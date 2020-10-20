@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , bc
 , bison
@@ -15,6 +14,7 @@
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
 , buildPackages
+, firmwareOdroidC4
 }:
 
 let
@@ -250,6 +250,94 @@ in {
       '${buildPackages.meson-tools}/bin/amlbootsig' boot_new.bin u-boot.img
       dd if=u-boot.img of=u-boot.gxbb bs=512 skip=96
     '';
+  };
+
+  ubootOdroidC4 = let in
+  assert
+    (lib.assertMsg (stdenv.buildPlatform.isx86_64)
+    "U-Boot for Odroid C4 must be cross-compiled on x86_64-linux system. Once built, U-Boot image must be signed by 'aml_encrypt_g12a' tool, which is available for x86_64-linux platform only.");
+  buildUBoot {
+    defconfig = "odroid-c4_defconfig";
+
+    # Fix eMMC/SD read issues on meson-sm1/meson-gx boards.
+    # Patches are queued for U-Boot 2021.01 release
+    patches = [
+      (fetchurl { #0001-mmc-meson-gx-move-arch-header-to-local-header.patch
+        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/77863d43eb2b40319619bbb4f781270d8f027189.patch";
+        sha256 = "10nf0klspqmy15a8bb8ybhl53x11v1cqvh20i6bxyqm10zwlqbhl";
+      })
+      (fetchurl { #0002-mmc-meson-gx-change-clock-phase-value-on-SM1-SoCs.patch
+        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/0dbb54eb3257c243c7968f967a6b183b1edb56c8.patch";
+        sha256 = "1xwj67h50gc32y7lrj7mh56s0zhwrd1vvxrpvhb2yhf1y17jf7rc";
+      })
+      (fetchurl { #0003-ARM-dts-meson-sm1-add-u-boot-specific-MMC-controller.patch
+        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/c87eab81616d671a6004ffc95847bad21b7eb005.patch";
+        sha256 = "11l19vx8q2a8j95liv1nwkn9cjryxk9qgmj68ya4lr4j0c5qzh7c";
+      })
+    ];
+
+    postBuild = ''
+      # blx_fix() resembles function from:
+      # - https://github.com/hardkernel/u-boot/blob/e0725c1dce0c3dbbae47478c13d968c41014fac8/fip/Makefile#L44
+      blx_fix() {
+        case $7 in
+          "bl30")
+            declare blx_bin_limit=40960
+            declare blx01_bin_limit=13312
+          ;;
+          "bl2")
+            declare blx_bin_limit=57344
+            declare blx01_bin_limit=4096
+          ;;
+        esac
+
+        declare -i blx_size=`du -b $1 | awk '{print int($1)}'`
+        declare -i zero_size=$blx_bin_limit-$blx_size
+        dd if=/dev/zero of=$2 bs=1 count=$zero_size
+        cat $1 $2 > $3
+
+        declare -i blx01_size=`du -b $4 | awk '{print int($1)}'`
+        declare -i zero_size_01=$blx01_bin_limit-$blx01_size
+        dd if=/dev/zero of=$2 bs=1 count=$zero_size_01
+        cat $4 $2 > $5
+
+        cat $3 $5 > $6
+      }
+
+      blx_fix ${firmwareOdroidC4}/bl30.bin zero_tmp bl30_zero.bin \
+              ${firmwareOdroidC4}/bl301.bin bl301_zero.bin \
+              bl30_new.bin bl30
+      blx_fix ${firmwareOdroidC4}/bl2.bin zero_tmp bl2_zero.bin \
+              ${firmwareOdroidC4}/acs.bin bl21_zero.bin \
+              bl2_new.bin bl2
+
+      ${firmwareOdroidC4}/aml_encrypt_g12a --bl30sig --input bl30_new.bin \
+        --output bl30_new.bin.g12a.enc --level v3
+      ${firmwareOdroidC4}/aml_encrypt_g12a --bl3sig --input bl30_new.bin.g12a.enc \
+        --output bl30_new.bin.enc --level v3 --type bl30
+      ${firmwareOdroidC4}/aml_encrypt_g12a --bl3sig --input ${firmwareOdroidC4}/bl31.img \
+        --output bl31.img.enc --level v3 --type bl31
+      ${firmwareOdroidC4}/aml_encrypt_g12a --bl3sig --input u-boot.bin --compress lz4 \
+        --output bl33.bin.enc --level v3 --type bl33 --compress lz4
+      ${firmwareOdroidC4}/aml_encrypt_g12a --bl2sig --input bl2_new.bin \
+        --output bl2.n.bin.sig
+
+      ${firmwareOdroidC4}/aml_encrypt_g12a --bootmk --output u-boot.bin \
+        --bl2 bl2.n.bin.sig --bl30 bl30_new.bin.enc --bl31 bl31.img.enc --bl33 bl33.bin.enc \
+        --ddrfw1 ${firmwareOdroidC4}/ddr4_1d.fw \
+        --ddrfw2 ${firmwareOdroidC4}/ddr4_2d.fw \
+        --ddrfw3 ${firmwareOdroidC4}/ddr3_1d.fw \
+        --ddrfw4 ${firmwareOdroidC4}/piei.fw \
+        --ddrfw5 ${firmwareOdroidC4}/lpddr4_1d.fw \
+        --ddrfw6 ${firmwareOdroidC4}/lpddr4_2d.fw \
+        --ddrfw7 ${firmwareOdroidC4}/diag_lpddr4.fw \
+        --ddrfw8 ${firmwareOdroidC4}/aml_ddr.fw \
+        --ddrfw9 ${firmwareOdroidC4}/lpddr3_1d.fw \
+        --level v3
+    '';
+
+    filesToInstall = [ "u-boot.bin" "${firmwareOdroidC4}/sd_fusing.sh"];
+    extraMeta.platforms = ["aarch64-linux"];
   };
 
   ubootOdroidXU3 = buildUBoot {
