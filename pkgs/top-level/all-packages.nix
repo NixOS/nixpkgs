@@ -11735,7 +11735,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     lua = lua5;
   } // (config.radare or {}))) radare2 r2-for-cutter;
 
-  radare2-cutter = libsForQt514.callPackage ../development/tools/analysis/radare2/cutter.nix { };
+  radare2-cutter = libsForQt515.callPackage ../development/tools/analysis/radare2/cutter.nix { };
 
   ragel = ragelStable;
 
