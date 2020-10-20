@@ -6,6 +6,7 @@
 , ppxlib
 , re
 , openssl
+, zarith
 }:
 
 rec {
@@ -541,6 +542,19 @@ rec {
     ];
     patches = ./sexp.patch;
     meta.description = "S-expression swiss knife";
+  };
+
+  zarith_stubs_js = janePackage {
+    pname = "zarith_stubs_js";
+    hash = "0dldnf85rfyx8z63qjly9n8plj8nnkw4i5zrj5vbm7s2wjcfjzj1";
+    meta.description = "Javascripts stubs for the Zarith library";
+  };
+
+  bignum = janePackage {
+    pname = "bignum";
+    hash = "0qldyl5mhlffnyps7n9y8qykm0ylrdiw5ii8zlww82zmmpp8zv5x";
+    propagatedBuildInputs = [ core_kernel zarith zarith_stubs_js ];
+    meta.description = "Core-flavoured wrapper around zarith's arbitrary-precision rationals";
   };
 
   ### Packages at version 0.11, with dependencies at version 0.12
