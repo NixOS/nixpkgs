@@ -1,29 +1,30 @@
-{ lib, fetchurl, buildPythonPackage
+{ lib, fetchFromGitHub, buildPythonPackage
 , cmake
-, libxml2
-, pkg-config
-, libxslt
-, pysideApiextractor
-, pysideGeneratorrunner
-, python
-, sphinx
-, qt4
-, isPy3k
 , isPy35
 , isPy36
 , isPy37
+, isPy3k
+, libxml2
+, libxslt
+, pkg-config
+, pysideApiextractor
+, pysideGeneratorrunner
+, python
+, qt4
+, sphinx
 }:
 
 buildPythonPackage rec {
   pname = "pyside-shiboken";
   version = "1.2.4";
+  format = "other";
   disabled = !isPy3k;
 
-  format = "other";
-
-  src = fetchurl {
-    url = "https://github.com/PySide/Shiboken/archive/${version}.tar.gz";
-    sha256 = "1536f73a3353296d97a25e24f9554edf3e6a48126886f8d21282c3645ecb96a4";
+  src = fetchFromGitHub {
+    owner = "PySide";
+    repo = "Shiboken";
+    rev = version;
+    sha256 = "0x2lyg52m6a0vn0665pgd1z1qrydglyfxxcggw6xzngpnngb6v5v";
   };
 
   enableParallelBuilding = true;
