@@ -445,5 +445,7 @@ in buildPythonPackage {
     libtensorflow = bazel-build.out;
   };
 
-  inherit (bazel-build) meta;
+  meta = bazel-build.meta // {
+    broken = gast.version != "0.3.2";
+  };
 }
