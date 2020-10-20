@@ -4822,6 +4822,12 @@
     githubId = 20250323;
     name = "Lucio Delelis";
   };
+  ldenefle = {
+    email = "ldenefle@gmail.com";
+    github = "ldenefle";
+    githubId = 20558127;
+    name = "Lucas Denefle";
+  };
   ldesgoui = {
     email = "ldesgoui@gmail.com";
     github = "ldesgoui";
