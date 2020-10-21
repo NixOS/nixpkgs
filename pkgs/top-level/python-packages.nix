@@ -817,6 +817,8 @@ in {
 
   bespon = callPackage ../development/python-modules/bespon { };
 
+  betacode = callPackage ../development/python-modules/betacode { };
+
   betamax = callPackage ../development/python-modules/betamax { };
 
   betamax-matchers = callPackage ../development/python-modules/betamax-matchers { };
