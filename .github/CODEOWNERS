@@ -96,8 +96,8 @@
 /pkgs/development/ruby-modules      @alyssais
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @LnL7
-/pkgs/build-support/rust @andir
+/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
+/pkgs/build-support/rust @andir @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
