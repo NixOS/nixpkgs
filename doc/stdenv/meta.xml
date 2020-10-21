@@ -289,6 +289,26 @@ meta.hydraPlatforms = [];
      </para>
     </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>screenshotThumb</varname>
+    </term>
+    <listitem>
+     <para>
+      This optional entry can be used to refer (with a URL) to a thumbnail sized screenshot of the package's application.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>screenshotLarge</varname>
+    </term>
+    <listitem>
+     <para>
+      This optional entry can be used to refer (with a URL) to a screenshot of the package's application.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
  </section>
  <section xml:id="sec-meta-license">
