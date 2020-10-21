@@ -5,7 +5,7 @@ _It's a good thing: r-ryantm is a bot that helps keeping [nixpkgs (one of) the m
 
 ## Manual Cross-Check
 
-- If you havn't submitted automated tests, yet, please take a moment and follow the bot's instructions on how to test.
+- If you haven't submitted automated tests, yet, please take a moment and follow the bot's instructions on how to test.
 - Once you've tested successfully, please report what you did as a simple
   [GitHub review](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/reviewing-proposed-changes-in-a-pull-request),
   similar to the text below.
@@ -21,7 +21,7 @@ LGTM.
 
 ## Automated Cross-Check
 
-- In the future, the r-ryantm _might_ gain the capability of auto-merging updates, if tests are available and they pass.
+- In the future, r-ryantm _might_ gain the capability of auto-merging updates, if tests are available and they pass.
 - So please consider adding automated tests to your packages.
 - Those tests also free you from the need to do the Manual Cross-Check above.
 
