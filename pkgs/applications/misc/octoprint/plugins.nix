@@ -183,13 +183,13 @@ in {
 
   gcodeeditor = buildPlugin rec {
     pname = "GcodeEditor";
-    version = "0.2.6";
+    version = "0.2.9";
 
     src = fetchFromGitHub {
       owner = "ieatacid";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "0c6p78r3vd6ys3kld308pyln09zjbr9yif1ljvcx6wlml2i5l1vh";
+      sha256 = "1yjj9lmxbzmzrn7gahw9lj7554fphalbjjp8ns0rr9py3rshwxkm";
     };
 
     meta = with stdenv.lib; {
