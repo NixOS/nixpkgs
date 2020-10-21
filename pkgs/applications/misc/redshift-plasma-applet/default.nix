@@ -18,7 +18,9 @@ stdenv.mkDerivation {
       --replace "redshiftCommand: 'redshift'" \
                 "redshiftCommand: '${redshift}/bin/redshift'" \
       --replace "redshiftOneTimeCommand: 'redshift -O " \
-                "redshiftOneTimeCommand: '${redshift}/bin/redshift -O "
+                "redshiftOneTimeCommand: '${redshift}/bin/redshift -P -O " \
+      --replace "redshift -x" \
+                "${redshift}/bin/redshift -x"
 
     substituteInPlace package/contents/ui/config/ConfigAdvanced.qml \
       --replace "'redshift -V'" \
