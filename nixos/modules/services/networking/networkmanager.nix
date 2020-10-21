@@ -15,6 +15,7 @@ let
     networkmanager-openconnect
     networkmanager-openvpn
     networkmanager-vpnc
+    networkmanager-sstp
    ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
 
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
@@ -386,6 +387,9 @@ in {
 
       "NetworkManager/VPN/nm-iodine-service.name".source =
         "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
+
+      "NetworkManager/VPN/nm-sstp-service.name".source =
+        "${networkmanager-sstp}/lib/NetworkManager/VPN/nm-sstp-service.name";
       }
       // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
          {

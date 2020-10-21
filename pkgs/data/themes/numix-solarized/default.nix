@@ -1,33 +1,29 @@
-{ stdenv, fetchFromGitHub, python3, sass, glib, gdk-pixbuf, libxml2,
-  inkscape, optipng, gtk-engine-murrine
-}:
+{ stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  version = "20180913";
+  version = "20200910";
   pname = "numix-solarized-gtk-theme";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "numix-solarized-gtk-theme";
     rev = version;
-    sha256 = "1kda0lyqi3cxh163fbj8yyi6jj6pf0y980k4s0cmyi3hkh4cqyd5";
+    sha256 = "05h1563sy6sfz76jadxsf730mav6bbjsk9xnadv49r16b8n8p9a9";
   };
 
-  nativeBuildInputs = [ python3 sass glib gdk-pixbuf libxml2 inkscape optipng ];
+  nativeBuildInputs = [ python3 sassc glib gdk-pixbuf inkscape ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = ''
     patchShebangs .
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
-    substituteInPlace scripts/render-assets.sh \
-      --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
-      --replace /usr/bin/optipng ${optipng}/bin/optipng
   '';
 
   buildPhase = "true";
 
   installPhase = ''
+    HOME="$NIX_BUILD_ROOT"  # shut up inkscape's warnings
     for theme in *.colors; do
       make THEME="''${theme/.colors/}" install
     done

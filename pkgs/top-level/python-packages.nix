@@ -7687,6 +7687,8 @@ in {
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
+  yamale = callPackage ../development/python-modules/yamale { };
+
   yamllint = callPackage ../development/python-modules/yamllint { };
 
   yamlordereddictloader = callPackage ../development/python-modules/yamlordereddictloader { };
