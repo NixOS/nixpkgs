@@ -6,6 +6,8 @@ stdenv.mkDerivation {
   pname = "redshift-plasma-applet";
   inherit version;
 
+  # most recent source is https://invent.kde.org/plasma/plasma-redshift-control
+  # but it breaks toggling off.
   src = fetchFromGitHub {
     owner = "kotelnik";
     repo = "plasma-applet-redshift-control";
@@ -17,10 +19,14 @@ stdenv.mkDerivation {
     substituteInPlace package/contents/ui/main.qml \
       --replace "redshiftCommand: 'redshift'" \
                 "redshiftCommand: '${redshift}/bin/redshift'" \
-      --replace "redshiftOneTimeCommand: 'redshift -O " \
-                "redshiftOneTimeCommand: '${redshift}/bin/redshift -P -O " \
       --replace "redshift -x" \
                 "${redshift}/bin/redshift -x"
+
+    # change this line when src is updated
+    # upstream adds -P option, but breaks toggling the applet off
+    substituteInPlace package/contents/ui/main.qml \
+      --replace "redshiftOneTimeCommand: 'redshift -O " \
+                "redshiftOneTimeCommand: '${redshift}/bin/redshift -P -O "
 
     substituteInPlace package/contents/ui/config/ConfigAdvanced.qml \
       --replace "'redshift -V'" \
