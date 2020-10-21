@@ -30,7 +30,8 @@ TODO: put examples here for how to add:
 - _0 of 0 passed binary check by having a zero exit code._
 - _0 of 0 passed binary check by having the new version present in output._
 
-_Note, that `nixpkgs-update` doesn’t do anything with [`updateWalker`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/upstream-updater/update-walker.txt)._
+_Note, that `nixpkgs-update` doesn’t do anything with [`updateWalker`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/upstream-updater/update-walker.txt)
+nor does it currently interfere with [other update tooling](https://github.com/ryantm/nixpkgs-update/issues/12)._
 
 ## Useful GithHub Label Queries
 
