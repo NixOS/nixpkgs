@@ -64,6 +64,7 @@ in
 , patches ? null, patchPhase ? null, prePatch ? "", postPatch ? ""
 , preConfigure ? null, postConfigure ? null
 , preBuild ? null, postBuild ? null
+, preHaddock ? null, postHaddock ? null
 , installPhase ? null, preInstall ? null, postInstall ? null
 , checkPhase ? null, preCheck ? null, postCheck ? null
 , preFixup ? null, postFixup ? null
@@ -658,6 +659,8 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? checkPhase)             { inherit checkPhase; }
 // optionalAttrs (args ? preCheck)               { inherit preCheck; }
 // optionalAttrs (args ? postCheck)              { inherit postCheck; }
+// optionalAttrs (args ? preHaddock)             { inherit preHaddock; }
+// optionalAttrs (args ? postHaddock)            { inherit postHaddock; }
 // optionalAttrs (args ? preInstall)             { inherit preInstall; }
 // optionalAttrs (args ? installPhase)           { inherit installPhase; }
 // optionalAttrs (args ? postInstall)            { inherit postInstall; }
