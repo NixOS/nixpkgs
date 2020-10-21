@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, linuxHeaders, perl }:
+{ lib, stdenv, fetchurl, buildPackages, linuxHeaders, perl }:
 
 let
   commonMakeFlags = [
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-reinstall-kernel-headers.patch ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
   hardeningDisable = [ "format" "stackprotector" ];
