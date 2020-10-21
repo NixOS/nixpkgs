@@ -14,9 +14,10 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
 let
 
-  qemu = config.system.build.qemu or pkgs.qemu_test;
 
   cfg = config.virtualisation;
+
+  qemu = cfg.qemu.package;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
@@ -401,6 +402,14 @@ in
       };
 
     virtualisation.qemu = {
+      package =
+        mkOption {
+          type = types.package;
+          default = pkgs.qemu;
+          example = "pkgs.qemu_test";
+          description = "QEMU package to use.";
+        };
+
       options =
         mkOption {
           type = types.listOf types.unspecified;

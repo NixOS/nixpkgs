@@ -51,7 +51,10 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     #       we avoid defining consoles if not possible.
     # TODO: refactor such that test-instrumentation can import qemu-vm
     #       or declare virtualisation.qemu.console option in a module that's always imported
-    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu.consoles) { qemu.consoles = [ qemuSerialDevice ]; };
+    virtualisation.qemu = {
+      consoles = lib.optional (options ? virtualisation.qemu.consoles) qemuSerialDevice;
+      package  = pkgs.qemu_test;
+    };
 
     boot.initrd.preDeviceCommands =
       ''
