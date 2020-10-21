@@ -22755,6 +22755,10 @@ in
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav;
   };
 
+  peaclock = callPackage ../applications/misc/peaclock {
+    stdenv = gccStdenv;
+  };
+
   peek = callPackage ../applications/video/peek { };
 
   pflask = callPackage ../os-specific/linux/pflask {};
