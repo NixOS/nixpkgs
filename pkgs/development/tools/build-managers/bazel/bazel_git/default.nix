@@ -294,7 +294,7 @@ stdenv.mkDerivation rec {
     };
 
   src_for_updater = stdenv.mkDerivation rec {
-    name = "updater-sources"; 
+    name = "updater-sources";
     inherit src;
     buildInputs = [ unzip ];
     inherit sourceRoot;
