@@ -31,6 +31,27 @@ in {
     };
   };
 
+  bedlevelvisualizer = buildPlugin rec {
+    pname = "BedLevelVisualizer";
+    version = "0.1.15";
+
+    src = fetchFromGitHub {
+      owner = "jneilliii";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "1bq39fnarnpk8phxfbpx6l4n9anf358z1cgid5r89nadmn2a0cny";
+    };
+
+    propagatedBuildInputs = with super; [ numpy ];
+
+    meta = with stdenv.lib; {
+      description = "Displays 3D mesh of bed topography report";
+      homepage = "https://github.com/jneilliii/OctoPrint-BedLevelVisualizer";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
   curaenginelegacy = buildPlugin rec {
     pname = "CuraEngineLegacy";
     version = "1.1.1";
