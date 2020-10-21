@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "http://pigeonhole.dovecot.org/";
     description = "A sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ rickynils globin ];
+    maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
   };
 }

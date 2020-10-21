@@ -14,17 +14,18 @@
 , swig
 , gettext
 , fetchpatch
+, coreutils
 }:
 let
-  preConfigure = (import ./script.nix);
+  preConfigure = (import ./script.nix {inherit coreutils;});
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "0ky4485z0gpaj1z75y7jr5bn9wr8x8w3v637aqq4v9a0a5iyagmg";
+    sha256 = "0rybs79h0sq12vsayah8dixqac404z84rlvqynvzf3dh2lwcgg0y";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "asls";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/saulecabrera/asls/releases/download/v${version}/bin.tar.gz";
-    sha256 = "14dcms0xl6dncwf16vixvf7rq7g15iwq8h4vja0dsiisyfm08aks";
+    sha256 = "05kp44p4q4sdykfw0b4k9j3qdp0qvwgjbs48ncmnd0ass0xrmi3s";
   };
 
   buildInputs = [ erlangR22 ];

@@ -1,39 +1,31 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3, makeDesktopItem }:
+{ stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg }:
 
 let
   pname = "joplin-desktop";
-  version = "1.0.233";
+  version = "1.2.6";
   name = "${pname}-${version}";
 
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
+
+  suffix = {
+    x86_64-linux = "AppImage";
+    x86_64-darwin = "dmg";
+  }.${system} or throwSystem;
+
   src = fetchurl {
-    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.AppImage";
-    sha256 = "1fmk56b9b70ly1r471mhppr8fz1wm2gpxji1v760ynha8fqy7qg1";
+    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
+    sha256 = {
+      x86_64-linux = "14svzfhszb0pnsajbydsic0rdc64zp6csqjp6k2p2i20jf0c0im6";
+      x86_64-darwin = "1wdv8idnvn5567xdmsaa3f7skv48i9q6jqd4pgv8pz1zkhiqj0wi";
+    }.${system} or throwSystem;
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 rec {
-  inherit name src;
 
-  profile = ''
-    export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
-
-  multiPkgs = null; # no 32bit needed
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
-  extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
-    install -m 444 -D ${appimageContents}/joplin.desktop $out/share/applications/joplin.desktop
-    install -m 444 -D ${appimageContents}/joplin.png \
-      $out/share/pixmaps/joplin.png
-    substituteInPlace $out/share/applications/joplin.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-  '';
-
-
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "An open source note taking and to-do application with synchronisation capabilities";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
@@ -45,6 +37,41 @@ in appimageTools.wrapType2 rec {
     homepage = "https://joplinapp.org";
     license = licenses.mit;
     maintainers = with maintainers; [ hugoreeves ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
-}
+
+  linux = appimageTools.wrapType2 rec {
+    inherit name src meta;
+
+    profile = ''
+      export LC_ALL=C.UTF-8
+      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+    '';
+
+    multiPkgs = null; # no 32bit needed
+    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
+    extraInstallCommands = ''
+      mv $out/bin/{${name},${pname}}
+      install -Dm444 ${appimageContents}/joplin.desktop -t $out/share/applications
+      install -Dm444 ${appimageContents}/joplin.png -t $out/share/pixmaps
+      substituteInPlace $out/share/applications/joplin.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}'
+    '';
+  };
+
+  darwin = stdenv.mkDerivation {
+    inherit name src meta;
+
+    nativeBuildInputs = [ undmg ];
+
+    sourceRoot = "Joplin.app";
+
+    installPhase = ''
+      mkdir -p $out/Applications/Joplin.app
+      cp -R . $out/Applications/Joplin.app
+    '';
+  };
+in
+if stdenv.isDarwin
+then darwin
+else linux

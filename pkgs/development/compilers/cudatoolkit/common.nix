@@ -154,8 +154,9 @@ stdenv.mkDerivation rec {
 
     # Remove OpenCL libraries as they are provided by ocl-icd and driver.
     rm -f $out/lib64/libOpenCL*
-    ${lib.optionalString (lib.versionAtLeast version "10.1") ''
+    ${lib.optionalString (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
       mv $out/lib64 $out/lib
+      mv $out/extras/CUPTI/lib64/libcupti* $out/lib
     ''}
 
     # Set compiler for NVCC.

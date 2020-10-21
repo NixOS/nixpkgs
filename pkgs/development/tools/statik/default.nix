@@ -4,7 +4,6 @@ buildGoPackage {
   pname = "statik";
   version = "unstable-2019-07-31";
   goPackagePath = "github.com/rakyll/statik";
-  goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "rakyll";

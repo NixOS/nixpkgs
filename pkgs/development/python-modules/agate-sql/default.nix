@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, agate, sqlalchemy }:
+{ stdenv, fetchPypi, buildPythonPackage, agate, sqlalchemy, crate }:
 
 buildPythonPackage rec {
     pname = "agate-sql";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
       sha256 = "50a39754babef6cd0d1b1e75763324a49593394fe46ab1ea9546791b5e6b69a7";
     };
 
-    propagatedBuildInputs = [ agate sqlalchemy ];
+    propagatedBuildInputs = [ agate sqlalchemy crate ];
 
     meta = with stdenv.lib; {
       description = "Adds SQL read/write support to agate.";

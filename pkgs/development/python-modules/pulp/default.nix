@@ -2,6 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , pyparsing
+, amply
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "9d8ecf532868cc31fa9ff59ee5d5b2049600c5c902c18c794a2bad677c1f92e5";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  propagatedBuildInputs = [ pyparsing amply ];
 
   # only one test that requires an extra
   doCheck = false;

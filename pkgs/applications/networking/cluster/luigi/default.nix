@@ -9,11 +9,11 @@ let
   };
 in with python.pkgs; buildPythonApplication rec {
   pname = "luigi";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02c480f5pjgqsvqnkaw7f6n4nhdspmhq5w7lw8sgg2v3jghg8n7i";
+    sha256 = "b4b1ccf086586d041d7e91e68515d495c550f30e4d179d63863fea9ccdbb78eb";
   };
 
   propagatedBuildInputs = [ dateutil tornado_5 python-daemon boto3 ];

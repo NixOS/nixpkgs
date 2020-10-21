@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "torchgpipe";
-  version = "0.0.5";
+  version = "0.0.7";
 
   disabled = isPy27;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "kakaobrain";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mqdavnqb8a320li2r7xw11w2lg03l59xxyg2fxpg4z57v0rbasi";
+    sha256 = "0ki0njhmz1i3pkpr3y6h6ac7p5qh1kih06mknc2s18mfw34f2l55";
   };
 
   propagatedBuildInputs = [ pytorch ];

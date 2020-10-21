@@ -1,4 +1,5 @@
 { lib
+, buildPackages
 , buildRustCrate
 , callPackage
 , releaseTools
@@ -10,13 +11,14 @@
 }:
 
 let
-  mkCrate = args: let
+  mkCrate = buildRustCrate: args: let
     p = {
       crateName = "nixtestcrate";
       version = "0.1.0";
       authors = [ "Test <test@example.com>" ];
     } // args;
   in buildRustCrate p;
+  mkHostCrate = mkCrate buildRustCrate;
 
   mkCargoToml =
     { name, crateVersion ? "0.1.0", path ? "Cargo.toml" }:
@@ -68,15 +70,15 @@ let
   mkLib = name: mkFile name "pub fn test() -> i32 { return 23; }";
 
   mkTest = crateArgs: let
-    crate = mkCrate (builtins.removeAttrs crateArgs ["expectedTestOutput"]);
+    crate = mkHostCrate (builtins.removeAttrs crateArgs ["expectedTestOutput"]);
     hasTests = crateArgs.buildTests or false;
     expectedTestOutputs = crateArgs.expectedTestOutputs or null;
-    binaries = map (v: ''"${v.name}"'') (crateArgs.crateBin or []);
+    binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or []);
     isLib = crateArgs ? libName || crateArgs ? libPath;
     crateName = crateArgs.crateName or "nixtestcrate";
     libName = crateArgs.libName or crateName;
 
-    libTestBinary = if !isLib then null else mkCrate {
+    libTestBinary = if !isLib then null else mkHostCrate {
       crateName = "run-test-${crateName}";
       dependencies = [ crate ];
       src = mkBinExtern "src/main.rs" libName;
@@ -89,18 +91,27 @@ let
       runCommand "run-buildRustCrate-${crateName}-test" {
         nativeBuildInputs = [ crate ];
       } (if !hasTests then ''
-          ${lib.concatStringsSep "\n" binaries}
+          ${lib.concatMapStringsSep "\n" (binary:
+            # Can't actually run the binary when cross-compiling
+            (lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "type ") + binary
+          ) binaries}
           ${lib.optionalString isLib ''
               test -e ${crate}/lib/*.rlib || exit 1
-              ${libTestBinary}/bin/run-test-${crateName}
+              ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "test -x "} \
+                ${libTestBinary}/bin/run-test-${crateName}
           ''}
           touch $out
-        '' else ''
+        '' else if stdenv.hostPlatform == stdenv.buildPlatform then ''
           for file in ${crate}/tests/*; do
             $file 2>&1 >> $out
           done
           set -e
           ${lib.concatMapStringsSep "\n" (o: "grep '${o}' $out || {  echo 'output \"${o}\" not found in:'; cat $out; exit 23; }") expectedTestOutputs}
+        '' else ''
+          for file in ${crate}/tests/*; do
+            test -x "$file"
+          done
+          touch "$out"
         ''
       );
 
@@ -109,7 +120,7 @@ let
 
        `name` is used as part of the derivation name that performs the checking.
 
-       `crateArgs` is passed to `mkCrate` to build the crate with `buildRustCrate`.
+       `crateArgs` is passed to `mkHostCrate` to build the crate with `buildRustCrate`.
 
        `expectedFiles` contains a list of expected file paths in the output. E.g.
        `[ "./bin/my_binary" ]`.
@@ -124,7 +135,7 @@ let
       assert (builtins.isList expectedFiles);
 
       let
-        crate = mkCrate (builtins.removeAttrs crateArgs ["expectedTestOutput"]);
+        crate = mkHostCrate (builtins.removeAttrs crateArgs ["expectedTestOutput"]);
         crateOutput = if output == null then crate else crate."${output}";
         expectedFilesFile = writeTextFile {
           name = "expected-files-${name}";
@@ -188,17 +199,17 @@ let
       crateBinRename1 = {
         crateBin = [{ name = "my-binary-rename1"; }];
         src = mkBinExtern "src/main.rs" "foo_renamed";
-        dependencies = [ (mkCrate { crateName = "foo"; src = mkLib "src/lib.rs"; }) ];
+        dependencies = [ (mkHostCrate { crateName = "foo"; src = mkLib "src/lib.rs"; }) ];
         crateRenames = { "foo" = "foo_renamed"; };
       };
       crateBinRename2 = {
         crateBin = [{ name = "my-binary-rename2"; }];
         src = mkBinExtern "src/main.rs" "foo_renamed";
-        dependencies = [ (mkCrate { crateName = "foo"; libName = "foolib"; src = mkLib "src/lib.rs"; }) ];
+        dependencies = [ (mkHostCrate { crateName = "foo"; libName = "foolib"; src = mkLib "src/lib.rs"; }) ];
         crateRenames = { "foo" = "foo_renamed"; };
       };
       crateBinRenameMultiVersion = let
-        crateWithVersion = version: mkCrate {
+        crateWithVersion = version: mkHostCrate {
           crateName = "my_lib";
           inherit version;
           src = mkFile "src/lib.rs" ''
@@ -307,7 +318,7 @@ let
           fn main() {}
         '';
         dependencies = [
-          (mkCrate {
+          (mkHostCrate {
             crateName = "somerlib";
             type = [ "rlib" ];
             src = mkLib "src/lib.rs";
@@ -315,7 +326,7 @@ let
         ];
       };
       buildScriptDeps = let
-        depCrate = boolVal: mkCrate {
+        depCrate = buildRustCrate: boolVal: mkCrate buildRustCrate {
           crateName = "bar";
           src = mkFile "src/lib.rs" ''
             pub const baz: bool = ${boolVal};
@@ -339,8 +350,8 @@ let
             '')
           ];
         };
-        buildDependencies = [ (depCrate "true") ];
-        dependencies = [ (depCrate "false") ];
+        buildDependencies = [ (depCrate buildPackages.buildRustCrate "true") ];
+        dependencies = [ (depCrate buildRustCrate "false") ];
         buildTests = true;
         expectedTestOutputs = [ "test baz_false ... ok" ];
       };
@@ -373,7 +384,7 @@ let
       # Regression test for https://github.com/NixOS/nixpkgs/pull/88054
       # Build script output should be rewritten as valid env vars.
       buildScriptIncludeDirDeps = let
-        depCrate = mkCrate {
+        depCrate = mkHostCrate {
           crateName = "bar";
           src = symlinkJoin {
             name = "build-script-and-include-dir-bar";
@@ -460,7 +471,7 @@ let
             mkdir -p $out/lib
             # Note: On darwin (which defaults to clang) we have to add
             # `-undefined dynamic_lookup` as otherwise the compilation fails.
-            cc -shared \
+            $CC -shared \
               ${lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup"} \
               -o $out/lib/${name}${stdenv.hostPlatform.extensions.sharedLibrary} ${src}
           '';
@@ -609,9 +620,11 @@ let
       pkg = brotliCrates.brotli_2_5_0 {};
     in runCommand "run-brotli-test-cmd" {
       nativeBuildInputs = [ pkg ];
-    } ''
+    } (if stdenv.hostPlatform == stdenv.buildPlatform then ''
       ${pkg}/bin/brotli -c ${pkg}/bin/brotli > /dev/null && touch $out
-    '';
+    '' else ''
+      test -x '${pkg}/bin/brotli' && touch $out
+    '');
     allocNoStdLibTest = let
       pkg = brotliCrates.alloc_no_stdlib_1_3_0 {};
     in runCommand "run-alloc-no-stdlib-test-cmd" {

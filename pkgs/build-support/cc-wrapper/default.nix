@@ -61,6 +61,12 @@ let
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 
+  useGccForLibs = isClang
+    && libcxx == null
+    && !(stdenv.targetPlatform.useLLVM or false)
+    && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+    && gccForLibs != null;
+
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
     if isGNU then
@@ -272,7 +278,7 @@ stdenv.mkDerivation {
     ##
     ## GCC libs for non-GCC support
     ##
-    + optionalString (isClang && libcxx == null && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs != null) ''
+    + optionalString useGccForLibs ''
 
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
@@ -316,11 +322,11 @@ stdenv.mkDerivation {
 
     # We have a libc++ directly, we have one via "smuggled" GCC, or we have one
     # bundled with the C compiler because it is GCC
-    + optionalString (libcxx != null || (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false) || (isGNU && cc.langCC or false)) ''
+    + optionalString (libcxx != null || (useGccForLibs && gccForLibs.langCC or false) || (isGNU && cc.langCC or false)) ''
       touch "$out/nix-support/libcxx-cxxflags"
       touch "$out/nix-support/libcxx-ldflags"
     ''
-    + optionalString (libcxx == null && (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false)) ''
+    + optionalString (libcxx == null && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done

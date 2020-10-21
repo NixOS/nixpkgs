@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "8.1.15";
+  version = "8.3.9";
   packInstall = swiplPath: pack:
     ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
     '';
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl-devel";
     rev = "V${version}";
-    sha256 = "0czbrscx2s4079nmwvipp9cnwfny16m3fpnp823llm7wyljchgvq";
+    sha256 = "0ixb8pc5s7q8q0njs8is1clpvik6jhhdcwnys7m9rpwdzgi10sjz";
     fetchSubmodules = true;
   };
 

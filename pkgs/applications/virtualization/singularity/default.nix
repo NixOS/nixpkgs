@@ -18,15 +18,14 @@ with lib;
 
 buildGoPackage rec {
   pname = "singularity";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchurl {
     url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
-    sha256 = "16sd08bfa2b1qgpnd3q6k7glw0w1wyrqyf47fz2220yafrryrmyz";
+    sha256 = "1zd29s8lggv4x5xracgzywayg1skl9qc2bqh1zdxh1wrg9sqbadi";
   };
 
   goPackagePath = "github.com/sylabs/singularity";
-  goDeps = ./deps.nix;
 
   buildInputs = [ gpgme openssl libuuid ];
   nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper cryptsetup ];

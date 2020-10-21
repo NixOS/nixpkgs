@@ -1,24 +1,29 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.3.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    sha256 = "0xpic9jx7nrxi5d8lqch2vxpvipx994d717c4n0kgr3ipyij1347";
+    sha256 = "0ap5ih4s99c4ah95mcafqsvy4yhfqab6vg1c6ydzfa4czczgcxff";
   };
 
-  cargoSha256 = "104lyfni75h1i30s2jlzf66sp1czfd9ywqz78kj4i7lfdf6fc4x9";
+  cargoSha256 = "0vj7g2jhvd5d37rcq02hval9axpciwyqyd10z2a0bsvw0r4bh943";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
+
+  # Needed to get openssl-sys to use pkgconfig.
+  OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
     description =
       "A command-line application for interacting with git repositories";
     homepage = "https://github.com/Byron/gitoxide";
-    # NOTE: the master branch is dual-licensed with APACHE but v0.3.0 is only MIT
-    license = licenses.mit;
+    license = with licenses; [ mit /* or */ asl20 ];
     maintainers = [ maintainers.syberant ];
   };
 }

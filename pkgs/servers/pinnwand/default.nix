@@ -14,14 +14,14 @@ let
   };
 in with python.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rk7rpyb4vmqxqqv8k9jpjmgakr3mn1iaqxyj34r74p1n5vfzimq";
+    sha256 = "0cxdpc3lxgzakzgvdyyrn234380dm05svnwr8av5nrjp4nm9s8z4";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ in with python.pkgs; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://supakeen.com/project/pinnwand/";
     license = licenses.mit;
-    description = "A Python pastebin that tries to keep it simple.";
+    description = "A Python pastebin that tries to keep it simple";
     maintainers = with maintainers; [ hexa ];
   };
 }

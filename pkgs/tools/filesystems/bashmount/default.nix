@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bashmount";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "jamielinux";
     repo = "bashmount";
     rev = version;
-    sha256 = "0pqjaib0qiwjq0ral5yjz4iq8hpaj9mqkhlihgfz0xigcn9lxwpf";
+    sha256 = "1irw47s6i1qwxd20cymzlfw5sv579cw877l27j3p66qfhgadwxrl";
   };
 
   installPhase = ''

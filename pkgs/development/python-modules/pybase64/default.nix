@@ -1,8 +1,10 @@
-{ buildPythonPackage, stdenv, fetchPypi, six, pytest }:
+{ buildPythonPackage, isPy3k, stdenv, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "pybase64";
   version = "1.0.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

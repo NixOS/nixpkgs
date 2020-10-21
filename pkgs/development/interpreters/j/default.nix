@@ -5,12 +5,12 @@
 stdenv.mkDerivation rec {
   pname = "j";
   version = "901";
-  jtype = "release-e";
+  jtype = "release-f";
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
     rev = "j${version}-${jtype}";
-    sha256 = "13ky37rrl6mc66fckrdnrw64gmvq1qlv6skzd513lab4d0wigshw";
+    sha256 = "1776021m0j1aanzwg60by83n53pw7i6afd5wplfzczwk8bywax4p";
     name = "jsource";
   };
 
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
   j64x="j${bits}${variant}";
 
   doCheck = true;
+
+  # Causes build failure due to warning
+  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "strictoverflow";
 
   buildPhase = ''
     export SOURCE_DIR=$(pwd)

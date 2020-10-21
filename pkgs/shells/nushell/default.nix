@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , openssl
+, zlib
 , pkg-config
 , python3
 , xorg
@@ -14,35 +15,36 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.18.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "100r26dx57wdzdpf6lgsgw0py33k3nsx73pa1qjcipwv00a106sr";
+    sha256 = "19bpxx9pi3cl5y7h5qg4a2pmvwqavm1vciyvsq96kxkc7rq2xwvl";
   };
 
-  cargoSha256 = "0ch79zsnqb5n9r7jq6figpmqp2cs2p9a3m7fg3sd04m797ki9chr";
+  cargoSha256 = "1ghbzahz8lbk11sjy2kis12w22rjr92aaw451rmc86pk2lsxn0dx";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ]
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
 
-  preCheck = ''
-    export HOME=$TMPDIR
+  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    unset SDKROOT
   '';
 
   checkPhase = ''
     runHook preCheck
     echo "Running cargo test"
-    cargo test
+    HOME=$TMPDIR cargo test
     runHook postCheck
   '';
 
@@ -51,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 johntitor marsam ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 
   passthru = {

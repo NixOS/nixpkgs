@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.0";
+  version = "2.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab0dce458ab746212cc02ac10cf31912c43bbfdcccb49025745b00850beab086";
+    sha256 = "933bf7f3848e9e39ecab6a12faa59d5185471c887534abac13baea6fe8138cc2";
   };
 
   checkInputs = [ coverage pytest pytestcov ];

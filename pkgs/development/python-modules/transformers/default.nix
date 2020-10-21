@@ -6,6 +6,7 @@
 , regex
 , requests
 , numpy
+, parameterized
 , sacremoses
 , sentencepiece
 , timeout-decorator
@@ -16,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.1.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wg36qrcljmpsyhjaxpqw3s1r6276yg8cq0bjrf52l4zlc5k4xzk";
+    sha256 = "1j9nzhl0zw5z9rnvzfih7v6bax353rxp05b3f0cvkii3b5dbkc2j";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    parameterized
     pytestCheckHook
     timeout-decorator
   ];
@@ -49,13 +51,19 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME="$TMPDIR"
-    cd tests
 
-    # This test requires the nlp module, which we haven't
-    # packaged yet. However, nlp is optional for transformers
-    # itself
-    rm test_trainer.py
+    # This test requires the `datasets` module to download test
+    # data. However, since we cannot download in the Nix sandbox
+    # and `dataset` is an optional dependency for transformers
+    # itself, we will just remove the tests files that import
+    # `dataset`.
+    rm tests/test_retrieval_rag.py
+    rm tests/test_trainer.py
   '';
+
+  # We have to run from the main directory for the tests. However,
+  # letting pytest discover tests leads to errors.
+  pytestFlagsArray = [ "tests" ];
 
   # Disable tests that require network access.
   disabledTests = [
@@ -76,6 +84,7 @@ buildPythonPackage rec {
     "test_tokenizer_from_model_type"
     "test_tokenizer_from_model_type"
     "test_tokenizer_from_pretrained"
+    "test_tokenizer_from_tokenizer_class"
     "test_tokenizer_identifier_with_correct_config"
   ];
 

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atlassian-jira";
-  version = "8.10.0";
+  version = "8.12.0";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${version}.tar.gz";
-    sha256 = "1l0kxh4cwqyciylbccd4vfmsvq9cr5sfd0v2gbs3lz41av79mlwa";
+    sha256 = "149yqj60b35mbvjz7jyh5a3ayh61kvwrz452s0zyb1q3pirj10xq";
   };
 
   buildPhase = ''

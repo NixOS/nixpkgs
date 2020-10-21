@@ -1,4 +1,4 @@
-From 794073e466a3b6c8e138f0e6d15c8d6465a1a4a9 Mon Sep 17 00:00:00 2001
+From a889dbe796cd72425f38dec3d2aaab44a914ac60 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Wed, 16 Apr 2014 10:59:28 +0200
 Subject: [PATCH 03/18] Fix NixOS containers
@@ -10,7 +10,7 @@ container, so checking early whether it exists will fail.
  1 file changed, 2 insertions(+)
 
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 3b9493f232..0117a9939d 100644
+index 43712565c2..07f294c78a 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -5122,6 +5122,7 @@ static int run(int argc, char *argv[]) {
@@ -30,5 +30,5 @@ index 3b9493f232..0117a9939d 100644
  
          } else {
 -- 
-2.27.0
+2.28.0
 

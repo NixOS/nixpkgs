@@ -7,26 +7,28 @@
 , paramiko
 , netaddr
 , ncclient
+, ntc-templates
 , lxml
 , jinja2
 , pyyaml
+, transitions
+, yamlordereddictloader
 , nose
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.5.1";
+  version = "2.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0e3a1e74b9254b4832a6cdbf8e6f26f9a269f574cb8cf2dd292dc131e0f4b245";
+    sha256 = "521659fe94da796897abc16773c3d84fa44d3e1f5386c71fbaef44cb80159855";
   };
-
 
   checkInputs = [ nose ];
 
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient lxml jinja2 pyyaml
+    scp six pyserial paramiko netaddr ncclient ntc-templates lxml jinja2 pyyaml transitions yamlordereddictloader
   ];
 
   checkPhase = ''

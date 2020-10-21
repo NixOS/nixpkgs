@@ -27,6 +27,18 @@
     <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
    </listitem>
    <listitem>
+     <para>
+     The Cinnamon desktop environment (v4.6) has been added. <varname>services.xserver.desktopManager.cinnamon.enable = true;</varname> to try it out!
+     Remember that, with any new feature it's possible you could run into issues, so please send all support requests to <link xlink:href="https://github.com/NixOS/nixpkgs/issues">github.com/NixOS/nixpkgs</link> to notify the maintainers.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      Quickly configure a complete, private, self-hosted video
+      conferencing solution with the new Jitsi Meet module.
+    </para>
+   </listitem>
+   <listitem>
     <para>
     <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
     Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
@@ -50,6 +62,12 @@
    <listitem>
     <para>
      Python 3 now defaults to Python 3.8 instead of 3.7.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Python 3.5 has reached its upstream EOL at the end of September 2020: it
+     has been removed from the list of available packages.
     </para>
    </listitem>
    <listitem>
@@ -258,6 +276,11 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
   <itemizedlist>
    <listitem>
     <para>
+     The <link linkend="opt-services.matrix-synapse.enable">matrix-synapse</link> module no longer includes optional dependencies by default, they have to be added through the <link linkend="opt-services.matrix-synapse.plugins">plugins</link> option.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <literal>buildGoModule</literal> now internally creates a vendor directory
      in the source tree for downloaded modules instead of using go's <link
      xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
@@ -395,6 +418,20 @@ php.override {
      </para>
    </listitem>
    <listitem>
+    <para>
+     The ACME module has been overhauled for simplicity and maintainability.
+     Cert generation now implicitly uses the <literal>acme</literal>
+     user, and the <literal>security.acme.certs._name_.user</literal> option
+     has been removed. Instead, certificate access from other services is now
+     managed through group permissions. The module no longer runs lego
+     twice under certain conditions, and will correctly renew certificates if
+     their configuration is changed. Services which reload nginx and httpd after
+     certificate renewal are now properly configured too so you no longer have
+     to do this manually if you are using HTTPS enabled virtual hosts. A mechanism
+     for regenerating certs on demand has also been added and documented.
+    </para>
+   </listitem>
+   <listitem>
      <para>
       Gollum received a major update to version 5.x and you may have to change
       some links in your wiki when migrating from gollum 4.x. More information
@@ -413,8 +450,8 @@ php.override {
    </listitem>
    <listitem>
      <para>
-       Add option <literal>services.nginx.enableSandbox</literal> to starting Nginx web server with additional sandbox/hardening options.
-       By default, write access to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       Nginx web server now starting with additional sandbox/hardening options. By default, write access
+       to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
        use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
        <programlisting>
 systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
@@ -552,8 +589,8 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        In addition to the hostname, the fully qualified domain name (FQDN),
-       which consists of <literal>${cfg.hostName}</literal> and
-       <literal>${cfg.domain}</literal> is now added to
+       which consists of <literal>${networking.hostName}</literal> and
+       <literal>${networking.domain}</literal> is now added to
        <literal>/etc/hosts</literal>, to allow local FQDN resolution, as used by the
        <literal>hostname --fqdn</literal> command and other applications that
        try to determine the FQDN. These new entries take precedence over entries
@@ -568,11 +605,15 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        The hostname (<literal>networking.hostName</literal>) must now be a valid
-       DNS label (see RFC 1035) and as such must not contain the domain part.
-       This means that the hostname must start with a letter, end with a letter
+       DNS label (see RFC 1035, RFC 1123) and as such must not contain the domain part.
+       This means that the hostname must start with a letter or digit, end with a letter
        or digit, and have as interior characters only letters, digits, and
        hyphen. The maximum length is 63 characters. Additionally it is
        recommended to only use lower-case characters.
+       If (e.g. for legacy reasons) a FQDN is required as the Linux kernel network node hostname
+       (<literal>uname --nodename</literal>) the option
+       <literal>boot.kernel.sysctl."kernel.hostname"</literal>
+       can be used as a workaround (but be aware of the 64 character limit).
      </para>
    </listitem>
    <listitem>
@@ -777,6 +818,76 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/63103">PR #63103</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <literal>config.systemd.services.${name}.path</literal> now returns a list of paths instead of a colon-separated string.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Caddy module now uses Caddy v2 by default. Caddy v1 can still be used by setting
+     <xref linkend="opt-services.caddy.package"/> to <literal>pkgs.caddy1</literal>.
+    </para>
+    <para>
+     New option <xref linkend="opt-services.caddy.adapter"/> has been added.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.jellyfin.enable">jellyfin</link> module will use and stay on the Jellyfin version <literal>10.5.5</literal>
+     if <literal>stateVersion</literal> is lower than <literal>20.09</literal>. This is because significant changes were made to the database schema,
+     and it is highly recommended to backup your instance before upgrading. After making your backup, you can upgrade to the latest version either by
+     setting your <literal>stateVersion</literal> to <literal>20.09</literal> or higher, or set the <option>services.jellyfin.package</option> to
+     <literal>pkgs.jellyfin</literal>. If you do not wish to upgrade Jellyfin, but want to change your <literal>stateVersion</literal>, you can set
+     the value of <option>services.jellyfin.package</option> to <literal>pkgs.jellyfin_10_5</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>security.rngd</literal> service is now disabled by default.
+     This choice was made because there's krngd in the linux kernel space making it (for most usecases)
+     functionally redundent.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>hardware.nvidia.optimus_prime.enable</literal> service has been renamed to
+     <literal>hardware.nvidia.prime.sync.enable</literal> and has many new enhancements.
+     Related nvidia prime settings may have also changed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The package <package>nextcloud17</package> has been removed and <package>nextcloud18</package> was marked as insecure
+     since both of them will <link xlink:href="https://docs.nextcloud.com/server/19/admin_manual/release_schedule.html">
+     will be EOL (end of life) within the lifetime of 20.09</link>.
+    </para>
+    <para>
+     It's necessary to upgrade to <package>nextcloud19</package>:
+     <itemizedlist>
+      <listitem>
+       <para>
+        From <package>nextcloud17</package>, you have to upgrade to <package>nextcloud18</package> first as
+        Nextcloud doesn't allow going multiple major revisions forward in a single upgrade. This is possible
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud18</package>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        From <package>nextcloud18</package>, it's possible to directly upgrade to <package>nextcloud19</package>
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud19</package>.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The GNOME desktop manager no longer default installs <package>gnome3.epiphany</package>.
+      It was chosen to do this as it has a usability breaking issue (see issue <link xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>)
+      that makes it unsuitable to be a default app.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -805,6 +916,17 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      of the default <literal>out</literal> output anymore - if you relied on the
      <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
      the <literal>notmuch.emacs</literal> output.
+
+     Device tree overlay support was improved in
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/79370">#79370</link>
+     and now uses <xref linkend="opt-hardware.deviceTree.kernelPackage"/>
+     instead of <option>hardware.deviceTree.base</option>.
+
+     <xref linkend="opt-hardware.deviceTree.overlays"/> configuration was
+     extended to support <literal>.dts</literal> files with symbols.
+
+     Device trees can now be filtered by setting
+     <xref linkend="opt-hardware.deviceTree.filter"/> option.
     </para>
    </listitem>
    <listitem>
@@ -844,6 +966,12 @@ CREATE ROLE postgres LOGIN SUPERUSER;
    <para>
      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
    </para>
+   </listitem>
+   <listitem>
+    <para>
+    The installer now enables sshd by default. This improves installation on headless machines especially ARM single-board-computer.
+    To login through ssh, either a password or an ssh key must be set for the root user or the nixos user.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -974,6 +1102,8 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
      <package>nextcloud18</package> before upgrading to <package>nextcloud19</package>
      since Nextcloud doesn't support upgrades across multiple major versions.
     </para>
+   </listitem>
+   <listitem>
      <para>
        The <literal>nixos-run-vms</literal> script now deletes the
        previous run machines states on test startup. You can use the
@@ -989,15 +1119,21 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    </listitem>
    <listitem>
     <para>
-     The <literal>fontconfig</literal> module stopped generating fontconfig 2.10.x config and cache.
-     Fontconfig 2.10.x was removed from Nixpkgs - it hasn't been used in any nixpkgs package anymore.
+     The <literal>fontconfig</literal> module stopped generating config and cache files for fontconfig 2.10.x, the <filename>/etc/fonts/fonts.conf</filename> now belongs to the latest fontconfig, just like on other Linux distributions, and we will <link xlink:href="https://github.com/NixOS/nixpkgs/pull/95358">no longer</link> be versioning the config directories.
+    </para>
+    <para>
+     Fontconfig 2.10.x was removed from Nixpkgs since it hasn’t been used in any Nixpkgs package for years now.
     </para>
    </listitem>
    <listitem>
     <para>
      Nginx module <literal>nginxModules.fastcgi-cache-purge</literal> renamed to official name <literal>nginxModules.cache-purge</literal>.
      Nginx module <literal>nginxModules.ngx_aws_auth</literal> renamed to official name <literal>nginxModules.aws-auth</literal>.
-      The packages <package>perl</package>, <package>rsync</package> and <package>strace</package> were removed from <option>systemPackages</option>. If you need them, install them again with <code><xref linkend="opt-environment.systemPackages"/> = with pkgs; [ perl rsync strace ];</code> in your <filename>configuration.nix</filename>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The option <option>defaultPackages</option> was added. It installs the packages <package>perl</package>, <package>rsync</package> and <package>strace</package> for now. They were added unconditionally to <option>systemPackages</option> before, but are not strictly necessary for a minimal NixOS install. You can set it to an empty list to have a more minimal system. Be aware that some functionality might still have an impure dependency on those packages, so things might break.
     </para>
    </listitem>
    <listitem>
@@ -1054,6 +1190,42 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
       removed, as it depends on libraries from deepin.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <literal>opendkim</literal> module now uses systemd sandboxing features
+       to limit the exposure of the system towards the opendkim service.
+     </para>
+   </listitem>
+  </itemizedlist>
+  <itemizedlist>
+   <listitem>
+    <para />
+    <para>
+        Kubernetes has been upgraded to 1.19.1, which also means that the
+        golang version to build it has been bumped to 1.15. This may have
+        consequences for your existing clusters and their certificates. Please
+        consider
+        <link xlink:href="https://relnotes.k8s.io/?markdown=93264">
+            the release notes for Kubernetes 1.19 carefully
+        </link>
+        before upgrading.
+    </para>
+   </listitem>
+  </itemizedlist>
+  <itemizedlist>
+    <listitem>
+      <para>
+        For AMD GPUs, Vulkan can now be used by adding <literal>amdvlk</literal>
+        to <literal>hardware.opengl.extraPackages</literal>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Similarly, still for AMD GPUs, the ROCm OpenCL stack can now be used by adding
+        <literal>rocm-opencl-icd</literal> to
+        <literal>hardware.opengl.extraPackages</literal>.
+      </para>
+    </listitem>
   </itemizedlist>
  </section>
 </section>

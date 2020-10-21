@@ -68,6 +68,8 @@ with lib;
       to handle FIDO security tokens, so this isn't necessary anymore.
     '')
 
+    (mkRemovedOptionModule [ "services" "seeks" ] "")
+
     # Do NOT add any option renames here, see top of the file
   ];
 }

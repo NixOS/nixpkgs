@@ -67,6 +67,8 @@ with lib;
     "jfs"
     "minix"
     "nilfs2"
+    "ntfs"
+    "omfs"
     "qnx4"
     "qnx6"
     "sysv"

@@ -8,7 +8,8 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "18rv5nxk04fgk4ziix7z4s2cargdpqgvqrk3lnp3wvd6yb5g5p98";
+    src = fetch "clang" "02ajkij85966vd150iy246mv16dsaph1kfi0y8wnncp8w6nar5hg";
+    inherit clang-tools-extra_src;
 
     unpackPhase = ''
       unpackFile $src
@@ -85,8 +86,6 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-      gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
     };
 
     meta = {

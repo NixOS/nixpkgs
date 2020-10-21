@@ -4,7 +4,7 @@
 
 let
   pname = "tdm";
-  version = "2.07";
+  version = "2.08";
 
   desktop = makeDesktopItem {
     desktopName = pname;
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://www.thedarkmod.com/sources/thedarkmod.${version}.src.7z";
-    sha256 = "17wdpip8zvm2njz0xrf7xcxl73hnsc6i83zj18kn8rnjkpy50dd6";
+    sha256 = "0bmv07j6s6q3m7hnpx7cwrycjkbvlf0y9sg9migakni0jg9yz5ps";
   };
   nativeBuildInputs = [
     p7zip sconsPackages.scons_3_1_2 gnum4 makeWrapper
@@ -39,13 +39,15 @@ in stdenv.mkDerivation {
   preBuild = ''
     pushd tdm_update
     scons BUILD=release TARGET_ARCH=x64
-    install -Dm755 tdm_update.linux $out/share/libexec/tdm_update.linux
+    install -Dm755 bin/tdm_update.linux64 $out/share/libexec/tdm_update.linux
     popd
   '';
 
   # why oh why can it find ld but not strip?
   postPatch = ''
     sed -i 's!strip \$!${binutils-unwrapped}/bin/strip $!' SConstruct
+    # This adds math.h needed for math::floor
+    sed -i 's|#include "Util.h"|#include "Util.h"\n#include <math.h>|' tdm_update/ConsoleUpdater.cpp
   '';
 
   installPhase = ''

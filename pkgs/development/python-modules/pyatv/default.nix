@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage
 , aiohttp
 , aiozeroconf
 , asynctest
@@ -11,15 +11,19 @@
 , pytest-asyncio
 , pytestrunner
 , srptools
+, zeroconf
+, fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.7.1";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "17d4fb4fbdfe1c762e421ce2caa6beddab8ef9a6e0e5c7ab7eb54c8d8654c61c";
+  version = "0.7.4";
+  src = fetchFromGitHub {
+    owner = "postlund";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "17gsamn4aibsx4w50r9dwr5kr9anc7dd0f0dvmdl717rkgh13zyi";
   };
 
   nativeBuildInputs = [ pytestrunner];
@@ -31,6 +35,7 @@ buildPythonPackage rec {
     protobuf
     cryptography
     netifaces
+    zeroconf
   ];
 
   checkInputs = [
@@ -38,12 +43,8 @@ buildPythonPackage rec {
     pytest
     pytest-aiohttp
     pytest-asyncio
+    pytestCheckHook
   ];
-
-  # just run vanilla pytest to avoid inclusion of coverage reports and xdist
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with stdenv.lib; {
     description = "A python client library for the Apple TV";

@@ -1,16 +1,18 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 }:
 
 buildPythonPackage rec {
-  version = "0.1.11";
+  version = "2.0.1";
   pname = "python-json-logger";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7a31162f2a01965a5efb94453ce69230ed208468b0bbc7fdfc56e6d8df2e281";
+    sha256 = "f26eea7898db40609563bed0a7ca11af12e2a79858632706d835a0f961b7d398";
   };
 
   checkInputs = [ nose ];

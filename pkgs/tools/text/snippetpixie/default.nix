@@ -19,19 +19,18 @@
 , ibus
 , json-glib
 , pantheon
-, libwnck3
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "snippetpixie";
-  version = "1.3.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = pname;
     rev = version;
-    sha256 = "0ml57j6jagqvjlpgn1bcyx08h71kcxalh69y03y2lj84x5ib8qz3";
+    sha256 = "1db3fbawh4qwdqby5ji4g26pksi4q253r5zvd3kv1m2ljmwrrwj0";
   };
 
   nativeBuildInputs = [
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     dbus
     ibus
     json-glib
-    libwnck3
     xorg.libXtst
     pantheon.granite
     pantheon.elementary-gtk-theme
@@ -83,6 +81,8 @@ stdenv.mkDerivation rec {
       Save your often used text snippets and then expand them whenever you type their abbreviation.
 
       For example:- "spr`" expands to "Snippet Pixie rules!"
+
+      For non-accessible applications such as browsers and Electron apps, there's a shortcut (default is Ctrl+`) for opening a search window that pastes the selected snippet.
     '';
     homepage = "https://www.snippetpixie.com";
     license = licenses.gpl2Plus;

@@ -10,7 +10,7 @@ let
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
 in mkDerivation rec {
-  version = "3.10.9";
+  version = "3.10.10";
   pname = "qgis";
   name = "${pname}-unwrapped-${version}";
 
@@ -18,7 +18,7 @@ in mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0d646hvrhhgsw789qc2g3iblmsvr64qh15jck1jkaljzrj3qbml6";
+    sha256 = "yZBG+bpJA7iKkUEjVo45d+bmRp9WS7mk8z96FLf0ZQ0=";
   };
 
   passthru = {

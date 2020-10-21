@@ -47,7 +47,7 @@ let
       # This adds it to lightworks' search path while keeping the default
       # using the FONTCONFIG_FILE env variable
       echo "<?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
           <dir>/usr/share/fonts/truetype</dir>
           <include>/etc/fonts/fonts.conf</include>

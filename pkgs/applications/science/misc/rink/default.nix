@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, ncurses }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.5.0";
+  version = "0.5.1";
   pname = "rink";
 
   src = fetchFromGitHub {
     owner = "tiffany352";
     repo = "rink-rs";
     rev = "v${version}";
-    sha256 = "1z51n25hmgqkn4bm9yj18j8p4pk5i1x3f3z70vl1vx3v109jhff0";
+    sha256 = "1s67drjzd4cf93hpm7b2facfd6y1x0s60aq6pygj7i02bm0cb9l9";
   };
 
-  cargoSha256 = "0p63py8q4iqj5rrsir9saj7dvkrafx63z493k7p5xb2mah7b21lb";
+  cargoSha256 = "1wd70y13lly7nccaqlv7w8znxfal0fzyf9d67y5c3aikj7hkzfin";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ncurses ];

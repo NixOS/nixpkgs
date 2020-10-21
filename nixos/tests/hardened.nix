@@ -67,7 +67,10 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
 
       # Test hidepid
       with subtest("hidepid=2 option is applied and works"):
-          machine.succeed("grep -Fq hidepid=2 /proc/mounts")
+          # Linux >= 5.8 shows "invisible"
+          machine.succeed(
+              "grep -Fq hidepid=2 /proc/mounts || grep -Fq hidepid=invisible /proc/mounts"
+          )
           # cannot use pgrep -u here, it segfaults when access to process info is denied
           machine.succeed("[ `su - sybil -c 'ps --no-headers --user root | wc -l'` = 0 ]")
           machine.succeed("[ `su - alice -c 'ps --no-headers --user root | wc -l'` != 0 ]")

@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ]
    ++ stdenv.lib.optional sensord rrdtool;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "ETCDIR=${placeholder "out"}/etc" ]
-    ++ stdenv.lib.optional sensord "PROG_EXTRA=sensord";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "ETCDIR=${placeholder "out"}/etc"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ] ++ stdenv.lib.optional sensord "PROG_EXTRA=sensord";
 
   meta = with stdenv.lib; {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";

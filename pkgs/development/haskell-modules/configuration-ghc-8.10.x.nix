@@ -66,7 +66,7 @@ self: super: {
   unliftio-core = doJailbreak super.unliftio-core;
 
   # Use the latest version to fix the build.
-  dhall = self.dhall_1_34_0;
+  dhall = self.dhall_1_35_0;
   lens = self.lens_4_19_2;
   optics = self.optics_0_3;
   optics-core = self.optics-core_0_3_0_1;
@@ -75,6 +75,16 @@ self: super: {
   repline = self.repline_0_4_0_0;
   singletons = self.singletons_2_7;
   th-desugar = self.th-desugar_1_11;
+
+  insert-ordered-containers = super.insert-ordered-containers.override {
+    optics-core = self.optics-core_0_3_0_1;
+    optics-extra = self.optics-extra_0_3.override {
+      optics-core = self.optics-core_0_3_0_1;
+    };
+  };
+
+  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  monoidal-containers = doJailbreak super.monoidal-containers;
 
   # `ghc-lib-parser-ex` (see conditionals in its `.cabal` file) does not need
   # the `ghc-lib-parser` dependency on GHC >= 8.8. However, because we have
@@ -119,10 +129,7 @@ self: super: {
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }));
 
-  # We want the latest version of Pandoc.
-  pandoc = self.pandoc_2_10_1;
-  pandoc-citeproc = self.pandoc-citeproc_0_17_0_2;
-  pandoc-plot = self.pandoc-plot_0_9_2_0;
-  pandoc-types = self.pandoc-types_1_21;
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
 
 }

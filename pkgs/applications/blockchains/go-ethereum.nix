@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.20";
+  version = "1.9.23";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "031cbl8yqw5g5yrm5h1x8s5ckdw2xkym46009l579zvafn2vcnj7";
+    sha256 = "0w65sln5l3sxwzxwjvyaial0m1kxhivhw8xwl5faxxxlk50rs4wm";
   };
 
   runVend = true;
-  vendorSha256 = "1744df059bjksvih4653nnvb4kb1xvzdhypd0nnz36m1wrihqssv";
+  vendorSha256 = "1qbg44cryiv9kvcak6qjrbmkc9bxyk5fybj62vdkskqfjvv86068";
 
   doCheck = false;
 
@@ -31,7 +31,6 @@ buildGoModule rec {
     "cmd/puppeth"
     "cmd/rlpdump"
     "cmd/utils"
-    "cmd/wnode"
   ];
 
   # Fix for usb-related segmentation faults on darwin

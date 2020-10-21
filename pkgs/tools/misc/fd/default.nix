@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   preFixup = ''
-    installManPage "$src/doc/fd.1"
+    installManPage doc/fd.1
 
     installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
     installShellCompletion --zsh $releaseDir/build/fd-find-*/out/_fd

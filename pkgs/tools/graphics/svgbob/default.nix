@@ -10,8 +10,11 @@ rustPlatform.buildRustPackage rec {
     rev = "0febc4377134a2ea3b3cd43ebdf5ea688a0e7432";
     sha256 = "1n0w5b3fjgbczy1iw52172x1p3y1bvw1qpz77fkaxkhrkgfd7vwr";
   };
-
   sourceRoot = "source/svgbob_cli";
+  postPatch = ''
+    substituteInPlace ../svgbob/src/lib.rs \
+      --replace '#![deny(warnings)]' ""
+  '';
 
   cargoSha256 = "1y9jsnxmz51zychmmzp6mi29pb5ks2qww7lk5bshkhp56v51sm8d";
 

@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "heimer";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "juzzlin";
     repo = pname;
     rev = version;
-    sha256 = "16p18svfcp201gd624wzmf0gpdvywybxp8539igin6s70k6rpc97";
+    sha256 = "18paabqfxz49fahdi4fs5z870aynmyfj3xw8q768qffgc26zhl3m";
   };
 
   nativeBuildInputs = [ cmake ];

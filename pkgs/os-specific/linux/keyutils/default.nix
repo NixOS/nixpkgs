@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "keyutils";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "0mzmw8c7gqmqaxm3sa0xki8ycjla47xxhqg0yh17pl00d7ydqw9w";
+    sha256 = "sha256-ph1XBhNq5MBb1I+GGGvP29iN2L1RB+Phlckkz8Gzm7Q=";
   };
 
   patches = [
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   BUILDDATE = "1970-01-01";
   outputs = [ "out" "lib" "dev" ];
+
+  enableParallelBuilding = true;
 
   installFlags = [
     "ETCDIR=$(out)/etc"

@@ -6,6 +6,7 @@
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
 , iceSupport ? false, zeroc-ice ? null
+, grpcSupport ? false, grpc ? null, c-ares ? null, abseil-cpp ? null, which ? null
 , nixosTests
 }:
 
@@ -13,6 +14,7 @@ assert jackSupport -> libjack2 != null;
 assert speechdSupport -> speechd != null;
 assert pulseSupport -> libpulseaudio != null;
 assert iceSupport -> zeroc-ice != null;
+assert grpcSupport -> (grpc != null && c-ares != null && abseil-cpp != null && which != null);
 
 with stdenv.lib;
 let
@@ -117,9 +119,12 @@ let
 
     configureFlags = [
       "CONFIG+=no-client"
-    ] ++ optional (!iceSupport) "CONFIG+=no-ice";
+    ] ++ optional (!iceSupport) "CONFIG+=no-ice"
+      ++ optional grpcSupport "CONFIG+=grpc";
 
-    buildInputs = [ libcap ] ++ optional iceSupport zeroc-ice;
+    buildInputs = [ libcap ]
+      ++ optional iceSupport zeroc-ice
+      ++ optionals grpcSupport [ grpc c-ares abseil-cpp which ];
 
     installPhase = ''
       # bin stuff

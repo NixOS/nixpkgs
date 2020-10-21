@@ -4,13 +4,13 @@
 
 buildDunePackage rec {
   pname = "macaddr";
-  version = "5.0.0";
+  version = "5.0.1";
 
   minimumOCamlVersion = "4.04";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-ipaddr/archive/v${version}.tar.gz";
-    sha256 = "1j2m2v64g3d81sixxq3g57j1iyk6042ivsszml18akrqvwfpxy66";
+    sha256 = "0ffqkhmnj8l085xgl7jxhs3ld9zsd9iavdg06nnhr1i9g1aayk1b";
   };
 
   checkInputs = [ ppx_sexp_conv ounit ];

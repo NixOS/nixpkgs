@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , cffi
 , numpy
 , portaudio
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   pname = "sounddevice";
   version = "0.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

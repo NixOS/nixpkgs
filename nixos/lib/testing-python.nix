@@ -4,10 +4,12 @@
 , minimal ? false
   # Ignored
 , config ? {}
+  # !!! See comment about args in lib/modules.nix
+, specialArgs ? {}
   # Modules to add to each VM
 , extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
+with import ./build-vms.nix { inherit system pkgs minimal specialArgs extraConfigurations; };
 with pkgs;
 
 rec {
@@ -15,9 +17,9 @@ rec {
   inherit pkgs;
 
 
-  testDriver = let
+  mkTestDriver = let
     testDriverScript = ./test-driver/test-driver.py;
-  in stdenv.mkDerivation {
+  in qemu_pkg: stdenv.mkDerivation {
     name = "nixos-test-driver";
 
     nativeBuildInputs = [ makeWrapper ];
@@ -45,10 +47,12 @@ rec {
         # TODO: copy user script part into this file (append)
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
+          --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
       '';
   };
 
+  testDriver = mkTestDriver qemu_test;
+  testDriverInteractive = mkTestDriver qemu_kvm;
 
   # Run an automated test suite in the given virtual network.
   # `driver' is the script that runs the network.
@@ -63,18 +67,12 @@ rec {
           mkdir -p $out
 
           LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
-
-          for i in */xchg/coverage-data; do
-            mkdir -p $out/coverage-data
-            mv $i $out/coverage-data/$(dirname $(dirname $i))
-          done
         '';
     };
 
 
   makeTest =
     { testScript
-    , makeCoverageReport ? false
     , enableOCR ? false
     , name ? "unnamed"
     # Skip linting (mainly intended for faster dev cycles)
@@ -117,7 +115,11 @@ rec {
       # Generate convenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
-      driver = let warn = if skipLint then lib.warn "Linting is disabled!" else lib.id; in warn (runCommand testDriverName
+      driver = testDriver:
+        let
+          warn = if skipLint then lib.warn "Linting is disabled!" else lib.id;
+        in
+        warn (runCommand testDriverName
         { buildInputs = [ makeWrapper];
           testScript = testScript';
           preferLocalBuild = true;
@@ -152,8 +154,7 @@ rec {
         meta = (drv.meta or {}) // t.meta;
       };
 
-      test = passMeta (runTests driver);
-      report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
+      test = passMeta (runTests (driver testDriver));
 
       nodeNames = builtins.attrNames nodes;
       invalidNodeNames = lib.filter
@@ -169,8 +170,10 @@ rec {
           Please stick to alphanumeric chars and underscores as separation.
         ''
       else
-        (if makeCoverageReport then report else test) // {
-          inherit nodes driver test;
+        test // {
+          inherit nodes test;
+          driver = driver testDriver;
+          driverInteractive = driver testDriverInteractive;
         };
 
   runInMachine =

@@ -71,6 +71,13 @@ let
       NO_AVX512 = true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
+
+    powerpc64le-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER5";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
   };
 in
 
@@ -100,6 +107,9 @@ in
 stdenv.mkDerivation rec {
   pname = "openblas";
   version = "0.3.10";
+
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";

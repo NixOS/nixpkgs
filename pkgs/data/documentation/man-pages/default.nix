@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     # conflict with shadow-utils
     rm $out/share/man/man5/passwd.5 \
        $out/share/man/man3/getspnam.3
+
+    # The manpath executable looks up manpages from PATH. And this package won't
+    # appear in PATH unless it has a /bin folder
+    mkdir -p $out/bin
   '';
   outputDocdev = "out";
 

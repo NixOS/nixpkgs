@@ -53,7 +53,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ coq ]
-  ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ocamlgraph ]);
+  ++ (with coq.ocamlPackages; [ ocaml findlib ocamlgraph ]
+    ++ stdenv.lib.optional (!stdenv.lib.versionAtLeast coq.coq-version "8.10") camlp5);
 
   # dpd_compute.ml uses deprecated Pervasives.compare
   # Versions prior to 0.6.5 do not have the WARN_ERR build flag

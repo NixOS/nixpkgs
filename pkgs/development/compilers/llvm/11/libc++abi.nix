@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "libc++abi";
   inherit version;
 
-  src = fetch "libcxxabi" "04gqdzs13sw7f7a06h5zm5917d9f1k79l4rcm096grgvf0r7lnqx";
+  src = fetch "libcxxabi" "05ac7rkjbla03bc0lf92f901dfjgxdvp8cr9fpn59a5p4x27ssaq";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
@@ -24,14 +24,15 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     unpackFile ${libcxx.src}
+    mv libcxx-* libcxx
     unpackFile ${llvm.src}
-    cmakeFlags+=" -DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
+    mv llvm-* llvm
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
+    patch -p1 -d libcxx -i ${../libcxx-0001-musl-hacks.patch}
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d $(ls -d llvm-*) -i ${./libcxxabi-wasm.patch}
+    patch -p1 -d llvm -i ${./libcxxabi-wasm.patch}
   '';
 
   installPhase = if stdenv.isDarwin

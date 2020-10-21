@@ -9,14 +9,14 @@
 }:
 let
   pname = "wootility";
-  version = "3.5.10";
+  version = "3.5.12";
 in
 appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-linux-latest/wootility-${version}.AppImage";
-    sha256 = "1bhk4jcziis01lyn8dmx93abd6p41gmbrysphcd5810l7zcfz59y";
+    sha256 = "13bhckk25fzq9r9cdsg3yqjd4kn47asqdx8kw0in8iky4ri41vnc";
   };
 
   profile = ''
@@ -35,7 +35,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     homepage = "https://wooting.io/wootility";
-    description = "Wootility is customization and management software for Wooting keyboards.";
+    description = "Wootility is customization and management software for Wooting keyboards";
     platforms = [ "x86_64-linux" ];
     license = "unknown";
     maintainers = with maintainers; [ davidtwco ];

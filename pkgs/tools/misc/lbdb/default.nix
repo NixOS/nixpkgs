@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   pname = "lbdb";
   inherit version;
   src = fetchurl {
-    url = "http://www.spinnaker.de/lbdb/download/lbdb_${version}.tar.gz";
+    url = "https://www.spinnaker.de/lbdb/download/lbdb_${version}.tar.gz";
     sha256 = "1gr5l2fr9qbdccga8bhsrpvz6jxigvfkdxrln9wyf2xpps5cdjxh";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     + ":${perlldap}/${perl.libPrefix}";
 
   meta = {
-    homepage = "http://www.spinnaker.de/lbdb/";
+    homepage = "https://www.spinnaker.de/lbdb/";
     license = licenses.gpl2;
     platforms = platforms.all;
     description = "The Little Brother's Database";

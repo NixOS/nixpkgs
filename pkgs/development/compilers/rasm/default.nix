@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
       # according to official documentation
-      cc rasm_v*.c -O2 -lm -lrt -march=native -o rasm
+      cc rasm_v*.c -O2 -lm -lrt -o rasm
   '';
 
   installPhase = ''

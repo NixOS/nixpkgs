@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    gcc -O3 -ffast-math -finline-functions -o aragorn aragorn${version}.c
+    $CC -O3 -ffast-math -finline-functions -o aragorn aragorn${version}.c
   '';
 
   installPhase = ''

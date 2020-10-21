@@ -2,22 +2,24 @@
 , buildGoPackage
 , fetchFromGitHub
 , callPackage
+, runtimeShell
 }:
 let
-  list = import ./data.nix;
+  list = lib.importJSON ./providers.json;
 
-  toDrv = data:
-    buildGoPackage rec {
-      inherit (data) owner repo rev version sha256;
-      name = "${repo}-${version}";
-      goPackagePath = "github.com/${owner}/${repo}";
+  toDrv = name: data:
+    buildGoPackage {
+      pname = data.repo;
+      version = data.version;
+      goPackagePath = "github.com/${data.owner}/${data.repo}";
       subPackages = [ "." ];
       src = fetchFromGitHub {
-        inherit owner repo rev sha256;
+        inherit (data) owner repo rev sha256;
       };
       # Terraform allow checking the provider versions, but this breaks
       # if the versions are not provided via file paths.
-      postBuild = "mv go/bin/${repo}{,_v${version}}";
+      postBuild = "mv $NIX_BUILD_TOP/go/bin/${data.repo}{,_v${data.version}}";
+      passthru = data;
     };
 
   # Google is now using the vendored go modules, which works a bit differently
@@ -39,6 +41,8 @@ let
       # just build and install into $GOPATH/bin
       buildPhase = ''
         go install -mod=vendor -v -p 16 .
+
+        runHook postBuild
       '';
 
       # don't run the tests, they are broken in this setup
@@ -46,7 +50,7 @@ let
     });
 
   # These providers are managed with the ./update-all script
-  automated-providers = lib.mapAttrs (_: toDrv) list;
+  automated-providers = lib.mapAttrs (toDrv) list;
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
@@ -54,6 +58,13 @@ let
     google = patchGoModVendor automated-providers.google;
     google-beta = patchGoModVendor automated-providers.google-beta;
     ibm = patchGoModVendor automated-providers.ibm;
+
+    acme = automated-providers.acme.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
+      '';
+    });
 
     # providers that were moved to the `hashicorp` organization,
     # but haven't updated their references yet:

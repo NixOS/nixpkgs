@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals withQt [ "UI=qt" ]
   ++ stdenv.lib.optionals withGtk [ "UI=gtk" ];
   meta = with stdenv.lib; {
-    description = "Folding text editor, designed to hierarchically structure any kind of text file and especially source code.";
+    description = "Folding text editor, designed to hierarchically structure any kind of text file and especially source code";
     homepage = "https://tibleiz.net/code-browser/";
     license = licenses.gpl2;
     platforms = platforms.x86_64;

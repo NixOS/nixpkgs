@@ -42,9 +42,10 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.18.2+k3s1";     # k3s git tag
+  k3sVersion = "1.19.2+k3s1";     # k3s git tag
   traefikChartVersion = "1.81.0"; # taken from ./scripts/download at the above k3s tag
-  k3sRootVersion = "0.3.0";       # taken from .s/cripts/download at the above k3s tag
+  k3sRootVersion = "0.6.0-rc3";   # taken from ./scripts/download at the above k3s tag
+  k3sCNIVersion = "0.8.6-k3s1";   # taken from ./scripts/version.sh at the above k3s tag
   # bundled into the k3s binary
   traefikChart = fetchurl {
     url = "https://kubernetes-charts.storage.googleapis.com/traefik-${traefikChartVersion}.tgz";
@@ -62,12 +63,12 @@ let
   k3sRoot = fetchzip {
     # Note: marked as apache 2.0 license
     url = "https://github.com/rancher/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
-    sha256 = "12xafn5jivl8lqdcs25b28xrc4mf7yf1xif5np169nvvxgvmpdxp";
+    sha256 = "0xj3dcqawpzyzmz545iwh151krzbs9csnzg3zfl74lkv2kxgidk6";
     stripRoot = false;
   };
   k3sPlugins = buildGoPackage rec {
     name = "k3s-cni-plugins";
-    version = "0.7.6-k3s1"; # from ./scripts/version.sh 'VERSION_CNIPLUGINS'; update when k3s's repo is updated.
+    version = k3sCNIVersion;
 
     goPackagePath = "github.com/containernetworking/plugins";
     subPackages = [ "." ];
@@ -76,7 +77,7 @@ let
       owner = "rancher";
       repo = "plugins";
       rev = "v${version}";
-      sha256 = "0ax72z1ziann352bp6khfds8vlf3bbkqckrkpx4l4jxgqks45izs";
+      sha256 = "13kx9msn5y9rw8v1p717wx0wbjqln59g6y3qfb1760aiwknva35q";
     };
 
     meta = {
@@ -93,7 +94,7 @@ let
     url = "https://github.com/rancher/k3s";
     rev = "v${k3sVersion}";
     leaveDotGit = true; # ./scripts/version.sh depends on git
-    sha256 = "01ww3d71mlri2fk6z54rbd697aqwj942kbg323k0hfsnx7flkhps";
+    sha256 = "1hbnarchs9w52w061bvfjvssdh7ycnxa04camjwkcx8vr0k804h4";
   };
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
@@ -149,7 +150,7 @@ let
     '';
 
     meta = {
-      description = "The various binaries that get packaged into the final k3s binary.";
+      description = "The various binaries that get packaged into the final k3s binary";
       license = licenses.asl20;
       homepage = "https://k3s.io";
       maintainers = [ maintainers.euank ];
@@ -210,7 +211,7 @@ let
     '';
 
     meta = {
-      description = "The k3s go binary which is used by the final wrapped output below.";
+      description = "The k3s go binary which is used by the final wrapped output below";
       license = licenses.asl20;
       homepage = "https://k3s.io";
       maintainers = [ maintainers.euank ];
@@ -256,7 +257,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A lightweight Kubernetes distribution.";
+    description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
     maintainers = [ maintainers.euank ];

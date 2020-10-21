@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig
+, systemd, fontconfig, libdbusmenu
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
@@ -62,7 +62,7 @@ in
       else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
         ++ [ libsecret libXScrnSaver ];
 
-    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib ];
+    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 

@@ -17,7 +17,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    description = "Convert an iCal file to org agenda format, optionally deduplicating entries.";
+    description = "Convert an iCal file to org agenda format, optionally deduplicating entries";
     homepage = "https://github.com/rjhorniii/ical2org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ swflint ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracy";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "13zg3ijzhh7qkhgqff2ca23nd4gj7ac8jr0bp9w1gjf2cpgqkm40";
+    sha256 = "06xznk7nslw9km7hia2pfb5filjqalgx6cah48skxnah148svq2y";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A real time, nanosecond resolution, remote telemetry frame profiler for games and other applications.";
+    description = "A real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
     homepage = "https://github.com/wolfpld/tracy";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;

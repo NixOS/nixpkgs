@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11e63dd759835d9ba7a763926ffb2662cf8a6dcb4c7971a95064de34dbc7e5af";
+    sha256 = "84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06";
   };
 
   propagatedBuildInputs = [ django ];

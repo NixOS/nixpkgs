@@ -58,7 +58,7 @@
 </programlisting>
   The X server can then be started manually:
 <screen>
-# systemctl start display-manager.service
+<prompt># </prompt>systemctl start display-manager.service
 </screen>
  </para>
  <para>

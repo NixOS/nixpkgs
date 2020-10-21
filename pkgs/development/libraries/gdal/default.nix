@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}" # optional
     "--with-pg=yes" # since gdal 3.0 doesn't use ${postgresql}/bin/pg_config
-    "--with-mysql=${libmysqlclient}/bin/mysql_config"
+    "--with-mysql=${getDev libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

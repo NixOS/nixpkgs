@@ -18,7 +18,7 @@
 }:
 
 let
-  version = "246";
+  version = "246.6";
 in stdenv.mkDerivation {
   inherit version;
   pname = "systemd";
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0zrkyxrh5rm45f2l1rnjyv229bcyzawfw7c63jqxwix75px60dyw";
+    sha256 = "1yhj2jlighqqpw1xk9q52f3pncjn47ipi224k35d6syb94q2b988";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
@@ -54,6 +54,7 @@ in stdenv.mkDerivation {
     ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0019-revert-get-rid-of-seat_can_multi_session.patch
   ];
 
   postPatch = ''

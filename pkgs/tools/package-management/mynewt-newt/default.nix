@@ -28,7 +28,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     homepage = "https://mynewt.apache.org/";
-    description = "Build and package management tool for embedded development.";
+    description = "Build and package management tool for embedded development";
     longDescription = ''
       Apache Newt is a smart build and package management tool,
       designed for C and C++ applications in embedded contexts. Newt

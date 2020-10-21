@@ -6,6 +6,7 @@
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos, libdrm, mesa
+, libxkbcommon, wayland # ozone/wayland
 
 # Command line programs
 , coreutils
@@ -62,6 +63,7 @@ let
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     kerberos libdrm mesa coreutils
+    libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
@@ -72,7 +74,7 @@ in stdenv.mkDerivation {
 
   name = "google-chrome${suffix}-${version}";
 
-  src = chromium.upstream-info.binary;
+  src = chromium.chromeSrc;
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [

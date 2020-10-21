@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, which, makeWrapper }:
+{ stdenv, fetchFromGitHub, jdk8, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "drip";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ jdk ];
+  buildInputs = [ jdk8 ];
 
   postPatch = ''
     patchShebangs .

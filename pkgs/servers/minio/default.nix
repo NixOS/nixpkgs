@@ -23,6 +23,15 @@ buildGoModule rec {
     sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
   '';
 
+  postConfigure = ''
+    export CGO_ENABLED=0
+  '';
+
+  buildFlagsArray = [
+    "-tags=kqueue"
+    "-trimpath"
+  ];
+
   passthru.tests.minio = nixosTests.minio;
 
   meta = with stdenv.lib; {

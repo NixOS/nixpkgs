@@ -1,40 +1,85 @@
-{ lib, pythonPackages, fetchurl, cloud-utils }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, jinja2
+, oauthlib
+, configobj
+, pyyaml
+, requests
+, jsonschema
+, jsonpatch
+, pytest
+, httpretty
+, dmidecode
+, pytestCheckHook
+, shadow
+, cloud-utils
+, openssh
+}:
 
-let version = "0.7.9";
+let version = "20.3";
 
-in pythonPackages.buildPythonApplication {
+in buildPythonApplication {
   pname = "cloud-init";
   inherit version;
   namePrefix = "";
 
-  src = fetchurl {
-    url = "https://launchpad.net/cloud-init/trunk/${version}/+download/cloud-init-${version}.tar.gz";
-    sha256 = "0wnl76pdcj754pl99wxx76hkir1s61x0bg0lh27sdgdxy45vivbn";
+  src = fetchFromGitHub {
+    owner = "canonical";
+    repo = "cloud-init";
+    rev = version;
+    sha256 = "1fmckxf4q4sxjqs758vw7ca0rnhl9hyq67cqpqzz2v3s1gqzjhm4";
   };
 
-  patches = [ ./add-nixos-support.patch ];
+  patches = [ ./0001-add-nixos-support.patch ];
   prePatch = ''
-    patchShebangs ./tools
+    substituteInPlace setup.py --replace /lib/systemd $out/lib/systemd
+  '';
 
-    substituteInPlace setup.py \
-      --replace /usr $out \
-      --replace /etc $out/etc \
-      --replace /lib/systemd $out/lib/systemd \
-      --replace 'self.init_system = ""' 'self.init_system = "systemd"'
+  postInstall = ''
+    install -D -m755 ./tools/write-ssh-key-fingerprints $out/libexec/write-ssh-key-fingerprints
+    for i in $out/libexec/*; do
+      wrapProgram $i --prefix PATH : "${lib.makeBinPath [ openssh ]}"
+    done
+  '';
 
-    substituteInPlace cloudinit/config/cc_growpart.py \
-      --replace 'util.subp(["growpart"' 'util.subp(["${cloud-utils}/bin/growpart"'
+  propagatedBuildInputs = [
+    jinja2
+    oauthlib
+    configobj
+    pyyaml
+    requests
+    jsonschema
+    jsonpatch
+  ];
 
-    # Argparse is part of python stdlib
-    sed -i s/argparse// requirements.txt
-    '';
+  checkInputs = [
+    pytestCheckHook
+    httpretty
+    dmidecode
+    # needed for tests; at runtime we rather want the setuid wrapper
+    shadow
+  ];
 
-  propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
-    oauthlib pyserial configobj pyyaml requests jsonpatch ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [
+      dmidecode cloud-utils.guest
+    ]}/bin"
+  ];
 
-  checkInputs = with pythonPackages; [ contextlib2 httpretty mock unittest2 ];
+  disabledTests = [
+    # tries to create /var
+    "test_dhclient_run_with_tmpdir"
+    # clears path and fails because mkdir is not found
+    "test_path_env_gets_set_from_main"
+    # tries to read from /etc/ca-certificates.conf while inside the sandbox
+    "test_handler_ca_certs"
+  ];
 
-  doCheck = false;
+  preCheck = ''
+    # TestTempUtils.test_mkdtemp_default_non_root does not like TMPDIR=/build
+    export TMPDIR=/tmp
+  '';
 
   meta = {
     homepage = "https://cloudinit.readthedocs.org";

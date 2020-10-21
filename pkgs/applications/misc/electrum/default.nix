@@ -19,19 +19,13 @@
 }:
 
 let
-  version = "4.0.2";
+  version = "4.0.3";
 
   # electrum is not compatible with dnspython 2.0.0 yet
   # use the latest 1.x release instead
   py = python3.override {
     packageOverrides = self: super: {
-      dnspython = super.dnspython.overridePythonAttrs (oldAttrs: rec {
-        version = "1.16.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
-        };
-      });
+      dnspython = super.dnspython_1;
     };
   };
 
@@ -49,7 +43,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1xpkbard994n1gwl95b558x69k1m1m258bc220nxrajg1pywh90f";
+    sha256 = "1r40i0v7nm35m3pzbd0l5z4qphl13s31l9v5njmyvpfjirdmhjbv";
 
     extraPostFetch = ''
       mv $out ./all
@@ -64,7 +58,7 @@ py.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "05ibrr6ysf6fncs1pimhxvyr7d659jwj2r2a9pdd3cmn1dxzy2w1";
+    sha256 = "0q891fgzxvyzjxfczynx92hvclfs8i3nr5nr9sgbvz13hsg4s6lg";
   };
 
   postUnpack = ''
@@ -86,13 +80,11 @@ py.pkgs.buildPythonApplication {
     matplotlib
     pbkdf2
     protobuf
-    pyaes
     pycryptodomex
     pysocks
     qrcode
     requests
     tlslite-ng
-
     # plugins
     ckcc-protocol
     keepkey

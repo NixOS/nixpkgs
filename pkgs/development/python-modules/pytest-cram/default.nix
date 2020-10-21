@@ -1,7 +1,7 @@
-{lib, buildPythonPackage, fetchPypi, pytest, cram, bash}:
+{ lib, buildPythonPackage, fetchPypi, pytest, cram, bash }:
 
 buildPythonPackage rec {
-  version = "0.2.0";
+  version = "0.2.2";
   pname = "pytest-cram";
 
   checkInputs = [ pytest ];
@@ -9,8 +9,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "006p5dr3q794sbwwmxmdls3nwq0fvnyrxxmc03pgq8n74chl71qn";
-    extension = "zip";
+    sha256 = "0405ymmrsv6ii2qhq35nxfjkb402sdb6d13xnk53jql3ybgmiqq0";
+    extension = "tar.gz";
   };
 
   postPatch = ''

@@ -60,6 +60,7 @@
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/steam-hardware.nix
+  ./hardware/system-76.nix
   ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
@@ -78,6 +79,7 @@
   ./hardware/xpadneo.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix
+  ./i18n/input-method/hime.nix
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
@@ -139,6 +141,7 @@
   ./programs/mininet.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/neovim.nix
   ./programs/nm-applet.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
@@ -173,6 +176,7 @@
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
+  ./programs/xwayland.nix
   ./programs/yabar.nix
   ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
@@ -329,6 +333,7 @@
   ./services/desktops/tumbler.nix
   ./services/desktops/zeitgeist.nix
   ./services/development/bloop.nix
+  ./services/development/blackfire.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
   ./services/development/jupyterhub/default.nix
@@ -438,6 +443,7 @@
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
+  ./services/misc/domoticz.nix
   ./services/misc/errbot.nix
   ./services/misc/etcd.nix
   ./services/misc/ethminer.nix
@@ -462,6 +468,7 @@
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
+  ./services/misc/klipper.nix
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
@@ -554,6 +561,7 @@
   ./services/monitoring/telegraf.nix
   ./services/monitoring/thanos.nix
   ./services/monitoring/tuptime.nix
+  ./services/monitoring/unifi-poller.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/vnstat.nix
@@ -636,7 +644,6 @@
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix
   ./services/networking/haproxy.nix
-  ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix
   ./services/networking/hylafax/default.nix
@@ -724,7 +731,6 @@
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
-  ./services/networking/seeks.nix
   ./services/networking/skydns.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
@@ -837,6 +843,7 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/wayland/cage.nix
+  ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
@@ -1026,6 +1033,7 @@
   ./virtualisation/podman.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
+  ./virtualisation/spice-usb-redirection.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix

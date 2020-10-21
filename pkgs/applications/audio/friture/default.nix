@@ -4,18 +4,14 @@ let
   py = python3Packages;
 in py.buildPythonApplication rec {
   pname = "friture";
-  version = "0.37";
+  version = "unstable-2020-02-16";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1ivy5qfd90w1s1icsphvvdnnqz563v3fhg5pws2zn4483cgnzc2y";
+    rev = "4460b4e72a9c55310d6438f294424b5be74fc0aa";
+    sha256 = "1pmxzq78ibifby3gbir1ah30mgsqv0y7zladf5qf3sl5r1as0yym";
   };
-
-  # module imports scipy.misc.factorial, but it has been removed since scipy
-  # 1.3.0; use scipy.special.factorial instead
-  patches = [ ./factorial.patch ];
 
   nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
     [ wrapQtAppsHook ];
@@ -23,16 +19,21 @@ in py.buildPythonApplication rec {
   propagatedBuildInputs = with py; [
     sounddevice
     pyopengl
+    pyopengl-accelerate
     docutils
     numpy
     pyqt5
     appdirs
     pyrr
+    rtmixer
   ];
 
-  postFixup = ''
-    wrapQtApp $out/bin/friture
-    wrapQtApp $out/bin/.friture-wrapped
+  patches = [
+    ./unlock_constraints.patch
+  ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

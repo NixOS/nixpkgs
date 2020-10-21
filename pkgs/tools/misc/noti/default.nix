@@ -3,13 +3,13 @@
 
 buildGoPackage rec {
   pname = "noti";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "variadico";
     repo = "noti";
     rev = version;
-    sha256 = "0bcwfyd93fx0rzjc9jgg4pvvqbpxwizr044yqqa5rx70gaasz7qa";
+    sha256 = "12r9wawwl6x0rfv1kahwkamfa0pjq24z60az9pn9nsi2z1rrlwkd";
   };
 
   buildInputs = lib.optional stdenv.isDarwin Cocoa;
@@ -26,7 +26,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "Monitor a process and trigger a notification.";
+    description = "Monitor a process and trigger a notification";
     longDescription = ''
       Monitor a process and trigger a notification.
 

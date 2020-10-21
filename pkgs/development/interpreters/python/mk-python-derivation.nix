@@ -81,6 +81,8 @@
 # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
 # "wheel" : Install from a pre-compiled wheel.
 # "flit" : Install a flit package. This builds a wheel.
+# "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
+# "egg": Install a package from an egg.
 # "other" : Provide your own buildPhase and installPhase.
 , format ? "setuptools"
 

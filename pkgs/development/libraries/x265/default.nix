@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, nasm, numactl
+{ stdenv, fetchFromBitbucket, cmake, nasm, numactl
 , numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
 , debugSupport ? false # Run-time sanity checks (debugging)
 , werrorSupport ? false # Warnings as errors
@@ -21,33 +21,27 @@ let
     (mkFlag custatsSupport "DETAILED_CU_STATS")
     (mkFlag unittestsSupport "ENABLE_TESTS")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isPower [
+    "-DENABLE_ALTIVEC=OFF"
   ];
 
-  version = "3.2";
+  version = "3.4";
 
-  src = fetchurl {
-    urls = [
-      "https://get.videolan.org/x265/x265_${version}.tar.gz"
-      "ftp://ftp.videolan.org/pub/videolan/x265/x265_${version}.tar.gz"
-    ];
-    sha256 = "0fqkhfhr22gzavxn60cpnj3agwdf5afivszxf3haj5k1sny7jk9n";
+  src = fetchFromBitbucket {
+    owner = "multicoreware";
+    repo = "x265_git";
+    rev = "${version}";
+    sha256 = "1jzgv2hxhcwmsdf6sbgyzm88a46dp09ll1fqj92g9vckvh9a7dsn";
   };
-
-  patches = [
-    # Fix build on ARM (#406)
-    (fetchpatch {
-      url = "https://bitbucket.org/multicoreware/x265/issues/attachments/406/multicoreware/x265/1527562952.26/406/X265-2.8-asm-primitives.patch";
-      sha256 = "1vf8bpl37gbd9dcbassgkq9i0rp24qm3bl6hx9zv325174bn402v";
-    })
-  ];
 
   buildLib = has12Bit: stdenv.mkDerivation rec {
     name = "libx265-${if has12Bit then "12" else "10"}-${version}";
-    inherit src patches;
+    inherit src;
     enableParallelBuilding = true;
 
     postPatch = ''
       sed -i 's/unknown/${version}/g' source/cmake/version.cmake
+      sed -i 's/0.0/${version}/g' source/cmake/version.cmake
     '';
 
     cmakeLibFlags = [
@@ -72,12 +66,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  inherit version src patches;
+  inherit version src;
 
   enableParallelBuilding = true;
 
   postPatch = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
+    sed -i 's/0.0/${version}/g' source/cmake/version.cmake
   '';
 
   cmakeFlags = [

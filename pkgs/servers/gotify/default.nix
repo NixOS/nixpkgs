@@ -3,7 +3,6 @@
 , lib
 , fetchFromGitHub
 , buildGoModule
-, packr
 , sqlite
 , callPackage
 }:
@@ -25,19 +24,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  postPatch = ''
-    substituteInPlace app.go \
-      --replace 'Version = "unknown"' 'Version = "${version}"'
-  '';
-
   buildInputs = [ sqlite ];
-
-  nativeBuildInputs = [ packr ];
 
   ui = callPackage ./ui.nix { };
 
   preBuild = ''
-    cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && packr
+    cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && go run hack/packr/packr.go
   '';
 
   passthru = {
@@ -49,7 +41,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   buildFlagsArray = [
-    "-ldflags='-X main.Version=${version} -X main.Mode=prod'"
+    "-ldflags=-X main.Version=${version} -X main.Mode=prod"
   ];
 
   meta = with stdenv.lib; {

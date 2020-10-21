@@ -1,9 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, graphviz
+{ stdenv, buildPythonPackage, isPy3k, fetchPypi, substituteAll, graphviz
 , pkgconfig, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
   pname = "pygraphviz";
   version = "1.6";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

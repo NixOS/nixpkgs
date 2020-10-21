@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libdvdread, libdvdcss, dvdauthor }:
+{ stdenv, fetchurl, fetchpatch, libdvdread, libdvdcss, dvdauthor }:
 
 stdenv.mkDerivation rec {
   version = "0.4.2";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libdvdread libdvdcss dvdauthor ];
+
+  # see https://bugs.launchpad.net/dvdbackup/+bug/1869226
+  patchFlags = [ "-p0" ];
+  patches = [ (fetchpatch {
+    url = "https://git.slackbuilds.org/slackbuilds/plain/multimedia/dvdbackup/patches/dvdbackup-dvdread-6.1.patch";
+    sha256 = "1v3xl01bwq1592i5x5dyh95r0mmm1zvvwf92fgjc0smr0k3davfz";
+  })];
 
   meta = {
     description = "A tool to rip video DVDs from the command line";

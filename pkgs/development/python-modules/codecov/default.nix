@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "codecov";
-  version = "2.1.8";
+  version = "2.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0be9cd6358cc6a3c01a1586134b0fb524dfa65ccbec3a40e9f28d5f976676ba2";
+    sha256 = "355fc7e0c0b8a133045f0d6089bde351c845e7b52b99fec5903b4ea3ab5f6aab";
   };
 
   checkInputs = [ unittest2 ]; # Tests only

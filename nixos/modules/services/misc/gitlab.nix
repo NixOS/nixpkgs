@@ -73,6 +73,11 @@ let
 
   redisConfig.production.url = cfg.redisUrl;
 
+  pagesArgs = [
+    "-pages-domain" gitlabConfig.production.pages.host
+    "-pages-root" "${gitlabConfig.production.shared.path}/pages"
+  ] ++ cfg.pagesExtraArgs;
+
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
     production = flip recursiveUpdate cfg.extraConfig {
@@ -234,6 +239,13 @@ in {
         default = pkgs.gitaly;
         defaultText = "pkgs.gitaly";
         description = "Reference to the gitaly package";
+      };
+
+      packages.pages = mkOption {
+        type = types.package;
+        default = pkgs.gitlab-pages;
+        defaultText = "pkgs.gitlab-pages";
+        description = "Reference to the gitlab-pages package";
       };
 
       statePath = mkOption {
@@ -449,6 +461,12 @@ in {
           default = "peer";
           description = "How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
         };
+      };
+
+      pagesExtraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ "-listen-proxy" "127.0.0.1:8090" ];
+        description = "Arguments to pass to the gitlab-pages daemon";
       };
 
       secrets.secretFile = mkOption {
@@ -754,6 +772,26 @@ in {
       };
     };
 
+    systemd.services.gitlab-pages = mkIf (gitlabConfig.production.pages.enabled or false) {
+      description = "GitLab static pages daemon";
+      after = [ "network.target" "redis.service" "gitlab.service" ]; # gitlab.service creates configs
+      wantedBy = [ "multi-user.target" ];
+
+      path = [ pkgs.unzip ];
+
+      serviceConfig = {
+        Type = "simple";
+        TimeoutSec = "infinity";
+        Restart = "on-failure";
+
+        User = cfg.user;
+        Group = cfg.group;
+
+        ExecStart = "${cfg.packages.pages}/bin/gitlab-pages ${escapeShellArgs pagesArgs}";
+        WorkingDirectory = gitlabEnv.HOME;
+      };
+    };
+
     systemd.services.gitlab-workhorse = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -780,6 +818,23 @@ in {
           + "-authSocket ${gitlabSocket} "
           + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public "
           + "-secretPath ${cfg.statePath}/.gitlab_workhorse_secret";
+      };
+    };
+
+    systemd.services.gitlab-mailroom = mkIf (gitlabConfig.production.incoming_email.enabled or false) {
+      description = "GitLab incoming mail daemon";
+      after = [ "network.target" "redis.service" "gitlab.service" ]; # gitlab.service creates configs
+      wantedBy = [ "multi-user.target" ];
+      environment = gitlabEnv;
+      serviceConfig = {
+        Type = "simple";
+        TimeoutSec = "infinity";
+        Restart = "on-failure";
+
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/bundle exec mail_room -c ${cfg.packages.gitlab}/share/gitlab/config.dist/mail_room.yml";
+        WorkingDirectory = gitlabEnv.HOME;
       };
     };
 

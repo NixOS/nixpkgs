@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = "make PREFIX=$out copy-data";
 
   # Sometimes tests fail when run in parallel
-  checkFlags = [ "--test-threads=1" ];
+  cargoParallelTestThreads = false;
 
   meta = with stdenv.lib; {
     description = "A graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
@@ -48,4 +48,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

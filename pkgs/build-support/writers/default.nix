@@ -164,12 +164,13 @@ rec {
   #   '';
   writeHaskell = name: {
     libraries ? [],
-    ghc ? pkgs.ghc
+    ghc ? pkgs.ghc,
+    ghcArgs ? []
   }:
     makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc tmp.hs
+        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
         mv tmp $out
         ${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded "$out"
       '';

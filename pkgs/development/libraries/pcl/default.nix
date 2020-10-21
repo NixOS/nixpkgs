@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://pointclouds.org/";
+    homepage = "https://pointclouds.org/";
+    broken = stdenv.lib.versionAtLeast qtbase.version "5.15";
     description = "Open project for 2D/3D image and point cloud processing";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric];

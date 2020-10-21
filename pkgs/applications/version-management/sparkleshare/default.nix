@@ -3,6 +3,7 @@
   coreutils,
   fetchFromGitHub,
   git,
+  git-lfs,
   glib,
   gtk-sharp-3_0,
   lib,
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
           paths = [
             coreutils
             git
+            git-lfs
             glib
             mono
             openssh
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Share and collaborate by syncing with any Git repository instantly. Linux, macOS, and Windows.";
+    description = "Share and collaborate by syncing with any Git repository instantly. Linux, macOS, and Windows";
     homepage = "https://sparkleshare.org";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ kevincox ];

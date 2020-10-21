@@ -64,7 +64,7 @@ let
         (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
         ./patches/specify_pkglibdir_at_runtime.patch
         ./patches/findstring.patch
-      ] ++ lib.optional stdenv.isLinux ./patches/socketdir-in-run.patch;
+      ] ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
 
     installTargets = [ "install-world" ];
 
@@ -144,7 +144,7 @@ let
       homepage    = "https://www.postgresql.org";
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin ];
+      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin marsam ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
@@ -218,6 +218,14 @@ in self: {
     psqlSchema = "12";
     sha256 = "1k06wryy8p4s1fim9qafcjlak3f58l0wqaqnrccr9x9j5jz3zsdy";
     this = self.postgresql_12;
+    inherit self;
+  };
+
+  postgresql_13 = self.callPackage generic {
+    version = "13.0";
+    psqlSchema = "13";
+    sha256 = "15i2b7m9a9430idqdgvrcyx66cpxz0v2d81nfqcm8ss3inz51rw0";
+    this = self.postgresql_13;
     inherit self;
   };
 

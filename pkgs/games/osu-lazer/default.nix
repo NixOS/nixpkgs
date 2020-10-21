@@ -13,13 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.820.0";
+  version = "2020.925.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "0vszw0f5x0syshn8bnsbskxvknwpgbnm31kxwh1mfdr7pnxvw922";
+    sha256 = "0838i3pdc1c44jm7mp86kvw5164w8f3faci73bzkq84g20ixwj2g";
   };
 
   patches = [ ./bypass-tamper-detection.patch ];
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $HOME/.nuget/NuGet
     cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
 
-    dotnet restore --source nixos osu.Desktop
+    dotnet restore --source "$PWD/nixos" osu.Desktop
 
     runHook postConfigure
   '';

@@ -1,14 +1,15 @@
-{ lib, fetchFromGitHub, python3Packages, qtbase, wrapQtAppsHook, secp256k1 }:
+{ lib, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
+, secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.0.14";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = version;
-    sha256 = "1dp7cj1185h6xfz6jzh0iq58zvg3wq9hl96bkgxkf5h4ygni2vm6";
+    sha256 = "1fllz2s20lg4hrppzmnlgjy9mrq7gaq66l2apb3vz1avzvsjw3gm";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -43,9 +44,7 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  checkInputs = with python3Packages; [
-    pytest
-  ];
+  checkInputs = with python3Packages; [ pytest ];
 
   checkPhase = ''
     unset HOME
@@ -62,9 +61,11 @@ python3Packages.buildPythonApplication rec {
   #   Electron Cash was unable to find the secp256k1 library on this system.
   #   Elliptic curve cryptography operations will be performed in slow
   #   Python-only mode.
-  postFixup = ''
-    wrapQtApp $out/bin/electron-cash \
-      --prefix LD_LIBRARY_PATH : ${secp256k1}/lib
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "--prefix" "LD_LIBRARY_PATH" ":" "${secp256k1}/lib"
+    )
   '';
 
   doInstallCheck = true;

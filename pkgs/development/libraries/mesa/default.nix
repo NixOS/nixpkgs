@@ -4,7 +4,6 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, python3Packages
 , libglvnd
-, patchelf, autoreconfHook, fetchFromGitHub
 , enableRadv ? true
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
@@ -32,7 +31,7 @@ with stdenv.lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.1.6";
+  version = "20.1.9";
   branch  = versions.major version;
 in
 
@@ -47,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0g59gxbgr884a9xvg0fls10zkllyhz675zjvr50dcfmh2h0x9gi3";
+    sha256 = "10kk8a8k7f4ip8yaiqdyrx162nbw8pw4h3b4hs4ha8mpd43wlldj";
   };
 
   prePatch = "patchShebangs .";
@@ -148,16 +147,6 @@ stdenv.mkDerivation {
   depsBuildBuild = [ pkgconfig ];
 
   nativeBuildInputs = [
-    (patchelf.overrideAttrs (pa: {
-      src = fetchFromGitHub {
-        owner = "NixOS";
-        repo = "patchelf";
-        rev = "61bc10176"; # current master; what matters is merge of #225
-        sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
-      };
-      nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
-    }))
-  ] ++ [
     pkgconfig meson ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako

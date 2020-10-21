@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ stdenv, buildPackages, fetchurl, perl, xz
+{ stdenv, buildPackages, fetchurl, perl, xz, gettext
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -12,7 +12,7 @@
 # files.
 
 let
-  crossBuildTools = interactive && stdenv.hostPlatform != stdenv.buildPlatform;
+  crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
 with stdenv.lib;
@@ -26,8 +26,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  patches = optional (version == "6.5") ./perl.patch
-    ++ optional crossBuildTools ./cross-tools-flags.patch;
+  patches = optional crossBuildTools ./cross-tools-flags.patch;
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
@@ -40,6 +39,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ xz.bin ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
+    ++ optionals stdenv.isDarwin [ gettext ]
     ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]

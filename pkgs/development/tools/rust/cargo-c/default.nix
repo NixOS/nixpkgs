@@ -5,7 +5,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.6.7";
+  version = "0.6.15";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-source-${version}";
@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage rec {
       owner = "lu-zero";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0n52xh4qg12bvvp2dgx5wfj5f31qijdqahasa3qfa3c3aqq7cvvg";
+      sha256 = "04hrk3vy8294vxcsggdpcs8hg3ykzj2564ifsqc4zwz4b4wd1p8l";
     };
     cargoLock = fetchurl {
       url = "https://github.com/lu-zero/${pname}/releases/download/v${version}/Cargo.lock";
-      sha256 = "0296187hsaxxmqhsrrva4qf313jwh3z08j1vxcbislxdq8xg32qb";
+      sha256 = "0rqb6ssqsdlm8zbshbxkwxlyy7j7p2gyficavzz33cw9g6fpmzbd";
     };
 
     installPhase = ''
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "1gwyszpcmss2d0lm5hvf3b48jy7b0fm7xizhrl3wd6rzw7pg06zd";
+  cargoSha256 = "1q2s28nqd6l9qmhmdksdjjlypxry5ff18i2pgwmgiilcry51mj4b";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]

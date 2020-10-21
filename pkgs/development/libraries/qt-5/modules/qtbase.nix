@@ -295,8 +295,8 @@ stdenv.mkDerivation {
       "-make tools"
       ''-${lib.optionalString (!buildExamples) "no"}make examples''
       ''-${lib.optionalString (!buildTests) "no"}make tests''
-      "-v"
     ]
+    ++ lib.optional (compareVersion "5.15.0" < 0) "-v"
 
     ++ (
       if stdenv.isDarwin
@@ -311,8 +311,9 @@ stdenv.mkDerivation {
       else
         [
           "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
-
-          "-system-xcb"
+        ]
+        ++ lib.optional (compareVersion "5.15.0" < 0) "-system-xcb"
+        ++ [
           "-xcb"
           "-qpa xcb"
           "-L" "${libX11.out}/lib"
@@ -327,7 +328,9 @@ stdenv.mkDerivation {
           ''-${lib.optionalString (cups == null) "no-"}cups''
           "-dbus-linked"
           "-glib"
-          "-system-libjpeg"
+        ]
+        ++ lib.optional (compareVersion "5.15.0" < 0) "-system-libjpeg"
+        ++ [
           "-system-libpng"
         ]
         ++ lib.optional withGtk3 "-gtk"

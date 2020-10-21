@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "go-migrate";
-  version = "4.11.0";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "golang-migrate";
     repo = "migrate";
     rev = "v${version}";
-    sha256 = "Dw+TiuksgOfFBCzNc9rsxyQCoXES+fpr4wTrZfqohGM=";
+    sha256 = "0vrc9y90aamj618sfipq2sgzllhdr4hmicj4yvl147klwb1rxlz6";
   };
 
-  vendorSha256 = "CezVFRZ/cknvK4t/MjyP46zJACGkzj4CZ5JVQ502Ihw=";
+  vendorSha256 = "0jpz5xvwsw4l7nmi7s1grvbfy4xjp50hrjycwicgv2ll719gz5v0";
 
   subPackages = [ "cmd/migrate" ];
 
   meta = with stdenv.lib; {
     homepage    = "https://github.com/golang-migrate/migrate";
-    description = "Database migrations. CLI and Golang library.";
+    description = "Database migrations. CLI and Golang library";
     maintainers = with maintainers; [ offline ];
     license     = licenses.mit;
   };

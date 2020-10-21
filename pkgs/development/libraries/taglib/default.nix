@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://taglib.org/";
     repositories.git = "git://github.com/taglib/taglib.git";
-    description = "A library for reading and editing audio file metadata.";
+    description = "A library for reading and editing audio file metadata";
     longDescription = ''
       TagLib is a library for reading and editing the meta-data of several
       popular audio formats. Currently it supports both ID3v1 and ID3v2 for MP3

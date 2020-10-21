@@ -73,7 +73,7 @@
 <programlisting>
 { pkgs, ... }:
 {
-  programs.zsh.ohMyZsh.customPkgs = with pkgs; [
+  programs.zsh.ohMyZsh.customPkgs = [
     pkgs.nix-zsh-completions
     # and even more...
   ];

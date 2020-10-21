@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
+    ./0001-Remove-references-to-dropped-sys_nerr-sys_errlist-fo.patch
     (fetchpatch {
       name = "CVE-2014-0470.patch";
       url = "https://salsa.debian.org/debian/super/raw/debian/3.30.0-7/debian/patches/14-Fix-unchecked-setuid-call.patch";

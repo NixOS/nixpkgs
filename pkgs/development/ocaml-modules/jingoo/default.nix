@@ -3,7 +3,7 @@
 
 buildDunePackage rec {
   pname = "jingoo";
-  version = "1.3.4";
+  version = "1.4.1";
 
   minimumOCamlVersion = "4.04";
 
@@ -11,7 +11,7 @@ buildDunePackage rec {
     owner = "tategakibunko";
     repo = "jingoo";
     rev = "v${version}";
-    sha256 = "0fsmm6wxa3axwbcgwdidik3drg754wyh2vxri2w12d662221m98s";
+    sha256 = "16wzggwi3ri13v93mjk8w7zxwp65qmi1rnng2kpk9vffx5g1kv6f";
   };
 
   buildInputs = [ menhir ];

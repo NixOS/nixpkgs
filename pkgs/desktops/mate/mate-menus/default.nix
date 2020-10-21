@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-menus";
-  version = "1.24.0";
+  version = "1.24.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vv4j38h7mrbfrsj99k25z6y7b5dg30fzd2qnhk7pl8ca8s1jhrd";
+    sha256 = "17zc9fn14jykhn30z8iwlw0qwk32ivj6gxgww3xrqvqk0da5yaas";
   };
 
   nativeBuildInputs = [ pkgconfig gettext gobject-introspection ];

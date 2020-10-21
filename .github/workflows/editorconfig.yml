@@ -10,11 +10,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: technote-space/get-diff-action@v3.1.0
+    - uses: technote-space/get-diff-action@v4.0.0
     - name: Fetch editorconfig-checker
       if: env.GIT_DIFF
       env:
-        ECC_VERSION: "2.1.0"
+        ECC_VERSION: "2.2.0"
         ECC_URL: "https://github.com/editorconfig-checker/editorconfig-checker/releases/download"
       run: |
         curl -sSf -O -L -C - "$ECC_URL/$ECC_VERSION/ec-linux-amd64.tar.gz" && \

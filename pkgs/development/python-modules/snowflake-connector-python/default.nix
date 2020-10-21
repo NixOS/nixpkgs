@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.2.10";
+  version = "2.3.3";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0beba8eb9c1dec2782d52491d058256e1f5d9e010114a80ff3b8e3905be655fd";
+    sha256 = "18w6ibpibqj3v136jjfklbax1l4y80v8mfk19apxlaprf6wvwpwy";
   };
 
   propagatedBuildInputs = [
@@ -57,12 +57,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'cffi>=1.9,<1.14'," "'cffi~=1.9',"
+      --replace "'boto3>=1.4.4,<1.15'," "'boto3~=1.15'," \
+      --replace "'cryptography>=2.5.0,<3.0.0'," "'cryptography'," \
+      --replace "'idna<2.10'," "'idna'," \
+      --replace "'requests<2.24.0'," "'requests',"
   '';
 
-  # tests are not working
-  # XXX: fix the tests
+  # tests require encrypted secrets, see
+  # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
   doCheck = false;
+  pythonImportsCheck = [ "snowflake" "snowflake.connector" ];
 
   meta = with lib; {
     description = "Snowflake Connector for Python";

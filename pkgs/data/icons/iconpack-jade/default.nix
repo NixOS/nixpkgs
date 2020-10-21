@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iconpack-jade";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1q29ikfssn1vmwws3dry4ssq6b44afd9sb7dwv3rdqg0frabpj1m";
+    sha256 = "1bns1f3vv7d7ps08plnhl3432cy2l2mhv85h7n4fifjqqi8bll9x";
   };
 
   nativeBuildInputs = [ gtk3 ];

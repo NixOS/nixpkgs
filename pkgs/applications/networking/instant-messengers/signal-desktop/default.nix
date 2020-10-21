@@ -4,7 +4,7 @@
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3
 # Runtime dependencies:
-, systemd, libnotify, libdbusmenu
+, systemd, libnotify, libdbusmenu, libpulseaudio
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -25,7 +25,7 @@ let
       else "");
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "1.35.1"; # Please backport all updates to the stable channel.
+  version = "1.37.1"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "1nxj7h8yrp2sbxxd49q9xdh1zsqixcd01i83lr492f4322cg1yjf";
+    sha256 = "0zj068wkgb0k7iq4ld0lb06vk2zlsvv5pf0csr4zkzkq0hgzx33s";
   };
 
   nativeBuildInputs = [
@@ -122,6 +122,7 @@ in stdenv.mkDerivation rec {
       --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
 
     autoPatchelf --no-recurse -- $out/lib/Signal/
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc.node
   '';
 
   # Tests if the application launches and waits for "Link your phone to Signal Desktop":

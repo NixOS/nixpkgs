@@ -1,11 +1,11 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
-
 let
   goPackagePath = "k8s.io/kops";
 
-  generic = { version, sha256, rev ? version, ...}@attrs:
-    let attrs' = builtins.removeAttrs attrs ["version" "sha256" "rev"] ; in
-      buildGoPackage {
+  generic = { version, sha256, rev ? version, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "rev" ]; in
+    buildGoPackage
+      {
         pname = "kops";
         inherit version;
 
@@ -42,12 +42,14 @@ let
         meta = with stdenv.lib; {
           description = "Easiest way to get a production Kubernetes up and running";
           homepage = "https://github.com/kubernetes/kops";
+          changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
           maintainers = with maintainers; [ offline zimbatm kampka ];
           platforms = platforms.unix;
         };
       } // attrs';
-in rec {
+in
+rec {
 
   mkKops = generic;
 
@@ -57,13 +59,13 @@ in rec {
   };
 
   kops_1_17 = mkKops {
-    version = "1.17.1";
-    sha256 = "1km6nwanmhfx8rl1wp445z9ib50jr2f86rd92vilm3q4rs9kig1h";
+    version = "1.17.2";
+    sha256 = "0fmrzjz163hda6sl1jkl7cmg8fw6mmqb9953048jnhmd3w428xlz";
   };
 
   kops_1_18 = mkKops rec {
-    version = "1.18.0";
-    sha256 = "16zbjxxv08j31y7lhkqx2bnx0pc3r0vpfrlhdjs26z22p5rc4rrh";
+    version = "1.18.1";
+    sha256 = "0jw23vmq2v9czxyansggq4fapz1bcaclmxpw6na4dsn8zcssz320";
     rev = "v${version}";
   };
 }

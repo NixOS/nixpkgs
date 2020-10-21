@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "federico-terzi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11xdnn1iwpx58s3wvjb6dkgfc6dzsblzb6fngc0np5vx8r2pccpg";
+    sha256 = "11b02i254dn5nwk8m2g21ixz22qcqgcf90vwll0n3yny78p40hn0";
   };
 
-  cargoSha256 = "1yjpqjfrixscg52yhalybgp734w3sdqg5hxka8ppcvz7lp3w5b1s";
+  cargoSha256 = "1cnz6rbqbb08j67bw485qi22pi31b3l3yzgr6w1qx780ldf1zd54";
 
   nativeBuildInputs = [
     extra-cmake-modules

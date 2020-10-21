@@ -36,8 +36,8 @@ python3Packages.buildPythonApplication rec {
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
   '';
 
-  postFixup = ''
-    wrapQtApp $out/bin/electrum-ltc
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   checkPhase = ''

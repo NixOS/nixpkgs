@@ -83,9 +83,9 @@
 /pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout
 
 # Perl
-/pkgs/development/interpreters/perl @volth
-/pkgs/top-level/perl-packages.nix   @volth
-/pkgs/development/perl-modules      @volth
+/pkgs/development/interpreters/perl @volth @stigtsp
+/pkgs/top-level/perl-packages.nix   @volth @stigtsp
+/pkgs/development/perl-modules      @volth @stigtsp
 
 # R
 /pkgs/applications/science/math/R   @peti
@@ -96,8 +96,8 @@
 /pkgs/development/ruby-modules      @alyssais
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @LnL7
-/pkgs/build-support/rust @andir
+/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
+/pkgs/build-support/rust @andir @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
@@ -192,6 +192,7 @@
 /nixos/tests/php                         @NixOS/php
 /pkgs/build-support/build-pecl.nix       @NixOS/php
 /pkgs/development/interpreters/php       @NixOS/php
+/pkgs/development/php-packages           @NixOS/php
 /pkgs/top-level/php-packages.nix         @NixOS/php
 
 # Podman, CRI-O modules and related

@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , aspell
-, pkgconfig
+, pkg-config
 , glib
 , hunspell
 , hspell
@@ -10,17 +10,17 @@
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.2.9";
+  version = "2.2.11";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0g1gf86jzxxhnhkn7jvgi0k9agzav2zr8pjnpgdwpvgmfci3v6mj";
+    sha256 = "opxXd8TkX8rCWVwVxJ1tKqQ0+l58mT3/P582e2X+Ryo=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

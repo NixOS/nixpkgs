@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, fetchsvn
+{ mkDerivation, lib, fetchurl, callPackage
 , pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -17,14 +17,17 @@ with lib;
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
-mkDerivation rec {
+let
+  tg_owt = callPackage ./tg_owt.nix {};
+
+in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.3.0";
+  version = "2.4.3";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0yga4p36jrc5m3d8q2y2g0505c2v540w5hgcscapl4xj9hyb21dw";
+    sha256 = "15a8pnz4wf3464n8dvfzr9ck0vmhlx16ya1y889y3crjagm4ipjn";
   };
 
   postPatch = ''
@@ -44,6 +47,7 @@ mkDerivation rec {
     qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
+    tg_owt
     # TODO: Shouldn't be required:
     pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
   ];
@@ -55,12 +59,6 @@ mkDerivation rec {
     # We're allowed to used the API ID of the Snap package:
     "-DTDESKTOP_API_ID=611335"
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
-    "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
-    "-DDESKTOP_APP_USE_PACKAGED_VARIANT=OFF"
-    "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
-    "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
-    "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
-    "-DDESKTOP_APP_DISABLE_WEBRTC_INTEGRATION=ON"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ];
@@ -82,6 +80,10 @@ mkDerivation rec {
   # TODO: Package mapbox-variant
 
   postFixup = ''
+    # Nuke refs to `tg_owt` which is introduced by `__FILE__` in headers.
+    sed -E "s|($NIX_STORE/)[a-z0-9]{32}(-${tg_owt.name})|\1eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\2|g" \
+      --in-place $out/bin/telegram-desktop
+
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
     wrapProgram $out/bin/telegram-desktop \
@@ -92,6 +94,10 @@ mkDerivation rec {
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
+
+  passthru = {
+    inherit tg_owt;
+  };
 
   meta = {
     description = "Telegram Desktop messaging app";

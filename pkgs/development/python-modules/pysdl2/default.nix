@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, SDL2, SDL2_ttf, SDL2_image, SDL2_gfx, SDL2_mixer }:
+{ stdenv, lib, substituteAll, fetchPypi, buildPythonPackage, SDL2, SDL2_ttf, SDL2_image, SDL2_gfx, SDL2_mixer }:
 
 buildPythonPackage rec {
   pname = "PySDL2";
@@ -18,19 +18,18 @@ buildPythonPackage rec {
   # which library they want to include.
   buildInputs = [ SDL2_ttf SDL2_image SDL2_gfx SDL2_mixer ];
   propagatedBuildInputs = [ SDL2 ];
-  patches = [ ./PySDL2-dll.patch ];
-  postPatch = ''
-    substituteInPlace sdl2/dll.py --replace \
-      "DLL(\"SDL2\")" "DLL('${SDL2}/lib/libSDL2${stdenv.hostPlatform.extensions.sharedLibrary}')"
-    substituteInPlace sdl2/sdlttf.py --replace \
-      "DLL(\"SDL2_ttf\")" "DLL('${SDL2_ttf}/lib/libSDL2_ttf${stdenv.hostPlatform.extensions.sharedLibrary}')"
-    substituteInPlace sdl2/sdlimage.py --replace \
-      "DLL(\"SDL2_image\")" "DLL('${SDL2_image}/lib/libSDL2_image${stdenv.hostPlatform.extensions.sharedLibrary}')"
-    substituteInPlace sdl2/sdlgfx.py --replace \
-     "DLL(\"SDL2_gfx\")" "DLL('${SDL2_gfx}/lib/libSDL2_gfx${stdenv.hostPlatform.extensions.sharedLibrary}')"
-    substituteInPlace sdl2/sdlmixer.py --replace \
-     "DLL(\"SDL2_mixer\")" "DLL('${SDL2_mixer}/lib/libSDL2_mixer${stdenv.hostPlatform.extensions.sharedLibrary}')"
-  '';
+  patches = [
+    (substituteAll ({
+      src = ./PySDL2-dll.patch;
+    } // builtins.mapAttrs (_: pkg: "${pkg}/lib/lib${pkg.pname}${stdenv.hostPlatform.extensions.sharedLibrary}") {
+      # substituteAll keys must start lowercase
+      sdl2 = SDL2;
+      sdl2_ttf = SDL2_ttf;
+      sdl2_image = SDL2_image;
+      sdl2_gfx = SDL2_gfx;
+      sdl2_mixer = SDL2_mixer;
+    }))
+  ];
 
   meta = {
     description = "A wrapper around the SDL2 library and as such similar to the discontinued PySDL project";

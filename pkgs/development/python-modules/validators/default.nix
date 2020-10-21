@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "validators";
   version = "0.17.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

@@ -1,18 +1,23 @@
-{ lib, fetchurl, ocaml, buildDunePackage }:
-
-if lib.versionAtLeast ocaml.version "4.08"
-then throw "earley is not available for OCaml ${ocaml.version}"
-else
+{ lib, fetchFromGitHub, ocaml, buildDunePackage
+, stdlib-shims
+}:
 
 buildDunePackage rec {
-  version = "2.0.0";
+  version = "3.0.0";
   pname = "earley";
-  src = fetchurl {
-    url = "https://github.com/rlepigre/ocaml-earley/releases/download/${version}/earley-${version}.tbz";
-    sha256 = "1kjr0wh3lji7f493kf48rphxnlv3sygj5a8rmx9z3xkpbd7aqyyw";
+  src = fetchFromGitHub {
+    owner = "rlepigre";
+    repo = "ocaml-earley";
+    rev = version;
+    sha256 = "1vi58zdxchpw6ai0bz9h2ggcmg8kv57yk6qbx82lh47s5wb3mz5y";
   };
 
-  minimumOCamlVersion = "4.03";
+  minimumOCamlVersion = "4.07";
+  useDune2 = true;
+
+  buildInputs = [ stdlib-shims ];
+
+  doCheck = true;
 
   meta = {
     description = "Parser combinators based on Earley Algorithm";

@@ -20,7 +20,7 @@ in
 
 {
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
-  ngx_aws_auth = throw "fastcgi-cache-purge was renamed to aws-auth";
+  ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
   aws-auth = {
     src = fetchFromGitHub {
@@ -229,8 +229,8 @@ in
       name = "naxsi";
       owner = "nbs-system";
       repo = "naxsi";
-      rev = "07a056ccd36bc3c5c40dc17991db226cb8cf6241";
-      sha256 = "1kdqy7by6ha2pl9lkkjxh4qrwcsrj2alm8fl129831h5y5xy8qx2";
+      rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
+      sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
     } + "/naxsi_src";
   };
 
@@ -240,8 +240,8 @@ in
         name = "opentracing";
         owner = "opentracing-contrib";
         repo = "nginx-opentracing";
-        rev = "v0.9.0";
-        sha256 = "02rf1909grbhvs9mjxrv7pwgbf7b8rpjw7j8rpwxag2rgvlsic3g";
+        rev = "v0.10.0";
+        sha256 = "1q234s3p55xv820207dnh4fcxkqikjcq5rs02ai31ylpmfsf0kkb";
       };
       in "${src'}/opentracing";
     inputs = [ pkgs.opentracing-cpp ];
@@ -335,8 +335,8 @@ in
       name = "shibboleth";
       owner = "nginx-shib";
       repo = "nginx-http-shibboleth";
-      rev = "5eadab80b2f5940d8873398bca000d93d3f0cf27";
-      sha256 = "1l0h3ic9mfsci89d0k5q3igkfpzq052ia25xj5hc8fq388yrhpap";
+      rev = "3f5ff4212fa12de23cb1acae8bf3a5a432b3f43b";
+      sha256 = "136zjipaz7iikgcgqwdv1mrh3ya996zyzbkdy6d4k07s2h9g7hy6";
     };
   };
 

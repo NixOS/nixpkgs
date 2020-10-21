@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtsvg, qttools
+, qtbase, qtsvg, qttools, perl
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
 # default for now until I (or someone else) figure it out.
@@ -16,7 +16,7 @@
 , withDevices ? true, udisks2
 , withDynamic ? true
 , withHttpServer ? true
-, withLibVlc ? false, vlc
+, withLibVlc ? false, libvlc
 , withStreams ? true
 }:
 
@@ -38,6 +38,8 @@ let
 
   withUdisks = (withTaglib && withDevices);
 
+  perl' = perl.withPackages (ppkgs: [ ppkgs.URI ]);
+
 in mkDerivation {
   name = "${pname}-${version}";
 
@@ -48,7 +50,18 @@ in mkDerivation {
     sha256 = "0ix7xp352bziwz31mw79y7wxxmdn6060p8ry2px243ni1lz1qx1c";
   };
 
-  buildInputs = [ qtbase qtsvg ]
+  patches = [
+    # Cantata wants to check if perl is in the PATH at runtime, but we
+    # patchShebangs the playlists scripts, making that unnecessary (perl will
+    # always be available because it's a dependency)
+    ./dont-check-for-perl-in-PATH.diff
+  ];
+
+  postPatch = ''
+    patchShebangs playlists
+  '';
+
+  buildInputs = [ qtbase qtsvg perl' ]
     ++ lib.optionals withTaglib [ taglib taglib_extras ]
     ++ lib.optionals withReplaygain [ ffmpeg_3 speex mpg123 ]
     ++ lib.optional  withHttpStream qtmultimedia
@@ -58,7 +71,7 @@ in mkDerivation {
     ++ lib.optional  withMtp libmtp
     ++ lib.optional  withMusicbrainz libmusicbrainz5
     ++ lib.optional  withUdisks udisks2
-    ++ lib.optional  withLibVlc vlc;
+    ++ lib.optional  withLibVlc libvlc;
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 

@@ -39,6 +39,14 @@ let
       meta.broken = since "12";
     };
 
+    # NOTE: this is a stub package to fetch npm dependencies for
+    # ../../applications/video/epgstation
+    epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
+      meta = drv.meta // {
+        broken = true; # not really broken, see the comment above
+      };
+    });
+
     bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
       name = "bitwarden-cli-${drv.version}";
     });
@@ -51,6 +59,11 @@ let
       buildInputs = [ pkgs.phantomjs2 ];
     };
 
+    expo-cli = super."expo-cli".override (attrs: {
+      # The traveling-fastlane-darwin optional dependency aborts build on Linux.
+      dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
+    });
+
     git-ssb = super.git-ssb.override {
       buildInputs = [ self.node-gyp-build ];
       meta.broken = since "10";
@@ -59,6 +72,18 @@ let
     insect = super.insect.override (drv: {
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
+
+    makam =  super.makam.override {
+      buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
+      postFixup = ''
+        wrapProgram "$out/bin/makam" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nodejs ]}
+        ${
+          if stdenv.isLinux
+            then "patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
+            else ""
+        }
+      '';
+    };
 
     mirakurun = super.mirakurun.override rec {
       nativeBuildInputs = with pkgs; [ makeWrapper ];
@@ -103,8 +128,22 @@ let
     };
 
     node-red = super.node-red.override {
-      meta.broken = since "10";
+      buildInputs = [ self.node-pre-gyp ];
     };
+
+    mermaid-cli = super."@mermaid-js/mermaid-cli".override (
+    if stdenv.isDarwin
+    then {}
+    else {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/mmdc \
+        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
 
     pnpm = super.pnpm.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -162,6 +201,32 @@ let
       meta.broken = since "10";
     };
 
+    vega-cli = super.vega-cli.override {
+      nativeBuildInputs = [ pkgs.pkgconfig ];
+      buildInputs = with pkgs; [
+        super.node-pre-gyp
+        pixman
+        cairo
+        pango
+        libjpeg
+      ];
+    };
+
+    vega-lite = super.vega-lite.override {
+        # npx tries to install vega from scratch at vegalite runtime if it
+        # can't find it. We thus replace it with a direct call to the nix
+        # derivation. This might not be necessary anymore in future vl
+        # versions: https://github.com/vega/vega-lite/issues/6863.
+        postInstall = ''
+          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
+            --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
+          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
+            --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
+          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
+            --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
+        '';
+    };
+
     webtorrent-cli = super.webtorrent-cli.override {
       buildInputs = [ self.node-gyp-build ];
     };
@@ -173,6 +238,8 @@ let
         # https://sharp.pixelplumbing.com/install
         vips
 
+        libsecret
+        self.node-gyp-build
         self.node-pre-gyp
       ];
     };

@@ -35,7 +35,7 @@ let
       # Steam VR
       procps
       usbutils
-    ] ++ lib.optional withJava jdk
+    ] ++ lib.optional withJava jdk8 # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
@@ -44,7 +44,7 @@ let
 
   # Zachtronics and a few other studios expect STEAM_LD_LIBRARY_PATH to be present
   exportLDPath = ''
-    export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}\''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
@@ -89,6 +89,7 @@ in buildFHSUserEnv rec {
     at-spi2-core   # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-plugins-base
     libdrm
     mono
     xorg.xkeyboardconfig
@@ -193,8 +194,6 @@ in buildFHSUserEnv rec {
     SDL_mixer
     SDL2_ttf
     SDL2_mixer
-    gstreamer
-    gst-plugins-base
     libappindicator-gtk2
     libcaca
     libcanberra

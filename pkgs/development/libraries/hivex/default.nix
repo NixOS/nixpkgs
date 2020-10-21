@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.3.19";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
+    url = "https://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
     sha256 = "0qppahpf7jq950nf8ial47h90nyqgnsffsj3zgdjjwkn958wq0ji";
   };
 

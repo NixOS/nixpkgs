@@ -74,14 +74,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
         # OOM killer randomly get rid of processes, since this leads
         # to failures that are hard to diagnose.
         echo 2 > /proc/sys/vm/panic_on_oom
-
-        # Coverage data is written into /tmp/coverage-data.
-        mkdir -p /tmp/xchg/coverage-data
       '';
-
-    # If the kernel has been built with coverage instrumentation, make
-    # it available under /proc/gcov.
-    boot.kernelModules = [ "gcov-proc" ];
 
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention).
@@ -111,8 +104,6 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     networking.defaultGateway = mkOverride 150 "";
     networking.nameservers = mkOverride 150 [ ];
 
-    systemd.globalEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
-
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SERIAL_8250_CONSOLE")
       (isYes "SERIAL_8250")
@@ -125,6 +116,10 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
+
+    # Make sure we use the Guest Agent from the QEMU package for testing
+    # to reduce the closure size required for the tests.
+    services.qemuGuest.package = pkgs.qemu_test.ga;
   };
 
 }

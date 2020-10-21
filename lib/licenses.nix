@@ -448,11 +448,6 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     free = false;
   };
 
-  jasper = spdx {
-    spdxId = "JasPer-2.0";
-    fullName = "JasPer License";
-  };
-
   lgpl2Only = spdx {
     spdxId = "LGPL-2.0-only";
     fullName = "GNU Library General Public License v2 only";
@@ -647,6 +642,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   purdueBsd = {
     fullName = " Purdue BSD-Style License"; # also know as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
+  };
+
+  prosperity30 = {
+    fullName = "Prosperity-3.0.0";
+    free = false;
+    url = "https://prosperitylicense.com/versions/3.0.0.html";
   };
 
   qhull = spdx {

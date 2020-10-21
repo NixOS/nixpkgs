@@ -1,5 +1,5 @@
 {
-  mkDerivation, copyPathsToStore, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-contacts, grantlee, grantleetheme, kconfig, kconfigwidgets,
   kcontacts, ki18n, kiconthemes, kio, libkleo, pimcommon, prison,

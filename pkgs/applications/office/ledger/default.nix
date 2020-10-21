@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DBUILD_DOCS:BOOL=ON"
     (lib.optionalString usePython "-DUSE_PYTHON=true")
-  ] ++ lib.optionals (usePython && stdenv.isDarwin) [
-    # Fix python lookup on Darwin. Not necessary after
-    # https://github.com/NixOS/nixpkgs/pull/94090 lands in master
-    "-DPython_ROOT_DIR=${python}"
   ];
 
   # by default, it will query the python interpreter for it's sitepackages location

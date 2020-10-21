@@ -6,8 +6,6 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/ribbybibby/s3_exporter";
 
-  goDeps = ./aws-s3-exporter_deps.nix;
-
   src = fetchFromGitHub {
     owner = "ribbybibby";
     repo = "s3_exporter";

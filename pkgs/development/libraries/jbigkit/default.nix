@@ -8,15 +8,23 @@ stdenv.mkDerivation rec {
     sha256 = "0cnrcdr1dwp7h7m0a56qw09bv08krb37mpf7cml5sjdgpyv0cwfy";
   };
 
+  makeFlags = [
+    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+  ];
+
   postPatch = ''
     sed -i 's/^\(CFLAGS.*\)$/\1 -fPIC/' Makefile
-  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+
     for f in Makefile libjbig/Makefile pbmtools/Makefile; do
-        substituteInPlace $f --replace "CC = gcc" "CC = clang"
+        sed -i -E 's/\bar /$(AR) /g;s/\branlib /$(RANLIB) /g' "$f"
     done
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m644 libjbig/libjbig.a $out/lib/libjbig.a
     install -D -m644 libjbig/libjbig85.a $out/lib/libjbig85.a
     install -D -m644 libjbig/jbig.h $out/include/jbig.h
@@ -30,12 +38,14 @@ stdenv.mkDerivation rec {
     install -D -m755 pbmtools/pbmtojbg $out/bin/pbmtojbg
     install -D -m755 pbmtools/jbgtopbm85 $out/bin/jbgtopbm85
     install -D -m755 pbmtools/pbmtojbg85 $out/bin/pbmtojbg85
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
     description = "A software implementation of the JBIG1 data compression standard";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

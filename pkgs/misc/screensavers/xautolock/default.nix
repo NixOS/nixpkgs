@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install.man" ];
 
   meta = with stdenv.lib; {
-    description = "Launch a given program when your X session has been idle for a given time.";
+    description = "Launch a given program when your X session has been idle for a given time";
     homepage = "http://www.ibiblio.org/pub/linux/X11/screensavers";
     maintainers = with maintainers; [ peti ];
     platforms = platforms.linux;

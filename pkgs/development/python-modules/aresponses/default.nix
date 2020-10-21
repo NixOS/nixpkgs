@@ -6,11 +6,14 @@
 # buildInputs
 , pytest
 , pytest-asyncio
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "aresponses";
   version = "2.0.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

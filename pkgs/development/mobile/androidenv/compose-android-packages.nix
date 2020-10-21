@@ -1,4 +1,4 @@
-{requireFile, autoPatchelfHook, pkgs, pkgs_i686, licenseAccepted ? false}:
+{requireFile, autoPatchelfHook, pkgs, pkgsHostHost, pkgs_i686, licenseAccepted ? false}:
 
 { toolsVersion ? "25.2.5"
 , platformToolsVersion ? "29.0.6"
@@ -144,7 +144,7 @@ rec {
   ) cmakeVersions;
 
   ndk-bundle = import ./ndk-bundle {
-    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs lib platform-tools;
+    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgsHostHost lib platform-tools;
     package = packages.ndk-bundle.${ndkVersion};
   };
 

@@ -1,7 +1,4 @@
-{ stdenv, fetchurl, lcms2, pkgconfig
-, jasper ? null, withJpeg2k ? false
-# disable JPEG2000 support by default as jasper has many CVE
-}:
+{ stdenv, fetchurl, lcms2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "libraw";
@@ -13,8 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "lib" "dev" "doc" ];
-
-  buildInputs = stdenv.lib.optionals withJpeg2k [ jasper ];
 
   propagatedBuildInputs = [ lcms2 ];
 

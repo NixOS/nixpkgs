@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "mirage-stack";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-stack/releases/download/v${version}/mirage-stack-v${version}.tbz";
-    sha256 = "1y110i4kjr03b0ji3q5h0bi3n3q8mdkfflb3fyq5rvpi5l45vvdb";
+    sha256 = "1qhi0ghcj4j3hw7yqn085ac6n18b6b66z5ih3k8p79m4cvn7cdq0";
   };
 
   propagatedBuildInputs = [ mirage-protocols ];

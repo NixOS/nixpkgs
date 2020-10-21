@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, pkgconfig
-, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2, openssl
+{ stdenv, fetchurl, pkgconfig, nixosTests
+, boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
 , mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
 }:
 
 stdenv.mkDerivation rec {
   pname = "powerdns";
-  version = "4.2.1";
+  version = "4.2.3";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "0a5al77rn4cd7v3g8c2q7627nf9b9g8dxg7yzz3b3jwgdfc1jl7n";
+    sha256 = "1vf03hssk9rfhvhzfc5ca2r4ly67wq0czr0ysvdrk8pnb0yk6yfi";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl opendbx unixODBC botan2 openssl
+    libyamlcpp libsodium curl opendbx unixODBC openssl systemd
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -25,18 +25,22 @@ stdenv.mkDerivation rec {
       --with-sqlite3
       --with-socketdir=/var/lib/powerdns
       --with-libcrypto=${openssl.dev}
-      --enable-libsodium
-      --enable-botan
+      --with-libsodium
       --enable-tools
       --disable-dependency-tracking
       --disable-silent-rules
       --enable-reproducible
       --enable-unit-tests
+      --enable-systemd
     )
   '';
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  passthru.tests = {
+    nixos = nixosTests.powerdns;
+  };
 
   meta = with stdenv.lib; {
     description = "Authoritative DNS server";

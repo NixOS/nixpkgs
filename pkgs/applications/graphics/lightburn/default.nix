@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lightburn";
-  version = "0.9.15";
+  version = "0.9.16";
 
   nativeBuildInputs = [
     p7zip
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/LightBurnSoftware/deployment/releases/download/${version}/LightBurn-Linux64-v${version}.7z";
-    sha256 = "1dwmrili4jfw55gnlnda3imgli7f4jqz9smwlynf7k87lxrhppmh";
+    sha256 = "0xmpglfzff3jpxbr304czsa24fbp497b69yd8kjkjdp2cd0l70qc";
   };
 
   buildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "LightBurn is layout, editing, and control software for your laser cutter.";
+    description = "LightBurn is layout, editing, and control software for your laser cutter";
     homepage = "https://lightburnsoftware.com/";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ q3k ];

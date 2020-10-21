@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "jx";
-  version = "2.1.127";
+  version = "2.1.138";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "01dfpnqgbrn8b6h2irq080xdm76b4jx6sd80f8x4zmyaz6hf5vlv";
+    sha256 = "1i45gzaql6rfplliky56lrzwjnm2qzv25kgyq7gvn9c7hjaaq65b";
   };
 
-  vendorSha256 = "0la92a8720l8my5r4wsbgv74y6m19ikmm0wv3l4m4w5gjyplfsxb";
+  vendorSha256 = "1wvggarakshpw7m8h0x2zvd6bshd2kzbrjynfa113z90pgksvjng";
 
   doCheck = false;
 
@@ -35,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "JX is a command line tool for installing and using Jenkins X.";
+    description = "JX is a command line tool for installing and using Jenkins X";
     homepage = "https://jenkins-x.io";
     longDescription = ''
       Jenkins X provides automated CI+CD for Kubernetes with Preview

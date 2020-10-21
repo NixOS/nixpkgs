@@ -2,14 +2,14 @@
 stdenv.mkDerivation rec{
 
   name = "geogebra-${version}";
-  version = "6-0-598-0";
+  version = "6-0-600-0";
 
   src = fetchurl {
     urls = [
         "https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
-        "https://web.archive.org/web/20200815132422/https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
+        "https://web.archive.org/web/20200904093945/https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
       ];
-    sha256 = "1klazsgrpmfd6vjzpdcfl5x8qhhbh6vx2g6id4vg16ac4sjdrb0c";
+    sha256 = "1l49rvfkil2cz6r7sa2mi0p6hvb6p66jv3x6xj8hjqls4l3sfhkm";
   };
 
   dontConfigure = true;

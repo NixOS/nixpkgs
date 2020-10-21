@@ -3,8 +3,10 @@
   minimal ? false
 , # Ignored
   config ? null
-  # Nixpkgs, for qemu, lib and more
-, pkgs
+, # Nixpkgs, for qemu, lib and more
+  pkgs
+, # !!! See comment about args in lib/modules.nix
+  specialArgs ? {}
 , # NixOS configuration to add to the VMs
   extraConfigurations ? []
 }:
@@ -31,7 +33,7 @@ rec {
     nodes: configurations:
 
     import ./eval-config.nix {
-      inherit system;
+      inherit system specialArgs;
       modules = configurations ++ extraConfigurations;
       baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix

@@ -106,7 +106,7 @@ let
                 name = "php-with-extensions-${version}";
                 inherit (php) version;
                 nativeBuildInputs = [ makeWrapper ];
-                passthru = {
+                passthru = php.passthru // {
                   buildEnv = mkBuildEnv allArgs allExtensionFunctions;
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
@@ -177,7 +177,7 @@ let
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport    "--enable-fpm"
-            ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
+            ++ lib.optional pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
             ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
               "--enable-libxml"
               "--with-libxml-dir=${libxml2.dev}"
@@ -259,6 +259,7 @@ let
           passthru = {
             buildEnv = mkBuildEnv {} [];
             withExtensions = mkWithExtensions {} [];
+            inherit ztsSupport;
           };
 
           meta = with stdenv.lib; {
@@ -272,16 +273,16 @@ let
         };
 
   php73base = callPackage generic (_args // {
-    version = "7.3.20";
-    sha256 = "1pl9bjwvdva2yx4sh465z9cr4bnr8mvv008w71sy1kqsj6a7ivf6";
+    version = "7.3.23";
+    sha256 = "0k600imsxm3r3qdv20ryqhvfmnkmjhvm2hcnqr180l058snncrpx";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   });
 
   php74base = callPackage generic (_args // {
-    version = "7.4.8";
-    sha256 = "0ql01sfg8l7y2bfwmnjxnfw9irpibnz57ssck24b00y00nkd6j3a";
+    version = "7.4.11";
+    sha256 = "1idq2sk3x6msy8l2g42jv3y87h1fgb1aybxw7wpjkliv4iaz422l";
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([

@@ -64,13 +64,9 @@ in
 
     services.xserver.displayManager.gdm = {
 
-      enable = mkEnableOption ''
-        GDM, the GNOME Display Manager
-      '';
+      enable = mkEnableOption "GDM, the GNOME Display Manager";
 
-      debug = mkEnableOption ''
-        debugging messages in GDM
-      '';
+      debug = mkEnableOption "debugging messages in GDM";
 
       # Auto login options specific to GDM
       autoLogin.delay = mkOption {

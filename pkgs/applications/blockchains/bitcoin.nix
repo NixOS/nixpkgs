@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     homepage = "https://bitcoin.org/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
-    maintainers = with maintainers; [ roconnor AndersonTorres ];
+    maintainers = with maintainers; [ roconnor ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

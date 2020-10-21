@@ -1,33 +1,31 @@
-{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+{ lib, stdenv, fetch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
 , enableShared ? true }:
 
 stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "0aaci7iblfczv1jb22zjrwzxcrcx6x7klvjivmxm2zni0n2x3bd4";
+  src = fetch "libcxx" "0ylbkcd38zrrz9xmkq9na3d9s8d96hc286dwfwd73wi205lyc7kc";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
-    export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
+    mv libcxxabi-* libcxxabi
+    unpackFile ${llvm.src}
+    mv llvm-* llvm
   '';
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
-  preConfigure = ''
-    # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package
-    cmakeFlagsArray=($cmakeFlagsArray -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$LIBCXXABI_INCLUDE_DIR")
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
-  nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) python3;
 
-  buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake python3 ]
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  buildInputs = [ libcxxabi ];
 
   cmakeFlags = [
-    "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
-    "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ stdenv.lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"

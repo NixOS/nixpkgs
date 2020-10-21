@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "coolreader";
-  version = "3.2.45";
+  version = "3.2.49";
 
   src = fetchFromGitHub {
     owner = "buggins";
     repo = pname;
     rev = "cr${version}";
-    sha256 = "0nkk4d0j04yjwanjszq8h8hvx87rnwax2k6akm4bpjxwpcs4icws";
+    sha256 = "10i3w4zjlilz3smjzbwm50d91ns3w0wlgmsf38fn2lv76zczv8ia";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -6,7 +6,7 @@
 # not native
 , gdal
 , wxGTK31-gtk3
-, proj_5
+, proj
 , dxflib
 , curl
 , libiodbc
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     hdf5
     gdal
     wxGTK31-gtk3
-    proj_5
+    proj
     libharu
     opencv
     vigra

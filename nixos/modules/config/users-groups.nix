@@ -139,6 +139,20 @@ let
         '';
       };
 
+      pamMount = mkOption {
+        type = with types; attrsOf str;
+        default = {};
+        description = ''
+          Attributes for user's entry in
+          <filename>pam_mount.conf.xml</filename>.
+          Useful attributes might include <code>path</code>,
+          <code>options</code>, <code>fstype</code>, and <code>server</code>.
+          See <link
+          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />
+          for more information.
+        '';
+      };
+
       shell = mkOption {
         type = types.either types.shellPackage types.path;
         default = pkgs.shadow;
@@ -537,6 +551,7 @@ in {
       input.gid = ids.gids.input;
       kvm.gid = ids.gids.kvm;
       render.gid = ids.gids.render;
+      shadow.gid = ids.gids.shadow;
     };
 
     system.activationScripts.users = stringAfter [ "stdio" ]

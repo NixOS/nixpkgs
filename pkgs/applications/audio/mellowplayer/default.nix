@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "MellowPlayer";
-  version = "3.6.5";
+  version = "3.6.6";
 
   src = fetchFromGitLab {
     owner = "ColinDuquesnoy";
     repo = "MellowPlayer";
     rev = version;
-    sha256 = "1fnfqyy52hnh9vwq4rcndcqwh0zsm1sd3vi4h5gzaj4zbniq5v2f";
+    sha256 = "14y175fl6wg04fz0fhx553r8z3nwqrs2lr3rdls70bhwx5x6lavw";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -62,7 +62,7 @@ mkDerivation rec {
   meta = with lib; {
     inherit (qtbase.meta) platforms;
 
-    description = "Cloud music integration for your desktop.";
+    description = "Cloud music integration for your desktop";
     homepage = "https://gitlab.com/ColinDuquesnoy/MellowPlayer";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kalbasit ];

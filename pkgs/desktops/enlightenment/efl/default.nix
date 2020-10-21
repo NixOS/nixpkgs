@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , SDL2
 , alsaLib
 , bullet
@@ -47,6 +47,8 @@
 , systemd
 , udev
 , utillinux
+, wayland
+, wayland-protocols
 , writeText
 , xorg
 , zlib
@@ -54,18 +56,18 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.24.3";
+  version = "1.25.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "de95c6e673c170c1e21382918b122417c091c643e7dcaced89aa785529625c2a";
+    sha256 = "0svybbrvpf6q955y6fclxh3md64z0dgmh0x54x2j60503hhs071m";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     gtk3
-    pkgconfig
+    pkg-config
     check
   ];
 
@@ -89,6 +91,7 @@ stdenv.mkDerivation rec {
     openssl
     systemd
     udev
+    wayland-protocols
     xorg.libX11
     xorg.libXcursor
     xorg.xorgproto
@@ -123,6 +126,7 @@ stdenv.mkDerivation rec {
     openjpeg
     poppler
     utillinux
+    wayland
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXdamage
@@ -141,17 +145,20 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
-    "-D drm=true"
-    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
+    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not availabe in nixpkgs
     "-D embedded-lz4=false"
     "-D fb=true"
     "-D network-backend=connman"
     "-D sdl=true"
+    "-D elua=true"
+    "-D bindings=lua,cxx"
+    # for wayland client support
+    "-D wl=true"
+    "-D drm=true"
   ];
 
   patches = [
     ./efl-elua.patch
-    ./0002-efreet-more-stat-info-changes.patch
   ];
 
   postPatch = ''
@@ -174,11 +181,10 @@ stdenv.mkDerivation rec {
     source "$setupHook"
   '';
 
-  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
-
   postInstall = ''
     # fix use of $out variable
     substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
+    rm "$out/share/elua/core/util.lua.orig"
 
     # add all module include dirs to the Cflags field in efl.pc
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
@@ -191,15 +197,17 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    # EFL applications depend on libcurl, which is linked at runtime by hand in code (it is dlopened)
+    # Some libraries are linked at runtime by hand in code (they are dlopened)
     patchelf --add-needed ${curl.out}/lib/libcurl.so $out/lib/libecore_con.so
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libecore_audio.so
+    patchelf --add-needed ${libsndfile.out}/lib/libsndfile.so $out/lib/libecore_audio.so
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

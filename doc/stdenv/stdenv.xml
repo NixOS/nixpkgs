@@ -475,9 +475,12 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
-     </para>
-     <para>
-      The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+      The script will be run with <varname>UPDATE_NIX_ATTR_PATH</varname> environment variable set to the attribute path it is supposed to update.
+      <note>
+       <para>
+        The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+       </para>
+      </note>
      </para>
      <para>
       For information about how to run the updates, execute <command>nix-shell maintainers/scripts/update.nix</command>.
@@ -1636,10 +1639,6 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 </programlisting>
      </para>
-     <para>
-      <function>substitute</function> is implemented using the <command
-      xlink:href="http://replace.richardlloyd.org.uk/">replace</command> command. Unlike with the <command>sed</command> command, you don’t have to worry about escaping special characters. It supports performing substitutions on binary files (such as executables), though there you’ll probably want to make sure that the replacement string is as long as the replaced string.
-     </para>
     </listitem>
    </varlistentry>
    <varlistentry xml:id='fun-substituteInPlace'>
@@ -1831,6 +1830,19 @@ addEnvHooks "$hostOffset" myBashFunction
      <listitem>
       <para>
        This setup hook moves any libraries installed in the lib64 subdirectory into lib. In addition, a link is provided from lib64 to lib for compatibility.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>move-systemd-user-units.sh</literal>
+     </term>
+     <listitem>
+      <para>
+       This setup hook moves any systemd user units installed in the lib
+       subdirectory into share. In addition, a link is provided from share to
+       lib for compatibility. This is needed for systemd to find user services
+       when installed into the user profile.
       </para>
      </listitem>
     </varlistentry>

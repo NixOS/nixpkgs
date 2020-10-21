@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.0.0";
+  version = "2.1.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3217b1f40290570bf27b1f82714fc4ed44c3260ba9b2f6cde0372378fc707ad3";
+    sha256 = "0wh6pn66nncfs6ay0n863bgyriwsgppn8flx5l7551j1lbqkinc2";
   };
 
   nativeBuildInputs = [ setuptools_scm pytest_6 ];
@@ -16,10 +16,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ execnet pytest-forked psutil six ];
 
   # pytest6 doesn't allow for new lines
+  # capture_deprecated not compatible with latest pytest6
   checkPhase = ''
     # Excluded tests access file system
     export HOME=$TMPDIR
-    pytest -n $NIX_BUILD_CORES -k "not (distribution_rsyncdirs_example or rsync)"
+    pytest -n $NIX_BUILD_CORES \
+      -k "not (distribution_rsyncdirs_example or rsync or warning_captured_deprecated_in_pytest_6)"
   '';
 
   meta = with stdenv.lib; {

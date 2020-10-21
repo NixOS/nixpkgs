@@ -1,20 +1,27 @@
-{stdenv, fetchurl, fetchpatch, makeWrapper, symlinkJoin,
-pkgconfig, libtool,
-gtk2,
-libxml2,
-libxslt,
-libusb-compat-0_1,
-sane-backends,
-rpm, cpio,
-getopt,
-patchelf, autoPatchelfHook, gcc
+{ stdenv
+, fetchurl
+, fetchpatch
+, makeWrapper
+, symlinkJoin
+, pkgconfig
+, libtool
+, gtk2
+, libxml2
+, libxslt
+, libusb-compat-0_1
+, sane-backends
+, rpm
+, cpio
+, getopt
+, patchelf
+, autoPatchelfHook
+, gcc
 }:
-
 let common_meta = {
-    homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
-    license = with stdenv.lib.licenses; epson;
-    platforms = with stdenv.lib.platforms; linux;
-   };
+  homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
+  license = with stdenv.lib.licenses; epson;
+  platforms = with stdenv.lib.platforms; linux;
+};
 in
 ############################
 #
@@ -23,7 +30,6 @@ in
 ############################
 
 # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
-
 let plugins = {
   v330 = stdenv.mkDerivation rec {
     name = "iscan-v330-bundle";
@@ -33,7 +39,7 @@ let plugins = {
       # To find new versions, visit
       # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
       # some printer like for instance "WF-7210" to get to the most recent
-      # version.  
+      # version.
       # NOTE: Don't forget to update the webarchive link too!
       urls = [
         "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz"
@@ -49,17 +55,17 @@ let plugins = {
       mkdir $out{,/share,/lib}
       cp -r ./usr/share/{iscan-data,esci}/ $out/share/
       cp -r ./usr/lib64/esci $out/lib
-      '';
+    '';
 
     passthru = {
       registrationCommand = ''
         $registry --add interpreter usb 0x04b8 0x0142 "$plugin/lib/esci/libesci-interpreter-perfection-v330 $plugin/share/esci/esfwad.bin"
-        '';
+      '';
       hw = "Perfection V330 Photo";
-      };
-    meta = common_meta // { description = "Plugin to support "+passthru.hw+" scanner in sane."; };
+    };
+    meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
   };
-  x770 =   stdenv.mkDerivation rec {
+  x770 = stdenv.mkDerivation rec {
     pname = "iscan-gt-x770-bundle";
     version = "2.30.4";
 
@@ -79,20 +85,20 @@ let plugins = {
       cp -r usr/lib64 $out/lib
       mv $out/share/iscan $out/share/esci
       mv $out/lib/iscan $out/lib/esci
-      '';
+    '';
     passthru = {
       registrationCommand = ''
         $registry --add interpreter usb 0x04b8 0x0130 "$plugin/lib/esci/libesint7C $plugin/share/esci/esfw7C.bin"
-        '';
+      '';
       hw = "Perfection V500 Photo";
-      };
-    meta = common_meta // { description = "iscan esci x770 plugin for "+passthru.hw; };
     };
+    meta = common_meta // { description = "iscan esci x770 plugin for " + passthru.hw; };
+  };
   f720 = stdenv.mkDerivation rec {
     pname = "iscan-gt-f720-bundle";
     version = "2.30.4";
 
-    nativeBuildInputs= [ autoPatchelfHook ];
+    nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ gcc.cc.lib ];
     src = fetchurl {
       urls = [
@@ -107,16 +113,16 @@ let plugins = {
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
-      '';
+    '';
 
     passthru = {
       registrationCommand = ''
         $registry --add interpreter usb 0x04b8 0x0131 "$plugin/lib/esci/libesci-interpreter-gt-f720 $plugin/share/esci/esfw8b.bin"
-        '';
+      '';
       hw = "GT-F720, GT-S620, Perfection V30, Perfection V300 Photo";
-      };
+    };
 
-    meta = common_meta // { description = "iscan esci f720 plugin for "+passthru.hw; };
+    meta = common_meta // { description = "iscan esci f720 plugin for " + passthru.hw; };
   };
   s80 = stdenv.mkDerivation rec {
     pname = "iscan-gt-s80-bundle";
@@ -139,7 +145,7 @@ let plugins = {
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
       mkdir $out/share/esci
-      '';
+    '';
 
     passthru = {
       registrationCommand = ''
@@ -147,11 +153,11 @@ let plugins = {
         $registry --add interpreter usb 0x04b8 0x0137 "$plugin/lib/esci/libesci-interpreter-gt-s50.so"
         $registry --add interpreter usb 0x04b8 0x0143 "$plugin/lib/esci/libesci-interpreter-gt-s50.so"
         $registry --add interpreter usb 0x04b8 0x0144 "$plugin/lib/esci/libesci-interpreter-gt-s80.so"
-        '';
+      '';
       hw = "ES-D200, ED-D350, ES-D400, GT-S50, GT-S55, GT-S80, GT-S85";
-      };
+    };
 
-    meta = common_meta // { description = "iscan esci s80 plugin for "+passthru.hw; };
+    meta = common_meta // { description = "iscan esci s80 plugin for " + passthru.hw; };
   };
   s650 = stdenv.mkDerivation rec {
     name = "iscan-gt-s650-bundle";
@@ -175,16 +181,16 @@ let plugins = {
       cp -r usr/lib64 $out/lib
       mv $out/share/iscan $out/share/esci
       mv $out/lib/iscan $out/lib/esci
-      '';
+    '';
 
     passthru = {
       registrationCommand = ''
         $registry --add interpreter usb 0x04b8 0x013c "$plugin/lib/esci/libiscan-plugin-gt-s650 $plugin/share/esci/esfw010c.bin"
         $registry --add interpreter usb 0x04b8 0x013d "$plugin/lib/esci/libiscan-plugin-gt-s650 $plugin/share/esci/esfw010c.bin"
-        '';
+      '';
       hw = "GT-S650, Perfection V19, Perfection V39";
     };
-    meta = common_meta // { description = "iscan GT-S650 for "+passthru.hw; };
+    meta = common_meta // { description = "iscan GT-S650 for " + passthru.hw; };
   };
   network = stdenv.mkDerivation rec {
     pname = "iscan-nt-bundle";
@@ -209,7 +215,7 @@ let plugins = {
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
       mkdir $out/share/esci
-      '';
+    '';
     passthru = {
       registrationCommand = "";
       hw = "network";
@@ -219,9 +225,6 @@ let plugins = {
   };
 };
 in
-
-
-
 let fwdir = symlinkJoin {
   name = "esci-firmware-dir";
   paths = stdenv.lib.mapAttrsToList (name: value: value + /share/esci) plugins;
@@ -278,14 +281,14 @@ stdenv.mkDerivation rec {
     })
     ./firmware_location.patch
     ./sscanf.patch
-    ];
+  ];
   patchFlags = [ "-p0" ];
 
-  configureFlags = [ "--enable-dependency-reduction" "--disable-frontend"];
+  configureFlags = [ "--enable-dependency-reduction" "--disable-frontend" ];
 
   postConfigure = ''
     echo '#define NIX_ESCI_PREFIX "'${fwdir}'"' >> config.h
-    '';
+  '';
 
   postInstall = ''
     mkdir -p $out/etc/sane.d
@@ -294,18 +297,20 @@ stdenv.mkDerivation rec {
     ln -s ${iscan-data}/share/iscan-data $out/share/iscan-data
     mkdir -p $out/lib/iscan
     ln -s ${plugins.network}/lib/iscan/network $out/lib/iscan/network
-    '';
+  '';
   postFixup = ''
     # iscan-registry is a shell script requiring getopt
     wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
     registry=$out/bin/iscan-registry;
-    '' +
-    stdenv.lib.concatStrings (stdenv.lib.mapAttrsToList (name: value: ''
-    plugin=${value};
-    ${value.passthru.registrationCommand}
-    '') plugins);
+  '' +
+  stdenv.lib.concatStrings (stdenv.lib.mapAttrsToList
+    (name: value: ''
+      plugin=${value};
+      ${value.passthru.registrationCommand}
+    '')
+    plugins);
   meta = common_meta // {
-    description = "sane-epkowa backend for some epson scanners.";
+    description = "sane-epkowa backend for some epson scanners";
     longDescription = ''
       Includes gui-less iscan (aka. Image Scan! for Linux).
       Supported hardware: at least :

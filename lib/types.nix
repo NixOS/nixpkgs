@@ -91,9 +91,12 @@ rec {
       #            combinable with the binOp binary operation.
       #   binOp: binary operation that merge two payloads of the same type.
       functor ? defaultFunctor name
+    , # The deprecation message to display when this type is used by an option
+      # If null, the type isn't deprecated
+      deprecationMessage ? null
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor;
+      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage;
       description = if description == null then name else description;
     };
 
@@ -101,6 +104,42 @@ rec {
   # When adding new types don't forget to document them in
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
+
+    anything = mkOptionType {
+      name = "anything";
+      description = "anything";
+      check = value: true;
+      merge = loc: defs:
+        let
+          getType = value:
+            if isAttrs value && isCoercibleToString value
+            then "stringCoercibleSet"
+            else builtins.typeOf value;
+
+          # Returns the common type of all definitions, throws an error if they
+          # don't have the same type
+          commonType = foldl' (type: def:
+            if getType def.value == type
+            then type
+            else throw "The option `${showOption loc}' has conflicting option types in ${showFiles (getFiles defs)}"
+          ) (getType (head defs).value) defs;
+
+          mergeFunction = {
+            # Recursively merge attribute sets
+            set = (attrsOf anything).merge;
+            # Safe and deterministic behavior for lists is to only accept one definition
+            # listOf only used to apply mkIf and co.
+            list =
+              if length defs > 1
+              then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
+              else (listOf anything).merge;
+            # This is the type of packages, only accept a single definition
+            stringCoercibleSet = mergeOneOption;
+            # Otherwise fall back to only allowing all equal definitions
+          }.${commonType} or mergeEqualOption;
+        in mergeFunction loc defs;
+    };
+
     unspecified = mkOptionType {
       name = "unspecified";
     };
@@ -222,8 +261,10 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = warn "types.string is deprecated because it quietly concatenates strings"
-      (separatedString "");
+    string = separatedString "" // {
+      name = "string";
+      deprecationMessage = "See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types.";
+    };
 
     attrs = mkOptionType {
       name = "attrs";
@@ -252,25 +293,20 @@ rec {
       merge = mergeEqualOption;
     };
 
-    # TODO: drop this in the future:
-    list = builtins.trace "`types.list` has been removed; please use `types.listOf` instead" types.listOf;
-
     listOf = elemType: mkOptionType rec {
       name = "listOf";
       description = "list of ${elemType.description}s";
       check = isList;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
-          if isList def.value then
-            imap1 (m: def':
-              (mergeDefinitions
-                (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
-                elemType
-                [{ inherit (def) file; value = def'; }]
-              ).optionalValue
-            ) def.value
-          else
-            throw "The option value `${showOption loc}` in `${def.file}` is not a list.") defs)));
+          imap1 (m: def':
+            (mergeDefinitions
+              (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+              elemType
+              [{ inherit (def) file; value = def'; }]
+            ).optionalValue
+          ) def.value
+        ) defs)));
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
@@ -327,14 +363,12 @@ rec {
     };
 
     # TODO: drop this in the future:
-    loaOf =
-      let msg =
-        ''
-          `types.loaOf` has been removed and mixing lists with attribute values
-          is no longer possible; please use `types.attrsOf` instead.
-          See https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.
-        '';
-      in builtins.trace msg types.attrsOf;
+    loaOf = elemType: types.attrsOf elemType // {
+      name = "loaOf";
+      deprecationMessage = "Mixing lists with attribute values is no longer"
+        + " possible; please use `types.attrsOf` instead. See"
+        + " https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.";
+    };
 
     # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
     uniq = elemType: mkOptionType rec {
@@ -427,7 +461,12 @@ rec {
             # would be used, and use of `<` and `>` would break the XML document.
             # It shouldn't cause an issue since this is cosmetic for the manual.
             args.name = "‹name›";
-          }).options;
+          }).options // optionalAttrs (freeformType != null) {
+            # Expose the sub options of the freeform type. Note that the option
+            # discovery doesn't care about the attribute name used here, so this
+            # is just to avoid conflicts with potential options from the submodule
+            _freeformOptions = freeformType.getSubOptions prefix;
+          };
         getSubModules = modules;
         substSubModules = m: submoduleWith (attrs // {
           modules = m;
@@ -460,6 +499,7 @@ rec {
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v
+          else if builtins.isBool v then if v then "true" else "false"
           else ''<${builtins.typeOf v}>'';
       in
       mkOptionType rec {
@@ -529,8 +569,9 @@ rec {
     # declarations from the ‘options’ attribute of containing option
     # declaration.
     optionSet = mkOptionType {
-      name = builtins.trace "types.optionSet is deprecated; use types.submodule instead" "optionSet";
+      name = "optionSet";
       description = "option set";
+      deprecationMessage = "Use `types.submodule' instead";
     };
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };

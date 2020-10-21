@@ -3,18 +3,18 @@
 }:
 
 let
-  version = "0.7.5";
+  version = "0.7.7";
 in stdenv.mkDerivation rec {
   pname = "rambox";
   inherit version;
   src = {
     x86_64-linux = fetchurl {
       url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-amd64.deb";
-      sha256 = "108yd5djnap37yh0nbjyqkp5ci1zmydfzqcsbapin40a4f36zm31";
+      sha256 = "0bij4f1bkg94gc8pq7r6yfym5zcvwc2ymdnmnmh5m4h1pa1gk6x9";
     };
     i686-linux = fetchurl {
       url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-i386.deb";
-      sha256 = "1pvh048h6m19rmbscsy69ih0jkyhazmq2pcagmf3kk8gmbi7y6p6";
+      sha256 = "1nhgqjha10jvyf9nsghvlkibg7byj8qz140639ygag9qlpd51rfs";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 

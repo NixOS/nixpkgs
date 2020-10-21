@@ -113,14 +113,14 @@ let
   in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.runCommand "xserver.conf"
-    { xfs = optionalString (cfg.useXFS != false)
-        ''FontPath "${toString cfg.useXFS}"'';
+    { fontpath = optionalString (cfg.fontPath != null)
+        ''FontPath "${cfg.fontPath}"'';
       inherit (cfg) config;
       preferLocalBuild = true;
     }
       ''
         echo 'Section "Files"' >> $out
-        echo $xfs >> $out
+        echo $fontpath >> $out
 
         for i in ${toString fontsForXServer}; do
           if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
@@ -136,6 +136,7 @@ let
           fi
         done
 
+        echo '${cfg.filesSection}' >> $out
         echo 'EndSection' >> $out
 
         echo "$config" >> $out
@@ -151,6 +152,11 @@ in
       ./desktop-managers/default.nix
       (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
         "See the 16.09 release notes for more information.")
+      (mkRemovedOptionModule
+        [ "services" "xserver" "startDbusSession" ]
+        "The user D-Bus session is now always socket activated and this option can safely be removed.")
+      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+        "Use services.xserver.fontPath instead of useXFS")
     ];
 
 
@@ -296,14 +302,6 @@ in
         description = "DPI resolution to use for X server.";
       };
 
-      startDbusSession = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start a new DBus session when you log in with dbus-launch.
-        '';
-      };
-
       updateDbusEnvironment = mkOption {
         type = types.bool;
         default = false;
@@ -362,6 +360,13 @@ in
           The contents of the configuration file of the X server
           (<filename>xorg.conf</filename>).
         '';
+      };
+
+      filesSection = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''FontPath "/path/to/my/fonts"'';
+        description = "Contents of the first <literal>Files</literal> section of the X server configuration file.";
       };
 
       deviceSection = mkOption {
@@ -481,11 +486,15 @@ in
         description = "Default colour depth.";
       };
 
-      useXFS = mkOption {
-        # FIXME: what's the type of this option?
-        default = false;
+      fontPath = mkOption {
+        type = types.nullOr types.str;
+        default = null;
         example = "unix/:7100";
-        description = "Determines how to connect to the X Font Server.";
+        description = ''
+          Set the X server FontPath. Defaults to null, which
+          means the compiled in defaults will be used. See
+          man xorg.conf for details.
+        '';
       };
 
       tty = mkOption {
@@ -702,7 +711,7 @@ in
 
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
-      nativeBuildInputs = [ pkgs.xkbvalidate ];
+      nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"

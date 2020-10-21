@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "7.5.1";
+  version = "7.7";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0ig5wc6dkbly6yrvd13h4lyr8x0y7k3d9iv4rhg0pnjgcpna83mw";
+    sha256 = "09r9ggngskazddhcm9c2n0cjc4qs9215vyri4i02cbp1jl82kwvg";
   };
 
   buildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "GTK theme supporting Budgie, Pantheon, Mate and Xfce4 desktops";
+    description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";
     homepage = "https://www.pling.com/p/1239855/";
     license = licenses.cc0;
     platforms = platforms.unix;

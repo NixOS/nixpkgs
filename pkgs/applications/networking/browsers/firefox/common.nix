@@ -7,10 +7,11 @@
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification
-, libvpx, libvpx_1_8
-, icu, icu67, libpng, jemalloc, glib
-, autoconf213, which, gnused, cargo, rustc, llvmPackages
+, libvpx_1_8
+, icu67, libpng, jemalloc, glib
+, autoconf213, which, gnused, cargo, rustc
 , rust-cbindgen, nodejs, nasm, fetchpatch
+, gnum4
 , debugBuild ? false
 
 ### optionals
@@ -22,7 +23,9 @@
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
+, ltoSupport ? stdenv.isLinux, overrideCC, buildPackages
 , gssSupport ? true, kerberos
+, pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
 ## privacy-related options
 
@@ -69,6 +72,8 @@
 }:
 
 assert stdenv.cc.libc or null != null;
+assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSupport requires both wayland and webrtc support.";
+assert ltoSupport -> stdenv.isDarwin -> throw "LTO is broken on Darwin (see PR#19312).";
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
@@ -84,9 +89,21 @@ let
   execdir = if stdenv.isDarwin
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
+
+  # Darwin's stdenv provides the default llvmPackages version, match that since
+  # clang LTO on Darwin is broken so the stdenv is not being changed.
+  llvmPackages = if stdenv.isDarwin
+                 then buildPackages.llvmPackages
+                 else buildPackages.llvmPackages_10;
+
+  # When LTO for Darwin is fixed, the following will need updating as lld
+  # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
+  buildStdenv = if ltoSupport
+                then overrideCC stdenv llvmPackages.lldClang
+                else stdenv;
 in
 
-stdenv.mkDerivation ({
+buildStdenv.mkDerivation ({
   name = "${pname}-unwrapped-${ffversion}";
   version = ffversion;
 
@@ -94,7 +111,12 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
-  ]
+  ] ++ lib.optional pipewireSupport
+    (fetchpatch {
+      # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
+      url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
+      sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
+    })
   ++ patches;
 
 
@@ -112,35 +134,46 @@ stdenv.mkDerivation ({
     xorg.libXext unzip makeWrapper
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
-    nasm
+    nasm icu67 libvpx_1_8
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss
   ]
-  ++ lib.optionals (lib.versionOlder ffversion "75") [ libvpx sqlite ]
-  ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
-  ++ lib.optional  (lib.versionOlder ffversion "78") icu
-  ++ lib.optional  (lib.versionAtLeast ffversion "78.0") icu67
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optional  waylandSupport libxkbcommon
-  ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
-                                     AVFoundation MediaToolbox CoreLocation
-                                     Foundation libobjc AddressBook cups ];
+  ++ lib.optional  ltoSupport llvmPackages.libunwind
+  ++ lib.optionals waylandSupport [ libxkbcommon ]
+  ++ lib.optionals pipewireSupport [ pipewire ]
+  ++ lib.optionals (lib.versionAtLeast ffversion "82") [ gnum4 ]
+  ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
+                                          AVFoundation MediaToolbox CoreLocation
+                                          Foundation libobjc AddressBook cups ];
 
-  NIX_CFLAGS_COMPILE = toString ([
+  NIX_LDFLAGS = lib.optionalString ltoSupport ''
+    -rpath ${placeholder "out"}/lib/${binaryName}
+    -rpath ${llvmPackages.libunwind.out}/lib
+  '';
+
+  NIX_CFLAGS_COMPILE = toString [
     "-I${glib.dev}/include/gio-unix-2.0"
     "-I${nss.dev}/include/nss"
-  ]
-  ++ lib.optional (pname == "firefox-esr" && lib.versionOlder ffversion "69")
-    "-Wno-error=format-security");
+  ];
+
+  MACH_USE_SYSTEM_PYTHON = "1";
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
+  '' + lib.optionalString pipewireSupport ''
+    # substitute the /usr/include/ lines for the libraries that pipewire provides.
+    # The patch we pick from fedora only contains the generated moz.build files
+    # which hardcode the dependency paths instead of running pkg_config.
+    substituteInPlace \
+      media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
+      --replace /usr/include ${pipewire.dev}/include
   '' + lib.optionalString (lib.versionAtLeast ffversion "80") ''
     substituteInPlace dom/system/IOUtils.h \
       --replace '#include "nspr/prio.h"'          '#include "prio.h"'
@@ -167,7 +200,7 @@ stdenv.mkDerivation ({
       which
     ]
     ++ lib.optional gtk3Support wrapGAppsHook
-    ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
+    ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
 
   preConfigure = ''
@@ -185,12 +218,12 @@ stdenv.mkDerivation ({
     # included we need to look in a few places.
     # TODO: generalize this process for other use-cases.
 
-    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
-      $(< ${stdenv.cc}/nix-support/libc-cflags) \
-      $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
-      ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
-      ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/${stdenv.hostPlatform.config}"} \
+    BINDGEN_CFLAGS="$(< ${buildStdenv.cc}/nix-support/libc-crt1-cflags) \
+      $(< ${buildStdenv.cc}/nix-support/libc-cflags) \
+      $(< ${buildStdenv.cc}/nix-support/cc-cflags) \
+      $(< ${buildStdenv.cc}/nix-support/libcxx-cxxflags) \
+      ${lib.optionalString buildStdenv.cc.isClang "-idirafter ${buildStdenv.cc.cc}/lib/clang/${lib.getVersion buildStdenv.cc.cc}/include"} \
+      ${lib.optionalString buildStdenv.cc.isGNU "-isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc} -isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc}/${buildStdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"
 
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
@@ -224,20 +257,20 @@ stdenv.mkDerivation ({
     "--enable-jemalloc"
     "--enable-default-toolkit=${default-toolkit}"
     "--with-libclang-path=${llvmPackages.libclang}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
     "--with-system-nspr"
     "--with-system-nss"
   ]
-  ++ lib.optionals (lib.versionOlder ffversion "78") [
-    "--with-system-bz2"
-    "--enable-startup-notification"
-    "--disable-gconf"
-  ]
-  ++ lib.optional (lib.versionOlder ffversion "75") "--enable-system-sqlite"
-  ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
-  ++ lib.optionals (lib.versionOlder ffversion "69") [
-    "--enable-webrender=build"
-  ]
+  ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
+  ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
+  # LTO is done using clang and lld on Linux.
+  # Darwin needs to use the default linker as lld is not supported (yet?):
+  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
+  # elf-hack is broken when using clang+lld:
+  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
+  ++ lib.optionals ltoSupport [
+    "--enable-lto"
+    "--disable-elf-hack"
+  ] ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
@@ -267,12 +300,12 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if buildStdenv.isDarwin then ''
     mkdir -p $out/Applications
     cp -LR dist/${binaryNameCapitalized}.app $out/Applications
   '' else null;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
@@ -280,7 +313,7 @@ stdenv.mkDerivation ({
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString buildStdenv.isLinux ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
       }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
@@ -305,16 +338,13 @@ stdenv.mkDerivation ({
     inherit execdir;
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
-} //
-lib.optionalAttrs (lib.versionAtLeast ffversion "74") {
-  hardeningDisable = [ "format" ]; # -Werror=format-security
-} //
-# the build system verifies checksums of the bundled rust sources
-# ./third_party/rust is be patched by our libtool fixup code in stdenv
-# unfortunately we can't just set this to `false` when we do not want it.
-# See https://github.com/NixOS/nixpkgs/issues/77289 for more details
 
-lib.optionalAttrs (lib.versionAtLeast ffversion "72") {
+  hardeningDisable = [ "format" ]; # -Werror=format-security
+
+  # the build system verifies checksums of the bundled rust sources
+  # ./third_party/rust is be patched by our libtool fixup code in stdenv
+  # unfortunately we can't just set this to `false` when we do not want it.
+  # See https://github.com/NixOS/nixpkgs/issues/77289 for more details
   # Ideally we would figure out how to tell the build system to not
   # care about changed hashes as we are already doing that when we
   # fetch the sources. Any further modifications of the source tree

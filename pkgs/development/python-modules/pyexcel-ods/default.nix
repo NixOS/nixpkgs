@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pyexcel-ods";
-  version = "0.5.6";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "O+Uv2KrdvYvJKG9+sUj0VT1MlyUtaVw6nse5XmZmoiM=";
+    sha256 = "f61b56515fd4ccd4687f0a112422f74ce8535247ad2da49db90038d7e3ed397c";
   };
 
   propagatedBuildInputs = [

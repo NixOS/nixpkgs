@@ -1,8 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ buildPythonPackage, fetchPypi, isPy3k, stdenv }:
 
 buildPythonPackage rec {
   pname = "lmtpd";
   version = "6.2.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

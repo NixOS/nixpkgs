@@ -13,13 +13,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.5160";
+  version = "1.0.5346";
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "58f65b6523fb25d989b011c51f963520c811f9f0";
-    sha256 = "19fizqmcr8i3axi3j5hg8p6dxr1pxnl5l58z4pws6nj1xbq8z5mi";
+    rev = "2ce59c44bcb2d789f4d6312b26cf41f36915d73c";
+    sha256 = "0hk8jdacg8ryhh0mpnfjbzrrpy8gv87f4hp0hybyypglmaxz8grm";
   };
 
   nativeBuildInputs = [ dotnet-sdk_3 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection ];
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $HOME/.nuget/NuGet
     cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
 
-    dotnet restore --source nixos Ryujinx.sln
+    dotnet restore --source "$PWD/nixos" Ryujinx.sln
 
     runHook postConfigure
   '';

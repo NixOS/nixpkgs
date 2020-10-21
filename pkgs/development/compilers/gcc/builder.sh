@@ -261,7 +261,7 @@ postInstall() {
     fi
 
     if type "install_name_tool"; then
-        for i in "${!outputLib}"/lib/*.*.dylib; do
+        for i in "${!outputLib}"/lib/*.*.dylib "${!outputLib}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true
             for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
               new_path=`echo "$old_path" | sed "s,$out,${!outputLib},"`

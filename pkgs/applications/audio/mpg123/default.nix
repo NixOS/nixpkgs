@@ -1,20 +1,42 @@
 { stdenv
-, fetchurl, alsaLib
+, fetchurl
+, makeWrapper
+
+, alsaLib
+, perl
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpg123-1.26.2";
+  name = "mpg123-1.26.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/${name}.tar.bz2";
-    sha256 = "1wrgds46wj6xsnqa6bi8kkh3wd29i2nxclbps34w5kjglrzbzxq0";
+    sha256 = "0vkcfdx0mqq6lmpczsmpa2jsb0s6dryx3i7gvr32i3w9b9w9ij9h";
   };
 
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+  outputs = [ "out" "conplay" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   configureFlags = stdenv.lib.optional
     (stdenv.hostPlatform ? mpg123)
     "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
+
+  postInstall = ''
+    mkdir -p $conplay/bin
+    mv scripts/conplay $conplay/bin/
+  '';
+
+  preFixup = ''
+    patchShebangs $conplay/bin/conplay
+  '';
+
+  postFixup = ''
+    wrapProgram $conplay/bin/conplay \
+      --prefix PATH : $out/bin
+  '';
 
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";

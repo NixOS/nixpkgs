@@ -154,6 +154,20 @@ runTests {
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
+  testSplitStringsRegex = {
+    expr = strings.splitString "\\[{}]()^$?*+|." "A\\[{}]()^$?*+|.B";
+    expected = [ "A" "B" ];
+  };
+
+  testSplitStringsDerivation = {
+    expr = take 3  (strings.splitString "/" (derivation {
+      name = "name";
+      builder = "builder";
+      system = "system";
+    }));
+    expected = ["" "nix" "store"];
+  };
+
   testSplitVersionSingle = {
     expr = versions.splitVersion "1";
     expected = [ "1" ];
@@ -445,32 +459,90 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  testToPretty = {
-    expr = mapAttrs (const (generators.toPretty {})) rec {
+  testToPretty =
+    let
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = builtins.currentSystem; };
+    in {
+    expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
       int = 42;
       float = 0.1337;
       bool = true;
+      emptystring = "";
       string = ''fno"rd'';
+      newlinestring = "\n";
       path = /. + "/foo";
       null_ = null;
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
+      emptylist = [];
       attrs = { foo = null; "foo bar" = "baz"; };
-      drv = derivation { name = "test"; system = builtins.currentSystem; };
+      emptyattrs = {};
+      drv = deriv;
     };
     expected = rec {
       int = "42";
       float = "~0.133700";
       bool = "true";
+      emptystring = ''""'';
       string = ''"fno\"rd"'';
+      newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
-      function = "<λ>";
-      functionArgs = "<λ:{(arg),foo}>";
+      function = "<function>";
+      functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
-      attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
-      drv = "<δ:test>";
+      emptylist = "[ ]";
+      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      emptyattrs = "{ }";
+      drv = "<derivation ${deriv.drvPath}>";
+    };
+  };
+
+  testToPrettyMultiline = {
+    expr = mapAttrs (const (generators.toPretty { })) rec {
+      list = [ 3 4 [ false ] ];
+      attrs = { foo = null; bar.foo = "baz"; };
+      newlinestring = "\n";
+      multilinestring = ''
+        hello
+        there
+        test
+      '';
+      multilinestring' = ''
+        hello
+        there
+        test'';
+    };
+    expected = rec {
+      list = ''
+        [
+          3
+          4
+          [
+            false
+          ]
+        ]'';
+      attrs = ''
+        {
+          bar = {
+            foo = "baz";
+          };
+          foo = null;
+        }'';
+      newlinestring = "''\n  \n''";
+      multilinestring = ''
+        '''
+          hello
+          there
+          test
+        ''''';
+      multilinestring' = ''
+        '''
+          hello
+          there
+          test''''';
+
     };
   };
 
@@ -542,4 +614,30 @@ runTests {
     name = "";
     expected = "unknown";
   };
+
+  testFreeformOptions = {
+    expr =
+      let
+        submodule = { lib, ... }: {
+          freeformType = lib.types.attrsOf (lib.types.submodule {
+            options.bar = lib.mkOption {};
+          });
+          options.bar = lib.mkOption {};
+        };
+
+        module = { lib, ... }: {
+          options.foo = lib.mkOption {
+            type = lib.types.submodule submodule;
+          };
+        };
+
+        options = (evalModules {
+          modules = [ module ];
+        }).options;
+
+        locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
+      in map (o: o.loc) locs;
+    expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+  };
+
 }

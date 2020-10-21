@@ -15,15 +15,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "alpha-0.6.1";
+  version = "alpha-0.6.2";
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
     rev = version;
-    sha256 = "0fs3wccbdfxf4nmx9l5wy7qpjk4r11qg0fc59y0pdvjrrslcjsds";
+    sha256 = "0ycyksrrp4llwklzx3ipac8hmpfxa1pa7dqsm82wic0f6p5d1dp6";
   };
 
-  cargoSha256 = "sha256:19j7jrizp7yifmqwrmnv66pka7131jl7ks4zgs3nr5gbb28zvdrz";
+  cargoSha256 = "sha256:0lxwhb2c16w5z7rqzch0ij8n8hxb5xcin31w9i28mzv1xm7sg8ks";
 
   cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
 
@@ -35,9 +35,10 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/share/man/man1
-    gzip < meli.1 > $out/share/man/man1/meli.1.gz
+    gzip < docs/meli.1 > $out/share/man/man1/meli.1.gz
     mkdir -p $out/share/man/man5
-    gzip < meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
+    gzip < docs/meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
+    gzip < docs/meli-themes.5 > $out/share/man/man5/meli-themes.5.gz
   '';
 
   meta = with stdenv.lib; {

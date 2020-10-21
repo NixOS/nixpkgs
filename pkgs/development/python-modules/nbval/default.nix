@@ -40,8 +40,12 @@ buildPythonPackage rec {
     six
   ];
 
-  # ignore impure tests
+  # Set HOME so that matplotlib doesn't try to use
+  # /homeless-shelter/.config/matplotlib, otherwise some of the tests fail for
+  # having an unexpected warning on stderr produced by matplotlib.
+  # Ignore impure tests.
   checkPhase = ''
+    export HOME=$(mktemp -d)
     pytest tests --ignore tests/test_timeouts.py
   '';
 

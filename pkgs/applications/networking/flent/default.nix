@@ -25,10 +25,8 @@ buildPythonApplication rec {
     xvfb-run -s '-screen 0 800x600x24' ./test-runner
   '';
 
-  postInstall = ''
-    for program in $out/bin/*; do
-      wrapQtApp $program --prefix PYTHONPATH : $PYTHONPATH
-    done
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, installShellFiles, jdk11, rlwrap, makeWrapper }:
+{ stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
+      binPath = stdenv.lib.makeBinPath [ rlwrap jdk ];
     in
     ''
       mkdir -p $out/libexec

@@ -184,7 +184,7 @@ in
       consul = 145;
       mailpile = 146;
       redmine = 147;
-      seeks = 148;
+      #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
       systemd-network = 152;
@@ -297,7 +297,7 @@ in
       headphones = 266;
       couchpotato = 267;
       gogs = 268;
-      pdns-recursor = 269;
+      #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
       geoip = 272;
@@ -346,6 +346,7 @@ in
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
+      # shadow = 318; # unused
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -497,7 +498,7 @@ in
       #consul = 145; # unused
       mailpile = 146;
       redmine = 147;
-      seeks = 148;
+      #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
       systemd-network = 152;
@@ -647,6 +648,7 @@ in
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
+      shadow = 318;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

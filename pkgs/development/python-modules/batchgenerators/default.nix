@@ -3,7 +3,7 @@
 , isPy27
 , fetchFromGitHub
 , fetchpatch
-, pytest
+, pytestCheckHook
 , unittest2
 , future
 , numpy
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "batchgenerators";
-  version = "0.20.0";
+  version = "0.20.1";
 
   disabled = isPy27;
 
@@ -24,11 +24,12 @@ buildPythonPackage rec {
     owner = "MIC-DKFZ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cc3i4wznqb7lk8n6jkprvkpsby6r7khkxqwn75k8f01mxgjfpvf";
+    sha256 = "1f91yflv9rschyl5bnfn735hp1rxrzcxkx18aajmlzb067h0ip8m";
 
   };
 
   patches = [
+    # lift Pillow bound; should be merged in next release
     (fetchpatch {
       url = "https://github.com/MIC-DKFZ/batchgenerators/pull/59.patch";
       sha256 = "171b3dm40yn0wi91m9s2nq3j565s1w39jpdf1mvc03rn75i8vdp0";
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     future numpy pillow scipy scikitlearn scikitimage threadpoolctl
   ];
 
-  checkInputs = [ pytest unittest2 ];
-
-  checkPhase = "pytest tests";
+  checkInputs = [ pytestCheckHook unittest2 ];
 
   meta = {
     description = "2D and 3D image data augmentation for deep learning";

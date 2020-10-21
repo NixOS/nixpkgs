@@ -1,23 +1,30 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy3k
+{ lib, pkgs, buildPythonPackage, fetchFromGitHub, isPy3k
+, ipython
+, ipywidgets
 , numpy
+, pyqt5
 }:
 
 buildPythonPackage rec {
   pname = "lightparam";
   version = "0.4.6";
   disabled = !isPy3k;
-  format = "wheel";
 
-  src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
-    python = "py3";
-    sha256 = "eca63016524208afb6a06db19baf659e698cce3ae2e57be15b37bc988549c631";
+  src = fetchFromGitHub {
+    owner = "portugueslab";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "13hlkvjcyz2lhvlfqyavja64jccbidshhs39sl4fibrn9iq34s3i";
   };
 
   propagatedBuildInputs = [
+    ipython
+    ipywidgets
     numpy
+    pyqt5
   ];
+
+  pythonImportsCheck = [ "lightparam" ];
 
   meta = {
     homepage = "https://github.com/portugueslab/lightparam";

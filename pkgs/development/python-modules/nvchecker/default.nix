@@ -1,18 +1,48 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytestCheckHook, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, aiohttp, pytest-httpbin }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, toml
+, structlog
+, appdirs
+, pytest-asyncio
+, flaky
+, tornado
+, pycurl
+, aiohttp
+, pytest-httpbin
+, docutils
+, installShellFiles
+}:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.7";
+  version = "2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "01be0e5587d346ad783b4b2dc45bd8eefe477081b33fff18cc2fdea58c2a38ef";
+  # Tests not included in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "lilydjwg";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0zf9vhf8ka0v1mf1xhbvkc2nr54m0rkiw1i68ps4sgx2mdj6qrfk";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl aiohttp ];
+  nativeBuildInputs = [ installShellFiles docutils ];
+  propagatedBuildInputs = [ setuptools toml structlog appdirs tornado pycurl aiohttp ];
   checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
+
+  postBuild = ''
+    patchShebangs docs/myrst2man.py
+    make -C docs man
+  '';
+
+  postInstall = ''
+    installManPage docs/_build/man/nvchecker.1
+  '';
 
   pytestFlagsArray = [ "-m 'not needs_net'" ];
 

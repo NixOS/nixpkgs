@@ -26,8 +26,7 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 ];
-  propagatedBuildInputs = [ coq ];
+  buildInputs = [ coq ];
 
   enableParallelBuilding = true;
 

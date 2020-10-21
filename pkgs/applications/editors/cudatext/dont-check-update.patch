@@ -1,0 +1,12 @@
+diff --git i/app/formmain.pas w/app/formmain.pas
+index 8c1131680..6c6c0043f 100644
+--- i/app/formmain.pas
++++ w/app/formmain.pas
+@@ -2135,6 +2135,7 @@ begin
+     false
+     {$endif};
+     *)
++  mnuHelpCheckUpd.Enabled:=false;
+ 
+   with AppPanels[cPaneSide] do
+   begin

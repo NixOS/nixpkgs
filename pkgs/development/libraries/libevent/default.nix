@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       and then add or remove events dynamically without having to change
       the event loop.
     '';
-    homepage = "http://libevent.org/";
+    homepage = "https://libevent.org/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

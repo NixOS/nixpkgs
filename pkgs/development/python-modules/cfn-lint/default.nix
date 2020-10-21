@@ -1,49 +1,76 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
-, pyyaml
-, six
-, requests
 , aws-sam-translator
 , importlib-metadata
 , importlib-resources
 , jsonpatch
 , jsonschema
-, pathlib2
-, setuptools
 , junit-xml
 , networkx
+, pathlib2
+, pyyaml
+, requests
+, setuptools
+, six
+# Test inputs
+, pytestCheckHook
+, mock
+, pydot
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.35.0";
+  version = "0.35.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "42023d89520e3a29891ec2eb4c326eef9d1f7516fe9abee8b6c97ce064187b45";
+  src = fetchFromGitHub {
+    owner = "aws-cloudformation";
+    repo  = "cfn-python-lint";
+    rev = "v${version}";
+    sha256 = "1ajb0412hw9fg9m4b3xbpfbp8cixmnpjxrkaks6k749xinzsv7qk";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace 'importlib_resources~=1.4;python_version<"3.7" and python_version!="3.4"' 'importlib_resources;python_version<"3.7"'
+  '';
+
   propagatedBuildInputs = [
-    pyyaml
-    six
-    requests
     aws-sam-translator
     jsonpatch
     jsonschema
-    pathlib2
-    setuptools
     junit-xml
     networkx
+    pathlib2
+    pyyaml
+    requests
+    setuptools
+    six
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
 
-  # No tests included in archive
-  doCheck = false;
+  pythonImportsCheck = [
+    "cfnlint"
+    "cfnlint.conditions"
+    "cfnlint.core"
+    "cfnlint.decode.node"
+    "cfnlint.decode.cfn_yaml"
+    "cfnlint.decode.cfn_json"
+    "cfnlint.decorators.refactored"
+    "cfnlint.graph"
+    "cfnlint.helpers"
+    "cfnlint.rules"
+    "cfnlint.runner"
+    "cfnlint.template"
+    "cfnlint.transform"
+  ];
+
+  checkInputs = [ pytestCheckHook mock pydot ];
+  preCheck = "export PATH=$out/bin:$PATH";
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
     homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
+    changelog = "https://github.com/aws-cloudformation/cfn-python-lint/blob/master/CHANGELOG.md";
     license = licenses.mit;
   };
 }

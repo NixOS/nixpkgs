@@ -3,7 +3,7 @@
 #   config.test-support.acme.caCert
 #
 # This value can be used inside the configuration of other test nodes to inject
-# the snakeoil certificate into security.pki.certificateFiles or into package
+# the test certificate into security.pki.certificateFiles or into package
 # overlays.
 #
 # Another value that's needed if you don't use a custom resolver (see below for
@@ -50,19 +50,13 @@
 # Also make sure that whenever you use a resolver from a different test node
 # that it has to be started _before_ the ACME service.
 { config, pkgs, lib, ... }:
-
-
 let
-  snakeOilCerts = import ./snakeoil-certs.nix;
+  testCerts = import ./snakeoil-certs.nix {
+    minica = pkgs.minica;
+    mkDerivation = pkgs.stdenv.mkDerivation;
+  };
+  domain = testCerts.domain;
 
-  wfeDomain = "acme.test";
-  wfeCertFile = snakeOilCerts.${wfeDomain}.cert;
-  wfeKeyFile = snakeOilCerts.${wfeDomain}.key;
-
-  siteDomain = "acme.test";
-  siteCertFile = snakeOilCerts.${siteDomain}.cert;
-  siteKeyFile = snakeOilCerts.${siteDomain}.key;
-  pebble = pkgs.pebble;
   resolver = let
     message = "You need to define a resolver for the acme test module.";
     firstNS = lib.head config.networking.nameservers;
@@ -71,27 +65,40 @@ let
   pebbleConf.pebble = {
     listenAddress = "0.0.0.0:443";
     managementListenAddress = "0.0.0.0:15000";
-    certificate = snakeOilCerts.${wfeDomain}.cert;
-    privateKey = snakeOilCerts.${wfeDomain}.key;
+    # These certs and keys are used for the Web Front End (WFE)
+    certificate = testCerts.${domain}.cert;
+    privateKey = testCerts.${domain}.key;
     httpPort = 80;
     tlsPort = 443;
-    ocspResponderURL = "http://0.0.0.0:4002";
+    ocspResponderURL = "http://${domain}:4002";
     strict = true;
   };
 
   pebbleConfFile = pkgs.writeText "pebble.conf" (builtins.toJSON pebbleConf);
-  pebbleDataDir = "/root/pebble";
 
 in {
   imports = [ ../../resolver.nix ];
 
-  options.test-support.acme.caCert = lib.mkOption {
-    type = lib.types.path;
-    description = ''
-      A certificate file to use with the <literal>nodes</literal> attribute to
-      inject the snakeoil CA certificate used in the ACME server into
-      <option>security.pki.certificateFiles</option>.
-    '';
+  options.test-support.acme = with lib; {
+    caDomain = mkOption {
+      type = types.str;
+      readOnly = true;
+      default = domain;
+      description = ''
+        A domain name to use with the <literal>nodes</literal> attribute to
+        identify the CA server.
+      '';
+    };
+    caCert = mkOption {
+      type = types.path;
+      readOnly = true;
+      default = testCerts.ca.cert;
+      description = ''
+        A certificate file to use with the <literal>nodes</literal> attribute to
+        inject the test CA certificate used in the ACME server into
+        <option>security.pki.certificateFiles</option>.
+      '';
+    };
   };
 
   config = {
@@ -99,35 +106,32 @@ in {
       resolver.enable = let
         isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
       in lib.mkOverride 900 isLocalResolver;
-      acme.caCert = snakeOilCerts.ca.cert;
     };
 
     # This has priority 140, because modules/testing/test-instrumentation.nix
     # already overrides this with priority 150.
     networking.nameservers = lib.mkOverride 140 [ "127.0.0.1" ];
-    networking.firewall.enable = false;
+    networking.firewall.allowedTCPPorts = [ 80 443 15000 4002 ];
 
     networking.extraHosts = ''
-      127.0.0.1 ${wfeDomain}
-      ${config.networking.primaryIPAddress} ${wfeDomain} ${siteDomain}
+      127.0.0.1 ${domain}
+      ${config.networking.primaryIPAddress} ${domain}
     '';
 
     systemd.services = {
       pebble = {
         enable = true;
         description = "Pebble ACME server";
-        requires = [ ];
         wantedBy = [ "network.target" ];
-        preStart = ''
-          mkdir ${pebbleDataDir}
-        '';
-        script = ''
-          cd ${pebbleDataDir}
-          ${pebble}/bin/pebble -config ${pebbleConfFile}
-        '';
+
         serviceConfig = {
+          RuntimeDirectory = "pebble";
+          WorkingDirectory = "/run/pebble";
+
           # Required to bind on privileged ports.
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+
+          ExecStart = "${pkgs.pebble}/bin/pebble -config ${pebbleConfFile}";
         };
       };
     };

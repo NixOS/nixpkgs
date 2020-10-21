@@ -39,5 +39,7 @@ llvmPackages.stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.andrewrk ];
+    # See https://github.com/NixOS/nixpkgs/issues/86299
+    broken = stdenv.isDarwin;
   };
 }

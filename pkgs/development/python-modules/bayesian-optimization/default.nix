@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "fmfn";
     repo = "BayesianOptimization";
-    rev = "v${version}";
-    sha256 = "0ylip9xdi0cjzmdayxxpazdfaa9dl0sdcl2qsfn3p0cipj59bdvd";
+    rev = version;
+    sha256 = "01mg9npiqh1qmq5ldnbpjmr8qkiw827msiv3crpkhbj4bdzasbfm";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +25,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    pytest tests
+    # New sklearn broke one test: https://github.com/fmfn/BayesianOptimization/issues/243
+    pytest tests -k "not test_suggest_with_one_observation"
   '';
 
   meta = with lib; {

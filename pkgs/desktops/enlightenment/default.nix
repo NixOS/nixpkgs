@@ -8,6 +8,7 @@
 
   #### APPLICATIONS
   econnman = callPackage ./econnman { };
+  evisum = callPackage ./evisum { };
   terminology = callPackage ./terminology { };
   rage = callPackage ./rage { };
   ephoto = callPackage ./ephoto { };

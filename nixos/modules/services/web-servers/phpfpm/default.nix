@@ -26,12 +26,9 @@ let
   phpIni = poolOpts: pkgs.runCommand "php.ini" {
     inherit (poolOpts) phpPackage phpOptions;
     preferLocalBuild = true;
-    nixDefaults = ''
-      sendmail_path = "/run/wrappers/bin/sendmail -t -i"
-    '';
-    passAsFile = [ "nixDefaults" "phpOptions" ];
+    passAsFile = [ "phpOptions" ];
   } ''
-    cat ${poolOpts.phpPackage}/etc/php.ini $nixDefaultsPath $phpOptionsPath > $out
+    cat ${poolOpts.phpPackage}/etc/php.ini $phpOptionsPath > $out
   '';
 
   poolOpts = { name, ... }:
@@ -277,6 +274,7 @@ in {
           ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
           RuntimeDirectory = "phpfpm";
           RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
+          Restart = "always";
         };
       }
     ) cfg.pools;

@@ -22,13 +22,13 @@ let
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.1.06-1";
+  version = "3.1.08-1";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "11z90x7rwzm7krkcnmcs9f41i1d284vrj0aqk2xnvl3p79vx25f7";
+    sha256 = "15b0fn8kv09k7kzyzix1pr1wmjw5yinzgw01v8pf9p547m4a899a";
   };
 
   buildInputs = [ perl makeWrapper ];

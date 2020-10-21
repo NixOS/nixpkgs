@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "git-subtrac";
-  version = "0.03";
+  version = "0.04";
 
   src = fetchFromGitHub {
     owner = "apenwarr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ky04h18vg1yl9lykbhkmf25qslg0z2qzziy8c7afmvzvvvhm2v5";
+    sha256 = "0p1n29k2a2rpznwxlwzkmx38ic6g041k9vx7msvick7cydn417fx";
   };
 
-  vendorSha256 = "1ccwbhzwys8sl3m2rs2lp70snzsi2a0ahnnq8kn15rrlvsv5qahf";
+  vendorSha256 = "0m64grnmhjvfsw7a56474s894sgd24rvcp5kamhzzyc4q556hqny";
 
   doCheck = false;
 

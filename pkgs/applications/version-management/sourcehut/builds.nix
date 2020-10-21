@@ -4,15 +4,13 @@
 , srht, redis, celery, pyyaml, markdown }:
 
 let
-  version = "0.56.13";
+  version = "0.63.4";
 
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
 
-    vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
-
-    doCheck = false;
+    vendorSha256 = "1sbcjp93gb0c4p7dd1gjhmhwr1pygxvrrzp954j2fvxvi38w6571";
   };
 in buildPythonPackage rec {
   inherit version;
@@ -21,12 +19,8 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     rev = version;
-    sha256 = "0la9i93fxxphi4gf913ccjiqlfn92h3nbpl9gxcwcplm2vvi4nmq";
+    sha256 = "1w3rb685nqg2h0k3ag681svc400si9r1gy0sdim3wa2qh8glbqni";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -40,7 +34,6 @@ in buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   postInstall = ''

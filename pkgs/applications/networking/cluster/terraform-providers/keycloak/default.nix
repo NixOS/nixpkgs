@@ -4,7 +4,7 @@
 }:
 
 buildGoModule rec {
-  name = "terraform-provider-keycloak-${version}";
+  pname = "terraform-provider-keycloak";
   version = "1.20.0";
 
   src = fetchFromGitHub {

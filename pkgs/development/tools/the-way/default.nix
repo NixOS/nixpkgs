@@ -1,18 +1,31 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, AppKit, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "out-of-cheese-error";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0q7yg90yxnpaafg6sg7mqkh86qkn43kxy73p9nqkkgrikdnrjh5a";
+    sha256 = "1whmvzpqm8x1q45mzrp4p40nj251drcryj9z4qjxgjlfsd5d1fxq";
   };
 
-  cargoSha256 = "1a747bmc6s007ram0w4xf1y2nb3pphvqnlx59098lr3v7gllp7x3";
-  checkFlags = "--test-threads=1";
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin  [ AppKit Security ];
+
+  cargoSha256 = "0adhgp6blwx7s1hlwqzzsgkzc43q9avxx8a9ykvvv2s1w7m9ql78";
+  checkFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--skip=copy" ];
+  cargoParallelTestThreads = false;
+
+  postInstall = ''
+    $out/bin/the-way config default tmp.toml
+    for shell in bash fish zsh; do
+      THE_WAY_CONFIG=tmp.toml $out/bin/the-way complete $shell > the-way.$shell
+      installShellCompletion the-way.$shell
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "Terminal code snippets manager";

@@ -1,7 +1,7 @@
-{ stdenv, lib, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv, lib, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, fetchurl
 
 # default dependencies
-, bzip2, flac, speex, libopus
+, gnutar, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, nasm, minizip, libwebp
@@ -13,11 +13,10 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, xorg
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg_3, libxslt, libxml2, at-spi2-core
-, jre
+, ffmpeg, libxslt, libxml2, at-spi2-core
+, jre8
 , pipewire_0_2
 
 # optional dependencies
@@ -39,6 +38,7 @@
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
 
+, channel
 , upstream-info
 }:
 
@@ -49,6 +49,8 @@ with stdenv.lib;
 # see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
 
 let
+  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
@@ -74,11 +76,16 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
-    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
-    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
+    "ffmpeg"
+    "flac"
+    "libjpeg"
+    "libpng"
+    "libwebp"
+    "libxslt"
+    "opus"
+    "snappy"
+    "zlib"
     # "re2" # fails with linker errors
-    # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
   ];
@@ -93,7 +100,7 @@ let
     libpng libcap
     xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg_3 libxslt libxml2
+    ffmpeg libxslt libxml2
     nasm
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
@@ -108,7 +115,7 @@ let
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
-        stable-version = (import ./upstream-info.nix).stable.version;
+        stable-version = (importJSON ./upstream-info.json).stable.version;
     in if versionAtLeast stable-version upto-version
        then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
@@ -116,16 +123,18 @@ let
 
   base = rec {
     name = "${packageName}-unwrapped-${version}";
-    inherit (upstream-info) channel version;
-    inherit packageName buildType buildPath;
+    inherit (upstream-info) version;
+    inherit channel packageName buildType buildPath;
 
-    src = upstream-info.main;
+    src = fetchurl {
+      url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
+      inherit (upstream-info) sha256;
+    };
 
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
-      (xorg.xcbproto.override { python = python2Packages.python; })
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -144,13 +153,9 @@ let
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
-    patches = optionals (versionRange "68" "86") [
-      ./patches/nix_plugin_paths_68.patch
-    ] ++ [
-      ./patches/remove-webp-include-69.patch
+    patches = [
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
-      ./patches/dont-use-ANGLE-by-default.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -160,18 +165,18 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi && versionRange "68" "86") [ # Improvements for the VA-API build:
-      ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
-      ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
+    ] ++ optionals (useVaapi) [
+      # Check for enable-accelerated-video-decode on Linux:
+      (githubPatch "54deb9811ca9bd2327def5c05ba6987b8c7a0897" "11jvxjlkzz1hm0pvfyr88j7z3zbwzplyl5idkx92l2lzv4459c8d")
     ];
 
-    postPatch = optionalString (!versionRange "0" "86") ''
+    postPatch = ''
       # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
       substituteInPlace native_client/SConstruct \
         --replace "#! -*- python -*-" ""
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
         --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
-    '' + ''
+
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
         --replace \
@@ -188,11 +193,6 @@ let
         --replace \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
-
-      substituteInPlace ui/gfx/x/BUILD.gn \
-        --replace \
-          '/usr/share/xcb' \
-          '${xorg.xcbproto}/share/xcb/'
 
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
@@ -243,7 +243,7 @@ let
 
     gnFlags = mkGnFlags ({
       use_lld = false;
-      use_gold = true;
+      use_gold = stdenv.buildPlatform.is64bit;  # ld.gold outs-of-memory on i686
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
 
@@ -266,6 +266,7 @@ let
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
+      symbol_level = 0;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
@@ -318,15 +319,8 @@ let
     NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
-      # Build paralelism: on Hydra the build was frequently running into memory
-      # exhaustion, and even other users might be running into similar issues.
-      # -j is halved to avoid memory problems, and -l is slightly increased
-      # so that the build gets slight preference before others
-      # (it will often be on "critical path" and at risk of timing out)
       buildCommand = target: ''
-        ninja -C "${buildPath}"  \
-          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
-          "${target}"
+        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName
@@ -344,9 +338,11 @@ let
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
       patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
     '';
+
+    passthru.updateScript = ./update.py;
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [
   "name" "gnFlags" "buildTargets"
-])
+] // { passthru = base.passthru // (extraAttrs.passthru or {}); })

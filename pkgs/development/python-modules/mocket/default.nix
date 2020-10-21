@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
 , decorator
+, http-parser
 , importlib-metadata
 , python
 , python_magic
@@ -8,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.8.8";
+  version = "3.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yqls2hqmfs6i4p2nb89j5icyrqwabalsmwfixfvbjir4fmgad2l";
+    sha256 = "25aba0b343784b27b1d77e731ed868a728d5209911f9f4728f33088582e491c9";
   };
 
   patchPhase = ''
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     decorator
+    http-parser
     python_magic
     urllib3
     six

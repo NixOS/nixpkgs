@@ -1,21 +1,21 @@
-{ lowPrio, newScope, pkgs, stdenv, cmake
+{ lowPrio, newScope, pkgs, stdenv, cmake, gccForLibs
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
+, buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
 
 let
   release_version = "11.0.0";
-  candidate = "rc2";
-  version = "${release_version}${candidate}"; # differentiating these (variables) is important for RCs
+  version = "${release_version}"; # differentiating these (variables) is important for RCs
   targetConfig = stdenv.targetPlatform.config;
 
   fetch = name: sha256: fetchurl {
-    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${release_version}-${candidate}/${name}-${version}.src.tar.xz";
+    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0bg2a9nmkdbj5qfd0vvqj8bgchcx1yzmylxxgvh8y5hhj4fz13fs";
+  clang-tools-extra_src = fetch "clang-tools-extra" "02bcwwn54661madhq4nxc069s7p7pj5gpqi8ww50w3anbpviilzy";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
@@ -24,9 +24,10 @@ let
       mkdir "$rsrc"
       ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && tools.clang-unwrapped ? gcc && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   in {
 
@@ -60,7 +61,8 @@ let
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      libcxx = null; # libstdcxx is smuggled in with clang.gcc
+      # libstdcxx is taken from gcc in an ad-hoc way in cc-wrapper.
+      libcxx = null;
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];

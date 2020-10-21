@@ -16,7 +16,7 @@
 , hyphen
 , unrarSupport ? false
 , chmlib
-, python2Packages
+, pythonPackages
 , libusb1
 , libmtp
 , xdg_utils
@@ -24,17 +24,13 @@
 , removeReferencesTo
 }:
 
-let
-  pypkgs = python2Packages;
-
-in
 mkDerivation rec {
   pname = "calibre";
-  version = "4.22.0";
+  version = "4.23.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0d0wmd3ijk8px1d662igal4lfmpyzynfzs6ms1bb9nf42mq2pxai";
+    sha256 = "sha256-Ft5RRzzw4zb5RqVyUaHk9Pu6H4V/F9j8FKoTLn61lRg=";
   };
 
   patches = [
@@ -47,7 +43,7 @@ mkDerivation rec {
   ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${pypkgs.pyqt5}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${pythonPackages.pyqt5}/share/sip/PyQt5':"  \
       setup/build_environment.py
 
     # Remove unneeded files and libs
@@ -61,51 +57,48 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig qmake removeReferencesTo ];
 
-  CALIBRE_PY3_PORT = builtins.toString pypkgs.isPy3k;
+  CALIBRE_PY3_PORT = builtins.toString pythonPackages.isPy3k;
 
   buildInputs = [
-    poppler_utils
-    libpng
-    imagemagick
-    libjpeg
-    fontconfig
-    podofo
-    qtbase
     chmlib
-    icu
+    fontconfig
     hunspell
     hyphen
-    sqlite
-    libusb1
+    icu
+    imagemagick
+    libjpeg
     libmtp
+    libpng
+    libusb1
+    podofo
+    poppler_utils
+    qtbase
+    sqlite
     xdg_utils
   ] ++ (
-    with pypkgs; [
+    with pythonPackages; [
       apsw
-      cssselect
+      beautifulsoup4
       css-parser
+      cssselect
       dateutil
       dnspython
       feedparser
+      html2text
       html5-parser
       lxml
       markdown
+      mechanize
+      msgpack
       netifaces
       pillow
-      python
       pyqt5
-      sip
-      regex
-      msgpack
-      beautifulsoup4
-      html2text
       pyqtwebengine
+      python
+      regex
+      sip
       # the following are distributed with calibre, but we use upstream instead
       odfpy
-    ]
-  ) ++ lib.optionals (!pypkgs.isPy3k) (
-    with pypkgs; [
-      mechanize
     ]
   );
 
@@ -121,17 +114,16 @@ mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
-    export SIP_BIN=${pypkgs.sip}/bin/sip
+    export SIP_BIN=${pythonPackages.sip}/bin/sip
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${pypkgs.python.interpreter} setup.py install --root=$out \
+    ${pythonPackages.python.interpreter} setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \
       --staging-libdir=$out/lib \
       --staging-sharedir=$out/share
-
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py
       $out/lib/calibre/calibre/ebooks/metadata/*.py
@@ -154,7 +146,8 @@ mkDerivation rec {
   # 2018-11-06) was a single string like the following:
   #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
   preFixup = ''
-    remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+    remove-references-to -t ${podofo.dev} \
+      $out/lib/calibre/calibre/plugins${lib.optionalString pythonPackages.isPy3k "/3"}/podofo.so
 
     for program in $out/bin/*; do
       wrapProgram $program \

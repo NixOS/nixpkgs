@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];
 
   meta = with stdenv.lib; {
-    description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output.";
+    description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = licenses.mit;
     maintainers = with maintainers; [ atemu ];

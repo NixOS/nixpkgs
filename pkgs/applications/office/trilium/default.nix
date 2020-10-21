@@ -1,7 +1,7 @@
 { stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
 
 let
-  description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases.";
+  description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
   desktopItem = makeDesktopItem {
     name = "Trilium";
     exec = "trilium";

@@ -44,12 +44,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/applications
     mv package-files/linux/deb/jedit.desktop $out/share/applications/jedit.desktop
 
-    patch package-files/linux/jedit << EOF
-    5a6,8
-    > # specify the correct JAVA_HOME
-    > JAVA_HOME=${jdk.jre.home}/jre
-    > 
-    EOF
+    # specify the correct JAVA_HOME
+    sed -i '1a JAVA_HOME=${jdk}' package-files/linux/jedit
     sed -i "s|/usr/share/jEdit/@jar.filename@|$out/share/jEdit/jedit.jar|g" package-files/linux/jedit
     mkdir -p $out/bin
     cp package-files/linux/jedit $out/bin/jedit

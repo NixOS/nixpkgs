@@ -1,4 +1,4 @@
-From 0d9d7c03054babdbd1fa5f6f266b56e8c96e9ba5 Mon Sep 17 00:00:00 2001
+From 42419ff4dc7a36607189f8d3765aa836d5c5eaf9 Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sun, 8 Mar 2020 01:05:54 +0100
 Subject: [PATCH 18/18] path-util.h: add placeholder for DEFAULT_PATH_NORMAL
@@ -29,5 +29,5 @@ index 30031fca8e..d97145539a 100644
  #if HAVE_SPLIT_USR
  #  define DEFAULT_PATH DEFAULT_PATH_SPLIT_USR
 -- 
-2.27.0
+2.28.0
 

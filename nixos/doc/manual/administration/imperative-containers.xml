@@ -14,18 +14,18 @@
  <para>
   You create a container with identifier <literal>foo</literal> as follows:
 <screen>
-# nixos-container create foo
+<prompt># </prompt>nixos-container create <replaceable>foo</replaceable>
 </screen>
   This creates the container’s root directory in
-  <filename>/var/lib/containers/foo</filename> and a small configuration file
-  in <filename>/etc/containers/foo.conf</filename>. It also builds the
+  <filename>/var/lib/containers/<replaceable>foo</replaceable></filename> and a small configuration file
+  in <filename>/etc/containers/<replaceable>foo</replaceable>.conf</filename>. It also builds the
   container’s initial system configuration and stores it in
-  <filename>/nix/var/nix/profiles/per-container/foo/system</filename>. You can
+  <filename>/nix/var/nix/profiles/per-container/<replaceable>foo</replaceable>/system</filename>. You can
   modify the initial configuration of the container on the command line. For
   instance, to create a container that has <command>sshd</command> running,
   with the given public key for <literal>root</literal>:
 <screen>
-# nixos-container create foo --config '
+<prompt># </prompt>nixos-container create <replaceable>foo</replaceable> --config '
   <xref linkend="opt-services.openssh.enable"/> = true;
   <link linkend="opt-users.users._name_.openssh.authorizedKeys.keys">users.users.root.openssh.authorizedKeys.keys</link> = ["ssh-dss AAAAB3N…"];
 '
@@ -34,7 +34,7 @@
   as container IP. This behavior can be altered by setting <literal>--host-address</literal> and
   <literal>--local-address</literal>:
 <screen>
-# nixos-container create test --config-file test-container.nix \
+<prompt># </prompt>nixos-container create test --config-file test-container.nix \
     --local-address 10.235.1.2 --host-address 10.235.1.1
 </screen>
  </para>
@@ -42,7 +42,7 @@
  <para>
   Creating a container does not start it. To start the container, run:
 <screen>
-# nixos-container start foo
+<prompt># </prompt>nixos-container start <replaceable>foo</replaceable>
 </screen>
   This command will return as soon as the container has booted and has reached
   <literal>multi-user.target</literal>. On the host, the container runs within
@@ -51,7 +51,7 @@
   Thus, if something went wrong, you can get status info using
   <command>systemctl</command>:
 <screen>
-# systemctl status container@foo
+<prompt># </prompt>systemctl status container@<replaceable>foo</replaceable>
 </screen>
  </para>
 
@@ -59,22 +59,22 @@
   If the container has started successfully, you can log in as root using the
   <command>root-login</command> operation:
 <screen>
-# nixos-container root-login foo
-[root@foo:~]#
+<prompt># </prompt>nixos-container root-login <replaceable>foo</replaceable>
+<prompt>[root@foo:~]#</prompt>
 </screen>
   Note that only root on the host can do this (since there is no
   authentication). You can also get a regular login prompt using the
   <command>login</command> operation, which is available to all users on the
   host:
 <screen>
-# nixos-container login foo
+<prompt># </prompt>nixos-container login <replaceable>foo</replaceable>
 foo login: alice
 Password: ***
 </screen>
   With <command>nixos-container run</command>, you can execute arbitrary
   commands in the container:
 <screen>
-# nixos-container run foo -- uname -a
+<prompt># </prompt>nixos-container run <replaceable>foo</replaceable> -- uname -a
 Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
 </screen>
  </para>
@@ -85,18 +85,18 @@ Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
   <literal>/var/lib/container/<replaceable>name</replaceable>/etc/nixos/configuration.nix</literal>,
   and run
 <screen>
-# nixos-container update foo
+<prompt># </prompt>nixos-container update <replaceable>foo</replaceable>
 </screen>
   This will build and activate the new configuration. You can also specify a
   new configuration on the command line:
 <screen>
-# nixos-container update foo --config '
+<prompt># </prompt>nixos-container update <replaceable>foo</replaceable> --config '
   <xref linkend="opt-services.httpd.enable"/> = true;
   <xref linkend="opt-services.httpd.adminAddr"/> = "foo@example.org";
   <xref linkend="opt-networking.firewall.allowedTCPPorts"/> = [ 80 ];
 '
 
-# curl http://$(nixos-container show-ip foo)/
+<prompt># </prompt>curl http://$(nixos-container show-ip <replaceable>foo</replaceable>)/
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">…
 </screen>
   However, note that this will overwrite the container’s
@@ -117,7 +117,7 @@ Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
   by using <command>systemctl</command> on the container’s service unit. To
   destroy a container, including its file system, do
 <screen>
-# nixos-container destroy foo
+<prompt># </prompt>nixos-container destroy <replaceable>foo</replaceable>
 </screen>
  </para>
 </section>
