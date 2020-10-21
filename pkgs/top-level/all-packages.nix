@@ -21163,6 +21163,8 @@ in
 
   hdhomerun-config-gui = callPackage ../applications/video/hdhomerun-config-gui { };
 
+  hdl-dump = callPackage ../tools/misc/hdl-dump { };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
