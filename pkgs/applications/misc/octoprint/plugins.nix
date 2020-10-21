@@ -13,40 +13,6 @@ self: super: let
 in {
   inherit buildPlugin;
 
-  # Deprecated alias
-  m3d-fio = self.m33-fio; # added 2016-08-13
-
-  m33-fio = buildPlugin rec {
-    pname = "M33-Fio";
-    version = "1.21";
-
-    src = fetchFromGitHub {
-      owner = "donovan6000";
-      repo = "M33-Fio";
-      rev = "V${version}";
-      sha256 = "1la3611kkqn8yiwjn6cizc45ri8pnk6ckld1na4nk6mqk88jvjq7";
-    };
-
-    patches = [
-      ./m33-fio-one-library.patch
-    ];
-
-    postPatch = ''
-      rm -rf octoprint_m33fio/static/libraries/*
-      (
-        cd 'shared library source'
-        make
-      )
-    '';
-
-    meta = with stdenv.lib; {
-      description = "OctoPrint plugin for the Micro 3D printer";
-      homepage = "https://github.com/donovan6000/M33-Fio";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
-
   mqtt = buildPlugin rec {
     pname = "MQTT";
     version = "0.8.6";
