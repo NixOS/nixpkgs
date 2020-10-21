@@ -7,14 +7,15 @@
 , pythonPackages
 , python3Packages
 , writeText
+, wrapNeovim2
 }:
 let
   # vimWithRC pass it args
   # need a function that generates wrapperArgs + customRC and then one can create its own package from that.
   # should let the user write its own file.
   makeNeovimConfig =
-    { extraMakeWrapperArgs ? ""
-    , withPython ? false
+    {
+    withPython ? false
     , extraPythonPackages ? (_: [ ]) /* the function you would have passed to python.withPackages */
     , withPython3 ? true
     , extraPython3Packages ? (_: [ ]) /* the function you would have passed to python.withPackages */
@@ -123,23 +124,55 @@ let
         "--set"
         "NVIM_SYSTEM_RPLUGIN_MANIFEST"
         "${placeholder "out"}/rplugin.vim"
-      ] ++ lib.optionals wrapRc [
-        "--add-flags"
-        "-u ${writeText "init.vim" neovimRcContent}"
       ];
 
       manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
       neovimRcContent = vimUtils.vimrcContent configure;
     in
     {
-      wrapperArgs = finalMakeWrapperArgs ++ extraMakeWrapperArgs;
+      wrapperArgs = finalMakeWrapperArgs;
       neovimRc = neovimRcContent;
       inherit manifestRc;
       inherit rubyEnv;
       inherit pythonEnv;
       inherit python3Env;
     };
+
+
+  # to keep backwards compatibility
+  legacyWrapper = neovim: {
+    extraMakeWrapperArgs ? []
+    , withPython ? true
+    /* the function you would have passed to python.withPackages */
+    ,  extraPythonPackages ? (_: [])
+    /* the function you would have passed to python.withPackages */
+    , withPython3 ? true,  extraPython3Packages ? (_: [])
+    , withNodeJs ? false
+    , withRuby ? true
+    , vimAlias ? false
+    , viAlias ? false
+    , configure ? {}
+  }:
+    let
+      res = makeNeovimConfig {
+        inherit withPython extraPythonPackages;
+        inherit withPython3 extraPython3Packages;
+        inherit withNodeJs withRuby;
+
+        inherit configure;
+      };
+    in
+    wrapNeovim2 neovim (res // {
+      wrapperArgs = res.wrapperArgs ++ [
+        "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
+      ]
+      ++ (if builtins.isList extraMakeWrapperArgs then extraMakeWrapperArgs
+      else lib.warn "Passing a string as extraMakeWrapperArgs to the neovim wrapper is
+        deprecated, please use a list instead")
+      ;
+  });
 in
 {
   inherit makeNeovimConfig;
+  inherit legacyWrapper;
 }

@@ -14,7 +14,6 @@ neovim:
 let
   wrapper = {
       wrapperArgs ? []
-    , neovimRc ? null
     , manifestRc ? null
     , withPython ? true, pythonEnv ? null
     , withPython3 ? true,  python3Env ? null
@@ -22,8 +21,7 @@ let
     , withRuby ? true, rubyEnv ? null
     , vimAlias ? false
     , viAlias ? false
-
-    # deprecate
+    , ...
   }:
   let
 
@@ -36,7 +34,7 @@ let
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
       postBuild = ''
-        rm $out/bin/nvim
+        # rm $out/bin/nvim
       ''
       + lib.optionalString stdenv.isLinux ''
         rm $out/share/applications/nvim.desktop
@@ -81,7 +79,7 @@ let
         # Only display the log on error since it will contain a few normally
         # irrelevant messages.
         if ! $out/bin/nvim \
-          -u ${writeFile "manifest.vim" manifestRc} \
+          -u ${writeText "manifest.vim" manifestRc} \
           -i NONE -n \
           -E -V1rplugins.log -s \
           +UpdateRemotePlugins +quit! > outfile 2>&1; then
@@ -91,6 +89,7 @@ let
         fi
       ''
       + ''
+        rm $out/bin/nvim
         makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs}
       '';
 
