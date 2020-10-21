@@ -2014,6 +2014,18 @@ let
     meta.homepage = "https://github.com/vim-scripts/mayansmoke/";
   };
 
+  mkdx = buildVimPluginFrom2Nix {
+    pname = "mkdx";
+    version = "2020-10-12";
+    src = fetchFromGitHub {
+      owner = "SidOfc";
+      repo = "mkdx";
+      rev = "65f343251d99c20db9f22e9c836b709f249129f6";
+      sha256 = "06xz12h87wkcpn2w22k6m7gxshk5x75hg8ql9cmja89v0birsn0f";
+    };
+    meta.homepage = "https://github.com/SidOfc/mkdx/";
+  };
+
   molokai = buildVimPluginFrom2Nix {
     pname = "molokai";
     version = "2015-11-11";

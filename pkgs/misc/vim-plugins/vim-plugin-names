@@ -463,6 +463,7 @@ Shougo/vimproc.vim
 Shougo/vimshell.vim
 shumphrey/fugitive-gitlab.vim
 sickill/vim-pasta
+SidOfc/mkdx
 simnalamburt/vim-mundo
 SirVer/ultisnips
 sjl/gundo.vim
