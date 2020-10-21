@@ -1,7 +1,9 @@
 { lib, stdenv, fetchFromGitHub, cmake, python3, ncurses }:
 
-stdenv.mkDerivation {
-  name = "libtapi-1000.10.8";
+stdenv.mkDerivation rec {
+  pname = "libtapi";
+  version = "1000.10.8"; # determined by looking at VERSION.txt
+
   src = fetchFromGitHub {
     owner = "tpoechtrager";
     repo = "apple-libtapi";
@@ -36,6 +38,8 @@ stdenv.mkDerivation {
   installTargets = [ "install-libtapi" "install-tapi-headers"];
 
   meta = with lib; {
+    description = "Replaces the Mach-O Dynamic Library Stub files in Apple's SDKs to reduce the size";
+    homepage = "https://github.com/tpoechtrager/apple-libtapi";
     license = licenses.apsl20;
     maintainers = with maintainers; [ matthewbauer ];
   };
