@@ -11,9 +11,15 @@
 , icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
+, gnum4
 , debugBuild ? false
 
 ### optionals
+
+## backported libraries
+
+, nss_latest
+
 
 ## optional libraries
 
@@ -87,6 +93,7 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
+  nss_pkg = if lib.versionAtLeast ffversion "82" then nss_latest else nss;
 in
 
 stdenv.mkDerivation ({
@@ -125,7 +132,7 @@ stdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss
+    nspr nss_pkg
   ]
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -133,13 +140,14 @@ stdenv.mkDerivation ({
   ++ lib.optional  gssSupport kerberos
   ++ lib.optionals waylandSupport [ libxkbcommon ]
   ++ lib.optionals pipewireSupport [ pipewire ]
+  ++ lib.optionals (lib.versionAtLeast ffversion "82") [ gnum4 ]
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
 
   NIX_CFLAGS_COMPILE = toString [
     "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss.dev}/include/nss"
+    "-I${nss_pkg.dev}/include/nss"
   ];
 
   MACH_USE_SYSTEM_PYTHON = "1";

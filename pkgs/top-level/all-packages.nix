@@ -14468,6 +14468,7 @@ in
   };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
+  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { });
   nss_3_44 = lowPrio (callPackage ../development/libraries/nss/3.44.nix { });
   nssTools = nss.tools;
 
