@@ -10,6 +10,7 @@ in
 # So an extension's attribute name should be of the form:
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
+stdenv.lib.mapAttrs (_n: stdenv.lib.recurseIntoAttrs)
 {
 
   alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
