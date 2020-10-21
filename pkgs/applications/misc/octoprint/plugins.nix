@@ -13,62 +13,21 @@ self: super: let
 in {
   inherit buildPlugin;
 
-  mqtt = buildPlugin rec {
-    pname = "MQTT";
-    version = "0.8.7";
+  abl-expert = buildPlugin rec {
+    pname = "ABL_Expert";
+    version = "0.6";
 
-    src = fetchFromGitHub {
-      owner = "OctoPrint";
-      repo = "OctoPrint-MQTT";
+    src = fetchgit {
+      url = "https://framagit.org/razer/Octoprint_ABL_Expert/";
       rev = version;
-      sha256 = "0k82h7wafbcqdvk5wjw4dp9lydwszfj1lf8vvymwbqdn7pf5h0dy";
-    };
-
-    propagatedBuildInputs = with super; [ paho-mqtt ];
-
-    meta = with stdenv.lib; {
-      description = "Publish printer status MQTT";
-      homepage = "https://github.com/OctoPrint/OctoPrint-MQTT";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ peterhoeg ];
-    };
-  };
-
-  titlestatus = buildPlugin rec {
-    pname = "TitleStatus";
-    version = "0.0.5";
-
-    src = fetchFromGitHub {
-      owner = "MoonshineSG";
-      repo = "OctoPrint-TitleStatus";
-      rev = version;
-      sha256 = "10nxjrixg0i6n6x8ghc1ndshm25c97bvkcis5j9kmlkkzs36i2c6";
+      sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
     };
 
     meta = with stdenv.lib; {
-      description = "Show printers status in window title";
-      homepage = "https://github.com/MoonshineSG/OctoPrint-TitleStatus";
+      description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
+      homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
-
-  stlviewer = buildPlugin rec {
-    pname = "STLViewer";
-    version = "0.4.2";
-
-    src = fetchFromGitHub {
-      owner = "jneilliii";
-      repo = "OctoPrint-STLViewer";
-      rev = version;
-      sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
-    };
-
-    meta = with stdenv.lib; {
-      description = "A simple stl viewer tab for OctoPrint";
-      homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ abbradar ];
+      maintainers = with maintainers; [ WhittlesJr ];
     };
   };
 
@@ -91,46 +50,62 @@ in {
     };
   };
 
-  touchui = buildPlugin rec {
-    pname = "TouchUI";
-    version = "0.3.16";
+  displaylayerprogress = buildPlugin rec {
+    pname = "OctoPrint-DisplayLayerProgress";
+    version = "1.24.0";
 
     src = fetchFromGitHub {
-      owner = "BillyBlaze";
-      repo = "OctoPrint-${pname}";
+      owner = "OllisGit";
+      repo = pname;
       rev = version;
-      sha256 = "1jlqjirc4ygl4k7jp93l2h6b18jap3mzz8sf2g61j9w0kgv9l365";
+      sha256 = "1lbivg3rcjzv8zqvp8n8gcaczxdm7gvd5ihjb6jq0fgf958lv59n";
     };
 
     meta = with stdenv.lib; {
-      description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
-      homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
+      description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
+      homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ j0hax ];
     };
   };
 
-  psucontrol = buildPlugin rec {
-    pname = "PSUControl";
-    version = "0.1.9";
+  gcodeeditor = buildPlugin rec {
+    pname = "GcodeEditor";
+    version = "0.2.9";
 
     src = fetchFromGitHub {
-      owner = "kantlivelong";
+      owner = "ieatacid";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "1cn009bdgn6c9ba9an5wfj8z02wi0xcsmbhkqggiqlnqy1fq45ca";
+      sha256 = "1yjj9lmxbzmzrn7gahw9lj7554fphalbjjp8ns0rr9py3rshwxkm";
     };
 
-    preConfigure = ''
-      # optional; RPi.GPIO is broken on vanilla kernels
-      sed /RPi.GPIO/d -i requirements.txt
-    '';
+    meta = with stdenv.lib; {
+      description = "Edit gcode on OctoPrint";
+      homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ WhittlesJr ];
+    };
+  };
+
+  mqtt = buildPlugin rec {
+    pname = "MQTT";
+    version = "0.8.7";
+
+    src = fetchFromGitHub {
+      owner = "OctoPrint";
+      repo = "OctoPrint-MQTT";
+      rev = version;
+      sha256 = "0k82h7wafbcqdvk5wjw4dp9lydwszfj1lf8vvymwbqdn7pf5h0dy";
+    };
+
+    propagatedBuildInputs = with super; [ paho-mqtt ];
 
     meta = with stdenv.lib; {
-      description = "OctoPrint plugin to control ATX/AUX power supply";
-      homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
+      description = "Publish printer status MQTT";
+      homepage = "https://github.com/OctoPrint/OctoPrint-MQTT";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ peterhoeg ];
     };
   };
 
@@ -163,40 +138,27 @@ in {
     };
   };
 
-  abl-expert = buildPlugin rec {
-    pname = "ABL_Expert";
-    version = "0.6";
-
-    src = fetchgit {
-      url = "https://framagit.org/razer/Octoprint_ABL_Expert/";
-      rev = version;
-      sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
-    };
-
-    meta = with stdenv.lib; {
-      description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
-      homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ WhittlesJr ];
-    };
-  };
-
-  gcodeeditor = buildPlugin rec {
-    pname = "GcodeEditor";
-    version = "0.2.9";
+  psucontrol = buildPlugin rec {
+    pname = "PSUControl";
+    version = "0.1.9";
 
     src = fetchFromGitHub {
-      owner = "ieatacid";
+      owner = "kantlivelong";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "1yjj9lmxbzmzrn7gahw9lj7554fphalbjjp8ns0rr9py3rshwxkm";
+      sha256 = "1cn009bdgn6c9ba9an5wfj8z02wi0xcsmbhkqggiqlnqy1fq45ca";
     };
 
+    preConfigure = ''
+      # optional; RPi.GPIO is broken on vanilla kernels
+      sed /RPi.GPIO/d -i requirements.txt
+    '';
+
     meta = with stdenv.lib; {
-      description = "Edit gcode on OctoPrint";
-      homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
+      description = "OctoPrint plugin to control ATX/AUX power supply";
+      homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ WhittlesJr ];
+      maintainers = with maintainers; [ gebner ];
     };
   };
 
@@ -219,22 +181,60 @@ in {
     };
   };
 
-  displaylayerprogress = buildPlugin rec {
-    pname = "OctoPrint-DisplayLayerProgress";
-    version = "1.24.0";
+  stlviewer = buildPlugin rec {
+    pname = "STLViewer";
+    version = "0.4.2";
 
     src = fetchFromGitHub {
-      owner = "OllisGit";
-      repo = pname;
+      owner = "jneilliii";
+      repo = "OctoPrint-STLViewer";
       rev = version;
-      sha256 = "1lbivg3rcjzv8zqvp8n8gcaczxdm7gvd5ihjb6jq0fgf958lv59n";
+      sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
     };
 
     meta = with stdenv.lib; {
-      description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
-      homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
+      description = "A simple stl viewer tab for OctoPrint";
+      homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ j0hax ];
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
+  titlestatus = buildPlugin rec {
+    pname = "TitleStatus";
+    version = "0.0.5";
+
+    src = fetchFromGitHub {
+      owner = "MoonshineSG";
+      repo = "OctoPrint-TitleStatus";
+      rev = version;
+      sha256 = "10nxjrixg0i6n6x8ghc1ndshm25c97bvkcis5j9kmlkkzs36i2c6";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Show printers status in window title";
+      homepage = "https://github.com/MoonshineSG/OctoPrint-TitleStatus";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
+  touchui = buildPlugin rec {
+    pname = "TouchUI";
+    version = "0.3.16";
+
+    src = fetchFromGitHub {
+      owner = "BillyBlaze";
+      repo = "OctoPrint-${pname}";
+      rev = version;
+      sha256 = "1jlqjirc4ygl4k7jp93l2h6b18jap3mzz8sf2g61j9w0kgv9l365";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
+      homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ gebner ];
     };
   };
 
