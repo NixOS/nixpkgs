@@ -943,6 +943,13 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      In the <literal>resilio</literal> module, <xref linkend="opt-services.resilio.httpListenAddr"/> has been changed to listen to <literal>[::1]</literal> instead of <literal>0.0.0.0</literal>.
      </para>
    </listitem>
+     <listitem>
+       <para>
+         <literal>sslh</literal> has been updated to version
+           <literal>1.21</literal>. The <literal>ssl</literal> probe must be
+             renamed to <literal>tls</literal> in <xref linkend="opt-services.sslh.appendConfig"/>.
+    </para>
+  </listitem>
    <listitem>
     <para>
      Users of <link xlink:href="http://openafs.org">OpenAFS 1.6</link> must
