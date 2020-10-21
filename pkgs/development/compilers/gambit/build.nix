@@ -35,6 +35,7 @@ gccStdenv.mkDerivation rec {
   #runtimeDeps = [ gnused gnugrep ];
 
   configureFlags = [
+    "--enable-targets=${gambit-params.targets}"
     "--enable-single-host"
     "--enable-c-opt=${optimizationSetting}"
     "--enable-gcc-opts"
@@ -94,6 +95,7 @@ gccStdenv.mkDerivation rec {
 
     # Now use the bootstrap compiler to build the real thing!
     make -j$NIX_BUILD_CORES from-scratch
+    ${lib.optionalString gambit-params.modules "make -j$NIX_BUILD_CORES modules"}
   '';
 
   postInstall = ''
