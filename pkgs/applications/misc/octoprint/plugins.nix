@@ -15,13 +15,13 @@ in {
 
   mqtt = buildPlugin rec {
     pname = "MQTT";
-    version = "0.8.6";
+    version = "0.8.7";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-MQTT";
       rev = version;
-      sha256 = "0y1jnfplcy8mh3szrfbbvngl02j49cbdizglrfsry4fvqg50zjxd";
+      sha256 = "0k82h7wafbcqdvk5wjw4dp9lydwszfj1lf8vvymwbqdn7pf5h0dy";
     };
 
     propagatedBuildInputs = with super; [ paho-mqtt ];
