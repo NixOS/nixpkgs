@@ -259,13 +259,13 @@ in {
 
   octoprint-dashboard = buildPlugin rec {
     pname = "OctoPrint-Dashboard";
-    version = "1.15.1";
+    version = "1.15.2";
 
     src = fetchFromGitHub {
       owner = "StefanCohen";
       repo = pname;
       rev = version;
-      sha256 = "1psk069g8xdpgbzmna51dh978vrildh33dn7kbbi5y31ry5c3gx6";
+      sha256 = "0p94jwd7kagh3sixhcrqmsgbay4aaf9l1pgyi2b45jym8pvld5n4";
     };
 
     meta = with stdenv.lib; {
