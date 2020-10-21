@@ -74,13 +74,13 @@ in {
 
   curaenginelegacy = buildPlugin rec {
     pname = "CuraEngineLegacy";
-    version = "1.0.2";
+    version = "1.1.1";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "1cdb276wfyf3wcfj5g3migd6b6aqmkrxncrqjfcfx4j4k3xac965";
+      sha256 = "1a7pxlmj1a7blkv97sn1k390pbjcxx2860011pbjcdnli74zpvv5";
     };
 
     meta = with stdenv.lib; {
