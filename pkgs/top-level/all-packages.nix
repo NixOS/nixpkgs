@@ -23171,6 +23171,8 @@ in
 
   pflask = callPackage ../os-specific/linux/pflask {};
 
+  pfsshell = callPackage ../tools/misc/pfsshell { };
+
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
 
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
