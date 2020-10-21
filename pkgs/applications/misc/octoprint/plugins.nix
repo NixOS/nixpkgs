@@ -165,12 +165,12 @@ in {
 
   abl-expert = buildPlugin rec {
     pname = "ABL_Expert";
-    version = "2019-12-21";
+    version = "0.6";
 
     src = fetchgit {
       url = "https://framagit.org/razer/Octoprint_ABL_Expert/";
-      rev = "f11fbe05088ad618bfd9d064ac3881faec223f33";
-      sha256 = "026r4prkyvwzxag5pv36455q7s3gaig37nmr2nbvhwq3d2lbi5s4";
+      rev = version;
+      sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
     };
 
     meta = with stdenv.lib; {
