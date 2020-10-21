@@ -16,6 +16,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Random User-Agent middleware based on fake-useragent";
     homepage = "https://github.com/alecxe/scrapy-fake-useragent";
-    license = licenses.bsd3;
+    license = licenses.mit;
   };
 }
