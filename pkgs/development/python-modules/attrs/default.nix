@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "19.3.0";
+  version = "20.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72";
+    sha256 = "152m77pcxkfwi0l8r0iwn859jx6gsqvxss1nbm6x7qcypgdlvd96";
   };
 
   # macOS needs clang for testing
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python attributes without boilerplate";
-    homepage = "https://github.com/hynek/attrs";
+    homepage = "https://github.com/python-attrs/attrs";
     license = licenses.mit;
   };
 }
