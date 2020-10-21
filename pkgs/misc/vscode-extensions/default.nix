@@ -48,6 +48,16 @@ in
     };
   };
 
+  dhall.dhall-lang = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "dhall-lang";
+      publisher = "dhall";
+      version = "0.0.4";
+      sha256 = "0sa04srhqmngmw71slnrapi2xay0arj42j4gkan8i11n7bfi1xpf";
+    };
+    meta = { license = stdenv.lib.licenses.mit; };
+  };
+
   formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "auto-close-tag";
