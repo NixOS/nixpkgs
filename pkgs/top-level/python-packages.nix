@@ -5023,6 +5023,8 @@ in {
 
   pygtksourceview = callPackage ../development/python-modules/pygtksourceview { inherit (pkgs) pkgconfig; };
 
+  pygtrie = callPackage ../development/python-modules/pygtrie { };
+
   pyhamcrest = if isPy3k then
     callPackage ../development/python-modules/pyhamcrest { }
   else
