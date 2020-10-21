@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, freezegun }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, freezegun }:
 
 buildPythonPackage rec {
   version = "4.0.0";
@@ -18,12 +18,15 @@ buildPythonPackage rec {
     py.test test \
       -k "not test_public_servers and not test_real_ftp \
           and not test_set_parser and not test_repr \
-          and not test_conditional_upload and not test_conditional_download_with_older_target"
-  '';
+          and not test_conditional_upload and not test_conditional_download_with_older_target \
+  ''
+  # need until https://ftputil.sschwarzer.net/trac/ticket/140#ticket is fixed
+  + lib.optionalString stdenv.isDarwin ''and not test_error_message_reuse''
+  + ''"'';
 
   meta = with lib; {
     description = "High-level FTP client library (virtual file system and more)";
-    homepage    = "http://ftputil.sschwarzer.net/";
-    license     = licenses.bsd2; # "Modified BSD license, says pypi"
+    homepage = "http://ftputil.sschwarzer.net/";
+    license = licenses.bsd2; # "Modified BSD license, says pypi"
   };
 }
