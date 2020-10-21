@@ -200,6 +200,25 @@ in {
     };
   };
 
+  themeify = buildPlugin rec {
+    pname = "Themeify";
+    version = "1.2.2";
+
+    src = fetchFromGitHub {
+      owner = "Birkbjo";
+      repo = "Octoprint-${pname}";
+      rev = "v${version}";
+      sha256 = "0j1qs6kyh947npdy7pqda25fjkqinpas3sy0qyscqlxi558lhvx2";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Beautiful themes for OctoPrint";
+      homepage = "https://github.com/birkbjo/OctoPrint-Themeify";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
   titlestatus = buildPlugin rec {
     pname = "TitleStatus";
     version = "0.0.5";
