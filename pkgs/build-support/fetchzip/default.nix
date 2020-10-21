@@ -44,8 +44,13 @@
       mv "$unpackDir/$fn" "$out"
     '' else ''
       mv "$unpackDir" "$out"
-    '') #*/
-    + extraPostFetch;
+    '')
+    + extraPostFetch
+    # Remove write permissions for files unpacked with write bits set
+    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
+    + ''
+      chmod -R a-w "$out"
+    '';
 } // removeAttrs args [ "stripRoot" "extraPostFetch" ])).overrideAttrs (x: {
   # Hackety-hack: we actually need unzip hooks, too
   nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];
