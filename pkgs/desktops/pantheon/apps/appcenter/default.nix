@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.4.2";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
