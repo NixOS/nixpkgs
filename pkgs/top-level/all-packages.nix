@@ -28342,6 +28342,8 @@ in
 
   navidrome = callPackage ../servers/misc/navidrome {};
 
+  zalgo = callPackage ../tools/misc/zalgo { };
+
   zettlr = callPackage ../applications/misc/zettlr { };
 
   unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
