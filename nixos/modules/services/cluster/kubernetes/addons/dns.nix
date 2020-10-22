@@ -323,6 +323,12 @@ in {
               targetPort = ports.dns;
               protocol = "TCP";
             }
+            {
+              name = "metrics";
+              port = 9153;
+              targetPort = ports.metrics;
+              protocol = "TCP";
+            }
           ];
           selector = { k8s-app = "kube-dns"; };
         };
