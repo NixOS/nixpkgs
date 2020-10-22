@@ -6711,6 +6711,12 @@
     githubId = 627831;
     name = "Hoang Xuan Phu";
   };
+  pickfire = {
+    email = "pickfire@riseup.net";
+    github = "pickfire";
+    githubId = 4687791;
+    name = "Ivan Tham";
+  };
   pierrechevalier83 = {
     email = "pierrechevalier83@gmail.com";
     github = "pierrechevalier83";
