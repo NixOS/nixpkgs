@@ -14,8 +14,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "linbox";
-  version = "1.6.3";
-
+  version = "1.6.3"; # TODO: Check postPatch script on update
 
   src = fetchFromGitHub {
     owner = "linbox-team";
@@ -35,6 +34,20 @@ stdenv.mkDerivation rec {
     gmpxx
     fflas-ffpack
   ];
+
+  patches = [
+    # Remove inappropriate `const &` qualifiers on data members that can be
+    # modified via member functions.
+    # See also: https://github.com/linbox-team/linbox/pull/256
+    ./patches/linbox-pr256-part2.patch # TODO: Remove on 1.7.0 update
+  ];
+
+  postPatch = ''
+    # Remove @LINBOXSAGE_LIBS@ that is actually undefined.
+    # See also: https://github.com/linbox-team/linbox/pull/249
+    # TODO: Remove on 1.7.0 update
+    find . -type f -exec sed -e 's/@LINBOXSAGE_LIBS@//' -i {} \;
+  '';
 
   configureFlags = [
     "--with-blas-libs=-lblas"
