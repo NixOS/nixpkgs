@@ -20,32 +20,7 @@
 , gsettings-desktop-schemas
 }:
 
-let
-  # gst-transcoder was merged with gst-plugins-bad 1.18.
-  # TODO: switch to that once available.
-  gst-transcoder = stdenv.mkDerivation rec {
-    version = "1.14.1";
-    pname = "gst-transcoder";
-    src = fetchFromGitHub {
-      owner = "pitivi";
-      repo = "gst-transcoder";
-      rev = version;
-      sha256 = "16skiz9akavssii529v9nr8zd54w43livc14khdyzv164djg9q8f";
-    };
-    nativeBuildInputs = [
-      pkg-config
-      meson
-      ninja
-      gobject-introspection
-      python3
-    ];
-    buildInputs = with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-    ];
-  };
-
-in python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pitivi";
   version = "0.999";
 
@@ -70,13 +45,12 @@ in python3Packages.buildPythonApplication rec {
       excludes = [ "po/POTFILES.in" ];
     })
 
-    # Complete switching to gst-transcoder in gst-plugins-bad.
-    # Otherwise there will likely be conflics.
-    # TODO: Apply this patch once we are using gst-transcoder from gst-plugins-bad.
-    # (fetchpatch {
-    #   url = "https://gitlab.gnome.org/GNOME/pitivi/commit/51ae6533ee26ffd47e453eb5f5ad8cd46f57d15e.patch";
-    #   sha256 = "zxJm+E5o+oZ3lW6wYNY/ERo2g4NmCjoY8oV+uScq8j8=";
-    # })
+    # Compatibility with using gst-transcoder from gst-plugins-bad.
+    # TODO Remove with version 2020.09
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/pitivi/commit/51ae6533ee26ffd47e453eb5f5ad8cd46f57d15e.patch";
+      sha256 = "zxJm+E5o+oZ3lW6wYNY/ERo2g4NmCjoY8oV+uScq8j8=";
+    })
 
     # Generate renderer.so on macOS instead of dylib.
     # Needed for the following patch to apply.
@@ -118,7 +92,6 @@ in python3Packages.buildPythonApplication rec {
     gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
     libnotify
-    gst-transcoder
   ] ++ (with gst_all_1; [
     gstreamer
     gst-editing-services
