@@ -21257,6 +21257,8 @@ in
 
   musikcube = callPackage ../applications/audio/musikcube {};
 
+  pinboard = with python3Packages; toPythonApplication pinboard;
+
   pinboard-notes-backup = haskell.lib.overrideCabal
     (haskell.lib.generateOptparseApplicativeCompletion "pnbackup"
       haskellPackages.pinboard-notes-backup)

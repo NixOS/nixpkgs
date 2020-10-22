@@ -4494,6 +4494,8 @@ in {
 
   pims = callPackage ../development/python-modules/pims { };
 
+  pinboard = callPackage ../development/python-modules/pinboard { };
+
   pint = callPackage ../development/python-modules/pint { };
 
   pip = callPackage ../development/python-modules/pip { };
