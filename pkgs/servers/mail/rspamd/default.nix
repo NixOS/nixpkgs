@@ -4,6 +4,7 @@
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
 , withLuaJIT ? stdenv.isx86_64
+, nixosTests
 }:
 
 assert withHyperscan -> stdenv.isx86_64;
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
     "-DLOCAL_CONFDIR=/etc/rspamd"
     "-DENABLE_JEMALLOC=ON"
   ] ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON";
+
+  passthru.tests.rspamd = nixosTests.rspamd;
 
   meta = with stdenv.lib; {
     homepage = "https://rspamd.com";
