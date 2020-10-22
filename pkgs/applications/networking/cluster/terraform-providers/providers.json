@@ -328,9 +328,9 @@
   "github": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-github",
-    "rev": "v2.8.0",
-    "sha256": "11aw9wqnayl786hvbgnb9ijijaipaggj18vkn5y0kcj2v4dwq4wg",
-    "version": "2.8.0"
+    "rev": "v3.1.0",
+    "sha256": "1xl4fd1lfbn1vnrdmg2xljnv8hy6rmf0iv7g8pzbnzbvj2pi7w3b",
+    "version": "3.1.0"
   },
   "gitlab": {
     "owner": "terraform-providers",
