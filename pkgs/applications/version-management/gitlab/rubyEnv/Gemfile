@@ -19,13 +19,15 @@ gem 'default_value_for', '~> 3.3.0'
 gem 'pg', '~> 1.1'
 
 gem 'rugged', '~> 0.28'
-gem 'grape-path-helpers', '~> 1.3'
+gem 'grape-path-helpers', '~> 1.4'
 
 gem 'faraday', '~> 1.0'
 gem 'marginalia', '~> 1.9.0'
 
 # Authentication libraries
-gem 'devise', '~> 4.6'
+gem 'devise', '~> 4.7.2'
+# TODO: verify ARM compile issue on 3.1.13+ version (see https://gitlab.com/gitlab-org/gitlab/-/merge_requests/18828)
+gem 'bcrypt', '3.1.12'
 gem 'doorkeeper', '~> 5.3.0'
 gem 'doorkeeper-openid_connect', '~> 1.7.4'
 gem 'omniauth', '~> 1.8'
@@ -97,6 +99,7 @@ gem 'graphiql-rails', '~> 1.4.10'
 gem 'apollo_upload_server', '~> 2.0.2'
 gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
 
+gem 'hashie'
 # Disable strong_params so that Mash does not respond to :permitted?
 gem 'hashie-forbidden_attributes'
 
@@ -108,7 +111,7 @@ gem 'hamlit', '~> 2.11.0'
 
 # Files attachments
 gem 'carrierwave', '~> 1.3'
-gem 'mini_magick'
+gem 'mini_magick', '~> 4.10.1'
 
 # for backups
 gem 'fog-aws', '~> 3.5'
@@ -155,7 +158,7 @@ gem 'wikicloth', '0.8.1'
 gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.12'
-gem 'rouge', '~> 3.21.0'
+gem 'rouge', '~> 3.24.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
 gem 'nokogiri', '~> 1.10.9'
@@ -169,7 +172,7 @@ gem 'diffy', '~> 3.3'
 gem 'diff_match_patch', '~> 0.1.0'
 
 # Application server
-gem 'rack', '~> 2.0.9'
+gem 'rack', '~> 2.1.4'
 # https://github.com/sharpstone/rack-timeout/blob/master/README.md#rails-apps-manually
 gem 'rack-timeout', '~> 0.5.1', require: 'rack/timeout/base'
 
@@ -244,7 +247,7 @@ gem 'atlassian-jwt', '~> 0.2.0'
 gem 'flowdock', '~> 0.7'
 
 # Slack integration
-gem 'slack-messenger', '~> 2.3.3'
+gem 'slack-messenger', '~> 2.3.4'
 
 # Hangouts Chat integration
 gem 'hangouts-chat', '~> 0.0.5'
@@ -256,7 +259,7 @@ gem 'asana', '0.10.2'
 gem 'ruby-fogbugz', '~> 0.2.1'
 
 # Kubernetes integration
-gem 'kubeclient', '~> 4.6.0'
+gem 'kubeclient', '~> 4.9.1'
 
 # Sanitize user input
 gem 'sanitize', '~> 5.2.1'
@@ -272,7 +275,7 @@ gem 'licensee', '~> 8.9'
 gem 'ace-rails-ap', '~> 4.1.0'
 
 # Detect and convert string character encoding
-gem 'charlock_holmes', '~> 0.7.5'
+gem 'charlock_holmes', '~> 0.7.7'
 
 # Detect mime content type from content
 gem 'mimemagic', '~> 0.3.2'
@@ -284,11 +287,10 @@ gem 'fast_blank'
 gem 'gitlab-chronic', '~> 0.10.5'
 gem 'gitlab_chronic_duration', '~> 0.10.6.2'
 
-gem 'webpack-rails', '~> 0.9.10'
 gem 'rack-proxy', '~> 0.6.0'
 
 gem 'sassc-rails', '~> 2.1.0'
-gem 'uglifier', '~> 2.7.2'
+gem 'terser', '1.0.2'
 
 gem 'addressable', '~> 2.7'
 gem 'font-awesome-rails', '~> 4.7'
@@ -308,7 +310,7 @@ gem 'sentry-raven', '~> 3.0'
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '0.12.1'
+gem 'gitlab-labkit', '0.12.2'
 
 # I18n
 gem 'ruby_parser', '~> 3.8', require: false
@@ -330,13 +332,13 @@ group :metrics do
   gem 'method_source', '~> 1.0', require: false
 
   # Prometheus
-  gem 'prometheus-client-mmap', '~> 0.11.0'
+  gem 'prometheus-client-mmap', '~> 0.12.0'
   gem 'raindrops', '~> 0.18'
 end
 
 group :development do
   gem 'brakeman', '~> 4.2', require: false
-  gem 'danger', '~> 8.0', require: false
+  gem 'danger', '~> 8.0.6', require: false
 
   gem 'letter_opener_web', '~> 1.3.4'
 
@@ -375,8 +377,6 @@ group :development, :test do
 
   gem 'scss_lint', '~> 0.56.0', require: false
   gem 'haml_lint', '~> 0.34.0', require: false
-  gem 'simplecov', '~> 0.18.5', require: false
-  gem 'simplecov-cobertura', '~> 1.3.1', require: false
   gem 'bundler-audit', '~> 0.6.1', require: false
 
   gem 'benchmark-ips', '~> 2.3.0', require: false
@@ -394,9 +394,14 @@ group :development, :test do
   gem 'rblineprof', '~> 0.3.6', platform: :mri, require: false
 end
 
+group :development, :test, :coverage do
+  gem 'simplecov', '~> 0.18.5', require: false
+  gem 'simplecov-cobertura', '~> 1.3.1', require: false
+end
+
 # Gems required in omnibus-gitlab pipeline
 group :development, :test, :omnibus do
-  gem 'license_finder', '~> 5.4', require: false
+  gem 'license_finder', '~> 6.0', require: false
 end
 
 group :test do
@@ -411,7 +416,7 @@ group :test do
 
   gem 'shoulda-matchers', '~> 4.0.1', require: false
   gem 'email_spec', '~> 2.2.0'
-  gem 'webmock', '~> 3.5.1'
+  gem 'webmock', '~> 3.9.1'
   gem 'rails-controller-testing'
   gem 'concurrent-ruby', '~> 1.1'
   gem 'test-prof', '~> 0.12.0'
@@ -425,7 +430,7 @@ end
 gem 'octokit', '~> 4.15'
 
 # https://gitlab.com/gitlab-org/gitlab/issues/207207
-gem 'gitlab-mail_room', '~> 0.0.6', require: 'mail_room'
+gem 'gitlab-mail_room', '~> 0.0.7', require: 'mail_room'
 
 gem 'email_reply_trimmer', '~> 0.1'
 gem 'html2text'
@@ -461,7 +466,7 @@ group :ed25519 do
 end
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 13.3.0-rc1'
+gem 'gitaly', '~> 13.5.0-rc2'
 
 gem 'grpc', '~> 1.30.2'
 
@@ -512,3 +517,6 @@ gem 'multi_json', '~> 1.14.1'
 gem 'yajl-ruby', '~> 1.4.1', require: 'yajl'
 
 gem 'webauthn', '~> 2.3'
+
+# IPAddress utilities
+gem 'ipaddress', '~> 0.8.3'
