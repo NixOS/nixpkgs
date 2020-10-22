@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -re 's@[(]in-home "gui/.command-history"[)]@(concatenate '"'"'string (ext:getenv "HOME") "/.eql-gui-command-history")@' -i gui/gui.lisp
+
+    # cl_def_c_function was renamed to ecl_def_c_function in ECL 20.4.24.
+    find . -type f -exec sed -e 's/\scl_def_c_function(/ ecl_def_c_function(/' -i {} \;
   '';
 
   buildPhase = ''
