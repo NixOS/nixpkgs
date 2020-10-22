@@ -6,7 +6,6 @@ let
     hasContext
     match
     readDir
-    readFile
     storeDir
     tryEval
     ;
@@ -15,6 +14,7 @@ let
     getAttr
     isString
     pathExists
+    readFile
     split
     ;
 in
