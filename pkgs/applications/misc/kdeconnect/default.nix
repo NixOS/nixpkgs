@@ -28,11 +28,11 @@
 
 mkDerivation rec {
   pname = "kdeconnect";
-  version = "20.08.1";
+  version = "20.08.2";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/release-service/${version}/src/${pname}-kde-${version}.tar.xz";
-    sha256 = "0s76djgpx08jfmh99c7kx18mnr3w7bv4hdra120nicq89mmy7gwf";
+    sha256 = "0rzfnkgkv759d4pa16qk0sw87wqzwgkd99yzrzfy2zcq423f6hvd";
   };
 
   patches = [
