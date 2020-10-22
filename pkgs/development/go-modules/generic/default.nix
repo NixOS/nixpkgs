@@ -136,10 +136,10 @@ let
       export GOSUMDB=off
       export GOPROXY=off
       cd "$modRoot"
-      if [ -n "${go-modules}" ]; then
-          rm -rf vendor
-          ln -s ${go-modules} vendor
-      fi
+    '' + lib.optionalString (go-modules != "") ''
+      rm -rf vendor
+      cp -r --reflink=auto ${go-modules} vendor
+    '' + ''
 
       runHook postConfigure
     '';
