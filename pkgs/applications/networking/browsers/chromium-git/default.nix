@@ -1,7 +1,7 @@
 { stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand, buildPackages, git, openjdk8
 , python2, ninja, llvmPackages_8, llvmPackages_9, llvmPackages_10, llvmPackages_11, bison, gperf, pkg-config, curl, cacert
 , dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf, libxkbcommon, xorg
-, gnome2, glib, gtk2, gtk3, cups, libgcrypt, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
+, gnome2, glib, gtk2, gtk3, cups, libgcrypt, alsaLib, libpulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
 , customGnFlags ? {}
 }:
 
@@ -26,7 +26,12 @@ let
 
   # https://gitlab.com/noencoding/OS-X-Chromium-with-proprietary-codecs/wikis/List-of-all-gn-arguments-for-Chromium-build
   gnFlags = {
+    use_lld = false;
+    use_gold = stdenv.buildPlatform.is64bit;  # ld.gold outs-of-memory on i686
+    gold_path = "${stdenv.cc}/bin";
     is_debug = false;
+    symbol_level = if gnFlags.is_debug then 2 else 0;
+
     use_jumbo_build = false; # `true` gives at least 2X compilation speedup, but it does not work for some versions
 
     enable_nacl = false;
@@ -48,8 +53,6 @@ let
     use_cups = true;
     use_gio = true;
     use_gnome_keyring = false;
-    use_lld = false;
-    use_gold = false;
     use_pulseaudio = true;
     link_pulseaudio = gnFlags.use_pulseaudio;
     enable_widevine = false;
@@ -142,7 +145,7 @@ let
       ] ++ lib.optionals gnFlags.use_cups [
         cups libgcrypt
       ] ++ lib.optionals gnFlags.use_pulseaudio [
-        pulseaudio
+        libpulseaudio
       ];
 
       postPatch = ''
@@ -242,7 +245,7 @@ let
 
       buildPhase = ''
         ( cd src
-          ninja -C out/Release chrome
+          ninja -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES -C out/Release chrome
         )
       '';
 
