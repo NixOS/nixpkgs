@@ -16,6 +16,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./lt_dladdsearchdir.patch
+    ./remove_bsd_base64_decode_flag.patch
   ];
   postPatch = ''
     substituteAllInPlace src/dl.c
