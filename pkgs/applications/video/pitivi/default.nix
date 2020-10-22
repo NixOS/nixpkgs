@@ -147,6 +147,12 @@ in python3Packages.buildPythonApplication rec {
     mv data/org.pitivi.Pitivi-mime.xml data/org.pitivi.Pitivi-mime.xml.in
   '';
 
+  # Fixes error
+  #     Couldn’t recognize the image file format for file ".../share/pitivi/pixmaps/asset-proxied.svg"
+  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
+  # and https://github.com/NixOS/nixpkgs/issues/89691#issuecomment-714398705.
+  strictDeps = false;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "pitivi";
