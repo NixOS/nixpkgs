@@ -4,9 +4,9 @@ source 'https://rubygems.org'
 gem 'bundler', '>= 1.17.3'
 
 gem 'rugged', '~> 0.28'
-gem 'github-linguist', '~> 7.9', require: 'linguist'
+gem 'github-linguist', '~> 7.11', require: 'linguist'
 gem 'gitlab-markup', '~> 1.7.1'
-gem 'activesupport', '~> 6.0.3.1'
+gem 'activesupport', '~> 6.0.3.3'
 gem 'rdoc', '~> 6.0'
 gem 'gitlab-gollum-lib', '~> 4.2.7.9', require: false
 gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4.2', require: false
