@@ -21622,7 +21622,7 @@ in
 
   okteta = libsForQt512.callPackage ../applications/editors/okteta { };
 
-  k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
+  k4dirstat = libsForQt512.callPackage ../applications/misc/k4dirstat { };
 
   kdeconnect = libsForQt512.callPackage ../applications/misc/kdeconnect { };
 
