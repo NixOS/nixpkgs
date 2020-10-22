@@ -2,7 +2,7 @@
 name: Out-of-date package reports
 about: For packages that are out-of-date
 title: ''
-labels: '0.kind: out-of-date package'
+labels: '9.needs: package (update)'
 assignees: ''
 
 ---
@@ -22,18 +22,18 @@ The "new_version" is the the current version of the package
 <!--
 Type the name of your package and try to find an open pull request for the package
 If you find an open pull request, you can review it!
-You will probably have the new version of the package while helping the community!
+There's a high chance that you'll have the new version right away while helping the community!
 -->
 - [ ] Checked the [nixpkgs pull requests](https://github.com/NixOS/nixpkgs/pulls)
 
 ###### Project name
-`nix search` name: 
+`nix search` name:
 <!--
 The current version can be found easily with the same process than above for checking the master branch
 If an open PR is present for the package, take this version as the current one and link to the PR
 -->
-current version: 
-desired version: 
+current version:
+desired version:
 
 ###### Notify maintainers
 <!--
@@ -41,7 +41,7 @@ Search your package here: https://search.nixos.org/packages?channel=unstable
 If no maintainer is listed for your package, tag the person that last updated the package
 -->
 
-maintainers: 
+maintainers:
 
 ###### Note for maintainers
 
