@@ -270,7 +270,7 @@ rec {
       name = "attrs";
       description = "attribute set";
       check = isAttrs;
-      merge = loc: foldl' (res: def: mergeAttrs res def.value) {};
+      merge = loc: foldl' (res: def: res // def.value) {};
       emptyValue = { value = {}; };
     };
 
