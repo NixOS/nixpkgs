@@ -21620,7 +21620,7 @@ in
     spectacle
     yakuake;
 
-  okteta = libsForQt5.callPackage ../applications/editors/okteta { };
+  okteta = libsForQt512.callPackage ../applications/editors/okteta { };
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
