@@ -110,7 +110,7 @@ rec {
     # Return early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
-    else if length defs == 1 then (elemAt defs 0).value
+    else if length defs == 1 then (head defs).value
     else (foldl' (first: def:
       if def.value != first.value then
         throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
