@@ -310,8 +310,6 @@ meta.hydraPlatforms = [];
       This optional entry can be used to refer (with a URL) to a screenshot of the package's application. A good source of 
       appropriate screenshots is the website <link
           xlink:href="https://screenshots.debian.net/"> <filename>https://screenshots.debian.net/</filename></link>. The suggested size of an image is 800x600 pixels or less.
-     </para>.
-     <para>
        An example is provided in the pingus package:
        <programlisting>
          meta = {
