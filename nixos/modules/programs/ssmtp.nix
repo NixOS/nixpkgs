@@ -1,6 +1,6 @@
 # Configuration for `ssmtp', a trivial mail transfer agent that can
 # replace sendmail/postfix on simple systems.  It delivers email
-# directly to an SMTP server defined in its configuration file, wihout
+# directly to an SMTP server defined in its configuration file, without
 # queueing mail locally.
 
 { config, lib, pkgs, ... }:
