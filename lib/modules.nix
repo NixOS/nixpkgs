@@ -719,7 +719,7 @@ rec {
 
        mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "<replacement instructions>"
 
-     causes a warning if the user defines boot.loader.grub.bootDevice.
+     causes a assertion if the user defines boot.loader.grub.bootDevice.
 
      replacementInstructions is a string that provides instructions on
      how to achieve the same functionality without the removed option,
