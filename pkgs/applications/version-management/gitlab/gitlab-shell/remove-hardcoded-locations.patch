@@ -1,5 +1,5 @@
 diff --git a/internal/config/config.go b/internal/config/config.go
-index 2231851..c869930 100644
+index 79c2a36..12ba31e 100644
 --- a/internal/config/config.go
 +++ b/internal/config/config.go
 @@ -3,7 +3,6 @@ package config
@@ -10,7 +10,7 @@ index 2231851..c869930 100644
  	"path"
  	"path/filepath"
  
-@@ -38,16 +37,13 @@ type Config struct {
+@@ -59,16 +58,13 @@ func (c *Config) GetHttpClient() *client.HttpClient {
  }
  
  func New() (*Config, error) {
@@ -30,18 +30,18 @@ index 2231851..c869930 100644
  
  func newFromFile(filename string) (*Config, error) {
 diff --git a/internal/keyline/key_line.go b/internal/keyline/key_line.go
-index e2abb82..7e9c481 100644
+index c6f2422..fb0426b 100644
 --- a/internal/keyline/key_line.go
 +++ b/internal/keyline/key_line.go
-@@ -38,7 +38,7 @@ func NewPrincipalKeyLine(keyId, principal string, config *config.Config) (*KeyLi
-
+@@ -37,7 +37,7 @@ func NewPrincipalKeyLine(keyId, principal string, config *config.Config) (*KeyLi
+ }
+ 
  func (k *KeyLine) ToString() string {
- 	sslCertDirEnvVar := k.sslCertDirEnvVar()
 -	command := fmt.Sprintf("%s %s-%s", path.Join(k.Config.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
 +	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.Id)
-
- 	if sslCertDirEnvVar != "" {
- 		sslCertDirEnvVar = fmt.Sprintf(`%s `, sslCertDirEnvVar)
+ 
+ 	return fmt.Sprintf(`command="%s",%s %s`, command, SshOptions, k.Value)
+ }
 diff --git a/support/gitlab_config.rb b/support/gitlab_config.rb
 index 52ac5ee..d96baa3 100644
 --- a/support/gitlab_config.rb
@@ -55,3 +55,6 @@ index 52ac5ee..d96baa3 100644
    end
  
    def auth_file
+-- 
+2.28.0
+
