@@ -6658,6 +6658,8 @@ in
 
   rtptools = callPackage ../tools/networking/rtptools { };
 
+  rtss = callPackage ../development/tools/misc/rtss { };
+
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x {};
