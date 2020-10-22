@@ -14605,6 +14605,8 @@ in
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
+  nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
+
   ndpi = callPackage ../development/libraries/ndpi { };
 
   nifticlib = callPackage ../development/libraries/science/biology/nifticlib { };
