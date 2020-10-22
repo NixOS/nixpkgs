@@ -7449,6 +7449,8 @@ in
 
   tio = callPackage ../tools/misc/tio { };
 
+  tks = callPackage ../applications/office/tks { };
+
   tldr = callPackage ../tools/misc/tldr { };
 
   tldr-hs = haskellPackages.tldr;
