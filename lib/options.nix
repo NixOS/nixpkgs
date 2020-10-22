@@ -3,12 +3,37 @@
 
 let
   inherit (lib)
-    isAttrs isBool isDerivation isFunction isInt isList isString
-    all collect concatMap concatLists elemAt filter foldl' head length mapAttrs optionals optional take
+    all
+    collect
+    concatLists
+    concatMap
+    elemAt
+    filter
+    foldl'
+    head
+    isAttrs
+    isBool
+    isDerivation
+    isFunction
+    isInt
+    isList
+    isString
+    length
+    mapAttrs
+    optional
+    optionals
+    take
     ;
-  inherit (lib.attrsets) optionalAttrs;
-  inherit (lib.strings) concatMapStrings concatStringsSep;
-  inherit (lib.types) mkOptionType;
+  inherit (lib.attrsets)
+    optionalAttrs
+    ;
+  inherit (lib.strings)
+    concatMapStrings
+    concatStringsSep
+    ;
+  inherit (lib.types)
+    mkOptionType
+    ;
 in
 rec {
 
