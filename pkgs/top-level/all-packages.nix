@@ -2342,6 +2342,8 @@ in
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
+  patool = with python3Packages; toPythonApplication patool;
+
   pbpst = callPackage ../applications/misc/pbpst { };
 
   pbzx = callPackage ../tools/compression/pbzx { };
@@ -3426,6 +3428,8 @@ in
   wallutils = callPackage ../tools/graphics/wallutils { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
+
+  wayst = callPackage ../applications/misc/wayst { };
 
   wev = callPackage ../tools/misc/wev { };
 
@@ -5104,10 +5108,13 @@ in
   nodejs-slim-14_x = callPackage ../development/web/nodejs/v14.nix {
     enableNpm = false;
   };
-
+  nodejs-15_x = callPackage ../development/web/nodejs/v15.nix { };
+  nodejs-slim-15_x = callPackage ../development/web/nodejs/v15.nix {
+    enableNpm = false;
+  };
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs-14_x;
-  nodejs-slim_latest = nodejs-slim-14_x;
+  nodejs_latest = nodejs-15_x;
+  nodejs-slim_latest = nodejs-slim-15_x;
 
   nodePackages_latest = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
     nodejs = pkgs.nodejs_latest;
@@ -5726,6 +5733,8 @@ in
   networkmanager-fortisslvpn = callPackage ../tools/networking/network-manager/fortisslvpn { };
 
   networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan { };
+
+  networkmanager-sstp = callPackage ../tools/networking/network-manager/sstp { };
 
   networkmanagerapplet = callPackage ../tools/networking/network-manager/applet { };
 
@@ -9659,11 +9668,11 @@ in
   # So this commit doesn't remove the 1.45.2 release.
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    llvmPackages = llvmPackages_10;
+    llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_10;
   };
   rust_1_47 = callPackage ../development/compilers/rust/1_47.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    llvmPackages = llvmPackages_11;
+    llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_11;
   };
   rust = rust_1_47;
 
@@ -13037,7 +13046,7 @@ in
   hwloc = callPackage ../development/libraries/hwloc {};
 
   inherit (callPackage ../development/tools/misc/hydra { })
-    hydra-migration hydra-unstable;
+    hydra-unstable;
 
   hydra-flakes = throw ''
     Flakes support has been merged into Hydra's master. Please use
@@ -21632,7 +21641,7 @@ in
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
+  kdeconnect = libsForQt512.callPackage ../applications/misc/kdeconnect { };
 
   inherit (kdeFrameworks) kdesu;
 
@@ -23635,6 +23644,8 @@ in
 
   tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
 
+  tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
+
   telepathy-gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
   telepathy-haze = callPackage ../applications/networking/instant-messengers/telepathy/haze {};
@@ -25336,6 +25347,12 @@ in
   openmw = libsForQt5.callPackage ../games/openmw { };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
+
+  portmod = callPackage ../games/portmod { };
+
+  tr-patcher = callPackage ../games/tr-patcher { };
+
+  tes3cmd = callPackage ../games/tes3cmd { };
 
   openraPackages = import ../games/openra pkgs;
 
@@ -28003,6 +28020,8 @@ in
 
   yadm = callPackage ../applications/version-management/yadm { };
 
+  yamale = with python3Packages; toPythonApplication yamale;
+
   yamdi = callPackage ../tools/video/yamdi { };
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
@@ -28334,4 +28353,5 @@ in
   cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {};
 
   psftools = callPackage ../os-specific/linux/psftools {};
+
 }

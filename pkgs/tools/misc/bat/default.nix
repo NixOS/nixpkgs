@@ -26,11 +26,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    unset SDKROOT
-  '';
-
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
     installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{fish,zsh}

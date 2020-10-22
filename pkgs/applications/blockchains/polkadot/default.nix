@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.8.24";
+  version = "0.8.25";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "15q5scajxrf82k8nxysah8cs3yl2p09xzzwlkxvjkcn08r3zhig6";
+    sha256 = "1jdklmysr25rlwgx7pz0jw66j1w60h98kqghzjhr90zhynzh39lz";
   };
 
-  cargoSha256 = "0qp20g5c15qzp2n1nzwqbnn2wx6c905vh652nvkm7sb1d901iiqi";
+  cargoSha256 = "08yfafrspkd1g1mhlfwngbknkxjkyymbcga8n2rdsk7mz0hm0vgy";
 
   cargoPatches = [ ./substrate-wasm-builder-runner.patch ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ akru andresilva ];
+    maintainers = with maintainers; [ akru andresilva RaghavSood ];
     platforms = platforms.linux;
   };
 }

@@ -5,7 +5,6 @@
 , makeWrapper
 , coreutils
 , libiconv
-, xcbuild
 , zlib
 , Security
 }:
@@ -24,7 +23,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
-    xcbuild # The cc crate attempts to run xcbuild.
   ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [

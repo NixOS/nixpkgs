@@ -17,9 +17,9 @@ rec {
   inherit pkgs;
 
 
-  testDriver = let
+  mkTestDriver = let
     testDriverScript = ./test-driver/test-driver.py;
-  in stdenv.mkDerivation {
+  in qemu_pkg: stdenv.mkDerivation {
     name = "nixos-test-driver";
 
     nativeBuildInputs = [ makeWrapper ];
@@ -47,10 +47,12 @@ rec {
         # TODO: copy user script part into this file (append)
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
+          --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
       '';
   };
 
+  testDriver = mkTestDriver qemu_test;
+  testDriverInteractive = mkTestDriver qemu_kvm;
 
   # Run an automated test suite in the given virtual network.
   # `driver' is the script that runs the network.
@@ -113,7 +115,11 @@ rec {
       # Generate convenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
-      driver = let warn = if skipLint then lib.warn "Linting is disabled!" else lib.id; in warn (runCommand testDriverName
+      driver = testDriver:
+        let
+          warn = if skipLint then lib.warn "Linting is disabled!" else lib.id;
+        in
+        warn (runCommand testDriverName
         { buildInputs = [ makeWrapper];
           testScript = testScript';
           preferLocalBuild = true;
@@ -148,7 +154,7 @@ rec {
         meta = (drv.meta or {}) // t.meta;
       };
 
-      test = passMeta (runTests driver);
+      test = passMeta (runTests (driver testDriver));
 
       nodeNames = builtins.attrNames nodes;
       invalidNodeNames = lib.filter
@@ -165,7 +171,9 @@ rec {
         ''
       else
         test // {
-          inherit nodes driver test;
+          inherit nodes test;
+          driver = driver testDriver;
+          driverInteractive = driver testDriverInteractive;
         };
 
   runInMachine =

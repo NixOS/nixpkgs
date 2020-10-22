@@ -392,6 +392,13 @@ rec {
     propagatedBuildInputs = [ async ];
   };
 
+  async_interactive = janePackage {
+    pname = "async_interactive";
+    hash = "1ma24pi3hqzrs1k12sc0aarhf42fap8nl1h7id6k01wp6s3yqi5d";
+    meta.description = "Utilities for building simple command-line based user interfaces";
+    propagatedBuildInputs = [ async ];
+  };
+
   re2 = janePackage {
     pname = "re2";
     hash = "0hmizznlzilynn5kh6149bbpkfw2l0xi7zi1y1fxfww2ma3wpim0";
@@ -475,6 +482,20 @@ rec {
     hash = "0jmmsi1m7d4cl5mnw6v9h4ng29anwxy73a6qfi28lgpzafn452bc";
     meta.description = "Library for writing Emacs plugin in OCaml";
     propagatedBuildInputs = [ async expect_test_helpers_kernel ];
+  };
+
+  posixat = janePackage {
+    pname = "posixat";
+    hash = "122fmd6v7fhiiivkxra539b5w3p5xkkd8mcjzvyb2msyq5zc6xa2";
+    propagatedBuildInputs = [ ppx_optcomp ppx_sexp_conv ];
+    meta.description = "Binding to the posix *at functions";
+  };
+
+  shexp = janePackage {
+    pname = "shexp";
+    hash = "0zdcyix0gdn4xmvbjzhbig63xw9jnw8ixj3ngs6g4k2vk77rs0gk";
+    propagatedBuildInputs = [ posixat spawn ];
+    meta.description = "Process library and s-expression based shell";
   };
 
   ### Packages at version 0.11, with dependencies at version 0.12

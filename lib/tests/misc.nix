@@ -154,6 +154,20 @@ runTests {
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
+  testSplitStringsRegex = {
+    expr = strings.splitString "\\[{}]()^$?*+|." "A\\[{}]()^$?*+|.B";
+    expected = [ "A" "B" ];
+  };
+
+  testSplitStringsDerivation = {
+    expr = take 3  (strings.splitString "/" (derivation {
+      name = "name";
+      builder = "builder";
+      system = "system";
+    }));
+    expected = ["" "nix" "store"];
+  };
+
   testSplitVersionSingle = {
     expr = versions.splitVersion "1";
     expected = [ "1" ];

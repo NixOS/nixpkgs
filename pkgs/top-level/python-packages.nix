@@ -774,6 +774,8 @@ in {
 
   bap = callPackage ../development/python-modules/bap { bap = pkgs.ocaml-ng.ocamlPackages_4_07.bap; };
 
+  baron = callPackage ../development/python-modules/baron { };
+
   base58 = callPackage ../development/python-modules/base58 { };
 
   baselines = callPackage ../development/python-modules/baselines { };
@@ -4364,6 +4366,8 @@ in {
 
   pathtools = callPackage ../development/python-modules/pathtools { };
 
+  patool = callPackage ../development/python-modules/patool { };
+
   patsy = callPackage ../development/python-modules/patsy { };
 
   paver = callPackage ../development/python-modules/paver { };
@@ -5259,6 +5263,8 @@ in {
 
   pyparted = callPackage ../development/python-modules/pyparted { };
 
+  pypblib = callPackage ../development/python-modules/pypblib { };
+
   pypcap = callPackage ../development/python-modules/pypcap { };
 
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
@@ -5835,6 +5841,8 @@ in {
 
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 
+  python-sat = callPackage ../development/python-modules/python-sat { };
+
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat { };
   python_simple_hipchat = self.python-simple-hipchat;
 
@@ -6103,6 +6111,8 @@ in {
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
+
+  redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
 
@@ -7686,6 +7696,8 @@ in {
   xxhash = callPackage ../development/python-modules/xxhash { };
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
+
+  yamale = callPackage ../development/python-modules/yamale { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
 

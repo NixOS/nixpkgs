@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "generic";
-  version = "0.1";
+  version = "0.1.0.1";
 
   src = fetchFromGitHub {
     repo = "Generic";
     owner = "effectfully";
     rev = "v${version}";
-    sha256 = "121121rg3daaqp91845fbyws6g28hyj1ywmh12n54r3nicb35g5q";
+    sha256 = "07l44yzx1jly20kmkmkjk8q493bn6x7i3xxpz6mhadkqlxyhmc8s";
   };
 
   buildInputs = [
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   preBuild = ''
     echo "module Everything where" > Everything.agda
-	  find src -name '*.agda' | sed -e 's/src\///;s/\//./g;s/\.agda$//;s/^/import /' >> Everything.agda
+    find src -name '*.agda' | sed -e 's/src\///;s/\//./g;s/\.agda$//;s/^/import /' >> Everything.agda
   '';
 
   meta = with lib; {

@@ -45,6 +45,46 @@ in
         CacheDirectory = "jellyfin";
         ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
         Restart = "on-failure";
+
+        # Security options:
+
+        NoNewPrivileges = true;
+
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+
+        # ProtectClock= adds DeviceAllow=char-rtc r
+        DeviceAllow = "";
+
+        LockPersonality = true;
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+
+        RemoveIPC = true;
+
+        RestrictNamespaces = true;
+        # AF_NETLINK needed because Jellyfin monitors the network connection
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" ];
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+
+          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@module"
+          "~@obsolete" "~@privileged" "~@setuid"
+        ];
       };
     };
 
