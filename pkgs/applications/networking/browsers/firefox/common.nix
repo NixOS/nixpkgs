@@ -310,6 +310,7 @@ stdenv.mkDerivation ({
     version = ffversion;
     isFirefox3Like = true;
     gtk = gtk2;
+    inherit alsaSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;

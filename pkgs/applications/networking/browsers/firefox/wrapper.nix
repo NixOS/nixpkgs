@@ -2,7 +2,7 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
+, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd
 , gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , tridactyl-native
@@ -39,6 +39,7 @@ let
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
+      alsaSupport = browser.alsaSupport or false;
 
       plugins =
         let
@@ -76,6 +77,7 @@ let
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
+            ++ lib.optional alsaSupport alsaLib
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk2 ];
 
