@@ -13042,7 +13042,7 @@ in
   hwloc = callPackage ../development/libraries/hwloc {};
 
   inherit (callPackage ../development/tools/misc/hydra { })
-    hydra-migration hydra-unstable;
+    hydra-unstable;
 
   hydra-flakes = throw ''
     Flakes support has been merged into Hydra's master. Please use
