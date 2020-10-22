@@ -63,7 +63,7 @@ let
     script = with builtins; concatStringsSep "\n" (mapAttrsToList (cert: data: ''
       for fixpath in /var/lib/acme/${escapeShellArg cert} /var/lib/acme/.lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
-          chmod -R 750 "$fixpath"
+          chmod -R u=rwX,g=rX,o= "$fixpath"
           chown -R acme:${data.group} "$fixpath"
         fi
       done
@@ -271,7 +271,7 @@ let
 
         mv domainhash.txt certificates/
         chmod 640 certificates/*
-        chmod -R 700 accounts/*
+        chmod -R u=rwX,g=,o= accounts/*
 
         # Group might change between runs, re-apply it
         chown 'acme:${data.group}' certificates/*
