@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+{ config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs, lcms2, fetchpatch
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
@@ -9,11 +9,6 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 
 let
-  version = "9.${ver_min}.${ver_patch}";
-  ver_min = "53";
-  ver_patch = "3";
-  sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
-
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
 
@@ -38,11 +33,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript";
-  inherit version;
+  version = "9.53.3";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}${ver_patch}/${pname}-${version}.tar.xz";
-    inherit sha512;
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
+    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
   };
 
   patches = [
@@ -58,7 +53,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs =
     [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
@@ -111,8 +106,6 @@ stdenv.mkDerivation rec {
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
   '';
-
-  passthru = { inherit version; };
 
   meta = {
     homepage = "https://www.ghostscript.com/";
