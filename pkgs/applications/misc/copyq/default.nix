@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "CopyQ";
-  version = "3.12.0";
+  version = "3.13.0";
 
   src  = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "04jidibf0b80c5vd659pz2wibmggjyyj9yz2bw7j4g84hwraksxb";
+    sha256 = "0qssyavx0dkgsyj2myqg8n7sih8niy960nyb1yknsbjm37iqraah";
   };
 
   nativeBuildInputs = [ cmake ];
