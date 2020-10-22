@@ -51,10 +51,7 @@
 # that it has to be started _before_ the ACME service.
 { config, pkgs, lib, ... }:
 let
-  testCerts = import ./snakeoil-certs.nix {
-    minica = pkgs.minica;
-    mkDerivation = pkgs.stdenv.mkDerivation;
-  };
+  testCerts = import ./snakeoil-certs.nix;
   domain = testCerts.domain;
 
   resolver = let
