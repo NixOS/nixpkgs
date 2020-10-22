@@ -732,14 +732,12 @@ rec {
         visible = false;
         apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config.assertions =
-        let opt = getAttrFromPath optionName options; in [{
-          assertion = !opt.isDefined;
-          message = ''
+      config.warnings =
+        let opt = getAttrFromPath optionName options; in
+        optional opt.isDefined ''
             The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
             ${replacementInstructions}
-          '';
-        }];
+        '';
     };
 
   /* Return a module that causes a warning to be shown if the
