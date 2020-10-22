@@ -125,6 +125,10 @@ let
             "--with-out-ext=tk"
             # on yosemite, "generating encdb.h" will hang for a very long time without this flag
             "--with-setjmp-type=setjmp"
+            # silence linker warnings after upgrading darwin.cctools to 949.0.1,
+            # which ruby treats as problem with LDFLAGS
+            # https://github.com/NixOS/nixpkgs/issues/101330
+            "LDFLAGS=-Wl,-w"
           ]
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
