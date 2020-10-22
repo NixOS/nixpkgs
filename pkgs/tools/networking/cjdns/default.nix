@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjdns";
-  version = "20.7";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
     rev = "cjdns-v${version}";
-    sha256 = "09gpqpzc00pp3cj7lyq9876p7is4bcndpdi5knqbv824vk4bj3k0";
+    sha256 = "1s9d8yrdrj2gviig05jhr0fnzazb88lih0amxfk0av786rvh7ymj";
   };
 
   buildInputs = [ which python27 nodejs ] ++

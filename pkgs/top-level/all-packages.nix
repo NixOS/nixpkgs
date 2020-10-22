@@ -2342,6 +2342,8 @@ in
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
+  patool = with python3Packages; toPythonApplication patool;
+
   pbpst = callPackage ../applications/misc/pbpst { };
 
   pbzx = callPackage ../tools/compression/pbzx { };
@@ -13044,7 +13046,7 @@ in
   hwloc = callPackage ../development/libraries/hwloc {};
 
   inherit (callPackage ../development/tools/misc/hydra { })
-    hydra-migration hydra-unstable;
+    hydra-unstable;
 
   hydra-flakes = throw ''
     Flakes support has been merged into Hydra's master. Please use
@@ -21639,7 +21641,7 @@ in
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
+  kdeconnect = libsForQt512.callPackage ../applications/misc/kdeconnect { };
 
   inherit (kdeFrameworks) kdesu;
 
@@ -23642,6 +23644,8 @@ in
 
   tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
 
+  tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
+
   telepathy-gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
   telepathy-haze = callPackage ../applications/networking/instant-messengers/telepathy/haze {};
@@ -25343,6 +25347,12 @@ in
   openmw = libsForQt5.callPackage ../games/openmw { };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
+
+  portmod = callPackage ../games/portmod { };
+
+  tr-patcher = callPackage ../games/tr-patcher { };
+
+  tes3cmd = callPackage ../games/tes3cmd { };
 
   openraPackages = import ../games/openra pkgs;
 
