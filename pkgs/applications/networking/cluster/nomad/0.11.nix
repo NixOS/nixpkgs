@@ -2,6 +2,6 @@
 
 callPackage ./generic.nix {
   inherit buildGoPackage;
-  version = "0.11.4";
-  sha256 = "1sykp9sji6f564s7bz0cvnr9w5x92n0l1r1djf1bl7jvv2mi1mcb";
+  version = "0.11.5";
+  sha256 = "0g7i7qd0zksd7s8y4l63kk7xdc7nrw8radba6ws3hw0h2kr2cmp8";
 }
