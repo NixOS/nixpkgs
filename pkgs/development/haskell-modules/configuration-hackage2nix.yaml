@@ -75,7 +75,7 @@ default-package-overrides:
   # haskell-language-server 0.5.0.0 doesn't accept newer versions
   - fourmolu ==0.2.*
   - refinery ==0.2.*
-  # LTS Haskell 16.18
+  # LTS Haskell 16.19
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -83,7 +83,7 @@ default-package-overrides:
   - ace ==0.6
   - action-permutations ==0.0.0.1
   - active ==0.2.0.14
-  - ad ==4.4
+  - ad ==4.4.1
   - adjunctions ==4.4
   - adler32 ==0.1.2.0
   - advent-of-code-api ==0.2.7.0
@@ -91,7 +91,7 @@ default-package-overrides:
   - aeson-attoparsec ==0.0.0
   - aeson-better-errors ==0.9.1.0
   - aeson-casing ==0.2.0.0
-  - aeson-combinators ==0.0.2.1
+  - aeson-combinators ==0.0.3.0
   - aeson-compat ==0.3.9
   - aeson-default ==0.9.1.0
   - aeson-diff ==1.1.0.9
@@ -301,7 +301,7 @@ default-package-overrides:
   - bech32 ==1.0.2
   - bech32-th ==1.0.2
   - bench ==1.0.12
-  - benchpress ==0.2.2.14
+  - benchpress ==0.2.2.15
   - between ==0.11.0.0
   - bibtex ==0.1.0.6
   - bifunctors ==5.5.7
@@ -492,7 +492,7 @@ default-package-overrides:
   - concurrent-split ==0.0.1.1
   - concurrent-supply ==0.1.8
   - cond ==0.4.1.1
-  - conduit ==1.3.2.1
+  - conduit ==1.3.3
   - conduit-algorithms ==0.0.11.0
   - conduit-combinators ==1.3.0
   - conduit-concurrent-map ==0.1.1
@@ -522,7 +522,7 @@ default-package-overrides:
   - convertible ==1.1.1.0
   - cookie ==0.4.5
   - core-data ==0.2.1.8
-  - core-program ==0.2.4.5
+  - core-program ==0.2.5.0
   - core-text ==0.2.3.6
   - countable ==1.0
   - cpio-conduit ==0.7.0
@@ -606,7 +606,7 @@ default-package-overrides:
   - data-or ==1.0.0.5
   - data-ordlist ==0.4.7.0
   - data-ref ==0.0.2
-  - data-reify ==0.6.2
+  - data-reify ==0.6.3
   - data-serializer ==0.3.4.1
   - data-textual ==0.3.0.3
   - data-tree-print ==0.1.0.2
@@ -623,7 +623,7 @@ default-package-overrides:
   - declarative ==0.5.3
   - deepseq-generics ==0.2.0.0
   - deepseq-instances ==0.1.0.1
-  - deferred-folds ==0.9.10.1
+  - deferred-folds ==0.9.11
   - dejafu ==2.3.0.1
   - dense-linear-algebra ==0.1.0.0
   - depq ==0.4.1.0
@@ -1030,10 +1030,10 @@ default-package-overrides:
   - hedgehog-fakedata ==0.0.1.3
   - hedgehog-fn ==1.0
   - hedgehog-quickcheck ==0.1.1
-  - hedis ==0.12.14
+  - hedis ==0.12.15
   - here ==1.2.13
   - heredoc ==0.2.0.0
-  - heterocephalus ==1.0.5.3
+  - heterocephalus ==1.0.5.4
   - hexml ==0.3.4
   - hexml-lens ==0.2.1
   - hexpat ==0.20.13
@@ -1091,9 +1091,9 @@ default-package-overrides:
   - HSlippyMap ==3.0.1
   - hslogger ==1.3.1.0
   - hslua ==1.0.3.2
-  - hslua-aeson ==1.0.3
+  - hslua-aeson ==1.0.3.1
   - hslua-module-doclayout ==0.1.0
-  - hslua-module-system ==0.2.2
+  - hslua-module-system ==0.2.2.1
   - hslua-module-text ==0.2.1
   - HsOpenSSL ==0.11.4.20
   - hsp ==0.10.0
@@ -1212,7 +1212,7 @@ default-package-overrides:
   - influxdb ==1.7.1.6
   - ini ==0.4.1
   - inj ==1.0
-  - inline-c ==0.9.1.2
+  - inline-c ==0.9.1.3
   - inline-c-cpp ==0.4.0.2
   - inliterate ==0.1.0
   - insert-ordered-containers ==0.2.3.1
@@ -1651,7 +1651,7 @@ default-package-overrides:
   - password-instances ==2.0.0.1
   - path ==0.7.0
   - path-extra ==0.2.0
-  - path-io ==1.6.0
+  - path-io ==1.6.1
   - path-pieces ==0.2.1
   - path-text-utf8 ==0.0.1.6
   - pathtype ==0.8.1.1
@@ -1858,7 +1858,7 @@ default-package-overrides:
   - regex-compat ==0.95.2.0
   - regex-compat-tdfa ==0.95.1.4
   - regex-pcre ==0.95.0.0
-  - regex-pcre-builtin ==0.95.1.2.8.43
+  - regex-pcre-builtin ==0.95.1.3.8.43
   - regex-posix ==0.96.0.0
   - regex-tdfa ==1.3.1.0
   - regex-with-pcre ==1.1.0.0
@@ -2099,7 +2099,7 @@ default-package-overrides:
   - storablevector ==0.2.13.1
   - stratosphere ==0.53.0
   - streaming ==0.2.3.0
-  - streaming-bytestring ==0.1.6
+  - streaming-bytestring ==0.1.7
   - streaming-commons ==0.2.2.1
   - streamly ==0.7.2
   - streamly-bytestring ==0.1.2
@@ -2162,7 +2162,7 @@ default-package-overrides:
   - tar-conduit ==0.3.2
   - tardis ==0.4.1.0
   - tasty ==1.2.3
-  - tasty-ant-xml ==1.1.6
+  - tasty-ant-xml ==1.1.7
   - tasty-dejafu ==2.0.0.6
   - tasty-discover ==4.2.2
   - tasty-expected-failure ==0.11.1.2
@@ -2172,7 +2172,7 @@ default-package-overrides:
   - tasty-hunit ==0.10.0.2
   - tasty-kat ==0.0.3
   - tasty-leancheck ==0.0.1
-  - tasty-lua ==0.2.3
+  - tasty-lua ==0.2.3.1
   - tasty-program ==1.0.5
   - tasty-quickcheck ==0.10.1.1
   - tasty-rerun ==1.1.17
@@ -2303,7 +2303,7 @@ default-package-overrides:
   - type-equality ==1
   - type-errors ==0.2.0.0
   - type-errors-pretty ==0.0.1.1
-  - type-fun ==0.1.1
+  - type-fun ==0.1.2
   - type-hint ==0.1
   - type-level-integers ==0.0.1
   - type-level-kv-list ==1.1.0
@@ -2330,7 +2330,7 @@ default-package-overrides:
   - unexceptionalio-trans ==0.5.1
   - unicode ==0.0.1.1
   - unicode-show ==0.1.0.4
-  - unicode-transforms ==0.3.7
+  - unicode-transforms ==0.3.7.1
   - unification-fd ==0.10.0.1
   - union-find ==0.2
   - uniplate ==1.6.12
@@ -2361,7 +2361,7 @@ default-package-overrides:
   - urbit-hob ==0.3.3
   - uri-bytestring ==0.3.2.2
   - uri-bytestring-aeson ==0.1.0.8
-  - uri-encode ==1.5.0.6
+  - uri-encode ==1.5.0.7
   - url ==2.1.3
   - users ==0.5.0.0
   - utf8-conversions ==0.1.0.4
@@ -2501,7 +2501,7 @@ default-package-overrides:
   - xturtle ==0.2.0.0
   - xxhash-ffi ==0.2.0.0
   - yaml ==0.11.5.0
-  - yamlparse-applicative ==0.1.0.1
+  - yamlparse-applicative ==0.1.0.2
   - yesod ==1.6.1.0
   - yesod-auth ==1.6.10
   - yesod-auth-fb ==1.10.1
