@@ -1,39 +1,32 @@
 { mkDerivation
-, lib
-, fetchurl
-, fetchpatch
 , extra-cmake-modules
+, fetchpatch
 , kcmutils
 , kconfigwidgets
 , kdbusaddons
 , kdoctools
-, kiconthemes
 , ki18n
-, knotifications
-, qca-qt5
-, libfakekey
-, libXtst
-, qtx11extras
-, qtmultimedia
-, qtgraphicaleffects
-, sshfs
-, makeWrapper
-, kwayland
+, kiconthemes
 , kio
-, kpeoplevcard
-, kpeople
 , kirigami2
+, knotifications
+, kpeople
+, kpeoplevcard
+, kwayland
+, lib
+, libXtst
+, libfakekey
+, makeWrapper
 , pulseaudio-qt
+, qca-qt5
+, qtgraphicaleffects
+, qtmultimedia
+, qtx11extras
+, sshfs
 }:
 
-mkDerivation rec {
-  pname = "kdeconnect";
-  version = "20.08.2";
-
-  src = fetchurl {
-    url = "https://download.kde.org/stable/release-service/${version}/src/${pname}-kde-${version}.tar.xz";
-    sha256 = "0rzfnkgkv759d4pa16qk0sw87wqzwgkd99yzrzfy2zcq423f6hvd";
-  };
+mkDerivation {
+  name = "kdeconnect-kde";
 
   patches = [
     # https://invent.kde.org/network/kdeconnect-kde/-/merge_requests/328
@@ -44,39 +37,36 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    libfakekey
-    libXtst
-    qtmultimedia
-    qtgraphicaleffects
-    pulseaudio-qt
-    kpeoplevcard
-    kpeople
-    kirigami2
-    ki18n
-    kiconthemes
     kcmutils
     kconfigwidgets
     kdbusaddons
-    knotifications
-    qca-qt5
-    qtx11extras
-    makeWrapper
-    kwayland
+    ki18n
+    kiconthemes
     kio
+    kirigami2
+    knotifications
+    kpeople
+    kpeoplevcard
+    kwayland
+    libXtst
+    libfakekey
+    pulseaudio-qt
+    qca-qt5
+    qtgraphicaleffects
+    qtmultimedia
+    qtx11extras
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "KDE Connect provides several features to integrate your phone and your computer";
-    homepage    = "https://community.kde.org/KDEConnect";
-    license     = with licenses; [ gpl2 ];
+    homepage = "https://community.kde.org/KDEConnect";
+    license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ fridh ];
   };
 }
