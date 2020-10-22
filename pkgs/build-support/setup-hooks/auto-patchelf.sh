@@ -8,7 +8,7 @@ gatherLibraries() {
 # wrapper around patchelf to raise proper error messages
 # containing the tried file name and command
 runPatchelf() {
-  patchelf $@ || (echo "Command failed: patchelf $@" && exit 1)
+  patchelf "$@" || (echo "Command failed: patchelf $*" && exit 1)
 }
 
 addEnvHooks "$targetOffset" gatherLibraries
@@ -231,7 +231,7 @@ autoPatchelf() {
       echo "autoPatchelfHook could not satisfy dependency $failedDep"
       depsMissing=1
     done
-    if [ $depsMissing == 1 -a -z "$autoPatchelfIgnoreMissingDeps" ]; then
+    if [[ $depsMissing == 1 && -z "$autoPatchelfIgnoreMissingDeps" ]]; then
       echo "Add the missing dependencies to the build inputs or set autoPatchelfIgnoreMissingDeps=true"
       exit 1
     fi
