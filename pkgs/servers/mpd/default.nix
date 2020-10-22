@@ -155,7 +155,8 @@ let
 
       mesonAutoFeatures = "disabled";
 
-      outputs = [ "out" "doc" "man" ];
+      outputs = [ "out" "doc" ]
+        ++ lib.optional (builtins.elem "documentation" features_) "man";
 
       mesonFlags = [
         "-Dtest=true"
