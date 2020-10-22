@@ -27,6 +27,7 @@ buildGoModule rec {
     # make 'vendor' writable
     cp -L -r vendor tmp-vendor
     rm -rf vendor
+    chmod -R u+w tmp-vendor
     mv tmp-vendor vendor
 
     # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
