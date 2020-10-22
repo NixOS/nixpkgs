@@ -21,6 +21,13 @@ buildGoModule rec {
 
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
+  preBuild = ''
+    export buildFlagsArray=(
+      -tags="xversion"
+      -ldflags="-X tailscale.com/version.LONG=${version} -X tailscale.com/version.SHORT=${version}"
+    )
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${
       lib.makeBinPath [ iproute iptables ]
