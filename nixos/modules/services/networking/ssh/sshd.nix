@@ -269,6 +269,7 @@ in
       kexAlgorithms = mkOption {
         type = types.listOf types.str;
         default = [
+          "curve25519-sha256"
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
         ];
@@ -279,7 +280,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -300,7 +301,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -321,7 +322,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
