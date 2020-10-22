@@ -130,9 +130,14 @@ let
         { nixpkgs.config.allow${allow_attr} = true; }
       in configuration.nix to override this.
       ${rebuild_amendment attrs}
-      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command* you can add
         { allow${allow_attr} = true; }
       to ~/.config/nixpkgs/config.nix.
+
+      *: If you use nixUnstable's flakes syntax (e.g `nix profile install nixpkgs#<package>`),
+         and, you have set in your config `allow${allow_attr}`, it will fail unless you use
+         `--impure`. Note that this is not recommended as a proper solution, as it breaks
+         caching.
     '';
 
   remediate_insecure = attrs:
