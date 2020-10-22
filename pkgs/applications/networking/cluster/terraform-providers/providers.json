@@ -934,6 +934,14 @@
     "sha256": "1cl83afm00fflsd3skynjvncid3r74fkxfznrs1v8qypcg1j79g1",
     "version": "0.18.0"
   },
+  "time": {
+    "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/time",
+    "repo": "terraform-provider-time",
+    "rev": "v0.6.0",
+    "sha256": "0fb81hisjicib9rzbn51jqfrchyjd3hzq98adnf22cbra8wlnxlm",
+    "version": "0.6.0"
+  },
   "tls": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/tls",
