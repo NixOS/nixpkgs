@@ -2342,6 +2342,8 @@ in
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
+  patool = with python3Packages; toPythonApplication patool;
+
   pbpst = callPackage ../applications/misc/pbpst { };
 
   pbzx = callPackage ../tools/compression/pbzx { };
@@ -25326,6 +25328,12 @@ in
   openmw = libsForQt5.callPackage ../games/openmw { };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
+
+  portmod = callPackage ../games/portmod { };
+
+  tr-patcher = callPackage ../games/tr-patcher { };
+
+  tes3cmd = callPackage ../games/tes3cmd { };
 
   openraPackages = import ../games/openra pkgs;
 
