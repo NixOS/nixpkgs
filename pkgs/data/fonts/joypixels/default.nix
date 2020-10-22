@@ -1,55 +1,58 @@
-{ stdenv, fetchurl, config
+{ stdenv
+, fetchurl
+, config
 , acceptLicense ? config.joypixels.acceptLicense or false
 }:
 
-let inherit (stdenv.hostPlatform.parsed) kernel;
+let
+  inherit (stdenv.hostPlatform.parsed) kernel;
 
-    systemSpecific = {
-      darwin = rec {
-        systemTag =  "nix-darwin";
-        capitalized = systemTag;
-        fontFile = "JoyPixels-SBIX.ttf";
-      };
-    }.${kernel.name} or rec {
-        systemTag = "nixos";
-        capitalized = "NixOS";
-        fontFile = "joypixels-android.ttf";
-      };
-
-    joypixels-free-license = with systemSpecific; {
-      spdxId = "LicenseRef-JoyPixels-Free-6.0";
-      fullName = "JoyPixels Free License Agreement 6.0";
-      url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.pdf";
-      free = false;
+  systemSpecific = {
+    darwin = rec {
+      systemTag =  "nix-darwin";
+      capitalized = systemTag;
+      fontFile = "JoyPixels-SBIX.ttf";
     };
+  }.${kernel.name} or rec {
+    systemTag = "nixos";
+    capitalized = "NixOS";
+    fontFile = "joypixels-android.ttf";
+  };
 
-    joypixels-license-appendix = with systemSpecific; {
-      spdxId = "LicenseRef-JoyPixels-NixOS-Appendix";
-      fullName = "JoyPixels ${capitalized} License Appendix";
-      url = "https://cdn.joypixels.com/distributions/${systemTag}/appendix/joypixels-license-appendix.pdf";
-      free = false;
-    };
+  joypixels-free-license = with systemSpecific; {
+    spdxId = "LicenseRef-JoyPixels-Free-6.0";
+    fullName = "JoyPixels Free License Agreement 6.0";
+    url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.pdf";
+    free = false;
+  };
 
-    throwLicense = throw ''
-      Use of the JoyPixels font requires acceptance of the license.
-        - ${joypixels-free-license.fullName} [1]
-        - ${joypixels-license-appendix.fullName} [2]
+  joypixels-license-appendix = with systemSpecific; {
+    spdxId = "LicenseRef-JoyPixels-NixOS-Appendix";
+    fullName = "JoyPixels ${capitalized} License Appendix";
+    url = "https://cdn.joypixels.com/distributions/${systemTag}/appendix/joypixels-license-appendix.pdf";
+    free = false;
+  };
 
-      You can express acceptance by setting acceptLicense to true in your
-      configuration. Note that this is not a free license so it requires allowing
-      unfree licenses.
+  throwLicense = throw ''
+    Use of the JoyPixels font requires acceptance of the license.
+      - ${joypixels-free-license.fullName} [1]
+      - ${joypixels-license-appendix.fullName} [2]
 
-      configuration.nix:
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.config.joypixels.acceptLicense = true;
+    You can express acceptance by setting acceptLicense to true in your
+    configuration. Note that this is not a free license so it requires allowing
+    unfree licenses.
 
-      config.nix:
-        allowUnfree = true;
-        joypixels.acceptLicense = true;
+    configuration.nix:
+      nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.joypixels.acceptLicense = true;
 
-      [1]: ${joypixels-free-license.url}
-      [2]: ${joypixels-license-appendix.url}
-    '';
+    config.nix:
+      allowUnfree = true;
+      joypixels.acceptLicense = true;
+
+    [1]: ${joypixels-free-license.url}
+    [2]: ${joypixels-license-appendix.url}
+  '';
 
 in
 
@@ -69,7 +72,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = with systemSpecific; ''
+    runHook preInstall
+
     install -Dm644 $src $out/share/fonts/truetype/${fontFile}
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
@@ -80,8 +87,10 @@ stdenv.mkDerivation rec {
       of files ranging from png, svg, iconjar, sprites, and fonts.
     '';
     homepage = "https://www.joypixels.com/fonts";
-    license = let free-license = joypixels-free-license;
-                  appendix = joypixels-license-appendix;
+    license =
+      let
+        free-license = joypixels-free-license;
+        appendix = joypixels-license-appendix;
       in with systemSpecific; {
         spdxId = "LicenseRef-JoyPixels-Free-6.0-with-${capitalized}-Appendix";
         fullName = "${free-license.fullName} with ${appendix.fullName}";
