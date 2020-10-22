@@ -6109,6 +6109,12 @@
     githubId = 818502;
     name = "Nathan Yong";
   };
+  nbke = {
+    email = "nicolai@kellerer.me";
+    github = "nbke";
+    githubId = 8681657;
+    name = "Nicolai Kellerer";
+  };
   nckx = {
     email = "github@tobias.gr";
     github = "nckx";
