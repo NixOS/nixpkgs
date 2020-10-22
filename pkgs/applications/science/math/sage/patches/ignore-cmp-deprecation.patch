@@ -1,24 +1,24 @@
 diff --git a/src/sage/tests/cmdline.py b/src/sage/tests/cmdline.py
-index bd6b76ab82..ccf1203dec 100644
+index 6e034dcb5a..8ec60ec72b 100644
 --- a/src/sage/tests/cmdline.py
 +++ b/src/sage/tests/cmdline.py
-@@ -837,8 +837,6 @@ def test_executable(args, input="", timeout=100.0, **kwds):
+@@ -660,8 +660,8 @@ def test_executable(args, input="", timeout=100.0, pydebug_ignore_warnings=False
+         sage: with open(input, 'w') as F:
+         ....:     _ = F.write(s)
+         sage: L = ["sage", "--rst2ipynb", input, output]
+-        sage: test_executable(L)                              # optional - rst2ipynb
+-        ('', '', 0)
++        sage: test_executable(L)[2]                           # optional - rst2ipynb
++        0
+         sage: import json                                     # optional - rst2ipynb
+         sage: d = json.load(open(output,'r'))                 # optional - rst2ipynb
+         sage: type(d)                                         # optional - rst2ipynb
+@@ -757,8 +757,6 @@ def test_executable(args, input="", timeout=100.0, pydebug_ignore_warnings=False
          ///
          4
          }}}
--        sage: err # py2
+-        sage: err # py2 # optional -- sagenb
 -        ''
-         sage: ret
+         sage: ret # py2 # optional -- sagenb
          0
  
-@@ -871,8 +869,8 @@ def test_executable(args, input="", timeout=100.0, **kwds):
-         sage: output = tmp_filename(ext='.sws')
-         sage: with open(input, 'w') as F:
-         ....:     _ = F.write(s)
--        sage: test_executable(["sage", "--rst2sws", input, output]) # py2
--        ('', '', 0)
-+        sage: test_executable(["sage", "--rst2sws", input, output])[2] # py2
-+        0
-         sage: import tarfile # py2
-         sage: f = tarfile.open(output, 'r') # py2
-         sage: print(f.extractfile('sage_worksheet/worksheet.html').read()) # py2

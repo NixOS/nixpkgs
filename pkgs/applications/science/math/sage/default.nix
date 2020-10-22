@@ -9,30 +9,11 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  # https://trac.sagemath.org/ticket/15980 for tracking of python3 support
-  python = pkgs.python2.override {
+  python = pkgs.python3.override {
     packageOverrides = self: super: {
-      # python packages that appear unmaintained and were not accepted into the nixpkgs
-      # tree because of that. These packages are only dependencies of the more-or-less
-      # deprecated sagenb. However sagenb is still a default dependency and the doctests
-      # depend on it.
-      # See https://github.com/NixOS/nixpkgs/pull/38787 for a discussion.
-      # The dependency on the sage notebook (and therefore these packages) will be
-      # removed in the future:
-      # https://trac.sagemath.org/ticket/25837
-      flask-oldsessions = self.callPackage ./flask-oldsessions.nix {};
-      flask-openid = self.callPackage ./flask-openid.nix {};
-      python-openid = self.callPackage ./python-openid.nix {};
-      sagenb = self.callPackage ./sagenb.nix {
-        mathjax = nodePackages.mathjax;
-      };
-
-      # Package with a cyclic dependency with sage
-      pybrial = self.callPackage ./pybrial.nix {};
-
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
-        inherit flint ecl arb;
+        inherit flint arb;
         inherit sage-src env-locations pynac singular;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
@@ -59,7 +40,7 @@ let
   # A bash script setting various environment variables to tell sage where
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
-    inherit pari_data ecl;
+    inherit pari_data;
     inherit singular maxima-ecl;
     cysignals = python.pkgs.cysignals;
     three = nodePackages.three;
@@ -71,7 +52,7 @@ let
   sage-env = callPackage ./sage-env.nix {
     sagelib = python.pkgs.sagelib;
     inherit env-locations;
-    inherit python ecl singular palp flint pynac pythonEnv maxima-ecl;
+    inherit python singular palp flint pynac pythonEnv maxima-ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
   };
 
@@ -102,8 +83,6 @@ let
 
   pythonRuntimeDeps = with python.pkgs; [
     sagelib
-    pybrial
-    sagenb
     cvxopt
     networkx
     service-identity
@@ -129,7 +108,6 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  # https://trac.sagemath.org/ticket/26625
   maxima-ecl = pkgs.maxima-ecl;
 
   # *not* to confuse with the python package "pynac"
@@ -161,9 +139,6 @@ let
       pari-seadata-small
     ];
   };
-
-  # https://trac.sagemath.org/ticket/22191
-  ecl = pkgs.ecl_16_1_2;
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {

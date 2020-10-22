@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     psutil
     future
     sphinx
-    sagenb
     scipy
     sympy
     matplotlib
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     ipywidgets
     jupyter_client
     typing
-    pybrial
   ]);
 
   unpackPhase = ''
