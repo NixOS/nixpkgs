@@ -1014,11 +1014,11 @@
     "version": "0.1.0"
   },
   "vultr": {
-    "owner": "terraform-providers",
+    "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v1.3.0",
-    "sha256": "0swc2fvp83d6w0cqvyxs346c756wr48xbn8m8jqkmma5s4ab2y4k",
-    "version": "1.3.0"
+    "rev": "v1.4.1",
+    "sha256": "1jx9p4bwpa5zxig6gfk4akfsnbivvyhwcw8id2ch2ga9a67pwald",
+    "version": "1.4.1"
   },
   "wavefront": {
     "owner": "terraform-providers",
