@@ -146,7 +146,7 @@ autoPatchelfFile() {
             echo "found: $foundDependency" >&2
         else
             echo "not found!" >&2
-            autoPatchelfFailedDeps["$dep"]=""
+            autoPatchelfFailedDeps["$dep"]="$toPatch"
         fi
     done
 
