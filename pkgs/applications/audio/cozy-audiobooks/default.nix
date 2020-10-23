@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   format = "other"; # no setup.py
 
   pname = "cozy";
-  version = "0.6.7";
+  version = "0.7.2";
 
   # Temporary fix
   # See https://github.com/NixOS/nixpkgs/issues/57029
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     owner = "geigi";
     repo = pname;
     rev = version;
-    sha256 = "0f8dyqj6111czn8spgsnic1fqs3kimjwl1b19mw55fa924b9bhsa";
+    sha256 = "0fmbddi4ga0bppwg3rm3yjmf7jgqc6zfslmavnr1pglbzkjhy9fs";
   };
 
   nativeBuildInputs = [
@@ -55,18 +55,23 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   propagatedBuildInputs = with python3Packages; [
-    gst-python
-    pygobject3
+    apsw
+    cairo
     dbus-python
-    mutagen
-    peewee
+    distro
+    gst-python
     magic
+    mutagen
+    packaging
+    peewee
+    pygobject3
+    pytz
+    requests
   ];
 
   postPatch = ''
-    chmod +x data/meson_post_install.py
-    patchShebangs data/meson_post_install.py
-    substituteInPlace cozy/magic/magic.py --replace "ctypes.util.find_library('magic')" "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
   '';
 
   postInstall = ''
