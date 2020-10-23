@@ -12,6 +12,7 @@
 , withEmacs ? true
 , withRuby ? true
 , withSfsexp ? true # also installs notmuch-git, which requires sexp-support
+, withVim ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -133,6 +134,10 @@ stdenv.mkDerivation rec {
   + lib.optionalString withSfsexp ''
     cp notmuch-git $out/bin/notmuch-git
     wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
+  '' + lib.optionalString withVim ''
+    make -C vim DESTDIR="$out/share/vim-plugins/notmuch" prefix="" install
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/notmuch $out/share/nvim/site
   '';
 
   passthru = {
