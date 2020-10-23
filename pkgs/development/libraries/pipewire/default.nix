@@ -65,9 +65,6 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
-  postPatch = ''
-    substituteInPlace meson.build --subst-var-by installed_tests_dir "$installedTests"
-  '';
 
   nativeBuildInputs = [
     doxygen
@@ -99,6 +96,7 @@ stdenv.mkDerivation rec {
     "-Dexamples=true" # only needed for `pipewire-media-session`
     "-Dudevrulesdir=lib/udev/rules.d"
     "-Dinstalled_tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
     "-Dlibpulse-path=${placeholder "pulse"}/lib"
     "-Dlibjack-path=${placeholder "jack"}/lib"
     "-Dgstreamer=${mesonBool gstreamerSupport}"
