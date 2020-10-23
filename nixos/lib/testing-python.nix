@@ -3,11 +3,12 @@
   # Use a minimal kernel?
 , minimal ? false
   # Ignored
-, config ? {}
+, config ? { }
   # !!! See comment about args in lib/modules.nix
-, specialArgs ? {}
+, specialArgs ? { }
   # Modules to add to each VM
-, extraConfigurations ? [] }:
+, extraConfigurations ? [ ]
+}:
 
 with pkgs;
 
@@ -16,39 +17,41 @@ rec {
   inherit pkgs;
 
 
-  mkTestDriver = let
-    testDriverScript = ./test-driver/test-driver.py;
-  in qemu_pkg: stdenv.mkDerivation {
-    name = "nixos-test-driver";
+  mkTestDriver =
+    let
+      testDriverScript = ./test-driver/test-driver.py;
+    in
+    qemu_pkg: stdenv.mkDerivation {
+      name = "nixos-test-driver";
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ (python3.withPackages (p: [ p.ptpython ])) ];
-    checkInputs = with python3Packages; [ pylint black mypy ];
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = [ (python3.withPackages (p: [ p.ptpython ])) ];
+      checkInputs = with python3Packages; [ pylint black mypy ];
 
-    dontUnpack = true;
+      dontUnpack = true;
 
-    preferLocalBuild = true;
+      preferLocalBuild = true;
 
-    doCheck = true;
-    checkPhase = ''
-      mypy --disallow-untyped-defs \
-           --no-implicit-optional \
-           --ignore-missing-imports ${testDriverScript}
-      pylint --errors-only ${testDriverScript}
-      black --check --diff ${testDriverScript}
-    '';
-
-    installPhase =
-      ''
-        mkdir -p $out/bin
-        cp ${testDriverScript} $out/bin/nixos-test-driver
-        chmod u+x $out/bin/nixos-test-driver
-        # TODO: copy user script part into this file (append)
-
-        wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
+      doCheck = true;
+      checkPhase = ''
+        mypy --disallow-untyped-defs \
+             --no-implicit-optional \
+             --ignore-missing-imports ${testDriverScript}
+        pylint --errors-only ${testDriverScript}
+        black --check --diff ${testDriverScript}
       '';
-  };
+
+      installPhase =
+        ''
+          mkdir -p $out/bin
+          cp ${testDriverScript} $out/bin/nixos-test-driver
+          chmod u+x $out/bin/nixos-test-driver
+          # TODO: copy user script part into this file (append)
+
+          wrapProgram $out/bin/nixos-test-driver \
+            --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils ]}" \
+        '';
+    };
 
   # Run an automated test suite in the given virtual network.
   # `driver' is the script that runs the network.
@@ -71,11 +74,10 @@ rec {
     { testScript
     , enableOCR ? false
     , name ? "unnamed"
-    # Skip linting (mainly intended for faster dev cycles)
+      # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
     , ...
     } @ t:
-
     let
       # A standard store path to the vm monitor is built like this:
       #   /tmp/nix-build-vm-test-run-$name.drv-0/vm-state-machine/monitor
@@ -94,7 +96,7 @@ rec {
       # interactively with the specified network, and for starting the
       # VMs from the command line.
       mkDriver = qemu_pkg:
-      let
+        let
           build-vms = import ./build-vms.nix {
             inherit system pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ (pkgs.lib.optional (qemu_pkg != null)
@@ -108,7 +110,8 @@ rec {
           testDriver = mkTestDriver (if qemu_pkg == null then pkgs.qemu_test else qemu_pkg);
 
           nodes = build-vms.buildVirtualNetwork (
-            t.nodes or (if t ? machine then { machine = t.machine; } else { }));
+            t.nodes or (if t ? machine then { machine = t.machine; } else { })
+          );
           vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
           vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
@@ -120,49 +123,51 @@ rec {
 
           testDriverName = with builtins;
             if testNameLen > maxTestNameLen then
-              abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
-                "it's currently ${toString testNameLen} characters long.")
+              abort
+                ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
+                  "it's currently ${toString testNameLen} characters long.")
             else
               "nixos-test-driver-${name}";
 
           warn = if skipLint then lib.warn "Linting is disabled!" else lib.id;
         in
         warn (runCommand testDriverName
-        { buildInputs = [ makeWrapper];
-          testScript = testScript';
-          preferLocalBuild = true;
-          testName = name;
-          passthru = {
-            inherit nodes;
-          };
-        }
-        ''
-          mkdir -p $out/bin
+          {
+            buildInputs = [ makeWrapper ];
+            testScript = testScript';
+            preferLocalBuild = true;
+            testName = name;
+            passthru = {
+              inherit nodes;
+            };
+          }
+          ''
+            mkdir -p $out/bin
 
-          echo -n "$testScript" > $out/test-script
-          ${lib.optionalString (!skipLint) ''
-            ${python3Packages.black}/bin/black --check --diff $out/test-script
-          ''}
+            echo -n "$testScript" > $out/test-script
+            ${lib.optionalString (!skipLint) ''
+              ${python3Packages.black}/bin/black --check --diff $out/test-script
+            ''}
 
-          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-          vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
-          wrapProgram $out/bin/nixos-test-driver \
-            --add-flags "''${vms[*]}" \
-            ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
-            --run "export testScript=\"\$(${coreutils}/bin/cat $out/test-script)\"" \
-            --set VLANS '${toString vlans}'
-          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-          wrapProgram $out/bin/nixos-run-vms \
-            --add-flags "''${vms[*]}" \
-            ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-            --set tests 'start_all(); join_all();' \
-            --set VLANS '${toString vlans}' \
-            ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
-        ''); # "
+            ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
+            vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
+            wrapProgram $out/bin/nixos-test-driver \
+              --add-flags "''${vms[*]}" \
+              ${lib.optionalString enableOCR
+                "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
+              --run "export testScript=\"\$(${coreutils}/bin/cat $out/test-script)\"" \
+              --set VLANS '${toString vlans}'
+            ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
+            wrapProgram $out/bin/nixos-run-vms \
+              --add-flags "''${vms[*]}" \
+              ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
+              --set tests 'start_all(); join_all();' \
+              --set VLANS '${toString vlans}' \
+              ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
+          ''); # "
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
-        meta = (drv.meta or {}) // t.meta;
+        meta = (drv.meta or { }) // t.meta;
       };
 
       driver = mkDriver null;
@@ -172,22 +177,23 @@ rec {
 
       nodeNames = builtins.attrNames driver.nodes;
       invalidNodeNames = lib.filter
-        (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null) nodeNames;
+        (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
+        nodeNames;
 
     in
-      if lib.length invalidNodeNames > 0 then
-        throw ''
-          Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
-          All machines are referenced as python variables in the testing framework which will break the
-          script when special characters are used.
+    if lib.length invalidNodeNames > 0 then
+      throw ''
+        Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
+        All machines are referenced as python variables in the testing framework which will break the
+        script when special characters are used.
 
-          Please stick to alphanumeric chars and underscores as separation.
-        ''
-      else
+        Please stick to alphanumeric chars and underscores as separation.
+      ''
+    else
       test // {
-          inherit test driver driverInteractive;
-          inherit (test) nodes;
-        };
+        inherit test driver driverInteractive;
+        inherit (test) nodes;
+      };
 
   runInMachine =
     { drv
@@ -202,8 +208,10 @@ rec {
       };
 
       vm = build-vms.buildVM { }
-        [ machine
-          { key = "run-in-machine";
+        [
+          machine
+          {
+            key = "run-in-machine";
             networking.hostName = "client";
             nix.readOnlyStore = false;
             virtualisation.writableStore = false;
@@ -250,16 +258,16 @@ rec {
       ''; # */
 
     in
-      lib.overrideDerivation drv (attrs: {
-        requiredSystemFeatures = [ "kvm" ];
-        builder = "${bash}/bin/sh";
-        args = ["-e" vmRunCommand];
-        origArgs = attrs.args;
-        origBuilder = attrs.builder;
-      });
+    lib.overrideDerivation drv (attrs: {
+      requiredSystemFeatures = [ "kvm" ];
+      builder = "${bash}/bin/sh";
+      args = [ "-e" vmRunCommand ];
+      origArgs = attrs.args;
+      origBuilder = attrs.builder;
+    });
 
 
-  runInMachineWithX = { require ? [], ... } @ args:
+  runInMachineWithX = { require ? [ ], ... } @ args:
     let
       client =
         { ... }:
@@ -275,13 +283,13 @@ rec {
           services.xserver.windowManager.icewm.enable = true;
         };
     in
-      runInMachine ({
-        machine = client;
-        preBuild =
-          ''
-            client.wait_for_x()
-          '';
-      } // args);
+    runInMachine ({
+      machine = client;
+      preBuild =
+        ''
+          client.wait_for_x()
+        '';
+    } // args);
 
 
   simpleTest = as: (makeTest as).test;
