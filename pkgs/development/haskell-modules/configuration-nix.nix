@@ -542,6 +542,7 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
+  splitmix_0_1_0_3 = dontCheck super.splitmix_0_1_0_3;
 
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
@@ -730,6 +731,7 @@ self: super: builtins.intersectAttrs super {
 
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
+  primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
     let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];

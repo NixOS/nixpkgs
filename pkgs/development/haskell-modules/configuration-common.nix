@@ -940,7 +940,7 @@ self: super: {
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (
     super.dhall-nix.overrideScope (self: super: {
-      dhall = super.dhall_1_35_0;
+      dhall = super.dhall_1_36_0;
       repline = self.repline_0_4_0_0;
       haskeline = self.haskeline_0_8_1_0;
     }));
@@ -1230,6 +1230,7 @@ self: super: {
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck self.lsp-test_0_11_0_7;
   }));
+  implicit-hie-cradle = super.implicit-hie-cradle.override { hie-bios = dontCheck super.hie-bios_0_7_1; };
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
@@ -1321,10 +1322,6 @@ self: super: {
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
   # Upstream issue: https://github.com/kowainik/trial/issues/62
   trial = doJailbreak super.trial;
-
-  # 2020-06-24: Tests are broken in hackage distribution.
-  # See: https://github.com/kowainik/stan/issues/316
-  stan = dontCheck super.stan;
 
   # 2020-06-24: Tests are broken in hackage distribution.
   # See: https://github.com/robstewart57/rdf4h/issues/39
@@ -1464,8 +1461,8 @@ self: super: {
   cryptonite = doDistribute self.cryptonite_0_27;
 
   # We want the latest version of Pandoc.
-  skylighting = doDistribute super.skylighting_0_10_0_2;
-  skylighting-core = doDistribute super.skylighting-core_0_10_0_2;
+  skylighting = doDistribute super.skylighting_0_10_0_3;
+  skylighting-core = doDistribute super.skylighting-core_0_10_0_3;
   hslua = doDistribute self.hslua_1_1_2;
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
   pandoc = doDistribute self.pandoc_2_11_0_2;
@@ -1480,6 +1477,9 @@ self: super: {
 
   # stack-2.5.1 needs a more current version of pantry to compile
   pantry = self.pantry_0_5_1_3;
+
+  # Too tight version bounds, see https://github.com/haskell-hvr/microaeson/pull/4
+  microaeson = doJailbreak super.microaeson;
 
   # haskell-language-server needs a more current version of pantry to compile
 } // (let
