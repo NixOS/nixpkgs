@@ -253,7 +253,8 @@ let
         echo '${domainHash}' > domainhash.txt
 
         # Check if we can renew
-        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' ]; then
+        # Certificates and account credentials must exist
+        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a "$(ls -1 accounts)" ]; then
 
           # When domains are updated, there's no need to do a full
           # Lego run, but it's likely renew won't work if days is too low.
