@@ -1,20 +1,23 @@
 { lib, runCommand, pipewire, paths-out, paths-lib }:
 
-runCommand "pipewire-test-paths" { } ''
-  ${lib.concatMapStringsSep "\n" (p: ''
-    if [ ! -f "${pipewire.lib}/${p}" ] && [ ! -d "${pipewire.lib}/${p}" ]; then
-      printf "pipewire failed to find the following path: %s\n" "${pipewire.lib}/${p}"
+let
+  check-path = output: path: ''
+    if [[ ! -f "${output}/${path}" && ! -d "${output}/${path}" ]]; then
+      printf "Missing: %s\n" "${output}/${path}" | tee -a $out
       error=error
+    else
+      printf "Found: %s\n" "${output}/${path}" | tee -a $out
     fi
-  '') paths-lib}
+  '';
 
-  ${lib.concatMapStringsSep "\n" (p: ''
-    if [ ! -f "${pipewire}/${p}" ] && [ ! -d "${pipewire}/${p}" ]; then
-      printf "pipewire failed to find the following path: %s\n" "${pipewire}/${p}"
-      error=error
-    fi
-  '') paths-out}
-
-  [ -n "$error" ] && exit 1
+  check-output = output: lib.concatMapStringsSep "\n" (check-path output);
+in runCommand "pipewire-test-paths" { } ''
   touch $out
+
+  ${check-output pipewire.lib paths-lib}
+  ${check-output pipewire paths-out}
+
+  if [[ -n "$error" ]]; then
+    exit 1
+  fi
 ''

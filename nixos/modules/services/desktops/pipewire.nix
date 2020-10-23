@@ -100,6 +100,6 @@ in {
       source = "${pkgs.pipewire}/share/alsa/alsa.conf.d/50-pipewire.conf";
     };
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional (cfg.alsa.enable || cfg.jack.enable || cfg.pulse.enable) "/run/current-system/sw/lib/pipewire";
+      lib.optional (cfg.jack.enable || cfg.pulse.enable) "/run/current-system/sw/lib/pipewire";
   };
 }
