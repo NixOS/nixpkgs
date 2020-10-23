@@ -5022,6 +5022,8 @@ in {
 
   pygmo = callPackage ../development/python-modules/pygmo { };
 
+  pygmt = callPackage ../development/python-modules/pygmt { };
+
   pygobject2 = callPackage ../development/python-modules/pygobject { inherit (pkgs) pkgconfig; };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { inherit (pkgs) meson pkgconfig; };
