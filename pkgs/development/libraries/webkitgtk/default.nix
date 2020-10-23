@@ -41,8 +41,6 @@
 , enableGeoLocation ? true
 , geoclue2
 , sqlite
-, enableGtk2Plugins ? false
-, gtk2 ? null
 , enableGLES ? true
 , gst-plugins-base
 , gst-plugins-bad
@@ -56,8 +54,6 @@
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
-assert enableGtk2Plugins -> gtk2 != null;
-assert stdenv.isDarwin -> !enableGtk2Plugins;
 
 with stdenv.lib;
 
@@ -146,8 +142,7 @@ stdenv.mkDerivation rec {
     systemd
     wayland
     xdg-dbus-proxy
-  ] ++ optional enableGeoLocation geoclue2
-    ++ optional enableGtk2Plugins gtk2;
+  ] ++ optional enableGeoLocation geoclue2;
 
   propagatedBuildInputs = [
     gtk3
@@ -171,8 +166,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_ACCELERATE=0"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
-    ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+  ] ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .
