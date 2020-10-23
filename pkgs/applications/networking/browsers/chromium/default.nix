@@ -47,6 +47,7 @@ let
       });
     } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "87") {
       useOzone = true; # YAY: https://chromium-review.googlesource.com/c/chromium/src/+/2382834 \o/
+      useVaapi = !stdenv.isAarch64; # TODO: Might be best to not set use_vaapi anymore (default is fine)
       gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-08-17";
         src = fetchgit {
