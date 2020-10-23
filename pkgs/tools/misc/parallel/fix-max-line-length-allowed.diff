@@ -1,0 +1,17 @@
+Correct path to coreutils echo to fix parallel --max-line-length-allowed.
+
+Author: Bjørn Forsman
+
+diff --git a/src/parallel b/src/parallel
+index a047fd94..9fc5f671 100755
+--- a/src/parallel
++++ b/src/parallel
+@@ -11580,7 +11580,7 @@ sub is_acceptable_command_line_length($$) {
+ 	$len += length $Global::parallel_env;
+     }
+     # Force using non-built-in command
+-    ::qqx("/bin/echo ".${string}x(($len-length "/bin/echo ")/length $string));
++    ::qqx("@coreutils@/bin/echo ".${string}x(($len-length "@coreutils@/bin/echo ")/length $string));
+     ::debug("init", "$len=$? ");
+     return not $?;
+ }
