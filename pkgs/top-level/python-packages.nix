@@ -2874,6 +2874,8 @@ in {
   else
     callPackage ../development/python-modules/imbalanced-learn { };
 
+  imdbpy = callPackage ../development/python-modules/imdbpy { };
+
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
   imgaug = callPackage ../development/python-modules/imgaug { };
