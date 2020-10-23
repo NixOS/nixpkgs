@@ -7114,7 +7114,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  sonar-scanner-bin = callPackage ../tools/security/sonar-scanner-bin { };
+  sonar-scanner-cli = callPackage ../tools/security/sonar-scanner-cli { };
 
   solr = callPackage ../servers/search/solr { };
   solr_7 = solr;
