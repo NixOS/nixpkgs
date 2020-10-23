@@ -4,9 +4,11 @@
 , tzdata
 
 , features ?
-    (if stdenv.isAarch64
+    ((if stdenv.isAarch64
      then [ "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ]
      else [ "leveldb" "leveldb/leveldb-sys-2" "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ])
+     ++
+     [ "sinks" "sources" "transforms" ])
 , coreutils
 , CoreServices
 }:
@@ -38,9 +40,20 @@ rustPlatform.buildRustPackage rec {
   # vector.dev during the checkPhase, which obviously isn't going to work.
   # these tests in the DNS module are trivial though, so stubbing them out is
   # fine IMO.
+  #
+  # the geoip transform yields maxmindb.so which contains references to rustc.
+  # neither figured out why the shared object is included in the output
+  # (it doesn't seem to be a runtime dependencies of the geoip transform),
+  # nor do I know why it depends on rustc.
+  # However, in order for the closure size to stay at a reasonable level,
+  # transforms-geoip is patched out of Cargo.toml for now - unless explicitly asked for.
   patchPhase = ''
     substituteInPlace ./src/dns.rs \
       --replace "#[test]" ""
+
+    ${lib.optionalString (!builtins.elem "transforms-geoip" features) ''
+        substituteInPlace ./Cargo.toml --replace '"transforms-geoip",' ""
+    ''}
   '';
 
   meta = with stdenv.lib; {
