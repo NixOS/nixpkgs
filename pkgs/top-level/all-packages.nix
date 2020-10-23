@@ -25933,6 +25933,7 @@ in
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
+    # TODO: Update these to qt515 at some point
     qt5 = qt514;
     libsForQt5 = libsForQt514;
     inherit pkgs;
