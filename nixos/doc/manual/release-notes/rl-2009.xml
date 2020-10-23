@@ -3,8 +3,11 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-20.09">
- <title>Release 20.09 (“Nightingale”, 2020.09/??)</title>
+ <title>Release 20.09 (“Nightingale”, 2020.10/26)</title>
 
+  <para>
+   Support is planned until the end of April 2021, handing over to 21.03.
+  </para>
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -13,88 +16,606 @@
   <title>Highlights</title>
 
   <para>
-   In addition to numerous new and upgraded packages, this release has the
+   In addition to 7349 new, 14442 updated, and 8181 removed packages, this release has the
    following highlights:
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-     Support is planned until the end of April 2021, handing over to 21.03.
+     Core version changes:
     </para>
-   </listitem>
-   <listitem>
-    <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
-   </listitem>
-   <listitem>
-     <para>
-     The Cinnamon desktop environment (v4.6) has been added. <varname>services.xserver.desktopManager.cinnamon.enable = true;</varname> to try it out!
-     Remember that, with any new feature it's possible you could run into issues, so please send all support requests to <link xlink:href="https://github.com/NixOS/nixpkgs/issues">github.com/NixOS/nixpkgs</link> to notify the maintainers.
-     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       gcc: 9.2.0 -> 9.3.0
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       glibc: 2.30 -> 2.31
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       linux: still defaults to 5.4.x, all supported kernels available
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       mesa: 19.3.5 -> 20.1.7
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-      Quickly configure a complete, private, self-hosted video
-      conferencing solution with the new Jitsi Meet module.
+     Desktop Enironments:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       plasma5: 5.17.5 -> 5.18.5
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       kdeApplications: 19.12.3 -> 20.08.1
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       gnome3: 3.34 -> 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.
+      </para>
+     </listitem>
+      <listitem>
+       <para>
+        cinnamon: added at 4.6
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       NixOS now distributes an official <link xlink:href="https://nixos.org/download.html#nixos-iso">GNOME ISO</link>.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     Programming Languages and Frameworks:
+    </para>
+    <itemizedlist>
+
+     <listitem>
+      <para>
+       Agda ecosystem was heavily reworked (see more details below).
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       PHP now defaults to PHP 7.4, updated from 7.3.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       PHP 7.2 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 20.09 release.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Python 3 now defaults to Python 3.8 instead of 3.7.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Python 3.5 has reached its upstream EOL at the end of September 2020: it
+       has been removed from the list of available packages.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     Databases and Service Monitoring:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       MariaDB has been updated to 10.4, MariaDB Galera to 26.4. Please read the related upgrade instructions under <link linkend="sec-release-20.09-incompatibilities">backwards incompatibilities</link> before upgrading.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Zabbix now defaults to 5.0, updated from 4.4. Please read related sections under <link linkend="sec-release-20.09-incompatibilities">backwards compatibilities</link> before upgrading.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     Major module changes:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       Quickly configure a complete, private, self-hosted video
+       conferencing solution with the new Jitsi Meet module.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
+       and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
+       been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
+       in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
+       make use of these new options instead.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Declarative Docker containers are renamed from <varname>docker-containers</varname> to <varname>virtualisation.oci-containers.containers</varname>.
+        This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        The new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
+        has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
+        like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
+        the NixOS configuration: since this can be expensive when a large number of packages are installed, the
+        feature is disabled by default.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certificate authorities.
+      </para>
+     </listitem>
+     <listitem>
+       <para>
+         The various documented workarounds to use steam have been converted to a module. <varname>programs.steam.enable</varname> enables steam, controller support and the workarounds.
+       </para>
+     </listitem>
+     <listitem>
+       <para>
+         Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the g15daemon project.
+       </para>
+     </listitem>
+     <listitem>
+       <para>
+         The GRUB module gained support for basic password protection, which
+         allows to restrict non-default entries in the boot menu to one or more
+         users. The users and passwords are defined via the option
+         <option>boot.loader.grub.users</option>.
+         Note: Password support is only avaiable in GRUB version 2.
+       </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     NixOS module changes:
+    </para>
+    <itemizedlist>
+     <listitem>
+       <para>
+        The NixOS module system now supports freeform modules as a mix between <literal>types.attrsOf</literal> and <literal>types.submodule</literal>. These allow you to explicitly declare a subset of options while still permitting definitions without an associated option. See <xref linkend='sec-freeform-modules'/> for how to use them.
+       </para>
+     </listitem>
+     <listitem>
+      <para>
+       Following its deprecation in 20.03, the Perl NixOS test driver has been removed.
+       All remaining tests have been ported to the Python test framework.
+       Code outside nixpkgs using <filename>make-test.nix</filename> or
+       <filename>testing.nix</filename> needs to be ported to
+       <filename>make-test-python.nix</filename> and
+       <filename>testing-python.nix</filename> respectively.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Subordinate GID and UID mappings are now set up automatically for all normal users.
+        This will make container tools like Podman work as non-root users out of the box.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-new-services">
+  <title>New Services</title>
+
+  <para>
+   In addition to 1119 new, 118 updated, and 476 removed options; 61 new modules were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+       Hardware:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.system76.firmware-daemon.enable" /> adds easy support of system76 firmware.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.uinput.enable" /> loads uinput kernel module.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.video.hidpi.enable" /> enable good defaults for HiDPI displays.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.wooting.enable" /> support for Wooting keyboards.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.xpadneo.enable" /> xpadneo driver for Xbox One wireless controllers.
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-    <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
-    Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
+       Programs:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-programs.hamster.enable" /> enable hamster time tracking.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-programs.steam.enable" /> adds easy enablement of steam and related system configuration.
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     We now distribute a GNOME ISO.
+       Security:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-security.doas.enable" /> alternative to sudo, allows non-root users to execute commands as root.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-security.tpm2.enable" /> add Trusted Platform Module 2 support.
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     PHP now defaults to PHP 7.4, updated from 7.3.
+       System:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-boot.initrd.network.openvpn.enable" /> Start an OpenVPN client during initrd boot.
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     PHP 7.2 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 20.09 release.
+       Virtualization:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-boot.enableContainers" /> Use nixos-containers.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-virtualisation.oci-containers.containers" /> Run OCI (Docker) containers.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-virtualisation.podman.enable" /> Daemonless container engine.
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
+
    <listitem>
     <para>
-     Python 3 now defaults to Python 3.8 instead of 3.7.
+       Services:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.ankisyncd.enable" /> Anki sync server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.bazarr.enable" /> subtitle manager for Sonarr and Radarr.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.biboumi.enable" /> Biboumi XMPP gateway to IRC.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.blockbook-frontend" /> Blockbook-frontend, a service for the Trezor wallet.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.cage.enable" /> Wayland cage service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.convos.enable" /> IRC daemon, which can be accessed throught the browser.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.engelsystem.enable" /> Tool for coordinating helpers and shifts on large events.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.espanso.enable" /> text-expander written in rust.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.foldingathome.enable" /> Folding@home client.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.foldingathome.enable" /> Folding@home client.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.gerrit.enable" /> Web-based team code collaboration tool.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.go-neb.enable" /> Matrix bot.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.hardware.xow.enable" /> xow as a systemd service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.hercules-ci-agent.enable" /> Hercules CI build agent.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jicofo.enable" /> Jitsi Conference Focus, component of Jitsi Meet.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jirafeau.enable" /> a web file repository.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jitsi-meet.enable" /> secure, simple and scalable video conferences.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jitsi-videobridge.enable" /> Jitsi Videobridge, a WebRTC compatible router.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jupyterhub.enable" /> Jupyterhub development server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.k3s.enable" /> lightweight kubernetes distribution.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.magic-wormhole-mailbox-server.enable" /> Magic Wormhole Mailbox Server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.malcontent.enable" /> parental control support.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.matrix-appservice-discord.enable" /> Matrix and Discord bridge.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.mautrix-telegram.enable" /> Matrix-Telegram puppeting/relaybot bridge.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.mirakurun.enable" /> Japanese DTV Tuner Server Service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.molly-brown.enable" /> Molly-Brown Gemini server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.mullvad-vpn.enable" /> Mullvad VPN daemon.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.ncdns.enable" /> Namecoin to DNS bridge.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.nextdns.enable" /> NextDNS to DoH Proxy service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.nix-store-gcs-proxy" /> Enable a Google storage bucket to be used as a nix store.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.onedrive.enable" /> OneDrive sync service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.pinnwand.enable" /> Pastebin-like service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.pixiecore.enable" /> manage network booting of machines.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.privacyidea.enable" /> Privacy authentication server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.quorum.enable" /> Quorum blockchain daemon.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.robustirc-bridge.enable" /> RobustIRC bridge.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.rss-bridge.enable" /> generate RSS and Atom feeds.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.rtorrent.enable" /> rTorrent service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.smartdns.enable" /> SmartDNS DNS server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.sogo.enable" /> SOGo groupware.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.teeworlds.enable" /> Teeworlds game server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.torque.mom.enable" /> torque computing node.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.torque.server.enable" /> enable torque server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.tuptime.enable" /> a total uptime service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.urserver.enable" /> X11 remote server.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.wasabibackend.enable" /> Wasabi backend service.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.yubikey-agent.enable" /> Yubikey agent.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.zigbee2mqtt.enable" /> Zigbee to MQTT bridge.
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
-   <listitem>
-    <para>
-     Python 3.5 has reached its upstream EOL at the end of September 2020: it
-     has been removed from the list of available packages.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
-     and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
-     been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
-     in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
-     make use of these new options instead.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-      Declarative Docker containers are renamed from <varname>docker-containers</varname> to <varname>virtualisation.oci-containers.containers</varname>.
-      This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
-    </para>
-   </listitem>
+
+  </itemizedlist>
+
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
    <listitem>
     <para>
       MariaDB has been updated to 10.4, MariaDB Galera to 26.4.
@@ -144,36 +665,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
       from the default of <literal>mysql</literal> to a different user please change <literal>'mysql'@'localhost'</literal> to the corresponding user instead.
     </para>
    </listitem>
-   <listitem>
-    <para>
-      The new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
-      has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
-      like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
-      the NixOS configuration: since this can be expensive when a large number of packages are installed, the
-      feature is disabled by default.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certificate authorities.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-      Subordinate GID and UID mappings are now set up automatically for all normal users.
-      This will make container tools like Podman work as non-root users out of the box.
-    </para>
-   </listitem>
-   <listitem>
-     <para>
-       The various documented workarounds to use steam have been converted to a module. <varname>programs.steam.enable</varname> enables steam, controller support and the workarounds.
-     </para>
-   </listitem>
-   <listitem>
-     <para>
-       Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the g15daemon project.
-     </para>
-   </listitem>
+
    <listitem>
     <para>
       Zabbix now defaults to 5.0, updated from 4.4. Please carefully read through
@@ -208,72 +700,13 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
 </programlisting>
     </para>
    </listitem>
-   <listitem>
-     <para>
-      The NixOS module system now supports freeform modules as a mix between <literal>types.attrsOf</literal> and <literal>types.submodule</literal>. These allow you to explicitly declare a subset of options while still permitting definitions without an associated option. See <xref linkend='sec-freeform-modules'/> for how to use them.
-     </para>
-   </listitem>
-   <listitem>
-     <para>
-       The GRUB module gained support for basic password protection, which
-       allows to restrict non-default entries in the boot menu to one or more
-       users. The users and passwords are defined via the option
-       <option>boot.loader.grub.users</option>.
-       Note: Password support is only avaiable in GRUB version 2.
-     </para>
-   </listitem>
-   <listitem>
-     <para>
-       Following its deprecation in 20.03, the Perl NixOS test driver has been removed.
-       All remaining tests have been ported to the Python test framework.
-       Code outside nixpkgs using <filename>make-test.nix</filename> or
-       <filename>testing.nix</filename> needs to be ported to
-       <filename>make-test-python.nix</filename> and
-       <filename>testing-python.nix</filename> respectively.
-     </para>
-   </listitem>
-  </itemizedlist>
- </section>
 
- <section xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="sec-release-20.09-new-services">
-  <title>New Services</title>
-
-  <para>
-   The following new services were added since the last release:
-  </para>
-
-  <itemizedlist>
    <listitem>
     <para>
-      There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <link xlink:href="https://hercules-ci.com">Hercules CI</link> Agent is a specialized build agent for projects built with Nix. See the <link xlink:href="https://nixos.org/nixos/options.html#services.hercules-ci-agent">options</link> and <link xlink:href="https://docs.hercules-ci.com/hercules-ci/getting-started/#deploy-agent">setup</link>.
+    <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
+    Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
     </para>
    </listitem>
-  </itemizedlist>
-
- </section>
-
- <section xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="sec-release-20.09-incompatibilities">
-  <title>Backward Incompatibilities</title>
-
-  <para>
-   When upgrading from a previous release, please be aware of the following
-   incompatible changes:
-  </para>
-
-  <itemizedlist>
    <listitem>
     <para>
      The <link linkend="opt-services.matrix-synapse.enable">matrix-synapse</link> module no longer includes optional dependencies by default, they have to be added through the <link linkend="opt-services.matrix-synapse.plugins">plugins</link> option.
