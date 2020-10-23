@@ -295,8 +295,8 @@ meta.hydraPlatforms = [];
     </term>
     <listitem>
      <para>
-      This optional entry can be used to refer (with a URL) to a thumbnail sized screenshot of the package's application. A good source of 
-      appropriate screenshots is the website <link
+      This optional entry can be used to refer (with a URL) to a thumbnail sized screenshot of the package's application.
+      A good source of appropriate screenshots is the website <link
           xlink:href="https://screenshots.debian.net/"> <filename>https://screenshots.debian.net/</filename></link>. The suggested size of a thumbnail image is 160x120 pixels or less.
      </para>
     </listitem>
@@ -307,8 +307,8 @@ meta.hydraPlatforms = [];
     </term>
     <listitem>
      <para>
-      This optional entry can be used to refer (with a URL) to a screenshot of the package's application. A good source of 
-      appropriate screenshots is the website <link
+      This optional entry can be used to refer (with a URL) to a screenshot of the package's application.
+      A good source of appropriate screenshots is the website <link
           xlink:href="https://screenshots.debian.net/"> <filename>https://screenshots.debian.net/</filename></link>. The suggested size of an image is 800x600 pixels or less.
        An example is provided in the pingus package:
        <programlisting>
