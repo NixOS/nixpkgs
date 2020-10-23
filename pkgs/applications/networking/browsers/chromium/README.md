@@ -19,6 +19,16 @@
   - `ungoogled-chromium`: Based on `chromium` (the expressions are regularly
     copied over and patched accordingly)
 
+# Upstream links
+
+- Source code: https://source.chromium.org/chromium/chromium/src
+- Bugs: https://bugs.chromium.org/p/chromium/issues/list
+- Release updates: https://chromereleases.googleblog.com/
+  - Available as Atom or RSS feed (filter for
+    "Stable Channel Update for Desktop")
+  - Channel overview: https://omahaproxy.appspot.com/
+  - Release schedule: https://chromiumdash.appspot.com/schedule
+
 # Updating Chromium
 
 Simply run `./pkgs/applications/networking/browsers/chromium/update.py` to
