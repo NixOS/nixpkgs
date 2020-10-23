@@ -8756,8 +8756,6 @@ in
 
   dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
 
-  drumstick = callPackage ../development/libraries/drumstick { };
-
   ecl = callPackage ../development/compilers/ecl { };
   ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
 
@@ -15252,6 +15250,8 @@ in
     appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
     dxflib = callPackage ../development/libraries/dxflib {};
+
+    drumstick = callPackage ../development/libraries/drumstick { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 

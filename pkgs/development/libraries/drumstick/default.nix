@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, cmake, docbook_xsl, docbook_xml_dtd_45, doxygen
-, fluidsynth, pkgconfig, qt5
+, fluidsynth, pkgconfig, qtbase, qtsvg
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_45 ];
   buildInputs = [
-    alsaLib doxygen fluidsynth qt5.qtbase qt5.qtsvg
+    alsaLib doxygen fluidsynth qtbase qtsvg
   ];
 
   meta = with stdenv.lib; {
