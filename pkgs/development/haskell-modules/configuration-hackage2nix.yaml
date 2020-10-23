@@ -5580,7 +5580,6 @@ broken-packages:
   - graphql
   - graphql-client
   - graphql-engine
-  - graphql-engine
   - graphql-utils
   - graphql-w-persistent
   - graphted
@@ -5852,6 +5851,7 @@ broken-packages:
   - haskell-bitmex-client
   - haskell-bitmex-rest
   - haskell-brainfuck
+  - haskell-ci
   - haskell-cnc
   - haskell-coffee
   - haskell-compression
