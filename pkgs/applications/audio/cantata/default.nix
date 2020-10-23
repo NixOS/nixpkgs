@@ -31,7 +31,7 @@ assert withReplaygain -> withTaglib;
 assert withLibVlc -> withHttpStream;
 
 let
-  version = "2.4.1";
+  version = "2.4.2";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -47,7 +47,7 @@ in mkDerivation {
     owner  = "CDrummond";
     repo   = "cantata";
     rev    = "v${version}";
-    sha256 = "0ix7xp352bziwz31mw79y7wxxmdn6060p8ry2px243ni1lz1qx1c";
+    sha256 = "15qfx9bpfdplxxs08inwf2j8kvf7g5cln5sv1wj1l2l41vbf1mjr";
   };
 
   patches = [
