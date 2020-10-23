@@ -406,6 +406,15 @@ in
         yelp
       ] config.environment.gnome3.excludePackages);
 
+      # Temporary hack until we can drop tracker 2.
+      services.dbus.packages = with pkgs.gnome3;
+        let
+          tracker2needed = removePackagesByName [ pkgs.gnome-photos gnome-documents gnome-books ] config.environment.gnome3.excludePackages == [];
+        in
+          lib.optionals tracker2needed [
+            tracker_2
+          ];
+
       # Enable default program modules
       # Since some of these have a corresponding package, we only
       # enable that program module if the package hasn't been excluded
