@@ -71,7 +71,7 @@ self: super: {
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
-  splitmix = self.splitmix_0_1_0_2;
+  splitmix = self.splitmix_0_1_0_3;
   tar = doJailbreak super.tar;
   th-abstraction = self.th-abstraction_0_4_0_0;
   time-compat = doJailbreak super.time-compat;
