@@ -6791,6 +6791,8 @@ in
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
+  radeon-profile-daemon = libsForQt5.callPackage ../tools/misc/radeon-profile-daemon { };
+
   radsecproxy = callPackage ../tools/networking/radsecproxy { };
 
   radvd = callPackage ../tools/networking/radvd { };
