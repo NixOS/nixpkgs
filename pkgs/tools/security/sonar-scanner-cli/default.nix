@@ -2,22 +2,22 @@
 
 let
 
-  version = "3.3.0.1492";
+  version = "4.5.0.2216";
 
   sonarScannerArchPackage = {
     "x86_64-linux" = {
       url = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${version}-linux.zip";
-      sha256 = "1vn22d1i14440wlym0kxzbmjlxd9x9b0wc2ifm8fwig1xvnwpjwd";
+      sha256 = "sha256-rmvDb5l2BGV8j94Uhu2kJXwoDAHA3VncAahqGvLY3I0=";
     };
     "x86_64-darwin" = {
       url = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${version}-macosx.zip";
-      sha256 = "1m7cplak63m2rmad7f2s1iksi1qn43m2h1jm0qh3m219xcpl632i";
+      sha256 = "1g3lldpkrjlvwld9h82hlwclyplxpbk4q3nq59ylw4dhp26kb993";
     };
   };
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "sonar-scanner-bin-${version}";
+  pname = "sonar-scanner-cli";
 
   src = fetchurl sonarScannerArchPackage.${stdenv.hostPlatform.system};
 
@@ -38,9 +38,9 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/SonarSource/sonar-scanner-cli;
+    homepage = "https://github.com/SonarSource/sonar-scanner-cli";
     description = "SonarQube Scanner used to start code analysis";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterromfeldhk ];
     platforms = builtins.attrNames sonarScannerArchPackage;
   };
