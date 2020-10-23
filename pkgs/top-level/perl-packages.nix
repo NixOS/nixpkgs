@@ -861,7 +861,7 @@ let
       sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
     };
     meta = {
-      homepage = "http://github.com/timj/perl-Astro-FITS-Header/tree/master";
+      homepage = "https://github.com/timj/perl-Astro-FITS-Header/tree/master";
       description = "Object-oriented interface to FITS HDUs";
       license = stdenv.lib.licenses.free;
     };
@@ -1314,7 +1314,7 @@ let
     buildInputs = [ FileSlurp ];
     propagatedBuildInputs = [ ClassLoad DirSelf FileShareDir ModulePluggable MooseXGetopt namespaceclean  ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training";
+      homepage = "https://metacpan.org/release/Bot-Training";
       description = "Plain text training material for bots like Hailo and AI::MegaHAL";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1330,7 +1330,7 @@ let
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training-MegaHAL";
+      homepage = "https://metacpan.org/release/Bot-Training-MegaHAL";
       description = "Provide megahal.trn via Bot::Training";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1346,7 +1346,7 @@ let
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training-StarCraft";
+      homepage = "https://metacpan.org/release/Bot-Training-StarCraft";
       description = "Provide starcraft.trn via Bot::Training";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
