@@ -11,7 +11,7 @@ let
       file = {
         group = "nginx";
         owner = "nginx";
-        path = "/tmp/${host}-ca.pem";
+        path = "/etc/ssl/certs/${host}-ca.pem";
       };
       label = "www_ca";
       profile = "three-month";
@@ -20,13 +20,13 @@ let
     certificate = {
       group = "nginx";
       owner = "nginx";
-      path = "/tmp/${host}-cert.pem";
+      path = "/etc/ssl/certs/${host}-cert.pem";
     };
     private_key = {
       group = "nginx";
       mode = "0600";
       owner = "nginx";
-      path = "/tmp/${host}-key.pem";
+      path = "/etc/ssl/certs/${host}-key.pem";
     };
     request = {
       CN = host;
@@ -87,8 +87,8 @@ let
           enable = true;
           virtualHosts = lib.mkMerge (map (host: {
             ${host} = {
-              sslCertificate = "/tmp/${host}-cert.pem";
-              sslCertificateKey = "/tmp/${host}-key.pem";
+              sslCertificate = "/etc/ssl/certs/${host}-cert.pem";
+              sslCertificateKey = "/etc/ssl/certs/${host}-key.pem";
               extraConfig = ''
                 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
               '';
@@ -124,27 +124,31 @@ in
     };
     testScript = ''
       machine.wait_for_unit("cfssl.service")
-      machine.wait_until_succeeds("ls /tmp/decl.example.org-ca.pem")
-      machine.wait_until_succeeds("ls /tmp/decl.example.org-key.pem")
-      machine.wait_until_succeeds("ls /tmp/decl.example.org-cert.pem")
-      machine.wait_until_succeeds("ls /tmp/imp.example.org-ca.pem")
-      machine.wait_until_succeeds("ls /tmp/imp.example.org-key.pem")
-      machine.wait_until_succeeds("ls /tmp/imp.example.org-cert.pem")
+      machine.wait_until_succeeds("ls /etc/ssl/certs/decl.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /etc/ssl/certs/decl.example.org-key.pem")
+      machine.wait_until_succeeds("ls /etc/ssl/certs/decl.example.org-cert.pem")
+      machine.wait_until_succeeds("ls /etc/ssl/certs/imp.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /etc/ssl/certs/imp.example.org-key.pem")
+      machine.wait_until_succeeds("ls /etc/ssl/certs/imp.example.org-cert.pem")
       machine.wait_for_unit("nginx.service")
       assert 1 < int(machine.succeed('journalctl -u nginx | grep "Starting Nginx" | wc -l'))
-      machine.succeed("curl --cacert /tmp/imp.example.org-ca.pem https://imp.example.org")
-      machine.succeed("curl --cacert /tmp/decl.example.org-ca.pem https://decl.example.org")
+      machine.succeed(
+          "curl --cacert /etc/ssl/certs/imp.example.org-ca.pem https://imp.example.org"
+      )
+      machine.succeed(
+          "curl --cacert /etc/ssl/certs/decl.example.org-ca.pem https://decl.example.org"
+      )
     '';
   };
 
   command = mkCertmgrTest {
     svcManager = "command";
     specs = {
-      test = mkSpec { host = "command.example.org"; action = "touch /tmp/command.executed"; };
+      test = mkSpec { host = "command.example.org"; action = "touch /etc/ssl/certs/command.executed"; };
     };
     testScript = ''
       machine.wait_for_unit("cfssl.service")
-      machine.wait_until_succeeds("stat /tmp/command.executed")
+      machine.wait_until_succeeds("stat /etc/ssl/certs/command.executed")
     '';
   };
 
