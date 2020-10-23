@@ -91339,7 +91339,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Production process manager for Node.JS applications with a built-in load balancer.";
-      homepage = http://pm2.keymetrics.io/;
+      homepage = "https://pm2.keymetrics.io/";
       license = "AGPL-3.0";
     };
     production = true;

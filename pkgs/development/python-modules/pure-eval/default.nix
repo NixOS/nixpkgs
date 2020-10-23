@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Safely evaluate AST nodes without side effects";
-    homepage = "http://github.com/alexmojaki/pure_eval";
+    homepage = "https://github.com/alexmojaki/pure_eval";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };
