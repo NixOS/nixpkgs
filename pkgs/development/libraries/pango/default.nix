@@ -9,25 +9,14 @@ with stdenv.lib;
 
 let
   pname = "pango";
-  version = "1.45.3";
+  version = "1.47.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0zg6gvzk227q997jf1c9p7j5ra87nm008hlgq6q8na9xmgmw2x8z";
+    sha256 = "0ry3j9n0lvdfmjwi2w7wa4gkalnip56kghqq6bh8hcf45xjvh3bk";
   };
-
-  patches = [
-    # Fix issue with Pango loading unsupported formats that
-    # breaks mixed x11/opentype font packages.
-    # See https://gitlab.gnome.org/GNOME/pango/issues/457
-    # Remove on next release.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/pango/commit/fe1ee773310bac83d8e5d3c062b13a51fb5fb4ad.patch";
-      sha256 = "1px66g31l2jx4baaqi4md59wlmvw0ywgspn6zr919fxl4h1kkh0h";
-    })
-  ];
 
   # FIXME: docs fail on darwin
   outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
@@ -50,6 +39,7 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
+    "-Dlibthai=disabled" # Not packaged in Nixpkgs
   ];
 
   enableParallelBuilding = true;
