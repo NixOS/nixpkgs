@@ -394,7 +394,7 @@ in
         gnome-logs
         gnome-maps
         gnome-music
-        gnome-photos
+        pkgs.gnome-photos
         gnome-screenshot
         gnome-software
         gnome-system-monitor
