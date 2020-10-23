@@ -2874,6 +2874,8 @@ in {
   else
     callPackage ../development/python-modules/imbalanced-learn { };
 
+  imdbpy = callPackage ../development/python-modules/imdbpy { };
+
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
   imgaug = callPackage ../development/python-modules/imgaug { };
@@ -6394,6 +6396,16 @@ in {
     src = oldAttrs.src.override {
       inherit version;
       sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
+    };
+    doCheck = false;
+    disabled = !isPy3k;
+  });
+
+  scipy_1_4 = self.scipy.overridePythonAttrs (oldAttrs: rec {
+    version = "1.4.1";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "0ndw7zyxd2dj37775mc75zm4fcyiipnqxclc45mkpxy8lvrvpqfy";
     };
     doCheck = false;
     disabled = !isPy3k;

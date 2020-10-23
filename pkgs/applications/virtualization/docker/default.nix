@@ -33,7 +33,7 @@ rec {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
-        owner = "docker";
+        owner = "containerd";
         repo = "containerd";
         rev = containerdRev;
         sha256 = containerdSha256;

@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
-  version = "3.1.0";
+  version = "3.1.1";
 
 
   # when updating this, please consider bumping the erlang/OTP version
   # in all-packages.nix
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
-    sha256 = "1vgqj3zsrkdqgnwzji3mqkapnfd6kq466f5xnya0fvzzl6bcfrs8";
+    sha256 = "18wcqxrv2bz88xadkqpqznprrxmcmwr0g6k895xrm8rbp9mpdzlg";
   };
 
   buildInputs = [ erlang icu openssl spidermonkey_68 (python3.withPackages(ps: with ps; [ requests ]))];

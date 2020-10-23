@@ -1,42 +1,57 @@
 {
   "EncConv": {
+    "owner": "Alexey-T",
     "rev": "2020.06.15",
     "sha256": "07dpvq3ppfq3b70i1smkf7vwdlzq8qnxs3fk94hi9h1z36bz2rw3"
   },
   "ATBinHex-Lazarus": {
+    "owner": "Alexey-T",
     "rev": "2020.09.05",
     "sha256": "022yx5vic4hnc9lz53wvr4h7hf0h71801dzlilj55x5mf8p59072"
   },
   "ATFlatControls": {
-    "rev": "2020.08.23",
-    "sha256": "1axzwiz5h62v11ncynxcg431dfbky9pwyha7cd6kpizjdjagfklw"
+    "owner": "Alexey-T",
+    "rev": "2020.09.20",
+    "sha256": "09svn8yyqp6znvfpcxrsybkclh828h5rvah7nhbhk7nrfzj8i63x"
   },
   "ATSynEdit": {
-    "rev": "2020.09.05",
-    "sha256": "0qn0fp7rbi48f3nrysb0knkd7a3a6pl5w72yf95g5iibal4zrib2"
+    "owner": "Alexey-T",
+    "rev": "2020.10.12",
+    "sha256": "07vznwwfa3c1jr1cd32yppw0mmmm1ja9bmsxhxlcbnc2nb30n9zr"
   },
   "ATSynEdit_Cmp": {
-    "rev": "2020.09.05",
-    "sha256": "1bd25zc97001b7lg0bvi8va9mazkr6jih6d2ddkabcxcnsj0dxnq"
+    "owner": "Alexey-T",
+    "rev": "2020.10.11",
+    "sha256": "11vx685i85izp7wzb34dalcwlkmkbz1vzva5j9cf2yz1jff1v4qw"
   },
   "EControl": {
-    "rev": "2020.09.05",
-    "sha256": "1n7s1zkhrr216gqdqvq6wq0n3jq7s78mwpi5s5j8054p0fak1ywi"
+    "owner": "Alexey-T",
+    "rev": "2020.10.04",
+    "sha256": "0ypbaca3y5biw2207yh3x5p28gm8g51qf7glm5622w3cgbrf9mdq"
   },
   "ATSynEdit_Ex": {
-    "rev": "2020.09.05",
-    "sha256": "17y2cx5syj3jvrszjgdyf1p6vilp2qgaggz4y8yqnz99cvd0shs7"
+    "owner": "Alexey-T",
+    "rev": "2020.10.04",
+    "sha256": "0z66cm9pgdi7whqaim6hva4aa08zrr1881n1fal7lnz6wlla824k"
   },
   "Python-for-Lazarus": {
+    "owner": "Alexey-T",
     "rev": "2020.07.31",
     "sha256": "0qbs51h6gw8qd3h06kwy1j7db35shbg7r2rayrhvvw0vzr9n330j"
   },
   "Emmet-Pascal": {
+    "owner": "Alexey-T",
     "rev": "2020.09.05",
     "sha256": "0qfiirxnk5g3whx8y8hp54ch3h6gkkd01yf79m95bwar5qvdfybg"
   },
   "CudaText-lexers": {
+    "owner": "Alexey-T",
     "rev": "2020.08.10",
     "sha256": "1gzs2psyfhb9si1qyacxzfjb3dz2v255hv7y4jlkbxdxv0kckqr6"
+  },
+  "bgrabitmap": {
+    "owner": "bgrabitmap",
+    "rev": "v11.2.4",
+    "sha256": "1zk88crfn07md16wg6af4i8nlx4ikkhxq9gfk49jirwimgwbf1md"
   }
 }
