@@ -1461,7 +1461,7 @@ self: super: {
 
   # We want the latest version of Pandoc.
   skylighting = doDistribute super.skylighting_0_10_0_3;
-  skylighting-core = doDistribute super.skylighting-core_0_10_0_2;
+  skylighting-core = doDistribute super.skylighting-core_0_10_0_3;
   hslua = doDistribute self.hslua_1_1_2;
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
   pandoc = doDistribute self.pandoc_2_11_0_2;
