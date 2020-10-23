@@ -81,7 +81,7 @@ ln -s /proc/mounts /etc/mtab
 [ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
 install -m 01777 -d /tmp
 install -m 0755 -d /var/{log,lib,db} /nix/var /etc/nixos/ \
-    /run/lock /home /bin # for the /bin/sh symlink
+    /run/lock /run/log /home /bin # for the /bin/sh symlink
 
 
 # Miscellaneous boot time cleanup.
@@ -110,19 +110,30 @@ if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
     resolvconf -m 1000 -a host </etc/resolv.conf
 fi
 
-# Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
+
+# Extract the list of secondary consoles from kernel. /sys/class/tty/console/active contains a list
+# of all the active consoles, from which we filter out the primary console (the last one in the file).
+# See https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-tty.
+# Except don't do this inside a container, as apparently at least LXC doesn't contain them from the host.
+secondaryConsoles=""
+if [ -z "$container" ]; then
+    secondaryConsoles="$(cat /sys/class/tty/console/active | sed -e 's/[^ ]*$//')"
+fi
+
+# Log the script output to /dev/kmsg or /run/log/stage-2-init.log and to all secondary consoles.
 # Only at this point are all the necessary prerequisites ready for these commands.
 exec {logOutFd}>&1 {logErrFd}>&2
-if test -w /dev/kmsg; then
-    exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
-        if test -n "$line"; then
-            echo "<7>stage-2-init: $line" > /dev/kmsg
-        fi
-    done) 2>&1
-else
-    mkdir -p /run/log
-    exec > >(tee -i /run/log/stage-2-init.log) 2>&1
-fi
+exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
+    if test -w /dev/kmsg; then
+        echo "<7>stage-2-init: $line" > /dev/kmsg
+    else
+        echo "$line" >> /run/log/stage-2-init.log
+    fi
+
+    for c in $secondaryConsoles; do
+        echo "$line" >> "/dev/$c"
+    done
+done) 2>&1
 
 
 # Run the script that performs all configuration activation that does

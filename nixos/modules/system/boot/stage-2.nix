@@ -17,6 +17,7 @@ let
     inherit (config.system.build) earlyMountScript;
     path = lib.makeBinPath ([
       pkgs.coreutils
+      pkgs.gnused
       pkgs.utillinux
     ] ++ lib.optional useHostResolvConf pkgs.openresolv);
     fsPackagesPath = lib.makeBinPath config.system.fsPackages;
