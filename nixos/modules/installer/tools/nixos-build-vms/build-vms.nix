@@ -6,7 +6,12 @@
 let
   nodes = builtins.mapAttrs (vm: module: {
     _file = "${networkExpr}@node-${vm}";
-    imports = [ module ];
+    imports = [
+      module
+      ({ pkgs, ... }: {
+        virtualisation.qemu.package = pkgs.qemu;
+      })
+    ];
   }) (import networkExpr);
 in
 

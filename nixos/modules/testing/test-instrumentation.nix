@@ -53,7 +53,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     #       or declare virtualisation.qemu.console option in a module that's always imported
     virtualisation.qemu = {
       consoles = lib.optional (options ? virtualisation.qemu.consoles) qemuSerialDevice;
-      package  = pkgs.qemu_test;
+      package  = lib.mkDefault pkgs.qemu_test;
     };
 
     boot.initrd.preDeviceCommands =
