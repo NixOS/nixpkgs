@@ -25618,6 +25618,8 @@ in
 
   typespeed = callPackage ../games/typespeed { };
 
+  udig = callPackage ../applications/gis/udig { };
+
   ufoai = callPackage ../games/ufoai { };
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
