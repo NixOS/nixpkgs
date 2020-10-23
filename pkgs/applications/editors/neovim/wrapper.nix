@@ -13,9 +13,10 @@ neovim:
 
 let
   wrapper = {
+      # should contain all args but the binary
       wrapperArgs ? []
     , manifestRc ? null
-    , withPython ? true, pythonEnv ? null
+    , withPython2 ? true, python2Env ? null
     , withPython3 ? true,  python3Env ? null
     , withNodeJs? false
     , withRuby ? true, rubyEnv ? null
@@ -42,8 +43,8 @@ let
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
       ''
-      + optionalString withPython ''
-        makeWrapper ${pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
+      + optionalString withPython2 ''
+        makeWrapper ${python2Env}/bin/python $out/bin/nvim-python --unset PYTHONPATH
       ''
       + optionalString withPython3 ''
         makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH

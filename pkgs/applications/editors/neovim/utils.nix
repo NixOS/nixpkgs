@@ -10,24 +10,28 @@
 , wrapNeovim2
 }:
 let
-  # vimWithRC pass it args
-  # need a function that generates wrapperArgs + customRC and then one can create its own package from that.
-  # should let the user write its own file.
+  # returns everything needed for the caller to wrap its own neovim:
+  # - the generated content of the future init.vim
+  # - the arguments to wrap neovim with
+  # The caller is responsible for writing the init.vim and adding it to the wrapped
+  # arguments (["-u" writeText "init.vim" GENERATEDRC)]).
+  # This makes it possible to write the config anywhere: on a per-project basis
+  # .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
+  # Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
+  # anymore, $MYVIMRC wont be set etc
   makeNeovimConfig =
     {
-    withPython ? false
-    , extraPythonPackages ? (_: [ ]) /* the function you would have passed to python.withPackages */
-    , withPython3 ? true
-    , extraPython3Packages ? (_: [ ]) /* the function you would have passed to python.withPackages */
+    withPython2 ? false
+    /* the function you would have passed to python.withPackages */
+    , extraPython2Packages ? (_: [ ])
+    ,  withPython3 ? true
+    /* the function you would have passed to python3.withPackages */
+    , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
     , withRuby ? true
     , configure ? { }
 
-    # whether to wrap the Rc file
-    # dont use it, should be discarded as we update neovim wrapper
-    , wrapRc ? true
-
-    # for forward compability, when adding features
+    # for forward compability, when adding new environments, haskell etc.
     , ...
     }:
     let
@@ -39,26 +43,20 @@ let
         '';
       };
 
-      /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
-      compatFun = funOrList: (if builtins.isList funOrList then
-        (_: lib.warn "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
-      else funOrList);
-      extraPythonPackagesFun = compatFun extraPythonPackages;
-      extraPython3PackagesFun = compatFun extraPython3Packages;
 
       requiredPlugins = vimUtils.requiredPlugins configure;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
 
-      pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
-      pythonEnv = pythonPackages.python.withPackages (ps:
+      pluginPython2Packages = getDeps "pythonDependencies" requiredPlugins;
+      python2Env = pythonPackages.python2.withPackages (ps:
         [ ps.pynvim ]
-        ++ (extraPythonPackagesFun ps)
+        ++ (extraPythonPackages ps)
         ++ (lib.concatMap (f: f ps) pluginPythonPackages));
 
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
       python3Env = python3Packages.python.withPackages (ps:
         [ ps.pynvim ]
-        ++ (extraPython3PackagesFun ps)
+        ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
       binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
@@ -71,7 +69,7 @@ let
       # While the later tells nvim that this provider is not available
       hostprog_check_table = {
         node = withNodeJs;
-        python = withPython;
+        python = withPython2;
         python3 = withPython3;
         ruby = withRuby;
       };
@@ -83,9 +81,7 @@ let
         let
           flags = lib.concatLists (lib.mapAttrsToList
             (
-              prog:
-              withProg:
-              [
+              prog: withProg: [
                 "--cmd"
                 (if withProg then
                   "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
@@ -97,19 +93,11 @@ let
             hostprog_check_table);
         in
         [
-          "--argv0"
-          "$0"
-          "--add-flags"
-          (lib.escapeShellArgs flags)
+          "--argv0" "$0" "--add-flags" (lib.escapeShellArgs flags)
         ] ++ lib.optionals withRuby [
-          "--set"
-          "GEM_HOME"
-          "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+          "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [
-          "--suffix"
-          "PATH"
-          ":"
-          binPath
+          "--suffix" "PATH" ":" binPath
         ];
       # If configure != {}, we can't generate the rplugin.vim file with e.g
       # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
@@ -121,9 +109,7 @@ let
         # this relies on a patched neovim, see
         # https://github.com/neovim/neovim/issues/9413
         ++ lib.optionals (configure != { }) [
-        "--set"
-        "NVIM_SYSTEM_RPLUGIN_MANIFEST"
-        "${placeholder "out"}/rplugin.vim"
+        "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim"
       ];
 
       manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
@@ -134,7 +120,7 @@ let
       neovimRc = neovimRcContent;
       inherit manifestRc;
       inherit rubyEnv;
-      inherit pythonEnv;
+      inherit python2Env;
       inherit python3Env;
     };
 
@@ -154,9 +140,18 @@ let
     , configure ? {}
   }:
     let
+      /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
+      compatFun = funOrList: (if builtins.isList funOrList then
+        (_: lib.warn "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
+      else funOrList);
+      # extraPythonPackagesFun = compatFun extraPythonPackages;
+      # extraPython3PackagesFun = compatFun extraPython3Packages;
+
       res = makeNeovimConfig {
-        inherit withPython extraPythonPackages;
-        inherit withPython3 extraPython3Packages;
+        withPython2 = withPython;
+        extraPythonPackages = compatFun extraPythonPackages;
+        inherit withPython3;
+        extraPython3Packages = compatFun extraPython3Packages;
         inherit withNodeJs withRuby;
 
         inherit configure;
