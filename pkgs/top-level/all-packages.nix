@@ -1792,6 +1792,8 @@ with pkgs;
 
   fspy = callPackage ../applications/misc/fspy { };
 
+  fluffychat = callPackage  ../applications/networking/instant-messengers/fluffychat { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };
