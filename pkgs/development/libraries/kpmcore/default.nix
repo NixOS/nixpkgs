@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, extra-cmake-modules
-, qtbase, kdeFrameworks
+, qtbase, kio
 , libatasmart, parted
 , utillinux }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     libatasmart
     parted # we only need the library
 
-    kdeFrameworks.kio
+    kio
 
     utillinux # needs blkid (note that this is not provided by utillinux-compat)
   ];
