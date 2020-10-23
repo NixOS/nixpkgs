@@ -26,26 +26,18 @@
 , json-glib
 , systemd
 , dbus
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.4";
+  version = "2.3.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vai0qz9jn3z5dlzysynwhbbmslp84ygdql81f5wfxxr98j54yap";
+    sha256 = "1wpfgzwzazyi1d6m73hbdk8gfb30xnh3y73vnnknya9m449b87mx";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      gdbus = "${glib.bin}/bin/gdbus";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
