@@ -70,4 +70,6 @@ mkDerivation {
   description = "GraphQL API over Postgres";
   license = stdenv.lib.licenses.asl20;
   maintainers = with stdenv.lib.maintainers; [ offline ];
+  hydraPlatforms = [];
+  broken = true;
 }
