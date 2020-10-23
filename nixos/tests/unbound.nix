@@ -132,6 +132,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
                 something.local. IN A 3.4.5.6
               ''}
           '';
+          "unbound-extra3.conf".text = ''
+            remote-control:
+              control-enable: yes
+              control-interface: /run/unbound/unbound.ctl
+          '';
+
         };
       };
 
@@ -243,5 +249,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           local_resolver.succeed("systemctl reload unbound")
           r = [("A", "3.4.5.6")]
           test(local_resolver, ["::1", "127.0.0.1"], zone="something.local.", records=r)
+
+      with subtest("test that we can enable unbound control sockets on the fly"):
+          local_resolver.succeed("ln -sf /etc/unbound-extra3.conf /etc/unbound/extra3.conf")
+          local_resolver.succeed("systemctl reload unbound")
+          local_resolver.succeed("unbound-control list_forwards")
     '';
   })
