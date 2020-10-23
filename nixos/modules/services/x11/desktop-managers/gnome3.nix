@@ -413,7 +413,9 @@ in
         in
           lib.optionals tracker2needed [
             tracker_2
-          ];
+          ] ++ removePackagesByName [
+            pkgs.gnome-photos
+          ] config.environment.gnome3.excludePackages;
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
