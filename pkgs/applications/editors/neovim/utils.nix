@@ -29,6 +29,8 @@ let
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
     , withRuby ? true
+
+    # same values as in vimUtils.vimrcContent
     , configure ? { }
 
     # for forward compability, when adding new environments, haskell etc.
@@ -48,10 +50,10 @@ let
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
 
       pluginPython2Packages = getDeps "pythonDependencies" requiredPlugins;
-      python2Env = pythonPackages.python2.withPackages (ps:
+      python2Env = pythonPackages.python.withPackages (ps:
         [ ps.pynvim ]
-        ++ (extraPythonPackages ps)
-        ++ (lib.concatMap (f: f ps) pluginPythonPackages));
+        ++ (extraPython2Packages ps)
+        ++ (lib.concatMap (f: f ps) pluginPython2Packages));
 
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
       python3Env = python3Packages.python.withPackages (ps:
@@ -66,7 +68,7 @@ let
       #    let g:<key>_host_prog=$out/bin/nvim-<key>
       # Or this:
       #    let g:loaded_${prog}_provider=1
-      # While the later tells nvim that this provider is not available
+      # While the latter tells nvim that this provider is not available
       hostprog_check_table = {
         node = withNodeJs;
         python = withPython2;
@@ -117,7 +119,7 @@ let
     in
     {
       wrapperArgs = finalMakeWrapperArgs;
-      neovimRc = neovimRcContent;
+      inherit neovimRcContent;
       inherit manifestRc;
       inherit rubyEnv;
       inherit python2Env;
@@ -130,7 +132,7 @@ let
     extraMakeWrapperArgs ? []
     , withPython ? true
     /* the function you would have passed to python.withPackages */
-    ,  extraPythonPackages ? (_: [])
+    , extraPythonPackages ? (_: [])
     /* the function you would have passed to python.withPackages */
     , withPython3 ? true,  extraPython3Packages ? (_: [])
     , withNodeJs ? false
@@ -144,8 +146,6 @@ let
       compatFun = funOrList: (if builtins.isList funOrList then
         (_: lib.warn "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
       else funOrList);
-      # extraPythonPackagesFun = compatFun extraPythonPackages;
-      # extraPython3PackagesFun = compatFun extraPython3Packages;
 
       res = makeNeovimConfig {
         withPython2 = withPython;
@@ -158,7 +158,8 @@ let
       };
     in
     wrapNeovim2 neovim (res // {
-      wrapperArgs = res.wrapperArgs ++ [
+      wrapperArgs = res.wrapperArgs
+      ++ [
         "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
       ]
       ++ (if builtins.isList extraMakeWrapperArgs then extraMakeWrapperArgs

@@ -34,10 +34,7 @@ let
       name = "neovim-${stdenv.lib.getVersion neovim}";
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
-      postBuild = ''
-        # rm $out/bin/nvim
-      ''
-      + lib.optionalString stdenv.isLinux ''
+      postBuild = lib.optionalString stdenv.isLinux ''
         rm $out/share/applications/nvim.desktop
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
