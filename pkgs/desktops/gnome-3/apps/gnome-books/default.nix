@@ -8,8 +8,8 @@
 , pkgconfig
 , gtk3
 , glib
-, tracker_2
-, tracker-miners-2
+, tracker
+, tracker-miners
 , libxslt
 , webkitgtk
 , gnome-desktop
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     webkitgtk
     gjs
     gobject-introspection
-    tracker_2
-    tracker-miners-2
+    tracker
+    tracker-miners
     gnome-desktop
     libgepub
   ];
@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    broken = true; # Tracker 3 not supported and it cannot start Tracker 2.
     homepage = "https://wiki.gnome.org/Apps/Books";
     description = "An e-book manager application for GNOME";
     maintainers = teams.gnome.members;

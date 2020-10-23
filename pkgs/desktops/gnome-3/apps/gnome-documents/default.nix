@@ -9,8 +9,8 @@
 , pkgconfig
 , gtk3
 , glib
-, tracker_2
-, tracker-miners-2
+, tracker
+, tracker-miners
 , itstool
 , libxslt
 , webkitgtk
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
     webkitgtk
     gjs
     gobject-introspection
-    tracker_2
-    tracker-miners-2
+    tracker
+    tracker-miners
     libgdata
     gnome-desktop
     libzapojit
@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    broken = true; # Tracker 3 not supported and it cannot start Tracker 2.
     homepage = "https://wiki.gnome.org/Apps/Documents";
     description = "Document manager application designed to work with GNOME 3";
     maintainers = teams.gnome.members;
