@@ -7,6 +7,7 @@
 , ruby
 , which, dtach, openssl, bash, gdb, man
 , withEmacs ? true
+, withVim ? true
 }:
 
 with stdenv.lib;
@@ -90,6 +91,8 @@ stdenv.mkDerivation rec {
 
   postInstall = stdenv.lib.optionalString withEmacs ''
     moveToOutput bin/notmuch-emacs-mua $emacs
+  '' + optionalString withVim ''
+    make -C vim DESTDIR="$out/share/vim" prefix="" install
   '';
 
   dontGzipMan = true; # already compressed
