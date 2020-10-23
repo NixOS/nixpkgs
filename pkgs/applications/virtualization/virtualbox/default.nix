@@ -23,8 +23,7 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.14";
-  tarballVersion = "${version}a";
+  version = "6.1.16";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -40,8 +39,8 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${tarballVersion}.tar.bz2";
-    sha256 = "16f3cb83ab3c4dacf2a9d3cc638cbd18db23767828bba6b8ba1c1b57abeb6aef";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
+    sha256 = "49c1990da16d8a3d5bda8cdb961ec8195a901e67e4c79aea44c1521a5fc2f9f1";
   };
 
   outputs = [ "out" "modsrc" ];
