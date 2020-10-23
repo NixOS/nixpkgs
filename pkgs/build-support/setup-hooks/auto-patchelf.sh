@@ -228,7 +228,7 @@ autoPatchelf() {
     # autoPatchelfIgnoreMissingDeps is not set
     local depsMissing=0
     for failedDep in "${!autoPatchelfFailedDeps[@]}"; do
-      echo "autoPatchelfHook could not satisfy dependency $failedDep"
+      echo "autoPatchelfHook could not satisfy dependency $failedDep wanted by ${autoPatchelfFailedDeps[$failedDep]}"
       depsMissing=1
     done
     if [[ $depsMissing == 1 && -z "$autoPatchelfIgnoreMissingDeps" ]]; then
