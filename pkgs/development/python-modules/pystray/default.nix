@@ -26,6 +26,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/moses-palmer/pystray";
     description = "This library allows you to create a system tray icon";
     license = licenses.lgpl3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ jojosch ];
   };
 }
