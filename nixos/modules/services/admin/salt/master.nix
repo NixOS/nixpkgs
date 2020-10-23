@@ -59,5 +59,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa ];
+  meta.maintainers = with lib.maintainers; [ Flakebi ];
 }

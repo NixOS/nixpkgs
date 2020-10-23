@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://saltstack.com/";
     description = "Portable, distributed, remote execution and configuration management system";
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [ Flakebi ];
     license = licenses.asl20;
   };
 }
