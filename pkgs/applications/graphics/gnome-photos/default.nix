@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "3.37.2";
+  version = "3.38.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13wspx5kgnn1ir8q521ja0d21r1dsnh73qb8k27nkgc4zyhmm5fc";
+    sha256 = "1i64w69kk3sdf9vn7npnwrhy8qjwn0vizq200x3pgmbrfm3kjzv6";
   };
 
   patches = [
@@ -103,6 +103,11 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapGApp "${placeholder "installedTests"}/libexec/installed-tests/gnome-photos/basic.py"
+
+    # Upstream now uses a private tracker 2 instance.
+    # https://gitlab.gnome.org/GNOME/gnome-photos/-/merge_requests/146
+    # Let’s install them after fixup since they are already wrapped.
+    ln -s ${tracker-miners-2}/libexec/tracker-extract ${tracker-miners-2}/libexec/tracker-miner-fs ${tracker_2}/libexec/tracker-store $out/libexec
   '';
 
   passthru = {
