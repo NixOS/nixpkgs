@@ -82,5 +82,6 @@ mkChromiumDerivation (base: rec {
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+    broken = channel == "dev"; # Blocked on https://bugs.chromium.org/p/chromium/issues/detail?id=1141896
   };
 })
