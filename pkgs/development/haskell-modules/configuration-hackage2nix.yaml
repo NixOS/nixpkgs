@@ -6844,7 +6844,6 @@ broken-packages:
   - imperative-edsl-vhdl
   - ImperativeHaskell
   - impl
-  - implicit-hie-cradle
   - implicit-logging
   - implicit-params
   - importify

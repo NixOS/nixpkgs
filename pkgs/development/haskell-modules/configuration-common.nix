@@ -1230,6 +1230,7 @@ self: super: {
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck self.lsp-test_0_11_0_7;
   }));
+  implicit-hie-cradle = super.implicit-hie-cradle.override { hie-bios = dontCheck super.hie-bios_0_7_1; };
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
