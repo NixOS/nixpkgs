@@ -132,15 +132,15 @@ let
         # drop comments
         aspell-affix() {
           words-only \
-            | grep -v '#' \
+            | grep -a -v '#' \
             | aspell-create "$@"
         }
 
         # Hack: drop comments and words with affixes
         aspell-plain() {
           words-only \
-            | grep -v '#' \
-            | grep -v '/' \
+            | grep -a -v '#' \
+            | grep -a -v '/' \
             | aspell-create "$@"
         }
 
