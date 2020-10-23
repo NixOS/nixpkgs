@@ -1,6 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
+, removeReferencesTo
 , meson
 , ninja
 , systemd
@@ -63,8 +65,14 @@ stdenv.mkDerivation rec {
     ./alsa-profiles-use-libdir.patch
     # Move installed tests into their own output.
     ./installed-tests-path.patch
-  ];
 
+    # TODO Remove this on next update
+    # Fixes rpath referencecs.
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/pipewire/commit/2e3556fa128b778be62a7ffad5fbe78393035825.diff";
+      sha256 = "039yysb8j1aiqml54rxnaqfmzqz1b6m8sv5w3vz52grvav3kyr1l";
+    })
+  ];
 
   nativeBuildInputs = [
     doxygen
@@ -72,6 +80,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    removeReferencesTo
   ];
 
   buildInputs = [
@@ -111,12 +120,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Pulseaudio asserts lead to dev references.
+  # TODO This should be fixed in the pulseaudio sources instead.
   preFixup = ''
-    # The rpaths mistakenly points to libpulseaudio instead
-    for file in "$pulse"/lib/*.so; do
-      oldrpath="$(patchelf --print-rpath "$file")"
-      patchelf --set-rpath "$pulse/lib:$oldrpath" "$file"
-    done
+    remove-references-to -t ${libpulseaudio.dev} "$(readlink -f $pulse/lib/libpulse.so)"
   '';
 
   passthru.tests = {
