@@ -6751,6 +6751,16 @@
       fingerprint = "A3A3 65AE 16ED A7A0 C29C  88F1 9712 452E 8BE3 372E";
     }];
   };
+  pinpox = {
+    email = "mail@pablo.tools";
+    github = "pinpox";
+    githubId = 1719781;
+    name = "Pablo Ovelleiro Corral";
+    keys = [{
+      longkeyid = "sa4096/0x823A6154426408D3";
+      fingerprint = "D03B 218C AE77 1F77 D7F9  20D9 823A 6154 4264 08D3";
+    }];
+  };
   piotr = {
     email = "ppietrasa@gmail.com";
     name = "Piotr Pietraszkiewicz";
