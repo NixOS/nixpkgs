@@ -16547,7 +16547,9 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
-  gerbera = callPackage ../servers/gerbera { };
+  gerbera = callPackage ../servers/gerbera {
+    fmt = fmt_6;
+  };
 
   gobetween = callPackage ../servers/gobetween { };
 
@@ -21301,7 +21303,9 @@ in
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
-  waybar = callPackage ../applications/misc/waybar { };
+  waybar = callPackage ../applications/misc/waybar {
+    fmt = fmt_6;
+  };
 
   hikari = callPackage ../applications/window-managers/hikari { };
 
