@@ -16,7 +16,7 @@
 , adwaita-icon-theme
 , libgweather
 , gucharmap
-, tracker_2
+, tracker
 , polkit
 , gnome3
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
     libgweather
     gucharmap
-    tracker_2
+    # tracker # Tracker 3 not supported.
     polkit
     wirelesstools
     linuxPackages.cpupower

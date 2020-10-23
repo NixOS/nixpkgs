@@ -3400,11 +3400,7 @@ in
 
   tracker = callPackage ../development/libraries/tracker { };
 
-  tracker_2 = callPackage ../development/libraries/tracker/2.x { };
-
   tracker-miners = callPackage ../development/libraries/tracker-miners { };
-
-  tracker-miners-2 = callPackage ../development/libraries/tracker-miners/2.x { };
 
   tracy = callPackage ../development/tools/tracy {
     inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
