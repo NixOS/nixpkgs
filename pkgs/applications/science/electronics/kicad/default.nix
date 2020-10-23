@@ -212,11 +212,10 @@ stdenv.mkDerivation rec {
 
   # why does $makeWrapperArgs have to be added explicitly?
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
-  # kicad-ogltest's source seems to indicate that crashing is expected behaviour...
   installPhase =
     let
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
-      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" "kicad-ogltest" ];
+      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" ];
     in
     (concatStringsSep "\n"
       (flatten [
