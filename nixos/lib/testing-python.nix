@@ -9,7 +9,6 @@
   # Modules to add to each VM
 , extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system pkgs minimal specialArgs extraConfigurations; };
 with pkgs;
 
 rec {
@@ -51,9 +50,6 @@ rec {
       '';
   };
 
-  testDriver = mkTestDriver qemu_test;
-  testDriverInteractive = mkTestDriver qemu_kvm;
-
   # Run an automated test suite in the given virtual network.
   # `driver' is the script that runs the network.
   runTests = driver:
@@ -88,25 +84,7 @@ rec {
       maxTestNameLen = 50;
       testNameLen = builtins.stringLength name;
 
-      testDriverName = with builtins;
-        if testNameLen > maxTestNameLen then
-          abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
-            "it's currently ${toString testNameLen} characters long.")
-        else
-          "nixos-test-driver-${name}";
 
-      nodes = buildVirtualNetwork (
-        t.nodes or (if t ? machine then { machine = t.machine; } else { }));
-
-      testScript' =
-        # Call the test script with the computed nodes.
-        if lib.isFunction testScript
-        then testScript { inherit nodes; }
-        else testScript;
-
-      vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
-
-      vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
       ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
 
@@ -115,8 +93,38 @@ rec {
       # Generate convenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
-      driver = testDriver:
-        let
+      mkDriver = qemu_pkg:
+      let
+          build-vms = import ./build-vms.nix {
+            inherit system pkgs minimal specialArgs;
+            extraConfigurations = extraConfigurations ++ (pkgs.lib.optional (qemu_pkg != null)
+              {
+                virtualisation.qemu.package = qemu_pkg;
+              }
+            );
+          };
+
+          # FIXME: get this pkg from the module system
+          testDriver = mkTestDriver (if qemu_pkg == null then pkgs.qemu_test else qemu_pkg);
+
+          nodes = build-vms.buildVirtualNetwork (
+            t.nodes or (if t ? machine then { machine = t.machine; } else { }));
+          vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
+          vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
+
+          testScript' =
+            # Call the test script with the computed nodes.
+            if lib.isFunction testScript
+            then testScript { inherit nodes; }
+            else testScript;
+
+          testDriverName = with builtins;
+            if testNameLen > maxTestNameLen then
+              abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
+                "it's currently ${toString testNameLen} characters long.")
+            else
+              "nixos-test-driver-${name}";
+
           warn = if skipLint then lib.warn "Linting is disabled!" else lib.id;
         in
         warn (runCommand testDriverName
@@ -124,6 +132,9 @@ rec {
           testScript = testScript';
           preferLocalBuild = true;
           testName = name;
+          passthru = {
+            inherit nodes;
+          };
         }
         ''
           mkdir -p $out/bin
@@ -154,9 +165,12 @@ rec {
         meta = (drv.meta or {}) // t.meta;
       };
 
-      test = passMeta (runTests (driver testDriver));
+      driver = mkDriver null;
+      driverInteractive = mkDriver pkgs.qemu;
 
-      nodeNames = builtins.attrNames nodes;
+      test = passMeta (runTests driver);
+
+      nodeNames = builtins.attrNames driver.nodes;
       invalidNodeNames = lib.filter
         (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null) nodeNames;
 
@@ -170,10 +184,9 @@ rec {
           Please stick to alphanumeric chars and underscores as separation.
         ''
       else
-        test // {
-          inherit nodes test;
-          driver = driver testDriver;
-          driverInteractive = driver testDriverInteractive;
+      test // {
+          inherit test driver driverInteractive;
+          inherit (test) nodes;
         };
 
   runInMachine =
@@ -184,7 +197,11 @@ rec {
     , ... # ???
     }:
     let
-      vm = buildVM { }
+      build-vms = import ./build-vms.nix {
+        inherit system pkgs minimal specialArgs extraConfigurations;
+      };
+
+      vm = build-vms.buildVM { }
         [ machine
           { key = "run-in-machine";
             networking.hostName = "client";
