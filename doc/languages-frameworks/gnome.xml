@@ -100,9 +100,16 @@ preFixup = ''
   done
 '';
 </programlisting>
-   Fortunately, there is <package>wrapGAppsHook</package>, that does the wrapping for us. In particular, it works in conjunction with other setup hooks that will populate the variable:
+  </para>
+  <para>
+   Fortunately, there is <package xml:id="ssec-gnome-hooks-wrapgappshook">wrapGAppsHook</package>. It works in conjunction with other setup hooks that populate environment variables, and it will then wrap all executables in <filename>bin</filename> and <filename>libexec</filename> directories using said variables.
+  </para>
+  <para>
+    For convenience, it also adds <package>dconf.lib</package> for a GIO module implementing a GSettings backend using <package>dconf</package>, <package>gtk3</package> for GSettings schemas, and <package>librsvg</package> for GdkPixbuf loader to the closure. In case you are packaging a program without a graphical interface, you might want to use <package xml:id="ssec-gnome-hooks-wrapgappsnoguihook">wrapGAppsNoGuiHook</package>, which runs the same script as <package>wrapGAppsHook</package> but does not bring <package>gtk3</package> and <package>librsvg</package> into the closure.
+  </para>
+  <para>
    <itemizedlist>
-    <listitem xml:id="ssec-gnome-hooks-wrapgappshook">
+    <listitem>
      <para>
       <package>wrapGAppsHook</package> itself will add the package’s <filename>share</filename> directory to <envar>XDG_DATA_DIRS</envar>.
      </para>
@@ -178,7 +185,7 @@ preFixup = ''
     </term>
     <listitem>
      <para>
-      There are no schemas avalable in <envar>XDG_DATA_DIRS</envar>. Temporarily add a random package containing schemas like <package>gsettings-desktop-schemas</package> to <literal>buildInputs</literal>. <link linkend="ssec-gnome-hooks-glib"><package>glib</package></link> and <link linkend="ssec-gnome-hooks-wrapgappshook"><package>wrapGAppsHook</package></link> setup hooks will take care of making the schemas available to application and you will see the actual missing schemas with the <link linkend="ssec-gnome-common-issues-missing-schema">next error</link>. Or you can try looking through the source code for the actual schemas used.
+      There are no schemas available in <envar>XDG_DATA_DIRS</envar>. Temporarily add a random package containing schemas like <package>gsettings-desktop-schemas</package> to <literal>buildInputs</literal>. <link linkend="ssec-gnome-hooks-glib"><package>glib</package></link> and <link linkend="ssec-gnome-hooks-wrapgappshook"><package>wrapGAppsHook</package></link> setup hooks will take care of making the schemas available to application and you will see the actual missing schemas with the <link linkend="ssec-gnome-common-issues-missing-schema">next error</link>. Or you can try looking through the source code for the actual schemas used.
      </para>
     </listitem>
    </varlistentry>
