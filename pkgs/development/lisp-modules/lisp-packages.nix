@@ -99,5 +99,28 @@ let lispPackages = rec {
 
           asdFilesToKeep = ["clx-truetype.asd"];
   };
+  cluffer = buildLispPackage rec {
+    baseName = "cluffer";
+    version = "2018-09-24";
+
+    buildSystems = [ "cluffer-base" "cluffer-simple-buffer" "cluffer-simple-line" "cluffer-standard-buffer" "cluffer-standard-line" "cluffer" ];
+    parasites = [ "cluffer-test" ];
+
+    description = "General purpose text-editor buffer";
+    deps = with pkgs.lispPackages; [
+      acclimation clump
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "robert-strandh";
+      repo = "cluffer";
+      rev = "4aad29c276a58a593064e79972ee4d77cae0af4a";
+      sha256 = "1bcg13g7qb3dr8z50aihdjqa6miz5ivlc9wsj2csgv1km1mak2kj";
+      # date = 2018-09-24T04:45:36+02:00;
+    };
+
+    packageName = "cluffer";
+
+    asdFilesToKeep = [ "cluffer.asd" "cluffer-base.asd" "cluffer-simple-buffer.asd" "cluffer-simple-line.asd" "cluffer-standard-buffer.asd" "cluffer-standard-line.asd" ];
+  };
 };
 in lispPackages
