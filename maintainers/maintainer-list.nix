@@ -176,6 +176,12 @@
     githubId = 1773511;
     name = "Adrien Devresse";
   };
+  addict3d = {
+    email = "nickbathum@gmail.com";
+    github = "addict3d";
+    githubId = 49227;
+    name = "Nick Bathum";
+  };
   adisbladis = {
     email = "adis@blad.is";
     github = "adisbladis";
