@@ -43,7 +43,7 @@ let
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
 
        [org.gnome.shell]
-       favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
+       favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -389,7 +389,6 @@ in
         gnome-music
         gnome-photos
         gnome-screenshot
-        gnome-software
         gnome-system-monitor
         gnome-weather
         nautilus
