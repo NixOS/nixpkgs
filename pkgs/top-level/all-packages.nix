@@ -7594,7 +7594,7 @@ in
 
   sonata = callPackage ../applications/audio/sonata { };
 
-  soundkonverter = kdeApplications.callPackage ../applications/audio/soundkonverter {};
+  soundkonverter = libsForQt5.soundkonverter;
 
   sozu = callPackage ../servers/sozu { };
 
@@ -13920,15 +13920,7 @@ in
 
   judy = callPackage ../development/libraries/judy { };
 
-  kdeFrameworks =
-    let
-      mkFrameworks = import ../development/libraries/kde-frameworks;
-      attrs = {
-        inherit libsForQt5;
-        inherit lib fetchurl;
-      };
-    in
-      recurseIntoAttrs (makeOverridable mkFrameworks attrs);
+  inherit (libsForQt5) kdeFrameworks;
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
@@ -15825,214 +15817,26 @@ in
       inherit llvmPackages_5;
     });
 
-  libsForQt512 = recurseIntoAttrs (lib.makeScope qt512.newScope mkLibsForQt5);
+  libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
+    inherit lib pkgs;
+    qt5 = qt512;
+  });
 
-  libsForQt514 = recurseIntoAttrs (lib.makeScope qt514.newScope mkLibsForQt5);
+  libsForQt514 = recurseIntoAttrs (import ./qt5-packages.nix {
+    inherit lib pkgs;
+    qt5 = qt514;
+  });
 
-  libsForQt515 = recurseIntoAttrs (lib.makeScope qt515.newScope mkLibsForQt5);
+  libsForQt515 = recurseIntoAttrs (import ./qt5-packages.nix {
+    inherit lib pkgs;
+    qt5 = qt515;
+  });
 
   # TODO bump to 5.14 on darwin once it's not broken; see #95199
   qt5 =        if stdenv.hostPlatform.isDarwin then qt512 else qt515;
   libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt512 else libsForQt515;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
-
-  mkLibsForQt5 = self: with self; {
-
-    ### KDE FRAMEWORKS
-
-    inherit (kdeFrameworks.override { libsForQt5 = self; })
-      attica baloo bluez-qt kactivities kactivities-stats
-      karchive kauth kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
-      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative kdelibs4support
-      kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
-      khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
-      kjobwidgets kjs kjsembed kmediaplayer knewstuff knotifications
-      knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
-      kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
-      kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
-      networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet
-      syntax-highlighting syndication threadweaver kirigami2 kholidays kpurpose
-      kcontacts kquickcharts kdoctools kapidox kdesu kinit kded frameworkintegration
-      kdewebkit breeze-icons
-    ;
-
-    ### KDE PLASMA 5
-
-    inherit (plasma5.override { libsForQt5 = self; })
-      kdecoration khotkeys libkscreen libksysguard bluedevil
-      breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover kactivitymanagerd
-      kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5 kinfocenter kmenuedit
-      kscreen kscreenlocker ksshaskpass ksysguard kwallet-pam kwayland-integration
-      kwin kwrited milou oxygen plasma-browser-integration plasma-desktop
-      plasma-integration plasma-nm plasma-pa plasma-thunderbolt plasma-vault plasma-workspace
-      plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
-      systemsettings xdg-desktop-portal-kde
-    ;
-
-    inherit ((plasma5.override { libsForQt5 = self; }).thirdParty)
-      plasma-applet-caffeine-plus kwin-dynamic-workspaces kwin-tiling krohnkite
-    ;
-
-    ### KDE APPLICATIONS
-
-    inherit (kdeApplications.override { libsForQt5 = self; })
-      libkdcraw libkexiv2 libkipi libkomparediff2 libksane libkcddb akonadi-contacts
-      akonadi-calendar akonadi-notes akonadi-search kaccounts-integration kidentitymanagement
-      kontactinterface kldap akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs
-      filelight granatier gwenview k3b kaddressbook kalzium kapptemplate kapman kate katomic
-      kblackbox kblocks kbounce kcachegrind kcalc kcharselect kcolorchooser
-      kdenlive kdf kdialog kdiamond keditbookmarks kfind kfloppy kget kgpg khelpcenter
-      kig kigo killbots kitinerary kleopatra klettres klines kmag kmail kmines kmix kmplot
-      knavalbattle knetwalk knights kollision kolourpaint kompare konsole kontact korganizer
-      kpkpass krdc kreversi krfb kshisen ksquares ksystemlog kteatime ktimer ktouch kturtle
-      kwalletmanager kwave marble minuet okular picmi spectacle yakuake
-    ;
-
-    ### LIBRARIES
-
-    accounts-qt = callPackage ../development/libraries/accounts-qt { };
-
-    alkimia = callPackage ../development/libraries/alkimia { };
-
-    appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
-
-    dxflib = callPackage ../development/libraries/dxflib {};
-
-    drumstick = callPackage ../development/libraries/drumstick { };
-
-    fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
-
-    fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
-
-    qgpgme = callPackage ../development/libraries/gpgme { };
-
-    grantlee = callPackage ../development/libraries/grantlee/5 { };
-
-    qtcurve = callPackage ../data/themes/qtcurve {};
-
-    herqq = callPackage ../development/libraries/herqq { };
-
-    kdb = callPackage ../development/libraries/kdb { };
-
-    kde2-decoration = callPackage ../data/themes/kde2 { };
-
-    kdiagram = callPackage ../development/libraries/kdiagram { };
-
-    kdsoap = callPackage ../development/libraries/kdsoap { };
-
-    kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
-
-    kproperty = callPackage ../development/libraries/kproperty { };
-
-    kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
-
-    kreport = callPackage ../development/libraries/kreport { };
-
-    kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
-
-    ldutils = callPackage ../development/libraries/ldutils { };
-
-    libcommuni = callPackage ../development/libraries/libcommuni { };
-
-    libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
-
-    libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
-
-    libktorrent = callPackage ../development/libraries/libktorrent { };
-
-    liblastfm = callPackage ../development/libraries/liblastfm { };
-
-    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
-
-    packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
-
-    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
-      inherit (darwin.apple_sdk.frameworks) AGL Cocoa Foundation;
-    };
-
-    libqglviewer = callPackage ../development/libraries/libqglviewer {
-      inherit (darwin.apple_sdk.frameworks) AGL;
-    };
-
-    libqtav = callPackage ../development/libraries/libqtav { };
-
-    kpmcore = callPackage ../development/libraries/kpmcore { };
-
-    mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
-
-    openbr = callPackage ../development/libraries/openbr { };
-
-    phonon = callPackage ../development/libraries/phonon { };
-
-    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
-
-    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
-
-    plasma-wayland-protocols = callPackage ../development/libraries/plasma-wayland-protocols { };
-
-    polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
-
-    poppler = callPackage ../development/libraries/poppler {
-      lcms = lcms2;
-      qt5Support = true;
-      suffix = "qt5";
-    };
-
-    poppler_0_61 = callPackage ../development/libraries/poppler/0.61.nix {
-      lcms = lcms2;
-      qt5Support = true;
-      suffix = "qt5";
-    };
-
-    pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
-
-    qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
-
-    qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
-
-    qmltermwidget = callPackage ../development/libraries/qmltermwidget {
-      inherit (darwin.apple_sdk.libs) utmp;
-    };
-
-    qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
-
-    qoauth = callPackage ../development/libraries/qoauth { };
-
-    qscintilla = callPackage ../development/libraries/qscintilla {
-      withQt5 = true;
-    };
-
-    qtutilities = callPackage ../development/libraries/qtutilities { };
-
-    qtinstaller = callPackage ../development/libraries/qtinstaller { };
-
-    qtkeychain = callPackage ../development/libraries/qtkeychain {
-      withQt5 = true;
-    };
-
-    qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
-
-    qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
-
-    qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
-
-    quazip = callPackage ../development/libraries/quazip { };
-
-    qwt = callPackage ../development/libraries/qwt/6.nix { };
-
-    soqt = callPackage ../development/libraries/soqt { };
-
-    telepathy = callPackage ../development/libraries/telepathy/qt { };
-
-    qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
-
-    # Not a library, but we do want it to be built for every qt version there
-    # is, to allow users to choose the right build if needed.
-    sddm = callPackage ../applications/display-managers/sddm { };
-
-    signond = callPackage ../development/libraries/signond {};
-  };
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
@@ -22640,15 +22444,7 @@ in
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
 
-  kdeApplications =
-    let
-      mkApplications = import ../applications/kde;
-      attrs = {
-        inherit libsForQt5;
-        inherit lib fetchurl;
-      };
-    in
-      recurseIntoAttrs (makeOverridable mkApplications attrs);
+  inherit (libsForQt514) kdeApplications;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -26936,6 +26732,8 @@ in
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
 
+  inherit (libsForQt5) plasma5;
+
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
   inherit (callPackages ../applications/misc/redshift {
@@ -26957,22 +26755,6 @@ in
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
-
-  ### DESKTOP ENVIRONMENTS / PLASMA 5
-
-  plasma5 =
-    let
-      mkPlasma5 = import ../desktops/plasma-5;
-      attrs = {
-        # ATTN: The Qt version used in the NixOS Plasma module must be updated
-        # whenever this changes!
-        inherit libsForQt5;
-        inherit lib fetchurl;
-        gconf = gnome2.GConf;
-        inherit gsettings-desktop-schemas;
-      };
-    in
-      recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
 
   ### SCIENCE/CHEMISTY
 
