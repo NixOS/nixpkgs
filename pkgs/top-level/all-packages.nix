@@ -16902,6 +16902,8 @@ in
 
   # PulseAudio daemons
 
+  hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
+
   pulseaudio = callPackage ../servers/pulseaudio {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
