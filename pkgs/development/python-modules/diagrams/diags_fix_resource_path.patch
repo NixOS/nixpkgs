@@ -1,0 +1,20 @@
+diff -u diagrams-0.17.0/diagrams/__init__.py.old diagrams-0.17.0/diagrams/__init__.py
+--- diagrams-0.17.0/diagrams/__init__.py.old	2020-10-09 22:26:31.459051230 -0400
++++ diagrams-0.17.0/diagrams/__init__.py	2020-10-09 22:26:07.970999273 -0400
+@@ -1,5 +1,6 @@
+ import contextvars
+ import os
++import sys
+ import uuid
+ from pathlib import Path
+ from typing import List, Union, Dict
+@@ -412,8 +413,7 @@
+         return uuid.uuid4().hex
+ 
+     def _load_icon(self):
+-        basedir = Path(os.path.abspath(os.path.dirname(__file__)))
+-        return os.path.join(basedir.parent, self._icon_dir, self._icon)
++        return os.path.join(sys.exec_prefix, self._icon_dir, self._icon)
+ 
+ 
+ class Edge:

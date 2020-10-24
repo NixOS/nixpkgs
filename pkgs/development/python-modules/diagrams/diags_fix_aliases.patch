@@ -1,0 +1,11 @@
+diff -u diagrams-0.17.0/diagrams/oci/database.py diagrams-0.17.0/diagrams/oci/database.py
+--- diagrams-0.17.0/diagrams/oci/database.py	2020-08-26 10:58:57.950195800 -0400
++++ diagrams-0.17.0/diagrams/oci/database.py	2020-08-26 10:58:57.950195800 -0400
+@@ -82,7 +82,3 @@
+ 
+ # Aliases
+ 
+-ADB = AutonomousDatabase
+-ADBWhite = AutonomousDatabaseWhite
+-DBService = Databaseservice
+-DBServiceWhite = DatabaseserviceWhite
