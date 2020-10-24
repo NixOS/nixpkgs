@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, callPackage
-, pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
+, pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
@@ -22,12 +22,12 @@ let
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.4.3";
+  version = "2.4.4";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "15a8pnz4wf3464n8dvfzr9ck0vmhlx16ya1y889y3crjagm4ipjn";
+    sha256 = "09lhikaybf57rki62miqcaxxrdg1ni2rj9aj4w9mrbzdv849fyc8";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ in mkDerivation rec {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ pkgconfig cmake ninja python3 wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ pkgconfig cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
@@ -81,8 +81,7 @@ in mkDerivation rec {
 
   postFixup = ''
     # Nuke refs to `tg_owt` which is introduced by `__FILE__` in headers.
-    sed -E "s|($NIX_STORE/)[a-z0-9]{32}(-${tg_owt.name})|\1eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\2|g" \
-      --in-place $out/bin/telegram-desktop
+    remove-references-to -t ${tg_owt} $out/bin/telegram-desktop
 
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
