@@ -255,7 +255,7 @@ rec {
         unset xchg
 
         export tests='${testScript}'
-        ${mkTestDriver qemu}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
+        ${mkTestDriver qemu}/bin/nixos-test-driver --keep-vm-state ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
 
     in
