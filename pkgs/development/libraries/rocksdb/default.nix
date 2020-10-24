@@ -26,7 +26,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ bzip2 lz4 snappy zlib zstd ] ++ stdenv.lib.optional enableJemalloc jemalloc;
+  propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
+
+  buildInputs = stdenv.lib.optional enableJemalloc jemalloc;
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
 
