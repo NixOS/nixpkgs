@@ -3,6 +3,7 @@
 , ninja
 , gettext
 , fetchurl
+, fetchpatch
 , evince
 , gjs
 , pkgconfig
@@ -28,6 +29,7 @@
 , desktop-file-utils
 , wrapGAppsHook
 , python3
+, appstream-glib
 , gsettings-desktop-schemas
 }:
 
@@ -39,6 +41,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1qph567mapg3s1a26k7b8y57g9bklhj2mh8xm758z9zkms20xafq";
   };
+
+  patches = [
+    # Fix inkscape 1.0 usage
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-documents/commit/0f55a18c40a61e6ae4ec4652604775f139892350.diff";
+      sha256 = "1yrisq69dl1dn7639drlbza20a5ic6xg04ksr9iq4sxdx3xj3d8s";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -52,6 +62,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
     wrapGAppsHook
     python3
+    appstream-glib
 
     # building getting started
     inkscape
@@ -92,6 +103,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.bin}/bin/gapplication"
   '';
 
+  preConfigure =
+    # To silence inkscape warnings regarding profile directory
+  ''
+    export INKSCAPE_PROFILE_DIR="$(mktemp -d)"
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
@@ -100,6 +117,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    broken = true; # Tracker 3 not supported and it cannot start Tracker 2.
     homepage = "https://wiki.gnome.org/Apps/Documents";
     description = "Document manager application designed to work with GNOME 3";
     maintainers = teams.gnome.members;

@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iagno";
-  version = "3.36.4";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1fh2cvyqbz8saf2wij0bz2r9bja2k4gy6fqvbvig4gv0lx66gl29";
+    sha256 = "097dw1l92l73xah9l56ka5mi3dvx48ffpiv33ni5i5rqw0ng7fc4";
   };
 
   patches = [

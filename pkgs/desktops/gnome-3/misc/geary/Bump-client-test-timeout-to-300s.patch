@@ -1,0 +1,10 @@
+diff --git a/test/meson.build b/test/meson.build
+index 6ea5e27a..450c03e3 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -167,4 +167,4 @@ test_integration_bin = executable('test-integration',
+ )
+ 
+ test('engine-tests', test_engine_bin)
+-test('client-tests', test_client_bin)
++test('client-tests', test_client_bin, timeout: 300)

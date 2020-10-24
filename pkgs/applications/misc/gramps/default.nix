@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
+{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
   pango, gobject-introspection, wrapGAppsHook, gettext,
 # Optional packages:
  enableOSM ? true, osm-gps-map,
@@ -13,7 +13,7 @@ in buildPythonApplication rec {
   pname = "gramps";
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
-  buildInputs = [ intltool gtk3 gobject-introspection pango gnome3.gexiv2 ]
+  buildInputs = [ intltool gtk3 gobject-introspection pango gexiv2 ]
     # Map support
     ++ stdenv.lib.optional enableOSM osm-gps-map
     # Graphviz support

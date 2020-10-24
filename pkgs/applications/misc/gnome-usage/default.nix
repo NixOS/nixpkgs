@@ -14,15 +14,16 @@
 , libdazzle
 , gnome3
 , tracker
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-usage";
-  version = "3.33.2";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0w3ppfaf15il8mad64qyc9hj1rmlvzs5dyzrxhq7r50k4kyiwmk4";
+    sha256 = "0mqs39yi2cqwkzlmmgzrszsva5hbdpws6zk4lbi4w2cjzl185mcl";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     libdazzle
     libgtop
     tracker
+    libhandy
   ];
 
   postPatch = ''

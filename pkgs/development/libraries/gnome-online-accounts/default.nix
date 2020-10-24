@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.36.0";
+  version = "3.37.90";
 
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "15j3xh93rqjphjw56j00g40m684nr4zy3hs7dsngm6a21l87fkfd";
+    sha256 = "05ahib6bjbfyj2gbqjijzg9i7x1q0r67hyph0fbrgnnadlpk2cv8";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
