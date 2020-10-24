@@ -1412,6 +1412,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "hu_dot_dwim_dot_defclass-star" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."hu_dot_dwim_dot_defclass-star" or (x: {}))
+       (import ./quicklisp-to-nix-output/hu_dot_dwim_dot_defclass-star.nix {
+         inherit fetchurl;
+           "hu_dot_dwim_dot_asdf" = quicklisp-to-nix-packages."hu_dot_dwim_dot_asdf";
+       }));
+
+
   "clump" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."clump" or (x: {}))

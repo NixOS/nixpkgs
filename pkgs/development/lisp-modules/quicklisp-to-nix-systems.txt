@@ -158,3 +158,4 @@ trivial-main-thread
 cl-webkit2
 acclimation
 clump
+hu.dwim.defclass-star
