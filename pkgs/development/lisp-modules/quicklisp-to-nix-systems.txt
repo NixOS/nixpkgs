@@ -35,6 +35,7 @@ cl-json
 cl-l10n
 cl-libuv
 cl-mysql
+cl-paths-ttf
 cl-pdf
 cl-ppcre
 cl-ppcre-template
@@ -62,7 +63,6 @@ clsql-postgresql-socket
 clsql-sqlite3
 clss
 clx
-clx-truetype
 command-line-arguments
 css-lite
 css-selectors

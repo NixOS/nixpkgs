@@ -32,9 +32,9 @@ in
       '';
       preInstall = ''
         type gcc
-        mkdir -p "$out/lib/common-lisp/" 
+        mkdir -p "$out/lib/common-lisp/"
         cp -r . "$out/lib/common-lisp/cl-fuse/"
-        "gcc" "-x" "c" "$out/lib/common-lisp/cl-fuse/fuse-launcher.c-minus" "-fPIC" "--shared" "-lfuse" "-o" "$out/lib/common-lisp/cl-fuse/libfuse-launcher.so"        
+        "gcc" "-x" "c" "$out/lib/common-lisp/cl-fuse/fuse-launcher.c-minus" "-fPIC" "--shared" "-lfuse" "-o" "$out/lib/common-lisp/cl-fuse/libfuse-launcher.so"
       '';
     };
   };
@@ -134,15 +134,15 @@ $out/lib/common-lisp/query-fs"
         @@ -155,7 +155,7 @@
                           ,(unique-dir-name)))
             (user-homedir-pathname)))
-         
+
         -(defvar *fasl-directory* (default-fasl-dir)
         +(defvar *fasl-directory* #P"$out/lib/common-lisp/swank/fasl/"
            "The directory where fasl files should be placed.")
-         
+
          (defun binary-pathname (src-pathname binary-dir)
         @@ -277,12 +277,7 @@
                           (contrib-dir src-dir))))
-         
+
          (defun delete-stale-contrib-fasl-files (swank-files contrib-files fasl-dir)
         -  (let ((newest (reduce #'max (mapcar #'file-write-date swank-files))))
         -    (dolist (src contrib-files)
@@ -151,7 +151,7 @@ $out/lib/common-lisp/query-fs"
         -                   (<= (file-write-date fasl) newest))
         -          (delete-file fasl))))))
         +  (declare (ignore swank-files contrib-files fasl-dir)))
-         
+
          (defun compile-contribs (&key (src-dir (contrib-dir *source-directory*))
                                     (fasl-dir (contrib-dir *fasl-directory*))
         EOD
@@ -159,9 +159,6 @@ $out/lib/common-lisp/query-fs"
     };
   };
   uiop = x: {
-    parasites = (x.parasites or []) ++ [
-      "uiop/version"
-    ];
     overrides = y: (x.overrides y) // {
       postInstall = ((x.overrides y).postInstall or "") + ''
         cp -r "${pkgs.asdf}/lib/common-lisp/asdf/uiop/contrib" "$out/lib/common-lisp/uiop"
@@ -217,5 +214,17 @@ $out/lib/common-lisp/query-fs"
         sed -i -e 's/:initform "Unknown" /:initform #:|Unknown| /' backends.lisp
       '';
     };
+  };
+  dbi = x: {
+    parasites = [];
+    deps = pkgs.lib.filter
+      (x:
+        (
+          x.name != quicklisp-to-nix-packages.dbd-mysql.name &&
+          x.name != quicklisp-to-nix-packages.dbd-postgres.name &&
+          x.name != quicklisp-to-nix-packages.dbd-sqlite3.name &&
+          x.name != quicklisp-to-nix-packages.dbi-test.name &&
+          true))
+      x.deps;
   };
 }

@@ -24,8 +24,8 @@ let lispPackages = rec {
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "https://beta.quicklisp.org/dist/quicklisp/2019-12-27/distinfo.txt";
-        sha256 = "0fz0k7ydmddxvxyid0nkifap21n6bxap602qhqsac2dxglv3i4cs";
+        url = "https://beta.quicklisp.org/dist/quicklisp/2020-10-16/distinfo.txt";
+        sha256 = "sha256:090xjcnyqcv8az9n1a7m0f6vzz2nwcncy95ha7ixb7fnd2rj1n65";
       };
       buildPhase = '' true; '';
       postInstall = ''
@@ -76,6 +76,28 @@ let lispPackages = rec {
       cp quicklisp-to-nix $out/bin
     '';
     dontStrip = true;
+  };
+
+  clx-truetype = buildLispPackage rec {
+          baseName = "clx-truetype";
+          version = ''20160825-git'';
+
+          buildSystems = [ "clx-truetype" ];
+          parasites = [ "clx-truetype-test" ];
+
+          description = ''clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.'';
+          deps = with pkgs.lispPackages; [
+                  alexandria bordeaux-threads cl-aa cl-fad cl-paths cl-paths-ttf cl-store
+                          cl-vectors clx trivial-features zpb-ttf
+          ];
+          src = pkgs.fetchurl {
+                  url = ''http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz'';
+                  sha256 = ''0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67'';
+          };
+
+          packageName = "clx-truetype";
+
+          asdFilesToKeep = ["clx-truetype.asd"];
   };
 };
 in lispPackages

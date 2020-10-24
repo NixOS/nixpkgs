@@ -5,7 +5,7 @@ rec {
 
   description = ''HTTP cookie manager'';
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cl-fad" args."cl-ppcre" args."cl-utilities" args."local-time" args."proc-parse" args."quri" args."split-sequence" args."trivial-features" ];
+  deps = [ args."alexandria" args."babel" args."cl-ppcre" args."cl-utilities" args."local-time" args."proc-parse" args."quri" args."split-sequence" args."trivial-features" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/cl-cookie/2019-10-07/cl-cookie-20191007-git.tgz'';
@@ -22,14 +22,13 @@ rec {
     http://beta.quicklisp.org/archive/cl-cookie/2019-10-07/cl-cookie-20191007-git.tgz
     MD5 37595a6705fdd77415b859aea90d30bc NAME cl-cookie FILENAME cl-cookie DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
-     (NAME bordeaux-threads FILENAME bordeaux-threads)
-     (NAME cl-fad FILENAME cl-fad) (NAME cl-ppcre FILENAME cl-ppcre)
+     (NAME cl-ppcre FILENAME cl-ppcre)
      (NAME cl-utilities FILENAME cl-utilities)
      (NAME local-time FILENAME local-time)
      (NAME proc-parse FILENAME proc-parse) (NAME quri FILENAME quri)
      (NAME split-sequence FILENAME split-sequence)
      (NAME trivial-features FILENAME trivial-features))
     DEPENDENCIES
-    (alexandria babel bordeaux-threads cl-fad cl-ppcre cl-utilities local-time
-     proc-parse quri split-sequence trivial-features)
+    (alexandria babel cl-ppcre cl-utilities local-time proc-parse quri
+     split-sequence trivial-features)
     VERSION 20191007-git SIBLINGS (cl-cookie-test) PARASITES NIL) */
