@@ -21616,6 +21616,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
 
+  spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
+
   spotifyd = callPackage ../applications/audio/spotifyd {
     withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
