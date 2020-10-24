@@ -156,3 +156,5 @@ cl-cffi-gtk
 enchant
 trivial-main-thread
 cl-webkit2
+acclimation
+clump
