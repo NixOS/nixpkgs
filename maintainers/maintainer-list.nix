@@ -6413,6 +6413,12 @@
     githubId = 4728903;
     name = "Owen Lynch";
   };
+  omasanori = {
+    email = "167209+omasanori@users.noreply.github.com";
+    github = "omasanori";
+    githubId = 167209;
+    name = "Masanori Ogino";
+  };
   omnipotententity = {
     email = "omnipotententity@gmail.com";
     github = "omnipotententity";
