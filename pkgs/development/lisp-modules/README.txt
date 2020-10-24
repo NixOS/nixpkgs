@@ -5,7 +5,7 @@ Want to add a package?  There are 3 simple steps!
   parameters to preserve some data between runs. For example, it is very
   useful when you add new packages with native dependencies and fail to
   specify the native dependencies correctly the first time.
-  (Might be nice to ensure the cache directoris exist)
+  (Might be nice to ensure the cache directories exist)
 3. Add native libraries and whatever else is needed to quicklisp-to-nix-overrides.nix.
 4. Sometimes there are problems with loading implementation-provided systems.
   In this case you might need to add more systems in the implementation's (so
