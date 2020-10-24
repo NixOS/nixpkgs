@@ -23,8 +23,10 @@ in writeScript "update-${name}" ''
   set -eux
   pushd ${basePath}
 
+  HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
-  gpg --keyserver hkps://gpg.mozilla.org --recv-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
+
+  gpg --import ${./mozilla.asc}
 
   tmpfile=`mktemp`
   url=${baseUrl}
