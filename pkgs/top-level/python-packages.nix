@@ -3516,6 +3516,8 @@ in {
 
   lxml = callPackage ../development/python-modules/lxml { inherit (pkgs) libxml2 libxslt zlib; };
 
+  lyricwikia = callPackage ../development/python-modules/lyricwikia { };
+
   lz4 = self.python-lz4; # alias 2018-12-05
 
   lzstring = callPackage ../development/python-modules/lzstring { };
