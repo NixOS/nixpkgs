@@ -667,14 +667,6 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "cl-paths" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."cl-paths" or (x: {}))
-       (import ./quicklisp-to-nix-output/cl-paths.nix {
-         inherit fetchurl;
-       }));
-
-
   "cl-aa" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-aa" or (x: {}))
@@ -706,6 +698,14 @@ let quicklisp-to-nix-packages = rec {
     ((f: x: (x // (f x)))
        (qlOverrides."zpb-ttf" or (x: {}))
        (import ./quicklisp-to-nix-output/zpb-ttf.nix {
+         inherit fetchurl;
+       }));
+
+
+  "cl-paths" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-paths" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-paths.nix {
          inherit fetchurl;
        }));
 
@@ -2764,6 +2764,16 @@ let quicklisp-to-nix-packages = rec {
          inherit fetchurl;
            "iterate" = quicklisp-to-nix-packages."iterate";
            "uiop" = quicklisp-to-nix-packages."uiop";
+           "zpb-ttf" = quicklisp-to-nix-packages."zpb-ttf";
+       }));
+
+
+  "cl-paths-ttf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-paths-ttf" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-paths-ttf.nix {
+         inherit fetchurl;
+           "cl-paths" = quicklisp-to-nix-packages."cl-paths";
            "zpb-ttf" = quicklisp-to-nix-packages."zpb-ttf";
        }));
 
