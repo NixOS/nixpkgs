@@ -18621,6 +18621,8 @@ in
 
   sysprof = callPackage ../development/tools/profiling/sysprof { };
 
+  libsysprof-capture = callPackage ../development/tools/profiling/sysprof/capture.nix { };
+
   sysklogd = callPackage ../os-specific/linux/sysklogd { };
 
   syslinux = callPackage ../os-specific/linux/syslinux { };
