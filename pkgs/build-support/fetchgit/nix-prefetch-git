@@ -148,7 +148,17 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
-    clean_git fetch -t ${builder:+--progress} origin || return 1
+    if [[ -n "$deepClone" ]]; then
+        clean_git fetch -t ${builder:+--progress} origin || return 1
+        # Try to shallow fetch specific hash if it doesn't exist in any ref.
+        # For example, if a ref was force-pushed but the server still exposes the old hash.
+        clean_git fetch ${builder:+--progress} --depth 1 origin "$hash" 2> /dev/null
+    else
+        # Try to shallow fetch specific hash if server supports uploadpack.allowReachableSha1InWant.
+        # Fallback to full fetch on failure.
+        clean_git fetch ${builder:+--progress} --depth 1 origin "$hash" 2> /dev/null ||
+        clean_git fetch -t ${builder:+--progress} origin || return 1
+    fi
 
     local object_type=$(git cat-file -t "$hash")
     if [[ "$object_type" == "commit" ]]; then
