@@ -90,6 +90,14 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "metatilities-base" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."metatilities-base" or (x: {}))
+       (import ./quicklisp-to-nix-output/metatilities-base.nix {
+         inherit fetchurl;
+       }));
+
+
   "mgl-pax" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."mgl-pax" or (x: {}))
@@ -1248,6 +1256,60 @@ let quicklisp-to-nix-packages = rec {
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
            "usocket" = quicklisp-to-nix-packages."usocket";
            "usocket-server" = quicklisp-to-nix-packages."usocket-server";
+       }));
+
+
+  "trivial-package-local-nicknames" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."trivial-package-local-nicknames" or (x: {}))
+       (import ./quicklisp-to-nix-output/trivial-package-local-nicknames.nix {
+         inherit fetchurl;
+       }));
+
+
+  "osicat" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."osicat" or (x: {}))
+       (import ./quicklisp-to-nix-output/osicat.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cffi-grovel" = quicklisp-to-nix-packages."cffi-grovel";
+           "cffi-toolchain" = quicklisp-to-nix-packages."cffi-toolchain";
+           "rt" = quicklisp-to-nix-packages."rt";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+       }));
+
+
+  "moptilities" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."moptilities" or (x: {}))
+       (import ./quicklisp-to-nix-output/moptilities.nix {
+         inherit fetchurl;
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+       }));
+
+
+  "cl-containers" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-containers" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-containers.nix {
+         inherit fetchurl;
+           "asdf-system-connections" = quicklisp-to-nix-packages."asdf-system-connections";
+           "metatilities-base" = quicklisp-to-nix-packages."metatilities-base";
+           "moptilities" = quicklisp-to-nix-packages."moptilities";
+       }));
+
+
+  "chanl" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."chanl" or (x: {}))
+       (import ./quicklisp-to-nix-output/chanl.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "fiveam" = quicklisp-to-nix-packages."fiveam";
        }));
 
 
