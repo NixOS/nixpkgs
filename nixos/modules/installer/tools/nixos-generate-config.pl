@@ -625,6 +625,10 @@ EOF
 
         my $networkingDhcpConfig = generateNetworkingDhcpConfig();
 
+        (my $desktopConfiguration = <<EOF)=~s/^/  /gm;
+@desktopConfiguration@
+EOF
+
         write_file($fn, <<EOF);
 @configuration@
 EOF
