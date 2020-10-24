@@ -1,6 +1,11 @@
 Want to add a package?  There are 3 simple steps!
 1. Add the needed system names to quicklisp-to-nix-systems.txt.
 2. cd <path to quicklisp-to-nix-systems.txt> ; nix-shell --run 'quicklisp-to-nix .'
+  You might want to specify also the --cacheSystemInfoDir and --cacheFaslDir
+  parameters to preserve some data between runs. For example, it is very
+  useful when you add new packages with native dependencies and fail to
+  specify the native dependencies correctly the first time.
+  (Might be nice to ensure the cache directoris exist)
 3. Add native libraries and whatever else is needed to quicklisp-to-nix-overrides.nix.
 
 To update to a more recent quicklisp dist modify
