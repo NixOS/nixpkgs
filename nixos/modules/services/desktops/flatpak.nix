@@ -15,6 +15,18 @@ in {
   options = {
     services.flatpak = {
       enable = mkEnableOption "flatpak";
+
+      guiPackages = mkOption {
+        internal = true;
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.gnome3.gnome-software ]";
+        description = ''
+          Packages that provide an interface for flatpak
+          (like gnome-software) that will be automatically available
+          to all users when flatpak is enabled.
+        '';
+      };
     };
   };
 
@@ -28,7 +40,7 @@ in {
       }
     ];
 
-    environment.systemPackages = [ pkgs.flatpak ];
+    environment.systemPackages = [ pkgs.flatpak ] ++ cfg.guiPackages;
 
     services.dbus.packages = [ pkgs.flatpak ];
 
