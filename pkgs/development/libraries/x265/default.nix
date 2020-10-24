@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_SHARED=ON"
     "-DHIGH_BIT_DEPTH=OFF"
     "-DENABLE_HDR10_PLUS=OFF"
-  ] ++ stdenv.lib.optionals is64bit [
+  ] ++ stdenv.lib.optionals (is64bit && !(stdenv.isAarch64 && stdenv.isLinux)) [
     "-DEXTRA_LIB=${libx265-10}/lib/libx265.a;${libx265-12}/lib/libx265.a"
     "-DLINKED_10BIT=ON"
     "-DLINKED_12BIT=ON"
