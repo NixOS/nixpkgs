@@ -6101,7 +6101,7 @@ in
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
-  p7zip = callPackage ../tools/archivers/p7zip { enableUnfree = config.allowUnfree; };
+  p7zip = callPackage ../tools/archivers/p7zip { removeUnfreeCode = !config.allowUnfree; };
 
   packagekit = callPackage ../tools/package-management/packagekit { };
 
