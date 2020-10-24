@@ -2,7 +2,7 @@
 , glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd
 , gtk3, gsettings-desktop-schemas, gnome-desktop, libxmlb, gnome-online-accounts
 , json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils
-, sysprof }:
+, libsysprof-capture }:
 
 let
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gtk3 glib packagekit appstream-glib libsoup
     gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
-    polkit flatpak libxmlb gnome-online-accounts sysprof
+    polkit flatpak libxmlb gnome-online-accounts libsysprof-capture
   ] ++ stdenv.lib.optionals withFwupd [
     fwupd
   ];
