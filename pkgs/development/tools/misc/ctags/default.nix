@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/ctags/code/trunk";
     rev = revision;
-    sha256 = "0jmbkrmscbl64j71qffcc39x005jrmphx8kirs1g2ws44wil39hf";
+    sha256 = "0g9pgnrawf10c26y0xn832skf2ff30scdk3gj12ky0lhg1sa9bfm";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
