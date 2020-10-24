@@ -90,6 +90,24 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "clump-binary-tree" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clump-binary-tree" or (x: {}))
+       (import ./quicklisp-to-nix-output/clump-binary-tree.nix {
+         inherit fetchurl;
+           "acclimation" = quicklisp-to-nix-packages."acclimation";
+       }));
+
+
+  "clump-2-3-tree" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clump-2-3-tree" or (x: {}))
+       (import ./quicklisp-to-nix-output/clump-2-3-tree.nix {
+         inherit fetchurl;
+           "acclimation" = quicklisp-to-nix-packages."acclimation";
+       }));
+
+
   "simple-tasks" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."simple-tasks" or (x: {}))
@@ -1391,6 +1409,25 @@ let quicklisp-to-nix-packages = rec {
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
            "usocket" = quicklisp-to-nix-packages."usocket";
            "usocket-server" = quicklisp-to-nix-packages."usocket-server";
+       }));
+
+
+  "clump" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clump" or (x: {}))
+       (import ./quicklisp-to-nix-output/clump.nix {
+         inherit fetchurl;
+           "acclimation" = quicklisp-to-nix-packages."acclimation";
+           "clump-2-3-tree" = quicklisp-to-nix-packages."clump-2-3-tree";
+           "clump-binary-tree" = quicklisp-to-nix-packages."clump-binary-tree";
+       }));
+
+
+  "acclimation" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."acclimation" or (x: {}))
+       (import ./quicklisp-to-nix-output/acclimation.nix {
+         inherit fetchurl;
        }));
 
 
