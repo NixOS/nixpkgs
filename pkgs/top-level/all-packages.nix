@@ -22687,6 +22687,8 @@ in
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
+  opustags = callPackage ../applications/audio/opustags { };
+
   opusTools = callPackage ../applications/audio/opus-tools { };
 
   orpie = callPackage ../applications/misc/orpie { };
