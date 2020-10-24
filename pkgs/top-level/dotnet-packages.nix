@@ -328,7 +328,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   Boogie = buildDotnetPackage rec {
     baseName = "Boogie";
     version = "2.4.1";
-    name = "${baseName}-${version}";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
@@ -380,18 +379,21 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   Dafny = let
-    z3 = pkgs.z3.overrideAttrs (oldAttrs: with oldAttrs; rec {
+    z3 = pkgs.z3.overrideAttrs (oldAttrs: rec {
       version = "4.8.4";
-      name = "${pname}-${version}";
+      name = "z3-${version}";
 
       src = fetchFromGitHub {
         owner = "Z3Prover";
-        repo = pname;
+        repo = "z3";
         rev = "z3-${version}";
         sha256 = "014igqm5vwswz0yhz0cdxsj3a6dh7i79hvhgc3jmmmz3z0xm1gyn";
       };
     });
-    boogie = assert dotnetPackages.Boogie.version == "2.4.1"; dotnetPackages.Boogie;
+    self' = pkgs.dotnetPackages.override ({
+      pkgs = pkgs // { inherit z3; };
+    });
+    Boogie = assert self'.Boogie.version == "2.4.1"; self'.Boogie;
   in buildDotnetPackage rec {
     baseName = "Dafny";
     version = "2.3.0";
@@ -428,7 +430,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     # Boogie as an input is not enough. Boogie libraries need to be at the same
     # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
     postFixup = ''
-      for lib in ${boogie}/lib/dotnet/${boogie.baseName}/*.dll{,.mdb}; do
+      for lib in ${Boogie}/lib/dotnet/${Boogie.baseName}/*.dll{,.mdb}; do
         ln -s $lib $out/lib/dotnet/${baseName}/
       done
       # We generate our own executable scripts
