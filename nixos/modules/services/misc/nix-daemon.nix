@@ -45,7 +45,7 @@ let
         trusted-substituters = ${toString cfg.trustedBinaryCaches}
         trusted-public-keys = ${toString cfg.binaryCachePublicKeys}
         auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
-        require-sigs = ${if cfg.requireSignedBinaryCaches then "true" else "false"}
+        require-sigs = ${boolToString cfg.requireSignedBinaryCaches}
         trusted-users = ${toString cfg.trustedUsers}
         allowed-users = ${toString cfg.allowedUsers}
         ${optionalString (!cfg.distributedBuilds) ''

@@ -129,7 +129,7 @@ stdenv.mkDerivation {
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
-    "-Dgallium-nine=${if enableGalliumNine then "true" else "false"}" # Direct3D in Wine
+    "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
@@ -229,7 +229,7 @@ stdenv.mkDerivation {
     inherit (libglvnd) driverLink;
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "An open source 3D graphics library";
     longDescription = ''
       The Mesa project began as an open-source implementation of the OpenGL
