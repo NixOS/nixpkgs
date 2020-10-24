@@ -200,6 +200,7 @@ rec {
     , machine
     , preBuild ? ""
     , postBuild ? ""
+    , qemu ? pkgs.qemu_test
     , ... # ???
     }:
     let
@@ -254,7 +255,7 @@ rec {
         unset xchg
 
         export tests='${testScript}'
-        ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
+        ${mkTestDriver qemu}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
 
     in
