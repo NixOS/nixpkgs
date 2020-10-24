@@ -42,6 +42,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
+    broken = true; # download links got removed
     description = "Convert documents to .mobi for use with Amazon Kindle";
     homepage = "https://www.amazon.com/gp/feature.html?docId=1000765211";
     license = licenses.unfree;
