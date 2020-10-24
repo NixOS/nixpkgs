@@ -99,5 +99,95 @@ let lispPackages = rec {
 
           asdFilesToKeep = ["clx-truetype.asd"];
   };
+  cluffer = buildLispPackage rec {
+    baseName = "cluffer";
+    version = "2018-09-24";
+
+    buildSystems = [ "cluffer-base" "cluffer-simple-buffer" "cluffer-simple-line" "cluffer-standard-buffer" "cluffer-standard-line" "cluffer" ];
+    parasites = [ "cluffer-test" ];
+
+    description = "General purpose text-editor buffer";
+    deps = with pkgs.lispPackages; [
+      acclimation clump
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "robert-strandh";
+      repo = "cluffer";
+      rev = "4aad29c276a58a593064e79972ee4d77cae0af4a";
+      sha256 = "1bcg13g7qb3dr8z50aihdjqa6miz5ivlc9wsj2csgv1km1mak2kj";
+      # date = 2018-09-24T04:45:36+02:00;
+    };
+
+    packageName = "cluffer";
+
+    asdFilesToKeep = [ "cluffer.asd" "cluffer-base.asd" "cluffer-simple-buffer.asd" "cluffer-simple-line.asd" "cluffer-standard-buffer.asd" "cluffer-standard-line.asd" ];
+  };
+  nyxt = pkgs.lispPackages.buildLispPackage rec {
+    baseName = "nyxt";
+    version = "2020-10-23";
+
+    buildSystems = [ "nyxt" "nyxt-ext" ];
+
+    description = "Browser";
+    deps = with pkgs.lispPackages; [
+      alexandria
+      bordeaux-threads
+      chanl
+      cl-annot
+      cl-ansi-text
+      cl-containers
+      cl-css
+      cl-json
+      cl-markup
+      cl-ppcre
+      cl-ppcre-unicode
+      cl-prevalence
+      cl-webkit2
+      closer-mop
+      cluffer
+      dbus
+      dexador
+      enchant
+      fset
+      hu_dot_dwim_dot_defclass-star
+      ironclad
+      local-time
+      log4cl
+      lparallel
+      mk-string-metrics
+      osicat
+      parenscript
+      plump
+      prove-asdf
+      quri
+      serapeum
+      sqlite
+      str
+      swank
+      trivia
+      trivial-clipboard
+      trivial-features
+      trivial-package-local-nicknames
+      trivial-types
+      unix-opts
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nyxt";
+      rev = "f744af5233b3636460ce71650de2b0c7dcb9fa8e";
+      sha256 = "1m4jic7nbm2jmxlm8k0zqg62z91g2f2s86by086brgfw056idjmz";
+      # date = 2020-10-23T19:06:04+02:00;
+    };
+
+    packageName = "nyxt";
+
+    asdFilesToKeep = [ "nyxt.asd" "nyxt-ext.asd" ];
+
+    propagatedBuildInputs = [
+      pkgs.libressl.out
+      pkgs.webkitgtk
+      pkgs.sbcl
+    ];
+  };
 };
 in lispPackages
