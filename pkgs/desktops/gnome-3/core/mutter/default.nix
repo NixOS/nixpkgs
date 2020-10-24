@@ -32,7 +32,7 @@
 , xorgserver
 , python3
 , wrapGAppsHook
-, sysprof
+, libsysprof-capture
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
@@ -110,7 +110,7 @@ let self = stdenv.mkDerivation rec {
     libxkbfile
     pango
     pipewire
-    sysprof
+    libsysprof-capture
     xkeyboard_config
     xwayland
     wayland-protocols
