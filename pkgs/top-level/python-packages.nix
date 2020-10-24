@@ -7816,6 +7816,8 @@ in {
 
   zigpy-zigate = callPackage ../development/python-modules/zigpy-zigate { };
 
+  zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
+
   zimports = callPackage ../development/python-modules/zimports { };
 
   zipfile36 = callPackage ../development/python-modules/zipfile36 { };
