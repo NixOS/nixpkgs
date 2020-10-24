@@ -159,9 +159,6 @@ $out/lib/common-lisp/query-fs"
     };
   };
   uiop = x: {
-    parasites = (x.parasites or []) ++ [
-      "uiop/version"
-    ];
     overrides = y: (x.overrides y) // {
       postInstall = ((x.overrides y).postInstall or "") + ''
         cp -r "${pkgs.asdf}/lib/common-lisp/asdf/uiop/contrib" "$out/lib/common-lisp/uiop"
