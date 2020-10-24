@@ -68,13 +68,18 @@ let
   bwrapCmd = { initArgs ? "" }: ''
     blacklist=(/nix /dev /proc /etc)
     ro_mounts=()
+    symlinks=()
     for i in ${env}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
-        continue
+        :
+      elif [[ -L $i ]]; then
+        symlinks+=(--symlink "$(readlink "$i")" "$path")
+        blacklist+=("$path")
+      else
+        ro_mounts+=(--ro-bind "$i" "$path")
+        blacklist+=("$path")
       fi
-      ro_mounts+=(--ro-bind "$i" "$path")
-      blacklist+=("$path")
     done
 
     if [[ -d ${env}/etc ]]; then
@@ -114,6 +119,7 @@ let
       --ro-bind /nix /nix
       ${etcBindFlags}
       "''${ro_mounts[@]}"
+      "''${symlinks[@]}"
       "''${auto_mounts[@]}"
       ${init runScript}/bin/${name}-init ${initArgs}
     )
