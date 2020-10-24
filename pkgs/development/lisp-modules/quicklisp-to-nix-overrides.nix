@@ -233,4 +233,5 @@ $out/lib/common-lisp/query-fs"
   cl-cffi-gtk-pango = addNativeLibs [pkgs.pango];
   cl-cffi-gtk-gdk = addNativeLibs [pkgs.gtk3];
   cl-cffi-gtk-gtk3 = addNativeLibs [pkgs.gtk3];
+  cl-webkit2 = addNativeLibs [pkgs.webkitgtk];
 }
