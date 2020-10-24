@@ -77,5 +77,27 @@ let lispPackages = rec {
     '';
     dontStrip = true;
   };
+
+  clx-truetype = buildLispPackage rec {
+          baseName = "clx-truetype";
+          version = ''20160825-git'';
+
+          buildSystems = [ "clx-truetype" ];
+          parasites = [ "clx-truetype-test" ];
+
+          description = ''clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.'';
+          deps = with pkgs.lispPackages; [
+                  alexandria bordeaux-threads cl-aa cl-fad cl-paths cl-paths-ttf cl-store
+                          cl-vectors clx trivial-features zpb-ttf
+          ];
+          src = pkgs.fetchurl {
+                  url = ''http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz'';
+                  sha256 = ''0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67'';
+          };
+
+          packageName = "clx-truetype";
+
+          asdFilesToKeep = ["clx-truetype.asd"];
+  };
 };
 in lispPackages
