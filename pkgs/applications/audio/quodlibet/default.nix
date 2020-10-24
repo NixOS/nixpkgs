@@ -83,7 +83,7 @@ python3.pkgs.buildPythonApplication rec {
       & internet radio, and all major audio formats.
     '';
 
-    maintainers = with maintainers; [ coroa sauyon ];
+    maintainers = with maintainers; [ coroa pbogdan ];
     homepage = "https://quodlibet.readthedocs.io/en/latest/";
   };
 }
