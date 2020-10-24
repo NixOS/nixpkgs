@@ -28,6 +28,22 @@
    </para>
   </section>
 
+  <section xml:id="ssec-gnome-gdk-pixbuf-loaders">
+   <title>GdkPixbuf loaders</title>
+
+   <para>
+    GTK applications typically use <link xlink:href="https://developer.gnome.org/gdk-pixbuf/stable/">GdkPixbuf</link> to load images. But <package>gdk-pixbuf</package> package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring to use third-party loader modules for other formats. This is especially painful since GTK itself includes SVG icons, which cannot be rendered without a loader provided by <package>librsvg</package>.
+   </para>
+
+   <para>
+    Unlike other libraries mentioned in this section, GdkPixbuf only supports a single value in its controlling environment variable <envar>GDK_PIXBUF_MODULE_FILE</envar>. It is supposed to point to a cache file containing information about the available loaders. Each loader package will contain a <filename>lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</filename> file describing the default loaders in <package>gdk-pixbuf</package> package plus the loader contained in the package itself. If you want to use multiple third-party loaders, you will need to create your own cache file manually. Fortunately, this is pretty rare as <link xlink:href="https://gitlab.gnome.org/federico/gdk-pixbuf-survey/blob/master/src/modules.md">not many loaders exist</link>.
+   </para>
+
+   <para>
+    <package>gdk-pixbuf</package> contains <link linkend="ssec-gnome-hooks-gdk-pixbuf">a setup hook</link> that sets <envar>GDK_PIXBUF_MODULE_FILE</envar> from dependencies but as mentioned in further section, it is pretty limited. Loaders should propagate this setup hook.
+   </para>
+  </section>
+
   <section xml:id="ssec-gnome-icons">
    <title>Icons</title>
 
@@ -117,6 +133,11 @@ preFixup = ''
     <listitem xml:id="ssec-gnome-hooks-glib">
      <para>
       <package>glib</package> setup hook will populate <envar>GSETTINGS_SCHEMAS_PATH</envar> and then <package>wrapGAppsHook</package> will prepend it to <envar>XDG_DATA_DIRS</envar>.
+     </para>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-gdk-pixbuf">
+     <para>
+      <package>gdk-pixbuf</package> setup hook will populate <envar>GDK_PIXBUF_MODULE_FILE</envar> with the path to biggest <filename>loaders.cache</filename> file from the dependencies containing <link xlink:href="ssec-gnome-gdk-pixbuf-loaders">GdkPixbuf loaders</link>. This works fine when there are only two packages containing loaders (<package>gdk-pixbuf</package> and e.g. <package>librsvg</package>) – it will choose the second one, reasonably expecting that it will be bigger since it describes extra loader in addition to the default ones. But when there are more than two loader packages, this logic will break. One possible solution would be constructing a custom cache file for each package containing a program like <filename>services/x11/gdk-pixbuf.nix</filename> NixOS module does. <package>wrapGAppsHook</package> copies the <envar>GDK_PIXBUF_MODULE_FILE</envar> environment variable into the produced wrapper.
      </para>
     </listitem>
     <listitem xml:id="ssec-gnome-hooks-gtk-drop-icon-theme-cache">
