@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
 , perl, pixman, vde2, alsaLib, texinfo, flex
-, bison, lzo, snappy, libaio, gnutls, nettle, curl
+, bison, lzo, snappy, libaio, gnutls, nettle, curl, libslirp
 , makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib glib perl pixman
       vde2 texinfo makeWrapper lzo snappy
-      gnutls nettle curl
+      gnutls nettle curl libslirp
     ]
     ++ optionals ncursesSupport [ ncurses ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
@@ -114,6 +114,7 @@ stdenv.mkDerivation rec {
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
+      "--enable-slirp=system"
     ]
     # disable sysctl check on darwin.
     ++ optional stdenv.isDarwin "--cpu=x86_64"
