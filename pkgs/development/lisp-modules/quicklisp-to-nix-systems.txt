@@ -62,7 +62,6 @@ clsql-postgresql-socket
 clsql-sqlite3
 clss
 clx
-clx-truetype
 command-line-arguments
 css-lite
 css-selectors

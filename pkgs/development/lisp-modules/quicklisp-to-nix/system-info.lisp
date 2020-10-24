@@ -10,7 +10,8 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defparameter *implementation-systems*
     (append
-      #+sbcl(list :sb-posix :sb-bsd-sockets)))
+      #+sbcl(list :sb-posix :sb-bsd-sockets :sb-rotate-byte :sb-cltl2
+                  :sb-introspect :sb-rt :sb-concurrency)))
   (mapcar (function require) *implementation-systems*))
 
 (declaim (optimize (debug 3) (speed 0) (space 0) (compilation-speed 0) (safety 3)))

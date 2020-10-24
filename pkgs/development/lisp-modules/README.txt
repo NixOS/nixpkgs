@@ -7,6 +7,9 @@ Want to add a package?  There are 3 simple steps!
   specify the native dependencies correctly the first time.
   (Might be nice to ensure the cache directoris exist)
 3. Add native libraries and whatever else is needed to quicklisp-to-nix-overrides.nix.
+4. Sometimes there are problems with loading implementation-provided systems.
+  In this case you might need to add more systems in the implementation's (so
+  SBCL's) entry into *implementation-systems* in quicklisp-to-nix/system-info.lisp
 
 To update to a more recent quicklisp dist modify
 lispPackages.quicklisp to have a more recent distinfo.
