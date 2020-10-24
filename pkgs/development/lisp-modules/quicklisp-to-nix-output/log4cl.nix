@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''log4cl'';
-  version = ''20191007-git'';
+  version = ''20200925-git'';
 
   parasites = [ "log4cl/syslog" "log4cl/test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."stefil" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/log4cl/2019-10-07/log4cl-20191007-git.tgz'';
-    sha256 = ''0i4i4ahw13fzka8ixasv292y59ljyzl4i6k6gmkrhxxbm6cdq1na'';
+    url = ''http://beta.quicklisp.org/archive/log4cl/2020-09-25/log4cl-20200925-git.tgz'';
+    sha256 = ''1z98ly71hsbd46i0dqqv2s3cm9y8bi0pl3yg8a168vz629c6mdrf'';
   };
 
   packageName = "log4cl";
@@ -20,11 +20,11 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM log4cl DESCRIPTION System lacks description SHA256
-    0i4i4ahw13fzka8ixasv292y59ljyzl4i6k6gmkrhxxbm6cdq1na URL
-    http://beta.quicklisp.org/archive/log4cl/2019-10-07/log4cl-20191007-git.tgz
-    MD5 11cdcd9da0ede86092886a055b186861 NAME log4cl FILENAME log4cl DEPS
+    1z98ly71hsbd46i0dqqv2s3cm9y8bi0pl3yg8a168vz629c6mdrf URL
+    http://beta.quicklisp.org/archive/log4cl/2020-09-25/log4cl-20200925-git.tgz
+    MD5 80b347666af496142581e9e0c029d181 NAME log4cl FILENAME log4cl DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME stefil FILENAME stefil))
-    DEPENDENCIES (alexandria bordeaux-threads stefil) VERSION 20191007-git
+    DEPENDENCIES (alexandria bordeaux-threads stefil) VERSION 20200925-git
     SIBLINGS (log4cl-examples log4slime) PARASITES (log4cl/syslog log4cl/test)) */

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''babel'';
-  version = ''20191130-git'';
+  version = ''20200925-git'';
 
   description = ''Babel, a charset conversion library.'';
 
   deps = [ args."alexandria" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/babel/2019-11-30/babel-20191130-git.tgz'';
-    sha256 = ''0rnb7waq3fi51g2fxrazkyr2fmksqp0syjhni005vzzlbykmkavd'';
+    url = ''http://beta.quicklisp.org/archive/babel/2020-09-25/babel-20200925-git.tgz'';
+    sha256 = ''1hpjm2whw7zla9igzj50y3nibii0mfg2a6y6nslaf5vpkni88jfi'';
   };
 
   packageName = "babel";
@@ -18,10 +18,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM babel DESCRIPTION Babel, a charset conversion library. SHA256
-    0rnb7waq3fi51g2fxrazkyr2fmksqp0syjhni005vzzlbykmkavd URL
-    http://beta.quicklisp.org/archive/babel/2019-11-30/babel-20191130-git.tgz
-    MD5 80087c99fe351d24e56bb279a62effeb NAME babel FILENAME babel DEPS
+    1hpjm2whw7zla9igzj50y3nibii0mfg2a6y6nslaf5vpkni88jfi URL
+    http://beta.quicklisp.org/archive/babel/2020-09-25/babel-20200925-git.tgz
+    MD5 7f64d3be80bcba19d9caeaede5dea6d8 NAME babel FILENAME babel DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME trivial-features FILENAME trivial-features))
-    DEPENDENCIES (alexandria trivial-features) VERSION 20191130-git SIBLINGS
+    DEPENDENCIES (alexandria trivial-features) VERSION 20200925-git SIBLINGS
     (babel-streams babel-tests) PARASITES NIL) */

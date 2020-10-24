@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lack-util'';
-  version = ''lack-20191007-git'';
+  version = ''lack-20201016-git'';
 
   description = ''System lacks description'';
 
-  deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."nibbles" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2019-10-07/lack-20191007-git.tgz'';
-    sha256 = ''1pjvsk1hc0n6aki393mg2z0dd0xwbkm4pmdph78jlk683158an5s'';
+    url = ''http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz'';
+    sha256 = ''124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan'';
   };
 
   packageName = "lack-util";
@@ -18,14 +18,14 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM lack-util DESCRIPTION System lacks description SHA256
-    1pjvsk1hc0n6aki393mg2z0dd0xwbkm4pmdph78jlk683158an5s URL
-    http://beta.quicklisp.org/archive/lack/2019-10-07/lack-20191007-git.tgz MD5
-    bce7a6b5aefb5bfd3fbeb782dda7748f NAME lack-util FILENAME lack-util DEPS
+    124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan URL
+    http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz MD5
+    8a056801bd99fdd70cdfaf33129f6aeb NAME lack-util FILENAME lack-util DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
-     (NAME ironclad FILENAME ironclad) (NAME nibbles FILENAME nibbles))
-    DEPENDENCIES (alexandria bordeaux-threads ironclad nibbles) VERSION
-    lack-20191007-git SIBLINGS
+     (NAME ironclad FILENAME ironclad))
+    DEPENDENCIES (alexandria bordeaux-threads ironclad) VERSION
+    lack-20201016-git SIBLINGS
     (lack-component lack-middleware-accesslog lack-middleware-auth-basic
      lack-middleware-backtrace lack-middleware-csrf lack-middleware-mount
      lack-middleware-session lack-middleware-static lack-request lack-response
