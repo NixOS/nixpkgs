@@ -20168,12 +20168,12 @@ let
     propagatedBuildInputs = [ MCE PerlCritic ];
   };
 
-  TestPerlTidy = buildPerlModule {
+  TestPerlTidy = buildPerlModule rec {
     pname = "Test-PerlTidy";
-    version = "20200412";
+    version = "20200930";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20200412.tar.gz";
-      sha256 = "905240447edb1930192000db659556cbf5ad5710f4376bb0a5abcd8716a4592c";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-${version}.tar.gz";
+      sha256 = "1djpfi57s1j6mqb0ii2ca1sj3ym7jjab018inp6vdmsyfjcnhvwz";
     };
     propagatedBuildInputs = [ PathTiny PerlTidy TextDiff ];
     meta = {
