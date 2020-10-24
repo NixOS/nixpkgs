@@ -6664,6 +6664,8 @@ in {
 
   smartypants = callPackage ../development/python-modules/smartypants { };
 
+  smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
+
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
 
   smmap = callPackage ../development/python-modules/smmap { };
