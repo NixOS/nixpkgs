@@ -152,3 +152,6 @@ cl-containers
 moptilities
 osicat
 trivial-package-local-nicknames
+cl-cffi-gtk
+enchant
+trivial-main-thread
