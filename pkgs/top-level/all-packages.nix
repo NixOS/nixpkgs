@@ -2536,7 +2536,7 @@ in
 
   asciidoctor = callPackage ../tools/typesetting/asciidoctor {
     # kindlegen is unfree, don't enable by default
-    kindlegen = null;
+    kindlegen = if config.allowUnfree then kindlegen else null;
     # epubcheck pulls in Java, which is problematic on some platforms
     epubcheck = null;
   };
@@ -3477,7 +3477,7 @@ in
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch6-oss = callPackage ../servers/search/elasticsearch/6.x.nix {
-    enableUnfree = false;
+    enableUnfree = config.allowUnfree;
     utillinux = utillinuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
@@ -3486,7 +3486,7 @@ in
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7-oss = callPackage ../servers/search/elasticsearch/7.x.nix {
-    enableUnfree = false;
+    enableUnfree = config.allowUnfree;
     utillinux = utillinuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
@@ -4834,11 +4834,11 @@ in
 
   kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
   kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
-    enableUnfree = false;
+    enableUnfree = config.allowUnfree;
   };
   kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix { };
   kibana7-oss = callPackage ../development/tools/misc/kibana/7.x.nix {
-    enableUnfree = false;
+    enableUnfree = config.allowUnfree;
   };
   kibana = kibana6;
   kibana-oss = kibana6-oss;
@@ -4943,11 +4943,11 @@ in
 
   logstash6 = callPackage ../tools/misc/logstash/6.x.nix { };
   logstash6-oss = callPackage ../tools/misc/logstash/6.x.nix {
-    enableUnfree = false;
+    enableUnfree = config.allowUnfree;
   };
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix { };
   logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
-    enableUnfree = false;
+    enableUnfree = config.allowUnfree;
   };
   logstash = logstash6;
 
@@ -6101,7 +6101,7 @@ in
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
-  p7zip = callPackage ../tools/archivers/p7zip { };
+  p7zip = callPackage ../tools/archivers/p7zip { enableUnfree = config.allowUnfree; };
 
   packagekit = callPackage ../tools/package-management/packagekit { };
 
