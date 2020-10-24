@@ -90,6 +90,141 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "simple-tasks" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."simple-tasks" or (x: {}))
+       (import ./quicklisp-to-nix-output/simple-tasks.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "array-utils" = quicklisp-to-nix-packages."array-utils";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "dissect" = quicklisp-to-nix-packages."dissect";
+       }));
+
+
+  "cl-cffi-gtk-pango" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk-pango" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk-pango.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk-cairo" = quicklisp-to-nix-packages."cl-cffi-gtk-cairo";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "cl-cffi-gtk-gobject" = quicklisp-to-nix-packages."cl-cffi-gtk-gobject";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
+  "cl-cffi-gtk-gobject" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk-gobject" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk-gobject.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
+  "cl-cffi-gtk-glib" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk-glib" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk-glib.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+       }));
+
+
+  "cl-cffi-gtk-gio" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk-gio" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk-gio.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "cl-cffi-gtk-gobject" = quicklisp-to-nix-packages."cl-cffi-gtk-gobject";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
+  "cl-cffi-gtk-gdk-pixbuf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk-gdk-pixbuf" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk-gdk-pixbuf.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "cl-cffi-gtk-gobject" = quicklisp-to-nix-packages."cl-cffi-gtk-gobject";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
+  "cl-cffi-gtk-gdk" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk-gdk" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk-gdk.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk-cairo" = quicklisp-to-nix-packages."cl-cffi-gtk-cairo";
+           "cl-cffi-gtk-gdk-pixbuf" = quicklisp-to-nix-packages."cl-cffi-gtk-gdk-pixbuf";
+           "cl-cffi-gtk-gio" = quicklisp-to-nix-packages."cl-cffi-gtk-gio";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "cl-cffi-gtk-gobject" = quicklisp-to-nix-packages."cl-cffi-gtk-gobject";
+           "cl-cffi-gtk-pango" = quicklisp-to-nix-packages."cl-cffi-gtk-pango";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
+  "cl-cffi-gtk-cairo" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk-cairo" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk-cairo.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+       }));
+
+
   "metatilities-base" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."metatilities-base" or (x: {}))
@@ -1256,6 +1391,79 @@ let quicklisp-to-nix-packages = rec {
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
            "usocket" = quicklisp-to-nix-packages."usocket";
            "usocket-server" = quicklisp-to-nix-packages."usocket-server";
+       }));
+
+
+  "cl-webkit2" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-webkit2" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-webkit2.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk" = quicklisp-to-nix-packages."cl-cffi-gtk";
+           "cl-cffi-gtk-cairo" = quicklisp-to-nix-packages."cl-cffi-gtk-cairo";
+           "cl-cffi-gtk-gdk" = quicklisp-to-nix-packages."cl-cffi-gtk-gdk";
+           "cl-cffi-gtk-gdk-pixbuf" = quicklisp-to-nix-packages."cl-cffi-gtk-gdk-pixbuf";
+           "cl-cffi-gtk-gio" = quicklisp-to-nix-packages."cl-cffi-gtk-gio";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "cl-cffi-gtk-gobject" = quicklisp-to-nix-packages."cl-cffi-gtk-gobject";
+           "cl-cffi-gtk-pango" = quicklisp-to-nix-packages."cl-cffi-gtk-pango";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
+  "trivial-main-thread" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."trivial-main-thread" or (x: {}))
+       (import ./quicklisp-to-nix-output/trivial-main-thread.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "array-utils" = quicklisp-to-nix-packages."array-utils";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "dissect" = quicklisp-to-nix-packages."dissect";
+           "simple-tasks" = quicklisp-to-nix-packages."simple-tasks";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+       }));
+
+
+  "enchant" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."enchant" or (x: {}))
+       (import ./quicklisp-to-nix-output/enchant.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+       }));
+
+
+  "cl-cffi-gtk" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cffi-gtk" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cffi-gtk.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-cffi-gtk-cairo" = quicklisp-to-nix-packages."cl-cffi-gtk-cairo";
+           "cl-cffi-gtk-gdk" = quicklisp-to-nix-packages."cl-cffi-gtk-gdk";
+           "cl-cffi-gtk-gdk-pixbuf" = quicklisp-to-nix-packages."cl-cffi-gtk-gdk-pixbuf";
+           "cl-cffi-gtk-gio" = quicklisp-to-nix-packages."cl-cffi-gtk-gio";
+           "cl-cffi-gtk-glib" = quicklisp-to-nix-packages."cl-cffi-gtk-glib";
+           "cl-cffi-gtk-gobject" = quicklisp-to-nix-packages."cl-cffi-gtk-gobject";
+           "cl-cffi-gtk-pango" = quicklisp-to-nix-packages."cl-cffi-gtk-pango";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
        }));
 
 
