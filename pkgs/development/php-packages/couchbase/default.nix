@@ -1,7 +1,7 @@
 { buildPecl, lib, pkgs, php }:
 let
   pname = "couchbase";
-  version = "2.6.1";
+  version = "2.6.2";
 in
 buildPecl {
   inherit pname version;
@@ -10,7 +10,7 @@ buildPecl {
     owner = "couchbase";
     repo = "php-couchbase";
     rev = "v${version}";
-    sha256 = "0jdzgcvab1vpxai23brmmvizjjq2d2dik9aklz6bzspfb512qjd6";
+    sha256 = "0ymrymnz91qg9b2ns044qg46wc65dffhxx402wpx1b5cj2vr4ma3";
   };
 
   configureFlags = [ "--with-couchbase" ];
