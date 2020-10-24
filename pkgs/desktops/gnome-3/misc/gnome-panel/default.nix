@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.37.1";
+  version = "3.38.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-HVmP1okz52AY8vsRanhxy8ADPB8Qm/v+CKHstWBn0VI=";
+    hash = "sha256-GosVrvCgKmyqm5IJyNP7Q+e5h6OAB2aRwj8DFOwwLxU=";
   };
 
   # make .desktop Exec absolute
