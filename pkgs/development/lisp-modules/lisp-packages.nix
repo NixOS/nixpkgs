@@ -129,6 +129,19 @@ let lispPackages = rec {
     buildSystems = [ "nyxt" "nyxt-ext" ];
 
     description = "Browser";
+
+    overrides = x: {
+      postInstall = ''
+        echo "Building nyxt binary"
+        NIX_LISP_PRELAUNCH_HOOK='
+          nix_lisp_build_system nyxt/gtk-application \
+           "(asdf/system:component-entry-point (asdf:find-system :nyxt/gtk-application))" \
+           "" "(format *error-output* \"Alien objects:~%~s~%\" sb-alien::*shared-objects*)"
+        ' "$out/bin/nyxt-lisp-launcher.sh"
+        cp "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
+      '';
+    };
+
     deps = with pkgs.lispPackages; [
       alexandria
       bordeaux-threads
