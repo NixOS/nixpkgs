@@ -133,6 +133,7 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
+      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [
