@@ -215,6 +215,11 @@ in
 
        # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
+
+      # Install gnome-software if flatpak is enabled
+      services.flatpak.guiPackages = [
+        pkgs.gnome3.gnome-software
+      ];
     })
 
     (mkIf flashbackEnabled {
