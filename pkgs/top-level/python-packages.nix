@@ -913,6 +913,8 @@ in {
 
   bluepy = callPackage ../development/python-modules/bluepy { };
 
+  bme680 = callPackage ../development/python-modules/bme680 { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
