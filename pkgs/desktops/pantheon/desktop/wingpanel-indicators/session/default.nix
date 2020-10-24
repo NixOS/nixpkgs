@@ -16,27 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
-  version = "2.2.8";
+  version = "unstable-2020-09-13";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-iBbYOeGlv2lUFSK1qcd+4UJlCP/KCtdkx6i73jq6Ngo=";
+    rev = "e65c95f46adbfd598ad61933394d7bc3c5998278";
+    sha256 = "sha256-QKOfgAc6pDQYpETrFunZB6+rF1P8XIf0pjft/t9aWW0=";
   };
-
-  patches = [
-    # build failure in vala 0.48.7
-    # https://github.com/elementary/gala/pull/869#issuecomment-657147695
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-session/commit/ead6971c708eed8b844bd9acd7eed2ab8a97e803.patch";
-      sha256 = "1v7w7zdia82d38ycr5zhckaxgf7gr15hsv05cv5khlki8frryn2x";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-session/commit/85347e676054635ac878fc542bd057398ca70d3e.patch";
-      sha256 = "1vw4zx0qbhxmfzqhdcmwdp4fxvij7n3f5lwcplf5v3k9qsr3wm0n";
-    })
-  ];
 
   passthru = {
     updateScript = nix-update-script {
