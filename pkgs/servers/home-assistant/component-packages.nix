@@ -36,7 +36,7 @@
     "apcupsd" = ps: with ps; [ ]; # missing inputs: apcaccess
     "api" = ps: with ps; [ aiohttp-cors ];
     "apns" = ps: with ps; [ ]; # missing inputs: apns2
-    "apple_tv" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: pyatv
+    "apple_tv" = ps: with ps; [ aiohttp-cors netdisco pyatv zeroconf ];
     "apprise" = ps: with ps; [ apprise ];
     "aprs" = ps: with ps; [ ]; # missing inputs: aprslib geopy
     "aqualogic" = ps: with ps; [ ]; # missing inputs: aqualogic
@@ -956,7 +956,7 @@
     "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf ];
     "zerproc" = ps: with ps; [ ]; # missing inputs: pyzerproc
     "zestimate" = ps: with ps; [ xmltodict ];
-    "zha" = ps: with ps; [ bellows pyserial zha-quirks zigpy-cc zigpy-deconz zigpy-xbee zigpy-zigate zigpy ]; # missing inputs: zigpy-znp
+    "zha" = ps: with ps; [ bellows pyserial zha-quirks zigpy-cc zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zigpy ];
     "zhong_hong" = ps: with ps; [ ]; # missing inputs: zhong_hong_hvac
     "ziggo_mediabox_xl" = ps: with ps; [ ]; # missing inputs: ziggo-mediabox-xl
     "zodiac" = ps: with ps; [ ];
