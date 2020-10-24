@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"
     "-Wno-error=stringop-truncation"
+    # The following flag allows libreswan v3.32 to work with NSS 3.22, see
+    # https://github.com/libreswan/libreswan/issues/334.
+    # This flag should not be needed for libreswan v3.33 (which is not yet released).
+    "-DNSS_PKCS11_2_0_COMPAT=1"
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
