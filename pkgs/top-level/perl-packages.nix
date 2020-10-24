@@ -16187,10 +16187,10 @@ let
 
   PerlTidy = buildPerlPackage rec {
     pname = "Perl-Tidy";
-    version = "20200110";
+    version = "20201001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20200110.tar.gz";
-      sha256 = "c8c13ab88f42409d419993d488b8dc7cf4a02d5034d3037ca859fb93b18e8086";
+      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-${version}.tar.gz";
+      sha256 = "04lsvjhv9h11scq9craky4gzpf2bw2q68wg6p0ppk79302rynwq8";
     };
     meta = {
       description = "Indent and reformat perl scripts";
