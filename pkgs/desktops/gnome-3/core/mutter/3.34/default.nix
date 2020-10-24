@@ -35,7 +35,7 @@
 , xorgserver
 , python3
 , wrapGAppsHook
-, sysprof
+, libsysprof-capture
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     libxkbfile
     pango
     pipewire_0_2 # TODO: backport pipewire 0.3 support
-    sysprof
+    libsysprof-capture
     upower
     xkeyboard_config
     xwayland
