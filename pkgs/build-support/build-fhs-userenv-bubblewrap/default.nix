@@ -64,10 +64,14 @@ let
     for i in ${env}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
-        continue
+        :
+      elif [[ -L $i ]]; then
+        symlinks="$symlinks --symlink $(readlink $i) $path"
+        blacklist="$blacklist $path"
+      else
+        ro_mounts="$ro_mounts --ro-bind $i $path"
+        blacklist="$blacklist $path"
       fi
-      ro_mounts="$ro_mounts --ro-bind $i $path"
-      blacklist="$blacklist $path"
     done
 
     if [[ -d ${env}/etc ]]; then
@@ -97,6 +101,7 @@ let
       --ro-bind /nix /nix \
       ${etcBindFlags} \
       $ro_mounts \
+      $symlinks \
       "''${auto_mounts[@]}" \
       ${init runScript}/bin/${name}-init ${initArgs}
   '';
