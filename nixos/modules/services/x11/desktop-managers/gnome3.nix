@@ -17,6 +17,11 @@ let
     '';
   };
 
+  defaultFavoriteAppsOverride = ''
+    [org.gnome.shell]
+    favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+  '';
+
   nixos-gsettings-desktop-schemas = let
     defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome3.gnome-shell ];
   in
@@ -42,8 +47,7 @@ let
        [org.gnome.desktop.screensaver]
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
 
-       [org.gnome.shell]
-       favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+       ${cfg.favoriteAppsOverride}
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -121,6 +125,17 @@ in
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
         apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
+      };
+
+      favoriteAppsOverride = mkOption {
+        internal = true; # this is messy
+        default = defaultFavoriteAppsOverride;
+        type = types.lines;
+        example = literalExample ''
+          [org.gnome.shell]
+          favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
+        '';
+        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
