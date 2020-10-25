@@ -15,6 +15,9 @@ buildGoModule rec {
 
   doCheck = false;
 
+  # Only build gopls, and not the integration tests or documentation generator.
+  subPackages = [ "." ];
+
   meta = with stdenv.lib; {
     description = "Official language server for the Go language";
     homepage = "https://github.com/golang/tools/tree/master/gopls";
