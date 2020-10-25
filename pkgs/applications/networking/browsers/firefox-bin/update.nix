@@ -55,7 +55,7 @@ in writeScript "update-${name}" ''
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/`
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep tar.bz2`
 
   cat > $tmpfile <<EOF
   {
