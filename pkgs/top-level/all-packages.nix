@@ -24875,9 +24875,7 @@ in
 
   arena = callPackage ../games/arena {};
 
-  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis {
-    stdenv = gcc6Stdenv;
-  };
+  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
 
   asc = callPackage ../games/asc {
     lua = lua5_1;
