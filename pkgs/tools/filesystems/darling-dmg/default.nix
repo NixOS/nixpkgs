@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu } :
+{ stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse }:
 
 stdenv.mkDerivation rec {
   pname = "darling-dmg";
@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fuse openssl zlib bzip2 libxml2 icu ];
+  buildInputs = [ fuse openssl zlib bzip2 libxml2 icu lzfse ];
 
+  CXXFLAGS = [
+    "-DCOMPILE_WITH_LZFSE=1"
+    "-llzfse"
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.darlinghq.org/";
