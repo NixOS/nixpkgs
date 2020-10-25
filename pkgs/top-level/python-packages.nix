@@ -2032,6 +2032,7 @@ in {
   feedgenerator = callPackage ../development/python-modules/feedgenerator { inherit (pkgs) glibcLocales; };
 
   feedparser = callPackage ../development/python-modules/feedparser { };
+  feedparser5 = callPackage ../development/python-modules/feedparser/5.x.nix { };  # For Python 2.x compatibility.
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     inherit (pkgs) pkg-config;
