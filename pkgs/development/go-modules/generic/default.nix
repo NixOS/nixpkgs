@@ -47,7 +47,7 @@ let
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  deleteFlag = if deleteVendor then "true" else "false";
+  deleteFlag = lib.boolToString deleteVendor;
 
   vendCommand = if runVend then "${vend}/bin/vend" else "false";
 

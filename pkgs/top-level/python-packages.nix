@@ -2397,6 +2397,8 @@ in {
 
   gmusicapi = callPackage ../development/python-modules/gmusicapi { };
 
+  gntp = callPackage ../development/python-modules/gntp { };
+
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
   gnutls = callPackage ../development/python-modules/gnutls { };
@@ -4826,7 +4828,7 @@ in {
 
   pybullet = callPackage ../development/python-modules/pybullet { };
 
-  pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs) meson pkg-config; };
+  pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs) meson pkgconfig; };
 
   pycallgraph = callPackage ../development/python-modules/pycallgraph { };
 
@@ -5021,6 +5023,8 @@ in {
   pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 
   pygmo = callPackage ../development/python-modules/pygmo { };
+
+  pygmt = callPackage ../development/python-modules/pygmt { };
 
   pygobject2 = callPackage ../development/python-modules/pygobject { inherit (pkgs) pkgconfig; };
 

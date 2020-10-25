@@ -2563,7 +2563,9 @@ in
     inherit (llvmPackages) openmp;
   };
 
-  bacula = callPackage ../tools/backup/bacula { };
+  bacula = callPackage ../tools/backup/bacula {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+  };
 
   bareos = callPackage ../tools/backup/bareos { };
 
@@ -5081,7 +5083,7 @@ in
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
-  next = callPackage ../applications/networking/browsers/next { };
+  nyxt = callPackage ../applications/networking/browsers/nyxt { };
 
   nfpm = callPackage ../tools/package-management/nfpm { };
 
@@ -8344,7 +8346,9 @@ in
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd {
-    cmake = buildPackages.cmakeMinimal;
+    cmake = buildPackages.cmake.override {
+      libarchive = buildPackages.libarchive.override { zstd = null; };
+    };
   };
 
   zsync = callPackage ../tools/compression/zsync { };
@@ -9672,15 +9676,15 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_10;
   };
-  rust_1_47 = callPackage ../development/compilers/rust/1_47.nix {
+  rust_1_46 = callPackage ../development/compilers/rust/1_46.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_11;
+    llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_10;
   };
-  rust = rust_1_47;
+  rust = rust_1_46;
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_47 = rust_1_47.packages.stable;
-  rustPackages = rustPackages_1_47;
+  rustPackages_1_46 = rust_1_46.packages.stable;
+  rustPackages = rustPackages_1_46;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -9800,8 +9804,8 @@ in
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-  sbcl_2_0_2 = callPackage ../development/compilers/sbcl {};
-  sbcl = callPackage ../development/compilers/sbcl/2.0.0.nix {};
+  sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.0.9.nix {};
+  sbcl = callPackage ../development/compilers/sbcl {};
 
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
@@ -10855,10 +10859,6 @@ in
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
-
-  cmakeMinimal = libsForQt5.callPackage ../development/tools/build-managers/cmake {
-    isBootstrap = true;
-  };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
@@ -16254,8 +16254,8 @@ in
     inherit clwrapper;
   };
 
-  lispPackages = recurseIntoAttrs (quicklispPackages_asdf_3_1 //
-    lispPackagesFor ((wrapLisp sbcl).override { asdf = asdf_3_1; }));
+  lispPackages = recurseIntoAttrs (quicklispPackages //
+    (lispPackagesFor (wrapLisp sbcl)));
 
   quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules/quicklisp-to-nix.nix {
     inherit clwrapper;
@@ -16263,8 +16263,6 @@ in
   quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp clisp));
   quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp sbcl));
   quicklispPackages = quicklispPackagesSBCL;
-  quicklispPackages_asdf_3_1 = quicklispPackagesFor
-    ((wrapLisp sbcl).override { asdf = asdf_3_1; });
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -18292,7 +18290,7 @@ in
     # udev is the same package as systemd which depends on cryptsetup
     # which depends on lvm2 again.  But we only need the libudev part
     # which does not depend on cryptsetup.
-    udev = systemdMinimal;
+    udev = udev.override { cryptsetup = null; };
   };
   lvm2_dmeventd = callPackage ../os-specific/linux/lvm2 {
     enableDmeventd = true;
@@ -18643,23 +18641,8 @@ in
       bzip2 = null;
     };
   };
-  systemdMinimal = systemd.override {
-    pname = "systemd-minimal";
-    withResolved = false;
-    withLogind = false;
-    withHostnamed = false;
-    withLocaled = false;
-    withTimedated = false;
-    withHwdb = false;
-    withEfi = false;
-    withImportd = false;
-    withCryptsetup = false;
-    cryptsetup = null;
-    lvm2 = null;
-  };
 
-
-  udev = systemd; # TODO: change to systemdMinimal
+  udev = systemd; # TODO: move to aliases.nix
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
@@ -22685,6 +22668,8 @@ in
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
+  opustags = callPackage ../applications/audio/opustags { };
+
   opusTools = callPackage ../applications/audio/opus-tools { };
 
   orpie = callPackage ../applications/misc/orpie { };
@@ -24887,9 +24872,7 @@ in
 
   arena = callPackage ../games/arena {};
 
-  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis {
-    stdenv = gcc6Stdenv;
-  };
+  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
 
   asc = callPackage ../games/asc {
     lua = lua5_1;

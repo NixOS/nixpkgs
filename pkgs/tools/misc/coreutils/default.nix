@@ -22,16 +22,21 @@ with lib;
 
 stdenv.mkDerivation (rec {
   pname = "coreutils";
-  version = "8.32";
+  version = "8.31";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
+    sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-    # included on coreutils master; TODO: apply unconditionally, I guess
-    ++ optional stdenv.hostPlatform.isAarch64 ./sys-getdents-undeclared.patch;
+         # included on coreutils master; TODO: apply unconditionally, I guess
+         ++ optional stdenv.hostPlatform.isAarch64 ./sys-getdents-undeclared.patch
+         ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
+         # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
+         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch
+         # Fix compilation in android-cross environments. To be removed in coreutils-8.32.
+         ++ [ ./coreutils-8.31-android-cross.patch ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.

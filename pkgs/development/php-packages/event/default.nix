@@ -1,11 +1,9 @@
 { buildPecl, lib, pkgs, php }:
-let
-in
 buildPecl {
   pname = "event";
 
-  version = "2.5.3";
-  sha256 = "12liry5ldvgwp1v1a6zgfq8w6iyyxmsdj4c71bp157nnf58cb8hb";
+  version = "2.5.7";
+  sha256 = "0jkzcm5mmbg101jc7p3aws9qb6l6xbxkfff82mrf7s5fn7xd44im";
 
   configureFlags = [
     "--with-event-libevent-dir=${pkgs.libevent.dev}"

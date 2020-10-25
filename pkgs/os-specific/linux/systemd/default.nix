@@ -1,61 +1,27 @@
-{ stdenv, lib, fetchFromGitHub
-, buildPackages
-, ninja, meson, m4, pkgconfig, coreutils, gperf, getent
-, patchelf, perl, glibcLocales, glib, substituteAll
-, gettext, python3Packages
-
-# Mandatory dependencies
-, libcap
-, utillinux
-, kbd
-, kmod
-
-# Optional dependencies
-, pam, cryptsetup, lvm2, audit, acl
-, lz4, libgcrypt, libgpgerror, libidn2
-, curl, gnutar, gnupg, zlib
-, xz, libuuid, libffi
-, libapparmor, intltool
-, bzip2, pcre2, e2fsprogs
+{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap
+, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, e2fsprogs, utillinux, libffi
+, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
+, audit, lz4, bzip2, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, gnu-efi
-, iptables
+, iptables, gnu-efi, bashInteractive
+, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
+, ninja, meson, python3Packages, glibcLocales
+, patchelf
+, substituteAll
+, getent
+, cryptsetup, lvm2
+, buildPackages
+, perl
 , withSelinux ? false, libselinux
 , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
-, bashInteractive
-
-, withResolved ? true
-, withLogind ? true
-, withHostnamed ? true
-, withLocaled ? true
-, withNetworkd ? true
-, withTimedated ? true
-, withTimesyncd ? true
-, withHwdb ? true
-, withEfi ? stdenv.hostPlatform.isEfi
-, withImportd ? true
-, withCryptsetup ? true
-
-# name argument
-, pname ? "systemd"
-
-
-, libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 }:
-
-assert withResolved -> (libgcrypt != null && libgpgerror != null);
-assert withImportd ->
-  ( curl.dev != null && zlib != null && xz != null && libgcrypt != null
-  && gnutar != null && gnupg != null);
-
-assert withCryptsetup ->
-  ( cryptsetup != null );
 
 let
   version = "246.6";
 in stdenv.mkDerivation {
-  inherit version pname;
+  inherit version;
+  pname = "systemd";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -105,17 +71,13 @@ in stdenv.mkDerivation {
   outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
-    [ pkgconfig gperf
+    [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
       ninja meson
       coreutils # meson calls date, stat etc.
       glibcLocales
       patchelf getent m4
       perl # to patch the libsystemd.so and remove dependencies on aarch64
 
-      intltool
-      gettext
-
-      libxslt docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
       (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
   buildInputs =
@@ -124,10 +86,9 @@ in stdenv.mkDerivation {
       pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
       stdenv.lib.optional withLibseccomp libseccomp ++
-      [ libffi audit lz4 bzip2 libapparmor iptables ] ++
-      stdenv.lib.optional withEfi gnu-efi ++
-      stdenv.lib.optional withSelinux libselinux ++
-      stdenv.lib.optional withCryptsetup cryptsetup.dev;
+    [ libffi audit lz4 bzip2 libapparmor
+      iptables gnu-efi
+    ] ++ stdenv.lib.optional withSelinux libselinux;
 
   #dontAddPrefix = true;
 
@@ -145,23 +106,19 @@ in stdenv.mkDerivation {
     "-Ddebug-shell=${bashInteractive}/bin/bash"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
-    "-Dimportd=${stdenv.lib.boolToString withImportd}"
+    "-Dimportd=true"
     "-Dlz4=true"
     "-Dhomed=false"
-    "-Dlogind=${stdenv.lib.boolToString withLogind}"
-    "-Dlocaled=${stdenv.lib.boolToString withLocaled}"
-    "-Dhostnamed=${stdenv.lib.boolToString withHostnamed}"
-    "-Dnetworkd=${stdenv.lib.boolToString withNetworkd}"
-    "-Dcryptsetup=${stdenv.lib.boolToString withCryptsetup}"
+    "-Dhostnamed=true"
+    "-Dnetworkd=true"
     "-Dportabled=false"
-    "-Dhwdb=${stdenv.lib.boolToString withHwdb}"
     "-Dremote=false"
     "-Dsysusers=false"
-    "-Dtimedated=${stdenv.lib.boolToString withTimedated}"
-    "-Dtimesyncd=${stdenv.lib.boolToString withTimesyncd}"
+    "-Dtimedated=true"
+    "-Dtimesyncd=true"
     "-Dfirstboot=false"
     "-Dlocaled=true"
-    "-Dresolve=${stdenv.lib.boolToString withResolved}"
+    "-Dresolve=true"
     "-Dsplit-usr=false"
     "-Dlibcurl=true"
     "-Dlibidn=false"
@@ -184,6 +141,11 @@ in stdenv.mkDerivation {
     "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
 
+    (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    "-Defi-libdir=${toString gnu-efi}/lib"
+    "-Defi-includedir=${toString gnu-efi}/include/efi"
+    "-Defi-ldsdir=${toString gnu-efi}/lib"
+
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
@@ -199,12 +161,6 @@ in stdenv.mkDerivation {
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
     "-Dman=true"
-
-    "-Dgnu-efi=${stdenv.lib.boolToString (withEfi && gnu-efi != null)}"
-  ] ++ stdenv.lib.optionals (withEfi && gnu-efi != null) [
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
   ];
 
   preConfigure = ''
@@ -328,6 +284,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ andir eelco flokli kloenk ];
+    maintainers = with maintainers; [ andir eelco flokli ];
   };
 }
