@@ -3851,6 +3851,16 @@
     githubId = 2736480;
     name = "Johannes Frankenau";
   };
+  jfroche = {
+    name = "Jean-François Roche";
+    email = "jfroche@pyxel.be";
+    github = "jfroche";
+    githubId = 207369;
+    keys = [{
+      longkeyid = "dsa1024/0xD1D09DE169EA19A0";
+      fingerprint = "7EB1 C02A B62B B464 6D7C  E4AE D1D0 9DE1 69EA 19A0";
+    }];
+  };
   jgeerds = {
     email = "jascha@geerds.org";
     github = "jgeerds";
