@@ -8,7 +8,7 @@
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
-, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
+, eglPlatforms ? [ "x11" "surfaceless" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
 , OpenGL, Xplugin
 , withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
@@ -31,7 +31,7 @@ with stdenv.lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.2.1";
+  version = "20.1.9";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0ji4s1gwcvx3fbj9h0x5zbma6kw4b75vs0266zhc06r97yd6v96i";
+    sha256 = "10kk8a8k7f4ip8yaiqdyrx162nbw8pw4h3b4hs4ha8mpd43wlldj";
   };
 
   prePatch = "patchShebangs .";
@@ -58,6 +58,7 @@ stdenv.mkDerivation {
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
+    ./link-radv-with-ld_args_build_id.patch
   ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [
       # Fix `-Werror=int-conversion` pthread warnings on musl.

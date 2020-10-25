@@ -2070,7 +2070,7 @@ nativeBuildInputs = [ breakpointHook ];
        The <literal>installManPage</literal> function takes one or more paths to manpages to install. The manpages must have a section suffix, and may optionally be compressed (with <literal>.gz</literal> suffix). This function will place them into the correct directory.
       </para>
       <para>
-       The <literal>installShellCompletion</literal> function takes one or more paths to shell completion files. By default it will autodetect the shell type from the completion file extension, but you may also specify it by passing one of <literal>--bash</literal>, <literal>--fish</literal>, or <literal>--zsh</literal>. These flags apply to all paths listed after them (up until another shell flag is given). Each path may also have a custom installation name provided by providing a flag <literal>--name NAME</literal> before the path. If this flag is not provided, zsh completions will be renamed automatically such that <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>. A root name may be provided for all paths using the flag <literal>--cmd NAME</literal>; this synthesizes the appropriate name depending on the shell (e.g. <literal>--cmd foo</literal> will synthesize the name <literal>foo.bash</literal> for bash and <literal>_foo</literal> for zsh). The path may also be a fifo or named fd (such as produced by <literal>&lt;(cmd)</literal>), in which case the shell and name must be provided.
+       The <literal>installShellCompletion</literal> function takes one or more paths to shell completion files. By default it will autodetect the shell type from the completion file extension, but you may also specify it by passing one of <literal>--bash</literal>, <literal>--fish</literal>, or <literal>--zsh</literal>. These flags apply to all paths listed after them (up until another shell flag is given). Each path may also have a custom installation name provided by providing a flag <literal>--name NAME</literal> before the path. If this flag is not provided, zsh completions will be renamed automatically such that <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>.
 <programlisting>
 nativeBuildInputs = [ installShellFiles ];
 postInstall = ''
@@ -2081,11 +2081,6 @@ postInstall = ''
   installShellCompletion --zsh --name _foobar share/completions.zsh
   # implicit behavior
   installShellCompletion share/completions/foobar.{bash,fish,zsh}
-  # using named fd
-  installShellCompletion --cmd foobar \
-    --bash &lt;($out/bin/foobar --bash-completion) \
-    --fish &lt;($out/bin/foobar --fish-completion) \
-    --zsh &lt;($out/bin/foobar --zsh-completion)
 '';
 </programlisting>
       </para>

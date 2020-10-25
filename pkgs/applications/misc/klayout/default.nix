@@ -1,6 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch
 , python, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl, makeWrapper
+, which, perl, makeWrapper, fixDarwinDylibNames
 }:
 
 mkDerivation rec {

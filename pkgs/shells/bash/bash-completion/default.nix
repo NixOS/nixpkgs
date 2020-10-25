@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bash-completion";
-  version = "2.11";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "scop";
     repo = "bash-completion";
     rev = version;
-    sha256 = "0m3brd5jx7w07h8vxvvcmbyrlnadrx6hra3cvx6grzv6rin89liv";
+    sha256 = "047yjryy9d6hp18wkigbfrw9r0sm31inlsp8l28fhxg8ii032sgq";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

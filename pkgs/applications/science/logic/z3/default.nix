@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hnbzq10d23drd7ksm3c1n2611c3kd0q0yxgz8y78zaafwczvwxx";
   };
 
-  nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ python ]
+  buildInputs = [ python fixDarwinDylibNames ]
   ++ optional javaBindings jdk
   ++ optionals ocamlBindings [ ocaml findlib zarith ]
   ;

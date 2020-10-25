@@ -22,11 +22,11 @@ with lib;
 
 stdenv.mkDerivation (rec {
   pname = "coreutils";
-  version = "8.32";
+  version = "8.31";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
+    sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch

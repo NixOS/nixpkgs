@@ -61,7 +61,9 @@ stdenv.mkDerivation rec {
     gobject-introspection
     makeWrapper
     glib
-  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ stdenv.lib.optional stdenv.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   propagatedBuildInputs = [
     glib
