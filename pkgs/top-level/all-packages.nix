@@ -5907,6 +5907,8 @@ in
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
+  nxdomain = python3.pkgs.callPackage ../tools/networking/nxdomain { };
+
   nxpmicro-mfgtools = callPackage ../development/tools/misc/nxpmicro-mfgtools { };
 
   nyancat = callPackage ../tools/misc/nyancat { };
