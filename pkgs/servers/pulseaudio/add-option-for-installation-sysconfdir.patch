@@ -1,8 +1,9 @@
+
 diff --git a/meson.build b/meson.build
-index 45df103f0..d3e246dba 100644
+index 86af7243e..e2d48ab94 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -65,12 +65,22 @@ datadir = join_paths(prefix, get_option('datadir'))
+@@ -65,6 +65,11 @@ datadir = join_paths(prefix, get_option('datadir'))
  localedir = join_paths(prefix, get_option('localedir'))
  localstatedir = join_paths(prefix, get_option('localstatedir'))
  sysconfdir = join_paths(prefix, get_option('sysconfdir'))
@@ -12,8 +13,9 @@ index 45df103f0..d3e246dba 100644
 +  sysconfdir_install = sysconfdir
 +endif
  privlibdir = join_paths(libdir, 'pulseaudio')
- alsadatadir = join_paths(datadir, 'pulseaudio', 'alsa-mixer')
  
+ alsadatadir = get_option('alsadatadir')
+@@ -75,6 +80,11 @@ endif
  pkgconfigdir = join_paths(libdir, 'pkgconfig')
  pulselibexecdir = join_paths(libexecdir, 'pulse')
  pulsesysconfdir = join_paths(sysconfdir, 'pulse')
@@ -26,13 +28,13 @@ index 45df103f0..d3e246dba 100644
  modlibexecdir = get_option('modlibexecdir')
  if modlibexecdir == ''
 diff --git a/meson_options.txt b/meson_options.txt
-index 766877319..01268d6ae 100644
+index 824f24e08..59a2b57ab 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -60,6 +60,9 @@ option('bashcompletiondir',
+@@ -66,6 +66,9 @@ option('bashcompletiondir',
  option('zshcompletiondir',
         type : 'string',
-        description : 'Zsh completions directory')
+        description : 'Directory for zsh completion scripts ["no" disables]')
 +option('sysconfdir_install',
 +       type: 'string', value: '',
 +       description: 'sysconfdir to use during installation')
@@ -40,7 +42,7 @@ index 766877319..01268d6ae 100644
  # Optional features
  
 diff --git a/src/daemon/meson.build b/src/daemon/meson.build
-index 9bc3bf18e..4cc28e2d7 100644
+index 9c9f807e7..425cecb46 100644
 --- a/src/daemon/meson.build
 +++ b/src/daemon/meson.build
 @@ -53,7 +53,7 @@ if x11_dep.found()
@@ -86,7 +88,7 @@ index 9bc3bf18e..4cc28e2d7 100644
  endif
  
 diff --git a/src/pulse/meson.build b/src/pulse/meson.build
-index 00c686772..1765136a1 100644
+index aaebff53e..05a29a0d0 100644
 --- a/src/pulse/meson.build
 +++ b/src/pulse/meson.build
 @@ -130,5 +130,5 @@ client_conf_file = configure_file(

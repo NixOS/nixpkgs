@@ -32,6 +32,7 @@
 , orc
 , check
 , gettext
+, gst_all_1
 
 , x11Support ? false
 
@@ -56,13 +57,13 @@
 
 stdenv.mkDerivation rec {
   pname = "${if libOnly then "lib" else ""}pulseaudio";
-  version = "13.0";
+  version = "13.99.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "0mw0ybrqj7hvf8lqs5gjzip464hfnixw453lr0mqzlng3b5266wn";
+    sha256 = "0kik95qjyqsajawyxgz8khc3n4lshaiddi4ywqn9a325r7vc98rq";
   };
 
   patches = [
@@ -120,7 +121,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optional remoteControlSupport lirc
     ++ lib.optional zeroconfSupport avahi
-    ++ [ webrtc-audio-processing ]
+    ++ [ webrtc-audio-processing gst_all_1.gst-plugins-base ]
   );
 
   mesonFlags = [
