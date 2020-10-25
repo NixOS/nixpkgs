@@ -5083,7 +5083,7 @@ in
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
-  next = callPackage ../applications/networking/browsers/next { };
+  nyxt = callPackage ../applications/networking/browsers/nyxt { };
 
   nfpm = callPackage ../tools/package-management/nfpm { };
 
