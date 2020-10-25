@@ -95,6 +95,10 @@ stdenv.mkDerivation rec {
     soxr
     speexdsp
     tdb
+    sbc
+    gst_all_1.gst-plugins-base
+  ] ++ lib.optionals bluetoothSupport [
+    bluez5
   ] ++ lib.optionals stdenv.isLinux [
     dbus
     glib
@@ -113,15 +117,11 @@ stdenv.mkDerivation rec {
       alsaLib
       systemd
       udev
-    ] ++ lib.optionals bluetoothSupport [
-      bluez5
-      sbc
-    ]
-    ++ lib.optional airtunesSupport openssl
+    ] ++ lib.optional airtunesSupport openssl
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optional remoteControlSupport lirc
     ++ lib.optional zeroconfSupport avahi
-    ++ [ webrtc-audio-processing gst_all_1.gst-plugins-base ]
+    ++ [ webrtc-audio-processing ]
   );
 
   mesonFlags = [
