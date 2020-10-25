@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "rss2email";
   version = "3.12.2";
 
-  propagatedBuildInputs = [ feedparser html2text ];
+  propagatedBuildInputs = [ feedparser5 html2text ];
   checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
