@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     # Remove Windows batch files (unclutter $out/bin)
     rm ./bin/*.bat
 
-    mkdir -p $out/share/basex" "$out/share/applications"
+    mkdir -p "$out/share/basex" "$out/share/applications"
 
     cp -R bin etc lib webapp src BaseX.jar "$out"
     cp -R readme.txt webapp "$out/share/basex"
