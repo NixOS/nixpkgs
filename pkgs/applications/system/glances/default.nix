@@ -4,6 +4,7 @@
 , bottle, pysnmp
 , hddtemp
 , netifaces # IP module
+, py-cpuinfo
 }:
 
 buildPythonApplication rec {
@@ -41,6 +42,7 @@ buildPythonApplication rec {
     psutil
     pysnmp
     setuptools
+    py-cpuinfo
   ] ++ lib.optional stdenv.isLinux hddtemp;
 
   preConfigure = ''
