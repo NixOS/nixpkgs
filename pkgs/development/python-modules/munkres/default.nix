@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "munkres";
-  version = "1.1.2";
+  version = "1.1.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "81e9ced40c3d0ffc48be4b6da5cfdfaa49041faaaba8075b159974ec47926aea";
+    sha256 = "fc44bf3c3979dada4b6b633ddeeb8ffbe8388ee9409e4d4e8310c2da1792db03";
   };
 
   checkInputs = [ nose ];
