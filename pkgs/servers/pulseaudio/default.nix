@@ -50,6 +50,9 @@
 , # Whether to build only the library.
   libOnly ? false
 
+# Building from Git source
+, fromGit ? false
+
 , CoreServices
 , AudioUnit
 , Cocoa
@@ -70,6 +73,11 @@ stdenv.mkDerivation rec {
     ./add-option-for-installation-sysconfdir.patch
     ./correct-ldflags.patch
   ];
+
+  # Says it should be v${version} but it's parsing logic is broken
+  preConfigure = lib.optionalString fromGit ''
+    sed -i "s@version : run_command.*@version: '${version}',@" meson.build
+  '';
 
   nativeBuildInputs = [
     gettext
