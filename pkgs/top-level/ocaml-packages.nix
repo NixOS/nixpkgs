@@ -808,7 +808,9 @@ let
 
     ppxlib = ppxlib-0-12;
 
-    ppxlib-0-12 = callPackage ../development/ocaml-modules/ppxlib { };
+    ppxlib-0-8 = callPackage ../development/ocaml-modules/ppxlib/0.8.x.nix { };
+
+    ppxlib-0-12 = callPackage ../development/ocaml-modules/ppxlib/0.12.x.nix { };
 
     ppxlib-0-20 = callPackage ../development/ocaml-modules/ppxlib/0.20.x.nix {
       ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
@@ -898,7 +900,9 @@ let
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
 
-    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
+    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc {
+      ppxlib = ppxlib-0-8;
+    };
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
 
@@ -1078,14 +1082,14 @@ let
     then import ../development/ocaml-modules/janestreet/0.12.nix {
       inherit ctypes janePackage num octavius re;
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { legacy = true; };
+      ppxlib = ppxlib-0-8;
     }
     else import ../development/ocaml-modules/janestreet {
       inherit janePackage ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
       inherit ppx_deriving re;
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { legacy = true; };
+      ppxlib = ppxlib-0-8;
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
