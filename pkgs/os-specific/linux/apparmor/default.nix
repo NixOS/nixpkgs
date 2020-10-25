@@ -14,7 +14,7 @@
 
 let
   apparmor-series = "2.13";
-  apparmor-patchver = "4";
+  apparmor-patchver = "5";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
@@ -27,19 +27,10 @@ let
 
   apparmor-sources = fetchurl {
     url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "03nislxccnbxld89giak2s8xa4mdbwscfxbdwhmw5qpvgz08dgwh";
-  };
-
-  # See <https://gitlab.com/apparmor/apparmor/-/issues/74> This and the
-  # accompanying application in prePatchCommon should be removed in 2.13.5
-  gnumake43Patch = fetchpatch {
-    url = "https://gitlab.com/apparmor/apparmor/-/merge_requests/465.patch";
-    name = "2-23-fix-build-with-make-4.3.patch";
-    sha256 = "0xw028iqp69j9mxv0kbwraplgkj5i5djdlgf0anpkc5cdbsf96r9";
+    sha256 = "05x7r99k00r97v1cq2f711lv6yqzhbl8zp1i1c7kxra4v0a2lzk3";
   };
 
   prePatchCommon = ''
-    patch -p1 < ${gnumake43Patch}
     chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
     patchShebangs ./common/list_capabilities.sh ./common/list_af_names.sh
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man"
