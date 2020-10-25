@@ -18,7 +18,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ packr ];
 
-  patches = [ ./use-go-module.patch ];
+  patches = [ ./use-go-module.patch ./fix-login-cmd.patch ];
 
   buildFlagsArray = ''
      -ldflags=

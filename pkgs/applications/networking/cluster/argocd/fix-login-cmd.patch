@@ -1,0 +1,45 @@
+diff --git a/cmd/argocd/commands/login.go b/cmd/argocd/commands/login.go
+index 98795a70..68591bbe 100644
+--- a/cmd/argocd/commands/login.go
++++ b/cmd/argocd/commands/login.go
+@@ -21,7 +21,6 @@ import (
+ 	settingspkg "github.com/argoproj/argo-cd/pkg/apiclient/settings"
+ 	"github.com/argoproj/argo-cd/util"
+ 	"github.com/argoproj/argo-cd/util/cli"
+-	grpc_util "github.com/argoproj/argo-cd/util/grpc"
+ 	"github.com/argoproj/argo-cd/util/localconfig"
+ 	oidcutil "github.com/argoproj/argo-cd/util/oidc"
+ 	"github.com/argoproj/argo-cd/util/rand"
+@@ -46,23 +45,6 @@ func NewLoginCommand(globalClientOpts *argocdclient.ClientOptions) *cobra.Comman
+ 				os.Exit(1)
+ 			}
+ 			server := args[0]
+-			tlsTestResult, err := grpc_util.TestTLS(server)
+-			errors.CheckError(err)
+-			if !tlsTestResult.TLS {
+-				if !globalClientOpts.PlainText {
+-					if !cli.AskToProceed("WARNING: server is not configured with TLS. Proceed (y/n)? ") {
+-						os.Exit(1)
+-					}
+-					globalClientOpts.PlainText = true
+-				}
+-			} else if tlsTestResult.InsecureErr != nil {
+-				if !globalClientOpts.Insecure {
+-					if !cli.AskToProceed(fmt.Sprintf("WARNING: server certificate had error: %s. Proceed insecurely (y/n)? ", tlsTestResult.InsecureErr)) {
+-						os.Exit(1)
+-					}
+-					globalClientOpts.Insecure = true
+-				}
+-			}
+ 			clientOpts := argocdclient.ClientOptions{
+ 				ConfigPath: "",
+ 				ServerAddr: server,
+@@ -99,7 +81,7 @@ func NewLoginCommand(globalClientOpts *argocdclient.ClientOptions) *cobra.Comman
+ 				SkipClaimsValidation: true,
+ 			}
+ 			claims := jwt.MapClaims{}
+-			_, _, err = parser.ParseUnverified(tokenString, &claims)
++			_, _, err := parser.ParseUnverified(tokenString, &claims)
+ 			errors.CheckError(err)
+ 
+ 			fmt.Printf("'%s' logged in successfully\n", userDisplayName(claims))
