@@ -21823,7 +21823,7 @@ in
   evolution-data-server = gnome3.evolution-data-server;
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
-  evolution-with-plugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { };
+  evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
 
   keepass = callPackage ../applications/misc/keepass { };
 

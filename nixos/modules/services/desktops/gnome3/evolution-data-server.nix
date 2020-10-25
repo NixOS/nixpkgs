@@ -15,30 +15,44 @@ with lib;
   options = {
 
     services.gnome3.evolution-data-server = {
-
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable Evolution Data Server, a collection of services for
-          storing addressbooks and calendars.
-        '';
+      enable = mkEnableOption "Evolution Data Server, a collection of services for storing addressbooks and calendars.";
+      plugins = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        description = "Plugins for Evolution Data Server.";
+      };
+    };
+    programs.evolution = {
+      enable = mkEnableOption "Evolution, a Personal information management application that provides integrated mail, calendaring and address book functionality.";
+      plugins = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        example = literalExample "[ pkgs.evolution-ews ]";
+        description = "Plugins for Evolution.";
       };
 
     };
-
   };
-
 
   ###### implementation
 
   config =
-  let evolution-with-plugins = (import ../../../../.. {}).evolution-with-plugins; in
-  mkIf config.services.gnome3.evolution-data-server.enable {
-    environment.systemPackages = [ evolution-with-plugins ];
+    let
+      bundle = pkgs.evolutionWithPlugins.override { inherit (config.services.gnome3.evolution-data-server) plugins; };
+    in
+    mkMerge [
+      (mkIf config.services.gnome3.evolution-data-server.enable {
+        environment.systemPackages = [ bundle ];
 
-    services.dbus.packages = [ evolution-with-plugins ];
+        services.dbus.packages = [ bundle ];
 
-    systemd.packages = [ evolution-with-plugins ];
-  };
+        systemd.packages = [ bundle ];
+      })
+      (mkIf config.programs.evolution.enable {
+        services.gnome3.evolution-data-server = {
+          enable = true;
+          plugins = [ pkgs.evolution ] ++ config.programs.evolution.plugins;
+        };
+      })
+    ];
 }

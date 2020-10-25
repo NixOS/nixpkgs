@@ -1,8 +1,8 @@
-{ lib, makeWrapper, symlinkJoin, evolution, evolution-ews, gnome3 }:
+{ lib, makeWrapper, symlinkJoin, gnome3, plugins }:
 
 symlinkJoin {
   name = "evolution-with-plugins";
-  paths = [ evolution evolution-ews gnome3.evolution-data-server];
+  paths = [ gnome3.evolution-data-server ] ++ plugins;
 
   buildInputs = [ makeWrapper ];
 
@@ -34,7 +34,7 @@ symlinkJoin {
     fixSymlink $out/share/dbus-1/service
     fixSymlink $out/lib/systemd/user
     for i in $out/share/dbus-1/services/*.service $out/lib/systemd/user/*.service; do
-      echo fixing service file $i
+      echo fixing service file $i to point to $out
       sed -i "s@/nix/store/[^/]*/@$out/@" $i
     done
   '';
