@@ -3,6 +3,7 @@
 , fetchPypi
 , isPy3k
 , sgmllib3k
+, tox
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sgmllib3k ];
 
-  # lots of networking failures
-  doCheck = false;
+  checkPhase = "python tests/runtests.py";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/kurtmckee/feedparser";
