@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "Darling lets you open macOS dmgs on Linux";
     platforms = platforms.linux;
     license = licenses.gpl3;
+    maintainers = with maintainers; [ Luflosi ];
   };
 }
