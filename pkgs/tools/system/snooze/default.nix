@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
 
   meta = with stdenv.lib; {
-    description =
-      "Tool for waiting until a particular time and then running a command.";
+    description = "Tool for waiting until a particular time and then running a command";
     maintainers = with maintainers; [ kaction ];
     license = licenses.cc0;
     platforms = platforms.linux;

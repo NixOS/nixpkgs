@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A minimalist fan control program. Originally designed
+    description  = "A minimalist fan control program";
+    longDescription = "A minimalist fan control program. Originally designed
 specifically for IBM/Lenovo Thinkpads, it now supports any kind of system via
 the sysfs hwmon interface (/sys/class/hwmon).";
     license = licenses.gpl3;
