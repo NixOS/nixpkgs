@@ -1,0 +1,13 @@
+--- a/gold/output.cc	2020-10-25 15:19:55.610685570 +0000
++++ b/gold/output.cc	2020-10-25 15:56:24.124019659 +0000
+@@ -142,8 +142,8 @@
+ #ifdef HAVE_FALLOCATE
+   {
+     int err = ::fallocate(o, 0, offset, len);
+-    if (err != EINVAL && err != ENOSYS && err != EOPNOTSUPP)
+-      return err;
++    if (err && (errno != EINVAL && errno != ENOSYS && errno != EOPNOTSUPP))
++      return errno;
+   }
+ #endif // defined(HAVE_FALLOCATE)
+ 

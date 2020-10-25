@@ -69,6 +69,12 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+    # Gold has an error handling bug calling fallocate. Triggers with Musl on a ZFS
+    # filesystem. Glibc has a hack in posix_fallocate that Musl rejects:
+    # https://www.openwall.com/lists/musl/2018/04/26/4
+    # which explains why it only shows up on Musl.
+    ./gold-fix-fallocate.patch
+
   ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
   [
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
