@@ -8346,7 +8346,9 @@ in
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd {
-    cmake = buildPackages.cmakeMinimal;
+    cmake = buildPackages.cmake.override {
+      libarchive = buildPackages.libarchive.override { zstd = null; };
+    };
   };
 
   zsync = callPackage ../tools/compression/zsync { };
@@ -9674,15 +9676,15 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_10;
   };
-  rust_1_47 = callPackage ../development/compilers/rust/1_47.nix {
+  rust_1_46 = callPackage ../development/compilers/rust/1_46.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_11;
+    llvmPackages = if stdenv.cc.isClang then llvmPackages_5 else llvmPackages_10;
   };
-  rust = rust_1_47;
+  rust = rust_1_46;
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_47 = rust_1_47.packages.stable;
-  rustPackages = rustPackages_1_47;
+  rustPackages_1_46 = rust_1_46.packages.stable;
+  rustPackages = rustPackages_1_46;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -10857,10 +10859,6 @@ in
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
-
-  cmakeMinimal = libsForQt5.callPackage ../development/tools/build-managers/cmake {
-    isBootstrap = true;
-  };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
@@ -18292,7 +18290,7 @@ in
     # udev is the same package as systemd which depends on cryptsetup
     # which depends on lvm2 again.  But we only need the libudev part
     # which does not depend on cryptsetup.
-    udev = systemdMinimal;
+    udev = udev.override { cryptsetup = null; };
   };
   lvm2_dmeventd = callPackage ../os-specific/linux/lvm2 {
     enableDmeventd = true;
@@ -18643,23 +18641,8 @@ in
       bzip2 = null;
     };
   };
-  systemdMinimal = systemd.override {
-    pname = "systemd-minimal";
-    withResolved = false;
-    withLogind = false;
-    withHostnamed = false;
-    withLocaled = false;
-    withTimedated = false;
-    withHwdb = false;
-    withEfi = false;
-    withImportd = false;
-    withCryptsetup = false;
-    cryptsetup = null;
-    lvm2 = null;
-  };
 
-
-  udev = systemd; # TODO: change to systemdMinimal
+  udev = systemd; # TODO: move to aliases.nix
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 

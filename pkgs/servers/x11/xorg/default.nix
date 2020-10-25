@@ -703,11 +703,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libX11 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
-    name = "libX11-1.6.12";
+    name = "libX11-1.6.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.6.12.tar.bz2";
-      sha256 = "1ivfzl1qwk8zh7gc0m5vb58gdxz11jwg7w3d356w16j1d5s2427i";
+      url = "mirror://xorg/individual/lib/libX11-1.6.8.tar.bz2";
+      sha256 = "1mbkwhhprhf49s2iwx7kiliprsdvd690zk44x3h53ql9q52si2dj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1054,11 +1054,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXvMC = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
-    name = "libXvMC-1.0.12";
+    name = "libXvMC-1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXvMC-1.0.12.tar.bz2";
-      sha256 = "1kbdjsvkm5l7axv7g477qj18sab2wnqhliy6197syzizgfbsfgbb";
+      url = "mirror://xorg/individual/lib/libXvMC-1.0.11.tar.bz2";
+      sha256 = "0bb2c996p0smp2lwckffcfh4701bzv7266xh230ag0x68ka38bja";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1158,11 +1158,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libxcb = callPackage ({ stdenv, pkgconfig, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python }: stdenv.mkDerivation {
-    name = "libxcb-1.14";
+    name = "libxcb-1.13.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxcb-1.14.tar.xz";
-      sha256 = "0d2chjgyn5lr9sfhacfvqgnj9l9faz11vn322a06jd6lk3dxcpm5";
+      url = "https://xcb.freedesktop.org/dist/libxcb-1.13.1.tar.bz2";
+      sha256 = "1i27lvrcsygims1pddpl5c4qqs6z715lm12ax0n3vx0igapvg7x8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig python ];
@@ -1431,11 +1431,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
-    name = "xcb-proto-1.14.1";
+    name = "xcb-proto-1.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xcb-proto-1.14.1.tar.xz";
-      sha256 = "1hzwazgyywd9mz4mjj1yv8ski27qqx7ypmyr27m39hrajyddsjph";
+      url = "https://xcb.freedesktop.org/dist/xcb-proto-1.13.tar.bz2";
+      sha256 = "1qdxw9syhbvswiqj5dvj278lrmfhs81apzmvx6205s4vcqg7563v";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig python ];
@@ -1717,11 +1717,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86inputlibinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-libinput-0.30.0";
+    name = "xf86-input-libinput-0.28.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-libinput-0.30.0.tar.bz2";
-      sha256 = "1h4np66p87jf0c85ig524w8f5rbhl5gx8fww1qg0c55f87yzkizr";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-0.28.2.tar.bz2";
+      sha256 = "0818vr0yhk9j1y1wcbxzcd458vrvp06rrhi8k43bhqkb5jb4dcxq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2679,11 +2679,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xorgproto = callPackage ({ stdenv, pkgconfig, fetchurl, libXt }: stdenv.mkDerivation {
-    name = "xorgproto-2020.1";
+    name = "xorgproto-2019.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xorgproto-2020.1.tar.bz2";
-      sha256 = "1llrnrkq6iprgiqakmwlv89745s9h02xsiaq0xn3fnh377qm78al";
+      url = "mirror://xorg/individual/proto/xorgproto-2019.1.tar.bz2";
+      sha256 = "16yll1kaffnslik5sizlw3qrigj1gpsgfgyq6903g3mwdixamnm6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
