@@ -1662,7 +1662,7 @@ in {
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
-  django_lts = self.django_2_2;
+  django_lts = self.django_2;
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
