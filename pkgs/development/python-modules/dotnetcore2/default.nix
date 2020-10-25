@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "dotnetcore2";
-  version = "2.1.14";
+  version = "2.1.17";
   format = "wheel";
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     inherit pname version format;
     python = "py3";
     platform = "manylinux1_x86_64";
-    sha256 = "0dxp9a73ncjylc09bjwq81fgj5ysk1yi27l8ka5f98121k1kmn6q";
+    sha256 = "87248bf5b5c751817025530bc1514e31f140e109f097a28ae8f8592fa7e4098d";
   };
 
   nativeBuildInputs = [ unzip ];
