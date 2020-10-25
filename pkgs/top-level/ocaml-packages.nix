@@ -640,6 +640,8 @@ let
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
+    ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
+
     ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
