@@ -4,16 +4,16 @@ with stdenv.lib;
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "kubernetes-sigs";
     repo   = "kind";
-    sha256 = "0r301nqvycik8fwlghq0cymmq4rm7xp8haj39i2nynxyw8zk6zym";
+    sha256 = "1kyjmlp1kmr3lwylnya6w392j1qpqgbvcacwpnz3ifyh3pbv32qr";
   };
 
-  vendorSha256 = "1qvbm8v8yah6r6cw1cvdw79yiwxb2amzdkkzvzbwigy0j4bvn9mi";
+  vendorSha256 = "04fmqh6lhvvzpvf1l2xk1r8687k5jx2lb5199rgmjbfnjgsa0q2d";
 
   doCheck = false;
 
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash fish zsh; do
       $out/bin/kind completion $shell > kind.$shell
       installShellCompletion kind.$shell
     done

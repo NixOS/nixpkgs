@@ -19,10 +19,10 @@ let
     '';
 
     nativeBuildInputs = [ cmake python3 lld ]
-      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx
-      ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
-    buildInputs = [ libxml2 llvm ];
+    buildInputs = [ libxml2 llvm ]
+      ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"

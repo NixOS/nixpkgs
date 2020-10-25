@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, pkgs, lib, php }:
 let
   pname = "phpcbf";
-  version = "3.5.5";
+  version = "3.5.8";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-    sha256 = "0hgagn70gl46migm6zpwcr39dxal07f5cdpnasrafgz5vq0gwr3g";
+    sha256 = "15ci30yvw3p9zlmzsk9s4mxzb3wax3gl9p55slhf1bzwn1xxwyb0";
   };
 
   phases = [ "installPhase" ];

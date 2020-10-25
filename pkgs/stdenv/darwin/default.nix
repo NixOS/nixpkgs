@@ -190,7 +190,10 @@ in rec {
 
   stage1 = prevStage: let
     persistent = self: super: with prevStage; {
-      cmake = super.cmakeMinimal;
+      cmake = super.cmake.override {
+        isBootstrap = true;
+        useSharedLibraries = false;
+      };
 
       python3 = super.python3Minimal;
 

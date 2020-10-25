@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.44";
+  version = "2.27";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "1qf80lifygbnxwvqjf8jz5j24n6fqqx4ixnkbf76xs2vrmcq664j";
+    sha256 = "0sj8kidl7qgf2qwxcbw1vadnlb30y4zvjzxswsmfdghq04npkhfs";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for working with POSIX capabilities";
-    homepage = "https://sites.google.com/site/fullycapable";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd3;
   };

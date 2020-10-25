@@ -57,7 +57,7 @@ let
 
     # FIXME: This fixes dylib references in the dylibs themselves, but
     # not in the programs in $out/bin.
-    nativeBuildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''

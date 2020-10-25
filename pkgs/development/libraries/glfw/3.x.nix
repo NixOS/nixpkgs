@@ -18,11 +18,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libGL ];
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libX11 libXrandr libXinerama libXcursor libXi libXext ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
+    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel fixDarwinDylibNames ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 

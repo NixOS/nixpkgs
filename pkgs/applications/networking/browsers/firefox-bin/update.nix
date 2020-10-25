@@ -23,8 +23,10 @@ in writeScript "update-${name}" ''
   set -eux
   pushd ${basePath}
 
+  HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
-  gpg --keyserver hkps://gpg.mozilla.org --recv-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
+
+  gpg --import ${./mozilla.asc}
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -53,7 +55,7 @@ in writeScript "update-${name}" ''
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/`
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep tar.bz2`
 
   cat > $tmpfile <<EOF
   {

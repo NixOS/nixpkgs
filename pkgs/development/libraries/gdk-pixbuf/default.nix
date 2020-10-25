@@ -21,6 +21,7 @@
 , doCheck ? false
 , makeWrapper
 , fetchpatch
+, lib
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +61,9 @@ stdenv.mkDerivation rec {
     gobject-introspection
     makeWrapper
     glib
-  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ stdenv.lib.optional stdenv.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -72,7 +75,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     "-Dx11=false" # use gdk-pixbuf-xlib
-    "-Dgir=${if gobject-introspection != null then "true" else "false"}"
+    "-Dgir=${lib.boolToString (gobject-introspection != null)}"
     "-Dgio_sniffing=false"
   ];
 
