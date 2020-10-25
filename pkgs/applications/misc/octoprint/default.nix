@@ -109,7 +109,7 @@ let
                 semantic-version
                 psutil
                 click
-                feedparser
+                feedparser5
                 future
                 websocket_client
                 wrapt
