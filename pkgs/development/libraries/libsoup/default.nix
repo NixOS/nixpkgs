@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3, sysprof
+{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3, libsysprof-capture
 , gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
 , libpsl, python3, brotli }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libpsl
     brotli
   ] ++ lib.optionals stdenv.isLinux [
-    sysprof
+    libsysprof-capture
   ];
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
