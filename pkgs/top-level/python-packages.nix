@@ -6527,6 +6527,8 @@ in {
 
   sfepy = callPackage ../development/python-modules/sfepy { };
 
+  sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
+
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
   shapely = callPackage ../development/python-modules/shapely { };
