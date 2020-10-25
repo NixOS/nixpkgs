@@ -92,6 +92,14 @@ in {
         '';
       };
 
+      hsphfpd.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable the hsphfpd[-prototype] implementation.
+        '';
+      };
+
       systemWide = mkOption {
         type = types.bool;
         default = false;
@@ -221,6 +229,37 @@ in {
 
       hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
     }
+
+    (mkIf cfg.hsphfpd.enable {
+      environment.systemPackages = [ pkgs.hsphfpd ];
+      services.dbus.packages = [ pkgs.hsphfpd ];
+
+      systemd.services.hsphfpd = {
+        after = [ "bluetooth.service" ];
+        requires = [ "bluetooth.service" ];
+        wantedBy = [ "multi-user.target" ];
+
+        description = "A prototype implementation used for connecting HSP/HFP Bluetooth devices";
+        serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/hsphfpd.pl";
+      };
+
+      systemd.user.services.telephony_client = {
+        after = [ "pulseaudio.service" ];
+        wantedBy = [ "default.target"];
+
+        description = "telephony_client for hsphfpd";
+        serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/telephony_client.pl";
+      };
+
+      systemd.user.services.audio_client = {
+        after = [ "pulseaudio.service" ];
+        wantedBy = [ "default.target"];
+
+        enable = cfg.package != pkgs.pulseaudio-hsphfpd;
+        description = "audio_client for hsphfpd";
+        serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/audio_client.pl";
+      };
+    })
 
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
