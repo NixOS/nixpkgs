@@ -4864,6 +4864,8 @@ in {
 
   pycm = callPackage ../development/python-modules/pycm { };
 
+  pycmarkgfm = callPackage ../development/python-modules/pycmarkgfm { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
