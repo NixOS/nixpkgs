@@ -29,7 +29,9 @@ stdenv.mkDerivation (rec {
     sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
   };
 
-  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
+  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+    # included on coreutils master; TODO: apply unconditionally, I guess
+    ++ optional stdenv.hostPlatform.isAarch64 ./sys-getdents-undeclared.patch;
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
