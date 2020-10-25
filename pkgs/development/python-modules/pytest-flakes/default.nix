@@ -5,11 +5,11 @@ buildPythonPackage rec {
   # upstream has abandoned project in favor of pytest-flake8
   # retaining package to not break other packages
   pname = "pytest-flakes";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37113ac6c7ea5e0b648abf73937955a45f8b9214fe49413297c2ce6ce1808500";
+    sha256 = "6733db47937d9689032876359e5ee0ee6926e3638546c09220e2f86b3581d4c1";
   };
 
   checkInputs = [ pytestpep8 pytest ];
