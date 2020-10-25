@@ -1,5 +1,5 @@
 { stdenv, makeWrapper, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2
+, fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, gtk2
 , at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gnome2.GConf
-    gnome2.pango
+    pango
     gtk2
     gtk3
     gsettings-desktop-schemas
