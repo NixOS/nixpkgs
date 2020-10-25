@@ -17,7 +17,7 @@ buildLinux (args // {
 
   extraMeta = {
     branch = "5.9/master";
-    maintainers = with stdenv.lib.maintainers; [ atemu ];
+    maintainers = with stdenv.lib.maintainers; [ atemu andresilva ];
   };
 
 } // (args.argsOverride or {}))
