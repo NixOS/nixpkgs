@@ -658,6 +658,8 @@ let
 
     ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
 
+    ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
+
     ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
 
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
