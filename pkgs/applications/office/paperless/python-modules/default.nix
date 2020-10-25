@@ -1,6 +1,6 @@
 pyPkgs: fetchFromGitHub:
 {
-  django_2_0 = pyPkgs.django_2_2.overridePythonAttrs (old: rec {
+  django_2_0 = pyPkgs.django_2.overridePythonAttrs (old: rec {
     version = "2.0.12";
     src = pyPkgs.fetchPypi {
       inherit (old) pname;
