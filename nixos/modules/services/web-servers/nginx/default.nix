@@ -179,6 +179,12 @@ let
       ${cfg.httpConfig}
     }''}
 
+    ${optionalString (cfg.streamConfig != "") ''
+    stream {
+      ${cfg.streamConfig}
+    }
+    ''}
+
     ${cfg.appendConfig}
   '';
 
@@ -438,6 +444,21 @@ in
           This is mutually exclusive with the structured configuration
           via virtualHosts and the recommendedXyzSettings configuration
           options. See appendHttpConfig for appending to the generated http block.
+        ";
+      };
+
+      streamConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          server {
+            listen 127.0.0.1:53 udp reuseport;
+            proxy_timeout 20s;
+            proxy_pass 192.168.0.1:53535;
+          }
+        '';
+        description = "
+          Configuration lines to be set inside the stream block.
         ";
       };
 
