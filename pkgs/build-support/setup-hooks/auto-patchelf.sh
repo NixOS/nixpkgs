@@ -41,7 +41,7 @@ addToDepCache() {
     # otherwise findDependency would have quadratic complexity
     autoPatchelfCachedDepsAssoc["$1"]=""
 
-    # also store deps in normal array to maintian their order
+    # also store deps in normal array to maintain their order
     autoPatchelfCachedDeps+=("$1")
 }
 
@@ -204,7 +204,7 @@ autoPatchelf() {
     echo "automatically fixing dependencies for ELF files" >&2
 
     # Add all shared objects of the current output path to the start of
-    # autoPatchelfCachedDeps so that it's choosen first in findDependency.
+    # autoPatchelfCachedDeps so that it's chosen first in findDependency.
     addAutoPatchelfSearchPath ${norecurse:+--no-recurse} -- "$@"
 
     while IFS= read -r -d $'\0' file; do
