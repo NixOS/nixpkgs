@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cmake
     python
     doxygen
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   checkInputs = [
     gtest
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     openssl
     boost
     libpqxx
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ];
 
   # emulate the process of pulling catch down
   postPatch = ''

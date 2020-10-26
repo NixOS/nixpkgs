@@ -20,10 +20,9 @@ in stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
 
-  buildInputs = [ zlib sqlite ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = [ zlib sqlite ];
 
   propagatedBuildInputs = [ nspr ];
 

@@ -4828,7 +4828,7 @@ in {
 
   pybullet = callPackage ../development/python-modules/pybullet { };
 
-  pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs) meson pkgconfig; };
+  pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs) meson pkg-config; };
 
   pycallgraph = callPackage ../development/python-modules/pycallgraph { };
 

@@ -52,6 +52,11 @@ python3.pkgs.buildPythonApplication rec {
     # cut-in-half-by-\0 store path references.
     # Let’s just clear the whole rpath and hope for the best.
     ./clear-old-rpath.patch
+
+    # Patch out default boost search paths to avoid impure builds on
+    # unsandboxed non-NixOS builds, see:
+    # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
+    ./boost-Do-not-add-system-paths-on-nix.patch
   ];
 
   setupHook = ./setup-hook.sh;
