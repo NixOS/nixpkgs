@@ -1,6 +1,6 @@
 { base58
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy27
 , lib
 , morphys
@@ -14,11 +14,13 @@
 
 buildPythonPackage rec {
   pname = "py-multihash";
-  version = "0.2.3";
+  version = "1.0.0";
 
-  src = fetchPypi {
-    inherit pname version ;
-    sha256 = "f0ade4de820afdc4b4aaa40464ec86c9da5cae3a4578cda2daab4b0eb7e5b18d";
+  src = fetchFromGitHub {
+    owner = "multiformats";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "07qglrbgcb8sr9msqw2v7dqj9s4rs6nyvhdnx02i5w6xx5ibzi3z";
   };
 
   nativeBuildInputs = [
@@ -37,6 +39,8 @@ buildPythonPackage rec {
     pytest
     pytestcov
   ];
+
+  pythonImportsCheck = [ "multihash" ];
 
   disabled = isPy27;
 
