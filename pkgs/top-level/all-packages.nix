@@ -5072,6 +5072,8 @@ in
 
   nbench = callPackage ../tools/misc/nbench { };
 
+  ncrack = callPackage ../tools/security/ncrack { };
+
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
