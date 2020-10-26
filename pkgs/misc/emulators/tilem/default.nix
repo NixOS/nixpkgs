@@ -4,25 +4,14 @@
 , autoreconfHook
 , pkg-config
 , glib
-, libusb1
 , darwin
 , acl
 , gnome2
 , libticonv
 , libtifiles2
+, libticables2
 }:
 let
-  libticables2 = stdenv.mkDerivation rec {
-    pname = "libticables2";
-    version = "1.3.5";
-    src = fetchurl {
-      url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
-      sha256 = "08j5di0cgix9vcpdv7b8xhxdjkk9zz7fqfnv3l4apk3jdr8vcvqc";
-    };
-    nativeBuildInputs = [ autoreconfHook pkg-config ];
-    buildInputs = [ glib libusb1 ];
-    configureFlags = [ "--enable-libusb10" ];
-  };
   libticalcs2 = stdenv.mkDerivation rec {
     pname = "libticalcs2";
     version = "1.1.9";
