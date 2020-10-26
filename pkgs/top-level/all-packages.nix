@@ -22541,7 +22541,7 @@ in
 
   nedit = callPackage ../applications/editors/nedit { };
 
-  ngt = callPackage ../development/libraries/ngt { };
+  ngt = callPackage ../development/libraries/ngt { enableAVX = false; };
 
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
