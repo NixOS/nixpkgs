@@ -37,13 +37,28 @@
    <section xml:id="module-services-keycloak-database">
      <title>Database access</title>
      <para>
-       <productname>Keycloak</productname> depends on
-       <productname>PostgreSQL</productname> and will automatically
-       enable it and create a database and role unless configured not
-       to, either by changing <xref linkend="opt-services.keycloak.databaseHost" />
-       from its default of <literal>localhost</literal> or setting
-       <xref linkend="opt-services.keycloak.databaseCreateLocally" />
+       <productname>Keycloak</productname> can be used with either
+       <productname>PostgreSQL</productname> or
+       <productname>MySQL</productname>. Which one is used can be
+       configured in <xref
+       linkend="opt-services.keycloak.databaseType" />. The selected
+       database will automatically be enabled and a database and role
+       created unless <xref
+       linkend="opt-services.keycloak.databaseHost" /> is changed from
+       its default of <literal>localhost</literal> or <xref
+       linkend="opt-services.keycloak.databaseCreateLocally" /> is set
        to <literal>false</literal>.
+     </para>
+
+     <para>
+       External database access can also be configured by setting
+       <xref linkend="opt-services.keycloak.databaseHost" />, <xref
+       linkend="opt-services.keycloak.databaseUsername" />, <xref
+       linkend="opt-services.keycloak.databaseUseSSL" /> and <xref
+       linkend="opt-services.keycloak.databaseCaCert" /> as
+       appropriate. Note that you need to manually create a database
+       called <literal>keycloak</literal> and allow the configured
+       database user full access to it.
      </para>
 
      <para>

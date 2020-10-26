@@ -2,12 +2,12 @@
 # OIDC client and a user, and simulates the user logging in to the
 # client using their Keycloak login.
 
-import ./make-test-python.nix (
-  { pkgs, ... }:
-  let
-    frontendUrl = "http://keycloak/auth";
-    initialAdminPassword = "h4IhoJFnt2iQIR9";
-  in
+let
+  frontendUrl = "http://keycloak/auth";
+  initialAdminPassword = "h4IhoJFnt2iQIR9";
+
+  keycloakTest = import ./make-test-python.nix (
+    { pkgs, databaseType, ... }:
     {
       name = "keycloak";
       meta = with pkgs.stdenv.lib.maintainers; {
@@ -19,7 +19,7 @@ import ./make-test-python.nix (
           virtualisation.memorySize = 1024;
           services.keycloak = {
             enable = true;
-            inherit frontendUrl initialAdminPassword;
+            inherit frontendUrl databaseType initialAdminPassword;
             databasePasswordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
           };
           environment.systemPackages = with pkgs; [
@@ -136,4 +136,9 @@ import ./make-test-python.nix (
           )
         '';
     }
-)
+  );
+in
+{
+  postgres = keycloakTest { databaseType = "postgresql"; };
+  mysql = keycloakTest { databaseType = "mysql"; };
+}

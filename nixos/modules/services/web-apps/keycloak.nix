@@ -97,11 +97,59 @@ in
       '';
     };
 
+    databaseType = lib.mkOption {
+      type = lib.types.enum [ "mysql" "postgresql" ];
+      default = "postgresql";
+      example = "mysql";
+      description = ''
+        The type of database Keycloak should connect to.
+      '';
+    };
+
     databaseHost = lib.mkOption {
       type = lib.types.str;
       default = "localhost";
       description = ''
-        Hostname of the PostgreSQL database to connect to.
+        Hostname of the database to connect to.
+      '';
+    };
+
+    databasePort =
+      let
+        dbPorts = {
+          postgresql = 5432;
+          mysql = 3306;
+        };
+      in
+        lib.mkOption {
+          type = lib.types.port;
+          default = dbPorts.${cfg.databaseType};
+          description = ''
+            Port of the database to connect to.
+          '';
+        };
+
+    databaseUseSSL = lib.mkOption {
+      type = lib.types.bool;
+      default = cfg.databaseHost != "localhost";
+      description = ''
+        Whether the database connection should be secured by SSL /
+        TLS.
+      '';
+    };
+
+    databaseCaCert = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        The SSL / TLS CA certificate that verifies the identity of the
+        database server.
+
+        Required when PostgreSQL is used and SSL is turned on.
+
+        For MySQL, if left at <literal>null</literal>, the default
+        Java keystore is used, which should suffice if the server
+        certificate is issued by an official CA.
       '';
     };
 
@@ -208,6 +256,12 @@ in
     let
       # We only want to create a database if we're actually going to connect to it.
       databaseActuallyCreateLocally = cfg.databaseCreateLocally && cfg.databaseHost == "localhost";
+      createLocalPostgreSQL = databaseActuallyCreateLocally && cfg.databaseType == "postgresql";
+      createLocalMySQL = databaseActuallyCreateLocally && cfg.databaseType == "mysql";
+
+      mySqlCaKeystore = pkgs.runCommandNoCC "mysql-ca-keystore" {} ''
+        ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.databaseCaCert} -keystore $out -storepass notsosecretpassword -noprompt
+      '';
 
       keycloakConfig' = builtins.foldl' lib.recursiveUpdate {
         "interface=public".inet-address = cfg.bindAddress;
@@ -220,19 +274,52 @@ in
             };
           };
         };
-        "subsystem=datasources"."jdbc-driver=postgresql" = {
-          driver-module-name = "org.postgresql";
-          driver-name = "postgresql";
-          driver-xa-datasource-class-name = "org.postgresql.xa.PGXADataSource";
-        };
         "subsystem=datasources"."data-source=KeycloakDS" = {
-          connection-url = "jdbc:postgresql://${cfg.databaseHost}/keycloak";
-          driver-name = "postgresql";
           max-pool-size = "20";
           user-name = if databaseActuallyCreateLocally then "keycloak" else cfg.databaseUsername;
           password = "@db-password@";
         };
       } [
+        (lib.optionalAttrs (cfg.databaseType == "postgresql") {
+          "subsystem=datasources" = {
+            "jdbc-driver=postgresql" = {
+              driver-module-name = "org.postgresql";
+              driver-name = "postgresql";
+              driver-xa-datasource-class-name = "org.postgresql.xa.PGXADataSource";
+            };
+            "data-source=KeycloakDS" = {
+              connection-url = "jdbc:postgresql://${cfg.databaseHost}:${builtins.toString cfg.databasePort}/keycloak";
+              driver-name = "postgresql";
+              "connection-properties=ssl".value = lib.boolToString cfg.databaseUseSSL;
+            } // (lib.optionalAttrs (cfg.databaseCaCert != null) {
+              "connection-properties=sslrootcert".value = cfg.databaseCaCert;
+              "connection-properties=sslmode".value = "verify-ca";
+            });
+          };
+        })
+        (lib.optionalAttrs (cfg.databaseType == "mysql") {
+          "subsystem=datasources" = {
+            "jdbc-driver=mysql" = {
+              driver-module-name = "com.mysql";
+              driver-name = "mysql";
+              driver-class-name = "com.mysql.jdbc.Driver";
+            };
+            "data-source=KeycloakDS" = {
+              connection-url = "jdbc:mysql://${cfg.databaseHost}:${builtins.toString cfg.databasePort}/keycloak";
+              driver-name = "mysql";
+              "connection-properties=useSSL".value = lib.boolToString cfg.databaseUseSSL;
+              "connection-properties=requireSSL".value = lib.boolToString cfg.databaseUseSSL;
+              "connection-properties=verifyServerCertificate".value = lib.boolToString cfg.databaseUseSSL;
+              "connection-properties=characterEncoding".value = "UTF-8";
+              valid-connection-checker-class-name = "org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker";
+              validate-on-match = true;
+              exception-sorter-class-name = "org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter";
+            } // (lib.optionalAttrs (cfg.databaseCaCert != null) {
+              "connection-properties=trustCertificateKeyStoreUrl".value = "file:${mySqlCaKeystore}";
+              "connection-properties=trustCertificateKeyStorePassword".value = "notsosecretpassword";
+            });
+          };
+        })
         (lib.optionalAttrs (cfg.certificatePrivateKeyBundle != null) {
           "socket-binding-group=standard-sockets"."socket-binding=https".port = cfg.httpsPort;
           "core-service=management"."security-realm=UndertowRealm"."server-identity=ssl" = {
@@ -444,7 +531,7 @@ in
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 
-      keycloakConfig = pkgs.runCommand "keycloak-config" {} ''
+      keycloakConfig = pkgs.runCommandNoCC "keycloak-config" {} ''
         export JBOSS_BASE_DIR="$(pwd -P)";
         export JBOSS_MODULEPATH="${cfg.package}/modules";
         export JBOSS_LOG_DIR="$JBOSS_BASE_DIR/log";
@@ -475,9 +562,16 @@ in
     in
       lib.mkIf cfg.enable {
 
+        assertions = [
+          {
+            assertion = (cfg.databaseUseSSL && cfg.databaseType == "postgresql") -> (cfg.databaseCaCert != null);
+            message = ''A CA certificate must be specified (in 'services.keycloak.databaseCaCert') when PostgreSQL is used with SSL'';
+          }
+        ];
+
         environment.systemPackages = [ cfg.package ];
 
-        systemd.services.keycloakDatabaseInit = lib.mkIf databaseActuallyCreateLocally {
+        systemd.services.keycloakPostgreSQLInit = lib.mkIf createLocalPostgreSQL {
           after = [ "postgresql.service" ];
           before = [ "keycloak.service" ];
           bindsTo = [ "postgresql.service" ];
@@ -498,71 +592,100 @@ in
           '';
         };
 
-        systemd.services.keycloak = {
-          after = lib.optionals databaseActuallyCreateLocally [
-            "keycloakDatabaseInit.service" "postgresql.service"
-          ];
-          bindsTo = lib.optionals databaseActuallyCreateLocally [
-            "keycloakDatabaseInit.service" "postgresql.service"
-          ];
-          wantedBy = [ "multi-user.target" ];
-          environment = {
-            JBOSS_LOG_DIR = "/var/log/keycloak";
-            JBOSS_BASE_DIR = "/run/keycloak";
-            JBOSS_MODULEPATH = "${cfg.package}/modules";
-          };
+        systemd.services.keycloakMySQLInit = lib.mkIf createLocalMySQL {
+          after = [ "mysql.service" ];
+          before = [ "keycloak.service" ];
+          bindsTo = [ "mysql.service" ];
           serviceConfig = {
-            ExecStartPre = let
-              startPreFullPrivileges = ''
-                set -eu
-
-                install -T -m 0400 -o keycloak -g keycloak '${cfg.databasePasswordFile}' /run/keycloak/secrets/db_password
-              '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
-                install -T -m 0400 -o keycloak -g keycloak '${cfg.certificatePrivateKeyBundle}' /run/keycloak/secrets/ssl_cert_pk_bundle
-              '';
-              startPre = ''
-                set -eu
-
-                install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
-                install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
-
-                db_password="$(</run/keycloak/secrets/db_password)"
-                ${pkgs.replace}/bin/replace-literal -fe '@db-password@' "$db_password" /run/keycloak/configuration/standalone.xml
-
-                export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
-                ${cfg.package}/bin/add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
-              '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
-                pushd /run/keycloak/ssl/
-                cat /run/keycloak/secrets/ssl_cert_pk_bundle <(echo) /etc/ssl/certs/ca-certificates.crt > allcerts.pem
-                ${pkgs.openssl}/bin/openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert_pk_bundle -chain \
-                                                   -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
-                                                   -CAfile allcerts.pem -passout pass:notsosecretpassword
-                popd
-              '';
-            in [
-              "+${pkgs.writeShellScript "keycloak-start-pre-full-privileges" startPreFullPrivileges}"
-              "${pkgs.writeShellScript "keycloak-start-pre" startPre}"
-            ];
-            ExecStart = "${cfg.package}/bin/standalone.sh";
-            User = "keycloak";
-            Group = "keycloak";
-            DynamicUser = true;
-            RuntimeDirectory = map (p: "keycloak/" + p) [
-              "secrets"
-              "configuration"
-              "deployments"
-              "data"
-              "ssl"
-              "log"
-              "tmp"
-            ];
-            RuntimeDirectoryMode = 0700;
-            LogsDirectory = "keycloak";
-            AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+            Type = "oneshot";
+            RemainAfterExit = true;
+            User = config.services.mysql.user;
+            Group = config.services.mysql.group;
           };
+          script = ''
+            set -eu
+
+            db_password="$(<'${cfg.databasePasswordFile}')"
+            ( echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
+              echo "CREATE DATABASE keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+              echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
+            ) | ${config.services.mysql.package}/bin/mysql -N
+          '';
         };
 
-        services.postgresql.enable = lib.mkDefault databaseActuallyCreateLocally;
+        systemd.services.keycloak =
+          let
+            databaseServices =
+              if createLocalPostgreSQL then [
+                "keycloakPostgreSQLInit.service" "postgresql.service"
+              ]
+              else if createLocalMySQL then [
+                "keycloakMySQLInit.service" "mysql.service"
+              ]
+              else [ ];
+          in {
+            after = databaseServices;
+            bindsTo = databaseServices;
+            wantedBy = [ "multi-user.target" ];
+            environment = {
+              JBOSS_LOG_DIR = "/var/log/keycloak";
+              JBOSS_BASE_DIR = "/run/keycloak";
+              JBOSS_MODULEPATH = "${cfg.package}/modules";
+            };
+            serviceConfig = {
+              ExecStartPre = let
+                startPreFullPrivileges = ''
+                  set -eu
+
+                  install -T -m 0400 -o keycloak -g keycloak '${cfg.databasePasswordFile}' /run/keycloak/secrets/db_password
+                '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
+                  install -T -m 0400 -o keycloak -g keycloak '${cfg.certificatePrivateKeyBundle}' /run/keycloak/secrets/ssl_cert_pk_bundle
+                '';
+                startPre = ''
+                  set -eu
+
+                  install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
+                  install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
+
+                  db_password="$(</run/keycloak/secrets/db_password)"
+                  ${pkgs.replace}/bin/replace-literal -fe '@db-password@' "$db_password" /run/keycloak/configuration/standalone.xml
+
+                  export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
+                  ${cfg.package}/bin/add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
+                '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
+                  pushd /run/keycloak/ssl/
+                  cat /run/keycloak/secrets/ssl_cert_pk_bundle <(echo) /etc/ssl/certs/ca-certificates.crt > allcerts.pem
+                  ${pkgs.openssl}/bin/openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert_pk_bundle -chain \
+                                                     -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
+                                                     -CAfile allcerts.pem -passout pass:notsosecretpassword
+                  popd
+                '';
+              in [
+                "+${pkgs.writeShellScript "keycloak-start-pre-full-privileges" startPreFullPrivileges}"
+                "${pkgs.writeShellScript "keycloak-start-pre" startPre}"
+              ];
+              ExecStart = "${cfg.package}/bin/standalone.sh";
+              User = "keycloak";
+              Group = "keycloak";
+              DynamicUser = true;
+              RuntimeDirectory = map (p: "keycloak/" + p) [
+                "secrets"
+                "configuration"
+                "deployments"
+                "data"
+                "ssl"
+                "log"
+                "tmp"
+              ];
+              RuntimeDirectoryMode = 0700;
+              LogsDirectory = "keycloak";
+              AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+            };
+          };
+
+        services.postgresql.enable = lib.mkDefault createLocalPostgreSQL;
+        services.mysql.enable = lib.mkDefault createLocalMySQL;
+        services.mysql.package = lib.mkIf createLocalMySQL pkgs.mysql;
       };
 
   meta.doc = ./keycloak.xml;
