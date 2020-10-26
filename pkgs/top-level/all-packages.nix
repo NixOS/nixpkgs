@@ -947,6 +947,8 @@ in
 
   cconv = callPackage ../tools/text/cconv { };
 
+  cerebral-debugger = callPackage ../development/cerebral-debugger { };
+
   go-check = callPackage ../development/tools/check { };
 
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
