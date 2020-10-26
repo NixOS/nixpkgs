@@ -15272,6 +15272,10 @@ in
 
   libticables2 = callPackage ../development/libraries/libticables2 { };
 
+  libticalcs2 = callPackage ../development/libraries/libticalcs2 {
+    inherit (darwin) libobjc;
+  };
+
   libticonv = callPackage ../development/libraries/libticonv { };
 
   libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
