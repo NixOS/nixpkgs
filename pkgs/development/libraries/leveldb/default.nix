@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ snappy ];
 
   nativeBuildInputs = []
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildPhase = ''
     make all

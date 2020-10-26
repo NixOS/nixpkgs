@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     sha256 = "1g2wdchlwdihqj0ynx58nwyrpncxanghlnykgir97p0wimg3hnxl";
   };
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ oracle-instantclient ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libaio ];

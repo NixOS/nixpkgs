@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brotli";
-  version = "1.0.7";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "1811b55wdfg4kbsjcgh1kc938g118jpvif97ilgrmbls25dfpvvw";
+    sha256 = "z6Dhrabav1MDQ4rAcXaDv0aN+qOoh9cvoXZqEWBB13c=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,7 +32,14 @@ stdenv.mkDerivation rec {
 
   # This breaks on Darwin because our cmake hook tries to make a build folder
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
-  prePatch = "rm BUILD";
+  prePatch = ''
+      rm BUILD
+
+      # Upstream fixed this reference to runtime-path after the release
+      # and with this references g++ complains about invalid option -R
+      sed -i 's/ -R''${libdir}//' scripts/libbrotli*.pc.in
+      cat scripts/libbrotli*.pc.in
+    '';
 
   # Don't bother with "man" output for now,
   # it currently only makes the manpages hard to use.
