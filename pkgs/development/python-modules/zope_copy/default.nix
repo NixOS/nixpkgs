@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , zope_interface
 , zope_location
 , zope_schema
@@ -26,5 +27,6 @@ buildPythonPackage rec {
 
   meta = {
     maintainers = with lib.maintainers; [ domenkozar ];
+    broken = isPy27;
   };
 }

@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , zope_interface
 , webob
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "repoze.who";
   version = "2.4";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

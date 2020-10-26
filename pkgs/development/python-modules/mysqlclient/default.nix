@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, libmysqlclient }:
+{ stdenv, buildPythonPackage, isPy27, fetchPypi, libmysqlclient }:
 
 buildPythonPackage rec {
   pname = "mysqlclient";
   version = "2.0.1";
+  disabled = isPy27;
 
   nativeBuildInputs = [
     libmysqlclient

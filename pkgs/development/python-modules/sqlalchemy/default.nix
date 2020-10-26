@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "SQLAlchemy";
   version = "1.3.19";
+  #disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

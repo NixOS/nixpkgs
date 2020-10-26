@@ -10,7 +10,7 @@ let
 
   tfType = if cudaSupport then "gpu" else "cpu";
 
-  system = 
+  system =
     if      stdenv.isLinux  then "linux"
     else if stdenv.isDarwin then "darwin"
     else unavailable;
@@ -73,5 +73,6 @@ in stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ basvandijk ];
+    broken = true;
   };
 }

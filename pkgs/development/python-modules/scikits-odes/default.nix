@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "scikits.odes";
   version = "2.6.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

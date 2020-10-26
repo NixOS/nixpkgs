@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, python-axolotl-curve25519, protobuf }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, cryptography, python-axolotl-curve25519, protobuf }:
 
 buildPythonPackage rec {
   pname = "python-axolotl";
@@ -10,6 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ cryptography python-axolotl-curve25519 protobuf ];
+  doCheck = isPy3k;
 
   meta = with lib; {
     homepage = "https://github.com/tgalal/python-axolotl";

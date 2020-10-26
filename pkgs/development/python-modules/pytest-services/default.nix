@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pytest-services";
   version = "2.1.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

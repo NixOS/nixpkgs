@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, isPy27
 , mock
 , zope_testing
 , stdenv
@@ -22,5 +23,6 @@ buildPythonPackage rec {
     homepage =  "https://www.python.org/pypi/zc.lockfile";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
+    broken = isPy27;
   };
 }

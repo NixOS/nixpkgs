@@ -1,7 +1,10 @@
 { stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , sphinx
+, importlib-metadata
 , pyenchant
 , pbr
 }:
@@ -15,7 +18,8 @@ buildPythonPackage rec {
     sha256 = "c8250ff02e6033c3aeabc41e91dc185168fecefb0c5722aaa3e2055a829e1e4c";
   };
 
-  propagatedBuildInputs = [ sphinx pyenchant pbr ];
+  propagatedBuildInputs = [ sphinx pyenchant pbr ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # No tests included
   doCheck = false;

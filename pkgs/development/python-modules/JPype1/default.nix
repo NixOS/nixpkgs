@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/originell/jpype/";
     license = licenses.asl20;
     description = "A Python to Java bridge";
+    broken = true;
   };
 }

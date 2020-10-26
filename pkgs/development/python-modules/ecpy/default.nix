@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ECPy";
   version = "1.2.3";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

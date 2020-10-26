@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nbconvert, pytest, requests, responses }:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, nbconvert, pytest, requests, responses }:
 
 buildPythonPackage rec {
   pname = "nbconflux";
   version = "0.7.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "Valassis-Digital-Media";
