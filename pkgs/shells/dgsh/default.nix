@@ -36,6 +36,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "The Directed Graph Shell";
     homepage = "http://www.dmst.aueb.gr/dds/sw/dgsh";
     license = with licenses; asl20;

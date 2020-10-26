@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    broken = true;
     platforms = qt4.meta.platforms;
     maintainers = [ maintainers.phreedom ];
     description = "A cross-platform Qt4 Webkit browser";

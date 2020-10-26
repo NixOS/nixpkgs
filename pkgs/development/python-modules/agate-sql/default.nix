@@ -12,6 +12,7 @@ buildPythonPackage rec {
     propagatedBuildInputs = [ agate sqlalchemy ];
 
     meta = with stdenv.lib; {
+      broken = true;
       description = "Adds SQL read/write support to agate.";
       homepage    = "https://github.com/wireservice/agate-sql";
       license     = with licenses; [ mit ];

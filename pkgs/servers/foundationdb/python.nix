@@ -15,6 +15,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with lib; {
+    broken = true;
     description = "Python bindings for FoundationDB";
     homepage    = "https://www.foundationdb.org";
     license     = with licenses; [ asl20 ];

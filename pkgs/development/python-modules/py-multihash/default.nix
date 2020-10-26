@@ -41,6 +41,7 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   meta = with lib; {
+    broken = true;
     description = "Self describing hashes - for future proofing";
     homepage = "https://github.com/multiformats/py-multihash";
     license = licenses.mit;

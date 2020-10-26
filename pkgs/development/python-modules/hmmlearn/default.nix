@@ -18,6 +18,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Hidden Markov Models in Python with scikit-learn like API";
     homepage    = "https://github.com/hmmlearn/hmmlearn";
     license     = licenses.bsd3;

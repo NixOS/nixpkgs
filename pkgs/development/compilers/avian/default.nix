@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = true;
     description = "Lightweight Java virtual machine";
     longDescription = ''
       Avian is a lightweight virtual machine and class library designed

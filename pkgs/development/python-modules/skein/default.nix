@@ -30,6 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     homepage = "https://jcristharif.com/skein";
     description = "A tool and library for easily deploying applications on Apache YARN";
     license = licenses.bsd3;

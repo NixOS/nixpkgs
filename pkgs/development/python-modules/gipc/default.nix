@@ -16,6 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ gevent ];
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered

@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
     license = licenses.gpl2;
     maintainers = with maintainers; [ timokau ];

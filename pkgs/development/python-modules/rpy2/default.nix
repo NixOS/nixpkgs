@@ -98,6 +98,7 @@ buildPythonPackage rec {
     ];
 
     meta = {
+      broken = true;
       homepage = "http://rpy.sourceforge.net/rpy2";
       description = "Python interface to R";
       license = lib.licenses.gpl2Plus;

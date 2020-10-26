@@ -49,6 +49,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Open source, physically-based global illumination rendering engine";
     homepage = "https://appleseedhq.net/";
     maintainers = with maintainers; [ hodapp ];

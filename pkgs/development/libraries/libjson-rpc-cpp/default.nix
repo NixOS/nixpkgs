@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "C++ framework for json-rpc (json remote procedure call)";
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";
     license = licenses.mit;

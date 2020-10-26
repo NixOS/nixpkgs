@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper makeWrapper ];
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Ted, an easy rich text processor";
     longDescription = ''
       Ted is a text processor running under X Windows on Unix/Linux systems.
@@ -77,7 +78,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://nllgg.nl/Ted/";
     license     = licenses.gpl2;
     platforms   = platforms.all;
-    broken      = stdenv.isDarwin;
     maintainers = with maintainers; [ obadz ];
   };
 }

@@ -140,6 +140,7 @@ let
         outputs = [ "out" "lib" "dev" "pythonsrc" ];
 
         meta = with gcc6Stdenv.lib; {
+          broken = true;
           description = "Open source, distributed, transactional key-value store";
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;

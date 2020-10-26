@@ -42,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "Simplify the writing of REST APIs, and extend them with additional protocols";
     homepage = "http://git.openstack.org/cgit/openstack/wsme";
     license = licenses.mit;

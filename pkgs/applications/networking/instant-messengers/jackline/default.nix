@@ -25,6 +25,7 @@ stdenv.mkDerivation {
   inherit (ocamlPackages.topkg) installPhase;
 
   meta = with stdenv.lib; {
+    broken = true;
     homepage = "https://github.com/hannesm/jackline";
     description = "minimalistic secure XMPP client in OCaml";
     license = licenses.bsd2;

@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
+    broken = true;
     description = "A mixnet providing IP-level privacy";
     longDescription = ''
       Nym routes IP packets through other participating nodes to hide their source and destination.

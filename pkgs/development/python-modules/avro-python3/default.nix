@@ -13,6 +13,7 @@ buildPythonPackage rec {
   doCheck = false;        # No such file or directory: './run_tests.py
 
   meta = with lib; {
+    broken = true;
     description = "A serialization and RPC framework";
     homepage = "https://pypi.python.org/pypi/avro-python3/";
     license = licenses.asl20;

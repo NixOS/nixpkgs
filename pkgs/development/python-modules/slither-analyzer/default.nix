@@ -27,6 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Static Analyzer for Solidity";
     longDescription = ''
       Slither is a Solidity static analysis framework written in Python 3. It

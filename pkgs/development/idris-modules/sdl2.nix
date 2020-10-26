@@ -28,6 +28,7 @@ build-idris-package rec {
   };
 
   meta = {
+    broken = true;
     description = "SDL2 binding for Idris";
     homepage = "https://github.com/steshaw/idris-sdl2";
     maintainers = with lib.maintainers; [

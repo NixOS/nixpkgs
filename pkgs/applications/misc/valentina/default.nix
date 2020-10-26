@@ -57,6 +57,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    broken = true;
     description = "An open source sewing pattern drafting software";
     homepage = "https://valentinaproject.bitbucket.io/";
     license = licenses.gpl3;

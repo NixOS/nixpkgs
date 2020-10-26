@@ -31,6 +31,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "A Python framework that makes developing APIs as simple as possible, but no simpler";
     homepage = "https://github.com/timothycrosley/hug";
     license = licenses.mit;

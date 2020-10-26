@@ -22,6 +22,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_TorchVis"  "test_onnx_graph" ];
 
   meta = with lib; {
+    broken = true;
     description = "Library for writing tensorboard-compatible logs";
     homepage = "https://github.com/lanpa/tensorboardX";
     license = licenses.mit;

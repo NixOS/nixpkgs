@@ -14,6 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake libGLU libpng zlib qt4 pythonPackages.pyqt4 bison flex ];
   meta = with stdenv.lib; {
+    broken = true;
     description = "Embeddable expression evaluation engine from Disney Animation";
     homepage = "https://www.disneyanimation.com/technology/seexpr.html";
     maintainers = with maintainers; [ hodapp ];

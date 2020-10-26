@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "A high-performance typed higher order prover";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

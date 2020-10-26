@@ -14,6 +14,7 @@ stdenv.mkDerivation {
   installPhase = "install -D bin/lit $out/bin/lit";
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "A literate programming tool for any language";
     homepage    = "http://literate.zbyedidia.webfactional.com/";
     license = licenses.mit;

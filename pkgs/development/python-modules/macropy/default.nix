@@ -30,6 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     homepage = "https://github.com/lihaoyi/macropy";
     description = "Macros in Python: quasiquotes, case classes, LINQ and more";
     license = licenses.mit;

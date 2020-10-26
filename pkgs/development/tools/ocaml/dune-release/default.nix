@@ -46,6 +46,7 @@ in buildDunePackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Release dune packages in opam";
     homepage = "https://github.com/ocamllabs/dune-release";
     license = licenses.isc;

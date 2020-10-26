@@ -24,6 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Google Container Engine API client library";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;

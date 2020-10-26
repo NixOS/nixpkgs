@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "A linter for Clojure code that sparks joy.";
     homepage = "https://github.com/borkdude/clj-kondo";
     license = licenses.epl10;

@@ -56,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     license = licenses.gpl2Plus;
 

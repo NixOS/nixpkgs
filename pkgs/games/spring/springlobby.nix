@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     homepage = "https://springlobby.info/";
     repositories.git = "git://github.com/springlobby/springlobby.git";
     description = "Cross-platform lobby client for the Spring RTS project";

@@ -46,6 +46,7 @@ mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = true;
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
     maintainers = with maintainers; [ abbradar nocent ];

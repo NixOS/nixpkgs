@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "A toolchain for cross-compiling to reMarkable tablets";
     homepage = "https://remarkable.engineering/";
     license = licenses.gpl2;

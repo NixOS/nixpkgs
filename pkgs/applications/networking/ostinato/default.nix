@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "A packet traffic generator and analyzer";
     homepage    = "https://ostinato.org";
     license     = licenses.gpl3;

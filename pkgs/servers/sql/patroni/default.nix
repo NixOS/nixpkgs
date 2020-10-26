@@ -48,6 +48,7 @@ pythonPackages.buildPythonApplication rec {
   preCheck = "export HOME=$(mktemp -d)";
 
   meta = with lib; {
+    broken = true;
     homepage = "https://patroni.readthedocs.io/en/latest/";
     description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;

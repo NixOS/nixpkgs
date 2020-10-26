@@ -26,6 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     homepage = "https://github.com/uber/h3-py";
     description = "This library provides Python bindings for the H3 Core Library.";
     license = licenses.asl20;

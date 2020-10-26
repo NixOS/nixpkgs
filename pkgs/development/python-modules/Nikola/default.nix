@@ -68,6 +68,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    broken = true;
     homepage = "https://getnikola.com/";
     description = "A modular, fast, simple, static website and blog generator";
     license = lib.licenses.mit;

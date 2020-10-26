@@ -49,6 +49,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Support for the WBEM standard for systems management";
     homepage = "https://pywbem.github.io";
     license = licenses.lgpl21Plus;
