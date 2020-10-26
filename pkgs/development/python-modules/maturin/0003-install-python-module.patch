@@ -1,0 +1,22 @@
+From 4152bcb5c3d9a57eaf475f343179b387d6418bbd Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Mon, 26 Oct 2020 15:38:59 +0100
+Subject: [PATCH 3/3] install python module
+
+---
+ setup.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/setup.py b/setup.py
+index d4d0c8e..1a088e1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -69,4 +69,5 @@ setup(
+     ],
+     install_requires=["toml~=0.10.0"],
+     zip_safe=False,
++    packages=["maturin"],
+ )
+-- 
+2.28.0
+

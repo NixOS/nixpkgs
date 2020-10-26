@@ -4,7 +4,7 @@
 let
   inherit (darwin.apple_sdk.frameworks) Security;
 in rustPlatform.buildRustPackage rec {
-  name = "maturin-${version}";
+  pname = "maturin";
   version = "0.8.3";
 
   src = fetchFromGitHub {

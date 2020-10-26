@@ -3652,6 +3652,10 @@ in {
 
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
+  maturin = callPackage ../development/python-modules/maturin {
+    inherit (pkgs) maturin;
+  };
+
   mautrix = callPackage ../development/python-modules/mautrix { };
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
