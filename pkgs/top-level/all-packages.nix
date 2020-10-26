@@ -15272,6 +15272,8 @@ in
 
   libticonv = callPackage ../development/libraries/libticonv { };
 
+  libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
+
   libtiff = callPackage ../development/libraries/libtiff { };
 
   libtiger = callPackage ../development/libraries/libtiger { };

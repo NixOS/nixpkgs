@@ -1,17 +1,15 @@
 { stdenv
 , fetchurl
 , lib
-, libarchive
 , autoreconfHook
 , pkg-config
 , glib
 , libusb1
 , darwin
 , acl
-, lzma
-, bzip2
 , gnome2
 , libticonv
+, libtifiles2
 }:
 let
   libticables2 = stdenv.mkDerivation rec {
@@ -36,16 +34,6 @@ let
     buildInputs = [ glib libticables2 libticonv libtifiles2 lzma bzip2 ]
       ++ lib.optionals stdenv.isLinux [ acl ]
       ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
-  };
-  libtifiles2 = stdenv.mkDerivation rec {
-    pname = "libtifiles2";
-    version = "1.1.7";
-    src = fetchurl {
-      url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
-      sha256 = "10n9mhlabmaw3ha5ckllxfy6fygs2pmlmj5v6w5v62bvx54kpils";
-    };
-    nativeBuildInputs = [ autoreconfHook pkg-config ];
-    buildInputs = [ glib libticonv libarchive lzma bzip2 ];
   };
 in
 
