@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    broken = true;
+    broken = true; # yes, all versions are currently broken
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
     license = stdenv.lib.licenses.mit;

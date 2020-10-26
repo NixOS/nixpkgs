@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cryptodev-linux.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
-    broken = !stdenv.lib.versionOlder kernel.version "4.13";
+    broken = true;
   };
 }
