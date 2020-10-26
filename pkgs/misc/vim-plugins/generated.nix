@@ -4440,6 +4440,18 @@ let
     meta.homepage = "https://github.com/junegunn/vim-easy-align/";
   };
 
+  vim-easyclip = buildVimPluginFrom2Nix {
+    pname = "vim-easyclip";
+    version = "2019-02-18";
+    src = fetchFromGitHub {
+      owner = "svermeulen";
+      repo = "vim-easyclip";
+      rev = "f1a3b95463402b30dd1e22dae7d0b6ea858db2df";
+      sha256 = "1y308y4czdzj9ppb0pnc8mkdd393wpwpncvki88aphicjzvw4498";
+    };
+    meta.homepage = "https://github.com/svermeulen/vim-easyclip";
+  };
+
   vim-easygit = buildVimPluginFrom2Nix {
     pname = "vim-easygit";
     version = "2018-07-08";
