@@ -515,18 +515,18 @@
    It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
   </para>
 
-  <para>
-   TODO: add the procedure to request merging rights.
-  </para>
-
 <!--
-The following paragraph about how to deal with unactive contributors is just a
+The following paragraphs about how to deal with unactive contributors is just a
 proposition and should be modified to what the community agrees to be the right
 policy.
 
 <para>Please note that contributors with commit rights unactive for more than
   three months will have their commit rights revoked.</para>
 -->
+
+  <para>
+   Please see the discussion in <link xlink:href="https://github.com/NixOS/nixpkgs/issues/50105">GitHub nixpkgs issue #50105</link> for information on how to proceed to be granted this level of access.
+  </para>
 
   <para>
    In a case a contributor definitively leaves the Nix community, they should create an issue or post on <link
