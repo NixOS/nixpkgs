@@ -8192,6 +8192,8 @@ in
 
   tilem = callPackage ../misc/emulators/tilem { };
 
+  tilp2 = callPackage ../applications/science/math/tilp2 { };
+
   timemachine = callPackage ../applications/audio/timemachine { };
 
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
