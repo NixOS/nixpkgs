@@ -1,11 +1,11 @@
-{ stdenv, fetchzip, makeWrapper, jre, writeText, nixosTests
-, postgresql_jdbc ? null
+{ stdenv, lib, fetchzip, makeWrapper, jre, writeText, nixosTests
+, postgresql_jdbc ? null, mysql_jdbc ? null
 }:
 
 let
   mkModuleXml = name: jarFile: writeText "module.xml" ''
     <?xml version="1.0" ?>
-    <module xmlns="urn:jboss:module:1.3" name="org.${name}">
+    <module xmlns="urn:jboss:module:1.3" name="${name}">
         <resources>
             <resource-root path="${jarFile}"/>
         </resources>
@@ -33,17 +33,22 @@ stdenv.mkDerivation rec {
 
     rm -rf $out/bin/*.{ps1,bat}
 
-    module_path=$out/modules/system/layers/keycloak/org
+    module_path=$out/modules/system/layers/keycloak
     if ! [[ -d $module_path ]]; then
         echo "The module path $module_path not found!"
         exit 1
     fi
 
-    ${if postgresql_jdbc != null then ''
-      mkdir -p $module_path/postgresql/main
-      ln -s ${postgresql_jdbc}/share/java/postgresql-jdbc.jar $module_path/postgresql/main
-      ln -s ${mkModuleXml "postgresql" "postgresql-jdbc.jar"} $module_path/postgresql/main/module.xml
-    '' else ""}
+    ${lib.optionalString (postgresql_jdbc != null) ''
+      mkdir -p $module_path/org/postgresql/main
+      ln -s ${postgresql_jdbc}/share/java/postgresql-jdbc.jar $module_path/org/postgresql/main/
+      ln -s ${mkModuleXml "org.postgresql" "postgresql-jdbc.jar"} $module_path/org/postgresql/main/module.xml
+    ''}
+    ${lib.optionalString (mysql_jdbc != null) ''
+      mkdir -p $module_path/com/mysql/main
+      ln -s ${mysql_jdbc}/share/java/mysql-connector-java.jar $module_path/com/mysql/main/
+      ln -s ${mkModuleXml "com.mysql" "mysql-connector-java.jar"} $module_path/com/mysql/main/module.xml
+    ''}
 
     wrapProgram $out/bin/standalone.sh --set JAVA_HOME ${jre}
     wrapProgram $out/bin/add-user-keycloak.sh --set JAVA_HOME ${jre}

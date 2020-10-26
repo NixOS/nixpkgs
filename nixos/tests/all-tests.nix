@@ -175,7 +175,7 @@ in
   kernel-latest = handleTest ./kernel-latest.nix {};
   kernel-lts = handleTest ./kernel-lts.nix {};
   kernel-testing = handleTest ./kernel-testing.nix {};
-  keycloak = handleTest ./keycloak.nix {};
+  keycloak = discoverTests (import ./keycloak.nix);
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
   krb5 = discoverTests (import ./krb5 {});
