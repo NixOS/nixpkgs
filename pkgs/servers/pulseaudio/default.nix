@@ -190,6 +190,10 @@ stdenv.mkDerivation rec {
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
+  passthru = {
+    pulseDir = "lib/pulse-" + lib.versions.majorMinor version;
+  };
+
   meta = with lib; {
     description = "A featureful, general-purpose sound server";
     homepage = "http://www.pulseaudio.org/";
