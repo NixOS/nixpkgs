@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/cwida/duckdb";
-    description = "DuckDB is an embeddable SQL OLAP Database Management System";
+    description = "Embeddable SQL OLAP Database Management System";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ costrouc ];

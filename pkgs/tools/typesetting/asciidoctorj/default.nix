@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = ''
-      AsciidoctorJ is the official library for running Asciidoctor on the JVM.
-    '';
+    description = "Official library for running Asciidoctor on the JVM";
     longDescription = ''
       AsciidoctorJ is the official library for running Asciidoctor on the JVM.
       Using AsciidoctorJ, you can convert AsciiDoc content or analyze the

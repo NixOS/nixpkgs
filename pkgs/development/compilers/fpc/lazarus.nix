@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Lazarus graphical IDE for the FreePascal language";
+    description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
     license = licenses.gpl2Plus ;
     maintainers = with maintainers; [ raskin ];
