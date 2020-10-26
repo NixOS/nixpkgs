@@ -11,19 +11,9 @@
 , lzma
 , bzip2
 , gnome2
+, libticonv
 }:
 let
-  libticonv = stdenv.mkDerivation rec {
-    pname = "libticonv";
-    version = "1.1.5";
-    src = fetchurl {
-      url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
-      sha256 = "0y080v12bm81wgjm6fnw7q0yg7scphm8hhrls9njcszj7fkscv9i";
-    };
-    nativeBuildInputs = [ autoreconfHook pkg-config ];
-    buildInputs = [ glib ];
-    configureFlags = [ "--enable-iconv" ];
-  };
   libticables2 = stdenv.mkDerivation rec {
     pname = "libticables2";
     version = "1.3.5";
@@ -58,6 +48,7 @@ let
     buildInputs = [ glib libticonv libarchive lzma bzip2 ];
   };
 in
+
 stdenv.mkDerivation rec {
   pname = "tilem";
   version = "2.0";
@@ -72,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "http://lpg.ticalc.org/prj_tilem/";
     description = "Emulator and debugger for Texas Instruments Z80-based graphing calculators";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [ siraben luc65r ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

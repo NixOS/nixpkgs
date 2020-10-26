@@ -15270,6 +15270,8 @@ in
 
   libthreadar = callPackage ../development/libraries/libthreadar { };
 
+  libticonv = callPackage ../development/libraries/libticonv { };
+
   libtiff = callPackage ../development/libraries/libtiff { };
 
   libtiger = callPackage ../development/libraries/libtiger { };
