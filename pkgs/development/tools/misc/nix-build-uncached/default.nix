@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "nix-build-uncached";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-build-uncached";
     rev = "v${version}";
-    sha256 = "1gfnlqh7ky0ynd6jwks2g3y04by10cad58chkddk1waq23j0a24v";
+    sha256 = "0hjx2gdwzg02fzxhsf7akp03vqj2s7wmcv9xfqn765zbqnljz14v";
   };
 
   vendorSha256 = null;
