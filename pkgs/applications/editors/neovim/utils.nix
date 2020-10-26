@@ -7,7 +7,7 @@
 , pythonPackages
 , python3Packages
 , writeText
-, wrapNeovim2
+, wrapNeovimUnstable
 }:
 let
   # returns everything needed for the caller to wrap its own neovim:
@@ -157,7 +157,7 @@ let
         inherit configure;
       };
     in
-    wrapNeovim2 neovim (res // {
+    wrapNeovimUnstable neovim (res // {
       wrapperArgs = res.wrapperArgs
       ++ [
         "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"

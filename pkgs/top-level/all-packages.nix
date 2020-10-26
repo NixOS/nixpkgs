@@ -23912,7 +23912,7 @@ in
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
-  wrapNeovim2 = callPackage ../applications/editors/neovim/wrapper.nix { };
+  wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovimUtils.legacyWrapper;
   neovim-unwrapped = callPackage ../applications/editors/neovim {
     lua =
