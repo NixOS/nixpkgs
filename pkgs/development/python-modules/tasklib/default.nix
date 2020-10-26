@@ -1,4 +1,4 @@
-{ lib, pythonPackages, taskwarrior, writeShellScriptBin }:
+{ lib, pythonPackages, taskwarrior, writeShellScriptBin, isPy27 }:
 
 with pythonPackages;
 
@@ -9,6 +9,7 @@ wsl_stub = writeShellScriptBin "wsl" "true";
 in buildPythonPackage rec {
   pname = "tasklib";
   version = "2.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

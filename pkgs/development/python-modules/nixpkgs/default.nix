@@ -24,6 +24,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/t184256/nixpkgs-python-importer";
     license = licenses.mit;
     maintainers = with maintainers; [ t184256 ];
+    broken = true;
   };
 
 }

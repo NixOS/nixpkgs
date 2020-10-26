@@ -1,17 +1,18 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-devhelp";
   version = "1.0.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "ff7f1afa7b9642e7060379360a67e9c41e8f3121f2ce9164266f61b9f4b338e4";
   };
-
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;

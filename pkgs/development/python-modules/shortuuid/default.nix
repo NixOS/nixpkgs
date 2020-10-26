@@ -1,12 +1,14 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pep8
 }:
 
 buildPythonPackage rec {
   pname = "shortuuid";
   version = "1.0.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

@@ -11727,6 +11727,7 @@ let
 
      meta = {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       broken = stdenv.lib.versionOlder perl.version "5.32.0";
      };
   };
 
@@ -11851,6 +11852,9 @@ let
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
     buildInputs = [ DataFloat MathBigIntLite NumberFraction ];
+    meta = {
+      broken = stdenv.lib.versionOlder perl.version "5.32.0";
+    };
   };
 
   MathPrimeUtil = buildPerlPackage {

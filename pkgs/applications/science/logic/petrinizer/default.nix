@@ -28,4 +28,5 @@ mkDerivation rec {
   description = "Safety and Liveness Analysis of Petri Nets with SMT solvers";
   license = stdenv.lib.licenses.gpl3;
   maintainers = with stdenv.lib.maintainers; [ raskin ];
+  broken = true;
 }

@@ -1,10 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , requests, six
 , backports_unittest-mock, pytestCheckHook, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "sseclient";
   version = "0.0.26";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

@@ -20,5 +20,6 @@ buildPythonPackage rec {
     # Modified Apache Software License, Version 1.1
     license = licenses.free;
     maintainers = with maintainers; [ peterhoeg ];
+    broken = !isPy3k;
   };
 }

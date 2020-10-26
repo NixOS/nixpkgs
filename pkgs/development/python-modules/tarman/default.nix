@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   version = "0.1.3";
   pname = "tarman";
-
   disabled = isPy3k;
 
   src = fetchPypi {
@@ -29,6 +28,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/matejc/tarman";
     description = "Archive manager with curses interface";
     license = licenses.bsd0;
+    broken = true; # doesn't unpack correctly
   };
 
 }

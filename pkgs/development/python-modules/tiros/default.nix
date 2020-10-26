@@ -17,4 +17,6 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ semantic-version boto3 flask docutils requests ];
+
+  meta.broken = true;
 }

@@ -1,5 +1,6 @@
 { stdenv
 , fetchPypi
+, isPy27
 , buildPythonPackage
 , zope_interface
 , mock
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "transaction";
   version = "3.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
