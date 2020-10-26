@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   buildInputs = [ perl ];
 
   meta = {
-    description = "Daemon turns other process into daemons";
+    description = "Turns other processes into daemons";
     longDescription = ''
       Daemon turns other process into daemons. There are many tasks that need
       to be performed to correctly set up a daemon process. This can be tedious.

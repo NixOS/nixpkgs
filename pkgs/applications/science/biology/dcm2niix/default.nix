@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libyamlcpp ];
 
   meta = with stdenv.lib; {
-    description = "dcm2niix DICOM to NIfTI converter";
+    description = "DICOM to NIfTI converter";
     longDescription = ''
       dcm2niix is a designed to convert neuroimaging data from the
       DICOM format to the NIfTI format.

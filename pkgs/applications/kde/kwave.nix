@@ -5,7 +5,7 @@ mkDerivation {
   name = "kwave";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/multimedia/org.kde.kwave";
-    description = "KWave is a simple media player";
+    description = "A simple media player";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

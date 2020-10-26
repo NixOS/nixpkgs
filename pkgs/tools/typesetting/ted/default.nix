@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper makeWrapper ];
 
   meta = with stdenv.lib; {
-    description = "Ted, an easy rich text processor";
+    description = "An easy rich text processor";
     longDescription = ''
       Ted is a text processor running under X Windows on Unix/Linux systems.
       Ted was developed as a standard easy light weight word processor, having

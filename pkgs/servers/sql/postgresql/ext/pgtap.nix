@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "pgTAP is a unit testing framework for PostgreSQL";
+    description = "A unit testing framework for PostgreSQL";
     longDescription = ''
       pgTAP is a unit testing framework for PostgreSQL written in PL/pgSQL and PL/SQL.
       It includes a comprehensive collection of TAP-emitting assertion functions,

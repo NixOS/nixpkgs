@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     homepage = "https://launchpad.net/dockbar/";
-    description = "DockBarX is a lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
+    description = "Lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.volth ];

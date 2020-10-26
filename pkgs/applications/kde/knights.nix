@@ -4,7 +4,7 @@ mkDerivation {
   name = "knights";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.knights";
-    description = "KNights is a chess game";
+    description = "A chess game";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

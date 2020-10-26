@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Leftwm - A tiling window manager for the adventurer";
+    description = "A tiling window manager for the adventurer";
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;
     platforms = platforms.linux;

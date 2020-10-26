@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Grsync is used to synchronize folders, files and make backups";
+    description = "Synchronize folders, files and make backups";
     homepage = "http://www.opbyte.it/grsync/";
     license = licenses.gpl1;
     platforms = platforms.linux;

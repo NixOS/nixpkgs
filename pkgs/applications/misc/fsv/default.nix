@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   version = "0.9-1";
 
   src = fetchFromGitHub {
-    owner  = "mcuelenaere"; 
+    owner  = "mcuelenaere";
     repo   = "fsv";
     rev    = "${pname}-${version}";
     sha256 = "0n09jd7yqj18mx6zqbg7kab4idg5llr15g6avafj74fpg1h7iimj";
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   buildInputs       = [ file gtk2 libGLU gtkglarea ];
 
   meta = with stdenv.lib; {
-    description     = "fsv is a file system visualizer in cyberspace";
+    description     = "File system visualizer in cyberspace";
     longDescription = ''
       fsv (pronounced eff-ess-vee) is a file system visualizer in cyberspace.
       It lays out files and directories in three dimensions, geometrically

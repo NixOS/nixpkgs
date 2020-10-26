@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "OpenModelica is an open-source Modelica-based modeling and simulation environment";
+    description = "An open-source Modelica-based modeling and simulation environment";
     homepage    = "https://openmodelica.org";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ smironov ];

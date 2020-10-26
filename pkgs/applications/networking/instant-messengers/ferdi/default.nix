@@ -9,7 +9,7 @@ mkFranzDerivation rec {
     sha256 = "0i24vcnq4iz5amqmn2fgk92ff9x9y7fg8jhc3g6ksvmcfly7af3k";
   };
   meta = with stdenv.lib; {
-    description = "Ferdi allows you to combine your favorite messaging services into one application";
+    description = "Combine your favorite messaging services into one application";
     homepage = "https://getferdi.com/";
     license = licenses.free;
     maintainers = [ maintainers.davidtwco ];

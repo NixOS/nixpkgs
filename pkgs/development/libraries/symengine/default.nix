@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "SymEngine is a fast symbolic manipulation library";
+    description = "A fast symbolic manipulation library";
     homepage = "https://github.com/symengine/symengine";
     platforms = platforms.unix ++ platforms.windows;
     license = licenses.bsd3;

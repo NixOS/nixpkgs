@@ -67,7 +67,7 @@ with lib; gnustep.stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "SOGo is a very fast and scalable modern collaboration suite (groupware)";
+    description = "A very fast and scalable modern collaboration suite (groupware)";
     license = with licenses; [ gpl2 lgpl21 ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;

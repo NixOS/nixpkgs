@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description =
-      "Obsidian is a powerful knowledge base that works on top of a local folder of plain text Markdown files";
+      "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     license = licenses.obsidian;
     maintainers = with maintainers; [ conradmearns zaninime ];
