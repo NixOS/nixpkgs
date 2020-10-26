@@ -143,6 +143,7 @@ in stdenv.mkDerivation {
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
+    "-Dglib=${stdenv.lib.boolToString (glib != null)}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Dimportd=${stdenv.lib.boolToString withImportd}"
