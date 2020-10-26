@@ -58,6 +58,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ck3d ];
     priority = -1;
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
+    broken = true;
   };
 }

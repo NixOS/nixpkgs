@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ lgpl21 gpl2 ];
     homepage = "https://www.displaylink.com/";
-    broken = versionOlder kernel.version "4.9" || stdenv.isAarch64;
+    broken = versionOlder kernel.version "5" || stdenv.isAarch64;
   };
 }

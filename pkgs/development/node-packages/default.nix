@@ -175,6 +175,7 @@ let
 
         self.node-pre-gyp
       ];
+      meta.broken = true;
     };
 
     thelounge = super.thelounge.override {

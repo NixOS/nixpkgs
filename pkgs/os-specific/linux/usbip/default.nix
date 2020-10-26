@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     description = "allows to pass USB device from server to client over the network";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    broken = lib.versionOlder kernel.version "4.14";
   };
 }
