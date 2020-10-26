@@ -445,8 +445,8 @@ let
       '';
     } // extraArgs);
 
-  # Builds a development shell
-  buildNodeShell =
+  # Builds a node environment (a node_modules folder and a set of binaries)
+  buildNodeDependencies =
     { name
     , packageName
     , version
@@ -465,8 +465,8 @@ let
 
     let
       extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" ];
-
-      nodeDependencies = stdenv.mkDerivation ({
+    in
+      stdenv.mkDerivation ({
         name = "node-dependencies-${name}-${version}";
 
         buildInputs = [ tarWrapper python nodejs ]
@@ -512,6 +512,27 @@ let
           ln -s $out/lib/node_modules/.bin $out/bin
         '';
       } // extraArgs);
+
+  # Builds a development shell
+  buildNodeShell =
+    { name
+    , packageName
+    , version
+    , src
+    , dependencies ? []
+    , buildInputs ? []
+    , production ? true
+    , npmFlags ? ""
+    , dontNpmInstall ? false
+    , bypassCache ? false
+    , reconstructLock ? false
+    , dontStrip ? true
+    , unpackPhase ? "true"
+    , buildPhase ? "true"
+    , ... }@args:
+
+    let
+      nodeDependencies = buildNodeDependencies args;
     in
     stdenv.mkDerivation {
       name = "node-shell-${name}-${version}";
@@ -538,5 +559,6 @@ in
 {
   buildNodeSourceDist = stdenv.lib.makeOverridable buildNodeSourceDist;
   buildNodePackage = stdenv.lib.makeOverridable buildNodePackage;
+  buildNodeDependencies = stdenv.lib.makeOverridable buildNodeDependencies;
   buildNodeShell = stdenv.lib.makeOverridable buildNodeShell;
 }
