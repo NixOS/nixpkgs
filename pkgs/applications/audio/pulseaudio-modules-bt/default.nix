@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
     # Pulseaudio version is detected with a -rebootstrapped suffix which build system assumptions
     substituteInPlace config.h.in --replace PulseAudio_VERSION ${pulseaudio.version}
-    substituteInPlace CMakeLists.txt --replace '${"\${PulseAudio_VERSION}"}' ${pulseaudio.version}
+    substituteInPlace CMakeLists.txt --replace '${"\${PULSE_DIR}"}' ${pulseaudio.pulseDir}
 
     # Fraunhofer recommends to enable afterburner but upstream has it set to false by default
     substituteInPlace src/modules/bluetooth/a2dp/a2dp_aac.c \
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     for so in $out/lib/pulse-${pulseaudio.version}/modules/*.so; do
       orig_rpath=$(patchelf --print-rpath "$so")
       patchelf \
-        --set-rpath "${ldacbt}/lib:${lib.getLib ffmpeg}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
+        --set-rpath "${ldacbt}/lib:${lib.getLib ffmpeg}/lib:$out/${pulseaudio.pulseDir}/modules:$orig_rpath" \
         "$so"
     done
   '';
