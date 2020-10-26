@@ -106,7 +106,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.10";
+  version = "0.3.12";
 
   outputs = [ "out" "dev" ];
 
