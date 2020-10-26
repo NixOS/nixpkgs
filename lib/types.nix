@@ -57,6 +57,9 @@ let
     escapeNixString
     isCoercibleToString
     ;
+  inherit (lib.trivial)
+    boolToString
+    ;
 
   inherit (lib.modules) mergeDefinitions;
   outer_types =
