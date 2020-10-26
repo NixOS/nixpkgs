@@ -6617,6 +6617,8 @@ in
 
   rc = callPackage ../shells/rc { };
 
+  rcon = callPackage ../tools/networking/rcon { };
+
   rdbtools = callPackage ../development/tools/rdbtools { python = python3; };
 
   rdma-core = callPackage ../os-specific/linux/rdma-core { };
