@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1r1g2hw9ipsmsmzbhsi7bxqra1za6x7j1kw12qzl5psqyq8rqbgs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig gettext doxygen makeWrapper ];
   buildInputs = [
-    cmake wxGTK30 openal curl gettext libtorrentRasterbar pcre jsoncpp
-    boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
+    wxGTK30 openal curl libtorrentRasterbar pcre jsoncpp
+    boost libpng libX11 libnotify gtk2 glib minizip alure
   ];
 
   patches = [
