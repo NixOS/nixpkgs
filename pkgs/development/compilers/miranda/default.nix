@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchpatch, gcc }:
+{ stdenv, lib, fetchzip, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "miranda";
