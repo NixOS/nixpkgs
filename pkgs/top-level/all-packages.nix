@@ -6947,6 +6947,8 @@ in
 
   sewer = callPackage ../tools/admin/sewer { };
 
+  sftpman = callPackage ../tools/filesystems/sftpman { };
+
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
