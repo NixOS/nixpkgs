@@ -1,12 +1,62 @@
 # Definitions related to run-time type checking.  Used in particular
 # to type-check NixOS configurations.
 { lib }:
-with lib.lists;
-with lib.attrsets;
-with lib.options;
-with lib.trivial;
-with lib.strings;
+
 let
+  inherit (lib)
+    elem
+    flip
+    functionArgs
+    isAttrs
+    isBool
+    isDerivation
+    isFloat
+    isFunction
+    isInt
+    isList
+    isString
+    isStorePath
+    setFunctionArgs
+    toDerivation
+    toList
+    ;
+  inherit (lib.lists)
+    all
+    concatLists
+    count
+    elemAt
+    filter
+    foldl'
+    head
+    imap1
+    last
+    length
+    tail
+    unique
+    ;
+  inherit (lib.attrsets)
+    attrNames
+    filterAttrs
+    hasAttr
+    mapAttrs
+    optionalAttrs
+    zipAttrsWith
+    ;
+  inherit (lib.options)
+    getFiles
+    getValues
+    mergeDefaultOption
+    mergeEqualOption
+    mergeOneOption
+    showFiles
+    showOption
+    ;
+  inherit (lib.strings)
+    concatMapStringsSep
+    concatStringsSep
+    escapeNixString
+    isCoercibleToString
+    ;
 
   inherit (lib.modules) mergeDefinitions;
   outer_types =
@@ -270,7 +320,7 @@ rec {
       name = "attrs";
       description = "attribute set";
       check = isAttrs;
-      merge = loc: foldl' (res: def: mergeAttrs res def.value) {};
+      merge = loc: foldl' (res: def: res // def.value) {};
       emptyValue = { value = {}; };
     };
 
