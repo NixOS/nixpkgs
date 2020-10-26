@@ -11173,7 +11173,7 @@ in
   gradle_4_10 = res.gradleGen.gradle_4_10;
   gradle_4 = gradle_4_10;
   gradle_5 = res.gradleGen.gradle_5_6;
-  gradle_6 = res.gradleGen.gradle_6_6;
+  gradle_6 = res.gradleGen.gradle_6_7;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
