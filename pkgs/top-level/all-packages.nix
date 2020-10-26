@@ -7601,6 +7601,8 @@ in
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
+  tvm = callPackage ../development/compilers/tvm { };
+
   oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
 
   twilight = callPackage ../tools/graphics/twilight {
