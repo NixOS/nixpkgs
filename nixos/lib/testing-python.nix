@@ -192,7 +192,7 @@ rec {
     else
       test // {
         inherit test driver driverInteractive;
-        inherit (test) nodes;
+        inherit (driver) nodes;
       };
 
   runInMachine =
