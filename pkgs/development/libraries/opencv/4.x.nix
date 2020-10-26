@@ -37,20 +37,20 @@
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
-  version = "4.3.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "1r9bq9p1x99g2y8jvj9428sgqvljz75dm5vrfsma7hh5wjhz9775";
+    sha256 = "0kv64hinfb07m7rld8b5iy8qkwi465rl1v8pf3fvd2ankmyb1m5w";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "068b4f95rlryab3mffxs2w6dnbmbhrnpsdgl007rxk4bwnz29y49";
+    sha256 = "1gls9c7r08amgi9hljbpscka6siiqfnmhfzr7qrm29xki882d3v4";
   };
 
   # Contrib must be built in order to enable Tesseract support:
