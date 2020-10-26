@@ -6,5 +6,5 @@ exemptLabels:
   - "2.status: never-stale"
 staleLabel: "2.status: stale"
 markComment: |
-  [Nixpkgs stale bot info](https://github.com/NixOS/nixpkgs/blob/master/.github/STALE-BOT.md)
+  I marked this as stale due to inactivity. &rarr; [More info](https://github.com/NixOS/nixpkgs/blob/master/.github/STALE-BOT.md)
 closeComment: false
