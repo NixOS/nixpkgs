@@ -30,8 +30,8 @@ stdenv.mkDerivation (rec {
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-         # included on coreutils master; TODO: apply unconditionally, I guess
-         ++ optional stdenv.hostPlatform.isAarch64 ./sys-getdents-undeclared.patch;
+    # included on coreutils master; TODO: apply unconditionally, I guess
+    ++ optional stdenv.hostPlatform.isAarch64 ./sys-getdents-undeclared.patch;
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
