@@ -29,6 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   meta = with lib; {
+    broken = true;
     homepage    = "https://f1ash.github.io/qt-virt-manager";
     description = "Desktop user interface for managing virtual machines (QT)";
     longDescription = ''

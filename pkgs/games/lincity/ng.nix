@@ -47,6 +47,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "City building game";
     license = licenses.gpl2;
     maintainers = with maintainers; [ raskin ];

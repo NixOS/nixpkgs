@@ -64,6 +64,7 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
     license = licenses.gpl2;

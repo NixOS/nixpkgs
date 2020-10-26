@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description =
       "A high-performance CPU-based implementation of the Vulkan, OpenGL ES, and Direct3D 9 graphics APIs";
     homepage = "https://opensource.google/projects/swiftshader";

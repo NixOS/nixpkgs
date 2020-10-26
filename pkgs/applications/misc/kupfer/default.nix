@@ -47,6 +47,7 @@ buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "A smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;

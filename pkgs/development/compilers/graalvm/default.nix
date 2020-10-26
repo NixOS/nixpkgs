@@ -271,6 +271,7 @@ in rec {
         --set    FINDBUGS_HOME ${findbugs}
     '';
     meta = with stdenv.lib; {
+      broken = true;
       homepage = "https://github.com/graalvm/mx";
       description = "Command-line tool used for the development of Graal projects";
       license = licenses.gpl2;
@@ -528,6 +529,7 @@ in rec {
     passthru.home = graalvm8;
 
     meta = with stdenv.lib; {
+      broken = true;
       homepage = "https://github.com/oracle/graal";
       description = "High-Performance Polyglot VM";
       license = licenses.gpl2;

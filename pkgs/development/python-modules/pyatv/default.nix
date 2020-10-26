@@ -46,6 +46,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "A python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;

@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
 
   meta = {
+    broken = true;
     description = "Simple tool for doing everyday things with PDF documents";
     homepage = "https://www.pdflabs.com/tools/pdftk-server/";
     license = stdenv.lib.licenses.gpl2;

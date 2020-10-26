@@ -49,8 +49,8 @@ let
     };
 
     meta = with stdenv.lib; {
+      broken = true;
       inherit (a) description license;
-      broken = a.broken or false;
       homepage = "https://www.libretro.com/";
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.unix;

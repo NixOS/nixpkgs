@@ -28,6 +28,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook mock nose ];
 
   meta = with lib; {
+    broken = true;
     description = "Access your meal tracking data stored in MyFitnessPal programatically";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
     license = licenses.mit;

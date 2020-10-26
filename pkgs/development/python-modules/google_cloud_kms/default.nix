@@ -25,6 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Cloud Key Management Service (KMS) API API client library";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;

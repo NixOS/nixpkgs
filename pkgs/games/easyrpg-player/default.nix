@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
     homepage = "https://easyrpg.org/";
     license = licenses.gpl3;

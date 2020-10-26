@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with licenses; [ gpl2 lgpl21 ];
     homepage = "http://libguestfs.org/";

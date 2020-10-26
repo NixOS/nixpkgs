@@ -174,6 +174,7 @@ let
     };
 
     meta = with lib; {
+      broken = true;
       description = "A compiled language with Ruby like syntax and type inference";
       homepage = "https://crystal-lang.org/";
       license = licenses.asl20;

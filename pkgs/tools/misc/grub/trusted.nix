@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
     homepage = "https://github.com/Sirrix-AG/TrustedGRUB2";
     license = licenses.gpl3Plus;

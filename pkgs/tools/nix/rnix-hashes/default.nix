@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "vaG+0t+XAckV9F4iIgcTkbIUurxdQsTCfOnRnrOKoRc=";
 
   meta = with lib; {
+    broken = true;
     description = "Nix Hash Converter";
     homepage = "https://github.com/numtide/rnix-hashes";
     license = licenses.asl20;

@@ -29,6 +29,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "A Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/fmfn/BayesianOptimization";
     license = licenses.mit;

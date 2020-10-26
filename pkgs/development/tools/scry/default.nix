@@ -35,6 +35,7 @@ in crystal.buildCrystalPackage rec {
   doInstallCheck = false;
 
   meta = with lib; {
+    broken = true;
     description = "Code analysis server for the Crystal programming language";
     homepage = "https://github.com/crystal-lang-tools/scry";
     license = licenses.mit;

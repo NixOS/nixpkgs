@@ -17,6 +17,7 @@ build-idris-package  {
   };
 
   meta = {
+    broken = true;
     description = "Functional data structures in Idris";
     homepage = "https://github.com/jdevuyst/idris-data";
     license = lib.licenses.bsd3;

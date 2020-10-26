@@ -25,6 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Portable, open-source Game Boy Color emulator";
     homepage = "https://github.com/sinamas/gambatte";
     license = licenses.gpl2;

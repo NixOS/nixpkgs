@@ -51,6 +51,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
     license = licenses.gpl2;

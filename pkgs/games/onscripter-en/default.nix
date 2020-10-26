@@ -26,6 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Japanese visual novel scripting engine";
     homepage = "http://unclemion.com/onscripter/";
     license = licenses.gpl2;

@@ -30,6 +30,7 @@ buildPythonPackage rec {
   cmakeFlags = lib.optional isPy3k "-DUSE_PYTHON3=TRUE";
 
   meta = {
+    broken = true;
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
     license = lib.licenses.gpl2;
     homepage = "http://www.pyside.org/docs/shiboken/";

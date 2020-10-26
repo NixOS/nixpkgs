@@ -43,6 +43,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Realtek r8168 driver";
     longDescription = ''
       A kernel module for Realtek 8168 network cards.

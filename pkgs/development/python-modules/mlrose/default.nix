@@ -17,6 +17,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Machine Learning, Randomized Optimization and SEarch";
     homepage    = "https://github.com/gkhayes/mlrose";
     license     = licenses.bsd3;
