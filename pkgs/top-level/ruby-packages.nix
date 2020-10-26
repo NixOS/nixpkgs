@@ -1132,6 +1132,7 @@
       type = "gem";
     };
     version = "3.4.1";
+    meta.broken = true;
   };
   hashie = {
     groups = ["default"];
@@ -1721,6 +1722,7 @@
       type = "gem";
     };
     version = "3.4.1";
+    meta.broken = true;
   };
   parallel = {
     groups = ["default"];

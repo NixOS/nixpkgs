@@ -98,5 +98,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    broken = true;
   };
 }
