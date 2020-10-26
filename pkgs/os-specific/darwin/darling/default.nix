@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/darlinghq/darling/archive/d2cc5fa748003aaa70ad4180fff0a9a85dc65e9b.tar.gz";
-    sha256 = "11b51fw47nl505h63bgx5kqiyhf3glhp1q6jkpb6nqfislnzzkrf";
+    sha256 = "0krlrb75fcfa52kx1nvlpyxk060zk2931hfw6g86k5nmzfv9hyxa";
     postFetch = ''
       # Get rid of case conflict
       mkdir $out
