@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.1.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = version;
-    sha256 = "1fllz2s20lg4hrppzmnlgjy9mrq7gaq66l2apb3vz1avzvsjw3gm";
+    sha256 = "0ixsx4224jilc5zis6wbsbxqxv10mm5sksrzq15xp30zz0bzb6md";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = ''
     unset HOME
-    pytest lib/tests
+    pytest electroncash/tests
   '';
 
   postInstall = ''
