@@ -86,7 +86,8 @@ in
 
     ipv6 = mkOption {
       type = types.bool;
-      default = false;
+      default = config.networking.enableIPv6;
+      defaultText = "config.networking.enableIPv6";
       description = "Whether to use IPv6.";
     };
 
