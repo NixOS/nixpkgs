@@ -22,11 +22,13 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  # TODO: Move to enhanced installShellCompletion when in master: PR #83630
   postInstall = ''
-   for shell in bash zsh; do
-     $out/bin/k3d completion $shell > k3d.$shell
-     installShellCompletion k3d.$shell
-   done
+    $out/bin/k3d completion bash > k3d.bash
+    $out/bin/k3d completion fish > k3d.fish
+    $out/bin/k3d completion zsh  > _k3d
+    installShellCompletion k3d.{bash,fish} --zsh _k3d
   '';
 
   vendorSha256 = null;
