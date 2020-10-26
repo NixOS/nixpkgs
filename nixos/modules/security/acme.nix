@@ -19,7 +19,6 @@ let
       Type = "oneshot";
       User = "acme";
       Group = mkDefault "acme";
-      UMask = 0027;
       StateDirectoryMode = 750;
       ProtectSystem = "full";
       PrivateTmp = true;
@@ -669,7 +668,7 @@ in {
         "d /var/lib/acme/.lego/accounts - acme acme"
       ] ++ (unique (concatMap (conf: [
           "d ${conf.accountDir} - acme acme"
-        ] ++ (optional (conf.webroot != null) "d ${conf.webroot}/.well-known/acme-challenge - acme ${conf.group}")
+        ] ++ (optional (conf.webroot != null) "d ${conf.webroot}/.well-known/acme-challenge - acme acme")
       ) (attrValues certConfigs)));
 
       # Create some targets which can be depended on to be "active" after cert renewals
