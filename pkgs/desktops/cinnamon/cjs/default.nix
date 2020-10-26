@@ -1,6 +1,4 @@
-{ autoconf-archive
-, autoreconfHook
-, dbus-glib
+{ dbus-glib
 , fetchFromGitHub
 , gobject-introspection
 , pkgconfig
@@ -17,25 +15,50 @@
 , libffi
 , gtk3
 , readline
+, spidermonkey_78
+, meson
+, sysprof
+, dbus
+, xvfb_run
+, ninja
+, makeWrapper
+, which
+, libxml2
 }:
 
-let
-
-  # https://github.com/linuxmint/cjs/issues/80
-  spidermonkey_52 = callPackage ./spidermonkey_52.nix {};
-
-in
-
 stdenv.mkDerivation rec {
-  pname = "cjs";
-  version = "4.6.0";
+  pname = "cjs-unstable";
+  version = "2020-10-19";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    sha256 = "1caa43cplb40dm1bwnwca7z4yafvnrncm96k7mih6kg3m87fxqi5";
+    repo = "cjs";
+    rev = "befc11adb5ba10681464e6fa81b1a79f108ce61c";
+    hash = "sha256-F2t8uKV2r29NxX2+3mYp5x1bug2lwihJZTK1dSS8rPg=";
   };
+
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [
+    meson # ADDING cmake breaks the build, ignore meson warning
+    ninja
+    pkgconfig
+    makeWrapper
+    which # for locale detection
+    libxml2 # for xml-stripblanks
+  ];
+
+  buildInputs = [
+    gobject-introspection
+    cairo
+    readline
+    spidermonkey_78
+    dbus # for dbus-run-session
+  ];
+
+  checkInputs = [
+    xvfb_run
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -47,25 +70,8 @@ stdenv.mkDerivation rec {
     xapps
   ];
 
-  nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
-    wrapGAppsHook
-    pkgconfig
-  ];
-
-  buildInputs = [
-    # from .pc
-    gobject-introspection
-    libffi
-    spidermonkey_52 # mozjs-52
-    cairo # +cairo-gobject
-    gtk3
-
-    # other
-
-    dbus-glib
-    readline
+  mesonFlags = [
+    "-Dprofiler=disabled"
   ];
 
   meta = with stdenv.lib; {
@@ -77,11 +83,12 @@ stdenv.mkDerivation rec {
     '';
 
     license = with licenses; [
-     gpl2Plus
-     lgpl2Plus
-     mit
-     mpl11
-   ];
+      gpl2Plus
+      lgpl2Plus
+      mit
+      mpl11
+    ];
+
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };
