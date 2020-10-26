@@ -25,6 +25,10 @@ in rustPlatform.buildRustPackage rec {
   # Requires network access, fails in sandbox.
   doCheck = false;
 
+  passthru = {
+    inherit rustPlatform;
+  };
+
   meta = with stdenv.lib; {
     description = "Build and publish crates with pyo3 bindings as python packages";
     homepage = "https://github.com/PyO3/maturin";
