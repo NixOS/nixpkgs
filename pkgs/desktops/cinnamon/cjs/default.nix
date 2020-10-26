@@ -27,14 +27,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cjs";
-  version = "4.6.0-gjs-1.66.0";
+  pname = "cjs-unstable";
+  version = "2020-10-19";
 
   src = fetchFromGitHub {
-    owner = "leigh123linux";
-    repo = pname;
-    rev = "gjs-1.66.0";
-    sha256 = "1pccz7h8mwljziflhn04gmfnbl99pvcj1byz1c6zn947v5gqskj1";
+    owner = "linuxmint";
+    repo = "cjs";
+    rev = "befc11adb5ba10681464e6fa81b1a79f108ce61c";
+    hash = "sha256-F2t8uKV2r29NxX2+3mYp5x1bug2lwihJZTK1dSS8rPg=";
   };
 
   outputs = [ "out" "dev" ];
