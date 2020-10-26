@@ -802,5 +802,8 @@ mapAliases ({
     kwin-tiling
     krohnkite
   ;
+  inherit (libsForQt5)
+    sddm
+  ;
 
 })

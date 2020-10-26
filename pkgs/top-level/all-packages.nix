@@ -15344,6 +15344,9 @@ in
 
     qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
+    # Not a library, but we do want it to be built for every qt version there
+    # is, to allow users to choose the right build if needed.
+    sddm = callPackage ../applications/display-managers/sddm { };
   };
 
   qtEnv = qt5.env;
@@ -23484,8 +23487,6 @@ in
   super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
-
-  sddm = libsForQt514.callPackage ../applications/display-managers/sddm { };
 
   skrooge = libsForQt514.callPackage ../applications/office/skrooge {};
 
