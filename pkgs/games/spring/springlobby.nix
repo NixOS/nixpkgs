@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
+{ stdenv, fetchurl, fetchpatch, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
 , libpng, libX11, gettext, boost, libnotify, gtk2, doxygen, spring
 , makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
 
@@ -17,7 +17,14 @@ stdenv.mkDerivation rec {
     boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
   ];
 
-  patches = [ ./revert_58b423e.patch ./fix-certs.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
+  patches = [
+    ./revert_58b423e.patch # Allows springLobby to continue using system installed spring until #707 is fixed
+    ./fix-certs.patch
+    (fetchpatch {
+      url = "https://github.com/springlobby/springlobby/commit/252c4cb156c1442ed9b4faec3f26265bc7c295ff.patch";
+      sha256 = "sha256-Nq1F5fRPnCkZwl9KgrfuUmpIMK3hUOyZQYIKElWpmzU=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
