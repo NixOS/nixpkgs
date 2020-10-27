@@ -26729,7 +26729,6 @@ in
 
   maxima = callPackage ../applications/science/math/maxima { };
   maxima-ecl = maxima.override {
-    ecl = ecl_16_1_2;
     withEcl = true;
     withSbcl = false;
   };

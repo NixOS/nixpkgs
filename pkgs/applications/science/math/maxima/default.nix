@@ -1,4 +1,5 @@
 { stdenv
+, autoreconfHook
 , fetchurl
 , fetchpatch
 , makeWrapper
@@ -12,9 +13,13 @@
 , withTk     ? false, tk
   # The test suite is disabled since 5.42.2 because of the following issues:
   #
-  #   Errors found in /build/maxima-5.42.2/share/linearalgebra/rtest_matrixexp.mac, problems:
+  #   Error(s) found:
+  #   /build/maxima-5.44.0/share/linearalgebra/rtest_matrixexp.mac problems:
   #   (20 21 22)
-  #   3 tests failed out of 3,988 total tests.
+  #   Tests that were expected to fail but passed:
+  #   /build/maxima-5.44.0/share/vector/rtest_vect.mac problem:
+  #   (19)
+  #   3 tests failed out of 16,184 total tests.
   #
   # These failures don't look serious. It would be nice to fix them, but I
   # don't know how and probably won't have the time to find out.
@@ -51,13 +56,15 @@ let
 in stdenv.mkDerivation rec {
 
   pname   = "maxima";
-  version = "5.42.2";
+  version = "5.44.0";
   name    = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "0kdncy6137sg3rradirxzj10mkcvafxd892zlclwhr9sa7b12zhn";
+    sha256 = "1v6jr5s6hhj6r18gfk6hgxk2qd6z1dxkrjq9ss2z1y6sqi45wgyr";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs =  [
     makeWrapper
@@ -71,6 +78,16 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals withTests [
     gnuplot
   ];
+
+  postPatch = ''
+    # Some build scripts now executes `/usr/bin/env perl` instead of
+    # `/usr/bin/perl` even where plain `perl` just works.
+    # The correct fix upstream would be adding `--with-perl` option to
+    # ./configure to support Perl interpreters that not in PATH.
+    # See https://sourceforge.net/p/maxima/code/ci/aa7d8228f369821aa6cbf14a6f7e552bb771e247
+    find doc/info -type f -exec \
+      sed -ie "s|/usr/bin/env perl|${perl}/bin/perl|" {} \;
+  '';
 
   postInstall = ''
     # Make sure that maxima can find its runtime dependencies.
@@ -106,14 +123,6 @@ in stdenv.mkDerivation rec {
       name = "undoing_true_false_printing_patch.patch";
       rev  = "07d6c37d18811e2b377a9689790a7c5e24da16ba";
       hash = "0fvi3rcjv6743sqsbgdzazy9jb6r1p1yq63zyj9fx42wd1hgf7yx";
-    })
-
-    # upstream bug https://sourceforge.net/p/maxima/bugs/2520/ (not fixed)
-    # introduced in https://trac.sagemath.org/ticket/13364
-    (fetchPatchFromSage {
-      name = "0001-taylor2-Avoid-blowing-the-stack-when-diff-expand-isn.patch";
-      rev  = "07d6c37d18811e2b377a9689790a7c5e24da16ba";
-      hash = "0xa0b6cr458zp7lc7qi0flv5ar0r3ivsqhjl0c3clv86di2y522d";
     })
   ] ++ stdenv.lib.optionals withEcl [
     # build fasl, needed for ECL support
