@@ -112,9 +112,7 @@ stdenv.mkDerivation rec {
   #
   #   Errors found in /build/maxima-5.42.2/share/linearalgebra/rtest_matrixexp.mac, problems:
   #   (20 21 22)
-  #   Error found in rtest_arag, problem:
-  #   (error break)
-  #   3 tests failed out of 3,881 total tests.
+  #   3 tests failed out of 3,988 total tests.
   #
   # These failures don't look serious. It would be nice to fix them, but I
   # don't know how and probably won't have the time to find out.
