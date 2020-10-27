@@ -18673,6 +18673,7 @@ in
     withLocaled = false;
     withLogind = false;
     withNetworkd = false;
+    withPolkit = false;
     withResolved = false;
     withTimedated = false;
     glib = null;
