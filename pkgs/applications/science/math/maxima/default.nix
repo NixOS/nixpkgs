@@ -10,9 +10,6 @@
 assert withSbcl != withEcl;
 
 let
-  name    = "maxima";
-  version = "5.42.2";
-
   searchPath = stdenv.lib.makeBinPath ([
   ] ++ stdenv.lib.optionals withSbcl [
     sbcl
@@ -27,12 +24,13 @@ let
   ]);
 
 in
-stdenv.mkDerivation ({
-  inherit version;
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  pname = "maxima";
+  version = "5.42.2";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
     sha256 = "0kdncy6137sg3rradirxzj10mkcvafxd892zlclwhr9sa7b12zhn";
   };
 
@@ -123,4 +121,4 @@ stdenv.mkDerivation ({
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
-})
+}
