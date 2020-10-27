@@ -106,6 +106,7 @@
   ./programs/bash-my-aws.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
+  ./programs/cabal-install.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
