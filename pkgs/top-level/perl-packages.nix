@@ -14607,6 +14607,25 @@ let
     };
   };
 
+  NetAsyncWebSocket = buildPerlModule {
+    pname = "Net-Async-WebSocket";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-WebSocket-0.13.tar.gz";
+      sha256 = "000nw7gnj7ks55nib3fiikxx9bfmbla6fimxrbn2z2n7sd187b0d";
+    };
+    propagatedBuildInputs = [ IOAsync ProtocolWebSocket URI ];
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      # network tests fail on Darwin/sandbox, so disable these
+      rm -f t/02server.t t/03cross.t
+    '';
+    meta = {
+      description = "Use WebSockets with IO::Async";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   NetAMQP = buildPerlModule {
     pname = "Net-AMQP";
     version = "0.06";
