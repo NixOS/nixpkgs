@@ -6101,6 +6101,8 @@ in
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
+  outguess = callPackage ../tools/security/outguess { };
+
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
