@@ -6889,6 +6889,12 @@
       fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E";
     }];
   };
+  preisschild = {
+    email = "florian@florianstroeger.com";
+    github = "Preisschild";
+    githubId = 11898437;
+    name = "Florian Ströger";
+  };
   priegger = {
     email = "philipp@riegger.name";
     github = "priegger";
