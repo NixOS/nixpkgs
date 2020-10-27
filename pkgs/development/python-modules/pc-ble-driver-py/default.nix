@@ -1,9 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, git, swig, boost, udev, pc-ble-driver
+{ stdenv, fetchFromGitHub, cmake, git, swig, boost, udev, pc-ble-driver, pythonOlder
 , buildPythonPackage, enum34, wrapt, future, setuptools, scikit-build }:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
   version = "0.14.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
