@@ -18662,6 +18662,7 @@ in
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
+    withAnalyze = false;
     withCompression = false;
     withCoredump = false;
     withCryptsetup = false;
