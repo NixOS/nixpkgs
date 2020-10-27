@@ -4,7 +4,7 @@ let
   # To obtain the version you will need to run the following command:
   #
   # dpkg-deb -I ${odafileconverter.src} | grep Version
-  version = "21.7.0.0";
+  version = "21.9.0.0";
   rpath = "$ORIGIN:${lib.makeLibraryPath [ stdenv.cc.cc qtbase ]}";
 
 in mkDerivation {
@@ -14,8 +14,8 @@ in mkDerivation {
 
   src = fetchurl {
     # NB: this URL is not stable (i.e. the underlying file and the corresponding version will change over time)
-    url = "https://download.opendesign.com/guestfiles/ODAFileConverter/ODAFileConverter_QT5_lnxX64_7.2dll.deb";
-    sha256 = "0sa21nnwzqb6g7gl0z43smqgcd9h3xipj3cq2cl7ybfh3cvcxfi9";
+    url = "https://download.opendesign.com/guestfiles/Demo/ODAFileConverter_QT5_lnxX64_7.2dll_21.9.deb";
+    sha256 = "571f59bb1c340025df4742eaf9bd80d277e631fdfe622f81a44ae0c61b59672d";
   };
 
   unpackPhase = ''
