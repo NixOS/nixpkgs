@@ -224,7 +224,6 @@ stdenv.mkDerivation {
     "-Dtimedated=${lib.boolToString withTimedated}"
     "-Dtimesyncd=${lib.boolToString withTimesyncd}"
     "-Dfirstboot=false"
-    "-Dlocaled=true"
     "-Dresolve=${lib.boolToString withResolved}"
     "-Dsplit-usr=false"
     "-Dlibcurl=${lib.boolToString wantCurl}"
