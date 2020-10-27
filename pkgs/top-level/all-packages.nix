@@ -26727,13 +26727,11 @@ in
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
 
-  maxima = callPackage ../applications/science/math/maxima {
-    ecl = null;
-  };
+  maxima = callPackage ../applications/science/math/maxima { };
   maxima-ecl = maxima.override {
     ecl = ecl_16_1_2;
-    ecl-fasl = true;
-    sbcl = null;
+    withEcl = true;
+    withSbcl = false;
   };
 
   mxnet = callPackage ../applications/science/math/mxnet {

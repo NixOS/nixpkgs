@@ -1,14 +1,48 @@
-{ stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, rlwrap ? null
-, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
+{ stdenv
+, fetchurl
+, fetchpatch
+, makeWrapper
+, gnuplot
+, perl
+, python
+, texinfo
+, withSbcl   ? true,  sbcl
+, withEcl    ? false, ecl
+, withRlwrap ? false, rlwrap
+, withTk     ? false, tk
+  # The test suite is disabled since 5.42.2 because of the following issues:
+  #
+  #   Errors found in /build/maxima-5.42.2/share/linearalgebra/rtest_matrixexp.mac, problems:
+  #   (20 21 22)
+  #   Error found in rtest_arag, problem:
+  #   (error break)
+  #   3 tests failed out of 3,881 total tests.
+  #
+  # These failures don't look serious. It would be nice to fix them, but I
+  # don't know how and probably won't have the time to find out.
+, withTests  ? false # try to re-enable after next version update
 }:
+
+# Either SBCL or ECL but not both of them can be used.
+assert withSbcl != withEcl;
 
 let
   name    = "maxima";
   version = "5.42.2";
 
-  searchPath =
-    stdenv.lib.makeBinPath
-      (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
+  searchPath = stdenv.lib.makeBinPath ([
+  ] ++ stdenv.lib.optionals withSbcl [
+    sbcl
+  ] ++ stdenv.lib.optionals withEcl [
+    ecl
+  ] ++ stdenv.lib.optionals withRlwrap [
+    rlwrap
+  ] ++ stdenv.lib.optionals withTk [
+    tk
+  ] ++ stdenv.lib.optionals withTests [
+    gnuplot
+  ]);
+
 in
 stdenv.mkDerivation ({
   inherit version;
@@ -19,9 +53,17 @@ stdenv.mkDerivation ({
     sha256 = "0kdncy6137sg3rradirxzj10mkcvafxd892zlclwhr9sa7b12zhn";
   };
 
-  buildInputs = stdenv.lib.filter (x: x != null) [
-    sbcl ecl texinfo perl python makeWrapper
-    gnuplot   # required in the test suite
+  buildInputs =  [
+    makeWrapper
+    perl
+    python
+    texinfo
+  ] ++ stdenv.lib.optionals withSbcl [
+    sbcl
+  ] ++ stdenv.lib.optionals withEcl [
+    ecl
+  ] ++ stdenv.lib.optionals withTests [
+    gnuplot
   ];
 
   postInstall = ''
@@ -33,11 +75,9 @@ stdenv.mkDerivation ({
     mkdir -p $out/share/emacs $out/share/doc
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
-  ''
-   + (stdenv.lib.optionalString ecl-fasl ''
-     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
-   '')
-  ;
+  '' + (stdenv.lib.optionalString withEcl ''
+    cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
+  '');
 
   patches = [
     # fix path to info dir (see https://trac.sagemath.org/ticket/11348)
@@ -64,7 +104,7 @@ stdenv.mkDerivation ({
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/0001-taylor2-Avoid-blowing-the-stack-when-diff-expand-isn.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0xa0b6cr458zp7lc7qi0flv5ar0r3ivsqhjl0c3clv86di2y522d";
     })
-  ] ++ stdenv.lib.optionals ecl-fasl [
+  ] ++ stdenv.lib.optionals withEcl [
     # build fasl, needed for ECL support
     (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/maxima.system.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
@@ -72,17 +112,7 @@ stdenv.mkDerivation ({
     })
   ];
 
-  # The test suite is disabled since 5.42.2 because of the following issues:
-  #
-  #   Errors found in /build/maxima-5.42.2/share/linearalgebra/rtest_matrixexp.mac, problems:
-  #   (20 21 22)
-  #   Error found in rtest_arag, problem:
-  #   (error break)
-  #   3 tests failed out of 3,881 total tests.
-  #
-  # These failures don't look serious. It would be nice to fix them, but I
-  # don't know how and probably won't have the time to find out.
-  doCheck = false;    # try to re-enable after next version update
+  doCheck = withTests;
 
   enableParallelBuilding = true;
 
