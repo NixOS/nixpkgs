@@ -10,7 +10,6 @@
 , gperf
 , getent
 , patchelf
-, perl
 , glibcLocales
 , glib
 , substituteAll
@@ -149,7 +148,6 @@ stdenv.mkDerivation {
       patchelf
       getent
       m4
-      perl # to patch the libsystemd.so and remove dependencies on aarch64
 
       intltool
       gettext
