@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20200430";
+  version = "20200925";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "0z19bniqsa8y0n1qrxmb6gz7m63jpwx22zgk5ablyriixhfpz07v";
+    sha256 = "12a5hd7wfwm0rcfjfxpc9zq7bxyk6mwqk74ysg34fbix3vi8hhyl";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     "acpidump"
     "acpiexec"
     "acpihelp"
-    "acpinames"
     "acpixtract"
   ];
 
