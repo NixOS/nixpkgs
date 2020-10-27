@@ -66,6 +66,7 @@
 , withLocaled ? true
 , withLogind ? true
 , withNetworkd ? true
+, withPolkit ? true
 , withRemote ? false  # has always been disabled on NixOS, upstream version appears broken anyway
 , withResolved ? true
 , withTimedated ? true
@@ -222,6 +223,7 @@ stdenv.mkDerivation {
     "-Dlocaled=${lib.boolToString withLocaled}"
     "-Dhostnamed=${lib.boolToString withHostnamed}"
     "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Dpolkit=${lib.boolToString withPolkit}"
     "-Dcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=false"
     "-Dhwdb=${lib.boolToString withHwdb}"
