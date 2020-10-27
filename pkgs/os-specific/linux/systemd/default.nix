@@ -270,6 +270,7 @@ stdenv.mkDerivation {
     # more frequent development builds
     "-Dman=true"
 
+    "-Defi=${lib.boolToString withEfi}"
     "-Dgnu-efi=${lib.boolToString withEfi}"
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
