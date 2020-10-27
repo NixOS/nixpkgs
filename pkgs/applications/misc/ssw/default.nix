@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ssw";
-  version = "0.3";
+  version = "0.6";
 
   src = fetchurl {
     url = "https://alpha.gnu.org/gnu/ssw/spread-sheet-widget-${version}.tar.gz";
-    sha256 = "1h93yyh2by6yrmkwqg38nd5knids05k5nqzcihc1hdwgzg3c4b8y";
+    sha256 = "08ck9l697xg8vpya5h07raq837i4pqxjqzx30vhscq4xpps2b8kj";
   };
 
   nativeBuildInputs = [ pkg-config ];
