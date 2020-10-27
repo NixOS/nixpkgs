@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "glow";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "glow";
     rev = "v${version}";
-    sha256 ="0jyl5ln7c2naawmw7bljzrldr96xyb5rbis6y6blmyghr0vx07zb";
+    sha256 = "016psbm93ni81k87i9gx3cjr59j1fmpq5x8vz0ydabczzdshd1py";
   };
 
-  vendorSha256 = "0z3r8fvpy36ybgb18sr0lril1sg8z7s99xv1a6g1v3zdnj3zimav";
+  vendorSha256 = "0gvlbj8b5sqk93ahg4b2krwrmr8ljz7cah77fxaxcd98apap0pw6";
 
   doCheck = false;
 
