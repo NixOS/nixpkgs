@@ -1467,7 +1467,7 @@ self: super: {
   skylighting-core = doDistribute super.skylighting-core_0_10_0_3;
   hslua = doDistribute self.hslua_1_1_2;
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
-  pandoc = doDistribute self.pandoc_2_11_0_2;
+  pandoc = doDistribute self.pandoc_2_11_0_4;
   # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
   pandoc-citeproc = doJailbreak (doDistribute self.pandoc-citeproc_0_17_0_2);
   pandoc-types = doDistribute self.pandoc-types_1_22;
