@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    install -m 0755 fiche $out/bin
+    install -Dm755 fiche -t $out/bin
   '';
 
   doCheck = true;
