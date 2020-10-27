@@ -24,6 +24,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://aajanki.github.io/yle-dl/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg SuperSandro2000 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
