@@ -3443,6 +3443,8 @@ in
 
   wrangler = callPackage ../development/tools/wrangler { };
 
+  wshowkeys = callPackage ../tools/wayland/wshowkeys { };
+
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
 
   xob = callPackage ../tools/X11/xob { };
