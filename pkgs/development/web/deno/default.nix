@@ -54,6 +54,9 @@ rustPlatform.buildRustPackage rec {
 
   # TODO: Move to enhanced installShellCompletion when merged: PR #83630
   postInstall = ''
+    # remove test plugin and test server
+    rm -rf $out/lib $out/bin/test_server
+
     $out/bin/deno completions bash > deno.bash
     $out/bin/deno completions fish > deno.fish
     $out/bin/deno completions zsh  > _deno
