@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, python3Packages, ffmpeg_3, zlib, libjpeg }:
+{ stdenv, fetchFromGitHub, python3Packages, ffmpeg, zlib, libjpeg }:
 
 python3Packages.buildPythonApplication {
   pname = "gif-for-cli";
-  version = "unstable-2018-08-14";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gif-for-cli";
-    rev = "9696f25fea2e38499b7c248a3151030c3c68bb00";
-    sha256 = "1rj8wjfsabn27k1ds7a5fdqgf2r28zpz4lvhbzssjfj1yf0mfh7s";
+    rev = "31f8aa2d617d6d6e941154f60e287c38dd9a74d5";
+    sha256 = "Bl5o492BUAn1KsscnlMIXCzJuy7xWUsdnxIKZKaRM3M=";
   };
 
   checkInputs = [ python3Packages.coverage ];
-  buildInputs = [ ffmpeg_3 zlib libjpeg ];
-  propagatedBuildInputs = with python3Packages; [ pillow requests x256 ];
+  buildInputs = [ zlib libjpeg ];
+  propagatedBuildInputs = with python3Packages; [ ffmpeg pillow requests x256 ];
 
   meta = with stdenv.lib; {
     description = "Render gifs as ASCII art in your cli";
