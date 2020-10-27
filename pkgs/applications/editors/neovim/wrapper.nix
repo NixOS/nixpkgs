@@ -26,9 +26,15 @@ let
   }:
   let
 
+  # If configure != {}, we can't generate the rplugin.vim file with e.g
+  # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
+  # the wrapper. That's why only when configure != {} (tested both here and
+  # when postBuild is evaluated), we call makeWrapper once to generate a
+  # wrapper with most arguments we need, excluding those that cause problems to
+  # generate rplugin.vim, but still required for the final wrapper.
   finalMakeWrapperArgs =
-    [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ] ++ wrapperArgs
-  ;
+    [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ] ++ wrapperArgs ++
+      [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ];
   in
   symlinkJoin {
       name = "neovim-${stdenv.lib.getVersion neovim}";
@@ -58,9 +64,14 @@ let
       + optionalString viAlias ''
         ln -s $out/bin/nvim $out/bin/vi
       ''
-      + optionalString (manifestRc != null) ''
+      + optionalString (manifestRc != null) (let
+        manifestWrapperArgs =
+          [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ] ++ wrapperArgs;
+      in ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim
+        makeWrapper ${lib.escapeShellArgs manifestWrapperArgs}
+
         # Some plugins assume that the home directory is accessible for
         # initializing caches, temporary files, etc. Even if the plugin isn't
         # actively used, it may throw an error as soon as Neovim is launched
@@ -76,7 +87,7 @@ let
         # (swap/viminfo) and redirect errors to stderr.
         # Only display the log on error since it will contain a few normally
         # irrelevant messages.
-        if ! $out/bin/nvim \
+        if ! $out/bin/nvim-wrapper \
           -u ${writeText "manifest.vim" manifestRc} \
           -i NONE -n \
           -E -V1rplugins.log -s \
@@ -85,7 +96,8 @@ let
           echo -e "\nGenerating rplugin.vim failed!"
           exit 1
         fi
-      ''
+        rm "${placeholder "out"}/bin/nvim-wrapper"
+      '')
       + ''
         rm $out/bin/nvim
         makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs}

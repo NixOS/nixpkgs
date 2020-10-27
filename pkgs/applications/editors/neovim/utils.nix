@@ -61,7 +61,6 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
-      binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
 
       # Mapping a boolean argument to a key that tells us whether to add or not to
       # add to nvim's 'embedded rc' this:
@@ -79,17 +78,13 @@ let
       # We start with the executable itself NOTE we call this variable "initial"
       # because if configure != {} we need to call makeWrapper twice, in order to
       # avoid double wrapping, see comment near finalMakeWrapperArgs
-      initialMakeWrapperArgs =
+      makeWrapperArgs =
         let
-          flags = lib.concatLists (lib.mapAttrsToList
-            (
+          binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
+
+          flags = lib.concatLists (lib.mapAttrsToList (
               prog: withProg: [
-                "--cmd"
-                (if withProg then
-                  "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
-                else
-                  "let g:loaded_${prog}_provider=1"
-                )
+                "--cmd" (genProviderSettings prog withProg)
               ]
             )
             hostprog_check_table);
@@ -101,24 +96,12 @@ let
         ] ++ lib.optionals (binPath != "") [
           "--suffix" "PATH" ":" binPath
         ];
-      # If configure != {}, we can't generate the rplugin.vim file with e.g
-      # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
-      # the wrapper. That's why only when configure != {} (tested both here and
-      # when postBuild is evaluated), we call makeWrapper once to generate a
-      # wrapper with most arguments we need, excluding those that cause problems to
-      # generate rplugin.vim, but still required for the final wrapper.
-      finalMakeWrapperArgs = initialMakeWrapperArgs
-        # this relies on a patched neovim, see
-        # https://github.com/neovim/neovim/issues/9413
-        ++ lib.optionals (configure != { }) [
-        "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim"
-      ];
 
       manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
       neovimRcContent = vimUtils.vimrcContent configure;
     in
     {
-      wrapperArgs = finalMakeWrapperArgs;
+      wrapperArgs = makeWrapperArgs;
       inherit neovimRcContent;
       inherit manifestRc;
       inherit rubyEnv;
@@ -126,6 +109,12 @@ let
       inherit python3Env;
     };
 
+    genProviderSettings = prog: withProg:
+      if withProg then
+        "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
+      else
+        "let g:loaded_${prog}_provider=1"
+    ;
 
   # to keep backwards compatibility
   legacyWrapper = neovim: {
