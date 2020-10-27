@@ -1,14 +1,31 @@
-{ stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, rlwrap ? null
-, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
+{ stdenv, fetchurl, fetchpatch, gnuplot, texinfo, perl, python, makeWrapper
+, withSbcl ? true, sbcl
+, withEcl ? false, ecl
+, withRlwrap ? false, rlwrap
+, withTk ? false, tk
+, withTests ? false
 }:
+
+#Either SBCL or ECL but not both of them can be used.
+assert withSbcl != withEcl;
 
 let
   name    = "maxima";
   version = "5.42.2";
 
-  searchPath =
-    stdenv.lib.makeBinPath
-      (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
+  searchPath = stdenv.lib.makeBinPath ([
+  ] ++ stdenv.lib.optionals withSbcl [
+    sbcl
+  ] ++ stdenv.lib.optionals withEcl [
+    ecl
+  ] ++ stdenv.lib.optionals withRlwrap [
+    rlwrap
+  ] ++ stdenv.lib.optionals withTk [
+    tk
+  ] ++ stdenv.lib.optionals withTests [
+    gnuplot
+  ]);
+
 in
 stdenv.mkDerivation ({
   inherit version;
@@ -19,8 +36,13 @@ stdenv.mkDerivation ({
     sha256 = "0kdncy6137sg3rradirxzj10mkcvafxd892zlclwhr9sa7b12zhn";
   };
 
-  buildInputs = stdenv.lib.filter (x: x != null) [
-    sbcl ecl texinfo perl python makeWrapper
+  buildInputs = [
+    texinfo perl python makeWrapper
+  ] ++ stdenv.lib.optionals withSbcl [
+    sbcl
+  ] ++ stdenv.lib.optionals withEcl [
+    ecl
+  ] ++ stdenv.lib.optionals withTests [
     gnuplot   # required in the test suite
   ];
 
@@ -34,7 +56,7 @@ stdenv.mkDerivation ({
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (stdenv.lib.optionalString ecl-fasl ''
+   + (stdenv.lib.optionalString withEcl ''
      cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
    '')
   ;
@@ -64,7 +86,7 @@ stdenv.mkDerivation ({
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/0001-taylor2-Avoid-blowing-the-stack-when-diff-expand-isn.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0xa0b6cr458zp7lc7qi0flv5ar0r3ivsqhjl0c3clv86di2y522d";
     })
-  ] ++ stdenv.lib.optionals ecl-fasl [
+  ] ++ stdenv.lib.optionals withEcl [
     # build fasl, needed for ECL support
     (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/maxima.system.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
@@ -82,7 +104,7 @@ stdenv.mkDerivation ({
   #
   # These failures don't look serious. It would be nice to fix them, but I
   # don't know how and probably won't have the time to find out.
-  doCheck = false;    # try to re-enable after next version update
+  doCheck = withTests;    # try to re-enable after next version update
 
   enableParallelBuilding = true;
 
