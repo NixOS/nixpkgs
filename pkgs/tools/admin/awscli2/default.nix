@@ -72,6 +72,9 @@ with py.pkgs; buildPythonApplication rec {
     mkdir -p $out/share/zsh/site-functions
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
     rm $out/bin/aws.cmd
+    # Generate completions
+    patchShebangs scripts/gen-ac-index
+    ./scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
   '';
 
   passthru.python = py; # for aws_shell
