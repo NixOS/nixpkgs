@@ -55,6 +55,7 @@
 , kexectools
 , bashInteractive
 
+, withAnalyze ? true
 , withCoredump ? true
 , withCompression ? true  # adds bzip2, lz4 and xz
 , withCryptsetup ? true
@@ -211,6 +212,7 @@ stdenv.mkDerivation {
     "-Dglib=${lib.boolToString (glib != null)}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Danalyze=${lib.boolToString withAnalyze}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
     "-Dhomed=false"
