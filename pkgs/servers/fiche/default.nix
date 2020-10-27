@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/bin
     install -Dm755 fiche -t $out/bin
   '';
 
