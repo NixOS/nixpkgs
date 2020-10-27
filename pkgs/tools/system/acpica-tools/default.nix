@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     "acpiexec"
     "acpihelp"
     "acpixtract"
+    "iasl"
   ];
 
   nativeBuildInputs = [ bison flex ];
