@@ -89,7 +89,7 @@ let
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
-      postFixup = let 
+      postFixup = let
         binPath = [ coreutils  acpica-tools acpica-tools gnugrep  gnused  file ];
       in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
     };
