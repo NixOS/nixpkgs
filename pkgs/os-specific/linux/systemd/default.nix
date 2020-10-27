@@ -55,6 +55,7 @@
 , kexectools
 , bashInteractive
 
+, withCompression ? true  # adds bzip2, lz4 and xz
 , withCryptsetup ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withHostnamed ? true
@@ -81,7 +82,7 @@
 assert withResolved -> (libgcrypt != null && libgpgerror != null);
 assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
-  && gnutar != null && gnupg != null);
+  && gnutar != null && gnupg != null && withCompression );
 
 assert withRemote -> lib.getDev curl != null;
 
@@ -168,7 +169,6 @@ stdenv.mkDerivation {
     [
       acl
       audit
-      bzip2
       glib
       kmod
       libapparmor
@@ -179,12 +179,11 @@ stdenv.mkDerivation {
       libidn2
       libuuid
       linuxHeaders
-      lz4
       pam
       pcre2
-      xz
     ]
     ++ lib.optional wantCurl (lib.getDev curl)
+    ++ lib.optionals withCompression [ bzip2 lz4 xz ]
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withKexectools kexectools
     ++ lib.optional withLibseccomp libseccomp
@@ -211,7 +210,7 @@ stdenv.mkDerivation {
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Dimportd=${lib.boolToString withImportd}"
-    "-Dlz4=true"
+    "-Dlz4=${lib.boolToString withCompression}"
     "-Dhomed=false"
     "-Dlogind=${lib.boolToString withLogind}"
     "-Dlocaled=${lib.boolToString withLocaled}"
