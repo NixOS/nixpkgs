@@ -39,16 +39,16 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "5.18";
+    version = "5.19";
     url = "https://dl.winehq.org/wine/source/5.x/wine-${version}.tar.xz";
-    sha256 = "0hpkcpi6j162bkgcgzzj8y471777q06j7pydl61yp6qscn4g80ch";
+    sha256 = "sha256-ACBIK57q6E6hoSgTI6S80bF9vUXqLovrOhAHN4fml8c=";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "0bwcvkf1g1dsq1qmric3jfl85rfjzhq6x4h839hfqc536lkfbrpy";
+    sha256 = "sha256-Wfh0tAjQurJ/ZuiaSfP922H8KaQuTdHmVExZ23vrcfI=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
