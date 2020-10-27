@@ -2,22 +2,24 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.23.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "1x55y96i4b3gk9l2zlwb6ifsk8nxzfny3b73ly89g7kifwkb543k";
+    sha256 = "0a1jhlkv6z5msw8p3wccy3axwpdvpnri6qps9fmvz57gfm9a3jmr";
   };
 
-  vendorSha256 = "0bd4fk15i292377mv5w57gzxjp21f0rcf1py9gd6v99rx1pviq66";
+  vendorSha256 = "0dd0qm1fxp3jnlrhfaas8fw87cj7rygaac35a9nk3xh2xsk7q35p";
 
   outputs = [ "out" "man" ];
 
   fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
   patchPhase = ''
