@@ -6610,6 +6610,8 @@ in {
 
   smugpy = callPackage ../development/python-modules/smugpy { };
 
+  snack = toPythonModule (pkgs.newt.override { inherit (self) python; });
+
   snakebite = callPackage ../development/python-modules/snakebite { };
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
