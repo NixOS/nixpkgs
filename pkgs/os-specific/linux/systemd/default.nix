@@ -55,6 +55,7 @@
 , kexectools
 , bashInteractive
 
+, withCoredump ? true
 , withCompression ? true  # adds bzip2, lz4 and xz
 , withCryptsetup ? true
 , withEfi ? stdenv.hostPlatform.isEfi
@@ -85,6 +86,7 @@ assert withImportd ->
   && gnutar != null && gnupg != null && withCompression );
 
 assert withRemote -> lib.getDev curl != null;
+assert withCoredump -> withCompression;
 
 assert withCryptsetup ->
 (cryptsetup != null);
@@ -223,6 +225,7 @@ stdenv.mkDerivation {
     "-Dsysusers=false"
     "-Dtimedated=${lib.boolToString withTimedated}"
     "-Dtimesyncd=${lib.boolToString withTimesyncd}"
+    "-Dcoredump=${lib.boolToString withCoredump}"
     "-Dfirstboot=false"
     "-Dresolve=${lib.boolToString withResolved}"
     "-Dsplit-usr=false"
