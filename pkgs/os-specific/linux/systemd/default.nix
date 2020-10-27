@@ -121,10 +121,9 @@ in stdenv.mkDerivation {
   buildInputs =
     [ linuxHeaders libcap curl.dev kmod xz pam acl
       cryptsetup libuuid glib libgcrypt libgpgerror libidn2
-      pcre2 ] ++
+      pcre2 libffi audit lz4 bzip2 libapparmor iptables ] ++
       lib.optional withKexectools kexectools ++
       lib.optional withLibseccomp libseccomp ++
-      [ libffi audit lz4 bzip2 libapparmor iptables ] ++
       lib.optional withEfi gnu-efi ++
       lib.optional withSelinux libselinux ++
       lib.optional withCryptsetup cryptsetup.dev;
