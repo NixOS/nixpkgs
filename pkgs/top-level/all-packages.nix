@@ -25514,7 +25514,7 @@ in
 
   sfrotz = callPackage ../games/sfrotz { };
 
-  sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
+  sgtpuzzles = callPackage ../games/sgt-puzzles { };
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
