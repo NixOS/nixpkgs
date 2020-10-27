@@ -36,6 +36,7 @@ in
     ./tinywm.nix
     ./twm.nix
     ./windowmaker.nix
+    ./wmderland.nix
     ./wmii.nix
     ./xmonad.nix
     ./yeahwm.nix
