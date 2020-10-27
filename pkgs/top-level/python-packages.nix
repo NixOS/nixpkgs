@@ -5416,6 +5416,8 @@ in {
   else
     throw "pyobjc can only be built on Mac OS";
 
+  pyobjc-core = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-core { });
+
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
   };
