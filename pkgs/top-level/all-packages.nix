@@ -23480,7 +23480,11 @@ in
 
   libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
-  sourcetrail = callPackage ../development/tools/sourcetrail { };
+  sourcetrail = libsForQt5.callPackage ../development/tools/sourcetrail {
+    jdk = jdk8;
+    llvmPackages = llvmPackages_10;
+    pythonPackages = python3Packages;
+  };
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
