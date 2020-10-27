@@ -18666,6 +18666,7 @@ in
     withCompression = false;
     withCoredump = false;
     withCryptsetup = false;
+    withDocumentation = false;
     withEfi = false;
     withHostnamed = false;
     withHwdb = false;

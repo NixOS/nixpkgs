@@ -59,6 +59,7 @@
 , withCoredump ? true
 , withCompression ? true  # adds bzip2, lz4 and xz
 , withCryptsetup ? true
+, withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withHostnamed ? true
 , withHwdb ? true
@@ -390,7 +391,9 @@ stdenv.mkDerivation {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
-  ''; # */
+  '' + lib.optionalString (!withDocumentation) ''
+    rm -rf $out/share/doc
+  '';
 
   enableParallelBuilding = true;
 
