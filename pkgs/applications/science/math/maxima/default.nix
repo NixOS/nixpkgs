@@ -130,10 +130,10 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Computer algebra system";
     homepage = "http://maxima.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in
@@ -142,7 +142,7 @@ in stdenv.mkDerivation rec {
       symbolic integration, 3D plotting, and an ODE solver.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ peti ];
   };
 }
