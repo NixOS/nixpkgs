@@ -5411,10 +5411,7 @@ in {
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
-  pyobjc = if stdenv.isDarwin then
-    callPackage ../development/python-modules/pyobjc { }
-  else
-    throw "pyobjc can only be built on Mac OS";
+  pyobjc = enabledIfDarwin (callPackage ../development/python-modules/pyobjc { });
 
   pyobjc-core = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-core { });
 

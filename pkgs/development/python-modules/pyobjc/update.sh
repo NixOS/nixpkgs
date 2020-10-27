@@ -576,17 +576,17 @@ update_commit_package() {
 }
 
 declare -a frameworks=(Accounts AdSupport AddressBook AppleScriptObjC AppleScriptKit ApplicationServices
-  AuthenticationServices AutomaticAssessmentConfiguration Automator AVKit BusinessChat CFNetwork CloudKit Cocoa
-  Collaboration ColorSync Contacts ContactsUI CoreAudioKit CoreBluetooth CoreData CoreHaptics CoreML CoreMotion
+  AuthenticationServices AutomaticAssessmentConfiguration Automator AVFoundation AVKit BusinessChat CalendarStore CFNetwork CloudKit Cocoa
+  Collaboration ColorSync Contacts ContactsUI CoreAudio CoreAudioKit CoreBluetooth CoreData CoreHaptics CoreLocation CoreMedia CoreMediaIO CoreML CoreMotion
   CoreServices CoreSpotlight CoreText CoreWLAN CryptoTokenKit DeviceCheck DictionaryServices
   DiscRecording DiscRecordingUI DiskArbitration DVDPlayback EventKit ExecutionPolicy ExceptionHandling ExternalAccessory
-  FileProvider FinderSync FSEvents GameCenter GameController GameKit GameplayKit
-  ImageCaptureCore IMServicePlugIn InputMethodKit InstantMessage Intents IOSurface iTunesLibrary LatentSemanticMapping
+  FileProvider FileProviderUI FinderSync FSEvents GameCenter GameController GameKit GameplayKit
+  ImageCaptureCore IMServicePlugIn InputMethodKit InstallerPlugins InstantMessage Intents IOSurface iTunesLibrary LatentSemanticMapping
   LaunchServices libdispatch LinkPresentation LocalAuthentication MapKit Metal MediaAccessibility MediaLibrary
   MediaPlayer MediaToolbox MetalKit ModelIO MultipeerConnectivity NaturalLanguage NetFS Network
   NetworkExtension NotificationCenter OpenDirectory OSAKit OSLog PencilKit Photos PhotosUI PreferencePanes PushKit Quartz
   QuickLookThumbnailing SafariServices SceneKit ScreenSaver ScriptingBridge SearchKit Security
-  SecurityFoundation SecurityInterface ServiceManagement Social SoundAnalysis Speech SyncServices
+  SecurityFoundation SecurityInterface ServiceManagement Social SoundAnalysis Speech SpriteKit StoreKit SyncServices SystemConfiguration
   SystemExtensions UserNotifications VideoSubscriberAccount VideoToolbox Vision WebKit)
 
 case $1 in
@@ -609,7 +609,7 @@ case $1 in
     done
     ;;
   "generate" | "")
-    framework="$2"
+    framework="${2:-}"
 
     if [[ -n $framework ]]; then
       generate_framework_nix $framework
