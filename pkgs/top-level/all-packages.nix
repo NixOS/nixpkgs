@@ -8770,6 +8770,8 @@ in
   };
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
+  fasmg = callPackage ../development/compilers/fasmg { };
+
   flyctl = callPackage ../development/web/flyctl { };
 
   flutterPackages =
