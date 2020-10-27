@@ -1,28 +1,59 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv
+, lib
+, fetchFromGitHub
 , buildPackages
-, ninja, meson, m4, pkgconfig, coreutils, gperf, getent
-, patchelf, perl, glibcLocales, glib, substituteAll
-, gettext, python3Packages
+, ninja
+, meson
+, m4
+, pkgconfig
+, coreutils
+, gperf
+, getent
+, patchelf
+, perl
+, glibcLocales
+, glib
+, substituteAll
+, gettext
+, python3Packages
 
-# Mandatory dependencies
+  # Mandatory dependencies
 , libcap
 , utillinux
 , kbd
 , kmod
 
-# Optional dependencies
-, pam, cryptsetup, lvm2, audit, acl
-, lz4, libgcrypt, libgpgerror, libidn2
-, curl, gnutar, gnupg, zlib
-, xz, libuuid, libffi
-, libapparmor, intltool
-, bzip2, pcre2, e2fsprogs
+  # Optional dependencies
+, pam
+, cryptsetup
+, lvm2
+, audit
+, acl
+, lz4
+, libgcrypt
+, libgpgerror
+, libidn2
+, curl
+, gnutar
+, gnupg
+, zlib
+, xz
+, libuuid
+, libffi
+, libapparmor
+, intltool
+, bzip2
+, pcre2
+, e2fsprogs
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gnu-efi
 , iptables
-, withSelinux ? false, libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
+, withSelinux ? false
+, libselinux
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
+, kexectools
 , bashInteractive
 
 , withResolved ? true
@@ -37,24 +68,27 @@
 , withImportd ? true
 , withCryptsetup ? true
 
-# name argument
+  # name argument
 , pname ? "systemd"
 
 
-, libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
 }:
 
 assert withResolved -> (libgcrypt != null && libgpgerror != null);
 assert withImportd ->
-  ( curl.dev != null && zlib != null && xz != null && libgcrypt != null
+(curl.dev != null && zlib != null && xz != null && libgcrypt != null
   && gnutar != null && gnupg != null);
 
 assert withCryptsetup ->
-  ( cryptsetup != null );
-
+(cryptsetup != null);
 let
   version = "246.6";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version pname;
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
@@ -105,28 +139,56 @@ in stdenv.mkDerivation {
   outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
-    [ pkgconfig gperf
-      ninja meson
+    [
+      pkgconfig
+      gperf
+      ninja
+      meson
       coreutils # meson calls date, stat etc.
       glibcLocales
-      patchelf getent m4
+      patchelf
+      getent
+      m4
       perl # to patch the libsystemd.so and remove dependencies on aarch64
 
       intltool
       gettext
 
-      libxslt docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-      (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
+      libxslt
+      docbook_xsl
+      docbook_xml_dtd_42
+      docbook_xml_dtd_45
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
     ];
+
   buildInputs =
-    [ linuxHeaders libcap curl.dev kmod xz pam acl
-      cryptsetup libuuid glib libgcrypt libgpgerror libidn2
-      pcre2 libffi audit lz4 bzip2 libapparmor iptables ] ++
-      lib.optional withKexectools kexectools ++
-      lib.optional withLibseccomp libseccomp ++
-      lib.optional withEfi gnu-efi ++
-      lib.optional withSelinux libselinux ++
-      lib.optional withCryptsetup cryptsetup.dev;
+    [
+      acl
+      audit
+      bzip2
+      cryptsetup
+      curl.dev
+      glib
+      iptables
+      kmod
+      libapparmor
+      libcap
+      libffi
+      libgcrypt
+      libgpgerror
+      libidn2
+      libuuid
+      linuxHeaders
+      lz4
+      pam
+      pcre2
+      xz
+    ] ++ lib.optional withKexectools kexectools
+    ++ lib.optional withLibseccomp libseccomp
+    ++ lib.optional withEfi gnu-efi
+    ++ lib.optional withSelinux libselinux
+    ++ lib.optional withCryptsetup cryptsetup.dev
+  ;
 
   #dontAddPrefix = true;
 
@@ -271,14 +333,17 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = toString [
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
-    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+    "-UPOLKIT_AGENT_BINARY_PATH"
+    "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
     # Set the release_agent on /sys/fs/cgroup/systemd to the
     # currently running systemd (/run/current-system/systemd) so
     # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    "-USYSTEMD_CGROUP_AGENT_PATH"
+    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
   ];
 
   doCheck = false; # fails a bunch of tests
