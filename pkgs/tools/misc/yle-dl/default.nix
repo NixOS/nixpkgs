@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = with maintainers; [ dezgeg SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }
