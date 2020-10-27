@@ -1,5 +1,7 @@
 { stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, libelf, utillinux, ... } @ args:
 
+with stdenv.lib;
+
 buildLinux (args // rec {
   version = "4.14.165-172";
 
@@ -7,7 +9,10 @@ buildLinux (args // rec {
   modDirVersion = "4.14.165";
 
   # branchVersion needs to be x.y.
-  extraMeta.branch = "4.14";
+  extraMeta = {
+    branch = versions.majorMinor version;
+    platforms = [ "armv7l-linux" ];
+  } // (args.extraMeta or {});
 
   src = fetchFromGitHub {
     owner = "hardkernel";
@@ -27,7 +32,5 @@ buildLinux (args // rec {
     #GATOR_MALI_MIDGARD_PATH ${src}/drivers/gpu/arm/midgard
 
   '' + (args.extraConfig or "");
-
-  extraMeta.platforms = [ "armv7l-linux" ];
 
 } // (args.argsOverride or {}))

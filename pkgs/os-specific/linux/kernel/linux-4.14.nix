@@ -9,7 +9,7 @@ buildLinux (args // rec {
   modDirVersion = if (modDirVersionArg == null) then concatStringsSep "." (take 3 (splitVersion "${version}.0")) else modDirVersionArg;
 
   # branchVersion needs to be x.y
-  extraMeta.branch = versions.majorMinor version;
+  extraMeta = { branch = versions.majorMinor version; } // (args.extraMeta or {});
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";

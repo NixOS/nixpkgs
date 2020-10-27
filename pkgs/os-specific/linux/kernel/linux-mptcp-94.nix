@@ -1,4 +1,7 @@
 { stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, structuredExtraConfig ? {}, ... } @ args:
+
+with stdenv.lib;
+
 let
   mptcpVersion = "0.94.6";
   modDirVersion = "4.14.127";
@@ -8,9 +11,9 @@ buildLinux ({
   inherit modDirVersion;
 
   extraMeta = {
-    branch = "4.4";
+    branch = versions.majorMinor version;
     maintainers = with stdenv.lib.maintainers; [ teto layus ];
-  };
+  } // (args.extraMeta or {});
 
   src = fetchFromGitHub {
     owner = "multipath-tcp";

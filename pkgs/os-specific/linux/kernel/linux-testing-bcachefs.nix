@@ -18,6 +18,6 @@ buildLinux (args // {
     hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
     maintainers = with stdenv.lib.maintainers; [ davidak chiiruno ];
     platforms = [ "x86_64-linux" ];
-  };
+  } // (args.extraMeta or {});
 
 } // (args.argsOverride or {}))

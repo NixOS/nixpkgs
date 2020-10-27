@@ -18,6 +18,6 @@ buildLinux (args // {
   extraMeta = {
     branch = "5.8/master";
     maintainers = with stdenv.lib.maintainers; [ atemu ];
-  };
+  } // (args.extraMeta or {});
 
 } // (args.argsOverride or {}))
