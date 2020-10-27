@@ -403,11 +403,6 @@
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.foldingathome.enable" /> Folding@home client.
-      </para>
-     </listitem>
-     <listitem>
-      <para>
        <xref linkend="opt-services.gerrit.enable" /> Web-based team code collaboration tool.
       </para>
      </listitem>
