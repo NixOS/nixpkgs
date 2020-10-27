@@ -18796,6 +18796,7 @@ in
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
     withCompression = false;
+    withCoredump = false;
     withCryptsetup = false;
     withEfi = false;
     withHostnamed = false;
