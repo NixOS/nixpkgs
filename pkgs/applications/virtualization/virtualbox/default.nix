@@ -1,8 +1,9 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, lib, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+, alsaLib, curl, libvpx, nettools, dbus, acpica-tools, substituteAll
+, fetchpatch
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
@@ -25,7 +26,7 @@ let
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
   version = "6.1.16";
 
-  iasl' = iasl.overrideAttrs (old: rec {
+  acpica-tools' = acpica-tools.overrideAttrs (old: rec {
     inherit (old) pname;
     version = "20190108";
     src = fetchurl {
@@ -52,7 +53,7 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+    [ acpica-tools' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk

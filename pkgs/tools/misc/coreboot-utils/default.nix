@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
   version = "4.12";
@@ -90,7 +90,7 @@ let
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
       postFixup = let 
-        binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
+        binPath = [ coreutils  acpica-tools acpica-tools gnugrep  gnused  file ];
       in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
     };
   };

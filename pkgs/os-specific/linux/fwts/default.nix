@@ -1,5 +1,5 @@
 { stdenv, fetchzip, autoreconfHook, pkgconfig, glib, libtool, pcre
-, json_c, flex, bison, dtc, pciutils, dmidecode, iasl, libbsd }:
+, json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "fwts";
@@ -12,12 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
-  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode iasl libbsd ];
+  buildInputs = [
+    glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd
+  ];
 
   postPatch = ''
     substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci"
     substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode"
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/iasl"       "${iasl}/bin/iasl"
+    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
   '';
 
   enableParallelBuilding = true;
