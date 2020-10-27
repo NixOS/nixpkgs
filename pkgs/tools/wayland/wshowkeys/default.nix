@@ -28,7 +28,9 @@ in stdenv.mkDerivation rec {
       setuid binary (use "programs.wshowkeys.enable = true;").
     '';
     homepage = "https://git.sr.ht/~sircmpwn/wshowkeys";
-    license = licenses.mit;
+    license = with licenses; [ gpl3Only mit ];
+    # Some portions of the code are taken from Sway which is MIT licensed.
+    # TODO: gpl3Only or gpl3Plus (ask upstream)?
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos berbiche ];
   };
