@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # Doesn't recognize platform flags
+  configurePlatforms = [];
+
   outputs = [ "out" "bin" "dev" "man" ];
 
   postInstall =
