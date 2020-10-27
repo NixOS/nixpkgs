@@ -29,7 +29,7 @@ let
     , embedSupport ? false
     , ipv6Support ? true
     , systemdSupport ? stdenv.isLinux
-    , valgrindSupport ? true
+    , valgrindSupport ? !stdenv.isDarwin
     , ztsSupport ? apxs2Support
     }@args:
       let
