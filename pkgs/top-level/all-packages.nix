@@ -23929,6 +23929,8 @@ in
 
   vimacs = callPackage ../applications/editors/vim/vimacs.nix { };
 
+  vimv = callPackage ../tools/misc/vimv/default.nix { };
+
   qpdfview = libsForQt514.callPackage ../applications/misc/qpdfview {};
 
   qtile = callPackage ../applications/window-managers/qtile {
