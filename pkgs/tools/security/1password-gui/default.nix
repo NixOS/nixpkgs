@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://1password.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ danieldk timstott ];
     platforms = [ "x86_64-linux" ];
   };
 }
