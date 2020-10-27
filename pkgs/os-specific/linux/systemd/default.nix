@@ -213,6 +213,7 @@ stdenv.mkDerivation {
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
     "-Dhomed=false"
