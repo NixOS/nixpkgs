@@ -19,24 +19,24 @@
 } @ args:
 
 import ./default.nix {
-  rustcVersion = "1.46.0";
-  rustcSha256 = "0a17jby2pd050s24cy4dfc0gzvgcl585v3vvyfilniyvjrqknsid";
+  rustcVersion = "1.47.0";
+  rustcSha256 = "07fqd2vp7cf1ka3hr207dnnz93ymxml4935vp74g4is79h3dz19i";
 
   # Note: the version MUST be one version prior to the version we're
   # building
-  bootstrapVersion = "1.45.2";
+  bootstrapVersion = "1.46.0";
 
-  # fetch hashes by running `print-hashes.sh 1.45.2`
+  # fetch hashes by running `print-hashes.sh 1.46.0`
   bootstrapHashes = {
-    i686-unknown-linux-gnu = "5b2050dde23152750de89f7e59acaab6bf088d0beb5854c69c9a545fd254b936";
-    x86_64-unknown-linux-gnu = "860feed955726a4d96ffe40758a110053326b9ae11c9e1ee059e9c6222f25643";
-    arm-unknown-linux-gnueabihf = "ddb5f59bbdef84e0b7c83049461e003ed031dd881a4622365c3d475102535c60";
-    armv7-unknown-linux-gnueabihf = "7a556581f87602705f9c89b04cce621cfbba9050b6fbe478166e91d164567531";
-    aarch64-unknown-linux-gnu = "151fad66442d28a4e4786753d1afb559c4a3d359081c64769273a31c2f0f4d30";
-    x86_64-apple-darwin = "6e8067624ede10aa23081d62e0086c6f42f7228cc0d00fb5ff24d4dac65249d6";
+    i686-unknown-linux-gnu = "6ebd7e04dc18a36d08b9731cdb42d5caf8460e1eb41b75f3a8596c39f5e71206";
+    x86_64-unknown-linux-gnu = "e3b98bc3440fe92817881933f9564389eccb396f5f431f33d48b979fa2fbdcf5";
+    arm-unknown-linux-gnueabihf = "bb8af68565321f54608e918597083eb016ed0f9f4f3cc23f7cc5f467b934ce7f";
+    armv7-unknown-linux-gnueabihf = "7c0640879d7f2c38db60352e3c0f09e3fc6fa3bac6ca8f22cbccb1eb5e950121";
+    aarch64-unknown-linux-gnu = "f0c6d630f3dedb3db69d69ed9f833aa6b472363096f5164f1068c7001ca42aeb";
+    x86_64-apple-darwin = "82d61582a3772932432a99789c3b3bd4abe6baca339e355048ca9efb9ea5b4db";
   };
 
-  selectRustPackage = pkgs: pkgs.rust_1_46;
+  selectRustPackage = pkgs: pkgs.rust_1_47;
 
   rustcPatches = [
   ];
