@@ -69,6 +69,7 @@
 , withPolkit ? true
 , withRemote ? false  # has always been disabled on NixOS, upstream version appears broken anyway
 , withResolved ? true
+, withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
 
@@ -278,6 +279,9 @@ stdenv.mkDerivation {
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
+  ] ++ lib.optionals (withShellCompletions == false) [
+    "-Dbashcompletiondir=no"
+    "-Dzshcompletiondir=no"
   ];
 
   preConfigure = ''

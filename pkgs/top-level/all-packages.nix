@@ -18675,6 +18675,7 @@ in
     withNetworkd = false;
     withPolkit = false;
     withResolved = false;
+    withShellCompletions = false;
     withTimedated = false;
     glib = null;
     libgcrypt = null;
