@@ -15,10 +15,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cstruct lwt mirage-device ];
 
-  meta = {
+  meta = with lib; {
     description = "Block signatures and implementations for MirageOS";
     homepage = "https://github.com/mirage/mirage-block";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
   };
 }
