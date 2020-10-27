@@ -18662,16 +18662,16 @@ in
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
-    withResolved = false;
-    withLogind = false;
-    withHostnamed = false;
-    withLocaled = false;
-    withTimedated = false;
-    withHwdb = false;
-    withEfi = false;
-    withImportd = false;
     withCompression = false;
     withCryptsetup = false;
+    withEfi = false;
+    withHostnamed = false;
+    withHwdb = false;
+    withImportd = false;
+    withLocaled = false;
+    withLogind = false;
+    withResolved = false;
+    withTimedated = false;
     glib = null;
     lvm2 = null;
   };
