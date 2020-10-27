@@ -25897,7 +25897,7 @@ in
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
-  latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
+  latte-dock = libsForQt514.callPackage ../applications/misc/latte-dock { };
 
   gnome-themes-extra = gnome3.gnome-themes-extra;
 
