@@ -55,17 +55,18 @@
 , kexectools
 , bashInteractive
 
-, withResolved ? true
-, withLogind ? true
+, withCryptsetup ? true
+, withEfi ? stdenv.hostPlatform.isEfi
 , withHostnamed ? true
+, withHwdb ? true
+, withImportd ? true
 , withLocaled ? true
+, withLogind ? true
 , withNetworkd ? true
+, withRemote ? false  # has always been disabled on NixOS, upstream version appears broken anyway
+, withResolved ? true
 , withTimedated ? true
 , withTimesyncd ? true
-, withHwdb ? true
-, withEfi ? stdenv.hostPlatform.isEfi
-, withImportd ? true
-, withCryptsetup ? true
 
   # name argument
 , pname ? "systemd"
@@ -82,9 +83,13 @@ assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
   && gnutar != null && gnupg != null);
 
+assert withRemote -> lib.getDev curl != null;
+
 assert withCryptsetup ->
 (cryptsetup != null);
 let
+  wantCurl = withRemote || withImportd;
+
   version = "246.6";
 in
 stdenv.mkDerivation {
@@ -165,7 +170,6 @@ stdenv.mkDerivation {
       audit
       bzip2
       cryptsetup
-      curl.dev
       glib
       kmod
       libapparmor
@@ -181,6 +185,7 @@ stdenv.mkDerivation {
       pcre2
       xz
     ]
+    ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withKexectools kexectools
     ++ lib.optional withLibseccomp libseccomp
@@ -216,7 +221,7 @@ stdenv.mkDerivation {
     "-Dcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=false"
     "-Dhwdb=${lib.boolToString withHwdb}"
-    "-Dremote=false"
+    "-Dremote=${lib.boolToString withRemote}"
     "-Dsysusers=false"
     "-Dtimedated=${lib.boolToString withTimedated}"
     "-Dtimesyncd=${lib.boolToString withTimesyncd}"
@@ -224,7 +229,7 @@ stdenv.mkDerivation {
     "-Dlocaled=true"
     "-Dresolve=${lib.boolToString withResolved}"
     "-Dsplit-usr=false"
-    "-Dlibcurl=true"
+    "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=true"
     "-Dquotacheck=false"
