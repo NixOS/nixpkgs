@@ -167,7 +167,6 @@ stdenv.mkDerivation {
       cryptsetup
       curl.dev
       glib
-      iptables
       kmod
       libapparmor
       libcap
@@ -181,7 +180,9 @@ stdenv.mkDerivation {
       pam
       pcre2
       xz
-    ] ++ lib.optional withKexectools kexectools
+    ]
+    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withKexectools kexectools
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withSelinux libselinux
