@@ -169,7 +169,6 @@ stdenv.mkDerivation {
       acl
       audit
       bzip2
-      cryptsetup
       glib
       kmod
       libapparmor
@@ -191,7 +190,7 @@ stdenv.mkDerivation {
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withSelinux libselinux
-    ++ lib.optional withCryptsetup cryptsetup.dev
+    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
   ;
 
   #dontAddPrefix = true;
