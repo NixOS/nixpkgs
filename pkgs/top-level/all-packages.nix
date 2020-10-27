@@ -18670,6 +18670,7 @@ in
     withHwdb = false;
     withEfi = false;
     withImportd = false;
+    withCompression = false;
     withCryptsetup = false;
     glib = null;
     lvm2 = null;
