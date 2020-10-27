@@ -50,6 +50,10 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/xrCore/xrCore.cpp \
       --replace /usr/share $out/share
+
+    # https://github.com/OpenXRay/xray-16/issues/667
+    echo "inline const char* xr_sys_errlist[100] = {};" >> src/Common/PlatformLinux.inl
+    echo "#define _sys_errlist xr_sys_errlist" >> src/Common/PlatformLinux.inl
   '';
 
   postInstall = ''
