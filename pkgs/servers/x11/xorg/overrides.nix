@@ -318,8 +318,9 @@ self: super:
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
-        mkdir -p $out/share
+        mkdir -p $out/share/man/man7
         ln -sfn ${self.xkeyboardconfig}/etc/X11 $out/share/X11
+        ln -sfn ${self.xkeyboardconfig}/share/man/man7/xkeyboard-config.7.gz $out/share/man/man7
       '';
   });
 
