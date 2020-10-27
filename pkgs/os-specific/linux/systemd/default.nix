@@ -86,6 +86,7 @@ assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
   && gnutar != null && gnupg != null && withCompression );
 
+assert withEfi -> (gnu-efi != null);
 assert withRemote -> lib.getDev curl != null;
 assert withCoredump -> withCompression;
 
@@ -269,8 +270,8 @@ stdenv.mkDerivation {
     # more frequent development builds
     "-Dman=true"
 
-    "-Dgnu-efi=${lib.boolToString (withEfi && gnu-efi != null)}"
-  ] ++ lib.optionals (withEfi && gnu-efi != null) [
+    "-Dgnu-efi=${lib.boolToString withEfi}"
+  ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
