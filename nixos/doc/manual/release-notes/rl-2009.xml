@@ -1657,4 +1657,131 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
     </listitem>
   </itemizedlist>
  </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-contributions">
+  <title>Contributions</title>
+  <para>
+        I, Jonathan Ringer, would like to thank the following individuals for their work on nixpkgs. This release could not be done without the hard work of the NixOS community. There were 31282 contributions across 1313 contributors.
+  </para>
+  <orderedlist>
+   <para>
+    Top contributors to NixOS/Nixpkgs from the 20.03 release to the 20.09 release:
+   </para>
+   <listitem>
+    <para>
+  2288  Mario Rodas
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+  1837  Frederik Rietdijk
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   946  Jörg Thalheim
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   925  Maximilian Bosch
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   687  Jonathan Ringer
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   651  Jan Tojnar
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   622  Daniël de Kok
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   605  WORLDofPEACE
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   597  Florian Klink
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   528  José Romildo Malaquias
+    </para>
+   </listitem>
+  </orderedlist>
+
+  <orderedlist>
+   <para>
+    Top contributors to stabilizing this release (Zero Hydra Failures period):
+   </para>
+   <listitem>
+    <para>
+      281  volth
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   101  Robert Scott
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    86  Tim Steinbach
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    76  WORLDofPEACE
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    49  Maximilian Bosch
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    42  Thomas Tuegel
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    37  Doron Behar
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    36  Vladimír Čunát
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    27  Jonathan Ringer
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    27  Maciej Krüger
+    </para>
+   </listitem>
+  </orderedlist>
+
+  <para>
+   I, Jonathan Ringer, would also like to personally thank @WORLDofPEACE for their help in mentoring me on the release process. Special thanks also goes to Thomas Tuegel for helping immensely with stabilizing Qt, kde, and Plasma5; I would also like to thank Robert Scott for his numerous fixes and pull request reviews.
+   </para>
+
+ </section>
 </section>
