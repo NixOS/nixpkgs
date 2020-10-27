@@ -9033,6 +9033,8 @@ in
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  flasm = callPackage ../development/compilers/flasm { };
+
   flyctl = callPackage ../development/web/flyctl { };
 
   flutterPackages =
