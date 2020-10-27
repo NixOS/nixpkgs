@@ -122,12 +122,12 @@ in stdenv.mkDerivation {
     [ linuxHeaders libcap curl.dev kmod xz pam acl
       cryptsetup libuuid glib libgcrypt libgpgerror libidn2
       pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
+      lib.optional withKexectools kexectools ++
+      lib.optional withLibseccomp libseccomp ++
       [ libffi audit lz4 bzip2 libapparmor iptables ] ++
-      stdenv.lib.optional withEfi gnu-efi ++
-      stdenv.lib.optional withSelinux libselinux ++
-      stdenv.lib.optional withCryptsetup cryptsetup.dev;
+      lib.optional withEfi gnu-efi ++
+      lib.optional withSelinux libselinux ++
+      lib.optional withCryptsetup cryptsetup.dev;
 
   #dontAddPrefix = true;
 
@@ -143,26 +143,26 @@ in stdenv.mkDerivation {
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
-    "-Dglib=${stdenv.lib.boolToString (glib != null)}"
+    "-Dglib=${lib.boolToString (glib != null)}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
-    "-Dimportd=${stdenv.lib.boolToString withImportd}"
+    "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=true"
     "-Dhomed=false"
-    "-Dlogind=${stdenv.lib.boolToString withLogind}"
-    "-Dlocaled=${stdenv.lib.boolToString withLocaled}"
-    "-Dhostnamed=${stdenv.lib.boolToString withHostnamed}"
-    "-Dnetworkd=${stdenv.lib.boolToString withNetworkd}"
-    "-Dcryptsetup=${stdenv.lib.boolToString withCryptsetup}"
+    "-Dlogind=${lib.boolToString withLogind}"
+    "-Dlocaled=${lib.boolToString withLocaled}"
+    "-Dhostnamed=${lib.boolToString withHostnamed}"
+    "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=false"
-    "-Dhwdb=${stdenv.lib.boolToString withHwdb}"
+    "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=false"
     "-Dsysusers=false"
-    "-Dtimedated=${stdenv.lib.boolToString withTimedated}"
-    "-Dtimesyncd=${stdenv.lib.boolToString withTimesyncd}"
+    "-Dtimedated=${lib.boolToString withTimedated}"
+    "-Dtimesyncd=${lib.boolToString withTimesyncd}"
     "-Dfirstboot=false"
     "-Dlocaled=true"
-    "-Dresolve=${stdenv.lib.boolToString withResolved}"
+    "-Dresolve=${lib.boolToString withResolved}"
     "-Dsplit-usr=false"
     "-Dlibcurl=true"
     "-Dlibidn=false"
@@ -201,8 +201,8 @@ in stdenv.mkDerivation {
     # more frequent development builds
     "-Dman=true"
 
-    "-Dgnu-efi=${stdenv.lib.boolToString (withEfi && gnu-efi != null)}"
-  ] ++ stdenv.lib.optionals (withEfi && gnu-efi != null) [
+    "-Dgnu-efi=${lib.boolToString (withEfi && gnu-efi != null)}"
+  ] ++ lib.optionals (withEfi && gnu-efi != null) [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
@@ -323,7 +323,7 @@ in stdenv.mkDerivation {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
