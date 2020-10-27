@@ -74,5 +74,6 @@ EOF
     license = licenses.lgpl2;
     maintainers = [ maintainers.gnidorah ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = true; # not compatible with glibc 2.32
   };
 }
