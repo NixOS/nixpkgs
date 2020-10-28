@@ -103,6 +103,8 @@ with frameworks; with libs; {
   SpriteKit               = [];
   StoreKit                = [];
   SyncServices            = [];
+  # Available with SDK 10.15
+  SystemExtensions        = [];
   SystemConfiguration     = [ Security ];
   TWAIN                   = [ Carbon ];
   Tcl                     = [];
