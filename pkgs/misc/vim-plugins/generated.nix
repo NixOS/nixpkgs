@@ -1958,12 +1958,12 @@ let
     pname = "lsp_extensions-nvim";
     version = "2020-10-19";
     src = fetchFromGitHub {
-      owner = "tjdevries";
+      owner = "nvim-lua";
       repo = "lsp_extensions.nvim";
       rev = "85ce064c36b93cd8856d6dfc41ea5089764ec1c6";
       sha256 = "0vljxb9cvq042f70cq01n5mf2vd2wg2qpj75nlva9rjhiw9q3qw8";
     };
-    meta.homepage = "https://github.com/tjdevries/lsp_extensions.nvim/";
+    meta.homepage = "https://github.com/nvim-lua/lsp_extensions.nvim/";
   };
 
   lushtags = buildVimPluginFrom2Nix {
