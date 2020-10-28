@@ -23912,6 +23912,9 @@ in
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
+  # this is a lower-level alternative to wrapNeovim conceived to handle
+  # more usecases when wrapping neovim. The interface is being actively worked on
+  # so expect breakage. use wrapNeovim instead if you want a stable alternative
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovimUtils.legacyWrapper;
   neovim-unwrapped = callPackage ../applications/editors/neovim {
