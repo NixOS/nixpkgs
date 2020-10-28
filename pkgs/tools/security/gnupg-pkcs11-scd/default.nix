@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://gnupg-pkcs11.sourceforge.net/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lschuermann philandstuff ];
+    maintainers = with maintainers; [ matthiasbeyer philandstuff ];
     platforms = platforms.unix;
   };
 }
