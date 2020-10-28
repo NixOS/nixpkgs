@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib }:
 
-let version = "10.12"; in
+let version = "10.13"; in
 
 # Ensure appleSdkVersion is up to date.
 assert stdenv.isDarwin -> stdenv.appleSdkVersion == version;
@@ -11,14 +11,14 @@ let
     pname = "MacOS_SDK";
     inherit version;
 
-    # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.12.merged-1.sucatalog, which we found by:
-    #  1. Google: site:swscan.apple.com and look for a name that seems appropriate for your version
+    # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.13-1.sucatalog.gz, which we found by:
+    #  1. DuckDuckGo: site:swscan.apple.com and DevSDK .pkg
     #  2. In the resulting file, search for a file called DevSDK ending in .pkg
-    #  3. ???
+    #  3. Use curl and not your browser or wget to download the file
     #  4. Profit
     src = fetchurl {
-      url    = "http://swcdn.apple.com/content/downloads/33/36/041-90419-A_7JJ4H9ZHO2/xs88ob5wjz6riz7g6764twblnvksusg4ps/DevSDK_OSX1012.pkg";
-      sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
+      url    = "http://swcdn.apple.com/content/downloads/50/15/041-91747-A_WICZE7RNVZ/rayjnqf847xflt3tan8o8agod67eq88cav/DevSDK_macOS1013_Public.pkg";
+      sha256 = "1dl1ypxh9l5xp9h2cyv332apawbxxgc2bbkk6223958f1kdak4d6";
     };
 
     nativeBuildInputs = [ xar cpio python3 pbzx ];

@@ -1,7 +1,7 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
 # The version of darwin.apple_sdk used for sources provided by apple.
-, appleSdkVersion ? "10.12"
+, appleSdkVersion ? "10.13"
 # Minimum required macOS version, used both for compatibility as well as reproducability.
 , macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
