@@ -7,7 +7,7 @@
 with frameworks; with libs; {
   AGL                     = { inherit Carbon OpenGL; };
   AVFoundation            = { inherit ApplicationServices CoreGraphics CoreMedia MediaToolbox; };
-  AVKit                   = {};
+  AVKit                   = { inherit AppKit; };
   Accounts                = {};
   AddressBook             = { inherit libobjc Carbon ContactsPersistence; };
   AppKit                  = { inherit ApplicationServices AudioToolbox AudioUnit Foundation QuartzCore UIFoundation; };
