@@ -36,7 +36,7 @@ with frameworks; with libs; {
   CoreMedia               = [ ApplicationServices AudioToolbox AudioUnit CoreAudio CoreGraphics CoreVideo ];
   CoreMediaIO             = [ CoreMedia ];
   CoreText                = [ CoreGraphics ];
-  CoreVideo               = [ ApplicationServices CoreGraphics IOSurface OpenGL ];
+  CoreVideo               = [ ApplicationServices CoreGraphics IOSurface Metal OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
   DVDPlayback             = [];
   DirectoryService        = [];
