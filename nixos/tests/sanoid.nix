@@ -38,7 +38,7 @@ in {
 
       services.syncoid = {
         enable = true;
-        sshKey = "/root/.ssh/id_ecdsa";
+        sshKey = "/var/lib/syncoid/id_ecdsa";
         commonArgs = [ "--no-sync-snap" ];
         commands."pool/test".target = "root@target:pool/test";
       };
@@ -69,11 +69,12 @@ in {
         "udevadm settle",
     )
 
-    source.succeed("mkdir -m 700 /root/.ssh")
     source.succeed(
-        "cat '${snakeOilPrivateKey}' > /root/.ssh/id_ecdsa"
+        "mkdir -m 700 -p /var/lib/syncoid",
+        "cat '${snakeOilPrivateKey}' > /var/lib/syncoid/id_ecdsa",
+        "chmod 600 /var/lib/syncoid/id_ecdsa",
+        "chown -R syncoid:syncoid /var/lib/syncoid/",
     )
-    source.succeed("chmod 600 /root/.ssh/id_ecdsa")
 
     source.succeed("touch /tmp/mnt/test.txt")
     source.systemctl("start --wait sanoid.service")

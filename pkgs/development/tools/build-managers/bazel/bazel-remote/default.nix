@@ -7,7 +7,7 @@
 }:
 
 buildBazelPackage rec {
-  name = "bazel-remote-${version}";
+  pname = "bazel-remote";
   version = "1.0.0";
 
   src = fetchFromGitHub {

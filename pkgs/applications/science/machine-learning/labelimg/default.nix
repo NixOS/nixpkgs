@@ -28,7 +28,7 @@
       makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     '';
     meta = with stdenv.lib; {
-      description = "LabelImg is a graphical image annotation tool and label object bounding boxes in images";
+      description = "A graphical image annotation tool and label object bounding boxes in images";
       homepage = "https://github.com/tzutalin/labelImg";
       license = licenses.mit;
       platforms = platforms.linux;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpic";
-  version = "2020.06.01";
+  version = "2020.09.15";
 
   src = fetchurl {
     url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
-    sha256 = "1gbkpbjwjaaifxff8amm9b47dynq4l4698snjdgnn4flndw62q88";
+    sha256 = "0gmmp4dlir3bn892nm55a3q8cfsj8yg7fp1dixmhsdhsrgmg1b83";
   };
 
   # The prefix passed to configure is not used.

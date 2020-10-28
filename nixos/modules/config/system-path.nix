@@ -33,6 +33,7 @@ let
       pkgs.ncurses
       pkgs.netcat
       config.programs.ssh.package
+      pkgs.mkpasswd
       pkgs.procps
       pkgs.su
       pkgs.time

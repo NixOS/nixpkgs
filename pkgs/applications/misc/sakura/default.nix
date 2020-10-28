@@ -1,27 +1,38 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte, pcre2, glib , makeWrapper }:
+{ stdenv
+, fetchurl
+, cmake
+, pkgconfig
+, gtk3
+, perl
+, vte
+, pcre2
+, glib
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "sakura";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchurl {
-    url = "https://launchpad.net/sakura/trunk/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "15gskj5yv5qs3cj4ps43735kfx2nzjlhq4dk9ghirl8lvhhxsm5m";
+    url = "https://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-cppODnUKQpS9kFkkOqxU3yqAElAVn8VQtQsP4Carkos=";
   };
 
-  nativeBuildInputs = [ cmake perl pkgconfig ];
+  nativeBuildInputs = [ cmake perl pkgconfig makeWrapper ];
 
-  buildInputs = [ makeWrapper gtk3 vte pcre2 glib ];
+  buildInputs = [ gtk3 vte pcre2 glib ];
 
-  # Wrapper sets path to gsettings-schemata so sakura knows where to find colorchooser, fontchooser ...
-  postInstall = "wrapProgram $out/bin/sakura --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/";
+  # Set path to gsettings-schemata so sakura knows
+  # where to find colorchooser, fontchooser etc.
+  postInstall = ''
+    wrapProgram $out/bin/sakura \
+      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+  '';
 
   meta = with stdenv.lib; {
+    homepage = "https://www.pleyades.net/david/projects/sakura";
     description = "A terminal emulator based on GTK and VTE";
-    homepage    = "https://www.pleyades.net/david/projects/sakura";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl codyopel ];
-    platforms   = platforms.linux;
     longDescription = ''
       sakura is a terminal emulator based on GTK and VTE. It's a terminal
       emulator with few dependencies, so you don't need a full GNOME desktop
@@ -32,5 +43,8 @@ stdenv.mkDerivation rec {
       terminals in one window and adds a contextual menu with some basic
       options. No more no less.
     '';
-  };
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ astsmtl codyopel AndersonTorres ];
+    platforms = platforms.linux;
+ };
 }

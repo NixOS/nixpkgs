@@ -1,16 +1,33 @@
 # Functions for copying sources to the Nix store.
 { lib }:
 
+let
+  inherit (builtins)
+    hasContext
+    match
+    readDir
+    storeDir
+    tryEval
+    ;
+  inherit (lib)
+    filter
+    getAttr
+    isString
+    pathExists
+    readFile
+    split
+    ;
+in
 rec {
 
   # Returns the type of a path: regular (for file), symlink, or directory
-  pathType = p: with builtins; getAttr (baseNameOf p) (readDir (dirOf p));
+  pathType = p: getAttr (baseNameOf p) (readDir (dirOf p));
 
   # Returns true if the path exists and is a directory, false otherwise
-  pathIsDirectory = p: if builtins.pathExists p then (pathType p) == "directory" else false;
+  pathIsDirectory = p: if pathExists p then (pathType p) == "directory" else false;
 
   # Returns true if the path exists and is a regular file, false otherwise
-  pathIsRegularFile = p: if builtins.pathExists p then (pathType p) == "regular" else false;
+  pathIsRegularFile = p: if pathExists p then (pathType p) == "regular" else false;
 
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
@@ -19,8 +36,8 @@ rec {
     (baseName == ".git" || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
     # Filter out editor backup / swap files.
     lib.hasSuffix "~" baseName ||
-    builtins.match "^\\.sw[a-z]$" baseName != null ||
-    builtins.match "^\\..*\\.sw[a-z]$" baseName != null ||
+    match "^\\.sw[a-z]$" baseName != null ||
+    match "^\\..*\\.sw[a-z]$" baseName != null ||
 
     # Filter out generates files.
     lib.hasSuffix ".o" baseName ||
@@ -89,7 +106,7 @@ rec {
     in lib.cleanSourceWith {
       filter = (path: type:
         let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
-        in lib.any (re: builtins.match re relPath != null) regexes);
+        in lib.any (re: match re relPath != null) regexes);
       inherit src;
     };
 
@@ -102,13 +119,12 @@ rec {
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in cleanSourceWith { inherit filter; src = path; };
 
-  pathIsGitRepo = path: (builtins.tryEval (commitIdFromGitRepo path)).success;
+  pathIsGitRepo = path: (tryEval (commitIdFromGitRepo path)).success;
 
   # Get the commit id of a git repo
   # Example: commitIdFromGitRepo <nixpkgs/.git>
   commitIdFromGitRepo =
     let readCommitFromFile = file: path:
-      with builtins;
         let fileName       = toString path + "/" + file;
             packedRefsName = toString path + "/packed-refs";
             absolutePath   = base: path:
@@ -145,11 +161,11 @@ rec {
            # packed-refs file, so we have to grep through it:
            then
              let fileContent = readFile packedRefsName;
-                 matchRef = builtins.match "([a-z0-9]+) ${file}";
-                 isRef = s: builtins.isString s && (matchRef s) != null;
+                 matchRef = match "([a-z0-9]+) ${file}";
+                 isRef = s: isString s && (matchRef s) != null;
                  # there is a bug in libstdc++ leading to stackoverflow for long strings:
                  # https://github.com/NixOS/nix/issues/2147#issuecomment-659868795
-                 refs = builtins.filter isRef (builtins.split "\n" fileContent);
+                 refs = filter isRef (split "\n" fileContent);
              in if refs == []
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head (matchRef (lib.head refs))
@@ -157,7 +173,7 @@ rec {
            else throw ("Not a .git directory: " + path);
     in readCommitFromFile "HEAD";
 
-  pathHasContext = builtins.hasContext or (lib.hasPrefix builtins.storeDir);
+  pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);
 
   canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
 }

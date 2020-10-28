@@ -173,6 +173,7 @@
   ./programs/wavemon.nix
   ./programs/waybar.nix
   ./programs/wireshark.nix
+  ./programs/wshowkeys.nix
   ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix

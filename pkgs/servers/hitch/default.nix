@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   passthru.tests.hitch = nixosTests.hitch;
 
   meta = with stdenv.lib; {
-    description = "Hitch is a libev-based high performance SSL/TLS proxy by Varnish Software";
+    description = "Libev-based high performance SSL/TLS proxy by Varnish Software";
     homepage = "https://hitch-tls.org/";
     license = licenses.bsd2;
     maintainers = [ maintainers.jflanglois ];

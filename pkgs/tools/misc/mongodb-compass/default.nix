@@ -1,6 +1,6 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gnome3, libnotify, libsecret, libuuid, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
+, gnome2, gdk-pixbuf, gtk3, pango, libnotify, libsecret, libuuid, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
 
 let
   version = "1.22.1";
@@ -19,9 +19,9 @@ let
     freetype
     glib
     gnome2.GConf
-    gnome2.gdk_pixbuf
-    gnome3.gtk
-    gnome2.pango
+    gdk-pixbuf
+    gtk3
+    pango
     libnotify
     libsecret
     libuuid
@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ dpkg wrapGAppsHook gnome3.gtk ];
+  buildInputs = [ dpkg wrapGAppsHook gtk3 ];
   dontUnpack = true;
 
   buildCommand = ''
