@@ -669,7 +669,7 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
-  alacritty = callPackage ../applications/misc/alacritty {
+  alacritty = callPackage ../applications/terminal-emulators/alacritty {
     inherit (xorg) libXcursor libXxf86vm libXi;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
@@ -2976,7 +2976,7 @@ in
 
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
-  cool-retro-term = libsForQt5.callPackage ../applications/misc/cool-retro-term { };
+  cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils { };
   coreutils-full = coreutils.override { minimal = false; };
@@ -3431,7 +3431,7 @@ in
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
-  wayst = callPackage ../applications/misc/wayst { };
+  wayst = callPackage ../applications/terminal-emulators/wayst { };
 
   wev = callPackage ../tools/misc/wev { };
 
@@ -5477,7 +5477,7 @@ in
 
   mgba = libsForQt5.callPackage ../misc/emulators/mgba { };
 
-  microcom = callPackage ../applications/misc/microcom { };
+  microcom = callPackage ../applications/terminal-emulators/microcom { };
 
   microserver = callPackage ../servers/microserver { };
 
@@ -5830,7 +5830,7 @@ in
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
-  nimmm = callPackage ../applications/misc/nimmm { };
+  nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
@@ -7445,7 +7445,7 @@ in
 
   tikzit = libsForQt5.callPackage ../tools/typesetting/tikzit { };
 
-  tilix = callPackage ../applications/misc/tilix { };
+  tilix = callPackage ../applications/terminal-emulators/tilix { };
 
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix {};
 
@@ -8160,7 +8160,7 @@ in
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
 
-  x3270 = callPackage ../applications/misc/x3270 { };
+  x3270 = callPackage ../applications/terminal-emulators/x3270 { };
 
   xclip = callPackage ../tools/misc/xclip { };
 
@@ -8248,7 +8248,7 @@ in
 
   yafaray-core = callPackage ../tools/graphics/yafaray-core { };
 
-  yaft = callPackage ../applications/misc/yaft { };
+  yaft = callPackage ../applications/terminal-emulators/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
 
@@ -20520,7 +20520,7 @@ in
 
   esniper = callPackage ../applications/networking/esniper { };
 
-  eterm = callPackage ../applications/misc/eterm { };
+  eterm = callPackage ../applications/terminal-emulators/eterm { };
 
   eteroj.lv2 = libsForQt5.callPackage ../applications/audio/eteroj.lv2 { };
 
@@ -20528,7 +20528,7 @@ in
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
-  evilvte = callPackage ../applications/misc/evilvte (config.evilvte or {});
+  evilvte = callPackage ../applications/terminal-emulators/evilvte (config.evilvte or {});
 
   evilpixie = libsForQt514.callPackage ../applications/graphics/evilpixie { };
 
@@ -20634,7 +20634,7 @@ in
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
-  foot = callPackage ../applications/misc/foot { };
+  foot = callPackage ../applications/terminal-emulators/foot { };
 
   fossil = callPackage ../applications/version-management/fossil { };
 
@@ -20927,7 +20927,7 @@ in
 
   gcalcli = callPackage ../applications/misc/gcalcli { };
 
-  havoc = callPackage ../applications/misc/havoc { };
+  havoc = callPackage ../applications/terminal-emulators/havoc { };
 
   vcal = callPackage ../applications/misc/vcal { };
 
@@ -21146,7 +21146,7 @@ in
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
-  guake = callPackage ../applications/misc/guake { };
+  guake = callPackage ../applications/terminal-emulators/guake { };
 
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
@@ -21250,7 +21250,7 @@ in
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
-  hyper = callPackage ../applications/misc/hyper { };
+  hyper = callPackage ../applications/terminal-emulators/hyper { };
 
   hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
     inherit (haskellPackages) ghcWithPackages;
@@ -21695,7 +21695,7 @@ in
     ffmpeg = ffmpeg_2;
   };
 
-  kitty = callPackage ../applications/misc/kitty {
+  kitty = callPackage ../applications/terminal-emulators/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation IOKit Kernel OpenGL;
   };
@@ -21929,7 +21929,7 @@ in
 
   jftui = callPackage ../applications/video/jftui { };
 
-  lilyterm = callPackage ../applications/misc/lilyterm {
+  lilyterm = callPackage ../applications/terminal-emulators/lilyterm {
     inherit (gnome2) vte;
     gtk = gtk2;
     flavour = "stable";
@@ -22259,7 +22259,7 @@ in
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
-  mrxvt = callPackage ../applications/misc/mrxvt { };
+  mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
   mtpaint = callPackage ../applications/graphics/mtpaint { };
 
@@ -23210,13 +23210,13 @@ in
 
   runc = callPackage ../applications/virtualization/runc {};
 
-  rxvt = callPackage ../applications/misc/rxvt { };
+  rxvt = callPackage ../applications/terminal-emulators/rxvt { };
 
-  rxvt-unicode = callPackage ../applications/misc/rxvt-unicode/wrapper.nix { };
+  rxvt-unicode = callPackage ../applications/terminal-emulators/rxvt-unicode/wrapper.nix { };
 
-  rxvt-unicode-unwrapped = callPackage ../applications/misc/rxvt-unicode { };
+  rxvt-unicode-unwrapped = callPackage ../applications/terminal-emulators/rxvt-unicode { };
 
-  rxvt-unicode-plugins = import ../applications/misc/rxvt-unicode-plugins { inherit callPackage; };
+  rxvt-unicode-plugins = import ../applications/terminal-emulators/rxvt-unicode-plugins { inherit callPackage; };
 
   uade123 = callPackage ../applications/audio/uade123 {};
 
@@ -23226,7 +23226,7 @@ in
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
-  sakura = callPackage ../applications/misc/sakura { };
+  sakura = callPackage ../applications/terminal-emulators/sakura { };
 
   sameboy = callPackage ../misc/emulators/sameboy { };
 
@@ -23324,7 +23324,7 @@ in
     ncurses = ncurses5;
   };
 
-  stupidterm = callPackage ../applications/misc/stupidterm {
+  stupidterm = callPackage ../applications/terminal-emulators/stupidterm {
     gtk = gtk3;
   };
 
@@ -23338,13 +23338,13 @@ in
 
   sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 
-  st = callPackage ../applications/misc/st {
+  st = callPackage ../applications/terminal-emulators/st {
     conf = config.st.conf or null;
     patches = config.st.patches or [];
     extraLibs = config.st.extraLibs or [];
   };
 
-  xst = callPackage ../applications/misc/st/xst.nix { };
+  xst = callPackage ../applications/terminal-emulators/st/xst.nix { };
 
   stag = callPackage ../applications/misc/stag {
     curses = ncurses;
@@ -23678,21 +23678,21 @@ in
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
-  terminator = callPackage ../applications/misc/terminator { };
+  terminator = callPackage ../applications/terminal-emulators/terminator { };
 
-  terminus = callPackage ../applications/misc/terminus { };
+  terminus = callPackage ../applications/terminal-emulators/terminus { };
 
   tty-solitaire = callPackage ../applications/misc/tty-solitaire { };
 
-  lxterminal = callPackage ../applications/misc/lxterminal { };
+  lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
-  aminal = callPackage ../applications/misc/aminal {
+  aminal = callPackage ../applications/terminal-emulators/aminal {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
   };
 
-  termite-unwrapped = callPackage ../applications/misc/termite { };
+  termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  termite = callPackage ../applications/misc/termite/wrapper.nix { termite = termite-unwrapped; };
+  termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix { termite = termite-unwrapped; };
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
 
@@ -23737,7 +23737,7 @@ in
 
   tig = gitAndTools.tig;
 
-  tilda = callPackage ../applications/misc/tilda {
+  tilda = callPackage ../applications/terminal-emulators/tilda {
     gtk = gtk3;
   };
 
@@ -24590,16 +24590,16 @@ in
 
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
-  xterm = callPackage ../applications/misc/xterm { };
+  xterm = callPackage ../applications/terminal-emulators/xterm { };
 
-  mlterm = callPackage ../applications/misc/mlterm {
+  mlterm = callPackage ../applications/terminal-emulators/mlterm {
     libssh2 = null;
     openssl = null;
   };
 
-  roxterm = callPackage ../applications/misc/roxterm { };
+  roxterm = callPackage ../applications/terminal-emulators/roxterm { };
 
-  termonad-with-packages = callPackage ../applications/misc/termonad {
+  termonad-with-packages = callPackage ../applications/terminal-emulators/termonad {
     inherit (haskellPackages) ghcWithPackages;
   };
 
@@ -28128,7 +28128,7 @@ in
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
-  iterm2 = callPackage ../applications/misc/iterm2 {};
+  iterm2 = callPackage ../applications/terminal-emulators/iterm2 {};
 
   sccache = callPackage ../development/tools/misc/sccache { };
 
@@ -28193,7 +28193,7 @@ in
 
   houdini = callPackage ../applications/misc/houdini {};
 
-  xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
+  xtermcontrol = callPackage ../applications/terminal-emulators/xtermcontrol {};
 
   openfst = callPackage ../development/libraries/openfst {};
 
