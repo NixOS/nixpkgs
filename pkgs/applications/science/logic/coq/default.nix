@@ -109,7 +109,7 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ]
   ++ stdenv.lib.optional (!versionAtLeast "8.6") gnumake42
   ;
-  buildInputs = [ ncurses ]
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
   ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
   ++ stdenv.lib.optional (!versionAtLeast "8.12") ocamlPackages.num
   ++ stdenv.lib.optionals buildIde
@@ -117,10 +117,7 @@ self = stdenv.mkDerivation {
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
      else [ ocamlPackages.lablgtk ]);
 
-  propagatedBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ stdenv.lib.optional (versionAtLeast "8.12") ocamlPackages.num;
-
-  propagatedUserEnvPkgs = [ ocamlPackages.ocaml ocamlPackages.findlib ];
+  propagatedBuildInputs = stdenv.lib.optional (versionAtLeast "8.12") ocamlPackages.num;
 
   postPatch = ''
     UNAME=$(type -tp uname)
