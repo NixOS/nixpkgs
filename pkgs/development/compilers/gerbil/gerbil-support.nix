@@ -4,6 +4,7 @@
 rec {
   # Gerbil libraries
   gerbilPackages-unstable = {
+    gerbil-libp2p = callPackage ./gerbil-libp2p.nix { };
     gerbil-utils = callPackage ./gerbil-utils.nix { };
     gerbil-crypto = callPackage ./gerbil-crypto.nix { };
     gerbil-poo = callPackage ./gerbil-poo.nix { };
