@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "dominate";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "456facce7a7ccfd9363948109cf1e978d48c58e46a46b01c71b4c0adc73b1928";
+    sha256 = "76ec2cde23700a6fc4fee098168b9dee43b99c2f1dd0ca6a711f683e8eb7e1e4";
   };
 
   doCheck = !isPy3k;
