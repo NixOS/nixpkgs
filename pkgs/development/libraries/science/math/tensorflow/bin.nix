@@ -73,6 +73,5 @@ in stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ basvandijk ];
-    broken = true;
   };
 }
