@@ -4394,11 +4394,11 @@
       };
     }
     {
-      name = "npm_user_validate___npm_user_validate_1.0.0.tgz";
+      name = "npm_user_validate___npm_user_validate_1.0.1.tgz";
       path = fetchurl {
-        name = "npm_user_validate___npm_user_validate_1.0.0.tgz";
-        url  = "https://registry.yarnpkg.com/npm-user-validate/-/npm-user-validate-1.0.0.tgz";
-        sha1 = "8ceca0f5cea04d4e93519ef72d0557a75122e951";
+        name = "npm_user_validate___npm_user_validate_1.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/npm-user-validate/-/npm-user-validate-1.0.1.tgz";
+        sha1 = "31428fc5475fe8416023f178c0ab47935ad8c561";
       };
     }
     {
