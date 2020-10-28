@@ -101,6 +101,8 @@ with frameworks; with libs; {
   SecurityInterface       = [ Security ];
   ServiceManagement       = [ Security ];
   Social                  = [];
+  # Available with SDK 10.15
+  Speech                  = [];
   SpriteKit               = [];
   StoreKit                = [];
   SyncServices            = [];
