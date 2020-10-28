@@ -50,7 +50,7 @@
    </listitem>
    <listitem>
     <para>
-     Desktop Enironments:
+     Desktop Environments:
     </para>
     <itemizedlist>
      <listitem>
@@ -65,7 +65,7 @@
      </listitem>
      <listitem>
       <para>
-       gnome3: 3.34 -> 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.
+       gnome3: 3.34 -> 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>
       </para>
      </listitem>
       <listitem>
@@ -75,7 +75,7 @@
      </listitem>
      <listitem>
       <para>
-       NixOS now distributes an official <link xlink:href="https://nixos.org/download.html#nixos-iso">GNOME ISO</link>.
+       NixOS now distributes an official <link xlink:href="https://nixos.org/download.html#nixos-iso">GNOME ISO</link>
       </para>
      </listitem>
     </itemizedlist>
@@ -89,28 +89,28 @@
 
      <listitem>
       <para>
-       Agda ecosystem was heavily reworked (see more details below).
+       Agda ecosystem was heavily reworked (see more details below)
       </para>
      </listitem>
      <listitem>
       <para>
-       PHP now defaults to PHP 7.4, updated from 7.3.
+       PHP now defaults to PHP 7.4, updated from 7.3
       </para>
      </listitem>
      <listitem>
       <para>
-       PHP 7.2 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 20.09 release.
+       PHP 7.2 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 20.09 release
       </para>
      </listitem>
      <listitem>
       <para>
-       Python 3 now defaults to Python 3.8 instead of 3.7.
+       Python 3 now defaults to Python 3.8 instead of 3.7
       </para>
      </listitem>
      <listitem>
       <para>
-       Python 3.5 has reached its upstream EOL at the end of September 2020: it
-       has been removed from the list of available packages.
+       Python 3.5 reached its upstream EOL at the end of September 2020: it
+       has been removed from the list of available packages
       </para>
      </listitem>
     </itemizedlist>
@@ -156,7 +156,7 @@
      </listitem>
      <listitem>
       <para>
-       There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
+       There is a new module for Podman (<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
       </para>
      </listitem>
      <listitem>
@@ -191,7 +191,7 @@
      </listitem>
      <listitem>
        <para>
-         Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the g15daemon project.
+         Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the <link xlink:href="https://sourceforge.net/projects/g15daemon/">g15daemon project</link>.
        </para>
      </listitem>
      <listitem>
@@ -200,7 +200,7 @@
          allows to restrict non-default entries in the boot menu to one or more
          users. The users and passwords are defined via the option
          <option>boot.loader.grub.users</option>.
-         Note: Password support is only avaiable in GRUB version 2.
+         Note: Password support is only available in GRUB version 2.
        </para>
      </listitem>
     </itemizedlist>
@@ -257,27 +257,27 @@
     <itemizedlist>
      <listitem>
       <para>
-       <xref linkend="opt-hardware.system76.firmware-daemon.enable" /> adds easy support of system76 firmware.
+       <xref linkend="opt-hardware.system76.firmware-daemon.enable" /> adds easy support of system76 firmware
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-hardware.uinput.enable" /> loads uinput kernel module.
+       <xref linkend="opt-hardware.uinput.enable" /> loads uinput kernel module
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-hardware.video.hidpi.enable" /> enable good defaults for HiDPI displays.
+       <xref linkend="opt-hardware.video.hidpi.enable" /> enable good defaults for HiDPI displays
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-hardware.wooting.enable" /> support for Wooting keyboards.
+       <xref linkend="opt-hardware.wooting.enable" /> support for Wooting keyboards
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-hardware.xpadneo.enable" /> xpadneo driver for Xbox One wireless controllers.
+       <xref linkend="opt-hardware.xpadneo.enable" /> xpadneo driver for Xbox One wireless controllers
       </para>
      </listitem>
     </itemizedlist>
@@ -289,12 +289,12 @@
     <itemizedlist>
      <listitem>
       <para>
-       <xref linkend="opt-programs.hamster.enable" /> enable hamster time tracking.
+       <xref linkend="opt-programs.hamster.enable" /> enable hamster time tracking
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-programs.steam.enable" /> adds easy enablement of steam and related system configuration.
+       <xref linkend="opt-programs.steam.enable" /> adds easy enablement of steam and related system configuration
       </para>
      </listitem>
     </itemizedlist>
@@ -306,12 +306,12 @@
     <itemizedlist>
      <listitem>
       <para>
-       <xref linkend="opt-security.doas.enable" /> alternative to sudo, allows non-root users to execute commands as root.
+       <xref linkend="opt-security.doas.enable" /> alternative to sudo, allows non-root users to execute commands as root
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-security.tpm2.enable" /> add Trusted Platform Module 2 support.
+       <xref linkend="opt-security.tpm2.enable" /> add Trusted Platform Module 2 support
       </para>
      </listitem>
     </itemizedlist>
@@ -323,7 +323,7 @@
     <itemizedlist>
      <listitem>
       <para>
-       <xref linkend="opt-boot.initrd.network.openvpn.enable" /> Start an OpenVPN client during initrd boot.
+       <xref linkend="opt-boot.initrd.network.openvpn.enable" /> start an OpenVPN client during initrd boot
       </para>
      </listitem>
     </itemizedlist>
@@ -335,17 +335,17 @@
     <itemizedlist>
      <listitem>
       <para>
-       <xref linkend="opt-boot.enableContainers" /> Use nixos-containers.
+       <xref linkend="opt-boot.enableContainers" /> use nixos-containers
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-virtualisation.oci-containers.containers" /> Run OCI (Docker) containers.
+       <xref linkend="opt-virtualisation.oci-containers.containers" /> run OCI (Docker) containers
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-virtualisation.podman.enable" /> Daemonless container engine.
+       <xref linkend="opt-virtualisation.podman.enable" /> daemonless container engine
       </para>
      </listitem>
     </itemizedlist>
@@ -358,237 +358,237 @@
     <itemizedlist>
      <listitem>
       <para>
-       <xref linkend="opt-services.ankisyncd.enable" /> Anki sync server.
+       <xref linkend="opt-services.ankisyncd.enable" /> Anki sync server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.bazarr.enable" /> subtitle manager for Sonarr and Radarr.
+       <xref linkend="opt-services.bazarr.enable" /> Subtitle manager for Sonarr and Radarr
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.biboumi.enable" /> Biboumi XMPP gateway to IRC.
+       <xref linkend="opt-services.biboumi.enable" /> Biboumi XMPP gateway to IRC
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.blockbook-frontend" /> Blockbook-frontend, a service for the Trezor wallet.
+       <xref linkend="opt-services.blockbook-frontend" /> Blockbook-frontend, a service for the Trezor wallet
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.cage.enable" /> Wayland cage service.
+       <xref linkend="opt-services.cage.enable" /> Wayland cage service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.convos.enable" /> IRC daemon, which can be accessed throught the browser.
+       <xref linkend="opt-services.convos.enable" /> IRC daemon, which can be accessed throught the browser
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.engelsystem.enable" /> Tool for coordinating helpers and shifts on large events.
+       <xref linkend="opt-services.engelsystem.enable" /> Tool for coordinating volunteers and shifts on large events
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.espanso.enable" /> text-expander written in rust.
+       <xref linkend="opt-services.espanso.enable" /> text-expander written in rust
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.foldingathome.enable" /> Folding@home client.
+       <xref linkend="opt-services.foldingathome.enable" /> Folding@home client
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.gerrit.enable" /> Web-based team code collaboration tool.
+       <xref linkend="opt-services.gerrit.enable" /> Web-based team code collaboration tool
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.go-neb.enable" /> Matrix bot.
+       <xref linkend="opt-services.go-neb.enable" /> Matrix bot
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.hardware.xow.enable" /> xow as a systemd service.
+       <xref linkend="opt-services.hardware.xow.enable" /> xow as a systemd service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.hercules-ci-agent.enable" /> Hercules CI build agent.
+       <xref linkend="opt-services.hercules-ci-agent.enable" /> Hercules CI build agent
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.jicofo.enable" /> Jitsi Conference Focus, component of Jitsi Meet.
+       <xref linkend="opt-services.jicofo.enable" /> Jitsi Conference Focus, component of Jitsi Meet
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.jirafeau.enable" /> a web file repository.
+       <xref linkend="opt-services.jirafeau.enable" /> A web file repository
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.jitsi-meet.enable" /> secure, simple and scalable video conferences.
+       <xref linkend="opt-services.jitsi-meet.enable" /> Secure, simple and scalable video conferences
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.jitsi-videobridge.enable" /> Jitsi Videobridge, a WebRTC compatible router.
+       <xref linkend="opt-services.jitsi-videobridge.enable" /> Jitsi Videobridge, a WebRTC compatible router
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.jupyterhub.enable" /> Jupyterhub development server.
+       <xref linkend="opt-services.jupyterhub.enable" /> Jupyterhub development server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.k3s.enable" /> lightweight kubernetes distribution.
+       <xref linkend="opt-services.k3s.enable" /> Lightweight Kubernetes distribution
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.magic-wormhole-mailbox-server.enable" /> Magic Wormhole Mailbox Server.
+       <xref linkend="opt-services.magic-wormhole-mailbox-server.enable" /> Magic Wormhole Mailbox Server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.malcontent.enable" /> parental control support.
+       <xref linkend="opt-services.malcontent.enable" /> Parental Control support
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.matrix-appservice-discord.enable" /> Matrix and Discord bridge.
+       <xref linkend="opt-services.matrix-appservice-discord.enable" /> Matrix and Discord bridge
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.mautrix-telegram.enable" /> Matrix-Telegram puppeting/relaybot bridge.
+       <xref linkend="opt-services.mautrix-telegram.enable" /> Matrix-Telegram puppeting/relaybot bridge
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.mirakurun.enable" /> Japanese DTV Tuner Server Service.
+       <xref linkend="opt-services.mirakurun.enable" /> Japanese DTV Tuner Server Service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.molly-brown.enable" /> Molly-Brown Gemini server.
+       <xref linkend="opt-services.molly-brown.enable" /> Molly-Brown Gemini server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.mullvad-vpn.enable" /> Mullvad VPN daemon.
+       <xref linkend="opt-services.mullvad-vpn.enable" /> Mullvad VPN daemon
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.ncdns.enable" /> Namecoin to DNS bridge.
+       <xref linkend="opt-services.ncdns.enable" /> Namecoin to DNS bridge
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.nextdns.enable" /> NextDNS to DoH Proxy service.
+       <xref linkend="opt-services.nextdns.enable" /> NextDNS to DoH Proxy service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.nix-store-gcs-proxy" /> Enable a Google storage bucket to be used as a nix store.
+       <xref linkend="opt-services.nix-store-gcs-proxy" /> Google storage bucket to be used as a nix store
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.onedrive.enable" /> OneDrive sync service.
+       <xref linkend="opt-services.onedrive.enable" /> OneDrive sync service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.pinnwand.enable" /> Pastebin-like service.
+       <xref linkend="opt-services.pinnwand.enable" /> Pastebin-like service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.pixiecore.enable" /> manage network booting of machines.
+       <xref linkend="opt-services.pixiecore.enable" /> Manage network booting of machines
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.privacyidea.enable" /> Privacy authentication server.
+       <xref linkend="opt-services.privacyidea.enable" /> Privacy authentication server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.quorum.enable" /> Quorum blockchain daemon.
+       <xref linkend="opt-services.quorum.enable" /> Quorum blockchain daemon
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.robustirc-bridge.enable" /> RobustIRC bridge.
+       <xref linkend="opt-services.robustirc-bridge.enable" /> RobustIRC bridge
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.rss-bridge.enable" /> generate RSS and Atom feeds.
+       <xref linkend="opt-services.rss-bridge.enable" /> Generate RSS and Atom feeds
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.rtorrent.enable" /> rTorrent service.
+       <xref linkend="opt-services.rtorrent.enable" /> rTorrent service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.smartdns.enable" /> SmartDNS DNS server.
+       <xref linkend="opt-services.smartdns.enable" /> SmartDNS DNS server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.sogo.enable" /> SOGo groupware.
+       <xref linkend="opt-services.sogo.enable" /> SOGo groupware
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.teeworlds.enable" /> Teeworlds game server.
+       <xref linkend="opt-services.teeworlds.enable" /> Teeworlds game server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.torque.mom.enable" /> torque computing node.
+       <xref linkend="opt-services.torque.mom.enable" /> torque computing node
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.torque.server.enable" /> enable torque server.
+       <xref linkend="opt-services.torque.server.enable" /> torque server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.tuptime.enable" /> a total uptime service.
+       <xref linkend="opt-services.tuptime.enable" /> A total uptime service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.urserver.enable" /> X11 remote server.
+       <xref linkend="opt-services.urserver.enable" /> X11 remote server
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.wasabibackend.enable" /> Wasabi backend service.
+       <xref linkend="opt-services.wasabibackend.enable" /> Wasabi backend service
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.yubikey-agent.enable" /> Yubikey agent.
+       <xref linkend="opt-services.yubikey-agent.enable" /> Yubikey agent
       </para>
      </listitem>
      <listitem>
       <para>
-       <xref linkend="opt-services.zigbee2mqtt.enable" /> Zigbee to MQTT bridge.
+       <xref linkend="opt-services.zigbee2mqtt.enable" /> Zigbee to MQTT bridge
       </para>
      </listitem>
     </itemizedlist>
@@ -1775,7 +1775,7 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
   </orderedlist>
 
   <para>
-   I, Jonathan Ringer, would also like to personally thank @WORLDofPEACE for their help in mentoring me on the release process. Special thanks also goes to Thomas Tuegel for helping immensely with stabilizing Qt, kde, and Plasma5; I would also like to thank Robert Scott for his numerous fixes and pull request reviews.
+   I, Jonathan Ringer, would also like to personally thank @WORLDofPEACE for their help in mentoring me on the release process. Special thanks also goes to Thomas Tuegel for helping immensely with stabilizing Qt, KDE, and Plasma5; I would also like to thank Robert Scott for his numerous fixes and pull request reviews.
    </para>
 
  </section>
