@@ -5095,9 +5095,9 @@ in
 
   nixnote2 = libsForQt514.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = hiPrio nodejs-12_x;
+  nodejs = hiPrio nodejs-14_x;
 
-  nodejs-slim = nodejs-slim-12_x;
+  nodejs-slim = nodejs-slim-14_x;
 
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix { };
