@@ -38,7 +38,6 @@
 , zlib
 , xz
 , libuuid
-, libffi
 , libapparmor
 , intltool
 , bzip2
@@ -183,7 +182,6 @@ stdenv.mkDerivation {
       kmod
       libapparmor
       libcap
-      libffi
       libgcrypt
       libgpgerror
       libidn2
