@@ -7777,6 +7777,8 @@ in
 
   viu = callPackage ../tools/graphics/viu { };
 
+  vix = callPackage ../tools/misc/vix { };
+
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = callPackage ../tools/video/vncrec { };
