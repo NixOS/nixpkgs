@@ -9,13 +9,13 @@ let
   pythonPackages = python3Packages;
 in mkDerivation rec {
   pname = "freecad-unstable";
-  version = "2020-10-17";
+  version = "2020-10-28";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
-    rev = "f3bdaaa55a6c03b297924c40819d23e4603fa55b";
-    sha256 = "1q1iy4i9k65v8z7h8a6r4bf5ycn124jp26xwp0xwbar4gnkx2jiq";
+    rev = "0f875168b67536fd859ed44e1fe50d9b0a11f223";
+    sha256 = "16aycnvs9p5590rhivbqympajfixfsy1sjljh3s8fq6kv9s64gaw";
   };
 
   nativeBuildInputs = [
