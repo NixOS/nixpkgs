@@ -733,7 +733,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
      It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instantiation:
 <programlisting>{
   services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
-    phantomJsSupport = false;
+    phantomJsSupport = true;
   });
 }</programlisting>
     </para>
