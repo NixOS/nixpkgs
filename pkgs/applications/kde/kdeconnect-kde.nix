@@ -59,9 +59,9 @@ mkDerivation {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
 
-  postInstall = ''
-    wrapProgram $out/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
-  '';
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ sshfs ]}"
+  ];
 
   meta = with lib; {
     description = "KDE Connect provides several features to integrate your phone and your computer";
