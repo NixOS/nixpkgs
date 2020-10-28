@@ -9360,6 +9360,13 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
+julia_15 = callPackage ../development/compilers/julia/1.5.nix {
+    gmp = gmp6;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
+
+
   julia_1 = julia_10;
   julia = julia_1;
 
