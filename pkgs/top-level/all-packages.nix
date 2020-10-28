@@ -20494,6 +20494,8 @@ in
 
   elementary-planner = callPackage ../applications/office/elementary-planner { };
 
+  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
+
   elinks = callPackage ../applications/networking/browsers/elinks { };
 
   elvis = callPackage ../applications/editors/elvis { };
