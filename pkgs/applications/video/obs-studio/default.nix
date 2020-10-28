@@ -39,13 +39,13 @@ let
 
 in mkDerivation rec {
   pname = "obs-studio";
-  version = "26.0.0";
+  version = "26.0.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "09y57b3c88szl3wyx3cxq8jrm3pfnyg2n25hxl1ynkq3rgaavdq2";
+    sha256 = "1d502f80whh686mvq0yn6zpa5nvmnlzxwp5sjz43vpbbvhpbrdqj";
   };
 
   nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
