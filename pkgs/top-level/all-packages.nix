@@ -18677,6 +18677,7 @@ in
     withMachined = false;
     withNetworkd = false;
     withNss = false;
+    withPCRE2 = false;
     withPolkit = false;
     withResolved = false;
     withShellCompletions = false;
