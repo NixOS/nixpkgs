@@ -75,7 +75,7 @@ with frameworks; with libs; {
   LDAP                    = {};
   LatentSemanticMapping   = { inherit Carbon; };
   LocalAuthentication     = {};
-  MapKit                  = { inherit CoreLocation; };
+  MapKit                  = { inherit AppKit CoreLocation; };
   MediaAccessibility      = { inherit CoreGraphics CoreText QuartzCore; };
   MediaPlayer             = {};
   MediaToolbox            = { inherit AudioToolbox AudioUnit CoreMedia; };
