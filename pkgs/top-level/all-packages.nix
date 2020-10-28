@@ -21708,7 +21708,7 @@ in
     kaddressbook kalzium kapptemplate kapman kate katomic
     kblackbox kblocks kbounce
     kcachegrind kcalc kcharselect kcolorchooser
-    kdenlive kdf kdialog kdiamond
+    kdeconnect-kde kdenlive kdf kdialog kdiamond
     keditbookmarks
     kfind kfloppy
     kget kgpg
@@ -21732,8 +21732,6 @@ in
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
-
-  kdeconnect = libsForQt512.callPackage ../applications/misc/kdeconnect { };
 
   inherit (kdeFrameworks) kdesu;
 
