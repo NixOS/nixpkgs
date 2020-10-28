@@ -18807,6 +18807,7 @@ in
     withLocaled = false;
     withLogind = false;
     withNetworkd = false;
+    withNss = false;
     withPolkit = false;
     withResolved = false;
     withShellCompletions = false;
