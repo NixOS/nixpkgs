@@ -66,14 +66,32 @@ in rec {
 
   continuum = mkDerivation {
     pluginName = "continuum";
-    version = "unstable-2018-02-23";
+    version = "unstable-2020-10-16";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
-      rev = "1531b3770a7cf7373d15fedd239c5331b99342d1";
-      sha256 = "1w3f7gzvv1k25yfr6d1snr2z88p8f87cahrbaslmyphdxpy0fa4m";
+      rev = "26eb5ffce0b559d682b9f98c8d4b6c370ecb639b";
+      sha256 = "1glwa89bv2r92qz579a49prk3jf612cpd5hw46j4wfb35xhnj3ab";
     };
     dependencies = [ resurrect ];
+    meta = {
+      homepage = "https://github.com/tmux-plugins/tmux-continuum";
+      description = "continous saving of tmux environment";
+      longDescription =
+      ''
+        Features:
+        * continuous saving of tmux environment
+        * automatic tmux start when computer/server is turned on
+        * automatic restore when tmux is started
+
+        Together, these features enable uninterrupted tmux usage. No matter the
+        computer or server restarts, if the machine is on, tmux will be there how
+        you left it off the last time it was used.
+      '';
+      license = stdenv.lib.licenses.mit;
+      platforms = stdenv.lib.platforms.unix;
+      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+    };
   };
 
   copycat = mkDerivation {
