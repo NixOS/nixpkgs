@@ -1618,7 +1618,7 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
       nixpkgs. It was a work in progress to package the
       <link xlink:href="https://www.deepin.org/en/dde/">Deepin Desktop Environment (DDE)</link>,
       including libraries, tools and applications, and it was still
-      missing a service to lauch the desktop environment. It has shown
+      missing a service to launch the desktop environment. It has shown
       to no longer be a feasible goal due to reasons discussed in
       <link xlink:href="https://github.com/NixOS/nixpkgs/issues/94870">issue #94870</link>.
       The package <literal>netease-cloud-music</literal> has also been
