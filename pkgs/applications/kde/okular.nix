@@ -4,7 +4,7 @@
   breeze-icons, chmlib ? null, discount, djvulibre, ebook_tools, kactivities,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, kdegraphics-mobipocket, kiconthemes, kjs, khtml, kio, kparts,
-  kpty, kwallet, kwindowsystem, libkexiv2, libspectre, libzip, phonon, poppler,
+  kpty, kpurpose, kwallet, kwindowsystem, libkexiv2, libspectre, libzip, phonon, poppler,
   qca-qt5, qtdeclarative, qtsvg, threadweaver, kcrash
 }:
 
@@ -14,7 +14,7 @@ mkDerivation {
   buildInputs = [
     breeze-icons discount djvulibre ebook_tools kactivities karchive kbookmarks
     kcompletion kconfig kconfigwidgets kcoreaddons kdbusaddons
-    kdegraphics-mobipocket kiconthemes kjs khtml kio kparts kpty kwallet
+    kdegraphics-mobipocket kiconthemes kjs khtml kio kparts kpty kpurpose kwallet
     kwindowsystem libkexiv2 libspectre libzip phonon poppler qca-qt5
     qtdeclarative qtsvg threadweaver kcrash
   ] ++ lib.optional (!stdenv.isAarch64) chmlib;
