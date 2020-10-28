@@ -9,7 +9,7 @@ stdenv.mkDerivation {
    rev = "36d3e861664aeae36a45f96100f10f8fe2218035";
    sha256 = "1h3vrsbli5q9kr84j5ijbivlhpwlh3l8cv233pg362v2zz4ja8i7";
   };
-  
+
   installPhase = ''
     sed -i 's|#! perl|#! ${perl}/bin/perl|g' vtwheel
     mkdir -p $out/lib/urxvt/perl
@@ -23,5 +23,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ danbst ];
     platforms = with platforms; unix;
   };
-  
+
 }
