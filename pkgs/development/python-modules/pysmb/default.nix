@@ -25,6 +25,8 @@ buildPythonPackage rec {
   #   https://github.com/miketeo/pysmb/blob/master/python3/tests/README_1st.txt
   doCheck = false;
 
+  pythonImportsCheck = [ "nmb" "smb" ];
+
   meta = {
     description = "Experimental SMB/CIFS library written in Python to support file sharing between Windows and Linux machines";
     homepage = "https://miketeo.net/wp/index.php/projects/pysmb";
