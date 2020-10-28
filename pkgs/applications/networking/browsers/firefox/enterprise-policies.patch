@@ -1,0 +1,46 @@
+This patch allows for Firefox to load a policies.json file on a pr. profile basis.
+This means that for each profile in ~/.mozilla/firefox/<profile>, there can be one
+`policies.json` file, which will get parsed/executed when running Firefox with the
+given profile. The reason for this is, to allow to customze your profile with 
+extensions, settings, bookmarks, etc. as can be found here: 
+https://github.com/mozilla/policy-templates/blob/master/README.md
+
+This is meant to be used in conjuction with home-manager, to provide a greater level
+of costomization.
+
+KEEP IN MIND! This opens up for the possibilty to sideload extensions into Firefox, 
+which was dropped at it sometimes cause issues for users + used to sideload maleware.
+https://blog.mozilla.org/addons/2019/10/31/firefox-to-discontinue-sideloaded-extensions/
+This however should not be as big of a issue with Nix users, as the general Firefox is 
+targeted towards both advanced users + novice, whereas Nix will have a tedency towards
+advanced users.
+
+diff --git a/toolkit/components/enterprisepolicies/EnterprisePolicies.js b/toolkit/components/enterprisepolicies/EnterprisePolicies.js
+index b4742ee123..87556bd43a 100644
+--- a/toolkit/components/enterprisepolicies/EnterprisePolicies.js
++++ b/toolkit/components/enterprisepolicies/EnterprisePolicies.js
+@@ -26,6 +26,11 @@ const POLICIES_FILENAME = "policies.json";
+ // When true browser policy is loaded per-user from
+ // /run/user/$UID/appname
+ const PREF_PER_USER_DIR = "toolkit.policies.perUserDir";
++// used to specify where to load the policies from.
++// value of `1` means to use the dir `/run/user/$UID/appname`, whereas
++// a value of `2` will use the profile dir, to load the `policies.json`.
++// `/etc/firefox/policies/policies.json` overrides everything else.
++const PREF_POLICIES_LOADFROM_DIR = "toolkit.policies.loadFrom";
+ // For easy testing, modify the helpers/sample.json file,
+ // and set PREF_ALTERNATE_PATH in firefox.js as:
+ // /your/repo/browser/components/enterprisepolicies/helpers/sample.json
+@@ -490,8 +495,11 @@ class JSONPoliciesProvider {
+ 
+     try {
+       let perUserPath = Services.prefs.getBoolPref(PREF_PER_USER_DIR, false);
+-      if (perUserPath) {
++      let loadFromDir = Services.prefs.getIntPref(PREF_POLICIES_LOADFROM_DIR, 0);
++      if (perUserPath || loadFromDir == 1) {
+         configFile = Services.dirsvc.get("XREUserRunTimeDir", Ci.nsIFile);
++      } else if (loadFromDir == 2) {
++        configFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+       } else {
+         configFile = Services.dirsvc.get("XREAppDist", Ci.nsIFile);
+       }

@@ -61,4 +61,11 @@ rec {
       versionKey = "ffversion";
     };
   };
+
+  # apply enterprise-policies.patch so that we can have enterprise policies
+  # on a pr. profile basis, instead of pr. user or global for the installation.
+  # see patch for more information of pros/cons of this patch
+  firefox-policies = firefox.overrideAttrs(old: {
+    patches = old.patches ++ [ ./enterprise-policies.patch ];
+  });
 }
