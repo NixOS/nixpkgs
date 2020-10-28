@@ -5426,6 +5426,8 @@ in {
 
   pyobjc-framework-CoreData = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreData { });
 
+  pyobjc-framework-CoreLocation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreLocation { });
+
   pyobjc-framework-CoreMedia = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreMedia { });
 
   pyobjc-framework-CoreServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreServices { });
