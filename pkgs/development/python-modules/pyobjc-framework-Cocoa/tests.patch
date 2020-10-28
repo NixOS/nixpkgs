@@ -1,0 +1,166 @@
+diff --git a/PyObjCTest/test_cffilesecurity.py b/PyObjCTest/test_cffilesecurity.py
+index f0121d8ac..e77000b37 100644
+--- a/PyObjCTest/test_cffilesecurity.py
++++ b/PyObjCTest/test_cffilesecurity.py
+@@ -21,16 +21,6 @@ class TestCFFileSecurity(TestCase):
+     def testConstants(self):
+         self.fail("kCFFileSecurityRemoveACL")
+
+-    @min_os_level("10.8")
+-    @expectedFailure
+-    def testConstants10_8(self):
+-        self.assertEqual(CoreFoundation.kCFFileSecurityClearOwner, 1 << 0)
+-        self.assertEqual(CoreFoundation.kCFFileSecurityClearGroup, 1 << 1)
+-        self.assertEqual(CoreFoundation.kCFFileSecurityClearMode, 1 << 2)
+-        self.assertEqual(CoreFoundation.kCFFileSecurityClearOwnerUUID, 1 << 3)
+-        self.assertEqual(CoreFoundation.kCFFileSecurityClearGroupUUID, 1 << 4)
+-        self.assertEqual(CoreFoundation.kCFFileSecurityClearAccessControlList, 1 << 5)
+-
+     @min_os_level("10.7")
+     def testFunctions10_7(self):
+         self.assertResultIsCFRetained(CoreFoundation.CFFileSecurityCreate)
+@@ -82,12 +72,6 @@ class TestCFFileSecurity(TestCase):
+         self.assertTrue(ok)
+         self.assertEqual(v, 0o444)
+
+-    @min_os_level("10.7")
+-    @expectedFailure
+-    def testFunctionsUnwrapped(self):
+-        # There are no usable wrappers for sys/acl.h at this time
+-        self.fail("ACL Handling")
+-
+     @min_os_level("10.8")
+     def testFunctions10_8(self):
+         security = CoreFoundation.CFFileSecurityCreate(None)
+diff --git a/PyObjCTest/test_nsapplication.py b/PyObjCTest/test_nsapplication.py
+index e4ac285d0..e1b10428f 100644
+--- a/PyObjCTest/test_nsapplication.py
++++ b/PyObjCTest/test_nsapplication.py
+@@ -162,10 +162,6 @@ class TestNSApplication(TestCase):
+
+         AppKit.NSUpdateDynamicServices()
+
+-        pboard = AppKit.NSPasteboard.pasteboardWithName_("pyobjctest")
+-        self.assertIsInstance(pboard, AppKit.NSPasteboard)
+-        self.assertIsInstance(AppKit.NSPerformService("help", pboard), bool)
+-
+         v = TestNSApplicationHelper.alloc().init()
+         AppKit.NSRegisterServicesProvider(v, "foobar")
+         AppKit.NSUnregisterServicesProvider("foobar")
+diff --git a/PyObjCTest/test_nsdragging.py b/PyObjCTest/test_nsdragging.py
+index 5665e91c3..bc215f8a6 100644
+--- a/PyObjCTest/test_nsdragging.py
++++ b/PyObjCTest/test_nsdragging.py
+@@ -160,10 +160,6 @@ class TestNSDragging(TestCase):
+         objc.protocolNamed("NSDraggingDestination")
+         objc.protocolNamed("NSDraggingSource")
+
+-    @min_sdk_level("10.11")
+-    def testProtocols10_11(self):
+-        objc.protocolNamed("NSSpringLoadingDestination")
+-
+     def testProtocolImplementations(self):
+         self.assertResultHasType(
+             TestNSDraggingHelper.draggingSourceOperationMask, objc._C_NSUInteger
+diff --git a/PyObjCTest/test_nsopengl.py b/PyObjCTest/test_nsopengl.py
+index d040a50e9..98155fc96 100644
+--- a/PyObjCTest/test_nsopengl.py
++++ b/PyObjCTest/test_nsopengl.py
+@@ -109,19 +109,10 @@ class TestNSOpenGL(TestCase):
+         )
+         self.assertArgIsIn(AppKit.NSOpenGLPixelFormat.initWithAttributes_, 0)
+
+-        o = AppKit.NSOpenGLPixelFormat.alloc().initWithAttributes_(
+-            [AppKit.NSOpenGLPFANoRecovery, AppKit.NSOpenGLPFAAuxBuffers, 2]
+-        )
+-        self.assertIsInstance(o, AppKit.NSOpenGLPixelFormat)
+-
+         # FIXME: I'm not entirely sure this test is correct.
+         self.assertArgIsOut(
+             AppKit.NSOpenGLPixelFormat.getValues_forAttribute_forVirtualScreen_, 0
+         )
+-        v = o.getValues_forAttribute_forVirtualScreen_(
+-            None, AppKit.NSOpenGLPFANoRecovery, 0
+-        )
+-        self.assertIsInstance(v, int)
+
+         self.assertResultHasType(
+             AppKit.NSOpenGLPixelFormat.CGLPixelFormatObj, b"^{_CGLPixelFormatObject}"
+@@ -152,12 +143,6 @@ class TestNSOpenGL(TestCase):
+             0,
+             b"^{_CGLPixelFormatObject=}",
+         )
+-        self.assertArgHasType(
+-            AppKit.NSOpenGLPixelFormat.initWithCGLBufferObj_, 0, b"^{_CGLBufferObject=}"
+-        )
+-        self.assertResultHasType(
+-            AppKit.NSOpenGLPixelFormat.CGLBufferObj_, b"^{_CGLBufferObject=}"
+-        )
+
+     @min_os_level("10.6")
+     def testConstants10_6(self):
+diff --git a/PyObjCTest/test_nsopenpanel.py b/PyObjCTest/test_nsopenpanel.py
+index 100aca11c..adc29bc67 100644
+--- a/PyObjCTest/test_nsopenpanel.py
++++ b/PyObjCTest/test_nsopenpanel.py
+@@ -54,7 +54,3 @@ class TestOpenPanel(TestCase):
+         self.assertArgIsBOOL(AppKit.NSOpenPanel.setCanResolveUbiquitousConflicts_, 0)
+         self.assertResultIsBOOL(AppKit.NSOpenPanel.canDownloadUbiquitousContents)
+         self.assertArgIsBOOL(AppKit.NSOpenPanel.setCanDownloadUbiquitousContents_, 0)
+-
+-    def test_issue_272(self):
+-        panel = AppKit.NSOpenPanel.openPanel()
+-        panel.setAllowedFileTypes_([".html", ".txt"])
+diff --git a/PyObjCTest/test_nsprintinfo.py b/PyObjCTest/test_nsprintinfo.py
+index f67ec8b2a..98c0e2fc3 100644
+--- a/PyObjCTest/test_nsprintinfo.py
++++ b/PyObjCTest/test_nsprintinfo.py
+@@ -61,19 +61,6 @@ class TestNSPrintInfo(TestCase):
+         self.assertEqual(AppKit.NSPrintingPaginationModeFit, 1)
+         self.assertEqual(AppKit.NSPrintingPaginationModeClip, 2)
+
+-    @max_os_level("10.13")
+-    def testConstants_not10_14(self):
+-        self.assertIsInstance(AppKit.NSPrintFaxCoverSheetName, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxHighResolution, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxModem, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxReceiverNames, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxReceiverNumbers, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxReturnReceipt, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxSendTime, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxTrimPageEnds, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxUseCoverSheet, str)
+-        self.assertIsInstance(AppKit.NSPrintFaxJob, str)
+-
+     def testMethods(self):
+         self.assertResultIsBOOL(AppKit.NSPrintInfo.isHorizontallyCentered)
+         self.assertResultIsBOOL(AppKit.NSPrintInfo.isVerticallyCentered)
+diff --git a/PyObjCTest/test_nssavepanel.py b/PyObjCTest/test_nssavepanel.py
+index bc575e614..2c58015df 100644
+--- a/PyObjCTest/test_nssavepanel.py
++++ b/PyObjCTest/test_nssavepanel.py
+@@ -105,7 +105,3 @@ class TestNSSavePanel(TestCase):
+     def testMethods10_9(self):
+         self.assertArgIsBOOL(AppKit.NSSavePanel.setShowsTagField_, 0)
+         self.assertResultIsBOOL(AppKit.NSSavePanel.showsTagField)
+-
+-    def test_issue282(self):
+-        panel = AppKit.NSSavePanel.savePanel()
+-        self.assertIsInstance(panel, AppKit.NSSavePanel)
+diff --git a/PyObjCTest/test_weirdness.py b/PyObjCTest/test_weirdness.py
+index 48f01d37f..24c644d22 100644
+--- a/PyObjCTest/test_weirdness.py
++++ b/PyObjCTest/test_weirdness.py
+@@ -26,10 +26,6 @@ class TestWeirdness(TestCase):
+
+         self.assertEqual(after.definingClass, c)
+
+-    @max_sdk_level("10.14")
+-    def testWeirdness1(self):
+-        self.doWeirdness("NSButtonCell", "setEnabled_")
+-
+     @max_sdk_level("10.14")
+     def testWeirdness2(self):
+         self.doWeirdness("NSTextView", "setEditable_")
+--
+2.27.0
