@@ -7,7 +7,7 @@
 with frameworks; with libs; {
   AGL                     = [ Carbon OpenGL ];
   AVFoundation            = [ ApplicationServices CoreGraphics ];
-  AVKit                   = [];
+  AVKit                   = [ AppKit ];
   Accounts                = [];
   AddressBook             = [ Carbon ];
   AppKit                  = [ AudioToolbox AudioUnit Foundation QuartzCore ];
