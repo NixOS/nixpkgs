@@ -305,7 +305,6 @@ stdenv.mkDerivation {
       src/core/mount.c \
       src/core/swap.c \
       src/cryptsetup/cryptsetup-generator.c \
-      src/fsck/fsck.c \
       src/journal/cat.c \
       src/nspawn/nspawn.c \
       src/remount-fs/remount-fs.c \
@@ -322,8 +321,6 @@ stdenv.mkDerivation {
         --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
         --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
         --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
-        --replace /sbin/mke2fs ${lib.getBin e2fsprogs}/sbin/mke2fs \
-        --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
         --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
