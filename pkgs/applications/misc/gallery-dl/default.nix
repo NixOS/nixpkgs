@@ -15,6 +15,7 @@ python3Packages.buildPythonApplication rec {
   pytestFlagsArray = [
     # requires network access
     "--ignore=test/test_results.py"
+    "--ignore=test/test_downloader.py"
   ];
 
   meta = {
