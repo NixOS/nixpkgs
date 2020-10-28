@@ -5422,6 +5422,36 @@ in {
 
   pyobjc-framework-Collaboration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Collaboration { });
 
+  pyobjc-framework-ColorSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ColorSync { });
+
+  pyobjc-framework-CoreMedia = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreMedia { });
+
+  pyobjc-framework-CoreServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreServices { });
+
+  pyobjc-framework-FinderSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FinderSync { });
+
+  pyobjc-framework-FSEvents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FSEvents { });
+
+  pyobjc-framework-GameKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameKit { });
+
+  pyobjc-framework-MetalKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MetalKit { });
+
+  pyobjc-framework-NetFS = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetFS { });
+
+  pyobjc-framework-SearchKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SearchKit { });
+
+  pyobjc-framework-ServiceManagement = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ServiceManagement { });
+
+  pyobjc-framework-SyncServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SyncServices { });
+
+  pyobjc-framework-SystemExtensions = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SystemExtensions { });
+
+  pyobjc-framework-Quartz = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Quartz { });
+
+  pyobjc-framework-VideoToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { });
+
+  pyobjc-framework-WebKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-WebKit { });
+
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
   };
