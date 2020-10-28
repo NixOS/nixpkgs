@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clipboard-indicator";
-  version = "34";
+  version = "37";
 
   src = fetchFromGitHub {
     owner = "Tudmotu";
     repo = "gnome-shell-extension-clipboard-indicator";
     rev = "v${version}";
-    sha256 = "0i00psc1ky70zljd14jzr627y7nd8xwnwrh4xpajl1f6djabh12s";
+    sha256 = "0npxhaam2ra2b9zh2gk2q0n5snlhx6glz86m3jf8hz037w920k41";
   };
 
   uuid = "clipboard-indicator@tudmotu.com";
