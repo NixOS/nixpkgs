@@ -74,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lschuermann ];
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
