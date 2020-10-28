@@ -69,6 +69,7 @@
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? true
+, withPCRE2 ? true
 , withPolkit ? true
 , withRemote ? false  # has always been disabled on NixOS, upstream version appears broken anyway
 , withResolved ? true
@@ -187,8 +188,8 @@ stdenv.mkDerivation {
       libuuid
       linuxHeaders
       pam
-      pcre2
     ]
+
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz ]
@@ -197,6 +198,7 @@ stdenv.mkDerivation {
     ++ lib.optional withKexectools kexectools
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withResolved libgpgerror
     ++ lib.optional withSelinux libselinux
     ;
