@@ -55,6 +55,7 @@
 , bashInteractive
 
 , withAnalyze ? true
+, withApparmor ? true
 , withCoredump ? true
 , withCompression ? true  # adds bzip2, lz4 and xz
 , withCryptsetup ? true
@@ -180,7 +181,6 @@ stdenv.mkDerivation {
       audit
       glib
       kmod
-      libapparmor
       libcap
       libgcrypt
       libidn2
@@ -189,6 +189,7 @@ stdenv.mkDerivation {
       pam
       pcre2
     ]
+    ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz ]
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
