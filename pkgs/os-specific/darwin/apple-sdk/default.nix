@@ -210,6 +210,13 @@ in rec {
       setupHook = ./private-frameworks-setup-hook.sh;
     });
 
+    GameKit = stdenv.lib.overrideDerivation super.GameKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
     Security = stdenv.lib.overrideDerivation super.Security (drv: {
       setupHook = ./security-setup-hook.sh;
     });
