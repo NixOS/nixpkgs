@@ -92,7 +92,7 @@ with frameworks; with libs; {
   PubSub                  = {};
   QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox; };
   QuickLook               = { inherit ApplicationServices; };
-  SceneKit                = {};
+  SceneKit                = { inherit GLKit; };
   ScreenSaver             = {};
   Scripting               = {};
   ScriptingBridge         = {};
