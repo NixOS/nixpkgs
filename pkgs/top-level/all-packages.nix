@@ -5907,6 +5907,8 @@ in
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
+  nxdomain = python3.pkgs.callPackage ../tools/networking/nxdomain { };
+
   nxpmicro-mfgtools = callPackage ../development/tools/misc/nxpmicro-mfgtools { };
 
   nyancat = callPackage ../tools/misc/nyancat { };
@@ -7774,6 +7776,8 @@ in
   vit = callPackage ../applications/misc/vit { };
 
   viu = callPackage ../tools/graphics/viu { };
+
+  vix = callPackage ../tools/misc/vix { };
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
