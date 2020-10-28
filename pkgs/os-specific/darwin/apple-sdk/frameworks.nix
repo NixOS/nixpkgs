@@ -121,7 +121,7 @@ with frameworks; with libs; {
   IOBluetooth         = { inherit CoreBluetooth IOKit; };
   JavaVM              = {};
   OpenDirectory       = {};
-  Quartz              = { inherit AppKit QuartzCore QuickLook QTKit; };
+  Quartz              = { inherit AppKit Cocoa QuartzCore QuickLook QTKit; };
   QuartzCore          = { inherit libobjc ApplicationServices CoreVideo OpenCL CoreImage Metal; };
   QuickTime           = { inherit ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore; };
 
