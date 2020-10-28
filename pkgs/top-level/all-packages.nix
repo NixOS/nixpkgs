@@ -2471,6 +2471,8 @@ in
 
   photon = callPackage ../tools/networking/photon { };
 
+  piglit = callPackage ../tools/graphics/piglit { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
