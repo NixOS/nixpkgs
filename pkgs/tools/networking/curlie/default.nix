@@ -16,7 +16,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Curlie is a frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
+    description = "Frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
     homepage = "https://curlie.io/";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit;

@@ -4,7 +4,7 @@ mkDerivation {
   name = "katomic";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.katomic";
-    description = "KAtomic is a fun educational game built around molecular geometry";
+    description = "Fun educational game built around molecular geometry";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

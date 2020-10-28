@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   meta = with stdenv.lib; {
-    description = "Belr is Belledonne Communications' language recognition library";
+    description = "Belledonne Communications' language recognition library";
     homepage = "https://gitlab.linphone.org/BC/public/belr";
     license = licenses.gpl3;
     platforms = platforms.all;

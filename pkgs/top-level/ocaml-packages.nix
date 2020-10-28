@@ -539,6 +539,10 @@ let
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
+    mirage-block = callPackage ../development/ocaml-modules/mirage-block { };
+
+    mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
+
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
@@ -562,6 +566,8 @@ let
     mirage-fs = callPackage ../development/ocaml-modules/mirage-fs { };
 
     mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
+
+    mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
@@ -749,6 +755,8 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
+
+    parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
@@ -1023,7 +1031,7 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.13.nix {
-      inherit ctypes dune-configurator janePackage num octavius ppxlib re;
+      inherit ctypes dune-configurator janePackage num octavius ppxlib re zarith;
       inherit (pkgs) openssl;
     }
     else if lib.versionOlder "4.07" ocaml.version

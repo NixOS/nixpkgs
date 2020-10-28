@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
+{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
 atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
 cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       gtk3-x11
-      gnome2.pango
+      pango
       atk
       cairo
       gdk-pixbuf

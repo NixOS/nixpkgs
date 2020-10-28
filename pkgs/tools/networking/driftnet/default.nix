@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Driftnet watches network traffic, and picks out and displays JPEG and GIF images for display";
+    description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;

@@ -33,7 +33,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mdlayher/corerad";
-    description = "CoreRAD extensible and observable IPv6 NDP RA daemon";
+    description = "Extensible and observable IPv6 NDP RA daemon";
     license = licenses.asl20;
     maintainers = with maintainers; [ mdlayher ];
   };

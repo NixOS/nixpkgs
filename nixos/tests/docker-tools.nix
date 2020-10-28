@@ -115,7 +115,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.nginx}'",
             "docker run --name nginx -d -p 8000:80 ${examples.nginx.imageName}",
         )
-        docker.wait_until_succeeds("curl http://localhost:8000/")
+        docker.wait_until_succeeds("curl -f http://localhost:8000/")
         docker.succeed(
             "docker rm --force nginx", "docker rmi '${examples.nginx.imageName}'",
         )

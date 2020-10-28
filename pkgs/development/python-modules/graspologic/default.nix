@@ -14,14 +14,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "graspy";
+  pname = "graspologic";
   version = "0.3";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
-    owner = "neurodata";
-    repo = pname;
+    owner = "microsoft";
+    repo = "graspologic";
     rev = "v${version}";
     sha256 = "0lab76qiryxvwl6zrcikhnxil1xywl0wkkm2vzi4v9mdzpa7w29r";
   };
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://graspy.neurodata.io";
     description = "A package for graph statistical algorithms";
-    license = licenses.asl20;
+    license = licenses.asl20;  # changing to `licenses.mit` in next release
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

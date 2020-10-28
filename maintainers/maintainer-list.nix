@@ -2169,6 +2169,12 @@
     githubId = 8852888;
     name = "David Izquierdo";
   };
+  djanatyn = {
+    email = "djanatyn@gmail.com";
+    github = "djanatyn";
+    githubId = 523628;
+    name = "Jonathan Strickland";
+  };
   Dje4321 = {
     email = "dje4321@gmail.com";
     github = "dje4321";
@@ -3436,6 +3442,12 @@
     github = "Helkafen";
     githubId = 2405974;
     name = "Sébastian Méric de Bellefon";
+  };
+  henrikolsson = {
+    email = "henrik@fixme.se";
+    github = "henrikolsson";
+    githubId = 982322;
+    name = "Henrik Olsson";
   };
   henrytill = {
     email = "henrytill@gmail.com";

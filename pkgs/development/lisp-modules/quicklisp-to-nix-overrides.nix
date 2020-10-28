@@ -185,9 +185,18 @@ $out/lib/common-lisp/query-fs"
     parasites = pkgs.lib.filter (x: x!= "buildnode-test") x.parasites;
   };
   postmodern = x: {
-    overrides = y : (x.overrides y) // {
-      meta.broken = true; # 2018-04-10
-    };
+    asdFilesToKeep = (x.asdFilesToKeep or []) ++ ["postmodern.asd" "simple-date.asd"];
+    parasites = (pkgs.lib.filter (x: x!= "postmodern/tests") x.parasites) ++
+      ["simple-date/postgres-glue"];
+    deps = pkgs.lib.filter
+      (x: x.name != quicklisp-to-nix-packages.simple-date.name)
+      x.deps;
+  };
+  s-sql = x: {
+    parasites = pkgs.lib.filter (x: x!= "s-sql/tests") x.parasites;
+    deps = pkgs.lib.filter
+      (x: x.name != quicklisp-to-nix-packages.postmodern.name)
+      x.deps;
   };
   split-sequence = x: {
     overrides = y: (x.overrides y) // {

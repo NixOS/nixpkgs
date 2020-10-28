@@ -6,6 +6,7 @@
 , ppxlib
 , re
 , openssl
+, zarith
 }:
 
 rec {
@@ -496,6 +497,71 @@ rec {
     hash = "0zdcyix0gdn4xmvbjzhbig63xw9jnw8ixj3ngs6g4k2vk77rs0gk";
     propagatedBuildInputs = [ posixat spawn ];
     meta.description = "Process library and s-expression based shell";
+  };
+
+  csvfields = janePackage {
+    pname = "csvfields";
+    hash = "19pnq9m9lkdgqfy9l21w779d6c8djr1dvvjq7r9kbgfwb04symmr";
+    propagatedBuildInputs = [ core expect_test_helpers ];
+    meta.description = "Runtime support for ppx_xml_conv and ppx_csv_conv";
+  };
+
+  sexp_diff_kernel = janePackage {
+    pname = "sexp_diff_kernel";
+    hash = "125gssd24vfcfbkpjlqbxijlc4jyw2n0wv1cnddcfvpn1f7cghzb";
+    propagatedBuildInputs = [ core_kernel ];
+    meta.description = "Code for computing the diff of two sexps";
+  };
+
+  sexp_macro = janePackage {
+    pname = "sexp_macro";
+    hash = "1rqs2r2ihwsqzgnqsdr0db6dqzz4q6s9hi1hvnwf0cb2vnkhsjln";
+    propagatedBuildInputs = [ async sexplib ];
+    meta.description = "Sexp macros";
+  };
+
+  sexp_select = janePackage {
+    pname = "sexp_select";
+    hash = "02yckmin937scqs2i45r2qqp56rqa6j2q04nfhnnxvn3bkb0qnb1";
+    propagatedBuildInputs = [ base ppx_jane ];
+    meta.description = "A library to use CSS-style selectors to traverse sexp trees";
+  };
+
+  sexp = janePackage {
+    pname = "sexp";
+    hash = "0cqp6syc4ap2nxgg1mvwwz2pmib48kp3gigzpjwh20wr38qq0p1r";
+    propagatedBuildInputs = [
+      async
+      core
+      csvfields
+      re2
+      sexp_diff_kernel
+      sexp_macro
+      sexp_pretty
+      sexp_select
+    ];
+    patches = ./sexp.patch;
+    meta.description = "S-expression swiss knife";
+  };
+
+  zarith_stubs_js = janePackage {
+    pname = "zarith_stubs_js";
+    hash = "0dldnf85rfyx8z63qjly9n8plj8nnkw4i5zrj5vbm7s2wjcfjzj1";
+    meta.description = "Javascripts stubs for the Zarith library";
+  };
+
+  bignum = janePackage {
+    pname = "bignum";
+    hash = "0qldyl5mhlffnyps7n9y8qykm0ylrdiw5ii8zlww82zmmpp8zv5x";
+    propagatedBuildInputs = [ core_kernel zarith zarith_stubs_js ];
+    meta.description = "Core-flavoured wrapper around zarith's arbitrary-precision rationals";
+  };
+
+  delimited_parsing = janePackage {
+    pname = "delimited_parsing";
+    hash = "0siz746q28241wk0sv435lfvvips7sl151z5a1sbqanr3lm4s17w";
+    propagatedBuildInputs = [ async core_extended ];
+    meta.description = "Parsing of character (e.g., comma) separated and fixed-width values";
   };
 
   ### Packages at version 0.11, with dependencies at version 0.12
