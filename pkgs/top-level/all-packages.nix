@@ -21862,6 +21862,8 @@ in
 
   imgcat = callPackage ../applications/graphics/imgcat { };
 
+  img-cat = callPackage ../applications/graphics/img-cat { };
+
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
   # Impressive, formerly known as "KeyJNote".
