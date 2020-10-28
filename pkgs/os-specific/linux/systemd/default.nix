@@ -66,6 +66,7 @@
 , withImportd ? true
 , withLocaled ? true
 , withLogind ? true
+, withMachined ? true
 , withNetworkd ? true
 , withNss ? true
 , withPolkit ? true
@@ -226,6 +227,7 @@ stdenv.mkDerivation {
     "-Dlogind=${lib.boolToString withLogind}"
     "-Dlocaled=${lib.boolToString withLocaled}"
     "-Dhostnamed=${lib.boolToString withHostnamed}"
+    "-Dmachined=${lib.boolToString withMachined}"
     "-Dnetworkd=${lib.boolToString withNetworkd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
     "-Dcryptsetup=${lib.boolToString withCryptsetup}"
