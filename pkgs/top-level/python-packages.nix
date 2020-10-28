@@ -5456,6 +5456,8 @@ in {
 
   pyobjc-framework-MapKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MapKit { });
 
+  pyobjc-framework-Metal = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Metal { });
+
   pyobjc-framework-MetalKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MetalKit { });
 
   pyobjc-framework-NetFS = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetFS { });
