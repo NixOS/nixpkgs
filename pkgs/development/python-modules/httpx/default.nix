@@ -1,70 +1,60 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
-, fetchpatch
+, brotli
 , certifi
-, chardet
-, h11
 , h2
 , httpcore
-, idna
 , rfc3986
 , sniffio
-, isPy27
-, pytest
+, pytestCheckHook
 , pytest-asyncio
 , pytest-trio
 , pytestcov
 , trustme
 , uvicorn
-, brotli
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.14.2";
-  disabled = isPy27;
+  version = "0.16.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "08b6k5g8car3bic90aw4ysb2zvsa5nm8qk3hk4dgamllnnxzl5br";
+    sha256 = "00gmq45fckcqkj910bvd7pyqz1mvgsdvz4s0k7dzbnc5czzq1f4a";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-cookie-test-timestamp.patch";
-      url = "https://github.com/encode/httpx/pull/1270.patch";
-      sha256 = "1hgrynac6226sgnyzmsr1nr15rn49gbfmk4c2kx3dwkbh6vr7jpd";
-    })
-  ];
-
   propagatedBuildInputs = [
+    brotli
     certifi
-    chardet
-    h11
     h2
     httpcore
-    idna
     rfc3986
     sniffio
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytest-asyncio
     pytest-trio
     pytestcov
     trustme
     uvicorn
-    brotli
   ];
 
-  checkPhase = ''
-    PYTHONPATH=.:$PYTHONPATH pytest -k 'not (test_connect_timeout or test_elapsed_timer)'
-  '';
   pythonImportsCheck = [ "httpx" ];
+
+  disabledTests = [
+    # httpcore.ConnectError: [Errno 101] Network is unreachable
+    "test_connect_timeout"
+    # httpcore.ConnectError: [Errno -2] Name or service not known
+    "test_async_proxy_close"
+    "test_sync_proxy_close"
+  ];
 
   meta = with lib; {
     description = "The next generation HTTP client";
