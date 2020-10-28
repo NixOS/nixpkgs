@@ -276,6 +276,13 @@ in rec {
       setupHook = ./private-frameworks-setup-hook.sh;
     });
 
+    GameKit = stdenv.lib.overrideDerivation super.GameKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
     IMServicePlugIn = stdenv.lib.overrideDerivation super.IMServicePlugIn (drv: {
       extraTBDFiles = [ "Versions/A/Frameworks/IMServicePlugInSupport.framework/Versions/A/IMServicePlugInSupport.tbd" ];
     });
