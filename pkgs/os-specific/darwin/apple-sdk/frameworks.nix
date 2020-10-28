@@ -36,7 +36,7 @@ with frameworks; with libs; {
   CoreMedia               = { inherit ApplicationServices AudioToolbox AudioUnit CoreAudio CoreGraphics CoreVideo; };
   CoreMediaIO             = { inherit CoreMedia; };
   CoreText                = { inherit CoreGraphics; };
-  CoreVideo               = { inherit ApplicationServices CoreGraphics IOSurface OpenGL; };
+  CoreVideo               = { inherit ApplicationServices CoreGraphics IOSurface Metal OpenGL; };
   CoreWLAN                = { inherit SecurityFoundation; };
   DVDPlayback             = {};
   DirectoryService        = {};
