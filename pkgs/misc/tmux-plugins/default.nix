@@ -284,12 +284,38 @@ in rec {
 
   resurrect = mkDerivation {
     pluginName = "resurrect";
-    version = "unstable-2020-03-21";
+    version = "unstable-2020-09-18";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "327c0481ad20c429b4e692e092659f8b3346b08f";
-      sha256 = "0nxfqazww36wwv49dzd39kq4jfls20834hf1458sf5pvmv5cmbyw";
+      rev = "e4825055c92e54b0c6ec572afc9b6c4723aba6c8";
+      sha256 = "0a96drkx1kpadkbxabcnvb542p75xdh2dbizvlq2lac5ldpb4hmx";
+    };
+    meta = {
+      homepage = "https://github.com/tmux-plugins/tmux-resurrect";
+      description = "Restore tmux environment after system restart";
+      longDescription =
+        ''
+          This plugin goes to great lengths to save and restore all the details
+          from your tmux environment. Here's what's been taken care of:
+
+          * all sessions, windows, panes and their order
+          * current working directory for each pane
+          * exact pane layouts within windows (even when zoomed)
+          * active and alternative session
+          * active and alternative window for each session
+          * windows with focus
+          * active pane for each window
+          * "grouped sessions" (useful feature when using tmux with multiple monitors)
+          * programs running within a pane! More details in the restoring programs doc.
+
+          Optional:
+          * restoring vim and neovim sessions
+          * restoring pane contents
+      '';
+      license = stdenv.lib.licenses.mit;
+      platforms = stdenv.lib.platforms.unix;
+      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
     };
   };
 
