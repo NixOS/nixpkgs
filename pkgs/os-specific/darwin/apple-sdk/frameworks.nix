@@ -52,7 +52,7 @@ with frameworks; with libs; {
   GLUT                    = [ OpenGL ];
   GSS                     = [];
   GameController          = [];
-  GameKit                 = [ Cocoa Foundation MetalKit ];
+  GameKit                 = [ Cocoa Foundation MetalKit SpriteKit ];
   Hypervisor              = [];
   ICADevices              = [ Carbon IOBluetooth ];
   IMServicePlugIn         = [];
