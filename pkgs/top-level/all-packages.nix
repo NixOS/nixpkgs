@@ -3079,6 +3079,8 @@ in
 
   convbin = callPackage ../tools/misc/convbin { };
 
+  convimg = callPackage ../tools/misc/convimg { };
+
   convmv = callPackage ../tools/misc/convmv { };
 
   convoy = callPackage ../tools/filesystems/convoy { };
