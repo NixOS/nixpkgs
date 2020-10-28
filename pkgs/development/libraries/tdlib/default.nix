@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
     owner = "tdlib";
     repo = "td";
 
-    # At version 1.6.0, this line was `rev = "v${version}". Version 1.6.9 uses an explicit revision hash because 1.6.9
-    # is not a tdlib GitHub release, and is therefore not hosted at `https://github.com/tdlib/td/releases/tag/v1.6.9`.
-    # Please return to the `rev = "v${version}"` style on the next version bump if you can, since that will allow
+    # At version 1.6.0, this line was `rev = "v${version}". Version 1.6.9 uses an explicit revision because 1.6.9 is not
+    # a tdlib GitHub release, and is therefore not hosted at `https://github.com/tdlib/td/releases/tag/v1.6.9`. Please
+    # return to the `rev = "v${version}"` style on the next version bump if you can, since that will allow
     # `nixpkgs-update` to update the package automatically.
-    rev = "32f2338bd199dd06a1b4b5f1ad14f2d4f2868f01";
+    rev = "unstable-2020-10-25";
 
     sha256 = "0wv03hlgzrsc04kcwnwz6dsmkdzvhb0i1wjs08gzivwxw06pkq4n";
   };
