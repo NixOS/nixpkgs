@@ -5438,6 +5438,8 @@ in {
 
   pyobjc-framework-NetFS = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetFS { });
 
+  pyobjc-framework-Quartz = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Quartz { });
+
   pyobjc-framework-SearchKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SearchKit { });
 
   pyobjc-framework-ServiceManagement = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ServiceManagement { });
@@ -5445,8 +5447,6 @@ in {
   pyobjc-framework-SyncServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SyncServices { });
 
   pyobjc-framework-SystemExtensions = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SystemExtensions { });
-
-  pyobjc-framework-Quartz = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Quartz { });
 
   pyobjc-framework-VideoToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { });
 
