@@ -183,7 +183,6 @@ stdenv.mkDerivation {
       libapparmor
       libcap
       libgcrypt
-      libgpgerror
       libidn2
       libuuid
       linuxHeaders
@@ -192,13 +191,14 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz ]
-    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+    ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexectools
     ++ lib.optional withLibseccomp libseccomp
-    ++ lib.optional withEfi gnu-efi
+    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withResolved libgpgerror
     ++ lib.optional withSelinux libselinux
-    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-  ;
+    ;
 
   #dontAddPrefix = true;
 
