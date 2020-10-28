@@ -524,6 +524,16 @@ args.stdenv.mkDerivation (args // {
        </varlistentry>
        <varlistentry>
         <term>
+         If it’s a <emphasis>terminal emulator</emphasis>:
+        </term>
+        <listitem>
+         <para>
+          <filename>applications/terminal-emulators</filename> (e.g. <filename>alacritty</filename> or <filename>rxvt</filename> or <filename>termite</filename>)
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
          If it’s for <emphasis>video playback / editing</emphasis>:
         </term>
         <listitem>
