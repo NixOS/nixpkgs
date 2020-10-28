@@ -120,7 +120,7 @@ with frameworks; with libs; {
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
   OpenDirectory       = [];
-  Quartz              = [ AppKit Cocoa QuickLook QTKit ];
+  Quartz              = [ AppKit Cocoa ImageCaptureCore QuickLook QTKit ];
   QuartzCore          = [ ApplicationServices CoreVideo OpenCL CoreImage Metal ];
   QuickTime           = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
 
