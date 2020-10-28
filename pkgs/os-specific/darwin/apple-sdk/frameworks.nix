@@ -74,7 +74,7 @@ with frameworks; with libs; {
   LDAP                    = [];
   LatentSemanticMapping   = [ Carbon ];
   LocalAuthentication     = [];
-  MapKit                  = [ CoreLocation ];
+  MapKit                  = [ AppKit CoreLocation ];
   MediaAccessibility      = [ CoreGraphics CoreText QuartzCore ];
   MediaPlayer             = [];
   MediaToolbox            = [ AudioToolbox AudioUnit CoreMedia ];
