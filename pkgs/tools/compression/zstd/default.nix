@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ]
    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-  buildInputs = [ bash ];
+  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
     ./playtests-darwin.patch
@@ -72,7 +72,9 @@ stdenv.mkDerivation rec {
       --replace "zstdcat" "$bin/bin/zstdcat"
   '';
 
-  outputs = [ "bin" "dev" "man" "out" ];
+  outputs = [ "bin" "dev" ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isUnix "man"
+    ++ [ "out" ];
 
   meta = with stdenv.lib; {
     description = "Zstandard real-time compression algorithm";
