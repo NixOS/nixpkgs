@@ -18813,6 +18813,7 @@ in
     withResolved = false;
     withShellCompletions = false;
     withTimedated = false;
+    withTimesyncd = false;
     withUserDb = false;
     glib = null;
     libgcrypt = null;
