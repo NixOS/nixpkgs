@@ -11,17 +11,20 @@
 , patchelf
 , pyyaml
 , requests
+, typing-extensions
 }:
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   platform = if stdenv.isDarwin then "darwin" else "linux";
-  srcs = import ./binary-hashes.nix;
+  srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
+  version = "1.7.0";
 in buildPythonPackage {
+  inherit version;
+
   pname = "pytorch";
   # Don't forget to update pytorch to the same version.
-  version = "1.6.0";
 
   format = "wheel";
 
@@ -39,6 +42,17 @@ in buildPythonPackage {
     numpy
     pyyaml
     requests
+    typing-extensions
+  ];
+
+  # PyTorch are broken: the dataclasses wheel is required, but ships with
+  # Python >= 3.7. Our dataclasses derivation is incompatible with >= 3.7.
+  #
+  # https://github.com/pytorch/pytorch/issues/46930
+  #
+  # Should be removed with the next PyTorch version.
+  pipInstallFlags = [
+    "--no-deps"
   ];
 
   postInstall = ''
