@@ -5420,6 +5420,8 @@ in {
 
   pyobjc-framework-Accounts = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Accounts { });
 
+  pyobjc-framework-CloudKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CloudKit { });
+
   pyobjc-framework-Cocoa = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Cocoa { });
 
   pyobjc-framework-Collaboration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Collaboration { });
