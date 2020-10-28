@@ -67,6 +67,7 @@
 , withLocaled ? true
 , withLogind ? true
 , withNetworkd ? true
+, withNss ? true
 , withPolkit ? true
 , withRemote ? false  # has always been disabled on NixOS, upstream version appears broken anyway
 , withResolved ? true
@@ -285,6 +286,11 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"
+  ] ++ lib.optionals (!withNss) [
+    "-Dnss-myhostname=false"
+    "-Dnss-mymachines=false"
+    "-Dnss-resolve=false"
+    "-Dnss-systemd=false"
   ];
 
   preConfigure = ''
