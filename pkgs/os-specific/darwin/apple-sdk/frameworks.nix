@@ -109,7 +109,7 @@ with frameworks; with libs; {
   Tcl                     = {};
   VideoDecodeAcceleration = { inherit CoreVideo; };
   VideoToolbox            = { inherit CoreMedia CoreVideo; };
-  WebKit                  = { inherit libobjc ApplicationServices Carbon JavaScriptCore OpenGL; };
+  WebKit                  = { inherit libobjc AppKit ApplicationServices Carbon JavaScriptCore OpenGL; };
 
   # Umbrellas
   Accelerate          = { inherit CoreWLAN IOBluetooth; };
