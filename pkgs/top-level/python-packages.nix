@@ -5420,6 +5420,14 @@ in {
 
   pyobjc-framework-Accounts = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Accounts { });
 
+  pyobjc-framework-AddressBook = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AddressBook { });
+
+  pyobjc-framework-AVFoundation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AVFoundation { });
+
+  pyobjc-framework-AVKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AVKit { });
+
+  pyobjc-framework-CalendarStore = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CalendarStore { });
+
   pyobjc-framework-CloudKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CloudKit { });
 
   pyobjc-framework-Cocoa = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Cocoa { });
