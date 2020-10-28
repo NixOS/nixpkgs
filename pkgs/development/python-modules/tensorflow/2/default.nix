@@ -22,7 +22,7 @@
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
 # Default from ./configure script
-, cudaCapabilities ? [ "3.5" "5.2" ]
+, cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
