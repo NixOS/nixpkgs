@@ -2,14 +2,14 @@
 
 let
 
-  version = "1.3.0";
+  version = "1.4.0";
   rev = "v${version}";
 
   aptlySrc = fetchFromGitHub {
     inherit rev;
     owner = "aptly-dev";
     repo = "aptly";
-    sha256 = "032gw8qkxcgc0jyrvzqh7jkbmk4k0gf7j74hyhclfnjmd9548f5l";
+    sha256 = "06cq761r3bxybb9xn58jii0ggp79mcp3810z1r2z3xcvplwhwnhy";
   };
 
   aptlyCompletionSrc = fetchFromGitHub {
