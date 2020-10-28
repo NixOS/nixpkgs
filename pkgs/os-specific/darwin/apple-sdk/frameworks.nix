@@ -107,7 +107,7 @@ with frameworks; with libs; {
   Tcl                     = [];
   VideoDecodeAcceleration = [ CoreVideo ];
   VideoToolbox            = [ CoreMedia CoreVideo ];
-  WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL ];
+  WebKit                  = [ AppKit ApplicationServices Carbon JavaScriptCore OpenGL ];
 
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];
