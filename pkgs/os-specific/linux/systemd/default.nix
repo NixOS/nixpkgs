@@ -73,6 +73,7 @@
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
+, withUserDb ? true
 
   # name argument
 , pname ? "systemd"
@@ -233,6 +234,7 @@ stdenv.mkDerivation {
     "-Dsysusers=false"
     "-Dtimedated=${lib.boolToString withTimedated}"
     "-Dtimesyncd=${lib.boolToString withTimesyncd}"
+    "-Duserdb=${lib.boolToString withUserDb}"
     "-Dcoredump=${lib.boolToString withCoredump}"
     "-Dfirstboot=false"
     "-Dresolve=${lib.boolToString withResolved}"

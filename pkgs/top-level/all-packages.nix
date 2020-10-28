@@ -18678,6 +18678,7 @@ in
     withResolved = false;
     withShellCompletions = false;
     withTimedated = false;
+    withUserDb = false;
     glib = null;
     libgcrypt = null;
     lvm2 = null;
