@@ -1,34 +1,52 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
-, isPy27
 , h11
+, h2
+, pproxy
+, pytestCheckHook
+, pytestcov
 , sniffio
+, uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.10.2";
-  disabled = isPy27;
+  version = "0.12.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "00gn8nfv814rg6fj7xv97mrra3fvx6fzjcgx9y051ihm6hxljdsi";
+    sha256 = "0bwxn7m7r7h6k41swxj0jqj3nzi76wqxwbnry6y7d4qfh4m26g2j";
   };
 
-  propagatedBuildInputs = [ h11 sniffio ];
+  propagatedBuildInputs = [
+    h11
+    h2
+    sniffio
+  ];
 
-  # tests require pythonic access to mitmproxy, which isn't (yet?) packaged as
-  # a pythonPackage.
-  doCheck = false;
+  checkInputs = [
+    pproxy
+    pytestCheckHook
+    pytestcov
+    uvicorn
+  ];
+
+  pytestFlagsArray = [
+    # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known
+    "--ignore=tests/sync_tests/test_interfaces.py"
+  ];
+
   pythonImportsCheck = [ "httpcore" ];
 
-  meta = with stdenv.lib; {
-    description = "A minimal HTTP client";
+  meta = with lib; {
+    description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
-    maintainers = [ maintainers.ris ];
+    maintainers = with maintainers; [ ris ];
   };
 }
