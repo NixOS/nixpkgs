@@ -82,6 +82,7 @@ with frameworks; with libs; {
   MetalKit                = [ ModelIO Metal ];
   ModelIO                 = [ ];
   NetFS                   = [];
+  NotificationCenter      = [ AppKit ];
   OSAKit                  = [ Carbon ];
   OpenAL                  = [];
   OpenCL                  = [ IOSurface OpenGL ];
