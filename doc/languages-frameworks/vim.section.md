@@ -265,6 +265,20 @@ To add a new plugin, run `./update.py --add "[owner]/[name]"`. **NOTE**: This sc
 
 Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of Language Server Protocol integration with vim/neovim.
 
+## Updating plugins in nixpkgs
+
+Run the update script with a GitHub API token that has at least `public_repo` access. Running the script without the token is likely to result in rate-limiting (429 errors). For steps on creating an API token, please refer to [GitHub's token documentation](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token).
+
+```sh
+GITHUB_API_TOKEN=my_token ./pkgs/misc/vim-plugins/update.py
+```
+
+Alternatively, set the number of processes to a lower count to avoid rate-limiting.
+
+```sh
+./pkgs/misc/vim-plugins/update.py --proc 1
+```
+
 ## Important repositories
 
 - [vim-pi](https://bitbucket.org/vimcommunity/vim-pi) is a plugin repository
