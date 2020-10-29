@@ -29,7 +29,7 @@ let
   # This provides simple way to customize urxvt using
   # the `.override` mechanism.
   wrapper = { configure, ... }:
-    let 
+    let
       config = configure { inherit availablePlugins; };
       plugins = config.plugins or (builtins.attrValues availablePlugins);
       extraDeps = config.extraDeps or [ ];
