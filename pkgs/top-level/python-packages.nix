@@ -5480,6 +5480,8 @@ in {
 
   pyobjc-framework-SearchKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SearchKit { });
 
+  pyobjc-framework-Security = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Security { });
+
   pyobjc-framework-ServiceManagement = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ServiceManagement { });
 
   pyobjc-framework-Speech = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Speech { });
