@@ -75,11 +75,7 @@ stdenv.mkDerivation rec {
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)'
   '';
 
-  preConfigure = ''
-    # because $out needs to be expanded
-    cmakeFlagsArray+=("-DCMAKE_INSTALL_PREFIX=$out/bin")
-    cmakeFlagsArray+=("-DARCH=${arch}")
-  '';
+  cmakeFlags = [ "-DARCH=${arch}" ];
 
   desktopItem = makeDesktopItem {
     name = "monero-wallet-gui";
