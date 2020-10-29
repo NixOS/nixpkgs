@@ -21085,7 +21085,7 @@ in
 
   git-quick-stats = callPackage ../development/tools/git-quick-stats {};
 
-  git-review = callPackage ../applications/version-management/git-review { };
+  git-review = python3Packages.callPackage ../applications/version-management/git-review { };
 
   github-cli = gitAndTools.gh;
 
