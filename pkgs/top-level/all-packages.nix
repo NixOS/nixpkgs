@@ -12465,6 +12465,8 @@ in
 
   enet = callPackage ../development/libraries/enet { };
 
+  entt = callPackage ../development/libraries/entt { };
+
   epoxy = callPackage ../development/libraries/epoxy {};
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
