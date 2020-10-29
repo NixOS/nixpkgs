@@ -4,28 +4,14 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "FusionInventory-Agent";
-  version = "2.3.21";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "fusioninventory";
     repo = "fusioninventory-agent";
     rev = version;
-    sha256 = "034clffcn0agx85macjgml4lyhvvck7idn94pqd2c77pk6crvw2y";
+    sha256 = "12grxf56kha71p9rd4p6kfp247c91skv5l82ckjyis7lz3m2dsqc";
   };
-
-  patches = [
-    ./remove_software_test.patch
-    # support for os-release file
-    (fetchurl {
-      url = "https://github.com/fusioninventory/fusioninventory-agent/pull/396.diff";
-      sha256 = "0bxrjmff80ab01n23xggci32ajsah6zvcmz5x4hj6ayy6dzwi6jb";
-    })
-    # support for Nix software inventory
-    (fetchurl {
-      url = "https://github.com/fusioninventory/fusioninventory-agent/pull/397.diff";
-      sha256 = "0pyf7mp0zsb3zcqb6yysr1zfp54p9ciwjn1pzayw6s9flmcgrmbw";
-    })
-    ];
 
   postPatch = ''
 
@@ -68,6 +54,8 @@ perlPackages.buildPerlPackage rec {
     XMLTreePP
   ];
 
+  doCheck = false;
+
   installPhase = ''
     mkdir -p $out
 
@@ -89,6 +77,5 @@ perlPackages.buildPerlPackage rec {
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.phile314 ];
-    broken = true;
   };
 }
