@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "cordless";
-  version = "2020-08-30";
+  version = "2020-10-24";
 
   src = fetchFromGitHub {
     owner = "Bios-Marcel";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CwOI7Ah4+sxD9We+Va5a6jYat5mjOeBk2EsOfwskz6k=";
+    sha256 = "18j8yrnipiivc49jwbb0ipgqwdi249fs9zxxz8qx8jfq77imvwbq";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "sha256-01I7GrZkaskuz20kVK2YwqvP7ViPMlQ3BFaoLHwgvOE=";
+  vendorSha256 = "1h47aqf8bmyqvaayfj16br1402qzy7kf8rk96f3vnsyvsnkg5gw5";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Bios-Marcel/cordless";
