@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p awscli -p jq -p qemu -i bash
+# shellcheck shell=bash
 
 # Uploads and registers NixOS images built from the
 # <nixos/release.nix> amazonImage attribute. Images are uploaded and
@@ -111,7 +112,7 @@ wait_for_import() {
     log "Waiting for import task $task_id to be completed"
     while true; do
         read state progress snapshot_id < <(
-            aws ec2 describe-import-snapshot-tasks --region $region --import-task-ids "$task_id" | \
+            aws ec2 describe-import-snapshot-tasks --region "$region" --import-task-ids "$task_id" | \
                 jq -r '.ImportSnapshotTasks[].SnapshotTaskDetail | "\(.Status) \(.Progress) \(.SnapshotId)"'
         )
         log " ... state=$state progress=$progress snapshot_id=$snapshot_id"
@@ -139,7 +140,7 @@ wait_for_image() {
 
     while true; do
         read state < <(
-            aws ec2 describe-images --image-ids "$ami_id" --region $region | \
+            aws ec2 describe-images --image-ids "$ami_id" --region "$region" | \
                 jq -r ".Images[].State"
         )
         log " ... state=$state"
@@ -163,7 +164,7 @@ make_image_public() {
     local region=$1
     local ami_id=$2
 
-    wait_for_image $region "$ami_id"
+    wait_for_image "$region" "$ami_id"
 
     log "Making image $ami_id public"
 
@@ -185,7 +186,7 @@ upload_image() {
         log "Checking for image on S3"
         if ! aws s3 ls --region "$region" "s3://${bucket}/${aws_path}" >&2; then
             log "Image missing from aws, uploading"
-            aws s3 cp --region $region "$image_file" "s3://${bucket}/${aws_path}" >&2
+            aws s3 cp --region "$region" "$image_file" "s3://${bucket}/${aws_path}" >&2
         fi
 
         log "Importing image from S3 path s3://$bucket/$aws_path"
@@ -197,7 +198,7 @@ upload_image() {
               \"S3Bucket\": \"$bucket\",
               \"S3Key\": \"$aws_path\"
           }
-        }" --region $region | jq -r '.ImportTaskId')
+        }" --region "$region" | jq -r '.ImportTaskId')
 
         write_state "$state_key" task_id "$task_id"
     fi
@@ -230,7 +231,7 @@ upload_image() {
             aws ec2 register-image \
                 --name "$image_name" \
                 --description "$image_description" \
-                --region $region \
+                --region "$region" \
                 --architecture $amazon_arch \
                 --block-device-mappings "${block_device_mappings[@]}" \
                 "${extra_flags[@]}" \
@@ -240,7 +241,7 @@ upload_image() {
         write_state "$state_key" ami_id "$ami_id"
     fi
 
-    make_image_public $region "$ami_id"
+    make_image_public "$region" "$ami_id"
 
     echo "$ami_id"
 }
@@ -268,7 +269,7 @@ copy_to_region() {
         write_state "$state_key" ami_id "$ami_id"
     fi
 
-    make_image_public $region "$ami_id"
+    make_image_public "$region" "$ami_id"
 
     echo "$ami_id"
 }
