@@ -3383,6 +3383,18 @@ let
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
   };
 
+  telescope-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-nvim";
+    version = "2020-10-28";
+    src = fetchFromGitHub {
+      owner = "nvim-lua";
+      repo = "telescope.nvim";
+      rev = "78cf7ebd7f2dcfcf6fec1d0195ccf46cb479d72c";
+      sha256 = "1wl30nqdbl90a9zky524k1cszwii4vg5rhlrrvg4n6hdw9kkyi4m";
+    };
+    meta.homepage = "https://github.com/nvim-lua/telescope.nvim/";
+  };
+
   tender-vim = buildVimPluginFrom2Nix {
     pname = "tender-vim";
     version = "2020-06-29";
