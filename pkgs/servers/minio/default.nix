@@ -29,7 +29,6 @@ buildGoModule rec {
 
   buildFlagsArray = [
     "-tags=kqueue"
-    "-trimpath"
   ];
 
   passthru.tests.minio = nixosTests.minio;
