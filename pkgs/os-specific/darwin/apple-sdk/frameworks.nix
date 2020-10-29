@@ -93,6 +93,7 @@ with frameworks; with libs; {
   PubSub                  = [];
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices ];
+  SafariServices          = [ AppKit ];
   SceneKit                = [ GLKit ];
   ScreenSaver             = [];
   Scripting               = [];
