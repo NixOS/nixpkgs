@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildGoPackage
-, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
+, makeWrapper, installShellFiles, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
@@ -94,7 +94,7 @@ rec {
 
     goPackagePath = "github.com/docker/docker-ce";
 
-    nativeBuildInputs = [ pkgconfig go-md2man go libtool removeReferencesTo installShellFiles ];
+    nativeBuildInputs = [ pkgconfig go-md2man go libtool installShellFiles ];
     buildInputs = [
       makeWrapper
     ] ++ optionals (stdenv.isLinux) [
@@ -182,12 +182,6 @@ rec {
       ./man/md2man-all.sh -q
 
       installManPage man/*/*.[1-9]
-    '';
-
-    preFixup = ''
-      find $out -type f -exec remove-references-to -t ${stdenv.cc.cc} '{}' +
-    '' + optionalString (stdenv.isLinux) ''
-      find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
     '';
 
     meta = {
