@@ -14794,6 +14794,8 @@ in
 
   ntrack = callPackage ../development/libraries/ntrack { };
 
+  nuraft = callPackage ../development/libraries/nuraft { };
+
   nuspell = callPackage ../development/libraries/nuspell { };
   nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
