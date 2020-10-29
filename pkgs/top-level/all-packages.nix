@@ -18008,6 +18008,10 @@ in
     inherit kernel;
     inherit (kernel) stdenv; # in particular, use the same compiler by default
 
+    # to help determine module compatibility
+    inherit (kernel) isXen isZen isHardened isLibre;
+    inherit (kernel) kernelOlder kernelAtLeast;
+
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
 
@@ -18271,6 +18275,7 @@ in
         kernelPatches.hardened.${kernel.meta.branch}
       ];
       modDirVersionArg = kernel.modDirVersion + "-hardened";
+      isHardened = true;
   });
 
   linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { });
