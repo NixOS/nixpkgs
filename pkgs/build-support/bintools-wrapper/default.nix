@@ -306,9 +306,7 @@ stdenv.mkDerivation {
     ''
 
     + optionalString (libc != null && targetPlatform.isZ80) ''
-      for isa in z80; do
-        echo "-L${getLib libc}/z80/lib/$isa" >> $out/nix-support/libc-cflags
-      done
+      echo "-L${getLib libc}/z80/lib/z80" >> $out/nix-support/libc-cflags
     ''
 
     + ''
