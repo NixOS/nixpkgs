@@ -6,7 +6,7 @@
 
 with frameworks; with libs; {
   AGL                     = [ Carbon OpenGL ];
-  AVFoundation            = [ ApplicationServices CoreGraphics ];
+  AVFoundation            = [ ApplicationServices CoreGraphics CoreMedia ];
   AVKit                   = [ AppKit ];
   Accounts                = [];
   AddressBook             = [ Carbon ];
