@@ -94,6 +94,7 @@ with frameworks; with libs; {
   PubSub                  = {};
   QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox; };
   QuickLook               = { inherit ApplicationServices; };
+  SafariServices          = { inherit AppKit; };
   SceneKit                = { inherit GLKit; };
   ScreenSaver             = {};
   Scripting               = {};
