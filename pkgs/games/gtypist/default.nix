@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ncurses perl fortune ]
    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
+  preConfigure = "
+    patchShebangs ./configure
+  ";
+
   preFixup = ''
      wrapProgram "$out/bin/typefortune" \
        --prefix PATH : "${fortune}/bin" \
