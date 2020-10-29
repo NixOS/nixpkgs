@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "pushgateway";
-  version = "1.2.0";
+  version = "1.3.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/pushgateway";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "pushgateway";
-    sha256 = "0q57pvdfapi1xx8mw7ykvxs64alypyqbxwvrqjcrgv2jidbcd1mm";
+    sha256 = "0ll6s8yqcx3fgn6gzmfb1bsfykl0ra6383nyw1kjbj260w200gls";
   };
 
   buildUser = "nix@nixpkgs";
