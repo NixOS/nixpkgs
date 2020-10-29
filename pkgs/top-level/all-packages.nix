@@ -9979,7 +9979,8 @@ in
     cc = z88dk-unwrapped;
     extraBuildCommands = ''
       wrap zcc $wrapper $ccPath/zcc
-      export named_cc=zcc
+      export named_cc=$out/cc
+      wrapProgram '${cc}/bin/zcc' $out/bin/cc
     '';
   };
 
