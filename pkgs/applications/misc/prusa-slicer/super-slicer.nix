@@ -3,7 +3,7 @@
 }:
 let
   appname = "SuperSlicer";
-  version = "2.2.54.1";
+  version = "2.2.54.2";
   pname = "super-slicer";
   description = "PrusaSlicer fork with more features and faster development cycle";
   override = super: {
@@ -12,7 +12,7 @@ let
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      sha256 = "sha256-0NWrck9nqAlc8xX3nTrRlnzjso4MRRjJSW7bUvCX6Y4=";
+      sha256 = "sha256-ThmsxFXI1uReK+JwpHrIWzHpBdIOP77kDjv+QaK+Azk=";
       rev = version;
     };
 
