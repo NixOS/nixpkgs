@@ -6879,6 +6879,8 @@ in
 
   rsibreak = libsForQt514.callPackage ../applications/misc/rsibreak { };
 
+  rss-bridge-cli = callPackage ../applications/misc/rss-bridge-cli { };
+
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
     pythonPackages = python3Packages;
   };
