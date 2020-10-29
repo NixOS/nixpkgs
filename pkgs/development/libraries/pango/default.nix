@@ -40,6 +40,8 @@ in stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
     "-Dlibthai=disabled" # Not packaged in Nixpkgs
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-Dxft=disabled"  # only works with x11
   ];
 
   enableParallelBuilding = true;
