@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, inkscape, xcursorgen }:
+{ stdenv, fetchFromGitHub, fetchpatch, inkscape, xcursorgen }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ inkscape xcursorgen ];
+
+  patches = [
+    # Remove when https://github.com/numixproject/numix-cursor-theme/pull/7 is merged
+    (fetchpatch {
+      url = "https://github.com/stephaneyfx/numix-cursor-theme/commit/3b647bf768cebb8f127b88e3786f6a9640460197.patch";
+      sha256 = "174kmhlvv76wwvndkys78aqc32051sqg3wzc0xg6b7by4agrbg76";
+      name = "support-inkscape-1-in-numix-cursor-theme.patch";
+    })
+  ];
 
   buildPhase = ''
     patchShebangs .
