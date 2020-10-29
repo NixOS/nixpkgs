@@ -1,5 +1,4 @@
 {stdenv
-, removeReferencesTo
 , lib
 , fetchurl
 , utillinux
@@ -28,7 +27,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/sylabs/singularity";
 
   buildInputs = [ gpgme openssl libuuid ];
-  nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper cryptsetup ];
+  nativeBuildInputs = [ utillinux which makeWrapper cryptsetup ];
   propagatedBuildInputs = [ coreutils squashfsTools ];
 
   postPatch = ''
