@@ -8,7 +8,7 @@ with stdenv.lib;
 
 buildGoPackage rec {
   pname = "gogs";
-  version = "0.11.91";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "gogs";
