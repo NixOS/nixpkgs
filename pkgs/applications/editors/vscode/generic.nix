@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu
+, systemd, fontconfig, libdbusmenu, bash, nodePackages
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
@@ -68,6 +68,16 @@ in
 
     dontBuild = true;
     dontConfigure = true;
+
+    patchPhase =
+      if system != "x86_64-darwin" then ''
+        ${nodePackages.asar}/bin/asar extract ./resources/app/node_modules.asar tmp
+        # use Nix(OS) paths
+        sed -i "s|/usr/bin/pkexec|/usr/bin/pkexec', '/run/wrappers/bin/pkexec|" tmp/sudo-prompt/index.js
+        sed -i 's|/bin/bash|${bash}/bin/bash|' tmp/sudo-prompt/index.js
+        ${nodePackages.asar}/bin/asar pack tmp ./resources/app/node_modules.asar
+        rm -rf tmp
+      '' else '''';
 
     installPhase =
       if system == "x86_64-darwin" then ''
