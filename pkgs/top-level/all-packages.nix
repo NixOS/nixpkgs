@@ -1651,6 +1651,8 @@ in
   capstone = callPackage ../development/libraries/capstone { };
   unicorn-emu = callPackage ../development/libraries/unicorn-emu { };
 
+  keystone = callPackage ../development/libraries/keystone { };
+
   casync = callPackage ../applications/networking/sync/casync {
     sphinx = python3Packages.sphinx;
   };
