@@ -5452,6 +5452,8 @@ in {
 
   pyobjc-framework-DiscRecordingUI = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DiscRecordingUI { });
 
+  pyobjc-framework-ExceptionHandling = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExceptionHandling { });
+
   pyobjc-framework-FinderSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FinderSync { });
 
   pyobjc-framework-FSEvents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FSEvents { });
