@@ -250,6 +250,10 @@ in
       home            = "/var/lib/murmur";
       createHome      = true;
       uid             = config.ids.uids.murmur;
+      group           = "murmur";
+    };
+    users.groups.murmur = {
+      gid             = config.ids.gids.murmur;
     };
 
     systemd.services.murmur = {
@@ -263,6 +267,7 @@ in
         PIDFile   = mkIf forking "/run/murmur/murmurd.pid";
         RuntimeDirectory = mkIf forking "murmur";
         User      = "murmur";
+        Group     = "murmur";
         ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile}";
       };
     };
