@@ -5456,6 +5456,8 @@ in {
 
   pyobjc-framework-FSEvents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FSEvents { });
 
+  pyobjc-framework-GameCenter = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameCenter { });
+
   pyobjc-framework-GameKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameKit { });
 
   pyobjc-framework-libdispatch = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-libdispatch { });
