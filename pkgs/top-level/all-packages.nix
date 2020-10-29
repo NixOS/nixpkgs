@@ -8694,11 +8694,12 @@ in
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
   gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
 
-  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then ../development/compilers/gcc/6
-    else ../development/compilers/gcc/9);
-  gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then gcc6 else gcc9;
+  gccFun = callPackage (if stdenv.targetPlatform.isZ80
+                        then ../development/compilers/z88dk
+                        else (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
+                              then ../development/compilers/gcc/6
+                              else ../development/compilers/gcc/9));
+  gcc = if stdenv.targetPlatform.isZ80 then z88dk else if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then gcc6 else gcc9;
 
   gcc-unwrapped = gcc.cc;
 
@@ -12685,6 +12686,7 @@ in
     else if name == "bionic" then targetPackages.bionic or bionic
     else if name == "uclibc" then targetPackages.uclibcCross or uclibcCross
     else if name == "avrlibc" then targetPackages.avrlibcCross or avrlibcCross
+    else if name == "newlib" && stdenv.targetPlatform.isZ80 then targetPackages.z88dk or z88dk
     else if name == "newlib" && stdenv.targetPlatform.isMsp430 then targetPackages.msp430NewlibCross or msp430NewlibCross
     else if name == "newlib" && stdenv.targetPlatform.isVc4 then targetPackages.vc4-newlib or vc4-newlib
     else if name == "newlib" then targetPackages.newlibCross or newlibCross

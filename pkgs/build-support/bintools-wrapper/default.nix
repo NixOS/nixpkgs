@@ -183,6 +183,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isSparc then "sparc"
       else if targetPlatform.isMsp430 then "msp430"
       else if targetPlatform.isAvr then "avr"
+      else if targetPlatform.isZ80 then "z80"
       else if targetPlatform.isAlpha then "alpha"
       else if targetPlatform.isVc4 then "vc4"
       else throw "unknown emulation for platform: ${targetPlatform.config}";

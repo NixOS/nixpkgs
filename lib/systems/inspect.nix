@@ -23,6 +23,7 @@ rec {
     isMsp430       = { cpu = { family = "msp430"; }; };
     isVc4          = { cpu = { family = "vc4"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
+    isZ80          = { cpu = { family = "z80"; bits = 8; }; };
     isAlpha        = { cpu = { family = "alpha"; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
 

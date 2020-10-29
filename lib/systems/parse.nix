@@ -112,6 +112,8 @@ rec {
     msp430   = { bits = 16; significantByte = littleEndian; family = "msp430"; };
     avr      = { bits = 8; family = "avr"; };
 
+    z80      = { bits = 8; family = "z80"; };
+
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
 
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
@@ -367,7 +369,7 @@ rec {
     setType "system" components;
 
   mkSkeletonFromList = l: {
-    "1" = if elemAt l 0 == "avr"
+    "1" = if elemAt l 0 == "avr" || elemAt l 0 == "z80"
       then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
       else throw "Target specification with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports

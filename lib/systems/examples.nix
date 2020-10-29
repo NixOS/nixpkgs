@@ -118,6 +118,10 @@ rec {
     config = "avr";
   };
 
+  z80 = {
+    config = "z80";
+  };
+
   vc4 = {
     config = "vc4-elf";
     libc = "newlib";
