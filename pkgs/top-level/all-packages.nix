@@ -12613,6 +12613,7 @@ with pkgs;
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-tauri-bundler = callPackage ../tools/package-management/cargo-tauri-bundler { inherit (darwin.apple_sdk.frameworks) CoreFoundation Security; };
   cargo-update = callPackage ../tools/package-management/cargo-update {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
