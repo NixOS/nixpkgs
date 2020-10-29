@@ -14218,6 +14218,8 @@ in
 
   libtcod = callPackage ../development/libraries/libtcod { };
 
+  libthai = callPackage ../development/libraries/libthai { };
+
   libtheora = callPackage ../development/libraries/libtheora { };
 
   libthreadar = callPackage ../development/libraries/libthreadar { };
