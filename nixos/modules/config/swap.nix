@@ -194,11 +194,7 @@ in
                 ${optionalString (sw.size != null) ''
                   currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
                   if [ "${toString sw.size}" != "$currentSize" ]; then
-                    fallocate -l ${toString sw.size}M "${sw.device}" ||
-                      dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
-                    if [ "${toString sw.size}" -lt "$currentSize" ]; then
-                      truncate --size "${toString sw.size}M" "${sw.device}"
-                    fi
+                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
                     chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
