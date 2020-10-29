@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class GitLabRepo:
     version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?")
-    def __init__(self, owner: str = 'gitlab-org', repo: str = 'gitlab'):
+    def __init__(self, owner: str = 'gitlab-org', repo: str = 'gitlab-foss'):
         self.owner = owner
         self.repo = repo
 
@@ -98,10 +98,12 @@ def cli():
 
 
 @cli.command('update-data')
-@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')
-def update_data(rev: str):
+@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z[-ee]), or \'latest\'')
+@click.option('--ee', type=bool, default=False, help='Use GitLab EE instead of GitLab CE')
+def update_data(rev: str, ee: bool):
     """Update data.nix"""
-    repo = GitLabRepo()
+    repo_name = 'gitlab' if ee else 'gitlab-foss'
+    repo = GitLabRepo(repo=repo_name)
 
     if rev == 'latest':
         # filter out pre and re releases
@@ -120,9 +122,11 @@ def update_data(rev: str):
 
 
 @cli.command('update-rubyenv')
-def update_rubyenv():
+@click.option('--ee', type=bool, default=False, help='Use GitLab EE instead of GitLab CE')
+def update_rubyenv(ee: bool):
     """Update rubyEnv"""
-    repo = GitLabRepo()
+    repo_name = 'gitlab' if ee else 'gitlab-foss'
+    repo = GitLabRepo(repo=repo_name)
     rubyenv_dir = pathlib.Path(__file__).parent / f"rubyEnv"
 
     # load rev from data.json
@@ -138,10 +142,11 @@ def update_rubyenv():
 
 
 @cli.command('update-yarnpkgs')
-def update_yarnpkgs():
+@click.option('--ee', type=bool, default=False, help='Use GitLab EE instead of GitLab CE')
+def update_yarnpkgs(ee: bool):
     """Update yarnPkgs"""
-
-    repo = GitLabRepo()
+    repo_name = 'gitlab' if ee else 'gitlab-foss'
+    repo = GitLabRepo(repo=repo_name)
     yarnpkgs_dir = pathlib.Path(__file__).parent
 
     # load rev from data.json
@@ -227,13 +232,14 @@ def update_gitlab_workhorse():
         os.unlink(gitlab_workhorse_dir / fn)
 
 @cli.command('update-all')
-@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')
+@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z[-ee]), or \'latest\'')
+@click.option('--ee', type=bool, default=False, help='Use GitLab EE instead of GitLab CE')
 @click.pass_context
-def update_all(ctx, rev: str):
+def update_all(ctx, rev: str, ee: bool):
     """Update all gitlab components to the latest stable release"""
-    ctx.invoke(update_data, rev=rev)
-    ctx.invoke(update_rubyenv)
-    ctx.invoke(update_yarnpkgs)
+    ctx.invoke(update_data, rev=rev, ee=ee)
+    ctx.invoke(update_rubyenv, ee=ee)
+    ctx.invoke(update_yarnpkgs, ee=ee)
     ctx.invoke(update_gitaly)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
