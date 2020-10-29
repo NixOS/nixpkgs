@@ -1649,7 +1649,6 @@ in
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
-  unicorn-emu = callPackage ../development/libraries/unicorn-emu { };
 
   casync = callPackage ../applications/networking/sync/casync {
     sphinx = python3Packages.sphinx;
@@ -8071,6 +8070,8 @@ in
   unclutter-xfixes = callPackage ../tools/misc/unclutter-xfixes { };
 
   unbound = callPackage ../tools/networking/unbound { };
+
+  unicorn = callPackage ../development/libraries/unicorn { };
 
   units = callPackage ../tools/misc/units {
     enableCurrenciesUpdater = true;
