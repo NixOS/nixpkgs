@@ -80,7 +80,7 @@ with frameworks; with libs; {
   MediaPlayer             = {};
   MediaToolbox            = { inherit AudioToolbox AudioUnit CoreMedia; };
   Metal                   = {};
-  MetalKit                = { inherit ModelIO Metal; };
+  MetalKit                = { inherit AppKit ModelIO Metal; };
   ModelIO                 = {};
   NetFS                   = {};
   NetworkExtension        = {};
