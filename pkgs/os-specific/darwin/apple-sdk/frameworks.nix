@@ -63,6 +63,7 @@ with frameworks; with libs; {
   ImageCaptureCore        = [];
   ImageIO                 = [ CoreGraphics ];
   InputMethodKit          = [ Carbon ];
+  Intents                 = [ CoreLocation ];
   InstallerPlugins        = [];
   InstantMessage          = [];
   JavaFrameEmbedding      = [];
