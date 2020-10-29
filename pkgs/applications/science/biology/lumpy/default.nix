@@ -7,13 +7,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "lumpy";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "lumpy-sv";
-    rev = version;
-    sha256 = "0azhzvmh9az9jcq0xprlzdz6w16azgszv4kshb903bwbnqirmk18";
+    rev = "v${version}";
+    sha256 = "0r71sg7qch8r6p6dw995znrqdj6q49hjdylhzbib2qmv8nvglhs9";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ which ];
@@ -26,6 +27,8 @@ in stdenv.mkDerivation rec {
     # Use Nix htslib over bundled version
     sed -i 's/lumpy_filter: htslib/lumpy_filter:/' Makefile
     sed -i 's|../../lib/htslib/libhts.a|-lhts|' src/filter/Makefile
+    # Also make sure we use the includes from Nix's htslib
+    sed -i 's|../../lib/htslib/|${htslib}|' src/filter/Makefile
   '';
 
   # Upstream's makefile doesn't have an install target
