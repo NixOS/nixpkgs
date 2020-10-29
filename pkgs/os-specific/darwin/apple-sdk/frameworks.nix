@@ -102,7 +102,7 @@ with frameworks; with libs; {
   ScriptingBridge         = {};
   Security                = { inherit IOKit; };
   SecurityFoundation      = {};
-  SecurityInterface       = { inherit Security SecurityFoundation; };
+  SecurityInterface       = { inherit Cocoa Security SecurityFoundation; };
   ServiceManagement       = { inherit Security; };
   Social                  = {};
   SpriteKit               = {};
