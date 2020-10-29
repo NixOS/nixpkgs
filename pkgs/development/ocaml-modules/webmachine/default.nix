@@ -6,6 +6,7 @@
 buildDunePackage rec {
   pname = "webmachine";
   version = "0.6.2";
+  useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 
