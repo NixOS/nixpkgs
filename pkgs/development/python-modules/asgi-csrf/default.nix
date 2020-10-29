@@ -2,7 +2,7 @@
 , pytestCheckHook, starlette, httpx, pytest-asyncio }:
 
 buildPythonPackage rec {
-  version = "0.7";
+  version = "0.7.1";
   pname = "asgi-csrf";
   disabled = isPy27;
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "1vf4lh007790836cp3hd6wf8wsgj045dcg0w1cm335p08zz6j4k7";
+    sha256 = "1hhqrb9r46y6i3d3w6hc9zm6yyikdyd2k5pcbyw0r9fl959yi4hf";
   };
 
   propagatedBuildInputs = [
