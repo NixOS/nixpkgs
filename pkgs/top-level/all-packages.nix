@@ -13500,6 +13500,8 @@ in
 
   libdap = callPackage ../development/libraries/libdap { };
 
+  libdatrie = callPackage ../development/libraries/libdatrie { };
+
   libdazzle = callPackage ../development/libraries/libdazzle { };
 
   libdbi = callPackage ../development/libraries/libdbi { };
