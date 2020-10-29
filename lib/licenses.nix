@@ -670,6 +670,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Ruby License";
   };
 
+  sata = {
+    fullName = "Star And Thank Author License";
+    url = "https://github.com/zTrix/sata-license";
+  };
+
   sendmail = spdx {
     spdxId = "Sendmail";
     fullName = "Sendmail License";
