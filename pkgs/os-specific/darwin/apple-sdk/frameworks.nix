@@ -79,7 +79,7 @@ with frameworks; with libs; {
   MediaPlayer             = [];
   MediaToolbox            = [ AudioToolbox AudioUnit CoreMedia ];
   Metal                   = [];
-  MetalKit                = [ ModelIO Metal ];
+  MetalKit                = [ AppKit ModelIO Metal ];
   ModelIO                 = [ ];
   NetFS                   = [];
   NetworkExtension        = [];
