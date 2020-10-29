@@ -1656,6 +1656,8 @@ in
 
   capstone = callPackage ../development/libraries/capstone { };
 
+  keystone = callPackage ../development/libraries/keystone { };
+
   casync = callPackage ../applications/networking/sync/casync {
     sphinx = python3Packages.sphinx;
   };
