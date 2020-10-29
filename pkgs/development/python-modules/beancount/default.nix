@@ -4,14 +4,14 @@
 , ply, python_magic, pytest, requests }:
 
 buildPythonPackage rec {
-  version = "2.3.2";
+  version = "2.3.3";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wfpf2b0sha84rz0qgkanc82wharjqr2nr7xxg1rngrci2h0aqhd";
+    sha256 = "0767ap2n9vk9dz40njndfhaprajr75fvzx7igbd1szc6x8wri8nr";
   };
 
   # Tests require files not included in the PyPI archive.
