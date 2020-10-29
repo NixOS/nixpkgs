@@ -5448,6 +5448,8 @@ in {
 
   pyobjc-framework-CoreServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreServices { });
 
+  pyobjc-framework-CoreText = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreText { });
+
   pyobjc-framework-DictionaryServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DictionaryServices { });
 
   pyobjc-framework-DiscRecording = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DiscRecording { });
