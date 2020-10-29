@@ -14,6 +14,7 @@ in {
 
     hardware.bluetooth = {
       enable = mkEnableOption "support for Bluetooth";
+      hsphfpd.enable = mkEnableOption "support for hsphfpd[-profotype] implementation";
 
       powerOnBoot = mkOption {
         type    = types.bool;
@@ -72,7 +73,8 @@ in {
       };
     };
 
-    environment.systemPackages = [ bluez-bluetooth ];
+    environment.systemPackages = [ bluez-bluetooth ]
+      ++ optionals cfg.hsphfpd.enable [ pkgs.hsphfpd ];
 
     environment.etc."bluetooth/main.conf"= {
       source = pkgs.writeText "main.conf"
@@ -80,7 +82,8 @@ in {
     };
 
     services.udev.packages = [ bluez-bluetooth ];
-    services.dbus.packages = [ bluez-bluetooth ];
+    services.dbus.packages = [ bluez-bluetooth ]
+      ++ optionals cfg.hsphfpd.enable [ pkgs.hsphfpd ];
     systemd.packages       = [ bluez-bluetooth ];
 
     systemd.services = {
@@ -88,11 +91,31 @@ in {
         wantedBy = [ "bluetooth.target" ];
         aliases  = [ "dbus-org.bluez.service" ];
       };
-    };
+    }
+      // (optionalAttrs cfg.hsphfpd.enable {
+        hsphfpd = {
+          after = [ "bluetooth.service" ];
+          requires = [ "bluetooth.service" ];
+          wantedBy = [ "multi-user.target" ];
+
+          description = "A prototype implementation used for connecting HSP/HFP Bluetooth devices";
+          serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/hsphfpd.pl";
+        };
+      })
+      ;
 
     systemd.user.services = {
       obex.aliases = [ "dbus-org.bluez.obex.service" ];
-    };
+    }
+      // (optionalAttrs cfg.hsphfpd.enable {
+        telephony_client = {
+          wantedBy = [ "default.target"];
+
+          description = "telephony_client for hsphfpd";
+          serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/telephony_client.pl";
+        };
+      })
+      ;
 
   };
 
