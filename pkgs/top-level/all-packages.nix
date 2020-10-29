@@ -23972,8 +23972,11 @@ in
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
-  wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
-
+  # this is a lower-level alternative to wrapNeovim conceived to handle
+  # more usecases when wrapping neovim. The interface is being actively worked on
+  # so expect breakage. use wrapNeovim instead if you want a stable alternative
+  wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
+  wrapNeovim = neovimUtils.legacyWrapper;
   neovim-unwrapped = callPackage ../applications/editors/neovim {
     lua =
       # neovim doesn't work with luajit on aarch64: https://github.com/neovim/neovim/issues/7879
@@ -23981,6 +23984,7 @@ in
       luajit;
   };
 
+  neovimUtils = callPackage ../applications/editors/neovim/utils.nix { };
   neovim = wrapNeovim neovim-unwrapped { };
 
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
