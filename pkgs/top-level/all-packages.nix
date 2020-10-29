@@ -28302,7 +28302,7 @@ in
   undervolt = callPackage ../os-specific/linux/undervolt { };
 
   alibuild = callPackage ../development/tools/build-managers/alibuild {
-    python = python27;
+    python = python3;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
