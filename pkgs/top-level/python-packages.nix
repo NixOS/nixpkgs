@@ -5516,6 +5516,8 @@ in {
 
   pyobjc-framework-SyncServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SyncServices { });
 
+  pyobjc-framework-SystemConfiguration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SystemConfiguration { });
+
   pyobjc-framework-SystemExtensions = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SystemExtensions { });
 
   pyobjc-framework-VideoToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { });
