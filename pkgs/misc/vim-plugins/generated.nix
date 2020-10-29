@@ -3515,6 +3515,18 @@ let
     meta.homepage = "https://github.com/AndrewRadev/splitjoin.vim/";
   };
 
+  srcery-vim = buildVimPluginFrom2Nix {
+    pname = "srcery-vim";
+    version = "2020-10-26";
+    src = fetchFromGitHub {
+      owner = "srcery-colors";
+      repo = "srcery-vim";
+      rev = "ecbd5ba9055ad6b78dc47ef4f0894a7da63215f7";
+      sha256 = "1ynyllw0fg4gfb5qcmwfjsqg5dr3dwfc5hya261zzd8a42qab1y4";
+    };
+    meta.homepage = "https://github.com/srcery-colors/srcery-vim/";
+  };
+
   starsearch-vim = buildVimPluginFrom2Nix {
     pname = "starsearch-vim";
     version = "2014-09-21";
