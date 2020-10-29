@@ -68,7 +68,7 @@ in lib.init bootStages ++ [
            else if crossSystem.useLLVM or false
              then buildPackages.llvmPackages_8.lldClang
            else if crossSystem.isZ80
-             then buildPackages.z88dk-unwrapped
+             then buildPackages.z88dk
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
