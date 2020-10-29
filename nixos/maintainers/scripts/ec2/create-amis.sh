@@ -178,9 +178,12 @@ upload_image() {
     local aws_path=${image_file#/}
 
     local state_key="$region.$image_label.$image_system"
-    local task_id=$(read_state "$state_key" task_id)
-    local snapshot_id=$(read_state "$state_key" snapshot_id)
-    local ami_id=$(read_state "$state_key" ami_id)
+    local task_id
+    task_id=$(read_state "$state_key" task_id)
+    local snapshot_id
+    snapshot_id=$(read_state "$state_key" snapshot_id)
+    local ami_id
+    ami_id=$(read_state "$state_key" ami_id)
 
     if [ -z "$task_id" ]; then
         log "Checking for image on S3"
