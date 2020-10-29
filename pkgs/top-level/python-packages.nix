@@ -5464,6 +5464,8 @@ in {
 
   pyobjc-framework-ExceptionHandling = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExceptionHandling { });
 
+  pyobjc-framework-ExecutionPolicy = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExecutionPolicy { });
+
   pyobjc-framework-FinderSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FinderSync { });
 
   pyobjc-framework-FSEvents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FSEvents { });
