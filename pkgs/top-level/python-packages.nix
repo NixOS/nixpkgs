@@ -5474,6 +5474,8 @@ in {
 
   pyobjc-framework-GameCenter = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameCenter { });
 
+  pyobjc-framework-GameController = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameController { });
+
   pyobjc-framework-GameKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameKit { });
 
   pyobjc-framework-ImageCaptureCore = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ImageCaptureCore { });
