@@ -101,7 +101,7 @@ with frameworks; with libs; {
   ScriptingBridge         = [];
   Security                = [ IOKit ];
   SecurityFoundation      = [];
-  SecurityInterface       = [ Security ];
+  SecurityInterface       = [ Cocoa Security ];
   ServiceManagement       = [ Security ];
   Social                  = [];
   # Available with SDK 10.15
