@@ -244,6 +244,15 @@ stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
   inherit (ffmpeg) src version;
 
+  # this should go away in the next release
+  patches = [
+    (fetchpatch {
+      url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=7c59e1b0f285cd7c7b35fcd71f49c5fd52cf9315";
+      sha256 = "sha256-dqpmpDFETTuWHWolMoLaubU4BeDEuQaBNA0wmzL1f8o=";
+      name = "fix_libsrt.patch";
+    })
+  ];
+
   prePatch = ''
     patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
