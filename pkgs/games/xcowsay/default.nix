@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     gdk-pixbuf # loading cow images
     librsvg # dreaming SVG images
   ];
+
+  preConfigure = "
+    patchShebangs ./configure
+  ";
+
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   configureFlags = [ "--enable-dbus" ];
