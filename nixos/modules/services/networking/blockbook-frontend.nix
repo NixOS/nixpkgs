@@ -158,15 +158,21 @@ let
         type = types.attrs;
         default = {};
         example = literalExample '' {
-          alternative_estimate_fee = "whatthefee-disabled";
-          alternative_estimate_fee_params = "{\"url\": \"https://whatthefee.io/data.json\", \"periodSeconds\": 60}";
-          fiat_rates = "coingecko";
-          fiat_rates_params = "{\"url\": \"https://api.coingecko.com/api/v3\", \"coin\": \"bitcoin\", \"periodSeconds\": 60}";
-          coin_shortcut = "BTC";
-          coin_label = "Bitcoin";
-          xpub_magic = 76067358;
-          xpub_magic_segwit_p2sh = 77429938;
-          xpub_magic_segwit_native = 78792518;
+          "alternative_estimate_fee" = "whatthefee-disabled";
+          "alternative_estimate_fee_params" = "{\"url\": \"https://whatthefee.io/data.json\", \"periodSeconds\": 60}";
+          "fiat_rates" = "coingecko";
+          "fiat_rates_params" = "{\"url\": \"https://api.coingecko.com/api/v3\", \"coin\": \"bitcoin\", \"periodSeconds\": 60}";
+          "coin_shortcut" = "BTC";
+          "coin_label" = "Bitcoin";
+          "parse" = true;
+          "subversion" = "";
+          "address_format" = "";
+          "xpub_magic" = 76067358;
+          "xpub_magic_segwit_p2sh" = 77429938;
+          "xpub_magic_segwit_native" = 78792518;
+          "mempool_workers" = 8;
+          "mempool_sub_workers" = 2;
+          "block_addresses_to_keep" = 300;
         }'';
         description = ''
           Additional configurations to be appended to <filename>coin.conf</filename>.
