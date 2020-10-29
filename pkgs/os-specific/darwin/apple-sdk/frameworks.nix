@@ -83,6 +83,7 @@ with frameworks; with libs; {
   MetalKit                = { inherit ModelIO Metal; };
   ModelIO                 = {};
   NetFS                   = {};
+  NetworkExtension        = {};
   NotificationCenter      = { inherit AppKit; };
   OSAKit                  = { inherit Carbon; };
   OpenAL                  = {};
