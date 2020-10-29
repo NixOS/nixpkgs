@@ -45,6 +45,11 @@
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 
+, isXen      ? features.xen_dom0 or false
+, isZen      ? false
+, isLibre    ? false
+, isHardened ? false
+
 # easy overrides to stdenv.hostPlatform.platform members
 , autoModules ? stdenv.hostPlatform.platform.kernelAutoModules
 , preferBuiltin ? stdenv.hostPlatform.platform.kernelPreferBuiltin or false
@@ -175,7 +180,9 @@ let
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig;
+    inherit commonStructuredConfig isXen isZen isHardened isLibre;
+    kernelOlder = lib.versionOlder version;
+    kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 

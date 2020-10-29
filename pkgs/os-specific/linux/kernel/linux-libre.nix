@@ -17,6 +17,7 @@ let
 in linux.override {
   argsOverride = {
     modDirVersion = "${linux.modDirVersion}-gnu";
+    isLibre = true;
 
     src = stdenv.mkDerivation {
       name = "${linux.name}-libre-src";
