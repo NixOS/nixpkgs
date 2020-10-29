@@ -65,7 +65,7 @@ image_logical_bytes=$(read_image_info .logical_bytes)
 
 # Derived attributes
 
-image_logical_gigabytes=$((($image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
+image_logical_gigabytes=$(((image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
 
 case "$image_system" in
     aarch64-linux)
