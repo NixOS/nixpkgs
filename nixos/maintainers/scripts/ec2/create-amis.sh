@@ -101,7 +101,7 @@ write_state() {
     local type=$2
     local val=$3
 
-    mkdir -p $state_dir
+    mkdir -p "$state_dir"
     echo "$val" > "$state_dir/$state_key.$type"
 }
 
