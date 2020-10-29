@@ -23,6 +23,7 @@ rec {
     isWasm         = { cpu = { family = "wasm"; }; };
     isMsp430       = { cpu = { family = "msp430"; }; };
     isVc4          = { cpu = { family = "vc4"; }; };
+    isCr16         = { cpu = { family = "cr16"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
     isAlpha        = { cpu = { family = "alpha"; }; };
     isOr1k         = { cpu = { family = "or1k"; }; };

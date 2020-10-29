@@ -115,6 +115,7 @@ rec {
     avr      = { bits = 8; family = "avr"; };
 
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
+    cr16     = { bits = 16; significantByte = littleEndian; family = "cr16"; };
 
     or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
 

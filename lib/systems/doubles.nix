@@ -39,7 +39,7 @@ let
 
     # none
     "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none" "msp430-none"
-    "or1k-none" "powerpc-none" "riscv32-none" "riscv64-none" "vc4-none"
+    "or1k-none" "powerpc-none" "riscv32-none" "riscv64-none" "vc4-none" "cr16-none"
     "x86_64-none"
 
     # OpenBSD
@@ -74,6 +74,7 @@ in {
   riscv         = filterDoubles predicates.isRiscV;
   vc4           = filterDoubles predicates.isVc4;
   or1k          = filterDoubles predicates.isOr1k;
+  cr16          = filterDoubles predicates.isCr16;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;
