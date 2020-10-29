@@ -5508,6 +5508,8 @@ in {
 
   pyobjc-framework-SecurityFoundation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SecurityFoundation { });
 
+  pyobjc-framework-SecurityInterface = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SecurityInterface { });
+
   pyobjc-framework-ServiceManagement = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ServiceManagement { });
 
   pyobjc-framework-Speech = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Speech { });
