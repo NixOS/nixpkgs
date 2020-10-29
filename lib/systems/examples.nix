@@ -120,6 +120,7 @@ rec {
 
   z80 = {
     config = "z80";
+    libc = "newlib";
   };
 
   vc4 = {

@@ -1,6 +1,6 @@
-{ fetchFromGitHub, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
+{ fetchFromGitHub, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which, crossLibcStdenv }:
 
-stdenv.mkDerivation rec {
+crossLibcStdenv.mkDerivation rec {
   pname = "z88dk-unstable";
   version = "2020-01-27";
 
@@ -42,10 +42,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which makeWrapper unzip ];
   buildInputs = [ libxml2 m4 uthash ];
-
-  postInstall = ''
-    wrapProgram $out/bin/zcc --set CC ${placeholder "out"}/bin/zcc
-  '';
 
   preInstall = ''
     mkdir -p $out/{bin,share}

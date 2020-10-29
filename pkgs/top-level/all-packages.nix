@@ -10539,6 +10539,7 @@ in
 
   xidel = callPackage ../tools/text/xidel { };
 
+  z80-newlib = callPackage ../development/misc/z80/newlib { };
 
   ### DEVELOPMENT / TOOLS
 
@@ -12686,7 +12687,7 @@ in
     else if name == "bionic" then targetPackages.bionic or bionic
     else if name == "uclibc" then targetPackages.uclibcCross or uclibcCross
     else if name == "avrlibc" then targetPackages.avrlibcCross or avrlibcCross
-    else if name == "newlib" && stdenv.targetPlatform.isZ80 then targetPackages.z88dk or z88dk
+    else if name == "newlib" && stdenv.targetPlatform.isZ80 then targetPackages.z80-newlib or z80-newlib
     else if name == "newlib" && stdenv.targetPlatform.isMsp430 then targetPackages.msp430NewlibCross or msp430NewlibCross
     else if name == "newlib" && stdenv.targetPlatform.isVc4 then targetPackages.vc4-newlib or vc4-newlib
     else if name == "newlib" then targetPackages.newlibCross or newlibCross

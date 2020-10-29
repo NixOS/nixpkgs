@@ -33,6 +33,13 @@ let
     rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
     sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
   };
+
+  z80-binutils-src = fetchFromGitHub {
+    owner = "atsidaev";
+    repo = "binutils-z80";
+    rev = "2f1482029bbf8793b9d1341509557d00ad4070c6";
+    sha256 = "1kdrz6fki55l005rwwamn74fnqpy0zlafsida2zymk76n3656c63";
+  };
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
@@ -44,7 +51,8 @@ stdenv.mkDerivation {
   pname = targetPrefix + basename;
   inherit version;
 
-  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else normal-src;
+  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else
+        if stdenv.targetPlatform.isZ80 then z80-binutils-src else normal-src;
 
   patches = [
     # Make binutils output deterministic by default.
