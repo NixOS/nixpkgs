@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
       gtkSupport = true;
     })
     gst_all_1.gstreamer
-    gst_all_1.gst-validate
+    gst_all_1.gst-devtools
     gtk3
     gtksourceview4
     libhandy_0
