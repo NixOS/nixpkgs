@@ -648,11 +648,13 @@ let
           "RapidCommit"
           "ForceDHCPv6PDOtherInformation"
           "PrefixDelegationHint"
+          "RouteMetric"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
+        (assertInt "RouteMetric")
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
