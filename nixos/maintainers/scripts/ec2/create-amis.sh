@@ -111,7 +111,7 @@ wait_for_import() {
     local state snapshot_id
     log "Waiting for import task $task_id to be completed"
     while true; do
-        read state progress snapshot_id < <(
+        read -r state progress snapshot_id < <(
             aws ec2 describe-import-snapshot-tasks --region "$region" --import-task-ids "$task_id" | \
                 jq -r '.ImportSnapshotTasks[].SnapshotTaskDetail | "\(.Status) \(.Progress) \(.SnapshotId)"'
         )
@@ -139,7 +139,7 @@ wait_for_image() {
     log "Waiting for image $ami_id to be available"
 
     while true; do
-        read state < <(
+        read -r state < <(
             aws ec2 describe-images --image-ids "$ami_id" --region "$region" | \
                 jq -r ".Images[].State"
         )
