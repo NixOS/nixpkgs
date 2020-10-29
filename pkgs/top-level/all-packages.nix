@@ -8694,12 +8694,11 @@ in
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
   gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
 
-  gccFun = callPackage (if stdenv.targetPlatform.isZ80
-                        then ../development/compilers/z88dk
-                        else (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-                              then ../development/compilers/gcc/6
-                              else ../development/compilers/gcc/9));
-  gcc = if stdenv.targetPlatform.isZ80 then z88dk else if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then gcc6 else gcc9;
+  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
+    then ../development/compilers/gcc/6
+    else ../development/compilers/gcc/9);
+  gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
+    then gcc6 else gcc9;
 
   gcc-unwrapped = gcc.cc;
 
@@ -9976,7 +9975,15 @@ in
 
   yosys = callPackage ../development/compilers/yosys { };
 
-  z88dk = callPackage ../development/compilers/z88dk { };
+  z88dk = wrapCC {
+    cc = z88dk-unwrapped;
+    extraBuildCommands = ''
+      wrap zcc $wrapper $ccPath/zcc
+      export named_cc=zcc
+    '';
+  };
+
+  z88dk-unwrapped = callPackage ../development/compilers/z88dk { };
 
   zulip = callPackage ../applications/networking/instant-messengers/zulip {
     # Bubblewrap breaks zulip, see https://github.com/NixOS/nixpkgs/pull/97264#issuecomment-704454645
