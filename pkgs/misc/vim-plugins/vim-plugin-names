@@ -371,6 +371,7 @@ nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
 nvim-lua/lsp_extensions.nvim
+nvim-lua/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
 ocaml/vim-ocaml
