@@ -6824,7 +6824,7 @@ in
   rkrlv2 = callPackage ../applications/audio/rkrlv2 {};
 
   rmlint = callPackage ../tools/misc/rmlint {
-    inherit (pythonPackages) sphinx;
+    inherit (python3Packages) sphinx;
   };
 
   rng-tools = callPackage ../tools/security/rng-tools { };
