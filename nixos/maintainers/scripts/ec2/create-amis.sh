@@ -225,10 +225,10 @@ upload_image() {
             --virtualization-type hvm
         )
 
-        block_device_mappings+=(DeviceName=/dev/sdb,VirtualName=ephemeral0)
-        block_device_mappings+=(DeviceName=/dev/sdc,VirtualName=ephemeral1)
-        block_device_mappings+=(DeviceName=/dev/sdd,VirtualName=ephemeral2)
-        block_device_mappings+=(DeviceName=/dev/sde,VirtualName=ephemeral3)
+        block_device_mappings+=("DeviceName=/dev/sdb,VirtualName=ephemeral0")
+        block_device_mappings+=("DeviceName=/dev/sdc,VirtualName=ephemeral1")
+        block_device_mappings+=("DeviceName=/dev/sdd,VirtualName=ephemeral2")
+        block_device_mappings+=("DeviceName=/dev/sde,VirtualName=ephemeral3")
 
         ami_id=$(
             aws ec2 register-image \
