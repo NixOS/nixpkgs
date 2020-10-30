@@ -3,6 +3,7 @@
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
+, libpulseaudio
 
 , homepage, version, prefix, hash
 
@@ -97,7 +98,8 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libXtst
     zlib
-  ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs;
+  ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs
+    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio;
 
   runtimeDependencies = [
     glib
