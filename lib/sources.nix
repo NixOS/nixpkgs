@@ -6,6 +6,7 @@ let
     hasContext
     match
     readDir
+    split
     storeDir
     tryEval
     ;
@@ -15,7 +16,6 @@ let
     isString
     pathExists
     readFile
-    split
     ;
 in
 rec {
