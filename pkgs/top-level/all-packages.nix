@@ -12081,8 +12081,6 @@ in
     aspell = aspell.override { searchNixProfiles = false; };
   };
 
-  attica = callPackage ../development/libraries/attica { };
-
   attr = callPackage ../development/libraries/attr { };
 
   at-spi2-core = callPackage ../development/libraries/at-spi2-core { };
