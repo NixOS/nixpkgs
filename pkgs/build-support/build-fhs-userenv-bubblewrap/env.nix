@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, writeText, pkgs, pkgsi686Linux }:
+{ stdenv, buildEnv, writeText, writeScriptBin, pkgs, pkgsi686Linux }:
 
 { name, profile ? ""
 , targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
@@ -49,6 +49,11 @@ let
     [ (toString gcc.cc.lib)
     ];
 
+  ldconfig = writeScriptBin "ldconfig" ''
+    #!${pkgs.stdenv.shell}
+
+    exec ${pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
+  '';
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
@@ -86,7 +91,8 @@ let
   # Composes a /usr-like directory structure
   staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
-    paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
+    # ldconfig wrapper must come first so it overrides the original ldconfig
+    paths = [ etcPkg ldconfig ] ++ basePkgs ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
