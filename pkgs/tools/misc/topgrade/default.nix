@@ -1,21 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "5.7.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nxqi2rykfxhvn8jzprklsc47iilxp1pmm2f17ikfyf5dgi69whb";
+    sha256 = "0m3kqk0ghlpzysyql777jlk5c0nb36z44vabw6r0484fh5vncwrh";
   };
 
-  cargoSha256 = "05afmz2n006331hc8yi2mq9kj574xi1iq6gr983jj75ix7n40rgg";
+  cargoSha256 = "1h5cyiyhpagdin9a8gfsccbl4jahw33nbkg5m74axyp4qrfc1mkz";
 
   buildInputs = lib.optional stdenv.isDarwin Foundation;
 
-  # TODO: add manpage (topgrade.8) to postInstall on next update
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage topgrade.8
+  '';
 
   meta = with lib; {
     description = "Upgrade all the things";
