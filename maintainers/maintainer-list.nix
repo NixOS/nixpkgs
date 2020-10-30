@@ -710,6 +710,12 @@
     githubId = 3965744;
     name = "Arthur Lee";
   };
+  arthus = {
+    email = "arthus@posteo.net";
+    github = "arthus701";
+    githubId = 49636602;
+    name = "M. Arthus Schanner";
+  };
   arturcygan = {
     email = "arczicygan@gmail.com";
     github = "arcz";
