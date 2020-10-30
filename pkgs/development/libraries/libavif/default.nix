@@ -7,6 +7,7 @@
 , libpng
 , libjpeg
 , dav1d
+, gdk-pixbuf
 }:
 
 stdenv.mkDerivation rec {
@@ -22,11 +23,14 @@ stdenv.mkDerivation rec {
 
   # reco: encode libaom slowest but best, decode dav1d fastest
 
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DAVIF_CODEC_AOM=ON"
     "-DAVIF_CODEC_DAV1D=ON"
     "-DAVIF_BUILD_APPS=ON"
+    "-DAVIF_BUILD_GDK_PIXBUF=ON"
   ];
 
   nativeBuildInputs = [
@@ -35,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gdk-pixbuf
     libaom
     zlib
     libpng
