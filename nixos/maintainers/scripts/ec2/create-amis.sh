@@ -6,8 +6,8 @@
 # <nixos/release.nix> amazonImage attribute. Images are uploaded and
 # registered via a home region, and then copied to other regions.
 
-# The home region requires an s3 bucket, and an IAM role named, by default,
-# "vmimport" IAM role with access to the S3 bucket. The name can be
+# The home region requires an s3 bucket, and an IAM role named "vmimport"
+# (by default) with access to the S3 bucket. The name can be
 # configured with the "service_role_name" variable. Configuration of the
 # vmimport role is documented in
 # https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html
