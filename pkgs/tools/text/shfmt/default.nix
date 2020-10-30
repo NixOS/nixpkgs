@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, scdoc }:
 
 buildGoModule rec {
   pname = "shfmt";
@@ -16,6 +16,13 @@ buildGoModule rec {
   subPackages = [ "cmd/shfmt" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles scdoc ];
+
+  postBuild = ''
+    scdoc < cmd/shfmt/shfmt.1.scd > shfmt.1
+    installManPage shfmt.1
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";
