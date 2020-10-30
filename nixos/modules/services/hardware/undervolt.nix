@@ -3,7 +3,12 @@
 with lib;
 let
   cfg = config.services.undervolt;
-  cliArgs = lib.cli.toGNUCommandLineShell {} {
+
+  mkPLimit = limit: window:
+    if (isNull limit && isNull window) then null
+    else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
+      "${toString limit} ${toString window}";
+  cliArgs = lib.cli.toGNUCommandLine {} {
     inherit (cfg)
       verbose
       temp
@@ -21,6 +26,9 @@ let
 
     temp-bat = cfg.tempBat;
     temp-ac = cfg.tempAc;
+
+    power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
+    power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
   };
 in
 {
@@ -104,6 +112,40 @@ in
       '';
     };
 
+    p1.limit = mkOption {
+      type = with types; nullOr int;
+      default = null;
+      description = ''
+        The P1 Power Limit in Watts.
+        Both limit and window must be set.
+      '';
+    };
+    p1.window = mkOption {
+      type = with types; nullOr (oneOf [ float int ]);
+      default = null;
+      description = ''
+        The P1 Time Window in seconds.
+        Both limit and window must be set.
+      '';
+    };
+
+    p2.limit = mkOption {
+      type = with types; nullOr int;
+      default = null;
+      description = ''
+        The P2 Power Limit in Watts.
+        Both limit and window must be set.
+      '';
+    };
+    p2.window = mkOption {
+      type = with types; nullOr (oneOf [ float int ]);
+      default = null;
+      description = ''
+        The P2 Time Window in seconds.
+        Both limit and window must be set.
+      '';
+    };
+
     useTimer = mkOption {
       type = types.bool;
       default = false;
@@ -133,7 +175,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
-        ExecStart = "${pkgs.undervolt}/bin/undervolt ${cliArgs}";
+        ExecStart = "${pkgs.undervolt}/bin/undervolt ${toString cliArgs}";
       };
     };
 
