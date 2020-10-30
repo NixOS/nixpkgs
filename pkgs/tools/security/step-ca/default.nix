@@ -21,6 +21,6 @@ buildGoPackage rec {
     homepage = "https://smallstep.com/certificates/";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 }
