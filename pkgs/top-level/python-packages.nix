@@ -322,6 +322,8 @@ in {
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime { antlr4 = pkgs.antlr4; };
 
+  anyio = callPackage ../development/python-modules/anyio { };
+
   anyjson = callPackage ../development/python-modules/anyjson { };
 
   anytree = callPackage ../development/python-modules/anytree { inherit (pkgs) graphviz; };
@@ -426,9 +428,13 @@ in {
 
   async_generator = callPackage ../development/python-modules/async_generator { };
 
+  asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
+
   asyncpg = callPackage ../development/python-modules/asyncpg { };
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
+
+  async_stagger = callPackage ../development/python-modules/async_stagger { };
 
   asynctest = callPackage ../development/python-modules/asynctest { };
 
@@ -2984,6 +2990,12 @@ in {
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   irc = callPackage ../development/python-modules/irc { };
+
+  ircrobots = callPackage ../development/python-modules/ircrobots { };
+
+  ircstates = callPackage ../development/python-modules/ircstates { };
+
+  irctokens = callPackage ../development/python-modules/irctokens { };
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
