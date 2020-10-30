@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "dgraph";
-  version = "20.03.4";
+  version = "20.07.1";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "1i098wimzwna62q4wp8ipx8qjrmhrdv48kklm1jdi2sfiz18c9sc";
+    sha256 = "0vkkzckk6095vkyl5yqhxqbjmvw7jzars8ymgv2zi55n26qzzvf0";
   };
 
-  vendorSha256 = "0n442nsa2whwb22dl0cjxspl8dc00rqv29zivcw9liwdzara81bw";
+  vendorSha256 = "17bfavirx0lpy6ca86y2gm6kf8m388xbpda65dd2w71csbzbc2mi";
+
+  doCheck = false;
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -37,13 +37,6 @@ let
       . /etc/profile
       cd "$HOME"
 
-      ${optionalString cfg.startDbusSession ''
-        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          /run/current-system/systemd/bin/systemctl --user start dbus.socket
-          export `/run/current-system/systemd/bin/systemctl --user show-environment | grep '^DBUS_SESSION_BUS_ADDRESS'`
-        fi
-      ''}
-
       ${optionalString cfg.displayManager.job.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
           export _DID_SYSTEMD_CAT=1
@@ -55,13 +48,6 @@ let
         exec &> >(tee ~/.xsession-errors)
       ''}
 
-      # Tell systemd about our $DISPLAY and $XAUTHORITY.
-      # This is needed by the ssh-agent unit.
-      #
-      # Also tell systemd about the dbus session bus address.
-      # This is required by user units using the session bus.
-      /run/current-system/systemd/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
-
       # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then
@@ -69,6 +55,12 @@ let
       elif test -e ~/.Xdefaults; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
       fi
+
+      # Import environment variables into the systemd user environment.
+      ${optionalString (cfg.displayManager.importedVariables != []) (
+        "/run/current-system/systemd/bin/systemctl --user import-environment "
+          + toString (unique cfg.displayManager.importedVariables)
+      )}
 
       # Speed up application start by 50-150ms according to
       # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
@@ -289,6 +281,14 @@ in
         '';
       };
 
+      importedVariables = mkOption {
+        type = types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
+        visible = false;
+        description = ''
+          Environment variables to import into the systemd user environment.
+        '';
+      };
+
       job = {
 
         preStart = mkOption {
@@ -353,7 +353,7 @@ in
             };
           };
         };
-        
+
         default = {};
         description = ''
           Auto login configuration attrset.
@@ -392,6 +392,16 @@ in
       ];
 
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
+
+    services.xserver.displayManager.importedVariables = [
+      # This is required by user units using the session bus.
+      "DBUS_SESSION_BUS_ADDRESS"
+      # These are needed by the ssh-agent unit.
+      "DISPLAY"
+      "XAUTHORITY"
+      # This is required to specify session within user units (e.g. loginctl lock-session).
+      "XDG_SESSION_ID"
+    ];
 
     systemd.user.targets.graphical-session = {
       unitConfig = {
@@ -464,6 +474,12 @@ in
             )
             [dms wms]
           );
+
+    # Make xsessions and wayland sessions available in XDG_DATA_DIRS
+    # as some programs have behavior that depends on them being present
+    environment.sessionVariables.XDG_DATA_DIRS = [
+      "${cfg.displayManager.sessionData.desktops}/share"
+    ];
   };
 
   imports = [

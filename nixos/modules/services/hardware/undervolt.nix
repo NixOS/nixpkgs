@@ -3,7 +3,12 @@
 with lib;
 let
   cfg = config.services.undervolt;
-  cliArgs = lib.cli.toGNUCommandLineShell {} {
+
+  mkPLimit = limit: window:
+    if (isNull limit && isNull window) then null
+    else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
+      "${toString limit} ${toString window}";
+  cliArgs = lib.cli.toGNUCommandLine {} {
     inherit (cfg)
       verbose
       temp
@@ -21,6 +26,9 @@ let
 
     temp-bat = cfg.tempBat;
     temp-ac = cfg.tempAc;
+
+    power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
+    power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
   };
 in
 {
@@ -103,6 +111,51 @@ in
         The temperature target on battery power in Celsius degrees.
       '';
     };
+
+    p1.limit = mkOption {
+      type = with types; nullOr int;
+      default = null;
+      description = ''
+        The P1 Power Limit in Watts.
+        Both limit and window must be set.
+      '';
+    };
+    p1.window = mkOption {
+      type = with types; nullOr (oneOf [ float int ]);
+      default = null;
+      description = ''
+        The P1 Time Window in seconds.
+        Both limit and window must be set.
+      '';
+    };
+
+    p2.limit = mkOption {
+      type = with types; nullOr int;
+      default = null;
+      description = ''
+        The P2 Power Limit in Watts.
+        Both limit and window must be set.
+      '';
+    };
+    p2.window = mkOption {
+      type = with types; nullOr (oneOf [ float int ]);
+      default = null;
+      description = ''
+        The P2 Time Window in seconds.
+        Both limit and window must be set.
+      '';
+    };
+
+    useTimer = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to set a timer that applies the undervolt settings every 30s.
+        This will cause spam in the journal but might be required for some
+        hardware under specific conditions.
+        Enable this if your undervolt settings don't hold.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -114,14 +167,19 @@ in
       path = [ pkgs.undervolt ];
 
       description = "Intel Undervolting Service";
+
+      # Apply undervolt on boot, nixos generation switch and resume
+      wantedBy = [ "multi-user.target" "post-resume.target" ];
+      after = [ "post-resume.target" ]; # Not sure why but it won't work without this
+
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
-        ExecStart = "${pkgs.undervolt}/bin/undervolt ${cliArgs}";
+        ExecStart = "${pkgs.undervolt}/bin/undervolt ${toString cliArgs}";
       };
     };
 
-    systemd.timers.undervolt = {
+    systemd.timers.undervolt = mkIf cfg.useTimer {
       description = "Undervolt timer to ensure voltage settings are always applied";
       partOf = [ "undervolt.service" ];
       wantedBy = [ "multi-user.target" ];

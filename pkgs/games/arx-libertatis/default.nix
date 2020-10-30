@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, zlib, boost
 , openal, glm, freetype, libGLU, SDL2, epoxy
-, dejavu_fonts, inkscape_0, optipng, imagemagick
+, dejavu_fonts, inkscape, optipng, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
 ,   qtbase ? null
 ,   wrapQtAppsHook ? null
@@ -12,17 +12,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation {
   pname = "arx-libertatis";
-  version = "2019-07-22";
+  version = "2020-10-20";
 
   src = fetchFromGitHub {
     owner = "arx";
     repo = "ArxLibertatis";
-    rev = "db77aa26bb8612f711b65e72b1cd8cf6481700c7";
-    sha256 = "0c88djyzjna17wjcvkgsfx3011m1rba5xdzdldy1hjmafpqgb4jj";
+    rev = "21df2e37664de79e117eff2af164873f05600f4c";
+    sha256 = "06plyyh0ddqv1j04m1vclz9j72609pgrp61v8wfjdcln8djm376i";
   };
 
   nativeBuildInputs = [
-    cmake inkscape_0 imagemagick optipng
+    cmake inkscape imagemagick optipng
   ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
   buildInputs = [

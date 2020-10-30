@@ -1,11 +1,6 @@
 /*
 
-NixOS support 2 fontconfig versions, "support" and "latest".
-
-- "latest" refers to default fontconfig package (pkgs.fontconfig).
-  configuration files are linked to /etc/fonts/VERSION/conf.d/
-- "support" refers to supportPkg (pkgs."fontconfig_${supportVersion}").
-  configuration files are linked to /etc/fonts/conf.d/
+Configuration files are linked to /etc/fonts/conf.d/
 
 This module generates a package containing configuration files and link it in /etc/fonts.
 
@@ -22,44 +17,25 @@ let
   cfg = config.fonts.fontconfig;
 
   fcBool = x: "<bool>" + (boolToString x) + "</bool>";
-
-  # back-supported fontconfig version and package
-  # version is used for font cache generation
-  supportVersion = "210";
-  supportPkg     = pkgs."fontconfig_${supportVersion}";
-
-  # latest fontconfig version and package
-  # version is used for configuration folder name, /etc/fonts/VERSION/
-  # note: format differs from supportVersion and can not be used with makeCacheConf
-  latestVersion  = pkgs.fontconfig.configVersion;
-  latestPkg      = pkgs.fontconfig;
-
-  # supported version fonts.conf
-  supportFontsConf = pkgs.makeFontsConf { fontconfig = supportPkg; fontDirectories = config.fonts.fonts; };
+  pkg = pkgs.fontconfig;
 
   # configuration file to read fontconfig cache
-  # version dependent
   # priority 0
-  cacheConfSupport = makeCacheConf { version = supportVersion; };
-  cacheConfLatest  = makeCacheConf {};
+  cacheConf  = makeCacheConf {};
 
-  # generate the font cache setting file for a fontconfig version
-  # use latest when no version is passed
+  # generate the font cache setting file
   # When cross-compiling, we can’t generate the cache, so we skip the
   # <cachedir> part. fontconfig still works but is a little slower in
   # looking things up.
-  makeCacheConf = { version ? null }:
+  makeCacheConf = { }:
     let
-      fcPackage = if version == null
-                  then "fontconfig"
-                  else "fontconfig_${version}";
       makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
-      cache     = makeCache pkgs.${fcPackage};
-      cache32   = makeCache pkgs.pkgsi686Linux.${fcPackage};
+      cache     = makeCache pkgs.fontconfig;
+      cache32   = makeCache pkgs.pkgsi686Linux.fontconfig;
     in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
       <?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
         ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
@@ -77,7 +53,7 @@ let
   # priority 10
   renderConf = pkgs.writeText "fc-10-nixos-rendering.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default rendering settings -->
@@ -134,7 +110,7 @@ let
     in
     pkgs.writeText "fc-52-nixos-default-fonts.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default fonts -->
@@ -153,7 +129,7 @@ let
   # priority 53
   rejectBitmaps = pkgs.writeText "fc-53-no-bitmaps.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     ${optionalString (!cfg.allowBitmaps) ''
@@ -181,7 +157,7 @@ let
   # priority 53
   rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     <!-- Reject Type 1 fonts -->
@@ -200,59 +176,46 @@ let
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
   } ''
-    support_folder=$out/etc/fonts/conf.d
-    latest_folder=$out/etc/fonts/${latestVersion}/conf.d
-
-    mkdir -p $support_folder
-    mkdir -p $latest_folder
+    dst=$out/etc/fonts/conf.d
+    mkdir -p $dst
 
     # fonts.conf
-    ln -s ${supportFontsConf} $support_folder/../fonts.conf
-    ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
-          $latest_folder/../fonts.conf
+    ln -s ${pkg.out}/etc/fonts/fonts.conf \
+          $dst/../fonts.conf
+    # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
+    mkdir -p $out/etc/fonts/2.11
+    ln -s /etc/fonts/fonts.conf \
+          $out/etc/fonts/2.11/fonts.conf
 
     # fontconfig default config files
-    ln -s ${supportPkg.out}/etc/fonts/conf.d/*.conf \
-          $support_folder/
-    # Latest fontconfig is configured to look for the upstream defaults inside the package.
+    ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
+          $dst/
 
     # 00-nixos-cache.conf
-    ln -s ${cacheConfSupport} \
-          $support_folder/00-nixos-cache.conf
-    ln -s ${cacheConfLatest}  $latest_folder/00-nixos-cache.conf
+    ln -s ${cacheConf}  $dst/00-nixos-cache.conf
 
     # 10-nixos-rendering.conf
-    ln -s ${renderConf}       $support_folder/10-nixos-rendering.conf
-    ln -s ${renderConf}       $latest_folder/10-nixos-rendering.conf
+    ln -s ${renderConf}       $dst/10-nixos-rendering.conf
 
     # 50-user.conf
     ${optionalString (!cfg.includeUserConf) ''
-    rm $support_folder/50-user.conf
-    ''}
-    # Since latest fontconfig looks for default files inside the package,
-    # we had to move this one elsewhere to be able to exclude it here.
-    ${optionalString cfg.includeUserConf ''
-    ln -s ${latestPkg.out}/etc/fonts/conf.d.bak/50-user.conf $latest_folder/50-user.conf
+    rm $dst/50-user.conf
     ''}
 
     # local.conf (indirect priority 51)
     ${optionalString (cfg.localConf != "") ''
-    ln -s ${localConf}        $support_folder/../local.conf
-    ln -s ${localConf}        $latest_folder/../local.conf
+    ln -s ${localConf}        $dst/../local.conf
     ''}
 
     # 52-nixos-default-fonts.conf
-    ln -s ${defaultFontsConf} $support_folder/52-nixos-default-fonts.conf
-    ln -s ${defaultFontsConf} $latest_folder/52-nixos-default-fonts.conf
+    ln -s ${defaultFontsConf} $dst/52-nixos-default-fonts.conf
 
     # 53-no-bitmaps.conf
-    ln -s ${rejectBitmaps} $support_folder/53-no-bitmaps.conf
-    ln -s ${rejectBitmaps} $latest_folder/53-no-bitmaps.conf
+    ln -s ${rejectBitmaps} $dst/53-no-bitmaps.conf
 
     ${optionalString (!cfg.allowType1) ''
     # 53-nixos-reject-type1.conf
-    ln -s ${rejectType1} $support_folder/53-nixos-reject-type1.conf
-    ln -s ${rejectType1} $latest_folder/53-nixos-reject-type1.conf
+    ln -s ${rejectType1} $dst/53-nixos-reject-type1.conf
     ''}
   '';
 
@@ -486,7 +449,7 @@ in
       environment.systemPackages    = [ pkgs.fontconfig ];
       environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
     })
-    (mkIf (cfg.enable && !cfg.penultimate.enable) {
+    (mkIf cfg.enable {
       fonts.fontconfig.confPackages = [ confPkg ];
     })
   ];

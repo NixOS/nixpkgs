@@ -3,11 +3,11 @@
 , withGog ? false, unar ? null }:
 
 stdenv.mkDerivation rec {
-  name = "innoextract-1.8";
+  name = "innoextract-1.9";
 
   src = fetchurl {
     url = "https://constexpr.org/innoextract/files/${name}.tar.gz";
-    sha256 = "0saj50n8ds85shygy4mq1h6s99510r9wgjjdll4dmvhra4lzcy2y";
+    sha256 = "09l1z1nbl6ijqqwszdwch9mqr54qb7df0wp2sd77v17dq6gsci33";
   };
 
   buildInputs = [ python lzma boost ];

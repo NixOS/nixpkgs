@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "chezmoi";
-  version = "1.8.3";
+  version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     rev = "v${version}";
-    sha256 = "01px0nj2llas835g1hf8lvhigip4jm4innjacz18c7nf1ddwn7ss";
+    sha256 = "1inmrcp01rxrjylkj9vzgw3q713q6jsqbnqllbzvp8q6kqfliayg";
   };
 
-  vendorSha256 = "1gzg73lrx73rhb9yj6yakv95m8rz1rhjgqjl1a78c8nvaii27a9x";
+  vendorSha256 = "0m946g6iw42q5ggki2j1lqdshpsxjmdsm1snnyzjzyy8gd88m4cx";
+
+  doCheck = false;
 
   buildFlagsArray = [
     "-ldflags=-s -w -X main.version=${version} -X main.builtBy=nixpkgs"
@@ -32,6 +34,5 @@ buildGoModule rec {
     description = "Manage your dotfiles across multiple machines, securely";
     license = licenses.mit;
     maintainers = with maintainers; [ jhillyerd ];
-    platforms = platforms.all;
   };
 }

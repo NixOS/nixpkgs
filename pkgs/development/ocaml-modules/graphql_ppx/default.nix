@@ -1,25 +1,27 @@
 { lib, buildDunePackage, fetchFromGitHub, alcotest, cppo
-, ocaml-migrate-parsetree, ppx_tools_versioned, reason, result, yojson }:
+, ocaml-migrate-parsetree, ppx_tools_versioned, reason, yojson }:
 
 buildDunePackage rec {
   pname = "graphql_ppx";
-  version = "0.7.1";
+  version = "1.0.1";
 
   minimumOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "reasonml-community";
-    repo = "graphql_ppx";
+    repo = "graphql-ppx";
     rev = "v${version}";
-    sha256 = "0gpzwcnss9c82whncyxfm6gwlkgh9hy90329hrazny32ybb470zh";
+    sha256 = "0lvmv1sb0ca9mja6di1dbmsgjqgj3w9var4amv1iz9nhwjjx4cpi";
   };
 
   propagatedBuildInputs =
-    [ cppo ocaml-migrate-parsetree ppx_tools_versioned reason result yojson ];
+    [ cppo ocaml-migrate-parsetree ppx_tools_versioned reason yojson ];
 
   checkInputs = lib.optional doCheck alcotest;
 
   doCheck = false;
+
+  useDune2 = true;
 
   meta = {
     homepage = "https://github.com/reasonml-community/graphql_ppx";

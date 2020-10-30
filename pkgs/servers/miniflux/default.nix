@@ -1,17 +1,20 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
 
-buildGoPackage rec {
+let
   pname = "miniflux";
-  version = "2.0.21";
+  version = "2.0.23";
+
+in buildGoModule {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0yhzmfs35jfc7vq26r9c14v4lnv8sxj3pv23r2cx2rfx47b1zmk7";
+    sha256 = "0v0n5lvrfn3ngs1s1m3hv95dvnqn8ysksb044m4ifk2cr3b77ryc";
   };
 
-  goPackagePath = "miniflux.app";
+  vendorSha256 = "1iin5r9l8wb9gm0bwgdmpx0cp1q35ij4y7zf98lnj2kvb3jv5crp";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,8 +26,10 @@ buildGoPackage rec {
 
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux
-    installManPage go/src/${goPackagePath}/miniflux.1
+    installManPage miniflux.1
   '';
+
+  passthru.tests = nixosTests.miniflux;
 
   meta = with stdenv.lib; {
     description = "Minimalist and opinionated feed reader";
@@ -33,4 +38,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ rvolosatovs benpye ];
   };
 }
-

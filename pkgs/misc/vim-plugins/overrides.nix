@@ -2,19 +2,18 @@
 , python, cmake, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform
+, pkgconfig, curl, openssl, libgit2, libiconv
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
 , gobject-introspection, glib, wrapGAppsHook
 , substituteAll
 , languagetool
+, tabnine
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
 , dasht
-
-# coc-go dependency
-, go
 
 # deoplete-khard dependency
 , khard
@@ -61,18 +60,19 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.158";
+    version = "0.1.160";
     LanguageClient-neovim-src = fetchFromGitHub {
       owner = "autozimu";
       repo = "LanguageClient-neovim";
       rev = version;
-      sha256 = "14xggdgp5qw4yj4gdsgr8s2nxm098m88q8rx6fzd2j20njv308ki";
+      sha256 = "143cifahav1pfmpx3j1ihx433jrwxf6z27s0wxndgjkd2plkks58";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
-      name = "LanguageClient-neovim-bin";
+      pname = "LanguageClient-neovim-bin";
+      inherit version;
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0nin1gydf6q4mmxljm2xbd1jfl3wpzx3pvlqwspahblv9j2bf5ck";
+      cargoSha256 = "0mf94j85awdcqa6cyb89bipny9xg13ldkznjf002fq747f55my2a";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -123,199 +123,6 @@ self: super: {
         -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
     '';
   });
-
-  coc-go = super.coc-go.overrideAttrs(old: {
-    preFixup = ''
-      substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
-        --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
-    '';
-  });
-
-  coc-css = buildVimPluginFrom2Nix {
-    pname = "coc-css";
-    version = nodePackages.coc-css.version;
-    src = "${nodePackages.coc-css}/lib/node_modules/coc-css";
-  };
-
-  coc-emmet = buildVimPluginFrom2Nix {
-    pname = "coc-emmet";
-    version = nodePackages.coc-emmet.version;
-    src = "${nodePackages.coc-emmet}/lib/node_modules/coc-emmet";
-  };
-
-  coc-eslint = buildVimPluginFrom2Nix {
-    pname = "coc-eslint";
-    version = nodePackages.coc-eslint.version;
-    src = "${nodePackages.coc-eslint}/lib/node_modules/coc-eslint";
-  };
-
-  coc-git = buildVimPluginFrom2Nix {
-    pname = "coc-git";
-    version = nodePackages.coc-git.version;
-    src = "${nodePackages.coc-git}/lib/node_modules/coc-git";
-  };
-
-  coc-highlight = buildVimPluginFrom2Nix {
-    pname = "coc-highlight";
-    version = nodePackages.coc-highlight.version;
-    src = "${nodePackages.coc-highlight}/lib/node_modules/coc-highlight";
-  };
-
-  coc-html = buildVimPluginFrom2Nix {
-    pname = "coc-html";
-    version = nodePackages.coc-html.version;
-    src = "${nodePackages.coc-html}/lib/node_modules/coc-html";
-  };
-
-  coc-imselect = buildVimPluginFrom2Nix {
-    pname = "coc-imselect";
-    version = nodePackages.coc-imselect.version;
-    src = "${nodePackages.coc-imselect}/lib/node_modules/coc-imselect";
-  };
-
-  coc-java = buildVimPluginFrom2Nix {
-    pname = "coc-java";
-    version = nodePackages.coc-java.version;
-    src = "${nodePackages.coc-java}/lib/node_modules/coc-java";
-  };
-
-  coc-jest = buildVimPluginFrom2Nix {
-    pname = "coc-jest";
-    version = nodePackages.coc-jest.version;
-    src = "${nodePackages.coc-jest}/lib/node_modules/coc-jest";
-  };
-
-  coc-json = buildVimPluginFrom2Nix {
-    pname = "coc-json";
-    version = nodePackages.coc-json.version;
-    src = "${nodePackages.coc-json}/lib/node_modules/coc-json";
-  };
-
-  coc-lists = buildVimPluginFrom2Nix {
-    pname = "coc-lists";
-    version = nodePackages.coc-lists.version;
-    src = "${nodePackages.coc-lists}/lib/node_modules/coc-lists";
-  };
-
-  coc-metals = buildVimPluginFrom2Nix {
-    pname = "coc-metals";
-    version = nodePackages.coc-metals.version;
-    src = "${nodePackages.coc-metals}/lib/node_modules/coc-metals";
-  };
-
-  coc-pairs = buildVimPluginFrom2Nix {
-    pname = "coc-pairs";
-    version = nodePackages.coc-pairs.version;
-    src = "${nodePackages.coc-pairs}/lib/node_modules/coc-pairs";
-  };
-
-  coc-prettier = buildVimPluginFrom2Nix {
-    pname = "coc-prettier";
-    version = nodePackages.coc-prettier.version;
-    src = "${nodePackages.coc-prettier}/lib/node_modules/coc-prettier";
-  };
-
-  coc-python = buildVimPluginFrom2Nix {
-    pname = "coc-python";
-    version = nodePackages.coc-python.version;
-    src = "${nodePackages.coc-python}/lib/node_modules/coc-python";
-  };
-
-  coc-r-lsp = buildVimPluginFrom2Nix {
-    pname = "coc-r-lsp";
-    version = nodePackages.coc-r-lsp.version;
-    src = "${nodePackages.coc-r-lsp}/lib/node_modules/coc-r-lsp";
-  };
-
-  coc-rls = buildVimPluginFrom2Nix {
-    pname = "coc-rls";
-    version = nodePackages.coc-rls.version;
-    src = "${nodePackages.coc-rls}/lib/node_modules/coc-rls";
-  };
-
-  coc-rust-analyzer = buildVimPluginFrom2Nix {
-    pname = "coc-rust-analyzer";
-    version = nodePackages.coc-rust-analyzer.version;
-    src = "${nodePackages.coc-rust-analyzer}/lib/node_modules/coc-rust-analyzer";
-  };
-
-  coc-smartf = buildVimPluginFrom2Nix {
-    pname = "coc-smartf";
-    version = nodePackages.coc-smartf.version;
-    src = "${nodePackages.coc-smartf}/lib/node_modules/coc-smartf";
-  };
-
-  coc-snippets = buildVimPluginFrom2Nix {
-    pname = "coc-snippets";
-    version = nodePackages.coc-snippets.version;
-    src = "${nodePackages.coc-snippets}/lib/node_modules/coc-snippets";
-  };
-
-  coc-solargraph = buildVimPluginFrom2Nix {
-    pname = "coc-solargraph";
-    version = nodePackages.coc-solargraph.version;
-    src = "${nodePackages.coc-solargraph}/lib/node_modules/coc-solargraph";
-  };
-
-  coc-stylelint = buildVimPluginFrom2Nix {
-    pname = "coc-stylelint";
-    version = nodePackages.coc-stylelint.version;
-    src = "${nodePackages.coc-stylelint}/lib/node_modules/coc-stylelint";
-  };
-
-  coc-tabnine = buildVimPluginFrom2Nix {
-    pname = "coc-tabnine";
-    version = nodePackages.coc-tabnine.version;
-    src = "${nodePackages.coc-tabnine}/lib/node_modules/coc-tabnine";
-  };
-
-  coc-tslint = buildVimPluginFrom2Nix {
-    pname = "coc-tslint";
-    version = nodePackages.coc-tslint.version;
-    src = "${nodePackages.coc-tslint}/lib/node_modules/coc-tslint";
-  };
-
-  coc-tslint-plugin = buildVimPluginFrom2Nix {
-    pname = "coc-tslint-plugin";
-    version = nodePackages.coc-tslint-plugin.version;
-    src = "${nodePackages.coc-tslint-plugin}/lib/node_modules/coc-tslint-plugin";
-  };
-
-  coc-tsserver = buildVimPluginFrom2Nix {
-    pname = "coc-tsserver";
-    version = nodePackages.coc-tsserver.version;
-    src = "${nodePackages.coc-tsserver}/lib/node_modules/coc-tsserver";
-  };
-
-  coc-vetur = buildVimPluginFrom2Nix {
-    pname = "coc-vetur";
-    version = nodePackages.coc-vetur.version;
-    src = "${nodePackages.coc-vetur}/lib/node_modules/coc-vetur";
-  };
-
-  coc-vimtex = buildVimPluginFrom2Nix {
-    pname = "coc-vimtex";
-    version = nodePackages.coc-vimtex.version;
-    src = "${nodePackages.coc-vimtex}/lib/node_modules/coc-vimtex";
-  };
-
-  coc-wxml = buildVimPluginFrom2Nix {
-    pname = "coc-wxml";
-    version = nodePackages.coc-wxml.version;
-    src = "${nodePackages.coc-wxml}/lib/node_modules/coc-wxml";
-  };
-
-  coc-yaml = buildVimPluginFrom2Nix {
-    pname = "coc-yaml";
-    version = nodePackages.coc-yaml.version;
-    src = "${nodePackages.coc-yaml}/lib/node_modules/coc-yaml";
-  };
-
-  coc-yank = buildVimPluginFrom2Nix {
-    pname = "coc-yank";
-    version = nodePackages.coc-yank.version;
-    src = "${nodePackages.coc-yank}/lib/node_modules/coc-yank";
-  };
 
   command-t = super.command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
@@ -421,6 +228,14 @@ self: super: {
 
   ghcid = super.ghcid.overrideAttrs(old: {
     configurePhase = "cd plugins/nvim";
+  });
+
+  vimsence = super.vimsence.overrideAttrs(old: {
+    meta = with stdenv.lib; {
+      description = "Discord rich presence for Vim";
+      homepage = "https://github.com/hugolgst/vimsence";
+      maintainers = with stdenv.lib.maintainers; [ hugolgst ];
+    };
   });
 
   vim-gist = super.vim-gist.overrideAttrs(old: {
@@ -764,4 +579,85 @@ self: super: {
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
   });
-}
+
+  vim-clap = super.vim-clap.overrideAttrs(old: {
+    preFixup = let
+      maple-bin = rustPlatform.buildRustPackage {
+        name = "maple";
+        src = old.src;
+
+        nativeBuildInputs = [
+          pkgconfig
+        ];
+
+        buildInputs = [
+          openssl
+        ] ++ stdenv.lib.optionals stdenv.isDarwin [
+          CoreServices
+          curl
+          libgit2
+          libiconv
+        ];
+
+        cargoSha256 = "QUi3GyAsakAtDQkiVA7ez05s5CixqsVSp92svYmcWdQ=";
+      };
+    in ''
+      ln -s ${maple-bin}/bin/maple $target/bin/maple
+    '';
+
+    meta.platforms = stdenv.lib.platforms.all;
+  });
+
+  completion-tabnine = super.completion-tabnine.overrideAttrs(old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir $target/binaries
+      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
+    '';
+  });
+} // (
+  let
+    nodePackageNames = [
+      "coc-go"
+      "coc-css"
+      "coc-diagnostic"
+      "coc-emmet"
+      "coc-eslint"
+      "coc-git"
+      "coc-highlight"
+      "coc-html"
+      "coc-imselect"
+      "coc-java"
+      "coc-jest"
+      "coc-json"
+      "coc-lists"
+      "coc-metals"
+      "coc-pairs"
+      "coc-prettier"
+      "coc-python"
+      "coc-r-lsp"
+      "coc-rls"
+      "coc-rust-analyzer"
+      "coc-smartf"
+      "coc-snippets"
+      "coc-solargraph"
+      "coc-stylelint"
+      "coc-tabnine"
+      "coc-tslint"
+      "coc-tslint-plugin"
+      "coc-tsserver"
+      "coc-vetur"
+      "coc-vimtex"
+      "coc-wxml"
+      "coc-yaml"
+      "coc-yank"
+    ];
+    nodePackage2VimPackage = name: buildVimPluginFrom2Nix {
+      pname = name;
+      inherit (nodePackages.${name}) version meta;
+      src = "${nodePackages.${name}}/lib/node_modules/${name}";
+    };
+  in
+  lib.genAttrs nodePackageNames nodePackage2VimPackage
+)

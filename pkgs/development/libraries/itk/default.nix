@@ -3,14 +3,20 @@
 
 stdenv.mkDerivation rec {
   pname = "itk";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
     rev = "v${version}";
-    sha256 = "0rvkp00xj1js60021jv2ydyl74wvbyb205gm9d7hf8gy2q456hgl";
+    sha256 = "1z7rmqrhgl7hfb3d0077kvp8vpi05r2zk3qyqzmv7bzbal5sqqhv";
   };
+
+  postPatch = ''
+    substituteInPlace CMake/ITKSetStandardCompilerFlags.cmake  \
+      --replace "-march=corei7" ""  \
+      --replace "-mtune=native" ""
+  '';
 
   cmakeFlags = [
     "-DBUILD_EXAMPLES=OFF"

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, libnl }:
+{ stdenv, fetchurl, pkg-config, libnl }:
 
 stdenv.mkDerivation rec {
   pname = "iw";
-  version = "5.4";
+  version = "5.9";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0prrgb11pjrr6dw71v7nx2bic127qzrjifvz183v3mw8f1kryim2";
+    sha256 = "1wp1ky1v353qqy5fnrk67apgzsap53jkr7pmghk3czpbk880ffi9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

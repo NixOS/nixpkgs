@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.2.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03s22sx8yp5z69nqgyng5nbqy1qy8wdlrh5h9ghk1j249lig21fz";
+    sha256 = "1kl3s5kv3wwh4br6zf0f56bffzjwhgzga93zg39mqry8jvwxp6dx";
     fetchSubmodules = true;
   };
-  cargoSha256 = "1lg7rclhm0jz7hiyzq2ff73zkyg24ndys78q830w30zx4lh4y50d";
+  cargoSha256 = "1m3wd2gjy2b8a3x9wm49n9z02165afv4c3n13pnqsxcqmd9a764f";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
@@ -54,6 +54,9 @@ rustPlatform.buildRustPackage rec {
 
   # TODO: Move to enhanced installShellCompletion when merged: PR #83630
   postInstall = ''
+    # remove test plugin and test server
+    rm -rf $out/lib $out/bin/test_server
+
     $out/bin/deno completions bash > deno.bash
     $out/bin/deno completions fish > deno.fish
     $out/bin/deno completions zsh  > _deno

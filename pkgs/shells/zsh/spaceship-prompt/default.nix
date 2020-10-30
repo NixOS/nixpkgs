@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     install -D -m644 spaceship.zsh "$out/lib/spaceship-prompt/spaceship.zsh"
     install -d "$out/share/zsh/themes/"
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/themes/spaceship.zsh-theme"
+    install -d "$out/share/zsh/site-functions/"
+    ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/site-functions/prompt_spaceship_setup"
   '';
 
   meta = with stdenv.lib; {

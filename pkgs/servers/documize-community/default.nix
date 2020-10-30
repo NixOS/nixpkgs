@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
 
   # This is really weird, but they've managed to screw up

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnuplot }:
+{ stdenv, lib, fetchurl, gnuplot }:
 
 let
   target = if stdenv.hostPlatform.system == "i686-linux" then
@@ -13,11 +13,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "iozone-3.471";
+  pname = "iozone";
+  version = "3.490";
 
   src = fetchurl {
-    url = "http://www.iozone.org/src/current/iozone3_471.tar";
-    sha256 = "0w63b3d4ws1sm52lpdd08sl7n4ay438dl3wy0q9la12iq81rglid";
+    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings ["."] ["_"] version}.tar";
+    sha256 = "1vagmm2k2bzlpahl2a2arpfmk3cd5nzhxi842a8mdag2b8iv9bay";
   };
 
   license = fetchurl {

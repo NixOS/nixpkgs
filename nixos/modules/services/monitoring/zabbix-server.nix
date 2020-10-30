@@ -5,8 +5,8 @@ let
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
-  inherit (lib) attrValues concatMapStringsSep literalExample optional optionalAttrs optionalString types;
+  inherit (lib) mkAfter mkDefault mkEnableOption mkIf mkMerge mkOption;
+  inherit (lib) attrValues concatMapStringsSep getName literalExample optional optionalAttrs optionalString types;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix";
@@ -220,13 +220,14 @@ in
     services.mysql = optionalAttrs mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ];
     };
+
+    systemd.services.mysql.postStart = mkAfter (optionalString mysqlLocal ''
+      ( echo "CREATE DATABASE IF NOT EXISTS \`${cfg.database.name}\` CHARACTER SET utf8 COLLATE utf8_bin;"
+        echo "CREATE USER IF NOT EXISTS '${cfg.database.user}'@'localhost' IDENTIFIED WITH ${if (getName config.services.mysql.package == getName pkgs.mariadb) then "unix_socket" else "auth_socket"};"
+        echo "GRANT ALL PRIVILEGES ON \`${cfg.database.name}\`.* TO '${cfg.database.user}'@'localhost';"
+      ) | ${config.services.mysql.package}/bin/mysql -N
+    '');
 
     services.postgresql = optionalAttrs pgsqlLocal {
       enable = true;

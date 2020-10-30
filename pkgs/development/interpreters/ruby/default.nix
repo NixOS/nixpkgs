@@ -125,6 +125,10 @@ let
             "--with-out-ext=tk"
             # on yosemite, "generating encdb.h" will hang for a very long time without this flag
             "--with-setjmp-type=setjmp"
+            # silence linker warnings after upgrading darwin.cctools to 949.0.1,
+            # which ruby treats as problem with LDFLAGS
+            # https://github.com/NixOS/nixpkgs/issues/101330
+            "LDFLAGS=-Wl,-w"
           ]
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
@@ -192,7 +196,7 @@ let
           description = "The Ruby language";
           homepage    = "http://www.ruby-lang.org/en/";
           license     = licenses.ruby;
-          maintainers = with maintainers; [ vrthra manveru ];
+          maintainers = with maintainers; [ vrthra manveru marsam ];
           platforms   = platforms.all;
         };
 
@@ -240,10 +244,10 @@ in {
   };
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "1" "";
+    version = rubyVersion "2" "7" "2" "";
     sha256 = {
-      src = "0674x98f542y02r7n2yv2qhmh97blqhi2mvh2dn5f000vlxlh66l";
-      git = "0qk729kr5wm67xmwpljpdprwhp5wvn5y4ikqy00p1zcgwlwdcs33";
+      src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
+      git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
     };
   };
 }

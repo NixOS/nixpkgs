@@ -1,4 +1,4 @@
-#! @shell@ -e
+#! @runtimeShell@ -e
 
 # Shows the usage of this command to the user
 

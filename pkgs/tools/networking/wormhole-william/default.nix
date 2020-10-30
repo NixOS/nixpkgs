@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1niky252gcxai6vz0cx7pvflg530bc1lmcd2wm2hqg6446r1yxsq";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/psanford/wormhole-william";
     description = "End-to-end encrypted file transfers";

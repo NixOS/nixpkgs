@@ -15,6 +15,6 @@ import ./make-test-python.nix {
 
     master.wait_for_unit("neo4j")
     master.wait_for_open_port(7474)
-    master.succeed("curl http://localhost:7474/")
+    master.succeed("curl -f http://localhost:7474/")
   '';
 }

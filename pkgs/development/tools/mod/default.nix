@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "032s62rjjq7bqiz5fg17yfkq4j4dsbl6vhvs1wf2sg8jvbqmvdwn";
 
+  doCheck = false;
+
   subPackages = [ "cmd/mod" ];
 
   meta = with lib; {

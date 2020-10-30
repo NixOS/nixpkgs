@@ -9,7 +9,7 @@ racket.overrideAttrs (oldAttrs: rec {
   };
 
   meta = oldAttrs.meta // {
-    description = "Racket without bundled packages, such as Dr. Racket.";
+    description = "Racket without bundled packages, such as Dr. Racket";
     longDescription = ''The essential package racket-libs is included,
       as well as libraries that live in collections. In particular, raco
       and the pkg library are still bundled.

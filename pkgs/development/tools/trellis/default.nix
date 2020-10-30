@@ -8,18 +8,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2020.06.29";
+  version = "2020.07.27";
 
   # git describe --tags
   realVersion = with stdenv.lib; with builtins;
-    "1.0-176-g${substring 0 7 (elemAt srcs 0).rev}";
+    "1.0-182-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "SymbiFlow";
        repo   = "prjtrellis";
-       rev    = "f93243b000c52b755c70829768d2ae6bcf7bb91a";
-       sha256 = "0f7xv99bxmidk7byahc821yzy8mln29gknz3w239i9xbwxzc6wc4";
+       rev    = "8c0a6382e11b160ed88d17af8493c12a897617ed";
+       sha256 = "1g0ppjfw8dq5cg5kl2p1p87grb0i88apaim4f5b6wj4sfqz8iln8";
        name   = "trellis";
      })
 

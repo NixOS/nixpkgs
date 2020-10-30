@@ -1,6 +1,5 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils
-, utillinuxMinimal
 , writeTextFile
 }:
 
@@ -234,10 +233,10 @@ let
         rm -fR drivers
 
         # Keep all headers
-        find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.h' -print0 | xargs -0 -r chmod u-w
 
         # Keep linker scripts (they are required for out-of-tree modules on aarch64)
-        find .  -type f -name '*.lds' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
         # Keep root and arch-specific Makefiles
         chmod u-w Makefile
@@ -247,7 +246,7 @@ let
         chmod u-w -R scripts
 
         # Delete everything not kept
-        find . -type f -perm -u=w -print0 | xargs -0 rm
+        find . -type f -perm -u=w -print0 | xargs -0 -r rm
 
         # Delete empty directories
         find -empty -type d -delete
@@ -281,7 +280,6 @@ let
 in
 
 assert (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") -> libelf != null;
-assert stdenv.lib.versionAtLeast version "4.15" -> utillinuxMinimal != null;
 assert stdenv.lib.versionAtLeast version "5.8" -> elfutils != null;
 
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
@@ -294,7 +292,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
       ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional  (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") libelf
-      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinuxMinimal
+      # Removed utillinuxMinimal since it should not be a dependency.
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
       ++ optional  (stdenv.lib.versionAtLeast version "5.8")  elfutils

@@ -19,14 +19,18 @@ let
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
   year = if stdenvNoCC.isDarwin then "2019" else "2020";
-  spot = if stdenvNoCC.isDarwin then "3" else "2";
-  rel = if stdenvNoCC.isDarwin then "199" else "254";
+  spot = if stdenvNoCC.isDarwin then "3" else "3";
+  rel = if stdenvNoCC.isDarwin then "199" else "279";
+
+  # Replace `openmpSpot` by `spot` after 2020.3. Release 2020.03
+  # adresses performance regressions and does not update OpenMP.
+  openmpSpot = if stdenvNoCC.isDarwin then spot else "2";
 
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
   # Intel openmp uses its own versioning, but shares the spot release patch.
   openmp = if stdenvNoCC.isDarwin then "19.0" else "19.1";
-  openmp-ver = "${openmp}.${spot}-${rel}-${openmp}.${spot}-${rel}";
+  openmp-ver = "${openmp}.${openmpSpot}-${rel}-${openmp}.${openmpSpot}-${rel}";
 
   shlibExt = stdenvNoCC.hostPlatform.extensions.sharedLibrary;
 
@@ -42,8 +46,8 @@ in stdenvNoCC.mkDerivation {
       })
     else
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16849/l_mkl_${version}.tgz";
-        sha256 = "08q2q5rary7fxlrk09kpw0vl7mkk2smmklib44a6qainmxks407d";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16903/l_mkl_${version}.tgz";
+        sha256 = "013shn3c823bjfssq4jyl3na5lbzj99s09ds608ljqllri7473ib";
       });
 
   nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin

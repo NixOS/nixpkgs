@@ -1,12 +1,12 @@
 { stdenv, glibcLocales, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.16.1";
+  version = "0.17.0";
   pname = "khard";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0fg4qh5gzki5wg958wlpc8a2icnk74gzg33lqxjm755cfnjng7qd";
+    sha256 = "062nv4xkfsjc11k9m52dh6xjn9z68a4a6x1s8z05wwv4jbp1lkhn";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

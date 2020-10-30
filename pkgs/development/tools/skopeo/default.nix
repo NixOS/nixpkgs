@@ -1,7 +1,6 @@
 { stdenv
 , buildGoModule
 , fetchFromGitHub
-, runCommand
 , gpgme
 , lvm2
 , btrfs-progs
@@ -10,23 +9,24 @@
 , installShellFiles
 , makeWrapper
 , fuse-overlayfs
-, nixosTests
 }:
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "0wkpw8fizxjpfypflp7rs1q128dg4hadwzdvn8k41h7f8cbcb39x";
+    sha256 = "1v7k3ki10i6082r7zswblyirx6zck674y6bw3plssw4p1l2611rd";
   };
 
   outputs = [ "out" "man" ];
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
@@ -35,21 +35,17 @@ buildGoModule rec {
 
   buildPhase = ''
     patchShebangs .
-    make binary-local
+    make bin/skopeo docs
   '';
 
   installPhase = ''
-    make install-binary PREFIX=$out
-    make install-docs MANINSTALLDIR="$man/share/man"
+    install -Dm755 bin/skopeo -t $out/bin
+    installManPage docs/*.[1-9]
     installShellCompletion --bash completions/bash/skopeo
-  '';
-
-  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
   '';
-
-  passthru.tests.docker-tools = nixosTests.docker-tools;
 
   meta = with stdenv.lib; {
     description = "A command line utility for various operations on container images and image repositories";

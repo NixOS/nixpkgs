@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.2.9";
+  version = "1.2.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gqccakzivga3lb9sh4aniamqpnlbbwxfbkhrb6833k1zha01w8j";
+    sha256 = "c6657f1d8aae566b89d02c6282827dddcec2a90f75dc0d2d91a47e00c8999d99";
   };
 
   buildInputs = [

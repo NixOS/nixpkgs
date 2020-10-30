@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs utils/cec-ctl/msg2ctl.pl
+    patchShebangs utils/libcecutil/cec-gen.pl
   '';
 
   meta = with stdenv.lib; {

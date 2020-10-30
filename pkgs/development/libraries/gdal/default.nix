@@ -7,13 +7,14 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.0.4";
+  # broken with poppler 20.08, however, can't fetch patches cleanly
+  version = "3.1.2.post2020-08-26";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "v${version}";
-    sha256 = "00a7q9wv8s1bmdhqxvixkq2afr8aibg3pkc76gg50r8lavf6j84c";
+    rev = "9a8df672204a8b3b33c36e09a32f747e21166fe9";
+    sha256 = "1n25jma4x1l7slwxk702q77r84vxr90fyn4c3zpkr07q1b8wqql9";
   };
 
   sourceRoot = "source/gdal";
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}" # optional
     "--with-pg=yes" # since gdal 3.0 doesn't use ${postgresql}/bin/pg_config
-    "--with-mysql=${libmysqlclient}/bin/mysql_config"
+    "--with-mysql=${getDev libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     "--with-proj=${proj.dev}" # optional
     "--with-geos=${geos}/bin/geos-config" # optional
     "--with-hdf4=${hdf4.dev}" # optional
-    "--with-xml2=${libxml2.dev}/bin/xml2-config" # optional
+    "--with-xml2=yes" # optional
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
 

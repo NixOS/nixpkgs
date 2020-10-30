@@ -516,7 +516,7 @@ in
         <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
       '';
 
-      type = with types; loaOf (submodule (
+      type = with types; attrsOf (submodule (
         { name, ... }: { options = {
 
           name = mkOption {
@@ -641,7 +641,7 @@ in
             credential = mkOption {
               default = null;
               example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
-              type = types.str;
+              type = types.nullOr types.str;
               description = "The FIDO2 credential ID.";
             };
 

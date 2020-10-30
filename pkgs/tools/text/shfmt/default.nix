@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "shfmt";
@@ -17,7 +17,13 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
-  doCheck = true;
+  patches = [
+    # fix failing test on go 1.15, remove with > 3.1.2
+    (fetchpatch {
+      url = "https://github.com/mvdan/sh/commit/88956f97dae1f268af6c030bf2ba60762ebb488a.patch";
+      sha256 = "1zg8i7kklr12zjkaxh8djd2bzkdx8klgfj271r2wivkc2x61shgv";
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";

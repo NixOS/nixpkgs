@@ -14,6 +14,8 @@ let
     propagatedBuildInputs = [ spacy ]
       ++ lib.optionals (lang == "zh") [ jieba pkuseg ];
 
+    pythonImportsCheck = [ pname ];
+
     meta = with stdenv.lib; {
       description = "Models for the spaCy NLP library";
       homepage    = "https://github.com/explosion/spacy-models";

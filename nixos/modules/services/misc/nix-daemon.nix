@@ -45,7 +45,7 @@ let
         trusted-substituters = ${toString cfg.trustedBinaryCaches}
         trusted-public-keys = ${toString cfg.binaryCachePublicKeys}
         auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
-        require-sigs = ${if cfg.requireSignedBinaryCaches then "true" else "false"}
+        require-sigs = ${boolToString cfg.requireSignedBinaryCaches}
         trusted-users = ${toString cfg.trustedUsers}
         allowed-users = ${toString cfg.allowedUsers}
         ${optionalString (!cfg.distributedBuilds) ''
@@ -500,13 +500,6 @@ in
 
   config = {
 
-    assertions = [
-      {
-        assertion = config.nix.distributedBuilds || config.nix.buildMachines == [];
-        message = "You must set `nix.distributedBuilds = true` to use nix.buildMachines";
-      }
-    ];
-
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
 
@@ -594,16 +587,10 @@ in
 
     nix.systemFeatures = mkDefault (
       [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-      optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
-        # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
-        [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
-          sandybridge    = [ "gccarch-westmere" ];
-          ivybridge      = [ "gccarch-westmere" "gccarch-sandybridge" ];
-          haswell        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
-          broadwell      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
-          skylake        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
-          skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
-        }.${pkgs.hostPlatform.platform.gcc.arch} or []
+      optionals (pkgs.hostPlatform.platform ? gcc.arch) (
+        # a builder can run code for `platform.gcc.arch` and inferior architectures
+        [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++
+        map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.platform.gcc.arch}
       )
     );
 

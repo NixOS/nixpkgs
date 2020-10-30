@@ -12,18 +12,20 @@
 , qtkeychain
 , qttools
 , qtwebengine
+, qtquickcontrols2
+, qtgraphicaleffects
 , sqlite
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "2.6.5";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "0r2n9l383drnnzbyywnbqljh9kxm3kz4g0mv7bnrp6b10b2ma3pg";
+    sha256 = "ROzaiRa9Odq4lXuHL7nbE0S49d0wxmDgm01qI1WM+WM=";
   };
 
   patches = [
@@ -44,6 +46,8 @@ mkDerivation rec {
     qtkeychain
     qttools
     qtwebengine
+    qtquickcontrols2
+    qtgraphicaleffects
     sqlite
   ];
 

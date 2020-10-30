@@ -1,8 +1,6 @@
 { mkDerivation
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, installShellFiles
 , qmake
 , qtbase
 , qtmultimedia
@@ -21,26 +19,18 @@ let
 in
 mkDerivation rec {
   pname = "bambootracker";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "rerrahkr";
     repo = "BambooTracker";
     rev = "v${version}";
-    sha256 = "0gq40qmsdavsyl2d6a71rwp4mjlwvp1c8bry32srn4hliwfnvqa6";
+    sha256 = "0d0f4jqzknsiq725pvfndarfjg183f92rb0lim3wzshnsixr5vdc";
   };
 
-  # Fix macOS build until new release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/rerrahkr/BambooTracker/commit/45346ed99559d44c2e32a5c6138a0835b212e875.patch";
-      sha256 = "1xkiqira1kpcqkacycy0y7qm1brhf89amliv42byijl4palmykh2";
-    })
-  ];
+  sourceRoot = "source/BambooTracker";
 
-  preConfigure = "cd BambooTracker";
-
-  nativeBuildInputs = [ qmake qttools installShellFiles ];
+  nativeBuildInputs = [ qmake qttools ];
 
   buildInputs = [ qtbase qtmultimedia ]
     ++ optional alsaSupport alsaLib
@@ -50,17 +40,6 @@ mkDerivation rec {
   qmakeFlags = [ "CONFIG+=release" "CONFIG-=debug" ]
     ++ optional pulseSupport "CONFIG+=use_pulse"
     ++ optionals jackSupport [ "CONFIG+=use_jack" "CONFIG+=jack_has_rename" ];
-
-  postInstall = ''
-    install -Dm644 ../BambooTracker.desktop $out/share/applications/BambooTracker.desktop
-    installManPage ../BambooTracker*.1
-
-    cp -r ../{demos,licenses,skins,LICENSE} $out/share/BambooTracker/
-
-    for size in 16x16 256x256; do
-      install -Dm644 res/icon/icon_$size.png $out/share/icons/hicolor/$size/apps/BambooTracker.png
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";

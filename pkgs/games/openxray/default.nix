@@ -3,13 +3,13 @@
 , pcre, makeWrapper }:
 
 let
-  version = "558";
+  version = "730-july-preview";
 
   src = fetchFromGitHub {
     owner = "OpenXRay";
     repo = "xray-16";
     rev = version;
-    sha256 = "1wnkx9g0ww4f5pljrb0wzs054jzkig1i5hlz1p509rfvnhc50afp";
+    sha256 = "1nish3sbpk0hsag7r4nyx8j6pl9mlgx58v8dhzg2vwj2q32isyb2";
     fetchSubmodules = true;
   };
 
@@ -40,7 +40,6 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
   cmakeFlags = [ "-DCMAKE_INCLUDE_PATH=${cryptopp}/include/cryptopp" ];
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   buildInputs = [
     glew freeimage liblockfile openal cryptopp libtheora SDL2 lzo
@@ -51,14 +50,13 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/xrCore/xrCore.cpp \
       --replace /usr/share $out/share
+
+    # https://github.com/OpenXRay/xray-16/issues/667
+    echo "inline const char* xr_sys_errlist[100] = {};" >> src/Common/PlatformLinux.inl
+    echo "#define _sys_errlist xr_sys_errlist" >> src/Common/PlatformLinux.inl
   '';
 
   postInstall = ''
-    mv $out/var/empty/* $out
-    install -Dm755 $out/games/xr_3da $out/bin/xr_3da
-    install -Dm644 $src/License.txt $out/share/licenses/openxray/License.txt
-    rm -r $out/var $out/games
-
     # needed because of SDL_LoadObject library loading code
     wrapProgram $out/bin/xr_3da \
       --prefix LD_LIBRARY_PATH : $out/lib

@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "operator-sdk";
-  version = "0.19.2";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lmnxw6l6lknvbwmw5xh238i0j452sib37fw8ybxp64zwvj2sac0";
+    sha256 = "1p2ra7mqn7crip6sjgq2j49782ncvs4qahjwg6jk5rdvvi4hbyc7";
   };
 
-  vendorSha256 = "1xk3zw8w2fynww0z4d66nlclhjf52bk4cv3bh51yyd1mr808lip5";
+  vendorSha256 = "0zy540cbfm1kfc5sp802a9a5l2gkpgqprn8mlh9zg4d4shni61wa";
+
+  doCheck = false;
 
   subPackages = [ "cmd/operator-sdk" ];
 
@@ -24,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "SDK for building Kubernetes applications. Provides high level APIs, useful abstractions, and project scaffolding.";
+    description = "SDK for building Kubernetes applications. Provides high level APIs, useful abstractions, and project scaffolding";
     homepage = "https://github.com/operator-framework/operator-sdk";
     license = licenses.asl20;
     maintainers = with maintainers; [ arnarg ];

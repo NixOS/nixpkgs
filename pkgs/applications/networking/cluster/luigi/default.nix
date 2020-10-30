@@ -1,15 +1,22 @@
-{ lib, python3Packages }:
+{ lib, python3 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      tornado = super.tornado_5;
+    };
+  };
+in with python.pkgs; buildPythonApplication rec {
   pname = "luigi";
-  version = "3.0.1";
+  version = "3.0.2";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "02c480f5pjgqsvqnkaw7f6n4nhdspmhq5w7lw8sgg2v3jghg8n7i";
+    sha256 = "b4b1ccf086586d041d7e91e68515d495c550f30e4d179d63863fea9ccdbb78eb";
   };
 
-  propagatedBuildInputs = with python3Packages; [ dateutil tornado_4 python-daemon boto3 ];
+  propagatedBuildInputs = [ dateutil tornado_5 python-daemon boto3 ];
 
   # Requires tox, hadoop, and google cloud
   doCheck = false;

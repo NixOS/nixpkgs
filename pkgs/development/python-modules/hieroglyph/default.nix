@@ -1,12 +1,13 @@
-{ stdenv, fetchPypi, buildPythonPackage, sphinx }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27, sphinx }:
 
 buildPythonPackage rec {
   pname = "hieroglyph";
-  version = "1.0.0";
+  version = "2.1.0";
+  disabled = isPy27; # python2 compatible sphinx is too low
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e137f0b1cd60c47b870011089790d3c8ddb74fcf409a75ddf2c7f2516ff337c";
+    sha256 = "b4b5db13a9d387438e610c2ca1d81386ccd206944d9a9dd273f21874486cddaf";
   };
 
   propagatedBuildInputs = [ sphinx ];

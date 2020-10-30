@@ -1,6 +1,7 @@
 { stdenv
 , makeWrapper
 , fetchFromGitHub
+, nixosTests
 , gradle_5
 , perl
 , jre
@@ -9,13 +10,13 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.8.1a";
+  version = "0.8.2d";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
     rev = "v${version}";
-    sha256 = "0cfrcjvnn2j4p7zbz252qbn2jacgwhzaja8lqvif0x1vszyl41v7";
+    sha256 = "11lgalam1aacw01ar7nawiim4pbxqzrdrnxvj6wq9mg83hgsz65l";
   };
 
   postPatch = ''
@@ -65,6 +66,10 @@ in stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
   '';
+
+  passthru.tests = {
+    shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://shatteredpixel.com/";

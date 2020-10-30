@@ -42,9 +42,9 @@ buildPythonPackage rec {
     "test_subprocess_print"
     "test_subprocess_error"
     "test_ipython_start_kernel_no_userns"
-    
+
     # https://github.com/ipython/ipykernel/issues/506
-    "test_unc_paths"    
+    "test_unc_paths"
   ] ++ lib.optionals (pythonOlder "3.8") [
     # flaky test https://github.com/ipython/ipykernel/issues/485
     "test_shutdown"

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "limesuite";
-  version = "20.07.1";
+  version = "20.07.2";
 
   src = fetchFromGitHub {
     owner = "myriadrf";
     repo = "LimeSuite";
     rev = "v${version}";
-    sha256 = "14mxqc350j3rk1202n0ax1rfx49sy40965zj90d4pnakbgz5xr7g";
+    sha256 = "0v0w0f5ff1gwpfy13x1q1jsx9xfg4s3ccg05ikpnkzj4yg6sjps1";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, gnugrep
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ]
    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
     ./playtests-darwin.patch
@@ -29,11 +30,7 @@ stdenv.mkDerivation rec {
     # work fine, and I'm not sure how to write the condition.
     ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
 
-  postPatch =
-  # Patch shebangs for playTests
-  ''
-    patchShebangs programs/zstdgrep
-  '' + stdenv.lib.optionalString (!static) ''
+  postPatch = stdenv.lib.optionalString (!static) ''
     substituteInPlace build/cmake/CMakeLists.txt \
       --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
     substituteInPlace build/cmake/tests/CMakeLists.txt \
@@ -60,6 +57,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
+    # Patch shebangs for playTests
+    patchShebangs ../programs/zstdgrep
     ctest -R playTests # The only relatively fast test.
     runHook postCheck
   '';
@@ -73,7 +72,9 @@ stdenv.mkDerivation rec {
       --replace "zstdcat" "$bin/bin/zstdcat"
   '';
 
-  outputs = [ "bin" "dev" "man" "out" ];
+  outputs = [ "bin" "dev" ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isUnix "man"
+    ++ [ "out" ];
 
   meta = with stdenv.lib; {
     description = "Zstandard real-time compression algorithm";

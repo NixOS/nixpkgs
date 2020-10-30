@@ -52,10 +52,18 @@
     <option>build-vm-with-bootloader</option>
    </arg>
     </group>
-   <sbr />
-   <arg>
-    <option>--upgrade</option>
-   </arg>
+    <sbr />
+
+    <arg>
+      <group choice='req'>
+        <arg choice='plain'>
+          <option>--upgrade</option>
+        </arg>
+        <arg choice='plain'>
+          <option>--upgrade-all</option>
+        </arg>
+      </group>
+    </arg>
 
    <arg>
     <option>--install-bootloader</option>
@@ -108,6 +116,11 @@
     <group choice='req'>
      <arg choice='plain'><option>--verbose</option></arg>
      <arg choice='plain'><option>-v</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--impure</option></arg>
     </group>
    </arg>
    <arg>
@@ -334,9 +347,23 @@
     <term>
      <option>--upgrade</option>
     </term>
+    <term>
+     <option>--upgrade-all</option>
+    </term>
     <listitem>
-     <para>
-      Fetch the latest version of NixOS from the NixOS channel.
+      <para>
+        Update the root user's channel named <literal>nixos</literal>
+        before rebuilding the system.
+      </para>
+      <para>
+        In addition to the <literal>nixos</literal> channel, the root
+        user's channels which have a file named
+        <literal>.update-on-nixos-rebuild</literal> in their base
+        directory will also be updated.
+      </para>
+      <para>
+        Passing <option>--upgrade-all</option> updates all of the root
+        user's channels.
      </para>
     </listitem>
    </varlistentry>
@@ -521,7 +548,7 @@
 
    <varlistentry>
     <term>
-     <option>--flake</option> <replaceable>flake-uri</replaceable>[<replaceable>name</replaceable>]
+     <option>--flake</option> <replaceable>flake-uri</replaceable><optional>#<replaceable>name</replaceable></optional>
     </term>
     <listitem>
      <para>
@@ -542,7 +569,7 @@
    In addition, <command>nixos-rebuild</command> accepts various Nix-related
    flags, including <option>--max-jobs</option> / <option>-j</option>,
    <option>--show-trace</option>, <option>--keep-failed</option>,
-   <option>--keep-going</option> and <option>--verbose</option> /
+   <option>--keep-going</option>, <option>--impure</option>, and <option>--verbose</option> /
    <option>-v</option>. See the Nix manual for details.
   </para>
  </refsection>

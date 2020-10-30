@@ -155,9 +155,9 @@ cassowary = buildLuarocksPackage {
   propagatedBuildInputs = [ lua penlight ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/simoncozens/cassowary.lua";
-    description = "The cassowary constraint solver.";
-    maintainers = with maintainers; [ marsam ];
+    homepage = "https://github.com/sile-typesetter/cassowary.lua";
+    description = "The cassowary constraint solver";
+    maintainers = with maintainers; [ marsam alerque ];
     license.fullName = "Apache 2";
   };
 };
@@ -173,7 +173,7 @@ cjson = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.kyne.com.au/~mark/software/lua-cjson.php";
+    homepage = "https://www.kyne.com.au/~mark/software/lua-cjson.php";
     description = "A fast JSON encoding/parsing module";
     license.fullName = "MIT";
   };
@@ -268,7 +268,7 @@ cyrussasl = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/JorjBauer/lua-cyrussasl";
+    homepage = "https://github.com/JorjBauer/lua-cyrussasl";
     description = "Cyrus SASL library for Lua 5.1+";
     maintainers = with maintainers; [ vcunat ];
     license.fullName = "BSD";
@@ -420,7 +420,7 @@ lgi = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/pavouk/lgi";
+    homepage = "https://github.com/pavouk/lgi";
     description = "Lua bindings to GObject libraries";
     license.fullName = "MIT/X11";
   };
@@ -546,7 +546,7 @@ lrexlib-gnu = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (GNU flavour).";
     license.fullName = "MIT/X11";
   };
@@ -563,7 +563,7 @@ lrexlib-pcre = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (PCRE flavour).";
     maintainers = with maintainers; [ vyp ];
     license.fullName = "MIT/X11";
@@ -581,7 +581,7 @@ lrexlib-posix = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (POSIX flavour).";
     license.fullName = "MIT/X11";
   };
@@ -625,7 +625,7 @@ lua-cmsgpack = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/antirez/lua-cmsgpack";
+    homepage = "https://github.com/antirez/lua-cmsgpack";
     description = "MessagePack C implementation and bindings for Lua 5.1/5.2/5.3";
     license.fullName = "Two-clause BSD";
   };
@@ -689,6 +689,74 @@ lua-messagepack = buildLuarocksPackage {
     homepage = "https://fperrad.frama.io/lua-MessagePack/";
     description = "a pure Lua implementation of the MessagePack serialization format";
     license.fullName = "MIT/X11";
+  };
+};
+lua-resty-http = buildLuarocksPackage {
+  pname = "lua-resty-http";
+  version = "0.15-0";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-http-0.15-0.src.rock;
+    sha256 = "1121abcz9y8kis2wdg7i1m75y8lplk3k49v02y804bywbl2km4fz";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/ledgetech/lua-resty-http";
+    description = "Lua HTTP client cosocket driver for OpenResty / ngx_lua.";
+    license.fullName = "2-clause BSD";
+  };
+};
+lua-resty-jwt = buildLuarocksPackage {
+  pname = "lua-resty-jwt";
+  version = "0.2.2-0";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-jwt-0.2.2-0.src.rock;
+    sha256 = "1a4wwiwcjwgr59g2940a2h0i6n1c7xjy2px5bls3x5br4shwhswa";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/cdbattags/lua-resty-jwt";
+    description = "JWT for ngx_lua and LuaJIT.";
+    license.fullName = "Apache License Version 2";
+  };
+};
+lua-resty-openidc = buildLuarocksPackage {
+  pname = "lua-resty-openidc";
+  version = "1.7.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-openidc-1.7.2-1.src.rock;
+    sha256 = "01mya69r4fncfrpqh5pn2acg18q3slds8zm976qgkjby0pzwzzw7";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua lua-resty-http lua-resty-session lua-resty-jwt ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/zmartzone/lua-resty-openidc";
+    description = "A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality";
+    license.fullName = "Apache 2.0";
+  };
+};
+lua-resty-session = buildLuarocksPackage {
+  pname = "lua-resty-session";
+  version = "3.6-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-session-3.6-1.src.rock;
+    sha256 = "1r5626x247d1vi5bzqfk11bl4d5c39h1iqj6mgndnwpnz43cag5i";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/bungle/lua-resty-session";
+    description = "Session Library for OpenResty – Flexible and Secure";
+    license.fullName = "BSD";
   };
 };
 lua-term = buildLuarocksPackage {
@@ -1041,7 +1109,7 @@ luaposix = buildLuarocksPackage {
   propagatedBuildInputs = [ bit32 lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/luaposix/luaposix/";
+    homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with maintainers; [ vyp lblasc ];
     license.fullName = "MIT/X11";
@@ -1185,7 +1253,7 @@ luautf8 = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/starwing/luautf8";
+    homepage = "https://github.com/starwing/luautf8";
     description = "A UTF-8 support module for Lua";
     maintainers = with maintainers; [ pstn ];
     license.fullName = "MIT";
@@ -1220,7 +1288,7 @@ lua-yajl = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/brimworks/lua-yajl";
+    homepage = "https://github.com/brimworks/lua-yajl";
     description = "Integrate the yajl JSON library with Lua.";
     maintainers = with maintainers; [ pstn ];
     license.fullName = "MIT/X11";
@@ -1272,7 +1340,7 @@ lyaml = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/gvvaughan/lyaml";
+    homepage = "https://github.com/gvvaughan/lyaml";
     description = "libYAML binding for Lua";
     maintainers = with maintainers; [ lblasc ];
     license.fullName = "MIT/X11";
@@ -1376,17 +1444,18 @@ nvim-client = buildLuarocksPackage {
 };
 penlight = buildLuarocksPackage {
   pname = "penlight";
-  version = "1.7.0-1";
+  version = "1.8.0-1";
 
   src = fetchurl {
-    url    = "mirror://luarocks/penlight-1.7.0-1.src.rock";
-    sha256 = "0rr56vc33b2knr5qmfdjrb1wk98lyp3zmlyzz6m15v2s1s5yxgah";
+    url    = "mirror://luarocks/penlight-1.8.0-1.src.rock";
+    sha256 = "05x00dgsa79wzq187ww6i8j0s74nh2c852awni7xfshxgihwhc42";
   };
   propagatedBuildInputs = [ luafilesystem ];
 
   meta = with stdenv.lib; {
     homepage = "http://tieske.github.io/Penlight";
     description = "Lua utility libraries loosely based on the Python standard libraries";
+    maintainers = with maintainers; [ alerque ];
     license.fullName = "MIT/X11";
   };
 };
@@ -1497,24 +1566,6 @@ stdlib = buildLuarocksPackage {
     description = "General Lua Libraries";
     maintainers = with maintainers; [ vyp ];
     license.fullName = "MIT/X11";
-  };
-};
-pulseaudio = buildLuarocksPackage {
-  pname = "pulseaudio";
-  version = "0.2-1";
-
-  src = fetchurl {
-    url    = "mirror://luarocks/pulseaudio-0.2-1.src.rock";
-    sha256 = "06w8fmwddrpm02yam818yi30gghw4ckb18zljjncy3x0zfijyhz7";
-  };
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/doronbehar/lua-pulseaudio";
-    description = "Bindings to libpulse";
-    maintainers = with maintainers; [ doronbehar ];
-    license.fullName = "Apache v2.0";
   };
 };
 vstruct = buildLuarocksPackage {

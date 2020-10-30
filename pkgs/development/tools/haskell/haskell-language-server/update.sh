@@ -7,6 +7,8 @@
 # Note that you should always try building haskell-language-server after updating it here, since
 # some of the overrides in pkgs/development/haskell/configuration-nix.nix may
 # need to be updated/changed.
+#
+# Remember to split out different updates into multiple commits
 
 set -eo pipefail
 
@@ -26,11 +28,27 @@ ghcide_old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$ghcide_derivati
 # This is the revision of ghcide used by hls on GitHub.
 ghcide_new_version=$(curl --silent "https://api.github.com/repos/haskell/haskell-language-server/contents/ghcide" | jq '.sha' --raw-output)
 
-echo "Updating haskell-language-server from old version $ghcide_old_version to new version $ghcide_new_version."
+echo "Updating haskell-language-server's ghcide from old version $ghcide_old_version to new version $ghcide_new_version."
 echo "Running cabal2nix and outputting to ${ghcide_derivation_file}..."
 
-cabal2nix --revision "$ghcide_new_version" "https://github.com/bubba/ghcide" > "$ghcide_derivation_file"
+cabal2nix --revision "$ghcide_new_version" "https://github.com/haskell/ghcide" > "$ghcide_derivation_file"
 
+# ===========================
+# HLS maintainer's Brittany fork
+# ===========================
+
+# brittany derivation created with cabal2nix.
+brittany_derivation_file="${script_dir}/hls-brittany.nix"
+
+# This is the current revision of the brittany fork in Nixpkgs.
+brittany_old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$brittany_derivation_file")"
+
+brittany_new_version=$(curl --silent "https://api.github.com/repos/bubba/brittany/commits/ghc-8.10.1" | jq '.sha' --raw-output)
+
+echo "Updating haskell-language-server's brittany from old version $brittany_old_version to new version $brittany_new_version."
+echo "Running cabal2nix and outputting to ${brittany_derivation_file}..."
+
+cabal2nix --revision "$brittany_new_version" "https://github.com/bubba/brittany" > "$brittany_derivation_file"
 
 # ===========================
 # HLS

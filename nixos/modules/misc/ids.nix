@@ -184,7 +184,7 @@ in
       consul = 145;
       mailpile = 146;
       redmine = 147;
-      seeks = 148;
+      #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
       systemd-network = 152;
@@ -198,7 +198,7 @@ in
       bosun = 161;
       kubernetes = 162;
       peerflix = 163;
-      chronos = 164;
+      #chronos = 164; # removed 2020-08-15
       gitlab = 165;
       tox-bootstrapd = 166;
       cadvisor = 167;
@@ -247,7 +247,7 @@ in
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
-      mathics = 218;
+      # mathics = 218; # unused, removed 2020-08-15
       ejabberd = 219;
       postsrsd = 220;
       opendkim = 221;
@@ -297,7 +297,7 @@ in
       headphones = 266;
       couchpotato = 267;
       gogs = 268;
-      pdns-recursor = 269;
+      #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
       geoip = 272;
@@ -321,7 +321,7 @@ in
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2020-08-21
       yarn = 294;
       hdfs = 295;
       mapred = 296;
@@ -346,6 +346,7 @@ in
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
+      # shadow = 318; # unused
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -467,7 +468,7 @@ in
       #minecraft = 114; # unused
       vault = 115;
       #ripped = 116; # unused
-      #murmur = 117; # unused
+      murmur = 117;
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
@@ -497,7 +498,7 @@ in
       #consul = 145; # unused
       mailpile = 146;
       redmine = 147;
-      seeks = 148;
+      #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
       systemd-network = 152;
@@ -622,7 +623,7 @@ in
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2020-08-21
       yarn = 294;
       hdfs = 295;
       mapred = 296;
@@ -647,6 +648,7 @@ in
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
+      shadow = 318;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

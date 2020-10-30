@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pytest
 , six
 , tqdm
@@ -19,14 +19,11 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "1.9.4";
+  version = "1.9.5";
 
-  # Can't use pypi, data files for tests missing
-  src = fetchFromGitHub {
-    owner = "jjjake";
-    repo = "internetarchive";
-    rev = "v${version}";
-    sha256 = "10xlblj21hanahsmw6lfggbrbpw08pdmvdgds1p58l8xd4fazli8";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "759053685c75e6e969d690043b82643c4016500abcbbc44e4daf52ec097a9a15";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +46,8 @@ buildPythonPackage rec {
   checkPhase = ''
     LC_ALL=en_US.utf-8 pytest tests
   '';
+
+  pythonImportsCheck = [ "internetarchive" ];
 
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";

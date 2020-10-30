@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto, darwin
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
@@ -17,29 +17,38 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.3.0";
+  version = "6.6.0";
 
   src =
     if buildFromTarball then
       fetchurl {
-        url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "1xcng497hs1gary3pz3fp590a4r1kqs4d0d8k5p370j0scw981kl";
+        url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
+        sha256 = "1y8y13zvh820f4b15287wb77wq7ra7kbfnpblzhm1dki5pfjvrcl";
       }
     else
       fetchgit {
-        url = "git://libvirt.org/libvirt.git";
+        url = "https://gitlab.com/libvirt/libvirt.git";
         rev = "v${version}";
-        sha256 = "129b3p72jlb40dsidak3nvpssv75xx2v99y63gzp5k074fp8y8x4";
+        sha256 = "09hsbm2qmx0jfmm418rf5lx374g85bwgg0kzlga62x5180jhsssn";
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig docutils ] ++ optionals (!buildFromTarball) [ autoreconfHook ];
+  nativeBuildInputs = [
+    makeWrapper pkgconfig docutils
+  ] ++ optionals (!buildFromTarball) [
+    autoreconfHook
+  ] ++ optional (!stdenv.isDarwin) [
+    rpcsvc-proto
+  ] ++ optionals stdenv.isDarwin [
+    darwin.developer_cmds # needed for rpcgen
+  ];
+
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl attr parted
+    libapparmor libcap_ng numactl attr parted libtirpc
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
   ] ++ optionals enableIscsi [
@@ -65,7 +74,7 @@ in stdenv.mkDerivation rec {
   dontAddDisableDepTrack = true;
 
   configureFlags = [
-    "--with-runstatedir=/run" # TODO: remove when autoconf 1.70 is released
+    "--with-runstatedir=/run" # TODO: remove when autoconf 2.70 is released
     "--localstatedir=/var"
     "--sysconfdir=/var/lib"
     "--with-libpcap"
@@ -80,6 +89,7 @@ in stdenv.mkDerivation rec {
     "QEMU_BRIDGE_HELPER=/run/wrappers/bin/qemu-bridge-helper"
     "QEMU_PR_HELPER=/run/libvirt/nix-helpers/qemu-pr-helper"
     "EBTABLES_PATH=${ebtables}/bin/ebtables-legacy"
+    "CFLAGS=-I${libtirpc.dev}/include/tirpc"
     "--with-attr"
     "--with-apparmor"
     "--with-secdriver-apparmor"
@@ -124,10 +134,8 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
-
   meta = {
-    homepage = "http://libvirt.org/";
+    homepage = "https://libvirt.org/";
     repositories.git = "git://libvirt.org/libvirt.git";
     description = ''
       A toolkit to interact with the virtualization capabilities of recent

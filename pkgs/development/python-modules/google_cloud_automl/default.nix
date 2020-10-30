@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "0.10.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "031331fs97jpyxacwsmhig0ndidn97r288qnkrzfdvg1wxw5rdhi";
+    sha256 = "f08abe78d37fb94a3748aa43e66dae2bad52f991cc7740501a341bc6f6387fd5";
   };
 
   checkInputs = [ pandas pytest mock google_cloud_storage ];

@@ -28,10 +28,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Infer parentheses for Clojure, Lisp, and Scheme.";
+    description = "Infer parentheses for Clojure, Lisp, and Scheme";
     homepage = "https://github.com/eraserhd/parinfer-rust";
     license = licenses.isc;
     maintainers = with maintainers; [ eraserhd ];
-    platforms = platforms.all;
   };
 }

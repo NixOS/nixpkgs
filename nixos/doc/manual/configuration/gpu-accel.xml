@@ -70,34 +70,40 @@ Platform Vendor      Advanced Micro Devices, Inc.</screen>
 	Core Next</link> (GCN) GPUs are supported through the
 	<package>rocm-opencl-icd</package> package. Adding this package to
 	<xref linkend="opt-hardware.opengl.extraPackages"/> enables OpenCL
-	support. However, OpenCL Image support is provided through the
-	non-free <package>rocm-runtime-ext</package> package. This package can
-	be added to the same configuration option, but requires that
-	<varname>allowUnfree</varname> option is is enabled for nixpkgs.  Full
-	OpenCL support on supported AMD GPUs is thus enabled as follows:
+	support:
 
 	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
   rocm-opencl-icd
-  rocm-runtime-ext
 ];</programlisting>
       </para>
+    </section>
+
+    <section xml:id="sec-gpu-accel-opencl-intel">
+      <title>Intel</title>
 
       <para>
-	It is also possible to use the OpenCL Image extension without a
-	system-wide installation of the <package>rocm-runtime-ext</package>
-	package by setting the <varname>ROCR_EXT_DIR</varname> environment
-	variable to the directory that contains the extension:
-
-	<screen><prompt>$</prompt> export \
-ROCR_EXT_DIR=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A rocm-runtime-ext`/lib/rocm-runtime-ext</screen>
+       <link
+         xlink:href="https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen8">Intel
+       Gen8 and later GPUs</link> are supported by the Intel NEO OpenCL
+       runtime that is provided by the
+       <package>intel-compute-runtime</package> package. For Gen7 GPUs,
+       the deprecated Beignet runtime can be used, which is provided
+       by the <package>beignet</package> package. The proprietary Intel
+       OpenCL runtime, in the <package>intel-ocl</package> package, is
+       an alternative for Gen7 GPUs.
       </para>
 
       <para>
-	With either approach, you can verify that OpenCL Image support
-	is indeed working with the <command>clinfo</command> command:
+       The <package>intel-compute-runtime</package>, <package>beignet</package>,
+       or <package>intel-ocl</package> package can be added to
+       <xref linkend="opt-hardware.opengl.extraPackages"/> to enable OpenCL
+       support. For example, for Gen8 and later GPUs, the following
+       configuration can be used:
 
-	<screen><prompt>$</prompt> clinfo | grep Image
-  Image support      Yes</screen>
+	      <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+  intel-compute-runtime
+];</programlisting>
+
       </para>
     </section>
   </section>
@@ -177,7 +183,12 @@ GPU1:
 	be forced as follows:
 
 	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
-  <package>amdvlk</package>
+  pkgs.<package>amdvlk</package>
+];
+
+# To enable Vulkan support for 32-bit applications, also add:
+<xref linkend="opt-hardware.opengl.extraPackages32"/> = [
+  pkgs.driversi686Linux.<package>amdvlk</package>
 ];
 
 # For amdvlk
@@ -189,5 +200,64 @@ GPU1:
 </programlisting>
       </para>
     </section>
+  </section>
+
+  <section xml:id="sec-gpu-accel-common-issues">
+   <title>Common issues</title>
+
+   <section xml:id="sec-gpu-accel-common-issues-permissions">
+    <title>User permissions</title>
+
+    <para>
+     Except where noted explicitly, it should not be necessary to
+     adjust user permissions to use these acceleration APIs. In the default
+     configuration, GPU devices have world-read/write permissions
+     (<filename>/dev/dri/renderD*</filename>) or are tagged as
+     <code>uaccess</code> (<filename>/dev/dri/card*</filename>).  The
+     access control lists of devices with the <varname>uaccess</varname>
+     tag will be updated automatically when a user logs in through
+     <command>systemd-logind</command>. For example, if the user
+     <emphasis>jane</emphasis> is logged in, the access control list
+     should look as follows:
+
+     <screen><prompt>$</prompt> getfacl /dev/dri/card0
+# file: dev/dri/card0
+# owner: root
+# group: video
+user::rw-
+user:jane:rw-
+group::rw-
+mask::rw-
+other::---</screen>
+
+     If you disabled (this functionality of) <command>systemd-logind</command>,
+     you may need to add the user to the <code>video</code> group and
+     log in again.
+    </para>
+   </section>
+
+   <section xml:id="sec-gpu-accel-common-issues-mixing-nixpkgs">
+    <title>Mixing different versions of nixpkgs</title>
+
+    <para>
+     The <emphasis>Installable Client Driver</emphasis> (ICD)
+     mechanism used by OpenCL and Vulkan loads runtimes into its address
+     space using <code>dlopen</code>. Mixing an ICD loader mechanism and
+     runtimes from different version of nixpkgs may not work. For example,
+     if the ICD loader uses an older version of <package>glibc</package>
+     than the runtime, the runtime may not be loadable due to
+     missing symbols. Unfortunately, the loader will generally be quiet
+     about such issues.
+    </para>
+
+    <para>
+     If you suspect that you are running into library version mismatches
+     between an ICL loader and a runtime, you could run an application with
+     the <code>LD_DEBUG</code> variable set to get more diagnostic
+     information. For example, OpenCL can be tested with
+     <code>LD_DEBUG=files clinfo</code>, which should report missing
+     symbols.
+    </para>
+   </section>
   </section>
 </chapter>

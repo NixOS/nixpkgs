@@ -69,7 +69,7 @@ in {
         mode = "0400";
       };
 
-      system.nssModules = pkgs.sssd;
+      system.nssModules = [ pkgs.sssd ];
       system.nssDatabases = {
         group = [ "sss" ];
         passwd = [ "sss" ];
@@ -92,4 +92,6 @@ in {
     services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
     services.openssh.authorizedKeysCommandUser = "nobody";
   })];
+
+  meta.maintainers = with maintainers; [ bbigras ];
 }

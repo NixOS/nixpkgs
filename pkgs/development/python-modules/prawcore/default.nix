@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "1.4.0";
+  version = "1.5.0";
   disabled = isPy27; # see https://github.com/praw-dev/prawcore/pull/101
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf71388d869becbcbdfd90258b19d2173c197a457f2dd0bef0566b6cfb9b95a1";
+    sha256 = "1f1eafc8a65d671f9892354f73142014fbb5d3a9ee621568c662d0a354e0578b";
   };
 
   propagatedBuildInputs = [

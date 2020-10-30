@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "0.17.2";
+  version = "1.0.2";
 
   # Support added in master https://github.com/pywbem/pywbem/commit/b2f2f1a151a30355bbc6652dca69a7b30bfe941e awaiting release
   disabled = isPy37;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84dac33f77d5ff2c3d8eb42fc7de2ffb6d33f5e4954ef89db0dbf3fe646a2809";
+    sha256 = "66d8ec82d30f2b95d8b4bd51659429066c2879d3f46292561f5fdbc7fed10f3d";
   };
 
   propagatedBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
     # Wants `wbemcli` in PATH
     rm testsuite/test_wbemcli.py
-    
+
     # Disables tests that use testfixtures which is currently broken by nonbuilding zope_component
     rm testsuite/{test_logging,test_recorder,test_wbemconnection_mock}.*
   '';

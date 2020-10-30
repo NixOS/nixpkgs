@@ -1,8 +1,11 @@
 { version
+, url ? null
 , sha256_32bit ? null
 , sha256_64bit
 , settingsSha256
+, settingsVersion ? version
 , persistencedSha256
+, persistencedVersion ? version
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
@@ -11,7 +14,7 @@
 , prePatch ? ""
 , patches ? []
 , broken ? false
-}:
+}@args:
 
 { stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
 , kernel ? null, perl, nukeReferences
@@ -19,6 +22,9 @@
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
   libsOnly ? false
+, # don't include the bundled 32-bit libraries on 64-bit platforms,
+  # even if it’s in downloaded binary
+  disable32Bit ? false
 }:
 
 with stdenv.lib;
@@ -30,7 +36,7 @@ assert ! versionOlder version "391" -> stdenv.hostPlatform.system == "x86_64-lin
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
-  i686bundled = versionAtLeast version "391";
+  i686bundled = versionAtLeast version "391" && !disable32Bit;
 
   libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
     pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
@@ -43,12 +49,12 @@ let
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
+          url = args.url or "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
           sha256 = sha256_64bit;
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
+          url = args.url or "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
           sha256 = sha256_32bit;
         }
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
@@ -86,6 +92,7 @@ let
         withGtk3 = !preferGtk2;
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
+      inherit persistencedVersion settingsVersion;
     };
 
     meta = with stdenv.lib; {

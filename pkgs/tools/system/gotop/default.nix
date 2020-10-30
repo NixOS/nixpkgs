@@ -11,7 +11,12 @@ buildGoModule rec {
     sha256 = "10qfzmq1wdgpvv319khzicalix1x4fqava0wry3bzz84k5c9dabs";
   };
 
-  vendorSha256 = "1crphp41bfivfmfp3cl7pjca3ypds6mr3847msd4wvfq4g6imk55";
+  runVend = true;
+  vendorSha256 = "09vdhdgj74ifdhl6rmxddkvk7ls26jn8gswzcxf9389zkjzi7822";
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with stdenv.lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";

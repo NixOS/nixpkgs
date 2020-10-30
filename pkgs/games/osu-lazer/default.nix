@@ -13,14 +13,17 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.725.0";
+  version = "2020.925.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "0s7pgqnszz1ahjg4jni7q6009n1xpa46ndzsv179czz4xa09namf";
+    sha256 = "0838i3pdc1c44jm7mp86kvw5164w8f3faci73bzkq84g20ixwj2g";
   };
+
+  patches = [ ./bypass-tamper-detection.patch ];
+  patchFlags = [ "--binary" "-p1" ];
 
   nativeBuildInputs = [ dotnet-sdk dotnetPackages.Nuget makeWrapper ];
 
@@ -46,7 +49,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $HOME/.nuget/NuGet
     cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
 
-    dotnet restore --source nixos osu.Desktop
+    dotnet restore --source "$PWD/nixos" osu.Desktop
 
     runHook postConfigure
   '';
@@ -96,7 +99,11 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Rhythm is just a *click* away";
     homepage = "https://osu.ppy.sh";
-    license = with licenses; [ mit cc-by-nc-40 ];
+    license = with licenses; [
+      mit
+      cc-by-nc-40
+      unfreeRedistributable # osu-framework contains libbass.so in repository
+    ];
     maintainers = with maintainers; [ oxalica ];
     platforms = [ "x86_64-linux" ];
   };

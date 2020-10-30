@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
-, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
+{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap
+, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, e2fsprogs, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -9,6 +9,7 @@
 , patchelf
 , substituteAll
 , getent
+, cryptsetup, lvm2
 , buildPackages
 , perl
 , withSelinux ? false, libselinux
@@ -16,33 +17,24 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let gnupg-minimal = gnupg.override {
-  enableMinimal = true;
-  guiSupport = false;
-  pcsclite = null;
-  sqlite = null;
-  pinentry = null;
-  adns = null;
-  gnutls = null;
-  libusb1 = null;
-  openldap = null;
-  readline = null;
-  zlib = null;
-  bzip2 = null;
-};
+let
+  version = "246.6";
 in stdenv.mkDerivation {
-  version = "245.6";
+  inherit version;
   pname = "systemd";
 
-  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
-  # Also fresh patches should be cherry-picked from that tree to our current one.
+  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
+  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
-    rev = "aa0cb635f1f6a4d9b50ed2cca7782f3f751be933";
-    sha256 = "191f0r1g946bsqxky00z78wygsxi9pld11y2q4374bshnpsff2ll";
+    rev = "v${version}";
+    sha256 = "1yhj2jlighqqpw1xk9q52f3pncjn47ipi224k35d6syb94q2b988";
   };
 
+  # If these need to be regenerated, `git am path/to/00*.patch` them into a
+  # systemd worktree, rebase to the more recent systemd version, and export the
+  # patches again via `git format-patch v${version}`.
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
@@ -62,6 +54,7 @@ in stdenv.mkDerivation {
     ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0019-revert-get-rid-of-seat_can_multi_session.patch
   ];
 
   postPatch = ''
@@ -75,7 +68,7 @@ in stdenv.mkDerivation {
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
   '';
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
     [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
@@ -89,7 +82,7 @@ in stdenv.mkDerivation {
     ];
   buildInputs =
     [ linuxHeaders libcap curl.dev kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
+      cryptsetup libuuid glib libgcrypt libgpgerror libidn2
       pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
       stdenv.lib.optional withLibseccomp libseccomp ++
@@ -105,7 +98,6 @@ in stdenv.mkDerivation {
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
     "-Drootprefix=${placeholder "out"}"
-    "-Drootlibdir=${placeholder "lib"}/lib"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
     "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
@@ -176,12 +168,28 @@ in stdenv.mkDerivation {
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c units/systemd-logind.service.in units/systemd-nspawn@.service.in; do
+    for i in \
+      src/core/mount.c \
+      src/core/swap.c \
+      src/cryptsetup/cryptsetup-generator.c \
+      src/fsck/fsck.c \
+      src/journal/cat.c \
+      src/nspawn/nspawn.c \
+      src/remount-fs/remount-fs.c \
+      src/shared/generator.c \
+      src/shutdown/shutdown.c \
+      units/emergency.service.in \
+      units/rescue.service.in \
+      units/systemd-logind.service.in \
+      units/systemd-nspawn@.service.in; \
+    do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
+        --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
         --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
         --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/mke2fs ${lib.getBin e2fsprogs}/sbin/mke2fs \
         --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
@@ -197,7 +205,7 @@ in stdenv.mkDerivation {
 
     # absolute paths to gpg & tar
     substituteInPlace src/import/pull-common.c \
-      --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
+      --replace '"gpg"' '"${gnupg}/bin/gpg"'
     for file in src/import/{{export,import,pull}-tar,import-common}.c; do
       substituteInPlace $file \
         --replace '"tar"' '"${gnutar}/bin/tar"'
@@ -258,37 +266,9 @@ in stdenv.mkDerivation {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
-
-    # Keep only libudev and libsystemd in the lib output.
-    mkdir -p $out/lib
-    mv $lib/lib/security $lib/lib/libnss* $out/lib/
   ''; # */
 
   enableParallelBuilding = true;
-
-  # On aarch64 we "leak" a reference to $out/lib/systemd/catalog in the lib
-  # output. The result of that is a dependency cycle between $out and $lib.
-  # Thus nix (rightfully) marks the build as failed. That reference originates
-  # from an array of strings (catalog_file_dirs) in systemd
-  # (src/src/journal/catalog.{c,h}).  The only consumer (as of v242) of the
-  # symbol is the main function of journalctl.  Still libsystemd.so contains
-  # the VALUE but not the symbol.  Systemd seems to be properly using function
-  # & data sections together with the linker flags to garbage collect unused
-  # sections (-Wl,--gc-sections).  For unknown reasons those flags do not
-  # eliminate the unused string constants, in this case on aarch64-linux. The
-  # hacky way is to just remove the reference after we finished compiling.
-  # Since it can not be used (there is no symbol to actually refer to it) there
-  # should not be any harm.  It is a bit odd and I really do not like starting
-  # these kind of hacks but there doesn't seem to be a straight forward way at
-  # this point in time.
-  # The reference will be replaced by the same reference the usual nukeRefs
-  # tooling uses.  The standard tooling can not / should not be uesd since it
-  # is a bit too excessive and could potentially do us some (more) harm.
-  postFixup = ''
-    nukedRef=$(echo $out | sed -e "s,$NIX_STORE/[^-]*-\(.*\),$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-\1,")
-    cat $lib/lib/libsystemd.so | perl -pe "s|$out/lib/systemd/catalog|$nukedRef/lib/systemd/catalog|" > $lib/lib/libsystemd.so.tmp
-    mv $lib/lib/libsystemd.so.tmp $(readlink -f $lib/lib/libsystemd.so)
-  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

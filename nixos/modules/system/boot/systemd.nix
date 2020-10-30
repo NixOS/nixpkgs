@@ -25,7 +25,7 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
-      #"cryptsetup.target"
+      "cryptsetup.target"
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -73,17 +73,13 @@ let
       "systemd-journald.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
-      "systemd-journald-audit.socket"
+      ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 
       # Coredumps.
       "systemd-coredump.socket"
       "systemd-coredump@.service"
-
-      # SysV init compatibility.
-      "systemd-initctl.socket"
-      "systemd-initctl.service"
 
       # Kernel module loading.
       "systemd-modules-load.service"
@@ -101,7 +97,7 @@ let
       "dev-hugepages.mount"
       "dev-mqueue.mount"
       "sys-fs-fuse-connections.mount"
-      "sys-kernel-config.mount"
+      ] ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount") ++ [
       "sys-kernel-debug.mount"
 
       # Maintaining state across reboots.
@@ -261,7 +257,7 @@ let
               pkgs.gnused
               systemd
             ];
-          environment.PATH = config.path;
+          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre =
@@ -354,6 +350,7 @@ let
           [Socket]
           ${attrsToSection def.socketConfig}
           ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
         '';
     };
 
@@ -906,11 +903,9 @@ in
       )
       ]);
       passwd = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
       group = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
     };
@@ -1013,16 +1008,18 @@ in
 
       "tmpfiles.d".source = (pkgs.symlinkJoin {
         name = "tmpfiles.d";
-        paths = cfg.tmpfiles.packages;
+        paths = map (p: p + "/lib/tmpfiles.d") cfg.tmpfiles.packages;
         postBuild = ''
           for i in $(cat $pathsPath); do
-            (test -d $i/lib/tmpfiles.d && test $(ls $i/lib/tmpfiles.d/*.conf | wc -l) -ge 1) || (
-              echo "ERROR: The path $i was passed to systemd.tmpfiles.packages but either does not contain the folder lib/tmpfiles.d or if it contains that folder, there are no files ending in .conf in it."
+            (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
+              echo "ERROR: The path '$i' from systemd.tmpfiles.packages contains no *.conf files."
               exit 1
             )
           done
-        '';
-      }) + "/lib/tmpfiles.d";
+        '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
+          rm -f $out/${removePrefix "tmpfiles.d/" name}
+        '') config.system.build.etc.targets;
+      }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };

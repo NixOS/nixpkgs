@@ -105,17 +105,6 @@ symlinkJoin {
         --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
     fi
 
-    # ghcide and haskell-language-server do package discovery without calling our ghc wrapper.
-    for prg in ghcide haskell-language-server; do
-      if [[ -x "$out/bin/$prg" ]]; then
-        wrapProgram $out/bin/$prg  \
-          --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
-          --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
-          --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
-          --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
-      fi
-    done
-
   '' + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS) ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="$out/lib/${ghc.name}/package.conf.d";

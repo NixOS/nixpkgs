@@ -1,15 +1,17 @@
 { buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
 
 let
-  humioCtlVersion = "0.26.0";
-  sha256 = "1j33hmvhkb546dbi2qd5hmpcv715yg9rnpxicc1mayr9f1i2aj2i";
-  vendorSha256 = "1l2wa4w43srfrkb4qrgiyzdb6bnaqvp9g3fnrln6bhrcw6jsgj4z";
+  humioCtlVersion = "0.27.0";
+  sha256 = "1h65g10dxcaw4wk0gyyyqj9f94xlphj30lp9w6rsfrk4pi3irzr4";
+  vendorSha256 = "0anvah2rpqvxgmdrdj73k3vbf8073nmsl3aykgvb1nraf3gz3bpk";
 in buildGoModule {
     name = "humioctl-${humioCtlVersion}";
     pname = "humioctl";
     version = humioCtlVersion;
 
     vendorSha256 = vendorSha256;
+
+    doCheck = false;
 
     src = fetchFromGitHub {
       owner = "humio";

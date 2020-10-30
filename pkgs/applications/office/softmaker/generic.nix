@@ -7,6 +7,9 @@
   # product unlocking.
 , coreutils, libredirect
 
+  # Extra utilities used by the SoftMaker applications.
+, gnugrep, utillinux, which
+
 , pname, version, edition, suiteName, src, archive
 
 , ...
@@ -59,13 +62,17 @@ in stdenv.mkDerivation {
     # procedure fails. This works around that by rewriting /bin/ls
     # to the proper path.
     #
+    # In addition, it expects some common utilities (which, whereis)
+    # to be in the path.
+    #
     # SoftMaker Office restarts itself upon some operations, such
     # changing the theme and unlocking. Unfortunately, we do not
     # have control over its environment then and it will fail
     # with an error.
-    lsIntercept = ''
+    extraWrapperArgs = ''
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-      --set NIX_REDIRECTS "/bin/ls=${coreutils}/bin/ls"
+      --set NIX_REDIRECTS "/bin/ls=${coreutils}/bin/ls" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ coreutils gnugrep utillinux which ]}"
     '';
   in ''
     runHook preInstall
@@ -77,11 +84,11 @@ in stdenv.mkDerivation {
     # their resource path.
     mkdir -p $out/bin
     makeWrapper $out/share/${pname}${edition}/planmaker $out/bin/${pname}-planmaker \
-      ${lsIntercept}
+      ${extraWrapperArgs}
     makeWrapper $out/share/${pname}${edition}/presentations $out/bin/${pname}-presentations \
-      ${lsIntercept}
+      ${extraWrapperArgs}
     makeWrapper $out/share/${pname}${edition}/textmaker $out/bin/${pname}-textmaker \
-      ${lsIntercept}
+      ${extraWrapperArgs}
 
     for size in 16 32 48 64 96 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps

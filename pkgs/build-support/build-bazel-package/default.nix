@@ -9,7 +9,7 @@ let
 in
 
 args@{
-  name
+  name ? "${args.pname}-${args.version}"
 , bazel ? bazelPkg
 , bazelFlags ? []
 , bazelBuildFlags ? []
@@ -37,6 +37,12 @@ args@{
 # Debian-specific /usr/share/java paths, but doesn't in the configured build).
 , fetchConfigured ? false
 
+# Don’t add Bazel --copt and --linkopt from NIX_CFLAGS_COMPILE /
+# NIX_LDFLAGS. This is necessary when using a custom toolchain which
+# Bazel wants all headers / libraries to come from, like when using
+# CROSSTOOL. Weirdly, we can still get the flags through the wrapped
+# compiler.
+, dontAddBazelOpts ? false
 , ...
 }:
 
@@ -170,6 +176,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
     done
   '' + fBuildAttrs.preConfigure or "";
 
+  inherit dontAddBazelOpts;
+
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
@@ -181,20 +189,22 @@ in stdenv.mkDerivation (fBuildAttrs // {
     #
     copts=()
     host_copts=()
-    for flag in $NIX_CFLAGS_COMPILE; do
-      copts+=( "--copt=$flag" )
-      host_copts+=( "--host_copt=$flag" )
-    done
-    for flag in $NIX_CXXSTDLIB_COMPILE; do
-      copts+=( "--copt=$flag" )
-      host_copts+=( "--host_copt=$flag" )
-    done
     linkopts=()
     host_linkopts=()
-    for flag in $NIX_LDFLAGS; do
-      linkopts+=( "--linkopt=-Wl,$flag" )
-      host_linkopts+=( "--host_linkopt=-Wl,$flag" )
-    done
+    if [ -z "''${dontAddBazelOpts:-}" ]; then
+      for flag in $NIX_CFLAGS_COMPILE; do
+        copts+=( "--copt=$flag" )
+        host_copts+=( "--host_copt=$flag" )
+      done
+      for flag in $NIX_CXXSTDLIB_COMPILE; do
+        copts+=( "--copt=$flag" )
+        host_copts+=( "--host_copt=$flag" )
+      done
+      for flag in $NIX_LDFLAGS; do
+        linkopts+=( "--linkopt=-Wl,$flag" )
+        host_linkopts+=( "--host_linkopt=-Wl,$flag" )
+      done
+    fi
 
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \

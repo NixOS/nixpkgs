@@ -24,8 +24,6 @@
 # This is useful if any dependency contain C files.
 , runVend ? false
 
-, modSha256 ? null
-
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -48,10 +46,6 @@ let
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
-
-  deleteFlag = if deleteVendor then "true" else "false";
-
-  vendCommand = if runVend then "${vend}/bin/vend" else "false";
 
   go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
 
@@ -83,22 +77,26 @@ let
 
     buildPhase = args.modBuildPhase or ''
       runHook preBuild
-
-      if [ ${deleteFlag} == "true" ]; then
+    '' + lib.optionalString (deleteVendor == true) ''
+      if [ ! -d vendor ]; then
+        echo "vendor folder does not exist, 'deleteVendor' is not needed"
+        exit 10
+      else
         rm -rf vendor
       fi
-
-      if [ -e vendor ]; then
-        echo "vendor folder exists, please set 'vendorSha256=null;' or 'deleteVendor=true;' in your expression"
+    '' + ''
+      if [ -d vendor ]; then
+        echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
         exit 10
       fi
 
-      if [ ${vendCommand} != "false" ]; then
-        echo running vend to rewrite vendor folder
-        ${vendCommand}
-      else
-        go mod vendor
-      fi
+    ${if runVend then ''
+      echo "running 'vend' to rewrite vendor folder"
+      ${vend}/bin/vend
+    '' else ''
+      go mod vendor
+    ''}
+
       mkdir -p vendor
 
       runHook postBuild
@@ -210,7 +208,7 @@ let
       runHook postBuild
     '';
 
-    doCheck = args.doCheck or false;
+    doCheck = args.doCheck or true;
     checkPhase = args.checkPhase or ''
       runHook preCheck
 
@@ -232,7 +230,7 @@ let
     '';
 
     preFixup = (args.preFixup or "") + ''
-      find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/{bin,libexec,lib} -type f 2>/dev/null | xargs -r ${removeExpr removeReferences} || true
     '';
 
     strictDeps = true;
@@ -252,8 +250,5 @@ let
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"
-else if modSha256 != null then
-  lib.warn "modSha256 is deprecated and will be removed in the next release (20.09), use vendorSha256 instead" (
-    import ./old.nix { inherit go cacert git lib removeReferencesTo stdenv; } args')
 else
   package

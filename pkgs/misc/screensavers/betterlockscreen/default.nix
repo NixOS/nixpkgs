@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    description = "Betterlockscreen is a simple minimal lock screen which allows you to cache images with different filters and lockscreen with blazing speed.";
+    description = "A simple minimal lock screen which allows you to cache images with different filters and lockscreen with blazing speed";
     homepage = "https://github.com/pavanjadhaw/betterlockscreen";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.1.3";
+  version = "4.1.5";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c88d973c6423fe0017818482a98163bb72e7f6a8c3127ff464930109df0958d9";
+    sha256 = "d467f020b694193873a237ce6744ae36bd5a59f4d2b7ffbeb15dda68b03f5aa1";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
@@ -42,7 +42,10 @@ buildPythonPackage rec {
     # remove dependency on pyqtwebengine
     # this is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
-    substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
+    substituteInPlace setup.py \
+      --replace "pyqt5<5.13" "pyqt5" \
+      --replace "parso==0.7.0" "parso" \
+      --replace "jedi==0.17.1" "jedi"
   '';
 
   postInstall = ''
@@ -69,7 +72,9 @@ buildPythonPackage rec {
       environment for the Python language with advanced editing, interactive
       testing, debugging and introspection features.
     '';
-    homepage = "https://github.com/spyder-ide/spyder/";
+    homepage = "https://www.spyder-ide.org/";
+    downloadPage = "https://github.com/spyder-ide/spyder/releases";
+    changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];

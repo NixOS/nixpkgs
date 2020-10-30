@@ -63,8 +63,8 @@ in {
     fsType = "ext4";
     configFile = pkgs.writeText "configuration.nix"
       ''
-        {
-          imports = [ <nixpkgs/nixos/modules/virtualisation/amazon-image.nix> ];
+        { modulesPath, ... }: {
+          imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
           ${optionalString config.ec2.hvm ''
             ec2.hvm = true;
           ''}

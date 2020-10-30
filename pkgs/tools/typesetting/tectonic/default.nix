@@ -3,30 +3,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.1.12";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
-    rev = "v${version}";
-    sha256 = "0dycv135bkpf71iwlwh8rwwvn287d605nl7v8mjxlrsayiivdmn9";
+    rev = "tectonic@${version}";
+    sha256 = "+kHp5qy0lzT5sLoxC1tlW6oaKZ11vQF+30zW0wXlQBU=";
   };
 
-  cargoSha256 = "1axrf7d01gmhvrap13rydfvwcsg0lk1zw7z1i7zzm898bc7c02qn";
+  cargoSha256 = "bsuNHqr/8OTG3LXd+PYPKsXEBpbcwxP4A7SEqLYNKU0=";
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
     ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
-  # tests fail due to read-only nix store
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
     homepage = "https://tectonic-typesetting.github.io/";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.lluchs ];
-    platforms = platforms.all;
+    maintainers = [ maintainers.lluchs maintainers.doronbehar ];
   };
 }

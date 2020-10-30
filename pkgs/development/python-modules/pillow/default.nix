@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "Pillow";
-  version = "7.1.2";
+  version = "7.2.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pdh1zzdwxilvsjg6rnl4q810pc2p2y16q6lx9gzzihb25h9kd50";
+    sha256 = "97f9e7953a77d5a70f49b9a48da7776dc51e9b738151b22dacf101641594a626";
   };
 
   # Disable imagefont tests, because they don't work well with infinality:

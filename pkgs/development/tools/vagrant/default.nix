@@ -5,9 +5,9 @@
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.9";
+  version = "2.2.10";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "0fbickjjliaw3cpkh3pl9bp56b2gcqn87c5ag67amc450ah43rdq";
+  sha256 = "07wlj4m79m9li3za1jkk4imdhqwpca86qz3c0h706s0w8cmv4bbj";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -54,13 +54,6 @@ in buildRubyGem rec {
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
-
-    # fix deprecation warning on ruby 2.6.5.
-    # See also https://github.com/hashicorp/vagrant/pull/11307
-    (fetchpatch {
-      url = "https://github.com/hashicorp/vagrant/commit/d18ed567aaa5da23c9e91ab87f360e7bf6760f13.patch";
-      sha256 = "0f61qj41rc3fdggmnha4jrqg4pzmfiriwpsz4fcgf7c0bx6qha7q";
-    })
   ];
 
   postPatch = ''

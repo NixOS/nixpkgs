@@ -74,7 +74,7 @@ let
       throw "Non-EFI boot methods are only supported on i686 / x86_64"
     else ''
       def assemble_qemu_flags():
-          flags = "-cpu host"
+          flags = "-cpu max"
           ${if system == "x86_64-linux"
             then ''flags += " -m 768"''
             else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
@@ -285,7 +285,7 @@ let
           ];
 
           virtualisation.diskSize = 8 * 1024;
-          virtualisation.memorySize = 1024;
+          virtualisation.memorySize = 1536;
 
           # Use a small /dev/vdb as the root disk for the
           # installer. This ensures the target disk (/dev/vda) is
@@ -633,10 +633,10 @@ in {
           + " mklabel msdos"
           + " mkpart primary ext2 1M 100MB"  # /boot
           + " mkpart extended 100M -1s"
-          + " mkpart logical 102M 2102M"  # md0 (root), first device
-          + " mkpart logical 2103M 4103M"  # md0 (root), second device
-          + " mkpart logical 4104M 4360M"  # md1 (swap), first device
-          + " mkpart logical 4361M 4617M",  # md1 (swap), second device
+          + " mkpart logical 102M 3102M"  # md0 (root), first device
+          + " mkpart logical 3103M 6103M"  # md0 (root), second device
+          + " mkpart logical 6104M 6360M"  # md1 (swap), first device
+          + " mkpart logical 6361M 6617M",  # md1 (swap), second device
           "udevadm settle",
           "ls -l /dev/vda* >&2",
           "cat /proc/partitions >&2",
@@ -799,7 +799,7 @@ in {
           "btrfs subvol create /mnt/badpath/boot",
           "btrfs subvol create /mnt/nixos",
           "btrfs subvol set-default "
-          + "$(btrfs subvol list /mnt | grep 'nixos' | awk '{print \$2}') /mnt",
+          + "$(btrfs subvol list /mnt | grep 'nixos' | awk '{print $2}') /mnt",
           "umount /mnt",
           "mount -o defaults LABEL=root /mnt",
           "mkdir -p /mnt/badpath/boot",  # Help ensure the detection mechanism

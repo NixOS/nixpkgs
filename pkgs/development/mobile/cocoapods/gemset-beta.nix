@@ -63,15 +63,15 @@
     version = "1.0.3";
   };
   cocoapods = {
-    dependencies = ["activesupport" "addressable" "claide" "cocoapods-core" "cocoapods-deintegrate" "cocoapods-downloader" "cocoapods-plugins" "cocoapods-search" "cocoapods-trunk" "cocoapods-try" "colored2" "escape" "fourflusher" "gh_inspector" "molinillo" "nap" "ruby-macho" "xcodeproj"];
+    dependencies = ["addressable" "claide" "cocoapods-core" "cocoapods-deintegrate" "cocoapods-downloader" "cocoapods-plugins" "cocoapods-search" "cocoapods-trunk" "cocoapods-try" "colored2" "escape" "fourflusher" "gh_inspector" "molinillo" "nap" "ruby-macho" "xcodeproj"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mx6gzs1d9za7crgwmk37ybmn395055kzya88iamgcj3yzvv3sqg";
+      sha256 = "0jf5q75h410b6gymy86j4zy9yhb6n28wa7hrk8p7y2dsafdzbric";
       type = "gem";
     };
-    version = "1.10.0.beta.1";
+    version = "1.10.0.beta.2";
   };
   cocoapods-core = {
     dependencies = ["activesupport" "addressable" "algoliasearch" "concurrent-ruby" "fuzzy_match" "nap" "netrc" "public_suffix" "typhoeus"];
@@ -79,10 +79,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1ibc5sx2iqjwrgmd4y2cq6hyd6s37aqyh2w61vw71ap8khcjnwh4";
+      sha256 = "0vrw6v5fp0m903ghvfwaw3mbxrr68x7hz9bj34rj4icirwp4ifyl";
       type = "gem";
     };
-    version = "1.10.0.beta.1";
+    version = "1.10.0.beta.2";
   };
   cocoapods-deintegrate = {
     groups = ["default"];
@@ -161,10 +161,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "094387x4yasb797mv07cs3g6f08y56virc2rjcpb1k79rzaj3nhl";
+      sha256 = "1vnxrbhi7cq3p4y2v9iwd10v1c7l15is4var14hwnb2jip4fyjzz";
       type = "gem";
     };
-    version = "1.1.6";
+    version = "1.1.7";
   };
   escape = {
     groups = ["default"];
@@ -366,9 +366,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mv5rsbgwq4vzri31w2f1474arrsr5j69rdhklrci6jnjps8dmx9";
+      sha256 = "18idiqfbvyrcyflccwy4qw125psckrnqy7ggci33m8f3zs8h7hnm";
       type = "gem";
     };
-    version = "1.17.1";
+    version = "1.18.0";
   };
 }

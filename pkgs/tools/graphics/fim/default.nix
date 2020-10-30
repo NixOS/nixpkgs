@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoconf, automake, pkgconfig
 , perl, flex, bison, readline, libexif
 , x11Support ? true, SDL
-, svgSupport ? true, inkscape_0
+, svgSupport ? true, inkscape
 , asciiArtSupport ? true, aalib
 , gifSupport ? true, giflib
 , tiffSupport ? true, libtiff
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
     [ perl flex bison readline libexif ]
     ++ optional x11Support SDL
-    ++ optional svgSupport inkscape_0
+    ++ optional svgSupport inkscape
     ++ optional asciiArtSupport aalib
     ++ optional gifSupport giflib
     ++ optional tiffSupport libtiff

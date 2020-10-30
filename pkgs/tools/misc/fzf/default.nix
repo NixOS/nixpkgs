@@ -1,23 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.22.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "0n0cy5q2r3dm1a3ivlzrv9c5d11awxlqim5b9x8zc85dlr73n35l";
+    sha256 = "03f9fdqicw1a2hcjiasya0dq72jvdz6fqw7dfig4kv5l14pwf3v9";
   };
 
-  vendorSha256 = "1c2iz28hjrw9rig9a6r27wd8clycdhi8fgs3da91c63w4qi140zm";
+  vendorSha256 = "0dd0qm1fxp3jnlrhfaas8fw87cj7rygaac35a9nk3xh2xsk7q35p";
 
   outputs = [ "out" "man" ];
 
   fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
+
+  buildFlagsArray = [
+    "-ldflags=-s -w -X main.version=${version} -X main.revision=${src.rev}"
+  ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
   patchPhase = ''
@@ -27,9 +31,14 @@ buildGoModule rec {
         echo "Failed to replace vim base_dir path with $out"
         exit 1
     fi
-  '';
 
-  doCheck = true;
+    # Has a sneaky dependency on perl
+    # Include first args to make sure we're patching the right thing
+    substituteInPlace shell/key-bindings.zsh \
+      --replace " perl -ne " " ${perl}/bin/perl -ne "
+    substituteInPlace shell/key-bindings.bash \
+      --replace " perl -n " " ${perl}/bin/perl -n "
+  '';
 
   preInstall = ''
     mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}

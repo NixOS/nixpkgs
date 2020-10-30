@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, perl, pandoc, python2Packages, git
+, perl, pandoc, python3Packages, git
 , par2cmdline ? null, par2Support ? true
 }:
 
 assert par2Support -> par2cmdline != null;
 
-let version = "0.30.1"; in
+let version = "0.31"; in
 
 with stdenv.lib;
 
@@ -17,12 +17,12 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    sha256 = "0z9rpmmi6mbm48ynd6izr0f8l3cklfyar6gjy0c8z9zal1ac9r55";
+    sha256 = "03kmmdlgg0p5z39bhckkf91mmq55wghb93ghqvv9f9gaby1diw4z";
   };
 
   buildInputs = [
     git
-    (python2Packages.python.withPackages
+    (python3Packages.python.withPackages
       (p: with p; [ setuptools tornado ]
         ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
   ];

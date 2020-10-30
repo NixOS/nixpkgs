@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/raftario/licensor";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 }

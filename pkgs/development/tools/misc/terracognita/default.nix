@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1dmv16v1c9sydbl1g69pgwvrhznd0a133giwrcbqi4cyg1fdb3sr";
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/cycloidio/terracognita/cmd.Version=${version}" ];

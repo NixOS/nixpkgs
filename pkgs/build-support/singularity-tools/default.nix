@@ -86,7 +86,9 @@ rec {
             done
 
             # Create runScript and link shell
-            ln -s ${runtimeShell} bin/sh
+            if [ ! -e bin/sh ]; then
+              ln -s ${runtimeShell} bin/sh
+            fi
             mkdir -p .singularity.d
             ln -s ${runScriptFile} .singularity.d/runscript
 

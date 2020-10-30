@@ -25,6 +25,5 @@ buildGoPackage rec {
     description = "Linter for Go source code";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jhillyerd ];
-    platforms = platforms.all;
   };
 }

@@ -4,14 +4,14 @@
 # `programs.zsh.interactiveShellInit = "source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh";`
 
 stdenv.mkDerivation rec {
-  pname = "zsh-nix-shell-unstable";
-  version = "2019-12-20";
+  pname = "zsh-nix-shell";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "chisui";
     repo = "zsh-nix-shell";
-    rev = "a65382a353eaee5a98f068c330947c032a1263bb";
-    sha256 = "0l41ac5b7p8yyjvpfp438kw7zl9dblrpd7icjg1v3ig3xy87zv0n";
+    rev = "v${version}";
+    sha256 = "0snhch9hfy83d4amkyxx33izvkhbwmindy0zjjk28hih1a9l2jmx";
   };
 
   installPhase = ''

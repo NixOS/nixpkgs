@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "13.5.7";
+  version = "13.7.9";
 
   src = fetchurl {
     url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    sha256 = "1b2sb44zsa6g5nnsa7drn4fn61jfz3a3g3bisai85fyjff746ipc";
+    sha256 = "1h0baxh9gvshdfqb77x5m8v95lw4lw4djj3gwrna0jjpfhmcs4vq";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
   ];
 
   dontBuild = true;

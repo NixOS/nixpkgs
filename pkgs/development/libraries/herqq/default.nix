@@ -1,11 +1,11 @@
-{ stdenv, qt5, unzip, fetchFromGitHub, qtmultimedia }:
+{ stdenv, unzip, fetchFromGitHub, qmake, qtmultimedia, qtbase }:
 
 stdenv.mkDerivation rec {
   version = "2.1.0";
   pname = "herqq";
 
-  nativeBuildInputs = [ qt5.qmake ];
-  buildInputs = [ qt5.qtbase unzip qtmultimedia ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase unzip qtmultimedia ];
   preConfigure = "cd herqq";
 
   src = fetchFromGitHub {

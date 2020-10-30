@@ -24,9 +24,8 @@ let
       ./runtime-vardirs.patch
     ];
 
-    # Disable MD5 verification for pjsip
     postPatch = ''
-      sed -i 's|$(verify_tarball)|true|' third-party/pjproject/Makefile
+      echo "PJPROJECT_CONFIG_OPTS += --prefix=$out" >> third-party/pjproject/Makefile.rules
     '';
 
     src = fetchurl {
@@ -51,6 +50,7 @@ let
 
       chmod -w externals_cache
     '';
+
     configureFlags = [
       "--libdir=\${out}/lib"
       "--with-lua=${lua}/lib"
@@ -68,6 +68,7 @@ let
     postInstall = ''
       # Install sample configuration files for this version of Asterisk
       make samples
+      ${lib.optionalString (lib.versionAtLeast version "17.0.0") "make install-headers"}
     '';
 
     meta = with stdenv.lib; {
@@ -78,14 +79,9 @@ let
     };
   };
 
-  pjproject_2_7_1 = fetchurl {
-    url = "https://www.pjsip.org/release/2.7.1/pjproject-2.7.1.tar.bz2";
-    sha256 = "09ii5hgl5s7grx4fiimcl3s77i385h7b3kwpfa2q0arbl1ibryjr";
-  };
-
-  pjproject_2_8 = fetchurl {
-    url = "https://www.pjsip.org/release/2.8/pjproject-2.8.tar.bz2";
-    sha256 = "0ybg0113rp3fk49rm2v0pcgqb28h3dv1pdy9594w2ggiz7bhngah";
+  pjproject_2_10 = fetchurl {
+    url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.10/pjproject-2.10.tar.bz2";
+    sha256 = "14qmddinm4bv51rl0wwg5133r64x5bd6inwbx27ahb2n0151m2if";
   };
 
   mp3-202 = fetchsvn {
@@ -95,61 +91,42 @@ let
   };
 
 in rec {
-  # Supported releases (as of 2018-11-20).
+  # Supported releases (as of 2020-10-07).
+  # Source: https://wiki.asterisk.org/wiki/display/AST/Asterisk+Versions
+  # Exact version can be found at https://www.asterisk.org/downloads/asterisk/all-asterisk-versions/
   #
   # Series  Type       Rel. Date   Sec. Fixes  EOL
   # 13.x    LTS        2014-10-24  2020-10-24  2021-10-24
-  # 15.x    Standard   2017-10-03  2018-10-03  2019-10-03
-  asterisk-stable = asterisk_15;
   # 16.x    LTS        2018-10-09  2022-10-09  2023-10-09
   asterisk-lts = asterisk_16;
-  asterisk = asterisk_16;
+  # 17.x    Standard   2019-10-28  2020-10-28  2021-10-28
+  asterisk-stable = asterisk_17;
+  asterisk = asterisk_17;
 
   asterisk_13 = common {
-    version = "13.24.1";
-    sha256 = "1mclpk7knqjl6jr6mpvhb17wsjah4bk2xqhb3shpx1j4z19xkmm3";
+    version = "13.37.0";
+    sha256 = "09wc6cqh4f15wm62drzdppwvh7nwgnbwapvz1kgb0qdgixsshn3v";
     externals = {
-      "externals_cache/pjproject-2.7.1.tar.bz2" = pjproject_2_7_1;
-      "addons/mp3" = mp3-202;
-    };
-  };
-
-  asterisk_15 = common {
-    version = "15.7.0";
-    sha256 = "1ngs73h4lz94b4f3shy1yb5laqy0z03zf451xa1nihrgp1h3ilyv";
-    externals = {
-      "externals_cache/pjproject-2.8.tar.bz2" = pjproject_2_8;
+      "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
     };
   };
 
   asterisk_16 = common {
-    version = "16.1.1";
-    sha256 = "19bfvqmxphk2608jx7jghfy7rdbj1qj5vw2fyb0fq4xjvx919wmv";
+    version = "16.14.0";
+    sha256 = "1y120p4jlhg4iwihdxlk64y3y3n8w7y785lwqxsyqg6zviz0ghx6";
     externals = {
-      "externals_cache/pjproject-2.8.tar.bz2" = pjproject_2_8;
+      "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
     };
   };
 
-  #asterisk-git = common {
-  #  version = "15-pre";
-  #  sha256 = "...";
-  #  externals = {
-  #    "externals_cache/pjproject-2.5.5.tar.bz2" = pjproject-255;
-  #    # Note that these sounds are included with the release tarball. They are
-  #    # provided here verbatim for the convenience of anyone wanting to build
-  #    # Asterisk from other sources. Include in externals.
-  #    "sounds/asterisk-core-sounds-en-gsm-1.5.tar.gz" = fetchurl {
-  #      url = "http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz";
-  #      sha256 = "01xzbg7xy0c5zg7sixjw5025pvr4z64kfzi9zvx19im0w331h4cd";
-  #    };
-  #    "sounds/asterisk-moh-opsound-wav-2.03.tar.gz" = fetchurl {
-  #      url = "http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-moh-opsound-wav-2.03.tar.gz";
-  #      sha256 = "449fb810d16502c3052fedf02f7e77b36206ac5a145f3dacf4177843a2fcb538";
-  #    };
-  #    # TODO: Sounds for other languages could be added here
-  #  }
-  #}.overrideDerivation (_: {src = fetchgit {...}})
-
+  asterisk_17 = common {
+    version = "17.8.0";
+    sha256 = "0xhwh8s8n8xg43gcdkqjj484assva7lm5ah1b306a5nf6j8p9bjy";
+    externals = {
+      "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
+      "addons/mp3" = mp3-202;
+    };
+  };
 }

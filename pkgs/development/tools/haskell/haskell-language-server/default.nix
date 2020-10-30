@@ -1,42 +1,45 @@
 { mkDerivation, aeson, base, binary, blaze-markup, brittany
-, bytestring, containers, data-default, deepseq, Diff, directory
-, extra, fetchgit, filepath, floskell, ghc, ghc-paths, ghcide
-, gitrev, hashable, haskell-lsp, haskell-lsp-types, hie-bios
-, hslogger, hspec, hspec-core, hspec-expectations, lens, lsp-test
-, optparse-applicative, optparse-simple, ormolu, process
-, regex-tdfa, safe-exceptions, shake, stdenv, stm, stylish-haskell
-, tasty, tasty-ant-xml, tasty-expected-failure, tasty-golden
-, tasty-hunit, tasty-rerun, temporary, text, time, transformers
-, unix, unordered-containers, yaml
+, bytestring, containers, data-default, deepseq, directory, extra
+, fetchgit, filepath, fingertree, floskell, fourmolu, ghc
+, ghc-boot-th, ghc-exactprint, ghc-paths, ghc-source-gen, ghcide
+, gitrev, hashable, haskell-lsp, hie-bios, hls-plugin-api, hslogger
+, hspec, hspec-core, lens, lsp-test, mtl, optparse-applicative
+, optparse-simple, ormolu, process, refinery, regex-tdfa, retrie
+, safe-exceptions, shake, stdenv, stm, stylish-haskell, syb, tasty
+, tasty-ant-xml, tasty-expected-failure, tasty-golden, tasty-hunit
+, tasty-rerun, temporary, text, time, transformers
+, unordered-containers, yaml
 }:
 mkDerivation {
   pname = "haskell-language-server";
-  version = "0.2.2.0";
+  version = "0.5.0.0";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "0g9g2gyb0fidx16l741ky12djxh4cid9akvxa48105iq1gdihd8l";
-    rev = "12c0e4423263140e3d16e76681927ec69fe4929f";
+    sha256 = "1qi762fa72487i8fspxmr8xizm9n2s1shxsvnvsl67vj9if573r9";
+    rev = "3ca2a6cd267f373aae19f59e1cf9e04b6524eff3";
     fetchSubmodules = true;
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson base binary brittany bytestring containers data-default
-    deepseq Diff directory extra filepath floskell ghc ghcide gitrev
-    hashable haskell-lsp hie-bios hslogger lens optparse-simple ormolu
-    process regex-tdfa shake stylish-haskell temporary text time
-    transformers unix unordered-containers
+    base containers data-default directory extra filepath ghc ghcide
+    gitrev haskell-lsp hie-bios hls-plugin-api hslogger
+    optparse-applicative optparse-simple process text
+    unordered-containers
   ];
   executableHaskellDepends = [
-    base binary containers data-default directory extra filepath ghc
-    ghc-paths ghcide gitrev hashable haskell-lsp hie-bios hslogger
-    optparse-applicative process safe-exceptions shake text time
-    unordered-containers
+    aeson base binary brittany bytestring containers deepseq directory
+    extra filepath fingertree floskell fourmolu ghc ghc-boot-th
+    ghc-exactprint ghc-paths ghc-source-gen ghcide gitrev hashable
+    haskell-lsp hie-bios hls-plugin-api hslogger lens mtl
+    optparse-applicative optparse-simple ormolu process refinery
+    regex-tdfa retrie safe-exceptions shake stylish-haskell syb
+    temporary text time transformers unordered-containers
   ];
   testHaskellDepends = [
     aeson base blaze-markup bytestring containers data-default
-    directory filepath haskell-lsp haskell-lsp-types hie-bios hslogger
-    hspec hspec-core hspec-expectations lens lsp-test process stm tasty
+    directory extra filepath haskell-lsp hie-bios hls-plugin-api
+    hslogger hspec hspec-core lens lsp-test process stm tasty
     tasty-ant-xml tasty-expected-failure tasty-golden tasty-hunit
     tasty-rerun temporary text transformers unordered-containers yaml
   ];

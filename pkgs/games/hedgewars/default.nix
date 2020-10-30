@@ -2,6 +2,7 @@
 , lib, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools
+, llvm
 , withServer ? true
 }:
 
@@ -27,6 +28,7 @@ mkDerivation rec {
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
     fpc lua5_1
+    llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
     ffmpeg_3 freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
@@ -34,6 +36,10 @@ mkDerivation rec {
   postPatch = ''
     substituteInPlace gameServer/CMakeLists.txt \
       --replace mask evaluate
+
+    # compile with fpc >= 3.2.0
+    # https://github.com/archlinux/svntogit-community/blob/75a1b3900fb3dd553d5114bbc8474d85fd6abb02/trunk/PKGBUILD#L26
+    sed -i 's/procedure ShiftWorld(Dir: LongInt); inline;/procedure ShiftWorld(Dir: LongInt);/' hedgewars/uWorld.pas
   '';
 
   cmakeFlags = [
@@ -42,7 +48,7 @@ mkDerivation rec {
   ];
 
 
-  # hslogger brings network-3 and network-bsd which conflict with 
+  # hslogger brings network-3 and network-bsd which conflict with
   # network-2.6.3.1
   preConfigure = ''
     substituteInPlace gameServer/CMakeLists.txt \
@@ -97,6 +103,5 @@ mkDerivation rec {
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
     inherit (ghc.meta) platforms;
-    hydraPlatforms = [];
   };
 }

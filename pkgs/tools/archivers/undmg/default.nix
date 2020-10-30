@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, zlib, bzip2 }:
+{ stdenv, fetchFromGitHub, zlib, bzip2, lzfse, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.5";
+  version = "1.1.0";
   pname = "undmg";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = "undmg";
     rev = "v${version}";
-    sha256 = "0yz5fniaa5z33d8bdzgr263957r1c9l99237y2p8k0hdid207la1";
+    sha256 = "0rb4h89jrl04vwf6p679ipa4mp95hzmc1ca11wqbanv3xd1kcpxm";
   };
 
-  buildInputs = [ zlib bzip2 ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zlib bzip2 lzfse ];
 
   setupHook = ./setup-hook.sh;
 

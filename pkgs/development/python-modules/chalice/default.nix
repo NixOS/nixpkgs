@@ -1,29 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , attrs
 , botocore
 , click
 , enum-compat
+, hypothesis
 , jmespath
+, mock
+, mypy-extensions
 , pip
+, pytest
+, pyyaml
 , setuptools
 , six
 , typing
-, wheel
 , watchdog
-, pytest
-, hypothesis
-, mock
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.14.1";
+  version = "1.21.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "457e71fd84951574ccbe72d1389d9c89aaf5e69a552b01d1f1585faa63459c26";
+    sha256 = "0b44514cdbafab08b18e21f59fc016cead0b78f5f5fdf14eccd993c469130b39";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];
@@ -33,10 +36,13 @@ buildPythonPackage rec {
     click
     enum-compat
     jmespath
+    mypy-extensions
     pip
+    pyyaml
     setuptools
     six
     wheel
+  ] ++ lib.optionals (pythonOlder "3.5") [
     typing
   ];
 

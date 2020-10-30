@@ -2,6 +2,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 # , cplex
 , cvxpy
 , dlx
@@ -16,6 +17,7 @@
 , qiskit-terra
 , quandl
 , scikitlearn
+, yfinance
   # Check Inputs
 , ddt
 , pytestCheckHook
@@ -24,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.7.3";
+  version = "0.7.5";
 
   disabled = pythonOlder "3.5";
 
@@ -33,8 +35,17 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "04zcnrc0vi6dfjahp1019h2ngdgi7l7jvfs9aw0y306nd9g6qgjc";
+    sha256 = "19sdv7lnc4b1c86rd1dv7pjpi8cmrpzbv7nav0fb899ki8ldqdwq";
   };
+
+  # TODO: remove in next release
+  patches = [
+    (fetchpatch {
+      name = "qiskit-aqua-fix-test-issue-1214.patch";
+      url = "https://github.com/Qiskit/qiskit-aqua/commit/284a4323192ac85787b22cbe5f344996fae16f7d.patch";
+      sha256 = "0zl8hqa2fq9ng793x4dhh0ny67nnbjcd8l1cdsaaab4ca1y0xcfr";
+    })
+  ];
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
   propagatedBuildInputs = [
@@ -51,6 +62,7 @@ buildPythonPackage rec {
     qiskit-ignis
     quandl
     scikitlearn
+    yfinance
   ];
 
   # *** NOTE ***
@@ -105,8 +117,9 @@ buildPythonPackage rec {
     # Disabled due to missing pyscf
     "test_validate" # test/chemistry/test_inputparser.py
 
-    "test_binary" # in SklearnSVM, seems to have trouble with eigenvectors converging
-    "test_pauli_expect_single"  # fails for unknown reason, 3e-3 out of tolerance
+    # Online tests
+    "test_exchangedata"
+    "test_yahoo"
 
     # Disabling slow tests > 10 seconds
     "TestVQE"
@@ -119,7 +132,6 @@ buildPythonPackage rec {
     "TestQGAN"
     "test_evaluate_qasm_mode"
     "test_measurement_error_mitigation_auto_refresh"
-    "test_exchangedata"
     "test_wikipedia"
     "test_shor_factoring_1__15___qasm_simulator____3__5__"
     "test_readme_sample"
@@ -138,11 +150,13 @@ buildPythonPackage rec {
     "test_oh"
     "test_confidence_intervals_00001"
     "test_eoh"
+    "test_qasm_5"
   ];
 
   meta = with lib; {
     description = "An extensible library of quantum computing algorithms";
     homepage = "https://github.com/QISKit/qiskit-aqua";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

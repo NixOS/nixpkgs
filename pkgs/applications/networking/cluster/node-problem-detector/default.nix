@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "node-problem-detector";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cphlaf9k2va879jgqd6fzdgkscpwg29j1cpr677i3zj3hfgaw1g";
+    sha256 = "1sga5l8bvqgm0j71yj3l1ykqvchxa7cg8pkfvjsrqlikgrfb54f3";
   };
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   # Optionally, a log counter binary can be created to parse journald logs.
   # The binary is dynamically linked against systemd libraries, making it a

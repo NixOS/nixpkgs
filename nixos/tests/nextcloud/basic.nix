@@ -33,7 +33,6 @@ in {
 
       services.nextcloud = {
         enable = true;
-        nginx.enable = true;
         hostName = "nextcloud";
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default

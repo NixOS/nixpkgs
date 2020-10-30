@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    fontdir="$out/share/fonts/$pname"
+    fontdir="$out/share/fonts/truetype"
     install -d "$fontdir"
     install "dist/$pname/ttf"/* "$fontdir"
   '';

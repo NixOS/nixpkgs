@@ -10,18 +10,18 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: technote-space/get-diff-action@v2.0.3
-    - name: fetch editorconfig-checker
+    - uses: technote-space/get-diff-action@v4.0.0
+    - name: Fetch editorconfig-checker
+      if: env.GIT_DIFF
       env:
-        VERSION: "2.1.0"
-        OS: "linux"
-        ARCH: "amd64"
+        ECC_VERSION: "2.2.0"
         ECC_URL: "https://github.com/editorconfig-checker/editorconfig-checker/releases/download"
       run: |
-        curl -sSf -O -L -C - $ECC_URL/$VERSION/ec-$OS-$ARCH.tar.gz && \
-        tar xzf ec-$OS-$ARCH.tar.gz && \
-        mv ./bin/ec-$OS-$ARCH ./bin/editorconfig-checker
+        curl -sSf -O -L -C - "$ECC_URL/$ECC_VERSION/ec-linux-amd64.tar.gz" && \
+        tar xzf ec-linux-amd64.tar.gz && \
+        mv ./bin/ec-linux-amd64 ./bin/editorconfig-checker
     - name: Checking EditorConfig
+      if: env.GIT_DIFF
       run: |
         ./bin/editorconfig-checker -disable-indentation \
         ${{ env.GIT_DIFF }}

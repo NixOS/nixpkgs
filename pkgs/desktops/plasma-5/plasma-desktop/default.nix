@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
 
   boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
@@ -12,7 +12,7 @@
   kdeclarative, kded, kdelibs4support, kemoticons, kglobalaccel, ki18n,
   kitemmodels, knewstuff, knotifications, knotifyconfig, kpeople, krunner,
   kscreenlocker, ksysguard, kwallet, kwin, phonon, plasma-framework,
-  plasma-workspace, xf86inputlibinput
+  plasma-workspace, qqc2-desktop-style, xf86inputlibinput
 }:
 
 mkDerivation {
@@ -27,10 +27,13 @@ mkDerivation {
     attica baloo kactivities kactivities-stats kauth kcmutils kdbusaddons
     kdeclarative kded kdelibs4support kemoticons kglobalaccel ki18n kitemmodels
     knewstuff knotifications knotifyconfig kpeople krunner kscreenlocker
-    ksysguard kwallet kwin plasma-framework plasma-workspace
+    ksysguard kwallet kwin plasma-framework plasma-workspace qqc2-desktop-style
   ];
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./hwclock-path.patch
+    ./tzdir.patch
+  ];
   postPatch = ''
     sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
   '';

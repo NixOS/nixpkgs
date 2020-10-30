@@ -54,7 +54,7 @@ in
 
   options = {
     fileSystems = mkOption {
-      type = with lib.types; loaOf (submodule encryptedFSOptions);
+      type = with lib.types; attrsOf (submodule encryptedFSOptions);
     };
     swapDevices = mkOption {
       type = with lib.types; listOf (submodule encryptedFSOptions);

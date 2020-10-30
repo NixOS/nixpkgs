@@ -200,7 +200,7 @@ in runCommand
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
         stable = [ meutraa ];
-        beta = [ galagora ];
+        beta = [ meutraa ];
         canary = [ meutraa ];
         dev = canary;
       }."${channel}";

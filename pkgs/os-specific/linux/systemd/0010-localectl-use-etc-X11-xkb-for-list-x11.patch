@@ -1,4 +1,4 @@
-From b5665ef8b9266c662c3a137df1ef1721cdff346e Mon Sep 17 00:00:00 2001
+From 84a2d35d4e75295edf7e190a94dfaf65db4973b6 Mon Sep 17 00:00:00 2001
 From: Imuli <i@imu.li>
 Date: Wed, 19 Oct 2016 08:46:47 -0400
 Subject: [PATCH 10/18] localectl: use /etc/X11/xkb for list-x11-*
@@ -10,10 +10,10 @@ NixOS has an option to link the xkb data files to /etc/X11, but not to
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/locale/localectl.c b/src/locale/localectl.c
-index 6f2d37d222..7aa2310d48 100644
+index e0664de826..c521f33a2a 100644
 --- a/src/locale/localectl.c
 +++ b/src/locale/localectl.c
-@@ -286,7 +286,7 @@ static int list_x11_keymaps(int argc, char **argv, void *userdata) {
+@@ -277,7 +277,7 @@ static int list_x11_keymaps(int argc, char **argv, void *userdata) {
          } state = NONE, look_for;
          int r;
  
@@ -23,5 +23,5 @@ index 6f2d37d222..7aa2310d48 100644
                  return log_error_errno(errno, "Failed to open keyboard mapping list. %m");
  
 -- 
-2.26.2
+2.28.0
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "lzfse";
@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mfh6y6vpvxsdwmqmfbkqkwvxc0pz2dqqc72c6fk9sbsrxxaghd5";
   };
 
-  makeFlags = [ "INSTALL_PREFIX=$(out)" ];
-
-  enableParallelBuilding = false; #bug
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/lzfse/lzfse";

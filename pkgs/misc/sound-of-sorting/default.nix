@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "01bpzn38cwn9zlydzvnfz9k7mxdnjnvgnbcpx7i4al8fha7x9lw8";
   };
 
-  buildInputs = 
+  buildInputs =
   [ wxGTK SDL2 ];
 
   preConfigure = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Audibilization and Visualization of Sorting Algorithms";
-    homepage = "http://panthema.net/2013/sound-of-sorting/";
+    homepage = "https://panthema.net/2013/sound-of-sorting/";
     license = with licenses; gpl3;
     maintainers = with maintainers; [ AndersonTorres ];
   };

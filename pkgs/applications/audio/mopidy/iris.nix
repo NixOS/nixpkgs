@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, mopidy, mopidy-local-images }:
+{ stdenv, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ (with python3Packages; [
     configobj
     requests
-    tornado_4
+    tornado
   ]);
 
   # no tests implemented

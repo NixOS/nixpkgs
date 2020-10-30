@@ -1,7 +1,7 @@
 From: Antonio Terceiro <terceiro@debian.org>
 Date: Wed, 27 May 2015 09:36:17 -0300
 Subject: Support system-installed plugins
-Source: https://salsa.debian.org/ruby-team/vagrant/blob/cb672c6dc0c63f6552c5ec4d6d7d22929d353503/debian/patches/0004-Support-system-installed-plugins.patch
+Source: https://salsa.debian.org/ruby-team/vagrant/-/blob/9d86f222/debian/patches/0004-Support-system-installed-plugins.patch
 
 Plugins must be installed as regular Ruby libraries, and they must
 contain /usr/share/vagrant-plugins/plugins.d/$PLUGINNAME.json with the
@@ -22,7 +22,7 @@ following content:
  2 files changed, 23 insertions(+), 3 deletions(-)
 
 diff --git a/lib/vagrant/plugin/manager.rb b/lib/vagrant/plugin/manager.rb
-index 567347d..d9d76a0 100644
+index 9058e68..2772131 100644
 --- a/lib/vagrant/plugin/manager.rb
 +++ b/lib/vagrant/plugin/manager.rb
 @@ -18,7 +18,7 @@ module Vagrant
@@ -80,16 +80,12 @@ index c6872d4..935d431 100644
        end
  
        # Add a plugin that is installed to the state file.
-@@ -107,6 +123,14 @@ module Vagrant
+@@ -107,6 +123,10 @@ module Vagrant
            f.close
            FileUtils.mv(f.path, @path)
          end
 +      rescue Errno::EACCES
 +        # Ignore permission denied against system-installed plugins; regular
-+        # users are not supposed to write there.
-+        raise unless @system
-+      rescue Errno::EROFS
-+        # Ignore read-only filesystem against system-installed plugins; regular
 +        # users are not supposed to write there.
 +        raise unless @system
        end

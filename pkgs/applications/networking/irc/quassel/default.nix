@@ -43,6 +43,12 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     sha256 = "0z8p7iv90yrrjbh31cyxhpr6hsynfmi23rlayn7p2f6ki5az7yc3";
   };
 
+  patches = [
+    # fixes build with Qt 5.14
+    # source: https://github.com/quassel/quassel/pull/518/commits/8a46d983fc99204711cdff1e4c542e272fef45b9
+    ./0001-common-Disable-enum-type-stream-operators-for-Qt-5.1.patch
+  ];
+
   enableParallelBuilding = true;
 
   # Prevent ``undefined reference to `qt_version_tag''' in SSL check

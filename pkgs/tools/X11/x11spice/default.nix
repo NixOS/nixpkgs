@@ -24,10 +24,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lpthread";
 
   meta = with stdenv.lib; {
-    description = ''
-      x11spice will enable a running X11 desktop to be available
-      via a Spice server
-    '';
+    description = "Enable a running X11 desktop to be available via a Spice server";
     homepage = "https://gitlab.freedesktop.org/spice/x11spice";
     platforms = platforms.linux;
     license = licenses.gpl3;

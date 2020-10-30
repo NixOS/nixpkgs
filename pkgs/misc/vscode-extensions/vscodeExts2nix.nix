@@ -1,24 +1,24 @@
-# based on the passed vscode will stdout a nix expression with the installed vscode extensions 
+# based on the passed vscode will stdout a nix expression with the installed vscode extensions
 { lib
 , vscodeDefault
 , writeShellScriptBin
 }:
 
 ##User input
-{ vscode             ? vscodeDefault 
+{ vscode             ? vscodeDefault
 , extensionsToIgnore ? []
 # will use those extensions to get sha256 if still exists when executed.
-, extensions         ? [] 
+, extensions         ? []
 }:
-let 
+let
   mktplcExtRefToFetchArgs = import ./mktplcExtRefToFetchArgs.nix;
 in
 writeShellScriptBin "vscodeExts2nix" ''
-  echo '[' 
+  echo '['
 
   for line in $(${vscode}/bin/code --list-extensions --show-versions \
     ${lib.optionalString (extensionsToIgnore != []) ''
-      | grep -v -i '^\(${lib.concatMapStringsSep "\\|" (e : ''${e.publisher}.${e.name}'') extensionsToIgnore}\)' 
+      | grep -v -i '^\(${lib.concatMapStringsSep "\\|" (e : ''${e.publisher}.${e.name}'') extensionsToIgnore}\)'
     ''}
   ) ; do
     [[ $line =~ ([^.]*)\.([^@]*)@(.*) ]]

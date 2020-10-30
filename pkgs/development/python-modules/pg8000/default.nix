@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.15.2";
+  version = "1.16.5";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb42ba62fbc048c91d5cf1ac729e0ea4ee329cc526bddafed4e7a8aa6b57fbbb";
+    sha256 = "8af70cdfcc1fadafa32468a6af563e1c0b5271c4dcc99a4490030a128cb295a3";
   };
 
   propagatedBuildInputs = [ passlib ];

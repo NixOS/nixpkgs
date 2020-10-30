@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "hcloud";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xkds49z4hjyvz170913dz6886lhq4hb2n6dqqpv6q5p1znsx2gj";
+    sha256 = "069bf78a3c6cd642aae0b1a562b443d2670e6d73d507ce77cbf8a2c16974ca29";
   };
 
   propagatedBuildInputs = [ future requests python-dateutil ];

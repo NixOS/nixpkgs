@@ -3,7 +3,7 @@
 let
 
   inherit (lib.options) literalExample mkEnableOption mkOption;
-  inherit (lib.types) bool enum int lines loaOf nullOr path str submodule;
+  inherit (lib.types) bool enum int lines attrsOf nullOr path str submodule;
   inherit (lib.modules) mkDefault mkIf mkMerge;
 
   commonDescr = ''
@@ -248,7 +248,7 @@ in
     };
 
     modems = mkOption {
-      type = loaOf (submodule [ modemConfigOptions ]);
+      type = attrsOf (submodule [ modemConfigOptions ]);
       default = {};
       example.ttyS1 = {
         type = "cirrus";

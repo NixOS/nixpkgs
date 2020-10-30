@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , makeWrapper
-, electron_8
+, electron_9
 , dpkg
 , gtk3
 , glib
@@ -13,15 +13,15 @@
 }:
 
 let
-  electron = electron_8;
+  electron = electron_9;
 in
 stdenv.mkDerivation rec {
   pname = "typora";
-  version = "0.9.89";
+  version = "0.9.95";
 
   src = fetchurl {
     url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-    sha256 = "0gk8j13z1ymad34zzcy4vqwyjgd5khgyw5xjj9rbzm5v537kqmx6";
+    sha256 = "0kgzk7z707vlbjrvykrnw2h6wscmc3h5hxycyz1z1j2cz26fns4p";
   };
 
   nativeBuildInputs = [

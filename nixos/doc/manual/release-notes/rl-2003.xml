@@ -796,7 +796,7 @@ users.users.me =
      or any other display manager in NixOS as they all support auto-login. If you used this module specifically
      because it permitted root auto-login you can override the lightdm-autologin pam module like:
 <programlisting>
-<link xlink:href="#opt-security.pam.services._name__.text">security.pam.services.lightdm-autologin.text</link> = lib.mkForce ''
+<link xlink:href="#opt-security.pam.services._name_.text">security.pam.services.lightdm-autologin.text</link> = lib.mkForce ''
     auth     requisite pam_nologin.so
     auth     required  pam_succeed_if.so quiet
     auth     required  pam_permit.so

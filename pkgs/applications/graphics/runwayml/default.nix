@@ -6,20 +6,19 @@
 
 let
   pname = "runwayml";
-  version = "0.10.20";
+  version = "0.14.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://runway-releases.s3.amazonaws.com/Runway%20${version}.AppImage";
-    sha256 = "1wi94xi8nrwfc4v2j1crlmwr0nxg95ffp5h4hxd84crvya8ibxgz";
-    name="${pname}-${version}.AppImage";
+    url = "https://runway-releases.s3.amazonaws.com/Runway-${version}.AppImage";
+    sha256 = "1bx8j39wd2z6f32hdvmk9z77bivnizzdhn296kin2nnqgq6v6y93";
   };
 
   binary = appimageTools.wrapType2 {
     name = pname;
     inherit src;
   };
-  # we only use this to extract the icon
+  # we only use this to extract the icon and desktop file
   appimage-contents = appimageTools.extractType2 {
     inherit name src;
   };

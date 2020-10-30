@@ -47,6 +47,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
     maintainers = with maintainers; [ danieldk ];
-    platforms = platforms.all;
   };
 }

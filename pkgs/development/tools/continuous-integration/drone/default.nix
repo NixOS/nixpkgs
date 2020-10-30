@@ -3,9 +3,10 @@
 buildGoModule rec {
   name = "drone.io-${version}";
   version = "1.9.0";
-  goPackagePath = "github.com/drone/drone";
 
   vendorSha256 = "0idf11sr417lxcjryplgb87affr6lgzxazzlyvk0y40hp8zbhwsx";
+
+  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "drone";

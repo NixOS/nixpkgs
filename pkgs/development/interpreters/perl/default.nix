@@ -28,7 +28,7 @@ let
 
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
-      optional crossCompiling "dev";
+      optional crossCompiling "mini";
     setOutputFlags = false;
 
     disallowedReferences = [ stdenv.cc ];
@@ -36,8 +36,7 @@ let
     patches =
       [
         # Do not look in /usr etc. for dependencies.
-        (if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch
-         else if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
+        (if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
          else ./no-sys-dirs-5.31.patch)
       ]
       ++ optional (versionOlder version "5.29.6")
@@ -73,7 +72,7 @@ let
     # Miniperl needs -lm. perl needs -lrt.
     configureFlags =
       (if crossCompiling
-       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
+       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
        else [ "-de" "-Dcc=cc" ])
       ++ [
         "-Uinstallusrbinperl"
@@ -144,13 +143,13 @@ let
           --replace "$man" /no-such-path
       '' + optionalString crossCompiling
       ''
-        mkdir -p $dev/lib/perl5/cross_perl/${version}
+        mkdir -p $mini/lib/perl5/cross_perl/${version}
         for dir in cnf/{stub,cpan}; do
-          cp -r $dir/* $dev/lib/perl5/cross_perl/${version}
+          cp -r $dir/* $mini/lib/perl5/cross_perl/${version}
         done
 
-        mkdir -p $dev/bin
-        install -m755 miniperl $dev/bin/perl
+        mkdir -p $mini/bin
+        install -m755 miniperl $mini/bin/perl
 
         export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
         # wrapProgram should use a runtime-native SHELL by default, but
@@ -161,9 +160,9 @@ let
         # miniperl can't load the native modules there. However, it can
         # (and sometimes needs to) load and run some of the pure perl
         # code there, so we add it anyway. When needed, stubs can be put
-        # into $dev/lib/perl5/cross_perl/${version}.
-        wrapProgram $dev/bin/perl --prefix PERL5LIB : \
-          "$dev/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
+        # into $mini/lib/perl5/cross_perl/${version}.
+        wrapProgram $mini/bin/perl --prefix PERL5LIB : \
+          "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
       ''; # */
 
     meta = {
@@ -175,11 +174,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "1.3.4"; # Jun 2, 2020
+    crossVersion = "65e06e238ccb949e8399bdebc6d7fd798c34127b"; # Oct 21, 2020
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "15wvlafhpsh9h66s3vazhx46hf8ik75473acrvf6722ijd1wpz45";
+      sha256 = "1rk9kbvkj7cl3bvv6cph20f0hcb6y9ijgcd4rxj7aq98fxzvyhxx";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -196,14 +195,6 @@ let
   });
 in {
   # Maint version
-  perl528 = common {
-    perl = pkgs.perl528;
-    buildPerl = buildPackages.perl528;
-    version = "5.28.3";
-    sha256 = "052if351m81yhaab429i1kv77v9b15qm0g48kr6y2yjrc7bc3jdg";
-  };
-
-  # Maint version
   perl530 = common {
     perl = pkgs.perl530;
     buildPerl = buildPackages.perl530;
@@ -211,11 +202,19 @@ in {
     sha256 = "0vs0wwwlw47sswxaflkk4hw0y45cmc7arxx788kwpbminy5lrq1j";
   };
 
+  # Maint version
+  perl532 = common {
+    perl = pkgs.perl532;
+    buildPerl = buildPackages.perl532;
+    version = "5.32.0";
+    sha256 = "1d6001cjnpxfv79000bx00vmv2nvdz7wrnyas451j908y7hirszg";
+  };
+
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.32.0-RC0";
-    sha256 = "02i6n1xa4j0ksp014yy8q0j7scjcy5mr0yd4iash2ryrrfv5yw5k";
+    version = "5.33.3";
+    sha256 = "1k9pyy8d3wx8cpp5ss7hjwf9sxgga5gd0x2nq3vnqblkxfna0jsg";
   };
 }

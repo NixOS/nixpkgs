@@ -23,23 +23,26 @@
 , singledispatch
 , mpi4py
 , bokeh
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2.18.0";
+  version = "2.30.0";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "902f098fb7558f035333804a5aeba2fb26a2a715388808205a17cbb2e02e0558";
+    sha256 = "3eb8e4173625cea6ebda2f0a079b813eeabbffd1b24584855cf063ed1cca60b3";
   };
+
+  disabled = pythonOlder "3.6";
 
   checkInputs = [ pytest pytest-repeat pytest-timeout mock joblib ];
   propagatedBuildInputs = [
       click cloudpickle dask msgpack psutil six
       sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
-  ] ++ lib.optionals (!isPy3k) [ futures singledispatch ];
+  ];
 
   # tests take about 10-15 minutes
   # ignore 5 cli tests out of 1000 total tests that fail due to subprocesses

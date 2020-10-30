@@ -1,21 +1,29 @@
-{ stdenv, fetchurl, ocaml, findlib }:
+{ stdenv, fetchurl, ocaml, findlib, fetchpatch }:
 
-if stdenv.lib.versionOlder ocaml.version "4.07"
+if stdenv.lib.versionOlder ocaml.version "4.08"
 then throw "dune is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   pname = "dune";
-  version = "2.6.2";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-    sha256 = "1sc8ax198z42vhc3l6i04kknm9g44whifjivs19qgi3sybrw2vjg";
+    sha256 = "0pcjf209gynjwipnpplaqyvyivnawqiwhvqnivhkybisicpqyln3";
   };
 
   buildInputs = [ ocaml findlib ];
 
   buildFlags = "release";
+
+  patches = [
+    # Fix setup.ml configure path. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/ocaml/dune/commit/8a3d7f2f2015b71384caa07226d1a89dba9d6c25.patch";
+      sha256 = "0dw4q10030h9xcdlxw2vp7qm0hd2qpkb98rir5d55m9vn65w8j28";
+    })
+  ];
 
   dontAddPrefix = true;
 

@@ -1,5 +1,6 @@
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
+  domain = certs.domain;
 in
 import ./make-test-python.nix {
   name = "postfix";
@@ -11,8 +12,8 @@ import ./make-test-python.nix {
       enableSubmission = true;
       enableSubmissions = true;
       sslCACert = certs.ca.cert;
-      sslCert = certs."acme.test".cert;
-      sslKey = certs."acme.test".key;
+      sslCert = certs.${domain}.cert;
+      sslKey = certs.${domain}.key;
       submissionsOptions = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit";
@@ -25,7 +26,7 @@ import ./make-test-python.nix {
     ];
 
     networking.extraHosts = ''
-      127.0.0.1 acme.test
+      127.0.0.1 ${domain}
     '';
 
     environment.systemPackages = let
@@ -33,7 +34,7 @@ import ./make-test-python.nix {
         #!${pkgs.python3.interpreter}
         import smtplib
 
-        with smtplib.SMTP('acme.test') as smtp:
+        with smtplib.SMTP('${domain}') as smtp:
           smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test\n\nTest data.')
           smtp.quit()
       '';
@@ -45,7 +46,7 @@ import ./make-test-python.nix {
 
         ctx = ssl.create_default_context()
 
-        with smtplib.SMTP('acme.test') as smtp:
+        with smtplib.SMTP('${domain}') as smtp:
           smtp.ehlo()
           smtp.starttls(context=ctx)
           smtp.ehlo()
@@ -60,7 +61,7 @@ import ./make-test-python.nix {
 
         ctx = ssl.create_default_context()
 
-        with smtplib.SMTP_SSL(host='acme.test', context=ctx) as smtp:
+        with smtplib.SMTP_SSL(host='${domain}', context=ctx) as smtp:
           smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test SMTPS\n\nTest data.')
           smtp.quit()
       '';

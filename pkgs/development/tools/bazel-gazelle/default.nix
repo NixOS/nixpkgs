@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   subPackages = [ "cmd/gazelle" ];
 
   meta = with lib; {

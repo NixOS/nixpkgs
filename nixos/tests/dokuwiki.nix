@@ -33,7 +33,7 @@ let
 in {
   name = "dokuwiki";
   meta = with pkgs.stdenv.lib; {
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ _1000101 ];
   };
   machine = { ... }: {
     services.dokuwiki."site1.local" = {

@@ -1,24 +1,19 @@
-{ stdenv, fetchpatch, fetchFromGitHub, ocaml, findlib, ncurses }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ncurses, cmdliner, re }:
 let
-  version = "1.99.19-beta";
+  version = "1.99.21";
 in
 stdenv.mkDerivation {
 
-  name = "ocaml${ocaml.version}-ocp-build-${version}";
+  name = "ocaml${ocaml.version}-ocp-build-${version}-beta";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-build";
-    rev = version;
-    sha256 = "162k5l0cxyqanxlml5v8mqapdq5qbqc9m4b8wdjq7mf523b3h2zj";
+    rev = "v${version}";
+    sha256 = "1641xzik98c7xnjwxpacijd6d9jzx340fmdn6i372z8h554jjlg9";
   };
 
-  patches = stdenv.lib.optional (stdenv.lib.versionAtLeast ocaml.version "4.08") (fetchpatch {
-    url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ocp-pp/ocp-pp.1.99.19-beta/files/0001-Fix-ocp-pp-for-changes-in-compiler-libs.patch";
-    sha256 = "0s0s2hh4d7cmwd6i7ixjgb79vij0r1v54m0vwwi26b3fips09qyn";
-  });
-
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib cmdliner re ];
   propagatedBuildInputs = [ ncurses ];
   preInstall = "mkdir -p $out/bin";
   preConfigure = ''

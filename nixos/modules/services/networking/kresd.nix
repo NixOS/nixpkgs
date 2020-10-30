@@ -129,12 +129,16 @@ in {
     systemd.services."kresd@".serviceConfig = {
       ExecStart = "${package}/bin/kresd --noninteractive "
         + "-c ${package}/lib/knot-resolver/distro-preconfig.lua -c ${configFile}";
-      # Ensure correct ownership in case UID or GID changes.
+      # Ensure /run/knot-resolver exists
+      RuntimeDirectory = "knot-resolver";
+      RuntimeDirectoryMode = "0770";
+      # Ensure /var/lib/knot-resolver exists
+      StateDirectory = "knot-resolver";
+      StateDirectoryMode = "0770";
+      # Ensure /var/cache/knot-resolver exists
       CacheDirectory = "knot-resolver";
-      CacheDirectoryMode = "0750";
+      CacheDirectoryMode = "0770";
     };
-
-    systemd.tmpfiles.packages = [ package ];
 
     # Try cleaning up the previously default location of cache file.
     # Note that /var/cache/* should always be safe to remove.

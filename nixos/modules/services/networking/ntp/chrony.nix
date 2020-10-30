@@ -117,7 +117,6 @@ in
             ProtectHome = "yes";
             ProtectSystem = "full";
             PrivateTmp = "yes";
-            StateDirectory = "chrony";
           };
 
       };

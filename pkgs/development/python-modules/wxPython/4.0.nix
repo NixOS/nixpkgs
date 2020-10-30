@@ -1,29 +1,18 @@
 { lib
 , stdenv
-, openglSupport ? true
-, libX11
-, pyopengl
 , buildPythonPackage
 , fetchPypi
 , pkgconfig
-, libjpeg
-, libtiff
-, SDL
-, gst-plugins-base
-, libnotify
-, freeglut
-, xorg
 , which
 , cairo
-, requests
 , pango
-, pathlib2
 , python
 , doxygen
 , ncurses
-, libpng
-, gstreamer
 , wxGTK
+, numpy
+, pillow
+, six
 }:
 
 buildPythonPackage rec {
@@ -38,16 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ pkgconfig which doxygen wxGTK ];
-
-  buildInputs = [ libjpeg libtiff SDL
-      gst-plugins-base libnotify freeglut xorg.libSM ncurses
-      requests libpng gstreamer libX11
-      pathlib2
-      (wxGTK.gtk)
-  ]
-    ++ lib.optional openglSupport pyopengl;
-
-  hardeningDisable = [ "format" ];
+  buildInputs = [ ncurses wxGTK.gtk ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 
@@ -68,10 +48,9 @@ buildPythonPackage rec {
 
   installPhase = ''
     ${python.interpreter} setup.py install --skip-build --prefix=$out
-    wrapPythonPrograms
   '';
 
-  passthru = { inherit wxGTK openglSupport; };
+  passthru = { inherit wxGTK; };
 
 
   meta = {

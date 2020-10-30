@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.13";
+  version = "0.14.1";
   pname = "hdmedians";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "230f80e064d905c49a1941af1b7e806e2f22b3c9a90ad5c21fd17d72636ea277";
+    sha256 = "ccefaae26302afd843c941b3b662f1119d5a36dec118077310f811a7a1ed8871";
   };
 
   # nose was specified in setup.py as a build dependency...

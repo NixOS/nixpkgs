@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "dbmate";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
     rev = "v${version}";
-    sha256 = "0v00k658b4ca9bpn2yiiy3gq5gr6hms8mlk31wf8svwsjyzjibzr";
+    sha256 = "09zb7r8f6m1w9ax9ayaxjzwmqcgx5f6x4lclfi1wdn6f6qaans4w";
   };
 
-  vendorSha256 = "00vp925vf9clk5bkw5fvj34id4v548rlssizh52z9psvdizj8q5p";
+  vendorSha256 = "012kgdvw7hj3m40v3nnpg916n02nxv19zid07h8g4qwprzg49iq2";
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Database migration tool";

@@ -1,17 +1,17 @@
 { stdenv, buildPythonPackage, fetchPypi
-, six, click, requests, pytz, tabulate, pythonOlder
+, six, click, requests, requests-hawk, pytz, tabulate, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "alerta";
-  version = "7.5.1";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e903d4b097d4650983faecedc4e2dffd27a962b671643098f8425f9a19884d0f";
+    sha256 = "49e0862c756d644e9349f5040dd59d135cd871ffeaea5fc288eb3a2e818cf61a";
   };
 
-  propagatedBuildInputs = [ six click requests pytz tabulate ];
+  propagatedBuildInputs = [ six click requests requests-hawk pytz tabulate ];
 
   doCheck = false;
 

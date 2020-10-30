@@ -1,8 +1,13 @@
-{ stdenv, fetchFromGitHub, cmake, libusb1, ninja, pkgconfig }:
+{ stdenv, config, lib, fetchFromGitHub, cmake, libusb1, ninja, pkgconfig, gcc
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, enablePython ? false, pythonPackages ? null }:
+
+assert cudaSupport -> cudatoolkit != null;
+assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.36.0";
+  version = "2.38.0";
 
   outputs = [ "out" "dev" ];
 
@@ -10,11 +15,17 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dfkhnybnd8qnljf3y3hjyamaqzw733hb3swy4hjcsdm9dh0wpay";
+    sha256 = "12rs0gklgzn8bplqjmaxixk04pr870i333mmcp9i5bhkn8x86zbx";
   };
 
   buildInputs = [
     libusb1
+    gcc.cc.lib
+  ] ++ lib.optional cudaSupport cudatoolkit
+    ++ lib.optional enablePython pythonPackages.python;
+
+  patches = lib.optionals enablePython [
+    ./py_sitepackage_dir.patch
   ];
 
   nativeBuildInputs = [
@@ -23,7 +34,22 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  cmakeFlags = [ "-DBUILD_EXAMPLES=false" ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=ON"
+    "-DBUILD_GRAPHICAL_EXAMPLES=OFF"
+    "-DBUILD_GLSL_EXTENSIONS=OFF"
+  ] ++ lib.optionals enablePython [
+    "-DBUILD_PYTHON_BINDINGS:bool=true"
+    "-DXXNIX_PYTHON_SITEPACKAGES=${placeholder "out"}/${pythonPackages.python.sitePackages}"
+  ] ++ lib.optional cudaSupport "-DBUILD_WITH_CUDA:bool=true";
+
+  # ensure python package contains its __init__.py. for some reason the install
+  # script does not do this, and it's questionable if intel knows it should be
+  # done
+  # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
+  postInstall = lib.optionalString enablePython  ''
+    cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
+  '';
 
   meta = with stdenv.lib; {
     description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";

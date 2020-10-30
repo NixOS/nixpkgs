@@ -1,19 +1,17 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "timescaledb-tune";
-  version = "0.6.0";
-
-  goPackagePath = "github.com/timescale/timescaledb-tune";
-
-  goDeps = ./deps.nix;
+buildGoModule rec {
+  pname = "timescaledb-tune";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
-    repo = name;
-    rev = version;
-    sha256 = "0hjxmjgkqm9sbjbyhs3pzkk1d9vvlcbzwl7ghsigh4h7rw3a0mpk";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0vncwwvw7y6g3crd4n5vvd6jwdsa8vsvsmfwy5mad4j6lix09ajx";
   };
+
+  vendorSha256 = "0hbpprbxs19fcar7xcy42kn9yfzhal2zsv5pml9ghiv2s61yns4z";
 
   meta = with stdenv.lib; {
     description = "A tool for tuning your TimescaleDB for better performance";

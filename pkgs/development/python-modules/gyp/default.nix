@@ -14,10 +14,6 @@ buildPythonPackage {
     sha256 = "0r9phq5yrmj968vdvy9vivli35wn1j9a6iwshp69wl7q4p0x8q2b";
   };
 
-  prePatch = stdenv.lib.optionals stdenv.isDarwin ''
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' pylib/gyp/xcode_emulation.py
-  '';
-
   patches = stdenv.lib.optionals stdenv.isDarwin [
     ./no-darwin-cflags.patch
     ./no-xcode.patch

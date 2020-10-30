@@ -11,7 +11,6 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/cloudflare/utahfs";
-  goDeps = ./deps.nix;
 
   meta = with lib; {
     homepage = "https://github.com/cloudflare/utahfs";

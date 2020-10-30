@@ -72,7 +72,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
-    inherit (source) sha512;
+    inherit (source) sha256;
   };
 
   phases = "unpackPhase installPhase";
@@ -179,5 +179,6 @@ stdenv.mkDerivation {
     };
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;
+    knownVulnerabilities = [ "Support ended around Semptember 2020." ];
   };
 }

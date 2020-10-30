@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ ncurses5 ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  checkFlagsArray = [ "--test-threads=1" ];
+  cargoParallelTestThreads = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ masaeedu ];
+    maintainers = with maintainers; [ masaeedu zowoq ];
   };
 }

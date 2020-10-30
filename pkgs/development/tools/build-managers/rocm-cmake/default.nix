@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-cmake";
-  version = "3.5.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";

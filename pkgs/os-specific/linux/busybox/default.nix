@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchzip
+{ stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
 , enableStatic ? false
 , enableMinimal ? false
 # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
@@ -32,16 +32,25 @@ let
     CONFIG_FEATURE_WTMP n
   '';
 
-  debianName = "busybox_1.30.1-5";
-  debianTarball = fetchzip {
-    url = "http://deb.debian.org/debian/pool/main/b/busybox/${debianName}.debian.tar.xz";
-    sha256 = "03m4rvs2pd0hj0mdkdm3r4m1gh0bgwr0cvnqds297xnkfi5s01nx";
+  # The debian version lacks behind the upstream version and also contains
+  # a debian-specific suffix. We only fetch the debian repository to get the
+  # default.script
+  debianVersion = "1.30.1-6";
+  debianSource = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = "busybox";
+    rev = "debian/1%${debianVersion}";
+    sha256 = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
   };
-  debianDispatcherScript = "${debianTarball}/tree/udhcpc/etc/udhcpc/default.script";
+  debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
 in
 
 stdenv.mkDerivation rec {
+  # TODO: When bumping this version, please validate whether the wget patch is present upstream
+  # and remove the patch if it is. The patch should be present upstream for all versions 1.32.0+.
+  # See NixOs/nixpkgs#94722 for context.
   name = "busybox-1.31.1";
 
   # Note to whoever is updating busybox: please verify that:
@@ -58,6 +67,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./busybox-in-store.patch
     ./0001-Fix-build-with-glibc-2.31.patch
+    ./0001-wget-implement-TLS-verification-with-ENABLE_FEATURE_.patch
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";

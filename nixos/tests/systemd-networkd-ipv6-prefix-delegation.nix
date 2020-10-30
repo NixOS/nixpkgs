@@ -31,7 +31,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
         firewall.enable = false;
         interfaces.eth1.ipv4.addresses = lib.mkForce []; # no need for legacy IP
         interfaces.eth1.ipv6.addresses = lib.mkForce [
-          { address = "2001:DB8::"; prefixLength = 64; }
+          { address = "2001:DB8::1"; prefixLength = 64; }
         ];
       };
 
@@ -260,7 +260,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
     client.wait_until_succeeds("ping -6 -c 1 FD42::1")
 
     # the global IP of the ISP router should still not be a reachable
-    router.fail("ping -6 -c 1 2001:DB8::")
+    router.fail("ping -6 -c 1 2001:DB8::1")
 
     # Once we have internal connectivity boot up the ISP
     isp.start()
@@ -273,11 +273,11 @@ import ./make-test-python.nix ({pkgs, ...}: {
 
     # wait until the uplink interface has a good status
     router.wait_for_unit("network-online.target")
-    router.wait_until_succeeds("ping -6 -c1 2001:DB8::")
+    router.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 
     # shortly after that the client should have received it's global IPv6
     # address and thus be able to ping the ISP
-    client.wait_until_succeeds("ping -6 -c1 2001:DB8::")
+    client.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 
     # verify that we got a globally scoped address in eth1 from the
     # documentation prefix

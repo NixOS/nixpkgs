@@ -14,6 +14,8 @@ buildGoModule rec {
 
   vendorSha256 = "0r2nh7v00m6zbdnhsgjn01q9pkiz41ckkqgfnpqmkxaqmjz31iyj";
 
+  doCheck = false;
+
   nativeBuildInputs = [ packr ];
 
   patches = [ ./use-go-module.patch ];

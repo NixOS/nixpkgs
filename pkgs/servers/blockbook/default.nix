@@ -26,6 +26,8 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "0p7vyw61nwvmaz7gz2bdh9fi6wp62i2vnzw6iz2r8cims4sbz53b";
 
+  doCheck = false;
+
   nativeBuildInputs = [ packr pkg-config ];
 
   buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
@@ -56,7 +58,7 @@ buildGoModule rec {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mmahut maintainers."1000101" ];
+    maintainers = with maintainers; [ mmahut _1000101 ];
     platforms = platforms.unix;
   };
 }

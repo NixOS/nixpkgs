@@ -13,12 +13,14 @@ buildGoModule rec {
 
   vendorSha256 = "0b2m9xkac60k5rbxmb03cxf530m23av14pnsjk8067l998sm4vqi";
 
+  doCheck = false;
+
   subPackages = [ "./exercism" ];
 
   meta = with stdenv.lib; {
    inherit (src.meta) homepage;
    description = "A Go based command line tool for exercism.io";
    license     = licenses.mit;
-   maintainers = [ maintainers.rbasso ];
+   maintainers = [ maintainers.rbasso maintainers.nobbz ];
   };
 }

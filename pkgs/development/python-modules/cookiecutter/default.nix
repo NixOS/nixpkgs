@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 future binaryornot click whichcraft poyo jinja2_time requests python-slugify
   ];
-  
+
   # requires network access for cloning git repos
   doCheck = false;
   checkPhase = ''

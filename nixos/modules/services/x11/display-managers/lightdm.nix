@@ -253,7 +253,6 @@ in
       KeyringMode = "shared";
       KillMode = "mixed";
       StandardError = "inherit";
-      StandardOutput = "syslog";
     };
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
@@ -309,6 +308,7 @@ in
       home = "/var/lib/lightdm";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
+      shell = pkgs.bash;
     };
 
     systemd.tmpfiles.rules = [

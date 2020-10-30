@@ -1,6 +1,10 @@
 { stdenv, fetchFromGitHub, autoreconfHook, coq }:
 
 let params = {
+  "8.12" = {
+    version = "0.6.8";
+    sha256 = "1mj6sknsd53xfb387sp3kdwvl4wn80ck24bfzf3s6mgw1a12vyps";
+  };
   "8.11" = {
     version = "0.6.7";
     sha256 = "01vpi7scvkl4ls1z2k2x9zd65wflzb667idj759859hlz3ps9z09";
@@ -49,7 +53,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ coq ]
-  ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ocamlgraph ]);
+  ++ (with coq.ocamlPackages; [ ocaml findlib ocamlgraph ]
+    ++ stdenv.lib.optional (!stdenv.lib.versionAtLeast coq.coq-version "8.10") camlp5);
 
   # dpd_compute.ml uses deprecated Pervasives.compare
   # Versions prior to 0.6.5 do not have the WARN_ERR build flag

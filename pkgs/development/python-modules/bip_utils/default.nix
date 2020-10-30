@@ -1,23 +1,25 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonOlder
 , ecdsa
 , pysha3
 }:
 
 buildPythonPackage rec {
   pname = "bip_utils";
-  version = "1.0.5";
+  version = "1.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e8397a315c2f656ccf37ff1c43f5e0d496a10ea692c614fdf9bae1a3d5de3558";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "ebellocchia";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "06ls1lara7sklqw6wrw5d3wpxwgyv6paxwjp37x7b3kfskm14cmd";
   };
 
   propagatedBuildInputs = [ ecdsa pysha3 ];
-
-  # tests are not packaged in the released tarball
-  doCheck = false;
 
   pythonImportsCheck = [
     "bip_utils"

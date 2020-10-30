@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, zlib, shadow, coreutils
+, python3, munge, perl, pam, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
 , pmix
@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "19.05.7.1";
+  version = "20.02.5.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "115f40k8y7d569nbl6g0mkyshgv925lawlwar7ib5296g30p97f0";
+    sha256 = "09d4zyyjl5mcrzhzbh6nhc35mzim1sy0h0p2h468nwk1fbl81ff5";
   };
 
   outputs = [ "out" "dev" ];
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
   # this doesn't fix tests completely at least makes slurmd to launch
   hardeningDisable = [ "bindnow" ];
 
-  nativeBuildInputs = [ pkgconfig libtool ];
+  nativeBuildInputs = [ pkgconfig libtool python3 ];
   buildInputs = [
-    curl python munge perl pam zlib
+    curl python3 munge perl pam zlib
       libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi shadow.su
       pmix

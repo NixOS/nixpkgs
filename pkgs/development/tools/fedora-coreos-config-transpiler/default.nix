@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   subPackages = [ "internal" ];
 
   buildFlagsArray = ''

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${libmysqlclient}/bin/mysql_config"
+    "--with-mysql=${getDev libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff.dev}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

@@ -85,6 +85,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = ''Beerware License'';
   };
 
+  blueOak100 = spdx {
+    spdxId = "BlueOak-1.0.0";
+    fullName = "Blue Oak Model License 1.0.0";
+  };
+
   bsd0 = spdx {
     spdxId = "0BSD";
     fullName = "BSD Zero Clause License";
@@ -431,15 +436,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   };
 
   # Proprietary binaries; free to redistribute without modification.
+  databricks = {
+    fullName = "Databricks Proprietary License";
+    url = "https://pypi.org/project/databricks-connect";
+    free = false;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
     free = false;
-  };
-
-  jasper = spdx {
-    spdxId = "JasPer-2.0";
-    fullName = "JasPer License";
   };
 
   lgpl2Only = spdx {
@@ -636,6 +642,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   purdueBsd = {
     fullName = " Purdue BSD-Style License"; # also know as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
+  };
+
+  prosperity30 = {
+    fullName = "Prosperity-3.0.0";
+    free = false;
+    url = "https://prosperitylicense.com/versions/3.0.0.html";
   };
 
   qhull = spdx {

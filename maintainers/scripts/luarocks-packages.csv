@@ -35,6 +35,10 @@ lua-cmsgpack,,,,,
 lua-iconv,,,,,
 lua-lsp,,http://luarocks.org/dev,,,
 lua-messagepack,,,,,
+lua-resty-http,,,,,
+lua-resty-jwt,,,,,
+lua-resty-openidc,,,,,
+lua-resty-session,,,,,
 lua-term,,,,,
 lua-toml,,,,,
 lua-zlib,,,,,koral
@@ -79,5 +83,4 @@ say,,,,,
 std__debug,std._debug,,,,
 std_normalize,std.normalize,,,,
 stdlib,,,,,vyp
-pulseaudio,,,,,doronbehar
 vstruct,,,,,

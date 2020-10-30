@@ -11,13 +11,14 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security
-, llvmPackages_5
+, llvmPackages
 , pkgsBuildTarget, pkgsBuildBuild
+, makeRustPlatform
 } @ args:
 
 import ./default.nix {
-  rustcVersion = "1.45.0";
-  rustcSha256 = "0z6dh0yd3fcm3qh960wi4s6fa6pxz9mh77psycsqfkkx5kqra15s";
+  rustcVersion = "1.45.2";
+  rustcSha256 = "0273a1g3f59plyi1n0azf21qjzwml1yqdnj5z472crz37qggr8xp";
 
   # Note: the version MUST be one version prior to the version we're
   # building

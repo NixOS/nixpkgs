@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "libsavitar";
-  version = "4.6.1";
+  version = "4.7.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
     rev = version;
-    sha256 = "0nk8zl5b0b36wrrkj271ck4phzxsigkjsazndscjslc9nkldmnpq";
+    sha256 = "0mzr3ynfap51bcn6kshyi2h6iny2gpavn6g3b1xcsgzzlxqgfixf";
   };
 
   postPatch = ''

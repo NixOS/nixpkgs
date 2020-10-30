@@ -2,13 +2,13 @@
 
 buildPerlPackage {
   pname = "ham-unstable";
-  version = "2019-01-22";
+  version = "2020-09-09";
 
   src = fetchFromGitHub {
     owner = "kernkonzept";
     repo = "ham";
-    rev = "37c2e4e8b8bd779ba0f8c48a3c6ba34bad860b92";
-    sha256 = "0h5r5256niskypl4g1j2573wqi0nn0mai5p04zsa06xrgyjqcy2j";
+    rev = "ae2a326f2efcdae0fa7c5bf0ba205b580fc91ecc";
+    sha256 = "0m65pav2830y0ivwsy60dc4w457qlc0nqg43lji1kj2g96hmy2bw";
   };
 
   outputs = [ "out" ];

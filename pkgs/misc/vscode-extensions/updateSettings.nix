@@ -16,7 +16,7 @@ let
 
   updateVSCodeSettingsCmd = ''
   (
-    echo 'updateSettings.nix: Updating ${vscodeSettingsFile}...' 
+    echo 'updateSettings.nix: Updating ${vscodeSettingsFile}...'
     oldSettings=$(cat ${vscodeSettingsFile})
     echo $oldSettings' ${builtins.toJSON settings}' | ${jq}/bin/jq -s add > ${vscodeSettingsFile}
   )'';
@@ -25,10 +25,10 @@ let
   fileName = builtins.baseNameOf vscodeSettingsFile;
   symlinkFromUserSettingCmd = lib.optionalString symlinkFromUserSetting
     '' && mkdir -p "${userSettingsFolder}" && ln -sfv "$(pwd)/${vscodeSettingsFile}" "${userSettingsFolder}/" '';
-in 
+in
 
   writeShellScriptBin ''vscodeNixUpdate-${lib.removeSuffix ".json" (fileName)}''
-  (lib.optionalString (settings != {}) 
+  (lib.optionalString (settings != {})
     (if createIfDoesNotExists then ''
       [ ! -f "${vscodeSettingsFile}" ] && ${createEmptySettingsCmd}
       ${updateVSCodeSettingsCmd} ${symlinkFromUserSettingCmd}

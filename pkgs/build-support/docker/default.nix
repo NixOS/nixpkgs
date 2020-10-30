@@ -718,28 +718,41 @@ rec {
          architecture = buildPackages.go.GOARCH;
          os = "linux";
       });
-      customisationLayer = runCommand "${name}-customisation-layer" { inherit extraCommands; } ''
-        cp -r ${contentsEnv}/ $out
 
-        if [[ -n $extraCommands ]]; then
-          chmod u+w $out
-          (cd $out; eval "$extraCommands")
-        fi
-      '';
-      contentsEnv = symlinkJoin {
-        name = "${name}-bulk-layers";
-        paths = if builtins.isList contents
-          then contents
-          else [ contents ];
+      contentsList = if builtins.isList contents then contents else [ contents ];
+
+      # We store the customisation layer as a tarball, to make sure that
+      # things like permissions set on 'extraCommands' are not overriden
+      # by Nix. Then we precompute the sha256 for performance.
+      customisationLayer = symlinkJoin {
+        name = "${name}-customisation-layer";
+        paths = contentsList;
+        inherit extraCommands;
+        postBuild = ''
+          mv $out old_out
+          (cd old_out; eval "$extraCommands" )
+
+          mkdir $out
+
+          tar \
+            --owner 0 --group 0 --mtime "@$SOURCE_DATE_EPOCH" \
+            --hard-dereference \
+            -C old_out \
+            -cf $out/layer.tar .
+
+          sha256sum $out/layer.tar \
+            | cut -f 1 -d ' ' \
+            > $out/checksum
+        '';
       };
 
-      # NOTE: the `closures` parameter is a list of closures to include.
-      # The TOP LEVEL store paths themselves will never be present in the
-      # resulting image. At this time (2020-06-18) none of these layers
-      # are appropriate to include, as they are all created as
-      # implementation details of dockerTools.
-      closures = [ baseJson contentsEnv ];
-      overallClosure = writeText "closure" (lib.concatStringsSep " " closures);
+      closureRoots = [ baseJson ] ++ contentsList;
+      overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
+
+      # These derivations are only created as implementation details of docker-tools,
+      # so they'll be excluded from the created images.
+      unnecessaryDrvs = [ baseJson overallClosure ];
+
       conf = runCommand "${name}-conf.json" {
         inherit maxLayers created;
         imageName = lib.toLower name;
@@ -751,9 +764,6 @@ rec {
         paths = referencesByPopularity overallClosure;
         buildInputs = [ jq ];
       } ''
-        paths() {
-          cat $paths ${lib.concatMapStringsSep " " (path: "| (grep -v ${path} || true)") (closures ++ [ overallClosure ])}
-        }
         ${if (tag == null) then ''
           outName="$(basename "$out")"
           outHash=$(echo "$outName" | cut -d - -f 1)
@@ -767,6 +777,12 @@ rec {
         if [[ "$created" != "now" ]]; then
             created="$(date -Iseconds -d "$created")"
         fi
+
+        paths() {
+          cat $paths ${lib.concatMapStringsSep " "
+                         (path: "| (grep -v ${path} || true)")
+                         unnecessaryDrvs}
+        }
 
         # Create $maxLayers worth of Docker Layers, one layer per store path
         # unless there are more paths than $maxLayers. In that case, create
@@ -803,7 +819,13 @@ rec {
       '';
       result = runCommand "stream-${name}" {
         inherit (conf) imageName;
-        passthru = { inherit (conf) imageTag; };
+        passthru = {
+          inherit (conf) imageTag;
+
+          # Distinguish tarballs and exes at the Nix level so functions that
+          # take images can know in advance how the image is supposed to be used.
+          isExe = true;
+        };
         buildInputs = [ makeWrapper ];
       } ''
         makeWrapper ${streamScript} $out --add-flags ${conf}

@@ -43,6 +43,7 @@
 , sqlite
 , enableGtk2Plugins ? false
 , gtk2 ? null
+, enableGLES ? true
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
@@ -61,13 +62,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.28.3";
+  version = "2.28.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "08imj2q6h975mz7714dqdrmbav0s884990gf98xf2862fb08m2gh";
+    sha256 = "0r4lkk21pny2g4mmsw0ds14m5hhjys1l47gvy59dfgihr7l546c2";
   };
 
   patches = optionals stdenv.isLinux [
@@ -167,7 +168,7 @@ stdenv.mkDerivation rec {
     "-DUSE_ACCELERATE=0"
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
-    ++ optional stdenv.isLinux "-DENABLE_GLES2=ON";
+    ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .

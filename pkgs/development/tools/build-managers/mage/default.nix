@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
 
+  doCheck = false;
+
   buildFlagsArray = [
     "-ldflags="
     "-X github.com/magefile/mage/mage.commitHash=v${version}"
@@ -25,6 +27,5 @@ buildGoModule rec {
     homepage = "https://magefile.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ swdunlop ];
-    platforms = platforms.all;
   };
 }

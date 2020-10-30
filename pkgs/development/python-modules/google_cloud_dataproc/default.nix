@@ -4,19 +4,21 @@
 , google_api_core
 , pytest
 , mock
+, libcst
+, proto-plus
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "0.8.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f37327079f6bc59fafcfb7ba4855137d26190a8d31fe8ee5180460a5eebd645f";
+    sha256 = "d6d94af6c0d5aee0bb88d058a180f4d3341209e112f85a1c7ce0df7887cbf867";
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core ];
+  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
 
   checkPhase = ''
     pytest tests/unit

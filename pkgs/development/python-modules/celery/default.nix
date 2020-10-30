@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.4.6";
+  version = "4.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ni5c3qgbhb7871b3i55wc306m3g2n0qxp92g5gszdxiicjf8xzx";
+    sha256 = "d220b13a8ed57c78149acf82c006785356071844afe0b27012a4991d44026f9f";
   };
 
   postPatch = ''

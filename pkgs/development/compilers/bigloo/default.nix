@@ -1,17 +1,29 @@
-{ fetchurl, stdenv, gmp }:
+{ fetchurl, stdenv, autoconf, automake, libtool, gmp
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.1a-2";
+  version = "4.3h";
 
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo${version}.tar.gz";
-    sha256 = "09yrz8r0jpj7bda39fdxzrrdyhi851nlfajsyf0b6jxanz6ygcjx";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
+    sha256 = "0fw08096sf8ma2cncipnidnysxii0h0pc7kcqkjhkhdchknp8vig";
   };
+
+  nativeBuildInputs = [ autoconf automake libtool ];
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin
+    darwin.apple_sdk.frameworks.ApplicationServices
+  ;
 
   propagatedBuildInputs = [ gmp ];
 
   preConfigure =
+    # For libuv on darwin
+    stdenv.lib.optionalString stdenv.isDarwin ''
+      export LIBTOOLIZE=libtoolize
+    '' +
     # Help libgc's configure.
     '' export CXXCPP="$CXX -E"
     '';

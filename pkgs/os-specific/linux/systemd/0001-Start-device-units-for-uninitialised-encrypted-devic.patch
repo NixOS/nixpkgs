@@ -1,4 +1,4 @@
-From 22f46f55c81d84e83a4614856d84e63c8400165c Mon Sep 17 00:00:00 2001
+From 46c8ccfeb61253cd3dff5f34013670c7e3366ef5 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:46:30 +0100
 Subject: [PATCH 01/18] Start device units for uninitialised encrypted devices
@@ -13,7 +13,7 @@ unit.  (However, this ignores the fsck unit, so it's not perfect...)
  1 file changed, 4 deletions(-)
 
 diff --git a/rules.d/99-systemd.rules.in b/rules.d/99-systemd.rules.in
-index c34b606216..3ab8c1c3fe 100644
+index 1c60eec587..b2486da130 100644
 --- a/rules.d/99-systemd.rules.in
 +++ b/rules.d/99-systemd.rules.in
 @@ -17,10 +17,6 @@ SUBSYSTEM=="ubi", TAG+="systemd"
@@ -28,5 +28,5 @@ index c34b606216..3ab8c1c3fe 100644
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}!="crypto_LUKS", SYMLINK+="gpt-auto-root"
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}=="crypto_LUKS", SYMLINK+="gpt-auto-root-luks"
 -- 
-2.26.2
+2.28.0
 

@@ -1,34 +1,58 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, python, pytest
-, typing-extensions
-, protobuf
-, hidapi
-, ecdsa
-, mnemonic
-, requests
-, pyblake2
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, installShellFiles
+, attrs
 , click
 , construct
+, ecdsa
+, hidapi
 , libusb1
+, mnemonic
+, pillow
+, protobuf
+, pyblake2
+, requests
 , rlp
 , shamir-mnemonic
+, typing-extensions
 , trezor-udev-rules
-, installShellFiles
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.12.1";
+  version = "0.12.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w19m9lws55k9sjhras47hpfpqwq1jm5vy135nj65yhkblygqg19";
+    sha256 = "0r0j0y0ii62ppawc8qqjyaq0fkmmb0zk1xb3f9navxp556w2dljv";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic trezor-udev-rules ];
+  propagatedBuildInputs = [
+    attrs
+    click
+    construct
+    ecdsa
+    hidapi
+    libusb1
+    mnemonic
+    pillow
+    protobuf
+    pyblake2
+    requests
+    rlp
+    shamir-mnemonic
+    typing-extensions
+  ] ++ lib.optionals stdenv.isLinux [
+    trezor-udev-rules
+  ];
 
   checkInputs = [
     pytest
@@ -52,9 +76,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
+    description = "Python library for communicating with Trezor Hardware Wallet";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ np prusnak mmahut maintainers."1000101" ];
+    maintainers = with maintainers; [ np prusnak mmahut _1000101 ];
   };
 }

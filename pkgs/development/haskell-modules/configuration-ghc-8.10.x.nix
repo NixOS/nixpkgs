@@ -62,17 +62,29 @@ self: super: {
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
-  pandoc = doJailbreak super.pandoc;
   system-fileio = doJailbreak super.system-fileio;
   unliftio-core = doJailbreak super.unliftio-core;
 
   # Use the latest version to fix the build.
-  dhall = self.dhall_1_33_1;
+  dhall = self.dhall_1_36_0;
   lens = self.lens_4_19_2;
-  optics-core = self.optics-core_0_3;
+  optics = self.optics_0_3;
+  optics-core = self.optics-core_0_3_0_1;
+  optics-extra = self.optics-extra_0_3;
+  optics-th = self.optics-th_0_3_0_2;
   repline = self.repline_0_4_0_0;
   singletons = self.singletons_2_7;
   th-desugar = self.th-desugar_1_11;
+
+  insert-ordered-containers = super.insert-ordered-containers.override {
+    optics-core = self.optics-core_0_3_0_1;
+    optics-extra = self.optics-extra_0_3.override {
+      optics-core = self.optics-core_0_3_0_1;
+    };
+  };
+
+  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  monoidal-containers = doJailbreak super.monoidal-containers;
 
   # `ghc-lib-parser-ex` (see conditionals in its `.cabal` file) does not need
   # the `ghc-lib-parser` dependency on GHC >= 8.8. However, because we have
@@ -116,5 +128,8 @@ self: super: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }));
+
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
 
 }

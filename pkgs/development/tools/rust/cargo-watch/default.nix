@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Cargo subcommand for watching over Cargo project's source";
     homepage = "https://github.com/passcod/cargo-watch";
     license = licenses.cc0;
-    platforms = platforms.all;
     maintainers = with maintainers; [ xrelkd ivan ];
   };
 }

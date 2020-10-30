@@ -27,5 +27,4 @@ mkDerivation {
     kdepim-addons
   ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
-  patches = [ ./kmail.patch ];
 }

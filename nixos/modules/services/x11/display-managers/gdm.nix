@@ -64,13 +64,9 @@ in
 
     services.xserver.displayManager.gdm = {
 
-      enable = mkEnableOption ''
-        GDM, the GNOME Display Manager
-      '';
+      enable = mkEnableOption "GDM, the GNOME Display Manager";
 
-      debug = mkEnableOption ''
-        debugging messages in GDM
-      '';
+      debug = mkEnableOption "debugging messages in GDM";
 
       # Auto login options specific to GDM
       autoLogin.delay = mkOption {
@@ -200,7 +196,6 @@ in
       KillMode = "mixed";
       IgnoreSIGPIPE = "no";
       BusName = "org.gnome.DisplayManager";
-      StandardOutput = "syslog";
       StandardError = "inherit";
       ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
       KeyringMode = "shared";
@@ -269,7 +264,7 @@ in
     # presented and there's a little delay.
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
-      WaylandEnable=${if cfg.gdm.wayland then "true" else "false"}
+      WaylandEnable=${boolToString cfg.gdm.wayland}
       ${optionalString cfg.autoLogin.enable (
         if cfg.gdm.autoLogin.delay > 0 then ''
           TimedLoginEnable=true

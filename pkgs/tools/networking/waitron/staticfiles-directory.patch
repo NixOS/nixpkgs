@@ -1,0 +1,13 @@
+diff --git a/main.go b/main.go
+index 4046911..a126bae 100644
+--- a/main.go
++++ b/main.go
+@@ -411,7 +411,7 @@ func main() {
+ 
+ 	if configuration.StaticFilesPath != "" {
+ 		fs := http.FileServer(http.Dir(configuration.StaticFilesPath))
+-		r.Handler("GET", "/files/:filename", http.StripPrefix("/files/", fs))
++		r.Handler("GET", "/files/*filepath", http.StripPrefix("/files/", fs))
+ 		log.Println("Serving static files from " + configuration.StaticFilesPath)
+ 	}
+ 

@@ -30,6 +30,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/ajeetdsouza/zoxide";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ysndr cole-h ];
-    platforms = platforms.all;
   };
 }

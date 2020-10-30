@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 (if withGtk3 then gtk3 else gtk2) xrandr ];
 
   meta = with stdenv.lib; {
-    description = "LXRandR is the standard screen manager of LXDE.";
+    description = "Standard screen manager of LXDE";
     homepage = "https://lxde.org/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ rawkode ];

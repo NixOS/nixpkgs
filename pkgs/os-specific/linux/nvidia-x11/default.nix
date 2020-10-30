@@ -22,15 +22,26 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "450.57";
-      sha256_64bit = "04fp0p5f11hrgjzhvbvxpmvl08d3m16m4r5gn9d5qans9zy7f36m";
-      settingsSha256 = "1clbj9a3kv3j8jg35c197gd7b3f9f9f4h9ll5hlax95hdg12lgan";
-      persistencedSha256 = "17747z1fsbiznfsmahxmz8kmhwwcjanpfih60v5mwzk63gy4i3d5";
+      version = "455.28";
+      sha256_64bit = "03ysf61qrb272yqkn7bhn9d65lcfhmqc2c0dbh5prp5f2ndlkqg4";
+      settingsSha256 = "0r9vclmh48yhcrnz9yrswfipj5450ga73jywdjg19gaq2s2aaf1f";
+      persistencedSha256 = "04v9d2g1r0x5dgyy9hqqyp0p9a3qxy1kzl13vklfqrwswb8jw7z1";
     }
     else legacy_390;
 
   # No active beta right now
   beta = stable;
+
+  # Vulkan developer beta driver
+  vulkan_beta = generic {
+    version = "450.56.11";
+    persistencedVersion = "450.57";
+    settingsVersion = "450.57";
+    sha256_64bit = "1k64h8sp4rf6kc7liypznjgkmxi67njy1s8xy2r341fhl62pl010";
+    settingsSha256 = "1clbj9a3kv3j8jg35c197gd7b3f9f9f4h9ll5hlax95hdg12lgan";
+    persistencedSha256 = "17747z1fsbiznfsmahxmz8kmhwwcjanpfih60v5mwzk63gy4i3d5";
+    url = "https://developer.nvidia.com/vulkan-beta-4505611-linux";
+  };
 
   # Last one supporting x86
   legacy_390 = generic {

@@ -9,6 +9,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1q8h89hqi4kxphn1g5nbcia0haz5k57is9rycwaabm55mj9s9fah";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "Radicale==" "Radicale>="
+  '';
+
   propagatedBuildInputs = with python3Packages; [
     etesync
     flask

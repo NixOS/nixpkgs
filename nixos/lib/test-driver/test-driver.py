@@ -110,7 +110,6 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     pty_master, pty_slave = pty.openpty()
     vde_process = subprocess.Popen(
         ["vde_switch", "-s", vde_socket, "--dirmode", "0700"],
-        bufsize=1,
         stdin=pty_slave,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -217,7 +216,7 @@ class Machine:
                 match = re.search("run-(.+)-vm$", cmd)
                 if match:
                     self.name = match.group(1)
-
+        self.logger = args["log"]
         self.script = args.get("startCommand", self.create_startcommand(args))
 
         tmp_dir = os.environ.get("TMPDIR", tempfile.gettempdir())
@@ -227,7 +226,10 @@ class Machine:
             os.makedirs(path, mode=0o700, exist_ok=True)
             return path
 
-        self.state_dir = create_dir("vm-state-{}".format(self.name))
+        self.state_dir = os.path.join(tmp_dir, f"vm-state-{self.name}")
+        if not args.get("keepVmState", False):
+            self.cleanup_statedir()
+        os.makedirs(self.state_dir, mode=0o700, exist_ok=True)
         self.shared_dir = create_dir("shared-xchg")
 
         self.booted = False
@@ -235,7 +237,6 @@ class Machine:
         self.pid: Optional[int] = None
         self.socket = None
         self.monitor: Optional[socket.socket] = None
-        self.logger: Logger = args["log"]
         self.allow_reboot = args.get("allowReboot", False)
 
     @staticmethod
@@ -424,15 +425,18 @@ class Machine:
                 output += out
         return output
 
-    def fail(self, *commands: str) -> None:
+    def fail(self, *commands: str) -> str:
         """Execute each command and check that it fails."""
+        output = ""
         for command in commands:
             with self.nested("must fail: {}".format(command)):
-                status, output = self.execute(command)
+                (status, out) = self.execute(command)
                 if status == 0:
                     raise Exception(
                         "command `{}` unexpectedly succeeded".format(command)
                     )
+                output += out
+        return output
 
     def wait_until_succeeds(self, command: str) -> str:
         """Wait until a command returns success and return its output.
@@ -743,7 +747,6 @@ class Machine:
 
         self.process = subprocess.Popen(
             self.script,
-            bufsize=1,
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -777,9 +780,10 @@ class Machine:
         self.log("QEMU running (pid {})".format(self.pid))
 
     def cleanup_statedir(self) -> None:
-        self.log("delete the VM state directory")
-        if os.path.isfile(self.state_dir):
+        if os.path.isdir(self.state_dir):
             shutil.rmtree(self.state_dir)
+            self.logger.log(f"deleting VM state directory {self.state_dir}")
+            self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
         if not self.booted:
@@ -837,7 +841,8 @@ class Machine:
             retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:
-        time.sleep(secs)
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {secs}")
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """Forward a TCP port on the host to a TCP port on the guest.
@@ -936,10 +941,10 @@ if __name__ == "__main__":
     for nr, vde_socket, _, _ in vde_sockets:
         os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
 
-    machines = [create_machine({"startCommand": s}) for s in vm_scripts]
-    for machine in machines:
-        if not cli_args.keep_vm_state:
-            machine.cleanup_statedir()
+    machines = [
+        create_machine({"startCommand": s, "keepVmState": cli_args.keep_vm_state})
+        for s in vm_scripts
+    ]
     machine_eval = [
         "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
     ]

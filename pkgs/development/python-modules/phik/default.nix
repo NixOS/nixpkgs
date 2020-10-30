@@ -5,6 +5,7 @@
 , pytest
 , pytest-pylint
 , nbconvert
+, joblib
 , jupyter_client
 , numpy
 , scipy
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    joblib
     numpy
     scipy
     pandas

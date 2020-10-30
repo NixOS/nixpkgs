@@ -183,8 +183,8 @@ in
     }
     ]) eachBitcoind);
 
-    environment.systemPackages = flatten (mapAttrsToList (bitcoindName: cfg: [ 
-      cfg.package 
+    environment.systemPackages = flatten (mapAttrsToList (bitcoindName: cfg: [
+      cfg.package
     ]) eachBitcoind);
 
     systemd.services = mapAttrs' (bitcoindName: cfg: (
@@ -256,6 +256,6 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ maintainers."1000101" ];
+  meta.maintainers = with maintainers; [ _1000101 ];
 
 }

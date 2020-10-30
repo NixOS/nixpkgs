@@ -10,11 +10,11 @@ with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.8.1";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "00g2vw7lz3yb4nq358x8d3r4mf3hkrq2vw1g9lli27zdp5p6jja1";
+    sha256 = "1ls6n1a8vjgwkb40drpc3rapjligaf9fp218539fnwvhv26div69";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -29,6 +29,7 @@ perlPackages.buildPerlPackage rec {
       Glib
       GlibObjectIntrospection
       GooCanvas2
+      LocaleCodes
       LocaleGettext
       PDFAPI2
       ImageSane

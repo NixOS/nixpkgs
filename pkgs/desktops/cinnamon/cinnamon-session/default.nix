@@ -27,17 +27,17 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "4.4.1";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1bkhzgdinsk4ahp1b4jf50phxwv2da23rh35cmg9fbm5c88701ga";
+    sha256 = "133vpgs0dqr16pvx5wyxhfcargn9wl14z0q99m2pn93hf6zycmsv";
   };
 
   patches = [
-    ./0001-Add-dbus_glib-dependency.patch
+    ./0001-Use-dbus_glib-instead-of-elogind.patch
   ];
 
   buildInputs = [
@@ -100,6 +100,6 @@ stdenv.mkDerivation rec {
     description = "The Cinnamon session manager";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d396ae1938e966e1ac3b981d14db7b0f9fabab553b0876c3202e187e4b477ab6";
+    sha256 = "c8d098ebd208d00c8f3bb55eefecd8553e7391d59700426a97d35125f0dcb248";
   };
 
   checkInputs = [ pytest mock ];

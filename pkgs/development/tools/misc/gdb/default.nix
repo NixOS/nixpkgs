@@ -17,20 +17,19 @@
 }:
 
 let
-  basename = "gdb-${version}";
-  version = "9.2";
+  basename = "gdb";
+  targetPrefix = stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                 "${stdenv.targetPlatform.config}-";
 in
 
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  name =
-    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                              (stdenv.targetPlatform.config + "-")
-    + basename;
+  pname = targetPrefix + basename;
+  version = "9.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gdb/${basename}.tar.xz";
+    url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
     sha256 = "0mf5fn8v937qwnal4ykn3ji1y2sxk0fa1yfqi679hxmpg6pdf31n";
   };
 

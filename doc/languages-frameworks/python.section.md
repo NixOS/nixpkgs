@@ -538,8 +538,123 @@ buildPythonPackage rec {
 ```
 Note also the line `doCheck = false;`, we explicitly disabled running the test-suite.
 
+#### Testing Python Packages
 
-#### Develop local package
+It is highly encouraged to have testing as part of the package build. This
+helps to avoid situations where the package was able to build and install,
+but is not usable at runtime. Currently, all packages will use the `test`
+command provided by the setup.py (i.e. `python setup.py test`). However,
+this is currently deprecated https://github.com/pypa/setuptools/pull/1878
+and your package should provide its own checkPhase.
+
+*NOTE:* The `checkPhase` for python maps to the `installCheckPhase` on a
+normal derivation. This is due to many python packages not behaving well
+to the pre-installed version of the package. Version info, and natively
+compiled extensions generally only exist in the install directory, and
+thus can cause issues when a test suite asserts on that behavior.
+
+*NOTE:* Tests should only be disabled if they don't agree with nix
+(e.g. external dependencies, network access, flakey tests), however,
+as many tests should be enabled as possible. Failing tests can still be
+a good indication that the package is not in a valid state.
+
+#### Using pytest
+
+Pytest is the most common test runner for python repositories. A trivial
+test run would be:
+```
+  checkInputs = [ pytest ];
+  checkPhase = "pytest";
+```
+
+However, many repositories' test suites do not translate well to nix's build
+sandbox, and will generally need many tests to be disabled.
+
+To filter tests using pytest, one can do the following:
+```
+  checkInputs = [ pytest ];
+  # avoid tests which need additional data or touch network
+  checkPhase = ''
+    pytest tests/ --ignore=tests/integration -k 'not download and not update'
+  '';
+```
+
+`--ignore` will tell pytest to ignore that file or directory from being
+collected as part of a test run. This is useful is a file uses a package
+which is not available in nixpkgs, thus skipping that test file is much
+easier than having to create a new package.
+
+`-k` is used to define a predicate for test names. In this example, we are
+filtering out tests which contain `download` or `update` in their test case name.
+Only one `-k` argument is allows, and thus a long predicate should be concatenated
+with "\" and wrapped to the next line.
+
+*NOTE:* In pytest==6.0.1, the use of "\" to continue a line (e.g. `-k 'not download \'`) has
+been removed, in this case, it's recommended to use `pytestCheckHook`.
+
+#### Using pytestCheckHook
+
+`pytestCheckHook` is a convenient hook which will substitute the setuptools
+`test` command for a checkPhase which runs `pytest`. This is also beneficial
+when a package may need many items disabled to run the test suite.
+
+Using the example above, the analagous pytestCheckHook usage would be:
+```
+  checkInputs = [ pytestCheckHook ];
+
+  # requires additional data
+  pytestFlagsArray = [ "tests/" "--ignore=tests/integration" ];
+
+  disabledTests = [
+    # touches network
+    "download"
+    "update"
+  ];
+```
+
+This is expecially useful when tests need to be conditionallydisabled,
+for example:
+
+```
+  disabledTests = [
+    # touches network
+    "download"
+    "update"
+  ] ++ lib.optionals (pythonAtLeast "3.8") [
+    # broken due to python3.8 async changes
+    "async"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # can fail when building with other packages
+    "socket"
+  ];
+```
+Trying to concatenate the related strings to disable tests in a regular checkPhase
+would be much harder to read. This also enables us to comment on why specific tests
+are disabled.
+
+#### Using pythonImportsCheck
+
+Although unit tests are highly prefered to valid correctness of a package. Not
+all packages have test suites that can be ran easily, and some have none at all.
+To help ensure the package still works, `pythonImportsCheck` can attempt to import
+the listed modules.
+
+```
+  pythonImportsCheck = [ "requests" "urllib" ];
+```
+roughly translates to:
+```
+  postCheck = ''
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    python -c "import requests; import urllib"
+  '';
+```
+However, this is done in it's own phase, and not dependent on whether `doCheck = true;`
+
+This can also be useful in verifying that the package doesn't assume commonly
+present packages (e.g. `setuptools`)
+
+### Develop local package
 
 As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
 (`python setup.py develop`); instead of installing the package this command
@@ -640,8 +755,8 @@ and in this case the `python38` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.5, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
-respectively `python27`, `python35`, `python36`, `python37` and `python38`. The
+Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
+respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python38`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
@@ -689,15 +804,16 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python35Packages`
 * `pkgs.python36Packages`
 * `pkgs.python37Packages`
+* `pkgs.python38Packages`
+* `pkgs.python39Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python37Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python38Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function
@@ -1016,7 +1132,7 @@ are used in `buildPythonPackage`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
   (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pipInstallHook` to install wheels.
-- `pytestCheckHook` to run tests with `pytest`.
+- `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.

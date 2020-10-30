@@ -298,21 +298,10 @@ rec {
     name = "no-store-paths";
     tag = "latest";
     extraCommands = ''
-      chmod a+w bin
-
       # This removes sharing of busybox and is not recommended. We do this
       # to make the example suitable as a test case with working binaries.
       cp -r ${pkgs.pkgsStatic.busybox}/* .
     '';
-    contents = [
-      # This layer has no dependencies and its symlinks will be dereferenced
-      # when creating the customization layer.
-      (pkgs.runCommand "layer-to-flatten" {} ''
-        mkdir -p $out/bin
-        ln -s /bin/true $out/bin/custom-true
-      ''
-      )
-    ];
   };
 
   nixLayered = pkgs.dockerTools.buildLayeredImageWithNixDb {
@@ -415,7 +404,7 @@ rec {
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
       tag = "latest";
-      contents = [ pkgs.bash pkgs.coreutils (nonRootShadowSetup { uid = 999; user = "somebody"; }) ];
+      contents = [ pkgs.bash pkgs.coreutils ] ++ nonRootShadowSetup { uid = 999; user = "somebody"; };
     };
 
 }

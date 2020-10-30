@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/Luz/hexdino";
     license = licenses.mit;
     maintainers = [ maintainers.luz ];
-    platforms = platforms.all;
   };
 }

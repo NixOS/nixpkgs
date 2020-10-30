@@ -2,18 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "qalculate-gtk";
-  version = "3.8.0a";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     rev = "v${version}";
-    sha256 = "0bjd61bbc5b2i09kz3ss01c0xmxrhmiv5wpbhhplkp3yhw2qrf3m";
+    sha256 = "0yrzvsii84r9d2i2hrs4f65wzv3yj24l9d9yqfv3j85881h8wkm2";
   };
-
-  patchPhase = ''
-    substituteInPlace src/main.cc --replace 'getPackageDataDir().c_str()' \"$out/share\"
-  '';
 
   hardeningDisable = [ "format" ];
 

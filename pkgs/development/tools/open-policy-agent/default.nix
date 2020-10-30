@@ -2,16 +2,17 @@
 
 buildGoPackage rec {
   pname = "open-policy-agent";
-  version = "0.15.0";
+  version = "0.24.0";
 
   goPackagePath = "github.com/open-policy-agent/opa";
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    sha256 = "0i9735v73a7wfq02p4hsy61g7d7bip6zmb8bnsiz2ma84g2g533w";
+    sha256 = "0fv2rq8a01hapcpgfqp71v113iyyzs5w1sam14h9clyr1vqrbcf2";
   };
-  goDeps = ./deps.nix;
+
+  subPackages = [ "." ];
 
   buildFlagsArray = ''
     -ldflags=
@@ -23,6 +24,5 @@ buildGoPackage rec {
     homepage = "https://www.openpolicyagent.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ lewo ];
-    platforms = platforms.all;
   };
 }

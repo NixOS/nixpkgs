@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "9.0";
+  version = "9.1.1";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r5qnkkhkfvx1jbi1wfyxpyggwyr32w6h5z3i93a03bc92kc4nl9";
+    sha256 = "1cb11a17fc121b3918414eb5eaf314ee325f2e693ac7cb3f6abf7560790827f2";
   };
 
   checkInputs = [ mock pytest ];

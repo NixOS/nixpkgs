@@ -56,11 +56,16 @@ indent_size = unset
 
 [deps.nix]
 insert_final_newline = unset
+[pkgs/tools/networking/dd-agent/*-deps.nix]
+insert_final_newline = unset
+
+[eggs.nix]
+trim_trailing_whitespace = unset
 
 [gemset.nix]
 insert_final_newline = unset
 
-[node-packages.nix]
+[node-{composition,packages,packages-generated}.nix]
 insert_final_newline = unset
 
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
@@ -69,31 +74,37 @@ trim_trailing_whitespace = unset
 [nixos/tests/systemd-networkd-vrf.nix]
 trim_trailing_whitespace = unset
 
-[pkgs/applications/editors/emacs-modes/recipes-archive-melpa.json]
-indent_size = unset
-
-[pkgs/build-support/dotnetenv/Wrapper/**.*]
+[pkgs/build-support/dotnetenv/Wrapper/**]
 end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
-[pkgs/development/lisp-modules/quicklisp-to-nix.nix]
-indent_size = unset
+[pkgs/build-support/upstream-updater/**]
+trim_trailing_whitespace = unset
+
+[pkgs/development/compilers/elm/registry.dat]
+end_of_line = unset
+insert_final_newline = unset
 
 [pkgs/development/haskell-modules/hackage-packages.nix]
 indent_style = unset
-indent_size = unset
 trim_trailing_whitespace = unset
 
 [pkgs/development/mobile/androidenv/generated/{addons,packages}.nix]
 trim_trailing_whitespace = unset
 
-[pkgs/development/node-packages/node-packages.nix]
+[pkgs/development/node-packages/composition.nix]
 insert_final_newline = unset
 
 [pkgs/servers/dict/wordnet_structures.py]
-indent_size = unset
 trim_trailing_whitespace = unset
 
-[pkgs/top-level/perl-packages.nix]
-indent_size = unset
+[pkgs/tools/misc/timidity/timidity.cfg]
+trim_trailing_whitespace = unset
+
+[pkgs/tools/security/enpass/data.json]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+[pkgs/top-level/emscripten-packages.nix]
+trim_trailing_whitespace = unset

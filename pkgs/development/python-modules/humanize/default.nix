@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.4.0";
+  version = "2.6.0";
   pname = "humanize";
   disabled = isPy27; # setup.py no longer compatible
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42ae7d54b398c01bd100847f6cb0fc9e381c21be8ad3f8e2929135e48dbff026";
+    sha256 = "8ee358ea6c23de896b9d1925ebe6a8504bb2ba7e98d5ccf4d07ab7f3b28f3819";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

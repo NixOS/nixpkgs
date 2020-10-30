@@ -11,21 +11,6 @@
 , autoreconfHook
 }:
 
-/** Font configuration scheme
- - ./config-compat.patch makes fontconfig try the following root configs, in order:
-    $FONTCONFIG_FILE, /etc/fonts/${configVersion}/fonts.conf, ${fontconfig.out}/etc/fonts/fonts.conf
-    This is done not to override config of pre-2.11 versions (which just blow up)
-    and still use *global* font configuration at NixOS,
-    falling back to upstream defaults on non-NixOS.
- - NixOS creates /etc/fonts/${configVersion}/fonts.conf link to $out/etc/fonts/fonts.conf,
-    and other modifications should go to /etc/fonts/${configVersion}/conf.d
- - See ./make-fonts-conf.xsl for config details.
-
-*/
-
-let
-  configVersion = "2.11"; # bump whenever fontconfig breaks compatibility with older configurations
-in
 stdenv.mkDerivation rec {
   pname = "fontconfig";
   version = "2.13.92";
@@ -36,11 +21,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./config-compat.patch;
-      inherit configVersion;
-    })
-
     # Fix fonts not being loaded when missing included configs that have ignore_missing="yes".
     # https://bugzilla.redhat.com/show_bug.cgi?id=1744377
     (fetchpatch {
@@ -73,6 +53,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/37c7c748740bf6f2468d59e67951902710240b34.patch";
       sha256 = "1rz5zrfwhpn9g49wrzzrmdglj78pbvpnw8ksgsw6bxq8l5d84jfr";
     })
+
+    # Show warning instead of error when encountering unknown attribute in config.
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/111
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/409b37c62780728755c908991c912a6b16f2389c.patch";
+      sha256 = "zJFh37QErSAINPGFkFVJyhYRP27BuIN7PIgoDl/PIwI=";
+    })
   ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
@@ -93,6 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
     "--disable-docs"
@@ -106,31 +94,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # Don't try to write to /var/cache/fontconfig at install time.
-  installFlags = [ "fc_cachedir=$(TMPDIR)/dummy" "RUN_FC_CACHE_TEST=false" ];
+  installFlags = [
+    # Don't try to write to /var/cache/fontconfig at install time.
+    "fc_cachedir=$(TMPDIR)/dummy"
+    "RUN_FC_CACHE_TEST=false"
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   postInstall = ''
     cd "$out/etc/fonts"
     xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
-      --stringparam fontconfig "$out" \
-      --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
-
-    # Make it easier to remove user config in NixOS module.
-    mkdir -p $out/etc/fonts/conf.d.bak
-    mv $out/etc/fonts/conf.d/50-user.conf $out/etc/fonts/conf.d.bak
-
-    # update latest 51-local.conf path to look at the latest local.conf
-    substituteInPlace $out/etc/fonts/conf.d/51-local.conf \
-      --replace local.conf /etc/fonts/${configVersion}/local.conf
   '';
-
-  passthru = {
-    inherit configVersion;
-  };
 
   meta = with stdenv.lib; {
     description = "A library for font customization and configuration";

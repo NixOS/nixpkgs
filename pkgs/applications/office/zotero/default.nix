@@ -1,6 +1,7 @@
 { stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
 , atk
 , cairo
+, coreutils
 , curl
 , cups
 , dbus-glib
@@ -35,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "5.0.88";
+  version = "5.0.89";
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "19r9jmakr04raqripfnqm2b9gwpi52lklrrqgqyb1x35a4xvnj62";
+    sha256 = "18p4qnnfx9f2frk7f2nk1d7jr4cjzg9z7lfzrk7vq11qgbjdpqbl";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -129,6 +130,12 @@ stdenv.mkDerivation rec {
      find . -executable -type f -exec \
        patchelf --set-rpath "$libPath" \
          "$out/usr/lib/zotero-bin-${version}/{}" \;
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils ]}
+    )
   '';
 
   meta = with stdenv.lib; {

@@ -1,19 +1,27 @@
-{ rustPlatform, fetchFromGitHub, lib, nasm }:
+{ rustPlatform, fetchFromGitHub, lib, nasm, cargo-c }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "xiph";
     repo = "rav1e";
     rev = "v${version}";
-    sha256 = "0a9dryag4x35a2c45qiq1j5xk9ydcpw1g6kici85d2yrc2z3hwrx";
+    sha256 = "0zwjg0sv504i1ahzfy2jgng6qwmyvcrvdrp4n3s90r4kvwjkv8xs";
   };
 
-  cargoSha256 = "1xaincrmpicp0skf9788w5631x1hxvifvq06hh5ribdz79zclzx3";
+  cargoSha256 = "1mfzshcbxky27nskxhcyrj99wd3v5f597ymgv7nb67lzp5lsyb24";
 
-  nativeBuildInputs = [ nasm ];
+  nativeBuildInputs = [ nasm cargo-c ];
+
+  postBuild = ''
+    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+  '';
+
+  postInstall = ''
+    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+  '';
 
   meta = with lib; {
     description = "The fastest and safest AV1 encoder";
@@ -27,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ maintainers.primeos ];
-    platforms = platforms.all;
   };
 }

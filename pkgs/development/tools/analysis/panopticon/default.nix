@@ -45,6 +45,5 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
   };
 }

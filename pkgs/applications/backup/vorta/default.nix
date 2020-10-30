@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "vorta";
-  version = "0.6.26";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    sha256 = "189kzwdmissg9142cd7wvxa1rvc2y7lysgr7if99zc7ks59mv6dq";
+    sha256 = "069fq5gv324l2ap3g6m6i12lhq1iqm27dsmaagyc3sva945j0gxw";
   };
 
   postPatch = ''
@@ -28,8 +28,8 @@ buildPythonApplication rec {
   # QT setup in tests broken.
   doCheck = false;
 
-  postFixup = ''
-    wrapQtApp $out/bin/vorta
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

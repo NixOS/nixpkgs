@@ -16,7 +16,7 @@ buildGoPackage rec {
   };
 
   meta = {
-    description = "Utility to extract JSON representation of declarations from a Go source file.";
+    description = "Utility to extract JSON representation of declarations from a Go source file";
     homepage = "https://github.com/ramya-rao-a/go-outline";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
     license = stdenv.lib.licenses.mit;

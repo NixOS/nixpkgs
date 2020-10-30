@@ -180,7 +180,6 @@ in
         gtk3.out
         hicolor-icon-theme
         lightlocker
-        nixos-artwork.wallpapers.simple-dark-gray
         onboard
         qgnomeplatform
         shared-mime-info
@@ -240,6 +239,8 @@ in
       # Otherwise you can't store NetworkManager Secrets with
       # "Store the password only for this user"
       programs.nm-applet.enable = true;
+      # Pantheon has its own network indicator
+      programs.nm-applet.indicator = false;
 
       # Shell integration for VTE terminals
       programs.bash.vteIntegration = mkDefault true;

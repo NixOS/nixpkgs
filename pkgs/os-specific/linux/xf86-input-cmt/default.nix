@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Chromebook touchpad driver.";
+    description = "Chromebook touchpad driver";
     license = licenses.bsd3;
     platforms = platforms.linux;
     homepage = "https://www.github.com/hugegreenbug/xf86-input-cmt";

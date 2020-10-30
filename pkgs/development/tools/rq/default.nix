@@ -26,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dflemstr/rq";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ aristid filalex77 ];
-    platforms = platforms.all;
   };
 }

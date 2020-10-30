@@ -1,17 +1,23 @@
-{ stdenv, lib, fetchgit, pkg-config, meson, ninja, freetype, fontconfig, pixman, tllist }:
+{ stdenv, lib, fetchgit, pkg-config, meson, ninja, scdoc
+,freetype, fontconfig, harfbuzz, pixman, tllist, check }:
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "0.4.3";
+  version = "2.3.1";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/fcft.git";
-    rev = "${version}";
-    sha256 = "1r2k5726k6ps8ml2s1vqmpiggqxzq9pbzs7m0dsxk29mh8vg0psj";
+    rev = version;
+    sha256 = "sha256-FD3KfaQbSEA1XdmS6YxH+c5fSsra9Ro/KKslb7Brv7U=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [ freetype fontconfig pixman tllist ];
+  nativeBuildInputs = [ pkg-config meson ninja scdoc ];
+  buildInputs = [ freetype fontconfig pixman tllist harfbuzz ];
+  checkInputs = [ check ];
+
+  mesonFlags = [ "--buildtype=release" ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fcft";

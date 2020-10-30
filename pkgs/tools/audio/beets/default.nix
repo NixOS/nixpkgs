@@ -31,6 +31,7 @@
 , enableAlternatives   ? false
 , enableCheck          ? false, liboggz ? null
 , enableCopyArtifacts  ? false
+, enableExtraFiles     ? false
 
 , bashInteractive, bash-completion
 }:
@@ -100,6 +101,7 @@ let
   externalTestArgs.beets = (beets.override {
     enableAlternatives = false;
     enableCopyArtifacts = false;
+    enableExtraFiles = false;
   }).overrideAttrs (stdenv.lib.const {
     doInstallCheck = false;
   });
@@ -110,6 +112,7 @@ let
     alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
     check = callPackage ./check-plugin.nix pluginArgs;
     copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
+    extrafiles = callPackage ./extrafiles-plugin.nix pluginArgs;
   };
 
 in pythonPackages.buildPythonApplication rec {
@@ -156,7 +159,9 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableThumbnails    pythonPackages.pyxdg
     ++ optional enableWeb           pythonPackages.flask
     ++ optional enableAlternatives  plugins.alternatives
-    ++ optional enableCopyArtifacts plugins.copyartifacts;
+    ++ optional enableCopyArtifacts plugins.copyartifacts
+    ++ optional enableExtraFiles    plugins.extrafiles
+  ;
 
   buildInputs = [
     imagemagick
@@ -190,6 +195,11 @@ in pythonPackages.buildPythonApplication rec {
       url = "https://github.com/beetbox/beets/commit/d43d54e21cde97f57f19486925ab56b419254cc8.patch";
       sha256 = "13n2gzmcgfi0m2ycl2r1hpczgksplnkc3y6b66vg57rx5y8nnv5c";
     })
+
+    # Fixes 548 tests due to breaking changes to the ast module
+    # https://github.com/beetbox/beets/pull/3621
+    # Can be dropped after 1.4.9
+    ./compatibility-with-breaking-changes-to-the-ast-module.patch
   ];
 
   postPatch = ''

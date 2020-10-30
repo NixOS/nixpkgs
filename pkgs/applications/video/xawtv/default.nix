@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "055p0wia0xsj073l8mg4ifa6m81dmv6p45qyh99brramq5iylfy5";
   };
 
+  patches = [
+    ./0001-Fix-build-for-glibc-2.32.patch
+  ];
+
   buildInputs = [
     ncurses
     libjpeg

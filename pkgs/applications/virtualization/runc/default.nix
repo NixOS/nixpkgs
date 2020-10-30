@@ -14,13 +14,13 @@
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc91";
+  version = "1.0.0-rc92";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "1hg3hbbjsz76q1piz86q8la6dym86d65xd7h6q12krfmwd2lbhkw";
+    sha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
@@ -45,7 +45,7 @@ buildGoPackage rec {
     installManPage man/*/*.[1-9]
   '';
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

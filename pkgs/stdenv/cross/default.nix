@@ -63,6 +63,8 @@ in lib.init bootStages ++ [
              # `tryEval` wouldn't catch, wrecking accessing previous stages
              # when there is a C compiler and everything should be fine.
              then throw "no C compiler provided for this platform"
+           else if crossSystem.isDarwin
+             then buildPackages.llvmPackages.clang
            else if crossSystem.useLLVM or false
              then buildPackages.llvmPackages_8.lldClang
            else buildPackages.gcc;
@@ -72,7 +74,8 @@ in lib.init bootStages ++ [
              (hostPlatform.isLinux && !buildPlatform.isLinux)
              [ buildPackages.patchelf ]
         ++ lib.optional
-             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS; in f hostPlatform && !(f buildPlatform))
+             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
+               in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
            # without proper `file` command, libtool sometimes fails
            # to recognize 64-bit DLLs

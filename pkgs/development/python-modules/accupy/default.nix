@@ -7,20 +7,19 @@
 , pybind11
 , pyfma
 , eigen
-, pytest
+, pytestCheckHook
 , matplotlib
-, perfplot
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "accupy";
-  version = "0.3.1";
+  version = "0.3.3";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b568de740e1cd137a96af1801b4d3d5f795e0f97be25c29957f39f004fbcdf9a";
+    sha256 = "a234c9897a683a6ade44f0bafa71196f122a61e3ebeacb5b813e7d139d54f3c7";
   };
 
   buildInputs = [
@@ -35,9 +34,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     matplotlib
-    perfplot
   ];
 
   postConfigure = ''
@@ -49,9 +47,15 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkPhase = ''
-    pytest test
+  # performance tests aren't useful to us and disabling them allows us to
+  # decouple ourselves from an unnecessary build dep
+  preCheck = ''
+    for f in test/test*.py ; do
+      substituteInPlace $f --replace 'import perfplot' ""
+    done
   '';
+  disabledTests = [ "test_speed_comparison1" "test_speed_comparison2" ];
+  pythonImportsCheck = [ "accupy" ];
 
   meta = with lib; {
     description = "Accurate sums and dot products for Python";

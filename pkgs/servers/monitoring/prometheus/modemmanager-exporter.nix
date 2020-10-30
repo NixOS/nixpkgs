@@ -13,11 +13,13 @@ buildGoModule rec {
 
   vendorSha256 = "0f6v97cvzdz7wygswpm87wf8r169x5rw28908vqhmqk644hli4zy";
 
+  doCheck = false;
+
   passthru.tests = { inherit (nixosTests.prometheus-exporters) modemmanager; };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mdlayher/modemmanager_exporter";
-    description = "Prometheus exporter for ModemManager and its devices.";
+    description = "Prometheus exporter for ModemManager and its devices";
     license = licenses.mit;
     maintainers = with maintainers; [ mdlayher ];
   };

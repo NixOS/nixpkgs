@@ -25,7 +25,7 @@
   preBuild = ''
     export HOME=$TMPDIR
     export PYTHONASYNCIODEBUG=1
-  ''; 
+  '';
 
   # tests fail ATM.
   doCheck = false;

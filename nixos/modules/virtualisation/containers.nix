@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   cfg = config.virtualisation.containers;
 
@@ -13,10 +13,6 @@ let
     json2toml "$valuePath" "$out"
   '';
 
-  # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
-  '';
 in
 {
   meta = {
@@ -42,6 +38,12 @@ in
           This option enables the common /etc/containers configuration module.
         '';
       };
+
+    ociSeccompBpfHook.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable the OCI seccomp BPF hook";
+    };
 
     containersConf = mkOption {
       default = {};
@@ -116,6 +118,12 @@ in
       [network]
       cni_plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
 
+      ${lib.optionalString (cfg.ociSeccompBpfHook.enable == true) ''
+      [engine]
+      hooks_dir = [
+        "${config.boot.kernelPackages.oci-seccomp-bpf-hook}",
+      ]
+      ''}
     '' + cfg.containersConf.extraConfig;
 
     environment.etc."containers/registries.conf".source = toTOML "registries.conf" {
@@ -124,7 +132,7 @@ in
 
     environment.etc."containers/policy.json".source =
       if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-      else copyFile "${pkgs.skopeo.src}/default-policy.json";
+      else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
   };
 
 }

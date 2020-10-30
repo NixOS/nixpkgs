@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "oobicpl";
-  name  = "${pname}-2016-03-02";
+  version = "unstable-2016-03-02";
 
   owner = "BIC-MNI";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libminc bicpl arguments pcre-cpp ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib"
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake"
                  "-DBICPL_DIR=${bicpl}/lib"
                  "-DARGUMENTS_DIR=${arguments}/lib"
                  "-DOOBICPL_BUILD_SHARED_LIBS=TRUE" ];

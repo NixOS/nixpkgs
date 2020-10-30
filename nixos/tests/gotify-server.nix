@@ -41,5 +41,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     )
 
     assert title == "Gotify"
+
+    # Ensure that the UI responds with a successfuly code and that the
+    # response is not empty
+    result = machine.succeed("curl -fsS localhost:3000")
+    assert result, "HTTP response from localhost:3000 must not be empty!"
   '';
 })

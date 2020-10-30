@@ -7,13 +7,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "mcy";
-  version = "2020.07.06";
+  version = "2020.08.03";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "mcy";
-    rev    = "6e8433ed9acbface5e080719110a957d89d849df";
-    sha256 = "1vbzg0rgmf7kp735m6p4msxc51vpsrdwk24ir7z0zxsb8lv53gg7";
+    rev    = "62048e69df13f8e03670424626755ae8ef4c36ff";
+    sha256 = "15xxgzx1zxzx5kshqyrxnfx33cz6cjzxcdcn6z98jhs9bwyvf96f";
   };
 
   buildInputs = [ python ];

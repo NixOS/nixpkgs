@@ -2,12 +2,13 @@
 
 # Native dependencies
 , python3, gtk3, gobject-introspection, gnome3
+, glib-networking
 
 # Test dependencies
 , xvfb_run, dbus
 
 # Optional dependencies
-, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly, libnice
+, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-good, libnice
 , enableE2E ? true
 , enableSecrets ? true, libsecret
 , enableRST ? true, docutils
@@ -19,32 +20,33 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  majorVersion = "1.1";
-  version = "${majorVersion}.3";
+  version = "1.2.2";
 
   src = fetchurl {
-    url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
-    sha256 = "0bzxwcpdd4ydh6d6mzpr0gxwhcb0x9ympk55fpvm1hcw9d28a716";
+    url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
+    sha256 = "1gfcp3b5nq43xxz5my8vfhfxnnli726j3hzcgwh9fzrzzd9ic3gx";
   };
 
-  postPatch = ''
-    # This test requires network access
-    echo "" > test/integration/test_resolver.py
-  '';
-
   buildInputs = [
-    gobject-introspection gtk3 gnome3.adwaita-icon-theme wrapGAppsHook
-  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly libnice ]
+    gobject-introspection gtk3 gnome3.adwaita-icon-theme
+    glib-networking
+  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
     ++ lib.optional enableUPnP gupnp-igd;
 
   nativeBuildInputs = [
-    gettext
+    gettext wrapGAppsHook
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pyasn1 pygobject3 dbus-python pillow cssutils precis-i18n keyring setuptools
+    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
@@ -57,6 +59,9 @@ python3.pkgs.buildPythonApplication rec {
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       ${python3.interpreter} setup.py test
   '';
+
+  # necessary for wrapGAppsHook
+  strictDeps = false;
 
   meta = {
     homepage = "http://gajim.org/";

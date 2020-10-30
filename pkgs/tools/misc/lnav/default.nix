@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "tstack";
     repo = "lnav";
     rev = "v${meta.version}";
-    sha256 = "0z8bsr0falxlkmd1b5gy871vyafyih0sw7lgg858lqnbsy0q2m4i";
+    sha256 = "1frdrr3yjlk2fns3ny0qbr30rpswhwlvv3kyhdl3l6a0q5cqaqsg";
     inherit name;
   };
 
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     sqlite
     curl
   ];
+
+  postPatch = ''
+    sed -ie '/DUMP_INTERNALS/d' src/Makefile.am
+  '';
 
   preConfigure = ''
     ./autogen.sh
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.8.5";
+    version = "0.9.0";
     maintainers = with maintainers; [ dochang ma27 ];
     platforms = platforms.unix;
   };

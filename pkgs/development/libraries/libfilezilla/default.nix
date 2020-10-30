@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-
+, autoreconfHook
 , gettext
 , gnutls
 , nettle
@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0lk84aw5ylrhpy26djdw3byhjbn9qrzx5k98r0i4nwfizckw3smd";
+    sha256 = "sha256-/dW07hkWr3sdQC591GfwXfdiS7ZfuVoIdaA3EuzC1v0=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ gettext gnutls nettle ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];

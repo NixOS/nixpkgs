@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "crayons";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50e5fa729d313e2c607ae8bf7b53bb487652e10bd8e7a1e08c4bc8bf62755ffc";
+    sha256 = "dcb85b87aa03bb65bd3a073d012796b024cabeb086033e616759e2abb769440b";
   };
 
   propagatedBuildInputs = [ colorama ];

@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub
 , bash, python3, yosys
-, yices, boolector, aiger
+, yices, boolector, z3, aiger
 }:
 
 stdenv.mkDerivation {
   pname = "symbiyosys";
-  version = "2020.07.03";
+  version = "2020.08.22";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "SymbiYosys";
-    rev    = "06e80194c77f5cc38c6999b1d3047a2d6ca82e15";
-    sha256 = "1hl03qy98pgq24ijyimf9pf7qxp42l7cki66wx48jys4m1s6n8v9";
+    rev    = "33b0bb7d836fe2a73dc7b10587222f2a718beef4";
+    sha256 = "03rbrbwsji1sqcp2yhgbc0fca04zsryv2g4izjhdzv64nqjzjyhn";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [ ];
   patchPhase = ''
     patchShebangs .
 
@@ -26,14 +26,15 @@ stdenv.mkDerivation {
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
       --replace '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
-      --replace ': "btormc"'       ': "${boolector}/bin/btormc"' \
-      --replace ': "yosys"'        ': "${yosys}/bin/yosys"' \
-      --replace ': "yosys-smtbmc"' ': "${yosys}/bin/yosys-smtbmc"' \
-      --replace ': "yosys-abc"'    ': "${yosys}/bin/yosys-abc"' \
-      --replace ': "aigbmc"'       ': "${aiger}/bin/aigbmc"' \
+      --replace ', "btormc"'             ', "${boolector}/bin/btormc"' \
+      --replace ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
+
+    substituteInPlace sbysrc/sby_core.py \
+      --replace '##yosys-program-prefix##' '"${yosys}/bin/"'
   '';
 
   buildPhase = "true";
+
   installPhase = ''
     mkdir -p $out/bin $out/share/yosys/python3
 
@@ -42,6 +43,10 @@ stdenv.mkDerivation {
 
     chmod +x $out/bin/sby
   '';
+
+  doCheck = false; # not all provers are yet packaged...
+  checkInputs = [ python3 yosys boolector yices z3 aiger ];
+  checkPhase = "make test";
 
   meta = {
     description = "Tooling for Yosys-based verification flows";

@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder }:
+{ stdenv, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c4ea60c8303f4214522b18038df017cae35afda7474efa0b4e19c2e73bc3ae2";
+    sha256 = "68b42aafd4b620ab2534ff78a52584c7f799e4e55d5ac297eab4263066e6f74b";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ mock httmock ];
+  checkInputs = [ mock httmock pytest responses ];
 
   disabled = pythonOlder "3.6";
 

@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption types;
+  inherit (lib) mkBefore mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
   inherit (lib) concatStringsSep literalExample mapAttrsToList;
-  inherit (lib) optional optionalAttrs optionalString singleton versionAtLeast;
+  inherit (lib) optional optionalAttrs optionalString;
 
   cfg = config.services.redmine;
-
+  format = pkgs.formats.yaml {};
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
   databaseYml = pkgs.writeText "database.yml" ''
@@ -20,24 +20,8 @@ let
       ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
   '';
 
-  configurationYml = pkgs.writeText "configuration.yml" ''
-    default:
-      scm_subversion_command: ${pkgs.subversion}/bin/svn
-      scm_mercurial_command: ${pkgs.mercurial}/bin/hg
-      scm_git_command: ${pkgs.gitAndTools.git}/bin/git
-      scm_cvs_command: ${pkgs.cvs}/bin/cvs
-      scm_bazaar_command: ${pkgs.breezy}/bin/bzr
-      scm_darcs_command: ${pkgs.darcs}/bin/darcs
-
-    ${cfg.extraConfig}
-  '';
-
-  additionalEnvironment = pkgs.writeText "additional_environment.rb" ''
-    config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
-    config.logger.level = Logger::INFO
-
-    ${cfg.extraEnv}
-  '';
+  configurationYml = format.generate "configuration.yml" cfg.settings;
+  additionalEnvironment = pkgs.writeText "additional_environment.rb" cfg.extraEnv;
 
   unpackTheme = unpack "theme";
   unpackPlugin = unpack "plugin";
@@ -56,8 +40,13 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "postgresql";
 
 in
-
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "redmine" "extraConfig" ] "Use services.redmine.settings instead.")
+    (mkRemovedOptionModule [ "services" "redmine" "database" "password" ] "Use services.redmine.database.passwordFile instead.")
+  ];
+
+  # interface
   options = {
     services.redmine = {
       enable = mkEnableOption "Redmine";
@@ -93,21 +82,24 @@ in
         description = "The state directory, logs and plugins are stored here.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+      settings = mkOption {
+        type = format.type;
+        default = {};
         description = ''
-          Extra configuration in configuration.yml.
-
-          See <link xlink:href="https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration"/>
+          Redmine configuration (<filename>configuration.yml</filename>). Refer to
+          <link xlink:href="https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration"/>
           for details.
         '';
         example = literalExample ''
-          email_delivery:
-            delivery_method: smtp
-            smtp_settings:
-              address: mail.example.com
-              port: 25
+          {
+            email_delivery = {
+              delivery_method = "smtp";
+              smtp_settings = {
+                address = "mail.example.com";
+                port = 25;
+              };
+            };
+          }
         '';
       };
 
@@ -186,16 +178,6 @@ in
           description = "Database user.";
         };
 
-        password = mkOption {
-          type = types.str;
-          default = "";
-          description = ''
-            The password corresponding to <option>database.user</option>.
-            Warning: this is stored in cleartext in the Nix store!
-            Use <option>database.passwordFile</option> instead.
-          '';
-        };
-
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
@@ -226,11 +208,12 @@ in
     };
   };
 
+  # implementation
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.passwordFile != null || cfg.database.password != "" || cfg.database.socket != null;
-        message = "one of services.redmine.database.socket, services.redmine.database.passwordFile, or services.redmine.database.password must be set";
+      { assertion = cfg.database.passwordFile != null || cfg.database.socket != null;
+        message = "one of services.redmine.database.socket or services.redmine.database.passwordFile must be set";
       }
       { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
@@ -242,6 +225,22 @@ in
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
     ];
+
+    services.redmine.settings = {
+      production = {
+        scm_subversion_command = "${pkgs.subversion}/bin/svn";
+        scm_mercurial_command = "${pkgs.mercurial}/bin/hg";
+        scm_git_command = "${pkgs.gitAndTools.git}/bin/git";
+        scm_cvs_command = "${pkgs.cvs}/bin/cvs";
+        scm_bazaar_command = "${pkgs.breezy}/bin/bzr";
+        scm_darcs_command = "${pkgs.darcs}/bin/darcs";
+      };
+    };
+
+    services.redmine.extraEnv = mkBefore ''
+      config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
+      config.logger.level = Logger::INFO
+    '';
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
@@ -338,7 +337,7 @@ in
 
 
         # handle database.passwordFile & permissions
-        DBPASS=$(head -n1 ${cfg.database.passwordFile})
+        DBPASS=${optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"}
         cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
         sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
         chmod 440 "${cfg.stateDir}/config/database.yml"
@@ -378,17 +377,6 @@ in
     users.groups = optionalAttrs (cfg.group == "redmine") {
       redmine.gid = config.ids.gids.redmine;
     };
-
-    warnings = optional (cfg.database.password != "")
-      ''config.services.redmine.database.password will be stored as plaintext
-      in the Nix store. Use database.passwordFile instead.'';
-
-    # Create database passwordFile default when password is configured.
-    services.redmine.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "redmine-database-password";
-        text = cfg.database.password;
-      })));
 
   };
 

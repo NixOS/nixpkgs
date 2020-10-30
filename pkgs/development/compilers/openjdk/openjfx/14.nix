@@ -96,7 +96,7 @@ in makePackage {
   postFixup = ''
     # Remove references to bootstrap.
     find "$out" -name \*.so | while read lib; do
-      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${openjdk11_headless}[^:]*,,')"
+      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${lib.escape ["+"] openjdk11_headless.outPath}[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
     done
   '';
@@ -108,7 +108,7 @@ in makePackage {
   meta = with stdenv.lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
-    description = "The next-generation Java client toolkit.";
+    description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
+{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
 atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
 cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "20.1.30";
+  version = "20.8.28";
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "0jns5zqjm0gqn18ypghbgk6gb713mh7p44ax1r8y4vcwijlp5nql";
+    sha256 = "fde9165f71f0d641f6892ddce3ec26d200e8095a383f2b4c8f924de4041d65ef";
   };
 
   sourceRoot = ".";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       gtk3-x11
-      gnome2.pango
+      pango
       atk
       cairo
       gdk-pixbuf
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut rople380 ];
   };
 }

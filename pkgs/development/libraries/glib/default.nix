@@ -16,9 +16,6 @@ with stdenv.lib;
 assert stdenv.isLinux -> utillinuxMinimal != null;
 
 # TODO:
-# * Add gio-module-fam
-#     Problem: cyclic dependency on gamin
-#     Possible solution: build as a standalone module, set env. vars
 # * Make it build without python
 #     Problem: an example (test?) program needs it.
 #     Possible solution: disable compilation of this example somehow
@@ -48,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.64.4";
+  version = "2.64.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0l6fggcgdnjif9kzy4crq7520f43bbrgzxz0c821ya3jn8jv7q7p";
+    sha256 = "04fczq693wivkqd2qxvvi3sncqgznsvzfiiwsll1rbayf795pgcw";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -111,7 +108,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
+    "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder ''dev''}/bin"
   ];

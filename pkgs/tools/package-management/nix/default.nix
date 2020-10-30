@@ -3,7 +3,6 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
-, stdenv, llvmPackages_6
 }:
 
 let
@@ -12,8 +11,9 @@ common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
   , bash, coreutils, gzip, gnutar
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
+  , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive
+  , lowdown, mdbook
   # Used by tests
   , gmock
   , busybox-sandbox-shell
@@ -32,8 +32,8 @@ common =
       inherit name src;
       version = lib.getVersion name;
 
-      is24 = lib.versionAtLeast version "2.4pre";
-      isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
+      is30 = lib.versionAtLeast version "3.0pre";
+      isExactly30 = lib.versionAtLeast version "2.3" && lib.versionOlder version "3.0";
 
       VERSION_SUFFIX = suffix;
 
@@ -41,15 +41,20 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
-                                docbook5 docbook_xsl_ns jq ];
+        ++ lib.optionals is30
+          [ autoreconfHook
+            autoconf-archive
+            bison flex
+            lowdown mdbook
+            jq
+           ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gmock ]
+        ++ lib.optionals is30 [ libarchive gmock ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -88,9 +93,9 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
+        # For Nix 3.0, patch around an issue where the Nix configure step pulls in the
         # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly23) ''
+        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly30) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
@@ -163,7 +168,7 @@ common =
           # This is not cross-compile safe, don't have time to fix right now
           # but noting for future travellers.
           nativeBuildInputs =
-            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive ];
+            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive nlohmann_json ];
 
           configureFlags =
             [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -183,26 +188,24 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.7";
+    name = "nix-2.3.8";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "dd8f52849414e5a878afe7e797aa4e22bab77c875d9da5a38d5f1bada704e596";
+      sha256 = "c7119823c1eabdcc9e527cc96a91f11a0b0e63f3840a02fe7573538dad2dad2a";
     };
 
     inherit storeDir stateDir confDir boehmgc;
-  } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
-    stdenv = llvmPackages_6.stdenv;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20200721_ff314f1";
+    name = "nix-3.0${suffix}";
+    suffix = "pre20201020_e0ca98c";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "ff314f186e3f91d87af6ad96c0ae3b472494b940";
-      hash = "sha256-QibpLo4/gf2xYGoeQcgjZzH/qy5TBRVH+QCHgqOwur0=";
+      rev = "e0ca98c2071b815578470e280df8fdb750c7e23b";
+      hash = "sha256-KVS/Z6FzMBOl5XCyOLwfiVoX7G2LQRa9HMGNnJRPCoo=";
     };
 
     inherit storeDir stateDir confDir boehmgc;

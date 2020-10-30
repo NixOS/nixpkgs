@@ -163,7 +163,6 @@ rec {
       SDL_mixer
       SDL2_ttf
       SDL2_mixer
-      gstreamer
       libappindicator-gtk2
       libcaca
       libcanberra

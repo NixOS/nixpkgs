@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , autoPatchelfHook
 , alsaLib
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     coreutils
     openssl
-    udev.lib
+    (lib.getLib udev)
   ];
 
   unpackPhase = ''

@@ -1,7 +1,7 @@
 { lib, buildGoModule, minikube }:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256;
+  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256 doCheck;
 
   pname = "docker-machine-kvm2";
 
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://minikube.sigs.k8s.io/docs/drivers/kvm2";
-    description = "KVM2 driver for docker-machine.";
+    description = "KVM2 driver for docker-machine";
     license = licenses.asl20;
     maintainers = with maintainers; [ tadfisher atkinschang ];
     platforms = platforms.linux;

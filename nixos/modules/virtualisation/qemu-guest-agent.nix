@@ -12,6 +12,11 @@ in {
         default = false;
         description = "Whether to enable the qemu guest agent.";
       };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.qemu.ga;
+        description = "The QEMU guest agent package.";
+      };
   };
 
   config = mkIf cfg.enable (
@@ -25,7 +30,7 @@ in {
       systemd.services.qemu-guest-agent = {
         description = "Run the QEMU Guest Agent";
         serviceConfig = {
-          ExecStart = "${pkgs.qemu.ga}/bin/qemu-ga";
+          ExecStart = "${cfg.package}/bin/qemu-ga";
           Restart = "always";
           RestartSec = 0;
         };

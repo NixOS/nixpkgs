@@ -1,12 +1,15 @@
-{ stdenv, fetchPypi, buildPythonPackage, click, redis }:
+{ stdenv, fetchFromGitHub, buildPythonPackage, isPy27, click, redis }:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.4.2";
+  version = "1.5.1";
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f680c52c7079266465d5e5c49679fab0d14db11d70fec6f1470423408b6bbcf6";
+  src = fetchFromGitHub {
+    owner = "rq";
+    repo = "rq";
+    rev = "v${version}";
+    sha256 = "0i7yyw828wdvl7ap4gb7jhm4p94502is3xxrgrdgwwp0l1rac004";
   };
 
   # test require a running redis rerver, which is something we can't do yet

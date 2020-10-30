@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.3.00.16851";
+  version = "1.3.00.25560";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "1mp4xq224nwv2ckb5zd7iv3yvkg3gv6mk9dvx3f60jgain7qr0r3";
+    sha256 = "0kpcd9q6v2qh0dzddykisdbi3djbxj2rl70wchlzrb6bx95hkzmc";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
     pulseaudio
   ];
 
@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/ $out/bin/
 
     ln -s $out/opt/teams/teams $out/bin/
+
+    # Work-around screen sharing bug
+    # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
+    rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
   '';
 
   dontAutoPatchelf = true;

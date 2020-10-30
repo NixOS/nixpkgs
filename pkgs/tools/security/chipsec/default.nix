@@ -11,6 +11,8 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1rxr9i08a22m15slvlkrhnki30jixi2ds096kmmc2nqzfr9yibmb";
   };
 
+  disabled = !stdenv.isLinux;
+
   nativeBuildInputs = [
     nasm libelf
   ];

@@ -5,14 +5,14 @@
 
 let
   pname = "bellows";
-  version = "0.17.0";
+  version = "0.20.3";
 
 in buildPythonPackage rec {
   inherit pname version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03gckhrxji8lgjsi6xr8yql405kfanii5hjrmakk1328bmq9g5f6";
+    sha256 = "9342b6b9423c818f99f7c6d9086fbb5e27d5c2efbb1f2a08f6f5a917c4991f86";
   };
 
   propagatedBuildInputs = [

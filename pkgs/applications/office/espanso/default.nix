@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
-  version = "0.6.3";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "federico-terzi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1x5p7hniapggqd18rx26mjvdf33z7rm7zz5vsqm2siv3mcl19033";
+    sha256 = "11b02i254dn5nwk8m2g21ixz22qcqgcf90vwll0n3yny78p40hn0";
   };
 
-  cargoSha256 = "0liwwdncymjql5dw7rwhhimcr7qdbyvfgmsd0bawvi0ym7m1v408";
+  cargoSha256 = "1cnz6rbqbb08j67bw485qi22pi31b3l3yzgr6w1qx780ldf1zd54";
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kimat ];
-    platforms = platforms.all;
 
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.

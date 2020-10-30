@@ -14,8 +14,6 @@ buildGoPackage rec {
     sha256 = "192slrz1cj1chzmfrl0d9ai8bq6s4w0iwpvxkhxb9krga7mkp9xb";
   };
 
-  goDeps = ./deps.nix;
-
   meta = with stdenv.lib; {
     description = "websocket command line tool";
     homepage    = "https://github.com/hashrocket/ws";

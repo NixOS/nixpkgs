@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.1.59";
+  version = "3.1.71";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "19vp2395sl6gdv54zn0k4vf1j6b902khvm44q5hfr805jd3fc11h";
+    sha256 = "4c25d8733c8eb54c7d3ce60a17d8020049fb137b796e5ada9d15f41cdd0e1655";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     flask-cors
     flask_login
     flask-restful
-    flask-restplus
+    flask-restx
     flask
     guessit
     html5lib

@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];
   buildInputs = [ wayland gtk3 ];
 
+  patches = [
+    # https://todo.sr.ht/~scoopta/wofi/121
+    ./do_not_follow_symlinks.patch
+  ];
+
   postInstall = ''
     installManPage man/wofi*
   '';

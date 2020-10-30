@@ -30,5 +30,7 @@ with lib;
     environment.systemPackages = [ pkgs.gnome3.gpaste ];
     services.dbus.packages = [ pkgs.gnome3.gpaste ];
     systemd.packages = [ pkgs.gnome3.gpaste ];
+    # gnome-control-center crashes in Keyboard Shortcuts pane without the GSettings schemas.
+    services.xserver.desktopManager.gnome3.sessionPath = [ pkgs.gnome3.gpaste ];
   };
 }

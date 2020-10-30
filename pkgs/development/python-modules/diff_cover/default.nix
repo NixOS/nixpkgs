@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "diff_cover";
-  version = "3.0.1";
+  version = "4.0.1";
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13768c8bc755dd8e1184ce79b95bbc8115ea566282f4b06efbeca72a4d00427b";
+    sha256 = "61a98ec126552d985c0e3e3c33cc72e79d7577f91f6edba99f635411a173d3b9";
   };
 
   propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];

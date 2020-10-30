@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace setup.py \
-      --replace "cryptography>=2.6,<=2.9" "cryptography>=2.6,<=3"
+      --replace "cryptography>=2.6,<=2.9" "cryptography"
   '';
 
   checkInputs = [ pytest ];
@@ -39,6 +39,7 @@ buildPythonPackage rec {
       tests/plugins_tests/certificate_info/test_certificate_utils.py \
       -k "not (TestScanner and test_client_certificate_missing)"
   '';
+  pythonImportsCheck = [ "sslyze" ];
 
   propagatedBuildInputs = [ nassl cryptography typing-extensions faker ];
 

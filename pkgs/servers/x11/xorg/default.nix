@@ -1782,11 +1782,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videoamdgpu = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-amdgpu-19.0.1";
+    name = "xf86-video-amdgpu-19.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-amdgpu-19.0.1.tar.bz2";
-      sha256 = "1mf6s7i423b2xyl469kwnakrpp5fr41sm8hh7vli5jxdd8crg8da";
+      url = "mirror://xorg/individual/driver/xf86-video-amdgpu-19.1.0.tar.bz2";
+      sha256 = "0pgy4ihnja0vm8504qw7qxh3pdpa3p9k6967nz15m6b1mvha83jg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1834,11 +1834,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videoati = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-ati-19.0.1";
+    name = "xf86-video-ati-19.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-ati-19.0.1.tar.bz2";
-      sha256 = "1c31g5q5p3nk9nscwikh1vvfnhdwsxiw7j8v678nlm34hrfh3djw";
+      url = "mirror://xorg/individual/driver/xf86-video-ati-19.1.0.tar.bz2";
+      sha256 = "0j9w4axsqlycv4v14g53xyhkm9h7d27b2fcv9lrzb9gf54b5m7v5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2692,11 +2692,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
-    name = "xorg-server-1.20.8";
+    name = "xorg-server-1.20.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xserver/xorg-server-1.20.8.tar.bz2";
-      sha256 = "0ih15m7gh1z1ly6z7g82bkni719yisqmbk61a1wgp82bxrmn8yyi";
+      url = "mirror://xorg/individual/xserver/xorg-server-1.20.9.tar.bz2";
+      sha256 = "0w9mrnffvjgmwi50kln15i8rpdskxv97r78l75wlcmg4vzhg46g2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

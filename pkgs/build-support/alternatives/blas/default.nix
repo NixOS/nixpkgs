@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     exit 1
   fi
 
-  nm -an "$libblas" | cut -f3 -d' ' > symbols
+  $NM -an "$libblas" | cut -f3 -d' ' > symbols
   for symbol in ${toString blasFortranSymbols}; do
     grep -q "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
   done

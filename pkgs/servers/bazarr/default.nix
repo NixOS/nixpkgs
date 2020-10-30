@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "0.8.4.4";
+  version = "0.9.0.5";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/archive/v${version}.tar.gz";
-    sha256 = "09qpy5fyyidi45968qg37cighfh3rgwsi8pfz4fk5fp2v1xq23yg";
+    sha256 = "1mm8qghkif48jr7fq28kp7zk5x71zm43isf0a96crpi9qi91sdd5";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp -r * $out/src
 
     mkdir -p $out/bin
-    makeWrapper "${(python3.withPackages (ps: [ps.lxml])).interpreter}" \
+    makeWrapper "${(python3.withPackages (ps: [ps.lxml ps.numpy])).interpreter}" \
       $out/bin/bazarr \
       --add-flags "$out/src/bazarr.py" \
   '';

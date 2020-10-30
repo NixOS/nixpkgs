@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, installShellFiles, jdk11, rlwrap, makeWrapper }:
+{ stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.590";
+  version = "1.10.1.645";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "18x8xkxsqwnv3k1mf42ylfv7zzjllm7yiagq16b2gkq62j5sm1k7";
+    sha256 = "1z6a9an8ls992y4japmzdxay7c5d2z9s2q1xl4g615r23jwpcsf9";
   };
 
   nativeBuildInputs = [
@@ -16,13 +16,14 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
+      binPath = stdenv.lib.makeBinPath [ rlwrap jdk ];
     in
     ''
       mkdir -p $out/libexec
       cp clojure-tools-${version}.jar $out/libexec
       cp example-deps.edn $out
       cp deps.edn $out
+      cp clj_exec.clj $out
 
       substituteInPlace clojure --replace PREFIX $out
 

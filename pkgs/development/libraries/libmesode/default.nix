@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool, openssl, expat, pkgconfig, check }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libtool, openssl, expat, pkgconfig, check }:
 
 stdenv.mkDerivation rec {
   pname = "libmesode";
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0xzfg1xx88cn36352nnjlb1p7xyw32yqkhjzq10px88iaaqz1vv0";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-ssl-certificate-verification.diff";
+      url = "https://github.com/profanity-im/libmesode/commit/532ed1e9d3e71e5bea0752e03dbacd4139d750d1.diff";
+      sha256 = "140jp7xzskik0sb6aqjsw7z477a124cxl7dkm80m2nyzjng4pzg5";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ openssl expat libtool check ];

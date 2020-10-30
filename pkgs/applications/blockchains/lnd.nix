@@ -4,16 +4,18 @@
 
 buildGoModule rec {
   pname = "lnd";
-  version = "0.10.3-beta";
+  version = "0.11.0-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
-    sha256 = "129vi8z2sk4hagk7axa675nba6sbj9km88zlq8a1g8di7v2k9z6a";
+    sha256 = "1r1hwz8ka5mnmrvj9zcd78kn68g8fg3d4bdx9i0xy4sc2hh1dcpj";
   };
 
-  vendorSha256 = "0a4bk2qry0isnrvl0adwikqn6imxwzlaq5j3nglb5rmwwq2cdz0r";
+  vendorSha256 = "090b9sxvdwh787w0rhrcbky9pbx64qgqx1pvk9ysk3886nxdhf7k";
+
+  doCheck = false;
 
   subPackages = ["cmd/lncli" "cmd/lnd"];
 

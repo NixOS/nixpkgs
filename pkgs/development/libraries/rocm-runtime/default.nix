@@ -1,41 +1,42 @@
 { stdenv
 , fetchFromGitHub
 , addOpenGLRunpath
+, clang-unwrapped
 , cmake
+, xxd
 , elfutils
+, llvm
+, rocm-device-libs
 , rocm-thunk }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-runtime";
-  version = "3.5.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${version}";
-    sha256 = "028x1f0if6lw41cpfpysp82ikp6c3fdxxd2a6ixs0vpm4424svb1";
+    sha256 = "1lm4cbx1d727zll85vjc1kykc72mk82nfhyyhjljv82gd4mnz00c";
   };
 
   sourceRoot = "source/src";
 
-  buildInputs = [ cmake elfutils ];
+  nativeBuildInputs = [ cmake xxd ];
 
-  cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${rocm-thunk}" ];
+  buildInputs = [ clang-unwrapped elfutils llvm ];
 
-  # Use the ROCR_EXT_DIR environment variable and/or OpenGL driver
-  # link path to try to find binary-only ROCm runtime extension
-  # libraries.  Without this change, we would have to rely on
-  # LD_LIBRARY_PATH to let the HSA runtime discover the shared
-  # libraries.
-  patchPhase = ''
-    substitute '${./rocr-ext-dir.diff}' ./rocr-ext-dir.diff \
-      --subst-var-by rocrExtDir "${addOpenGLRunpath.driverLink}/lib/rocm-runtime-ext"
-    patch -p2 < ./rocr-ext-dir.diff
+  cmakeFlags = [
+   "-DBITCODE_DIR=${rocm-device-libs}/lib"
+   "-DCMAKE_PREFIX_PATH=${rocm-thunk}"
+  ];
+
+  postPatch = ''
+    patchShebangs image/blit_src/create_hsaco_ascii_file.sh
   '';
 
   fixupPhase = ''
-    rm -r $out/lib $out/include
-    mv $out/hsa/lib $out/hsa/include $out
+    rm -rf $out/hsa
   '';
 
   meta = with stdenv.lib; {

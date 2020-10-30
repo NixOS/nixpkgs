@@ -4,18 +4,19 @@
 , bottle, pysnmp
 , hddtemp
 , netifaces # IP module
+, py-cpuinfo
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.1.4.1";
+  version = "3.1.5";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "04dc3pwj9qbbhxpihf13ckdgwz0qc771c7v7awni4vyzk3a9cdfb";
+    sha256 = "0l91nvlwyabxlsy5p533dqnc68mmvykfsrcsnxylcpjjl1nzy931";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
@@ -41,6 +42,7 @@ buildPythonApplication rec {
     psutil
     pysnmp
     setuptools
+    py-cpuinfo
   ] ++ lib.optional stdenv.isLinux hddtemp;
 
   preConfigure = ''

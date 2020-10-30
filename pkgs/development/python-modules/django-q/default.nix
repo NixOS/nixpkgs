@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "django-q";
-  version = "1.2.3";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa17950a75dc1fe4636b24ddba37ad3a7b660ce279b2f70f2a301135364fbe58";
+    sha256 = "de7077660ede36bfdd89ab9405d6393b598bb3e0bfed61f59a0a9074cc4942bb";
   };
 
   propagatedBuildInputs = [

@@ -1,10 +1,10 @@
 { abiCompat ? null,
   stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
-  freetype, tradcpp, fontconfig, meson, ninja, ed,
+  freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3,
+  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -48,10 +48,6 @@ self: super:
 
   editres = super.editres.overrideAttrs (attrs: {
     hardeningDisable = [ "format" ];
-  });
-
-  fontbhttf = super.fontbhttf.overrideAttrs (attrs: {
-    meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
   });
 
   fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
@@ -473,7 +469,7 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool libxslt ];
 
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
@@ -646,6 +642,16 @@ self: super:
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
+        # patchPhase is not working, this is a hack but we can remove it in the next xorg-server release
+        preConfigure = let
+          # https://gitlab.freedesktop.org/xorg/xserver/-/issues/1067
+          headerFix = fetchpatch {
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/919f1f46fc67dae93b2b3f278fcbfc77af34ec58.patch";
+            sha256 = "0w48rdpl01v0c97n9zdxhf929y76r1f6rqkfs9mfygkz3xcmrfsq";
+          };
+        in ''
+          patch -p1 < ${headerFix}
+        '';
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
@@ -848,4 +854,63 @@ self: super:
         --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
+
+  # convert Type1 vector fonts to OpenType fonts
+  fontbitstreamtype1 = super.fontbitstreamtype1.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ fontforge ];
+
+    postBuild = ''
+      # convert Postscript (Type 1) font to otf
+      for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
+          name=$(basename $i | cut -d. -f1)
+          fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otf\")"
+      done
+    '';
+
+    postInstall = ''
+      # install the otf fonts
+      fontDir="$out/lib/X11/fonts/misc/"
+      install -D -m 644 -t "$fontDir" *.otf
+      mkfontscale "$fontDir"
+    '';
+  });
+
 }
+
+# mark some packages as unfree
+// (
+  let
+    # unfree but redistributable
+    redist = [
+      "fontadobeutopiatype1"
+      "fontadobeutopia100dpi"
+      "fontadobeutopia75dpi"
+      "fontbhtype1"
+      "fontibmtype1"
+      "fontbhttf"
+      "fontbh100dpi"
+      "fontbh75dpi"
+    ];
+
+    # unfree, possibly not redistributable
+    unfree = [
+      # no license, just a copyright notice
+      "fontbhlucidatypewriter100dpi"
+      "fontbhlucidatypewriter75dpi"
+      "fontdaewoomisc"
+
+      # unclear license, "permission to use"?
+      "fontjismisc"
+    ];
+
+    setLicense = license: name:
+      super.${name}.overrideAttrs (attrs: {
+        meta = attrs.meta // { inherit license; };
+      });
+    mapNamesToAttrs = f: names: with lib;
+      listToAttrs (zipListsWith nameValuePair names (map f names));
+
+  in
+    mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist //
+    mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
+)

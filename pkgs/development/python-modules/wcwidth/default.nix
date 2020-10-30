@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "wcwidth";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "edbc2b718b4db6cdf393eefe3a420183947d6aa312505ce6754516f458ff8830";
+    sha256 = "c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83";
   };
 
   checkInputs = [ pytestCheckHook ];

@@ -1,4 +1,4 @@
-From 9262f52b0e30cf8c39d9f7684a8c0e8fd4887cd5 Mon Sep 17 00:00:00 2001
+From 7dbe84b7c43669dccd90db8ac33c38a70e6b6914 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Mon, 26 Feb 2018 14:25:57 +0000
 Subject: [PATCH 12/18] Install default configuration into $out/share/factory
@@ -31,10 +31,10 @@ store again, while having executables looking up files in /etc.
  17 files changed, 29 insertions(+), 26 deletions(-)
 
 diff --git a/hwdb.d/meson.build b/hwdb.d/meson.build
-index 4df6dabf89..02d8d69095 100644
+index 5c77387a26..6404bc01ba 100644
 --- a/hwdb.d/meson.build
 +++ b/hwdb.d/meson.build
-@@ -27,7 +27,7 @@ if conf.get('ENABLE_HWDB') == 1
+@@ -43,7 +43,7 @@ if conf.get('ENABLE_HWDB') == 1
                       install_dir : udevhwdbdir)
  
          meson.add_install_script('sh', '-c',
@@ -44,10 +44,10 @@ index 4df6dabf89..02d8d69095 100644
          meson.add_install_script('sh', '-c',
                                   'test -n "$DESTDIR" || @0@/systemd-hwdb update'
 diff --git a/meson.build b/meson.build
-index 62eba4186c..b0b2edbb5a 100644
+index 2ef9d4d770..ae7acbd769 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -154,6 +154,9 @@ udevhwdbdir = join_paths(udevlibexecdir, 'hwdb.d')
+@@ -163,6 +163,9 @@ udevhwdbdir = join_paths(udevlibexecdir, 'hwdb.d')
  catalogdir = join_paths(prefixdir, 'lib/systemd/catalog')
  kernelinstalldir = join_paths(prefixdir, 'lib/kernel/install.d')
  factorydir = join_paths(datadir, 'factory')
@@ -57,7 +57,7 @@ index 62eba4186c..b0b2edbb5a 100644
  bootlibdir = join_paths(prefixdir, 'lib/systemd/boot/efi')
  testsdir = join_paths(prefixdir, 'lib/systemd/tests')
  systemdstatedir = join_paths(localstatedir, 'lib/systemd')
-@@ -2511,7 +2514,7 @@ if conf.get('ENABLE_BINFMT') == 1
+@@ -2653,7 +2656,7 @@ if conf.get('ENABLE_BINFMT') == 1
          meson.add_install_script('sh', '-c',
                                   mkdir_p.format(binfmtdir))
          meson.add_install_script('sh', '-c',
@@ -66,16 +66,16 @@ index 62eba4186c..b0b2edbb5a 100644
  endif
  
  if conf.get('ENABLE_REPART') == 1
-@@ -2612,7 +2615,7 @@ executable('systemd-sleep',
-            install_dir : rootlibexecdir)
+@@ -2769,7 +2772,7 @@ executable(
+         install_dir : rootlibexecdir)
  
  install_data('src/sleep/sleep.conf',
 -             install_dir : pkgsysconfdir)
 +             install_dir : factorypkgconfdir)
  
- exe = executable('systemd-sysctl',
-                  'src/sysctl/sysctl.c',
-@@ -2924,7 +2927,7 @@ if conf.get('HAVE_KMOD') == 1
+ public_programs += executable(
+         'systemd-sysctl',
+@@ -3103,7 +3106,7 @@ if conf.get('HAVE_KMOD') == 1
          meson.add_install_script('sh', '-c',
                                   mkdir_p.format(modulesloaddir))
          meson.add_install_script('sh', '-c',
@@ -83,8 +83,8 @@ index 62eba4186c..b0b2edbb5a 100644
 +                                 mkdir_p.format(join_paths(factoryconfdir, 'modules-load.d')))
  endif
  
- exe = executable('systemd-nspawn',
-@@ -3167,7 +3170,7 @@ install_subdir('factory/etc',
+ public_programs += executable(
+@@ -3354,7 +3357,7 @@ install_subdir('factory/etc',
                 install_dir : factorydir)
  
  install_data('xorg/50-systemd-user.sh',
@@ -94,10 +94,10 @@ index 62eba4186c..b0b2edbb5a 100644
               install_dir : modprobedir)
  install_data('LICENSE.GPL2',
 diff --git a/network/meson.build b/network/meson.build
-index 544dcf4387..1828c50863 100644
+index 99a650eac3..8105a4e48d 100644
 --- a/network/meson.build
 +++ b/network/meson.build
-@@ -10,7 +10,7 @@ if conf.get('ENABLE_NETWORKD') == 1
+@@ -11,7 +11,7 @@ if conf.get('ENABLE_NETWORKD') == 1
                       install_dir : networkdir)
  
          meson.add_install_script('sh', '-c',
@@ -107,10 +107,10 @@ index 544dcf4387..1828c50863 100644
  
  install_data('99-default.link',
 diff --git a/src/core/meson.build b/src/core/meson.build
-index 3586838f59..02ddf1a123 100644
+index fa95108523..60ee0e31c1 100644
 --- a/src/core/meson.build
 +++ b/src/core/meson.build
-@@ -179,8 +179,8 @@ libcore = static_library(
+@@ -183,8 +183,8 @@ libcore = static_library(
  systemd_sources = files('main.c')
  
  in_files = [['macros.systemd',   rpmmacrosdir],
@@ -121,7 +121,7 @@ index 3586838f59..02ddf1a123 100644
              ['systemd.pc',       pkgconfigdatadir],
              ['triggers.systemd', '']]
  
-@@ -212,6 +212,6 @@ meson.add_install_script('sh', '-c', mkdir_p.format(systemsleepdir))
+@@ -216,6 +216,6 @@ meson.add_install_script('sh', '-c', mkdir_p.format(systemsleepdir))
  meson.add_install_script('sh', '-c', mkdir_p.format(systemgeneratordir))
  meson.add_install_script('sh', '-c', mkdir_p.format(usergeneratordir))
  
@@ -180,15 +180,16 @@ index 5796f77cac..75d975c260 100644
  if get_option('create-log-dirs')
          meson.add_install_script(
 diff --git a/src/kernel-install/meson.build b/src/kernel-install/meson.build
-index 261c3aaae4..dbc5e23513 100644
+index 9ae342dfba..65df666337 100644
 --- a/src/kernel-install/meson.build
 +++ b/src/kernel-install/meson.build
-@@ -11,4 +11,4 @@ install_data('00-entry-directory.install',
-              install_dir : kernelinstalldir)
+@@ -14,5 +14,5 @@ if want_kernel_install
+ 		install_dir : kernelinstalldir)
  
- meson.add_install_script('sh', '-c',
--                         mkdir_p.format(join_paths(sysconfdir, 'kernel/install.d')))
-+                         mkdir_p.format(join_paths(factoryconfdir, 'kernel/install.d')))
+ 	meson.add_install_script('sh', '-c',
+-				mkdir_p.format(join_paths(sysconfdir, 'kernel/install.d')))
++				mkdir_p.format(join_paths(factoryconfdir, 'kernel/install.d')))
+ endif
 diff --git a/src/login/meson.build b/src/login/meson.build
 index 0a7d3d5440..ff90149c1c 100644
 --- a/src/login/meson.build
@@ -203,10 +204,10 @@ index 0a7d3d5440..ff90149c1c 100644
          install_data('org.freedesktop.login1.conf',
                       install_dir : dbuspolicydir)
 diff --git a/src/network/meson.build b/src/network/meson.build
-index c1c02cfda1..1bfa79a03b 100644
+index b3a88d9910..be56d1e9d7 100644
 --- a/src/network/meson.build
 +++ b/src/network/meson.build
-@@ -201,7 +201,7 @@ if conf.get('ENABLE_NETWORKD') == 1
+@@ -229,7 +229,7 @@ if conf.get('ENABLE_NETWORKD') == 1
          endif
  
          install_data('networkd.conf',
@@ -227,10 +228,10 @@ index adbac24b54..e9dc88dfa2 100644
 +                     install_dir : factorypkgconfdir)
  endif
 diff --git a/src/resolve/meson.build b/src/resolve/meson.build
-index c4d8d4e5d9..f550c289a5 100644
+index 92b67b6333..ac5b9a0b0a 100644
 --- a/src/resolve/meson.build
 +++ b/src/resolve/meson.build
-@@ -170,7 +170,7 @@ if conf.get('ENABLE_RESOLVE') == 1
+@@ -168,7 +168,7 @@ if conf.get('ENABLE_RESOLVE') == 1
                  output : 'resolved.conf',
                  configuration : substs)
          install_data(resolved_conf,
@@ -253,10 +254,10 @@ index e5c118c8db..19235df9ca 100644
                       install_dir : dbuspolicydir)
          install_data('org.freedesktop.timesync1.service',
 diff --git a/src/udev/meson.build b/src/udev/meson.build
-index 173b10be50..82638cf5a9 100644
+index aa23b07090..ad004d803a 100644
 --- a/src/udev/meson.build
 +++ b/src/udev/meson.build
-@@ -187,7 +187,7 @@ foreach prog : [['ata_id/ata_id.c'],
+@@ -186,7 +186,7 @@ foreach prog : [['ata_id/ata_id.c'],
  endforeach
  
  install_data('udev.conf',
@@ -265,7 +266,7 @@ index 173b10be50..82638cf5a9 100644
  
  configure_file(
          input : 'udev.pc.in',
-@@ -196,7 +196,7 @@ configure_file(
+@@ -195,7 +195,7 @@ configure_file(
          install_dir : pkgconfigdatadir == 'no' ? '' : pkgconfigdatadir)
  
  meson.add_install_script('sh', '-c',
@@ -285,10 +286,10 @@ index 3f072e3db7..bd9f843eba 100644
 -                         mkdir_p.format(join_paths(sysconfdir, 'sysctl.d')))
 +                         mkdir_p.format(join_paths(factoryconfdir, 'sysctl.d')))
 diff --git a/tmpfiles.d/meson.build b/tmpfiles.d/meson.build
-index e77f46d06b..04d2ef621d 100644
+index 0a9582d8b9..3c56ca7d83 100644
 --- a/tmpfiles.d/meson.build
 +++ b/tmpfiles.d/meson.build
-@@ -57,5 +57,5 @@ endforeach
+@@ -58,5 +58,5 @@ endforeach
  if enable_tmpfiles
          meson.add_install_script(
                  'sh', '-c',
@@ -296,10 +297,10 @@ index e77f46d06b..04d2ef621d 100644
 +                mkdir_p.format(join_paths(factoryconfdir, 'tmpfiles.d')))
  endif
 diff --git a/units/meson.build b/units/meson.build
-index ea91f0cc9e..8622054ca5 100644
+index 275daad3f4..491abd8eef 100644
 --- a/units/meson.build
 +++ b/units/meson.build
-@@ -323,7 +323,7 @@ install_data('user-.slice.d/10-defaults.conf',
+@@ -324,7 +324,7 @@ install_data('user-.slice.d/10-defaults.conf',
  
  meson.add_install_script(meson_make_symlink,
                           join_paths(pkgsysconfdir, 'user'),
@@ -309,5 +310,5 @@ index ea91f0cc9e..8622054ca5 100644
                           join_paths(dbussystemservicedir, 'org.freedesktop.systemd1.service'),
                           join_paths(dbussessionservicedir, 'org.freedesktop.systemd1.service'))
 -- 
-2.26.2
+2.28.0
 

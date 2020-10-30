@@ -3,7 +3,7 @@
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
-, openssl, gperf, tinyxml2, taglib, libssh, swig, jre
+, openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
 , libxml2, systemd
 , alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
@@ -44,15 +44,15 @@ assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
 let
-  kodiReleaseDate = "20200301";
-  kodiVersion = "18.6";
+  kodiReleaseDate = "20200728";
+  kodiVersion = "18.8";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "0rwymipn5hljy5xrslzmrljmj6f9wb191wi7gjw20wl6sv44d0bk";
+    sha256 = "0qpkpz43s207msvv3qkiy6vzqwcgmydxv3py7vc29mv6h30chrva";
   };
 
   cmakeProto = fetchurl {
@@ -192,8 +192,8 @@ in stdenv.mkDerivation {
     ++ lib.optional  usbSupport      libusb-compat-0_1
     ++ lib.optional  vdpauSupport    libvdpau
     ++ lib.optionals useWayland [
-      wayland 
-      waylandpp.dev 
+      wayland
+      waylandpp.dev
       wayland-protocols
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
@@ -211,7 +211,7 @@ in stdenv.mkDerivation {
       which
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-      jre yasm gettext python2Packages.python flatbuffers
+      jre_headless yasm gettext python2Packages.python flatbuffers
 
       # for TexturePacker
       giflib zlib libpng libjpeg lzo

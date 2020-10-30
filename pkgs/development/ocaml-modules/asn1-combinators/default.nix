@@ -6,11 +6,11 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.05";
 
   pname = "asn1-combinators";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-asn1-combinators/releases/download/v${version}/asn1-combinators-v${version}.tbz";
-    sha256 = "0c9n3nki3drjwn7yv2pg7nzyzsi409laq70830wh147hvvwxbsy9";
+    sha256 = "1z73hc17f5m2i4bfxw0g94fsri67f8vha812mm8klz4ggs8y7d6r";
   };
 
   propagatedBuildInputs = [ cstruct zarith bigarray-compat stdlib-shims ptime ];

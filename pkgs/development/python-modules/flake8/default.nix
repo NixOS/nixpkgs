@@ -19,8 +19,9 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ]
     ++ stdenv.lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
+  # fixtures fail to initialize correctly
   checkPhase = ''
-    py.test tests
+    py.test tests --ignore=tests/integration/test_checker.py
   '';
 
   meta = with stdenv.lib; {

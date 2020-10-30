@@ -55,7 +55,7 @@ in
             Configuration for the rclone remote being used for backup.
             See the remote's specific options under rclone's docs at
             <link xlink:href="https://rclone.org/docs/"/>. When specifying
-            option names, use the "config" name specified in the docs. 
+            option names, use the "config" name specified in the docs.
             For example, to set <literal>--b2-hard-delete</literal> for a B2
             remote, use <literal>hard_delete = true</literal> in the
             attribute set.

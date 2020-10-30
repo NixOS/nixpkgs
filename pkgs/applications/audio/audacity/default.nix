@@ -1,20 +1,27 @@
-{ stdenv, fetchzip, wxGTK31, pkgconfig, file, gettext,
+{ stdenv, fetchzip, wxGTK30, pkgconfig, file, gettext,
   libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
   expat, libid3tag, ffmpeg_3, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
-  pcre, vamp-plugin-sdk, portmidi, twolame, git,
-  cmake, libtool
+  autoconf, automake, libtool
   }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.4.2";
+  version = "2.4.1";
   pname = "audacity";
 
   src = fetchzip {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
-    sha256 = "0lklcvqkxrr2gkb9gh3422iadzl2rv9v0a8s76rwq43lj2im7546";
+    sha256 = "1xk0piv72d2xd3p7igr916fhcbrm76fhjr418k1rlqdzzg1hfljn";
   };
+
+  preConfigure = /* we prefer system-wide libs */ ''
+    autoreconf -vi # use system libraries
+
+    # we will get a (possibly harmless) warning during configure without this
+    substituteInPlace configure \
+      --replace /usr/bin/file ${file}/bin/file
+  '';
 
   configureFlags = [
     "--with-libsamplerate"
@@ -36,12 +43,11 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
-  nativeBuildInputs = [ pkgconfig cmake libtool git ];
+  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
   buildInputs = [
-    file gettext wxGTK31 expat alsaLib
-    libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil wxGTK31.gtk
+    file gettext wxGTK30 expat alsaLib
+    libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil wxGTK30.gtk
     ffmpeg_3 libmad lame libvorbis flac soundtouch
-    pcre vamp-plugin-sdk portmidi twolame
   ]; #ToDo: detach sbsms
 
   enableParallelBuilding = true;
@@ -51,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Sound editor with graphical UI";
-    homepage = "http://audacityteam.org/";
+    homepage = "https://www.audacityteam.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lheckemann ];
     platforms = intersectLists platforms.linux platforms.x86; # fails on ARM

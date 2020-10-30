@@ -318,6 +318,42 @@ let
         '';
       };
 
+      gnupg = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If enabled, pam_gnupg will attempt to automatically unlock the
+            user's GPG keys with the login password via
+            <command>gpg-agent</command>. The keygrips of all keys to be
+            unlocked should be written to <filename>~/.pam-gnupg</filename>,
+            and can be queried with <command>gpg -K --with-keygrip</command>.
+            Presetting passphrases must be enabled by adding
+            <literal>allow-preset-passphrase</literal> in
+            <filename>~/.gnupg/gpg-agent.conf</filename>.
+          '';
+        };
+
+        noAutostart = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Don't start <command>gpg-agent</command> if it is not running.
+            Useful in conjunction with starting <command>gpg-agent</command> as
+            a systemd user service.
+          '';
+        };
+
+        storeOnly = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Don't send the password immediately after login, but store for PAM
+            <literal>session</literal>.
+          '';
+        };
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -366,7 +402,7 @@ let
           ${let p11 = config.security.pam.p11; in optionalString cfg.p11Auth
               "auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so"}
           ${let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth
-              "auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"}"}
+              "auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"}"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
@@ -386,6 +422,7 @@ let
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
             || cfg.googleAuthenticator.enable
+            || cfg.gnupg.enable
             || cfg.duoSecurity.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
@@ -394,9 +431,13 @@ let
                 "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
               ${optionalString cfg.enableKwallet
                 ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-                 " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
+                 " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
                 "auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"}
+              ${optionalString cfg.gnupg.enable
+                "auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"
+                + optionalString cfg.gnupg.storeOnly " store-only"
+               }
               ${optionalString cfg.googleAuthenticator.enable
                 "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
               ${optionalString cfg.duoSecurity.enable
@@ -429,8 +470,6 @@ let
               "password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok"}
           ${optionalString config.krb5.enable
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
-          ${optionalString config.services.samba.syncPasswordsByPam
-              "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
           ${optionalString cfg.enableGnomeKeyring
               "password optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so use_authtok"}
 
@@ -471,9 +510,13 @@ let
               "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
           ${optionalString (cfg.enableKwallet)
               ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-               " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
+               " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
           ${optionalString (cfg.enableGnomeKeyring)
               "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
+          ${optionalString cfg.gnupg.enable
+              "session optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"
+              + optionalString cfg.gnupg.noAutostart " no-autostart"
+           }
           ${optionalString (config.virtualisation.lxc.lxcfs.enable)
                "session optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all"}
         '');
@@ -544,7 +587,7 @@ in
 
     security.pam.services = mkOption {
       default = [];
-      type = with types; loaOf (submodule pamOpts);
+      type = with types; attrsOf (submodule pamOpts);
       description =
         ''
           This option defines the PAM services.  A service typically
@@ -653,6 +696,22 @@ in
 
           More information can be found <link
           xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
+        '';
+      };
+
+      appId = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        description = ''
+            By default <literal>pam-u2f</literal> module sets the application
+            ID to <literal>pam://$HOSTNAME</literal>.
+
+            When using <command>pamu2fcfg</command>, you can specify your
+            application ID with the <literal>-i</literal> flag.
+
+            More information can be found <link
+            xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
+            here</link>
         '';
       };
 

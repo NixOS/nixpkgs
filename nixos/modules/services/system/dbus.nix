@@ -1,6 +1,6 @@
 # D-Bus configuration and system bus daemon.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -18,7 +18,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -53,10 +52,11 @@ in
       };
 
       socketActivated = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
+        visible = false;
         description = ''
-          Make the user instance socket activated.
+          Removed option, do not use.
         '';
       };
     };
@@ -65,6 +65,14 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    warnings = optional (cfg.socketActivated != null) (
+      let
+        files = showFiles options.services.dbus.socketActivated.files;
+      in
+        "The option 'services.dbus.socketActivated' in ${files} no longer has"
+        + " any effect and can be safely removed: the user D-Bus session is"
+        + " now always socket activated."
+    );
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
@@ -108,7 +116,7 @@ in
         reloadIfChanged = true;
         restartTriggers = [ configDir ];
       };
-      sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
+      sockets.dbus.wantedBy = [ "sockets.target" ];
     };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];

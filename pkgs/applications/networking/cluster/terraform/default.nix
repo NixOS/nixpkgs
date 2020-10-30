@@ -1,5 +1,5 @@
 { stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
-, runCommand, writeText, terraform-providers, fetchpatch }:
+, runCommand, runtimeShell, writeText, terraform-providers, fetchpatch }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -43,12 +43,13 @@ let
         homepage = "https://www.terraform.io/";
         license = licenses.mpl20;
         maintainers = with maintainers; [
-          zimbatm
-          peterhoeg
+          Chili-Man
+          babariviere
           kalbasit
           marsam
-          babariviere
-          Chili-Man
+          peterhoeg
+          timstott
+          zimbatm
         ];
       };
     } // attrs');
@@ -58,6 +59,35 @@ let
       withPlugins = plugins:
         let
           actualPlugins = plugins terraform.plugins;
+
+          # Make providers available in Terraform 0.13 and 0.12 search paths.
+          pluginDir = lib.concatMapStrings (pl: let
+            inherit (pl) version GOOS GOARCH;
+
+            pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
+
+            # This is just the name, without the terraform-provider- prefix
+            plugin_name = lib.removePrefix "terraform-provider-" pname;
+
+            slug = pl.passthru.provider-source-address or "registry.terraform.io/nixpkgs/${plugin_name}";
+
+            shim = writeText "shim" ''
+              #!${runtimeShell}
+              exec ${pl}/bin/${pname}_v${version} "$@"
+            '';
+            in ''
+              TF_0_13_PROVIDER_PATH=$out/plugins/${slug}/${version}/${GOOS}_${GOARCH}/${pname}_v${version}
+              mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
+
+              cp ${shim} "$TF_0_13_PROVIDER_PATH"
+              chmod +x "$TF_0_13_PROVIDER_PATH"
+
+              TF_0_12_PROVIDER_PATH=$out/plugins/${pname}_v${version}
+
+              cp ${shim} "$TF_0_12_PROVIDER_PATH"
+              chmod +x "$TF_0_12_PROVIDER_PATH"
+          ''
+          ) actualPlugins;
 
           # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
           wrapperInputs = lib.unique (lib.flatten
@@ -87,15 +117,10 @@ let
             inherit (terraform) name;
             buildInputs = [ makeWrapper ];
 
-            buildCommand = ''
+            buildCommand = pluginDir + ''
               mkdir -p $out/bin/
               makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
-                --set NIX_TERRAFORM_PLUGIN_DIR "${
-                  buildEnv {
-                    name = "tf-plugin-env";
-                    paths = actualPlugins;
-                  }
-                }/bin" \
+                --set NIX_TERRAFORM_PLUGIN_DIR $out/plugins \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
 
@@ -132,8 +157,8 @@ in rec {
   });
 
   terraform_0_13 = pluggable (generic {
-    version = "0.13.0-rc1";
-    sha256 = "1lja2s9viz5ja40qmlf49p6hk3rwdz6q0rw3ff1894b464zbsnk2";
+    version = "0.13.5";
+    sha256 = "1fnydzm5h65pdy2gkq403sllx05cvpldkdzdpcy124ywljb4x9d8";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

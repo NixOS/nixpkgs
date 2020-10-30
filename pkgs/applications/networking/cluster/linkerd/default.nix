@@ -13,10 +13,12 @@ buildGoModule {
 
   vendorSha256 = "0vls58ld50jca5yn73kvg3lx4z83cc7skky54a90pkbj737y58pz";
 
+  doCheck = false;
+
   subPackages = [ "cli/cmd" ];
 
   meta = with stdenv.lib; {
-    description = "A service mesh for Kubernetes and beyond.";
+    description = "A service mesh for Kubernetes and beyond";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ Gonzih ];

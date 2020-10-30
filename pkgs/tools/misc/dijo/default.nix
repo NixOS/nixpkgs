@@ -1,5 +1,5 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, ncurses, CoreServices }:
-let version = "0.2.2"; in
+let version = "0.2.3"; in
 rustPlatform.buildRustPackage {
   pname = "dijo";
   inherit version;
@@ -8,15 +8,14 @@ rustPlatform.buildRustPackage {
     owner = "NerdyPepper";
     repo = "dijo";
     rev = "v${version}";
-    sha256 = "1al2dfrfxw39m9q636h47dnypcwkhp9bw01hvy7d9b69kskb21db";
+    sha256 = "1lcvj0pri5v64zygkf2p24vr72y39agrq1r3kb8dfgz8yy3vcz0a";
   };
-  cargoSha256 = "0a2l0ynjj9wl86aawm0l0rbdkm8j3a2n0nm6ysyxamaip0q5y1ql";
+  cargoSha256 = "0pm048xf8hkva8q8fjmhrdnk7h2im28ix7xy784xwkkdnilm4j7f";
 
   meta = with lib; {
-    description = "Scriptable, curses-based, digital habit tracker.";
+    description = "Scriptable, curses-based, digital habit tracker";
     homepage = "https://github.com/NerdyPepper/dijo";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
-    platforms = platforms.all;
   };
 }

@@ -1,14 +1,14 @@
 { stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
 , zulu, glib, libxml2, libav_0_8, ffmpeg_3, libxslt, libGL, alsaLib
-, fontconfig, freetype, gnome2, cairo, gdk-pixbuf, atk, xorg, zlib
+, fontconfig, freetype, pango, gtk2, cairo, gdk-pixbuf, atk, xorg, zlib
 , swingSupport ? true }:
 
 let
-  version = "10.1+11";
-  openjdk = "10";
+  version = "11.41.23";
+  openjdk = "11.0.8";
 
-  sha256_linux = "0g51n2zc7inal29n5ly3mrrfj15c7vl87zb6b2r1q67n4mnbrgm8";
-  sha256_darwin = "1c5ib136nv6gz7ij31mg15nhzrl6zr7kp8spm17zwm1ib82bc73y";
+  sha256_linux = "f8aee4ab30ca11ab3c8f401477df0e455a9d6b06f2710b2d1b1ddcf06067bc79";
+  sha256_darwin = "643c6648cc4374f39e830e4fcb3d68f8667893d487c07eb7091df65937025cc3";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
@@ -16,8 +16,8 @@ let
 
   libraries = [
     stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg_3 libxslt libGL
-    xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango
-    gnome2.gtk cairo gdk-pixbuf atk zlib
+    xorg.libXxf86vm alsaLib fontconfig freetype pango
+    gtk2 cairo gdk-pixbuf atk zlib
   ] ++ (lib.optionals swingSupport (with xorg; [
     xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp
     xorg.libXt xorg.libXrender stdenv.cc.cc
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";
+    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_x64.${extension}";
     sha256 = hash;
   };
 
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ nequissimus fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

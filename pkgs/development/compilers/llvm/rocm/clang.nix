@@ -4,7 +4,6 @@
 , python
 , llvm
 , clang-tools-extra_src ? null
-, rocm-runtime
 , lld
 
 , version
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python ];
 
-  buildInputs = [ llvm rocm-runtime ];
+  buildInputs = [ llvm ];
 
   hardeningDisable = [ "all" ];
 

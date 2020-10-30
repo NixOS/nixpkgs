@@ -54,7 +54,7 @@ let
     '') gitlabConfig.production.repositories.storages))}
   '';
 
-  gitlabShellConfig = {
+  gitlabShellConfig = flip recursiveUpdate cfg.extraShellConfig {
     user = cfg.user;
     gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}";
     http_settings.self_signed_cert = false;
@@ -72,6 +72,11 @@ let
   };
 
   redisConfig.production.url = cfg.redisUrl;
+
+  pagesArgs = [
+    "-pages-domain" gitlabConfig.production.pages.host
+    "-pages-root" "${gitlabConfig.production.shared.path}/pages"
+  ] ++ cfg.pagesExtraArgs;
 
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
@@ -234,6 +239,13 @@ in {
         default = pkgs.gitaly;
         defaultText = "pkgs.gitaly";
         description = "Reference to the gitaly package";
+      };
+
+      packages.pages = mkOption {
+        type = types.package;
+        default = pkgs.gitlab-pages;
+        defaultText = "pkgs.gitlab-pages";
+        description = "Reference to the gitlab-pages package";
       };
 
       statePath = mkOption {
@@ -451,6 +463,12 @@ in {
         };
       };
 
+      pagesExtraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ "-listen-proxy" "127.0.0.1:8090" ];
+        description = "Arguments to pass to the gitlab-pages daemon";
+      };
+
       secrets.secretFile = mkOption {
         type = with types; nullOr path;
         default = null;
@@ -515,6 +533,12 @@ in {
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
         '';
+      };
+
+      extraShellConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Extra configuration to merge into shell-config.yml";
       };
 
       extraConfig = mkOption {
@@ -618,26 +642,38 @@ in {
       enable = true;
       ensureUsers = singleton { name = cfg.databaseUsername; };
     };
+
     # The postgresql module doesn't currently support concepts like
     # objects owners and extensions; for now we tack on what's needed
     # here.
-    systemd.services.postgresql.postStart = mkAfter (optionalString databaseActuallyCreateLocally ''
-      set -eu
+    systemd.services.gitlab-postgresql = let pgsql = config.services.postgresql; in mkIf databaseActuallyCreateLocally {
+      after = [ "postgresql.service" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ pgsql.package ];
+      script = ''
+        set -eu
 
-      $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
-      current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
-      if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
-          $PSQL -tAc 'ALTER DATABASE "${cfg.databaseName}" OWNER TO "${cfg.databaseUsername}"'
-          if [[ -e "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}" ]]; then
-              echo "Reassigning ownership of database ${cfg.databaseName} to user ${cfg.databaseUsername} failed on last boot. Failing..."
-              exit 1
-          fi
-          touch "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
-          $PSQL "${cfg.databaseName}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${cfg.databaseUsername}\""
-          rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
-      fi
-      $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
-    '');
+        PSQL="${pkgs.utillinux}/bin/runuser -u ${pgsql.superUser} -- psql --port=${toString pgsql.port}"
+
+        $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
+        current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
+        if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
+            $PSQL -tAc 'ALTER DATABASE "${cfg.databaseName}" OWNER TO "${cfg.databaseUsername}"'
+            if [[ -e "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}" ]]; then
+                echo "Reassigning ownership of database ${cfg.databaseName} to user ${cfg.databaseUsername} failed on last boot. Failing..."
+                exit 1
+            fi
+            touch "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
+            $PSQL "${cfg.databaseName}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${cfg.databaseUsername}\""
+            rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
+        fi
+        $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+      };
+    };
 
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
@@ -684,7 +720,6 @@ in {
       "L+ /run/gitlab/shell-config.yml - - - - ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)}"
 
       "L+ ${cfg.statePath}/config/unicorn.rb - - - - ${./defaultUnicornConfig.rb}"
-      "L+ ${cfg.statePath}/config/initializers/extra-gitlab.rb - - - - ${extraGitlabRb}"
     ];
 
     systemd.services.gitlab-sidekiq = {
@@ -737,6 +772,26 @@ in {
       };
     };
 
+    systemd.services.gitlab-pages = mkIf (gitlabConfig.production.pages.enabled or false) {
+      description = "GitLab static pages daemon";
+      after = [ "network.target" "redis.service" "gitlab.service" ]; # gitlab.service creates configs
+      wantedBy = [ "multi-user.target" ];
+
+      path = [ pkgs.unzip ];
+
+      serviceConfig = {
+        Type = "simple";
+        TimeoutSec = "infinity";
+        Restart = "on-failure";
+
+        User = cfg.user;
+        Group = cfg.group;
+
+        ExecStart = "${cfg.packages.pages}/bin/gitlab-pages ${escapeShellArgs pagesArgs}";
+        WorkingDirectory = gitlabEnv.HOME;
+      };
+    };
+
     systemd.services.gitlab-workhorse = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -766,8 +821,25 @@ in {
       };
     };
 
+    systemd.services.gitlab-mailroom = mkIf (gitlabConfig.production.incoming_email.enabled or false) {
+      description = "GitLab incoming mail daemon";
+      after = [ "network.target" "redis.service" "gitlab.service" ]; # gitlab.service creates configs
+      wantedBy = [ "multi-user.target" ];
+      environment = gitlabEnv;
+      serviceConfig = {
+        Type = "simple";
+        TimeoutSec = "infinity";
+        Restart = "on-failure";
+
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/bundle exec mail_room -c ${cfg.packages.gitlab}/share/gitlab/config.dist/mail_room.yml";
+        WorkingDirectory = gitlabEnv.HOME;
+      };
+    };
+
     systemd.services.gitlab = {
-      after = [ "gitlab-workhorse.service" "gitaly.service" "network.target" "postgresql.service" "redis.service" ];
+      after = [ "gitlab-workhorse.service" "gitaly.service" "network.target" "gitlab-postgresql.service" "redis.service" ];
       requires = [ "gitlab-sidekiq.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
@@ -804,6 +876,7 @@ in {
             rm -f ${cfg.statePath}/lib
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
+            ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
 
             ${cfg.packages.gitlab-shell}/bin/install
 

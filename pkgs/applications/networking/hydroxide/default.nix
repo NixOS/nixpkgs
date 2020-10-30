@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1r5qg5cx48yw1l5nil28y4a82fc7g52jmy9pckaxygppmmn539pc";
 
+  doCheck = false;
+
   subPackages = [ "cmd/hydroxide" ];
 
   meta = with lib; {

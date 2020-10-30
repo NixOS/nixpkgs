@@ -5,9 +5,16 @@ let
   integerSimpleExcludes = [
     "ghc822Binary"
     "ghc865Binary"
+    "ghc8102Binary"
     "ghcjs"
     "ghcjs86"
     "integer-simple"
+    "native-bignum"
+    "ghcHEAD"
+  ];
+
+  nativeBignumIncludes = [
+    "ghcHEAD"
   ];
 
   haskellLib = import ../development/haskell-modules/lib.nix {
@@ -43,6 +50,10 @@ in {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
+    ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_9;
+    };
+
     ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -73,6 +84,18 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
     };
+    ghc8102 = callPackage ../development/compilers/ghc/8.10.2.nix {
+      bootPkgs = packages.ghc865Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_9;
+      llvmPackages = pkgs.llvmPackages_9;
+    };
+    ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
+      bootPkgs = packages.ghc8102Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_10;
+      llvmPackages = pkgs.llvmPackages_10;
+    };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc883; # no binary yet
       inherit (buildPackages.python3Packages) sphinx;
@@ -97,6 +120,16 @@ in {
     in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
       (name: compiler.${name}.override { enableIntegerSimple = true; }));
+
+    # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
+    # with "native" and "gmp" backends.
+    native-bignum = let
+      nativeBignumGhcNames = pkgs.lib.filter
+        (name: builtins.elem name nativeBignumIncludes)
+        (pkgs.lib.attrNames compiler);
+    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+      nativeBignumGhcNames
+      (name: compiler.${name}.override { enableNativeBignum = true; }));
   };
 
   # Default overrides that are applied to all package sets.
@@ -115,6 +148,12 @@ in {
       buildHaskellPackages = bh.packages.ghc865Binary;
       ghc = bh.compiler.ghc865Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc8102Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8102Binary;
+      ghc = bh.compiler.ghc8102Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc865 = callPackage ../development/haskell-modules {
@@ -141,6 +180,16 @@ in {
       buildHaskellPackages = bh.packages.ghc8101;
       ghc = bh.compiler.ghc8101;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+    };
+    ghc8102 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8102;
+      ghc = bh.compiler.ghc8102;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+    };
+    ghc901 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc901;
+      ghc = bh.compiler.ghc901;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
@@ -170,5 +219,16 @@ in {
       };
     });
 
+    native-bignum = let
+      nativeBignumGhcNames = pkgs.lib.filter
+        (name: builtins.elem name nativeBignumIncludes)
+        (pkgs.lib.attrNames compiler);
+    in pkgs.lib.genAttrs nativeBignumGhcNames (name: packages.${name}.override {
+      ghc = bh.compiler.native-bignum.${name};
+      buildHaskellPackages = bh.packages.native-bignum.${name};
+      overrides = _self : _super : {
+        integer-gmp = null;
+      };
+    });
   };
 }

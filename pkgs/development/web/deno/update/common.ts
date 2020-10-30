@@ -8,7 +8,20 @@ const run = async (command: string, args: string[]) => {
     { cmd: [command, ...args], stdout: "piped", stderr: "piped" },
   );
   if (!(await cmd.status()).success) {
-    throw await cmd.stderrOutput().then((b) => decode(b));
+    const error = await cmd.stderrOutput().then((b) => decode(b).trimEnd());
+    // Known error we can ignore
+    if (error.includes("'allow-unsafe-native-code-during-evaluation'")) {
+      // Extract the target sha256 out of the error
+      const target = "  got:    sha256:";
+      const match = error
+        .split("\n")
+        .find((l) => l.includes(target))
+        ?.split(target)[1];
+      if (typeof match !== "undefined") {
+        return match;
+      }
+    }
+    throw new Error(error);
   }
   return cmd.output().then((b) => decode(b).trimEnd());
 };

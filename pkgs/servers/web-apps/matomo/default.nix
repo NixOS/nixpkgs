@@ -3,16 +3,16 @@
 let
   versions = {
     matomo = {
-      version = "3.13.6";
-      sha256 = "1d3s5v96mmhcxdnxi7qh822p55g9a2nxh0zcq2d8bhg0cshi9804";
+      version = "3.14.1";
+      sha256 = "0gp6v797118z703nh0p77zvsizvdg0c2jkn26996d4sqw5pa78v3";
     };
 
     matomo-beta = {
-      version = "3.13.6";
+      version = "3.14.1";
       # `beta` examples: "b1", "rc1", null
       # TOOD when updating: use null if stable version is >= latest beta or release candidate
       beta = null;
-      sha256 = "1d3s5v96mmhcxdnxi7qh822p55g9a2nxh0zcq2d8bhg0cshi9804";
+      sha256 = "0gp6v797118z703nh0p77zvsizvdg0c2jkn26996d4sqw5pa78v3";
     };
   };
   common = pname: { version, sha256, beta ? null }:

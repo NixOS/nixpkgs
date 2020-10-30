@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl }:
+{ stdenv, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
+, rpcsvc-proto, libtirpc, libnsl
+}:
 let
   /*
   dsniff's build system unconditionnaly wants static libraries and does not
@@ -52,9 +54,10 @@ in stdenv.mkDerivation {
     name = "dsniff.tar.gz";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ glib pcap ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ldl";
+  nativeBuildInputs = [ autoreconfHook rpcsvc-proto ];
+  buildInputs = [ glib pcap libtirpc libnsl ];
+  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ldl -ltirpc";
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch

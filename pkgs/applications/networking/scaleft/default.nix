@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "scaleft";
-  version = "1.45.3";
+  version = "1.45.4";
 
   src =
     fetchurl {
       url = "http://pkg.scaleft.com/rpm/scaleft-client-tools-${version}-1.x86_64.rpm";
-      sha256 = "02hsn64kg22pgga5ldjwhnqc6jq8w03mwf40dfanln1qz38x9nx1";
+      sha256 = "1yskybjba9ljy1wazddgrm7a4cc72i1xbk7sxnjpcq4hdy3b50l0";
     };
 
   nativeBuildInputs = [ patchelf rpmextract ];

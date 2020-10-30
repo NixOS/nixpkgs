@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, coverage, pytest, pytestcov }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, coverage, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "1.6";
+  version = "2.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1sbwbwkpk3s7iwnwsdrvj1ydw9lgbn3xqhji7f8y5y6vvr77i53v";
+    sha256 = "933bf7f3848e9e39ecab6a12faa59d5185471c887534abac13baea6fe8138cc2";
   };
 
   checkInputs = [ coverage pytest pytestcov ];

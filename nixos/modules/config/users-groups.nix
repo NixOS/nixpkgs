@@ -35,8 +35,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password install the <literal>mkpasswd</literal>
-    package and run <literal>mkpasswd -m sha-512</literal>.
+    To generate a hashed password run <literal>mkpasswd -m sha-512</literal>.
 
     If set to an empty string (<literal>""</literal>), this user will
     be able to log in without being asked for a password (but not via remote
@@ -136,6 +135,20 @@ let
         description = ''
           Path to encrypted luks device that contains
           the user's home directory.
+        '';
+      };
+
+      pamMount = mkOption {
+        type = with types; attrsOf str;
+        default = {};
+        description = ''
+          Attributes for user's entry in
+          <filename>pam_mount.conf.xml</filename>.
+          Useful attributes might include <code>path</code>,
+          <code>options</code>, <code>fstype</code>, and <code>server</code>.
+          See <link
+          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />
+          for more information.
         '';
       };
 
@@ -463,7 +476,7 @@ in {
 
     users.users = mkOption {
       default = {};
-      type = with types; loaOf (submodule userOpts);
+      type = with types; attrsOf (submodule userOpts);
       example = {
         alice = {
           uid = 1234;
@@ -487,7 +500,7 @@ in {
         { students.gid = 1001;
           hackers = { };
         };
-      type = with types; loaOf (submodule groupOpts);
+      type = with types; attrsOf (submodule groupOpts);
       description = ''
         Additional groups to be created automatically by the system.
       '';
@@ -537,6 +550,7 @@ in {
       input.gid = ids.gids.input;
       kvm.gid = ids.gids.kvm;
       render.gid = ids.gids.render;
+      shadow.gid = ids.gids.shadow;
     };
 
     system.activationScripts.users = stringAfter [ "stdio" ]
