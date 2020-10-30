@@ -16701,6 +16701,8 @@ in
 
   imgproxy = callPackage ../servers/imgproxy { };
 
+  ircdog = callPackage ../applications/networking/irc/ircdog { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
