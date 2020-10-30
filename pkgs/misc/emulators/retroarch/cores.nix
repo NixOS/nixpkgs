@@ -630,7 +630,6 @@ in with stdenv.lib.licenses;
       rev = "02987af9b81a9c3294af8fb9d5a34f9826a2cf4d";
       sha256 = "0gl7irmn5d8lk7kf484vgw6kb325fq4ghwsni3il4nm5n2a8yglh";
     };
-    broken = true;
     patches = [
       (fetchpatch {
         name = "fix_mame_build_on_make-4.3.patch";
@@ -640,6 +639,7 @@ in with stdenv.lib.licenses;
     ];
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/102078#issuecomment-719535596
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs = [ alsaLib ];
     postPatch = ''
