@@ -13,8 +13,8 @@ let
   bashCompletion = fetchFromGitHub {
     owner = "imomaliev";
     repo = "tmux-bash-completion";
-    rev = "fcda450d452f07d36d2f9f27e7e863ba5241200d";
-    sha256 = "092jpkhggjqspmknw7h3icm0154rg21mkhbc71j5bxfmfjdxmya8";
+    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
+    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
   };
 
 in
