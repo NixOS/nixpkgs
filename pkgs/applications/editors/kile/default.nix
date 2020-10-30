@@ -29,14 +29,17 @@ mkDerivation rec {
     sha256 = "BEmSEv/LJPs6aCkUmnyuTGrV15WYXwgIANbfcviMXfA=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules wrapGAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    wrapGAppsHook
+    kdoctools
+  ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     kconfig
     kcrash
     kdbusaddons
     kdelibs4support
-    kdoctools
     kguiaddons
     kiconthemes
     kinit
@@ -48,6 +51,10 @@ mkDerivation rec {
     poppler
     qtscript
   ];
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   propagatedUserEnvPkgs = [ konsole ];
 
