@@ -212,6 +212,8 @@ in
 
   ptags = callPackage ../development/tools/misc/ptags { };
 
+  ptouch-print = callPackage ../misc/ptouch-print { };
+
   demoit = callPackage ../servers/demoit { };
 
   deviceTree = callPackage ../os-specific/linux/device-tree {};
