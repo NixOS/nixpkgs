@@ -1,4 +1,6 @@
-{ lib, callPackage, runCommandLocal, writeShellScriptBin, coreutils, bubblewrap }:
+{ lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, coreutils, bubblewrap }:
+
+let buildFHSEnv = callPackage ./env.nix { }; in
 
 args @ {
   name
@@ -60,8 +62,27 @@ let
   in concatStringsSep "\n  "
   (map (file: "--ro-bind-try /etc/${file} /etc/${file}") files);
 
+  # Create this on the fly instead of linking from /nix
+  # The container might have to modify it and re-run ldconfig if there are
+  # issues running some binary with LD_LIBRARY_PATH
+  createLdConfCache = ''
+    cat > /etc/ld.so.conf <<EOF
+    /lib
+    /lib/x86_64-linux-gnu
+    /lib64
+    /usr/lib
+    /usr/lib/x86_64-linux-gnu
+    /usr/lib64
+    /lib/i386-linux-gnu
+    /lib32
+    /usr/lib/i386-linux-gnu
+    /usr/lib32
+    EOF
+    ldconfig &> /dev/null
+  '';
   init = run: writeShellScriptBin "${name}-init" ''
     source /etc/profile
+    ${createLdConfCache}
     exec ${run} "$@"
   '';
 
@@ -117,6 +138,11 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       --die-with-parent
       --ro-bind /nix /nix
+      --tmpfs ${glibc}/etc \
+      --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
+      --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
+      --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
+      --remount-ro ${glibc}/etc \
       ${etcBindFlags}
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
