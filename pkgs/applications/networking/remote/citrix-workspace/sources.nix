@@ -52,7 +52,7 @@ let
   #
   # The lifespans of Citrix products can be found here:
   # https://www.citrix.com/support/product-lifecycle/milestones/receiver.html
-  unsupportedVersions = [ "19.6.0" "19.8.0" "19.10.0" "19.12.0" ];
+  unsupportedVersions = [ ];
 in {
   inherit supportedVersions unsupportedVersions;
 }
