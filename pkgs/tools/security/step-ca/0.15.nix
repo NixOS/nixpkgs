@@ -29,10 +29,11 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
+    description = "A private certificate authority (X.509 & SSH) & ACME server";
+    longDescription = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = with platforms; platforms.linux ++ platforms.darwin;
   };
 }
