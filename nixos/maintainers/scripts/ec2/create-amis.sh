@@ -126,6 +126,8 @@ wait_for_import() {
                 ;;
             *)
                 log "Unexpected snapshot import state: '${state}'"
+                log "Full response: "
+                aws ec2 describe-import-snapshot-tasks --region "$region" --import-task-ids "$task_id" >&2
                 exit 1
                 ;;
         esac
