@@ -2518,6 +2518,8 @@ in
 
   step-ca = callPackage ../tools/security/step-ca { };
 
+  step-ca_0_15 = callPackage ../tools/security/step-ca/0.15.nix { };
+
   step-cli = callPackage ../tools/security/step-cli { };
 
   string-machine = callPackage ../applications/audio/string-machine { };
