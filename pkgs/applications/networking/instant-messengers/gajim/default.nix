@@ -59,6 +59,9 @@ python3.pkgs.buildPythonApplication rec {
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       ${python3.interpreter} setup.py test
   '';
+  
+  # necessary for wrapGAppsHook
+  strictDeps = false;
 
   meta = {
     homepage = "http://gajim.org/";
