@@ -356,6 +356,7 @@ mountFS() {
     case $options in
         *x-nixos.autoresize*)
             if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                modprobe "$fsType"
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"
