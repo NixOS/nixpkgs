@@ -8746,7 +8746,11 @@ broken-packages:
   - polydata-core
   - polynomial
   - polysemy-chronos
+  - polysemy-extra
+  - polysemy-fskvstore
   - polysemy-http
+  - polysemy-kvstore-jsonfile
+  - polysemy-methodology
   - polysemy-optics
   - polysemy-RandomFu
   - polysemy-resume
@@ -11115,6 +11119,7 @@ broken-packages:
   - windns
   - windowslive
   - winerror
+  - winery
   - winio
   - Wired
   - wires
