@@ -272,6 +272,8 @@ in {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
+  algopy = callPackage ../development/python-modules/algopy { };
+
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
   alot = callPackage ../development/python-modules/alot { };
