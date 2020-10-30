@@ -13341,8 +13341,6 @@ in
     automake = automake111x;
   };
 
-  kf5gpgmepp = libsForQt5.callPackage ../development/libraries/kf5gpgmepp { };
-
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
@@ -15229,6 +15227,8 @@ in
     kdiagram = callPackage ../development/libraries/kdiagram { };
 
     kdsoap = callPackage ../development/libraries/kdsoap { };
+
+    kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
 
     kproperty = callPackage ../development/libraries/kproperty { };
 
