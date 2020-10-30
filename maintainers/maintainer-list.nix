@@ -5689,12 +5689,6 @@
     githubId = 1387206;
     name = "Mike Sperber";
   };
-  mildlyincompetent = {
-    email = "nix@kch.dev";
-    github = "mildlyincompetent";
-    githubId = 19479662;
-    name = "Kajetan Champlewski";
-  };
   millerjason = {
     email = "mailings-github@millerjason.com";
     github = "millerjason";
