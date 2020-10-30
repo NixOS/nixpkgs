@@ -1,22 +1,22 @@
-{ stdenv, python2Packages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-python2Packages.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "broadlink-cli";
-  inherit (python2Packages.broadlink) version;
+  inherit (python3Packages.broadlink) version;
 
   # the tools are available as part of the source distribution from GH but
   # not pypi, so we have to fetch them here.
   src = fetchFromGitHub {
     owner  = "mjg59";
     repo   = "python-broadlink";
-    # this rev is version 0.9
-    rev    = "766b7b00fb1cec868e3d5fca66f1aada208959ce";
-    sha256 = "0j0idzxmpwkb1lbgvi9df2hbxafm5hxjc6mgg5481lq7z4z1r4nb";
+    # this rev is version 0.15.0
+    rev    = "99add9e6feea6e47be4f3a58783556d7838b759c";
+    sha256 = "1q1q62brvfjcb18i0j4ca5cxqzjwv1iywdrdby0yjqa4wm6ywq6b";
   };
 
   format = "other";
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = with python3Packages; [
     broadlink
   ];
 
@@ -32,6 +32,6 @@ python2Packages.buildPythonApplication {
   meta = with stdenv.lib; {
     description = "Tools for interfacing with Broadlink RM2/3 (Pro) remote controls, A1 sensor platforms and SP2/3 smartplugs";
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (python2Packages.broadlink.meta) homepage license;
+    inherit (python3Packages.broadlink.meta) homepage license;
   };
 }
