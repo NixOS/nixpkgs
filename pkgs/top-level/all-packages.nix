@@ -23343,8 +23343,6 @@ in
 
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
 
-  skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
-
   SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
 
   slmenu = callPackage ../applications/misc/slmenu {};
