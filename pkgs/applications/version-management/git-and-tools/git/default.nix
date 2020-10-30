@@ -2,7 +2,7 @@
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
-, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
+, asciidoctor, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xsl_ns, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? true
@@ -65,8 +65,8 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl ]
-    ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_45 libxslt ];
+    ++ stdenv.lib.optionals withManual [ asciidoctor texinfo xmlto docbook2x
+         docbook_xsl docbook_xsl_ns docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
     ++ stdenv.lib.optionals perlSupport [ perlPackages.perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
@@ -145,7 +145,7 @@ stdenv.mkDerivation {
       }
 
       # Install git-subtree.
-      make -C contrib/subtree install ${stdenv.lib.optionalString withManual "install-doc"}
+      make -C contrib/subtree install ${stdenv.lib.optionalString withManual "USE_ASCIIDOCTOR=1 install-doc"}
       rm -rf contrib/subtree
 
       # Install contrib stuff.
@@ -230,7 +230,7 @@ stdenv.mkDerivation {
       '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html install-info \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES USE_ASCIIDOCTOR=1 PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html install-info \
          -C Documentation ''
 
    + (if guiSupport then ''
