@@ -49,7 +49,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      broken = true;
+      broken = a.broken or false;
       inherit (a) description license;
       homepage = "https://www.libretro.com/";
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
@@ -630,6 +630,7 @@ in with stdenv.lib.licenses;
       rev = "02987af9b81a9c3294af8fb9d5a34f9826a2cf4d";
       sha256 = "0gl7irmn5d8lk7kf484vgw6kb325fq4ghwsni3il4nm5n2a8yglh";
     };
+    broken = true;
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
