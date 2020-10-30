@@ -53,8 +53,8 @@ self: super: {
   haddock-api = self.haddock-api_2_23_1;
 
   # These builds need Cabal 3.2.x.
-  cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_0_0; };
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+  cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
@@ -109,10 +109,10 @@ self: super: {
   apply-refact = super.apply-refact_0_7_0_0;
 
   # The package needs the latest Cabal version.
-  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
 
   # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
 
   # liquidhaskell does not support ghc version 8.8.x.
   liquid = markBroken super.liquid;
