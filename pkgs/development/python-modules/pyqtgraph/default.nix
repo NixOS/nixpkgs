@@ -35,7 +35,7 @@ in buildPythonPackage rec {
   checkPhase = ''
     export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
-
+    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
     export FONTCONFIG_FILE=${fontsConf}
 
     # disable 6 tests which try to clone https://github.com/pyqtgraph/test-data
