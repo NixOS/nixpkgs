@@ -14570,6 +14570,27 @@ let
     };
   };
 
+  NetAsyncHTTP = buildPerlModule {
+    pname = "Net-Async-HTTP";
+    version = "0.47";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.47.tar.gz";
+      sha256 = "1lwy1ijrhibi087p3q5zvadhkq0slfrzfhb76cmkx4mpyv5v4l8f";
+    };
+    buildInputs = [ HTTPCookies TestIdentity TestMetricsAny TestRefcount ];
+    propagatedBuildInputs = [ Future HTTPMessage IOAsync MetricsAny StructDumb URI ];
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      # network tests fail on Darwin/sandbox, so disable these
+      rm -f t/20local-connect.t t/22local-connect-pipeline.t t/23local-connect-redir.t
+      rm -f t/90rt75615.t t/90rt75616.t t/90rt93232.t
+    '';
+    meta = {
+      description = "Use HTTP with IO::Async";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   NetAsyncPing = buildPerlPackage {
     pname = "Net-Async-Ping";
     version = "0.004001";
