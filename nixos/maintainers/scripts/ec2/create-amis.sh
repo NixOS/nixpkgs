@@ -6,9 +6,10 @@
 # <nixos/release.nix> amazonImage attribute. Images are uploaded and
 # registered via a home region, and then copied to other regions.
 
-# The home region requires an s3 bucket, and a "vmimport" IAM role
-# with access to the S3 bucket.  Configuration of the vmimport role is
-# documented in
+# The home region requires an s3 bucket, and an IAM role named, by default,
+# "vmimport" IAM role with access to the S3 bucket. The name can be
+# configured with the "service_role_name" variable. Configuration of the
+# vmimport role is documented in
 # https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html
 
 # set -x
@@ -18,6 +19,7 @@ set -euo pipefail
 state_dir=$HOME/amis/ec2-images
 home_region=eu-west-1
 bucket=nixos-amis
+service_role_name=vmimport
 
 regions=(eu-west-1 eu-west-2 eu-west-3 eu-central-1 eu-north-1
          us-east-1 us-east-2 us-west-1 us-west-2
@@ -196,7 +198,7 @@ upload_image() {
 
         log "Importing image from S3 path s3://$bucket/$aws_path"
 
-        task_id=$(aws ec2 import-snapshot --disk-container "{
+        task_id=$(aws ec2 import-snapshot --role-name "$service_role_name" --disk-container "{
           \"Description\": \"nixos-image-${image_label}-${image_system}\",
           \"Format\": \"vhd\",
           \"UserBucket\": {
