@@ -21849,7 +21849,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
-  jackmix = callPackage ../applications/audio/jackmix { };
+  jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
   jalv = callPackage ../applications/audio/jalv { };
