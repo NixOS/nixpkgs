@@ -21965,6 +21965,8 @@ in
 
   ledger-web = callPackage ../applications/office/ledger-web { };
 
+  ledger2beancount = callPackage ../tools/text/ledger2beancount { };
+
   lightburn = libsForQt5.callPackage ../applications/graphics/lightburn { };
 
   lighthouse = callPackage ../applications/misc/lighthouse { };
