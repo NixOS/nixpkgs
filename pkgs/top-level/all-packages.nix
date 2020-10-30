@@ -7835,6 +7835,8 @@ in
 
   verilog = callPackage ../applications/science/electronics/verilog {};
 
+  versus = callPackage ../applications/networking/versus { };
+
   vgrep = callPackage ../tools/text/vgrep { };
 
   vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
