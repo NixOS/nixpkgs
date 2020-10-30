@@ -5,8 +5,9 @@ let
   version = "0.15.5";
 in
 buildGoModule {
+  inherit vendorSha256;
+  inherit version;
   pname = "step-ca";
-  version = version;
 
   src = fetchFromGitHub {
     inherit sha256;
@@ -16,7 +17,6 @@ buildGoModule {
   };
 
   goPackagePath = "github.com/smallstep/certificates";
-  vendorSha256 = vendorSha256;
 
   buildPhase = ''
     runHook preBuild
