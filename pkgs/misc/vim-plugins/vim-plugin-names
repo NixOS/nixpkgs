@@ -91,6 +91,7 @@ eagletmt/ghcmod-vim
 eagletmt/neco-ghc
 easymotion/vim-easymotion
 editorconfig/editorconfig-vim
+edwinb/idris2-vim
 ehamberg/vim-cute-python
 eikenb/acp
 elixir-editors/vim-elixir

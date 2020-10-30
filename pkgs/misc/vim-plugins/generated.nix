@@ -1593,6 +1593,18 @@ let
     meta.homepage = "https://github.com/idris-hackers/idris-vim/";
   };
 
+  idris2-vim = buildVimPluginFrom2Nix {
+    pname = "idris2-vim";
+    version = "2020-05-25";
+    src = fetchFromGitHub {
+      owner = "edwinb";
+      repo = "idris2-vim";
+      rev = "099129e08c89d9526ad092b7980afa355ddaa24c";
+      sha256 = "1gip64ni2wdd5v4crl64f20pbrx24dmr3ci7w5c9da9hs85x1p29";
+    };
+    meta.homepage = "https://github.com/edwinb/idris2-vim/";
+  };
+
   Improved-AnsiEsc = buildVimPluginFrom2Nix {
     pname = "Improved-AnsiEsc";
     version = "2015-08-26";
