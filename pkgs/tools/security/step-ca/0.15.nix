@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, buildGoPackage, fetchFromGitHub }:
 let
   sha256 = "01y4wi6j1frfpd6ndwrxw4sr9rwhj8m96mvp76rnszzwgvlydgd4";
   vendorSha256 = "1is4rvga3anmzqqd1bmdw3014lxrvnm19jrfpyvmdqh7pc7cm4i5";
@@ -9,10 +9,10 @@ buildGoModule {
   version = version;
 
   src = fetchFromGitHub {
+    inherit sha256;
     owner = "smallstep";
     repo = "certificates";
     rev = "v${version}";
-    sha256 = sha256;
   };
 
   goPackagePath = "github.com/smallstep/certificates";
@@ -20,7 +20,7 @@ buildGoModule {
 
   buildPhase = ''
     runHook preBuild
-    CGO_ENABLED=0 go build -v -o bin/step-ca -ldflags='-w -X "main.Version=${version}" -X "main.BuildTime=1969-12-31 00:00 UTC"' github.com/smallstep/certificates/cmd/step-ca
+    CGO_ENABLED=0 go build -v -o bin/step-ca -ldflags='-w -X "main.Version=${version}" -X "main.BuildTime=1969-12-31 23:59 UTC"' github.com/smallstep/certificates/cmd/step-ca
   '';
 
   installPhase = ''
