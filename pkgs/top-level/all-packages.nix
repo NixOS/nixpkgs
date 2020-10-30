@@ -2494,6 +2494,8 @@ in
 
   pev = callPackage ../development/tools/analysis/pev { };
 
+  phd2 = callPackage ../applications/science/astronomy/phd2 { };
+
   phoronix-test-suite = callPackage ../tools/misc/phoronix-test-suite { };
 
   photon = callPackage ../tools/networking/photon { };
