@@ -1,4 +1,4 @@
-{ lib, buildGoModule, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 let
   sha256 = "01y4wi6j1frfpd6ndwrxw4sr9rwhj8m96mvp76rnszzwgvlydgd4";
   vendorSha256 = "1is4rvga3anmzqqd1bmdw3014lxrvnm19jrfpyvmdqh7pc7cm4i5";
