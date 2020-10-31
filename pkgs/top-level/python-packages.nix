@@ -5526,6 +5526,8 @@ in {
 
   pyobjc-framework-LatentSemanticMapping = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LatentSemanticMapping { });
 
+  pyobjc-framework-LaunchServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LaunchServices { });
+
   pyobjc-framework-libdispatch = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-libdispatch { });
 
   pyobjc-framework-LocalAuthentication = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LocalAuthentication { });
