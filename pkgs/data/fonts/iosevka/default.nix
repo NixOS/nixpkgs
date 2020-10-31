@@ -89,6 +89,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    updateScript = ./update-default.sh;
+  };
+
   meta = with stdenv.lib; {
     homepage = "https://be5invis.github.io/Iosevka";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
