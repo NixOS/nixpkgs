@@ -16656,9 +16656,7 @@ in
 
   grafana = callPackage ../servers/monitoring/grafana { };
 
-  grafana-loki = callPackage ../servers/monitoring/loki {
-    buildGoPackage = buildGo114Package;
-  };
+  grafana-loki = callPackage ../servers/monitoring/loki { };
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
