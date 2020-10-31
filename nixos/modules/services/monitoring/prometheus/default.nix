@@ -546,7 +546,7 @@ in {
             job_name = "home_assistant";
             metrics_path = "/api/prometheus";
             scheme = "https";
-            bearer_token = "\${HOME_ASSISTANT_BEARER_TOKEN}";
+            bearer_token = "\''${HOME_ASSISTANT_BEARER_TOKEN}";
             [...]
           }
         </programlisting>
