@@ -108,7 +108,7 @@ with frameworks; with libs; {
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices ];
   SafariServices          = [ AppKit ];
-  SceneKit                = [ GLKit ];
+  SceneKit                = [ GLKit QuartzCore ];
   ScreenSaver             = [ AppKit ];
   Scripting               = [];
   ScriptingBridge         = [];
