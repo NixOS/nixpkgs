@@ -2,14 +2,14 @@
 pyobjc-core, pyobjc-framework-Cocoa }:
 
 buildPythonPackage rec {
-  pname = "pyobjc-framework-AppleScriptKit";
+  pname = "pyobjc-framework-AppleScriptObjC";
   version = "6.2.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14hljxjh64c3kblz7qp24yk68rashlz0szxpwss7v683fpb22y7s";
+    sha256 = "1cnxjb64ggznwc86b6wgr1lr17zywljndifkrixwarm20bhm272q";
   };
   
   postPatch = ''
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Wrappers for the framework AppleScriptKit on Mac OS X";
-    homepage = "https://pythonhosted.org/pyobjc-framework-AppleScriptKit/";
+    description = "Wrappers for the framework AppleScriptObjC on Mac OS X";
+    homepage = "https://pythonhosted.org/pyobjc-framework-AppleScriptObjC/";
     license = licenses.mit;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ SuperSandro2000 ];

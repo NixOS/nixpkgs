@@ -5424,6 +5424,8 @@ in {
 
   pyobjc-framework-AdSupport = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AdSupport { });
 
+  pyobjc-framework-AppleScriptObjC = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AppleScriptObjC { });
+
   pyobjc-framework-AppleScriptKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AppleScriptKit { });
 
   pyobjc-framework-ApplicationServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ApplicationServices { });
