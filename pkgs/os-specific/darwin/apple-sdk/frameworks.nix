@@ -40,6 +40,7 @@ with frameworks; with libs; {
   CoreText                = [ CoreGraphics ];
   CoreVideo               = [ ApplicationServices CoreGraphics IOSurface Metal OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
+  CryptoTokenKit          = [];
   DVDPlayback             = [];
   DirectoryService        = [];
   DiscRecording           = [ CoreServices IOKit ];
