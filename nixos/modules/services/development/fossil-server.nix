@@ -85,12 +85,6 @@ in
       description = "Do not compress HTTP replies";
     };
 
-    nojail = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Drop root privileges but do not enter the chroot jail";
-    };
-
     nossl = mkOption {
       type = types.bool;
       default = false;
@@ -134,7 +128,6 @@ in
         + (optionalString (cfg.maxLatency > 0) "--max-latency  ${toString cfg.maxLatency} ")
         + (optionalString cfg.nocompress "--nocompress ")
         + (optionalString cfg.https "--https ")
-        + (optionalString cfg.nojail "--nojail ")
         + (optionalString cfg.nossl "--nossl ")
         + (optionalString cfg.repolist "--repolist ")
         + "--port ${toString cfg.port} "
