@@ -228,6 +228,13 @@ in rec {
       setupHook = ./security-setup-hook.sh;
     });
 
+    SpriteKit = stdenv.lib.overrideDerivation super.SpriteKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
     QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
