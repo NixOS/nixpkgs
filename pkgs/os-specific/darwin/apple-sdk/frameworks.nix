@@ -123,6 +123,8 @@ with frameworks; with libs; {
   SystemConfiguration     = [ Security ];
   TWAIN                   = [ Carbon ];
   Tcl                     = [];
+  # Available with SDK 10.14
+  UserNotifications       = [];
   VideoDecodeAcceleration = [ CoreVideo ];
   VideoToolbox            = [ CoreMedia CoreVideo ];
   WebKit                  = [ AppKit ApplicationServices Carbon JavaScriptCore OpenGL ];
