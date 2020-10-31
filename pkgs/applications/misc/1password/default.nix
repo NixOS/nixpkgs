@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
+{ stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "1password";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ xar cpio ];
+  
+  postPhases = [ "postInstall" ];
 
   unpackPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     xar -xf $src
@@ -29,10 +31,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D op $out/bin/op
   '';
+  
+  postInstall = ''
+    installShellCompletion --bash --name op <($out/bin/op completion bash)
+    installShellCompletion --zsh --name _op <($out/bin/op completion zsh)
+  '';
 
   dontStrip = stdenv.isDarwin;
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ installShellFiles ] ++ stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   doInstallCheck = true;
 
