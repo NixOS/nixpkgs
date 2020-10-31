@@ -5470,6 +5470,8 @@ in {
 
   pyobjc-framework-CoreWLAN = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreWLAN { });
 
+  pyobjc-framework-CryptoTokenKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CryptoTokenKit { });
+
   pyobjc-framework-DeviceCheck = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DeviceCheck { });
 
   pyobjc-framework-DictionaryServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DictionaryServices { });
