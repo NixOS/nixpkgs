@@ -5432,6 +5432,8 @@ in {
 
   pyobjc-framework-AuthenticationServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AuthenticationServices { });
 
+  pyobjc-framework-AutomaticAssessmentConfiguration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AutomaticAssessmentConfiguration { });
+
   pyobjc-framework-Automator = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Automator { });
 
   pyobjc-framework-AVFoundation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AVFoundation { });
