@@ -5488,6 +5488,8 @@ in {
 
   pyobjc-framework-DiscRecordingUI = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DiscRecordingUI { });
 
+  pyobjc-framework-DiskArbitration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DiskArbitration { });
+
   pyobjc-framework-DVDPlayback = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DVDPlayback { });
 
   pyobjc-framework-ExceptionHandling = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExceptionHandling { });
