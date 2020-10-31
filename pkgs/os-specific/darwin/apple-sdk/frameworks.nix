@@ -63,7 +63,7 @@ with frameworks; with libs; {
   GameplayKit             = [ SpriteKit ];
   Hypervisor              = [];
   ICADevices              = [ Carbon IOBluetooth ];
-  IMServicePlugIn         = [];
+  IMServicePlugIn         = [ GameKit ];
   IOBluetoothUI           = [ IOBluetooth ];
   IOKit                   = [];
   IOSurface               = [ IOKit xpc ];
