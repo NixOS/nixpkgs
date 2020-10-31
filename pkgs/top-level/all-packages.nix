@@ -22551,6 +22551,7 @@ in
     greetd = callPackage ../os-specific/linux/greetd { };
     gtkgreet = callPackage ../os-specific/linux/gtkgreet { };
     dlm = callPackage ../os-specific/linux/dlm { };
+    wlgreet = callPackage ../os-specific/linux/wlgreet { };
   };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
