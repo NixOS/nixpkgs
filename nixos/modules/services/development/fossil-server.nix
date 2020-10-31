@@ -103,17 +103,40 @@ in
       description = ''If REPOSITORY is dir, URL "/" lists repos.'';
     };
 
+    user = mkOption {
+      type = types.str;
+      default = "fossil";
+      description = "User to run fossil as";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "fossil";
+      description = "Group to run fossil as";
+    };
+
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
+    users.users.${cfg.user} = {
+      description     = "Fossil server user";
+      group           = cfg.group;
+    };
+
+    users.groups.${cfg.group} = {
+      members = [ cfg.user ];
+    };
+
     networking.firewall.allowedTCPPorts = [ cfg.port ];
     systemd.services.fossil = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
         ExecStart = "${pkgs.fossil}/bin/fossil server "
         + (optionalString (cfg.baseurl != "") "--baseurl ${cfg.baseurl} ")
         + (optionalString (cfg.extroot != "") "--extroot ${cfg.extroot} ")
