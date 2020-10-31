@@ -5504,6 +5504,8 @@ in {
 
   pyobjc-framework-GameKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameKit { });
 
+  pyobjc-framework-GameplayKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameplayKit { });
+
   pyobjc-framework-ImageCaptureCore = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ImageCaptureCore { });
 
   pyobjc-framework-InputMethodKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-InputMethodKit { });
