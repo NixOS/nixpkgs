@@ -5506,6 +5506,8 @@ in {
 
   pyobjc-framework-NotificationCenter = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NotificationCenter { });
 
+  pyobjc-framework-OSAKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-OSAKit { });
+
   pyobjc-framework-PencilKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-PencilKit { });
 
   pyobjc-framework-Quartz = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Quartz { });
