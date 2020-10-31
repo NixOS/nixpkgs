@@ -50,6 +50,8 @@ with frameworks; with libs; {
   DiskArbitration         = [ IOKit ];
   EventKit                = [];
   ExceptionHandling       = [];
+  # Available with SDK 10.13
+  ExternalAccessory       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ IOKit ];
   Foundation              = [ libobjc CoreFoundation Security ApplicationServices SystemConfiguration ];
