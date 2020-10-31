@@ -5528,6 +5528,8 @@ in {
 
   pyobjc-framework-MapKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MapKit { });
 
+  pyobjc-framework-MediaLibrary = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaLibrary { });
+
   pyobjc-framework-MediaToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaToolbox { });
 
   pyobjc-framework-Metal = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Metal { });
