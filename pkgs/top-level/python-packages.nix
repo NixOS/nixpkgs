@@ -5530,6 +5530,8 @@ in {
 
   pyobjc-framework-SystemExtensions = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SystemExtensions { });
 
+  pyobjc-framework-VideoSubscriberAccount = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoSubscriberAccount { });
+
   pyobjc-framework-VideoToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { });
 
   pyobjc-framework-WebKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-WebKit { });
