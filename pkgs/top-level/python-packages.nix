@@ -5512,6 +5512,8 @@ in {
 
   pyobjc-framework-SafariServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SafariServices { });
 
+  pyobjc-framework-ScreenSaver = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ScreenSaver { });
+
   pyobjc-framework-SearchKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SearchKit { });
 
   pyobjc-framework-Security = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Security { });
