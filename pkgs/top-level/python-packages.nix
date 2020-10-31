@@ -5528,6 +5528,8 @@ in {
 
   pyobjc-framework-Quartz = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Quartz { });
 
+  pyobjc-framework-QuickLookThumbnailing = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-QuickLookThumbnailing { });
+
   pyobjc-framework-SafariServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SafariServices { });
 
   pyobjc-framework-ScreenSaver = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ScreenSaver { });
