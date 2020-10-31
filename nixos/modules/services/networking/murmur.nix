@@ -67,7 +67,7 @@ in
 
       iniPath = mkOption {
         type = types.str;
-        default = "";
+        default = "/run/murmur/murmur.ini";
         description = "-ini argument to pass to murmurd";
       };
 
@@ -79,7 +79,7 @@ in
 
       group = mkOption {
         type = types.str;
-        default = "";
+        default = "murmur";
         description = "Group to run murmurd as";
       };
 
@@ -329,8 +329,7 @@ in
         User      = cfg.user;
         Group     = cfg.group;
         ExecStart = ''
-          ${pkgs.murmur}/bin/murmurd -ini \
-            ${if cfg.iniPath != "" then cfg.iniPath else configFile}
+          ${pkgs.murmur}/bin/murmurd -ini ${cfg.iniPath}
         '';
       };
     };
