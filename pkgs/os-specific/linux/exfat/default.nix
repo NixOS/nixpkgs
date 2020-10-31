@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.linux;
+    broken = with kernel; kernelAtLeast "5.8";
   };
 }
