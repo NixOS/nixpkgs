@@ -5438,6 +5438,8 @@ in {
 
   pyobjc-framework-CalendarStore = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CalendarStore { });
 
+  pyobjc-framework-CFNetwork = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CFNetwork { });
+
   pyobjc-framework-CloudKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CloudKit { });
 
   pyobjc-framework-Cocoa = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Cocoa { });
