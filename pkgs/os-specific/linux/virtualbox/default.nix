@@ -18,5 +18,6 @@ stdenv.mkDerivation {
 
   meta = virtualbox.meta // {
     description = virtualbox.meta.description + " (kernel modules)";
+    broken = with kernel; kernelAtLeast "5.9";
   };
 }

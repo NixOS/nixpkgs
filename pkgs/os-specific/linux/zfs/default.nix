@@ -185,6 +185,7 @@ let
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
+        broken = if kernel == null then false else kernel.kernelAtLeast "5.9";
       };
     };
 in {
