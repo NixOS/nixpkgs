@@ -4105,6 +4105,8 @@ in {
 
   nmigen-soc = callPackage ../development/python-modules/nmigen-soc { };
 
+  nocaselist = callPackage ../development/python-modules/nocaselist { };
+
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   node-semver = callPackage ../development/python-modules/node-semver { };
