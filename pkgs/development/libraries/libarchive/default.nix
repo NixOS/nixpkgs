@@ -2,8 +2,10 @@
   fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
 
-  # Optional but increases closure only negligibly.
-  xarSupport ? true,
+  # Optional but increases closure only negligibly. Also, while libxml2
+  # builds fine on windows, but libarchive has trouble linking windows
+  # things it depends on for some reason.
+  xarSupport ? stdenv.hostPlatform.isUnix,
 }:
 
 assert xarSupport -> libxml2 != null;
@@ -22,7 +24,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ sharutils zlib bzip2 openssl xz lzo zstd ]
+  buildInputs =
+    stdenv.lib.optional stdenv.hostPlatform.isUnix sharutils
+    ++ [ zlib bzip2 openssl xz lzo zstd ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;
 

@@ -10,7 +10,7 @@
 , nss
 , nspr
 , fontconfig
-, gnome2
+, pango
 , cairo
 , expat
 , alsaLib
@@ -59,7 +59,7 @@ let
     freetype
     gdk-pixbuf
     glib
-    gnome2.pango
+    pango
     gtk3-x11
     gtk2-x11
     nspr

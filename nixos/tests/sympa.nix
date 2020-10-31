@@ -30,7 +30,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_unit("sympa.service")
     machine.wait_for_unit("wwsympa.service")
     assert "Mailing lists service" in machine.succeed(
-        "curl --insecure -L http://localhost/"
+        "curl --fail --insecure -L http://localhost/"
     )
   '';
 })

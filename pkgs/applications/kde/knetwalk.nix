@@ -4,7 +4,7 @@ mkDerivation {
   name = "knetwalk";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.knetwalk";
-    description = "KNetWalk is a single player logic game";
+    description = "A single player logic game";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

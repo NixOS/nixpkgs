@@ -6,12 +6,12 @@ buildDunePackage rec {
   pname = "biocaml";
   version = "0.10.1";
 
-  owner = "biocaml";
+  useDune2 = true;
 
   minimumOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
-    inherit owner;
+    owner = "biocaml";
     repo   = pname;
     rev    = "v${version}";
     sha256 = "1f19nc8ld0iv45jjnsvaah3ddj88s2n9wj8mrz726kzg85cfr8xj";

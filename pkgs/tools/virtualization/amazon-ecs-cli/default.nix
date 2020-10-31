@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "amazon-ecs-cli";
-  version = "1.18.1";
+  version = "1.20.0";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
-        sha256 = "1q0qsvxwz6mgslwzwslddxxv45v9wmlbbkxgyfz3dfkw6n6d1a2s";
+        sha256 = "11cw2hk48x66wlsg5bzay95l2pgncwnawzj4xmqmbchhhvphrvxr";
       }
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       fetchurl {
         url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-v${version}";
-        sha256 = "0hik88z5xm1pw6a3mxa6zpghdv47s6bg56srxv4azjinzdi59s3b";
+        sha256 = "1f4yq04sgwkj2p0j598a8vc54dzihmqvg9daa6mxnqj403ln0rg1";
       }
     else throw "Architecture not supported";
 

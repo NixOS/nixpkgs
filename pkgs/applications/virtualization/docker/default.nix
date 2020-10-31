@@ -29,7 +29,9 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: {
+    docker-containerd = let
+      withlibseccomp = lib.versionAtLeast version "19.03";
+    in containerd.overrideAttrs (oldAttrs: {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -38,6 +40,9 @@ rec {
         rev = containerdRev;
         sha256 = containerdSha256;
       };
+      # This should be removed once Docker uses containerd >=1.4
+      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ lib.optional withlibseccomp pkgconfig;
+      buildInputs = oldAttrs.buildInputs ++ lib.optional withlibseccomp libseccomp;
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: {
@@ -210,13 +215,14 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen rec {
-    version = "19.03.12";
+    version = "19.03.13";
     rev = "v${version}";
-    sha256 = "0i5xr8q3yjrz5zsjcq63v4g1mzqpingjr1hbf9amk14484i2wkw7";
+    sha256 = "139qqy8jiz1phnngknpa7c1nk9iqwd3hcc9as8x50p1vnycwzr3f";
     runcRev = "dc9208a3303feef5b3839f4323d9beb36df0a9dd"; # v1.0.0-rc10
     runcSha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
-    containerdRev = "7ad184331fa3e55e52b890ea95e65ba581ae3429"; # v1.2.13
-    containerdSha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
+    # Note: Once all packaged Docker versions use containerd <=1.2 or >=1.4 remove the libseccomp and pkgconfig inputs above
+    containerdRev = "8fba4e9a7d01810a393d5d25a3621dc101981175"; # v1.3.7
+    containerdSha256 = "10zy507ajslizicagb64dvbs7wmw0j4x3hdhygbdh4g2nv3mgjb7";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662"; # v0.18.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

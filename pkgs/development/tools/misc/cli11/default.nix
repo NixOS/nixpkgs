@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "CLI11 is a command line parser for C++11";
+    description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p ];

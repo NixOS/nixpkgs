@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     ''
       mortyProxyWithKey.wait_for_unit("default.target")
       mortyProxyWithKey.wait_for_open_port(3001)
-      mortyProxyWithKey.succeed("curl -L 127.0.0.1:3001 | grep MortyProxy")
+      mortyProxyWithKey.succeed("curl -fL 127.0.0.1:3001 | grep MortyProxy")
     '';
 
 })

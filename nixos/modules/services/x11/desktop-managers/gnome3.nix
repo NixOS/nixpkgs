@@ -17,6 +17,11 @@ let
     '';
   };
 
+  defaultFavoriteAppsOverride = ''
+    [org.gnome.shell]
+    favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+  '';
+
   nixos-gsettings-desktop-schemas = let
     defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome3.gnome-shell ];
   in
@@ -42,8 +47,7 @@ let
        [org.gnome.desktop.screensaver]
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
 
-       [org.gnome.shell]
-       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
+       ${cfg.favoriteAppsOverride}
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -121,6 +125,17 @@ in
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
         apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
+      };
+
+      favoriteAppsOverride = mkOption {
+        internal = true; # this is messy
+        default = defaultFavoriteAppsOverride;
+        type = types.lines;
+        example = literalExample ''
+          [org.gnome.shell]
+          favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
+        '';
+        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -215,6 +230,11 @@ in
 
        # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
+
+      # Install gnome-software if flatpak is enabled
+      services.flatpak.guiPackages = [
+        pkgs.gnome3.gnome-software
+      ];
     })
 
     (mkIf flashbackEnabled {
@@ -397,7 +417,6 @@ in
         gnome-music
         gnome-photos
         gnome-screenshot
-        gnome-software
         gnome-system-monitor
         gnome-weather
         nautilus

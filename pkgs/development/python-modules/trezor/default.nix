@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     rlp
     shamir-mnemonic
     typing-extensions
+  ] ++ lib.optionals stdenv.isLinux [
     trezor-udev-rules
   ];
 

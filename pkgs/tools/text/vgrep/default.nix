@@ -1,19 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, go-md2man, installShellFiles }:
 
 buildGoModule rec {
   pname = "vgrep";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "vrothberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "109j04my2xib8m52a0337996a27nvfgzackpg20zs3nzn66dmvb7";
+    sha256 = "1waxp66286q325avvsq58s8qkfjqa39s5p8c3z59scpm0244nr80";
   };
 
   vendorSha256 = null;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  nativeBuildInputs = [ go-md2man installShellFiles ];
+
+  postBuild = ''
+    sed -i '/SHELL= /d' Makefile
+    make docs
+    installManPage docs/*.[1-9]
+  '';
 
   meta = with lib; {
     description = "User-friendly pager for grep/git-grep/ripgrep";

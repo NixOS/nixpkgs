@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   meta = with stdenv.lib; {
-    description = "BZRTP is an opensource implementation of ZRTP keys exchange protocol";
+    description = "An opensource implementation of ZRTP keys exchange protocol";
     homepage = "https://gitlab.linphone.org/BC/public/bzrtp";
     # They have switched to GPLv3 on git HEAD so probably the next release will
     # be GPL3.

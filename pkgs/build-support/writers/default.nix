@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs, lib, gawk, gnused, gixy }:
 
 with lib;
 rec {
@@ -219,10 +219,11 @@ rec {
   writeNginxConfig = name: text: pkgs.runCommandLocal name {
     inherit text;
     passAsFile = [ "text" ];
+    nativeBuildInputs = [ gawk gnused gixy ];
   } /* sh */ ''
     # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
-    ${pkgs.gawk}/bin/awk -f ${awkFormatNginx} "$textPath" | ${pkgs.gnused}/bin/sed '/^\s*$/d' > $out
-    ${pkgs.gixy}/bin/gixy $out
+    awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
+    gixy $out
   '';
 
   # writePerl takes a name an attributeset with libraries and some perl sourcecode and
