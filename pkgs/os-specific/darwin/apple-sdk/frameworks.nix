@@ -90,6 +90,7 @@ with frameworks; with libs; {
   OpenCL                  = [ IOSurface OpenGL ];
   OpenGL                  = [];
   PCSC                    = [ CoreData ];
+  Photos                  = [ CoreImage CoreMedia CoreVideo ];
   PreferencePanes         = [];
   PubSub                  = [];
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
