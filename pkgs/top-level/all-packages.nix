@@ -22547,6 +22547,10 @@ in
 
   grandorgue = callPackage ../applications/audio/grandorgue { };
 
+  greetd = recurseIntoAttrs {
+    greetd = callPackage ../os-specific/linux/greetd { };
+  };
+
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
   };
