@@ -57,8 +57,8 @@ in
     };
 
     jsmode = mkOption {
-      type = types.str;
-      default = "";
+      type = types.nullOr (types.enum [ "inline" "separate" "bundled" ]);
+      default = null;
       example = "inline";
       description = ''
           Determine how JavaScript is delivered with pages.
@@ -124,7 +124,7 @@ in
         + (optionalString (cfg.baseurl != "") "--baseurl ${cfg.baseurl} ")
         + (optionalString (cfg.extroot != "") "--extroot ${cfg.extroot} ")
         + (optionalString (cfg.files != "") "--files ${cfg.files} ")
-        + (optionalString (cfg.jsmode != "") "--jsmode  ${cfg.jsmode} ")
+        + (optionalString (cfg.jsmode != null) "--jsmode  ${cfg.jsmode} ")
         + (optionalString (cfg.maxLatency > 0) "--max-latency  ${toString cfg.maxLatency} ")
         + (optionalString cfg.nocompress "--nocompress ")
         + (optionalString cfg.https "--https ")
