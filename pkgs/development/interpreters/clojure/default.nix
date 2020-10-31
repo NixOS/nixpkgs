@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.645";
+  version = "1.10.1.727";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "1z6a9an8ls992y4japmzdxay7c5d2z9s2q1xl4g615r23jwpcsf9";
+    sha256 = "1mnxvy4n7g72vcwhvrgr0xqri3p9d9w76c8a78kphhmd8lq0m92q";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       cp clojure-tools-${version}.jar $out/libexec
       cp example-deps.edn $out
       cp deps.edn $out
-      cp clj_exec.clj $out
+      cp exec.jar $out
 
       substituteInPlace clojure --replace PREFIX $out
 
