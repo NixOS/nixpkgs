@@ -7826,6 +7826,8 @@ in {
 
   yamllint = callPackage ../development/python-modules/yamllint { };
 
+  yamlloader = callPackage ../development/python-modules/yamlloader { };
+
   yamlordereddictloader = callPackage ../development/python-modules/yamlordereddictloader { };
 
   yanc = callPackage ../development/python-modules/yanc { };
