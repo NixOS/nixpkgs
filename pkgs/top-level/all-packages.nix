@@ -7772,6 +7772,8 @@ in
 
   up = callPackage ../tools/misc/up { };
 
+  upterm = callPackage ../tools/misc/upterm { };
+
   upx = callPackage ../tools/compression/upx { };
 
   uq = callPackage ../misc/uq { };
