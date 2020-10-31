@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ yorickvp ];
+    broken = kernel.kernelAtLeast "5.8";
   };
 }

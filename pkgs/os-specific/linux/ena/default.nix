@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;
+    broken = kernel.kernelAtLeast "5.9";
   };
 }
