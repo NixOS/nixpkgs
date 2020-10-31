@@ -83,6 +83,8 @@ with frameworks; with libs; {
   MetalKit                = [ AppKit ModelIO Metal ];
   ModelIO                 = [ ];
   NetFS                   = [];
+  # Available with SDK 10.14
+  Network                 = [];
   NetworkExtension        = [];
   NotificationCenter      = [ AppKit ];
   OSAKit                  = [ Carbon ];
