@@ -1,13 +1,25 @@
-diff --git a/src/pip/_internal/operations/install/wheel.py b/src/pip/_internal/operations/install/wheel.py
-index e7315ee4..4e36b03d 100644
---- a/src/pip/_internal/operations/install/wheel.py
-+++ b/src/pip/_internal/operations/install/wheel.py
-@@ -615,6 +615,8 @@ def install_wheel(
-     direct_url=None,  # type: Optional[DirectUrl]
- ):
-     # type: (...) -> None
-+    _temp_dir_for_testing = (
-+        _temp_dir_for_testing or os.environ.get("NIX_PIP_INSTALL_TMPDIR"))
-     with TempDirectory(
-         path=_temp_dir_for_testing, kind="unpacked-wheel"
-     ) as unpacked_dir, ZipFile(wheel_path, allowZip64=True) as z:
+diff --git a/src/pip/_internal/utils/temp_dir.py b/src/pip/_internal/utils/temp_dir.py
+index 201ba6d98..f1569fecd 100644
+--- a/src/pip/_internal/utils/temp_dir.py
++++ b/src/pip/_internal/utils/temp_dir.py
+@@ -3,6 +3,7 @@ from __future__ import absolute_import
+ import errno
+ import itertools
+ import logging
++import os
+ import os.path
+ import tempfile
+ from contextlib import contextmanager
+@@ -181,6 +182,11 @@ class TempDirectory(object):
+         # symlinked to another directory.  This tends to confuse build
+         # scripts, so we canonicalize the path by traversing potential
+         # symlinks here.
++        if "SOURCE_DATE_EPOCH" in os.environ:
++            path = os.path.join(tempfile.gettempdir(), "pip-{}-immobile".format(kind))
++            os.mkdir(path)
++            return path
++
+         path = os.path.realpath(
+             tempfile.mkdtemp(prefix="pip-{}-".format(kind))
+         )
+
