@@ -5560,6 +5560,8 @@ in {
 
   pyobjc-framework-OSAKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-OSAKit { });
 
+  pyobjc-framework-OSLog = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-OSLog { });
+
   pyobjc-framework-PencilKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-PencilKit { });
 
   pyobjc-framework-Photos = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Photos { });
