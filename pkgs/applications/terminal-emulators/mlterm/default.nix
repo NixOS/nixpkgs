@@ -5,6 +5,7 @@
 , openssl, libssh2 #build-in ssh
 , fcitx, ibus, uim #IME
 , wrapGAppsHook #color picker in mlconfig
+, Cocoa #Darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf wrapGAppsHook ];
   buildInputs = [
-    libX11 gdk-pixbuf.dev cairo libXft gtk3 vte
-    harfbuzz fribidi m17n_lib openssl libssh2
-    fcitx ibus uim
+    libX11
+    gdk-pixbuf.dev
+    cairo
+    libXft
+    gtk3
+    harfbuzz
+    fribidi
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # need linker magic, not adapted for Darwin yet
+    openssl
+    libssh2
+
+    # Not supported on Darwin
+    vte
+    m17n_lib
+
+    fcitx
+    ibus
+    uim
   ];
 
   #bad configure.ac and Makefile.in everywhere
@@ -42,7 +59,7 @@ stdenv.mkDerivation rec {
       --replace "-m 2755 -g utmp" " " \
       --replace "-m 4755 -o root" " "
   '';
-  NIX_LDFLAGS = "
+  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "
     -L${stdenv.cc.cc.lib}/lib
     -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft
     -lvte-2.91 -lgtk-3 -lharfbuzz -lfribidi -lm17n
@@ -53,23 +70,30 @@ stdenv.mkDerivation rec {
   ";
 
   configureFlags = [
-    "--with-x=yes"
-    "--with-gui=xlib,fb"
     "--with-imagelib=gdk-pixbuf" #or mlimgloader depending on your bugs of choice
     "--with-type-engines=cairo,xft,xcore"
     "--with-gtk=3.0"
     "--enable-ind" #indic scripts
     "--enable-fribidi" #bidi scripts
-    "--enable-m17nlib" #character encodings
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
      #mlterm-menu and mlconfig depend on enabling gnome3.at-spi2-core
      #and configuring ~/.mlterm/key correctly.
- ] ++ lib.optional (libssh2 == null) "--disable-ssh2";
+ ] ++ lib.optionals (!stdenv.isDarwin) [
+   "--with-x=yes"
+   "--with-gui=xlib,fb"
+    "--enable-m17nlib" #character encodings
+ ] ++ lib.optionals stdenv.isDarwin [
+    "--with-gui=quartz"
+ ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
     install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
     install -D -t $out/share/applications $desktopItem/share/applications/*
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/
+    cp -a cocoa/mlterm.app $out/Applications/
+    install $out/bin/mlterm -Dt $out/Applications/mlterm.app/Contents/MacOS/
   '';
 
   desktopItem = makeDesktopItem {
@@ -87,10 +111,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Multi Lingual TERMinal emulator on X11";
+    description = "Multi Lingual TERMinal emulator";
     homepage = "http://mlterm.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

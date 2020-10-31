@@ -724,6 +724,7 @@ in
   mlterm = callPackage ../applications/terminal-emulators/mlterm {
     libssh2 = null;
     openssl = null;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
