@@ -24,6 +24,7 @@ with frameworks; with libs; {
   CalendarStore           = [];
   Cocoa                   = [ AppKit ];
   Collaboration           = [];
+  ContactsUI              = [ AppKit ];
   # Impure version of CoreFoundation, this should not be used unless another
   # framework includes headers that are not available in the pure version.
   CoreFoundation          = [];
