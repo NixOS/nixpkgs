@@ -120,7 +120,8 @@ in
                  '';
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${pkgs.fossil}/bin/fossil server "
+      serviceConfig = {
+        ExecStart = "${pkgs.fossil}/bin/fossil server "
         + (optionalString (cfg.baseurl != "") "--baseurl ${cfg.baseurl} ")
         + (optionalString (cfg.extroot != "") "--extroot ${cfg.extroot} ")
         + (optionalString (cfg.files != "") "--files ${cfg.files} ")
@@ -132,6 +133,7 @@ in
         + (optionalString cfg.repolist "--repolist ")
         + "--port ${toString cfg.port} "
         + cfg.repository;
+      };
     };
 
   };
