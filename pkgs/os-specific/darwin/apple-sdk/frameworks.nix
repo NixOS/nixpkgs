@@ -91,6 +91,7 @@ with frameworks; with libs; {
   OpenCL                  = { inherit IOSurface OpenGL; };
   OpenGL                  = {};
   PCSC                    = { inherit CoreData; };
+  Photos                  = { inherit CoreImage CoreMedia CoreVideo; };
   PreferencePanes         = {};
   PubSub                  = {};
   QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox; };
