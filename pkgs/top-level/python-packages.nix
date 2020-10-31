@@ -1970,6 +1970,8 @@ in {
 
   Fabric = callPackage ../development/python-modules/Fabric { };
 
+  fabulous = callPackage ../development/python-modules/fabulous { };
+
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
 
   face = callPackage ../development/python-modules/face { };
