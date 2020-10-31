@@ -103,6 +103,8 @@ with frameworks; with libs; {
   PhotosUI                = [ AppKit Photos ];
   PreferencePanes         = [];
   PubSub                  = [];
+  # Available with SDK 10.15
+  PushKit                 = [];
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices ];
   SafariServices          = [ AppKit ];
