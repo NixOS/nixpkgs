@@ -63,5 +63,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = with stdenv.lib.maintainers; [ phreedom ];
     platforms = stdenv.lib.platforms.linux;
+    broken = with kernel; kernelAtLeast "5.9";
   };
 }

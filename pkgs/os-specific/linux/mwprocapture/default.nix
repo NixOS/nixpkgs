@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ MP2E ];
     platforms = platforms.linux;
+    broken = with kernel; kernelAtLeast "5.8";
   };
 }

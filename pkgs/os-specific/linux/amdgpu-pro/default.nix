@@ -179,5 +179,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ corngood ];
     # Copied from the nvidia default.nix to prevent a store collision.
     priority = 4;
+    broken = true;
   };
 }

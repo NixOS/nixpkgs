@@ -162,5 +162,6 @@ in stdenv.mkDerivation rec {
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
+    broken = with kernel; kernelAtLeast "5.9";
   };
 }
