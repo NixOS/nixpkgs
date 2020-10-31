@@ -5442,6 +5442,8 @@ in {
 
   pyobjc-framework-ColorSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ColorSync { });
 
+  pyobjc-framework-CoreAudio = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreAudio { });
+
   pyobjc-framework-CoreAudioKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreAudioKit { });
 
   pyobjc-framework-CoreBluetooth = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth { });
