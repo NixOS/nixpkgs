@@ -24,6 +24,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     services.journald.extraConfig = "Storage=volatile";
     test-support.displayManager.auto.user = "alice";
 
+    # To ensure systemd has been compiled with the
+    # systemd-journal-gatewayd support.
+    services.journald.enableHttpGateway = true;
+
     systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
       #!${pkgs.runtimeShell}
       PATH=${lib.makeBinPath (with pkgs; [ utillinux coreutils ])}
