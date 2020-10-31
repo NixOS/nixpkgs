@@ -12,7 +12,7 @@ pipInstallPhase() {
 
     pushd dist || return 1
     mkdir tmpbuild
-    NIX_PIP_INSTALL_TMPDIR=tmpbuild @pythonInterpreter@ -m pip install ./*.whl --no-index --prefix="$out" --no-cache $pipInstallFlags
+    @pythonInterpreter@ -m pip install ./*.whl --no-index --prefix="$out" --no-cache $pipInstallFlags
     rm -rf tmpbuild
     popd || return 1
 
