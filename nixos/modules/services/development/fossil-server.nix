@@ -149,6 +149,16 @@ in
         + (optionalString cfg.repolist "--repolist ")
         + "--port ${toString cfg.port} "
         + cfg.repository;
+        PrivateTmp = "yes";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH";
+        RestrictNamespaces = "uts ipc pid user cgroup";
+        ProtectKernelTunables = "yes";
+        ProtectKernelModules = "yes";
+        ProtectControlGroups = "yes";
+        PrivateDevices = "yes";
+        RestrictSUIDSGID = true;
       };
     };
 
