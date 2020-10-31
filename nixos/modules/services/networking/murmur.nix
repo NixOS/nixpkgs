@@ -67,7 +67,7 @@ in
 
       iniPath = mkOption {
         type = types.str;
-        default = "/run/murmur/murmur.ini";
+        default = "/run/murmur/murmurd.ini";
         description = "-ini argument to pass to murmurd";
       };
 
