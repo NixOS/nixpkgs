@@ -44,7 +44,14 @@
       SHOW_WATERMARK_FOR_GUESTS = false;
     };
   };
-  <link linkend="opt-services.jitsi-videobridge.openFirewall">services.jitsi-videobridge.openFirewall</link> = true;
+  services.jitsi-videobridge = {
+    <link linkend="opt-services.jitsi-videobridge.openFirewall">openFirewall</link> = true;
+    # The following is necessary if the server is behind a NAT
+    nat = {
+      <link linkend="opt-services.jitsi-videobridge.nat.localAddress">localAddress</link> = "192.168.0.23";
+      <link linkend="opt-services.jitsi-videobridge.nat.publicAddress">publicAddress</link> = "1.1.1.1";
+    };
+  };
   <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 80 443 ];
   <link linkend="opt-security.acme.email">security.acme.email</link> = "me@example.com";
   <link linkend="opt-security.acme.acceptTerms">security.acme.acceptTerms</link> = true;
