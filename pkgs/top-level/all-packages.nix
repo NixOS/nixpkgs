@@ -8412,6 +8412,8 @@ in
 
   zplug = callPackage ../shells/zsh/zplug { };
 
+  zplugin = callPackage ../shells/zsh/zplugin {} ;
+
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-bd = callPackage ../shells/zsh/zsh-bd { };
