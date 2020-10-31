@@ -98,6 +98,8 @@ with frameworks; with libs; {
   OpenAL                  = [];
   OpenCL                  = [ IOSurface OpenGL ];
   OpenGL                  = [];
+  # Available with SDK 10.15
+  OSLog                   = [];
   PCSC                    = [ CoreData ];
   Photos                  = [ CoreImage CoreMedia CoreVideo ];
   PhotosUI                = [ AppKit Photos ];
