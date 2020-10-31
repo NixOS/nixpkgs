@@ -22,6 +22,7 @@ with frameworks; with libs; {
   CalendarStore           = {};
   Cocoa                   = { inherit AppKit CoreData; };
   Collaboration           = {};
+  Contacts                = {};
   ContactsUI              = { inherit AppKit; };
   # Impure version of CoreFoundation, this should not be used unless another
   # framework includes headers that are not available in the pure version.
