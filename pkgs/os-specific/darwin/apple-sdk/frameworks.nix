@@ -38,6 +38,7 @@ with frameworks; with libs; {
   CoreText                = { inherit CoreGraphics; };
   CoreVideo               = { inherit ApplicationServices CoreGraphics IOSurface Metal OpenGL; };
   CoreWLAN                = { inherit SecurityFoundation; };
+  CryptoTokenKit          = {};
   DVDPlayback             = {};
   DirectoryService        = {};
   DiscRecording           = { inherit libobjc CoreServices IOKit; };
