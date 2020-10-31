@@ -111,13 +111,6 @@ in
 
     networking.firewall.allowedTCPPorts = [ cfg.port ];
     systemd.services.fossil = {
-      preStart = if lib.strings.hasSuffix ".fossil" cfg.repository
-                 then ""
-                 else  ''
-                   if [ ! -d ${cfg.repository} ]; then
-                     mkdir -pv ${cfg.repository};
-                   fi
-                 '';
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
