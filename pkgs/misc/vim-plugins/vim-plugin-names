@@ -48,6 +48,7 @@ chrisbra/CheckAttach
 chrisbra/csv.vim
 chrisbra/NrrwRgn
 chrisbra/Recover.vim
+chrisbra/SudoEdit.vim
 chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim

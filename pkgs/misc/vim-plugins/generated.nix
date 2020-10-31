@@ -3251,6 +3251,18 @@ let
     meta.homepage = "https://github.com/darfink/starsearch.vim/";
   };
 
+  SudoEdit-vim = buildVimPluginFrom2Nix {
+    pname = "SudoEdit-vim";
+    version = "2020-02-27";
+    src = fetchFromGitHub {
+      owner = "chrisbra";
+      repo = "SudoEdit.vim";
+      rev = "e203eada5b563e9134ce2aae26b09edae0904fd7";
+      sha256 = "0pf9iix50pw3p430ky51rv11ra1hppdpwa5flzcd5kciybr76n0n";
+    };
+    meta.homepage = "https://github.com/chrisbra/SudoEdit.vim/";
+  };
+
   supertab = buildVimPluginFrom2Nix {
     pname = "supertab";
     version = "2020-10-01";
