@@ -14,7 +14,7 @@ neovim:
 let
   wrapper = {
       # should contain all args but the binary
-      wrapperArgs ? []
+      wrapperArgs ? ""
     , manifestRc ? null
     , withPython2 ? true, python2Env ? null
     , withPython3 ? true,  python3Env ? null
@@ -33,7 +33,7 @@ let
   # wrapper with most arguments we need, excluding those that cause problems to
   # generate rplugin.vim, but still required for the final wrapper.
   finalMakeWrapperArgs =
-    [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ] ++ wrapperArgs ++
+    [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ] ++
       [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ];
   in
   symlinkJoin {
@@ -66,11 +66,11 @@ let
       ''
       + optionalString (manifestRc != null) (let
         manifestWrapperArgs =
-          [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ] ++ wrapperArgs;
+          [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ];
       in ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim
-        makeWrapper ${lib.escapeShellArgs manifestWrapperArgs}
+        makeWrapper ${lib.escapeShellArgs manifestWrapperArgs} ${wrapperArgs}
 
         # Some plugins assume that the home directory is accessible for
         # initializing caches, temporary files, etc. Even if the plugin isn't
@@ -100,7 +100,7 @@ let
       '')
       + ''
         rm $out/bin/nvim
-        makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs}
+        makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${wrapperArgs}
       '';
 
     paths = [ neovim ];

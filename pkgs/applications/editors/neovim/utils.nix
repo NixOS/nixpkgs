@@ -118,7 +118,7 @@ let
 
   # to keep backwards compatibility
   legacyWrapper = neovim: {
-    extraMakeWrapperArgs ? []
+    extraMakeWrapperArgs ? ""
     , withPython ? true
     /* the function you would have passed to python.withPackages */
     , extraPythonPackages ? (_: [])
@@ -147,13 +147,9 @@ let
       };
     in
     wrapNeovimUnstable neovim (res // {
-      wrapperArgs = res.wrapperArgs
-      ++ [
-        "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
-      ]
-      ++ (if builtins.isList extraMakeWrapperArgs then extraMakeWrapperArgs
-      else lib.warn "Passing a string as extraMakeWrapperArgs to the neovim wrapper is
-        deprecated, please use a list instead")
+      wrapperArgs = lib.escapeShellArgs (
+        res.wrapperArgs ++ [ "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}" ])
+        + " " + extraMakeWrapperArgs
       ;
   });
 in
