@@ -2369,6 +2369,8 @@ in {
 
   getmac = callPackage ../development/python-modules/getmac { };
 
+  getkey = callPackage ../development/python-modules/getkey { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
