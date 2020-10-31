@@ -217,6 +217,13 @@ in rec {
       '';
     });
 
+    GameplayKit = stdenv.lib.overrideDerivation super.GameplayKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
     MetalKit = stdenv.lib.overrideDerivation super.MetalKit (drv: {
       installPhase = drv.installPhase + ''
         mkdir -p $out/include/simd
