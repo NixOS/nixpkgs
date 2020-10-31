@@ -693,6 +693,8 @@ in
         ${cfg.preStart}
         ${execCommand} -t
       '';
+
+      startLimitIntervalSec = 60;
       serviceConfig = {
         ExecStart = execCommand;
         ExecReload = [
@@ -701,7 +703,6 @@ in
         ];
         Restart = "always";
         RestartSec = "10s";
-        StartLimitInterval = "1min";
         # User and group
         User = cfg.user;
         Group = cfg.group;

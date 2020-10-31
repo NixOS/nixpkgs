@@ -132,6 +132,14 @@
      to <package>nextcloud20</package>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     NixOS now emits a deprecation warning if systemd's <literal>StartLimitInterval</literal> setting is used in a <literal>serviceConfig</literal> section instead of in a <literal>unitConfig</literal>; that setting is deprecated and now undocumented for the service section by systemd upstream, but still effective and somewhat buggy there, which can be confusing. See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/45785">#45785</link> for details.
+    </para>
+    <para>
+     All services should use <xref linkend="opt-systemd.services._name_.startLimitIntervalSec" /> or <literal>StartLimitIntervalSec</literal> in <xref linkend="opt-systemd.services._name_.unitConfig" /> instead.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

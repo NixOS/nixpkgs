@@ -25,10 +25,7 @@ in {
       wants = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      unitConfig = {
-        StartLimitIntervalSec = 0;
-        StartLimitBurst = 0;
-      };
+      startLimitIntervalSec = 0;
 
       serviceConfig = {
         ExecStart =
