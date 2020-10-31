@@ -71,7 +71,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.ipfs-cluster ];
-    environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
+
 
     systemd.tmpfiles.rules =
       [ "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -" ];
@@ -90,7 +90,9 @@ in {
         RemainAfterExit = true;
         User = cfg.user;
         Group = cfg.group;
-      };
+        } // optionalAttrs (cfg.secretFile != null) {
+          EnvironmentFile = cfg.secretFile;
+        };
       unitConfig.ConditionDirectoryNotEmpty = "!${cfg.dataDir}";
     };
 
@@ -106,8 +108,6 @@ in {
           [ "" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service daemon" ];
         User = cfg.user;
         Group = cfg.group;
-      } // optionalAttrs (cfg.secretFile != null) {
-        EnvironmentFile = cfg.secretFile;
       };
     };
     networking.firewall.allowedTCPPorts = [ 9096 ];
