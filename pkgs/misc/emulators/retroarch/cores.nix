@@ -550,13 +550,15 @@ in with stdenv.lib.licenses;
     description = "Port of MAME to libretro";
     license = gpl2Plus;
 
-    extraBuildInputs = [ alsaLib libGLU libGL portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL portaudio python27 xorg.libX11 ]
+      ++ stdenv.lib.optional stdenv.isLinux alsaLib;
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
       mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
     '';
     makefile = "Makefile.libretro";
+    makeFlags = [ "CC=cc" "CXX=c++" "LD=c++" ];
   };
 
   mame2000 = mkLibRetroCore rec {
@@ -606,7 +608,8 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2010 to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
-    makeFlags = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
+    makeFlags = [ "CC_AS=cc" "CC=c++" "LD=c++" ]
+      ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
   };
 
   mame2015 = mkLibRetroCore rec {
@@ -619,8 +622,9 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2015 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs = stdenv.lib.optional stdenv.isLinux alsaLib;
     makefile = "Makefile";
+    makeFlags = [ "REALCC=cc" "NATIVECC=c++" "CXX=c++" ];
   };
 
   mame2016 = mkLibRetroCore rec {
@@ -640,11 +644,15 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs = stdenv.lib.optional stdenv.isLinux alsaLib;
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
       mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
+      # Don't override the toolchain.  While makefile allows us to pass
+      # OVERRIDE_* to fix this, Makefile.libreto (which is our entry
+      # point) does not pass those along to makefile.
+      sed -ri '/^(CC|CXX|LD)\s*:?=/d' makefile 3rdparty/genie/build/*/genie.make
     '';
   };
 
