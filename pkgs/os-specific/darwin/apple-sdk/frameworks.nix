@@ -96,7 +96,7 @@ with frameworks; with libs; {
   QuickLook               = [ ApplicationServices ];
   SafariServices          = [ AppKit ];
   SceneKit                = [ GLKit ];
-  ScreenSaver             = [];
+  ScreenSaver             = [ AppKit ];
   Scripting               = [];
   ScriptingBridge         = [];
   Security                = [ IOKit ];
