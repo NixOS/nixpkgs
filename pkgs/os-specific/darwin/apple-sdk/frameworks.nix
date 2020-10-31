@@ -60,7 +60,7 @@ with frameworks; with libs; {
   GSS                     = [];
   GameController          = [];
   GameKit                 = [ Cocoa Foundation GameController GameplayKit MetalKit SceneKit SpriteKit ];
-  GameplayKit             = [];
+  GameplayKit             = [ SpriteKit ];
   Hypervisor              = [];
   ICADevices              = [ Carbon IOBluetooth ];
   IMServicePlugIn         = [];
