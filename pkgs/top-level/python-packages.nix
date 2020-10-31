@@ -5510,6 +5510,8 @@ in {
 
   pyobjc-framework-NetFS = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetFS { });
 
+  pyobjc-framework-Network = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Network { });
+
   pyobjc-framework-NetworkExtension = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetworkExtension { });
 
   pyobjc-framework-NotificationCenter = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NotificationCenter { });
