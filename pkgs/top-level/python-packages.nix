@@ -5536,6 +5536,8 @@ in {
 
   pyobjc-framework-MediaLibrary = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaLibrary { });
 
+  pyobjc-framework-MediaPlayer = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaPlayer { });
+
   pyobjc-framework-MediaToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaToolbox { });
 
   pyobjc-framework-Metal = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Metal { });
