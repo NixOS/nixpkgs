@@ -17,6 +17,8 @@ with frameworks; with libs; {
   AudioToolbox            = [ CoreAudio CoreMIDI ];
   AudioUnit               = [ AudioToolbox Carbon CoreAudio ];
   AudioVideoBridging      = [ Foundation ];
+  # Available with SDK 10.15
+  AuthenticationServices  = [];
   Automator               = [];
   CFNetwork               = [];
   CalendarStore           = [];
