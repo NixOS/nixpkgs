@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     description = "Multi Lingual TERMinal emulator";
     homepage = "http://mlterm.sourceforge.net/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vrthra ramkromberg ];
+    maintainers = with maintainers; [ vrthra ramkromberg atemu ];
     platforms = with platforms; linux ++ darwin;
   };
 }
