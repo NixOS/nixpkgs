@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ xar cpio ];
-  
+
   postPhases = [ "postInstall" ];
 
   unpackPhase = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D op $out/bin/op
   '';
-  
+
   postInstall = ''
     installShellCompletion --bash --name op <($out/bin/op completion bash)
     installShellCompletion --zsh --name _op <($out/bin/op completion zsh)
