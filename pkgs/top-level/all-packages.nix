@@ -22549,6 +22549,7 @@ in
 
   greetd = recurseIntoAttrs {
     greetd = callPackage ../os-specific/linux/greetd { };
+    gtkgreet = callPackage ../os-specific/linux/gtkgreet { };
   };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
