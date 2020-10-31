@@ -26,7 +26,7 @@ with frameworks; with libs; {
   # framework includes headers that are not available in the pure version.
   CoreFoundation          = {};
   CoreAudio               = { inherit IOKit; };
-  CoreAudioKit            = { inherit AudioUnit; };
+  CoreAudioKit            = { inherit AudioUnit Cocoa; };
   CoreData                = {};
   CoreGraphics            = { inherit Accelerate IOKit IOSurface SystemConfiguration; };
   CoreImage               = {};
