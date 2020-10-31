@@ -5500,6 +5500,8 @@ in {
 
   pyobjc-framework-ExternalAccessory = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExternalAccessory { });
 
+  pyobjc-framework-FileProvider = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FileProvider { });
+
   pyobjc-framework-FinderSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FinderSync { });
 
   pyobjc-framework-FSEvents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FSEvents { });
