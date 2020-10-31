@@ -39,7 +39,7 @@ in
         default = "";
         description = ''
           Verbatim additional configuration variables for TLP.
-          DEPRECATED: use services.tlp.config instead.
+          DEPRECATED: use services.tlp.settings instead.
         '';
       };
     };
