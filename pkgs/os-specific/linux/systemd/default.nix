@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap
 , curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, e2fsprogs, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, pcre2
+, audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , iptables, gnu-efi, bashInteractive
 , gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
@@ -83,7 +83,7 @@ in stdenv.mkDerivation {
   buildInputs =
     [ linuxHeaders libcap curl.dev kmod xz pam acl
       cryptsetup libuuid glib libgcrypt libgpgerror libidn2
-      pcre2 ] ++
+      libmicrohttpd pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
       stdenv.lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
@@ -112,7 +112,6 @@ in stdenv.mkDerivation {
     "-Dhostnamed=true"
     "-Dnetworkd=true"
     "-Dportabled=false"
-    "-Dremote=false"
     "-Dsysusers=false"
     "-Dtimedated=true"
     "-Dtimesyncd=true"
