@@ -17,10 +17,10 @@ buildDunePackage rec {
   buildInputs = [ ppx_cstruct ];
   propagatedBuildInputs = [ cstruct lwt ];
 
-  meta = {
+  meta = with lib; {
     description = "Collect runtime profiling information in CTF format";
     homepage = "https://github.com/mirage/mirage-profile";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ vbgl ];
   };
 }
