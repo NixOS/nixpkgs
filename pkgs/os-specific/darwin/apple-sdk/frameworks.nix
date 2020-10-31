@@ -57,7 +57,7 @@ with frameworks; with libs; {
   GameCenter              = {};
   GameController          = {};
   GameKit                 = { inherit Cocoa Foundation GameCenter GameController GameplayKit Metal MetalKit ModelIO SceneKit SpriteKit; };
-  GameplayKit             = {};
+  GameplayKit             = { inherit SpriteKit; };
   Hypervisor              = {};
   ICADevices              = { inherit libobjc Carbon IOBluetooth; };
   IMServicePlugIn         = {};
