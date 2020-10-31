@@ -6143,7 +6143,7 @@ in
 
   paperless = callPackage ../applications/office/paperless { };
 
-  paperwork = callPackage ../applications/office/paperwork { };
+  paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   papertrail = callPackage ../tools/text/papertrail { };
 
