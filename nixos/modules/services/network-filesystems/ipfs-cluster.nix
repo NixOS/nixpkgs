@@ -109,5 +109,6 @@ in {
         EnvironmentFile = cfg.secretFile;
       };
     };
+    networking.firewall.allowedTCPPorts = [ 9096 ];
   };
 }
