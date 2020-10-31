@@ -3,8 +3,8 @@
 }:
 
 let
-  rev = "c73a4718cbff7048373a63db32068482e5fd11ef";
-  sha256 = "0nr20mvvmmg8ii8f2rljd7iv2szplcfjn40rpy6llkmf705mwr1k";
+  rev = "1d4f7d74ff1a627db6e45682efd0e3b85738e426";
+  sha256 = "1w03xmjn693ff489pg368jv21478vr4ldxyya4lsrx87fn88caj3";
 
 in stdenv.mkDerivation {
   pname = "tg_owt";
@@ -15,8 +15,6 @@ in stdenv.mkDerivation {
     repo = "tg_owt";
     inherit rev sha256;
   };
-
-  patches = [ ./tg_owt-install.patch ];
 
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
