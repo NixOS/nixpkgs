@@ -5492,6 +5492,8 @@ in {
 
   pyobjc-framework-ExecutionPolicy = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExecutionPolicy { });
 
+  pyobjc-framework-ExternalAccessory = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExternalAccessory { });
+
   pyobjc-framework-FinderSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FinderSync { });
 
   pyobjc-framework-FSEvents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FSEvents { });
