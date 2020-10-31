@@ -5494,6 +5494,8 @@ in {
 
   pyobjc-framework-DVDPlayback = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DVDPlayback { });
 
+  pyobjc-framework-EventKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-EventKit { });
+
   pyobjc-framework-ExceptionHandling = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExceptionHandling { });
 
   pyobjc-framework-ExecutionPolicy = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExecutionPolicy { });
