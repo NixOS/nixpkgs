@@ -60,7 +60,7 @@ with frameworks; with libs; {
   GameplayKit             = { inherit SpriteKit; };
   Hypervisor              = {};
   ICADevices              = { inherit libobjc Carbon IOBluetooth; };
-  IMServicePlugIn         = {};
+  IMServicePlugIn         = { inherit GameKit; };
   IOBluetoothUI           = { inherit IOBluetooth; };
   IOKit                   = {};
   IOSurface               = { inherit IOKit xpc; };
