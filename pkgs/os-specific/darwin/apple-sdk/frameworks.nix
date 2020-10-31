@@ -101,7 +101,7 @@ with frameworks; with libs; {
   QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox; };
   QuickLook               = { inherit ApplicationServices; };
   SafariServices          = { inherit AppKit; };
-  SceneKit                = { inherit GLKit; };
+  SceneKit                = { inherit AppKit GLKit; };
   ScreenSaver             = { inherit AppKit; };
   Scripting               = {};
   ScriptingBridge         = {};
