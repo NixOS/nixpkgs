@@ -39,6 +39,8 @@ with frameworks; with libs; {
   CoreMIDIServer          = [];
   CoreMedia               = [ ApplicationServices AudioToolbox AudioUnit CoreAudio CoreGraphics CoreVideo ];
   CoreMediaIO             = [ CoreMedia ];
+  # Available with SDK 10.13
+  CoreML                  = [];
   CoreText                = [ CoreGraphics ];
   CoreVideo               = [ ApplicationServices CoreGraphics IOSurface Metal OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
