@@ -97,7 +97,7 @@ with frameworks; with libs; {
   QuickLook               = { inherit ApplicationServices; };
   SafariServices          = { inherit AppKit; };
   SceneKit                = { inherit GLKit; };
-  ScreenSaver             = {};
+  ScreenSaver             = { inherit AppKit; };
   Scripting               = {};
   ScriptingBridge         = {};
   Security                = { inherit IOKit; };
