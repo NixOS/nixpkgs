@@ -231,6 +231,13 @@ in rec {
       '';
     });
 
+    ModelIO = stdenv.lib.overrideDerivation super.ModelIO (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
     Security = stdenv.lib.overrideDerivation super.Security (drv: {
       setupHook = ./security-setup-hook.sh;
     });
