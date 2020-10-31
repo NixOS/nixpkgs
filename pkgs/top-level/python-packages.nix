@@ -5488,6 +5488,8 @@ in {
 
   pyobjc-framework-IOSurface = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-IOSurface { });
 
+  pyobjc-framework-iTunesLibrary = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-iTunesLibrary { });
+
   pyobjc-framework-libdispatch = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-libdispatch { });
 
   pyobjc-framework-LocalAuthentication = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LocalAuthentication { });
