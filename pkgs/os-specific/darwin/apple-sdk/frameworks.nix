@@ -110,7 +110,7 @@ with frameworks; with libs; {
   Social                  = [];
   # Available with SDK 10.15
   Speech                  = [];
-  SpriteKit               = [ AppKit ];
+  SpriteKit               = [ AppKit Cocoa ];
   StoreKit                = [];
   SyncServices            = [];
   # Available with SDK 10.15
