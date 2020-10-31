@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
       ttuegel
       babariviere
       rileyinman
+      AluisioASG
     ];
   };
 }
