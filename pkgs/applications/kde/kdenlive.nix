@@ -25,9 +25,9 @@
 , frei0r
 , phonon-backend-gstreamer
 , qtdeclarative
+, qtmultimedia
 , qtquickcontrols2
 , qtscript
-, qtwebkit
 , rttr
 , kpurpose
 , kdeclarative
@@ -60,9 +60,9 @@ mkDerivation {
     mlt
     phonon-backend-gstreamer
     qtdeclarative
+    qtmultimedia
     qtquickcontrols2
     qtscript
-    qtwebkit
     shared-mime-info
     libv4l
     ffmpeg-full
