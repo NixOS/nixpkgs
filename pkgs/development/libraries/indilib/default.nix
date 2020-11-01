@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
 , cmake
 , cfitsio
 , libusb1
@@ -9,14 +9,18 @@
 , curl
 , libjpeg
 , gsl
+, fftw
 }:
 
-stdenv.mkDerivation {
-  name = "indilib-1.1.0";
+stdenv.mkDerivation rec {
+  pname = "indilib";
+  version = "1.8.6";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/indi/libindi_1.1.0.tar.gz";
-    sha256 = "1bs6lkwqd4aashg93mqqkc7nrg7fbx9mdw85qs5263jqa6sr780w";
+  src = fetchFromGitHub {
+    owner = "indilib";
+    repo = "indi";
+    rev = "v${version}";
+    sha256 = "1yzvcm7lwhwssnvv6gp8f7igmnvs35bpidmzz6z15awm5841yw30";
   };
 
   patches = [
@@ -36,12 +40,14 @@ stdenv.mkDerivation {
     libnova
     libjpeg
     gsl
+    fftw
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://www.indilib.org/";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    description = "Implementaion of the INDI protocol for POSIX operating systems";
-    platforms = stdenv.lib.platforms.unix;
+    description = "Implementation of the INDI protocol for POSIX operating systems";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ hjones2199 ];
+    platforms = [ "x86_64-linux" ];
   };
 }
