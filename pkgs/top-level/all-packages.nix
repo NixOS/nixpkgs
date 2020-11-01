@@ -4556,13 +4556,7 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
-  ipfs = ipfs_0_6;
-  ipfs_latest = ipfs_0_7;
-  ipfs_0_6 = callPackage ../applications/networking/ipfs/0.6.nix {
-    buildGoModule = buildGo114Module;
-  };
-  ipfs_0_7 = callPackage ../applications/networking/ipfs/0.7.nix { };
-
+  ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
     buildGoModule = buildGo114Module;
