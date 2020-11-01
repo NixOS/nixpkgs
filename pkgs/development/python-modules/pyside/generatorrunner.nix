@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, pysideApiextractor, python2, qt4 }:
+{ stdenv, fetchurl, cmake, pysideApiextractor, python3, qt4 }:
 
 # This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
 let
-  pythonEnv = python2.withPackages(ps: with ps; [ sphinx ]);
+  pythonEnv = python3.withPackages(ps: with ps; [ sphinx ]);
   pname = "pyside-generatorrunner";
   version = "0.6.16";
 in stdenv.mkDerivation {
@@ -15,7 +15,14 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pysideApiextractor qt4 pythonEnv ];
+  outputs = [ "out" "dev" ];
+
+  preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
+  '';
+
+  nativeBuildInputs = [ cmake pythonEnv ];
+  buildInputs = [ pysideApiextractor qt4 ];
 
   meta = {
     description = "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";
