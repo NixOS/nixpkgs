@@ -41,6 +41,8 @@ with frameworks; with libs; {
   CoreMediaIO             = [ CoreMedia ];
   # Available with SDK 10.13
   CoreML                  = [];
+  # Available with SDK 10.13
+  CoreSpotlight           = [];
   CoreText                = [ CoreGraphics ];
   CoreVideo               = [ ApplicationServices CoreGraphics IOSurface Metal OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
