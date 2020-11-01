@@ -1,0 +1,106 @@
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, darwin, python,
+pyobjc-core<% [[ -n $python_frameworks ]] && (export IFS=' '; for i in ${python_frameworks[@]}; do printf ", pyobjc-framework-%s" "$i"; done) %> }:
+
+buildPythonPackage rec {
+  pname = "pyobjc-framework-<%= $framework %>";
+  version = "<%= $version %>";
+
+<% if [[ $framework != AuthenticationServices && $framework != CoreSpotlight && $framework != ExternalAccessory && $framework != Network && $framework != OSLog && $framework != PushKit && $framework != Speech && $framework != SystemExtensions && $framework != Vision ]]; then -%>
+  disabled = pythonOlder "3.6";
+<% elif [[ $framework != CoreSpotlight && $framework != ExternalAccessory && $framework != Vision ]]; then -%>
+  disabled = pythonOlder "3.6" ||
+    (stdenv.lib.versionOlder "${darwin.apple_sdk.sdk.version}" "10.13") && throw "${pname}: requires apple_sdk.sdk 10.13";
+<% elif [[ $framework != Network && $framework != UserNotifications ]]; then -%>
+  disabled = pythonOlder "3.6" ||
+    (stdenv.lib.versionOlder "${darwin.apple_sdk.sdk.version}" "10.14") && throw "${pname}: requires apple_sdk.sdk 10.14";
+<% else -%>
+  disabled = pythonOlder "3.6" ||
+    (stdenv.lib.versionOlder "${darwin.apple_sdk.sdk.version}" "10.15") && throw "${pname}: requires apple_sdk.sdk 10.15";
+<% fi %>
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "<%= $hash %>";
+  };
+  <% if [[ -n $patch ]]; then %>
+  patches = [ <%= $patch %> ];
+  <% fi %>
+  postPatch = ''
+    # Hard code correct SDK version
+    substituteInPlace pyobjc_setup.py \
+      --replace 'os.path.basename(data)[6:-4]' '"${darwin.apple_sdk.sdk.version}"'
+<% if [[ $framework == Cocoa ]]; then %>
+    # symlink TestSupport.py because Python only checks the first directory in PYTHONPATH
+    ln -s "${pyobjc-core.outPath}/lib/${python.libPrefix}/site-packages/PyObjCTools/TestSupport.py" Lib/PyObjCTools/TestSupport.py
+<% fi -%>
+  '';
+
+  buildInputs = [
+  ] ++ (with darwin; [
+  ] ++ (with apple_sdk.frameworks;[
+<% export IFS=' '; for i in $build_frameworks; do printf "    %s\n" "$i"; done -%>
+  ]));
+
+  propagatedBuildInputs = [
+    pyobjc-core
+<% [[ -n $python_frameworks ]] && (export IFS=' '; for i in ${python_frameworks[@]}; do printf "    pyobjc-framework-%s\n" "$i"; done) -%>
+  ];
+
+  # clang-7: error: argument unused during compilation: '-fno-strict-overflow'
+  hardeningDisable = [ "strictoverflow" ];
+
+<% if [[ $tests != false ]]; then -%>
+  # show test names instead of just dots
+  setuptoolsCheckFlagsArray = [ "--verbosity=3" ];
+
+  preCheck = ''
+    # testConstants in PyObjCTest.test_cfsocket.TestSocket returns: Segmentation fault: 11
+    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+<% if [[ $framework == AddressBook ]]; then -%>
+    # Test removed because it requires network:
+    # an error occurred while attempting to obtain endpoint for listener 'HostCallsAuxiliary': Connection interrupted
+    rm PyObjCTest/test_abpersonview.py
+
+    # Test removed because it likely requires network:
+    # AssertionError: None is not an instance of <objective-c class ABAddressBook at 0x7fff96826300>
+    rm PyObjCTest/test_abaddressbookc.py
+
+    # Set correct SDK version
+    substituteInPlace PyObjCTest/test_abglobals.py \
+      --replace 'def testConstants_10_7_broken(self):' 'def disabled_testConstants_10_7_broken(self):'
+<% elif [[ $framework == AVFoundation ]]; then -%>
+    # Remove Test which is probably missing a sdk check
+    substituteInPlace PyObjCTest/test_avcapturedevice.py \
+      --replace 'def testMissingConstants(self):' 'def disabled_testMissingConstants(self):'
+<% elif [[ $framework == CFNetwork ]]; then -%>
+    # Remove Test which requires network
+    rm PyObjCTest/test_cfhttpstream.py PyObjCTest/test_cfproxysupport.py PyObjCTest/test_cfhttpmessage.py
+<% elif [[ $framework == iTunesLibrary ]]; then -%>
+    # Remove Test which is probably missing a sdk check
+    substituteInPlace PyObjCTest/test_itlibmediaitem.py \
+      --replace 'def testConstants_missing(self):' 'def disabled_testConstants_missing(self):'
+<% elif [[ $framework == Metal ]]; then -%>
+    # Remove Test which is probably missing a sdk check
+    # AttributeError: MTLSamplePositionMake
+    substituteInPlace PyObjCTest/test_mtltypes.py \
+      --replace 'v = Metal.MTLSamplePositionMake(0.5, 1.5)' "" \
+      --replace 'self.assertIsInstance(v, Metal.MTLSamplePosition)' "" \
+      --replace 'self.assertEqual(v, (0.5, 1.5))' ""
+
+    # Remove Test which is probably missing a sdk check
+    # AttributeError: MTLIndirectCommandBufferExecutionRangeMake
+    substituteInPlace PyObjCTest/test_mtlindirectcommandbuffer.py \
+      --replace 'def test_functions(self):' 'def disabled_test_functions(self):'
+<% fi -%>
+  '';
+<% else -%>
+  dontUseSetuptoolsCheck = true;
+  pythonImportcheck = [ "pyobjc-framework-<%= $framework %>" ];
+<% fi %>
+  meta = with stdenv.lib; {
+    description = "Wrappers for the framework <%= $framework %> on Mac OS X";
+    homepage = "https://pythonhosted.org/pyobjc-framework-<%= $framework %>/";
+    license = licenses.mit;
+    platforms = platforms.darwin;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+  };
+}
