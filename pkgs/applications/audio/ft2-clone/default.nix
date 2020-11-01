@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.36";
+  version = "1.37";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    sha256 = "0hsgzh7s2qgl8ah8hzmhfl74v5y8wc7f6z8ly9026h5r6pb09id0";
+    sha256 = "1lhpzd46mpr3bq13qhd0bq724db5fhc8jplfb684c2q7sc4v92nk";
   };
 
   nativeBuildInputs = [ cmake ];
