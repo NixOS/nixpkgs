@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
-    rev = "${version}";
+    rev = version;
     sha256 = "00ing1v6vjqfvirp3mbayn8rwvxf72wnhz9249k2iifw8bl2r2hd";
   };
 
