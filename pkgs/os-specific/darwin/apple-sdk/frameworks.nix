@@ -135,6 +135,8 @@ with frameworks; with libs; {
   UserNotifications       = [];
   VideoDecodeAcceleration = [ CoreVideo ];
   VideoToolbox            = [ CoreMedia CoreVideo ];
+  # Available with SDK 10.13
+  Vision                  = [];
   WebKit                  = [ AppKit ApplicationServices Carbon JavaScriptCore OpenGL ];
 
   # Umbrellas
