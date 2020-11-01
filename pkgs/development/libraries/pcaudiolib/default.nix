@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rhdunn";
     repo = "pcaudiolib";
-    rev = "${version}";
+    rev = version;
     sha256 = "0c55hlqqh0m7bcb3nlgv1s4a22s5bgczr1cakjh3767rjb10khi0";
   };
 

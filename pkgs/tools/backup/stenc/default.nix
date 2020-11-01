@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scsitape";
     repo = "stenc";
-    rev = "${version}";
+    rev = version;
     sha256 = "1778m1zcyzyf42k5m496yqh0gv6kqhb0sq5983dhky1fccjl905k";
   };
 
