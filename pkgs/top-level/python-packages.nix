@@ -5558,6 +5558,8 @@ in {
 
   pyobjc-framework-ModelIO = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ModelIO { });
 
+  pyobjc-framework-MultipeerConnectivity = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MultipeerConnectivity { });
+
   pyobjc-framework-NaturalLanguage = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NaturalLanguage { });
 
   pyobjc-framework-NetFS = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetFS { });
