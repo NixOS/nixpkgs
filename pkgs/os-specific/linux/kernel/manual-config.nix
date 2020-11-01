@@ -34,6 +34,13 @@ in {
   randstructSeed ? "",
   # Use defaultMeta // extraMeta
   extraMeta ? {},
+
+  # for module compatibility
+  isXen      ? features.xen_dom0 or false,
+  isZen      ? false,
+  isLibre    ? false,
+  isHardened ? false,
+
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
   # ignored
@@ -86,6 +93,9 @@ let
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
+        inherit isXen isZen isHardened isLibre;
+        kernelOlder = stdenv.lib.versionOlder version;
+        kernelAtLeast = stdenv.lib.versionAtLeast version;
       };
 
       inherit src;
