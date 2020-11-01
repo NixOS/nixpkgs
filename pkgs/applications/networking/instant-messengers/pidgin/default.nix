@@ -2,8 +2,9 @@
 , gtkspell2, aspell
 , gst_all_1, startupnotification, gettext
 , perlPackages, libxml2, nss, nspr, farstream
-, libXScrnSaver, ncurses, avahi, dbus, dbus-glib, intltool, libidn
+, libXScrnSaver, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python3, libICE, libXext, libSM
+, libgnt, ncurses
 , cyrus_sasl ? null
 , openssl ? null
 , gnutls ? null
@@ -23,8 +24,6 @@ let unwrapped = stdenv.mkDerivation rec {
     sha256 = "bb45f7c032f9efd6922a5dbf2840995775e5584771b23992d04f6eff7dff5336";
   };
 
-  inherit nss ncurses;
-
   nativeBuildInputs = [ makeWrapper ];
 
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
@@ -35,9 +34,10 @@ let unwrapped = stdenv.mkDerivation rec {
     aspell startupnotification
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     libxml2 nss nspr
-    libXScrnSaver ncurses python-with-dbus
+    libXScrnSaver python-with-dbus
     avahi dbus dbus-glib intltool libidn
     libICE libXext libSM cyrus_sasl
+    libgnt ncurses # optional: build finch - the console UI
   ]
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
