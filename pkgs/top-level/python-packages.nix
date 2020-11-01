@@ -5631,7 +5631,9 @@ in {
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pysvn = callPackage ../development/python-modules/pysvn { };
+  pysvn = callPackage ../development/python-modules/pysvn {
+    inherit (pkgs) bash subversion apr aprutil expat neon openssl;
+  };
 
   pytabix = callPackage ../development/python-modules/pytabix { };
 
