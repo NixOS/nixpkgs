@@ -17602,6 +17602,8 @@ in
 
   crda = callPackage ../os-specific/linux/crda { };
 
+  cshatag = callPackage ../os-specific/linux/cshatag { };
+
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`
