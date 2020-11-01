@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, CoreServices
 , buildPackages }:
 
 let
@@ -72,8 +72,8 @@ in with stdenv.lib.licenses;
     core = "atari800";
     src = fetchRetro {
       repo = "libretro-" + core;
-      rev = "f9bf53b864344b8bbe8d425ed2f3c628eb10519c";
-      sha256 = "0sgk93zs423pwiqzvj0x1gfwcn9gacnlrrdq53ps395k64lig6lk";
+      rev = "8ce851fbca0d360763a267322f6a76c3c80ddae6";
+      sha256 = "026yjihqv2zda7lgxgawyy7c5h4v28v5qjsw7p0mxg1fqikzr7ga";
     };
     description = "Port of Atari800 to libretro";
     license = gpl2;
@@ -644,7 +644,9 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = stdenv.lib.optional stdenv.isLinux alsaLib;
+    extraBuildInputs =
+      stdenv.lib.optional stdenv.isLinux alsaLib
+      ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -703,6 +705,7 @@ in with stdenv.lib.licenses;
     };
     description = "Libretro port of Mupen64 Plus, GL only";
     license = gpl2;
+    broken = stdenv.isDarwin; # libretro/mupen64plus-libretro-nx#146
 
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
@@ -849,7 +852,8 @@ in with stdenv.lib.licenses;
     description = "ppsspp libretro port";
     license = gpl2;
     extraNativeBuildInputs = [ cmake pkgconfig ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ]
+      ++ stdenv.lib.optional stdenv.isDarwin AppKit;
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
