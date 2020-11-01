@@ -5526,6 +5526,8 @@ in {
 
   pyobjc-framework-Intents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Intents { });
 
+  pyobjc-framework-InstallerPlugins = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-InstallerPlugins { });
+
   pyobjc-framework-InstantMessage = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-InstantMessage { });
 
   pyobjc-framework-IOSurface = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-IOSurface { });
