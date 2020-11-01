@@ -16,35 +16,36 @@ let
   pname = "vuescan";
 
   # Minor versions are released using the same file name
-  version = "9.7";
-  versionString = builtins.replaceStrings ["."] [""] version;
+  version = "9.7.37";
+  versionItems = builtins.splitVersion version;
+  versionString = (builtins.elemAt versionItems 0) + (builtins.elemAt versionItems 1);
 
   src = let
     base = "https://www.hamrick.com/files/";
   in {
     x86_64-darwin = fetchurl {
       url = "${base}/vuex64${versionString}.dmg";
-      sha256 = "045ihd2pj0zmzjfwn2qmv5114yvs9vf6mw6sf4x3hwcdmpk40sfh";
+      sha256 = "1zimcnmyfdqgnc6n1rl8929sill7wfhmvxyfs1q1brmhqyg73fz2";
     };
     i686-darwin = fetchurl {
       url = "${base}/vuex32${versionString}.dmg";
-      sha256 = "0nny1jm3s1nr7xm03mcy3zgxvslznnvc8a5gn93gjww6gwg9rcn6";
+      sha256 = "0dja8krncm107mxgkvdfligyn2mabkwi501n8b80iqsdh96zrbzf";
     };
     x86_64-linux = fetchurl {
       url = "${base}/vuex64${versionString}.tgz";
-      sha256 = "0jkj92w3y66dcxwq3kkg7vhqxljwf9dqs563xbkh1r7piyjfwycm";
+      sha256 = "175ns9x23vgb2ib8d8fm0iy8vaym31rkkylaghscc7hn0qix5iyy";
     };
     i686-linux = fetchurl {
       url = "${base}/vuex32${versionString}.tgz";
-      sha256 = "03qac9c0sg21jwz91nzzwk3ml8byv06ay9wiq00dl62nmhs20r5m";
+      sha256 = "06lq5bqwnfnwnb4g4k0zkzli6hqd2fl9ciyqjvpwym982brsyp31";
     };
     aarch64-linux = fetchurl {
       url = "${base}/vuea64${versionString}.tgz";
-      sha256 = "17viy7kcb78j0p3ik99psabmkgpwpmgvk96wjhn9aar48gpyr1wj";
+      sha256 = "1vv97ipb8ps6hlihjcxwh1hamz0yb4vlz59fra6zjkq1vn389m2k";
     };
     armv6l-linux = fetchurl {
       url = "${base}/vuea32${versionString}.tgz";
-      sha256 = "0m7sp18bdf2l2yf3q3z6c3i0bm4mq2h4ndm6qfvyknip0h11gv7i";
+      sha256 = "06s2zsh47g9wzbnqfgs5qiabpc275x56ks26p3x9ja5mfgkv3yma";
     };
   }.${system} or throwSystem;
 
