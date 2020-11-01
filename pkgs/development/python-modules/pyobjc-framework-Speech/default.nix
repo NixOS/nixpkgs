@@ -12,7 +12,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1napk9zq62jqzwkaj6rkcml0dhk4vp5g3nwhd7rdnmkbi4k2gwvg";
   };
-  
+
   postPatch = ''
     # Hard code correct SDK version
     substituteInPlace pyobjc_setup.py \

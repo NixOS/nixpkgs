@@ -11,15 +11,12 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1p17vviyv8wcr0qqppk7mldawy9z524s91hyb7f2bbh314lpcbkc";
   };
-  
+
   postPatch = ''
     # Hard code correct SDK version
     substituteInPlace pyobjc_setup.py \
       --replace 'os.path.basename(data)[6:-4]' '"${darwin.apple_sdk.sdk.version}"'
   '';
-
-  buildInputs = with darwin.apple_sdk.frameworks; [
-  ];
 
   propagatedBuildInputs = [
     pyobjc-core

@@ -21,9 +21,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "<%= $hash %>";
   };
-  <% if [[ -n $patch ]]; then %>
+<% if [[ -n $patch ]]; then %>
   patches = [ <%= $patch %> ];
-  <% fi %>
+<% fi %>
   postPatch = ''
     # Hard code correct SDK version
     substituteInPlace pyobjc_setup.py \
@@ -33,11 +33,11 @@ buildPythonPackage rec {
     ln -s "${pyobjc-core.outPath}/lib/${python.libPrefix}/site-packages/PyObjCTools/TestSupport.py" Lib/PyObjCTools/TestSupport.py
 <% fi -%>
   '';
-
+<% if [[ -n $build_frameworks ]]; then %>
   buildInputs = with darwin.apple_sdk.frameworks; [
 <% export IFS=' '; for i in $build_frameworks; do printf "    %s\n" "$i"; done -%>
   ];
-
+<% fi %>
   propagatedBuildInputs = [
     pyobjc-core
 <% [[ -n $python_frameworks ]] && (export IFS=' '; for i in ${python_frameworks[@]}; do printf "    pyobjc-framework-%s\n" "$i"; done) -%>
