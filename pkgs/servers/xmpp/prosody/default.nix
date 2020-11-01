@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
     "--with-lua=${lua5}"
   ];
 
+  postBuild = ''
+    make -C tools/migration
+  '';
+
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
@@ -68,6 +72,11 @@ stdenv.mkDerivation rec {
         --prefix LUA_CPATH ';' "$LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
+
+      make -C tools/migration install
+      wrapProgram $out/bin/prosody-migrator \
         --prefix LUA_PATH ';' "$LUA_PATH" \
         --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
