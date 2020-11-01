@@ -5,7 +5,11 @@ with lib;
 let
 
   cfg = config.virtualisation.anbox;
-  kernelPackages = config.boot.kernelPackages;
+  inherit (config.boot) kernelPackages;
+  inherit (kernelPackages) kernel;
+
+  # Inverted condition from `meta.broken` on `kernelPackages.anbox`.
+  useAnboxModules = kernel.kernelAtLeast "4.4" && kernel.kernelOlder "5.5";
   addrOpts = v: addr: pref: name: {
     address = mkOption {
       default = addr;
@@ -107,14 +111,9 @@ in
 
     environment.systemPackages = with pkgs; [ anbox ];
 
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages =
-      let
-        inherit (kernelPackages) kernel;
-      in
-      # Inverted condition from `meta.broken` on `kernelPackages.anbox`.
-      optional (kernel.kernelAtLeast "4.4" && kernel.kernelOlder "5.5") kernelPackages.anbox
-    ;
+    # Mainline ashmem/binder drivers not available as modules
+    boot.kernelModules = optionals useAnboxModules [ "ashmem_linux" "binder_linux" ];
+    boot.extraModulePackages = optional useAnboxModules kernelPackages.anbox;
 
     system.requiredKernelConfig = with config.lib.kernelConfig; mkIf (kernel.kernelOlder "5.5") [
       (isEnabled "ASHMEM")
@@ -127,10 +126,6 @@ in
       # ANDROID_BINDER_DEVICES binder,hwbinder,vndbinder
     ];
 
-    services.udev.extraRules = ''
-      KERNEL=="ashmem", NAME="%k", MODE="0666"
-      KERNEL=="binder*", NAME="%k", MODE="0666"
-    '';
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
