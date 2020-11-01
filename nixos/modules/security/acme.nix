@@ -662,6 +662,7 @@ in {
       } // (mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs)));
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
+      systemd.mutex.acme = map (cert: "acme-${cert}.service") (attrNames certConfigs);
 
       # .lego and .lego/accounts specified to fix any incorrect permissions
       systemd.tmpfiles.rules = [
