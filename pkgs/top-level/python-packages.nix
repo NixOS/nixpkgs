@@ -5624,6 +5624,8 @@ in {
 
   pyobjc-framework-VideoToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { });
 
+  pyobjc-framework-Vision = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Vision { });
+
   pyobjc-framework-WebKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-WebKit { });
 
   pyocr = callPackage ../development/python-modules/pyocr {
