@@ -8373,6 +8373,42 @@ in
 
   abcl = callPackage ../development/compilers/abcl {};
 
+  adoptopenjdk-bin-15-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk15-linux.nix;
+  adoptopenjdk-bin-15-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk15-darwin.nix;
+
+  adoptopenjdk-hotspot-bin-15 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-15-packages-linux.jdk-hotspot {}
+    else callPackage adoptopenjdk-bin-15-packages-darwin.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-15 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-15-packages-linux.jre-hotspot {}
+    else callPackage adoptopenjdk-bin-15-packages-darwin.jre-hotspot {};
+
+  adoptopenjdk-openj9-bin-15 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-15-packages-linux.jdk-openj9 {}
+    else callPackage adoptopenjdk-bin-15-packages-darwin.jdk-openj9 {};
+
+  adoptopenjdk-jre-openj9-bin-15 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-15-packages-linux.jre-openj9 {}
+    else callPackage adoptopenjdk-bin-15-packages-darwin.jre-openj9 {};
+
+  adoptopenjdk-bin-14-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk14-linux.nix;
+  adoptopenjdk-bin-14-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk14-darwin.nix;
+
+  adoptopenjdk-hotspot-bin-14 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-14-packages-linux.jdk-hotspot {}
+    else callPackage adoptopenjdk-bin-14-packages-darwin.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-14 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-14-packages-linux.jre-hotspot {}
+    else callPackage adoptopenjdk-bin-14-packages-darwin.jre-hotspot {};
+
+  adoptopenjdk-openj9-bin-14 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-14-packages-linux.jdk-openj9 {}
+    else callPackage adoptopenjdk-bin-14-packages-darwin.jdk-openj9 {};
+
+  adoptopenjdk-jre-openj9-bin-14 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-14-packages-linux.jre-openj9 {}
+    else callPackage adoptopenjdk-bin-14-packages-darwin.jre-openj9 {};
+
   adoptopenjdk-bin-13-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk13-linux.nix;
   adoptopenjdk-bin-13-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk13-darwin.nix;
 
