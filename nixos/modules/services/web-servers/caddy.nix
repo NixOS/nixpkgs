@@ -24,6 +24,10 @@ let
     ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${adaptedConfig} ${tlsJSON} > $out
   '';
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "caddy" "agree" ] "this option is no longer necessary for Caddy 2")
+  ];
+
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
 
@@ -66,12 +70,6 @@ in {
       description = "Email address (for Let's Encrypt certificate)";
     };
 
-    agree = mkOption {
-      default = false;
-      type = types.bool;
-      description = "Agree to Let's Encrypt Subscriber Agreement";
-    };
-
     dataDir = mkOption {
       default = "/var/lib/caddy";
       type = types.path;
@@ -103,6 +101,8 @@ in {
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ]; # systemd-networkd-wait-online.service
       wantedBy = [ "multi-user.target" ];
+      startLimitIntervalSec = 14400;
+      startLimitBurst = 10;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/caddy run --config ${configJSON}";
         ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
@@ -110,8 +110,6 @@ in {
         User = "caddy";
         Group = "caddy";
         Restart = "on-abnormal";
-        StartLimitIntervalSec = 14400;
-        StartLimitBurst = 10;
         AmbientCapabilities = "cap_net_bind_service";
         CapabilityBoundingSet = "cap_net_bind_service";
         NoNewPrivileges = true;

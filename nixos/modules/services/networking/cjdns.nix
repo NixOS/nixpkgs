@@ -264,10 +264,10 @@ in
          ''
       );
 
+      startLimitIntervalSec = 0;
       serviceConfig = {
         Type = "forking";
         Restart = "always";
-        StartLimitInterval = 0;
         RestartSec = 1;
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW CAP_SETUID";
         ProtectSystem = true;

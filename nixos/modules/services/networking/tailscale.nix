@@ -17,6 +17,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.tailscale ]; # for the CLI
     systemd.services.tailscale = {
       description = "Tailscale client daemon";
 
@@ -24,10 +25,7 @@ in {
       wants = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      unitConfig = {
-        StartLimitIntervalSec = 0;
-        StartLimitBurst = 0;
-      };
+      startLimitIntervalSec = 0;
 
       serviceConfig = {
         ExecStart =

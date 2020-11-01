@@ -14570,6 +14570,27 @@ let
     };
   };
 
+  NetAsyncHTTP = buildPerlModule {
+    pname = "Net-Async-HTTP";
+    version = "0.47";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.47.tar.gz";
+      sha256 = "1lwy1ijrhibi087p3q5zvadhkq0slfrzfhb76cmkx4mpyv5v4l8f";
+    };
+    buildInputs = [ HTTPCookies TestIdentity TestMetricsAny TestRefcount ];
+    propagatedBuildInputs = [ Future HTTPMessage IOAsync MetricsAny StructDumb URI ];
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      # network tests fail on Darwin/sandbox, so disable these
+      rm -f t/20local-connect.t t/22local-connect-pipeline.t t/23local-connect-redir.t
+      rm -f t/90rt75615.t t/90rt75616.t t/90rt93232.t
+    '';
+    meta = {
+      description = "Use HTTP with IO::Async";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   NetAsyncPing = buildPerlPackage {
     pname = "Net-Async-Ping";
     version = "0.004001";
@@ -14583,6 +14604,25 @@ let
       description = "asyncronously check remote host for reachability";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "https://github.com/frioux/Net-Async-Ping";
+    };
+  };
+
+  NetAsyncWebSocket = buildPerlModule {
+    pname = "Net-Async-WebSocket";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-WebSocket-0.13.tar.gz";
+      sha256 = "000nw7gnj7ks55nib3fiikxx9bfmbla6fimxrbn2z2n7sd187b0d";
+    };
+    propagatedBuildInputs = [ IOAsync ProtocolWebSocket URI ];
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      # network tests fail on Darwin/sandbox, so disable these
+      rm -f t/02server.t t/03cross.t
+    '';
+    meta = {
+      description = "Use WebSockets with IO::Async";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 

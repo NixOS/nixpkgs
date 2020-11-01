@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "mpdavis";
     repo = "python-jose";
     rev = version;
-    sha256 = "1gnn0zy03pywj65ammy3sd07knzhjv8n5jhx1ir9bikgra9v0iqh";
+    sha256 = "cSPIZrps0xFd4pPcQ4w/jFWOk2XYgd3mtE/sDzlytvY=";
   };
 
   checkInputs = [
@@ -22,6 +22,13 @@ buildPythonPackage rec {
     pytestrunner
     cryptography # optional dependency, but needed in tests
   ];
+
+  # relax ecdsa deps
+  patchPhase = ''
+    substituteInPlace setup.py \
+      --replace 'ecdsa<0.15' 'ecdsa' \
+      --replace 'ecdsa <0.15' 'ecdsa'
+  '';
 
   disabledTests = [
     # https://github.com/mpdavis/python-jose/issues/176

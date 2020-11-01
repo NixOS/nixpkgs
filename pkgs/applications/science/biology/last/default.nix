@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "last";
-  version = "1066";
+  version = "1133";
 
   src = fetchurl {
     url = "http://last.cbrc.jp/last-${version}.zip";
-    sha256 = "098j3f3a80rmhd01ds7rnb9y1xykmll2yh5ivpnvskssd8z2vc4r";
+    sha256 = "0a600p1fymm1ylaxzjwg46zdwz6ilaaak1f4n8xr3hp3ir9rgfjq";
   };
 
   nativeBuildInputs = [ unzip ];

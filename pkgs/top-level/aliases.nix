@@ -41,6 +41,7 @@ mapAliases ({
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
   alienfx = throw "alienfx has been removed."; # added 2019-12-08
+  amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # added 2020-10-30
   ammonite-repl = ammonite; # added 2017-05-02
   antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
   arduino_core = arduino-core;  # added 2015-02-04
@@ -224,6 +225,7 @@ mapAliases ({
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
+  kdeconnect = kdeApplications.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
   keepassx-community = keepassxc; # added 2017-11
@@ -526,6 +528,7 @@ mapAliases ({
   skrooge2 = skrooge; # added 2017-02-18
   sky = throw "sky has been removed from nixpkgs (2020-09-16)";
   skype = skypeforlinux; # added 2017-07-27
+  skype_call_recorder = throw "skype_call_recorder has been removed from nixpkgs, because it stopped working when classic Skype was retired."; # added 2020-10-31
   skydive = throw "skydive has been removed from nixpkgs (2019-09-10)";
   slack-dark = slack; # added 2020-03-27
   slic3r-prusa3d = prusa-slicer; # added 2019-05-21
