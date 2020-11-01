@@ -834,6 +834,16 @@ in
       '';
     };
 
+    systemd.mutex = mkOption {
+      type = types.attrsOf (types.listOf (types.strMatching ".*\\.service"));
+      default = {};
+      example = { maintenance = [ "btrfs-balance.service" "btrfs-scrub.service" ]; };
+      description = ''
+        Specifies services which should not be started simultaneously by systemd.
+        Each attribute contains a list of mutually exclusive services. Attribute names are not significant.
+      '';
+    };
+
     systemd.watchdog.device = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -1071,8 +1081,33 @@ in
     ];
 
     systemd.units =
+      (let sortedMutex = map unique (map (sort builtins.lessThan) (attrValues cfg.mutex)); in
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
+         // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n (
+           let
+             containing = filter (elem "${n}.service") sortedMutex;
+             /* partition a list in before and after the pivot */
+             partition = pivot: list:
+              foldl' (acc: elt:
+                if acc.passed_pivot then
+                acc // { after = acc.after ++ [ elt ]; }
+                else if elt == pivot then
+                acc // { passed_pivot = true; }
+                else
+                acc // { before = acc.before ++ [ elt ]; }
+                ) { after = []; before = []; passed_pivot = false; } list;
+             when = map (partition "${n}.service") containing;
+             mutexBefore = concatMap (part: part.before) when;
+             mutexAfter = concatMap (part: part.after) when;
+           in
+           if containing == [] then v else
+           v // {
+             unitConfig = v.unitConfig // {
+               After = (v.unitConfig.After or "") + " " + (toString mutexAfter);
+               Before = (v.unitConfig.Before or "") + " " + (toString mutexBefore);
+             };
+           }
+           ))) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
       // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
       // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
@@ -1082,7 +1117,7 @@ in
                        in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+                       in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts));
 
     systemd.user.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.user.paths

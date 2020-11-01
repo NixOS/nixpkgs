@@ -54,6 +54,56 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       '';
     };
 
+    systemd.services.testservicemutex1 = {
+      description = "Test Service for mutex 1";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        touch /tmp/started1
+        for i in $(seq 1 10); do
+          [[ ! -e /tmp/started2 ]];
+          [[ ! -e /tmp/started3 ]];
+          sleep 1;
+        done
+        rm /tmp/started1
+        touch /tmp/success1
+      '';
+    };
+
+    systemd.services.testservicemutex2 = {
+      description = "Test Service for mutex 2";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        touch /tmp/started2
+        for i in $(seq 1 10); do
+          [[ ! -e /tmp/started1 ]];
+          [[ ! -e /tmp/started3 ]];
+          sleep 1;
+        done
+        rm /tmp/started2
+        touch /tmp/success2
+      '';
+    };
+
+    systemd.services.testservicemutex3 = {
+      description = "Test Service for mutex 3";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        touch /tmp/started3
+        for i in $(seq 1 10); do
+          [[ ! -e /tmp/started1 ]];
+          [[ ! -e /tmp/started2 ]];
+          sleep 1;
+        done
+        rm /tmp/started3
+        touch /tmp/success3
+      '';
+    };
+
+    systemd.mutex.test = map (i: "testservicemutex${toString i}.service") [ 1 2 3 ];
+
     systemd.watchdog = {
       device = "/dev/watchdog";
       runtimeTime = "30s";
@@ -69,6 +119,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_x()
     # wait for user services
     machine.wait_for_unit("default.target", "alice")
+
+    with subtest("mutually exclusive services"):
+        machine.wait_until_succeeds("test -e /tmp/success1")
+        machine.wait_until_succeeds("test -e /tmp/success2")
+        machine.wait_until_succeeds("test -e /tmp/success3")
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35415
     with subtest("configuration files are recognized by systemd"):
