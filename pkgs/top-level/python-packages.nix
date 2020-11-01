@@ -5012,6 +5012,8 @@ in {
 
   pycurl = callPackage ../development/python-modules/pycurl { };
 
+  pycxx = callPackage ../development/python-modules/pycxx { };
+
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
