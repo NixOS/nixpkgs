@@ -5440,6 +5440,8 @@ in {
 
   pyobjc-framework-AVKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AVKit { });
 
+  pyobjc-framework-BusinessChat = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-BusinessChat { });
+
   pyobjc-framework-CalendarStore = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CalendarStore { });
 
   pyobjc-framework-CFNetwork = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CFNetwork { });
