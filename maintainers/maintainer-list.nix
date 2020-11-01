@@ -9892,4 +9892,10 @@
     github = "wilsonehusin";
     githubId = 14004487;
   };
+  bb2020 = {
+    email = "bb2020@users.noreply.github.com";
+    github = "bb2020";
+    githubId = 19290397;
+    name = "Tunc Uzlu";
+  };
 }
