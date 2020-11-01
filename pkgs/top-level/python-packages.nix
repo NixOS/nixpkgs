@@ -4640,6 +4640,8 @@ in {
 
   pproxy = callPackage ../development/python-modules/pproxy { };
 
+  ppscore = callPackage ../development/python-modules/ppscore { };
+
   pq = callPackage ../development/python-modules/pq { };
 
   prance = callPackage ../development/python-modules/prance { };
