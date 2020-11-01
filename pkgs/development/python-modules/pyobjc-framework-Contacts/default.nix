@@ -32,7 +32,11 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   # show test names instead of just dots
-  setuptoolsCheckFlagsArray = [ "--verbosity=3" ];
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} setup.py test --verbosity=3
+  '';
 
   preCheck = ''
     # testConstants in PyObjCTest.test_cfsocket.TestSocket returns: Segmentation fault: 11

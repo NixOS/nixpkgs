@@ -58,7 +58,13 @@ buildPythonPackage rec {
   '';
 
   # show test names instead of just dots
-  setuptoolsCheckFlagsArray = [ "--verbosity=3" ];
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} setup.py test --verbosity=3
+
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib;
     {
