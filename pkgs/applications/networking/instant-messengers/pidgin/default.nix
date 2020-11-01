@@ -16,11 +16,11 @@
 let unwrapped = stdenv.mkDerivation rec {
   pname = "pidgin";
   majorVersion = "2";
-  version = "${majorVersion}.13.0";
+  version = "${majorVersion}.14.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.bz2";
-    sha256 = "13vdqj70315p9rzgnbxjp9c51mdzf1l4jg1kvnylc4bidw61air7";
+    sha256 = "10070r8jp1m3cs8rjrn38rksi4h8yjj9pqncdbjdj5qian6y2cpi";
   };
 
   inherit nss ncurses;
