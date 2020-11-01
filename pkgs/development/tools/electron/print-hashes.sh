@@ -21,8 +21,8 @@ SYSTEMS=(
 
 hashfile="$(nix-prefetch-url --print-path "https://github.com/electron/electron/releases/download/v${VERSION}/SHASUMS256.txt" 2>/dev/null | tail -n1)"
 
-echo "Entry similar to the following goes in default.nix:"
-echo
+# Entry similar to the following goes in default.nix:
+
 echo "  electron_${VERSION%%.*} = mkElectron \"${VERSION}\" {"
 
 for S in "${!SYSTEMS[@]}"; do

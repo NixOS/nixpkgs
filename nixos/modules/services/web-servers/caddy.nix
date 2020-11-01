@@ -101,6 +101,8 @@ in {
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ]; # systemd-networkd-wait-online.service
       wantedBy = [ "multi-user.target" ];
+      startLimitIntervalSec = 14400;
+      startLimitBurst = 10;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/caddy run --config ${configJSON}";
         ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
@@ -108,8 +110,6 @@ in {
         User = "caddy";
         Group = "caddy";
         Restart = "on-abnormal";
-        StartLimitIntervalSec = 14400;
-        StartLimitBurst = 10;
         AmbientCapabilities = "cap_net_bind_service";
         CapabilityBoundingSet = "cap_net_bind_service";
         NoNewPrivileges = true;

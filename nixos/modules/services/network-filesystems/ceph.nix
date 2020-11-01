@@ -28,6 +28,9 @@ let
 
     # Don't start services that are not yet initialized
     unitConfig.ConditionPathExists = "/var/lib/${stateDirectory}/keyring";
+    startLimitBurst =
+      if daemonType == "osd" then 30 else if lib.elem daemonType ["mgr" "mds"] then 3 else 5;
+    startLimitIntervalSec = 60 * 30;  # 30 mins
 
     serviceConfig = {
       LimitNOFILE = 1048576;
@@ -39,8 +42,6 @@ let
       ProtectHome = "true";
       ProtectSystem = "full";
       Restart = "on-failure";
-      StartLimitBurst = "5";
-      StartLimitInterval = "30min";
       StateDirectory = stateDirectory;
       User = "ceph";
       Group = if daemonType == "osd" then "disk" else "ceph";
@@ -48,13 +49,10 @@ let
                     -f --cluster ${clusterName} --id ${daemonId}'';
     } // optionalAttrs (daemonType == "osd") {
       ExecStartPre = ''${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}'';
-      StartLimitBurst = "30";
       RestartSec = "20s";
       PrivateDevices = "no"; # osd needs disk access
     } // optionalAttrs ( daemonType == "mon") {
       RestartSec = "10";
-    } // optionalAttrs (lib.elem daemonType ["mgr" "mds"]) {
-      StartLimitBurst = "3";
     };
   });
 

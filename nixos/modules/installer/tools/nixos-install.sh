@@ -64,7 +64,7 @@ while [ "$#" -gt 0 ]; do
         --no-bootloader)
             noBootLoader=1
             ;;
-        --show-trace|--impure)
+        --show-trace|--impure|--keep-going)
             extraBuildFlags+=("$i")
             ;;
         --help)

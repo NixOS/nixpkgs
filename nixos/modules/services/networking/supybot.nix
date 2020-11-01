@@ -103,6 +103,8 @@ in
         rm -f '${cfg.stateDir}/supybot.cfg.bak'
       '';
 
+      startLimitIntervalSec = 5 * 60;  # 5 min
+      startLimitBurst = 1;
       serviceConfig = {
         ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";
         PIDFile = "/run/supybot.pid";
@@ -110,8 +112,6 @@ in
         Group = "supybot";
         UMask = "0007";
         Restart = "on-abort";
-        StartLimitInterval = "5m";
-        StartLimitBurst = "1";
 
         NoNewPrivileges = true;
         PrivateDevices = true;
