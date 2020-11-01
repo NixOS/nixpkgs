@@ -148,8 +148,9 @@ let
     in
     wrapNeovimUnstable neovim (res // {
       wrapperArgs = lib.escapeShellArgs (
-        res.wrapperArgs ++ [ "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}" ])
-        + " " + extraMakeWrapperArgs
+        res.wrapperArgs ++ lib.optionals (configure != {}) [
+          "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
+        ]) + " " + extraMakeWrapperArgs
       ;
   });
 in
