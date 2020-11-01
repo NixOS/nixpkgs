@@ -39,6 +39,11 @@ let
       ${interfaces}
       ${access}
       ${trustAnchor}
+    ${lib.optionalString (cfg.localControlSocketPath != null) ''
+      remote-control:
+        control-enable: yes
+        control-interface: ${cfg.localControlSocketPath}
+    ''}
     ${cfg.extraConfig}
     ${forward}
   '';
@@ -86,6 +91,28 @@ in
         description = "Use and update root trust anchor for DNSSEC validation.";
       };
 
+      localControlSocketPath = mkOption {
+        default = null;
+        # FIXME: What is the proper type here so users can specify strings,
+        # paths and null?
+        # My guess would be `types.nullOr (types.either types.str types.path)`
+        # but I haven't verified yet.
+        type = types.nullOr types.str;
+        example = "/run/unbound/unbound.ctl";
+        description = ''
+          When not set to <literal>null</literal> this option defines the path
+          at which the unbound remote control socket should be created at. The
+          socket will be owned by the unbound user (<literal>unbound</literal>)
+          and group will be <literal>nogroup</literal>.
+
+          Users that should be permitted to access the socket must be in the
+          <literal>unbound</literal> group.
+
+          If this option is <literal>null</literal> remote control will not be
+          configured at all. Unbounds default values apply.
+        '';
+      };
+
       extraConfig = mkOption {
         default = "";
         type = types.lines;
@@ -108,6 +135,14 @@ in
     users.users.unbound = {
       description = "unbound daemon user";
       isSystemUser = true;
+      group = lib.mkIf (cfg.localControlSocketPath != null) (lib.mkDefault "unbound");
+    };
+
+    # We need a group so that we can give users access to the configured
+    # control socket. Unbound allows access to the socket only to the unbound
+    # user and the primary group.
+    users.groups = lib.mkIf (cfg.localControlSocketPath != null) {
+      unbound = {};
     };
 
     networking.resolvconf.useLocalResolver = mkDefault true;
@@ -148,6 +183,7 @@ in
         ];
 
         User = "unbound";
+        Group = lib.mkIf (cfg.localControlSocketPath != null) (lib.mkDefault "unbound");
 
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
