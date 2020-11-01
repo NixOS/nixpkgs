@@ -5,7 +5,7 @@
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, nasm, minizip, libwebp
-, libusb1, pciutils, nss, re2, zlib
+, libusb1, pciutils, nss, re2
 
 , python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
@@ -13,10 +13,9 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, xorg
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg_3, libxslt, libxml2, at-spi2-core
+, ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
 , pipewire_0_2
 
@@ -49,8 +48,6 @@ buildFun:
 
 with stdenv.lib;
 
-# see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
-
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
 
@@ -66,7 +63,7 @@ let
   mkGnFlags =
     let
       # Serialize Nix types into GN types according to this document:
-      # https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/language.md
+      # https://source.chromium.org/gn/gn/+/master:docs/language.md
       mkGnString = value: "\"${escape ["\"" "$" "\\"] value}\"";
       sanitize = value:
         if value == true then "true"
@@ -78,14 +75,17 @@ let
       toFlag = key: value: "${key}=${sanitize value}";
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
+  # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
-    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
-    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
-    # "re2" # fails with linker errors
-    # "ffmpeg" # https://crbug.com/731766
-    # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
-                    # so we can't build with one from system and other from source
+    "ffmpeg"
+    "flac"
+    "libjpeg"
+    "libpng"
+    "libwebp"
+    "libxslt"
+    "opus"
+    "snappy"
+    "zlib"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -97,11 +97,9 @@ let
     libevent expat libjpeg snappy
     libpng libcap
     xdg_utils minizip libwebp
-    libusb1 re2 zlib
-    ffmpeg_3 libxslt libxml2
+    libusb1 re2
+    ffmpeg libxslt libxml2
     nasm
-    # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
-               # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
@@ -135,10 +133,10 @@ let
     };
 
     nativeBuildInputs = [
+      llvmPackages.lldClang.bintools
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
-      (xorg.xcbproto.override { python = python2Packages.python; })
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -157,34 +155,35 @@ let
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
-    patches = optionals (versionRange "68" "86") [
-      ./patches/nix_plugin_paths_68.patch
-    ] ++ [
-      ./patches/remove-webp-include-69.patch
-      ./patches/no-build-timestamps.patch
-      ./patches/widevine-79.patch
-      ./patches/dont-use-ANGLE-by-default.patch
-      # Unfortunately, chromium regularly breaks on major updates and
-      # then needs various patches backported in order to be compiled with GCC.
-      # Good sources for such patches and other hints:
-      # - https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
-      # - https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
-      # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
-      #
-      # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
+    patches = [
+      ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
+      ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi && versionRange "68" "86") [ # Improvements for the VA-API build:
-      ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
-      ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
+    ] ++ optionals (useVaapi && versionRange "86" "87") [
+      # Check for enable-accelerated-video-decode on Linux:
+      (githubPatch "54deb9811ca9bd2327def5c05ba6987b8c7a0897" "11jvxjlkzz1hm0pvfyr88j7z3zbwzplyl5idkx92l2lzv4459c8d")
     ];
 
-    postPatch = optionalString (!versionRange "0" "86") ''
+    postPatch = ''
+      # remove unused third-party
+      for lib in ${toString gnSystemLibraries}; do
+        if [ -d "third_party/$lib" ]; then
+          find "third_party/$lib" -type f \
+            \! -path "third_party/$lib/chromium/*" \
+            \! -path "third_party/$lib/google/*" \
+            \! -path "third_party/harfbuzz-ng/utils/hb_scoped.h" \
+            \! -regex '.*\.\(gn\|gni\|isolate\)' \
+            -delete
+        fi
+      done
+
       # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
-      substituteInPlace native_client/SConstruct \
-        --replace "#! -*- python -*-" ""
-      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
-    '' + ''
+      substituteInPlace native_client/SConstruct --replace "#! -*- python -*-" ""
+      if [ -e third_party/harfbuzz-ng/src/src/update-unicode-tables.make ]; then
+        substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+          --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
+      fi
+
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
         --replace \
@@ -202,11 +201,6 @@ let
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
-      substituteInPlace ui/gfx/x/BUILD.gn \
-        --replace \
-          '/usr/share/xcb' \
-          '${xorg.xcbproto}/share/xcb/'
-
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
@@ -216,42 +210,20 @@ let
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         gpu/config/gpu_info_collector_linux.cc
 
-      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
-        chrome/browser/ui/webui/engagement/site_engagement_ui.cc
-
-      sed -i -e '/#include/ {
-        i #include <algorithm>
-        :l; n; bl
-      }' gpu/config/gpu_control_list.cc
-
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
       patchShebangs .
       # use our own nodejs
       mkdir -p third_party/node/linux/node-linux-x64/bin
-      ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
+      ln -s "$(command -v node)" third_party/node/linux/node-linux-x64/bin/node
 
-      # remove unused third-party
-      # in third_party/crashpad third_party/zlib contains just a header-adapter
-      for lib in ${toString gnSystemLibraries}; do
-        find -type f -path "*third_party/$lib/*"     \
-            \! -path "*third_party/crashpad/crashpad/third_party/zlib/*"  \
-            \! -path "*third_party/$lib/chromium/*"  \
-            \! -path "*third_party/$lib/google/*"    \
-            \! -path "*base/third_party/icu/*"       \
-            \! -path "*base/third_party/libevent/*"  \
-            \! -regex '.*\.\(gn\|gni\|isolate\|py\)' \
-            -delete
-      done
+      # Allow building against system libraries in official builds
+      sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
+
     '' + optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
-    '' + optionalString stdenv.cc.isClang ''
-      mkdir -p third_party/llvm-build/Release+Asserts/bin
-      ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
-      ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
-      ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
     '' + optionalString ungoogled ''
       ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ${ungoogler}/utils/patches.py . ${ungoogler}/patches
@@ -259,9 +231,9 @@ let
     '';
 
     gnFlags = mkGnFlags ({
-      use_lld = false;
-      use_gold = true;
-      gold_path = "${stdenv.cc}/bin";
+      custom_toolchain = "//build/toolchain/linux/unbundle:default";
+      host_toolchain = "//build/toolchain/linux/unbundle:default";
+      is_official_build = true;
       is_debug = false;
 
       proprietary_codecs = false;
@@ -283,6 +255,7 @@ let
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
+      symbol_level = 0;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
@@ -336,8 +309,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      python build/linux/unbundle/replace_gn_files.py \
-        --system-libraries ${toString gnSystemLibraries}
+      python build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
