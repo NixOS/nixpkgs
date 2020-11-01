@@ -3493,6 +3493,12 @@
     email = "t@larkery.com";
     name = "Tom Hinton";
   };
+  hjones2199 = {
+    email = "hjones2199@gmail.com";
+    github = "hjones2199";
+    githubId = 5525217;
+    name = "Hunter Jones";
+  };
   hkjn = {
     email = "me@hkjn.me";
     name = "Henrik Jonsson";
