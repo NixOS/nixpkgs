@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, CoreAudioKit, ForceFeedback, libobjc, libiconv
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, Cocoa, CoreAudioKit, ForceFeedback, libobjc, libiconv
 , buildPackages }:
 
 let
@@ -291,6 +291,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Citra to libretro";
     license = gpl2Plus;
+    broken = stdenv.isDarwin; # WIP
     extraNativeBuildInputs = [ cmake pkgconfig ];
     extraBuildInputs = [ libGLU libGL boost ]
       ++ stdenv.lib.optional stdenv.isDarwin libiconv;
@@ -349,7 +350,8 @@ in with stdenv.lib.licenses;
     extraNativeBuildInputs = [ cmake curl pkgconfig ];
     extraBuildInputs = [ libGLU libGL pcre sfml gettext hidapi ]
       ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ])
-      ++ stdenv.lib.optionals stdenv.isLinux [ libevdev udev ];
+      ++ stdenv.lib.optionals stdenv.isLinux [ libevdev udev ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa CoreAudioKit ForceFeedback ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
@@ -554,7 +556,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU libGL portaudio python27 xorg.libX11 ]
       ++ stdenv.lib.optional stdenv.isLinux alsaLib
-      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -643,13 +645,23 @@ in with stdenv.lib.licenses;
         url = "https://github.com/libretro/mame2016-libretro/commit/5874fae3d124f5e7c8a91634f5473a8eac902e47.patch";
         sha256 = "061f1lcm72glksf475ikl8w10pnbgqa7049ylw06nikis2qdjlfn";
       })
+      (fetchpatch {
+        name = "fix_darwin_something.patch";
+        url = "https://github.com/mamedev/mame/commit/72869d504cbfabc88642998aee989bbbc361000e.patch";
+        sha256 = "0j5jlln6yba6lzxjgf4hs3ll4clqg6nsavf6liplcg756avl2y8b";
+        postFetch = ''
+          # Upstream dropped the double parentheses here since libretro
+          # made their snapshot.
+          sed -ri 's/LOG_DRIVE\((.+)\)/LOG_DRIVE((\1))/' $out
+        '';
+      })
     ];
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs =
       stdenv.lib.optional stdenv.isLinux alsaLib
-      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
