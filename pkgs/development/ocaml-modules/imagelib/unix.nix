@@ -2,7 +2,7 @@
 
 buildDunePackage {
   pname = "imagelib-unix";
-  inherit (imagelib) version src meta;
+  inherit (imagelib) version src useDune2 meta;
 
   propagatedBuildInputs = [ imagelib ];
 }
