@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , buildPackages
 , ninja
 , meson
@@ -71,6 +72,7 @@
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? true
+, withOomd ? false
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? false
@@ -80,8 +82,8 @@
 , withTimedated ? true
 , withTimesyncd ? true
 , withUserDb ? true
-, p11-kit
 , libfido2
+, p11-kit
 
   # name argument
 , pname ? "systemd"
@@ -109,7 +111,7 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "246.6";
+  version = "247";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -118,14 +120,15 @@ stdenv.mkDerivation {
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = "systemd-stable";
+    repo = "systemd";
     rev = "v${version}";
-    sha256 = "1yhj2jlighqqpw1xk9q52f3pncjn47ipi224k35d6syb94q2b988";
+    sha256 = "1nwsr6p65zy5jpabvjbszq5g556l1npaf2xsik4p4pvjjwnn1nx6";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
   # systemd worktree, rebase to the more recent systemd version, and export the
   # patches again via `git format-patch v${version}`.
+  # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
@@ -138,14 +141,13 @@ stdenv.mkDerivation {
     ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-Install-default-configuration-into-out-share-factory.patch
-    ./0013-inherit-systemd-environment-when-calling-generators.patch
-    ./0014-add-rootprefix-to-lookup-dir-paths.patch
-    ./0015-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0019-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0012-inherit-systemd-environment-when-calling-generators.patch
+    ./0013-add-rootprefix-to-lookup-dir-paths.patch
+    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
   ];
 
   postPatch = ''
@@ -239,6 +241,7 @@ stdenv.mkDerivation {
     "-Dhostnamed=${lib.boolToString withHostnamed}"
     "-Dmachined=${lib.boolToString withMachined}"
     "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Doomd=${lib.boolToString withOomd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
     "-Dcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=${lib.boolToString withPortabled}"
@@ -259,6 +262,7 @@ stdenv.mkDerivation {
     "-Dldconfig=false"
     "-Dsmack=true"
     "-Db_pie=true"
+    "-Dinstall-sysconfdir=false"
     /*
     As of now, systemd doesn't allow runtime configuration of these values. So
     the settings in /etc/login.defs have no effect on it. Many people think this
@@ -338,7 +342,7 @@ stdenv.mkDerivation {
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for dir in tools src/resolve test src/test; do
+    for dir in tools src/resolve test src/test src/shared; do
       patchShebangs $dir
     done
 
