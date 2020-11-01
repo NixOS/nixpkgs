@@ -5514,6 +5514,8 @@ in {
 
   pyobjc-framework-Photos = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Photos { });
 
+  pyobjc-framework-PhotosUI = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-PhotosUI { });
+
   pyobjc-framework-Quartz = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Quartz { });
 
   pyobjc-framework-SafariServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SafariServices { });
