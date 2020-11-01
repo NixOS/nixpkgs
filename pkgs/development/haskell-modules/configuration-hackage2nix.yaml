@@ -5386,7 +5386,6 @@ broken-packages:
   - git-fmt
   - git-gpush
   - git-jump
-  - git-mediate
   - git-monitor
   - git-object
   - git-remote-ipfs
