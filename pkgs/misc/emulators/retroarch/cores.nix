@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, CoreServices
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, CoreAudioKit, ForceFeedback, libobjc, libiconv
 , buildPackages }:
 
 let
@@ -179,6 +179,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PSX Engine (with HW accel) core to libretro";
     license = gpl2;
+    broken = stdenv.isDarwin; # WIP
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
@@ -291,7 +292,8 @@ in with stdenv.lib.licenses;
     description = "Port of Citra to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ cmake pkgconfig ];
-    extraBuildInputs = [ libGLU libGL boost ];
+    extraBuildInputs = [ libGLU libGL boost ]
+      ++ stdenv.lib.optional stdenv.isDarwin libiconv;
     makefile = "Makefile";
     cmakeFlags = [
       "-DENABLE_LIBRETRO=ON"
@@ -345,11 +347,9 @@ in with stdenv.lib.licenses;
     license = gpl2Plus;
 
     extraNativeBuildInputs = [ cmake curl pkgconfig ];
-    extraBuildInputs = [
-      libGLU libGL pcre sfml
-      gettext hidapi
-      libevdev udev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
+    extraBuildInputs = [ libGLU libGL pcre sfml gettext hidapi ]
+      ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ])
+      ++ stdenv.lib.optionals stdenv.isLinux [ libevdev udev ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
@@ -394,6 +394,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Final Burn Alpha ~2012 to libretro";
     license = "Non-commercial";
+    broken = stdenv.isDarwin; # WIP
     makefile = "makefile.libretro";
     preBuild = "cd svn-current/trunk";
   };
@@ -408,6 +409,7 @@ in with stdenv.lib.licenses;
     description = "Port of FBNeo to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
+    broken = stdenv.isDarwin; # WIP
     postPatch = ''
       sed -i -e 's:-Wall:-Wall -Wno-format-security:g' src/burner/libretro/Makefile
     '';
@@ -551,7 +553,8 @@ in with stdenv.lib.licenses;
     license = gpl2Plus;
 
     extraBuildInputs = [ libGLU libGL portaudio python27 xorg.libX11 ]
-      ++ stdenv.lib.optional stdenv.isLinux alsaLib;
+      ++ stdenv.lib.optional stdenv.isLinux alsaLib
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -646,7 +649,7 @@ in with stdenv.lib.licenses;
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs =
       stdenv.lib.optional stdenv.isLinux alsaLib
-      ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -818,6 +821,7 @@ in with stdenv.lib.licenses;
     };
     description = "Fast MegaDrive/MegaCD/32X emulator";
     license = "MAME";
+    broken = stdenv.isDarwin; # WIP
 
     extraBuildInputs = [ libpng SDL ];
     SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
@@ -835,8 +839,9 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Play! to libretro";
     license = bsd2;
-    extraBuildInputs = [ boost ];
     extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
+    extraBuildInputs = [ boost ]
+      ++ stdenv.lib.optional stdenv.isDarwin libobjc;
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
     postBuild = "mv Source/ui_libretro/play_libretro${stdenv.hostPlatform.extensions.sharedLibrary} play_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -1080,6 +1085,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Vecx to libretro";
     license = gpl3;
+    makeFlags = [ "ARCHFLAGS=" ];
   };
 
   virtualjaguar = mkLibRetroCore rec {

@@ -27629,7 +27629,7 @@ in
 
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
     retroarch = retroarchBare;
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreServices;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreAudioKit ForceFeedback libobjc;
   });
 
   retrofe = callPackage ../misc/emulators/retrofe { };
