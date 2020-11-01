@@ -135,8 +135,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "avast-tl";
-    repo = "retdec";
-    name = "retdec-${version}";
+    repo = pname;
     rev = "refs/tags/v${version}";
     sha256 = "0chky656lsddn20bnm3pmz6ix20y4a0y8swwr42hrhi01vkhmzrp";
   };

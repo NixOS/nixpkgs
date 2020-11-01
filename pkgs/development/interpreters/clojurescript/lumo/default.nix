@@ -145,7 +145,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/anmonteiro/lumo.git";
-    rev = "${version}";
+    rev = version;
     sha256 = "12agi6bacqic2wq6q3l28283badzamspajmajzqm7fbdl2aq1a4p";
   };
 

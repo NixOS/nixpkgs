@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arsenetar";
     repo = "dupeguru";
-    rev = "${version}";
+    rev = version;
     sha256 = "0ma4f1c6vmpz8gi4sdy43x1ik7wh42wayvk1iq520d3i714kfcpy";
     fetchSubmodules = true;
   };

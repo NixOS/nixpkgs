@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
-    rev = "${version}";
+    rev = version;
     sha256 = "0zajvbaf3r02k53lv5zdxf13apc6chnjmj69zkyac48lpnpbcxq6";
   };
 
