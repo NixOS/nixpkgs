@@ -16,8 +16,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./lt_dladdsearchdir.patch
-    ./remove_bsd_base64_decode_flag.patch
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
   postPatch = ''
     substituteAllInPlace src/dl.c
   '';
