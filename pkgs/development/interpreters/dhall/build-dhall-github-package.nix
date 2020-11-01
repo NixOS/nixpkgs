@@ -1,7 +1,7 @@
 { buildDhallPackage, fetchFromGitHub, lib }:
 
 # This function is used by `dhall-to-nixpkgs` when given a GitHub repository
-lib.makeOverridable
+lib.makePackageOverridable
   ( { # Arguments passed through to `buildDhallPackage`
       name
     , dependencies ? []
