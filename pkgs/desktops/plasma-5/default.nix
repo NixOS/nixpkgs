@@ -36,7 +36,6 @@ let
   };
 
   mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
-  qtbase = libsForQt5.callPackage ({ qtbase }: qtbase) {};
 
   packages = self: with self;
     let
@@ -83,7 +82,6 @@ let
             setupHook = args.setupHook or defaultSetupHook;
 
             meta = {
-              broken = lib.versionAtLeast qtbase.version "5.15";
               license = with lib.licenses; [
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
