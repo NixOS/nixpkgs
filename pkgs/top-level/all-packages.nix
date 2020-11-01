@@ -2876,6 +2876,8 @@ in
 
     libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
+    libthai = callPackage ../tools/inputmethods/ibus-engines/ibus-libthai { };
+
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
@@ -13500,6 +13502,8 @@ in
 
   libdap = callPackage ../development/libraries/libdap { };
 
+  libdatrie = callPackage ../development/libraries/libdatrie { };
+
   libdazzle = callPackage ../development/libraries/libdazzle { };
 
   libdbi = callPackage ../development/libraries/libdbi { };
@@ -14215,6 +14219,8 @@ in
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
 
   libtcod = callPackage ../development/libraries/libtcod { };
+
+  libthai = callPackage ../development/libraries/libthai { };
 
   libtheora = callPackage ../development/libraries/libtheora { };
 

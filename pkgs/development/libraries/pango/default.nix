@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, cairo, harfbuzz
-, libintl, gobject-introspection, darwin, fribidi, gnome3
+, libintl, libthai, gobject-introspection, darwin, fribidi, gnome3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 , meson, ninja, glib
 , x11Support? !stdenv.isDarwin, libXft
@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     fribidi
+    libthai
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
@@ -39,7 +40,6 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
-    "-Dlibthai=disabled" # Not packaged in Nixpkgs
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-Dxft=disabled"  # only works with x11
   ];
