@@ -33,8 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    installShellCompletion --bash --name op <($out/bin/op completion bash)
-    installShellCompletion --zsh --name _op <($out/bin/op completion zsh)
+    $out/bin/op completion bash > op.bash
+    $out/bin/op completion zsh > op.zsh
+
+    installShellCompletion --bash --name op ./op.bash
+    installShellCompletion --zsh --name _op ./op.zsh
   '';
 
   dontStrip = stdenv.isDarwin;
