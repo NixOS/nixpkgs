@@ -91,6 +91,7 @@ with frameworks; with libs; {
   OpenGL                  = [];
   PCSC                    = [ CoreData ];
   Photos                  = [ CoreImage CoreMedia CoreVideo ];
+  PhotosUI                = [ AppKit Photos ];
   PreferencePanes         = [];
   PubSub                  = [];
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
