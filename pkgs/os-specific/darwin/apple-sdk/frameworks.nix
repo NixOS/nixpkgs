@@ -92,6 +92,7 @@ with frameworks; with libs; {
   OpenGL                  = {};
   PCSC                    = { inherit CoreData; };
   Photos                  = { inherit CoreImage CoreMedia CoreVideo; };
+  PhotosUI                = { inherit AppKit Photos; };
   PreferencePanes         = {};
   PubSub                  = {};
   QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox; };
