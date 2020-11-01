@@ -20785,6 +20785,8 @@ in
 
   exercism = callPackage ../applications/misc/exercism { };
 
+  go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
+
   go-motion = callPackage ../development/tools/go-motion { };
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
