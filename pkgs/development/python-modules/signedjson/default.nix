@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchgit
+, fetchFromGitHub
 , canonicaljson
 , unpaddedbase64
 , pynacl
@@ -11,8 +11,9 @@ buildPythonPackage rec {
   pname = "signedjson";
   version = "1.1.0";
 
-  src = fetchgit {
-    url = "https://github.com/matrix-org/python-signedjson.git";
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "python-${pname}";
     rev = "refs/tags/v${version}";
     sha256 = "18s388hm3babnvakbbgfqk0jzq25nnznvhygywd3azp9b4yzmd5c";
   };

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "stuko";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0rm1qxa0fanaaqg0idr6rf2s2xlbyn1dzjzwh3rddy9mgl60lj2h";
   };

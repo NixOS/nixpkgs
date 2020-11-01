@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   version = "3.22.11";
 
   src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    domain = "gitlab.gnome.org";
-    rev    = "${version}";
+    rev = version;
     sha256 = "1asm0y6485xqsysdg586y3hzz8bhxqwnc82k6vhfnxpxz7l62qa1";
   };
 

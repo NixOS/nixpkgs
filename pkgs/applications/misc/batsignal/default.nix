@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "electrickite";
     repo = "batsignal";
-    rev = "${version}";
+    rev = version;
     sha256 = "12hj0j18db34x0xzgj6xmhvxm966d05z0rl3d9rlrcd2q96lilwf";
   };
 

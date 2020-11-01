@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
-    rev = "${version}";
+    rev = version;
     sha256 = "16mmh1kz6zbncfisd9qnb3ssgpkcb4hb7700jlzbdjqxyjmy0qsf";
   };
 

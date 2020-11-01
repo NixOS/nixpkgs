@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "01k1fpk2qp4kv0xr4f0xmrjkr98j5ws48r1aks8l80mffs4ynqfr";
     fetchSubmodules = true;
