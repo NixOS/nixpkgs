@@ -176,7 +176,6 @@ in
         RestrictNamespaces = true;
         LockPersonality = true;
         RestrictSUIDSGID = true;
-        ReadWritePaths = [ "/run/unbound" "${stateDir}" ];
       };
     };
     # If networkmanager is enabled, ask it to interface with unbound.
