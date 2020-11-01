@@ -210,32 +210,26 @@ in
         '';
       };
 
-      session = mkOption {
+      dmSessions = mkOption {
         default = [];
-        example = literalExample
-          ''
-            [ { manage = "desktop";
-                name = "xterm";
-                start = '''
-                  ''${pkgs.xterm}/bin/xterm -ls &
-                  waitPID=$!
-                ''';
-              }
-            ]
-          '';
         description = ''
-          List of sessions supported with the command used to start each
-          session.  Each session script can set the
-          <varname>waitPID</varname> shell variable to make this script
-          wait until the end of the user session.  Each script is used
-          to define either a window manager or a desktop manager.  These
-          can be differentiated by setting the attribute
-          <varname>manage</varname> either to <literal>"window"</literal>
-          or <literal>"desktop"</literal>.
+          List of enabled desktop manager sessions. Each session can
+          either support or not support the use of external window
+          managers. If external window are supported, it must provide
+          a function <varname>genStart</varname> that takes a package
+          (the window manager's startup script) and returns a string
+          (the desktop manager's startup script), otherwise it should
+          provide a string <varname>start</varname> that represents its
+          startup script.
+        '';
+      };
 
-          The list of desktop manager and window manager should appear
-          inside the display manager with the desktop manager name
-          followed by the window manager name.
+      wmSessions = mkOption {
+        default = [];
+        description = ''
+          List of enabled window manager sessions. All sessions should
+          provide a string <varname>start</varname> that represents its
+          startup script
         '';
       };
 
@@ -414,22 +408,17 @@ in
     # that do not have upstream session files (those defined using services.{display,desktop,window}Manager.session options).
     services.xserver.displayManager.sessionPackages =
       let
-        dms = filter (s: s.manage == "desktop") cfg.displayManager.session;
-        wms = filter (s: s.manage == "window") cfg.displayManager.session;
+        dms = cfg.displayManager.dmSessions;
+        wms = cfg.displayManager.wmSessions;
 
         # Script responsible for starting the window manager and the desktop manager.
-        xsession = dm: wm: pkgs.writeScript "xsession" ''
-          #! ${pkgs.bash}/bin/bash
-
+        xsession = startup: pkgs.writeShellScript "xsession" ''
           # Legacy session script used to construct .desktop files from
           # `services.xserver.displayManager.session` entries. Called from
           # `sessionWrapper`.
 
-          # Start the window manager.
-          ${wm.start}
-
-          # Start the desktop manager.
-          ${dm.start}
+          # Run the startup script.
+          ${startup}
 
           ${optionalString cfg.updateDbusEnvironment ''
             ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
@@ -441,39 +430,60 @@ in
 
           exit 0
         '';
+      writeSessionFile = {sessionName, script, desktopNames}:
+        pkgs.writeTextFile {
+          name = "${sessionName}-xsession";
+          destination = "/share/xsessions/${sessionName}.desktop";
+          # Desktop Entry Specification:
+          # - https://standards.freedesktop.org/desktop-entry-spec/latest/
+          # - https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+          text = ''
+            [Desktop Entry]
+            Version=1.0
+            Type=XSession
+            TryExec=${script}
+            Exec=${script}
+            Name=${sessionName}
+            DesktopNames=${desktopNames}
+          '';
+          } // {
+           providedSessions = [ sessionName ];
+          };
       in
         # We will generate every possible pair of WM and DM.
         concatLists (
-            builtins.map
-            ({dm, wm}: let
-              sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
-              script = xsession dm wm;
-              desktopNames = if dm ? desktopNames
-                             then concatStringsSep ";" dm.desktopNames
-                             else sessionName;
-            in
-              optional (dm.name != "none" || wm.name != "none")
-                (pkgs.writeTextFile {
-                  name = "${sessionName}-xsession";
-                  destination = "/share/xsessions/${sessionName}.desktop";
-                  # Desktop Entry Specification:
-                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/
-                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
-                  text = ''
-                    [Desktop Entry]
-                    Version=1.0
-                    Type=XSession
-                    TryExec=${script}
-                    Exec=${script}
-                    Name=${sessionName}
-                    DesktopNames=${desktopNames}
-                  '';
-                } // {
-                  providedSessions = [ sessionName ];
-                })
-            )
+          builtins.map
+            ({dm, wm}: optional dm.supportExternalWM
+              (let
+                sessionName = "${dm.name}+${wm.name}";
+                startup = dm.genStart wm.bin;
+                script = xsession startup;
+                desktopNames = if dm ? desktopNames
+                               then concatStringsSep ";" dm.desktopNames
+                               else sessionName;
+              in
+                writeSessionFile {
+                  inherit sessionName script desktopNames;
+                }
+              ))
             (cartesianProductOfSets { dm = dms; wm = wms; })
-          );
+          ) ++ map (dm:
+            let
+              sessionName = dm.name;
+              startup =
+                if dm.supportExternalWM
+                then dm.genStart null
+                else dm.start;
+              script = xsession startup;
+              desktopNames =
+                if dm ? desktopNames
+                then concatStringsSep ";" dm.desktopNames
+                else sessionName;
+            in
+              writeSessionFile {
+                inherit sessionName script desktopNames;
+              }
+          ) (filter (dm: dm.name != "none") dms);
 
     # Make xsessions and wayland sessions available in XDG_DATA_DIRS
     # as some programs have behavior that depends on them being present

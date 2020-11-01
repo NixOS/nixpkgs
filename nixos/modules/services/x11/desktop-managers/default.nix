@@ -69,15 +69,23 @@ in
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
         '';
-        apply = map (d: d // {
-          manage = "desktop";
-          start = d.start
-          + optionalString (needBGCond d) ''
-            if [ -e $HOME/.background-image ]; then
-              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
-            fi
-          '';
-        });
+        apply = map (d:
+          let
+            dm = { supportExternalWM = false; } // d;
+            str = optionalString (needBGCond d) ''
+              if [ -e $HOME/.background-image ]; then
+                ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+              fi
+            '';
+          in
+            dm //(
+            if dm.supportExternalWM
+            then {
+              genStart = wm: dm.genStart wm + str;
+            }
+            else {
+              start = d.start + str;
+            }));
       };
 
       default = mkOption {
@@ -95,5 +103,5 @@ in
 
   };
 
-  config.services.xserver.displayManager.session = cfg.session;
+  config.services.xserver.displayManager.dmSessions = cfg.session;
 }
