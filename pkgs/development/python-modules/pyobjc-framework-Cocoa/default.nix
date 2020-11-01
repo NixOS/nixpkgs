@@ -23,12 +23,10 @@ buildPythonPackage rec {
     ln -s "${pyobjc-core.outPath}/lib/${python.libPrefix}/site-packages/PyObjCTools/TestSupport.py" Lib/PyObjCTools/TestSupport.py
   '';
 
-  buildInputs = [
-  ] ++ (with darwin; [
-  ] ++ (with apple_sdk.frameworks;[
+  buildInputs = with darwin.apple_sdk.frameworks; [
     AppKit
     Foundation
-  ]));
+  ];
 
   propagatedBuildInputs = [
     pyobjc-core

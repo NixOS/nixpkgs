@@ -18,10 +18,8 @@ buildPythonPackage rec {
       --replace 'os.path.basename(data)[6:-4]' '"${darwin.apple_sdk.sdk.version}"'
   '';
 
-  buildInputs = [
-  ] ++ (with darwin; [
-  ] ++ (with apple_sdk.frameworks;[
-  ]));
+  buildInputs = with darwin.apple_sdk.frameworks; [
+  ];
 
   propagatedBuildInputs = [
     pyobjc-core

@@ -34,11 +34,9 @@ buildPythonPackage rec {
 <% fi -%>
   '';
 
-  buildInputs = [
-  ] ++ (with darwin; [
-  ] ++ (with apple_sdk.frameworks;[
+  buildInputs = with darwin.apple_sdk.frameworks; [
 <% export IFS=' '; for i in $build_frameworks; do printf "    %s\n" "$i"; done -%>
-  ]));
+  ];
 
   propagatedBuildInputs = [
     pyobjc-core
