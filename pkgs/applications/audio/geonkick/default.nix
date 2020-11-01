@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     owner = "iurie-sw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ibsfyzkvzijv929p91db56gaxm582b7nikbn10wbbjvv4f46mmj";
+    sha256 = "19zbz4v2n5ph4af721xls7ignmis2q2yqyd0m97g9b3njrgnfy3n";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
