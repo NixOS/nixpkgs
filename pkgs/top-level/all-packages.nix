@@ -13638,6 +13638,8 @@ in
 
   libgksu = callPackage ../development/libraries/libgksu { };
 
+  libgnt = callPackage ../development/libraries/libgnt { };
+
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
   # https://github.com/gpg/libgpg-error/blob/70058cd9f944d620764e57c838209afae8a58c78/README#L118-L140
