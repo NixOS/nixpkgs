@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mkcert";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0w1ji96hbd3anzsz82xjcafsqhgyz7c7n41rsq60yrllwbj5946f";
+    sha256 = "0g85vpkfgkc7nzjl3asl2f4ncsh12naf2fkr0mvyihfmfy9fz0fw";
   };
 
   vendorSha256 = "0b8ggdpbyxx5n2myhchhlwmm5nndwpykp1ylnzdyw12mdskfvn9h";
@@ -16,7 +16,7 @@ buildGoModule rec {
   doCheck = false;
 
   buildFlagsArray = ''
-    -ldflags=-X main.Version=v${version}
+    -ldflags=-s -w -X main.Version=v${version}
   '';
 
   meta = with lib; {
