@@ -53,6 +53,7 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
 , kexectools
 , bashInteractive
+, libmicrohttpd
 
 , withAnalyze ? true
 , withApparmor ? true
@@ -71,7 +72,7 @@
 , withNss ? true
 , withPCRE2 ? true
 , withPolkit ? true
-, withRemote ? false  # has always been disabled on NixOS, upstream version appears broken anyway
+, withRemote ? true
 , withResolved ? true
 , withShellCompletions ? true
 , withTimedated ? true
@@ -201,6 +202,7 @@ stdenv.mkDerivation {
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withResolved libgpgerror
     ++ lib.optional withSelinux libselinux
+    ++ lib.optional withRemote libmicrohttpd
     ;
 
   #dontAddPrefix = true;
