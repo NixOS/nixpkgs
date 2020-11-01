@@ -5411,233 +5411,233 @@ in {
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
-  pyobjc = enabledIfDarwin (callPackage ../development/python-modules/pyobjc { });
+  pyobjc = callPackage ../development/python-modules/pyobjc { };
 
-  pyobjc-core = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-core { });
+  pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
 
-  pyobjc-framework-Accounts = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Accounts { });
+  pyobjc-framework-Accounts = callPackage ../development/python-modules/pyobjc-framework-Accounts { };
 
-  pyobjc-framework-AddressBook = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AddressBook { });
+  pyobjc-framework-AddressBook = callPackage ../development/python-modules/pyobjc-framework-AddressBook { };
 
-  pyobjc-framework-AdSupport = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AdSupport { });
+  pyobjc-framework-AdSupport = callPackage ../development/python-modules/pyobjc-framework-AdSupport { };
 
-  pyobjc-framework-AppleScriptObjC = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AppleScriptObjC { });
+  pyobjc-framework-AppleScriptObjC = callPackage ../development/python-modules/pyobjc-framework-AppleScriptObjC { };
 
-  pyobjc-framework-AppleScriptKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AppleScriptKit { });
+  pyobjc-framework-AppleScriptKit = callPackage ../development/python-modules/pyobjc-framework-AppleScriptKit { };
 
-  pyobjc-framework-ApplicationServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ApplicationServices { });
+  pyobjc-framework-ApplicationServices = callPackage ../development/python-modules/pyobjc-framework-ApplicationServices { };
 
-  pyobjc-framework-AuthenticationServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AuthenticationServices { });
+  pyobjc-framework-AuthenticationServices = callPackage ../development/python-modules/pyobjc-framework-AuthenticationServices { };
 
-  pyobjc-framework-AutomaticAssessmentConfiguration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AutomaticAssessmentConfiguration { });
+  pyobjc-framework-AutomaticAssessmentConfiguration = callPackage ../development/python-modules/pyobjc-framework-AutomaticAssessmentConfiguration { };
 
-  pyobjc-framework-Automator = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Automator { });
+  pyobjc-framework-Automator = callPackage ../development/python-modules/pyobjc-framework-Automator { };
 
-  pyobjc-framework-AVFoundation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AVFoundation { });
+  pyobjc-framework-AVFoundation = callPackage ../development/python-modules/pyobjc-framework-AVFoundation { };
 
-  pyobjc-framework-AVKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-AVKit { });
+  pyobjc-framework-AVKit = callPackage ../development/python-modules/pyobjc-framework-AVKit { };
 
-  pyobjc-framework-BusinessChat = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-BusinessChat { });
+  pyobjc-framework-BusinessChat = callPackage ../development/python-modules/pyobjc-framework-BusinessChat { };
 
-  pyobjc-framework-CalendarStore = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CalendarStore { });
+  pyobjc-framework-CalendarStore = callPackage ../development/python-modules/pyobjc-framework-CalendarStore { };
 
-  pyobjc-framework-CFNetwork = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CFNetwork { });
+  pyobjc-framework-CFNetwork = callPackage ../development/python-modules/pyobjc-framework-CFNetwork { };
 
-  pyobjc-framework-CloudKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CloudKit { });
+  pyobjc-framework-CloudKit = callPackage ../development/python-modules/pyobjc-framework-CloudKit { };
 
-  pyobjc-framework-Cocoa = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Cocoa { });
+  pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
 
-  pyobjc-framework-Collaboration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Collaboration { });
+  pyobjc-framework-Collaboration = callPackage ../development/python-modules/pyobjc-framework-Collaboration { };
 
-  pyobjc-framework-ColorSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ColorSync { });
+  pyobjc-framework-ColorSync = callPackage ../development/python-modules/pyobjc-framework-ColorSync { };
 
-  pyobjc-framework-Contacts = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Contacts { });
+  pyobjc-framework-Contacts = callPackage ../development/python-modules/pyobjc-framework-Contacts { };
 
-  pyobjc-framework-ContactsUI = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ContactsUI { });
+  pyobjc-framework-ContactsUI = callPackage ../development/python-modules/pyobjc-framework-ContactsUI { };
 
-  pyobjc-framework-CoreAudio = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreAudio { });
+  pyobjc-framework-CoreAudio = callPackage ../development/python-modules/pyobjc-framework-CoreAudio { };
 
-  pyobjc-framework-CoreAudioKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreAudioKit { });
+  pyobjc-framework-CoreAudioKit = callPackage ../development/python-modules/pyobjc-framework-CoreAudioKit { };
 
-  pyobjc-framework-CoreBluetooth = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth { });
+  pyobjc-framework-CoreBluetooth = callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth { };
 
-  pyobjc-framework-CoreData = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreData { });
+  pyobjc-framework-CoreData = callPackage ../development/python-modules/pyobjc-framework-CoreData { };
 
-  pyobjc-framework-CoreHaptics = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreHaptics { });
+  pyobjc-framework-CoreHaptics = callPackage ../development/python-modules/pyobjc-framework-CoreHaptics { };
 
-  pyobjc-framework-CoreLocation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreLocation { });
+  pyobjc-framework-CoreLocation = callPackage ../development/python-modules/pyobjc-framework-CoreLocation { };
 
-  pyobjc-framework-CoreMedia = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreMedia { });
+  pyobjc-framework-CoreMedia = callPackage ../development/python-modules/pyobjc-framework-CoreMedia { };
 
-  pyobjc-framework-CoreMediaIO = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreMediaIO { });
+  pyobjc-framework-CoreMediaIO = callPackage ../development/python-modules/pyobjc-framework-CoreMediaIO { };
 
-  pyobjc-framework-CoreML = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreML { });
+  pyobjc-framework-CoreML = callPackage ../development/python-modules/pyobjc-framework-CoreML { };
 
-  pyobjc-framework-CoreMotion = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreMotion { });
+  pyobjc-framework-CoreMotion = callPackage ../development/python-modules/pyobjc-framework-CoreMotion { };
 
-  pyobjc-framework-CoreServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreServices { });
+  pyobjc-framework-CoreServices = callPackage ../development/python-modules/pyobjc-framework-CoreServices { };
 
-  pyobjc-framework-CoreSpotlight = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreSpotlight { });
+  pyobjc-framework-CoreSpotlight = callPackage ../development/python-modules/pyobjc-framework-CoreSpotlight { };
 
-  pyobjc-framework-CoreText = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreText { });
+  pyobjc-framework-CoreText = callPackage ../development/python-modules/pyobjc-framework-CoreText { };
 
-  pyobjc-framework-CoreWLAN = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CoreWLAN { });
+  pyobjc-framework-CoreWLAN = callPackage ../development/python-modules/pyobjc-framework-CoreWLAN { };
 
-  pyobjc-framework-CryptoTokenKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-CryptoTokenKit { });
+  pyobjc-framework-CryptoTokenKit = callPackage ../development/python-modules/pyobjc-framework-CryptoTokenKit { };
 
-  pyobjc-framework-DeviceCheck = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DeviceCheck { });
+  pyobjc-framework-DeviceCheck = callPackage ../development/python-modules/pyobjc-framework-DeviceCheck { };
 
-  pyobjc-framework-DictionaryServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DictionaryServices { });
+  pyobjc-framework-DictionaryServices = callPackage ../development/python-modules/pyobjc-framework-DictionaryServices { };
 
-  pyobjc-framework-DiscRecording = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DiscRecording { });
+  pyobjc-framework-DiscRecording = callPackage ../development/python-modules/pyobjc-framework-DiscRecording { };
 
-  pyobjc-framework-DiscRecordingUI = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DiscRecordingUI { });
+  pyobjc-framework-DiscRecordingUI = callPackage ../development/python-modules/pyobjc-framework-DiscRecordingUI { };
 
-  pyobjc-framework-DiskArbitration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DiskArbitration { });
+  pyobjc-framework-DiskArbitration = callPackage ../development/python-modules/pyobjc-framework-DiskArbitration { };
 
-  pyobjc-framework-DVDPlayback = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-DVDPlayback { });
+  pyobjc-framework-DVDPlayback = callPackage ../development/python-modules/pyobjc-framework-DVDPlayback { };
 
-  pyobjc-framework-EventKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-EventKit { });
+  pyobjc-framework-EventKit = callPackage ../development/python-modules/pyobjc-framework-EventKit { };
 
-  pyobjc-framework-ExceptionHandling = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExceptionHandling { });
+  pyobjc-framework-ExceptionHandling = callPackage ../development/python-modules/pyobjc-framework-ExceptionHandling { };
 
-  pyobjc-framework-ExecutionPolicy = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExecutionPolicy { });
+  pyobjc-framework-ExecutionPolicy = callPackage ../development/python-modules/pyobjc-framework-ExecutionPolicy { };
 
-  pyobjc-framework-ExternalAccessory = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ExternalAccessory { });
+  pyobjc-framework-ExternalAccessory = callPackage ../development/python-modules/pyobjc-framework-ExternalAccessory { };
 
-  pyobjc-framework-FileProvider = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FileProvider { });
+  pyobjc-framework-FileProvider = callPackage ../development/python-modules/pyobjc-framework-FileProvider { };
 
-  pyobjc-framework-FileProviderUI = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FileProviderUI { });
+  pyobjc-framework-FileProviderUI = callPackage ../development/python-modules/pyobjc-framework-FileProviderUI { };
 
-  pyobjc-framework-FinderSync = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FinderSync { });
+  pyobjc-framework-FinderSync = callPackage ../development/python-modules/pyobjc-framework-FinderSync { };
 
-  pyobjc-framework-FSEvents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-FSEvents { });
+  pyobjc-framework-FSEvents = callPackage ../development/python-modules/pyobjc-framework-FSEvents { };
 
-  pyobjc-framework-GameCenter = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameCenter { });
+  pyobjc-framework-GameCenter = callPackage ../development/python-modules/pyobjc-framework-GameCenter { };
 
-  pyobjc-framework-GameController = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameController { });
+  pyobjc-framework-GameController = callPackage ../development/python-modules/pyobjc-framework-GameController { };
 
-  pyobjc-framework-GameKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameKit { });
+  pyobjc-framework-GameKit = callPackage ../development/python-modules/pyobjc-framework-GameKit { };
 
-  pyobjc-framework-GameplayKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-GameplayKit { });
+  pyobjc-framework-GameplayKit = callPackage ../development/python-modules/pyobjc-framework-GameplayKit { };
 
-  pyobjc-framework-ImageCaptureCore = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ImageCaptureCore { });
+  pyobjc-framework-ImageCaptureCore = callPackage ../development/python-modules/pyobjc-framework-ImageCaptureCore { };
 
-  pyobjc-framework-IMServicePlugIn = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-IMServicePlugIn { });
+  pyobjc-framework-IMServicePlugIn = callPackage ../development/python-modules/pyobjc-framework-IMServicePlugIn { };
 
-  pyobjc-framework-InputMethodKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-InputMethodKit { });
+  pyobjc-framework-InputMethodKit = callPackage ../development/python-modules/pyobjc-framework-InputMethodKit { };
 
-  pyobjc-framework-Intents = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Intents { });
+  pyobjc-framework-Intents = callPackage ../development/python-modules/pyobjc-framework-Intents { };
 
-  pyobjc-framework-InstallerPlugins = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-InstallerPlugins { });
+  pyobjc-framework-InstallerPlugins = callPackage ../development/python-modules/pyobjc-framework-InstallerPlugins { };
 
-  pyobjc-framework-InstantMessage = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-InstantMessage { });
+  pyobjc-framework-InstantMessage = callPackage ../development/python-modules/pyobjc-framework-InstantMessage { };
 
-  pyobjc-framework-IOSurface = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-IOSurface { });
+  pyobjc-framework-IOSurface = callPackage ../development/python-modules/pyobjc-framework-IOSurface { };
 
-  pyobjc-framework-iTunesLibrary = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-iTunesLibrary { });
+  pyobjc-framework-iTunesLibrary = callPackage ../development/python-modules/pyobjc-framework-iTunesLibrary { };
 
-  pyobjc-framework-LatentSemanticMapping = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LatentSemanticMapping { });
+  pyobjc-framework-LatentSemanticMapping = callPackage ../development/python-modules/pyobjc-framework-LatentSemanticMapping { };
 
-  pyobjc-framework-LaunchServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LaunchServices { });
+  pyobjc-framework-LaunchServices = callPackage ../development/python-modules/pyobjc-framework-LaunchServices { };
 
-  pyobjc-framework-libdispatch = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-libdispatch { });
+  pyobjc-framework-libdispatch = callPackage ../development/python-modules/pyobjc-framework-libdispatch { };
 
-  pyobjc-framework-LinkPresentation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LinkPresentation { });
+  pyobjc-framework-LinkPresentation = callPackage ../development/python-modules/pyobjc-framework-LinkPresentation { };
 
-  pyobjc-framework-LocalAuthentication = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-LocalAuthentication { });
+  pyobjc-framework-LocalAuthentication = callPackage ../development/python-modules/pyobjc-framework-LocalAuthentication { };
 
-  pyobjc-framework-MapKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MapKit { });
+  pyobjc-framework-MapKit = callPackage ../development/python-modules/pyobjc-framework-MapKit { };
 
-  pyobjc-framework-MediaAccessibility = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaAccessibility { });
+  pyobjc-framework-MediaAccessibility = callPackage ../development/python-modules/pyobjc-framework-MediaAccessibility { };
 
-  pyobjc-framework-MediaLibrary = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaLibrary { });
+  pyobjc-framework-MediaLibrary = callPackage ../development/python-modules/pyobjc-framework-MediaLibrary { };
 
-  pyobjc-framework-MediaPlayer = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaPlayer { });
+  pyobjc-framework-MediaPlayer = callPackage ../development/python-modules/pyobjc-framework-MediaPlayer { };
 
-  pyobjc-framework-MediaToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MediaToolbox { });
+  pyobjc-framework-MediaToolbox = callPackage ../development/python-modules/pyobjc-framework-MediaToolbox { };
 
-  pyobjc-framework-Metal = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Metal { });
+  pyobjc-framework-Metal = callPackage ../development/python-modules/pyobjc-framework-Metal { };
 
-  pyobjc-framework-MetalKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MetalKit { });
+  pyobjc-framework-MetalKit = callPackage ../development/python-modules/pyobjc-framework-MetalKit { };
 
-  pyobjc-framework-ModelIO = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ModelIO { });
+  pyobjc-framework-ModelIO = callPackage ../development/python-modules/pyobjc-framework-ModelIO { };
 
-  pyobjc-framework-MultipeerConnectivity = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-MultipeerConnectivity { });
+  pyobjc-framework-MultipeerConnectivity = callPackage ../development/python-modules/pyobjc-framework-MultipeerConnectivity { };
 
-  pyobjc-framework-NaturalLanguage = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NaturalLanguage { });
+  pyobjc-framework-NaturalLanguage = callPackage ../development/python-modules/pyobjc-framework-NaturalLanguage { };
 
-  pyobjc-framework-NetFS = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetFS { });
+  pyobjc-framework-NetFS = callPackage ../development/python-modules/pyobjc-framework-NetFS { };
 
-  pyobjc-framework-Network = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Network { });
+  pyobjc-framework-Network = callPackage ../development/python-modules/pyobjc-framework-Network { };
 
-  pyobjc-framework-NetworkExtension = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NetworkExtension { });
+  pyobjc-framework-NetworkExtension = callPackage ../development/python-modules/pyobjc-framework-NetworkExtension { };
 
-  pyobjc-framework-NotificationCenter = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-NotificationCenter { });
+  pyobjc-framework-NotificationCenter = callPackage ../development/python-modules/pyobjc-framework-NotificationCenter { };
 
-  pyobjc-framework-OpenDirectory = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-OpenDirectory { });
+  pyobjc-framework-OpenDirectory = callPackage ../development/python-modules/pyobjc-framework-OpenDirectory { };
 
-  pyobjc-framework-OSAKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-OSAKit { });
+  pyobjc-framework-OSAKit = callPackage ../development/python-modules/pyobjc-framework-OSAKit { };
 
-  pyobjc-framework-OSLog = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-OSLog { });
+  pyobjc-framework-OSLog = callPackage ../development/python-modules/pyobjc-framework-OSLog { };
 
-  pyobjc-framework-PencilKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-PencilKit { });
+  pyobjc-framework-PencilKit = callPackage ../development/python-modules/pyobjc-framework-PencilKit { };
 
-  pyobjc-framework-Photos = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Photos { });
+  pyobjc-framework-Photos = callPackage ../development/python-modules/pyobjc-framework-Photos { };
 
-  pyobjc-framework-PhotosUI = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-PhotosUI { });
+  pyobjc-framework-PhotosUI = callPackage ../development/python-modules/pyobjc-framework-PhotosUI { };
 
-  pyobjc-framework-PreferencePanes = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-PreferencePanes { });
+  pyobjc-framework-PreferencePanes = callPackage ../development/python-modules/pyobjc-framework-PreferencePanes { };
 
-  pyobjc-framework-PushKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-PushKit { });
+  pyobjc-framework-PushKit = callPackage ../development/python-modules/pyobjc-framework-PushKit { };
 
-  pyobjc-framework-Quartz = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Quartz { });
+  pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
 
-  pyobjc-framework-QuickLookThumbnailing = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-QuickLookThumbnailing { });
+  pyobjc-framework-QuickLookThumbnailing = callPackage ../development/python-modules/pyobjc-framework-QuickLookThumbnailing { };
 
-  pyobjc-framework-SafariServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SafariServices { });
+  pyobjc-framework-SafariServices = callPackage ../development/python-modules/pyobjc-framework-SafariServices { };
 
-  pyobjc-framework-SceneKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SceneKit { });
+  pyobjc-framework-SceneKit = callPackage ../development/python-modules/pyobjc-framework-SceneKit { };
 
-  pyobjc-framework-ScreenSaver = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ScreenSaver { });
+  pyobjc-framework-ScreenSaver = callPackage ../development/python-modules/pyobjc-framework-ScreenSaver { };
 
-  pyobjc-framework-ScriptingBridge = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ScriptingBridge { });
+  pyobjc-framework-ScriptingBridge = callPackage ../development/python-modules/pyobjc-framework-ScriptingBridge { };
 
-  pyobjc-framework-SearchKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SearchKit { });
+  pyobjc-framework-SearchKit = callPackage ../development/python-modules/pyobjc-framework-SearchKit { };
 
-  pyobjc-framework-Security = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Security { });
+  pyobjc-framework-Security = callPackage ../development/python-modules/pyobjc-framework-Security { };
 
-  pyobjc-framework-SecurityFoundation = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SecurityFoundation { });
+  pyobjc-framework-SecurityFoundation = callPackage ../development/python-modules/pyobjc-framework-SecurityFoundation { };
 
-  pyobjc-framework-SecurityInterface = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SecurityInterface { });
+  pyobjc-framework-SecurityInterface = callPackage ../development/python-modules/pyobjc-framework-SecurityInterface { };
 
-  pyobjc-framework-ServiceManagement = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-ServiceManagement { });
+  pyobjc-framework-ServiceManagement = callPackage ../development/python-modules/pyobjc-framework-ServiceManagement { };
 
-  pyobjc-framework-Social = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Social { });
+  pyobjc-framework-Social = callPackage ../development/python-modules/pyobjc-framework-Social { };
 
-  pyobjc-framework-SoundAnalysis = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SoundAnalysis { });
+  pyobjc-framework-SoundAnalysis = callPackage ../development/python-modules/pyobjc-framework-SoundAnalysis { };
 
-  pyobjc-framework-Speech = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Speech { });
+  pyobjc-framework-Speech = callPackage ../development/python-modules/pyobjc-framework-Speech { };
 
-  pyobjc-framework-SpriteKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SpriteKit { });
+  pyobjc-framework-SpriteKit = callPackage ../development/python-modules/pyobjc-framework-SpriteKit { };
 
-  pyobjc-framework-StoreKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-StoreKit { });
+  pyobjc-framework-StoreKit = callPackage ../development/python-modules/pyobjc-framework-StoreKit { };
 
-  pyobjc-framework-SyncServices = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SyncServices { });
+  pyobjc-framework-SyncServices = callPackage ../development/python-modules/pyobjc-framework-SyncServices { };
 
-  pyobjc-framework-SystemConfiguration = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SystemConfiguration { });
+  pyobjc-framework-SystemConfiguration = callPackage ../development/python-modules/pyobjc-framework-SystemConfiguration { };
 
-  pyobjc-framework-SystemExtensions = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-SystemExtensions { });
+  pyobjc-framework-SystemExtensions = callPackage ../development/python-modules/pyobjc-framework-SystemExtensions { };
 
-  pyobjc-framework-UserNotifications = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-UserNotifications { });
+  pyobjc-framework-UserNotifications = callPackage ../development/python-modules/pyobjc-framework-UserNotifications { };
 
-  pyobjc-framework-VideoSubscriberAccount = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoSubscriberAccount { });
+  pyobjc-framework-VideoSubscriberAccount = callPackage ../development/python-modules/pyobjc-framework-VideoSubscriberAccount { };
 
-  pyobjc-framework-VideoToolbox = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { });
+  pyobjc-framework-VideoToolbox = callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { };
 
-  pyobjc-framework-Vision = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-Vision { });
+  pyobjc-framework-Vision = callPackage ../development/python-modules/pyobjc-framework-Vision { };
 
-  pyobjc-framework-WebKit = enabledIfDarwin (callPackage ../development/python-modules/pyobjc-framework-WebKit { });
+  pyobjc-framework-WebKit = callPackage ../development/python-modules/pyobjc-framework-WebKit { };
 
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
