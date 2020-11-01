@@ -194,7 +194,15 @@ in
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;
-        start = startplasma;
+        genStart = wm:
+         if pkg == null
+         then startplasma
+         else ''
+           export KDEWM=${wm}
+
+           ${startplasma}
+         '';
+        supportExternalWM = true;
       };
 
       security.wrappers = {
