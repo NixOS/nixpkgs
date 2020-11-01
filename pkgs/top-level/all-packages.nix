@@ -27493,6 +27493,8 @@ in
 
   nixos-generators = callPackage ../tools/nix/nixos-generators { };
 
+  extra-container = callPackage ../tools/virtualization/extra-container { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
