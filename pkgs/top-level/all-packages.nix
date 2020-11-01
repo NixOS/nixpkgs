@@ -25224,6 +25224,10 @@ in
 
   instead-launcher = callPackage ../games/instead-launcher { };
 
+  iortcw = callPackage ../games/iortcw { };
+  # used as base package for iortcw forks
+  iortcw_sp = callPackage ../games/iortcw/sp.nix { };
+
   ivan = callPackage ../games/ivan { };
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
