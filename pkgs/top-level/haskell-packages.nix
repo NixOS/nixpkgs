@@ -6,6 +6,7 @@ let
     "ghc822Binary"
     "ghc865Binary"
     "ghc8102Binary"
+    "ghc8102BinaryMinimal"
     "ghcjs"
     "ghcjs86"
     "integer-simple"
