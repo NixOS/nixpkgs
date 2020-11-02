@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-media";
-  version = "2.2.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0adeee9e654a9011f5107def06fea6838864a3514a1e5a9ed495f3a56a687cc7";
+    sha256 = "8944775725c5253614d257576d841ee68afa34f570b05c0924a7f73f1db28a24";
   };
 
   propagatedBuildInputs = [
