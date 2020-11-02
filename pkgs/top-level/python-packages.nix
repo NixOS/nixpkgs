@@ -7704,6 +7704,8 @@ in {
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
+  xmljson = callPackage ../development/python-modules/xmljson { };
+
   xmlschema = callPackage ../development/python-modules/xmlschema { };
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
