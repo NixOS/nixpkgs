@@ -2,7 +2,8 @@
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
 , ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
-, autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot }:
+, autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot
+, rpcsvc-proto }:
 
 let
   x11ProjectRoot = symlinkJoin {
@@ -25,6 +26,7 @@ in stdenv.mkDerivation rec {
   # remove with next release
   patches = [
     ./2.3.2.patch
+    ./0001-all-remove-deprecated-sys_errlist-and-replace-with-A.patch
   ];
 
   buildInputs = [
@@ -33,6 +35,7 @@ in stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     bison ncompress gawk autoPatchelfHook makeWrapper fakeroot
+    rpcsvc-proto
   ];
 
   makeFlags = [
@@ -74,6 +77,5 @@ EOF
     license = licenses.lgpl2;
     maintainers = [ maintainers.gnidorah ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    broken = true; # not compatible with glibc 2.32
   };
 }
