@@ -2,6 +2,7 @@
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
 , installShellFiles
+, removeReferencesTo, go
 }:
 
 let
@@ -52,6 +53,12 @@ buildGoPackage rec {
   '';
 
   outputs = [ "out" "man" ];
+
+  # fails with `GOFLAGS=-trimpath`
+  allowGoReference = true;
+  preFixup = ''
+    find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
+  '';
 
   meta = with stdenv.lib; {
     homepage    = "https://www.cockroachlabs.com";
