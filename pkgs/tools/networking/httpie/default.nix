@@ -2,29 +2,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";
     repo = "httpie";
     rev = version;
-    sha256 = "0caazv24jr0844c4mdx77vzwwi5m869n10wa42cydb08ppx1xxj6";
+    sha256 = "1aiy40p0i7rfb66m57hxxchym5nckqs0syxzz634safa0pfg5m77";
   };
 
   outputs = [ "out" "doc" "man" ];
 
-  propagatedBuildInputs = with python3Packages; [ pygments requests setuptools ];
+  propagatedBuildInputs = with python3Packages; [ pygments requests requests-toolbelt ];
   dontUseSetuptoolsCheck = true;
-  patches = [
-    ./strip-venv.patch
-
-    # Fix `test_ciphers_none_can_be_selected`
-    # TODO: remove on next release
-    (fetchpatch {
-      url = "https://github.com/jakubroztocil/httpie/commit/49e71d252f54871a6bc49cb1cba103d385a543b8.patch";
-      sha256 = "13b2faf50gimj7f17dlx4gmd8ph8ipgihpzfqbvmfjlbf1v95fsj";
-    })
-  ];
+  patches = [ ./strip-venv.patch ];
 
   checkInputs = with python3Packages; [
     mock
@@ -32,6 +23,8 @@ python3Packages.buildPythonApplication rec {
     pytest-httpbin
     pytestCheckHook
   ];
+
+  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     # install completions
