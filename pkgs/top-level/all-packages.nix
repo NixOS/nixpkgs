@@ -20485,8 +20485,6 @@ in
 
   denemo = callPackage ../applications/audio/denemo { };
 
-  dvb_apps  = callPackage ../applications/video/dvb-apps { };
-
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
   dvdbackup = callPackage ../applications/video/dvdbackup { };
