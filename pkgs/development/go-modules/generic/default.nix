@@ -22,6 +22,7 @@
 , deleteVendor ? false
 # Whether to run the vend tool to regenerate the vendor directory.
 # This is useful if any dependency contain C files.
+# TODO: adapt to https://github.com/go-modules-by-example/index/blob/master/012_modvendor/README.md
 , runVend ? false
 
 # We want parallel builds by default
