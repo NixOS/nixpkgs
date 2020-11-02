@@ -5,12 +5,12 @@
 
 buildDunePackage rec {
 	pname = "js_of_ocaml-compiler";
-	version = "3.7.0";
+	version = "3.7.1";
 	useDune2 = true;
 
 	src = fetchurl {
 		url = "https://github.com/ocsigen/js_of_ocaml/releases/download/${version}/js_of_ocaml-${version}.tbz";
-		sha256 = "0rw6cfkl3zlyav8q2w7grxxqjmg35mz5rgvmkiqb58nl4gmgzx6w";
+		sha256 = "0i0smhvsfx2ydmbyg5ai5cgqsfnng8rkcvys4i3fa55cw24aknrn";
 	};
 
 	nativeBuildInputs = [ ocaml findlib dune_2 cppo menhir ];
