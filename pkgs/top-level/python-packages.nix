@@ -2564,6 +2564,8 @@ in {
 
   gradient_sdk = callPackage ../development/python-modules/gradient_sdk { };
 
+  gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
