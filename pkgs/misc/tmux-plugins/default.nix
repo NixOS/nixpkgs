@@ -66,14 +66,32 @@ in rec {
 
   continuum = mkDerivation {
     pluginName = "continuum";
-    version = "unstable-2018-02-23";
+    version = "unstable-2020-10-16";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
-      rev = "1531b3770a7cf7373d15fedd239c5331b99342d1";
-      sha256 = "1w3f7gzvv1k25yfr6d1snr2z88p8f87cahrbaslmyphdxpy0fa4m";
+      rev = "26eb5ffce0b559d682b9f98c8d4b6c370ecb639b";
+      sha256 = "1glwa89bv2r92qz579a49prk3jf612cpd5hw46j4wfb35xhnj3ab";
     };
     dependencies = [ resurrect ];
+    meta = {
+      homepage = "https://github.com/tmux-plugins/tmux-continuum";
+      description = "continous saving of tmux environment";
+      longDescription =
+      ''
+        Features:
+        * continuous saving of tmux environment
+        * automatic tmux start when computer/server is turned on
+        * automatic restore when tmux is started
+
+        Together, these features enable uninterrupted tmux usage. No matter the
+        computer or server restarts, if the machine is on, tmux will be there how
+        you left it off the last time it was used.
+      '';
+      license = stdenv.lib.licenses.mit;
+      platforms = stdenv.lib.platforms.unix;
+      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+    };
   };
 
   copycat = mkDerivation {
@@ -266,12 +284,38 @@ in rec {
 
   resurrect = mkDerivation {
     pluginName = "resurrect";
-    version = "unstable-2020-03-21";
+    version = "unstable-2020-09-18";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "327c0481ad20c429b4e692e092659f8b3346b08f";
-      sha256 = "0nxfqazww36wwv49dzd39kq4jfls20834hf1458sf5pvmv5cmbyw";
+      rev = "e4825055c92e54b0c6ec572afc9b6c4723aba6c8";
+      sha256 = "0a96drkx1kpadkbxabcnvb542p75xdh2dbizvlq2lac5ldpb4hmx";
+    };
+    meta = {
+      homepage = "https://github.com/tmux-plugins/tmux-resurrect";
+      description = "Restore tmux environment after system restart";
+      longDescription =
+        ''
+          This plugin goes to great lengths to save and restore all the details
+          from your tmux environment. Here's what's been taken care of:
+
+          * all sessions, windows, panes and their order
+          * current working directory for each pane
+          * exact pane layouts within windows (even when zoomed)
+          * active and alternative session
+          * active and alternative window for each session
+          * windows with focus
+          * active pane for each window
+          * "grouped sessions" (useful feature when using tmux with multiple monitors)
+          * programs running within a pane! More details in the restoring programs doc.
+
+          Optional:
+          * restoring vim and neovim sessions
+          * restoring pane contents
+      '';
+      license = stdenv.lib.licenses.mit;
+      platforms = stdenv.lib.platforms.unix;
+      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
     };
   };
 

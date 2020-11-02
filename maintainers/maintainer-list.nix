@@ -7407,6 +7407,12 @@
     githubId = 1217934;
     name = "José Romildo Malaquias";
   };
+  ronanmacf = {
+    email = "macfhlar@tcd.ie";
+    github = "ronanmacf";
+    githubId = 25930627;
+    name = "Ronan Mac Fhlannchadha";
+  };
   rongcuid = {
     email = "rongcuid@outlook.com";
     github = "rongcuid";
