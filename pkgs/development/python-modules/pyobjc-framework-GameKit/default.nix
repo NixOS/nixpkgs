@@ -33,7 +33,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-GameKit" ];
+  pythonImportsCheck = [ "GameKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework GameKit on Mac OS X";

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-GameController" ];
+  pythonImportsCheck = [ "GameController" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework GameController on Mac OS X";

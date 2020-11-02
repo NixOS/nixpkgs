@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-MultipeerConnectivity" ];
+  pythonImportsCheck = [ "MultipeerConnectivity" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework MultipeerConnectivity on Mac OS X";

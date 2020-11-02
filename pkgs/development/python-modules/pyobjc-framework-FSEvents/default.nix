@@ -31,7 +31,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-FSEvents" ];
+  pythonImportsCheck = [ "FSEvents" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework FSEvents on Mac OS X";

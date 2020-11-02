@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-ScreenSaver" ];
+  pythonImportsCheck = [ "ScreenSaver" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework ScreenSaver on Mac OS X";

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-NotificationCenter" ];
+  pythonImportsCheck = [ "NotificationCenter" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework NotificationCenter on Mac OS X";

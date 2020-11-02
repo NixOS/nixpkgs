@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-ServiceManagement" ];
+  pythonImportsCheck = [ "ServiceManagement" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework ServiceManagement on Mac OS X";

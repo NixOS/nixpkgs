@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-AutomaticAssessmentConfiguration" ];
+  pythonImportsCheck = [ "AutomaticAssessmentConfiguration" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework AutomaticAssessmentConfiguration on Mac OS X";

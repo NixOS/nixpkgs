@@ -38,6 +38,8 @@ buildPythonPackage rec {
     runHook preCheck
 
     ${python.interpreter} setup.py test --verbosity=3
+
+    runHook postCheck
   '';
 
   preCheck = ''

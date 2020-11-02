@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-StoreKit" ];
+  pythonImportsCheck = [ "StoreKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework StoreKit on Mac OS X";

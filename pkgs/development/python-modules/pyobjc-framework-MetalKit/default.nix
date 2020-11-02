@@ -33,7 +33,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-MetalKit" ];
+  pythonImportsCheck = [ "MetalKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework MetalKit on Mac OS X";

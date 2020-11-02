@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-PhotosUI" ];
+  pythonImportsCheck = [ "PhotosUI" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework PhotosUI on Mac OS X";

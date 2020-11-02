@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-Social" ];
+  pythonImportsCheck = [ "Social" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework Social on Mac OS X";

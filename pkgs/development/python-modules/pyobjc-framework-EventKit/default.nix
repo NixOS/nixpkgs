@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-EventKit" ];
+  pythonImportsCheck = [ "EventKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework EventKit on Mac OS X";

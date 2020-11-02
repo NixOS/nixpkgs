@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-DictionaryServices" ];
+  pythonImportsCheck = [ "DictionaryServices" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework DictionaryServices on Mac OS X";

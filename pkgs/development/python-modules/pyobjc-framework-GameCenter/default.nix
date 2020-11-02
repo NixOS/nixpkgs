@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-GameCenter" ];
+  pythonImportsCheck = [ "GameCenter" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework GameCenter on Mac OS X";

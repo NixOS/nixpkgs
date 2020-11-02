@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-DiskArbitration" ];
+  pythonImportsCheck = [ "DiskArbitration" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework DiskArbitration on Mac OS X";

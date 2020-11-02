@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-ModelIO" ];
+  pythonImportsCheck = [ "ModelIO" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework ModelIO on Mac OS X";

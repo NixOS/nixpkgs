@@ -28,7 +28,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-MediaLibrary" ];
+  pythonImportsCheck = [ "MediaLibrary" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework MediaLibrary on Mac OS X";

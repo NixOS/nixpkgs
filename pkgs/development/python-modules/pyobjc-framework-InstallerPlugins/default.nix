@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-InstallerPlugins" ];
+  pythonImportsCheck = [ "InstallerPlugins" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework InstallerPlugins on Mac OS X";

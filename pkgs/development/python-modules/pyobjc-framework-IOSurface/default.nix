@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-IOSurface" ];
+  pythonImportsCheck = [ "IOSurface" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework IOSurface on Mac OS X";

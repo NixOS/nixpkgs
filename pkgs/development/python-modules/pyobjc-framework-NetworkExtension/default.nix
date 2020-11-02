@@ -33,7 +33,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-NetworkExtension" ];
+  pythonImportsCheck = [ "NetworkExtension" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework NetworkExtension on Mac OS X";

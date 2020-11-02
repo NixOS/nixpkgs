@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-DiscRecording" ];
+  pythonImportsCheck = [ "DiscRecording" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework DiscRecording on Mac OS X";

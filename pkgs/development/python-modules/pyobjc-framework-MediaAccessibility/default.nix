@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-MediaAccessibility" ];
+  pythonImportsCheck = [ "MediaAccessibility" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework MediaAccessibility on Mac OS X";

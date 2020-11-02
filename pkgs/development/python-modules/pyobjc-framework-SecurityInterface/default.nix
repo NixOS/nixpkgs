@@ -33,7 +33,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-SecurityInterface" ];
+  pythonImportsCheck = [ "SecurityInterface" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework SecurityInterface on Mac OS X";

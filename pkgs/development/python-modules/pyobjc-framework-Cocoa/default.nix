@@ -18,9 +18,6 @@ buildPythonPackage rec {
     # Hard code correct SDK version
     substituteInPlace pyobjc_setup.py \
       --replace 'os.path.basename(data)[6:-4]' '"${darwin.apple_sdk.sdk.version}"'
-
-    # symlink TestSupport.py because Python only checks the first directory in PYTHONPATH
-    ln -s "${pyobjc-core.outPath}/lib/${python.libPrefix}/site-packages/PyObjCTools/TestSupport.py" Lib/PyObjCTools/TestSupport.py
   '';
 
   buildInputs = with darwin.apple_sdk.frameworks; [
@@ -40,13 +37,22 @@ buildPythonPackage rec {
     runHook preCheck
 
     ${python.interpreter} setup.py test --verbosity=3
+
+    runHook postCheck
   '';
 
   preCheck = ''
     # testConstants in PyObjCTest.test_cfsocket.TestSocket returns: Segmentation fault: 11
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+
+    # symlink TestSupport.py because Python only checks the first directory in PYTHONPATH
+    ln -s "${pyobjc-core.outPath}/lib/${python.libPrefix}/site-packages/PyObjCTools/TestSupport.py" Lib/PyObjCTools/TestSupport.py
   '';
 
+  postCheck = ''
+    # If the symlink exists in the final package the modules can't be used in a Python environment because the file would be duplicated
+    rm Lib/PyObjCTools/TestSupport.py
+  '';
   meta = with stdenv.lib; {
     description = "Wrappers for the framework Cocoa on Mac OS X";
     homepage = "https://pythonhosted.org/pyobjc-framework-Cocoa/";

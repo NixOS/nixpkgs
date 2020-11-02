@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-SearchKit" ];
+  pythonImportsCheck = [ "SearchKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework SearchKit on Mac OS X";

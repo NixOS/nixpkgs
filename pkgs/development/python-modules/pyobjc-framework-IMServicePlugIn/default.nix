@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-IMServicePlugIn" ];
+  pythonImportsCheck = [ "IMServicePlugIn" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework IMServicePlugIn on Mac OS X";

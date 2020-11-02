@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-LocalAuthentication" ];
+  pythonImportsCheck = [ "LocalAuthentication" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework LocalAuthentication on Mac OS X";

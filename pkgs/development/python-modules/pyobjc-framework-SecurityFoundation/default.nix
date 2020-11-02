@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-SecurityFoundation" ];
+  pythonImportsCheck = [ "SecurityFoundation" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework SecurityFoundation on Mac OS X";

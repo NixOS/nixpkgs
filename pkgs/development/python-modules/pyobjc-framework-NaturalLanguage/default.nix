@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-NaturalLanguage" ];
+  pythonImportsCheck = [ "NaturalLanguage" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework NaturalLanguage on Mac OS X";

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-CoreServices" ];
+  pythonImportsCheck = [ "CoreServices" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework CoreServices on Mac OS X";

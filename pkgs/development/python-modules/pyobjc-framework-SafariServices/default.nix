@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-SafariServices" ];
+  pythonImportsCheck = [ "SafariServices" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework SafariServices on Mac OS X";

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-DiscRecordingUI" ];
+  pythonImportsCheck = [ "DiscRecordingUI" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework DiscRecordingUI on Mac OS X";

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-Intents" ];
+  pythonImportsCheck = [ "Intents" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework Intents on Mac OS X";

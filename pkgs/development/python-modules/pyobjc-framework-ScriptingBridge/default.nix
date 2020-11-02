@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-ScriptingBridge" ];
+  pythonImportsCheck = [ "ScriptingBridge" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework ScriptingBridge on Mac OS X";

@@ -34,7 +34,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-Quartz" ];
+  pythonImportsCheck = [ "Quartz" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework Quartz on Mac OS X";

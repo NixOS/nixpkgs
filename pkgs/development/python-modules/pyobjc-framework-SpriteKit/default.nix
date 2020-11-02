@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-SpriteKit" ];
+  pythonImportsCheck = [ "SpriteKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework SpriteKit on Mac OS X";

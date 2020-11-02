@@ -31,7 +31,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-CoreText" ];
+  pythonImportsCheck = [ "CoreText" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework CoreText on Mac OS X";

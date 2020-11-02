@@ -27,7 +27,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-DVDPlayback" ];
+  pythonImportsCheck = [ "DVDPlayback" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework DVDPlayback on Mac OS X";

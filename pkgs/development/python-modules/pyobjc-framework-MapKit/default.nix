@@ -33,7 +33,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-MapKit" ];
+  pythonImportsCheck = [ "MapKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework MapKit on Mac OS X";

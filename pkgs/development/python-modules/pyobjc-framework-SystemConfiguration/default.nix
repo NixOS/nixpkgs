@@ -31,7 +31,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-SystemConfiguration" ];
+  pythonImportsCheck = [ "SystemConfiguration" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework SystemConfiguration on Mac OS X";

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-Photos" ];
+  pythonImportsCheck = [ "Photos" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework Photos on Mac OS X";

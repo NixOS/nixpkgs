@@ -32,7 +32,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-MediaToolbox" ];
+  pythonImportsCheck = [ "MediaToolbox" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework MediaToolbox on Mac OS X";

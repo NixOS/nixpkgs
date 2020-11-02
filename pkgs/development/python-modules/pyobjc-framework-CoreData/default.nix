@@ -31,7 +31,7 @@ buildPythonPackage rec {
   hardeningDisable = [ "strictoverflow" ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportcheck = [ "pyobjc-framework-CoreData" ];
+  pythonImportsCheck = [ "CoreData" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework CoreData on Mac OS X";
