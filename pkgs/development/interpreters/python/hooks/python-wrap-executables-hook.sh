@@ -1,7 +1,14 @@
-# Wrap (and patch) Python executables
+# shellcheck shell=bash
+appsWrapperArgs=()
+pythonWrapperArgs=()
+
+
 
 pythonWrapExecutablesPhase() {
-    wrapPythonPrograms
+    # The $pythonPath variable may be passed in 
+    # from the buildPythonPackage function.
+    buildPythonPath "$out $pythonPath"
+    pythonWrapperArgs+=(--set PYTHONPATH )
 }
 
 if [ -z "${dontUsePythonWrapExecutables-}" ]; then

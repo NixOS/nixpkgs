@@ -4,6 +4,7 @@
 , callPackage
 , makeSetupHook
 , makeWrapper
+, wrapAppsHook
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
@@ -125,7 +126,7 @@ in rec {
   pythonWrapExecutablesHook = callPackage ({ wrapPython }:
     makeSetupHook {
       name = "python-wrap-hook.sh";
-      deps = [ wrapPython ];
+      deps = [ wrapPython wrapAppsHook ];
     } ./python-wrap-executables-hook.sh) {};
 
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
