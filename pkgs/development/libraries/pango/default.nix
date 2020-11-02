@@ -27,6 +27,13 @@ in stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/pango/commit/fe1ee773310bac83d8e5d3c062b13a51fb5fb4ad.patch";
       sha256 = "1px66g31l2jx4baaqi4md59wlmvw0ywgspn6zr919fxl4h1kkh0h";
     })
+    # Fix issue with Pango which is breaking Pidgin
+    # See https://gitlab.gnome.org/GNOME/pango/-/issues/490
+    # Remove on next release.
+    (pkgs.fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/pango/-/commit/948e0b0cb5319adfa956f08c40dd1ea85855a424.patch";
+      sha256 = "03vhqpnsq6gzvsd0sz7n5126zrp1b4kfbbfmhc1pmay3rp2ifz7w";
+    })
   ];
 
   # FIXME: docs fail on darwin
