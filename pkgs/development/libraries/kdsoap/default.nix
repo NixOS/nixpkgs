@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "1.9.0";
+  version = "1.9.1";
 in
 
 mkDerivation {
@@ -24,7 +24,7 @@ mkDerivation {
   };
   src = fetchurl {
     url = "https://github.com/KDAB/KDSoap/releases/download/kdsoap-${version}/kdsoap-${version}.tar.gz";
-    sha256 = "0a28k48cmagqxhaayyrqnxsx1zbvw4f06dgs16kl33xhbinn5fg3";
+    sha256 = "09rxx7h98niawz7i94g279c2rgh7xmq1hqxwlyzwsaqsx4kfl850";
   };
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ cmake ];
