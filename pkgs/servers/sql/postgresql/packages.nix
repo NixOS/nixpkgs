@@ -51,7 +51,11 @@ self: super: {
 
     temporal_tables = super.callPackage ./ext/temporal_tables.nix { };
 
-    timescaledb = super.callPackage ./ext/timescaledb.nix { };
+    timescaledb =
+      super.callPackage ./ext/timescaledb.nix { build-unfree-tsl = false; };
+
+    timescaledb-tsl =
+      super.callPackage ./ext/timescaledb.nix { build-unfree-tsl = true; };
 
     tsearch_extras = super.callPackage ./ext/tsearch_extras.nix { };
 

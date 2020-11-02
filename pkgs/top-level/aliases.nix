@@ -447,6 +447,7 @@ mapAliases ({
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
   timescaledb = postgresqlPackages.timescaledb;
+  timescaledb-tsl = postgresqlPackages.timescaledb-tsl;
   tsearch_extras = postgresqlPackages.tsearch_extras;
   cstore_fdw = postgresqlPackages.cstore_fdw;
   pg_hll = postgresqlPackages.pg_hll;

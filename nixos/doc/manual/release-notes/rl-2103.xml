@@ -235,6 +235,12 @@
      <literal>unbound-control</literal> without passing a custom configuration location.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>timescaledb</package>'s non-free <literal>tsl</literal> library has been moved to
+     <package>timescaledb-tsl</package>.  This does not affect the Postgresql extension.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
