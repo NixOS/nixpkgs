@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
+  stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, wrapApps,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
@@ -172,7 +172,7 @@ let
 
       wrapQtAppsHook = makeSetupHook {
         deps =
-          [ self.qtbase.dev makeWrapper ]
+          [ self.qtbase.dev warpApps ]
           ++ optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };
