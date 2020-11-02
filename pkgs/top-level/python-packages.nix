@@ -737,6 +737,8 @@ in {
 
   azure-synapse-accesscontrol = callPackage ../development/python-modules/azure-synapse-accesscontrol { };
 
+  azure-synapse-artifacts = callPackage ../development/python-modules/azure-synapse-artifacts { };
+
   azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
 
   b2sdk = callPackage ../development/python-modules/b2sdk { };
