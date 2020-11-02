@@ -7502,7 +7502,7 @@ in
 
   texstudio = libsForQt5.callPackage ../applications/editors/texstudio { };
 
-  textadept = callPackage ../applications/editors/textadept { };
+  textadept = callPackage ../applications/editors/textadept/10 { };
 
   texworks = libsForQt514.callPackage ../applications/editors/texworks { };
 
