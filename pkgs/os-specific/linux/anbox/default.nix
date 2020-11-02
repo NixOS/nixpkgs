@@ -25,6 +25,7 @@
 , systemd
 , writeText
 , writeShellScript
+, nixosTests
 }:
 
 let
@@ -151,6 +152,8 @@ stdenv.mkDerivation rec {
       --subst-var out
     chmod +x $out/bin/anbox-application-manager
   '';
+
+  passthru.tests = { inherit (nixosTests) anbox; };
 
   passthru.image = callPackage ./postmarketos-image.nix { };
   passthru.postmarketos-image = callPackage ./anbox-image.nix { };
