@@ -1,12 +1,12 @@
 { stdenv, lib, python, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.12.1";
+  version = "2.14.0";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "14m2zjgaszrki34kva23vdsl0nxxifz8r9i54ld3idi8hj3nx0q3";
+    sha256 = "0rihxkdckfkqzrr3jc8jpdpjg3pgz5jymyz19lpva8qqln7cmzpy";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -113,6 +113,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-multiapi-storage
     azure-storage-blob
     azure-synapse-accesscontrol
+    azure-synapse-artifacts
     azure-synapse-spark
     colorama
     cryptography
@@ -164,9 +165,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   # almost the entire test suite requires an azure account setup and networking
   # ensure that the azure namespaces are setup correctly and that azure.cli can be accessed
   checkPhase = ''
-    cd azure # avoid finding local copy
-    ${py.interpreter} -c 'import azure.cli.core; assert "${version}" == azure.cli.core.__version__'
-    HOME=$TMPDIR ${py.interpreter} -m azure.cli --help
+    HOME=$TMPDIR $out/bin/az --help > /dev/null
   '';
 
   # ensure these namespaces are able to be accessed
