@@ -134,7 +134,7 @@ in stdenv.mkDerivation rec {
     isCross = stdenv.hostPlatform != stdenv.buildPlatform;
     nss = if isCross then buildPackages.nss.tools else "$out";
   in
-  (stdenv.lib.optionalString enableFIPS ''
+  (stdenv.lib.optionalString enableFIPS (''
     for libname in freebl3 nssdbm3 softokn3
     do '' +
     (if stdenv.isDarwin
@@ -147,7 +147,7 @@ in stdenv.mkDerivation rec {
      '') + ''
         ${nss}/bin/shlibsign -v -i "$libfile"
     done
-  '') +
+  '')) +
   ''
     moveToOutput bin "$tools"
     moveToOutput bin/nss-config "$dev"
