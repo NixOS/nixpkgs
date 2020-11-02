@@ -24,7 +24,7 @@ let
     withPython2 ? false
     /* the function you would have passed to python.withPackages */
     , extraPython2Packages ? (_: [ ])
-    ,  withPython3 ? true
+    , withPython3 ? true
     /* the function you would have passed to python3.withPackages */
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
@@ -44,7 +44,6 @@ let
           ln -sf ${ruby}/bin/* $out/bin
         '';
       };
-
 
       requiredPlugins = vimUtils.requiredPlugins configure;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
@@ -104,9 +103,11 @@ let
       wrapperArgs = makeWrapperArgs;
       inherit neovimRcContent;
       inherit manifestRc;
-      inherit rubyEnv;
       inherit python2Env;
       inherit python3Env;
+      inherit withNodeJs;
+    } // lib.optionalAttrs withRuby {
+      inherit rubyEnv;
     };
 
     genProviderSettings = prog: withProg:

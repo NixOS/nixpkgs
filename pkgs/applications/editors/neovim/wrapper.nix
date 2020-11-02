@@ -18,8 +18,8 @@ let
     , manifestRc ? null
     , withPython2 ? true, python2Env ? null
     , withPython3 ? true,  python3Env ? null
-    , withNodeJs? false
-    , withRuby ? true, rubyEnv ? null
+    , withNodeJs ? false
+    , rubyEnv ? null
     , vimAlias ? false
     , viAlias ? false
     , ...
@@ -52,7 +52,7 @@ let
       + optionalString withPython3 ''
         makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
       ''
-      + optionalString withRuby ''
+      + optionalString (rubyEnv != null) ''
         ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
       ''
       + optionalString withNodeJs ''
