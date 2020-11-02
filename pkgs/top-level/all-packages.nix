@@ -22378,7 +22378,7 @@ in
     if stdenv.isDarwin then
       callPackage ../applications/audio/musescore/darwin.nix { }
     else
-      libsForQt514.callPackage ../applications/audio/musescore { };
+      libsForQt5.callPackage ../applications/audio/musescore { };
 
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
