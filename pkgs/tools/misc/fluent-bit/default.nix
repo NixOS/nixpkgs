@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake flex bison ];
 
+  patches = [ ./fix-luajit-darwin.patch ];
+
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
       --replace /lib/systemd $out/lib/systemd
