@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
-  version = "78.1.0";
+  version = "78.4.0";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "18k47dl9hbnpqw69csxjar5dhwa7r8k7j9kvcfgmwb1iv6ba601n";
+    sha256 = "1z3hj45bnd12z3g6ajv9qrgclca7fymi1sxj9l9nh9q6y6xz0g4f";
   };
 
   outputs = [ "out" "dev" ];
@@ -50,18 +50,6 @@ stdenv.mkDerivation rec {
     nspr
     readline
     zlib
-  ];
-
-  patches = [
-    # https://mail.gnome.org/archives/distributor-list/2020-August/msg00000.html
-    (fetchpatch {
-      url = "https://github.com/ptomato/mozjs/commit/b2974f8a6558d2dc4517b49ee313a9900a853285.patch";
-      sha256 = "1bl5mbx7gmad6fmpc427263i1ychi2linpg69kxlr2w91r5m6ji3";
-    })
-    (fetchpatch {
-      url = "https://github.com/ptomato/mozjs/commit/e5a2eb99f653ae03c67e536df1d55d265a0a1605.patch";
-      sha256 = "0xhy63nw2byibmjc41yh6dwpg282nylganrs5aprn9pbqbcpsvif";
-    })
   ];
 
   preConfigure = ''
@@ -101,9 +89,9 @@ stdenv.mkDerivation rec {
 
   # Remove unnecessary static lib
   preFixup = ''
-    moveToOutput bin/js60-config "$dev"
+    moveToOutput bin/js78-config "$dev"
     rm $out/lib/libjs_static.ajs
-    ln -s $out/bin/js60 $out/bin/js
+    ln -s $out/bin/js78 $out/bin/js
   '';
 
   enableParallelBuilding = true;
@@ -112,7 +100,7 @@ stdenv.mkDerivation rec {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
-    maintainers = [ maintainers.abbradar ];
+    maintainers = with maintainers; [ abbradar lostnet ];
     platforms = platforms.linux;
   };
 }
