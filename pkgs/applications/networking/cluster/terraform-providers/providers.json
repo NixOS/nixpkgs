@@ -367,13 +367,6 @@
     "sha256": "00l3cwvyyjk0n3j535qfj3bsf1s5l07786gnxycj0f8vz3a06bcq",
     "version": "1.6.0"
   },
-  "hcloud": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-hcloud",
-    "rev": "v1.16.0",
-    "sha256": "09v2bg4ffyh4ibz449dygxgd7mvjgh4b2r242l3cwi7pzn66imrz",
-    "version": "1.16.0"
-  },
   "hedvig": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-hedvig",
