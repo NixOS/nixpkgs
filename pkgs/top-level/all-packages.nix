@@ -1146,6 +1146,8 @@ in
 
   fitnesstrax = callPackage ../applications/misc/fitnesstrax/default.nix { };
 
+  flood = callPackage ../applications/networking/flood { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genpass = callPackage ../tools/security/genpass {
