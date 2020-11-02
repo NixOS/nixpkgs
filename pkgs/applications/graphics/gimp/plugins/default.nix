@@ -85,22 +85,6 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     };
   };
 
-  focusblur = pluginDerivation rec {
-    /* menu:
-       Blur/Focus Blur
-    */
-    name = "focusblur-3.2.6";
-    buildInputs = with pkgs; [ fftwSinglePrec ];
-    patches = [ ./patches/focusblur-glib.patch ];
-    postInstall = "fail";
-    installPhase = "installPlugins src/focusblur";
-    src = fetchurl {
-      url = "http://registry.gimp.org/files/${name}.tar.bz2";
-      sha256 = "1gqf3hchz7n7v5kpqkhqh8kwnxbsvlb5cr2w2n7ngrvl56f5xs1h";
-    };
-    meta.broken = true;
-  };
-
   resynthesizer = pluginDerivation rec {
     /* menu:
       Edit/Fill with pattern seamless...
