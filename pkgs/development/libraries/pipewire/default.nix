@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.13";
+  version = "0.3.15";
 
   outputs = [
     "out"
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "19j5kmb7iaivkq2agfzncfm2qms41ckqi0ddxvhpc91ihwprdc5w";
+    sha256 = "1lmsn13pbr0cigb5ri9nd3102ffbaf8nsz5c8aawf6lsz7mhkx9x";
   };
 
   patches = [
@@ -65,13 +65,6 @@ stdenv.mkDerivation rec {
     ./alsa-profiles-use-libdir.patch
     # Move installed tests into their own output.
     ./installed-tests-path.patch
-
-    # TODO Remove this on next update
-    # Fixes rpath referencecs.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/pipewire/pipewire/commit/2e3556fa128b778be62a7ffad5fbe78393035825.diff";
-      sha256 = "039yysb8j1aiqml54rxnaqfmzqz1b6m8sv5w3vz52grvav3kyr1l";
-    })
   ];
 
   nativeBuildInputs = [
