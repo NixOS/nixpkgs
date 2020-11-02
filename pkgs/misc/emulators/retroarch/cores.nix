@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, Cocoa, CoreAudioKit, ForceFeedback, libobjc, libiconv
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, Cocoa, CoreAudioKit, ForceFeedback, Foundation, libiconv
 , buildPackages }:
 
 let
@@ -351,12 +351,11 @@ in with stdenv.lib.licenses;
     extraBuildInputs = [ libGLU libGL pcre sfml gettext hidapi ]
       ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ])
       ++ stdenv.lib.optionals stdenv.isLinux [ libevdev udev ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa CoreAudioKit ForceFeedback ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa CoreAudioKit ForceFeedback Foundation ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
       "-DLIBRETRO=ON"
-      "-DLIBRETRO_STATIC=1"
       "-DENABLE_QT=OFF"
       "-DENABLE_LTO=OFF"
       "-DUSE_UPNP=OFF"
@@ -556,7 +555,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU libGL portaudio python27 xorg.libX11 ]
       ++ stdenv.lib.optional stdenv.isLinux alsaLib
-      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback Foundation ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -853,7 +852,7 @@ in with stdenv.lib.licenses;
     license = bsd2;
     extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
     extraBuildInputs = [ boost ]
-      ++ stdenv.lib.optional stdenv.isDarwin libobjc;
+      ++ stdenv.lib.optional stdenv.isDarwin Foundation;
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
     postBuild = "mv Source/ui_libretro/play_libretro${stdenv.hostPlatform.extensions.sharedLibrary} play_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -873,6 +872,12 @@ in with stdenv.lib.licenses;
       ++ stdenv.lib.optional stdenv.isDarwin AppKit;
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
+    postPatch = ''
+      ${stdenv.lib.optionalString stdenv.isDarwin ''
+      # -Bsymbolic is not supported by the macOS toolchain.
+      sed -i 's/-Wl,-Bsymbolic//' libretro/CMakeLists.txt
+      ''}
+    '';
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
   };
 
