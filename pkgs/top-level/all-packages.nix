@@ -19414,6 +19414,8 @@ in
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-emoji-blob-bin noto-fonts-extra;
 
+  nuclear = callPackage ../applications/audio/nuclear { };
+
   nullmailer = callPackage ../servers/mail/nullmailer {
     stdenv = gccStdenv;
   };
