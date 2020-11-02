@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.8.0";
+  version = "5.9.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0vk4vickrpahdhl3zazr2qn2bf99v5549ncirjpwiy4h0a4izkfg";
+    sha256 = "1kys6dmhrl43iaq95n5sh02p39d7bq8i5y672qrzgwnwpjaaqpd2";
   };
 
   preConfigure = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -e '/ARPDDIR/d' -i Makefile
     # TODO: Drop temporary version fix for 5.8 (53159d81) once 5.9 is out:
     substituteInPlace include/version.h \
-      --replace "v5.7.0-77-gb687d1067169" "5.8.0"
+      --replace "v5.7.0-77-gb687d1067169" "5.9.0"
   '';
 
   outputs = [ "out" "dev" ];
