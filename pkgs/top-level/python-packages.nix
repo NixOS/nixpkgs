@@ -3754,6 +3754,8 @@ in {
 
   mlrose = callPackage ../development/python-modules/mlrose { };
 
+  mlxtend = callPackage ../development/python-modules/mlxtend { };
+
   mmh3 = callPackage ../development/python-modules/mmh3 { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
