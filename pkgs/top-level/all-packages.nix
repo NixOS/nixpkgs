@@ -16674,8 +16674,6 @@ in
 
   frab = callPackage ../servers/web-apps/frab { };
 
-  freepops = callPackage ../servers/mail/freepops { };
-
   freeradius = callPackage ../servers/freeradius { };
 
   freeswitch = callPackage ../servers/sip/freeswitch {
