@@ -8138,8 +8138,6 @@ in
 
   unar = callPackage ../tools/archivers/unar { stdenv = clangStdenv; };
 
-  unarj = callPackage ../tools/archivers/unarj { };
-
   unp = callPackage ../tools/archivers/unp { };
 
   unshield = callPackage ../tools/archivers/unshield { };
