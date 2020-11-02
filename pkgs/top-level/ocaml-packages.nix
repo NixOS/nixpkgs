@@ -543,6 +543,8 @@ let
 
     mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
 
+    mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
+
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
