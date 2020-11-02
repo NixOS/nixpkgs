@@ -805,6 +805,8 @@ in
 
   analog = callPackage ../tools/admin/analog {};
 
+  angle-grinder = callPackage ../tools/text/angle-grinder {};
+
   ansifilter = callPackage ../tools/text/ansifilter {};
 
   antora = callPackage ../development/tools/documentation/antora {};
