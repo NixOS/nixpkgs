@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${stdenv.lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
+    "--prefix" "PYTHONPATH" ":" "${stdenv.lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.computeRequiredPythonModules propagatedBuildInputs))}"
     "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
   ];
 

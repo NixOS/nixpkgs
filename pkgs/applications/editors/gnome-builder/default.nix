@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
+  pythonPath = with python3.pkgs; computeRequiredPythonModules [ pygobject3 ];
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"

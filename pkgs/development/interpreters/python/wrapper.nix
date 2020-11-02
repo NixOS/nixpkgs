@@ -4,7 +4,7 @@
 , postBuild ? ""
 , ignoreCollisions ? false
 , permitUserSite ? false
-, requiredPythonModules
+, computeRequiredPythonModules
 # Wrap executables with the given argument.
 , makeWrapperArgs ? []
 , }:
@@ -12,7 +12,7 @@
 # Create a python executable that knows about additional packages.
 let
   env = let
-    paths = requiredPythonModules (extraLibs ++ [ python ] ) ;
+    paths = computeRequiredPythonModules (extraLibs ++ [ python ] ) ;
     pythonPath = "${placeholder "out"}/${python.sitePackages}";
     pythonExecutable = "${placeholder "out"}/bin/${python.executable}";
   in buildEnv {

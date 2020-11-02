@@ -61,13 +61,13 @@ let
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
 
   # Get list of required Python modules given a list of derivations.
-  requiredPythonModules = drvs: let
+  computeRequiredPythonModules = drvs: let
     modules = filter hasPythonModule drvs;
   in unique ([python] ++ modules ++ concatLists (catAttrs "requiredPythonModules" modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
-  makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
+  makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (computeRequiredPythonModules drvs);
 
   removePythonPrefix = name:
     removePrefix namePrefix name;
@@ -79,7 +79,7 @@ let
       passthru = (oldAttrs.passthru or {})// {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
+        requiredPythonModules = computeRequiredPythonModules drv.propagatedBuildInputs;
       };
     });
 
@@ -103,7 +103,7 @@ in {
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
-  inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
+  inherit hasPythonModule computeRequiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;
 

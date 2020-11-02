@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook autoreconfHook
   ];
 
-  pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
+  pythonPath = with python3Packages; computeRequiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
 
   configureFlags = [
     "--with-udev-rules"
