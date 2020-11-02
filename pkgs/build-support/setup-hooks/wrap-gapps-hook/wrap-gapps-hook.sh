@@ -1,5 +1,9 @@
 # shellcheck shell=bash
+appsWrapperArgs=()
 gappsWrapperArgs=()
+
+# Inherit arguments given in mkDerivation
+gappsWrapperArgs=( ${gappsWrapperArgs-} )
 
 find_gio_modules() {
     if [ -d "$1/lib/gio/modules" ] && [ -n "$(ls -A "$1/lib/gio/modules")" ] ; then
@@ -36,58 +40,9 @@ gappsWrapperArgsHook() {
             gappsWrapperArgs+=(--prefix "$v" : "${!v}")
         fi
     done
+
+    # Extend the appsWrapperArgs for wrapAppsHook
+    appsWrapperArgs+=gappsWrapperArgs
 }
 
 preFixupPhases+=" gappsWrapperArgsHook"
-
-wrapGApp() {
-    local program="$1"
-    shift 1
-    wrapProgram "$program" "${gappsWrapperArgs[@]}" "$@"
-}
-
-# Note: $gappsWrapperArgs still gets defined even if ${dontWrapGApps-} is set.
-wrapGAppsHook() {
-    # guard against running multiple times (e.g. due to propagation)
-    [ -z "$wrapGAppsHookHasRun" ] || return 0
-    wrapGAppsHookHasRun=1
-
-    if [[ -z "${dontWrapGApps:-}" ]]; then
-        targetDirsThatExist=()
-        targetDirsRealPath=()
-
-        # wrap binaries
-        targetDirs=("${prefix}/bin" "${prefix}/libexec")
-        for targetDir in "${targetDirs[@]}"; do
-            if [[ -d "${targetDir}" ]]; then
-                targetDirsThatExist+=("${targetDir}")
-                targetDirsRealPath+=("$(realpath "${targetDir}")/")
-                find "${targetDir}" -type f -executable -print0 |
-                    while IFS= read -r -d '' file; do
-                        echo "Wrapping program '${file}'"
-                        wrapGApp "${file}"
-                    done
-            fi
-        done
-
-        # wrap links to binaries that point outside targetDirs
-        # Note: links to binaries within targetDirs do not need
-        #       to be wrapped as the binaries have already been wrapped
-        if [[ ${#targetDirsThatExist[@]} -ne 0 ]]; then
-            find "${targetDirsThatExist[@]}" -type l -xtype f -executable -print0 |
-                while IFS= read -r -d '' linkPath; do
-                    linkPathReal=$(realpath "${linkPath}")
-                    for targetPath in "${targetDirsRealPath[@]}"; do
-                        if [[ "$linkPathReal" == "$targetPath"* ]]; then
-                            echo "Not wrapping link: '$linkPath' (already wrapped)"
-                            continue 2
-                        fi
-                    done
-                    echo "Wrapping link: '$linkPath'"
-                    wrapGApp "${linkPath}"
-                done
-        fi
-    fi
-}
-
-fixupOutputHooks+=(wrapGAppsHook)

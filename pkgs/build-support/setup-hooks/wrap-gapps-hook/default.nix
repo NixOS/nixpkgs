@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , makeSetupHook
-, makeWrapper
+, wrapAppsHook
 , gobject-introspection
 , gtk3
 , librsvg
@@ -32,7 +32,7 @@ makeSetupHook {
     librsvg
 
     # We use the wrapProgram function.
-    makeWrapper
+    wrapAppsHook
   ];
   substitutions = {
     passthru.tests = let
