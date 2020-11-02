@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   pname = "libavif";
   version = "0.8.1";
 
+  outputs = [ "out" "gdkPixbufLoader" ];
+
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = pname;
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # reco: encode libaom slowest but best, decode dav1d fastest
 
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "gdkPixbufLoader"}/${gdk-pixbuf.moduleDir}";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -48,8 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/thumbnailers
-    cat ${./thumbnailer} | sed "s|@bindir@|${gdk-pixbuf}/bin|g" > $out/share/thumbnailers/libavif.thumbnailer
+    mkdir -p ${placeholder "gdkPixbufLoader"}/share/thumbnailers
+    substitute "${./thumbnailer}" "${placeholder "gdkPixbufLoader"}/share/thumbnailers/libavif.thumbnailer" --subst-var-by bindir "${gdk-pixbuf}/bin"
   '';
 
   meta = with stdenv.lib; {
