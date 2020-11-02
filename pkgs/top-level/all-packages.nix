@@ -1493,6 +1493,8 @@ with pkgs;
 
   bklk = callPackage ../applications/misc/bklk { };
 
+  blackmagicDesktopVideo = callPackage ../tools/video/blackmagic-desktop-video { };
+
   bkyml = callPackage ../tools/misc/bkyml { };
 
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
