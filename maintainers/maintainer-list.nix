@@ -4928,6 +4928,12 @@
     githubId = 1202012;
     name = "Ignat Loskutov";
   };
+  lostnet = {
+    email = "lost.networking@gmail.com";
+    github = "lostnet";
+    githubId = 1422781;
+    name = "Will Young";
+  };
   louisdk1 = {
     email = "louis@louis.dk";
     github = "louisdk1";
