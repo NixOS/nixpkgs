@@ -4306,6 +4306,8 @@ in {
   else
     callPackage ../development/python-modules/pandas/2.nix { };
 
+  pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
+
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
