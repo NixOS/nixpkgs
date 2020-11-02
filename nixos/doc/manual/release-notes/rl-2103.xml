@@ -153,6 +153,11 @@
      <link xlink:href="http://www.mutt.org/relnotes/2.0/">release notes for Mutt 2.0</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <literal>vim</literal> switched to Python 3, dropping all Python 2 support.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
