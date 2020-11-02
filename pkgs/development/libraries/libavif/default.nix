@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
     dav1d
   ];
 
+  postInstall = ''
+    mkdir -p $out/share/thumbnailers
+    cat ${./thumbnailer} | sed "s|@bindir@|${gdk-pixbuf}/bin|g" > $out/share/thumbnailers/libavif.thumbnailer
+  '';
+
   meta = with stdenv.lib; {
     description  = "C implementation of the AV1 Image File Format";
     longDescription = ''
