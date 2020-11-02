@@ -2822,6 +2822,8 @@ in {
 
   hyperlink = callPackage ../development/python-modules/hyperlink { };
 
+  hyperopt = callPackage ../development/python-modules/hyperopt { };
+
   hypothesis_4 = callPackage ../development/python-modules/hypothesis/2.nix
     { }; # File name is called 2.nix because this one will need to remain for Python 2.
 
