@@ -24268,7 +24268,7 @@ in
     onlyLibVLC = true;
   };
 
-  vmpk = callPackage ../applications/audio/vmpk { };
+  vmpk = libsForQt5.callPackage ../applications/audio/vmpk { };
 
   vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
 
