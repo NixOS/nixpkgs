@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles }:
+{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
 
 buildGoPackage rec {
   pname = "vault";
@@ -23,6 +23,8 @@ buildGoPackage rec {
     echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash
   '';
+
+  passthru.tests.vault = nixosTests.vault;
 
   meta = with stdenv.lib; {
     homepage = "https://www.vaultproject.io/";
