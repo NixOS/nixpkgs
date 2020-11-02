@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = stdenv.lib.getVersion unicorn-emu;
 
   src = unicorn-emu.src;
-  sourceRoot = "unicorn-${version}/bindings/python";
+  sourceRoot = "source/bindings/python";
 
   prePatch = ''
     ln -s ${unicorn-emu}/lib/libunicorn${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
