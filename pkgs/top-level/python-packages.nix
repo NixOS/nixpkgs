@@ -1200,6 +1200,8 @@ in {
 
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean { };
 
+  click-help-colors = callPackage ../development/python-modules/click-help-colors { };
+
   click-log = callPackage ../development/python-modules/click-log { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
