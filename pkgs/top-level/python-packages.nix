@@ -124,11 +124,9 @@ in {
     setuptoolsBuildHook
     setuptoolsCheckHook
     venvShellHook
-    wheelUnpackHook;
-
-  # helpers
-
-  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
+    wheelUnpackHook
+    wrapPython
+    ;
 
   # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
   pythonPackages = self;

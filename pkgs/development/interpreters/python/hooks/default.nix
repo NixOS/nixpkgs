@@ -3,6 +3,7 @@
 , lib
 , callPackage
 , makeSetupHook
+, makeWrapper
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
@@ -153,4 +154,8 @@ in rec {
       name = "wheel-unpack-hook.sh";
       deps = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
+
+  wrapPython = callPackage ../wrap-python.nix {
+    inherit python makeSetupHook makeWrapper;
+  };
 }
