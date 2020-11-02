@@ -3,7 +3,6 @@
 { lib
 , config
 , python
-, wrapPython
 , unzip
 , ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
@@ -20,6 +19,7 @@
 , pythonRecompileBytecodeHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, pythonWrapExecutablesHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -111,10 +111,10 @@ let
 
     nativeBuildInputs = [
       python
-      wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRecompileBytecodeHook  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
       pythonRemoveTestsDirHook
+      pythonWrapExecutablesHook
     ] ++ lib.optionals catchConflicts [
       setuptools pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
@@ -159,10 +159,6 @@ let
       # pass in a hook that sets it.
       setuptoolsCheckHook
     ] ++ checkInputs;
-
-    postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
-      wrapPythonPrograms
-    '' + attrs.postFixup or '''';
 
     # Python packages built through cross-compilation are always for the host platform.
     disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];

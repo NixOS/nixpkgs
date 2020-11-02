@@ -121,6 +121,7 @@ in {
     pythonRecompileBytecodeHook
     pythonRemoveBinBytecodeHook
     pythonRemoveTestsDirHook
+    pythonWrapExecutablesHook
     setuptoolsBuildHook
     setuptoolsCheckHook
     venvShellHook

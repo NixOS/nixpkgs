@@ -122,6 +122,12 @@ in rec {
       };
     } ./python-remove-tests-dir-hook.sh) {};
 
+  pythonWrapExecutablesHook = callPackage ({ wrapPython }:
+    makeSetupHook {
+      name = "python-wrap-hook.sh";
+      deps = [ wrapPython ];
+    } ./python-wrap-executables-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
       name = "setuptools-setup-hook";
