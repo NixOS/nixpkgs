@@ -33,9 +33,9 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/archive",
     "repo": "terraform-provider-archive",
-    "rev": "v1.3.0",
-    "sha256": "1hwg8ai4bvsmgnl669608lr4v940xnyig1xshps490f47c8hqy6y",
-    "version": "1.3.0"
+    "rev": "v2.0.0",
+    "sha256": "1d5n379zyjp2srg43g78a8h33qwcpkfkj7c35idvbyydi35vzlpl",
+    "version": "2.0.0"
   },
   "arukas": {
     "owner": "terraform-providers",
