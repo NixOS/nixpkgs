@@ -902,9 +902,9 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/template",
     "repo": "terraform-provider-template",
-    "rev": "v2.1.2",
-    "sha256": "18w1mmma81m9j7yf6q500w8v9ss28w6sw2ynssl99pyw2gwmd04q",
-    "version": "2.1.2"
+    "rev": "v2.2.0",
+    "sha256": "12pn1i06jz4xl50md94yfdggg3pg5bv1viwf35izizm5rnyksyv2",
+    "version": "2.2.0"
   },
   "tencentcloud": {
     "owner": "terraform-providers",
