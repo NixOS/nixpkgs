@@ -7165,6 +7165,7 @@ in
   slsnif = callPackage ../tools/misc/slsnif { };
 
   slstatus = callPackage ../applications/misc/slstatus {
+    patches = config.slstatus.patches or [];
     conf = config.slstatus.conf or null;
   };
 
@@ -20428,8 +20429,12 @@ in
   djview = libsForQt5.callPackage ../applications/graphics/djview { };
   djview4 = pkgs.djview;
 
-  dmenu = callPackage ../applications/misc/dmenu { };
-  dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
+  dmenu = callPackage ../applications/misc/dmenu {
+    patches = config.dmenu.patches or [];
+  };
+  dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix {
+    patches = config.dmenu.patches or [];
+  };
 
   dmensamenu = callPackage ../applications/misc/dmensamenu {
     inherit (python3Packages) buildPythonApplication requests;
