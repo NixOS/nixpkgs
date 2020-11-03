@@ -293,9 +293,9 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/external",
     "repo": "terraform-provider-external",
-    "rev": "v1.2.0",
-    "sha256": "1kx28bffhd1pg3m0cbldclc8l9zic16mqrk7gybcls9vyds5gbvc",
-    "version": "1.2.0"
+    "rev": "v2.0.0",
+    "sha256": "16wciz08gicicsirij2ql0gy8dg0372jjsqmaigkl2n07mqz2b6a",
+    "version": "2.0.0"
   },
   "fastly": {
     "owner": "terraform-providers",
