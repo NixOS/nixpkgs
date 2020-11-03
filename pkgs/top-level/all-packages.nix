@@ -15340,6 +15340,8 @@ in
 
     qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
+    qgnomeplatform =  callPackage ../development/libraries/qgnomeplatform { };
+
     qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
     quazip = callPackage ../development/libraries/quazip { };
@@ -15447,8 +15449,6 @@ in
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
-
-  qgnomeplatform =  libsForQt514.callPackage ../development/libraries/qgnomeplatform { };
 
   randomx = callPackage ../development/libraries/randomx { };
 
