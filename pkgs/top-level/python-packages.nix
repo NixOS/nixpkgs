@@ -5534,6 +5534,10 @@ in {
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
+  pymd4c = callPackage ../development/python-modules/pymd4c {
+    inherit (pkgs) pkg-config;
+  };
+
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
