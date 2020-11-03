@@ -428,10 +428,10 @@ that we introduced with the `let` expression.
 
 Our example, `toolz`, does not have any dependencies on other Python packages or
 system libraries. According to the manual, `buildPythonPackage` uses the
-arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If
+arguments `buildInputs` and `requiredPythonModules` to specify dependencies. If
 something is exclusively a build-time dependency, then the dependency should be
 included in `buildInputs`, but if it is (also) a runtime dependency, then it
-should be added to `propagatedBuildInputs`. Test dependencies are considered
+should be added to `requiredPythonModules`. Test dependencies are considered
 build-time dependencies and passed to `checkInputs`.
 
 The following example shows which arguments are given to `buildPythonPackage` in
@@ -450,7 +450,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy multipledispatch dateutil ];
+  requiredPythonModules = [ numpy multipledispatch dateutil ];
 
   meta = with lib; {
     homepage = "https://github.com/ContinuumIO/datashape";
@@ -464,7 +464,7 @@ buildPythonPackage rec {
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
 `dateutil`. Furthermore, we have one `checkInputs`, i.e. `pytest`. `pytest` is a
 test runner and is only used during the `checkPhase` and is therefore not added
-to `propagatedBuildInputs`.
+to `requiredPythonModules`.
 
 In the previous case we had only dependencies on other Python packages to consider.
 Occasionally you have also system libraries to consider. E.g., `lxml` provides
@@ -518,7 +518,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
 
-  propagatedBuildInputs = [ numpy scipy ];
+  requiredPythonModules = [ numpy scipy ];
 
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
@@ -671,9 +671,9 @@ mode is activated.
 
 In the following example we create a simple environment that has a Python 3.8
 version of our package in it, as well as its dependencies and other packages we
-like to have in the environment, all specified with `propagatedBuildInputs`.
+like to have in the environment, all specified with `requiredPythonModules`.
 Indeed, we can just add any package we like to have in our environment to
-`propagatedBuildInputs`.
+`requiredPythonModules`.
 
 ```nix
 with import <nixpkgs> {};
@@ -682,7 +682,7 @@ with python38Packages;
 buildPythonPackage rec {
   name = "mypackage";
   src = ./path/to/package/source;
-  propagatedBuildInputs = [ pytest numpy pkgs.libsndfile ];
+  requiredPythonModules = [ pytest numpy pkgs.libsndfile ];
 }
 ```
 
@@ -843,7 +843,7 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis ];
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy ];
+  requiredPythonModules = [ attrs py setuptools six pluggy ];
 
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
@@ -898,8 +898,6 @@ following are specific to `buildPythonPackage`:
 * `pipInstallFlags ? []`: A list of strings. Arguments to be passed to `pip
   install`. To pass options to `python setup.py install`, use
   `--install-option`. E.g., `pipInstallFlags=["--install-option='--cpp_implementation'"]`.
-* `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
-  in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
 * `preShellHook`: Hook to execute commands before `shellHook`.
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only
@@ -920,7 +918,7 @@ because their behaviour is different:
 * `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These
   are added to `nativeBuildInputs` when `doCheck = true`. Items listed in
   `tests_require` go here.
-* `propagatedBuildInputs ? []`: Aside from propagating dependencies,
+* `requiredPythonModules ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
   paths included in this list. Items listed in `install_requires` go here.
 
@@ -980,7 +978,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
   };
 
-  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon ];
+  requiredPythonModules = with python3Packages; [ tornado_4 python-daemon ];
 
   meta = with lib; {
     ...
@@ -1539,7 +1537,7 @@ configure alternatives](#sec-overlays-alternatives-blas-lapack)".
 In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 * `setup_requires` corresponds to `nativeBuildInputs`
-* `install_requires` corresponds to `propagatedBuildInputs`
+* `install_requires` corresponds to `requiredPythonModules`
 * `tests_require` corresponds to `checkInputs`
 
 ## Contributing

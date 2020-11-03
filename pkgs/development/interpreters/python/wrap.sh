@@ -112,8 +112,8 @@ _addToPythonPath() {
     addToSearchPath program_PYTHONPATH $dir/@sitePackages@
     addToSearchPath program_PATH $dir/bin
 
-    # Inspect the propagated inputs (if they exist) and recur on them.
-    local prop="$dir/nix-support/propagated-build-inputs"
+    # Traverse the `required-python-modules and recurse on them
+    local prop="$dir/nix-support/required-python-modules"
     if [ -e $prop ]; then
         local new_path
         for new_path in $(cat $prop); do

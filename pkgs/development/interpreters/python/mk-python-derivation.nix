@@ -8,6 +8,7 @@
 , ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
 , toPythonModule
+, computeRequiredPythonModules
 , namePrefix
 , update-python-libraries
 , setuptools
@@ -20,6 +21,7 @@
 , pythonRecompileBytecodeHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, pythonWriteRequiredPythonModulesHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -44,8 +46,8 @@
 # C can import package A propagated by B
 , propagatedBuildInputs ? []
 
-# DEPRECATED: use propagatedBuildInputs
-, pythonPath ? []
+# Required Python modules
+, requiredPythonModules ? []
 
 # Enabled to detect some (native)BuildInputs mistakes
 , strictDeps ? true
@@ -103,8 +105,10 @@ else
 let
   inherit (python) stdenv;
 
+  requiredPythonModules_ = computeRequiredPythonModules requiredPythonModules;
+
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format" "requiredPythonModules"
   ]) // {
 
     name = namePrefix + name;
@@ -115,6 +119,7 @@ let
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRecompileBytecodeHook  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
       pythonRemoveTestsDirHook
+      pythonWriteRequiredPythonModulesHook
     ] ++ lib.optionals catchConflicts [
       setuptools pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
@@ -141,9 +146,21 @@ let
       pythonNamespacesHook
     ] ++ nativeBuildInputs;
 
-    buildInputs = buildInputs ++ pythonPath;
+    inherit buildInputs;
 
-    propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
+    # TODO: stop propagating Python and its packages?
+    # Python applications should not propagate Python with its dependencies.
+    # In principle, buildPythonApplication could stop using `propagatedBuildInputs`,
+    # however, it won't help in case `buildPythonPackage` is used with `toPythonApplication`.
+    # Note also, propagation is needed for e.g. `checkInputs` to find its dependencies.
+    #
+    # Probably the solution is to keep using propagation in case packages,
+    # and convert `buildPythonApplication` to first build the package, and then an environment
+    # using `python.buildEnv` https://github.com/NixOS/nixpkgs/pull/16672.
+    propagatedBuildInputs = propagatedBuildInputs ++ requiredPythonModules_;
+
+    # requiredPythonModules is also set
+    requiredPythonModules = requiredPythonModules_;
 
     inherit strictDeps;
 
