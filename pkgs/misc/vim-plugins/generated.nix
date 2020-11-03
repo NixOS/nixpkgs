@@ -1810,6 +1810,18 @@ let
     meta.homepage = "https://github.com/autozimu/LanguageClient-neovim/";
   };
 
+  LanguageTool-nvim = buildVimPluginFrom2Nix {
+    pname = "LanguageTool-nvim";
+    version = "2020-10-19";
+    src = fetchFromGitHub {
+      owner = "vigoux";
+      repo = "LanguageTool.nvim";
+      rev = "809e7d77fec834597f495fec737c59292a10025b";
+      sha256 = "1g12dz85xq8qd92dgna0a3w6zgxa74njlvmvly4k20610r63bzrn";
+    };
+    meta.homepage = "https://github.com/vigoux/LanguageTool.nvim/";
+  };
+
   last256 = buildVimPluginFrom2Nix {
     pname = "last256";
     version = "2017-06-10";

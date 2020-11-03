@@ -553,6 +553,7 @@ unblevable/quick-scope
 urbit/hoon.vim
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
+vigoux/LanguageTool.nvim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vim-pandoc/vim-pandoc
