@@ -27,11 +27,11 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "2019.2.4";
+  version = "2019.2.7";
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0ir8gmir4jl21v252vxwgjaskj15wlkhp715jn7h1jb1vfairsxg";
+    sha256 = "0wxqw6rca78bn2afrszbfb62bz2323n7vmnznl9jwgvcgzxvqj6n";
   };
 
   propagatedBuildInputs = with py.pkgs; [
