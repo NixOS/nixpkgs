@@ -9,8 +9,18 @@ let
   isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
 
-  packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.adwaita-qt ]
-    else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
+  packages = if isQGnome then [
+    pkgs.libsForQt5.qgnomeplatform
+    pkgs.libsForQt514.qgnomeplatform
+    pkgs.libsForQt512.qgnomeplatform
+    pkgs.libsForQt5.adwaita-qt
+    pkgs.libsForQt514.adwaita-qt
+    pkgs.libsForQt512.adwaita-qt
+  ] else if isQtStyle then [
+    pkgs.libsForQt5.qtstyleplugins
+    pkgs.libsForQt514.qtstyleplugins
+    pkgs.libsForQt512.qtstyleplugins
+  ]
     else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
 
 in
@@ -29,8 +39,12 @@ in
         ];
         example = "gnome";
         relatedPackages = [
-          "qgnomeplatform"
+          ["libsForQt5" "qgnomeplatform"]
+          ["libsForQt514" "qgnomeplatform"]
+          ["libsForQt512" "qgnomeplatform"]
           ["libsForQt5" "qtstyleplugins"]
+          ["libsForQt514" "qtstyleplugins"]
+          ["libsForQt512" "qtstyleplugins"]
         ];
         description = ''
           Selects the platform theme to use for Qt5 applications.</para>
@@ -63,8 +77,12 @@ in
         ];
         example = "adwaita";
         relatedPackages = [
-          "adwaita-qt"
+          ["libsForQt5" "adwaita-qt"]
+          ["libsForQt514" "adwaita-qt"]
+          ["libsForQt512" "adwaita-qt"]
           ["libsForQt5" "qtstyleplugins"]
+          ["libsForQt514" "qtstyleplugins"]
+          ["libsForQt512" "qtstyleplugins"]
         ];
         description = ''
           Selects the style to use for Qt5 applications.</para>
