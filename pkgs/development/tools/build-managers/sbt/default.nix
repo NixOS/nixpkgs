@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, jre, autoPatchelfHook, zlib, writeScript, common-updater-scripts, git, nixfmt, nix, coreutils, gnused }:
+{ stdenv, fetchurl, jre, autoPatchelfHook, zlib, writeScript
+, common-updater-scripts, git, nixfmt, nix, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "sbt";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchurl {
     url =
       "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
-    sha256 = "1mgfs732w1c1p7dna7h47x8h073lvjs224fqlpkkvq10153mnxxl";
+    sha256 = "1dw4l91sw4ybqxjid1hsb6r33ka5bl85rfdrbsr9m5vxl82a3mmc";
   };
 
   patchPhase = ''
@@ -38,7 +39,16 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "update.sh" ''
     #!${stdenv.shell}
     set -o errexit
-    PATH=${stdenv.lib.makeBinPath [ common-updater-scripts git nixfmt nix coreutils gnused ]}
+    PATH=${
+      stdenv.lib.makeBinPath [
+        common-updater-scripts
+        git
+        nixfmt
+        nix
+        coreutils
+        gnused
+      ]
+    }
 
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion sbt" | tr -d '"')"
     latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags git@github.com:sbt/sbt.git '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
