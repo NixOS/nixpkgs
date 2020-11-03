@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, libtool, autoconf, automake }:
+{ stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   pname = "libmkv";
   version = "0.6.5.1";
 
-  src = fetchgit {
-    url = "https://github.com/saintdev/libmkv.git";
+  src = fetchFromGitHub {
+    owner = "saintdev";
+    repo = pname;
     rev = "refs/tags/${version}";
     sha256 = "0pr9q7yprndl8d15ir7i7cznvmf1yqpvnsyivv763n6wryssq6dl";
   };

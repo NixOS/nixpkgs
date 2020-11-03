@@ -10,7 +10,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "QMatrixClient";
     repo = "Quaternion";
-    rev = "${version}";
+    rev = version;
     sha256 = "0hqhg7l6wpkdbzrdjvrbqymmahziri07ba0hvbii7dd2p0h248fv";
   };
 

@@ -805,6 +805,8 @@ in
 
   analog = callPackage ../tools/admin/analog {};
 
+  angle-grinder = callPackage ../tools/text/angle-grinder {};
+
   ansifilter = callPackage ../tools/text/ansifilter {};
 
   antora = callPackage ../development/tools/documentation/antora {};
@@ -1653,7 +1655,8 @@ in
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
-  unicorn-emu = callPackage ../development/libraries/unicorn-emu { };
+
+  keystone = callPackage ../development/libraries/keystone { };
 
   casync = callPackage ../applications/networking/sync/casync {
     sphinx = python3Packages.sphinx;
@@ -3075,6 +3078,12 @@ in
 
   console-bridge = callPackage ../development/libraries/console-bridge { };
 
+  convbin = callPackage ../tools/misc/convbin { };
+
+  convimg = callPackage ../tools/misc/convimg { };
+
+  convfont = callPackage ../tools/misc/convfont { };
+
   convmv = callPackage ../tools/misc/convmv { };
 
   convoy = callPackage ../tools/filesystems/convoy { };
@@ -3520,7 +3529,7 @@ in
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
-    inherit (pythonPackages) sphinx;
+    inherit (python3Packages) sphinx;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -4235,14 +4244,16 @@ in
 
   google-authenticator = callPackage ../os-specific/linux/google-authenticator { };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
+    python = python3;
+  };
   google-cloud-sdk-gce = google-cloud-sdk.override { with-gce = true; };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
   google-clasp = callPackage ../development/misc/google-clasp { };
 
-  google-compute-engine = python2.pkgs.google-compute-engine;
+  google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
 
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
 
@@ -4909,10 +4920,12 @@ in
 
   kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
-  wrapKakoune = callPackage ../applications/editors/kakoune/wrapper.nix { };
+  wrapKakoune = kakoune: attrs: callPackage ../applications/editors/kakoune/wrapper.nix (attrs // { inherit kakoune; });
   kakounePlugins = callPackage ../applications/editors/kakoune/plugins { };
   kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
-  kakoune = wrapKakoune kakoune-unwrapped { };
+  kakoune = wrapKakoune kakoune-unwrapped {
+    plugins = [ ];  # override with the list of desired plugins
+  };
 
   kak-lsp = callPackage ../tools/misc/kak-lsp { };
 
@@ -8074,6 +8087,8 @@ in
 
   unbound = callPackage ../tools/networking/unbound { };
 
+  unicorn = callPackage ../development/libraries/unicorn { };
+
   units = callPackage ../tools/misc/units {
     enableCurrenciesUpdater = true;
     pythonPackages = python3Packages;
@@ -8122,8 +8137,6 @@ in
   };
 
   unar = callPackage ../tools/archivers/unar { stdenv = clangStdenv; };
-
-  unarj = callPackage ../tools/archivers/unarj { };
 
   unp = callPackage ../tools/archivers/unp { };
 
@@ -12356,7 +12369,7 @@ in
 
   cxx-prettyprint = callPackage ../development/libraries/cxx-prettyprint { };
 
-  cxxtest = callPackage ../development/libraries/cxxtest { };
+  cxxtest = python2Packages.callPackage ../development/libraries/cxxtest { };
 
   cypress = callPackage ../development/web/cypress { };
 
@@ -21778,7 +21791,6 @@ in
       attrs = {
         inherit libsForQt5;
         inherit lib fetchurl;
-        inherit okteta;
       };
     in
       recurseIntoAttrs (makeOverridable mkApplications attrs);
@@ -22417,7 +22429,7 @@ in
     if stdenv.isDarwin then
       callPackage ../applications/audio/musescore/darwin.nix { }
     else
-      libsForQt514.callPackage ../applications/audio/musescore { };
+      libsForQt5.callPackage ../applications/audio/musescore { };
 
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
@@ -25269,6 +25281,10 @@ in
 
   instead-launcher = callPackage ../games/instead-launcher { };
 
+  iortcw = callPackage ../games/iortcw { };
+  # used as base package for iortcw forks
+  iortcw_sp = callPackage ../games/iortcw/sp.nix { };
+
   ivan = callPackage ../games/ivan { };
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
@@ -27584,6 +27600,8 @@ in
   opkg = callPackage ../tools/package-management/opkg { };
 
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
+
+  OSCAR = qt5.callPackage ../applications/misc/OSCAR { };
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 

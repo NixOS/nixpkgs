@@ -411,6 +411,17 @@ let
         };
       });
 
+      sshtunnel = super.sshtunnel.overridePythonAttrs(oldAttrs: rec {
+        name = "sshtunnel-${version}";
+        version = "0.1.5";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "0jcjppp6mdfsqrbfc3ddfxg1ybgvkjv7ri7azwv3j778m36zs4y8";
+        };
+      });
+
       websocket_client = super.websocket_client.overridePythonAttrs(oldAttrs: rec {
         version = "0.56.0";
 

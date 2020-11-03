@@ -10,7 +10,7 @@ let
     src = fetchFromGitHub {
       owner = "google";
       repo = pname;
-      rev = "${version}";
+      rev = version;
       sha256 = "0dcl5a5jykgfmnfj42vl7kah9k26wg38l2g6yfh5pssmlf0nax33";
     };
 

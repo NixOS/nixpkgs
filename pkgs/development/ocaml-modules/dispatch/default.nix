@@ -7,7 +7,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = "ocaml-dispatch";
-    rev = "${version}";
+    rev = version;
     sha256 = "05kb9zcihk50r2haqz8vrlr7kmaka6vrs4j1z500lmnl877as6qr";
   };
 

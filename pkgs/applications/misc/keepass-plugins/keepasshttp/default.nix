@@ -8,7 +8,7 @@ let
     src = fetchFromGitHub {
       owner = "pfn";
       repo = "keepasshttp";
-      #rev = "${version}";
+      # rev = version;
       # for 1.8.4.2 the tag is at the wrong commit (they fixed stuff
       # afterwards and didn't move the tag), hence reference by commitid
       rev = "c2c4eb5388a02169400cba7a67be325caabdcc37";

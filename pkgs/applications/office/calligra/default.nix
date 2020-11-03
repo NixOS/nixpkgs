@@ -15,11 +15,11 @@
 
 mkDerivation rec {
   pname = "calligra";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-flViKGZdeeZ8Bi/RFz1mdvCw187v3W4bC8+aeB6nCVE=";
+    sha256 = "0iqi6z6gkck2afgy200dacgcspq7i7887alcj0pklm08hbmsdy5i";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

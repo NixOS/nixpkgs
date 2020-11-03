@@ -4272,7 +4272,7 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
-  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito { pythonPackages = self; });
+  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito { inherit python; });
 
   owslib = callPackage ../development/python-modules/owslib { };
 
@@ -7375,7 +7375,9 @@ in {
 
   unicode-slugify = callPackage ../development/python-modules/unicode-slugify { };
 
-  unicorn = callPackage ../development/python-modules/unicorn { };
+  unicorn = callPackage ../development/python-modules/unicorn {
+    unicorn-emu = pkgs.unicorn;
+  };
 
   unidecode = callPackage ../development/python-modules/unidecode { };
 

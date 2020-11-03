@@ -7407,6 +7407,12 @@
     githubId = 1217934;
     name = "José Romildo Malaquias";
   };
+  ronanmacf = {
+    email = "macfhlar@tcd.ie";
+    github = "ronanmacf";
+    githubId = 25930627;
+    name = "Ronan Mac Fhlannchadha";
+  };
   rongcuid = {
     email = "rongcuid@outlook.com";
     github = "rongcuid";
@@ -9891,5 +9897,11 @@
     email = "wilsonehusin@gmail.com";
     github = "wilsonehusin";
     githubId = 14004487;
+  };
+  bb2020 = {
+    email = "bb2020@users.noreply.github.com";
+    github = "bb2020";
+    githubId = 19290397;
+    name = "Tunc Uzlu";
   };
 }

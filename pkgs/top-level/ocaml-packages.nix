@@ -569,6 +569,8 @@ let
 
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
+    mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
+
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };

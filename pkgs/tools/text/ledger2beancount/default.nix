@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zacchiro";
     repo = "ledger2beancount";
-    rev = "${version}";
+    rev = version;
     sha256 = "0w88jb1x0w02jwwf6ipx3cxr89kzffrrdqws3556zrvvs01bh84j";
   };
 

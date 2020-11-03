@@ -1,19 +1,21 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, dune-configurator
 , bigarray-compat, optint
-, cmdliner, fmt, rresult
+, fmt, rresult
 , alcotest
 }:
 
 buildDunePackage rec {
-  version = "0.1.1";
+  version = "0.2.1";
   pname = "checkseum";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-v${version}.tbz";
-    sha256 = "0aa2r1l65a5hcgciw6n8r5ij4gpgg0cf9k24isybxiaiz63k94d3";
+    sha256 = "1swb44c64pcs4dh9ka9lig6d398qwwkd3kkiajicww6qk7jbh3n5";
   };
 
-  buildInputs = [ cmdliner fmt rresult ];
+  buildInputs = [ dune-configurator fmt rresult ];
   propagatedBuildInputs = [ bigarray-compat optint ];
   checkInputs = lib.optionals doCheck [ alcotest ];
 

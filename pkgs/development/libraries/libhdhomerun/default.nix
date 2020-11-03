@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libhdhomerun";
-  version = "20200521";
+  version = "20200907";
 
   src = fetchurl {
     url = "https://download.silicondust.com/hdhomerun/libhdhomerun_${version}.tgz";
-    sha256 = "0s0683bwyd10n3r2sanlyd07ii3fmi3vl9w9a2rwlpcclzq3h456";
+    sha256 = "1v80jk056ii2iv2w7sq24i3prjrbhxql5vqhafs7vq54qmwvgbnb";
   };
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''

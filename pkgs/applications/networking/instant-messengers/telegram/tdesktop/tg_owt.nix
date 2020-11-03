@@ -3,8 +3,8 @@
 }:
 
 let
-  rev = "1d4f7d74ff1a627db6e45682efd0e3b85738e426";
-  sha256 = "1w03xmjn693ff489pg368jv21478vr4ldxyya4lsrx87fn88caj3";
+  rev = "e8fcae73947445db3d418fb7c20b964b59e14706";
+  sha256 = "0s2dd41r71aixhvympiqfks1liv7x78y60n0i87vmyxyfx449b5h";
 
 in stdenv.mkDerivation {
   pname = "tg_owt";
