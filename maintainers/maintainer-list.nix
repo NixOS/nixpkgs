@@ -514,6 +514,12 @@
     githubId = 69135;
     name = "Andrea Bedini";
   };
+  andreasfelix = {
+    email = "fandreas@physik.hu-berlin.de";
+    github = "andreasfelix";
+    githubId = 24651767;
+    name = "Felix Andreas";
+  };
   andres = {
     email = "ksnixos@andres-loeh.de";
     github = "kosmikus";
