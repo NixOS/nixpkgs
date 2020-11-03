@@ -3917,6 +3917,8 @@ in {
 
   MDP = callPackage ../development/python-modules/mdp { };
 
+  mdpo = callPackage ../development/python-modules/mdpo { };
+
   measurement = callPackage ../development/python-modules/measurement { };
 
   mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };

@@ -2474,6 +2474,8 @@ in
 
   maxcso = callPackage ../tools/archivers/maxcso {};
 
+  mdpo = with python3Packages; toPythonApplication mdpo;
+
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt515.callPackage ../applications/misc/megasync { };
