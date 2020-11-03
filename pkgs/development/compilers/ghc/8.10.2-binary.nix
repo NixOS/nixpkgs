@@ -2,6 +2,14 @@
 , fetchurl, perl, gcc
 , ncurses6, gmp, glibc, libiconv, numactl
 , llvmPackages
+
+  # minimal = true; will remove files that aren't strictly necessary for
+  # regular builds and GHC bootstrapping.
+  # This is "useful" for staying within hydra's output limits for at least the
+  # aarch64-linux architecture.
+  # Examples of unnecessary files are the bundled documentation and files that
+  # are only needed for profiling builds.
+, minimal ? false
 }:
 
 # Prebuilt only does native
@@ -172,6 +180,13 @@ stdenv.mkDerivation rec {
     for file in $(find "$out" -name setup-config); do
       substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
     done
+  '' +
+  stdenv.lib.optionalString minimal ''
+    # Remove profiling objects
+    find $out -type f -name '*.p_o' -delete
+    rm $out/lib/ghc-*/bin/ghc-iserv-prof
+    # Remove docs
+    rm -r $out/share/{doc,man}
   '';
 
   doInstallCheck = true;
@@ -195,11 +210,18 @@ stdenv.mkDerivation rec {
     enableShared = true;
   };
 
-  meta = {
+  meta = let
+    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+  in {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     license = stdenv.lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+
+    # The minimal variation can not be distributed because it removes the
+    # documentation, including licensing information that is required for
+    # distribution.
+    inherit platforms;
+    hydraPlatforms = stdenv.lib.optionals (!minimal) platforms;
     maintainers = with stdenv.lib.maintainers; [ lostnet ];
   };
 }
