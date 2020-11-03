@@ -25,7 +25,7 @@ let
                     utillinux # for (u)mount, fdisk, sfdisk, mkswap
                     parted
                   ];
-    pythonPath = [ pythonPackages.pyasn1 ];
+    requiredPythonModules = [ pythonPackages.pyasn1 ];
 
     configurePhase = false;
     buildPhase = false;

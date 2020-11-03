@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python2Packages.python python2Packages.wrapPython ];
-  pythonPath = [ python2Packages.numpy python2Packages.opencv4 ];
+  requiredPythonModules = [ python2Packages.numpy python2Packages.opencv4 ];
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 

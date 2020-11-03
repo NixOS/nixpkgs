@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     python2Packages.python
   ];
 
-  pythonPath = [
+  requiredPythonModules = [
     python2Packages.xlib
     python2Packages.pygtk
   ];

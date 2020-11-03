@@ -6,7 +6,7 @@
 }:
 
 let
-  pythonPath = with python3.pkgs; makePythonPath [
+  requiredPythonModules = with python3.pkgs; makePythonPath [
     future
     isort
     psutil
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     chmod +x $out/share/pwndbg/gdbinit.py
     makeWrapper ${gdb}/bin/gdb $out/bin/pwndbg \
       --add-flags "-q -x $out/share/pwndbg/gdbinit.py" \
-      --set NIX_PYTHONPATH ${pythonPath}
+      --set NIX_PYTHONPATH ${requiredPythonModules}
   '';
 
   meta = with stdenv.lib; {

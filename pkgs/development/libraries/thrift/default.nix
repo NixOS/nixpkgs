@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  requiredPythonModules = [];
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ boost zlib libevent openssl python bison flex ]

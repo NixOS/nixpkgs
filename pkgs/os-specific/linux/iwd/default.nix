@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ openssl ];
 
-  pythonPath = [
+  requiredPythonModules = [
     python3Packages.dbus-python
     python3Packages.pygobject3
   ];

@@ -15,7 +15,7 @@ mkDerivation rec {
     sha256 = "02bkyi9xpaxdcivm075y3praxgvfay9z0189gvr6g8yc3ml1miyr";
   };
 
-  pythonPath = with python3Packages; [ lxml ];
+  requiredPythonModules = with python3Packages; [ lxml ];
 
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 

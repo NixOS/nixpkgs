@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ systemd glib dbus libnl pythonPackages.python pythonPackages.wrapPython ];
-  pythonPath = [ pythonPackages.pygobject2 pythonPackages.dbus-python pythonPackages.pygtk ];
+  requiredPythonModules = [ pythonPackages.pygobject2 pythonPackages.dbus-python pythonPackages.pygtk ];
 
   configureFlags = [ "--disable-debug" "--enable-tools" "--enable-ese" "--with-systemdsystemunitdir=$out/lib/systemd/system" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # INFO: the config option "--enable-test" would copy the apps to $out/lib/neard/test/ instead
     install -d $out/lib/neard
     install -m 0755 test/* $out/lib/neard/
-    wrapPythonProgramsIn $out/lib/neard "$out $pythonPath"
+    wrapPythonProgramsIn $out/lib/neard "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

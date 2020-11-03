@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     utillinux
   ];
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     dbus-python
     pygobject3
     setproctitle
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    wrapPythonProgramsIn $out/lib "$out $pythonPath"
+    wrapPythonProgramsIn $out/lib "$out $requiredPythonModules"
   '';
 
   meta = with lib; {

@@ -63,12 +63,12 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
     python3.pkgs.wrapPython
   ];
 
-  pythonPath = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     setuptools
   ];
 
   postPatch = ''
-    # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
+    # Patch `packages.json` so that nix's *python* is used as default value for `python.requiredPythonModules`.
     substituteInPlace "./package.json" \
       --replace "\"default\": \"python\"" "\"default\": \"${pythonDefaultsTo}\""
 

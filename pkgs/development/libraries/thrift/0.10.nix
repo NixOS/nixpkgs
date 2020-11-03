@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  requiredPythonModules = [];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

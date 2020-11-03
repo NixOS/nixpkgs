@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ efl python3Packages.python dbus ];
 
-  pythonPath = [ python3Packages.pythonefl python3Packages.dbus-python ];
+  requiredPythonModules = [ python3Packages.pythonefl python3Packages.dbus-python ];
 
   postInstall = ''
     wrapPythonPrograms

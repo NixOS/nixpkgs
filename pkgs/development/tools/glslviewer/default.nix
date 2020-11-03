@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     libXi libX11
   ] ++ (with python3Packages; [ python setuptools wrapPython ])
     ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
-  pythonPath = with python3Packages; [ pyyaml requests ];
+  requiredPythonModules = with python3Packages; [ pyyaml requests ];
 
   # Makefile has /usr/local/bin hard-coded for 'make install'
   preConfigure = ''

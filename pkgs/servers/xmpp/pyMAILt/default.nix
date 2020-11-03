@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 		sha256 = "15301252e52b4ccb2156baefed8982a2a0cce3ae8eae3caf3cc28dfa615c8d6e";
 	};
 
-  pythonPath = [ xmpppy ];
+  requiredPythonModules = [ xmpppy ];
   buildInputs = [ pythonPackages.wrapPython ];
 
   installPhase = ''

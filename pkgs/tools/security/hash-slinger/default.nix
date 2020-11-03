@@ -13,11 +13,11 @@ in stdenv.mkDerivation rec {
     sha256 = "05wn744ydclpnpyah6yfjqlfjlasrrhzj48lqmm5a91nyps5yqyn";
   };
 
-  pythonPath = with pythonPackages; [ dnspython m2crypto ipaddr python-gnupg
+  requiredPythonModules = with pythonPackages; [ dnspython m2crypto ipaddr python-gnupg
                                       pyunbound ];
 
   buildInputs = [ pythonPackages.wrapPython ];
-  propagatedBuildInputs = [ unbound libreswan ] ++ pythonPath;
+  propagatedBuildInputs = [ unbound libreswan ] ++ requiredPythonModules;
   propagatedUserEnvPkgs = [ unbound libreswan ];
 
   patchPhase = ''

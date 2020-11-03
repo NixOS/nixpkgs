@@ -1,24 +1,24 @@
-# Wrapper around wrapPythonProgramsIn, below. The $pythonPath
+# Wrapper around wrapPythonProgramsIn, below. The $requiredPythonModules
 # variable is passed in from the buildPythonPackage function.
 wrapPythonPrograms() {
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out $requiredPythonModules"
 }
 
 # Builds environment variables like PYTHONPATH and PATH walking through closure
 # of dependencies.
 buildPythonPath() {
-    local pythonPath="$1"
+    local requiredPythonModules="$1"
     local path
 
     # Create an empty table of python paths (see doc on _addToPythonPath
     # for how this is used). Build up the program_PATH and program_PYTHONPATH
     # variables.
-    declare -A pythonPathsSeen=()
+    declare -A requiredPythonModulessSeen=()
     program_PYTHONPATH=
     program_PATH=
-    pythonPathsSeen["@pythonHost@"]=1
+    requiredPythonModulessSeen["@pythonHost@"]=1
     addToSearchPath program_PATH @pythonHost@/bin
-    for path in $pythonPath; do
+    for path in $requiredPythonModules; do
         _addToPythonPath $path
     done
 }
@@ -41,10 +41,10 @@ patchPythonScript() {
 # suffix).
 wrapPythonProgramsIn() {
     local dir="$1"
-    local pythonPath="$2"
+    local requiredPythonModules="$2"
     local f
 
-    buildPythonPath "$pythonPath"
+    buildPythonPath "$requiredPythonModules"
 
     # Find all regular files in the output directory that are executable.
     if [ -d "$dir" ]; then
@@ -101,12 +101,12 @@ wrapPythonProgramsIn() {
 # Adds the lib and bin directories to the PYTHONPATH and PATH variables,
 # respectively. Recurses on any paths declared in
 # `propagated-build-inputs`, while avoiding duplicating paths by
-# flagging the directories it has visited in `pythonPathsSeen`.
+# flagging the directories it has visited in `requiredPythonModulessSeen`.
 _addToPythonPath() {
     local dir="$1"
     # Stop if we've already visited here.
-    if [ -n "${pythonPathsSeen[$dir]}" ]; then return; fi
-    pythonPathsSeen[$dir]=1
+    if [ -n "${requiredPythonModulessSeen[$dir]}" ]; then return; fi
+    requiredPythonModulessSeen[$dir]=1
     # addToSearchPath is defined in stdenv/generic/setup.sh. It will have
     # the effect of calling `export program_X=$dir/...:$program_X`.
     addToSearchPath program_PYTHONPATH $dir/@sitePackages@

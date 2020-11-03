@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1f75iwlshnif60x0qqdqw5ffng2m4f4zp0ijkrbjz83wm73nsxfx";
   };
 
-  pythonPath = [ dockbarx ];
+  requiredPythonModules = [ dockbarx ];
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ python2 vala_0_46 gtk2 pythonPackages.wrapPython ]
     ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
-    ++ pythonPath;
+    ++ requiredPythonModules;
 
   postPatch = ''
     substituteInPlace wscript           --replace /usr/share/            "\''${PREFIX}/share/"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "dir2opus";
   inherit version;
 
-  pythonPath = [ mutagen ];
+  requiredPythonModules = [ mutagen ];
   buildInputs = [ wrapPython ];
   propagatedBuildInputs = [ opusTools mpg123 ];
 

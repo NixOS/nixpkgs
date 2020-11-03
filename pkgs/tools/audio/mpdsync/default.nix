@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1mfg3ipqj5dvyyqbgp6ia6sc1ja5gmm2c9mfrwx0jw2dl182if6q";
   };
 
-  pythonPath = [ mpd2 ];
+  requiredPythonModules = [ mpd2 ];
 
   nativeBuildInputs = [
     wrapPython

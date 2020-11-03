@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "2.2.4";
   pname = "Tautulli";
 
-  pythonPath = [ python.pkgs.setuptools ];
+  requiredPythonModules = [ python.pkgs.setuptools ];
   buildInputs = [ python.pkgs.setuptools ];
   nativeBuildInputs = [ python.pkgs.wrapPython ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     # Creat backwards compatibility symlink to bin/plexpy
     ln -s $out/bin/tautulli $out/bin/plexpy
 
-    wrapPythonProgramsIn "$out" "$out $pythonPath"
+    wrapPythonProgramsIn "$out" "$out $requiredPythonModules"
   '';
 
   meta  = with stdenv.lib; {

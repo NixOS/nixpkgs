@@ -27,7 +27,7 @@ buildGoModule rec {
     ./runtime-sharedir.patch
   ];
 
-  pythonPath = [
+  requiredPythonModules = [
     python3.pkgs.colorama
   ];
 
@@ -42,7 +42,7 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
     make PREFIX=$out GOFLAGS="$GOFLAGS -tags=notmuch" install
-    wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
+    wrapPythonProgramsIn $out/share/aerc/filters "$out $requiredPythonModules"
     runHook postInstall
   '';
 

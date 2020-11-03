@@ -56,7 +56,7 @@ let
     '';
 
     postFixup = ''
-      wrapPythonProgramsIn "$out/gui" "$out $pythonPath"
+      wrapPythonProgramsIn "$out/gui" "$out $requiredPythonModules"
     '';
 
     doInstallCheck = true;

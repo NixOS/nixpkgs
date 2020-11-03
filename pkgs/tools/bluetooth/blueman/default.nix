@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
                   gnome3.adwaita-icon-theme iproute libappindicator networkmanager ]
-                ++ pythonPath
+                ++ requiredPythonModules
                 ++ lib.optional withPulseAudio libpulseaudio;
 
   patches = [
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py
   '';
 
-  pythonPath = with pythonPackages; [ pygobject3 pycairo ];
+  requiredPythonModules = with pythonPackages; [ pygobject3 pycairo ];
 
   propagatedUserEnvPkgs = [ obex_data_server ];
 
@@ -56,8 +56,8 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapperArgs="--prefix PATH ':' ${binPath}"
     # This mimics ../../../development/interpreters/python/wrap.sh
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out $requiredPythonModules"
+    wrapPythonProgramsIn "$out/libexec" "$out $requiredPythonModules"
   '';
 
   meta = with lib; {

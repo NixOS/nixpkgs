@@ -13,7 +13,7 @@
 let
   env = let
     paths = computeRequiredPythonModules (extraLibs ++ [ python ] ) ;
-    pythonPath = "${placeholder "out"}/${python.sitePackages}";
+    requiredPythonModules = "${placeholder "out"}/${python.sitePackages}";
     pythonExecutable = "${placeholder "out"}/bin/${python.executable}";
   in buildEnv {
     name = "${python.name}-env";
@@ -37,7 +37,7 @@ let
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${if permitUserSite then "" else ''--set PYTHONNOUSERSITE "true"''} ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${requiredPythonModules} ${if permitUserSite then "" else ''--set PYTHONNOUSERSITE "true"''} ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done
