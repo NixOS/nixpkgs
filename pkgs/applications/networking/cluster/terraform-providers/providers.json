@@ -939,9 +939,9 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/tls",
     "repo": "terraform-provider-tls",
-    "rev": "v2.1.1",
-    "sha256": "1qsx540pjcq4ra034q2dwnw5nmzab5h1c3vm20ppg5dkhhyiizq8",
-    "version": "2.1.1"
+    "rev": "v3.0.0",
+    "sha256": "1p9d5wrr4xwf2i930zlcarm1zl8ysj3nyc6rrbhpxk04kr6ap0wz",
+    "version": "3.0.0"
   },
   "triton": {
     "owner": "terraform-providers",
