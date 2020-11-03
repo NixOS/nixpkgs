@@ -2,23 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner  = "tummychow";
     repo   = pname;
     rev    = "refs/tags/${version}";
-    sha256 = "12ih0gm07ddi86jy612f029nzav345v57pjajyy9lw017g6n6mjb";
+    sha256 = "04v10bn24acify34vh5ayymsr1flcyb05f3az9k1s2m6nlxy5gb9";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  cargoSha256 = "0x2zcw0bpwqimvbb5xj8xawvl4jcvk5lj0y2mm5ncbdapzyqdsb2";
+  cargoSha256 = "0h0vlz4qd8i9bf1mgjr618zbdwfp6bmy7ql9a1xzjmfdpkl3cgk9";
 
   postInstall = ''
     installManPage Documentation/git-absorb.1
+    for shell in bash zsh fish; do
+      $out/bin/git-absorb --gen-completions $shell > git-absorb.$shell
+      installShellCompletion git-absorb.$shell
+    done
   '';
 
   meta = with stdenv.lib; {
