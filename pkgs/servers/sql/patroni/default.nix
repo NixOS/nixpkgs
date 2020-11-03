@@ -39,7 +39,7 @@ pythonPackages.buildPythonApplication rec {
   checkInputs = with pythonPackages; [
     flake8
     mock
-    pytest
+    pytestCheckHook
     pytestcov
     requests
   ];
