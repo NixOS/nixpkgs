@@ -402,7 +402,6 @@
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
   ./services/mail/exim.nix
-  ./services/mail/freepops.nix
   ./services/mail/mail.nix
   ./services/mail/mailcatcher.nix
   ./services/mail/mailhog.nix
