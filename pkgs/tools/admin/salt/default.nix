@@ -7,11 +7,11 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3001.1";
+  version = "3001.3";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1g2sdcibir0zhldmngv1iyzlhh2adq9dqjc73grap3df5zcv9sz9";
+    sha256 = "05lqgwp087dm3hvhdr8b6rfbd0ww8f4fw44k3svgzy089g0xklcf";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
