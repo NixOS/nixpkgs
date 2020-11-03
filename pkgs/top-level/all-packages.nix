@@ -2302,6 +2302,8 @@ in
 
   klipper = callPackage ../servers/klipper { };
 
+  klog = qt5.callPackage ../applications/radio/klog { };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
