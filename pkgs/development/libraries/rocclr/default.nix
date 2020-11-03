@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${version}";
-    sha256 = "05vh70qh6jb7038b1rcmz24bg4an0nw98bv2vn3jcyygj4dr3fmf";
+    sha256 = "193pd6lbnfjrmqsrlvkpadxxi908a9r0c41y8x1bkbbaviad39q0";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -46,7 +46,10 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
+    # Work around broken cmake files
     ln -s $out/include/compiler/lib/include/* $out/include
+    ln -s $out/include/elf/elfio $out/include/elfio
+
     substituteInPlace $out/lib/cmake/rocclr/ROCclrConfig.cmake \
       --replace "/build/source/build" "$out"
   '';
