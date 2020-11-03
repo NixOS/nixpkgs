@@ -7192,8 +7192,6 @@ in
 
   smu = callPackage ../tools/text/smu { };
 
-  smugline = python3Packages.smugline;
-
   sn0int = callPackage ../tools/security/sn0int { };
 
   snabb = callPackage ../tools/networking/snabb { } ;
