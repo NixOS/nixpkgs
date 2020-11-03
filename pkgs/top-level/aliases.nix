@@ -1137,6 +1137,8 @@ mapAliases ({
   ;
   inherit (libsForQt5)
     sddm
+    # Added after https://github.com/NixOS/nixpkgs/issues/98009#issuecomment-720941017
+    adwaita-qt
   ;
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:

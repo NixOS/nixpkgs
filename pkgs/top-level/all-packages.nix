@@ -22011,8 +22011,6 @@ in
 
   adementary-theme = callPackage ../data/themes/adementary { };
 
-  adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
-
   agave = callPackage ../data/fonts/agave { };
 
   aileron = callPackage ../data/fonts/aileron { };

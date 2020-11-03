@@ -52,6 +52,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   ### LIBRARIES
 
+  adwaita-qt = callPackage ../data/themes/adwaita-qt { };
+
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
   alkimia = callPackage ../development/libraries/alkimia { };
