@@ -176,6 +176,9 @@
 /pkgs/applications/editors/emacs       @adisbladis
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
+# Neovim
+/pkgs/applications/editors/neovim      @jonringer
+
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio
 
