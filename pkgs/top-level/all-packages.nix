@@ -15505,6 +15505,8 @@ in
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
+  md4c = callPackage ../development/libraries/md4c { };
+
   mdctags = callPackage ../development/tools/misc/mdctags { };
 
   mdds = callPackage ../development/libraries/mdds { };
