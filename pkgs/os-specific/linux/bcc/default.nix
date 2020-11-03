@@ -71,7 +71,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

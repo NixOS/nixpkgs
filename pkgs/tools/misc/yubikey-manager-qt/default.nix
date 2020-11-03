@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  pythonPath = [ yubikey-manager ];
+  requiredPythonModules = [ yubikey-manager ];
 
   dontWrapQtApps = true;
   postInstall = ''
-    buildPythonPath "$pythonPath"
+    buildPythonPath "$requiredPythonModules"
 
     wrapQtApp $out/bin/ykman-gui \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \

@@ -37,7 +37,7 @@ buildPythonApplication rec {
 
   postInstall = ''
     gappsWrapperArgs+=(
-      "--prefix" "PYTHONPATH" : "${makePythonPath propagatedBuildInputs}"
+      "--prefix" "PYTHONPATH" : "${makePythonPath requiredPythonModules}"
       "--set" "PYTHONNOUSERSITE" "1"
     )
   '';

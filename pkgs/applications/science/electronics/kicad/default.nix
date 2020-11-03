@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
-  pythonPath = optionals (withScripting)
+  requiredPythonModules = optionals (withScripting)
     [ wxPython python.pkgs.six ];
 
   nativeBuildInputs = [ makeWrapper ]
@@ -220,7 +220,7 @@ stdenv.mkDerivation rec {
     in
     (concatStringsSep "\n"
       (flatten [
-        (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
+        (optionalString (withScripting) "buildPythonPath \"${base} $requiredPythonModules\" \n")
 
         # wrap each of the directly usable tools
         (map

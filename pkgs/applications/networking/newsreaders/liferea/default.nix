@@ -59,13 +59,13 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pygobject3
     pycairo
   ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 

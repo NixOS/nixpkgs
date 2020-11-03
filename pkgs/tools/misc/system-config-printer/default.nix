@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook autoreconfHook
   ];
 
-  pythonPath = with python3Packages; computeRequiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
+  requiredPythonModules = with python3Packages; computeRequiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
 
   configureFlags = [
     "--with-udev-rules"
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      buildPythonPath "$out $pythonPath"
+      buildPythonPath "$out $requiredPythonModules"
       gappsWrapperArgs+=(
         --prefix PATH : "$program_PATH"
         --set CUPS_DATADIR "${cups-filters}/share/cups"

@@ -122,10 +122,10 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  pythonPath = with python3.pkgs; computeRequiredPythonModules [ pygobject3 ];
+  requiredPythonModules = with python3.pkgs; computeRequiredPythonModules [ pygobject3 ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
     )

@@ -20,7 +20,7 @@ buildPythonPackage {
 
   phases = [ "unpackPhase" "installPhase" ];
 
-  pythonPath = [ pyopenssl pkgs.gtk3 ];
+  requiredPythonModules = [ pyopenssl pkgs.gtk3 ];
 
   installPhase = ''
     substituteInPlace server/deskcon-server --replace "python2" "python"
@@ -30,7 +30,7 @@ buildPythonPackage {
     cp -r "server/"* $out/lib/${python.libPrefix}/site-packages
     mv $out/lib/${python.libPrefix}/site-packages/deskcon-server $out/bin/deskcon-server
 
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    wrapPythonProgramsIn $out/bin "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

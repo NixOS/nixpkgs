@@ -95,10 +95,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  pythonPath = with python.pkgs; [ pygobject2 pygtk ];
+  requiredPythonModules = with python.pkgs; [ pygobject2 pygtk ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share" --prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 

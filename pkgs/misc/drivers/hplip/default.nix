@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication {
     removeReferencesTo
   ] ++ stdenv.lib.optional withQt5 qt5.wrapQtAppsHook;
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     dbus
     pillow
     pygobject3
@@ -196,7 +196,7 @@ python3Packages.buildPythonApplication {
   # 2. Making our own wrapper pointing directly to the original script.
   dontWrapPythonPrograms = true;
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
 
     for bin in $out/bin/*; do
       py=$(readlink -m $bin)

@@ -87,7 +87,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   preCheck = ''
-    wrapPythonProgramsIn "$PWD/testing/overrides/bin" "$pythonPath"
+    wrapPythonProgramsIn "$PWD/testing/overrides/bin" "$requiredPythonModules"
 
     # Add 'duplicity' to PATH for tests.
     # Normally, 'setup.py test' adds 'build/scripts-2.7/' to PATH before running
