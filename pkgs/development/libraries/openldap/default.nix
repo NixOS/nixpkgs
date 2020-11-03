@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.51";
+  name = "openldap-2.4.55";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "0qmy2jkk6v9iqwrsdsn8s7lwzaplr01a2mgf21r6nl66lig7g47l";
+    sha256 = "0d44x6xjj4maay89i7vpkq6dd5xbwv2hi0hz9hh3vxwgpbb7ndcp";
   };
 
   # TODO: separate "out" and "bin"
