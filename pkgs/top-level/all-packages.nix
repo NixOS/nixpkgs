@@ -26157,8 +26157,6 @@ in
 
   platypus = callPackage ../applications/science/biology/platypus { };
 
-  plink = callPackage ../applications/science/biology/plink { };
-
   plink-ng = callPackage ../applications/science/biology/plink-ng { };
 
   prodigal = callPackage ../applications/science/biology/prodigal { };
