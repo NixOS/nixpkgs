@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "1a14a29e60be13eac11bd204dab9aef73cd72fe56a94c587333f21087584c0d8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     numpydoc
     scipy

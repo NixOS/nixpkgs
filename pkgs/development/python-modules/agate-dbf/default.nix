@@ -4,7 +4,7 @@ buildPythonPackage rec {
     pname = "agate-dbf";
     version = "0.2.2";
 
-    propagatedBuildInputs = [ agate dbf dbfread ];
+    requiredPythonModules = [ agate dbf dbfread ];
 
     src = fetchPypi {
       inherit pname version;

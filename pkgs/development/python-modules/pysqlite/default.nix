@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Since the `.egg' file is zipped, the `NEEDED' of the `.so' files
   # it contains is not taken into account.  Thus, we must explicitly make
   # it a propagated input.
-  propagatedBuildInputs = [ pkgs.sqlite ];
+  requiredPythonModules = [ pkgs.sqlite ];
 
   patchPhase = ''
     substituteInPlace "setup.cfg"                                     \

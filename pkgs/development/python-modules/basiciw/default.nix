@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ gcc ];
-  propagatedBuildInputs = [ wirelesstools ];
+  requiredPythonModules = [ wirelesstools ];
 
   meta = {
     description = "Get info about wireless interfaces using libiw";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1sfmm7daz0kpdx6pynsvi6qlfhrzxx783l1wb69c8dfzya4xssym";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     astroid
   ];
 

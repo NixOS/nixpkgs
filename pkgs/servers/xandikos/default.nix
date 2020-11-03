@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1x0bylmdizirvlcn6ryd43lffpmlq0cklj3jz956scmxgq4p6wby";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     aiohttp
     dulwich
     defusedxml

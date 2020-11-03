@@ -30,7 +30,7 @@ buildPythonApplication rec {
 
   doCheck = false; # weird error
 
-  propagatedBuildInputs = [ iowait psutil pyzmq tornado six ];
+  requiredPythonModules = [ iowait psutil pyzmq tornado six ];
 
   meta = with stdenv.lib; {
     description = "A process and socket manager";

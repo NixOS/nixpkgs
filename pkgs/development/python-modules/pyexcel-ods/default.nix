@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "f61b56515fd4ccd4687f0a112422f74ce8535247ad2da49db90038d7e3ed397c";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyexcel-io
     odfpy
   ];

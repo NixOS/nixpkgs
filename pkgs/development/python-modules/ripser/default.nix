@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cython
     numpy
     scipy

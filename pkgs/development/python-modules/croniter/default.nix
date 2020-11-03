@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "9d3098e50f7edc7480470455d42f09c501fa1bb7e2fc113526ec6e90b068f32c";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     python-dateutil
     natsort
   ];

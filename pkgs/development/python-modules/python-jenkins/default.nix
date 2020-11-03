@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
+  requiredPythonModules = [ pbr pyyaml setuptools six multi_key_dict requests ];
 
   checkInputs = [ unittest2 testscenarios requests-mock ];
   checkPhase = ''

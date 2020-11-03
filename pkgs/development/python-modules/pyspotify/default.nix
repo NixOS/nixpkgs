@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1y1zqkqi9jz5m9bb2z7wmax7g40c1snm3c6di6b63726qrf26rb7";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
   buildInputs = [ pkgs.libspotify ];
 
   # python zip complains about old timestamps

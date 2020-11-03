@@ -14,7 +14,7 @@ buildPythonPackage rec {
     touch LICENSE
   '';
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   # required files for test don't seem to be included in pypi package, full source for 0.10
   # version doesn't appear to be present on github

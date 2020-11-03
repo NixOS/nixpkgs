@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "b2fe534dcb33b1d3faad13d60c5a7c718e28f85987f2a034ecf5ec279918c11c";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  requiredPythonModules = [ requests six ];
 
   # some tests use python3 strings
   doCheck = !isPy27;

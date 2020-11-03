@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   checkPhase = ''pytest --benchmark-skip'';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     python-dateutil
     jsonref
     jsonschema

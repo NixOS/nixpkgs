@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     isort python-language-server
   ];
 

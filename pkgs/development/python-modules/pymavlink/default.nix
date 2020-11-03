@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "2954bb071ff67fc5ab29ed2dabe3b5355c4063fb8b014477d9bfbceb87358bc6";
   };
 
-  propagatedBuildInputs = [ future lxml ];
+  requiredPythonModules = [ future lxml ];
 
   # No tests included in PyPI tarball
   doCheck = false;

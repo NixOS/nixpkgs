@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "107dgsrjv95ww6gj77q89dirl604b2ljlpjg79gffm9c4gkmjj2m";
   };
 
-  propagatedBuildInputs = [ pyside2 shiboken2 twisted certifi ] ++ twisted.extras.tls;
+  requiredPythonModules = [ pyside2 shiboken2 twisted certifi ] ++ twisted.extras.tls;
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];

@@ -49,7 +49,7 @@ buildPythonPackage rec {
     buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click click-log click-threading
     requests_toolbelt
     requests

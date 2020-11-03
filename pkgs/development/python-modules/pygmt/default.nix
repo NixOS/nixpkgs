@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
-  propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
+  requiredPythonModules = [ numpy netcdf4 pandas packaging xarray ];
 
   doCheck = false; # requires network access
 

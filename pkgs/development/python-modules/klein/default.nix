@@ -19,7 +19,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ six twisted werkzeug incremental ];
+  requiredPythonModules = [ six twisted werkzeug incremental ];
 
   checkInputs = [ mock twisted ];
 

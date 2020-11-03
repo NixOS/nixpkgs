@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     python3Packages.dbus-python
     python3Packages.pygobject3
     python3Packages.pexpect

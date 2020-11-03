@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ cython packaging ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
     h5py

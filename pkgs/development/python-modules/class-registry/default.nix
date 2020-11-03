@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0zjf9nczl1ifzj07bgs6mwxsfd5xck9l0lchv2j0fv2n481xp2v7";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   checkInputs = [ nose ];
 
   # Tests currently failing.

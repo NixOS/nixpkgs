@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "00fqgnmv7z6d792ga4cyzn9lrfjf79jplkssm2jbyb0akfggfj7h";
   };
 
-  propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
+  requiredPythonModules = [ requests mt-940 sepaxml bleach ];
 
   checkInputs = [ pytest ];
 

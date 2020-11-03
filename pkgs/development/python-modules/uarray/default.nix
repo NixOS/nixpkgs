@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   doCheck = false; # currently has circular dependency module import, remove when bumping to >0.5.1
   checkInputs = [ pytest nbval pytestcov numba ];
-  propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions black ];
+  requiredPythonModules = [ matchpy numpy astunparse typing-extensions black ];
 
   pythonImportsCheck = [ "uarray" ];
 

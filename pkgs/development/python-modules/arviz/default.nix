@@ -31,7 +31,7 @@ buildPythonPackage rec {
     sha256 = "1cnj972knkvi084cfcpc12lv0wxm8xm9clfd55r3hvv42g1ms5d9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # needed to install
     matplotlib
     netcdf4

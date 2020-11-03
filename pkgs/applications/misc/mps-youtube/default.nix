@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "0lqprlpc0v092xqkjc0cc395ag45lijwgd34dpg2jy6i0f2szywv";
   };
 
-  propagatedBuildInputs = [ pafy ];
+  requiredPythonModules = [ pafy ];
 
   # disabled due to error in loading unittest
   # don't know how to make test from: <mps_youtube. ...>

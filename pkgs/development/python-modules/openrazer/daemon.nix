@@ -28,7 +28,7 @@ buildPythonApplication (common // rec {
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     daemonize
     dbus-python
     gobject-introspection

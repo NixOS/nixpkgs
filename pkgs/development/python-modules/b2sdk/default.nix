@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "b2sdk" ];
 
   nativebuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ requests arrow logfury tqdm ];
+  requiredPythonModules = [ requests arrow logfury tqdm ];
 
   # requires unpackaged dependencies like liccheck
   doCheck = false;

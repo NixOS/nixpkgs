@@ -80,7 +80,7 @@ buildPythonPackage rec {
     iml
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cypari2
     jinja2
     numpy

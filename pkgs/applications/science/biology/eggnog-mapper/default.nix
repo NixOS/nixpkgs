@@ -17,7 +17,7 @@ python27Packages.buildPythonApplication rec {
   });
 
   buildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ python27Packages.biopython wget diamond hmmer ];
+  requiredPythonModules = [ python27Packages.biopython wget diamond hmmer ];
 
   # make emapper find diamond & hmmer
   makeWrapperArgs = [

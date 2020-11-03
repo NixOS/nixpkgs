@@ -25,7 +25,7 @@ in buildPythonPackage rec {
     sed -i -e '/alembic>/d' requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     Mako
     aiohttp
     mautrix
@@ -48,7 +48,7 @@ in buildPythonPackage rec {
   # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
   # which has `mautrix-telegram` in its environment.
   passthru.alembic = alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ dbDrivers ++ [
+    requiredPythonModules = old.requiredPythonModules ++ dbDrivers ++ [
       mautrix-telegram
     ];
   });

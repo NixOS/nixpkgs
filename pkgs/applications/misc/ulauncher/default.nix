@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     wmctrl
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     mock
     mypy
     mypy-extensions

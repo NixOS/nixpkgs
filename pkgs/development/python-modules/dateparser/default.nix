@@ -46,7 +46,7 @@ buildPythonPackage rec {
   # AttributeError: 'module' object has no attribute 'config'
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # install_requires
     dateutil pytz regex tzlocal
     # extra_requires

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ flask_script ] ++ optional isPy3k glibcLocales;
-  propagatedBuildInputs = [ flask flask_sqlalchemy alembic ];
+  requiredPythonModules = [ flask flask_sqlalchemy alembic ];
 
   # tests invoke the flask cli which uses click and therefore has py3k encoding troubles
   preCheck = optionalString isPy3k ''

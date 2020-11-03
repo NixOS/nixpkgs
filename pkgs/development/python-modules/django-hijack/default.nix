@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ django_nose ];
-  propagatedBuildInputs = [ django django_compat ];
+  requiredPythonModules = [ django django_compat ];
 
   checkPhase = ''
     runHook preCheck

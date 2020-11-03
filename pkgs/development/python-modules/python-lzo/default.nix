@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ lzo ];
-  propagatedBuildInputs = [ ];
+  requiredPythonModules = [ ];
   checkInputs = [ nose ];
 
   meta = with lib; {

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools_scm cython ];
-  propagatedBuildInputs = [ numpy scikitlearn ];
+  requiredPythonModules = [ numpy scikitlearn ];
   checkInputs = [ pytest ];
 
   checkPhase = ''

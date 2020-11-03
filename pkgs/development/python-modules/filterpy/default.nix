@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy scipy matplotlib ];
+  requiredPythonModules = [ numpy scipy matplotlib ];
 
   # single test fails (even on master branch of repository)
   # project does not use CI

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
   };
 
-  propagatedBuildInputs = [ cssselect lxml webob ];
+  requiredPythonModules = [ cssselect lxml webob ];
 
   # circular dependency on webtest
   doCheck = false;

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "bbc47dad03dddb1ba5895612fdfa1e43cfb3c497534976cebacd4f3684b505b4";
   };
 
-  propagatedBuildInputs = [ quantities numpy ];
+  requiredPythonModules = [ quantities numpy ];
 
   # strange setuptools error (can not import semantic.test)
   doCheck = false;

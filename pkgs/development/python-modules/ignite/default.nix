@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest matplotlib mock ];
-  propagatedBuildInputs = [ pytorch scikitlearn tqdm pynvml ];
+  requiredPythonModules = [ pytorch scikitlearn tqdm pynvml ];
 
   # Some packages are not in NixPkgs; other tests try to build distributed
   # models, which doesn't work in the sandbox.

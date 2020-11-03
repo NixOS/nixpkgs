@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ] ++ lib.optionals (!isPy3k) [ mock ];
 
-  propagatedBuildInputs = [ brotli ];
+  requiredPythonModules = [ brotli ];
 
   checkPhase = ''
     find tests -name \*.pyc -delete

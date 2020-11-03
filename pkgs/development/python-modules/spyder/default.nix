@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server

@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "0xhrvg3d8ffnbbizsrfppcd2y98znvkgxjdmvbvin458m2rwccka";
   };
 
-  propagatedBuildInputs = [ numpy scipy imagemagick pillow ];
+  requiredPythonModules = [ numpy scipy imagemagick pillow ];
 
   meta = with stdenv.lib; {
     description = "Convert scans of handwritten notes to beautiful, compact PDFs";

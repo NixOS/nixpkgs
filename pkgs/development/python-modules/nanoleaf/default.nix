@@ -14,7 +14,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'gitVersion' '"${version}"'
   '';
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   meta = with stdenv.lib; {
     description = "A python interface for Nanoleaf Aurora lighting";

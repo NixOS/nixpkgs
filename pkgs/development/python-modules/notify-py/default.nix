@@ -16,7 +16,7 @@ buildPythonPackage rec {
      --replace "loguru==0.4.1" "loguru~=0.5.0"
   '';
 
-  propagatedBuildInputs = [ alsaUtils libnotify loguru which ];
+  requiredPythonModules = [ alsaUtils libnotify loguru which ];
 
   checkInputs = [ alsaUtils libnotify pytest which ];
 

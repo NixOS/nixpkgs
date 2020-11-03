@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     cython llfuse
   ];
 

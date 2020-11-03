@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1nnalv0jkkj34hw6yb12lp6r6fj1ps9vkkyshjvx65y5xdwmnny3";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   meta = with stdenv.lib; {
     description = "WebSockets support for any application/server";

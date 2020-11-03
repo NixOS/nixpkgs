@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dill
     fastjsonschema
     jsonschema

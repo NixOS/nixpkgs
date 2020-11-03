@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pygobject3
     pycairo
   ];

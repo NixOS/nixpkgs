@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "5a3896dbde3f291c5dd34769e7329ef5d5e4da34fee53479bd13dc5e5d540b8a";
   };
 
-  propagatedBuildInputs = [ numpy pytz six sentinel enum-compat ];
+  requiredPythonModules = [ numpy pytz six sentinel enum-compat ];
 
   # This is the list of officially supported versions. Other versions may work
   # as well.

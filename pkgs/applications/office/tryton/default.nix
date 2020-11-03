@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     dateutil
     pygobject3
     goocalendar

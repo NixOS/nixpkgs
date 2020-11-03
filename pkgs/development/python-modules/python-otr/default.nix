@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "0p3b1n8jlxwd65gbk2k5007fkhdyjwcvr4982s42hncivxvabzzy";
   };
 
-  propagatedBuildInputs = [ zope_interface cryptography application gmpy2 ];
+  requiredPythonModules = [ zope_interface cryptography application gmpy2 ];
 
   meta = with stdenv.lib; {
     description = "A pure python implementation of OTR";

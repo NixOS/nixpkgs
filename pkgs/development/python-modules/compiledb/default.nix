@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest gcc coreutils ];
-  propagatedBuildInputs = [ click bashlex shutilwhich ];
+  requiredPythonModules = [ click bashlex shutilwhich ];
 
   checkPhase = ''
     pytest

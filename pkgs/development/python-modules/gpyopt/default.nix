@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkPhase = "nosetests -v GPyOpt/testing";
 
-  propagatedBuildInputs = [ setuptools numpy scipy gpy emcee ];
+  requiredPythonModules = [ setuptools numpy scipy gpy emcee ];
 
   meta = with stdenv.lib; {
     description = "Bayesian optimization toolbox in Python";

@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     librsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pygobject3
     pyxdg
   ];

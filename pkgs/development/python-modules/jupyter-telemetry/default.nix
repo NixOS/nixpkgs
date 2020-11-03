@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "052khyn6h97jxl3k5i2m81xvga5v6vwh5qixzrax4w6zwcx62p24";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     python-json-logger jsonschema ruamel_yaml traitlets
   ];
 

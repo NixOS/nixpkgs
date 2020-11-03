@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm pkgconfig pytestrunner ];
   checkInputs = [ pytest pytestcov psutil ];
-  propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
+  requiredPythonModules = lib.optionals (!isPy3k) [ future ];
 
   # give a hint to setuptools_scm on package version
   preBuild = ''

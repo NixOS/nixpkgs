@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0c5zm6c7xzsigbb9c7v4r33fcpz911zscfwvh3dq1qxdy3ap18ci";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with lib; {
     description = "Python port of Google's language-detection library";

@@ -11,7 +11,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ i3ipc xcffib click cffi xpybutil marshmallow pyyaml ];
+  requiredPythonModules = [ i3ipc xcffib click cffi xpybutil marshmallow pyyaml ];
 
   # Tests require access to a X session
   doCheck = false;

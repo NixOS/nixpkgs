@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ contextvars ];
+  requiredPythonModules = lib.optionals (pythonOlder "3.7") [ contextvars ];
 
   checkInputs = [ pytest curio ];
 

@@ -23,7 +23,7 @@ in with python.pkgs; buildPythonPackage rec {
   pname = "bepasty";
   version = "0.5.0";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     pygments
     setuptools

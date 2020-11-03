@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ docutils ];
-  propagatedBuildInputs = [ boto3 fsspec ];
+  requiredPythonModules = [ boto3 fsspec ];
 
   # Depends on `moto` which has a long dependency chain with exact
   # version requirements that can't be made to work with current

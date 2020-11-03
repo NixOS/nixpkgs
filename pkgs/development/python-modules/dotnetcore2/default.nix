@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ unzip ];
 
-  propagatedBuildInputs = [ distro ];
+  requiredPythonModules = [ distro ];
 
   # needed to apply patches
   prePatch = ''

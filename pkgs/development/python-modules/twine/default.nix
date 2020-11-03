@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     keyring
     pkginfo
     pyblake2

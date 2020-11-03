@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (!isPy3k) [
+  requiredPythonModules = [ setuptools ] ++ lib.optionals (!isPy3k) [
     backports_functools_lru_cache
   ];
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytestrunner ];
   checkInputs = [ pytest pytestcov pytest-benchmark openssh ];
-  propagatedBuildInputs = [ pymatgen marshmallow pyyaml pygmo
+  requiredPythonModules = [ pymatgen marshmallow pyyaml pygmo
                             pandas scipy numpy scikitlearn
                             lammps-cython pymatgen-lammps ];
 

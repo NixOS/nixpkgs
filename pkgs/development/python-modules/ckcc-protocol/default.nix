@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [ click ecdsa hidapi pyaes ];
+  requiredPythonModules = [ click ecdsa hidapi pyaes ];
 
   meta = with stdenv.lib; {
     description = "Communicate with your Coldcard using Python";

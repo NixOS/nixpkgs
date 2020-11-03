@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "1gmlifnv9kji0d1jwg1pa8d96zg48w17qg0sgxwy1y1jf3hn37bm";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     h5py hickle numpy pandas pillow six pytorch torchvision tqdm
   ];
 

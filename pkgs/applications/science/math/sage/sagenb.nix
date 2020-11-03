@@ -31,7 +31,7 @@ buildPythonPackage rec {
     ./patches/sagenb-cmp-deprecation.patch
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     twisted
     flask
     flask-oldsessions

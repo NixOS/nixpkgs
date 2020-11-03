@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "05fhwraq12c2724pn4py1bjzy5rmsrb1x68zck73nlp5icba6yap";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pylint-plugin-utils
   ];
 

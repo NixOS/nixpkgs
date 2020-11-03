@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "15l1gb0hhi9pf3mhhb9vpc93w6w3hrih2ljmzbkgfb3dwqd1l9a8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     click-default-group
     incremental

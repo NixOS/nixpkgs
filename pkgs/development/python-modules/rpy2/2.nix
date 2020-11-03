@@ -71,7 +71,7 @@ buildPythonPackage rec {
     doPatchelf = false; # fails because of "missing filename"
     patchelfPhase = "";
 
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       singledispatch
       six
       jinja2

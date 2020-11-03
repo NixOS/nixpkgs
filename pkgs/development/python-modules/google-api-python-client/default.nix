@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     google_auth google-auth-httplib2 google_api_core
     httplib2 six uritemplate oauth2client
   ];

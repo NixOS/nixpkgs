@@ -41,7 +41,7 @@ buildPythonPackage rec {
     geos proj_5
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # required
     six pyshp shapely numpy
 

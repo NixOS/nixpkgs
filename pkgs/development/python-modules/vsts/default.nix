@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "15sgwqa72ynpahj101r2kc15s3dnsafg5gqx0sz3hnqz29h925ys";
   };
 
-  propagatedBuildInputs = [ msrest ];
+  requiredPythonModules = [ msrest ];
 
   # Tests are highly impure
   checkPhase = ''

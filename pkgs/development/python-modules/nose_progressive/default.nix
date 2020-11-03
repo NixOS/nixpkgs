@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ nose ];
-  propagatedBuildInputs = [ pillow blessings ];
+  requiredPythonModules = [ pillow blessings ];
 
   # fails with obscure error
   doCheck = !isPy3k;

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   # bin/duecredit requires setuptools at runtime
-  propagatedBuildInputs = [ citeproc-py requests setuptools six ];
+  requiredPythonModules = [ citeproc-py requests setuptools six ];
 
   checkInputs = [ contextlib2 pytest pytestCheckHook vcrpy ];
   disabledTests = [ "test_io" ];

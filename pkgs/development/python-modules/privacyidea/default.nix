@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "188ki924dig899wlih45xfsm0s7mjkya56vii26bg02h91izrb4b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cryptography pyrad pymysql python-dateutil flask-versioned flask_script
     defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel

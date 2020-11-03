@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   patches = [ ./sql_error.patch ]; # Already fixed in master, but not yet in the current release. This can be removed upon the next version update
 
-  propagatedBuildInputs = [ lxml sqlalchemy ];
+  requiredPythonModules = [ lxml sqlalchemy ];
 
   doCheck = false; # Tests require networking, and https://github.com/alberanid/imdbpy/issues/240
   pythonImportsCheck = [ "imdb" ];

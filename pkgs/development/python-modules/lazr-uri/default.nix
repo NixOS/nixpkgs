@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "f36e7e40d5f8f2cf20ff2c81784a14a546e6c19c216d40a6617ebe0c96c92c49";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  requiredPythonModules = [ setuptools ];
 
   meta = with lib; {
     description = "A self-contained, easily reusable library for parsing, manipulating";

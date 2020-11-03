@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jsonpickle
     mmh3
     ordered-set

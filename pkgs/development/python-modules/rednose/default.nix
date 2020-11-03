@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = !(isPy27 || (stdenv.isDarwin && pythonAtLeast "3.8"));
 
   checkInputs = [ six ];
-  propagatedBuildInputs = [ nose colorama termstyle ];
+  requiredPythonModules = [ nose colorama termstyle ];
 
   meta = with stdenv.lib; {
     description = "A python nose plugin adding color to console results";

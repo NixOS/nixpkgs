@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints ]
+  requiredPythonModules = [ dbus-python entrypoints ]
   ++ lib.optional stdenv.isLinux secretstorage
   ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 

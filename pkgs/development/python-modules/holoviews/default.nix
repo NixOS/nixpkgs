@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "3f8a00ce1cc67a388a3a949441accd7e7e9ca9960ba16b49ee96a50305105a01";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     param
     numpy
     pyviz-comms

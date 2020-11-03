@@ -67,7 +67,7 @@ in buildPythonPackage rec {
     ++ lib.optional withWebSockets qtwebsockets
   ;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dbus-python
     sip
   ] ++ lib.optional (!isPy3k) enum34;

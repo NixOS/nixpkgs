@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0lcf3yg27amrnqvgn5nw4jn2j0vj4yfmyl5p5yncmn7dh6bdbsp8";
   };
 
-  propagatedBuildInputs = [ aiohttp yarl ];
+  requiredPythonModules = [ aiohttp yarl ];
   checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   meta = with lib; {

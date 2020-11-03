@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0nfmdkgbhmkl82dfxjpwiiarxngm6a3fvdrzpaqp60a4b17pipqg";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     ipaddress
     pyserial

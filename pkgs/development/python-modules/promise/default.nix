@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace '"futures",' ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     gevent
     six
   ];

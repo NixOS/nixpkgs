@@ -46,7 +46,7 @@ buildPythonPackage rec {
     muparserx
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cvxpy
     cython  # generates some cython files at runtime that need to be cython-ized
     numpy

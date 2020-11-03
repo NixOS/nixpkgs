@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython pkgs.proj ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy shapely
   ] ++ lib.optional (pythonOlder "3.6") aenum;
 

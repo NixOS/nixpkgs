@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ requests urllib3 mock setuptools ];
+  requiredPythonModules = [ requests urllib3 mock setuptools ];
 
   meta = with stdenv.lib; {
     description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";

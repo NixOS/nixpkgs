@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "894d240c51428225264867a80094b9743d71272635a18ddfefa5832b61fed2c6";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     bcrypt
     blinker
     flask

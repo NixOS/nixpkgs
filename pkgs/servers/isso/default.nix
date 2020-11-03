@@ -15,7 +15,7 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "02jgfzq3svd54zj09jj7lm2r7ypqqjynzxa9dgnnm0pqvq728wzr";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     itsdangerous
     jinja2
     misaka

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   buildInputs = [ zlib bwa ];
 
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
 
   # no tests
   doCheck = false;

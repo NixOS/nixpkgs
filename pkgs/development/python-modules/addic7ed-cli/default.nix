@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     requests
     pyquery
   ];

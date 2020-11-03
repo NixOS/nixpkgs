@@ -20,7 +20,7 @@ buildPythonPackage rec {
     pytest_xdist
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six pyyaml numpy scipy h5py
     keras-applications keras-preprocessing
   ];

@@ -39,7 +39,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   checkInputs = [ pytest pytest-repeat pytest-timeout mock joblib ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
       click cloudpickle dask msgpack psutil six
       sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
   ];

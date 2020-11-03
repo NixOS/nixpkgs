@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1cn550kjadnxc1sx2xy814248fpzrj3lgvrmsbrwmk03vwaa2hmi";
   };
 
-  propagatedBuildInputs = [ nbformat ];
+  requiredPythonModules = [ nbformat ];
   checkInputs = [ nose ];
 
   checkPhase = ''

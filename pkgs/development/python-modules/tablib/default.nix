@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1rvvdchdva7j9b29ay0sg8y33pjhpmzynl38wz2rl89pph8gmhlc";
   };
 
-  propagatedBuildInputs = [ xlwt openpyxl pyyaml xlrd odfpy ];
+  requiredPythonModules = [ xlwt openpyxl pyyaml xlrd odfpy ];
   checkInputs = [ pytest pytestcov unicodecsv pandas ];
 
   # test_tablib needs MarkupPy, which isn't packaged yet

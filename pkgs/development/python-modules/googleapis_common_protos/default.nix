@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "560716c807117394da12cecb0a54da5a451b5cf9866f1d37e9a5e2329a665351";
   };
 
-  propagatedBuildInputs = [ protobuf setuptools ];
+  requiredPythonModules = [ protobuf setuptools ];
   checkInputs = [ pytest ];
 
   doCheck = false;  # there are no tests

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0r2wr7aqay9fwjrgk35fkjzk8lvvb4i4df7ndaqzkr4ndw5zzx7q";
   };
 
-  propagatedBuildInputs = [ decorator setuptools ];
+  requiredPythonModules = [ decorator setuptools ];
   checkInputs = [ nose pytest];
   checkPhase = ''
     pytest

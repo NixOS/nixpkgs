@@ -27,7 +27,7 @@ buildPythonPackage rec {
     gcc8
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     msgpack
   ];

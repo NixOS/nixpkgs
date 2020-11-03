@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   doCheck = false;
-  propagatedBuildInputs = [ requests six requests_oauthlib ];
+  requiredPythonModules = [ requests six requests_oauthlib ];
 
   meta = with lib; {
     homepage = "https://github.com/tweepy/tweepy";

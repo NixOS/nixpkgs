@@ -10,7 +10,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "14d8kn2pvr1qv8mwqrxmj85jycr73vwfqz12hzag0ararbkfhyky";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     twisted Mako chardet pyxdg pyopenssl service-identity
     libtorrentRasterbar.dev libtorrentRasterbar.python setuptools
     setproctitle pillow rencode six zope_interface

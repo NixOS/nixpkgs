@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   sourceRoot = "source/${pname}";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ConfigArgParse
     acme
     configobj

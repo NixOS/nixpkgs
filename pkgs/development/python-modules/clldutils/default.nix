@@ -29,7 +29,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--cov" ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil
     tabulate
     colorlog

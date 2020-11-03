@@ -355,7 +355,7 @@ in buildPythonPackage {
   setupPyGlobalFlags = [ "--project_name ${pname}" ];
 
   # tensorflow/tools/pip_package/setup.py
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     absl-py
     astor
     gast

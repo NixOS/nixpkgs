@@ -15,7 +15,7 @@ buildPythonPackage rec {
     find . -name '*.pyc' -exec rm {} \;
   '';
 
-  propagatedBuildInputs = [ decorator requests simplejson pillow ]
+  requiredPythonModules = [ decorator requests simplejson pillow ]
     ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [ nose mock pytest freezegun ];

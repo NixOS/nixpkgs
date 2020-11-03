@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ file desktop-file-utils ];
 
-  propagatedBuildInputs = [ python3Packages.pyxdg ];
+  requiredPythonModules = [ python3Packages.pyxdg ];
 
   preConfigure = ''
     substituteInPlace Mimeo.py \

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     rm fxa/tests/test_core.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyjwt requests cryptography pybrowserid hawkauthlib six
   ];
 

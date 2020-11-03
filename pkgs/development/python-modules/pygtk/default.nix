@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pango
   ] ++ stdenv.lib.optional (libglade != null) libglade;
 
-  propagatedBuildInputs = [ gtk2 pygobject2 pycairo ];
+  requiredPythonModules = [ gtk2 pygobject2 pycairo ];
 
   configurePhase = "configurePhase";
 

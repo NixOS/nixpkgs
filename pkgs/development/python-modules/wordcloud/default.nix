@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1ncjr90m3w3b4zi23kw6ai11gxahdyah96x8jb2yn2x4573022x2";
   };
 
-  propagatedBuildInputs = [ matplotlib numpy pillow ];
+  requiredPythonModules = [ matplotlib numpy pillow ];
 
   # Tests require extra dependencies
   checkInputs = [ mock pytest pytestcov ];

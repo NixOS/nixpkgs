@@ -37,7 +37,7 @@ buildPythonPackage rec {
     executing pure-eval asttokens ]
   ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  requiredPythonModules = [ urllib3 certifi ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/getsentry/sentry-python";

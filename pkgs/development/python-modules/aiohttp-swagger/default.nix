@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1vpfk5b3f7s9qzr2q48g776f39xzqppjwm57scfzqqmbldkk5nv7";
   };
 
-  propagatedBuildInputs = [ aiohttp jinja2 pyyaml ];
+  requiredPythonModules = [ aiohttp jinja2 pyyaml ];
 
   checkInputs = [ flake8 pytestCheckHook pytest-aiohttp ];
 

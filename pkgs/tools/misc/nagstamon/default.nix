@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   # Test assumes darwin
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [ configparser pyqt5 psutil requests
+  requiredPythonModules = with pythonPackages; [ configparser pyqt5 psutil requests
      beautifulsoup4 keyring requests-kerberos kerberos lxml ];
 
   meta = with stdenv.lib; {

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "040yzha6cyshnn6ljgk2birgh6mh2cnra48xp5ina5vfsnsmab6p";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools ];
+  requiredPythonModules = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 

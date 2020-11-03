@@ -19,7 +19,7 @@ buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   checkPhase = ''
     runtest="$(pwd)/numexpr/tests/test_numexpr.py"

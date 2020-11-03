@@ -20,7 +20,7 @@ buildPythonPackage rec {
       --replace "'gcc'" "'${gcc}/bin/gcc'"
   '';
 
-  propagatedBuildInputs = [ ipykernel ];
+  requiredPythonModules = [ ipykernel ];
 
   # no tests in repository
   doCheck = false;

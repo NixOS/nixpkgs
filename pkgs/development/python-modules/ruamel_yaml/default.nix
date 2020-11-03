@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Tests use relative paths
   doCheck = false;
 
-  propagatedBuildInputs = [ ruamel_base ]
+  requiredPythonModules = [ ruamel_base ]
     ++ lib.optional (!isPy3k) ruamel_ordereddict
     ++ lib.optional (!isPyPy) ruamel_yaml_clib;
 

@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "17aq6v4ahnga82r350kx1y8i7zgikpzmwzaacj7a339kh8hxkh63";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ slixmpp prometheus_client pyyaml ];
+  requiredPythonModules = with pythonPackages; [ slixmpp prometheus_client pyyaml ];
 
   meta = {
     description = "XMPP Web hook for Prometheus";

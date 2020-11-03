@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "17r37pbxiv5dw857bmg990x836gq6sgww069w3q5jjg9m3xdm7dh";
   };
 
-  propagatedBuildInputs = [ numpy ] ++ lib.optional isPy27 mock;
+  requiredPythonModules = [ numpy ] ++ lib.optional isPy27 mock;
 
   checkInputs = [ pytestCheckHook ];
 

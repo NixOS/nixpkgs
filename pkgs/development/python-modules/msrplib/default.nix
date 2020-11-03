@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0d0krwv4hhspjgppnvh0iz51bvdbz23cjasgrppip7x8b00514gz";
   };
 
-  propagatedBuildInputs = [ eventlib application gnutls ];
+  requiredPythonModules = [ eventlib application gnutls ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/AGProjects/python-msrplib";

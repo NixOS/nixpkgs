@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose psutil ] ++
     lib.optionals isPy27 [ contextlib2 mock unittest2 ];
-  propagatedBuildInputs = [ six ] ++
+  requiredPythonModules = [ six ] ++
     lib.optionals (pythonOlder "3.4") [ statistics ];
 
   # tests not included in pypi repository

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   checkInputs = [ django-discover-runner mock dj-database-url dj-email-url dj-search-url django-cache-url ];
 
   checkPhase = ''

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "a622bce0d6d0ac99a53b6e6a6475c39250207d644f28ad0ed276af7b96d12617";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   checkInputs = [ pytest pytestcov pytest-mock pytest_xdist ];
 

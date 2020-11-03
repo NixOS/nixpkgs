@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sha256 = "16qw68rz5q77w84lwyhjpfd3bm4mfrhcjrnxwwnz3vmi610h68hx";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click watchdog exifread requests mistune inifile Babel jinja2
     flask pyopenssl ndg-httpsclient setuptools
   ] ++ lib.optionals isPy27 [ functools32 ];

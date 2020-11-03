@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     click
     construct

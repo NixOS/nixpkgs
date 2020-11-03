@@ -21,7 +21,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake ];
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     numpy
     scipy

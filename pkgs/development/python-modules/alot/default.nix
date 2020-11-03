@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optional withManpage sphinx;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     notmuch
     urwid
     urwidtrees

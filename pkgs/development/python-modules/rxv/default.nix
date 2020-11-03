@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1dw3ayrzknai2279bhkgzcapzw06rhijlny33rymlbp7irp0gvnj";
   };
 
-  propagatedBuildInputs = [ defusedxml requests ];
+  requiredPythonModules = [ defusedxml requests ];
 
   checkInputs = [ pytest requests-mock mock pytestcov pytest-timeout testtools ];
   checkPhase = ''

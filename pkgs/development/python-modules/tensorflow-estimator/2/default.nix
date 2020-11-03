@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "11n4sl9wfr00fv1i837b7a36ink86ggmlsgj7i06kcfc011h6pmp";
   };
 
-  propagatedBuildInputs = [ mock numpy absl-py ];
+  requiredPythonModules = [ mock numpy absl-py ];
 
   meta = with stdenv.lib; {
     description = "TensorFlow Estimator is a high-level API that encapsulates model training, evaluation, prediction, and exporting.";

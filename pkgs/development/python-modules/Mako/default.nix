@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "8195c8c1400ceb53496064314c6736719c6f25e7479cd24c77be3d9361cddc27";
   };
 
-  propagatedBuildInputs = [ markupsafe ];
+  requiredPythonModules = [ markupsafe ];
   checkInputs = [ pytestCheckHook markupsafe mock ];
 
   disabledTests = lib.optionals isPyPy [

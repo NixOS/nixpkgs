@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0jczc1yr2yi3mf1qdgpvg9sidp5hf3jplzs4917j65ymvk2zw9na";
   };
 
-  propagatedBuildInputs = [ mozlog mozdevice ];
+  requiredPythonModules = [ mozlog mozdevice ];
 
   meta = {
     description = "Application version information library";

@@ -23,7 +23,7 @@ buildPythonPackage rec {
       export CUDA_PATH=${cudatoolkit}
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cudatoolkit
     cudnn
     linuxPackages.nvidia_x11

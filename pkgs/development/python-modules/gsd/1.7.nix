@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0fpk69wachyydpk9cbs901m7hkwrrvq24ykxsrz62km9ql8lr2vp";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   # tests not packaged with gsd
   doCheck = false;

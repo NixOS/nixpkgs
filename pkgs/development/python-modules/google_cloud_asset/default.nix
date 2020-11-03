@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ mock pytest-asyncio pytestCheckHook ];
   disabledTests = [ "asset_service_transport_auth_adc" ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     grpc_google_iam_v1
     google_api_core
     google-cloud-access-context-manager

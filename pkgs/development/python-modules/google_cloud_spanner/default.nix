@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ grpcio-gcp grpc_google_iam_v1 google_api_core google_cloud_core ];
+  requiredPythonModules = [ grpcio-gcp grpc_google_iam_v1 google_api_core google_cloud_core ];
 
   # avoid importing local package
   checkPhase = ''

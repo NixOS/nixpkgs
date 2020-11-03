@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1wn3ara3i19fi1y9a5j4imyczpa6dkkzd5djggxg4kkl1ff9awrj";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   meta = with lib; {
     homepage = "https://github.com/mhe/pynrrd";

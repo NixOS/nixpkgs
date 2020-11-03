@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
+  requiredPythonModules = [ cryptography boto3 pyyaml docutils ];
 
   # No tests in archive
   doCheck = false;

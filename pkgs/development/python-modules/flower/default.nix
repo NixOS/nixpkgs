@@ -24,7 +24,7 @@ buildPythonPackage rec {
     rm tests/load.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     celery
     pytz
     tornado

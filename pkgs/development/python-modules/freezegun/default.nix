@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "e2062f2c7f95cc276a834c22f1a17179467176b624cc6f936e8bc3be5535ad1b";
   };
 
-  propagatedBuildInputs = [ dateutil six ];
+  requiredPythonModules = [ dateutil six ];
   checkInputs = [ mock nose pytest ];
   # contains python3 specific code
   doCheck = !isPy27;

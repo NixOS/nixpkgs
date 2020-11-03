@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "e224754230e7e015836ba20037cac6321e8e2ce9b8627c14d579fcb37249decd";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil
     jmespath
     docutils

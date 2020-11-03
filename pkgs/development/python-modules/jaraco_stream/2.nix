@@ -9,5 +9,5 @@ buildPythonPackage rec {
   };
   doCheck = false;
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 }

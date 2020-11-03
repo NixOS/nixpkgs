@@ -13,7 +13,7 @@ buildPythonPackage rec {
     rev    = "v${version}";
     sha256 = "13bzs9dcv27czpnnbgz7a037lm8h991c8gk0qzzk5mq5yak24715";
   };
-  propagatedBuildInputs = [ xlib ];
+  requiredPythonModules = [ xlib ];
 
   fontsConf = makeFontsConf {
     fontDirectories = [ ];

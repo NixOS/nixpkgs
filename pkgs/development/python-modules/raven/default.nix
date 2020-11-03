@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # see https://github.com/getsentry/raven-python/blob/master/setup.py
   doCheck = false;
 
-  propagatedBuildInputs = [ blinker ] ++ lib.optionals (!isPy3k) [ contextlib2 ];
+  requiredPythonModules = [ blinker ] ++ lib.optionals (!isPy3k) [ contextlib2 ];
 
   meta = {
     description = "A Python client for Sentry (getsentry.com)";

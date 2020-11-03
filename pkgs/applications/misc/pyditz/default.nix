@@ -13,7 +13,7 @@ in buildPythonApplication rec {
     sha256 = "0hxxz7kxv9gsrr86ccsc31g7bc2agw1ihbxhd659c2m6nrqq5qaf";
   };
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pyyaml six jinja2 cerberus_1_1 ];
+  requiredPythonModules = [ pyyaml six jinja2 cerberus_1_1 ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ flake8 pytest_4 pytest-expect mock ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six webencodings
   ];
 

@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1jwk0b2iz4z09qynnhcr07w15lx6i1ra09s9lp48vslqcf2fp36x";
   };
 
-  propagatedBuildInputs = [ mopidy mopidy-spotify pythonPackages.tunigo ];
+  requiredPythonModules = [ mopidy mopidy-spotify pythonPackages.tunigo ];
 
   doCheck = false;
 

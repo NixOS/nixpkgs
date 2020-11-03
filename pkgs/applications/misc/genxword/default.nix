@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     gtksourceview3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pycairo
     pygobject3
   ];

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     curve25519-donna
     ed25519
     cryptography

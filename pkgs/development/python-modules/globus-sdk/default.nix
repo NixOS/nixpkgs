@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [ flake8 nose2 mock ];
 
-  propagatedBuildInputs = [ requests pyjwt  ];
+  requiredPythonModules = [ requests pyjwt  ];
 
   meta = with lib; {
     description = "A convenient Pythonic interface to Globus REST APIs, including the Transfer API and the Globus Auth API.";

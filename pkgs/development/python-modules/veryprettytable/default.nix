@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1k1rifz8x6qcicmx2is9vgxcj0qb2f5pvzrp7zhmvbmci3yack3f";
   };
 
-  propagatedBuildInputs = [ termcolor colorama ];
+  requiredPythonModules = [ termcolor colorama ];
 
   meta = with stdenv.lib; {
     description = "A simple Python library for easily displaying tabular data in a visually appealing ASCII table format";

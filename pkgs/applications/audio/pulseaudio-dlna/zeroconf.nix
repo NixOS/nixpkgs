@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0ykzg730n915qbrq9bn5pn06bv6rb5zawal4sqjyfnjjm66snkj3";
   };
 
-  propagatedBuildInputs = [ netifaces six enum-compat ifaddr ]
+  requiredPythonModules = [ netifaces six enum-compat ifaddr ]
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
 
   meta = with stdenv.lib; {

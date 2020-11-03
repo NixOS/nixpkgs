@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1v49sym6mrci9dxy0a7cpbp4bv6fg2ijj6rwk4wzg18c2x4qzkhn";
   };
 
-  propagatedBuildInputs = [ livestreamer ];
+  requiredPythonModules = [ livestreamer ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/gapato/livestreamer-curses";

@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "13r4fn3dd0nyidfhrr7zzpls5ifbyqdwxhyvpkqr8ahchws7wfc6";
   };
 
-  propagatedBuildInputs = [ pillow ];
+  requiredPythonModules = [ pillow ];
 
   installFlags = [
     "DESTDIR=$(out)"

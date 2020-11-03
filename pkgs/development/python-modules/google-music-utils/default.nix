@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0fn4zp0gf1wx2x06dbc840qcq21j4p3ajghxp7646w2n6n9gxhh7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     audio-metadata multidict wrapt
   ];
 

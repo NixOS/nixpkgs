@@ -21,7 +21,7 @@ with python3.pkgs; buildPythonApplication rec {
     mypy-extensions
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cryptography
     beautifulsoup4
     requests

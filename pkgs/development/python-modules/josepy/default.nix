@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "c37ff4b93606e6a452b72cdb992da5e0544be12912fac01b31ddbdd61f6d5bd0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyopenssl
     cryptography
     six

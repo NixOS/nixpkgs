@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1jngf0mbn5hn166pqh1ga5snwwvv7n5kv1k9kaksrfibixkvpw6h";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout pytz xmltodict ];
+  requiredPythonModules = [ aiohttp async-timeout pytz xmltodict ];
 
   pythonImportsCheck = [ "metno"];
 

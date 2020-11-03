@@ -48,7 +48,7 @@ with py.pkgs; buildPythonApplication rec {
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     bcdoc
     botocore
     colorama

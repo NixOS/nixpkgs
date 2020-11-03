@@ -66,7 +66,7 @@ in buildPythonPackage {
 
   src = bazel-build;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     absl-py
     semantic-version

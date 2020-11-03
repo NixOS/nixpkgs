@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # requires old version of vcrpy
   doCheck = false;
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   meta = with lib; {
     description = "Python SDK for the VMware vSphere API that allows you to manage ESX, ESXi, and vCenter";

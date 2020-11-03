@@ -17,7 +17,7 @@ buildPythonPackage rec {
     pytest tests/test_{parser,model,variant_m3u8}.py
   '';
 
-  propagatedBuildInputs = [ requests iso8601 ];
+  requiredPythonModules = [ requests iso8601 ];
 
   meta = with lib; {
     homepage = "https://github.com/globocom/m3u8";

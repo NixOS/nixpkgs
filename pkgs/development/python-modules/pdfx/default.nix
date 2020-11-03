@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sed -i -e "s|pdfminer2|pdfminer.six|" setup.py
   '';
 
-  propagatedBuildInputs = [ pdfminer chardet ];
+  requiredPythonModules = [ pdfminer chardet ];
 
   checkInputs = [ pytest ];
 

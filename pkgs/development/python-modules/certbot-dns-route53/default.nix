@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   pname = "certbot-dns-route53";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     acme
     boto3
     certbot

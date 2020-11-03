@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-benchmark ];
 
-  propagatedBuildInputs = [ astroid isort mccabe toml ];
+  requiredPythonModules = [ astroid isort mccabe toml ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove broken darwin test

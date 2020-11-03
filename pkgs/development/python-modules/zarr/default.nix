@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     asciitree
     numpy
     fasteners

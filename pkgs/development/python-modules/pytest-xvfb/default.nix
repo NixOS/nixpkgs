@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1kyq5rg27dsnj7dc6x9y7r8vwf8rc88y2ppnnw6r96alw0nn9fn4";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
     virtual-display
   ];

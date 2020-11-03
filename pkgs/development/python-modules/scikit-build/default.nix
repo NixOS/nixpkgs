@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sha256 = "0p4smkl2rbpl00m5va5qa8hp2hqb3284p2cs6k8zlmi4kgbdyh6s";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     distro
     packaging
     setuptools

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ icu ]; # for icu-config
   buildInputs = [ icu ];
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with stdenv.lib; {
     homepage = "https://pypi.python.org/pypi/PyICU/";

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "02ff25466b3a46b1a7dbe477340b042770ac078de7ea475a6285a28a75eb1fab";
   };
 
-  propagatedBuildInputs = [ tornado ];
+  requiredPythonModules = [ tornado ];
 
   meta = with lib; {
     homepage = "https://github.com/mrjoes/sockjs-tornado/";

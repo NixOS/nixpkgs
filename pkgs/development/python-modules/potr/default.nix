@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "f95b9a7feaf8e3a6aaa898609f8a2ada55518cf52fc09152775c4c59c99b8ea6";
   };
 
-  propagatedBuildInputs = [ pycrypto ];
+  requiredPythonModules = [ pycrypto ];
 
   meta = with stdenv.lib; {
     description = "A pure Python OTR implementation";

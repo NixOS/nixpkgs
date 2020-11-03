@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "13m0iz14lyplnpm96gfpisqvv4n89ls30kmkg21z7v238lm0h19j";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     mopidy
     python3Packages.uritools
   ];

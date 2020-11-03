@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "93fbb9af860e95dd40bf18c3b2b6ed99189a07c0f29ba76f9c5be71344664ec8";
   };
 
-  propagatedBuildInputs = [ tinycss2 ];
+  requiredPythonModules = [ tinycss2 ];
 
   checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
 

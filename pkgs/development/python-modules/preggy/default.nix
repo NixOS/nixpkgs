@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "preggy";
   version = "1.4.4";
 
-  propagatedBuildInputs = [ six unidecode ];
+  requiredPythonModules = [ six unidecode ];
   checkInputs = [ nose yanc ];
 
   src = fetchPypi {

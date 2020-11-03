@@ -30,7 +30,7 @@ buildPythonPackage rec {
     substituteInPlace heudiconv/info.py --replace "'pathlib'," ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
   ];
 

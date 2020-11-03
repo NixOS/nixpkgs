@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock ];
-  propagatedBuildInputs = [ sphinx six ];
+  requiredPythonModules = [ sphinx six ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests

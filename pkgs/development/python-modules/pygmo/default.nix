@@ -13,7 +13,7 @@
 }:
 
 let
-  propagatedBuildInputs = [ numpy cloudpickle ipyparallel numba ];
+  requiredPythonModules = [ numpy cloudpickle ipyparallel numba ];
 
   pagmo2WithPython = pagmo2.overrideAttrs (oldAttrs: {
     cmakeFlags = oldAttrs.cmakeFlags ++ [
@@ -21,7 +21,7 @@ let
       "-DPAGMO_BUILD_PAGMO=no"
       "-DPagmo_DIR=${pagmo2}"
     ];
-    buildInputs = [ eigen nlopt ipopt boost pagmo2 ] ++ propagatedBuildInputs;
+    buildInputs = [ eigen nlopt ipopt boost pagmo2 ] ++ requiredPythonModules;
     postInstall = ''
       mv wheel $out
     '';
@@ -31,7 +31,7 @@ in buildPythonPackage {
   pname = "pygmo";
   version = pagmo2WithPython.version;
 
-  inherit propagatedBuildInputs;
+  inherit requiredPythonModules;
 
   src = pagmo2WithPython;
 

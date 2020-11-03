@@ -30,7 +30,7 @@ buildPythonPackage rec {
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     });
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     asgiref
     pytz
     sqlparse

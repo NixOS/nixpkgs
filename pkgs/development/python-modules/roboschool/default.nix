@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # fails to find boost_python for some reason
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     gym
   ];
 

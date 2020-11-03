@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   # Somehow nosetests doesn't run the tests, so let's use pytest instead
   doCheck = false; # tests use relative paths, which fail to resolve

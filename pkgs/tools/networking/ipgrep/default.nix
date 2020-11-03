@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
       --replace "'scripts': []" "'scripts': { '${pname}.py' }"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pycares
     urllib3
     requests

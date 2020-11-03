@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1ay598avmg656cxnc9phdx43z1plsrfjf9png9jwjwyhyjjiqxil";
   };
 
-  propagatedBuildInputs = [ aiofiles cryptography libusb1 pyasn1 rsa ];
+  requiredPythonModules = [ aiofiles cryptography libusb1 pyasn1 rsa ];
 
   checkInputs = [ mock pycryptodome ];
   checkPhase = ''

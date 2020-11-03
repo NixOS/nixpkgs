@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0ebc1925c1aed94f99d74cbc0230215127ade80a25240133204094faa74bc41b";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  requiredPythonModules = [ pyyaml ];
 
   postPatch = ''
     substituteInPlace lib/ClusterShell/Worker/Ssh.py \

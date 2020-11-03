@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1d8343982cae238da82c809dcbd82d53f9560b50e17b1dd727123f576385139d";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   checkInputs = [ pytest mock sphinx ];
 

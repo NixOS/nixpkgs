@@ -19,7 +19,7 @@ buildPythonPackage rec {
       --replace "catch = 1" ""
   '';
 
-  propagatedBuildInputs = [ testtools ];
+  requiredPythonModules = [ testtools ];
 
   meta = with stdenv.lib; {
     description = "A pyunit extension for dependency injection";

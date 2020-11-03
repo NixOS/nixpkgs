@@ -28,7 +28,7 @@ buildPythonPackage rec {
     zlib
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     kafka-python
   ];
 

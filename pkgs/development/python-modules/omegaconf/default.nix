@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ pyyaml six ] ++ stdenv.lib.optional isPy27 pathlib2;
+  requiredPythonModules = [ pyyaml six ] ++ stdenv.lib.optional isPy27 pathlib2;
 
   meta = with stdenv.lib; {
     description = "A framework for configuring complex applications";

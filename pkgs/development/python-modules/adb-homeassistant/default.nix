@@ -20,7 +20,7 @@ buildPythonPackage {
 
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     libusb1
     rsa
     pycryptodome

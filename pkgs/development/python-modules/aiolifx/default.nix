@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ bitstring ifaddr ];
+  requiredPythonModules = [ bitstring ifaddr ];
 
   meta = with lib; {
     homepage = "https://github.com/frawau/aiolifx";

@@ -51,7 +51,7 @@ let
       libX11
     ];
 
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       six
     ];
 
@@ -80,7 +80,7 @@ in
       opencascade
     ];
 
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       pyparsing
       pythonocc-core-cadquery
     ];

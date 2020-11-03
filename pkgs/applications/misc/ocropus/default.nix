@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "tmbdev";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ curl numpy scipy pillow
+  requiredPythonModules = with pythonPackages; [ curl numpy scipy pillow
     matplotlib beautifulsoup4 pygtk lxml ];
 
   enableParallelBuilding = true;

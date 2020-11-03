@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "0b3dz137lpbvpjvfy42ibqvj3yk526x4bpn819fd11lagn77w69r";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     arrow
     icalendar
     glibcLocales

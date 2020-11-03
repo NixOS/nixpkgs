@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "9f28bbb7c00374159376bd4ce36b4dacde7c6b86a0af625aa5e3ae214651a690";
   };
 
-  propagatedBuildInputs = [ distro httplib2 oauthlib setuptools six wadllib ];
+  requiredPythonModules = [ distro httplib2 oauthlib setuptools six wadllib ];
 
   doCheck = false; # requires to package lazr.restful, lazr.authentication, and wsgi_intercept
 

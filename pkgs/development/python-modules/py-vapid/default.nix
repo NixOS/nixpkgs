@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "f05cecaa9fc009515086d04b6117324f30eedf1a196f67fb1ec360a9dbdad4ee";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  requiredPythonModules = [ cryptography ];
 
   checkInputs = [ flake8 mock nose pytest ];
 

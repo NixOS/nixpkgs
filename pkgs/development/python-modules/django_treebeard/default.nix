@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   # tests fail  "AppRegistryNotReady("Apps aren't loaded yet.")"
   doCheck = false;

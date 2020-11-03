@@ -24,7 +24,7 @@ pythonPackages.buildPythonPackage {
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     beautifulsoup4
     html5lib
     lxml

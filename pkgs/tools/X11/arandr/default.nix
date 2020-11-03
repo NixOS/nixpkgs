@@ -29,7 +29,7 @@ in buildPythonApplication rec {
 
   buildInputs = [ docutils gsettings-desktop-schemas gtk3 ];
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
-  propagatedBuildInputs = [ xrandr pygobject3 ];
+  requiredPythonModules = [ xrandr pygobject3 ];
 
   meta = {
     homepage = "http://christian.amsuess.com/tools/arandr/";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "97d275ff01ddae45101eced0d9d5258f2869308c949b17d86a77b77a2a50b7b3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     configparser
     future
     python-dateutil

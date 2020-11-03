@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "199kiiml18k34z1zhk2hbhibphmnv0kb11kxiajq52alps0mjb3m";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     matplotlib
     numpy
     pyqt4

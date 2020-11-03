@@ -33,7 +33,7 @@ buildPythonApplication rec {
       --replace "suite.addTest(pygments.test_suite())" ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     Babel
     docutils
     pygments

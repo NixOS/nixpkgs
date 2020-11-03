@@ -25,5 +25,5 @@ buildPythonPackage rec {
 
   buildInputs = [ mock pytest pytest-mock pytest-server-fixtures pytest-localserver ];
 
-  propagatedBuildInputs = [ termcolor click markdown2 six jsonref pyyaml xmltodict attrs ];
+  requiredPythonModules = [ termcolor click markdown2 six jsonref pyyaml xmltodict attrs ];
 }

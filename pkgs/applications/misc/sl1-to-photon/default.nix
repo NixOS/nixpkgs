@@ -22,7 +22,7 @@ in
     sha256 = "1hmb74rcky3nax4lxn7pw6lcd5a66fdbwrm11c84zb31xb51bakw";
   };
 
-  propagatedBuildInputs = [ pyphotonfile pillow numpy pyside2 shiboken2 ];
+  requiredPythonModules = [ pyphotonfile pillow numpy pyside2 shiboken2 ];
 
   format = "other";
 

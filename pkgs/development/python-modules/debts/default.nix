@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  propagatedBuildInputs = [ jinja2 ];
+  requiredPythonModules = [ jinja2 ];
 
   checkInputs = [ pytest ];
 

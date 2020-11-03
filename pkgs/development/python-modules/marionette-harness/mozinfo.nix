@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
 
-  propagatedBuildInputs = [ mozfile ];
+  requiredPythonModules = [ mozfile ];
 
   meta = with stdenv.lib; {
     description = "System information utilities for Mozilla testing";

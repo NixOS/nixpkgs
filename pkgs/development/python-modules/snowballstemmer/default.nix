@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = [ PyStemmer ];
+  requiredPythonModules = [ PyStemmer ];
 
   meta = with stdenv.lib; {
     description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";

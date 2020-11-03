@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1mggj9d265hra4z67qyla686qvl0cf79655cszi136gh9hqlibv9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pony
     whoosh
   ];

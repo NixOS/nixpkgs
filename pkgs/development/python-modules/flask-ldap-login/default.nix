@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ nose mock flask_testing ];
-  propagatedBuildInputs = [ flask flask_wtf ldap ];
+  requiredPythonModules = [ flask flask_wtf ldap ];
 
   checkPhase = "nosetests -d";
 

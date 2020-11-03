@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "75bcaca8825e1a321965b136815dee53083c63314975e024ad0ccff8545e681f";
   };
 
-  propagatedBuildInputs = [ marisa-trie ];
+  requiredPythonModules = [ marisa-trie ];
 
   checkInputs = [ nose ];
 

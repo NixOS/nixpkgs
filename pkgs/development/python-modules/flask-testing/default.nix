@@ -13,7 +13,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "twill==0.9.1" "twill"
   '';
 
-  propagatedBuildInputs = [ flask ];
+  requiredPythonModules = [ flask ];
 
   checkInputs = [ blinker ] ++ stdenv.lib.optionals (!isPy3k) [ twill ];
 

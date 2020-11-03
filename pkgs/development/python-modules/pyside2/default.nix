@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     qtbase qtxmlpatterns qtmultimedia qttools qtx11extras qtlocation qtscript
     qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
   ];
-  propagatedBuildInputs = [ shiboken2 ];
+  requiredPythonModules = [ shiboken2 ];
 
   meta = with stdenv.lib; {
     description = "LGPL-licensed Python bindings for Qt";

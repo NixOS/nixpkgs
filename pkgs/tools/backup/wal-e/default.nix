@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   # needs tox
   doCheck = false;
 
-  propagatedBuildInputs = (with python3Packages; [
+  requiredPythonModules = (with python3Packages; [
     boto
     gevent
     google_cloud_storage

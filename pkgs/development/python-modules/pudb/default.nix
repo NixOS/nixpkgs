@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1p2qizb35f9lfhklldzrn8g9mwiar3zmpc44463h5n1ln40ymw78";
   };
 
-  propagatedBuildInputs = [ pygments urwid ];
+  requiredPythonModules = [ pygments urwid ];
 
   # Tests fail on python 3 due to writes to the read-only home directory
   doCheck = !isPy3k;

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1zf1v04zd5phabyqh0nhplr5a8vxskzfrzdh4akljnz1yk2n2a0b";
   };
 
-  propagatedBuildInputs = [ dnspython ];
+  requiredPythonModules = [ dnspython ];
   checkInputs = [ mock nose ];
 
   meta = with stdenv.lib; {

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
   
-  propagatedBuildInputs = [ packaging ]
+  requiredPythonModules = [ packaging ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Test suite explicitly requires pytest

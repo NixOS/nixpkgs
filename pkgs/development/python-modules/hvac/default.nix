@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "87dc2a3183c1d4595990203e752b430155d7582a60850dfe0756189a233d4b57";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  requiredPythonModules = [ requests six ];
 
   # Requires running a Vault server
   doCheck = false;

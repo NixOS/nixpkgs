@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pandas pytest mock google_cloud_storage ];
-  propagatedBuildInputs = [ enum34 google_api_core ];
+  requiredPythonModules = [ enum34 google_api_core ];
 
   # ignore tests which need credentials
   checkPhase = ''

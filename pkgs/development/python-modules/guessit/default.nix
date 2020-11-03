@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # Tests require more packages.
   doCheck = false;
   buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil babelfish rebulk
   ];
 

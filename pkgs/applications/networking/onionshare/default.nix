@@ -56,7 +56,7 @@ let
     inherit version meta src;
 
     disable = !isPy3k;
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       flask
       flask-httpauth
       stem

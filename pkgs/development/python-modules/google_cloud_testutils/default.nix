@@ -20,7 +20,7 @@ buildPythonPackage {
     sha256 = "1fvcnssmpgf4lfr7l9h7cz984rbc5mfr1j1br12japcib5biwzjy";
   };
 
-  propagatedBuildInputs = [ six google_auth ];
+  requiredPythonModules = [ six google_auth ];
 
   postPatch = ''
     cd test_utils

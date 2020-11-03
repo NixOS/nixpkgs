@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   checkInputs = with pythonPackages; [ pytest mock requests-mock freezegun ];
 
-  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client isodate ]) ++ [ rtmpdump ffmpeg_3 ];
+  requiredPythonModules = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client isodate ]) ++ [ rtmpdump ffmpeg_3 ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/streamlink/streamlink";

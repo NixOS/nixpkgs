@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   # From astroid/__pkginfo__.py
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lazy-object-proxy
     six
     wrapt

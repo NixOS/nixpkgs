@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0yb7d51jws665rdfqkmi077w0pjxmb2ni7ysphj7lx7b18whq54j";
   };
 
-  propagatedBuildInputs = [ fake-useragent faker ];
+  requiredPythonModules = [ fake-useragent faker ];
 
   checkInputs = [ pytestCheckHook scrapy pytestcov pytest-mock ];
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock pytest coverage tox ];
-  propagatedBuildInputs = [ urwid tweepy future ];
+  requiredPythonModules = [ urwid tweepy future ];
 
   LC_ALL = "en_US.UTF-8";
 

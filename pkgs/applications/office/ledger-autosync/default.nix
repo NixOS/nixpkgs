@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0sh32jcf8iznnbg1kqlrswbzfmn4h3gkw32q20xwxzz4935pz1qk";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     asn1crypto
     beautifulsoup4
     cffi

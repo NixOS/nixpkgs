@@ -11,7 +11,7 @@ python2Packages.buildPythonApplication rec {
   };
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support
-  propagatedBuildInputs = with python2Packages; [
+  requiredPythonModules = with python2Packages; [
     arduino-core
     avrdude
     picocom

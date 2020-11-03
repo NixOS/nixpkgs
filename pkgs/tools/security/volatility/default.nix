@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pythonPackages.pycrypto pythonPackages.distorm3 ];
+  requiredPythonModules = [ pythonPackages.pycrypto pythonPackages.distorm3 ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.volatilityfoundation.org/";

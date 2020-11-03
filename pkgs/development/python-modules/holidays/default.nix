@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "839281f2b1ae7ac576da7951472482f6e714818296853107ea861fa60f5013cc";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     convertdate
     dateutil
     korean-lunar-calendar

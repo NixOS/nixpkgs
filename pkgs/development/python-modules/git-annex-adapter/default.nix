@@ -28,7 +28,7 @@ buildPythonPackage rec {
     utillinux # `rev` is needed in tests/test_process.py
   ];
 
-  propagatedBuildInputs = [ pygit2 cacert ];
+  requiredPythonModules = [ pygit2 cacert ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest

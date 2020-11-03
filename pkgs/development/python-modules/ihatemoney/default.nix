@@ -80,7 +80,7 @@ buildPythonPackage rec {
     sed -i 's/==.*$//' setup.cfg
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     alembic
     aniso8601
     Babel

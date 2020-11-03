@@ -15,7 +15,7 @@ buildPythonPackage {
   };
 
   buildInputs =  [ pkgs.libsamplerate ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   preConfigure = ''
      cat > site.cfg << END

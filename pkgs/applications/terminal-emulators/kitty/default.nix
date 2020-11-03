@@ -59,7 +59,7 @@ buildPythonApplication rec {
     installShellFiles
   ];
 
-  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
+  requiredPythonModules = stdenv.lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" ];
 

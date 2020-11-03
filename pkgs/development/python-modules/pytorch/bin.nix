@@ -37,7 +37,7 @@ in buildPythonPackage {
     patchelf
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     numpy
     pyyaml

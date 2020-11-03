@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ simplejson psutil ];
+  requiredPythonModules = [ simplejson psutil ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rapid7/le";

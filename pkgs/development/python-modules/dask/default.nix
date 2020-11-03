@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     bokeh
     cloudpickle
     dill

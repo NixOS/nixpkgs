@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1lfqa9admhvdv71f528jmz2wl0i5cv77v6l64px2pm4zqr9ckkjx";
   };
 
-  propagatedBuildInputs = [ mailman ];
+  requiredPythonModules = [ mailman ];
   checkInputs = [ mock ];
 
   checkPhase = ''

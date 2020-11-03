@@ -22,7 +22,7 @@ buildPythonApplication rec {
     ./homeserver-script.patch
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
     bcrypt
     bleach

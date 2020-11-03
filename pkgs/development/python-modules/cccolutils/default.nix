@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ krb5Full ];
-  propagatedBuildInputs = [ nose GitPython mock git ];
+  requiredPythonModules = [ nose GitPython mock git ];
 
   doCheck = isPy3k; # needs unpackaged module to run tests on python2
 

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "ac57f29693fab3e309ea789252fcce3061e19110085aa31af5446ca749325618";
   };
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     lib.optionals isPy27 [ enum34 functools32 ]
     ++ lib.optional isPy27 typing;
 

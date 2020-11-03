@@ -35,7 +35,7 @@ buildPythonPackage rec {
     sha256 = "12v2clnbic8320fjsvkg3xfxfa7x8inhjk61z00pzwx46g3rqhy6";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     guessit babelfish enzyme beautifulsoup4 requests
     click dogpile_cache stevedore chardet pysrt six
     appdirs rarfile pytz

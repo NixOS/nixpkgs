@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "pyssim";
   version = "0.4";
 
-  propagatedBuildInputs = [ numpy scipy pillow ];
+  requiredPythonModules = [ numpy scipy pillow ];
 
   # PyPI tarball doesn't contain test images so let's use GitHub
   src = fetchFromGitHub {

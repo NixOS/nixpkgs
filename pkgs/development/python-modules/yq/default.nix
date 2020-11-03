@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1q4rky0a6n4izmq7slb91a54g8swry1xrbfqxwc8lkd3hhvlxxkl";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyyaml
     xmltodict
     argcomplete

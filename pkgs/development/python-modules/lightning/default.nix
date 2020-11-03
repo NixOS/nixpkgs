@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jinja2 matplotlib numpy requests six ];
+  requiredPythonModules = [ jinja2 matplotlib numpy requests six ];
 
   meta = with stdenv.lib; {
     description = "A Python client library for the Lightning data visualization server";

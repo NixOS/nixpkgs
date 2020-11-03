@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1bb7irxbaxxb9ahm3z5wsx1q96mm5gzskc7b6q07h9ikcnb8yrjf";
   };
 
-  propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
+  requiredPythonModules = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 
   checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
 

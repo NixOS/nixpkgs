@@ -10,7 +10,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ tkinter ];
+  requiredPythonModules = [ tkinter ];
 
   # Finding tests fails
   doCheck = false;

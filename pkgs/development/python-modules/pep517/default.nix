@@ -26,7 +26,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     toml
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata zipp

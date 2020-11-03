@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ nose parameterized ];
   checkPhase = "nosetests -v";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     numpy
     scipy

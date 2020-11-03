@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pyparsing configparser ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     chardet
     future
     pycurl

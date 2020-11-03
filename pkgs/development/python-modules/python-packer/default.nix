@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0rgmkyn7i6y1xs8m75dpl8hq7j2ns2s3dvp7kv9j4zwic93rrlsc";
   };
 
-  propagatedBuildInputs = [ sh ];
+  requiredPythonModules = [ sh ];
 
   # Tests requires network connections
   doCheck = false;

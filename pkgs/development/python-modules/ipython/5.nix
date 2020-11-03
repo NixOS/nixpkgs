@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose pygments testpath ] ++ lib.optional isPy27 mock;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
     simplegeneric traitlets requests pathlib2 pexpect
   ] ++ lib.optionals stdenv.isDarwin [ appnope ];

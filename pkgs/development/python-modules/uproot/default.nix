@@ -35,7 +35,7 @@ buildPythonPackage rec {
     xxhash
   ] ++ lib.optional isPy27 backports_lzma;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     cachetools
     uproot-methods

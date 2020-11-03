@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ simplejson six ] ++ lib.optional (pythonOlder "3.3") ipaddress;
+  requiredPythonModules = [ simplejson six ] ++ lib.optional (pythonOlder "3.3") ipaddress;
 
   # Taken from .travis.yml
   checkPhase = ''

@@ -45,7 +45,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
+  requiredPythonModules = if withApplePCSC then [ PCSC ] else [ pcsclite ];
   nativeBuildInputs = [ swig ];
 
   meta = {

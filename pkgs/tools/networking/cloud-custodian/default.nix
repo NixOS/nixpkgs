@@ -21,7 +21,7 @@ buildPythonApplication rec {
     sha256 = "0c199gdmpm83xfghrbzp02xliyxiygsnx2fvb35j9qpf37wzzp3z";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     argcomplete
     boto3
     botocore

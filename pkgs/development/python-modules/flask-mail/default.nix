@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0hazjc351s3gfbhk975j8k65cg4gf31yq404yfy0gx0bjjdfpr92";
   };
 
-  propagatedBuildInputs = [ blinker flask ];
+  requiredPythonModules = [ blinker flask ];
   buildInputs = [ blinker mock nose speaklater ];
 
   doCheck = false;

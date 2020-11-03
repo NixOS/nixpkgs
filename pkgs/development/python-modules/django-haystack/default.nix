@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pysolr whoosh dateutil geopy coverage nose mock coverage requests ];
-  propagatedBuildInputs = [ django setuptools ];
+  requiredPythonModules = [ django setuptools ];
   nativeBuildInputs = [ setuptools_scm ];
 
   postPatch = ''

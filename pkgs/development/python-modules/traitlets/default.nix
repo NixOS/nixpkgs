@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ glibcLocales pytest mock ];
-  propagatedBuildInputs = [ ipython_genutils decorator six ] ++ lib.optional (pythonOlder "3.4") enum34;
+  requiredPythonModules = [ ipython_genutils decorator six ] ++ lib.optional (pythonOlder "3.4") enum34;
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test

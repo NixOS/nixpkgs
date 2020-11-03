@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "00zs0a580vvfm2w4ja68mc46360p475wlgagjkq1hi4m8s4qwd75";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     b2sdk
     class-registry
     setuptools

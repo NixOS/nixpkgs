@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "ce0f1013e6d0e9faebaf3188cc069f4892fc60a6ec552e3f817c1a2f92835054";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     azure-nspkg
   ] ++ lib.optionals (!isPy3k) [ setuptools ]; # need for namespace lookup
 

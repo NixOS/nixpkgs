@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   checkInputs = [ pytest pytestrunner pytestcov coverage ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/schwehr/libais";

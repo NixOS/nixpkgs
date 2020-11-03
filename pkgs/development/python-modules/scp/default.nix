@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "8bd748293d7362073169b96ce4b8c4f93bcc62cfc5f7e1d949e01e406a025bd4";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     paramiko
   ];
 

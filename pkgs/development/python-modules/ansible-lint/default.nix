@@ -27,7 +27,7 @@ buildPythonPackage rec {
   format = "pyproject";
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pyyaml ansible ruamel_yaml rich ];
+  requiredPythonModules = [ pyyaml ansible ruamel_yaml rich ];
   checkInputs = [ pytestCheckHook pytestcov pytest_xdist git ];
 
   postPatch = ''

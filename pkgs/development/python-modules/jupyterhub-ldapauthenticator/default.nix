@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # No tests implemented
   doCheck = false;
 
-  propagatedBuildInputs = [ jupyterhub ldap3 ];
+  requiredPythonModules = [ jupyterhub ldap3 ];
 
   meta = with lib; {
     description = "Simple LDAP Authenticator Plugin for JupyterHub";

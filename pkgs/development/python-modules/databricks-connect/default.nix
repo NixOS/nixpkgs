@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   sourceRoot = ".";
 
-  propagatedBuildInputs = [ py4j six jdk ];
+  requiredPythonModules = [ py4j six jdk ];
 
   # requires network access
   doCheck = false;

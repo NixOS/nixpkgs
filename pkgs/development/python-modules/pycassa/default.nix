@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # running
   doCheck = false;
 
-  propagatedBuildInputs = [ thrift' ];
+  requiredPythonModules = [ thrift' ];
 
   meta = {
     description = "A python client library for Apache Cassandra";

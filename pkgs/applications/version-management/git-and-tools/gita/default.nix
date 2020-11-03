@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "nosarthur";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyyaml
     setuptools
   ];

@@ -20,7 +20,7 @@ buildPythonApplication rec {
     sha256 = "1wqq4i23hppilp20fx5a5nj93xwf3wwwr2f8aasvn6jkv2l22vpl";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ply
     configparser
     zc_lockfile

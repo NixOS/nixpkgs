@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ xmltodict datamodeldict numpy matplotlib scipy pandas cython numericalunits toolz ];
+  requiredPythonModules = [ xmltodict datamodeldict numpy matplotlib scipy pandas cython numericalunits toolz ];
 
   checkPhase = ''
     py.test tests -k 'not test_atomic'

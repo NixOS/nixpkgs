@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   disabled = !(python3Packages.pythonAtLeast "3.6");
 
   checkInputs = with python3Packages; [ pytest ];
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     jinja2
     markdown
     pillow

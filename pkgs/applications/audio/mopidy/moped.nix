@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ mopidy ];
+  requiredPythonModules = [ mopidy ];
 
   # no tests implemented
   doCheck = false;

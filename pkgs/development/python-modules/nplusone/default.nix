@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytest tests/
   '';
 
-  propagatedBuildInputs = [ six blinker ];
+  requiredPythonModules = [ six blinker ];
   checkInputs = [
     mock
     pytest

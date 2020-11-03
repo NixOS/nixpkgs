@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0f7czq83ic22fz1vnf0cavb7l3grcxxd5yyw9wcjz3g1j2d76735";
   };
 
-  propagatedBuildInputs = [ requests websocket_client ];
+  requiredPythonModules = [ requests websocket_client ];
 
   pythonImportsCheck = [ "jellyfin_apiclient_python" ];
 

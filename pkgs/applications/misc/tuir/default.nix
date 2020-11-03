@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   checkInputs = [ coverage coveralls docopt mock pylint pytest vcrpy ];
 
-  propagatedBuildInputs = [ beautifulsoup4 decorator kitchen requests ];
+  requiredPythonModules = [ beautifulsoup4 decorator kitchen requests ];
 
   meta = with lib; {
     description = "Browse Reddit from your Terminal (fork of rtv)";

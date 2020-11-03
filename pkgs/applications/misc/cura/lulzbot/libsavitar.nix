@@ -19,7 +19,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ sip ];
+  requiredPythonModules = [ sip ];
 
   disabled = pythonOlder "3.4.0";
 

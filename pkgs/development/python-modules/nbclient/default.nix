@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
-  propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter_client ];
+  requiredPythonModules = [ async_generator traitlets nbformat nest-asyncio jupyter_client ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/jupyter/nbclient";

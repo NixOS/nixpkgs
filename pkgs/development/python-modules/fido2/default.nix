@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1hzprnd407g2xh9kyv8j8pq949hwr1snmg3fp65pqfbghzv6i424";
   };
 
-  propagatedBuildInputs = [ six cryptography ];
+  requiredPythonModules = [ six cryptography ];
 
   checkInputs = [ mock pyfakefs ];
 

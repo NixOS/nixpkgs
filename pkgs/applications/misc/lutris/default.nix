@@ -93,7 +93,7 @@ in buildPythonApplication rec {
     webkitgtk
   ] ++ gstDeps;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     evdev distro pyyaml pygobject3 requests pillow dbus-python keyring
   ];
 

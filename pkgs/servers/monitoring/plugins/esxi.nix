@@ -27,7 +27,7 @@ in python2Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  propagatedBuildInputs = with python2Packages; [ pywbem ];
+  requiredPythonModules = with python2Packages; [ pywbem ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.claudiokuenzler.com/nagios-plugins/";

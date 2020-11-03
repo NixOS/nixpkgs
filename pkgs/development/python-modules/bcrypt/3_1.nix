@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ six ] ++ lib.optional (!isPyPy) cffi;
+  requiredPythonModules = [ six ] ++ lib.optional (!isPyPy) cffi;
 
   meta = with lib; {
     description = "Modern password hashing for your software and your servers";

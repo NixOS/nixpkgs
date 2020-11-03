@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1jw59mmd3n1d5zihdqz2a3j2axxf3m34lqp1190fw8rlndlilf3r";
   };
 
-  propagatedBuildInputs = [ jsonschema pyyaml six setuptools ]
+  requiredPythonModules = [ jsonschema pyyaml six setuptools ]
     ++ (lib.optionals (isPy27) [ pathlib ]);
 
   checkInputs = [ mock pytest pytestcov pytest-flake8 tox ];

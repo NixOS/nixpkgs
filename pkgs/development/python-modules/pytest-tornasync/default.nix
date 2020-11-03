@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "04cg1cfrr55dbi8nljkpcsc103i5c6p0nr46vjr0bnxgkxx03x36";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
     tornado
   ];

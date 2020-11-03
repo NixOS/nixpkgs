@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ sortedcontainers ];
+  requiredPythonModules = [ sortedcontainers ];
 
   checkPhase = ''
     runHook preCheck

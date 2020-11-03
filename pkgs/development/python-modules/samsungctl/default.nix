@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0ipz3fd65rqkxlb02sql0awc3vnslrwb2pfrsnpfnf8bfgxpbh9g";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     websocket_client
   ];
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
   ];
 

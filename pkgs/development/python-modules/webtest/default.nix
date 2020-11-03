@@ -28,7 +28,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "nose<1.3.0" "nose"
   '';
 
-  propagatedBuildInputs = [ webob six beautifulsoup4 waitress ];
+  requiredPythonModules = [ webob six beautifulsoup4 waitress ];
 
   checkInputs = [ nose mock PasteDeploy wsgiproxy2 pyquery ];
 

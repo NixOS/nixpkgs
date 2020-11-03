@@ -33,7 +33,7 @@ buildPythonPackage rec {
     factory_boy
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pandas
     numpy
     requests

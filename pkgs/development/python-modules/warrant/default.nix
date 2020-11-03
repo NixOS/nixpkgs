@@ -30,7 +30,7 @@ buildPythonPackage {
 
   checkInputs = [ mock ];
 
-  propagatedBuildInputs = [ boto3 envs python-jose requests ];
+  requiredPythonModules = [ boto3 envs python-jose requests ];
 
   # all the checks are failing
   doCheck = false;

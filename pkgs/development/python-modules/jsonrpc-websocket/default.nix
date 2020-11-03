@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pep8 ];
 
-  propagatedBuildInputs = [ aiohttp jsonrpc-base ];
+  requiredPythonModules = [ aiohttp jsonrpc-base ];
 
   meta = with stdenv.lib; {
     description = "A JSON-RPC websocket client library for asyncio";

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 
-  propagatedBuildInputs = [ parso ];
+  requiredPythonModules = [ parso ];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test test

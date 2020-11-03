@@ -21,7 +21,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   buildInputs = [ opencl-headers ocl-icd pybind11 ];
 
-  propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
+  requiredPythonModules = [ numpy cffi pytools decorator appdirs six Mako ];
 
   src = fetchPypi {
     inherit pname version;

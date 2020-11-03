@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ forbiddenfruit ];
+  requiredPythonModules = [ forbiddenfruit ];
 
   meta = with stdenv.lib; {
     description = "Python Assertion Helpers inspired by Shouldly";

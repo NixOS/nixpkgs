@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.makeWrapper ];
 
-  propagatedBuildInputs = [ pkgs.rtmpdump pycrypto requests ]
+  requiredPythonModules = [ pkgs.rtmpdump pycrypto requests ]
     ++ stdenv.lib.optionals isPy27 [ singledispatch futures ];
 
   postInstall = ''

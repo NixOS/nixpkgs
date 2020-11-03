@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1nqf5wy8ikx2g684khzvjc4iagkslmbsxxwilbv4jpaznr9lahdl";
   };
 
-  propagatedBuildInputs = [ networkx numpy ];
+  requiredPythonModules = [ networkx numpy ];
 
   checkInputs = [ nose ];
   checkPhase = "nosetests";

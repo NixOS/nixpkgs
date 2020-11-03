@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec  {
     gdk-pixbuf
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     grpcio-tools
     protobuf
     pygobject3

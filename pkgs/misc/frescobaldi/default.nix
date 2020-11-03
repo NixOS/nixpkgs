@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "07hjlq29npasn2bsb3qrzr1gikyvcc85avx0sxybfih329bvjk03";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     lilypond pygame python-ly sip
     pyqt5 poppler-qt5
     pyqtwebengine

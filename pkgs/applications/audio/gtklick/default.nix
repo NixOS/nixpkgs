@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = [ klick ];
+  requiredPythonModules = [ klick ];
 
   # wrapPythonPrograms breaks gtklick in the postFixup phase.
   # To fix it, apply wrapPythonPrograms and then clean up the wrapped file.

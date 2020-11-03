@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0zn3grc6xhgzcc81qc3dxkkwk731cjjqqhb46smw12lk09cdnigb";
   };
 
-  propagatedBuildInputs = [ six beautifulsoup4 lxml ];
+  requiredPythonModules = [ six beautifulsoup4 lxml ];
 
   meta = with stdenv.lib; {
     homepage = "http://sites.google.com/site/ofxparse";

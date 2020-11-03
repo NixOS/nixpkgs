@@ -13,7 +13,7 @@ buildPythonPackage rec {
     echo " " > tests/requirements.txt \
   '';
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ pytestcov pytest ];
 

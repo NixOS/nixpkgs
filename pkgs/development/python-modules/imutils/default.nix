@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "857af6169d90e4a0a814130b9b107f5d611150ce440107e1c1233521c6fb1e2b";
   };
 
-  propagatedBuildInputs = [ opencv3 ];
+  requiredPythonModules = [ opencv3 ];
 
   # no tests
   doCheck = false;

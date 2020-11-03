@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0jnkh1nin1lwnx32ak6sv8gzmpnkvcy6vm23wzm1ymzfndxk6rnm";
   };
 
-  propagatedBuildInputs = [ protobuf hidapi trezor ];
+  requiredPythonModules = [ protobuf hidapi trezor ];
 
   buildInputs = [ ecdsa mnemonic ];
 

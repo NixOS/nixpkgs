@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "005qach6phz8w17k8kqmyd647c6jkfybczybxq0yxi5ik0s91a08";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     netifaces
     pyqt5
     quamash

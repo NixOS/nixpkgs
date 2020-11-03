@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ flake8 py pyflakes tox ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # ImportError: No module named 'tests
   doCheck = false;

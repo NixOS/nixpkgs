@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1hlc717wcn71i37ngsfb3c605rlyjhsn3v6b5bplq00373r4d39z";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
   ];
 

@@ -4,7 +4,7 @@ buildPythonApplication rec {
   pname = "jsbeautifier";
   version = "1.13.0";
 
-  propagatedBuildInputs = [ six editorconfig ];
+  requiredPythonModules = [ six editorconfig ];
   checkInputs = [ pytest ];
 
   src = fetchPypi {

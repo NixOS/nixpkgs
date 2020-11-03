@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "86bbce30cdd407137c57670993a8f9bfdfe3f8e994b889181d85e844d5aa8dfb";
   };
 
-  propagatedBuildInputs = [ six txaio twisted zope_interface cffi cryptography pynacl ] ++
+  requiredPythonModules = [ six txaio twisted zope_interface cffi cryptography pynacl ] ++
     (lib.optionals (!isPy3k) [ trollius futures ]);
 
   checkInputs = [ mock pytest ];

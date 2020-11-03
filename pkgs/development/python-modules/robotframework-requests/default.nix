@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ robotframework lxml requests ];
+  requiredPythonModules = [ robotframework lxml requests ];
 
   meta = with stdenv.lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";

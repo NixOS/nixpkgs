@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     httpsig
     requests
     pbkdf2

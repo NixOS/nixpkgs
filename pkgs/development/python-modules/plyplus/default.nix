@@ -8,7 +8,7 @@ buildPythonPackage rec {
     sha256 = "0g3flgfm3jpb2d8v9z0qmbwca5gxdqr10cs3zvlfhv5cs06ahpnp";
   };
 
-  propagatedBuildInputs = [ ply ];
+  requiredPythonModules = [ ply ];
 
   doCheck = !isPy3k;
 

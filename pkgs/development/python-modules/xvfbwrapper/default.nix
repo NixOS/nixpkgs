@@ -13,7 +13,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
   };
-  propagatedBuildInputs = [ xorgserver ];
+  requiredPythonModules = [ xorgserver ];
 
   # See: https://github.com/cgoldberg/xvfbwrapper/issues/30
   doCheck = false;

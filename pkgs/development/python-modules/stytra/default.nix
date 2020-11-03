@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     opencv3
     pyqt5
     pyqtgraph

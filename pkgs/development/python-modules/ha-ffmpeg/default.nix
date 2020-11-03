@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   buildInputs = [ ffmpeg_3 ];
 
-  propagatedBuildInputs = [ async-timeout ];
+  requiredPythonModules = [ async-timeout ];
 
   # only manual tests
   doCheck = false;

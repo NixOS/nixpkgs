@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pytest-flake8 ];
-  propagatedBuildInputs = [ dask numpy toolz scipy pims ];
+  requiredPythonModules = [ dask numpy toolz scipy pims ];
   checkInputs = [
     pytest
     scikitimage

@@ -14,7 +14,7 @@ buildPythonPackage rec {
    sha256 = "0ar3mkyfa9qi3av3885bvacpwlxh420if9ymdj8i4x06ymzc213d";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     deepmerge
     yarl

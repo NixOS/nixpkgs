@@ -23,7 +23,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     importlib-metadata
   ];
 

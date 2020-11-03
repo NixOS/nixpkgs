@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ backports_weakref ];
+  requiredPythonModules = [ backports_weakref ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests

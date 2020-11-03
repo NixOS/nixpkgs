@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1srjmkhnz84nz5jd72vdsnc4fn7dd9jr8nyf3hzk6yx1dsn815gd";
   };
 
-  propagatedBuildInputs = [ traits apptools ];
+  requiredPythonModules = [ traits apptools ];
 
   preCheck = ''
     export HOME=$PWD/HOME

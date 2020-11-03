@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "72753820246a7d8486e8b385353e3bbf769abfceec2e850fa527a288b084ff7a";
   };
 
-  propagatedBuildInputs = lib.optionals isPy27 [ enum34 ];
+  requiredPythonModules = lib.optionals isPy27 [ enum34 ];
 
   checkInputs = [ attrs pytz ];
   checkPhase = ''

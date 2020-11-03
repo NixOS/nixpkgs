@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "239f3d83635ca4251536aeb577df7c60df77fc4d658097b92094719739aec3f3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     astropy
     matplotlib

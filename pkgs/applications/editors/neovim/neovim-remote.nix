@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0jlw0qksak4bdzddpsj74pm2f2bgpj3cwrlspdjjy0j9qzg0mpl9";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     pynvim
     psutil
     setuptools

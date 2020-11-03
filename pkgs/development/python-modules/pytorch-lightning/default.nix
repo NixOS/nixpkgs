@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "12zhq4pnfcwbgcx7cs99c751gp3w0ysaf5ykv2lv8f4i360w3r5a";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     pytorch
     pyyaml

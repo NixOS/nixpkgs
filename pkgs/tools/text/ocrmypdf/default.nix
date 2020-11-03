@@ -46,7 +46,7 @@ buildPythonApplication rec {
     setuptools_scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     cffi
     chardet
     coloredlogs

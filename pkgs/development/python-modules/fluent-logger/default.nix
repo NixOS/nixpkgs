@@ -14,7 +14,7 @@ buildPythonPackage rec {
       --replace "msgpack<1.0.0" "msgpack"
   '';
 
-  propagatedBuildInputs = [ msgpack ];
+  requiredPythonModules = [ msgpack ];
 
   # Tests fail because absent in package
   doCheck = false;

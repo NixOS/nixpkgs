@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm pytest ];
   checkInputs = [ pytest filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil six ];
+  requiredPythonModules = [ execnet pytest-forked psutil six ];
 
   # Encountered a memory leak
   # https://github.com/pytest-dev/pytest-xdist/issues/462

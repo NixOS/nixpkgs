@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1rgsj49gnx361hnb3vn6c1h17497qh22yc3r70l1r6w0mw71bixz";
   };
 
-  propagatedBuildInputs = [ flask sqlalchemy ];
+  requiredPythonModules = [ flask sqlalchemy ];
   checkInputs = [ mock pytest ];
 
   checkPhase = ''

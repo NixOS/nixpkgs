@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1lbjxqdx63fc7qxx7xwq4b9dafmdafj7p1ggs48hyhbqfwkrv9p7";
   };
 
-  propagatedBuildInputs = [ attrs protobuf zeroconf ];
+  requiredPythonModules = [ attrs protobuf zeroconf ];
 
   # no tests implemented
   doCheck = false;

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1nscfwycclfbll709w1q46w6rl0r5c3b85rsc7zwc3ixd1k8aajp";
   };
 
-  propagatedBuildInputs = [ attrs cryptography async-timeout ];
+  requiredPythonModules = [ attrs cryptography async-timeout ];
 
   checkInputs = [ pytestCheckHook pytest-aiohttp ];
 

@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   checkInputs = with pythonPackages; [ pytest ];
-  propagatedBuildInputs = with pythonPackages; [ click ];
+  requiredPythonModules = with pythonPackages; [ click ];
 
   meta = with stdenv.lib; {
     description = "Easily manage your dotfiles";

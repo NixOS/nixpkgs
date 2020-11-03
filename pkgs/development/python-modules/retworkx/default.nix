@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
       } )
   ];
 
-  propagatedBuildInputs = [ python ];
+  requiredPythonModules = [ python ];
 
   nativeBuildInputs = [ pipInstallHook maturin pip ];
 

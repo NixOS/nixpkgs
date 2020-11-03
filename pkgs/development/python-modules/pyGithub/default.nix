@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ httpretty parameterized pytestCheckHook ];
-  propagatedBuildInputs = [ cryptography deprecated pyjwt requests ];
+  requiredPythonModules = [ cryptography deprecated pyjwt requests ];
 
   # Test suite makes REST calls against github.com
   doCheck = false;

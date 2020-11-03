@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   pname = "certbot-dns-rfc2136";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     acme
     certbot
     dnspython

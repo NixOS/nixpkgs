@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = [ gtk3 gobject-introspection wrapGAppsHook gnome3.adwaita-icon-theme ];
-  propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
+  requiredPythonModules = with python3Packages; [ pyxdg pygobject3 ];
 
 
   preFixup = ''

@@ -25,7 +25,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pgpy
     srht
     redis

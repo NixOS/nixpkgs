@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     coverage
     sortedcontainers

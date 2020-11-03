@@ -25,7 +25,7 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     hypothesis
     pytest
     pytest-astropy-header

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1e345535164cb684de4b825e1d0daf81b75554b30d3905446584a9e4af0cc3e7";
   };
 
-  propagatedBuildInputs = [ elasticsearch python-dateutil six ]
+  requiredPythonModules = [ elasticsearch python-dateutil six ]
                           ++ stdenv.lib.optional (!isPy3k) ipaddress;
 
   # ImportError: No module named test_elasticsearch_dsl

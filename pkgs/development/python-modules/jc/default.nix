@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "0rwvyyrdnw43pixp8h51rncq2inc9pbbj1j2191y5si00pjw34zr";
   };
 
-  propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];
+  requiredPythonModules = [ ruamel_yaml xmltodict pygments ];
 
   meta = with stdenv.lib; {
     description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";

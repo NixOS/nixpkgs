@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "3b0ad400cb7fa25f95d1516756c4c4557bb78890510f69393ad0bd15869eaa2d";
   };
 
-  propagatedBuildInputs = [ zope_interface mock ];
+  requiredPythonModules = [ zope_interface mock ];
 
   meta = with stdenv.lib; {
     description = "Transaction management";

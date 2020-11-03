@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "03z8miyppm2xncrc9yjilwl7z5c5cpv51zha580v64p8sb2l0j7j";
   };
 
-  propagatedBuildInputs = [ snowballstemmer ];
+  requiredPythonModules = [ snowballstemmer ];
 
   checkInputs = [ pytest mock ];
 

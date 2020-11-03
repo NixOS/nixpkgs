@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   pname = "certbot-dns-cloudflare";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     acme
     certbot
     cloudflare

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication {
     sha256 = "1rpclqagvigp5qhvgnjavvy463f1drshnc1mfxm6z7ygzs0l0yz6";
   };
 
-  propagatedBuildInputs = [ python3Packages.sympy ];
+  requiredPythonModules = [ python3Packages.sympy ];
 
   # checks are disabled because jelly has no tests, and the default is to run
   # the output binary with no arguments, which exits with status 1 and causes

@@ -18,7 +18,7 @@ buildPythonApplication rec {
 
   checkInputs = [ pytestCheckHook mock pathpy pyhamcrest pytest-html ];
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ colorama cucumber-tag-expressions parse parse-type six ];
+  requiredPythonModules = [ colorama cucumber-tag-expressions parse parse-type six ];
 
   postPatch = ''
     patchShebangs bin

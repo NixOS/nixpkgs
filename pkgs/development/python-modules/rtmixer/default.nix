@@ -25,7 +25,7 @@ buildPythonPackage rec {
   buildInputs = [ portaudio ];
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cffi
     pa-ringbuffer
     sounddevice

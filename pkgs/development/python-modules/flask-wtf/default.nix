@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "086pvg2x69n0nczcq7frknfjd8am1zdy8qqpva1sanwb02hf65yl";
   };
 
-  propagatedBuildInputs = [ flask wtforms nose ];
+  requiredPythonModules = [ flask wtforms nose ];
 
   doCheck = false; # requires external service
 

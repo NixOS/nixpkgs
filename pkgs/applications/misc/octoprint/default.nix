@@ -81,7 +81,7 @@ let
                 sha256 = "1bblrjwkccy1ifw7lf55g3k9lq1sqzwd49vj8bfzj2w07a7qda62";
               };
 
-              propagatedBuildInputs = with super; [
+              requiredPythonModules = with super; [
                 octoprint-firmwarecheck
                 octoprint-filecheck
                 markupsafe

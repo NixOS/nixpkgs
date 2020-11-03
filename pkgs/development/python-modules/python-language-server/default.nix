@@ -69,7 +69,7 @@ buildPythonPackage rec {
     "test_numpy_hover"
   ] ++ stdenv.lib.optional isPy27 "test_flake8_lint";
 
-  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server flake8 ujson ]
+  requiredPythonModules = [ setuptools jedi pluggy future python-jsonrpc-server flake8 ujson ]
     ++ stdenv.lib.optional (withProvider "autopep8") autopep8
     ++ stdenv.lib.optional (withProvider "mccabe") mccabe
     ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle

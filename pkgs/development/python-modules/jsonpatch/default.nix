@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   # test files are missing
   doCheck = false;
-  propagatedBuildInputs = [ jsonpointer ];
+  requiredPythonModules = [ jsonpointer ];
 
   meta = {
     description = "Library to apply JSON Patches according to RFC 6902";

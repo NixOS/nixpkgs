@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     srht
     hglib
     scmsrht

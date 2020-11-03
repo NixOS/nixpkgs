@@ -107,7 +107,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography pyasn1 idna six ];
+  requiredPythonModules = [ cryptography pyasn1 idna six ];
 
   checkInputs = [ pytest pretend flaky glibcLocales ];
 }

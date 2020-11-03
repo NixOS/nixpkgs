@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # In the git repo, supervise_api lives inside a python subdir
   patchFlags = [ "-p2" ];
 
-  propagatedBuildInputs = lib.optional (!isPy3k) whichcraft;
+  requiredPythonModules = lib.optional (!isPy3k) whichcraft;
 
   checkInputs = [ utillinux ];
 

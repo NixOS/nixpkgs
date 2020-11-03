@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ semantic-version setuptools toml ];
+  requiredPythonModules = [ semantic-version setuptools toml ];
 
   meta = with stdenv.lib; {
     description = "Setuptools plugin for Rust support";

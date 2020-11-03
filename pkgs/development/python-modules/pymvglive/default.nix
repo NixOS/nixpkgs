@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0sh4xm74im9qxzpbrlc5h1vnpgvpybnpvdcav1iws0b561zdr08c";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   meta = with lib; {
     description = "get live-data from mvg-live.de";

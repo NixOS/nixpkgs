@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ decorator setuptools ];
+  requiredPythonModules = [ decorator setuptools ];
 
   meta = {
     homepage = "https://networkx.github.io/";

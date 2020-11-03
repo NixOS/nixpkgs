@@ -30,7 +30,7 @@ buildPythonPackage rec {
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 
-  propagatedBuildInputs = [ pycrypto ecdsa ]
+  requiredPythonModules = [ pycrypto ecdsa ]
     ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
     ++ lib.optional withCryptography cryptography
     ++ lib.optional withVoipSupport sox

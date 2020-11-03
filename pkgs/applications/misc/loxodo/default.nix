@@ -12,7 +12,7 @@ py.buildPythonApplication {
     sha256 = "1cg0dfcv57ps54f1a0ksib7hgkrbdi9q699w302xyyfyvjcb5dd2";
   };
 
-  propagatedBuildInputs = with py; [ wxPython ];
+  requiredPythonModules = with py; [ wxPython ];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo

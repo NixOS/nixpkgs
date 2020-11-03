@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # ImportError: No module named tests
   doCheck = false;
 
-  propagatedBuildInputs = [ ofxhome ofxparse beautifulsoup4 lxml keyring ];
+  requiredPythonModules = [ ofxhome ofxparse beautifulsoup4 lxml keyring ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/captin411/ofxclient";

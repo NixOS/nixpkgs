@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ aiohttp ];
+  requiredPythonModules = [ aiohttp ];
   checkInputs = [ pytestCheckHook pytestcov pytest-asyncio ];
 
   meta = with lib; {

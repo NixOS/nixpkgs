@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1bdzay7j70fly5fy6wbdi8fbrxjrrlxnxnw226rwry1c8a351rpy";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   checkInputs = [ zope_testing ];
 
   meta = with stdenv.lib; {

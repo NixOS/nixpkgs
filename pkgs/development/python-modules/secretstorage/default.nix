@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "14lznnn916ddn6yrd3w2nr2zq49zc8hw53yjz1k9yhd492p9gir0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cryptography
     jeepney
   ];

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     "static_tool_sees_all_symbols"
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     sortedcontainers
     async_generator

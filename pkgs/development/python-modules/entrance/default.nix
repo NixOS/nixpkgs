@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # No useful tests
   doCheck = false;
 
-  propagatedBuildInputs = [ pyyaml sanic ] ++ opts.extraBuildInputs;
+  requiredPythonModules = [ pyyaml sanic ] ++ opts.extraBuildInputs;
 
   prePatch = opts.prePatch;
 

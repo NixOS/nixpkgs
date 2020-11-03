@@ -19,7 +19,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];
-  propagatedBuildInputs = [ enum34 libselinux networkx ]
+  requiredPythonModules = [ enum34 libselinux networkx ]
     ++ optionals withGraphics [ pyqt5 ];
 
   checkInputs = [ tox checkpolicy ];

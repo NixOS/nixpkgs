@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db";
   };
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     [ botocore
     ] ++ stdenv.lib.optional (pythonOlder "3") futures;
 

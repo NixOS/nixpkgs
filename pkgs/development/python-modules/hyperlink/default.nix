@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "47fcc7cd339c6cb2444463ec3277bdcfe142c8b1daf2160bdd52248deec815af";
   };
 
-  propagatedBuildInputs = [ idna ]
+  requiredPythonModules = [ idna ]
     ++ lib.optionals isPy27 [ typing ];
 
   meta = with lib; {

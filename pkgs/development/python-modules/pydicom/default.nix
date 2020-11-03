@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "594c91f715c415ef439f498351ae68fb770c776fc5aa72f3c87eb500dc2a7470";
   };
 
-  propagatedBuildInputs = [ numpy pillow ];
+  requiredPythonModules = [ numpy pillow ];
 
   checkInputs = [ pytest pytestrunner pytestCheckHook ];
   disabledTests = [ "test_invalid_bit_depth_raises" ];

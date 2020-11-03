@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython pkg-config ];
   buildInputs = [ leptonica tesseract ];
-  propagatedBuildInputs = [ pillow ];
+  requiredPythonModules = [ pillow ];
 
   meta = with lib; {
     description = "A simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";

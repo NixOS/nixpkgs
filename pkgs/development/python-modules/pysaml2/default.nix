@@ -41,7 +41,7 @@ buildPythonPackage rec {
     sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
 
-  propagatedBuildInputs = [ cryptography defusedxml future pyopenssl dateutil pytz requests six ];
+  requiredPythonModules = [ cryptography defusedxml future pyopenssl dateutil pytz requests six ];
 
   checkInputs = [ mock pyasn1 pymongo pytest responses ];
 

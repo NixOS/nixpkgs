@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     imageio
     numpy

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1mj00fhxj75ac3i8xk9jmm7hvcjz9p4x2r3yndcwsgb659rvgbrg";
   };
 
-  propagatedBuildInputs = [ sqlalchemy ];
+  requiredPythonModules = [ sqlalchemy ];
   checkInputs = [ nose ];
 
   meta = with lib; {

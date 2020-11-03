@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "5b93c1726e50a93a033c36e5ca7fdcd29a5c7395af50a6892f5d9e7c6cfbfb29";
   };
   buildInputs = [ pycparser mock pytest py ];
-  propagatedBuildInputs = [ six ] ++ optional (!isPyPy) cffi;
+  requiredPythonModules = [ six ] ++ optional (!isPyPy) cffi;
 
   meta = {
     maintainers = with maintainers; [ domenkozar ];

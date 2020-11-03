@@ -28,7 +28,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ beautifulsoup4 lxml cssutils future enum34 six ];
+  requiredPythonModules = [ beautifulsoup4 lxml cssutils future enum34 six ];
 
   # Tests not included in pypi (?)
   doCheck = false;

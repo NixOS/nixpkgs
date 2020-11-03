@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3'
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     certifi
     python-dateutil
     python-slugify

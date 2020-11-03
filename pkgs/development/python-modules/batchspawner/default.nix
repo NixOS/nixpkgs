@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0yn312sjfjpjjfciagbczfmqprk2fj4lbb3vsbzj17p948acq5w2";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jupyterhub
   ];
 

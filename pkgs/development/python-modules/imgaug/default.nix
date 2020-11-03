@@ -32,7 +32,7 @@ buildPythonPackage rec {
       --replace "--xdoctest --xdoctest-global-exec=\"import imgaug as ia\nfrom imgaug import augmenters as iaa\"" ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     imageio
     imagecorruptions
     numpy

@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  propagatedBuildInputs = [ ncurses ];
+  requiredPythonModules = [ ncurses ];
 
   # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
   prePatch = ''

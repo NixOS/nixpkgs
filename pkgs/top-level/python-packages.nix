@@ -5334,7 +5334,7 @@ in {
   /*
     `pyqt5_with_qtwebkit` should not be used by python libraries in
     pkgs/development/python-modules/*. Putting this attribute in
-    `propagatedBuildInputs` may cause collisions.
+    `requiredPythonModules` may cause collisions.
   */
   pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
 

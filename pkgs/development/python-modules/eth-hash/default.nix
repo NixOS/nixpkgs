@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ pysha3 pycrypto pycryptodome ];
+  requiredPythonModules = [ pysha3 pycrypto pycryptodome ];
 
   # setuptools-markdown uses pypandoc which is broken at the moment
   preConfigure = ''

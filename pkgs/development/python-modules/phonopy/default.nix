@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "28864b04adb900597705f1367a100da869af835088bdd13f1693c4382259f128";
   };
 
-  propagatedBuildInputs = [ numpy pyyaml matplotlib h5py spglib ];
+  requiredPythonModules = [ numpy pyyaml matplotlib h5py spglib ];
 
   checkInputs = [ pytestCheckHook ];
   # flakey due to floating point inaccuracy

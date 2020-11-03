@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiozeroconf
     srptools
     aiohttp

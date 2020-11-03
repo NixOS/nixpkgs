@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   sourceRoot = "source/packages/python/chart-studio";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     plotly
     requests
     retrying

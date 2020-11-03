@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "577c2f8bbf88f77bda84ee95af0310b59111c156f48a5aab56ca481e2f77eaf4";
   };
 
-  propagatedBuildInputs = [ six texttable tqdm colorama setuptools ];
+  requiredPythonModules = [ six texttable tqdm colorama setuptools ];
 
   # The kgb test dependency is not in nixpkgs
   doCheck = false;

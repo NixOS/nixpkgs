@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1yihp2n42amrxw0wk9f66llpb3w5kwhgkcdg9krkzcik1nsqp7dh";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     javaobj-py3
   ];
 

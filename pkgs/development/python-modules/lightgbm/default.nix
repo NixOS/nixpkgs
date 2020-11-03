@@ -36,7 +36,7 @@ buildPythonPackage rec {
     EOF
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
     scikitlearn

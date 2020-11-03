@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1f1l288sqna0bca7dwwvyw7wzg9b2613g6vc0g0vfngm7k75b2jg";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyparsing
     future
   ];

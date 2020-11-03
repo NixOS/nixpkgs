@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1vzn1vm3zf86l7qncbmghjrwyvla9dc2v8abn8jajbl47gm7r5f7";
   };
 
-  propagatedBuildInputs = [ dnspython sphinx ];
+  requiredPythonModules = [ dnspython sphinx ];
 
   checkInputs = [ pytest ];
 

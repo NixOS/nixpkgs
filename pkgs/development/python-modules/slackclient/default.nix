@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sha256 = "1ngj1mivbln19546195k400w9yaw69g0w6is7c75rqwyxr8wgzsk";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     websocket_client
     requests

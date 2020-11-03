@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1j88rrliys8hqvnb35k1xqw88bvrllcb4rb53lgh82byhscsxlf3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     mopidy
   ];
 

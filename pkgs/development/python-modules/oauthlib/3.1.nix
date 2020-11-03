@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ cryptography blinker pyjwt ];
+  requiredPythonModules = [ cryptography blinker pyjwt ];
 
   checkPhase = ''
     py.test tests/

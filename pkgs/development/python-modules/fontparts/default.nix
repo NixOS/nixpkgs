@@ -14,7 +14,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     booleanoperations
     fonttools
     unicodedata2  # fonttools[unicode] extra

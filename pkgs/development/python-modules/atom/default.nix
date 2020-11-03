@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ cppy ];
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   # Tests not released to pypi
   doCheck = true;

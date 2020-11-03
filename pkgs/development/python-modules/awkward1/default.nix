@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ rapidjson ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   dontUseCmakeConfigure = true;
 

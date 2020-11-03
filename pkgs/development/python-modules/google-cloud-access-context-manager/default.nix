@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  propagatedBuildInputs = [ google_api_core ];
+  requiredPythonModules = [ google_api_core ];
 
   # No tests in repo
   doCheck = false;

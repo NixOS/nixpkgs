@@ -13,7 +13,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  propagatedBuildInputs = [ gobject-introspection pygobject3 graphviz gtk3 ];
+  requiredPythonModules = [ gobject-introspection pygobject3 graphviz gtk3 ];
 
   meta = with lib; {
     description = "An interactive viewer for graphs written in Graphviz's dot";

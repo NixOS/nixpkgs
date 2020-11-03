@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ beets ];
   checkInputs = [ pythonPackages.nose flac liboggz mp3val ];
-  propagatedBuildInputs = [ flac liboggz mp3val ];
+  requiredPythonModules = [ flac liboggz mp3val ];
 
   # patch out broken tests
   patches = [ ./beet-check-tests.patch ];

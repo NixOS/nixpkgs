@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     docutils
     od

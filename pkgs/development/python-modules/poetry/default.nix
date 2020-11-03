@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ intreehooks ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cachecontrol
     cachy
     cleo

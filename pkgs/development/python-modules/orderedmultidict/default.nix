@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ flake8 ];
 
-  propagatedBuildInputs = [ six ]
+  requiredPythonModules = [ six ]
     ++ stdenv.lib.optionals (pythonOlder "3.8") [
       importlib-metadata
     ];

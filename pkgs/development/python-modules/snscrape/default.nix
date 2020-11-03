@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ setuptools requests lxml beautifulsoup4 ];
+  requiredPythonModules = [ setuptools requests lxml beautifulsoup4 ];
 
   meta = with lib; {
     homepage = "https://github.com/JustAnotherArchivist/snscrape";

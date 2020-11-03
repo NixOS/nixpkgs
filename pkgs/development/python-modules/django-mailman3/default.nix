@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "7e37b68bb47e9ae196ca19018f576e2c8c90189c5bd82d4e549d0c2f2f3f35fb";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     django-gravatar2 django_compressor django-allauth mailmanclient
   ];
   checkInputs = [ django mock ];

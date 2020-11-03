@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm gcc ];
 
-  propagatedBuildInputs = [ cython numpy scikitlearn six ];
+  requiredPythonModules = [ cython numpy scikitlearn six ];
 
   checkInputs = [ pytest pytestcov ];
 

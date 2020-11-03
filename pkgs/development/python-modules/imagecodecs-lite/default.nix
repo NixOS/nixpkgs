@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
   ];
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     ln -s ${capstone}/lib/libcapstone.a prebuilt/
   '';
 
-  propagatedBuildInputs = [ setuptools ];
+  requiredPythonModules = [ setuptools ];
 
   checkPhase = ''
     mv capstone capstone.hidden

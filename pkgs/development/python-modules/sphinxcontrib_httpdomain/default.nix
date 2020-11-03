@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "ac40b4fba58c76b073b03931c7b8ead611066a6aebccafb34dc19694f4eb6335";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  requiredPythonModules = [ sphinx ];
 
   # Check is disabled due to this issue:
   # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype

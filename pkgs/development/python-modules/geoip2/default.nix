@@ -21,7 +21,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "requests>=2.24.0,<3.0.0" "requests"
   '';
 
-  propagatedBuildInputs = [ aiohttp requests maxminddb ];
+  requiredPythonModules = [ aiohttp requests maxminddb ];
 
   checkInputs = [ mocket requests-mock ];
 

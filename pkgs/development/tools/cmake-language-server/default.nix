@@ -28,7 +28,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [ poetry ];
-  propagatedBuildInputs = [ pygls pyparsing ];
+  requiredPythonModules = [ pygls pyparsing ];
 
   checkInputs = [ cmake pytest pytest-datadir ];
   dontUseCmakeConfigure = true;

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     msrestazure
     azure-common
     azure-mgmt-nspkg

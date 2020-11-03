@@ -9,7 +9,7 @@ buildPythonPackage rec {
       sha256 = "a4a7a8cdc113d840142d21a796c16c7d329ad35c48f17156446732c83ebc571a";
     };
 
-    propagatedBuildInputs = [ aenum ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
+    requiredPythonModules = [ aenum ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
 
     doCheck = !isPy3k;
     # tests are not yet ported.

@@ -14,7 +14,7 @@ let
           sha256 = "1awzpbrkh4fympqzddz5i3ml81b7f0i0nwkvbpmyxjjfqx6l0m4m";
         };
 
-        propagatedBuildInputs = with self; [
+        requiredPythonModules = with self; [
           six
           requests
           websocket_client
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
     consul
     docker
   ]);
-  propagatedBuildInputs = with python'.pkgs; [ python tornado ];
+  requiredPythonModules = with python'.pkgs; [ python tornado ];
 
   buildCommand = ''
     mkdir -p $out/bin

@@ -15,7 +15,7 @@ in pythonPackages.buildPythonApplication {
     inherit sha256;
   };
 
-  propagatedBuildInputs = with pythonPackages; [ argh ];
+  requiredPythonModules = with pythonPackages; [ argh ];
 
   meta = with stdenv.lib; {
     description = "Cjdns swiss army knife";

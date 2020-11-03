@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ ncurses ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     boost
     cgal
     expat

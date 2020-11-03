@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
 
   makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ imagemagick xpdf tesseract ]) ];
 
-  propagatedBuildInputs = with python3Packages; [ unidecode dateparser pyyaml pillow chardet pdfminer ];
+  requiredPythonModules = with python3Packages; [ unidecode dateparser pyyaml pillow chardet pdfminer ];
 
   # Tests fails even when ran manually on my ubuntu machine !!
   doCheck = false;

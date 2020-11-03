@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "e79d83d4947a0945488699324802eda4ad4a63c7680ad5b2a42c71f4faa2cd8b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     sqlalchemy
     snowflake-connector-python
   ];

@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "0wkk107s0bpvbknapns0qdzf8csrzc2j6gliy6pa8z208fcfzyy3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     binaryornot
     boolean-py
     debian

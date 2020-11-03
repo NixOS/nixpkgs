@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   # buildInputs = [ ];
   checkInputs = [ pytest pytz ];
-  # propagatedBuildInputs = [ ];
+  # requiredPythonModules = [ ];
 
   checkPhase = ''
     pytest tests

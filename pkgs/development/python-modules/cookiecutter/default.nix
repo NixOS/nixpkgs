@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestcov pytest-mock freezegun ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jinja2 future binaryornot click whichcraft poyo jinja2_time requests python-slugify
   ];
 

@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-ugly
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     gobject-introspection
   ] ++ (with pythonPackages; [
       gst-python

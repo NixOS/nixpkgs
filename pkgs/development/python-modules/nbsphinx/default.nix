@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "369c16fe93af14c878d61fb3e81d838196fb35b27deade2cd7b95efe1fe56ea0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     docutils
     jinja2
     nbconvert

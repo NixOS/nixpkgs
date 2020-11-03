@@ -30,7 +30,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
   __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [ six ]
+  requiredPythonModules = [ six ]
     ++ lib.optional (pythonOlder "3.5") typing;
 
   checkInputs = [

@@ -49,7 +49,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aws-xray-sdk
     boto
     boto3

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0ci0w5igjk5xa8x4rx17cpgmdkamwjmavxhp0vp6213cl93ybjhz";
   };
 
-  propagatedBuildInputs = with python3Packages; [ i3ipc ];
+  requiredPythonModules = with python3Packages; [ i3ipc ];
 
   dontBuild = true;
   doCheck = false;

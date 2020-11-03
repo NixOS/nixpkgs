@@ -5,7 +5,7 @@
 , glibcLocales
 , pkginfo
 , check-manifest
-# propagatedBuildInputs
+# requiredPythonModules
 , py
 , devpi-common
 , pluggy
@@ -34,7 +34,7 @@ buildPythonApplication rec {
 
   buildInputs = [ glibcLocales pkginfo check-manifest ];
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools ];
+  requiredPythonModules = [ py devpi-common pluggy setuptools ];
 
   checkInputs = [
     pytest pytest-flake8 webtest mock

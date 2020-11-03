@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0fwp86xv0rvkncjdvy2mwcvbglw4w9k0fva25i7zx8kd19b3kh08";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # doesn't ship tests in tarball
   doCheck = false;

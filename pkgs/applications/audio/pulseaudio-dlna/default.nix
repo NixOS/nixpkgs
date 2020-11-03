@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication {
     sha256 = "1dfn7036vrq49kxv4an7rayypnm5dlawsf02pfsldw877hzdamqk";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     dbus-python docopt requests setproctitle protobuf psutil futures
     chardet notify2 netifaces pyroute2 pygobject2 lxml setuptools ]
     ++ [ zeroconf ]

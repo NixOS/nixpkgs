@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   # tests not included with pypi release
   doCheck = false;

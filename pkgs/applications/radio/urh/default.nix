@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ hackrf rtl-sdr airspy limesuite libiio ]
     ++ lib.optional USRPSupport uhd;
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyqt5 numpy psutil cython pyzmq pyaudio setuptools
   ];
 

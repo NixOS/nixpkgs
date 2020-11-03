@@ -32,7 +32,7 @@ buildPythonPackage rec {
   };
 
   doCheck = false;
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python
   ];
   buildInputs = [ file ];

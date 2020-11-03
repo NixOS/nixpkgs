@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "ebeb62b71a5c683a84c1b16bbf415708af5a46841b142b85ac3a22ec2d7613b0";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+  requiredPythonModules = lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 

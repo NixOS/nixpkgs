@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1ygzc7vlwszqmsd3v1dsqp1dpsn6inx7g8gck63alvf88dbn8m3s";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyqt5
     pypdf2
     poppler-qt5

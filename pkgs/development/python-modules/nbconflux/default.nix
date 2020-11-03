@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1708qkb275d6f7b4b5zmqx3i0jh56nrx2n9rwwp5nbaah5p2wwlh";
   };
 
-  propagatedBuildInputs = [ nbconvert requests ];
+  requiredPythonModules = [ nbconvert requests ];
 
   checkInputs = [ pytest responses ];
 

@@ -32,7 +32,7 @@ mkDerivation rec {
     olm pyotherside
   ];
 
-  propagatedBuildInputs = pypkgs;
+  requiredPythonModules = pypkgs;
 
   pythonPath = pypkgs;
 

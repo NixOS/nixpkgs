@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0d708bgsxjhhchqc56afi1h7k87vbfn7v40f4y1zlv7hsjc69s36";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     PyGithub GitPython toml click tqdm paramiko networkx pydot pyyaml
   ];
 

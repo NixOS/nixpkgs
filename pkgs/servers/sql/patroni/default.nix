@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     done
   '';
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     boto
     click
     consul

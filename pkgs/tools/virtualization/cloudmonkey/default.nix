@@ -6,7 +6,7 @@ buildPythonApplication rec {
   pname = "cloudmonkey";
   version = "5.3.3";
 
-  propagatedBuildInputs = [ argcomplete pygments ];
+  requiredPythonModules = [ argcomplete pygments ];
 
   doCheck = false; # upstream has no tests defined
 

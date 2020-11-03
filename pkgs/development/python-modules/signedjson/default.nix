@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "18s388hm3babnvakbbgfqk0jzq25nnznvhygywd3azp9b4yzmd5c";
   };
 
-  propagatedBuildInputs = [ canonicaljson unpaddedbase64 pynacl typing-extensions ];
+  requiredPythonModules = [ canonicaljson unpaddedbase64 pynacl typing-extensions ];
 
   meta = with stdenv.lib; {
     homepage = "https://pypi.org/project/signedjson/";

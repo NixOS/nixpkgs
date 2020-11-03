@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   checkInputs = with python3.pkgs; [ flake8 flake8-future-import flake8-import-order openssl ];
-  propagatedBuildInputs = with python3.pkgs; [ pyserial pyaes ecdsa ];
+  requiredPythonModules = with python3.pkgs; [ pyserial pyaes ecdsa ];
 
   meta = with stdenv.lib; {
     description = "ESP8266 and ESP32 serial bootloader utility";

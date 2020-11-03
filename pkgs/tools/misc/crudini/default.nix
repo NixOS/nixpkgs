@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ help2man installShellFiles ];
 
-  propagatedBuildInputs = with python3Packages; [ iniparse ];
+  requiredPythonModules = with python3Packages; [ iniparse ];
 
   postPatch = ''
     substituteInPlace crudini-help \

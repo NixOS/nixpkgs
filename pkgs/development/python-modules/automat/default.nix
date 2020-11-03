@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ m2r setuptools_scm ];
-  propagatedBuildInputs = [ six attrs ];
+  requiredPythonModules = [ six attrs ];
 
   # Some tests require twisetd, but twisted requires Automat to build.
   # this creates a circular dependency.

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestpep8 pytestcache pytestcov responses mock ];
 
-  propagatedBuildInputs = [ requests requests_oauthlib six ];
+  requiredPythonModules = [ requests requests_oauthlib six ];
 
   checkPhase = ''
     py.test

@@ -12,7 +12,7 @@ buildPythonApplication rec {
     sha256 = "0w5lh4aavab9ynfy2mq09ga6j4vss4k0vlc3g6f5a9i4175g9pmr";
   };
 
-  propagatedBuildInputs = [ dateutil argh psycopg2 boto3 argcomplete ];
+  requiredPythonModules = [ dateutil argh psycopg2 boto3 argcomplete ];
 
   # Tests are not present in tarball
   checkPhase = ''

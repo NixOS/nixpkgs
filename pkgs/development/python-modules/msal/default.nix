@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "7efb0256c96a7b2eadab49ce29ecdb91352a91440c12a40bed44303724b62fda";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyjwt
     requests
   ];

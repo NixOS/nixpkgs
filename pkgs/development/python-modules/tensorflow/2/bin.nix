@@ -63,7 +63,7 @@ in buildPythonPackage {
     key = "${platform}_py_${pyVerNoDot}_${unit}";
   in fetchurl packages.${key};
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     protobuf
     numpy
     scipy

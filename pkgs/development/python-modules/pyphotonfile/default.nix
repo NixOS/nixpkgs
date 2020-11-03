@@ -10,7 +10,7 @@ in
 buildPythonPackage {
   pname = "pyphotonfile";
   inherit version;
-  propagatedBuildInputs = [ pillow numpy ];
+  requiredPythonModules = [ pillow numpy ];
 
   src = fetchFromGitHub {
     owner = "fookatchu";

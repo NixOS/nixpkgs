@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1l565n3rmyghc4vzh80gazvdks1i97j1h94x33pkmxxlf9a9rncj";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     PyChromecast
     psutil
     mutagen

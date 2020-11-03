@@ -41,7 +41,7 @@ buildPythonPackage rec {
     typogrify
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
     blinker pillow beautifulsoup4 markupsafe lxml
   ];

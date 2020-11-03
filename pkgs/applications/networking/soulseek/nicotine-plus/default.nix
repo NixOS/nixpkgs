@@ -13,7 +13,7 @@ python27Packages.buildPythonApplication {
     sha256 = "11j2qm67sszfqq730czsr2zmpgkghsb50556ax1vlpm7rw3gm33c";
   };
 
-  propagatedBuildInputs = with python27Packages; [
+  requiredPythonModules = with python27Packages; [
     pygtk
     miniupnpc
     mutagen

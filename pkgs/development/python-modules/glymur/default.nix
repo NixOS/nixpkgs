@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "1zbghzw1q4fljb019lsrhka9xrnn4425qnxrjbmbv7dssgkkywd7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
   ] ++ stdenv.lib.optional isPy27 [ contextlib2 mock importlib-resources ];
 

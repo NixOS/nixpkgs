@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     sqlalchemy
   ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
 

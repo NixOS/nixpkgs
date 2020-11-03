@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "05hfddf1dm594wnjyqhj0zmjfsf1kpmx1frjwhypgzx4hf62qcmr";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     flask_wtf
     mongoengine

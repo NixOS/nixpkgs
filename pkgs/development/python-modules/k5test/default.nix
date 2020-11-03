@@ -27,7 +27,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
   ];
 

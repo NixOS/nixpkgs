@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "16425aa1575a271dd3705d812b06276eeedc3ac557e7fd28e06822ad14cd0667";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyyaml cbor2 dateutil tomlkit u-msgpack-python
   ];
 

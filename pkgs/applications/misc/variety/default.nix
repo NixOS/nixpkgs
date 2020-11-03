@@ -43,7 +43,7 @@ buildPythonApplication rec {
       --replace /bin/bash ${stdenv.shell}
   '';
 
-  propagatedBuildInputs =
+  requiredPythonModules =
        [ gtk3
          gexiv2
          libnotify

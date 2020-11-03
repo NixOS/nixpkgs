@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   doCheck = false;
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six jaraco_classes jaraco_text ];
+  requiredPythonModules = [ six jaraco_classes jaraco_text ];
 
   # break dependency cycle
   patchPhase = ''

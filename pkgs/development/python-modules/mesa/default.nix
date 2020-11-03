@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pytest tests -k "not scaffold"
   '';
 
-  propagatedBuildInputs = [ cookiecutter networkx pandas tornado tqdm ];
+  requiredPythonModules = [ cookiecutter networkx pandas tornado tqdm ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/projectmesa/mesa";

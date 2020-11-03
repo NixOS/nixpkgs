@@ -33,7 +33,7 @@ buildPythonPackage rec {
     jupyter_client
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     joblib
     numpy
     scipy

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
   postPatch = "patchShebangs ./configure";
 
-  propagatedBuildInputs = [ boolean-py ];
+  requiredPythonModules = [ boolean-py ];
 
   meta = with lib; {
     homepage = "https://github.com/nexB/license-expression";

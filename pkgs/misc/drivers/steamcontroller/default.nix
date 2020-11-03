@@ -21,7 +21,7 @@ buildPythonApplication {
   '';
 
   buildInputs = [ libusb1 ];
-  propagatedBuildInputs =
+  requiredPythonModules =
     [ psutil python3Packages.libusb1 ]
     ++ lib.optionals GyroplotSupport [ pyqtgraph pyside ];
 

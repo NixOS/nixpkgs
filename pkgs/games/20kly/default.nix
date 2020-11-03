@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
         "LIGHTYEARS_DIR = \"$out/share\""
   '';
 
-  propagatedBuildInputs = with python.pkgs; [ pygame ];
+  requiredPythonModules = with python.pkgs; [ pygame ];
 
   buildPhase = "python -O -m compileall .";
 

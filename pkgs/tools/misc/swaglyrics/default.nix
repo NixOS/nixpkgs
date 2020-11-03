@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1dwj9fpyhqqpm2z3imp8hfribkzxya891shh77yg77rc2xghp7mh";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     unidecode colorama beautifulsoup4 flask requests swspotify
   ];
 

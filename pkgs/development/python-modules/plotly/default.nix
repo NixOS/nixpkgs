@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "257f530ffd73754bd008454826905657b329053364597479bb9774437a396837";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     decorator
     nbformat
     pytz

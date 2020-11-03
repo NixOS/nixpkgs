@@ -36,7 +36,7 @@ in buildPythonApplication rec {
       --replace "sys.executable" "'${pythonEnv.interpreter}'"
   '';
 
-  propagatedBuildInputs = runtimeDeps python3.pkgs;
+  requiredPythonModules = runtimeDeps python3.pkgs;
 
   doCheck = true;
   checkPhase = ''

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1ml91yaxwx4msisxbm92yf22qfrscvk58f3z2r1jhi96pw2k4i7x";
   };
 
-  propagatedBuildInputs = [ numpy scipy sparse ]
+  requiredPythonModules = [ numpy scipy sparse ]
     ++ lib.optionals (!doCheck) [ nose ]; # upstream added nose to install_requires
 
   checkInputs = [ pytest nose pytorch ];

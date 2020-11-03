@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ crc32c  ];
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
 
   LDFLAGS = "-L${crc32c}/lib";
   CFLAGS = "-I${crc32c}/include";

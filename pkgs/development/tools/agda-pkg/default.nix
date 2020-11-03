@@ -20,7 +20,7 @@ buildPythonApplication rec {
     HOME=$NIX_BUILD_TOP $out/bin/apkg --help > /dev/null
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     GitPython
     pony

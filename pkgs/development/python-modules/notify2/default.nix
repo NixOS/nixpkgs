@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   # Tests require Xorg and Dbus instance
   doCheck = false;
-  propagatedBuildInputs = [ pygobject3
+  requiredPythonModules = [ pygobject3
                             dbus-python ];
 
   meta = {

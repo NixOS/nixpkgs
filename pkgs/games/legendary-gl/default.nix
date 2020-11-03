@@ -16,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "0kdrhdvh9gxq1zinh5w852f5fjls9902pcrkhkhm2c0vvq7jfass";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   disabled = pythonOlder "3.8";
 

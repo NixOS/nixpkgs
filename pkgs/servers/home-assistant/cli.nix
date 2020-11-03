@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" setup.py
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     requests netdisco click click-log tabulate jsonpath_rw jinja2 dateparser regex ruamel_yaml aiohttp
   ];
 

@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec  {
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     beautifulsoup4
     pillow
     pycairo
@@ -78,7 +78,7 @@ python3.pkgs.buildPythonApplication rec  {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
+    wrapPythonProgramsIn $out/libexec "$out $requiredPythonModules"
   '';
 
   strictDeps = false;

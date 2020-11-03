@@ -37,7 +37,7 @@ buildPythonPackage {
       --subst-var-by 'sc2path' '${sc2-headless}'
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     absl-py
     enum34
     future

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
     nativeBuildInputs = [ git setuptools_scm ];
 
-    propagatedBuildInputs = [ setuptools requests boto3 responses ];
+    requiredPythonModules = [ setuptools requests boto3 responses ];
 
     meta = with stdenv.lib; {
         description = "Keboola Connection Storage API client";

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ sphinx ];
+  requiredPythonModules = [ sphinx ];
 
   # no tests in package
   doCheck = false;

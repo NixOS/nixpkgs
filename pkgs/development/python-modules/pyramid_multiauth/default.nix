@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0lprqjyg3zcji6033p1l3s4nigjigc5423wgivkfhz46vq0jmniy";
   };
 
-  propagatedBuildInputs = [ pyramid ];
+  requiredPythonModules = [ pyramid ];
 
   meta = with stdenv.lib; {
     description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";

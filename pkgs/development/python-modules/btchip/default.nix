@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "4167f3c6ea832dd189d447d0d7a8c2a968027671ae6f43c680192f2b72c39b2c";
   };
 
-  propagatedBuildInputs = [ hidapi pyscard ecdsa ];
+  requiredPythonModules = [ hidapi pyscard ecdsa ];
 
   # tests requires hardware
   doCheck = false;

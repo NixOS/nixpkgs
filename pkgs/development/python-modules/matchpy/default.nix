@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm pytestrunner ];
   checkInputs = [ pytest hypothesis ];
-  propagatedBuildInputs = [ hopcroftkarp multiset ];
+  requiredPythonModules = [ hopcroftkarp multiset ];
 
   meta = with lib; {
     description = "A library for pattern matching on symbolic expressions";

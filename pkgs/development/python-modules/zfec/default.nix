@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptoolsDarcs ];
-  propagatedBuildInputs = [ pyutil ];
+  requiredPythonModules = [ pyutil ];
 
   # argparse is in the stdlib but zfec doesn't know that.
   postPatch = ''

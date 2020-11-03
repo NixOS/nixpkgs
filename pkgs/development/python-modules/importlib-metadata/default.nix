@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ zipp ]
+  requiredPythonModules = [ zipp ]
     ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
 
   doCheck = false; # Cyclic dependencies.

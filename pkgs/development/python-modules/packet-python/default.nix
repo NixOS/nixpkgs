@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "e333fb5ce45a3f283ddeb6261d061b39328b82eb440a89233fa08ce3fec2fcf0";
   };
   nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
   checkInputs = [
     pytest
     pytestrunner

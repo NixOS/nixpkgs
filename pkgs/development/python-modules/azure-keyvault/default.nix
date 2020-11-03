@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "69002a546921a8290eb54d9a3805cfc515c321bc1d4c0bfcfb463620245eca40";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     azure-keyvault-certificates
     azure-keyvault-keys
     azure-keyvault-secrets

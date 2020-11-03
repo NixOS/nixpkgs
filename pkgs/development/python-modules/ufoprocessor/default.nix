@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     defcon
     lxml
     fonttools

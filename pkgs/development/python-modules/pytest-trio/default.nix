@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "09v2031yxm8ryhq12205ldcck76n3wwqhjjsgfmn6dxfiqb0vbw9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     trio
     async_generator
     outcome

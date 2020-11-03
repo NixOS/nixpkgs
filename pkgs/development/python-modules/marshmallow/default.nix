@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "a2a5eefb4b75a3b43f05be1cca0b6686adf56af7465c3ca629e5ad8d1e1fe13d";
   };
 
-  propagatedBuildInputs = [ dateutil simplejson ];
+  requiredPythonModules = [ dateutil simplejson ];
 
   doCheck = false;
 }

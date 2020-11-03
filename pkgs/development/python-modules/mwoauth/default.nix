@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # package has no tests
   doCheck = false;
 
-  propagatedBuildInputs = [ six pyjwt requests oauthlib requests_oauthlib ];
+  requiredPythonModules = [ six pyjwt requests oauthlib requests_oauthlib ];
 
   meta = with lib; {
     description = "A library designed to provide a simple means to performing an OAuth handshake with a MediaWiki installation with the OAuth Extension installed.";

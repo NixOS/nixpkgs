@@ -26,7 +26,7 @@ buildPythonPackage {
 
   postPatch = "cd python-package";
 
-  propagatedBuildInputs = [ scipy ];
+  requiredPythonModules = [ scipy ];
   buildInputs = [ xgboost ];
   checkInputs = [ nose pytest scikitlearn pandas matplotlib graphviz datatable ];
 

@@ -13,7 +13,7 @@ buildPythonPackage {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ future pyusb ipython pygreat ];
+  requiredPythonModules = [ future pyusb ipython pygreat ];
 
   doCheck = false;
 

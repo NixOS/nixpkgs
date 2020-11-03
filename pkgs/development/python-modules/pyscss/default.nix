@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ six ]
+  requiredPythonModules = [ six ]
     ++ (stdenv.lib.optionals (pythonOlder "3.4") [ enum34 pathlib ])
     ++ (stdenv.lib.optionals (pythonOlder "2.7") [ ordereddict ]);
 

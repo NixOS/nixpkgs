@@ -15,7 +15,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     enamlx
     twisted
     lxml

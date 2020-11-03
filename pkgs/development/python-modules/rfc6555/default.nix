@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "05sjrd6jc0sdvx0z7d3llk82rx366jlmc7ijam0nalsv66hbn70r";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ selectors2 ];
+  requiredPythonModules = with pythonPackages; [ selectors2 ];
 
   checkInputs = with pythonPackages; [ mock pytest ];
   # disabling tests that require a functional DNS IPv{4,6} stack to pass.

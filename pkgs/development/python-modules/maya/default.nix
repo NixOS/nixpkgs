@@ -19,7 +19,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ dateparser humanize pendulum ruamel_yaml tzlocal ];
+  requiredPythonModules = [ dateparser humanize pendulum ruamel_yaml tzlocal ];
 
   # No tests
   doCheck = false;

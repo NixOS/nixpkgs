@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "6b07dbd4f77ab023ed4167c43ffc1b9f9354fb6075cc6ff3b91fefcbb80342ca";
   };
 
-  propagatedBuildInputs = [ ruamel_yaml python-dateutil ];
+  requiredPythonModules = [ ruamel_yaml python-dateutil ];
 
   # Library tested with external tool
   # https://hitchdev.com/approach/contributing-to-hitch-libraries/

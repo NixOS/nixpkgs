@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest-httpbin
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyyaml
     wrapt
     six

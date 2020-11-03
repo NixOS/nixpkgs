@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1m9aa4qnyj21lbq4sbvmv1vcz7zksss4rz37ddf2hxv4hk8b547w";
   };
 
-  propagatedBuildInputs = [ nose ];
+  requiredPythonModules = [ nose ];
 
   meta = with stdenv.lib; {
     description = "Add flag to ignore unicode literal prefixes in doctests";

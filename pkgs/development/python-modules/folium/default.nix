@@ -24,7 +24,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   checkInputs = [ pytest nbconvert pandas mock ];
-  propagatedBuildInputs = [ jinja2 branca requests numpy ];
+  requiredPythonModules = [ jinja2 branca requests numpy ];
 
   # No tests in archive
   doCheck = false;

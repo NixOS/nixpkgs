@@ -17,7 +17,7 @@ buildPythonPackage {
     sha256 = "0mplziqw52jfspas6vsm210lmxqqzgj0dxm8y0i3gpbyyykwcmh0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
   ];
 

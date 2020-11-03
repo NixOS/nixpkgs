@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  propagatedBuildInputs = [ cairosvg pyphen cffi cssselect lxml html5lib tinycss pygobject2 ];
+  requiredPythonModules = [ cairosvg pyphen cffi cssselect lxml html5lib tinycss pygobject2 ];
 
   patches = [
     (substituteAll {

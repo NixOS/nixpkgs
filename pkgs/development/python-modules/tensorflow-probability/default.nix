@@ -88,7 +88,7 @@ in buildPythonPackage {
 
   src = bazel-wheel;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     tensorflow
     six
     numpy

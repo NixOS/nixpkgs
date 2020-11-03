@@ -19,7 +19,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection ];
   buildInputs = [ glib gobject-introspection ]
                  ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
-  propagatedBuildInputs = [ pycairo cairo ];
+  requiredPythonModules = [ pycairo cairo ];
 
   passthru = {
     updateScript = gnome3.updateScript {

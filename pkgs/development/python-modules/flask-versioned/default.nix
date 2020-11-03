@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1wim9hvx7lxzfg35c0nc7p34j4vw9mzisgijlz4ibgykah4g1y37";
   };
 
-  propagatedBuildInputs = [ flask ];
+  requiredPythonModules = [ flask ];
 
   meta = with stdenv.lib; {
     description = "Flask plugin to rewrite file paths to add version info";

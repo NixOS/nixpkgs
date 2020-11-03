@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   doCheck = false;  # there are no tests
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
   ];
 

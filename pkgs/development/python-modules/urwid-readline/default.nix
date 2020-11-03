@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "24e376d4b75940d19e8bc81c264be5d383f8d4da560f68f648dd16c85f6afdb5";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     urwid
   ];
 

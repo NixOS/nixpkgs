@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   checkInputs = [ which ] ++ (with python3Packages; [ cython pytest ]);
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     sqlite apsw pycrypto requests defusedxml dugong llfuse
     cython pytest pytest-catchlog google_auth google-auth-oauthlib
   ];

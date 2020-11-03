@@ -11,7 +11,7 @@ python.pkgs.buildPythonPackage rec {
     sha256 = "1hdgh5f59bya079w4ahx4l0hf4gc5yvaz44irp5x57cj9hkpp92z";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     psutil # needed to profile child processes
     matplotlib # needed for plotting memory usage
   ];

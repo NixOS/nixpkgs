@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "9274bc8298b2d4b69cb3936bdcda315b50e45975789f519a237bdec58346b8d7";
   };
 
-  propagatedBuildInputs = lib.optional (!isPy3k) enum34;
+  requiredPythonModules = lib.optional (!isPy3k) enum34;
 
   checkInputs = [ pyyaml pytest ];
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libev ];
-  propagatedBuildInputs = [ six ]
+  requiredPythonModules = [ six ]
     ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
   checkInputs = [ eventlet mock nose pytest pytz pyyaml sure ];

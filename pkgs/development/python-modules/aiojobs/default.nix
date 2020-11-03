@@ -23,7 +23,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
   ];
 

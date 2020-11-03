@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm ];
   checkInputs = [ hypothesis ];
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover tests

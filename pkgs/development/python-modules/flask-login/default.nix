@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose mock semantic-version ];
-  propagatedBuildInputs = [ flask blinker ];
+  requiredPythonModules = [ flask blinker ];
 
   checkPhase = "nosetests -d";
 

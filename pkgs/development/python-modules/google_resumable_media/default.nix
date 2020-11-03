@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ requests setuptools six ]
+  requiredPythonModules = [ requests setuptools six ]
     ++ lib.optional isPy3k google-crc32c
     ++ lib.optional (!isPy3k) crcmod;
 

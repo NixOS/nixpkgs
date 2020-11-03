@@ -22,7 +22,7 @@ in python3Packages.buildPythonApplication rec {
   buildInputs = [ makeWrapper docutils unzip ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  propagatedBuildInputs = [ dulwich ];
+  requiredPythonModules = [ dulwich ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

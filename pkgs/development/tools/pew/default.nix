@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "04anak82p4v9w0lgfs55s7diywxil6amq8c8bhli143ca8l2fcdq";
   };
 
-  propagatedBuildInputs = [ virtualenv virtualenv-clone setuptools ];
+  requiredPythonModules = [ virtualenv virtualenv-clone setuptools ];
 
   # no tests are packaged
   checkPhase = ''

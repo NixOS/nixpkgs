@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     protobuf
     numpy
     six

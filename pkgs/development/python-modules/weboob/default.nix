@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pyqt5 ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     Babel
     cssselect
     dateutil

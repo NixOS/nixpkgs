@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook flaky mock pytest-mock ];
-  propagatedBuildInputs = [ numpy pandas pytz six requests ];
+  requiredPythonModules = [ numpy pandas pytz six requests ];
 
   # Skip a few tests that try to access some URLs
   pytestFlagsArray = [ "pvlib/tests" ];

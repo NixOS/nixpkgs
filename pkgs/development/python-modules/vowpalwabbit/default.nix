@@ -34,7 +34,7 @@ buildPythonPackage rec {
     zlib.dev
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scikitlearn
     scipy

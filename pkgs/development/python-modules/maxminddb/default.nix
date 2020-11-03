@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libmaxminddb ];
 
-  propagatedBuildInputs = [ ipaddress ];
+  requiredPythonModules = [ ipaddress ];
 
   checkInputs = [ nose mock ];
 

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "8f255ef2c87c436b7132049e1dd86c8e08bf82d8c773aea86f3069b461a17d52";
   };
 
-  propagatedBuildInputs = [ agate openpyxl xlrd ];
+  requiredPythonModules = [ agate openpyxl xlrd ];
 
   checkInputs = [ nose ];
 

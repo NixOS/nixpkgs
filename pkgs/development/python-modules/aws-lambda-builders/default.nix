@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # Package is not compatible with Python 3.5
   disabled = isPy35;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
   ] ++ lib.optionals isPy27 [ pathlib ];
 

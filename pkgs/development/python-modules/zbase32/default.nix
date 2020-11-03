@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # Tests require `pyutil' so disable them to avoid circular references.
   doCheck = false;
 
-  propagatedBuildInputs = [ setuptoolsDarcs pyutil ];
+  requiredPythonModules = [ setuptoolsDarcs pyutil ];
 
   meta = with stdenv.lib; {
     description = "zbase32, a base32 encoder/decoder";

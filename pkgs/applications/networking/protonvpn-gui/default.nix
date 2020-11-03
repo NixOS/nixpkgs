@@ -39,7 +39,7 @@ in python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook makeWrapper imagemagick ];
 
-  propagatedBuildInputs = (with python3Packages; [
+  requiredPythonModules = (with python3Packages; [
       pygobject3
       pycairo
       requests

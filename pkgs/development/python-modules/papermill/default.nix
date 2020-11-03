@@ -32,7 +32,7 @@ buildPythonPackage rec {
     sha256 = "ecd4cafa9179693b0eedc3b6f4560f9ee47826a6e366e42bfa3cc20f7931b3f8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ansiwrap
     click
     future

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pbr ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     docutils
     six
     chardet

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   }) ];
 
   checkInputs = [ unittest2 scripttest pytz mock testtools testrepository ];
-  propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
+  requiredPythonModules = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   doCheck = !stdenv.isDarwin;
 

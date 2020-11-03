@@ -36,7 +36,7 @@ buildPythonPackage rec {
     '';
 
   checkInputs = [ pytest pytest-mock];
-  propagatedBuildInputs = [ appdirs click construct croniter cryptography importlib-metadata zeroconf attrs pytz tqdm netifaces ];
+  requiredPythonModules = [ appdirs click construct croniter cryptography importlib-metadata zeroconf attrs pytz tqdm netifaces ];
 
   checkPhase = ''
     pytest

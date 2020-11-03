@@ -45,7 +45,7 @@ buildPythonPackage rec {
     fplll
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cython
     cysignals
     numpy

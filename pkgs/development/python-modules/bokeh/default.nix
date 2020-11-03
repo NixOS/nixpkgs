@@ -73,7 +73,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pillow
     jinja2
     python-dateutil

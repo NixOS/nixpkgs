@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
 
-  propagatedBuildInputs = [ numpy scipy six paramz matplotlib ];
+  requiredPythonModules = [ numpy scipy six paramz matplotlib ];
 
   meta = with stdenv.lib; {
     description = "Gaussian process framework in Python";

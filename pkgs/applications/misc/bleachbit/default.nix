@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     chardet
     pygobject3
     requests

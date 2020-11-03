@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "017risn0j1bjy9ygzfgphjnyjl4gk7wbrr4qv1vvrlan60wyp1rs";
   };
 
-  propagatedBuildInputs = [ click future six ];
+  requiredPythonModules = [ click future six ];
 
   meta = with stdenv.lib; {
     description = "A linter for prose";

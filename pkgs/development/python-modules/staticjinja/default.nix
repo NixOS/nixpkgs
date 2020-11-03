@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "fbd61cca1dad44b6891d1a1d72b11ae100e21b3909802e3ff1861ab55bf16603";
   };
 
-  propagatedBuildInputs = [ jinja2 docopt easywatch ];
+  requiredPythonModules = [ jinja2 docopt easywatch ];
 
   # There are no tests on pypi
   doCheck = false;

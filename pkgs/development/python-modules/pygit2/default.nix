@@ -17,7 +17,7 @@ buildPythonPackage rec {
     libgit2
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cached-property
   ] ++ lib.optional (!isPyPy) cffi;
 

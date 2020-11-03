@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = lib.optionals (pythonOlder "3.5") [ mock ];
-  propagatedBuildInputs = [ six requests vobject lxml ]
+  requiredPythonModules = [ six requests vobject lxml ]
     ++ lib.optionals (pythonOlder "3.6") [ pytz tzlocal ];
 
   checkInputs = [

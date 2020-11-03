@@ -18,7 +18,7 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # Does not install tests
   doCheck = false;

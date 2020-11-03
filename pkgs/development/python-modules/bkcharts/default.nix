@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "a5eaa8e78853dcecaa46345812e4fabe9cd3b96330ebf0809f640a4a0556d72e";
   };
 
-  propagatedBuildInputs = [ numpy pandas ];
+  requiredPythonModules = [ numpy pandas ];
 
   # Circular test dependency on bokeh
   doCheck = false;

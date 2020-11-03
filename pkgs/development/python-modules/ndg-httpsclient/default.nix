@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "0.5.1";
   pname = "ndg-httpsclient";
 
-  propagatedBuildInputs = [ pyopenssl ];
+  requiredPythonModules = [ pyopenssl ];
 
   src = fetchFromGitHub {
     owner = "cedadev";

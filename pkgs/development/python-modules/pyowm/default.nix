@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "a7b18297a9189dbe5f6b454b12d61a407e35c7eb9ca75bcabfe5e1c83245290d";
   };
 
-  propagatedBuildInputs = [ requests geojson ];
+  requiredPythonModules = [ requests geojson ];
 
   # This may actually break the package.
   postPatch = ''

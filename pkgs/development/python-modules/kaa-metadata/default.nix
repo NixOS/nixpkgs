@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.libdvdread ];
 
-  propagatedBuildInputs = [ kaa-base ];
+  requiredPythonModules = [ kaa-base ];
 
   # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
   installPhase = ''

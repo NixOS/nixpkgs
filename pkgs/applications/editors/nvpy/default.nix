@@ -11,7 +11,7 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "1rd3vlaqkg16iz6qcw6rkbq0jmyvc0843wa3brnvn1nz0kla243f";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     markdown
     tkinter
     docutils

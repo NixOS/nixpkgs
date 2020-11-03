@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "7f110208a3a2aa9b4d6da11233fd0f206ea039b52bca4bfe312f1b9dcf788476";
   };
 
-  propagatedBuildInputs = [ numpy awkward ];
+  requiredPythonModules = [ numpy awkward ];
 
   # No tests on PyPi
   doCheck = false;

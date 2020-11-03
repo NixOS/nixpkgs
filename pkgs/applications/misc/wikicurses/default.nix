@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   outputs = [ "out" "man" ];
 
-  propagatedBuildInputs = with pythonPackages; [ urwid beautifulsoup4 lxml ];
+  requiredPythonModules = with pythonPackages; [ urwid beautifulsoup4 lxml ];
 
   postInstall = ''
     mkdir -p $man/share/man/man{1,5}

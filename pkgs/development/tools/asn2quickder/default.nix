@@ -21,7 +21,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ makeWrapper cmake ];
   checkInputs = [ pytestrunner pytest ];
 
-  propagatedBuildInputs = [ pyparsing asn1ate six ];
+  requiredPythonModules = [ pyparsing asn1ate six ];
 
   meta = with stdenv.lib; {
     description = "An ASN.1 compiler with a backend for Quick DER";

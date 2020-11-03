@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "015z7n0hdgkzn0p7aw1xsv6lwc260p8q67jx0zyd1zghnwyj8k79";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  requiredPythonModules = lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   checkInputs = [ pytest xvfb_run ];
 

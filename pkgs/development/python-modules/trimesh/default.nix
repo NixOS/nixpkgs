@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "932670e753abdec162d1d9c661920db871236de782890ad88577b2af0d824c7f";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   # tests are not included in pypi distributions and would require lots of
   # optional dependencies

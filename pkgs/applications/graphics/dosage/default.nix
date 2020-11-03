@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1p6vllqaf9s6crj47xqp97hkglch1kd4y8y4lxvzx3g2shhhk9hh";
   };
   checkInputs = with python3Packages; [ pytest responses ];
-  propagatedBuildInputs = with python3Packages; [ colorama lxml requests pbr setuptools ];
+  requiredPythonModules = with python3Packages; [ colorama lxml requests pbr setuptools ];
 
   disabled = python3Packages.pythonOlder "3.3";
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0c2dyi4qi7clln43481xq66f6r4fadrz84jphjc5phz97bp33ds8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     pytorch
     scikitlearn

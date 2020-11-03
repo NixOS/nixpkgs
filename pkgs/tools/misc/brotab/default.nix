@@ -11,7 +11,7 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "1ja9qaf3rxm0chgzs5mpw973h7ibb454k9mbfbb2gl12gr9zllyw";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     requests
     flask
     psutil

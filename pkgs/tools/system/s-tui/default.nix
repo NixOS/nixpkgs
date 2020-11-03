@@ -9,7 +9,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1gqrb2xxii43j7kszy7kvv4f6hr8ac4p0m9q8i1xs5fhsqcx186i";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     urwid
     psutil
   ];

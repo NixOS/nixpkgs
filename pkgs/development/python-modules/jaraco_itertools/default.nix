@@ -17,7 +17,7 @@ buildPythonPackage rec {
     ./0001-Don-t-run-flake8-checks-during-the-build.patch
   ];
 
-  propagatedBuildInputs = [ inflect more-itertools six ];
+  requiredPythonModules = [ inflect more-itertools six ];
   checkInputs = [ pytest ];
 
   # tests no longer available through pypi

@@ -20,7 +20,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     paramiko peewee pyqt5 python-dateutil APScheduler psutil qdarkstyle
     secretstorage appdirs setuptools
   ];

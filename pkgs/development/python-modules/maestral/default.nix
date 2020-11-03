@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-kh3FYBSVOU4ywrYl6ONEIbLbkSuZmexNJC9dB+JtUjM=";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     alembic
     bugsnag
     click
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${stdenv.lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.computeRequiredPythonModules propagatedBuildInputs))}"
+    "--prefix" "PYTHONPATH" ":" "${stdenv.lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.computeRequiredPythonModules requiredPythonModules))}"
     "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
   ];
 

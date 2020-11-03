@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # No tests included
   doCheck = false;

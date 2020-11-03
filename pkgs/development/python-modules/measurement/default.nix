@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestrunner ];
   nativeBuildInputs = [ sphinx setuptools_scm ];
-  propagatedBuildInputs = [ sympy ];
+  requiredPythonModules = [ sympy ];
 
   meta = with lib; {
     description = "Use and manipulate unit-aware measurement objects in Python";

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1a3hr7wx3ywwskr99hgp120dw9ab1vmcaxdixlsbd9bg6ly3fdr9";
   };
 
-  propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
+  requiredPythonModules = [ ipython jupyter_client traitlets tornado ];
 
   # https://github.com/ipython/ipykernel/pull/377
   patches = [

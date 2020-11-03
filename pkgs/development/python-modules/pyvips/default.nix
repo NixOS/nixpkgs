@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glib vips ];
 
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
 
   # tests are not included in pypi tarball
   doCheck = false;

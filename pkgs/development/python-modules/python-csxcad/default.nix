@@ -25,7 +25,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     openems
     csxcad
     numpy

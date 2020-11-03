@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1r6g29gd009p87m8a6wv4rzx7f0564zdv67qz5xys4wsgvc95bx0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     clickclick
     dnspython
     requests

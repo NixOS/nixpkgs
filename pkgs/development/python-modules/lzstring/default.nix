@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "18ly9pppy2yspxzw7k1b23wk77k7m44rz2g0271bqgqrk3jn3yhs";
   };
 
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   meta = {
     description = "lz-string for python";

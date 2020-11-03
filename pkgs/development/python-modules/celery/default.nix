@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ case pytest boto3 moto ];
-  propagatedBuildInputs = [ kombu billiard pytz future vine ];
+  requiredPythonModules = [ kombu billiard pytz future vine ];
 
   meta = with lib; {
     homepage = "https://github.com/celery/celery/";

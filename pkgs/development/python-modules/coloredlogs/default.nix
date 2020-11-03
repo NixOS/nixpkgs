@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
   checkInputs = [ pytest mock utillinux ];
 
-  propagatedBuildInputs = [ humanfriendly verboselogs capturer ];
+  requiredPythonModules = [ humanfriendly verboselogs capturer ];
 
   meta = with lib; {
     description = "Colored stream handler for Python's logging module";

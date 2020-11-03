@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1qrq7y5hnghzbxgrxgl153n8jlhw31kqjbr93jsvlvhz5b3ci750";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ configshell rtslib ];
+  requiredPythonModules = with python3.pkgs; [ configshell rtslib ];
 
   postInstall = ''
     install -D targetcli.8 -t $out/share/man/man8/

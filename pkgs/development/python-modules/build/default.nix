@@ -26,7 +26,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     toml
     pep517
     packaging

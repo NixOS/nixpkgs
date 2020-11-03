@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ certifi six ];
+  requiredPythonModules = [ certifi six ];
 
   # tests require last.fm credentials
   doCheck = false;

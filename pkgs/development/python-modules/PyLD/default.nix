@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "0z2vkllw8bvzxripwb6l757r7av5qwhzsiy4061gmlhq8z8gq961";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # Unfortunately PyLD does not pass all testcases in the JSON-LD corpus. We
   # check for at least a minimum amount of successful tests so we know it's not

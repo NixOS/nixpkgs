@@ -79,7 +79,7 @@ python3.pkgs.buildPythonApplication rec {
     xorg.libxkbfile
   ] ++ stdenv.lib.optional atspiSupport at-spi2-core;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     dbus-python
     distutils_extra
     pyatspi

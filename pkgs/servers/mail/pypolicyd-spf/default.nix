@@ -10,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "1nm8y1jjgx6mxrbcxrbdnmkf8vglwp0wiw6jipzh641wb24gi76z";
   };
 
-  propagatedBuildInputs = [ pyspf ];
+  requiredPythonModules = [ pyspf ];
 
   preBuild = ''
     substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"

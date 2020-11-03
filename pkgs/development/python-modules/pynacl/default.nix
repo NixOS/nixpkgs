@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest hypothesis_4 ];
   buildInputs = [ libsodium ];
-  propagatedBuildInputs = [ cffi six ];
+  requiredPythonModules = [ cffi six ];
 
   SODIUM_INSTALL = "system";
 

@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     vte
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     configobj
     dbus-python
     pygobject3
@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs run_tests tests po
-    # dbus-python is correctly passed in propagatedBuildInputs, but for some reason setup.py complains.
+    # dbus-python is correctly passed in requiredPythonModules, but for some reason setup.py complains.
     # The wrapped terminator has the correct path added, so ignore this.
     substituteInPlace setup.py --replace "'dbus-python'," ""
   '';

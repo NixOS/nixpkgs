@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "c943b7181322a2bdd50d20e1244536c404916e546131dc1fae10a7cb99a013e9";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # Tests ends up with libssl.so cannot load shared
   doCheck = false;

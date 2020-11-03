@@ -26,7 +26,7 @@ buildPythonPackage rec {
     gtk3
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pygobject3
   ];
 

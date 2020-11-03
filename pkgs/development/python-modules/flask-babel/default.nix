@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0gmb165vkwv5v7dxsxa2i3zhafns0fh938m2zdcrv4d8z5l099yn";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     Babel
     jinja2

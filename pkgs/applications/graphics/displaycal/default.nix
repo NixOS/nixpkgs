@@ -24,7 +24,7 @@ in buildPythonApplication rec {
     sha256 = "1sivi4q7sqsrc95qg5gh37bsm2761md4mpl89hflzwk6kyyxyd3w";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     libXext
     libXxf86vm
     libX11

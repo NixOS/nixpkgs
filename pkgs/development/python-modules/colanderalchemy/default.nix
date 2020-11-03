@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ colander sqlalchemy ];
+  requiredPythonModules = [ colander sqlalchemy ];
 
   meta = with stdenv.lib; {
     description = "Autogenerate Colander schemas based on SQLAlchemy models";

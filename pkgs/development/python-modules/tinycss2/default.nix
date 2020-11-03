@@ -32,7 +32,7 @@ buildPythonPackage rec {
     )
   ];
 
-  propagatedBuildInputs = [ webencodings ];
+  requiredPythonModules = [ webencodings ];
 
   checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
 

@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "pdftools.pdfposter";
   version = "0.7.post1";
 
-  propagatedBuildInputs = [ pypdf2 ];
+  requiredPythonModules = [ pypdf2 ];
 
   src = fetchPypi {
     inherit pname version;

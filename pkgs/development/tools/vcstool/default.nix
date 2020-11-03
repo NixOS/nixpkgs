@@ -12,7 +12,7 @@ buildPythonApplication rec {
     sha256 = "1lb0j120sj76swi702ah6ryn770m1y7gh69237zxpyh897pn5paa";
   };
 
-  propagatedBuildInputs = [ pyyaml setuptools ];
+  requiredPythonModules = [ pyyaml setuptools ];
 
   makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git breezy subversion ])];
 

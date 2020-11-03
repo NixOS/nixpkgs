@@ -32,7 +32,7 @@ in python.pkgs.buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     cornice gunicorn pyramid requests simplejson sqlalchemy mozsvc tokenserver
     serversyncstorage configparser
   ];

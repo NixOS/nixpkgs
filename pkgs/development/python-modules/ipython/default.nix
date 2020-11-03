@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose pygments ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jedi
     decorator
     pickleshare

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0s69kdhl8vhqazhxqdvb06l83x0iqdm0yr4vp3p52alzi6a8lm33";
   };
 
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
   checkInputs = [ nose numpy ];
 
   checkPhase = "python setup.py nosetests -sv";

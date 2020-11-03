@@ -33,7 +33,7 @@ in buildPythonApplication {
     ffmpeg_3
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg_3 mplayer dvdauthor vcdimager cdrkit urllib3 setuptools
   ];
 

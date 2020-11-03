@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ astropy requests keyring beautifulsoup4 html5lib ];
+  requiredPythonModules = [ astropy requests keyring beautifulsoup4 html5lib ];
 
   nativeBuildInputs = [ astropy-helpers ];
 

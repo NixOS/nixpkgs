@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock pytest requests unittest2 ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # Functional tests require networking
   checkPhase = ''

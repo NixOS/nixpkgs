@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0bqkq0wn20cc3qrcd1ifq74p4m570j345bkq4axl08kbr8whfba7";
   };
 
-  propagatedBuildInputs = [ baron ];
+  requiredPythonModules = [ baron ];
 
   preCheck = ''
     rm -rf tests/__pycache__

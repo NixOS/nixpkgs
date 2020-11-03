@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "4edf0223a0685a7c485ae5a156b6f529ba1ee481a1417817935b20bde1956232";
   };
 
-  propagatedBuildInputs = [ six sphinxcontrib-serializinghtml ];
+  requiredPythonModules = [ six sphinxcontrib-serializinghtml ];
 
   doCheck = false;
 

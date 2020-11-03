@@ -23,7 +23,7 @@ buildPythonPackage rec {
     gdal_2
   ] ++ lib.optionals stdenv.cc.isClang [ giflib ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     click
     cligj

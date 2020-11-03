@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "152l5qjgkag8zkr69ax2i5s8xcac1qvyngisrplbnbzwbpf77d0d";
   };
 
-  propagatedBuildInputs = [ blessed python-editor readchar ];
+  requiredPythonModules = [ blessed python-editor readchar ];
 
   postPatch = ''
    substituteInPlace requirements.txt \

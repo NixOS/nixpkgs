@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "5fa3a9d99c7f3e5410a810fa8a158c0f71e39036c47b77745c7f2e4630372f82";
   };
 
-  propagatedBuildInputs = [ boltons attrs face ];
+  requiredPythonModules = [ boltons attrs face ];
 
   checkInputs = [ pytest pyyaml ];
   # test_cli.py checks the output of running "glom"

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1bfdq33mj6mwk5fkc6n23f9bc9z8j7kmvql3zchz4h58jskmvqas";
   };
 
-  propagatedBuildInputs = [ numpy astropy astropy-helpers ];
+  requiredPythonModules = [ numpy astropy astropy-helpers ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''

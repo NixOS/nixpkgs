@@ -32,7 +32,7 @@ buildPythonPackage rec {
       --replace 'astropy<3.1;' 'astropy;' --replace 'astropy<3.0;' 'astropy;'
   '';
 
-  propagatedBuildInputs = [ h5py numpy dill ];
+  requiredPythonModules = [ h5py numpy dill ];
 
   doCheck = false; # incompatible with latest astropy
   checkInputs = [

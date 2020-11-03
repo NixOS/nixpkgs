@@ -53,7 +53,7 @@ let
 
         sourceRoot = "source/src/azure-cli-core";
 
-        propagatedBuildInputs = with self; [
+        requiredPythonModules = with self; [
           adal
           argcomplete
           azure-common
@@ -107,7 +107,7 @@ let
 
         sourceRoot = "source/src/azure-cli-telemetry";
 
-        propagatedBuildInputs = with super; [
+        requiredPythonModules = with super; [
           applicationinsights
           portalocker
         ];
@@ -352,7 +352,7 @@ let
           sha256 = "0jfxm8lx8dzs3v2b04ljizk8gfckbm5l2v86rm7k0npbfvryba1p";
         };
 
-        propagatedBuildInputs = with self; [
+        requiredPythonModules = with self; [
           azure-common azure-nspkg msrest msrestazure cryptography
         ];
         pythonNamespaces = [ "azure" ];

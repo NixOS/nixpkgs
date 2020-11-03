@@ -22,7 +22,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest pathpy nbconvert ];
-  propagatedBuildInputs = [ setuptools_scm ];
+  requiredPythonModules = [ setuptools_scm ];
 
   meta = with lib; {
     description = "Zimmermann's Extensible Tools for Unified Project setups";

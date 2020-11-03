@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0rppwwpp4djn5c43x7icwslnxbzcfnnn3c6awpg1k97j69d2nmln";
   };
 
-  propagatedBuildInputs = [ robotframework ];
+  requiredPythonModules = [ robotframework ];
 
   checkPhase = ''
     ${python.interpreter} test/run.py

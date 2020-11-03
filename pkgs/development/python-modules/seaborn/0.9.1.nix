@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ pandas matplotlib ];
+  requiredPythonModules = [ pandas matplotlib ];
 
   checkPhase = ''
     nosetests -v

@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ jinja2 mock ];
-  propagatedBuildInputs = [ chardet dnspython lmtpd python-daemon six click ];
+  requiredPythonModules = [ chardet dnspython lmtpd python-daemon six click ];
 
   # Darwin tests fail without this. See:
   # https://github.com/NixOS/nixpkgs/pull/82166#discussion_r399909846

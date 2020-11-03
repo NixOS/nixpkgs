@@ -14,7 +14,7 @@ in buildPythonPackage rec {
     sha256 = "54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
   ] ++ lib.optionals isPy27 [ futures backports_functools_lru_cache ];
 

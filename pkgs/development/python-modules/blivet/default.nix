@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pykickstart pyparted pyblock pyudev libselinux
     six
   ];

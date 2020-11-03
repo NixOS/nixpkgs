@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
+  requiredPythonModules = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
     ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "07487rcmv74srnchh60jp0vg46g086qmpkaj8gxqhp9rj47r1s4m";
   };
 
-  propagatedBuildInputs = [ regex ];
+  requiredPythonModules = [ regex ];
 
   checkInputs =  [ pytest ];
   checkPhase = ''

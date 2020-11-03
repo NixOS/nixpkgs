@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1qh9x3lncaldnw79fgpqbayichs8pbz8abr6pxb5qxbs7zrnyrwf";
   };
 
-  propagatedBuildInputs = [ py4j ];
+  requiredPythonModules = [ py4j ];
 
   # Tests needs java to be present in path
   doCheck = false;

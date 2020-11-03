@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1n20znamai7jksimbdshy03rgw235qwa9vbx3lyajzwysblq4s4d";
   };
 
-  propagatedBuildInputs = [ unittest2 six ];
+  requiredPythonModules = [ unittest2 six ];
 
   # package supports 3.x but tests require egenix-mx-base which is python 2.x only
   # and is not currently in nixos

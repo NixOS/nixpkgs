@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson pytest-aiohttp ]
   ++ lib.optional (pythonOlder "3.7") glibcLocales
   ;
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     clickclick
     jsonschema
     pyyaml

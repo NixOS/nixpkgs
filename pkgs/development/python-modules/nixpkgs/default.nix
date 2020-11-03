@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pbr ];
-  propagatedBuildInputs = [ pythonix ];
+  requiredPythonModules = [ pythonix ];
 
   meta = with stdenv.lib; {
     description = "Allows to `from nixpkgs import` stuff in interactive Python sessions";

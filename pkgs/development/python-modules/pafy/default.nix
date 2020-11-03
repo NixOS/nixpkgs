@@ -11,7 +11,7 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  propagatedBuildInputs = [ youtube-dl ];
+  requiredPythonModules = [ youtube-dl ];
 
   meta = with lib; {
     description = "A library to download YouTube content and retrieve metadata";

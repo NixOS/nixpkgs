@@ -30,7 +30,7 @@ buildPythonPackage rec {
   # (c libs are used with anaconda, which we don't care about as we use the alternative path, being that of pyusb).
   doCheck = false;
 
-  propagatedBuildInputs = [ pyusb numpy ];
+  requiredPythonModules = [ pyusb numpy ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 

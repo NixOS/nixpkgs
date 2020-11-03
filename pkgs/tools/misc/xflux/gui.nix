@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "09zphcd9821ink63636swql4g85hg6lpsazqg1mawlk9ikc8zbps";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyxdg
     pexpect
     pygobject3

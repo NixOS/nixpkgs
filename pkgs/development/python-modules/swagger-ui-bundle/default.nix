@@ -15,7 +15,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "setup_requires=['pytest-runner', 'flake8']" "setup_requires=[]"
   '';
 
-  propagatedBuildInputs = [ jinja2 ];
+  requiredPythonModules = [ jinja2 ];
 
   # package contains no tests
   doCheck = false;

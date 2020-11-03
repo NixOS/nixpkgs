@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # Files are missing in the distribution
   doCheck = false;
 
-  propagatedBuildInputs = [ asgiref django daphne ];
+  requiredPythonModules = [ asgiref django daphne ];
 
   meta = with stdenv.lib; {
     description = "Brings event-driven capabilities to Django with a channel system";

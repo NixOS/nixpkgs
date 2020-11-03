@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "b095cbc77618f066d459a02b137b020c37da9f46d9b057704019c9f77dba3065";
   };
 
-  propagatedBuildInputs = [ pbr ];
+  requiredPythonModules = [ pbr ];
 
   # upstream hacking package is not required for functional testing
   patchPhase = ''

@@ -46,7 +46,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     udisks
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyqt5
     pygobject3
     gphoto2

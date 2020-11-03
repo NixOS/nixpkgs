@@ -19,7 +19,7 @@ buildPythonPackage rec {
     touch changelog.md
   '';
 
-  propagatedBuildInputs = [ six requests ];
+  requiredPythonModules = [ six requests ];
 
   # requires an active Azure Cosmos service
   doCheck = false;

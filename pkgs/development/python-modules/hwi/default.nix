@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "eec460a51eb556500c1eca92015be246d5714cd53171407a76da71e4346048ae";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     mnemonic
     ecdsa
     typing-extensions

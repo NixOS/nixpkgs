@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "0xrvg503xmi28w0hllr4s7fkap0p09fgw2wax3p1s2r6b3xjvbz7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     sqlalchemy
     pycrypto
     cryptography

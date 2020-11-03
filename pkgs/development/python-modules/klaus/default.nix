@@ -16,7 +16,7 @@ buildPythonPackage rec {
       --replace "mkdir -p \$builddir" "mkdir -p \$builddir && pwd"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six flask pygments dulwich httpauth humanize
   ];
 

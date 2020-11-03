@@ -13,7 +13,7 @@ buildPythonPackage rec {
   sourceRoot = "apache-arrow-${version}/python";
 
   nativeBuildInputs = [ cmake cython pkgconfig setuptools_scm ];
-  propagatedBuildInputs = [ numpy six ];
+  requiredPythonModules = [ numpy six ];
   checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
 
   PYARROW_BUILD_TYPE = "release";

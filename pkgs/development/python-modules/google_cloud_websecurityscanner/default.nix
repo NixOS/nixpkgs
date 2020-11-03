@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core ];
+  requiredPythonModules = [ google_api_core ];
 
   checkPhase = ''
     pytest tests/unit

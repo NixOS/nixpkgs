@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestcov mock Mako ];
 
-  propagatedBuildInputs = [ decorator stevedore ];
+  requiredPythonModules = [ decorator stevedore ];
 
   meta = with stdenv.lib; {
     description = "A caching front-end based on the Dogpile lock";

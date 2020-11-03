@@ -23,7 +23,7 @@ buildPythonApplication rec {
   '';
 
   checkInputs = [ py pytest pytest-datafiles pytest-mock pytestrunner ];
-  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
+  requiredPythonModules = [ arrow click click-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
   meta = with stdenv.lib; {

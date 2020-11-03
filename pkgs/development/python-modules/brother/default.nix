@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "03gjcpbq8rwnjzplgwhwr8wb7a1zh940dr6iwnq9srklqzzj691m";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pysnmp
   ];
 

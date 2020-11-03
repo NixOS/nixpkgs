@@ -48,7 +48,7 @@ in python.pkgs.buildPythonApplication rec {
     sha256 = "13qzjv11b0c7s1c66j70qmc222a78805n10lv2svj9yyk1v4xhjv";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     daemonize astral requests websocket_client aiohttp yarl jinja2
     aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt setuptools
     deepdiff dateutil bcrypt python-socketio pid

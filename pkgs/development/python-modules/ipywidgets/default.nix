@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # doCheck = false;
 
   buildInputs = [ nose pytest mock ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ipython
     ipykernel
     traitlets

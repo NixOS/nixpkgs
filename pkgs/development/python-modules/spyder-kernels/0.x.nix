@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # requirement xarray not available on Py2k
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cloudpickle
     ipykernel
     wurlitzer

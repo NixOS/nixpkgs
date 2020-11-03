@@ -24,7 +24,7 @@ python2.pkgs.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with python2.pkgs; [ protobuf.protobuf ];
-  propagatedBuildInputs = with python2.pkgs; [ protobuf ];
+  requiredPythonModules = with python2.pkgs; [ protobuf ];
 
   checkInputs = [ roundup ncurses ];
 

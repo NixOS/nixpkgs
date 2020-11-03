@@ -37,7 +37,7 @@ buildPythonApplication rec {
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     boto3 # needed for caches service
     pillow
     pyyaml

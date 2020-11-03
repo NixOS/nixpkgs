@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "bb0ec74df292ef884aa37bf1e98fb9df4d338718e1559eebda363317a792123e";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     libftdi1
     libusb1
   ];

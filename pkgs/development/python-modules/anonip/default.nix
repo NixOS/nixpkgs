@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0y5xqivcinp6pwx4whc8ca1n2wxrvff7a2lpbz2dhivilfanmljs";
   };
 
-  propagatedBuildInputs = lib.optionals isPy27 [ ipaddress ];
+  requiredPythonModules = lib.optionals isPy27 [ ipaddress ];
 
   checkPhase = "python tests.py";
 

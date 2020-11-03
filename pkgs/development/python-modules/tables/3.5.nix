@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];
-  propagatedBuildInputs = [ numpy numexpr six mock ];
+  requiredPythonModules = [ numpy numexpr six mock ];
 
   # The setup script complains about missing run-paths, but they are
   # actually set.

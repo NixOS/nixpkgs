@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkInputs = [ testresources ];
   buildInputs = [ pbr ];
-  propagatedBuildInputs = [ fixtures subunit testtools ];
+  requiredPythonModules = [ fixtures subunit testtools ];
 
   checkPhase = ''
     ${python.interpreter} ./testr

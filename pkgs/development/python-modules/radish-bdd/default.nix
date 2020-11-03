@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sha256 = "1k7l0j8w221pa6k990x4rfm7km4asx5zy4zpzvh029lb9nw2pp8b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lark-parser
     click
     colorful

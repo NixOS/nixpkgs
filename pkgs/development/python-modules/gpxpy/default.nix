@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1r5gb660nrkrdbw5m5h1n5k10npcfv9bxqv92z55ds8r7rw2saz6";
   };
 
-  propagatedBuildInputs = [ lxml ];
+  requiredPythonModules = [ lxml ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest test

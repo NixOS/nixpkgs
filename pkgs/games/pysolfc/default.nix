@@ -15,7 +15,7 @@ buildPythonApplication rec {
     sha256 = "0h0fibjv47j8lkc1bwnlbbvrx2nr3l2hzv717kcgagwhc7v2mrqh";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     tkinter six random2
     # optional :
     pygame freecell-solver pillow

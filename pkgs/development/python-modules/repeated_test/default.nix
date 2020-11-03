@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with stdenv.lib; {
     description = "A quick unittest-compatible framework for repeating a test function over many fixtures";

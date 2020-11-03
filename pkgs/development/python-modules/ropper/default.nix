@@ -22,7 +22,7 @@ buildPythonApplication rec {
   doCheck = false; # Tests not included in archive
 
   checkInputs = [pytest];
-  propagatedBuildInputs = [ capstone filebytes ];
+  requiredPythonModules = [ capstone filebytes ];
   meta = with stdenv.lib; {
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;

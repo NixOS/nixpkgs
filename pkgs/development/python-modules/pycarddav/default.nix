@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "0avkrcpisfvhz103v7vmq2jd83hvmpqrb4mlbx6ikkk1wcvclsx8";
   };
 
-  propagatedBuildInputs = [ vobject lxml requests urwid pyxdg ];
+  requiredPythonModules = [ vobject lxml requests urwid pyxdg ];
 
   meta = with stdenv.lib; {
     description = "Command-line interface carddav client";

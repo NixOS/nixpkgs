@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  propagatedBuildInputs = [  pyyaml pathspec ];
+  requiredPythonModules = [  pyyaml pathspec ];
 
   # Two test failures
   doCheck = false;

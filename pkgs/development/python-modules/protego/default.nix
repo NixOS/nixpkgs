@@ -13,7 +13,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "a682771bc7b51b2ff41466460896c1a5a653f9a1e71639ef365a72e66d8734b4";
   };
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ pytest ];
 

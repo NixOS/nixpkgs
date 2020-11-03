@@ -24,7 +24,7 @@ buildPythonPackage rec {
     go
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     colorlog
     cryptography

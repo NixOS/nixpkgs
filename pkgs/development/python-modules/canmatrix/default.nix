@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sha256 = "129lcchq45h8wqjvvn0rwpbmih4m0igass2cx7a21z94li97hcia";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # required
     attrs
     bitstruct

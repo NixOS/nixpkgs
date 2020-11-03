@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "ce0915d7acd771fde6e8c2dce8ad0cb0e6f7c4fa8430cc96e3e7134e99aeb12f";
   };
 
-  propagatedBuildInputs = [ enchant2 ];
+  requiredPythonModules = [ enchant2 ];
 
   postPatch = let
     libext = stdenv.hostPlatform.extensions.sharedLibrary;

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sed -i 's/"cryptography.*"/"cryptography"/' setup.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     acme aiohttp atomicwrites snitun attrs warrant pycognito
   ];
 

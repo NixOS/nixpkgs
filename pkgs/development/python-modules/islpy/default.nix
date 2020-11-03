@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ isl pybind11 ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   preCheck = "mv islpy islpy.hidden";
   checkInputs = [ pytestCheckHook ];

@@ -12,7 +12,7 @@ let
     };
     # The tests are impure (they try to access a PostgreSQL server)
     doCheck = false;
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       pythonPackages.psycopg2
       pythonPackages.pytest
     ];
@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication {
   };
   # The tests are impure (they try to access a PostgreSQL server)
   doCheck = false;
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pythonPackages.psycopg2
     pythonPackages.pytest
     pythonPackages.pyyaml

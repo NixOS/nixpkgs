@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # Neither the PyPI tarball nor the repository has tests
   doCheck = false;
 
-  propagatedBuildInputs = [ robotframework-seleniumlibrary ];
+  requiredPythonModules = [ robotframework-seleniumlibrary ];
 
   meta = with stdenv.lib; {
     description = "Web testing library for Robot Framework";

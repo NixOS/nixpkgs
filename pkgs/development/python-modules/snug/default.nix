@@ -22,7 +22,7 @@ buildPythonPackage rec {
   buildInputs = [ glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     lib.optionals (pythonOlder "3.4") [ singledispatch ] ++
     lib.optionals (pythonOlder "3.5") [ typing ];
 

@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ lz4 keyring pbkdf2 pyaes pycryptodome ];
+  requiredPythonModules = [ lz4 keyring pbkdf2 pyaes pycryptodome ];
 
   # No tests implemented
   doCheck = false;

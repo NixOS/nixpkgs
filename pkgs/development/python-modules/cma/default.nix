@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "00vv7imdkv0bqcs4b8dg9nggxcl2fkcnhdd46n22bcmnwy8rjxv6";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
   ];
 

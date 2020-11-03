@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "f4b3553415f90daac656f89d3e82e79b3d751793239bb173a683b4cc0ceb2635";
   };
 
-  propagatedBuildInputs = [ colorlog pyvmomi requests verboselogs pyopenssl setuptools ]
+  requiredPythonModules = [ colorlog pyvmomi requests verboselogs pyopenssl setuptools ]
   ++ stdenv.lib.optional (pythonOlder "3.3") psutil;
 
   checkInputs = [ mock pytestCheckHook pytest-mock qemu ];

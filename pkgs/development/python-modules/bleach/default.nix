@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ packaging six html5lib setuptools ];
+  requiredPythonModules = [ packaging six html5lib setuptools ];
 
   # Disable network tests
   checkPhase = ''

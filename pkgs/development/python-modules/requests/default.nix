@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pytest ];
-  propagatedBuildInputs = [ urllib3 idna chardet certifi ];
+  requiredPythonModules = [ urllib3 idna chardet certifi ];
   # sadly, tests require networking
   doCheck = false;
 

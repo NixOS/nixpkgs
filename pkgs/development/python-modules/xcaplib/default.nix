@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "15ww8f0a9zh37mypw5s4q1qk44cwf7jlhc9q1z4vjlpvnzimg54v";
   };
 
-  propagatedBuildInputs = [ eventlib application ];
+  requiredPythonModules = [ eventlib application ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/AGProjects/python-xcaplib";

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace '==' '>='
   '';
 
-  propagatedBuildInputs = [ contextlib2 ];
+  requiredPythonModules = [ contextlib2 ];
 
   checkInputs = [ pytest mock ];
   checkPhase = "pytest ./test_schema.py";

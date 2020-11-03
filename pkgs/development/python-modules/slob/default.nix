@@ -18,7 +18,7 @@ buildPythonPackage {
     sha256 = "1r510s4r124s121wwdm9qgap6zivlqqxrhxljz8nx0kv0cdyypi5";
   };
 
-  propagatedBuildInputs = [ PyICU ];
+  requiredPythonModules = [ PyICU ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest slob

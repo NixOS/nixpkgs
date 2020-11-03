@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0lbib0l8c1q7i1j610rwcdagymr1idahrql4dkgnm5rzyg2vk3ml";
   };
 
-  propagatedBuildInputs = [ antlr ];
+  requiredPythonModules = [ antlr ];
 
   disabled = isPy3k;
 

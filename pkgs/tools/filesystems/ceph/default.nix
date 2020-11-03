@@ -90,7 +90,7 @@ let
     sourceRoot = "ceph-${version}/src/python-common";
 
     checkInputs = [ python3Packages.pytest ];
-    propagatedBuildInputs = with python3Packages; [ pyyaml six ];
+    requiredPythonModules = with python3Packages; [ pyyaml six ];
 
     meta = getMeta "Ceph common module for code shared by manager modules";
   };

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0ef59c8da8da2e18e808e3880158049e9d72f3031c84cc804b6c533a0eb668a9";
   };
 
-  propagatedBuildInputs = [ marshmallow sqlalchemy ];
+  requiredPythonModules = [ marshmallow sqlalchemy ];
 
   doCheck = false;
 }

@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1khw1rxra5hn7hwp16i6kgj89znq8vjsyly3r2dxx2z2bddil000";
   };
 
-  propagatedBuildInputs = lib.singleton python3Packages.pyusb;
+  requiredPythonModules = lib.singleton python3Packages.pyusb;
 
   doCheck = false; # there are no tests
 

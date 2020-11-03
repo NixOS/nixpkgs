@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3 glib gnome3.adwaita-icon-theme python3
   ];
-  propagatedBuildInputs = with python3.pkgs; [ lxml evdev pygobject3 ] ++ [
+  requiredPythonModules = with python3.pkgs; [ lxml evdev pygobject3 ] ++ [
     gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
   ];
 

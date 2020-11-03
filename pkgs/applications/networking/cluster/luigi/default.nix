@@ -16,7 +16,7 @@ in with python.pkgs; buildPythonApplication rec {
     sha256 = "b4b1ccf086586d041d7e91e68515d495c550f30e4d179d63863fea9ccdbb78eb";
   };
 
-  propagatedBuildInputs = [ dateutil tornado_5 python-daemon boto3 ];
+  requiredPythonModules = [ dateutil tornado_5 python-daemon boto3 ];
 
   # Requires tox, hadoop, and google cloud
   doCheck = false;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   format = "pyproject";
 
   nativeBuildInputs = [ poetry ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     CommonMark
     colorama
     ipywidgets

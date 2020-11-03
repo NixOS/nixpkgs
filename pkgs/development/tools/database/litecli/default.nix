@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "FARWjtbS5zi/XQDyAVImUmArLj8xATz1jZ4jnXFdq1w=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     cli-helpers
     click
     configobj

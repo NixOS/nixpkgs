@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1p03j91pk2bwycd13p0qi8kns1sf357180hd2mkaip8mfaf33x3q";
   };
 
-  propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr ];
+  requiredPythonModules = [ numpy moderngl pyglet pillow pyrr ];
 
   disabled = !isPy3k;
 

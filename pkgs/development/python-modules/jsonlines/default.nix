@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1f8zsqy8p9a41gqg2a5x7sppc5qhhq7gw58id2aigb270yxzs7jw";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ flake8 pep8-naming pytest pytestcov pytestpep8 ];
   checkPhase = ''

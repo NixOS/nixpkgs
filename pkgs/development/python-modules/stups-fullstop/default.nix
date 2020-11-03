@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1cpzz1b8g2mich7c1p74vfgw70vlxpgwi82a1ld82wv3srwqa0h3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests
     stups-cli-support
     stups-zign

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     ln -s ${unicorn-emu}/lib/libunicorn.a prebuilt/
   '';
 
-  propagatedBuildInputs = [ setuptools ];
+  requiredPythonModules = [ setuptools ];
 
   meta = with stdenv.lib; {
     description = "Python bindings for Unicorn CPU emulator engine";

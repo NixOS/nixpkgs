@@ -8,7 +8,7 @@ buildPythonPackage rec {
     sha256 = "1mzc29wwyhyardclj1vg2xsfdibg2lzb7f1azjcxi580ama55wv2";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
 
   # The tests require write access to $out
   doCheck = false;

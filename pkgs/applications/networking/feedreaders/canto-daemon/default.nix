@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1si53r8cd4avfc56r315zyrghkppnjd6n125z1agfv59i7hdmk3n";
   };
 
-  propagatedBuildInputs = with python3Packages; [ feedparser ];
+  requiredPythonModules = with python3Packages; [ feedparser ];
 
   meta = {
     description = "Daemon for the canto Atom/RSS feed reader";

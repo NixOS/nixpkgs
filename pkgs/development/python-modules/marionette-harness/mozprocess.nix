@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "a0fd8367e663d3cac74ee46bffa789667bc8d52f242d81a14522205fa6650cb2";
   };
 
-  propagatedBuildInputs = [ mozinfo ];
+  requiredPythonModules = [ mozinfo ];
 
   meta = {
     description = "Mozilla-authored process handling";

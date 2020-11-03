@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     rev = "version-0.6.3";
     sha256 = "157wvv9vnaszzwbj68jpdc0imcm1hdab3z760bx2axbsgfpqqilz";
   };
-  propagatedBuildInputs = [ nix-prefetch-scripts ];
+  requiredPythonModules = [ nix-prefetch-scripts ];
   passthru = {
     # NOTE: `fetch` should not be used within nixpkgs because it
     # uses a non-idiomatic structure. It is provided for use by

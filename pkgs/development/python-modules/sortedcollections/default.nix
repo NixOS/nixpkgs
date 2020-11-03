@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0sihzm5aqz7r3irh4jn6rzicb7lf81d27z7vl6kaslnhwcsizhsq";
   };
 
-  propagatedBuildInputs = [ sortedcontainers ];
+  requiredPythonModules = [ sortedcontainers ];
 
   # No tests in PyPi tarball
   doCheck = false;

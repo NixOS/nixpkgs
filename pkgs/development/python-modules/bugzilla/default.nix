@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pep8 coverage logilab_common ];
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   preCheck = ''
     mkdir -p check-phase

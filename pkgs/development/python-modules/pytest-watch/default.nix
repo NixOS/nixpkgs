@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # No Tests
   doCheck = false;
 
-  propagatedBuildInputs = [ pytest colorama docopt watchdog ];
+  requiredPythonModules = [ pytest colorama docopt watchdog ];
 
   meta = with lib; {
     homepage = "https://github.com/joeyespo/pytest-watch";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   checkPhase = ''
     pytest Test/

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "1088waraiigi2bnlighn7bvnvqmpx5fbw70c8jd8sh25mj38wgly";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     django
     pylint-plugin-utils
   ];

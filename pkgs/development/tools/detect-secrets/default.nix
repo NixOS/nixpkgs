@@ -12,7 +12,7 @@ buildPythonApplication rec {
     sha256 = "01y5xd0irxxib4wnf5834gwa7ibb81h5y4dl8b26gyzgvm5zfpk1";
   };
 
-  propagatedBuildInputs = [ pyyaml ]
+  requiredPythonModules = [ pyyaml ]
     ++ lib.optionals isPy27 [ configparser enum34 future functools32 ];
 
   checkInputs = [ mock pytest unidiff ];

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm toml ];
 
-  propagatedBuildInputs = [ more-itertools backports_functools_lru_cache ];
+  requiredPythonModules = [ more-itertools backports_functools_lru_cache ];
 
   doCheck = false;
 

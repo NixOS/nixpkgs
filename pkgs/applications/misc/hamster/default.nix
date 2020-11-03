@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     atk
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pygobject3
     pycairo
     pyxdg

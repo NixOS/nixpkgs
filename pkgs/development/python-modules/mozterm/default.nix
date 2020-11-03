@@ -7,7 +7,7 @@ buildPythonPackage rec {
   # name 'unicode' is not defined
   disabled = isPy3k;
 
-  propagatedBuildInputs = [six];
+  requiredPythonModules = [six];
 
   src = fetchPypi {
     inherit pname version;

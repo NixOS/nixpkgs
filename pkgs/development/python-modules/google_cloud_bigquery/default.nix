@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ipython freezegun ];
-  propagatedBuildInputs = [ google_resumable_media google_api_core google_cloud_core pandas pyarrow ];
+  requiredPythonModules = [ google_resumable_media google_api_core google_cloud_core pandas pyarrow ];
 
   # prevent local directory from shadowing google imports
   # call_api_applying_custom_retry_on_timeout requires credentials

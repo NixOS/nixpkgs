@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock psutil ];
-  propagatedBuildInputs = [ pyopenssl pysendfile ];
+  requiredPythonModules = [ pyopenssl pysendfile ];
 
   # impure filesystem-related tests cause timeouts
   # on Hydra: https://hydra.nixos.org/build/84374861

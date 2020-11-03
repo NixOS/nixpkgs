@@ -21,7 +21,7 @@ buildPythonApplication rec {
   # the package has no tests
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     gmusicapi
     google_api_python_client
     mpv

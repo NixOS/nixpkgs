@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "f5218f2f0bb1210563ff87687afbf10786e080d8494a248e705507ebd92d7153";
   };
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   # pypi release does not include tests
   doCheck = false;

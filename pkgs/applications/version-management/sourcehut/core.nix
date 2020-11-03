@@ -30,7 +30,7 @@ buildPythonPackage rec {
     nodejs
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pgpy
     flask
     bleach

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1rp4xxy7qp0s0wnq3ig4ji8xsl31g901qkdp339ndxn466cqal2s";
   };
 
-  propagatedBuildInputs = [ kazoo six ];
+  requiredPythonModules = [ kazoo six ];
   buildInputs = [ testtools ];
   checkPhase = ''
     # Skip test - fails with our new kazoo version

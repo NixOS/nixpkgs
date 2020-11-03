@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1m511psddvlapg492ny36l8rzy7z4i39yx6a1agxzfz6s9b83fq8";
   };
 
-  propagatedBuildInputs = [ bsddb3 scrapy ];
+  requiredPythonModules = [ bsddb3 scrapy ];
 
   checkInputs = [ pytest ];
 

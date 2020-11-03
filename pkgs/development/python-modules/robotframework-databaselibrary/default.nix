@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # unit tests are impure
   doCheck = false;
 
-  propagatedBuildInputs = [ robotframework ];
+  requiredPythonModules = [ robotframework ];
 
   meta = with stdenv.lib; {
     description = "Database Library contains utilities meant for Robot Framework";

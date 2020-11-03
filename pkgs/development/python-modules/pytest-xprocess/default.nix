@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ psutil pytest ];
+  requiredPythonModules = [ psutil pytest ];
 
   # Remove test QoL package from install_requires
   postPatch = ''

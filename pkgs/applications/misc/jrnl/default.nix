@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "d254c9c8f24dcf985b98a1d5311337c7f416e6305107eec34c567f58c95b06f4";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytz six tzlocal keyring dateutil
     parsedatetime pycrypto
   ];

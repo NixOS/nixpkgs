@@ -10,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "61a353012cff6ab94ca062823d1fb2f692c4acda51c76ff83a8d77915fba51ea";
   };
 
-  propagatedBuildInputs = [ pyflakes ];
+  requiredPythonModules = [ pyflakes ];
 
   doCheck = true;
 

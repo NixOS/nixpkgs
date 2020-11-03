@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0zqa74i54ww9qjciiv8s58mxbs6vxq06cq5k4pxfarc0l75l4gh2";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests
     zeroconf
     wakeonlan

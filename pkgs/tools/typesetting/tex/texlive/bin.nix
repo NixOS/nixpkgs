@@ -299,7 +299,7 @@ latexindent = perlPackages.buildPerlPackage rec {
   outputs = [ "out" ];
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-  propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
+  requiredPythonModules = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
 
   postPatch = ''
     substituteInPlace scripts/latexindent/LatexIndent/GetYamlSettings.pm \
@@ -327,7 +327,7 @@ pygmentex = python2Packages.buildPythonApplication rec {
 
   src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
 
-  propagatedBuildInputs = with python2Packages; [ pygments chardet ];
+  requiredPythonModules = with python2Packages; [ pygments chardet ];
 
   dontBuild = true;
 

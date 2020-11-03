@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "036xfdd21pcfjlilknc67z5jqpk0vz07853wwcsiac32iypc6f2q";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     matrix-client
   ];
 

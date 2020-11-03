@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "8ad47d5d2688fabc66850f32c7b6d3b4a97e6b653726309fe09603edd6fceb23";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
    cython
    cymem
    murmurhash

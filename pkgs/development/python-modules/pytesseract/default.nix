@@ -17,7 +17,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ tesseract ];
-  propagatedBuildInputs = [ pillow ];
+  requiredPythonModules = [ pillow ];
 
   # the package doesn't have any tests.
   doCheck = false;

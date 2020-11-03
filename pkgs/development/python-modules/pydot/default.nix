@@ -30,7 +30,7 @@ buildPythonPackage rec {
       --replace "test_graphviz_regression_tests" "no_test_graphviz_regression_tests"
   '';
 
-  propagatedBuildInputs = [ pyparsing ];
+  requiredPythonModules = [ pyparsing ];
 
   checkInputs = [ chardet ];
 

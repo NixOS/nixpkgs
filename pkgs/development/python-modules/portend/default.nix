@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ tempora ];
+  requiredPythonModules = [ tempora ];
 
   checkInputs = [ pytest pytest-black pytestcov ];
 

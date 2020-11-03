@@ -25,7 +25,7 @@ buildPythonPackage rec {
     ./test.patch # https://github.com/kjellmf/dot2tex/issues/5
   ];
 
-  propagatedBuildInputs = [ pyparsing ];
+  requiredPythonModules = [ pyparsing ];
 
   checkInputs = [
     (texlive.combine {

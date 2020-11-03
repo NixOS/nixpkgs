@@ -51,7 +51,7 @@ let
 
     sourceRoot = "${name}/management/python";
 
-    propagatedBuildInputs = [ qpid-python ];
+    requiredPythonModules = [ qpid-python ];
   };
 in buildEnv {
   name = "${name}-env";

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "==" ">="
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lxml pycryptodomex construct
     argon2_cffi dateutil future
   ];

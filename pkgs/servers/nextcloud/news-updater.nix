@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ php ];
+  requiredPythonModules = [ php ];
 
   meta = {
     description = "Fast parallel feed updater for the Nextcloud news app";

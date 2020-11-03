@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1i4h6vq681x8s05wi0n3ykavsxjh9hxdxn6banwjcqzhxzkyhsxi";
   };
 
-  propagatedBuildInputs = [ aiohttp websockets ];
+  requiredPythonModules = [ aiohttp websockets ];
   patchPhase = ''
     substituteInPlace "requirements.txt" \
       --replace "aiohttp>=3.6.0,<3.7.0" "aiohttp~=3.6.0" \

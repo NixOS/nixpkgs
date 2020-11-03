@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     poppler_gi
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pycairo
     pygobject3
     python-vlc

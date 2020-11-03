@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ itsdangerous click werkzeug jinja2 ];
+  requiredPythonModules = [ itsdangerous click werkzeug jinja2 ];
 
   checkPhase = ''
     py.test

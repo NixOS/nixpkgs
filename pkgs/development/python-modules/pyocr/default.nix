@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ setuptools_scm setuptools-scm-git-archive ];
-  propagatedBuildInputs = [ pillow ];
+  requiredPythonModules = [ pillow ];
   checkInputs = [ pytest tox ];
   checkPhase = "pytest";
 

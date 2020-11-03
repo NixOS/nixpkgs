@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "04z0r8xzrmhvh04y8ggdz9gs8qa8lv3qr7kasf6lm63fixsfgrlp";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     alembic boto cornice hawkauthlib mozsvc paste pybrowserid pyfxa
     pymysql pymysqlsa sqlalchemy testfixtures tokenlib umemcache
   ];

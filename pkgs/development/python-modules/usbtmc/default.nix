@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "14f4j77ljr45crnjwlp1dqbxwa45s20y2fpq5rg59r60w15al4yw";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  requiredPythonModules = [ pyusb ];
 
   meta = with stdenv.lib; {
     description = "Python implementation of the USBTMC instrument control protocol";

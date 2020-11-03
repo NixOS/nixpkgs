@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     ./pytest-executable-name.patch
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     urwid
     zulip
     urwid-readline

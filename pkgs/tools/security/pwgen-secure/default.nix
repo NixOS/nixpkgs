@@ -18,7 +18,7 @@ buildPythonApplication rec {
     sha256 = "15md5606hzy1xfhj2lxmc0nvynyrcs4vxa5jdi34kfm31rdklj28";
   };
 
-  propagatedBuildInputs = [ docopt ];
+  requiredPythonModules = [ docopt ];
 
   postInstall = ''
     install -Dm755 spwgen.py $out/bin/spwgen

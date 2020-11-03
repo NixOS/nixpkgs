@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1mxih81zc2k64briirpp5wz4f72l8v05avfyfibaq9fr6lcbih9b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pymysql
   ];
 

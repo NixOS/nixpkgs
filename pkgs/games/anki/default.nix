@@ -86,7 +86,7 @@ buildPythonApplication rec {
 
   outputs = [ "out" "doc" "man" ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyqtwebengine
     sqlalchemy
     beautifulsoup4

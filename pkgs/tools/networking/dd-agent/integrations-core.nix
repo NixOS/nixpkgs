@@ -64,7 +64,7 @@ let
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
-    propagatedBuildInputs = with python.pkgs; [
+    requiredPythonModules = with python.pkgs; [
       requests protobuf prometheus_client uuid simplejson uptime
     ];
   };
@@ -82,7 +82,7 @@ let
   integrations = defaultIntegrations // extraIntegrations;
   builtIntegrations = mapAttrs (pname: fdeps: buildIntegration {
     inherit pname;
-    propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
+    requiredPythonModules = (fdeps python.pkgs) ++ [ datadog_checks_base ];
   }) integrations;
 
 in builtIntegrations // {

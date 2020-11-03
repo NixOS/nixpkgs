@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ requests zeroconf protobuf casttube ];
+  requiredPythonModules = [ requests zeroconf protobuf casttube ];
 
   meta = with lib; {
     description = "Library for Python 3.4+ to communicate with the Google Chromecast";

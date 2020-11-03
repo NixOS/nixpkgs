@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "amqp==2.5.1" "amqp~=2.5"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     amqp
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata

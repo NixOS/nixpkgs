@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1i05cnk3yh722fdyaq0asr7z9xf7v7ikbmnpxa8j6pdqx6g5xs4i";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyparsing
     graphviz
   ];

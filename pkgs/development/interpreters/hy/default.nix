@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ flake8 pytest ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     appdirs
     astor
     clint

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   checkPhase = "${python.interpreter} runtests.py";
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   meta = with stdenv.lib; {
       description = "Tweak the form field rendering in templates, not in python-level form definitions.";

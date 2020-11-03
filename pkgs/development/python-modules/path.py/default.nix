@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-flake8 glibcLocales packaging ];
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     importlib-metadata
   ] ++ lib.optional isPy27 backports_os
   ;

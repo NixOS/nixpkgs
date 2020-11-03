@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0dks0yr2a0cpr32vrwhdrhsb4qyj7rz1yv44fjbr8z8j8p84yjx5";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     numpy
     pillow
     jinja2

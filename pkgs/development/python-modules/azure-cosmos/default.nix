@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "7f8ac99e4e40c398089fc383bfadcdc83376f72b88532b0cac0b420357cd08c7";
   };
 
-  propagatedBuildInputs = [ six requests ];
+  requiredPythonModules = [ six requests ];
 
   pythonNamespaces = [ "azure" ];
 

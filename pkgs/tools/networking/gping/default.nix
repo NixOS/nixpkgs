@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
   pname = "gping";
   version = "1.1";
 
-  propagatedBuildInputs = with python3Packages; [ colorama ];
+  requiredPythonModules = with python3Packages; [ colorama ];
 
   src = python3Packages.fetchPypi {
     inherit version;

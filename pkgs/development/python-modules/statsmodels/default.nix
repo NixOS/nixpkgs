@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy scipy pandas patsy matplotlib ];
+  requiredPythonModules = [ numpy scipy pandas patsy matplotlib ];
 
   # Huge test suites with several test failures
   doCheck = false;

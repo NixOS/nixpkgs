@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0dgca286vhrabm4r4jj545k895z6w2c70ars06vrjhf9cpgg7qck";
   };
 
-  propagatedBuildInputs = [ xmltodict requests toml ];
+  requiredPythonModules = [ xmltodict requests toml ];
   checkInputs = [
     pytest pytestcov coveralls pylint flake8 graphviz mock sphinx
     sphinx_rtd_theme

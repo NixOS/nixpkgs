@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook pytestcov ];
-  propagatedBuildInputs = [ flake8 click pyyaml six ];
+  requiredPythonModules = [ flake8 click pyyaml six ];
 
   # test_cli asserts on exact quoting style of output
   disabledTests = [

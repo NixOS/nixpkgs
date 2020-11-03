@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # remove this as soon as https://github.com/luispedro/mahotas/issues/97 is fixed
   patches = [ ./disable-impure-tests.patch ];
 
-  propagatedBuildInputs = [ numpy imread pillow scipy ];
+  requiredPythonModules = [ numpy imread pillow scipy ];
   checkInputs = [ nose ];
 
   checkPhase= ''

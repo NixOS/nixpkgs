@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "dcebb32e474bc28aa77b944a0a64949ef3b5b852cbef6256fbc95347a04e777c";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests
     keyring
     keyrings-alt

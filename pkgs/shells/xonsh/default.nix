@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [ python3Packages.pytest python3Packages.pytest-rerunfailures glibcLocales git ];
 
-  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
+  requiredPythonModules = with python3Packages; [ ply prompt_toolkit pygments ];
 
   meta = with stdenv.lib; {
     description = "A Python-ish, BASHwards-compatible shell";

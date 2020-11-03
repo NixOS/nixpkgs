@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1h0k8lpx14svc8dini62j0kqiam10pck5sdzvxa4xhsx7y689g5l";
   };
 
-  propagatedBuildInputs = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
+  requiredPythonModules = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
 
   checkInputs = [ pytest pytestpep8 mock ] ++ lib.optional (pythonOlder "3.4") pathlib;
 

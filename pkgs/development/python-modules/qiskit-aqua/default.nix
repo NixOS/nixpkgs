@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # cplex
     cvxpy
     docplex

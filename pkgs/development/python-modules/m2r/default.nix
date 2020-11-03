@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99";
   };
 
-  propagatedBuildInputs = [ mistune docutils ];
+  requiredPythonModules = [ mistune docutils ];
 
   # Some tests interfeere with each other (test.md and test.rst are
   # deleted by some tests and not properly regenerated)

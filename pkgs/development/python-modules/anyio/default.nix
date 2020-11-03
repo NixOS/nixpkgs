@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "06nazfrm2sclp3lpgsn9wl8vmqxvx36s3gr2gnqz3zhjpf3glkxv";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     idna
     sniffio
   ] ++ lib.optionals (pythonOlder "3.8") [

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  propagatedBuildInputs = [ xstatic-jquery ];
+  requiredPythonModules = [ xstatic-jquery ];
 
   meta = with lib;{
     homepage = "https://jqueryui.com/";

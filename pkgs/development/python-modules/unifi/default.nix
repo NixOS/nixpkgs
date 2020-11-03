@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0prgx01hzs49prrazgxrinm7ivqzy57ch06qm2h7s1p957sazds8";
   };
 
-  propagatedBuildInputs = [ urllib3 ];
+  requiredPythonModules = [ urllib3 ];
 
   # upstream has no tests
   doCheck = false;

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1mcmz95595nrp4r58spy1ac993db26hk4q97isghbmn4md99vwmr";
   };
 
-  propagatedBuildInputs = [ click prompt_toolkit ];
+  requiredPythonModules = [ click prompt_toolkit ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/click-contrib/click-repl";

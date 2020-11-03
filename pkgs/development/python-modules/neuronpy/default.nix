@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1clhc2b5fy2l8nfrji4dagmj9419nj6kam090yqxhq5c28sngk25";
   };
 
-  propagatedBuildInputs = [ numpy matplotlib scipy ];
+  requiredPythonModules = [ numpy matplotlib scipy ];
 
   #No tests included
   doCheck = false;

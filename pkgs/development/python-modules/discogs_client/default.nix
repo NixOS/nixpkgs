@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "cc979fcbb5283f74d388c7111c8ed6bef920b01614a014d6b1c5d6fbb554bfc3";
   };
 
-  propagatedBuildInputs = [ requests oauthlib ];
+  requiredPythonModules = [ requests oauthlib ];
 
   meta = with stdenv.lib; {
     description = "Official Python API client for Discogs";

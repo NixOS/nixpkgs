@@ -35,7 +35,7 @@ python.pkgs.buildPythonApplication rec {
     HOME=$(mktemp -d) py.test
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     bumps
     gcc
     h5py

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0b0gipvz7vcfa9ddmwq2jrx16d4apb0hdnl5q4i3h8jlzwp1c1s2";
   };
 
-  propagatedBuildInputs = [ pygobject3 ];
+  requiredPythonModules = [ pygobject3 ];
 
   meta = {
     homepage = "https://github.com/LEW21/pydbus";

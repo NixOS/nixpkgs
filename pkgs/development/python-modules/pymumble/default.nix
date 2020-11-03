@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1r1sch8xrpbzffsb72lhp5xjr3ac3xb599n44vsfmaam3xklz6vz";
   };
 
-  propagatedBuildInputs = [ opuslib protobuf ];
+  requiredPythonModules = [ opuslib protobuf ];
 
   pythonImportsCheck = [ "pymumble_py3" ];
 

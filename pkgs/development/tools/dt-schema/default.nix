@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm git ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
     ruamel_yaml
     jsonschema

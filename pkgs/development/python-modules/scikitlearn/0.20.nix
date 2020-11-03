@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pillow gfortran glibcLocales ];
-  propagatedBuildInputs = [ numpy scipy numpy.blas ];
+  requiredPythonModules = [ numpy scipy numpy.blas ];
   checkInputs = [ pytest ];
 
   LC_ALL="en_US.UTF-8";

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "74fb4db848ac1343241fa4dc5d9bf3fab561f309826c602e8a3568309df91fe3";
   };
 
-  propagatedBuildInputs = [ traits pyface six ];
+  requiredPythonModules = [ traits pyface six ];
 
   doCheck = false; # Needs X server
 

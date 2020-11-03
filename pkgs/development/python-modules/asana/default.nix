@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest responses ];
-  propagatedBuildInputs = [ requests requests_oauthlib six ];
+  requiredPythonModules = [ requests requests_oauthlib six ];
 
   postPatch = ''
     substituteInPlace setup.py \

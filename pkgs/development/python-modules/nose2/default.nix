@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0pmbb6nk31yhgh4zkcblzxsznml7f7pf5q1ihgrwvbxv4mwzfql7";
   };
 
-  propagatedBuildInputs = [ six coverage ];
+  requiredPythonModules = [ six coverage ];
 
   # AttributeError: 'module' object has no attribute 'collector'
   doCheck = false;

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0f2lyi7xhvb60pvzx82dpc13ksdj5k92ww09czclkdz8k0dxa7hb";
   };
 
-  propagatedBuildInputs = [ pyperclip urwid ];
+  requiredPythonModules = [ pyperclip urwid ];
 
   doCheck = false;
 

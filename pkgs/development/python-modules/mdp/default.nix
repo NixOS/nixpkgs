@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ future numpy ];
+  requiredPythonModules = [ future numpy ];
 
   # Tests disabled because of missing dependencies not in nix
   doCheck = false;

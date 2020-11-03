@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "11k4ppwq845lnj265ydfr0cn1rrym5amx2i19x1h3ccbxc3gsy3x";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     argcomplete
     colorama
     crcmod

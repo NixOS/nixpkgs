@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock pytestrunner ];
-  propagatedBuildInputs = [ pyflakes pycodestyle mccabe ]
+  requiredPythonModules = [ pyflakes pycodestyle mccabe ]
     ++ stdenv.lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
     ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ]
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ]

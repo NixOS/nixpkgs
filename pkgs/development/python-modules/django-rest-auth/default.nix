@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "f11e12175dafeed772f50d740d22caeab27e99a3caca24ec65e66a8d6de16571";
   };
 
-  propagatedBuildInputs = [ django djangorestframework six ];
+  requiredPythonModules = [ django djangorestframework six ];
 
   # pypi release does not include tests
   doCheck = false;

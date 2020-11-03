@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98";
   };
 
-  propagatedBuildInputs = [ coverage ];
+  requiredPythonModules = [ coverage ];
 
   doCheck = false;  # lot's of transient errors, too much hassle
   checkPhase = if python.is_py3k or false then ''

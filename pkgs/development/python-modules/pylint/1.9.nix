@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestrunner ];
 
-  propagatedBuildInputs = [ astroid six isort mccabe configparser backports_functools_lru_cache singledispatch setuptools ];
+  requiredPythonModules = [ astroid six isort mccabe configparser backports_functools_lru_cache singledispatch setuptools ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove broken darwin test

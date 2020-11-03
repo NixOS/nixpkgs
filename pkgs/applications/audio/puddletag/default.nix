@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [ chromaprint ] ++ (with python3Packages; [
+  requiredPythonModules = [ chromaprint ] ++ (with python3Packages; [
     configobj
     mutagen
     pyparsing

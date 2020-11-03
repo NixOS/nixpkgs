@@ -31,7 +31,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ujson
     email_validator
     typing-extensions

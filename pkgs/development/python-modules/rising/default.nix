@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "0fb9894ppcp18wc2dhhjizj8ja53gbv9wpql4mixxxdz8z2bn33c";
   };
 
-  propagatedBuildInputs = [ numpy pytorch threadpoolctl tqdm ];
+  requiredPythonModules = [ numpy pytorch threadpoolctl tqdm ];
   checkInputs = [ dill pytestcov pytestCheckHook ];
 
   disabledTests = [ "test_affine" ];  # deprecated division operator '/'

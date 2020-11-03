@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0b3lh7z98nlh4yn0cmvk7bimhfk5w4qvbmjr6jn880ji9h2ixq6d";
   };
 
-  propagatedBuildInputs = [ six pillow ];
+  requiredPythonModules = [ six pillow ];
 
   # Test data is not included
   # https://github.com/torchbox/Willow/issues/34

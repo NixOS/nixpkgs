@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk dbus-python pygtksourceview ];
+  requiredPythonModules = with pythonPackages; [ pygtk dbus-python pygtksourceview ];
 
   patches = [ ./subprocess.patch ];
 

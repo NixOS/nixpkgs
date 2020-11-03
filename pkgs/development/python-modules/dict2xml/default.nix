@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0bfn8n8sb3slwx7ra8m8fbfy65k20h2qxcqfq99hwqrrkgcffihl";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with lib; {
     description = "Super simple library to convert a Python dictionary into an xml string";

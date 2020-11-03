@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   buildInputs = [ nose mock ];
 
-  propagatedBuildInputs = [ pyjwt pysocks pytz six requests ];
+  requiredPythonModules = [ pyjwt pysocks pytz six requests ];
 
   meta = with stdenv.lib; {
     description = "Twilio API client and TwiML generator";

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   buildInputs = [ nose ];
 
-  propagatedBuildInputs = [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
+  requiredPythonModules = [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
   ] ++ lib.optionals (!isPy3k) [ futures ];
 
   # Requires access to cluster

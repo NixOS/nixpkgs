@@ -22,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "docopt==0.6.2" "docopt"
   '';
 
-  propagatedBuildInputs = [ internetarchive docopt youtube-dl ];
+  requiredPythonModules = [ internetarchive docopt youtube-dl ];
 
   pythonImportsCheck = [ "tubeup" ];
 

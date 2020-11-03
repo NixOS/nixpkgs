@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1zapmbczxs1phrwbd0yvpfxhljd2pyv4pi9rwggaq38lcnc325s7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pylint toml
   ];
 

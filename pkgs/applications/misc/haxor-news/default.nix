@@ -32,7 +32,7 @@ buildPythonApplication rec {
     sha256 = "1g3dfsyk4727d9jh9w6j5r51ag07851cls7v7a7hmdvdixpvbzp6";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     colorama
     requests

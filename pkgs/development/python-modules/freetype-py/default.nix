@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ freetype ];
+  requiredPythonModules = [ freetype ];
 
   pythonImportsCheck =  [ "freetype" ];
 

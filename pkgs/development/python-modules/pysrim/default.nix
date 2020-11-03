@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ numpy pyyaml ];
+  requiredPythonModules = [ numpy pyyaml ];
 
   # Tests require git lfs download of repository
   doCheck = false;

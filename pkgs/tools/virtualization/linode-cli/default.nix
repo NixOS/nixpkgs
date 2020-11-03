@@ -44,7 +44,7 @@ buildPythonApplication rec {
       --replace "version=get_version()," "version='${version}',"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     terminaltables
     colorclass
     requests

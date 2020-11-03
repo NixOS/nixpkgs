@@ -15,7 +15,7 @@ buildPythonPackage {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     scipy
   ];
 

@@ -33,7 +33,7 @@ buildPythonPackage rec {
       --replace "\"bash\"" "'${bash}/bin/bash'"
   '';
 
-  propagatedBuildInputs = [ ipykernel pexpect ];
+  requiredPythonModules = [ ipykernel pexpect ];
 
   # no tests
   doCheck = false;

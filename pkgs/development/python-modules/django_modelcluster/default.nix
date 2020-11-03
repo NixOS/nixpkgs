@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pytz six ];
+  requiredPythonModules = [ pytz six ];
 
   meta = with stdenv.lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";

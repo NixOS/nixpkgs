@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     clikit
   ];
 

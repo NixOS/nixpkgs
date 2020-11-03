@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyface pygments numpy vtk traitsui envisage apptools pyqt5
   ];
 

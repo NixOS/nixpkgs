@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0m1snyybq2k51khlydhisq300vzys897vdbsicph628iran950hn";
   };
 
-  propagatedBuildInputs = [ factory_boy inflection pytest ];
+  requiredPythonModules = [ factory_boy inflection pytest ];
 
   # The project uses tox, which we can't. So we simply run pytest manually.
   checkInputs = [

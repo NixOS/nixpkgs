@@ -14,7 +14,7 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "2510e3aae4874674187f88f22f854e6b0ea1881b77039808a68ac1a5e8ee69b6";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dulwich
     pbr
     pyyaml

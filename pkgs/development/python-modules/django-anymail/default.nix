@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1v8ayd3nh7pna9lg0pzwgwmvmzzh2g1kxsy7i6mka0hi52g1xvz5";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     requests
     django

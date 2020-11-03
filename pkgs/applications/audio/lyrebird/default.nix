@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0wmnww2wi8bb9m8jgc18n04gjia8pf9klmvij0w98xz11l6kxb13";
   };
 
-  propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
+  requiredPythonModules = with python3Packages; [ toml pygobject3 ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
 

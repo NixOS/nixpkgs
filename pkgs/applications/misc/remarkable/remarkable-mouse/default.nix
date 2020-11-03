@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "0k2wjfcgnvb8yqn4c4ddfyyhrvl6hj61kn1ddnyp6ay9vklnw160";
   };
 
-  propagatedBuildInputs = with python3Packages; [ screeninfo paramiko pynput libevdev ];
+  requiredPythonModules = with python3Packages; [ screeninfo paramiko pynput libevdev ];
 
   meta = with stdenv.lib; {
     description = "A program to use a reMarkable as a graphics tablet";

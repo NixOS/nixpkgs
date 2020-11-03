@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0s8v918n6xn44r2mrq5hqbf0znpz64clq7a1jakkgz9py8bi6vnn";
   };
 
-  propagatedBuildInputs = [ requests netifaces ];
+  requiredPythonModules = [ requests netifaces ];
 
   doCheck = !isPy27;
   checkInputs = [ pytest testtools requests-mock ];

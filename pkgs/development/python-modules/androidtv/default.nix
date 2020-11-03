@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1iqw40szwgzvhv3fbnx2wwfnw0d3clcwk9vsq1xsn30fjil2vl7b";
   };
 
-  propagatedBuildInputs = [ adb-shell pure-python-adb ]
+  requiredPythonModules = [ adb-shell pure-python-adb ]
     ++ lib.optionals (isPy3k) [ aiofiles ];
 
   checkInputs = [ mock ];

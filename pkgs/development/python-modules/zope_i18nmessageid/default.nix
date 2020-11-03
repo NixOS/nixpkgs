@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "9534142b684c986f5303f469573978e5a340f05ba2eee4f872933f1c38b1b059";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ coverage zope_testrunner ];
 

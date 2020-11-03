@@ -15,7 +15,7 @@ buildPythonPackage {
     sha256 = "1mknxvsq0lr1ffm8amzm3w2prn043c6ghqgpxlkw83r988p5fn57";
   };
 
-  propagatedBuildInputs = [ pymaging ];
+  requiredPythonModules = [ pymaging ];
 
   meta = with stdenv.lib; {
     description = "Pure Python imaging library with Python 2.6, 2.7, 3.1+ support";

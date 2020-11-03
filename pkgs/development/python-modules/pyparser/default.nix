@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   postPatch = "sed -i 's/parse==/parse>=/' requirements.txt";
 
-  propagatedBuildInputs = [ parse ];
+  requiredPythonModules = [ parse ];
 
   meta = {
     description = "Simple library that makes it easier to parse files";

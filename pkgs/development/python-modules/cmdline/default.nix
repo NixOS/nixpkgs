@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   # No tests, https://github.com/rca/cmdline/issues/1
   doCheck = false;
-  propagatedBuildInputs = [ pyyaml ];
+  requiredPythonModules = [ pyyaml ];
 
   meta = with stdenv.lib; {
     description = "Utilities for consistent command line tools";

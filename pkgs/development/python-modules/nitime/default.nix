@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   buildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
+  requiredPythonModules = [ numpy scipy matplotlib networkx nibabel ];
 
   checkPhase = "pytest nitime/tests";
 

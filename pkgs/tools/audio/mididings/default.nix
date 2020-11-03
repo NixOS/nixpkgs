@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib alsaLib libjack2 pythonPackages.boost ];
-  propagatedBuildInputs = with pythonPackages; [ decorator ]
+  requiredPythonModules = with pythonPackages; [ decorator ]
     # for livedings
     ++ [ tkinter pyliblo ]
     # for mididings.extra

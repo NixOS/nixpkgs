@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "14mkwk44bgm6s4kqagz7nm6p6gsygmksl2628jaqh7ppblxca9as";
   };
 
-  propagatedBuildInputs = [ pyusb pyserial ];
+  requiredPythonModules = [ pyusb pyserial ];
 
   pythonImportsCheck = [ "pyftdi" ];
 

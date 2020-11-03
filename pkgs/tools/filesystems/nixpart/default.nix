@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "0avwd8p47xy9cydlbjxk8pj8q75zyl68gw2w6fnkk78dcb1a3swp";
   };
 
-  propagatedBuildInputs = [ blivet ];
+  requiredPythonModules = [ blivet ];
 
   meta = {
     description = "NixOS storage manager/partitioner";

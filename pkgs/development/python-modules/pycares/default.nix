@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ c-ares ];
 
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
 
   checkPhase = ''
     ${python.interpreter} tests/tests.py

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "0c9zzfv6ciyf9qm7556wil45xxgykg1cj8isp1b88gimwcb2hxg4";
   };
 
-  propagatedBuildInputs = [ blessings six ];
+  requiredPythonModules = [ blessings six ];
   checkInputs = [ nose coverage ];
 
   # test_prefixedWhitespace fails due to a python3 StringIO issue requiring

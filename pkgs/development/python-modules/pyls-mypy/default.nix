@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   checkInputs = [ mock pytestcov coverage pytestCheckHook ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     mypy python-language-server configparser
   ] ++ lib.optional (isPy27) [
     future

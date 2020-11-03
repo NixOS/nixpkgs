@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkPhase = "nosetests";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     flask-caching
     cairocffi

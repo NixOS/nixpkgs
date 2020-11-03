@@ -22,7 +22,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [ meld3 setuptools ];
+  requiredPythonModules = [ meld3 setuptools ];
 
   meta = with lib; {
     description = "A system for controlling process state under UNIX";

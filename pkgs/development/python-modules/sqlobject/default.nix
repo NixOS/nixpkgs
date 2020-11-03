@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ FormEncode PasteDeploy paste pydispatcher ];
+  requiredPythonModules = [ FormEncode PasteDeploy paste pydispatcher ];
 
   meta = with stdenv.lib; {
     description = "Object Relational Manager for providing an object interface to your database";

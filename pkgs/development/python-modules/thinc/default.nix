@@ -34,7 +34,7 @@ buildPythonPackage rec {
     Accelerate CoreFoundation CoreGraphics CoreVideo
   ]);
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
    blis
    catalogue
    cymem

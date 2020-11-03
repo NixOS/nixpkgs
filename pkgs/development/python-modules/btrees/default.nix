@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "4.7.2";
 
   buildInputs = [ transaction ];
-  propagatedBuildInputs = [ persistent zope_interface ];
+  requiredPythonModules = [ persistent zope_interface ];
   checkInputs = [ zope_testrunner ];
 
   # disable a failing test that looks broken

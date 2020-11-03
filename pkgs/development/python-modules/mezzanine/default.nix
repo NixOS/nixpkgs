@@ -32,7 +32,7 @@ buildPythonPackage rec {
     || stdenv.lib.versionAtLeast django.version "2.0";
 
   buildInputs = [ pyflakes pep8 ];
-  propagatedBuildInputs = [ django django_contrib_comments filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4 requests requests_oauthlib future pillow chardet ];
+  requiredPythonModules = [ django django_contrib_comments filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4 requests requests_oauthlib future pillow chardet ];
 
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;

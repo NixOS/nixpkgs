@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "2dc379b80b07bf2ddd5488cad06b2b9531da4dd31edb04dc9ec0dc226486c138";
   };
 
-  propagatedBuildInputs = [ docutils ];
+  requiredPythonModules = [ docutils ];
 
   # statistics package does not have any tests
   doCheck = false;

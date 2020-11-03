@@ -13,7 +13,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     fonttools
   ];
 

@@ -11,7 +11,8 @@ if isPyPy then null else buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ libffi pycparser ];
+  propagatedBuildInputs = [ libffi ];
+  requiredPythonModules = [ pycparser ];
   checkInputs = [ pytest ];
 
   # On Darwin, the cffi tests want to hit libm a lot, and look for it in a global

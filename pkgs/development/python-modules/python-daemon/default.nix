@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ twine ];
-  propagatedBuildInputs = [ docutils lockfile ];
+  requiredPythonModules = [ docutils lockfile ];
 
   checkInputs = [ pytest_4 mock testscenarios ];
   checkPhase = ''

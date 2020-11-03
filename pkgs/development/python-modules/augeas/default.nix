@@ -20,7 +20,7 @@ buildPythonPackage rec {
                     'ffi.dlopen("${lib.makeLibraryPath [augeas]}/${libname}")'
       '';
 
-    propagatedBuildInputs = [ cffi augeas ];
+    requiredPythonModules = [ cffi augeas ];
 
     doCheck = false;
 

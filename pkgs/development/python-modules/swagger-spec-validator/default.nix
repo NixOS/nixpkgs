@@ -20,7 +20,7 @@ buildPythonPackage rec {
     pytest tests
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyyaml
     jsonschema
     six

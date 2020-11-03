@@ -38,7 +38,7 @@ in python.pkgs.buildPythonPackage {
     sed -iE "s/yarl==1.3.0//" requirements.txt
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict setuptools
     jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
     prompt_toolkit py-cpuinfo

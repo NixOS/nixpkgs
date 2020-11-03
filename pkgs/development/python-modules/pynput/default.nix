@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ sphinx ];
 
-  propagatedBuildInputs = [ setuptools-lint xlib ];
+  requiredPythonModules = [ setuptools-lint xlib ];
 
   doCheck = false;
 

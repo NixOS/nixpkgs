@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1kc1n9wr1a66xd5zvl6dq78xnkqkn5574jpzashc99pvm62dr24j";
   };
 
-  propagatedBuildInputs = [ twisted ldaptor configobj ];
+  requiredPythonModules = [ twisted ldaptor configobj ];
 
   # python 2 zope.interface test import path issues
   doCheck = false;

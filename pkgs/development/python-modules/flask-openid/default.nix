@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "5a8ffe1c8c0ad1cc1f5030e1223ea27f8861ee0215a2a58a528cc61379e5ccab";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     python3-openid
   ];

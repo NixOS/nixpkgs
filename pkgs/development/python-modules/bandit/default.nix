@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "0rb034c99pyhb4a60z7f2kz40cjydhm8m9v2blaal1rmhlam7rs1";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     GitPython
     pbr
     pyyaml

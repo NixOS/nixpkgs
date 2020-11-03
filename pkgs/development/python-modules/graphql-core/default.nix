@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0kvbj9dwpx8mjfj86kqx54dbz9k72ki147ssyj0ca2syvb8jm3wb";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     promise
     rx
     six

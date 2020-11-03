@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   doCheck = false; # too many dependencies and conflicting versions; I (nadrieril) gave up
-  propagatedBuildInputs = [ pyramid simplejson konfig ];
+  requiredPythonModules = [ pyramid simplejson konfig ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mozilla-services/mozservices";

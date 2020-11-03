@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ certifi future urllib3 tornado decorator ];
+  requiredPythonModules = [ certifi future urllib3 tornado decorator ];
 
   # --with-upstream-urllib3 is not working properly
   postPatch = ''

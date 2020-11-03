@@ -17,7 +17,7 @@ buildPythonPackage rec {
     format = "wheel";
   };
 
-  propagatedBuildInputs = [ mozlog moznetwork mozprocess ];
+  requiredPythonModules = [ mozlog moznetwork mozprocess ];
 
   meta = {
     description = "Mozilla-authored device management";

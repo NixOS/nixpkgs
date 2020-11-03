@@ -28,7 +28,7 @@ in with python.pkgs; buildPythonApplication rec {
     poetry
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     docutils
     tornado

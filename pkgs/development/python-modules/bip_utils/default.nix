@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "06ls1lara7sklqw6wrw5d3wpxwgyv6paxwjp37x7b3kfskm14cmd";
   };
 
-  propagatedBuildInputs = [ ecdsa pysha3 ];
+  requiredPythonModules = [ ecdsa pysha3 ];
 
   pythonImportsCheck = [
     "bip_utils"

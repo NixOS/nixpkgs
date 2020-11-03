@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pbr ];
-  propagatedBuildInputs = [ sphinx ];
+  requiredPythonModules = [ sphinx ];
 
   # There are no unit tests
   doCheck = false;

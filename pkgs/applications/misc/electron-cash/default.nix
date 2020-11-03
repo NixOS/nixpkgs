@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0ixsx4224jilc5zis6wbsbxqxv10mm5sksrzq15xp30zz0bzb6md";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     dnspython
     ecdsa
     jsonrpclib-pelix

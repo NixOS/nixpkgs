@@ -39,7 +39,7 @@ buildPythonApplication rec {
   buildInputs = [
     mock
   ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lxml
     relatorio
     genshi

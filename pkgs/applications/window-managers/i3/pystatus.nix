@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ libpulseaudio libnotify gobject-introspection ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     keyring colour netifaces psutil basiciw pygobject3
   ] ++ extraLibs;
 

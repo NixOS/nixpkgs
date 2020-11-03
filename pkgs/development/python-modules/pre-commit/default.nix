@@ -30,7 +30,7 @@ buildPythonPackage rec {
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aspy-yaml
     cached-property
     cfgv

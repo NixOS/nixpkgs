@@ -28,7 +28,7 @@ buildPythonPackage rec {
     py.test geopandas -m "not web"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pandas
     shapely
     fiona

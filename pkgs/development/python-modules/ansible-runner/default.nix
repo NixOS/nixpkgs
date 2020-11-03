@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ansible
     psutil
     pexpect

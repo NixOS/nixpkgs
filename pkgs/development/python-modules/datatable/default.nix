@@ -34,7 +34,7 @@ buildPythonPackage rec {
     python ci/ext.py wheel
   '';
 
-  propagatedBuildInputs = [ typesentry blessed ];
+  requiredPythonModules = [ typesentry blessed ];
   buildInputs = [ llvm pipInstallHook ];
   checkInputs = [ docutils pytestCheckHook ];
 

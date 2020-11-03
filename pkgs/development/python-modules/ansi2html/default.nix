@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1a9vihsvd03hb0a4dbiklyy686adp9q2ipl79mkxmdr6gfp8bbln";
   };
 
-  propagatedBuildInputs = [ six setuptools ];
+  requiredPythonModules = [ six setuptools ];
 
   checkInputs = [ mock nose ];
 

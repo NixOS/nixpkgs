@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1w1axsm6w9bl2smzxmyk4in1lsm8gk8ma6y183m83cpj66aqxg4z";
   };
 
-  propagatedBuildInputs = [ greenlet ];
+  requiredPythonModules = [ greenlet ];
 
   doCheck = false;
 

@@ -32,7 +32,7 @@ in pythonPackages.buildPythonApplication rec {
     ]
   ;
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     pyqt5
     mutagen
     chromaprint

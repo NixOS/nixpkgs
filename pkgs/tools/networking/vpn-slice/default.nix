@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "1z2mdl3arzl95zrj4ir57f762gcimmmq5nk91j679cshxz4snxyr";
   };
 
-  propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ];
+  requiredPythonModules = with python3Packages; [ setproctitle dnspython ];
 
   doCheck = false;
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
   checkInputs = [ pytest git glibcLocales mock ];
-  propagatedBuildInputs = [ pip click six setuptools_scm ];
+  requiredPythonModules = [ pip click six setuptools_scm ];
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
     # Depend on network tests:

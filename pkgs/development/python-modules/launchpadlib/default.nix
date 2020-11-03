@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "5804d68ec93247194449d17d187e949086da0a4d044f12155fad269ef8515435";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     httplib2
     keyring
     lazr-restfulclient

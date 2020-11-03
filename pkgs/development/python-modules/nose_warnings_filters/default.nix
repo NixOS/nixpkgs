@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ nose ];
+  requiredPythonModules = [ nose ];
 
   checkInputs = [ nose ];
   checkPhase = ''

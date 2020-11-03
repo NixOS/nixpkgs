@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cogapp mock virtualenv ];
 
-  propagatedBuildInputs = [ nose ];
+  requiredPythonModules = [ nose ];
 
   # the tests do not pass
   doCheck = false;

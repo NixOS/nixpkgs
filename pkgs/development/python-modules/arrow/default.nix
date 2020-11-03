@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "ff08d10cda1d36c68657d6ad20d74fbea493d980f8b2d45344e00d6ed2bf6ed4";
   };
 
-  propagatedBuildInputs = [ python-dateutil ]
+  requiredPythonModules = [ python-dateutil ]
     ++ lib.optionals isPy27 [ backports_functools_lru_cache ];
 
   checkInputs = [

@@ -16,7 +16,7 @@ buildPythonPackage rec {
       --replace "iso8601<=0.1.11" iso8601
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     chameleon
     colander
     iso8601

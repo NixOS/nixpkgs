@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   buildInputs = [xorg.libX11];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     geckodriver urllib3
   ];
 

@@ -10,7 +10,7 @@
     sha256 = "1f2f42f058afd30456e47b6b92a6b7b15100f6bca0a29108ace95bd5147a8e86";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pydsdl
   ];
 

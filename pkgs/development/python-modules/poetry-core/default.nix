@@ -27,7 +27,7 @@ buildPythonPackage rec {
     intreehooks
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+  requiredPythonModules = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals isPy27 [
     pathlib2

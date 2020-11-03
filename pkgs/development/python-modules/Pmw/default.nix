@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "080iml3868nxniyn56kcwnbghm10j7fw74a5nj0s19sm4zsji78b";
   };
 
-  propagatedBuildInputs = [ tkinter ];
+  requiredPythonModules = [ tkinter ];
 
   # Disable tests due to their xserver requirement
   doCheck = false;

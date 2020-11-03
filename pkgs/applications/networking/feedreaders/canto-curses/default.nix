@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = [ readline ncurses canto-daemon ];
-  propagatedBuildInputs = [ canto-daemon ];
+  requiredPythonModules = [ canto-daemon ];
 
   meta = {
     description = "An ncurses-based console Atom/RSS feed reader";

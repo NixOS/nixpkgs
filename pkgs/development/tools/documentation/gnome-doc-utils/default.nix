@@ -21,7 +21,7 @@ python2Packages.buildPythonApplication rec {
     substituteInPlace xml2po/xml2po/Makefile --replace '-e "s+^#!.*python.*+#!$(PYTHON)+"' '-e "s\"^#!.*python.*\"#!$(PYTHON)\""'
   '';
 
-  propagatedBuildInputs = [ libxml2Python ];
+  requiredPythonModules = [ libxml2Python ];
 
   passthru = {
     updateScript = gnome3.updateScript {

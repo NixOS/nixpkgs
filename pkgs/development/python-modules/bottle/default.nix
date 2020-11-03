@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0819b74b145a7def225c0e83b16a4d5711fde751cd92bae467a69efce720f69e";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  requiredPythonModules = [ setuptools ];
 
   meta = with stdenv.lib; {
     homepage = "http://bottlepy.org";

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "11bf0jnj8h2fxhpdp498189r4s6b47vy4wripv0z4nx7lxajl88i";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     requests
     lxml
     pyxdg

@@ -16,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "5282d8076d9814d9248071aec8784cffbd968601542533ccb28ca61d1d08205e";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytz
     tasklib
     tzlocal

@@ -13,7 +13,7 @@ in buildPythonPackage rec {
     sha256 = "084q8x86ywgxgpsgdid8y9rjjys06146dqinfpmlggjswbq9kl0d";
   };
 
-  propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
+  requiredPythonModules = with py.pkgs; [ protobuf dnspython ];
 
   # Tests are failing (TODO: unknown reason)
   # TypeError: __init__() missing 1 required positional argument: 'string'

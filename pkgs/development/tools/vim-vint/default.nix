@@ -15,7 +15,7 @@ buildPythonApplication rec {
   disabled = ! pythonAtLeast "3.5";
 
   checkInputs = [ pytest pytestcov ];
-  propagatedBuildInputs = [ ansicolor chardet pyyaml setuptools ];
+  requiredPythonModules = [ ansicolor chardet pyyaml setuptools ];
 
   # Unpin test dependency versions. This is fixed in master but not yet released.
   preCheck = ''

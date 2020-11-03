@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0pm88hyn18dy7ljam4mdx9qqgmgraf2zy2wl02g5vsjl4ncvq90j";
   };
 
-  propagatedBuildInputs = [ freetds ];
+  requiredPythonModules = [ freetds ];
 
   SYBASE = freetds;
   setupPyBuildFlags = [ "-DHAVE_FREETDS" "-UWANT_BULKCOPY" ];

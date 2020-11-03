@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  propagatedBuildInputs = [ gpgme ];
+  requiredPythonModules = [ gpgme ];
 
   meta = with stdenv.lib; {
     homepage = "https://launchpad.net/pygpgme";

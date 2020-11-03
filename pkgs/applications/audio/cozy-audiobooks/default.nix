@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     gst-plugins-base
   ]);
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     apsw
     cairo
     dbus-python

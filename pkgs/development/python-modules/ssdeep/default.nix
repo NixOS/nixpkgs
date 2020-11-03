@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.ssdeep pytestrunner ];
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ cffi six ];
+  requiredPythonModules = [ cffi six ];
 
   # tests repository does not include required files
   doCheck = false;

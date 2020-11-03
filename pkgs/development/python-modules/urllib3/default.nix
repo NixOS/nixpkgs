@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   checkInputs = [ pytest mock tornado ];
-  propagatedBuildInputs = [ pyopenssl cryptography idna certifi ipaddress pysocks ];
+  requiredPythonModules = [ pyopenssl cryptography idna certifi ipaddress pysocks ];
 
   meta = with stdenv.lib; {
     description = "Powerful, sanity-friendly HTTP client for Python";

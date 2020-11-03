@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "09yfr8hlwvpgvq8kp1y7qbnnl0q28hi0348bv199ssiqx779r99r";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     Babel
     speaklater

@@ -24,7 +24,7 @@ buildPythonApplication rec {
     sha256 = "sha256-AkGU9p00y+psBS/fL2YLyQYRSMOp1aPs21E9bpN9z0M=";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil
     pyyaml
     openpyxl

@@ -13,7 +13,7 @@ with python3.pkgs; buildPythonApplication rec {
     ./skip-broken-test.patch
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     atomicwrites
     click
     click-log

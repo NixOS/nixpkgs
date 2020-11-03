@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.0";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     twisted qtpy
   ];
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "a662990737d86984156a48f769e6528d947e90fd1561bb5e19d0036b59b9fd6f";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     beautifulsoup4
     requests
     future

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1xgi7x9b9kxm0q51bqnmwdm5lp8vwhx5yk4d1b23r37spz9dbhw5";
   };
 
-  propagatedBuildInputs = [ pymeeus pytz ];
+  requiredPythonModules = [ pymeeus pytz ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/fitnr/convertdate";

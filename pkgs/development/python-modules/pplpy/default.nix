@@ -31,7 +31,7 @@ buildPythonPackage rec {
     sphinx # docbuild, called by make
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cython
     cysignals
     gmpy2

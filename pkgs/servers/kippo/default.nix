@@ -40,7 +40,7 @@ let
       sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ zope_interface ];
+    requiredPythonModules = with pythonPackages; [ zope_interface ];
 
     # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
     # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3

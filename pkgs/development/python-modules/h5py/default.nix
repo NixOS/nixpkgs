@@ -35,7 +35,7 @@ in buildPythonPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ hdf5 cython ]
     ++ optional mpiSupport mpi;
-  propagatedBuildInputs = [ numpy six]
+  requiredPythonModules = [ numpy six]
     ++ optionals mpiSupport [ mpi4py openssh ];
 
   meta = {

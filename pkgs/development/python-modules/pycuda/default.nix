@@ -47,7 +47,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     pytools
     pytest

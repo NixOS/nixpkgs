@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1l576dws9drjakfsn0pfpbr48b21vpxv3vd3dz8lkbn8q71zs22r";
   };
 
-  propagatedBuildInputs = [ numpy pytorch scikitlearn scipy tabulate tqdm ];
+  requiredPythonModules = [ numpy pytorch scikitlearn scipy tabulate tqdm ];
   checkInputs = [ pytest pytestcov flaky pandas pytestCheckHook ];
 
   # on CPU, these expect artifacts from previous GPU run

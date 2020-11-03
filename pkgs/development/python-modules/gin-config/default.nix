@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   };
 
-  propagatedBuildInputs = [ six enum34 ];
+  requiredPythonModules = [ six enum34 ];
 
   # PyPI archive does not ship with tests
   doCheck= false;

@@ -12,7 +12,7 @@ in buildPythonApplication {
     sha256 = "0grsgn5gbvk1hlfa8qx7ppz7iyfyi2pdhxy8njr8lm60w4amfiyq";
   };
 
-  propagatedBuildInputs = [ boto m2crypto ];
+  requiredPythonModules = [ boto m2crypto ];
 
   meta = {
     homepage = "https://github.com/eucalyptus/euca2ools";

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ chardet lxml pkgs.libxml2 ];
+  requiredPythonModules = [ chardet lxml pkgs.libxml2 ];
 
   doCheck = false; # No such file or directory: 'run_tests.py'
 

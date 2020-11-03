@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     vte
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     dbus-python
     pbr
     pycairo

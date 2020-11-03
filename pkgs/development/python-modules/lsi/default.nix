@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "b2c4a9a276a32f914a6193509503c28b3cc84bf42d58e191214811cfe78f4736";
   };
 
-  propagatedBuildInputs = [ colored boto pkgs.openssh pkgs.which ];
+  requiredPythonModules = [ colored boto pkgs.openssh pkgs.which ];
 
   meta = with stdenv.lib; {
     description = "CLI for querying and SSHing onto AWS EC2 instances";

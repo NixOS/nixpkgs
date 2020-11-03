@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1k2vinlhkzl7lzhvbz20x3a2r2zqqila0yxg3a3fax2r6qxbxxzi";
   };
 
-  propagatedBuildInputs = [ packaging appdirs requests ];
+  requiredPythonModules = [ packaging appdirs requests ];
 
   checkInputs = [ pytestCheckHook ];
   disabledTests = [

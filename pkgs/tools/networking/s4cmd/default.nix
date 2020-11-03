@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0d4mx98i3qhvlmr9x898mjvf827smzx6x5ji6daiwgjdlxc60mj2";
   };
 
-  propagatedBuildInputs = with python3Packages; [ boto3 pytz ];
+  requiredPythonModules = with python3Packages; [ boto3 pytz ];
 
   # The upstream package tries to install some bash shell completion scripts in /etc.
   # Setuptools is bugged and doesn't handle --prefix properly: https://github.com/pypa/setuptools/issues/130

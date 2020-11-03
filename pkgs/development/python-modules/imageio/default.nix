@@ -27,7 +27,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest psutil ] ++ stdenv.lib.optionals isPy3k [
     imageio-ffmpeg ffmpeg_3
     ];
-  propagatedBuildInputs = [ numpy pillow ];
+  requiredPythonModules = [ numpy pillow ];
 
   checkPhase = ''
     export IMAGEIO_USERDIR="$TMP"

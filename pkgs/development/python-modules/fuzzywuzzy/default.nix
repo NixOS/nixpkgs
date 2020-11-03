@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1s00zn75y2dkxgnbw8kl8dw4p1mc77cv78fwfa4yb0274s96w0a5";
   };
 
-  propagatedBuildInputs = [ python-Levenshtein ];
+  requiredPythonModules = [ python-Levenshtein ];
   checkInputs = [ pycodestyle hypothesis pytest ];
 
   meta = with stdenv.lib; {

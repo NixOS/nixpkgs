@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1xjhkhdpmqa7ngcpcfhrkmj4cid2wla3fzgr04wvw672ysffv2vz";
   };
 
-  propagatedBuildInputs = with python3Packages; [ nagiosplugin ];
+  requiredPythonModules = with python3Packages; [ nagiosplugin ];
 
   meta = with lib; {
     description = "Simple and easy nagios check for systemd status";

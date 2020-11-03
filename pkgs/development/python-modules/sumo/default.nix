@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1zw86qp9ycw2k0anw6pzvwgd3zds0z2cwy0s663zhiv9mnb5hx1n";
   };
 
-  propagatedBuildInputs = [ numpy scipy spglib pymatgen h5py matplotlib seekpath phonopy ];
+  requiredPythonModules = [ numpy scipy spglib pymatgen h5py matplotlib seekpath phonopy ];
 
   checkInputs = [ pytest ];
 

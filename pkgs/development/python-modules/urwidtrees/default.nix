@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1n1kpidvkdnsqyb82vlvk78gmly96kh8351lqxn2pzgwwns6fml2";
   };
 
-  propagatedBuildInputs = [ urwid ];
+  requiredPythonModules = [ urwid ];
 
   checkInputs = [ glibcLocales ];
   LC_ALL="en_US.UTF-8";

@@ -12,7 +12,7 @@ python2Packages.buildPythonPackage {
     sha256 = "0k03b09ipsz8vp362x7sx7z68mxgqw9qzvkii2f8j9vx2y79rjsh";
   };
 
-  propagatedBuildInputs = with python2Packages; [
+  requiredPythonModules = with python2Packages; [
     pillow
     twisted
     pexpect

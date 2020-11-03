@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "00q8n15xdnvqj454arn7xxksyrzh0dw996kjyy7g9rdk0rf8x82z";
   };
 
-  propagatedBuildInputs = [ flake8 six ]
+  requiredPythonModules = [ flake8 six ]
     ++ lib.optionals (pythonOlder "3.8") [
       importlib-metadata
     ];

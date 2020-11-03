@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1h4gwmcfn84kkqh83km1vfz8sc5kr2g4gzgzmr8gz704jmqiv7nq";
   };
 
-  propagatedBuildInputs = [ cryptography ecdsa ];
+  requiredPythonModules = [ cryptography ecdsa ];
 
   meta = with lib; {
     description = "OpenSSH Public Key Parser for Python";

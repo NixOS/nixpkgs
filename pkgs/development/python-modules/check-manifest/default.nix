@@ -14,7 +14,7 @@ buildPythonPackage rec {
     substituteInPlace tests.py --replace "test_build_sdist" "no_test_build_sdist"
   '';
 
-  propagatedBuildInputs = [ pep517 toml ];
+  requiredPythonModules = [ pep517 toml ];
 
   checkInputs = [ mock breezy git ];
 

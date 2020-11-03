@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ opencl-headers ];
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ docutils matplotlib numpy scipy pyopencl ];
+  requiredPythonModules = [ docutils matplotlib numpy scipy pyopencl ];
 
   checkPhase = ''
     HOME=$(mktemp -d) py.test -c ./pytest.ini

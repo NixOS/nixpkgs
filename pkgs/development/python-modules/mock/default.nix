@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "dd33eb70232b6118298d516bbcecd26704689c386594f0f3c4f13867b2c56f72";
   };
 
-  propagatedBuildInputs = [ six pbr ] ++ lib.optionals isPy27 [ funcsigs ];
+  requiredPythonModules = [ six pbr ] ++ lib.optionals isPy27 [ funcsigs ];
 
   # On PyPy for Python 2.7 in particular, Mock's tests have a known failure.
   # Mock upstream has a decoration to disable the failing test and make

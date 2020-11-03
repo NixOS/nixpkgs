@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     decorator
     appdirs
     six

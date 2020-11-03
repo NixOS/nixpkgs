@@ -13,7 +13,7 @@ buildPythonApplication {
     sha256 = "0x7za74lkwn3v6j9j04ifgdwdlx9akh1izkw7vkkzj9ag9qjrzb0";
   };
 
-  propagatedBuildInputs = [ pygtk numpy ];
+  requiredPythonModules = [ pygtk numpy ];
 
   outputs = [ "out" "man" ];
 

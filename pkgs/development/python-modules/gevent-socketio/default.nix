@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ versiontools gevent-websocket mock pytest ];
-  propagatedBuildInputs = [ gevent ];
+  requiredPythonModules = [ gevent ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/abourget/gevent-socketio";

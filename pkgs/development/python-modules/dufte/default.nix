@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
   format = "pyproject";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     matplotlib
     numpy
   ] ++ stdenv.lib.optionals (pythonOlder "3.8") [

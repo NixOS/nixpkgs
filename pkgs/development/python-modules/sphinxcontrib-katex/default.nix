@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "88320b2780f350d67f84a5424973ce24aee65701e8e163a7f5856c5df3353188";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  requiredPythonModules = [ sphinx ];
 
   # There are no unit tests
   doCheck = false;

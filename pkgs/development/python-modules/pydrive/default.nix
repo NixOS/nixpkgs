@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "11q7l94mb34hfh9wkdwfrh5xw99y13wa33ba7xp1q23q4b60v2c3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     google_api_python_client
     oauth2client
     pyyaml

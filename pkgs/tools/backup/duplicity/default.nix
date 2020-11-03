@@ -46,7 +46,7 @@ pythonPackages.buildPythonApplication rec {
     librsync
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     b2sdk
     boto
     cffi

@@ -44,7 +44,7 @@ let
       sha256 = "0n3bamaixxhcm27gf1ws3g6rkamvqx87087c88r6hyyl52si1ycn";
     };
 
-    propagatedBuildInputs = [ certifi chardet h11 h2 idna rfc3986 ];
+    requiredPythonModules = [ certifi chardet h11 h2 idna rfc3986 ];
 
     # relax pinned old version of h11
     postConfigure = ''
@@ -66,7 +66,7 @@ let
       sha256 = "8731420451383196ecf2fd96082bfc8ae5103ada90aba185888499d7784dde6f";
     };
 
-    propagatedBuildInputs = [ requests httpcore ];
+    requiredPythonModules = [ requests httpcore ];
 
     # LICENCE.md gets propagated without this, causing collisions
     postInstall = ''
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     sha256 = "0b1qqsvdjkibrw5kgr0pm7n7jzb1403132wjmb0lx3k5wyvqfi95";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     httptools
     aiofiles
     websockets

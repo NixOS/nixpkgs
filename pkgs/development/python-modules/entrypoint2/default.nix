@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "4ac1a8f08477d93282c422faa90875ce5edaa941e1f3fd410b95cb31d9f473a7";
   };
 
-  propagatedBuildInputs = [ ];
+  requiredPythonModules = [ ];
 
   pythonImportsCheck = [ "entrypoint2" ];
 

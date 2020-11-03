@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ setuptools pyvcd jinja2 ];
+  requiredPythonModules = [ setuptools pyvcd jinja2 ];
 
   checkInputs = [ pytestCheckHook yosys symbiyosys yices ];
 

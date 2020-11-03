@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "3a176da6b70df9bb88498e1a18a9e4a8579ed5b9141207762368a1017bf8f5ef";
   };
 
-  propagatedBuildInputs = [ six monotonic ];
+  requiredPythonModules = [ six monotonic ];
 
   checkInputs = [ testtools nose ] ++ stdenv.lib.optionals (!isPy3k) [ futures ];
 

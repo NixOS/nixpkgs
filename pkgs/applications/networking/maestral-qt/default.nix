@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-7qpVyQUbT+GChJl1TnKOONSyRDvzQ0M2z9RdN7PNl9U=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     bugsnag
     click
     markdown2
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
 
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${stdenv.lib.concatStringsSep ":" (map (p: p + "/lib/${python3.libPrefix}/site-packages") (python3.pkgs.computeRequiredPythonModules python3.pkgs.maestral.propagatedBuildInputs))}"
+    "--prefix" "PYTHONPATH" ":" "${stdenv.lib.concatStringsSep ":" (map (p: p + "/lib/${python3.libPrefix}/site-packages") (python3.pkgs.computeRequiredPythonModules python3.pkgs.maestral.requiredPythonModules))}"
     "--prefix" "PYTHONPATH" ":" "${python3.pkgs.maestral}/lib/${python3.libPrefix}/site-packages"
   ];
 

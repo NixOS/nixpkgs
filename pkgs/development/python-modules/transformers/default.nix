@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "1v09gryxsg57d2cjwagna1535m8mbxlazdbhsww210lxa818m5qj";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     filelock
     numpy
     protobuf

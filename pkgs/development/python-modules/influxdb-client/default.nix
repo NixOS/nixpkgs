@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sed -i -e '/randomize/d' test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     rx
     certifi
     six

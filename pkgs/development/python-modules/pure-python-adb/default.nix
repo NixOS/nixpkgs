@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0kdr7w2fhgjpcf1k3l6an9im583iqkr6v8hb4q1zw30nh3bqkk0f";
   };
 
-  propagatedBuildInputs = [ aiofiles ];
+  requiredPythonModules = [ aiofiles ];
   # Disable tests as they require docker, docker-compose and a dedicated
   # android emulator
   doCheck = false;

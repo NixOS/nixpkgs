@@ -49,7 +49,7 @@ in newPython.pkgs.buildPythonApplication rec {
     sha256 = "0ncqs1p4g23fmzgdmwppgxr8w275h38hgjdzs456cgivz8xs9rjl";
   };
 
-  propagatedBuildInputs = with newPython.pkgs; [
+  requiredPythonModules = with newPython.pkgs; [
     bottle
     colorama
     dateutil

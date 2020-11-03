@@ -17,7 +17,7 @@ buildPythonPackage rec {
     pytestCheckHook boto3 crc32c matplotlib moto pillow pytorch tensorflow-tensorboard torchvision
   ];
 
-  propagatedBuildInputs = [ numpy protobuf six ];
+  requiredPythonModules = [ numpy protobuf six ];
 
   disabledTests = [ "test_TorchVis"  "test_onnx_graph" ];
 

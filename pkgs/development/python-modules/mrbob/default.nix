@@ -19,7 +19,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" nosetests
   '';
 
-  propagatedBuildInputs = [ jinja2 six ];
+  requiredPythonModules = [ jinja2 six ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/domenkozar/mr.bob";

@@ -16,7 +16,7 @@ buildPythonPackage rec {
       --replace 'debug=True' 'debug=True, use_reloader=False'
   '';
 
-  propagatedBuildInputs = [ flask mutagen ];
+  requiredPythonModules = [ flask mutagen ];
 
   meta = {
     description = "Application that generates RSS feeds for podcast episodes from local audio files";

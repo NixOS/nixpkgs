@@ -20,7 +20,7 @@ buildPythonPackage rec {
     xorg.libX11
   ];
 
-  propagatedBuildInputs =  [ numpy ];
+  requiredPythonModules =  [ numpy ];
 
   patches = [
     # make sure X11 and OpenGL can be found at runtime

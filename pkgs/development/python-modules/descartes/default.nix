@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0nq36w9ylvfwmwn5qd9c8fsp2jzsqpmy4xcr6pzxcpmg8qhm0nhk";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     matplotlib
     shapely
   ];

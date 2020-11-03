@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "13ny7h41430pi9393dw3qgwxvzcxacapjsw0d3vjm7lc4h566alq";
   };
 
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   checkInputs = [ nose ] ++ lib.optional (!isPy3k) mock;
   checkPhase = "nosetests -v";

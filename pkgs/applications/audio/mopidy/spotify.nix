@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1ac8r8050i5r3ag1hlblbcyskqjqz7wgamndbzsmw52qi6hxk44f";
   };
 
-  propagatedBuildInputs = [ mopidy pythonPackages.pyspotify ];
+  requiredPythonModules = [ mopidy pythonPackages.pyspotify ];
 
   doCheck = false;
 

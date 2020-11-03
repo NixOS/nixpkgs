@@ -22,7 +22,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy scipy scikitlearn joblib six ];
+  requiredPythonModules = [ numpy scipy scikitlearn joblib six ];
 
   meta = with lib; {
     description = "Hierarchical Density-Based Spatial Clustering of Applications with Noise, a clustering algorithm with a scikit-learn compatible API";

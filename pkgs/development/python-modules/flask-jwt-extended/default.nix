@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1p8rwcsscyjw2m7dbybiaflqk4z1r2d1kp9r9qqyjfzblxpyxa0a";
   };
 
-  propagatedBuildInputs = [ dateutil flask pyjwt werkzeug ];
+  requiredPythonModules = [ dateutil flask pyjwt werkzeug ];
   checkInputs = [ pytest ];
 
   checkPhase = ''

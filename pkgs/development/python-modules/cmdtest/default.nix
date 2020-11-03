@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0scc47h1nkmbm5zlvk9bsnsg64kb9r4xadchdinf4f1mph9qpgn6";
   };
 
-  propagatedBuildInputs = [ cliapp ttystatus markdown ];
+  requiredPythonModules = [ cliapp ttystatus markdown ];
 
   # TODO: cmdtest tests must be run before the buildPhase
   doCheck = false;

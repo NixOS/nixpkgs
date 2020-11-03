@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "717388a9346883eb5def3e96def7275763f2a607cac48c272f352e3834e0bd0d";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   checkInputs = [ unittest2 pyyaml flask ];
 
   checkPhase = ''

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   buildInputs = [ django ];
 
-  propagatedBuildInputs = [ tornado six ];
+  requiredPythonModules = [ tornado six ];
 
   checkInputs = [ nose ];
   # TODO: retry running all tests after v2.6.1

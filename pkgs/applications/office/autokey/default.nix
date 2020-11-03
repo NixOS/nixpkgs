@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ wrapGAppsHook gobject-introspection gtksourceview3
     libappindicator-gtk3 libnotify ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     dbus-python pyinotify xlib pygobject3 ];
 
   meta = {

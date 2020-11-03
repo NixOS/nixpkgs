@@ -12,7 +12,7 @@
     sha256 = "03kbpzdrjzj5vpgz5rhc110pm1axdn3ynv88b42zq6iyab4k8k1x";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
   ];
 
   # allow for writable directory for darwin

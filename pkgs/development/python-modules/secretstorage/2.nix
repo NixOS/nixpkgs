@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1di9gx4m27brs6ar774m64s017iz742mnmw39kvfc8skfs3mrxis";
   };
 
-  propagatedBuildInputs = [ cryptography dbus-python ];
+  requiredPythonModules = [ cryptography dbus-python ];
 
   # Needs a D-Bus Sesison
   doCheck = false;

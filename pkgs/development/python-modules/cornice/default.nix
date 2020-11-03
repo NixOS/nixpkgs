@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "f971831e90343374b21c0c97d523e23eb09cec41a2a8fc2e85bb5c2585348576";
   };
 
-  propagatedBuildInputs = [ pyramid simplejson six venusian ];
+  requiredPythonModules = [ pyramid simplejson six venusian ];
 
   # tests not packaged with pypi release
   doCheck = false;

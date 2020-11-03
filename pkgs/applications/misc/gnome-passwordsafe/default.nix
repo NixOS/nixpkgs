@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     libhandy
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pygobject3
     construct
 
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
         inherit version;
         sha256 = "1ysjn92bixq8wkwhlbhrjj9z0h80qnlnj7ks5478ndkzdw5gxvm1";
       };
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pycryptodome ];
+      requiredPythonModules = old.requiredPythonModules ++ [ pycryptodome ];
     }))
 
   ] ++ [

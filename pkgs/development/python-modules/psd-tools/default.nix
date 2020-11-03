@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "dece6327b5aa03b53163c63e2bf90b4a7b0ff6872ef743adab140a59cb2318ff";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     docopt
     pillow
   ] ++ lib.optionals isPy27 [ enum34 ];

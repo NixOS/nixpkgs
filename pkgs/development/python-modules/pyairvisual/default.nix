@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     numpy
     pysmb

@@ -7,7 +7,7 @@ python2Packages.buildPythonApplication rec {
   pname = "cpuset";
   version = "1.5.8";
 
-  propagatedBuildInputs = [ ];
+  requiredPythonModules = [ ];
 
   makeFlags = [ "prefix=$(out)" ];
 

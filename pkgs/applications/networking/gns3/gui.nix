@@ -21,7 +21,7 @@ in python.pkgs.buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     sentry-sdk psutil jsonschema # tox for check
     # Runtime dependencies
     sip (pyqt5.override { withWebSockets = true; }) distro setuptools

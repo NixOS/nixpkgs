@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1pz15mh72i992p63grwzqn2bbp6sm37zcp4f0fy1z7rsargwsbcz";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jsonpickle
     requests
   ];

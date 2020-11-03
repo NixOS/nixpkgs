@@ -82,7 +82,7 @@ python3Packages.buildPythonApplication rec {
       paperwork-shell chkdeps paperwork
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     paperwork-backend
     pypillowfight
     gtk3

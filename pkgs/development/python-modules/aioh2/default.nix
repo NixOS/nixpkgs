@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "03i24wzpw0mrnrpck3w6qy83iigwl7n99sdrndqzxfyrc69b99wd";
   };
 
-  propagatedBuildInputs = [ h2 priority ];
+  requiredPythonModules = [ h2 priority ];
 
   doCheck = false; # https://github.com/decentfox/aioh2/issues/17
 

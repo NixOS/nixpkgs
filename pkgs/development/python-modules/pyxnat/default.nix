@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "113d13cs5ab7wy4vmyqyh8isjhlgfvan7y2g8n25vcpn3j4j00h0";
   };
 
-  propagatedBuildInputs = [ lxml requests ];
+  requiredPythonModules = [ lxml requests ];
 
   checkInputs = [ nose ];
   checkPhase = "nosetests pyxnat/tests";

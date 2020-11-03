@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0yj3yb0qvfdv4wh7nzcsh9in8nzk7b59dvjj0x02rsmlv4kw9ah1";
   };
 
-  propagatedBuildInputs = [ regex ];
+  requiredPythonModules = [ regex ];
 
   meta = with stdenv.lib; {
     description = "Tokenizer and sentence splitter for German and English web texts";

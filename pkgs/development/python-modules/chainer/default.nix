@@ -26,7 +26,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     filelock
     protobuf
     numpy

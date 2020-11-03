@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1e6bba42a5f66c245adf38a5a4006a99dcc06a0703786ea636098667d42903b8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     pynacl
   ];

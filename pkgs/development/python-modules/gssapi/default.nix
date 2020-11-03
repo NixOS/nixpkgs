@@ -38,7 +38,7 @@ buildPythonPackage rec {
     krb5Full
   ];
 
-  propagatedBuildInputs =  [
+  requiredPythonModules =  [
     decorator
     six
   ];

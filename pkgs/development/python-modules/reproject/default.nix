@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1jsc3ad518vyys5987fr1achq8qvnz8rm80zp5an9qxlwr4zmh4m";
   };
 
-  propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
+  requiredPythonModules = [ numpy astropy astropy-healpix astropy-helpers scipy ];
 
   nativeBuildInputs = [ astropy-helpers cython extension-helpers setuptools_scm ];
 

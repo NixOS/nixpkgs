@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "051s127qb5dladxa14n9nqajwq7xki1dz1was5r5v9df5a0jq8pd";
   };
 
-  propagatedBuildInputs = [ h11 enum34 ];
+  requiredPythonModules = [ h11 enum34 ];
 
   checkInputs = [ pytest ];
 

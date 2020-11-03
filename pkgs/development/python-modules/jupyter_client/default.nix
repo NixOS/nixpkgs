@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "49e390b36fe4b4226724704ea28d9fb903f1a3601b6882ce3105221cd09377a1";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     traitlets
     jupyter_core
     pyzmq

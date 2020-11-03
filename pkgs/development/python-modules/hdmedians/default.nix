@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   # nose was specified in setup.py as a build dependency...
   buildInputs = [ cython nose ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   # cannot resolve path for packages in tests
   doCheck = false;

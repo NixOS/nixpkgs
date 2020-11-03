@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1f9e8a6ca6f16db5a37d3356f07b6e52344f6f9f7e806d618537731669eb1a94";
   };
 
-  propagatedBuildInputs = [ ipaddress ];
+  requiredPythonModules = [ ipaddress ];
 
   checkPhase = ''
    ${python.interpreter} -m unittest discover

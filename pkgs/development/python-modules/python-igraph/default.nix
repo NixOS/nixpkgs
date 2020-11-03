@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ igraph ];
-  propagatedBuildInputs = [ texttable ];
+  requiredPythonModules = [ texttable ];
 
   src = fetchPypi {
     inherit pname version;

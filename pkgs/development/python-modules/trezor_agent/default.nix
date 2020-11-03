@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "139d917d6495bf290bcc21da457f84ccd2e74c78b4d59a649e0cdde4288cd20c";
   };
 
-  propagatedBuildInputs = [ setuptools trezor libagent ecdsa ed25519 mnemonic keepkey semver wheel pinentry ];
+  requiredPythonModules = [ setuptools trezor libagent ecdsa ed25519 mnemonic keepkey semver wheel pinentry ];
 
   meta = with stdenv.lib; {
     description = "Using Trezor as hardware SSH agent";

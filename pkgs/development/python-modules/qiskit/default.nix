@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "1r23pjnql49gczf4k4m6ir5rr95gqdxjrks60p8a93d243mxx3c9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     qiskit-aer
     qiskit-aqua
     qiskit-ibmq-provider

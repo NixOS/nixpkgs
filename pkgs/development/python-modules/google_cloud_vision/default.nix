@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock ];
-  propagatedBuildInputs = [ enum34 google_api_core ];
+  requiredPythonModules = [ enum34 google_api_core ];
 
   # pytest seems to pick up some file which overrides PYTHONPATH
   checkPhase = ''

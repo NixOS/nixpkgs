@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "1vvp7i8ghmq72v57f6smh441h35xnr5ar628q2mr40bzvcifwymw";
   };
 
-  propagatedBuildInputs = [ botocore ];
+  requiredPythonModules = [ botocore ];
 
   checkInputs = [ pytest mock flake8 tox awscli ];
 

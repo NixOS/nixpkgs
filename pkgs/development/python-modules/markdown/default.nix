@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1fafe3f1ecabfb514a5285fca634a53c1b32a81cb0feb154264d55bf2ff22c17";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "19rng6v1sw14mbjp5cplnrgxjnhlj8faalfw02iihi9s5w1k7zjy";
   };
 
-  propagatedBuildInputs = [ pyjwt django djangorestframework ];
+  requiredPythonModules = [ pyjwt django djangorestframework ];
 
   # ./runtests.py fails because the project must be tested against a django
   # installation, there are missing database tables for User, that don't exist.

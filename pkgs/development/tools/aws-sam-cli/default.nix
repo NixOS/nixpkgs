@@ -41,7 +41,7 @@ buildPythonApplication rec {
   # Tests are not included in the PyPI package
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aws-lambda-builders
     aws-sam-translator
     chevron

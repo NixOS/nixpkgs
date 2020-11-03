@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dnspython
     idna
   ] ++ (if isPy3k then [ ] else [ ipaddress ]);

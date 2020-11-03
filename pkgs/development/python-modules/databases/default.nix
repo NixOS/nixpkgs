@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0cdb4vln4zdmqbbcj7711b81b2l64jg1miihqcg8gpi35v404h2q";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     sqlalchemy
     aiocontextvars
   ];

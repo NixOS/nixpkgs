@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "0176b17aa14cc2ef82a327dc70b66af670bdb39dcf836896f81269db376932ea";
   };
 
-  propagatedBuildInputs = [ requests six pbr setuptools ];
+  requiredPythonModules = [ requests six pbr setuptools ];
 
   # For the tests the following requirements are needed:
   # https://github.com/openstack/python-swiftclient/blob/master/test-requirements.txt

@@ -45,7 +45,7 @@ buildPythonApplication rec {
       --replace 'pycodestyle<=2.4.0' 'pycodestyle<=2.5.0'
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     astroid
     django
     dodgy

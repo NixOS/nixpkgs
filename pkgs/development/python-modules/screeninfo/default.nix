@@ -23,7 +23,7 @@ buildPythonApplication rec {
       --replace "load_library(\"Xrandr\")" "ctypes.cdll.LoadLibrary(\"${libXrandr}/lib/libXrandr.so\")"
   '';
 
-  propagatedBuildInputs = stdenv.lib.optional isPy36 dataclasses;
+  requiredPythonModules = stdenv.lib.optional isPy36 dataclasses;
 
   buildInputs = [ libX11 libXinerama libXrandr];
 

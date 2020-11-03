@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   doCheck = (!isPy38); # hmac functionality has changed
   checkInputs = [ nose mock ];
-  propagatedBuildInputs = [ requests httpretty ];
+  requiredPythonModules = [ requests httpretty ];
 
   meta = with pkgs.lib; {
     homepage = "https://github.com/boto/boto";

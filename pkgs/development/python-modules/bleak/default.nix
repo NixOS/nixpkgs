@@ -19,7 +19,7 @@ buildPythonPackage rec {
       --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
-  propagatedBuildInputs = [ txdbus ];
+  requiredPythonModules = [ txdbus ];
   checkInputs = [ pytest pytestcov ];
 
   checkPhase = "AGENT_OS=linux py.test";

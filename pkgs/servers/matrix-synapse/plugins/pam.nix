@@ -11,5 +11,5 @@ buildPythonPackage rec {
     sha256 = "10byma9hxz3g4sirw5sa4pvljn83h9vs7zc15chhpl2n14bdx45l";
   };
 
-  propagatedBuildInputs = [ twisted python-pam ];
+  requiredPythonModules = [ twisted python-pam ];
 }

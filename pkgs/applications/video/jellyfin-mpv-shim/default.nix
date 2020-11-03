@@ -38,7 +38,7 @@ buildPythonApplication rec {
     ln -s ${shaderPack} jellyfin_mpv_shim/default_shader_pack
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jellyfin-apiclient-python
     mpv
     pillow

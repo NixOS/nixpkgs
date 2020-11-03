@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis pygments ];
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     atomicwrites
     attrs
     more-itertools

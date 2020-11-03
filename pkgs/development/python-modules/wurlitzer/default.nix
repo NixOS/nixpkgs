@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0hvmbc41kdwrjns8z1s4a59a4azdvzb8q3vs7nn1li4qm4l0g3yh";
   };
 
-  propagatedBuildInputs = lib.optionals isPy27 [ selectors2 ];
+  requiredPythonModules = lib.optionals isPy27 [ selectors2 ];
 
   checkInputs = [ mock pytest ];
 

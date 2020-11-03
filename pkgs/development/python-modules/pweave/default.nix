@@ -21,7 +21,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   buildInputs = [ mock pkgs.glibcLocales ];
-  propagatedBuildInputs = [ matplotlib nbconvert markdown ];
+  requiredPythonModules = [ matplotlib nbconvert markdown ];
 
   # fails due to trying to run CSS as test
   doCheck = false;

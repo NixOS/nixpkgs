@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0ngh3ar6v15516f52j21k6qz7hykmxfjadhb2rakvl27b5xvjy1c";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     click
     clint
     crayons

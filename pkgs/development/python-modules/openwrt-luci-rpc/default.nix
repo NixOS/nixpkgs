@@ -22,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "packaging==19.1" "packaging"
   '';
 
-  propagatedBuildInputs = [ click requests packaging ];
+  requiredPythonModules = [ click requests packaging ];
 
   meta = {
     description = ''

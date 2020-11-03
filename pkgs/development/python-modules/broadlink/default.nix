@@ -15,7 +15,7 @@ buildPythonPackage rec {
       --replace pyaes==1.6.0 pyaes
     '';
 
-  propagatedBuildInputs = [ cryptography pyaes pycrc ];
+  requiredPythonModules = [ cryptography pyaes pycrc ];
 
   # no tests available
   doCheck = false;

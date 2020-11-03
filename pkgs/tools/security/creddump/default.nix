@@ -15,7 +15,7 @@ python2Packages.buildPythonApplication rec {
   # No setup.py is available
   dontBuild = true;
   doCheck = false;
-  propagatedBuildInputs = [ python2Packages.pycrypto ];
+  requiredPythonModules = [ python2Packages.pycrypto ];
 
   installPhase = ''
     mkdir -p ${placeholder "out"}/bin

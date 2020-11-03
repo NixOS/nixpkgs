@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "078657iiksrqzcc2wvwhiilf3xxq5vlinsv0kz03qzqr1qyvbmas";
    };
 
-  propagatedBuildInputs = [ regex langcodes ftfy msgpack mecab-python3 jieba ];
+  requiredPythonModules = [ regex langcodes ftfy msgpack mecab-python3 jieba ];
 
   # patch to relax version requirements for regex
   # dependency to prevent break in upgrade

@@ -15,7 +15,7 @@ buildPythonPackage {
     sha256 ="0ams289qcgna96aak96jbz6wybs6qb95h2gn8lb4lmx2p5sq4q56";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  requiredPythonModules = [ requests six ];
 
   meta = with pkgs.lib; {
     description = "Digital Ocean API python wrapper";

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1n960xgrnmv20l31nm0im7pb4nfa83bmx4x4clqrh2jkpzq3ric0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests
     pyopenssl
     cryptography

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0gyady7x3v3l9fm1zan0idaggqqcm31y7g5vxk7h05p5h7f39bjs";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jinja2
     lxml
   ];

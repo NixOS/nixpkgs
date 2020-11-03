@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
 
-  propagatedBuildInputs = [ more-itertools six ];
+  requiredPythonModules = [ more-itertools six ];
 
   checkInputs = [
     jaraco_text

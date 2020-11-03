@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace 'python-jose[cryptography]' 'python-jose'
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     boto3
     envs
     python-jose

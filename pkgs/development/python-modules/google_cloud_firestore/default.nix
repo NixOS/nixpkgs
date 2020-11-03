@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ google_api_core google_cloud_core ];
+  requiredPythonModules = [ google_api_core google_cloud_core ];
 
   # tests were not included with release
   # See issue https://github.com/googleapis/google-cloud-python/issues/6380

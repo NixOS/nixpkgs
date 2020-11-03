@@ -72,7 +72,7 @@ buildPythonPackage rec {
     pytest -k 'not test_get_version' # expects a Git repository
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
     # setup.py
     blinker

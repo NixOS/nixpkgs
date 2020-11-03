@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "bfdb422f52e1d4d60bd0635d203fb59fa7f613397d079661eb48e79464ba13c5";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click click-log click-threading
     requests_toolbelt
     requests

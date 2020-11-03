@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ gevent certifi six backports_ssl_match_hostname ];
+  requiredPythonModules = [ gevent certifi six backports_ssl_match_hostname ];
 
   # Several tests fail that require network
   doCheck = false;

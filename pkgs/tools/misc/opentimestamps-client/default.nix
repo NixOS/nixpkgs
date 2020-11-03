@@ -16,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "1aiq9cwr40md54swzm7wkwj0h65psxmvj2japvw79s9x0pp8iwqs";
   };
 
-  propagatedBuildInputs = [ opentimestamps appdirs GitPython pysocks ];
+  requiredPythonModules = [ opentimestamps appdirs GitPython pysocks ];
 
   meta = {
     description = "Command-line tool to create and verify OpenTimestamps proofs";

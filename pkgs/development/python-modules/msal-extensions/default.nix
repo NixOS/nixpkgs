@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "31414753c484679bb3b6c6401623eb4c3ccab630af215f2f78c1d5c4f8e1d1a9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     msal
     portalocker
   ] ++ lib.optionals isPy27 [

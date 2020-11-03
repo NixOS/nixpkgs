@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0i59qfv1cfm0ss63ab2nrkn5wr4rxpqqmvfd7pf9c3pl9dbfq20c";
   };
 
-  propagatedBuildInputs = [ update-dotdee simpleeval dateutil ];
+  requiredPythonModules = [ update-dotdee simpleeval dateutil ];
 
   meta = with lib; {
     description = "Simple command line interface for backup rotation";

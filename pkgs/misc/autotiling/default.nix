@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "0hwvy9bxwv9fakqqiyrkmpckxgm0z85c240p84ibdhja9sm086v0";
   };
 
-  propagatedBuildInputs = [ i3ipc importlib-metadata ];
+  requiredPythonModules = [ i3ipc importlib-metadata ];
   doCheck = false;
 
   meta = with lib; {

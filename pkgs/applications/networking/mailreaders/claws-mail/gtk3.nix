@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
-  propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
+  requiredPythonModules = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =
     [ curl dbus dbus-glib gtk3 gnutls gsettings-desktop-schemas

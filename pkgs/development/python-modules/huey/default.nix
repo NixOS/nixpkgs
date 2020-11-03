@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1hgic7qrmb1kxvfgf2qqiw39nqyknf17pjvli8jfzvd9mv7cb7hh";
   };
 
-  propagatedBuildInputs = [ redis ];
+  requiredPythonModules = [ redis ];
 
   # connects to redis
   doCheck = false;

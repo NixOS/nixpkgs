@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "c85398b5fb82f82399fc38c44fe3532c0dde1754abee727d8f5cfcc74547b334";
   };
 
-  propagatedBuildInputs = [ ipython ];
+  requiredPythonModules = [ ipython ];
   checkInputs = [ mock ];
 
   preCheck = ''

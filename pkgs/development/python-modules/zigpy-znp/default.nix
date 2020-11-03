@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "a98RYPvcYE1NPERmPo1jPwMf86N+0297u4pOKuaB6u4=";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     async-timeout
     coloredlogs
     pyserial

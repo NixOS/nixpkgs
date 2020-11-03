@@ -19,7 +19,7 @@ in buildPythonPackage rec {
   checkInputs = [ nose pytest ];
   nativeBuildInputs = [ gfortran ];
   buildInputs = [ numpy.blas pybind ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   # Remove tests because of broken wrapper
   prePatch = ''

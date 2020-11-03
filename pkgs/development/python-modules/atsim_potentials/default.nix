@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   # tests are not included with release
   doCheck = false;

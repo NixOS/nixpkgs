@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   buildInputs = [ enlightenment.efl ];
 
-  propagatedBuildInputs = [ dbus-python ];
+  requiredPythonModules = [ dbus-python ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl evas) $NIX_CFLAGS_COMPILE"

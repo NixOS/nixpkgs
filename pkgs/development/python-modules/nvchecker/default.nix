@@ -30,7 +30,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ installShellFiles docutils ];
-  propagatedBuildInputs = [ setuptools toml structlog appdirs tornado pycurl aiohttp ];
+  requiredPythonModules = [ setuptools toml structlog appdirs tornado pycurl aiohttp ];
   checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
   disabled = pythonOlder "3.7";

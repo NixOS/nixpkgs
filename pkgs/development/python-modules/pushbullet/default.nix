@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "917883e1af4a0c979ce46076b391e0243eb8fe0a81c086544bcfa10f53e5ae64";
   };
 
-  propagatedBuildInputs = [ requests websocket_client python_magic ];
+  requiredPythonModules = [ requests websocket_client python_magic ];
 
   checkInputs = [ pytest mock ];
 

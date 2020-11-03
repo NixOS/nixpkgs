@@ -16,7 +16,7 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ toml ];
+  requiredPythonModules = [ toml ];
 
   checkInputs = [ pytest ];
 

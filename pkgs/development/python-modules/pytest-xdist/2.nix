@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm pytest_6 ];
   checkInputs = [ pytest_6 filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil six ];
+  requiredPythonModules = [ execnet pytest-forked psutil six ];
 
   # pytest6 doesn't allow for new lines
   # capture_deprecated not compatible with latest pytest6

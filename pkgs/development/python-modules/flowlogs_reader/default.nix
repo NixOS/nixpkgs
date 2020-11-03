@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "19118ff77925c66a6782152066d86bc8d5c6ed60189b642263fb0c6eb7cb22ef";
   };
 
-  propagatedBuildInputs = [ botocore boto3 docutils ];
+  requiredPythonModules = [ botocore boto3 docutils ];
   buildInputs = [ unittest2 mock ];
 
   meta = with stdenv.lib; {

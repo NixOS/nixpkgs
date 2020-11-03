@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytestrunner
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     chardet
     pyyaml
     requests

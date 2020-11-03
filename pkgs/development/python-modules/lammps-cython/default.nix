@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython pytestrunner ];
   checkInputs = [ pytest_4 pytestcov openssh ];
-  propagatedBuildInputs = [ mpi4py pymatgen ase numpy ];
+  requiredPythonModules = [ mpi4py pymatgen ase numpy ];
 
   preBuild = ''
     echo "Creating lammps.cfg file..."

@@ -11,7 +11,7 @@ buildPythonPackage rec {
 };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs =  [ openssl dnspython pynacl authres ];
+  requiredPythonModules =  [ openssl dnspython pynacl authres ];
 
   patchPhase = ''
     substituteInPlace dkim/dknewkey.py --replace \

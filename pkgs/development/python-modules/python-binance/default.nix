@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;  # Tries to test multiple interpreters with tox
   checkInputs = [ pytest requests-mock tox ];
 
-  propagatedBuildInputs = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ];
+  requiredPythonModules = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ];
 
   meta = {
     description = "Binance Exchange API python implementation for automated trading";

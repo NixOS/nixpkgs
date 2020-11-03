@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "7122d55505d5ed5a6f3df940ad174b3f606ecae5e9bc379569cdcbd4cd9d2b83";
   };
 
-  propagatedBuildInputs = lib.optional (!isPy3k) mock;
+  requiredPythonModules = lib.optional (!isPy3k) mock;
 
   nativeBuildInputs = [
    setuptools_scm

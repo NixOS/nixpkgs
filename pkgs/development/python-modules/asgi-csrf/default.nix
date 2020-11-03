@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1hhqrb9r46y6i3d3w6hc9zm6yyikdyd2k5pcbyw0r9fl959yi4hf";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     itsdangerous
     python-multipart
   ];

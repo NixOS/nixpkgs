@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0mnmfzlq5mhih6z8dq5bkx95vb8whjycz9mdlqwbmlqjb3gb3zhr";
   };
 
-  propagatedBuildInputs = [ statistics ];
+  requiredPythonModules = [ statistics ];
 
   meta = with lib; {
     homepage = "https://github.com/genomematt/xenomapper";

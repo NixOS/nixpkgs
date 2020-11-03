@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [ protobuf grpcio setuptools ];
+  requiredPythonModules = [ protobuf grpcio setuptools ];
 
   # no tests in the package
   doCheck = false;

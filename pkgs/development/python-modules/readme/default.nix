@@ -18,7 +18,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     readme_renderer
   ];
 

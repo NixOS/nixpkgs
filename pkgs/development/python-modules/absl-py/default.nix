@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "75e737d6ce7723d9ff9b7aa1ba3233c34be62ef18d5859e706b8fdc828989830";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
   ] ++ lib.optionals (pythonOlder "3.4") [
     enum34

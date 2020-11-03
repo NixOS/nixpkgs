@@ -29,7 +29,7 @@ buildPythonPackage rec {
     })
   ];
   checkInputs = [ invoke pytest mock pytest-relaxed ];
-  propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];
+  requiredPythonModules = [ bcrypt cryptography pynacl pyasn1 ];
 
   __darwinAllowLocalNetworking = true;
 

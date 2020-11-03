@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
-  propagatedBuildInputs = [ twisted ];
+  requiredPythonModules = [ twisted ];
 
   # Tests fail because they try to write new code into the twisted
   # package, apparently some kind of plugin.

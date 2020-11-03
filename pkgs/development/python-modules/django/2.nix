@@ -24,7 +24,7 @@ buildPythonPackage rec {
     })
   ;
 
-  propagatedBuildInputs = [ pytz sqlparse ];
+  requiredPythonModules = [ pytz sqlparse ];
 
   # too complicated to setup
   doCheck = false;

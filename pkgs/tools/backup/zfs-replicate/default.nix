@@ -22,7 +22,7 @@ buildPythonApplication rec {
     pytestrunner
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     stringcase
   ];

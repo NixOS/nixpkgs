@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0a3kn3qvspvx15imgzzzjsbvw6bqmbk29apbliqwifa9cj7pvb40";
   };
 
-  propagatedBuildInputs = [ pycurl six rpm dateutil ];
+  requiredPythonModules = [ pycurl six rpm dateutil ];
 
   # Judging from SyntaxError
   disabled = isPy3k;

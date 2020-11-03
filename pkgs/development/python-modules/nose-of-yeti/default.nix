@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "nose-of-yeti";
   version = "1.8";
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ nose fudge should-dsl ];
 

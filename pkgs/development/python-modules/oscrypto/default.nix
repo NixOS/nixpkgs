@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sed -e '/TLSTests/d' -e '/TrustListTests/d' -i tests/__init__.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     asn1crypto
     openssl
   ];

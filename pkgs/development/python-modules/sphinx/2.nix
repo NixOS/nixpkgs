@@ -41,7 +41,7 @@ buildPythonPackage rec {
   checkPhase = ''
     cd tests; ${python.interpreter} run.py --ignore py35 -k 'not test_defaults and not test_anchors_ignored'
   '';
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     docutils
     jinja2
     pygments

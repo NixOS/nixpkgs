@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "016f50853b4d72e5ddb963b042caa45fb60fa4d3f13aee819d829af21e55ef07";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # As of 0.2.16, pyupdate is intimately tied to Home Assistant which is py3 only
   disabled = !isPy3k;

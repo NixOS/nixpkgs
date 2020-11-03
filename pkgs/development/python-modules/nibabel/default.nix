@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "5827b644d1b0833603710dac198f5f8cbb9002769f97001a191e863b32f5956c";
   };
 
-  propagatedBuildInputs = [ numpy scipy h5py packaging pydicom ];
+  requiredPythonModules = [ numpy scipy h5py packaging pydicom ];
 
   checkInputs = [ nose pytest ];
 

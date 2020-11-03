@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # tests assume the availability of a mysql/postgresql database
   doCheck = false;
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   meta = with stdenv.lib; {
     description = "An extension to the Django web framework that provides comprehensive version control facilities";

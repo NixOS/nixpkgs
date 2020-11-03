@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "1fbnhpmkxavv6yirmhx7659q1y9bqynwjd1g6cscv1mfv9m59l60";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     plotly
     flask
     flask-compress

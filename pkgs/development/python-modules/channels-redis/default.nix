@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ redis hiredis ];
 
-  propagatedBuildInputs = [ channels msgpack aioredis asgiref ];
+  requiredPythonModules = [ channels msgpack aioredis asgiref ];
 
   # Fetch from github (no tests files on pypi)
   # src = fetchFromGitHub {

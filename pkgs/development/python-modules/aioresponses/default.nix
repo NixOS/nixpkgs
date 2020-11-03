@@ -23,7 +23,7 @@ buildPythonPackage rec {
     pbr
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
   ];
 

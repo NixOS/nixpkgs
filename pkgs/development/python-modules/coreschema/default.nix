@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "027pc753mkgbb3r1v1x7dsdaarq93drx0f79ppvw9pfkcjcq6wb1";
   };
 
-  propagatedBuildInputs = [ jinja2 ];
+  requiredPythonModules = [ jinja2 ];
 
   checkInputs = [ pytest ];
   checkPhase = ''

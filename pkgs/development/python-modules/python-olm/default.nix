@@ -12,7 +12,7 @@ buildPythonPackage {
     make include/olm/olm.h
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cffi
     future
   ] ++ lib.optionals (!isPy3k) [ typing ];

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "238713208031e8981bf70b3350b3d7f85ed64d34e0f21e4c1184444a546fee7f";
   };
 
-  propagatedBuildInputs = [ requests six pyopenssl ];
+  requiredPythonModules = [ requests six pyopenssl ];
 
   meta = {
     homepage = "https://developer.paypal.com/";

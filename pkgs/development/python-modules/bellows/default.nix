@@ -15,7 +15,7 @@ in buildPythonPackage rec {
     sha256 = "9342b6b9423c818f99f7c6d9086fbb5e27d5c2efbb1f2a08f6f5a917c4991f86";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click click-log pure-pcapy3 pyserial pyserial-asyncio voluptuous zigpy
   ];
 

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0qp8sycclzagkiszqk1pw2fr8s8s195bzy8r27dj7f5zx350nxk5";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     notmuch
     oauth2client
     google_api_python_client

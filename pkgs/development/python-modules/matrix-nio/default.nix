@@ -33,7 +33,7 @@ buildPythonPackage rec {
     git
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     future
     aiohttp
