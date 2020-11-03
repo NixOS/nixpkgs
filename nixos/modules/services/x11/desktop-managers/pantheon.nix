@@ -182,7 +182,7 @@ in
         hicolor-icon-theme
         lightlocker
         onboard
-        qgnomeplatform
+        libsForQt5.qgnomeplatform
         shared-mime-info
         sound-theme-freedesktop
         xdg-user-dirs

@@ -18188,8 +18188,6 @@ in
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
-  qgnomeplatform =  libsForQt514.callPackage ../development/libraries/qgnomeplatform { };
-
   randomx = callPackage ../development/libraries/randomx { };
 
   retro-gtk = callPackage ../development/libraries/retro-gtk { };

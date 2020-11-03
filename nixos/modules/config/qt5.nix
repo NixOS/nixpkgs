@@ -9,7 +9,7 @@ let
   isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
 
-  packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.libsForQt5.adwaita-qt ]
+  packages = if isQGnome then [ pkgs.libsForQt5.qgnomeplatform pkgs.libsForQt5.adwaita-qt ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
     else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
 
@@ -29,7 +29,7 @@ in
         ];
         example = "gnome";
         relatedPackages = [
-          "qgnomeplatform"
+          ["libsForQt5" "qgnomeplatform"]
           ["libsForQt5" "adwaita-qt"]
           ["libsForQt5" "qtstyleplugins"]
         ];

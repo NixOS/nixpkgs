@@ -166,6 +166,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
+  qgnomeplatform =  callPackage ../development/libraries/qgnomeplatform { };
+
   qmltermwidget = callPackage ../development/libraries/qmltermwidget {
     inherit (pkgs.darwin.apple_sdk.libs) utmp;
   };
