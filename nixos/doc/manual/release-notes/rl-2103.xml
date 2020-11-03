@@ -39,7 +39,19 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+     <para>
+       <link xlink:href="https://www.keycloak.org/">Keycloak</link>,
+       an open source identity and access management server with
+       support for <link
+       xlink:href="https://openid.net/connect/">OpenID Connect</link>,
+       <link xlink:href="https://oauth.net/2/">OAUTH 2.0</link> and
+       <link xlink:href="https://en.wikipedia.org/wiki/SAML_2.0">SAML
+       2.0</link>.
+     </para>
+     <para>
+       See the <link linkend="module-services-keycloak">Keycloak
+       section of the NixOS manual</link> for more information.
+     </para>
    </listitem>
   </itemizedlist>
 
