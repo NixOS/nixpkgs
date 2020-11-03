@@ -24,7 +24,7 @@ let
     withPython2 ? false
     /* the function you would have passed to python.withPackages */
     , extraPython2Packages ? (_: [ ])
-    ,  withPython3 ? true
+    , withPython3 ? true
     /* the function you would have passed to python3.withPackages */
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
@@ -35,7 +35,7 @@ let
 
     # for forward compability, when adding new environments, haskell etc.
     , ...
-    }:
+    }@args:
     let
       rubyEnv = bundlerEnv {
         name = "neovim-ruby-env";
@@ -44,7 +44,6 @@ let
           ln -sf ${ruby}/bin/* $out/bin
         '';
       };
-
 
       requiredPlugins = vimUtils.requiredPlugins configure;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
@@ -100,13 +99,15 @@ let
       manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
       neovimRcContent = vimUtils.vimrcContent configure;
     in
-    {
+    args // {
       wrapperArgs = makeWrapperArgs;
       inherit neovimRcContent;
       inherit manifestRc;
-      inherit rubyEnv;
       inherit python2Env;
       inherit python3Env;
+      inherit withNodeJs;
+    } // lib.optionalAttrs withRuby {
+      inherit rubyEnv;
     };
 
     genProviderSettings = prog: withProg:
@@ -141,15 +142,15 @@ let
         extraPythonPackages = compatFun extraPythonPackages;
         inherit withPython3;
         extraPython3Packages = compatFun extraPython3Packages;
-        inherit withNodeJs withRuby;
-
+        inherit withNodeJs withRuby viAlias vimAlias;
         inherit configure;
       };
     in
     wrapNeovimUnstable neovim (res // {
       wrapperArgs = lib.escapeShellArgs (
-        res.wrapperArgs ++ [ "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}" ])
-        + " " + extraMakeWrapperArgs
+        res.wrapperArgs ++ lib.optionals (configure != {}) [
+          "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
+        ]) + " " + extraMakeWrapperArgs
       ;
   });
 in

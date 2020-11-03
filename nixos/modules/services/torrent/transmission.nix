@@ -197,7 +197,7 @@ in
           install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
            '${cfg.home}/${settingsDir}/settings.json'
         '')];
-        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f";
+        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;

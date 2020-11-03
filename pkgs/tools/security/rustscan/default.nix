@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "0dhy7b73ipsxsr7wlc3r5yy39i3cjrdszhsw9xwjj31692s3b605";
   };
 

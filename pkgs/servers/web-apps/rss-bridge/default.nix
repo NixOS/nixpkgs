@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RSS-Bridge";
     repo = "rss-bridge";
-    rev = "${version}";
+    rev = version;
     sha256 = "075k4bylx9308d083ry5a9q4629ccnrnndqqdqp1g42rzlqrw79q";
   };
 

@@ -7,7 +7,7 @@
 
 let
   release_version = "11.0.0";
-  version = "${release_version}"; # differentiating these (variables) is important for RCs
+  version = release_version; # differentiating these (variables) is important for RCs
   targetConfig = stdenv.targetPlatform.config;
 
   fetch = name: sha256: fetchurl {
