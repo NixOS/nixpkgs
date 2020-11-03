@@ -35,7 +35,7 @@ let
 
     # for forward compability, when adding new environments, haskell etc.
     , ...
-    }:
+    }@args:
     let
       rubyEnv = bundlerEnv {
         name = "neovim-ruby-env";
@@ -99,7 +99,7 @@ let
       manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
       neovimRcContent = vimUtils.vimrcContent configure;
     in
-    {
+    args // {
       wrapperArgs = makeWrapperArgs;
       inherit neovimRcContent;
       inherit manifestRc;
@@ -142,8 +142,7 @@ let
         extraPythonPackages = compatFun extraPythonPackages;
         inherit withPython3;
         extraPython3Packages = compatFun extraPython3Packages;
-        inherit withNodeJs withRuby;
-
+        inherit withNodeJs withRuby viAlias vimAlias;
         inherit configure;
       };
     in
