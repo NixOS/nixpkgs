@@ -7107,6 +7107,12 @@
     githubId = 14829269;
     name = "Ram Kromberg";
   };
+  ranfdev = {
+    email = "ranfdev@gmail.com";
+    name = "Lorenzo Miglietta";
+    github = "ranfdev";
+    githubId = 23294184;
+  };
   rardiol = {
     email = "ricardo.ardissone@gmail.com";
     github = "rardiol";
