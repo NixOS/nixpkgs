@@ -154,8 +154,7 @@ in
       description = "Unbound recursive Domain Name Server";
       after = [ "network.target" ];
       before = [ "nss-lookup.target" ];
-      wants = [ "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" "nss-lookup.target" ];
 
       preStart = lib.mkIf cfg.enableRootTrustAnchor ''
         ${cfg.package}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
