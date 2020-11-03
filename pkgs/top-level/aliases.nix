@@ -368,6 +368,7 @@ mapAliases ({
   parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
+  pdf2htmlEx = throw "pdf2htmlEx has been removed from nixpkgs, as it was unmaintained"; # added 2020-11-03
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
