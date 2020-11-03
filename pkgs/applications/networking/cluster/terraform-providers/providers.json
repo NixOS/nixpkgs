@@ -782,9 +782,9 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/random",
     "repo": "terraform-provider-random",
-    "rev": "v2.2.1",
-    "sha256": "1qklsxj443vsj61lwl7qf7xwgnllwcvb2yk6s0kn9g3iq63pcv30",
-    "version": "2.2.1"
+    "rev": "v3.0.0",
+    "sha256": "00dkpcri9ckp0kxwgh3p8175cyd44m8z13cb013pm4mrr61n4wq9",
+    "version": "3.0.0"
   },
   "rightscale": {
     "owner": "terraform-providers",
