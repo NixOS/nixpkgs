@@ -325,7 +325,12 @@ let
       patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
     '';
 
-    passthru.updateScript = ./update.py;
+    passthru = {
+      updateScript = ./update.py;
+      chromiumDeps = {
+        gn = gnChromium;
+      };
+    };
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.
