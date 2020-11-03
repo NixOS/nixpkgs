@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
 
   buildInputs = [ glib ];
 
-  pythonPath = with python3Packages; [ dbus-python pygobject3 ];
+  requiredPythonModules = with python3Packages; [ dbus-python pygobject3 ];
 
   strictDeps = false;
 

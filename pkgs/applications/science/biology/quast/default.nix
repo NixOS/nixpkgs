@@ -14,11 +14,11 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "13ml8qywbb4cc7wf2x7z5mz1rjqg51ab8wkizwcg4f6c40zgif6d";
   };
 
-  pythonPath = with pythonPackages; [ simplejson joblib setuptools matplotlib ];
+  requiredPythonModules = with pythonPackages; [ simplejson joblib setuptools matplotlib ];
 
   nativeBuildInputs = [ coreutils ];
 
-  buildInputs = [ zlib ] ++ pythonPath;
+  buildInputs = [ zlib ] ++ requiredPythonModules;
 
   dontConfigure = true;
 

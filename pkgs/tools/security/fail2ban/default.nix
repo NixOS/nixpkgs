@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication {
     sha256 = "0kqvkxpb72y3kgmxf6g36w67499c6gcd2a9yyblagwx12y05f1sh";
   };
 
-  pythonPath = with python3.pkgs;
+  requiredPythonModules = with python3.pkgs;
     stdenv.lib.optionals stdenv.isLinux [
       systemd
     ];

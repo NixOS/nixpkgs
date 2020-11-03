@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   requiredPythonModules = with python3Packages; [
     attrs ConfigArgParse ffmpeg_3 future lxml requests
   ];
-  pythonPath = [ rtmpdump php wget ];
+  requiredPythonModules = [ rtmpdump php wget ];
 
   doCheck = false; # tests require network access
   checkInputs = with python3Packages; [ ffmpeg_3 pytest pytestrunner ];

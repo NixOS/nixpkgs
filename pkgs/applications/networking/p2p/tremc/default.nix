@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     wrapPython
   ];
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     ipy
     pyperclip
   ] ++

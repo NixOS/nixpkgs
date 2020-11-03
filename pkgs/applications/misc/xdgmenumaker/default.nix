@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     glib
   ];
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyxdg
     pygobject3
   ];

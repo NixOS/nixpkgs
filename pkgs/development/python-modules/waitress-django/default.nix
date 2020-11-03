@@ -5,7 +5,7 @@ buildPythonPackage {
   version = "0.0.0";
 
   src = ./.;
-  pythonPath = [ django waitress ];
+  requiredPythonModules = [ django waitress ];
   doCheck = false;
   meta.description = "A waitress WSGI server serving django";
 }

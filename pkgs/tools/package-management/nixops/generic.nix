@@ -10,7 +10,7 @@ python2Packages.buildPythonApplication {
 
   buildInputs = [ libxslt ];
 
-  pythonPath = with python2Packages;
+  requiredPythonModules = with python2Packages;
     [ prettytable
       boto
       boto3

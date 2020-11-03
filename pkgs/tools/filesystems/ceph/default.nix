@@ -155,7 +155,7 @@ in rec {
       optFcgi optExpat optCurl optFuse optLibedit
     ];
 
-    pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
+    requiredPythonModules = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
 
     preConfigure =''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
