@@ -1,10 +1,18 @@
-{
-  mkDerivation, lib,
-  fetchurl,
-  extra-cmake-modules,
-  qtbase, boost,
-  akonadi-calendar, akonadi-notes, akonadi-search, kidentitymanagement, kontactinterface, kldap,
-  krunner, kwallet, kcalendarcore
+{ mkDerivation
+, lib
+, fetchurl
+, extra-cmake-modules
+, qtbase
+, boost
+, akonadi-calendar
+, akonadi-notes
+, akonadi-search
+, kidentitymanagement
+, kontactinterface
+, kldap
+, krunner
+, kwallet
+, kcalendarcore
 }:
 
 mkDerivation rec {
@@ -21,17 +29,25 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase boost
-    akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap
-    krunner kwallet kcalendarcore
+    qtbase
+    boost
+    akonadi-calendar
+    akonadi-notes
+    akonadi-search
+    kidentitymanagement
+    kontactinterface
+    kldap
+    krunner
+    kwallet
+    kcalendarcore
   ];
 
   meta = with lib; {
-    broken = true;
     description = "A powerful yet simple application to manage your day to day actions, getting your mind like water";
     homepage = "https://zanshin.kde.org/";
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    broken = true;
   };
 }

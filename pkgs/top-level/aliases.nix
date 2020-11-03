@@ -220,6 +220,7 @@ mapAliases ({
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   julia_07 = throw "deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "deprecated in favor of latest Julia version"; # added 2020-09-15
+  kdeconnect = kdeApplications.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
   keepassx-community = keepassxc; # added 2017-11
@@ -734,4 +735,63 @@ mapAliases ({
   /* Cleanup before 21.03 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
+
+  ant-dracula-theme = throw "ant-dracula-theme is now dracula-theme, and theme name is Dracula instead of Ant-Dracula.";
+
+  /* If these are in the scope of all-packages.nix, they cause collisions
+  between mixed versions of qt. See:
+  https://github.com/NixOS/nixpkgs/pull/101369 */
+
+  inherit (kdeFrameworks) breeze-icons oxygen-icons5;
+  inherit (kdeApplications)
+    akonadi akregator ark
+    bomber bovo
+    dolphin dragon
+    elisa
+    ffmpegthumbs filelight
+    granatier gwenview
+    k3b
+    kaddressbook kalzium kapptemplate kapman kate katomic
+    kblackbox kblocks kbounce
+    kcachegrind kcalc kcharselect kcolorchooser
+    kdenlive kdf kdialog kdiamond
+    keditbookmarks
+    kfind kfloppy
+    kget kgpg
+    khelpcenter
+    kig kigo killbots kitinerary
+    kleopatra klettres klines
+    kmag kmail kmines kmix kmplot
+    knavalbattle knetwalk knights
+    kollision kolourpaint kompare konsole kontact korganizer
+    kpkpass
+    krdc kreversi krfb
+    kshisen ksquares ksystemlog
+    kteatime ktimer ktouch kturtle
+    kwalletmanager kwave
+    marble minuet
+    okular
+    picmi
+    spectacle
+    yakuake
+  ;
+  inherit (plasma5)
+    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover
+    kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
+    kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
+    kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-browser-integration
+    plasma-desktop plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
+    plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
+    systemsettings user-manager xdg-desktop-portal-kde
+  ;
+  inherit (plasma5.thirdParty)
+    plasma-applet-caffeine-plus
+    kwin-dynamic-workspaces
+    kwin-tiling
+    krohnkite
+  ;
+  inherit (libsForQt5)
+    sddm
+  ;
+
 })
