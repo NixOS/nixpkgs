@@ -506,9 +506,9 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/local",
     "repo": "terraform-provider-local",
-    "rev": "v1.4.0",
-    "sha256": "1k1kbdn99ypn1pi6vqbs1l9a8vvf4vs32wl8waa16i26514sz1wk",
-    "version": "1.4.0"
+    "rev": "v2.0.0",
+    "sha256": "0c1mk63lh3qmj8pl80lyvvsgyg4gg7673abr8cfxrj45635h74z5",
+    "version": "2.0.0"
   },
   "logentries": {
     "owner": "terraform-providers",
