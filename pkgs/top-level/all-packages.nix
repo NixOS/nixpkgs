@@ -15236,6 +15236,8 @@ in
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    adwaita-qt = callPackage ../data/themes/adwaita-qt { };
+
     alkimia = callPackage ../development/libraries/alkimia { };
 
     appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
@@ -18935,8 +18937,6 @@ in
   adapta-kde-theme = callPackage ../data/themes/adapta-kde { };
 
   adementary-theme = callPackage ../data/themes/adementary { };
-
-  adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
 
   agave = callPackage ../data/fonts/agave { };
 
