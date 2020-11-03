@@ -1,34 +1,38 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, enum34
-, google_api_core
-, google_cloud_storage
-, pandas
-, pytest
-, mock
-}:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytestCheckHook, libcst
+, google_api_core, google_cloud_storage, google_cloud_testutils, pandas
+, proto-plus, pytest-asyncio, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f08abe78d37fb94a3748aa43e66dae2bad52f991cc7740501a341bc6f6387fd5";
+    sha256 = "16hr1i2771z4yh19xg6kk037h9cv5j64q5bxb9nmkvj12hdwbwgv";
   };
 
-  checkInputs = [ pandas pytest mock google_cloud_storage ];
-  propagatedBuildInputs = [ enum34 google_api_core ];
+  disabled = pythonOlder "3.6";
+
+  checkInputs = [
+    google_cloud_storage
+    google_cloud_testutils
+    mock
+    pandas
+    pytest-asyncio
+    pytestCheckHook
+  ];
+  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
 
   # ignore tests which need credentials
-  checkPhase = ''
-    pytest tests/unit -k 'not upload and not prediction_client_client_info'
+  disabledTests = [ "test_prediction_client_client_info" ];
+  preCheck = ''
+    rm -r google
+    rm tests/system/gapic/v1beta1/test_system_tables_client_v1.py
   '';
 
   meta = with stdenv.lib; {
     description = "Cloud AutoML API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-automl";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };
