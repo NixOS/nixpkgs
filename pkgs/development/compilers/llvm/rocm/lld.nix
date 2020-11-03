@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput include "$dev"
     moveToOutput lib "$dev"
+
+    # Fix lld binary path for CMake.
+    substituteInPlace "$dev/lib/cmake/lld/LLDTargets-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/bin/lld" "$out/bin/lld"
   '';
 
   meta = with stdenv.lib; {
