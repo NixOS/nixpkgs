@@ -3887,8 +3887,6 @@ in
 
   flips = callPackage ../tools/compression/flips { };
 
-  flvtool2 = callPackage ../tools/video/flvtool2 { };
-
   fmbt = callPackage ../development/tools/fmbt {
     python = python2;
   };
