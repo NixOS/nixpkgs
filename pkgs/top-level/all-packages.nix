@@ -14643,6 +14643,8 @@ in
     withGUI = false;
   };
 
+  mlc = callPackage ../tools/system/mlc { };
+
   mlt = callPackage ../development/libraries/mlt { };
 
   mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
