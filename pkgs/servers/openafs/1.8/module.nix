@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
-    broken = versionOlder kernel.version "3.18";
+    broken = with kernel; kernelOlder "3.18" || kernelAtLeast "5.8" || isHardened;
   };
 
 }

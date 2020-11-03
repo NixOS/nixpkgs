@@ -9,6 +9,7 @@ mkDerivation {
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
+    broken = lib.versionOlder qtbase.version "5.13";
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcodecs ki18n qtbase ];

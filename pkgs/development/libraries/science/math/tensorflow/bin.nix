@@ -10,7 +10,7 @@ let
 
   tfType = if cudaSupport then "gpu" else "cpu";
 
-  system = 
+  system =
     if      stdenv.isLinux  then "linux"
     else if stdenv.isDarwin then "darwin"
     else unavailable;

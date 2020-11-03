@@ -1,10 +1,12 @@
-{ buildPackages, pkgs, newScope }:
+{ buildPackages, pkgs, newScope, stdenv }:
 
 let
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
     "ghc822Binary"
     "ghc865Binary"
+    "ghc8102Binary"
+    "ghc8102BinaryMinimal"
     "ghcjs"
     "ghcjs86"
     "integer-simple"
@@ -49,6 +51,10 @@ in {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
+    ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_9;
+    };
+
     ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -68,7 +74,11 @@ in {
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
-      bootPkgs = packages.ghc865Binary;
+      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+      bootPkgs = if stdenv.isAarch64 then
+          packages.ghc8102Binary
+        else
+          packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
@@ -80,7 +90,11 @@ in {
       llvmPackages = pkgs.llvmPackages_9;
     };
     ghc8102 = callPackage ../development/compilers/ghc/8.10.2.nix {
-      bootPkgs = packages.ghc865Binary;
+      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+      bootPkgs = if stdenv.isAarch64 then
+          packages.ghc8102Binary
+        else
+          packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
@@ -137,6 +151,12 @@ in {
       buildHaskellPackages = bh.packages.ghc865Binary;
       ghc = bh.compiler.ghc865Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc8102Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8102Binary;
+      ghc = bh.compiler.ghc8102Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc865 = callPackage ../development/haskell-modules {

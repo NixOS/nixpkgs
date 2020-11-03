@@ -23,6 +23,7 @@ buildPythonPackage rec {
     homepage = "https://webpy.org/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ layus ];
+    broken = true;
   };
 
 }

@@ -227,6 +227,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "A retargetable machine-code decompiler based on LLVM";
     homepage = "https://retdec.com";
     license = licenses.mit;

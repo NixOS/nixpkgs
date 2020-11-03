@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchFromGitHub, isPy38
+{ buildPythonPackage, fetchFromGitHub, isPy38, isPy3k
 , flask
 , gevent
 , mock
@@ -22,6 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ msgpack requests flask gevent pyzmq ];
+  doCheck = isPy3k;
   checkInputs = [ mock unittest2 ];
   # remove file which attempts to do GET request
   preCheck = ''

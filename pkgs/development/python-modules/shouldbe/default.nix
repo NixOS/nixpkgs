@@ -18,6 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ forbiddenfruit ];
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Python Assertion Helpers inspired by Shouldly";
     homepage =  "https://pypi.python.org/pypi/shouldbe/";
     license = licenses.mit;

@@ -3,6 +3,7 @@
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
+, libpulseaudio, pcsclite
 
 , homepage, version, prefix, hash
 
@@ -97,10 +98,12 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libXtst
     zlib
-  ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs;
+  ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs
+    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio;
 
   runtimeDependencies = [
     glib
+    pcsclite
 
     xorg.libX11
     xorg.libXScrnSaver
@@ -146,8 +149,8 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
 
     # Run upstream installer in the store-path.
-    sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./linuxx64/hinst
-    ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
+    sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
+    ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
 
     if [ -f "$ICAInstDir/util/setlog" ]; then
       chmod +x "$ICAInstDir/util/setlog"
@@ -169,8 +172,8 @@ stdenv.mkDerivation rec {
 
     # See https://developer-docs.citrix.com/projects/workspace-app-for-linux-oem-guide/en/latest/reference-information/#library-files
     # Those files are fallbacks to support older libwekit.so and libjpeg.so
-    rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so
-    rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so
+    rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
+    rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
 
     # We support only Gstreamer 1.0
     rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so}

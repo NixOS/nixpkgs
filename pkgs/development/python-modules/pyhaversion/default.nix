@@ -5,6 +5,7 @@
 # propagatedBuildInputs
 , aiohttp
 , async-timeout
+, semantic-version
 # buildInputs
 , pytestrunner
 # checkInputs
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     async-timeout
+    semantic-version
   ];
 
   buildInputs = [

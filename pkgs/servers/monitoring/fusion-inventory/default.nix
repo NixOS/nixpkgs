@@ -89,5 +89,6 @@ perlPackages.buildPerlPackage rec {
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.phile314 ];
+    broken = true;
   };
 }

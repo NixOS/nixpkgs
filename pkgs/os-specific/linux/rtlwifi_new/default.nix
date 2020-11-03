@@ -31,6 +31,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = true;
     description = "The newest Realtek rtlwifi codes";
     inherit (src.meta) homepage;
     license = stdenv.lib.licenses.gpl2;

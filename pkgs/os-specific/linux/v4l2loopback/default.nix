@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.domenkozar ];
     platforms = platforms.linux;
+    broken = stdenv.lib.versionOlder kernel.version "4.14";
   };
 }

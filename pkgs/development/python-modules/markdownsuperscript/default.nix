@@ -23,6 +23,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytestrunner pytestcov coverage ];
 
   meta = {
+    broken = true;
     description = "An extension to the Python Markdown package enabling superscript text";
     homepage = "https://github.com/jambonrose/markdown_superscript_extension";
     license = stdenv.lib.licenses.bsd2;

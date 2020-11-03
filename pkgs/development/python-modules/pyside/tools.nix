@@ -19,6 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyside pysideShiboken ];
 
   meta = with lib; {
+    broken = true;
     description = "Development tools (pyside-uic/rcc/lupdate) for PySide, the LGPL-licensed Python bindings for the Qt framework";
     license = licenses.gpl2;
     homepage = "https://wiki.qt.io/PySide";

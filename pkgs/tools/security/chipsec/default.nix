@@ -38,5 +38,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/chipsec/chipsec";
     maintainers = with maintainers; [ johnazoidberg ];
     platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
+    broken = if kernel == null then false else kernel.kernelAtLeast "5.8";
   };
 }

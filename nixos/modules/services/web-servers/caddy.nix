@@ -26,6 +26,10 @@ let
     ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${adaptedConfig} ${tlsJSON} > $out
   '';
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "caddy" "agree" ] "this option is no longer necessary for Caddy 2")
+  ];
+
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
 
@@ -66,12 +70,6 @@ in {
       default = "";
       type = types.str;
       description = "Email address (for Let's Encrypt certificate)";
-    };
-
-    agree = mkOption {
-      default = false;
-      type = types.bool;
-      description = "Agree to Let's Encrypt Subscriber Agreement";
     };
 
     dataDir = mkOption {

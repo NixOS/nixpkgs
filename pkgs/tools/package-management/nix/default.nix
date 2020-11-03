@@ -12,8 +12,9 @@ common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
   , bash, coreutils, gzip, gnutar
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
+  , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive
+  , lowdown, mdbook
   # Used by tests
   , gmock
   , busybox-sandbox-shell
@@ -33,7 +34,7 @@ common =
       version = lib.getVersion name;
 
       is24 = lib.versionAtLeast version "2.4pre";
-      isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
+      isExactly24 = lib.versionAtLeast version "2.4" && lib.versionOlder version "2.4";
 
       VERSION_SUFFIX = suffix;
 
@@ -41,8 +42,13 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
-                                docbook5 docbook_xsl_ns jq ];
+        ++ lib.optionals is24
+          [ autoreconfHook
+            autoconf-archive
+            bison flex
+            lowdown mdbook
+            jq
+           ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
@@ -88,9 +94,9 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
+        # For Nix 2.4, patch around an issue where the Nix configure step pulls in the
         # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly23) ''
+        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly24) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
@@ -163,7 +169,7 @@ common =
           # This is not cross-compile safe, don't have time to fix right now
           # but noting for future travellers.
           nativeBuildInputs =
-            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive ];
+            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive nlohmann_json ];
 
           configureFlags =
             [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -195,14 +201,14 @@ in rec {
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-3.0${suffix}";
-    suffix = "pre20200829_f156513";
+    name = "nix-2.4${suffix}";
+    suffix = "pre20201102_550e11f";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "f15651303f8596bf34c67fc8d536b1e9e7843a87";
-      hash = "sha256-HqM3Z4DLdMrf+0PPZL9ysctGg+K+i3S/IHA1GsJj0Ro=";
+      rev = "550e11f077ae508abde5a33998a9d4029880e7b2";
+      sha256 = "186grfxsfqg7r92wgwbma66xc7p3iywn43ff7s59m4g6bvb0qgcl";
     };
 
     inherit storeDir stateDir confDir boehmgc;

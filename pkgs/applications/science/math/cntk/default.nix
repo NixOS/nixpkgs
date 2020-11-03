@@ -93,9 +93,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = true;
     # Newer cub is included with cudatoolkit now and it breaks the build.
     # https://github.com/Microsoft/CNTK/issues/3191
-    broken = cudaSupport;
     homepage = "https://github.com/Microsoft/CNTK";
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;

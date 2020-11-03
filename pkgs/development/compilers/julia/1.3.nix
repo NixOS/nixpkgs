@@ -150,11 +150,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    broken = true;
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.isi686;
   };
 }

@@ -43,6 +43,17 @@ let
       x86hash   = "1b4gdmnnpa61ydiv2fnmap8cnfhskrq6swcs6i1nqrp5zvvkqrv4";
       x64suffix = "15";
       x86suffix = "15";
+      homepage  = "https://www.citrix.com/de-de/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-2009.html";
+    };
+
+    "20.10.0" = {
+      major     = "20";
+      minor     = "10";
+      patch     = "0";
+      x64hash   = "13g7r92mhwqwqkm6a4k4yn232ighkmxifs7j8wdi1yva0dvklqdf";
+      x86hash   = "04cr2da25v8x098ccyjwa47d4krk3jpldqkyf4kk2j3hwzbqh9yx";
+      x64suffix = "6";
+      x86suffix = "6";
       homepage  = "https://www.citrix.com/de-de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };
   };
@@ -52,7 +63,7 @@ let
   #
   # The lifespans of Citrix products can be found here:
   # https://www.citrix.com/support/product-lifecycle/milestones/receiver.html
-  unsupportedVersions = [ "19.6.0" "19.8.0" "19.10.0" "19.12.0" ];
+  unsupportedVersions = [ ];
 in {
   inherit supportedVersions unsupportedVersions;
 }

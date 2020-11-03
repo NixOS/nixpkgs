@@ -1,9 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , pytest, heapdict }:
 
 buildPythonPackage rec {
   pname = "zict";
   version = "2.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

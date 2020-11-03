@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , Babel, requests, requests_oauthlib, six, click, markdown, pyyaml
-, pytestrunner, coverage, flake8, mock, pytest, pytestcov, tox
+, pytestrunner, coverage, flake8, mock, pytest, pytestcov, tox, gntp, sleekxmpp
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestrunner coverage flake8 mock pytest pytestcov tox
+    pytestrunner coverage flake8 mock pytest pytestcov tox gntp sleekxmpp
   ];
 
   meta = with lib; {

@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.jethro ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = kernel.kernelAtLeast "5.8";
   };
 }

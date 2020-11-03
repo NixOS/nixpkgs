@@ -7,6 +7,7 @@ buildPythonPackage rec {
   version = "0.5";
 
   meta = {
+    broken = true;
     description = "Helper class for generate sample data for django apps development";
     homepage = "https://github.com/kaleidos/django-sampledatahelper";
     license = lib.licenses.bsd3;

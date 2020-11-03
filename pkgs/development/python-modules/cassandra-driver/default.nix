@@ -39,6 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "A Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
     license = licenses.asl20;

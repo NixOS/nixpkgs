@@ -8,7 +8,9 @@
 , snappy
 , zlib
 , zstd
+, enableJemalloc ? false, jemalloc
 , enableLite ? false
+, enableShared ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ bzip2 lz4 snappy zlib zstd ];
+  buildInputs = [ bzip2 lz4 snappy zlib zstd ] ++ stdenv.lib.optional enableJemalloc jemalloc;
 
   patches = [
     # Without this change private dependencies are exported.
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DPORTABLE=1"
-    "-DWITH_JEMALLOC=0"
+    "-DWITH_JEMALLOC=${if enableJemalloc then "1" else "0"}"
     "-DWITH_JNI=0"
     "-DWITH_BENCHMARK_TOOLS=0"
     "-DWITH_TESTS=1"
@@ -58,7 +60,7 @@ stdenv.mkDerivation rec {
         "-DFORCE_SSE42=1")
     (stdenv.lib.optional enableLite "-DROCKSDB_LITE=1")
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
-  ];
+  ] ++ stdenv.lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = stdenv.lib.optional stdenv.hostPlatform.isWindows "format";

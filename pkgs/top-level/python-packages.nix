@@ -324,7 +324,8 @@ in {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
-  appleseed = disabledIf isPy3k (toPythonModule (pkgs.appleseed.override { inherit (self) python; }));
+  # currently fails in all python versions
+  appleseed = disabledIf true (toPythonModule (pkgs.appleseed.override { inherit (self) python; }));
 
   application = callPackage ../development/python-modules/application { };
 
@@ -1972,6 +1973,8 @@ in {
 
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 { };
 
+  fastprogress = callPackage ../development/python-modules/fastprogress { };
+
   fastrlock = callPackage ../development/python-modules/fastrlock { };
 
   fasttext = callPackage ../development/python-modules/fasttext { };
@@ -2358,6 +2361,8 @@ in {
   gmpy = callPackage ../development/python-modules/gmpy { };
 
   gmusicapi = callPackage ../development/python-modules/gmusicapi { };
+
+  gntp = callPackage ../development/python-modules/gntp { };
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 

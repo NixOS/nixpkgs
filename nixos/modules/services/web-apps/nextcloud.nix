@@ -557,9 +557,7 @@ in {
           };
           "/" = {
             priority = 900;
-            extraConfig = if major < 20
-              then "rewrite ^ /index.php;"
-              else "try_files $uri $uri/ /index.php$request_uri;";
+            extraConfig = "rewrite ^ /index.php;";
           };
           "~ ^/store-apps" = {
             priority = 201;
@@ -583,7 +581,7 @@ in {
           "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)".extraConfig = ''
             return 404;
           '';
-          ${if major < 20 then "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" else "~ \\.php(?:$|/)"} = {
+          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
             priority = 500;
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi.conf;

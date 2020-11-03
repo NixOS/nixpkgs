@@ -23,6 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = true;
     homepage = "https://github.com/Labelbox/Labelbox";
     description = "Platform API for LabelBox";
     license = licenses.asl20;

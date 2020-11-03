@@ -30,6 +30,7 @@ with python2.pkgs; buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "A commenting server similar to Disqus";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;

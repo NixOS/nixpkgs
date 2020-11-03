@@ -18,4 +18,10 @@ mkDerivation {
     qtquickcontrols2
   ];
   propagatedBuildInputs = [ kpackage kservice qtbase ];
+  # align QtQuick usage with qt5.12, otherwise it will be unable to find certain components
+  # see https://github.com/NixOS/nixpkgs/issues/98536
+  postPatch = ''
+    substituteInPlace src/declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml \
+      --replace "import QtQuick 2.14" "import QtQuick 2.12"
+  '';
 }

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Generate master and ephemeral rippled validator keys";
     homepage = "https://github.com/ripple/validator-keys-tool";
     maintainers = with maintainers; [ offline ];

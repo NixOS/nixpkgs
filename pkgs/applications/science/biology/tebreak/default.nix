@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Find and characterise transposable element insertions";
     homepage = "https://github.com/adamewing/tebreak";
     license = licenses.mit;

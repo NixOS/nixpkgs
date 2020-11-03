@@ -41,6 +41,7 @@ stdenv.mkDerivation {
   buildInputs = [ perl libelf ];
 
   meta = {
+    broken = true;
     description = "Ndis driver wrapper for the Linux kernel";
     homepage = "https://sourceforge.net/projects/ndiswrapper";
     license = "GPL";

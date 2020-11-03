@@ -14,6 +14,9 @@
 , pytest
 , nose
 , parameterized
+, fastprogress
+, typing-extensions
+, libredirect
 }:
 
 buildPythonPackage rec {
@@ -41,6 +44,8 @@ buildPythonPackage rec {
     h5py
     arviz
     packaging
+    fastprogress
+    typing-extensions
   ];
 
   checkInputs = [
@@ -52,11 +57,24 @@ buildPythonPackage rec {
   # The test suite is computationally intensive and test failures are not
   # indicative for package usability hence tests are disabled by default.
   doCheck = false;
+  pythonImportsCheck = [ "pymc3" ];
 
   # For some reason tests are run as a part of the *install* phase if enabled.
   # Theano writes compiled code to ~/.theano hence we set $HOME.
-  preInstall = "export HOME=$(mktemp -d)";
-  postInstall = "rm -rf $HOME";
+  # This branch is missing #97597 (and its predecessor #93560), meaning only
+  # "/tmp" is exempt from NIX_ENFORCE_PURITY's objections when theano is
+  # imported from within a nix build environment. Therefore use libredirect
+  # to convince the wrapper we are actually accessing "/tmp".
+  preInstall = ''
+    export HOME=$(mktemp -d)
+
+    export NIX_REDIRECTS=/tmp=$TMPDIR
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
+    export TEMP=/tmp
+    export TEMPDIR=/tmp
+    export TMP=/tmp
+    export TMPDIR=/tmp
+  '';
 
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";

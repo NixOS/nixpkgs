@@ -41,6 +41,7 @@ def test_umap_transform_on_iris()"
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;

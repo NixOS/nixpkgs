@@ -164,5 +164,6 @@ stdenv.mkDerivation rec {
     # I was making this package blindly and requesting testing from the real user,
     # so I can't even test it by myself and won't provide future updates.
     maintainers = with maintainers; [ abbradar ];
+    broken = with kernel; kernelOlder "4.19";
   };
 }

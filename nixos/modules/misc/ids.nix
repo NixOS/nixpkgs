@@ -468,7 +468,7 @@ in
       #minecraft = 114; # unused
       vault = 115;
       #ripped = 116; # unused
-      #murmur = 117; # unused
+      murmur = 117;
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;

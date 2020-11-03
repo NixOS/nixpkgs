@@ -135,6 +135,7 @@ stdenv.mkDerivation rec {
     hydraPlatforms = [];
     # Copied from the nvidia default.nix to prevent a store collision.
     priority = 4;
+    broken = builtins.match "4\.9\..*" kernel.version != [ ]; # every version but 4.9.x
   };
 
 }

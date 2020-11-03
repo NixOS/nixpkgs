@@ -13,6 +13,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ hypothesis ];
 
   meta = with stdenv.lib; {
+    broken = true;
     homepage = "https://github.com/d9pouces/RubyMarshal/";
     description = "Read and write Ruby-marshalled data";
     license = licenses.wtfpl;

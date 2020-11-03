@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    broken = true;
     homepage = "https://wiki.gnome.org/Apps/Iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
     maintainers = teams.gnome.members;

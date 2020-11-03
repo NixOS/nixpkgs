@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
+    broken = true;
     description = "Tools for MTD filesystems";
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";

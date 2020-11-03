@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
+{ stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
@@ -49,8 +49,8 @@ let
     };
 
     meta = with stdenv.lib; {
-      inherit (a) description license;
       broken = a.broken or false;
+      inherit (a) description license;
       homepage = "https://www.libretro.com/";
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.unix;
@@ -630,8 +630,16 @@ in with stdenv.lib.licenses;
       rev = "02987af9b81a9c3294af8fb9d5a34f9826a2cf4d";
       sha256 = "0gl7irmn5d8lk7kf484vgw6kb325fq4ghwsni3il4nm5n2a8yglh";
     };
+    patches = [
+      (fetchpatch {
+        name = "fix_mame_build_on_make-4.3.patch";
+        url = "https://github.com/libretro/mame2016-libretro/commit/5874fae3d124f5e7c8a91634f5473a8eac902e47.patch";
+        sha256 = "061f1lcm72glksf475ikl8w10pnbgqa7049ylw06nikis2qdjlfn";
+      })
+    ];
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/102078#issuecomment-719535596
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs = [ alsaLib ];
     postPatch = ''

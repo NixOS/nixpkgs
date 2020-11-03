@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "tifffile";
   version = "2020.8.25";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

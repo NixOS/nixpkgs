@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";
     license = licenses.mit;
     homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
+    broken = !isPy3k;
   };
 }

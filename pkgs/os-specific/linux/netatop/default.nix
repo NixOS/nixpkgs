@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [viric];
+    broken = with kernel; kernelAtLeast "5.8";
   };
 }

@@ -23,6 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "iterm2" ];
 
   meta = with lib; {
+    broken = true;
     description = "Python interface to iTerm2's scripting API";
     homepage = "http://github.com/gnachman/iTerm2";
     license = licenses.gpl2;

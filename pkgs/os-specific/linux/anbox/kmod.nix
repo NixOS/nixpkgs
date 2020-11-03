@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/anbox/anbox-modules";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    broken = (versionOlder kernel.version "4.4") || (kernel.features.grsecurity);
+    broken = (versionOlder kernel.version "4.4") || (kernel.features.grsecurity or false) || versionAtLeast kernel.version "5.8";
     maintainers = with maintainers; [ edwtjo ];
   };
 

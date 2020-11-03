@@ -22,6 +22,7 @@ build-idris-package  {
   '';
 
   meta = {
+    broken = true;
     description = "Proof that Idris is pacman complete";
     homepage = "https://github.com/jdublu10/pacman";
     maintainers = [ lib.maintainers.brainrape ];

@@ -14,6 +14,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Simplify Exif manipulations with Python";
     homepage = "https://github.com/hMatoba/Piexif";
     license = licenses.mit;

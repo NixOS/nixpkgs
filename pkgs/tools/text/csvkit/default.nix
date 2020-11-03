@@ -27,7 +27,9 @@ python3.pkgs.buildPythonApplication rec {
         inherit (old) pname;
         inherit version;
         sha256 = "1d6rbahmdix7xi7ma2v86fpk5yi32q5dba5vama35w5mmn2pnyw7";
-      };}))
+      };
+      meta = old.meta // { broken = false; };
+    }))
     six
   ];
 

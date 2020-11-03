@@ -10,6 +10,7 @@ mkDerivation {
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
+    broken = lib.versionOlder (lib.getVersion qttools.name) "5.13";
   };
   patches = [
     ./0001-akonadi-paths.patch

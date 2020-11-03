@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   patches = [ ./lcms-1.17.patch  ./keep-environment.patch ];
 
   meta = {
+    broken = true;
     description = "Little CMS ICC profile construction set";
     homepage = "https://sourceforge.net/projects/lprof";
     license = stdenv.lib.licenses.gpl2;

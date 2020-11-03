@@ -7,6 +7,7 @@ in
 buildLinux (args // {
   modDirVersion = "${version}-zen1";
   inherit version;
+  isZen = true;
 
   src = fetchFromGitHub {
     owner = "zen-kernel";
