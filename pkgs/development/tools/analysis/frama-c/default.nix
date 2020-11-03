@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, makeWrapper, writeText
 , autoconf, ncurses, graphviz, doxygen
-, ocamlPackages, ltl2ba, coq, why3,
+, ocamlPackages, ltl2ba, coq, why3
+, gdk-pixbuf, wrapGAppsHook
 }:
 
 let
@@ -33,20 +34,18 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
 
-  nativeBuildInputs = [ autoconf makeWrapper ];
+  nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib ltl2ba ocamlgraph yojson menhir camlzip
     lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
+    gdk-pixbuf
   ];
 
   enableParallelBuilding = true;
 
-  fixupPhase = ''
-    for p in $out/bin/frama-c{,-gui};
-    do
-      wrapProgram $p --prefix OCAMLPATH ':' ${ocamlpath}
-    done
+  preFixup = ''
+     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
   '';
 
   # Allow loading of external Frama-C plugins
