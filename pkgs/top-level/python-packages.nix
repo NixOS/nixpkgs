@@ -6654,8 +6654,6 @@ in {
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
-  smugpy = callPackage ../development/python-modules/smugpy { };
-
   snack = toPythonModule (pkgs.newt.override { inherit (self) python; });
 
   snakebite = callPackage ../development/python-modules/snakebite { };
