@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "iniconfig";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s9z9n4603fdpv2vzh6ddzfgsjmb09n6qalkjl2xwrss6n4jzyg5";
+    sha256 = "bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32";
   };
 
   doCheck = false; # avoid circular import with pytest
