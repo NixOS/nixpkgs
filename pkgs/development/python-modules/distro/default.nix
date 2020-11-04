@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # tests are very targeted at individual linux distributions
   doCheck = false;
 
-  pythonImportcheck = [ "distro" ];
+  pythonImportsCheck = [ "distro" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/nir0s/distro";
