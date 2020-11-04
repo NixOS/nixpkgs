@@ -212,18 +212,11 @@ stdenv.mkDerivation rec {
     enableShared = true;
   };
 
-  meta = let
-    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
-  in {
+  meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     license = stdenv.lib.licenses.bsd3;
-
-    # The minimal variation can not be distributed because it removes the
-    # documentation, including licensing information that is required for
-    # distribution.
-    inherit platforms;
-    hydraPlatforms = stdenv.lib.optionals (!minimal) platforms;
+    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
     maintainers = with stdenv.lib.maintainers; [ lostnet ];
   };
 }
