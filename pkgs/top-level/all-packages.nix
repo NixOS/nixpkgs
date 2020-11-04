@@ -6688,7 +6688,7 @@ in
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
-  qlcplus = libsForQt512.callPackage ../applications/misc/qlcplus { };
+  qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
   qnial = callPackage ../development/interpreters/qnial { };
 
