@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ];
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    cd src
-  '';
+  cmakeDir = "../src";
+
+  # Running the tests is required to build the *.olean files for the core
+  # library.
+  doCheck = true;
+
+  postPatch = "patchShebangs .";
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace $out/bin/leanpkg \
