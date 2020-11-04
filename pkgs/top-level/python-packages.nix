@@ -1347,6 +1347,8 @@ in {
 
   cppy = callPackage ../development/python-modules/cppy { };
 
+  cpyparsing = callPackage ../development/python-modules/cpyparsing { };
+
   cram = callPackage ../development/python-modules/cram { };
 
   crashtest = callPackage ../development/python-modules/crashtest { };
