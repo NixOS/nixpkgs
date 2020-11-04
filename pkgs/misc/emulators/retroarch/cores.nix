@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, Cocoa, CoreAudioKit, ForceFeedback, Foundation, libiconv
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, Cocoa, CoreAudioKit, ForceFeedback, Foundation, MetalKit, libiconv
 , buildPackages }:
 
 let
@@ -555,7 +555,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU libGL portaudio python27 xorg.libX11 ]
       ++ stdenv.lib.optional stdenv.isLinux alsaLib
-      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback Foundation ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback Foundation MetalKit ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
