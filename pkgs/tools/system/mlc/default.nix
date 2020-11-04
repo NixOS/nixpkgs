@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, lib }:
+{ stdenv, fetchurl, patchelf }:
 stdenv.mkDerivation rec {
   pname = "mlc";
   version = "3.9";
@@ -10,25 +10,21 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "Linux";
 
-  nativeBuildInputs = [ patchelf ];
-
-  phases = [ "unpackPhase" "installPhase" "patchPhase" ];
-
   installPhase = ''
-    mkdir -p $out/bin
-    cp mlc $out/bin/mlc
-    chmod +x $out/bin/mlc
+    install -Dm755 mlc $out/bin/mlc
   '';
 
-  patchPhase = ''
+  nativeBuildInputs = [ patchelf ];
+
+  fixupPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/mlc
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://software.intel.com/content/www/us/en/develop/articles/intelr-memory-latency-checker.html";
     description = "Intel Memory Latency Checker";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ basvandijk ];
-    platforms = with lib.platforms; linux;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ basvandijk ];
+    platforms = with platforms; linux;
   };
 }
