@@ -1854,6 +1854,8 @@ in
 
   dapr-cli = callPackage ../development/tools/dapr/cli {};
 
+  dasel = callPackage ../applications/misc/dasel { };
+
   dasher = callPackage ../applications/accessibility/dasher { };
 
   datamash = callPackage ../tools/misc/datamash { };
