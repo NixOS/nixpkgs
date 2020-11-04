@@ -21500,6 +21500,8 @@ in
 
   musikcube = callPackage ../applications/audio/musikcube {};
 
+  pass-secret-service = callPackage ../applications/misc/pass-secret-service { };
+
   pinboard = with python3Packages; toPythonApplication pinboard;
 
   pinboard-notes-backup = haskell.lib.overrideCabal
