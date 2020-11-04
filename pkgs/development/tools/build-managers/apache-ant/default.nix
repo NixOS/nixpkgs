@@ -1,6 +1,6 @@
 { fetchurl, stdenv, coreutils, makeWrapper }:
 
-let version = "1.10.8"; in
+let version = "1.10.9"; in
 
 stdenv.mkDerivation {
   pname = "ant";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha256 = "0zh94csb2hl6ir2ccn18ps506mjgh3mffnrb8wpsmp1x5fcykha5";
+    sha256 = "1ab8ybczvk12501dnj450a3d4v43ca0pjhk33s175hax46s58z47";
   };
 
   contrib = fetchurl {
