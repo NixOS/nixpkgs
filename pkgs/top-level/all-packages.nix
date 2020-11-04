@@ -1061,6 +1061,8 @@ in
 
   cloud-custodian = python3Packages.callPackage ../tools/networking/cloud-custodian  { };
 
+  coconut = with python3Packages; toPythonApplication coconut;
+
   cod = callPackage ../tools/misc/cod { };
 
   codespell = with python3Packages; toPythonApplication codespell;
