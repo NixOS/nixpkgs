@@ -21,6 +21,7 @@
 , pytestCheckHook
 , ddt
 , fixtures
+, pytest-timeout
 , qiskit-terra
 }:
 
@@ -81,7 +82,12 @@ buildPythonPackage rec {
     pytestCheckHook
     ddt
     fixtures
+    pytest-timeout
     qiskit-terra
+  ];
+  pytestFlagsArray = [
+    "--timeout=30"
+    "--durations=10"
   ];
 
   preCheck = ''

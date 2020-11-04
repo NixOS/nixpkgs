@@ -28,6 +28,7 @@
   # Check Inputs
 , ddt
 , pytestCheckHook
+, pytest-timeout
 , qiskit-aer
 }:
 
@@ -100,6 +101,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     ddt
+    pytest-timeout
     qiskit-aer
   ];
   pythonImportsCheck = [
@@ -110,7 +112,10 @@ buildPythonPackage rec {
     "qiskit.ml"
     "qiskit.optimization"
   ];
-  pytestFlagsArray = lib.optionals (!withPyscf) [
+  pytestFlagsArray = [
+    "--timeout=30"
+    "--durations=10"
+  ] ++ lib.optionals (!withPyscf) [
     "--ignore=test/chemistry/test_qeom_ee.py"
     "--ignore=test/chemistry/test_qeom_vqe.py"
     "--ignore=test/chemistry/test_vqe_uccsd_adapt.py"
