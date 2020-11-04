@@ -7,8 +7,6 @@
   # regular builds and GHC bootstrapping.
   # This is "useful" for staying within hydra's output limits for at least the
   # aarch64-linux architecture.
-  # Examples of unnecessary files are the bundled documentation and files that
-  # are only needed for profiling builds.
 , minimal ? false
 }:
 
@@ -182,11 +180,15 @@ stdenv.mkDerivation rec {
     done
   '' +
   stdenv.lib.optionalString minimal ''
-    # Remove profiling objects
+    # Remove profiling files
     find $out -type f -name '*.p_o' -delete
+    find $out -type f -name '*.p_hi' -delete
+    find $out -type f -name '*_p.a' -delete
     rm $out/lib/ghc-*/bin/ghc-iserv-prof
-    # Remove docs
-    rm -r $out/share/{doc,man}
+    # Hydra will redistribute this derivation, so we have to keep the docs for
+    # legal reasons (retaining the legal notices etc)
+    # As a last resort we could unpack the docs separately and symlink them in.
+    # They're in $out/share/{doc,man}.
   '';
 
   doInstallCheck = true;
