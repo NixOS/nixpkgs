@@ -410,7 +410,11 @@ rec {
         # details on what's going on here; basically this command
         # means that the runAsRootScript will be executed in a nearly
         # completely isolated environment.
-        unshare -imnpuf --mount-proc chroot mnt ${runAsRootScript}
+        #
+        # Ideally we would use --mount-proc=mnt/proc or similar, but this
+        # doesn't work. The workaround is to setup proc after unshare.
+        # See: https://github.com/karelzak/util-linux/issues/648
+        unshare -imnpuf --mount-proc sh -c 'mount --rbind /proc mnt/proc && chroot mnt ${runAsRootScript}'
 
         # Unmount directories and remove them.
         umount -R mnt/dev mnt/sys mnt${storeDir}
