@@ -206,6 +206,12 @@
 /nixos/tests/cri-o.nix                       @NixOS/podman @zowoq
 /nixos/tests/podman.nix                      @NixOS/podman @zowoq
 
+# Docker tools
+/pkgs/build-support/docker
+/nixos/tests/docker-tools-overlay.nix
+/nixos/tests/docker-tools.nix
+/doc/builders/images/dockertools.xml
+
 # Blockchains
 /pkgs/applications/blockchains  @mmahut
 
