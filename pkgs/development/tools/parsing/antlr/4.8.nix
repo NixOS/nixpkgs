@@ -2,12 +2,12 @@
 , fetchFromGitHub, cmake, ninja, pkgconfig, libuuid, darwin }:
 
 let
-  version = "4.7.2";
+  version = "4.8";
   source = fetchFromGitHub {
     owner = "antlr";
     repo = "antlr4";
     rev = version;
-    sha256 = "1pl0zs6c6wx9nmq30s7ccpc3dl72az55i8vfp574fw9sywmvxmlj";
+    sha256 = "1qal3add26qxskm85nk7r758arladn5rcyjinmhlhznmpbbv9j8m";
   };
 
   runtime = {
@@ -41,7 +41,7 @@ let
 
     src = fetchurl {
       url ="https://www.antlr.org/download/antlr-${version}-complete.jar";
-      sha256 = "1d40nfkq3ws8g4ksx4gj6l6m2l9j4b605q6sf68z5vvmg5nkhlk8";
+      sha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
     };
 
     dontUnpack = true;

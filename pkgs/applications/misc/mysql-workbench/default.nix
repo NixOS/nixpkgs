@@ -9,7 +9,7 @@
 , gtkmm3
 , pcre
 , swig
-, antlr4_7
+, antlr4_8
 , sudo
 , mysql
 , libxml2
@@ -80,7 +80,7 @@ in stdenv.mkDerivation rec {
   # have it look for 4.7.2 instead of 4.7.1
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.8-complete.jar"
   '';
 
   nativeBuildInputs = [
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     libX11
-    antlr4_7.runtime.cpp
+    antlr4_8.runtime.cpp
     python2
     mysql
     libxml2
@@ -141,7 +141,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
-    "-DWITH_ANTLR_JAR=${antlr4_7.jarLocation}"
+    "-DWITH_ANTLR_JAR=${antlr4_8.jarLocation}"
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
