@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+{ config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs, lcms2, fetchpatch
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
@@ -9,10 +9,6 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 
 let
-  version = "9.${ver_min}";
-  ver_min = "52";
-  sha512 = "1ksm3v4nw8acc4j817n44l1c65ijk0mr3mp4kryy17jz41bmzzql5d8vr40h59n9dmf8b2wmnbq45bj3an1zrpfagavlf0i9s436jjc";
-
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
 
@@ -37,31 +33,27 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript";
-  inherit version;
+  version = "9.53.3";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${pname}-${version}.tar.xz";
-    inherit sha512;
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
+    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
   };
 
   patches = [
     (fetchpatch {
-      name = "CVE-2020-15900.patch";
-      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/5d499272b95a6b890a1397e11d20937de000d31b.patch";
-      sha256 = "1nnnrn8q33x7nc8227ygc60f3mj4bjzrhj40sxp6dah58rb5x5jz";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
+      sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
     })
     ./urw-font-files.patch
     ./doc-no-ref.diff
-    # rebased version of upstream http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=1b4c3669a20c,
-    # Remove on update to version > 9.52
-    ./0001-Bug-702364-Fix-missing-echogs-dependencies.patch
   ];
 
   outputs = [ "out" "man" "doc" ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs =
     [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
@@ -114,8 +106,6 @@ stdenv.mkDerivation rec {
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
   '';
-
-  passthru = { inherit version; };
 
   meta = {
     homepage = "https://www.ghostscript.com/";
