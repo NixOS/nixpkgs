@@ -1,19 +1,18 @@
 {
-  mkDerivation, fetchurl, lib,
+  mkDerivation, fetchFromGitLab, lib,
   extra-cmake-modules, qttools,
   qtbase, qtsvg,
 }:
 
-let
+mkDerivation rec {
   pname = "kdiagram";
   version = "2.7.0";
-in
-
-mkDerivation {
-  inherit pname version;
-  src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256:1pgvf2q8b59hw0jg5ajmj5nrn4q8cgnifpvdd0fynk2ml6zym8k3";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "graphics";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "NSBNHPr8JzBn3y3ivhL0RjiXjDuPwZsTTOeI22pq3vc=";
   };
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   propagatedBuildInputs = [ qtbase qtsvg ];

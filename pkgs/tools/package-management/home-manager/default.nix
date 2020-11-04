@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
 
   pname = "home-manager";
-  version = "2020-03-17";
+  version = "2020-11-02";
 
   src = fetchFromGitHub {
-    owner = "rycee";
+    owner = "nix-community";
     repo = "home-manager";
-    rev = "5969551a5cc52f9470b5ff5ca01327bf4bda82c1";
-    sha256 = "0f4kz83a1kp3ci8zi5hvp8fp34wi73arpykl4d9vlywdk6w36bnd";
+    rev = "612afee126c664121cb8bc071b999696513df808";
+    sha256 = "0jmdl0yfx9cl1fpq3l8j3iccdyzwqpqnywl91ar358wwcdq0mi1c";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A user environment configurator";
-    homepage = "https://rycee.gitlab.io/home-manager/";
+    homepage = "https://nix-community.github.io/home-manager/";
     platforms = platforms.unix;
     license = licenses.mit;
   };
