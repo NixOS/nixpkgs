@@ -105,6 +105,32 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!withClassicalFunctionCompiler ) [
     "--ignore=test/python/classical_function_compiler/"
   ];
+  disabledTests = [
+    # Flaky tests
+    "test_cx_equivalence"
+    "test_pulse_limits"
+  ]
+  # Disabling slow tests for build constraints
+  ++ [
+    "test_all_examples"
+    "test_controlled_random_unitary"
+    "test_controlled_standard_gates_1"
+    "test_jupyter_jobs_pbars"
+    "test_lookahead_swap_higher_depth_width_is_better"
+    "test_move_measurements"
+    "test_job_monitor"
+    "test_wait_for_final_state"
+    "test_multi_controlled_y_rotation_matrix_basic_mode"
+    "test_two_qubit_weyl_decomposition_abc"
+    "test_isometry"
+    "test_parallel"
+    "test_random_state"
+    "test_random_clifford_valid"
+    "test_to_matrix"
+    "test_block_collection_reduces_1q_gate"
+    "test_multi_controlled_rotation_gate_matrices"
+    "test_block_collection_runs_for_non_cx_bases"
+  ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding
   # cythonized modules and expecting to find some resource files in the test directory.
