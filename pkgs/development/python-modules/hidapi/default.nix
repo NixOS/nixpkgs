@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "hidapi";
-  version = "0.10.0";
+  version = "0.10.0.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2560ad8db212f54cf40ea8d78715adad7df803011cfdce9dabbac0e76acf31ef";
+    sha256 = "27c04d42a7187becf7a8309d4846aa4f235ac8b7dafd758335b109f5cbd3b962";
   };
 
   propagatedBuildInputs =
