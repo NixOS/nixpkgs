@@ -23,6 +23,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "javaproperties==0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
+      --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
       --replace "mock~=4.0" "mock"
 
     # remove namespace hacks
