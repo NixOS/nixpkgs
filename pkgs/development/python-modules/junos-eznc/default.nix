@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "521659fe94da796897abc16773c3d84fa44d3e1f5386c71fbaef44cb80159855";
+    sha256 = "bf036d0af9ee5c5e4f517cb5fc902fe891fa120e18f459805862c53d4a97193a";
   };
 
   checkInputs = [ nose ];
