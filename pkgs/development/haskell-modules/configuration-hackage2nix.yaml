@@ -8377,7 +8377,6 @@ broken-packages:
   - optparse-applicative-simple
   - optparse-enum
   - optparse-helper
-  - orbits
   - orc
   - orchestrate
   - OrchestrateDB
