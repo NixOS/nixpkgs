@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "kde2-decoration";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "repos-holder";
     repo = "kdecoration2-kde2";
     rev = version;
-    sha256 = "1766z9wscybcqvr828xih93b3rab3hb0ghsf818iflhp1xy0js08";
+    sha256 = "1iyvk02sa6vdqxgsjj6mz7c7qmhz8jlblqadxrf14lc4gs7vasnb";
   };
 
   enableParallelBuilding = true;
