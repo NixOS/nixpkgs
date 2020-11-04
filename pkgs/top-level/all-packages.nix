@@ -15335,6 +15335,8 @@ in
       withQt5 = true;
     };
 
+    qtcurve = callPackage ../data/themes/qtcurve {};
+
     qtutilities = callPackage ../development/libraries/qtutilities { };
 
     qtinstaller = callPackage ../development/libraries/qtinstaller { };
@@ -19525,8 +19527,6 @@ in
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
   qogir-theme = callPackage ../data/themes/qogir { };
-
-  qtcurve = libsForQt514.callPackage ../data/themes/qtcurve {};
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
