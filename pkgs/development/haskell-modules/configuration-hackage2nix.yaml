@@ -10987,7 +10987,6 @@ broken-packages:
   - vty-menu
   - vty-ui
   - vty-ui-extras
-  - vulkan-utils
   - waargonaut
   - wacom-daemon
   - waddle
