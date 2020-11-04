@@ -46,8 +46,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = with stdenv.lib; [
     pyobjc-core
     pyobjc-framework-AddressBook pyobjc-framework-AdSupport pyobjc-framework-AppleScriptObjC
-    pyobjc-framework-AppleScriptKit pyobjc-framework-ApplicationServices
-    pyobjc-framework-AutomaticAssessmentConfiguration pyobjc-framework-Automator pyobjc-framework-AVFoundation
+    pyobjc-framework-AppleScriptKit pyobjc-framework-ApplicationServices pyobjc-framework-Automator pyobjc-framework-AVFoundation
     pyobjc-framework-AVKit pyobjc-framework-BusinessChat pyobjc-framework-CalendarStore pyobjc-framework-CFNetwork
     pyobjc-framework-CloudKit pyobjc-framework-Cocoa pyobjc-framework-Collaboration pyobjc-framework-ColorSync
     pyobjc-framework-ContactsUI pyobjc-framework-CoreAudio pyobjc-framework-CoreAudioKit pyobjc-framework-CoreBluetooth
@@ -71,14 +70,15 @@ buildPythonPackage rec {
     pyobjc-framework-SceneKit pyobjc-framework-ScreenSaver pyobjc-framework-ScriptingBridge pyobjc-framework-SearchKit
     pyobjc-framework-Security pyobjc-framework-SecurityFoundation pyobjc-framework-SecurityInterface
     pyobjc-framework-ServiceManagement pyobjc-framework-Social pyobjc-framework-SoundAnalysis pyobjc-framework-SpriteKit
-    pyobjc-framework-StoreKit pyobjc-framework-SyncServices pyobjc-framework-SystemConfiguration pyobjc-framework-VideoSubscriberAccount pyobjc-framework-VideoToolbox pyobjc-framework-WebKit
+    pyobjc-framework-StoreKit pyobjc-framework-SyncServices pyobjc-framework-SystemConfiguration pyobjc-framework-VideoSubscriberAccount
+    pyobjc-framework-VideoToolbox pyobjc-framework-WebKit
   ] ++ optionals (versionOlder "10.13" darwin.apple_sdk.sdk.version )[
     pyobjc-framework-CoreML pyobjc-framework-CoreSpotlight pyobjc-framework-ExternalAccessory pyobjc-framework-Vision
   ] ++ optionals (versionOlder "10.14" darwin.apple_sdk.sdk.version )[
     pyobjc-framework-Network pyobjc-framework-UserNotifications
   ] ++ optionals (versionOlder "10.15" darwin.apple_sdk.sdk.version )[
-    pyobjc-framework-AuthenticationServices pyobjc-framework-OSLog pyobjc-framework-PushKit pyobjc-framework-Speech
-    pyobjc-framework-SystemExtensions
+    pyobjc-framework-AutomaticAssessmentConfiguration pyobjc-framework-AuthenticationServices pyobjc-framework-OSLog
+    pyobjc-framework-PushKit pyobjc-framework-Speech pyobjc-framework-SystemExtensions
   ];
 
   # I suspect that the Python platform check depends on the host and not the Nix Apple SDK
@@ -98,6 +98,7 @@ buildPythonPackage rec {
   '' + optionalString (versionAtLeast "10.15" darwin.apple_sdk.sdk.version ) ''
     substituteInPlace setup.py \
       --replace '("AuthenticationServices", "10.15", None),' "" \
+      --replace '("AutomaticAssessmentConfiguration", "10.15", None),' "" \
       --replace '("OSLog", "10.15", None),' "" \
       --replace '("PushKit", "10.15", None),' "" \
       --replace '("Speech", "10.15", None),' "" \

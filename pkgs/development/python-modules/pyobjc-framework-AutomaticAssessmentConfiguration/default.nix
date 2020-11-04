@@ -5,7 +5,8 @@ buildPythonPackage rec {
   pname = "pyobjc-framework-AutomaticAssessmentConfiguration";
   version = "6.2.2";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6" ||
+    (stdenv.lib.versionOlder "${darwin.apple_sdk.sdk.version}" "10.15") && throw "${pname}: requires apple_sdk.sdk 10.15";
 
   src = fetchPypi {
     inherit pname version;

@@ -5,7 +5,7 @@ buildPythonPackage rec {
   pname = "pyobjc-framework-<%= $framework %>";
   version = "<%= $version %>";
 
-<% if [[ $framework != AuthenticationServices && $framework != CoreSpotlight && $framework != ExternalAccessory && $framework != Network && $framework != OSLog && $framework != PushKit && $framework != Speech && $framework != SystemExtensions && $framework != Vision ]]; then -%>
+<% if [[ $framework != AuthenticationServices && $framework != AutomaticAssessmentConfiguration && $framework != CoreSpotlight && $framework != ExternalAccessory && $framework != Network && $framework != OSLog && $framework != PushKit && $framework != Speech && $framework != SystemExtensions && $framework != Vision ]]; then -%>
   disabled = pythonOlder "3.6";
 <% elif [[ $framework != CoreSpotlight && $framework != ExternalAccessory && $framework != Vision ]]; then -%>
   disabled = pythonOlder "3.6" ||
