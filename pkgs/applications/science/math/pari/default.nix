@@ -12,11 +12,11 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.11.4";
+  version = "2.13.0";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
-    sha256 = "sha256-v8iPxPc1L0hA5uNSxy8DacvqikVAOxg0piafNwmXCxw=";
+    sha256 = "14xs90wrw8mbdx08hxlbhiahp6kgjq6yh27zjw7fvhfjx5nr84f8";
   };
 
   buildInputs = [
