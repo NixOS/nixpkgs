@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  patches = [ ./custom-dirs.patch ];
+
   nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
 
   propagatedBuildInputs =
