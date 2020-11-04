@@ -4855,7 +4855,6 @@ broken-packages:
   - every-bit-counts
   - ewe
   - exact-cover
-  - exact-real
   - exact-real-positional
   - except-exceptions
   - exception-monads-fd
