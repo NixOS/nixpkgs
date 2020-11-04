@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "notify_py";
-  version = "0.2.3";
+  version = "0.2.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i209xsff54hipdk9cg6va60fl33swg126yfgkg3wsgjmi6s07ca";
+    sha256 = "2a19273a476c8b003baa96650d00a81c5981c3a17ada748bc0a73aefad46d977";
   };
 
   postPatch = ''
