@@ -6547,6 +6547,8 @@ in {
 
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
+  shap = callPackage ../development/python-modules/shap { };
+
   shapely = callPackage ../development/python-modules/shapely { };
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
@@ -6627,6 +6629,8 @@ in {
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
   slicedimage = callPackage ../development/python-modules/slicedimage { };
+
+  slicer = callPackage ../development/python-modules/slicer { };
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
