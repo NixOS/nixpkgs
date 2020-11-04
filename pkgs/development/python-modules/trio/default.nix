@@ -5,7 +5,7 @@
 , idna
 , outcome
 , contextvars
-, pytest
+, pytestCheckHook
 , pyopenssl
 , trustme
 , sniffio
@@ -18,23 +18,23 @@
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.15.1";
-  disabled = pythonOlder "3.5";
+  version = "0.17.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3010864ab8d8b2ae44d3bc97b0e8924d8f5170bf32f07c7638a930a129687f33";
+    sha256 = "0zcxirpdvvl54pbfkgw7vz984879xwvdygqfpggnam24is2zjp78";
   };
 
-  checkInputs = [ astor pytest pyopenssl trustme jedi pylint yapf ];
+  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
-  checkPhase = ''
-    HOME=$TMPDIR py.test -k 'not getnameinfo \
-                             and not SocketType_resolve \
-                             and not getprotobyname \
-                             and not waitpid \
-                             and not static_tool_sees_all_symbols'
-  '';
+  disabledTests = [
+    "getnameinfo"
+    "SocketType_resolve"
+    "getprotobyname"
+    "waitpid"
+    "static_tool_sees_all_symbols"
+  ];
 
   propagatedBuildInputs = [
     attrs

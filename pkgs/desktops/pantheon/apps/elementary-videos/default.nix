@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -19,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.7.1";
+  version = "2.7.2";
 
   repoName = "videos";
 
@@ -27,11 +28,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "00arim4i9bv9mbms1irkp44grkgrfnmqzraswyn1xiz9nvl1bsb9";
+    sha256 = "sha256-MSyhCXsziQ0MD4lGp9X/9odidjT/L+2Aihwd1qCGvB0=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

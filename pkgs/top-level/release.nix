@@ -34,6 +34,7 @@ let
 
       manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+      pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
       darwin-tested = if supportDarwin then pkgs.releaseTools.aggregate
         { name = "nixpkgs-darwin-${jobs.tarball.version}";
@@ -89,9 +90,9 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
-              jobs.metrics
               jobs.manual
               jobs.lib-tests
+              jobs.pkgs-lib-tests
               jobs.stdenv.x86_64-linux
               jobs.linux.x86_64-linux
               jobs.pandoc.x86_64-linux

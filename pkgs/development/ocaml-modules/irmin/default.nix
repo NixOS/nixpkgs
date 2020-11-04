@@ -1,31 +1,22 @@
 { lib, fetchurl, buildDunePackage
 , astring, base64, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
-, alcotest, hex
+, alcotest, hex, ppx_irmin
 }:
 
-buildDunePackage rec {
-
+buildDunePackage {
   pname = "irmin";
-  version = "2.1.0";
 
+  inherit (ppx_irmin) src version;
+
+  useDune2 = true;
   minimumOCamlVersion = "4.07";
-
-  src = fetchurl {
-    url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    sha256 = "1ji8r7zbdmhbk8r8w2hskd9z7pnvirzbhincfxndxgdaxbfkff5g";
-  };
 
   propagatedBuildInputs = [ astring base64 digestif fmt jsonm logs ocaml_lwt ocamlgraph uri ];
 
-  checkInputs = lib.optionals doCheck [ alcotest hex ];
-
+  checkInputs = [ alcotest hex ppx_irmin ];
   doCheck = true;
 
-  meta = {
-    homepage = "https://irmin.org/";
+  meta = ppx_irmin.meta // {
     description = "A distributed database built on the same principles as Git";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
   };
-
 }

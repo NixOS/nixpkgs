@@ -16,11 +16,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "148";
+  version = "160";
 
   src = fetchurl {
     url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "1fx3wq5bv12pjcpkd7lvis0vg50apzwvxa5jvcs2dv1r8385wchz";
+    sha256 = "1nshcgq31nrbh4r70i5azs7s0wfc4llb60ka1w8rncy22rg8rabc";
   };
 
   outputs = [ "out" "man" ];

@@ -1,0 +1,172 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-21.03">
+ <title>Release 21.03 (“Okapi”, 2021.03/??)</title>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-21.03-highlights">
+  <title>Highlights</title>
+
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Support is planned until the end of October 2021, handing over to 21.09.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-21.03-new-services">
+  <title>New Services</title>
+
+  <para>
+   The following new services were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+     <para>
+       <link xlink:href="https://www.keycloak.org/">Keycloak</link>,
+       an open source identity and access management server with
+       support for <link
+       xlink:href="https://openid.net/connect/">OpenID Connect</link>,
+       <link xlink:href="https://oauth.net/2/">OAUTH 2.0</link> and
+       <link xlink:href="https://en.wikipedia.org/wiki/SAML_2.0">SAML
+       2.0</link>.
+     </para>
+     <para>
+       See the <link linkend="module-services-keycloak">Keycloak
+       section of the NixOS manual</link> for more information.
+     </para>
+   </listitem>
+  </itemizedlist>
+
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-21.03-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        <literal>systemd-journal2gelf</literal> no longer parses json and expects the receiving system to handle it. How to achieve this with Graylog is described in this <link xlink:href="https://github.com/parse-nl/SystemdJournal2Gelf/issues/10">GitHub issue</link>.
+      </para>
+   </listitem>
+   <listitem>
+    <para>
+     If the <varname>services.dbus</varname> module is enabled, then
+     the user D-Bus session is now always socket activated. The
+     associated options <varname>services.dbus.socketActivated</varname>
+     and <varname>services.xserver.startDbusSession</varname> have
+     therefore been removed and you will receive a warning if
+     they are present in your configuration. This change makes the
+     user D-Bus session available also for non-graphical logins.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <option>fonts.enableFontDir</option> has been renamed to
+     <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
+     has also been changed to <literal>/run/current-system/sw/share/X11/fonts</literal>,
+     for consistency with other X11 resources.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      A number of options have been renamed in the kicad interface. <literal>oceSupport</literal>
+      has been renamed to <literal>withOCE</literal>, <literal>withOCCT</literal> has been renamed
+      to <literal>withOCC</literal>, <literal>ngspiceSupport</literal> has been renamed to
+      <literal>withNgspice</literal>, and <literal>scriptingSupport</literal> has been renamed to
+      <literal>withScripting</literal>. Additionally, <literal>kicad/base.nix</literal> no longer
+      provides default argument values since these are provided by
+      <literal>kicad/default.nix</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The socket for the <literal>pdns-recursor</literal> module was moved from <literal>/var/lib/pdns-recursor</literal>
+      to <literal>/run/pdns-recursor</literal> to match upstream.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      PowerDNS has been updated from <literal>4.2.x</literal> to <literal>4.3.x</literal>. Please
+      be sure to review the <link xlink:href="https://doc.powerdns.com/authoritative/upgrading.html#x-to-4-3-0">Upgrade Notes</link>
+      provided by upstream before upgrading. Worth specifically noting is that the service now runs
+      entirely as a dedicated <literal>pdns</literal> user, instead of starting as <literal>root</literal>
+      and dropping privileges, as well as the default <literal>socket-dir</literal> location changing from
+      <literal>/var/lib/powerdns</literal> to <literal>/run/pdns</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    <package>btc1</package> has been abandoned upstream, and removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    <package>riak-cs</package> package removed along with <varname>services.riak-cs</varname> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    <package>stanchion</package> package removed along with <varname>services.stanchion</varname> module.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-21.03-notable-changes">
+  <title>Other Notable Changes</title>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The default-version of <literal>nextcloud</literal> is <package>nextcloud20</package>.
+     Please note that it's <emphasis>not</emphasis> possible to upgrade <literal>nextcloud</literal>
+     across multiple major versions! This means that it's e.g. not possible to upgrade
+     from <package>nextcloud18</package> to <package>nextcloud20</package> in a single deploy.
+    </para>
+    <para>
+     The package can be manually upgraded by setting <xref linkend="opt-services.nextcloud.package" />
+     to <package>nextcloud20</package>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     NixOS now emits a deprecation warning if systemd's <literal>StartLimitInterval</literal> setting is used in a <literal>serviceConfig</literal> section instead of in a <literal>unitConfig</literal>; that setting is deprecated and now undocumented for the service section by systemd upstream, but still effective and somewhat buggy there, which can be confusing. See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/45785">#45785</link> for details.
+    </para>
+    <para>
+     All services should use <xref linkend="opt-systemd.services._name_.startLimitIntervalSec" /> or <literal>StartLimitIntervalSec</literal> in <xref linkend="opt-systemd.services._name_.unitConfig" /> instead.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+</section>

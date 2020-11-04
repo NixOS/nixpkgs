@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchgit, SDL2
+{ lib, mkDerivation, fetchFromGitHub, SDL2
 , qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
 , qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
 , gst_all_1, wayland, pkgconfig
@@ -6,7 +6,7 @@
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.0.8";
+  version = "4.0.10";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -58,10 +58,11 @@ mkDerivation rec {
   '';
 
   # TODO: package mavlink so we can build from a normal source tarball
-  src = fetchgit {
-    url = "https://github.com/mavlink/qgroundcontrol.git";
+  src = fetchFromGitHub {
+    owner = "mavlink";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0jr9jpjqdwizsvh9zm0fdp8k2r4536m40dxrn30fbr3ba8vnzkgq";
+    sha256 = "1jmhhd2nwxq3m9rzzmrjls8f6hhj52ia71b1sv4vvcjh802cha8g";
     fetchSubmodules = true;
   };
 

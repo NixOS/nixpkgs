@@ -8,13 +8,16 @@
 , electron_6
 }:
 
+let
+  electron = electron_6;
+in
 stdenv.mkDerivation rec {
   pname = "openbazaar-client";
-  version = "2.4.5";
+  version = "2.4.8";
 
   src = fetchurl {
     url = "https://github.com/OpenBazaar/openbazaar-desktop/releases/download/v${version}/openbazaar2client_${version}_amd64.deb";
-    sha256 = "0kahqqchalbyzy51gkxzmw91qignh8sprg57nbj1vmgm84w1z6kw";
+    sha256 = "0c8ar0rd4yydy4rd4hqafljrhi40v3cwhc9v7fjbrfhcx1ikmf64";
   };
 
   dontBuild = true;
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_6}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';

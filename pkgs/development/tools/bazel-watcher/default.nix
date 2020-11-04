@@ -56,7 +56,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "17vdqs3dpaqc4llmzh4rd8mkm19q192w5gp90jlry3dpwj6b4kdf";
+    sha256 = "0rfdwss8aahydiybwhi3j0qw12j1l91k9lbn1vaip0bmnq5qfwh9";
   };
 
   buildAttrs = {
@@ -73,7 +73,7 @@ buildBazelPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
-    description = "Tools for building Bazel targets when source files change.";
+    description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;

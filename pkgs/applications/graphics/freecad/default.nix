@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
-xercesc, ode, eigen, qtbase, qttools, qtwebkit, wrapQtAppsHook,
+xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
 opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
 gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
 
@@ -8,14 +8,14 @@ assert mpi != null;
 let
   pythonPackages = python3Packages;
 in mkDerivation rec {
-  pname = "freecad";
-  version = "0.18.4";
+  pname = "freecad-unstable";
+  version = "2020-10-17";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
-    rev = version;
-    sha256 = "1phs9a0px5fnzpyx930cz39p5dis0f0yajxzii3c3sazgkzrd55s";
+    rev = "f3bdaaa55a6c03b297924c40819d23e4603fa55b";
+    sha256 = "1q1iy4i9k65v8z7h8a6r4bf5ycn124jp26xwp0xwbar4gnkx2jiq";
   };
 
   nativeBuildInputs = [
@@ -29,19 +29,11 @@ in mkDerivation rec {
   buildInputs = [
     cmake coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
-    libGLU libXmu qtbase qttools qtwebkit
+    libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
+    GitPython # for addon manager
   ]);
-
-  # Fix missing app icon on Wayland. Has been upstreamed and should be safe to
-  # remove in versions >= 0.19
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/FreeCAD/FreeCAD/commit/c4d2a358ca125d51d059dfd72dcbfba326196dfc.patch";
-      sha256 = "0yqc9zrxgi2c2xcidm8wh7a9yznkphqvjqm9742qm5fl20p8gl4h";
-    })
-  ];
 
   cmakeFlags = [
     "-DBUILD_QT5=ON"

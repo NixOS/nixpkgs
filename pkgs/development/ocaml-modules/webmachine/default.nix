@@ -5,15 +5,16 @@
 
 buildDunePackage rec {
   pname = "webmachine";
-  version = "0.6.1";
+  version = "0.6.2";
+  useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = "ocaml-webmachine";
-    rev = "${version}";
-    sha256 = "0kpbxsvjzylbxmxag77k1c8m8mwn4f4xscqk2i7fc591llgq9fp3";
+    rev = version;
+    sha256 = "1zi1vsm589y2njwzsqkmdbxvs9s4xlgbd62xqw2scp60mccp09nk";
   };
 
   propagatedBuildInputs = [ cohttp dispatch ptime ];

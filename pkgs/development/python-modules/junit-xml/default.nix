@@ -2,8 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , six
-, pytest
-, pytest-sugar
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -21,11 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest pytest-sugar ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Creates JUnit XML test result documents that can be read by tools such as Jenkins";

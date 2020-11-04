@@ -35,23 +35,30 @@ let
       gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ];
 
+    dontBuild = true;
+    dontConfigure = true;
+
+    unpackPhase = ''
+      ar p $src data.tar.xz | tar xJ ./usr/
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      mv usr/bin usr/share $out
+      rm -rf $out/share/lintian
+
+      runHook postInstall
+    '';
+
     preFixup = ''
       gappsWrapperArgs+=(
-        --prefix "PATH" : "${gvfs}/bin" \
+        --prefix "PATH" : "${gvfs}/bin"
       )
     '';
 
-    buildCommand = ''
-      mkdir -p $out/usr/
-      ar p $src data.tar.xz | tar -C $out -xJ ./usr
-      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/usr/share/applications/${pname}.desktop
-      mv $out/usr/* $out/
-      rm -r $out/share/lintian
-      rm -r $out/usr/
-      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
-
-      fixupPhase
-
+    postFixup = ''
       share=$out/share/${pname}
 
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -70,13 +77,15 @@ let
       ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
 
       find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
+
+      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/share/applications/${pname}.desktop
     '';
 
     meta = with stdenv.lib; {
       description = "A hackable text editor for the 21st Century";
       homepage = "https://atom.io/";
       license = licenses.mit;
-      maintainers = with maintainers; [ offline nequissimus ysndr ];
+      maintainers = with maintainers; [ offline ysndr ];
       platforms = platforms.x86_64;
     };
   };

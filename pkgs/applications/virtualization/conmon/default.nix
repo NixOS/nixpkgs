@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.0.18";
+  version = "2.0.21";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f32g048jamfhrds68vzirx8iqizr45wf2d4bfvdsk176amrj4k0";
+    sha256 = "13g436s00bcwzs31qsx5rpgkbbyxd4zvx8mbkq10gkrsv4r04q23";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/containers/conmon";

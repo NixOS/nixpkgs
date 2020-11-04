@@ -33,7 +33,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://www.keybase.io/";
-    description = "The Keybase official command-line utility and service.";
+    description = "The Keybase official command-line utility and service";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ avaq carlsverre np rvolosatovs filalex77 ];
     license = licenses.bsd3;

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt
+, libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
 
 # for update.nix
 , writeScript
@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.3.5";
+  version = "0.4.4.5";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0s6qspi102drn1nk3gfxs51x992xarc44gkfsi8y3l48wr50wsk1";
+    sha256 = "09lr6l98qmc69pzsi8r02z86v969dbfwjrwphfm3npknzq5a0p54";
   };
 
   outputs = [ "out" "geoip" ];
@@ -54,19 +54,22 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/tor
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
+  passthru = {
+    tests.tor = nixosTests.tor;
+    updateScript = import ./update.nix {
+      inherit (stdenv) lib;
+      inherit
+        writeScript
+        common-updater-scripts
+        bash
+        coreutils
+        curl
+        gnupg
+        gnugrep
+        gnused
+        nix
+      ;
+    };
   };
 
   meta = with stdenv.lib; {

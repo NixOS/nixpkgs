@@ -20,10 +20,10 @@ let
     in valueType;
   dynamicConfigFile = if cfg.dynamicConfigFile == null then
     pkgs.runCommand "config.toml" {
-      buildInputs = [ pkgs.yj ];
+      buildInputs = [ pkgs.remarshal ];
       preferLocalBuild = true;
     } ''
-      yj -jt -i \
+      remarshal -if json -of toml \
         < ${
           pkgs.writeText "dynamic_config.json"
           (builtins.toJSON cfg.dynamicConfigOptions)
@@ -136,6 +136,8 @@ in {
       description = "Traefik web server";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      startLimitIntervalSec = 86400;
+      startLimitBurst = 5;
       serviceConfig = {
         ExecStart =
           "${cfg.package}/bin/traefik --configfile=${staticConfigFile}";
@@ -143,8 +145,6 @@ in {
         User = "traefik";
         Group = cfg.group;
         Restart = "on-failure";
-        StartLimitInterval = 86400;
-        StartLimitBurst = 5;
         AmbientCapabilities = "cap_net_bind_service";
         CapabilityBoundingSet = "cap_net_bind_service";
         NoNewPrivileges = true;

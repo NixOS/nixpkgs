@@ -1,7 +1,7 @@
 { lib
 , fetchurl
 , mkDerivation
-, kdeApplications
+, libkcddb
 , kinit
 , kdelibs4support
 , solid
@@ -18,20 +18,21 @@
 , poppler
 , makeWrapper
 , kdoctools
+, taglib
 }:
 
 mkDerivation rec {
   name = "tellico";
-  version = "3.3.0";
+  version = "3.3.3";
 
   src = fetchurl {
-    url = "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz";
-    sha256 = "1digkpvzrsbv5znf1cgzs6zkmysfz6lzs12n12mrrpgkcdxc426y";
+    # version 3.3.0 just uses 3.3 in its name
+    urls = [
+      "https://tellico-project.org/files/tellico-${version}.tar.xz"
+      "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz"
+    ];
+    sha256 = "sha256-9cdbUTa2Mt3/yNylOSdGjgDETD74sR0dU4C58uW0Y6o=";
   };
-
-  patches = [
-    ./hex.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -41,27 +42,28 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    kdelibs4support
-    solid
-    kxmlgui
-    karchive
-    kfilemetadata
-    khtml
-    knewstuff
-    libksane
     cmake
     exempi
     extra-cmake-modules
+    karchive
+    libkcddb
+    kdelibs4support
+    kfilemetadata
+    khtml
+    knewstuff
+    kxmlgui
     libcdio
-    kdeApplications.libkcddb
+    libksane
     poppler
+    solid
+    taglib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection management software, free and simple";
     homepage = "https://tellico-project.org/";
-    maintainers = with lib.maintainers; [ numkem ];
-    license = with lib.licenses; [ gpl2 gpl3 ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl2 gpl3 ];
+    maintainers = with maintainers; [ numkem ];
+    platforms = platforms.linux;
   };
 }

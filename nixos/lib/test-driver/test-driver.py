@@ -3,7 +3,10 @@ from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
 from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
 from xml.sax.saxutils import XMLGenerator
+import queue
+import io
 import _thread
+import argparse
 import atexit
 import base64
 import codecs
@@ -19,6 +22,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import traceback
 import unicodedata
 
 CHAR_TO_KEY = {
@@ -106,7 +110,6 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     pty_master, pty_slave = pty.openpty()
     vde_process = subprocess.Popen(
         ["vde_switch", "-s", vde_socket, "--dirmode", "0700"],
-        bufsize=1,
         stdin=pty_slave,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -213,7 +216,7 @@ class Machine:
                 match = re.search("run-(.+)-vm$", cmd)
                 if match:
                     self.name = match.group(1)
-
+        self.logger = args["log"]
         self.script = args.get("startCommand", self.create_startcommand(args))
 
         tmp_dir = os.environ.get("TMPDIR", tempfile.gettempdir())
@@ -223,7 +226,10 @@ class Machine:
             os.makedirs(path, mode=0o700, exist_ok=True)
             return path
 
-        self.state_dir = create_dir("vm-state-{}".format(self.name))
+        self.state_dir = os.path.join(tmp_dir, f"vm-state-{self.name}")
+        if not args.get("keepVmState", False):
+            self.cleanup_statedir()
+        os.makedirs(self.state_dir, mode=0o700, exist_ok=True)
         self.shared_dir = create_dir("shared-xchg")
 
         self.booted = False
@@ -231,7 +237,6 @@ class Machine:
         self.pid: Optional[int] = None
         self.socket = None
         self.monitor: Optional[socket.socket] = None
-        self.logger: Logger = args["log"]
         self.allow_reboot = args.get("allowReboot", False)
 
     @staticmethod
@@ -420,15 +425,18 @@ class Machine:
                 output += out
         return output
 
-    def fail(self, *commands: str) -> None:
+    def fail(self, *commands: str) -> str:
         """Execute each command and check that it fails."""
+        output = ""
         for command in commands:
             with self.nested("must fail: {}".format(command)):
-                status, output = self.execute(command)
+                (status, out) = self.execute(command)
                 if status == 0:
                     raise Exception(
                         "command `{}` unexpectedly succeeded".format(command)
                     )
+                output += out
+        return output
 
     def wait_until_succeeds(self, command: str) -> str:
         """Wait until a command returns success and return its output.
@@ -671,6 +679,22 @@ class Machine:
         with self.nested("waiting for {} to appear on screen".format(regex)):
             retry(screen_matches)
 
+    def wait_for_console_text(self, regex: str) -> None:
+        self.log("waiting for {} to appear on console".format(regex))
+        # Buffer the console output, this is needed
+        # to match multiline regexes.
+        console = io.StringIO()
+        while True:
+            try:
+                console.write(self.last_lines.get())
+            except queue.Empty:
+                self.sleep(1)
+                continue
+            console.seek(0)
+            matches = re.search(regex, console.read())
+            if matches is not None:
+                return
+
     def send_key(self, key: str) -> None:
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
@@ -723,7 +747,6 @@ class Machine:
 
         self.process = subprocess.Popen(
             self.script,
-            bufsize=1,
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -734,11 +757,16 @@ class Machine:
         self.monitor, _ = self.monitor_socket.accept()
         self.shell, _ = self.shell_socket.accept()
 
+        # Store last serial console lines for use
+        # of wait_for_console_text
+        self.last_lines: Queue = Queue()
+
         def process_serial_output() -> None:
             assert self.process.stdout is not None
             for _line in self.process.stdout:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
+                self.last_lines.put(line)
                 eprint("{} # {}".format(self.name, line))
                 self.logger.enqueue({"msg": line, "machine": self.name})
 
@@ -750,6 +778,12 @@ class Machine:
         self.booted = True
 
         self.log("QEMU running (pid {})".format(self.pid))
+
+    def cleanup_statedir(self) -> None:
+        if os.path.isdir(self.state_dir):
+            shutil.rmtree(self.state_dir)
+            self.logger.log(f"deleting VM state directory {self.state_dir}")
+            self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
         if not self.booted:
@@ -807,7 +841,8 @@ class Machine:
             retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:
-        time.sleep(secs)
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {secs}")
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """Forward a TCP port on the host to a TCP port on the guest.
@@ -863,7 +898,8 @@ def run_tests() -> None:
             try:
                 exec(tests, globals())
             except Exception as e:
-                eprint("error: {}".format(str(e)))
+                eprint("error: ")
+                traceback.print_exc()
                 sys.exit(1)
     else:
         ptpython.repl.embed(locals(), globals())
@@ -889,6 +925,15 @@ def subtest(name: str) -> Iterator[None]:
 
 
 if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument(
+        "-K",
+        "--keep-vm-state",
+        help="re-use a VM state coming from a previous run",
+        action="store_true",
+    )
+    (cli_args, vm_scripts) = arg_parser.parse_known_args()
+
     log = Logger()
 
     vlan_nrs = list(dict.fromkeys(os.environ.get("VLANS", "").split()))
@@ -896,8 +941,10 @@ if __name__ == "__main__":
     for nr, vde_socket, _, _ in vde_sockets:
         os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
 
-    vm_scripts = sys.argv[1:]
-    machines = [create_machine({"startCommand": s}) for s in vm_scripts]
+    machines = [
+        create_machine({"startCommand": s, "keepVmState": cli_args.keep_vm_state})
+        for s in vm_scripts
+    ]
     machine_eval = [
         "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
     ]
@@ -911,7 +958,6 @@ if __name__ == "__main__":
                     continue
                 log.log("killing {} (pid {})".format(machine.name, machine.pid))
                 machine.process.kill()
-
             for _, _, process, _ in vde_sockets:
                 process.terminate()
         log.close()

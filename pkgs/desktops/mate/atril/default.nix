@@ -1,4 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, glib, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, texlive, mate, wrapGAppsHook }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, gtk3
+, glib
+, libxml2
+, libsecret
+, poppler
+, itstool
+, hicolor-icon-theme
+, texlive
+, mate
+, wrapGAppsHook
+, enableEpub ? true, webkitgtk
+, enableDjvu ? true, djvulibre
+, enablePostScript ? true, libspectre
+, enableXps ? true, libgxps
+, enableImages ? false
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "atril";
@@ -26,7 +47,19 @@ stdenv.mkDerivation rec {
     mate.mate-desktop
     hicolor-icon-theme
     texlive.bin.core  # for synctex, used by the pdf back-end
-  ];
+  ]
+  ++ optionals enableDjvu [ djvulibre ]
+  ++ optionals enableEpub [ webkitgtk ]
+  ++ optionals enablePostScript [ libspectre ]
+  ++ optionals enableXps [ libgxps ]
+  ;
+
+  configureFlags = [ ]
+    ++ optionals (enableDjvu) [ "--enable-djvu" ]
+    ++ optionals (enableEpub) [ "--enable-epub" ]
+    ++ optionals (enablePostScript) [ "--enable-ps" ]
+    ++ optionals (enableXps) [ "--enable-xps" ]
+    ++ optionals (enableImages) [ "--enable-pixbuf" ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 

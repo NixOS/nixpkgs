@@ -1,8 +1,8 @@
 { stdenv
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , python
+, pythonAtLeast
 , zope_testrunner
 , transaction
 , six
@@ -17,25 +17,20 @@
 
 buildPythonPackage rec {
     pname = "ZODB";
-    version = "5.5.1";
+    version = "5.6.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "20155942fa326e89ad8544225bafd74237af332ce9d7c7105a22318fe8269666";
+      sha256 = "1zh7rd182l15swkbkm3ib0wgyn16xasdz2mzry8k4lwk6dagnm26";
     };
-
-    patches = [
-      # Compatibility with transaction v3.0
-      (fetchpatch {
-        url = "https://github.com/zopefoundation/ZODB/commit/0adcc6877f690186c97cc5da7e13788946d5e0df.patch";
-        sha256 = "1zmbgm7r36nj5w7icpinp61fm81svh2wk213pzr3l0jxzr9i5qi4";
-      })
-    ];
 
     # remove broken test
     postPatch = ''
       rm -vf src/ZODB/tests/testdocumentation.py
     '';
+
+    # ZConfig 3.5.0 is not compatible with Python 3.8
+    disabled = pythonAtLeast "3.8";
 
     propagatedBuildInputs = [
       transaction

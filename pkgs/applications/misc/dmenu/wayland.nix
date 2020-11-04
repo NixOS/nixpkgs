@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dmenu-wayland-unstable";
-  version = "2020-04-03";
+  version = "2020-07-06";
 
   src = fetchFromGitHub {
     owner = "nyyManni";
     repo = "dmenu-wayland";
-    rev = "550a7c39f3f925b803d51c616609c8cb6c0ea543";
-    sha256 = "0az3w1csn4x6mjyacg6lf70kykdfqamic3hbr57mj83i5jjv0jlv";
+    rev = "304c8e917651ee02b16ebf0b7097a5c53fa2236b";
+    sha256 = "0rkpmpk7xkcfbnv9vpg8n65423z5xpgp0hm2vg0rxf9354bjin7k";
   };
 
   outputs = [ "out" "man" ];

@@ -11,7 +11,7 @@ let
     ''
       default-lease-time 600;
       max-lease-time 7200;
-      authoritative;
+      ${optionalString (!cfg.authoritative) "not "}authoritative;
       ddns-update-style interim;
       log-facility local1; # see dhcpd.nix
 
@@ -173,6 +173,16 @@ let
       description = ''
         A list mapping Ethernet addresses to IPv${postfix} addresses for the
         DHCP server.
+      '';
+    };
+
+    authoritative = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether the DHCP server shall send DHCPNAK messages to misconfigured
+        clients. If this is not done, clients may be unable to get a correct
+        IP address after changing subnets until their old lease has expired.
       '';
     };
 

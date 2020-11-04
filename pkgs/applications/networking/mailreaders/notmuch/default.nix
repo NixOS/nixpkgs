@@ -1,4 +1,4 @@
-{ fetchurl, stdenv
+{ fetchurl, fetchgit, stdenv
 , pkgconfig, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
@@ -12,17 +12,18 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.29.3";
+  version = "0.31";
   pname = "notmuch";
 
   passthru = {
-    pythonSourceRoot = "${pname}-${version}/bindings/python";
+    pythonSourceRoot = "${src.name}/bindings/python";
     inherit version;
   };
 
-  src = fetchurl {
-    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0dfwa38vgnxk9cvvpza66szjgp8lir6iz6yy0cry9593lywh9xym";
+  src = fetchgit {
+    url = "https://git.notmuchmail.org/git/notmuch";
+    sha256 = "0f9d9k9avb46yh2r8fvijvw7bryqwckvyzc68f9phax2g4c99x4x";
+    rev = version;
   };
 
   nativeBuildInputs = [
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
       sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
     };
   in ''
+    mkdir -p test/test-databases
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
   doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");

@@ -10,11 +10,11 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.2.9";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0rvm9mpaq66lxyq4f09x9w6xxhgys0phza223hm5zv6kgn413xsf";
+    sha256 = "1bmmfvmawnlihbqkksdrwxfkaip4nfsi97w83fmvkyxl4jk715vr";
   };
 
   # *somtimes* fails with can't find ui_manager.h, also see https://github.com/NixOS/nixpkgs/issues/35359

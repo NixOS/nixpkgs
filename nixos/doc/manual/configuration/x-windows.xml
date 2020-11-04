@@ -58,7 +58,7 @@
 </programlisting>
   The X server can then be started manually:
 <screen>
-# systemctl start display-manager.service
+<prompt># </prompt>systemctl start display-manager.service
 </screen>
  </para>
  <para>
@@ -90,10 +90,9 @@
   using lightdm for a user <literal>alice</literal>:
 <programlisting>
 <xref linkend="opt-services.xserver.displayManager.lightdm.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.user"/> = "alice";
+<xref linkend="opt-services.xserver.displayManager.autoLogin.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.autoLogin.user"/> = "alice";
 </programlisting>
-  The options are named identically for all other display managers.
   </para>
  </simplesect>
  <simplesect xml:id="sec-x11--graphics-cards-intel">

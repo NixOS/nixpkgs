@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitLab, coq, stdpp }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.0";
+  version = "3.3.0";
   name = "coq${coq.coq-version}-iris-${version}";
   src = fetchFromGitLab {
     domain = "gitlab.mpi-sws.org";
     owner = "iris";
     repo = "iris";
     rev = "iris-${version}";
-    sha256 = "10dfi7qx6j5w6kbmbrf05xh18jwxr9iz5g7y0f6157msgvl081xs";
+    sha256 = "0az4gkp5m8sq0p73dlh0r7ckkzhk7zkg5bndw01bdsy5ywj0vilp";
   };
 
   buildInputs = [ coq ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.7" "8.8" "8.9" "8.10" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.9" "8.10" "8.11" "8.12" ];
   };
 
 }

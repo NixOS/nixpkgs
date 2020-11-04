@@ -21,17 +21,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  # Run the test suite.
-  # It requires the build path to be in the python search path.
   checkPhase = ''
-    pushd $out
-    ${python}/bin/${python.executable} <<EOF
-    import sys
-    import numexpr
-    r = numexpr.test()
-    if not r.wasSuccessful():
-        sys.exit(1)
-    EOF
+    runtest="$(pwd)/numexpr/tests/test_numexpr.py"
+    pushd "$out"
+    ${python}/bin/${python.executable} "$runtest"
     popd
   '';
 

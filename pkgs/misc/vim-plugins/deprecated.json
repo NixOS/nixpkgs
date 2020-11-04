@@ -3,6 +3,10 @@
         "date": "2020-03-27",
         "new": "vim-gist"
     },
+    "nvim-lsp": {
+        "date": "2020-08-31",
+        "new": "nvim-lspconfig"
+    },
     "vim-jade": {
         "date": "2020-03-27",
         "new": "vim-pug"

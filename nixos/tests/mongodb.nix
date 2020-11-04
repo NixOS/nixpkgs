@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       node.wait_for_open_port(27017)
 
       assert "hello" in node.succeed(
-          "mongo ${testQuery}"
+          "${pkg}/bin/mongo ${testQuery}"
       )
 
       node.execute(
@@ -36,6 +36,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
           mongodb-3_4
           mongodb-3_6
           mongodb-4_0
+          mongodb-4_2
         ];
       };
     };
@@ -44,8 +45,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
       node.start()
     ''
       + runMongoDBTest pkgs.mongodb-3_4
-      + runMongoDBTest pkgs.mongodb-3_6 
+      + runMongoDBTest pkgs.mongodb-3_6
       + runMongoDBTest pkgs.mongodb-4_0
+      + runMongoDBTest pkgs.mongodb-4_2
       + ''
         node.shutdown()
       '';

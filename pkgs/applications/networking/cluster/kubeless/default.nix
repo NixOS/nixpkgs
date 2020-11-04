@@ -1,22 +1,31 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "kubeless";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "kubeless";
     repo = "kubeless";
     rev = "v${version}";
-    sha256 = "1fcdyd1jf0yibfx9jc16m0vmazm2jymps92llh3vh5zqd36bxbyd";
+    sha256 = "0x2hydywnnlh6arzz71p7gg9yzq5z2y2lppn1jszvkbgh11kkqfr";
   };
 
   goPackagePath = "github.com/kubeless/kubeless";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   subPackages = [ "cmd/kubeless" ];
 
   buildFlagsArray = ''
-    -ldflags=-X github.com/kubeless/kubeless/pkg/version.Version=${version}
+    -ldflags=-s -w -X github.com/kubeless/kubeless/pkg/version.Version=${version}
+  '';
+
+  postInstall = ''
+    for shell in bash; do
+      $out/bin/kubeless completion $shell > kubeless.$shell
+      installShellCompletion kubeless.$shell
+    done
   '';
 
   meta = with stdenv.lib; {

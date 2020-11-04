@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
-  
+
   meta = {
     description = "A pair programming tool and library written in Golang";
     homepage = "https://github.com/jeffail/leaps/";
@@ -23,4 +23,3 @@ buildGoPackage rec {
     platforms = stdenv.lib.platforms.unix;
   };
 }
-

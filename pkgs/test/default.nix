@@ -27,6 +27,8 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  install-shell-files = callPackage ./install-shell-files {};
+
   kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};
@@ -38,6 +40,8 @@ with pkgs;
   nixos-functions = callPackage ./nixos-functions {};
 
   patch-shebangs = callPackage ./patch-shebangs {};
+
+  texlive = callPackage ./texlive {};
 
   writers = callPackage ../build-support/writers/test.nix {};
 }

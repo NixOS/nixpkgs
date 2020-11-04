@@ -2,15 +2,17 @@
 , buildPythonPackage
 , fetchPypi
 , markdown
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "python-markdown-math";
-  version = "0.6";
+  version = "0.7";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c68d8cb9695cb7b435484403dc18941d1bad0ff148e4166d9417046a0d5d3022";
+    sha256 = "17a12175e8b2052a1c3402fca410841c551c678046293b1f7c280ccfe7b302a0";
   };
 
   checkInputs = [ markdown ];

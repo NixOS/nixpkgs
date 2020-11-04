@@ -1,7 +1,8 @@
 { stdenv, fetchurl, tzdata, iana-etc, runCommand
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
-, buildPackages, pkgsTargetTarget
+, buildPackages
+, pkgsBuildTarget
 , fetchpatch
 }:
 
@@ -25,17 +26,21 @@ let
     "armv5tel" = "arm";
     "armv6l" = "arm";
     "armv7l" = "arm";
+    "powerpc64le" = "ppc64le";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
+  # We need a target compiler which is still runnable at build time,
+  # to handle the cross-building case where build != host == target
+  targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
 in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.14.4";
+  version = "1.14.10";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1105qk2l4kfy1ki9n9gh8j4gfqrfgfwapa1fp38hih9aphxsy4bh";
+    sha256 = "0rfnjl582cm5klv8c2qyyvn26807zn89m5mk282gkc7awfkrjxmk";
   };
 
   # perl is used for testing go vet
@@ -166,11 +171,11 @@ stdenv.mkDerivation rec {
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
+      "${targetCC}/bin/${targetCC.targetPrefix}cc"
     else
       null;
   CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++"
+      "${targetCC}/bin/${targetCC.targetPrefix}c++"
     else
       null;
 
@@ -193,8 +198,11 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
+    ${optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
     # Independent from host/target, CC should produce code for the building system.
+    # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
+    ''}
     ulimit -a
   '';
 

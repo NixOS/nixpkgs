@@ -25,6 +25,6 @@ stdenv.mkDerivation {
     description = "Tool to automate hash length extension attacks";
     homepage = "https://github.com/iagox86/hash_extender";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

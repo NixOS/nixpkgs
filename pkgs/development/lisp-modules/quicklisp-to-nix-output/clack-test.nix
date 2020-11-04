@@ -5,7 +5,7 @@ rec {
 
   description = ''Testing Clack Applications.'';
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-annot" args."cl-base64" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-syntax" args."cl-syntax-annot" args."cl-utilities" args."clack" args."clack-handler-hunchentoot" args."clack-socket" args."dexador" args."dissect" args."fast-http" args."fast-io" args."flexi-streams" args."http-body" args."hunchentoot" args."ironclad" args."jonathan" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."local-time" args."md5" args."named-readtables" args."nibbles" args."proc-parse" args."quri" args."rfc2388" args."rove" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."trivial-types" args."usocket" args."xsubseq" ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-annot" args."cl-base64" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-syntax" args."cl-syntax-annot" args."cl-utilities" args."clack" args."clack-handler-hunchentoot" args."clack-socket" args."dexador" args."dissect" args."fast-http" args."fast-io" args."flexi-streams" args."http-body" args."hunchentoot" args."ironclad" args."jonathan" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."local-time" args."md5" args."named-readtables" args."proc-parse" args."quri" args."rfc2388" args."rove" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."trivial-types" args."usocket" args."xsubseq" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/clack/2019-10-07/clack-20191007-git.tgz'';
@@ -45,9 +45,9 @@ rec {
      (NAME lack-middleware-backtrace FILENAME lack-middleware-backtrace)
      (NAME lack-util FILENAME lack-util) (NAME local-time FILENAME local-time)
      (NAME md5 FILENAME md5) (NAME named-readtables FILENAME named-readtables)
-     (NAME nibbles FILENAME nibbles) (NAME proc-parse FILENAME proc-parse)
-     (NAME quri FILENAME quri) (NAME rfc2388 FILENAME rfc2388)
-     (NAME rove FILENAME rove) (NAME smart-buffer FILENAME smart-buffer)
+     (NAME proc-parse FILENAME proc-parse) (NAME quri FILENAME quri)
+     (NAME rfc2388 FILENAME rfc2388) (NAME rove FILENAME rove)
+     (NAME smart-buffer FILENAME smart-buffer)
      (NAME split-sequence FILENAME split-sequence)
      (NAME static-vectors FILENAME static-vectors)
      (NAME trivial-backtrace FILENAME trivial-backtrace)
@@ -64,9 +64,9 @@ rec {
      clack-socket dexador dissect fast-http fast-io flexi-streams http-body
      hunchentoot ironclad jonathan lack lack-component
      lack-middleware-backtrace lack-util local-time md5 named-readtables
-     nibbles proc-parse quri rfc2388 rove smart-buffer split-sequence
-     static-vectors trivial-backtrace trivial-features trivial-garbage
-     trivial-gray-streams trivial-mimes trivial-types usocket xsubseq)
+     proc-parse quri rfc2388 rove smart-buffer split-sequence static-vectors
+     trivial-backtrace trivial-features trivial-garbage trivial-gray-streams
+     trivial-mimes trivial-types usocket xsubseq)
     VERSION clack-20191007-git SIBLINGS
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot
      clack-handler-wookie clack-socket clack-v1-compat clack

@@ -12,6 +12,8 @@ buildGoModule rec {
 
   vendorSha256 = "1g5rmiiwqpm8gky9yr5f2a7zsjjmm9i12r7yxj9cz7y3rmw9sw8c";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Easily manage and invoke small scripts and wrappers";
     homepage    = "https://github.com/TekWizely/run";

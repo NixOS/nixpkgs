@@ -7,7 +7,9 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
+  inherit (pkgs) kdeApplications kdeFrameworks plasma5;
+  libsForQt5 = pkgs.libsForQt514;
+  qt5 = pkgs.qt514;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
@@ -83,7 +85,7 @@ let
     # recognize that software that has been removed.
     rm -fv $HOME/.cache/ksycoca*
 
-    ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+    ${libsForQt5.kservice}/bin/kbuildsycoca5
   '';
 
   set_XDG_CONFIG_HOME = ''
@@ -182,6 +184,14 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      # Seed our configuration into nixos-generate-config
+      system.nixos-generate-config.desktopConfiguration = ''
+        # Enable the Plasma 5 Desktop Environment.
+        services.xserver.enable = true;
+        services.xserver.displayManager.sddm.enable = true;
+        services.xserver.desktopManager.plasma5.enable = true;
+      '';
+
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;
@@ -190,7 +200,7 @@ in
 
       security.wrappers = {
         kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
-        start_kdeinit.source = "${lib.getBin pkgs.kinit}/libexec/kf5/start_kdeinit";
+        start_kdeinit.source = "${lib.getBin pkgs.kdeFrameworks.kinit}/libexec/kf5/start_kdeinit";
         kwin_wayland = {
           source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
           capabilities = "cap_sys_nice+ep";
@@ -203,7 +213,9 @@ in
         KERNEL=="i2c-[0-9]*", TAG+="uaccess"
       '';
 
-      environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
+      environment.systemPackages =
+        with qt5; with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
         [
           frameworkintegration
           kactivities
@@ -270,6 +282,7 @@ in
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent
+          spectacle
           systemsettings
 
           plasma-desktop
@@ -293,7 +306,7 @@ in
 
           qtvirtualkeyboard
 
-          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
 
         # Phonon audio backend
@@ -301,13 +314,13 @@ in
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt openobex obexftp ]
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
-        ++ lib.optional config.services.colord.enable colord-kde
+        ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
-        ++ lib.optional config.services.xserver.wacom.enable wacomtablet;
+        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -321,7 +334,7 @@ in
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
-        monospace = [ "Hack" "Noto Mono" ];
+        monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
         serif = [ "Noto Serif" ];
       };
@@ -358,6 +371,8 @@ in
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
+
+      nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
     })
   ];
 

@@ -17,7 +17,6 @@ pkgs.runCommandNoCC "nixpkgs-lib-tests" {
     export TEST_ROOT=$(pwd)/test-tmp
     export NIX_BUILD_HOOK=
     export NIX_CONF_DIR=$TEST_ROOT/etc
-    export NIX_DB_DIR=$TEST_ROOT/db
     export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
     export NIX_LOG_DIR=$TEST_ROOT/var/log/nix
     export NIX_STATE_DIR=$TEST_ROOT/var/nix

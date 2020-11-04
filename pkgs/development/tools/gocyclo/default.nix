@@ -19,7 +19,7 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "Calculate cyclomatic complexities of functions in Go source code.";
+    description = "Calculate cyclomatic complexities of functions in Go source code";
     homepage = "https://github.com/alecthomas/gocyclo";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];

@@ -21,6 +21,7 @@
 , tables
 , xlwt
 , runtimeShell
+, isPy38
 , libcxx ? null
 }:
 
@@ -30,11 +31,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "1.0.4";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b35d625282baa7b51e82e52622c300a1ca9f786711b2af7cbe64f1e6831f4126";
+    sha256 = "53328284a7bb046e2e885fd1b8c078bd896d7fc4575b915d4936f54984a2ba67";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -57,6 +58,10 @@ in buildPythonPackage rec {
     xlwt
   ];
 
+  # doesn't work with -Werror,-Wunused-command-line-argument
+  # https://github.com/NixOS/nixpkgs/issues/39687
+  hardeningDisable = optional stdenv.cc.isClang "strictoverflow";
+
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = optionalString isDarwin ''
@@ -67,7 +72,9 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  setupPyBuildFlags = [
+  # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
+  # release. https://github.com/pandas-dev/pandas/pull/30862
+  setupPyBuildFlags = optionals (!(isPy38 && isDarwin)) [
     # As suggested by
     # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
     "--parallel=$NIX_BUILD_CORES"
@@ -95,6 +102,9 @@ in buildPythonPackage rec {
     "order_without_freq"
     # tries to import from pandas.tests post install
     "util_in_top_level"
+    # Fails with 1.0.5
+    "test_constructor_list_frames"
+    "test_constructor_with_embedded_frames"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"

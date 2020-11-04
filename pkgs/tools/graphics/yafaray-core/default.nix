@@ -7,13 +7,13 @@
 stdenv.mkDerivation rec {
 
     pname = "yafaray-core";
-    version = "3.4.4";
+    version = "3.5.0";
 
     src = fetchFromGitHub {
       owner  = "YafaRay";
       repo   = "Core";
       rev    = "v${version}";
-      sha256 = "140vnaihz09rdvp0mqgrs26b3a2fv5wm49ar6817p4qklfx71l0g";
+      sha256 = "05r08ynm6p9jq9l3v1v3lqkrfx3bm6zlqcxm1yk7mdv1zv2yxikd";
     };
 
     preConfigure = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       homepage = "http://www.yafaray.org";
       maintainers = with maintainers; [ hodapp ];
       license = licenses.lgpl21;
-      platforms = platforms.linux;
+      platforms = [ "x86_64-linux" ];
     };
   }
 

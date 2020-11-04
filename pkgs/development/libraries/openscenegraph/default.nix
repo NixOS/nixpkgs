@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
+  AGL, Carbon, Cocoa, Foundation,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? false, jasper,  # disable jasper by default (many CVE)
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
     libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional jasperSupport jasper
     ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
@@ -62,6 +61,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional sdlSupport SDL2
     ++ lib.optionals restSupport [ asio boost ]
     ++ lib.optionals withExamples [ fltk wxGTK ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
   ;
 
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "A 3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
     maintainers = with maintainers; [ aanderse raskin ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
 }

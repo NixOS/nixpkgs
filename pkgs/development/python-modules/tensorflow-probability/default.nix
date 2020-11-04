@@ -31,7 +31,7 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "${version}";
+      rev = version;
       sha256 = "07cm8zba8n0ihzdm3k4a4rsg5v62xxsfvcw4h0niz91c0parqjqy";
     };
 
@@ -61,7 +61,7 @@ let
     bazelTarget = ":pip_pkg";
 
     fetchAttrs = {
-      sha256 = "1bh6lsi0732fzhrfs6p33qg2qfvq73r6qmijbpnv592aq8yiy1h5";
+      sha256 = "1qw7vkwnxy45z4vm94isq5m96xiz35sigag7vjg1xb2sklbymxh8";
     };
 
     buildAttrs = {

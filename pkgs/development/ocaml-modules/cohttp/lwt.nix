@@ -8,7 +8,7 @@ else
 
 buildDunePackage {
 	pname = "cohttp-lwt";
-	inherit (cohttp) version src meta;
+	inherit (cohttp) version src useDune2 meta;
 
 	buildInputs = [ uri ppx_sexp_conv ];
 

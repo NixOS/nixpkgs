@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zrxq0s3dlgjarn8l519czwffp2s5ibykc00vfrpayg547dgj342";
+    sha256 = "1ihibhj48fk1c89yh7vyb44mkywxphxqqgz7xks9caw05qw5ac1y";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ fuse3 ];
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with stdenv.lib; {
     description = "FUSE implementation for overlayfs";

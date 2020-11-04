@@ -5,14 +5,19 @@
 assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.version "4.0";
 
 stdenv.mkDerivation rec {
+  # linux kernel above 5.7 comes with its own exfat implementation https://github.com/arter97/exfat-linux/issues/27
+  # Assertion moved here due to some tests unintenionally triggering it,
+  # e.g. nixosTests.kernel-latest; it's unclear how/why so far.
+  assertion = assert lib.versionOlder kernel.version "5.8"; null;
+
   name = "exfat-nofuse-${version}-${kernel.version}";
-  version = "2019-09-06";
+  version = "2020-04-15";
 
   src = fetchFromGitHub {
-    owner = "AdrianBan";
+    owner = "barrybingo";
     repo = "exfat-nofuse";
-    rev = "5536f067373c196f152061f5000fe0032dc07c48";
-    sha256 = "00mhadsv2iw8z00a6170hwbvk3afx484nn3irmd5f5kmhs34sw7k";
+    rev = "297a5739cd4a942a1d814d05a9cd9b542e7b8fc8";
+    sha256 = "14jahy7n6pr482fjfrlf9ck3f2rkr5ds0n5r85xdfsla37ria26d";
   };
 
   hardeningDisable = [ "pic" ];

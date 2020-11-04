@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "0j2lh9vc92zhn44rjbia5aw3y1rpgfng1x1h17lcvj5m4i6vj0pc";
+    sha256 = "08d5d52m8wy3imfc6mdxpx8swhh2k4s1gmfaykg02j59z84awc6p";
   };
 
   # $out for the library and $examples for the example programs (in examples):
@@ -21,16 +21,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config wayland ];
 
   buildInputs = [
-    libGL wayland-protocols libinput libxkbcommon pixman
+    libGL wayland wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
     libpng ffmpeg
   ];
 
-  postInstall = ''
-    # Copy the library to $examples
-    mkdir -p $examples/lib
-    cp -P libwlroots* $examples/lib/
-  '';
+  mesonFlags = [ "-Dlogind-provider=systemd" ];
 
   postFixup = ''
     # Install ALL example programs to $examples:

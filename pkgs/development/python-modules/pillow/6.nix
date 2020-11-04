@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    python -m pytest -v -x -W always
+    python -m pytest -v -x -W always${stdenv.lib.optionalString stdenv.isDarwin " --deselect=Tests/test_file_icns.py::TestFileIcns::test_save --deselect=Tests/test_imagegrab.py::TestImageGrab::test_grab"}
     runHook postCheck
   '';
 

@@ -13,14 +13,14 @@ let
   pythonPackages = python3Packages;
 in
 mkDerivation rec {
-  version = "1.8";
+  version = "1.10";
   pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "177j893abplj8wd8j4ava58m1mr7qq8fsffsq0w4hf5xgl5w8fq8";
+    sha256 = "1ibf2lv3q69fkzv1nsva2mbdjlayrpxicrd96d9nfcw64f2mv6ds";
   };
 
   buildInputs = [

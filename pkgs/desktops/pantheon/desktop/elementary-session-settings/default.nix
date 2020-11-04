@@ -1,7 +1,9 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
+, nix-update-script
 , substituteAll
+, desktop-file-utils
+, pkg-config
 , writeScript
 , pantheon
 , gnome-keyring
@@ -16,7 +18,6 @@
 , writeText
 , meson
 , ninja
-, pkg-config
 }:
 
 let
@@ -61,87 +62,95 @@ let
   '';
 
   executable = writeScript "pantheon" ''
-    export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
+    # gnome-session can find RequiredComponents for `pantheon` session (notably pantheon's patched g-s-d autostarts)
+    export XDG_CONFIG_DIRS=@out@/etc/xdg:$XDG_CONFIG_DIRS
+
+    # Make sure we use our gtk-3.0/settings.ini
+    export XDG_CONFIG_DIRS=${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
+
+    # * gnome-session can find the `pantheon' session
+    # * use pantheon-mimeapps.list
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
-    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
+
+    # Start pantheon session. Keep in sync with upstream
+    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+  '';
+
+  # Absolute path patched version of the upstream xsession
+  xsession = writeText "pantheon.desktop" ''
+    [Desktop Entry]
+    Name=Pantheon
+    Comment=This session provides elementary experience
+    Exec=@out@/libexec/pantheon
+    TryExec=${wingpanel}/bin/wingpanel
+    Icon=
+    DesktopNames=Pantheon
+    Type=Application
   '';
 
 in
 
 stdenv.mkDerivation rec {
-  pname = "elementary-session-settings";
-  version = "unstable-2019-11-12";
+  pname = "elementary-session-settings-unstable";
+  version = "2020-07-06";
 
   repoName = "session-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "f9d5afed16ce447cf6ae3c2d1c1db5eece84daca";
-    sha256 = "0n1m41aapr58rb1ffvfkjq6c6w3f0ynjzzhja50s4di98p4m7y0q";
+    rev = "fa15cbd83fba0ba30e9a302db880350bff5ace52";
+    hash = "sha256-26H791c7OAjFYtjVChIatICSocMt0uTej1TKBOvw+6w=";
   };
 
-  patches = [
-    # Map Pantheon required components by g-s-d versions
-    # https://github.com/elementary/session-settings/pull/23
-    (fetchpatch {
-      url = "https://github.com/elementary/session-settings/commit/39918f4ec64fa9ed5affa109d6a692b97ae4ff01.patch";
-      sha256 = "0v2kqcsibymnslnnw4v67yh098znsrhrcycgxkw8vymvwlinc502";
-    })
-  ];
-
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
     pkg-config
   ];
 
   buildInputs = [
-    elementary-settings-daemon
+    pantheon.elementary-settings-daemon
+    gnome-keyring
+    onboard
+    orca
   ];
 
   mesonFlags = [
-    "-Ddefaults-list=false"
-    "-Dpatched-gsd-autostarts=false"
-    "-Dpatched-ubuntu-autostarts=false"
+    "-Dmimeapps-list=false"
     "-Dfallback-session=GNOME"
+    "-Ddetect-program-prefixes=true"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
   postInstall = ''
+    # our mimeapps patched from upstream to exclude:
+    # * pantheon-mail -> geary
+    # * evince.desktop -> org.gnome.Evince.desktop
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
-    mkdir -p $out/etc/xdg/autostart
-    for package in ${gnome-keyring} ${orca} ${onboard} ${at-spi2-core}; do
-      cp -av $package/etc/xdg/autostart/* $out/etc/xdg/autostart
-    done
-
+    # instantiates pantheon's dockitems
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 
+    # script `Exec` to start pantheon
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
     chmod +x $out/libexec/pantheon
-  '';
 
-  postFixup = ''
-    substituteInPlace $out/share/xsessions/pantheon.desktop \
-      --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
-      --replace "wingpanel" "${wingpanel}/bin/wingpanel"
-
-    for f in $out/etc/xdg/autostart/*; do mv "$f" "''${f%.desktop}-pantheon.desktop"; done
-
-    for autostart in $(grep -rl "OnlyShowIn=GNOME;" $out/etc/xdg/autostart)
-    do
-      echo "Patching OnlyShowIn to Pantheon in: $autostart"
-      sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
-    done
+    # absolute path patched xsession
+    substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
-    providedSessions = [ "pantheon" ];
+
+    providedSessions = [
+      "pantheon"
+    ];
   };
 
   meta = with stdenv.lib; {

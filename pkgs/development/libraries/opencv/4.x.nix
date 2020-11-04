@@ -9,7 +9,6 @@
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
-, enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
@@ -32,7 +31,7 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
+, AVFoundation, Cocoa, VideoDecodeAcceleration, CoreMedia, MediaToolbox, bzip2
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -203,7 +202,6 @@ stdenv.mkDerivation {
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableJPEG2K jasper
     ++ lib.optional enableFfmpeg ffmpeg_3
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
@@ -219,7 +217,7 @@ stdenv.mkDerivation {
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
     ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ]
-    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
+    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -242,7 +240,6 @@ stdenv.mkDerivation {
     "-DBUILD_DOCS=${printEnabled enableDocs}"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
@@ -258,7 +255,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
-    "-DBUILD_opencv_videoio=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ];

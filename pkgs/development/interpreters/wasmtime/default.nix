@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.17.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "18kmxc53jz1rlbmgdvffpvvsr8m399lgv62kwhciv5pif857qbb4";
+    sha256 = "01k1fpk2qp4kv0xr4f0xmrjkr98j5ws48r1aks8l80mffs4ynqfr";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "149nav392wf4sr50dpdlnvfq3vfrrl9lqgr98g5dyzfjrf5jbzm3";
+  cargoSha256 = "0vghcs1nbxlkmw9wfikzb1ndscx7fkmgv5q8dnfcisl05zpkj7si";
 
   nativeBuildInputs = [ python cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
-    homepage = "https://github.com/CraneStation/wasmtime";
+    homepage = "https://github.com/bytecodealliance/wasmtime";
     license = licenses.asl20;
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.unix;

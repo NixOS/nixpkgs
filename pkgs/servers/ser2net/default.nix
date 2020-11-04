@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ser2net";
-  version = "4.1.8";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "cminyard";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0xxxxlfi4wln2l86ybdsc42qcj37mnac2s2baj6s7mqri8alaa14";
+    sha256 = "01w82nrgffsfz2c80p4cyppg3bz56d90jm6i6356j0nva3784haw";
   };
 
   buildInputs = [ pkgconfig autoreconfHook gensio libyaml ];

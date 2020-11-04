@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
-  fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps,
+  fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
   pkgconfig, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "11.0.5";
+  version = "11.1.5";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "0idh8dqwb1df2di689090k9x1iap35jk3wg8yb1g70byichmscqb";
+    sha256 = "0i8p28hd5wgiay4lgmd9fid5ickwygy6w3xpfzzy8v9z04xc5bg7";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
-  buildInputs = [ fuse glib icu libdnet libmspack openssl pam procps xercesc ]
+  buildInputs = [ fuse glib icu libdnet libmspack libtirpc openssl pam procps rpcsvc-proto xercesc ]
       ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
-  patches = [ 
-    ./recognize_nixos.patch 
+  patches = [
+    ./recognize_nixos.patch
     ./find_gdk_pixbuf_xlib.patch #See https://github.com/vmware/open-vm-tools/pull/438
   ];
 
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
      sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
+     sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
      sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
      sed -i 's,$(UDEVRULESDIR),''${prefix}/$(UDEVRULESDIR),' udev/Makefile.am

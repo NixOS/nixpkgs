@@ -27,18 +27,31 @@ let
     };
   };
 in {
-  nextcloud17 = generic {
-    version = "17.0.6";
-    sha256 = "0qq7lkgzsn1zakfym5bjqzpcisxmgfcdd927ddqlhddy3zvgxrxx";
-  };
+  nextcloud17 = throw ''
+    Nextcloud v17 has been removed from `nixpkgs` as the support for it will be dropped
+    by upstream within the lifetime of NixOS 20.09[1]. Please upgrade to Nextcloud v18 by
+    declaring
+
+        services.nextcloud.package = pkgs.nextcloud18;
+
+    in your NixOS config.
+
+    [1] https://docs.nextcloud.com/server/18/admin_manual/release_schedule.html
+  '';
 
   nextcloud18 = generic {
-    version = "18.0.6";
-    sha256 = "1chmkg31jc1nr53y8r886mmd2jzb78094mrx7ggcfpjfkkv8b89s";
+    version = "18.0.9";
+    sha256 = "0rigg5pv2vnxgmjznlvxfc41s00raxa8jhib5vsznhj55qn99jm1";
+    insecure = true;
   };
 
   nextcloud19 = generic {
-    version = "19.0.0";
-    sha256 = "1bhazqj5f02sclh5pmifzqfahhhfqypixbvkgrnlgqy5ayb44gfj";
+    version = "19.0.3";
+    sha256 = "0sc9cnsdh8kj60h7i3knh40ngdz1w1wmdqw2v2axfkmax22kjl7w";
+  };
+
+  nextcloud20 = generic {
+    version = "20.0.1";
+    sha256 = "1z1fzz1i41k4dhdhi005l3gzkvnmmgqqz3rdr374cvk73q7bbiln";
   };
 }

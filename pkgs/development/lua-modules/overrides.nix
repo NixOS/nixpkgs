@@ -169,7 +169,7 @@ with super;
   luadbi-mysql = super.luadbi-mysql.override({
     extraVariables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR="${pkgs.libmysqlclient}/include/mysql";
+      MYSQL_INCDIR="${pkgs.libmysqlclient.dev}/include/mysql";
       MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
     };
     buildInputs = [
@@ -203,6 +203,9 @@ with super;
   luaexpat = super.luaexpat.override({
     externalDeps = [
       { name = "EXPAT"; dep = pkgs.expat; }
+    ];
+    patches = [
+      ./luaexpat.patch
     ];
   });
 
@@ -328,12 +331,20 @@ with super;
     '';
   });
 
-  pulseaudio = super.pulseaudio.override({
-    buildInputs = [
-      pkgs.libpulseaudio
-    ];
-    nativeBuildInputs = [
-      pkgs.pulseaudio pkgs.pkgconfig
-    ];
+  readline = (super.readline.override ({
+    unpackCmd = ''
+      unzip "$curSrc"
+      tar xf *.tar.gz
+    '';
+    propagatedBuildInputs = super.readline.propagatedBuildInputs ++ [ pkgs.readline ];
+    extraVariables = rec {
+      READLINE_INCDIR = "${pkgs.readline.dev}/include";
+      HISTORY_INCDIR = READLINE_INCDIR;
+    };
+  })).overrideAttrs (old: {
+    # Without this, source root is wrongly set to ./readline-2.6/doc
+    setSourceRoot = ''
+      sourceRoot=./readline-2.6
+    '';
   });
 }

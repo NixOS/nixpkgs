@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, nix-update-script
 , fetchpatch
 , meson
 , ninja
@@ -8,7 +9,7 @@
 , rustc
 , python3
 , rustPlatform
-, pkgconfig
+, pkg-config
 , gtksourceview4
 , glib
 , libhandy
@@ -25,24 +26,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fractal";
-  version = "4.2.2";
+  version = "4.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "0r98km3c8naj3mdr1wppzj823ir7jnsia7r3cbg3vsq8q52i480r";
+    sha256 = "DSNVd9YvI7Dd3s3+M0+wE594tmL1yPNMnD1W9wLhSuw=";
   };
 
-  cargoSha256 = "10fgw9m6gdazrca73g43sgvsghhac7xc3bg7hr0vpynzqyfigwa9";
+  cargoSha256 = "xim5sOzeXJjRXbTOg2Gk/LHU0LioiyMK5nSr1LwMPjc=";
 
   nativeBuildInputs = [
     cargo
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     rustc
     wrapGAppsHook
@@ -58,6 +59,9 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gst-editing-services
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override {
+      gtkSupport = true;
+    })
     gst_all_1.gstreamer
     gst_all_1.gst-validate
     gtk3
@@ -77,6 +81,12 @@ rustPlatform.buildRustPackage rec {
   buildPhase = null;
   checkPhase = null;
   installPhase = null;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Matrix group messaging app";

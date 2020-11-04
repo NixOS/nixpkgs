@@ -1,10 +1,11 @@
 { stdenv, lib, coursier, jdk, jre, makeWrapper }:
 
-let
-  baseName = "metals";
-  version = "0.9.0";
+stdenv.mkDerivation rec {
+  pname = "metals";
+  version = "0.9.4";
+
   deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
+    name = "${pname}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
       ${coursier}/bin/coursier fetch org.scalameta:metals_2.12:${version} \
@@ -15,11 +16,8 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "116q2jzqlmdhkqvjg31b9ib8w1k7rlr8gmjcr7z32idpn16hqg59";
+    outputHash     = "1k07gg13z3kambvvrxsc27781cd5npb2a50ahdbj7x6j6h67k0pg";
   };
-in
-stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk deps ];

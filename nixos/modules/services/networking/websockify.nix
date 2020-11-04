@@ -5,12 +5,12 @@ with lib;
 let cfg = config.services.networking.websockify; in {
   options = {
     services.networking.websockify = {
-      enable = mkOption {  
+      enable = mkOption {
         description = "Whether to enable websockify to forward websocket connections to TCP connections.";
 
-        default = false;   
+        default = false;
 
-        type = types.bool; 
+        type = types.bool;
       };
 
       sslCert = mkOption {

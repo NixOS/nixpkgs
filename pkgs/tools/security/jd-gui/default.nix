@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, jdk, gradle, makeDesktopItem, perl, writeText, runtimeShell }:
+{ stdenv, fetchFromGitHub, jre, jdk, gradle_5, makeDesktopItem, perl, writeText, runtimeShell }:
 
 let
   pname = "jd-gui";
@@ -15,7 +15,7 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk perl gradle ];
+    nativeBuildInputs = [ jdk perl gradle_5 ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = [ jdk gradle ];
+  nativeBuildInputs = [ jdk gradle_5 ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)

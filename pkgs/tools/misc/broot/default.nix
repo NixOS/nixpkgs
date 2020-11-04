@@ -1,40 +1,77 @@
-{ stdenv, rustPlatform, fetchFromGitHub, coreutils, libiconv, Security, installShellFiles }:
+{ stdenv
+, rustPlatform
+, fetchCrate
+, installShellFiles
+, makeWrapper
+, coreutils
+, libiconv
+, zlib
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "0.18.0";
+  version = "1.0.4";
 
-  src = fetchFromGitHub {
-    owner = "Canop";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0b2hggm2ckdzl9f2dn64gdyvd7flpq3szmx69k84f3fimabn7yrm";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "06gq7xn9g5wk6d5p732998q7lxbw2g6qb8vsv95jcnybarf88n1v";
   };
 
-  cargoSha256 = "1bl2y7h72vwi2jvnszd8vna4yc71s9n6kgmlq4ib2cjmzsppqdpa";
+  cargoSha256 = "1cbvi3jgj78gly3xkqbn8ai0ra5hpdphpdy7cphlrym0aj77ck4a";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+    zlib
+  ];
 
   postPatch = ''
     substituteInPlace src/verb/builtin.rs --replace '"/bin/' '"${coreutils}/bin/'
+
+    # Fill the version stub in the man page. We can't fill the date
+    # stub reproducibly.
+    substitute man/page man/broot.1 \
+      --replace "#version" "${version}"
   '';
 
   postInstall = ''
+    # Do not nag users about installing shell integration, since
+    # it is impure.
+    wrapProgram $out/bin/broot \
+      --set BR_INSTALL no
+
+    # Install shell function for bash.
+    $out/bin/broot --print-shell-function bash > br.bash
+    install -Dm0444 -t $out/etc/profile.d br.bash
+
+    # Install shell function for zsh.
+    $out/bin/broot --print-shell-function zsh > br.zsh
+    install -Dm0444 br.zsh $out/share/zsh/site-functions/br
+
+    # Install shell function for fish
+    $out/bin/broot --print-shell-function fish > br.fish
+    install -Dm0444 -t $out/share/fish/vendor_functions.d br.fish
+
     # install shell completion files
     OUT_DIR=$releaseDir/build/broot-*/out
 
     installShellCompletion --bash $OUT_DIR/{br,broot}.bash
     installShellCompletion --fish $OUT_DIR/{br,broot}.fish
     installShellCompletion --zsh $OUT_DIR/{_br,_broot}
+
+    installManPage man/broot.1
   '';
 
   meta = with stdenv.lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [ danieldk ];
     license = with licenses; [ mit ];
-    platforms = platforms.all;
   };
 }

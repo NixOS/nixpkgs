@@ -2,7 +2,7 @@
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
-, meson, ninja, pkgconfig
+, meson, ninja, pkg-config
 , autoreconfHook
 , python3Packages, which
 }:
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
       else [ ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch ]);
 
   nativeBuildInputs = if isFuse3
-    then [ meson ninja pkgconfig ]
+    then [ meson ninja pkg-config ]
     else [ autoreconfHook gettext ];
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";

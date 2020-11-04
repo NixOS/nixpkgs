@@ -1,14 +1,16 @@
 { config, lib, pkgs, ... }:
+with builtins;
 with lib;
 let
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
-  hashedServices = with builtins; (mapAttrs' (name: service: nameValuePair
-    "${name}_${config.networking.hostName}_${
+  hashedServices = mapAttrs'
+    (name: service: nameValuePair
+      "${name}_${config.networking.hostName}_${
         substring 0 12
         (hashString "md5" (unsafeDiscardStringContext (toJSON service)))}"
       service)
-    cfg.services);
+    cfg.services;
   configPath = "$HOME/.gitlab-runner/config.toml";
   configureScript = pkgs.writeShellScriptBin "gitlab-runner-configure" (
     if (cfg.configFile != null) then ''
@@ -47,6 +49,8 @@ let
           ] ++ service.registrationFlags
             ++ optional (service.buildsDir != null)
             "--builds-dir ${service.buildsDir}"
+            ++ optional (service.cloneUrl != null)
+            "--clone-url ${service.cloneUrl}"
             ++ optional (service.preCloneScript != null)
             "--pre-clone-script ${service.preCloneScript}"
             ++ optional (service.preBuildScript != null)
@@ -76,7 +80,7 @@ let
               ++ map (v: "--docker-allowed-images ${escapeShellArg v}") service.dockerAllowedImages
               ++ map (v: "--docker-allowed-services ${escapeShellArg v}") service.dockerAllowedServices
             )
-          ))} && sleep 1
+          ))} && sleep 1 || exit 1
         fi
       '') hashedServices)}
 
@@ -89,8 +93,17 @@ let
 
       # update global options
       remarshal --if toml --of json ${configPath} \
-        | jq -cM '.check_interval = ${toString cfg.checkInterval} |
-                  .concurrent = ${toString cfg.concurrent}' \
+        | jq -cM ${escapeShellArg (concatStringsSep " | " [
+            ".check_interval = ${toJSON cfg.checkInterval}"
+            ".concurrent = ${toJSON cfg.concurrent}"
+            ".sentry_dsn = ${toJSON cfg.sentryDSN}"
+            ".listen_address = ${toJSON cfg.prometheusListenAddress}"
+            ".session_server.listen_address = ${toJSON cfg.sessionServer.listenAddress}"
+            ".session_server.advertise_address = ${toJSON cfg.sessionServer.advertiseAddress}"
+            ".session_server.session_timeout = ${toJSON cfg.sessionServer.sessionTimeout}"
+            "del(.[] | nulls)"
+            "del(.session_server[] | nulls)"
+          ])} \
         | remarshal --if json --of toml \
         | sponge ${configPath}
 
@@ -139,6 +152,66 @@ in
         Limits how many jobs globally can be run concurrently.
         The most upper limit of jobs using all defined runners.
         0 does not mean unlimited.
+      '';
+    };
+    sentryDSN = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "https://public:private@host:port/1";
+      description = ''
+        Data Source Name for tracking of all system level errors to Sentry.
+      '';
+    };
+    prometheusListenAddress = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "localhost:8080";
+      description = ''
+        Address (&lt;host&gt;:&lt;port&gt;) on which the Prometheus metrics HTTP server
+        should be listening.
+      '';
+    };
+    sessionServer = mkOption {
+      type = types.submodule {
+        options = {
+          listenAddress = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "0.0.0.0:8093";
+            description = ''
+              An internal URL to be used for the session server.
+            '';
+          };
+          advertiseAddress = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "runner-host-name.tld:8093";
+            description = ''
+              The URL that the Runner will expose to GitLab to be used
+              to access the session server.
+              Fallbacks to <option>listenAddress</option> if not defined.
+            '';
+          };
+          sessionTimeout = mkOption {
+            type = types.int;
+            default = 1800;
+            description = ''
+              How long in seconds the session can stay active after
+              the job completes (which will block the job from finishing).
+            '';
+          };
+        };
+      };
+      default = { };
+      example = literalExample ''
+        {
+          listenAddress = "0.0.0.0:8093";
+        }
+      '';
+      description = ''
+        The session server allows the user to interact with jobs
+        that the Runner is responsible for. A good example of this is the
+        <link xlink:href="https://docs.gitlab.com/ee/ci/interactive_web_terminal/index.html">interactive web terminal</link>.
       '';
     };
     gracefulTermination = mkOption {
@@ -304,6 +377,14 @@ in
             description = ''
               Absolute path to a directory where builds will be stored
               in context of selected executor (Locally, Docker, SSH).
+            '';
+          };
+          cloneUrl = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "http://gitlab.example.local";
+            description = ''
+              Overwrite the URL for the GitLab instance. Used if the Runner can’t connect to GitLab on the URL GitLab exposes itself.
             '';
           };
           dockerImage = mkOption {

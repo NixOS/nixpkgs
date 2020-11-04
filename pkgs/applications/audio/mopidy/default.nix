@@ -14,9 +14,7 @@ let
 
     mopidy-gmusic = callPackage ./gmusic.nix { };
 
-    mopidy-local-images = callPackage ./local-images.nix { };
-
-    mopidy-local-sqlite = callPackage ./local-sqlite.nix { };
+    mopidy-local = callPackage ./local.nix { };
 
     mopidy-spotify = callPackage ./spotify.nix { };
 
@@ -39,6 +37,8 @@ let
     mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
     mopidy-iris = callPackage ./iris.nix { };
+
+    mopidy-tunein = callPackage ./tunein.nix { };
 
   };
 

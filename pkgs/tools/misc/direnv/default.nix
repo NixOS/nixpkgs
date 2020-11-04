@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoModule, bash }:
+{ stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.21.3";
+  version = "2.23.1";
 
   vendorSha256 = null;
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "1adi6ld9g4zgz0f6q0kkzrywclqrmikyp7yh22zm9lfdvd5hs8wp";
+    sha256 = "02b27imda9pg65z5xw2q398p2281d5d46vgs3i9mrwcfsbpl5s6d";
   };
 
   # we have no bash at the moment for windows
@@ -27,6 +27,13 @@ buildGoModule rec {
     make install DESTDIR=$out
     mkdir -p $out/share/fish/vendor_conf.d
     echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+  '';
+
+  checkInputs = [ fish zsh ];
+
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    make test-go test-bash test-fish test-zsh
   '';
 
   meta = with stdenv.lib; {

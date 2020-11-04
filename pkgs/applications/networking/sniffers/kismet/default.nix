@@ -10,11 +10,11 @@ assert !withPython;
 
 stdenv.mkDerivation rec {
   pname = "kismet";
-  version = "2020-04-R2";
+  version = "2020-09-R2";
 
   src = fetchurl {
     url = "https://www.kismetwireless.net/code/${pname}-${version}.tar.xz";
-    sha256 = "0hxmaln0y6bk9m1rshr4swmg0sqy3ic693vfk8haj7f5gnph96cm";
+    sha256 = "1n6y6sgqf50bng8n0mhs2r1w0ak14mv654sqay72a78wh2s7ywzg";
   };
 
   nativeBuildInputs = [ pkgconfig ];

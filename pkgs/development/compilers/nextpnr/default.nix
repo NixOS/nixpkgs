@@ -14,14 +14,14 @@ let
 in
 with stdenv; mkDerivation rec {
   pname = "nextpnr";
-  version = "2020.06.12";
+  version = "2020.08.22";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr";
-      rev    = "c9e7d1448eaa4644d18073316e30586f2cb1d75a";
-      sha256 = "13jyg9d8q9xs1gpb8mz315hcyi3npr4kbfi31x2laz4zmki6ibai";
+      rev    = "c8ecb8341ca766e1e7565cc2b652b63eaba67508";
+      sha256 = "1cf9ad7w5x452qdc6m9c3in6v9yzip3n1as978lbdh76f5mc00fv";
       name   = "nextpnr";
     })
     (fetchFromGitHub {
@@ -50,7 +50,7 @@ with stdenv; mkDerivation rec {
       "-DBUILD_TESTS=ON"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
-      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDB=OFF"

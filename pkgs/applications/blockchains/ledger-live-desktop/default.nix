@@ -2,12 +2,12 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.6.0";
+  version = "2.15.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    sha256 = "0c58bx6fgykz0fl2yjbpbg6h5bv31zmjwgd1m3qi8afqryf52m5w";
+    sha256 = "06sm4ah05j0f3bxb1sbdi8mazmxk166y2gaycll6p2xhd105ins3";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -30,7 +30,8 @@ in appimageTools.wrapType2 rec {
     description = "Wallet app for Ledger Nano S and Ledger Blue";
     homepage = "https://www.ledger.com/live";
     license = licenses.mit;
-    maintainers = with maintainers; [ thedavidmeister nyanloutre ];
+    maintainers = with maintainers; [ thedavidmeister nyanloutre RaghavSood ];
     platforms = [ "x86_64-linux" ];
   };
 }
+

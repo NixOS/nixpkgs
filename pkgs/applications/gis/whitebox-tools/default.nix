@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
     license = licenses.mit;
     maintainers = [ maintainers.mpickering ];
-    platforms = platforms.all;
   };
 }

@@ -95,12 +95,33 @@ stdenv.mkDerivation rec {
       cd ..
     done
     ''}
-    ${lib.optionalString (lib.versionAtLeast version "10.1") ''
+    ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
       cd pkg/builds/cuda-toolkit
       mv * $out/
     ''}
+    ${lib.optionalString (lib.versionAtLeast version "11") ''
+      mkdir -p $out/bin $out/lib64 $out/include $out/doc
+      for dir in pkg/builds/* pkg/builds/cuda_nvcc/nvvm pkg/builds/cuda_cupti/extras/CUPTI; do
+        if [ -d $dir/bin ]; then
+          mv $dir/bin/* $out/bin
+        fi
+        if [ -d $dir/doc ]; then
+          (cd $dir/doc && find . -type d -exec mkdir -p $out/doc/\{} \;)
+          (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $out/doc/\{} \;)
+        fi
+        if [ -L $dir/include ] || [ -d $dir/include ]; then
+          (cd $dir/include && find . -type d -exec mkdir -p $out/include/\{} \;)
+          (cd $dir/include && find . \( -type f -o -type l \) -exec mv \{} $out/include/\{} \;)
+        fi
+        if [ -L $dir/lib64 ] || [ -d $dir/lib64 ]; then
+          (cd $dir/lib64 && find . -type d -exec mkdir -p $out/lib64/\{} \;)
+          (cd $dir/lib64 && find . \( -type f -o -type l \) -exec mv \{} $out/lib64/\{} \;)
+        fi
+      done
+      mv pkg/builds/cuda_nvcc/nvvm $out/nvvm
+    ''}
 
-    rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
+    rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
     ${lib.optionalString (lib.versionOlder version "10.1") ''
     # let's remove the 32-bit libraries, they confuse the lib64->lib mover
@@ -133,8 +154,9 @@ stdenv.mkDerivation rec {
 
     # Remove OpenCL libraries as they are provided by ocl-icd and driver.
     rm -f $out/lib64/libOpenCL*
-    ${lib.optionalString (lib.versionAtLeast version "10.1") ''
+    ${lib.optionalString (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
       mv $out/lib64 $out/lib
+      mv $out/extras/CUPTI/lib64/libcupti* $out/lib
     ''}
 
     # Set compiler for NVCC.
@@ -152,7 +174,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for b in nvvp nsight; do
+    for b in nvvp ${lib.optionalString (lib.versionOlder version "11") "nsight"}; do
       wrapProgram "$out/bin/$b" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     done

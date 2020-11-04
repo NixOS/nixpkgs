@@ -99,7 +99,7 @@ in
 
     ##############################################
     # PROVIDER configuration
-    # Taken from: https://github.com/pusher/oauth2_proxy/blob/master/providers/providers.go
+    # Taken from: https://github.com/oauth2-proxy/oauth2-proxy/blob/master/providers/providers.go
     provider = mkOption {
       type = types.enum [
         "google"
@@ -346,7 +346,9 @@ in
         type = types.nullOr types.str;
         default = null;
         description = ''
-          An optional cookie domain to force cookies to.
+          Optional cookie domains to force cookies to (ie: `.yourcompany.com`).
+          The longest domain matching the request's host will be used (or the shortest
+          cookie domain if there is no match).
         '';
         example = ".yourcompany.com";
       };
@@ -537,7 +539,7 @@ in
     extraConfig = mkOption {
       default = {};
       description = ''
-        Extra config to pass to oauth2_proxy.
+        Extra config to pass to oauth2-proxy.
       '';
     };
 
@@ -545,7 +547,7 @@ in
       type = types.nullOr types.path;
       default = null;
       description = ''
-        oauth2_proxy allows passing sensitive configuration via environment variables.
+        oauth2-proxy allows passing sensitive configuration via environment variables.
         Make a file that contains lines like
         OAUTH2_PROXY_CLIENT_SECRET=asdfasdfasdf.apps.googleuserscontent.com
         and specify the path here.
@@ -577,7 +579,7 @@ in
       serviceConfig = {
         User = "oauth2_proxy";
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/oauth2_proxy ${configString}";
+        ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
         EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
       };
     };

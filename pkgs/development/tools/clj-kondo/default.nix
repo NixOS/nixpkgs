@@ -1,4 +1,4 @@
-{ stdenv, lib, graalvm8, fetchurl }:
+{ stdenv, lib, graalvm8-ce, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "clj-kondo";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ graalvm8 ];
+  buildInputs = [ graalvm8-ce ];
 
   buildPhase = ''
     native-image  \
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A linter for Clojure code that sparks joy.";
+    description = "A linter for Clojure code that sparks joy";
     homepage = "https://github.com/borkdude/clj-kondo";
     license = licenses.epl10;
-    platforms = graalvm8.meta.platforms;
+    platforms = graalvm8-ce.meta.platforms;
     maintainers = with maintainers; [ jlesquembre bandresen ];
   };
 }

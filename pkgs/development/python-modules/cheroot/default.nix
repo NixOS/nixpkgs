@@ -8,6 +8,7 @@
 , pytest-mock
 , pytest-testmon
 , requests
+, requests-toolbelt
 , requests-unixsocket
 , setuptools_scm
 , setuptools-scm-git-archive
@@ -17,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.3.0";
+  version = "8.4.5";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0577e1f28661727d472671a7cc4e0c12ea0cbc5220265e70f00a8b8cb628931";
+    sha256 = "b6c18caf5f79cdae668c35fc8309fc88ea4a964cce9e2ca8504fab13bcf57301";
   };
 
   nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
@@ -39,9 +40,14 @@ buildPythonPackage rec {
     pytest-mock
     pytest-testmon
     requests
+    requests-toolbelt
     requests-unixsocket
     trustme
   ];
+
+  # avoid attempting to use 3 packages not available on nixpkgs
+  # (jaraco.apt, jaraco.context, yg.lockfile)
+  pytestFlagsArray = [ "--ignore=cheroot/test/test_wsgi.py" ];
 
   # Disable doctest plugin because times out
   # Disable xdist (-n arg) because it's incompatible with testmon

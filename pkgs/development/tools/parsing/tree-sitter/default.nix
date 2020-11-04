@@ -11,9 +11,9 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.16.4";
-  sha256 = "1m0zxz7h4w2zny7yhrlxwqvizcf043cizg7ca5dn3h9k16adcxil";
-  cargoSha256 = "0hxm73diwiybljm6yy3vmwfdpg33b4rlg0h7afq4xgccq2vkwafs";
+  version = "0.17.1";
+  sha256 = "sha256-k61actAEyao/Ea8aw9PCm252U+1I0d43MAYC68/lui4=";
+  cargoSha256 = "sha256-Jp/Fl20ZZfaIdWinOOujNVH5JjJNtyUYHfyTrmeeoRg=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -55,13 +55,16 @@ in rustPlatform.buildRustPackage {
     # needed for the tests
     rm -rf test/fixtures/grammars
     ln -s ${grammars} test/fixtures/grammars
+
+    # These functions do not appear in the source code
+    sed -i /_ts_query_context/d lib/binding_web/exports.json
+    sed -i /___assert_fail/d lib/binding_web/exports.json
   '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
   preBuild = ''
-    HOME=/tmp
     bash ./script/build-wasm --debug
   '';
 
@@ -90,7 +93,6 @@ in rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Profpatsch ];
     # Darwin needs some more work with default libraries

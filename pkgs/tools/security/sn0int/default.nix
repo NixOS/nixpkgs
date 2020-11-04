@@ -1,18 +1,18 @@
-{ lib, fetchFromGitHub, rustPlatform,
-  libsodium, libseccomp, sqlite, pkgconfig }:
+{ lib, fetchFromGitHub, rustPlatform, libsodium, libseccomp, sqlite, pkgconfig
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sn0int";
-  version = "0.18.2";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b21b0ryq03zrhqailg2iajirn30l358aj3k44lfnravr4h9zwkj";
+    sha256 = "10f1wblczxlww09f4dl8i9zzgpr14jj7s329wkvm7lafmwx3qrn5";
   };
 
-  cargoSha256 = "1pvn0sc325b5fh29m2l6cack4qfssa4lp3zhyb1qzkb3fmw3lgcy";
+  cargoSha256 = "1v0q751ylsfpdjwsbl20pvn7g75w503jwjl5kn5kc8xq3g0lnp65";
 
   nativeBuildInputs = [ pkgconfig ];
 

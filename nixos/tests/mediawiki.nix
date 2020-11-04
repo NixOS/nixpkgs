@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     machine.wait_for_unit("phpfpm-mediawiki.service")
 
-    page = machine.succeed("curl -L http://localhost/")
+    page = machine.succeed("curl -fL http://localhost/")
     assert "MediaWiki has been installed" in page
   '';
 })

@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.51.3";
+  version = "3.53.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ecf687696dd449067f69ef6730c4d4a0189db1f8d1aad9e376358354631d5b2c";
+    sha256 = "ef72be284e7f2b61ac0894b44165926f13f5d995b2bf3cd8a8dedc6224b255a7";
   };
 
   propagatedBuildInputs = [ python-utils ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
     pytest sphinx flake8 pytestpep8 pytest-flakes pytestcov
     pytestcache freezegun
   ];
-  # ignore tests on the nix wrapped setup.py and don't flake .eggs directory
+  # ignore tests on the nix wrapped setup.py
   checkPhase = ''
     runHook preCheck
-    ${python.interpreter} setup.py test --addopts "--ignore=.eggs"
+    ${python.interpreter} setup.py test
     runHook postCheck
   '';
 
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://progressbar-2.readthedocs.io/en/latest/";
     description = "Text progressbar library for python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    maintainers = with maintainers; [ ashgillman turion ];
   };
 }

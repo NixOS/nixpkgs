@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "buildkit";
-  version = "0.7.1";
+  version = "0.7.2";
 
   goPackagePath = "github.com/moby/buildkit";
   subPackages = [ "cmd/buildctl" ] ++ stdenv.lib.optionals stdenv.isLinux [ "cmd/buildkitd" ];
@@ -11,10 +11,10 @@ buildGoPackage rec {
     owner = "moby";
     repo = "buildkit";
     rev = "v${version}";
-    sha256 = "048h69ffgmpir2ix9ldi6zrzlwxa5yz3idg5ajspz2dihmzmnwws";
+    sha256 = "0kn2ad0rh3xlcxjxslkyrfxhv3cx88996nhxn86605x1mybxb2iq";
   };
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/version.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/version.Version=${version} -X ${goPackagePath}/version.Revision=${src.rev}" ];
 
   meta = with stdenv.lib; {
     description = "Concurrent, cache-efficient, and Dockerfile-agnostic builder toolkit";

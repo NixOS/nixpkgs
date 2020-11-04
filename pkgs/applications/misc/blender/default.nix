@@ -9,6 +9,7 @@
 , colladaSupport ? true, opencollada
 , makeWrapper
 , pugixml, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, embree
 }:
 
 with lib;
@@ -17,11 +18,11 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.83.0";
+  version = "2.90.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "07rzm4xaj94pjxy2vlqfhi1adsqpshfkrzrq8kljmcbnw22vrqhl";
+    sha256 = "169xcmm1zkvab14qdxggqc758xdkqs7r7imwi6yx2fl2djacr3g7";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
       (opensubdiv.override { inherit cudaSupport; })
       tbb
       makeWrapper
+      embree
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -50,13 +52,20 @@ stdenv.mkDerivation rec {
     ++ optional cudaSupport cudatoolkit
     ++ optional colladaSupport opencollada;
 
-  postPatch =
-    if stdenv.isDarwin then ''
+  postPatch = ''
+    # allow usage of dynamically linked embree
+    rm build_files/cmake/Modules/FindEmbree.cmake
+  '' +
+    (if stdenv.isDarwin then ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+        --replace 'set(PYTHON_VERSION 3.7)' \
+                  'set(PYTHON_VERSION ${python.pythonVersion})' \
+        --replace '${"$"}{PYTHON_VERSION}m' \
+                  '${"$"}{PYTHON_VERSION}' \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
         --replace '${"$"}{LIBDIR}/opencollada' \
@@ -73,7 +82,7 @@ stdenv.mkDerivation rec {
                   'set(OPENEXR_INCLUDE_DIRS "${openexr.dev}/include/OpenEXR") #'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '';
+    '');
 
   cmakeFlags =
     [

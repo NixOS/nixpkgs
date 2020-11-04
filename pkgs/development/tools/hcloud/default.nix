@@ -1,40 +1,35 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.16.2";
-
-  goPackagePath = "github.com/hetznercloud/cli";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0cxh92df8gdl4bmr22pdvdxdkdjyfy0jv48y0k6awy1xz61r94ap";
+    sha256 = "0iq04jfqvmwlm6947kzz4c3a33lvwxvj42z179rc3126b5v7bq54";
   };
 
-  vendorSha256 = "1iiqmdnjnrsqgjisb5j5casa2hmqmafn79157skl5zxawndvc2rj";
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
+  vendorSha256 = "1svwrb5wyz5d8fgx36bpypnfq4hmpfxyd197cla9wnqpbkia7n5r";
+
+  doCheck = false;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 
   postInstall = ''
-    mkdir -p \
-      $out/etc/bash_completion.d \
-      $out/share/zsh/vendor-completions
-
-    # Add bash completions
-    $out/bin/hcloud completion bash > "$out/etc/bash_completion.d/hcloud"
-
-    # Add zsh completions
-    echo "#compdef hcloud" > "$out/share/zsh/vendor-completions/_hcloud"
-    $out/bin/hcloud completion zsh >> "$out/share/zsh/vendor-completions/_hcloud"
+    for shell in bash zsh; do
+      $out/bin/hcloud completion $shell > hcloud.$shell
+      installShellCompletion hcloud.$shell
+    done
   '';
 
   meta = {
     description = "A command-line interface for Hetzner Cloud, a provider for cloud virtual private servers";
     homepage = "https://github.com/hetznercloud/cli";
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.zauberpony ];
   };
 }

@@ -1,5 +1,3 @@
-# TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
-# but I have gvim with python support now :) - Marc
 { source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
 , writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
@@ -156,7 +154,12 @@ in stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
-      "$out"/bin/{vim,gvim}
+      "$out"/bin/vim
+    if [[ -e "$out"/bin/gvim ]]; then
+      patchelf --set-rpath \
+        "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
+        "$out"/bin/gvim
+    fi
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''

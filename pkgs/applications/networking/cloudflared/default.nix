@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2020.5.1";
+  version = "2020.10.2";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "0r1n3a8h8gyww4p2amb24jmp8zkyxy1ava3nbqgwlfjr3zagga00";
+    sha256 = "0ppl74gb46r2x65hl7z1hjdqlr8la0pvhy8af8isk11sbxmprqjj";
   };
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
 

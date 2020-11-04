@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doctest";
-  version = "2.3.8";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "onqtam";
     repo = "doctest";
     rev = version;
-    sha256 = "16w907750jnp98vdzkn72lzwy1zyryaqvfi80lbdp398pj23rq65";
+    sha256 = "1yi95saqv8qb3ix6w8d7ffvs7qbwvqmq6wblckhxhicxxdxk85cd";
   };
 
   nativeBuildInputs = [ cmake ];

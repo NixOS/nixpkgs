@@ -18,22 +18,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.1.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0034c2qp8sf6li7d38rnd6h9vhhi82p5rysm0pkrdhlmfqkqdgma";
+    sha256 = "19ki9qyg9q26jq4jkcf8b6xhy4g4cn30zqccgl3324mnijhl33jk";
     fetchSubmodules = true;
   };
-  cargoSha256 = "1wbqxv2mzbs27j617a88gd7z0fjnjr2z1nklqfk49y62v8f1vsm1";
+  cargoSha256 = "1q3gmilphkbh54y7m711ccr1gr5slk2nn91qq61rmmphyylwkgv2";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = with stdenv.lib; [ ]
-    ++ optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance
@@ -55,6 +54,9 @@ rustPlatform.buildRustPackage rec {
 
   # TODO: Move to enhanced installShellCompletion when merged: PR #83630
   postInstall = ''
+    # remove test plugin and test server
+    rm -rf $out/lib $out/bin/test_server
+
     $out/bin/deno completions bash > deno.bash
     $out/bin/deno completions fish > deno.fish
     $out/bin/deno completions zsh  > _deno

@@ -3,11 +3,11 @@
 
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.45";
+  version = "2.46";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "07wyp3k2kiprr47mc4vxb7vmh7g5kshcqw0gq3qr87gi78c9i66m";
+    sha256 = "0zyclydgyg8nhwxrzw7x4f82975cqdmp12py33k6sballx6jhgiy";
   };
 
   sourceRoot = ".";
@@ -87,7 +87,7 @@ with builtins; buildDotnetPackage rec {
 
   dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
 
-  postInstall = 
+  postInstall =
   let
     extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
   in
@@ -111,7 +111,7 @@ with builtins; buildDotnetPackage rec {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz joncojonathan jraygauthier ];
+    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz jraygauthier ];
     platforms = with stdenv.lib.platforms; all;
     license = stdenv.lib.licenses.gpl2;
   };

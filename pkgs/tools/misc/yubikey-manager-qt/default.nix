@@ -20,11 +20,11 @@ let inherit (stdenv) lib; in
 
 stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0rbr72741q7fqkr9qmvgj2mi6192ayz7bl935q2bsnqils4wsa3f";
+    sha256 = "1yimlaqvhq34gw6wkqgil0qq8x9zbfzh4psqihjr2d9jaa2wygwy";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook python3.pkgs.wrapPython qmake ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit version;
-    description = "Cross-platform application for configuring any YubiKey over all USB interfaces.";
+    description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];

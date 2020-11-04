@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/{bin,lib/java/leo3}
     cp "${jar}" "$out/lib/java/leo3/leo3.jar"
     echo "#!${runtimeShell}" > "$out/bin/leo3"
-    echo "'${openjdk}/bin/java' -jar '$out/lib/java/leo3/leo3.jar' \"\$@\""  > "$out/bin/leo3"
+    echo "'${openjdk}/bin/java' -jar '$out/lib/java/leo3/leo3.jar' \"\$@\""  >> "$out/bin/leo3"
     chmod a+x "$out/bin/leo3"
   '';
 

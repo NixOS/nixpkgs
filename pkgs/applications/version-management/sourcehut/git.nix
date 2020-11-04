@@ -4,52 +4,46 @@
 , srht, minio, pygit2, scmsrht }:
 
 let
-  version = "0.50.3";
+  version = "0.61.10";
 
   buildShell = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-shell";
-
-  vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
+    vendorSha256 = "1abyv2s5l3bs0iylpgyj3jri2hh1iy8fiadxm7g6l2vl58h0b9ba";
   };
 
   buildDispatcher = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatcher";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-dispatch";
-
-  vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
+    vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
   };
 
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-keys";
-
-  vendorSha256 = "16j7kpar318s4766pln8xn6d51xqblwig5n1jywhj0sl80qjl5cv";
+    vendorSha256 = "1d94cqy7x0q0agwg515xxsbl70b3qrzxbzsyjhn1pbyj532brn7f";
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-update-hook";
+    vendorSha256 = "0fwzqpjv8x5y3w3bfjd0x0cvqjjak23m0zj88hf32jpw49xmjkih";
+  };
 
-  vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
+  buildAPI = src: buildGoModule {
+    inherit src version;
+    pname = "gitsrht-api";
+    vendorSha256 = "0d6kmsbsgj2q5nddx4w675zbsiarffj9vqplwvqk7dwz4id2wnif";
   };
 in buildPythonPackage rec {
-  inherit version;
   pname = "gitsrht";
+  inherit version;
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     rev = version;
-    sha256 = "0rxsr8cizac5xv8bgx2s1p2q4n8i5s51p9qbqdjad9z1xmwi6rvn";
+    sha256 = "0g7aj5wlns0m3kf2aajqjjb5fwk5vbb8frrkdfp4118235h3xcqy";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -62,7 +56,6 @@ in buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   postInstall = ''
@@ -71,6 +64,7 @@ in buildPythonPackage rec {
     cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
     cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
     cp ${buildUpdateHook "${src}/gitsrht-update-hook"}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    cp ${buildAPI "${src}/api"}/bin/api $out/bin/gitsrht-api
   '';
 
   meta = with stdenv.lib; {

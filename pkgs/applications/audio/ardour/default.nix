@@ -55,13 +55,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.0";
+  version = "6.2";
 
   # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "162jd96zahl05fdmjwvpdfjxbhd6ifbav6xqa0vv6rsdl4zk395q";
+    sha256 = "17jxbqavricy01x4ymq6d302djsqfnv84m7dm4fd8cpka0dqjp1y";
   };
 
   patches = [

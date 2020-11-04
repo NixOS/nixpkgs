@@ -58,9 +58,9 @@ Jan 07 15:55:57 hagbard systemd[1]: Started PostgreSQL Server.
  <para>
   Units can be stopped, started or restarted:
 <screen>
-# systemctl stop postgresql.service
-# systemctl start postgresql.service
-# systemctl restart postgresql.service
+<prompt># </prompt>systemctl stop postgresql.service
+<prompt># </prompt>systemctl start postgresql.service
+<prompt># </prompt>systemctl restart postgresql.service
 </screen>
   These operations are synchronous: they wait until the service has finished
   starting or stopping (or has failed). Starting a unit will cause the

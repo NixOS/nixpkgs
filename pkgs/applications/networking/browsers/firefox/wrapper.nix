@@ -2,14 +2,15 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
+, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd
 , gnome3/*.gnome-shell*/
-, browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
+, browserpass, chrome-gnome-shell, uget-integrator, plasma5, bukubrow
 , tridactyl-native
 , fx_cast_bridge
 , udev
 , kerberos
 , libva
+, mesa # firefox wants gbm for drm+dmabuf
 }:
 
 ## configurability of the wrapper itself
@@ -26,16 +27,19 @@ let
     , nameSuffix ? ""
     , icon ? browserName
     , extraNativeMessagingHosts ? []
-    , gdkWayland ? false
+    , pkcs11Modules ? []
+    , forceWayland ? false
+    , useGlvnd ? true
     , cfg ? config.${browserName} or {}
     }:
 
-    assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
+    assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
+      alsaSupport = browser.alsaSupport or false;
 
       plugins =
         let
@@ -61,18 +65,20 @@ let
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
-          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
+          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optionals stdenv.isLinux [ udev libva ]
+      libs =   lib.optionals stdenv.isLinux [ udev libva mesa ]
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
-            ++ lib.optional gdkWayland libglvnd
+            ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
-            ++ lib.optional (config.pulseaudio or true) libpulseaudio;
+            ++ lib.optional (config.pulseaudio or true) libpulseaudio
+            ++ lib.optional alsaSupport alsaLib
+            ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
@@ -83,7 +89,7 @@ let
         exec = "${browserName}${nameSuffix} %U";
         inherit icon;
         comment = "";
-        desktopName = "${desktopName}${nameSuffix}${lib.optionalString gdkWayland " (Wayland)"}";
+        desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
         categories = "Network;WebBrowser;";
         mimeType = stdenv.lib.concatStringsSep ";" [
@@ -124,8 +130,8 @@ let
             --set SNAP_NAME "firefox" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
-            ${lib.optionalString gdkWayland ''
-              --set GDK_BACKEND "wayland" \
+            ${lib.optionalString forceWayland ''
+              --set MOZ_ENABLE_WAYLAND "1" \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
@@ -150,6 +156,11 @@ let
         mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString nativeMessagingHosts}; do
             ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
+        done
+
+        mkdir -p $out/lib/mozilla/pkcs11-modules
+        for ext in ${toString pkcs11Modules}; do
+            ln -sLt $out/lib/mozilla/pkcs11-modules $ext/lib/mozilla/pkcs11-modules/*
         done
 
         # For manpages, in case the program supplies them

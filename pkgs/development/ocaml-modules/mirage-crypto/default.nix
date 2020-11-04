@@ -1,14 +1,14 @@
-{ lib, fetchurl, buildDunePackage, ounit, cstruct, dune-configurator, pkg-config }:
+{ lib, fetchurl, buildDunePackage, ounit, cstruct, dune-configurator, eqaf, pkg-config }:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.08";
 
   pname = "mirage-crypto";
-  version = "0.8.0";
+  version = "0.8.7";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-v${version}.tbz";
-    sha256 = "1wb2923v17z179v866ragil0r601w5b3kvpnbkmkwlijp4i5grih";
+    sha256 = "1gx86h6kk39zq3kvl854jc2ap2755paalp1f7iv8r9js2xnbxfxy";
   };
 
   useDune2 = true;
@@ -17,7 +17,7 @@ buildDunePackage rec {
   checkInputs = [ ounit ];
 
   nativeBuildInputs = [ dune-configurator pkg-config ];
-  propagatedBuildInputs = [ cstruct ];
+  propagatedBuildInputs = [ cstruct eqaf ];
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-crypto";

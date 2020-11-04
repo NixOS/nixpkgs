@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   patches = [
+    ../7/compiler-rt-glibc.patch
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
   ]# ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ stdenv.lib.optional stdenv.hostPlatform.isAarch32 ./compiler-rt-armv7l.patch;

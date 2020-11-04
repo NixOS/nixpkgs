@@ -1,6 +1,6 @@
 { stdenv, lib
 , pkgconfig, autoreconfHook
-, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua
+, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ];
+  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ]
+                ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]

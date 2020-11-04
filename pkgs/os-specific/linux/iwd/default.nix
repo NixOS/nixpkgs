@@ -13,13 +13,15 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.7";
+  version = "1.9";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "1qi25qav1rv8gm5lbrip8ayq5vwynmyv2q4ar7bbmnjh6cglvyh2";
+    sha256 = "193wa13i2prfz1zr7nvwbgrxgacms57zj1n7x28yy5hmm3nnwbrd";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     autoreconfHook

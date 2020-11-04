@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchurl, dpkg
+{ stdenv, lib, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
@@ -41,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2020.4";
+  version = "2020.6";
 
   src = fetchurl {
     url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "17xi8g2k89vi4d0j7pr33bx9zjapa2qh4pymbrqvxwli3yhq6zwr";
+    sha256 = "0d9rv874avx86jppl1dky0nfq1633as0z8yz3h3f69nhmcbwhlr3";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ systemd.lib libnotify libappindicator ];
+  runtimeDependencies = [ (lib.getLib systemd) libnotify libappindicator ];
 
   installPhase = ''
     runHook preInstall

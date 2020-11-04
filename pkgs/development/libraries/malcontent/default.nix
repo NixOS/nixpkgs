@@ -3,7 +3,7 @@
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , wrapGAppsHook
 , glib
@@ -19,16 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.7.0";
+  version = "0.9.0";
 
-  outputs = [ "bin" "out" "dev" "man" "installedTests" ];
+  outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
     repo = pname;
     rev = version;
-    sha256 = "0lxakzj75pvpgwbjfyfkg0gyzvry00zhc9h9cd8f0wksg7mabzbh";
+    sha256 = "DEtibrGgHSgRjaarAzizzLN1xsJKXl+LCQ29FmpPoJo=";
   };
 
   patches = [
@@ -37,19 +37,12 @@ stdenv.mkDerivation rec {
 
     # Do not build things that are part of malcontent-ui package
     ./better-separation.patch
-
-    # Fix pam installed test
-    # https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/50
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/pwithnall/malcontent/commit/5d102eeb0604e65fc977ca77d4b249e986e634cc.patch";
-      sha256 = "1vs35zfp2sa2rps5h1240h73kvlspmv7mfr6f8mcbzvhj1wgzw74";
-    })
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];
@@ -72,6 +65,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dpamlibdir=${placeholder "pam"}/lib/security"
     "-Dui=disabled"
   ];
 
@@ -83,6 +77,13 @@ stdenv.mkDerivation rec {
       --replace "/bin/false" "${coreutils}/bin/false"
   '';
 
+  postInstall = ''
+    # `giDiscoverSelf` only picks up paths in `out` output.
+    # This needs to be in `postInstall` so that it runs before
+    # `gappsWrapperArgsHook` that runs as one of `preFixupPhases`.
+    addToSearchPath GI_TYPELIB_PATH "$lib/lib/girepository-1.0"
+  '';
+
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.malcontent;
@@ -90,6 +91,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    # We need to install Polkit & AccountsService data files in `out`
+    # but `buildEnv` only uses `bin` when both `bin` and `out` are present.
+    outputsToInstall = [ "bin" "out" "man" ];
+
     description = "Parental controls library";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;

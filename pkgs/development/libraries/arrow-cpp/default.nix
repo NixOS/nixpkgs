@@ -1,26 +1,32 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, autoconf, boost
-, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4, perl
-, python3, rapidjson, snappy, thrift, which, zlib, zstd
+{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames
+, autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
+, perl, python3, rapidjson, snappy, thrift, utf8proc, which, zlib, zstd
 , enableShared ? true }:
 
 let
+  arrow-testing = fetchFromGitHub {
+    owner = "apache";
+    repo = "arrow-testing";
+    rev = "860376d4e586a3ac34ec93089889da624ead6c2a";
+    sha256 = "16k3lz4ji4y3qcjhr765q14jwwlac8iqscwndwd8ll3zr0vy69b0";
+  };
+
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "bcd9ebcf9204a346df47204fe21b85c8d0498816";
-    sha256 = "0m16pqzbvxiaradq088q5ai6fwnz9srbap996397znwppvva479b";
+    rev = "d914f9d289488c7db1759d7a88a4a1b8f062c7dd";
+    sha256 = "0xj3ynck2wv6l70xnmvs13bz1jycqjrl5k4lwhhwgag338048als";
   };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "0.17.1";
+  version = "2.0.0";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "18lyvbibfdw3w77cy5whbq7c6mshn5fg2bhvgw7v226a7cs1rifb";
+    sha256 = "1ghzqw0rx4rxa2d7i76y3szisv0bd9cl7vzadbc41cvvhk6440xy";
   };
-
   sourceRoot = "apache-arrow-${version}/cpp";
 
   ARROW_JEMALLOC_URL = fetchurl {
@@ -32,19 +38,18 @@ in stdenv.mkDerivation rec {
     sha256 = "1xl7z0vwbn5iycg7amka9jd6hxd8nmfk7nahi4p9w2bnw9f0wcrl";
   };
 
+  ARROW_MIMALLOC_URL = fetchurl {
+    # From
+    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
+    # ./cpp/thirdparty/versions.txt
+    url =
+      "https://github.com/microsoft/mimalloc/archive/v1.6.4.tar.gz";
+    sha256 = "1b8av0974q70alcmaw5cwzbn6n9blnpmj721ik1qwmbbwwd6nqgs";
+  };
+
   patches = [
     # patch to fix python-test
     ./darwin.patch
-
-    # fix musl build
-    (fetchpatch {
-      url = "https://github.com/apache/arrow/commit/de4168786dfd8ab932f48801e0a7a6b8a370c19d.diff";
-      sha256 = "1nl4y1rwdl0gn67v7l05ibc4lwkn6x7fhwbmslmm08cqmwfjsx3y";
-      stripLen = 1;
-    })
-  ] ++ lib.optionals (!enableShared) [
-    # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
-    ./jemalloc-disable-shared.patch
   ];
 
   nativeBuildInputs = [
@@ -63,6 +68,7 @@ in stdenv.mkDerivation rec {
     rapidjson
     snappy
     thrift
+    utf8proc
     zlib
     zstd
   ] ++ lib.optionals enableShared [
@@ -71,15 +77,17 @@ in stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace cmake_modules/FindLz4.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-
     patchShebangs build-support/
   '';
 
   cmakeFlags = [
     "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
+    "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"
+    "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
+    "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_PLASMA=ON"
     # Disable Python for static mode because openblas is currently broken there.
     "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
@@ -87,24 +95,23 @@ in stdenv.mkDerivation rec {
     "-DARROW_WITH_BROTLI=ON"
     "-DARROW_WITH_LZ4=ON"
     "-DARROW_WITH_SNAPPY=ON"
+    "-DARROW_WITH_UTF8PROC=ON"
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
+    "-DARROW_MIMALLOC=ON"
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
   ] ++ lib.optionals (!enableShared) [
-    "-DARROW_BUILD_SHARED=OFF"
-    "-DARROW_BOOST_USE_SHARED=OFF"
-    "-DARROW_GFLAGS_USE_SHARED=OFF"
-    "-DARROW_PROTOBUF_USE_SHARED=OFF"
     "-DARROW_TEST_LINKAGE=static"
-    "-DOPENSSL_USE_STATIC_LIBS=ON"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
+  ARROW_TEST_DATA =
+    if doInstallCheck then "${arrow-testing}/data" else null;
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];

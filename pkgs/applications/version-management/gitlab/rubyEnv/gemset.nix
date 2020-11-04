@@ -2382,10 +2382,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0invfvfb252ihsdr65rylkvd1x2wy004jval52v3i8ybb0jhc5hi";
+      sha256 = "1vxkqciny5v4jgmjxl8qrgbmig2cij2iskqbwh4bfcmpxf467ch3";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.2.1";
   };
   kaminari-actionview = {
     dependencies = ["actionview" "kaminari-core"];
@@ -2393,10 +2393,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mhhsm6xhmwqc7hfw7xnk1kdbfg468bqs5awcqm5j6j8b9zyjvdi";
+      sha256 = "0w0p1hyv6lgf6h036cmn2kbkdv4x7g0g9q9kc5gzkpz7amlxr8ri";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.2.1";
   };
   kaminari-activerecord = {
     dependencies = ["activerecord" "kaminari-core"];
@@ -2404,20 +2404,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1kb5aj6iy1cwcq5548jd3w1ipxicnzmnx2ay1s4hvad2gvrd4g93";
+      sha256 = "02n5xxv6ilh39q2m6vcz7qrdai7ghk3s178dw6f0b3lavwyq49w3";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.2.1";
   };
   kaminari-core = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0r2n293ad1xr9wgn8cr53nfzwls4w3p1xi4kjfjgl1z0yf05mpwr";
+      sha256 = "0h04cr4y1jfn81gxy439vmczifghc2cvsyw47aa32is5bbxg1wlz";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.2.1";
   };
   kgio = {
     groups = ["default" "unicorn"];

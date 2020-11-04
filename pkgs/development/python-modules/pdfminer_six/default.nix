@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, pycryptodome, chardet, nose, sortedcontainers }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, cryptography, chardet, nose, sortedcontainers }:
 
 buildPythonPackage rec {
   pname = "pdfminer_six";
-  version = "20200517";
+  version = "20201018";
 
   disabled = !isPy3k;
 
@@ -11,10 +11,10 @@ buildPythonPackage rec {
     owner = "pdfminer";
     repo = "pdfminer.six";
     rev = version;
-    sha256 = "00272pxkh6djm37yvlvgd06w7ycf35srwk6n3p58ppw5hgmpkhc2";
+    sha256 = "1a2fxxnnjqbx344znpvx7cnv1881dk6585ibw01inhfq3w6yj2lr";
   };
 
-  propagatedBuildInputs = [ chardet pycryptodome sortedcontainers ];
+  propagatedBuildInputs = [ chardet cryptography sortedcontainers ];
 
   checkInputs = [ nose ];
   checkPhase = ''

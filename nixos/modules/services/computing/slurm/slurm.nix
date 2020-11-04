@@ -67,7 +67,7 @@ in
           type = types.bool;
           default = false;
           description = ''
-            Wether to enable the slurm control daemon.
+            Whether to enable the slurm control daemon.
             Note that the standard authentication method is "munge".
             The "munge" service needs to be provided with a password file in order for
             slurm to work properly (see <literal>services.munge.password</literal>).
@@ -135,7 +135,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Wether to provide a slurm.conf file.
+          Whether to provide a slurm.conf file.
           Enable this option if you do not run a slurm daemon on this host
           (i.e. <literal>server.enable</literal> and <literal>client.enable</literal> are <literal>false</literal>)
           but you still want to run slurm commands from this host.

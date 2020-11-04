@@ -4,10 +4,10 @@
 
 buildPythonPackage rec {
   pname = "django-cleanup";
-  version = "4.0.0";
+  version = "5.1.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "195hkany3iwg4wb4cbdrdmanxcahjl87n8v03dbamanx2ya3yb21";
+    sha256 = "8976aec12a22913afb3d1fcb541b1aedde2f5ec243e4260c5ff78bb6aa75a089";
   };
 
   checkInputs = [ django ];

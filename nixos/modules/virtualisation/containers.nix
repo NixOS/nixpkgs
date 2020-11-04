@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   cfg = config.virtualisation.containers;
 
@@ -13,15 +13,20 @@ let
     json2toml "$valuePath" "$out"
   '';
 
-  # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
-  '';
 in
 {
   meta = {
     maintainers = [] ++ lib.teams.podman.members;
   };
+
+
+  imports = [
+    (
+      lib.mkRemovedOptionModule
+      [ "virtualisation" "containers" "users" ]
+      "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
+    )
+  ];
 
   options.virtualisation.containers = {
 
@@ -33,6 +38,12 @@ in
           This option enables the common /etc/containers configuration module.
         '';
       };
+
+    ociSeccompBpfHook.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable the OCI seccomp BPF hook";
+    };
 
     containersConf = mkOption {
       default = {};
@@ -99,15 +110,6 @@ in
       '';
     };
 
-    users = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = ''
-        List of users to set up subuid/subgid mappings for.
-        This is a requirement for running rootless containers.
-      '';
-    };
-
   };
 
   config = lib.mkIf cfg.enable {
@@ -116,35 +118,21 @@ in
       [network]
       cni_plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
 
+      ${lib.optionalString (cfg.ociSeccompBpfHook.enable == true) ''
+      [engine]
+      hooks_dir = [
+        "${config.boot.kernelPackages.oci-seccomp-bpf-hook}",
+      ]
+      ''}
     '' + cfg.containersConf.extraConfig;
 
     environment.etc."containers/registries.conf".source = toTOML "registries.conf" {
       registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
     };
 
-    users.extraUsers = builtins.listToAttrs (
-      (
-        builtins.foldl' (
-          acc: user: {
-            values = acc.values ++ [
-              {
-                name = user;
-                value = {
-                  subUidRanges = [ { startUid = acc.offset; count = 65536; } ];
-                  subGidRanges = [ { startGid = acc.offset; count = 65536; } ];
-                };
-              }
-            ];
-            offset = acc.offset + 65536;
-          }
-        )
-        { values = []; offset = 100000; } (lib.unique cfg.users)
-      ).values
-    );
-
     environment.etc."containers/policy.json".source =
       if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-      else copyFile "${pkgs.skopeo.src}/default-policy.json";
+      else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
   };
 
 }

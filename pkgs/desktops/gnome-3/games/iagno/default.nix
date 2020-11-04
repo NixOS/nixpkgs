@@ -1,24 +1,59 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
-, itstool, gsound, libxml2
-, meson, ninja, python3, vala, desktop-file-utils
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, gtk3
+, gnome3
+, gdk-pixbuf
+, librsvg
+, wrapGAppsHook
+, itstool
+, gsound
+, libxml2
+, meson
+, ninja
+, python3
+, vala
+, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "iagno";
-  version = "3.36.3";
+  version = "3.36.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0cid9fag8irlq0cywyqaj402vb60l8f66ld1zj7a023rg0khqnbb";
+    sha256 = "1fh2cvyqbz8saf2wij0bz2r9bja2k4gy6fqvbvig4gv0lx66gl29";
   };
 
-  nativeBuildInputs = [
-    meson ninja python3 vala desktop-file-utils
-    pkgconfig wrapGAppsHook itstool libxml2
+  patches = [
+    # Fix build with Meson 0.55
+    # https://gitlab.gnome.org/GNOME/iagno/-/issues/16
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/iagno/commit/0100bab269f2102f24a6e41202b931da1b6e8dc5.patch";
+      sha256 = "ZW75s+bV45ivwA+SKUN7ejSvnXYEo/kYQjDVvFBA/sg=";
+    })
   ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg gsound ];
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    meson
+    ninja
+    python3
+    vala
+    desktop-file-utils
+    pkg-config
+    wrapGAppsHook
+    itstool
+    libxml2
+  ];
+
+  buildInputs = [
+    gtk3
+    gnome3.adwaita-icon-theme
+    gdk-pixbuf
+    librsvg
+    gsound
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -31,7 +66,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

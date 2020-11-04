@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Auto-suspend inactive X11 applications.";
+    description = "Auto-suspend inactive X11 applications";
     homepage = "https://kernc.github.io/xsuspender/";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ offline ];

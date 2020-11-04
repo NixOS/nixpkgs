@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , vala_0_46
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = stdenv.lib.optional (!withPantheon) "-Dnoele=yes";
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };

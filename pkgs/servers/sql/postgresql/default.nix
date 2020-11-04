@@ -64,7 +64,9 @@ let
         (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
         ./patches/specify_pkglibdir_at_runtime.patch
         ./patches/findstring.patch
-      ] ++ lib.optional stdenv.isLinux ./patches/socketdir-in-run.patch;
+      ]
+      ++ lib.optional (atLeast "10") ./patches/stabilize-timetz-dst.patch
+      ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
 
     installTargets = [ "install-world" ];
 
@@ -144,7 +146,7 @@ let
       homepage    = "https://www.postgresql.org";
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin ];
+      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin marsam ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
@@ -182,42 +184,50 @@ let
 in self: {
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.22";
+    version = "9.5.23";
     psqlSchema = "9.5";
-    sha256 = "03v4d4nr9f86y0i1j5jmvfan5w8y4ga1mar59lhcnj3jl5q58ma8";
+    sha256 = "0rl31jc3kg2wq6hazyd297gnmx3cibjvivllbsivii2m6dzgl573";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.18";
+    version = "9.6.19";
     psqlSchema = "9.6";
-    sha256 = "16crr2a1sl97aiacqzd0bk56yl1abq6blc0c6qpx5rl5ny1c4zji";
+    sha256 = "1c2wnl5bbpjs1s1rpzvlnzsqlpb0p823zw7s38nhpgnxrja3myb1";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.13";
+    version = "10.14";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "1qal0yp7a90yzya7hl56gsmw5fvacplrdhpn7h9gnbyr1i2iyw2d";
+    sha256 = "0fxj30jvwq5pqpbj97vhlxgmn2ah59a78s9jyjr7vxyqj7sdh71q";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.8";
+    version = "11.9";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "1qksqyayxmnccmbapg3ajsw9pjgqva0inxjhx64rqd6ckhrg9wpa";
+    sha256 = "0db6pfphc5rp12abnkvv2l9pbl7bdyf3hhiwj8ghjwh35skqlq9m";
     this = self.postgresql_11;
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.3";
+    version = "12.4";
     psqlSchema = "12";
-    sha256 = "0hfg3n7rlz96579cj3z1dh2idl15rh3wfvn8jl31jj4h2yk69vcl";
+    sha256 = "1k06wryy8p4s1fim9qafcjlak3f58l0wqaqnrccr9x9j5jz3zsdy";
     this = self.postgresql_12;
+    inherit self;
+  };
+
+  postgresql_13 = self.callPackage generic {
+    version = "13.0";
+    psqlSchema = "13";
+    sha256 = "15i2b7m9a9430idqdgvrcyx66cpxz0v2d81nfqcm8ss3inz51rw0";
+    this = self.postgresql_13;
     inherit self;
   };
 

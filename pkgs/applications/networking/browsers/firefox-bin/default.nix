@@ -45,8 +45,9 @@
 , gnused
 , gnugrep
 , gnupg
-, ffmpeg_3
+, ffmpeg
 , runtimeShell
+, mesa # firefox wants gbm for drm+dmabuf
 , systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
 
@@ -84,7 +85,7 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl { inherit (source) url sha512; };
+  src = fetchurl { inherit (source) url sha256; };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
@@ -106,6 +107,7 @@ stdenv.mkDerivation {
       gtk2
       gtk3
       kerberos
+      mesa
       libX11
       libXScrnSaver
       libXcomposite
@@ -128,7 +130,7 @@ stdenv.mkDerivation {
       libpulseaudio
       (lib.getDev libpulseaudio)
       systemd
-      ffmpeg_3
+      ffmpeg
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];

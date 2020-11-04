@@ -5,16 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.7.0";
+  version = "5.9.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "088gs56iqhdlpw1iqjwrss4zxd4zbl2wl8s2implrrdajjxcfpbj";
+    sha256 = "1kys6dmhrl43iaq95n5sh02p39d7bq8i5y672qrzgwnwpjaaqpd2";
   };
 
   preConfigure = ''
     # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
+    # TODO: Drop temporary version fix for 5.9 once 5.10 is out:
+    substituteInPlace include/version.h \
+      --replace "5.8.0" "${version}"
   '';
 
   outputs = [ "out" "dev" ];

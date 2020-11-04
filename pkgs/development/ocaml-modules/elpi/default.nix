@@ -1,19 +1,19 @@
 { lib, fetchzip, buildDunePackage, camlp5
-, ppx_tools_versioned, ppx_deriving, re
+, ppxlib, ppx_deriving, re, perl, ncurses
 }:
 
 buildDunePackage rec {
   pname = "elpi";
-  version = "1.11.2";
+  version = "1.11.4";
 
    src = fetchzip {
      url = "https://github.com/LPCIC/elpi/releases/download/v${version}/elpi-v${version}.tbz";
-     sha256 = "15hamy9ifr05kczadwh3yj2gmr12a9z1jwppmp5yrns0vykjbj76";
+     sha256 = "1hmjp2z52j17vwhhdkj45n9jx11jxkdg2dwa0n04yyw0qqy4m7c1";
    };
 
   minimumOCamlVersion = "4.04";
 
-  buildInputs = [ ppx_tools_versioned ];
+  buildInputs = [ perl ncurses ppxlib ];
 
   propagatedBuildInputs = [ camlp5 ppx_deriving re ];
 
@@ -23,6 +23,10 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/LPCIC/elpi";
   };
+
+  postPatch = ''
+    substituteInPlace elpi_REPL.ml --replace "tput cols" "${ncurses}/bin/tput cols"
+  '';
 
   useDune2 = true;
 }

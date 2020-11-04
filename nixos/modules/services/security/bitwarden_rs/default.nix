@@ -81,6 +81,23 @@ in {
         <link xlink:href="https://github.com/dani-garcia/bitwarden_rs/blob/${bitwarden_rs.version}/.env.template">the environment template file</link>.
       '';
     };
+
+    environmentFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      example = "/root/bitwarden_rs.env";
+      description = ''
+        Additional environment file as defined in <citerefentry>
+        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+        </citerefentry>.
+
+        Secrets like <envar>ADMIN_TOKEN</envar> and <envar>SMTP_PASSWORD</envar>
+        may be passed to the service without adding them to the world-readable Nix store.
+
+        Note that this file needs to be available on the host on which
+        <literal>bitwarden_rs</literal> is running.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -101,7 +118,7 @@ in {
       serviceConfig = {
         User = user;
         Group = group;
-        EnvironmentFile = configFile;
+        EnvironmentFile = [ configFile ] ++ optional (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${bitwarden_rs}/bin/bitwarden_rs";
         LimitNOFILE = "1048576";
         LimitNPROC = "64";

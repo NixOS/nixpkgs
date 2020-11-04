@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0ksxx45mm0cvnb5jphyxsf843rn2rgb0yxv9j0ydh2xp4qgvvyva";
+    sha256 = "sha256-avu9Hya3C9g8kGl3D9bLwuZBkNPdwyvLspuBWgvpXU8=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

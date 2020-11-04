@@ -1,4 +1,5 @@
-{ lib
+{ fetchFromGitHub
+, lib
 , python
 , enableTelemetry ? false
 }:
@@ -30,11 +31,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.44.0";
+  version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r3m41xjmg8m2jwsqwc9kdkcs3xbz8dsl240ybwbnr7rp29pnirf";
+    sha256 = "0scnymhhiiqrs2j0jaypxgq2wg1qf1w8f55qfay0b3nf51y6mh8y";
   };
 
   # Tests are not included in the PyPI package
@@ -66,10 +67,13 @@ buildPythonApplication rec {
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
-      --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9" \
+      --replace "boto3~=1.14.0, >=1.14.23" "boto3~=1.14" \
+      --replace "docker~=4.2.0" "docker~=4.3.1" \
+      --replace "jmespath~=0.9.5" "jmespath~=0.10.0" \
       --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
-      --replace "tomlkit==0.5.8" "tomlkit~=0.5.8" \
-      --replace "requests==2.22.0" "requests~=2.22"
+      --replace "requests==2.23.0" "requests~=2.24" \
+      --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9" \
+      --replace "tomlkit==0.5.8" "tomlkit~=0.7.0"
   '';
 
   meta = with lib; {

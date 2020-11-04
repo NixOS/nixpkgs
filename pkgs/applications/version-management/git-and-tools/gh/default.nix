@@ -2,20 +2,21 @@
 
 buildGoModule rec {
   pname = "gh";
-  version = "0.10.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0q4zpm10hcci4j0g1gx08q2qwn71ab9f7yaf4k78sfn5p89y7rm2";
+    sha256 = "17hbgi1jh4p07r4p5mr7w7p01i6zzr28mn5i4jaki7p0jwfqbvvi";
   };
 
-  vendorSha256 = "0igbqnylryiq36lbb1gha8najijzxmn10asc0xayxygbxc16s1vi";
+  vendorSha256 = "0ybbwbw4vdsxdq4w75s1i0dqad844sfgs69b3vlscwfm6g3i9h51";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
+    export GO_LDFLAGS="-s -w"
     make GH_VERSION=${version} bin/gh manpages
   '';
 
@@ -27,6 +28,10 @@ buildGoModule rec {
       $out/bin/gh completion -s $shell > gh.$shell
       installShellCompletion gh.$shell
     done
+  '';
+
+  checkPhase = ''
+    make test
   '';
 
   meta = with lib; {

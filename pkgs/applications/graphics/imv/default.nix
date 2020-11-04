@@ -1,8 +1,23 @@
-{ stdenv, fetchFromGitHub
-, freeimage, fontconfig, pkgconfig
-, asciidoc, docbook_xsl, libxslt, cmocka
-, librsvg, pango, libxkbcommon, wayland
-, libGLU, icu
+{ asciidoc
+, cmocka
+, docbook_xsl
+, fetchFromGitHub
+, fontconfig
+, freeimage
+, icu
+, libGLU
+, libheif
+, libjpeg_turbo
+, libpng
+, librsvg
+, libtiff
+, libxkbcommon
+, libxslt
+, netsurf
+, pango
+, pkgconfig
+, stdenv
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -10,36 +25,30 @@ stdenv.mkDerivation rec {
   version = "4.1.0";
 
   src = fetchFromGitHub {
-    owner  = "eXeC64";
-    repo   = "imv";
-    rev    = "v${version}";
+    owner = "eXeC64";
+    repo = "imv";
+    rev = "v${version}";
     sha256 = "0gk8g178i961nn3bls75a8qpv6wvfvav6hd9lxca1skaikd33zdx";
   };
 
-  preBuild = ''
-    # Version is 4.0.1, but Makefile was not updated
-    sed -i 's/echo v4\.0\.0/echo v4.0.1/' Makefile
-  '';
-
-  nativeBuildInputs = [
-    asciidoc
-    cmocka
-    docbook_xsl
-    libxslt
-  ];
+  nativeBuildInputs = [ asciidoc cmocka docbook_xsl libxslt ];
 
   buildInputs = [
     freeimage
+    icu
     libGLU
+    libjpeg_turbo
     librsvg
     libxkbcommon
+    netsurf.libnsgif
     pango
     pkgconfig
     wayland
-    icu
   ];
 
   installFlags = [ "PREFIX=$(out)" "CONFIGPREFIX=$(out)/etc" ];
+
+  makeFlags = [ "BACKEND_LIBJPEG=yes" "BACKEND_LIBNSGIF=yes" ];
 
   postFixup = ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
@@ -53,9 +62,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line image viewer for tiling window managers";
-    homepage    = "https://github.com/eXeC64/imv";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/eXeC64/imv";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

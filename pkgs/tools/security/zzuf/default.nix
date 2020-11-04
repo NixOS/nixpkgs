@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   meta = with stdenv.lib; {
-    description = "Transparent application input fuzzer.";
+    description = "Transparent application input fuzzer";
     homepage = "http://caca.zoy.org/wiki/zzuf";
     license = licenses.wtfpl;
     platforms = platforms.linux;

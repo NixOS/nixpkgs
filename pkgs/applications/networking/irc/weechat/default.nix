@@ -27,12 +27,12 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.8";
+      version = "2.9";
       pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0xpzl7985j47rpmly4r833jxd448xpy7chqphaxmhlql2c0gc08z";
+        sha256 = "12h4m4ag8cdab7q6f5n357mfg0fdayab1gcikncjkkid3bjd4r4g";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -44,7 +44,7 @@ let
         "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
         "-DENABLE_PHP=OFF"
       ]
-        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
+        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
@@ -78,7 +78,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = stdenv.lib.licenses.gpl3;
-        maintainers = with stdenv.lib.maintainers; [ lovek323 lheckemann ma27 ];
+        maintainers = with stdenv.lib.maintainers; [ lovek323 lheckemann ];
         platforms = stdenv.lib.platforms.unix;
       };
     }

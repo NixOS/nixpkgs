@@ -1,4 +1,5 @@
-{ mkDerivation
+{ stdenv
+, mkDerivation
 , lib
 , fetchFromGitHub
 , autoreconfHook
@@ -12,13 +13,13 @@
 
 mkDerivation rec {
   pname = "projectm";
-  version = "3.1.3";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectM";
     rev = "v${version}";
-    sha256 = "1mjnahr694phksmvc069y89rv85s4l2z9fixkc3l1f5qj2vgn4sy";
+    sha256 = "1wm5fym6c1yb972pmil7j9axinqqwrj68cwd2sc7ky8c5z2fsdna";
   };
 
   nativeBuildInputs = [
@@ -39,12 +40,13 @@ mkDerivation rec {
     "--enable-sdl"
   ];
 
-  fixupPhase = ''
+  fixupPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # NOTE: 2019-10-05: Upstream inserts the src path buring build into ELF rpath, so must delete it out
     # upstream report: https://github.com/projectM-visualizer/projectm/issues/245
     for entry in $out/bin/* ; do
       patchelf --set-rpath "$(patchelf --print-rpath $entry | tr ':' '\n' | grep -v 'src/libprojectM' | tr '\n' ':')" "$entry"
     done
+  '' + ''
     wrapQtApp $out/bin/projectM-pulseaudio
     rm $out/bin/projectM-unittest
   '';

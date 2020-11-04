@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
+, mkDerivation
 , fetchFromGitHub
 , cmake
-, wrapQtAppsHook
 , dxflib
 , eigen
 , flann
@@ -16,19 +16,19 @@
 , xercesc
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.11.0";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
     rev = "v${version}";
-    sha256 = "02ahhhivgb9k1aygw1m35wdvhaizag1r98mb0r6zzrs5p4y64wlb";
+    sha256 = "0sb2h08iaf6zrf54sg6ql6wm63q5vq0kpd3gffdm26z8w6j6wv3s";
     # As of writing includes (https://github.com/CloudCompare/CloudCompare/blob/a1c589c006fc325e8b560c77340809b9c7e7247a/.gitmodules):
     # * libE57Format
     # * PoissonRecon
-    # In > 2.11 it will also contain
+    # In a future version it will also contain
     # * CCCoreLib
     fetchSubmodules = true;
   };
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     eigen # header-only
-    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    # TODO: This will become -DCCCORELIB_USE_TBB=ON in > 2.11.0, see
+    # TODO: This will become -DCCCORELIB_USE_TBB=ON in a future version, see
     #       https://github.com/CloudCompare/CloudCompare/commit/f5a0c9fd788da26450f3fa488b2cf0e4a08d255f
     "-DCOMPILE_CC_CORE_LIB_WITH_TBB=ON"
     "-DOPTION_USE_DXF_LIB=ON"
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
     license = licenses.gpl2Plus;

@@ -5,30 +5,57 @@
 
   outputs = { self }:
     let
-
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
       };
 
       lib = import ./lib;
 
-      systems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "i686-linux"
+        "x86_64-darwin"
+        "aarch64-linux"
+        "armv6l-linux"
+        "armv7l-linux"
+      ];
 
       forAllSystems = f: lib.genAttrs systems (system: f system);
 
     in
     {
-      lib = lib // {
+      lib = lib.extend (final: prev: {
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
-            modules = modules ++
-              [ { system.nixos.versionSuffix =
-                    ".${lib.substring 0 8 (self.lastModifiedDate or self.lastModified)}.${self.shortRev or "dirty"}";
-                  system.nixos.revision = lib.mkIf (self ? rev) self.rev;
+            modules =
+              let
+                vmConfig = (import ./nixos/lib/eval-config.nix
+                  (args // {
+                    modules = modules ++ [ ./nixos/modules/virtualisation/qemu-vm.nix ];
+                  })).config;
+
+                vmWithBootLoaderConfig = (import ./nixos/lib/eval-config.nix
+                  (args // {
+                    modules = modules ++ [
+                      ./nixos/modules/virtualisation/qemu-vm.nix
+                      { virtualisation.useBootLoader = true; }
+                    ];
+                  })).config;
+              in
+              modules ++ [
+                {
+                  system.nixos.versionSuffix =
+                    ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
+                  system.nixos.revision = final.mkIf (self ? rev) self.rev;
+
+                  system.build = {
+                    vm = vmConfig.system.build.vm;
+                    vmWithBootLoader = vmWithBootLoaderConfig.system.build.vm;
+                  };
                 }
               ];
           });
-      };
+      });
 
       checks.x86_64-linux.tarball = jobs.tarball;
 

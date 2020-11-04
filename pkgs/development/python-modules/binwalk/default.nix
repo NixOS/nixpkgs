@@ -9,13 +9,18 @@
 , gnutar
 , p7zip
 , cabextract
+, cramfsprogs
+, cramfsswap
+, sasquatch
+, squashfsTools
 , lzma
+, matplotlib
 , nose
 , pycrypto
 , pyqtgraph ? null }:
 
 let
-  visualizationSupport = (pyqtgraph != null);
+  visualizationSupport = (pyqtgraph != null) && (matplotlib != null);
   version = "2.2.0";
 in
 buildPythonPackage {
@@ -29,8 +34,8 @@ buildPythonPackage {
     sha256 = "1bxgj569fzwv6jhcbl864nmlsi9x1k1r20aywjxc8b9b1zgqrlvc";
   };
 
-  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma pycrypto ]
-  ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract cramfsswap cramfsprogs sasquatch squashfsTools lzma pycrypto ]
+  ++ stdenv.lib.optionals visualizationSupport [ matplotlib pyqtgraph ];
 
   # setup.py only installs version.py during install, not test
   postPatch = ''

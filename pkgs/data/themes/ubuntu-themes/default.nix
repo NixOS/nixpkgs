@@ -7,21 +7,21 @@
 , gtk3
 , hicolor-icon-theme
 , humanity-icon-theme
-, python2Packages
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "ubuntu-themes";
-  version = "19.04";
+  version = "20.10";
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.orig.tar.gz";
-    sha256 = "1dy2dmiq2dj80nl2y4mf4ks0c7qmmnpk25wzv2rynwa3s2gkxgih";
+    sha256 = "00frn2dd4kjhlmwkasrx4a820fwrg8f8hmiwh51m63bpj00vwn0r";
   };
 
   nativeBuildInputs = [
     gtk3
-    python2Packages.python
+    python3Packages.python
   ];
 
   propagatedBuildInputs = [

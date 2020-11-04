@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   uuid = "clipboard-indicator@tudmotu.com";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp -r * $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

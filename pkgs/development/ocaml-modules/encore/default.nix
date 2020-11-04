@@ -1,15 +1,21 @@
-{ lib, buildDunePackage, fetchurl, ocaml, alcotest, angstrom, ke }:
+{ lib, buildDunePackage, fetchurl, ocaml
+, fmt, bigstringaf, bigarray-compat
+, bigarray-overlap, angstrom, ke, alcotest }:
 
 buildDunePackage rec {
   pname = "encore";
-  version = "0.3";
+  version = "0.5";
+
   src = fetchurl {
     url = "https://github.com/mirage/encore/releases/download/v${version}/encore-v${version}.tbz";
-    sha256 = "05nv6yms5axsmq9cspr7884rz5kirj50izx3vdm89q4yl186qykl";
+    sha256 = "15n0dla149k9h7migs76wap08z5402qcvxyqxzl887ha6isj3p9n";
   };
-  propagatedBuildInputs = [ angstrom ke ];
-  checkInputs = lib.optional doCheck alcotest;
-  doCheck = lib.versions.majorMinor ocaml.version != "4.07";
+
+  useDune2 = true;
+
+  propagatedBuildInputs = [ angstrom ke fmt bigstringaf bigarray-compat bigarray-overlap ];
+  checkInputs = [ alcotest ];
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/mirage/encore";

@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
-  version = "4.12";
+  version = "4.13";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0139ps707mh1zkypaxsqzy58mmsm5whdxxx2nbsmqfswb7qisz2b";
+    sha256 = "1hh0hnd2d08l4n5r73fkngv08f8230pp94k9qq8xgmchvjfg6j8y";
   };
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
-  # still missing parent themes: Ambiant-MATE, Mint-X, Faenza-Dark, KFaenza
+  propagatedBuildInputs = [ gnome-icon-theme mint-x-icons hicolor-icon-theme ];
+  # still missing parent themes: Ambiant-MATE, Faenza-Dark, KFaenza
 
   dontDropIconThemeCache = true;
 

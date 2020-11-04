@@ -28,7 +28,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Academic Free License v3.0";
   };
 
-  agpl3 = spdx {
+  agpl3Only = spdx {
     spdxId = "AGPL-3.0-only";
     fullName = "GNU Affero General Public License v3.0 only";
   };
@@ -85,6 +85,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = ''Beerware License'';
   };
 
+  blueOak100 = spdx {
+    spdxId = "BlueOak-1.0.0";
+    fullName = "Blue Oak Model License 1.0.0";
+  };
+
   bsd0 = spdx {
     spdxId = "0BSD";
     fullName = "BSD Zero Clause License";
@@ -95,6 +100,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = ''BSD 2-clause "Simplified" License'';
   };
 
+  bsd2Patent = spdx {
+    spdxId = "BSD-2-Clause-Patent";
+    fullName = ''BSD-2-Clause Plus Patent License'';
+  };
+
   bsd3 = spdx {
     spdxId = "BSD-3-Clause";
     fullName = ''BSD 3-clause "New" or "Revised" License'';
@@ -103,6 +113,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   bsdOriginal = spdx {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
+  };
+
+  bsdProtection = spdx {
+    spdxId = "BSD-Protection";
+    fullName = "BSD Protection License";
   };
 
   bsl11 = {
@@ -276,12 +291,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "European Union Public License 1.2";
   };
 
-  fdl11 = spdx {
+  fdl11Only = spdx {
     spdxId = "GFDL-1.1-only";
     fullName = "GNU Free Documentation License v1.1 only";
   };
 
-  fdl12 = spdx {
+  fdl12Only = spdx {
     spdxId = "GFDL-1.2-only";
     fullName = "GNU Free Documentation License v1.2 only";
   };
@@ -291,7 +306,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU Free Documentation License v1.2 or later";
   };
 
-  fdl13 = spdx {
+  fdl13Only = spdx {
     spdxId = "GFDL-1.3-only";
     fullName = "GNU Free Documentation License v1.3 only";
   };
@@ -322,7 +337,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     free = false;
   };
 
-  gpl1 = spdx {
+  gpl1Only = spdx {
     spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";
   };
@@ -332,7 +347,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU General Public License v1.0 or later";
   };
 
-  gpl2 = spdx {
+  gpl2Only = spdx {
     spdxId = "GPL-2.0-only";
     fullName = "GNU General Public License v2.0 only";
   };
@@ -357,7 +372,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU General Public License v2.0 or later";
   };
 
-  gpl3 = spdx {
+  gpl3Only = spdx {
     spdxId = "GPL-3.0-only";
     fullName = "GNU General Public License v3.0 only";
   };
@@ -421,18 +436,19 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   };
 
   # Proprietary binaries; free to redistribute without modification.
+  databricks = {
+    fullName = "Databricks Proprietary License";
+    url = "https://pypi.org/project/databricks-connect";
+    free = false;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
     free = false;
   };
 
-  jasper = spdx {
-    spdxId = "JasPer-2.0";
-    fullName = "JasPer License";
-  };
-
-  lgpl2 = spdx {
+  lgpl2Only = spdx {
     spdxId = "LGPL-2.0-only";
     fullName = "GNU Library General Public License v2 only";
   };
@@ -442,7 +458,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU Library General Public License v2 or later";
   };
 
-  lgpl21 = spdx {
+  lgpl21Only = spdx {
     spdxId = "LGPL-2.1-only";
     fullName = "GNU Lesser General Public License v2.1 only";
   };
@@ -452,7 +468,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU Lesser General Public License v2.1 or later";
   };
 
-  lgpl3 = spdx {
+  lgpl3Only = spdx {
     spdxId = "LGPL-3.0-only";
     fullName = "GNU Lesser General Public License v3.0 only";
   };
@@ -460,6 +476,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   lgpl3Plus = spdx {
     spdxId = "LGPL-3.0-or-later";
     fullName = "GNU Lesser General Public License v3.0 or later";
+  };
+
+  lgpllr = spdx {
+    spdxId = "LGPLLR";
+    fullName = "Lesser General Public License For Linguistic Resources";
   };
 
   libpng = spdx {
@@ -480,6 +501,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   llgpl21 = {
     fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
     url = "https://opensource.franz.com/preamble.html";
+  };
+
+  llvm-exception = spdx {
+    spdxId = "LLVM-exception";
+    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
   };
 
   lppl12 = spdx {
@@ -543,6 +569,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   nposl3 = spdx {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
+  };
+
+  obsidian = {
+    fullName = "Obsidian End User Agreement";
+    url = "https://obsidian.md/eula";
+    free = false;
   };
 
   ocamlpro_nc = {
@@ -610,6 +642,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   purdueBsd = {
     fullName = " Purdue BSD-Style License"; # also know as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
+  };
+
+  prosperity30 = {
+    fullName = "Prosperity-3.0.0";
+    free = false;
+    url = "https://prosperitylicense.com/versions/3.0.0.html";
   };
 
   qhull = spdx {
@@ -761,4 +799,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
+} // {
+  # TODO: remove legacy aliases
+  agpl3 = lib.licenses.agpl3Only;
+  fdl11 = lib.licenses.fdl11Only;
+  fdl12 = lib.licenses.fdl12Only;
+  fdl13 = lib.licenses.fdl13Only;
+  gpl1 = lib.licenses.gpl1Only;
+  gpl2 = lib.licenses.gpl2Only;
+  gpl3 = lib.licenses.gpl3Only;
+  lgpl2 = lib.licenses.lgpl2Only;
+  lgpl21 = lib.licenses.lgpl21Only;
+  lgpl3 = lib.licenses.lgpl3Only;
 }

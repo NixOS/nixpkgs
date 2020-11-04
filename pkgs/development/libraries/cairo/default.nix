@@ -4,13 +4,13 @@
 , gobjectSupport ? true, glib
 , xcbSupport ? x11Support, libxcb, xcbutil # no longer experimental since 1.12
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, glSupport ? config.cairo.gl or (libGLSupported && stdenv.isLinux)
+, glSupport ? x11Support && config.cairo.gl or (libGLSupported && stdenv.isLinux)
 , libGL ? null # libGLU libGL is no longer a big dependency
 , pdfSupport ? true
 , darwin
 }:
 
-assert glSupport -> libGL != null;
+assert glSupport -> x11Support && libGL != null;
 
 let
   version = "1.16.0";
@@ -35,6 +35,9 @@ in stdenv.mkDerivation rec {
       url    = "https://gitlab.freedesktop.org/cairo/cairo/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
       sha256 = "112hgrrsmcwxh1r52brhi5lksq4pvrz4xhkzcf2iqp55jl2pb7n1";
     })
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
+    # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
+    ./skip-configure-stderr-check.patch
   ];
 
   outputs = [ "out" "dev" "devdoc" ];

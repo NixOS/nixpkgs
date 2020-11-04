@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "coredns";
-  version = "1.7.0";
-
-  goPackagePath = "github.com/coredns/coredns";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "1wayfr26gwgdl0sfrvskb4hkxfmxfy7idbrpw3z4r05fkr2886xj";
+    sha256 = "04hkz70s5i7ndwyg39za3k83amvmi90rkjm8qp3w3a8fbmq4q4y6";
   };
 
-  vendorSha256 = "17znl3vkg73hnrfl697rw201nsd5sijgalnbkljk1b4m0a01zik1";
+  vendorSha256 = "1zwrf2pshb9r3yvp7mqali47163nqhvs9ghflczfpigqswd1m0p0";
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://coredns.io";

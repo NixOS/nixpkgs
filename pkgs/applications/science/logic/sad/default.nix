@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.schmitthenner ];
     homepage = "http://nevidal.org/sad.en.html";
     platforms = stdenv.lib.platforms.linux;
+    broken = true;  # ghc-8.4.4 is gone from Nixpkgs
   };
 }

@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "cheat";
-  version = "3.10.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
     rev = version;
-    sha256 = "0indvycj972wng979mvia8mrb7bwdfay7wxq3lnj05qyxqafj5h2";
+    sha256 = "0x6msbbqkwxs6msqacpqw4wlw7c9ilf8n6jqmx297ij6isswgksh";
   };
 
   subPackages = [ "cmd/cheat" ];
@@ -22,6 +22,8 @@ buildGoModule rec {
   '';
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Create and view interactive cheatsheets on the command-line";

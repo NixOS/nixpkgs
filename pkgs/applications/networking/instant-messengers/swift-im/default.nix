@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, pkgconfig, qttools, scons
+{ mkDerivation, stdenv, fetchurl, pkgconfig, qttools, sconsPackages
 , GConf, avahi, boost, hunspell, libXScrnSaver, libedit, libidn, libnatpmp, libxml2
 , lua, miniupnpc, openssl, qtbase, qtmultimedia, qtsvg, qtwebkit, qtx11extras, zlib
 }:
@@ -14,7 +14,7 @@ mkDerivation rec {
 
   patches = [ ./qt-5.11.patch ./scons.patch ];
 
-  nativeBuildInputs = [ pkgconfig qttools scons.py2 ];
+  nativeBuildInputs = [ pkgconfig qttools sconsPackages.scons_3_1_2 ];
 
   buildInputs = [
     GConf avahi boost hunspell libXScrnSaver libedit libidn libnatpmp libxml2

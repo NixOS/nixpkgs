@@ -1,8 +1,7 @@
 { stdenv
+, lib
 , fetchurl
 , rpmextract
-, patchelf
-, patchelfUnstable
 , libnotify
 , libuuid
 , cairo
@@ -40,11 +39,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.3.0";
+  version = "2.17.0";
+  buildNumber = "11";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans.rpm";
-    sha256 = "06lcpkga8h0zpl2wlysj6n979f0yg361frp3zr0vwzln3fiil2a7";
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
+    sha256 = "1h5jbnp5bwy6bpma9a1ia08v7bpz09fm66jsip470k1r7vjjwa68";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
         expat
         gdk-pixbuf
         dbus
-        udev.lib
+        (lib.getLib udev)
         freetype
         nspr
         glib
@@ -96,11 +96,11 @@ stdenv.mkDerivation rec {
     mv usr/share share
     rmdir usr
 
-    ${patchelf}/bin/patchelf \
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
-    ${patchelfUnstable}/bin/patchelf \
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
 

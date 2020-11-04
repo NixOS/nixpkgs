@@ -9,7 +9,12 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  inherit (pkgs) sddm;
+  sddm = if config.services.xserver.desktopManager.lxqt.enable then
+    # TODO: Move lxqt to libsForQt515
+    pkgs.libsForQt514.sddm
+  else
+    pkgs.libsForQt5.sddm
+  ;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
@@ -55,15 +60,15 @@ let
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
-    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    EnableHidpi=${boolToString cfg.enableHidpi}
 
     [Wayland]
-    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    EnableHidpi=${boolToString cfg.enableHidpi}
     SessionDir=${dmcfg.sessionData.desktops}/share/wayland-sessions
 
-    ${optionalString cfg.autoLogin.enable ''
+    ${optionalString dmcfg.autoLogin.enable ''
     [Autologin]
-    User=${cfg.autoLogin.user}
+    User=${dmcfg.autoLogin.user}
     Session=${autoLoginSessionName}.desktop
     Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
@@ -78,6 +83,20 @@ in
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
       "Set the option `services.xserver.displayManager.sddm.package' instead.")
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "enable" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "user" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "user"
+    ])
   ];
 
   options = {
@@ -153,40 +172,14 @@ in
         '';
       };
 
-      autoLogin = mkOption {
-        default = {};
+      # Configuration for automatic login specific to SDDM
+      autoLogin.relogin = mkOption {
+        type = types.bool;
+        default = false;
         description = ''
-          Configuration for automatic login.
+          If true automatic login will kick in again on session exit (logout), otherwise it
+          will only log in automatically when the display-manager is started.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically log in as <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the automatic login.
-              '';
-            };
-
-            relogin = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                If true automatic login will kick in again on session exit (logout), otherwise it
-                will only log in automatically when the display-manager is started.
-              '';
-            };
-          };
-        };
       };
 
     };
@@ -201,12 +194,7 @@ in
           SDDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
-        message = ''
-          SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
-        '';
-      }
-      { assertion = cfg.autoLogin.enable -> autoLoginSessionName != null;
+      { assertion = dmcfg.autoLogin.enable -> autoLoginSessionName != null;
         message = ''
           SDDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';

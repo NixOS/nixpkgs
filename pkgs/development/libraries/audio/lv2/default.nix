@@ -12,11 +12,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ gtk2 libsndfile python3 ];
 
+  wafConfigureFlags = stdenv.lib.optionals stdenv.isDarwin [ "--lv2dir=${placeholder "out"}/lib/lv2" ];
+
   meta = with stdenv.lib; {
     homepage = "https://lv2plug.in";
     description = "A plugin standard for audio systems";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

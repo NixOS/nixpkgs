@@ -1,10 +1,11 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkgconfig, fetchpatch
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
 , ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
+, useOpenSSL ? !isBootstrap, openssl
 , useNcurses ? false, ncurses
 , useQt4 ? false, qt4
 , withQt5 ? false, qtbase
@@ -19,12 +20,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.17.3";
+  version = "3.18.2";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "0h4c3nwk7wmzcmmlwyb16zmjqr44l4k591m2y9p9zp3m498hvmhb";
+    sha256 = "0zhxsnxm5d8wdarz2gs3r41r1dfrnh35ki75fa684gaxfzy40kjx";
   };
 
   patches = [
@@ -44,14 +45,16 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs =
-    [ setupHook pkgconfig ]
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [ setupHook pkgconfig ];
+
+  buildInputs = []
     ++ lib.optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
+    ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
     ++ lib.optional useQt4 qt4
     ++ lib.optional withQt5 qtbase;
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
@@ -91,13 +94,15 @@ stdenv.mkDerivation rec {
     "-DCMAKE_AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     "-DCMAKE_RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
     "-DCMAKE_STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
-  ]
+
+    "-DCMAKE_USE_OPENSSL=${if useOpenSSL then "ON" else "OFF"}"
     # Avoid depending on frameworks.
-    ++ lib.optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
+    "-DBUILD_CursesDialog=${if useNcurses then "ON" else "OFF"}"
+  ];
 
   # make install attempts to use the just-built cmake
   preInstall = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed -i 's|bin/cmake|${buildPackages.cmake}/bin/cmake|g' Makefile
+    sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
   '';
 
   dontUseCmakeConfigure = true;
@@ -110,8 +115,17 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
-    homepage = "http://www.cmake.org/";
+    homepage = "https://cmake.org/";
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/"
+      + "release/${lib.versions.majorMinor version}.html";
     description = "Cross-Platform Makefile Generator";
+    longDescription = ''
+      CMake is an open-source, cross-platform family of tools designed to
+      build, test and package software. CMake is used to control the software
+      compilation process using simple platform and compiler independent
+      configuration files, and generate native makefiles and workspaces that
+      can be used in the compiler environment of your choice.
+    '';
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;

@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   bison, extra-cmake-modules, flex,
   kconfig, kcoreaddons, kcrash, kdbusaddons, kdoctools, ki18n, kwindowsystem,
   qtbase, shared-mime-info,
@@ -15,5 +15,8 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kconfig kcoreaddons ];
   propagatedUserEnvPkgs = [ shared-mime-info ]; # for kbuildsycoca5
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./qdiriterator-follow-symlinks.patch
+    ./no-canonicalize-path.patch
+  ];
 }

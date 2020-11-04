@@ -10,9 +10,9 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
- 
+
   checkPhase = ''
-    pytest 
+    pytest
   '';
 
   meta = with stdenv.lib; {
@@ -22,4 +22,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

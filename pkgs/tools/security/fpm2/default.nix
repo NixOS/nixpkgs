@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnupg gtk2 libxml2 intltool ];
 
   meta = {
-    description = "FPM2 is GTK2 port from Figaro's Password Manager originally developed by John Conneely, with some new enhancements.";
+    description = "GTK2 port from Figaro's Password Manager originally developed by John Conneely, with some new enhancements";
     homepage    = "https://als.regnet.cz/fpm2/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

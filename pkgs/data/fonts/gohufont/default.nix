@@ -52,18 +52,11 @@ stdenv.mkDerivation rec {
     fontDir="$out/share/consolefonts"
     install -D -m 644 -t "$fontDir" psf/*.psf
 
-    # install the pcf fonts (for xorg applications)
+    # install the pcf and otb fonts (for X11,GTK applications)
     fontDir="$out/share/fonts/misc"
-    install -D -m 644 -t "$fontDir" *.pcf
-    mkfontdir "$fontDir"
-
-    # install the otb fonts (for gtk applications)
-    fontDir="$otb/share/fonts/misc"
-    install -D -m 644 -t "$fontDir" *.otb
+    install -D -m 644 -t "$fontDir" *.pcf *.otb
     mkfontdir "$fontDir"
   '';
-
-  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = ''

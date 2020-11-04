@@ -1,27 +1,26 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, six, pytest, arrow
+{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+, six, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel_yaml
 }:
 
 buildPythonPackage rec {
   pname   = "construct";
-  version = "2.9.45";
+  version = "2.10.56";
 
+  disabled = pythonOlder "3.6";
+
+  # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0ig66xrzswpkhhmw123p2nvr15a9lxz54a1fmycfdh09327c1d3y";
+    sha256 = "1j4mqwyxkbdcsnnk5bbdcljv855w4fglaqc94q1xdzm8kgjxk4mr";
   };
 
-  propagatedBuildInputs = [ six ];
+  checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel_yaml ];
 
-  checkInputs = [ pytest arrow ];
+  disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
-  # TODO: figure out missing dependencies
-  doCheck = false;
-  checkPhase = ''
-    py.test -k 'not test_numpy and not test_gallery' tests
-  '';
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   meta = with stdenv.lib; {
     description = "Powerful declarative parser (and builder) for binary data";

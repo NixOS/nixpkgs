@@ -2,8 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, nose
+, packaging
 , pytest
+, nose
 , numpy
 , h5py
 , pydicom
@@ -12,20 +13,20 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "3.1.0";
+  version = "3.2.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "774adcff834f22915afb68c6cdd7acbcb5d0240b7f87f6da6c63ff405480884b";
+    sha256 = "5827b644d1b0833603710dac198f5f8cbb9002769f97001a191e863b32f5956c";
   };
 
-  propagatedBuildInputs = [ numpy scipy h5py pydicom ];
+  propagatedBuildInputs = [ numpy scipy h5py packaging pydicom ];
 
   checkInputs = [ nose pytest ];
 
   checkPhase = ''
-    nosetests
+    pytest
   '';
 
   meta = with lib; {

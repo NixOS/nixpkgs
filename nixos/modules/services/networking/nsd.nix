@@ -11,8 +11,6 @@ let
 
   # build nsd with the options needed for the given config
   nsdPkg = pkgs.nsd.override {
-    configFile = "${configFile}/nsd.conf";
-
     bind8Stats = cfg.bind8Stats;
     ipv6 = cfg.ipv6;
     ratelimit = cfg.ratelimit.enable;
@@ -897,7 +895,10 @@ in
               + "want, please enable 'services.nsd.rootServer'.";
     };
 
-    environment.systemPackages = [ nsdPkg ];
+    environment = {
+      systemPackages = [ nsdPkg ];
+      etc."nsd/nsd.conf".source = "${configFile}/nsd.conf";
+    };
 
     users.groups.${username}.gid = config.ids.gids.nsd;
 
@@ -915,14 +916,14 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      startLimitBurst = 4;
+      startLimitIntervalSec = 5 * 60;  # 5 mins
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
         StandardError = "null";
         PIDFile = pidFile;
         Restart = "always";
         RestartSec = "4s";
-        StartLimitBurst = 4;
-        StartLimitInterval = "5min";
       };
 
       preStart = ''

@@ -3,7 +3,6 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
-, stdenv, llvmPackages_6
 }:
 
 let
@@ -12,8 +11,9 @@ common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
   , bash, coreutils, gzip, gnutar
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
+  , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive
+  , lowdown, mdbook
   # Used by tests
   , gmock
   , busybox-sandbox-shell
@@ -33,7 +33,7 @@ common =
       version = lib.getVersion name;
 
       is24 = lib.versionAtLeast version "2.4pre";
-      isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
+      isExactly24 = lib.versionAtLeast version "2.4" && lib.versionOlder version "2.4";
 
       VERSION_SUFFIX = suffix;
 
@@ -41,15 +41,20 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
-                                docbook5 docbook_xsl_ns jq gmock ];
+        ++ lib.optionals is24
+          [ autoreconfHook
+            autoconf-archive
+            bison flex
+            lowdown mdbook
+            jq
+           ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive ]
+        ++ lib.optionals is24 [ libarchive gmock ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -88,9 +93,9 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
+        # For Nix 2.4, patch around an issue where the Nix configure step pulls in the
         # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly23) ''
+        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly24) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
@@ -119,7 +124,8 @@ common =
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
-      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
+      makeFlags = [ "profiledir=$(out)/etc/profile.d" ]
+        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0";
 
       installFlags = [ "sysconfdir=$(out)/etc" ];
 
@@ -162,7 +168,7 @@ common =
           # This is not cross-compile safe, don't have time to fix right now
           # but noting for future travellers.
           nativeBuildInputs =
-            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive ];
+            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive nlohmann_json ];
 
           configureFlags =
             [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -182,43 +188,29 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.6";
+    name = "nix-2.3.8";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "05e90529c9dc9f4bf656cbceae61cafdca49935bb79cd291c8f078a095701d89";
+      sha256 = "c7119823c1eabdcc9e527cc96a91f11a0b0e63f3840a02fe7573538dad2dad2a";
     };
 
     inherit storeDir stateDir confDir boehmgc;
-  } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
-    stdenv = llvmPackages_6.stdenv;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre7805_984e5213";
+    suffix = "pre20201102_550e11f";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "984e521392b3f41f7cdab203e5c00f3e00e27a28";
-      sha256 = "1dch48018dwzx9cysnfxrdpszav87s0d635zqw810mgmqpm25fw8";
+      rev = "550e11f077ae508abde5a33998a9d4029880e7b2";
+      sha256 = "186grfxsfqg7r92wgwbma66xc7p3iywn43ff7s59m4g6bvb0qgcl";
     };
 
     inherit storeDir stateDir confDir boehmgc;
   });
 
-  nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20200622_334e26b";
-
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "334e26bfc2ce82912602e8a0f9f9c7e0fb5c3221";
-      sha256 = "14a2yyn1ygymlci6hl5d308fs3p3m0mgcfs5dc8dn0s3lg5qvbmp";
-    };
-
-    inherit storeDir stateDir confDir boehmgc;
-  });
+  nixFlakes = nixUnstable;
 
 }

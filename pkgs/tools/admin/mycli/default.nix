@@ -7,11 +7,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.20.1";
+  version = "1.22.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vhwaqkx4njarm0wy8zg2hvzr2yl92y8gnwipcn7p59sazw4whfl";
+    sha256 = "1lq2x95553vdmhw13cxcgsd2g2i32izhsb7hxd4m1iwf9b3msbpv";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +24,8 @@ buildPythonApplication rec {
     export HOME=.
     export LC_ALL="en_US.UTF-8"
 
-    py.test
+    py.test \
+      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
   meta = {

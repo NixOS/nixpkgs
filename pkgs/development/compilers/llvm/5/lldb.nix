@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
 , zlib
 , ncurses
@@ -19,6 +20,15 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetch "lldb" "05j2a63yzln43852nng8a7y47spzlyr1cvdmgmbxgd29c8r0bfkq";
+
+  patches = [
+    # Fix PythonString::GetString for >=python-3.7
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5457b426f5e15a29c0acc8af1a476132f8be2a36.patch";
+      sha256 = "1zbx4m0m8kbg0wq6740jcw151vb2pb1p25p401wiq8diqqagkjps";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place

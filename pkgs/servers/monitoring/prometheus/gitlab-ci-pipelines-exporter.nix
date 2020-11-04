@@ -22,6 +22,5 @@ buildGoPackage rec {
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
     license = licenses.asl20;
     maintainers = [ maintainers.mmahut ];
-    platforms = platforms.all;
   };
 }

@@ -4,7 +4,7 @@
 , faacSupport ? false, faac ? null
 , flacSupport ? true, flac ? null
 , soxSupport ? true, sox ? null
-, vorbisSupport ? true, vorbisTools ? null
+, vorbisSupport ? true, vorbis-tools ? null
 }:
 
 assert mp3Support -> lame != null;
@@ -12,7 +12,7 @@ assert opusSupport -> opusTools != null;
 assert faacSupport -> faac != null;
 assert flacSupport -> flac != null;
 assert soxSupport -> sox != null;
-assert vorbisSupport -> vorbisTools != null;
+assert vorbisSupport -> vorbis-tools != null;
 
 let
   zeroconf = pythonPackages.callPackage ./zeroconf.nix { };
@@ -37,7 +37,7 @@ pythonPackages.buildPythonApplication {
     ++ stdenv.lib.optional faacSupport faac
     ++ stdenv.lib.optional flacSupport flac
     ++ stdenv.lib.optional soxSupport sox
-    ++ stdenv.lib.optional vorbisSupport vorbisTools;
+    ++ stdenv.lib.optional vorbisSupport vorbis-tools;
 
   # upstream has no tests
   checkPhase = ''

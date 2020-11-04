@@ -1,30 +1,20 @@
-From e2b25ce3606d05ff8a387185c41ab32fb2a36161 Mon Sep 17 00:00:00 2001
+From 539f3af04963a6826d2b2d0ba2095af99a7a6294 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
 Subject: [PATCH 07/18] hostnamed, localed, timedated: disable methods that
  change system settings.
 
 ---
- src/hostname/hostnamed.c |  9 +++++++++
+ src/hostname/hostnamed.c |  6 ++++++
  src/locale/localed.c     |  9 +++++++++
  src/timedate/timedated.c | 10 ++++++++++
- 3 files changed, 28 insertions(+)
+ 3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index 21f6471495..8c5af7619f 100644
+index 7f6607a527..b5a9388916 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
-@@ -422,6 +422,9 @@ static int method_set_hostname(sd_bus_message *m, void *userdata, sd_bus_error *
-         if (r < 0)
-                 return r;
- 
-+        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
-+            "Changing system settings via systemd is not supported on NixOS.");
-+
-         if (isempty(name))
-                 name = c->data[PROP_STATIC_HOSTNAME];
- 
-@@ -478,6 +481,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+@@ -626,6 +626,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
          if (r < 0)
                  return r;
  
@@ -33,8 +23,8 @@ index 21f6471495..8c5af7619f 100644
 +
          name = empty_to_null(name);
  
-         if (streq_ptr(name, c->data[PROP_STATIC_HOSTNAME]))
-@@ -535,6 +541,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+         context_read_etc_hostname(c);
+@@ -685,6 +688,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
          if (r < 0)
                  return r;
  
@@ -43,12 +33,12 @@ index 21f6471495..8c5af7619f 100644
 +
          name = empty_to_null(name);
  
-         if (streq_ptr(name, c->data[prop]))
+         context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index 09f16d25f4..c1cb87cef1 100644
+index 715ce5cac7..014f7dcf6c 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
-@@ -275,6 +275,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
+@@ -317,6 +317,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
          if (r < 0)
                  return r;
  
@@ -56,9 +46,9 @@ index 09f16d25f4..c1cb87cef1 100644
 +            "Changing system settings via systemd is not supported on NixOS.");
 +
          /* If single locale without variable name is provided, then we assume it is LANG=. */
-         if (strv_length(l) == 1 && !strchr(*l, '=')) {
-                 if (!locale_is_valid(*l))
-@@ -410,6 +413,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
+         if (strv_length(l) == 1 && !strchr(l[0], '=')) {
+                 if (!locale_is_valid(l[0]))
+@@ -432,6 +435,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
          if (r < 0)
                  return r;
  
@@ -68,7 +58,7 @@ index 09f16d25f4..c1cb87cef1 100644
          keymap = empty_to_null(keymap);
          keymap_toggle = empty_to_null(keymap_toggle);
  
-@@ -586,6 +592,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
+@@ -606,6 +612,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
          if (r < 0)
                  return r;
  
@@ -79,10 +69,10 @@ index 09f16d25f4..c1cb87cef1 100644
          model = empty_to_null(model);
          variant = empty_to_null(variant);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 5e2fb50d83..63865f557c 100644
+index c467b85477..3e78b2f575 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
-@@ -652,6 +652,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
+@@ -646,6 +646,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
          if (r < 0)
                  return r;
  
@@ -93,7 +83,7 @@ index 5e2fb50d83..63865f557c 100644
          if (!timezone_is_valid(z, LOG_DEBUG))
                  return sd_bus_error_setf(error, SD_BUS_ERROR_INVALID_ARGS, "Invalid or not installed time zone '%s'", z);
  
-@@ -731,6 +735,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
+@@ -725,6 +729,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
          if (r < 0)
                  return r;
  
@@ -103,7 +93,7 @@ index 5e2fb50d83..63865f557c 100644
          if (lrtc == c->local_rtc)
                  return sd_bus_reply_method_return(m, NULL);
  
-@@ -923,6 +930,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+@@ -917,6 +924,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
          if (r < 0)
                  return r;
  
@@ -114,5 +104,5 @@ index 5e2fb50d83..63865f557c 100644
          if (r < 0)
                  return r;
 -- 
-2.26.2
+2.28.0
 

@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "cni";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02qn1br8164d99978acalisy1sx294g1axnii4yh1wji0fc735xz";
+    sha256 = "16i59dhiq7pc7qs32cdk4yv4w9rjx4vvlw7fb6a6jhq6hxxjrgiw";
   };
 
   goPackagePath = "github.com/containernetworking/cni";
@@ -18,6 +18,6 @@ buildGoPackage rec {
     license = licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
     maintainers = with maintainers; [ offline vdemeester ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

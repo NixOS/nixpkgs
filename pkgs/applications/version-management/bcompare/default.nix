@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bcompare";
-  version = "4.3.4.24657";
+  version = "4.3.5.24893";
 
   src = fetchurl {
     url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-    sha256 = "031ivmpy0mk43skb30r7p5zwf0m90pmsqhaq5kc08gzy6g4s0wd0";
+    sha256 = "1gm8d6hgdg8f3hd83wqac28gkvz5nyn62wj7x44vmr60dh4i2jfn";
   };
 
   unpackPhase = ''

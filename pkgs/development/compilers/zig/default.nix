@@ -20,13 +20,6 @@ llvmPackages.stdenv.mkDerivation rec {
     zlib
   ];
 
-  patches = [
-    (substituteAll {
-        src = ./llvm10_polly.patch;
-        llvm_extras = "-Wl,${llvmPackages.llvm}/lib/LLVMPolly.so";
-    })
-  ];
-
   preBuild = ''
     export HOME=$TMPDIR;
   '';
@@ -46,5 +39,7 @@ llvmPackages.stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.andrewrk ];
+    # See https://github.com/NixOS/nixpkgs/issues/86299
+    broken = stdenv.isDarwin;
   };
 }

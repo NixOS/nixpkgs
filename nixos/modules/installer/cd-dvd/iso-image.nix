@@ -417,6 +417,14 @@ in
       '';
     };
 
+    isoImage.squashfsCompression = mkOption {
+      default = "xz -Xdict-size 100%";
+      description = ''
+        Compression settings to use for the squashfs nix store.
+      '';
+      example = "zstd -Xcompression-level 6";
+    };
+
     isoImage.edition = mkOption {
       default = "";
       description = ''
@@ -614,6 +622,7 @@ in
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
       storeContents = config.isoImage.storeContents;
+      comp = config.isoImage.squashfsCompression;
     };
 
     # Individual files to be included on the CD, outside of the Nix

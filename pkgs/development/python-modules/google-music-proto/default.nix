@@ -19,6 +19,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i -e "/audio-metadata/c\'audio-metadata'," -e "/marshmallow/c\'marshmallow'," setup.py
+    substituteInPlace setup.py \
+      --replace "pendulum>=2.0,<=3.0,!=2.0.5,!=2.1.0" "pendulum>=2.0,<=3.0"
   '';
 
   propagatedBuildInputs = [

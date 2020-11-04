@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -83,12 +83,10 @@ let
     )
 
     (
-      optionalString (cfg.mailboxes != []) ''
-        protocol imap {
-          namespace inbox {
-            inbox=yes
-            ${concatStringsSep "\n" (map mailboxConfig cfg.mailboxes)}
-          }
+      optionalString (cfg.mailboxes != {}) ''
+        namespace inbox {
+          inbox=yes
+          ${concatStringsSep "\n" (map mailboxConfig (attrValues cfg.mailboxes))}
         }
       ''
     )
@@ -131,12 +129,13 @@ let
     special_use = \${toString mailbox.specialUse}
   '' + "}";
 
-  mailboxes = { ... }: {
+  mailboxes = { name, ... }: {
     options = {
       name = mkOption {
-        type = types.nullOr (types.strMatching ''[^"]+'');
+        type = types.strMatching ''[^"]+'';
         example = "Spam";
-        default = null;
+        default = name;
+        readOnly = true;
         description = "The name of the mailbox.";
       };
       auto = mkOption {
@@ -335,19 +334,11 @@ in
     };
 
     mailboxes = mkOption {
-      type = with types; let m = submodule mailboxes; in either (listOf m) (attrsOf m);
+      type = with types; coercedTo
+        (listOf unspecified)
+        (list: listToAttrs (map (entry: { name = entry.name; value = removeAttrs entry ["name"]; }) list))
+        (attrsOf (submodule mailboxes));
       default = {};
-      apply = x:
-        if isList x then warn "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.03!" x
-        else mapAttrsToList (name: value:
-          if value.name != null
-            then throw ''
-              When specifying dovecot2 mailboxes as attributes, declaring
-              a `name'-attribute is prohibited! The name ${value.name} should
-              be the attribute key!
-            ''
-          else value // { inherit name; }
-        ) x;
       example = literalExample ''
         {
           Spam = { specialUse = "Junk"; auto = "create"; };
@@ -436,12 +427,12 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ cfg.configFile modulesDir ];
 
+      startLimitIntervalSec = 60;  # 1 min
       serviceConfig = {
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
         Restart = "on-failure";
         RestartSec = "1s";
-        StartLimitInterval = "1min";
         RuntimeDirectory = [ "dovecot2" ];
       };
 
@@ -470,6 +461,10 @@ in
     };
 
     environment.systemPackages = [ dovecotPkg ];
+
+    warnings = mkIf (any isList options.services.dovecot2.mailboxes.definitions) [
+      "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.03! See the release notes for more info for migration."
+    ];
 
     assertions = [
       {

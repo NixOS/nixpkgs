@@ -3,15 +3,15 @@
 with stdenv.lib;
 
 buildLinux (args // rec {
-  version = "5.8-rc2";
-  extraMeta.branch = "5.8";
+  version = "5.10-rc2";
+  extraMeta.branch = "5.10";
 
   # modDirVersion needs to be x.y.z, will always add .0
   modDirVersion = if (modDirVersionArg == null) then builtins.replaceStrings ["-"] [".0-"] version else modDirVersionArg;
 
   src = fetchurl {
     url = "https://git.kernel.org/torvalds/t/linux-${version}.tar.gz";
-    sha256 = "03y4p5abmcjm3w5m7p868bqzzrrqz461na9h46f3f99g95z66v09";
+    sha256 = "1qh353xd48mbvavpw61r2lz1cn8007yyc2xqiacbn8xsj7xdlxkj";
   };
 
   # Should the testing kernels ever be built on Hydra?

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tunnelto";
-  version = "0.1.6";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "agrinman";
     repo = pname;
     rev = version;
-    sha256 = "0yigjg8kjl8v0636hjr3sg33p4v963vzq7wbfi986ymxfx47jqp7";
+    sha256 = "1vvb619cq3n88y2s8lncwcyrhb5s4gpjfiyia91pilcpnfdb04y2";
   };
 
-  cargoSha256 = "0603b0hn84shl9wdg7zg7kf9050gh33d8ghscwsby1vqanakms9j";
+  cargoSha256 = "0k0ig3dynj46kh8g7d6bljcaalmp40pvdbhbjmlxrmwnjq6bhzcq";
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = [ ]

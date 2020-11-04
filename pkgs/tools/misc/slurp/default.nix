@@ -1,27 +1,28 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
-, cairo, wayland, wayland-protocols
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config
+, cairo, libxkbcommon, wayland, wayland-protocols
 , buildDocs ? true, scdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurp";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "slurp";
     rev = "v${version}";
-    sha256 = "0580m6kaiilgsrcj608r837r37sl6a25y7w21p7d6ij20fs3gvg1";
+    sha256 = "191yjn909dax8z66ks58wjadrycpbwryirkfjcy99dhq7dijg9fh";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
   ] ++ stdenv.lib.optional buildDocs scdoc;
 
   buildInputs = [
     cairo
+    libxkbcommon
     wayland
     wayland-protocols
   ];

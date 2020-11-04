@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
   meta = with stdenv.lib; {
     homepage = "http://www.libroxml.net/";
-    description = "This library is minimum, easy-to-use, C implementation for xml file parsing.";
+    description = "This library is minimum, easy-to-use, C implementation for xml file parsing";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mpickering ];

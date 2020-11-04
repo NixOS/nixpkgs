@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, dune, js_of_ocaml-compiler
+{ stdenv, ocaml, findlib, dune_2, js_of_ocaml-compiler
 , ocaml-migrate-parsetree, ppx_tools_versioned, uchar
 }:
 
@@ -8,9 +8,7 @@ stdenv.mkDerivation {
   inherit (js_of_ocaml-compiler) version src installPhase meta;
 
   buildInputs = [ findlib ocaml-migrate-parsetree ppx_tools_versioned ];
-  nativeBuildInputs = [ ocaml findlib dune ];
-
-  postPatch = "patchShebangs lib/generate_stubs.sh";
+  nativeBuildInputs = [ ocaml findlib dune_2 ];
 
 	propagatedBuildInputs = [ js_of_ocaml-compiler uchar ];
 

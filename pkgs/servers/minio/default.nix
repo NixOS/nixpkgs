@@ -2,22 +2,35 @@
 
 buildGoModule rec {
   pname = "minio";
-  version = "2020-05-01T22-19-14Z";
+  version = "2020-08-08T04-50-06Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "0yyq5j82rcl8yhn2jg8sjfxii6kzbrbmxvb05yiwv7p0q42ag5rn";
+    sha256 = "0l5yd3k154h3q9sc5psv80n9wpnhpj5sb3r9v9gsqcam46ljwpna";
   };
 
-  vendorSha256 = "15yx5nkyf424v42glg3cx0gkqckdfv1xn25570s9cwf8zid0zlxd";
+  vendorSha256 = "1xxhvgawkj2lq39cxgl4l5v41m6nsask79n2cxfpcgb00fqq147x";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [''-ldflags=
-    -s -w -X github.com/minio/minio/cmd.Version=${version}
-  ''];
+  patchPhase = ''
+    sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
+    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
+    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
+  '';
+
+  postConfigure = ''
+    export CGO_ENABLED=0
+  '';
+
+  buildFlagsArray = [
+    "-tags=kqueue"
+    "-trimpath"
+  ];
 
   passthru.tests.minio = nixosTests.minio;
 

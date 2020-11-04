@@ -10,7 +10,8 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cohttp-lwt graphql-cohttp graphql-lwt irmin ];
 
-  doCheck = true;
+  # test requires network
+  doCheck = false;
 
   meta = irmin.meta // {
     description = "GraphQL server for Irmin";

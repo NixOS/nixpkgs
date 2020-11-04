@@ -1,45 +1,20 @@
-{ stdenv, fetchFromGitHub, boost, sqlite, cmake, gtest }:
+{ stdenv, rustPlatform, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+rustPlatform.buildRustPackage rec {
   pname = "udpt";
-  version = "2017-09-27";
-
-  enableParallelBuilding = true;
-
-  # Suitable for a network facing daemon.
-  hardeningEnable = [ "pie" ];
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "naim94a";
     repo = "udpt";
-    rev = "e0dffc83c8ce76b08a41a4abbd5f8065535d534f";
-    sha256 = "187dw96mzgcmh4k9pvfpb7ckbb8d4vlikamr2x8vkpwzgjs3xd6g";
+    rev = "${pname}-${version}";
+    sha256 = "1g6l0y5x9pdra3i1npkm474glysicm4hf2m01700ack2rp43vldr";
   };
 
-  doCheck = true;
+  cargoSha256 = "1cmd80ndjxdmyfjpm1f04rwf64501nyi6wdsj7lxidgd1v92wy2c";
 
-  checkPhase = ''
-    runHook preCheck
-
-    make test
-
-    runHook postCheck
-  '';
-
-  buildInputs = [ boost sqlite cmake gtest ];
-
-  postPatch = ''
-    # Enabling optimization (implied by fortify hardening) causes htons
-    # to be re-defined as a macro, turning this use of :: into a syntax error.
-    sed -i '104a#undef htons' src/udpTracker.cpp
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/etc/
-    cp udpt $out/bin
-    cp ../udpt.conf $out/etc/
-    # without this, the resulting binary is unstripped.
-    runHook postInstall
+  postInstall = ''
+    install -D udpt.toml $out/share/udpt/udpt.toml
   '';
 
   meta = {

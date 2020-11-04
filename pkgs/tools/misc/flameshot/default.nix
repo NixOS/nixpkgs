@@ -1,44 +1,26 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qmake, qttools, qtsvg }:
+{ mkDerivation, lib, fetchFromGitHub, qtbase, cmake, qttools, qtsvg }:
 
-# To use `flameshot gui`, you will also need to put flameshot in `services.dbus.packages`
-# in configuration.nix so that the daemon gets launched properly:
-#
-#   services.dbus.packages = [ pkgs.flameshot ];
-#   environment.systemPackages = [ pkgs.flameshot ];
 mkDerivation rec {
   pname = "flameshot";
-  version = "0.6.0";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
-    owner = "lupoDharkael";
+    owner = "flameshot-org";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "193szslh55v44jzxzx5g9kxhl8p8di7vbcnxlid4acfidhnvgazm";
+    sha256 = "1z77igs60lz106vsf6wsayxjafxm3llf2lm4dpvsqyyrxybfq191";
   };
 
-  nativeBuildInputs = [ qmake qttools qtsvg ];
+  nativeBuildInputs = [ cmake qttools qtsvg ];
   buildInputs = [ qtbase ];
-
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
-
-  preConfigure = ''
-    # flameshot.pro assumes qmake is being run in a git checkout.
-    git() { echo ${version}; }
-    export -f git
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/share/dbus-1/services/org.dharkael.Flameshot.service \
-      --replace "/usr/local" "$out"
-  '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
-    homepage = "https://github.com/lupoDharkael/flameshot";
+    homepage = "https://flameshot.js.org";
     maintainers = [ maintainers.scode ];
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
 }

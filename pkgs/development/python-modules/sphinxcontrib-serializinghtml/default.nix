@@ -1,11 +1,13 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-serializinghtml";
   version = "1.1.4";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

@@ -10,16 +10,17 @@
 
 let
   major = "11";
-  update = ".0.7";
-  build = "ga";
+  minor = "0";
+  update = "9";
+  build = "11";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}-${build}";
+    version = "${major}.${minor}.${update}+${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "14daacng9ndxf4kmvsn7nracwfiwwmw5rha8rkk3723pfk9g8q7p";
+      sha256 = "fc2ee2ee5822f2440e66114c8fa76888fea7ddd351282940c222d34b5f871858";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
@@ -47,6 +48,7 @@ let
 
     configureFlags = [
       "--with-boot-jdk=${openjdk11-bootstrap.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -83,6 +85,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/

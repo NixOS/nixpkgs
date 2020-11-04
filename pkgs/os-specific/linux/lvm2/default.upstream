@@ -1,4 +1,0 @@
-url ftp://sources.redhat.com/pub/lvm2/
-version_link '[.]tgz$'
-version '.*[^0-9.][^.]*[.]([0-9.]+)[.].*' '\1'
-do_overwrite () { do_overwrite_just_version; }

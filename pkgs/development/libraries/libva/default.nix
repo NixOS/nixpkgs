@@ -7,28 +7,14 @@
 
 stdenv.mkDerivation rec {
   name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.7.1"; # Also update the hash for libva-utils!
+  version = "2.9.0"; # Also update the hash for libva-utils!
 
-  # update libva-utils and vaapiIntel as well
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "0ywasac7z3hwggj8szp83sbxi2naa0a3amblx64y7i1hyyrn0csq";
+    sha256 = "17m8k8fn41vzi1lzh9idf2mn4x73bwlkw60kl5zj396kpw4n1z1r";
   };
-
-  patches = [
-    (fetchpatch { # meson: Allow for libdir and includedir to be absolute paths
-      url = "https://github.com/intel/libva/commit/de902e2905abff635f3bb151718cc52caa3f669c.patch";
-      sha256 = "1lpc8qzvsxnlsh9g0ab5lja204zxz8rr2p973pfihcw7dcxc3gia";
-    })
-  ];
-
-  postPatch = ''
-    # Remove the execute bit from all source code files
-    # https://github.com/intel/libva/commit/dbd2cd635f33af1422cbc2079af0a7e68671c102
-    chmod -x va/va{,_dec_av1,_trace,_vpp}.h
-  '';
 
   outputs = [ "dev" "out" ];
 

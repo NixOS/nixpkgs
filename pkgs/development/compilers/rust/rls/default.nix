@@ -20,6 +20,11 @@ rustPlatform.buildRustPackage {
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;
 
+  # As of rustc 1.45.0, these env vars are required to build rls
+  # (due to https://github.com/rust-lang/rust/pull/72001)
+  CFG_RELEASE = "${rustPlatform.rust.rustc.version}-nightly";
+  CFG_RELEASE_CHANNEL = "nightly";
+
   # rls-rustc links to rustc_private crates
   CARGO_BUILD_RUSTFLAGS = if stdenv.isDarwin then "-C rpath" else null;
 
@@ -44,6 +49,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/rust-lang/rls/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ symphorien ];
-    platforms = platforms.all;
   };
 }

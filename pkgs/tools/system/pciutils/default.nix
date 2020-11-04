@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
+{ stdenv, fetchurl, pkgconfig, zlib, kmod, which
+, static ? stdenv.targetPlatform.isStatic
+, darwin ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "pciutils-3.7.0"; # with release-date database
@@ -9,10 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib kmod which ];
+  buildInputs = [ zlib kmod which ] ++
+    stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+
+  preConfigure = if stdenv.cc.isGNU then null else ''
+    substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
+  '';
 
   makeFlags = [
-    "SHARED=yes"
+    "SHARED=${if static then "no" else "yes"}"
     "PREFIX=\${out}"
     "STRIP="
     "HOST=${stdenv.hostPlatform.system}"

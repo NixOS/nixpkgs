@@ -1,7 +1,7 @@
 { lib
-, self
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 , numpy
 , scipy
@@ -13,18 +13,21 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.11.1";
+  version = "0.12.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bde3fa0a35a91b45dba7cbc28270b5b649ff1d721c89290883f6e831672d5f0";
+    sha256 = "5c7d6707ad3112b67f564abaf1845d3c02ecc7174c2d990d539f45c37e98ad35";
   };
 
-  checkInputs = with self; [ nose ];
-  propagatedBuildInputs = with self; [numpy scipy pandas patsy cython matplotlib];
+  nativeBuildInputs = [ cython ];
+  checkInputs = [ nose ];
+  propagatedBuildInputs = [ numpy scipy pandas patsy matplotlib ];
 
   # Huge test suites with several test failures
   doCheck = false;
+  pythonImportsCheck = [ "statsmodels" ];
 
   meta = {
     description = "Statistical computations and models for use with SciPy";

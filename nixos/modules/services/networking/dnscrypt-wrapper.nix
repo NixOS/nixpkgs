@@ -55,7 +55,10 @@ let
   rotateKeys = ''
     # check if keys are not expired
     keyValid() {
-      fingerprint=$(dnscrypt-wrapper --show-provider-publickey | awk '{print $(NF)}')
+      fingerprint=$(dnscrypt-wrapper \
+        --show-provider-publickey \
+        --provider-publickey-file=${publicKey} \
+        | awk '{print $(NF)}')
       dnscrypt-proxy --test=${toString (cfg.keys.checkInterval + 1)} \
         --resolver-address=127.0.0.1:${toString cfg.port} \
         --provider-name=${cfg.providerName} \

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alpine";
-  version = "2.21";
+  version = "2.24";
 
   src = fetchurl {
     url = "http://alpine.x10host.com/alpine/release/src/${pname}-${version}.tar.xz";
-    sha256 = "0f3llxrmaxw7w9w6aixh752md3cdc91mwfmbarkm8s413f4bcc30";
+    sha256 = "1vxw19nx10y7nx01d9i6gah2f3y5r2idbq56l13bdqi91bx9y6k5";
   };
 
   buildInputs = [
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-passfile=.pine-passfile"
+    "--with-c-client-target=slx"
   ];
 
   meta = with stdenv.lib; {

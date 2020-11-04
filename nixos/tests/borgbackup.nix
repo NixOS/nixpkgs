@@ -43,7 +43,7 @@ in {
   nodes = {
     client = { ... }: {
       services.borgbackup.jobs = {
-        
+
         local = {
           paths = dataDir;
           repo = localRepo;

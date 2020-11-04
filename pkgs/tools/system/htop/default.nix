@@ -1,28 +1,27 @@
-{ lib, fetchurl, stdenv, ncurses,
-IOKit, python3 }:
+{ lib, fetchFromGitHub, stdenv, autoreconfHook
+, ncurses, IOKit
+}:
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "2.2.0";
+  version = "3.0.2";
 
-  src = fetchurl {
-    url = "https://hisham.hm/htop/releases/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0mrwpb3cpn3ai7ar33m31yklj64c3pp576vh1naqff6f21pq5mnr";
+  src = fetchFromGitHub {
+    owner = "htop-dev";
+    repo = pname;
+    rev = version;
+    sha256 = "1qmqhbnc5yw4brd24yrp85k09770c1c00nl03mkv5pdz2bvqivk7";
   };
 
-  nativeBuildInputs = [ python3 ];
-  buildInputs =
-    [ ncurses ] ++
-    lib.optionals stdenv.isDarwin [ IOKit ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  prePatch = ''
-    patchShebangs scripts/MakeHeader.py
-  '';
+  buildInputs = [ ncurses
+  ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
     description = "An interactive process viewer for Linux";
-    homepage = "https://hisham.hm/htop/";
-    license = licenses.gpl2Plus;
+    homepage = "https://htop.dev";
+    license = licenses.gpl2Only;
     platforms = with platforms; linux ++ freebsd ++ openbsd ++ darwin;
     maintainers = with maintainers; [ rob relrod ];
   };

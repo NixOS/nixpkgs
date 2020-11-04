@@ -21,8 +21,9 @@ stdenv.mkDerivation {
 
   preInstall = "mkdir -p $out/share/man/man5/ $out/share/man/man8/ $out/sbin";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A system logging daemon";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

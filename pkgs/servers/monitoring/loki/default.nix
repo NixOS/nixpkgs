@@ -1,32 +1,38 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, systemd, fetchpatch }:
 
-buildGoPackage rec {
-  version = "1.5.0";
+buildGoModule rec {
+  version = "2.0.0";
   pname = "grafana-loki";
-  goPackagePath = "github.com/grafana/loki";
-
-  doCheck = true;
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "137lnd69p8qfg2z8l32dr1mrk2lhrxjx392xfij11sy5i9blfc3n";
+    sha256 = "09a0mqdmk754vigd1xqijzwazwrmfaqcgdr2c6dz25p7a65568hj";
   };
 
-  postPatch = ''
-    substituteInPlace pkg/distributor/distributor_test.go --replace \
-      '"eth0", "en0", "lo0"' \
-      '"lo"'
-  '';
+  vendorSha256 = null;
+
+  subPackages = [ "..." ];
+
+  patches = [
+    (fetchpatch {
+      # Fix expected return value in Test_validateDropConfig
+      # https://github.com/grafana/loki/issues/2519
+      url = "https://github.com/grafana/loki/commit/1316c0f0c5cda7c272c4873ea910211476fc1db8.patch";
+      sha256 = "06hwga58qpmivbhyjgyqzb75602hy8212a4b5vh99y9pnn6c913h";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/promtail \
-      --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Like Prometheus, but for logs";

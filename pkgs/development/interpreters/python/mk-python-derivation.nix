@@ -81,6 +81,8 @@
 # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
 # "wheel" : Install from a pre-compiled wheel.
 # "flit" : Install a flit package. This builds a wheel.
+# "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
+# "egg": Install a package from an egg.
 # "other" : Provide your own buildPhase and installPhase.
 , format ? "setuptools"
 
@@ -105,81 +107,81 @@ let
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
   ]) // {
 
-  name = namePrefix + name;
+    name = namePrefix + name;
 
-  nativeBuildInputs = [
-    python
-    wrapPython
-    ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
-    pythonRecompileBytecodeHook  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
-    pythonRemoveTestsDirHook
-  ] ++ lib.optionals catchConflicts [
-    setuptools pythonCatchConflictsHook
-  ] ++ lib.optionals removeBinBytecode [
-    pythonRemoveBinBytecodeHook
-  ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
-    unzip
-  ] ++ lib.optionals (format == "setuptools") [
-    setuptoolsBuildHook
-  ] ++ lib.optionals (format == "flit") [
-    flitBuildHook
-  ] ++ lib.optionals (format == "pyproject") [
-    pipBuildHook
-  ] ++ lib.optionals (format == "wheel") [
-    wheelUnpackHook
-  ] ++ lib.optionals (format == "egg") [
-    eggUnpackHook eggBuildHook eggInstallHook
-  ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
-    pipInstallHook
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    # This is a test, however, it should be ran independent of the checkPhase and checkInputs
-    pythonImportsCheckHook
-  ] ++ lib.optionals (python.pythonAtLeast "3.3") [
-    # Optionally enforce PEP420 for python3
-    pythonNamespacesHook
-  ] ++ nativeBuildInputs;
+    nativeBuildInputs = [
+      python
+      wrapPython
+      ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+      pythonRecompileBytecodeHook  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
+      pythonRemoveTestsDirHook
+    ] ++ lib.optionals catchConflicts [
+      setuptools pythonCatchConflictsHook
+    ] ++ lib.optionals removeBinBytecode [
+      pythonRemoveBinBytecodeHook
+    ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+      unzip
+    ] ++ lib.optionals (format == "setuptools") [
+      setuptoolsBuildHook
+    ] ++ lib.optionals (format == "flit") [
+      flitBuildHook
+    ] ++ lib.optionals (format == "pyproject") [
+      pipBuildHook
+    ] ++ lib.optionals (format == "wheel") [
+      wheelUnpackHook
+    ] ++ lib.optionals (format == "egg") [
+      eggUnpackHook eggBuildHook eggInstallHook
+    ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
+      pipInstallHook
+    ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+      # This is a test, however, it should be ran independent of the checkPhase and checkInputs
+      pythonImportsCheckHook
+    ] ++ lib.optionals (python.pythonAtLeast "3.3") [
+      # Optionally enforce PEP420 for python3
+      pythonNamespacesHook
+    ] ++ nativeBuildInputs;
 
-  buildInputs = buildInputs ++ pythonPath;
+    buildInputs = buildInputs ++ pythonPath;
 
-  propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
+    propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
 
-  inherit strictDeps;
+    inherit strictDeps;
 
-  LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
+    LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
 
-  # Python packages don't have a checkPhase, only an installCheckPhase
-  doCheck = false;
-  doInstallCheck = attrs.doCheck or true;
-  installCheckInputs = [
-  ] ++ lib.optionals (format == "setuptools") [
-    # Longer-term we should get rid of this and require
-    # users of this function to set the `installCheckPhase` or
-    # pass in a hook that sets it.
-    setuptoolsCheckHook
-  ] ++ checkInputs;
+    # Python packages don't have a checkPhase, only an installCheckPhase
+    doCheck = false;
+    doInstallCheck = attrs.doCheck or true;
+    installCheckInputs = [
+    ] ++ lib.optionals (format == "setuptools") [
+      # Longer-term we should get rid of this and require
+      # users of this function to set the `installCheckPhase` or
+      # pass in a hook that sets it.
+      setuptoolsCheckHook
+    ] ++ checkInputs;
 
-  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
-    wrapPythonPrograms
-  '' + attrs.postFixup or '''';
+    postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
+      wrapPythonPrograms
+    '' + attrs.postFixup or '''';
 
-  # Python packages built through cross-compilation are always for the host platform.
-  disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+    # Python packages built through cross-compilation are always for the host platform.
+    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
-  # For now, revert recompilation of bytecode.
-  dontUsePythonRecompileBytecode = true;
+    # For now, revert recompilation of bytecode.
+    dontUsePythonRecompileBytecode = true;
 
-  meta = {
-    # default to python's platforms
-    platforms = python.meta.platforms;
-    isBuildPythonPackage = python.meta.platforms;
-  } // meta;
-} // lib.optionalAttrs (attrs?checkPhase) {
-  # If given use the specified checkPhase, otherwise use the setup hook.
-  # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-  installCheckPhase = attrs.checkPhase;
-}));
+    meta = {
+      # default to python's platforms
+      platforms = python.meta.platforms;
+      isBuildPythonPackage = python.meta.platforms;
+    } // meta;
+  } // lib.optionalAttrs (attrs?checkPhase) {
+    # If given use the specified checkPhase, otherwise use the setup hook.
+    # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+    installCheckPhase = attrs.checkPhase;
+  }));
 
-passthru.updateScript = let
-    filename = builtins.head (lib.splitString ":" self.meta.position);
-  in attrs.passthru.updateScript or [ update-python-libraries filename ];
+  passthru.updateScript = let
+      filename = builtins.head (lib.splitString ":" self.meta.position);
+    in attrs.passthru.updateScript or [ update-python-libraries filename ];
 in lib.extendDerivation true passthru self

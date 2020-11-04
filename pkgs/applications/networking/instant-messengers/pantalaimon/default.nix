@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.6.3";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "1h1z701sj1qgcqlsk3pnzifnbcg9fshl7v6271h9x54hm3d6hg8a";
+    sha256 = "0cx8sqajf5lh8w61yy1l6ry67rv1b45xp264zkw3s7ip80i4ylb2";
   };
 
   propagatedBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An end-to-end encryption aware Matrix reverse proxy daemon.";
+    description = "An end-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = licenses.asl20;
     maintainers = with maintainers; [ valodim ];

@@ -25,6 +25,7 @@ mkDerivation rec {
         "Graphical small-internet client, supports gemini, http, https, gopher, finger";
       homepage = "https://random-projects.net/projects/kristall.gemini";
       maintainers = with maintainers; [ ehmry ];
+      license = licenses.gpl3;
       inherit (qtmultimedia.meta) platforms;
     };
 }

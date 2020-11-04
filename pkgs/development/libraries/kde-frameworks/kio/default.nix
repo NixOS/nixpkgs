@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools, qttools,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
@@ -21,5 +21,8 @@ mkDerivation {
     kxmlgui qtbase qttools solid
   ];
   outputs = [ "out" "dev" ];
-  patches = (copyPathsToStore (lib.readPathsFromFile ./. ./series));
+  patches = [
+    ./samba-search-path.patch
+    ./kio-debug-module-loader.patch
+  ];
 }

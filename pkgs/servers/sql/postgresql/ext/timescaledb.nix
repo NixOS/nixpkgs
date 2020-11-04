@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "1.7.1";
+  version = "1.7.4";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "11h1vvchnipcxvvbjb5y4bgkdzdsik5cq8k8yzkrqz8q33zmjvgg";
+    sha256 = "0w0sl5izwic3j1k94xhky2y4wkd8l18m5hcknj5vqxq3ryhxaszc";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" ];

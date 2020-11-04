@@ -110,6 +110,7 @@
 , openjpeg ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
 , libpulseaudio ? null # Pulseaudio input support
+, rav1e ? null # AV1 encoder (focused on speed and safety)
 , rtmpdump ? null # RTMP[E] support
 #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
@@ -118,6 +119,7 @@
 #, shine ? null # Fixed-point MP3 encoder
 , soxr ? null # Resampling via soxr
 , speex ? null # Speex de/encoder
+, srt ? null # Secure Reliable Transport (SRT) protocol
 #, twolame ? null # MP2 encoder
 #, utvideo ? null # Ut Video de/encoder
 , vid-stab ? null # Video stabilization
@@ -242,6 +244,15 @@ stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
   inherit (ffmpeg) src version;
 
+  # this should go away in the next release
+  patches = [
+    (fetchpatch {
+      url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=7c59e1b0f285cd7c7b35fcd71f49c5fd52cf9315";
+      sha256 = "sha256-dqpmpDFETTuWHWolMoLaubU4BeDEuQaBNA0wmzL1f8o=";
+      name = "fix_libsrt.patch";
+    })
+  ];
+
   prePatch = ''
     patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -355,6 +366,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (libnut != null) "libnut")
     (enableFeature (libopus != null) "libopus")
     (enableFeature (librsvg != null) "librsvg")
+    (enableFeature (srt != null) "libsrt")
     (enableFeature (libssh != null) "libssh")
     (enableFeature (libtheora != null) "libtheora")
     (enableFeature (if isLinux then libv4l != null else false) "libv4l2")
@@ -381,6 +393,7 @@ stdenv.mkDerivation rec {
     (enableFeature (opensslExtlib && gplLicensing) "openssl")
     (enableFeature (libpulseaudio != null) "libpulse")
     #(enableFeature quvi "libquvi")
+    (enableFeature (rav1e != null) "librav1e")
     (enableFeature (rtmpdump != null) "librtmp")
     #(enableFeature (schroedinger != null) "libschroedinger")
     (enableFeature (SDL2 != null) "sdl2")
@@ -417,8 +430,8 @@ stdenv.mkDerivation rec {
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
-    samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
+    libxcb libXv libXext lzma openal openjpeg libpulseaudio rav1e rtmpdump opencore-amr
+    samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, appimageTools, gsettings-desktop-schemas, gtk3 }:
 
 let
-  version = "2.3.1";
+  version = "2.3.2";
 in appimageTools.wrapType2 rec {
   name = "unityhub";
 
@@ -13,7 +13,7 @@ in appimageTools.wrapType2 rec {
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
 
-    libselinux pciutils libpulseaudio
+    libselinux pciutils libpulseaudio libxml2
   ]);
 
   profile = ''
@@ -23,7 +23,7 @@ in appimageTools.wrapType2 rec {
   src = fetchurl {
     # mirror of https://public-cdn.cloud.unity3d.com/hub/prod/UnityHub.AppImage
     url = "https://archive.org/download/unity-hub-${version}/UnityHub.AppImage";
-    sha256 = "09nrgjlknl3hgrrl7rc79bmbrq6r6sl49dw0cmvs37vjqnvlr8ny";
+    sha256 = "07nfyfp9apshqarc6pgshsczila6x4943hiyyizc55kp85aw0imn";
   };
 
   meta = with stdenv.lib; {

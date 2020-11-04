@@ -9,18 +9,20 @@
 
 stdenv.mkDerivation rec {
   pname = "bash-completion";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "scop";
     repo = "bash-completion";
     rev = version;
-    sha256 = "047yjryy9d6hp18wkigbfrw9r0sm31inlsp8l28fhxg8ii032sgq";
+    sha256 = "0m3brd5jx7w07h8vxvvcmbyrlnadrx6hra3cvx6grzv6rin89liv";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  doCheck = !stdenv.isDarwin;
+  # tests are super flaky unfortunately, and regularily break.
+  # let's disable them for now.
+  doCheck = false;
   checkInputs = [
     # perl is assumed by perldoc completion
     perl
@@ -30,10 +32,6 @@ stdenv.mkDerivation rec {
     python3Packages.pexpect
     python3Packages.pytest
     bashInteractive
-
-    # use xdist to speed up the test run, just like upstream:
-    # https://github.com/scop/bash-completion/blob/009bf2228c68894629eb6fd17b3dc0f1f6d67615/test/requirements.txt#L4
-    python3Packages.pytest_xdist
   ];
 
   # - ignore test_gcc on ARM because it assumes -march=native
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
   # - ignore test_ls because impure logic
   # - ignore test_screen because it assumes vt terminals exist
   checkPhase = ''
-    pytest -n $NIX_BUILD_CORES . \
+    pytest . \
       ${stdenv.lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) "--ignore=test/t/test_gcc.py"} \
       --ignore=test/t/test_chsh.py \
       --ignore=test/t/test_ether_wake.py \

@@ -10,7 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [libxml2 openssl bzip2];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Peer-to-Peer file sharing client";
+    homepage = "http://dcgui.berlios.de";
+    platforms = platforms.linux;
+    license = [ licenses.openssl licenses.gpl2 ];
   };
 }

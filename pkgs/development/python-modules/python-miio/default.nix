@@ -4,8 +4,11 @@
 , appdirs
 , click
 , construct
+, croniter
 , cryptography
+, importlib-metadata
 , pytest
+, pytest-mock
 , zeroconf
 , attrs
 , pytz
@@ -13,17 +16,27 @@
 , netifaces
 }:
 
+
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d23caf4906f2112dc88b9a6d5e1767877744cae016cd71c2bf75592a4be3b79";
+    sha256 = "3be5275b569844dfa267c80a1e23dc0957411dd501cae0ed3cccf43467031ceb";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ appdirs click construct cryptography zeroconf attrs pytz tqdm netifaces ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace  "zeroconf>=0.25.1,<0.26.0" "zeroconf"
+    substituteInPlace setup.py \
+      --replace  "pytz>=2019.3,<2020.0" "pytz"
+    substituteInPlace setup.py \
+      --replace  "cryptography>=2.9,<3.0" "cryptography"
+    '';
+
+  checkInputs = [ pytest pytest-mock];
+  propagatedBuildInputs = [ appdirs click construct croniter cryptography importlib-metadata zeroconf attrs pytz tqdm netifaces ];
 
   checkPhase = ''
     pytest

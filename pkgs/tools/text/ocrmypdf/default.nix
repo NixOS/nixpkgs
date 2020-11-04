@@ -29,14 +29,14 @@ let
 in
 buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "9.8.2";
+  version = "11.0.1";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "0zff9gsbfaf72p8zbjamn6513czpr7papyh1jy0fz1z2a9h7ya0g";
+    sha256 = "194ds9i1zd80ynzwgv7kprax0crh7bbchayawdcvg2lyr64a82xn";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -49,8 +49,10 @@ buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     cffi
     chardet
+    coloredlogs
     img2pdf
     pdfminer
+    pluggy
     pikepdf
     pillow
     reportlab
@@ -66,7 +68,7 @@ buildPythonApplication rec {
     pytestcov
     pytestrunner
     python-xmp-toolkit
-    setuptools
+    pytestCheckHook
   ] ++ runtimeDeps;
 
   patches = [
@@ -75,25 +77,6 @@ buildPythonApplication rec {
       liblept = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
-
-  # The tests take potentially 20+ minutes, depending on machine
-  doCheck = false;
-
-  # These tests fail and it might be upstream problem... or packaging. :)
-  # development is happening on macos and the pinned test versions are
-  # significantly newer than nixpkgs has. Program still works...
-  # (to the extent I've used it) -- Kiwi
-  checkPhase = ''
-    export HOME=$TMPDIR
-    pytest -k 'not test_force_ocr_on_pdf_with_no_images \
-    and not test_tesseract_crash \
-    and not test_tesseract_crash_autorotate \
-    and not test_ghostscript_pdfa_failure \
-    and not test_gs_render_failure \
-    and not test_gs_raster_failure \
-    and not test_bad_utf8 \
-    and not test_old_unpaper'
-  '';
 
   makeWrapperArgs = [ "--prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
 

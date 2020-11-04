@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, pkgconfig
 , libXinerama, libSM, libXxf86vm
-, gtk2, GConf ? null, gtk3
-, xorgproto, gstreamer, gst-plugins-base, setfile
+, gtk2, gtk3
+, xorgproto, gst_all_1, setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat28 ? false, compat30 ? true, unicode ? true
@@ -18,19 +18,19 @@ assert withWebKit -> webkitgtk != null;
 assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK31: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
-  version = "3.1.2";
+  version = "3.1.3";
   pname = "wxwidgets";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    sha256 = "0gfdhb7xq5vzasm7s1di39nchv42zsp0dmn4v6knzb7mgsb107wb";
+    sha256 = "022mby78q7n0bhd4mph04hz93c9qamnvzv3h1s26r839k28760f4";
   };
 
   buildInputs = [
-    libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base
-  ] ++ optionals withGtk2 [ gtk2 GConf ]
+    libXinerama libSM libXxf86vm xorgproto gst_all_1.gstreamer gst_all_1.gst-plugins-base
+  ] ++ optionals withGtk2 [ gtk2 ]
     ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
     ++ optional withWebKit webkitgtk

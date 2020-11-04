@@ -1,12 +1,12 @@
 { stdenv, lib, python, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.7.0";
+  version = "2.14.0";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "0g0ddg04pwcsmyyzrqllx4ladw4x5zxc5yw29q8f6q59j6jaf1zb";
+    sha256 = "0rihxkdckfkqzrr3jc8jpdpjg3pgz5jymyz19lpva8qqln7cmzpy";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -36,6 +36,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = with py.pkgs; [
+    azure-appconfiguration
     azure-batch
     azure-cli-core
     azure-cli-telemetry
@@ -44,6 +45,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-functions-devops-build
     azure-graphrbac
     azure-keyvault
+    azure-keyvault-administration
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
@@ -105,10 +107,14 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-sql
     azure-mgmt-sqlvirtualmachine
     azure-mgmt-storage
+    azure-mgmt-synapse
     azure-mgmt-trafficmanager
     azure-mgmt-web
     azure-multiapi-storage
     azure-storage-blob
+    azure-synapse-accesscontrol
+    azure-synapse-artifacts
+    azure-synapse-spark
     colorama
     cryptography
     Fabric
@@ -159,9 +165,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   # almost the entire test suite requires an azure account setup and networking
   # ensure that the azure namespaces are setup correctly and that azure.cli can be accessed
   checkPhase = ''
-    cd azure # avoid finding local copy
-    ${py.interpreter} -c 'import azure.cli.core; assert "${version}" == azure.cli.core.__version__'
-    HOME=$TMPDIR ${py.interpreter} -m azure.cli --help
+    HOME=$TMPDIR $out/bin/az --help > /dev/null
   '';
 
   # ensure these namespaces are able to be accessed

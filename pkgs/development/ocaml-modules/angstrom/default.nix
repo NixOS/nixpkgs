@@ -1,8 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, result, bigstringaf }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, result, bigstringaf, ppx_let }:
 
 buildDunePackage rec {
   pname = "angstrom";
-  version = "0.13.0";
+  version = "0.15.0";
 
   minimumOCamlVersion = "4.04";
 
@@ -10,10 +10,10 @@ buildDunePackage rec {
     owner  = "inhabitedtype";
     repo   = pname;
     rev    = version;
-    sha256 = "0vzbwd8j34iv7n6gwqq2mf25q7rqpnpxnifb9ssxhq55p5dd1kp4";
+    sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
   };
 
-  checkInputs = [ alcotest ];
+  checkInputs = [ alcotest ppx_let ];
   propagatedBuildInputs = [ bigstringaf result ];
   doCheck = lib.versionAtLeast ocaml.version "4.05";
 

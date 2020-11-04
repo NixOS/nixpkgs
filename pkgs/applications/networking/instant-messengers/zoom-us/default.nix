@@ -6,7 +6,7 @@
 , qtquickcontrols2, qtscript, qtsvg , qttools, qtwayland, qtwebchannel
 , qtwebengine
 # Runtime
-, coreutils, libjpeg_turbo, pciutils, procps, utillinux
+, coreutils, faac, pciutils, procps, utillinux
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -15,11 +15,11 @@ assert pulseaudioSupport -> libpulseaudio != null;
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "5.1.412382.0614";
+  version = "5.4.53350.1027";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "07xb3v5i08wq0a3my9id91gizsxj5ppqvxmcbdy04j7yn4i1jm9x";
+      sha256 = "11va3px42y81bwy10mxm7mk0kf2sni9gwb422pq9djck2dgchw5x";
     };
   };
 
@@ -27,8 +27,8 @@ let
   desktopIntegration = fetchFromGitHub {
     owner = "flathub";
     repo = "us.zoom.Zoom";
-    rev = "0d294e1fdd2a4ef4e05d414bc680511f24d835d7";
-    sha256 = "0rm188844a10v8d6zgl2pnwsliwknawj09b02iabrvjw5w1lp6wl";
+    rev = "25e14f8141cdc682b4f7d9ebe15608619f5a19f2";
+    sha256 = "0w3pdd5484r3nsb4iahi37jdlm37vm1053sb8k2zlqb9s554zjwp";
   };
 
 in mkDerivation {
@@ -40,7 +40,7 @@ in mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo qtbase
+    dbus glib libGL libX11 libXfixes libuuid libxcb faac qtbase
     qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols qtquickcontrols2
     qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
   ];
@@ -70,7 +70,10 @@ in mkDerivation {
       cp -ar ${files} $out/share/zoom-us
 
       # TODO Patch this somehow; tries to dlopen './libturbojpeg.so' from cwd
-      ln -s $(readlink -e "${libjpeg_turbo.out}/lib/libturbojpeg.so") $out/share/zoom-us/libturbojpeg.so
+      cp libturbojpeg.so $out/share/zoom-us/libturbojpeg.so
+
+      # Again, requires faac with a nonstandard filename.
+      ln -s $(readlink -e "${faac}/lib/libfaac.so") $out/share/zoom-us/libfaac1.so
 
       runHook postInstall
     '';

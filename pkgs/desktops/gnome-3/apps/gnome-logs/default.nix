@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -26,6 +27,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-logs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0w1nfdxbv3f0wnhmdy21ydvr4swfc108hypda561p7l9lrhnnxj4";
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gnome-logs/-/issues/52
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/b42defceefc775220b525f665a3b662ab9593b81.patch";
+      sha256 = "1s0zscmhwy7r0xff17wh8ik8x9xw1vrkipw5vl5i770bxnljps8n";
+    })
+  ];
 
   nativeBuildInputs = [
     python3

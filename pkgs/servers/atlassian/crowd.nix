@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atlassian-crowd";
-  version = "4.0.2";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://www.atlassian.com/software/crowd/downloads/binary/${pname}-${version}.tar.gz";
-    sha256 = "1ndg9qb406rd239q7xycc2vdh2jd4fh9wryx1fm9493rxlncx28b";
+    sha256 = "1gg4jcwvk4za6j4260dx1vz2dprrnqv8paqf6z86s7ka3y1nx1aj";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];

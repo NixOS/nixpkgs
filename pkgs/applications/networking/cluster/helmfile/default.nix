@@ -1,28 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm, ... }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm }:
 
-let version = "0.118.6"; in
-
-buildGoModule {
+buildGoModule rec {
   pname = "helmfile";
-  inherit version;
+  version = "0.132.1";
 
   src = fetchFromGitHub {
     owner = "roboll";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "0zbvz8kn52c1q4yn8n9z4rrf761h495fhjw72x9q1nh44hr7npwd";
+    sha256 = "03i9pl3iwqk5az73qm9rxdq8c5nd9l4w3c28yk55bfgpwpnxcwjc";
   };
 
-  goPackagePath = "github.com/roboll/helmfile";
+  vendorSha256 = "0r4p4nwhmxg06qyf86gd2g61l4r1mlpblh4vhsc1shbz9iigykzi";
 
-  vendorSha256 = "0xj14f0yx7x9ziijd1yka1n6kbmmhbibsk3ppp8cn1pqrwgqk7pr";
+  doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X main.Version=${version}
-  '';
+  subPackages = [ "." ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/helmfile \

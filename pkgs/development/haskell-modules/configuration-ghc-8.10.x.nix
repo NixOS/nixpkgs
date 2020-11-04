@@ -61,35 +61,30 @@ self: super: {
   haddock-library = self.haddock-library_1_9_0;
 
   # Jailbreak to fix the build.
-  async = doJailbreak super.async;
   base-noprelude = doJailbreak super.base-noprelude;
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  ed25519 = doJailbreak super.ed25519;
-  email-validate = doJailbreak super.email-validate;  # https://github.com/Porges/email-validate-hs/issues/51
-  feed = doJailbreak super.feed;  # https://github.com/bergmark/feed/issues/48
-  hashable = doJailbreak super.hashable;
-  pandoc = doJailbreak super.pandoc;
-  parallel = doJailbreak super.parallel;
-  regex-base = doJailbreak super.regex-base;
-  regex-compat = doJailbreak super.regex-compat;
-  regex-pcre-builtin = doJailbreak super.regex-pcre-builtin;
-  regex-posix = doJailbreak super.regex-posix;
-  regex-tdfa = doJailbreak super.regex-tdfa;
-  split = doJailbreak super.split;
   system-fileio = doJailbreak super.system-fileio;
-  tar = doJailbreak super.tar;
-  tasty-expected-failure = doJailbreak super.tasty-expected-failure;
-  tasty-rerun = doJailbreak super.tasty-rerun;  # https://github.com/ocharles/tasty-rerun/issues/18
   unliftio-core = doJailbreak super.unliftio-core;
-  vector = doJailbreak super.vector;
-  zlib = doJailbreak super.zlib;
 
   # Use the latest version to fix the build.
+  dhall = self.dhall_1_36_0;
   lens = self.lens_4_19_2;
-  optics-core = self.optics-core_0_3;
-  repline = self.repline_0_3_0_0;
+  optics = self.optics_0_3;
+  optics-core = self.optics-core_0_3_0_1;
+  optics-extra = self.optics-extra_0_3;
+  optics-th = self.optics-th_0_3_0_2;
+  repline = self.repline_0_4_0_0;
   singletons = self.singletons_2_7;
   th-desugar = self.th-desugar_1_11;
+
+  insert-ordered-containers = super.insert-ordered-containers.override {
+    optics-core = self.optics-core_0_3_0_1;
+    optics-extra = self.optics-extra_0_3.override {
+      optics-core = self.optics-core_0_3_0_1;
+    };
+  };
+
+  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  monoidal-containers = doJailbreak super.monoidal-containers;
 
   # `ghc-lib-parser-ex` (see conditionals in its `.cabal` file) does not need
   # the `ghc-lib-parser` dependency on GHC >= 8.8. However, because we have
@@ -99,17 +94,12 @@ self: super: {
   ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = null; };
 
   # Jailbreak to fix the build.
-  aeson-diff = doJailbreak super.aeson-diff;
   brick = doJailbreak super.brick;
-  cabal-plan = doJailbreak super.cabal-plan;
-  cborg = doJailbreak super.cborg;
-  cborg-json = doJailbreak super.cborg-json;
   exact-pi = doJailbreak super.exact-pi;
-  policeman = doJailbreak super.policeman;
-  relude = dontCheck (doJailbreak super.relude);
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
+  shower = doJailbreak super.shower;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
@@ -131,5 +121,15 @@ self: super: {
     sha256 = "198hsfjsy83s7rp71llf05cwa3vkm74g73djg5p4sk4awm9s6vf2";
     excludes = ["package.yaml"];
   });
+
+  # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
+  hnix = generateOptparseApplicativeCompletion "hnix"
+    (overrideCabal super.hnix (drv: {
+      # executable is allowed for ghc >= 8.10 and needs repline
+      executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
+    }));
+
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
 
 }

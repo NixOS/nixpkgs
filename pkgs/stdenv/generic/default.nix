@@ -61,7 +61,10 @@ let
     ]
       # FIXME this on Darwin; see
       # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
-    ++ lib.optional hostPlatform.isLinux ../../build-support/setup-hooks/audit-tmpdir.sh
+    ++ lib.optionals hostPlatform.isLinux [
+      ../../build-support/setup-hooks/audit-tmpdir.sh
+      ../../build-support/setup-hooks/move-systemd-user-units.sh
+    ]
     ++ [
       ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
@@ -138,8 +141,11 @@ let
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
 
-      # The derivation's `system` is `buildPlatform.system`.
-      inherit (buildPlatform) system;
+      # Override `system` so that packages can get the system of the host
+      # platform through `stdenv.system`. `system` is originally set to the
+      # build platform within the derivation above so that Nix directs the build
+      # to correct type of machine.
+      inherit (hostPlatform) system;
 
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;

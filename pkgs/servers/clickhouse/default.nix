@@ -1,38 +1,52 @@
 { stdenv, fetchFromGitHub, cmake, libtool, lldClang, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion, gperftools
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl
-, poco, protobuf, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
+, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
+, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
 , xxHash, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "19.17.9.60";
+  version = "20.5.2.7";
 
   src = fetchFromGitHub {
-    owner  = "yandex";
+    owner  = "ClickHouse";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
-    sha256 = "0k1ncn7i4szpw4jlhv3zmw6mrkkm8qfs39nj1zbawjqrkgnw70kg";
+    fetchSubmodules = true;
+    sha256 = "15b499czsv727wwdb1i1ja5wfsk6ii3pqpk6dlqic9cdmkh8c8ic";
   };
 
   nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
   buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion gperftools
-    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl
-    poco protobuf rapidjson re2 rdkafka readline sparsehash unixODBC
+    boost brotli capnproto cctz clang-unwrapped double-conversion
+    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
+    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
     xxHash zstd
   ];
 
+  postPatch = ''
+    patchShebangs src/
+
+    substituteInPlace contrib/openssl-cmake/CMakeLists.txt \
+      --replace '/usr/bin/env perl' perl
+    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-duplicate-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-ungrouped-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/generate-ya-make/generate-ya-make.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/list-licenses/list-licenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-style \
+      --replace 'git rev-parse --show-toplevel' '$src'
+  '';
+
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
-    "-DUNBUNDLED=ON"
-    "-DUSE_STATIC_LIBRARIES=OFF"
   ];
-
-  postPatch = ''
-    patchShebangs dbms/programs/clang/copy_headers.sh
-  '';
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
@@ -46,7 +60,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
-    homepage = "https://clickhouse.yandex/";
+    homepage = "https://clickhouse.tech/";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

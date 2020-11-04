@@ -6,6 +6,8 @@ buildDunePackage {
 
   inherit (irmin) version src;
 
+  useDune2 = true;
+
   propagatedBuildInputs = [ alcotest cmdliner irmin metrics-unix mtime ];
 
   meta = irmin.meta // {

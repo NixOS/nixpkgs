@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , python
 , subunit
 , testrepository
@@ -14,6 +15,7 @@
 buildPythonPackage rec {
   pname = "mox3";
   version = "1.1.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

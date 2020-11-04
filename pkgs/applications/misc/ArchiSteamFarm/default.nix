@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ArchiSteamFarm";
-  version = "4.2.2.1";
+  version = "4.3.1.0";
 
   src = fetchurl {
     url = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/${version}/ASF-generic.zip";
-    sha256 = "0pr9rrhi44yl99c2i12rimmc4mhbh0ma9jn17cgsh8p0kbj8sq94";
+    sha256 = "1q28byshh4wkfsfdb0sfdqq9a5da9k7i4nagsfpk0fzyajvzd4lx";
   };
 
   nativeBuildInputs = [ unzip makeWrapper jq ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --run "[ -d config ] || cp --no-preserve=mode -r $dist/config ." \
       --run "[ -d logs ] || cp --no-preserve=mode -r $dist/logs ." \
       --run "[ -d plugins ] || cp --no-preserve=mode -r $dist/plugins ." \
-      --run "[ -d www ] || ln -sf $dist/www ."
+      --run "ln -sf $dist/www ."
   '';
 
   meta = with stdenv.lib; {

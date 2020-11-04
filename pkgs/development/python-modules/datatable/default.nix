@@ -1,45 +1,63 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+, pipInstallHook, writeText
 , blessed
 , docutils
 , libcxx
-, libcxxabi
 , llvm
-, openmp
-, pytest
+, pytestCheckHook
 , typesentry
 }:
 
 buildPythonPackage rec {
   pname = "datatable";
-  version = "0.10.1";
+  version = "0.11.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ce5257c0c4afa96e2b14ca47a0aaf73add195b11de48f4adda50b5ede927436";
+    sha256 = "19c602711e00f72e9ae296d8fa742d46da037c2d3a2d254bdf68f817a8da76bb";
   };
+  # authors seem to have created their own build system
+  format = "other";
 
-  patches = lib.optionals stdenv.isDarwin [
-    # Replace the library auto-detection with hardcoded paths.
-    (substituteAll {
-      src = ./hardcode-library-paths.patch;
+  # tarball doesn't appear to have been shipped totally ready-to-build
+  postPatch = ''
+    substituteInPlace ci/ext.py \
+      --replace \
+        'shell_cmd(["git"' \
+        '"0000000000000000000000000000000000000000" or shell_cmd(["git"'
+    echo '${version}' > VERSION.txt
+  '';
+  DT_RELEASE = "1";
 
-      libomp_dylib = "${lib.getLib openmp}/lib/libomp.dylib";
-      libcxx_dylib = "${lib.getLib libcxx}/lib/libc++.1.dylib";
-      libcxxabi_dylib = "${lib.getLib libcxxabi}/lib/libc++abi.dylib";
-    })
-  ];
+  buildPhase = ''
+    python ci/ext.py wheel
+  '';
 
   propagatedBuildInputs = [ typesentry blessed ];
-  buildInputs = [ llvm ] ++ lib.optionals stdenv.isDarwin [ openmp ];
-  checkInputs = [ docutils pytest ];
+  buildInputs = [ llvm pipInstallHook ];
+  checkInputs = [ docutils pytestCheckHook ];
 
   LLVM = llvm;
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${libcxx}/include/c++/v1";
 
-  checkPhase = ''
-    mv datatable datatable.hidden
-    pytest
-  '';
+  pytestFlagsArray = let
+    # ini file (not included in tarball) required to change python_files setting,
+    pytestIni = writeText "pytest.ini" ''
+      [pytest]
+      python_files = test_*.py test-*.py
+    '';
+  in [
+    "-c ${pytestIni}"
+  ];
+  disabledTests = [
+    # skip tests which are irrelevant to our installation or use way too much memory
+    "test_xfunction_paths"
+    "test_fread_from_cmd2"
+    "test_cast_huge_to_str"
+    "test_create_large_string_column"
+  ];
+  pythonImportsCheck = [ "datatable" ];
 
   meta = with lib; {
     description = "data.table for Python";

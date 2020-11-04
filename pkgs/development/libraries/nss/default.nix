@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, darwin, fixDarwinDylibNames, buildPackages, ninja }:
 
 let
   nssPEM = fetchurl {
     url = "http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz";
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
-  version = "3.52.1";
+  version = "3.57";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
@@ -14,12 +14,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "0y4jb9095f7bbgw7d7kvzm4c3g4p5i6y68fwhb8wlkpb7b1imj5w";
+    sha256 = "55a86c01be860381d64bb4e5b94eb198df9b0f098a8af0e58c014df398bdc382";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 
   buildInputs = [ zlib sqlite ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
@@ -29,10 +30,18 @@ in stdenv.mkDerivation rec {
   prePatch = ''
     # strip the trailing whitespace from the patch line and the renamed CKO_NETSCAPE_ enum to CKO_NSS_
     xz -d < ${nssPEM} | sed \
-       -e '/^-DIRS = builtins $/ s/ $//' \
+       -e 's/-DIRS = builtins $/-DIRS = . builtins/g' \
        -e 's/CKO_NETSCAPE_/CKO_NSS_/g' \
        -e 's/CKT_NETSCAPE_/CKT_NSS_/g' \
        | patch -p1
+
+    patchShebangs nss
+
+    for f in nss/coreconf/config.gypi nss/build.sh nss/coreconf/config.gypi; do
+      substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
+    done
+
+    substituteInPlace nss/coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   '';
 
   patches =
@@ -40,55 +49,55 @@ in stdenv.mkDerivation rec {
       # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
       ./85_security_load.patch
       ./ckpem.patch
+      ./fix-cross-compilation.patch
     ];
 
   patchFlags = [ "-p0" ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-  '';
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+     substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+   '';
 
   outputs = [ "out" "dev" "tools" ];
 
   preConfigure = "cd nss";
 
-  makeFlags = let
-    # NSS's build systems expects aarch32 to be called arm; if we pass in armv6l/armv7l, it
-    # fails with a linker error
-    cpu = if stdenv.hostPlatform.isAarch32 then "arm" else stdenv.hostPlatform.parsed.cpu.name;
-  in [
-    "NSPR_INCLUDE_DIR=${nspr.dev}/include"
-    "NSPR_LIB_DIR=${nspr.out}/lib"
-    "NSDISTMODE=copy"
-    "BUILD_OPT=1"
-    "SOURCE_PREFIX=\$(out)"
-    "NSS_ENABLE_ECC=1"
-    "USE_SYSTEM_ZLIB=1"
-    "NSS_USE_SYSTEM_SQLITE=1"
-    "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
-    # Pass in CPU even if we're not cross compiling, because otherwise it tries to guess with
-    # uname, which can be wrong if e.g. we're compiling for aarch32 on aarch64
-    "OS_TEST=${cpu}"
-    "CPU_ARCH=${cpu}"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=1"
-    "NSS_DISABLE_GTESTS=1" # don't want to build tests when cross-compiling
-  ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
-    ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
+  buildPhase = let
+    getArch = platform: if platform.isx86_64 then "x64"
+          else if platform.isx86_32 then "ia32"
+          else if platform.isAarch32 then "arm"
+          else if platform.isAarch64 then "arm64"
+          else platform.parsed.cpu.name;
+    # yes, this is correct. nixpkgs uses "host" for the platform the binary will run on whereas nss uses "host" for the platform that the build is running on
+    target = getArch stdenv.hostPlatform;
+    host = getArch stdenv.buildPlatform;
+  in ''
+    runHook preBuild
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+    sed -i 's|nss_dist_dir="$dist_dir"|nss_dist_dir="'$out'"|;s|nss_dist_obj_dir="$obj_dir"|nss_dist_obj_dir="'$out'"|' build.sh
+    ./build.sh -v --opt \
+      --with-nspr=${nspr.dev}/include:${nspr.out}/lib \
+      --system-sqlite \
+      --enable-legacy-db \
+      --target ${target} \
+      -Dhost_arch=${host} \
+      -Duse_system_zlib=1 \
+      --enable-libpkix \
+      ${stdenv.lib.optionalString stdenv.isDarwin "--clang"} \
+      ${stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
-  # TODO(@oxij): investigate this: `make -n check` works but `make
-  # check` fails with "no rule", same for "installcheck".
-  doCheck = false;
-  doInstallCheck = false;
+    runHook postBuild
+  '';
 
-  postInstall = ''
+  NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\"";
+
+  installPhase = ''
+    runHook preInstall
+
     rm -rf $out/private
+    find $out -name "*.TOC" -delete
     mv $out/public $out/include
-    mv $out/*.OBJ/* $out/
-    rmdir $out/*.OBJ
 
     ln -s lib $out/lib64
 
@@ -138,6 +147,8 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/nss-config "$dev"
     moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
     rm -f "$out"/lib/*.a
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

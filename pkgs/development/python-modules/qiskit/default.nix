@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "qiskit";
   # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
-  version = "0.19.1";
+  version = "0.20.0";
 
   disabled = pythonOlder "3.5";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit";
     rev = version;
-    sha256 = "0p1sahgf6qgbkvxb067mnyj6ya8nv7y57yyiiaadhjw242sjkjy5";
+    sha256 = "1r23pjnql49gczf4k4m6ir5rr95gqdxjrks60p8a93d243mxx3c9";
   };
 
   propagatedBuildInputs = [
@@ -36,14 +36,21 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
   dontUseSetuptoolsCheck = true;
-  # following doesn't work b/c they are distributed across different nix sitePackages dirs. Tested with pytest though.
-  # pythonImportsCheck = [ "qiskit" "qiskit.terra" "qiskit.ignis" "qiskit.aer" "qiskit.aqua" ];
 
-  meta = {
+  pythonImportsCheck = [
+    "qiskit"
+    "qiskit.aqua"
+    "qiskit.circuit"
+    "qiskit.ignis"
+    "qiskit.providers.aer"
+  ];
+
+  meta = with lib; {
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit/releases";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger pandaman ];
+    changelog = "https://qiskit.org/documentation/release_notes.html";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ drewrisinger pandaman ];
   };
 }

@@ -13,21 +13,10 @@ buildGoModule rec {
     sha256 = "05qy14k9wmyhsg1hiv4njfx1zn1m9lz4d1p50kc36v7pq0n4csfk";
   };
 
-  libvterm = fetchFromGitHub {
-    owner = "ddevault";
-    repo = "go-libvterm";
-    rev = "b7d861da381071e5d3701e428528d1bfe276e78f";
-    sha256 = "06vv4pgx0i6hjdjcar4ch18hp9g6q6687mbgkvs8ymmbacyhp7s6";
-  };
+  runVend = true;
+  vendorSha256 = "13zs5113ip85yl6sw9hzclxwlnrhy18d39vh9cwbq97dgnh9rz89";
 
-  vendorSha256 = "1rqn36510m0yb7k4bvq2hgirr3z8a2h5xa7cq5mb84xsmhvf0g69";
-
-  overrideModAttrs = (_: {
-      postBuild = ''
-      cp -r --reflink=auto ${libvterm}/libvterm vendor/github.com/ddevault/go-libvterm
-      cp -r --reflink=auto ${libvterm}/encoding vendor/github.com/ddevault/go-libvterm
-      '';
-    });
+  doCheck = false;
 
   nativeBuildInputs = [
     scdoc
@@ -44,8 +33,6 @@ buildGoModule rec {
 
   buildInputs = [ python3 notmuch ];
 
-  GOFLAGS="-tags=notmuch";
-
   buildPhase = "
     runHook preBuild
     # we use make instead of go build
@@ -54,7 +41,7 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    make PREFIX=$out install
+    make PREFIX=$out GOFLAGS="$GOFLAGS -tags=notmuch" install
     wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
     runHook postInstall
   '';
@@ -67,7 +54,7 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "aerc is an email client for your terminal";
+    description = "An email client for your terminal";
     homepage = "https://aerc-mail.org/";
     maintainers = with maintainers; [ tadeokondrak ];
     license = licenses.mit;

@@ -5,9 +5,9 @@
 , fetchpatch
 , substituteAll
 , gtk-doc
-, pkgconfig
+, pkg-config
 , gobject-introspection
-, intltool
+, gettext
 , libgudev
 , polkit
 , libxmlb
@@ -23,13 +23,12 @@
 , libsmbios
 , efivar
 , gnu-efi
-, libyaml
 , valgrind
 , meson
 , libuuid
 , colord
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , ninja
 , gcab
 , python3
@@ -67,10 +66,6 @@ let
     requests
   ]);
 
-  fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
-
   isx86 = stdenv.isx86_64 || stdenv.isi686;
 
   # Dell isn't supported on Aarch64
@@ -93,30 +88,50 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.4.4";
-
-    src = fetchurl {
-      url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "03yn96kxs53vxcbza17y99rdhbjlybv44gkc90vaj6301grxahnp";
-    };
+    version = "1.4.6";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
     # CLI programs go to out
     outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
+    src = fetchurl {
+      url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
+      sha256 = "AKG5stioIveQc7ooYb/2UoOaBzbPUFzYk8tZK0rzvK0=";
+    };
+
+    patches = [
+      # Do not try to create useless paths in /var.
+      ./fix-paths.patch
+
+      # Allow installing
+      ./add-option-for-installation-sysconfdir.patch
+
+      # Install plug-ins and libfwupdplugin to out,
+      # they are not really part of the library.
+      ./install-fwupdplugin-to-out.patch
+
+      # Installed tests are installed to different output
+      # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
+      (substituteAll {
+        src = ./installed-tests-path.patch;
+        # Needs a different set of modules than po/make-images.
+        inherit installedTestsPython;
+      })
+    ];
+
     nativeBuildInputs = [
       meson
       ninja
       gtk-doc
-      pkgconfig
+      pkg-config
       gobject-introspection
-      intltool
+      gettext
       shared-mime-info
       valgrind
       gcab
       docbook_xml_dtd_43
-      docbook_xsl
+      docbook-xsl-nons
       help2man
       libxslt
       python
@@ -133,7 +148,6 @@ let
       libsoup
       elfutils
       gnu-efi
-      libyaml
       libgudev
       colord
       libjcat
@@ -151,50 +165,6 @@ let
     ] ++ stdenv.lib.optionals haveDell [
       libsmbios
     ];
-
-    patches = [
-      ./fix-paths.patch
-      ./add-option-for-installation-sysconfdir.patch
-
-      # Install plug-ins and libfwupdplugin to out,
-      # they are not really part of the library.
-      ./install-fwupdplugin-to-out.patch
-
-      # Installed tests are installed to different output
-      # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
-      (substituteAll {
-        src = ./installed-tests-path.patch;
-        # Needs a different set of modules than po/make-images.
-        inherit installedTestsPython;
-      })
-    ];
-
-    postPatch = ''
-      patchShebangs \
-        contrib/get-version.py \
-        contrib/generate-version-script.py \
-        meson_post_install.sh \
-        po/make-images \
-        po/make-images.sh \
-        po/test-deps
-    '';
-
-    # /etc/os-release not available in sandbox
-    # doCheck = true;
-
-    preFixup = let
-      binPath = [
-        efibootmgr
-        bubblewrap
-        tpm2-tools
-      ] ++ stdenv.lib.optional haveFlashrom flashrom;
-    in ''
-      gappsWrapperArgs+=(
-        --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-        # See programs reached with fu_common_find_program_in_path in source
-        --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
-      )
-    '';
 
     mesonFlags = [
       "-Dgtkdoc=true"
@@ -223,20 +193,57 @@ let
       "-Dplugin_flashrom=true"
     ];
 
-    FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+    # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
+    dontWrapGApps = true;
+
+    # /etc/os-release not available in sandbox
+    # doCheck = true;
+
+    # Environment variables
+
+    # Fontconfig error: Cannot load default config file
+    FONTCONFIG_FILE =
+      let
+        fontsConf = makeFontsConf {
+          fontDirectories = [ freefont_ttf ];
+        };
+      in fontsConf;
 
     # error: “PolicyKit files are missing”
     # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
     PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
 
-    # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
-    dontWrapGApps = true;
+    # Phase hooks
+
+    postPatch = ''
+      patchShebangs \
+        contrib/get-version.py \
+        contrib/generate-version-script.py \
+        meson_post_install.sh \
+        po/make-images \
+        po/make-images.sh \
+        po/test-deps
+    '';
 
     preCheck = ''
       addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
     '';
 
-    # so we need to wrap the executables manually
+    preFixup = let
+      binPath = [
+        efibootmgr
+        bubblewrap
+        tpm2-tools
+      ] ++ stdenv.lib.optional haveFlashrom flashrom;
+    in ''
+      gappsWrapperArgs+=(
+        --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+        # See programs reached with fu_common_find_program_in_path in source
+        --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+      )
+    '';
+
+    # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
     postFixup = ''
       find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
         | while IFS= read -r -d ''' file; do
@@ -307,7 +314,7 @@ let
     meta = with stdenv.lib; {
       homepage = "https://fwupd.org/";
       maintainers = with maintainers; [ jtojnar ];
-      license = [ licenses.gpl2 ];
+      license = licenses.lgpl21Plus;
       platforms = platforms.linux;
     };
   };

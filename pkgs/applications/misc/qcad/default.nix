@@ -1,23 +1,27 @@
 { boost
 , fetchFromGitHub
+, libGLU
 , mkDerivationWith
 , muparser
 , pkgconfig
+, qtbase
 , qmake
-, qt5
+, qtscript
+, qtsvg
+, qtxmlpatterns
+, qttools
 , stdenv
-, libGLU
 }:
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.24.3.4";
+  version = "3.25.2.0";
 
   src = fetchFromGitHub {
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "0hv9050srrq7fm1fqla8b52mwpilsvr1jriz4ay633s63svss3zz";
+    sha256 = "1lz6q9n2p0l7k8rwqsdj6av9p3426423g5avc4y6s7nbk36280mz";
   };
 
   patches = [
@@ -25,11 +29,13 @@ mkDerivationWith stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}
-    cp \
-      src/3rdparty/qt-labs-qtscriptgenerator-5.12.3/qt-labs-qtscriptgenerator-5.12.3.pro \
-      src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}/qt-labs-qtscriptgenerator-${qt5.qtbase.version}.pro
-  '';
+    if ! [ -d src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version} ]; then
+      mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}
+      cp \
+        src/3rdparty/qt-labs-qtscriptgenerator-5.14.0/qt-labs-qtscriptgenerator-5.14.0.pro \
+        src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}/qt-labs-qtscriptgenerator-${qtbase.version}.pro
+    fi
+ '';
 
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
@@ -59,6 +65,10 @@ mkDerivationWith stdenv.mkDerivation rec {
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
 
+    # workaround to fix the library browser:
+    rm -r $out/lib/plugins/sqldrivers
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
+
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 
     runHook postInstall
@@ -68,16 +78,16 @@ mkDerivationWith stdenv.mkDerivation rec {
     boost
     muparser
     libGLU
-    qt5.qtbase
-    qt5.qtscript
-    qt5.qtsvg
-    qt5.qtxmlpatterns
+    qtbase
+    qtscript
+    qtsvg
+    qtxmlpatterns
   ];
 
   nativeBuildInputs = [
     pkgconfig
-    qt5.qmake
-    qt5.qttools
+    qmake
+    qttools
   ];
 
   enableParallelBuilding = true;
@@ -87,6 +97,6 @@ mkDerivationWith stdenv.mkDerivation rec {
     homepage = "https://qcad.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ yvesf ];
-    platforms = qt5.qtbase.meta.platforms;
+    platforms = qtbase.meta.platforms;
   };
 }

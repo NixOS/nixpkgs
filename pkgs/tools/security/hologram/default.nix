@@ -13,17 +13,14 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/AdRoll/hologram";
 
-  goDeps = ./deps.nix;
-
   preConfigure = ''
     sed -i 's|cacheTimeout != 3600|cacheTimeout != 0|' cmd/hologram-server/main.go
   '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/AdRoll/hologram/";
-    description = "Easy, painless AWS credentials on developer laptops.";
+    description = "Easy, painless AWS credentials on developer laptops";
     maintainers = with maintainers; [ nand0p ];
-    platforms = platforms.all;
     license = licenses.asl20;
   };
 }

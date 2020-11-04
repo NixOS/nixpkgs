@@ -8,7 +8,7 @@
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
-, eglPlatforms ? [ "x11" "surfaceless" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
+, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
 , withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
@@ -31,7 +31,7 @@ with stdenv.lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.0.8"; # Update only to the final (last planned) release (i.e. X.Y.MAX)?
+  version = "20.2.1";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "6cf0c010df89680f9b2bc6432ff01400031795e39bceda7535fa00af06740b6c";
+    sha256 = "0ji4s1gwcvx3fbj9h0x5zbma6kw4b75vs0266zhc06r97yd6v96i";
   };
 
   prePatch = "patchShebangs .";
@@ -58,7 +58,21 @@ stdenv.mkDerivation {
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] # do not prefix user provided dri-drivers-path
+  ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # Fix `-Werror=int-conversion` pthread warnings on musl.
+      # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
+      (fetchpatch {
+        name = "nine_debug-Make-tid-more-type-correct";
+        # Patch adjusted for version `20.1`, before the big mesa dirs change
+        # `gallium: rename 'state tracker' to 'frontend'`.
+        # Patch for versions after that change is at
+        #     https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e3b4745ef16d0e833300ad67044.patch
+        url = "https://gitlab.freedesktop.org/nh2/mesa/commit/3385c49684375f1153a52ed7ccda3f5135268a41.patch";
+        sha256 = "1ci694sqjll44c9g2md4krhk6qlvq51r7ad5rnnfdnf3l8ys0i50";
+      })
+    ]
+    # do not prefix user provided dri-drivers-path
     ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
       sha256 = "0z6phi8hbrbb32kkp1js7ggzviq7faz1ria36wi4jbc4in2392d9";
@@ -81,6 +95,12 @@ stdenv.mkDerivation {
     substituteInPlace meson.build --replace \
       "find_program('pkg-config')" \
       "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
+
+    # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
+    substituteInPlace src/util/xmlconfig.c --replace \
+      'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
+    substituteInPlace src/util/meson.build --replace \
+      "get_option('datadir')" "'${placeholder "out"}'"
   '';
 
   outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
@@ -88,6 +108,7 @@ stdenv.mkDerivation {
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
     "--sysconfdir=/etc"
+    "--datadir=${placeholder "drivers"}/share" # Vendor files
 
     # Don't build in debug mode
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
@@ -107,7 +128,7 @@ stdenv.mkDerivation {
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
-    "-Dgallium-nine=${if enableGalliumNine then "true" else "false"}" # Direct3D in Wine
+    "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
@@ -158,9 +179,6 @@ stdenv.mkDerivation {
       mv $out/lib/lib*_mesa* $drivers/lib
     fi
 
-    # move vendor files
-    mv $out/share/ $drivers/
-
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
       substituteInPlace "$js" --replace '"libEGL_' '"'"$drivers/lib/libEGL_"
@@ -210,7 +228,7 @@ stdenv.mkDerivation {
     inherit (libglvnd) driverLink;
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "An open source 3D graphics library";
     longDescription = ''
       The Mesa project began as an open-source implementation of the OpenGL

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "1.14.0";
+  version = "1.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c91f605d00926416bcd4d32d6ca195e0e5bd6fb794bc67b09910a19ee2ca6570";
+    sha256 = "de6fe53bdaf66aa8e2c1f34b26af24c479a876619b5c667d009fbd9700dd89f7";
   };
 
   checkInputs = [ pytest mock ];

@@ -1,28 +1,21 @@
-{ lib, python3, platformio, esptool, git, protobuf3_10, fetchpatch }:
+{ lib, python3, platformio, esptool, git, protobuf3_12, fetchpatch }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
       protobuf = super.protobuf.override {
-        protobuf = protobuf3_10;
+        protobuf = protobuf3_12;
       };
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
-        };
-      });
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.14.4";
+  version = "1.15.2";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "10krdmpbafvii0qlg5w94vdv573f3zdqm78ck79d6q0frdd9q9yn";
+    sha256 = "1wnmgn0q4n2vp2cdwsc36acsy7c7w5vyxdglii3432mr5drrgcsx";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
@@ -30,12 +23,12 @@ in python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     voluptuous pyyaml paho-mqtt colorlog
     tornado protobuf tzlocal pyserial ifaddr
-    protobuf
+    protobuf click
   ];
 
   # remove all version pinning (E.g tornado==5.1.1 -> tornado)
   postPatch = ''
-    sed -i -e "s/==[0-9.]*//" setup.py
+    sed -i -e "s/==[0-9.]*//" requirements.txt
   '';
 
   makeWrapperArgs = [

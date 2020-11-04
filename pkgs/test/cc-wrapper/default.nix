@@ -45,6 +45,14 @@ in stdenv.mkDerivation {
     NIX_LDFLAGS="-L$NIX_BUILD_TOP/foo/lib -rpath $NIX_BUILD_TOP/foo/lib" $CC -lfoo -o ldflags-check ${./ldflags-main.c}
     ./ldflags-check
 
+    printf "Check whether -nostdinc and -nostdinc++ is handled correctly" >&2
+    mkdir -p std-include
+    cp ${./stdio.h} std-include/stdio.h
+    NIX_DEBUG=1 $CC -I std-include -nostdinc -o nostdinc-main ${./nostdinc-main.c}
+    ./nostdinc-main
+    $CXX -I std-include -nostdinc++ -o nostdinc-main++ ${./nostdinc-main.c}
+    ./nostdinc-main++
+
     ${optionalString sanitizersWorking ''
       printf "checking whether sanitizers are fully functional... ">&2
       $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}

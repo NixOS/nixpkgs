@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "PyStemmer";
-  version = "2.0.0.1";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57d1e353b11c5f90566efec7037deaa0e411b1df1e4e5522ce97d7be34b49478";
+    sha256 = "9b81c35302f1d2a5ad9465b85986db246990db93d97d3e8f129269ed7102788e";
   };
 
   nativeBuildInputs = [ cython ];

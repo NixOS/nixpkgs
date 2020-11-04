@@ -15,6 +15,7 @@ let
   bowerPackages = buildBowerComponents {
     name = "${cryptpad.name}-bower-packages";
     # this list had to be tweaked by hand:
+    # * add the second jquery ~2.1.0 entry
     # * add the second bootstrap ~3.1.1 entry
     generated = ./bower-packages.nix;
     src = cryptpad.src;
@@ -47,6 +48,8 @@ let
   combined = cryptpad.override {
     postInstall = ''
       out_cryptpad=$out/lib/node_modules/cryptpad
+
+      substituteInPlace $out_cryptpad/lib/workers/index.js --replace "lib/workers/db-worker" "$out_cryptpad/lib/workers/db-worker"
 
       # add the bower components
       ln -sv \

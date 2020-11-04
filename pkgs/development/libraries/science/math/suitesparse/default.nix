@@ -57,29 +57,6 @@ stdenv.mkDerivation rec {
     "library"
   ];
 
-  # Likely fixed after 5.7.2
-  # https://github.com/DrTimothyAldenDavis/SuiteSparse/commit/f6daae26ee391e475e2295e77c839aa7c1a8b784
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    # The fixDarwinDylibNames in nixpkgs can't seem to fix all the libraries.
-    # We manually fix them up here.
-    fixDarwinDylibNames() {
-        local flags=()
-        local old_id
-
-        for fn in "$@"; do
-            flags+=(-change "$PWD/lib/$(basename "$fn")" "$fn")
-        done
-
-        for fn in "$@"; do
-            if [ -L "$fn" ]; then continue; fi
-            echo "$fn: fixing dylib"
-            install_name_tool -id "$fn" "''${flags[@]}" "$fn"
-        done
-    }
-
-    fixDarwinDylibNames $(find "$out" -name "*.dylib")
-  '';
-
   meta = with stdenv.lib; {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
     description = "A suite of sparse matrix algorithms";

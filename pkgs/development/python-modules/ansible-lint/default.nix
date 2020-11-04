@@ -4,30 +4,31 @@
 , isPy27
 , ansible
 , pyyaml
-, six
-, nose
 , setuptools_scm
 , ruamel_yaml
-, pathlib2
+, rich
+, pytestCheckHook
+, pytestcov
+, pytest_xdist
+, git
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "4.2.0";
+  version = "4.3.6";
   # pip is not able to import version info on raumel.yaml
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a";
+    sha256 = "1fn7mdykm4id78k4faibi92q9yxbjbyxb90ww0by03c31m8z5348";
   };
 
   format = "pyproject";
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ]
-    ++ lib.optionals isPy27 [ pathlib2 ];
-  checkInputs = [ nose ];
+  propagatedBuildInputs = [ pyyaml ansible ruamel_yaml rich ];
+  checkInputs = [ pytestCheckHook pytestcov pytest_xdist git ];
 
   postPatch = ''
     patchShebangs bin/ansible-lint
@@ -42,11 +43,11 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-    PATH=$out/bin:$PATH nosetests test
+    pytest -k 'not test_run_playbook_github and not test_run_single_role_path_no_trailing_slash_script'
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/willthames/ansible-lint";
+    homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
     license = licenses.mit;
     maintainers = [ maintainers.sengaya ];

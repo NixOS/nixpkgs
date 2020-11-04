@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     # Docs
       (ifMinVer "0.6" "--disable-doc")
     # External Libraries
+      "--enable-libass"
       "--enable-bzlib"
       "--enable-gnutls"
       (ifMinVer "1.0" "--enable-fontconfig")

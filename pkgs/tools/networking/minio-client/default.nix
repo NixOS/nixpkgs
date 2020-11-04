@@ -2,20 +2,26 @@
 
 buildGoModule rec {
   pname = "minio-client";
-  version = "2020-04-25T00-43-23Z";
+  version = "2020-10-03T02-54-56Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "mc";
     rev = "RELEASE.${version}";
-    sha256 = "0ff2fyr3787zp0lpgbph064am33py2wzjikzmxd3zwp3y0dic770";
+    sha256 = "0pc08w0xdkk9w8xya0q7d1601wprshq852419pwpi8hd7y3q381h";
   };
 
-  vendorSha256 = "0nfcxz47v5gl0wih59xarhz82nd8wy61c3ijvg2v08ipk29zivcc";
+  vendorSha256 = "0bkidqcdfjyqjlzxy9w564c6s3vw850wgq6ksx5y1p8f5r4plzxs";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/minio/mc/cmd.Version=${version}" ];
+  patchPhase = ''
+    sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
+    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
+    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/minio/mc";

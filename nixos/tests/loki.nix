@@ -12,15 +12,28 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       enable = true;
       configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
     };
-    systemd.services.promtail = {
-      description = "Promtail service for Loki test";
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        ExecStart = ''
-          ${pkgs.grafana-loki}/bin/promtail --config.file ${pkgs.grafana-loki.src}/cmd/promtail/promtail-local-config.yaml
-        '';
-        DynamicUser = true;
+    services.promtail = {
+      enable = true;
+      configuration = {
+        server = {
+          http_listen_port = 9080;
+          grpc_listen_port = 0;
+        };
+        clients = [ { url = "http://localhost:3100/loki/api/v1/push"; } ];
+        scrape_configs = [
+          {
+            job_name = "system";
+            static_configs = [
+              {
+                targets = [ "localhost" ];
+                labels = {
+                  job = "varlogs";
+                  __path__ = "/var/log/*log";
+                };
+              }
+            ];
+          }
+        ];
       };
     };
   };

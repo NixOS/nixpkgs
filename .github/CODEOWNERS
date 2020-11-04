@@ -10,6 +10,12 @@
 # This file
 /.github/CODEOWNERS @edolstra
 
+# GitHub actions
+/.github/workflows @Mic92 @zowoq
+
+# EditorConfig
+/.editorconfig @Mic92 @zowoq
+
 # Libraries
 /lib                        @edolstra @nbp @infinisil
 /lib/systems                @nbp @ericson2314 @matthewbauer
@@ -77,9 +83,9 @@
 /pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout
 
 # Perl
-/pkgs/development/interpreters/perl @volth
-/pkgs/top-level/perl-packages.nix   @volth
-/pkgs/development/perl-modules      @volth
+/pkgs/development/interpreters/perl @volth @stigtsp
+/pkgs/top-level/perl-packages.nix   @volth @stigtsp
+/pkgs/development/perl-modules      @volth @stigtsp
 
 # R
 /pkgs/applications/science/math/R   @peti
@@ -90,8 +96,8 @@
 /pkgs/development/ruby-modules      @alyssais
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @LnL7
-/pkgs/build-support/rust @andir
+/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
+/pkgs/build-support/rust @andir @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
@@ -170,6 +176,10 @@
 /pkgs/applications/editors/emacs       @adisbladis
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
+# Neovim
+/pkgs/applications/editors/neovim      @jonringer
+/pkgs/applications/editors/neovim      @teto
+
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio
 
@@ -186,13 +196,20 @@
 /nixos/tests/php                         @NixOS/php
 /pkgs/build-support/build-pecl.nix       @NixOS/php
 /pkgs/development/interpreters/php       @NixOS/php
+/pkgs/development/php-packages           @NixOS/php
 /pkgs/top-level/php-packages.nix         @NixOS/php
 
 # Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @NixOS/podman
-/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman
-/nixos/modules/virtualisation/podman.nix     @NixOS/podman
-/nixos/tests/podman.nix                      @NixOS/podman
+/nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
+/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman @zowoq
+/nixos/modules/virtualisation/podman.nix     @NixOS/podman @zowoq
+/nixos/tests/cri-o.nix                       @NixOS/podman @zowoq
+/nixos/tests/podman.nix                      @NixOS/podman @zowoq
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut
+
+# Go
+/pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
+/pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
+/pkgs/development/go-packages  @kalbasit @Mic92 @zowoq

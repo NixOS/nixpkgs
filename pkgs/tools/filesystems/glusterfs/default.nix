@@ -2,7 +2,7 @@
  autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite,
  liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, utillinux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc
+ rsync, glibc, rpcsvc-proto, libtirpc
 }:
 let
   s =
@@ -24,7 +24,7 @@ let
   buildInputs = [
     fuse bison flex_2_5_35 openssl ncurses readline
     autoconf automake libtool pkgconfig zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper utillinux
+    acl sqlite liburcu attr makeWrapper utillinux libtirpc
     (python3.withPackages (pkgs: [
       pkgs.flask
       pkgs.prettytable
@@ -99,6 +99,8 @@ stdenv.mkDerivation
   configureFlags = [
     ''--localstatedir=/var''
     ];
+
+  nativeBuildInputs = [ rpcsvc-proto ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

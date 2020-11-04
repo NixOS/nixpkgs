@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, meson, ninja, python3, pantheon
+{ stdenv, fetchFromGitHub, nix-update-script, vala, pkgconfig, meson, ninja, python3, pantheon
 , gtk3, gtksourceview, json-glib, libgee, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };

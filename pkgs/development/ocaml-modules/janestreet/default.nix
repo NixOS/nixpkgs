@@ -234,7 +234,7 @@ rec {
   ppx_let = janePackage {
     pname = "ppx_let";
     hash = "1ckzwljlb78cdf6xxd24nddnmsihvjrnq75r1b255aj3xgkzsygx";
-    buildInputs = [ ppxlib ];
+    propagatedBuildInputs = [ base ppxlib ];
     meta.description = "Monadic let-bindings";
   };
 
@@ -533,6 +533,7 @@ rec {
     pname = "email_message";
     hash = "131jd72k4s8cdbgg6gyg7w5v8mphdlvdx4fgvh8d9a1m7kkvbxfg";
     propagatedBuildInputs = [ async angstrom core_extended cryptokit magic-mime ounit ];
+    patches = [ ./email-message-angstrom-0.14.patch ];
     meta.description = "E-mail message parser";
   };
 

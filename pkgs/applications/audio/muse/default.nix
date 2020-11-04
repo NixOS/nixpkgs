@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "muse-sequencer";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "muse-sequencer";
     repo = "muse";
     rev = "muse_${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "08k25652w88xf2i79lw305x1phpk7idrww9jkqwcs8q6wzgmz8aq";
+    sha256 = "1rasp2v1ds2aw296lbf27rzw0l9fjl0cvbvw85d5ycvh6wkm301p";
   };
 
   sourceRoot = "source/muse3";

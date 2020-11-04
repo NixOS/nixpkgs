@@ -6,6 +6,7 @@
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? true
+, nlsSupport ? true
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -21,7 +22,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.27.0";
+  version = "2.29.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1ybk39ylvs32lywq7ra4l2kdr5izc80r9461hwfnw8pssxs9gjkk";
+    sha256 = "KEMtmVJXxGJv4PsgkfWI327tmOlXFBnnLIO8Izcua4k=";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional withManual "doc";
@@ -98,6 +99,7 @@ stdenv.mkDerivation {
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
   ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1"
+  ++ stdenv.lib.optional (!nlsSupport) "NO_GETTEXT=1"
   # git-gui refuses to start with the version of tk distributed with
   # macOS Catalina. We can prevent git from building the .app bundle
   # by specifying an invalid tk framework. The postInstall step will
@@ -153,12 +155,6 @@ stdenv.mkDerivation {
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
       mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
-      mkdir -p $out/share/zsh/site-functions
-      ln -s $out/share/git/contrib/completion/git-completion.zsh $out/share/zsh/site-functions/_git
-
-      # Patch the zsh completion script so it can find the Bash completion script.
-      sed -i -e "/locations=(/a \${"\t\t"}'$out/share/git/contrib/completion/git-completion.bash'" \
-        $out/share/git/contrib/completion/git-completion.zsh
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \

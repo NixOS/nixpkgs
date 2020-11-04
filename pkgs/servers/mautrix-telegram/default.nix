@@ -1,15 +1,24 @@
-{ lib, python3, mautrix-telegram }:
+{ lib, python3, mautrix-telegram, fetchFromGitHub }:
 
 with python3.pkgs;
 
-buildPythonPackage rec {
+let
+  # officially supported database drivers
+  dbDrivers = [
+    psycopg2
+    # sqlite driver is already shipped with python by default
+  ];
+
+in buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.8.1";
+  version = "0.8.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1gz6d28dq3ykvr3wp85wkc05lbppdzf5j9i62pgx0blmx3jh0yrk";
+  src = fetchFromGitHub {
+    owner = "tulir";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0mhy9b933haz1bldkglvn81warjxdjdzgkviiv5k6fykghq473jf";
   };
 
   postPatch = ''
@@ -30,7 +39,7 @@ buildPythonPackage rec {
     pillow
     lxml
     setuptools
-  ];
+  ] ++ dbDrivers;
 
   # `alembic` (a database migration tool) is only needed for the initial setup,
   # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
@@ -39,7 +48,7 @@ buildPythonPackage rec {
   # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
   # which has `mautrix-telegram` in its environment.
   passthru.alembic = alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+    propagatedBuildInputs = old.propagatedBuildInputs ++ dbDrivers ++ [
       mautrix-telegram
     ];
   });

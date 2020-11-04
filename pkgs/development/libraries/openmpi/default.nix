@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric
+, libpsm2, libfabric, pmix, ucx
 
 # Enable CUDA support
 , cudaSupport ? false, cudatoolkit ? null
@@ -13,13 +13,12 @@
 
 # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
 , fabricSupport ? stdenv.isLinux && stdenv.isx86_64
-
 }:
 
 assert !cudaSupport || cudatoolkit != null;
 
 let
-  version = "4.0.4";
+  version = "4.0.5";
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -31,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = with stdenv.lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1i0slg2dxjdgw513aml1n9dsbdxn2fimi2b5712d5r9z4ar4xqj7";
+    sha256 = "02f0r9d3xgs08svkmj8v7lzviyxqnkk4yd3z0wql550xnriki3y5";
   };
 
   postPatch = ''
@@ -46,7 +45,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl ]
+    ++ lib.optionals isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core
@@ -55,8 +54,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
 
   configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
-    ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
-    ++ lib.optional enableSGE "--with-sge"
+    ++ lib.optionals isLinux  [
+      "--with-libnl=${libnl.dev}"
+      "--with-pmix=${pmix}"
+      "--with-pmix-libdir=${pmix}/lib"
+      "--enable-mpi-cxx"
+    ] ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx

@@ -66,7 +66,7 @@
    <listitem>
     <para>
      For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_BROKEN=1</programlisting>
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_BROKEN=1</screen>
     </para>
    </listitem>
    <listitem>
@@ -85,19 +85,19 @@
   <title>Installing packages on unsupported systems</title>
 
   <para>
-   There are also two ways to try compiling a package which has been marked as unsuported for the given system.
+   There are also two ways to try compiling a package which has been marked as unsupported for the given system.
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-     For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1</programlisting>
+     For allowing the build of an unsupported package once, you can use an environment variable for a single invocation of the nix tools:
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1</screen>
     </para>
    </listitem>
    <listitem>
     <para>
-     For permanently allowing broken packages to be built, you may add <literal>allowUnsupportedSystem = true;</literal> to your user's configuration file, like this:
+     For permanently allowing unsupported packages to be built, you may add <literal>allowUnsupportedSystem = true;</literal> to your user's configuration file, like this:
 <programlisting>
 {
   allowUnsupportedSystem = true;
@@ -122,7 +122,7 @@
    <listitem>
     <para>
      To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_UNFREE=1</programlisting>
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_UNFREE=1</screen>
     </para>
    </listitem>
    <listitem>
@@ -162,10 +162,10 @@
 </programlisting>
     </para>
     <para>
-     The following example configuration blacklists the <literal>gpl3</literal> and <literal>agpl3</literal> licenses:
+     The following example configuration blacklists the <literal>gpl3Only</literal> and <literal>agpl3Only</literal> licenses:
 <programlisting>
 {
-  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
+  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3Only gpl3Only ];
 }
 </programlisting>
     </para>
@@ -187,7 +187,7 @@
    <listitem>
     <para>
      To temporarily allow all insecure packages, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_INSECURE=1</programlisting>
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_INSECURE=1</screen>
     </para>
    </listitem>
    <listitem>

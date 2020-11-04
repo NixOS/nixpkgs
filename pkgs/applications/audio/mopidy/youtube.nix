@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-youtube";
-  version = "3.0";
+  version = "3.1";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "Mopidy-YouTube";
-    sha256 = "0x1q9rfnjx65n6hi8s5rw5ff4xv55h63zy52fwm8aksdnzppr7gd";
+    sha256 = "1bn3nxianbal9f81z9wf2cxi893hndvrz2zdqvh1zpxrhs0cr038";
   };
 
   patchPhase = "sed s/bs4/beautifulsoup4/ -i setup.cfg";

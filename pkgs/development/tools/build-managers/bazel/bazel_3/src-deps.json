@@ -65,14 +65,14 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "8d0bf8ab83c9e38ec6ed5ce7bf425dbdc6469cec9e078559d4e8da42b705410f",
-        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.17.0.tar.gz"
+        "sha256": "761e997a9055fe5e2b70aba8d64e78d4c2113feafaa8ac81909cb63e403f3087",
+        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.19.0rc1.tar.gz"
     },
-    "android_tools_pkg-0.17.0.tar.gz": {
-        "name": "android_tools_pkg-0.17.0.tar.gz",
-        "sha256": "8d0bf8ab83c9e38ec6ed5ce7bf425dbdc6469cec9e078559d4e8da42b705410f",
+    "android_tools_pkg-0.19.0rc1.tar.gz": {
+        "name": "android_tools_pkg-0.19.0rc1.tar.gz",
+        "sha256": "761e997a9055fe5e2b70aba8d64e78d4c2113feafaa8ac81909cb63e403f3087",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.17.0.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.19.0rc1.tar.gz"
         ]
     },
     "bazel-toolchains-3.1.0.tar.gz": {

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
-  version = "5.1.0";
+  version = "6.1.0";
 
   src = fetchzip {
     url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "0ja8ds9gpibrnwcf8n6cpbggwkbks0ik3z9vfx5h1yf3ln1nycky";
+    sha256 = "12ff9rhgqd71xm72r385hx0h8g75hz0ag0adzqcwfa54k0lhrrrz";
   };
 
   nativeBuildInputs = [ unixtools.column which ];

@@ -1,14 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, buildPackages, autoreconfHook, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dash-0.5.11";
+  name = "dash-0.5.11.2";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/${name}.tar.gz";
-    sha256 = "1jwilfsy249d3q7fagg1ga4bgc2bg1fzw63r2nan0m77bznsdnad";
+    sha256 = "0pvdpm1cgfbc25ramn4305a0158yq031q1ain4dc972rnxl7vyq0";
   };
 
   hardeningDisable = [ "format" ];
+
+  # Temporary fix until a proper one is accepted upstream
+  patches = stdenv.lib.optional stdenv.isDarwin ./0001-fix-dirent64-et-al-on-darwin.patch;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   meta = with stdenv.lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";

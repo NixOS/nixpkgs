@@ -284,7 +284,7 @@ in rec {
         '')
         workspaceDependenciesTransitive;
 
-    in stdenv.mkDerivation (builtins.removeAttrs attrs ["pkgConfig" "workspaceDependencies"] // {
+    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies"] // {
       inherit src pname;
 
       name = baseName;
@@ -389,7 +389,7 @@ in rec {
     # yarn2nix is the only package that requires the yarnNix option.
     # All the other projects can auto-generate that file.
     yarnNix = ./yarn.nix;
-    
+
     # Using the filter above and importing package.json from the filtered
     # source results in an error in restricted mode. To circumvent this,
     # we import package.json from the unfiltered source

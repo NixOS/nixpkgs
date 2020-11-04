@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bitlbee autoconf automake libtool glib libgcrypt ];
+  buildInputs = [ bitlbee autoconf automake libtool libgcrypt ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee

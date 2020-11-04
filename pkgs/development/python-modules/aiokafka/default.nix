@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.5.2";
+  version = "0.6.0";
 
   disabled = isPy27;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiokafka";
     rev = "v${version}";
-    sha256 = "062kqsq75fi5pbpqf2a8nxm43pxpr6bwplg6bp4nv2a68r850pki";
+    sha256 = "1l5nkz9blmfrbsj7m76vm8vcfdgvab33anzpq62384scp9yf8dln";
   };
 
   nativeBuildInputs = [

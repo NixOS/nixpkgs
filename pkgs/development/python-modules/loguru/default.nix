@@ -2,15 +2,17 @@
 
 buildPythonPackage rec {
   pname = "loguru";
-  version = "0.5.0";
-  
+  version = "0.5.3";
+
   disabled = isPy27;
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e0e6ff59be5e22f863d909ca989e34bb14c21b374f6af45281e603d003dbb96";
+    sha256 = "b28e72ac7a98be3d28ad28570299a393dfcd32e5e3f6a353dec94675767b6319";
   };
 
   checkInputs = [ pytestCheckHook colorama ];
+
+  pytestFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--ignore=tests/test_multiprocessing.py" ];
 
   disabledTests = [ "test_time_rotation_reopening" "test_file_buffering" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" "test_await_complete_inheritance" ];

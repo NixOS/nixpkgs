@@ -19,7 +19,6 @@ let
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
-      coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
@@ -60,6 +59,7 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
+      VST = callPackage ../development/coq-modules/VST {};
 
       filterPackages = filterCoqPackages;
     };
@@ -119,7 +119,7 @@ in rec {
     version = "8.11.2";
   };
   coq_8_12 = callPackage ../applications/science/logic/coq {
-    version = "8.12+beta1";
+    version = "8.12.0";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
@@ -131,7 +131,7 @@ in rec {
   coqPackages_8_11 = mkCoqPackages coq_8_11;
   coqPackages_8_12 = mkCoqPackages coq_8_12;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
-    coqPackages_8_9
+    coqPackages_8_11
   );
   coq = coqPackages.coq;
 

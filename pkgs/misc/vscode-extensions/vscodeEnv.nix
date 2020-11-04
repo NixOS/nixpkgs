@@ -21,13 +21,13 @@
 , user-data-dir ? ''"''${TMP}''${name}"/vscode-data-dir''
 # if file exists will use it and import the extensions in it into this dervation else will use empty extensions list
 # this file will be created/updated by vscodeExts2nix when vscode exists
-, mutableExtensionsFile 
+, mutableExtensionsFile
 }:
-let  
+let
   mutableExtensionsFilePath = toString mutableExtensionsFile;
-  mutableExtensions = if builtins.pathExists mutableExtensionsFile 
+  mutableExtensions = if builtins.pathExists mutableExtensionsFile
                       then import mutableExtensionsFilePath else [];
-  vscodeWithConfiguration = import ./vscodeWithConfiguration.nix { 
+  vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
     inherit lib writeShellScriptBin extensionsFromVscodeMarketplace;
     vscodeDefault = vscode;
   }
@@ -63,19 +63,19 @@ let
     symlinkFromUserSetting = (user-data-dir != "");
   };
 
-  vscodeExts2nix = import ./vscodeExts2nix.nix { 
+  vscodeExts2nix = import ./vscodeExts2nix.nix {
     inherit lib writeShellScriptBin;
     vscodeDefault = vscodeWithConfiguration;
   }
   {
     extensionsToIgnore = nixExtensions;
-    extensions = mutableExtensions; 
+    extensions = mutableExtensions;
   };
   code = writeShellScriptBin "code" ''
     ${updateSettingsCmd}/bin/vscodeNixUpdate-settings
     ${updateLaunchCmd}/bin/vscodeNixUpdate-launch
     ${updateKeybindingsCmd}/bin/vscodeNixUpdate-keybindings
-    ${vscodeWithConfiguration}/bin/code --wait "$@" 
+    ${vscodeWithConfiguration}/bin/code --wait "$@"
     echo 'running vscodeExts2nix to update ${mutableExtensionsFilePath}...'
     ${vscodeExts2nix}/bin/vscodeExts2nix > ${mutableExtensionsFilePath}
   '';

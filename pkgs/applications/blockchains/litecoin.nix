@@ -50,6 +50,6 @@ mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ offline AndersonTorres ];
+    maintainers = with maintainers; [ offline ];
   };
 }

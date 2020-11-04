@@ -11,6 +11,7 @@
 , rocksdb, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
+, rdkafka
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -74,6 +75,26 @@ let
     none = [ ];
   };
 
+  getMeta = description: {
+     homepage = "https://ceph.com/";
+     inherit description;
+     license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+     maintainers = with maintainers; [ adev ak johanot krav ];
+     platforms = [ "x86_64-linux" ];
+   };
+
+  ceph-common = python3Packages.buildPythonPackage rec{
+    pname = "ceph-common";
+    inherit src version;
+
+    sourceRoot = "ceph-${version}/src/python-common";
+
+    checkInputs = [ python3Packages.pytest ];
+    propagatedBuildInputs = with python3Packages; [ pyyaml six ];
+
+    meta = getMeta "Ceph common module for code shared by manager modules";
+  };
+
   ceph-python-env = python3Packages.python.withPackages (ps: [
     ps.sphinx
     ps.flask
@@ -82,36 +103,37 @@ let
     ps.virtualenv
     # Libraries needed by the python tools
     ps.Mako
+    ceph-common
     ps.cherrypy
+    ps.dateutil
+    ps.jsonpatch
     ps.pecan
     ps.prettytable
     ps.pyjwt
     ps.webob
     ps.bcrypt
+    # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
+    # Bump (and get rid of scipy_1_3) once these issues are resolved:
+    # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
+    ps.scipy_1_3
     ps.six
     ps.pyyaml
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.9";
+  version = "15.2.5";
+  src = fetchurl {
+    url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+    sha256 = "05p7ssbfypf5x8bry361rrnyaihf89xzbqzhygdyrg7w1rxpna8d";
+  };
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
-    inherit version;
-
-    src = fetchurl {
-      url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0zkh1a23v8g1fa5flqa2d53lv08ancab3li57gybpqpnja90k7il";
-    };
+    inherit src version;
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      (fetchurl {
-        # Remove for Ceph > v15.2.3; https://www.openwall.com/lists/oss-security/2020/06/25/5
-        name = "CVE-2020-10753.patch";
-        url = "https://github.com/ceph/ceph/pull/35773/commits/1524d3c0c5cb11775313ea1e2bb36a93257947f2.patch";
-        sha256 = "1c04kirijp4c8a5pgwqx17dzdnzvd29nl2nr3qdvf4fkqwnlf48s";
-      })
+      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [
@@ -124,7 +146,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng
+      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ optionals stdenv.isLinux [
       linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
@@ -178,25 +200,13 @@ in rec {
 
     doCheck = false; # uses pip to install things from the internet
 
-    meta = {
-      homepage = "https://ceph.com/";
-      description = "Distributed storage system";
-      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-      maintainers = with maintainers; [ adev ak krav johanot ];
-      platforms = [ "x86_64-linux" ];
-    };
+    meta = getMeta "Distributed storage system";
 
     passthru.version = version;
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
-     meta = {
-        homepage = "https://ceph.com/";
-        description = "Tools needed to mount Ceph's RADOS Block Devices";
-        license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-        maintainers = with maintainers; [ adev ak johanot krav ];
-        platforms = [ "x86_64-linux" ];
-      };
+      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices";
     } ''
       mkdir -p $out/{bin,etc,${sitePackages}}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin

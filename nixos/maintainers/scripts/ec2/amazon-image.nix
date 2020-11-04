@@ -57,14 +57,14 @@ in {
     inherit (cfg) contents format name;
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
     partitionTableType = if config.ec2.efi then "efi"
-                         else if config.ec2.hvm then "legacy"
+                         else if config.ec2.hvm then "legacy+gpt"
                          else "none";
     diskSize = cfg.sizeMB;
     fsType = "ext4";
     configFile = pkgs.writeText "configuration.nix"
       ''
-        {
-          imports = [ <nixpkgs/nixos/modules/virtualisation/amazon-image.nix> ];
+        { modulesPath, ... }: {
+          imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
           ${optionalString config.ec2.hvm ''
             ec2.hvm = true;
           ''}

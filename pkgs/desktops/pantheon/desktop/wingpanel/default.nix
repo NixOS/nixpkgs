@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , wrapGAppsHook
 , pkgconfig
@@ -20,17 +21,17 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0yvn1crylrdc9gq6gc7v4ynb5ii4n0c3bnswfq72p8cs3vvvvv24";
+    sha256 = "sha256-mXi600gufUK81Uks9p4+al0tCI7H9KpizZGyoomp42s=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

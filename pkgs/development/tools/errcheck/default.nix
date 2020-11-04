@@ -20,7 +20,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "errcheck is a program for checking for unchecked errors in go programs.";
+    description = "Program for checking for unchecked errors in go programs";
     homepage = "https://github.com/kisielk/errcheck";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];

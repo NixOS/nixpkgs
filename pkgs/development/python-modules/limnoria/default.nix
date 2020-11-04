@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2020.04.11";
+  version = "2020.10.10";
   disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41e27cae66aeb1e811bebe64140a9b5eb3ccb208103a0f42ac61369d9a7ca339";
+    sha256 = "546fdfad14c645ebb56e20a83ce34259b91a6db5c50cf14df741771b28ac2e19";
   };
 
   patchPhase = ''

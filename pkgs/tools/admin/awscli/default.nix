@@ -19,11 +19,11 @@ let
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.80"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.18.150"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0519rlc0m0888ag7s55lz516vsgif5pws6rzhmclbbw38g4wmb2k";
+    sha256 = "0jrxzr4dx2s6ychmrz19yz8i4kqcwj7f8ly82ydwvrr0ff62374g";
   };
 
   postPatch = ''

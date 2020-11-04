@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bennofs/nix-index";
     license = with licenses; [ bsd3 ];
     maintainers = [ maintainers.bennofs ];
-    platforms = platforms.all;
   };
 }

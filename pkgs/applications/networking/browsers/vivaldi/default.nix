@@ -3,7 +3,7 @@
 , alsaLib, dbus, cups, libexif, ffmpeg_3, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
-, gstreamer, gst-plugins-base, libxml2
+, libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
 , libdrm, mesa
 , nss, nspr
@@ -18,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "3.1.1929.45-1";
+  version = "3.3.2022.47-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "0pg16zs9fcr6b360igszpkia3i8i5xf4m0hs1b2a17lf8vkldix9";
+    sha256 = "0lraliqb5r8akh8lfmw2sy90s58sbghcpc598nlz2d89f91yq7vz";
   };
 
   unpackPhase = ''
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg_3 systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
-    gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
+    libxml2 pango cairo gnome2.GConf
     libdrm mesa
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
-    maintainers = with maintainers; [ otwieracz nequissimus ];
+    maintainers = with maintainers; [ otwieracz badmutex ];
     platforms   = [ "x86_64-linux" ];
   };
 }

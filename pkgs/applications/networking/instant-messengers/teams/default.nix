@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.3.00.5153";
+  version = "1.3.00.25560";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "13c7fmij0gcg6mrjjj2mhs21q7fzdssscwhihzyrmbmj64cd0a69";
+    sha256 = "0kpcd9q6v2qh0dzddykisdbi3djbxj2rl70wchlzrb6bx95hkzmc";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
     pulseaudio
   ];
 
@@ -50,15 +50,19 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/ $out/bin/
 
     ln -s $out/opt/teams/teams $out/bin/
+
+    # Work-around screen sharing bug
+    # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
+    rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
   '';
 
   dontAutoPatchelf = true;
 
   # Includes runtimeDependencies in the RPATH of the included Node modules
   # so that dynamic loading works. We cannot use directly runtimeDependencies
-  # here, since the libraries from runtimeDependencies are not propagated 
+  # here, since the libraries from runtimeDependencies are not propagated
   # to the dynamically loadable node modules because of a condition in
-  # autoPatchElfHook since *.node modules have Type: DYN (Shared object file) 
+  # autoPatchElfHook since *.node modules have Type: DYN (Shared object file)
   # instead of EXEC or INTERP it expects.
   # Fixes: https://github.com/NixOS/nixpkgs/issues/85449
   postFixup = ''

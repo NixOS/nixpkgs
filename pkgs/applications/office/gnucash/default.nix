@@ -25,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "3.10";
+  version = "4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "05kgg7mhizndwn7icnarqk3c19xrzfawf90y9nb3jdm6fv1741xn";
+    sha256 = "020k1mm909dcgs52ls4v7xx3yn8gqazi9awyr81l6y7pkq1spn2n";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
 
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
-
-  patches = [ ./cmake_check_symbol_exists.patch ];
 
   postPatch = ''
     patchShebangs .

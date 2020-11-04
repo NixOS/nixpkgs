@@ -7,16 +7,18 @@
 
 buildPythonPackage rec {
   pname = "pytest-black";
-  version = "0.3.9";
+  version = "0.3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c743dfeffe6b2cb25c0ed1a84cc306dff4b504b713b5a6d1bc3824fa73a7d693";
+    sha256 = "1mjxqvzadpyfvypv5isfda9c6lz8xbqci9b4hn58b2lbj3kv0pjr";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
 
   propagatedBuildInputs = [ black pytest toml ];
+
+  pythonImportsCheck = [ "pytest_black" ];
 
   meta = with lib; {
     description = "A pytest plugin to enable format checking with black";

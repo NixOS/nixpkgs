@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.1.0.post3";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "164yksvqwqvwzh8f8lq92asg87hd8rvcy2xb5vm4y4ccvd5xgb7i";
+    sha256 = "0irs5sn6ldpg70630nfndghjnpxv8jldk61zyczfzp1jcz53b43s";
   };
 
   nativeBuildInputs = [

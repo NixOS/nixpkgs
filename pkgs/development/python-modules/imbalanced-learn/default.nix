@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.6.2";
+  version = "0.7.0";
   disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "942b9a7f2e1df831097fbee587c5c90a4cc6afa6105b23d3e30d8798f1a9b17d";
+    sha256 = "da59de0d1c0fa66f62054dd9a0a295a182563aa1abbb3bf9224a3678fcfe8fa4";
   };
 
   propagatedBuildInputs = [ scikitlearn ];

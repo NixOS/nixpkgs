@@ -19,17 +19,17 @@ assert withSQLite -> sqlite != null;
 assert withPgSQL -> postgresql != null;
 assert withMysql -> libmysqlclient != null;
 
-let inherit (stdenv.lib) optional; in
+let inherit (stdenv.lib) getDev optional optionalString; in
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.5";
   pname = "pmacct";
 
   src = fetchFromGitHub {
     owner = "pmacct";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j5qmkya67q7jvaddcj00blmaac37bkir1zb3m1xmm95gm5lf2p5";
+    sha256 = "17p5isrq5w58hvmzhc6akbd37ins3c95g0rvhhdm0v33khzxmran";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
     ++ optional withPgSQL postgresql
     ++ optional withMysql [ libmysqlclient zlib ];
 
+  MYSQL_CONFIG =
+    optionalString withMysql "${getDev libmysqlclient}/bin/mysql_config";
+
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
   ] ++ optional withJansson "--enable-jansson"
@@ -49,14 +52,14 @@ stdenv.mkDerivation rec {
     ++ optional withMysql "--enable-mysql";
 
   meta = with stdenv.lib; {
-    description = "pmacct is a small set of multi-purpose passive network monitoring tools";
+    description = "A small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]
     '';
     homepage = "http://www.pmacct.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.unix;
   };
 }

@@ -14,13 +14,13 @@ let
 in
 buildGoPackage rec {
   pname = "cockroach";
-  version = "19.1.5";
+  version = "20.1.7";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "1pnzzmxxb7qxiiy8qpl2sifk4qrijjbhmzy47bnjj5ssdsjjjcqy";
+    sha256 = "1m1jziby0mzfbpwsak1marh1k9sx8vhc17ix6lgikxip4dpf52qg";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];

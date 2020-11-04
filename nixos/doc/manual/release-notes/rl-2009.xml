@@ -3,8 +3,11 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-20.09">
- <title>Release 20.09 (“Nightingale”, 2020.09/??)</title>
+ <title>Release 20.09 (“Nightingale”, 2020.10/27)</title>
 
+  <para>
+   Support is planned until the end of April 2021, handing over to 21.03.
+  </para>
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -13,65 +16,601 @@
   <title>Highlights</title>
 
   <para>
-   In addition to numerous new and upgraded packages, this release has the
+   In addition to 7349 new, 14442 updated, and 8181 removed packages, this release has the
    following highlights:
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-     Support is planned until the end of April 2021, handing over to 21.03.
+     Core version changes:
     </para>
-   </listitem>
-   <listitem>
-    <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
-   </listitem>
-   <listitem>
-    <para>
-    <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
-    Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     We now distribute a GNOME ISO.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     PHP now defaults to PHP 7.4, updated from 7.3.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     Python 3 now defaults to Python 3.8 instead of 3.7.
-    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       gcc: 9.2.0 -> 9.3.0
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       glibc: 2.30 -> 2.31
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       linux: still defaults to 5.4.x, all supported kernels available
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       mesa: 19.3.5 -> 20.1.7
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
-     and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
-     been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
-     in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
-     make use of these new options instead.
+     Desktop Environments:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       plasma5: 5.17.5 -> 5.18.5
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       kdeApplications: 19.12.3 -> 20.08.1
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       gnome3: 3.34 -> 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>
+      </para>
+     </listitem>
+      <listitem>
+       <para>
+        cinnamon: added at 4.6
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       NixOS now distributes an official <link xlink:href="https://nixos.org/download.html#nixos-iso">GNOME ISO</link>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     Programming Languages and Frameworks:
+    </para>
+    <itemizedlist>
+
+     <listitem>
+      <para>
+       Agda ecosystem was heavily reworked (see more details below)
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       PHP now defaults to PHP 7.4, updated from 7.3
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       PHP 7.2 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 20.09 release
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Python 3 now defaults to Python 3.8 instead of 3.7
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Python 3.5 reached its upstream EOL at the end of September 2020: it
+       has been removed from the list of available packages
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     Databases and Service Monitoring:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       MariaDB has been updated to 10.4, MariaDB Galera to 26.4. Please read the related upgrade instructions under <link linkend="sec-release-20.09-incompatibilities">backwards incompatibilities</link> before upgrading.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Zabbix now defaults to 5.0, updated from 4.4. Please read related sections under <link linkend="sec-release-20.09-incompatibilities">backwards compatibilities</link> before upgrading.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     Major module changes:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       Quickly configure a complete, private, self-hosted video
+       conferencing solution with the new Jitsi Meet module.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
+       and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
+       been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
+       in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
+       make use of these new options instead.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       There is a new module for Podman (<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Declarative Docker containers are renamed from <varname>docker-containers</varname> to <varname>virtualisation.oci-containers.containers</varname>.
+        This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        The new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
+        has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
+        like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
+        the NixOS configuration: since this can be expensive when a large number of packages are installed, the
+        feature is disabled by default.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certificate authorities.
+      </para>
+     </listitem>
+     <listitem>
+       <para>
+         The various documented workarounds to use steam have been converted to a module. <varname>programs.steam.enable</varname> enables steam, controller support and the workarounds.
+       </para>
+     </listitem>
+     <listitem>
+       <para>
+         Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the <link xlink:href="https://sourceforge.net/projects/g15daemon/">g15daemon project</link>.
+       </para>
+     </listitem>
+     <listitem>
+       <para>
+         The GRUB module gained support for basic password protection, which
+         allows to restrict non-default entries in the boot menu to one or more
+         users. The users and passwords are defined via the option
+         <option>boot.loader.grub.users</option>.
+         Note: Password support is only available in GRUB version 2.
+       </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+     NixOS module changes:
+    </para>
+    <itemizedlist>
+     <listitem>
+       <para>
+        The NixOS module system now supports freeform modules as a mix between <literal>types.attrsOf</literal> and <literal>types.submodule</literal>. These allow you to explicitly declare a subset of options while still permitting definitions without an associated option. See <xref linkend='sec-freeform-modules'/> for how to use them.
+       </para>
+     </listitem>
+     <listitem>
+      <para>
+       Following its deprecation in 20.03, the Perl NixOS test driver has been removed.
+       All remaining tests have been ported to the Python test framework.
+       Code outside nixpkgs using <filename>make-test.nix</filename> or
+       <filename>testing.nix</filename> needs to be ported to
+       <filename>make-test-python.nix</filename> and
+       <filename>testing-python.nix</filename> respectively.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+        Subordinate GID and UID mappings are now set up automatically for all normal users.
+        This will make container tools like Podman work as non-root users out of the box.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-new-services">
+  <title>New Services</title>
+
+  <para>
+   In addition to 1119 new, 118 updated, and 476 removed options; 61 new modules were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+       Hardware:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.system76.firmware-daemon.enable" /> adds easy support of system76 firmware
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.uinput.enable" /> loads uinput kernel module
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.video.hidpi.enable" /> enable good defaults for HiDPI displays
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.wooting.enable" /> support for Wooting keyboards
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-hardware.xpadneo.enable" /> xpadneo driver for Xbox One wireless controllers
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
+       Programs:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-programs.hamster.enable" /> enable hamster time tracking
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-programs.steam.enable" /> adds easy enablement of steam and related system configuration
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
+       Security:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-security.doas.enable" /> alternative to sudo, allows non-root users to execute commands as root
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-security.tpm2.enable" /> add Trusted Platform Module 2 support
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
-      Declarative Docker containers are renamed from <varname>docker-containers</varname> to <varname>virtualisation.oci-containers.containers</varname>.
-      This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
+       System:
     </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-boot.initrd.network.openvpn.enable" /> start an OpenVPN client during initrd boot
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
+   <listitem>
+    <para>
+       Virtualization:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-boot.enableContainers" /> use nixos-containers
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-virtualisation.oci-containers.containers" /> run OCI (Docker) containers
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-virtualisation.podman.enable" /> daemonless container engine
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+   <listitem>
+    <para>
+       Services:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.ankisyncd.enable" /> Anki sync server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.bazarr.enable" /> Subtitle manager for Sonarr and Radarr
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.biboumi.enable" /> Biboumi XMPP gateway to IRC
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.blockbook-frontend" /> Blockbook-frontend, a service for the Trezor wallet
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.cage.enable" /> Wayland cage service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.convos.enable" /> IRC daemon, which can be accessed throught the browser
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.engelsystem.enable" /> Tool for coordinating volunteers and shifts on large events
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.espanso.enable" /> text-expander written in rust
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.foldingathome.enable" /> Folding@home client
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.gerrit.enable" /> Web-based team code collaboration tool
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.go-neb.enable" /> Matrix bot
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.hardware.xow.enable" /> xow as a systemd service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.hercules-ci-agent.enable" /> Hercules CI build agent
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jicofo.enable" /> Jitsi Conference Focus, component of Jitsi Meet
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jirafeau.enable" /> A web file repository
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jitsi-meet.enable" /> Secure, simple and scalable video conferences
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jitsi-videobridge.enable" /> Jitsi Videobridge, a WebRTC compatible router
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.jupyterhub.enable" /> Jupyterhub development server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.k3s.enable" /> Lightweight Kubernetes distribution
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.magic-wormhole-mailbox-server.enable" /> Magic Wormhole Mailbox Server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.malcontent.enable" /> Parental Control support
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.matrix-appservice-discord.enable" /> Matrix and Discord bridge
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.mautrix-telegram.enable" /> Matrix-Telegram puppeting/relaybot bridge
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.mirakurun.enable" /> Japanese DTV Tuner Server Service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.molly-brown.enable" /> Molly-Brown Gemini server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.mullvad-vpn.enable" /> Mullvad VPN daemon
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.ncdns.enable" /> Namecoin to DNS bridge
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.nextdns.enable" /> NextDNS to DoH Proxy service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.nix-store-gcs-proxy" /> Google storage bucket to be used as a nix store
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.onedrive.enable" /> OneDrive sync service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.pinnwand.enable" /> Pastebin-like service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.pixiecore.enable" /> Manage network booting of machines
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.privacyidea.enable" /> Privacy authentication server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.quorum.enable" /> Quorum blockchain daemon
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.robustirc-bridge.enable" /> RobustIRC bridge
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.rss-bridge.enable" /> Generate RSS and Atom feeds
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.rtorrent.enable" /> rTorrent service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.smartdns.enable" /> SmartDNS DNS server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.sogo.enable" /> SOGo groupware
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.teeworlds.enable" /> Teeworlds game server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.torque.mom.enable" /> torque computing node
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.torque.server.enable" /> torque server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.tuptime.enable" /> A total uptime service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.urserver.enable" /> X11 remote server
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.wasabibackend.enable" /> Wasabi backend service
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.yubikey-agent.enable" /> Yubikey agent
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <xref linkend="opt-services.zigbee2mqtt.enable" /> Zigbee to MQTT bridge
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+
+  </itemizedlist>
+
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
    <listitem>
     <para>
       MariaDB has been updated to 10.4, MariaDB Galera to 26.4.
@@ -109,65 +648,75 @@ systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce "read-only";
 systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
 </programlisting>
     </para>
+    <para>
+      The MySQL service no longer runs its <literal>systemd</literal> service startup script as <literal>root</literal> anymore. A dedicated non <literal>root</literal>
+      super user account is required for operation. This means users with an existing MySQL or MariaDB database server are required to run the following SQL statements
+      as a super admin user before upgrading:
+<programlisting>
+CREATE USER IF NOT EXISTS 'mysql'@'localhost' identified with unix_socket;
+GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
+</programlisting>
+      If you use MySQL instead of MariaDB please replace <literal>unix_socket</literal> with <literal>auth_socket</literal>. If you have changed the value of <xref linkend="opt-services.mysql.user"/>
+      from the default of <literal>mysql</literal> to a different user please change <literal>'mysql'@'localhost'</literal> to the corresponding user instead.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+      Zabbix now defaults to 5.0, updated from 4.4. Please carefully read through
+      <link xlink:href="https://www.zabbix.com/documentation/current/manual/installation/upgrade/sources">the upgrade guide</link>
+      and apply any changes required. Be sure to take special note of the section on
+      <link xlink:href="https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500#enabling_extended_range_of_numeric_float_values">enabling extended range of numeric (float) values</link>
+      as you will need to apply this database migration manually.
+    </para>
+    <para>
+      If you are using Zabbix Server with a MySQL or MariaDB database you should note that using a character set of <literal>utf8</literal> and a collate of <literal>utf8_bin</literal> has become mandatory with
+      this release. See the upstream <link xlink:href="https://support.zabbix.com/browse/ZBX-17357">issue</link> for further discussion. Before upgrading you should check the character set and collation used by
+      your database and ensure they are correct:
+<programlisting>
+  SELECT
+    default_character_set_name,
+    default_collation_name
+  FROM
+    information_schema.schemata
+  WHERE
+    schema_name = 'zabbix';
+</programlisting>
+      If these values are not correct you should take a backup of your database and convert the character set and collation as required. Here is an
+      <link xlink:href="https://www.zabbix.com/forum/zabbix-help/396573-reinstall-after-upgrade?p=396891#post396891">example</link> of how to do so, taken from
+      the Zabbix forums:
+<programlisting>
+  ALTER DATABASE `zabbix` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+  -- the following will produce a list of SQL commands you should subsequently execute
+  SELECT CONCAT("ALTER TABLE ", TABLE_NAME," CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;") AS ExecuteTheString
+  FROM information_schema.`COLUMNS`
+  WHERE table_schema = "zabbix" AND COLLATION_NAME = "utf8_general_ci";
+</programlisting>
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+    <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
+    Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
+    </para>
    </listitem>
    <listitem>
     <para>
-      Two new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
-      has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
-      like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
-      the NixOS configuration: since this can be expensive when a large number of packages are installed, the
-      feature is disabled by default.
+     The <link linkend="opt-services.matrix-synapse.enable">matrix-synapse</link> module no longer includes optional dependencies by default, they have to be added through the <link linkend="opt-services.matrix-synapse.plugins">plugins</link> option.
     </para>
    </listitem>
-  </itemizedlist>
- </section>
-
- <section xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="sec-release-20.09-new-services">
-  <title>New Services</title>
-
-  <para>
-   The following new services were added since the last release:
-  </para>
-
-  <itemizedlist>
-   <listitem>
-    <para>
-      There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
-    </para>
-   </listitem>
-  </itemizedlist>
-
- </section>
-
- <section xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="sec-release-20.09-incompatibilities">
-  <title>Backward Incompatibilities</title>
-
-  <para>
-   When upgrading from a previous release, please be aware of the following
-   incompatible changes:
-  </para>
-
-  <itemizedlist>
    <listitem>
     <para>
      <literal>buildGoModule</literal> now internally creates a vendor directory
      in the source tree for downloaded modules instead of using go's <link
      xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
      proxy protocol</link>. This storage format is simpler and therefore less
-     likekly to break with future versions of go. As a result
+     likely to break with future versions of go. As a result
      <literal>buildGoModule</literal> switched from
      <literal>modSha256</literal> to the <literal>vendorSha256</literal>
-     attribute to pin fetched version data. <literal>buildGoModule</literal>
-     still accepts <literal>modSha256</literal> with a warning, but support will
-     be removed in the next release.
+     attribute to pin fetched version data.
     </para>
    </listitem>
    <listitem>
@@ -176,10 +725,10 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
      <link xlink:href="https://grafana.com/docs/grafana/latest/guides/whats-new-in-v6-4/">deprecated in Grafana</link>
      and the <package>phantomjs</package> project is
      <link xlink:href="https://github.com/ariya/phantomjs/issues/15344#issue-302015362">currently unmaintained</link>.
-     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instanciation:
+     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instantiation:
 <programlisting>{
   services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
-    phantomJsSupport = false;
+    phantomJsSupport = true;
   });
 }</programlisting>
     </para>
@@ -188,7 +737,7 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
     <para>
       The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
       as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
-      is 20.09 or higher. It also enables number of
+      is 20.09 or higher. It also enables a number of
       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing">systemd sandboxing options</link>
       which may possibly interfere with some plugins. If this is the case you can disable the options through attributes in
       <option>systemd.services.supybot.serviceConfig</option>.
@@ -297,6 +846,20 @@ php.override {
      </para>
    </listitem>
    <listitem>
+    <para>
+     The ACME module has been overhauled for simplicity and maintainability.
+     Cert generation now implicitly uses the <literal>acme</literal>
+     user, and the <literal>security.acme.certs._name_.user</literal> option
+     has been removed. Instead, certificate access from other services is now
+     managed through group permissions. The module no longer runs lego
+     twice under certain conditions, and will correctly renew certificates if
+     their configuration is changed. Services which reload nginx and httpd after
+     certificate renewal are now properly configured too so you no longer have
+     to do this manually if you are using HTTPS enabled virtual hosts. A mechanism
+     for regenerating certs on demand has also been added and documented.
+    </para>
+   </listitem>
+   <listitem>
      <para>
       Gollum received a major update to version 5.x and you may have to change
       some links in your wiki when migrating from gollum 4.x. More information
@@ -315,8 +878,8 @@ php.override {
    </listitem>
    <listitem>
      <para>
-       Add option <literal>services.nginx.enableSandbox</literal> to starting Nginx web server with additional sandbox/hardening options.
-       By default, write access to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       Nginx web server now starting with additional sandbox/hardening options. By default, write access
+       to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
        use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
        <programlisting>
 systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
@@ -454,8 +1017,8 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        In addition to the hostname, the fully qualified domain name (FQDN),
-       which consists of <literal>${cfg.hostName}</literal> and
-       <literal>${cfg.domain}</literal> is now added to
+       which consists of <literal>${networking.hostName}</literal> and
+       <literal>${networking.domain}</literal> is now added to
        <literal>/etc/hosts</literal>, to allow local FQDN resolution, as used by the
        <literal>hostname --fqdn</literal> command and other applications that
        try to determine the FQDN. These new entries take precedence over entries
@@ -470,11 +1033,15 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        The hostname (<literal>networking.hostName</literal>) must now be a valid
-       DNS label (see RFC 1035) and as such must not contain the domain part.
-       This means that the hostname must start with a letter, end with a letter
+       DNS label (see RFC 1035, RFC 1123) and as such must not contain the domain part.
+       This means that the hostname must start with a letter or digit, end with a letter
        or digit, and have as interior characters only letters, digits, and
        hyphen. The maximum length is 63 characters. Additionally it is
        recommended to only use lower-case characters.
+       If (e.g. for legacy reasons) a FQDN is required as the Linux kernel network node hostname
+       (<literal>uname --nodename</literal>) the option
+       <literal>boot.kernel.sysctl."kernel.hostname"</literal>
+       can be used as a workaround (but be aware of the 64 character limit).
      </para>
    </listitem>
    <listitem>
@@ -502,6 +1069,258 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
     <para>
      In the <literal>resilio</literal> module, <xref linkend="opt-services.resilio.httpListenAddr"/> has been changed to listen to <literal>[::1]</literal> instead of <literal>0.0.0.0</literal>.
+     </para>
+   </listitem>
+     <listitem>
+       <para>
+         <literal>sslh</literal> has been updated to version
+           <literal>1.21</literal>. The <literal>ssl</literal> probe must be
+             renamed to <literal>tls</literal> in <xref linkend="opt-services.sslh.appendConfig"/>.
+    </para>
+  </listitem>
+   <listitem>
+    <para>
+     Users of <link xlink:href="http://openafs.org">OpenAFS 1.6</link> must
+     upgrade their services to OpenAFS 1.8! In this release, the OpenAFS package
+     version 1.6.24 is marked broken but can be used during transition to
+     OpenAFS 1.8.x. Use the options
+     <option>services.openafsClient.packages.module</option>,
+     <option>services.openafsClient.packages.programs</option> and
+     <option>services.openafsServer.package</option> to select a different
+     OpenAFS package. OpenAFS 1.6 will be removed in the next release. The
+     package <literal>openafs</literal> and the service options will then
+     silently point to the OpenAFS 1.8 release.
+    </para>
+    <para>
+     See also the OpenAFS <link
+     xlink:href="http://docs.openafs.org/AdminGuide/index.html">Administrator
+     Guide</link> for instructions. Beware of the following when updating
+     servers:
+     <itemizedlist>
+      <listitem>
+       <para>
+       The storage format of the server key has changed and the key must be converted before running the new release.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+       When updating multiple database servers, turn off the database servers
+       from the highest IP down to the lowest with resting periods in
+       between. Start up in reverse order. Do not concurrently run database
+       servers working with different OpenAFS releases!
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+       Update servers first, then clients.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Radicale's default package has changed from 2.x to 3.x. An upgrade
+     checklist can be found
+     <link xlink:href="https://github.com/Kozea/Radicale/blob/3.0.x/NEWS.md#upgrade-checklist">here</link>.
+     You can use the newer version in the NixOS service by setting the
+     <literal>package</literal> to <literal>radicale3</literal>, which is done
+     automatically if <literal>stateVersion</literal> is 20.09 or higher.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <literal>udpt</literal> experienced a complete rewrite from C++ to rust. The configuration format changed from ini to toml.
+      The new configuration documentation can be found at
+      <link xlink:href="https://naim94a.github.io/udpt/config.html">the official website</link> and example
+      configuration is packaged in <literal>${udpt}/share/udpt/udpt.toml</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     We now have a unified <xref linkend="opt-services.xserver.displayManager.autoLogin"/> option interface
+     to be used for every display-manager in NixOS.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>bitcoind</literal> module has changed to multi-instance, using submodules.
+     Therefore, it is now mandatory to name each instance.
+     To use this new multi-instance config with an existing bitcoind data directory and user,
+     you have to adjust the original config, e.g.:
+<programlisting>
+  services.bitcoind = {
+    enable = true;
+    extraConfig = "...";
+    ...
+  };
+</programlisting>
+     To something similar:
+<programlisting>
+  services.bitcoind.mainnet = {
+    enable = true;
+    dataDir = "/var/lib/bitcoind";
+    user = "bitcoin";
+    extraConfig = "...";
+    ...
+  };
+</programlisting>
+     The key settings are:
+     <itemizedlist>
+      <listitem>
+       <para>
+        <literal>dataDir</literal> - to continue using the same data directory.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <literal>user</literal> - to continue using the same user so that bitcoind maintains access to its files.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Graylog introduced a change in the LDAP server certificate validation behaviour for version 3.3.3 which might break existing setups.
+      When updating Graylog from a version before 3.3.3 make sure to check the Graylog <link xlink:href="https://www.graylog.org/post/announcing-graylog-v3-3-3">release info</link> for information on how to avoid the issue.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>dokuwiki</literal> module has changed to multi-instance, using submodules.
+     Therefore, it is now mandatory to name each instance. Moreover, forcing SSL by default has been dropped, so
+     <literal>nginx.forceSSL</literal> and <literal>nginx.enableACME</literal> are no longer set to <literal>true</literal>.
+     To continue using your service with the original SSL settings, you have to adjust the original config, e.g.:
+<programlisting>
+services.dokuwiki = {
+  enable = true;
+  ...
+};
+</programlisting>
+     To something similar:
+<programlisting>
+services.dokuwiki."mywiki" = {
+  enable = true;
+  nginx = {
+    forceSSL = true;
+    enableACME = true;
+  };
+  ...
+};
+</programlisting>
+     The base package has also been upgraded to the 2020-07-29 "Hogfather" release. Plugins might be incompatible or require upgrading.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <xref linkend="opt-services.postgresql.dataDir"/> option is now set to <literal>"/var/lib/postgresql/${cfg.package.psqlSchema}"</literal> regardless of your
+      <xref linkend="opt-system.stateVersion"/>. Users with an existing postgresql install that have a <xref linkend="opt-system.stateVersion"/> of <literal>17.03</literal> or below
+      should double check what the value of their <xref linkend="opt-services.postgresql.dataDir"/> option is (<literal>/var/db/postgresql</literal>) and then explicitly
+      set this value to maintain compatibility:
+<programlisting>
+services.postgresql.dataDir = "/var/db/postgresql";
+</programlisting>
+    </para>
+    <para>
+     The postgresql module now expects there to be a database super user account called <literal>postgres</literal> regardless of your <xref linkend="opt-system.stateVersion"/>. Users
+     with an existing postgresql install that have a <xref linkend="opt-system.stateVersion"/> of <literal>17.03</literal> or below should run the following SQL statements as a
+     database super admin user before upgrading:
+<programlisting>
+CREATE ROLE postgres LOGIN SUPERUSER;
+</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The USBGuard module now removes options and instead hardcodes values for <literal>IPCAccessControlFiles</literal>, <literal>ruleFiles</literal>, and <literal>auditFilePath</literal>. Audit logs can be found in the journal.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The NixOS module system now evaluates option definitions more strictly, allowing it to detect a larger set of problems.
+     As a result, what previously evaluated may not do so anymore.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/82743#issuecomment-674520472">the PR that changed this</link> for more info.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     For NixOS configuration options, the type <literal>loaOf</literal>, after
+     its initial deprecation in release 20.03, has been removed. In NixOS and
+     Nixpkgs options using this type have been converted to <literal>attrsOf</literal>.
+     For more information on this change have look at these links:
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/1800">issue #1800</link>,
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/63103">PR #63103</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <literal>config.systemd.services.${name}.path</literal> now returns a list of paths instead of a colon-separated string.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Caddy module now uses Caddy v2 by default. Caddy v1 can still be used by setting
+     <xref linkend="opt-services.caddy.package"/> to <literal>pkgs.caddy1</literal>.
+    </para>
+    <para>
+     New option <xref linkend="opt-services.caddy.adapter"/> has been added.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.jellyfin.enable">jellyfin</link> module will use and stay on the Jellyfin version <literal>10.5.5</literal>
+     if <literal>stateVersion</literal> is lower than <literal>20.09</literal>. This is because significant changes were made to the database schema,
+     and it is highly recommended to backup your instance before upgrading. After making your backup, you can upgrade to the latest version either by
+     setting your <literal>stateVersion</literal> to <literal>20.09</literal> or higher, or set the <option>services.jellyfin.package</option> to
+     <literal>pkgs.jellyfin</literal>. If you do not wish to upgrade Jellyfin, but want to change your <literal>stateVersion</literal>, you can set
+     the value of <option>services.jellyfin.package</option> to <literal>pkgs.jellyfin_10_5</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>security.rngd</literal> service is now disabled by default.
+     This choice was made because there's krngd in the linux kernel space making it (for most usecases)
+     functionally redundent.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>hardware.nvidia.optimus_prime.enable</literal> service has been renamed to
+     <literal>hardware.nvidia.prime.sync.enable</literal> and has many new enhancements.
+     Related nvidia prime settings may have also changed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The package <package>nextcloud17</package> has been removed and <package>nextcloud18</package> was marked as insecure
+     since both of them will <link xlink:href="https://docs.nextcloud.com/server/19/admin_manual/release_schedule.html">
+     will be EOL (end of life) within the lifetime of 20.09</link>.
+    </para>
+    <para>
+     It's necessary to upgrade to <package>nextcloud19</package>:
+     <itemizedlist>
+      <listitem>
+       <para>
+        From <package>nextcloud17</package>, you have to upgrade to <package>nextcloud18</package> first as
+        Nextcloud doesn't allow going multiple major revisions forward in a single upgrade. This is possible
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud18</package>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        From <package>nextcloud18</package>, it's possible to directly upgrade to <package>nextcloud19</package>
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud19</package>.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The GNOME desktop manager no longer default installs <package>gnome3.epiphany</package>.
+      It was chosen to do this as it has a usability breaking issue (see issue <link xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>)
+      that makes it unsuitable to be a default app.
     </para>
    </listitem>
   </itemizedlist>
@@ -532,11 +1351,27 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      of the default <literal>out</literal> output anymore - if you relied on the
      <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
      the <literal>notmuch.emacs</literal> output.
+
+     Device tree overlay support was improved in
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/79370">#79370</link>
+     and now uses <xref linkend="opt-hardware.deviceTree.kernelPackage"/>
+     instead of <option>hardware.deviceTree.base</option>.
+
+     <xref linkend="opt-hardware.deviceTree.overlays"/> configuration was
+     extended to support <literal>.dts</literal> files with symbols.
+
+     Device trees can now be filtered by setting
+     <xref linkend="opt-hardware.deviceTree.filter"/> option.
     </para>
    </listitem>
    <listitem>
     <para>
       The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>buildGoModule</literal> <literal>doCheck</literal> now defaults to <literal>true</literal>.
     </para>
    </listitem>
    <listitem>
@@ -569,6 +1404,12 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    </listitem>
    <listitem>
     <para>
+    The installer now enables sshd by default. This improves installation on headless machines especially ARM single-board-computer.
+    To login through ssh, either a password or an ssh key must be set for the root user or the nixos user.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The scripted networking system now uses <literal>.link</literal> files in
      <literal>/etc/systemd/network</literal> to configure mac address and link MTU,
      instead of the sometimes buggy <literal>network-link-*</literal> units, which
@@ -594,6 +1435,37 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
     <para>
      The <literal>hardware.u2f</literal> module, which was installing udev rules
      was removed, as udev gained native support to handle FIDO security tokens.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>services.transmission</literal> module
+     was enhanced with the new options:
+     <xref linkend="opt-services.transmission.credentialsFile"/>,
+     <xref linkend="opt-services.transmission.openFirewall"/>,
+     and <xref linkend="opt-services.transmission.performanceNetParameters"/>.
+    </para>
+    <para>
+     <literal>transmission-daemon</literal> is now started with additional systemd sandbox/hardening options for better security.
+     Please <link xlink:href="https://github.com/NixOS/nixpkgs/issues">report</link>
+     any use case where this is not working well.
+     In particular, the <literal>RootDirectory</literal> option newly set
+     forbids uploading or downloading a torrent outside of the default directory
+     configured at <link linkend="opt-services.transmission.settings">settings.download-dir</link>.
+     If you really need Transmission to access other directories,
+     you must include those directories into the <literal>BindPaths</literal> of the service:
+<programlisting>
+systemd.services.transmission.serviceConfig.BindPaths = [ "/path/to/alternative/download-dir" ];
+</programlisting>
+    </para>
+    <para>
+     Also, connection to the RPC (Remote Procedure Call) of <literal>transmission-daemon</literal>
+     is now only available on the local network interface by default.
+     Use:
+<programlisting>
+services.transmission.settings.rpc-bind-address = "0.0.0.0";
+</programlisting>
+     to get the previous behavior of listening on all network interfaces.
     </para>
    </listitem>
    <listitem>
@@ -666,6 +1538,256 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      since Nextcloud doesn't support upgrades across multiple major versions.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <literal>nixos-run-vms</literal> script now deletes the
+       previous run machines states on test startup. You can use the
+       <literal>--keep-vm-state</literal> flag to match the previous
+       behaviour and keep the same VM state between different test runs.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-nix.buildMachines">nix.buildMachines</link> option is now type-checked.
+     There are no functional changes, however this may require updating some configurations to use correct types for all attributes.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>fontconfig</literal> module stopped generating config and cache files for fontconfig 2.10.x, the <filename>/etc/fonts/fonts.conf</filename> now belongs to the latest fontconfig, just like on other Linux distributions, and we will <link xlink:href="https://github.com/NixOS/nixpkgs/pull/95358">no longer</link> be versioning the config directories.
+    </para>
+    <para>
+     Fontconfig 2.10.x was removed from Nixpkgs since it hasn’t been used in any Nixpkgs package for years now.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Nginx module <literal>nginxModules.fastcgi-cache-purge</literal> renamed to official name <literal>nginxModules.cache-purge</literal>.
+     Nginx module <literal>nginxModules.ngx_aws_auth</literal> renamed to official name <literal>nginxModules.aws-auth</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The option <option>defaultPackages</option> was added. It installs the packages <package>perl</package>, <package>rsync</package> and <package>strace</package> for now. They were added unconditionally to <option>systemPackages</option> before, but are not strictly necessary for a minimal NixOS install. You can set it to an empty list to have a more minimal system. Be aware that some functionality might still have an impure dependency on those packages, so things might break.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>undervolt</literal> option no longer needs to apply its
+      settings every 30s. If they still become undone, open an issue and restore
+      the previous behaviour using <literal>undervolt.useTimer</literal>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+      Agda has been heavily reworked.
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    <literal>agda.mkDerivation</literal> has been heavily changed and
+	    is now located at <package>agdaPackages.mkDerivation</package>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    New top-level packages <package>agda</package> and
+	    <literal>agda.withPackages</literal> have been added, the second
+	    of which sets up agda with access to chosen libraries.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    All agda libraries now live under
+	    <literal>agdaPackages</literal>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Many broken libraries have been removed.
+	  </para>
+	</listitem>
+      </itemizedlist>
+      See the <link
+      xlink:href="https://nixos.org/nixpkgs/manual/#agda">new
+      documentation</link> for more information.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>deepin</literal> package set has been removed from
+      nixpkgs. It was a work in progress to package the
+      <link xlink:href="https://www.deepin.org/en/dde/">Deepin Desktop Environment (DDE)</link>,
+      including libraries, tools and applications, and it was still
+      missing a service to launch the desktop environment. It has shown
+      to no longer be a feasible goal due to reasons discussed in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/94870">issue #94870</link>.
+      The package <literal>netease-cloud-music</literal> has also been
+      removed, as it depends on libraries from deepin.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>opendkim</literal> module now uses systemd sandboxing features
+       to limit the exposure of the system towards the opendkim service.
+     </para>
+   </listitem>
   </itemizedlist>
+  <itemizedlist>
+   <listitem>
+    <para />
+    <para>
+        Kubernetes has been upgraded to 1.19.1, which also means that the
+        golang version to build it has been bumped to 1.15. This may have
+        consequences for your existing clusters and their certificates. Please
+        consider
+        <link xlink:href="https://relnotes.k8s.io/?markdown=93264">
+            the release notes for Kubernetes 1.19 carefully
+        </link>
+        before upgrading.
+    </para>
+   </listitem>
+  </itemizedlist>
+  <itemizedlist>
+    <listitem>
+      <para>
+        For AMD GPUs, Vulkan can now be used by adding <literal>amdvlk</literal>
+        to <literal>hardware.opengl.extraPackages</literal>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Similarly, still for AMD GPUs, the ROCm OpenCL stack can now be used by adding
+        <literal>rocm-opencl-icd</literal> to
+        <literal>hardware.opengl.extraPackages</literal>.
+      </para>
+    </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-contributions">
+  <title>Contributions</title>
+  <para>
+        I, Jonathan Ringer, would like to thank the following individuals for their work on nixpkgs. This release could not be done without the hard work of the NixOS community. There were 31282 contributions across 1313 contributors.
+  </para>
+  <orderedlist>
+   <para>
+    Top contributors to NixOS/Nixpkgs from the 20.03 release to the 20.09 release:
+   </para>
+   <listitem>
+    <para>
+  2288  Mario Rodas
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+  1837  Frederik Rietdijk
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   946  Jörg Thalheim
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   925  Maximilian Bosch
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   687  Jonathan Ringer
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   651  Jan Tojnar
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   622  Daniël de Kok
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   605  WORLDofPEACE
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   597  Florian Klink
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   528  José Romildo Malaquias
+    </para>
+   </listitem>
+  </orderedlist>
+
+  <orderedlist>
+   <para>
+    Top contributors to stabilizing this release (Zero Hydra Failures period):
+   </para>
+   <listitem>
+    <para>
+      281  volth
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+   101  Robert Scott
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    86  Tim Steinbach
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    76  WORLDofPEACE
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    49  Maximilian Bosch
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    42  Thomas Tuegel
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    37  Doron Behar
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    36  Vladimír Čunát
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    27  Jonathan Ringer
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    27  Maciej Krüger
+    </para>
+   </listitem>
+  </orderedlist>
+
+  <para>
+   I, Jonathan Ringer, would also like to personally thank @WORLDofPEACE for their help in mentoring me on the release process. Special thanks also goes to Thomas Tuegel for helping immensely with stabilizing Qt, KDE, and Plasma5; I would also like to thank Robert Scott for his numerous fixes and pull request reviews.
+   </para>
+
  </section>
 </section>

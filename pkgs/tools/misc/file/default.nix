@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1lgs2w2sgamzf27kz5h7pajz7v62554q21fbs11n4mfrfrm2hpgh";
   };
 
+  patches = [
+    # https://github.com/file/file/commit/85b7ab83257b3191a1a7ca044589a092bcef2bb3
+    # Without the RCS id change to avoid conflicts. Remove on next bump.
+    ./webassembly-format-fix.patch
+  ];
+
   nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
               ++ stdenv.lib.optional stdenv.hostPlatform.isWindows libgnurx;

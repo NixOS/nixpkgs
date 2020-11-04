@@ -1,15 +1,22 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3, udev, wooting-udev-rules }:
-
+{ appimageTools
+, fetchurl
+, lib
+, gsettings-desktop-schemas
+, gtk3
+, libxkbfile
+, udev
+, wooting-udev-rules
+}:
 let
   pname = "wootility";
-  version = "3.4.6";
+  version = "3.5.12";
 in
 appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-linux-latest/wootility-${version}.AppImage";
-    sha256 = "02ivbgnzr657iqb9hviaylmsym2kki2c84xmqfix3b0awsphn05q";
+    sha256 = "13bhckk25fzq9r9cdsg3yqjd4kn47asqdx8kw0in8iky4ri41vnc";
   };
 
   profile = ''
@@ -19,12 +26,16 @@ appimageTools.wrapType2 rec {
 
   multiPkgs = extraPkgs;
   extraPkgs =
-    pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([ udev wooting-udev-rules ]);
+    pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([
+      udev
+      wooting-udev-rules
+      libxkbfile
+    ]);
   extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 
   meta = with lib; {
     homepage = "https://wooting.io/wootility";
-    description = "Wootility is customization and management software for Wooting keyboards.";
+    description = "A customization and management software for Wooting keyboards";
     platforms = [ "x86_64-linux" ];
     license = "unknown";
     maintainers = with maintainers; [ davidtwco ];

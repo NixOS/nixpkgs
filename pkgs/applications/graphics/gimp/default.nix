@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , substituteAll
+, autoreconfHook
 , pkgconfig
 , intltool
 , babl
@@ -28,9 +29,10 @@
 , ghostscript
 , aalib
 , shared-mime-info
-, python2Packages
+, python2
 , libexif
 , gettext
+, makeWrapper
 , xorg
 , glib-networking
 , libmypaint
@@ -47,23 +49,37 @@
 }:
 
 let
-  inherit (python2Packages) pygtk wrapPython python;
+  python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.20";
+  version = "2.10.22";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "4S+fh0saAHxCd7YKqB4LZzML5+YVPldJ6tg5uQL8ezw=";
+    sha256 = "1fqqyshakvdarf1jipk2n33ibqr23ni22z3d8srq13bpydblpf1d";
   };
 
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+
+    # Use absolute paths instead of relying on PATH
+    # to make sure plug-ins are loaded by the correct interpreter.
+    ./hardcode-plugin-interpreters.patch
+  ];
+
   nativeBuildInputs = [
+    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
     pkgconfig
     intltool
     gettext
-    wrapPython
+    makeWrapper
   ];
 
   buildInputs = [
@@ -97,7 +113,6 @@ in stdenv.mkDerivation rec {
     libwebp
     libheif
     python
-    pygtk
     libexif
     xorg.libXpm
     glib-networking
@@ -116,7 +131,20 @@ in stdenv.mkDerivation rec {
     gegl
   ];
 
-  pythonPath = [ pygtk ];
+  configureFlags = [
+    "--without-webkit" # old version is required
+    "--disable-check-update"
+    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
+    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
+    "--libdir=\${exec_prefix}/lib"
+  ];
+
+  enableParallelBuilding = true;
+
+  # on Darwin,
+  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
+  doCheck = !stdenv.isDarwin;
 
   # Check if librsvg was built with --disable-pixbuf-loader.
   PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
@@ -126,19 +154,8 @@ in stdenv.mkDerivation rec {
     export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
   '';
 
-  patches = [
-    # to remove compiler from the runtime closure, reference was retained via
-    # gimp --version --verbose output
-    (substituteAll {
-      src = ./remove-cc-reference.patch;
-      cc_version = stdenv.cc.cc.name;
-    })
-  ];
-
   postFixup = ''
-    wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/
     wrapProgram $out/bin/gimp-${lib.versions.majorMinor version} \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
@@ -152,21 +169,6 @@ in stdenv.mkDerivation rec {
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;
   };
-
-  configureFlags = [
-    "--without-webkit" # old version is required
-    "--disable-check-update"
-    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/run/current-system/sw/share/color/icc"
-    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
-    "--libdir=\${exec_prefix}/lib"
-  ];
-
-  # on Darwin,
-  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
-  doCheck = !stdenv.isDarwin;
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "The GNU Image Manipulation Program";

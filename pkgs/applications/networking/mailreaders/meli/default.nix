@@ -15,15 +15,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "alpha-0.5.1";
+  version = "alpha-0.6.2";
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
     rev = version;
-    sha256 = "1y5567hdm1s2s272drxvmp6x4y1jpyl7423iz58hgqcsjm9085zv";
+    sha256 = "0ycyksrrp4llwklzx3ipac8hmpfxa1pa7dqsm82wic0f6p5d1dp6";
   };
 
-  cargoSha256 = "040dfr09bg5z5pn68dy323hcppd599d3f6k7zxqw5f8n4whnlc9y";
+  cargoSha256 = "sha256:0lxwhb2c16w5z7rqzch0ij8n8hxb5xcin31w9i28mzv1xm7sg8ks";
 
   cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
 
@@ -35,16 +35,17 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/share/man/man1
-    gzip < meli.1 > $out/share/man/man1/meli.1.gz
+    gzip < docs/meli.1 > $out/share/man/man1/meli.1.gz
     mkdir -p $out/share/man/man5
-    gzip < meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
+    gzip < docs/meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
+    gzip < docs/meli-themes.5 > $out/share/man/man5/meli-themes.5.gz
   '';
 
   meta = with stdenv.lib; {
     description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ maintainers."0x4A6F" matthiasbeyer erictapen ];
+    maintainers = with maintainers; [ _0x4A6F matthiasbeyer erictapen ];
     platforms = platforms.linux;
   };
 }

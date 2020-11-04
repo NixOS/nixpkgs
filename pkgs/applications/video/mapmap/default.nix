@@ -12,14 +12,14 @@ with stdenv;
 
 mkDerivation rec {
 
-  version = "0.6.1";
+  version = "0.6.2";
   pname = "mapmap";
 
   src = fetchFromGitHub {
     owner = "mapmapteam";
     repo = "mapmap";
     rev = version;
-    sha256 = "15km6xmfkxhrflq4sl9m9r85zi4shrr4k5h15x17v7x0qkc3xgsh";
+    sha256 = "1pyb3vz19lbfz2hrfqm9a29vnajw1bigdrblbmcy32imkf4isfvm";
   };
 
   nativeBuildInputs = [

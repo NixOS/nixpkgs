@@ -34,6 +34,7 @@ buildPythonPackage rec {
     description = "A tool and library for easily deploying applications on Apache YARN";
     license = licenses.bsd3;
     maintainers = with maintainers; [ alexbiehl ];
+    broken = true; # maven repo src isn't stable
   };
 
 }

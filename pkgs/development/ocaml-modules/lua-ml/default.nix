@@ -7,13 +7,13 @@ else
 stdenv.mkDerivation rec {
   pname = "lua-ml";
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "lindig";
     repo = pname;
-    rev = "${version}";
-    sha256 = "09lj6qykg15fdf65in7xdry0jcifcr8vqbvz85v12gwfckmmxjir";
+    rev = version;
+    sha256 = "04lv98nxmzanvyn4c0k6k0ax29f5xfdl8qzpf5hwadslq213a044";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];

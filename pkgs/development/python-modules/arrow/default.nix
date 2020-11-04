@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "0.15.6";
+  version = "0.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb5d339f00072cc297d7de252a2e75f272085d1231a3723f1026d1fa91367118";
+    sha256 = "ff08d10cda1d36c68657d6ad20d74fbea493d980f8b2d45344e00d6ed2bf6ed4";
   };
 
   propagatedBuildInputs = [ python-dateutil ]

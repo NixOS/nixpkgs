@@ -1,13 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, graphviz
+{ stdenv, buildPythonPackage, isPy3k, fetchPypi, substituteAll, graphviz
 , pkgconfig, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
   pname = "pygraphviz";
-  version = "1.5";
+  version = "1.6";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "179i3mjprhn200gcj6jq7c4mdrzckyqlh1srz78hynnw0nijka2h";
+    sha256 = "411ae84a5bc313e3e1523a1cace59159f512336318a510573b47f824edef8860";
     extension = "zip";
   };
 

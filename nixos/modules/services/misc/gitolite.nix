@@ -27,7 +27,10 @@ in
         type = types.str;
         default = "/var/lib/gitolite";
         description = ''
-          Gitolite home directory (used to store all the repositories).
+          The gitolite home directory used to store all repositories. If left as the default value
+          this directory will automatically be created before the gitolite server starts, otherwise
+          the sysadmin is responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
         '';
       };
 
@@ -149,14 +152,6 @@ in
     };
     users.groups.${cfg.group}.gid = config.ids.gids.gitolite;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.dataDir}'/.gitolite - ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.dataDir}'/.gitolite/logs - ${cfg.user} ${cfg.group} - -"
-
-      "Z ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
-    ];
-
     systemd.services.gitolite-init = {
       description = "Gitolite initialization";
       wantedBy    = [ "multi-user.target" ];
@@ -167,13 +162,19 @@ in
         GITOLITE_RC_DEFAULT = "${rcDir}/gitolite.rc.default";
       };
 
-      serviceConfig = {
-        Type = "oneshot";
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = "~";
-        RemainAfterExit = true;
-      };
+      serviceConfig = mkMerge [
+        (mkIf (cfg.dataDir == "/var/lib/gitolite") {
+          StateDirectory = "gitolite gitolite/.gitolite gitolite/.gitolite/logs";
+          StateDirectoryMode = "0750";
+        })
+        {
+          Type = "oneshot";
+          User = cfg.user;
+          Group = cfg.group;
+          WorkingDirectory = "~";
+          RemainAfterExit = true;
+        }
+      ];
 
       path = [ pkgs.gitolite pkgs.git pkgs.perl pkgs.bash pkgs.diffutils config.programs.ssh.package ];
       script =

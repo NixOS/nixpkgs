@@ -29,25 +29,26 @@ let
   # A python package that contains simple .egg-info and .pth files for an editable installation
   editablePackage = python.pkgs.toPythonModule (pkgs.runCommandNoCC "${name}-editable"
     { } ''
-    mkdir -p "$out/${python.sitePackages}"
-    cd "$out/${python.sitePackages}"
+        mkdir -p "$out/${python.sitePackages}"
+        cd "$out/${python.sitePackages}"
 
-    # See https://docs.python.org/3.8/library/site.html for info on such .pth files
-    # These add another site package path for each line
-    touch poetry2nix-editable.pth
-    ${lib.concatMapStringsSep "\n" (src: ''
-      echo "${toString src}" >> poetry2nix-editable.pth
-    '')
-      (lib.attrValues editablePackageSources)}
+        # See https://docs.python.org/3.8/library/site.html for info on such .pth files
+        # These add another site package path for each line
+        touch poetry2nix-editable.pth
+        ${lib.concatMapStringsSep "\n"
+    (src: ''
+          echo "${toString src}" >> poetry2nix-editable.pth
+        '')
+          (lib.attrValues editablePackageSources)}
 
-    # Create a very simple egg so pkg_resources can find this package
-    # See https://setuptools.readthedocs.io/en/latest/formats.html for more info on the egg format
-    mkdir "${name}.egg-info"
-    cd "${name}.egg-info"
-    ln -s ${pkgInfoFile} PKG-INFO
-    ${lib.optionalString (pyProject.tool.poetry ? plugins) ''
-      ln -s ${entryPointsFile} entry_points.txt
-    ''}
+        # Create a very simple egg so pkg_resources can find this package
+        # See https://setuptools.readthedocs.io/en/latest/formats.html for more info on the egg format
+        mkdir "${name}.egg-info"
+        cd "${name}.egg-info"
+        ln -s ${pkgInfoFile} PKG-INFO
+        ${lib.optionalString (pyProject.tool.poetry ? plugins) ''
+          ln -s ${entryPointsFile} entry_points.txt
+        ''}
   ''
   );
 in

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.6.1";
+  version = "5.9";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "1nwnvjdnr9fjj2q2p2vpjabfdhcrwykgj9knjcsqy0c7p1bgbk2h";
+    sha256 = "14d7hz07kfczfgmy1ixkgccjn393gpkjn7givz5kwxddcnk5i4xq";
   };
 
   nativeBuildInputs = [
@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
-  # The i686 case is a quick hack; I don't know what's wrong.
-  postConfigure = stdenv.lib.optionalString (!stdenv.isi686) ''
-    export LDSHARED="$LD -shared"
-  '';
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally

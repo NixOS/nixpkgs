@@ -1,11 +1,11 @@
 { stdenv, fetchzip }:
 
 let
-  version = "20200407";
+  version = "20200729";
 in fetchzip {
   name = "iana-etc-${version}";
   url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-  sha256 = "1zmqim0l4lz5xbq7w2wi48fzsvg2msyw6c80dzw4vxll31frpy18";
+  sha256 = "05cymmisfvpyd7fwzc6axvm5fsi1v6hzs0pjr4xp1i95wvpz7qpm";
 
   postFetch = ''
     tar -xzvf $downloadedFile --strip-components=1

@@ -10,18 +10,18 @@
 
 buildPythonPackage rec {
   pname = "sslyze";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    sha256 = "1ahwldsh3xvagin09dy5q73bdw5k4siqy2qqgxwj4wdyd7pjb4p9";
+    sha256 = "06mwzxw6xaqin2gwzcqb9r7qhbyx3k7zcxygxywi2bpxyjv9lq32";
   };
 
   patchPhase = ''
     substituteInPlace setup.py \
-      --replace "cryptography>=2.6,<=2.9" "cryptography>=2.6,<=3"
+      --replace "cryptography>=2.6,<=2.9" "cryptography"
   '';
 
   checkInputs = [ pytest ];
@@ -39,6 +39,7 @@ buildPythonPackage rec {
       tests/plugins_tests/certificate_info/test_certificate_utils.py \
       -k "not (TestScanner and test_client_certificate_missing)"
   '';
+  pythonImportsCheck = [ "sslyze" ];
 
   propagatedBuildInputs = [ nassl cryptography typing-extensions faker ];
 

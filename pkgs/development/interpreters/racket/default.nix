@@ -46,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "7.7"; # always change at once with ./minimal.nix
+  version = "7.9"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "0cx5h3k0n58cb442qzp3jlc7n1b9dbaxv9blg2rjil2rn119yrb2";
+    sha256 = "18pz6gjzqy6a62xkcmjanhr7kgxpvpmc0blrk4igz8ldcybz44if";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     unset AR
-    for f in src/lt/configure src/cs/c/configure src/racket/src/string.c; do
+    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
       substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
     done
     mkdir src/build

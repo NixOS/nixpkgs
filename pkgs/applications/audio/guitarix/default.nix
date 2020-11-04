@@ -42,15 +42,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "guitarix";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "0q9050499hcj19hvbxb069vxh5yclawjg04vryh46lxm4sfy9g57";
+    sha256 = "0qsfbyrrpb3bbdyq68k28mjql7kglxh8nqcw9jvja28x6x9ik5a0";
   };
-
-  # see: https://sourceforge.net/p/guitarix/bugs/105
-  patches = [ ./fix-build.patch ];
 
   nativeBuildInputs = [
     gettext
@@ -101,8 +98,6 @@ stdenv.mkDerivation rec {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-    "--includeresampler"
-    "--includeconvolver"
   ] ++ optional optimizationSupport "--optimization";
 
   meta = with stdenv.lib; {

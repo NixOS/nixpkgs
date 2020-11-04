@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ldap3";
-  version = "2.7";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h1q8g1c2nkhx8p5n91bzkvjx5js5didi9xqbnmfrxqbnyc45w0p";
+    sha256 = "37d633e20fa360c302b1263c96fe932d40622d0119f1bddcb829b03462eeeeb7";
   };
 
   propagatedBuildInputs = [ pyasn1 ];

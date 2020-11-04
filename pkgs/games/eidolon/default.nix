@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.sr.ht/~nicohman/eidolon";
-    rev = "${version}";
+    rev = version;
     sha256 = "1yn3k569pxzw43mmsk97088xpkdc714rks3ncchbb6ccx25kgxrr";
   };
   cargoPatches = [ ./cargo-lock.patch ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "A single TUI-based registry for drm-free, wine and steam games on linux, accessed through a rofi launch menu";
     homepage = "https://github.com/nicohman/eidolon";
     license = licenses.gpl3;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.linux;
   };
 }

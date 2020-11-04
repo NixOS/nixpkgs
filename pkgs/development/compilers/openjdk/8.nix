@@ -19,8 +19,8 @@ let
     aarch64-linux = "aarch64";
   }.${stdenv.system} or (throw "Unsupported platform");
 
-  update = "242";
-  build = "b08";
+  update = "272";
+  build = if stdenv.isAarch64 then "b10" else "b10";
   baseurl = if stdenv.isAarch64 then "https://hg.openjdk.java.net/aarch64-port/jdk8u-shenandoah"
             else "https://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = lib.optionalString stdenv.isAarch64 "aarch64-shenandoah-"
@@ -29,50 +29,50 @@ let
   jdk8 = fetchurl {
              name = "jdk8-${repover}.tar.gz";
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0qpmr267qcxhmw398zbl1axd161yxn4k4hfz1jlxlmdvg70p7h90"
-                      else "1crs4hmzmgm6fkwfq0d3xz9lph0nd33fngrqv2rz1mkkqcrjx18z";
+             sha256 = if stdenv.isAarch64 then "db98897d6fddce85996a9b0daf4352abce4578be0b51eada41702ee1469dd415"
+                      else "8f0e8324d3500432e8ed642b4cc7dff90a617dbb2a18a94c07c1020d32f93b7a";
           };
   langtools = fetchurl {
              name = "langtools-${repover}.tar.gz";
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "1rhhi4kgmxvnyl3ic5p008p1n7zyji5nw99blm1lr5fw7ry7df24"
-                      else "1aaxd1rl7dlk4kxdivvqvripsbn0d5vny0jvjksycsm97vrfiry4";
+             sha256 = if stdenv.isAarch64 then "6544c1cc455844bbbb3d2914ffc716b1cee7f19e6aa223764d41a7cddc41322c"
+                      else "632417b0b067c929eda6958341352e29c5810056a5fec138641eb3503f9635b7";
           };
   hotspot = fetchurl {
              name = "hotspot-${repover}.tar.gz";
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0lphrhjqlavd6qlkh7h4sd2bqf5gd0cchkcnvy87703fbd7gy5ii"
-                      else "18i4if16zikgda9k5bgqyx0p2104db23zlnclq512178z0p9yycb";
+             sha256 = if stdenv.isAarch64 then "37abb89e66641607dc6f372946bfc6bd413f23fec0b9c3baf75f41ce517e21d8"
+                      else "2142f3b769800a955613b51ffe192551bab1db95b0c219900cf34febc6f20245";
           };
   corba = fetchurl {
              name = "corba-${repover}.tar.gz";
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "18h0v566v420d00na6x4jrs41v4aa39byk15fi8k6dcn0dmirhvg"
-                      else "1298k8p2dsj7xc4h2ayk5nl4ssrcgncn06ysyqrmnwrb8gj8s1w4";
+             sha256 = if stdenv.isAarch64 then "5da82f7b4aceff32e02d2f559033e3b62b9509d79f1a6891af871502e1d125b1"
+                      else "320098d64c843c1ff2ae62579817f9fb4a81772bc0313a543ce68976ad7a6d98";
           };
   jdk = fetchurl {
              name = "jdk-${repover}.tar.gz";
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0xxy7rkj8ah263nnzkd4mg9dai5qix3l9cyilm47dig5hv7g8aq0"
-                      else "0vqlbks3cy3cnmnrnhbjkqinvp8bcy2h96xvx81cvlza4s2hszvz";
+             sha256 = if stdenv.isAarch64 then "ee613296d823605dcd1a0fe2f89b4c7393bdb8ae5f2659f48f5cbc0012bb1a47"
+                      else "957c24fc58ac723c8cd808ab60c77d7853710148944c8b9a59f470c4c809e1a0";
           };
   jaxws = fetchurl {
              name = "jaxws-${repover}.tar.gz";
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0ajqm2l9g5w5ag5s4vl4ldpbm99pqa6d342hrzvv7psqn3zf6ar5"
-                      else "1wg9fbiz09arj0llavnzrmbhw8nx0dw8dcjkrzxw78rj1cadflzc";
+             sha256 = if stdenv.isAarch64 then "7c426b85f0d378125fa46e6d1b25ddc27ad29d93514d38c5935c84fc540b26ce"
+                      else "4efb0ee143dfe86c8ee06db2429fb81a0c8c65af9ea8fc18daa05148c8a1162f";
           };
   jaxp = fetchurl {
              name = "jaxp-${repover}.tar.gz";
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "03zjh6xvza05abxz9d9j2w9xndw9n07f8lrn6dymj7f4imals831"
-                      else "1i5xrk8r8pcgnc68zrgp3hd1a1nzcm99swpmdnlb424qlg5nnrcf";
+             sha256 = if stdenv.isAarch64 then "928e363877afa7e0ad0c350bb18be6ab056b23708c0624a0bd7f01c4106c2a14"
+                      else "25a651c670d5b036042f7244617a3eb11fec80c07745c1c8181a1cdebeda3d8e";
           };
   nashorn = fetchurl {
              name = "nashorn-${repover}.tar.gz";
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0n809w264ndxksva9c81x0m1fsyg8c627w571f72xxxl9c1bnrmp"
-                      else "0qlxaz7sriy709vcyzz48s2v4p5h4d31my33whip018c4j5gkfqq";
+             sha256 = if stdenv.isAarch64 then "f060e08c5924457d4f5047c02ad6a987bdbdcd1cea53d2208322073ba4f398c3"
+                      else "a28b41d86f0c87ceacd2b686dd31c9bf391d851b1b5187a49ef5e565fc2cbc84";
           };
   openjdk8 = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -260,7 +260,7 @@ let
       homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo nequissimus ];
+      maintainers = with maintainers; [ edwtjo ];
       platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     };
 

@@ -18,6 +18,7 @@ let
     nativeBuildInputs = [ autoreconfHook ];
 
     doCheck = true;
+    AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
 
     patches = stdenv.lib.optionals stdenv.isDarwin [ ./skip-flaky-darwin-test.patch ];
 
@@ -37,5 +38,5 @@ let
     };
   };
 in {
-  xapian_1_4 = generic "1.4.15" "1sjhz6vgql801rdgl6vrsjj0vy1mwlkcxjx6nr7h27m031cyjs5i";
+  xapian_1_4 = generic "1.4.17" "0bjpaavdckl4viznr8gbq476fvg648sj4rks2vacmc51vrb8bsxm";
 }
