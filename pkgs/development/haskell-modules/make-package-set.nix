@@ -293,6 +293,10 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       , # Whether or not to generate a Hoogle database for all the
         # dependencies.
         withHoogle ? false
+      , # Whether or not to include benchmark dependencies of your local
+        # packages.  You should set this to true if you have benchmarks defined
+        # in your local packages that you want to be able to run with cabal benchmark
+        doBenchmark ? false
       , ...
       } @ args:
       let
@@ -397,7 +401,11 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
           version = "0";
           license = null;
         }
-        // packageInputs;
+        // packageInputs
+        // pkgs.lib.optionalAttrs doBenchmark {
+          # `doBenchmark` needs to explicitly be set here because haskellPackages.mkDerivation defaults it to `false`.  If the user wants benchmark dependencies included in their development shell, it has to be explicitly enabled here.
+          doBenchmark = true;
+        };
 
         # This is a pseudo Haskell package derivation that contains all the
         # dependencies for the packages in `selected`.
@@ -419,7 +427,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         # pkgWithCombinedDepsDevDrv :: Derivation
         pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-        mkDerivationArgs = builtins.removeAttrs args [ "packages" "withHoogle" ];
+        mkDerivationArgs = builtins.removeAttrs args [ "packages" "withHoogle" "doBenchmark" ];
 
       in pkgWithCombinedDepsDevDrv.overrideAttrs (old: mkDerivationArgs // {
         nativeBuildInputs = old.nativeBuildInputs ++ mkDerivationArgs.nativeBuildInputs or [];
