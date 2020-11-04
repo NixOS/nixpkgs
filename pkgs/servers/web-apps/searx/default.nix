@@ -1,8 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
+{ lib, python3, python3Packages, fetchFromGitHub, fetchpatch }:
 
 with python3Packages;
 
-buildPythonApplication rec {
+toPythonModule (buildPythonApplication rec {
   pname = "searx";
   version = "0.17.0";
 
@@ -34,10 +34,16 @@ buildPythonApplication rec {
     rm tests/test_robot.py # A variable that is imported is commented out
   '';
 
+  postInstall = ''
+    # Create a symlink for easier access to static data
+    mkdir -p $out/share
+    ln -s ../${python3.sitePackages}/searx/static $out/share/
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/asciimoo/searx";
     description = "A privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ matejc fpletz globin danielfullmer ];
   };
-}
+})
