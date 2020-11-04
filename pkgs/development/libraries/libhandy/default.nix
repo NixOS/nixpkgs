@@ -17,18 +17,20 @@
 , gdk-pixbuf
 , librsvg
 , hicolor-icon-theme
+, at-spi2-atk
+, at-spi2-core
 }:
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.0.0";
+  version = "1.0.1";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-qTmFgvR7fXKSBdbqwMBo/vNarySf3Vfuo3JPhRjSZpk=";
+    sha256 = "106qa4d2rcbvd3g3avbgkd59aq0bjvwpx8vfz1cikvwrarnfvql4";
   };
 
   nativeBuildInputs = [
@@ -52,8 +54,11 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    hicolor-icon-theme
     xvfb_run
+    at-spi2-atk
+    at-spi2-core
+    librsvg
+    hicolor-icon-theme
   ];
 
   mesonFlags = [
@@ -64,14 +69,11 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";
   PKG_CONFIG_GLADEUI_2_0_CATALOGDIR = "${placeholder "glade"}/share/glade/catalogs";
 
-  # Bail out! dbind-FATAL-WARNING:
-  # AT-SPI: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown:
-  # The name org.a11y.Bus was not provided by any .service files
-  doCheck = false;
+  doCheck = true;
 
   checkPhase = ''
     NO_AT_BRIDGE=1 \
-    XDG_DATA_DIRS="$XDG_DATA_DIRS:${hicolor-icon-theme}/share"
+    XDG_DATA_DIRS="$XDG_DATA_DIRS:${hicolor-icon-theme}/share" \
     GDK_PIXBUF_MODULE_FILE="${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
