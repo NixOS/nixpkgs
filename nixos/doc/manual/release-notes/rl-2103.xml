@@ -39,7 +39,19 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+     <para>
+       <link xlink:href="https://www.keycloak.org/">Keycloak</link>,
+       an open source identity and access management server with
+       support for <link
+       xlink:href="https://openid.net/connect/">OpenID Connect</link>,
+       <link xlink:href="https://oauth.net/2/">OAUTH 2.0</link> and
+       <link xlink:href="https://en.wikipedia.org/wiki/SAML_2.0">SAML
+       2.0</link>.
+     </para>
+     <para>
+       See the <link linkend="module-services-keycloak">Keycloak
+       section of the NixOS manual</link> for more information.
+     </para>
    </listitem>
   </itemizedlist>
 
@@ -107,6 +119,16 @@
       entirely as a dedicated <literal>pdns</literal> user, instead of starting as <literal>root</literal>
       and dropping privileges, as well as the default <literal>socket-dir</literal> location changing from
       <literal>/var/lib/powerdns</literal> to <literal>/run/pdns</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    <package>riak-cs</package> package removed along with <varname>services.riak-cs</varname> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    <package>stanchion</package> package removed along with <varname>services.stanchion</varname> module.
     </para>
    </listitem>
   </itemizedlist>

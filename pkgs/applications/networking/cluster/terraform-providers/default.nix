@@ -164,6 +164,7 @@ let
     cloudfoundry = callPackage ./cloudfoundry {};
     elasticsearch = callPackage ./elasticsearch {};
     gandi = callPackage ./gandi {};
+    hcloud = callPackage ./hcloud {};
     keycloak = callPackage ./keycloak {};
     libvirt = callPackage ./libvirt {};
     lxd = callPackage ./lxd {};

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-search";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0085c7qi9z1ayxd8683ck79nfnldkrwl481hzav84flyg8d0m94j";
+    sha256 = "d4c78b14b48edd2e27e2068c9a448acfc84a18595be77fe483afe7bb447e1eb6";
   };
 
   propagatedBuildInputs = [

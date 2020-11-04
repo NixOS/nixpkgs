@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, isPy3k
 , pexpect
 , notebook
 , nix
@@ -9,6 +10,8 @@
 buildPythonPackage rec {
   pname = "nix-kernel";
   version = "unstable-2020-04-26";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "GTrunSec";
