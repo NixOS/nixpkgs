@@ -3205,7 +3205,6 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - authoring
-  - autoapply
   - AutoForms
   - autom
   - automata
@@ -4856,7 +4855,6 @@ broken-packages:
   - every-bit-counts
   - ewe
   - exact-cover
-  - exact-real
   - exact-real-positional
   - except-exceptions
   - exception-monads-fd
@@ -8379,7 +8377,6 @@ broken-packages:
   - optparse-applicative-simple
   - optparse-enum
   - optparse-helper
-  - orbits
   - orc
   - orchestrate
   - OrchestrateDB
@@ -10987,7 +10984,6 @@ broken-packages:
   - vty-menu
   - vty-ui
   - vty-ui-extras
-  - vulkan-utils
   - waargonaut
   - wacom-daemon
   - waddle

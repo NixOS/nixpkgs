@@ -922,8 +922,9 @@ self: super: {
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
-  # Compiles some C++ source which requires these headers
+  # Compiles some C or C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary super.VulkanMemoryAllocator pkgs.vulkan-headers;
+  vulkan-utils = addExtraLibrary super.vulkan-utils pkgs.vulkan-headers;
 
   # https://github.com/dmwit/encoding/pull/3
   encoding = doJailbreak (appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch);
@@ -1482,6 +1483,8 @@ self: super: {
 
   # Too tight version bounds, see https://github.com/haskell-hvr/microaeson/pull/4
   microaeson = doJailbreak super.microaeson;
+
+  autoapply = super.autoapply.override { th-desugar = self.th-desugar_1_11; };
 
   # haskell-language-server needs a more current version of pantry to compile
 } // (let
