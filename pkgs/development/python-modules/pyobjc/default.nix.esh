@@ -7,10 +7,10 @@ buildPythonPackage rec {
 
 <% if [[ $framework != AuthenticationServices && $framework != AutomaticAssessmentConfiguration && $framework != CoreSpotlight && $framework != ExternalAccessory && $framework != Network && $framework != OSLog && $framework != PushKit && $framework != Speech && $framework != SystemExtensions && $framework != Vision ]]; then -%>
   disabled = pythonOlder "3.6";
-<% elif [[ $framework != CoreSpotlight && $framework != ExternalAccessory && $framework != Vision ]]; then -%>
+<% elif [[ $framework == CoreSpotlight && $framework == ExternalAccessory && $framework == Vision ]]; then -%>
   disabled = pythonOlder "3.6" ||
     (stdenv.lib.versionOlder "${darwin.apple_sdk.sdk.version}" "10.13") && throw "${pname}: requires apple_sdk.sdk 10.13";
-<% elif [[ $framework != Network && $framework != UserNotifications ]]; then -%>
+<% elif [[ $framework == Network && $framework == UserNotifications ]]; then -%>
   disabled = pythonOlder "3.6" ||
     (stdenv.lib.versionOlder "${darwin.apple_sdk.sdk.version}" "10.14") && throw "${pname}: requires apple_sdk.sdk 10.14";
 <% else -%>
