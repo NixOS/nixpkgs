@@ -3891,8 +3891,6 @@ in
 
   flips = callPackage ../tools/compression/flips { };
 
-  flvtool2 = callPackage ../tools/video/flvtool2 { };
-
   fmbt = callPackage ../development/tools/fmbt {
     python = python2;
   };
@@ -4500,7 +4498,9 @@ in
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
-  halide = callPackage ../development/compilers/halide { };
+  halide = callPackage ../development/compilers/halide {
+    llvmPackages = llvmPackages_9;
+  };
 
   ham = pkgs.perlPackages.ham;
 
@@ -6339,8 +6339,6 @@ in
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
-
-  pdf2htmlEX = callPackage ../tools/typesetting/pdf2htmlEX { };
 
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
@@ -9406,6 +9404,10 @@ in
     inherit (darwin) libiconv libobjc libresolv;
   }) mx jvmci8 graalvm8;
 
+  inherit (callPackages ../development/compilers/graalvm/community-edition.nix { })
+    graalvm8-ce
+    graalvm11-ce;
+
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
     graalvm11-ee;
@@ -10871,6 +10873,8 @@ in
   buildkite-agent3 = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
   buildkite-cli = callPackage ../development/tools/continuous-integration/buildkite-cli { };
+
+  bump = callPackage ../development/tools/github/bump { };
 
   libbpf = callPackage ../os-specific/linux/libbpf { };
 
@@ -16694,8 +16698,6 @@ in
 
   frab = callPackage ../servers/web-apps/frab { };
 
-  freepops = callPackage ../servers/mail/freepops { };
-
   freeradius = callPackage ../servers/freeradius { };
 
   freeswitch = callPackage ../servers/sip/freeswitch {
@@ -17063,16 +17065,6 @@ in
   percona-server = percona-server56;
 
   riak = callPackage ../servers/nosql/riak/2.2.0.nix {
-    erlang = erlang_basho_R16B02;
-  };
-
-  riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    erlang = erlang_basho_R16B02;
-  };
-
-  stanchion = callPackage ../servers/nosql/riak-cs/stanchion.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     erlang = erlang_basho_R16B02;
   };
 
@@ -18727,6 +18719,8 @@ in
 
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
+  rtsp-simple-server = callPackage ../servers/rtsp-simple-server { };
+
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
@@ -19236,6 +19230,8 @@ in
   font-awesome_4 = (callPackage ../data/fonts/font-awesome-5 { }).v4;
   font-awesome_5 = (callPackage ../data/fonts/font-awesome-5 { }).v5;
   font-awesome = font-awesome_5;
+
+  fraunces = callPackage ../data/fonts/fraunces { };
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
@@ -20021,6 +20017,8 @@ in
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
+  ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
+
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
@@ -20065,9 +20063,9 @@ in
 
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
-  backintime-qt4 = callPackage ../applications/networking/sync/backintime/qt4.nix { };
+  backintime-qt = libsForQt5.callPackage ../applications/networking/sync/backintime/qt.nix { };
 
-  backintime = backintime-qt4;
+  backintime = backintime-qt;
 
   balsa = callPackage ../applications/networking/mailreaders/balsa { };
 
@@ -20547,8 +20545,6 @@ in
   devede = callPackage ../applications/video/devede { };
 
   denemo = callPackage ../applications/audio/denemo { };
-
-  dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
@@ -23789,6 +23785,8 @@ in
 
   teleprompter = callPackage ../applications/misc/teleprompter {};
 
+  tempo = callPackage ../servers/tracing/tempo {};
+
   tendermint = callPackage ../tools/networking/tendermint { };
 
   termdown = python3Packages.callPackage ../applications/misc/termdown { };
@@ -25928,7 +25926,6 @@ in
   gnomeExtensions = recurseIntoAttrs {
     appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
     arc-menu = callPackage ../desktops/gnome-3/extensions/arc-menu { };
-    battery-status = callPackage ../desktops/gnome-3/extensions/battery-status { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
@@ -26217,8 +26214,6 @@ in
   picard-tools = callPackage ../applications/science/biology/picard-tools { };
 
   platypus = callPackage ../applications/science/biology/platypus { };
-
-  plink = callPackage ../applications/science/biology/plink { };
 
   plink-ng = callPackage ../applications/science/biology/plink-ng { };
 

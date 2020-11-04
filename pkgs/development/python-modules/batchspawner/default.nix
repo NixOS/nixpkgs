@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # tests require a job scheduler e.g. slurm, pbs, etc.
   doCheck = false;
 
-  pythonImportCheck = [ "batchspawner" ];
+  pythonImportsCheck = [ "batchspawner" ];
 
   meta = with lib; {
     description = "A spawner for Jupyterhub to spawn notebooks using batch resource managers";

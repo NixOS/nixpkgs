@@ -1,25 +1,28 @@
-{ llvmPackages, lib, fetchFromGitHub, cmake
-, libpng, libjpeg, mesa, eigen
-, openblas, blas, lapack
+{ llvmPackages
+, lib
+, fetchFromGitHub
+, cmake
+, libpng
+, libjpeg
+, mesa
+, eigen
+, openblas
+, blas
+, lapack
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
-let
-  version = "2019_08_27";
-
-in llvmPackages.stdenv.mkDerivation {
-
-  name = "halide-${builtins.replaceStrings ["_"] ["."] version}";
+llvmPackages.stdenv.mkDerivation rec {
+  pname = "halide";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
-    rev = "release_${version}";
-    sha256 = "09xf8v9zyxx2fn6s1yzjkyzcf9zyzrg3x5vivgd2ljzbfhm8wh7n";
+    rev = "v${version}";
+    sha256 = "0il71rppjp76m7zd420siidvhs76sqiq26h60ywk812sj9mmgxj6";
   };
-
-  patches = [ ./nix.patch ];
 
   # clang fails to compile intermediate code because
   # of unused "--gcc-toolchain" option
@@ -27,15 +30,13 @@ in llvmPackages.stdenv.mkDerivation {
     sed -i "s/-Werror//" src/CMakeLists.txt
   '';
 
-  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" ];
+  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" ];
 
   # To handle the lack of 'local' RPATH; required, as they call one of
   # their built binaries requiring their libs, in the build process.
   preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$(pwd)/src''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
-
-  enableParallelBuilding = true;
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
@@ -44,24 +45,11 @@ in llvmPackages.stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  # No install target for cmake available.
-  # Calling install target in Makefile causes complete rebuild
-  # and the library rpath is broken, because libncursesw.so.6 is missing.
-  # Another way is using "make halide_archive", but the tarball is not easy
-  # to disassemble.
-  installPhase = ''
-    find
-    mkdir -p "$out/lib" "$out/bin"
-    cp bin/HalideTrace* "$out/bin"
-    cp lib/libHalide.so "$out/lib"
-    cp -r include "$out"
-  '';
-
   meta = with lib; {
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = [ maintainers.ck3d ];
   };
 }

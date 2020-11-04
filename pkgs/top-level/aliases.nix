@@ -120,6 +120,7 @@ mapAliases ({
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
+  dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
@@ -141,6 +142,7 @@ mapAliases ({
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
   flameGraph = flamegraph; # added 2018-04-25
+  flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
   foldingathome = fahclient; # added 2020-09-03
   font-awesome-ttf = font-awesome; # 2018-02-25
   # 2019-10-31
@@ -366,6 +368,7 @@ mapAliases ({
   parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
+  pdf2htmlEx = throw "pdf2htmlEx has been removed from nixpkgs, as it was unmaintained"; # added 2020-11-03
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
@@ -484,6 +487,7 @@ mapAliases ({
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
+  riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
@@ -575,6 +579,7 @@ mapAliases ({
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   squid4 = squid;  # added 2019-08-22
   sshfsFuse = sshfs-fuse; # added 2016-09
+  stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14
   surf-webkit2 = surf; # added 2017-04-02
   sup = throw "sup was deprecated on 2019-09-10: abandoned by upstream";
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
