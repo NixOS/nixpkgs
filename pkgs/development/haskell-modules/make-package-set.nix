@@ -290,19 +290,18 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       { # Packages to create this development shell for.  These are usually
         # your local packages.
         packages
-      , # Whether or not to generated a Hoogle database for all the
+      , # Whether or not to generate a Hoogle database for all the
         # dependencies.
         withHoogle ? false
       , ...
       } @ args:
       let
         # A list of the packages we want to build a development shell for.
-        #
         # This is a list of Haskell package derivations.
         selected = packages self;
 
-        # This is a list of attribute sets, where the each attribute set
-        # corresponds to the build inputs one of the packages input to shellFor.
+        # This is a list of attribute sets, where each attribute set
+        # corresponds to the build inputs of one of the packages input to shellFor.
         #
         # Each attribute has keys like buildDepends, executableHaskellDepends,
         # testPkgconfigDepends, etc.  The values for the keys of the attribute
