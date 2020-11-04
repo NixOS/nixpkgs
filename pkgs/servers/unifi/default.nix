@@ -54,7 +54,7 @@ in {
   };
 
   unifiBeta = generic {
-    version = "6.0.23";
-    sha256 = "sha256-t/s0UEk0CgnAeydtLWTgpZjnAJqnyfyESNNVe1d5PHo=";
+    version = "6.0.28";
+    sha256 = "14q8r4mcqx0v3sh8zwqg4cc3iszqn5201q5r4c20cwqdd4ivf97q";
   };
 }
