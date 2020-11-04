@@ -23,6 +23,10 @@ in mkDerivation {
       url = "https://github.com/KDE/qtcurve/commit/ee2228ea2f18ac5da9b434ee6089381df815aa94.patch";
       sha256 = "1vz5frsrsps93awn84gk8d7injrqfcyhc1rji6s0gsgsp5z9sl34";
     })
+    (fetchpatch {
+      url = "https://github.com/KDE/qtcurve/commit/44e2a35ebb164dcab0bad1a9158b1219a3ff6504.patch";
+      sha256 = "0xc78lxsclxzvj8v8b8mkylamz4qdlx9ng297ckhs0qy3dfkcjk3";
+    })
   ];
 
   enableParallelBuilding = true;
