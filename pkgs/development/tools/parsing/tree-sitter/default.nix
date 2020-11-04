@@ -11,9 +11,9 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.17.1";
-  sha256 = "sha256-k61actAEyao/Ea8aw9PCm252U+1I0d43MAYC68/lui4=";
-  cargoSha256 = "sha256-Jp/Fl20ZZfaIdWinOOujNVH5JjJNtyUYHfyTrmeeoRg=";
+  version = "0.17.3";
+  sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
+  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -66,6 +66,11 @@ in rustPlatform.buildRustPackage {
   # JS dependencies for installation.
   preBuild = ''
     bash ./script/build-wasm --debug
+  '';
+
+  postInstall = ''
+    export PREFIX=$out
+    make install
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
