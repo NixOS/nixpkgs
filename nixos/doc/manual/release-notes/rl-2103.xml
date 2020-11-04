@@ -126,6 +126,11 @@
    </listitem>
    <listitem>
     <para>
+    <package>btc1</package> has been abandoned upstream, and removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
     <package>riak-cs</package> package removed along with <varname>services.riak-cs</varname> module.
     </para>
    </listitem>
