@@ -1,9 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, alsaLib, ffmpeg_3, glib, openssl
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, alsaLib, ffmpeg, glib, openssl
 , pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama
 , libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile, wayland
-, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt
-, libusb1, libpulseaudio ? null, cups ? null, pcsclite ? null, systemd ? null
-, buildServer ? true, nocaps ? false }:
+, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt, cairo
+, libusb1, libpulseaudio, cups, pcsclite, systemd, libjpeg_turbo
+, buildServer ? true, nocaps ? false
+}:
 
 let
   cmFlag = flag: if flag then "ON" else "OFF";
@@ -49,8 +50,9 @@ in stdenv.mkDerivation rec {
   buildInputs = with lib;
     [
       alsaLib
+      cairo
       cups
-      ffmpeg_3
+      ffmpeg
       glib
       gst-plugins-base
       gst-plugins-good
@@ -65,6 +67,7 @@ in stdenv.mkDerivation rec {
       libXrender
       libXtst
       libXv
+      libjpeg_turbo
       libpulseaudio
       libunwind
       libusb1
@@ -93,6 +96,9 @@ in stdenv.mkDerivation rec {
       WITH_PULSE = (libpulseaudio != null);
       WITH_SERVER = buildServer;
       WITH_SSE2 = stdenv.isx86_64;
+      WITH_VAAPI = true;
+      WITH_JPEG = (libjpeg_turbo != null);
+      WITH_CAIRO = (cairo != null);
     };
 
   meta = with lib; {

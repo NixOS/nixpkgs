@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
-  # Also update pkgs/development/interpreters/python/hooks/pip-install-hook.sh accordingly
+  # See also https://github.com/pypa/pip/issues/7808
   patches = [ ./reproducible.patch ];
 
   nativeBuildInputs = [ bootstrapped-pip ];

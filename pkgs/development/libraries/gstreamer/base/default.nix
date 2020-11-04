@@ -19,11 +19,9 @@
 , libvisual
 , tremor # provides 'virbisidec'
 , libGL
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_43
 , enableX11 ? stdenv.isLinux
 , libXv
+, libXext
 , enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
@@ -42,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.16.2";
+  version = "1.18.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0sl1hxlyq46r02k7z70v09vx1gi4rcypqmzra9jid93lzvi76gmi";
+    sha256 = "15vqvcy842vhbic3w7l4yvannzazdgwggzv2x8f9m02hm78vsakn";
   };
 
   patches = [
@@ -66,9 +64,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
 
     # docs
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
+    # TODO add hotdoc here
   ] ++ lib.optional enableWayland wayland;
 
   buildInputs = [
@@ -89,6 +85,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableAlsa [
     alsaLib
   ] ++ lib.optionals enableX11 [
+    libXext
     libXv
     pango
   ] ++ lib.optionals enableWayland [
@@ -103,17 +100,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
-    # We must currently disable gtk_doc API docs generation,
-    # because it is not compatible with some features being disabled.
-    # See for example
-    #     https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/issues/564
-    # for it failing because some Wayland symbols are missing.
-    # This problem appeared between 1.15.1 and 1.16.0.
-    # In 1.18 they should switch to hotdoc, which should make this issue irrelevant.
-    "-Dgtk_doc=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
   # TODO How to disable Wayland?
@@ -125,7 +115,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs common/scangobj-merge.py
+    patchShebangs \
+      common/scangobj-merge.py \
+      scripts/extract-release-date-from-doap-file.py
   '';
 
   # This package has some `_("string literal")` string formats

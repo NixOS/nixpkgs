@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, pkgconfig, ninja
+{ lib, stdenv, fetchurl, fetchpatch, meson, pkgconfig, ninja
 , libffi, libxml2, wayland
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 , withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -19,6 +19,14 @@ in stdenv.mkDerivation rec {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
     sha256 = "0k995rn96xkplrapz5k648j651wc43kq817xk1x8280h16gsfxa6";
   };
+
+  patches = [
+    # Fix documentation to be reproducible.
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/wayland/wayland/-/commit/e53e0edf0f892670f3e8c5dd527b3bb22335d32d.patch";
+      sha256 = "15sbhi86m9k72lsj56p7zr20ph2b0y4svl639snsbafn2ir1zdb2";
+    })
+  ];
 
   outputs = [ "out" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;

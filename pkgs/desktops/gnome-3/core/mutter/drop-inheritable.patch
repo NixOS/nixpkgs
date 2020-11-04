@@ -102,18 +102,18 @@ index 7f4f666d2..b27968f13 100644
  #if defined(HAVE_NATIVE_BACKEND) && defined(HAVE_WAYLAND)
  #include <systemd/sd-login.h>
  #endif /* HAVE_WAYLAND && HAVE_NATIVE_BACKEND */
-@@ -673,6 +677,12 @@ meta_run (void)
-   if (!meta_display_open ())
-     meta_exit (META_EXIT_ERROR);
- 
+@@ -670,5 +674,12 @@ int
+ meta_run (void)
+ {
+   meta_start ();
++
 +#ifdef HAVE_LIBCAPNG
 +  capng_clear(CAPNG_SELECT_BOTH);
 +  capng_update(CAPNG_ADD, CAPNG_EFFECTIVE|CAPNG_PERMITTED, CAP_SYS_NICE);
 +  capng_apply(CAPNG_SELECT_BOTH);
 +#endif
 +
-   g_main_loop_run (meta_main_loop);
- 
+   meta_run_main_loop ();
    meta_finalize ();
 diff --git a/src/meson.build b/src/meson.build
 index 90d80734f..a9fffa2c2 100644

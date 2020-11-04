@@ -41,34 +41,33 @@
 , enableGeoLocation ? true
 , geoclue2
 , sqlite
-, enableGtk2Plugins ? false
-, gtk2 ? null
 , enableGLES ? true
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
 , bubblewrap
 , libseccomp
+, systemd
 , xdg-dbus-proxy
 , substituteAll
 , glib
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
-assert enableGtk2Plugins -> gtk2 != null;
-assert stdenv.isDarwin -> !enableGtk2Plugins;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.28.4";
+  version = "2.30.1";
 
   outputs = [ "out" "dev" ];
 
+  separateDebugInfo = stdenv.isLinux;
+
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0r4lkk21pny2g4mmsw0ds14m5hhjys1l47gvy59dfgihr7l546c2";
+    sha256 = "1cfnsl5kvwrbclmp7v9q9ynrz702i9ncb6xmx6972dxpmpyrvi8p";
   };
 
   patches = optionals stdenv.isLinux [
@@ -140,10 +139,10 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     bubblewrap
     libseccomp
+    systemd
     wayland
     xdg-dbus-proxy
-  ] ++ optional enableGeoLocation geoclue2
-    ++ optional enableGtk2Plugins gtk2;
+  ] ++ optional enableGeoLocation geoclue2;
 
   propagatedBuildInputs = [
     gtk3
@@ -167,8 +166,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_ACCELERATE=0"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
-    ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+  ] ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .
@@ -178,7 +176,7 @@ stdenv.mkDerivation rec {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
   };
 }

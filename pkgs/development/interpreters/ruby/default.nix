@@ -108,6 +108,9 @@ let
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
+          # Make the build reproducible for ruby <= 2.7
+          # See https://github.com/ruby/io-console/commit/679a941d05d869f5e575730f6581c027203b7b26#diff-d8422f096931c58d4463e2489f62a228b0f24f0492950ba88c8c89a0d741cfe6
+          sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
         # Force the revision.h generation. Somehow `revision.tmp` is an empty

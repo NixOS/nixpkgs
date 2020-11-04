@@ -13,48 +13,70 @@
 +++ b/daemon/gdm-manager.c
 @@ -145,7 +145,7 @@
          GError  *error;
- 
+
          error = NULL;
--        res = g_spawn_command_line_sync ("/bin/plymouth --ping",
+-        res = g_spawn_command_line_sync ("plymouth --ping",
 +        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth --ping",
                                           NULL, NULL, &status, &error);
          if (! res) {
                  g_debug ("Could not ping plymouth: %s", error->message);
 @@ -163,7 +163,7 @@
          GError  *error;
- 
+
          error = NULL;
--        res = g_spawn_command_line_sync ("/bin/plymouth deactivate",
+-        res = g_spawn_command_line_sync ("plymouth deactivate",
 +        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth deactivate",
                                           NULL, NULL, NULL, &error);
          if (! res) {
                  g_warning ("Could not deactivate plymouth: %s", error->message);
 @@ -178,7 +178,7 @@
          GError  *error;
- 
+
          error = NULL;
--        res = g_spawn_command_line_async ("/bin/plymouth quit --retain-splash", &error);
+-        res = g_spawn_command_line_async ("plymouth quit --retain-splash", &error);
 +        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit --retain-splash", &error);
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
 @@ -194,7 +194,7 @@
          GError  *error;
- 
+
          error = NULL;
--        res = g_spawn_command_line_async ("/bin/plymouth quit", &error);
+-        res = g_spawn_command_line_async ("plymouth quit", &error);
 +        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit", &error);
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
 --- a/data/gdm.service.in
 +++ b/data/gdm.service.in
-@@ -28,7 +28,7 @@ BusName=org.gnome.DisplayManager
- StandardOutput=syslog
- StandardError=inherit
- EnvironmentFile=-@LANG_CONFIG_FILE@
+@@ -26,7 +26,7 @@ Restart=always
+ IgnoreSIGPIPE=no
+ BusName=org.gnome.DisplayManager
+ EnvironmentFile=-${LANG_CONFIG_FILE}
 -ExecReload=/bin/kill -SIGHUP $MAINPID
 +ExecReload=@coreutils@/bin/kill -SIGHUP $MAINPID
  KeyringMode=shared
- 
+
  [Install]
+--- a/daemon/gdm-session.c
++++ b/daemon/gdm-session.c
+@@ -2916,16 +2916,16 @@ gdm_session_start_session (GdmSession *self,
+                  */
+                 if (run_launcher) {
+                         if (is_x11) {
+-                                program = g_strdup_printf (LIBEXECDIR "/gdm-x-session %s\"dbus-run-session -- %s\"",
++                                program = g_strdup_printf (LIBEXECDIR "/gdm-x-session %s\"@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s\"",
+                                                            register_session ? "--register-session " : "",
+                                                            self->selected_program);
+                         } else {
+-                                program = g_strdup_printf (LIBEXECDIR "/gdm-wayland-session %s\"dbus-run-session -- %s\"",
++                                program = g_strdup_printf (LIBEXECDIR "/gdm-wayland-session %s\"@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s\"",
+                                                            register_session ? "--register-session " : "",
+                                                            self->selected_program);
+                         }
+                 } else {
+-                        program = g_strdup_printf ("dbus-run-session -- %s",
++                        program = g_strdup_printf ("@dbus@/bin/dbus-run-session --dbus-daemon=@dbus@/bin/dbus-daemon -- %s",
+                                                    self->selected_program);
+                 }
+         }

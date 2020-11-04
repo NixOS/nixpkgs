@@ -1,4 +1,6 @@
 { fetchurl
+, fetchFromGitLab
+, fetchpatch
 , stdenv
 , substituteAll
 , accountsservice
@@ -68,12 +70,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "3.36.4";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0m7pxjgymc7aqqz0vcmlq91nxnwzd1v7v1gdhrfam49krxmk80mc";
+    sha256 = "09i011hf23s2i4wim43vjys7y4y43cxl3kyvrnrwqvqgc5n0144d";
   };
+  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
+  prePatch = (import ../gvc-with-ucm-prePatch.nix {
+    inherit fetchFromGitLab;
+  });
 
   nativeBuildInputs = [
     docbook_xsl
@@ -143,16 +149,23 @@ stdenv.mkDerivation rec {
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
     })
+
+    # Fix double free when leaving user accounts panel.
+    # https://gitlab.gnome.org/GNOME/gnome-control-center/merge_requests/853
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/commit/e80b4b5f58f448c5a3d38721f7bba32c413d46e7.patch";
+      sha256 = "GffsSU/uNS0Fg2lXbOuD/BrWBT4D2VKgWNGifG0FBUw=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/commit/64686cfee330849945f6ff4dcc43393eb1a6e59c.patch";
+      sha256 = "4VJU0q6qOtGzd/hmDncckInfEjCkC8+lXmDgxwc4VJU=";
+    })
   ];
 
   postPatch = ''
     chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
     patchShebangs build-aux/meson/meson_post_install.py
   '';
-
-  mesonFlags = [
-    "-Dgnome_session_libexecdir=${gnome-session}/libexec"
-  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
