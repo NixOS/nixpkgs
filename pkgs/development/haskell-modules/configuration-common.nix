@@ -1484,6 +1484,8 @@ self: super: {
   # Too tight version bounds, see https://github.com/haskell-hvr/microaeson/pull/4
   microaeson = doJailbreak super.microaeson;
 
+  autoapply = super.autoapply.override { th-desugar = self.th-desugar_1_11; };
+
   # haskell-language-server needs a more current version of pantry to compile
 } // (let
   inherit (self) hls-ghcide hls-brittany;
