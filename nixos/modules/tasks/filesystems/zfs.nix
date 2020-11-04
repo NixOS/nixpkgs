@@ -173,23 +173,6 @@ in
         '';
       };
 
-      forceImportAll = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Forcibly import all ZFS pool(s).
-
-          This is enabled by default for backwards compatibility purposes, but it is highly
-          recommended to disable this option, as it bypasses some of the safeguards ZFS uses
-          to protect your ZFS pools.
-
-          If you set this option to <literal>false</literal> and NixOS subsequently fails to
-          import your non-root ZFS pool(s), you should manually import each pool with
-          "zpool import -f &lt;pool-name&gt;", and then reboot. You should only need to do
-          this once.
-        '';
-      };
-
       requestEncryptionCredentials = mkOption {
         type = types.either types.bool (types.listOf types.str);
         default = true;
@@ -363,10 +346,6 @@ in
         {
           assertion = config.networking.hostId != null;
           message = "ZFS requires networking.hostId to be set";
-        }
-        {
-          assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
-          message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
       ];
 
