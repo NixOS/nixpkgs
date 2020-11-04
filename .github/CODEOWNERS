@@ -207,10 +207,10 @@
 /nixos/tests/podman.nix                      @NixOS/podman @zowoq
 
 # Docker tools
-/pkgs/build-support/docker
-/nixos/tests/docker-tools-overlay.nix
-/nixos/tests/docker-tools.nix
-/doc/builders/images/dockertools.xml
+/pkgs/build-support/docker                   @roberth
+/nixos/tests/docker-tools-overlay.nix        @roberth
+/nixos/tests/docker-tools.nix                @roberth
+/doc/builders/images/dockertools.xml         @roberth
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut
