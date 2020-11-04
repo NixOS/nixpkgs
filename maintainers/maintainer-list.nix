@@ -2827,6 +2827,12 @@
       fingerprint = "50B7 11F4 3DFD 2018 DCE6  E8D0 8A52 A140 BEBF 7D2C";
     }];
   };
+  fabianhjr = {
+    email = "fabianhjr@protonmail.com";
+    github = "fabianhjr";
+    githubId = 303897;
+    name = "Fabián Heredia Montiel";
+  };
   fadenb = {
     email = "tristan.helmich+nixos@gmail.com";
     github = "fadenb";
