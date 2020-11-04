@@ -3205,7 +3205,6 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - authoring
-  - autoapply
   - AutoForms
   - autom
   - automata
