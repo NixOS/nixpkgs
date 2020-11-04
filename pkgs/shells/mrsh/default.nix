@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "mrsh";
-  version = "2020-07-27";
+  version = "2020-11-04";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "mrsh";
-    rev = "0da902c0ee6f443fe703498e60f266af7f12537e";
-    sha256 = "1yr09ln5p1s48aj8xv2d6dy0pahqvd86fkiwyc6zrjfq80igxf05";
+    rev = "1738e41b2a35e5f99b9a1300a5f687478458226a";
+    sha256 = "08gak5261d4sd6b2w2kscmdwa4gwcp5drgfyb3swyrj9cl0nlcbn";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
