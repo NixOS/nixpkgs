@@ -103,6 +103,7 @@ enricobacis/vim-airline-clock
 ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
+euclio/vim-markdown-composer
 fannheyward/coc-markdownlint
 farmergreg/vim-lastplace
 fatih/vim-go
