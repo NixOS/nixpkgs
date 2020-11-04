@@ -5690,6 +5690,8 @@ in
 
   mmake = callPackage ../tools/misc/mmake { };
 
+  mmixware = callPackage ../development/tools/mmixware { };
+
   modemmanager = callPackage ../tools/networking/modem-manager {};
 
   modem-manager-gui = callPackage ../applications/networking/modem-manager-gui {};
