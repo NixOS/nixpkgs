@@ -45,7 +45,7 @@ let
           }
           oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
           latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)"
-          if [ ! "$oldVersion" = "$latestTag" ]; then
+          if [ "$oldVersion" != "$latestTag" ]; then
             nixpkgs="$(git rev-parse --show-toplevel)"
             default_nix="$nixpkgs/pkgs/development/tools/ammonite/default.nix"
             update-source-version ${pname}_2_12 "$latestTag" --version-key=version --print-changes
