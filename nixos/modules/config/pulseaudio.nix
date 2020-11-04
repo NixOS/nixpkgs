@@ -79,6 +79,41 @@ let
     ${alsaCfg.extraConfig}
   '');
 
+  # Create a directory full of configuration files for PulseAudio to use for
+  # various modules. Packages are scanned similiar how udev does it.
+  moduleEnvVars = {
+    PA_ALSA_PATHS_DIR = "${moduleConf}/alsa-paths";
+    PA_ALSA_PROFILE_SETS_DIR = "${moduleConf}/alsa-profiles";
+  };
+  moduleConf = stdenv.mkDerivation {
+    name = "pulseaudio-moduleconf";
+
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+
+    buildCommand = ''
+      mkdir -p $out/{alsa-profiles,alsa-paths}
+      shopt -s nullglob
+      set +o pipefail
+
+      function copy_dir() {
+        for j in $1/$2/*; do
+          echo "Copying $i to $out/$3/$(basename $j)"
+          cat $j > $out/$3/$(basename $j)
+        done
+      }
+
+      for i in ${toString (reverseList cfg.packages)}; do
+        echo "Adding configuration for package $i"
+        copy_dir $i/share/pulseaudio/alsa-mixer profile-sets alsa-profiles
+        copy_dir $i/share/pulseaudio/alsa-mixer paths alsa-paths
+      done
+
+      echo "Appending extra default profile set configuration"
+      cat ${writeText "extraProfileConf" cfg.extraProfileConf} >> $out/alsa-profiles/default.conf
+    '';
+  };
+
 in {
 
   options = {
@@ -139,6 +174,26 @@ in {
         default = "";
         description = ''
           Extra configuration appended to pulse/client.conf file.
+        '';
+      };
+
+      extraProfileConf = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra configuration appended to the default ALSA profile set <filename>alsa-mixer/profile-sets/default.conf</filename>.
+        '';
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          List of packages containing additional PulseAudio configuration.
+          All files found in the following directories:
+          <filename><replaceable>pkg</replaceable>/share/pulseaudio/alsa-mixer/profile-sets</filename>
+          <filename><replaceable>pkg</replaceable>/share/pulseaudio/alsa-mixer/paths</filename>
+          will be included.
         '';
       };
 
@@ -225,6 +280,8 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
+      hardware.pulseaudio.packages = [ overriddenPackage ];
+
       sound.enable = true;
 
       environment.etc = {
@@ -280,6 +337,7 @@ in {
       systemd.user = {
         services.pulseaudio = {
           restartIfChanged = true;
+          environment = moduleEnvVars;
           serviceConfig = {
             RestartSec = "500ms";
             PassEnvironment = "DISPLAY";
@@ -308,7 +366,9 @@ in {
         description = "PulseAudio System-Wide Server";
         wantedBy = [ "sound.target" ];
         before = [ "sound.target" ];
-        environment.PULSE_RUNTIME_PATH = stateDir;
+        environment = moduleEnvVars // {
+          PULSE_RUNTIME_PATH = stateDir;
+        };
         serviceConfig = {
           Type = "notify";
           ExecStart = "${binaryNoDaemon} --log-level=${cfg.daemon.logLevel} --system -n --file=${myConfigFile}";
