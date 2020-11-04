@@ -23877,7 +23877,7 @@ in
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
-  teamspeak_client = libsForQt512.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskell = haskell.lib.justStaticExecutables haskellPackages.taskell;
