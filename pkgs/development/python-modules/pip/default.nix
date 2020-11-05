@@ -10,6 +10,8 @@
 , pytest
 , setuptools
 , wheel
+, isPy27
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -26,6 +28,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ bootstrapped-pip ];
+
+  patches = lib.optionals isPy27 [
+    (fetchpatch {
+      url = "https://github.com/pypa/pip/commit/94fbb6cf78c267bf7cdf83eeeb2536ad56cfe639.patch";
+      sha256 = "Z6x5yxBp8QkU/GOfb1ltI0dVt//MaI09XK3cdY42kFs=";
+    })
+  ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.
