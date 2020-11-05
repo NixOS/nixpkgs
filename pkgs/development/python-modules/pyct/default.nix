@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , param
 , pyyaml
 , requests
@@ -16,6 +17,7 @@ buildPythonPackage rec {
     sha256 = "23d7525b5a1567535c093aea4b9c33809415aa5f018dd77f6eb738b1226df6f7";
   };
 
+  doCheck = !isPy27;
   checkInputs = [ pytest ];
   propagatedBuildInputs = [
     param
