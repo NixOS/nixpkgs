@@ -25691,7 +25691,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  samplv1 = callPackage ../applications/audio/samplv1 { qt5 = qt514; };
+  samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
