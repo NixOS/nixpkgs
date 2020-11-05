@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, six
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,9 @@ buildPythonPackage rec {
   # FAIL: test_sanitize_remove_src_javascript (genshi.filters.tests.html.HTMLSanitizerTestCase)
   doCheck = false;
 
-  buildInputs = [ setuptools ];
+  propagatedBuildInputs = [
+    setuptools six
+  ];
 
   meta = with stdenv.lib; {
     description = "Python components for parsing HTML, XML and other textual content";
