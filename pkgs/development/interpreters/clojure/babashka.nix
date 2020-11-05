@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, graalvm8, glibcLocales }:
+{ stdenv, fetchurl, graalvm8-ce, glibcLocales }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   LC_ALL = "en_US.UTF-8";
-  nativeBuildInputs = [ graalvm8 glibcLocales ];
+  nativeBuildInputs = [ graalvm8-ce glibcLocales ];
 
   buildPhase = ''
     native-image \
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/borkdude/babashka";
     license = licenses.epl10;
-    platforms = graalvm8.meta.platforms;
+    platforms = graalvm8-ce.meta.platforms;
     maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
   };
 }

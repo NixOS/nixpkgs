@@ -167,6 +167,7 @@ let
     hcloud = callPackage ./hcloud {};
     keycloak = callPackage ./keycloak {};
     libvirt = callPackage ./libvirt {};
+    linuxbox = callPackage ./linuxbox {};
     lxd = callPackage ./lxd {};
     shell = callPackage ./shell {};
     vpsadmin = callPackage ./vpsadmin {};
