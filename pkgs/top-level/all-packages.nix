@@ -25686,7 +25686,7 @@ in
 
   rrootage = callPackage ../games/rrootage { };
 
-  saga = libsForQt514.callPackage ../applications/gis/saga {
+  saga = libsForQt5.callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
