@@ -23181,7 +23181,7 @@ in
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
-  psi = libsForQt514.callPackage ../applications/networking/instant-messengers/psi { };
+  psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
   psi-plus = libsForQt514.callPackage ../applications/networking/instant-messengers/psi-plus { };
 
