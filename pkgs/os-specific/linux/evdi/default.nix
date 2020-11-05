@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "unstable-20200416";
+  version = "unstable-20200731";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "dc595db636845aef39490496bc075f6bf067106c";
-    sha256 = "1yrny6jj9403z0rxbd3nxf49xc4w0rfpl7xsq03pq32pb3vlbqw7";
+    rev = "1e6bf705cb21efb3272cc488d5b7caee69413f28";
+    sha256 = "0r902j54pbcl1cb1gbwqrdkr4klgak98rd5nvxx0nrcymy91pn32";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
