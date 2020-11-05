@@ -9384,9 +9384,18 @@ in
   /* default JDK */
 
   jdk = jdk14;
-  # jdk14 lacks a jre output. See https://github.com/NixOS/nixpkgs/issues/79490
+
+  # Since the introduction of the Java Platform Module System in Java 9, Java
+  # no longer ships a separate JRE package.
+  #
+  # If you are building a 'minimal' system/image, you are encouraged to use
+  # 'jre_minimal' to build a bespoke JRE containing only the modules you need.
+  #
+  # For a general-purpose system, 'jre' defaults to the full JDK:
   jre = jdk14;
   jre_headless = jdk14_headless;
+
+  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
 
   openjdk = openjdk14;
   openjdk_headless = openjdk14_headless;
