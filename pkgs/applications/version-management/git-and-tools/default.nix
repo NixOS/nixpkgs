@@ -74,6 +74,8 @@ let
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 
+  git-chglog = callPackage ./git-chglog { };
+
   git-cinnabar = callPackage ./git-cinnabar { };
 
   git-codeowners = callPackage ./git-codeowners { };
