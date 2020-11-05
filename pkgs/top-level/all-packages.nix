@@ -27148,7 +27148,7 @@ in
 
   cached-nix-shell = callPackage ../tools/nix/cached-nix-shell {};
 
-  calaos_installer = libsForQt514.callPackage ../misc/calaos/installer {};
+  calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
   ccemux = callPackage ../misc/emulators/ccemux { };
 
