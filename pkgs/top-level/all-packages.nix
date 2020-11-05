@@ -3520,7 +3520,7 @@ in
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
-  strawberry = libsForQt514.callPackage ../applications/audio/strawberry { };
+  strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
   tealdeer = callPackage ../tools/misc/tealdeer {
     inherit (darwin.apple_sdk.frameworks) Security;
