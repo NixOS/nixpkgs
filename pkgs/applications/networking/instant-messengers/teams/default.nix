@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mv share $out/share
 
     substituteInPlace $out/share/applications/teams.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
 
     ln -s $out/opt/teams/teams $out/bin/
 
