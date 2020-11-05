@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, buildPythonPackage
-, nose, flask, six }:
+, nose, flask, six, packaging }:
 
 buildPythonPackage rec {
   pname = "Flask-Cors";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [ nose packaging ];
   propagatedBuildInputs = [ flask six ];
 
   # Exclude test_acl_uncaught_exception_500 test case because is not compatible
