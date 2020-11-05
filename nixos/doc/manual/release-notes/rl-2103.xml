@@ -101,6 +101,13 @@
    </listitem>
    <listitem>
     <para>
+      Paperwork was updated to version 2. The on-disk format slightly changed,
+      and it is not possible to downgrade from Paperwork 2 back to Paperwork
+      1.3. Back your documents up before upgrading. See <link xlink:href="https://forum.openpaper.work/t/paperwork-2-0/112/5">this thread</link> for more details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       PowerDNS has been updated from <literal>4.2.x</literal> to <literal>4.3.x</literal>. Please
       be sure to review the <link xlink:href="https://doc.powerdns.com/authoritative/upgrading.html#x-to-4-3-0">Upgrade Notes</link>
       provided by upstream before upgrading. Worth specifically noting is that the service now runs
