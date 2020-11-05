@@ -1,11 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytestpep8, pytest, pyflakes }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+, pytestpep8
+, pytest
+, pyflakes
+}:
 
 buildPythonPackage rec {
   # upstream has abandoned project in favor of pytest-flake8
   # retaining package to not break other packages
   pname = "pytest-flakes";
   version = "4.0.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
