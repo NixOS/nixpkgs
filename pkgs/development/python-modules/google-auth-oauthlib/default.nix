@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , isPy3k
 , click
 , mock
@@ -13,6 +14,7 @@
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
   version = "0.4.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
