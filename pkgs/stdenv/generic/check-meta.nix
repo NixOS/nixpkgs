@@ -88,13 +88,28 @@ let
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
   };
+  remediation_env_var = allow_attr: {
+    Unfree = "NIXPKGS_ALLOW_UNFREE";
+    Broken = "NIXPKGS_ALLOW_BROKEN";
+    UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
+  }.${allow_attr};
+  remediation_phrase = allow_attr: {
+    Unfree = "unfree packages";
+    Broken = "broken packages";
+    UnsupportedSystem = "packages that are unsupported for this system";
+  }.${allow_attr};
   remediate_whitelist = allow_attr: attrs:
     ''
-      a) For `nixos-rebuild` you can set
+      a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
+         for a single invocation of the nix tools.
+
+           $ export ${remediation_env_var allow_attr}=1
+
+      b) For `nixos-rebuild` you can set
         { nixpkgs.config.allow${allow_attr} = true; }
       in configuration.nix to override this.
 
-      b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
         { allow${allow_attr} = true; }
       to ~/.config/nixpkgs/config.nix.
     '';
