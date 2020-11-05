@@ -25602,7 +25602,7 @@ in
 
   papermc = callPackage ../games/papermc { };
 
-  pentobi = libsForQt514.callPackage ../games/pentobi { };
+  pentobi = libsForQt5.callPackage ../games/pentobi { };
 
   performous = callPackage ../games/performous {
     boost = boost166;
