@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "cupy";
   version = "8.1.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
