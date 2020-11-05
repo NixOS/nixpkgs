@@ -610,6 +610,7 @@ whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+wlangstroth/vim-racket
 wsdjeg/vim-fetch
 xavierd/clang_complete
 xolox/vim-easytags
