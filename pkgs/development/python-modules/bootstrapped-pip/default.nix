@@ -23,11 +23,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Apply the pip reproducible patch
-    pushd "${pip.src.name}"
-      patch -p1 < ${../pip/reproducible.patch}
-    popd
-
     mkdir -p $out/bin
   '';
 
