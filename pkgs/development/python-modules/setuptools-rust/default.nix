@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , semantic-version
 , setuptools
 , setuptools_scm
