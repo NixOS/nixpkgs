@@ -1315,6 +1315,8 @@ in
 
   anbox = callPackage ../os-specific/linux/anbox { };
 
+  android-image-utils = callPackage ../development/mobile/android-image-utils { };
+
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
   };
