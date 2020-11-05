@@ -6935,7 +6935,7 @@ in
 
   rshijack = callPackage ../tools/networking/rshijack { };
 
-  rsibreak = libsForQt514.callPackage ../applications/misc/rsibreak { };
+  rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
     pythonPackages = python3Packages;
