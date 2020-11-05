@@ -19728,6 +19728,8 @@ in
 
   ttf-envy-code-r = callPackage ../data/fonts/ttf-envy-code-r {};
 
+  ttf-tw-moe = callPackage ../data/fonts/ttf-tw-moe { };
+
   twemoji-color-font = callPackage ../data/fonts/twemoji-color-font {
     inherit (nodePackages) svgo;
   };
