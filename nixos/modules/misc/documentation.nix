@@ -64,7 +64,7 @@ let
     desktopName = "NixOS Manual";
     genericName = "View NixOS documentation in a web browser";
     icon = "nix-snowflake";
-    exec = "${helpScript}/bin/nixos-help";
+    exec = "nixos-help";
     categories = "System";
   };
 
