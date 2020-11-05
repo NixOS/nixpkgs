@@ -7045,6 +7045,8 @@ in
 
   skim = callPackage ../tools/misc/skim { };
 
+  seaweedfs = callPackage ../applications/networking/seaweedfs { };
+
   sec = callPackage ../tools/admin/sec { };
 
   seccure = callPackage ../tools/security/seccure { };
