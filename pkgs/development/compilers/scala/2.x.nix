@@ -1,6 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre, gnugrep, coreutils, nixosTests }:
+{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, nixosTests
+, writeScript, common-updater-scripts, git, gnused, nix, nixfmt }:
+
+with lib;
+
 let
-  common = { version, sha256, test }:
+  repo = "git@github.com:scala/scala.git";
+
+  common = { version, sha256, test, pname }:
     stdenv.mkDerivation rec {
       inherit version;
 
@@ -35,6 +41,32 @@ let
 
       passthru = {
         tests = [ test ];
+
+        updateScript = writeScript "update.sh" ''
+          #!${stdenv.shell}
+          set -o errexit
+          PATH=${
+            stdenv.lib.makeBinPath [
+              common-updater-scripts
+              coreutils
+              git
+              gnused
+              nix
+              nixfmt
+            ]
+          }
+          versionSelect='v${versions.major version}.${versions.minor version}.*'
+          oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+          latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} "$versionSelect" | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
+          if [ "$oldVersion" != "$latestTag" ]; then
+            nixpkgs="$(git rev-parse --show-toplevel)"
+            default_nix="$nixpkgs/pkgs/development/compilers/scala/2.x.nix"
+            update-source-version ${pname} "$latestTag" --version-key=version --print-changes
+            nixfmt "$default_nix"
+          else
+            echo "${pname} is already up-to-date"
+          fi
+        '';
       };
 
       meta = {
@@ -48,33 +80,38 @@ let
           compared to an equivalent Java application.
         '';
         homepage = "https://www.scala-lang.org/";
-        license = stdenv.lib.licenses.bsd3;
-        platforms = stdenv.lib.platforms.all;
-        branch = stdenv.lib.majorMinor version;
+        license = licenses.bsd3;
+        platforms = platforms.all;
+        branch = versions.majorMinor version;
+        maintainers = [ maintainers.nequissimus ];
       };
     };
 in {
   scala_2_10 = common {
     version = "2.10.7";
-    sha256 = "04gi55lzgrhsb78qw8jmnccqim92rw6898knw0a7gfzn2sci30wj";
+    sha256 = "koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
     test = { inherit (nixosTests) scala_2_10; };
+    pname = "scala_2_10";
   };
 
   scala_2_11 = common {
     version = "2.11.12";
-    sha256 = "1a4nc4qp9dm4rps47j92hlmxxqskv67qbdmjqc5zd94wd4rps7di";
+    sha256 = "sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
     test = { inherit (nixosTests) scala_2_11; };
+    pname = "scala_2_11";
   };
 
   scala_2_12 = common {
     version = "2.12.12";
-    sha256 = "0avyaa7y8w7494339krcpqhc2p8y5pjk4pz7mqmzdzwy7hgws81m";
+    sha256 = "NSDNHzye//YrrudfMuUtHl3BIL4szzQGSeRw5I9Sfis=";
     test = { inherit (nixosTests) scala_2_12; };
+    pname = "scala_2_12";
   };
 
   scala_2_13 = common {
     version = "2.13.3";
-    sha256 = "0zv9w9f6g2cfydsvp8mqcfgv2v3487xp4ca1qndg6v7jrhdp7wy9";
+    sha256 = "yfNzG8zybPOaxUExcvtBZGyxn2O4ort1846JZ1ziaX8=";
     test = { inherit (nixosTests) scala_2_13; };
+    pname = "scala_2_13";
   };
 }
