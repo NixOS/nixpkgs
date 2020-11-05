@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.0-2020-02-04";
+  version = "5.0.0-2020-11-04";
   pname = "openapi-generator-cli";
 
   jarfilename = "${pname}-${version}.jar";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/5.0.0-SNAPSHOT/openapi-generator-cli-5.0.0-20200204.091421-37.jar";
-    sha256 = "0swv976fcr2z8g53avr0r706c31xacb2dlnl8b4c8mzmi49byy7k";
+    url = "https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/5.0.0-SNAPSHOT/openapi-generator-cli-5.0.0-20201104.185152-853.jar";
+    sha256 = "1g3wkzj6bavdagbmrg9j6nryawxphplvi5mw0zpdqy3jjb1d8z6q";
   };
 
   phases = [ "installPhase" ];
