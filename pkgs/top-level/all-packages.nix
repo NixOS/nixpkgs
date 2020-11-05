@@ -5028,7 +5028,7 @@ in
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
-  kronometer = libsForQt514.callPackage ../tools/misc/kronometer { };
+  kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
   krop = callPackage ../applications/graphics/krop { };
 
