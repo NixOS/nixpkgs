@@ -4,6 +4,7 @@
 , setuptools_scm
 , docutils
 , pyparsing
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,15 +16,13 @@ buildPythonPackage rec {
     sha256 = "cb12dcb49d16b168c02be128a1527ecde50211e4bd94af76ff4e67707f5a2d38";
   };
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [
     docutils
     pyparsing
   ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    python tests/test_amply.py
-  '';
   pythonImportsCheck = [ "amply" ];
 
   meta = with stdenv.lib; {
