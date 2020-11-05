@@ -151,6 +151,9 @@ in {
   gifsicle = super.gifsicle.override {
     static = true;
   };
+  jsoncpp = super.jsoncpp.override {
+    static = true;
+  };
   bzip2 = super.bzip2.override {
     linkStatic = true;
   };
