@@ -19,9 +19,6 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
-  # passthru to prevent rebuild but allow pname and version
-  passthru = { inherit pname version; };
-
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
     sha256 = "b6c8a93ddda5eabe3bfee1eb39636c9a03d2a56c7b62828b359bf197943c582e";
@@ -78,6 +75,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    # passthru to prevent rebuild but allow pname and version
+    inherit pname version;
     gtkExeEnvPostBuild = ''
       rm $out/lib/gtk-2.0/2.10.0/immodules.cache
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
