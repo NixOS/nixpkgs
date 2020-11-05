@@ -5,9 +5,9 @@
 , nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
 
 stdenv.mkDerivation rec {
-  version = "2020-10-29";
+  version = "2020-11-04";
   pname = "oh-my-zsh";
-  rev = "852a44094a3bb4df39f8f778bc7ada2ddda09727";
+  rev = "3e6ee85a161c8089955c19364728e167025a911d";
 
   src = fetchgit { inherit rev;
     url = "https://github.com/ohmyzsh/ohmyzsh";
