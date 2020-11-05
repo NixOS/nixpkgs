@@ -75,6 +75,8 @@ let
   linux = stdenv.mkDerivation rec {
     inherit pname version src meta;
 
+    passthru.updateScript = ./update.sh;
+
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib
       at-spi2-atk
@@ -158,6 +160,8 @@ let
 
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
+
+    passthru.updateScript = ./update.sh;
 
     nativeBuildInputs = [ undmg ];
 
