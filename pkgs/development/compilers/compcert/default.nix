@@ -3,9 +3,6 @@
 , tools ? stdenv.cc
 }:
 
-assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
-assert lib.versionAtLeast coq.coq-version "8.8.0";
-
 let
   ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir ];
   ccomp-platform = if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux";
