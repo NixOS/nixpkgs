@@ -30,7 +30,13 @@ stdenv.mkDerivation rec {
     sha256 = "1zp5gpx61v1cpqf2zwb1cidhp9xylvw49d3zydkxqk6b1qa20xpp";
   };
 
-  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
+  patches = [
+    # 'generate.consistent.ids=1' ensures reproducible docs, for further details see
+    # http://docbook.sourceforge.net/release/xsl/current/doc/html/generate.consistent.ids.html
+    # Also applied upstream in https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/189,
+    # expected in version 1.14
+    ./docs-reproducible-ids.patch
+  ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
 
   postPatch = ''
     substituteInPlace tools/Makefile.in \
