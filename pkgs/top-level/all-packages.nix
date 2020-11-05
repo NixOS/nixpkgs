@@ -5032,7 +5032,7 @@ in
 
   krop = callPackage ../applications/graphics/krop { };
 
-  kdiff3 = libsForQt514.callPackage ../tools/text/kdiff3 { };
+  kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
