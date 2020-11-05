@@ -24214,7 +24214,7 @@ in
     system-libvirt = libvirt;
   };
 
-  virt-manager-qt = libsForQt514.callPackage ../applications/virtualization/virt-manager/qt.nix {
+  virt-manager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
     qtermwidget = lxqt.qtermwidget;
   };
 
