@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     cd go
     patchShebangs ./ # replace /bin/bash
 
+    # Disable timezone tests (these fail when `tzdata` is updated)
+    rm src/time/{example,format}_test.go
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
     rm src/net/{multicast_test.go,parse_test.go,port_test.go}
@@ -56,8 +58,6 @@ stdenv.mkDerivation rec {
     sed -i '/TestDialTimeout/areturn' src/net/dial_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/os/os_test.go
-    # ParseInLocation fails the test
-    sed -i '/TestParseInSydney/areturn' src/time/format_test.go
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
@@ -119,13 +119,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-tools-1.4.patch
     ./creds-test-1.4.patch
-
-    # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
-    # actually works on old versions too.
-    (fetchpatch {
-      url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
-      sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
-    })
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
