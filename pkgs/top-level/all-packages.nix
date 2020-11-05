@@ -15446,6 +15446,8 @@ in
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+    qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
+
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
       inherit (darwin.apple_sdk.libs) utmp;
     };
@@ -26869,8 +26871,6 @@ in
   openems = callPackage ../applications/science/electronics/openems { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
-
-  qcsxcad = libsForQt514.callPackage ../applications/science/electronics/qcsxcad { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
