@@ -27946,7 +27946,7 @@ in
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
-  tellico = libsForQt514.callPackage ../applications/misc/tellico { };
+  tellico = libsForQt5.callPackage ../applications/misc/tellico { };
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
 
