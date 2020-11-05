@@ -5024,7 +5024,7 @@ in
 
   kpcli = callPackage ../tools/security/kpcli { };
 
-  krename = libsForQt514.callPackage ../applications/misc/krename { };
+  krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
