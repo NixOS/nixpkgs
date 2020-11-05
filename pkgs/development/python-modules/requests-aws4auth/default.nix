@@ -11,10 +11,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
+  # pypi package no longer contains tests
+  doCheck = false;
   checkPhase = ''
     cd requests_aws4auth
     ${python.interpreter} test/requests_aws4auth_test.py
   '';
+
+  pythonImportsCheck = [ "requests_aws4auth" ];
 
   meta = {
     description = "Amazon Web Services version 4 authentication for the Python Requests library.";
