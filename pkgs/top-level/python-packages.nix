@@ -1900,6 +1900,8 @@ in {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  emv = callPackage ../development/python-modules/emv { };
+
   emoji = callPackage ../development/python-modules/emoji { };
 
   enaml = callPackage ../development/python-modules/enaml { };
