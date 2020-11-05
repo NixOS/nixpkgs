@@ -255,6 +255,7 @@ in
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
   nzbget = handleTest ./nzbget.nix {};
+  oh-my-zsh = handleTest ./oh-my-zsh.nix {};
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
