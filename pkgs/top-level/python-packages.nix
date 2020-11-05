@@ -1379,6 +1379,8 @@ in {
   else
     callPackage ../development/python-modules/cryptography/vectors.nix { };
 
+  crytic-compile = callPackage ../development/python-modules/crytic-compile { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
   cssmin = callPackage ../development/python-modules/cssmin { };
