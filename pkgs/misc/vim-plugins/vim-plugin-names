@@ -169,6 +169,7 @@ itchyny/thumbnail.vim
 itchyny/vim-cursorword
 itchyny/vim-gitbranch
 ivanov/vim-ipython
+jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
 jaredgorski/SpaceCamp
 jaxbot/semantic-highlight.vim
