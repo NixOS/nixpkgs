@@ -243,6 +243,12 @@
      <literal>unbound-control</literal> without passing a custom configuration location.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     NixOS now generates empty <literal>/etc/netgroup</literal>.
+     <literal>/etc/netgroup</literal> defines network-wide groups and may affect to setups using NIS.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
