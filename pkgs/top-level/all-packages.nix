@@ -11723,6 +11723,8 @@ in
   rr = callPackage ../development/tools/analysis/rr { };
   rr-unstable = callPackage ../development/tools/analysis/rr/unstable.nix { }; # This is a temporary attribute, please see the corresponding file for details.
 
+  rufo = callPackage ../development/tools/rufo { };
+
   samurai = callPackage ../development/tools/build-managers/samurai { };
 
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
