@@ -26829,7 +26829,7 @@ in
     openssl = openssl_1_0_2;
   };
 
-  eagle = libsForQt514.callPackage ../applications/science/electronics/eagle/eagle.nix { };
+  eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
