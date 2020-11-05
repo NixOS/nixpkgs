@@ -1854,6 +1854,8 @@ in
 
   dapr-cli = callPackage ../development/tools/dapr/cli {};
 
+  dasel = callPackage ../applications/misc/dasel { };
+
   dasher = callPackage ../applications/accessibility/dasher { };
 
   datamash = callPackage ../tools/misc/datamash { };
@@ -10687,10 +10689,11 @@ in
   };
   antlr3 = antlr3_5;
 
-  antlr4_7 = callPackage ../development/tools/parsing/antlr/4.7.nix {
+  antlr4_8 = callPackage ../development/tools/parsing/antlr/4.8.nix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-  antlr4 = antlr4_7;
+
+  antlr4 = antlr4_8;
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
@@ -14668,6 +14671,8 @@ in
   mkvtoolnix-cli = callPackage ../applications/video/mkvtoolnix {
     withGUI = false;
   };
+
+  mlc = callPackage ../tools/system/mlc { };
 
   mlt = callPackage ../development/libraries/mlt { };
 
