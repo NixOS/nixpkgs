@@ -23183,7 +23183,7 @@ in
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
-  psi-plus = libsForQt514.callPackage ../applications/networking/instant-messengers/psi-plus { };
+  psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
 
   psol = callPackage ../development/libraries/psol { };
 
