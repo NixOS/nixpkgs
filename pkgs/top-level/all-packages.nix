@@ -2471,6 +2471,8 @@ in
 
   photon = callPackage ../tools/networking/photon { };
 
+  piglit = callPackage ../tools/graphics/piglit { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
@@ -16071,6 +16073,8 @@ in
     libpng = libpng12;
     stdenv = gcc6Stdenv; # upstream code incompatible with gcc7
   };
+
+  waffle = callPackage ../development/libraries/waffle { };
 
   wally-cli = callPackage ../development/tools/wally-cli { };
 
