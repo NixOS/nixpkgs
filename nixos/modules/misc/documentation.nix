@@ -40,9 +40,8 @@ let
       in scrubbedEval.options;
   };
 
-  helpScript = pkgs.writeScriptBin "nixos-help"
+  helpScript = pkgs.writeShellScriptBin "nixos-help"
     ''
-      #! ${pkgs.runtimeShell} -e
       # Finds first executable browser in a colon-separated list.
       # (see how xdg-open defines BROWSER)
       browser="$(
