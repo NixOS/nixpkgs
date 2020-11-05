@@ -1,7 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
-, prettytable
-, setuptools
-, solc
+, crytic-compile, prettytable, setuptools, solc
 }:
 
 buildPythonPackage rec {
@@ -19,7 +17,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ prettytable setuptools ];
+  propagatedBuildInputs = [ crytic-compile prettytable setuptools ];
 
   postFixup = ''
     wrapProgram $out/bin/slither \
