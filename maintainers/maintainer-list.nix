@@ -3586,7 +3586,7 @@
     name = "Ingo Blechschmidt";
   };
   icy-thought = {
-    name = "Icy-Thought"
+    name = "Icy-Thought";
     email = "gilganyx@gmail.com";
     github = "Icy-Thought";
     githubId = 53710398;
