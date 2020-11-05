@@ -24377,7 +24377,7 @@ in
 
   wayvnc = callPackage ../applications/networking/remote/wayvnc { };
 
-  webcamoid = libsForQt514.callPackage ../applications/video/webcamoid { };
+  webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
