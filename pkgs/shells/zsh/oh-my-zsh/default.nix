@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = { inherit (nixosTests) oh-my-zsh; };
+
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
       set -o errexit
