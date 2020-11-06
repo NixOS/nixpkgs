@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , gtk3
@@ -29,6 +30,11 @@ mkDerivation rec {
     (substituteAll {
       src = ./hardcode-gsettings.patch;
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
+    })
+  ] ++ lib.optionals (lib.versionAtLeast qtbase.version "5.15") [
+    (fetchpatch {
+      url = "https://github.com/FedoraQt/QGnomePlatform/commit/c835c9e80cfadd62e01f16591721d2103d28a212.diff";
+      sha256 = "Kcj9w+XorfHd47LYDMTINoStvZbu4MjvSumi3TJu/Vw=";
     })
   ];
 
