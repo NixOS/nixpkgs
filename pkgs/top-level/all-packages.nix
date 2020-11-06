@@ -6153,7 +6153,9 @@ in
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
-  openvpn = callPackage ../tools/networking/openvpn {};
+  inherit (callPackages ../tools/networking/openvpn {})
+    openvpn_24
+    openvpn;
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
