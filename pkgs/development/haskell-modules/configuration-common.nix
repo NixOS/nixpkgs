@@ -1450,6 +1450,23 @@ self: super: {
   # binary-instances needs the latest version.
   time-compat = self.time-compat_1_9_4;
 
+  # - Deps are required during the build for testing and also during execution,
+  #   so add them to build input and also wrap the resulting binary so they're in
+  #   PATH.
+  update-nix-fetchgit = let deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
+  in generateOptparseApplicativeCompletion "update-nix-fetchgit" (overrideCabal
+    (addTestToolDepends (super.update-nix-fetchgit.overrideScope (self: super: {
+      optparse-generic = self.optparse-generic_1_4_4;
+      optparse-applicative = self.optparse-applicative_0_16_0_0;
+    })) deps) (drv: {
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.makeWrapper ];
+      postInstall = drv.postInstall or "" + ''
+        wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${
+          pkgs.lib.makeBinPath deps
+        }"
+      '';
+    }));
+
   optparse-generic_1_4_4 = super.optparse-generic_1_4_4.override {
     optparse-applicative = self.optparse-applicative_0_16_0_0;
   };
