@@ -5532,6 +5532,12 @@
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
   };
+  meatcar = {
+    email = "nixpkgs@denys.me";
+    github = "meatcar";
+    githubId = 191622;
+    name = "Denys Pavlov";
+  };
   meditans = {
     email = "meditans@gmail.com";
     github = "meditans";

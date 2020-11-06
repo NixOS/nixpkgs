@@ -11826,6 +11826,8 @@ in
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
+  sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
+
   sqlite-web = callPackage ../development/tools/database/sqlite-web { };
 
   sqlmap = with python3Packages; toPythonApplication sqlmap;
