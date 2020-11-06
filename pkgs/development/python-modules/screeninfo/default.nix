@@ -1,8 +1,9 @@
-{ stdenv, buildPythonApplication, fetchPypi, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
+{ stdenv, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
 
 buildPythonApplication rec {
   pname = "screeninfo";
   version = "0.6.6";
+  disabled = isPy27; # dataclasses isn't available for python2
 
   src = fetchPypi {
     inherit pname version;
