@@ -5,6 +5,8 @@ buildDunePackage rec {
   pname = "mirage-runtime";
   version = "3.9.0";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
