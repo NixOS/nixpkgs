@@ -1352,7 +1352,7 @@ self: super: {
   # 2020-08-14: gi-pango from stackage is to old for the C libs it links against in nixpkgs.
   # That's why we need to bump a ton of dependency versions to unbreak them.
   gi-pango = assert super.gi-pango.version == "1.0.22"; self.gi-pango_1_0_23;
-  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_3) [ pkgs.gobject-introspection ];
+  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_4) [ pkgs.gobject-introspection ];
   haskell-gi = assert super.haskell-gi.version == "0.23.1"; self.haskell-gi_0_24_5;
   gi-cairo = assert super.gi-cairo.version == "1.0.23"; self.gi-cairo_1_0_24;
   gi-glib = assert super.gi-glib.version == "2.0.23"; self.gi-glib_2_0_24;
