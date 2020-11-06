@@ -23698,7 +23698,7 @@ in
 
   sipp = callPackage ../development/tools/misc/sipp { };
 
-  skanlite = libsForQt514.callPackage ../applications/office/skanlite { };
+  skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
 
   soci = callPackage ../development/libraries/soci { };
 
