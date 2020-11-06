@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "patator";
-  version = "0.9";
+  version = "0.7";
   disabled = !(isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68cb24bdc3042ee0d47a288b19a8b99a6c54bdbd4ddf0c5817d9b9ac0a0d8a15";
+    sha256 = "335e432e6cc591437e316ba8c1da935484ca39fc79e595ccf60ccd9166e965f1";
   };
 
   propagatedBuildInputs = [

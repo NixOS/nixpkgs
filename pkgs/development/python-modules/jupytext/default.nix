@@ -3,6 +3,7 @@
 , nbformat
 , pytest
 , pyyaml
+, toml
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyyaml
     nbformat
+    toml
   ] ++ lib.optionals isPy27 [ mock ]; # why they put it in install_requires, who knows
 
   checkInputs = [

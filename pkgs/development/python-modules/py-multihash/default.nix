@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/multiformats/py-multihash";
     license = licenses.mit;
     maintainers = with maintainers; [ rakesh4g ];
+    broken = true; # no longer compatible with base58, no updates in 5 years. Added 2020-11-05
   };
 }

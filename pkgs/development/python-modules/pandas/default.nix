@@ -1,27 +1,29 @@
-{ buildPythonPackage
+{ stdenv
+, buildPythonPackage
 , fetchPypi
 , python
-, stdenv
-, pytest
-, glibcLocales
+, isPy38
+, beautifulsoup4
+, bottleneck
 , cython
 , dateutil
-, scipy
-, moto
-, numexpr
-, pytz
-, xlrd
-, bottleneck
-, sqlalchemy
-, lxml
 , html5lib
-, beautifulsoup4
-, hypothesis
+, lxml
+, numexpr
 , openpyxl
+, pytz
+, sqlalchemy
+, scipy
 , tables
+, xlrd
 , xlwt
+# Test Inputs
+, glibcLocales
+, hypothesis
+, moto
+, pytestCheckHook
+# Darwin inputs
 , runtimeShell
-, isPy38
 , libcxx ? null
 }:
 
@@ -31,32 +33,32 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "1.1.1";
+  version = "1.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "53328284a7bb046e2e885fd1b8c078bd896d7fc4575b915d4936f54984a2ba67";
+    sha256 = "a979d0404b135c63954dea79e6246c45dd45371a88631cdbb4877d844e6de3b6";
   };
-
-  checkInputs = [ pytest glibcLocales moto hypothesis ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
-    dateutil
-    scipy
-    numexpr
-    pytz
-    xlrd
-    bottleneck
-    sqlalchemy
-    lxml
-    html5lib
     beautifulsoup4
+    bottleneck
+    dateutil
+    html5lib
+    numexpr
+    lxml
     openpyxl
+    pytz
+    scipy
+    sqlalchemy
     tables
+    xlrd
     xlwt
   ];
+
+  checkInputs = [ pytestCheckHook glibcLocales moto hypothesis ];
 
   # doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687
@@ -80,8 +82,14 @@ in buildPythonPackage rec {
     "--parallel=$NIX_BUILD_CORES"
   ];
 
+  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
+  pytestFlagsArray = [
+    "$out/${python.sitePackages}/pandas"
+    "--skip-slow"
+    "--skip-network"
+  ];
+  disabledTests = [
     # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
     # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
     "test_fallback_plural"
@@ -105,15 +113,16 @@ in buildPythonPackage rec {
     # Fails with 1.0.5
     "test_constructor_list_frames"
     "test_constructor_with_embedded_frames"
+    # tries to import compiled C extension locally
+    "test_missing_required_dependency"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
-  ]);
+  ];
 
-  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
-
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    export LC_ALL="en_US.UTF-8"
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
@@ -123,19 +132,17 @@ in buildPythonPackage rec {
     echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
-  '' + ''
-    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
-    runHook postCheck
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
     homepage = "https://pandas.pydata.org/";
+    changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
     description = "Python Data Analysis Library";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin fridh knedlsepp ];
+    platforms = platforms.unix;
   };
 }

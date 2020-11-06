@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "colorama";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1";
+    sha256 = "5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b";
   };
 
   # No tests in archive
