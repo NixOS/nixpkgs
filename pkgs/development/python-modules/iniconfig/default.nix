@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "brain-dead simple parsing of ini files";
-    homepage = "https://github.com/CHANGE/iniconfig/";
+    homepage = "https://github.com/RonnyPfannschmidt/iniconfig";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };
