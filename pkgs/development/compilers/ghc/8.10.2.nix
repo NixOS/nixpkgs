@@ -242,6 +242,7 @@ stdenv.mkDerivation (rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
+    timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
   };
 
