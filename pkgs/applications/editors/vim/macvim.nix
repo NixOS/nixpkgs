@@ -94,6 +94,19 @@ stdenv.mkDerivation {
   + ''
     unset LD
   ''
+  # When building with nix-daemon, we need to pass -derivedDataPath or else it tries to use
+  # a folder rooted in /var/empty and fails. Unfortunately we can't just pass -derivedDataPath
+  # by itself as this flag requires the use of -scheme or -xctestrun (not sure why), but MacVim
+  # by default just runs `xcodebuild -project src/MacVim/MacVim.xcodeproj`, relying on the default
+  # behavior to build the first target in the project. Experimentally, there seems to be a scheme
+  # called MacVim, so we'll explicitly select that. We also need to specify the configuration too
+  # as the scheme seems to have the wrong default.
+  + ''
+    configureFlagsArray+=(
+      XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
+      --with-xcodecfg="Release"
+    )
+  ''
   ;
 
   # Because we're building with system clang, this means we're building against Xcode's SDK and
