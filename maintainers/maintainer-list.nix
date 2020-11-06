@@ -5268,6 +5268,12 @@
     githubId = 1238350;
     name = "Matthias Herrmann";
   };
+  majesticmullet = {
+    email = "hoccthomas@gmail.com.au";
+    github = "MajesticMullet";
+    githubId = 31056089;
+    name = "Tom Ho";
+  };
   makefu = {
     email = "makefu@syntax-fehler.de";
     github = "makefu";
