@@ -3,7 +3,7 @@
 with lib;
 
 let
-  dataDir = "/var/lib/searx";
+  runDir = "/run/searx";
   cfg = config.services.searx;
 
   hasEngines =
@@ -13,7 +13,7 @@ let
   # Script to merge NixOS settings with
   # the default settings.yml bundled in searx.
   mergeConfig = ''
-    cd ${dataDir}
+    cd ${runDir}
     # find the default settings.yml
     default=$(find '${cfg.package}/' -name settings.yml)
 
@@ -46,6 +46,9 @@ let
     env -0 | while IFS='=' read -r -d ''' n v; do
       sed "s#@$n@#$v#g" -i settings.yml
     done
+
+    # set strict permissions
+    chmod 400 settings.yml
   '';
 
 in
@@ -114,7 +117,7 @@ in
 
       settingsFile = mkOption {
         type = types.path;
-        default = "${dataDir}/settings.yml";
+        default = "${runDir}/settings.yml";
         description = ''
           The path of the Searx server settings.yml file. If no file is
           specified, a default file is used (default config file has debug mode
@@ -136,6 +139,38 @@ in
         description = "searx package to use.";
       };
 
+      runInUwsgi = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to run searx in uWSGI as a "vassal", instead of using its
+          built-in HTTP server. This is the recommended mode for public or
+          large instances, but is unecessary for LAN or local-only use.
+          <warning>
+            <para>
+              The built-in HTTP server logs all queries by default.
+            </para>
+          </warning>
+        '';
+      };
+
+      uwsgiConfig = mkOption {
+        type = types.attrs;
+        default = { http = ":8080"; };
+        example = lib.literalExample ''
+          {
+            disable-logging = true;
+            http = ":8080";                   # serve via HTTP...
+            socket = "/run/searx/searx.sock"; # ...or UNIX socket
+          }
+        '';
+        description = ''
+          Additional configuration of the uWSGI vassal running searx. It
+          should notably specify on which interfaces and ports the vassal
+          should listen.
+        '';
+      };
+
     };
 
   };
@@ -143,23 +178,66 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.searx.enable {
-    systemd.services.searx = {
-      description = "Searx server, the meta search engine.";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
+    users.users.searx =
+      { description = "Searx daemon user";
+        group = "searx";
+        isSystemUser = true;
+      };
+
+    users.groups.searx = { };
+
+    systemd.services.searx-init = {
+      description = "Initialise Searx settings";
       serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
         User = "searx";
-        DynamicUser = true;
+        RuntimeDirectory = "searx";
+        RuntimeDirectoryMode = "750";
+      } // optionalAttrs (cfg.environmentFile != null)
+        { EnvironmentFile = builtins.toPath cfg.environmentFile; };
+      script = mergeConfig;
+    };
+
+    systemd.services.searx = mkIf (!cfg.runInUwsgi) {
+      description = "Searx server, the meta search engine.";
+      wantedBy = [ "network.target" "multi-user.target" ];
+      requires = [ "searx-init.service" ];
+      after = [ "searx-init.service" ];
+      serviceConfig = {
+        User  = "searx";
+        Group = "searx";
         ExecStart = "${cfg.package}/bin/searx-run";
-        StateDirectory = "searx";
       } // optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
       environment.SEARX_SETTINGS_PATH = cfg.settingsFile;
-      preStart = mergeConfig;
     };
 
-    environment.systemPackages = [ cfg.package ];
+    systemd.services.uwsgi = mkIf (cfg.runInUwsgi)
+      { requires = [ "searx-init.service" ];
+        after = [ "searx-init.service" ];
+      };
+
+    services.uwsgi = mkIf (cfg.runInUwsgi) {
+      enable = true;
+      plugins = [ "python3" ];
+
+      instance.type = "emperor";
+      instance.vassals.searx = {
+        type = "normal";
+        strict = true;
+        immediate-uid = "searx";
+        immediate-gid = "searx";
+        lazy-apps = true;
+        enable-threads = true;
+        module = "searx.webapp";
+        env = [ "SEARX_SETTINGS_PATH=${cfg.settingsFile}" ];
+        pythonPackages = self: [ cfg.package ];
+      } // cfg.uwsgiConfig;
+    };
 
   };
 

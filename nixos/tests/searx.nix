@@ -6,7 +6,8 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ rnhmjoj ];
   };
 
-  machine = { ... }: {
+  # basic setup: searx running the built-in webserver
+  nodes.base = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
     services.searx = {
@@ -17,11 +18,10 @@ import ./make-test-python.nix ({ pkgs, ...} :
       '';
 
       settings.server =
-        { port = 8080;
+        { port = "8080";
           bind_address = "0.0.0.0";
           secret_key = "@SEARX_SECRET_KEY@";
         };
-
       settings.engines = {
         wolframalpha =
           { api_key = "@WOLFRAM_API_KEY@";
@@ -29,34 +29,81 @@ import ./make-test-python.nix ({ pkgs, ...} :
           };
         startpage.shortcut = "start";
       };
-
     };
+
+  };
+
+  # fancy setup: run in uWSGI and use nginx as proxy
+  nodes.fancy = { ... }: {
+    imports = [ ../modules/profiles/minimal.nix ];
+
+    services.searx = {
+      enable = true;
+      runInUwsgi = true;
+      uwsgiConfig = {
+        # serve using the uwsgi protocol
+        socket = "/run/searx/uwsgi.sock";
+        chmod-socket = "660";
+
+        # use /searx as url "mountpoint"
+        mount = "/searx=searx.webapp:application";
+        module = "";
+        manage-script-name = true;
+      };
+    };
+
+    # use nginx as reverse proxy
+    services.nginx.enable = true;
+    services.nginx.virtualHosts.localhost = {
+      locations."/searx".extraConfig =
+        ''
+          include ${pkgs.nginx}/conf/uwsgi_params;
+          uwsgi_pass unix:/run/searx/uwsgi.sock;
+        '';
+      locations."/searx/static/".alias = "${pkgs.searx}/share/static/";
+    };
+
+    # allow nginx access to the searx socket
+    users.users.nginx.extraGroups = [ "searx" ];
+
   };
 
   testScript =
     ''
-      start_all()
+      base.start()
 
       with subtest("Settings have been merged"):
-          machine.wait_for_unit("searx")
-          output = machine.succeed(
-              "${pkgs.yq-go}/bin/yq r /var/lib/searx/settings.yml"
+          base.wait_for_unit("searx-init")
+          base.wait_for_file("/run/searx/settings.yml")
+          output = base.succeed(
+              "${pkgs.yq-go}/bin/yq r /run/searx/settings.yml"
               " 'engines.(name==startpage).shortcut'"
           ).strip()
           assert output == "start", "Settings not merged"
 
       with subtest("Environment variables have been substituted"):
-          machine.succeed("grep -q somesecret /var/lib/searx/settings.yml")
-          machine.succeed("grep -q sometoken /var/lib/searx/settings.yml")
+          base.succeed("grep -q somesecret /run/searx/settings.yml")
+          base.succeed("grep -q sometoken /run/searx/settings.yml")
+          base.copy_from_vm("/run/searx/settings.yml")
 
-      with subtest("Searx service is running"):
-          machine.wait_for_open_port(8080)
-          machine.succeed(
+      with subtest("Basic setup is working"):
+          base.wait_for_open_port(8080)
+          base.wait_for_unit("searx")
+          base.succeed(
               "${pkgs.curl}/bin/curl --fail http://localhost:8080"
           )
+          base.shutdown()
 
-      machine.copy_from_vm("/var/lib/searx/settings.yml")
-      machine.shutdown()
+      with subtest("Nginx+uWSGI setup is working"):
+          fancy.start()
+          fancy.wait_for_open_port(80)
+          fancy.wait_for_unit("uwsgi")
+          fancy.succeed(
+              "${pkgs.curl}/bin/curl --fail http://localhost/searx >&2"
+          )
+          fancy.succeed(
+              "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/js/bootstrap.min.js >&2"
+          )
     '';
 })
 
