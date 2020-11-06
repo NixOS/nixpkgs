@@ -4,6 +4,7 @@
 , ipython
 , isPyPy
 , isPy27
+, mock
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ ipython ];
+  checkInputs = [ mock ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
