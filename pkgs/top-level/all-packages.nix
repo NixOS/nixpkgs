@@ -21771,8 +21771,6 @@ in
 
   k3s = callPackage ../applications/networking/cluster/k3s {};
 
-  k9copy = libsForQt514.callPackage ../applications/video/k9copy {};
-
   kail = callPackage ../tools/networking/kail {  };
 
   kanboard = callPackage ../applications/misc/kanboard { };
