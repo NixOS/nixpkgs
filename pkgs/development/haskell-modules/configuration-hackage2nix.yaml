@@ -3994,6 +3994,7 @@ broken-packages:
   - compdata-dags
   - compdata-param
   - compdoc
+  - compdoc-dhall-decoder
   - competition
   - compilation
   - complexity
@@ -4599,6 +4600,8 @@ broken-packages:
   - doi
   - DOM
   - dom-lt
+  - domain
+  - domain-optics
   - domplate
   - dot-linker
   - dotfs
@@ -5260,6 +5263,8 @@ broken-packages:
   - garepinoh
   - gargoyle
   - gargoyle-postgresql
+  - gargoyle-postgresql-connect
+  - gargoyle-postgresql-nix
   - gas
   - gbu
   - gc-monitoring-wai
@@ -7925,6 +7930,7 @@ broken-packages:
   - morfette
   - morfeusz
   - morley
+  - morloc
   - morpheus-graphql-cli
   - morpheus-graphql-client
   - morphisms-functors
@@ -8729,6 +8735,7 @@ broken-packages:
   - pointless-haskell
   - pointless-lenses
   - pointless-rewrite
+  - poke
   - pokemon-go-protobuf-types
   - poker-eval
   - pokitdok
@@ -8747,6 +8754,7 @@ broken-packages:
   - polysemy-kvstore-jsonfile
   - polysemy-methodology
   - polysemy-optics
+  - polysemy-path
   - polysemy-RandomFu
   - polysemy-resume
   - polysemy-test
@@ -11285,6 +11293,7 @@ broken-packages:
   - yaml-rpc
   - yaml-rpc-scotty
   - yaml-rpc-snap
+  - yaml-unscrambler
   - YamlReference
   - Yampa
   - yampa-canvas
