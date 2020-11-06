@@ -109,6 +109,7 @@ fatih/vim-go
 fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
 fenetikm/falcon
+fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
@@ -159,7 +160,6 @@ iamcco/coc-vimlsp
 ianks/vim-tsx
 idanarye/vim-merginal
 idris-hackers/idris-vim
-ihsanturk/neuron.vim
 Inazuma110/deoplete-greek
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
