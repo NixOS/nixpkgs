@@ -22004,7 +22004,7 @@ in
 
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
-  ktorrent = libsForQt514.callPackage ../applications/networking/p2p/ktorrent { };
+  ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
