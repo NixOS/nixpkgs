@@ -21179,7 +21179,7 @@ in
 
   redoflacs = callPackage ../applications/audio/redoflacs { };
 
-  flameshot = libsForQt514.callPackage ../tools/misc/flameshot { };
+  flameshot = libsForQt5.callPackage ../tools/misc/flameshot { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer (config.flashplayer or {});
 
