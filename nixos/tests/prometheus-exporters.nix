@@ -626,7 +626,7 @@ let
           };
         };
         enable = true;
-        user = "postgres";
+        user = "prometheus-sql-exporter";
       };
       metricProvider = {
         services.postgresql = {
