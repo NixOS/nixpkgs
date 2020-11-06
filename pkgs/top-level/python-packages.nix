@@ -1811,8 +1811,6 @@ in {
 
   dot2tex = callPackage ../development/python-modules/dot2tex { inherit (pkgs) graphviz; };
 
-  dotnetcore2 = callPackage ../development/python-modules/dotnetcore2 { inherit (pkgs) substituteAll dotnet-sdk; };
-
   dparse = callPackage ../development/python-modules/dparse { };
 
   dpath = callPackage ../development/python-modules/dpath { };
