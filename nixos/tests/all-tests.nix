@@ -225,6 +225,7 @@ in
   mysql-backup = handleTest ./mysql/mysql-backup.nix {};
   mysql-replication = handleTest ./mysql/mysql-replication.nix {};
   nagios = handleTest ./nagios.nix {};
+  nar-serve = handleTest ./nar-serve.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
