@@ -236,6 +236,7 @@ in
           # an AppArmor profile is provided to get a confinement based upon paths and rights.
           builtins.storeDir
           "/etc"
+          "/run"
           ] ++
           optional (cfg.settings.script-torrent-done-enabled &&
                     cfg.settings.script-torrent-done-filename != "")
@@ -408,6 +409,7 @@ in
           #r @{PROC}/@{pid}/environ,
           r @{PROC}/@{pid}/mounts,
           rwk /tmp/tr_session_id_*,
+          r /run/systemd/resolve/stub-resolv.conf,
 
           r ${pkgs.openssl.out}/etc/**,
           r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},
