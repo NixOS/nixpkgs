@@ -1,4 +1,4 @@
-{lib, fetchPypi, buildPythonPackage, numpy, pyparsing}:
+{lib, fetchPypi, buildPythonPackage, numpy, pyparsing, pytestcov, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "periodictable";
@@ -10,6 +10,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1d09c359468e2de74b43fc3a7dcb0d3d71e0ff53adb85995215d8d7796451af6";
   };
+
+  checkInputs = [ pytestcov pytestCheckHook ];
 
   meta = {
     homepage = "https://www.reflectometry.org/danse/software.html";
