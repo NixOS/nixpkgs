@@ -8,7 +8,7 @@
   kwindowsystem, kxmlgui, sonnet, threadweaver,
   kcontacts, akonadi, akonadi-calendar, akonadi-contacts,
   eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen,
-  librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon,
+  librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, phonon,
   poppler, pstoedit, qca-qt5, vc
 # TODO: package Spnav, m2mml LibEtonyek, Libqgit2
 }:
@@ -32,7 +32,7 @@ mkDerivation rec {
     ktextwidgets kwallet kwidgetsaddons kwindowsystem kxmlgui sonnet threadweaver
     kcontacts akonadi akonadi-calendar akonadi-contacts
     eigen git gsl ilmbase kproperty kreport lcms2 marble pcre libgit2 libodfgen librevenge
-    libvisio libwpd libwpg libwps okular openexr openjpeg phonon poppler qca-qt5 vc
+    libvisio libwpd libwpg libwps okular openexr phonon poppler qca-qt5 vc
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
