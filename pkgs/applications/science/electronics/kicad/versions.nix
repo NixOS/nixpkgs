@@ -3,17 +3,17 @@
 {
   "kicad" = {
     kicadVersion = {
-      version =			"5.1.7";
+      version =			"5.1.8";
       src = {
-        rev =			"a382d34a883a5bf4250e86ec4bc390aa0a385012";
-        sha256 =		"1gjh0rny4pw52kpljfim51sivs8x1cvy11hx1isgp4dsn2zdwg95";
+        rev =			"db9833491010954bc27fac92c83d2864bd95c23c";
+        sha256 =		"08ni9j2lw2hjc1csk6rkydcxwdal6da17ch60zkjij5vfsif2hix";
       };
     };
     libVersion = {
-      version =			"5.1.7";
+      version =			"5.1.8";
       libSources = {
-        i18n.rev =		"d24af2da8cab4ce1081c401909a4a880514e5549";
-        i18n.sha256 =		"0r0sv52k84sw4jxf10lrmzwmn58d2fv5h57fdrspnmvnh10q63xf";
+        i18n.rev =		"78adcd19e7ed53f4889d6db65a33dd8ec2d323e9";
+        i18n.sha256 =		"0x0w2m6d3xfm22y4anp5j2j67iwzby149ynj6qjlw2kcsi8kwk1j";
         symbols.rev =		"bf475af94877e8fd9cf80e667578ff61835e02bb";
         symbols.sha256 =	"1ii3r813653ng2ycggnknqx4g3ja7dbm4qyxrf9aq48ws0xkvhx3";
         templates.rev =		"1ccbaf3704e8ff4030d0915f71e051af621ef7d7";
