@@ -90,7 +90,8 @@ in stdenvNoCC.mkDerivation {
       substituteInPlace $f \
         --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
         --replace $\{MKLROOT} "$out" \
-        --replace "lib/intel64_lin" "lib"
+        --replace "lib/intel64_lin" "lib" \
+        --replace "lib/intel64" "lib"
     done
 
     for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
