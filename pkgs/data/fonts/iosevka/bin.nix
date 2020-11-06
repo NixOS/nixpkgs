@@ -1,28 +1,39 @@
-{ stdenv, fetchzip }:
+{ stdenv, lib, fetchurl, iosevka, unzip
+, variant ? ""
+}:
 
 let
-  version = "3.4.6";
-in fetchzip {
-  name = "iosevka-bin-${version}";
+  name = "iosevka" + lib.optionalString (variant != "") "-" + variant;
 
-  url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-iosevka-${version}.zip";
+  variantHashes = import ./variants.nix;
+  validVariants = map (lib.removePrefix "iosevka-")
+    (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
+in stdenv.mkDerivation rec {
+  pname = "${name}-bin";
+  version = "3.7.1";
 
-  postFetch = ''
+  src = fetchurl {
+    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-${name}-${version}.zip";
+    sha256 = variantHashes.${name} or (throw ''
+      No such variant "${variant}" for package iosevka-bin.
+      Valid variants are: ${lib.concatStringsSep ", " validVariants}.
+    '');
+  };
+
+  nativeBuildInputs = [ unzip ];
+
+  phases = [ "unpackPhase" ];
+
+  unpackPhase = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttc -d $out/share/fonts/truetype
+    unzip -d $out/share/fonts/truetype $src
   '';
 
-  sha256 = "1nab49gkpxahwvvw39xcc32q425qkccr7ffmz87jbcdv71qy7pp9";
-
-  meta = with stdenv.lib; {
-    homepage = "https://be5invis.github.io/Iosevka/";
-    downloadPage = "https://github.com/be5invis/Iosevka/releases";
-    description = ''
-      Slender monospace sans-serif and slab-serif typeface inspired by Pragmata
-      Pro, M+ and PF DIN Mono, designed to be the ideal font for programming.
-    '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.cstrahan ];
+  meta = iosevka.meta // {
+    maintainers = with lib.maintainers; [
+      cstrahan
+    ];
   };
+
+  passthru.updateScript = ./update-bin.sh;
 }

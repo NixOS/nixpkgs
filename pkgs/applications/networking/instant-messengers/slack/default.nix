@@ -39,9 +39,16 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   pname = "slack";
+
+  x86_64-darwin-version = "4.10.3";
+  x86_64-darwin-sha256 = "0r77l57vr603xamich4h4gbdd5vdcj0sjs6yjpymfx9s0f98v8bb";
+
+  x86_64-linux-version = "4.10.3";
+  x86_64-linux-sha256 = "1gnjj2iyk8cwjajg8h9qpmzx10j4qjxjzciq8csg45qfzwkr3drf";
+
   version = {
-    x86_64-darwin = "4.9.0";
-    x86_64-linux = "4.9.1";
+    x86_64-darwin = x86_64-darwin-version;
+    x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
   src = let
@@ -49,11 +56,11 @@ let
   in {
     x86_64-darwin = fetchurl {
       url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "007fflncvvclj4agb6g5hc5k9j5hhz1rpvlcfd8w31rn1vad4abk";
+      sha256 = x86_64-darwin-sha256;
     };
     x86_64-linux = fetchurl {
       url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = "1n8br5vlcnf13b8m6727hy4bkmd6wayss96ck4ba9zsjiyj7v74i";
+      sha256 = x86_64-linux-sha256;
     };
   }.${system} or throwSystem;
 
@@ -67,6 +74,8 @@ let
 
   linux = stdenv.mkDerivation rec {
     inherit pname version src meta;
+
+    passthru.updateScript = ./update.sh;
 
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib
@@ -151,6 +160,8 @@ let
 
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
+
+    passthru.updateScript = ./update.sh;
 
     nativeBuildInputs = [ undmg ];
 

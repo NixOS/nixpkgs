@@ -543,9 +543,13 @@ let
 
     mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
 
+    mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
+
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
+
+    mirage-console = callPackage ../development/ocaml-modules/mirage-console { };
 
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
@@ -567,7 +571,11 @@ let
 
     mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
 
+    mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
+
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
+
+    mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 

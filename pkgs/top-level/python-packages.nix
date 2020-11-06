@@ -322,6 +322,8 @@ in {
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime { antlr4 = pkgs.antlr4; };
 
+  anyio = callPackage ../development/python-modules/anyio { };
+
   anyjson = callPackage ../development/python-modules/anyjson { };
 
   anytree = callPackage ../development/python-modules/anytree { inherit (pkgs) graphviz; };
@@ -426,9 +428,13 @@ in {
 
   async_generator = callPackage ../development/python-modules/async_generator { };
 
+  asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
+
   asyncpg = callPackage ../development/python-modules/asyncpg { };
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
+
+  async_stagger = callPackage ../development/python-modules/async_stagger { };
 
   asynctest = callPackage ../development/python-modules/asynctest { };
 
@@ -730,6 +736,8 @@ in {
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
   azure-synapse-accesscontrol = callPackage ../development/python-modules/azure-synapse-accesscontrol { };
+
+  azure-synapse-artifacts = callPackage ../development/python-modules/azure-synapse-artifacts { };
 
   azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
 
@@ -1370,6 +1378,8 @@ in {
     callPackage ../development/python-modules/cryptography/vectors-2.9.nix { }
   else
     callPackage ../development/python-modules/cryptography/vectors.nix { };
+
+  crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
@@ -2985,6 +2995,12 @@ in {
 
   irc = callPackage ../development/python-modules/irc { };
 
+  ircrobots = callPackage ../development/python-modules/ircrobots { };
+
+  ircstates = callPackage ../development/python-modules/ircstates { };
+
+  irctokens = callPackage ../development/python-modules/irctokens { };
+
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
   islpy = callPackage ../development/python-modules/islpy { };
@@ -4260,7 +4276,7 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
-  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito { pythonPackages = self; });
+  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito { inherit python; });
 
   owslib = callPackage ../development/python-modules/owslib { };
 
@@ -4291,6 +4307,8 @@ in {
     callPackage ../development/python-modules/pandas { }
   else
     callPackage ../development/python-modules/pandas/2.nix { };
+
+  pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
@@ -4832,7 +4850,7 @@ in {
 
   pybullet = callPackage ../development/python-modules/pybullet { };
 
-  pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs) meson pkgconfig; };
+  pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs) meson pkg-config; };
 
   pycallgraph = callPackage ../development/python-modules/pycallgraph { };
 
@@ -6638,10 +6656,6 @@ in {
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
-  smugline = callPackage ../development/python-modules/smugline { };
-
-  smugpy = callPackage ../development/python-modules/smugpy { };
-
   snack = toPythonModule (pkgs.newt.override { inherit (self) python; });
 
   snakebite = callPackage ../development/python-modules/snakebite { };
@@ -7177,7 +7191,10 @@ in {
 
   tomlkit = callPackage ../development/python-modules/tomlkit { };
 
-  toolz = callPackage ../development/python-modules/toolz { };
+  toolz = if isPy3k then
+    callPackage ../development/python-modules/toolz { }
+  else
+    callPackage ../development/python-modules/toolz/2.nix { };
 
   toposort = callPackage ../development/python-modules/toposort { };
 
@@ -7360,7 +7377,9 @@ in {
 
   unicode-slugify = callPackage ../development/python-modules/unicode-slugify { };
 
-  unicorn = callPackage ../development/python-modules/unicorn { };
+  unicorn = callPackage ../development/python-modules/unicorn {
+    unicorn-emu = pkgs.unicorn;
+  };
 
   unidecode = callPackage ../development/python-modules/unidecode { };
 

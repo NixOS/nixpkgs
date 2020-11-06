@@ -6,7 +6,7 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 in stdenv.mkDerivation rec {
   name = "r8168-${kernel.version}-${version}";
   # on update please verify that the source matches the realtek version
-  version = "8.047.04";
+  version = "8.048.03";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "1rni8jimwdhyx75603mdcylrdxgfwfpyprf1lf5x5cli2i4bbijg";
+    sha256 = "1l8llpcnapcaafxp7wlyny2ywh7k6q5zygwwjl9h0l6p04cghss4";
   };
 
   hardeningDisable = [ "pic" ];
@@ -29,8 +29,8 @@ in stdenv.mkDerivation rec {
   # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
   preBuild = ''
     makeFlagsArray+=("-C${kernel.dev}/lib/modules/${kernel.modDirVersion}/build")
-    makeFlagsArray+=("SUBDIRS=$PWD/src")
-    makeFlagsArray+=("EXTRA_CFLAGS=-DCONFIG_R8168_NAPI -DCONFIG_R8168_VLAN")
+    makeFlagsArray+=("M=$PWD/src")
+    makeFlagsArray+=("EXTRA_CFLAGS=-DCONFIG_R8168_NAPI -DCONFIG_R8168_VLAN -DCONFIG_ASPM -DENABLE_S5WOL -DENABLE_EEE")
     makeFlagsArray+=("modules")
   '';
 

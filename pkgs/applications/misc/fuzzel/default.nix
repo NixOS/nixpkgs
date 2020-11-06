@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/fuzzel";
-    rev = "${version}";
+    rev = version;
     sha256 = "0c0p9spklzmy9f7abz3mvw0vp6zgnk3ns1i6ks95ljjb3kqy9vs2";
   };
 

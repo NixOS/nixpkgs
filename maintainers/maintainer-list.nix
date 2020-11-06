@@ -4007,6 +4007,12 @@
     githubId = 2502736;
     name = "James Hillyerd";
   };
+  jiehong = {
+    email = "nixos@majiehong.com";
+    github = "Jiehong";
+    githubId = 1061229;
+    name = "Jiehong Ma";
+  };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
     github = "jirkamarsik";
@@ -4815,6 +4821,12 @@
     github = "ldelelis";
     githubId = 20250323;
     name = "Lucio Delelis";
+  };
+  ldenefle = {
+    email = "ldenefle@gmail.com";
+    github = "ldenefle";
+    githubId = 20558127;
+    name = "Lucas Denefle";
   };
   ldesgoui = {
     email = "ldesgoui@gmail.com";
@@ -6439,6 +6451,12 @@
     githubId = 167209;
     name = "Masanori Ogino";
   };
+  omgbebebe = {
+    email = "omgbebebe@gmail.com";
+    github = "omgbebebe";
+    githubId = 588167;
+    name = "Sergey Bubnov";
+  };
   omnipotententity = {
     email = "omnipotententity@gmail.com";
     github = "omnipotententity";
@@ -6612,6 +6630,12 @@
     github = "ip1981";
     githubId = 131844;
     name = "Igor Pashev";
+  };
+  pasqui23 = {
+    email = "p3dimaria@hotmail.it";
+    github = "pasqui23";
+    githubId = 6931743;
+    name = "pasqui23";
   };
   patryk27 = {
     email = "wychowaniec.patryk@gmail.com";
@@ -7400,6 +7424,12 @@
     github = "romildo";
     githubId = 1217934;
     name = "José Romildo Malaquias";
+  };
+  ronanmacf = {
+    email = "macfhlar@tcd.ie";
+    github = "ronanmacf";
+    githubId = 25930627;
+    name = "Ronan Mac Fhlannchadha";
   };
   rongcuid = {
     email = "rongcuid@outlook.com";
@@ -9885,5 +9915,11 @@
     email = "wilsonehusin@gmail.com";
     github = "wilsonehusin";
     githubId = 14004487;
+  };
+  bb2020 = {
+    email = "bb2020@users.noreply.github.com";
+    github = "bb2020";
+    githubId = 19290397;
+    name = "Tunc Uzlu";
   };
 }

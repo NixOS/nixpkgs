@@ -83,6 +83,7 @@ digitaltoad/vim-pug
 direnv/direnv.vim
 dleonard0/pony-vim-syntax
 dmix/elvish.vim
+dpelle/vim-LanguageTool
 dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
@@ -552,6 +553,7 @@ unblevable/quick-scope
 urbit/hoon.vim
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
+vigoux/LanguageTool.nvim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vim-pandoc/vim-pandoc

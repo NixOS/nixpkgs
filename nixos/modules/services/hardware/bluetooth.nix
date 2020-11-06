@@ -87,6 +87,8 @@ in {
       bluetooth = {
         wantedBy = [ "bluetooth.target" ];
         aliases  = [ "dbus-org.bluez.service" ];
+        # restarting can leave people without a mouse/keyboard
+        unitConfig.X-RestartIfChanged = false;
       };
     };
 

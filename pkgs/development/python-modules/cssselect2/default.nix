@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "cssselect2";
-  version = "0.3.0";
+  version = "0.4.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c2716f06b5de93f701d5755a9666f2ee22cbcd8b4da8adddfc30095ffea3abc";
+    sha256 = "93fbb9af860e95dd40bf18c3b2b6ed99189a07c0f29ba76f9c5be71344664ec8";
   };
 
   propagatedBuildInputs = [ tinycss2 ];

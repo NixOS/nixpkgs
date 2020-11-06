@@ -176,6 +176,10 @@
 /pkgs/applications/editors/emacs       @adisbladis
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
+# Neovim
+/pkgs/applications/editors/neovim      @jonringer
+/pkgs/applications/editors/neovim      @teto
+
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio
 
@@ -201,6 +205,12 @@
 /nixos/modules/virtualisation/podman.nix     @NixOS/podman @zowoq
 /nixos/tests/cri-o.nix                       @NixOS/podman @zowoq
 /nixos/tests/podman.nix                      @NixOS/podman @zowoq
+
+# Docker tools
+/pkgs/build-support/docker                   @roberth
+/nixos/tests/docker-tools-overlay.nix        @roberth
+/nixos/tests/docker-tools.nix                @roberth
+/doc/builders/images/dockertools.xml         @roberth
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut

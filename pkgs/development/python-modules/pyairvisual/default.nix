@@ -1,29 +1,54 @@
-{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, requests
-, requests-mock, pytest
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry
+, aiohttp
+, numpy
+, pysmb
+, aresponses
+, asynctest
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "1.0.0";
+  version = "5.0.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0ng6k07n91k5l68zk3hl4fywb33admp84wqdm20qmmw9yc9c64fd";
+    rev = version;
+    sha256 = "0z769xrb6w6bhqcq02sjryl1qyvk9dc1xfn06fc3mdqnrbr0xxj3";
   };
 
-  checkInputs = [ pytest requests-mock ];
-  propagatedBuildInputs = [ requests ];
+  nativeBuildInputs = [ poetry ];
 
-  checkPhase = ''
-    py.test tests
-  '';
+  propagatedBuildInputs = [
+    aiohttp
+    numpy
+    pysmb
+  ];
 
-  disabled = !isPy3k;
+  checkInputs = [
+    aresponses
+    asynctest
+    pytest-aiohttp
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests"
+  ];
 
   meta = with lib; {
-    description = "A thin Python wrapper for the AirVisual API";
+    description = "A simple, clean, well-tested Python library for interacting with AirVisual©";
     license = licenses.mit;
     homepage = "https://github.com/bachya/pyairvisual";
   };

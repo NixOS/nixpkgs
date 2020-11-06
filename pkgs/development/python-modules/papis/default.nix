@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.10";
+  version = "0.11.1";
   disabled = !isPy3k;
 
   # Missing tests on Pypi
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fmrvxs6ixfwjlp96b69db7fpvyqfy2n3c23kdz8yr0vhnp82l93";
+    sha256 = "0bbkjyw1fsvvp0380l404h2lys8ib4xqga5s6401k1y1hld28nl6";
   };
 
   propagatedBuildInputs = [

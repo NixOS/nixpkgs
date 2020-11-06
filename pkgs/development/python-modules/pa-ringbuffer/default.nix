@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spatialaudio";
     repo = "python-pa-ringbuffer";
-    rev = "${version}";
+    rev = version;
     sha256 = "0afpydy1l20hd1xncjppjhqa2c8dj5h9nlv4z8m55cs9hc9h1mxv";
   };
 

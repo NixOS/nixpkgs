@@ -2,8 +2,8 @@
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "3.0.2";
-  k3sVersion = "1.18.6-k3s1";
+  version = "3.1.5";
+  k3sVersion = "1.18.9-k3s1";
 
   excludedPackages = ''tools'';
 
@@ -11,7 +11,7 @@ buildGoModule rec {
     owner  = "rancher";
     repo   = "k3d";
     rev    = "v${version}";
-    sha256 = "182n4kggwr6z75vsagfd0rl89ixcw5h13whf56jh4cd38dj8is5l";
+    sha256 = "0aspkar9im323d8117k48fvh1yylyspi2p2l2f5rdg1ilpa6hm53";
   };
 
   buildFlagsArray = ''
@@ -22,11 +22,13 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  # TODO: Move to enhanced installShellCompletion when in master: PR #83630
   postInstall = ''
-   for shell in bash zsh; do
-     $out/bin/k3d completion $shell > k3d.$shell
-     installShellCompletion k3d.$shell
-   done
+    $out/bin/k3d completion bash > k3d.bash
+    $out/bin/k3d completion fish > k3d.fish
+    $out/bin/k3d completion zsh  > _k3d
+    installShellCompletion k3d.{bash,fish} --zsh _k3d
   '';
 
   vendorSha256 = null;
@@ -38,6 +40,6 @@ buildGoModule rec {
     description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kuznero jlesquembre ngerstle ];
+    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
   };
 }

@@ -13,6 +13,12 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "dev" ];
+
+  preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
+  '';
+
   nativeBuildInputs = [ cmake pysideGeneratorrunner pysideShiboken qt4 ];
 
   buildInputs = [ mesa libGL ];

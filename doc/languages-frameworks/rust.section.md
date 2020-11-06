@@ -16,9 +16,9 @@ cargo
 into the `environment.systemPackages` or bring them into
 scope with `nix-shell -p rustc cargo`.
 
-For daily builds (beta and nightly) use either rustup from
-nixpkgs or use the [Rust nightlies
-overlay](#using-the-rust-nightlies-overlay).
+For other versions such as daily builds (beta and nightly),
+use either `rustup` from nixpkgs (which will manage the rust installation in your home directory),
+or use Mozilla's [Rust nightlies overlay](#using-the-rust-nightlies-overlay).
 
 ## Compiling Rust applications with Cargo
 
@@ -478,8 +478,15 @@ Mozilla provides an overlay for nixpkgs to bring a nightly version of Rust into 
 This overlay can _also_ be used to install recent unstable or stable versions
 of Rust, if desired.
 
-To use this overlay, clone
-[nixpkgs-mozilla](https://github.com/mozilla/nixpkgs-mozilla),
+### Rust overlay installation
+
+You can use this overlay by either changing your local nixpkgs configuration,
+or by adding the overlay declaratively in a nix expression,  e.g. in `configuration.nix`.
+For more information see [#sec-overlays-install](the manual on installing overlays).
+
+#### Imperative rust overlay installation
+
+Clone [nixpkgs-mozilla](https://github.com/mozilla/nixpkgs-mozilla),
 and create a symbolic link to the file
 [rust-overlay.nix](https://github.com/mozilla/nixpkgs-mozilla/blob/master/rust-overlay.nix)
 in the `~/.config/nixpkgs/overlays` directory.
@@ -488,7 +495,34 @@ in the `~/.config/nixpkgs/overlays` directory.
     $ mkdir -p ~/.config/nixpkgs/overlays
     $ ln -s $(pwd)/nixpkgs-mozilla/rust-overlay.nix ~/.config/nixpkgs/overlays/rust-overlay.nix
 
-The latest version can be installed with the following command:
+### Declarative rust overlay installation
+
+Add the following to your `configuration.nix`, `home-configuration.nix`, `shell.nix`, or similar:
+
+```
+  nixpkgs = {
+    overlays = [
+      (import (builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz))
+      # Further overlays go here
+    ];
+  };
+```
+
+Note that this will fetch the latest overlay version when rebuilding your system.
+
+### Rust overlay usage
+
+The overlay contains attribute sets corresponding to different versions of the rust toolchain, such as:
+
+* `latest.rustChannels.stable`
+* `latest.rustChannels.nightly`
+* a function `rustChannelOf`, called as `(rustChannelOf { date = "2018-04-11"; channel = "nightly"; })`, or...
+* `(nixpkgs.rustChannelOf { rustToolchain = ./rust-toolchain; })` if you have a local `rust-toolchain` file (see https://github.com/mozilla/nixpkgs-mozilla#using-in-nix-expressions for an example)
+
+Each of these contain packages such as `rust`, which contains your usual rust development tools with the respective toolchain chosen.
+For example, you might want to add `latest.rustChannels.stable.rust` to the list of packages in your configuration.
+
+Imperatively, the latest stable version can be installed with the following command:
 
     $ nix-env -Ai nixos.latest.rustChannels.stable.rust
 

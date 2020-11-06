@@ -1,17 +1,17 @@
 {
   "stable": {
-    "version": "85.0.4183.102",
-    "sha256": "032yh1mfwins7a62zw8kwwq8xw1n52a0a93lqz7qlyjaf9sd8s4a",
-    "sha256bin64": "1i8xaxxnmg80vsia8hxnq58qi9k5nnbrl80d6d23g9lb7dbc9cpm"
+    "version": "86.0.4240.111",
+    "sha256": "05y7lwr89awkhvgmwkx3br9j4ap2aypg2wsc0nz8mi7kxc1dnyzj",
+    "sha256bin64": "10aqiiydw4i3jxnw8xxdgkgcqbfqc67n1fbrg40y54kg0v5dz8l6"
   },
   "beta": {
-    "version": "86.0.4240.30",
-    "sha256": "1isj0zngb72k1hhn3h0s8mccg1cdmppz1mjmg19f2h306farzmzl",
-    "sha256bin64": "10d8im2adqqnkd6265gngv6xlm5qsz6r13z6cbbchsss0ssr8fxa"
+    "version": "87.0.4280.27",
+    "sha256": "0w0asxj7jlsw69cssfia8km4q9cx1c2mliks2rmhf4jk0hsghasm",
+    "sha256bin64": "1lsx4mhy8nachfb8c9f3mrx5nqw2bi046dqirb4lnv7y80jjjs1k"
   },
   "dev": {
-    "version": "87.0.4252.0",
-    "sha256": "1lxlsdni63zh79hxvpwgmnfn67kgfzhz3yg9bkxghqchqykkz92y",
-    "sha256bin64": "130hf7b35wcxpw05ddbqq89x10c0kays1vb9qg6xhq3zx2mk6ijw"
+    "version": "88.0.4298.4",
+    "sha256": "0ka11gmpkyrmifajaxm66c16hrj3xakdvhjqg04slyp2sv0nlhrl",
+    "sha256bin64": "0768y31jqbl1znp7yp6mvl5j12xl1nwjkh2l8zdga81q0wz52hh6"
   }
 }

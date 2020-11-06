@@ -14,6 +14,7 @@ PLATFORMS=(
   armv7-unknown-linux-gnueabihf
   aarch64-unknown-linux-gnu
   x86_64-apple-darwin
+  powerpc64le-unknown-linux-gnu
 )
 BASEURL=https://static.rust-lang.org/dist
 VERSION=${1:-}

@@ -75,6 +75,7 @@
 , "eslint_d"
 , "expo-cli"
 , {"fast-cli": "1.x"}
+, "fauna-shell"
 , "fkill-cli"
 , "forever"
 , "fx"
@@ -99,7 +100,7 @@
 , "indium"
 , "insect"
 , "ionic"
-, { "iosevka-build-deps": "../../data/fonts/iosevka" }
+, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v3.7.1.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
