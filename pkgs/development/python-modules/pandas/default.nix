@@ -113,6 +113,8 @@ in buildPythonPackage rec {
     # Fails with 1.0.5
     "test_constructor_list_frames"
     "test_constructor_with_embedded_frames"
+    # tries to import compiled C extension locally
+    "test_missing_required_dependency"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
@@ -120,6 +122,7 @@ in buildPythonPackage rec {
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
