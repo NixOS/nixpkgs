@@ -2345,7 +2345,7 @@ in
 
   medusa = callPackage ../tools/security/medusa { };
 
-  megasync = libsForQt514.callPackage ../applications/misc/megasync { };
+  megasync = libsForQt515.callPackage ../applications/misc/megasync { };
 
   megacmd = callPackage ../applications/misc/megacmd { };
 
