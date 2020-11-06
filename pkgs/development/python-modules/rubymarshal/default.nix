@@ -12,6 +12,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hypothesis ];
 
+  # pypi doesn't distribute tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "rubymarshal" ];
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/d9pouces/RubyMarshal/";
     description = "Read and write Ruby-marshalled data";
