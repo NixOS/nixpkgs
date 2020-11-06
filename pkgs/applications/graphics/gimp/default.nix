@@ -3,19 +3,22 @@
 , fetchurl
 , substituteAll
 , autoreconfHook
+, appstream-glib
 , pkgconfig
 , intltool
 , babl
 , gegl
-, gtk2
+, gtk3
 , glib
 , gdk-pixbuf
+, gobject-introspection
 , isocodes
 , pango
 , cairo
 , freetype
 , fontconfig
 , lcms
+, libarchive
 , libpng
 , libjpeg
 , poppler
@@ -38,6 +41,7 @@
 , libmypaint
 , gexiv2
 , harfbuzz
+, vala
 , mypaint-brushes1
 , libwebp
 , libheif
@@ -52,13 +56,13 @@ let
   python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.22";
+  version = "2.99.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1fqqyshakvdarf1jipk2n33ibqr23ni22z3d8srq13bpydblpf1d";
+    sha256 = "0wxfqglxlnzablc7vhxzirwb04myyx3g4sv8sslszfhvb2hrkp1r";
   };
 
   patches = [
@@ -71,7 +75,7 @@ in stdenv.mkDerivation rec {
 
     # Use absolute paths instead of relying on PATH
     # to make sure plug-ins are loaded by the correct interpreter.
-    ./hardcode-plugin-interpreters.patch
+    #./hardcode-plugin-interpreters.patch
   ];
 
   nativeBuildInputs = [
@@ -80,12 +84,16 @@ in stdenv.mkDerivation rec {
     intltool
     gettext
     makeWrapper
+    vala
   ];
 
   buildInputs = [
+    gobject-introspection
+    appstream-glib
+    libarchive
     babl
     gegl
-    gtk2
+    gtk3
     glib
     gdk-pixbuf
     pango
@@ -167,7 +175,7 @@ in stdenv.mkDerivation rec {
     targetScriptDir = "share/gimp/${majorVersion}/scripts";
 
     # probably its a good idea to use the same gtk in plugins ?
-    gtk = gtk2;
+    gtk = gtk3;
   };
 
   meta = with lib; {
