@@ -1,4 +1,5 @@
-{ stdenvNoCC
+{ callPackage
+, stdenvNoCC
 , fetchurl
 , rpmextract
 , undmg
@@ -156,6 +157,8 @@ in stdenvNoCC.mkDerivation {
   # Per license agreement, do not modify the binary
   dontStrip = true;
   dontPatchELF = true;
+
+  passthru.tests.pkg-config = callPackage ./test { };
 
   meta = with stdenvNoCC.lib; {
     description = "Intel Math Kernel Library";
