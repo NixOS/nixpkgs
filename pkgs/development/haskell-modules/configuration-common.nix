@@ -85,6 +85,11 @@ self: super: {
     url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
     sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
   });
+  optparse-applicative_0_16_0_0 = appendPatch super.optparse-applicative_0_16_0_0 (pkgs.fetchpatch {
+    name = "optparse-applicative-0.15.1-hercules-ci-compgen.diff";
+    url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
+    sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
+  });
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
