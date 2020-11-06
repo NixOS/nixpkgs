@@ -571,6 +571,8 @@ let
 
     mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
 
+    mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
+
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
     mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
