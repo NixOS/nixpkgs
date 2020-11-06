@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-material-shell";
-  version = "8";
+  version = "9";
 
   src = fetchFromGitHub {
     owner = "material-shell";
     repo = "material-shell";
     rev = version;
-    sha256 = "08zc6xl2b7k7l5l6afr40ii3gnxxbysan3cqv2s9g614rbsmc62r";
+    sha256 = "154ids72hkkvibqpq3522wf6h9qw7zkjnf8dgz50vxbkiiy015xn";
   };
 
   # This package has a Makefile, but it's used for building a zip for
