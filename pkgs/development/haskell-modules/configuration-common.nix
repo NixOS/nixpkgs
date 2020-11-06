@@ -1450,6 +1450,10 @@ self: super: {
   # binary-instances needs the latest version.
   time-compat = self.time-compat_1_9_4;
 
+  optparse-generic_1_4_4 = super.optparse-generic_1_4_4.override {
+    optparse-applicative = self.optparse-applicative_0_16_0_0;
+  };
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 } // (let
   inherit (self) hls-ghcide hls-brittany;
