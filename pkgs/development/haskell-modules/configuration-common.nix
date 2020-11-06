@@ -1476,7 +1476,6 @@ self: super: {
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
-  # INSERT NEW OVERRIDES ABOVE THIS LINE
 
   # stack-2.5.1 needs a more current version of pantry to compile
   pantry = self.pantry_0_5_1_3;
@@ -1486,7 +1485,7 @@ self: super: {
 
   autoapply = super.autoapply.override { th-desugar = self.th-desugar_1_11; };
 
-  # haskell-language-server needs a more current version of pantry to compile
+  # INSERT NEW OVERRIDES ABOVE THIS LINE
 } // (let
   inherit (self) hls-ghcide hls-brittany;
   hlsScopeOverride = self: super: {
