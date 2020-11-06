@@ -26,6 +26,8 @@
 
 let
   pythonPkgs = extraPythonPackages
+    # Add the extraPackages as python modules as well
+    ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ stdenv.lib.flatten (stdenv.lib.mapAttrsToList (
       feat: info: (
         if unwrapped.hasFeature feat unwrapped.features then
