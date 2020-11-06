@@ -1252,41 +1252,8 @@ self: super: {
   x509-validation = dontCheck super.x509-validation;
   tls = dontCheck super.tls;
 
-  patch = appendPatches super.patch [
-    # Upstream PR: https://github.com/reflex-frp/patch/pull/20
-    # Makes tests work with hlint 3
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/3ed23a4e4049ee17e64a1a5bbebf1990cdbe033a.patch";
-      sha256 ="1hfa980wln8kzbqw1lr8ddszgcibw25xf12ki2jb9xkl464aynzf";
-    })
-    # Upstream PR: https://github.com/reflex-frp/patch/pull/17
-    # Bumps version dependencies
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/a191ed9ded708ed7ff0cf53ad6dafaf54db5b95a.patch";
-      sha256 ="1x9w5fimhk3a0l2aa5z91nqaa6s2irz1775iidd0191m6w25vszp";
-    })
-  ];
-
-  reflex = appendPatches super.reflex [
-    # Upstream PR: https://github.com/reflex-frp/reflex/pull/434
-    # Bump version bounds
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/commit/e6104bdfd7f664f524b6765275490722e376df4d.patch";
-      sha256 ="1awp5p4640cnhfd50dplsvp0kzy6h8r0hpbw1s40blni74r3dhzr";
-    })
-    # Upstream PR: https://github.com/reflex-frp/reflex/pull/436
-    # Fix build with newest dependent-map version
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/commit/dc3bf44d822d70594e3c474fe3869261776c3554.patch";
-      sha256 ="0rbjfj9b8p6zkvd5j4pak5kpgard6cyfvzk750s4xwpc1v84iiqd";
-    })
-    # Upstream PR: https://github.com/reflex-frp/reflex/pull/437
-    # Fix tests with newer dep versions
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/commit/87c74a1b9d9098eae8a56148c59ed4963a5232c2.patch";
-      sha256 ="0qhjjgd6n4fms1hpbblny78c95bfh74izhx9dvrdlnhz6q7xlm9q";
-    })
-  ];
+  # Allow building with recent versions of hlint.
+  patch = doJailbreak super.patch;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   # Tests disabled because of very old dep: https://github.com/reflex-frp/reflex-dom/issues/393
