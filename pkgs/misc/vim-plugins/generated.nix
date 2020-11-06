@@ -219,6 +219,18 @@ let
     meta.homepage = "https://github.com/ayu-theme/ayu-vim/";
   };
 
+  barbar-nvim = buildVimPluginFrom2Nix {
+    pname = "barbar-nvim";
+    version = "2020-11-06";
+    src = fetchFromGitHub {
+      owner = "romgrk";
+      repo = "barbar.nvim";
+      rev = "92e70f9e369d106476de283354bc30e37a94e864";
+      sha256 = "17az4flcsry4f2p4xnmgw0ymbbybcfycajm25g6r692hcbgkg5dx";
+    };
+    meta.homepage = "https://github.com/romgrk/barbar.nvim/";
+  };
+
   base16-vim = buildVimPluginFrom2Nix {
     pname = "base16-vim";
     version = "2019-06-07";
