@@ -23704,7 +23704,7 @@ in
 
   soci = callPackage ../development/libraries/soci { };
 
-  sonic-lineup = libsForQt514.callPackage ../applications/audio/sonic-lineup { };
+  sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
