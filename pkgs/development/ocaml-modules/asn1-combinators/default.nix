@@ -8,6 +8,8 @@ buildDunePackage rec {
   pname = "asn1-combinators";
   version = "0.2.4";
 
+  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-asn1-combinators/releases/download/v${version}/asn1-combinators-v${version}.tbz";
     sha256 = "09rn5wwqhwg7x51b9ycl15s7007hgha6lwaz2bpw85fr70jq3i9r";
