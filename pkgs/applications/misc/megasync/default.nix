@@ -1,17 +1,40 @@
-{ stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
-, fetchpatch, ffmpeg_3, libmediainfo, libraw, libsodium, libtool, libuv, libzen
-, lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
-, wget }:
+{ stdenv
+, autoconf
+, automake
+, c-ares
+, cryptopp
+, curl
+, doxygen
+, fetchFromGitHub
+, fetchpatch
+, ffmpeg_3
+, libmediainfo
+, libraw
+, libsodium
+, libtool
+, libuv
+, libzen
+, lsb-release
+, mkDerivation
+, pkgconfig
+, qtbase
+, qttools
+, qtx11extras
+, sqlite
+, swig
+, unzip
+, wget
+}:
 
 mkDerivation rec {
   pname = "megasync";
-  version = "4.3.1.0";
+  version = "4.3.5.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0b68wpif8a0wf1vfn1nr19dmz8f31dprb27jpldxrxhyfslc43yj";
+    sha256 = "0rr1jjy0n5bj1lh6xi3nbbcikvq69j3r9qnajp4mhywr5izpccvs";
     fetchSubmodules = true;
   };
 
@@ -29,6 +52,7 @@ mkDerivation rec {
     libuv
     libzen
     qtbase
+    qtx11extras
     sqlite
     unzip
     wget
