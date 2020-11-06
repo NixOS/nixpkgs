@@ -2738,6 +2738,8 @@ unsupported-platforms:
   sdl2-mixer:                                   [ x86_64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin ]
   tokyotyrant-haskell:                          [ x86_64-darwin ]
+  vulkan:                                       [ i686-linux, armv7l-linux ]
+  VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux ]
   Win32-console:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   Win32-dhcp-server:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   Win32-errors:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
