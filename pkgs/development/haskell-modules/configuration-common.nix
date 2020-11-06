@@ -1442,6 +1442,9 @@ self: super: {
 
   autoapply = super.autoapply.override { th-desugar = self.th-desugar_1_11; };
 
+  # binary-instances needs the latest version.
+  time-compat = self.time-compat_1_9_4;
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 } // (let
   inherit (self) hls-ghcide hls-brittany;
