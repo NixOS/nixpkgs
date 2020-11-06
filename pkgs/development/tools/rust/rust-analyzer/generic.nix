@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
-    export RUST_SRC_PATH=${rustPlatform.rustcSrc}
+    export RUST_SRC_PATH=${rustPlatform.rustLibSrc}
   '';
 
   doInstallCheck = true;
