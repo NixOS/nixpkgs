@@ -18,30 +18,10 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.tailscale ]; # for the CLI
-    systemd.services.tailscale = {
-      description = "Tailscale client daemon";
-
-      after = [ "network-pre.target" ];
-      wants = [ "network-pre.target" ];
+    systemd.packages = [ pkgs.tailscale ];
+    systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
-
-      startLimitIntervalSec = 0;
-
-      serviceConfig = {
-        ExecStart =
-          "${pkgs.tailscale}/bin/tailscaled --port ${toString cfg.port}";
-
-        RuntimeDirectory = "tailscale";
-        RuntimeDirectoryMode = 755;
-
-        StateDirectory = "tailscale";
-        StateDirectoryMode = 750;
-
-        CacheDirectory = "tailscale";
-        CacheDirectoryMode = 750;
-
-        Restart = "on-failure";
-      };
+      serviceConfig.Environment = "PORT=${toString cfg.port}";
     };
   };
 }
