@@ -15380,6 +15380,8 @@ in
 
     grantlee = callPackage ../development/libraries/grantlee/5 { };
 
+    herqq = callPackage ../development/libraries/herqq { };
+
     kdb = callPackage ../development/libraries/kdb { };
 
     kdiagram = callPackage ../development/libraries/kdiagram { };
