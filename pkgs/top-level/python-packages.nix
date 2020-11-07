@@ -2925,6 +2925,8 @@ in {
 
   infoqscraper = callPackage ../development/python-modules/infoqscraper { };
 
+  inform = callPackage ../development/python-modules/inform { };
+
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
   inifile = callPackage ../development/python-modules/inifile { };
@@ -3999,6 +4001,8 @@ in {
   neo = callPackage ../development/python-modules/neo { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
+
+  nestedtext = callPackage ../development/python-modules/nestedtext { };
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
