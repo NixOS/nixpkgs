@@ -232,6 +232,31 @@ rec {
     fixupPhase = ":";
   });
 
+  /* Create a documentation tarball suitable for uploading to Hackage instead
+     of building the package.
+   */
+  documentationTarball = pkg:
+    pkgs.lib.overrideDerivation pkg (drv: {
+      name = "${drv.name}-docs";
+      # Like sdistTarball, disable the "doc" output here.
+      outputs = [ "out" ];
+      buildPhase = ''
+        runHook preHaddock
+        ./Setup haddock --for-hackage
+        runHook postHaddock
+      '';
+      haddockPhase = ":";
+      checkPhase = ":";
+      installPhase = ''
+        runHook preInstall
+        mkdir -p "$out"
+        tar --format=ustar \
+          -czf "$out/${drv.name}-docs.tar.gz" \
+          -C dist/doc/html "${drv.name}-docs"
+        runHook postInstall
+      '';
+    });
+
   /* Use the gold linker. It is a linker for ELF that is designed
      "to run as fast as possible on modern systems"
    */
