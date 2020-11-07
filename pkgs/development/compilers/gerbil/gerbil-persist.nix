@@ -2,8 +2,8 @@
 
 gerbil-support.gerbilPackage {
   pname = "gerbil-persist";
-  version = "unstable-2020-08-02";
-  git-version = "0.0-4-ga3b2bd1";
+  version = "unstable-2020-08-31";
+  git-version = "0.0-8-gd211390";
   gerbil-package = "clan/persist";
   gerbil = gerbil-unstable;
   gerbilInputs = with gerbil-support.gerbilPackages-unstable; [gerbil-utils gerbil-crypto gerbil-poo];
@@ -14,8 +14,8 @@ gerbil-support.gerbilPackage {
   src = fetchFromGitHub {
     owner = "fare";
     repo = "gerbil-persist";
-    rev = "a3b2bd104612db0e4492737f09f72adea6684483";
-    sha256 = "0mc01wva26ww1i7n8naa95mfw7i6lj8qg0bwsik7gb3dsj2acjvh";
+    rev = "d211390c8a199cf2b8c7400cd98977524e960015";
+    sha256 = "13s6ws8ziwalfp23nalss41qnz667z2712lr3y123sypm5n5axk7";
   };
   meta = {
     description = "Gerbil Persist: Persistent data and activities";
