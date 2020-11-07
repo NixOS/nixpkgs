@@ -100,7 +100,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  passthru.tests = callPackage ./test { };
+  passthru.tests.cmake = callPackage ./test { };
 
   meta = with stdenv.lib; {
     description = "C++ API of the PyTorch machine learning framework";
