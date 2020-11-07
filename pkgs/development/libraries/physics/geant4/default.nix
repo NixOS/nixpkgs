@@ -45,12 +45,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "10.6.2";
+  version = "10.6.3";
   pname = "geant4";
 
   src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p02.tar.gz";
-    sha256 = "0vznm3pjlbihjy1wsxc4gj229k0dzc283wvil2xghyl08vwdpnpc";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p03.tar.gz";
+    sha256 = "1wzv5xky1pfm7wdfdkvqcaaqlcnsrz35dc7zcrxh8l3j5rki6pqb";
   };
 
   boost_python_lib = "python${builtins.replaceStrings ["."] [""] python3.pythonVersion}";
