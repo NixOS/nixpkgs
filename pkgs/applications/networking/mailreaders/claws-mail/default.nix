@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
-  requiredPythonModules = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
+  requiredPythonModules = with python.pkgs; computeRequiredPythonModules ([ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ]);
 
   buildInputs =
     [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas
@@ -94,8 +94,6 @@ stdenv.mkDerivation rec {
     ++ optional (!enableSpellcheck) "--disable-enchant";
 
   enableParallelBuilding = true;
-
-  requiredPythonModules = with python.pkgs; [ pygobject2 pygtk ];
 
   preFixup = ''
     buildPythonPath "$out $requiredPythonModules"
