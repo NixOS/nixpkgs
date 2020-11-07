@@ -27,7 +27,7 @@ stdenv.mkDerivation ({
   ];
 
   postPatch = ''
-    sed -e 's|/usr/bin/env perl|${perl}/bin/perl|' -i doc/info/Makefile.am
+    substituteInPlace doc/info/Makefile.am --replace "/usr/bin/env perl" "${perl}/bin/perl"
   '';
 
   postInstall = ''
