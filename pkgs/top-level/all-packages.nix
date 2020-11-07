@@ -20521,7 +20521,7 @@ in
 
   curseradio = callPackage ../applications/audio/curseradio { };
 
-  cutecom = libsForQt514.callPackage ../tools/misc/cutecom { };
+  cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
   cvs = callPackage ../applications/version-management/cvs { };
 
