@@ -113,7 +113,7 @@ let
   # Propagating Python modules is in principle fine, it is however unlikely one
   # would actually want to do that.
   # This is to be released in nixos-21.03 and should thus be removed in nixos-21.09.
-  partitionedPropagatedInputs = lib.lists.partition (x: lib.hasAttr "pythonModule" x) propagatedBuildInputs;
+  partitionedPropagatedInputs = lib.lists.partition (x: lib.hasAttr "pythonModule" x) (lib.filter (x: x != null) propagatedBuildInputs);
   propagatedPythonInputs = if lib.length partitionedPropagatedInputs.right > 0
     then
       lib.warn ''
