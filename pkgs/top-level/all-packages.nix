@@ -23020,6 +23020,8 @@ in
 
   pistol = callPackage ../tools/misc/pistol { };
 
+  plater = libsForQt5.callPackage ../applications/misc/plater { };
+
   plexamp = callPackage ../applications/audio/plexamp { };
 
   plex-media-player = libsForQt512.callPackage ../applications/video/plex-media-player { };
