@@ -1,23 +1,23 @@
-{ stdenv, lib, graalvm8-ce, fetchurl }:
+{ stdenv, lib, graalvm11-ce, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "clj-kondo";
-  version = "2020.04.05";
+  version = "2020.11.07";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://raw.githubusercontent.com/borkdude/${pname}/v${version}/reflection.json";
-    sha256 = "1m6kja38p6aypawbynkyq8bdh8wpdjmyqrhslinqid9r8cl25rcq";
+    sha256 = "0mwclqjh38alkddr5r7bfqn5lplx06h9gladi89kp06qdxc1hp7a";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "0k9samcqkpkdgzbzr2bpixf75987lsabh97101v1fg12qvjhf187";
+    sha256 = "1xqryfcn82bp8wasqnllfgvhl5w9zm63yw8c2kgxz18dayhq4i31";
   };
 
   dontUnpack = true;
 
-  buildInputs = [ graalvm8-ce ];
+  buildInputs = [ graalvm11-ce ];
 
   buildPhase = ''
     native-image  \
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "A linter for Clojure code that sparks joy";
     homepage = "https://github.com/borkdude/clj-kondo";
     license = licenses.epl10;
-    platforms = graalvm8-ce.meta.platforms;
+    platforms = graalvm11-ce.meta.platforms;
     maintainers = with maintainers; [ jlesquembre bandresen ];
   };
 }
