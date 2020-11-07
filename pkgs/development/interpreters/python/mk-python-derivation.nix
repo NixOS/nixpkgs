@@ -105,13 +105,41 @@ else
 let
   inherit (python) stdenv;
 
-  requiredPythonModules_ = computeRequiredPythonModules requiredPythonModules;
+  name_ = namePrefix + name;
+
+  # We've converted from `propagatedBuildInputs` to `requiredPythonModules`.
+  # This will cause packages that did not convert to fail at run-time.
+  # Here we warn in case Python modules are being propagated.
+  # Propagating Python modules is in principle fine, it is however unlikely one
+  # would actually want to do that.
+  # This is to be released in nixos-21.03 and should thus be removed in nixos-21.09.
+  partitionedPropagatedInputs = lib.lists.partition (x: lib.hasAttr "pythonModule" x) propagatedBuildInputs;
+  propagatedPythonInputs = if lib.length partitionedPropagatedInputs.right > 0
+    then
+      lib.warn ''
+        ${name}: Using `propagatedBuildInputs` for Python modules has been deprecated, please use `requiredPythonModules` instead.
+        
+        Your code may need to look like:
+
+          requiredPythonModules = [ ${lib.concatMapStringsSep " " (drv: drv.pname or drv.name) partitionedPropagatedInputs.right} ];
+
+          propagatedBuildInputs = [ ${lib.concatMapStringsSep " " (drv: drv.pname or drv.name) partitionedPropagatedInputs.wrong} ];
+
+        Note the exact attribute names may be incorrect. Not resolving this issue may result in incorrect wrappers.
+
+        For more information, see https://github.com/NixOS/nixpkgs/pull/102613.
+      '' partitionedPropagatedInputs.right
+    else
+      [ ];
+  propagatedDerivationInputs = partitionedPropagatedInputs.wrong;
+
+  requiredPythonModules_ = computeRequiredPythonModules (requiredPythonModules ++ propagatedPythonInputs);
 
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format" "requiredPythonModules"
   ]) // {
 
-    name = namePrefix + name;
+    name = name_;   
 
     nativeBuildInputs = [
       python
@@ -157,7 +185,7 @@ let
     # Probably the solution is to keep using propagation in case packages,
     # and convert `buildPythonApplication` to first build the package, and then an environment
     # using `python.buildEnv` https://github.com/NixOS/nixpkgs/pull/16672.
-    propagatedBuildInputs = propagatedBuildInputs ++ requiredPythonModules_;
+    propagatedBuildInputs = propagatedDerivationInputs ++ requiredPythonModules_;
 
     # requiredPythonModules is also set
     requiredPythonModules = requiredPythonModules_;
