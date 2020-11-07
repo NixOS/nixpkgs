@@ -1471,6 +1471,10 @@ self: super: {
     optparse-applicative = self.optparse-applicative_0_16_0_0;
   };
 
+  # Our quickcheck-instances is too old for the newer binary-instances, but
+  # quickcheck-instances is only used in the tests of binary-instances.
+  binary-instances = dontCheck super.binary-instances;
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 } // (let
   inherit (self) hls-ghcide hls-brittany;
