@@ -1,0 +1,20 @@
+diff --color -U 1000 -r a/services/sddm.pam b/services/sddm.pam
+--- a/services/sddm.pam	2021-01-18 12:01:11.232929452 +0100
++++ b/services/sddm.pam	2021-01-18 12:01:59.941494939 +0100
+@@ -1,15 +1,15 @@
+ #%PAM-1.0
+ 
+-auth		include		system-login
++auth		substack		system-login
+ -auth		optional	pam_gnome_keyring.so
+ -auth   optional  pam_kwallet5.so
+ 
+ account		include		system-login
+ 
+ password	include		system-login
+ -password	optional	pam_gnome_keyring.so use_authtok
+ 
+ session		optional	pam_keyinit.so force revoke
+ session		include		system-login
+ -session		optional	pam_gnome_keyring.so auto_start
+ -session  optional  pam_kwallet5.so auto_start
