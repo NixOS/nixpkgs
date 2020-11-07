@@ -3,7 +3,7 @@
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
 , file, hddtemp, iproute, ipmitool, usbutils, kmod, lm_sensors, smartmontools
-, binutils, tree, upower
+, binutils, tree, upower, pciutils
 , withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
 }:
 
@@ -12,7 +12,7 @@ let
     "--prefix PATH ':' '${stdenv.lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
     util-linuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
-    lm_sensors smartmontools binutils tree upower
+    lm_sensors smartmontools binutils tree upower pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms
