@@ -7095,6 +7095,12 @@
       fingerprint = "7573 56D7 79BB B888 773E  415E 736C CDF9 EF51 BD97";
     }];
   };
+  r-burns = {
+    email = "rtburns@protonmail.com";
+    github = "r-burns";
+    githubId = 52847440;
+    name = "Ryan Burns";
+  };
   raboof = {
     email = "arnout@bzzt.net";
     github = "raboof";
