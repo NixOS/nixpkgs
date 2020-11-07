@@ -178,6 +178,30 @@
    </listitem>
    <listitem>
     <para>
+      The uWSGI server is now built with POSIX capabilities. As a consequence,
+      root is no longer required in emperor mode and the service defaults to
+      running as the unprivileged <literal>uwsgi</literal> user. Any additional
+      capability can be added via the new option
+      <xref linkend="opt-services.uwsgi.capabilities"/>.
+      The previous behaviour can be restored by setting:
+<programlisting>
+  <xref linkend="opt-services.uwsgi.user"/> = "root";
+  <xref linkend="opt-services.uwsgi.group"/> = "root";
+  <xref linkend="opt-services.uwsgi.instance"/> =
+    {
+      uid = "uwsgi";
+      gid = "uwsgi";
+    };
+</programlisting>
+    </para>
+    <para>
+      Another incompatibility from the previous release is that vassals running under a
+      different user or group need to use <literal>immediate-{uid,gid}</literal>
+      instead of the usual <literal>uid,gid</literal> options.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
     <package>btc1</package> has been abandoned upstream, and removed.
     </para>
    </listitem>
