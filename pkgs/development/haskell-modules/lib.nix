@@ -156,6 +156,9 @@ rec {
   addBuildDepend = drv: x: addBuildDepends drv [x];
   addBuildDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.buildDepends or []) ++ xs; });
 
+  addTestToolDepend = drv: x: addTestToolDepends drv [x];
+  addTestToolDepends = drv: xs: overrideCabal drv (drv: { testToolDepends = (drv.testToolDepends or []) ++ xs; });
+
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
   addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
 
