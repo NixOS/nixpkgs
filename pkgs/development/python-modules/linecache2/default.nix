@@ -5,7 +5,7 @@
 , isPy3k
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "linecache2";
   version = "1.0.0";
 
@@ -23,8 +23,4 @@ buildPythonPackage (rec {
     homepage = "https://github.com/testing-cabal/linecache2";
     license = licenses.psfl;
   };
-# TODO: move into main set, this was to avoid a rebuild
-} // stdenv.lib.optionalAttrs (!isPy3k ) {
-  # syntax error in tests. Tests are likely Python 3 only.
-  dontUsePythonRecompileBytecode = !isPy3k;
-})
+}
