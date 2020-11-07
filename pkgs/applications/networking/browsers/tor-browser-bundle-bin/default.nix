@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , makeDesktopItem
+, writeText
 
 # Common run-time dependencies
 , zlib
@@ -106,6 +107,19 @@ let
       sha256 = "sha256-EanW2Q8TtCPY5FSp8zfgBXMte9+RfKE24fu8ROtArK0=";
     };
   };
+
+  policiesJson = writeText "policies.json" (builtins.toJSON enterprisePolicies);
+
+  enterprisePolicies.policies = {
+    ExtensionSettings = {
+      "${noScriptId}" = {
+        installation_mode = "force_installed";
+        install_url = "${builtins.placeholder "out"}/share/tor-browser/TorBrowser/Data/Browser/profile.default/extensions/${noScriptId}.xpi";
+      };
+    };
+  };
+
+  noScriptId = "{73a6fe31-595d-460b-a920-fcc0f8843232}";
 in
 stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
@@ -168,6 +182,9 @@ stdenv.mkDerivation rec {
     sed -i TorBrowser/Data/Tor/torrc-defaults \
         -e "s|\(ClientTransportPlugin snowflake\) exec|\1 exec $interp|"
 
+    # Set up enterprise policies
+    mkdir -p distribution
+    cp ${policiesJson} distribution/policies.json
 
     # Prepare for autoconfig.
     #
