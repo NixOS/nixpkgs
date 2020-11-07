@@ -225,6 +225,13 @@ let
       is_official_build = true;
       is_debug = false;
 
+      chrome_pgo_phase = 2; # TODO Remove after updating stable to M87+
+      pgo_data_path =
+        builtins.toString (fetchurl {
+          url = "https://commondatastorage.googleapis.com/chromium-optimization-profiles/pgo_profiles/${upstream-info.pgo-profile.name}";
+          sha256 = upstream-info.pgo-profile.sha256;
+        });
+
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;

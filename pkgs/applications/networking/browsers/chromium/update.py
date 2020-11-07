@@ -16,6 +16,7 @@ from urllib.request import urlopen
 HISTORY_URL = 'https://omahaproxy.appspot.com/history?os=linux'
 DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official'
+PGO_URL = 'https://commondatastorage.googleapis.com/chromium-optimization-profiles/pgo_profiles'
 
 JSON_PATH = dirname(abspath(__file__)) + '/upstream-info.json'
 
@@ -79,6 +80,13 @@ with urlopen(HISTORY_URL) as resp:
         try:
             channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{build["version"]}.tar.xz')
             channel['sha256bin64'] = nix_prefetch_url(f'{DEB_URL}/google-chrome-{suffix}/google-chrome-{suffix}_{build["version"]}-1_amd64.deb')
+
+            pgo_filename = get_file_revision(build['version'], 'chrome/build/linux.pgo.txt').decode("utf-8").rstrip()
+            channel['pgo-profile'] = {
+                'name': pgo_filename,
+                'sha256': nix_prefetch_url(f'{PGO_URL}/{pgo_filename}')
+            }
+
         except subprocess.CalledProcessError:
             # This build isn't actually available yet.  Continue to
             # the next one.
