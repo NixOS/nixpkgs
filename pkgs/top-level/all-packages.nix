@@ -2532,6 +2532,8 @@ in
 
   socklog = callPackage ../tools/system/socklog { };
 
+  ssmsh = callPackage ../tools/admin/ssmsh { };
+
   stagit = callPackage ../development/tools/stagit { };
 
   starboard = callPackage ../applications/networking/cluster/starboard { };
