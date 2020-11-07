@@ -1,5 +1,5 @@
 {
-  mkDerivation, fetchurl, lib,
+  mkDerivation, fetchurl, lib, qtbase,
   extra-cmake-modules, kdoctools, wrapGAppsHook,
   karchive, kconfig, kcrash, kguiaddons, kinit, kparts, kwindowsystem
 }:
