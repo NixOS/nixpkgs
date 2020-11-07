@@ -7159,7 +7159,7 @@ in
 
   sigal = callPackage ../applications/misc/sigal { };
 
-  sigil = libsForQt514.callPackage ../applications/editors/sigil { };
+  sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
