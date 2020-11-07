@@ -57,7 +57,6 @@ populateCacheWithRecursiveDeps() {
     local so found foundso
     for so in "${autoPatchelfCachedDeps[@]}"; do
         for found in $(getDepsFromSo "$so"); do
-            local libdir="${found%/*}"
             local base="${found##*/}"
             local soname="${base%.so*}"
             for foundso in "${found%/*}/$soname".so*; do
@@ -113,7 +112,8 @@ findDependency() {
 autoPatchelfFile() {
     local dep rpath="" toPatch="$1"
 
-    local interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
+    local interpreter
+    interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
     if isExecutable "$toPatch"; then
         runPatchelf --set-interpreter "$interpreter" "$toPatch"
         if [ -n "$runtimeDependencies" ]; then
@@ -129,7 +129,8 @@ autoPatchelfFile() {
     # clear the RPATH first.
     runPatchelf --remove-rpath "$toPatch"
 
-    local missing="$(
+    local missing
+    missing="$(
         ldd "$toPatch" 2> /dev/null | \
             sed -n -e 's/^[\t ]*\([^ ]\+\) => not found.*/\1/p'
     )"
@@ -137,7 +138,6 @@ autoPatchelfFile() {
     # This ensures that we get the output of all missing dependencies instead
     # of failing at the first one, because it's more useful when working on a
     # new package where you don't yet know its dependencies.
-    local -i depNotFound=0
 
     for dep in $missing; do
         echo -n "  $dep -> " >&2
@@ -220,7 +220,7 @@ autoPatchelf() {
       # Jump file if patchelf is unable to parse it
       # Some programs contain binary blobs for testing,
       # which are identified as ELF but fail to be parsed by patchelf
-      patchelf $file || continue
+      patchelf "$file" || continue
       autoPatchelfFile "$file"
     done < <(find "$@" ${norecurse:+-maxdepth 1} -type f -print0)
 
