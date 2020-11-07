@@ -1,4 +1,4 @@
-{ stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ stdenv, version, buildOverride, fetch, cmake, python3, llvm, libcxxabi }:
 
 let
 
@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version;
   src = fetch pname "0d5j5l8phwqjjscmk8rmqn0i2i0abl537gdbkagl8fjpzy1gyjip";
+
+  unpackPhase =
+    if buildOverride == null then null
+    else ''
+      cp -r $src/compiler-rt/. .
+      chmod -R u+w .
+    '';
 
   nativeBuildInputs = [ cmake python3 llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;

@@ -8,6 +8,14 @@
       "sha256": "0ifxvii6fzx5aq1wlksz49qrljvv58779y472mlf5y0vxjk5knkd"
     },
     "deps": {
+      "clang": {
+        "version": "2020-08-18",
+        "release": "12.0.0",
+        "owner": "llvm",
+        "repo": "llvm-project",
+        "rev": "a1caa302970de86b15d360212b526be8f1d59641",
+        "sha256": "1j3z3ra9dp5jlfdfncq6y279dkb68xfr5mf5286db69i57zfdxjc"
+      },
       "gn": {
         "version": "2020-08-07",
         "url": "https://gn.googlesource.com/gn",
@@ -25,6 +33,14 @@
       "sha256": "1lajj3jizfrf8zzq39714g7w6n7b1758542x6927i9s0d4y1qirx"
     },
     "deps": {
+      "clang": {
+        "version": "2020-09-05",
+        "release": "12.0.0",
+        "owner": "llvm",
+        "repo": "llvm-project",
+        "rev": "d0abc757495349fd053beeaea81cd954c2e457e7",
+        "sha256": "0w2y8xxhpsnfm3wpnrky5hfnnjxmzxq88gkmr6wgnpbssl8z0q0g"
+      },
       "gn": {
         "version": "2020-09-09",
         "url": "https://gn.googlesource.com/gn",
@@ -42,6 +58,14 @@
       "sha256": "10mzlb5qqm2qz8s7f15hyjnpl7sbx0j1d6sr3gpm60icymdhqps3"
     },
     "deps": {
+      "clang": {
+        "version": "2020-09-12",
+        "release": "12.0.0",
+        "owner": "llvm",
+        "repo": "llvm-project",
+        "rev": "f086e85eea94a51eb42115496ac5d24f07bc8791",
+        "sha256": "0s6k2x0knkx3r28pkzz2b3l4ixgxlckl08b7lhqq242hicp83jdb"
+      },
       "gn": {
         "version": "2020-10-21",
         "url": "https://gn.googlesource.com/gn",

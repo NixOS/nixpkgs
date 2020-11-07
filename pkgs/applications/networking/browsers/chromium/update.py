@@ -40,11 +40,29 @@ def get_file_revision(revision, file_path):
         return http_response.read()
 
 def get_channel_dependencies(channel):
+    clang_script = get_file_revision(channel['version'], 'tools/clang/scripts/update.py')
+    clang_commit_pattern = b"CLANG_REVISION = '.+([0-9a-f]{8})'"
+    clang_release_pattern = b"RELEASE_VERSION = '(\d+\.?\d+\.?\d+)'"
+    clang_commit = re.search(clang_commit_pattern, clang_script).group(1).decode()
+    clang_release = re.search(clang_release_pattern, clang_script).group(1).decode()
+    clang_github_owner = 'llvm'
+    clang_github_repo = 'llvm-project'
+    clang = nix_prefetch_git(f'https://github.com/{clang_github_owner}/{clang_github_repo}.git', clang_commit)
+
     deps = get_file_revision(channel['version'], 'DEPS')
     gn_pattern = b"'gn_version': 'git_revision:([0-9a-f]{40})'"
     gn_commit = re.search(gn_pattern, deps).group(1).decode()
     gn = nix_prefetch_git('https://gn.googlesource.com/gn', gn_commit)
+
     return {
+        'clang': {
+            'version': datetime.fromisoformat(clang['date']).date().isoformat(),
+            'release': clang_release,
+            'owner': clang_github_owner,
+            'repo': clang_github_repo,
+            'rev': clang['rev'],
+            'sha256': clang['sha256']
+        },
         'gn': {
             'version': datetime.fromisoformat(gn['date']).date().isoformat(),
             'url': gn['url'],

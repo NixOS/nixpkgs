@@ -1,4 +1,5 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
+{ stdenv, fetch, cmake, libxml2, llvm, version, buildOverride
+, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
@@ -11,13 +12,21 @@ let
     src = fetch "clang" "02ajkij85966vd150iy246mv16dsaph1kfi0y8wnncp8w6nar5hg";
     inherit clang-tools-extra_src;
 
-    unpackPhase = ''
-      unpackFile $src
-      mv clang-${version}* clang
-      sourceRoot=$PWD/clang
-      unpackFile ${clang-tools-extra_src}
-      mv clang-tools-extra-* $sourceRoot/tools/extra
-    '';
+    unpackPhase =
+      if buildOverride == null then ''
+        unpackFile $src
+        mv clang-${version}* clang
+        sourceRoot=$PWD/clang
+        unpackFile ${clang-tools-extra_src}
+        mv clang-tools-extra-* $sourceRoot/tools/extra
+      ''
+      else ''
+        sourceRoot=$PWD/clang
+        mkdir -p $sourceRoot/tools
+        cp -r $src/clang .
+        cp -r $src/clang-tools-extra $sourceRoot/tools/extra
+        chmod -R u+w .
+      '';
 
     nativeBuildInputs = [ cmake python3 lld ]
       ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx

@@ -22,15 +22,20 @@
 }:
 
 let
-  llvmPackages = llvmPackages_11;
+  upstream-info = (lib.importJSON ./upstream-info.json).${channel};
+
+  llvmPackages = llvmPackages_11.override {
+    buildLlvmTools = llvmPackages.tools;
+    targetLlvmLibraries = llvmPackages.libraries;
+    buildOverride = upstream-info.deps.clang;
+  };
+
   stdenv = llvmPackages.stdenv;
 
   callPackage = newScope chromium;
 
   chromium = rec {
-    inherit stdenv llvmPackages;
-
-    upstream-info = (lib.importJSON ./upstream-info.json).${channel};
+    inherit upstream-info stdenv llvmPackages;
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs

@@ -4,6 +4,7 @@
 , libxml2
 , llvm
 , version
+, buildOverride
 }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +12,13 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetch pname "077xyh7sij6mhp4dc4kdcmp9whrpz332fa12rwxnzp3wgd5bxrzg";
+
+  unpackPhase =
+    if buildOverride == null then null
+    else ''
+      cp -r $src/lld/. .
+      chmod -R u+w .
+    '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm libxml2 ];

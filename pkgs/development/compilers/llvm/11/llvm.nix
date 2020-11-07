@@ -9,6 +9,7 @@
 , ncurses
 , version
 , release_version
+, buildOverride
 , zlib
 , buildPackages
 , debugVersion ? false
@@ -35,14 +36,23 @@ in stdenv.mkDerivation (rec {
   src = fetch pname "0s94lwil98w7zb7cjrbnxli0z7gklb312pkw74xs1d6zk346hgwi";
   polly_src = fetch "polly" "0h442ivcslr3dv3q3g1nw5avh77f8cxsp6zild1hgspj266xpynw";
 
-  unpackPhase = ''
-    unpackFile $src
-    mv llvm-${version}* llvm
-    sourceRoot=$PWD/llvm
-  '' + optionalString enablePolly ''
-    unpackFile $polly_src
-    mv polly-* $sourceRoot/tools/polly
-  '';
+  unpackPhase =
+    if buildOverride == null then ''
+      unpackFile $src
+      mv llvm-${version}* llvm
+      sourceRoot=$PWD/llvm
+    '' + optionalString enablePolly ''
+      unpackFile $polly_src
+      mv polly-* $sourceRoot/tools/polly
+    ''
+    else ''
+      cp -r $src/. .
+      chmod -R u+w .
+      sourceRoot=$PWD/llvm
+    '' + optionalString enablePolly ''
+      cp -r $src/polly $sourceRoot/tools
+      chmod -R u+w $sourceRoot/tools
+    '';
 
   outputs = [ "out" "python" ]
     ++ optional enableSharedLibraries "lib";
