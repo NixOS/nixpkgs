@@ -15384,6 +15384,8 @@ in
 
     kdb = callPackage ../development/libraries/kdb { };
 
+    kde2-decoration = callPackage ../data/themes/kde2 { };
+
     kdiagram = callPackage ../development/libraries/kdiagram { };
 
     kdsoap = callPackage ../development/libraries/kdsoap { };
@@ -19437,8 +19439,6 @@ in
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
-
-  kde2-decoration = libsForQt514.callPackage ../data/themes/kde2 { };
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
