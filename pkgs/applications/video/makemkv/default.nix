@@ -7,6 +7,9 @@
 , openssl
 , qtbase
 , zlib
+
+, withJava ? true
+, jre_headless
 }:
 
 let
@@ -37,6 +40,13 @@ in mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+
+  qtWrapperArgs =
+    let
+      binPath = stdenv.lib.makeBinPath [ jre_headless ];
+    in stdenv.lib.optionals withJava [
+      ''--prefix PATH : ${binPath}''
+    ];
 
   installPhase = ''
     runHook preInstall
