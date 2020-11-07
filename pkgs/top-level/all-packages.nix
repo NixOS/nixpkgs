@@ -15706,7 +15706,9 @@ in
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
-  soil = callPackage ../development/libraries/soil { };
+  soil = callPackage ../development/libraries/soil {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   sonic = callPackage ../development/libraries/sonic { };
 
