@@ -48,26 +48,26 @@ stdenv.mkDerivation {
   '';
 
   postUnpack = ''
-        sed -i -e "s|DATE=.*|DATE='Mon, 2 Nov 2020 15:49:15 +0300'|" "$sourceRoot/git-rev.sh"
-        sed -i -e "s:^}$:  prefix $prefix\n&:g" "$sourceRoot/compiletime-settings"
+    sed -i -e "s|DATE=.*|DATE='Mon, 2 Nov 2020 15:49:15 +0300'|" "$sourceRoot/git-rev.sh"
+    sed -i -e "s:^}$:  prefix $prefix\n&:g" "$sourceRoot/compiletime-settings"
   '';
 
   preConfigure = ''
-        ./autogen.sh
+    ./autogen.sh
   '';
 
   installPhase = ''
-        if [ -n "$prefix" ]; then
-          mkdir -p "$prefix";
-        fi;
-        make SHELL="$(which bash)" PREFIX="$prefix" install
-
+    if [ -n "$prefix" ]; then
+      mkdir -p "$prefix";
+    fi;
+    make SHELL="$(which bash)" PREFIX="$prefix" install
   '';
 
   meta = with stdenv.lib; {
     description = "DOS emulator for linux";
     homepage = "http://dosemu2.github.io/dosemu2/";
     license = licenses.gpl2Only;
-    maintainers = [ "Jaume Delclòs Coll <jaume@delclos.com>" ];
+    maintainers = [ maintainers.cosarara ];
+    platforms = [ "x86_64-linux" ];
   };
 }

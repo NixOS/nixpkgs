@@ -1727,6 +1727,12 @@
     githubId = 2552981;
     name = "Jonas Hörsch";
   };
+  cosarara = {
+    email = "jaume@delclos.com";
+    github = "cosarara";
+    githubId = 1713879;
+    name = "Jaume Delclòs Coll";
+  };
   costrouc = {
     email = "chris.ostrouchov@gmail.com";
     github = "costrouc";
