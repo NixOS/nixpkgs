@@ -1,5 +1,12 @@
-{ stdenv, mkDerivation, fetchurl, autoPatchelfHook
-, ffmpeg_3, openssl, qtbase, zlib, pkgconfig
+{ stdenv
+, mkDerivation
+, fetchurl
+, autoPatchelfHook
+, pkg-config
+, ffmpeg_3
+, openssl
+, qtbase
+, zlib
 }:
 
 let
@@ -27,7 +34,7 @@ in mkDerivation {
 
   sourceRoot = "makemkv-oss-${version}";
 
-  nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
+  nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
 
