@@ -6,11 +6,11 @@
 , openssl, gperf, cppunit, poppler, utillinux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, clucene_core, libcdr, lcms, vigra
+, libwpg, dbus-glib, clucene_core, libcdr, lcms
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, bluez5, libtool, carlito
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
-, librevenge, libe-book, libmwaw, glm, glew, gst_all_1
+, librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
 , gnome3, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
@@ -394,10 +394,10 @@ in (mkDrv rec {
       libXdmcp libpthreadstubs libGLU libGL mythes
       glib libmysqlclient
       neon nspr nss openldap openssl pam perl pkgconfig poppler
-      python3 sane-backends unzip vigra which zip zlib
+      python3 sane-backends unzip which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
-      librevenge libe-book libmwaw glm glew ncurses epoxy
+      librevenge libe-book libmwaw glm ncurses epoxy
       libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
     ]
     ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
