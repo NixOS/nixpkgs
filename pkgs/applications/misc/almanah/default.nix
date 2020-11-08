@@ -4,6 +4,7 @@
 , cairo
 , desktop-file-utils
 , evolution-data-server
+, evolution
 , gcr
 , gettext
 , glib
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gcr
     glib
-    gnome3.evolution
+    evolution
     gpgme
     gtk3
     gtksourceview3
