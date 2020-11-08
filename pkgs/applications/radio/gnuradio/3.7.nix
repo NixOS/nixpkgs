@@ -33,10 +33,8 @@
 , qt4
 , qwt6_qt4
 # Features available to override, the list of them is in featuresInfo. They
-# are all turned on by default, besides wxgui which is recommended by upstream
-# in favor of gr-qtgui, see:
-# https://www.gnuradio.org/news/2019-08-10-gnu-radio-v3-8-0-0-release/
-, features ? { gr-wxgui = false; }
+# are all turned on by default
+, features ? {}
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
