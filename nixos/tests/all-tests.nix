@@ -368,6 +368,7 @@ in
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   tuptime = handleTest ./tuptime.nix {};
+  unbound = handleTest ./unbound.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
   upnp = handleTest ./upnp.nix {};
