@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "2e5adbc0e88f296b1bc8667f1dcf26ca4ea2db6596f07cb0a39e7b1b8ef14656";
   };
 
-  propagatedBuildInputs = [ google_api_core ];
+  requiredPythonModules = [ google_api_core ];
   checkInputs = [ pytest mock ];
 
   checkPhase = ''

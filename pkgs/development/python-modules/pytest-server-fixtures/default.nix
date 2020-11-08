@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ pytest-shutil pytest-fixture-config psutil requests future retry ];
+  requiredPythonModules = [ pytest-shutil pytest-fixture-config psutil requests future retry ];
 
   # RuntimeError: Unable to find a free server number to start Xvfb
   doCheck = false;

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "a4d3bdddfce84a8fb1b2d5447193a0239c55c16ca246e5194d48efd59c4e236b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
   ];
 

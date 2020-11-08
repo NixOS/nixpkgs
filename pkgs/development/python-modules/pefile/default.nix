@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "pefile";
   version = "2019.4.18";
 
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   src = fetchPypi {
     inherit pname version;

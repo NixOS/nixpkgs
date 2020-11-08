@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytest-asyncio pretend freezegun simplejson twisted ]
     ++ lib.optionals (pythonAtLeast "3.6") [ python-rapidjson ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkPhase = ''
     # rm tests/test_twisted.py*

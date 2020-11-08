@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
   format = "pyproject";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dufte
     matplotlib
     numpy

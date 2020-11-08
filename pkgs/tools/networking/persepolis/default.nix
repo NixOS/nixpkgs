@@ -50,7 +50,7 @@ buildPythonApplication rec {
     ''''${qtWrapperArgs[@]}''
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pulseaudio
     psutil
     pyqt5

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "125r372q7bwcajfdysp7w5zh5wccwxf1mkhqawl8h518nl1icv87";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with stdenv.lib; {
     homepage = "http://leather.rtfd.io";

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1r3lp9gkph48g9lijby5rs5daa3lhxs204r14zw4kvp3hf4xcm84";
   };
 
-  propagatedBuildInputs = [ defusedxml ];
+  requiredPythonModules = [ defusedxml ];
 
   meta = with stdenv.lib; {
     description = "AMF (Action Message Format) support for Python";

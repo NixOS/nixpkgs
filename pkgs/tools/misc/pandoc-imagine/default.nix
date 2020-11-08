@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "1wpnckc7qyrf6ga5xhr6gv38k1anpy9nx888n7n3rh6nixzcz2dw";
   };
 
-  propagatedBuildInputs = [ pandocfilters six ];
+  requiredPythonModules = [ pandocfilters six ];
 
   # No tests in archive
   doCheck = false;

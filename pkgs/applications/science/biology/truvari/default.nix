@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0lp1wnldjv92k4ncga1h0icb0dpjsrx427vggg40x04a7kp9lwx0";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyvcf
     python-Levenshtein
     progressbar2

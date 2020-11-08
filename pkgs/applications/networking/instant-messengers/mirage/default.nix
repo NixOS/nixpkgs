@@ -32,15 +32,15 @@ mkDerivation rec {
     olm pyotherside
   ];
 
-  propagatedBuildInputs = pypkgs;
+  requiredPythonModules = pypkgs;
 
-  pythonPath = pypkgs;
+  requiredPythonModules = pypkgs;
 
   qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   dontWrapQtApps = true;
   postInstall = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     wrapProgram $out/bin/mirage \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       "''${qtWrapperArgs[@]}"

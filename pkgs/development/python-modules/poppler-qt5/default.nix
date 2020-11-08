@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   buildInputs = [ qtbase.dev poppler ];
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ sip pyqt5.dev ];
+  requiredPythonModules = [ sip pyqt5.dev ];
 
   # no tests, just bindings for `poppler_qt5`
   doCheck = false;

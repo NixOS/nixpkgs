@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     fonttools
     fs
     pyclipper

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytest -nauto -k "not test_api and not test_cli and not test_interface"
   '';
 
-  propagatedBuildInputs = [ asciimatics loguru requests setuptools websocket_client ];
+  requiredPythonModules = [ asciimatics loguru requests setuptools websocket_client ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/pawamoy/aria2p";

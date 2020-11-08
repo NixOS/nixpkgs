@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "077zj8xad8hsa3nqywvf7ircirmx3krxdipl8wr3dynv3l3khcpl";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six pytimeparse parsedatetime Babel
     isodate python-slugify leather
   ];

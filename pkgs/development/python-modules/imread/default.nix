@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ nose libjpeg libpng libtiff libwebp ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   meta = with stdenv.lib; {
     description = "Python package to load images as numpy arrays";

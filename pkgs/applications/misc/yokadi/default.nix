@@ -10,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "681c8aa52b2e4b5255e1311e76b4b81dcb63ee7f6ca3a47178e684c06baf330f";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil
     sqlalchemy
     setproctitle

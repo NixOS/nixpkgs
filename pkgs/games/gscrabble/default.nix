@@ -22,7 +22,7 @@ buildPythonApplication {
     gnome3.adwaita-icon-theme gtk3 gobject-introspection
   ];
 
-  propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];
+  requiredPythonModules = with python3Packages; [ gst-python pygobject3 ];
 
   preFixup = ''
     gappsWrapperArgs+=(

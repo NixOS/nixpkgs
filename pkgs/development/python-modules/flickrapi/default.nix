@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "03g2z21k6nhxgwysjrgnxj9m1yg25mnnkr10gpyfhfkd9w77pcpz";
   };
 
-  propagatedBuildInputs = [ requests requests_toolbelt requests_oauthlib ];
+  requiredPythonModules = [ requests requests_toolbelt requests_oauthlib ];
 
   checkInputs = [ pytest pytestrunner pytestcov responses ];
   doCheck = false; # Otherwise:

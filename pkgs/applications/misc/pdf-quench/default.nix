@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
     goocanvas2
     poppler_gi
   ];
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pypdf2 ];
+  requiredPythonModules = with python3.pkgs; [ pygobject3 pypdf2 ];
 
   format = "other";
   doCheck = false;

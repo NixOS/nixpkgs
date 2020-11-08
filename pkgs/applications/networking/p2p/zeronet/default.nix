@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "04prgicm0yjh2klcxdgwx1mvlsxxi2bdkzfcvysvixbgq20wjvdk";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     gevent msgpack base58 merkletools rsa pysocks pyasn1 websocket_client
     gevent-websocket rencode bitcoinlib maxminddb pyopenssl
   ];

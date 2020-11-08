@@ -32,7 +32,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ vdf ];
+  requiredPythonModules = [ vdf ];
 
   # The wine install shipped with Proton must run under steam's
   # chrootenv, but winetricks and zenity break when running under

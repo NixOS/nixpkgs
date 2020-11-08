@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0cqj86rdm6c7y5vq3i13qy76fg5xi3yjp4r0hpqy8hvynv54wqrw";
   };
 
-  propagatedBuildInputs = [ numpy Theano ];
+  requiredPythonModules = [ numpy Theano ];
 
   # there are no tests
   doCheck = false;

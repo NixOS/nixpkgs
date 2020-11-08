@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "060bikv3gwr203jbdmvawsfhc0yq0bg1m42dk8czx1nqvwvgv6fm";
   };
 
-  propagatedBuildInputs = [ pythonPackages.urwid ];
+  requiredPythonModules = [ pythonPackages.urwid ];
 
   postPatch = ''
     sed -i "/'entry_points': {/d" setup.py

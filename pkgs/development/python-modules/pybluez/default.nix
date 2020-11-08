@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "unstable-20160819";
   pname = "pybluez";
 
-  propagatedBuildInputs = [ pkgs.bluez ];
+  requiredPythonModules = [ pkgs.bluez ];
 
   src = fetchFromGitHub {
     owner = "karulis";

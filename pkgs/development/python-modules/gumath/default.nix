@@ -16,7 +16,7 @@ buildPythonPackage {
   inherit (libgumath) src version meta;
 
   checkInputs = [ numba ];
-  propagatedBuildInputs = [ ndtypes xnd ];
+  requiredPythonModules = [ ndtypes xnd ];
 
   postPatch = ''
     substituteInPlace setup.py \

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1ym2hkvmmacgy21wnjwzyrcxyl3sx4bcx4hc51vf4lzcnj589l68";
   };
 
-  propagatedBuildInputs = [ pyparsing six urwid ];
+  requiredPythonModules = [ pyparsing six urwid ];
 
   meta = with stdenv.lib; {
     description = "A Python library for building configuration shells";

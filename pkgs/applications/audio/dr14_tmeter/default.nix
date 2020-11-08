@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1nfsasi7kx0myxkahbd7rz8796mcf5nsadrsjjpx2kgaaw5nkv1m";
   };
 
-  propagatedBuildInputs = with pkgs; [
+  requiredPythonModules = with pkgs; [
     python3Packages.numpy flac vorbis-tools ffmpeg_3 faad2 lame
   ];
 

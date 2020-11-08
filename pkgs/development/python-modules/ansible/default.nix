@@ -39,7 +39,7 @@ buildPythonPackage rec {
     done
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pycrypto paramiko jinja2 pyyaml httplib2
     six netaddr dnspython jmespath dopy ncclient
   ] ++ lib.optional windowsSupport pywinrm;

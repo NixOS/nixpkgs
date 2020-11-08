@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1g70cr0559iyqfzidwh6n2qq6d4dcnrr4sg0jkn1s4qzka828mj7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     databases
     typesystem
   ];

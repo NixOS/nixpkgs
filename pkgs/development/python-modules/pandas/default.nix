@@ -42,7 +42,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
   buildInputs = optional isDarwin libcxx;
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     beautifulsoup4
     bottleneck
     dateutil

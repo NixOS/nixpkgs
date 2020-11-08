@@ -17,7 +17,7 @@ buildPythonPackage {
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ google_apputils ];
+  requiredPythonModules = [ google_apputils ];
   propagatedNativeBuildInputs = [ buildPackages.protobuf ];  # For protoc.
   nativeBuildInputs = [ google_apputils pyext ];
   buildInputs = [ protobuf ];

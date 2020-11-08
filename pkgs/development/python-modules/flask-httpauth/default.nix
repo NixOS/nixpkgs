@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "9e028e4375039a49031eb9ecc40be4761f0540476040f6eff329a31dabd4d000";
   };
 
-  propagatedBuildInputs = [ flask ];
+  requiredPythonModules = [ flask ];
 
   meta = with lib; {
     description = "Extension that provides HTTP authentication for Flask routes";

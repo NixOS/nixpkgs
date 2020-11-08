@@ -10,7 +10,7 @@ buildPythonPackage rec {
                     ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 
   buildInputs = [ c-ares openssl zlib ];
-  propagatedBuildInputs = [ six protobuf ]
+  requiredPythonModules = [ six protobuf ]
                         ++ stdenv.lib.optionals (isPy27) [ enum34 futures ];
 
   preBuild = stdenv.lib.optionalString stdenv.isDarwin "unset AR";

@@ -10,7 +10,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   doCheck = false;
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     python.pkgs.requests
     python.pkgs.pyyaml
   ];

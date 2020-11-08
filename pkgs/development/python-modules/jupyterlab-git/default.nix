@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "434ff9edd1190809e02e0cbf50090c28de48a51e151a1f904ac66e902244398d";
   };
 
-  propagatedBuildInputs = [ notebook nbdime git ];
+  requiredPythonModules = [ notebook nbdime git ];
 
   checkInputs = [ pytest ];
 

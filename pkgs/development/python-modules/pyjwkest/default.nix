@@ -18,5 +18,5 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ future pycryptodomex requests six ];
+  requiredPythonModules = [ future pycryptodomex requests six ];
 }

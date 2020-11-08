@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
   nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ mkl six ];
+  requiredPythonModules = [ mkl six ];
 
   meta = with lib; {
     description = "Python hooks for Intel(R) Math Kernel Library runtime control settings";

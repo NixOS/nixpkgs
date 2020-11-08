@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "07gc5iwbyprb8nihnjjl2zd06z8p4nl3a3drzh9a8ny35ig1khq0";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pkgs.git
     appdirs
     click

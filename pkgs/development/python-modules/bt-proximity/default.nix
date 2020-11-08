@@ -13,7 +13,7 @@ buildPythonPackage {
     sha256 = "0anfh90cj3c2g7zqrjvq0d6dzpb4hjl6gk8zw0r349j2zw9i4h7y";
   };
 
-  propagatedBuildInputs = [ pybluez ];
+  requiredPythonModules = [ pybluez ];
 
   # there are no tests
   doCheck = false;

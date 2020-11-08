@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "f38c908aaa59c14335eeea12abea5f443646216c4e29380d7bf34d2018e2c39e";
   };
 
-  propagatedBuildInputs = [ immutables ];
+  requiredPythonModules = [ immutables ];
 
   meta = {
     description = "A backport of the Python 3.7 contextvars module for Python 3.6";

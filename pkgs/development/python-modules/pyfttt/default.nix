@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "10iq7c9c832ssl2xrvf62xf7znfvqzax6sq8ppsibq6wpb8dlnj5";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # tests need a server to run against
   doCheck = false;

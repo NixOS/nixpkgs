@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "1dnmnkc21zdfaypskbpvkwl0wpkpn0nagj1fc338w64mbxrk8ny7";
   };
 
-  propagatedBuildInputs = [ apipkg bottle gevent lxml odfpy pillow py pyPdf pyparsing qserve roman simplejson sqlite3dbm timelib ];
+  requiredPythonModules = [ apipkg bottle gevent lxml odfpy pillow py pyPdf pyparsing qserve roman simplejson sqlite3dbm timelib ];
 
   checkInputs = [ pytest ];
 

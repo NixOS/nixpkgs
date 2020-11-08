@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scikitlearn
     scipy

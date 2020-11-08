@@ -17,7 +17,7 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
   '';
 
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     pyqt5_with_qtwebkit
     cjson
     sipsimple

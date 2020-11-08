@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1brrik70jyagxa9l0cfmlxvqpilwj1q655bphxnvjxyganxf4c00";
   };
 
-  propagatedBuildInputs = with python3Packages; [ dateutil future requests beautifulsoup4 ]
+  requiredPythonModules = with python3Packages; [ dateutil future requests beautifulsoup4 ]
     ++ stdenv.lib.optional withTwitter python3Packages.twitter
   ;
 

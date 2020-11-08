@@ -28,7 +28,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     irctokens
     pendulum
   ];

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyutilib
     appdirs
     ply

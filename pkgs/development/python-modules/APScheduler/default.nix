@@ -42,7 +42,7 @@ buildPythonPackage rec {
     gevent
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     pytz
     tzlocal

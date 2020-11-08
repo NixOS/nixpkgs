@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [ flake8 pycodestyle ]
+  requiredPythonModules = [ flake8 pycodestyle ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkInputs = [ pytest ];

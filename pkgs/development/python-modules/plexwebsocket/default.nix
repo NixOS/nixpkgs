@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1xdzb268c71yb25a5mk4g2jrbq4dv8bynfirs7p4n8a51p030dz6";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  requiredPythonModules = [ aiohttp ];
 
   # package does not include tests
   doCheck = false;

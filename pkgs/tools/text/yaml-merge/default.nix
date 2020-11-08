@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0mwda2shk43i6f22l379fcdchmb07fm7nf4i2ii7fk3ihkhb8dgp";
   };
 
-  pythonPath = with pythonPackages; [ pyyaml ];
+  requiredPythonModules = with pythonPackages; [ pyyaml ];
   nativeBuildInputs = [ pythonPackages.wrapPython ];
 
   installPhase = ''

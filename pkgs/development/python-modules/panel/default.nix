@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "2e86d82bdd5e7664bf49558eedad62b664d5403ec9e422e5ddfcf69e3bd77318";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     bokeh
     param
     pyviz-comms

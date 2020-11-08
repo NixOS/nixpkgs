@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "0h6lpbz8inxj2kpdjwrk5v7lqh1w5kkyv76d8sk3gs77y62xnxji";
   };
 
-  propagatedBuildInputs = [ six pyasn1-modules cachetools rsa setuptools ];
+  requiredPythonModules = [ six pyasn1-modules cachetools rsa setuptools ];
 
   checkInputs = [
     flask

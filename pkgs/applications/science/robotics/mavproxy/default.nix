@@ -10,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "87d7f9c0b8f4f1db3ce3521f67cd244fe3b89ffead797e92f35a7f71bbe8b958";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     matplotlib
     numpy
     pymavlink

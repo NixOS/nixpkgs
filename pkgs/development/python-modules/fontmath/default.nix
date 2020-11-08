@@ -13,7 +13,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ fonttools ];
+  requiredPythonModules = [ fonttools ];
   checkInputs = [ pytest pytestrunner ];
 
   meta = with lib; {

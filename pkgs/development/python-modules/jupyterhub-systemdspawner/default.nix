@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "080dd9cd9292266dad35d1efc7aa1af0ed6993d15eadc79bd959d1ee273d1923";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jupyterhub
     tornado
   ];

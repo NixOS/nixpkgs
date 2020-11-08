@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "48432b01d91913451c3512c5b90e31b0f348f1074b166a3431085eb70d784fb1";
   };
 
-  propagatedBuildInputs = [ six nose unittest2 mock ];
+  requiredPythonModules = [ six nose unittest2 mock ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/celery/case";

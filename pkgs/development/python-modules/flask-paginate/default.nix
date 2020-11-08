@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "60079a1c4c600cb4d4a9f7c386ea357b5ee02355ae6d6e8b41f769ae3f7af3ad";
   };
 
-  propagatedBuildInputs = [ flask ];
+  requiredPythonModules = [ flask ];
 
   meta = with lib; {
     homepage = "https://github.com/lixxu/flask-paginate";

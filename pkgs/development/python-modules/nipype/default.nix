@@ -66,7 +66,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     dateutil
     etelemetry

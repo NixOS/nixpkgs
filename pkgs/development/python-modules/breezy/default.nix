@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "50f16bc7faf299f98fe58573da55b0664078f94b1a0e7f0ce9e1e6a0d47e68e0";
   };
 
-  propagatedBuildInputs = [ configobj six fastimport dulwich launchpadlib ];
+  requiredPythonModules = [ configobj six fastimport dulwich launchpadlib ];
 
   checkInputs = [ testtools ];
 

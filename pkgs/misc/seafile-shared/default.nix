@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--disable-console"
   ];
 
-  pythonPath = with python2.pkgs; [
+  requiredPythonModules = with python2.pkgs; [
     future
     libsearpc
   ];

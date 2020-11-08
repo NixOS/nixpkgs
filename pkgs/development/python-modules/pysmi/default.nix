@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "bd15a15020aee8376cab5be264c26330824a8b8164ed0195bd402dd59e4e8f7c";
   };
 
-  propagatedBuildInputs = [ ply ];
+  requiredPythonModules = [ ply ];
 
   # Tests require pysnmp, which in turn requires pysmi => infinite recursion
   doCheck = false;

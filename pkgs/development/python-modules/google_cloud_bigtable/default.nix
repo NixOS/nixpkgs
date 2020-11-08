@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ grpc_google_iam_v1 google_api_core google_cloud_core ];
+  requiredPythonModules = [ grpc_google_iam_v1 google_api_core google_cloud_core ];
 
   checkPhase = ''
     rm -r google

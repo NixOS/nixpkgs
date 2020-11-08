@@ -16,7 +16,7 @@ buildPythonPackage {
     rev = "2ffa0258cadaf79313241f43bf2c1caaf197d9c2";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  requiredPythonModules = [ pyparsing ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/aroig/mutag";

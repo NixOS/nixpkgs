@@ -23,7 +23,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'setup_requires=["pipenv"]' "setup_requires=[]"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     decorator
     http-parser
     python_magic

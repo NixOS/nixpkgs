@@ -37,7 +37,7 @@ buildPythonPackage rec {
     sha256 = "0rrpwr4a82j69j5ibl2g0nw8wbpg201cfz6f234k2v6pj500x9nl";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     arrow
     nest-asyncio
     qiskit-terra

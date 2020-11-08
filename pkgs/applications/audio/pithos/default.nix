@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig appstream-glib wrapGAppsHook ];
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     [ gtk3 gobject-introspection libnotify libsecret gnome3.adwaita-icon-theme ] ++
     (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) ++
     (with pythonPackages; [ pygobject3 pylast ]);

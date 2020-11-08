@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0lkn7n3bfp7zip6hkqwkqwc8pxmhhs4rr699k77h51rfln6kjllh";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
 
   checkInputs = [ hypothesis ];
 

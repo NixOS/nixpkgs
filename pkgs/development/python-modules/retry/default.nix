@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pbr
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     decorator
     py
   ];

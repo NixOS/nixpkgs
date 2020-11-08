@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1a79jm7mp0pvi3a19za5c3idavnj7hlral01hhr3x9mz1jayav5i";
   };
 
-  propagatedBuildInputs = [ six wxPython ];
+  requiredPythonModules = [ six wxPython ];
 
   meta = with stdenv.lib; {
     description = "Hierarchic visualization control for wxPython";

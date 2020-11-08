@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0rcpmhy7hm6ljlm1w455il53s1amq2vii2x1wfkrcx3sj4s0dc9k";
   };
 
-  propagatedBuildInputs = lib.optional isPy27 futures;
+  requiredPythonModules = lib.optional isPy27 futures;
 
   checkInputs = [ gevent mock pytest tornado ];
 

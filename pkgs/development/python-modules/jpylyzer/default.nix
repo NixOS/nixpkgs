@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0vhrq15l6jd5fm6vj7mczjzjpl2ph1dk8jp89dw4vlccky8660ll";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # there don't appear to be any in-tree tests as such, but the builder's automatic
   # runner seems to be upset by the project layout

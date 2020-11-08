@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "164v65qglgyg38q9ajnas99rp14mvrk5hn8x76b8iy81vszmx1c0";
   };
 
-  propagatedBuildInputs = [ bokeh ipython matplotlib numpy ];
+  requiredPythonModules = [ bokeh ipython matplotlib numpy ];
 
   checkInputs = [ pytest nbconvert nbformat ];
   checkPhase = ''

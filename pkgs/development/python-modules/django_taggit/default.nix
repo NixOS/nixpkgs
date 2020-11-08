@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "4a833bf71f4c2deddd9745924eee53be1c075d7f0020a06f12e29fa3d752732d";
   };
 
-  propagatedBuildInputs = [ isort django ];
+  requiredPythonModules = [ isort django ];
 
   checkInputs = [ mock ];
   checkPhase = ''

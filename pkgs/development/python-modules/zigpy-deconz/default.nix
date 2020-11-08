@@ -6,7 +6,7 @@ buildPythonPackage rec {
   pname = "zigpy-deconz";
   version = "0.9.2";
 
-  propagatedBuildInputs = [ pyserial pyserial-asyncio zigpy ];
+  requiredPythonModules = [ pyserial pyserial-asyncio zigpy ];
   checkInputs = [ pytest pytest-asyncio asynctest ];
 
   src = fetchPypi {

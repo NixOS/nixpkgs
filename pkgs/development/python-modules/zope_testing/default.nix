@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   doCheck = !isPyPy;
 
-  propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
+  requiredPythonModules = [ zope_interface zope_exceptions zope_location ];
 
   meta = with stdenv.lib; {
     description = "Zope testing helpers";

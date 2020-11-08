@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     urwid
     urwidtrees
     aiohttp

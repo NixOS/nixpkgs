@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0gfvj28i82va7c264jl2p4cdsl3lpf9fpb9cyjnis55crfdafqmv";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     importlib-metadata
     psutil
   ];

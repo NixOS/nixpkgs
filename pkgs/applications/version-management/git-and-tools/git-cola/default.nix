@@ -15,7 +15,7 @@ in buildPythonApplication rec {
   };
 
   buildInputs = [ git gettext ];
-  propagatedBuildInputs = [ pyqt5 sip pyinotify ];
+  requiredPythonModules = [ pyqt5 sip pyinotify ];
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   doCheck = false;

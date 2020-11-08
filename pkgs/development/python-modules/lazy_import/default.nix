@@ -17,7 +17,7 @@ buildPythonPackage rec {
     pytest_xdist
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
   ];
 

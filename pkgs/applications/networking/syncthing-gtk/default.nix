@@ -29,7 +29,7 @@ buildPythonApplication rec {
     gsettings-desktop-schemas
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil pyinotify pygobject3 bcrypt
   ];
 

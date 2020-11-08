@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     booleanoperations
     fonttools
     lxml           # fonttools[lxml], defcon[lxml] extra

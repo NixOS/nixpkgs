@@ -10,7 +10,7 @@ buildPythonPackage {
   version = "1.0.0";
   disabled = ! isPy27;
 
-  propagatedBuildInputs = [ lxml ];
+  requiredPythonModules = [ lxml ];
 
   src = fetchgit {
     url = "https://github.com/kjellmf/svg2tikz";

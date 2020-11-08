@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "7369f1d7fa09f6c9969625c4b76a8a63d2507a94c6fc257183da1c10261703e9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     boto3
     diskcache
     packaging

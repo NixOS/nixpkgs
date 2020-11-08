@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     pytest-flake8
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     nix
   ] ++ (with python3Packages; [
     click

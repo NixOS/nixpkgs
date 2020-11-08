@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "935726b784cc636cbcfed2c977f1a6887dc60056806da4eff60db932c5896692";
   };
 
-  propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ]
+  requiredPythonModules = [ authres dnspython dkimpy publicsuffix2 ]
                           ++ lib.optional isPy27 ipaddress;
 
   meta = {

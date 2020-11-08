@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   pname = "acme";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cryptography pyasn1 pyopenssl pyRFC3339 pytz requests requests-toolbelt six
     werkzeug mock ndg-httpsclient josepy
   ];

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest nose ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     joblib
     matplotlib
     nibabel

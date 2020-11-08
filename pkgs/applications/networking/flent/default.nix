@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   buildInputs = [ sphinx ];
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
-  propagatedBuildInputs = [ matplotlib procps pyqt5 ];
+  requiredPythonModules = [ matplotlib procps pyqt5 ];
   checkInputs = [ procps pythonPackages.mock pyqt5 xvfb_run ];
 
   checkPhase = ''

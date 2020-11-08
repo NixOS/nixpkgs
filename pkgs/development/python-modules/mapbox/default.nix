@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "123wsa4j11ps5pkjgylbmw4gnzh2vi22swgmvy50w26glkszh075";
   };
 
-  propagatedBuildInputs = [ boto3 cachecontrol iso3166 python-dateutil requests polyline uritemplate ];
+  requiredPythonModules = [ boto3 cachecontrol iso3166 python-dateutil requests polyline uritemplate ];
   checkInputs = [ pytestCheckHook responses ];
 
   meta = with lib; {

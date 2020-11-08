@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [ sphinx setuptools_scm ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     python3Packages.setuptools python3Packages.notmuch chardet dkimpy
   ];
 

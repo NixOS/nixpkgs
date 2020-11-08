@@ -84,7 +84,7 @@ buildPythonPackage rec {
      })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     alembic
     cached-property
     colorlog

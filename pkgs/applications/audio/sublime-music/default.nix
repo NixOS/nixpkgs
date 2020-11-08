@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
    ++ lib.optional networkSupport networkmanager
   ;
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     dataclasses-json
     deepdiff
     fuzzywuzzy

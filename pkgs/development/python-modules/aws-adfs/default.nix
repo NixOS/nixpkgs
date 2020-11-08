@@ -24,7 +24,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = [ glibcLocales pytest pytestrunner pytestcov mock ];
-  propagatedBuildInputs = [ botocore lxml requests requests-kerberos click configparser fido2 ];
+  requiredPythonModules = [ botocore lxml requests requests-kerberos click configparser fido2 ];
 
   meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";

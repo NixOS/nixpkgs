@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "14dqs64nhy84dykyyrdjmsirc7m169zsvwa8abh4v0xcm658lm5k";
   };
 
-  propagatedBuildInputs = [ validictory decorator mutagen protobuf setuptools requests dateutil proboscis mock appdirs oauth2client pyopenssl gpsoauth MechanicalSoup future ];
+  requiredPythonModules = [ validictory decorator mutagen protobuf setuptools requests dateutil proboscis mock appdirs oauth2client pyopenssl gpsoauth MechanicalSoup future ];
 
   meta = with stdenv.lib; {
     description = "An unofficial API for Google Play Music";

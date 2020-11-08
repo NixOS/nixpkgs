@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "05b9lzx5yc3wgml2bcq50lq35h66m8zpj6dc9advcb5z3acsbaay";
   };
 
-  propagatedBuildInputs = [ flask six pytz aniso8601 pycrypto ];
+  requiredPythonModules = [ flask six pytz aniso8601 pycrypto ];
 
   checkInputs = [ pytest nose mock blinker ];
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sed -i 's@python@${python.interpreter}@' .testr.conf
   '';
 
-  propagatedBuildInputs = [ requests six ];
+  requiredPythonModules = [ requests six ];
 
   checkInputs = [ mock purl testrepository testtools pytest ];
 

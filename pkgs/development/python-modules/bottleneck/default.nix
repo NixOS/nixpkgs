@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "20179f0b66359792ea283b69aa16366419132f3b6cf3adadc0c48e2e8118e573";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   postPatch = ''
     substituteInPlace setup.py --replace "__builtins__.__NUMPY_SETUP__ = False" ""

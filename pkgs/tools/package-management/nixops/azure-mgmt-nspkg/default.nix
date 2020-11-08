@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1rq92fj3kvnqkk18596dybw0kvhgscvc6cd8hp1dhy3wrkqnhwmq";
   };
 
-  propagatedBuildInputs = [ azure-nspkg ];
+  requiredPythonModules = [ azure-nspkg ];
 
   meta = with pkgs.lib; {
     description = "Microsoft Azure SDK for Python";

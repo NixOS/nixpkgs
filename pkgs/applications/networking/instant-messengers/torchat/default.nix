@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python unzip wxPython wrapPython ];
-  pythonPath = [ wxPython ];
+  requiredPythonModules = [ wxPython ];
 
   preConfigure = "cd torchat/src; rm portable.txt";
 

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ fonttools ];
+  requiredPythonModules = [ fonttools ];
 
   # can't run normal tests due to circular dependency with fontParts
   doCheck = false;

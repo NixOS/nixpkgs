@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest mock ];
 
-  propagatedBuildInputs = [ six twisted ];
+  requiredPythonModules = [ six twisted ];
 
   checkPhase = ''
     py.test -k "not test_sdist"

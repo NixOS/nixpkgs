@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
     python3Packages.wrapPython pkgconfig which wrapQtAppsHook
   ];
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     rdflib pyliblo
   ] ++ optional withFrontend pyqt5;
 
   buildInputs = [
     file liblo alsaLib fluidsynth ffmpeg_3 jack2 libpulseaudio libsndfile
-  ] ++ pythonPath
+  ] ++ requiredPythonModules
     ++ optional withQt qtbase
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables
     wrapPythonPrograms
-    wrapPythonProgramsIn "$out/share/carla/resources" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/carla/resources" "$out $requiredPythonModules"
 
     find "$out/share/carla" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
       patchPythonScript "$f"

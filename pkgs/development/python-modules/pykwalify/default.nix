@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1cnfzkg1b01f825ikpw2fhjclf9c8akxjfrbd1vc22x1lg2kk2vy";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil
     docopt
     pyyaml

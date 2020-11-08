@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ behave mock pyparsing pytest ];
-  propagatedBuildInputs = [ lxml ];
+  requiredPythonModules = [ lxml ];
 
   checkPhase = ''
     py.test tests

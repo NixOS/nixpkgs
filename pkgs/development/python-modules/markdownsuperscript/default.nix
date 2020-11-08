@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "2c255b5959c1f5dd364ae80762bd0a568a0fcc9fd4e4a3d7e7b192e88adf8900";
   };
 
-  propagatedBuildInputs = [ markdown ];
+  requiredPythonModules = [ markdown ];
 
   postPatch = ''
     # remove version bounds for Markdown dependency

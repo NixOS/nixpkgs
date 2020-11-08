@@ -15,7 +15,7 @@ buildPythonPackage rec {
     substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"
   '';
 
-  propagatedBuildInputs = [ flask webassets flask_script nose ];
+  requiredPythonModules = [ flask webassets flask_script nose ];
 
   meta = with lib; {
     homepage = "https://github.com/miracle2k/flask-assets";

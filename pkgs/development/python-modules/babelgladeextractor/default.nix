@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "160p4wi2ss69g141c2z59azvrhn7ymy5m9h9d65qrcabigi0by5w";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     Babel
   ];
 

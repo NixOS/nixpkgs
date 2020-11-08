@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "ce686b7fd49b3f876d651c87e8468ad71bcd2707399140d6baf198184c45d970";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dask
     dask-glm
     distributed

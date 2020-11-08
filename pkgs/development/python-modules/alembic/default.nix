@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest pytestcov mock coverage ];
-  propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil setuptools ];
+  requiredPythonModules = [ Mako sqlalchemy python-editor dateutil setuptools ];
 
   # no traditional test suite
   doCheck = false;

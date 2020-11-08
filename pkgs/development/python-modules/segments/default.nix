@@ -26,7 +26,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--cov" ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     regex
     csvw
     clldutils

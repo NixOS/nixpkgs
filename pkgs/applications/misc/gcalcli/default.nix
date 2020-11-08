@@ -19,7 +19,7 @@ buildPythonApplication rec {
       --replace "'notify-send" "'${libnotify}/bin/notify-send"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dateutil gflags httplib2 parsedatetime six vobject
     google_api_python_client oauth2client uritemplate
     libnotify

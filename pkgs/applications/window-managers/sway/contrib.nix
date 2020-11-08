@@ -80,7 +80,7 @@ inactive-windows-transparency = python3Packages.buildPythonApplication rec {
   dontBuild = true;
   dontConfigure = true;
 
-  propagatedBuildInputs = [ python3Packages.i3ipc ];
+  requiredPythonModules = [ python3Packages.i3ipc ];
 
   installPhase = ''
     install -Dm 0755 $src/contrib/${lname}.py $out/bin/${lname}.py

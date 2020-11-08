@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  propagatedBuildInputs = [ numpy six ];
+  requiredPythonModules = [ numpy six ];
 
   meta = with lib; {
     description = "A Python string matching library including string tokenizers and string similarity measures";

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0jl0b87l7v6c0f1nx6k81skjhdj5i11kmchdjls00mynpvdip0cf";
   };
 
-  propagatedBuildInputs = [ dateutil lxml ];
+  requiredPythonModules = [ dateutil lxml ];
 
   # No tests in archive
   doCheck = false;

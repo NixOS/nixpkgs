@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pycryptodome requests ];
+  requiredPythonModules = [ pycryptodome requests ];
 
   # Jailbreak pycryptodome
   preBuild = ''

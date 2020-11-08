@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "94d056e48e7e6fe2e6fe4161471e774ac03221a6225fd83d551d3184220c1edf";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   checkInputs = [ nose pyyaml ];
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs importlib-metadata functools32 pyrsistent ];
+  requiredPythonModules = [ attrs importlib-metadata functools32 pyrsistent ];
   checkInputs = [ nose mock pyperf twisted vcversioner ];
 
   # zope namespace collides on py27

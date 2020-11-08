@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # unit tests are impure
   doCheck = false;
 
-  propagatedBuildInputs = [ robotframework paramiko scp ];
+  requiredPythonModules = [ robotframework paramiko scp ];
 
   meta = with stdenv.lib; {
     description = "SSHLibrary is a Robot Framework test library for SSH and SFTP";

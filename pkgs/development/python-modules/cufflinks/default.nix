@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "0i56062k54dlg5iz3qyl1ykww62mpkp8jr4n450h0c60dm0b7ha8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     chart-studio
     colorlover
     ipython

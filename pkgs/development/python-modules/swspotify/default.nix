@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0jxcvy8lw8kpjbl4q6mi11164pvi0w9m9p76bxj2m7i7s5p4dxd4";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests flask-cors dbus-python
   ];
 

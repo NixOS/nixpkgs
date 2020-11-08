@@ -108,7 +108,7 @@ buildPythonPackage rec {
     done
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     alembic ipython jinja2 pamela python-oauth2 requests sqlalchemy tornado
     traitlets prometheus_client async_generator notebook certipy oauthlib
     jupyter-telemetry

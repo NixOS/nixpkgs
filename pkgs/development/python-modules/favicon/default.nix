@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytestrunner ];
   checkInputs = [ pytest requests-mock ];
-  propagatedBuildInputs = [ requests beautifulsoup4 ];
+  requiredPythonModules = [ requests beautifulsoup4 ];
 
   checkPhase = ''
     pytest

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # # error in tests when running with python 3+
   doCheck = false;
 
-  propagatedBuildInputs = [ webob six ];
+  requiredPythonModules = [ webob six ];
 
   meta = with stdenv.lib; {
     description = "Taking Google App Engine's webapp to the next level";

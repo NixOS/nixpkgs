@@ -77,9 +77,6 @@ python3.pkgs.buildPythonApplication rec {
       mv ".$i-wrapped" "$i"
     done
     popd
-
-    # Do not propagate Python
-    rm $out/nix-support/propagated-build-inputs
   '';
 
   meta = with lib; {

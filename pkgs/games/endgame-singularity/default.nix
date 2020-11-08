@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   sourceRoot = "source";
 
   nativeBuildInputs = [ unzip ]; # The music is zipped
-  propagatedBuildInputs = with python3.pkgs; [ pygame numpy polib ];
+  requiredPythonModules = with python3.pkgs; [ pygame numpy polib ];
 
   # Add the music
   postInstall = stdenv.lib.optionalString enableDefaultMusicPack ''

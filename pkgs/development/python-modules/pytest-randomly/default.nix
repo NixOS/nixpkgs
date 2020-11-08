@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0s9cx692cdchfrjqx7fgf9wnm3fdac211a4hjq1cx9qqnbpdpl2z";
   };
 
-  propagatedBuildInputs = [ numpy factory_boy faker ];
+  requiredPythonModules = [ numpy factory_boy faker ];
 
   checkInputs = [ pytest pytest_xdist ];
 

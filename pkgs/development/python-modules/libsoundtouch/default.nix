@@ -22,7 +22,7 @@ buildPythonPackage {
     substituteInPlace setup.py --replace "'enum34>=1.1.6'" ""
   '';
 
-  propagatedBuildInputs = [ requests enum34 ];
+  requiredPythonModules = [ requests enum34 ];
 
   doCheck = false;
 

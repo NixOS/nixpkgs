@@ -19,7 +19,7 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
   ];
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pbr setuptools_scm ];
-  propagatedBuildInputs = [ six ]
+  requiredPythonModules = [ six ]
     ++ lib.optionals isPy27 [ futures monotonic typing ];
 
   checkInputs = [ pytest sphinx tornado ]

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0ivkfdrmb4wpyawvwrgm3jvx6hn49vqjpwbkmkmamigghqqwacx3";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # Tests require nomad agent
   doCheck = false;

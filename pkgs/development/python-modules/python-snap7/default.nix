@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "169zd1nxq86nmi6132vxl1f6wxm9w3waihq2wn14kkmld1vkmvfd";
   };
 
-  propagatedBuildInputs = [ setuptools six ];
+  requiredPythonModules = [ setuptools six ];
 
   prePatch = ''
     substituteInPlace snap7/common.py \

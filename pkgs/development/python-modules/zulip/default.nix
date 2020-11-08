@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
   sourceRoot = "source/zulip";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests
     matrix-client
     distro

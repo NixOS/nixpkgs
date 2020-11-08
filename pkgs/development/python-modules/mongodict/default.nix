@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0nv5amfs337m0gbxpjb0585s20rndqfc3mfrzq1iwgnds5gxcrlw";
   };
 
-  propagatedBuildInputs = [ pymongo ];
+  requiredPythonModules = [ pymongo ];
 
   meta = with stdenv.lib; {
     description = "MongoDB-backed Python dict-like interface";

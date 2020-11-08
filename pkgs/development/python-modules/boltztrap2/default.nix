@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake cython ];
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ spglib numpy scipy matplotlib ase netcdf4 ];
+  requiredPythonModules = [ spglib numpy scipy matplotlib ase netcdf4 ];
 
   # pypi release does no include files for tests
   doCheck = false;

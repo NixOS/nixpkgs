@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   # ~400 failures
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4

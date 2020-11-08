@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # Some kind of trickery with imports that doesn't work.
   doCheck = false;
   buildInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six regex ];
+  requiredPythonModules = [ six regex ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Toilal/rebulk/";

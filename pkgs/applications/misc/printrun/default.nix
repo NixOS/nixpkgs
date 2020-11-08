@@ -10,7 +10,7 @@ python27Packages.buildPythonApplication rec {
     sha256 = "09ijv8h4k5h15swg64s7igamvynawz7gdi7hiymzrzywdvr0zwsa";
   };
 
-  propagatedBuildInputs = with python27Packages; [
+  requiredPythonModules = with python27Packages; [
     wxPython30 pyserial dbus-python psutil numpy pyopengl pyglet cython
   ];
 

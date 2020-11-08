@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "86a36049ae3c8b1ce12d3183911b3082b38b2998e858285309581e37dc22d8fa";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     colorama
     configobj
     packaging

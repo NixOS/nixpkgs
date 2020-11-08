@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkPhase = ''
     py.test

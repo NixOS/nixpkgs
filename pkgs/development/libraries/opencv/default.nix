@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
   '';
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { requiredPythonModules = []; };
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";

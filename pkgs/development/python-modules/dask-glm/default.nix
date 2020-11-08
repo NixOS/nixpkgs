@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikitlearn ];
+  requiredPythonModules = [ cloudpickle dask numpy toolz multipledispatch scipy scikitlearn ];
 
   checkPhase = ''
     py.test dask_glm

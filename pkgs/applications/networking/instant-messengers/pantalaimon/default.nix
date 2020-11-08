@@ -22,7 +22,7 @@ buildPythonApplication rec {
     sha256 = "0cx8sqajf5lh8w61yy1l6ry67rv1b45xp264zkw3s7ip80i4ylb2";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     appdirs
     attrs

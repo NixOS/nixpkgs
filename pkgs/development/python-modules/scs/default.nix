@@ -30,7 +30,7 @@ buildPythonPackage rec {
     blas
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
   ];

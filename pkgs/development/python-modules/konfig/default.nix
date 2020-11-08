@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1h780fbrv275dcik4cs3rincza805z6q726b48r4a0qmh5d8160c";
   };
 
-  propagatedBuildInputs = [ configparser six ];
+  requiredPythonModules = [ configparser six ];
 
   patches = [ (writeText "konfig.patch" ''
     diff --git a/setup.py b/setup.py

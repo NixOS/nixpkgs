@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "ade11b20d0631dfc9c2f18ce0149f1e61e4baf114108b27cfd68e5c1619ecc0c";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     h5py
     numba

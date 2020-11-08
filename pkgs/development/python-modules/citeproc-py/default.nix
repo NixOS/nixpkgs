@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ rnc2rng ];
 
-  propagatedBuildInputs = [ lxml ];
+  requiredPythonModules = [ lxml ];
 
   checkInputs = [ nose git ];
   checkPhase = "nosetests tests";

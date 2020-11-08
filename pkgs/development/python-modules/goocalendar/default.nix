@@ -28,7 +28,7 @@ buildPythonPackage rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pygobject3
   ];
 

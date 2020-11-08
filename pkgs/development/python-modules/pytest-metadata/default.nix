@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pytest ];
+  requiredPythonModules = [ pytest ];
 
   meta = with stdenv.lib; {
     description = "Plugin for accessing test session metadata";

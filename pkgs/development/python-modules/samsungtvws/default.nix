@@ -17,7 +17,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "websocket-client==" "websocket-client>="
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     websocket_client
     requests
   ];

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ libsodium ];
+  requiredPythonModules = [ libsodium ];
 
   postPatch =
     let soext = stdenv.hostPlatform.extensions.sharedLibrary; in ''

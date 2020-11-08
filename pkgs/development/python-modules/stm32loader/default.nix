@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0135qzxlrivvkq6wgkw7shfz94n755qs2c1754p1hc2jk0nqayrg";
   };
 
-  propagatedBuildInputs = [ progress pyserial ];
+  requiredPythonModules = [ progress pyserial ];
 
   checkInputs = [ pytest ] ++ lib.optional isPy27 mock;
 

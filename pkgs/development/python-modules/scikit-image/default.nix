@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cloudpickle
     dask
     imageio

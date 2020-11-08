@@ -24,7 +24,7 @@ in
       substituteInPlace setup.py --replace "GitPython ==" "GitPython >= "
     '';
 
-    propagatedBuildInputs = [ python3Packages.GitPython truffleHogRegexes ];
+    requiredPythonModules = [ python3Packages.GitPython truffleHogRegexes ];
 
     # Test cases run git clone and require network access
     doCheck = false;

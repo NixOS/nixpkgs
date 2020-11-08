@@ -11,6 +11,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm toml ];
-  propagatedBuildInputs = [ six importlib-metadata ];
+  requiredPythonModules = [ six importlib-metadata ];
   checkInputs = [ nose ];
 }

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   meta = with stdenv.lib; {
     description = "Parse human-readable date/time text";

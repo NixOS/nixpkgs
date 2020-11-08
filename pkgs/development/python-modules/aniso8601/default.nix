@@ -11,7 +11,7 @@ buildPythonPackage rec {
     license     = licenses.bsd3;
   };
 
-  propagatedBuildInputs = [ dateutil ];
+  requiredPythonModules = [ dateutil ];
 
   checkInputs = stdenv.lib.optional (!isPy3k) mock;
 

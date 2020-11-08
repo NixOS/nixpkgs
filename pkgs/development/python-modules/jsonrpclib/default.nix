@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "02vgirw2bcgvpcxhv5hf3yvvb4h5wzd1lpjx8na5psdmaffj6l3z";
   };
 
-  propagatedBuildInputs = [ cjson ];
+  requiredPythonModules = [ cjson ];
 
   meta = with lib; {
     description = "JSON RPC client library";

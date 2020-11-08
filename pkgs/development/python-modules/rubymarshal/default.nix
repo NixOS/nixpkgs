@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "94aa84fa42393f773c8215fab679bd3b72bbdb9f7931643d3672184cde9981d9";
   };
 
-  propagatedBuildInputs = [ hypothesis ];
+  requiredPythonModules = [ hypothesis ];
 
   # pypi doesn't distribute tests
   doCheck = false;

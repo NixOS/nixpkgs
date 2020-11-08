@@ -22,7 +22,7 @@ buildPythonPackage rec {
       --replace "if sys.version_info >= (3, 7):" "if sys.version_info >= (3, 6, 4):"
   '';
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ mock ];
 

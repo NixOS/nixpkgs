@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1svaza5lpvdbmyrx5xi0riqzq4hb9wnlpqrg6r8zy14pbi42j8hi";
   };
 
-  propagatedBuildInputs = [ click ];
+  requiredPythonModules = [ click ];
 
   meta = with stdenv.lib; {
     description = "Enable git-like did-you-mean feature in click";

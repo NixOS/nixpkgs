@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     srht
     redis
     alembic

@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pkgs.gifsicle
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     tornado
     pycrypto
     pycurl

@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "1crnlv0khplpibl9mj3flrgp877pnr1xz6hnnsi6hk3kfbc6p3nj";
   };
 
-  propagatedBuildInputs = [ pyserial pyudev ];
+  requiredPythonModules = [ pyserial pyudev ];
 
   meta = with lib; {
     homepage = "https://github.com/dhylands/rshell";

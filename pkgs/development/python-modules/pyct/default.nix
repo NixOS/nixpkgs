@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   doCheck = !isPy27;
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     param
     pyyaml
     requests

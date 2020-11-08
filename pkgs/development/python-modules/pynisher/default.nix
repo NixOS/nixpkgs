@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1b1079315ad1009de108c9ad701f6ae5274264e64503fc22c2de366d99953f34";
   };
 
-  propagatedBuildInputs = [ psutil docutils ];
+  requiredPythonModules = [ psutil docutils ];
 
   # no tests in the Pypi archive
   doCheck = false;

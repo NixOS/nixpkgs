@@ -39,7 +39,7 @@ buildPythonApplication rec {
     "test_readable_plan_file_is_not_json"
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     GitPython
     emoji
     filetype

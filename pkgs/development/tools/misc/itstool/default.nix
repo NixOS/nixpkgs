@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1acjgf8zlyk7qckdk19iqaca4jcmywd7vxjbcs1mm6kaf8icqcv2";
   };
 
-  pythonPath = [ python3.pkgs.libxml2 ];
+  requiredPythonModules = [ python3.pkgs.libxml2 ];
   buildInputs = [ python3 python3.pkgs.libxml2 ];
   nativeBuildInputs = [ python3.pkgs.wrapPython ];
 

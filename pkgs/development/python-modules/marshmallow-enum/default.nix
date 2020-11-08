@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1ihrcmyfjabivg6hc44i59hnw5ijlg1byv3zs1rqxfynp8xr7398";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     marshmallow
   ] ++ lib.optionals isPy27 [ enum34 ];
 

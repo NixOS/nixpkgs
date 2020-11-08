@@ -54,7 +54,7 @@ buildPythonPackage rec {
     email_validator
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     wtforms
   ] ++ lib.optionals isPy27 [ enum34 ];

@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
                       "--set CHARSET en_us.UTF-8" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pygobject3
   ];
 

@@ -5,7 +5,7 @@ buildPythonPackage rec {
   pname = "tzlocal";
   version = "2.1";
 
-  propagatedBuildInputs = [ pytz ];
+  requiredPythonModules = [ pytz ];
 
   src = fetchPypi {
     inherit pname version;

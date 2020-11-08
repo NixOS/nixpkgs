@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "01bms89sl16nyh9f141idsz4mnhxvjrc3gj721wxh1fhikps0djx";
   };
 
-  propagatedBuildInputs = [ service-identity ldap3 twisted ];
+  requiredPythonModules = [ service-identity ldap3 twisted ];
 
   # ldaptor is not ready for py3 yet
   doCheck = !isPy3k;

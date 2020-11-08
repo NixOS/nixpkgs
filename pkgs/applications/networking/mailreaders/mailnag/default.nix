@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     xorg.lndir
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     gsettings-desktop-schemas
     pygobject3
     dbus-python

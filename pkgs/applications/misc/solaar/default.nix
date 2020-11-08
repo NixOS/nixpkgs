@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0k5z9dap6rawiafkg1x7zjx51ala7wra6j6lvc2nn0y8r79yp7a9";
   };
 
-  propagatedBuildInputs = with python3Packages; [ gobject-introspection gtk3 pygobject3 pyudev ];
+  requiredPythonModules = with python3Packages; [ gobject-introspection gtk3 pygobject3 pyudev ];
 
   postInstall = ''
     wrapProgram "$out/bin/solaar" \

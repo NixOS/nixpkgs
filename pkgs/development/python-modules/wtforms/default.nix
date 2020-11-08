@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c";
   };
 
-  propagatedBuildInputs = [ markupsafe ];
+  requiredPythonModules = [ markupsafe ];
 
   # Django tests are broken "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet."
   doCheck = false;

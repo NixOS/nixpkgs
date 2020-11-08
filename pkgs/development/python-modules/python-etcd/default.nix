@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = [ nose mock pyopenssl ];
 
-  propagatedBuildInputs = [ urllib3 dnspython ];
+  requiredPythonModules = [ urllib3 dnspython ];
 
   postPatch = ''
     sed -i '19s/dns/"dnspython"/' setup.py

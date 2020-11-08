@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1fysm05cz0z54apn1p889xhbgjnfwax6fngi05yij5qp2zxqghf9";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ setuptools six ];
+  requiredPythonModules = with python3.pkgs; [ setuptools six ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/KBNLresearch/isolyzer";

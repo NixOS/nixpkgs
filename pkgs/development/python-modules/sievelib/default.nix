@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ future six ];
+  requiredPythonModules = [ future six ];
   checkInputs = [ mock ];
 
   meta = {

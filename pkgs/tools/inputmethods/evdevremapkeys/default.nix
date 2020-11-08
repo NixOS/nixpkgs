@@ -14,7 +14,7 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = "0c9slflakm5jqd8s1zpxm7gmrrk0335m040d7m70hnsak42jvs2f";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ 
+  requiredPythonModules = with pythonPackages; [ 
     pyyaml
     pyxdg
     python-daemon

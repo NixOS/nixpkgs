@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "46ab999744a9d831159c3411bb0c79346d94a444df9a3a3742e9ed63645f264b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
   ];
 

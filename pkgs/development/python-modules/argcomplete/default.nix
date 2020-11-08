@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # re-enable if we are able to make testing work
   # checkInputs = [ bashInteractive coverage flake8 ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dicttoxml
     importlib-metadata
     pexpect

@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "flufl.lock";
   version = "3.2";
 
-  propagatedBuildInputs = [ atpublic ];
+  requiredPythonModules = [ atpublic ];
 
   src = fetchPypi {
     inherit pname version;

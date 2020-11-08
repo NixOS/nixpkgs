@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0n980gqpzh0fm58h3i4mi2i10wgj606lscm1r5sk60vbf6vh8mv9";
   };
 
-  propagatedBuildInputs = [ pyopenssl ];
+  requiredPythonModules = [ pyopenssl ];
 
   doCheck = false; #no tests were included
 

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "815fdef4607474295d68da46978a54481dd1e7be153c7d60f9e72773cd38d77d";
   };
 
-  propagatedBuildInputs = with stdenv.lib; [ pycares ]
+  requiredPythonModules = with stdenv.lib; [ pycares ]
     ++ optional (pythonOlder "3.7") typing
     ++ optional (isPy27 || isPyPy) trollius;
 

@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "062nv4xkfsjc11k9m52dh6xjn9z68a4a6x1s8z05wwv4jbp1lkhn";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     atomicwrites
     configobj
     vobject

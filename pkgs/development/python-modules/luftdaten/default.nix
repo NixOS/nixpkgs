@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1w1f0kmiwslg1dxn7gq0ak8f5wajlwl03r5zklshjc11j34b4d5i";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout ];
+  requiredPythonModules = [ aiohttp async-timeout ];
 
   # No tests implemented
   doCheck = false;

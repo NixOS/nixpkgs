@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ pyyaml typing-inspect ];
+  requiredPythonModules = [ pyyaml typing-inspect ];
 
   checkInputs = [ black isort pytestCheckHook ];
 

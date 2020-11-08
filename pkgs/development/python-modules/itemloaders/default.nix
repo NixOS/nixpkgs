@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1s8c2il7jyfixpb7h5zq0lf4s07pqwia4ycpf3slb8whcp0h8bfm";
   };
 
-  propagatedBuildInputs = [ w3lib parsel jmespath itemadapter ];
+  requiredPythonModules = [ w3lib parsel jmespath itemadapter ];
 
   checkInputs = [ pytestCheckHook ];
 

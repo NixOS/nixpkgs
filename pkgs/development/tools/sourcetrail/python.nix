@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapPython cmake swig ];
   buildInputs = [ python ];
-  pythonPath = [ jedi parso ];
+  requiredPythonModules = [ jedi parso ];
 
   dontUseCmakeConfigure = true;
   cmakeFlags = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    buildPythonPath "$pythonPath"
+    buildPythonPath "$requiredPythonModules"
 
     # FIXME: some tests are failing
     # PYTHONPATH="$program_PYTHONPATH:SourcetrailDB/build/bindings_python" \
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cp _sourcetraildb* $out/libexec/_sourcetraildb.so
     popd
 
-    wrapPythonProgramsIn "$out/libexec" "$pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$requiredPythonModules"
   '';
 
   doCheck = true;

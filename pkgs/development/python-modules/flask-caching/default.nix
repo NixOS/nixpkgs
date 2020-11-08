@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "a0356ad868b1d8ec2d0e675a6fe891c41303128f8904d5d79e180d8b3f952aff";
   };
 
-  propagatedBuildInputs = [ flask ];
+  requiredPythonModules = [ flask ];
 
   checkInputs = [ pytest pytestcov pytest-xprocess pytestcache ];
 

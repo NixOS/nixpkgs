@@ -22,7 +22,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ docopt six wcwidth pygments ];
+  requiredPythonModules = [ docopt six wcwidth pygments ];
 
   meta = {
     description = "Python library for building powerful interactive command lines";

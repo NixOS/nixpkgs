@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   outputs = [ "out" "doc" "man" ];
 
-  propagatedBuildInputs = with python3Packages; [ pygments requests setuptools ];
+  requiredPythonModules = with python3Packages; [ pygments requests setuptools ];
   dontUseSetuptoolsCheck = true;
   patches = [
     ./strip-venv.patch

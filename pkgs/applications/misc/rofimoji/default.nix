@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.
-  propagatedBuildInputs = with lib; [ ConfigArgParse pyxdg rofi ]
+  requiredPythonModules = with lib; [ ConfigArgParse pyxdg rofi ]
     ++ optionals waylandSupport [ wl-clipboard wtype ]
     ++ optionals x11Support [ xdotool xsel ];
 

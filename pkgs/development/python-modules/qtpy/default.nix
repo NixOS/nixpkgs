@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "13cw8l7zrhbdi03k1wl1pg9xdl4ahdfa7yz8gd0f23sxnm22rdrd";
   };
 
-  # no concrete propagatedBuildInputs as multiple backends are supposed
+  # no concrete requiredPythonModules as multiple backends are supposed
   checkInputs = [ pyside pytest ];
 
   doCheck = false; # require X

@@ -55,7 +55,7 @@ in buildPythonPackage rec {
     proj
     zlib
   ]);
-  propagatedBuildInputs = [ pillow pycairo ];
+  requiredPythonModules = [ pillow pycairo ];
 
   meta = with stdenv.lib; {
     description = "Python bindings for Mapnik";

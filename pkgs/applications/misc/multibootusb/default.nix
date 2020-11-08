@@ -58,7 +58,7 @@ python36Packages.buildPythonApplication rec {
   # "Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory"
   doCheck = false;
 
-  pythonPath = [
+  requiredPythonModules = [
     python36Packages.dbus-python
     python36Packages.pyqt5
     python36Packages.pytest-shutil

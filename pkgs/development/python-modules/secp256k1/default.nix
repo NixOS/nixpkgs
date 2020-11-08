@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ cffi secp256k1 ];
+  requiredPythonModules = [ cffi secp256k1 ];
 
   # Tests are not included in archive
   doCheck = false;

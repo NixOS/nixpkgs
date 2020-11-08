@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cssselect2
     lxml
     pillow

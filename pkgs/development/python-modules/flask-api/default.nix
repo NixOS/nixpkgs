@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "6986642e5b25b7def710ca9489ed2b88c94006bfc06eca01c78da7cf447e66e5";
   };
 
-  propagatedBuildInputs = [ flask markdown ];
+  requiredPythonModules = [ flask markdown ];
 
   meta = with lib; {
     homepage = "https://github.com/miracle2k/flask-assets";

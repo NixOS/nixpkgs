@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0g1nqiikv023ab60gfqrvc13kfjv8m70bpfk264vlliaq6mvxdf2";
   };
 
-  propagatedBuildInputs = [ astropy ];
+  requiredPythonModules = [ astropy ];
 
   nativeBuildInputs = [ astropy-helpers ];
 

@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "tunigo";
   version = "1.0.0";
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   src = fetchFromGitHub {
     owner = "trygveaa";

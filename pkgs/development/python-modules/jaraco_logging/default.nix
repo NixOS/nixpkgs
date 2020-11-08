@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ tempora six ];
+  requiredPythonModules = [ tempora six ];
 
   # test no longer packaged with pypi
   doCheck = false;

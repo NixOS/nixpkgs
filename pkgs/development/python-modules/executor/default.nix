@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1jfmagw126di0qd82bydwvryqcxc54pqja3rbx3ny3fv1ahi5s7k";
   };
 
-  propagatedBuildInputs = [ coloredlogs property-manager fasteners ];
+  requiredPythonModules = [ coloredlogs property-manager fasteners ];
 
   checkInputs = [ pytestCheckHook mock virtualenv ];
 

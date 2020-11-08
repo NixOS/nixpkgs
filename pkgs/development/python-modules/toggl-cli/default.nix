@@ -49,7 +49,7 @@ buildPythonPackage rec {
    runHook postCheck
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     click-completion
     inquirer

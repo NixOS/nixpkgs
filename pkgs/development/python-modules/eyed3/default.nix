@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # https://github.com/nicfit/eyeD3/blob/103198e265e3279384f35304e8218be6717c2976/Makefile#L97
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six filetype deprecation
   ] ++ lib.optional (pythonOlder "3.7") dataclasses;
 

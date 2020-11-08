@@ -20,7 +20,7 @@ buildPythonPackage {
     branchName= "pyusb";
   };
 
-  propagatedBuildInputs = [ pyusb pybluez pyfantom git ];
+  requiredPythonModules = [ pyusb pybluez pyfantom git ];
 
   # Tests fail on Mac dependency
   doCheck = false;

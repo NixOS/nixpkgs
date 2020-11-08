@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # Doesn't actually run tests
   doCheck = false;
 
-  propagatedBuildInputs = [ six isodate pyparsing html5lib keepalive ];
+  requiredPythonModules = [ six isodate pyparsing html5lib keepalive ];
 
   meta = with stdenv.lib; {
     description = "This is a wrapper around a SPARQL service. It helps in creating the query URI and, possibly, convert the result into a more manageable format";

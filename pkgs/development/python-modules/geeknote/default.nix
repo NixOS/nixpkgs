@@ -26,7 +26,7 @@ buildPythonPackage {
    /homeless-shelter/.geeknotebuilder". */
   doCheck = false;
 
-  propagatedBuildInputs = [ thrift beautifulsoup4 markdown2 sqlalchemy html2text evernote ];
+  requiredPythonModules = [ thrift beautifulsoup4 markdown2 sqlalchemy html2text evernote ];
 
   meta = with stdenv.lib; {
     description = "Work with Evernote from command line";

@@ -28,7 +28,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--cov" ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     isodate
     dateutil

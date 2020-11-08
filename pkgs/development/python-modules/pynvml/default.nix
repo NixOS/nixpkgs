@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0pfykj1amqh1rixp90rg85v1nj6qmx89fahqr6ii4zlcckffmm68";
   };
 
-  propagatedBuildInputs = [ cudatoolkit ];
+  requiredPythonModules = [ cudatoolkit ];
 
   doCheck = false;  # no tests in PyPi dist
   pythonImportsCheck = [ "pynvml" "pynvml.smi" ];

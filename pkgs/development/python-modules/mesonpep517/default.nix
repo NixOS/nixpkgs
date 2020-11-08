@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ intreehooks  ];
 
-  propagatedBuildInputs = [ pytoml ];
+  requiredPythonModules = [ pytoml ];
 
   # postPatch = ''
   #   # Meson tries to detect ninja as well, so we should patch meson as well.

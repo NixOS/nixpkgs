@@ -5,7 +5,7 @@ buildPythonPackage rec {
   pname = "pybtex";
 
   doCheck = false;
-  propagatedBuildInputs = [ latexcodec pyyaml ];
+  requiredPythonModules = [ latexcodec pyyaml ];
 
   src = fetchPypi {
     inherit version pname;

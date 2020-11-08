@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "7fa4337256a1542e8f5bb4bed19e1d9aea98fe5ff9baf76693342a1dd6ac7c96";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ pytest pytestrunner ];
 

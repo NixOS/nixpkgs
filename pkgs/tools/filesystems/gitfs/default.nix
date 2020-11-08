@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkInputs = with python3Packages; [ pytest pytestcov mock ];
-  propagatedBuildInputs = with python3Packages; [ atomiclong fusepy pygit2 six ];
+  requiredPythonModules = with python3Packages; [ atomiclong fusepy pygit2 six ];
 
   checkPhase = "py.test";
   doCheck = false;

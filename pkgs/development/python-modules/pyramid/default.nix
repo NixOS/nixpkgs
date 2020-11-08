@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   checkInputs = [ webtest zope_component ];
 
-  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
+  requiredPythonModules = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
 
   # Failing tests
   # https://github.com/Pylons/pyramid/issues/1899

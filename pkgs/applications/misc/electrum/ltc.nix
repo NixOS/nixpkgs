@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [ pyqt5 wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyaes
     ecdsa
     pbkdf2

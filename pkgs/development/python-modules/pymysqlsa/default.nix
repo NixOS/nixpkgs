@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "a2676bce514a29b2d6ab418812259b0c2f7564150ac53455420a20bd7935314a";
   };
 
-  propagatedBuildInputs = [ pymysql sqlalchemy ];
+  requiredPythonModules = [ pymysql sqlalchemy ];
 
   meta = with stdenv.lib; {
     description = "PyMySQL dialect for SQL Alchemy";

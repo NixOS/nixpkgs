@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1vddr9sjn6337i1vx0mm7pb3qibvl2gx6nx18vm4fajgv9vcjxny";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     click-datetime
     deprecation

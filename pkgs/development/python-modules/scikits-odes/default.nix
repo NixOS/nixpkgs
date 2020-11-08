@@ -31,7 +31,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     sundials
     scipy

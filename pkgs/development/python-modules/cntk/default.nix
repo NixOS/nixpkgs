@@ -19,7 +19,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [ swig openmpi ];
   buildInputs = [ cntk openmpi ];
-  propagatedBuildInputs = [ numpy scipy enum34 protobuf pip ];
+  requiredPythonModules = [ numpy scipy enum34 protobuf pip ];
 
   CNTK_LIB_PATH = "${cntk}/lib";
   CNTK_COMPONENT_VERSION = cntk.version;

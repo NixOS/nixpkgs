@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyflakes
     flake8-import-order
     setuptools

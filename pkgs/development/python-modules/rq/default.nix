@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # test require a running redis rerver, which is something we can't do yet
   doCheck = false;
 
-  propagatedBuildInputs = [ click redis ];
+  requiredPythonModules = [ click redis ];
 
   meta = with stdenv.lib; {
     description = "A simple, lightweight library for creating background jobs, and processing them";

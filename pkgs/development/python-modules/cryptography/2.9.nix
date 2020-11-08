@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     packaging
     six
   ] ++ stdenv.lib.optional (!isPyPy) cffi

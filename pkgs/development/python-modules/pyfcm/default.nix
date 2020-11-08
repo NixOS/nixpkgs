@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0aj10yvjsc04j15zbn403i83j7ra5yg35pi3ywkyakk8n1s0s3qg";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # pyfcm's unit testing suite requires network access
   doCheck = false;

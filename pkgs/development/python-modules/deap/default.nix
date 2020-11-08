@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0bvshly83c4h5jhxaa97z192viczymz5fxp6vl8awjmmrs9l9x8i";
   };
 
-  propagatedBuildInputs = [ numpy matplotlib ];
+  requiredPythonModules = [ numpy matplotlib ];
 
   checkInputs = [ nose ];
   checkPhase = ''

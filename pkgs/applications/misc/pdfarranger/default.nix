@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     gtk3 poppler_gi
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pygobject3
     pikepdf
     img2pdf

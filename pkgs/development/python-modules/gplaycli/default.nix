@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ libffi pyasn1 clint ndg-httpsclient protobuf requests args gpapi pyaxmlparser ];
+  requiredPythonModules = [ libffi pyasn1 clint ndg-httpsclient protobuf requests args gpapi pyaxmlparser ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/matlink/gplaycli";

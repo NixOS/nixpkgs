@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace dockx_applets/volume-control.py         --replace /usr/share/             $out/share/
   '';
 
-  propagatedBuildInputs = (with pythonPackages; [ pygtk pyxdg dbus-python pillow xlib ])
+  requiredPythonModules = (with pythonPackages; [ pygtk pyxdg dbus-python pillow xlib ])
     ++ (with gnome2; [ gnome_python gnome_python_desktop ])
     ++ [ keybinder ];
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "56ec931959ede74b5dedf65cf20772e6a79764d20c404794cce0111c88c085ff";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     stringcase
     typing-inspect
     marshmallow-enum

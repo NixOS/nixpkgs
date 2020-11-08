@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
-  propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
+  requiredPythonModules = with python.pkgs; computeRequiredPythonModules ([ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ]);
 
   buildInputs =
     [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas
@@ -95,10 +95,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  pythonPath = with python.pkgs; [ pygobject2 pygtk ];
-
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share" --prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 

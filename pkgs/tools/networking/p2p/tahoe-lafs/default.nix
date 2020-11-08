@@ -51,7 +51,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
 
   # The `backup' command requires `sqlite3'.
-  propagatedBuildInputs = with pythonPackages; [
+  requiredPythonModules = with pythonPackages; [
     twisted foolscap nevow simplejson zfec pycryptopp darcsver
     setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
     service-identity pyyaml magic-wormhole treq characteristic

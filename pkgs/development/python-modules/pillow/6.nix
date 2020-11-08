@@ -26,7 +26,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  propagatedBuildInputs = [ olefile ];
+  requiredPythonModules = [ olefile ];
 
   checkInputs = [ pytest pytestrunner pyroma numpy ];
 

@@ -18,5 +18,5 @@ python3Packages.buildPythonApplication {
     sha256 = "0v8y64kldfbs809j1g9d75dd1vxq7mfxnp4b45pz8anpxhjf64fy";
   };
 
-  propagatedBuildInputs = [ python3Packages.openant ];
+  requiredPythonModules = [ python3Packages.openant ];
 }

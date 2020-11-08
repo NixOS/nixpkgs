@@ -19,7 +19,7 @@
     sed -i '/fido2/c\"fido2",' pyproject.toml
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     ecdsa
     fido2

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ construct ];
+  requiredPythonModules = [ construct ];
 
   # no checks from Pypi - https://github.com/happyleavesaoc/python-snapcast/issues/23
   doCheck = false;

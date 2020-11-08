@@ -56,7 +56,7 @@ buildPythonPackage rec {
     cma
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     sqlalchemy
     numpy
     scipy

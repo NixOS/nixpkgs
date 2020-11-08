@@ -37,7 +37,7 @@ let
       url = "https://bitbucket.org/fenics-project/dijitso/downloads/dijitso-${version}.tar.gz";
       sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
     };
-    propagatedBuildInputs = [ numpy six ];
+    requiredPythonModules = [ numpy six ];
     checkInputs = [ pytest ];
     preCheck = ''
       export HOME=$PWD
@@ -62,7 +62,7 @@ let
       url = "https://bitbucket.org/fenics-project/fiat/downloads/fiat-${version}.tar.gz";
       sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
     };
-    propagatedBuildInputs = [ numpy six sympy ];
+    requiredPythonModules = [ numpy six sympy ];
     checkInputs = [ pytest ];
 
     preCheck = ''
@@ -92,7 +92,7 @@ let
       url = "https://bitbucket.org/fenics-project/ufl/downloads/ufl-${version}.tar.gz";
       sha256 = "04daxwg4y9c51sdgvwgmlc82nn0fjw7i2vzs15ckdc7dlazmcfi1";
     };
-    propagatedBuildInputs = [ numpy six ];
+    requiredPythonModules = [ numpy six ];
     checkInputs = [ pytest ];
     checkPhase = ''
       runHook preCheck
@@ -117,7 +117,7 @@ let
     nativeBuildInputs = [
       pybind11
     ];
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       dijitso
       fiat
       numpy
@@ -157,7 +157,7 @@ let
         sha256 = "1zj7k3y7vsx0hz3gwwlxhq6gdqamqpcw90d4ishwx5ps5ckcsb9r";
       })
     ];
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       dijitso
       fiat
       numpy
@@ -241,7 +241,7 @@ let
       boost
     ];
 
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       dijitso
       ffc
       mpi4py

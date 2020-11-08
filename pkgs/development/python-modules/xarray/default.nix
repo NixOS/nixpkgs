@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy pandas setuptools ];
+  requiredPythonModules = [ numpy pandas setuptools ];
 
   checkPhase = ''
     pytest $out/${python.sitePackages}

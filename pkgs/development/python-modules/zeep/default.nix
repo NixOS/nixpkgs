@@ -41,7 +41,7 @@ buildPythonPackage rec {
      })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     appdirs
     attrs
     cached-property

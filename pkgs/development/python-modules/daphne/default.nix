@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [ asgiref autobahn twisted service-identity pyopenssl ];
+  requiredPythonModules = [ asgiref autobahn twisted service-identity pyopenssl ];
 
   checkInputs = [ hypothesis pytest pytest-asyncio ];
 

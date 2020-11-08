@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace pandas~=0.25.0 pandas
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     dateparser
     pandas

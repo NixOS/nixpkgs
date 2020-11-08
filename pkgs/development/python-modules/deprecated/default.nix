@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0x3zkmykcyjn8k57g8lcf89fxw8q7hvvcj6xkwb0f2zrnmpscnsj";
   };
 
-  propagatedBuildInputs = [ wrapt ];
+  requiredPythonModules = [ wrapt ];
   checkInputs = [ pytest ];
   meta = with stdenv.lib; {
     homepage = "https://github.com/tantale/deprecated";

@@ -16,7 +16,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "1970izjaa60r5cg9i35rzz9lk5c5d8q1vw1rh2skvfbf63z1hnzv";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     cadquery
     Logbook
     pyqt5

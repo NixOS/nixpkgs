@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1zamff3m0kc4vyfniyhxpkkcqv1rrgnmh37ykxv34nna1ws47vi6";
   };
 
-  propagatedBuildInputs = [ repoze_lru six webob ];
+  requiredPythonModules = [ repoze_lru six webob ];
   checkInputs = [ coverage webtest ];
 
   meta = with stdenv.lib; {

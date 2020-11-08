@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "dcb85b87aa03bb65bd3a073d012796b024cabeb086033e616759e2abb769440b";
   };
 
-  propagatedBuildInputs = [ colorama ];
+  requiredPythonModules = [ colorama ];
 
   meta = with stdenv.lib; {
     description = "TextUI colors for Python";

@@ -32,7 +32,7 @@ buildPythonPackage rec {
       --replace "starlette ==0.13.2" "starlette"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     uvicorn
     starlette
     pydantic

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ u-msgpack-python six ];
+  requiredPythonModules = [ u-msgpack-python six ];
 
   # Tests in neither the archive nor the repo
   doCheck = false;

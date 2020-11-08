@@ -28,7 +28,7 @@ python.pkgs.buildPythonApplication rec {
 
   buildInputs = [ python.pkgs.Babel ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     androguard
     clint
     defusedxml

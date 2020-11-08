@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ zope_testing ];
+  requiredPythonModules = [ zope_testing ];
 
   meta = with stdenv.lib; {
     description = "Inter-process locks";

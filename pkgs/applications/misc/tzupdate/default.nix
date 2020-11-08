@@ -12,7 +12,7 @@ buildPythonApplication rec {
     sha256 = "5b55795c390e4ccc90e649c8cc387447daaf30a21d68f7196b49824cbcba8adc";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   meta = with stdenv.lib; {
     description = "Update timezone information based on geoip";

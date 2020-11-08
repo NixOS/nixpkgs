@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1n0xim4ij1n4yvyqqvyc0wllhjs22szglsd5av0j8k2qmck4njcg";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     logilab_common six
   ];
 

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "c315be70aa12a5f5790c0ab9acd426c3a58eebea65a77d0893248c5144a5080c";
   };
 
-  propagatedBuildInputs = [ django djangorestframework pyjwt ];
+  requiredPythonModules = [ django djangorestframework pyjwt ];
 
   # Test raises django.core.exceptions.ImproperlyConfigured
   doCheck = false;

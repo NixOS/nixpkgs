@@ -32,7 +32,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "mock==1.0.1" "mock"
   '';
 
-  propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
+  requiredPythonModules = [ httplib2 oauth oauth2 semantic-version ];
   checkInputs = [
     flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
     pytest-flakes pytestpep8 sphinx mock chalice

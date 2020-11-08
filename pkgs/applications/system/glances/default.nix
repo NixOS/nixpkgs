@@ -35,7 +35,7 @@ buildPythonApplication rec {
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     bottle
     future
     netifaces

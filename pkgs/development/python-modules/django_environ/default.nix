@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   # The testsuite fails to modify the base environment
   doCheck = false;
-  propagatedBuildInputs = [ django six ];
+  requiredPythonModules = [ django six ];
 
   meta = with stdenv.lib; {
     description = "Utilize environment variables to configure your Django application";

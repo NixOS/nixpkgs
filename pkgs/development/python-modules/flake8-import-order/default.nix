@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "14kfvsagqc6lrplvf3x58ia6x744bk8fj91wmk0hcipa8naw73d2";
   };
 
-  propagatedBuildInputs = [ pycodestyle ] ++ lib.optional (!isPy3k) enum34;
+  requiredPythonModules = [ pycodestyle ] ++ lib.optional (!isPy3k) enum34;
 
   checkInputs = [ pytest flake8 pycodestyle pylama ];
 

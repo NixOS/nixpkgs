@@ -32,7 +32,7 @@ in buildPythonApplication rec {
 
   # The optional tagpy dependency (for editing metadata) is not yet
   # included because it's difficult to build.
-  pythonPath = [
+  requiredPythonModules = [
     dbus-python
     mpd2
     pygobject3

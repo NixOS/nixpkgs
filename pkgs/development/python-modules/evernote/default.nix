@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "796847e0b7517e729041c5187fa1665c3f6fc0491cb4d71fb95a62c4f22e64eb";
   };
 
-   propagatedBuildInputs = [ oauth2 ];
+   requiredPythonModules = [ oauth2 ];
 
    meta = with stdenv.lib; {
     description = "Evernote SDK for Python";

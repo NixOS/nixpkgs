@@ -31,7 +31,7 @@ buildPythonPackage rec {
     sha256 = "a59039a1724c0f4f4435316e2ad3383f2328ae61f190e74414a66cc8c4637636";
   };
 
-  propagatedBuildInputs = [ ipywidgets six docopt tqdm jupyter psutil pyyaml ansible-runner ansible ];
+  requiredPythonModules = [ ipywidgets six docopt tqdm jupyter psutil pyyaml ansible-runner ansible ];
 
   postPatch = ''
    # remove when merged

@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sha256 = "00gmq45fckcqkj910bvd7pyqz1mvgsdvz4s0k7dzbnc5czzq1f4a";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     brotli
     certifi
     h2

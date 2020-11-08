@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "16g7dzvjcfhaz52wbmcapamy55l7vfhgizqy3m8dv9gkmy8vap89";
   };
 
-  propagatedBuildInputs = [ python3Packages.urwid ];
+  requiredPythonModules = [ python3Packages.urwid ];
 
   doCheck = false; # No tests available
 

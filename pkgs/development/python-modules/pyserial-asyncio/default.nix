@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1vlsb0d03krxlj7vpvyhpinnyxyy8s3lk5rs8ba2932dhyl7f1n4";
   };
 
-  propagatedBuildInputs = [ pyserial ];
+  requiredPythonModules = [ pyserial ];
 
   meta = with stdenv.lib; {
     description = "asyncio extension package for pyserial";

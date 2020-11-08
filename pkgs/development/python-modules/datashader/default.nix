@@ -37,7 +37,7 @@ buildPythonPackage rec {
     sha256 = "b1f80415f72f92ccb660aaea7b2881ddd35d07254f7c44101709d42e819d6be6";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dask
     distributed
     bokeh

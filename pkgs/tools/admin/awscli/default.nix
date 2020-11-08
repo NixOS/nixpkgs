@@ -33,7 +33,7 @@ in with py.pkgs; buildPythonApplication rec {
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     botocore
     bcdoc
     s3transfer

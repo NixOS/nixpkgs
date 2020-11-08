@@ -21,7 +21,7 @@ in python3Packages.buildPythonApplication {
     inherit (tortoisehgSrc.meta) name version;
     src = tortoisehgSrc;
 
-    propagatedBuildInputs = with python3Packages; [
+    requiredPythonModules = with python3Packages; [
       tortoiseMercurial qscintilla-qt5 iniparse
     ];
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];

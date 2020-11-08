@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "d34493cee15029ff5db16157429585ff863ba5542675a4d8a94a0da1bc6e3a50";
   };
 
-  propagatedBuildInputs = [ isodate html5lib SPARQLWrapper ];
+  requiredPythonModules = [ isodate html5lib SPARQLWrapper ];
 
   checkInputs = [ networkx nose ];
 

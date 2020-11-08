@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # carbon is installed as a regular python module.
   GRAPHITE_NO_PREFIX="True";
 
-  propagatedBuildInputs = [ twisted whisper txamqp cachetools urllib3 ];
+  requiredPythonModules = [ twisted whisper txamqp cachetools urllib3 ];
 
   meta = with stdenv.lib; {
     homepage = "http://graphiteapp.org/";

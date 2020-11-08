@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest nose glibcLocales ];
-  propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
+  requiredPythonModules = [ numpy scipy matplotlib h5py ];
 
   checkPhase = ''
     LC_ALL=en_US.utf-8 pytest -k 'not test_message_to_parents'

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0ickpwvvdrlbm477gdzfjfcbgmfia9ksm9a3i3pbx9xia97r9fim";
   };
 
-  propagatedBuildInputs = [ more-itertools backports_functools_lru_cache ];
+  requiredPythonModules = [ more-itertools backports_functools_lru_cache ];
 
   doCheck = false;
 

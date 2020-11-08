@@ -56,7 +56,7 @@ in buildPythonApplication rec {
     hicolor-icon-theme
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     pycairo
     pygobject3

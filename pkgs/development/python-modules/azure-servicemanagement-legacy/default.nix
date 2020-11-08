@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1kcibw17qm8c02y28xabm3k1zrawi6g4q8kzc751l5l3vagqnf2x";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     azure-common
     requests
   ];

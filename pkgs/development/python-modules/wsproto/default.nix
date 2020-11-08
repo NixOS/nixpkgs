@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "17gsxlli4w8am1wwwl3k90hpdfa213ax40ycbbvb7hjx1v1rhiv1";
   };
 
-  propagatedBuildInputs = [ h11 ] ++ lib.optional isPy36 dataclasses;
+  requiredPythonModules = [ h11 ] ++ lib.optional isPy36 dataclasses;
 
   checkInputs = [ pytest ];
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "b2444dbfd03deda35792bd00ebd1692597c2605c61445da79da6322afaca7a8d";
   };
 
-  propagatedBuildInputs = [ flask six ];
+  requiredPythonModules = [ flask six ];
 
   # touches network
   doCheck = false;

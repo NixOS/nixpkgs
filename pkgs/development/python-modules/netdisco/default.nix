@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "dcaabf83b204282aacfb213b18799eb7af2d5a6defe529487bbd0548036392fe";
   };
 
-  propagatedBuildInputs = [ requests zeroconf netifaces ];
+  requiredPythonModules = [ requests zeroconf netifaces ];
 
   checkInputs = [ pytest ];
 

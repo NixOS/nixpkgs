@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "19c82d5633751bf3ec92caa481fb5cffaac1787bd485f0df6436fd6242176949";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     freezegun
     pytest
   ];

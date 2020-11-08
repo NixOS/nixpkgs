@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1d4gxypaahby45zcpl0rffcn2z7n55dg9lcd8sv6jjsmbbf9vr4g";
   };
 
-  propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];
+  requiredPythonModules = [ numpy scipy matplotlib flask pillow psycopg2 ];
 
   checkPhase = ''
     $out/bin/ase test

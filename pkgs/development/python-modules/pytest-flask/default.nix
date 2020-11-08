@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
     flask
     werkzeug

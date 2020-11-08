@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0c3dsnfyldnsmyzczp5s5aqvbzcn360s0h4l3gm3k53lg57f762z";
   };
 
-  propagatedBuildInputs = [ requests audioread ];
+  requiredPythonModules = [ requests audioread ];
 
   postPatch = ''
     sed -i \

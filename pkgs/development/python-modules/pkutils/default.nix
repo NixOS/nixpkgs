@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "01yaq9sz6vyxk8yiss6hsmy70qj642cr2ifk0sx1mlh488flcm62";
   };
 
-  propagatedBuildInputs = [ semver ];
+  requiredPythonModules = [ semver ];
 
   # Remove when https://github.com/reubano/pkutils/pull/4 merged
   postPatch = ''

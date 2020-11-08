@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ flake8 pytest ];
 
-  propagatedBuildInputs = [ six orderedmultidict ];
+  requiredPythonModules = [ six orderedmultidict ];
 
   # see https://github.com/gruns/furl/issues/121
   checkPhase = ''

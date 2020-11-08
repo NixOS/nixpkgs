@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1kjn64wx23jmr8dcc6g7bwlmrhfmxr77gh6iphqsl39sayfxdab9";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with stdenv.lib; {
     description = "Functionality needed to operate the pseudo-tty (PTY) allocated to a docker container";

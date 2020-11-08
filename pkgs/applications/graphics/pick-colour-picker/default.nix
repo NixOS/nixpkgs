@@ -26,7 +26,7 @@ buildPythonPackage rec {
     wrapGAppsHook
   ];
 
-  pythonPath = [
+  requiredPythonModules = [
     pygobject3
     pycairo
   ];

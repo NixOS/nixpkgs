@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "06hwbz7362y0la9np3df25mms235fcqgpd2vn0mnf8dri9spzy1h";
   };
 
-  propagatedBuildInputs = [ six django ];
+  requiredPythonModules = [ six django ];
 
   patches = [
     (fetchpatch {

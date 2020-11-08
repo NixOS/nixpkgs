@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   # Only needed for tests
   checkInputs = [ pkgs.openssl ];
 

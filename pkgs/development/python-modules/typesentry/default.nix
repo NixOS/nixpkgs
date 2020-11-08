@@ -18,7 +18,7 @@ buildPythonPackage {
     sha256 = "0z615f9dxaab3bay3v27j7q99qm6l6q8xv872yvsp87sxj7apfki";
   };
 
-  propagatedBuildInputs = [ colorama ];
+  requiredPythonModules = [ colorama ];
   checkInputs = [ pytest pytestcov ];
   checkPhase = ''
     pytest

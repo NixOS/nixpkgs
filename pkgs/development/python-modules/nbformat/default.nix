@@ -22,7 +22,7 @@ buildPythonPackage rec {
   LC_ALL="en_US.utf8";
 
   checkInputs = [ pytest glibcLocales ];
-  propagatedBuildInputs = [ ipython_genutils traitlets testpath jsonschema jupyter_core ];
+  requiredPythonModules = [ ipython_genutils traitlets testpath jsonschema jupyter_core ];
 
   preCheck = ''
     mkdir tmp

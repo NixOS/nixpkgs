@@ -31,7 +31,7 @@ buildPythonApplication rec {
   # The test hangs so we disable it.
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     certifi
     requests-aws4auth

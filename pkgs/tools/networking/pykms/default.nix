@@ -42,7 +42,7 @@ in buildPythonApplication rec {
 
   sourceRoot = "source/py-kms";
 
-  propagatedBuildInputs = [ systemd pytz tzlocal ];
+  requiredPythonModules = [ systemd pytz tzlocal ];
 
   # Fix https://github.com/SystemRage/py-kms/issues/64 :
   patches = [ ./log-to-current-directory-by-default.patch ];

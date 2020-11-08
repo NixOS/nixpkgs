@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1sm6cqi7fv2k3pc68r7wvvjjz8y6cjmz8bvxgqfa4v4wxibwnwrl";
   };
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     lib.optionals (pythonOlder "3.5") [ typing ] ++
     lib.optionals (pythonOlder "3.4") [ funcsigs ];
 

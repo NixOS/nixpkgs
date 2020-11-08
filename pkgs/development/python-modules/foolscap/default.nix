@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0rbw9makjmawkcxnkkngybj3n14s0dnzn9gkqqq2krcm514kmlb9";
   };
 
-  propagatedBuildInputs = [ mock twisted pyopenssl service-identity ];
+  requiredPythonModules = [ mock twisted pyopenssl service-identity ];
 
   checkPhase = ''
     # Either uncomment this, or remove this custom check phase entirely, if

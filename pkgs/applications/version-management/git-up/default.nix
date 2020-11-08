@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   # git should be on path for tool to work correctly
-  propagatedBuildInputs = [ git ] ++ (with pythonPackages; [ click colorama docopt GitPython six termcolor ]);
+  requiredPythonModules = [ git ] ++ (with pythonPackages; [ click colorama docopt GitPython six termcolor ]);
 
   checkInputs = [ git pythonPackages.nose ]; # git needs to be on path
   # 1. git fails to run as it cannot detect the email address, so we set it

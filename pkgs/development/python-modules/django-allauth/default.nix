@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "10id4k01p1hg5agb8cmllg8mv4kc7ryl75br10idwxabqqp4vla1";
   };
 
-  propagatedBuildInputs = [ requests requests_oauthlib django python3-openid ];
+  requiredPythonModules = [ requests requests_oauthlib django python3-openid ];
 
   checkInputs = [ coverage mock ];
 

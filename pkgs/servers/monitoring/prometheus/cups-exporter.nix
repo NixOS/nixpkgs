@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1cwk2gbw2svqjlzgwv5wqzhq7fxwrwsrr0kkbnqn4mfb0kq6pa8m";
   };
 
-  propagatedBuildInputs = with python3Packages; [ prometheus_client pycups ];
+  requiredPythonModules = with python3Packages; [ prometheus_client pycups ];
 
   installPhase = ''
     mkdir -p $out/share/

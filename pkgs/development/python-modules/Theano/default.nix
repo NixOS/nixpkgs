@@ -81,7 +81,7 @@ in buildPythonPackage rec {
 
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+  requiredPythonModules = [ numpy numpy.blas scipy six libgpuarray_ ];
 
   pythonImportsCheck = [ "theano" ];
 

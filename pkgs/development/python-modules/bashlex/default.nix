@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ enum-compat ];
+  requiredPythonModules = [ enum-compat ];
 
   # workaround https://github.com/idank/bashlex/issues/51
   preBuild = ''

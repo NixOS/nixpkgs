@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "16kpixl43nrn093cvkmxiq2dzd9xc73zwzkmwp0rs7x01nji8kj3";
   };
 
-  propagatedBuildInputs = [ asttokens colorama executing pygments ];
+  requiredPythonModules = [ asttokens colorama executing pygments ];
 
   meta = with lib; {
     description = "A little library for sweet and creamy print debugging";

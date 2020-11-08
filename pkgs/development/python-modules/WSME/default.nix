@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     netaddr
     pytz
     simplegeneric

@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiofiles
     asgi-csrf
     click

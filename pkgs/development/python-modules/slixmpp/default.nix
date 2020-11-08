@@ -18,7 +18,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ aiodns pyasn1 pyasn1-modules aiohttp ];
+  requiredPythonModules = [ aiodns pyasn1 pyasn1-modules aiohttp ];
 
   checkInputs = [ nose ];
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1f50xczv8kgly6wz6zrvqzwdj6nvhdlgx8wnrhmbipjrb6qacr25";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  requiredPythonModules = [ requests six ];
 
   # tests want to access the spotify API
   doCheck = false;

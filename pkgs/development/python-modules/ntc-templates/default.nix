@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "0pvd9n7hcmxl9cr8m1xlqcjmy3k2hga0qmn2k3x9hripjis7pbbi";
   };
 
-  propagatedBuildInputs = [ textfsm ];
+  requiredPythonModules = [ textfsm ];
 
   checkInputs = [ pytestCheckHook ruamel_yaml yamllint ];
 

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "23bf20690d4400edc795836b0c983c2b4cbbb922233108ff925b7dd7750f00c9";
   };
 
-  propagatedBuildInputs = [ requests dparse click setuptools ];
+  requiredPythonModules = [ requests dparse click setuptools ];
 
   # Disable tests depending on online services
   checkInputs = [ pytestCheckHook ];

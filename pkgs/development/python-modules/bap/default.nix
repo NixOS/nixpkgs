@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1ahkrmcn7qaivps1gar8wd9mq2qqyx6zzvznf5r9rr05h17x5lbp";
   };
 
-  propagatedBuildInputs = [bap requests];
+  requiredPythonModules = [bap requests];
 
   doCheck = false;
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1l2cgl6iiq8jff2w2pib6w8dwaj8344crhwsni2zzq0p44dwi13d";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   checkInputs = [ nose vcrpy ];
   checkPhase = "make test";

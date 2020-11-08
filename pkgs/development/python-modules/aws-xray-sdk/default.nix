@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "abf5b90f740e1f402e23414c9670e59cb9772e235e271fef2bce62b9100cbc77";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jsonpickle wrapt requests future botocore
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata

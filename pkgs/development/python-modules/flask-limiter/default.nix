@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "08d6d7534a847c532fd36d0df978f93908d8616813085941c862bbcfcf6811aa";
   };
 
-  propagatedBuildInputs = [ flask limits ];
+  requiredPythonModules = [ flask limits ];
 
   meta = with stdenv.lib; {
     description = "Rate limiting for flask applications";

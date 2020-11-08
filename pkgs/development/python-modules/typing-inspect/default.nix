@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1dzs9a1pr23dhbvmnvms2jv7l7jk26023g5ysf0zvnq8b791s6wg";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     typing-extensions
     mypy-extensions
   ];

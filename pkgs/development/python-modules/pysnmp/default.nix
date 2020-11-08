@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # NameError: name 'mibBuilder' is not defined
   doCheck = false;
 
-  propagatedBuildInputs = [ pyasn1 pycryptodomex pysmi ];
+  requiredPythonModules = [ pyasn1 pycryptodomex pysmi ];
 
   meta = with stdenv.lib; {
     homepage = "http://snmplabs.com/pysnmp/index.html";

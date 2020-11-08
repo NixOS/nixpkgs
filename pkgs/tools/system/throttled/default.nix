@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3Packages.wrapPython ];
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     configparser
     dbus-python
     pygobject3

@@ -34,7 +34,7 @@ python.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [ python.pkgs.netaddr ];
+  requiredPythonModules = [ python.pkgs.netaddr ];
   nativeBuildInputs = [ makeWrapper cmake flex bison ]
     # libelf is incompatible with elfutils-libelf
     ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
@@ -71,7 +71,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

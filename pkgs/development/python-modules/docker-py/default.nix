@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # The tests access the network.
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     requests
     websocket_client

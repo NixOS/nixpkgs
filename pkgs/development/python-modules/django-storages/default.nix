@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "148y2hyx1l4pfbqpq8hgq95fw8bhfbblwd3m5xwnhw6frcirk7m5";
   };
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting DEFAULT_INDEX_TABLESPACE, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
   doCheck = false;

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1csp0zd049d643d409rfivbswwzrayb4i6gkypp5mc27fb1z2afd";
   };
 
-  propagatedBuildInputs = [ GitPython ];
+  requiredPythonModules = [ GitPython ];
 
   meta = with stdenv.lib; {
     description = "A command-line tool that helps you clean up Git branches";

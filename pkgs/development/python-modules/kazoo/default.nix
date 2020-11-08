@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1zpj5cc8624w6i0pxgcxqkjwbkm4pkrv19d7wh5df3jais32g3jq";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   buildInputs = [ eventlet gevent nose mock coverage pkgs.openjdk8 ];
 
   # not really needed

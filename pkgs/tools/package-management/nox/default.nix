@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ python3Packages.pbr git ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
       dogpile_cache
       click
       requests

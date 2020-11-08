@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf gobject-introspection libnotify gtk3
     python3Packages.setuptools_scm
   ];
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     dbus-python docopt ewmh pygobject3 pyxdg
     setproctitle
   ];

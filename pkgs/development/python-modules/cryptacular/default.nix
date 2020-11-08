@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ coverage nose ];
-  propagatedBuildInputs = [ pbkdf2 ];
+  requiredPythonModules = [ pbkdf2 ];
 
   # TODO: tests fail: TypeError: object of type 'NoneType' has no len()
   doCheck = false;

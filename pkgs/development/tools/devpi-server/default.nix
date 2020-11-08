@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
   sourceRoot = "source/server";
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     py
     appdirs
     devpi-common

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0q5yqfm5mzffx9vnp9xcnclgjzgs0b7f50i9xmxn1m1iha1zawh1";
   };
 
-  propagatedBuildInputs = [ pillow xlib six ];
+  requiredPythonModules = [ pillow xlib six ];
   nativeBuildInputs = [ sphinx ];
   checkInputs = [ xvfb_run ];
 

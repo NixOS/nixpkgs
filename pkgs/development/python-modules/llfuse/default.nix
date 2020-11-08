@@ -34,7 +34,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest which ] ++
     optionals stdenv.isLinux [ attr ];
 
-  propagatedBuildInputs = [ contextlib2 ];
+  requiredPythonModules = [ contextlib2 ];
 
   checkPhase = ''
     py.test -k "not test_listdir" ${optionalString stdenv.isDarwin ''-m "not uses_fuse"''}

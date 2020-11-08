@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest hypothesis ];
-  propagatedBuildInputs = [ eth-hash eth-typing cytoolz ];
+  requiredPythonModules = [ eth-hash eth-typing cytoolz ];
 
   # setuptools-markdown uses pypandoc which is broken at the moment
   preConfigure = ''

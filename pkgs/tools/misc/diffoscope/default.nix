@@ -44,7 +44,9 @@ python3Packages.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools: docx2txt dumppdf dumpxsb enjarify lipo ocamlobjinfo oggDump otool procyon
-  pythonPath = [
+  #
+  # TODO: remove non-Python run-time dependencies. Note having them here does not hurt.
+  requiredPythonModules = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
       libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
@@ -60,7 +62,13 @@ python3Packages.buildPythonApplication rec {
       hdf5 imagemagick llvm jdk mono odt2txt openssh pdftk poppler_utils qemu R tcpdump wabt
     ] ++ (with python3Packages; [ binwalk guestfs h5py ]));
 
-  checkInputs = with python3Packages; [ pytest ] ++ pythonPath;
+  checkInputs = with python3Packages; [ pytest ] ++ requiredPythonModules;
+
+  makeWrapperArgs = [
+    # Extend PATH with non-Python run-time dependencies.
+    # TODO remove Python run-time dependencies.
+    "--prefix PATH : ${stdenv.lib.makeBinPath requiredPythonModules }"
+  ];
 
   postInstall = ''
     make -C doc

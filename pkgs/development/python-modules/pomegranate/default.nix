@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "070ciwww1lhjmfwd5n1kcwgxwbgdfvmhjs4l156bnf08z9dlrafl";
   };
 
-  propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
+  requiredPythonModules = [ numpy scipy cython networkx joblib pyyaml ];
 
   checkInputs = [ nose ];
 

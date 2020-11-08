@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "12iyypbl92ybh8w1bf4z0c2g0sb9id2c07c89vzvnlxgjylw3wbi";
   };
 
-  propagatedBuildInputs = [ python-dateutil requests six sseclient-py ];
+  requiredPythonModules = [ python-dateutil requests six sseclient-py ];
   # has no tests
   doCheck = false;
   pythonImportsCheck = [ "nest" ];

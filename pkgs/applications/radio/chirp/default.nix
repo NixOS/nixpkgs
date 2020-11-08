@@ -11,7 +11,7 @@ python2.pkgs.buildPythonApplication rec {
     sha256 = "60b682793698e6427ad485546eae3a044b8290a220f190633158a2fb0e942fa0";
   };
 
-  propagatedBuildInputs = with python2.pkgs; [
+  requiredPythonModules = with python2.pkgs; [
     pygtk pyserial libxml2 future
   ];
 

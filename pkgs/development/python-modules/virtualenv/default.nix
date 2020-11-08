@@ -28,7 +28,7 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     appdirs
     distlib
     filelock

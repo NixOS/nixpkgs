@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "629612b001f86784669d65e662377a482052decfd9a0a17c46860878eef7b9e0";
   };
 
-  propagatedBuildInputs = [ oset pybtex pybtex-docutils sphinx ];
+  requiredPythonModules = [ oset pybtex pybtex-docutils sphinx ];
 
   meta = {
     description = "A Sphinx extension for BibTeX style citations";

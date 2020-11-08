@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioharmony.harmonyapi" "aioharmony.harmonyclient" ];
 
-  propagatedBuildInputs = [ slixmpp async-timeout aiohttp ];
+  requiredPythonModules = [ slixmpp async-timeout aiohttp ];
 
   meta = with lib; {
     homepage = "https://github.com/ehendrix23/aioharmony";

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "0ki0njhmz1i3pkpr3y6h6ac7p5qh1kih06mknc2s18mfw34f2l55";
   };
 
-  propagatedBuildInputs = [ pytorch ];
+  requiredPythonModules = [ pytorch ];
 
   checkInputs = [ pytest pytestrunner pytestCheckHook ];
   disabledTests = [ "test_inplace_on_requires_grad" ];

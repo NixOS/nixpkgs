@@ -24,7 +24,7 @@ in python2Packages.buildPythonApplication {
   buildInputs = [ makeWrapper docutils unzip ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  propagatedBuildInputs = [ hg-git dulwich ];
+  requiredPythonModules = [ hg-git dulwich ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

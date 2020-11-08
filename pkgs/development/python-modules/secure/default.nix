@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1nbxwi0zccrha6js14ibd596kdi1wpqr7jgs442mqclw4b3f77q5";
   };
 
-  propagatedBuildInputs = [ maya requests ];
+  requiredPythonModules = [ maya requests ];
 
   # no tests in release
   doCheck = false;

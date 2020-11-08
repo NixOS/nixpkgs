@@ -11,7 +11,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "01cr16zf3gzsci1hhfli79m34fcx5m1pvswl16rkxxn212yc9fhy";
   };
 
-  pythonPath = with python2Packages; [ configobj dbus-python pygobject2 pygtk simplejson pysvn dulwich tkinter gvfs xdg_utils ];
+  requiredPythonModules = with python2Packages; [ configobj dbus-python pygobject2 pygtk simplejson pysvn dulwich tkinter gvfs xdg_utils ];
 
   prePatch = ''
       sed -ie 's|if sys\.argv\[1\] == "install":|if False:|' ./setup.py
@@ -27,7 +27,7 @@ python2Packages.buildPythonApplication rec {
   postInstall = ''
     mkdir -p $cli/bin
     cp clients/cli/rabbitvcs $cli/bin
-    wrapPythonProgramsIn $cli "$out $pythonPath"
+    wrapPythonProgramsIn $cli "$out $requiredPythonModules"
   '';
 
   doCheck = false;

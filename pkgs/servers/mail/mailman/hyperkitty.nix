@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ isort ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     robot-detection django_extensions rjsmin cssmin django-mailman3
     django-haystack flufl_lock networkx dateutil defusedxml
     django-paintstore djangorestframework django django-q

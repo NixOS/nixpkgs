@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "64c7b870c77e34e4f5f9cfdf330b9702e89b4dd0f64275704f86c1468312c755";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     twisted passlib pycrypto pyopenssl pyparsing service-identity zope_interface
   ];
 

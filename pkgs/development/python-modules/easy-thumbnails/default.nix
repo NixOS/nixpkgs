@@ -17,5 +17,5 @@ buildPythonPackage rec {
     sha256 = "e4e7a0dd4001f56bfd4058428f2c91eafe27d33ef3b8b33ac4e013b159b9ff91";
   };
 
-  propagatedBuildInputs = [ django pillow ];
+  requiredPythonModules = [ django pillow ];
 }

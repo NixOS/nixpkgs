@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-# propagatedBuildInputs
+# requiredPythonModules
 , aiohttp
 , async-timeout
 , semantic-version
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "376a1b232a26035bc82d64affa1c4f312d782234fe5453e8d0f9e1350a97be5b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     async-timeout
     semantic-version

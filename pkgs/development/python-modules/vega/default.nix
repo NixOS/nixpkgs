@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
+  requiredPythonModules = [ jupyter jupyter_core pandas ipywidgets ];
 
   # currently, recommonmark is broken on python3
   doCheck = false;

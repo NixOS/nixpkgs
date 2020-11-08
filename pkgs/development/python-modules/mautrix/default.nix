@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1hqg32n7pmjhap0ybfcf05zgfcyyirb4fm1m7gf44dwh40da6qz0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     future-fstrings
 

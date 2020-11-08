@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ libunwind ];
-  propagatedBuildInputs = [ colorama requests six pytz ];
+  requiredPythonModules = [ colorama requests six pytz ];
 
   # No tests included
   doCheck = false;

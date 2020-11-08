@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "b871ebb3bcfd292e8a062dbbaacbc132793d98f1b60f549a8c3b672619603fc1";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests
     adal
     azure-common

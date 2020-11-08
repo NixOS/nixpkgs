@@ -11,7 +11,7 @@ buildPythonPackage rec {
     repo = pname;
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  requiredPythonModules = [ pyparsing ];
 
   meta = with stdenv.lib; {
     description = "Python library for translating ASN.1 into other forms";

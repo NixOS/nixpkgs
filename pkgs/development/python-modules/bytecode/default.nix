@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.6") [ aenum ];
+  requiredPythonModules = lib.optionals (pythonOlder "3.6") [ aenum ];
 
   meta = with lib; {
     homepage = "https://github.com/vstinner/bytecode";

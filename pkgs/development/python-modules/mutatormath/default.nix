@@ -13,7 +13,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ fontmath unicodedata2 defcon ];
+  requiredPythonModules = [ fontmath unicodedata2 defcon ];
   checkInputs = [ unicodedata2 fs ];
 
   meta = with lib; {

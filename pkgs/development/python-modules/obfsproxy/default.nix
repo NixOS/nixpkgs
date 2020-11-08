@@ -22,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "argparse" ""
   '';
 
-  propagatedBuildInputs = [ pyptlib twisted pycrypto pyyaml ];
+  requiredPythonModules = [ pyptlib twisted pycrypto pyyaml ];
 
   # No tests in archive
   doCheck = false;

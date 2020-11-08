@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1k1bj8q1qm89a8xm4az6qk4qswwmgxw5jpdjcxmf93zh5hrcy9h9";
   };
 
-  propagatedBuildInputs = [ pyperclip ];
+  requiredPythonModules = [ pyperclip ];
 
   postPatch = ''
     substituteInPlace setup.py \

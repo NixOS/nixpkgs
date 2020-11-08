@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   patchPhase = "sed s/bs4/beautifulsoup4/ -i setup.cfg";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     mopidy
     python3Packages.beautifulsoup4
     python3Packages.cachetools

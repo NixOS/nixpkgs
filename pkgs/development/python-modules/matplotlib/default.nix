@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optional enableGhostscript ghostscript
     ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
       certifi libpng mock pytz pillow ]
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]

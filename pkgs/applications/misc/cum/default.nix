@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "15qc6agka2g3kcnpnz0hbjic1s3260cr9bda0rlcyninxs1vndq0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     alembic beautifulsoup4 click natsort requests sqlalchemy
   ];
 

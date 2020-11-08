@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ toolz ];
+  requiredPythonModules = [ toolz ];
 
   # Failing test https://github.com/pytoolz/cytoolz/issues/122
   checkPhase = ''

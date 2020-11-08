@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # No tests included.
   doCheck = false;
 
-  propagatedBuildInputs = [ sphinx plantuml ];
+  requiredPythonModules = [ sphinx plantuml ];
 
   meta = with stdenv.lib; {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";

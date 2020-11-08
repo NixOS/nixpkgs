@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0f2d1ixg0ir7ispxxggv378dc0m55k9y19075swf893maxf07f35";
   };
 
-  propagatedBuildInputs = with python3Packages; [ requests ];
+  requiredPythonModules = with python3Packages; [ requests ];
 
   checkInputs = with python3Packages; [ pytestCheckHook ];
   pytestFlagsArray = [

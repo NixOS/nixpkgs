@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ tvdb_api ];
+  requiredPythonModules = [ tvdb_api ];
 
   # a ton of tests fail with: IOError: tvnamer/main.py could not be found in . or ..
   doCheck = false;

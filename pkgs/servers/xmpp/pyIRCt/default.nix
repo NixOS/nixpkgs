@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pythonPackages.wrapPython ];
 
-  pythonPath = [
+  requiredPythonModules = [
     xmpppy pythonIRClib
   ];
 

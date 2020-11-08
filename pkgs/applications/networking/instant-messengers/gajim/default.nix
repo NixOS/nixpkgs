@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils

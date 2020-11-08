@@ -18,7 +18,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cftime
     numpy
     zlib

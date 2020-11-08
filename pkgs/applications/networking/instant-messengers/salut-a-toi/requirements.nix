@@ -35,7 +35,7 @@ in {
       sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
     };
 
-    propagatedBuildInputs = [ xe ];
+    requiredPythonModules = [ xe ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -55,7 +55,7 @@ in {
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
     };
 
-    propagatedBuildInputs = with pythonPackages; [twisted dateutil];
+    requiredPythonModules = with pythonPackages; [twisted dateutil];
 
     meta = with stdenv.lib; {
       description = "Some (mainly XMPP-related) additions to twisted";

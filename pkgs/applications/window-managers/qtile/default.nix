@@ -34,7 +34,7 @@ python37Packages.buildPythonApplication rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
 
-  pythonPath = with python37Packages; [
+  requiredPythonModules = with python37Packages; [
     xcffib
     cairocffi-xcffib
     setuptools

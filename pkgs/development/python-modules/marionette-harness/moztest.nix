@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1pg9pqq4xnn14k1jqbyqg81zag2v66y725537v6hixi41yiqkdas";
   };
 
-  propagatedBuildInputs = [ mozinfo ];
+  requiredPythonModules = [ mozinfo ];
 
   meta = {
     description = "Mozilla test result storage and output";

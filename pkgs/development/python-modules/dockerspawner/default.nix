@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "83fd8ee012bb32432cb57bd408ff65534749aed8696648e6ac029a87fc474928";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jupyterhub
     escapism
     docker

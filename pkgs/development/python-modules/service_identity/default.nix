@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1aw475ksmd4vpl8cwfdcsw2v063nbhnnxpy633sb75iqp9aazhlx";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyasn1 pyasn1-modules idna attrs cryptography
   ] ++ lib.optionals (pythonOlder "3.3") [ ipaddress ];
 

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     ${python.interpreter} manage.py test captcha
   '';
 
-  propagatedBuildInputs = [ django django-ranged-response six pillow ]
+  requiredPythonModules = [ django django-ranged-response six pillow ]
   ++ lib.optional withTTS flite;
 
   meta = with lib; {

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     # unittest2
   # ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     django
     netaddr
     six

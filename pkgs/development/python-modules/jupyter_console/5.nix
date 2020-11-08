@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jupyter_client
     ipython
     ipykernel

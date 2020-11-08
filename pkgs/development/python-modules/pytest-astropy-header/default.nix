@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1y87agr324p6x5gvhziymxjlw54pyn4gqnd49papbl941djpkp5g";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
   ];
 

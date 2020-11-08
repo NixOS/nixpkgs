@@ -18,7 +18,7 @@ let
     
     src = "${mainsrc}/matrix-python-sdk/";
 
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       requests responses olm python-olm canonicaljson
       pytestrunner pytest
     ];
@@ -41,7 +41,7 @@ buildPythonApplication rec {
 
   src = mainsrc;
 
-  propagatedBuildInputs = [pygobject3 sdk];
+  requiredPythonModules = [pygobject3 sdk];
 
   meta = {
     description = "CLI client for Matrix";

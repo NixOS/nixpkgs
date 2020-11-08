@@ -85,7 +85,7 @@ in buildPythonApplication rec {
     sha256 = "1hbw8nbllyj0xyx1rz2chx9vyqf9949dcdx4v9hnfbsjwwpcfi0a";
   };
 
-  propagatedBuildInputs =  [
+  requiredPythonModules =  [
     bottle click colorama git lockfile
     pyserial requests semantic-version
     tabulate pyelftools marshmallow

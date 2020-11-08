@@ -37,7 +37,7 @@ buildPythonPackage rec {
     gmp
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cysignals
     cython
   ];

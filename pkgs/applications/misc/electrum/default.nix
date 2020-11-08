@@ -68,7 +68,7 @@ py.pkgs.buildPythonApplication {
 
   nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  requiredPythonModules = with py.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx

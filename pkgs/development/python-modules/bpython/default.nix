@@ -24,7 +24,7 @@ buildPythonPackage rec {
     which = "${which}/bin/which";
   })];
 
-  propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
+  requiredPythonModules = [ curtsies greenlet pygments requests urwid ];
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \

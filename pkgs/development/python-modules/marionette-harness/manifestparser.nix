@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "06cnj682ynacwpi63k1427vbf7ydnwh3dchc4b11yw8ii25wbc5d";
   };
 
-  propagatedBuildInputs = [ ];
+  requiredPythonModules = [ ];
 
   meta = {
     description = "Mozilla test manifest handling";

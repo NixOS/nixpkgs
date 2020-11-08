@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkPhase = "py.test";
 
-  propagatedBuildInputs = [ cython numpy nine python-utils enum34 ];
+  requiredPythonModules = [ cython numpy nine python-utils enum34 ];
 
   meta = with lib; {
     description = "Library to make reading, writing and modifying both binary and ascii STL files easy";

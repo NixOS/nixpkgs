@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0plr2h1qn4ryawbaxf29cfna4wailghhaqy1jcm9kxq6q7b9xqqy";
   };
 
-  propagatedBuildInputs = [ pyserial pyftdi pyusb pyopenssl ];
+  requiredPythonModules = [ pyserial pyftdi pyusb pyopenssl ];
 
   doCheck = !isPy3k;
   checkInputs = [ nose mock ];

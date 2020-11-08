@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1l955q1q6lljq3bmyiayr33gzxrlw16xdwgjdaflznvyg16fcjkk";
   };
 
-  propagatedBuildInputs = [ requests tqdm websocket_client ];
+  requiredPythonModules = [ requests tqdm websocket_client ];
 
   checkInputs = [ pytest pillow ];
 

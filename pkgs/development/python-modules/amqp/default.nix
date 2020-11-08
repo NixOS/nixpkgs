@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "70cdb10628468ff14e57ec2f751c7aa9e48e7e3651cfd62d431213c0c4e58f21";
   };
 
-  propagatedBuildInputs = [ vine ];
+  requiredPythonModules = [ vine ];
 
   checkInputs = [ pytestCheckHook case ];
   disabledTests = [

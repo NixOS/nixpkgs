@@ -23,7 +23,7 @@ buildPythonApplication rec {
   };
 
   buildInputs = [ bash ];
-  propagatedBuildInputs = [ boto setuptools distro ];
+  requiredPythonModules = [ boto setuptools distro ];
 
 
   postPatch = ''

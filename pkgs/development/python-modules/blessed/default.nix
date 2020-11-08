@@ -19,7 +19,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [ wcwidth six ];
+  requiredPythonModules = [ wcwidth six ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/jquast/blessed";

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1pmznka5dxcdjfak0p1yh7lhfbfazmx8g9ysv57lsrkqy4n61qks";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
     twiggy requests offtrac bugzilla taskw dateutil pytz keyring six
     jinja2 pycurl dogpile_cache lockfile click pyxdg future jira

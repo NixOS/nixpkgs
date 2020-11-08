@@ -19,7 +19,7 @@ in with python.pkgs; buildPythonApplication rec {
     sha256 = "1v1hnhv5knzdl0kj3574ccwlh171vcb7faddp095ycdmiiybalk4";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click ludios_wpull manhole lmdb autobahn fb-re2 websockets cchardet
   ];
 

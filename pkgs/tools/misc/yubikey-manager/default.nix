@@ -10,7 +10,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1yhc8j67phrj5xgx09b5h7c67pgc4wj4jnkmkq0r3s6j7jn43vv8";
   };
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     with python3Packages; [
       click
       cryptography

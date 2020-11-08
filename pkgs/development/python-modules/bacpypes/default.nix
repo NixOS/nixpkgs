@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1fxrh57z3fjl95db8jh71grkv5id8qk65g6k5jqcs9v3dgkg8jkl";
   };
 
-  propagatedBuildInputs = [ wheel ];
+  requiredPythonModules = [ wheel ];
 
   # Using pytes instead of setuptools check hook allows disabling specific tests
   checkInputs = [ pytestCheckHook pytestrunner ];

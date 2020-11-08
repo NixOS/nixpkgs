@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0vinpla0apizzykcyfis79mrm1i6fhns83nkzw85svypdhkx2g8v";
   };
 
-  propagatedBuildInputs = [ evdev pyudev ];
+  requiredPythonModules = [ evdev pyudev ];
 
   buildInputs = [ bluez ];
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0b5ec40c954cd48c4e3234e81ad92afdc68438f82ad392fed35b7097eb77b6dd";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click-plugins
     colorama
     requests

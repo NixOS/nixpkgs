@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sphinx
     py3to2
   ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lxml
     isodate
     numpy

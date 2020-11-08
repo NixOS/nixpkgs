@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "lazr.config";
   version = "2.2.2";
 
-  propagatedBuildInputs = [ lazr_delegates ];
+  requiredPythonModules = [ lazr_delegates ];
 
   src = fetchPypi {
     inherit pname version;

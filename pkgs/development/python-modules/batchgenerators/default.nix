@@ -36,7 +36,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future numpy pillow scipy scikitlearn scikitimage threadpoolctl
   ];
 

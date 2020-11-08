@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ pythonPackages.pygtk pythonPackages.psutil ];
 
-  pythonPath = [ pythonPackages.pygtk pythonPackages.psutil ];
+  requiredPythonModules = [ pythonPackages.pygtk pythonPackages.psutil ];
   
   patchPhase = ''
     substituteInPlace install.sh --replace "/usr/local" "$out"

@@ -9,7 +9,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ dateutil pyproj pytz requests pyyaml ];
+  requiredPythonModules = [ dateutil pyproj pytz requests pyyaml ];
 
   # 'tests' dir not included in pypy distribution archive.
   doCheck = false;

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1ballx1hljpdpyvqzqn79m0dc21z2smrnxk2ylb6dbpg5crrskcr";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   meta = {
     description = "Download files using requests and save them to a target path";

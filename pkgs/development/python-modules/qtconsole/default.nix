@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
-  propagatedBuildInputs = [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5 qtpy];
+  requiredPythonModules = [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5 qtpy];
 
   # : cannot connect to X server
   doCheck = false;

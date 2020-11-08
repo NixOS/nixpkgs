@@ -13,7 +13,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ heapdict ];
+  requiredPythonModules = [ heapdict ];
 
   meta = with stdenv.lib; {
     description = "Mutable mapping tools.";

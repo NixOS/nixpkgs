@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "0j2c5pzd3kny7ghr9q7xn9vs8dffvyzz5igaavvvd04w7aph29sy";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     ifaddr
   ] ++ lib.optional (pythonOlder "3.4") enum-compat;

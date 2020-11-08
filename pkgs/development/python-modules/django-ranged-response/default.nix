@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # tests not included in PyPi package, github source is not up to date with 0.2.0
   doCheck = false;
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   meta = with stdenv.lib; {
     description = "A modified FileResponse that returns `Content-Range` headers with the HTTP response, so browsers (read Safari 9+) that request the file, can stream the response properly";

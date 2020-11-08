@@ -18,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ postgresql ];
-  propagatedBuildInputs = [ postgresql ];
+  requiredPythonModules = [ postgresql ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/markdrago/pgsanity";

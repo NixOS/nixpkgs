@@ -126,7 +126,7 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "1qxdqbzvz97zgykzdwn78g2xyxmg0q2jdb12dnjnrwvhmjv67vi8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pythonPackages.six
     pythonPackages.enum34
     pythonPackages.jellyfish

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0myc27k087rhgpwn1a1dffzl32rwz6ngdbf3rm2i0zlgcxh4zk9p";
   };
 
-  propagatedBuildInputs = [ docopt ];
+  requiredPythonModules = [ docopt ];
 
   checkInputs = [ delegator-py pytest ];
 

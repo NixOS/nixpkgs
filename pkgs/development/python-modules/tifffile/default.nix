@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
   ] ++ lib.optionals isPy3k [
     imagecodecs-lite

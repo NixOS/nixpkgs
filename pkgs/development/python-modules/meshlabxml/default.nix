@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1villmg46hqby5jjkkpxr5bxydr72y5b3cbfngwpyxxdljn091w8";
   };
 
-  propagatedBuildInputs = [ ];
+  requiredPythonModules = [ ];
 
   doCheck = false; # Upstream not currently have any tests.
 

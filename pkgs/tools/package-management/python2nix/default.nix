@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication {
     sha256 = "022gr0gw6azfi3iq4ggb3fhkw2jljs6n5rncn45hb5liwakigj8i";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ requests pip setuptools ];
+  requiredPythonModules = with pythonPackages; [ requests pip setuptools ];
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.domenkozar ];

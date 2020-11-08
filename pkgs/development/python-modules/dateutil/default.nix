@@ -9,7 +9,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six setuptools_scm ];
+  requiredPythonModules = [ six setuptools_scm ];
 
   checkPhase = ''
     py.test dateutil/test

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ webtest ];
-  propagatedBuildInputs = [ pyramid Mako ];
+  requiredPythonModules = [ pyramid Mako ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Pylons/pyramid_mako";

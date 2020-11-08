@@ -20,7 +20,7 @@ buildPythonPackage rec {
     virtualenv
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     protobuf
   ];
 

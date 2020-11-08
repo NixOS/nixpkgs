@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ mock ] ++ lib.optional (!isPy3k) unittest2;
 
-  propagatedBuildInputs = [ six ] ++ lib.optional (!isPy3k) futures;
+  requiredPythonModules = [ six ] ++ lib.optional (!isPy3k) futures;
 
   patches = [
     ./tests.patch

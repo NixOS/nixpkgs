@@ -29,7 +29,7 @@ buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     hidapi
     psutil

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ unittest2 nose mock ];
-  propagatedBuildInputs = [ libarchive ];
+  requiredPythonModules = [ libarchive ];
 
   # tests are still failing
   doCheck = false;

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1yc3knh28cx3rjb2ifg5kmqqa78yyyw2gzzslbm9fj0mzh5aq1sx";
   };
 
-  propagatedBuildInputs = [ pytz six ];
+  requiredPythonModules = [ pytz six ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/tlocke/pg8000";

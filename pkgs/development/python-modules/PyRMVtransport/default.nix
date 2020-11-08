@@ -22,7 +22,7 @@ buildPythonPackage rec {
     flit
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     lxml
   ];

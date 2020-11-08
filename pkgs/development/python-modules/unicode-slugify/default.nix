@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0l7nphfdq9rgiczbl8n3mra9gx7pxap0xz540pkyz034zbz3mkrl";
   };
 
-  propagatedBuildInputs = [ six unidecode ];
+  requiredPythonModules = [ six unidecode ];
 
   checkInputs = [ nose unittest2 ];
 

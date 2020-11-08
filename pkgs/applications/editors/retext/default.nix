@@ -43,7 +43,7 @@ in python.pkgs.buildPythonApplication {
   doCheck = false;
 
   nativeBuildInputs = [ wrapQtAppsHook ];
-  propagatedBuildInputs = [ pythonEnv ];
+  requiredPythonModules = [ pythonEnv ];
 
   postInstall = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

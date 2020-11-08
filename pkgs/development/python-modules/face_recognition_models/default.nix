@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # no module named `tests` as no tests are available
   doCheck = false;
 
-  propagatedBuildInputs = [ setuptools ];
+  requiredPythonModules = [ setuptools ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/ageitgey/face_recognition_models";

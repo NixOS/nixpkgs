@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestrunner pytest ];
 
-  propagatedBuildInputs = [ oauthlib requests requests_oauthlib six ];
+  requiredPythonModules = [ oauthlib requests requests_oauthlib six ];
 
   meta = with lib; {
     description = "Python Atlassian REST API Wrapper";

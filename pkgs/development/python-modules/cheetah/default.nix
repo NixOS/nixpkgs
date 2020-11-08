@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "be308229f0c1e5e5af4f27d7ee06d90bb19e6af3059794e5fd536a6f29a9b550";
   };
 
-  propagatedBuildInputs = [ markdown ];
+  requiredPythonModules = [ markdown ];
 
   doCheck = false; # Circular dependency
 

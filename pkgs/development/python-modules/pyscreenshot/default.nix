@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "dec8517cb18faf4f983dd2ee6636924e472a5644da1480ae871786dfcac244e9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     EasyProcess
     entrypoint2
     pillow

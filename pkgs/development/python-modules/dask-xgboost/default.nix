@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest scikitlearn ];
-  propagatedBuildInputs = [ xgboost dask distributed ];
+  requiredPythonModules = [ xgboost dask distributed ];
 
   checkPhase = ''
     py.test dask_xgboost/tests/test_core.py

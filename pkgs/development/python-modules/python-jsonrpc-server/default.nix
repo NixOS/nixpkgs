@@ -40,7 +40,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ future ujson ]
+  requiredPythonModules = [ future ujson ]
     ++ stdenv.lib.optional (pythonOlder "3.2") futures;
 
   meta = with stdenv.lib; {

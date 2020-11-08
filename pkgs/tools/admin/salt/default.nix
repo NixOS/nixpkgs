@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0pp7qcfwsvg4419hzfka1180pw3saa9mrhl0z9951zn9fw2nllsc";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     distro
     jinja2
     markupsafe

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "0hyzq0h1w8gp0zfvhqh7qsgcg1wp05a14371m6bn5a7gss93rbv4";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
   ];
 

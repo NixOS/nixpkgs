@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0w8qkjm7b62cr49dbis41kvv3179sfmvvzlhlc0rbqss6vmwbq4p";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     defusedxml
     passlib
     vobject

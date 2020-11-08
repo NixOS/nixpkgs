@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestcov ];
-  propagatedBuildInputs = [ numpy scipy cython numba six ];
+  requiredPythonModules = [ numpy scipy cython numba six ];
 
   checkPhase = ''
     pytest tests

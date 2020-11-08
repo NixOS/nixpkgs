@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1p3lh9s2ylsnrzbs931y2vn7mp2y2xskgqmh767c9l1a33shfgwf";
   };
 
-  propagatedBuildInputs = [ click numpy pyparsing ];
+  requiredPythonModules = [ click numpy pyparsing ];
 
   checkInputs = [ pytest hypothesis ];
   checkPhase = "pytest test_snuggs.py";

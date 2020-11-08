@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkPhase = ''
     pytest --deselect=tests/test_configobj.py::test_options_deprecation

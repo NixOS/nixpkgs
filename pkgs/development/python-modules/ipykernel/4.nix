@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ] ++ lib.optional isPy27 mock;
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ipython
     jupyter_client
     pexpect
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   # Tests require backends.
-  # I don't want to add all supported backends as propagatedBuildInputs
+  # I don't want to add all supported backends as requiredPythonModules
   doCheck = false;
 
   meta = {

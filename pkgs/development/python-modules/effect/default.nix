@@ -23,7 +23,7 @@ buildPythonPackage rec {
     testtools
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     attrs
   ];

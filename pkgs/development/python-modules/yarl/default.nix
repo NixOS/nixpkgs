@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ multidict idna ]
+  requiredPythonModules = [ multidict idna ]
     ++ lib.optionals (pythonOlder "3.8") [
       typing-extensions
     ];

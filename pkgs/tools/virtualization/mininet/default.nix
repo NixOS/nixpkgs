@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "mnexec" ];
   makeFlags = [ "PREFIX=$(out)" ];
 
-  pythonPath = [ python.pkgs.setuptools ];
+  requiredPythonModules = [ python.pkgs.setuptools ];
   buildInputs = [ python which help2man ];
 
   installTargets = [ "install-mnexec" "install-manpages" ];

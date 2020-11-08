@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestrunner requests-mock pytestcov ];
 
-  propagatedBuildInputs = [ lxml requests beautifulsoup4 six ];
+  requiredPythonModules = [ lxml requests beautifulsoup4 six ];
 
   # Requires network
   doCheck = false;

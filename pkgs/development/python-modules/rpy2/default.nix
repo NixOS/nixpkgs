@@ -82,7 +82,7 @@ buildPythonPackage rec {
       substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
     '';
 
-    propagatedBuildInputs = [
+    requiredPythonModules = [
       ipython
       jinja2
       pytz

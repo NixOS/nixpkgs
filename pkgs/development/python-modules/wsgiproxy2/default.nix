@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "13kf9bdxrc95y9vriaz0viry3ah11nz4rlrykcfvb8nlqpx3dcm4";
   };
 
-  propagatedBuildInputs = [ six webob ];
+  requiredPythonModules = [ six webob ];
 
   # circular dep on webtest
   doCheck = false;

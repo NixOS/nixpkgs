@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0753e78b235b1e8da275509351257a861cf2cf9fafe1b414f8c1deb858a4f94e";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     genshi
     lxml
     python_magic

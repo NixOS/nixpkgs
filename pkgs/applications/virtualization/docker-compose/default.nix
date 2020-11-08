@@ -20,7 +20,7 @@ buildPythonApplication rec {
   doCheck = false;
   nativeBuildInputs = [ installShellFiles ];
   checkInputs = [ mock pytest nose ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyyaml backports_ssl_match_hostname colorama dockerpty docker
     ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property paramiko distro python-dotenv

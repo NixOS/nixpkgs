@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
   checkInputs = [ rpm ];
-  propagatedBuildInputs = [ urlgrabber m2crypto chardet ];
+  requiredPythonModules = [ urlgrabber m2crypto chardet ];
 
   postInstall = ''
     ln -s $out/bin/osc-wrapper.py $out/bin/osc

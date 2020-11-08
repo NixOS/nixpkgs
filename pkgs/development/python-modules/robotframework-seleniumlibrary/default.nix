@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0dabc5dwx0pwsyiy74d7wj97k72yl28a17sasjzrdq819pyc3dvq";
   };
 
-  propagatedBuildInputs = [ robotframework selenium ];
+  requiredPythonModules = [ robotframework selenium ];
   checkInputs = [ mockito robotstatuschecker approvaltests ];
 
   # Only execute Unit Tests. Acceptance Tests require headlesschrome, currently

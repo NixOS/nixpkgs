@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ six pytz jaraco_functools ];
+  requiredPythonModules = [ six pytz jaraco_functools ];
 
   checkInputs = [
     pytest-freezegun pytest freezegun backports_unittest-mock

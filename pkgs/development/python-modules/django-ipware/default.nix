@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "73a640a5bff00aa7503a35e92e462001cfabb07d73d649c262f117423beee953";
   };
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_TRUSTED_PROXY_LIST, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
   doCheck = false;

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0de9a7418f4e6d1c45acecf1e77f61c8f96f036ce034493ac67124626fd0d885";
   };
 
-  propagatedBuildInputs = [ pygments markdown ];
+  requiredPythonModules = [ pygments markdown ];
 
   # FAIL:test_generate_entry and test_time
   # both tests fail due to time issue that doesn't seem to matter in practice

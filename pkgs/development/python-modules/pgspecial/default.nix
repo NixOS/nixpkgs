@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ click sqlparse psycopg2 ];
+  requiredPythonModules = [ click sqlparse psycopg2 ];
 
   checkPhase = ''
     find tests -name \*.pyc -delete

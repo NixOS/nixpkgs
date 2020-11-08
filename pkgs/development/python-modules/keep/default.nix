@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0902kcvhbmy5q5n0ai1df29ybf87qaljz306c5ssl8j9xdjipcq2";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     requests
     terminaltables

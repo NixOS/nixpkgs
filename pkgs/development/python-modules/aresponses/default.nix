@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-# propagatedBuildInputs
+# requiredPythonModules
 , aiohttp
 # buildInputs
 , pytest
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "58693a6b715edfa830a20903ee1d1b2a791251923f311b3bebf113e8ff07bb35";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
   ];
 

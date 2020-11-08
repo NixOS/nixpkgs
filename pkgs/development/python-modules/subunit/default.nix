@@ -18,7 +18,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ check cppunit ];
-  propagatedBuildInputs = [ testtools ];
+  requiredPythonModules = [ testtools ];
 
   checkInputs = [ testscenarios hypothesis fixtures pytest ];
   # ignore tests which call shell code, or call methods which haven't been implemented

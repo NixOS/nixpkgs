@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1y5ln09ji4dwpzhxr77cggk02kghq7lql60a6969a5n2lwpvqblk";
   };
 
-  propagatedBuildInputs = [ cryptography ]
+  requiredPythonModules = [ cryptography ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkInputs = [ coverage flake8 mock nose ];

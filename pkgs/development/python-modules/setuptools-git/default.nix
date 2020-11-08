@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "ff64136da01aabba76ae88b050e7197918d8b2139ccbf6144e14d472b9c40445";
   };
 
-  propagatedBuildInputs = [ pkgs.git ];
+  requiredPythonModules = [ pkgs.git ];
   doCheck = false;
 
   meta = with stdenv.lib; {

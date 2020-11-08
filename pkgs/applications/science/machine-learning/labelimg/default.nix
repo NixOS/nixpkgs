@@ -12,7 +12,7 @@
       pyqt5
       qt5.wrapQtAppsHook
     ];
-    propagatedBuildInputs = with python3Packages; [
+    requiredPythonModules = with python3Packages; [
       pyqt5
       lxml
       sip

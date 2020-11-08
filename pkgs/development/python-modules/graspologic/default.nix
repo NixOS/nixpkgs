@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "0lab76qiryxvwl6zrcikhnxil1xywl0wkkm2vzi4v9mdzpa7w29r";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     hyppo
     matplotlib
     networkx

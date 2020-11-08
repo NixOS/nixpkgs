@@ -25,7 +25,7 @@ buildPythonApplication rec {
 
   checkPhase = "nosetests mkdocs";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     tornado
     livereload
     click

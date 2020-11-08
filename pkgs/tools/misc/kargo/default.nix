@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "1iq3vrmglag9gpsir03yz7556m0bz99nwb2mf594378cqzbr6db3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ansible
     boto
     cffi

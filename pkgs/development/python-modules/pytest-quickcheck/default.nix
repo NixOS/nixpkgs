@@ -9,7 +9,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ pytest-flakes pytestpep8 tox ];
+  requiredPythonModules = [ pytest-flakes pytestpep8 tox ];
 
   meta = with stdenv.lib; {
     license = licenses.asl20;

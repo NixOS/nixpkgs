@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "03qs6np5s9r0nmsryfzll29ajcqk27b18kcbgd9plf80ys3nb6kd";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     peewee
     wtforms
   ];

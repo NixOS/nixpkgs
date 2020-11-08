@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   patches = stdenv.lib.optional stdenv.cc.isClang ./pyfribidi-clang.patch;
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with stdenv.lib; {
     description = "A simple wrapper around fribidi";

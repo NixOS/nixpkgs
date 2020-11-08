@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1f31yaiwc33ivjbipym7sggsqwqxn70kgf9dixi8392pk70jzq6p";
   };
 
-  propagatedBuildInputs = with python3Packages; [ bespon ];
+  requiredPythonModules = with python3Packages; [ bespon ];
   # unfortunately upstream doesn't contain tests
   checkPhase = ''
     $out/bin/codebraid --help > /dev/null

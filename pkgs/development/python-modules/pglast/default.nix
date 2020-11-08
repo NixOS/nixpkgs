@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (pythonOlder "3.6") [ aenum ];
+  requiredPythonModules = [ setuptools ] ++ lib.optionals (pythonOlder "3.6") [ aenum ];
 
   checkInputs = [ pytest pytestcov ];
 

@@ -18,7 +18,7 @@ buildPythonApplication rec {
     sed -i 's/==.*$//' requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyyaml lxml grequests flaskbabel flask requests
     gevent speaklater Babel pytz dateutil pygments
     pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks

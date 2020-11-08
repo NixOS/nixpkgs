@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1kc1042jydgk54xpgcp0r1ib4gys91nhy285jzfcxj3pfqrk4w8n";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  requiredPythonModules = [ pyyaml ];
   checkInputs = [ nose jinja2 mock pytest ];
 
   # Needs Babel CLI tool

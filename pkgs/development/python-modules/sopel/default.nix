@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "5e394d9797e221f90a95e5eb9987e8c1faf4f2488964f521e8ca1628798f0a38";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dnspython
     geoip2
     ipython

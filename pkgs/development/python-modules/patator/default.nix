@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "335e432e6cc591437e316ba8c1da935484ca39fc79e595ccf60ccd9166e965f1";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     paramiko
     pycurl
     ajpy

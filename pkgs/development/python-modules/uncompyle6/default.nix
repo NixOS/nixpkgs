@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose pytest hypothesis six ];
-  propagatedBuildInputs = [ spark_parser xdis ];
+  requiredPythonModules = [ spark_parser xdis ];
 
   # six import errors (yet it is supplied...)
   checkPhase = ''

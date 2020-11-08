@@ -37,7 +37,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtquickcontrols2 ];
   # numpy-stl temporarily disabled due to https://code.alephobjects.com/T8415
-  propagatedBuildInputs = with python3.pkgs; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
+  requiredPythonModules = with python3.pkgs; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [

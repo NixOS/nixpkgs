@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest dask ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
     numba

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm toml ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     importlib-metadata
   ] ++ lib.optional (pythonOlder "3.4") singledispatch
     ++ lib.optional (pythonOlder "3.5") typing

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "cec83253bf6da67a7fb32b2c9ae13e9dbc6cfbcaae2aa3107993e69e9788f15e";
   };
 
-  propagatedBuildInputs = [ scikitlearn ];
+  requiredPythonModules = [ scikitlearn ];
 
   postPatch = ''
     sed -i 's,sklearn,scikit-learn,g' setup.py

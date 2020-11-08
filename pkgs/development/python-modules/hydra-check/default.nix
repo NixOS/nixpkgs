@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1dmsscsib8ckp496gsfqxmq8d35zs71n99xmziq9iprvy7n5clq2";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     docopt
     requests
     beautifulsoup4

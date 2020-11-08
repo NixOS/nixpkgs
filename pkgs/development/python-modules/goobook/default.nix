@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ docutils installShellFiles ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     google_api_python_client simplejson oauth2client setuptools xdg
   ];
 

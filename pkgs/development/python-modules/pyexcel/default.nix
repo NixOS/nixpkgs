@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "36588573ccb1c86e1a8869e1e9f6b31975a38c13803f015a197c18efd2e685ad";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lml
     pyexcel-io
     texttable

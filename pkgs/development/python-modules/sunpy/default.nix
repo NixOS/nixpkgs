@@ -39,7 +39,7 @@ buildPythonPackage rec {
     sha256 = "0j2yfhfxgi95rig8cfp9lvszb7694gq90jvs0xrb472hwnzgh2sk";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
     matplotlib

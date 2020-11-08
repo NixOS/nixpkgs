@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "aefc1f1d96256c430a409f08241bab75ffe97e5d14ac5d1f000764e39bf4873a";
   };
 
-  propagatedBuildInputs = [ flask marshmallow ];
+  requiredPythonModules = [ flask marshmallow ];
   buildInputs = [ six ];
 
   doCheck = false;

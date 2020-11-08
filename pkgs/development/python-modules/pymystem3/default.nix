@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "15gv78m17g958gfka6rr3rg230g6b5ssgk8bfpsp7k2iajhxdbhs";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
   checkInputs = [ flake8 mock pytest ];
   doCheck = isPy3k; # fails on linting
 

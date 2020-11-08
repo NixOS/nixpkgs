@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0zdz8lw545cd3a34cpib7mdwnad83gr2mrrxyj3v74h4zhwabhmg";
   };
 
-  propagatedBuildInputs = [ six requests mock unittest2 ];
+  requiredPythonModules = [ six requests mock unittest2 ];
 
   # FIXME
   doCheck = false;

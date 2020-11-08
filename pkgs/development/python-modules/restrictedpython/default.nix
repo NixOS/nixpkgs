@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1g0sffn6ifkl1w8gq15rpaqm8c7l68bsnm77wcd3flyzzydmd050";
   };
 
-  #propagatedBuildInputs = [ xmltodict requests ifaddr ];
+  #requiredPythonModules = [ xmltodict requests ifaddr ];
 
   checkInputs = [
     pytest pytest-mock

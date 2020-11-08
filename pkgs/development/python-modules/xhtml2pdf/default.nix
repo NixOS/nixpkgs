@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "xhtml2pdf";
   version = "0.2.5";
 
-  propagatedBuildInputs = [pillow html5lib pypdf2 reportlab six];
+  requiredPythonModules = [pillow html5lib pypdf2 reportlab six];
 
   src = fetchPypi {
     inherit pname version;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "8a33adbd266127e342d12da755075fae08f398032a6f0909b5e86bef13960a85";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     beautifulsoup4
     geojson
     lxml

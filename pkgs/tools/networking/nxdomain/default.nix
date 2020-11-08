@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "1z9iffggqq2kw6kpnj30shi98cg0bkvkwpglmhnkgwac6g55n2zn";
   };
 
-  propagatedBuildInputs = [ dnspython ];
+  requiredPythonModules = [ dnspython ];
 
   checkInputs = [ pytestCheckHook ];
 

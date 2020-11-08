@@ -10,7 +10,7 @@ python27Packages.buildPythonPackage rec {
     sha256 = "1isxvx27hk0avxwgwcwys2z8ickfs816ii1aklvmi09ak1rgrf1g";
   };
 
-  propagatedBuildInputs = with python27Packages; [ pyside pycrypto ];
+  requiredPythonModules = with python27Packages; [ pyside pycrypto ];
   patches = [ ./fix-pyside-requirement.diff ];
 
   # aid ctypes load_libary()

@@ -20,7 +20,7 @@ in python.pkgs.buildPythonApplication rec {
 
   ESPHOME_USE_SUBPROCESS = "";
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     voluptuous pyyaml paho-mqtt colorlog
     tornado protobuf tzlocal pyserial ifaddr
     protobuf click

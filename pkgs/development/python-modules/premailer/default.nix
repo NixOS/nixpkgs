@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock nose ];
-  propagatedBuildInputs = [ cachetools cssselect cssutils lxml requests ];
+  requiredPythonModules = [ cachetools cssselect cssutils lxml requests ];
 
   meta = {
     description = "Turns CSS blocks into style attributes ";

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sha256 = "24a6fd2fe1c76e94801b74db8f52c0fb42718dc4a199a861b305b1a492b9d868";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ nose sure coverage mock rednose pytest
     # Following not declared in setup.py

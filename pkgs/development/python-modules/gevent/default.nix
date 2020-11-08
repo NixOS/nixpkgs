@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ libev ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     zope_interface
   ] ++ stdenv.lib.optionals (!isPyPy) [ greenlet ];
 

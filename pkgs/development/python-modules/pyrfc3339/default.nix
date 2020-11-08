@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "06jv7ar7lpvvk0dixzwdr3wgm0g1lipxs429s2z7knwwa7hwpf41";
   };
 
-  propagatedBuildInputs = [ pytz ];
+  requiredPythonModules = [ pytz ];
   buildInputs = [ nose ];
 
   meta = with stdenv.lib; {

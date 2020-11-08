@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "enaml.workbench"
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     atom
     ply
     kiwisolver

@@ -74,7 +74,7 @@ in with localPython.pkgs; buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
     # Otherwise, awsebcli will try to install it using pip when using some
     # commands (like "eb local run").

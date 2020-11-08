@@ -31,7 +31,7 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cython
   ] ++ lib.optionals pariSupport [
     # When cysignals is built with pari, including cysignals into the

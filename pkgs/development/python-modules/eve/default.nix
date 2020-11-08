@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "3a057277bba7144a0c15ab8c737dc8a1002e87e7284847aa011ce122e353418e";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cerberus
     events
     flask

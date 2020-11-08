@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "7a649c6fae61635519d12a6bcacc742241aad1bff3230baef2cedd693ed9cfe8";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with lib; {
     homepage = "https://github.com/mooz/percol";

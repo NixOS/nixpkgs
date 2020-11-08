@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1c2qldw9vxpvdfh5wl6mfcd7zzz3v8r86ffqll311lcp2zin33dg";
   };
 
-  pythonPath = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     musicbrainzngs
     mutagen
     pycdio

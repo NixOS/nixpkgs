@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0wc0cvjanlszn09n61jj38pq9wdlphkjgrp3c8hvd16754is3n7f";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pymongo
     six
   ];

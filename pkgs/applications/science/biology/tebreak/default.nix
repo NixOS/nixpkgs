@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ findutils python3Packages.cython ];
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pysam
     scipy
     bx-python

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   checkInputs = [ pytest ];
 

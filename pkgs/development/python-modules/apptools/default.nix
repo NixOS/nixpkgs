@@ -19,7 +19,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ configobj six traitsui ];
+  requiredPythonModules = [ configobj six traitsui ];
 
   checkInputs = [
     nose

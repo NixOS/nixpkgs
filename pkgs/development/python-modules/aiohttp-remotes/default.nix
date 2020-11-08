@@ -18,7 +18,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  requiredPythonModules = [ aiohttp ];
 
   checkInputs = [ pytest pytestcov pytest-aiohttp ];
   checkPhase = ''

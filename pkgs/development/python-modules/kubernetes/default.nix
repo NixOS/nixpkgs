@@ -28,7 +28,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ isort coverage pytest mock sphinx autopep8 pep8 codecov recommonmark nose ];
-  propagatedBuildInputs = [ ipaddress websocket_client urllib3 pyyaml requests_oauthlib python-dateutil google_auth adal ];
+  requiredPythonModules = [ ipaddress websocket_client urllib3 pyyaml requests_oauthlib python-dateutil google_auth adal ];
 
   meta = with stdenv.lib; {
     description = "Kubernetes python client";

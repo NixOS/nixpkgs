@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ nose ];
-  propagatedBuildInputs = [ pyparsing decorator six future ];
+  requiredPythonModules = [ pyparsing decorator six future ];
 
   meta = with stdenv.lib; {
     description = "Allows to declare constraints on function parameters and return values";

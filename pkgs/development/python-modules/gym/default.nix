@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
   # cloudpickle range has been expanded in package but not yet released
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy requests six pyglet scipy cloudpickle
   ];
 

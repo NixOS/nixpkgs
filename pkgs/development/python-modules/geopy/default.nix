@@ -12,7 +12,7 @@ buildPythonPackage rec {
   disabled = !isPy3k; # only Python 3
   doCheck = false; # Needs network access
 
-  propagatedBuildInputs = [ geographiclib ];
+  requiredPythonModules = [ geographiclib ];
 
   src = fetchFromGitHub {
     owner = "geopy";

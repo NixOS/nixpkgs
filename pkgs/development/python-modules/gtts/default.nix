@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "1d0r6dnb8xvgyvxz7nfj4q4xqmpmvcwcsjghxrh76m6p364lh1hj";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     beautifulsoup4
     click
     gtts-token

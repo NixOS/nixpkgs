@@ -24,7 +24,7 @@ buildPythonApplication {
     sha256 = "05gbj2fqzqndq1mx6g9asa7i6z8a9jdjrvilfwx8lg23cs356m6m";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     bibtool
     pybtex
     pymupdf

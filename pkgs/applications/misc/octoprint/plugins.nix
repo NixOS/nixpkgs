@@ -6,7 +6,7 @@ self: super: let
   buildPlugin = args: self.buildPythonPackage (args // {
     pname = "OctoPrintPlugin-${args.pname}";
     inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ [ super.octoprint ];
+    requiredPythonModules = (args.requiredPythonModules or []) ++ [ super.octoprint ];
     # none of the following have tests
     doCheck = false;
   });
@@ -42,7 +42,7 @@ in {
       sha256 = "1bq39fnarnpk8phxfbpx6l4n9anf358z1cgid5r89nadmn2a0cny";
     };
 
-    propagatedBuildInputs = with super; [ numpy ];
+    requiredPythonModules = with super; [ numpy ];
 
     meta = with stdenv.lib; {
       description = "Displays 3D mesh of bed topography report";
@@ -120,7 +120,7 @@ in {
       sha256 = "0k82h7wafbcqdvk5wjw4dp9lydwszfj1lf8vvymwbqdn7pf5h0dy";
     };
 
-    propagatedBuildInputs = with super; [ paho-mqtt ];
+    requiredPythonModules = with super; [ paho-mqtt ];
 
     meta = with stdenv.lib; {
       description = "Publish printer status MQTT";

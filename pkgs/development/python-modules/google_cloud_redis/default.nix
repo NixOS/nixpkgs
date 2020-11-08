@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ enum34 google_api_core ];
+  requiredPythonModules = [ enum34 google_api_core ];
 
   # requires old version of google-api-core (override)
   preBuild = ''

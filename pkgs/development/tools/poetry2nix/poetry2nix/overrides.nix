@@ -8,7 +8,7 @@ self: super:
 {
   automat = super.automat.overridePythonAttrs (
     old: rec {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.m2r ];
+      requiredPythonModules = old.requiredPythonModules ++ [ self.m2r ];
     }
   );
 
@@ -21,7 +21,7 @@ self: super:
 
       # Inputs copied from nixpkgs as ansible doesn't specify it's dependencies
       # in a correct manner.
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      requiredPythonModules = old.requiredPythonModules ++ [
         self.pycrypto
         self.paramiko
         self.jinja2
@@ -127,7 +127,7 @@ self: super:
   dictdiffer = super.dictdiffer.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
+      requiredPythonModules = old.requiredPythonModules ++ [ self.setuptools ];
     }
   );
 
@@ -237,7 +237,7 @@ self: super:
 
   horovod = super.horovod.overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.openmpi ];
+      requiredPythonModules = old.requiredPythonModules ++ [ pkgs.openmpi ];
     }
   );
 
@@ -301,7 +301,7 @@ self: super:
   # importlib-metadata has an incomplete dependency specification
   importlib-metadata = super.importlib-metadata.overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional self.python.isPy2 self.pathlib2;
+      requiredPythonModules = old.requiredPythonModules ++ lib.optional self.python.isPy2 self.pathlib2;
     }
   );
 
@@ -313,7 +313,7 @@ self: super:
 
   isort = super.isort.overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
+      requiredPythonModules = old.requiredPythonModules ++ [ self.setuptools ];
     }
   );
 
@@ -360,7 +360,7 @@ self: super:
 
   lap = super.lap.overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      requiredPythonModules = old.requiredPythonModules ++ [
         self.numpy
       ];
     }
@@ -368,7 +368,7 @@ self: super:
 
   libvirt-python = super.libvirt-python.overridePythonAttrs ({ nativeBuildInputs ? [ ], ... }: {
     nativeBuildInputs = nativeBuildInputs ++ [ pkgs.pkgconfig ];
-    propagatedBuildInputs = [ pkgs.libvirt ];
+    requiredPythonModules = [ pkgs.libvirt ];
   });
 
   llvmlite = super.llvmlite.overridePythonAttrs (
@@ -396,7 +396,7 @@ self: super:
 
   lockfile = super.lockfile.overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.pbr ];
+      requiredPythonModules = old.requiredPythonModules ++ [ self.pbr ];
     }
   );
 
@@ -443,7 +443,7 @@ self: super:
         EOF
       '';
 
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      requiredPythonModules = old.requiredPythonModules ++ [
         pkgs.libpng
         pkgs.freetype
       ]
@@ -511,7 +511,7 @@ self: super:
         self.cython
       ];
 
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      requiredPythonModules = old.requiredPythonModules ++ [
         pkgs.zlib
         pkgs.netcdf
         pkgs.hdf5
@@ -585,7 +585,7 @@ self: super:
     in
     {
       buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
-      propagatedBuildInputs = old.propagatedBuildInputs
+      requiredPythonModules = old.requiredPythonModules
         ++ lib.optional withPostgres self.psycopg2
         ++ lib.optional withMysql self.mysql-connector;
     }
@@ -714,7 +714,7 @@ self: super:
           pkgs.pkgconfig
         ];
 
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [
+        requiredPythonModules = old.requiredPythonModules ++ [
           pkgs.cairo
           pkgs.xlibsWrapper
         ];
@@ -952,7 +952,7 @@ self: super:
   pyzmq = super.pyzmq.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.zeromq ];
+      requiredPythonModules = old.requiredPythonModules ++ [ pkgs.zeromq ];
     }
   );
 
@@ -1005,7 +1005,7 @@ self: super:
     old:
     if old.format != "wheel" then {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.pybind11 ];
+      requiredPythonModules = old.requiredPythonModules ++ [ self.pybind11 ];
       setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
       enableParallelBuilding = true;
       buildInputs = old.buildInputs ++ [ self.numpy.blas ];
@@ -1057,7 +1057,7 @@ self: super:
     old: {
       HDF5_DIR = "${pkgs.hdf5}";
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
-      propagatedBuildInputs = old.nativeBuildInputs ++ [ pkgs.hdf5 self.numpy self.numexpr ];
+      requiredPythonModules = old.nativeBuildInputs ++ [ pkgs.hdf5 self.numpy self.numexpr ];
     }
   );
 
@@ -1095,7 +1095,7 @@ self: super:
 
   urwidtrees = super.urwidtrees.overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      requiredPythonModules = old.requiredPythonModules ++ [
         self.urwid
       ];
     }
@@ -1187,7 +1187,7 @@ self: super:
       ) else super.zipp
   ).overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      requiredPythonModules = old.requiredPythonModules ++ [
         self.toml
       ];
     }

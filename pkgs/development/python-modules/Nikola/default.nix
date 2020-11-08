@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestcov mock glibcLocales freezegun ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # requirements.txt
     doit pygments pillow dateutil docutils Mako markdown unidecode
     lxml Yapsy PyRSS2Gen Logbook blinker natsort requests piexif Babel

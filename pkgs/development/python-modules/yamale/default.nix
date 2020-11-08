@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1xjvah4r3gpwk4zxql3c9jpllb34k175fm6iq1zvsd2vv2fwf8s2";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyyaml
     ruamel_yaml
   ];

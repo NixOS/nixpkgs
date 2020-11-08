@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ requests pytest ];
-  propagatedBuildInputs = [ notebook jsonschema pyjson5 ];
+  requiredPythonModules = [ notebook jsonschema pyjson5 ];
 
   # test_listing test fails
   # this is a new package and not all tests pass

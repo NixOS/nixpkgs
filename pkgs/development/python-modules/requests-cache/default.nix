@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ requests six urllib3 ];
+  requiredPythonModules = [ requests six urllib3 ];
 
   meta = with stdenv.lib; {
     description = "Persistent cache for requests library";

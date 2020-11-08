@@ -43,7 +43,7 @@ in buildPythonApplication {
     done
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jinja2
     oauthlib
     configobj

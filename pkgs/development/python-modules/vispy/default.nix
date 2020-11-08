@@ -24,7 +24,7 @@ buildPythonPackage rec {
     cython setuptools_scm setuptools-scm-git-archive
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy freetype-py fontconfig libGL
   ];
 

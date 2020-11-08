@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 		sha256 = "08rcbd14vn7312rmk2hyvdzvhibri31c4r5lzdrwb1n1y9q761qm";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     git
     awscli
     python3.pkgs.python-gnupg

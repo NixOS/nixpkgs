@@ -18,7 +18,7 @@ in
     doCheck = false;
     checkInputs = with python3Packages; [ vcrpy mock hiro ];
     buildInputs = [ libffi openssl ];
-    propagatedBuildInputs = with python3Packages; [
+    requiredPythonModules = with python3Packages; [
       ordereddict requests six suds-jurko termcolor keyring
       jira  keyrings-alt
     ];

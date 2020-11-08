@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0npgsyxj7kby5laznk5ilkrychs3i68y57gphwk48w8k9fvnl3zc";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     argcomplete dateutil configobj feedparser bibtexparser pyyaml requests six 
     beautifulsoup4
   ];

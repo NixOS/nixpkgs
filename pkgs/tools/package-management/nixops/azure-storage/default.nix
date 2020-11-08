@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "06bmw6k2000kln5jwk5r9bgcalqbyvqirmdh9gq4s6nb4fv3c0jb";
   };
 
-  propagatedBuildInputs = [ azure-common dateutil requests ]
+  requiredPythonModules = [ azure-common dateutil requests ]
                             ++ pkgs.lib.optionals (!isPy3k) [ futures ];
 
   postInstall = ''

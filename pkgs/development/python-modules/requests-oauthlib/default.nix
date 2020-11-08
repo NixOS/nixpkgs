@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   doCheck = false;        # Internet tests fail when building in chroot
-  propagatedBuildInputs = [ oauthlib requests ];
+  requiredPythonModules = [ oauthlib requests ];
 
   meta = with stdenv.lib; {
     description = "OAuthlib authentication support for Requests";

@@ -47,7 +47,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     srht
     minio
     pygit2

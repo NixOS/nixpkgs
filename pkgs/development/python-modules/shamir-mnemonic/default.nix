@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1cc08d276e05b13cd32bd3b0c5d1cb6c30254e0086e0f6857ec106d4cceff121";
   };
 
-  propagatedBuildInputs = [ click colorama ];
+  requiredPythonModules = [ click colorama ];
 
   meta = with lib; {
     description = "Reference implementation of SLIP-0039";

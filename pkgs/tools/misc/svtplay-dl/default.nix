@@ -17,8 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0gcw7hwbr9jniwvqix37vvd2fiplsz70qab9w45d21i8jrfnhxb5";
   };
 
-  pythonPaths = [ pycrypto pyyaml requests ];
-  buildInputs = [ python perl nose mock makeWrapper python-dateutil setuptools ] ++ pythonPaths;
+  requiredPythonModuless = [ pycrypto pyyaml requests ];
+  buildInputs = [ python perl nose mock makeWrapper python-dateutil setuptools ] ++ requiredPythonModuless;
   nativeBuildInputs = [ gitMinimal zip ];
 
   postPatch = ''

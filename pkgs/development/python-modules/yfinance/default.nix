@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "65d39bccf16bef35f6a08bf0df33650c0515b5ce8ea3c53924601f5fe00590cb";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     multitasking
     numpy
     pandas

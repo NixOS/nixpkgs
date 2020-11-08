@@ -27,7 +27,7 @@ buildPythonPackage rec {
     ./relax-dependencies.patch
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     anyio
     asyncio-throttle
     ircstates

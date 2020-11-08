@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "4b2acd6802a04b59e306d0a6ccf37701d24376f4dc044bbbafba3afdf9d3389a";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     logutils
     Mako
     singledispatch

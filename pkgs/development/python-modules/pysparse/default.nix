@@ -23,7 +23,7 @@ buildPythonPackage {
 
   hardeningDisable = [ "all" ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     blas
     lapack

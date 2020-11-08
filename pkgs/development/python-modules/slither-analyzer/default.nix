@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ prettytable setuptools ];
+  requiredPythonModules = [ prettytable setuptools ];
 
   postFixup = ''
     wrapProgram $out/bin/slither \

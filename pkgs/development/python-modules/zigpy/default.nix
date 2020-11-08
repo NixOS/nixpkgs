@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "ba8Ru6RCbFOHhctFtklnrxVD3uEpxF4XDvO5RMgXPBs=";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     crccheck
     pycrypto

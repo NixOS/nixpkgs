@@ -21,7 +21,7 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
     pytest-doctestplus
     pytestcov

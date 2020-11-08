@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     dblatex
   ];
 
-  pythonPath = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
     (anytree.override { withGraphviz = false; })
     lxml
@@ -61,12 +61,6 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false; # requires a lot of stuff
   doInstallCheck = false; # fails
-
-  postFixup = ''
-    # Do not propagate Python
-    substituteInPlace $out/nix-support/propagated-build-inputs \
-      --replace "${python3}" ""
-  '';
 
   # find: ‘...-gtk-doc-1.32/lib/python3.8/site-packages’: No such file or directory
   # https://github.com/NixOS/nixpkgs/pull/90208#issuecomment-644051108

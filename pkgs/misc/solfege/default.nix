@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ gettext pkgconfig texinfo wrapGAppsHook ];
   buildInputs = [ gobject-introspection gtk3 librsvg ];
-  propagatedBuildInputs = [ pycairo pygobject3 ];
+  requiredPythonModules = [ pycairo pygobject3 ];
 
   preBuild = ''
     sed -i -e 's|wav_player=.*|wav_player=${alsaUtils}/bin/aplay|' \

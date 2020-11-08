@@ -19,7 +19,7 @@ buildPythonApplication {
     ./python-3.patch
   ];
 
-  propagatedBuildInputs = [ pyyaml fonttools fontforge ];
+  requiredPythonModules = [ pyyaml fonttools fontforge ];
 
   installPhase = ''
     runHook preInstall

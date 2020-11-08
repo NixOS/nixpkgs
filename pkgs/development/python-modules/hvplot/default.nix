@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytest parameterized nbsmoke flake8 coveralls xarray networkx streamz ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     bokeh
     colorcet
     holoviews

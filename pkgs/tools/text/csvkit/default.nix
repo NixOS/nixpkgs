@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     agate
     agate-excel
     agate-dbf

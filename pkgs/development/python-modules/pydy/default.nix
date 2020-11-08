@@ -22,7 +22,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
     sympy

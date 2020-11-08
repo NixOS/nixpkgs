@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1b40cjigv7s9qj8hxxy6yhwv0320z7qywrigwgkasgh80q0xgphc";
   };
 
-  propagatedBuildInputs = [ watchdog ];
+  requiredPythonModules = [ watchdog ];
 
   # There are no tests
   doCheck = false;

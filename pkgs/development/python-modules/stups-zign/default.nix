@@ -29,7 +29,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     stups-tokens
     stups-cli-support
   ];

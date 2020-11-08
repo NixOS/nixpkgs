@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     # ++ optional withIvona libdumbtts
   ;
 
-  pythonPath = [ pyxdg ];
+  requiredPythonModules = [ pyxdg ];
 
   configureFlags = [
     # Audio method falls back from left to right.

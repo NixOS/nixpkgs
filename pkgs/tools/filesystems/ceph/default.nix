@@ -90,7 +90,7 @@ let
     sourceRoot = "ceph-${version}/src/python-common";
 
     checkInputs = [ python3Packages.pytest ];
-    propagatedBuildInputs = with python3Packages; [ pyyaml six ];
+    requiredPythonModules = with python3Packages; [ pyyaml six ];
 
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
@@ -155,7 +155,7 @@ in rec {
       optFcgi optExpat optCurl optFuse optLibedit
     ];
 
-    pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
+    requiredPythonModules = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
 
     preConfigure =''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"

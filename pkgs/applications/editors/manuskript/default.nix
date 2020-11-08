@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     python3Packages.pyqt5
     python3Packages.lxml
     zlib

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0manlfdpb585niw23ibb8n21mindd1bazp0pnxvmdjrp2mnw97ig";
   };
 
-  propagatedBuildInputs = [ mmpython pyqt4 ];
+  requiredPythonModules = [ mmpython pyqt4 ];
 
   setup = ''
     import os

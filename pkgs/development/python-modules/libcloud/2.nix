@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ mock pytest pytestrunner requests-mock ];
-  propagatedBuildInputs = [ pycrypto requests ]
+  requiredPythonModules = [ pycrypto requests ]
     ++ lib.optionals isPy27 [ typing backports_ssl_match_hostname ];
 
   preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";

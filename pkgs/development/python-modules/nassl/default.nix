@@ -94,7 +94,7 @@ buildPythonPackage rec {
     cp ${zlibStatic.out}/lib/libz.a deps/zlib-1.2.11/
   '';
 
-  propagatedBuildInputs = [ tls-parser ];
+  requiredPythonModules = [ tls-parser ];
 
   nativeBuildInputs = [ invoke ];
 

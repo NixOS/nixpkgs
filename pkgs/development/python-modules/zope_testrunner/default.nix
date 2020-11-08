@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "873d6017abadc213992a0c38c786ed020341b6e0fe78d14bc2a684cf5a70de4b";
   };
 
-  propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
+  requiredPythonModules = [ zope_interface zope_exceptions zope_testing six ];
 
   doCheck = false; # custom test modifies sys.path
 

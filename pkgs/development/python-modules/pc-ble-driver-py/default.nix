@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake swig git setuptools scikit-build ];
   buildInputs = [ boost pc-ble-driver ];
-  propagatedBuildInputs = [ enum34 wrapt future ];
+  requiredPythonModules = [ enum34 wrapt future ];
 
   dontUseCmakeConfigure = true;
 

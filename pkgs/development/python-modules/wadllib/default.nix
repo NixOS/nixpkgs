@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "e995691713d3c795d2b36278de8e212241870f46bec6ecba91794ea3cc5bd67d";
   };
 
-  propagatedBuildInputs = [ setuptools lazr-uri ];
+  requiredPythonModules = [ setuptools lazr-uri ];
 
   doCheck = isPy3k;
 

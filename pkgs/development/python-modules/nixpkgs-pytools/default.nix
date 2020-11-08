@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "11skcbi1lf9qcv9j5ikifb4pakhbbygqpcmv3390j7gxsa85cn19";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jinja2
     setuptools
     rope

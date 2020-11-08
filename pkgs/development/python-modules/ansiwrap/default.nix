@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytestcov
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     textwrap3
   ];
 

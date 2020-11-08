@@ -13,7 +13,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "996021ef33e0f50b97ff2d6b5f422a0fe5577de21a8873b58a779a5ddd1c3132";
   };
-  propagatedBuildInputs = [ redis ];
+  requiredPythonModules = [ redis ];
 
   checkPhase = ''
     mv hiredis _hiredis

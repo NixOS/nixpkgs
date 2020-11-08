@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "35c90698b55c683946091177177a9e9c0713a0860f0e049febd72649ccd77b70";
   };
 
-  propagatedBuildInputs = [ coverage nose six ];
+  requiredPythonModules = [ coverage nose six ];
 
   meta = with stdenv.lib; {
     description = "A dict with attribute-style access";

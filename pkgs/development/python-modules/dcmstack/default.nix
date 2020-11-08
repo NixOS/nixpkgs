@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1n24pp3rqz7ss1z6276fxynnppraxadbl3b9p8ijrcqnpzbzih7p";
   };
 
-  propagatedBuildInputs = [ nibabel pydicom ];
+  requiredPythonModules = [ nibabel pydicom ];
 
   checkInputs = [ nose ];
   checkPhase = ''

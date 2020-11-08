@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0fnzpchwwqsy5h18fs0n90s51w25n0dx0l74j0ka6lvhjl5sxn4c";
   };
 
-  propagatedBuildInputs = [ gevent ];
+  requiredPythonModules = [ gevent ];
 
   checkInputs = [
     hostname

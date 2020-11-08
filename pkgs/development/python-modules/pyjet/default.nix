@@ -21,7 +21,7 @@ buildPythonPackage rec {
     done
   '';
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
   checkInputs = [ pytest ];
   checkPhase = ''
     mv pyjet _pyjet

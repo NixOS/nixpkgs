@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "17n9h3xzjsfxmwclh33vc4yg3c9yzh9hfhaj12kv5ah3fy8rklwb";
   };
 
-  propagatedBuildInputs = [ pexpect ];
+  requiredPythonModules = [ pexpect ];
 
   # no tests in github or pypi
   doCheck = false;

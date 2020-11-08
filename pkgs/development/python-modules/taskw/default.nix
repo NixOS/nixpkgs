@@ -29,7 +29,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   buildInputs = [ nose pkgs.taskwarrior tox ];
-  propagatedBuildInputs = [ six dateutil kitchen pytz ];
+  requiredPythonModules = [ six dateutil kitchen pytz ];
 
   meta = with stdenv.lib; {
     homepage =  "https://github.com/ralphbean/taskw";

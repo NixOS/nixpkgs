@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
 
-  propagatedBuildInputs = [ requests cryptography suds-jurko ];
+  requiredPythonModules = [ requests cryptography suds-jurko ];
 
   meta = with stdenv.lib; {
     description = "TransIP API Connector";

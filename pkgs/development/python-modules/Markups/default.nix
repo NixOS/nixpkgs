@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ markdown docutils pygments ];
-  propagatedBuildInputs = [ python-markdown-math ];
+  requiredPythonModules = [ python-markdown-math ];
 
   meta = {
     description = "A wrapper around various text markup languages.";

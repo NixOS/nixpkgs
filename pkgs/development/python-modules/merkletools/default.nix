@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0pdik5sil0xcrwdcgdfy86c5qcfrz24r0gfc8m8bxa0i7h7x2v9l";
   };
 
-  propagatedBuildInputs = [ pysha3 ];
+  requiredPythonModules = [ pysha3 ];
 
   meta = with lib; {
     description = "Python tools for creating Merkle trees, generating Merkle proofs, and verification of Merkle proofs";

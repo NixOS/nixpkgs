@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   checkInputs = [ pytestCheckHook freezegun pytest-mock tornado_4 ];
   # Makes HTTP requests
   disabledTests = [ "test_proxy" "test_live" ];

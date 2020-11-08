@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ rednose ];
-  propagatedBuildInputs = [ six mock ];
+  requiredPythonModules = [ six mock ];
 
   meta = with stdenv.lib; {
     description = "Utility belt for automated testing";

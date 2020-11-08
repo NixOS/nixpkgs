@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "695d78f8edeb6a7ca98d8351adb36948d56cceeffe8a84896c9fbfd349fc4cb8";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     colorcet
     flask
     flask-compress

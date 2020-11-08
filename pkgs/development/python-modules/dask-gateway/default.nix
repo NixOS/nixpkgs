@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "519818f3598ddd726882c5a6bf7053941613d8517b80e8a2c28467e30d57da9b";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     dask
     distributed

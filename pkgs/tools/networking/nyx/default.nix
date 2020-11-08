@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "02rrlllz2ci6i6cs3iddyfns7ang9a54jrlygd2jw1f9s6418ll8";
   };
 
-  propagatedBuildInputs = [ stem ];
+  requiredPythonModules = [ stem ];
 
   # ./run_tests.py returns `TypeError: testFailure() takes exactly 1 argument`
   doCheck = false;

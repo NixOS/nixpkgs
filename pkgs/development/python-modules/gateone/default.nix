@@ -19,7 +19,7 @@ buildPythonPackage {
     sha256 = "1ghrawlqwv7wnck6alqpbwy9mpv0y21cw2jirrvsxaracmvgk6vv";
   };
 
-  propagatedBuildInputs = [tornado futures html5lib pkgs.openssl pkgs.cacert pkgs.openssh];
+  requiredPythonModules = [tornado futures html5lib pkgs.openssl pkgs.cacert pkgs.openssh];
 
   postInstall=''
     cp -R "$out/gateone/"* $out/lib/python2.7/site-packages/gateone

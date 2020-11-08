@@ -6,7 +6,7 @@ in pythonPackages.buildPythonApplication rec {
   pname = "zabbix-cli";
   version = "2.2.1";
 
-  propagatedBuildInputs = with pythonPackages; [ ipaddr requests ];
+  requiredPythonModules = with pythonPackages; [ ipaddr requests ];
 
   # argparse is part of the standardlib
   prePatch = ''

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0ngdkmb73gkp5y00q7r9k1cdlfn0wyzws2wrqlshc4hlkbdyabj4";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pylev pastel
   ]
     ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]

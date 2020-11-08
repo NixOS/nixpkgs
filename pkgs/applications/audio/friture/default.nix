@@ -16,7 +16,7 @@ in py.buildPythonApplication rec {
   nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
     [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py; [
+  requiredPythonModules = with py; [
     sounddevice
     pyopengl
     pyopengl-accelerate

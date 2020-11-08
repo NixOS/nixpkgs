@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     (gst_all_1.gst-plugins-bad.override { enableZbar = true; }) # for zbar plug-in
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     dbus-python
     future
     gpgme

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "14f7847b8md5kf631zl8x2f53wy8zbzxypq4wdgzvwsjz4k7v4jn";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     dill
     filelock
     numpy

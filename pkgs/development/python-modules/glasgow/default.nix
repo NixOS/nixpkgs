@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm sdcc ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     setuptools
     nmigen
     fx2

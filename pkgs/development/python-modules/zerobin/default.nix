@@ -18,7 +18,7 @@ buildPythonPackage {
     sha256 = "1pzcwy454kn5216pvwjqzz311s6jbh7viw9s6kw4xps6f5h44bid";
   };
 
-  propagatedBuildInputs = [ cherrypy bottle lockfile clize ];
+  requiredPythonModules = [ cherrypy bottle lockfile clize ];
 
   # zerobin doesn't have any tests, but includes a copy of cherrypy which
   # can wrongly fail the check phase.

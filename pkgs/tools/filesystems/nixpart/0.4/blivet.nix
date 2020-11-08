@@ -34,7 +34,7 @@ buildPythonApplication rec {
     }' blivet/pyudev.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pykickstart pyparted pyblock libselinux cryptsetup
   ] ++ stdenv.lib.optional useNixUdev systemd;
 

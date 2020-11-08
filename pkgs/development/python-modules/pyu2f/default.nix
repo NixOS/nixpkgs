@@ -18,7 +18,7 @@ buildPythonPackage rec {
     rm pyu2f/tests/hid/macos_test.py
   '';
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ pytest six mock pyfakefs unittest2 ];
 

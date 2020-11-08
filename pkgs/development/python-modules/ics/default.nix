@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0rrdc9rcxc3ys6rml81b8m8qdlisk78a34bdib0wy65hlkmyyykn";
   };
 
-  propagatedBuildInputs = [ tatsu arrow ];
+  requiredPythonModules = [ tatsu arrow ];
 
   postPatch = ''
     substituteInPlace requirements.txt \

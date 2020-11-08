@@ -269,7 +269,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { requiredPythonModules = []; };
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";

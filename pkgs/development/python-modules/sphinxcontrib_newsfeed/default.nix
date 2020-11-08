@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1d7gam3mn8v4in4p16yn3v10vps7nnaz6ilw99j4klij39dqd37p";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  requiredPythonModules = [ sphinx ];
 
   meta = with stdenv.lib; {
     description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";

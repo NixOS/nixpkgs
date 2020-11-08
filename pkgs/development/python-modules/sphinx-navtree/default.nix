@@ -8,7 +8,7 @@ buildPythonPackage rec {
     sha256 = "1nqcsbqwr8ihk1fv534i0naag1qw04f7ibcgl2j8csvkh8q90b4p";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  requiredPythonModules = [ sphinx ];
 
   meta = {
     description = "Navigation tree customization for Sphinx";

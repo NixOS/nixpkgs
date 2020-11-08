@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = stdenv.lib.optional doCheck [ nose ];
-  propagatedBuildInputs = [ matplotlib nibabel numpy scipy sympy ];
+  requiredPythonModules = [ matplotlib nibabel numpy scipy sympy ];
 
   checkPhase = ''    # wants to be run in a different directory
     mkdir nosetests

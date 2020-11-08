@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   meta = with stdenv.lib; {
     description = "Shows a 503 error page when maintenance-mode is on";

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ glibcLocales ];
 
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     enum34
     matplotlib
     monty

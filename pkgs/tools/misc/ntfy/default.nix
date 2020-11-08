@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     mock
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     requests ruamel_yaml appdirs
     sleekxmpp dns
     emoji

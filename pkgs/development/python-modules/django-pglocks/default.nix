@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ django ];
-  propagatedBuildInputs = [ django six ];
+  requiredPythonModules = [ django six ];
 
   # tests need a postgres database
   doCheck = false;

@@ -33,7 +33,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
   ];
 

@@ -13,7 +13,7 @@ buildPythonPackage {
   # lpod library currently does not support Python 3.x
   disabled = isPy3k;
 
-  propagatedBuildInputs = [ lxml docutils pillow ];
+  requiredPythonModules = [ lxml docutils pillow ];
 
   src = fetchFromGitHub {
     owner = "lpod";

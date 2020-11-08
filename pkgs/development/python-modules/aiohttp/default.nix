@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytest-mock pytestcov trustme brotlipy freezegun
   ];
 
-  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
+  requiredPythonModules = [ attrs chardet multidict async-timeout yarl ]
     ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
 
   disabledTests = [

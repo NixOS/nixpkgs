@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1g65cyxpkqshgsggav2q3f76rbj5pzh7sacyhmhzvfz4zfarkcxk";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests
     future
     kinparse

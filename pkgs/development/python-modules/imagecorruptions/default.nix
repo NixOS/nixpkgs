@@ -20,7 +20,7 @@ buildPythonPackage rec {
       --replace "'opencv-python >= 3.4.5'," ""
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scikitimage
     opencv3

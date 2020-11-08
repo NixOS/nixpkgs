@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1h3m593nwzx6vwa24k0wizb7la49yhqxwn73ipclxgxxi4dfdj01";
   };
 
-  propagatedBuildInputs = [ executor naturalsort ];
+  requiredPythonModules = [ executor naturalsort ];
 
   meta = with lib; {
     description = "Generic modularized configuration file manager";

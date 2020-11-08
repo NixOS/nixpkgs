@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ ];
 
-  propagatedBuildInputs = [ anki ];
+  requiredPythonModules = [ anki ];
 
   checkPhase = ''
     # Exclude tests that require sqlite's sqldiff command, since

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ django ];
-  propagatedBuildInputs = [ six pycrypto ];
+  requiredPythonModules = [ six pycrypto ];
 
   doCheck = false;
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1a2fxxnnjqbx344znpvx7cnv1881dk6585ibw01inhfq3w6yj2lr";
   };
 
-  propagatedBuildInputs = [ chardet cryptography sortedcontainers ];
+  requiredPythonModules = [ chardet cryptography sortedcontainers ];
 
   checkInputs = [ nose ];
   checkPhase = ''

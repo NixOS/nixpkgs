@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "d9f94828c11e3b40350fb14a02e027f42670a7c372bcb30db18d552dcfab7c01";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ipywidgets
     numpy
     six

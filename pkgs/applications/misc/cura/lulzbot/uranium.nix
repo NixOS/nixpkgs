@@ -16,7 +16,7 @@ buildPythonPackage {
   disabled = pythonOlder "3.5.0";
 
   buildInputs = [ python gettext ];
-  propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcusLulzbot ];
+  requiredPythonModules = [ pyqt5 numpy scipy shapely libarcusLulzbot ];
   nativeBuildInputs = [ cmake doxygen ];
 
   postPatch = ''

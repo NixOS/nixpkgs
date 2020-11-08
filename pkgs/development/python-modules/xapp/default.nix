@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1pp3z4q6ryxcc26kaq222j53ji110n2v7rx29c7vy1fbb8mq64im";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     psutil
     pygobject3
     gtk3

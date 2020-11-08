@@ -20,7 +20,7 @@ buildPythonPackage rec {
     glibcLocales gobject-introspection gtk3 libsoup libsecret
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pygobject3 freezegun mock
   ];
 

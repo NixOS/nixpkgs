@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # Tests seem to hang
   doCheck = false;
 
-  propagatedBuildInputs = [ flask pymongo vcversioner ];
+  requiredPythonModules = [ flask pymongo vcversioner ];
 
   meta = {
     homepage = "https://flask-pymongo.readthedocs.org/";

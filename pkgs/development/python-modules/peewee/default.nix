@@ -33,7 +33,7 @@ buildPythonPackage rec {
     cython # compile speedups
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     apsw # sqlite performance improvement
   ] ++ (lib.optional withPostgres psycopg2)
     ++ (lib.optional withMysql mysql-connector);

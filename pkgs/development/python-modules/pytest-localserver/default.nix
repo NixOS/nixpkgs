@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "3a5427909d1dfda10772c1bae4b9803679c0a8f04adb66c338ac607773bfefc2";
   };
 
-  propagatedBuildInputs = [ werkzeug ];
+  requiredPythonModules = [ werkzeug ];
 
   # all tests access network: does not work in sandbox
   doCheck = false;

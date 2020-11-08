@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ nose ];
-  propagatedBuildInputs = [ rdflib ];
+  requiredPythonModules = [ rdflib ];
 
   meta = with lib; {
     homepage = "https://github.com/RDFLib/rdflib-jsonld";

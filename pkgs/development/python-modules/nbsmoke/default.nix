@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "06as8vh17m0nkp3fpkp42m990a5zjfl2iaa17da99ksh7886mjpc";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
     holoviews
     jupyter_client

@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt libxml2
   ];
-  propagatedBuildInputs = with python3Packages; [ mercurial ];
+  requiredPythonModules = with python3Packages; [ mercurial ];
 
   postInstall = ''
     make install-doc prefix=$out

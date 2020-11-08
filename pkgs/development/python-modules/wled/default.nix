@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1adh23v4c9kia3ddqdq0brksd5rhgh4ff7l5hil8klx4dmkrjfz3";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aiohttp
     backoff
     packaging

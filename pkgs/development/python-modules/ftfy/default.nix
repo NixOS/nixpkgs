@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "081p5z20dirrf1i3nshylc31qd5mbxibjc7gzj8x4isbiizpdisi";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     html5lib
     wcwidth
     setuptools

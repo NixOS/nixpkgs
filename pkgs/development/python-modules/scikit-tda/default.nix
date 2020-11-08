@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "0a90k6i9fkmc9gf250b4fidx2fzd2qrn025l74mjk51fvf23q13a";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
     scikitlearn

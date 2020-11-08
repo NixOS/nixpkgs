@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "08adx8r5pwwazbnfahay42l5f203mmvcn2ipz5hg8myqc9jxm2ky";
   };
 
-  propagatedBuildInputs = with python3Packages; [ setuptools ];
+  requiredPythonModules = with python3Packages; [ setuptools ];
 
   meta = {
     description = "Screen rotation, docking and other scripts for ThinkPad® X220 and X230 Tablet";

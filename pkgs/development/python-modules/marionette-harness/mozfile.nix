@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "e5dc835582ea150e35ecd57e9d86cb707d3aa3b2505679db7332326dd49fd6b8";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   # mozhttpd -> moznetwork -> mozinfo -> mozfile
   doCheck = false;

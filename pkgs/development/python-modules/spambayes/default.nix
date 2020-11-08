@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "016r3g43ja73rls1nh1dl82d75lgsjdl4cv2r5s7zcihm47nb38q";
   };
 
-  propagatedBuildInputs = [ bsddb3 pydns lockfile ];
+  requiredPythonModules = [ bsddb3 pydns lockfile ];
 
   meta = {
     description = "Statistical anti-spam filter, initially based on the work of Paul Graham";

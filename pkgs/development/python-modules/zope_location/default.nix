@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "a720f9e3c8a51d5007ed6fcd47e1834df02671d85dbfd1062a0d808de8bf80ac";
   };
 
-  propagatedBuildInputs = [ zope_proxy ];
+  requiredPythonModules = [ zope_proxy ];
 
   # ignore circular dependency on zope_schema
   preBuild = ''

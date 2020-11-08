@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # 'mpv-jsonipc' does not have any tests
   doCheck = false;
 
-  propagatedBuildInputs = [ requests tqdm websocket_client ];
+  requiredPythonModules = [ requests tqdm websocket_client ];
 
   pythonImportsCheck = [ "python_mpv_jsonipc" ];
 

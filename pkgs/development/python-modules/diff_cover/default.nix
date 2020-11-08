@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sha256 = "61a98ec126552d985c0e3e3c33cc72e79d7577f91f6edba99f635411a173d3b9";
   };
 
-  propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];
+  requiredPythonModules = [ jinja2 jinja2_pluralize pygments six inflect ];
 
   checkInputs = [ mock coverage pytest nose pylint pyflakes pycodestyle ];
 

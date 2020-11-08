@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # Tests require database connections
   doCheck = false;
 
-  propagatedBuildInputs = [ pika ];
+  requiredPythonModules = [ pika ];
   meta = with stdenv.lib; {
     homepage = "https://github.com/bninja/pika-pool";
     license = licenses.bsdOriginal;

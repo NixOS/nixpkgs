@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0a2ixiz04aw4p0aivxh47k3fa9ql804l3y5iv5gcih9aizi5fbm4";
   };
 
-  propagatedBuildInputs = [ setuptools_scm toml six astroid ];
+  requiredPythonModules = [ setuptools_scm toml six astroid ];
 
   checkInputs = [ pytest ];
 

@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-ugly
   ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pycairo
     dbus-python
     pygobject3

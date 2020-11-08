@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools pytestrunner ];
   checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     uritemplate
     pyjwt
   ];

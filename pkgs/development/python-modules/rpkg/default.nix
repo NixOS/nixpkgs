@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
 
-  propagatedBuildInputs = [ pycurl koji cccolutils six rpmfluff ];
+  requiredPythonModules = [ pycurl koji cccolutils six rpmfluff ];
 
   doCheck = false; # needs /var/lib/rpm database to run tests
 

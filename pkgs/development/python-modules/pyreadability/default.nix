@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1k6fq416pdmjcdqh6gdxl0y0k8kj1zlpzwp5574xsvsha18p2zpn";
   };
 
-  propagatedBuildInputs = [ requests chardet cssselect lxml ];
+  requiredPythonModules = [ requests chardet cssselect lxml ];
 
   # ModuleNotFoundError: No module named 'tests'
   doCheck = false;

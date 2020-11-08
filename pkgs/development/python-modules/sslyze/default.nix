@@ -41,7 +41,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "sslyze" ];
 
-  propagatedBuildInputs = [ nassl cryptography typing-extensions faker ];
+  requiredPythonModules = [ nassl cryptography typing-extensions faker ];
 
   meta = with lib; {
     homepage = "https://github.com/nabla-c0d3/sslyze";

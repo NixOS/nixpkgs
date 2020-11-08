@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ boto3 pytest pytestcov packaging hypothesis ] ++ lib.optional (!isPy3k) mock;
   nativeBuildInputs = [ cython gdal ];
-  propagatedBuildInputs = [ gdal numpy attrs affine cligj click-plugins snuggs setuptools ];
+  requiredPythonModules = [ gdal numpy attrs affine cligj click-plugins snuggs setuptools ];
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";

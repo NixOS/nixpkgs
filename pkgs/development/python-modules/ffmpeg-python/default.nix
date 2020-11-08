@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
   checkInputs = [ pytest pytest-mock ];
 
   meta = with lib; {

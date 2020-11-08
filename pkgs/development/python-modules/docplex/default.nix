@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "976e9b4e18bccbabae04149c33247a795edb1f00110f1b511c5517ac6ac353bb";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     docloud
     requests
   ] ++ lib.optional isPy27 futures;

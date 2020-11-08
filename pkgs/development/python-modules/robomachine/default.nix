@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "4251d405759a38f1e665acc245dcbcdec319376718169a73c57560183370fe0e";
   };
 
-  propagatedBuildInputs = [ pyparsing robotframework allpairspy ];
+  requiredPythonModules = [ pyparsing robotframework allpairspy ];
 
   # Remove Windows .bat files
   postInstall = ''

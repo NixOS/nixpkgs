@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1gckxhqkvzyw7pmwg8xzxq146jysqy0s23l5mjc3awm6swdij66y";
   };
 
-  propagatedBuildInputs = [ six pypblib ];
+  requiredPythonModules = [ six pypblib ];
 
   checkInputs = [ pytestCheckHook ];
 

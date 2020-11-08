@@ -18,7 +18,7 @@ python2Packages.buildPythonApplication rec {
   nativeBuildInputs = with python2Packages; [ pbr git ];
   PBR_VERSION=version;
 
-  propagatedBuildInputs = with python2Packages; [
+  requiredPythonModules = with python2Packages; [
     appdirs
     cryptography
     fasteners

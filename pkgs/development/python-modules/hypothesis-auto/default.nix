@@ -19,7 +19,7 @@ buildPythonPackage rec {
     poetry
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pydantic
     hypothesis
     pytest

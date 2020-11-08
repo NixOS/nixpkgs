@@ -5,10 +5,10 @@ buildPythonPackage rec {
   version = "1.0.6";
 
   # although pytest is a runtime dependency, do not add it as
-  # propagatedBuildInputs in order to allow packages depend on another version
+  # requiredPythonModules in order to allow packages depend on another version
   # of pytest more easily
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ flake8 ];
+  requiredPythonModules = [ flake8 ];
 
   src = fetchPypi {
     inherit pname version;

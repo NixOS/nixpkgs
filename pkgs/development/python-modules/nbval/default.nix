@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     coverage
     ipykernel
     jupyter_client

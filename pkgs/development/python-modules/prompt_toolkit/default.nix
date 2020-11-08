@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six wcwidth ];
+  requiredPythonModules = [ six wcwidth ];
 
   meta = {
     description = "Python library for building powerful interactive command lines";

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "07zf7kivj4r1n6xwisld7n90bpi095bqbc9xpv668grq1rpf53c1";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
    blis
    catalogue
    cymem

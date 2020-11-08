@@ -18,7 +18,7 @@ buildPythonPackage {
     sha256 = "1v7f77cv95yv0v80gisdh71mj7jcq41xcfip6bqm57zfdbsa0xpn";
   };
 
-  propagatedBuildInputs = [ six requests ];
+  requiredPythonModules = [ six requests ];
 
   meta = with stdenv.lib; {
     description = "A python client library for the IPFS API";

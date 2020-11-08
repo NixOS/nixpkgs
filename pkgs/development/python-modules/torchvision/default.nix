@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "18gvdabkmzfjg47ns0lw38mf85ry28nq1mas5rzlwvb4l5zmw2ms";
   };
 
-  propagatedBuildInputs = [ six numpy pillow pytorch ];
+  requiredPythonModules = [ six numpy pillow pytorch ];
 
   meta = {
     description = "PyTorch vision library";

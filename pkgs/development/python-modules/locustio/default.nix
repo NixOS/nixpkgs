@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1645d63ig4ymw716b6h53bhmjqqc13p9r95k1xfx66ck6vdqnisd";
   };
 
-  propagatedBuildInputs = [ msgpack requests flask gevent pyzmq ];
+  requiredPythonModules = [ msgpack requests flask gevent pyzmq ];
   checkInputs = [ mock unittest2 ];
   # remove file which attempts to do GET request
   preCheck = ''

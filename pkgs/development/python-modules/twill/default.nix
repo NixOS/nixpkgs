@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lxml
     requests
     pyparsing

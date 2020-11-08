@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0dicp55adbqxb7hqlck95hngb1klv5s26lszw3xim30k18bwqaxl";
   };
 
-  propagatedBuildInputs = [ ];
+  requiredPythonModules = [ ];
 
   # By default it attempts to build Windows-only functionality
   prePatch = ''

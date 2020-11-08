@@ -20,7 +20,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "h2==" "h2>="
   '';
 
-  propagatedBuildInputs = [ six h2 ];
+  requiredPythonModules = [ six h2 ];
 
   meta = {
     description = "A webserver intended for web browser testing";

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     nose
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     apispec
     colorama
     click

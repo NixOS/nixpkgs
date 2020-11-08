@@ -35,7 +35,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'importlib_resources~=1.4;python_version<"3.7" and python_version!="3.4"' 'importlib_resources;python_version<"3.7"'
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aws-sam-translator
     jsonpatch
     jsonschema

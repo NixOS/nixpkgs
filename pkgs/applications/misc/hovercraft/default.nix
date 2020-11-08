@@ -24,7 +24,7 @@ buildPythonApplication rec {
   };
 
   checkInputs = [ manuel ];
-  propagatedBuildInputs = [ setuptools docutils lxml svg-path pygments watchdog ];
+  requiredPythonModules = [ setuptools docutils lxml svg-path pygments watchdog ];
 
   meta = with lib; {
     description = "Makes impress.js presentations from reStructuredText";

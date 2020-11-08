@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "14dlzwr4gxlbgjy012i4pqs2rn2rmp21w8n1k1wwjkf26mcvrq5s";
   };
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ dateutil pytest ];
   checkPhase = ''

@@ -19,7 +19,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ gobject-introspection ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
     pygobject3 pyyaml
   ];

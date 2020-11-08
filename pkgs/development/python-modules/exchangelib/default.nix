@@ -23,7 +23,7 @@ buildPythonPackage rec {
   checkInputs = [ psutil requests-mock pyyaml
     flake8
   ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     lxml tzlocal python-dateutil pygments requests-kerberos
     defusedxml cached-property isodate requests_ntlm dnspython
     oauthlib requests_oauthlib

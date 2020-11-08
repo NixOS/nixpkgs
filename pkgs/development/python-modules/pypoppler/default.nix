@@ -19,7 +19,7 @@ buildPythonPackage rec {
   NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
   nativeBuildInputs = [ pkgs.pkgconfig ];
   buildInputs = [ pkgs.poppler.dev ];
-  propagatedBuildInputs = [ pycairo pygobject2 ];
+  requiredPythonModules = [ pycairo pygobject2 ];
 
   patches = [
     ./pypoppler-0.39.0.patch

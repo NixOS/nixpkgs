@@ -10,7 +10,7 @@ buildPythonPackage (rec {
     sha256 = "1v1bcc2m4pz90rsh5pjb9m9agkvhqdk1viyf64gi1h85h191vkib";
   };
 
-  propagatedBuildInputs = [ twisted future ];
+  requiredPythonModules = [ twisted future ];
 
   checkInputs = [ setuptoolsTrial mock ];
 

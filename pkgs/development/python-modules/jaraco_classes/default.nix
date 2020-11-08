@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six more-itertools ];
+  requiredPythonModules = [ six more-itertools ];
 
   doCheck = false;
 }

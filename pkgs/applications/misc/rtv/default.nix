@@ -29,7 +29,7 @@ buildPythonApplication rec {
     vcrpy
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     beautifulsoup4
     decorator
     kitchen

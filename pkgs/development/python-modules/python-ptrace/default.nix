@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # requires distorm, which is optionally
   doCheck = false;
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   meta = with stdenv.lib; {
     description = "Python binding of ptrace library";

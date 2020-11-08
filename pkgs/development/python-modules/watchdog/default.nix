@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin
     [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
-  propagatedBuildInputs = [ argh pathtools pyyaml ];
+  requiredPythonModules = [ argh pathtools pyyaml ];
 
   doCheck = false;
 

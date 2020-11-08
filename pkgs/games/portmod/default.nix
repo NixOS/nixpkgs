@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
       --replace "RustExtension(\"portmod.portmod\", binding=Binding.PyO3, strip=True)" ""
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     setuptools_scm
     setuptools
     requests

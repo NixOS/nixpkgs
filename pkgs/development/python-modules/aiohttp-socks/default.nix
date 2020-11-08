@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1mn2ng66951mri49f99zh3660j83kvqhr6dpx90s9fkjwk83hmjy";
   };
 
-  propagatedBuildInputs = [ aiohttp attrs ];
+  requiredPythonModules = [ aiohttp attrs ];
 
   # Checks needs internet access
   doCheck = false;

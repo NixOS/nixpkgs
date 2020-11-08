@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # Disable darwin tests which require executables: `iconutil` and `screencapture`
   disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_save" "test_grab" "test_grabclipboard" ];
 
-  propagatedBuildInputs = [ olefile ];
+  requiredPythonModules = [ olefile ];
 
   checkInputs = [ pytestCheckHook pyroma numpy ];
 

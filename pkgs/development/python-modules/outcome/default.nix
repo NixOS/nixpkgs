@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ attrs ];
+  requiredPythonModules = [ attrs ];
   # Has a test dependency on trio, which depends on outcome.
   doCheck = false;
 

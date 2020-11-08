@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ subunit testrepository testtools six ];
-  propagatedBuildInputs = [ pbr fixtures ];
+  requiredPythonModules = [ pbr fixtures ];
 
   # Disabling as several tests depdencies are missing:
   # https://opendev.org/openstack/mox3/src/branch/master/test-requirements.txt

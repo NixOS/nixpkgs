@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "55eef68e39473d6a58d28c4cf388cb8b7d29bab76568e7124d7df98d9365ab35";
   };
 
-  propagatedBuildInputs = [ dnspython greenlet monotonic six ]
+  requiredPythonModules = [ dnspython greenlet monotonic six ]
     ++ lib.optional (pythonOlder "3.4") enum34;
 
   prePatch = ''

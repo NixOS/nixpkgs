@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [ mock nose utillinux /* mcookie */ xorg.xauth xorg.xorgserver /* xvfb */ ];
   nativeBuildInputs = [ setuptools_scm ];
   buildInputs = [ xorg.libX11 ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   doCheck = !stdenv.isDarwin;
 

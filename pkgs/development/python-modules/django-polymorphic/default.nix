@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ dj-database-url ];
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   checkPhase = ''
     ${python.interpreter} runtests.py

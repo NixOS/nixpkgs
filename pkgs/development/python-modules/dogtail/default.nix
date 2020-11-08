@@ -34,7 +34,7 @@ buildPythonPackage {
   ];
 
   nativeBuildInputs = [ gobject-introspection dbus xvfb_run wrapGAppsHook ]; # for setup hooks
-  propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
+  requiredPythonModules = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
   strictDeps = false; # issue 56943
 
   checkPhase = ''

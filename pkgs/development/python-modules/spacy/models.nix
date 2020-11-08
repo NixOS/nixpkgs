@@ -11,7 +11,7 @@ let
       inherit sha256;
     };
 
-    propagatedBuildInputs = [ spacy ]
+    requiredPythonModules = [ spacy ]
       ++ lib.optionals (lang == "zh") [ jieba pkuseg ];
 
     pythonImportsCheck = [ pname ];

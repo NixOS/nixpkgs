@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "flufl.i18n";
   version = "2.0.2";
 
-  propagatedBuildInputs = [ atpublic ];
+  requiredPythonModules = [ atpublic ];
 
   src = fetchPypi {
     inherit pname version;

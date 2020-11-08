@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytestrunner
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     morphys
     six
     python-baseconv

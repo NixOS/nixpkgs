@@ -34,7 +34,7 @@ buildPythonPackage rec {
     astropy
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     semantic-version
     pyyaml
     jsonschema

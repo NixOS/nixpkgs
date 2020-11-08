@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "1.5";
 
   # ps is used in Worker.worker_pids method
-  propagatedBuildInputs = [ simplejson setproctitle redis' pkgs.ps ];
+  requiredPythonModules = [ simplejson setproctitle redis' pkgs.ps ];
   checkInputs = [ nose pkgs.redis ];
 
   # PyPI tarball doesn't contain tests so let's use GitHub

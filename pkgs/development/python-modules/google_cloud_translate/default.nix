@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   # google_cloud_core[grpc] -> grpcio
-  propagatedBuildInputs = [ google_api_core google_cloud_core grpcio ];
+  requiredPythonModules = [ google_api_core google_cloud_core grpcio ];
 
   checkInputs = [ pytest mock ];
   checkPhase = ''

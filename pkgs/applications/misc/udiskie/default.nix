@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator-gtk3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     docopt
     pygobject3
     pyyaml

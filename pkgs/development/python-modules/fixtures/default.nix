@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "fcf0d60234f1544da717a9738325812de1f42c2fa085e2d9252d8fff5712b2ef";
   };
 
-  propagatedBuildInputs = [ pbr testtools mock ];
+  requiredPythonModules = [ pbr testtools mock ];
 
   checkPhase = ''
     ${python.interpreter} -m testtools.run fixtures.test_suite

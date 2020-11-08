@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ aiolifx ];
+  requiredPythonModules = [ aiolifx ];
 
   meta = with lib; {
     homepage = "https://github.com/amelchio/aiolifx_effects";

@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     mock
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     distro
     jinja2
     six

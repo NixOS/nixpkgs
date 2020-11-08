@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgs.pkgconfig ];
   checkInputs = [ six ];
-  propagatedBuildInputs = [ pkgs.parted ];
+  requiredPythonModules = [ pkgs.parted ];
 
   checkPhase = ''
     patchShebangs Makefile

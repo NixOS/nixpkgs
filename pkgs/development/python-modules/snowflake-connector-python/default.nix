@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sha256 = "b953a53141a88406e9c0e3144582a7c257e5c89fa81e97664d520999991812e7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     azure-storage-blob
     asn1crypto
     boto3

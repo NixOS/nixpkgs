@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "ced47c200073dbbfafb10b26931b9c9bf3c6b898f41dffa3676f5c2e2eddc2f0";
   };
 
-  propagatedBuildInputs = [ python-dateutil botocore ];
+  requiredPythonModules = [ python-dateutil botocore ];
   checkInputs = [ requests mock pytest mypy ];
 
   meta = with lib; {

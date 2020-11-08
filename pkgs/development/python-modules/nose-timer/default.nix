@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "09hwjwbczi06bfqgiylb2yxs5h88jdl26zi1fdqxdzvamrkksf2c";
   };
 
-  propagatedBuildInputs = [ nose ];
+  requiredPythonModules = [ nose ];
 
   meta = with lib; {
     homepage = "https://github.com/mahmoudimus/nose-timer";

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "d873baeb7815311d3420aab0a1d83f050f628228cbc2d6045a14a16460411bc9";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  requiredPythonModules = [ setuptools ];
   checkInputs = [
     pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
     pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ black pytest toml ];
+  requiredPythonModules = [ black pytest toml ];
 
   pythonImportsCheck = [ "pytest_black" ];
 

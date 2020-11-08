@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "d59d98bdf96a764dcf7a2929a86439d023b283a9152492811c7e44fc47555bc9";
   };
 
-  propagatedBuildInputs = [ django six ];
+  requiredPythonModules = [ django six ];
 
   # pypi version doesn't include runtest.py, needed to run tests
   doCheck = false;

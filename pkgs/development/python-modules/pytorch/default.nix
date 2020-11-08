@@ -212,7 +212,7 @@ in buildPythonPackage rec {
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     cffi
     click
     numpy

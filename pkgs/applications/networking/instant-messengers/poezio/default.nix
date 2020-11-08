@@ -7,7 +7,7 @@ buildPythonApplication rec {
     disabled = pythonOlder "3.4";
 
     checkInputs = [ pytest ];
-    propagatedBuildInputs = [ aiodns slixmpp pyinotify potr mpd2 cffi setuptools ];
+    requiredPythonModules = [ aiodns slixmpp pyinotify potr mpd2 cffi setuptools ];
     nativeBuildInputs = [ pkgconfig ];
 
     src = fetchFromGitHub {

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0h0dr7cfpjnjj8bgl2vk9063a53649pn37wnlkd8hxjy656slkni";
   };
 
-  propagatedBuildInputs = [ arrow jinja2 ];
+  requiredPythonModules = [ arrow jinja2 ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/hackebrot/jinja2-time";

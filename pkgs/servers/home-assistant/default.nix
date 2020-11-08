@@ -3,7 +3,7 @@
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
 
-# Additional packages to add to propagatedBuildInputs
+# Additional packages to add to requiredPythonModules
 , extraPackages ? ps: []
 
 # Override Python packages using
@@ -97,7 +97,7 @@ in with py.pkgs; buildPythonApplication rec {
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     # From setup.py
     aiohttp astral async-timeout attrs bcrypt certifi ciso8601 httpx jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml

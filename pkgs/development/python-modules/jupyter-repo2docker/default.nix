@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "7fc2edf0cda1e46f2e7553bfb84a47e6d141b8dac393268ef01ee3504ca6ad94";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     docker
     escapism
     jinja2

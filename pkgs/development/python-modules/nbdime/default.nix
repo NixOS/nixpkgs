@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     py
     setuptools

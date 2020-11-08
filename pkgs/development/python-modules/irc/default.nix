@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "irc" ];
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     importlib-metadata
     jaraco_logging

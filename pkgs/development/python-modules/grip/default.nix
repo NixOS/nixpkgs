@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest responses ];
 
-  propagatedBuildInputs = [ docopt flask markdown path-and-address pygments requests tabulate ];
+  requiredPythonModules = [ docopt flask markdown path-and-address pygments requests tabulate ];
 
   checkPhase = ''
       export PATH="$PATH:$out/bin"

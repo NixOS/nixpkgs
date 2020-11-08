@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "03zj602m2rln9yvr08dswy56vzkbldp8b074ixwzz525dafblr92";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ledgerblue libagent setuptools wheel
   ];
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libxslt libusb1 pps-tools
   ];
 
-  pythonPath = [
+  requiredPythonModules = [
     python2Packages.pygobject2
     python2Packages.pygtk
   ];
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "udev-install" ];
 
   postFixup = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    wrapPythonProgramsIn $out/bin "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0fqa4p3qg7800fykib1x264gizhhmb6dz2hajgwr0hxf5xa19wdl";
   };
 
-  propagatedBuildInputs =
+  requiredPythonModules =
     [ can
       canmatrix
     ];

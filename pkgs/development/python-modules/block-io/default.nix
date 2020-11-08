@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "97ea037a67af72037cb08cec7e0a9f7866ecdfaa1a8c8ebcc0f4b9359a1516d7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     base58
     ecdsa
     pycryptodome

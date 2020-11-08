@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  pythonPath = with python2Packages; [ pyqt4 pillow pyxdg pyyaml ];
+  requiredPythonModules = with python2Packages; [ pyqt4 pillow pyxdg pyyaml ];
   nativeBuildInputs = with python2Packages; [ python wrapPython ];
 
   installPhase = ''
     mkdir -p $out/share/themes
     cp -r cdetheme $out/share/themes
     patchShebangs $out/share/themes/cdetheme/scripts/switchtheme
-    wrapPythonProgramsIn "$out/share/themes/cdetheme/scripts" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/themes/cdetheme/scripts" "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

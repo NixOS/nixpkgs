@@ -118,7 +118,7 @@ pythonPackages.callPackage
         ++ lib.optional (!__isBootstrap) [ pythonPackages.poetry ]
       );
 
-      propagatedBuildInputs =
+      requiredPythonModules =
         let
           compat = isCompatible (poetryLib.getPythonVersion python);
           deps = lib.filterAttrs

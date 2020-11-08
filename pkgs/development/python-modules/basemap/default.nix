@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "13lw1iwa8hadpvqdgb06nh881l8c17awzvvwbfwblvb9q9s0lnzp";
   };
 
-  propagatedBuildInputs = [ numpy matplotlib pillow pyproj pyshp six ];
+  requiredPythonModules = [ numpy matplotlib pillow pyproj pyshp six ];
   buildInputs = [ setuptools pkgs.geos ];
 
   # Standard configurePhase from `buildPythonPackage` seems to break the setup.py script

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ mock nose nose_progressive pkgs.glibcLocales ];
-  propagatedBuildInputs = [ pillow blessings args ];
+  requiredPythonModules = [ pillow blessings args ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/kennethreitz/clint";

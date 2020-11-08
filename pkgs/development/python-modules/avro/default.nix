@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '');
 
   nativeBuildInputs = [ pycodestyle ];
-  propagatedBuildInputs = [ isort ];
+  requiredPythonModules = [ isort ];
 
   meta = with stdenv.lib; {
     description = "A serialization and RPC framework";

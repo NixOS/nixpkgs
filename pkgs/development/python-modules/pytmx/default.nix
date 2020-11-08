@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0480pr61v54bwdyzb983sk0fqkyfbcgrdn8k11yf1yck4zb119gc";
   };
 
-  propagatedBuildInputs = [ pygame pyglet pysdl2 six ];
+  requiredPythonModules = [ pygame pyglet pysdl2 six ];
 
   checkPhase = ''
     python -m unittest tests.pytmx.test_pytmx

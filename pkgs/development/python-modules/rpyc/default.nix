@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "145mi8p37x9cbfm5117g4ng7b5rmghjjwgm319qqhwgzvqg3y4j9";
   };
 
-  propagatedBuildInputs = [ plumbum ];
+  requiredPythonModules = [ plumbum ];
 
   checkInputs = [ nose ];
   checkPhase = ''

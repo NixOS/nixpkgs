@@ -18,7 +18,7 @@ buildPythonApplication rec {
     owner = "trehn";
   };
 
-  propagatedBuildInputs = [ dateutil click pyfiglet setuptools ];
+  requiredPythonModules = [ dateutil click pyfiglet setuptools ];
 
   meta = with stdenv.lib; {
     description = "Starts a countdown to or from TIMESPEC";

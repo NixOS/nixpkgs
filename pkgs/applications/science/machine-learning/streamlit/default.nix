@@ -14,7 +14,7 @@ buildPythonApplication rec {
     sha256 = "1wymv7qckafs0p2jdjlxjaf1xrhm3iyd185jkldanbb0na5n3ndz";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     altair astor base58 blinker boto3 botocore click enum-compat
     future pillow protobuf requests toml tornado_5 tzlocal validators watchdog
     jinja2 setuptools

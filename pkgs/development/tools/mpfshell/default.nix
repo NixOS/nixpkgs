@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1n4ap4yfii54y125f9n9krc0lc0drwg3hsq4z6g89xbswdx9sygr";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyserial colorama websocket_client
   ];
 

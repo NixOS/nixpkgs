@@ -24,7 +24,7 @@ buildPythonPackage {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     future
     pyparsing
   ];

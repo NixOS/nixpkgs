@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "79ddadaa9db60b81762a10af0c0d994fd60d21616c7d9229d6f7ce1930f8d343";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # pypi release does not include tests
   doCheck = false;

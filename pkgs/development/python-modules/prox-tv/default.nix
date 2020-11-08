@@ -23,7 +23,7 @@ buildPythonPackage {
     nose
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     cffi
   ];

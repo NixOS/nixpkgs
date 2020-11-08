@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "tornado";
   version = "4.5.3";
 
-  propagatedBuildInputs = lib.optionals isPy27 [ backports_abc certifi singledispatch backports_ssl_match_hostname futures ];
+  requiredPythonModules = lib.optionals isPy27 [ backports_abc certifi singledispatch backports_ssl_match_hostname futures ];
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634

@@ -12,7 +12,7 @@
 , systemd
 , udev
 }: let
-  pythonPath = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     dbus-python
     pygobject3
     recursivePthLoader
@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
       ln -s ../test/$a $test/bin/bluez-$a
     done
     popd
-    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
+    wrapPythonProgramsIn $test/test "$test/test ${toString requiredPythonModules}"
   '' + ''
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin

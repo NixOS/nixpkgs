@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "064x1ypxwx1l270ic97p8czbzb7swl9758v40k3w2gaqf9762f0l";
   };
 
-  propagatedBuildInputs = [ jupyterhub ];
+  requiredPythonModules = [ jupyterhub ];
 
   # No tests available in the package
   doCheck = false;

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "b541d9d7f234074a74214505aff1846eb21e5dd6d3915139e817d4675d34f4e3";
   };
 
-  propagatedBuildInputs = [ requests_oauthlib nose sh ];
+  requiredPythonModules = [ requests_oauthlib nose sh ];
 
   doCheck = false;
 

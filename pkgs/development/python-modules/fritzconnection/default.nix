@@ -21,7 +21,7 @@ buildPythonPackage rec {
       --replace 'find_packages()' 'find_packages(exclude=["*.tests"])'
   '';
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   checkInputs = [ pytest ];
 

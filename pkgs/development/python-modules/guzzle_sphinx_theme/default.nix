@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  propagatedBuildInputs = [ sphinx ];
+  requiredPythonModules = [ sphinx ];
 
   meta = with stdenv.lib; {
     description = "Sphinx theme used by Guzzle: http://guzzlephp.org";

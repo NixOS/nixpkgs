@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "9fd5bd990132da77e73dec6e9613408602a4612e1d73caf2e2b813d2b61508e5";
   };
 
-  propagatedBuildInputs = [ dill ];
+  requiredPythonModules = [ dill ];
 
   # Python-version dependent tests
   doCheck = false;

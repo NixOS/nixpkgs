@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   disabled = (pythonOlder "2.7");
 
-  propagatedBuildInputs = [ requests future ]
+  requiredPythonModules = [ requests future ]
                              ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
 
   postPatch = (stdenv.lib.optionalString (!pythonOlder "3.4") ''

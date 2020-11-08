@@ -12,7 +12,7 @@ buildPythonPackage rec {
   disabled = !isPy27; # only Python 2.7
   doCheck = false; # Needs network access
 
-  propagatedBuildInputs = [ geographiclib ];
+  requiredPythonModules = [ geographiclib ];
 
   src = fetchPypi {
     inherit pname version;

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # 4 failing tests, 2to3
   doCheck = false;
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   checkInputs = [ nose ];
 
   checkPhase = ''

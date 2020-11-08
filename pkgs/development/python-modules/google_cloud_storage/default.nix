@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "da12b7bd79bbe978a7945a44b600604fbc10ece2935d31f243e751f99135e34f";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     google_api_core
     google_cloud_core
     google_resumable_media

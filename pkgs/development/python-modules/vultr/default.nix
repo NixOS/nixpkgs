@@ -15,7 +15,7 @@ buildPythonPackage rec {
       sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
   };
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # Tests disabled. They fail because they try to access the network
   doCheck = false;

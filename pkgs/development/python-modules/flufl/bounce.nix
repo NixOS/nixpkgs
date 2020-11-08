@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = "3.0.1";
 
   buildInputs = [ nose2 ];
-  propagatedBuildInputs = [ atpublic zope_interface ];
+  requiredPythonModules = [ atpublic zope_interface ];
 
   src = fetchPypi {
     inherit pname version;

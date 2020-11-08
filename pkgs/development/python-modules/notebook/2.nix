@@ -37,7 +37,7 @@ buildPythonPackage rec {
   checkInputs = [ nose glibcLocales ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
     prometheus_client

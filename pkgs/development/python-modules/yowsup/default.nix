@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   patches = [ ./dependency-fixes.patch ];
 
-  propagatedBuildInputs = [ six python-axolotl consonance appdirs ];
+  requiredPythonModules = [ six python-axolotl consonance appdirs ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/tgalal/yowsup";

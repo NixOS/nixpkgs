@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     pytest
    ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     colored
     eliot
     iso8601

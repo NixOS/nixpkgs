@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pyramid_mako nose django jinja2 tornado pyramid Mako ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
   postPatch = ''
     sed -i 's/1.4.99/1.99/' setup.py
   '';

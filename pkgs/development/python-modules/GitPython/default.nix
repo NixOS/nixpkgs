@@ -18,7 +18,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ nose ] ++ lib.optional isPy27 mock;
-  propagatedBuildInputs = [ gitdb ddt ];
+  requiredPythonModules = [ gitdb ddt ];
 
   # Tests require a git repo
   doCheck = false;

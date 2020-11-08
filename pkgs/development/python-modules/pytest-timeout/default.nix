@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0xnsigs0kmpq1za0d4i522sp3f71x5bgpdh3ski0rs74yqy13cr0";
   };
 
-  propagatedBuildInputs = [ pytest ];
+  requiredPythonModules = [ pytest ];
 
   checkInputs = [ pytestCheckHook pexpect pytestcov ];
 

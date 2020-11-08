@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "a212a244b0a6022a61657746c8120ac9b6db83432371b345154075eb8faceb61";
   };
 
-  propagatedBuildInputs = [ pytz requests ];
+  requiredPythonModules = [ pytz requests ];
   checkInputs = [ mock pytest pytest-mock requests-kerberos toml ];
   # TODO requests-kerberos is broken on darwin, weeding out the broken tests without
   # access to macOS is not an adventure I am ready to embark on - @rski

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0g9l14my3v8zlgq1yd8wh5gpara0qcapsfmvg7lq2lapglzhjsy5";
   };
 
-  propagatedBuildInputs = [ xlib ];
+  requiredPythonModules = [ xlib ];
 
   # No tests included
   doCheck = false;

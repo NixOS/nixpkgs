@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "0g3cyi5lzakhs5p3fpwywbl8jpapnr8890zw9w45dqg8k0svc1fi";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pycryptodome
     uvloop
   ];

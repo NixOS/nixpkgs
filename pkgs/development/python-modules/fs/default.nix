@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
   checkInputs = [ pyftpdlib mock psutil pytestCheckHook ];
-  propagatedBuildInputs = [ six appdirs pytz ]
+  requiredPythonModules = [ six appdirs pytz ]
     ++ lib.optionals (!isPy3k) [ backports_os ]
     ++ lib.optionals (!pythonAtLeast "3.6") [ typing ]
     ++ lib.optionals (!pythonAtLeast "3.5") [ scandir ]

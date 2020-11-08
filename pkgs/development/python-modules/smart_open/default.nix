@@ -33,7 +33,7 @@ buildPythonPackage rec {
   checkInputs = [ mock moto responses ];
 
   # upstream code requires both boto and boto3
-  propagatedBuildInputs = [ boto boto3 bz2file requests ];
+  requiredPythonModules = [ boto boto3 bz2file requests ];
   meta = {
     license = lib.licenses.mit;
     description = "smart_open is a Python 2 & Python 3 library for efficient streaming of very large file";

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0rsa75x86gdjalvy4riq7613szb616hff80crx006chyppzdkxmq";
   };
 
-  propagatedBuildInputs = [ elementpath ];
+  requiredPythonModules = [ elementpath ];
 
   checkInputs = [ lxml pytest ];
 

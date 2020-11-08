@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "09iskh33hl5aaif763j1fmbz7yvf0yqsxycfd41scj7vbwdsbxl0";
   };
 
-  propagatedBuildInputs = with python3Packages; [ ansiwrap cryptography ];
+  requiredPythonModules = with python3Packages; [ ansiwrap cryptography ];
 
   meta = with lib; {
     homepage = "https://tildegit.org/solderpunk/AV-98";

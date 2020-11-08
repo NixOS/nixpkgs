@@ -29,7 +29,7 @@ in buildPythonApplication rec {
     sha256 = "1jz1fbjj6byndvir7qxzhd2ryirrd5h2kwndxpp53xdc05z1i8g7";
   };
 
-  pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ];
+  requiredPythonModules = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ];
 
   # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
   # install flag.

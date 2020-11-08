@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "eaee690ab8403dd1a9cb4db10afee41dd3e6c7ed63bdace02a0121f9feadb0c9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pikepdf
     pillow
   ];

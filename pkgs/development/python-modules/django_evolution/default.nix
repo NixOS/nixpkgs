@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "a0bc983657de1b0bc5c8d29ddcbf7b6fb113685bf306ccc266cf22b8a77bd862";
   };
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   meta = with stdenv.lib; {
     description = "A database schema evolution tool for the Django web framework";

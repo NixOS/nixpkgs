@@ -15,7 +15,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
 
   buildInputs = [ hdf5 bzip2 lzo c-blosc ];
-  propagatedBuildInputs = [ numpy numexpr six mock ];
+  requiredPythonModules = [ numpy numexpr six mock ];
 
   # When doing `make distclean`, ignore docs
   postPatch = ''

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ git makeWrapper ];
-  propagatedBuildInputs = [ hyperkitty postorius whoosh ];
+  requiredPythonModules = [ hyperkitty postorius whoosh ];
 
   # Tries to check runtime configuration.
   doCheck = false;

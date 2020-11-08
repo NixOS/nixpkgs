@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sha256 = "0l3zc8j2sh7h1z4qpy8kfvclv3kzndri55p10i42q6xahs9phav1";
   }));
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     werkzeug
     protobuf

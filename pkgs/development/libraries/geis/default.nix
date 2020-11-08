@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  pythonPath = with python3Packages;
+  requiredPythonModules = with python3Packages;
     [ pygobject3  ];
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook python3Packages.wrapPython];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
   '';
 

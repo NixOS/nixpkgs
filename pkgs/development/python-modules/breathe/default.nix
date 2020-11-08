@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "c28e251ad8a42e4d3dd6c0861a66128b400131614b36f19df505ea34c934f801";
   };
 
-  propagatedBuildInputs = [ docutils six sphinx ];
+  requiredPythonModules = [ docutils six sphinx ];
 
   doCheck = !isPy3k;
 

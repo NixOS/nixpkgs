@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ sphinx ];
-  propagatedBuildInputs = [ tracing ttystatus cliapp ];
+  requiredPythonModules = [ tracing ttystatus cliapp ];
 
   # error: invalid command 'test'
   doCheck = false;

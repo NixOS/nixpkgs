@@ -16,7 +16,7 @@ buildPythonPackage rec {
     # requires django-sekizai, which we don't have packaged yet
     doCheck = false;
 
-    propagatedBuildInputs = [ rcssmin rjsmin django_appconf ];
+    requiredPythonModules = [ rcssmin rjsmin django_appconf ];
 
     meta = with stdenv.lib; {
       description = "Compresses linked and inline JavaScript or CSS into single cached files";

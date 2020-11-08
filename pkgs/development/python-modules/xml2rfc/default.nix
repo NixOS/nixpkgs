@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "7f621ed0e5a30c2b67c0e50778627b7a35e1ccfea9db19ea89b4c72a8faf42c0";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     intervaltree
     jinja2
     pyflakes

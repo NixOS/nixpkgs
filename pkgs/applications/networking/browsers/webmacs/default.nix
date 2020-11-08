@@ -19,7 +19,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "1hzb9341hybgrqcy1w20hshm6xaiby4wbjpjkigf4zq389407368";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pyqtwebengine
     setuptools
     dateparser

@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ python3 ];
+  requiredPythonModules = [ python3 ];
 
   meta = with stdenv.lib; {
     description = "A text scroller for use with panels and shells";

@@ -8,6 +8,7 @@
 , ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
 , toPythonModule
+, computeRequiredPythonModules
 , namePrefix
 , update-python-libraries
 , setuptools
@@ -20,6 +21,7 @@
 , pythonRecompileBytecodeHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, pythonWriteRequiredPythonModulesHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -44,8 +46,8 @@
 # C can import package A propagated by B
 , propagatedBuildInputs ? []
 
-# DEPRECATED: use propagatedBuildInputs
-, pythonPath ? []
+# Required Python modules
+, requiredPythonModules ? []
 
 # Enabled to detect some (native)BuildInputs mistakes
 , strictDeps ? true
@@ -103,11 +105,41 @@ else
 let
   inherit (python) stdenv;
 
+  name_ = namePrefix + name;
+
+  # We've converted from `propagatedBuildInputs` to `requiredPythonModules`.
+  # This will cause packages that did not convert to fail at run-time.
+  # Here we warn in case Python modules are being propagated.
+  # Propagating Python modules is in principle fine, it is however unlikely one
+  # would actually want to do that.
+  # This is to be released in nixos-21.03 and should thus be removed in nixos-21.09.
+  partitionedPropagatedInputs = lib.lists.partition (x: lib.hasAttr "pythonModule" x) (lib.filter (x: x != null) propagatedBuildInputs);
+  propagatedPythonInputs = if lib.length partitionedPropagatedInputs.right > 0
+    then
+      lib.warn ''
+        ${name}: Using `propagatedBuildInputs` for Python modules has been deprecated, please use `requiredPythonModules` instead.
+        
+        Your code may need to look like:
+
+          requiredPythonModules = [ ${lib.concatMapStringsSep " " (drv: drv.pname or drv.name) partitionedPropagatedInputs.right} ];
+
+          propagatedBuildInputs = [ ${lib.concatMapStringsSep " " (drv: drv.pname or drv.name) partitionedPropagatedInputs.wrong} ];
+
+        Note the exact attribute names may be incorrect. Not resolving this issue may result in incorrect wrappers.
+
+        For more information, see https://github.com/NixOS/nixpkgs/pull/102613.
+      '' partitionedPropagatedInputs.right
+    else
+      [ ];
+  propagatedDerivationInputs = partitionedPropagatedInputs.wrong;
+
+  requiredPythonModules_ = computeRequiredPythonModules (requiredPythonModules ++ propagatedPythonInputs);
+
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format" "requiredPythonModules"
   ]) // {
 
-    name = namePrefix + name;
+    name = name_;   
 
     nativeBuildInputs = [
       python
@@ -115,6 +147,7 @@ let
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRecompileBytecodeHook  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
       pythonRemoveTestsDirHook
+      pythonWriteRequiredPythonModulesHook
     ] ++ lib.optionals catchConflicts [
       setuptools pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
@@ -141,9 +174,21 @@ let
       pythonNamespacesHook
     ] ++ nativeBuildInputs;
 
-    buildInputs = buildInputs ++ pythonPath;
+    buildInputs = buildInputs ++ requiredPythonModules_;
 
-    propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
+    # TODO: stop propagating Python and its packages?
+    # Python applications should not propagate Python with its dependencies.
+    # In principle, buildPythonApplication could stop using `propagatedBuildInputs`,
+    # however, it won't help in case `buildPythonPackage` is used with `toPythonApplication`.
+    # Note also, propagation is needed for e.g. `checkInputs` to find its dependencies.
+    #
+    # Probably the solution is to keep using propagation in case packages,
+    # and convert `buildPythonApplication` to first build the package, and then an environment
+    # using `python.buildEnv` https://github.com/NixOS/nixpkgs/pull/16672.
+    propagatedBuildInputs = propagatedDerivationInputs;
+
+    # requiredPythonModules is also set
+    requiredPythonModules = requiredPythonModules_;
 
     inherit strictDeps;
 

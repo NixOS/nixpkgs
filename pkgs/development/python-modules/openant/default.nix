@@ -26,7 +26,7 @@ buildPythonPackage {
     install -m644 resources/ant-usb-sticks.rules "$out/etc/udev/rules.d/99-ant-usb-sticks.rules"
   '';
 
-  propagatedBuildInputs = [ pyusb ];
+  requiredPythonModules = [ pyusb ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Tigge/openant";

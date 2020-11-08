@@ -22,7 +22,7 @@ buildPythonPackage {
     sha256 = "076c7q7pr7akfvq5y8lxr1ab81wwps07gw00igdkcxnc5k9dzxwc";
   };
 
-  propagatedBuildInputs = [ gflags ];
+  requiredPythonModules = [ gflags ];
 
   meta = with stdenv.lib; {
     description = "Checks JavaScript files against Google's style guide.";

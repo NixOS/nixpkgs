@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "08yca0a0prrnrc7ir7ajd56yxvxpcs4m1k8f5kf273f5whgr7wzw";
   };
 
-  propagatedBuildInputs = (with python3Packages; [
+  requiredPythonModules = (with python3Packages; [
       requests
       docopt
       setuptools

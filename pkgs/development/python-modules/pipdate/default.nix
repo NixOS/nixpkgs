@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ wheel ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     appdirs
     requests
   ] ++ lib.optionals (pythonOlder "3.8") [

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0np4wpxyha7013vkkrdy54dvnil67gzi871lg60z8lap0l5h67wn";
   };
 
-  propagatedBuildInputs = [ logilab_common ];
+  requiredPythonModules = [ logilab_common ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.logilab.org/project/logilab-astng";

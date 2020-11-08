@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_cloud_logging ];
+  requiredPythonModules = [ google_cloud_logging ];
 
   checkPhase = ''
     rm -r google

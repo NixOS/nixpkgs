@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "02pwafd5kyjpc310ys0pgnd0adff1laz18naxxwsfrllqafqnrxb";
   };
 
-  propagatedBuildInputs = [ requests hidapi ];
+  requiredPythonModules = [ requests hidapi ];
 
   # Tests fail: "ValueError: underlying buffer has been detached"
   doCheck = false;

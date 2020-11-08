@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkPhase = "py.test";
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     sphinx
   ];
 

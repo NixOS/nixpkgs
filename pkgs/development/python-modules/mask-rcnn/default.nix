@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     h5py
     imgaug
     ipython

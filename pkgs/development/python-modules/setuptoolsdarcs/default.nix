@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   # In order to break the dependency on darcs -> ghc, we don't add
   # darcs as a propagated build input.
-  propagatedBuildInputs = [ darcsver ];
+  requiredPythonModules = [ darcsver ];
 
   # ugly hack to specify version that should otherwise come from darcs
   patchPhase = ''

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sed -i 's@werkzeug.contrib.fixers@werkzeug.middleware.proxy_fix@g' flask_reverse_proxy_fix/middleware/__init__.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     flask
     werkzeug
   ];

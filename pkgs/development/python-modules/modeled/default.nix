@@ -22,7 +22,7 @@ buildPythonPackage rec {
     zetup
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     six
     moretools
     pathpy

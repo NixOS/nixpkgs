@@ -19,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
     sed -ie '/argparse/d' setup.py
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     cached-property
     ConfigArgParse
     pyparsing

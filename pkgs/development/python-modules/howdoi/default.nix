@@ -22,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'cachelib==0.1' 'cachelib'
   '';
 
-  propagatedBuildInputs = [ six pygments pyquery cachelib appdirs keep ];
+  requiredPythonModules = [ six pygments pyquery cachelib appdirs keep ];
 
   # author hasn't included page_cache directory (which allows tests to run without
   # external requests) in pypi tarball. github repo doesn't have release revisions

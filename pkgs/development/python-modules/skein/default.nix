@@ -21,7 +21,7 @@ buildPythonPackage rec {
   inherit pname version src;
   disabled = isPy27;
 
-  propagatedBuildInputs = with pythonPackages; [ cryptography grpcio grpcio-tools jupyter pytest pyyaml requests jre ];
+  requiredPythonModules = with pythonPackages; [ cryptography grpcio grpcio-tools jupyter pytest pyyaml requests jre ];
 
   preBuild = ''
     # Ensure skein.jar exists skips the maven build in setup.py

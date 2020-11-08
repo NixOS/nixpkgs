@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "15yx8ib5yx1xx6kq8wnfdmv9zm43k7y33c6zpq5rba6a30v4lcnd";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     marshmallow
   ];
 

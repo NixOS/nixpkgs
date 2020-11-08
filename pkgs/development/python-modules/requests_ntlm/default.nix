@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "9189c92e8c61ae91402a64b972c4802b2457ce6a799d658256ebf084d5c7eb71";
   };
 
-  propagatedBuildInputs = [ ntlm-auth requests ];
+  requiredPythonModules = [ ntlm-auth requests ];
 
   # Tests require networking
   doCheck = false;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ipython
   ];
 

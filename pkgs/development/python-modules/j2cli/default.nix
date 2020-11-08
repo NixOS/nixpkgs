@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   doCheck = false; # tests aren't installed thus aren't found, so skip
-  propagatedBuildInputs = [ jinja2 pyyaml setuptools ];
+  requiredPythonModules = [ jinja2 pyyaml setuptools ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/kolypto/j2cli";

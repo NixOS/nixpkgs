@@ -23,7 +23,7 @@ buildPythonPackage rec {
     networkx
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     cvxopt
   ];

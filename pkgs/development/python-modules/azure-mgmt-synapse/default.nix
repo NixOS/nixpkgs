@@ -15,7 +15,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     azure-common
     msrest
     msrestazure

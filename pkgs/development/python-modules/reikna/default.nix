@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [ sphinx pytestcov pytest ];
 
-  propagatedBuildInputs = [ Mako numpy funcsigs ]
+  requiredPythonModules = [ Mako numpy funcsigs ]
     ++ stdenv.lib.optional withCuda pycuda
     ++ stdenv.lib.optional withOpenCL pyopencl;
 

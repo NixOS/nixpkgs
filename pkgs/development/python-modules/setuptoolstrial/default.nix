@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest virtualenv pytestrunner pytest-virtualenv ];
-  propagatedBuildInputs = [ twisted pathlib2 ];
+  requiredPythonModules = [ twisted pathlib2 ];
 
   postPatch = ''
     sed -i '12,$d' tests/test_main.py

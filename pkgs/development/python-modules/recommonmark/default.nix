@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ CommonMark docutils sphinx ];
+  requiredPythonModules = [ CommonMark docutils sphinx ];
 
   dontUseSetuptoolsCheck = true;
 

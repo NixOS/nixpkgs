@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0784s32pap9rbki3f0f7swaf6946sdv4xzidns13jmw9ilifk5z4";
   };
 
-  propagatedBuildInputs = [ mopidy ];
+  requiredPythonModules = [ mopidy ];
 
   doCheck = false;
 

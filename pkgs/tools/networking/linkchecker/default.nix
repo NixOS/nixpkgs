@@ -15,7 +15,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     ConfigArgParse
     argcomplete
     beautifulsoup4

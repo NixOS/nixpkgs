@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ omegaconf ] ++ lib.optional isPy27 pathlib2;
+  requiredPythonModules = [ omegaconf ] ++ lib.optional isPy27 pathlib2;
 
   checkPhase = ''
     runHook preCheck

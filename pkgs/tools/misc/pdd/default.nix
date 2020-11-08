@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   format = "other";
 
-  propagatedBuildInputs = [ dateutil ];
+  requiredPythonModules = [ dateutil ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

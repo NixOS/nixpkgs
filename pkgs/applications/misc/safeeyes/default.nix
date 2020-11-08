@@ -24,7 +24,7 @@ in buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     Babel
     psutil
     xlib

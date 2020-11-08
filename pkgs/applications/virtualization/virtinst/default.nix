@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "175laiy49dni8hzi0cn14bbsdsigvgr9h6d9z2bcvbpa29spldvf";
   };
 
-  pythonPath = with python2Packages;
+  requiredPythonModules = with python2Packages;
     [ setuptools eventlet greenlet gflags netaddr carrot routes
       PasteDeploy m2crypto ipy twisted
       distutils_extra simplejson cheetah lockfile httplib2
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       python2Packages.wrapPython
       python2Packages.mox
       intltool
-    ] ++ pythonPath;
+    ] ++ requiredPythonModules;
 
   buildPhase = "python setup.py build";
 

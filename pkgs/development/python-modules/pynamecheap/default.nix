@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "PyNamecheap";
   version = "0.0.3";
 
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   # Tests require access to api.sandbox.namecheap.com
   doCheck = false;

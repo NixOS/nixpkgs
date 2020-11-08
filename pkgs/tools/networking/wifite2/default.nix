@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     aircrack-ng
     wireshark-cli
     reaverwps-t6x
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
   '';
 
-  checkInputs = propagatedBuildInputs;
+  checkInputs = requiredPythonModules;
   checkPhase = "python -m unittest discover tests -v";
 
   meta = with stdenv.lib; {

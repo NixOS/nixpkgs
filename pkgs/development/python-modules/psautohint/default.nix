@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ fonttools lxml fs ];
+  requiredPythonModules = [ fonttools lxml fs ];
 
   checkInputs = [ pytest pytestcov pytest_xdist pytest-randomly ];
   checkPhase = "pytest tests";

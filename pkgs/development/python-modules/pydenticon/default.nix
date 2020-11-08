@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "2ef363cdd6f4f0193ce62257486027e36884570f6140bbde51de72df321b77f1";
   };
 
-  propagatedBuildInputs = [ pillow mock ];
+  requiredPythonModules = [ pillow mock ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/azaghal/pydenticon";

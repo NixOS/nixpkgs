@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "030kn709515452n6gy2i1d9fg6fyrkmdz228lfpmbslybsld9xzg";
   };
 
-  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
+  requiredPythonModules = [ typed-ast psutil mypy-extensions typing-extensions ];
 
   # Tests not included in pip package.
   doCheck = false;

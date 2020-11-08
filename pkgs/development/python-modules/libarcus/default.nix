@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.4.0";
 
-  propagatedBuildInputs = [ sip ];
+  requiredPythonModules = [ sip ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 

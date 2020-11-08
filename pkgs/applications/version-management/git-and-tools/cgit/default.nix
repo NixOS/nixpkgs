@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl zlib asciidoc libxml2 libxslt docbook_xsl luajit
   ];
-  pythonPath = [ pygments markdown ];
+  requiredPythonModules = [ pygments markdown ];
 
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/man/man5"
     cp cgitrc.5 "$out/share/man/man5"
 
-    wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $requiredPythonModules"
 
     for script in $out/lib/cgit/filters/*.sh $out/lib/cgit/filters/html-converters/txt2html; do
       wrapProgram $script --prefix PATH : '${stdenv.lib.makeBinPath [ coreutils gnused ]}'

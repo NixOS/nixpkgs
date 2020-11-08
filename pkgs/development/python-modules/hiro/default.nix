@@ -8,7 +8,7 @@ buildPythonPackage rec {
     sha256 = "d10e3b7f27b36673b4fa1283cd38d610326ba1ff1291260d0275152f15ae4bc7";
   };
 
-  propagatedBuildInputs = [ six mock ];
+  requiredPythonModules = [ six mock ];
 
   meta = with stdenv.lib; {
     description = "Time manipulation utilities for Python";

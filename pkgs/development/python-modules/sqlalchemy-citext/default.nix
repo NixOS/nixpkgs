@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "69ba00f5505f92a1455a94eefc6d3fcf72dda3691ab5398a0b4d0d8d85bd6aab";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     sqlalchemy
   ];
 

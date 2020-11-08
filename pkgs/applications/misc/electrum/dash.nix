@@ -10,7 +10,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "9b7ac205f63fd4bfb15d77a34a4451ef82caecf096f31048a7603bd276dfc33e";
   };
 
-  propagatedBuildInputs = with python2Packages; [
+  requiredPythonModules = with python2Packages; [
     dnspython
     ecdsa
     pbkdf2

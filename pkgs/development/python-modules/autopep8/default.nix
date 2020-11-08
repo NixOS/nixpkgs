@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "d21d3901cb0da6ebd1e83fc9b0dfbde8b46afc2ede4fe32fbda0c7c6118ca094";
   };
 
-  propagatedBuildInputs = [ pycodestyle toml ];
+  requiredPythonModules = [ pycodestyle toml ];
 
   # One test fails:
   # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "da59de0d1c0fa66f62054dd9a0a295a182563aa1abbb3bf9224a3678fcfe8fa4";
   };
 
-  propagatedBuildInputs = [ scikitlearn ];
+  requiredPythonModules = [ scikitlearn ];
   checkInputs = [ nose pytest pandas ];
   checkPhase = ''
     export HOME=$TMPDIR

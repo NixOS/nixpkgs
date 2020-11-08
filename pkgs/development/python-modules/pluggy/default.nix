@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ importlib-metadata ];
+  requiredPythonModules = [ importlib-metadata ];
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";

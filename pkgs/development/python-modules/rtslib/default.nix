@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "13kycf9xkyxm1ik8yh3qpd96vird8y65daigyiyb4jvx0lmrd0kv";
   };
 
-  propagatedBuildInputs = [ six pyudev pygobject3 ];
+  requiredPythonModules = [ six pyudev pygobject3 ];
 
   meta = with stdenv.lib; {
     description = "A Python object API for managing the Linux LIO kernel target";

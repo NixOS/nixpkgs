@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ multipledispatch numpy ];
+  requiredPythonModules = [ multipledispatch numpy ];
 
   meta = with stdenv.lib; {
     description = "3D mathematical functions using NumPy";

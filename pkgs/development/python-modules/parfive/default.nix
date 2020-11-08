@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools_scm
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     tqdm
     aiohttp
     aioftp

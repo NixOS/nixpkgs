@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pyfxa
     beautifulsoup4
     cryptography
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapGApps = true;
   preFixup = ''
-    buildPythonPath "$out $propagatedBuildInputs"
+    buildPythonPath "$out $requiredPythonModules"
     patchPythonScript "$out/libexec/eolie-sp"
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

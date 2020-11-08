@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1hyjdv6xnswgqvip8y164piwfach9hjkbp7vc2qzhd7amjpim89h";
   };
 
-  propagatedBuildInputs = [ portalocker ];
+  requiredPythonModules = [ portalocker ];
 
   meta = with lib; {
     description = "This project extends the Application Insights API surface to support Python";

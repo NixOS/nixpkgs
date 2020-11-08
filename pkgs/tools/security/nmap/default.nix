@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}gcc"
   ];
 
-  pythonPath = with python2.pkgs; optionals graphicalSupport  [
+  requiredPythonModules = with python2.pkgs; optionals graphicalSupport  [
     pygtk pysqlite pygobject2 pycairo
   ];
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ]);
 
   postInstall = optionalString graphicalSupport ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     patchPythonScript $out/bin/ndiff
     patchPythonScript $out/bin/zenmap
   '';

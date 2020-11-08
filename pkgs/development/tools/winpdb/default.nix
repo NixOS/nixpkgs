@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0vkpd24r40j928vc04c721innv0168sbllg97v4zw10adm24d8fs";
   };
 
-  propagatedBuildInputs = [ pythonPackages.wxPython ];
+  requiredPythonModules = [ pythonPackages.wxPython ];
 
   desktopItem = makeDesktopItem {
     name = "winpdb";

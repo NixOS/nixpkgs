@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     pythonPackages.wrapPython
   ];
 
-  propagatedBuildInputs = with pythonPackages; [ pyenchant regex ];
+  requiredPythonModules = with pythonPackages; [ pyenchant regex ];
 
   postFixup = ''
     buildPythonPath "$out"

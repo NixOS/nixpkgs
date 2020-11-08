@@ -58,7 +58,7 @@ let
   python = { buildPythonPackage, cython }: buildPythonPackage {
     inherit pname version src patches;
 
-    propagatedBuildInputs = [ core cython ];
+    requiredPythonModules = [ core cython ];
 
     # This tells setup.py to use cython, which should produce faster bindings
     MONOSAT_CYTHON = true;

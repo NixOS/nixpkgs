@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optional isPy27 mock;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     paramiko
     requests
     six

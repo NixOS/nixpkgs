@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0jpvrkan6w8bpq017m8si7r9hb1pyw3ip4vr1fl2pmi8ngzc1jdy";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  requiredPythonModules = [ attrs ];
 
   disabled = pythonOlder "3.6";
 

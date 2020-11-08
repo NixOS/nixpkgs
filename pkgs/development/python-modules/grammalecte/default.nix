@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "11byjs3ggdhia5f4vyfqfvbbczsfqimll98h98g7hlsrm7vrifb0";
   };
 
-  propagatedBuildInputs = [ bottle ];
+  requiredPythonModules = [ bottle ];
 
   preBuild = "cd ..";
 

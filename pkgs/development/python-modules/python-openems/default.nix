@@ -28,7 +28,7 @@ buildPythonPackage rec {
     boost
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     openems
     csxcad
     python-csxcad

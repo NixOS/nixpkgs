@@ -37,7 +37,7 @@ buildPythonPackage rec {
   # also, tests use conda so can't run on NixOS without buildFHSUserEnv
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     alembic
     click
     cloudpickle

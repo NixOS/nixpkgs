@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   strictDeps = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     moviepy
     pygobject3
     pyxdg

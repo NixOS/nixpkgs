@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1c6chm3q3hyn8fmjv23qgc79ai1kr3xvrrkp4clbqkssn10k7mcw";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     django
     coreschema
     itypes

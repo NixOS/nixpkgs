@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1lf5f4x80f7d983bmkx12sxcizzii21kghs8kf63a1mj022a5x5j";
   };
 
-  propagatedBuildInputs = [ pygments wxPython ];
+  requiredPythonModules = [ pygments wxPython ];
 
   # ride_postinstall.py checks that needed deps are installed and creates a
   # desktop shortcut. We don't really need it and it clutters up bin/ so

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "f042cf60ddd69eeb17c9f1586bae25da5b7282ca53d9afe0be30b943b4194d52";
   };
 
-  propagatedBuildInputs = [ future dateutil six ];
+  requiredPythonModules = [ future dateutil six ];
 
   checkInputs = [ pytest mock parameterized ];
 

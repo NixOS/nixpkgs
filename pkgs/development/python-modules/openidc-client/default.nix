@@ -8,7 +8,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "680e969cae18c30adbddd6a087ed09f6a296b4937b4c8bc69be813bdbbfa9847";
   };
-  propagatedBuildInputs = [ requests ];
+  requiredPythonModules = [ requests ];
 
   doCheck = false;
 

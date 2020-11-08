@@ -27,7 +27,7 @@ buildPythonPackage rec {
       --replace "oauthlib==3.1.0" "oauthlib"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     oauthlib
     requests
     requests_oauthlib

@@ -45,7 +45,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
   '';
 
-  propagatedBuildInputs = [ cairosvg tinycss cssselect ]
+  requiredPythonModules = [ cairosvg tinycss cssselect ]
     ++ stdenv.lib.optionals (!isPyPy) [ lxml ];
 
   meta = with stdenv.lib; {

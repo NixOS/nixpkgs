@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py --replace "Radicale==" "Radicale>="
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     etesync
     flask
     flask_wtf

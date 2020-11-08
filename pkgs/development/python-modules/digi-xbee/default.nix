@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "2ed798faee0853bf7ae9ca5aa4bdcbab496e3c2d56c9f0719a8e3e0d13270891";
   };
 
-  propagatedBuildInputs = [ pyserial srp ];
+  requiredPythonModules = [ pyserial srp ];
 
   # Upstream doesn't contain unit tests, only functional tests which require specific hardware
   doCheck = false;

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
 
-  pythonPath = python_deps;
+  requiredPythonModules = python_deps;
 
   propagatedBuildInputs = python_deps;
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ coverage nose ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkPhase = ''
     ${python.interpreter} run_tests.py

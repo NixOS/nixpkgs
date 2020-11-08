@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkPhase = ''
     # clashes with our pythhon wrapper (which is in argv0)

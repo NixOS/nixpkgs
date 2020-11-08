@@ -30,7 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ pytz ];
+  requiredPythonModules = [ pytz ];
 
   checkInputs = [ pytest freezegun ];
 

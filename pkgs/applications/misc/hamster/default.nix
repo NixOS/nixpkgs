@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     atk
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pygobject3
     pycairo
     pyxdg
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $pythonPath"
+    wrapPythonProgramsIn $out/libexec "$out $requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

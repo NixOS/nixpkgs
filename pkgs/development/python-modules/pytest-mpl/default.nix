@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     matplotlib
     nose
     pillow

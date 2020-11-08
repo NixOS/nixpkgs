@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "7b071089faf0789059ac24052e311e2b096a002c173d42b96896db09c6e2ba5d";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     azure-common
     azure-core
     azure-nspkg

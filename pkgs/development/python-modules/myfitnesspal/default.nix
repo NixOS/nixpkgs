@@ -3,7 +3,7 @@
 , pytestCheckHook, mock, nose }:
 
 # TODO: Define this package in "all-packages.nix" using "toPythonApplication".
-# This currently errors out, complaining about not being able to find "etree" from "lxml" even though "lxml" is defined in "propagatedBuildInputs".
+# This currently errors out, complaining about not being able to find "etree" from "lxml" even though "lxml" is defined in "requiredPythonModules".
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sed -i 's/rich>=.*/rich/' requirements.txt
   '';
 
-  propagatedBuildInputs = [ blessed keyring keyrings-alt lxml measurement python-dateutil requests six rich ];
+  requiredPythonModules = [ blessed keyring keyrings-alt lxml measurement python-dateutil requests six rich ];
 
   # Integration tests require an account to be set
   disabledTests = [ "test_integration" ];

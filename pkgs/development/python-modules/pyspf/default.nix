@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0bmimlmwrq9glnjc4i6pwch30n3y5wyqmkjfyayxqxkfrixqwydi";
   };
 
-  propagatedBuildInputs = [ pydns ];
+  requiredPythonModules = [ pydns ];
 
   # requires /etc/resolv.conf to exist
   doCheck = false;

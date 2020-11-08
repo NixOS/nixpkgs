@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "14acc192ef20459d5e11b4e800dd3a4542f6bd2ab191bf5717c696bf30936c62";
   };
 
-  propagatedBuildInputs = [ pycrypto ];
+  requiredPythonModules = [ pycrypto ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/atl/py-http-signature";

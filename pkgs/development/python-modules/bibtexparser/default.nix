@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1yj3hqnmkjh0sjjhmlm4097mmz98kna8rn0dd9g8zaw9g1a35h8c";
   };
 
-  propagatedBuildInputs = [ future pyparsing ];
+  requiredPythonModules = [ future pyparsing ];
 
   checkInputs = [ nose unittest2 glibcLocales ];
 

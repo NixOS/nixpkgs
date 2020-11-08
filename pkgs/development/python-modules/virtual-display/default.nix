@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "PyVirtualDisplay";
   version = "1.3.2";
 
-  propagatedBuildInputs = [ EasyProcess ];
+  requiredPythonModules = [ EasyProcess ];
 
   src = fetchPypi {
     inherit pname version;

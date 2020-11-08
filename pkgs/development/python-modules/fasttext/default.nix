@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fasttext" ];
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   preBuild = ''
     HOME=$TMPDIR

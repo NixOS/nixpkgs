@@ -30,7 +30,7 @@ buildPythonPackage rec {
       --deselect tests/test_black.py::BlackTestCase::test_failed_formatting_does_not_get_cached
   '';
 
-  propagatedBuildInputs = [ attrs appdirs click toml aiohttp aiohttp-cors pathspec regex typed-ast ];
+  requiredPythonModules = [ attrs appdirs click toml aiohttp aiohttp-cors pathspec regex typed-ast ];
 
   meta = with stdenv.lib; {
     description = "The uncompromising Python code formatter";

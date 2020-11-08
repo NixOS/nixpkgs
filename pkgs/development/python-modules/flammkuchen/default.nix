@@ -20,7 +20,7 @@ buildPythonPackage rec {
     nose
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
     tables

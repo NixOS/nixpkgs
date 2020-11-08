@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0gmb165vkwv5v7dxsxa2i3zhafns0fh938m2zdcrv4d8z5l099yn";
   };
 
-  propagatedBuildInputs = [ flask jinja2 speaklater Babel pytz ];
+  requiredPythonModules = [ flask jinja2 speaklater Babel pytz ];
 
   meta = with stdenv.lib; {
     description = "Adds i18n/l10n support to Flask applications";

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "3559b9c7ab13450c66ea833eb82c28233bee24f1bd8ca19aa7d27f8c23d5bc53";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     azure-common
     azure-storage-common
   ] ++ lib.optional (!isPy3k) futures;

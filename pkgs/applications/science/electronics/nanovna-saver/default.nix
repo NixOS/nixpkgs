@@ -17,7 +17,7 @@ in mkDerivationWith python3Packages.buildPythonApplication {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     cython
     scipy_1_4
     pyqt5

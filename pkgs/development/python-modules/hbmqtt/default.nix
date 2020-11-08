@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1n9c8yj11npiq9qxivwmfhib1qkjpcyw42a7q0w641bdrz3x6r37";
   };
 
-  propagatedBuildInputs = [ transitions websockets passlib docopt pyyaml ];
+  requiredPythonModules = [ transitions websockets passlib docopt pyyaml ];
 
   postPatch = ''
     # test tries to bind same port multiple times and fails

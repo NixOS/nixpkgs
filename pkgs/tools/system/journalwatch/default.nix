@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     systemd
   ];
 

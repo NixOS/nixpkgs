@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1v7hjm7qxpgk92i477fjhpcnjgp072xgr8jrgmbrxfbsv4cvl486";
   };
 
-  propagatedBuildInputs = [ coloredlogs humanfriendly verboselogs ];
+  requiredPythonModules = [ coloredlogs humanfriendly verboselogs ];
   checkInputs = [ pytest pytestcov ];
 
   meta = with lib; {

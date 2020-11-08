@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [ python3Packages.nose dbus.daemon xvfb_run xdotool ];
   buildInputs = [ gnome3.adwaita-icon-theme librsvg ];
-  propagatedBuildInputs = with python3Packages; [ pillow pygobject3 gtk3 ];
+  requiredPythonModules = with python3Packages; [ pillow pygobject3 gtk3 ];
 
   makeWrapperArgs = [
     "--prefix GI_TYPELIB_PATH : \"$GI_TYPELIB_PATH\""

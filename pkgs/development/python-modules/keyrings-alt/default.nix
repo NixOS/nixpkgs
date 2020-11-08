@@ -18,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six ];
+  requiredPythonModules = [ six ];
 
   checkInputs = [ pytest keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
 

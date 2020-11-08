@@ -6,7 +6,7 @@ buildPythonPackage {
   version = "2.0a1";
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     z3 ply python-igraph oset ordered-set dictionaries
   ];
 

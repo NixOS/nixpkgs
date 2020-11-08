@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "fc81c2116f8573e559dfbb8d73e03d9f73c22d0770559f406516984302e07e70";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
   buildInputs = [ cython ];
 
   meta = with stdenv.lib; {

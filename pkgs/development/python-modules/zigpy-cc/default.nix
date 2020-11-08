@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyserial
     pyserial-asyncio
     zigpy

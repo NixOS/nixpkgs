@@ -45,7 +45,7 @@ buildPythonApplication rec {
     poetry
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     beautifulsoup4
     boto3
     cryptography

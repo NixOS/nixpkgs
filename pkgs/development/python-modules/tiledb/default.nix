@@ -35,7 +35,7 @@ buildPythonPackage rec {
     tiledb
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     wheel # No idea why but it is listed
   ];

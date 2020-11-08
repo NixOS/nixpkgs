@@ -11,10 +11,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0p56pb3wxdzqgs4fsh4hn06xs0mgzgznqqr0bn2vkkkibnkr1asp";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     attrs ConfigArgParse ffmpeg_3 future lxml requests
   ];
-  pythonPath = [ rtmpdump php wget ];
+  requiredPythonModules = [ rtmpdump php wget ];
 
   doCheck = false; # tests require network access
   checkInputs = with python3Packages; [ ffmpeg_3 pytest pytestrunner ];

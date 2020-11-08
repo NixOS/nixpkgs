@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "13hbm0ki6s88r6p65ibvrbxnskinzdz0m9gsshb8s571p91ymfjn";
   };
 
-  propagatedBuildInputs = [ dulwich ];
+  requiredPythonModules = [ dulwich ];
 
   # Needs patch to work with Mercurial 4.8
   # https://bitbucket.org/durin42/hg-git/issues/264/unexpected-keyword-argument-createopts-hg

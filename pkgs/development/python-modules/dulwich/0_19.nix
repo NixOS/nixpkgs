@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  requiredPythonModules = [ urllib3 certifi ];
 
   # Only test dependencies
   checkInputs = [ git glibcLocales gevent geventhttpclient mock fastimport ];

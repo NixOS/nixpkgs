@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
     [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo mutagen gst-python feedparser ]
+  requiredPythonModules = with python3.pkgs; [ pygobject3 pycairo mutagen gst-python feedparser ]
       ++ optionals withDbusPython [ dbus-python ]
       ++ optionals withPyInotify [ pyinotify ]
       ++ optionals withMusicBrainzNgs [ musicbrainzngs ]

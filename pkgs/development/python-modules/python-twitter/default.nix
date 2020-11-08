@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ future requests requests_oauthlib ];
+  requiredPythonModules = [ future requests requests_oauthlib ];
   checkInputs = [ pytest responses hypothesis ];
 
   meta = with stdenv.lib; {

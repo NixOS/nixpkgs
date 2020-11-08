@@ -43,7 +43,7 @@ buildPythonPackage rec {
     botocore
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     twisted
     cryptography
     cssselect

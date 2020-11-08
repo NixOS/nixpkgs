@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # tests folder is missing in PyPI
   doCheck = false;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     click
     requests
     tabulate

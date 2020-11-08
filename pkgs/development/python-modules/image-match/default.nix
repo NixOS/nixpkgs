@@ -13,7 +13,7 @@ buildPythonPackage {
 
   buildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     scikitimage
   ];
 

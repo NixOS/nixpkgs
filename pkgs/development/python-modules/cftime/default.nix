@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest coveralls pytestcov ];
   buildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy ];
+  requiredPythonModules = [ numpy ];
 
   checkPhase = ''
     py.test

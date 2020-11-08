@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1fg12gcg6ca7rjh7m3g48m30cx4aaw5g09855nlyz2sa1kw3gfyq";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     async_generator
     rsa
     pyaes

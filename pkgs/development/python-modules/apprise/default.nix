@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ Babel ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     requests requests_oauthlib six click markdown pyyaml
   ];
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "a6c53d9426326e0e722a5b1af3a1d55810259cb3afa92ca5e4029a6d533cab37";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     mock
     pbr
     ply

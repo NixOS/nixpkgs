@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     async-timeout
   ] ++ stdenv.lib.optional (!isPyPy) hiredis;
 

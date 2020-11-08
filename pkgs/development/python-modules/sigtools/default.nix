@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ repeated_test sphinx mock coverage unittest2 ];
-  propagatedBuildInputs = [ funcsigs six ];
+  requiredPythonModules = [ funcsigs six ];
 
   patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
 

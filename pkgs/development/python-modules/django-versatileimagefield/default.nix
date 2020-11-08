@@ -15,7 +15,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "b197e7066f23bb73b001a61525f2b1cae3dd654bf208a944a7ff5a3fe6107b51";
   };
-  propagatedBuildInputs = [ pillow python_magic ];
+  requiredPythonModules = [ pillow python_magic ];
 
   checkInputs = [ django ];
 

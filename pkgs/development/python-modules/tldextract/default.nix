@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "ab0e38977a129c72729476d5f8c85a8e1f8e49e9202e1db8dca76e95da7be9a8";
   };
 
-  propagatedBuildInputs = [ requests requests-file idna ];
+  requiredPythonModules = [ requests requests-file idna ];
   checkInputs = [ pytest responses ];
   nativeBuildInputs = [ setuptools_scm ];
 

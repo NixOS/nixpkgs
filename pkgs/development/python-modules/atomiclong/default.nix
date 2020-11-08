@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ cffi ];
+  requiredPythonModules = [ cffi ];
 
   meta = with stdenv.lib; {
     description = "Long data type with atomic operations using CFFI";

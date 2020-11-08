@@ -32,7 +32,7 @@ buildPythonPackage rec {
     sha256 = "0c284abeb74927a7366dcab6cefc010c4d050365b8af61c37326a2473a490a4e";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     appdirs
     dask
     holoviews

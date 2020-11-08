@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "7f6194f4f4692d292da3f501c7f343ccd5e36c6a1becf7b7515e23e66d6bf1e9";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     jupyter_client
     ipython
     ipykernel

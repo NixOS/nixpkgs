@@ -30,7 +30,7 @@ python2Packages.buildPythonApplication rec {
   inherit version src;
 
   buildInputs = [ openssl zlib libpcap ];
-  propagatedBuildInputs = [ cpyrit_opencl ];
+  requiredPythonModules = [ cpyrit_opencl ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/JPaulMora/Pyrit";

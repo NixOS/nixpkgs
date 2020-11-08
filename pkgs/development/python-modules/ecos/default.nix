@@ -27,7 +27,7 @@ buildPythonPackage rec {
     echo '__version__ = "${version}"' >> ./src/ecos/version.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     scipy
   ];

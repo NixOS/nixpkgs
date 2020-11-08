@@ -43,7 +43,7 @@ buildPythonPackage rec {
     python setup.py test
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     coverage
     docopt
     requests

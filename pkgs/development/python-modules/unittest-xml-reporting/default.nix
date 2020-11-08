@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = "3.0.4";
   disabled = isPy27;
 
-  propagatedBuildInputs = [six];
+  requiredPythonModules = [six];
 
   # The tarball from Pypi doesn't actually contain the unit tests
   doCheck = false;

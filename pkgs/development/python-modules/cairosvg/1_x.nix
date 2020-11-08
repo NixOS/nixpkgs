@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "15z0cag5s79ghhrlgs5xc9ayvzzdr3v8151vf6k819f1drsfjfxl";
   };
 
-  propagatedBuildInputs = [ cairocffi ];
+  requiredPythonModules = [ cairocffi ];
 
   checkInputs = [ nose fontconfig cssselect2 defusedxml pillow tinycss2 ];
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     nose
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     pyqt5
   ];

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace py4j==0.10.7 'py4j>=0.10.7,<0.11'
   '';
 
-  propagatedBuildInputs = [ py4j ];
+  requiredPythonModules = [ py4j ];
 
   # Tests assume running spark...
   doCheck = false;

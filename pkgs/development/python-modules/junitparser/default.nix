@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "16xwayr0rbp7xdg7bzmyf8s7al0dhkbmkcnil66ax7r8bznp5lmp";
   };
 
-  propagatedBuildInputs = [ future ];
+  requiredPythonModules = [ future ];
 
   checkPhase = ''
     ${python.interpreter} test.py

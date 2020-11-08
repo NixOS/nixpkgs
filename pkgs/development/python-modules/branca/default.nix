@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest selenium ];
-  propagatedBuildInputs = [ jinja2 six setuptools ];
+  requiredPythonModules = [ jinja2 six setuptools ];
 
   # Seems to require a browser
   doCheck = false;

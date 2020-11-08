@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06";
   };
 
-  propagatedBuildInputs = [ django ];
+  requiredPythonModules = [ django ];
 
   # Tests fail (needs the 'crispy_forms' module not packaged on nixos)
   doCheck = false;

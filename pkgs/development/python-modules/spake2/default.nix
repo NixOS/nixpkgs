@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ hkdf ];
+  requiredPythonModules = [ hkdf ];
 
   checkPhase = ''
     py.test $out

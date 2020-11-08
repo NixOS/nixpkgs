@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ pythonPackages.pyyaml pythonPackages.i3-py ];
+  requiredPythonModules = [ pythonPackages.pyyaml pythonPackages.i3-py ];
 
   # No tests
   doCheck = false;

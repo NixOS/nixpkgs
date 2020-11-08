@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy pandas imutils progress matplotlib ];
+  requiredPythonModules = [ numpy pandas imutils progress matplotlib ];
 
   # tests not packaged with pypi
   doCheck = false;

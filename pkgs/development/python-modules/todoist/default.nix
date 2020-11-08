@@ -23,7 +23,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ requests ] ++ stdenv.lib.optional (pythonOlder "3.5") typing;
+  requiredPythonModules = [ requests ] ++ stdenv.lib.optional (pythonOlder "3.5") typing;
 
   meta = {
     description = "The official Todoist Python API library";

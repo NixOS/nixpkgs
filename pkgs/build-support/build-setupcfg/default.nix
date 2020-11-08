@@ -20,6 +20,6 @@ in build {
     (info.setup_requires or []) ++
     (if doCheck then (info.tests_require or []) else []));
 
-  propagatedBuildInputs = map (p: pythonPackages.${p})
+  requiredPythonModules = map (p: pythonPackages.${p})
     (info.install_requires or []);
 }

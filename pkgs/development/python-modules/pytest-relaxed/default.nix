@@ -18,7 +18,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ six decorator ];
+  requiredPythonModules = [ six decorator ];
 
   patchPhase = ''
     sed -i "s/pytest>=3,<5/pytest/g" setup.py

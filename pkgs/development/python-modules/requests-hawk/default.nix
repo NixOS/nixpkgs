@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1qcga289yr6qlkmc6fjk0ia6l5cg0galklpdzpslf1y8ky9zb7rl";
   };
 
-  propagatedBuildInputs = [ mohawk requests ];
+  requiredPythonModules = [ mohawk requests ];
 
   meta = with lib; {
     description = "Hawk authentication strategy for the requests python library.";

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1rlrx3cw6h1zl9svnqbzwdfy8469qa1y7w6576lbhdwpfhpipscy";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     enaml
     # Until https://github.com/inkcut/inkcut/issues/105 perhaps
     pyqtgraph

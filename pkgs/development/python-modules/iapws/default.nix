@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "781285acaedff49d72c074aa308aabf7ca17f486cca490e5ed3f35526bbe4153";
   };
 
-  propagatedBuildInputs = [ scipy ];
+  requiredPythonModules = [ scipy ];
 
   meta = with lib; {
     description = "Python implementation of standard from IAPWS";

@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0v3y90zi43myyi4k7q3892dcrbyi9dn2q6xgk12nw9db9zil269i";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ docutils ];
+  requiredPythonModules = with pythonPackages; [ docutils ];
 
   meta = {
     homepage = "https://github.com/andrewshadura/git-crecord";

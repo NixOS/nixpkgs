@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "5bbe53f854fb3b689e4faacac5bdb5fa576cb270fc12c78edef827dd46a4fb50";
   };
 
-  propagatedBuildInputs = [ pyparsing amply ];
+  requiredPythonModules = [ pyparsing amply ];
 
   # only one test that requires an extra
   doCheck = false;

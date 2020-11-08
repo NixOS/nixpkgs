@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0mr1mpx4j9q7sch9arwfvpysnpf2p7ijy7072wilxm8pnj0bwvsi";
   };
 
-  propagatedBuildInputs = [ requests webob ];
+  requiredPythonModules = [ requests webob ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mozilla-services/hawkauthlib";

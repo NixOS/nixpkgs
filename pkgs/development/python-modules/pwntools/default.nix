@@ -39,7 +39,7 @@ buildPythonPackage rec {
     sed -i 's/unicorn>=1.0.2rc1,<1.0.2rc4/unicorn>=1.0.2rc1/' setup.py
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     Mako
     packaging
     pysocks

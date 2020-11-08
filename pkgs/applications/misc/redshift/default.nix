@@ -55,7 +55,7 @@ let
         ++ stdenv.lib.optional  withAppIndicator libappindicator
         ;
 
-      pythonPath = [ pygobject3 pyxdg ];
+      requiredPythonModules = [ pygobject3 pyxdg ];
 
       preConfigure = "./bootstrap";
 

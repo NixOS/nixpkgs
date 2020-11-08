@@ -11,7 +11,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     PyChromecast bottle pycaption paste html5lib pygobject3 dbus-python
     gtk3 gobject-introspection
   ];

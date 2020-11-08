@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
     gst-devtools
   ]);
 
-  pythonPath = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     pygobject3
     gst-python
     pyxdg

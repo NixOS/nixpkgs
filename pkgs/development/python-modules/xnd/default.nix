@@ -12,7 +12,7 @@ buildPythonPackage {
   disabled = isPy27;
   inherit (libxnd) version src meta;
 
-  propagatedBuildInputs = [ ndtypes ];
+  requiredPythonModules = [ ndtypes ];
 
   postPatch = ''
     substituteInPlace setup.py \

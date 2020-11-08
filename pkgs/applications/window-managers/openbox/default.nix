@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     pango imlib2
   ];
 
-  pythonPath = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pyxdg
   ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/openbox-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-gnome-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$out $requiredPythonModules"
   '';
 
   meta = {

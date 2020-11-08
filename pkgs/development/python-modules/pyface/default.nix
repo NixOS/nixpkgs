@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "a3e22a4d31429f0d5b9ff50aaac3fb47e4f7da678b6b0439a7b91ef40675f88d";
   };
 
-  propagatedBuildInputs = [ setuptools six traits ];
+  requiredPythonModules = [ setuptools six traits ];
 
   doCheck = false; # Needs X server
 

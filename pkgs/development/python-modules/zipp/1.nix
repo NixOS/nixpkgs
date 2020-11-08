@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ more-itertools ];
+  requiredPythonModules = [ more-itertools ];
 
   checkInputs = [ pytest pytest-flake8 ];
 

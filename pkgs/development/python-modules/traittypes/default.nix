@@ -33,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ traitlets ];
+  requiredPythonModules = [ traitlets ];
 
   checkInputs = [ numpy pandas xarray nose pytest ];
 

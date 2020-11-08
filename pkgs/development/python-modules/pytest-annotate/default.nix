@@ -18,7 +18,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyannotate
   ];
 

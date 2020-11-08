@@ -24,7 +24,7 @@ buildPythonPackage rec {
       --replace "mock==1.0.1" "mock"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
     click
   ];

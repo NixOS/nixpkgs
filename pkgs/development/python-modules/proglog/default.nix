@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "13diln950wk6nnn4rpmzx37rvrnpa7f803gwygiwbq1q46zwri6q";
   };
 
-  propagatedBuildInputs = [ tqdm ];
+  requiredPythonModules = [ tqdm ];
 
   meta = with stdenv.lib; {
     description = "Logs and progress bars manager for Python";

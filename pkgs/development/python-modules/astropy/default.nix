@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ astropy-helpers ];
 
-  propagatedBuildInputs = [ numpy pytest ]; # yes it really has pytest in install_requires
+  requiredPythonModules = [ numpy pytest ]; # yes it really has pytest in install_requires
 
   checkInputs = [ pytest pytest-astropy ];
 

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0917211c0f083f344e7f1bc997e0d713dbc147b6380bc19f606119394f820b9a";
   };
 
-  propagatedBuildInputs = [ numpy scipy six decorator ];
+  requiredPythonModules = [ numpy scipy six decorator ];
 
   meta = with stdenv.lib; {
     description = "Parameterization framework for parameterized model creation and handling";

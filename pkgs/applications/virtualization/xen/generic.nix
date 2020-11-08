@@ -214,7 +214,7 @@ stdenv.mkDerivation (rec {
 
     wrapPythonPrograms
     # We also need to wrap pygrub, which lies in lib
-    wrapPythonProgramsIn "$out/lib" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/lib" "$out $requiredPythonModules"
 
     shopt -s extglob
     for i in $out/etc/xen/scripts/!(*.sh); do

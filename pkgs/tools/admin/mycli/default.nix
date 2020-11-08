@@ -14,7 +14,7 @@ buildPythonApplication rec {
     sha256 = "1lq2x95553vdmhw13cxcgsd2g2i32izhsb7hxd4m1iwf9b3msbpv";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     paramiko pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
   ];
 

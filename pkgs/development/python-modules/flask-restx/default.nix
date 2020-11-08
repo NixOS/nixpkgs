@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sha256 = "0xf2vkmdngp9cv9klznizai4byxjcf0iqh1pr4b83nann0jxqwy7";
   };
 
-  propagatedBuildInputs = [ aniso8601 jsonschema flask werkzeug pytz six ]
+  requiredPythonModules = [ aniso8601 jsonschema flask werkzeug pytz six ]
     ++ lib.optionals isPy27 [ enum34 ];
 
   checkInputs = [ pytestCheckHook faker mock pytest-flask pytest-mock pytest-benchmark blinker ];

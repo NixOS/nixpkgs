@@ -16,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "0myhvflph4fayl2bg8m9a7prh5pcnvnb75p0jb4jpmbx7jyn7ihp";
   };
 
-  propagatedBuildInputs = [ docopt anytree ];
+  requiredPythonModules = [ docopt anytree ];
 
   postPatch = '' patchShebangs . '';
 

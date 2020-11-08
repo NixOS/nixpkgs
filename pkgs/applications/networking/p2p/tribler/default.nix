@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     python3Packages.python
   ];
 
-  pythonPath = [
+  requiredPythonModules = [
     python3Packages.libtorrentRasterbar
     python3Packages.twisted
     python3Packages.netifaces

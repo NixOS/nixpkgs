@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1qr7c5p9a0nzsvri1djnd5r3d7ilh2mdxvviqn1s2hcc70rha65d";
   };
 
-  propagatedBuildInputs = [ xmpppy ];
+  requiredPythonModules = [ xmpppy ];
 
   doCheck = false; # lol, it does not even specify dependencies properly
 

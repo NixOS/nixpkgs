@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [ requests urllib3 tld ];
+  requiredPythonModules = with python3Packages; [ requests urllib3 tld ];
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/photon}

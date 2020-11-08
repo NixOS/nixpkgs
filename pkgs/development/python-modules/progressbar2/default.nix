@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "ef72be284e7f2b61ac0894b44165926f13f5d995b2bf3cd8a8dedc6224b255a7";
   };
 
-  propagatedBuildInputs = [ python-utils ];
+  requiredPythonModules = [ python-utils ];
   nativeBuildInputs = [ pytestrunner ];
   checkInputs = [
     pytest sphinx flake8 pytestpep8 pytest-flakes pytestcov

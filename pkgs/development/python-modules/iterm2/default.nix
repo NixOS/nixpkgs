@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "8dead057b09ed4ac03c6caae7890489da1d823215ec5166789739ece941bdcbc";
   };
 
-  propagatedBuildInputs = [ protobuf websockets ];
+  requiredPythonModules = [ protobuf websockets ];
 
   # The tests require pyobjc. We can't use pyobjc because at
   # time of writing the pyobjc derivation is disabled on python 3.

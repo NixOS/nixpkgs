@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ poetry ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     brotli
     ijson
     python_magic

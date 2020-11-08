@@ -33,7 +33,7 @@ buildPythonPackage rec {
   checkInputs = [  globus-sdk mwoauth codecov flake8 pytest
     pytestcov pytest-tornado requests-mock pyjwt ];
 
-  propagatedBuildInputs = [ jupyterhub ];
+  requiredPythonModules = [ jupyterhub ];
 
   disabled = pythonOlder "3.4";
 

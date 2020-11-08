@@ -31,7 +31,7 @@ in buildPythonPackage {
     sha256 = "0m3k5vrv5ab1aw1mjd0r8d71anwqzvncvv9v5zx9xp1i188sdm8x";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyopenssl
     webcolors
     future

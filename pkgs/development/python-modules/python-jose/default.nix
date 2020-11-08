@@ -35,7 +35,7 @@ buildPythonPackage rec {
     "test_key_too_short"
   ];
 
-  propagatedBuildInputs = [ future six ecdsa rsa ];
+  requiredPythonModules = [ future six ecdsa rsa ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mpdavis/python-jose";

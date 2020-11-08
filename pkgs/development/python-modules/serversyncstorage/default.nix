@@ -32,7 +32,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ testfixtures unittest2 webtest ];
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
     pymysqlsa umemcache WSGIProxy requests pybrowserid
   ];

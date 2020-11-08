@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "5.8.4";
   disabled = isPy27;
 
-  propagatedBuildInputs = [ ptable click requests prompt_toolkit pygments urllib3 ];
+  requiredPythonModules = [ ptable click requests prompt_toolkit pygments urllib3 ];
 
   checkInputs = [ pytest pytestcov mock sphinx testtools ptable click requests prompt_toolkit pygments urllib3 ];
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python3 ];
-  pythonPath = [
+  requiredPythonModules = [
     pyqt5 pyserial
   ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     patchShebangs $out/opt/sumorobot-manager/main.py
-    wrapPythonProgramsIn "$out/opt" "$pythonPath"
+    wrapPythonProgramsIn "$out/opt" "$requiredPythonModules"
   '';
 
   meta = with stdenv.lib; {

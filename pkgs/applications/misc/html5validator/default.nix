@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "130acqi0dsy3midg7hwslykzry6crr4ln6ia0f0avyywkz4bplsv";
   };
 
-  propagatedBuildInputs = [ openjdk ];
+  requiredPythonModules = [ openjdk ];
 
   checkInputs = [ nose ];
   checkPhase = "PATH=$PATH:$out/bin nosetests";

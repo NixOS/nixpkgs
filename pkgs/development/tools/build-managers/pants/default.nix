@@ -24,7 +24,7 @@ buildPythonApplication rec {
   # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520.
   dontStrip = true;
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     twitter-common-collections setproctitle ansicolors packaging pathspec
     scandir twitter-common-dirutil psutil requests pystache pex docutils
     markdown pygments twitter-common-confluence fasteners pywatchman

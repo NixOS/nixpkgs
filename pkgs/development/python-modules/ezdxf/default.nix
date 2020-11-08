@@ -16,7 +16,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   checkPhase = "pytest tests integration_tests";
 
-  propagatedBuildInputs = [ pyparsing ];
+  requiredPythonModules = [ pyparsing ];
 
   meta = with stdenv.lib; {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";

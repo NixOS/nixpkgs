@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytestrunner
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     mock
     prawcore
     update_checker

@@ -52,7 +52,7 @@ buildPythonPackage rec {
       --replace "'float_value': float(str(np.float32(sympy.pi)))" "'float_value': pytest.approx(float(str(np.float32(sympy.pi))))"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     freezegun
     google_api_core
     numpy

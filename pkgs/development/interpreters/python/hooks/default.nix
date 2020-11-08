@@ -121,6 +121,11 @@ in rec {
       };
     } ./python-remove-tests-dir-hook.sh) {};
 
+  pythonWriteRequiredPythonModulesHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-write-required-python-modules-hook";
+    } ./python-write-required-python-modules-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
       name = "setuptools-setup-hook";

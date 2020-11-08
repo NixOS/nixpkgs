@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1cm3xqacxnbpv2706bd2jl86mvcsphpjlvhzngz2k2p48a0jjx8r";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     google_api_core
     grpc_google_iam_v1
   ];

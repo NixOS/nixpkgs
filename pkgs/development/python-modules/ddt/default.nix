@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ six pyyaml mock pytestCheckHook ];
 
-  propagatedBuildInputs = lib.optionals (!isPy3k) [
+  requiredPythonModules = lib.optionals (!isPy3k) [
     enum34
   ];
 

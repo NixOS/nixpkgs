@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     pytest
     pylint
     six

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "0xscckcbw75pbcl4546ndrjs4682pn2sqqrd6qvqm0s6zswg7a0y";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     socat
     psutil
     hglib

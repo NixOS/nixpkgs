@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-STUyMUCWAHfDA6dkpiOqSRBL3/tubedUbWa94Kp/764=";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     attrs
     click
     effect

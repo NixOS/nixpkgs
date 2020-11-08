@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "a093c4d04b42b7907f69086e476a766b7639dca50d95edc83aef6aeab9db2090";
   };
 
-  propagatedBuildInputs = [ six jsonpatch jsonschema jsonpointer ];
+  requiredPythonModules = [ six jsonpatch jsonschema jsonpointer ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bcwaldon/warlock";

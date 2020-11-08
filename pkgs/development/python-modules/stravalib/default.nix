@@ -22,7 +22,7 @@ buildPythonPackage rec {
     nose
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     arrow
     requests
     units

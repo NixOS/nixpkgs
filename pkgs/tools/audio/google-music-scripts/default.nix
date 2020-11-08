@@ -33,7 +33,7 @@ buildPythonApplication rec {
       --replace "pendulum>=2.0,<=3.0,!=2.0.5,!=2.1.0" "pendulum"
   '';
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     appdirs
     audio-metadata
     google-music

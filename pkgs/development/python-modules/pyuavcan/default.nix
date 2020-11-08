@@ -13,7 +13,7 @@
     sha256 = "0fmbmdnnh679zkllv5m6pkrasg7m9vjwabqnmz5m7flrgdh6h4qa";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     numpy
     nunavut
     pyserial

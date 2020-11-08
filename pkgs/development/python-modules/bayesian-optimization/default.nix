@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "01mg9npiqh1qmq5ldnbpjmr8qkiw827msiv3crpkhbj4bdzasbfm";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     scikitlearn
     scipy
   ];

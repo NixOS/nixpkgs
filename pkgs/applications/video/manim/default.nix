@@ -17,7 +17,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     colour
     numpy
     pillow

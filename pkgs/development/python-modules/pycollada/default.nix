@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1rp4wlvfywgk3v6l3hnhjx61x9yqawvvivpq4dig2jj71k3mpsyj";
   };
 
-  propagatedBuildInputs = [ numpy dateutil ];
+  requiredPythonModules = [ numpy dateutil ];
 
   # Some tests fail because they refer to test data files that don't exist
   # (upstream packaging issue)

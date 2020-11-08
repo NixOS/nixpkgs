@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "7ec39087cc1524e55557e7d9dc6295eb1b95b09b125e293c0e2dd068574f0aee";
   };
 
-  propagatedBuildInputs = [ zope_event zope_component ];
+  requiredPythonModules = [ zope_event zope_component ];
 
   # namespace colides with local directory
   doCheck = false;

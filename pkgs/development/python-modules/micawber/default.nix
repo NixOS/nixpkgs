@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "5e1e6fbab5bfc1edc6d575b900707c24a3484c51cf2e01f059a7e070724a3633";
   };
 
-  propagatedBuildInputs = [ beautifulsoup4 ];
+  requiredPythonModules = [ beautifulsoup4 ];
 
   meta = with stdenv.lib; {
     homepage = "https://micawber.readthedocs.io/en/latest/";

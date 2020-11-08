@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "028szd3k295yhz943bj19i4kx6f0pfh1fd2q14id0g84dl4i49dm";
   };
 
-  propagatedBuildInputs = [ pygments ];
+  requiredPythonModules = [ pygments ];
 
   # has no tests
   doCheck = false;

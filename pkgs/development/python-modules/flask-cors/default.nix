@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose packaging ];
-  propagatedBuildInputs = [ flask six ];
+  requiredPythonModules = [ flask six ];
 
   # Exclude test_acl_uncaught_exception_500 test case because is not compatible
   # with Flask>=1.1.0. See: https://github.com/corydolphin/flask-cors/issues/253

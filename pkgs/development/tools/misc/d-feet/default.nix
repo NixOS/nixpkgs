@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     libwnck3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  requiredPythonModules = with python3.pkgs; [
     pygobject3
   ];
 

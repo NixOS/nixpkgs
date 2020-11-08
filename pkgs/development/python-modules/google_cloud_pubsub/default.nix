@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
+  requiredPythonModules = [ enum34 grpc_google_iam_v1 google_api_core ];
 
   # tests don't clean up file descriptors correctly
   doCheck = false;

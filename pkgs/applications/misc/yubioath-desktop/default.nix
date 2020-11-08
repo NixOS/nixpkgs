@@ -24,13 +24,13 @@ mkDerivation rec {
       --replace '/usr/bin' "$out/bin"
   '';
 
-  pythonPath = [ yubikey-manager ];
+  requiredPythonModules = [ yubikey-manager ];
 
   # Need LD_PRELOAD for libykpers as the Nix cpython disables ctypes.cdll.LoadLibrary
   # support that the yubicommon library uses to load libykpers
 
   postInstall = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
     wrapProgram $out/bin/yubioath-desktop \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --prefix QML2_IMPORT_PATH : "${pyotherside}/${qtbase.qtQmlPrefix}" \

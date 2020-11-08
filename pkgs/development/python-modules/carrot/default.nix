@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ nose ];
-  propagatedBuildInputs = [ amqplib anyjson ];
+  requiredPythonModules = [ amqplib anyjson ];
 
   doCheck = false; # depends on the network
 

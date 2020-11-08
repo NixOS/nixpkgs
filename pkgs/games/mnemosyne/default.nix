@@ -16,7 +16,7 @@ python.pkgs.buildPythonApplication rec {
 
   buildInputs = [ anki ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  requiredPythonModules = with python.pkgs; [
     cheroot
     cherrypy
     googletrans

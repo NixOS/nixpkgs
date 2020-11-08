@@ -14,7 +14,7 @@ buildPythonPackage rec {
     ./update-django-tagging.patch
   ];
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     django django_tagging whisper pycairo cairocffi
     ldap memcached pytz urllib3 scandir
   ];

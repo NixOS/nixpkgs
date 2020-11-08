@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
+  requiredPythonModules = [ google_api_core libcst proto-plus ];
 
   checkPhase = ''
     pytest tests/unit

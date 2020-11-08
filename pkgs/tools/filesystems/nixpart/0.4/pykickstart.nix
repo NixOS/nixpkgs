@@ -16,7 +16,7 @@ buildPythonApplication rec {
                key=lambda m: m.__name__)/" tests/baseclass.py
   '';
 
-  propagatedBuildInputs = [ urlgrabber ];
+  requiredPythonModules = [ urlgrabber ];
 
   checkPhase = ''
     ${python}/bin/${python.executable} tests/baseclass.py -vv

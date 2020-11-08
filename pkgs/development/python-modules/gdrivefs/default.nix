@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ gipc greenlet httplib2 six ];
-  propagatedBuildInputs = [ dateutil fusepy google_api_python_client ];
+  requiredPythonModules = [ dateutil fusepy google_api_python_client ];
 
   patchPhase = ''
     substituteInPlace gdrivefs/resources/requirements.txt \

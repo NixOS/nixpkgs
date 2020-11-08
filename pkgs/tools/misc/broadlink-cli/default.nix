@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
 
   format = "other";
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     broadlink
   ];
 

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1rklkki54z5392cpwwy78bnmsy2ghc187l3j7nv0rzn6jk5bvyi7";
   };
 
-  propagatedBuildInputs = [
+  requiredPythonModules = [
     wrapt
     numpy
     setuptools

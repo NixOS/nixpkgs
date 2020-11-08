@@ -22,7 +22,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ numba numpy pandas thrift ];
+  requiredPythonModules = [ numba numpy pandas thrift ];
   checkInputs = [ pytest python-snappy lz4 zstd ];
 
   meta = with lib; {

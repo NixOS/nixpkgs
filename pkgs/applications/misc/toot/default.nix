@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ pytest ];
 
-  propagatedBuildInputs = with python3Packages;
+  requiredPythonModules = with python3Packages;
     [ requests beautifulsoup4 future wcwidth urwid ];
 
   checkPhase = ''

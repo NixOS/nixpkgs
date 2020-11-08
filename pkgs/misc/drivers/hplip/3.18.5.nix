@@ -69,7 +69,7 @@ python2Packages.buildPythonApplication {
     pkgconfig
   ];
 
-  pythonPath = with python2Packages; [
+  requiredPythonModules = with python2Packages; [
     dbus
     pillow
     pygobject2
@@ -184,7 +184,7 @@ python2Packages.buildPythonApplication {
   # 2. Making our own wrapper pointing directly to the original script.
   dontWrapPythonPrograms = true;
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out $requiredPythonModules"
 
     for bin in $out/bin/*; do
       py=$(readlink -m $bin)

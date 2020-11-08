@@ -17,7 +17,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "flake8==2.6.0" "flake8"
   '';
 
-  propagatedBuildInputs = [ pillow click dlib numpy face_recognition_models ];
+  requiredPythonModules = [ pillow click dlib numpy face_recognition_models ];
 
   # Our dlib is compiled with AVX instructions by default which breaks
   # with "Illegal instruction" on some builders due to missing hardware features.

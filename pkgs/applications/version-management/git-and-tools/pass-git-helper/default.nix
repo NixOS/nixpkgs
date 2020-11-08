@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "1zccbmq5l6asl9qm1f90vg9467y3spmv3ayrw07qizrj43yfd9ap";
   };
 
-  propagatedBuildInputs = [ pyxdg ];
+  requiredPythonModules = [ pyxdg ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/languitar/pass-git-helper";
