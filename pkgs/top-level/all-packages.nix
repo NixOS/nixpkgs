@@ -7605,7 +7605,9 @@ in
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
-  tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
+  tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
