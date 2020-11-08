@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , qmake
 , qtbase
-, qtmultimedia
 , qttools
 , alsaSupport ? stdenv.hostPlatform.isLinux
 , alsaLib
@@ -19,20 +18,20 @@ let
 in
 mkDerivation rec {
   pname = "bambootracker";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "rerrahkr";
     repo = "BambooTracker";
     rev = "v${version}";
-    sha256 = "0d0f4jqzknsiq725pvfndarfjg183f92rb0lim3wzshnsixr5vdc";
+    sha256 = "0ibi0sykxf6cp5la2c4pgxf5gvy56yv259fbmdwdrdyv6vlddf42";
   };
 
   sourceRoot = "source/BambooTracker";
 
   nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ qtbase qtmultimedia ]
+  buildInputs = [ qtbase ]
     ++ optional alsaSupport alsaLib
     ++ optional pulseSupport libpulseaudio
     ++ optional jackSupport libjack2;
