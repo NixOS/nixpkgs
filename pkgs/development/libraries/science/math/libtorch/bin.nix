@@ -45,6 +45,14 @@ in stdenv.mkDerivation {
 
     # We do not care about Java support...
     rm -f $out/lib/lib*jni* 2> /dev/null || true
+
+    # Fix up library paths for split outputs
+    substituteInPlace $dev/share/cmake/Torch/TorchConfig.cmake \
+      --replace \''${TORCH_INSTALL_PREFIX}/lib "$out/lib" \
+
+    substituteInPlace \
+      $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
+      --replace \''${_IMPORT_PREFIX}/lib "$out/lib" \
   '';
 
   postFixup = let
