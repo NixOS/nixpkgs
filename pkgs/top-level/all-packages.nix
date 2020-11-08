@@ -2145,6 +2145,8 @@ in
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
+  go-chromecast = callPackage ../applications/video/go-chromecast { };
+
   go-rice = callPackage ../tools/misc/go.rice {};
 
   go-2fa = callPackage ../tools/security/2fa {};
