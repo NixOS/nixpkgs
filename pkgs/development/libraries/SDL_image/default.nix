@@ -17,7 +17,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [
+    # Disable its dynamic loading or dlopen will fail because of no proper rpath
+    "--disable-jpg-shared"
+    "--disable-png-shared"
+    "--disable-tif-shared"
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
 
   buildInputs = [ SDL libpng libjpeg libtiff libungif libXpm ];
 
