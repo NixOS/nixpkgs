@@ -885,6 +885,17 @@ php.override {
 systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
        </programlisting>
      </para>
+     <para>
+       Nginx is also started with the systemd option <literal>ProtectHome = mkDefault true;</literal>
+       which forbids it to read anything from <literal>/home</literal>, <literal>/root</literal>
+       and <literal>/run/user</literal> (see
+       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#ProtectHome=">ProtectHome docs</link>
+       for details).
+       If you require serving files from home directories, you may choose to set e.g.
+<programlisting>
+systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
+</programlisting>
+     </para>
    </listitem>
    <listitem>
     <para>
