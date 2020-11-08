@@ -24793,7 +24793,6 @@ in
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
-  freicoin = callPackage ../applications/blockchains/freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
