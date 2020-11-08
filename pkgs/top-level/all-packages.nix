@@ -3355,7 +3355,9 @@ in
 
   dog = callPackage ../tools/system/dog { };
 
-  dogdns = callPackage ../tools/networking/dogdns { };
+  dogdns = callPackage ../tools/networking/dogdns {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
