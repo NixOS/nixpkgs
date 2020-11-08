@@ -7504,8 +7504,6 @@ in {
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
-  vdirsyncerStable = callPackage ../development/python-modules/vdirsyncer { };
-
   vega = callPackage ../development/python-modules/vega { };
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
