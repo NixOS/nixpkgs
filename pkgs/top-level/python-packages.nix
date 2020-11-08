@@ -7502,10 +7502,7 @@ in {
 
   vdf = callPackage ../development/python-modules/vdf { };
 
-  vdirsyncer = callPackage ../development/python-modules/vdirsyncer {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Security;
-    inherit (pkgs) pkg-config openssl rustPlatform;
-  };
+  vdirsyncer = callPackage ../development/python-modules/vdirsyncer/stable.nix { };
 
   vdirsyncerStable = callPackage ../development/python-modules/vdirsyncer/stable.nix { };
 
