@@ -879,11 +879,22 @@ php.override {
    <listitem>
      <para>
        Nginx web server now starting with additional sandbox/hardening options. By default, write access
-       to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       to <literal>/var/log/nginx</literal> and <literal>/var/cache/nginx</literal> is allowed. To allow writing to other folders,
        use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
        <programlisting>
 systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
        </programlisting>
+     </para>
+     <para>
+       Nginx is also started with the systemd option <literal>ProtectHome = mkDefault true;</literal>
+       which forbids it to read anything from <literal>/home</literal>, <literal>/root</literal>
+       and <literal>/run/user</literal> (see
+       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#ProtectHome=">ProtectHome docs</link>
+       for details).
+       If you require serving files from home directories, you may choose to set e.g.
+<programlisting>
+systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
+</programlisting>
      </para>
    </listitem>
    <listitem>
