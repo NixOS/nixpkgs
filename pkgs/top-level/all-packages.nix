@@ -24034,8 +24034,6 @@ in
 
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
-  vdirsyncerStable = with python3Packages; toPythonApplication vdirsyncerStable;
-
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   verbiste = callPackage ../applications/misc/verbiste {
