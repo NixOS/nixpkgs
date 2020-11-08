@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
    src = fetchzip {
-     url = "https://github.com/JuliaLang/julia/releases/download/v1.5.2/julia-1.5.2-full.tar.gz";
-     # url = "https://github.com/JuliaLang/julia/releases/download/v${majorVersion}.${minorVersion}.${maintenanceVersion}/julia-${majorVersion}.${minorVersion}.${maintenanceVersion}-full.tar.gz";
+     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
      sha256 = src_sha256;
    };
 
