@@ -66,9 +66,7 @@ stdenv.mkDerivation rec {
     arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
     pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
-  ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
-  ;
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
 
