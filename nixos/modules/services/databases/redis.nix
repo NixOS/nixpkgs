@@ -87,9 +87,12 @@ in
 
       bind = mkOption {
         type = with types; nullOr str;
-        default = null; # All interfaces
-        description = "The IP interface to bind to.";
-        example = "127.0.0.1";
+        default = "127.0.0.1";
+        description = ''
+          The IP interface to bind to.
+          <literal>null</literal> means "all interfaces".
+        '';
+        example = "192.0.2.1";
       };
 
       unixSocket = mkOption {
