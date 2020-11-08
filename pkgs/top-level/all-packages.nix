@@ -8557,6 +8557,8 @@ in
 
   ### DEVELOPMENT / COMPILERS
 
+  _4th = callPackage ../development/compilers/4th { };
+
   abcl = callPackage ../development/compilers/abcl {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
