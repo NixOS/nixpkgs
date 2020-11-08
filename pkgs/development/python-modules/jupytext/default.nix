@@ -3,6 +3,7 @@
 , nbformat
 , pytest
 , pyyaml
+, toml
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pyyaml
     nbformat
+    pyyaml
+    toml
   ] ++ lib.optionals isPy27 [ mock ]; # why they put it in install_requires, who knows
 
   checkInputs = [
@@ -33,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
+    changelog = "https://github.com/mwouts/jupytext/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ timokau ];
   };
