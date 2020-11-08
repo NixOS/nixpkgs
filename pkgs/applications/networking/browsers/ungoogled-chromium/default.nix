@@ -37,26 +37,15 @@ let
       inherit channel gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs
               cupsSupport pulseSupport useOzone;
       inherit ungoogled;
-      # TODO: Remove after we can update gn for the stable channel (backward incompatible changes):
       gnChromium = gn.overrideAttrs (oldAttrs: {
-        version = "2020-07-20";
+        inherit (upstream-info.deps.gn) version;
         src = fetchgit {
-          url = "https://gn.googlesource.com/gn";
-          rev = "3028c6a426a4aaf6da91c4ebafe716ae370225fe";
-          sha256 = "0h3wf4152zdvrbb0jbj49q6814lfl3rcy5mj8b2pl9s0ahvkbc6q";
+          inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
     } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "87") {
       useOzone = true; # YAY: https://chromium-review.googlesource.com/c/chromium/src/+/2382834 \o/
       useVaapi = !stdenv.isAarch64; # TODO: Might be best to not set use_vaapi anymore (default is fine)
-      gnChromium = gn.overrideAttrs (oldAttrs: {
-        version = "2020-08-17";
-        src = fetchgit {
-          url = "https://gn.googlesource.com/gn";
-          rev = "6f13aaac55a977e1948910942675c69f2b4f7a94";
-          sha256 = "01hpma1sllpdx09mvr4d6073sg6zmk6iv44kd3r28khymcj4s251";
-        };
-      });
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
