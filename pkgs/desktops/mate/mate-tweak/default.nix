@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     mate.mate-session-manager
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  requiredPythonModules = with python3Packages; [
     distro
     pygobject3
     psutil

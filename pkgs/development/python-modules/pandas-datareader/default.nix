@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pandas_datareader" ];
 
-  propagatedBuildInputs = [ pandas lxml requests ];
+  requiredPythonModules = [ pandas lxml requests ];
 
   meta = with stdenv.lib; {
     description = "Up to date remote data access for pandas, works for multiple versions of pandas";
