@@ -26,59 +26,60 @@ let
   repover = lib.optionalString stdenv.isAarch64 "aarch64-shenandoah-"
             + "jdk8u${update}-${build}";
 
-  jdk8 = fetchurl {
-             name = "jdk8-${repover}.tar.gz";
-             url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "db98897d6fddce85996a9b0daf4352abce4578be0b51eada41702ee1469dd415"
-                      else "8f0e8324d3500432e8ed642b4cc7dff90a617dbb2a18a94c07c1020d32f93b7a";
-          };
-  langtools = fetchurl {
-             name = "langtools-${repover}.tar.gz";
-             url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "6544c1cc455844bbbb3d2914ffc716b1cee7f19e6aa223764d41a7cddc41322c"
-                      else "632417b0b067c929eda6958341352e29c5810056a5fec138641eb3503f9635b7";
-          };
-  hotspot = fetchurl {
-             name = "hotspot-${repover}.tar.gz";
-             url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "37abb89e66641607dc6f372946bfc6bd413f23fec0b9c3baf75f41ce517e21d8"
-                      else "2142f3b769800a955613b51ffe192551bab1db95b0c219900cf34febc6f20245";
-          };
-  corba = fetchurl {
-             name = "corba-${repover}.tar.gz";
-             url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "5da82f7b4aceff32e02d2f559033e3b62b9509d79f1a6891af871502e1d125b1"
-                      else "320098d64c843c1ff2ae62579817f9fb4a81772bc0313a543ce68976ad7a6d98";
-          };
-  jdk = fetchurl {
-             name = "jdk-${repover}.tar.gz";
-             url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "ee613296d823605dcd1a0fe2f89b4c7393bdb8ae5f2659f48f5cbc0012bb1a47"
-                      else "957c24fc58ac723c8cd808ab60c77d7853710148944c8b9a59f470c4c809e1a0";
-          };
-  jaxws = fetchurl {
-             name = "jaxws-${repover}.tar.gz";
-             url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "7c426b85f0d378125fa46e6d1b25ddc27ad29d93514d38c5935c84fc540b26ce"
-                      else "4efb0ee143dfe86c8ee06db2429fb81a0c8c65af9ea8fc18daa05148c8a1162f";
-          };
-  jaxp = fetchurl {
-             name = "jaxp-${repover}.tar.gz";
-             url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "928e363877afa7e0ad0c350bb18be6ab056b23708c0624a0bd7f01c4106c2a14"
-                      else "25a651c670d5b036042f7244617a3eb11fec80c07745c1c8181a1cdebeda3d8e";
-          };
-  nashorn = fetchurl {
-             name = "nashorn-${repover}.tar.gz";
-             url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "f060e08c5924457d4f5047c02ad6a987bdbdcd1cea53d2208322073ba4f398c3"
-                      else "a28b41d86f0c87ceacd2b686dd31c9bf391d851b1b5187a49ef5e565fc2cbc84";
-          };
+  fetchSrc = hashes: fetchurl {
+    name = "jdk8-${repover}.tar.gz";
+		url = "${baseurl}/archive/${repover}.tar.gz";
+		sha256 = if stdenv.isAarch64 then hashes.risc else hashes.cisc;
+	};
+
+  fetchModuleSrc = name: hashes: fetchurl {
+    name = "${name}-${repover}.tar.gz";
+		url = "${baseurl}/${name}/archive/${repover}.tar.gz";
+		sha256 = if stdenv.isAarch64 then hashes.risc else hashes.cisc;
+	};
+
+  # Run `./generate-jdk8-hashes.sh > /tmp/hashes` and paste /tmp/hashes below:
+  jdk8 = fetchSrc {
+    cisc = "1nqb2nnwy54x2ysnbkxx9hqbigcgqy7fpm4kghrn4xrc7rs41plm";
+    risc = "05flkm3f2bkh87dfll8bprw4bkmba91sy3cvdacqbknxdxyqk66v";
+  };
+
+  moduleSrcs = lib.mapAttrs fetchModuleSrc {
+    langtools = {
+      cisc = "1258cz1bb17blhvkg4q0pqhy5h8iqbj11iarph1qf2v293d9baq3";
+      risc = "0b1j87fcv9s19mv278kakvqygkmi2v3zy5197nxvni2q8p6c2i35";
+    };
+    hotspot = {
+      cisc = "1vy1qszb81c24sraapxwb6mzzvx1ml058r69291ir896r7mqjnrj";
+      risc = "1n11gr8wwhazyyxc7ff0zqikyhdxqszlca9pdzf0f5k4csgbiarp";
+    };
+    corba = {
+      cisc = "1jfj8gf2yfkj2dwbvnx5wj100yl36w984dhva3vqsfp53qfj0q6g";
+      risc = "1c95s7hh45c7my8nh6lzsw4raaxnwcrr0m9g5ph35zyf99xjza2x";
+    };
+    jdk = {
+      cisc = "0pkrws8z9miwak7jdyk56p8azf0gqy5r61pr4rfgzpw77rvr7cz5";
+      risc = "0iqspc901g2wizs5j9jzmswbv4vk9jdziqhg3b6msq13v2b34qgf";
+    };
+    jaxws = {
+      cisc = "0pa9ixxhvggkj8lqks9szzqifcr07rqr0c0bvx2zr20lp8jb7mgn";
+      risc = "1ki61dagr12wjg2khkaijffx4yn2vljinvbfligi4y6ky22nnhkw";
+    };
+    jaxp = {
+      cisc = "0rg6mvz2ayfd5kkw6lpyskcviz1j5w8i2myfji26d9sxk1c20mww";
+      risc = "051adh8c80bzpnh281lcf0inn1dbws5v22rm1jny19xgfww3d3lj";
+    };
+    nashorn = {
+      cisc = "0s7h5mfqpqd2xk1ik4jif96ycixlkqk1icwzqgaarrl91rx380bx";
+      risc = "1hwqyfj3n1r2hchd4lza3k6vvgc7m7b2mh27a17psi94b66f0q7h";
+    };
+  };
+
   openjdk8 = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "8u${update}-${build}";
 
-    srcs = [ jdk8 langtools hotspot corba jdk jaxws jaxp nashorn ];
+    srcs = [ jdk8 ] ++ lib.attrValues moduleSrcs;
     sourceRoot = ".";
 
     outputs = [ "out" "jre" ];
