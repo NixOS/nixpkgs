@@ -25,5 +25,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ t184256 ];
   };
-
 }
