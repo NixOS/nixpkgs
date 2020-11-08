@@ -5412,6 +5412,12 @@
     githubId = 115218;
     name = "Felix Richter";
   };
+  malvo = {
+    email = "malte@malvo.ml";
+    github = "malte-v";
+    githubId = 34393802;
+    name = "Malte Voos";
+  };
   malyn = {
     email = "malyn@strangeGizmo.com";
     github = "malyn";
