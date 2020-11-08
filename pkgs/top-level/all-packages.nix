@@ -2053,6 +2053,8 @@ in
 
   gotify-cli = callPackage ../tools/misc/gotify-cli { };
 
+  gp-saml-gui = callPackage ../tools/networking/gp-saml-gui { };
+
   gping = callPackage ../tools/networking/gping { };
 
   greg = callPackage ../applications/audio/greg {
