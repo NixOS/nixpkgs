@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nwg-launchers";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0r0wj4w3jj3l56z1lx6ypkzz4fsgx4vzqbvs95661l8q362pndzw";
+    sha256 = "0flp7mwj1pgcwx3k9pzc8pmqlkhbddj0maimdnvlazk87kzxpfd0";
   };
 
   nativeBuildInputs = [
