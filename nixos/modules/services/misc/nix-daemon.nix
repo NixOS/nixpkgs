@@ -40,7 +40,7 @@ let
         max-jobs = ${toString (cfg.maxJobs)}
         cores = ${toString (cfg.buildCores)}
         sandbox = ${if (builtins.isBool cfg.useSandbox) then boolToString cfg.useSandbox else cfg.useSandbox}
-        extra-sandbox-paths = ${toString cfg.sandboxPaths}
+        sandbox-paths = ${toString cfg.sandboxPaths}
         substituters = ${toString cfg.binaryCaches}
         trusted-substituters = ${toString cfg.trustedBinaryCaches}
         trusted-public-keys = ${toString cfg.binaryCachePublicKeys}
