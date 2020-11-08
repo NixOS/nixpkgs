@@ -5,7 +5,7 @@
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
-, curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
+, curl, fftwSinglePrec, fftw, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
 , blas, lapack, arpack
 # Darwin frameworks
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
+    arpack fftw fftwSinglePrec libgit2 libunwind mpfr
     pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
   ] ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
       "USE_SYSTEM_ARPACK=1"
       "USE_SYSTEM_FFTW=1"
-      "USE_SYSTEM_GMP=1"
+      "USE_SYSTEM_GMP=0"
       "USE_SYSTEM_LIBGIT2=1"
       "USE_SYSTEM_LIBUNWIND=1"
 
@@ -113,14 +113,12 @@ stdenv.mkDerivation rec {
     ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    arpack fftw fftwSinglePrec gmp libgit2 mpfr blas openlibm
+    arpack fftw fftwSinglePrec libgit2 mpfr blas openlibm
     openspecfun pcre2 lapack
   ];
 
   enableParallelBuilding = true;
 
-  # doCheck = !stdenv.isDarwin;
-  # checkTarget = "testall";
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"
