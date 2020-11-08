@@ -1,5 +1,13 @@
 addPythonPath() {
     addToSearchPathWithCustomDelimiter : PYTHONPATH $1/@sitePackages@
+    # Include the dependencies in `required-python-modules` as well
+    local prop="$1/nix-support/required-python-modules"
+    if [ -e $prop ]; then
+        local new_path
+        for new_path in $(cat $prop); do
+            addToSearchPathWithCustomDelimiter : PYTHONPATH $new_path/@sitePackages@
+        done
+    fi
 }
 
 toPythonPath() {

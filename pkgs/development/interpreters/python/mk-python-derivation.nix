@@ -174,7 +174,7 @@ let
       pythonNamespacesHook
     ] ++ nativeBuildInputs;
 
-    inherit buildInputs;
+    buildInputs = buildInputs ++ requiredPythonModules_;
 
     # TODO: stop propagating Python and its packages?
     # Python applications should not propagate Python with its dependencies.
@@ -185,7 +185,7 @@ let
     # Probably the solution is to keep using propagation in case packages,
     # and convert `buildPythonApplication` to first build the package, and then an environment
     # using `python.buildEnv` https://github.com/NixOS/nixpkgs/pull/16672.
-    propagatedBuildInputs = propagatedDerivationInputs ++ requiredPythonModules_;
+    propagatedBuildInputs = propagatedDerivationInputs;
 
     # requiredPythonModules is also set
     requiredPythonModules = requiredPythonModules_;
