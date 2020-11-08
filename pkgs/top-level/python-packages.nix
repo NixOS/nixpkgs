@@ -7483,9 +7483,9 @@ in {
 
   vdf = callPackage ../development/python-modules/vdf { };
 
-  vdirsyncer = callPackage ../development/python-modules/vdirsyncer/stable.nix { };
+  vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
-  vdirsyncerStable = callPackage ../development/python-modules/vdirsyncer/stable.nix { };
+  vdirsyncerStable = callPackage ../development/python-modules/vdirsyncer { };
 
   vega = callPackage ../development/python-modules/vega { };
 
