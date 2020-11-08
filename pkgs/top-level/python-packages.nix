@@ -913,6 +913,8 @@ in {
 
   bluepy = callPackage ../development/python-modules/bluepy { };
 
+  bme680 = callPackage ../development/python-modules/bme680 { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
@@ -6663,6 +6665,8 @@ in {
   smart_open = callPackage ../development/python-modules/smart_open { };
 
   smartypants = callPackage ../development/python-modules/smartypants { };
+
+  smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
 
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
 
