@@ -136,6 +136,13 @@
     <package>stanchion</package> package removed along with <varname>services.stanchion</varname> module.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>mutt</package> has been updated to a new major version (2.x), which comes with
+     some backward incompatible changes that are described in the
+     <link xlink:href="http://www.mutt.org/relnotes/2.0/">release notes for Mutt 2.0</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
