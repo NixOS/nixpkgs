@@ -1,6 +1,6 @@
 { stdenv, meson, ninja, gettext, fetchurl
 , pkgconfig, gtk3, glib, libsoup, gsettings-desktop-schemas
-, itstool, libxml2, python3Packages, libhandy
+, itstool, libxml2, python3Packages, libhandy_0
 , gnome3, gdk-pixbuf, libnotify, gobject-introspection, wrapGAppsHook }:
 
 let
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     libnotify gnome3.gnome-shell python3Packages.pygobject3
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
     gnome3.mutter gnome3.gnome-desktop gobject-introspection
-    gnome3.nautilus libhandy
+    gnome3.nautilus libhandy_0
     # Makes it possible to select user themes through the `user-theme` extension
     gnome3.gnome-shell-extensions
   ];
