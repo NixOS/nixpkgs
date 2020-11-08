@@ -26885,6 +26885,8 @@ in
     inherit (pkgs.gnome2) gtkglext;
   };
 
+  convertall = qt5.callPackage ../applications/science/misc/convertall { };
+
   cytoscape = callPackage ../applications/science/misc/cytoscape {
     jre = openjdk11;
   };
