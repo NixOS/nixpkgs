@@ -56,6 +56,10 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/pleroma_ctl \
       --set-default RELEASE_TMP "/tmp"'';
 
+  passthru.tests = {
+    pleroma = nixosTests.pleroma;
+  };
+
   meta = {
     description = "ActivityPub microblogging server";
     homepage = https://git.pleroma.social/pleroma/pleroma;
