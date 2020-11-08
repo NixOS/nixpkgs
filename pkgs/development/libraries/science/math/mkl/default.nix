@@ -1,4 +1,5 @@
-{ stdenvNoCC
+{ callPackage
+, stdenvNoCC
 , fetchurl
 , rpmextract
 , undmg
@@ -90,7 +91,8 @@ in stdenvNoCC.mkDerivation {
       substituteInPlace $f \
         --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
         --replace $\{MKLROOT} "$out" \
-        --replace "lib/intel64_lin" "lib"
+        --replace "lib/intel64_lin" "lib" \
+        --replace "lib/intel64" "lib"
     done
 
     for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
@@ -155,6 +157,8 @@ in stdenvNoCC.mkDerivation {
   # Per license agreement, do not modify the binary
   dontStrip = true;
   dontPatchELF = true;
+
+  passthru.tests.pkg-config = callPackage ./test { };
 
   meta = with stdenvNoCC.lib; {
     description = "Intel Math Kernel Library";
