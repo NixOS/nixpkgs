@@ -9,6 +9,8 @@
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
   ./config/xdg/portal.nix
+  ./config/zfw/core.nix
+  ./config/zfw/zone-firewall.nix
   ./config/appstream.nix
   ./config/console.nix
   ./config/xdg/sounds.nix
