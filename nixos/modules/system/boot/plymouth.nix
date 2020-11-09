@@ -9,7 +9,7 @@ let
 
   cfg = config.boot.plymouth;
 
-  nixosBreezePlymouth = pkgs.breeze-plymouth.override {
+  nixosBreezePlymouth = pkgs.plasma5.breeze-plymouth.override {
     logoFile = cfg.logo;
     logoName = "nixos";
     osName = "NixOS";

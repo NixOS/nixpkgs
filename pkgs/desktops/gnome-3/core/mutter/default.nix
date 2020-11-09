@@ -32,7 +32,7 @@
 , xorgserver
 , python3
 , wrapGAppsHook
-, libsysprof-capture
+, sysprof
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
@@ -110,7 +110,7 @@ let self = stdenv.mkDerivation rec {
     libxkbfile
     pango
     pipewire
-    libsysprof-capture
+    sysprof
     xkeyboard_config
     xwayland
     wayland-protocols
@@ -128,7 +128,7 @@ let self = stdenv.mkDerivation rec {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   passthru = {
-    libdir = "${self}/lib/mutter-6";
+    libdir = "${self}/lib/mutter-7";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

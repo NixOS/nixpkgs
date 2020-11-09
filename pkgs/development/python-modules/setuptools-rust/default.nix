@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , semantic-version
 , setuptools
 , setuptools_scm
@@ -10,6 +11,8 @@
 buildPythonPackage rec {
   pname = "setuptools-rust";
   version = "0.11.4";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

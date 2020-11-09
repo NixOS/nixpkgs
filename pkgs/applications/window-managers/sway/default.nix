@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace meson.build --replace "v1.5" "1.5"
+    substituteInPlace meson.build \
+      --replace "v1.5" "1.5" \
+      --replace "wlroots_version = ['>=0.11.0', '<0.12.0']" "wlroots_version = ['>=0.11.0', '<0.13.0']"
   '';
 
   nativeBuildInputs = [

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "v1.6-1";
+  version = "v1.6-2";
 
   src = fetchFromGitHub {
     owner = "mortie";
     repo = "swaylock-effects";
     rev = version;
-    sha256 = "044fc4makjx8v29fkx5xlil6vr1v4r0k6c8741pl67gzvlm4cx3i";
+    sha256 = "0fs3c4liajgkax0a2pdc7117v1g9k73nv87g3kyv9wsnkfbbz534";
   };
 
   postPatch = ''
