@@ -5,6 +5,7 @@
 , python-dateutil
 , python-slugify
 , six
+, slugify
 , requests
 , tqdm
 , urllib3
@@ -12,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.5.6";
+  version = "1.5.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f5qrkgklcpgbwncrif7aw4f86dychqplh7k3f4rljwnr9yhjb1w";
+    sha256 = "14rv7qykawnp5f7z0wjzp2if6gznf6q2mvk7qy4vins6nv7ywjj4";
   };
 
   # The version bounds in the setup.py file are unnecessarily restrictive.
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     python-slugify
     requests
     six
+    slugify
     tqdm
     urllib3
   ];
