@@ -11966,6 +11966,8 @@ in
 
   vagrant = callPackage ../development/tools/vagrant {};
 
+  vala-language-server = callPackage ../development/tools/vala-language-server {};
+
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
   gdb = callPackage ../development/tools/misc/gdb {
