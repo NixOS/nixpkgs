@@ -45,14 +45,14 @@ assert useWayland -> wayland != null && wayland-protocols != null && waylandpp !
 
 let
   kodiReleaseDate = "20200728";
-  kodiVersion = "18.8";
+  kodiVersion = "18.9";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "0qpkpz43s207msvv3qkiy6vzqwcgmydxv3py7vc29mv6h30chrva";
+    sha256 = "0nnf7823pixj6n2fkjc8rbdjwayvhlbglij2by4rnjzzfgmqmw20";
   };
 
   cmakeProto = fetchurl {
