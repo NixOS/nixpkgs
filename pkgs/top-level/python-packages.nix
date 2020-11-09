@@ -6658,6 +6658,8 @@ in {
 
   slowaes = callPackage ../development/python-modules/slowaes { };
 
+  slugify = callPackage ../development/python-modules/slugify { };
+
   sly = callPackage ../development/python-modules/sly { };
 
   smartdc = callPackage ../development/python-modules/smartdc { };
