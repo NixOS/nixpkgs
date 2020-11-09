@@ -207,7 +207,7 @@
 /nixos/tests/podman.nix                      @NixOS/podman @zowoq
 
 # Docker tools
-/pkgs/build-support/docker                   @roberth
+/pkgs/build-support/docker                   @roberth @utdemir
 /nixos/tests/docker-tools-overlay.nix        @roberth
 /nixos/tests/docker-tools.nix                @roberth
 /doc/builders/images/dockertools.xml         @roberth
