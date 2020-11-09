@@ -78,7 +78,8 @@ in
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = mkIf cfg.docker [ "docker.service" ];
+      after = if cfg.docker then "docker.service" else "network-online.service";
+      wants = "network-online.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
@@ -87,6 +88,10 @@ in
         Delegate = "yes";
         Restart = "always";
         RestartSec = "5s";
+        LimitNOFILE = 1048576;
+        LimitNPROC = "infinity";
+        LimitCORE = "infinity";
+        TasksMax = "infinity";
         ExecStart = concatStringsSep " \\\n " (
           [
             "${cfg.package}/bin/k3s ${cfg.role}"
