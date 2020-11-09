@@ -13,4 +13,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   AlsaMixer-app = callPackage ./AlsaMixer-app.nix { };
 
   wmCalClock = callPackage ./wmCalClock.nix { };
+
+  wmsm-app = callPackage ./wmsm-app.nix { };
 })
