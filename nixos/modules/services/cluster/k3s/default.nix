@@ -78,8 +78,8 @@ in
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = if cfg.docker then "docker.service" else "network-online.service";
-      wants = "network-online.service";
+      after = [ "network-online.service" "firewall.service" ] ++ (if cfg.docker then [ "docker.service" ] else []);
+      wants = [ "network-online.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
