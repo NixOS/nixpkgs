@@ -336,8 +336,6 @@ in (mkDrv rec {
     # Schema files for validation are not included in the source tarball
     "--without-export-validation"
 
-    "--disable-libnumbertext" # system-libnumbertext"
-
     # We do tarball prefetching ourselves
     "--disable-fetch-external"
     "--enable-build-opensymbol"
@@ -360,6 +358,7 @@ in (mkDrv rec {
     "--without-system-libfreehand"
     "--without-system-liblangtag"
     "--without-system-libmspub"
+    "--without-system-libnumbertext"
     "--without-system-libpagemaker"
     "--without-system-libstaroffice"
     "--without-system-libepubgen"
