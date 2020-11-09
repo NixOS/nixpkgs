@@ -192,6 +192,8 @@ in
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
+  cp437 = callPackage ../tools/misc/cp437 { };
+
   cpu-x = callPackage ../applications/misc/cpu-x { };
 
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
