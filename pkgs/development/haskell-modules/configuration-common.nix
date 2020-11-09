@@ -1261,25 +1261,7 @@ self: super: {
   patch = doJailbreak super.patch;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
-  # Tests disabled because of very old dep: https://github.com/reflex-frp/reflex-dom/issues/393
-  reflex-dom-core = doDistribute (unmarkBroken (dontCheck (appendPatches super.reflex-dom-core [
-    # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/388
-    # Fix upper bounds
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex-dom/commit/5ef04d8e478f410d2c63603b84af052c9273a533.patch";
-      sha256 ="0d0b819yh8mqw8ih5asdi9qcca2kmggfsi8gf22akfw1n7xvmavi";
-      stripLen = 2;
-      extraPrefix = "";
-    })
-    # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/394
-    # Bump dependent-map
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex-dom/commit/695bd17d5dcdb1bf321ee8858670731637f651db.patch";
-      sha256 ="0llky3i37rakgsw9vqaqmwryv7s91w8ph8xjkh83nxjs14p5zfyk";
-      stripLen = 2;
-      extraPrefix = "";
-    })
-  ])));
+  reflex-dom-core = doDistribute (unmarkBroken (dontCheck super.reflex-dom-core));
 
   # add unreleased commit fixing version constraint as a patch
   # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
