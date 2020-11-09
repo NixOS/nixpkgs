@@ -5,6 +5,7 @@
 , callPackage
 , enableShared ? true
 , enableStatic ? false
+, Security
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -50,6 +51,8 @@ let
 in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version cargoSha256;
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ emscripten which ];
 
@@ -103,9 +106,8 @@ in rustPlatform.buildRustPackage {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Profpatsch ];
-    # Darwin needs some more work with default libraries
     # Aarch has test failures with how tree-sitter compiles the generated C files
-    broken = stdenv.isDarwin || stdenv.isAarch64;
+    broken = stdenv.isAarch64;
   };
 
 }
