@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, xz }:
+{ stdenv, lib, fetchurl, autoreconfHook, xz, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devman" ];
+
+  # Without latex2man, no man pages are installed despite being
+  # prebuilt in the source tarball.
+  configureFlags = "LATEX2MAN=${coreutils}/bin/true";
 
   propagatedBuildInputs = [ xz ];
 
