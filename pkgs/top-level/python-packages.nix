@@ -4568,6 +4568,8 @@ in {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  pysbd = callPackage ../development/python-modules/pysbd { };
+
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
