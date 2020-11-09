@@ -8900,7 +8900,7 @@ in
         inherit noSysDirs;
         # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
         profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-        isl = if !stdenv.isDarwin then isl_0_17 else null;
+        isl = if !stdenv.isDarwin then isl_0_20 else null;
 
         # just for stage static
         crossStageStatic = true;
@@ -8993,7 +8993,7 @@ in
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
-    isl = if !stdenv.isDarwin then isl_0_17 else null;
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
 
   gcc10 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/10 {
@@ -9007,7 +9007,7 @@ in
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
-    isl = if !stdenv.isDarwin then isl_0_17 else null;
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
 
   gcc_latest = gcc10;
