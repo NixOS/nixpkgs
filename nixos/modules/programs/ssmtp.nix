@@ -142,6 +142,13 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      {
+        assertion = cfg.useSTARTTLS -> cfg.useTLS;
+        message = "services.ssmtp.useSTARTTLS has no effect without services.ssmtp.useTLS";
+      }
+    ];
+
     services.ssmtp.settings = mkMerge [
       ({
         MailHub = cfg.hostName;
