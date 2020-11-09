@@ -38,6 +38,7 @@ let
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
     sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
   });
+  patchesDir = ./patches + "/${minorVersion}";
 in
 
 stdenv.mkDerivation {
@@ -48,18 +49,18 @@ stdenv.mkDerivation {
 
   patches = [
     # Make binutils output deterministic by default.
-    ./deterministic.patch
+    "${patchesDir}/deterministic.patch"
 
     # Bfd looks in BINDIR/../lib for some plugins that don't
     # exist. This is pointless (since users can't install plugins
     # there) and causes a cycle between the lib and bin outputs, so
     # get rid of it.
-    ./no-plugins.patch
+    "${patchesDir}/no-plugins.patch"
 
     # Help bfd choose between elf32-littlearm, elf32-littlearm-symbian, and
     # elf32-littlearm-vxworks in favor of the first.
     # https://github.com/NixOS/nixpkgs/pull/30484#issuecomment-345472766
-    ./disambiguate-arm-targets.patch
+    "${patchesDir}/disambiguate-arm-targets.patch"
 
     # For some reason bfd ld doesn't search DT_RPATH when cross-compiling. It's
     # not clear why this behavior was decided upon but it has the unfortunate
@@ -67,19 +68,21 @@ stdenv.mkDerivation {
     # shared objects when cross-compiling. Consequently, we are forced to
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
-    ./always-search-rpath.patch
-
-  ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
-  [
+    "${patchesDir}/always-search-rpath.patch"
+  ]
+  # For version 2.31 exclusively
+  ++ lib.optionals (!stdenv.targetPlatform.isVc4 && minorVersion == "2.31") [
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
-    ./gold-symbol-visibility.patch
+    ./patches/2.31/gold-symbol-visibility.patch
 
     # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
     # un-break features so linking against musl doesn't produce crash-only binaries
-    ./0001-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
-    ./0001-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
-    ./0001-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
-  ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
+    ./patches/2.31/0001-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
+    ./patches/2.31/0001-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
+    ./patches/2.31/0001-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
+  ]
+  ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
+  ;
 
   outputs = [ "out" "info" "man" ];
 
@@ -149,7 +152,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit targetPrefix;
+    inherit targetPrefix patchesDir;
   };
 
   meta = with lib; {
