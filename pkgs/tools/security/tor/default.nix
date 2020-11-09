@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     maintainers = with maintainers;
-      [ phreedom doublec thoughtpolice joachifm ];
+      [ phreedom thoughtpolice joachifm ];
     platforms = platforms.unix;
   };
 }
