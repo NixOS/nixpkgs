@@ -6495,6 +6495,8 @@ in
 
   podiff = callPackage ../tools/text/podiff { };
 
+  podcast = callPackage ../tools/networking/podcast { };
+
   podman = if stdenv.isDarwin then
     callPackage ../applications/virtualization/podman { }
   else
