@@ -192,7 +192,7 @@ with lib;
         RuntimeDirectory = StateDirectory;
         StateDirectory = builtins.baseNameOf dataDir;
         Type = "oneshot";
-        ExecStartPre = "!${lib.getBin pkgs.coreutils}/bin/install -m666 ${cfg.configFile} /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStartPre = "!${lib.getBin pkgs.coreutils}/bin/install -D -m666 ${cfg.configFile} /run/${RuntimeDirectory}/ddclient.conf";
         ExecStart = "${lib.getBin pkgs.ddclient}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };
