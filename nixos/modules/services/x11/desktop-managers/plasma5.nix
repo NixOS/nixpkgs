@@ -367,7 +367,7 @@ in
       security.pam.services.sddm.enableKwallet = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
+      xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
