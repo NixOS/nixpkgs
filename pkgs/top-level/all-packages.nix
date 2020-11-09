@@ -24322,6 +24322,7 @@ in
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
+  dockapps = callPackage ../applications/window-managers/windowmaker/dockapps { };
 
   wily = callPackage ../applications/editors/wily { };
 
