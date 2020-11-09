@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
     ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    ./CVE-2020-27617.patch
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
