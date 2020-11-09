@@ -6,6 +6,7 @@
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos, libdrm, mesa
+, libxkbcommon, wayland # ozone/wayland
 
 # Command line programs
 , coreutils
@@ -62,6 +63,7 @@ let
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     kerberos libdrm mesa coreutils
+    libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
@@ -119,9 +121,13 @@ in stdenv.mkDerivation {
       --replace /opt $out/share \
       --replace $out/share/google/$appname/google-$appname $exe
 
-    for icon_file in $out/share/google/chrome*/product_logo_*[0-9].png; do
+    for icon_file in $out/share/google/chrome*/product_logo_[0-9]*.png; do
       num_and_suffix="''${icon_file##*logo_}"
-      icon_size="''${num_and_suffix%.*}"
+      if [ $dist = "stable" ]; then
+        icon_size="''${num_and_suffix%.*}"
+      else
+        icon_size="''${num_and_suffix%_*}"
+      fi
       logo_output_prefix="$out/share/icons/hicolor"
       logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
       mkdir -p "$logo_output_path"

@@ -322,6 +322,7 @@ stdenv.mkDerivation ({
     isFirefox3Like = true;
     gtk = gtk2;
     nspr = nspr_pkg;
+    inherit alsaSupport;
     inherit ffmpegSupport;
     inherit gssSupport;
     inherit execdir;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkgconfig
 , curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
 , coreutils, procps, psmisc }:
@@ -90,6 +90,12 @@ in stdenv.mkDerivation rec {
   patches = [
     ./default-to-http-1dot1.patch
     ./0001-Don-t-use-file-timestamp-in-cache-filename.patch
+
+    (fetchpatch {
+      name = "CVE-2020-25729.patch";
+      url = "https://github.com/ZoneMinder/zoneminder/commit/9268db14a79c4ccd444c2bf8d24e62b13207b413.patch";
+      sha256 = "0ank49f66n4ssilwm86maqr8bkwk13g2hhx7iw6bn8b9ypp1pj5y";
+    })
   ];
 
   postPatch = ''

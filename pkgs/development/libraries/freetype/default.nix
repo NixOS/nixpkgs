@@ -45,6 +45,7 @@ in stdenv.mkDerivation rec {
 
   patches =
     [ ./enable-table-validation.patch
+      ./CVE-2020-15999.patch
     ] ++
     optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
