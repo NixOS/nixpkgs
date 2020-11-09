@@ -6,15 +6,11 @@ stdenv.mkDerivation {
 
   src = ./.;
 
-  postPatch = ''
-    cat CMakeLists.txt
-  '';
-
-  makeFlags = [ "VERBOSE=1" ];
-
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libtorch-bin ];
+
+  doCheck = true;
 
   installPhase = ''
     touch $out
