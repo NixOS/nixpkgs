@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
   };
 }
