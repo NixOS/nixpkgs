@@ -9,4 +9,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   };
 
   libdockapp = callPackage ./libdockapp.nix { };
+
+  AlsaMixer-app = callPackage ./AlsaMixer-app.nix { };
 })
