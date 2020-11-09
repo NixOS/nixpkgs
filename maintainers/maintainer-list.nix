@@ -3341,6 +3341,12 @@
     githubId = 1882000;
     name = "Guillaume Desforges";
   };
+  guillaumecherel = {
+    email = "guillaume.cherel@cosimus.com";
+    github = "guillaumecherel";
+    githubId = 6168820;
+    name = "Guillaume Chérel";
+  };
   guillaumekoenig = {
     email = "guillaume.edward.koenig@gmail.com";
     github = "guillaumekoenig";
