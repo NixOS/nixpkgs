@@ -74,7 +74,7 @@ in stdenv.mkDerivation {
     description = "Decentralised and censorship-resistant network";
     homepage = "https://freenetproject.org/";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.doublec ];
+    maintainers = [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
