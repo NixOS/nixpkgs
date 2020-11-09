@@ -2738,6 +2738,8 @@ unsupported-platforms:
   sdl2-mixer:                                   [ x86_64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin ]
   tokyotyrant-haskell:                          [ x86_64-darwin ]
+  vulkan:                                       [ i686-linux, armv7l-linux ]
+  VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux ]
   Win32-console:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   Win32-dhcp-server:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   Win32-errors:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -2892,6 +2894,7 @@ broken-packages:
   - accentuateus
   - access-time
   - access-token-provider
+  - achille
   - acid-state-dist
   - acid-state-tls
   - ACME
@@ -3121,6 +3124,8 @@ broken-packages:
   - armor
   - arpa
   - arpack
+  - array-builder
+  - array-chunks
   - array-forth
   - array-list
   - array-primops
@@ -3205,7 +3210,6 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - authoring
-  - autoapply
   - AutoForms
   - autom
   - automata
@@ -3456,6 +3460,7 @@ broken-packages:
   - bitcoin-hs
   - bitcoin-rpc
   - bitcoin-script
+  - bitcoin-scripting
   - bitcoin-tx
   - bitcoind-regtest
   - bitcoind-rpc
@@ -3601,7 +3606,11 @@ broken-packages:
   - byline
   - bytable
   - bytearray-parsing
+  - bytebuild
+  - bytehash
   - bytelog
+  - byteslice
+  - bytesmith
   - bytestring-arbitrary
   - bytestring-builder-varword
   - bytestring-class
@@ -3995,6 +4004,7 @@ broken-packages:
   - compdata-dags
   - compdata-param
   - compdoc
+  - compdoc-dhall-decoder
   - competition
   - compilation
   - complexity
@@ -4101,7 +4111,9 @@ broken-packages:
   - context-free-grammar
   - context-stack
   - ContextAlgebra
+  - contiguous
   - contiguous-checked
+  - contiguous-fft
   - continue
   - continuum
   - continuum-client
@@ -4535,6 +4547,7 @@ broken-packages:
   - discord-gateway
   - discord-haskell
   - discord-hs
+  - discord-register
   - discord-rest
   - discord-types
   - discordian-calendar
@@ -4600,6 +4613,9 @@ broken-packages:
   - doi
   - DOM
   - dom-lt
+  - domain
+  - domain-core
+  - domain-optics
   - domplate
   - dot-linker
   - dotfs
@@ -4799,6 +4815,7 @@ broken-packages:
   - eros
   - eros-client
   - eros-http
+  - error-codes
   - error-context
   - error-continuations
   - error-list
@@ -4856,7 +4873,6 @@ broken-packages:
   - every-bit-counts
   - ewe
   - exact-cover
-  - exact-real
   - exact-real-positional
   - except-exceptions
   - exception-monads-fd
@@ -5262,6 +5278,8 @@ broken-packages:
   - garepinoh
   - gargoyle
   - gargoyle-postgresql
+  - gargoyle-postgresql-connect
+  - gargoyle-postgresql-nix
   - gas
   - gbu
   - gc-monitoring-wai
@@ -5415,7 +5433,6 @@ broken-packages:
   - git-fmt
   - git-gpush
   - git-jump
-  - git-mediate
   - git-monitor
   - git-object
   - git-remote-ipfs
@@ -5518,6 +5535,7 @@ broken-packages:
   - GoogleSB
   - GoogleTranslate
   - gopherbot
+  - gopro-plus
   - gore-and-ash
   - gore-and-ash-actor
   - gore-and-ash-async
@@ -6158,6 +6176,7 @@ broken-packages:
   - hevolisa
   - hevolisa-dph
   - hex
+  - hex-text
   - HExcel
   - hexchat
   - hexif
@@ -6928,6 +6947,7 @@ broken-packages:
   - iostring
   - iothread
   - iotransaction
+  - ip
   - ip2location
   - ip2proxy
   - ipatch
@@ -7589,6 +7609,7 @@ broken-packages:
   - lxd-client
   - lye
   - Lykah
+  - lz4-bytes
   - lz4-conduit
   - lz4-frame-conduit
   - lzma-enumerator
@@ -7611,6 +7632,7 @@ broken-packages:
   - maclight
   - macos-corelibs
   - macosx-make-standalone
+  - macrm
   - madlang
   - mage
   - magic-tyfams
@@ -7826,6 +7848,7 @@ broken-packages:
   - mltool
   - mm2
   - mmsyn4
+  - mmsyn7h
   - mmtf
   - mmtl
   - mmtl-base
@@ -7928,8 +7951,10 @@ broken-packages:
   - morfette
   - morfeusz
   - morley
+  - morloc
   - morpheus-graphql-cli
   - morpheus-graphql-client
+  - morpheus-graphql-subscriptions
   - morphisms-functors
   - morphisms-functors-inventory
   - morphisms-objects
@@ -8380,7 +8405,6 @@ broken-packages:
   - optparse-applicative-simple
   - optparse-enum
   - optparse-helper
-  - orbits
   - orc
   - orchestrate
   - OrchestrateDB
@@ -8733,6 +8757,7 @@ broken-packages:
   - pointless-haskell
   - pointless-lenses
   - pointless-rewrite
+  - poke
   - pokemon-go-protobuf-types
   - poker-eval
   - pokitdok
@@ -8751,6 +8776,7 @@ broken-packages:
   - polysemy-kvstore-jsonfile
   - polysemy-methodology
   - polysemy-optics
+  - polysemy-path
   - polysemy-RandomFu
   - polysemy-resume
   - polysemy-test
@@ -8781,6 +8807,7 @@ broken-packages:
   - poseidon
   - poseidon-postgis
   - posix-acl
+  - posix-api
   - posix-realtime
   - posix-waitpid
   - posplyu
@@ -8859,10 +8886,15 @@ broken-packages:
   - primal
   - primal-memory
   - primes-type
+  - primitive-atomic
+  - primitive-containers
+  - primitive-extras
   - primitive-indexed
   - primitive-maybe
   - primitive-simd
+  - primitive-sort
   - primitive-stablename
+  - primitive-unlifted
   - PrimitiveArray-Pretty
   - primula-board
   - primula-bot
@@ -9188,6 +9220,7 @@ broken-packages:
   - reflex-dom-svg
   - reflex-dynamic-containers
   - reflex-fsnotify
+  - reflex-gadt-api
   - reflex-ghci
   - reflex-gloss
   - reflex-gloss-scene
@@ -9416,6 +9449,7 @@ broken-packages:
   - ruin
   - ruler
   - ruler-core
+  - run-st
   - rungekutta
   - runhs
   - runmany
@@ -9857,6 +9891,7 @@ broken-packages:
   - sme
   - smerdyakov
   - smiles
+  - smith
   - smith-cli
   - smith-client
   - Smooth
@@ -10121,6 +10156,7 @@ broken-packages:
   - stm-chunked-queues
   - stm-containers
   - stm-firehose
+  - stm-hamt
   - stm-promise
   - stm-stats
   - stm-supply
@@ -10331,6 +10367,7 @@ broken-packages:
   - tart
   - task
   - task-distribution
+  - taskell
   - TaskMonad
   - tasty-auto
   - tasty-bdd
@@ -10458,6 +10495,7 @@ broken-packages:
   - th-instances
   - th-kinds
   - th-kinds-fork
+  - th-lego
   - th-pprint
   - th-sccs
   - th-tc
@@ -10746,6 +10784,7 @@ broken-packages:
   - typescript-docs
   - typograffiti
   - tyro
+  - tz
   - u2f
   - uber
   - uberlast
@@ -10988,7 +11027,6 @@ broken-packages:
   - vty-menu
   - vty-ui
   - vty-ui-extras
-  - vulkan-utils
   - waargonaut
   - wacom-daemon
   - waddle
@@ -11290,6 +11328,7 @@ broken-packages:
   - yaml-rpc
   - yaml-rpc-scotty
   - yaml-rpc-snap
+  - yaml-unscrambler
   - YamlReference
   - Yampa
   - yampa-canvas

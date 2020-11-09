@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, icu, catch2, ronn }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, icu, catch2, pandoc }:
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "1jfnwva2i67i9pyh123a5h2zs5p7gw77qh4w7qkx61jigsyxc5v7";
+    sha256 = "1p90a3wv4b8m5fdpbnr9cyd1x3a504q9rc4cghq02xff63h5gclf";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ronn ];
+  nativeBuildInputs = [ cmake pkgconfig pandoc ];
   buildInputs = [ boost icu ];
 
   outputs = [ "out" "lib" "dev" "man" ];

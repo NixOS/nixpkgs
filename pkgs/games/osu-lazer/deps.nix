@@ -586,8 +586,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2020.925.0";
-    sha256 = "1244fxm7x4rqi43kp6l98bsbjc2yvv7dmpbajdr9fapqm37fdbdj";
+    version = "2020.1009.0";
+    sha256 = "0mqx9wjp639k56f0cjlrk67mq7c4h4vlglvss93dnvbb20ljn54r";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
@@ -596,8 +596,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Game.Resources";
-    version = "2020.904.0";
-    sha256 = "0n0alpyxpf65mmnqidh044sh4nibsfj0m5n8hfmpjwq11wnpmbih";
+    version = "2020.1016.0";
+    sha256 = "1zsqmmlxbb2ncrlvha33cz0inbd6ijbcvxn0y0cysfkg7zb9iisy";
   })
   (fetchNuGet {
     name = "ppy.osuTK.NS20";

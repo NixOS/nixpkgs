@@ -91,17 +91,18 @@ let
   };
 
 in rec {
-  # Supported releases (as of 2020-10-07).
+  # Supported releases (as of 2020-10-26).
   # Source: https://wiki.asterisk.org/wiki/display/AST/Asterisk+Versions
   # Exact version can be found at https://www.asterisk.org/downloads/asterisk/all-asterisk-versions/
   #
   # Series  Type       Rel. Date   Sec. Fixes  EOL
   # 13.x    LTS        2014-10-24  2020-10-24  2021-10-24
   # 16.x    LTS        2018-10-09  2022-10-09  2023-10-09
-  asterisk-lts = asterisk_16;
+  # 18.x    LTS        2020-10-20  2024-10-20  2025-10-20
+  asterisk-lts = asterisk_18;
   # 17.x    Standard   2019-10-28  2020-10-28  2021-10-28
-  asterisk-stable = asterisk_17;
-  asterisk = asterisk_17;
+  asterisk-stable = asterisk_18;
+  asterisk = asterisk_18;
 
   asterisk_13 = common {
     version = "13.37.0";
@@ -124,6 +125,15 @@ in rec {
   asterisk_17 = common {
     version = "17.8.0";
     sha256 = "0xhwh8s8n8xg43gcdkqjj484assva7lm5ah1b306a5nf6j8p9bjy";
+    externals = {
+      "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
+      "addons/mp3" = mp3-202;
+    };
+  };
+
+  asterisk_18 = common {
+    version = "18.0.0";
+    sha256 = "174zasx8d7ragy2fz4vwc4pbra9wl471mnisz1z0a3b2qsbh4y4v";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;

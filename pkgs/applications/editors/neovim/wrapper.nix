@@ -43,7 +43,6 @@ let
       postBuild = lib.optionalString stdenv.isLinux ''
         rm $out/share/applications/nvim.desktop
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
-          --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
       ''
       + optionalString withPython2 ''

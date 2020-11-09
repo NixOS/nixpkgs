@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;  # the build fails without this. should probably be reported upstream
 
   meta = with stdenv.lib; {
+    description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
     license = with licenses; [ gpl2 bsd2 ];
     platforms = platforms.linux;

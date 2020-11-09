@@ -24,6 +24,7 @@ in
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   agda = handleTest ./agda.nix {};
+  ammonite = handleTest ./ammonite.nix {};
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
@@ -224,6 +225,7 @@ in
   mysql-backup = handleTest ./mysql/mysql-backup.nix {};
   mysql-replication = handleTest ./mysql/mysql-replication.nix {};
   nagios = handleTest ./nagios.nix {};
+  nar-serve = handleTest ./nar-serve.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
@@ -254,6 +256,7 @@ in
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
   nzbget = handleTest ./nzbget.nix {};
+  oh-my-zsh = handleTest ./oh-my-zsh.nix {};
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
@@ -312,6 +315,7 @@ in
   samba = handleTest ./samba.nix {};
   sanoid = handleTest ./sanoid.nix {};
   sbt = handleTest ./sbt.nix {};
+  scala = handleTest ./scala.nix {};
   sddm = handleTest ./sddm.nix {};
   service-runner = handleTest ./service-runner.nix {};
   shadowsocks = handleTest ./shadowsocks {};
@@ -364,6 +368,7 @@ in
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   tuptime = handleTest ./tuptime.nix {};
+  unbound = handleTest ./unbound.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
   upnp = handleTest ./upnp.nix {};

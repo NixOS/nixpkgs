@@ -136,6 +136,13 @@
     <package>stanchion</package> package removed along with <varname>services.stanchion</varname> module.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>mutt</package> has been updated to a new major version (2.x), which comes with
+     some backward incompatible changes that are described in the
+     <link xlink:href="http://www.mutt.org/relnotes/2.0/">release notes for Mutt 2.0</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -161,10 +168,71 @@
    </listitem>
    <listitem>
     <para>
+     The setting <xref linkend="opt-services.redis.bind" /> defaults to <literal>127.0.0.1</literal> now, making Redis listen on the loopback interface only, and not all public network interfaces.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      NixOS now emits a deprecation warning if systemd's <literal>StartLimitInterval</literal> setting is used in a <literal>serviceConfig</literal> section instead of in a <literal>unitConfig</literal>; that setting is deprecated and now undocumented for the service section by systemd upstream, but still effective and somewhat buggy there, which can be confusing. See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/45785">#45785</link> for details.
     </para>
     <para>
      All services should use <xref linkend="opt-systemd.services._name_.startLimitIntervalSec" /> or <literal>StartLimitIntervalSec</literal> in <xref linkend="opt-systemd.services._name_.unitConfig" /> instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The Unbound DNS resolver service (<literal>services.unbound</literal>) has been refactored to allow reloading, control sockets and to fix startup ordering issues.
+    </para>
+
+    <para>
+     It is now possible to enable a local UNIX control socket for unbound by setting the <xref linkend="opt-services.unbound.localControlSocketPath" />
+     option.
+    </para>
+
+    <para>
+     Previously we just applied a very minimal set of restrictions and
+     trusted unbound to properly drop root privs and capabilities.
+    </para>
+
+    <para>
+     As of this we are (for the most part) just using the upstream
+     example unit file for unbound. The main difference is that we start
+     unbound as <literal>unbound</literal> user with the required capabilities instead of
+     letting unbound do the chroot &amp; uid/gid changes.
+    </para>
+
+    <para>
+     The upstream unit configuration this is based on is a lot stricter with
+     all kinds of permissions then our previous variant. It also came with
+     the default of having the <literal>Type</literal> set to <literal>notify</literal>, therefore we are now also
+     using the <literal>unbound-with-systemd</literal> package here. Unbound will start up,
+     read the configuration files and start listening on the configured ports
+     before systemd will declare the unit <literal>active (running)</literal>.
+     This will likely help with startup order and the occasional race condition during system
+     activation where the DNS service is started but not yet ready to answer
+     queries. Services depending on <literal>nss-lookup.target</literal> or <literal>unbound.service</literal>
+     are now be able to use unbound when those targets have been reached.
+    </para>
+
+    <para>
+     Aditionally to the much stricter runtime environmet the
+     <literal>/dev/urandom</literal> mount lines we previously had in the code (that would
+     randomly failed during the stop-phase) have been removed as systemd will take care of those for us.
+    </para>
+
+    <para>
+     The <literal>preStart</literal> script is now only required if we enabled the trust
+      anchor updates (which are still enabled by default).
+    </para>
+
+    <para>
+     Another benefit of the refactoring is that we can now issue reloads via
+     either <literal>pkill -HUP unbound</literal> and <literal>systemctl reload unbound</literal> to reload the
+     running configuration without taking the daemon offline. A prerequisite
+     of this was that unbound configuration is available on a well known path
+     on the file system. We are using the path <literal>/etc/unbound/unbound.conf</literal> as that is the
+     default in the CLI tooling which in turn enables us to use
+     <literal>unbound-control</literal> without passing a custom configuration location.
     </para>
    </listitem>
   </itemizedlist>
