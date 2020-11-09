@@ -18,8 +18,12 @@
 let
   pulseSources = runCommand "pulseaudio-sources" {} ''
     mkdir $out
-    tar -xf ${pulseaudio.src}
-    mv pulseaudio*/* $out/
+    if [ -d ${pulseaudio.src} ]; then
+      ln -s ${pulseaudio.src}/* $out/
+    else
+      tar -xf ${pulseaudio.src}
+      mv pulseaudio*/* $out/
+    fi
   '';
 
 in stdenv.mkDerivation rec {
