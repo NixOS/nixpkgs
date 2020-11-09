@@ -8,4 +8,5 @@ lib.makeScope pkgs.newScope (self: with self; {
     sha256 = "sha256-BuSnwPIj3gUWMjj++SK+117xm/77u4gXLQzRFttei0w=";
   };
 
+  libdockapp = callPackage ./libdockapp.nix { };
 })
