@@ -1,18 +1,18 @@
-From 597e73f2a4b2f0b508127931b36d5540d6941823 Mon Sep 17 00:00:00 2001
-From: Frederik Rietdijk <fridh@fridh.nl>
-Date: Mon, 28 Aug 2017 09:24:06 +0200
-Subject: [PATCH] Don't use ldconfig
+From 084c6dd6352077e64f10cf7aa168f95d800f3819 Mon Sep 17 00:00:00 2001
+From: Jonathan Ringer <jonringer117@gmail.com>
+Date: Mon, 9 Nov 2020 10:24:35 -0800
+Subject: [PATCH] CPython: Don't use ldconfig
 
 ---
- Lib/ctypes/util.py | 70 ++----------------------------------------------------
- 1 file changed, 2 insertions(+), 68 deletions(-)
+ Lib/ctypes/util.py | 77 ++--------------------------------------------
+ 1 file changed, 2 insertions(+), 75 deletions(-)
 
 diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
-index 5e8b31a854..7b45ce6c15 100644
+index 0c2510e..7fb98af 100644
 --- a/Lib/ctypes/util.py
 +++ b/Lib/ctypes/util.py
-@@ -94,46 +94,7 @@ elif os.name == "posix":
-     import re, tempfile
+@@ -100,53 +100,7 @@ elif os.name == "posix":
+             return thefile.read(4) == elf_header
  
      def _findLib_gcc(name):
 -        # Run GCC's linker with the -t (aka --trace) option and examine the
@@ -51,15 +51,22 @@ index 5e8b31a854..7b45ce6c15 100644
 -                # Raised if the file was already removed, which is the normal
 -                # behaviour of GCC if linking fails
 -                pass
--        res = re.search(expr, trace)
+-        res = re.findall(expr, trace)
 -        if not res:
 -            return None
--        return os.fsdecode(res.group(0))
+-
+-        for file in res:
+-            # Check if the given file is an elf file: gcc can report
+-            # some files that are linker scripts and not actual
+-            # shared objects. See bpo-41976 for more details
+-            if not _is_elf(file):
+-                continue
+-            return os.fsdecode(file)
 +        return None
  
  
      if sys.platform == "sunos5":
-@@ -255,34 +216,7 @@ elif os.name == "posix":
+@@ -268,34 +222,7 @@ elif os.name == "posix":
      else:
  
          def _findSoname_ldconfig(name):
@@ -96,5 +103,5 @@ index 5e8b31a854..7b45ce6c15 100644
          def _findLib_ld(name):
              # See issue #9998 for why this is needed
 -- 
-2.15.0
+2.28.0
 

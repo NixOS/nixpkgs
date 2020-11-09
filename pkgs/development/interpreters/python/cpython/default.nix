@@ -14,6 +14,7 @@
 , self
 , configd
 , autoreconfHook
+, autoconf-archive
 , python-setup-hook
 , nukeReferences
 # For the Python package set
@@ -67,6 +68,8 @@ let
 
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
+  ] ++ optionals (!stdenv.isDarwin && passthru.pythonAtLeast "3.10") [
+    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
   ] ++ [
     nukeReferences
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
