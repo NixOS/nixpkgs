@@ -25,8 +25,6 @@
 , gnome-desktop
 , gsettings-desktop-schemas
 , gdk-pixbuf
-, tracker
-, nautilus
 , xvfb_run
 }:
 
@@ -72,8 +70,6 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
     gnome-desktop
     gsettings-desktop-schemas
-    tracker
-    nautilus
     # for plug-ins
     python3Packages.pygobject3
     python3Packages.dbus-python
