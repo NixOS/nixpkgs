@@ -95,7 +95,15 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
   # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
-  cachix = disableLibraryProfiling super.cachix;
+  cachix = overrideSrc (disableLibraryProfiling super.cachix) {
+    src = (pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "1471050f5906ecb7cd0d72115503d07d2e3beb17";
+      sha256 = "1lkrmhv5x9dpy53w33kxnhv4x4qm711ha8hsgccrjmxaqcsdm59g";
+    }) + "/cachix";
+    version = "0.5.1";
+  };
   hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
