@@ -2,16 +2,30 @@
 #! nix-shell -i bash -p coreutils curl jq
 # shellcheck shell=bash
 #
-# Update a terraform provider to the latest version advertised at
-# the provider source address.
+# Update a terraform provider to the latest version advertised at the provider source address.
+#
+# When the provider data has the vendorSha256 the Go module is built to extract the updated vendorSha256.
 set -euo pipefail
+
+puts() {
+  local blue="\e[34m"
+  local default="\e[39m"
+  local timestamp
+  timestamp=$(date +%FT%T.%3NZ)
+  echo -e "${blue}${timestamp} $1${default}" 1>&2
+}
 
 USAGE=$(cat<<DOC
 Specify the terraform provider name to update.
 
 Example:
-To update nixpkgs.terraform-providers.aws run:
-./update-provider aws
+
+To update the aws provider run (from nixpkgs root):
+./pkgs/applications/networking/cluster/terraform-providers/update-provider aws
+
+OR
+
+nix-shell maintainers/scripts/update.nix --argstr path terraform-providers.aws
 DOC
 )
 
@@ -23,20 +37,26 @@ if [ -z "$provider_name" ]; then
   exit 1
 fi
 
-provider_source_address="$(jq -r ".$provider_name.\"provider-source-address\"" providers.json)"
+dirname="$(dirname "$0")"
+
+provider_data="$(jq -r ".\"$provider_name\"" "$dirname/providers.json")"
+provider_source_address="$(jq -r ".\"provider-source-address\"" <<< "$provider_data")"
 
 if [ "$provider_source_address" == "null" ]; then
   echo "No provider source address specified with provider: $provider_name"
   exit 1
 fi
 
-# The provider source address (used inside Terraform `required_providers` block) is
+# The provider source address (used inside Terraform's `required_providers` block) is
 # used to compute the registry API endpoint
 #
 # registry.terraform.io/hashicorp/aws (provider source address)
 # registry.terraform.io/providers/hashicorp/aws (provider URL for the website)
 # registry.terraform.io/v1/providers/hashicorp/aws (provider URL for the JSON API)
-registry_response=$(curl -s https://"${provider_source_address/\///v1/providers/}")
+provider_registry_url="https://${provider_source_address/\///v1/providers/}"
+
+puts "fetching provider metadata from registry: $provider_registry_url"
+registry_response=$(curl -s "$provider_registry_url")
 
 prefetch_github() {
   # of a given owner, repo and rev, fetch the tarball and return the output of
@@ -53,25 +73,53 @@ org="$(echo "$provider_source_url" | cut -d '/' -f 4)"
 repo="$(echo "$provider_source_url" | cut -d '/' -f 5)"
 rev="$(jq -r '.tag' <<< "$registry_response")"
 
+puts "fetching provider source at: $provider_source_url"
 sha256=$(prefetch_github "$org" "$repo" "$rev")
-
 version="$(jq -r '.version' <<< "$registry_response")"
 
-updated_provider="$(mktemp)"
-cat <<EOF >> "$updated_provider"
-{
-  "$provider_name": {
-    "owner": "$org",
-    "repo": "$repo",
-    "rev": "$rev",
-    "sha256": "$sha256",
-    "version": "$version",
-    "provider-source-address": "$provider_source_address"
-  }
+update_provider() {
+  local original_provider_list
+  original_provider_list="$(cat "$dirname/providers.json")"
+
+  jq --sort-keys \
+    --argjson original "$original_provider_list" \
+    --argjson updated "$1" \
+    --arg provider_name "$provider_name" \
+    --slurp -n '$original * { ($provider_name): $updated }' \
+    > "$dirname/providers.json"
 }
-EOF
 
-original_provider_list="$(mktemp)"
-cat providers.json > "$original_provider_list"
+update_provider "$(cat <<EOS
+{
+  "owner": "$org",
+  "repo": "$repo",
+  "rev": "$rev",
+  "sha256": "$sha256",
+  "version": "$version"
+}
+EOS
+)"
 
-jq --sort-keys --slurp '.[0] * .[1]' "$original_provider_list" "$updated_provider" > providers.json
+if [ "$(jq -r '. | keys | index("vendorSha256")' <<< "$provider_data")" != "null" ]; then
+  puts "provider is Go module will build to compute vendorSha256"
+
+  if [ "$(jq -r '.vendorSha256' <<< "$provider_data")" = "null" ]; then
+
+    update_provider '{ "vendorSha256": null }'
+  else
+    update_provider '{ "vendorSha256": "0000000000000000000000000000000000000000000000000000" }'
+  fi
+
+  build_output="$(mktemp)"
+  set +e
+  nix-build -A "terraform-providers.$provider_name" 2>&1 | tee "$build_output"
+  set -e
+
+  vendorSha256="$(grep "got:" "$build_output" | cut -d':' -f3)"
+
+  puts "extracted vendorSha256: $vendorSha256"
+
+  update_provider "{ \"vendorSha256\": \"$vendorSha256\" }"
+fi
+
+puts "done"
