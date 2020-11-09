@@ -3796,6 +3796,8 @@ in
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
+  fend = callPackage ../tools/misc/fend { };
+
   ferm = callPackage ../tools/networking/ferm { };
 
   ffsend = callPackage ../tools/misc/ffsend { };
