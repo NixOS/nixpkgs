@@ -3,27 +3,22 @@
 appleDerivation {
   # We can't just run the root build, because https://github.com/facebook/xcbuild/issues/264
 
+  patchPhase = ''
+    substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
+      --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib'
+  '';
+
   # pkill requires special private headers that are unavailable in
   # NixPkgs. These ones are needed:
   #  - xpc/xpxc.h
   #  - os/base_private.h
   #  - _simple.h
   # We disable it here for now. TODO: build pkill inside adv_cmds
-
-  # We also disable locale here because of some issues with a missing
-  # "lstdc++".
-  patchPhase = ''
-    substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
-      --replace "FD201DC214369B4200906237 /* pkill.c in Sources */," "" \
-      --replace "FDF278D60FC6204E00D7A3C6 /* locale.cc in Sources */," "" \
-      --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib'
-  '';
-
   buildPhase = ''
     targets=$(xcodebuild -list \
                 | awk '/Targets:/{p=1;print;next} p&&/^\s*$/{p=0};p' \
                 | tail -n +2 | sed 's/^[ \t]*//' \
-                | grep -v -e Desktop -e Embedded -e mklocale -e colldef)
+                | grep -v -e Desktop -e Embedded -e mklocale -e pkill -e pgrep -e colldef)
 
     for i in $targets; do
       xcodebuild SYMROOT=$PWD/Products OBJROOT=$PWD/Intermediates -target $i
@@ -34,7 +29,7 @@ appleDerivation {
   installPhase = ''
     for f in Products/Release/*; do
       if [ -f $f ]; then
-        install -D $file $out/bin/$(basename $f)
+        install -D $f $out/bin/$(basename $f)
       fi
     done
 
