@@ -3,6 +3,8 @@
 , writeShellScript, runCommand, which
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
 , callPackage
+, enableShared ? true
+, enableStatic ? false
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -69,8 +71,9 @@ in rustPlatform.buildRustPackage {
   '';
 
   postInstall = ''
-    export PREFIX=$out
-    make install
+    PREFIX=$out make install
+    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
