@@ -9,7 +9,7 @@
 , hunspell, libXdamage, libevent, libstartup_notification
 , libvpx_1_8
 , icu67, libpng, jemalloc, glib
-, autoconf213, which, gnused, cargo, rustc
+, autoconf213, which, gnused, rustPackages, rustPackages_1_45
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , debugBuild ? false
@@ -102,6 +102,10 @@ let
   buildStdenv = if ltoSupport
                 then overrideCC stdenv llvmPackages.lldClang
                 else stdenv;
+
+  # 78 ESR won't build with rustc 1.47
+  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
+    rustc cargo;
 in
 
 buildStdenv.mkDerivation ({

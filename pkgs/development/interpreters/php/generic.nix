@@ -1,7 +1,7 @@
 # We have tests for PCRE and PHP-FPM in nixos/tests/php/ or
 # both in the same attribute named nixosTests.php
 
-{ callPackage, lib, stdenv, nixosTests }@_args:
+{ callPackage, lib, stdenv, nixosTests, ... }:
 
 let
   generic =
@@ -271,34 +271,4 @@ let
             outputsToInstall = [ "out" "dev" ];
           };
         };
-
-  php73base = callPackage generic (_args // {
-    version = "7.3.24";
-    sha256 = "1655rj4w63n5fkvdj3kz9f5jfyjgvzw8a6j8zkzgic1p42xszdsm";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
-  });
-
-  php74base = callPackage generic (_args // {
-    version = "7.4.12";
-    sha256 = "0rwrl7xgfq2bbgmy34klgfsqa7v935074ibanmic9pwy4g676vvf";
-  });
-
-  defaultPhpExtensions = { all, ... }: with all; ([
-    bcmath calendar curl ctype dom exif fileinfo filter ftp gd
-    gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
-    openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
-    posix readline session simplexml sockets soap sodium sqlite3
-    tokenizer xmlreader xmlwriter zip zlib
-  ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
-
-  defaultPhpExtensionsWithHash = { all, ... }:
-    (defaultPhpExtensions { inherit all; }) ++ [ all.hash ];
-
-  php74 = php74base.withExtensions defaultPhpExtensions;
-  php73 = php73base.withExtensions defaultPhpExtensionsWithHash;
-
-in {
-  inherit php73 php74;
-}
+in generic

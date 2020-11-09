@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "msgpack-numpy";
-  version = "0.4.6.1";
+  version = "0.4.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f9b57abb2b155c2d3e411c2dd5b98f14998bd053a20c6ed0ab64a6ceb8ad51d";
+    sha256 = "7eaf51acf82d7c467d21aa71df94e1c051b2055e54b755442051b474fa7cf5e1";
   };
 
   buildInputs = [

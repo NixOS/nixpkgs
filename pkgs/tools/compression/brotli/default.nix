@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   patches = stdenv.lib.optional staticOnly (fetchpatch {
-    # from https://github.com/google/brotli/pull/655
-    url = "https://github.com/google/brotli/commit/7289e5a378ba13801996a84d89d8fe95c3fc4c11.patch";
-    sha256 = "1bghbdvj24jrvb0sqfdif9vwg7wx6pn8dvl6flkrcjkhpj0gi0jg";
+    # context from https://github.com/google/brotli/pull/655
+    # updated patch from https://github.com/google/brotli/pull/655
+    url = "https://github.com/google/brotli/commit/47a554804ceabb899ae924aaee54df806053d0d1.patch";
+    sha256 = "sOeXNVsCaBSD9i82GRUDrkyreGeQ7qaJWjjy/uLL0/0=";
   });
 
   cmakeFlags = []
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = licenses.mit;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
   };
 }

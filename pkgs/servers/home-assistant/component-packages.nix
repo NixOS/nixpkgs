@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.117.4";
+  version = "0.117.5";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -74,7 +74,7 @@
     "bbb_gpio" = ps: with ps; [ ]; # missing inputs: Adafruit_BBIO
     "bbox" = ps: with ps; [ ]; # missing inputs: pybbox
     "beewi_smartclim" = ps: with ps; [ ]; # missing inputs: beewi_smartclim
-    "bh1750" = ps: with ps; [ ]; # missing inputs: i2csense smbus-cffi
+    "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ ]; # missing inputs: blockchain
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
@@ -88,8 +88,8 @@
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
     "bluetooth_tracker" = ps: with ps; [ bt_proximity ]; # missing inputs: pybluez
-    "bme280" = ps: with ps; [ ]; # missing inputs: i2csense smbus-cffi
-    "bme680" = ps: with ps; [ ]; # missing inputs: bme680 smbus-cffi
+    "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
+    "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
     "bond" = ps: with ps; [ ]; # missing inputs: bond-api
@@ -222,7 +222,7 @@
     "enphase_envoy" = ps: with ps; [ ]; # missing inputs: envoy_reader
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
-    "envirophat" = ps: with ps; [ ]; # missing inputs: envirophat smbus-cffi
+    "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ ]; # missing inputs: pyenvisalink
     "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
     "epson" = ps: with ps; [ ]; # missing inputs: epson-projector
@@ -358,7 +358,7 @@
     "hp_ilo" = ps: with ps; [ ]; # missing inputs: python-hpilo
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "htu21d" = ps: with ps; [ ]; # missing inputs: i2csense smbus-cffi
+    "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "huawei_lte" = ps: with ps; [ getmac stringcase ]; # missing inputs: huawei-lte-api url-normalize
     "huawei_router" = ps: with ps; [ ];
     "hue" = ps: with ps; [ aiohue ];
@@ -657,7 +657,7 @@
     "rainforest_eagle" = ps: with ps; [ ]; # missing inputs: eagle200_reader uEagle
     "rainmachine" = ps: with ps; [ ]; # missing inputs: regenmaschine
     "random" = ps: with ps; [ ];
-    "raspihats" = ps: with ps; [ ]; # missing inputs: raspihats smbus-cffi
+    "raspihats" = ps: with ps; [ smbus-cffi ]; # missing inputs: raspihats
     "raspyrfm" = ps: with ps; [ ]; # missing inputs: raspyrfm-client
     "recollect_waste" = ps: with ps; [ ]; # missing inputs: recollect-waste
     "recorder" = ps: with ps; [ sqlalchemy ];
