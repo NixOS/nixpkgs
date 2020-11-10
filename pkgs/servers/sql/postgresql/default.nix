@@ -13,7 +13,7 @@ let
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, sha256, psqlSchema, enableDebug ? false
+      , version, sha256, psqlSchema
     }:
   let
     atLeast = lib.versionAtLeast version;
@@ -54,8 +54,8 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
-      (lib.optionalString enableDebug "--enable-debug")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
 
@@ -163,6 +163,8 @@ let
     ];
     buildInputs = [ makeWrapper ];
 
+    separateDebugInfo = true;
+
     # We include /bin to ensure the $out/bin directory is created, which is
     # needed because we'll be removing the files from that directory in postBuild
     # below. See #22653
@@ -192,29 +194,11 @@ in self: {
     inherit self;
   };
 
-  postgresql_9_5_debug = self.callPackage generic {
-    version = "9.5.23";
-    psqlSchema = "9.5";
-    sha256 = "0rl31jc3kg2wq6hazyd297gnmx3cibjvivllbsivii2m6dzgl573";
-    this = self.postgresql_9_5;
-    enableDebug = true;
-    inherit self;
-  };
-
   postgresql_9_6 = self.callPackage generic {
     version = "9.6.19";
     psqlSchema = "9.6";
     sha256 = "1c2wnl5bbpjs1s1rpzvlnzsqlpb0p823zw7s38nhpgnxrja3myb1";
     this = self.postgresql_9_6;
-    inherit self;
-  };
-
-  postgresql_9_6_debug = self.callPackage generic {
-    version = "9.6.19";
-    psqlSchema = "9.6";
-    sha256 = "1c2wnl5bbpjs1s1rpzvlnzsqlpb0p823zw7s38nhpgnxrja3myb1";
-    this = self.postgresql_9_6;
-    enableDebug = true;
     inherit self;
   };
 
@@ -226,29 +210,11 @@ in self: {
     inherit self;
   };
 
-  postgresql_10_debug = self.callPackage generic {
-    version = "10.14";
-    psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0fxj30jvwq5pqpbj97vhlxgmn2ah59a78s9jyjr7vxyqj7sdh71q";
-    this = self.postgresql_10;
-    enableDebug = true;
-    inherit self;
-  };
-
   postgresql_11 = self.callPackage generic {
     version = "11.9";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
     sha256 = "0db6pfphc5rp12abnkvv2l9pbl7bdyf3hhiwj8ghjwh35skqlq9m";
     this = self.postgresql_11;
-    inherit self;
-  };
-
-  postgresql_11_debug = self.callPackage generic {
-    version = "11.9";
-    psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "0db6pfphc5rp12abnkvv2l9pbl7bdyf3hhiwj8ghjwh35skqlq9m";
-    this = self.postgresql_11;
-    enableDebug = true;
     inherit self;
   };
 
@@ -260,15 +226,6 @@ in self: {
     inherit self;
   };
 
-  postgresql_12_debug = self.callPackage generic {
-    version = "12.4";
-    psqlSchema = "12";
-    sha256 = "1k06wryy8p4s1fim9qafcjlak3f58l0wqaqnrccr9x9j5jz3zsdy";
-    this = self.postgresql_12;
-    enableDebug = true;
-    inherit self;
-  };
-
   postgresql_13 = self.callPackage generic {
     version = "13.0";
     psqlSchema = "13";
@@ -276,14 +233,4 @@ in self: {
     this = self.postgresql_13;
     inherit self;
   };
-
-  postgresql_13_debug = self.callPackage generic {
-    version = "13.0";
-    psqlSchema = "13";
-    sha256 = "15i2b7m9a9430idqdgvrcyx66cpxz0v2d81nfqcm8ss3inz51rw0";
-    this = self.postgresql_13;
-    enableDebug = true;
-    inherit self;
-  };
-
 }
