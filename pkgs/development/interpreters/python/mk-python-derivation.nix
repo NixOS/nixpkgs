@@ -113,6 +113,8 @@ let
   # Propagating Python modules is in principle fine, it is however unlikely one
   # would actually want to do that.
   # This is to be released in nixos-21.03 and should thus be removed in nixos-21.09.
+  drvName = drv: drv.pname or (builtins.parseDrvName drv.name).name;
+
   partitionedPropagatedInputs = lib.lists.partition (x: lib.hasAttr "pythonModule" x) (lib.filter (x: x != null) propagatedBuildInputs);
   propagatedPythonInputs = if lib.length partitionedPropagatedInputs.right > 0
     then
@@ -121,9 +123,9 @@ let
         
         Your code may need to look like:
 
-          requiredPythonModules = [ ${lib.concatMapStringsSep " " (drv: drv.pname or drv.name) partitionedPropagatedInputs.right} ];
+          requiredPythonModules = [ ${lib.concatMapStringsSep " " drvName partitionedPropagatedInputs.right} ];
 
-          propagatedBuildInputs = [ ${lib.concatMapStringsSep " " (drv: drv.pname or drv.name) partitionedPropagatedInputs.wrong} ];
+          propagatedBuildInputs = [ ${lib.concatMapStringsSep " " drvName partitionedPropagatedInputs.wrong} ];
 
         Note the exact attribute names may be incorrect. Not resolving this issue may result in incorrect wrappers.
 
@@ -133,7 +135,21 @@ let
       [ ];
   propagatedDerivationInputs = partitionedPropagatedInputs.wrong;
 
-  requiredPythonModules_ = computeRequiredPythonModules (requiredPythonModules ++ propagatedPythonInputs);
+  # Warn in case a non-Python dependency is in `requiredPythonModules`.
+  # Such warning could be moved into the function `computeRequiredPythonModules`, however, there is no way then to indicate
+  # where the trace is generated.
+  partitionedRequiredPythonModules = lib.lists.partition (x: lib.hasAttr "pythonModule" x) (lib.filter (x: x != null) requiredPythonModules);
+  requiredPythonModulesChecked =  if lib.length partitionedRequiredPythonModules.wrong > 0
+    then let
+      list = ''[ ${lib.concatMapStringsSep " " drvName partitionedRequiredPythonModules.wrong} ]'';
+      in lib.warn ''
+        ${name}: Non-Python packages are in `requiredPythonModules`: ${list}
+        These are likely meant to be in `buildInputs`. If their executables need to be included in wrappers, set `makeWrapperArgs=["--prefix PATH : ''${lib.makeBinPath ${list} }";`.
+      '' partitionedRequiredPythonModules.right
+    else
+      partitionedRequiredPythonModules.right;
+
+  requiredPythonModules_ = computeRequiredPythonModules (requiredPythonModulesChecked ++ propagatedPythonInputs);
 
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format" "requiredPythonModules"

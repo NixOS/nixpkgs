@@ -8,7 +8,7 @@
 
 { pkgs
 , stdenv
-, python
+, python_
 , overrides ? (self: super: {})
 }:
 
@@ -18,6 +18,8 @@ let
   packages = ( self:
 
 let
+  python = toPythonModule python_;
+
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
