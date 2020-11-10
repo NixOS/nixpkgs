@@ -1,22 +1,22 @@
 { stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "herwig-${version}";
-  version = "7.1.3";
+  pname = "herwig";
+  version = "7.2.1";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "1iq1h5ap86729c4pfkswzfh0l2v20fyvqsb15c35g0407l54wfqm";
+    sha256 = "11m6xvardnk0i8x8b3dpwg4c4ncq0xmlfg2n5r5qmh6544pz7zyl";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
   buildInputs = [ boost fastjet gfortran gsl thepeg zlib ]
-    # There is a bug that requires for MMHT PDF's to be presend during the build
-    ++ (with lhapdf.pdf_sets; [ MMHT2014lo68cl MMHT2014nlo68cl ]);
+    # There is a bug that requires for default PDF's to be present during the build
+    ++ (with lhapdf.pdf_sets; [ CT14lo CT14nlo ]);
 
   postPatch = ''
-    patchShebangs ./cat_with_cpplines
+    patchShebangs ./
   '';
 
   configureFlags = [
@@ -25,11 +25,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A multi-purpose particle physics event generator";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://herwig.hepforge.org/;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    homepage = "https://herwig.hepforge.org/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    broken = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

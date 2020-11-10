@@ -16,20 +16,27 @@
 , Babel
 , snowballstemmer
 , six
-, sqlalchemy
 , whoosh
 , imagesize
 , requests
+, sphinxcontrib-applehelp
+, sphinxcontrib-devhelp
+, sphinxcontrib-htmlhelp
+, sphinxcontrib-jsmath
+, sphinxcontrib-qthelp
+, sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
 , typing
+, setuptools
 }:
 
 buildPythonPackage rec {
-  pname = "Sphinx";
-  version = "1.7.8";
+  pname = "sphinx";
+  version = "3.0.3";
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a07050845cc9a2f4026a6035cc8ed795a5ce7be6528bbc82032385c10807dfe7";
+    pname = "Sphinx";
+    inherit version;
+    sha256 = "0wpmqfx4mxv5kv9xxd6wyfsm8vcnp8p99h14q7b6if2mv69gvvb2";
   };
   LC_ALL = "en_US.UTF-8";
 
@@ -45,27 +52,27 @@ buildPythonPackage rec {
     pygments
     alabaster
     Babel
+    setuptools
     snowballstemmer
     six
-    sqlalchemy
     whoosh
     imagesize
     requests
+    sphinxcontrib-applehelp
+    sphinxcontrib-devhelp
+    sphinxcontrib-htmlhelp
+    sphinxcontrib-jsmath
+    sphinxcontrib-qthelp
+    sphinxcontrib-serializinghtml
     sphinxcontrib-websupport
   ] ++ lib.optional (pythonOlder "3.5") typing;
 
   # Lots of tests. Needs network as well at some point.
   doCheck = false;
 
-  # https://github.com/NixOS/nixpkgs/issues/22501
-  # Do not run `python sphinx-build arguments` but `sphinx-build arguments`.
-  postPatch = ''
-    substituteInPlace sphinx/make_mode.py --replace "sys.executable, " ""
-  '';
-
   meta = {
     description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
-    homepage = http://sphinx.pocoo.org/;
+    homepage = "http://sphinx.pocoo.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nand0p ];
   };

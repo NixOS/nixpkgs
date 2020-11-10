@@ -7,14 +7,19 @@ let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   cfg = dmcfg.sddm;
-  xEnv = config.systemd.services."display-manager".environment;
+  xEnv = config.systemd.services.display-manager.environment;
 
-  inherit (pkgs) sddm;
+  sddm = if config.services.xserver.desktopManager.lxqt.enable then
+    # TODO: Move lxqt to libsForQt515
+    pkgs.libsForQt514.sddm
+  else
+    pkgs.libsForQt5.sddm
+  ;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec systemd-cat ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
+    exec systemd-cat -t xserver-wrapper ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeScript "Xsetup" ''
@@ -30,8 +35,8 @@ let
 
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
-    HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
-    RebootCommand=${pkgs.systemd}/bin/systemctl reboot
+    HaltCommand=/run/current-system/systemd/bin/systemctl poweroff
+    RebootCommand=/run/current-system/systemd/bin/systemctl reboot
     ${optionalString cfg.autoNumlock ''
     Numlock=on
     ''}
@@ -50,34 +55,50 @@ let
     MinimumVT=${toString (if xcfg.tty != null then xcfg.tty else 7)}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
-    SessionCommand=${dmcfg.session.wrapper}
-    SessionDir=${dmcfg.session.desktops}/share/xsessions
+    SessionCommand=${dmcfg.sessionData.wrapper}
+    SessionDir=${dmcfg.sessionData.desktops}/share/xsessions
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
-    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    EnableHidpi=${boolToString cfg.enableHidpi}
 
     [Wayland]
-    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    EnableHidpi=${boolToString cfg.enableHidpi}
+    SessionDir=${dmcfg.sessionData.desktops}/share/wayland-sessions
 
-    ${optionalString cfg.autoLogin.enable ''
+    ${optionalString dmcfg.autoLogin.enable ''
     [Autologin]
-    User=${cfg.autoLogin.user}
-    Session=${defaultSessionName}.desktop
+    User=${dmcfg.autoLogin.user}
+    Session=${autoLoginSessionName}.desktop
     Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}
   '';
 
-  defaultSessionName =
-    let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") ("+" + wm);
+  autoLoginSessionName = dmcfg.sessionData.autologinSession;
 
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
+      "Set the option `services.xserver.displayManager.sddm.package' instead.")
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "enable" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "user" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "user"
+    ])
+  ];
+
   options = {
 
     services.xserver.displayManager.sddm = {
@@ -151,40 +172,14 @@ in
         '';
       };
 
-      autoLogin = mkOption {
-        default = {};
+      # Configuration for automatic login specific to SDDM
+      autoLogin.relogin = mkOption {
+        type = types.bool;
+        default = false;
         description = ''
-          Configuration for automatic login.
+          If true automatic login will kick in again on session exit (logout), otherwise it
+          will only log in automatically when the display-manager is started.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically log in as <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the automatic login.
-              '';
-            };
-
-            relogin = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                If true automatic login will kick in again on session exit (logout), otherwise it
-                will only log in automatically when the display-manager is started.
-              '';
-            };
-          };
-        };
       };
 
     };
@@ -194,29 +189,23 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
+      { assertion = xcfg.enable;
         message = ''
-          SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
+          SDDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+      { assertion = dmcfg.autoLogin.enable -> autoLoginSessionName != null;
         message = ''
-          SDDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
-          default session: ${defaultSessionName} is not valid.
+          SDDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
     ];
 
     services.xserver.displayManager.job = {
-      logToFile = true;
-
       environment = {
         # Load themes from system environment
         QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
         QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
-
-        XDG_DATA_DIRS = "/run/current-system/sw/share";
       };
 
       execCmd = "exec /run/current-system/sw/bin/sddm";
@@ -238,7 +227,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = sddm
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
@@ -265,8 +254,8 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
-    environment.pathsToLink = [ 
-      "/share/sddm" 
+    environment.pathsToLink = [
+      "/share/sddm"
     ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;

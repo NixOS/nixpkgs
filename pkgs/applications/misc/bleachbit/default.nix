@@ -1,34 +1,69 @@
-{ stdenv, pythonPackages, fetchurl }:
-pythonPackages.buildPythonApplication rec {
-  name = "bleachbit-${version}";
-  version = "2.0";
+{ stdenv
+, python3Packages
+, fetchurl
+, gettext
+, gobject-introspection
+, wrapGAppsHook
+, glib
+, gtk3
+, libnotify
+}:
 
-  namePrefix = "";
+python3Packages.buildPythonApplication rec {
+  pname = "bleachbit";
+  version = "4.0.0";
+
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bleachbit/${name}.tar.bz2";
-    sha256 = "0ps98zx4n13q92bq7ykqi6hj3i7brdqgm87i9gk6ibvljp1vxdz9";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1dn3h6lr9ldbfpvgq9sdlk972sxhwalgj2f377qbqibm3yfxzpil";
   };
 
-  buildInputs = [  pythonPackages.wrapPython ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook
+  ];
 
-  doCheck = false;
+  buildInputs = [
+    glib
+    gtk3
+    libnotify
+  ];
 
-  postInstall = ''
-    mkdir -p $out/bin
-    cp bleachbit.py $out/bin/bleachbit
-    chmod +x $out/bin/bleachbit
+  propagatedBuildInputs = with python3Packages; [
+    chardet
+    pygobject3
+    requests
+    scandir
+  ];
 
-    substituteInPlace $out/bin/bleachbit --replace "#!/usr/bin/env python" "#!${pythonPackages.python.interpreter}"
+  # Patch the many hardcoded uses of /usr/share/ and /usr/bin
+  postPatch = ''
+    find -type f -exec sed -i -e 's@/usr/share@${placeholder "out"}/share@g' {} \;
+    find -type f -exec sed -i -e 's@/usr/bin@${placeholder "out"}/bin@g' {} \;
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk ];
+  dontBuild = true;
 
-  meta = {
-    homepage = http://bleachbit.sourceforge.net;
+  installFlags = [
+    "prefix=${placeholder "out"}"
+  ];
+
+  # prevent double wrapping from wrapGApps and wrapPythonProgram
+  dontWrapGApps = true;
+  makeWrapperArgs = [
+    ''''${gappsWrapperArgs[@]}''
+  ];
+
+  strictDeps = false;
+
+  meta = with stdenv.lib; {
+    homepage = "http://bleachbit.sourceforge.net";
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ leonardoce ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ leonardoce ];
   };
 }

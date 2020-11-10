@@ -1,0 +1,24 @@
+From 3f5abd591b93ebdbc1ae82e5c29cf26024222f5f Mon Sep 17 00:00:00 2001
+From: Uri Baghin <uri@canva.com>
+Date: Thu, 30 Jan 2020 16:47:36 +1100
+Subject: [PATCH] Disable build file generation for remote apis.
+
+---
+ WORKSPACE | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/WORKSPACE b/WORKSPACE
+index f9ebafa..52e4e0b 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -208,6 +208,7 @@ http_archive(
+ 
+ go_repository(
+     name = "com_github_bazelbuild_remote_apis",
++    build_file_generation = "off",
+     importpath = "github.com/bazelbuild/remote-apis",
+     sum = "h1:OPH+hf+ICw8WEp2CV2ncfdyWPC30Cmw8b5NKun0n5IQ=",
+     version = "v0.0.0-20191119143007-b5123b1bb285",
+-- 
+2.25.0
+

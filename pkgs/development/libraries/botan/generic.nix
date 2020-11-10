@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "botan-${version}";
+  pname = "botan";
   version = "${baseVersion}.${revision}";
 
   src = fetchurl {

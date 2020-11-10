@@ -1,36 +1,41 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, zlib
+, ilmbase
+, fetchpatch
+, cmake
+}:
 
 stdenv.mkDerivation rec {
-  name = "openexr-${version}";
-  version = lib.getVersion ilmbase;
-
-  src = fetchurl {
-    url = "https://github.com/openexr/openexr/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "19jywbs9qjvsbkvlvzayzi81s976k53wg53vw4xj66lcgylb6v7x";
-  };
-
-  patches = [
-    ./bootstrap.patch
-  ];
+  pname = "openexr";
+  version = "2.5.3";
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
-  preConfigure = ''
-    patchShebangs ./bootstrap
-    ./bootstrap
-  '';
+  src = fetchFromGitHub {
+    owner = "AcademySoftwareFoundation";
+    repo = "openexr";
+    rev = "v${version}";
+    sha256 = "xyYdRrwAYdnRZmErIK0tZspguqtrXvixO5+6nMDoOh8=";
+  };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool ];
+  patches = [
+    # Fix pkg-config paths
+    (fetchpatch {
+      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/6442fb71a86c09fb0a8118b6dbd93bcec4883a3c.patch";
+      sha256 = "bwD5WTKPT4DjOJDnPXIvT5hJJkH0b71Vo7qupWO9nPA=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
-  enableParallelBuilding = true;
-  doCheck = false; # fails 1 of 1 tests
-
   meta = with stdenv.lib; {
-    homepage = http://www.openexr.com/;
+    description = "A high dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

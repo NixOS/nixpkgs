@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin"
     mkdir -p "$out/share/man/man8"
   '';
-  makeFlags='' prefix="''${out}" manprefix="''${out}/share/" '';
+  makeFlags = [ "prefix=$(out)" "manprefix=$(out)/share/" ];
   meta = {
     inherit (s) version;
     description = ''Tool to detach from controlling TTY and attach to another'';

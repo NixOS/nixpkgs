@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Assembler for the Atmel AVR microcontroller family";
-    homepage = http://avra.sourceforge.net/;
+    homepage = "http://avra.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ the-kenny ];
   };
 }

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "idna";
-  version = "2.7";
+  version = "2.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16";
+    sha256 = "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6";
   };
 
   meta = {

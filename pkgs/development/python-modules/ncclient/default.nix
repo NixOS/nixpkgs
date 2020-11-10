@@ -4,25 +4,23 @@
 , paramiko
 , selectors2
 , lxml
-, libxml2
-, libxslt
 , nose
 , rednose
 }:
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.2";
+  version = "0.6.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6616828f9c5d318906dae22378a78342bbfa5983f1775c1af8bfecc779434c38";
+    sha256 = "0112f2ad41fb658f52446d870853a63691d69299c73c7351c520d38dbd8dc0c4";
   };
 
   checkInputs = [ nose rednose ];
 
   propagatedBuildInputs = [
-    paramiko lxml libxml2 libxslt selectors2
+    paramiko lxml selectors2
   ];
 
   checkPhase = ''
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://ncclient.org/;
+    homepage = "https://github.com/ncclient/ncclient";
     description = "Python library for NETCONF clients";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];

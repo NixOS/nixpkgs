@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "hcs_utils";
   version = "2.0";
-  name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library collecting some useful snippets";
-    homepage    = https://pypi.python.org/pypi/hcs_utils/1.3;
+    homepage    = "https://pypi.python.org/pypi/hcs_utils/1.3";
     license     = licenses.isc;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

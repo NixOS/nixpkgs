@@ -5,11 +5,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "4.9";
+  version = "5.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
-    sha256 = "13pjil9cjggpi773m0516lszyqvwzlgcrmmj8yn9nc24rbxwvn6d";
+    sha256 = "18ksld775balh0yx2icj7fya9fvjkfgvwznvccdlmhi3zidg550h";
   };
 
   preConfigure = ''
@@ -28,9 +28,9 @@ in stdenv.mkDerivation rec {
     inherit version;
     description = "A minimal ftp server";
     downloadPage = "http://bftpd.sf.net/download.html";
-    homepage = http://bftpd.sf.net/;
+    homepage = "http://bftpd.sf.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

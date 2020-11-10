@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "sct";
 
   src = fetchurl {
-    url = http://www.tedunangst.com/flak/files/sct.c;
+    url = "http://www.tedunangst.com/flak/files/sct.c";
     sha256 = "01f3ndx3s6d2qh2xmbpmhd4962dyh8yp95l87xwrs4plqdz6knhd";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = "install -Dt $out/bin sct";
 
   meta = with stdenv.lib; {
-    homepage = https://www.tedunangst.com/flak/post/sct-set-color-temperature;
+    homepage = "https://www.tedunangst.com/flak/post/sct-set-color-temperature";
     description = "A minimal utility to set display colour temperature";
     maintainers = [ maintainers.raskin ];
     license = licenses.publicDomain;

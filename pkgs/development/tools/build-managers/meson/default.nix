@@ -1,22 +1,20 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll }:
+{ lib
+, python3
+, stdenv
+, writeTextDir
+, substituteAll
+, pkgsHostHost
+, fetchpatch
+}:
 
-python3Packages.buildPythonApplication rec {
-  version = "0.46.1";
+python3.pkgs.buildPythonApplication rec {
   pname = "meson";
+  version = "0.55.3";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
+    sha256 = "19cjy24mfaswxyvqmns6rd7hx05ybqb663zlgklspfr8l4jjmvbb";
   };
-
-  postFixup = ''
-    pushd $out/bin
-    # undo shell wrapper as meson tools are called with python
-    for i in *; do
-      mv ".$i-wrapped" "$i"
-    done
-    popd
-  '';
 
   patches = [
     # Upstream insists on not allowing bindir and other dir options
@@ -24,6 +22,11 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/issues/2561
     # We remove the check so multiple outputs can work sanely.
     ./allow-dirs-outside-of-prefix.patch
+
+    # Meson is currently inspecting fewer variables than autoconf does, which
+    # makes it harder for us to use setup hooks, etc.  Taken from
+    # https://github.com/mesonbuild/meson/pull/6827
+    ./more-env-vars.patch
 
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
@@ -41,42 +44,49 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+
+    # When Meson removes build_rpath from DT_RUNPATH entry, it just writes
+    # the shorter NUL-terminated new rpath over the old one to reduce
+    # the risk of potentially breaking the ELF files.
+    # But this can cause much bigger problem for Nix as it can produce
+    # cut-in-half-by-\0 store path references.
+    # Let’s just clear the whole rpath and hope for the best.
+    ./clear-old-rpath.patch
+
+    # Patch out default boost search paths to avoid impure builds on
+    # unsandboxed non-NixOS builds, see:
+    # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
+    ./boost-Do-not-add-system-paths-on-nix.patch
   ];
 
   setupHook = ./setup-hook.sh;
 
-  crossFile = writeTextDir "cross-file.conf" ''
-    [binaries]
-    c = '${stdenv.cc.targetPrefix}cc'
-    cpp = '${stdenv.cc.targetPrefix}c++'
-    ar = '${stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${stdenv.cc.bintools.targetPrefix}strip'
-    pkgconfig = 'pkg-config'
-
-    [properties]
-    needs_exe_wrapper = true
-
-    [host_machine]
-    system = '${stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${stdenv.targetPlatform.parsed.cpu.family}'
-    cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-    endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-  '';
+  # Ensure there will always be a native C compiler when meson is used, as a
+  # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
+  depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
 
-  inherit (stdenv) cc;
+  postFixup = ''
+    pushd $out/bin
+    # undo shell wrapper as meson tools are called with python
+    for i in *; do
+      mv ".$i-wrapped" "$i"
+    done
+    popd
 
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
+  '';
 
   meta = with lib; {
-    homepage = http://mesonbuild.com;
+    homepage = "https://mesonbuild.com";
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mbe rasendubi ];
+    maintainers = with maintainers; [ jtojnar mbe ];
     platforms = platforms.all;
   };
 }

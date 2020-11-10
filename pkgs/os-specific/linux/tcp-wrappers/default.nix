@@ -4,7 +4,7 @@ let
   vanillaVersion = "7.6.q";
   patchLevel = "26";
 in stdenv.mkDerivation rec {
-  name = "tcp-wrappers-${version}";
+  pname = "tcp-wrappers";
   version = "${vanillaVersion}-${patchLevel}";
 
   src = fetchurl {
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
       addition to the traditional BSD sockets.
     '';
 
-    homepage = ftp://ftp.porcupine.org/pub/security/index.html;
+    homepage = "ftp://ftp.porcupine.org/pub/security/index.html";
     license = "BSD-style";
     platforms = stdenv.lib.platforms.linux;
   };

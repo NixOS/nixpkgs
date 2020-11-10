@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
-  version = "0.3.0";
-  name = "grobi-${version}";
-
-  goPackagePath = "github.com/fd0/grobi";
+buildGoModule rec {
+  version = "0.6.0";
+  pname = "grobi";
 
   src = fetchFromGitHub {
-    rev = "78a0639ffad765933a5233a1c94d2626e24277b8";
+    rev = "v${version}";
     owner = "fd0";
     repo = "grobi";
-    sha256 = "16q7vnhb1p6ds561832sfdszvlafww67bjn3lc0d18v7lyak2l3i";
+    sha256 = "032lvnl2qq9258y6q1p60lfi7qir68zgq8zyh4khszd3wdih7y3s";
   };
 
-   meta = with stdenv.lib; {
-    homepage = https://github.com/fd0/grobi;
+  vendorSha256 = "1ibwx5rbxkygfx78j3g364dmbwwa5b34qmzq3sqcbrsnv8rzrwvj";
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/fd0/grobi";
     description = "Automatically configure monitors/outputs for Xorg via RANDR";
     license = with licenses; [ bsd2 ];
     platforms   = platforms.linux;

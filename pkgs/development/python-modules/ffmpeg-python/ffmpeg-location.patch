@@ -1,0 +1,84 @@
+diff --git i/ffmpeg/_probe.py w/ffmpeg/_probe.py
+index 41e8168..eb83b54 100644
+--- i/ffmpeg/_probe.py
++++ w/ffmpeg/_probe.py
+@@ -4,7 +4,7 @@ from ._run import Error
+ from ._utils import convert_kwargs_to_cmd_line_args
+ 
+ 
+-def probe(filename, cmd='ffprobe', **kwargs):
++def probe(filename, cmd='@ffmpeg@/bin/ffprobe', **kwargs):
+     """Run ffprobe on the specified file and return a JSON representation of the output.
+ 
+     Raises:
+diff --git i/ffmpeg/_run.py w/ffmpeg/_run.py
+index afc504d..9445cca 100644
+--- i/ffmpeg/_run.py
++++ w/ffmpeg/_run.py
+@@ -172,7 +172,7 @@ def get_args(stream_spec, overwrite_output=False):
+ 
+ 
+ @output_operator()
+-def compile(stream_spec, cmd='ffmpeg', overwrite_output=False):
++def compile(stream_spec, cmd='@ffmpeg@/bin/ffmpeg', overwrite_output=False):
+     """Build command-line for invoking ffmpeg.
+ 
+     The :meth:`run` function uses this to build the commnad line
+@@ -193,7 +193,7 @@ def compile(stream_spec, cmd='ffmpeg', overwrite_output=False):
+ @output_operator()
+ def run_async(
+     stream_spec,
+-    cmd='ffmpeg',
++    cmd='@ffmpeg@/bin/ffmpeg',
+     pipe_stdin=False,
+     pipe_stdout=False,
+     pipe_stderr=False,
+@@ -289,7 +289,7 @@ def run_async(
+ @output_operator()
+ def run(
+     stream_spec,
+-    cmd='ffmpeg',
++    cmd='@ffmpeg@/bin/ffmpeg',
+     capture_stdout=False,
+     capture_stderr=False,
+     input=None,
+diff --git i/ffmpeg/tests/test_ffmpeg.py w/ffmpeg/tests/test_ffmpeg.py
+index 279a323..8d3b35c 100644
+--- i/ffmpeg/tests/test_ffmpeg.py
++++ w/ffmpeg/tests/test_ffmpeg.py
+@@ -24,7 +24,7 @@ TEST_OUTPUT_FILE2 = os.path.join(SAMPLE_DATA_DIR, 'out2.mp4')
+ BOGUS_INPUT_FILE = os.path.join(SAMPLE_DATA_DIR, 'bogus')
+ 
+ 
+-subprocess.check_call(['ffmpeg', '-version'])
++subprocess.check_call(['@ffmpeg@/bin/ffmpeg', '-version'])
+ 
+ 
+ def test_escape_chars():
+@@ -423,7 +423,7 @@ def test_filter_text_arg_str_escape():
+ 
+ def test__compile():
+     out_file = ffmpeg.input('dummy.mp4').output('dummy2.mp4')
+-    assert out_file.compile() == ['ffmpeg', '-i', 'dummy.mp4', 'dummy2.mp4']
++    assert out_file.compile() == ['@ffmpeg@/bin/ffmpeg', '-i', 'dummy.mp4', 'dummy2.mp4']
+     assert out_file.compile(cmd='ffmpeg.old') == [
+         'ffmpeg.old',
+         '-i',
+@@ -490,7 +490,7 @@ def test__run__input_output(mocker):
+ @pytest.mark.parametrize('capture_stdout', [True, False])
+ @pytest.mark.parametrize('capture_stderr', [True, False])
+ def test__run__error(mocker, capture_stdout, capture_stderr):
+-    mocker.patch.object(ffmpeg._run, 'compile', return_value=['ffmpeg'])
++    mocker.patch.object(ffmpeg._run, 'compile', return_value=['@ffmpeg@/bin/ffmpeg'])
+     stream = _get_complex_filter_example()
+     with pytest.raises(ffmpeg.Error) as excinfo:
+         out, err = ffmpeg.run(
+@@ -684,7 +684,7 @@ def test_pipe():
+         'pipe:1',
+     ]
+ 
+-    cmd = ['ffmpeg'] + args
++    cmd = ['@ffmpeg@/bin/ffmpeg'] + args
+     p = subprocess.Popen(
+         cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+     )

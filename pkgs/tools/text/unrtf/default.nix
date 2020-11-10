@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, autoconf, automake, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "unrtf-${version}";
+  pname = "unrtf";
   version = "0.21.9";
 
   src = fetchurl {
-    url = "https://www.gnu.org/software/unrtf/${name}.tar.gz";
+    url = "https://www.gnu.org/software/unrtf/${pname}-${version}.tar.gz";
     sha256 = "1pcdzf2h1prn393dkvg93v80vh38q0v817xnbwrlwxbdz4k7i8r2";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       UnRTF converts documents in Rich Text Format to other
       formats, including HTML, LaTeX, and RTF itself.
     '';
-    homepage = https://www.gnu.org/software/unrtf/;
+    homepage = "https://www.gnu.org/software/unrtf/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ joachifm ];
     platforms = platforms.unix;

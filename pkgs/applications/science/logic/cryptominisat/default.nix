@@ -1,28 +1,30 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, python, xxd }:
+{ stdenv, fetchFromGitHub, cmake, python3, xxd, boost, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "cryptominisat-${version}";
-  version = "5.0.1";
+  pname = "cryptominisat";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner  = "msoos";
     repo   = "cryptominisat";
     rev    = version;
-    sha256 = "0cpw5d9vplxvv3aaplhnga55gz1hy29p7s4pkw1306knkbhlzvkb";
+    sha256 = "00hmxdlyhn7pwk9jlvc5g0l5z5xqfchjzf5jgn3pkj9xhl8yqq50";
   };
 
-  buildInputs = [ python xxd ];
-  nativeBuildInputs = [ cmake ];
+  patches = [ 
+    (fetchpatch {
+      # https://github.com/msoos/cryptominisat/pull/621
+      url = "https://github.com/msoos/cryptominisat/commit/11a97003b0bfbfb61ed6c4e640212110d390c28c.patch";
+      sha256 = "0hdy345bwcbxz0jl1jdxfa6mmfh77s2pz9rnncsr0jzk11b3j0cw";
+    })
+  ];
 
-  patches = [(fetchpatch rec {
-    name = "fix-exported-library-name.patch";
-    url = "https://github.com/msoos/cryptominisat/commit/7a47795cbe5ad5a899731102d297f234bcade077.patch";
-    sha256 = "11hf3cfqs4cykn7rlgjglq29lzqfxvlm0f20qasi0kdrz01cr30f";
-  })];
+  buildInputs = [ python3 boost ];
+  nativeBuildInputs = [ cmake xxd ];
 
   meta = with stdenv.lib; {
     description = "An advanced SAT Solver";
-    homepage    = https://github.com/msoos/cryptominisat;
+    homepage    = "https://github.com/msoos/cryptominisat";
     license     = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
     platforms   = platforms.unix;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
+{ stdenv, fetchFromGitHub, cmake, python3 }:
 # Like many google projects, shaderc doesn't gracefully support separately compiled dependencies, so we can't easily use
 # the versions of glslang and spirv-tools used by vulkan-loader. Exact revisions are taken from
 # https://github.com/google/shaderc/blob/known-good/known_good.json
@@ -8,30 +8,32 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "32d3ec319909fcad0b2b308fe1635198773e8316";
-    sha256 = "1kmgjv5kbrjy6azpgwnjcn3cj8vg5i8hnyk3m969sc0gq2j1rbjj";
+    rev = "3ee5f2f1d3316e228916788b300d786bb574d337";
+    sha256 = "1l5h9d92mzd35pgs0wibqfg7vbl771lwnvdlcsyhf6999khn5dzv";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "fe2fbee294a8ad4434f828a8b4d99eafe9aac88c";
-    sha256 = "03rq4ypwqnz34n8ip85n95a3b9rxb34j26azzm3b3invaqchv19x";
+    rev = "b63f0e5ed3e818870968ebf6af73317127fd07b0";
+    sha256 = "1chv30azfp76nha428ivg4ixrij6d8pxj5kn3jam87gmkmgc9zhm";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "3ce3e49d73b8abbf2ffe33f829f941fb2a40f552";
-    sha256 = "0yk4bzqifdqpmdxkhvrxbdqhf5ngkga0ig1yyz7khr7rklqfz7wp";
+    rev = "979924c8bc839e4cb1b69d03d48398551f369ce7";
+    sha256 = "07vyjlblpm4zhfds612h86lnz0qvrj5qqw5z2zzfa3m9fax7cm85";
   };
 in stdenv.mkDerivation rec {
-  name = "shaderc-git-${version}";
-  version = "2018-06-01";
+  pname = "shaderc";
+  version = "2020.2";
+
+  outputs = [ "out" "lib" "bin" "dev" "static" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
-    rev = "be8e0879750303a1de09385465d6b20ecb8b380d";
-    sha256 = "16p25ry2i4zrj00zihfpf210f8xd7g398ffbw25igvi9mbn4nbfd";
+    rev = "v${version}";
+    sha256 = "1sxz8872x3rdlrhmbn83r1vniq4j51jnk0ka3447fq68il4myf1w";
   };
 
   patchPhase = ''
@@ -40,13 +42,17 @@ in stdenv.mkDerivation rec {
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers
   '';
 
-  buildInputs = [ cmake python ];
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake python3 ];
+
+  postInstall = ''
+    moveToOutput "lib/*.a" $static
+  '';
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = "A collection of tools, libraries and tests for shader compilation.";
+    description = "A collection of tools, libraries and tests for shader compilation";
+    license = [ licenses.asl20 ];
   };
 }

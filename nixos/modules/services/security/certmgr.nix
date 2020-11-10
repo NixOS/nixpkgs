@@ -30,12 +30,19 @@ let
 
   preStart = ''
     ${concatStringsSep " \\\n" (["mkdir -p"] ++ map escapeShellArg specPaths)}
-    ${pkgs.certmgr}/bin/certmgr -f ${certmgrYaml} check
+    ${cfg.package}/bin/certmgr -f ${certmgrYaml} check
   '';
 in
 {
   options.services.certmgr = {
     enable = mkEnableOption "certmgr";
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.certmgr;
+      defaultText = "pkgs.certmgr";
+      description = "Which certmgr package to use in the service.";
+    };
 
     defaultRemote = mkOption {
       type = types.str;
@@ -106,7 +113,7 @@ in
         otherCert = "/var/certmgr/specs/other-cert.json";
       }
       '';
-      type = with types; attrsOf (either (submodule {
+      type = with types; attrsOf (either path (submodule {
         options = {
           service = mkOption {
             type = nullOr str;
@@ -141,7 +148,7 @@ in
             description = "certmgr spec request object.";
           };
         };
-    }) path);
+    }));
       description = ''
         Certificate specs as described by:
         <link xlink:href="https://github.com/cloudflare/certmgr#certificate-specs" />
@@ -187,7 +194,7 @@ in
       serviceConfig = {
         Restart = "always";
         RestartSec = "10s";
-        ExecStart = "${pkgs.certmgr}/bin/certmgr -f ${certmgrYaml}";
+        ExecStart = "${cfg.package}/bin/certmgr -f ${certmgrYaml}";
       };
     };
   };

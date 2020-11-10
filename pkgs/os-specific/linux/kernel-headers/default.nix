@@ -1,35 +1,61 @@
-{ stdenvNoCC, lib, buildPackages
-, fetchurl, perl
-}:
+{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header }:
 
 let
-  common = { version, sha256, patches ? [] }: stdenvNoCC.mkDerivation {
-    name = "linux-headers-${version}";
+  makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
+    inherit src;
 
-    src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-      inherit sha256;
-    };
+    pname = "linux-headers";
+    inherit version;
 
-    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or (throw "missing kernelArch");
+    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl ];
+    # `elf-header` is null when libc provides `elf.h`.
+    nativeBuildInputs = [ perl elf-header ];
 
     extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
     inherit patches;
 
-    buildPhase = ''
-      make mrproper headers_check SHELL=bash
+    hardeningDisable = lib.optional stdenvNoCC.buildPlatform.isDarwin "format";
+
+    makeFlags = [
+      "SHELL=bash"
+      # Avoid use of runtime build->host compilers for checks. These
+      # checks only cared to work around bugs in very old compilers, so
+      # these changes should be safe.
+      "cc-version:=9999"
+      "cc-fullversion:=999999"
+      # `$(..)` expanded by make alone
+      "HOSTCC:=$(CC_FOR_BUILD)"
+      "HOSTCXX:=$(CXX_FOR_BUILD)"
+    ];
+
+    # Skip clean on darwin, case-sensitivity issues.
+    buildPhase = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
+      make mrproper $makeFlags
+    '' + ''
+      make headers $makeFlags
     '';
 
-    installPhase = ''
-      make INSTALL_HDR_PATH=$out headers_install
+    checkPhase = ''
+      make headers_check $makeFlags
+    '';
 
-      # Some builds (e.g. KVM) want a kernel.release.
+    # The following command requires rsync:
+    #   make headers_install INSTALL_HDR_PATH=$out $makeFlags
+    # but rsync depends on popt which does not compile on aarch64 without
+    # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
+    # so we replicate it with cp. This also reduces bootstrap closure size.
+    installPhase = ''
+      mkdir -p $out
+      cp -r usr/include $out
+      find $out -type f ! -name '*.h' -delete
+    ''
+    # Some builds (e.g. KVM) want a kernel.release.
+    + ''
       mkdir -p $out/include/config
       echo "${version}-default" > $out/include/config/kernel.release
     '';
@@ -41,9 +67,17 @@ let
     };
   };
 in {
+  inherit makeLinuxHeaders;
 
-  linuxHeaders = common {
-    version = "4.18.3";
-    sha256 = "1m23hjd02bg8mqnd8dc4z4m3kxds1cyrc6j5saiwnhzbz373rvc1";
-  };
+  linuxHeaders = let version = "5.5"; in
+    makeLinuxHeaders {
+      inherit version;
+      src = fetchurl {
+        url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+        sha256 = "0c131fi6s7vgvka1c0597vnvcmwn1pp968rci5kq64iwj3pd9yx6";
+      };
+      patches = [
+         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+      ];
+    };
 }

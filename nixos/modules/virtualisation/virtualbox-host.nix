@@ -83,6 +83,8 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [{
+    warnings = mkIf (config.nixpkgs.config.virtualbox.enableExtensionPack or false)
+      ["'nixpkgs.virtualbox.enableExtensionPack' has no effect, please use 'virtualisation.virtualbox.host.enableExtensionPack'"];
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
     boot.extraModulePackages = [ kernelModules ];
     environment.systemPackages = [ virtualbox ];
@@ -102,7 +104,7 @@ in
       "VBoxNetNAT"
       "VBoxSDL"
       "VBoxVolInfo"
-      "VirtualBox"
+      "VirtualBoxVM"
     ]));
 
     users.groups.vboxusers.gid = config.ids.gids.vboxusers;
@@ -120,7 +122,7 @@ in
 
     # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
   } (mkIf cfg.addNetworkInterface {
-    systemd.services."vboxnet0" =
+    systemd.services.vboxnet0 =
       { description = "VirtualBox vboxnet0 Interface";
         requires = [ "dev-vboxnetctl.device" ];
         after = [ "dev-vboxnetctl.device" ];
@@ -147,5 +149,12 @@ in
     # Make sure NetworkManager won't assume this interface being up
     # means we have internet access.
     networking.networkmanager.unmanaged = ["vboxnet0"];
-  })]);
+  }) (mkIf config.networking.useNetworkd {
+    systemd.network.networks."40-vboxnet0".extraConfig = ''
+      [Link]
+      RequiredForOnline=no
+    '';
+  })
+
+]);
 }

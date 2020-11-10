@@ -1,29 +1,32 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
 
 let
-  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   self = stdenv.mkDerivation ({
-    name = "clang-${version}";
+    pname = "clang";
+    inherit version;
+
+    src = fetch "cfe" "0018520c4qxf5hgjdqgpz2dgl3faf4gsz87fdlb8zdmx99rfk77s";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0018520c4qxf5hgjdqgpz2dgl3faf4gsz87fdlb8zdmx99rfk77s"}
+      unpackFile $src
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    nativeBuildInputs = [ cmake python ]
-      ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    nativeBuildInputs = [ cmake python3 ]
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx
+      ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 llvm ]
-      ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    buildInputs = [ libxml2 llvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
+      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ stdenv.lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -74,18 +77,16 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs stdenv.isLinux {
-      inherit gcc;
     };
 
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = http://llvm.org/;
+      homepage    = "https://llvm.org/";
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
   } // stdenv.lib.optionalAttrs enableManpages {
-    name = "clang-manpages-${version}";
+    pname = "clang-manpages";
 
     buildPhase = ''
       make docs-clang-man

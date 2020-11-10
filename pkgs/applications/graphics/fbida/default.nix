@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp, libdrm
 , pkgconfig, freetype, fontconfig, which, imagemagick, curl, sane-backends, libXpm
-, epoxy, poppler, mesa_noglu, lirc }:
+, epoxy, poppler, mesa, lirc }:
 
 stdenv.mkDerivation rec {
   name = "fbida-2.14";
-  
+
   src = fetchurl {
     url = "http://dl.bytesex.org/releases/fbida/${name}.tar.gz";
     sha256 = "0f242mix20rgsqz1llibhsz4r2pbvx6k32rmky0zjvnbaqaw1dwm";
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
     imagemagick curl sane-backends libdrm libXpm epoxy poppler lirc
-    mesa_noglu
+    mesa
   ];
-  
+
   makeFlags = [ "prefix=$(out)" "verbose=yes" "STRIP=" "JPEG_VER=62" ];
 
   patchPhase = ''
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Image viewing and manipulation programs";
-    homepage = https://www.kraxel.org/blog/linux/fbida/;
+    description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
+    homepage = "https://www.kraxel.org/blog/linux/fbida/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

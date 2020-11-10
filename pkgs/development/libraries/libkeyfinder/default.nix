@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fftw, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "libkeyfinder-${version}";
+  pname = "libkeyfinder";
   version = "2.1";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Musical key detection for digital audio (C++ library)";
-    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
+    homepage = "http://www.ibrahimshaath.co.uk/keyfinder/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

@@ -1,13 +1,25 @@
+diff --git a/platform/x11/detect.py b/platform/x11/detect.py
+index 5674e78350..7051d8e73c 100644
+--- a/platform/x11/detect.py
 +++ b/platform/x11/detect.py
-@@ -142,6 +142,11 @@
-     env.ParseConfig('pkg-config xcursor --cflags --libs')
-     env.ParseConfig('pkg-config xinerama --cflags --libs')
-     env.ParseConfig('pkg-config xrandr --cflags --libs')
-+    env.ParseConfig('pkg-config xrender --cflags --libs')
-+    env.ParseConfig('pkg-config xext --cflags --libs')
-+    env.ParseConfig('pkg-config xfixes --cflags --libs')
-+    env.ParseConfig('pkg-config glu --cflags --libs')
-+    env.ParseConfig('pkg-config zlib --cflags --libs')
+@@ -201,6 +201,11 @@ def configure(env):
+     env.ParseConfig("pkg-config xrender --cflags --libs")
+     env.ParseConfig("pkg-config xi --cflags --libs")
  
-     if (env['touch']):
-         x11_error = os.system("pkg-config xi --modversion > /dev/null ")
++    env.ParseConfig("pkg-config xext --cflags --libs")
++    env.ParseConfig("pkg-config xfixes --cflags --libs")
++    env.ParseConfig("pkg-config glu --cflags --libs")
++    env.ParseConfig("pkg-config zlib --cflags --libs")
++
+     if env["touch"]:
+         env.Append(CPPDEFINES=["TOUCH_ENABLED"])
+ 
+@@ -299,7 +304,7 @@ def configure(env):
+         print("Enabling ALSA")
+         env.Append(CPPDEFINES=["ALSA_ENABLED", "ALSAMIDI_ENABLED"])
+         # Don't parse --cflags, we don't need to add /usr/include/alsa to include path
+-        env.ParseConfig("pkg-config alsa --libs")
++        env.ParseConfig("pkg-config alsa --cflags --libs")
+     else:
+         print("ALSA libraries not found, disabling driver")
+ 

@@ -8,6 +8,7 @@ in {
   options = {
     programs.systemtap = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Install <command>systemtap</command> along with necessary kernel options.

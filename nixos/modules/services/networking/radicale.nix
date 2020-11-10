@@ -8,8 +8,10 @@ let
 
   confFile = pkgs.writeText "radicale.conf" cfg.config;
 
-  # This enables us to default to version 2 while still not breaking configurations of people with version 1
-  defaultPackage = if versionAtLeast config.system.stateVersion "17.09" then {
+  defaultPackage = if versionAtLeast config.system.stateVersion "20.09" then {
+    pkg = pkgs.radicale3;
+    text = "pkgs.radicale3";
+  } else if versionAtLeast config.system.stateVersion "17.09" then {
     pkg = pkgs.radicale2;
     text = "pkgs.radicale2";
   } else {
@@ -35,13 +37,14 @@ in
       defaultText = defaultPackage.text;
       description = ''
         Radicale package to use. This defaults to version 1.x if
-        <literal>system.stateVersion &lt; 17.09</literal> and version 2.x
-        otherwise.
+        <literal>system.stateVersion &lt; 17.09</literal>, version 2.x if
+        <literal>17.09 ≤ system.stateVersion &lt; 20.09</literal>, and
+        version 3.x otherwise.
       '';
     };
 
     services.radicale.config = mkOption {
-      type = types.string;
+      type = types.str;
       default = "";
       description = ''
         Radicale configuration, this will set the service
@@ -50,7 +53,7 @@ in
     };
 
     services.radicale.extraArgs = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       description = "Extra arguments passed to the Radicale daemon.";
     };
@@ -59,18 +62,15 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.users = singleton
-      { name = "radicale";
-        uid = config.ids.uids.radicale;
+    users.users.radicale =
+      { uid = config.ids.uids.radicale;
         description = "radicale user";
         home = "/var/lib/radicale";
         createHome = true;
       };
 
-    users.groups = singleton
-      { name = "radicale";
-        gid = config.ids.gids.radicale;
-      };
+    users.groups.radicale =
+      { gid = config.ids.gids.radicale; };
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "LazyLimiter-${version}";
+  pname = "LazyLimiter";
   version = "0.3.2";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A fast yet clean lookahead limiter for jack and lv2";
-    homepage = https://magnetophon.github.io/LazyLimiter/;
+    homepage = "https://magnetophon.github.io/LazyLimiter/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
   };

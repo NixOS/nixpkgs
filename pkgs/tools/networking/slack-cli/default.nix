@@ -5,10 +5,11 @@
 # for token storage, except that it would make the Nix package inconsistent with
 # upstream and other distributions.
 
-{ stdenv, lib, writeShellScriptBin, fetchFromGitHub, curl, jq }:
+{ stdenv, lib, fetchFromGitHub, curl, jq, coreutils, gnugrep, gnused
+, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "slack-cli-${version}";
+  pname = "slack-cli";
   version = "0.18.0";
 
   src = fetchFromGitHub {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     cp src/slack "$out/bin/.slack-wrapped"
 
     cat <<-WRAPPER > "$out/bin/slack"
-    #!${stdenv.shell}
+    #!${runtimeShell}
     [ "\$1" = "init" -a -z "\$SLACK_CLI_TOKEN" ] && cat <<-'MESSAGE' >&2
     WARNING: slack-cli must be configured using the SLACK_CLI_TOKEN
     environment variable. Using \`slack init\` will not work because it tries
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
     MESSAGE
 
-    export PATH=${lib.makeBinPath [ curl jq ]}:"\$PATH"
+    export PATH=${lib.makeBinPath [ curl jq coreutils gnugrep gnused ]}:"\$PATH"
     exec "$out/bin/.slack-wrapped" "\$@"
     WRAPPER
 

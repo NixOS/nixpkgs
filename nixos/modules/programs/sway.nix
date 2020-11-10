@@ -4,82 +4,134 @@ with lib;
 
 let
   cfg = config.programs.sway;
-  swayPackage = pkgs.sway;
 
-  swayWrapped = pkgs.writeShellScriptBin "sway" ''
-    if [[ "$#" -ge 1 ]]; then
-      exec sway-setcap "$@"
-    else
-      ${cfg.extraSessionCommands}
-      exec ${pkgs.dbus.dbus-launch} --exit-with-session sway-setcap
-    fi
-  '';
-  swayJoined = pkgs.symlinkJoin {
-    name = "sway-joined";
-    paths = [ swayWrapped swayPackage ];
+  wrapperOptions = types.submodule {
+    options =
+      let
+        mkWrapperFeature  = default: description: mkOption {
+          type = types.bool;
+          inherit default;
+          example = !default;
+          description = "Whether to make use of the ${description}";
+        };
+      in {
+        base = mkWrapperFeature true ''
+          base wrapper to execute extra session commands and prepend a
+          dbus-run-session to the sway command.
+        '';
+        gtk = mkWrapperFeature false ''
+          wrapGAppsHook wrapper to execute sway with required environment
+          variables for GTK applications.
+        '';
+    };
+  };
+
+  swayPackage = pkgs.sway.override {
+    extraSessionCommands = cfg.extraSessionCommands;
+    extraOptions = cfg.extraOptions;
+    withBaseWrapper = cfg.wrapperFeatures.base;
+    withGtkWrapper = cfg.wrapperFeatures.gtk;
   };
 in {
   options.programs.sway = {
     enable = mkEnableOption ''
-      the tiling Wayland compositor Sway. After adding yourself to the "sway"
-      group you can manually launch Sway by executing "sway" from a terminal.
-      If you call "sway" with any parameters the extraSessionCommands won't be
-      executed and Sway won't be launched with dbus-launch'';
+      Sway, the i3-compatible tiling Wayland compositor. You can manually launch
+      Sway by executing "exec sway" on a TTY. Copy /etc/sway/config to
+      ~/.config/sway/config to modify the default configuration. See
+      https://github.com/swaywm/sway/wiki and "man 5 sway" for more information.
+      Please have a look at the "extraSessionCommands" example for running
+      programs natively under Wayland'';
+
+    wrapperFeatures = mkOption {
+      type = wrapperOptions;
+      default = { };
+      example = { gtk = true; };
+      description = ''
+        Attribute set of features to enable in the wrapper.
+      '';
+    };
 
     extraSessionCommands = mkOption {
       type = types.lines;
       default = "";
       example = ''
-        # Define a keymap (US QWERTY is the default)
-        export XKB_DEFAULT_LAYOUT=de,us
-        export XKB_DEFAULT_VARIANT=nodeadkeys
-        export XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle,caps:escape
-        # Change the Keyboard repeat delay and rate
-        export WLC_REPEAT_DELAY=660
-        export WLC_REPEAT_RATE=25
+        export SDL_VIDEODRIVER=wayland
+        # needs qt5.qtwayland in systemPackages
+        export QT_QPA_PLATFORM=wayland
+        export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+        # Fix for some Java AWT applications (e.g. Android Studio),
+        # use this if they aren't displayed properly:
+        export _JAVA_AWT_WM_NONREPARENTING=1
       '';
       description = ''
         Shell commands executed just before Sway is started.
       '';
     };
 
+    extraOptions = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [
+        "--verbose"
+        "--debug"
+        "--unsupported-gpu"
+        "--my-next-gpu-wont-be-nvidia"
+      ];
+      description = ''
+        Command line arguments passed to launch Sway. Please DO NOT report
+        issues if you use an unsupported GPU (proprietary drivers).
+      '';
+    };
+
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        i3status xwayland rxvt_unicode dmenu
+        swaylock swayidle alacritty dmenu
+        rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
-        with pkgs; [ i3status xwayland rxvt_unicode dmenu ];
+        with pkgs; [ swaylock swayidle xwayland rxvt-unicode dmenu ];
       '';
       example = literalExample ''
         with pkgs; [
-          i3lock light termite
+          xwayland
+          i3status i3status-rust
+          termite rofi light
         ]
       '';
       description = ''
         Extra packages to be installed system wide.
       '';
     };
+
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ swayJoined ] ++ cfg.extraPackages;
-    security.wrappers.sway = {
-      program = "sway-setcap";
-      source = "${swayPackage}/bin/sway";
-      capabilities = "cap_sys_ptrace,cap_sys_tty_config=eip";
-      owner = "root";
-      group = "sway";
-      permissions = "u+rx,g+rx";
+    assertions = [
+      {
+        assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
+        message = ''
+          The extraSessionCommands for Sway will not be run if
+          wrapperFeatures.base is disabled.
+        '';
+      }
+    ];
+    environment = {
+      systemPackages = [ swayPackage ] ++ cfg.extraPackages;
+      etc = {
+        "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
+        #"sway/security.d".source = mkOptionDefault "${swayPackage}/etc/sway/security.d/";
+        #"sway/config.d".source = mkOptionDefault "${swayPackage}/etc/sway/config.d/";
+      };
     };
-
-    users.groups.sway = {};
     security.pam.services.swaylock = {};
-
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
     programs.dconf.enable = mkDefault true;
+    # To make a Sway session available if a display manager like SDDM is enabled:
+    services.xserver.displayManager.sessionPackages = [ swayPackage ];
+    programs.xwayland.enable = mkDefault true;
   };
 
-  meta.maintainers = with lib.maintainers; [ gnidorah primeos ];
+  meta.maintainers = with lib.maintainers; [ gnidorah primeos colemickens ];
 }

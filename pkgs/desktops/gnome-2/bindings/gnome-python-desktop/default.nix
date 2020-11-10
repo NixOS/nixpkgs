@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome_python, librsvg, libwnck, libgtop, pkgconfig, python2, gtk }:
+{ stdenv, fetchurl, gnome_python, librsvg, libwnck, libgtop, pkgconfig, python2, gtk2 }:
 
 let
   inherit (python2.pkgs) python pygtk;
@@ -6,7 +6,7 @@ in stdenv.mkDerivation rec {
   ver_maj = "2.32";
   ver_min = "0";
   version = "${ver_maj}.${ver_min}";
-  name = "gnome-python-desktop-${version}";
+  pname = "gnome-python-desktop";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-python-desktop/${ver_maj}/gnome-python-desktop-${version}.tar.bz2";
@@ -14,17 +14,17 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk librsvg libwnck libgtop python ];
+  buildInputs = [ gtk2 librsvg libwnck libgtop python ];
   propagatedBuildInputs = [ gnome_python pygtk ];
 
   # gnome-python-desktop expects that .pth file is already installed by PyGTK
   # in the same directory. This is not the case for Nix.
   postInstall = ''
-    echo "gtk-2.0" > $out/${python2.sitePackages}/${name}.pth
+    echo "gtk-2.0" > $out/${python2.sitePackages}/${pname}-${version}.pth
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.pygtk.org;
+    homepage = "http://www.pygtk.org";
     description = "Python bindings for GNOME desktop packages";
     license = licenses.lgpl21;
     maintainers = [ maintainers.goibhniu ];

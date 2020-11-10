@@ -1,38 +1,42 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper
+, nixosTests, rclone }:
 
-buildGoPackage rec {
-  name = "restic-${version}";
-  version = "0.9.2";
-
-  goPackagePath = "github.com/restic/restic";
+buildGoModule rec {
+  pname = "restic";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "0kl8yk636i3y7f2kd43pydjh4pv7hhq09p5k54jlysnrbf2kjb4h";
+    sha256 = "13zmx9wzv29z0np3agx4rsz1j9pgrvlnngjsb971i1dnzwv5l3hf";
   };
 
-  buildPhase = ''
-    cd go/src/${goPackagePath}
-    go run build.go
+  vendorSha256 = "09sa5jpdj73w595c063mib14132zacswh54nmjqp2n440cflmwjh";
+
+  subPackages = [ "cmd/restic" ];
+
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  passthru.tests.restic = nixosTests.restic;
+
+  postPatch = ''
+    rm cmd/restic/integration_fuse_test.go
   '';
 
-  installPhase = ''
-    mkdir -p \
-      $bin/bin \
-      $bin/etc/bash_completion.d \
-      $bin/share/zsh/vendor-completions \
-      $bin/share/man/man1
-    cp restic $bin/bin/
-    $bin/bin/restic generate \
-      --bash-completion $bin/etc/bash_completion.d/restic.sh \
-      --zsh-completion $bin/share/zsh/vendor-completions/_restic \
-      --man $bin/share/man/man1
+  postInstall = ''
+    wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    $out/bin/restic generate \
+      --bash-completion restic.bash \
+      --zsh-completion restic.zsh \
+      --man .
+    installShellCompletion restic.{bash,zsh}
+    installManPage *.1
   '';
 
   meta = with lib; {
-    homepage = https://restic.net;
+    homepage = "https://restic.net";
     description = "A backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;

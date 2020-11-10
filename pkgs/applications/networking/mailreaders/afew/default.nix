@@ -1,38 +1,45 @@
-{ stdenv, pythonPackages, notmuch }:
+{ stdenv, python3Packages, notmuch }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "afew";
-  version = "1.3.0";
+  version = "3.0.1";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0105glmlkpkjqbz350dxxasvlfx9dk0him9vwbl86andzi106ygz";
+    sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
   };
 
-  nativeBuildInputs = with pythonPackages; [ sphinx setuptools_scm ];
+  nativeBuildInputs = with python3Packages; [ sphinx setuptools_scm ];
 
-  propagatedBuildInputs = with pythonPackages; [
-    pythonPackages.notmuch chardet dkimpy
-  ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
+  propagatedBuildInputs = with python3Packages; [
+    python3Packages.setuptools python3Packages.notmuch chardet dkimpy
+  ];
 
-  postBuild =  ''
-    make -C docs man
-  '';
-
-  postInstall = ''
-    mandir="$out/share/man/man1"
-    mkdir -p "$mandir"
-    cp docs/build/man/* "$mandir"
-  '';
+  checkInputs = with python3Packages; [
+    freezegun notmuch
+  ];
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${notmuch}/bin"''
   ];
 
+  outputs = [ "out" "doc" ];
+
+  postBuild =  ''
+    ${python3Packages.python.interpreter} setup.py build_sphinx -b html,man
+  '';
+
+  postInstall = ''
+    install -D -v -t $out/share/man/man1 build/sphinx/man/*
+    mkdir -p $out/share/doc/afew
+    cp -R build/sphinx/html/* $out/share/doc/afew
+  '';
+
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/afewmail/afew;
+    homepage = "https://github.com/afewmail/afew";
     description = "An initial tagging script for notmuch mail";
     license = licenses.isc;
-    maintainers = with maintainers; [ garbas andir flokli ];
+    maintainers = with maintainers; [ andir flokli ];
   };
 }

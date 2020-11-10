@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.6";
-  name = "txt2tags-${version}";
+  pname = "txt2tags";
 
   dontBuild = true;
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://txt2tags.googlecode.com/files/${name}.tgz";
+    url = "http://txt2tags.googlecode.com/files/${pname}-${version}.tgz";
     sha256 = "0p5hql559pk8v5dlzgm75yrcxwvz4z30f1q590yzng0ghvbnf530";
   };
 
   meta = {
-    homepage = https://txt2tags.org/;
+    homepage = "https://txt2tags.org/";
     description = "A KISS markup language";
     license  = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];

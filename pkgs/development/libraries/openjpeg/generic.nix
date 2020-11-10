@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, libpng, libtiff, lcms2
+, libpng, libtiff, lcms2, jpylyzer
 , mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
 , jpipLibSupport ? false # JPIP library & executables
@@ -8,10 +8,10 @@
 , openjpegJarSupport ? false # Openjpeg jar (Java)
 , jp3dSupport ? true # # JP3D comp
 , thirdPartySupport ? false # Third party libraries - OFF: only build when found, ON: always build
-, testsSupport ? false
+, testsSupport ? true
 , jdk ? null
 # Inherit generics
-, branch, version, revision, sha256, patches ? [], ...
+, branch, version, revision, sha256, patches ? [], extraFlags ? [], ...
 }:
 
 assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
@@ -23,8 +23,9 @@ let
   mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
-stdenv.mkDerivation rec {
-  name = "openjpeg-${version}";
+stdenv.mkDerivation {
+  pname = "openjpeg";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "uclouvain";
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     (mkFlag jp3dSupport "BUILD_JP3D")
     (mkFlag thirdPartySupport "BUILD_THIRDPARTY")
     (mkFlag testsSupport "BUILD_TESTING")
-  ];
+  ] ++ extraFlags;
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
@@ -62,13 +63,20 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libpng libtiff lcms2 ];
 
+  doCheck = (testsSupport && !stdenv.isAarch64); # tests fail on aarch64-linux
+  checkPhase = ''
+    substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \
+      --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"${jpylyzer}/bin/jpylyzer\" # "
+    OPJ_SOURCE_DIR=.. ctest -S ../tools/ctest_scripts/travis-ci.cmake
+  '';
+
   passthru = {
     incDir = "openjpeg-${branch}";
   };
 
   meta = with stdenv.lib; {
     description = "Open-source JPEG 2000 codec written in C language";
-    homepage = http://www.openjpeg.org/;
+    homepage = "http://www.openjpeg.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.all;

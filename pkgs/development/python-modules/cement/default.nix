@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "3.0.0";
+  version = "3.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e50e1033d61d18b36787a60d52cad0d3fe20780e7e2f78f0204bde32000645f9";
+    sha256 = "10a8459dc9fc31d6c038ede24a9081c5c3bd5fcd75b071e01baf281f81c9eace";
   };
 
   # Disable test tests since they depend on a memcached server running on
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   meta = with stdenv.lib; {
-    homepage = http://builtoncement.com/;
+    homepage = "https://builtoncement.com/";
     description = "A CLI Application Framework for Python.";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.bsd3;

@@ -1,13 +1,14 @@
-{ stdenv, ocaml, cstruct, ppx_tools_versioned }:
+{ lib, buildDunePackage, cstruct, sexplib, ppx_tools_versioned }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
+if !lib.versionAtLeast (cstruct.version or "1") "3"
+then cstruct
+else
 
-stdenv.mkDerivation rec {
-	name = "ocaml${ocaml.version}-ppx_cstruct-${version}";
-	inherit (cstruct) version src unpackCmd installPhase meta;
+buildDunePackage {
+	pname = "ppx_cstruct";
+	inherit (cstruct) version src meta;
 
-	buildInputs = cstruct.buildInputs ++ [ ppx_tools_versioned ];
-	propagatedBuildInputs = [ cstruct ];
+	minimumOCamlVersion = "4.03";
 
-	buildPhase = "dune build -p ppx_cstruct";
+	propagatedBuildInputs = [ cstruct ppx_tools_versioned sexplib ];
 }

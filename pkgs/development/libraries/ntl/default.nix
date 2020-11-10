@@ -13,12 +13,12 @@
 assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
-  name = "ntl-${version}";
-  version = "11.3.0";
+  pname = "ntl";
+  version = "11.4.3";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "1pcib3vz1sdqlk0n561wbf7fwq44jm5cpx710w4vqljxgrjd7q1s";
+    sha256 = "1lisp3064rch3jaa2wrhy1s9kll7i3ka3d0y6lj6l3l4ckfcrhdp";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perl # needed for ./configure
   ];
 
-  sourceRoot = "${name}/src";
+  sourceRoot = "${pname}-${version}/src";
 
   enableParallelBuilding = true;
 
@@ -66,7 +66,9 @@ stdenv.mkDerivation rec {
     '';
     # Upstream contact: maintainer is victorshoup on GitHub. Alternatively the
     # email listed on the homepage.
-    homepage = http://www.shoup.net/ntl/;
+    homepage = "http://www.shoup.net/ntl/";
+    # also locally at "${src}/doc/tour-changes.html";
+    changelog = "https://www.shoup.net/ntl/doc/tour-changes.html";
     maintainers = with maintainers; [ timokau ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;

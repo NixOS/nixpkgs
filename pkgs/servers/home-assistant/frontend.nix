@@ -1,20 +1,23 @@
-{ lib, fetchPypi, buildPythonPackage, user-agents }:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
+  # the frontend version corresponding to a specific home-assistant version can be found here
+  # https://github.com/home-assistant/home-assistant/blob/master/homeassistant/components/frontend/manifest.json
   pname = "home-assistant-frontend";
-  version = "20180903.0";
+  version = "20201021.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54ba2ad2d1043952885f432d900025bd3eb11de180ac5147342cff585f44d4f9";
+    sha256 = "138h4cgvkn26xlr53ziz6d0zc00zw4wk40cpi4c4nia1lv6cqkxd";
   };
 
-  propagatedBuildInputs = [ user-agents ];
+  # no Python tests implemented
+  doCheck = false;
 
   meta = with lib; {
     description = "Polymer frontend for Home Assistant";
-    homepage = https://github.com/home-assistant/home-assistant-polymer;
+    homepage = "https://github.com/home-assistant/home-assistant-polymer";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

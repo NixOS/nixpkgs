@@ -1,51 +1,51 @@
-{ stdenv, fetchurl, pkgconfig
-, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2
-, mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
+{ stdenv, fetchurl, pkgconfig, nixosTests
+, boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
+, mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
 }:
 
 stdenv.mkDerivation rec {
-  name = "powerdns-${version}";
-  version = "4.1.4";
+  pname = "powerdns";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "1m9yhzrxh315gv855c590b2qc8bx31rrnl72pqxrnlix701qch79";
+    sha256 = "0if27znz528sir52y9i4gcfhdsym7yxiwjgffy9lpscf1426q56m";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl opendbx unixODBC botan2
-  ];
-
-  patches = [
-    # checksum type not found, maybe a dependency is to old?
-    ./skip-sha384-test.patch
+    libyamlcpp libsodium curl unixODBC openssl systemd
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
   preConfigure = ''
     configureFlagsArray=(
-      "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua mydns opendbx pipe random remote"
+      "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua2 pipe random remote"
       --with-sqlite3
-      --with-socketdir=/var/lib/powerdns
-      --enable-libsodium
-      --enable-botan
+      --with-libcrypto=${openssl.dev}
+      --with-libsodium
       --enable-tools
       --disable-dependency-tracking
       --disable-silent-rules
       --enable-reproducible
       --enable-unit-tests
+      --enable-systemd
     )
   '';
 
+  enableParallelBuilding = true;
   doCheck = true;
+
+  passthru.tests = {
+    nixos = nixosTests.powerdns;
+  };
 
   meta = with stdenv.lib; {
     description = "Authoritative DNS server";
-    homepage = https://www.powerdns.com;
-    platforms = platforms.linux;
-    # cannot find postgresql libs on macos x
+    homepage = "https://www.powerdns.com";
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 disassembler ];
   };

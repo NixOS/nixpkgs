@@ -1,31 +1,29 @@
-{ stdenv, fetchFromGitHub, crystal, pcre, libyaml, which }:
+{ stdenv, fetchFromGitHub, crystal }:
 
-stdenv.mkDerivation rec {
-  name = "shards-${version}";
-  version = "0.8.1";
+crystal.buildCrystalPackage rec {
+  pname = "shards";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
-    owner  = "crystal-lang";
-    repo   = "shards";
-    rev    = "v${version}";
-    sha256 = "1cjn2lafr08yiqzlhyqx14jjjxf1y24i2kk046px07gljpnlgqwk";
+    owner = "crystal-lang";
+    repo = "shards";
+    rev = "v${version}";
+    sha256 = "1bjy3hcdqq8769bx73f3pwn26rnkj23dngyfbw4iv32bw23x1d49";
   };
 
-  buildInputs = [ crystal libyaml pcre which ];
+  # we cannot use `make` here as it would introduce a dependency on itself
+  format = "crystal";
 
-  buildFlags = [ "CRFLAGS=--release" ];
+  shardsFile = ./shards.nix;
 
-  installPhase = ''
-    runHook preInstall
+  crystalBinaries.shards.src = "./src/shards.cr";
 
-    install -Dm755 bin/shards $out/bin/shards
-
-    runHook postInstall
-  '';
+  # tries to execute git which fails spectacularly
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Dependency manager for the Crystal language";
-    license     = licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (crystal.meta) homepage platforms;
   };

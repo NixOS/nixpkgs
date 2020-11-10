@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name    = "picosat-${version}";
+  pname = "picosat";
   version = "965";
 
   src = fetchurl {
-    url = "http://fmv.jku.at/picosat/${name}.tar.gz";
+    url = "http://fmv.jku.at/picosat/${pname}-${version}.tar.gz";
     sha256 = "0m578rpa5rdn08d10kr4lbsdwp4402hpavrz6n7n53xs517rn5hm";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SAT solver with proof and core support";
-    homepage    = http://fmv.jku.at/picosat/;
+    homepage    = "http://fmv.jku.at/picosat/";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ roconnor thoughtpolice ];

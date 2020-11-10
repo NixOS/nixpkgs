@@ -2,7 +2,7 @@
 let
   jdk = libreoffice.jdk;
 in
-(runCommand "${libreoffice.name}" {
+(runCommand libreoffice.name {
   inherit dbus libreoffice jdk bash;
 } ''
   mkdir -p "$out/bin"
@@ -13,4 +13,7 @@ in
   for i in $(ls "${libreoffice}/bin/"); do
     test "$i" = "soffice" || ln -s soffice "$out/bin/$(basename "$i")"
   done
-'') // { inherit libreoffice dbus; }
+'') // {
+  inherit libreoffice dbus;
+  meta = libreoffice.meta;
+}

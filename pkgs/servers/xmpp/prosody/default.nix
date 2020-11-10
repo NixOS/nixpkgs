@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
+{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
+, nixosTests
 , withLibevent ? true, luaevent ? null
 , withDBI ? true, luadbi ? null
 # use withExtraLibs to add additional dependencies of community modules
@@ -12,35 +13,45 @@ assert withDBI -> luadbi != null;
 
 with stdenv.lib;
 
-let
-  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ]
-                ++ optional withLibevent luaevent
-                ++ optional withDBI luadbi
-                ++ withExtraLibs;
-  getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
-  getLuaPath  = lib : getPath lib "lua";
-  getLuaCPath = lib : getPath lib "so";
-  luaPath     = concatStringsSep ";" (map getLuaPath  libs);
-  luaCPath    = concatStringsSep ";" (map getLuaCPath libs);
-in
 
 stdenv.mkDerivation rec {
-  version = "0.10.2";
-  name = "prosody-${version}";
-
+  version = "0.11.7"; # also update communityModules
+  pname = "prosody";
+  # The following community modules are necessary for the nixos module
+  # prosody module to comply with XEP-0423 and provide a working
+  # default setup.
+  nixosModuleDeps = [
+    "bookmarks"
+    "cloud_notify"
+    "vcard_muc"
+    "smacks"
+    "http_upload"
+  ];
   src = fetchurl {
-    url = "https://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "13knr7izscw0zx648b9582dx11aap4cq9bzfiqh5ykd7wwsz1dbm";
+    url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
+    sha256 = "0iw73ids6lv09pg2fn0cxsm2pvi593md71xk48zbcp28advc1zr8";
   };
 
+  # A note to all those merging automated updates: Please also update this
+  # attribute as some modules might not be compatible with a newer prosody
+  # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "150a7bd59043";
-    sha256 = "0nfx3lngcy88nd81gb7v4kh3nz1bzsm67bxgpd2lprk54diqcrz1";
+    rev = "7678b4880719";
+    sha256 = "1rpk3jcfhsa9hl7d7y638kprs9in0ljjp1nqxg30w1689v5h85d2";
   };
 
-  buildInputs = [ lua5 makeWrapper libidn openssl ]
-    ++ optional withDBI luadbi;
+  buildInputs = [
+    lua5 makeWrapper libidn openssl
+  ]
+  # Lua libraries
+  ++ [
+    luasocket luasec luaexpat luafilesystem luabitop
+  ]
+  ++ optional withLibevent luaevent
+  ++ optional withDBI luadbi
+  ++ withExtraLibs;
+
 
   configureFlags = [
     "--ostype=linux"
@@ -48,26 +59,41 @@ stdenv.mkDerivation rec {
     "--with-lua=${lua5}"
   ];
 
+  postBuild = ''
+    make -C tools/migration
+  '';
+
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
-      '') (withCommunityModules ++ withOnlyInstalledCommunityModules)}
+      '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       wrapProgram $out/bin/prosody \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
+
+      make -C tools/migration install
+      wrapProgram $out/bin/prosody-migrator \
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
 
-  passthru.communityModules = withCommunityModules;
+  passthru = {
+    communityModules = withCommunityModules;
+    tests = {
+      main = nixosTests.prosody;
+      mysql = nixosTests.prosodyMysql;
+    };
+  };
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
-    homepage = https://prosody.im;
+    homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin ninjatrappeur ];
   };
 }

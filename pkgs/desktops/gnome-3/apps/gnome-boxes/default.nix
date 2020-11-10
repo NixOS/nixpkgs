@@ -1,47 +1,129 @@
-{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtk-vnc, libvirt, spice-gtk, python3
-, spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
-, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
-, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
-, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, wrapGAppsHook
+, pkgconfig
+, gettext
+, itstool
+, libvirt-glib
+, glib
+, gobject-introspection
+, libxml2
+, gtk3
+, gtksourceview4
+, gtk-vnc
+, freerdp
+, libvirt
+, spice-gtk
+, python3
+, appstream-glib
+, spice-protocol
+, libhandy_0
+, libsoup
+, libosinfo
+, systemd
+, tracker
+, tracker-miners
+, vala
+, libcap
+, yajl
+, gmp
+, gdbm
+, cyrus_sasl
+, gnome3
+, librsvg
+, desktop-file-utils
+, mtools
+, cdrkit
+, libcdio
+, libusb1
+, libarchive
+, acl
+, libgudev
+, libsecret
+, libcap_ng
+, numactl
+, xen
+, libapparmor
+, json-glib
+, webkitgtk
+, vte
+, glib-networking
 }:
 
-# TODO: ovirt (optional)
-
-let
-  version = "3.28.5";
-in stdenv.mkDerivation rec {
-  name = "gnome-boxes-${version}";
+stdenv.mkDerivation rec {
+  pname = "gnome-boxes";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1z1qimspx1nw7l79rardxcx2bydj9nmk60vsdb611xzlqa3hkppm";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0zrm4mihkx5i42h3pvk9lmsqf983dqz4rnfcbccwhx4ml2s4w3qv";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils python3
+    appstream-glib # for appstream-util
+    desktop-file-utils
+    gettext
+    gobject-introspection
+    itstool
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
   ];
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = [ spice-gtk ];
+  propagatedUserEnvPkgs = [
+    spice-gtk
+  ];
 
   buildInputs = [
-    libvirt-glib glib gtk3 gtk-vnc libxml2
-    libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
-    tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.defaultIconTheme librsvg acl libgudev libsecret
-    libcap_ng numactl xen libapparmor
+    acl
+    cyrus_sasl
+    freerdp
+    gdbm
+    glib
+    glib-networking
+    gmp
+    gnome3.adwaita-icon-theme
+    gtk-vnc
+    gtk3
+    gtksourceview4
+    json-glib
+    libapparmor
+    libarchive
+    libcap
+    libcap_ng
+    libgudev
+    libhandy_0
+    libosinfo
+    librsvg
+    libsecret
+    libsoup
+    libusb1
+    libvirt
+    libvirt-glib
+    libxml2
+    numactl
+    spice-gtk
+    spice-protocol
+    systemd
+    tracker
+    tracker-miners
+    vte
+    webkitgtk
+    xen
+    yajl
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
-
-  mesonFlags = [
-    "-Dovirt=false"
-  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py # patchShebangs requires executable file
@@ -50,16 +132,16 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-boxes";
-      attrPath = "gnome3.gnome-boxes";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
-    homepage = https://wiki.gnome.org/action/show/Apps/Boxes;
+    homepage = "https://wiki.gnome.org/Apps/Boxes";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = teams.gnome.members;
   };
 }

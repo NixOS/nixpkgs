@@ -1,36 +1,44 @@
-{stdenv, fetchurl, yasm, enable10bit ? false}:
+{ stdenv, lib, fetchurl, nasm }:
 
 stdenv.mkDerivation rec {
-  version = "20170731-2245";
-  name = "x264-${version}";
+  pname = "x264";
+  version = "20191217-2245";
 
   src = fetchurl {
     url = "https://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
-    sha256 = "01sgk1ps4qfifdnblwa3fxnd8ah6n6zbmfc1sy09cgqcdgzxgj0z";
+    sha256 = "0q214q4rhbhigyx3dfhp6d5v5gzln01cxccl153ps5ih567mqjdj";
   };
 
-  patchPhase = ''
-    sed -i s,/bin/bash,${stdenv.shell}, configure version.sh
+  # Upstream ./configure greps for (-mcpu|-march|-mfpu) in CFLAGS, which in nix
+  # is put in the cc wrapper anyway.
+  patches = [ ./disable-arm-neon-default.patch ];
+
+  postPatch = ''
+    patchShebangs .
   '';
 
-  outputs = [ "out" "lib" ]; # leaving 52 kB of headers
+  enableParallelBuilding = true;
 
-  preConfigure = ''
-    # `AS' is set to the binutils assembler, but we need yasm
+  outputs = [ "out" "lib" "dev" ];
+
+  preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
+    # `AS' is set to the binutils assembler, but we need nasm
     unset AS
+  '' + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) ''
+    export AS=$CC
   '';
 
   configureFlags = [ "--enable-shared" ]
     ++ stdenv.lib.optional (!stdenv.isi686) "--enable-pic"
-    ++ stdenv.lib.optional (enable10bit) "--bit-depth=10";
+    ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
-  buildInputs = [ yasm ];
+  nativeBuildInputs = lib.optional (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isi686) nasm;
 
   meta = with stdenv.lib; {
     description = "Library for encoding H264/AVC video streams";
-    homepage    = http://www.videolan.org/developers/x264.html;
+    homepage    = "http://www.videolan.org/developers/x264.html";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = with maintainers; [ spwhitt tadeokondrak ];
   };
 }

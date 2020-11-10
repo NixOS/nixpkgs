@@ -41,8 +41,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "QtScript bindings generator";
-    homepage = https://code.qt.io/cgit/qt-labs/qtscriptgenerator.git/;
+    homepage = "https://code.qt.io/cgit/qt-labs/qtscriptgenerator.git/";
     inherit (qt4.meta) platforms;
-    maintainers = [ ];
+    license = stdenv.lib.licenses.lgpl21;
   };
 }

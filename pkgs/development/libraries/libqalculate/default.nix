@@ -2,14 +2,14 @@
   autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "libqalculate-${version}";
-  version = "2.6.2";
+  pname = "libqalculate";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "1wfffki5ib65z9ndph2c4a17qx62f07q12adzabs7ij9gv94y9j5";
+    sha256 = "1j4sr9s7152xmci677pnz64spv8s3ia26fbp5cqx8ydv7swlivh2";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   patchPhase = ''
-    substituteInPlace libqalculate/Calculator.cc \
+    substituteInPlace libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
-      --replace '"gnuplot -"' '"${gnuplot}/bin/gnuplot -"'
+      --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
   '' + stdenv.lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/qalc.cc \
       --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
@@ -40,8 +40,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An advanced calculator library";
-    homepage = http://qalculate.github.io;
+    homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ gebner ];
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

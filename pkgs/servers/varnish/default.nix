@@ -1,23 +1,25 @@
 { stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
-, python2, makeWrapper }:
+, python3, makeWrapper }:
 
 let
-  common = { version, sha256 }:
+  common = { version, sha256, extraNativeBuildInputs ? [] }:
     stdenv.mkDerivation rec {
-      name = "varnish-${version}";
+      pname = "varnish";
+      inherit version;
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${name}.tgz";
+        url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
         inherit sha256;
       };
 
-      nativeBuildInputs = [ pkgconfig ];
+      passthru.python = python3;
+
+      nativeBuildInputs = with python3.pkgs; [ pkgconfig docutils sphinx ];
       buildInputs = [
-        pcre libxslt groff ncurses readline python2 libedit
-        python2.pkgs.docutils makeWrapper
+        pcre libxslt groff ncurses readline libedit makeWrapper python3
       ];
 
-      buildFlags = "localstatedir=/var/spool";
+      buildFlags = [ "localstatedir=/var/spool" ];
 
       postInstall = ''
         wrapProgram "$out/sbin/varnishd" --prefix PATH : "${stdenv.lib.makeBinPath [ stdenv.cc ]}"
@@ -30,24 +32,24 @@ let
 
       meta = with stdenv.lib; {
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
-        homepage = https://www.varnish-cache.org;
+        homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = with maintainers; [ garbas fpletz ];
+        maintainers = with maintainers; [ fpletz ];
         platforms = platforms.unix;
       };
     };
 in
 {
-  varnish4 = common {
-    version = "4.1.9";
-    sha256 = "11zwyasz2fn9qxc87r175wb5ba7388sd79mlygjmqn3yv2m89n12";
+  varnish60 = common {
+    version = "6.0.5";
+    sha256 = "11aw202s7zdp5qp66hii5nhgm2jk0d86pila7gqrnjgc7x8fs8a0";
   };
-  varnish5 = common {
-    version = "5.2.1";
-    sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
+  varnish62 = common {
+    version = "6.2.2";
+    sha256 = "10s3qdvb95pkwp3wxndrigb892h0109yqr8dw4smrhfi0knhnfk5";
   };
-  varnish6 = common {
-    version = "6.0.1";
-    sha256 = "1f7k751r31sgfvr1ns6s3h48c5x06kkps1p6zd40wvylm56qxwj7";
+  varnish63 = common {
+    version = "6.3.1";
+    sha256 = "0xa14pd68zpi5hxcax3arl14rcmh5d1cdwa8gv4l5f23mmynr8ni";
   };
 }

@@ -32,7 +32,7 @@ in {
       ];
 
       kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode}"
+        "video=hyperv_fb:${cfg.videoMode} elevator=noop"
       ];
     };
 

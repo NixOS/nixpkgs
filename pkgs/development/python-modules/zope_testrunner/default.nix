@@ -10,20 +10,20 @@
 
 buildPythonPackage rec {
   pname = "zope.testrunner";
-  version = "4.8.1";
+  version = "5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "039z9q5i1r6fqzlm224nmaxn896k4a9sb1237dv406ncdldd7jaz";
+    sha256 = "873d6017abadc213992a0c38c786ed020341b6e0fe78d14bc2a684cf5a70de4b";
   };
-
-  patches = [ ./test-selection.patch ];
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
+  doCheck = false; # custom test modifies sys.path
+
   meta = with stdenv.lib; {
     description = "A flexible test runner with layer support";
-    homepage = https://pypi.python.org/pypi/zope.testrunner;
+    homepage = "https://pypi.python.org/pypi/zope.testrunner";
     license = licenses.zpl20;
     maintainers = [ maintainers.goibhniu ];
   };

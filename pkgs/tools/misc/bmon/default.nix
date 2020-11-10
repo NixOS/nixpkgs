@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ncurses, confuse
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ncurses, libconfuse
 , libnl }:
 
 stdenv.mkDerivation rec {
-  name = "bmon-${version}";
+  pname = "bmon";
   version = "4.0";
 
   src = fetchFromGitHub {
@@ -14,11 +14,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ ncurses confuse libnl ];
+  buildInputs = [ ncurses libconfuse libnl ];
+
+  preConfigure = ''
+    # Must be an absolute path
+    export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
+  '';
 
   meta = with stdenv.lib; {
     description = "Network bandwidth monitor";
-    homepage = https://github.com/tgraf/bmon;
+    homepage = "https://github.com/tgraf/bmon";
     # Licensed unter BSD and MIT
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.BSD
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.MIT

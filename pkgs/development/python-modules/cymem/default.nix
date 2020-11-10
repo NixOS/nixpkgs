@@ -4,21 +4,26 @@
 , cython
 , python
 }:
+
 buildPythonPackage rec {
   pname = "cymem";
-  version = "1.31.2";
-  name = pname + "-" + version;
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
-    rev = "1.31.2";
-    sha256 = "0miznr4kbdzw8yik3m96jmrlmln4qv7z3i3qdp7wjqr51zpqfm1k";
+    rev = "v${version}";
+    sha256 = "0cqz6whq4zginxjnh4cfqlsh535p4qz295ymvjchp71fv8mz11f6";
   };
 
   propagatedBuildInputs = [
    cython
   ];
+
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
+  '';
 
   checkPhase = ''
     cd cymem/tests
@@ -27,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Cython memory pool for RAII-style memory management";
-    homepage = https://github.com/explosion/cymem;
+    homepage = "https://github.com/explosion/cymem";
     license = licenses.mit;
     maintainers = with maintainers; [ sdll ];
     };

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, ninja, zlib, expat, rpm, db }:
 
 stdenv.mkDerivation rec {
-  rev  = "0.6.35";
-  name = "libsolv-${rev}";
+  version  = "0.7.16";
+  pname = "libsolv";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner  = "openSUSE";
     repo   = "libsolv";
-    sha256 = "0jx1bmwwhjwfidwa0hrarwpcrf4ic068kapd4vb9m5y7xd4l55nq";
+    rev    = version;
+    sha256 = "1arw7p83s5yq36pw94b76zfiqsh90fjjnayni54a5wgm0zvbkki8";
   };
 
   cmakeFlags = [
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free package dependency solver";
+    homepage    = "https://github.com/openSUSE/libsolv";
     license     = licenses.bsd3;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

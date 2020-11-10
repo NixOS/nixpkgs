@@ -1,45 +1,40 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
+{ lib, stdenv, fetchurl
+, autoreconfHook
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
 stdenv.mkDerivation rec {
-  name = "boehm-gc-${version}";
-  version = "7.6.8";
+  pname = "boehm-gc";
+  version = "8.0.4";
 
   src = fetchurl {
     urls = [
-      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
+      "https://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
     ];
-    sha256 = "0n720a0i584ghcwmdsjiq6bl9ig0p9mrja29rp4cgsqvpz6wa2h4";
+    sha256 = "1798rp3mcfkgs38ynkbg2p47bq59pisrc6mn0l20pb5iczf0ssj3";
   };
 
-  buildInputs = [ libatomic_ops ];
-  nativeBuildInputs = [ pkgconfig ];
-
   outputs = [ "out" "dev" "doc" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+="-D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
+    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
-  patches = [ (fetchpatch {
-    url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
-    sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
-  }) ] ++
-    # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
+  patches = # https://github.com/ivmai/bdwgc/pull/208
+    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch
+    # boehm-gc whitelists GCC threading models
+    ++ lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
   configureFlags =
-    [ "--enable-cplusplus" ]
-    ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static";
+    [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
+    ++ lib.optional enableLargeConfig "--enable-large-config";
+
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
 
   doCheck = true; # not cross;
-
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   enableParallelBuilding = true;
 
@@ -63,10 +58,10 @@ stdenv.mkDerivation rec {
       C or C++ programs, though that is not its primary goal.
     '';
 
-    homepage = http://hboehm.info/gc/;
+    homepage = "https://hboehm.info/gc/";
 
     # non-copyleft, X11-style license
-    license = http://hboehm.info/gc/license.txt;
+    license = "https://hboehm.info/gc/license.txt";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

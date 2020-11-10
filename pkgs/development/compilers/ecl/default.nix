@@ -1,5 +1,6 @@
 {stdenv, fetchurl
 , libtool, autoconf, automake
+, texinfo
 , gmp, mpfr, libffi, makeWrapper
 , noUnicode ? false
 , gcc
@@ -10,14 +11,13 @@ let
   s = # Generated upstream information
   rec {
     baseName="ecl";
-    version="16.1.3";
+    version="20.4.24";
     name="${baseName}-${version}";
-    hash="0m0j24w5d5a9dwwqyrg0d35c0nys16ijb4r0nyk87yp82v38b9bn";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.3.tgz";
-    sha256="0m0j24w5d5a9dwwqyrg0d35c0nys16ijb4r0nyk87yp82v38b9bn";
+    url="https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
+    sha256="01qgdmr54wkj854f69qdm9sybrvd6gd21dpx4askdaaqybnkh237";
   };
   buildInputs = [
-    libtool autoconf automake makeWrapper
+    libtool autoconf automake texinfo makeWrapper
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
@@ -34,6 +34,9 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  patches = [
+  ];
 
   configureFlags = [
     (if threadSupport then "--enable-threads" else "--disable-threads")
@@ -58,7 +61,7 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    homepage = https://common-lisp.net/project/ecl/;
+    homepage = "https://common-lisp.net/project/ecl/";
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

@@ -1,11 +1,14 @@
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 }:
 
 let
   bootStages = import ../. {
     inherit lib localSystem overlays;
-    crossSystem = null;
+
+    crossSystem = localSystem;
+    crossOverlays = [];
+
     # Ignore custom stdenvs when cross compiling for compatability
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
@@ -33,7 +36,9 @@ in lib.init bootStages ++ [
 
   # Run Packages
   (buildPackages: {
-    inherit config overlays;
+    inherit config;
+    overlays = overlays ++ crossOverlays
+      ++ (if (with crossSystem; isWasm || isRedox) then [(import ../../top-level/static.nix)] else []);
     selfBuild = false;
     stdenv = buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
@@ -46,18 +51,31 @@ in lib.init bootStages ++ [
       extraBuildInputs = [ ]; # Old ones run on wrong platform
       allowedRequisites = null;
 
+      hasCC = !targetPlatform.isGhcjs;
+
       cc = if crossSystem.useiOSPrebuilt or false
              then buildPackages.darwin.iosSdkPkgs.clang
-           else if crossSystem.useAndroidPrebuilt
-             then buildPackages.androidenv."androidndkPkgs_${crossSystem.ndkVer}".gcc
+           else if crossSystem.useAndroidPrebuilt or false
+             then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
+           else if targetPlatform.isGhcjs
+             # Need to use `throw` so tryEval for splicing works, ugh.  Using
+             # `null` or skipping the attribute would cause an eval failure
+             # `tryEval` wouldn't catch, wrecking accessing previous stages
+             # when there is a C compiler and everything should be fine.
+             then throw "no C compiler provided for this platform"
+           else if crossSystem.isDarwin
+             then buildPackages.llvmPackages.clang
+           else if crossSystem.useLLVM or false
+             then buildPackages.llvmPackages_8.lldClang
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
         ++ lib.optionals
              (hostPlatform.isLinux && !buildPlatform.isLinux)
-             [ buildPackages.patchelf buildPackages.paxctl ]
+             [ buildPackages.patchelf ]
         ++ lib.optional
-             (let f = p: !p.isx86 || p.libc == "musl"; in f hostPlatform && !(f buildPlatform))
+             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
+               in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
            # without proper `file` command, libtool sometimes fails
            # to recognize 64-bit DLLs

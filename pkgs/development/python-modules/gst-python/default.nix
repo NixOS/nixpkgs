@@ -1,43 +1,58 @@
-{ buildPythonPackage, fetchurl, stdenv, meson, ninja, pkgconfig, python, pygobject3
-, gst-plugins-base, ncurses
+{ buildPythonPackage
+, fetchurl
+, meson
+, ninja
+, stdenv
+, pkgconfig
+, python3
+, pygobject3
+, gobject-introspection
+, gst-plugins-base
+, isPy3k
 }:
 
-let
+buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.14.2";
-  name = "${pname}-${version}";
-in buildPythonPackage rec {
-  inherit pname version;
-  format = "other";
+  version = "1.18.0";
 
-  src = fetchurl {
-    urls = [
-      "${meta.homepage}/src/gst-python/${name}.tar.xz"
-      "mirror://gentoo/distfiles/${name}.tar.xz"
-      ];
-    sha256 = "08nb011acyvlz48fqh8c084k0dlssz9b7wha7zzk797inidbwh6w";
-  };
+  format = "other";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig python ];
+  src = fetchurl {
+    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
+    sha256 = "0ifx2s2j24sj2w5jm7cxyg1kinnhbxiz4x0qp3gnsjlwbawfigvn";
+  };
 
-  # XXX: in the Libs.private field of python3.pc
-  buildInputs = [ ncurses ];
+  # Python 2.x is not supported.
+  disabled = !isPy3k;
 
-  mesonFlags = [
-    "-Dpygi-overrides-dir=${python.sitePackages}/gi/overrides"
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    python3
+    gobject-introspection
+    gst-plugins-base
   ];
 
-  postPatch = ''
-    chmod +x scripts/pythondetector # patchShebangs requires executable file
-    patchShebangs scripts/pythondetector
-  '';
+  propagatedBuildInputs = [
+    gst-plugins-base
+    pygobject3
+  ];
 
-  propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
+  mesonFlags = [
+    "-Dpygi-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
+  ];
+
+  doCheck = true;
+
+  # TODO: Meson setup hook does not like buildPythonPackage
+  # https://github.com/NixOS/nixpkgs/issues/47390
+  installCheckPhase = "meson test --print-errorlogs";
 
   meta = {
-    homepage = https://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "Python bindings for GStreamer";
 

@@ -1,27 +1,29 @@
-{ stdenv, fetchFromGitHub, buildPythonApplication,
-click, pyfiglet, dateutil}:
-
-with stdenv.lib;
+{ stdenv
+, fetchFromGitHub
+, buildPythonApplication
+, click
+, pyfiglet
+, dateutil
+, setuptools
+}:
 
 buildPythonApplication rec {
-
-  name    = "termdown-${version}";
-  version = "1.11.0";
+  pname = "termdown";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
-    rev    = "d1e3504e02ad49013595112cb03fbf175822e58d";
-    sha256 = "1i6fxymg52q95n0cbm4imdxh6yvpj3q57yf7w9z5d9pr35cf1iq5";
-    repo   = "termdown";
-    owner  = "trehn";
+    rev = version;
+    sha256 = "1sd9z5n2a4ir35832wgxs68vwav7wxhq39b5h8pq934mp8sl3v2k";
+    repo = "termdown";
+    owner = "trehn";
   };
 
-  propagatedBuildInputs = [ dateutil click pyfiglet ];
+  propagatedBuildInputs = [ dateutil click pyfiglet setuptools ];
 
   meta = with stdenv.lib; {
-    description     = "Starts a countdown to or from TIMESPEC";
+    description = "Starts a countdown to or from TIMESPEC";
     longDescription = "Countdown timer and stopwatch in your terminal";
-    homepage        = https://github.com/trehn/termdown;
-    license         = licenses.gpl3;
-    platforms       = platforms.all;
+    homepage = "https://github.com/trehn/termdown";
+    license = licenses.gpl3;
   };
 }

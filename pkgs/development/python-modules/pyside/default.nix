@@ -1,4 +1,4 @@
-{ lib, fetchurl, cmake, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4 }:
+{ lib, fetchurl, cmake, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4, mesa, libGL }:
 
 # This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 buildPythonPackage rec {
@@ -13,15 +13,21 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pysideGeneratorrunner pysideShiboken qt4 ];
+  outputs = [ "out" "dev" ];
 
-  makeFlags = "QT_PLUGIN_PATH=" + pysideShiboken + "/lib/generatorrunner";
+  preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
+  '';
+
+  nativeBuildInputs = [ cmake pysideGeneratorrunner pysideShiboken qt4 ];
+
+  buildInputs = [ mesa libGL ];
+
+  makeFlags = [ "QT_PLUGIN_PATH=${pysideShiboken}/lib/generatorrunner" ];
 
   meta = {
     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = lib.licenses.lgpl21;
-    homepage = http://www.pyside.org;
-    maintainers = [ lib.maintainers.chaoflow ];
-    platforms = lib.platforms.all;
+    homepage = "http://www.pyside.org";
   };
 }

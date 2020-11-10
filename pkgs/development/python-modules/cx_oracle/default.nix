@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "cx_Oracle";
-  version = "6.4.1";
+  version = "8.0.1";
 
   buildInputs = [ odpic ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3519bf3263c9892aaadc844735aca02d3773ed9b92f97e069cd1726882a7d1b6";
+    sha256 = "f10ada7f821a325c6befdd6fef1cac44ebc830736d0b75dda7b8ac9f851087b2";
   };
 
   preConfigure = ''
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python interface to Oracle";
     homepage = "https://oracle.github.io/python-cx_Oracle";
-    license = licenses.bsdOriginal;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ y0no ];
   };
 }

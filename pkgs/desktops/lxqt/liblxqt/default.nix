@@ -1,16 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras,
-  qttools, qtsvg, libqtxdg, polkit-qt, kwindowsystem, xorg }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtx11extras
+, qttools
+, qtsvg
+, libqtxdg
+, polkit-qt
+, kwindowsystem
+, xorg
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "liblxqt";
-  version = "0.13.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1lbvnx6gg15k7fy1bnv5sjji659f603glblcl8c9psh0m1cjdbll";
+    sha256 = "01vfy7r7h0c5axlwqwsxg3pzdlaicnf2474bcq3jwk12gipvj5sd";
   };
 
   nativeBuildInputs = [
@@ -28,21 +39,17 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
   ];
 
-  cmakeFlags = [
-    "-DPULL_TRANSLATIONS=NO"
-    "-DLXQT_ETC_XDG_DIR=/run/current-system/sw/etc/xdg"
-  ];
-
-  patchPhase = ''
-    sed -i 's|set(LXQT_SHARE_DIR .*)|set(LXQT_SHARE_DIR "/run/current-system/sw/share/lxqt")|' CMakeLists.txt
+  postPatch = ''
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+
+  meta = with lib; {
     description = "Core utility library for all LXQt components";
-    homepage = https://github.com/lxqt/liblxqt;
+    homepage = "https://github.com/lxqt/liblxqt";
     license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

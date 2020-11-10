@@ -8,8 +8,7 @@
 , dbus
 , fontconfig
 , freetype
-, gconf
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gtk2
@@ -27,12 +26,10 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
+, libcanberra
 , libnotify
-, defaultIconTheme
-, libGLU_combined
+, gnome3
+, libGLU, libGL
 , nspr
 , nss
 , pango
@@ -49,6 +46,9 @@
 , gnugrep
 , gnupg
 , ffmpeg
+, runtimeShell
+, mesa # firefox wants gbm for drm+dmabuf
+, systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
 
 let
@@ -56,8 +56,8 @@ let
   inherit (generated) version sources;
 
   mozillaPlatforms = {
-    "i686-linux" = "linux-i686";
-    "x86_64-linux" = "linux-x86_64";
+    i686-linux = "linux-i686";
+    x86_64-linux = "linux-x86_64";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
@@ -67,8 +67,6 @@ let
 
   sourceMatches = locale: source:
       (isPrefixOf source.locale locale) && source.arch == arch;
-
-  systemLocale = config.i18n.defaultLocale or "en-US";
 
   policies = {
     DisableAppUpdate = true;
@@ -87,7 +85,7 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl { inherit (source) url sha512; };
+  src = fetchurl { inherit (source) url sha256; };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
@@ -103,13 +101,13 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gconf
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gtk2
       gtk3
       kerberos
+      mesa
       libX11
       libXScrnSaver
       libXcomposite
@@ -122,11 +120,9 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
+      libcanberra
       libnotify
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       pango
@@ -141,7 +137,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 defaultIconTheme ];
+  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -191,7 +187,7 @@ stdenv.mkDerivation {
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
+    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"
@@ -199,12 +195,12 @@ stdenv.mkDerivation {
   };
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
-    homepage = http://www.mozilla.org/firefox/;
+    homepage = "http://www.mozilla.org/firefox/";
     license = {
       free = false;
-      url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
+      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ taku0 ];
   };
 }

@@ -9,4 +9,4 @@ addPerlLibPath () {
     addToSearchPath PERL5LIB $1/lib/perl5/site_perl/@version@/@runtimeArch@
 }
 
-addEnvHooks "$targetOffset" addPerlLibPath
+addEnvHooks "$hostOffset" addPerlLibPath

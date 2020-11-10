@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, cmake, doxygen
-, libopenshot-audio, imagemagick, ffmpeg
+, libopenshot-audio, imagemagick, ffmpeg_3
 , swig, python3
-, unittest-cpp, cppzmq, czmqpp
+, unittest-cpp, cppzmq, zeromq
 , qtbase, qtmultimedia }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libopenshot-${version}";
-  version = "0.2.1";
+  pname = "libopenshot";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${version}";
-    sha256 = "0n8ksnv6y2qh9iz352zqibfhnfvyjq7pkvy51prl47620ac40pc3";
+    sha256 = "1mxjkgjmjzgf628y3rscc6rqf55hxgjpmvwxlncfk1216i5xskwp";
   };
 
   patchPhase = ''
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
   buildInputs =
-  [ imagemagick ffmpeg swig python3 unittest-cpp
-    cppzmq czmqpp qtbase qtmultimedia ];
+  [ imagemagick ffmpeg_3 swig python3 unittest-cpp
+    cppzmq zeromq qtbase qtmultimedia ];
 
-  LIBOPENSHOT_AUDIO_DIR = "${libopenshot-audio}";
+  LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;
   "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";
 
   doCheck = false;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_RUBY=OFF" ];
 
   meta = {
-    homepage = http://openshot.org/;
+    homepage = "http://openshot.org/";
     description = "Free, open-source video editor library";
     longDescription = ''
       OpenShot Library (libopenshot) is an open-source project dedicated to

@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "mozrunner";
-  version = "7.0.1";
+  version = "7.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4e3d532d1d7eb34b6332e0568612ebac3f56da849894005b3dbe68968e5d292";
+    sha256 = "04s6w0sp83bn3c6ym75rnlpmcy3yr7d35jxkxhgzmy75gbcps7bi";
   };
 
   propagatedBuildInputs = [ mozdevice mozfile mozinfo mozlog mozprocess
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Mozilla application start/stop helpers";
-    homepage = https://wiki.mozilla.org/Auto-tools/Projects/Mozbase;
+    homepage = "https://wiki.mozilla.org/Auto-tools/Projects/Mozbase";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
   };

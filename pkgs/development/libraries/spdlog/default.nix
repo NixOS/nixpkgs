@@ -3,7 +3,7 @@
 let
   generic = { version, sha256 }:
     stdenv.mkDerivation {
-      name = "spdlog-${version}";
+      pname = "spdlog";
       inherit version;
 
       src = fetchFromGitHub {
@@ -15,7 +15,7 @@ let
 
       nativeBuildInputs = [ cmake ];
 
-      # cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLES=ON" ];
+      cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLE=OFF" "-DSPDLOG_BUILD_BENCH=OFF" ];
 
       outputs = [ "out" "doc" ];
 
@@ -25,8 +25,8 @@ let
       '';
 
       meta = with stdenv.lib; {
-        description    = "Very fast, header only, C++ logging library.";
-        homepage       = https://github.com/gabime/spdlog;
+        description    = "Very fast, header only, C++ logging library";
+        homepage       = "https://github.com/gabime/spdlog";
         license        = licenses.mit;
         maintainers    = with maintainers; [ obadz ];
         platforms      = platforms.all;
@@ -35,12 +35,12 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.1.0";
-    sha256 = "0yckz5w02v8193jhxihk9v4i8f6jafyg2a33amql0iclhk17da8f";
+    version = "1.7.0";
+    sha256 = "1ryaa22ppj60461hcdb8nk7jwj84arp4iw4lyw594py92g4vnx3j";
   };
 
   spdlog_0 = generic {
-    version = "0.14.0";
-    sha256 = "13730429gwlabi432ilpnja3sfvy0nn2719vnhhmii34xcdyc57q";
+    version = "0.17.0";
+    sha256 = "112kfh4fbpm5cvrmgbgz4d8s802db91mhyjpg7cwhlywffnzkwr9";
   };
 }

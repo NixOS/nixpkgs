@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pyspread";
-  version = "1.1.2";
+  version = "1.99.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ffdfd219450f5f22ee51eb633c04941d1d608e1ceb4d3357d07683b7e5b84f83";
+    sha256 = "117268cbeb225e0aca4c59381b7bdf5333bf95ca85c1db410a326a887a74f3da";
   };
 
   propagatedBuildInputs = [ numpy wxPython matplotlib pycairo python-gnupg xlrd xlwt jedi pyenchant basemap pygtk ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pyspread is a non-traditional spreadsheet application that is based on and written in the programming language Python";
-    homepage = https://manns.github.io/pyspread/;
+    homepage = "https://manns.github.io/pyspread/";
     license = licenses.gpl3;
   };
 }

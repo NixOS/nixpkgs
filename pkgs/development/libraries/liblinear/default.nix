@@ -1,37 +1,40 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub, fixDarwinDylibNames }:
 
-stdenv.mkDerivation rec {
-  name = "liblinear-${version}";
-  version = "2.20";
+let
+  soVersion = "4";
+in stdenv.mkDerivation rec {
+  pname = "liblinear";
+  version = "2.41";
 
-  src = fetchurl {
-    url = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/liblinear-${version}.tar.gz";
-    sha256 = "13q48azqy9pd8jyhk0c2hzj5xav1snbdrj8pp38vwrv2wwhfz7rz";
+  src = fetchFromGitHub {
+    owner = "cjlin1";
+    repo = "liblinear";
+    rev = "v${builtins.replaceStrings ["."] [""] version}";
+    sha256 = "1mykrzka2wxnvvjh21hisabs5fsxqzdhkxw9m08h24c58vfiwsd8";
   };
 
-  buildPhase = ''
-    make
-    make lib
-  '';
+  outputs = [ "bin" "dev" "out" ];
 
-  installPhase = let
-    libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
-  in ''
-    mkdir -p $out/lib $out/bin $out/include
-    cp liblinear.so.3 $out/lib/liblinear.3${libSuff}
-    ln -s $out/lib/liblinear.3${libSuff} $out/lib/liblinear${libSuff}
-    cp train $out/bin/liblinear-train
-    cp predict $out/bin/liblinear-predict
-    cp linear.h $out/include
-  '';
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
-  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id liblinear.3.dylib $out/lib/liblinear.3.dylib
+  buildFlags = [ "lib" "predict" "train" ];
+
+  installPhase = ''
+    ${if stdenv.isDarwin then ''
+      install -D liblinear.so.${soVersion} $out/lib/liblinear.${soVersion}.dylib
+      ln -s $out/lib/liblinear.${soVersion}.dylib $out/lib/liblinear.dylib
+    '' else ''
+      install -Dt $out/lib liblinear.so.${soVersion}
+      ln -s $out/lib/liblinear.so.${soVersion} $out/lib/liblinear.so
+    ''}
+    install -D train $bin/bin/liblinear-train
+    install -D predict $bin/bin/liblinear-predict
+    install -Dm444 -t $dev/include linear.h
   '';
 
   meta = with stdenv.lib; {
     description = "A library for large linear classification";
-    homepage = https://www.csie.ntu.edu.tw/~cjlin/liblinear/;
+    homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
     license = licenses.bsd3;
     maintainers = [ maintainers.danieldk ];
     platforms = platforms.unix;

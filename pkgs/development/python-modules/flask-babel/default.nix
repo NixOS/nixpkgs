@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Babel";
-  version = "0.11.2";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ff9n165vhf1nhv6807ckhpp224jw7k7sd7jz5kfh3sbpl85gmy0";
+    sha256 = "0gmb165vkwv5v7dxsxa2i3zhafns0fh938m2zdcrv4d8z5l099yn";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     '';
     license = licenses.bsd2;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/python-babel/flask-babel;
+    homepage = "https://github.com/python-babel/flask-babel";
   };
 }

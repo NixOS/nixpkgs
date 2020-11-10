@@ -1,27 +1,29 @@
-{ stdenv, fetchpatch, fetchFromGitHub, meson, ninja, pkgconfig, gettext
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, libstemmer, glib, xapian, libxml2, libyaml, gobjectIntrospection
-, pcre, itstool, gperf, vala
+, libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
+, pcre, itstool, gperf, vala, lmdb, libsoup
 }:
 
 stdenv.mkDerivation rec {
-  name = "appstream-${version}";
-  version = "0.12.2";
+  pname = "appstream";
+  version = "0.12.11";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner  = "ximion";
     repo   = "appstream";
-    rev    = "APPSTREAM_${stdenv.lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1g15c4bhyl730rgaiqia3jppraixh05c3yx098lyilidbddxp5xb";
+    rev    = "v${version}";
+    sha256 = "sha256-bCDyMwQdn9Csxs2hy4dm+LjtxK4+YBK6yDkAdhu1QVU=";
   };
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext
     libxslt xmlto docbook_xsl docbook_xml_dtd_45
-    gobjectIntrospection itstool vala
+    gobject-introspection itstool vala
   ];
 
-  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf ];
+  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf lmdb libsoup ];
 
   prePatch = ''
     substituteInPlace meson.build \
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Software metadata handling library";
-    homepage    = https://www.freedesktop.org/wiki/Distributions/AppStream/;
+    homepage    = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     longDescription = ''
       AppStream is a cross-distro effort for building Software-Center applications
       and enhancing metadata provided by software components.  It provides
@@ -47,6 +49,6 @@ stdenv.mkDerivation rec {
       can be consumed by other software.
     '';
     license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
  };
 }

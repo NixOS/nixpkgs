@@ -1,18 +1,26 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , pandas, shapely, fiona, descartes, pyproj
-, pytest, Rtree }:
+, pytest, Rtree, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.4.0";
-  name = pname + "-" + version;
+  version = "0.8.1";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     rev = "v${version}";
-    sha256 = "025zpgck5pnmidvzk0805pr345rd7k6z66qb2m34gjh1814xjkhv";
+    sha256 = "0618p0s0biisxk2s0h43hkc3bs1nwjk84rxbfyd6brfvs9yx4vq7";
   };
+
+  patches = [
+    # Fix for test test_numerical_operations: https://github.com/geopandas/geopandas/issues/1541
+    (fetchpatch {
+      url = "https://github.com/geopandas/geopandas/pull/1544/commits/6ce868a33a2f483b071089d51e178030fa4414d0.patch";
+      sha256 = "1sjgxrqgbhz5krx51hrv230ywszcdl6z8q3bj6830kfad8n8b5dq";
+    })
+  ];
 
   checkInputs = [ pytest Rtree ];
 
@@ -30,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python geospatial data analysis framework";
-    homepage = https://geopandas.org;
+    homepage = "https://geopandas.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

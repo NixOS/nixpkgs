@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
   buildInputs = [readline];
 
-  meta = {
+  meta = with stdenv.lib; {
     description     = "Bayesian Inference of Phylogeny";
     longDescription = ''
       Bayesian inference of phylogeny is based upon a
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       MrBayes uses a simulation technique called Markov chain Monte Carlo (or
       MCMC) to approximate the posterior probabilities of trees.
     '';
-    license     = "GPL2";
-    homepage    = http://mrbayes.csit.fsu.edu/;
-    platforms = stdenv.lib.platforms.linux;
+    license     = licenses.gpl2;
+    homepage    = "http://mrbayes.csit.fsu.edu/";
+    platforms = platforms.linux;
   };
 }

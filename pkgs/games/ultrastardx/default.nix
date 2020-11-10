@@ -1,30 +1,56 @@
-{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
-, lua, fpc, pcre, portaudio, freetype, libpng
-, SDL2, SDL2_image, SDL2_gfx, SDL2_mixer, SDL2_net, SDL2_ttf
-, ffmpeg, sqlite, zlib, libX11, libGLU_combined }:
+{ stdenv
+, autoreconfHook
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, lua
+, fpc
+, pcre
+, portaudio
+, freetype
+, libpng
+, SDL2
+, SDL2_image
+, SDL2_gfx
+, SDL2_mixer
+, SDL2_net, SDL2_ttf
+, ffmpeg
+, sqlite
+, zlib
+, libX11
+, libGLU
+, libGL
+}:
 
 let
   sharedLibs = [
     pcre portaudio freetype
     SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU_combined ffmpeg
+    sqlite lua zlib libX11 libGLU libGL ffmpeg
   ];
 
 in stdenv.mkDerivation rec {
-  name = "ultrastardx-${version}";
-  version = "2017.8.0";
+  pname = "ultrastardx";
+  version = "2020.4.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    sha256 = "1zp0xfwzci3cjmwx3cprcxvm60cik5cvhvrz9n4d6yb8dv38nqzm";
+    sha256 = "0vmfv8zpyf8ymx3rjydpd7iqis080lni94vb316vfxkgvjmqbhym";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ fpc libpng ] ++ sharedLibs;
 
+  patches = [
+    (fetchpatch {
+      name = "fpc-3.2-support.patch";
+      url = "https://github.com/UltraStar-Deluxe/USDX/commit/1b8e8714c1523ef49c2fd689a1545d097a3d76d7.patch";
+      sha256 = "02zmjymj9w1mkpf7armdpf067byvml6lprs1ca4lhpkv45abddp4";
+    })
+  ];
+
   postPatch = ''
-    # autoconf substitutes strange things otherwise
     substituteInPlace src/config.inc.in \
       --subst-var-by libpcre_LIBNAME libpcre.so.1
   '';
@@ -39,7 +65,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = http://ultrastardx.sourceforge.net/;
+    homepage = "http://ultrastardx.sourceforge.net/";
     description = "Free and open source karaoke game";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];

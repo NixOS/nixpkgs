@@ -4,12 +4,8 @@ with lib;
 
 let
   cfg = config.services.logstash;
-  pluginPath = lib.concatStringsSep ":" cfg.plugins;
-  havePluginPath = lib.length cfg.plugins > 0;
   ops = lib.optionalString;
   verbosityFlag = "--log.level " + cfg.logLevel;
-
-  pluginsPath = "--path.plugins ${pluginPath}";
 
   logstashConf = pkgs.writeText "logstash.conf" ''
     input {
@@ -27,13 +23,21 @@ let
 
   logstashSettingsYml = pkgs.writeText "logstash.yml" cfg.extraSettings;
 
-  logstashSettingsDir = pkgs.runCommand "logstash-settings" {inherit logstashSettingsYml;} ''
+  logstashSettingsDir = pkgs.runCommand "logstash-settings" {
+      inherit logstashSettingsYml;
+      preferLocalBuild = true;
+    } ''
     mkdir -p $out
     ln -s $logstashSettingsYml $out/logstash.yml
   '';
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
+    (mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+  ];
+
   ###### interface
 
   options = {
@@ -50,7 +54,7 @@ in
         type = types.package;
         default = pkgs.logstash;
         defaultText = "pkgs.logstash";
-        example = literalExample "pkgs.logstash5";
+        example = literalExample "pkgs.logstash";
         description = "Logstash package to use.";
       };
 
@@ -165,7 +169,7 @@ in
         ExecStart = concatStringsSep " " (filter (s: stringLength s != 0) [
           "${cfg.package}/bin/logstash"
           "-w ${toString cfg.filterWorkers}"
-          (ops havePluginPath pluginsPath)
+          (concatMapStringsSep " " (x: "--path.plugins ${x}") cfg.plugins)
           "${verbosityFlag}"
           "-f ${logstashConf}"
           "--path.settings ${logstashSettingsDir}"

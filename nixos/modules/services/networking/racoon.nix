@@ -32,12 +32,12 @@ in {
           else cfg.configPath
         }";
         ExecReload = "${pkgs.ipsecTools}/bin/racoonctl reload-config";
-        PIDFile = "/var/run/racoon.pid";
+        PIDFile = "/run/racoon.pid";
         Type = "forking";
         Restart = "always";
       };
       preStart = ''
-        rm /var/run/racoon.pid || true
+        rm /run/racoon.pid || true
         mkdir -p /var/racoon
       '';
     };

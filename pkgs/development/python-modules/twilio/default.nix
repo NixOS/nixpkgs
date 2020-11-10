@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "6.8.0";
+  version = "6.43.0";
   # tests not included in PyPi, so fetch from github instead
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
     rev = version;
-    sha256 = "1vi3m6kvbmv643jbz95q59rcn871y0sss48kw2nqziyr5iswfx8c";
+    sha256 = "0p2chrzakqx5694g305j0klh9lxlclm5qp0qjm6wqicivyybggzg";
   };
 
   buildInputs = [ nose mock ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Twilio API client and TwiML generator";
-    homepage = https://github.com/twilio/twilio-python/;
+    homepage = "https://github.com/twilio/twilio-python/";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
   };

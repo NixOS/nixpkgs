@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, file, which
-, autoreconfHook
-, git
+{ stdenv, fetchurl, fetchpatch
+, autoreconfHook, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+, file, which, ncurses
 , texinfo
+, buildPackages
 , qtbase ? null
-, withPython ? false, swig2 ? null, python ? null
+, pythonSupport ? false, swig2 ? null, python ? null
 }:
 
 let
@@ -13,13 +13,28 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gpgme-${version}";
-  version = "1.11.1";
+  pname = "gpgme";
+  version = "1.14.0";
 
   src = fetchurl {
-    url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
+    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
+    sha256 = "01s3rlspykbm9vmi5rfbdm3d20ip6yni69r48idqzlmhlq8ggwff";
   };
+
+  patches = [
+    (fetchpatch { # gpg: Send --with-keygrip when listing keys
+      name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
+      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
+      sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
+    })
+    # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
+    (fetchpatch {
+      name = "0001-Fix-python-tests-on-non-Linux.patch";
+      url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
+      sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
+    })
+    # Disable python tests on Darwin as they use gpg (see configureFlags below)
+  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch;
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
@@ -28,31 +43,36 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
-  ++ lib.optionals withPython [ python swig2 which ];
+  nativeBuildInputs = [ pkgconfig gnupg texinfo autoreconfHook ]
+  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
-  postPatch =''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
-  ] ++ lib.optional withPython "--enable-languages=python";
+    "--with-libassuan-prefix=${libassuan.dev}"
+  ] ++ lib.optional pythonSupport "--enable-languages=python"
+  # Tests will try to communicate with gpg-agent instance via a UNIX socket
+  # which has a path length limit. Nix on darwin is using a build directory
+  # that already has quite a long path and the resulting socket path doesn't
+  # fit in the limit. https://github.com/NixOS/nix/pull/1085
+    ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
-  NIX_CFLAGS_COMPILE =
+  NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64");
 
   checkInputs = [ which ];
 
-  doCheck = false; # fails 8 out of 26 tests with "GPGME: Decryption failed". Spooky!
+  doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://gnupg.org/software/gpgme/index.html;
+    homepage = "https://gnupg.org/software/gpgme/index.html";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;hb=refs/tags/gpgme-${version}";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -62,6 +82,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fuuzetsu primeos ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 
-buildGoPackage rec {
-  name = "yaml2json-${version}";
+buildGoPackage {
+  pname = "yaml2json";
   version = "unstable-2017-05-03";
   goPackagePath = "github.com/bronze1man/yaml2json";
 
@@ -16,7 +16,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bronze1man/yaml2json;
+    homepage = "https://github.com/bronze1man/yaml2json";
     description = "Convert yaml to json";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.adisbladis ];

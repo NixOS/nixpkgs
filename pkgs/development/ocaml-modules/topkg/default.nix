@@ -7,11 +7,17 @@ build system is required, the attribute `run` can be used.
 */
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, result, opaline }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.01"
-then throw "topkg is not available for OCaml ${ocaml.version}"
-else
-
 let
+  param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.03" then {
+    version = "1.0.3";
+    sha256 = "0b77gsz9bqby8v77kfi4lans47x9p2lmzanzwins5r29maphb8y6";
+  } else {
+    version = "1.0.0";
+    sha256 = "1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
+    propagatedBuildInputs = [ result ];
+  };
+
 /* This command allows to run the “topkg” build system.
  * It is usually called with `build` or `test` as argument.
  * Packages that use `topkg` may call this command as part of
@@ -22,17 +28,16 @@ in
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-topkg-${version}";
-  version = "0.9.1";
+  inherit (param) version;
 
   src = fetchurl {
-    url = "http://erratique.ch/software/topkg/releases/topkg-${version}.tbz";
-    sha256 = "1slrzbmyp81xhgsfwwqs2d6gxzvqx0gcp34rq00h5iblhcq7myx6";
+    url = "https://erratique.ch/software/topkg/releases/topkg-${version}.tbz";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  propagatedBuildInputs = [ result ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  propagatedBuildInputs = param.propagatedBuildInputs or [];
 
-  unpackCmd = "tar xjf ${src}";
   buildPhase = "${run} build";
   createFindlibDestdir = true;
   installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit run; };
 
   meta = {
-    homepage = http://erratique.ch/software/topkg;
+    homepage = "https://erratique.ch/software/topkg";
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     description = "A packager for distributing OCaml software";

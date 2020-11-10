@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Elliptic Curve Method for Integer Factorization";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://ecm.gforge.inria.fr/;
+    homepage = "http://ecm.gforge.inria.fr/";
     maintainers = [ stdenv.lib.maintainers.roconnor ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };

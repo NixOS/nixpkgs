@@ -1,43 +1,40 @@
-{ stdenv, lib, fetchurl
-, perl
-, libcap, libtool, libxml2, openssl
-, enablePython ? false, python3 ? null
-, enableSeccomp ? false, libseccomp ? null, buildPackages
+{ config, stdenv, lib, fetchurl, fetchpatch
+, perl, pkg-config
+, libcap, libtool, libxml2, openssl, libuv
+, enablePython ? config.bind.enablePython or false, python3 ? null
+, enableSeccomp ? false, libseccomp ? null, buildPackages, nixosTests
 }:
 
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.12.2-P2"; in
-
 stdenv.mkDerivation rec {
-  name = "bind-${version}";
+  pname = "bind";
+  version = "9.16.8";
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0gk9vwqlbdmn10m21f2awvmiccfbadvcwi8zsgm91awbx4k7h0l7";
+    url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0ccdbqmpvnxlbrxjsx2w8ir4xh961svzcw7n87n8dglj6rb9r6wy";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
 
-  patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
-    stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
+  patches = [
+    ./dont-keep-configure-flags.patch
+    ./remove-mkdir-var.patch
+  ];
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ libtool libxml2 openssl ]
+  nativeBuildInputs = [ perl pkg-config ];
+  buildInputs = [ libtool libxml2 openssl libuv ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
-    ++ lib.optional enablePython python3;
-
-  STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
     "--localstatedir=/var"
     "--with-libtool"
-    "--with-libxml2=${libxml2.dev}"
-    "--with-openssl=${openssl.dev}"
     (if enablePython then "--with-python" else "--without-python")
     "--without-atf"
     "--without-dlopen"
@@ -55,32 +52,35 @@ stdenv.mkDerivation rec {
     "--without-eddsa"
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
-    ++ lib.optional enableSeccomp "--enable-seccomp";
+    ++ lib.optional enableSeccomp "--enable-seccomp"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
-    moveToOutput bin/isc-config.sh $dev
 
     moveToOutput bin/host $host
 
     moveToOutput bin/dig $dnsutils
+    moveToOutput bin/delv $dnsutils
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
 
-    for f in "$lib/lib/"*.la "$dev/bin/"{isc-config.sh,bind*-config}; do
+    for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
       sed -i "$f" -e 's|-L${openssl.dev}|-L${openssl.out}|g'
     done
   '';
 
   doCheck = false; # requires root and the net
 
-  meta = {
-    homepage = http://www.isc.org/software/bind;
-    description = "Domain name server";
-    license = stdenv.lib.licenses.mpl20;
+  passthru.tests = { inherit (nixosTests) bind; };
 
-    maintainers = with stdenv.lib.maintainers; [peti];
-    platforms = with stdenv.lib.platforms; unix;
+  meta = with stdenv.lib; {
+    homepage = "https://www.isc.org/downloads/bind/";
+    description = "Domain name server";
+    license = licenses.mpl20;
+
+    maintainers = with maintainers; [ peti globin ];
+    platforms = platforms.unix;
 
     outputsToInstall = [ "out" "dnsutils" "host" ];
   };

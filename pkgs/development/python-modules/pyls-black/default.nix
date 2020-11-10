@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "pyls-black";
-  version = "0.2.1";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "rupert";
     repo = "pyls-black";
     rev = "v${version}";
-    sha256 = "0xa3iv8nhnj0lw0dh41qb0dqp55sb6rdxalbk60v8jll6qyc0si8";
+    sha256 = "0cjf0mjn156qp0x6md6mncs31hdpzfim769c2lixaczhyzwywqnj";
   };
 
   disabled = !isPy3k;
@@ -19,15 +19,12 @@ buildPythonPackage rec {
     pytest
   '';
 
-  # Enable when https://github.com/rupert/pyls-black/pull/6 is merged.
-  doCheck = false;
-
   checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ black toml python-language-server ];
 
   meta = with lib; {
-    homepage = https://github.com/rupert/pyls-black;
+    homepage = "https://github.com/rupert/pyls-black";
     description = "Black plugin for the Python Language Server";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];

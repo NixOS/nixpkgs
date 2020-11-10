@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
-, python3Packages, gnome3, gtk3, gobjectIntrospection}:
+{ stdenv, fetchFromGitHub, wrapGAppsHook, gettext
+, python3Packages, gnome3, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
-  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2;
+  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
 in buildPythonApplication rec {
   pname = "sonata";
   version = "1.7b1";
@@ -16,32 +16,44 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    intltool wrapGAppsHook
-    gnome3.defaultIconTheme
-    gnome3.gsettings-desktop-schemas
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook
   ];
+
+  buildInputs = [
+    glib
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    gdk-pixbuf
+  ];
+
+  # The optional tagpy dependency (for editing metadata) is not yet
+  # included because it's difficult to build.
+  pythonPath = [
+    dbus-python
+    mpd2
+    pygobject3
+    setuptools
+  ];
+
+  # Otherwise the setup hook for gobject-introspection is not run:
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   postPatch = ''
     # Remove "Local MPD" tab which is not suitable for NixOS.
     sed -i '/localmpd/d' sonata/consts.py
   '';
 
-  propagatedBuildInputs = [
-    gobjectIntrospection gtk3 pygobject3
-  ];
-
-  # The optional tagpy dependency (for editing metadata) is not yet
-  # included because it's difficult to build.
-  pythonPath = [ dbus-python pygobject3 mpd2 ];
-
   meta = {
     description = "An elegant client for the Music Player Daemon";
     longDescription = ''
       Sonata is an elegant client for the Music Player Daemon.
 
-      Written in Python and using the GTK+ 3 widget set, its features
+      Written in Python and using the GTK 3 widget set, its features
       include:
 
        - Expanded and collapsed views
@@ -61,7 +73,7 @@ in buildPythonApplication rec {
        - Commandline control
        - Available in 24 languages
     '';
-    homepage = http://www.nongnu.org/sonata/;
+    homepage = "https://www.nongnu.org/sonata/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.rvl ];

@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     perl
     DBI
     DBDSQLite
-    DigestMD5
     HTMLTagset
     TimeDate # == DateParse
     HTMLTemplate
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An email classification system that automatically sorts messages and fights spam";
-    homepage = http://getpopfile.org;
+    homepage = "http://getpopfile.org";
     license = stdenv.lib.licenses.gpl2;
 
     # Should work on macOS, but havent tested it.

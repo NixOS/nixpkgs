@@ -1,62 +1,48 @@
-{ stdenv, fetchurl, openssl, zlib, pcre, postgresql, libxml2, libxslt,
-gd, geoip, perl }:
+{ callPackage
+, runCommand
+, lib
+, fetchurl
+, postgresql
+, ...
+}@args:
 
-with stdenv.lib;
-
-stdenv.mkDerivation rec {
-  name = "openresty-${version}";
-  version = "1.13.6.2";
+callPackage ../nginx/generic.nix args rec {
+  pname = "openresty";
+  nginxVersion = "1.17.8";
+  version = "${nginxVersion}.2";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "0hi9zw4344a4i636g3nbnnlm8qbnq37f50irhd1xncih4xc1jvll";
+    sha256 = "1813w33hjm1hcqvl3b3f67qgi5zfjiqg6s01hiy12a5j3jqilcig";
   };
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip postgresql ];
-  nativeBuildInputs = [ perl ];
+  fixPatch = patch: let name = patch.name or (builtins.baseNameOf patch); in
+    runCommand "openresty-${name}" { src = patch; } ''
+      substitute $src $out \
+        --replace "a/" "a/bundle/nginx-${nginxVersion}/" \
+        --replace "b/" "b/bundle/nginx-${nginxVersion}/"
+    '';
 
-  NIX_CFLAGS_COMPILE = ["-I${libxml2.dev}/include/libxml2"];
+  buildInputs = [ postgresql ];
+
+  configureFlags = [ "--with-http_postgres_module" ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  configureFlags = [
-    "--with-pcre-jit"
-    "--with-http_ssl_module"
-    "--with-http_v2_module"
-    "--with-http_realip_module"
-    "--with-http_addition_module"
-    "--with-http_xslt_module"
-    "--with-http_image_filter_module"
-    "--with-http_geoip_module"
-    "--with-http_sub_module"
-    "--with-http_dav_module"
-    "--with-http_flv_module"
-    "--with-http_mp4_module"
-    "--with-http_gunzip_module"
-    "--with-http_gzip_static_module"
-    "--with-http_auth_request_module"
-    "--with-http_random_index_module"
-    "--with-http_secure_link_module"
-    "--with-http_degradation_module"
-    "--with-http_stub_status_module"
-    "--with-http_postgres_module"
-    "--with-ipv6"
-  ];
-
-  enableParallelBuilding = true;
-
   postInstall = ''
     ln -s $out/luajit/bin/luajit-2.1.0-beta3 $out/bin/luajit-openresty
     ln -s $out/nginx/sbin/nginx $out/bin/nginx
+    ln -s $out/nginx/conf $out/conf
+    ln -s $out/nginx/html $out/html
   '';
 
   meta = {
     description = "A fast web application server built on Nginx";
-    homepage    = http://openresty.org;
-    license     = licenses.bsd2;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice lblasc ];
+    homepage    = "http://openresty.org";
+    license     = lib.licenses.bsd2;
+    platforms   = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice lblasc emily ];
   };
 }

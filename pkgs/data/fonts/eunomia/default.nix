@@ -1,4 +1,4 @@
-{ stdenv,  fetchzip }:
+{ lib, fetchzip }:
 
 let
   majorVersion = "0";
@@ -6,7 +6,7 @@ let
   pname = "eunomia";
 in
 
-fetchzip rec {
+fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
@@ -17,9 +17,9 @@ fetchzip rec {
     unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://dotcolon.net/font/eunomia/;
-    description = "A futuristic decorative font.";
+  meta = with lib; {
+    homepage = "http://dotcolon.net/font/eunomia/";
+    description = "A futuristic decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
     license = licenses.ofl;

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://ftp.gnu.org/gnu/which/;
+    homepage = "https://www.gnu.org/software/which/";
+    description = "Shows the full path of (shell) commands";
     platforms = platforms.all;
     license = licenses.gpl3;
   };

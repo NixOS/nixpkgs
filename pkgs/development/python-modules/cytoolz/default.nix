@@ -5,26 +5,26 @@
 , nose
 , toolz
 , python
+, fetchpatch
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.9.0.1";
+  version = "0.11.0";
+  disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84cc06fa40aa310f2df79dd440fc5f84c3e20f01f9f7783fc9c38d0a11ba00e5";
+    sha256 = "c64f3590c3eb40e1548f0d3c6b2ccde70493d0b8dc6cc7f9f3fec0bb3dcd4222";
   };
-
-  # Extension types
-  disabled = isPyPy;
 
   checkInputs = [ nose ];
   propagatedBuildInputs = [ toolz ];
 
-  # Disable failing test https://github.com/pytoolz/cytoolz/issues/97
+  # Failing test https://github.com/pytoolz/cytoolz/issues/122
   checkPhase = ''
-    NOSE_EXCLUDE=test_curried_exceptions nosetests -v $out/${python.sitePackages}
+    NOSE_EXCLUDE=test_introspect_builtin_modules nosetests -v $out/${python.sitePackages}
   '';
 
   meta = {

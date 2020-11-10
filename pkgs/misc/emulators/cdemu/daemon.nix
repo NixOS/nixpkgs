@@ -1,9 +1,9 @@
-{ callPackage, glib, libao, intltool }:
+{ callPackage, glib, libao, intltool, libmirage }:
 let pkg = import ./base.nix {
-  version = "3.1.0";
+  version = "3.2.3";
   pkgName = "cdemu-daemon";
-  pkgSha256 = "0kxwhwjvcr40sjlrvln9gasjwkkfc3wxpcz0rxmffp92w8phz3s9";
+  pkgSha256 = "022xzgwmncswb9md71w3ly3mjkdfc93lbij2llp2jamq8grxjjxr";
 };
 in callPackage pkg {
-  buildInputs = [ glib libao (callPackage ./libmirage.nix {}) intltool ];
+  buildInputs = [ glib libao libmirage intltool ];
 }

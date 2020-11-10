@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
@@ -6,17 +6,17 @@
 }:
 
 assert guiSupport -> (dbus != null);
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
-  name = "qbittorrent-${version}";
-  version = "4.1.3";
+mkDerivation rec {
+  pname = "qbittorrent";
+  version = "4.3.0.1";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "1hpcn1x4z3vdjscw035d18vqhfs7c6yv002akgmbgdf9jl3vfrsl";
+    sha256 = "068sf24mjvc2idimgpzvf7gjk8n9xrr3qqlqfx5j3j598ckm3yfp";
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Featureful free software BitTorrent client";
-    homepage    = https://www.qbittorrent.org/;
+    homepage    = "https://www.qbittorrent.org/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ Anton-Latukha ];

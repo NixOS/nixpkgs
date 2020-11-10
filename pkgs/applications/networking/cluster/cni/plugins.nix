@@ -1,33 +1,50 @@
-{ stdenv, lib, fetchFromGitHub, go }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
-stdenv.mkDerivation rec {
-  name = "cni-plugins-${version}";
-  version = "0.7.3";
+buildGoModule rec {
+  pname = "cni-plugins";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "1saaszzxy4x3jkqd9ac6cphmzfim7x84h28c9i7az46px40blzm1";
+    sha256 = "1sjk0cghldygx1jgx4bqv83qky7shk64n6xkkfxl92f12wyvsq9j";
   };
 
-  buildInputs = [ go ];
+  vendorSha256 = null;
 
-  buildPhase = ''
-    patchShebangs build.sh
-    ./build.sh
-  '';
+  doCheck = false;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv bin/* $out/bin
-  '';
+  buildFlagsArray = [
+    "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=v${version}"
+  ];
+
+  subPackages = [
+    "plugins/ipam/dhcp"
+    "plugins/ipam/host-local"
+    "plugins/ipam/static"
+    "plugins/main/bridge"
+    "plugins/main/host-device"
+    "plugins/main/ipvlan"
+    "plugins/main/loopback"
+    "plugins/main/macvlan"
+    "plugins/main/ptp"
+    "plugins/main/vlan"
+    "plugins/meta/bandwidth"
+    "plugins/meta/firewall"
+    "plugins/meta/flannel"
+    "plugins/meta/portmap"
+    "plugins/meta/sbr"
+    "plugins/meta/tuning"
+  ];
+
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";
-    homepage = https://github.com/containernetworking/plugins;
+    homepage = "https://github.com/containernetworking/plugins";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cstrahan ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cstrahan ] ++ teams.podman.members;
   };
 }

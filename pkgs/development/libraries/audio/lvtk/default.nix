@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, boost, gtkmm2, lv2, pkgconfig, python }:
+{ stdenv, fetchurl, boost, gtkmm2, lv2, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "lvtk-${version}";
+  pname = "lvtk";
   version = "1.2.0";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "03nbj2cqcklqwh50zj2gwm07crh5iwqbpxbpzwbg5hvgl4k4rnjd";
   };
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig python wafHook ];
   buildInputs = [ boost gtkmm2 lv2 ];
 
   enableParallelBuilding = true;
@@ -19,19 +19,14 @@ stdenv.mkDerivation rec {
     sed -i '/target[ ]*= "ttl2c"/ ilib=["boost_system"],' tools/wscript_build
   '';
 
-  configurePhase = ''
-    python waf configure --prefix=$out \
-      --boost-includes="${boost.dev}/include" \
-      --boost-libs="${boost.out}/lib"
-  '';
-
-  buildPhase = "python waf";
-
-  installPhase = "python waf install";
+  wafConfigureFlags = [
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
+  ];
 
   meta = with stdenv.lib; {
     description = "A set C++ wrappers around the LV2 C API";
-    homepage = http://lvtoolkit.org;
+    homepage = "http://lvtoolkit.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

@@ -64,8 +64,8 @@ print <<"EOF";
       sha256 = "$OPAM_RELEASE_SHA256";
     };
   };
-in stdenv.mkDerivation rec {
-  name = "opam-\${version}";
+in stdenv.mkDerivation {
+  pname = "opam";
   version = "$OPAM_RELEASE";
 
   buildInputs = [ unzip curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
@@ -113,7 +113,8 @@ print <<'EOF';
     mv $out/bin/opam $out/bin/.opam-wrapped
     makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
       --argv0 "opam" \
-      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin
+      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
+      --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/
     $out/bin/opam-installer --prefix=$installer opam-installer.install
   '';
 
@@ -121,8 +122,8 @@ print <<'EOF';
 
   meta = with stdenv.lib; {
     description = "A package manager for OCaml";
-    homepage = http://opam.ocamlpro.com/;
-    maintainers = [ maintainers.henrytill ];
+    homepage = "https://opam.ocaml.org/";
+    maintainers = [ maintainers.henrytill maintainers.marsam ];
     platforms = platforms.all;
   };
 }

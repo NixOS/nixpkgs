@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "codecov";
-  version = "2.0.15";
+  version = "2.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ed8b7c6791010d359baed66f84f061bba5bd41174bf324c31311e8737602788";
+    sha256 = "355fc7e0c0b8a133045f0d6089bde351c845e7b52b99fec5903b4ea3ab5f6aab";
   };
 
   checkInputs = [ unittest2 ]; # Tests only
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python report uploader for Codecov";
-    homepage = https://codecov.io/;
+    homepage = "https://codecov.io/";
     license = stdenv.lib.licenses.asl20;
   };
 }

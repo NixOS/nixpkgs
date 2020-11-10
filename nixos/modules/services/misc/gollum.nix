@@ -50,6 +50,12 @@ in
       description = "Parse and interpret emoji tags";
     };
 
+    h1-title = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Use the first h1 as page title";
+    };
+
     branch = mkOption {
       type = types.str;
       default = "master";
@@ -71,9 +77,14 @@ in
       group = config.users.users.gollum.name;
       description = "Gollum user";
       createHome = false;
+      isSystemUser = true;
     };
 
     users.groups.gollum = { };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - ${config.users.users.gollum.name} ${config.users.groups.gollum.name} - -"
+    ];
 
     systemd.services.gollum = {
       description = "Gollum wiki";
@@ -81,29 +92,23 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.git ];
 
-      preStart = let
-          userName = config.users.users.gollum.name;
-          groupName = config.users.groups.gollum.name;
-        in ''
-        # All of this is safe to be run on an existing repo
-        mkdir -p ${cfg.stateDir}
+      preStart = ''
+        # This is safe to be run on an existing repo
         git init ${cfg.stateDir}
-        chmod 755 ${cfg.stateDir}
-        chown -R ${userName}:${groupName} ${cfg.stateDir}
       '';
 
       serviceConfig = {
         User = config.users.users.gollum.name;
         Group = config.users.groups.gollum.name;
-        PermissionsStartOnly = true;
         ExecStart = ''
           ${pkgs.gollum}/bin/gollum \
             --port ${toString cfg.port} \
             --host ${cfg.address} \
-            --config ${builtins.toFile "gollum-config.rb" cfg.extraConfig} \
+            --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
             ${optionalString cfg.mathjax "--mathjax"} \
             ${optionalString cfg.emoji "--emoji"} \
+            ${optionalString cfg.h1-title "--h1-title"} \
             ${optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
             ${cfg.stateDir}
         '';

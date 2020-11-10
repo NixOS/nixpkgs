@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 stdenv.mkDerivation rec {
   version = "2.0.0.2";
-  name = "checkbashisms-${version}";
+  pname = "checkbashisms";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/checkbaskisms/${version}/checkbashisms";
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   # The link returns directly the script. No need for unpacking
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     install -D -m755 $src $out/bin/checkbashisms
   '';
 
   meta = {
-    homepage = https://sourceforge.net/projects/checkbaskisms/;
+    homepage = "https://sourceforge.net/projects/checkbaskisms/";
     description = "Check shell scripts for non-portable syntax";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

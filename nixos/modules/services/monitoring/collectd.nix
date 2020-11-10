@@ -16,12 +16,28 @@ let
       NotifyLevel "OKAY"
     </Plugin>
 
+    ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
+      LoadPlugin ${plugin}
+      <Plugin "${plugin}">
+      ${pluginConfig}
+      </Plugin>
+    '') cfg.plugins)}
+
     ${concatMapStrings (f: ''
-    Include "${f}"
+      Include "${f}"
     '') cfg.include}
 
     ${cfg.extraConfig}
   '';
+
+  package =
+    if cfg.buildMinimalPackage
+    then minimalPackage
+    else cfg.package;
+
+  minimalPackage = cfg.package.override {
+    enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
+  };
 
 in {
   options.services.collectd = with types; {
@@ -33,7 +49,15 @@ in {
       description = ''
         Which collectd package to use.
       '';
-      type = package;
+      type = types.package;
+    };
+
+    buildMinimalPackage = mkOption {
+      default = false;
+      description = ''
+        Build a minimal collectd package with only the configured `services.collectd.plugins`
+      '';
+      type = types.bool;
     };
 
     user = mkOption {
@@ -68,6 +92,15 @@ in {
       type = listOf str;
     };
 
+    plugins = mkOption {
+      default = {};
+      example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
+      description = ''
+        Attribute set of plugin names to plugin config segments
+      '';
+      type = types.attrsOf types.str;
+    };
+
     extraConfig = mkOption {
       default = "";
       description = ''
@@ -79,26 +112,27 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} - - -"
+    ];
+
     systemd.services.collectd = {
       description = "Collectd Monitoring Agent";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -f";
+        ExecStart = "${package}/sbin/collectd -C ${conf} -f";
         User = cfg.user;
-        PermissionsStartOnly = true;
+        Restart = "on-failure";
+        RestartSec = 3;
       };
-
-      preStart = ''
-        mkdir -p "${cfg.dataDir}"
-        chmod 755 "${cfg.dataDir}"
-        chown -R ${cfg.user} "${cfg.dataDir}"
-      '';
     };
 
-    users.users = optional (cfg.user == "collectd") {
-      name = "collectd";
+    users.users = optionalAttrs (cfg.user == "collectd") {
+      collectd = {
+        isSystemUser = true;
+      };
     };
   };
 }

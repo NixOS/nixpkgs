@@ -1,38 +1,63 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, six, typing
-, django, shortuuid, python-dateutil, pytest
-, pytest-django, pytestcov, mock, vobject
-, werkzeug, glibcLocales
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python
+, django
+, factory_boy
+, glibcLocales
+, mock
+, pygments
+, pytest
+, pytestcov
+, pytest-django
+, python-dateutil
+, shortuuid
+, six
+, tox
+, typing
+, vobject
+, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1xf84wq7ab1zfb3nmf4qgw6mjf5xafjwr3175dyrqrrn6cpvcr4a";
+    sha256 = "1z2si9wpc8irqhi5i2wp4wr05dqxyw4mn2vj3amp0rvsvydws92c";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "'tox'," ""
-  '';
+  LC_ALL = "en_US.UTF-8";
+  __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") typing;
+  propagatedBuildInputs = [ six ]
+    ++ lib.optional (pythonOlder "3.5") typing;
 
   checkInputs = [
-    django shortuuid python-dateutil pytest
-    pytest-django pytestcov mock vobject
-    werkzeug glibcLocales
+    django
+    factory_boy
+    glibcLocales
+    mock
+    pygments # not explicitly declared in setup.py, but some tests require it
+    pytest
+    pytestcov
+    pytest-django
+    python-dateutil
+    shortuuid
+    tox
+    vobject
+    werkzeug
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  # tests not compatible with pip>=20
+  checkPhase = ''
+    rm tests/management/commands/test_pipchecker.py
+    ${python.interpreter} setup.py test
+  '';
 
   meta = with lib; {
     description = "A collection of custom extensions for the Django Framework";
-    homepage = https://github.com/django-extensions/django-extensions;
+    homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };
 }

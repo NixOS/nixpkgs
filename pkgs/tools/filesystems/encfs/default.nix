@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "encfs-${version}";
+  pname = "encfs";
   version = "1.9.5";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An encrypted filesystem in user-space via FUSE";
-    homepage = https://vgough.github.io/encfs;
+    homepage = "https://vgough.github.io/encfs";
     license = with licenses; [ gpl3 lgpl3 ];
     platforms = with platforms; linux;
   };

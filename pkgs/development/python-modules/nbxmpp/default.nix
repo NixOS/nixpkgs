@@ -1,26 +1,22 @@
-{ stdenv, buildPythonPackage, fetchzip, pyopenssl, python }:
+{ stdenv, buildPythonPackage, fetchzip, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl }:
 
 let
   pname = "nbxmpp";
-  version = "0.6.6";
+  version = "1.0.2";
   name = "${pname}-${version}";
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit pname version;
   # Tests aren't included in PyPI tarball.
   src = fetchzip {
     name = "${name}.tar.bz2";
     url = "https://dev.gajim.org/gajim/python-nbxmpp/repository/archive.tar.bz2?"
         + "ref=${name}";
-    sha256 = "10n7z613p00q15dplsvdrz11s9yq26jy2qack6nd8k7fivfhlcmz";
+    sha256 = "1rhzsakqrybzq5j5b9400wjd14pncph47c1ggn5a6f3di03lk4az";
   };
 
-  propagatedBuildInputs = [ pyopenssl ];
-
-  checkPhase = ''
-    # Disable tests requiring networking
-    echo "" > test/unit/test_xmpp_transports_nb2.py
-    ${python.executable} test/runtests.py
-  '';
+  buildInputs = [ precis-i18n ];
+  checkInputs = [ gobject-introspection libsoup pygobject3 ];
+  propagatedBuildInputs = [ idna pyopenssl ];
 
   meta = with stdenv.lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";

@@ -1,87 +1,276 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, xz, pam, acl, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, libmicrohttpd, pcre2
-, linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi
-, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, ninja, meson, python3Packages, glibcLocales
-, patchelf
-, getent
+{ stdenv
+, lib
+, fetchFromGitHub
 , buildPackages
-, withSelinux ? false, libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
+, ninja
+, meson
+, m4
+, pkgconfig
+, coreutils
+, gperf
+, getent
+, patchelf
+, glibcLocales
+, glib
+, substituteAll
+, gettext
+, python3Packages
+
+  # Mandatory dependencies
+, libcap
+, utillinux
+, kbd
+, kmod
+
+  # Optional dependencies
+, pam
+, cryptsetup
+, lvm2
+, audit
+, acl
+, lz4
+, libgcrypt
+, libgpgerror
+, libidn2
+, curl
+, gnutar
+, gnupg
+, zlib
+, xz
+, libuuid
+, libapparmor
+, intltool
+, bzip2
+, pcre2
+, e2fsprogs
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnu-efi
+, iptables
+, withSelinux ? false
+, libselinux
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
+, kexectools
+, bashInteractive
+, libmicrohttpd
+
+, withAnalyze ? true
+, withApparmor ? true
+, withCoredump ? true
+, withCompression ? true  # adds bzip2, lz4 and xz
+, withCryptsetup ? true
+, withDocumentation ? true
+, withEfi ? stdenv.hostPlatform.isEfi
+, withHostnamed ? true
+, withHwdb ? true
+, withImportd ? true
+, withLocaled ? true
+, withLogind ? true
+, withMachined ? true
+, withNetworkd ? true
+, withNss ? true
+, withPCRE2 ? true
+, withPolkit ? true
+, withRemote ? true
+, withResolved ? true
+, withShellCompletions ? true
+, withTimedated ? true
+, withTimesyncd ? true
+, withUserDb ? true
+, withHomed ? false, p11-kit, libfido2
+# , withPortabled ? false TODO
+
+  # name argument
+, pname ? "systemd"
+
+
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
 }:
 
+assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withImportd ->
+(curl.dev != null && zlib != null && xz != null && libgcrypt != null
+  && gnutar != null && gnupg != null && withCompression );
+
+assert withEfi -> (gnu-efi != null);
+assert withRemote -> lib.getDev curl != null;
+assert withCoredump -> withCompression;
+
+assert withHomed -> withCryptsetup;
+
+assert withCryptsetup ->
+(cryptsetup != null);
+
 let
-  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
+  wantCurl = withRemote || withImportd;
 
-in stdenv.mkDerivation rec {
-  version = "239";
-  name = "systemd-${version}";
+  version = "246.6";
+in
+stdenv.mkDerivation {
+  inherit version pname;
 
-  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
-  # Also fresh patches should be cherry-picked from that tree to our current one.
+  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
+  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "systemd";
-    rev = "31859ddd35fc3fa82a583744caa836d356c31d7f";
-    sha256 = "1xci0491j95vdjgs397n618zii3sgwnvanirkblqqw6bcvcjvir1";
+    owner = "systemd";
+    repo = "systemd-stable";
+    rev = "v${version}";
+    sha256 = "1yhj2jlighqqpw1xk9q52f3pncjn47ipi224k35d6syb94q2b988";
   };
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  # If these need to be regenerated, `git am path/to/00*.patch` them into a
+  # systemd worktree, rebase to the more recent systemd version, and export the
+  # patches again via `git format-patch v${version}`.
+  patches = [
+    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
+    ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0003-Fix-NixOS-containers.patch
+    ./0004-Look-for-fsck-in-the-right-place.patch
+    ./0005-Add-some-NixOS-specific-unit-directories.patch
+    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0008-Fix-hwdb-paths.patch
+    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0012-Install-default-configuration-into-out-share-factory.patch
+    ./0013-inherit-systemd-environment-when-calling-generators.patch
+    ./0014-add-rootprefix-to-lookup-dir-paths.patch
+    ./0015-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0019-logind-seat-debus-show-CanMultiSession-again.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/boot/efi/meson.build \
+      --replace \
+      "find_program('ld'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
+      --replace \
+      "find_program('objcopy'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '';
+
+  outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
-    [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-      ninja meson
+    [
+      pkgconfig
+      gperf
+      ninja
+      meson
       coreutils # meson calls date, stat etc.
       glibcLocales
-      patchelf getent m4
+      patchelf
+      getent
+      m4
+
+      intltool
+      gettext
+
+      libxslt
+      docbook_xsl
+      docbook_xml_dtd_42
+      docbook_xml_dtd_45
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
     ];
+
   buildInputs =
-    [ linuxHeaders libcap kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
-    [ libffi audit lz4 bzip2 libapparmor
-      iptables gnu-efi
-      # This is actually native, but we already pull it from buildPackages
-      pythonLxmlEnv
-    ] ++ stdenv.lib.optional withSelinux libselinux;
+    [
+      acl
+      audit
+      glib
+      kmod
+      libcap
+      libgcrypt
+      libidn2
+      libuuid
+      linuxHeaders
+      pam
+    ]
+
+    ++ lib.optional  withApparmor libapparmor
+    ++ lib.optional  wantCurl (lib.getDev curl)
+    ++ lib.optionals withCompression [ bzip2 lz4 xz ]
+    ++ lib.optional  withCryptsetup (lib.getDev cryptsetup.dev)
+    ++ lib.optional  withEfi gnu-efi
+    ++ lib.optional  withKexectools kexectools
+    ++ lib.optional  withLibseccomp libseccomp
+    ++ lib.optional  withNetworkd iptables
+    ++ lib.optional  withPCRE2 pcre2
+    ++ lib.optional  withResolved libgpgerror
+    ++ lib.optional  withSelinux libselinux
+    ++ lib.optional  withRemote libmicrohttpd
+    ++ lib.optionals withHomed [ p11-kit libfido2 ]
+    ;
 
   #dontAddPrefix = true;
 
   mesonFlags = [
+    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
+    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
+    "-Drootprefix=${placeholder "out"}"
+    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
+    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
-    # "-Dtests=" # TODO
-    "-Dlz4=true"
-    "-Dhostnamed=true"
-    "-Dnetworkd=true"
+    "-Ddebug-shell=${bashInteractive}/bin/bash"
+    "-Dglib=${lib.boolToString (glib != null)}"
+    # while we do not run tests we should also not build them. Removes about 600 targets
+    "-Dtests=false"
+    "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
+    "-Dimportd=${lib.boolToString withImportd}"
+    "-Dlz4=${lib.boolToString withCompression}"
+    "-Dhomed=${stdenv.lib.boolToString withHomed}"
+    "-Dlogind=${lib.boolToString withLogind}"
+    "-Dlocaled=${lib.boolToString withLocaled}"
+    "-Dhostnamed=${lib.boolToString withHostnamed}"
+    "-Dmachined=${lib.boolToString withMachined}"
+    "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Dpolkit=${lib.boolToString withPolkit}"
+    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
+    "-Dportabled=false"
+    "-Dhwdb=${lib.boolToString withHwdb}"
+    "-Dremote=${lib.boolToString withRemote}"
     "-Dsysusers=false"
-    "-Dtimedated=true"
-    "-Dtimesyncd=true"
+    "-Dtimedated=${lib.boolToString withTimedated}"
+    "-Dtimesyncd=${lib.boolToString withTimesyncd}"
+    "-Duserdb=${lib.boolToString withUserDb}"
+    "-Dcoredump=${lib.boolToString withCoredump}"
     "-Dfirstboot=false"
-    "-Dlocaled=true"
-    "-Dresolve=true"
+    "-Dresolve=${lib.boolToString withResolved}"
     "-Dsplit-usr=false"
-    "-Dlibcurl=false"
+    "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=true"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
-    "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
-    "-Dsystem-gid-max=499"
+    "-Db_pie=true"
+    /*
+    As of now, systemd doesn't allow runtime configuration of these values. So
+    the settings in /etc/login.defs have no effect on it. Many people think this
+    should be supported however, see
+    - https://github.com/systemd/systemd/issues/3855
+    - https://github.com/systemd/systemd/issues/4850
+    - https://github.com/systemd/systemd/issues/9769
+    - https://github.com/systemd/systemd/issues/9843
+    - https://github.com/systemd/systemd/issues/10184
+    */
+    "-Dsystem-uid-max=999"
+    "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
-
-    (if stdenv.isAarch32 || stdenv.isAarch64 || !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
 
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
@@ -91,44 +280,73 @@ in stdenv.mkDerivation rec {
     "-Dsulogin-path=${utillinux}/bin/sulogin"
     "-Dmount-path=${utillinux}/bin/mount"
     "-Dumount-path=${utillinux}/bin/umount"
+    "-Dcreate-log-dirs=false"
+    # Upstream uses cgroupsv2 by default. To support docker and other
+    # container managers we still need v1.
+    "-Ddefault-hierarchy=hybrid"
+    # Upstream defaulted to disable manpages since they optimize for the much
+    # more frequent development builds
+    "-Dman=true"
+
+    "-Defi=${lib.boolToString withEfi}"
+    "-Dgnu-efi=${lib.boolToString withEfi}"
+  ] ++ lib.optionals withEfi [
+    "-Defi-libdir=${toString gnu-efi}/lib"
+    "-Defi-includedir=${toString gnu-efi}/include/efi"
+    "-Defi-ldsdir=${toString gnu-efi}/lib"
+  ] ++ lib.optionals (withShellCompletions == false) [
+    "-Dbashcompletiondir=no"
+    "-Dzshcompletiondir=no"
+  ] ++ lib.optionals (!withNss) [
+    "-Dnss-myhostname=false"
+    "-Dnss-mymachines=false"
+    "-Dnss-resolve=false"
+    "-Dnss-systemd=false"
   ];
 
   preConfigure = ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-    mesonFlagsArray+=(-Ddbuspolicydir=$out/etc/dbus-1/system.d)
-    mesonFlagsArray+=(-Ddbussessionservicedir=$out/share/dbus-1/services)
-    mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
-    mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
-    mesonFlagsArray+=(-Drootprefix=$out)
-    mesonFlagsArray+=(-Drootlibdir=$lib/lib)
-    mesonFlagsArray+=(-Dpkgconfiglibdir=$dev/lib/pkgconfig)
-    mesonFlagsArray+=(-Dpkgconfigdatadir=$dev/share/pkgconfig)
-
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
+    for i in \
+      src/core/mount.c \
+      src/core/swap.c \
+      src/cryptsetup/cryptsetup-generator.c \
+      src/journal/cat.c \
+      src/nspawn/nspawn.c \
+      src/remount-fs/remount-fs.c \
+      src/shared/generator.c \
+      src/shutdown/shutdown.c \
+      units/emergency.service.in \
+      units/rescue.service.in \
+      units/systemd-logind.service.in \
+      units/systemd-nspawn@.service.in; \
+    do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
-        --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
-        --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
+        --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
+        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for i in tools/xml_helper.py tools/make-directive-index.py tools/make-man-index.py test/sys-script.py; do
-      substituteInPlace $i \
-        --replace "#!/usr/bin/env python" "#!${pythonLxmlEnv}/bin/python"
+    for dir in tools src/resolve test src/test; do
+      patchShebangs $dir
     done
 
-    for i in src/basic/generate-gperfs.py src/resolve/generate-dns_type-gperf.py src/test/generate-sym-test.py ; do
-      substituteInPlace $i \
-        --replace "#!/usr/bin/env python" "#!${buildPackages.python3Packages.python}/bin/python"
+    # absolute paths to gpg & tar
+    substituteInPlace src/import/pull-common.c \
+      --replace '"gpg"' '"${gnupg}/bin/gpg"'
+    for file in src/import/{{export,import,pull}-tar,import-common}.c; do
+      substituteInPlace $file \
+        --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
     substituteInPlace src/journal/catalog.c \
@@ -144,20 +362,28 @@ in stdenv.mkDerivation rec {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  NIX_CFLAGS_COMPILE = toString [
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
+    # lead to a cyclic dependency.
+    "-UPOLKIT_AGENT_BINARY_PATH"
+    "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    # Set the release_agent on /sys/fs/cgroup/systemd to the
+    # currently running systemd (/run/current-system/systemd) so
+    # that we don't use an obsolete/garbage-collected release agent.
+    "-USYSTEMD_CGROUP_AGENT_PATH"
+    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-      "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-    ];
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+  ];
 
   doCheck = false; # fails a bunch of tests
+
+  # trigger the test -n "$DESTDIR" || mutate in upstreams build system
+  preInstall = ''
+    export DESTDIR=/
+  '';
 
   postInstall = ''
     # sysinit.target: Don't depend on
@@ -181,11 +407,9 @@ in stdenv.mkDerivation rec {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
-
-    # Keep only libudev and libsystemd in the lib output.
-    mkdir -p $out/lib
-    mv $lib/lib/security $lib/lib/libnss* $out/lib/
-  ''; # */
+  '' + lib.optionalString (!withDocumentation) ''
+    rm -rf $out/share/doc
+  '';
 
   enableParallelBuilding = true;
 
@@ -197,11 +421,12 @@ in stdenv.mkDerivation rec {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/systemd;
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.eelco ];
+    priority = 10;
+    maintainers = with maintainers; [ andir eelco flokli kloenk ];
   };
 }

@@ -1,25 +1,33 @@
-{stdenv, fetchFromGitHub, python}:
+{ stdenv, fetchFromGitHub, python, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  version = "3.7";
-  name = "googler-${version}";
+  pname = "googler";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "jarun";
-    repo = "googler";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0dxg849ckyy181zlrb57hd959cgvx105c35ksmvi4wl285sh5kpj";
+    sha256 = "04wa0mlbfjnzwham2dpd9lch7800js4vp3ikgjl4qnwilvr1lw74";
   };
 
-  propagatedBuildInputs = [ python ];
+  buildInputs = [ python ];
 
-  makeFlags = "PREFIX=$(out)";
+  nativeBuildInputs = [ installShellFiles ];
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    installShellCompletion --bash --name googler.bash auto-completion/bash/googler-completion.bash
+    installShellCompletion --fish auto-completion/fish/googler.fish
+    installShellCompletion --zsh auto-completion/zsh/_googler
+  '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jarun/googler;
+    homepage = "https://github.com/jarun/googler";
     description = "Google Search, Google Site Search, Google News from the terminal";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ koral ];
-    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ koral filalex77 ];
+    platforms = python.meta.platforms;
   };
 }

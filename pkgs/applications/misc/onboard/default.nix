@@ -1,13 +1,14 @@
 { fetchurl
 , stdenv
+, substituteAll
 , aspellWithDicts
 , at-spi2-core ? null
 , atspiSupport ? true
 , bash
 , glib
 , glibcLocales
-, gnome3
-, gobjectIntrospection
+, dconf
+, gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
 , hunspell
@@ -16,6 +17,7 @@
 , intltool
 , isocodes
 , libcanberra-gtk3
+, mousetweaks
 , udev
 , libxkbcommon
 , pkgconfig
@@ -27,24 +29,69 @@
 }:
 
 let
-  customHunspell = hunspellWithDicts [hunspellDicts.en-us];
+
+  customHunspell = hunspellWithDicts [
+    hunspellDicts.en-us
+  ];
+
   majorVersion = "1.4";
+
+in
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "onboard";
   version = "${majorVersion}.1";
-in python3.pkgs.buildPythonApplication rec {
-  name = "onboard-${version}";
+
   src = fetchurl {
-    url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${name}.tar.gz";
-    sha256 = "01cae1ac5b1ef1ab985bd2d2d79ded6fc99ee04b1535cc1bb191e43a231a3865";
+    url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
+    sha256 = "0r9q38ikmr4in4dwqd8m9gh9xjbgxnfxglnjbfcapw8ybfnf3jh1";
   };
 
   patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit mousetweaks;
+    })
     # Allow loading hunspell dictionaries installed in NixOS system path
     ./hunspell-use-xdg-datadirs.patch
   ];
 
-  # For tests
-  LC_ALL = "en_US.UTF-8";
-  doCheck = false;
+  nativeBuildInputs = [
+    gobject-introspection
+    intltool
+    pkgconfig
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    bash
+    glib
+    dconf
+    gsettings-desktop-schemas
+    gtk3
+    hunspell
+    isocodes
+    libcanberra-gtk3
+    libxkbcommon
+    mousetweaks
+    udev
+    xorg.libXtst
+    xorg.libxkbfile
+  ] ++ stdenv.lib.optional atspiSupport at-spi2-core;
+
+  propagatedBuildInputs = with python3.pkgs; [
+    dbus-python
+    distutils_extra
+    pyatspi
+    pycairo
+    pygobject3
+    systemd
+  ];
+
+  propagatedUserEnvPkgs = [
+    dconf
+  ];
+
   checkInputs = [
     # for Onboard.SpellChecker.aspell_cmd doctests
     (aspellWithDicts (dicts: with dicts; [ en ]))
@@ -60,42 +107,10 @@ in python3.pkgs.buildPythonApplication rec {
     python3.pkgs.nose
   ];
 
-  propagatedBuildInputs = [
-    glib
-    python3
-    python3.pkgs.dbus-python
-    python3.pkgs.distutils_extra
-    python3.pkgs.pyatspi
-    python3.pkgs.pycairo
-    python3.pkgs.pygobject3
-    python3.pkgs.systemd
-  ];
+  # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
-  buildInputs = [
-    bash
-    gnome3.dconf
-    gsettings-desktop-schemas
-    gtk3
-    hunspell
-    isocodes
-    libcanberra-gtk3
-    udev
-    libxkbcommon
-    wrapGAppsHook
-    xorg.libXtst
-    xorg.libxkbfile
-  ] ++ stdenv.lib.optional atspiSupport at-spi2-core;
-
-  nativeBuildInputs = [
-    glibcLocales
-    gobjectIntrospection # populate GI_TYPELIB_PATH
-    intltool
-    pkgconfig
-  ];
-
-  propagatedUserEnvPkgs = [
-    gnome3.dconf
-  ];
+  doCheck = false;
 
   preBuild = ''
     # Unnecessary file, has been removed upstream
@@ -110,6 +125,9 @@ in python3.pkgs.buildPythonApplication rec {
     chmod -x ./scripts/sokSettings.py
 
     patchShebangs .
+
+    substituteInPlace setup.py \
+      --replace "/etc" "$out/etc"
 
     substituteInPlace  ./Onboard/LanguageSupport.py \
       --replace "/usr/share/xml/iso-codes" "${isocodes}/share/xml/iso-codes" \
@@ -142,16 +160,22 @@ in python3.pkgs.buildPythonApplication rec {
       --replace '"killall",' '"${procps}/bin/pkill", "-x",'
   '';
 
-  postInstall = ''
-    cp onboard-default-settings.gschema.override.example $out/share/glib-2.0/schemas/10_onboard-default-settings.gschema.override
+  installPhase = ''
+    ${python3.interpreter} setup.py install --prefix="$out"
 
+    cp onboard-default-settings.gschema.override.example $out/share/glib-2.0/schemas/10_onboard-default-settings.gschema.override
     glib-compile-schemas $out/share/glib-2.0/schemas/
   '';
 
-  meta = {
-    homepage = https://launchpad.net/onboard;
-    description = "An onscreen keyboard useful for tablet PC users and for mobility impaired users.";
-    maintainers = with stdenv.lib.maintainers; [ johnramsden ];
-    license = stdenv.lib.licenses.gpl3;
+  # Remove ubuntu icons.
+  postFixup = ''
+    rm -rf  $out/share/icons/ubuntu-mono-*
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://launchpad.net/onboard";
+    description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
+    maintainers = with maintainers; [ johnramsden ];
+    license = licenses.gpl3;
   };
 }

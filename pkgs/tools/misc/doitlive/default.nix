@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "doitlive";
-  version = "4.0.1";
+  version = "4.3.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1icnjkczy52i3cp1fmsijqny571fz1h4b3wpdzz79cn90fr326pc";
+    sha256 = "03qrs032x206xrl0x3z0fpvxgjivzz9rkmb11bqlk1id10707cac";
   };
 
   propagatedBuildInputs = with python3Packages; [ click click-completion click-didyoumean ];
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Tool for live presentations in the terminal";
-    homepage = https://pypi.python.org/pypi/doitlive;
+    homepage = "https://pypi.python.org/pypi/doitlive";
     license = licenses.mit;
     maintainers = with maintainers; [ mbode ];
   };

@@ -1,26 +1,26 @@
-{ fetchurl, stdenv, python2Packages, texinfo }:
+{ fetchurl, stdenv, python3Packages, texinfo }:
 
-python2Packages.buildPythonApplication rec {
-  name = "rubber-${version}";
-  version = "1.4";
+python3Packages.buildPythonApplication rec {
+  pname = "rubber";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "https://launchpad.net/rubber/trunk/${version}/+download/${name}.tar.gz";
-    sha256 = "1d7hq19vpb3l31grldbxg8lx1qdd18f5f3gqw96q0lhf58agcjl2";
+    url = "https://launchpad.net/rubber/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    sha256 = "178dmrp0mza5gqjiqgk6dqs0c10s0c517pk6k9pjbam86vf47a1p";
   };
 
-  propagatedBuildInputs = [ texinfo ];
-
-  # I couldn't figure out how to pass the proper parameter to disable pdf generation, so we
-  # use sed to change the default
-  preBuild = ''
-    sed -i -r 's/pdf\s+= True/pdf = False/g' setup.py
+  # I'm sure there is a better way to pass these parameters to the build script...
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'pdf  = True' 'pdf = False' \
+      --replace '$base/man'   'share/man' \
+      --replace '$base/info'  'share/info' \
+      --replace '$base/share' 'share'
   '';
 
-  # the check scripts forces python2. If we need to use python3 at some point, we should use
-  # the correct python
+  nativeBuildInputs = [ texinfo ];
+
   checkPhase = ''
-    sed -i 's|python=python2|python=${python2Packages.python.interpreter}|' tests/run.sh
     cd tests && ${stdenv.shell} run.sh
   '';
 
@@ -36,7 +36,7 @@ python2Packages.buildPythonApplication rec {
       of pdfLaTeX to produce PDF documents.
     '';
     license = licenses.gpl2Plus;
-    homepage = https://launchpad.net/rubber;
+    homepage = "https://launchpad.net/rubber";
     maintainers = with maintainers; [ ttuegel peterhoeg ];
     platforms = platforms.unix;
   };

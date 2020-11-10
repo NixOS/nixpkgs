@@ -18,7 +18,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ type_conv ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/variantslib;
+    homepage = "https://github.com/janestreet/variantslib";
     description = "OCaml variants as first class values";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

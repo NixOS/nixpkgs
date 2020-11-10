@@ -1,12 +1,12 @@
 { stdenv, fetchurl, dovecot, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-pigeonhole-${version}";
-  version = "0.5.2";
+  pname = "dovecot-pigeonhole";
+  version = "0.5.11";
 
   src = fetchurl {
     url = "https://pigeonhole.dovecot.org/releases/2.3/dovecot-2.3-pigeonhole-${version}.tar.gz";
-    sha256 = "0d95q2yj2f750jwg599jlizlglldcz9hs52y4mhrflwfqlaqw3lm";
+    sha256 = "1w5mryv6izh1gv7davnl94rb0pvh5bxl2bydzbfla1b83x22m5qb";
   };
 
   buildInputs = [ dovecot openssl ];
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://pigeonhole.dovecot.org/;
+    homepage = "http://pigeonhole.dovecot.org/";
     description = "A sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
   };
 }

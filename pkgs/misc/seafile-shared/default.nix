@@ -1,27 +1,48 @@
-{stdenv, fetchFromGitHub, which, autoreconfHook, pkgconfig, curl, vala, python, intltool, fuse, ccnet}:
+{stdenv, fetchFromGitHub, which, autoreconfHook, pkgconfig, vala, python2, curl, libevent, glib, libsearpc, sqlite, intltool, fuse, ccnet, libuuid }:
 
 stdenv.mkDerivation rec {
-  version = "6.2.4";
-  name = "seafile-shared-${version}";
+  pname = "seafile-shared";
+  version = "7.0.8";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${version}";
-    sha256 = "0v6wvw8x3zfcapi0lk71mg89gy3gw2qmdiq6mhw6qbbrzvqprlmr";
+    sha256 = "0q0zylv8hkhnfw0084bj1wmqwqvpflmdy1njxvvkjsbnflh8kc2y";
   };
 
-  nativeBuildInputs = [ pkgconfig which autoreconfHook vala intltool ];
-  buildInputs = [ python fuse ];
-  propagatedBuildInputs = [ ccnet curl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    vala
+    pkgconfig
+    python2
+    python2.pkgs.wrapPython
+  ];
+
+  buildInputs = [
+    libuuid
+    sqlite
+    libsearpc
+    libevent
+    curl
+  ];
 
   configureFlags = [
     "--disable-server"
     "--disable-console"
   ];
 
+  pythonPath = with python2.pkgs; [
+    future
+    libsearpc
+  ];
+
+  postFixup = ''
+    wrapPythonPrograms
+  '';
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/haiwen/seafile;
+    homepage = "https://github.com/haiwen/seafile";
     description = "Shared components of Seafile: seafile-daemon, libseafile, libseafile python bindings, manuals, and icons";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -1,5 +1,5 @@
-{ clangStdenv, fetchFromGitHub, which, ninja, python, gyp, pkgconfig, protobuf
-, ibus, gtk2, zinnia, qt5, libxcb }:
+{ clangStdenv, fetchFromGitHub, fetchpatch, which, ninja, python, gyp, pkgconfig
+, protobuf, ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese }:
 
 let
   japanese_usage_dictionary = fetchFromGitHub {
@@ -10,26 +10,39 @@ let
   };
 in clangStdenv.mkDerivation rec {
   name = "ibus-mozc-${version}";
-  version = "2.20.2673.102";
+  version = "2.23.2815.102";
 
   meta = with clangStdenv.lib; {
     isIbusEngine = true;
     description  = "Japanese input method from Google";
-    homepage     = https://github.com/google/mozc;
+    homepage     = "https://github.com/google/mozc";
     license      = licenses.free;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
-  nativeBuildInputs = [ which ninja python gyp pkgconfig ];
+  nativeBuildInputs = [ which ninja python gyp pkgconfig qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
   src = fetchFromGitHub {
     owner  = "google";
     repo   = "mozc";
-    rev    = "280e38fe3d9db4df52f0713acf2ca65898cd697a";
-    sha256 = "0s599f817gjgqynm4n1yll1ipd25ai2c55y8k6wvhg9s7qaxnyhs";
+    rev    = "afb03ddfe72dde4cf2409863a3bfea160f7a66d8";
+    sha256 = "0w2dy2j9x5nc7x3g95j17r3m60vbfyn5j617h7js9xryv33yzpgx";
   };
+
+  patches = [
+    # https://github.com/google/mozc/pull/444 - fix for gcc8 STL
+    (fetchpatch {
+      url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
+      sha256 = "07cja1b7qfsd3i76nscf1zwiav74h7d6h2g9g2w4bs3h1mc9jwla";
+    })
+    # Support dates after 2019
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/mozc/-/raw/master/debian/patches/add_support_new_japanese_era.patch";
+      sha256 = "1dsiiglrmm8i8shn2hv0j2b8pv6miysjrimj4569h606j4lwmcw2";
+    })
+  ];
 
   postUnpack = ''
     rmdir $sourceRoot/src/third_party/japanese_usage_dictionary/
@@ -37,7 +50,7 @@ in clangStdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc"
+    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc zinnia_model_file=${tegaki-zinnia-japanese}/share/tegaki/models/zinnia/handwriting-ja.model"
     cd src && python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
   '';
 
@@ -57,6 +70,7 @@ in clangStdenv.mkDerivation rec {
 
     install -D -m 755 out_linux/Release/mozc_server $out/lib/mozc/mozc_server
     install    -m 755 out_linux/Release/mozc_tool   $out/lib/mozc/mozc_tool
+    wrapQtApp $out/lib/mozc/mozc_tool
 
     install -d        $out/share/doc/mozc
     install -m 644    data/installer/*.html         $out/share/doc/mozc/

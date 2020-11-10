@@ -16,9 +16,12 @@
 , lxml
 , html5lib
 , beautifulsoup4
+, hypothesis
 , openpyxl
 , tables
 , xlwt
+, runtimeShell
+, isPy38
 , libcxx ? null
 }:
 
@@ -28,18 +31,18 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.23.4";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b24ca47acf69222e82530e89111dd9d14f9b970ab2cd3a1c2c78f0c4fbba4f4";
+    sha256 = "53328284a7bb046e2e885fd1b8c078bd896d7fc4575b915d4936f54984a2ba67";
   };
 
-  checkInputs = [ pytest glibcLocales moto ];
+  checkInputs = [ pytest glibcLocales moto hypothesis ];
 
-  buildInputs = [] ++ optional isDarwin libcxx;
+  nativeBuildInputs = [ cython ];
+  buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
-    cython
     dateutil
     scipy
     numexpr
@@ -55,6 +58,10 @@ in buildPythonPackage rec {
     xlwt
   ];
 
+  # doesn't work with -Werror,-Wunused-command-line-argument
+  # https://github.com/NixOS/nixpkgs/issues/39687
+  hardeningDisable = optional stdenv.cc.isClang "strictoverflow";
+
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = optionalString isDarwin ''
@@ -64,6 +71,14 @@ in buildPythonPackage rec {
       --replace "['pandas/src/klib', 'pandas/src']" \
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
+
+  # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
+  # release. https://github.com/pandas-dev/pandas/pull/30862
+  setupPyBuildFlags = optionals (!(isPy38 && isDarwin)) [
+    # As suggested by
+    # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
+    "--parallel=$NIX_BUILD_CORES"
+  ];
 
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
@@ -82,10 +97,20 @@ in buildPythonPackage rec {
     "io"
     # KeyError Timestamp
     "test_to_excel"
+    # ordering logic has changed
+    "numpy_ufuncs_other"
+    "order_without_freq"
+    # tries to import from pandas.tests post install
+    "util_in_top_level"
+    # Fails with 1.0.5
+    "test_constructor_list_frames"
+    "test_constructor_with_embedded_frames"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
   ]);
+
+  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
   checkPhase = ''
     runHook preCheck
@@ -94,8 +119,8 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!/bin/sh" > pbcopy
-    echo "#!/bin/sh" > pbpaste
+    echo "#!${runtimeShell}" > pbcopy
+    echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
@@ -107,7 +132,7 @@ in buildPythonPackage rec {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = http://pandas.pydata.org/;
+    homepage = "https://pandas.pydata.org/";
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];

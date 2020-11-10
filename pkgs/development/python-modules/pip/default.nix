@@ -1,25 +1,44 @@
 { lib
+, python
 , buildPythonPackage
-, fetchPypi
+, bootstrapped-pip
+, fetchFromGitHub
 , mock
 , scripttest
 , virtualenv
 , pretend
 , pytest
+, setuptools
+, wheel
+, isPy27
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "18.0";
+  version = "20.2.4";
+  format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a0e11645ee37c90b40c46d607070c4fd583e2cd46231b1c06e389c5e814eed76";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "eMVV4ftgV71HLQsSeaOchYlfaJVgzNrwUynn3SA1/Do=";
+    name = "${pname}-${version}-source";
   };
+
+  nativeBuildInputs = [ bootstrapped-pip ];
+
+  patches = lib.optionals isPy27 [
+    (fetchpatch {
+      url = "https://github.com/pypa/pip/commit/94fbb6cf78c267bf7cdf83eeeb2536ad56cfe639.patch";
+      sha256 = "Z6x5yxBp8QkU/GOfb1ltI0dVt//MaI09XK3cdY42kFs=";
+    })
+  ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.
-  installFlags = [ "--ignore-installed" ];
+  pipInstallFlags = [ "--ignore-installed" ];
 
   checkInputs = [ mock scripttest virtualenv pretend pytest ];
   # Pip wants pytest, but tests are not distributed
@@ -27,8 +46,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "The PyPA recommended tool for installing Python packages";
-    license = lib.licenses.mit;
-    homepage = https://pip.pypa.io/;
+    license = with lib.licenses; [ mit ];
+    homepage = "https://pip.pypa.io/";
     priority = 10;
   };
 }

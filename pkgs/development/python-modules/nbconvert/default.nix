@@ -17,15 +17,16 @@
 , pandocfilters
 , tornado
 , jupyter_client
+, defusedxml
 }:
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "5.3.1";
+  version = "5.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f9dkvpx186xjm4xab0qbph588mncp4vqk3fmxrsnqs43mks9c8j";
+    sha256 = "21fb48e700b43e82ba0e3142421a659d7739b65568cc832a13976a77be16b523";
   };
 
   checkInputs = [ nose pytest glibcLocales ];
@@ -33,17 +34,23 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     entrypoints bleach mistune jinja2 pygments traitlets testpath
     jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client
+    defusedxml
   ];
 
+  # disable preprocessor tests for ipython 7
+  # see issue https://github.com/jupyter/nbconvert/issues/898
   checkPhase = ''
-    mkdir tmp
-    LC_ALL=en_US.UTF-8 HOME=`realpath tmp` py.test -v
+    export LC_ALL=en_US.UTF-8
+    HOME=$(mktemp -d) py.test -v --ignore="nbconvert/preprocessors/tests/test_execute.py"
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Converting Jupyter Notebooks";
-    homepage = http://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh globin ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

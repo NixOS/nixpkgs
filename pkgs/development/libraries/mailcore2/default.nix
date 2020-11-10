@@ -3,15 +3,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mailcore2-${version}";
+  pname = "mailcore2";
 
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner  = "MailCore";
     repo   = "mailcore2";
     rev    = version;
-    sha256 = "1d0wmnkk9vnjqc28i79z3fwaaycdbprfspagik4mzdkgval5r5pm";
+    sha256 = "0a69q11z194fdfwyazjyyylx57sqs9j4lz7jwh5qcws8syqgb23z";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple and asynchronous API to work with e-mail protocols IMAP, POP and SMTP";
-    homepage    = http://libmailcore.com;
+    homepage    = "http://libmailcore.com";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan ];
   };

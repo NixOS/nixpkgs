@@ -3,7 +3,7 @@
 , utillinux, yodl }:
 
 stdenv.mkDerivation rec {
-  name = "bobcat-${version}";
+  pname = "bobcat";
   version = "4.08.03";
 
   src = fetchFromGitHub {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Brokken's Own Base Classes And Templates";
-    homepage = https://fbb-git.github.io/bobcat/;
+    homepage = "https://fbb-git.github.io/bobcat/";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

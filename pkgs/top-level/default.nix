@@ -22,9 +22,8 @@
   # `*Platform`s.
   localSystem
 
-, # The system packages will ultimately be run on. Null if the two should be the
-  # same.
-  crossSystem ? null
+, # The system packages will ultimately be run on.
+  crossSystem ? localSystem
 
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
@@ -32,14 +31,20 @@
 , # List of overlays layers used to extend Nixpkgs.
   overlays ? []
 
+, # List of overlays to apply to target packages only.
+  crossOverlays ? []
+
 , # A function booting the final package set for a specific standard
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
   stdenvStages ? import ../stdenv
+
+, # Ignore unexpected args.
+  ...
 } @ args:
 
 let # Rename the function arguments
-  configExpr = config;
+  config0 = config;
   crossSystem0 = crossSystem;
 
 in let
@@ -48,20 +53,36 @@ in let
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
-  config =
-    if lib.isFunction configExpr
-    then configExpr { inherit pkgs; }
-    else configExpr;
+  config1 =
+    if lib.isFunction config0
+    then config0 { inherit pkgs; }
+    else config0;
 
   # From a minimum of `system` or `config` (actually a target triple, *not*
   # nixpkgs configuration), infer the other one and platform as needed.
-  localSystem = lib.systems.elaborate (
+  localSystem = lib.systems.elaborate (if builtins.isAttrs args.localSystem then (
     # Allow setting the platform in the config file. This take precedence over
     # the inferred platform, but not over an explicitly passed-in one.
-    builtins.intersectAttrs { platform = null; } config
-    // args.localSystem);
+    builtins.intersectAttrs { platform = null; } config1
+    // args.localSystem) else args.localSystem);
 
-  crossSystem = lib.mapNullable lib.systems.elaborate crossSystem0;
+  crossSystem = if crossSystem0 == null then localSystem
+                else lib.systems.elaborate crossSystem0;
+
+  configEval = lib.evalModules {
+    modules = [
+      ./config.nix
+      ({ options, ... }: {
+        _file = "nixpkgs.config";
+        # filter-out known options, FIXME: remove this eventually
+        config = builtins.intersectAttrs options config1;
+      })
+    ];
+  };
+
+  # take all the rest as-is
+  config = lib.showWarnings configEval.config.warnings
+    (config1 // builtins.removeAttrs configEval.config [ "_module" ]);
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
@@ -70,7 +91,7 @@ in let
   # whatever arguments it doesn't explicitly provide. This way,
   # `all-packages.nix` doesn't know more than it needs too.
   #
-  # It's OK that `args` doesn't include default arguemtns from this file:
+  # It's OK that `args` doesn't include default arguments from this file:
   # they'll be deterministically inferred. In fact we must *not* include them,
   # because it's important that if some parameter which affects the default is
   # substituted with a different argument, the default is re-inferred.
@@ -80,6 +101,14 @@ in let
   # compiling toolchains and 32-bit packages on x86_64). In both those cases we
   # want the provided non-native `localSystem` argument to affect the stdenv
   # chosen.
+  #
+  # NB!!! This thing gets its `config` argument from `args`, i.e. it's actually
+  # `config0`. It is important to keep it to `config0` format (as opposed to the
+  # result of `evalModules`, i.e. the `config` variable above) throughout all
+  # nixpkgs evaluations since the above function `config0 -> config` implemented
+  # via `evalModules` is not idempotent. In other words, if you add `config` to
+  # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
+  # experience here.)
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
   # Partially apply some arguments for building bootstraping stage pkgs
@@ -91,7 +120,7 @@ in let
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays;
+    inherit lib localSystem crossSystem config overlays crossOverlays;
   };
 
   pkgs = boot stages;

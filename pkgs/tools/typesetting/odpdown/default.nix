@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
 
-  name = "odpdown-${version}";
+  pname = "odpdown";
   version = "0.4.1";
 
   src = fetchurl {
@@ -17,8 +17,8 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/thorstenb/odpdown;
-    repositories.git = https://github.com/thorstenb/odpdown.git;
+    homepage = "https://github.com/thorstenb/odpdown";
+    repositories.git = "https://github.com/thorstenb/odpdown.git";
     description = "Create nice-looking slides from your favourite text editor";
     longDescription = ''
       Have a tool like pandoc, latex beamer etc, that you can write (or

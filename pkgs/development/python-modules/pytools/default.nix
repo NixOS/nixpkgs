@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , decorator
 , appdirs
 , six
@@ -10,11 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2018.5.2";
+  version = "2020.4";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3b3f41e1235b579dc4f4a3d6f5f8ae187841968e72a4f73ac481c6bfe4c1668b";
+    sha256 = "37db39ff11a1b5fc8aec875ae4ddb3d6c21aa0e95bddc9c841aa98e1631ae460";
   };
 
   checkInputs = [ pytest ];
@@ -31,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/inducer/pytools/;
+    homepage = "https://github.com/inducer/pytools/";
     description = "Miscellaneous Python lifesavers.";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artuuge ];

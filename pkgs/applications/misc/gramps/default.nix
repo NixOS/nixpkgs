@@ -1,26 +1,32 @@
-{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
-  pango, gobjectIntrospection, wrapGAppsHook,
+{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
+  pango, gobject-introspection, wrapGAppsHook, gettext,
 # Optional packages:
- enableOSM ? true, osm-gps-map
+ enableOSM ? true, osm-gps-map,
+ enableGraphviz ? true, graphviz,
+ enableGhostscript ? true, ghostscript
  }:
 
 let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
-  version = "5.0.0";
-  name = "gramps-${version}";
+  version = "5.0.1";
+  pname = "gramps";
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = [ intltool gtk3 gobjectIntrospection pango gnome3.gexiv2 ] 
+  nativeBuildInputs = [ wrapGAppsHook gettext ];
+  buildInputs = [ intltool gtk3 gobject-introspection pango gexiv2 ]
     # Map support
     ++ stdenv.lib.optional enableOSM osm-gps-map
+    # Graphviz support
+    ++ stdenv.lib.optional enableGraphviz graphviz
+    # Ghostscript support
+    ++ stdenv.lib.optional enableGhostscript ghostscript
   ;
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     rev = "v${version}";
-    sha256 = "056l4ihmd3gdsiv6wwv4ckgh8bfzd5nii6z4afsdn2nmjbj4hw9m";
+    sha256 = "1jz1fbjj6byndvir7qxzhd2ryirrd5h2kwndxpp53xdc05z1i8g7";
   };
 
   pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ];
@@ -41,7 +47,7 @@ in buildPythonApplication rec {
     eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
     if [ -e "$eapth" ]; then
         # move colliding easy_install.pth to specifically named one
-        mv "$eapth" $(dirname "$eapth")/${name}.pth
+        mv "$eapth" $(dirname "$eapth")/${pname}-${version}.pth
     fi
 
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
@@ -51,7 +57,7 @@ in buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Genealogy software";
-    homepage = https://gramps-project.org;
+    homepage = "https://gramps-project.org";
     license = licenses.gpl2;
   };
 }

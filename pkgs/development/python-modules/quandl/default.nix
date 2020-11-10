@@ -1,27 +1,22 @@
 {
-  lib, fetchFromGitHub, buildPythonPackage, isPy3k,
+  lib, fetchPypi, buildPythonPackage, isPy3k, pythonOlder,
   # runtime dependencies
-  pandas, numpy, requests, inflection, python-dateutil, six, more-itertools,
+  pandas, numpy, requests, inflection, python-dateutil, six, more-itertools, importlib-metadata,
   # test suite dependencies
-  nose, unittest2, flake8, httpretty, mock, factory_boy, jsondate,
+  nose, unittest2, flake8, httpretty, mock, jsondate, parameterized, faker, factory_boy,
   # additional runtime dependencies are required on Python 2.x
   pyOpenSSL ? null, ndg-httpsclient ? null, pyasn1 ? null
 }:
 
 buildPythonPackage rec {
   pname = "quandl";
-  version = "3.2.1";
-  sha256 = "0vc0pzs2px9yaqkqcmd2m1b2bq1iils8fs0xbl0989hjq791a4jr";
+  version = "3.5.0";
+  disabled = !isPy3k;
 
-  patches = [ ./allow-requests-v2.18.patch ];
-
-  # Tests do not work with fetchPypi
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = "quandl-python";
-    rev = "refs/tags/v${version}";
-    inherit sha256;
-    fetchSubmodules = true; # Fetching by tag does not work otherwise
+  src = fetchPypi {
+    inherit version;
+    pname = "Quandl";
+    sha256 = "0zpw0nwqr4g56l9z4my0fahfgpcmfx74acbmv6nfx1dmq5ggraf3";
   };
 
   doCheck = true;
@@ -32,8 +27,10 @@ buildPythonPackage rec {
     flake8
     httpretty
     mock
-    factory_boy
     jsondate
+    parameterized
+    faker
+    factory_boy
   ];
 
   propagatedBuildInputs = [
@@ -44,16 +41,18 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ] ++ lib.optional (!isPy3k) [
+  ] ++ lib.optionals (!isPy3k) [
     pyOpenSSL
     ndg-httpsclient
     pyasn1
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  meta = {
-    homepage = "https://github.com/quandl/quandl-python";
+  meta = with lib; {
     description = "Quandl Python client library";
-    maintainers = [ lib.maintainers.ilya-kolpakov ];
-    license = lib.licenses.mit;
+    homepage = "https://github.com/quandl/quandl-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ilya-kolpakov ];
   };
 }

@@ -1,29 +1,24 @@
-{ stdenv, fetchzip, ocaml, findlib, yojson
-, withEmacsMode ? false, emacs }:
+{ lib, fetchurl, buildDunePackage, substituteAll
+, dot-merlin-reader, dune_2, yojson, csexp, result }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
+buildDunePackage rec {
+  pname = "merlin";
 
-let
-  version = "3.1.0";
-in
+  inherit (dot-merlin-reader) src version;
 
-stdenv.mkDerivation {
+  minimumOCamlVersion = "4.02.3";
 
-  name = "merlin-${version}";
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+      dune = "${dune_2}/bin/dune";
+    })
+  ];
 
-  src = fetchzip {
-    url = "https://github.com/ocaml/merlin/archive/v${version}.tar.gz";
-    sha256 = "1vf0c2mmflp94r8hshb44lsvnfdy03ld6mld2n79cdxr3zl24ci2";
-  };
+  buildInputs = [ dot-merlin-reader yojson csexp result ];
 
-  buildInputs = [ ocaml findlib yojson ]
-    ++ stdenv.lib.optional withEmacsMode emacs;
-
-  preConfigure = "mkdir -p $out/bin";
-  prefixKey = "--prefix ";
-  configureFlags = stdenv.lib.optional withEmacsMode "--enable-compiled-emacs-mode";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;

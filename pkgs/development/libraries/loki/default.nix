@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "loki-${version}";
+  pname = "loki";
   version = "0.1.7";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C++ library of designs, containing flexible implementations of common design patterns and idioms";
-    homepage = http://loki-lib.sourceforge.net;
+    homepage = "http://loki-lib.sourceforge.net";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];

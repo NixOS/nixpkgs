@@ -3,11 +3,11 @@
 }:
 buildPythonPackage rec {
   pname = "parse";
-  version = "1.8.4";
+  version = "1.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3cdf6206f22aeebfa00e5b954fcfea13d1b2dc271c75806b6025b94fb490939";
+    sha256 = "91666032d6723dc5905248417ef0dc9e4c51df9526aaeef271eacad6491f06a4";
   };
 
   checkPhase = ''
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/r1chardj0n3s/parse;
+    homepage = "https://github.com/r1chardj0n3s/parse";
     description = "parse() is the opposite of format()";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ alunduil ];

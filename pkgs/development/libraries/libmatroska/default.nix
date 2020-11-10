@@ -2,14 +2,14 @@
 , libebml }:
 
 stdenv.mkDerivation rec {
-  name = "libmatroska-${version}";
-  version = "1.4.9";
+  pname = "libmatroska";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner  = "Matroska-Org";
     repo   = "libmatroska";
     rev    = "release-${version}";
-    sha256 = "1hfrcpvmyqnvdkw8rz1z20zw7fpnjyl5h0g9ky7k6y1a44b1fz86";
+    sha256 = "0yhr9hhgljva1fx3b0r4s3wkkypdfgsysbl35a4g3krkbhaa9rsd";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to parse Matroska files";
-    homepage = https://matroska.org/;
+    homepage = "https://matroska.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ spwhitt ];
     platforms = platforms.unix;

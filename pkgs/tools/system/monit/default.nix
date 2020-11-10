@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "monit-5.25.2";
+  name = "monit-5.27.1";
 
   src = fetchurl {
     url = "${meta.homepage}dist/${name}.tar.gz";
-    sha256 = "0jn6mdsh50zd3jc61hr1y8sd80r01gqcyvd860zf8m8i3lvfc35a";
+    sha256 = "0lgdhif6x11fcpli0qn138rpdvrfnwmkzsy4lc9pas45c78hhx7m";
   };
 
   nativeBuildInputs = [ bison flex ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://mmonit.com/monit/;
+    homepage = "http://mmonit.com/monit/";
     description = "Monitoring system";
     license = stdenv.lib.licenses.agpl3;
     maintainers = with stdenv.lib.maintainers; [ raskin wmertens ];

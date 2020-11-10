@@ -1,11 +1,12 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gocode-${version}";
-  version = "20180727-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "00e7f5ac290aeb20a3d8d31e737ae560a191a1d5";
+  pname = "gocode-unstable";
+  version = "2020-04-06";
+  rev = "4acdcbdea79de6b3dee1c637eca5cbea0fdbe37c";
 
   goPackagePath = "github.com/mdempsky/gocode";
+  excludedPackages = ''internal/suggest/testdata'';
 
   # we must allow references to the original `go` package,
   # because `gocode` needs to dig into $GOROOT to provide completions for the
@@ -13,17 +14,14 @@ buildGoPackage rec {
   allowGoReference = true;
 
   src = fetchFromGitHub {
+    inherit rev;
+
     owner = "mdempsky";
     repo = "gocode";
-    inherit rev;
-    sha256 = "0vrwjq4r90za47hm88yx5h2mvkv7y4yaj2xbx3skg62wq2drsq31";
+    sha256 = "0i1hc089gb6a4mcgg56vn5l0q96wrlza2n08l4349s3dc2j559fb";
   };
 
-  preBuild = ''
-    # getting an error building the testdata because they contain invalid files
-    # on purpose as part of the testing.
-    rm -r go/src/$goPackagePath/internal/suggest/testdata
-  '';
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "An autocompletion daemon for the Go programming language";
@@ -39,9 +37,8 @@ buildGoPackage rec {
       Typical autocompletion time with warm cache is 30ms, which is barely
       noticeable.
     '';
-    homepage = https://github.com/mdempsky/gocode;
+    homepage = "https://github.com/mdempsky/gocode";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kalbasit ];
   };
 }

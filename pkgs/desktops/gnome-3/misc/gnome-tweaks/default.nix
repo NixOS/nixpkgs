@@ -1,29 +1,29 @@
 { stdenv, meson, ninja, gettext, fetchurl
-, pkgconfig, gtk3, glib, libsoup
-, itstool, libxml2, python3Packages
-, gnome3, gdk_pixbuf, libnotify, gobjectIntrospection, wrapGAppsHook }:
+, pkgconfig, gtk3, glib, libsoup, gsettings-desktop-schemas
+, itstool, libxml2, python3Packages, libhandy_0
+, gnome3, gdk-pixbuf, libnotify, gobject-introspection, wrapGAppsHook }:
 
 let
   pname = "gnome-tweaks";
-  version = "3.28.1";
+  version = "3.34.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1p5xydr0haz4389h6dvvbna6i1mipdzvmlfksnv0jqfvfs9sy6fp";
+    sha256 = "0l2j42ba7v866iknygamnkiq7igh0fjvq92r93cslvvfnkx2ccq0";
   };
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext itstool libxml2 wrapGAppsHook python3Packages.python
   ];
   buildInputs = [
-    gtk3 glib gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme
+    gtk3 glib gsettings-desktop-schemas
+    gdk-pixbuf gnome3.adwaita-icon-theme
     libnotify gnome3.gnome-shell python3Packages.pygobject3
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
-    gnome3.mutter gnome3.gnome-desktop gobjectIntrospection
-    gnome3.nautilus
+    gnome3.mutter gnome3.gnome-desktop gobject-introspection
+    gnome3.nautilus libhandy_0
     # Makes it possible to select user themes through the `user-theme` extension
     gnome3.gnome-shell-extensions
   ];
@@ -45,9 +45,9 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/action/show/Apps/GnomeTweakTool;
+    homepage = "https://wiki.gnome.org/action/show/Apps/GnomeTweakTool";
     description = "A tool to customize advanced GNOME 3 options";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

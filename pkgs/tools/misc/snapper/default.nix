@@ -1,26 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, utillinux }:
+, lvm2, pam, python, utillinux, fetchpatch, json_c, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-${version}";
-  version = "0.5.0";
+  pname = "snapper";
+  version = "0.8.14";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "14hrv23film4iihyclcvc2r2dgxl8w3as50r81xjjc85iyp6yxkm";
+    sha256 = "1q687bjwy668klxnhsrc2rlhisa59j8bhmh1jw220rq7z0hm2khr";
   };
-
-  patches = [
-    # Fix build with new Boost
-    (fetchpatch {
-      url = "https://github.com/openSUSE/snapper/commit/2e3812d2c1d1f54861fb79f5c2b0197de96a00a3.patch";
-      sha256 = "0yrzss1v7lmcvkajmchz917yqsvlsdfz871szzw790v6pql1322s";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig
@@ -28,12 +20,22 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python utillinux
+    lvm2 pam python utillinux json_c
+  ];
+
+  passthru.tests.snapper = nixosTests.snapper;
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/openSUSE/snapper/commit/c51708aea22d9436da287cba84424557ad03644b.patch";
+      sha256 = "106pf7pv8z3q37c8ckmgwxs1phf2fy7l53a9g5xq5kk2rjj1cx34";
+    })
   ];
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,data,pam,scripts}/Makefile.am; do
+    for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
         --replace '$(DESTDIR)/usr' "$out" \
         --replace "DESTDIR" "out" \
@@ -49,9 +51,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${libxml2.dev}/include/libxml2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool for Linux filesystem snapshot management";
-    homepage = http://snapper.io;
+    homepage = "http://snapper.io";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ tstrobel markuskowa ];
   };
 }

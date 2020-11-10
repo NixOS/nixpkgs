@@ -8,16 +8,15 @@
 
 buildPythonPackage rec {
   pname = "langcodes";
-  version = "1.4.1";
+  version = "2.1.0";
+  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1axdiva2qglsjmnx2ak7i6hm0yhp6kbc4lcsgn8ckwy0nq1z3kr2";
+    sha256 = "75bcaca8825e1a321965b136815dee53083c63314975e024ad0ccff8545e681f";
   };
 
   propagatedBuildInputs = [ marisa-trie ];
-
-  disabled = pythonOlder "3.3";
 
   checkInputs = [ nose ];
 
@@ -27,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A toolkit for working with and comparing the standardized codes for languages, such as ‘en’ for English or ‘es’ for Spanish";
-    homepage =  https://github.com/LuminosoInsight/langcodes;
+    homepage =  "https://github.com/LuminosoInsight/langcodes";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

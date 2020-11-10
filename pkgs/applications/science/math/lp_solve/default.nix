@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "lp_solve-${version}";
+  pname = "lp_solve";
   version = "5.5.2.5";
 
   src = fetchurl {
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     cd lp_solve*/lpsolve55
     bash ccc
     mkdir -pv $out/lib
-    cp -v bin/*/* $out/lib
+    find bin -type f -exec cp -v "{}" $out/lib \;
     )
     (
     cd lp_solve*/lp_solve
     bash ccc
     mkdir -pv $out/bin
-    cp -v bin/*/* $out/bin
+    find bin -type f -exec cp -v "{}" $out/bin \;
     )
     (
     mkdir -pv $out/include

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.5";
-  name = "liblaxjson-${version}";
+  pname = "liblaxjson";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "liblaxjson";
-    rev = "${version}";
+    rev = version;
     sha256 = "01iqbpbhnqfifhv82m6hi8190w5sdim4qyrkss7z1zyv3gpchc5s";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for parsing JSON config files";
-    homepage = https://github.com/andrewrk/liblaxjson;
+    homepage = "https://github.com/andrewrk/liblaxjson";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.andrewrk ];

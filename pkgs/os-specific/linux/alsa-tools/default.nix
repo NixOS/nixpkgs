@@ -3,12 +3,12 @@
 # some use gtk2, some gtk3 (and some even fltk13).
 
 stdenv.mkDerivation rec {
-  name = "alsa-tools-${version}";
-  version = "1.1.6";
+  pname = "alsa-tools";
+  version = "1.2.2";
 
   src = fetchurl {
-    url = "mirror://alsa/tools/${name}.tar.bz2";
-    sha256 = "09rjb6hw1mn9y1jfdfj5djncgc2cr5wfps83k56rf6k4zg14v76n";
+    url = "mirror://alsa/tools/${pname}-${version}.tar.bz2";
+    sha256 = "0jbkjmq038zapj66a7nkppdf644v2mwj581xbmh6k4i8w6mcglxz";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture tools";
 
     longDescription = ''

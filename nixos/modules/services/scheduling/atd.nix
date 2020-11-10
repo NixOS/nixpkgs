@@ -57,22 +57,16 @@ in
 
     security.pam.services.atd = {};
 
-    users.users = singleton
-      { name = "atd";
-        uid = config.ids.uids.atd;
+    users.users.atd =
+      { uid = config.ids.uids.atd;
         description = "atd user";
         home = "/var/empty";
       };
 
-    users.groups = singleton
-      { name = "atd";
-        gid = config.ids.gids.atd;
-      };
+    users.groups.atd.gid = config.ids.gids.atd;
 
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
-      after = [ "systemd-udev-settle.service" ];
-      wants = [ "systemd-udev-settle.service" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ at ];

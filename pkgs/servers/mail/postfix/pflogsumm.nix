@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, buildPerlPackage, perlPackages
-}:
+{ stdenv, fetchurl, perlPackages }:
 
-buildPerlPackage rec {
-  name = "pflogsumm-${version}";
+perlPackages.buildPerlPackage rec {
+  pname = "pflogsumm";
   version = "1.1.3";
 
   src = fetchurl {
-    url = "https://jimsun.linxnet.com/downloads/${name}.tar.gz";
+    url = "https://jimsun.linxnet.com/downloads/${pname}-${version}.tar.gz";
     sha256 = "0hkim9s5f1yg5sfs5048jydhy3sbxafls496wcjk0cggxb113py4";
   };
 
@@ -27,7 +26,7 @@ buildPerlPackage rec {
   '';
 
   meta = {
-    homepage = http://jimsun.linxnet.com/postfix_contrib.html;
+    homepage = "http://jimsun.linxnet.com/postfix_contrib.html";
     maintainers = with stdenv.lib.maintainers; [ schneefux ];
     description = "Postfix activity overview";
     license = stdenv.lib.licenses.gpl2Plus;

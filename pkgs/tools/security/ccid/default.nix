@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.30";
-  name = "ccid-${version}";
+  pname = "ccid";
+  version = "1.4.33";
 
   src = fetchurl {
-    url = "https://ccid.apdu.fr/files/${name}.tar.bz2";
-    sha256 = "0z7zafdg75fr1adlv2x0zz34s07gljcjg2lsz76s1048w1xhh5xc";
+    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
+    sha256 = "0974h2v9wq0j0ajw3c7yckaw8wqcppb2npfhfhmv9phijy9xlmjj";
   };
 
   postPatch = ''
@@ -23,9 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ccid drivers for pcsclite";
-    homepage = https://ccid.apdu.fr/;
+    homepage = "https://ccid.apdu.fr/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wkennington ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

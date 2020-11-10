@@ -1,92 +1,108 @@
-{ stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python
-, expat, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx, glibmm
-
-# Optional dependencies
-, libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
-, pyqt4 ? null, dbus-python ? null, xdg_utils ? null
-
-# Other Flags
-, prefix ? ""
+{ stdenv
+, mkDerivation
+, dbus
+, dbus_cplusplus
+, desktop-file-utils
+, fetchurl
+, glibmm
+, kernel
+, libavc1394
+, libconfig
+, libiec61883
+, libraw1394
+, libxmlxx3
+, pkgconfig
+, python3
+, sconsPackages
+, which
+, wrapQtAppsHook
 }:
 
 let
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
-
-  libOnly = prefix == "lib";
-
-  optLibjack2 = shouldUsePkg libjack2;
-  optDbus = shouldUsePkg dbus;
-  optDbus_cplusplus = shouldUsePkg dbus_cplusplus;
-  optAlsaLib = shouldUsePkg alsaLib;
-  optPyqt4 = shouldUsePkg pyqt4;
-  optPythonDBus = shouldUsePkg dbus-python;
-  optXdg_utils = shouldUsePkg xdg_utils;
+  inherit (python3.pkgs) pyqt5 dbus-python;
+  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
 in
-stdenv.mkDerivation rec {
-  name = "${prefix}ffado-${version}";
-  version = "2.4.0";
+mkDerivation rec {
+  pname = "ffado";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "14rprlcd0gpvg9kljh0zzjzd2rc9hbqqpjidshxxjvvfh4r00f4f";
+    sha256 = "08bygzv1k6ai0572gv66h7gfir5zxd9klfy74z2pxqp6s5hms58r";
   };
 
-  nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
+  prePatch = ''
+    substituteInPlace ./support/tools/ffado-diag.in \
+      --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
+  '';
 
-  buildInputs = [
-    expat libraw1394 libconfig libavc1394 libiec61883
-  ] ++ stdenv.lib.optionals (!libOnly) [
-    optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
-    optXdg_utils libxmlxx glibmm
+  patches = [
+    # fix installing metainfo file
+    ./fix-build.patch
   ];
 
-  postPatch = ''
-    sed '1iimport sys' -i SConstruct
-    # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
-    # Let's just skip this and tell it which to build
-    sed '/def is_userspace_32bit(cpuinfo):/a\
-        return ${if stdenv.is64bit then "False" else "True"}' -i SConstruct
+  outputs = [ "out" "bin" "dev" ];
 
-    # Lots of code is missing random headers to exist
-    sed -i '1i #include <memory>' \
-      src/ffadodevice.h src/bebob/bebob_dl_mgr.cpp tests/scan-devreg.cpp
-    sed -i -e '1i #include <stdlib.h>' \
-      -e '1i #include "version.h"' \
-      src/libutil/serialize_expat.cpp
+  nativeBuildInputs = [
+    desktop-file-utils
+    sconsPackages.scons_3_1_2
+    pkgconfig
+    which
+    python
+    pyqt5
+    wrapQtAppsHook
+  ];
+
+  prefixKey = "PREFIX=";
+  sconsFlags = [
+    "DEBUG=False"
+    "ENABLE_ALL=True"
+    "BUILD_TESTS=True"
+    "WILL_DEAL_WITH_XDG_MYSELF=True"
+    "BUILD_MIXER=True"
+    "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
+    "PYPKGDIR=${placeholder "out"}/${python3.sitePackages}"
+    "BINDIR=${placeholder "bin"}/bin"
+    "INCLUDEDIR=${placeholder "dev"}/include"
+    "PYTHON_INTERPRETER=${python.interpreter}"
+  ];
+
+  buildInputs = [
+    dbus
+    dbus_cplusplus
+    glibmm
+    libavc1394
+    libconfig
+    libiec61883
+    libraw1394
+    libxmlxx3
+    python
+  ];
+
+  enableParallelBuilding = true;
+  dontWrapQtApps = true;
+
+  postInstall = ''
+    desktop="$bin/share/applications/ffado-mixer.desktop"
+    install -DT -m 444 support/xdg/ffado.org-ffadomixer.desktop $desktop
+    substituteInPlace "$desktop" \
+      --replace Exec=ffado-mixer "Exec=$bin/bin/ffado-mixer" \
+      --replace hi64-apps-ffado ffado-mixer
+    install -DT -m 444 support/xdg/hi64-apps-ffado.png "$bin/share/icons/hicolor/64x64/apps/ffado-mixer.png"
+
+    # prevent build tools from leaking into closure
+    echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
   '';
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libxml++-2.6)"
-  '';
-
-  # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
-  buildPhase = ''
-    export PYDIR=$out/lib/${python.libPrefix}/site-packages
-
-    scons PYPKGDIR=$PYDIR DEBUG=False \
-      ENABLE_ALL=True \
-      SERIALIZE_USE_EXPAT=True \
-  '';
-
-  installPhase = if libOnly then ''
-    scons PREFIX=$TMPDIR UDEVDIR=$TMPDIR \
-      LIBDIR=$out/lib INCLUDEDIR=$out/include install
-  '' else ''
-    scons PREFIX=$out PYPKGDIR=$PYDIR UDEVDIR=$out/lib/udev/rules.d install
-  '' + stdenv.lib.optionalString (optPyqt4 != null && optPythonDBus != null) ''
-    wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
-
-    wrapProgram $out/bin/ffado-diag --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:$out/share/libffado/python:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
+  preFixup = ''
+    wrapQtApp $bin/bin/ffado-mixer
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.ffado.org;
+    homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu wkennington ];
+    maintainers = with maintainers; [ goibhniu michojel ];
     platforms = platforms.linux;
   };
 }

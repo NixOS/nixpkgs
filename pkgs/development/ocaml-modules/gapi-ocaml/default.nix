@@ -1,28 +1,32 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml
+, cryptokit, ocamlnet, ocurl, yojson
+, ounit
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "gapi-ocaml is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  pname = "gapi-ocaml";
+  version = "0.4.1";
 
-stdenv.mkDerivation rec {
-  name = "gapi-ocaml-${version}";
-  version = "0.3.6";
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.02";
+
   src = fetchFromGitHub {
     owner = "astrada";
-    repo = "gapi-ocaml";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0qgsy51bhkpfgl5rdnjw4bqs5fbh2w4vwrfbl8y3lh1wrqmnwci4";
+    sha256 = "0riax23grjnq9pczmp1yv02ji0svvs2kbiqskj6f6yjviamnpa31";
   };
-  buildInputs = [ ocaml dune findlib ];
-  propagatedBuildInputs = [ ocurl cryptokit ocaml_extlib yojson ocamlnet xmlm ];
 
-  inherit (dune) installPhase;
+  propagatedBuildInputs = [ cryptokit ocamlnet ocurl yojson ];
+
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  checkInputs = [ ounit ];
 
   meta = {
     description = "OCaml client for google services";
-    homepage = http://gapi-ocaml.forge.ocamlcore.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
-    platforms = ocaml.meta.platforms or [];
+    homepage = "http://gapi-ocaml.forge.ocamlcore.org";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

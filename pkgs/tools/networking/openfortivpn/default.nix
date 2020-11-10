@@ -1,36 +1,48 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, ppp, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+, openssl, ppp
+, systemd ? null }:
 
-with stdenv.lib;
+let
+  withSystemd = stdenv.isLinux && !(systemd == null);
 
-let repo = "openfortivpn";
-    version = "1.7.1";
-
-in stdenv.mkDerivation {
-  name = "${repo}-${version}";
+in
+stdenv.mkDerivation rec {
+  pname = "openfortivpn";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
-    inherit repo;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "01nsgmmh72qk0aq2zdjh8qqn256mmvz1w2gl0wi7g29d82y2hdfm";
+    sha256 = "1r9lp19fmqx9dw33j5967ydijbnacmr80mqnhbbxyqiw4k5c10ds";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ openssl ppp ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
-
-  preConfigure = ''
-    substituteInPlace src/tunnel.c --replace "/usr/sbin/pppd" "${ppp}/bin/pppd"
+  # we cannot write the config file to /etc and as we don't need the file, so drop it
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace '$(DESTDIR)$(confdir)' /tmp
   '';
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  buildInputs = [
+    openssl ppp
+  ]
+  ++ lib.optional withSystemd systemd;
+
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--with-pppd=${ppp}/bin/pppd"
+  ]
+  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Client for PPP+SSL VPN tunnel services";
-    homepage = https://github.com/adrienverge/openfortivpn;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.madjar ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/adrienverge/openfortivpn";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ madjar ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

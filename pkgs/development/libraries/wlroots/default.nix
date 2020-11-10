@@ -1,49 +1,55 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
-, wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland
+, libGL, wayland-protocols, libinput, libxkbcommon, pixman
+, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
+, libpng, ffmpeg
 }:
 
-let pname = "wlroots";
-    version = "unstable-2018-03-16";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  pname = "wlroots";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
-    rev = "9cc875429b40e2567b219f8e9ffd23316d136204";
-    sha256 = "1prhic3pyf9n65qfg5akzkc9qv2z3ab60dpcacr7wgr9nxrvnsdq";
+    rev = version;
+    sha256 = "01j38lmgs2c6fq68v8b75pkilia2wsgzgp46ivfbi9hhx47kgcfn";
   };
 
-  # $out for the library and $bin for rootston
-  outputs = [ "out" "bin" ];
+  # $out for the library and $examples for the example programs (in examples):
+  outputs = [ "out" "examples" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
 
   buildInputs = [
-    wayland libGL wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa_noglu
+    libGL wayland wayland-protocols libinput libxkbcommon pixman
+    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
+    libpng ffmpeg
   ];
 
-  # Install rootston (the reference compositor) to $bin
-  postInstall = ''
-    mkdir -p $bin/bin
-    cp rootston/rootston $bin/bin/
-    mkdir $bin/lib
-    cp libwlroots* $bin/lib/
-    patchelf --set-rpath "$bin/lib:${stdenv.lib.makeLibraryPath buildInputs}" $bin/bin/rootston
-    mkdir $bin/etc
-    cp ../rootston/rootston.ini.example $bin/etc/rootston.ini
+  mesonFlags = [ "-Dlogind-provider=systemd" "-Dlibseat=disabled" ];
+
+  postFixup = ''
+    # Install ALL example programs to $examples:
+    # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
+    # screenshot output-layout multi-pointer rotation tablet touch pointer
+    # simple
+    mkdir -p $examples/bin
+    cd ./examples
+    for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
+      cp "$binary" "$examples/bin/wlroots-$binary"
+    done
   '';
 
   meta = with stdenv.lib; {
     description = "A modular Wayland compositor library";
+    longDescription = ''
+      Pluggable, composable, unopinionated modules for building a Wayland
+      compositor; or about 50,000 lines of code you were going to write anyway.
+    '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];
-    # Marked as broken until the first official/stable release (upstream
-    # request). See #38344 for the public discussion.
-    broken = true;
   };
 }

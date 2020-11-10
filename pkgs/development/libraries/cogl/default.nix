@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
-, mesa_noglu
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk-pixbuf, xorg, libintl
+, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
+, mesa, automake, autoconf
 , gstreamerSupport ? true, gst_all_1 }:
 
 let
   pname = "cogl";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.22.2";
+  version = "1.22.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
+    sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 
   patches = [
@@ -21,19 +21,19 @@ in stdenv.mkDerivation rec {
     # could be merged, but dev can not make a new release.
 
     (fetchpatch {
-      url = https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589;
+      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589";
       sha256 = "0f0d9iddg8zwy853phh7swikg4yzhxxv71fcag36f8gis0j5p998";
     })
 
     (fetchpatch {
-      url = https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056;
+      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056";
       sha256 = "09fyrdci4727fg6qm5aaapsbv71sf4wgfaqz8jqlyy61dibgg490";
     })
   ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig libintl ];
+  nativeBuildInputs = [ pkgconfig libintl automake autoconf ];
 
   configureFlags = [
     "--enable-introspection"
@@ -41,10 +41,10 @@ in stdenv.mkDerivation rec {
     "--enable-wayland-egl-platform"
     "--enable-wayland-egl-server"
   ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst"
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
+  ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
-      glib gdk_pixbuf gobjectIntrospection wayland mesa_noglu
+      glib gdk-pixbuf gobject-introspection wayland mesa
       libGL libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer

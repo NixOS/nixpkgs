@@ -1,14 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
 , oset, pybtex, pybtex-docutils, sphinx
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
+  version = "1.0.0";
   pname = "sphinxcontrib-bibtex";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb9fb4526642fc080204fccd5cd8f41e9e95387278e17b1d6969b1e27c2d3e0c";
+    sha256 = "629612b001f86784669d65e662377a482052decfd9a0a17c46860878eef7b9e0";
   };
 
   propagatedBuildInputs = [ oset pybtex pybtex-docutils sphinx ];

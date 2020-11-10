@@ -1,22 +1,20 @@
-{ stdenv, ocaml, findlib, dune, git-http
-, cohttp-lwt-unix
-, tls, cmdliner, mtime
+{ stdenv, buildDunePackage, git-http, cohttp, cohttp-lwt-unix
+, mmap, cmdliner, mtime, alcotest, mirage-crypto-rng, tls
+, io-page, git-binary
 }:
 
-stdenv.mkDerivation rec {
-	name = "ocaml${ocaml.version}-git-unix-${version}";
-	inherit (git-http) version src;
+buildDunePackage {
+	pname = "git-unix";
+	inherit (git-http) version src minimumOCamlVersion;
 
-	buildInputs = [ ocaml findlib dune cmdliner mtime ];
+	useDune2 = true;
 
-	propagatedBuildInputs = [ cohttp-lwt-unix git-http tls ];
-
-	buildPhase = "dune build -p git-unix";
-
-	inherit (dune) installPhase;
+	propagatedBuildInputs = [ mmap cmdliner git-http cohttp cohttp-lwt-unix mtime ];
+	checkInputs = [ alcotest mirage-crypto-rng tls io-page git-binary ];
+	doCheck = !stdenv.isAarch64;
 
 	meta = {
 		description = "Unix backend for the Git protocol(s)";
-		inherit (git-http.meta) homepage license maintainers platforms;
+		inherit (git-http.meta) homepage license maintainers;
 	};
 }

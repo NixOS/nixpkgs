@@ -1,41 +1,96 @@
-{ stdenv, fetchurl, pkgconfig, vala, gettext, libxml2, gobjectIntrospection, gtk-doc, wrapGAppsHook, glib, gssdp, gupnp, gupnp-av, gupnp-dlna, gst_all_1, libgee, libsoup, gtk3, libmediaart, sqlite, systemd, tracker, shared-mime-info, gnome3 }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, vala
+, gettext
+, libxml2
+, gobject-introspection
+, wrapGAppsHook
+, python3
+, glib
+, gssdp
+, gupnp
+, gupnp-av
+, gupnp-dlna
+, gst_all_1
+, libgee
+, libsoup
+, gtk3
+, libmediaart
+, sqlite
+, systemd
+, tracker
+, shared-mime-info
+, gnome3
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.36.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.40.0";
 
   # TODO: split out lib
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0i12z6bzfzgcjidhxa2jsvpm4hqpab0s032z13jy2vbifrncfcnk";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0xrbdsgm78h3g4qcvq2p8k70q31x9xdbb35bixz36q6h9s1wqznn";
   };
 
   nativeBuildInputs = [
-    pkgconfig vala gettext libxml2 gobjectIntrospection gtk-doc wrapGAppsHook
+    meson
+    ninja
+    pkgconfig
+    vala
+    gettext
+    libxml2
+    gobject-introspection
+    wrapGAppsHook
+    python3
   ];
+
   buildInputs = [
-    glib gssdp gupnp gupnp-av gupnp-dlna libgee libsoup gtk3 libmediaart sqlite systemd tracker shared-mime-info
+    glib
+    gssdp
+    gupnp
+    gupnp-av
+    gupnp-dlna
+    libgee
+    libsoup
+    gtk3
+    libmediaart
+    sqlite
+    systemd
+    tracker
+    shared-mime-info
   ] ++ (with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
+    gstreamer
+    gst-editing-services
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
   ]);
 
-  configureFlags = [
-    "--with-systemduserunitdir=$(out)/lib/systemd/user"
-    "--enable-apidocs"
+  mesonFlags = [
+    "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"
+    "-Dapi-docs=false"
     "--sysconfdir=/etc"
-  ];
-
-  installFlags = [
-    "sysconfdir=$(out)/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
+    # Build all plug-ins except for tracker 2
+    "-Dplugins=external,gst-launch,lms,media-export,mpris,playbin,ruih,tracker3"
   ];
 
   doCheck = true;
 
-  enableParallelBuilding = true;
+  patches = [
+    ./add-option-for-installation-sysconfdir.patch
+  ];
+
+  postPatch = ''
+    patchShebangs data/xml/process-xml.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -46,9 +101,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
-    homepage = https://wiki.gnome.org/Projects/Rygel;
+    homepage = "https://wiki.gnome.org/Projects/Rygel";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

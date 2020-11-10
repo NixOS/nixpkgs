@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-remove-dropdown-arrows-${version}";
-  version = "9";
+  pname = "gnome-shell-extension-remove-dropdown-arrows";
+  version = "13";
 
   src = fetchFromGitHub {
     owner = "mpdeimos";
     repo = "gnome-shell-remove-dropdown-arrows";
     rev = "version/${version}";
-    sha256 = "1z9icxr75rd3cas28xjlmsbbd3j3sm1qvj6mp95jhfaqj821q665";
+    sha256 = "09b2hnfbqym20pb1sfc8xiz7gs2kbs6b1s7xl8swc8dydhsbambk";
   };
 
   # This package has a Makefile, but it's used for publishing and linting, not
@@ -18,15 +18,17 @@ stdenv.mkDerivation rec {
 
   uuid = "remove-dropdown-arrows@mpdeimos.com";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp extension.js $out/share/gnome-shell/extensions/${uuid}
     cp metadata.json $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Remove dropdown arrows from GNOME Shell Menus";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonafato ];
-    homepage = https://github.com/mpdeimos/gnome-shell-remove-dropdown-arrows;
+    homepage = "https://github.com/mpdeimos/gnome-shell-remove-dropdown-arrows";
   };
 }

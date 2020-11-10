@@ -3,18 +3,18 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-async";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "adda3ff6e122b1932b6e20cf583666ea65db4248bc19b04811a4ccc0f0b03d95";
+    sha256 = "383f331e28cd8f6e3fa86f3e7052efa541b7ae8bf328a4e692aa045cfc0ecf25";
   };
 
   propagatedBuildInputs = [ aiohttp jsonrpc-base ];
 
   meta = with stdenv.lib; {
     description = "A JSON-RPC client library for asyncio";
-    homepage = https://github.com/armills/jsonrpc-async;
+    homepage = "https://github.com/armills/jsonrpc-async";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
   };

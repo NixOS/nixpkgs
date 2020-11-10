@@ -12,12 +12,12 @@
 # Debian builds with std.h (systemtap).
 
 stdenv.mkDerivation rec {
-  name = "lttng-ust-${version}";
-  version = "2.10.2";
+  pname = "lttng-ust";
+  version = "2.10.5";
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-ust/${name}.tar.bz2";
-    sha256 = "0if0hrs32r98sp85c8c63zpgy5xjw6cx8wrs65xq227b0jwj5jn4";
+    url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
+    sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
   };
 
   buildInputs = [ python ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LTTng Userspace Tracer libraries";
-    homepage = https://lttng.org/;
+    homepage = "https://lttng.org/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

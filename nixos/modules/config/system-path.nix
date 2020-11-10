@@ -7,9 +7,8 @@ with lib;
 
 let
 
-  requiredPackages =
-    [ config.nix.package
-      pkgs.acl
+  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+    [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
@@ -19,7 +18,9 @@ let
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      pkgs.stdenv.cc.libc
+      pkgs.getent
+      pkgs.getconf
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -31,17 +32,21 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.nix-info
       config.programs.ssh.package
-      pkgs.perl
+      pkgs.mkpasswd
       pkgs.procps
-      pkgs.rsync
-      pkgs.strace
       pkgs.su
       pkgs.time
       pkgs.utillinux
-      pkgs.which # 88K size
+      pkgs.which
+      pkgs.zstd
     ];
+
+    defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      [ pkgs.perl
+        pkgs.rsync
+        pkgs.strace
+      ];
 
 in
 
@@ -62,6 +67,21 @@ in
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           <filename>/nix/var/nix/profiles/default</filename>.
+        '';
+      };
+
+      defaultPackages = mkOption {
+        type = types.listOf types.package;
+        default = defaultPackages;
+        example = literalExample "[]";
+        description = ''
+          Set of packages users expect from a minimal linux istall.
+          Like systemPackages, they appear in
+          /run/current-system/sw.  These packages are
+          automatically available to all users, and are
+          automatically updated every time you rebuild the system
+          configuration.
+          If you want a more minimal system, set it to an empty list.
         '';
       };
 
@@ -104,7 +124,7 @@ in
 
   config = {
 
-    environment.systemPackages = requiredPackages;
+    environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
 
     environment.pathsToLink =
       [ "/bin"
@@ -114,6 +134,7 @@ in
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/emacs"
+        "/share/hunspell"
         "/share/nano"
         "/share/org"
         "/share/themes"
@@ -122,6 +143,7 @@ in
         "/share/kservices5"
         "/share/kservicetypes5"
         "/share/kxmlgui5"
+        "/share/systemd"
       ];
 
     system.path = pkgs.buildEnv {
@@ -133,14 +155,13 @@ in
       # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
-          if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
-              $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
-          fi
+          # Remove wrapped binaries, they shouldn't be accessible via PATH.
+          find $out/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
 
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
-          
+
           ${config.environment.extraSetup}
         '';
     };

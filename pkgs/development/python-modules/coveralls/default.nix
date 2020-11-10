@@ -1,6 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, isPy27
 , mock
 , pytest
 , pytestrunner
@@ -15,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "coveralls";
-  name = "${pname}-python-${version}";
-  version = "1.4.0";
+  version = "2.1.2";
+  disabled = isPy27;
 
   # wanted by tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ddb2e3114db9604a7cb1fcc68a7dcca32dce346f5ba568c99979b38e166f5a6";
+    sha256 = "4430b862baabb3cf090d36d84d331966615e4288d8a8c5957e0fd456d0dd8bd6";
   };
 
   checkInputs = [
@@ -50,7 +51,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Show coverage stats online via coveralls.io";
-    homepage = https://github.com/coveralls-clients/coveralls-python;
+    homepage = "https://github.com/coveralls-clients/coveralls-python";
     license = lib.licenses.mit;
   };
 }

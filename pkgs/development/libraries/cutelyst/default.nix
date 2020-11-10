@@ -1,19 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, makeWrapper
-, qtbase, libuuid, libcap, uwsgi, grantlee }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook
+, qtbase, libuuid, libcap, uwsgi, grantlee, pcre
+}:
 
 stdenv.mkDerivation rec {
-  name = "cutelyst-${version}";
-  version = "2.5.1";
+  pname = "cutelyst";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "0iamavr5gj213c8knrh2mynhn8wcrv83x6s46jq93x93kc5127ks";
+    sha256 = "1xbw8ag3iwm69dhrsg54anrlzvvflj6pwsj42z6hrl0yckabn99z";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-  buildInputs = [ qtbase libuuid libcap uwsgi grantlee ];
+  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  buildInputs = [ qtbase libuuid libcap uwsgi grantlee pcre ];
 
   cmakeFlags = [
     "-DPLUGIN_UWSGI=ON"
@@ -23,22 +24,16 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:`pwd`/Cutelyst:`pwd`/EventLoopEPoll"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/Cutelyst:`pwd`/EventLoopEPoll"
   '';
 
   postBuild = ''
     unset LD_LIBRARY_PATH
   '';
 
-  postInstall = ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" --set QT_PLUGIN_PATH '${qtbase}/${qtbase.qtPluginPrefix}'
-    done
-  '';
-
   meta = with lib; {
     description = "C++ Web Framework built on top of Qt";
-    homepage = https://cutelyst.org/;
+    homepage = "https://cutelyst.org/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fpletz ];
   };

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "conway_polynomials-${version}";
+  pname = "conway_polynomials";
   version = "0.5";
 
   pythonEnv = python.withPackages (ps: with ps; [ six ]);
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Contains a small database of Conway polynomials.";
+    description = "Contains a small database of Conway polynomials";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ timokau ];

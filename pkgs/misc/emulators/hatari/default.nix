@@ -1,23 +1,23 @@
 { stdenv, fetchurl, zlib, SDL, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "hatari-2.1.0";
+  name = "hatari-2.2.1";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/hatari/2.1.0/${name}.tar.bz2";
-    sha256 = "0909l9fq20ninf8xgv5qf0a5y64cpk5ja1rsk2iaid1dx5h98agb";
+    url = "https://download.tuxfamily.org/hatari/2.2.1/${name}.tar.bz2";
+    sha256 = "0q3g23vnx58w666723v76ilh9j353md3sn48cmlq9gkll8qfzbqi";
   };
 
   # For pthread_cancel
-  cmakeFlags = "-DCMAKE_EXE_LINKER_FLAGS=-lgcc_s";
+  cmakeFlags = [ "-DCMAKE_EXE_LINKER_FLAGS=-lgcc_s" ];
 
   buildInputs = [ zlib SDL cmake ];
 
   meta = {
-    homepage = http://hatari.tuxfamily.org/;
+    homepage = "http://hatari.tuxfamily.org/";
     description = "Atari ST/STE/TT/Falcon emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

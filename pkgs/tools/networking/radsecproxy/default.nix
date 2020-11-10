@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchFromGitHub, openssl, autoreconfHook, nettle }:
 
 stdenv.mkDerivation rec {
-  name = "radsecproxy-${version}";
-  version = "1.6.9";
+  pname = "radsecproxy";
+  version = "1.8.2";
 
-  src = fetchurl {
-    url = "https://software.nordu.net/radsecproxy/radsecproxy-${version}.tar.xz";
-    sha256 = "6f2c7030236c222782c9ac2c52778baa63540a1865b75a7a6d8c1280ce6ad816";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1g7q128cip1dac9jad58rd96afx4xz7x7vsiv0af8iyq2ivqvs2m";
   };
 
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl nettle ];
 
   configureFlags = [
      "--with-ssl=${openssl.dev}"
@@ -18,8 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://software.nordu.net/radsecproxy/;
-    description = "A generic RADIUS proxy that supports both UDP and TLS (RadSec) RADIUS transports.";
+    homepage = "https://software.nordu.net/radsecproxy/";
+    description = "A generic RADIUS proxy that supports both UDP and TLS (RadSec) RADIUS transports";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sargon ];
     platforms = with platforms; linux;

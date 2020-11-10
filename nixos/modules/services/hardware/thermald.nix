@@ -8,12 +8,7 @@ in {
   ###### interface
   options = {
     services.thermald = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable thermald, the temperature management daemon.
-        '';
-      };
+      enable = mkEnableOption "thermald, the temperature management daemon";
 
       debug = mkOption {
         type = types.bool;
@@ -27,6 +22,15 @@ in {
         type = types.nullOr types.path;
         default = null;
         description = "the thermald manual configuration file.";
+      };
+
+      adaptive = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable adaptive mode, only working on kernel versions greater than 5.8.
+          Thermald will detect this itself, safe to enable on kernel versions below 5.8.
+        '';
       };
     };
   };
@@ -44,6 +48,7 @@ in {
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
             ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
+            ${optionalString cfg.adaptive "--adaptive"} \
             --dbus-enable
         '';
       };

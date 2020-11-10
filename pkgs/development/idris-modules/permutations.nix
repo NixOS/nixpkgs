@@ -13,13 +13,9 @@ build-idris-package  {
     sha256 = "1dirzqy40fczbw7gp2jr51lzqsnq5vcx9z5l6194lcrq2vxgzv1s";
   };
 
-  postUnpack = ''
-    rm source/test.ipkg
-  '';
-
   meta = {
     description = "Type-safe way of working with permutations in Idris";
-    homepage = https://github.com/vmchale/permutations;
+    homepage = "https://github.com/vmchale/permutations";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

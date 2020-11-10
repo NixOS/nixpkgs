@@ -1,10 +1,10 @@
 { stdenv, fetchurl, allegro }:
 stdenv.mkDerivation rec {
-  version = "5.6.4";
-  name = "liquidwar5-${version}";
+  version = "5.6.5";
+  pname = "liquidwar5";
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/liquidwar/liquidwar-${version}.tar.gz";
-    sha256 = "18wkbfzp07yckg05b5gjy67rw06z9lxp0hzg0zwj7rz8i12jxi9j";
+    url = "http://www.ufoot.org/download/liquidwar/v5/${version}/liquidwar-${version}.tar.gz";
+    sha256 = "2tCqhN1BbK0FVCHtm0DfOe+ueNPfdZwFg8ZMVPfy/18=";
   };
 
   buildInputs = [ allegro ];
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional stdenv.isx86_64 "--disable-asm";
 
   hardeningDisable = [ "format" ];
+
+  NIX_CFLAGS_COMPILE = [ "-lm" ];
 
   meta = with stdenv.lib; {
     description = ''The classic version of a quick tactics game LiquidWar'';

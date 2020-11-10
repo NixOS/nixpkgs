@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, zlib, protobuf, ncurses, pkgconfig, IOTty
-, makeWrapper, perl, openssl, autoreconfHook, openssh, bash-completion
+{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkgconfig
+, makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
 , libutempter ? null, withUtempter ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
@@ -11,9 +11,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ protobuf ncurses zlib IOTty makeWrapper perl openssl bash-completion ] ++ lib.optional withUtempter libutempter;
+  buildInputs = [ protobuf ncurses zlib makeWrapper openssl bash-completion ]
+    ++ (with perlPackages; [ perl IOTty ])
+    ++ lib.optional withUtempter libutempter;
 
-  patches = [ ./ssh_path.patch ./utempter_path.patch ];
+  enableParallelBuilding = true;
+
+  patches = [
+    ./ssh_path.patch
+    ./utempter_path.patch
+    # Fix w/c++17, ::bind vs std::bind
+    (fetchpatch {
+      url = "https://github.com/mobile-shell/mosh/commit/e5f8a826ef9ff5da4cfce3bb8151f9526ec19db0.patch";
+      sha256 = "15518rb0r5w1zn4s6981bf1sz6ins6gpn2saizfzhmr13hw4gmhm";
+    })
+    # Fix build with bash-completion 2.10
+    ./bash_completion_datadir.patch
+  ];
   postPatch = ''
     substituteInPlace scripts/mosh.pl \
         --subst-var-by ssh "${openssh}/bin/ssh"
@@ -28,7 +42,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = {
-    homepage = https://mosh.org/;
+    homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
     longDescription = ''
       Remote terminal application that allows roaming, supports intermittent

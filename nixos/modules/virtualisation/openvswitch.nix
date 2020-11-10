@@ -42,6 +42,9 @@ in {
       default = false;
       description = ''
         Whether to start racoon service for openvswitch.
+        Supported only if openvswitch version is less than 2.6.0.
+        Use <literal>virtualisation.vswitch.package = pkgs.openvswitch-lts</literal>
+        for a version that supports ipsec over GRE.
       '';
     };
   };
@@ -49,12 +52,12 @@ in {
   config = mkIf cfg.enable (let
 
     # Where the communication sockets live
-    runDir = "/var/run/openvswitch";
+    runDir = "/run/openvswitch";
 
     # The path to the an initialized version of the database
     db = pkgs.stdenv.mkDerivation {
       name = "vswitch.db";
-      unpackPhase = "true";
+      dontUnpack = true;
       buildPhase = "true";
       buildInputs = with pkgs; [
         cfg.package
@@ -89,6 +92,13 @@ in {
             "${cfg.package}/share/openvswitch/vswitch.ovsschema"
         fi
         chmod -R +w /var/db/openvswitch
+        if ${cfg.package}/bin/ovsdb-tool needs-conversion /var/db/openvswitch/conf.db | grep -q "yes"
+        then
+          echo "Performing database upgrade"
+          ${cfg.package}/bin/ovsdb-tool convert /var/db/openvswitch/conf.db
+        else
+          echo "Database already up to date"
+        fi
         '';
       serviceConfig = {
         ExecStart =
@@ -99,13 +109,13 @@ in {
             --certificate=db:Open_vSwitch,SSL,certificate \
             --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
             --unixctl=ovsdb.ctl.sock \
-            --pidfile=/var/run/openvswitch/ovsdb.pid \
+            --pidfile=/run/openvswitch/ovsdb.pid \
             --detach \
             /var/db/openvswitch/conf.db
           '';
         Restart = "always";
         RestartSec = 3;
-        PIDFile = "/var/run/openvswitch/ovsdb.pid";
+        PIDFile = "/run/openvswitch/ovsdb.pid";
         # Use service type 'forking' to correctly determine when ovsdb-server is ready.
         Type = "forking";
       };
@@ -114,7 +124,7 @@ in {
       '';
     };
 
-    systemd.services.vswitchd = {
+    systemd.services.ovs-vswitchd = {
       description = "Open_vSwitch Daemon";
       wantedBy = [ "multi-user.target" ];
       bindsTo = [ "ovsdb.service" ];
@@ -123,17 +133,19 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/ovs-vswitchd \
-          --pidfile=/var/run/openvswitch/ovs-vswitchd.pid \
+          --pidfile=/run/openvswitch/ovs-vswitchd.pid \
           --detach
         '';
-        PIDFile = "/var/run/openvswitch/ovs-vswitchd.pid";
+        PIDFile = "/run/openvswitch/ovs-vswitchd.pid";
         # Use service type 'forking' to correctly determine when vswitchd is ready.
         Type = "forking";
+        Restart = "always";
+        RestartSec = 3;
       };
     };
 
   }
-  (mkIf cfg.ipsec {
+  (mkIf (cfg.ipsec && (versionOlder cfg.package.version "2.6.0")) {
     services.racoon.enable = true;
     services.racoon.configPath = "${runDir}/ipsec/etc/racoon/racoon.conf";
 
@@ -152,11 +164,11 @@ in {
         ExecStart = ''
           ${cfg.package}/bin/ovs-monitor-ipsec \
             --root-prefix ${runDir}/ipsec \
-            --pidfile /var/run/openvswitch/ovs-monitor-ipsec.pid \
+            --pidfile /run/openvswitch/ovs-monitor-ipsec.pid \
             --monitor --detach \
-            unix:/var/run/openvswitch/db.sock
+            unix:/run/openvswitch/db.sock
         '';
-        PIDFile = "/var/run/openvswitch/ovs-monitor-ipsec.pid";
+        PIDFile = "/run/openvswitch/ovs-monitor-ipsec.pid";
         # Use service type 'forking' to correctly determine when ovs-monitor-ipsec is ready.
         Type = "forking";
       };
@@ -167,10 +179,12 @@ in {
         ln -fs ${pkgs.ipsecTools}/bin/setkey ${runDir}/ipsec/usr/sbin/setkey
         ln -fs ${pkgs.writeScript "racoon-restart" ''
         #!${pkgs.runtimeShell}
-        /var/run/current-system/sw/bin/systemctl $1 racoon
+        /run/current-system/sw/bin/systemctl $1 racoon
         ''} ${runDir}/ipsec/etc/init.d/racoon
       '';
     };
   })]));
+
+  meta.maintainers = with maintainers; [ netixx ];
 
 }

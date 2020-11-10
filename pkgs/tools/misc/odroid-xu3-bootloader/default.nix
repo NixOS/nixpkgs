@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, coreutils, ubootOdroidXU3 }:
+{ stdenv, lib, fetchFromGitHub, coreutils, ubootOdroidXU3, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "odroid-xu3-bootloader-2015-12-04";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
     install -Dm755 $src/sd_fuse/hardkernel_1mb_uboot/sd_fusing.1M.sh $out/bin/sd_fuse-xu3
     sed -i \
-      -e '1i#!${stdenv.shell}' \
+      -e '1i#!${runtimeShell}' \
       -e '1iPATH=${lib.makeBinPath [ coreutils ]}:$PATH' \
       -e '/set -x/d' \
       -e 's,.\/sd_fusing\.sh,sd_fuse-xu3,g' \

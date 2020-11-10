@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, fetchpatch, python3
+{ stdenv, nixosTests, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
-, extraComponents ? []
+, extraComponents ? [ ]
 
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
@@ -9,38 +9,30 @@
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
-, packageOverrides ? self: super: { }
+, packageOverrides ? self: super: {
+}
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:
 
 let
-
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
-    (mkOverride "aiohttp" "3.4.0"
-      "9b15efa7411dcf3b59c1f4766eb16ba1aba4531a33e54d469ee22106eabce460")
-    (mkOverride "astral" "1.6.1"
-      "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d")
-    (mkOverride "attrs" "18.1.0"
-      "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b")
-    (mkOverride "bcrypt" "3.1.4"
-      "67ed1a374c9155ec0840214ce804616de49c3df9c5bc66740687c1c9b1cd9e8d")
-    (mkOverride "pyjwt" "1.6.4"
-      "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176")
-    (mkOverride "cryptography" "2.3.1"
-      "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6")
-    (mkOverride "cryptography_vectors" "2.3.1" # required by cryptography==2.3.1
-      "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
-    (mkOverride "requests" "2.19.1"
-      "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a")
-    (mkOverride "voluptuous" "0.11.5"
-      "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
 
-    # used by check_config script
-    # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
-    (mkOverride "colorlog" "3.1.4"
-      "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d")
+    # Pinned due to API changes in astral>=2.0, required by the sun/moon plugins
+    # https://github.com/home-assistant/core/issues/36636
+    (mkOverride "astral" "1.10.1"
+      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
+
+    # Pinned due to an API change in pyowm>=3.0
+    # Remove after https://github.com/home-assistant/core/pull/39839 gets merged
+    (mkOverride "pyowm" "2.10.0"
+      "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g")
+
+    # Pinned, because v1.5.0 broke the google_translate integration
+    # https://github.com/home-assistant/core/pull/38428
+    (mkOverride "yarl" "1.4.2"
+      "0jzpgrdl6415zzl8js7095q8ks14555lhgxah76mimffkr39rkaq")
 
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
@@ -57,7 +49,7 @@ let
         };
       });
     };
-    
+
   py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
@@ -75,50 +67,134 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.77.3";
+  hassVersion = "0.117.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
-  disabled = pythonOlder "3.5";
+  # check REQUIRED_PYTHON_VER in homeassistant/const.py
+  disabled = pythonOlder "3.7.1";
 
   inherit availableComponents;
 
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
-    repo = "home-assistant";
+    repo = "core";
     rev = version;
-    sha256 = "1c459iqbkhs6dv563zld6qb9avpx3h0fnxng476zahj9x9m5rzk6";
+    sha256 = "1al2pwj2xrhqyaz2pal4a1bdh4sm63ijfaw8pajghz5z23gf62r0";
   };
+
+  # leave this in, so users don't have to constantly update their downstream patch handling
+  patches = [];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
+      --replace "cryptography==3.2" "cryptography" \
+      --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
+    substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+  '';
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous
-    # From http, frontend, recorder and config.config_entries components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend voluptuous-serialize pyotp pyqrcode
+    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 httpx jinja2
+    pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
+    setuptools voluptuous voluptuous-serialize yarl
+    # From default_config. frontend, http, image, mobile_app and recorder components as well as
+    # the auth.mfa_modules.totp module
+    aiohttp-cors defusedxml distro emoji hass-frontend pynacl pillow pyotp
+    pyqrcode sqlalchemy
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
+  # upstream only tests on Linux, so do we.
+  doCheck = stdenv.isLinux;
+
   checkInputs = [
-    pytest requests-mock pydispatcher pytest-aiohttp
+    asynctest pytestCheckHook pytest-aiohttp pytest_xdist requests-mock hass-nabucasa netdisco pydispatcher
   ];
 
-  checkPhase = ''
-    # The components' dependencies are not included, so they cannot be tested
-    py.test --ignore tests/components
-    # Some basic components should be tested however
-    py.test \
-      tests/components/{group,http,frontend} \
-      tests/components/test_{api,configurator,demo,discovery,init,introduction,logger,script,shell_command,system_log,websocket_api}.py
+  # We cannot test all components, since they'd introduce lots of dependencies, some of which are unpackaged,
+  # but we should test very common stuff, like what's in `default_config`.
+  componentTests = [
+    "api"
+    "automation"
+    "config"
+    "configurator"
+    "default_config"
+    "demo"
+    "discovery"
+    "frontend"
+    "group"
+    "history"
+    "homeassistant"
+    "http"
+    "input_boolean"
+    "input_datetime"
+    "input_text"
+    "input_number"
+    "input_select"
+    "logbook"
+    "logger"
+    "media_source"
+    "mobile_app"
+    "person"
+    "scene"
+    "script"
+    "shell_command"
+    "ssdp"
+    "sun"
+    "system_health"
+    "system_log"
+    "tag"
+    "websocket_api"
+    "zeroconf"
+    "zone"
+  ];
+
+  pytestFlagsArray = [
+    "-n auto"
+    # don't bulk test all components
+    "--ignore tests/components"
+    # prone to race conditions due to parallel file access
+    "--ignore tests/test_config.py"
+    # tries to import unpackaged dependencies
+    "--ignore tests/test_loader.py"
+    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
+    "--ignore tests/auth/mfa_modules/test_notify.py"
+    "tests"
+  ] ++ map (component: "tests/components/" + component) componentTests;
+
+  disabledTests = [
+    # AssertionError: merge_log_err.call_count != 0
+    "test_merge"
+    # ModuleNotFoundError: No module named 'pyqwikswitch'
+    "test_merge_id_schema"
+    # AssertionError: assert 'unknown' == 'not_home'
+    "test_device_tracker_not_home"
+    # Racy https://github.com/home-assistant/core/issues/41425
+    "test_cached_event_message"
+  ];
+
+  preCheck = ''
+    # the tests require the existance of a media dir
+    mkdir /build/media
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
+  passthru = {
+    inherit (py.pkgs) hass-frontend;
+    tests = {
+      inherit (nixosTests) home-assistant;
+    };
+  };
+
   meta = with lib; {
-    homepage = https://home-assistant.io/;
-    description = "Open-source home automation platform running on Python 3";
+    homepage = "https://home-assistant.io/";
+    description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = with maintainers; [ f-breidenstein dotlambda ];
+    maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
   };
 }

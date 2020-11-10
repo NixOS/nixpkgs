@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.6";
-  name = "nix-bash-completions-${version}";
+  version = "0.6.8";
+  pname = "nix-bash-completions";
 
   src = fetchFromGitHub {
     owner = "hedning";
     repo = "nix-bash-completions";
     rev = "v${version}";
-    sha256 = "1lz9cgacyd4cphr7l90x4hn0ifhxwzz2d5829w1jcglasfacfpsw";
+    sha256 = "1n5zs6xcnv4bv1hdaypmz7fv4j7dsr4a0ifah99iyj4p5j85i1bc";
   };
 
   # To enable lazy loading via. bash-completion we need a symlink to the script
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/hedning/nix-bash-completions;
+    homepage = "https://github.com/hedning/nix-bash-completions";
     description = "Bash completions for Nix, NixOS, and NixOps";
     license = licenses.bsd3;
     platforms = platforms.all;

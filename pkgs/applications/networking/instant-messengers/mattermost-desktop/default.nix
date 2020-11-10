@@ -1,10 +1,14 @@
-{ stdenv, lib, fetchurl, gnome2, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
+{ stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
-libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
+libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev, wrapGAppsHook,
+hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk }:
+
 let
-  rpath = lib.makeLibraryPath [
+  rpath = stdenv.lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -12,11 +16,12 @@ let
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
-    gtk2
+    gtk3
     pango
+    libuuid
     libX11
     libXScrnSaver
     libXcomposite
@@ -37,45 +42,57 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "mattermost-desktop-${version}";
-    version = "4.1.2";
+    pname = "mattermost-desktop";
+    version = "4.5.2";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
-          sha256 = "16dn6870bs1nfl2082ym9gwvmqb3i5sli48qprap80p7riph6k9s";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
+          sha256 = "0r9xmhzif1ia1m53yr59q6p3niyq3jv3vgv4703x68jmd46f91n6";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
-          sha256 = "145zb1l37fa2slfrrlprlwzcc5km3plxs374yhgix25mlg2afkqr";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
+          sha256 = "1h8lw06p3cqz9dkgbhfmzcrzjsir5cfhx28xm4zrmvkj4yfzbcnv";
         }
       else
         throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";
 
-    phases = [ "unpackPhase" "installPhase" ];
+    dontBuild = true;
+    dontConfigure = true;
+    dontPatchELF = true;
+
+    buildInputs = [ wrapGAppsHook gtk3 hicolor-icon-theme ];
+
     installPhase = ''
-      mkdir -p $out
-      cp -R . $out
+      mkdir -p $out/share/mattermost-desktop
+      cp -R . $out/share/mattermost-desktop
 
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-               --set-rpath ${rpath}:$out $out/mattermost-desktop
+      mkdir -p "$out/bin"
+      ln -s $out/share/mattermost-desktop/mattermost-desktop \
+        $out/bin/mattermost-desktop
 
-      patchShebangs $out/create_desktop_file.sh
-      $out/create_desktop_file.sh
+      patchShebangs $out/share/mattermost-desktop/create_desktop_file.sh
+      $out/share/mattermost-desktop/create_desktop_file.sh
+      rm $out/share/mattermost-desktop/create_desktop_file.sh
+      mkdir -p $out/share/applications
+      mv Mattermost.desktop $out/share/applications/Mattermost.desktop
+      substituteInPlace \
+        $out/share/applications/Mattermost.desktop \
+        --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
-      mkdir -p $out/{bin,share/applications}
-      cp Mattermost.desktop $out/share/applications/Mattermost.desktop
-      ln -s $out/mattermost-desktop $out/bin/mattermost-desktop
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${rpath}:$out/share/mattermost-desktop" \
+        $out/share/mattermost-desktop/mattermost-desktop
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Mattermost Desktop client";
-      homepage    = https://about.mattermost.com/;
-      license     = lib.licenses.asl20;
-      platforms   = [
-        "x86_64-linux" "i686-linux"
-      ];
+      homepage    = "https://about.mattermost.com/";
+      license     = licenses.asl20;
+      platforms   = [ "x86_64-linux" "i686-linux" ];
+      maintainers = [ maintainers.joko ];
     };
   }

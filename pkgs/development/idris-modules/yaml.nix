@@ -8,6 +8,7 @@ build-idris-package  {
   name = "yaml";
   version = "2018-01-25";
 
+  ipkgName = "Yaml";
   idrisDeps = [ contrib lightyear ];
 
   src = fetchFromGitHub {
@@ -19,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris YAML lib";
-    homepage = https://github.com/Heather/Idris.Yaml;
+    homepage = "https://github.com/Heather/Idris.Yaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pycollada";
-  version = "0.6";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fcd6f38fd981e350f9ec754d9671834017accd600e967d6d299a6cfdae5ba4f4";
+    sha256 = "1rp4wlvfywgk3v6l3hnhjx61x9yqawvvivpq4dig2jj71k3mpsyj";
   };
 
   propagatedBuildInputs = [ numpy dateutil ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for reading and writing collada documents";
-    homepage = http://pycollada.github.io/;
+    homepage = "http://pycollada.github.io/";
     license = "BSD"; # they don't specify which BSD variant
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ bjornfor ];

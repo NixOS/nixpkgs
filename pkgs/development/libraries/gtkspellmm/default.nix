@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gtkspellmm-${version}";
+  pname = "gtkspellmm";
   version = "3.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gtkspell/gtkspellmm/" +
-          "${name}.tar.xz";
+          "${pname}-${version}.tar.xz";
     sha256 = "0i8mxwyfv5mskachafa4qlh315q0cfph7s66s1s34nffadbmm1sv";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ binding for the gtkspell library";
-    homepage = http://gtkspell.sourceforge.net/;
+    homepage = "http://gtkspell.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

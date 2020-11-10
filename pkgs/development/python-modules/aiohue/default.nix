@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "1.7.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26989babdc3f38575164b60b9536309271d58db005a03045b6e9cca4fc5201d8";
+    sha256 = "35696d04d6eb0328b7031ea3c0a3cfe5d83dfcf62f920522e4767d165c6bc529";
   };
 
   propagatedBuildInputs = [ aiohttp ];
 
   meta = with lib; {
     description = "asyncio package to talk to Philips Hue";
-    homepage = https://github.com/balloob/aiohue;
+    homepage = "https://github.com/balloob/aiohue";
     license = licenses.asl20;
   };
 }

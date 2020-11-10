@@ -1,25 +1,26 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
-, gtk, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook }:
+, gtk3, gsettings-desktop-schemas, vte, gettext, which, libuuid, vala
+, desktop-file-utils, itstool, wrapGAppsHook, glib, pcre2
+, libxslt, docbook-xsl-nons }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-terminal-${version}";
-  version = "3.28.2";
+  pname = "gnome-terminal";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0ybjansg6lr279191w8z8r45gy4rxwzw1ajm98cgkv0fk2jdr0x2";
+    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1lgkvla0fadg76j898p2x2fipqf8kkqbbmmsfkfpz11q9y1d966r";
   };
 
   buildInputs = [
-    gtk gsettings-desktop-schemas vte libuuid dconf
+    gtk3 gsettings-desktop-schemas vte libuuid dconf
     # For extension
     nautilus
   ];
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool which libxml2
-    vala desktop-file-utils wrapGAppsHook
+    pkgconfig gettext itstool which libxml2 libxslt docbook-xsl-nons
+    vala desktop-file-utils wrapGAppsHook pcre2
   ];
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the
@@ -42,9 +43,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The GNOME Terminal Emulator";
-    homepage = https://wiki.gnome.org/Apps/Terminal;
+    homepage = "https://wiki.gnome.org/Apps/Terminal";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

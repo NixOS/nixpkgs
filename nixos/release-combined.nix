@@ -5,7 +5,7 @@
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" "aarch64-linux" ]
 }:
 
 let
@@ -20,11 +20,6 @@ let
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
-  allSupportedNixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    supportedSystems = supportedSystems ++ limitedSupportedSystems;
-    nixpkgs = nixpkgsSrc;
-  })) [ "unstable" ];
-
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
@@ -38,102 +33,124 @@ in rec {
     nixpkgs = nixpkgsSrc;
   })) [ "unstable" ];
 
-  tested = pkgs.lib.hydraJob (pkgs.releaseTools.aggregate {
-    name = "nixos-${nixos.channel.version}";
-    meta = {
-      description = "Release-critical builds for the NixOS channel";
-      maintainers = with pkgs.lib.maintainers; [ eelco fpletz ];
-    };
-    constituents =
-      let
-        all = x: map (system: x.${system}) supportedSystems;
-      in [
-        nixos.channel
-        (all nixos.dummy)
-        (all nixos.manual)
-
-        nixos.iso_minimal.x86_64-linux or []
-        nixos.iso_minimal.i686-linux or []
-        nixos.iso_graphical.x86_64-linux or []
-        nixos.ova.x86_64-linux or []
-
-        #(all nixos.tests.containers)
-        (all nixos.tests.containers-imperative)
-        (all nixos.tests.containers-ipv4)
-        nixos.tests.chromium.x86_64-linux or []
-        (all nixos.tests.firefox)
-        (all nixos.tests.firewall)
-        (all nixos.tests.gnome3)
-        nixos.tests.installer.zfsroot.x86_64-linux or [] # ZFS is 64bit only
-        (all nixos.tests.installer.lvm)
-        (all nixos.tests.installer.luksroot)
-        (all nixos.tests.installer.separateBoot)
-        (all nixos.tests.installer.separateBootFat)
-        (all nixos.tests.installer.simple)
-        (all nixos.tests.installer.simpleLabels)
-        (all nixos.tests.installer.simpleProvided)
-        (all nixos.tests.installer.simpleUefiSystemdBoot)
-        (all nixos.tests.installer.swraid)
-        (all nixos.tests.installer.btrfsSimple)
-        (all nixos.tests.installer.btrfsSubvols)
-        (all nixos.tests.installer.btrfsSubvolDefault)
-        (all nixos.tests.boot.biosCdrom)
-        #(all nixos.tests.boot.biosUsb) # disabled due to issue #15690
-        (all nixos.tests.boot.uefiCdrom)
-        (all nixos.tests.boot.uefiUsb)
-        (all nixos.tests.boot-stage1)
-        (all nixos.tests.hibernate)
-        nixos.tests.docker.x86_64-linux or []
-        (all nixos.tests.ecryptfs)
-        (all nixos.tests.env)
-        (all nixos.tests.ipv6)
-        (all nixos.tests.i3wm)
-        # 2018-06-06: keymap tests temporarily removed from tested job
-        # since non-deterministic failure are blocking the channel (#41538)
-        #(all nixos.tests.keymap.azerty)
-        #(all nixos.tests.keymap.colemak)
-        #(all nixos.tests.keymap.dvorak)
-        #(all nixos.tests.keymap.dvp)
-        #(all nixos.tests.keymap.neo)
-        #(all nixos.tests.keymap.qwertz)
-        (all nixos.tests.plasma5)
-        #(all nixos.tests.lightdm)
-        (all nixos.tests.login)
-        (all nixos.tests.misc)
-        (all nixos.tests.mutableUsers)
-        (all nixos.tests.nat.firewall)
-        (all nixos.tests.nat.firewall-conntrack)
-        (all nixos.tests.nat.standalone)
-        (all nixos.tests.networking.scripted.loopback)
-        (all nixos.tests.networking.scripted.static)
-        (all nixos.tests.networking.scripted.dhcpSimple)
-        (all nixos.tests.networking.scripted.dhcpOneIf)
-        (all nixos.tests.networking.scripted.bond)
-        (all nixos.tests.networking.scripted.bridge)
-        (all nixos.tests.networking.scripted.macvlan)
-        (all nixos.tests.networking.scripted.sit)
-        (all nixos.tests.networking.scripted.vlan)
-        (all nixos.tests.nfs3)
-        (all nixos.tests.nfs4)
-        (all nixos.tests.openssh)
-        (all nixos.tests.php-pcre)
-        (all nixos.tests.predictable-interface-names.predictable)
-        (all nixos.tests.predictable-interface-names.unpredictable)
-        (all nixos.tests.predictable-interface-names.predictableNetworkd)
-        (all nixos.tests.predictable-interface-names.unpredictableNetworkd)
-        (all nixos.tests.printing)
-        (all nixos.tests.proxy)
-        (all nixos.tests.sddm.default)
-        (all nixos.tests.simple)
-        (all nixos.tests.slim)
-        (all nixos.tests.switchTest)
-        (all nixos.tests.udisks2)
-        (all nixos.tests.xfce)
-
-        nixpkgs.tarball
-        (all allSupportedNixpkgs.emacs)
-        (all allSupportedNixpkgs.jdk)
+  tested =
+    let
+      onFullSupported = x: map (system: "${x}.${system}") supportedSystems;
+      onAllSupported = x: map (system: "${x}.${system}") (supportedSystems ++ limitedSupportedSystems);
+      onSystems = systems: x: map (system: "${x}.${system}")
+        (pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems));
+    in pkgs.releaseTools.aggregate {
+      name = "nixos-${nixos.channel.version}";
+      meta = {
+        description = "Release-critical builds for the NixOS channel";
+        maintainers = with pkgs.lib.maintainers; [ eelco fpletz ];
+      };
+      constituents = pkgs.lib.concatLists [
+        [ "nixos.channel" ]
+        (onFullSupported "nixos.dummy")
+        (onAllSupported "nixos.iso_minimal")
+        (onSystems ["x86_64-linux"] "nixos.iso_plasma5")
+        (onSystems ["x86_64-linux"] "nixos.iso_gnome")
+        (onFullSupported "nixos.manual")
+        (onSystems ["x86_64-linux"] "nixos.ova")
+        (onSystems ["aarch64-linux"] "nixos.sd_image")
+        (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
+        (onSystems ["x86_64-linux"] "nixos.tests.boot.biosUsb")
+        (onFullSupported "nixos.tests.boot-stage1")
+        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiCdrom")
+        (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiUsb")
+        (onSystems ["x86_64-linux"] "nixos.tests.chromium")
+        (onFullSupported "nixos.tests.containers-imperative")
+        (onFullSupported "nixos.tests.containers-ip")
+        (onSystems ["x86_64-linux"] "nixos.tests.docker")
+        (onFullSupported "nixos.tests.ecryptfs")
+        (onFullSupported "nixos.tests.env")
+        (onFullSupported "nixos.tests.firefox-esr")
+        (onFullSupported "nixos.tests.firefox")
+        (onFullSupported "nixos.tests.firewall")
+        (onFullSupported "nixos.tests.fontconfig-default-fonts")
+        (onFullSupported "nixos.tests.gnome3")
+        (onFullSupported "nixos.tests.gnome3-xorg")
+        (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
+        (onFullSupported "nixos.tests.i3wm")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootFat")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBoot")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleLabels")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleProvided")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.simple")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.swraid")
+        (onFullSupported "nixos.tests.ipv6")
+        (onFullSupported "nixos.tests.keymap.azerty")
+        (onFullSupported "nixos.tests.keymap.colemak")
+        (onFullSupported "nixos.tests.keymap.dvorak")
+        (onFullSupported "nixos.tests.keymap.dvp")
+        (onFullSupported "nixos.tests.keymap.neo")
+        (onFullSupported "nixos.tests.keymap.qwertz")
+        (onFullSupported "nixos.tests.latestKernel.login")
+        (onFullSupported "nixos.tests.lightdm")
+        (onFullSupported "nixos.tests.login")
+        (onFullSupported "nixos.tests.misc")
+        (onFullSupported "nixos.tests.mutableUsers")
+        (onFullSupported "nixos.tests.nat.firewall-conntrack")
+        (onFullSupported "nixos.tests.nat.firewall")
+        (onFullSupported "nixos.tests.nat.standalone")
+        (onFullSupported "nixos.tests.networking.scripted.bond")
+        (onFullSupported "nixos.tests.networking.scripted.bridge")
+        (onFullSupported "nixos.tests.networking.scripted.dhcpOneIf")
+        (onFullSupported "nixos.tests.networking.scripted.dhcpSimple")
+        (onFullSupported "nixos.tests.networking.scripted.link")
+        (onFullSupported "nixos.tests.networking.scripted.loopback")
+        (onFullSupported "nixos.tests.networking.scripted.macvlan")
+        (onFullSupported "nixos.tests.networking.scripted.privacy")
+        (onFullSupported "nixos.tests.networking.scripted.routes")
+        (onFullSupported "nixos.tests.networking.scripted.sit")
+        (onFullSupported "nixos.tests.networking.scripted.static")
+        (onFullSupported "nixos.tests.networking.scripted.virtual")
+        (onFullSupported "nixos.tests.networking.scripted.vlan")
+        (onFullSupported "nixos.tests.networking.networkd.bond")
+        (onFullSupported "nixos.tests.networking.networkd.bridge")
+        (onFullSupported "nixos.tests.networking.networkd.dhcpOneIf")
+        (onFullSupported "nixos.tests.networking.networkd.dhcpSimple")
+        (onFullSupported "nixos.tests.networking.networkd.link")
+        (onFullSupported "nixos.tests.networking.networkd.loopback")
+        # Fails nondeterministically (https://github.com/NixOS/nixpkgs/issues/96709)
+        #(onFullSupported "nixos.tests.networking.networkd.macvlan")
+        (onFullSupported "nixos.tests.networking.networkd.privacy")
+        (onFullSupported "nixos.tests.networking.networkd.routes")
+        (onFullSupported "nixos.tests.networking.networkd.sit")
+        (onFullSupported "nixos.tests.networking.networkd.static")
+        (onFullSupported "nixos.tests.networking.networkd.virtual")
+        (onFullSupported "nixos.tests.networking.networkd.vlan")
+        (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
+        (onFullSupported "nixos.tests.nfs3.simple")
+        (onFullSupported "nixos.tests.nfs4.simple")
+        (onFullSupported "nixos.tests.openssh")
+        (onFullSupported "nixos.tests.pantheon")
+        (onFullSupported "nixos.tests.php.fpm")
+        (onFullSupported "nixos.tests.php.httpd")
+        (onFullSupported "nixos.tests.php.pcre")
+        (onFullSupported "nixos.tests.plasma5")
+        (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")
+        (onFullSupported "nixos.tests.predictable-interface-names.predictable")
+        (onFullSupported "nixos.tests.predictable-interface-names.unpredictableNetworkd")
+        (onFullSupported "nixos.tests.predictable-interface-names.unpredictable")
+        (onFullSupported "nixos.tests.printing")
+        (onFullSupported "nixos.tests.proxy")
+        (onFullSupported "nixos.tests.sddm.default")
+        (onFullSupported "nixos.tests.simple")
+        (onFullSupported "nixos.tests.switchTest")
+        (onFullSupported "nixos.tests.udisks2")
+        (onFullSupported "nixos.tests.xfce")
+        (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
+        (onFullSupported "nixpkgs.emacs")
+        (onFullSupported "nixpkgs.jdk")
+        ["nixpkgs.tarball"]
       ];
-  });
-
+    };
 }

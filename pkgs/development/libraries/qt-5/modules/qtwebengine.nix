@@ -12,29 +12,42 @@
 , pciutils
 , systemd
 , enableProprietaryCodecs ? true
-, gn, darwin, openbsm
-, ffmpeg ? null
-, lib, stdenv # lib.optional, needsPax
+, gn
+, cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
+, ffmpeg_3 ? null
+, lib, stdenv, fetchpatch
 }:
 
 with stdenv.lib;
-
-let qt56 = qtCompatVersion == "5.6"; in
 
 qtModule {
   name = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkgconfig python2 which gn
-  ];
+  ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
   enableParallelBuilding = true;
 
+  # Don’t use the gn setup hook
+  dontUseGnConfigure = true;
+
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
+
+  patches = [
+    # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
+    (fetchpatch {
+      name = "qtwebengine-bison-3.7-build.patch";
+      url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
+      sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+  ];
 
   postPatch =
     # Patch Chromium build tools
@@ -42,13 +55,19 @@ qtModule {
       ( cd src/3rdparty/chromium; patchShebangs . )
     ''
     # Patch Chromium build files
-    + ''
-      substituteInPlace ./src/3rdparty/chromium/build/common.gypi \
+    + optionalString (lib.versionOlder qtCompatVersion "5.12") ''
+      substituteInPlace ./src/3rdparty/chromium/build/common.gypi --replace /bin/echo ${coreutils}/bin/echo
+      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/toolchain.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/toolchain.gypi \
+      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/standalone.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/standalone.gypi \
-        --replace /bin/echo ${coreutils}/bin/echo
+    ''
+    # Prevent Chromium build script from making the path to `clang` relative to
+    # the build directory.  `clang_base_path` is the value of `QMAKE_CLANG_DIR`
+    # from `src/core/config/mac_osx.pri`.
+    + optionalString stdenv.isDarwin ''
+      substituteInPlace ./src/3rdparty/chromium/build/toolchain/mac/BUILD.gn \
+        --replace 'prefix = rebase_path("$clang_base_path/bin/", root_build_dir)' 'prefix = "$clang_base_path/bin/"'
     ''
     # Patch library paths in Qt sources
     + ''
@@ -60,53 +79,52 @@ qtModule {
     ''
     # Patch library paths in Chromium sources
     + optionalString (!stdenv.isDarwin) ''
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
         src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
-    + optionalString stdenv.isDarwin ''
-      # Remove annoying xcode check
-      substituteInPlace mkspecs/features/platform.prf \
-        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false
+    + optionalString stdenv.isDarwin (''
       substituteInPlace src/core/config/mac_osx.pri \
-        --replace /usr ${stdenv.cc} \
-        --replace "isEmpty(QMAKE_MAC_SDK_VERSION)" false
-
-    # FIXME Needed with old Apple SDKs
-    # Abandon all hope ye who try to make sense of this.
-    substituteInPlace src/3rdparty/chromium/base/mac/foundation_util.mm \
-      --replace "NSArray<NSString*>*" "NSArray*"
-    substituteInPlace src/3rdparty/chromium/base/mac/sdk_forward_declarations.h \
-      --replace "NSDictionary<VNImageOption, id>*" "NSDictionary*" \
-      --replace "NSArray<VNRequest*>*" "NSArray*" \
-      --replace "typedef NSString* VNImageOption NS_STRING_ENUM" "typedef NSString* VNImageOption"
-
-    cat <<EOF > src/3rdparty/chromium/build/mac/find_sdk.py
-#!/usr/bin/env python
-print("10.10.0")
-print("")
-EOF
-
-    cat <<EOF > src/3rdparty/chromium/build/config/mac/sdk_info.py
-#!/usr/bin/env python
-print('xcode_version="9.1"')
-print('xcode_version_int=9')
-print('xcode_build="9B55"')
-print('machine_os_build="17E199"')
-print('sdk_path=""')
-print('sdk_version="10.10"')
-print('sdk_platform_path=""')
-print('sdk_build="17B41"')
-EOF
-
+        --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+    ''
+     # Following is required to prevent a build error:
+     # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
+    + (optionalString (lib.versionAtLeast qtCompatVersion "5.11") ''
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+        --replace '$sysroot/usr' "${darwin.xnu}"
+    '')
+    + ''
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
       --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-    '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
+    substituteInPlace src/3rdparty/chromium/sandbox/mac/BUILD.gn \
+      --replace 'libs = [ "sandbox" ]' 'libs = [ "/usr/lib/libsandbox.1.dylib" ]'
+    '');
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
+    "-Wno-class-memaccess"
+  ] ++ lib.optionals (stdenv.hostPlatform.platform.gcc.arch or "" == "sandybridge") [
+    # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+    # TODO: investigate and fix properly
+    "-march=westmere"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_12"
+    "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_12"
+
+    #
+    # Prevent errors like
+    # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
+    # error: pointer to non-const type 'id' with no explicit ownership
+    #     id** _kvcPropertyAccessors;
+    #
+    # TODO remove when new Apple SDK is in
+    #
+    "-fno-objc-arc"
+  ];
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -135,7 +153,7 @@ EOF
 
     libevent
   ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg
+    ffmpeg_3
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -161,7 +179,10 @@ EOF
 
     # frameworks
     ApplicationServices
+    AVFoundation
     Foundation
+    ForceFeedback
+    GameController
     AppKit
     ImageCaptureCore
     CoreBluetooth
@@ -169,27 +190,53 @@ EOF
     CoreWLAN
     Quartz
     Cocoa
+    LocalAuthentication
 
     openbsm
     libunwind
   ]);
 
+  buildInputs = optionals stdenv.isDarwin (with darwin; [
+    cups
+
+    # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
+    # to get some information about the host platform.
+    (writeScriptBin "sw_vers" ''
+      #!${stdenv.shell}
+
+      while [ $# -gt 0 ]; do
+        case "$1" in
+          -buildVersion) echo "17E199";;
+        *) break ;;
+
+        esac
+        shift
+      done
+    '')
+
+    # For sandbox.h include
+    (runCommand "MacOS_SDK_sandbox.h" {} ''
+      install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
+    '')
+  ]);
+
+  __impureHostDeps = optional stdenv.isDarwin "/usr/lib/libsandbox.1.dylib";
+
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
+  dontUseXcbuild = true;
 
   postInstall = lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
     EOF
-    paxmark m $out/libexec/QtWebEngineProcess
   '';
 
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
-    broken = qt56; # 2018-09-13, no successful build since 2018-04-25
   };
 
 }

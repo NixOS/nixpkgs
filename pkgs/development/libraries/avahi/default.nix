@@ -1,13 +1,21 @@
-{ fetchurl, stdenv, pkgconfig, libdaemon, dbus, perl, perlXMLParser
-, expat, gettext, intltool, glib, libiconv
+{ fetchurl, fetchpatch, stdenv, pkgconfig, libdaemon, dbus, perlPackages
+, expat, gettext, intltool, glib, libiconv, writeShellScriptBin
+, gtk3Support ? false, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
-, withLibdnssdCompat ? false }:
+, withLibdnssdCompat ? false
+, python ? null
+, withPython ? false }:
 
 assert qt4Support -> qt4 != null;
 
+let
+  # despite the configure script claiming it supports $PKG_CONFIG, it doesnt respect it
+  pkgconfig-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
+in
+
 stdenv.mkDerivation rec {
-  name = "avahi-${version}";
+  name = "avahi${stdenv.lib.optionalString withLibdnssdCompat "-compat"}-${version}";
   version = "0.7";
 
   src = fetchurl {
@@ -15,23 +23,44 @@ stdenv.mkDerivation rec {
     sha256 = "0128n7jlshw4bpx0vg8lwj8qwdisjxi7mvniwfafgnkzzrfrpaap";
   };
 
-  patches = [ ./no-mkdir-localstatedir.patch ];
+  prePatch = ''
+    substituteInPlace configure \
+      --replace pkg-config "$PKG_CONFIG"
+  '';
 
-  buildInputs = [ libdaemon dbus perl perlXMLParser glib expat libiconv ]
+  patches = [
+    ./no-mkdir-localstatedir.patch
+    (fetchpatch {
+      name ="CVE-2017-6519-CVE-2018-100084.patch";
+      url = "https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch";
+      sha256 = "06n7b7kz6xcc35c7xjfc1kj3k2llyjgi09nhy0ci32l1bhacjw0q";
+    })
+  ];
+
+  buildInputs = [ libdaemon dbus glib expat libiconv ]
+    ++ (with perlPackages; [ perl XMLParser ])
+    ++ (stdenv.lib.optional gtk3Support gtk3)
     ++ (stdenv.lib.optional qt4Support qt4);
 
-  nativeBuildInputs = [ pkgconfig gettext intltool glib ];
+  propagatedBuildInputs =
+    stdenv.lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
+
+  nativeBuildInputs = [ pkgconfig pkgconfig-helper gettext intltool glib ];
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
-      "--disable-gtk" "--disable-gtk3"
+      "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+      (stdenv.lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
-      "--disable-python" "--localstatedir=/var" "--with-distro=none"
+      (stdenv.lib.enableFeature withPython "python")
+      "--localstatedir=/var" "--with-distro=none"
       # A systemd unit is provided by the avahi-daemon NixOS module
       "--with-systemdsystemunitdir=no" ]
     ++ stdenv.lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"
     # autoipd won't build on darwin
     ++ stdenv.lib.optional stdenv.isDarwin "--disable-autoipd";
+
+  NIX_CFLAGS_COMPILE = "-DAVAHI_SERVICE_DIR=\"/etc/avahi/services\"";
 
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i '20 i\
@@ -51,10 +80,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "mDNS/DNS-SD implementation";
-    homepage    = http://avahi.org;
+    homepage    = "http://avahi.org";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 globin ];
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local

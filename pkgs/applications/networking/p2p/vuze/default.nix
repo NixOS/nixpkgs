@@ -1,7 +1,7 @@
 { stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "vuze-${version}";
+  pname = "vuze";
   version = "5750";
 
   src = fetchsvn {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Torrent client";
-    homepage = http://www.vuze.com;
+    homepage = "http://www.vuze.com";
     license = licenses.unfree;
     platforms = platforms.all;
     maintainers = with maintainers; [ volth ];

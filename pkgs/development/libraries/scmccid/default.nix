@@ -1,8 +1,8 @@
-{stdenv, fetchurl, patchelf, libusb}:
+{stdenv, fetchurl, patchelf, libusb-compat-0_1}:
 
 assert stdenv ? cc && stdenv.cc.libc != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "scmccid-5.0.11";
 
   src = if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelf ];
 
   installPhase = ''
-    RPATH=${libusb.out}/lib:${stdenv.cc.libc.out}/lib
+    RPATH=${libusb-compat-0_1.out}/lib:${stdenv.cc.libc.out}/lib
 
     for a in proprietary/*/Contents/Linux/*.so*; do
         if ! test -L $a; then
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.scmmicro.com/support/pc-security-support/downloads.html;
+    homepage = "http://www.scmmicro.com/support/pc-security-support/downloads.html";
     description = "PCSC drivers for linux, for the SCM SCR3310 v2.0 card and others";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [viric];

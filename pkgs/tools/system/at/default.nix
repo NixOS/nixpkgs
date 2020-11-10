@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, bison, flex, pam
+{ stdenv, fetchurl, fetchpatch, bison, flex, pam, perl
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , atWrapperPath ? "/run/wrappers/bin/at"
 }:
 
 stdenv.mkDerivation rec {
-  name = "at-${version}";
+  pname = "at";
   version = "3.1.23";
 
   src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [ bison flex perl /* for `prove` (tests) */ ];
 
   buildInputs = [ pam ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "--with-daemon_groupname=atd"
   ];
 
-  doCheck = false; # need "prove" tool
+  doCheck = true;
 
   # Ensure that "batch" can invoke the setuid "at" wrapper, if it exists, or
   # else we get permission errors (on NixOS). "batch" is a shell script, so
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = ''The classical Unix `at' job scheduling command'';
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = https://packages.qa.debian.org/at;
+    homepage = "https://packages.qa.debian.org/at";
     platforms = stdenv.lib.platforms.linux;
   };
 }

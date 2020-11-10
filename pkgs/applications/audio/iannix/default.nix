@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
+{ mkDerivation, stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
 }:
 
-stdenv.mkDerivation rec {
-  name = "iannix-${version}";
+mkDerivation {
+  pname = "iannix";
   version = "2016-01-31";
   src = fetchFromGitHub {
     owner = "iannix";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Graphical open-source sequencer,";
-    homepage = https://www.iannix.org/;
+    homepage = "https://www.iannix.org/";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

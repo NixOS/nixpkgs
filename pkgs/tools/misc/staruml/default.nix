@@ -1,29 +1,27 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, lib, fetchurl, makeWrapper
 , dpkg, patchelf
-, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
-, libXdamage }:
+, gtk2, glib, gdk-pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
+, libXdamage, expat }:
 
 let
   inherit (stdenv) lib;
   LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage ];
+    [ glib gtk2 gdk-pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
 in
 stdenv.mkDerivation rec {
   version = "2.8.1";
-  name = "staruml-${version}";
+  pname = "staruml";
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
-      url = "http://staruml.io/download/release/v${version}/StarUML-v${version}-32-bit.deb";
+      url = "https://s3.amazonaws.com/staruml-bucket/releases-v2/StarUML-v${version}-32-bit.deb";
       sha256 = "0vb3k9m3l6pmsid4shlk0xdjsriq3gxzm8q7l04didsppg0vvq1n";
     } else fetchurl {
-      url = "http://staruml.io/download/release/v${version}/StarUML-v${version}-64-bit.deb";
+      url = "https://s3.amazonaws.com/staruml-bucket/releases-v2/StarUML-v${version}-64-bit.deb";
       sha256 = "05gzrnlssjkhyh0wv019d4r7p40lxnsa1sghazll6f233yrqmxb0";
     };
 
-  buildInputs = [ dpkg ];
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper dpkg ];
 
   unpackPhase = ''
     mkdir pkg
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
-    ln -s ${systemd.lib}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     for binary in StarUML Brackets-node; do
       ${patchelf}/bin/patchelf \
@@ -50,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A sophisticated software modeler";
-    homepage = http://staruml.io/;
+    homepage = "http://staruml.io/";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

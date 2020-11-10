@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "flask-paginate";
-  version = "0.5.1";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pgk6ngqzh7lgq2nr6hraqp3z76f3f0kjhai50vxb6j1civ8v3mn";
+    sha256 = "949b93d0535d1223b91ac0048586bd878aaebf4044c54c1dc3068acc9bdf441f";
   };
 
   propagatedBuildInputs = [ flask ];
 
   meta = with lib; {
-    homepage = https://github.com/lixxu/flask-paginate;
+    homepage = "https://github.com/lixxu/flask-paginate";
     description = "Pagination support for Flask";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

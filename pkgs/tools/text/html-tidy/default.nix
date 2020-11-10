@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "html-tidy-${version}";
+  pname = "html-tidy";
   version = "5.6.0";
 
   src = fetchFromGitHub {
@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake libxslt/*manpage*/ ];
 
-  cmakeFlags = stdenv.lib.optional
-    (stdenv.hostPlatform.libc or null == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
+  cmakeFlags = [];
 
   # ATM bin/tidy is statically linked, as upstream provides no other option yet.
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
       used to validate and fix HTML data.
     '';
     license = licenses.libpng; # very close to it - the 3 clauses are identical
-    homepage = http://html-tidy.org;
+    homepage = "http://html-tidy.org";
     platforms = platforms.all;
     maintainers = with maintainers; [ edwtjo ];
   };

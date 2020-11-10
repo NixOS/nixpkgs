@@ -1,6 +1,5 @@
 {stdenv, fetchFromGitHub, libX11}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "wayv";
   version = "0.3";
 
@@ -28,6 +27,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://github.com/mikemb/wayV;
+    homepage = "https://github.com/mikemb/wayV";
   };
 }

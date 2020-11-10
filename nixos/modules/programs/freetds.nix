@@ -25,7 +25,7 @@ in
           ''';
         }
       '';
-      description = 
+      description =
         ''
         Configure freetds database entries. Each attribute denotes
         a section within freetds.conf, and the value (a string) is the config
@@ -47,7 +47,7 @@ in
     environment.variables.FREETDS = "/etc/freetds.conf";
     environment.variables.SYBASE = "${pkgs.freetds}";
 
-    environment.etc."freetds.conf" = { text = 
+    environment.etc."freetds.conf" = { text =
       (concatStrings (mapAttrsToList (name: value:
         ''
         [${name}]

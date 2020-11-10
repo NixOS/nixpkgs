@@ -7,26 +7,28 @@
 , paramiko
 , netaddr
 , ncclient
+, ntc-templates
 , lxml
 , jinja2
 , pyyaml
+, transitions
+, yamlordereddictloader
 , nose
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.1.9";
+  version = "2.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6729c35efd764e1f22457b72898bba554986466306ad29ad2d0bb071e997093";
+    sha256 = "521659fe94da796897abc16773c3d84fa44d3e1f5386c71fbaef44cb80159855";
   };
-
 
   checkInputs = [ nose ];
 
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient lxml jinja2 pyyaml
+    scp six pyserial paramiko netaddr ncclient ntc-templates lxml jinja2 pyyaml transitions yamlordereddictloader
   ];
 
   checkPhase = ''
@@ -34,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.github.com/Juniper/py-junos-eznc;
+    homepage = "http://www.github.com/Juniper/py-junos-eznc";
     description = "Junos 'EZ' automation for non-programmers";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];

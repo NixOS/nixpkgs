@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, symlinkJoin, gfortran, perl, procps
-, libyaml, libxc, fftw, openblas, gsl, netcdf, arpack
+{ stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
+, libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
 }:
 
-let
-  version = "8.2";
-  fftwAll = symlinkJoin { name ="ftw-dev-out"; paths = [ fftw.dev fftw.out ]; };
+assert (!blas.isILP64) && (!lapack.isILP64);
 
-in stdenv.mkDerivation {
-  name = "octopus-${version}";
+stdenv.mkDerivation rec {
+  pname = "octopus";
+  version = "10.0";
 
-  src = fetchurl {
-    url = "http://www.tddft.org/programs/octopus/down.php?file=${version}/octopus-${version}.tar.gz";
-    sha256 = "0z74q17lzyga44m5pbsr1hmq12ly96y44pcz7glfvc4vbaq3jd8p";
+  src = fetchFromGitLab {
+    owner = "octopus-code";
+    repo = "octopus";
+    rev = version;
+    sha256 = "1c6q20y0x9aacwa7vp6gj3yvfzain7hnk6skxmvg3wazp02l91kn";
   };
 
-  nativeBuildInputs = [ perl procps fftw.dev ];
-  buildInputs = [ libyaml gfortran libxc openblas gsl fftw.out netcdf arpack ];
+  nativeBuildInputs = [ perl procps autoreconfHook ];
+  buildInputs = [ libyaml gfortran libxc blas lapack gsl fftw netcdf arpack ];
 
   configureFlags = [
     "--with-yaml-prefix=${libyaml}"
-    "--with-blas=-lopenblas"
-    "--with-lapack=-lopenblas"
-    "--with-fftw-prefix=${fftwAll}"
+    "--with-blas=-lblas"
+    "--with-lapack=-llapack"
+    "--with-fftw-prefix=${fftw.dev}"
     "--with-gsl-prefix=${gsl}"
     "--with-libxc-prefix=${libxc}"
   ];
@@ -41,7 +42,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Real-space time dependent density-functional theory code";
-    homepage = http://octopus-code.org;
+    homepage = "https://octopus-code.org";
     maintainers = with maintainers; [ markuskowa ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];

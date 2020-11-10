@@ -1,13 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "whichcraft";
-  version = "0.4.1";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e0d51c9387cb7e9f28b7edb549e6a03da758f7784f991eb4397d7f7808c57fd";
+    sha256 = "11yfkzyplizdgndy34vyd5qlmr1n5mxis3a3svxmx8fnccdvknxc";
   };
+
+  LC_ALL="en_US.utf-8";
+  buildInputs = [ glibcLocales ];
 
   checkInputs = [ pytest ];
 
@@ -16,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/pydanny/whichcraft;
+    homepage = "https://github.com/pydanny/whichcraft";
     description = "Cross-platform cross-python shutil.which functionality";
     license = licenses.bsd3;
   };

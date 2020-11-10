@@ -1,17 +1,17 @@
 { stdenv, fetchurl, fftwFloat }:
 
 stdenv.mkDerivation rec {
-  name = "zita-convolver-${version}";
-  version = "4.0.0";
+  pname = "zita-convolver";
+  version = "4.0.3";
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "0fx7f48ls0rlndqrmd4k7ifpnml39yxzc2f0n6xyysypgn06y673";
+    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "0prji66p86z2bzminywkwchr5bfgxcg2i8y803pydd1hzf2198cs";
   };
 
   buildInputs = [ fftwFloat ];
 
   patchPhase = ''
-    cd libs
+    cd source
     sed -e "s@ldconfig@@" -i Makefile
   '';
 
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Convolution library by Fons Adriaensen";
-    version = "${version}";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
+    version = version;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

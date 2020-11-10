@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, num, camlp5 }:
+{ stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
 
 let
   load_num =
@@ -11,7 +11,7 @@ let
 
   start_script =
     ''
-      #!/bin/sh
+      #!${runtimeShell}
       cd $out/lib/hol_light
       exec ${ocaml}/bin/ocaml \
         -I \`${camlp5}/bin/camlp5 -where\` \
@@ -21,14 +21,19 @@ let
 in
 
 stdenv.mkDerivation {
-  name     = "hol_light-2018-09-30";
+  name     = "hol_light-2019-10-06";
 
   src = fetchFromGitHub {
     owner  = "jrh13";
     repo   = "hol-light";
-    rev    = "27e09dd27834de46e917057710e9d8ded51a4c9f";
-    sha256 = "1p0rm08wnc2lsrh3xzhlq3zdhzqcv1lbqnkwx3aybrqhbg1ixc1d";
+    rev    = "5c91b2ded8a66db571824ecfc18b4536c103b23e";
+    sha256 = "0sxsk8z08ba0q5aixdyczcx5l29lb51ba4ip3d2fry7y604kjsx6";
   };
+
+  patches = [(fetchpatch {
+    url = "https://salsa.debian.org/ocaml-team/hol-light/-/raw/master/debian/patches/0004-Fix-compilation-with-camlp5-7.11.patch";
+    sha256 = "180qmxbrk3vb1ix7j77hcs8vsar91rs11s5mm8ir5352rz7ylicr";
+  })];
 
   buildInputs = [ ocaml camlp5 ];
   propagatedBuildInputs = [ num ];
@@ -42,9 +47,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Interactive theorem prover based on Higher-Order Logic";
-    homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
+    homepage    = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
     license     = licenses.bsd2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice z77z vbgl ];
+    maintainers = with maintainers; [ thoughtpolice maggesi vbgl ];
   };
 }

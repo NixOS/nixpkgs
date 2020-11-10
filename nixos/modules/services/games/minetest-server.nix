@@ -5,12 +5,12 @@ with lib;
 let
   cfg   = config.services.minetest-server;
   flag  = val: name: if val != null then "--${name} ${val} " else "";
-  flags = [ 
-    (flag cfg.gameId "gameid") 
-    (flag cfg.world "world") 
-    (flag cfg.configPath "config") 
-    (flag cfg.logPath "logfile") 
-    (flag cfg.port "port") 
+  flags = [
+    (flag cfg.gameId "gameid")
+    (flag cfg.world "world")
+    (flag cfg.configPath "config")
+    (flag cfg.logPath "logfile")
+    (flag cfg.port "port")
   ];
 in
 {
@@ -26,7 +26,7 @@ in
         type        = types.nullOr types.str;
         default     = null;
         description = ''
-          Id of the game to use. To list available games run 
+          Id of the game to use. To list available games run
           `minetestserver --gameid list`.
 
           If only one game exists, this option can be null.
@@ -59,7 +59,7 @@ in
         type        = types.nullOr types.path;
         default     = null;
         description = ''
-          Path to logfile for logging. 
+          Path to logfile for logging.
 
           If set to null, logging will be output to stdout which means
           all output will be catched by systemd.
@@ -84,7 +84,9 @@ in
       home            = "/var/lib/minetest";
       createHome      = true;
       uid             = config.ids.uids.minetest;
+      group           = "minetest";
     };
+    users.groups.minetest.gid = config.ids.gids.minetest;
 
     systemd.services.minetest-server = {
       description   = "Minetest Server Service";
@@ -93,6 +95,7 @@ in
 
       serviceConfig.Restart = "always";
       serviceConfig.User    = "minetest";
+      serviceConfig.Group   = "minetest";
 
       script = ''
         cd /var/lib/minetest

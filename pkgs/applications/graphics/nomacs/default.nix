@@ -1,31 +1,31 @@
 { stdenv
+, mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkgconfig
-, wrapGAppsHook
-, gsettings-desktop-schemas
 
 , qtbase
 , qttools
 , qtsvg
 
 , exiv2
-, opencv
+, opencv4
 , libraw
 , libtiff
 , quazip
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.10.2";
+mkDerivation rec {
+  pname = "nomacs";
+  version = "3.17.2206";
+
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "0v2gsdc8caswf2b5aa023d8kil1fqf4r9mlg15180h3c92f8jzvh";
+    sha256 = "1bq7bv4p7w67172y893lvpk90d6fgdpnylynbj2kn8m2hs6khya4";
   };
-
-  name = "nomacs-${version}";
 
   enableParallelBuilding = true;
 
@@ -34,31 +34,30 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [cmake
-                       pkgconfig
-                       wrapGAppsHook];
+                       pkgconfig];
 
   buildInputs = [qtbase
                  qttools
                  qtsvg
                  exiv2
-                 opencv
+                 opencv4
                  libraw
                  libtiff
-                 quazip
-                 gsettings-desktop-schemas];
+                 quazip];
 
   cmakeFlags = ["-DENABLE_OPENCV=ON"
                 "-DENABLE_RAW=ON"
                 "-DENABLE_TIFF=ON"
                 "-DENABLE_QUAZIP=ON"
+                "-DENABLE_TRANSLATIONS=ON"
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
   meta = with stdenv.lib; {
-    homepage = https://nomacs.org;
+    homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
-    maintainers = [maintainers.ahmedtd];
+    maintainers = with stdenv.lib.maintainers; [ mindavi ];
     license = licenses.gpl3Plus;
-    repositories.git = https://github.com/nomacs/nomacs.git;
+    repositories.git = "https://github.com/nomacs/nomacs.git";
     inherit (qtbase.meta) platforms;
   };
 }

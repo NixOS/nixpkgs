@@ -1,9 +1,9 @@
 { stdenv, lib, config, fetchFromGitHub
 , cmake
-, glog, google-gflags, gtest
+, glog, gflags, gtest
 , protobuf, snappy
 , python, future, six, python-protobuf, numpy, pydot
-, eigen3
+, eigen
 , doxygen
 , useCuda ? (config.cudaSupport or false), cudatoolkit ? null
 , useCudnn ? (config.cudnnSupport or false), cudnn ? null
@@ -38,7 +38,7 @@ let
   '';
 
   cub = {
-    src = fetchFromGitHub rec {
+    src = fetchFromGitHub {
       owner  = "NVlabs";
       repo   = "cub";
       rev    = "v1.7.4";
@@ -57,11 +57,11 @@ let
     dst = "pybind11";
   };
 
-  ccVersion = (builtins.parseDrvName stdenv.cc.name).version;
+  ccVersion = lib.getVersion stdenv.cc;
 in
 
 stdenv.mkDerivation rec {
-  name = "caffe2-${version}";
+  pname = "caffe2";
   version = "0.8.1";
   src = fetchFromGitHub {
     owner = "caffe2";
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" ];
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  buildInputs = [ glog google-gflags protobuf snappy eigen3 ]
+  buildInputs = [ glog gflags protobuf snappy eigen ]
     ++ lib.optional useCuda cudatoolkit
     ++ lib.optional useCudnn cudnn
     ++ lib.optional useOpenmp openmp
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     ${installExtraSrc cub}
     ${installExtraSrc pybind11}
     # XXX hack
-    export NIX_CFLAGS_COMPILE="-I ${eigen3}/include/eigen3/ $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="-I ${eigen}/include/eigen3/ $NIX_CFLAGS_COMPILE"
   '';
 
   postInstall = ''
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://caffe2.ai/;
+    homepage = "https://caffe2.ai/";
     description = "A new lightweight, modular, and scalable deep learning framework";
     longDescription = ''
       Caffe2 aims to provide an easy and straightforward way for you to experiment

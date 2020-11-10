@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Abstract vector spaces in Idris";
-    homepage = https://github.com/clayrat/idris-vecspace;
+    homepage = "https://github.com/clayrat/idris-vecspace";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

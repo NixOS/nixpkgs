@@ -24,7 +24,7 @@ with lib;
 
   config = mkMerge [
     (mkIf cfg.hdfs.namenode.enabled {
-      systemd.services."hdfs-namenode" = {
+      systemd.services.hdfs-namenode = {
         description = "Hadoop HDFS NameNode";
         wantedBy = [ "multi-user.target" ];
 
@@ -44,7 +44,7 @@ with lib;
       };
     })
     (mkIf cfg.hdfs.datanode.enabled {
-      systemd.services."hdfs-datanode" = {
+      systemd.services.hdfs-datanode = {
         description = "Hadoop HDFS DataNode";
         wantedBy = [ "multi-user.target" ];
 

@@ -1,6 +1,6 @@
-{ buildPythonPackage, fetchFromGitHub, lib, isPyPy, isPy3k, pythonOlder
+{ buildPythonPackage, fetchFromGitHub, lib, isPyPy
 , pycrypto, ecdsa # TODO
-, enum34, mock
+, tox, mock, coverage, can, brotli
 , withOptionalDeps ? true, tcpdump, ipython
 , withCryptography ? true, cryptography
 , withVoipSupport ? true, sox
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.4.0";
+  version = "2.4.4";
 
   disabled = isPyPy;
 
@@ -21,33 +21,57 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     rev = "v${version}";
-    sha256 = "0dw6kl1qi9bf3rbm79gb1h40ms8y0b5dbmpip841p2905d5r2isj";
+    sha256 = "1wpx7gps3g8q5ykbfcd67mxwcs416zg37b53fwfzzlc1m58vhk3p";
   };
 
-  # TODO: Temporary workaround
-  patches = [ ./fix-version-1.patch ./fix-version-2.patch ];
-
-  postPatch = lib.optionalString withManufDb ''
+  postPatch = ''
+    printf "${version}" > scapy/VERSION
+  '' + lib.optionalString withManufDb ''
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 
   propagatedBuildInputs = [ pycrypto ecdsa ]
-    ++ lib.optional withOptionalDeps [ tcpdump ipython ]
-    ++ lib.optional withCryptography [ cryptography ]
-    ++ lib.optional withVoipSupport [ sox ]
-    ++ lib.optional withPlottingSupport [ matplotlib ]
-    ++ lib.optional withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ]
-    ++ lib.optional (isPy3k && pythonOlder "3.4") [ enum34 ]
-    ++ lib.optional doCheck [ mock ];
+    ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
+    ++ lib.optional withCryptography cryptography
+    ++ lib.optional withVoipSupport sox
+    ++ lib.optional withPlottingSupport matplotlib
+    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ];
 
-  # Tests fail with Python 3.6 (seems to be an upstream bug, I'll investigate)
-  doCheck = if isPy3k then false else true;
+  # Running the tests seems too complicated:
+  doCheck = false;
+  checkInputs = [ tox mock coverage can brotli ];
+  checkPhase = ''
+    patchShebangs .
+    .config/ci/test.sh
+  '';
 
   meta = with lib; {
-    description = "Powerful interactive network packet manipulation program";
-    homepage = https://scapy.net/;
+    description = "A Python-based network packet manipulation program and library";
+    longDescription = ''
+      Scapy is a powerful Python-based interactive packet manipulation program
+      and library.
+
+      It is able to forge or decode packets of a wide number of protocols, send
+      them on the wire, capture them, store or read them using pcap files,
+      match requests and replies, and much more. It is designed to allow fast
+      packet prototyping by using default values that work.
+
+      It can easily handle most classical tasks like scanning, tracerouting,
+      probing, unit tests, attacks or network discovery (it can replace hping,
+      85% of nmap, arpspoof, arp-sk, arping, tcpdump, wireshark, p0f, etc.). It
+      also performs very well at a lot of other specific tasks that most other
+      tools can't handle, like sending invalid frames, injecting your own
+      802.11 frames, combining techniques (VLAN hopping+ARP cache poisoning,
+      VoIP decoding on WEP protected channel, ...), etc.
+
+      Scapy supports Python 2.7 and Python 3 (3.4 to 3.8). It's intended to be
+      cross platform, and runs on many different platforms (Linux, OSX, *BSD,
+      and Windows).
+    '';
+    homepage = "https://scapy.net/";
+    changelog = "https://github.com/secdev/scapy/releases/tag/v${version}";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos bjornfor ];
   };
 }

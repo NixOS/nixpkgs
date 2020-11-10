@@ -1,18 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, hypothesis }:
+{ stdenv, buildPythonPackage, fetchPypi, hypothesis, isPy3k }:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
-  version = "1.0.3";
+  version = "1.2.7";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "131lbc18s3rlmby2dpbvi4msz13gqw6xvx067mh4zcx9npygn9r2";
+    sha256 = "94aa84fa42393f773c8215fab679bd3b72bbdb9f7931643d3672184cde9981d9";
   };
 
   propagatedBuildInputs = [ hypothesis ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/d9pouces/RubyMarshal/;
+    homepage = "https://github.com/d9pouces/RubyMarshal/";
     description = "Read and write Ruby-marshalled data";
     license = licenses.wtfpl;
     maintainers = [ maintainers.ryantm ];

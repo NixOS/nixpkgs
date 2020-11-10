@@ -63,7 +63,7 @@ addEntry() {
         copyToKernelsDir $kernel; kernel=$result
         copyToKernelsDir $initrd; initrd=$result
     fi
-    
+
     mkdir -p $outdir
     ln -sf $(readlink -f $path) $outdir/system
     ln -sf $(readlink -f $path/init) $outdir/init

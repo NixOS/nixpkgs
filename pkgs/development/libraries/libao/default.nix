@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.2";
-  name = "libao-${version}";
+  pname = "libao";
 
   # the github mirror is more up to date than downloads.xiph.org
   src = fetchFromGitHub {
     owner  = "xiph";
     repo   = "libao";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0svgk4sc9kdhcsfyvbvgm5vpbg3sfr6z5rliflrw49v3x2i4vxq5";
   };
 
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
       programs to output audio using a simple API on a wide variety of
       platforms.
     '';
-    homepage = https://xiph.org/ao/;
+    homepage = "https://xiph.org/ao/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

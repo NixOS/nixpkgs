@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bspwm-${version}";
-  version = "0.9.5";
+  pname = "bspwm";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner  = "baskerville";
     repo   = "bspwm";
     rev    = version;
-    sha256 = "09h3g1rxxjyw861mk32lj774nmwkx8cwxq4wfgmf4dpbizymvhhr";
+    sha256 = "0qlv7b4c2mmjfd65y100d11x8iqyg5f6lfiws3cgmpjidhdygnxc";
   };
 
   buildInputs = [ libxcb libXinerama xcbutil xcbutilkeysyms xcbutilwm ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tiling window manager based on binary space partitioning";
-    homepage = https://github.com/baskerville/bspwm;
+    homepage = "https://github.com/baskerville/bspwm";
     maintainers = with maintainers; [ meisternu epitrochoid rvolosatovs ];
     license = licenses.bsd2;
     platforms = platforms.linux;

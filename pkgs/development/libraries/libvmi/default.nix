@@ -13,7 +13,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libvmi-${version}";
+  pname = "libvmi";
   version = "0.12.0";
   libVersion = "0.0.12";
 
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl3 lgpl3 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lschuermann ];
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

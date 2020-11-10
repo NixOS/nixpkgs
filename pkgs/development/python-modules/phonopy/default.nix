@@ -1,28 +1,28 @@
-{ stdenv, buildPythonPackage, python, fetchPypi, numpy, pyyaml, matplotlib, h5py }:
+{ stdenv, buildPythonPackage, python, fetchPypi, numpy, pyyaml, matplotlib, h5py, spglib, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "1.13.2.107";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "72f06728c98b9a7ab3db2d6fa2ae5d029029fbcff4e8fcfbc29f1e2620a0f905";
+    sha256 = "28864b04adb900597705f1367a100da869af835088bdd13f1693c4382259f128";
   };
 
-  propagatedBuildInputs = [ numpy pyyaml matplotlib h5py ];
+  propagatedBuildInputs = [ numpy pyyaml matplotlib h5py spglib ];
 
-  checkPhase = ''
-    cd test
-    # dynamic structure factor test ocassionally fails do to roundoff
-    # see issue https://github.com/atztogo/phonopy/issues/79
-    rm spectrum/test_dynamic_structure_factor.py
-    ${python.interpreter} -m unittest discover -b
-    cd ../..
+  checkInputs = [ pytestCheckHook ];
+  # flakey due to floating point inaccuracy
+  disabledTests = [ "test_NaCl" ];
+
+  # prevent pytest from importing local directory
+  preCheck = ''
+    rm -r phonopy
   '';
 
   meta = with stdenv.lib; {
     description = "A package for phonon calculations at harmonic and quasi-harmonic levels";
-    homepage = https://atztogo.github.io/phonopy/;
+    homepage = "https://atztogo.github.io/phonopy/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ psyanticy ];
   };

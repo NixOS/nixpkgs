@@ -1,23 +1,22 @@
-{ stdenv, fetchFromGitHub, bash }:
+{ stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
-  name = "bfs-${version}";
-  version = "1.2.4";
+  pname = "bfs";
+  version = "2.0";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "0nxx2njjp04ik6msfmf07hprw0j88wg04m0q1sf17mhkliw2d78s";
+    sha256 = "0cx650cz4ap1ng25n17pkz0n6zcs87l4bs0mabhqr289rfkf3ddd";
   };
 
-  postPatch = ''
-    # Patch tests (both shebangs and usage in scripts)
-    for f in $(find -type f -name '*.sh'); do
-      substituteInPlace $f --replace "/bin/bash" "${bash}/bin/bash"
-    done
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libcap acl ];
+
+  # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-flto -DNDEBUG" "-DNDEBUG"
   '';
-  doCheck = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
@@ -28,9 +27,9 @@ stdenv.mkDerivation rec {
       bfs is a variant of the UNIX find command that operates breadth-first rather than
       depth-first. It is otherwise intended to be compatible with many versions of find.
     '';
-    homepage = https://github.com/tavianator/bfs;
+    homepage = "https://github.com/tavianator/bfs";
     license = licenses.bsd0;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ yesbox ];
   };
 }

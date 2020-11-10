@@ -1,7 +1,7 @@
 { fetchFromGitHub, perl, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libbson-${version}";
+  pname = "libbson";
   version = "1.9.5";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C Library for parsing, editing, and creating BSON documents";
-    homepage = https://github.com/mongodb/libbson;
+    homepage = "https://github.com/mongodb/libbson";
     license = licenses.asl20;
     platforms = platforms.all;
   };

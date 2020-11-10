@@ -1,8 +1,12 @@
-{ stdenv, appstream, qtbase, qttools }:
+{ stdenv, mkDerivation, appstream, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
-  name = "appstream-qt-${version}";
+# TODO: look into using the libraries from the regular appstream derivation as we keep duplicates here
+
+mkDerivation {
+  pname = "appstream-qt";
   inherit (appstream) version src prePatch;
+
+  outputs = [ "out" "dev" ];
 
   buildInputs = appstream.buildInputs ++ [ appstream qtbase ];
 
@@ -10,13 +14,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = appstream.mesonFlags ++ [ "-Dqt=true" ];
 
-  postInstall = ''
-    rm -rf $out/{bin,etc,include/appstream,lib/pkgconfig,lib/libappstream.so*,share}
-  '';
-
-  preFixup = ''
-    patchelf --add-needed ${appstream}/lib/libappstream.so.4 \
-      $out/lib/libAppStreamQt.so
+  postFixup = ''
+    sed -i "$dev/lib/cmake/AppStreamQt/AppStreamQtConfig.cmake" \
+      -e "/INTERFACE_INCLUDE_DIRECTORIES/ s@\''${PACKAGE_PREFIX_DIR}@$dev@"
   '';
 
   meta = appstream.meta // {

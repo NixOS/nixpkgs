@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "genanki";
-  version = "0.6.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xj8yd3acl8h457sh42balvcd0z4mg5idd4q63f7qlfzc5wgbb74";
+    sha256 = "08eddb4a203e36e4fc3b66f85e00252070379867dbbc04fd8902ddc14fb352c6";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/kerrickstaley/genanki;
+    homepage = "https://github.com/kerrickstaley/genanki";
     description = "Generate Anki decks programmatically";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

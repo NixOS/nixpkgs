@@ -6,9 +6,8 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 ## Opening issues
 
 * Make sure you have a [GitHub account](https://github.com/signup/free)
-* [Submit an issue](https://github.com/NixOS/nixpkgs/issues) - assuming one does not already exist.
-  * Clearly describe the issue including steps to reproduce when it is a bug.
-  * Include information what version of nixpkgs and Nix are you using (nixos-version or git revision).
+* Make sure there is no open issue on the topic
+* [Submit a new issue](https://github.com/NixOS/nixpkgs/issues/new/choose) by choosing the kind of topic and fill out the template
 
 ## Submitting changes
 
@@ -19,6 +18,8 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 
   (Motivation for change. Additional information.)
   ```
+
+  For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
 
   Examples:
 
@@ -47,6 +48,16 @@ In addition to writing properly formatted commit messages, it's important to inc
 
 For package version upgrades and such a one-line commit message is usually sufficient.
 
+## Backporting changes
+
+Follow these steps to backport a change into a release branch in compliance with the [commit policy](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches).
+
+1. Take note of the commits in which the change was introduced into `master` branch.
+2. Check out the target _release branch_, e.g. `release-20.09`. Do not use a _channel branch_ like `nixos-20.09` or `nixpkgs-20.09`.
+3. Create a branch for your change, e.g. `git checkout -b backport`.
+4. When the reason to backport is not obvious from the original commit message, use `git cherry-pick -xe <original commit>` and add a reason. Otherwise use `git cherry-pick -x <original commit>`. That's fine for minor version updates that only include security and bug fixes, commits that fixes an otherwise broken package or similar. Please also ensure the commits exists on the master branch; in the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
+5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-20.09`) as the target branch of the pull request, and link to the pull request in which the original change was comitted to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[20.09]`.
+
 ## Reviewing contributions
 
-See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#sec-reviewing-contributions).
+See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#chap-reviewing-contributions).

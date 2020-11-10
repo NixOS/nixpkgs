@@ -1,4 +1,4 @@
-{ stdenv, fetchhg
+{ mkDerivation, stdenv, fetchhg
 , qmake, qttools
 , qtbase, qtsvg, qtxmlpatterns
 , poppler_utils
@@ -6,14 +6,14 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "valentina-${version}";
-  version = "0.6.0.0a";
+mkDerivation rec {
+  pname = "valentina";
+  version = "0.6.1";
 
   src = fetchhg {
     url = "https://bitbucket.org/dismine/valentina";
-    rev = "ccd68eba533a82aeb2dd3702124899a37c23ded5";
-    sha256 = "1qmxm6pwwass2kpyg41nhkmyq0g74pyk517sq68dcgs6340ii7fs";
+    rev = "v${version}";
+    sha256 = "0dxk2av7xbsd233sr9wa1hamzb7pp8yx6p5b43rsnvnzchkqf423";
   };
 
   postPatch = ''
@@ -52,14 +52,13 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/mime/packages
     cp dist/debian/valentina.sharedmimeinfo $out/share/mime/packages/valentina.xml
-    cp dist/debian/valentina.mime $out/share/mime/packages/valentina
   '';
 
   enableParallelBuilding = true;
 
   meta = {
     description = "An open source sewing pattern drafting software";
-    homepage = https://valentinaproject.bitbucket.io/;
+    homepage = "https://valentinaproject.bitbucket.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];

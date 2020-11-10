@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mptre";
     repo = "yank";
     rev = "v${meta.version}";
-    sha256 = "03h99i59kq8jlmshfwas1qm4y5ksw9lxaf9kr14l2mp028g7930n";
+    sha256 = "1izygx7f1z35li74i2cwca0p28c3v8fbr7w72dwpiqdaiwywa8xc";
     inherit name;
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "YANKCMD=${xsel}/bin/xsel" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mptre/yank;
+    homepage = "https://github.com/mptre/yank";
     description = "Yank terminal output to clipboard";
     longDescription = ''
       Read input from stdin and display a selection interface that allows a
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/mptre/yank/releases";
     license = licenses.mit;
-    version = "1.0.0";
+    version = "1.2.0";
     maintainers = [ maintainers.dochang ];
     platforms = platforms.unix;
   };

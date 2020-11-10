@@ -1,23 +1,30 @@
-{ stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
-, docbook_xsl }:
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
+, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, utillinux
+}:
 
-let
-  version = "1.0.73";
-in stdenv.mkDerivation rec {
-  name = "tgt-${version}";
+stdenv.mkDerivation rec {
+  pname = "tgt";
+  version = "1.0.79";
 
   src = fetchFromGitHub {
     owner = "fujita";
-    repo = "tgt";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0alrdrklh5wq8x4xbp30zwnxkp0brx1mjkbp70dhaz0zbzvyydr0";
+    sha256 = "18bp7fcpv7879q3ppdxlqj7ayqmlh5zwrkz8gch6rq9lkmmrklrf";
   };
 
-  buildInputs = [ libxslt systemd libaio docbook_xsl ];
+  nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
 
-  DESTDIR = "$(out)";
-  PREFIX = "/";
-  SD_NOTIFY="1";
+  buildInputs = [ systemd libaio ];
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SD_NOTIFY=1"
+  ];
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
@@ -27,14 +34,26 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    sed -i 's|#!/usr/bin/perl|#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}|' $out/sbin/tgt-admin
+    substituteInPlace $out/sbin/tgt-admin \
+      --replace "#!/usr/bin/perl" "#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}"
+    wrapProgram $out/sbin/tgt-admin --prefix PATH : \
+      ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
+
+    install -D scripts/tgtd.service $out/etc/systemd/system/tgtd.service
+    substituteInPlace $out/etc/systemd/system/tgtd.service \
+      --replace "/usr/sbin/tgt" "$out/bin/tgt"
+
+    # See https://bugzilla.redhat.com/show_bug.cgi?id=848942
+    sed -i '/ExecStart=/a ExecStartPost=${coreutils}/bin/sleep 5' $out/etc/systemd/system/tgtd.service
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "iSCSI Target daemon with rdma support";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "iSCSI Target daemon with RDMA support";
+    homepage = "http://stgt.sourceforge.net/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnazoidberg ];
   };
 }

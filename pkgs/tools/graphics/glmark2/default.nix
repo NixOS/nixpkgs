@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
-  python27, wayland, udev, mesa_noglu }:
+  python27, wayland, udev, mesa, wafHook }:
 
-stdenv.mkDerivation rec {
-  name = "glmark2-${version}";
+stdenv.mkDerivation {
+  pname = "glmark2";
   version = "2017-09-01";
 
   src = fetchFromGitHub {
@@ -12,23 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "076l75rfl6pnp1wgiwlaihy1vg2advg1z8bi0x84kk259kldgvwn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    libjpeg libpng xorg.libxcb libX11 libGL libdrm python27 wayland udev mesa_noglu
+    libjpeg libpng xorg.libxcb libX11 libGL libdrm python27 wayland udev mesa
   ];
 
-  buildPhase = ''
-    python ./waf configure --prefix=$out --with-flavors x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2
-    python2 ./waf
-  '';
-
-  installPhase = ''
-    python2 ./waf install --destdir="$pkgdir/"
-  '';
+  wafConfigureFlags = ["--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2"];
 
   meta = with stdenv.lib; {
     description = "OpenGL (ES) 2.0 benchmark";
-    homepage = https://github.com/glmark2/glmark2;
+    homepage = "https://github.com/glmark2/glmark2";
     license = licenses.gpl3Plus;
     longDescription = ''
       glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of

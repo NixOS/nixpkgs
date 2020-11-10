@@ -1,62 +1,42 @@
 { stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
-, libmbim, libqmi, systemd, fetchpatch }:
+, libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
-  name = "modem-manager-${version}";
-  pname = "ModemManager";
-  version = "1.7.990";
+  pname = "modem-manager";
+  version = "1.12.10";
 
+  package = "ModemManager";
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1v4hixmghlrw7w4ajq2x4k62js0594h223d0yma365zwqr7hjrfl";
+    url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
+    sha256 = "1apq9camys2gaw6y6ic1ld20cncfwpmxnzvh4j5zkbbjpf5hbcxj";
   };
 
-  nativeBuildInputs = [ gettext pkgconfig ];
+  nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
-  patches = [
-    # Patch dependency on glib headers, this breaks packages using core headers (networkmanager-qt)
-    (fetchpatch {
-      url = "https://cgit.freedesktop.org/ModemManager/ModemManager/patch/?id=0f377f943eeb81472fd73189f2c3d8fc65b8c609";
-      sha256 = "0av0sqdvbhwjnhqqylkc7rmqcj6awqmz5693l9x93nlwp7zya95j";
-    })
-  ];
-
   configureFlags = [
     "--with-polkit"
-    "--with-udev-base-dir=$(out)/lib/udev"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-udev-base-dir=${placeholder "out"}/lib/udev"
+    "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-suspend-resume=systemd"
+    "--with-systemd-suspend-resume"
+    "--with-systemd-journal"
   ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  preInstall = ''
-    mkdir -p $out/etc/systemd/system
+  preCheck = ''
+    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
   '';
 
-  postInstall = ''
-    # rename to modem-manager to be in style
-    mv $out/$out/etc/systemd/system/ModemManager.service $out/etc/systemd/system/modem-manager.service
-    rm -rf $out/$out/etc
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
+  enableParallelBuilding = true;
 
-    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-    # aliases ourselves.
-    ln -s $out/etc/systemd/system/modem-manager.service \
-      $out/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service
-  '';
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "WWAN modem manager, part of NetworkManager";
-    homepage = https://www.freedesktop.org/wiki/Software/ModemManager/;
+    homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.linux;

@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, libunwind, libraw1394, libjpeg, libiec61883, libdv
 , libavc1394, pkgconfig, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dvgrab-2016-05-16";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       AVI type 2, Quicktime DV, a series of JPEG stills or MPEG2-TS.
     '';
 
-    homepage = http://kinodv.org/;
+    homepage = "http://kinodv.org/";
 
     license = licenses.gpl2Plus;
     platforms = platforms.gnu ++ platforms.linux;

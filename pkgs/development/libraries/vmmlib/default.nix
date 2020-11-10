@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, blas
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, lapack
 , Accelerate, CoreGraphics, CoreVideo
 }:
 
 stdenv.mkDerivation rec {
   version = "1.6.2";
-  name = "vmmlib-${version}";
+  pname = "vmmlib";
 
   src = fetchFromGitHub {
     owner = "VMML";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ boost blas ]
+  buildInputs = [ boost lapack ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
 
   enableParallelBuilding = true;
@@ -30,17 +30,16 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A vector and matrix math library implemented using C++ templates";
 
-    longDescription = ''vmmlib is a vector and matrix math library implemented 
-            using C++ templates. Its basic functionality includes a vector 
-            and a matrix class, with additional functionality for the 
+    longDescription = ''vmmlib is a vector and matrix math library implemented
+            using C++ templates. Its basic functionality includes a vector
+            and a matrix class, with additional functionality for the
             often-used 3d and 4d vectors and 3x3 and 4x4 matrices.
-            More advanced functionality include solvers, frustum 
+            More advanced functionality include solvers, frustum
             computations and frustum culling classes, and spatial data structures'';
 
     license     = licenses.bsd2;
-    homepage    = https://github.com/VMML/vmmlib/;
+    homepage    = "https://github.com/VMML/vmmlib/";
     maintainers = [ maintainers.adev ];
     platforms   = platforms.all;
   };
 }
-

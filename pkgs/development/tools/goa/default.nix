@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "goa-${version}";
-  version = "1.0.0";
+  pname = "goa";
+  version = "1.4.1";
 
   goPackagePath = "github.com/goadesign/goa";
   subPackages = [ "goagen" ];
@@ -11,13 +11,13 @@ buildGoPackage rec {
     owner = "goadesign";
     repo = "goa";
     rev = "v${version}";
-    sha256 = "13401jf907z3qh11h9clb3z0i0fshwkmhx11fq9z6vx01x8x2in1";
+    sha256 = "0qcd4ii6arlpsivfdhcwidvnd8zbxxvf574jyxyvm1aazl8sqxj7";
   };
 
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://goa.design;
+    homepage = "https://goa.design";
     description = "A framework for building microservices in Go using a unique design-first approach";
     license = licenses.mit;
     maintainers = [ maintainers.rushmorem ];

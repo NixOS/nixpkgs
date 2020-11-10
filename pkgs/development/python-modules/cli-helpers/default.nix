@@ -1,30 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, terminaltables
-, tabulate
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , backports_csv
-, wcwidth
+, configobj
+, mock
 , pytest
-, isPy27
+, tabulate
+, terminaltables
+, wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "cli_helpers";
-  version = "1.0.2";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z5rqm8pznj6bvivm2al8rsxm82rai8hc9bqrgh3ksnbzg2kfy7p";
+    sha256 = "dd6f164310f7d86fa3da1f82043a9c784e44a02ad49be932a80624261e56979b";
   };
 
   propagatedBuildInputs = [
+    configobj
     terminaltables
     tabulate
     wcwidth
   ] ++ (lib.optionals isPy27 [ backports_csv ]);
 
-  checkInputs = [ pytest ];
+  # namespace collision between backport.csv and backports.configparser
+  doCheck = !isPy27;
+
+  checkInputs = [ pytest mock ];
 
   checkPhase = ''
     py.test
@@ -52,7 +55,7 @@ buildPythonPackage rec {
 
       Read the documentation at http://cli-helpers.rtfd.io
     '';
-    homepage = https://cli-helpers.readthedocs.io/en/stable/;
+    homepage = "https://cli-helpers.readthedocs.io/en/stable/";
     license = licenses.bsd3 ;
     maintainers = [ maintainers.kalbasit ];
   };

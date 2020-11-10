@@ -1,24 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "parso";
-  version = "0.3.1";
+  version = "0.8.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35704a43a3c113cce4de228ddb39aab374b8004f4f2407d070b6a2ca784ce8a2";
+    sha256 = "2b6db14759c528d857eeb9eac559c2166b2554548af39f5198bdfb976f72aa64";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "A Python Parser";
-    homepage = https://github.com/davidhalter/parso;
-    license = lib.licenses.mit;
+    homepage = "https://parso.readthedocs.io/en/latest/";
+    changelog = "https://github.com/davidhalter/parso/blob/master/CHANGELOG.rst";
+    license = licenses.mit;
   };
-
 }

@@ -1,34 +1,47 @@
-{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib
-, Security, libiconv
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, less
+, Security
+, libiconv
+, installShellFiles
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "bat-${version}";
-  version = "0.7.1";
+  pname = "bat";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = "bat";
-    rev    = "v${version}";
-    sha256 = "1fzk0z7r70rjvv2c6531zaa1jzbcb7j9wbi0xqb9y4dls538bmz0";
-    fetchSubmodules = true;
+    owner = "sharkdp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "161pfix42j767ziyp4mslffdd20v9i0ncplvjw2pmpccwdm106kg";
   };
 
-  cargoSha256 = "19syz0sxcpk3i4675bfq5gpb9i6hp81in36w820kkvamaimq10nd";
+  cargoSha256 = "19vhhxfyx3nrngcs6dvwldnk9h4lvs7xjkb31aj1y0pyawz882h9";
 
-  nativeBuildInputs = [ cmake pkgconfig zlib ];
+  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
-    install -m 444 -Dt $out/share/man/man1 doc/bat.1
+    installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{fish,zsh}
+  '';
+
+  # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
+  # expected with certain flag combinations.
+  postFixup = ''
+    wrapProgram "$out/bin/bat" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
   '';
 
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
-    homepage    = https://github.com/sharkdp/bat;
-    license     = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = "https://github.com/sharkdp/bat";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir lilyball zowoq ];
   };
 }

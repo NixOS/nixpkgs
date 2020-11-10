@@ -2,20 +2,24 @@
 
 buildPythonPackage rec {
   pname = "mail-parser";
-  version = "3.3.1";
+  version = "3.12.0";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1b1v61zwgdx2xjzds3hp6bv53yq424hhlrhf445n4faj1l0c4lkg";
+    sha256 = "0p851jlly6bzcs70kd1lcjwmg4scwh1icymfc0f2y6rkh4kfsdhk";
   };
 
   LC_ALL = "en_US.utf-8";
 
+  # remove version bounds
+  prePatch = ''
+    sed -i -e 's/==.*//g' requirements.txt
+  ''
   # ipaddress is part of the standard library of Python 3.3+
-  prePatch = lib.optionalString (!pythonOlder "3.3") ''
+  + lib.optionalString (!pythonOlder "3.3") ''
     substituteInPlace requirements.txt \
       --replace "ipaddress" ""
   '';
@@ -34,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A mail parser for python 2 and 3";
-    homepage = https://github.com/SpamScope/mail-parser;
+    homepage = "https://github.com/SpamScope/mail-parser";
     license = licenses.asl20;
     maintainers = with maintainers; [ psyanticy ];
   };

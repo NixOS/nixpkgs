@@ -1,13 +1,17 @@
 { stdenv, fetchurl, automake, autoconf, pkgconfig, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "gsimplecal-${version}";
+  pname = "gsimplecal";
   version = "2.1";
 
   src = fetchurl {
     url = "https://github.com/dmedvinsky/gsimplecal/archive/v${version}.tar.gz";
     sha256 = "1sa05ifjp41xipfspk5n6l3wzpzmp3i45q88l01p4l6k6drsq336";
   };
+
+  postPatch = ''
+    sed -ie '/sys\/sysctl.h/d' src/Unique.cpp
+  '';
 
   enableParallelBuilding = true;
 
@@ -17,7 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = http://dmedvinsky.github.io/gsimplecal/;
+    homepage = "http://dmedvinsky.github.io/gsimplecal/";
     description = "Lightweight calendar application written in C++ using GTK";
     longDescription = ''
       gsimplecal was intentionally made for use with tint2 panel in the

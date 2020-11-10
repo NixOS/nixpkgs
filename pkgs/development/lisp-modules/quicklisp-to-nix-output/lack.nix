@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lack'';
-  version = ''20180831-git'';
+  version = ''20201016-git'';
 
   description = ''A minimal Clack'';
 
-  deps = [ args."ironclad" args."lack-component" args."lack-util" args."nibbles" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."lack-component" args."lack-util" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2018-08-31/lack-20180831-git.tgz'';
-    sha256 = ''0x4b3v5qvrik5c8nn4kpxygv78srqb306jcypkhpyc65ig81gr9n'';
+    url = ''http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz'';
+    sha256 = ''124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan'';
   };
 
   packageName = "lack";
@@ -18,14 +18,17 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM lack DESCRIPTION A minimal Clack SHA256
-    0x4b3v5qvrik5c8nn4kpxygv78srqb306jcypkhpyc65ig81gr9n URL
-    http://beta.quicklisp.org/archive/lack/2018-08-31/lack-20180831-git.tgz MD5
-    fd57a7185997a1a5f37bbd9d6899118d NAME lack FILENAME lack DEPS
-    ((NAME ironclad FILENAME ironclad)
+    124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan URL
+    http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz MD5
+    8a056801bd99fdd70cdfaf33129f6aeb NAME lack FILENAME lack DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME ironclad FILENAME ironclad)
      (NAME lack-component FILENAME lack-component)
-     (NAME lack-util FILENAME lack-util) (NAME nibbles FILENAME nibbles))
-    DEPENDENCIES (ironclad lack-component lack-util nibbles) VERSION
-    20180831-git SIBLINGS
+     (NAME lack-util FILENAME lack-util))
+    DEPENDENCIES
+    (alexandria bordeaux-threads ironclad lack-component lack-util) VERSION
+    20201016-git SIBLINGS
     (lack-component lack-middleware-accesslog lack-middleware-auth-basic
      lack-middleware-backtrace lack-middleware-csrf lack-middleware-mount
      lack-middleware-session lack-middleware-static lack-request lack-response

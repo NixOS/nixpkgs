@@ -1,7 +1,6 @@
 { stdenv, fetchsvn, fetchurl, cups, cups-filters, jbigkit, zlib }:
 
 let
-  rev = "315";
 
   color-profiles = stdenv.mkDerivation {
     name = "splix-color-profiles-20070625";
@@ -19,18 +18,20 @@ let
     '';
   };
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "splix-svn-${rev}";
+  rev = "315";
 
   src = fetchsvn {
     # We build this from svn, because splix hasn't been in released in several years
     # although the community has been adding some new printer models.
     url = "svn://svn.code.sf.net/p/splix/code/splix";
-    rev = "r${rev}";
+    inherit rev;
     sha256 = "16wbm4xnz35ca3mw2iggf5f4jaxpyna718ia190ka6y4ah932jxl";
   };
 
   postPatch = ''
+    mv -v *.ppd ppd/
     substituteInPlace src/pstoqpdl.cpp \
       --replace "RASTERDIR \"/\" RASTERTOQPDL" "\"$out/lib/cups/filter/rastertoqpdl\"" \
       --replace "RASTERDIR" "\"${cups-filters}/lib/cups/filter\"" \
@@ -46,7 +47,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "CUPS drivers for SPL (Samsung Printer Language) printers";
-    homepage = http://splix.ap2c.org;
+    homepage = "http://splix.ap2c.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau peti ];

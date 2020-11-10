@@ -1,17 +1,19 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.3";
-  name = "libde265-${version}";
+  version = "1.0.7";
+  pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
     rev = "v${version}";
-    sha256 = "049g77f6c5sbk1h534zi9akj3y5h8zwnca5c9kqqjkn7f17irk10";
+    sha256 = "0x7g9771457z49qvzpk4iswfhq018i0mzsflv9gg8if5hjqhfdp0";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://github.com/strukturag/libde265";

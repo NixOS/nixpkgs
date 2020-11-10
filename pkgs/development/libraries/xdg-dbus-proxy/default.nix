@@ -1,22 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, glib }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_43
+, dbus
+, glib
+}:
 
-let
-  version = "0.1.0";
-in stdenv.mkDerivation rec {
-  name = "xdg-dbus-proxy-${version}";
+stdenv.mkDerivation rec {
+  pname = "xdg-dbus-proxy";
+  version = "0.1.2";
 
   src = fetchurl {
-    url = "https://github.com/flatpak/xdg-dbus-proxy/releases/download/${version}/${name}.tar.xz";
-    sha256 = "055wli36lvdannp6qqwbvd78353n61wn9kp8y3dchh39wq7x7vwy";
+    url = "https://github.com/flatpak/xdg-dbus-proxy/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "03sj1h0c2l08xa8phw013fnxr4fgav7l2mkjhzf9xk3dykwxcj8p";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_43
+  ];
 
-  buildInputs = [ glib ];
+  buildInputs = [
+    glib
+  ];
+
+  checkInputs = [
+    dbus
+  ];
+
+  configureFlags = [
+    "--enable-man"
+  ];
+
+  # dbus[2345]: Failed to start message bus: Failed to open "/etc/dbus-1/session.conf": No such file or directory
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "DBus proxy for Flatpak and others";
-    homepage = https://flatpak.org/;
+    homepage = "https://github.com/flatpak/xdg-dbus-proxy";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, makeWrapper, spidermonkey }:
+{ stdenv, fetchFromGitHub, makeWrapper, spidermonkey_38 }:
 
-stdenv.mkDerivation rec {
-  name = "jsawk-${version}";
+stdenv.mkDerivation {
+  pname = "jsawk";
   version = "1.5-pre";
   src = fetchFromGitHub {
     owner = "micha";
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp $src/jsawk $out/bin/
     wrapProgram $out/bin/jsawk \
-      --prefix PATH : "${spidermonkey}/bin"
+      --prefix PATH : "${spidermonkey_38}/bin"
   '';
 
   meta = {
-    description = "Jsawk is like awk, but for JSON";
-    homepage = https://github.com/micha/jsawk;
+    description = "Like awk, but for JSON";
+    homepage = "https://github.com/micha/jsawk";
     license = stdenv.lib.licenses.publicDomain;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = stdenv.lib.platforms.unix;

@@ -1,27 +1,31 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
-, flask, blinker, twill }:
-
-with stdenv.lib;
+{ stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
 
 buildPythonPackage rec {
   pname = "Flask-Testing";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dc076623d7d850653a018cb64f500948334c8aeb6b10a5a842bf1bcfb98122bc";
+    sha256 = "1rkkqgmrzmhpv6y1xysqh0ij03xniic8h631yvghksqwxd9vyjfq";
   };
 
   postPatch = ''
-    sed -i -e 's/twill==0.9.1/twill/' setup.py
+    substituteInPlace setup.py --replace "twill==0.9.1" "twill"
   '';
 
-  buildInputs = optionals (pythonOlder "3.0") [ twill ];
-  propagatedBuildInputs = [ flask blinker ];
+  propagatedBuildInputs = [ flask ];
 
-  meta = {
+  checkInputs = [ blinker ] ++ stdenv.lib.optionals (!isPy3k) [ twill ];
+
+  # twill integration is outdated in Python 2, hence it the tests fails.
+  # Some of the tests use localhost networking on darwin.
+  doCheck = isPy3k && !stdenv.isDarwin;
+
+  pythonImportsCheck = [ "flask_testing" ];
+
+  meta = with stdenv.lib; {
     description = "Flask unittest integration.";
-    homepage = https://pythonhosted.org/Flask-Testing/;
+    homepage = "https://pythonhosted.org/Flask-Testing/";
     license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];
   };

@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   version = "3.99-u4-b5";
   pname = "monkeys-audio";
-  name = pname + "-" + version;
 
   patches = [ ./buildfix.diff ];
 
@@ -13,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    description = "Lossless audio codec";
     platforms = platforms.linux;
+    license = licenses.lgpl2;
     maintainers = [ ];
   };
 }

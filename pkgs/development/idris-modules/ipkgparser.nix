@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Parser for Idris iPkg files written in Idris using Lightyear";
-    homepage = https://github.com/emptyflash/idris-ipkg-parser;
+    homepage = "https://github.com/emptyflash/idris-ipkg-parser";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

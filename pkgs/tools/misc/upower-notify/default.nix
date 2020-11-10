@@ -7,10 +7,10 @@
 #   (sleep 3; exec ${pkgs.yeshup}/bin/yeshup ${pkgs.go-upower-notify}/bin/upower-notify) &
 # '';
 buildGoPackage rec {
-  name = "upower-notify-${version}";
+  pname = "upower-notify";
   version = "20160310-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "14c581e683a7e90ec9fa6d409413c16599a5323c";
-  
+
   goPackagePath = "github.com/omeid/upower-notify";
 
   src = fetchgit {

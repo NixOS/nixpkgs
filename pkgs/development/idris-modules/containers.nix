@@ -17,13 +17,9 @@ build-idris-package  {
     sha256 = "0vyjadd9sb8qcbzvzhnqwc8wa7ma770c10xhn96jsqsnzr81k52d";
   };
 
-  postUnpack = ''
-    rm source/containers-travis.ipkg
-  '';
-
   meta = {
     description = "Various data structures for use in the Idris Language.";
-    homepage = https://github.com/jfdm/idris-containers;
+    homepage = "https://github.com/jfdm/idris-containers";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

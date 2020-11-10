@@ -2,7 +2,6 @@
 , withNethackLevels ? true
 }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xsok";
   version = "1.02";
 
@@ -43,6 +42,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://tracker.debian.org/pkg/xsok;
+    homepage = "https://tracker.debian.org/pkg/xsok";
   };
 }

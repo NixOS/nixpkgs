@@ -1,19 +1,23 @@
 { stdenv, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
-, ipodSupport ? false, libgpod, gobjectIntrospection
+, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.5";
+  version = "3.10.16";
   format = "other";
 
   src = fetchFromGitHub {
-    owner = "gpodder";
-    repo = "gpodder";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "00lvma40d62h4haybabh15x1y7rnmd84whbjgjv773igwagkn9vw";
+    sha256 = "0pbpaasd7kj6y25nm45y1qyb9sxd4570f7g6zkfcpf6pa3nx7qkq";
   };
+
+  patches = [
+    ./disable-autoupdate.patch
+  ];
 
   postPatch = with stdenv.lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
@@ -27,8 +31,8 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     python3
-    gobjectIntrospection
-    gnome3.defaultIconTheme
+    gobject-introspection
+    gnome3.adwaita-icon-theme
   ];
 
   checkInputs = with python3Packages; [
@@ -46,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     podcastparser
     html5lib
     gtk3
-  ] ++ stdenv.lib.optional ipodSupport libgpod;
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -69,7 +73,7 @@ python3Packages.buildPythonApplication rec {
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
-    homepage = http://gpodder.org/;
+    homepage = "http://gpodder.org/";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ skeidel mic92 ];

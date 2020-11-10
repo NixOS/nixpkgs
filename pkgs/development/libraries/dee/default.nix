@@ -1,27 +1,65 @@
-{ stdenv, fetchurl, python, pkgconfig
-, glib, icu, gobjectIntrospection }:
+{ stdenv
+, fetchgit
+, fetchpatch
+, pkgconfig
+, glib
+, icu
+, gobject-introspection
+, dbus-glib
+, vala
+, python3
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "dee-${version}";
-  version = "1.2.7";
+  pname = "dee";
+  version = "unstable-2017-06-16";
 
-  src = fetchurl {
-    url = "https://launchpad.net/dee/1.0/${version}/+download/${name}.tar.gz";
-    sha256 = "12mzffk0lyd566y46x57jlvb9af152b4dqpasr40zal4wrn37w0v";
+  outputs = [ "out" "dev" "py" ];
+
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/dee";
+    rev = "import/1.2.7+17.10.20170616-4ubuntu3";
+    sha256 = "09blrdj7229vscp4mkg0fabmcvc6jdpamvblrq86rbky7j2nnwlk";
   };
 
-  buildInputs = [ glib gobjectIntrospection icu ];
-  nativeBuildInputs = [ python pkgconfig ];
+  patches = [
+    "${src}/debian/patches/gtkdocize.patch"
+    "${src}/debian/patches/strict-prototype.patch"
+    "${src}/debian/patches/vapi-skip-properties.patch"
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" ]; # gcc-6
+    # Fixes glib 2.62 deprecations
+    (fetchpatch {
+      name = "dee-1.2.7-deprecated-g_type_class_add_private.patch";
+      url = "https://src.fedoraproject.org/rpms/dee/raw/1a9a4ce3377074fabfca653ffe0287cd73aef82f/f/dee-1.2.7-deprecated-g_type_class_add_private.patch";
+      sha256 = "13nyprq7bb7lnzkcb7frcpzidbl836ycn5bvmwa2k0nhmj6ycbx5";
+    })
+  ];
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    pkgconfig
+    vala
+    autoreconfHook
+    gobject-introspection
+    python3
+  ];
+
+  buildInputs = [
+    glib
+    icu
+    dbus-glib
+  ];
+
+  configureFlags = [
+    "--disable-gtk-doc"
+    "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
+  ];
 
   meta = with stdenv.lib; {
     description = "A library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
-    homepage = https://launchpad.net/dee;
+    homepage = "https://launchpad.net/dee";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar worldofpeace ];
   };
 }

@@ -1,11 +1,12 @@
 { stdenv, fetchurl, cmake, openssl, pkgconfig, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "qca-qt5-2.1.3";
+  pname = "qca-qt5";
+  version = "2.3.1";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/qca/2.1.3/src/qca-2.1.3.tar.xz";
-    sha256 = "0lz3n652z208daxypdcxiybl0a9fnn6ida0q7fh5f42269mdhgq0";
+    url = "http://download.kde.org/stable/qca/${version}/qca-${version}.tar.xz";
+    sha256 = "sha256-wThREJq+/EYjNwmJ+uOnRb9rGss8KhOolYU5gj6XTks=";
   };
 
   buildInputs = [ openssl qtbase ];
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt 5 Cryptographic Architecture";
-    homepage = http://delta.affinix.com/qca;
+    homepage = "http://delta.affinix.com/qca";
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;

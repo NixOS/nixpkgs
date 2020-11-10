@@ -5,7 +5,8 @@
 let version = "1.3.11"; in
 
 stdenv.mkDerivation {
-  name = "gmtp-${version}";
+  pname = "gmtp";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/gmtp/gMTP-${version}/gmtp-${version}.tar.gz";
@@ -22,10 +23,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A simple MP3 and Media player client for UNIX and UNIX like systems.";
-    homepage = https://gmtp.sourceforge.io;
+    description = "A simple MP3 and Media player client for UNIX and UNIX like systems";
+    homepage = "https://gmtp.sourceforge.io";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.pbogdan ];
+    maintainers = [ ];
     license = stdenv.lib.licenses.bsd3;
   };
 }

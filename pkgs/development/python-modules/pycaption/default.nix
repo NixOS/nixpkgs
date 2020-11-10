@@ -17,7 +17,7 @@ buildPythonPackage rec {
   prePatch = ''
     substituteInPlace setup.py \
       --replace 'beautifulsoup4>=4.2.1,<4.5.0' \
-                'beautifulsoup4>=4.2.1,<=4.6.3'
+                'beautifulsoup4>=4.2.1,<5'
   '';
 
   # don't require enum34 on python >= 3.4
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Closed caption converter";
-    homepage = https://github.com/pbs/pycaption;
+    homepage = "https://github.com/pbs/pycaption";
     license = with licenses; [ asl20 ];
   };
 }

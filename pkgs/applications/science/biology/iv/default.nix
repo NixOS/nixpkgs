@@ -20,12 +20,13 @@ stdenv.mkDerivation rec
           break
         fi
       done
+    '' + stdenv.lib.optionalString stdenv.isLinux ''
       patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
     '';
     meta = with stdenv.lib;
       { description = "InterViews graphical library for Neuron";
         license     = licenses.bsd3;
-        homepage    = http://www.neuron.yale.edu/neuron;
+        homepage    = "http://www.neuron.yale.edu/neuron";
         platforms   = platforms.all;
       };
   }

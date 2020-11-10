@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, intltool, pkgconfig, jansson
+{ config, stdenv, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, intltool
+, pkgconfig
+, jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
 , gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
@@ -9,9 +15,9 @@
 , wavSupport ? true, libsndfile ? null
 , cdaSupport ? true, libcdio ? null, libcddb ? null
 , aacSupport ? true, faad2 ? null
-, midiSupport ? false, wildmidi ? null
+, opusSupport ? true, opusfile ? null
 , wavpackSupport ? false, wavpack ? null
-, ffmpegSupport ? false, ffmpeg ? null
+, ffmpegSupport ? false, ffmpeg_3 ? null
 , apeSupport ? true, yasm ? null
 # misc plugins
 , zipSupport ? true, libzip ? null
@@ -20,7 +26,7 @@
 , osdSupport ? true, dbus ? null
 # output plugins
 , alsaSupport ? true, alsaLib ? null
-, pulseSupport ? true, libpulseaudio ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 # effect plugins
 , resamplerSupport ? true, libsamplerate ? null
 , overloadSupport ? true, zlib ? null
@@ -37,8 +43,9 @@ assert flacSupport -> flac != null;
 assert wavSupport -> libsndfile != null;
 assert cdaSupport -> (libcdio != null && libcddb != null);
 assert aacSupport -> faad2 != null;
+assert opusSupport -> opusfile != null;
 assert zipSupport -> libzip != null;
-assert ffmpegSupport -> ffmpeg != null;
+assert ffmpegSupport -> ffmpeg_3 != null;
 assert apeSupport -> yasm != null;
 assert artworkSupport -> imlib2 != null;
 assert hotkeysSupport -> libX11 != null;
@@ -47,17 +54,18 @@ assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> libpulseaudio != null;
 assert resamplerSupport -> libsamplerate != null;
 assert overloadSupport -> zlib != null;
-assert midiSupport -> wildmidi != null;
 assert wavpackSupport -> wavpack != null;
 assert remoteSupport -> curl != null;
 
 stdenv.mkDerivation rec {
-  name = "deadbeef-${version}";
-  version = "0.7.2";
+  pname = "deadbeef";
+  version = "1.8.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/deadbeef/${name}.tar.bz2";
-    sha256 = "1168hgr1nf27pf24n1rlfh1kx1wiscwhpbhqw0rprwy203gsnqwa";
+  src = fetchFromGitHub {
+    owner = "DeaDBeeF-Player";
+    repo = "deadbeef";
+    rev = version;
+    sha256 = "161b0ll8v4cjgwwmk137hzvh0jidlkx56vjkpnr70f0x4jzv2nll";
   };
 
   buildInputs = with stdenv.lib; [ jansson ]
@@ -69,8 +77,9 @@ stdenv.mkDerivation rec {
     ++ optional wavSupport libsndfile
     ++ optionals cdaSupport [ libcdio libcddb ]
     ++ optional aacSupport faad2
+    ++ optional opusSupport opusfile
     ++ optional zipSupport libzip
-    ++ optional ffmpegSupport ffmpeg
+    ++ optional ffmpegSupport ffmpeg_3
     ++ optional apeSupport yasm
     ++ optional artworkSupport imlib2
     ++ optional hotkeysSupport libX11
@@ -79,19 +88,27 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport libpulseaudio
     ++ optional resamplerSupport libsamplerate
     ++ optional overloadSupport zlib
-    ++ optional midiSupport wildmidi
     ++ optional wavpackSupport wavpack
     ++ optional remoteSupport curl
     ;
 
-  nativeBuildInputs = with stdenv.lib; [ intltool pkgconfig ]
-    ++ optional gtk3Support wrapGAppsHook;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    intltool
+    libtool
+    pkgconfig
+  ] ++ stdenv.lib.optional gtk3Support wrapGAppsHook;
 
   enableParallelBuilding = true;
 
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
   meta = with stdenv.lib; {
     description = "Ultimate Music Player for GNU/Linux";
-    homepage = http://deadbeef.sourceforge.net/;
+    homepage = "http://deadbeef.sourceforge.net/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];

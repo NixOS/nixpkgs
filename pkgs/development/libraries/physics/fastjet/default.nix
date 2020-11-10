@@ -1,21 +1,15 @@
 { stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "fastjet-${version}";
-  version = "3.3.1";
+  pname = "fastjet";
+  version = "3.3.4";
 
   src = fetchurl {
     url = "http://fastjet.fr/repo/fastjet-${version}.tar.gz";
-    sha256 = "0lvchyh9q2p8lb10isazw0wbwzs24yg7gxyhpj9xpvz5hydyvgvn";
+    sha256 = "00zwvmnp2j79z95n9lgnq67q02bqfgirqla8j9y6jd8k3r052as3";
   };
 
   buildInputs = [ python2 ];
-
-  postPatch = ''
-    substituteInPlace plugins/SISCone/SISConeBasePlugin.cc \
-      --replace 'structure_of<UserScaleBase::StructureType>()' \
-                'structure_of<UserScaleBase>()'
-  '';
 
   configureFlags = [
     "--enable-allcxxplugins"
@@ -27,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A software package for jet finding in pp and e+e− collisions";
     license     = stdenv.lib.licenses.gpl2Plus;
-    homepage    = http://fastjet.fr/;
+    homepage    = "http://fastjet.fr/";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };

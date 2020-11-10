@@ -6,6 +6,10 @@ let
   cfg = config.programs.zsh.autosuggestions;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "zsh" "enableAutosuggestions" ] [ "programs" "zsh" "autosuggestions" "enable" ])
+  ];
+
   options.programs.zsh.autosuggestions = {
 
     enable = mkEnableOption "zsh-autosuggestions";
@@ -18,13 +22,13 @@ in
     };
 
     strategy = mkOption {
-      type = types.enum [ "default" "match_prev_cmd" ];
-      default = "default";
+      type = types.enum [ "history" "match_prev_cmd" ];
+      default = "history";
       description = ''
         Set ZSH_AUTOSUGGEST_STRATEGY to choose the strategy for generating suggestions.
         There are currently two to choose from:
 
-          * default: Chooses the most recent match.
+          * history: Chooses the most recent match.
           * match_prev_cmd: Chooses the most recent match whose preceding history item matches
             the most recently executed command (more info). Note that this strategy won't work as
             expected with ZSH options that don't preserve the history order such as
@@ -51,7 +55,7 @@ in
       source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
       export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="${cfg.highlightStyle}"
-      export ZSH_AUTOSUGGEST_STRATEGY="${cfg.strategy}"
+      export ZSH_AUTOSUGGEST_STRATEGY=("${cfg.strategy}")
 
       ${concatStringsSep "\n" (mapAttrsToList (key: value: ''export ${key}="${value}"'') cfg.extraConfig)}
     '';

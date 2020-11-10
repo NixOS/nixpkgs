@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, cmake }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "pingtcp-${version}";
+  pname = "pingtcp";
   version = "0.0.3";
 
-  # This project uses git submodules, which fetchFromGitHub doesn't support:
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "LanetNetwork";
+    repo = "pingtcp";
     sha256 = "1cv84n30y03s1b83apxxyn2jv5ss1pywsahrfrpkb6zcgzzrcqn8";
     rev = "refs/tags/v${version}";
-    url = "https://github.com/LanetNetwork/pingtcp.git";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Measure TCP handshake time";
-    homepage = https://github.com/LanetNetwork/pingtcp;
+    homepage = "https://github.com/LanetNetwork/pingtcp";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

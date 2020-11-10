@@ -1,12 +1,15 @@
-{ stdenv, fetchgit, utillinux, ncurses, flex, bison }:
+{ stdenv, fetchFromGitHub, fetchpatch, utillinux, ncurses, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "unnethack-5.3.1";
+  pname = "unnethack";
+  version = "5.3.2";
 
-  src = fetchgit {
-    url = "https://github.com/UnNetHack/UnNetHack";
-    rev = "63677eb256b5a75430f190cfb0f76bdd9bd0b9dd";
-    sha256 = "0w6vyg0j2xdvr5vdlyf3dwliyxjzcr5fdbx5maygxiql44j104v3";
+  src = fetchFromGitHub {
+    name = "UnNetHack";
+    owner = "UnNetHack";
+    repo = "UnNetHack";
+    rev = version;
+    sha256 = "1rg0mqyplgn3dfh3wz09a600qxk7aidqw4d84kyiincljvhyb7ps";
   };
 
   buildInputs = [ ncurses ];
@@ -21,6 +24,16 @@ stdenv.mkDerivation rec {
                    ];
 
   makeFlags = [ "GAMEPERM=744" ];
+  patches = [
+    # fix regression with bison, merged in master
+    (fetchpatch {
+      name = "fix-bison.patch";
+      url = "https://github.com/UnNetHack/UnNetHack/commit/04f0a3a850a94eb8837ddcef31303968240d1c31.patch";
+      sha256 = "1zblbwqqz9nx16k6n31wi2hdvz775lvzmkjblmrx18nbm4ylj0n9";
+    })
+  ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     cp -r /tmp/unnethack $out/share/unnethack/profile
@@ -47,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fork of NetHack";
-    homepage = https://unnethack.wordpress.com/;
+    homepage = "https://unnethack.wordpress.com/";
     license = "nethack";
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
-  }; 
+  };
 }

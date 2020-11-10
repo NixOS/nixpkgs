@@ -1,15 +1,24 @@
-{ stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk }:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper
+, pkgconfig, libX11, libuuid, xz, vtk_7, Cocoa }:
 
 stdenv.mkDerivation rec {
-  name = "itk-4.13.1";
+  pname = "itk";
+  version = "5.1.1";
 
-  src = fetchurl {
-    url = mirror://sourceforge/itk/InsightToolkit-4.13.1.tar.xz;
-    sha256 = "0p4cspgbnjsnkjz8nfg092yaxz8qkqi2nkxjdv421d0zrmi0i2al";
+  src = fetchFromGitHub {
+    owner = "InsightSoftwareConsortium";
+    repo = "ITK";
+    rev = "v${version}";
+    sha256 = "1z7rmqrhgl7hfb3d0077kvp8vpi05r2zk3qyqzmv7bzbal5sqqhv";
   };
 
+  postPatch = ''
+    substituteInPlace CMake/ITKSetStandardCompilerFlags.cmake  \
+      --replace "-march=corei7" ""  \
+      --replace "-mtune=native" ""
+  '';
+
   cmakeFlags = [
-    "-DBUILD_TESTING=OFF"
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
     "-DModule_ITKMINC=ON"
@@ -21,14 +30,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ cmake xz ];
-  buildInputs = [ libX11 libuuid vtk ];
+  nativeBuildInputs = [ cmake xz makeWrapper ];
+  buildInputs = [ libX11 libuuid vtk_7 ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/h5c++" --prefix PATH ":" "${pkgconfig}/bin"
+  '';
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
-    homepage = http://www.itk.org/;
+    homepage = "https://www.itk.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

@@ -2,24 +2,24 @@
 
 buildPythonPackage rec {
   pname = "podcastparser";
-  version = "0.6.2";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "podcastparser";
     rev = version;
-    sha256 = "1mhg7192d6s1ll9mx1b63yfj6k4cnv4i95jllbnydyjv9ykkv0k1";
+    sha256 = "1s83iq0mxcikxv6gi003iyavl1ai3siw1d7arijh0g28l0fff23a";
   };
 
-  propagatedBuildInputs = [ ];
+  checkInputs = [ nose ];
 
-  buildInputs = [ nose ];
-
-  checkPhase = "nosetests test_*.py";
+  checkPhase = ''
+    nosetests test_*.py
+  '';
 
   meta = {
     description = "podcastparser is a simple, fast and efficient podcast parser written in Python.";
-    homepage = http://gpodder.org/podcastparser/;
+    homepage = "http://gpodder.org/podcastparser/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mic92 ];
   };

@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pdf2xml";
 
   src = fetchurl {
-      url = http://tarballs.nixos.org/pdf2xml.tar.gz;
+      url = "http://tarballs.nixos.org/pdf2xml.tar.gz";
       sha256 = "04rl7ppxqgnvxvvws669cxp478lnrdmiqj0g3m4p69bawfjc4z3w";
   };
   sourceRoot = "pdf2xml/pdf2xml";
@@ -32,7 +32,9 @@ stdenv.mkDerivation {
     cp exe/* $out/bin
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "PDF to XML converter";
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

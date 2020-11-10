@@ -1,34 +1,30 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
-, libX11, freefont_ttf, nettle, libconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_ttf, spice-protocol
+, fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
+, libXi, libXext, wayland, libffi, libGLU, expat, libbfd
 }:
 
 stdenv.mkDerivation rec {
-  name = "looking-glass-client-${version}";
-  version = "a11";
+  pname = "looking-glass-client";
+  version = "B2";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "0q4isn86pl5wddf6h8qd62fw3577ns2sd2myzw969sbl796bwcil";
+    sha256 = "100b5kzh8gr81kzw5fdqz2jsms25hv3815d31vy3qd6lrlm5gs3d";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf nettle libconfig
+    SDL2 SDL2_ttf spice-protocol fontconfig libX11 freefont_ttf nettle
+    libpthreadstubs libXau libXdmcp libXi libXext wayland libffi libGLU expat
+    libbfd
   ];
 
-  enableParallelBuilding = true;
-
   sourceRoot = "source/client";
-
-  installPhase = ''
-    mkdir -p $out
-    mv bin $out/
-  '';
+  NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
 
   meta = with stdenv.lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";
@@ -39,9 +35,9 @@ stdenv.mkDerivation rec {
       step required to move away from dual booting with other operating systems
       for legacy programs that require high performance graphics.
     '';
-    homepage = https://looking-glass.hostfission.com/;
+    homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pneumaticat ];
+    maintainers = with maintainers; [ alexbakker ];
     platforms = [ "x86_64-linux" ];
   };
 }

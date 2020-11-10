@@ -36,12 +36,14 @@ let
 
   # base packages of the chroot
   # these match the host's architecture, glibc_multi is used for multilib
-  # builds.
+  # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
+  # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
   basePkgs = with pkgs;
-    [ (if isMultiBuild then glibc_multi else glibc)
+    [ glibcLocales
+      (if isMultiBuild then glibc_multi else glibc)
       (toString gcc.cc.lib) bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz glibcLocales
+      gnutar gzip bzip2 xz
     ];
   baseMultiPkgs = with pkgsi686Linux;
     [ (toString gcc.cc.lib)
@@ -50,13 +52,13 @@ let
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
-    export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
-    export PATH='/run/wrappers/bin:/usr/bin:/usr/sbin'
+    export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
 
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
-    export NIX_CC_WRAPPER_${stdenv.cc.infixSalt}_TARGET_HOST=1
+    export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
     export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
     export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'
     export NIX_LDFLAGS='-L/usr/lib -L/usr/lib32'
@@ -196,4 +198,5 @@ in stdenv.mkDerivation {
     ${if isMultiBuild then extraBuildCommandsMulti else ""}
   '';
   preferLocalBuild = true;
+  allowSubstitutes = false;
 }

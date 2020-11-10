@@ -10,7 +10,7 @@
 # GUI/Desktop
 , dbus
 , glibmm
-, gnome3
+, gsettings-desktop-schemas
 , hicolor-icon-theme
 , libappindicator-gtk3
 , libnotify
@@ -21,7 +21,7 @@
 # User-agent info
 , lsb-release
 # rt2rtng
-, python2
+, python3
 # Testing
 , gtest
 # Fixup
@@ -36,17 +36,17 @@ let
     gst-libav
   ];
   # For the rt2rtng utility for converting bookmark file to -ng format
-  pythonInputs = with python2.pkgs; [ python2 lxml ];
+  pythonInputs = with python3.pkgs; [ python lxml ];
 in
 stdenv.mkDerivation rec {
-  name = "radiotray-ng-${version}";
-  version = "0.2.3";
+  pname = "radiotray-ng";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "ebruck";
-    repo = "radiotray-ng";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1sq7bc0dswv3vv56w527z268ib0pyhdxyf25388vnj1fv0c146wc";
+    sha256 = "1v2nsz7s0jj0wmqabzk6akcf1353rachm1lfq77hxbq9z5pw8pgb";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -54,17 +54,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     boost jsoncpp libbsd pcre
-    glibmm hicolor-icon-theme gnome3.gsettings-desktop-schemas libappindicator-gtk3 libnotify
+    glibmm hicolor-icon-theme gsettings-desktop-schemas libappindicator-gtk3 libnotify
     libxdg_basedir
     lsb-release
     wxGTK
   ] ++ gstInputs
     ++ pythonInputs;
 
+  patches = [ ./no-dl-googletest.patch ];
+
   postPatch = ''
-    for x in debian/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
+    for x in package/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
       substituteInPlace $x --replace /usr $out
     done
+    substituteInPlace package/CMakeLists.txt --replace /etc/xdg/autostart $out/etc/xdg/autostart
 
     # We don't find the radiotray-ng-notification icon otherwise
     substituteInPlace data/radiotray-ng.desktop \
@@ -80,9 +83,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   checkInputs = [ gtest ];
-  checkPhase = "ctest";
-  # doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  doCheck = false; # fails to pick up supplied gtest, tries to download it instead
+  doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${stdenv.lib.makeBinPath [ dbus ]})
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An internet radio player for linux";
-    homepage = https://github.com/ebruck/radiotray-ng;
+    homepage = "https://github.com/ebruck/radiotray-ng";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

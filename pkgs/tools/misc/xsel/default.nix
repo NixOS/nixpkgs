@@ -1,28 +1,22 @@
-{stdenv, lib, fetchFromGitHub, libX11, autoreconfHook }:
+{ stdenv, lib, fetchFromGitHub, libX11, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "xsel-unstable-${version}";
-
-  version = "2016-09-02";
+stdenv.mkDerivation {
+  pname = "xsel-unstable";
+  version = "2020-05-27";
 
   src = fetchFromGitHub {
     owner = "kfish";
     repo = "xsel";
-    rev = "aa7f57eed805adb09e9c59c8ea841870e8206b81";
-    sha256 = "04mrc8j0rr7iy1k6brfxnx26pmxm800gh4nqrxn6j2lz6vd5y9m5";
+    rev = "062e6d373537c60829fa9b5dcddbcd942986b3c3";
+    sha256 = "0fbf80zsc22vcqp59r9fdx4icxhrkv7l3lphw83326jrmkzy6kri";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libX11 ];
 
-  # We need a README file, otherwise autoconf complains.
-  postUnpack = ''
-    mv $sourceRoot/README{.md,}
-  '';
-
   meta = with lib; {
     description = "Command-line program for getting and setting the contents of the X selection";
-    homepage = http://www.kfish.org/software/xsel;
+    homepage = "http://www.kfish.org/software/xsel";
     license = licenses.mit;
     maintainers = [ maintainers.cstrahan ];
     platforms = lib.platforms.unix;

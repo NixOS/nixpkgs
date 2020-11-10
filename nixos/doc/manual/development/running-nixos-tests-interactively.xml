@@ -2,26 +2,26 @@
         xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="5.0"
-        xml:id="sec-running-nixos-tests">
+        xml:id="sec-running-nixos-tests-interactively">
  <title>Running Tests interactively</title>
 
  <para>
   The test itself can be run interactively. This is particularly useful when
   developing or debugging a test:
 <screen>
-$ nix-build nixos/tests/login.nix -A driver
-$ ./result/bin/nixos-test-driver
+<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driverInteractive
+<prompt>$ </prompt>./result/bin/nixos-test-driver
 starting VDE switch for network 1
-&gt;
+<prompt>&gt;</prompt>
 </screen>
-  You can then take any Perl statement, e.g.
+  You can then take any Python statement, e.g.
 <screen>
-&gt; startAll
-&gt; testScript
-&gt; $machine->succeed("touch /tmp/foo")
-&gt; print($machine->succeed("pwd"), "\n") # Show stdout of command
+<prompt>&gt;</prompt> start_all()
+<prompt>&gt;</prompt> test_script()
+<prompt>&gt;</prompt> machine.succeed("touch /tmp/foo")
+<prompt>&gt;</prompt> print(machine.succeed("pwd")) # Show stdout of command
 </screen>
-  The function <command>testScript</command> executes the entire test script
+  The function <command>test_script</command> executes the entire test script
   and drops you back into the test driver command line upon its completion.
   This allows you to inspect the state of the VMs after the test (e.g. to debug
   the test script).
@@ -30,15 +30,20 @@ starting VDE switch for network 1
  <para>
   To just start and experiment with the VMs, run:
 <screen>
-$ nix-build nixos/tests/login.nix -A driver
-$ ./result/bin/nixos-run-vms
+<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driverInteractive
+<prompt>$ </prompt>./result/bin/nixos-run-vms
 </screen>
   The script <command>nixos-run-vms</command> starts the virtual machines
   defined by test.
  </para>
 
  <para>
-  The machine state is kept across VM restarts in
-  <filename>/tmp/vm-state-</filename><varname>machinename</varname>.
+   You can re-use the VM states coming from a previous run
+   by setting the <command>--keep-vm-state</command> flag.
+<screen>
+<prompt>$ </prompt>./result/bin/nixos-run-vms --keep-vm-state
+</screen>
+  The machine state is stored in the
+  <filename>$TMPDIR/vm-state-</filename><varname>machinename</varname> directory.
  </para>
 </section>

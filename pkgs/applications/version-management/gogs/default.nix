@@ -1,19 +1,20 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, bash, gzip, openssh
+, git, bash, gzip, openssh, pam
 , sqliteSupport ? true
+, pamSupport ? true
 }:
 
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gogs-${version}";
-  version = "0.11.66";
+  pname = "gogs";
+  version = "0.11.91";
 
   src = fetchFromGitHub {
     owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "1b9ilk4xlsllsj5pzmxwsz4a1zvgd06a8mi9ni9hbvmfl3w8xf28";
+    sha256 = "1yfimgjg9n773kdml17119539w9736mi66bivpv5yp3cj2hj9mlj";
   };
 
   patches = [ ./static-root-path.patch ];
@@ -25,15 +26,21 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  buildInputs = optional pamSupport pam;
 
-  outputs = [ "bin" "out" "data" ];
+  buildFlags = [ "-tags" ];
+
+  buildFlagsArray =
+    (  optional sqliteSupport "sqlite"
+    ++ optional pamSupport "pam");
+
+  outputs = [ "out" "data" ];
 
   postInstall = ''
     mkdir $data
     cp -R $src/{public,templates} $data
 
-    wrapProgram $bin/bin/gogs \
+    wrapProgram $out/bin/gogs \
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
@@ -41,7 +48,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A painless self-hosted Git service";
-    homepage = https://gogs.io;
+    homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
   };

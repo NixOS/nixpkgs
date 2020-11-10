@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   version = "1.23";
   pname = "lcalc";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     # original at http://oto.math.uwaterloo.ca/~mrubinst/L_function_public/CODE/L-${version}.tar.gz, no longer available
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://oto.math.uwaterloo.ca/~mrubinst/L_function_public/L.html;
+    homepage = "http://oto.math.uwaterloo.ca/~mrubinst/L_function_public/L.html";
     description = "A program for calculating with L-functions";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ timokau ];

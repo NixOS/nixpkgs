@@ -1,17 +1,20 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin }:
+{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
+  runtimeShell }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rust-bindgen-${version}";
-  version = "0.40.0";
+  pname = "rust-bindgen";
+  version = "0.55.1";
+
+  RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
   src = fetchFromGitHub {
-    owner = "rust-lang-nursery";
-    repo = "rust-bindgen";
+    owner = "rust-lang";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0d7jqgi3aadwqcxiaz7axsq9h6n2i42yd3q0p1hc5l0kcdwwbj5k";
+    sha256 = "0cbc78zrhda4adza88g05sy04chixqay2ylgdjgmf13h607hp3kn";
   };
 
-  cargoSha256 = "1rjyazhnk9xihqw1qzkkcrab627lqbj789g5d5nb8bn2hkbdx5d6";
+  cargoSha256 = "1dv1ywdy701bnc2jv5jq0hnpal1snlizaj9w6k1wxyrp9szjd48w";
 
   libclang = llvmPackages.libclang.lib; #for substituteAll
 
@@ -29,10 +32,10 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/bin/bindgen
   '';
 
-  doCheck = false; # half the tests fail because our rustfmt is not nightly enough
+  doCheck = true;
   checkInputs =
     let fakeRustup = writeScriptBin "rustup" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       shift
       shift
       exec "$@"
@@ -42,17 +45,22 @@ rustPlatform.buildRustPackage rec {
     fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
     clang
   ];
+  preCheck = ''
+    # for the ci folder, notably
+    patchShebangs .
+  '';
 
   meta = with stdenv.lib; {
-    description = "C and C++ binding generator";
+    description = "Automatically generates Rust FFI bindings to C (and some C++) libraries";
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into
       rust ffi declarations.
       As with most compiler related software, this will only work
       inside a nix-shell with the required libraries as buildInputs.
     '';
-    homepage = https://github.com/rust-lang-nursery/rust-bindgen;
+    homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
-    maintainers = [ maintainers.ralith ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ johntitor ralith ];
   };
 }

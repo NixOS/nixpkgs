@@ -2,13 +2,15 @@
 
 buildPythonPackage rec {
   pname = "python-sql";
-  version = "0.9";
+  version = "1.2.1";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07b51cc1c977ef5480fe671cae5075ad4b68a6fc67f4569782e06f012456d35c";
+    sha256 = "306999bd311fbf50804d76f346655af0a6ff18881ce46c1329256fee40f492c0";
   };
+
   meta = {
-    homepage = http://python-sql.tryton.org/;
+    homepage = "https://python-sql.tryton.org/";
     description = "A library to write SQL queries in a pythonic way";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.bsd3;

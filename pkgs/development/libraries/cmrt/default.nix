@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libdrm, libva }:
 
 stdenv.mkDerivation rec {
-  name = "cmrt-${version}";
+  pname = "cmrt";
   version = "1.0.6";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdrm libva ];
 
   meta = with stdenv.lib; {
-    homepage = https://01.org/linuxmedia;
+    homepage = "https://01.org/linuxmedia";
     description = "Intel C for Media Runtime";
     longDescription = "Media GPU kernel manager for Intel G45 & HD Graphics family";
     license = licenses.mit;

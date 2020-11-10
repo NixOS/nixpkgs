@@ -1,44 +1,61 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, libxml2, cmake, ninja, gtk3, granite, gnome3
-, gobjectIntrospection, sqlite, poppler, poppler_utils, html2text, unzip, unar, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk, libgee
+, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook
+, appstream, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "1.0.0";
-
-  name = "${pname}-${version}";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;
     rev = version;
-    sha256 = "0nv1nxird0s0qfhh8fr82mkj4qimhklw1bwcjwmvjdsvsxxs9520";
+    sha256 = "0w0rlyahpgx0l6inkbj106agbnr2czil0vdcy1zzv70apnjz488j";
   };
 
   nativeBuildInputs = [
-    cmake
-    gobjectIntrospection
+    bash
+    gobject-introspection
     libxml2
+    meson
     ninja
     pkgconfig
+    python3
     vala
     wrapGAppsHook
   ];
 
-  buildInputs = with gnome3; [
+  buildInputs = [
+    pantheon.elementary-icon-theme
+    pantheon.granite
     glib
-    granite
+    libgee
     gtk3
     html2text
-    libgee
     poppler
+    python2
     sqlite
     webkitgtk
+    appstream
+    desktop-file-utils
   ];
 
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+  # These programs are expected in PATH from the source code and scripts
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ unzip unar poppler_utils html2text ]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
+      --prefix PATH : $out/bin
     )
+  '';
+
+  postFixup = ''
+    patchShebangs $out/share/bookworm/scripts/mobi_lib/*.py
+    patchShebangs $out/share/bookworm/scripts/tasks/*.sh
   '';
 
    meta = with stdenv.lib; {
@@ -46,7 +63,7 @@ stdenv.mkDerivation rec {
      longDescription = ''
        Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
      '';
-     homepage = https://babluboy.github.io/bookworm/;
+     homepage = "https://babluboy.github.io/bookworm/";
      license = licenses.gpl3Plus;
      platforms = platforms.linux;
    };

@@ -1,7 +1,7 @@
-{stdenv, fetchurl, jre}:
+{ stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "alchemy-${version}";
+  pname = "alchemy";
   version = "008";
 
   enableParallelBuilding = true;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share
     cp -a . $out/share/alchemy
     cat >> $out/bin/alchemy << EOF
-    #!/bin/sh
+    #!${runtimeShell}
     cd $out/share/alchemy
     ${jre}/bin/java -jar Alchemy.jar "$@"
     EOF
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Experimental in nature, Alchemy lets you brainstorm visually to explore
       an expanded range of ideas and possibilities in a serendipitous way.
     '';
-    homepage = http://al.chemy.org/;
+    homepage = "http://al.chemy.org/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux;

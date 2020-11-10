@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchzip }:
+{ stdenv, runtimeShell, lib, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "terminal-notifier-${version}";
+  pname = "terminal-notifier";
 
   version = "2.0.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -r terminal-notifier.app $out/Applications
     cat >$out/bin/terminal-notifier <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/Applications/terminal-notifier.app
     exec ./Contents/MacOS/terminal-notifier "\$@"
     EOF
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan ];
-    homepage = https://github.com/julienXX/terminal-notifier;
+    homepage = "https://github.com/julienXX/terminal-notifier";
     license = licenses.mit;
     platforms  = platforms.darwin;
   };

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hll2390dw-cups-${version}";
+  pname = "hll2390dw-cups";
   version = "4.0.0-1";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother HL-L2390DW combined print driver";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    downloadPage = http://support.brother.com/g/b/downloadlist.aspx?c=us_ot&lang=en&prod=hll2390dw_us&os=128;
+    downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us_ot&lang=en&prod=hll2390dw_us&os=128";
     maintainers = [ maintainers.samueldr ];
   };
 }

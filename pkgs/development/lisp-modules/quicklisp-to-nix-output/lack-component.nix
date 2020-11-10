@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lack-component'';
-  version = ''lack-20180831-git'';
+  version = ''lack-20201016-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2018-08-31/lack-20180831-git.tgz'';
-    sha256 = ''0x4b3v5qvrik5c8nn4kpxygv78srqb306jcypkhpyc65ig81gr9n'';
+    url = ''http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz'';
+    sha256 = ''124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan'';
   };
 
   packageName = "lack-component";
@@ -17,11 +17,11 @@ rec {
   asdFilesToKeep = ["lack-component.asd"];
   overrides = x: x;
 }
-/* (SYSTEM lack-component DESCRIPTION NIL SHA256
-    0x4b3v5qvrik5c8nn4kpxygv78srqb306jcypkhpyc65ig81gr9n URL
-    http://beta.quicklisp.org/archive/lack/2018-08-31/lack-20180831-git.tgz MD5
-    fd57a7185997a1a5f37bbd9d6899118d NAME lack-component FILENAME
-    lack-component DEPS NIL DEPENDENCIES NIL VERSION lack-20180831-git SIBLINGS
+/* (SYSTEM lack-component DESCRIPTION System lacks description SHA256
+    124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan URL
+    http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz MD5
+    8a056801bd99fdd70cdfaf33129f6aeb NAME lack-component FILENAME
+    lack-component DEPS NIL DEPENDENCIES NIL VERSION lack-20201016-git SIBLINGS
     (lack-middleware-accesslog lack-middleware-auth-basic
      lack-middleware-backtrace lack-middleware-csrf lack-middleware-mount
      lack-middleware-session lack-middleware-static lack-request lack-response

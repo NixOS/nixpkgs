@@ -1,42 +1,43 @@
-{ stdenv, fetchFromGitHub, rustPlatform, asciidoc, docbook_xsl, libxslt
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, asciidoctor
+, installShellFiles
 , Security
-, withPCRE2 ? false, pcre2 ? null
+, withPCRE2 ? true
+, pcre2 ? null
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "0.10.0";
+  pname = "ripgrep";
+  version = "12.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
+    repo = pname;
     rev = version;
-    sha256 = "017fz5kv1kv9jz7mb7vcxrklf5vybvfz2x61g6myzshqz4z1v1yb";
+    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
   };
 
-  cargoSha256 = "0k2b2vbklfdjk2zdc8ip480drc12gy1whlwj94p44hr3402azcgr";
+  cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
 
   cargoBuildFlags = stdenv.lib.optional withPCRE2 "--features pcre2";
 
-  nativeBuildInputs = [ asciidoc docbook_xsl libxslt ];
+  nativeBuildInputs = [ asciidoctor installShellFiles ];
   buildInputs = (stdenv.lib.optional withPCRE2 pcre2)
-    ++ (stdenv.lib.optional stdenv.isDarwin Security);
+  ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
-    mkdir -p "$out/man/man1"
-    cp target/release/build/ripgrep-*/out/rg.1 "$out/man/man1/"
+    installManPage $releaseDir/build/ripgrep-*/out/rg.1
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-    cp target/release/build/ripgrep-*/out/rg.bash "$out/share/bash-completion/completions/"
-    cp target/release/build/ripgrep-*/out/rg.fish "$out/share/fish/vendor_completions.d/"
-    cp "$src/complete/_rg" "$out/share/zsh/site-functions/"
+    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
+    installShellCompletion --zsh complete/_rg
   '';
 
   meta = with stdenv.lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = [ maintainers.tailhook ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
   };
 }

@@ -1,34 +1,136 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_40, enchant
-, wrapGAppsHook, gdk_pixbuf, cmake, ninja, desktop-file-utils
-, libnotify, libcanberra-gtk3, libsecret, gmime, isocodes
-, gobjectIntrospection, libpthreadstubs, sqlite
-, gnome3, librsvg, gnome-doc-utils, webkitgtk }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gtk3
+, vala
+, enchant2
+, wrapGAppsHook
+, meson
+, ninja
+, desktop-file-utils
+, gnome-online-accounts
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, libpeas
+, libsecret
+, gmime3
+, isocodes
+, libxml2
+, gettext
+, sqlite
+, gcr
+, json-glib
+, itstool
+, libgee
+, gnome3
+, webkitgtk
+, python3
+, gnutls
+, cacert
+, xvfb_run
+, glibcLocales
+, dbus
+, shared-mime-info
+, libunwind
+, folks
+, glib-networking
+, gobject-introspection
+, gspell
+, appstream-glib
+, libytnef
+, libhandy
+, gsound
+}:
 
-let
-  pname = "geary";
-  version = "0.12.4";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "geary";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "01ykhkjfkprvh9kp4rzrl6xs2pqibiw44ckvqsn5cs3xy2rlq8mm";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "04p8fjkz4xp5afp0ld1m09pnv0zkcx51l7hf23amfrjkk0kj2bp7";
   };
 
-  nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobjectIntrospection ];
+  patches = [
+    # Longer timeout for client test.
+    ./Bump-client-test-timeout-to-300s.patch
+  ];
+
+  nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
+    gettext
+    gobject-introspection
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    gtk3 enchant webkitgtk libnotify libcanberra-gtk3 gnome3.libgee libsecret gmime sqlite
-    libpthreadstubs gnome3.gsettings-desktop-schemas gnome3.gcr isocodes
-    gdk_pixbuf librsvg gnome3.defaultIconTheme
+    adwaita-icon-theme
+    enchant2
+    folks
+    gcr
+    glib-networking
+    gmime3
+    gnome-online-accounts
+    gsettings-desktop-schemas
+    gsound
+    gspell
+    gtk3
+    isocodes
+    json-glib
+    libgee
+    libhandy
+    libpeas
+    libsecret
+    libunwind
+    libytnef
+    sqlite
+    webkitgtk
   ];
 
-  cmakeFlags = [
-    "-DISOCODES_DIRECTORY=${isocodes}/share/xml/iso-codes"
+  checkInputs = [
+    dbus
+    gnutls # for certtool
+    cacert # trust store for glib-networking
+    xvfb_run
+    glibcLocales # required by Geary.ImapDb.DatabaseTest/utf8_case_insensitive_collation
   ];
 
-  # TODO: This is bad, upstream should fix their code.
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${webkitgtk.dev}/share/gir-1.0";
+  mesonFlags = [
+    "-Dcontractor=true" # install the contractor file (Pantheon specific)
+  ];
+
+  # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
+  # https://gitlab.gnome.org/GNOME/geary/commit/f7f72143e0f00ca5e0e6a798691805c53976ae31#0cc1139e3347f573ae1feee5b73dbc8a8a21fcfa
+  postPatch = ''
+    chmod +x build-aux/post_install.py build-aux/git_version.py
+
+    patchShebangs build-aux/post_install.py build-aux/git_version.py
+
+    chmod +x build-aux/yaml_to_json.py
+    patchShebangs build-aux/yaml_to_json.py
+
+    chmod +x desktop/geary-attach
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    NO_AT_BRIDGE=1 \
+    GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules \
+    XDG_DATA_DIRS=$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share:${folks}/share/gsettings-schemas/${folks.name} \
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test -v --no-stdsplit
+  '';
 
   preFixup = ''
     # Add geary to path for geary-attach
@@ -43,10 +145,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Geary;
+    homepage = "https://wiki.gnome.org/Apps/Geary";
     description = "Mail client for GNOME 3";
-    maintainers = gnome3.maintainers;
-    license = licenses.lgpl2;
+    maintainers = teams.gnome.members;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

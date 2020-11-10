@@ -1,15 +1,15 @@
 { stdenv, fetchurl
-, gfortran, fftw, openblas
+, gfortran, fftw, blas, lapack
 , mpi ? null
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.3";
-  name = "quantum-espresso-${version}";
+  version = "6.5";
+  pname = "quantum-espresso";
 
   src = fetchurl {
     url = "https://gitlab.com/QEF/q-e/-/archive/qe-${version}/q-e-qe-${version}.tar.gz";
-    sha256 = "1738z3nhkzcrgnhnfg1r4lipbwvcrcprwhzjbjysnylmzbzwhrs0";
+    sha256 = "00nnsq1vq579xsmkvwrgs6bdqdcbdlsmcp4yfynnvs40ca52m2r5";
   };
 
   passthru = {
@@ -20,13 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  # remove after 6.3 version:
-  # makefile needs to ignore install directory easier than applying patch
-  preInstall = ''
-    printf "\n.PHONY: install\n" >> Makefile
-  '';
-
-  buildInputs = [ fftw openblas gfortran ]
+  buildInputs = [ fftw blas lapack gfortran ]
     ++ (stdenv.lib.optionals (mpi != null) [ mpi ]);
 
 configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
@@ -41,7 +35,7 @@ configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${g
         nanoscale. It is based on density-functional theory, plane waves, and
         pseudopotentials.
       '';
-    homepage = https://www.quantum-espresso.org/;
+    homepage = "https://www.quantum-espresso.org/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.costrouc ];

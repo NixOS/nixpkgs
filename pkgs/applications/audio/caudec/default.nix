@@ -4,8 +4,9 @@ let
   version = "1.7.5";
 in
 
-stdenv.mkDerivation rec {
-  name = "caudec-${version}";
+stdenv.mkDerivation {
+  pname = "caudec";
+  inherit version;
 
   src = fetchurl {
     url = "http://caudec.net/downloads/caudec-${version}.tar.gz";
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
    meta = with stdenv.lib; {
-    homepage = http://caudec.net/;
+    homepage = "http://caudec.net/";
     description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license     = licenses.gpl3;
     platforms   = platforms.linux ++ platforms.darwin;

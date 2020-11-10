@@ -25,7 +25,7 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
-      #"cryptsetup.target"
+      "cryptsetup.target"
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -63,6 +63,7 @@ let
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
+      "dbus-org.freedesktop.import1.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
       "user-runtime-dir@.service"
@@ -72,13 +73,13 @@ let
       "systemd-journald.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
-      "systemd-journald-audit.socket"
+      ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 
-      # SysV init compatibility.
-      "systemd-initctl.socket"
-      "systemd-initctl.service"
+      # Coredumps.
+      "systemd-coredump.socket"
+      "systemd-coredump@.service"
 
       # Kernel module loading.
       "systemd-modules-load.service"
@@ -96,7 +97,7 @@ let
       "dev-hugepages.mount"
       "dev-mqueue.mount"
       "sys-fs-fuse-connections.mount"
-      "sys-kernel-config.mount"
+      ] ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount") ++ [
       "sys-kernel-debug.mount"
 
       # Maintaining state across reboots.
@@ -108,11 +109,13 @@ let
       # Hibernate / suspend.
       "hibernate.target"
       "suspend.target"
+      "suspend-then-hibernate.target"
       "sleep.target"
       "hybrid-sleep.target"
       "systemd-hibernate.service"
       "systemd-hybrid-sleep.service"
       "systemd-suspend.service"
+      "systemd-suspend-then-hibernate.service"
 
       # Reboot stuff.
       "reboot.target"
@@ -139,6 +142,7 @@ let
       "user.slice"
       "machine.slice"
       "machines.target"
+      "systemd-importd.service"
       "systemd-machined.service"
       "systemd-nspawn@.service"
 
@@ -156,7 +160,6 @@ let
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
-      "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
     ] ++ optionals config.services.journald.enableHttpGateway [
@@ -186,14 +189,32 @@ let
       "sockets.target"
       "sound.target"
       "systemd-exit.service"
+      "systemd-tmpfiles-clean.service"
+      "systemd-tmpfiles-clean.timer"
+      "systemd-tmpfiles-setup.service"
       "timers.target"
     ];
 
   makeJobScript = name: text:
-    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
-    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
+    let
+      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      out = pkgs.writeTextFile {
+        # The derivation name is different from the script file name
+        # to keep the script file name short to avoid cluttering logs.
+        name = "unit-script-${scriptName}";
+        executable = true;
+        destination = "/bin/${scriptName}";
+        text = ''
+          #!${pkgs.runtimeShell} -e
+          ${text}
+        '';
+        checkPhase = ''
+          ${pkgs.stdenv.shell} -n "$out/bin/${scriptName}"
+        '';
+      };
+    in "${out}/bin/${scriptName}";
 
-  unitConfig = { config, ... }: {
+  unitConfig = { config, options, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -219,7 +240,11 @@ let
         // optionalAttrs (config.documentation != []) {
           Documentation = toString config.documentation; }
         // optionalAttrs (config.onFailure != []) {
-          OnFailure = toString config.onFailure;
+          OnFailure = toString config.onFailure; }
+        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
+          StartLimitIntervalSec = toString config.startLimitIntervalSec;
+        } // optionalAttrs (options.startLimitBurst.isDefined) {
+          StartLimitBurst = toString config.startLimitBurst;
         };
     };
   };
@@ -227,50 +252,38 @@ let
   serviceConfig = { name, config, ... }: {
     config = mkMerge
       [ { # Default path for systemd services.  Should be quite minimal.
-          path =
+          path = mkAfter
             [ pkgs.coreutils
               pkgs.findutils
               pkgs.gnugrep
               pkgs.gnused
               systemd
             ];
-          environment.PATH = config.path;
+          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStart}
-            '';
+          { serviceConfig.ExecStartPre =
+              makeJobScript "${name}-pre-start" config.preStart;
           })
         (mkIf (config.script != "")
-          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.script}
-            '' + " " + config.scriptArgs;
+          { serviceConfig.ExecStart =
+              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
           })
         (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStart}
-            '';
+          { serviceConfig.ExecStartPost =
+              makeJobScript "${name}-post-start" config.postStart;
           })
         (mkIf (config.reload != "")
-          { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.reload}
-            '';
+          { serviceConfig.ExecReload =
+              makeJobScript "${name}-reload" config.reload;
           })
         (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStop}
-            '';
+          { serviceConfig.ExecStop =
+              makeJobScript "${name}-pre-stop" config.preStop;
           })
         (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStop}
-            '';
+          { serviceConfig.ExecStopPost =
+              makeJobScript "${name}-post-stop" config.postStop;
           })
       ];
   };
@@ -317,9 +330,11 @@ let
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n:
-              let s = optionalString (env."${n}" != null)
+              let s = optionalString (env.${n} != null)
                 "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
-              in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
+              # systemd max line length is now 1MiB
+              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
           '' else if !def.restartIfChanged then ''
@@ -337,6 +352,7 @@ let
           [Socket]
           ${attrsToSection def.socketConfig}
           ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
         '';
     };
 
@@ -387,13 +403,14 @@ let
 
   logindHandlerType = types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "lock"
+    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
+
+  proxy_env = config.networking.proxy.envVars;
 
 in
 
 {
-
   ###### interface
 
   options = {
@@ -420,7 +437,8 @@ in
     systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      description = "Packages providing systemd units.";
+      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      description = "Packages providing systemd units and hooks.";
     };
 
     systemd.targets = mkOption {
@@ -482,7 +500,7 @@ in
     systemd.generators = mkOption {
       type = types.attrsOf types.path;
       default = {};
-      example = { "systemd-gpt-auto-generator" = "/dev/null"; };
+      example = { systemd-gpt-auto-generator = "/dev/null"; };
       description = ''
         Definition of systemd generators.
         For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
@@ -490,11 +508,14 @@ in
       '';
     };
 
-    systemd.generator-packages = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
-      description = "Packages providing systemd generators.";
+    systemd.shutdown = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      description = ''
+        Definition of systemd shutdown executables.
+        For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
+        <literal>/etc/systemd/system-shutdown/NAME</literal> to <literal>VALUE</literal>.
+      '';
     };
 
     systemd.defaultUnit = mkOption {
@@ -513,7 +534,7 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = with types; attrsOf (nullOr (either str (either path package)));
+      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       default = {};
       example = { TZ = "CET"; };
       description = ''
@@ -522,10 +543,30 @@ in
     };
 
     systemd.enableCgroupAccounting = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting.
+      '';
+    };
+
+    systemd.coredump.enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether core dumps should be processed by
+        <command>systemd-coredump</command>. If disabled, core dumps
+        appear in the current directory of the crashing process.
+      '';
+    };
+
+    systemd.coredump.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "Storage=journal";
+      description = ''
+        Extra config options for systemd-coredump. See coredump.conf(5) man page
+        for available options.
       '';
     };
 
@@ -555,17 +596,33 @@ in
         each other's limit. The value may be specified in the following
         units: s, min, h, ms, us. To turn off any kind of rate limiting,
         set either value to 0.
+
+        See <option>services.journald.rateLimitBurst</option> for important
+        considerations when setting this value.
       '';
     };
 
     services.journald.rateLimitBurst = mkOption {
-      default = 1000;
+      default = 10000;
       type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
         interval) that is applied to all messages generated on the system.
         This rate limiting is applied per-service, so that two services
         which log do not interfere with each other's limit.
+
+        Note that the effective rate limit is multiplied by a factor derived
+        from the available free disk space for the journal as described on
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/journald.conf.html">
+        journald.conf(5)</link>.
+
+        Note that the total amount of logs stored is limited by journald settings
+        such as <literal>SystemMaxUse</literal>, which defaults to a 4 GB cap.
+
+        It is thus recommended to compute what period of time that you will be
+        able to store logs for when an application logs at full burst rate.
+        With default settings for log lines that are 100 Bytes long, this can
+        amount to just a few hours.
       '';
     };
 
@@ -587,13 +644,41 @@ in
       '';
     };
 
+    services.journald.forwardToSyslog = mkOption {
+      default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
+      defaultText = "services.rsyslogd.enable || services.syslog-ng.enable";
+      type = types.bool;
+      description = ''
+        Whether to forward log messages to syslog.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
       description = ''
-        Extra config options for systemd-logind. See man logind.conf for
-        available options.
+        Extra config options for systemd-logind. See
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html">
+        logind.conf(5)</link> for available options.
+      '';
+    };
+
+    services.logind.killUserProcesses = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Specifies whether the processes of a user should be killed
+        when the user logs out.  If true, the scope unit corresponding
+        to the session and all processes inside that scope will be
+        terminated.  If false, the scope is "abandoned" (see
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">
+        systemd.scope(5)</link>), and processes are not killed.
+        </para>
+
+        <para>
+        See <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=">logind.conf(5)</link>
+        for more details.
       '';
     };
 
@@ -618,6 +703,29 @@ in
       '';
     };
 
+    services.logind.lidSwitchExternalPower = mkOption {
+      default = config.services.logind.lidSwitch;
+      defaultText = "services.logind.lidSwitch";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = ''
+        Specifies what to do when the laptop lid is closed and the system is
+        on external power. By default use the same action as specified in
+        services.logind.lidSwitch.
+      '';
+    };
+
+    systemd.sleep.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "HibernateDelaySec=1h";
+      description = ''
+        Extra config options for systemd sleep state logic.
+        See sleep.conf.d(5) man page for available options.
+      '';
+    };
+
     systemd.user.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -637,6 +745,25 @@ in
         automatically. See
         <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
         for the exact format.
+      '';
+    };
+
+    systemd.tmpfiles.packages = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExample "[ pkgs.lvm2 ]";
+      apply = map getLib;
+      description = ''
+        List of packages containing <command>systemd-tmpfiles</command> rules.
+
+        All files ending in .conf found in
+        <filename><replaceable>pkg</replaceable>/lib/tmpfiles.d</filename>
+        will be included.
+        If this folder does not exist or does not contain any files an error will be returned instead.
+
+        If a <filename>lib</filename> output is available, rules are searched there and only there.
+        If there is no <filename>lib</filename> output it will fall back to <filename>out</filename>
+        and if that does not exist either, the default output will be used.
       '';
     };
 
@@ -697,6 +824,61 @@ in
       '';
     };
 
+    systemd.suppressedSystemUnits = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      example = [ "systemd-backlight@.service" ];
+      description = ''
+        A list of units to suppress when generating system systemd configuration directory. This has
+        priority over upstream units, <option>systemd.units</option>, and
+        <option>systemd.additionalUpstreamSystemUnits</option>. The main purpose of this is to
+        suppress a upstream systemd unit with any modifications made to it by other NixOS modules.
+      '';
+    };
+
+    systemd.watchdog.device = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/dev/watchdog";
+      description = ''
+        The path to a hardware watchdog device which will be managed by systemd.
+        If not specified, systemd will default to /dev/watchdog.
+      '';
+    };
+
+    systemd.watchdog.runtimeTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "30s";
+      description = ''
+        The amount of time which can elapse before a watchdog hardware device
+        will automatically reboot the system. Valid time units include "ms",
+        "s", "min", "h", "d", and "w".
+      '';
+    };
+
+    systemd.watchdog.rebootTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "10m";
+      description = ''
+        The amount of time which can elapse after a reboot has been triggered
+        before a watchdog hardware device will automatically reboot the system.
+        Valid time units include "ms", "s", "min", "h", "d", and "w".
+      '';
+    };
+
+    systemd.watchdog.kexecTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "10m";
+      description = ''
+        The amount of time which can elapse when kexec is being executed before
+        a watchdog hardware device will automatically reboot the system. This
+        option should only be enabled if reloadTime is also enabled. Valid
+        time units include "ms", "s", "min", "h", "d", and "w".
+      '';
+    };
   };
 
 
@@ -704,27 +886,67 @@ in
 
   config = {
 
-    warnings = concatLists (mapAttrsToList (name: service:
-      optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
-        "Service ‘${name}.service’ with ‘Type=oneshot’ must have ‘Restart=no’") cfg.services);
+    warnings = concatLists (
+      mapAttrsToList
+        (name: service:
+          let
+            type = service.serviceConfig.Type or "";
+            restart = service.serviceConfig.Restart or "no";
+            hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
+          in
+            concatLists [
+              (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
+                "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
+              )
+              (optional hasDeprecated
+                "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786."
+              )
+            ]
+        )
+        cfg.services
+    );
 
     system.build.units = cfg.units;
+
+    system.nssModules = [ systemd.out ];
+    system.nssDatabases = {
+      hosts = (mkMerge [
+        [ "mymachines" ]
+        (mkOrder 1600 [ "myhostname" ] # 1600 to ensure it's always the last
+      )
+      ]);
+      passwd = (mkMerge [
+        (mkAfter [ "systemd" ])
+      ]);
+      group = (mkMerge [
+        (mkAfter [ "systemd" ])
+      ]);
+    };
 
     environment.systemPackages = [ systemd ];
 
     environment.etc = let
-      # generate contents for /etc/systemd/system-generators from
-      # systemd.generators and systemd.generator-packages
-      generators = pkgs.runCommand "system-generators" { packages = cfg.generator-packages; } ''
+      # generate contents for /etc/systemd/system-${type} from attrset of links and packages
+      hooks = type: links: pkgs.runCommand "system-${type}" {
+          preferLocalBuild = true;
+          packages = cfg.packages;
+      } ''
+        set -e
         mkdir -p $out
         for package in $packages
         do
-          ln -s $package/lib/systemd/system-generators/* $out/
-        done;
-        ${concatStrings (mapAttrsToList (generator: target: "ln -s ${target} $out/${generator};\n") cfg.generators)}
+          for hook in $package/lib/systemd/system-${type}/*
+          do
+            ln -s $hook $out/
+          done
+        done
+        ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
       '';
+
+      enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
+      enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedSystemUnits) cfg.units;
     in ({
-      "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
+      "systemd/system".source = generateUnits "system" enabledUnits enabledUpstreamSystemUnits upstreamSystemWants;
 
       "systemd/user".source = generateUnits "user" cfg.user.units upstreamUserUnits [];
 
@@ -734,9 +956,22 @@ in
           DefaultCPUAccounting=yes
           DefaultIOAccounting=yes
           DefaultBlockIOAccounting=yes
-          DefaultMemoryAccounting=yes
-          DefaultTasksAccounting=yes
+          DefaultIPAccounting=yes
         ''}
+        DefaultLimitCORE=infinity
+        ${optionalString (config.systemd.watchdog.device != null) ''
+          WatchdogDevice=${config.systemd.watchdog.device}
+        ''}
+        ${optionalString (config.systemd.watchdog.runtimeTime != null) ''
+          RuntimeWatchdogSec=${config.systemd.watchdog.runtimeTime}
+        ''}
+        ${optionalString (config.systemd.watchdog.rebootTime != null) ''
+          RebootWatchdogSec=${config.systemd.watchdog.rebootTime}
+        ''}
+        ${optionalString (config.systemd.watchdog.kexecTime != null) ''
+          KExecWatchdogSec=${config.systemd.watchdog.kexecTime}
+        ''}
+
         ${config.systemd.extraConfig}
       '';
 
@@ -754,32 +989,53 @@ in
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
         ''}
+        ${optionalString (config.services.journald.forwardToSyslog) ''
+          ForwardToSyslog=yes
+        ''}
         ${config.services.journald.extraConfig}
       '';
 
+      "systemd/coredump.conf".text =
+        ''
+          [Coredump]
+          ${config.systemd.coredump.extraConfig}
+        '';
+
       "systemd/logind.conf".text = ''
         [Login]
-        KillUserProcesses=no
+        KillUserProcesses=${if config.services.logind.killUserProcesses then "yes" else "no"}
         HandleLidSwitch=${config.services.logind.lidSwitch}
         HandleLidSwitchDocked=${config.services.logind.lidSwitchDocked}
+        HandleLidSwitchExternalPower=${config.services.logind.lidSwitchExternalPower}
         ${config.services.logind.extraConfig}
       '';
 
       "systemd/sleep.conf".text = ''
         [Sleep]
+        ${config.systemd.sleep.extraConfig}
       '';
 
-      "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
-      "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
+      # install provided sysctl snippets
+      "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
+      "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
 
-      "tmpfiles.d/nixos.conf".text = ''
-        # This file is created automatically and should not be modified.
-        # Please change the option ‘systemd.tmpfiles.rules’ instead.
+      "tmpfiles.d".source = (pkgs.symlinkJoin {
+        name = "tmpfiles.d";
+        paths = map (p: p + "/lib/tmpfiles.d") cfg.tmpfiles.packages;
+        postBuild = ''
+          for i in $(cat $pathsPath); do
+            (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
+              echo "ERROR: The path '$i' from systemd.tmpfiles.packages contains no *.conf files."
+              exit 1
+            )
+          done
+        '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
+          rm -f $out/${removePrefix "tmpfiles.d/" name}
+        '') config.system.build.etc.targets;
+      }) + "/*";
 
-        ${concatStringsSep "\n" cfg.tmpfiles.rules}
-      '';
-
-      "systemd/system-generators" = { source = generators; };
+      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
+      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
     });
 
     services.dbus.enable = true;
@@ -796,6 +1052,36 @@ in
       { description = "Security Keys";
         unitConfig.X-StopOnReconfiguration = true;
       };
+
+    systemd.tmpfiles.packages = [
+      # Default tmpfiles rules provided by systemd
+      (pkgs.runCommand "systemd-default-tmpfiles" {} ''
+        mkdir -p $out/lib/tmpfiles.d
+        cd $out/lib/tmpfiles.d
+
+        ln -s "${systemd}/example/tmpfiles.d/home.conf"
+        ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
+        ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nspawn.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/var.conf"
+        ln -s "${systemd}/example/tmpfiles.d/x11.conf"
+      '')
+      # User-specified tmpfiles rules
+      (pkgs.writeTextFile {
+        name = "nixos-tmpfiles.d";
+        destination = "/lib/tmpfiles.d/00-nixos.conf";
+        text = ''
+          # This file is created automatically and should not be modified.
+          # Please change the option ‘systemd.tmpfiles.rules’ instead.
+
+          ${concatStringsSep "\n" cfg.tmpfiles.rules}
+        '';
+      })
+    ];
 
     systemd.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
@@ -867,6 +1153,7 @@ in
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+    systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     # Restarting systemd-logind breaks X11
     # - upstream commit: https://cgit.freedesktop.org/xorg/xserver/commit/?id=dc48bd653c7e101
     # - systemd announcement: https://github.com/systemd/systemd/blob/22043e4317ecd2bc7834b48a6d364de76bb26d91/NEWS#L103-L112
@@ -882,12 +1169,15 @@ in
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
-    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
+    systemd.services.systemd-importd.environment = proxy_env;
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
+    boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
+      "kernel.core_pattern" = "core";
+    };
   };
 
   # FIXME: Remove these eventually.
@@ -895,6 +1185,7 @@ in
     [ (mkRenamedOptionModule [ "boot" "systemd" "sockets" ] [ "systemd" "sockets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "targets" ] [ "systemd" "targets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
+      (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
+      (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
     ];
-
 }

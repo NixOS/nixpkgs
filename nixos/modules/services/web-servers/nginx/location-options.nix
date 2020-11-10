@@ -1,4 +1,4 @@
-# This file defines the options that can be used both for the Apache
+# This file defines the options that can be used both for the Nginx
 # main server configuration, and for the virtual hosts.  (The latter
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
@@ -9,6 +9,34 @@ with lib;
 
 {
   options = {
+    basicAuth = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      example = literalExample ''
+        {
+          user = "password";
+        };
+      '';
+      description = ''
+        Basic Auth protection for a vhost.
+
+        WARNING: This is implemented to store the password in plain text in the
+        Nix store.
+      '';
+    };
+
+    basicAuthFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Basic Auth password file for a vhost.
+        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>.
+
+        WARNING: The generate file contains the users' passwords in a
+        non-cryptographically-securely hashed way.
+      '';
+    };
+
     proxyPass = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -64,6 +92,15 @@ with lib;
       '';
     };
 
+    return = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "301 http://example.com$request_uri";
+      description = ''
+        Adds a return directive, for e.g. redirections.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -83,4 +120,3 @@ with lib;
     };
   };
 }
-

@@ -6,8 +6,8 @@
 , patches
 }:
 
-stdenv.mkDerivation rec {
-  name = "restbed-${version}";
+stdenv.mkDerivation {
+  pname = "restbed";
   version = "2016-09-15";
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       business processes. Targeting mobile, tablet, desktop, and embedded
       production environments.
     '';
-    homepage = https://corvusoft.co.uk/;
+    homepage = "https://corvusoft.co.uk/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;

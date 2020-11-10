@@ -3,19 +3,14 @@
 i3.overrideAttrs (oldAttrs : rec {
 
   name = "i3-gaps-${version}";
-  version = "4.15.0.1";
-  releaseDate = "2018-03-13";
+  version = "4.18.3";
 
   src = fetchurl {
-    url = "https://github.com/Airblader/i3/archive/${version}.tar.gz";
-    sha256 = "16s6bink8yj3zix4vww64b745d5drf2vqjg8vz3pwzrark09hfal";
+    url = "https://github.com/Airblader/i3/releases/download/${version}/i3-${version}.tar.bz2";
+    sha256 = "1hcakwyz78lgp8mhqv7pw86jlb3m415pfql1q19rkijnhm3fn3ci";
   };
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ autoreconfHook ];
-
-  postUnpack = ''
-      echo -n "${version} (${releaseDate})" > ./i3-${version}/I3_VERSION
-  '';
 
   # fatal error: GENERATED_config_enums.h: No such file or directory
   enableParallelBuilding = false;

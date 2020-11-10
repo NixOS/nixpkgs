@@ -1,18 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git }:
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.37";
+  version = "0.42";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44e3cf4b0833a55460046bf7a3600eaadbcae5e9d13baf0c9d9789dd5c2c6452";
+    sha256 = "0d8e1b0944a667dd4a75274f6763e558f0d268fde2c725e894dfd152aae23300";
   };
 
-  doCheck = false;
+  # Test requires filesystem access
+  postPatch = ''
+    substituteInPlace tests.py --replace "test_build_sdist" "no_test_build_sdist"
+  '';
+
+  propagatedBuildInputs = [ pep517 toml ];
+
+  checkInputs = [ mock breezy git ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mgedmin/check-manifest;
+    homepage = "https://github.com/mgedmin/check-manifest";
     description = "Check MANIFEST.in in a Python source package for completeness";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo ];

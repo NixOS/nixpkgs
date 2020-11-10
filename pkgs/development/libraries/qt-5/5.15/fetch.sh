@@ -1,0 +1,1 @@
+WGET_ARGS=( http://download.qt.io/official_releases/qt/5.15/5.15.0/submodules/ )

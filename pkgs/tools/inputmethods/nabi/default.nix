@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "The Easy Hangul XIM";
-    homepage = https://github.com/choehwanjin/nabi;
+    homepage = "https://github.com/choehwanjin/nabi";
     license = licenses.gpl2;
     maintainers = [ maintainers.ianwookim ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2, pkgconfig, libgnome, GConf, glib, gtk, gnome_vfs }:
+{ stdenv, fetchurl, python2, pkgconfig, libgnome, GConf, glib, gtk2, gnome_vfs }:
 
 with stdenv.lib;
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python glib gtk GConf libgnome gnome_vfs ];
+  buildInputs = [ python glib gtk2 GConf libgnome gnome_vfs ];
   propagatedBuildInputs = [ pygobject2 pygtk dbus-python ];
 
   # gnome-python expects that .pth file is already installed by PyGTK in the
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://pygtk.org/;
+    homepage = "http://pygtk.org/";
     description = "Python wrapper for GNOME libraries";
     platforms = platforms.linux;
     license = licenses.lgpl2;

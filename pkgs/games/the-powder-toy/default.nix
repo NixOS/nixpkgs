@@ -1,27 +1,24 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, SDL, lua, fftwFloat, zlib, bzip2 }:
+
+{ stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat,
+  zlib, bzip2, curl, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "the-powder-toy-${version}";
-  version = "92.5";
+  pname = "the-powder-toy";
+  version = "95.0";
 
   src = fetchFromGitHub {
-    owner = "simtr";
+    owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
     rev = "v${version}";
-    sha256 = "1n15kgl4qnz55b32ddgmhrv64cl3awbds8arycn7mkf7akwdg1g6";
+    sha256 = "18rp2g1mj0gklra06wm9dm57h73hmm301npndh0y8ap192i5s8sa";
   };
-
-  patches = [ ./fix-env.patch ];
-
-  postPatch = ''
-    sed -i 's,lua5.1,lua,g' SConscript
-  '';
 
   nativeBuildInputs = [ scons pkgconfig ];
 
-  buildInputs = [ SDL lua fftwFloat zlib bzip2 ];
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin
+    [ darwin.apple_sdk.frameworks.Cocoa ];
 
-  buildPhase = "scons DESTDIR=$out/bin --tool='' -j$NIX_BUILD_CORES";
+  buildInputs = [ SDL2 lua fftwFloat zlib bzip2 curl ];
 
   installPhase = ''
     install -Dm 755 build/powder* "$out/bin/powder"
@@ -31,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free 2D physics sandbox game";
-    homepage = http://powdertoy.co.uk/;
+    homepage = "http://powdertoy.co.uk/";
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar siraben ];
   };
 }

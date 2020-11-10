@@ -1,21 +1,10 @@
-{ lib, buildFHSUserEnv }:
+{ lib, buildFHSUserEnv, fetchFromGitHub }:
 
 let
   pio-pkgs = pkgs:
     let
-      python = pkgs.python.override {
+      python = pkgs.python3.override {
         packageOverrides = self: super: {
-
-          # https://github.com/platformio/platformio-core/issues/349
-          click = super.click.overridePythonAttrs (oldAttrs: rec {
-            version = "5.1";
-            src = oldAttrs.src.override {
-              inherit version;
-              sha256 = "678c98275431fad324275dec63791e4a17558b40e5a110e20a82866139a85a5a";
-            };
-            patches = [];
-          });
-
           platformio = self.callPackage ./core.nix { };
         };
       };
@@ -30,6 +19,14 @@ let
       platformio
     ]);
 
+  src = fetchFromGitHub {
+    owner = "platformio";
+    repo = "platformio-core";
+    rev = "v5.0.2";
+    sha256 = "1hbw8nbllyj0xyx1rz2chx9vyqf9949dcdx4v9hnfbsjwwpcfi0a";
+  };
+
+
 in buildFHSUserEnv {
   name = "platformio";
 
@@ -38,14 +35,17 @@ in buildFHSUserEnv {
 
   meta = with lib; {
     description = "An open source ecosystem for IoT development";
-    homepage = http://platformio.org;
+    homepage = "https://platformio.org";
     maintainers = with maintainers; [ mog ];
     license = licenses.asl20;
     platforms = with platforms; linux;
   };
 
   extraInstallCommands = ''
+    mkdir -p $out/lib/udev/rules.d
+
     ln -s $out/bin/platformio $out/bin/pio
+    ln -s ${src}/scripts/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
   '';
 
   runScript = "platformio";

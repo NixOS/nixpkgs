@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation rec {
-  name = "xidel-${version}";
+  pname = "xidel";
   version = "0.9.6";
 
   ## Source archive lacks file (manageUtils.sh), using pre-built package for now.
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command line tool to download and extract data from html/xml pages";
-    homepage = http://videlibri.sourceforge.net/xidel.html;
+    homepage = "http://videlibri.sourceforge.net/xidel.html";
     # source contains no license info (AFAICS), but sourceforge says GPLv2
     license = licenses.gpl2;
     # more platforms will be supported when we switch to source build

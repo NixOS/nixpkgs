@@ -1,22 +1,15 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.23.0";
-  name = "libuv-${version}";
+  version = "1.40.0";
+  pname = "libuv";
 
   src = fetchFromGitHub {
-    owner = "libuv";
-    repo = "libuv";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1yfx99f7qnq3qvcgbnih27dgwfg6c51xw6n6n2c3c1wb3mh95im0";
+    sha256 = "1hd0x6i80ca3j0c3a7laygzab5qkgxjkz692jwzrsinsfhvbq0pg";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d.patch";
-      sha256 = "1s2692h4dvqnzwwicrkpj0zph1i2bhv39w31z5vh7ssgvykaradj";
-    })
-  ];
 
   postPatch = let
     toDisable = [
@@ -24,11 +17,12 @@ stdenv.mkDerivation rec {
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
-    ]
-      # Sometimes: timeout (no output), failed uv_listen. Someone
-      # should report these failures to libuv team. There tests should
-      # be much more robust.
-      ++ stdenv.lib.optionals stdenv.isDarwin [
+      "get_passwd" # passed on NixOS but failed on other Linuxes
+      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+        # Sometimes: timeout (no output), failed uv_listen. Someone
+        # should report these failures to libuv team. There tests should
+        # be much more robust.
         "process_title" "emfile" "poll_duplex" "poll_unidirectional"
         "ipc_listen_before_write" "ipc_listen_after_write" "ipc_tcp_connection"
         "tcp_alloc_cb_fail" "tcp_ping_pong" "tcp_ref3" "tcp_ref4"
@@ -40,18 +34,24 @@ stdenv.mkDerivation rec {
         "tcp_open" "tcp_write_queue_order" "tcp_try_write" "tcp_writealot"
         "multiple_listen" "delayed_accept"
         "shutdown_close_tcp" "shutdown_eof" "shutdown_twice" "callback_stack"
-        "tty_pty" "condvar_5"
-      ] ++ stdenv.lib.optionals stdenv.isAarch32 [
-        # I observe this test failing with some regularity on ARMv7:
-        # https://github.com/libuv/libuv/issues/1871
-        "shutdown_close_pipe"
-      ];
+        "tty_pty" "condvar_5" "hrtime" "udp_multicast_join"
+        # Tests that fail when sandboxing is enabled.
+        "fs_event_close_in_callback" "fs_event_watch_dir" "fs_event_error_reporting"
+        "fs_event_watch_dir_recursive" "fs_event_watch_file"
+        "fs_event_watch_file_current_dir" "fs_event_watch_file_exact_path"
+        "process_priority" "udp_create_early_bad_bind"
+    ] ++ stdenv.lib.optionals stdenv.isAarch32 [
+      # I observe this test failing with some regularity on ARMv7:
+      # https://github.com/libuv/libuv/issues/1871
+      "shutdown_close_pipe"
+    ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString doCheck ''
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh
@@ -61,11 +61,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
-    homepage    = https://github.com/libuv/libuv;
+    homepage    = "https://libuv.org/";
+    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
+    license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
 }

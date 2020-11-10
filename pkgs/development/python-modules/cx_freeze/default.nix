@@ -1,14 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, ncurses }:
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, ncurses }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
-  version = "5.1.1";
-  name  = "${pname}-${version}";
+  version = "6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2eadddde670f5c5f6cf88638a0ac4e5d5fe181292a31063275fa56c7bf22426b";
+    sha256 = "44bbbcea3196b79da77cc22637cb28a825b51182d32209e8a3f6cd4042edc247";
   };
+
+  disabled = pythonOlder "3.5";
 
   propagatedBuildInputs = [ ncurses ];
 

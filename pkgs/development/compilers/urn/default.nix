@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.7.1";
+  version = "0.7.2";
   # Build a sort of "union package" with all the native dependencies we
   # have: Lua (or LuaJIT), readline, etc. Then, we can depend on this
   # and refer to ${urn-rt} instead of ${lua}, ${readline}, etc.
@@ -20,14 +20,14 @@ let
   inherit (stdenv.lib) optionalString concatMapStringsSep;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "urn-${optionalString (extraLibraries != []) "with-libraries-"}${version}";
 
   src = fetchFromGitLab {
     owner = "urn";
     repo = "urn";
     rev = "v${version}";
-    sha256 = "1vw0sljrczbwl7fl5d3frbpklb0larzyp7s7mwwprkb07b027sd5";
+    sha256 = "0nclr3d8ap0y5cg36i7g4ggdqci6m5q27y9f26b57km8p266kcpy";
   };
 
   buildInputs = [ makeWrapper ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://urn-lang.com;
+    homepage = "https://urn-lang.com";
     description = "Yet another Lisp variant which compiles to Lua";
     license = licenses.bsd3;
     maintainers = with maintainers; [ CrazedProgrammer ];

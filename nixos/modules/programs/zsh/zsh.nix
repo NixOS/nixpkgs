@@ -11,8 +11,27 @@ let
   cfg = config.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}") cfg.shellAliases
+    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
+      (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
+
+  zshStartupNotes = ''
+    # Note that generated /etc/zprofile and /etc/zshrc files do a lot of
+    # non-standard setup to make zsh usable with no configuration by default.
+    #
+    # Which means that unless you explicitly meticulously override everything
+    # generated, interactions between your ~/.zshrc and these files are likely
+    # to be rather surprising.
+    #
+    # Note however, that you can disable loading of the generated /etc/zprofile
+    # and /etc/zshrc (you can't disable loading of /etc/zshenv, but it is
+    # designed to not set anything surprising) by setting `no_global_rcs` option
+    # in ~/.zshenv:
+    #
+    #   echo setopt no_global_rcs >> ~/.zshenv
+    #
+    # See "STARTUP/SHUTDOWN FILES" section of zsh(1) for more info.
+  '';
 
 in
 
@@ -34,13 +53,12 @@ in
       };
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases;
+        default = {};
         description = ''
-          Set of aliases for zsh shell. Overrides the default value taken from
-           <option>environment.shellAliases</option>.
+          Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
         '';
-        type = types.attrs; # types.attrsOf types.stringOrPath;
+        type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
@@ -69,14 +87,44 @@ in
 
       promptInit = mkOption {
         default = ''
-          if [ "$TERM" != dumb ]; then
-              autoload -U promptinit && promptinit && prompt walters
-          fi
+          # Note that to manually override this in ~/.zshrc you should run `prompt off`
+          # before setting your PS1 and etc. Otherwise this will likely to interact with
+          # your ~/.zshrc configuration in unexpected ways as the default prompt sets
+          # a lot of different prompt variables.
+          autoload -U promptinit && promptinit && prompt walters && setopt prompt_sp
         '';
         description = ''
           Shell script code used to initialise the zsh prompt.
         '';
         type = types.lines;
+      };
+
+      histSize = mkOption {
+        default = 2000;
+        description = ''
+          Change history size.
+        '';
+        type = types.int;
+      };
+
+      histFile = mkOption {
+        default = "$HOME/.zsh_history";
+        description = ''
+          Change history file.
+        '';
+        type = types.str;
+      };
+
+      setOptions = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "HIST_IGNORE_DUPS" "SHARE_HISTORY" "HIST_FCNTL_LOCK"
+        ];
+        example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
+        description = ''
+          Configure zsh options. See
+          <citerefentry><refentrytitle>zshoptions</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
+        '';
       };
 
       enableCompletion = mkOption {
@@ -87,6 +135,13 @@ in
         type = types.bool;
       };
 
+      enableBashCompletion = mkOption {
+        default = false;
+        description = ''
+          Enable compatibility with bash's programmable completion system.
+        '';
+        type = types.bool;
+      };
 
       enableGlobalCompInit = mkOption {
         default = cfg.enableCompletion;
@@ -106,20 +161,29 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc."zshenv".text =
+    programs.zsh.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
+
+    environment.etc.zshenv.text =
       ''
         # /etc/zshenv: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for all shells.
 
         # Only execute this file once per shell.
-        # But don't clobber the environment of interactive non-login children!
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
-        export __ETC_ZSHENV_SOURCED=1
+        __ETC_ZSHENV_SOURCED=1
 
         if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
             . ${config.system.build.setEnvironment}
         fi
 
+        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+
+        # Tell zsh how to find installed completions.
+        for p in ''${(z)NIX_PROFILES}; do
+            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+        done
+
+        # Setup custom shell init stuff.
         ${cfge.shellInit}
 
         ${cfg.shellInit}
@@ -130,15 +194,18 @@ in
         fi
       '';
 
-    environment.etc."zprofile".text =
+    environment.etc.zprofile.text =
       ''
         # /etc/zprofile: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for login shells.
+        #
+        ${zshStartupNotes}
 
         # Only execute this file once per shell.
         if [ -n "$__ETC_ZPROFILE_SOURCED" ]; then return; fi
         __ETC_ZPROFILE_SOURCED=1
 
+        # Setup custom login shell init stuff.
         ${cfge.loginShellInit}
 
         ${cfg.loginShellInit}
@@ -149,40 +216,59 @@ in
         fi
       '';
 
-    environment.etc."zshrc".text =
+    environment.etc.zshrc.text =
       ''
         # /etc/zshrc: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for interactive shells.
+        #
+        ${zshStartupNotes}
 
         # Only execute this file once per shell.
         if [ -n "$__ETC_ZSHRC_SOURCED" -o -n "$NOSYSZSHRC" ]; then return; fi
         __ETC_ZSHRC_SOURCED=1
 
+        ${optionalString (cfg.setOptions != []) ''
+          # Set zsh options.
+          setopt ${concatStringsSep " " cfg.setOptions}
+        ''}
+
+        # Setup command line history.
+        # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
+        SAVEHIST=${toString cfg.histSize}
+        HISTSIZE=${toString cfg.histSize}
+        HISTFILE=${cfg.histFile}
+
+        # Configure sane keyboard defaults.
         . /etc/zinputrc
 
-        # history defaults
-        SAVEHIST=2000
-        HISTSIZE=2000
-        HISTFILE=$HOME/.zsh_history
+        ${optionalString cfg.enableGlobalCompInit ''
+          # Enable autocompletion.
+          autoload -U compinit && compinit
+        ''}
 
-        setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+        ${optionalString cfg.enableBashCompletion ''
+          # Enable compatibility with bash's completion system.
+          autoload -U bashcompinit && bashcompinit
+        ''}
 
-        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
-
-        # Tell zsh how to find installed completions
-        for p in ''${(z)NIX_PROFILES}; do
-            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
-        done
-
-        ${optionalString cfg.enableGlobalCompInit "autoload -U compinit && compinit"}
-
+        # Setup custom interactive shell init stuff.
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
 
+        # Setup aliases.
         ${zshAliases}
 
+        # Setup prompt.
         ${cfg.promptInit}
+
+        # Disable some features to support TRAMP.
+        if [ "$TERM" = dumb ]; then
+            unsetopt zle prompt_cr prompt_subst
+            unset RPS1 RPROMPT
+            PS1='$ '
+            PROMPT='$ '
+        fi
 
         # Read system-wide modifications.
         if test -f /etc/zshrc.local; then
@@ -190,7 +276,7 @@ in
         fi
       '';
 
-    environment.etc."zinputrc".source = ./zinputrc;
+    environment.etc.zinputrc.source = ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
@@ -201,7 +287,6 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"
-        "/var/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 

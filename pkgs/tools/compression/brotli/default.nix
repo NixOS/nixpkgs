@@ -1,22 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, fetchpatch, staticOnly ? false }:
 
 # ?TODO: there's also python lib in there
 
 stdenv.mkDerivation rec {
-  name = "brotli-${version}";
-  version = "1.0.6";
+  pname = "brotli";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "1hng7v7n6asli9v8gnshrqjnia5cvrwzgnx7irmk7r98nnjzlqda";
+    sha256 = "z6Dhrabav1MDQ4rAcXaDv0aN+qOoh9cvoXZqEWBB13c=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = stdenv.lib.optional
-    (stdenv.hostPlatform.libc == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
+  patches = stdenv.lib.optional staticOnly (fetchpatch {
+    # context from https://github.com/google/brotli/pull/655
+    # updated patch from https://github.com/google/brotli/pull/655
+    url = "https://github.com/google/brotli/commit/47a554804ceabb899ae924aaee54df806053d0d1.patch";
+    sha256 = "sOeXNVsCaBSD9i82GRUDrkyreGeQ7qaJWjjy/uLL0/0=";
+  });
+
+  cmakeFlags = []
+    ++ stdenv.lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [ "out" "dev" "lib" ];
 
@@ -26,7 +33,14 @@ stdenv.mkDerivation rec {
 
   # This breaks on Darwin because our cmake hook tries to make a build folder
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
-  prePatch = "rm BUILD";
+  prePatch = ''
+      rm BUILD
+
+      # Upstream fixed this reference to runtime-path after the release
+      # and with this references g++ complains about invalid option -R
+      sed -i 's/ -R''${libdir}//' scripts/libbrotli*.pc.in
+      cat scripts/libbrotli*.pc.in
+    '';
 
   # Don't bother with "man" output for now,
   # it currently only makes the manpages hard to use.
@@ -55,8 +69,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = licenses.mit;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
   };
 }
-

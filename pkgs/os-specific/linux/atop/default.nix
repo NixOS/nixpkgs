@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
-  name = "atop-${version}";
+  version = "2.4.0";
+  pname = "atop";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "0r5j9q89wpylmg0px5xymxi3jpihw9wq8bh37g3ciymsw1fp5r3k";
+    sha256 = "0s9xlxlzz688a80zxld840zkrmzw998rdkkg6yc7ssq8fw50275y";
   };
 
   buildInputs = [zlib ncurses];
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     '';
     inherit version;
     license = licenses.gpl2;
-    downloadPage = http://atoptool.nl/downloadatop.php;
+    downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }

@@ -1,15 +1,18 @@
 { stdenv, fetchurl, cmake, hdf5 }:
 
 stdenv.mkDerivation rec {
-  name = "medfile-${version}";
-  version = "3.3.1";
+  pname = "medfile";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "http://files.salome-platform.org/Salome/other/med-${version}.tar.gz";
-    sha256 = "1215sal10xp6xirgggdszay2bmx0sxhn9pgh7x0wg2w32gw1wqyx";
+    sha256 = "1khzclkrd1yn9mz3g14ndgpsbj8j50v8dsjarcj6kkn9zgbbazc4";
   };
 
-  buildInputs = [ cmake hdf5 ];
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ hdf5 ];
 
   checkPhase = "make test";
 
@@ -17,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to read and write MED files";
-    homepage = http://salome-platform.org/;
+    homepage = "http://salome-platform.org/";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
   };

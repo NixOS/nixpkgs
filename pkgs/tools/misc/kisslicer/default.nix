@@ -1,6 +1,6 @@
 { fetchzip
 , libX11
-, libGLU_combined
+, libGLU, libGL
 , makeWrapper
 , stdenv
 }:
@@ -8,7 +8,7 @@
 let
 
   libPath = stdenv.lib.makeLibraryPath [
-    libGLU_combined
+    libGLU libGL
     stdenv.cc.cc
     libX11
   ];
@@ -17,12 +17,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
-  name = "kisslicer-1.6.2";
+stdenv.mkDerivation {
+  name = "kisslicer-1.6.3";
 
   src = fetchzip {
-    url = "http://www.kisslicer.com/uploads/1/5/3/8/15381852/kisslicer_linux64_1.6.2_release.zip";
-    sha256 = "0fb7hzic78skq3ykc37srnjsw0yri7m0pb3arlz076ws7jrcbr0f";
+    url = "http://www.kisslicer.com/uploads/1/5/3/8/15381852/kisslicer_linux64_1.6.3_release.zip";
+    sha256 = "1xmywj5jrcsqv1d5x3mphhvafs4mfm9l12npkhk7l03qxbwg9j82";
     stripRoot = false;
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper
-    libGLU_combined
+    libGLU libGL
     libX11
   ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Convert STL files into Gcode";
-    homepage = http://www.kisslicer.com;
+    homepage = "http://www.kisslicer.com";
     license = licenses.unfree;
     maintainers = [ maintainers.cransom ];
     platforms = [ "x86_64-linux" ];

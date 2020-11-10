@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, gpgme, libidn, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, gpgme, libidn2, libunistring, gobject-introspection
+, vala }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.0";
-  name = "gmime-${version}";
+  version = "3.2.7";
+  pname = "gmime";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gmime/3.2/${name}.tar.xz";
-    sha256 = "1q6palbpf6lh6bvy9ly26q5apl5k0z0r4mvl6zzqh90rz4rn1v3m";
+    url = "mirror://gnome/sources/gmime/3.2/${pname}-${version}.tar.xz";
+    sha256 = "0i3xfc84qn1z99i70q68kbnp9rmgqrnprqb418ba52s6g9j9dsia";
   };
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ gobjectIntrospection zlib gpgme libidn ];
+  buildInputs = [ vala gobject-introspection zlib gpgme libidn2 libunistring ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib ];
-  configureFlags = [ "--enable-introspection=yes" ];
+  configureFlags = [
+    "--enable-introspection=yes"
+    "--enable-vala=yes"
+  ];
 
   postPatch = ''
     substituteInPlace tests/testsuite.c \
@@ -23,13 +27,15 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ gnupg ];
 
+  doCheck = true;
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jstedfast/gmime/;
+    homepage = "https://github.com/jstedfast/gmime/";
     description = "A C/C++ library for creating, editing and parsing MIME messages and structures";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chaoflow ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

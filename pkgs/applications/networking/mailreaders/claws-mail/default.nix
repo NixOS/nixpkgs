@@ -1,8 +1,8 @@
-{ fetchurl, stdenv, wrapGAppsHook, autoreconfHook
-, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor-icon-theme
+{ config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
+, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, gumbo
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
-, glib-networking, gsettings-desktop-schemas, libSM, libytnef
+, openldap, perl, pkgconfig, poppler, python, shared-mime-info
+, glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
 # TODO: Plugins that complain about their missing dependencies, even when
@@ -10,10 +10,10 @@
 #         gdata requires libgdata
 #         geolocation requires libchamplain
 , enableLdap ? false
-, enableNetworkManager ? false
+, enableNetworkManager ? config.networking.networkmanager.enable or false
 , enablePgp ? true
 , enablePluginArchive ? false
-, enablePluginFancy ? false
+, enablePluginLitehtmlViewer ? false
 , enablePluginNotificationDialogs ? true
 , enablePluginNotificationSounds ? true
 , enablePluginPdf ? false
@@ -30,21 +30,23 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "claws-mail-${version}";
-  version = "3.17.1";
+  pname = "claws-mail";
+  version = "3.17.7";
 
   src = fetchurl {
-    url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "1wknxbwyzm5xjh3cqmddcxmvp1rkp301qga5n5rgfi7vcd0myyvm";
+    url = "https://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    sha256 = "1j6x09621wng0lavh53nwzh9vqjzpspl8kh5azh7kbihpi4ldfb0";
   };
 
   outputs = [ "out" "dev" ];
 
-  patches = [ ./mime.patch ];
+  patches = [
+    ./mime.patch
+  ];
 
   preConfigure = ''
     # autotools check tries to dlopen libpython as a requirement for the python plugin
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${python}/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python}/lib
   '';
 
   postPatch = ''
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =
-    [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas hicolor-icon-theme
+    [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas
       libetpan perl glib-networking libSM libytnef
     ]
     ++ optional enableSpellcheck enchant
@@ -64,12 +66,12 @@ stdenv.mkDerivation rec {
     ++ optional enablePluginArchive libarchive
     ++ optional enablePluginNotificationSounds libcanberra-gtk2
     ++ optional enablePluginNotificationDialogs libnotify
-    ++ optional enablePluginFancy libsoup
+    ++ optional enablePluginLitehtmlViewer gumbo
     ++ optional enablePluginRssyl libxml2
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
     ++ optional enablePluginPdf poppler
-    ++ optional enablePluginFancy webkitgtk24x-gtk2;
+    ++ optional enablePluginVcalendar libical;
 
   configureFlags =
     optional (!enableLdap) "--disable-ldap"
@@ -80,7 +82,7 @@ stdenv.mkDerivation rec {
       "--disable-pgpmime-plugin"
     ]
     ++ optional (!enablePluginArchive) "--disable-archive-plugin"
-    ++ optional (!enablePluginFancy) "--disable-fancy-plugin"
+    ++ optional (!enablePluginLitehtmlViewer) "--disable-litehtml_viewer-plugin"
     ++ optional (!enablePluginPdf) "--disable-pdf_viewer-plugin"
     ++ optional (!enablePluginPython) "--disable-python-plugin"
     ++ optional (!enablePluginRavatar) "--disable-libravatar-plugin"
@@ -107,9 +109,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The user-friendly, lightweight, and fast email client";
-    homepage = https://www.claws-mail.org/;
+    homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin orivej ];
   };
 }

@@ -1,54 +1,101 @@
-{ stdenv, darwin, fetchurl, makeWrapper, pkgconfig
-, harfbuzz, icu, lpeg, luaexpat, luazlib, luafilesystem
-, fontconfig, lua, libiconv
+{ stdenv
+, darwin
+, fetchurl
+, makeWrapper
+, pkg-config
+, autoconf
+, automake
+, poppler_utils
+, harfbuzz
+, icu
+, fontconfig
+, lua
+, libiconv
+, makeFontsConf
+, gentium
 }:
 
-with stdenv.lib;
-
 let
-
-  libs          = [lpeg luaexpat luazlib luafilesystem];
-  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
-  luaPath       = concatStringsSep ";" (map getLuaPath libs);
-  luaCPath      = concatStringsSep ";" (map getLuaCPath libs);
-
+  luaEnv = lua.withPackages(ps: with ps; [
+    cassowary
+    cosmo
+    compat53
+    linenoise
+    lpeg
+    lua-zlib
+    lua_cliargs
+    luaepnf
+    luaexpat
+    luafilesystem
+    luarepl
+    luasec
+    luasocket
+    penlight
+    stdlib
+    vstruct
+  ]);
 in
 
 stdenv.mkDerivation rec {
-  name = "sile-${version}";
-  version = "0.9.4";
+  pname = "sile";
+  version = "0.10.12";
 
   src = fetchurl {
-    url = "https://github.com/simoncozens/sile/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "1mald727hy9bi17rcaph8q400yn5xqkn5f2xf1408g94wmwncs8w";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "0bxm3vhba289vcgpzbs1hz5fjamf0zgxkr7h8vcsiijjjavmv64a";
   };
 
-  nativeBuildInputs = [pkgconfig makeWrapper];
-  buildInputs = [ harfbuzz icu lua lpeg luaexpat luazlib luafilesystem fontconfig libiconv ]
-  ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
-  ;
+  configureFlags = [
+    "--with-system-luarocks"
+    "--with-manual"
+  ];
 
-  preConfigure = optionalString stdenv.isDarwin ''
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    harfbuzz
+    icu
+    fontconfig
+    libiconv
+    luaEnv
+  ]
+  ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
+  ;
+  checkInputs = [
+    poppler_utils
+  ];
+
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
   '';
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework AppKit";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-framework AppKit";
 
-  LUA_PATH = luaPath;
-  LUA_CPATH = luaCPath;
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [
+      gentium
+    ];
+  };
 
-  postInstall = ''
-    wrapProgram $out/bin/sile \
-      --set LUA_PATH "${luaPath};" \
-      --set LUA_CPATH "${luaCPath};" \
+  doCheck = true;
+
+  enableParallelBuilding = true;
+
+  preBuild = stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace libtexpdf/dpxutil.c \
+      --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
 
-  meta = {
+  outputs = [ "out" "doc" "man" "dev" ];
+
+  meta = with stdenv.lib; {
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -60,8 +107,9 @@ stdenv.mkDerivation rec {
       technologies and borrowing some ideas from graphical systems
       such as InDesign.
     '';
-    homepage = http://www.sile-typesetter.org;
+    homepage = "https://sile-typesetter.org/";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };
 }

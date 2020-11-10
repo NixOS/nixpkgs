@@ -1,5 +1,6 @@
 { stdenv, writeScript, vmTools, makeInitrd
 , samba, vde2, openssh, socat, netcat-gnu, coreutils, gnugrep, gzip
+, runtimeShell
 }:
 
 { sshKey
@@ -52,7 +53,7 @@ let
       store /fs/nix/store
 
     mount -t 9p \
-      -o trans=virtio,version=9p2000.L,cache=loose \
+      -o trans=virtio,version=9p2000.L \
       xchg /fs/xchg
 
     echo root:x:0:0::/root:/bin/false > /fs/etc/passwd
@@ -74,7 +75,7 @@ let
   loopForever = "while :; do ${coreutils}/bin/sleep 1; done";
 
   initScript = writeScript "init.sh" (''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     ${coreutils}/bin/cp -L "${sshKey}" /ssh.key
     ${coreutils}/bin/chmod 600 /ssh.key
   '' + (if installMode then ''

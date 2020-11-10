@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "multiprocess";
-  version = "0.70.6.1";
+  version = "0.70.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ip5caz67b3q0553mr8gm8xwsb8x500jn8ml0gihgyfy52m2ypcq";
+    sha256 = "9fd5bd990132da77e73dec6e9613408602a4612e1d73caf2e2b813d2b61508e5";
   };
 
   propagatedBuildInputs = [ dill ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Better multiprocessing and multithreading in python";
-    homepage = https://github.com/uqfoundation/multiprocess;
+    homepage = "https://github.com/uqfoundation/multiprocess";
     license = licenses.bsd3;
   };
 }

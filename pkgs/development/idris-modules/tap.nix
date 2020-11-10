@@ -7,6 +7,7 @@ build-idris-package  {
   name = "tap";
   version = "2017-04-08";
 
+  ipkgName = "TAP";
   idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {
@@ -16,13 +17,9 @@ build-idris-package  {
     sha256 = "0fhlmmivq9xv89r7plrnhmvay1j7bapz3wh7y8lygwvcrllh9zxs";
   };
 
-  postUnpack = ''
-    rm source/Draft.ipkg
-  '';
-
   meta = {
     description = "A simple TAP producer and consumer/reporter for Idris";
-    homepage = https://github.com/ostera/tap-idris;
+    homepage = "https://github.com/ostera/tap-idris";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

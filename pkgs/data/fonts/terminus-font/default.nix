@@ -1,26 +1,45 @@
-{ stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
+{ stdenv, fetchurl, python3
+, libfaketime, fonttosfnt
+, bdftopcf, mkfontscale
+}:
 
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.46";
+  pname = "terminus-font";
+  version = "4.48"; # set here for use in URL below
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/terminus-font/${name}/${name}.tar.gz";
-    sha256 = "1kavqw38aarz0vpwz4b7l6l8xkyc5096zaf9ypqnvdwraqz46aaf";
+    url = "mirror://sourceforge/project/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1bwlkj39rqbyq57v5yssayav6hzv1n11b9ml2s0dpiyfsn6rqy9l";
   };
 
-  buildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
+  nativeBuildInputs =
+    [ python3 bdftopcf libfaketime
+      fonttosfnt mkfontscale
+    ];
 
-  patchPhase = ''
+  enableParallelBuilding = true;
+
+  postPatch = ''
     substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
+    substituteInPlace Makefile --replace 'gzip'     'gzip -n'
   '';
 
-  configurePhase = ''
-    sh ./configure --prefix=$out
+  postBuild = ''
+    # convert unicode bdf fonts to otb
+    for i in *.bdf; do
+      name=$(basename $i .bdf)
+      faketime -f "1970-01-01 00:00:01" \
+      fonttosfnt -v -o "$name.otb" "$i"
+    done
   '';
 
-  installPhase = ''
-    make install fontdir
+  postInstall = ''
+    # install otb fonts (for GTK applications)
+    install -m 644 -D *.otb -t "$out/share/fonts/misc";
+    mkfontdir "$out/share/fonts/misc"
   '';
+
+  installTargets = [ "install" "fontdir" ];
 
   meta = with stdenv.lib; {
     description = "A clean fixed width font";
@@ -36,9 +55,8 @@ stdenv.mkDerivation rec {
       16x32. The styles are normal and bold (except for 6x12), plus
       EGA/VGA-bold for 8x14 and 8x16.
     '';
-    homepage = http://www.is-vn.bg/hamster/;
+    homepage = "http://terminus-font.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.linux;
   };
 }

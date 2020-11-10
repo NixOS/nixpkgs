@@ -1,5 +1,5 @@
---- source.org/tools/deadlock_detector.py	1980-01-02 00:00:00.000000000 +0000
-+++ source/tools/deadlock_detector.py	2018-05-29 13:57:11.807126673 +0100
+--- source.org/tools/deadlock.py	1980-01-02 00:00:00.000000000 +0000
++++ source/tools/deadlock.py	2018-05-29 13:57:11.807126673 +0100
 @@ -44,9 +44,8 @@
  #
  # 01-Feb-2017   Kenny Yu   Created this.

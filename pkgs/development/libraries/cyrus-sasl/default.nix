@@ -1,38 +1,39 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext,
-  pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false }:
+{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
+, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
+, buildPackages, pruneLibtoolFiles, fetchpatch }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
-  version = "2.1.26";
+  pname = "cyrus-sasl";
+  version = "2.1.27";
 
   src = fetchurl {
-    url = "ftp://ftp.cyrusimap.org/cyrus-sasl/${name}.tar.gz";
-    sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
+    urls =
+      [ "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
+        "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
+      ];
+    sha256 = "1m85zcpgfdhm43cavpdkhb1s2zq1b31472hq1w1gs3xh94anp1i6";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [ openssl db gettext kerberos ]
     ++ lib.optional enableLdap openldap
-    ++ lib.optional stdenv.isFreeBSD autoreconfHook
-    ++ lib.optional stdenv.isLinux pam
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isLinux pam;
 
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
+    ./cyrus-sasl-ac-try-run-fix.patch
     (fetchpatch {
-      name = "CVE-2013-4122.patch";
-      url = "http://sourceforge.net/projects/miscellaneouspa/files/glibc217/cyrus-sasl-2.1.26-glibc217-crypt.diff";
-      sha256 = "05l7dh1w9d5fvzg0pjwzqh0fy4ah8y5cv6v67s4ssbq8xwd4pkf2";
+      name = "CVE-2019-19906.patch";
+      url = "https://sources.debian.org/data/main/c/cyrus-sasl2/2.1.27+dfsg-1+deb10u1/debian/patches/0021-CVE-2019-19906.patch";
+      sha256 = "1n4c5wg7l9j8rlbvx8i605j5d39xmj5wm618k8acxl4fmglcmfls";
     })
-  ] ++ lib.optional stdenv.isFreeBSD (
-      fetchurl {
-        url = "http://www.linuxfromscratch.org/patches/blfs/svn/cyrus-sasl-2.1.26-fixes-3.patch";
-        sha256 = "1vh4pc2rxxm6yvykx0b7kg09jbcwcxwv5rs6yq2ag3y8p6a9x86w";
-      }
-    );
+  ];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -42,20 +43,10 @@ stdenv.mkDerivation rec {
     "--enable-shared"
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
-  # Avoid triggering regenerating using broken autoconf/libtool bits.
-  # (many distributions carry patches to remove/replace, but this works for now)
-  dontUpdateAutotoolsGnuConfigScripts = if stdenv.hostPlatform.isMusl then true else null;
-
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
-  postInstall = ''
-    for f in $out/lib/*.la $out/lib/sasl2/*.la; do
-      substituteInPlace $f --replace "${openssl.dev}/lib" "${openssl.out}/lib"
-    done
-  '';
-
   meta = {
-    homepage = https://www.cyrusimap.org/sasl;
+    homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
     license = licenses.bsdOriginal;

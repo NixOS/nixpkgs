@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "sedutil-${version}";
+  pname = "sedutil";
   version = "1.15.1";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "DTA sedutil Self encrypting drive software";
-    homepage    = https://www.drivetrust.com;
+    homepage    = "https://www.drivetrust.com";
     license     = licenses.gpl3;
     platforms   = platforms.linux;
   };

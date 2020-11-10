@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, sslEnable ? false, libcap, pam }:
+{ stdenv, fetchurl, libcap, openssl, pam }:
 
 stdenv.mkDerivation rec {
   name = "vsftpd-3.0.3";
@@ -8,44 +8,29 @@ stdenv.mkDerivation rec {
     sha256 = "1xsyjn68k3fgm2incpb3lz2nikffl9by2safp994i272wvv2nkcx";
   };
 
+  buildInputs = [ libcap openssl pam ];
+
   patches = [ ./CVE-2015-1419.patch ];
 
-  preConfigure = stdenv.lib.optionalString sslEnable ''
-    echo "Will enable SSL"
+  postPatch = ''
     sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h
+
+    substituteInPlace Makefile \
+      --replace -dirafter "" \
+      --replace /usr $out \
+      --replace /etc $out/etc
+
+    mkdir -p $out/sbin $out/man/man{5,8}
   '';
 
-  # The gcc-wrappers use -idirafter for glibc, and vsftpd also, and
-  # their dummyinc come before those of glibc, then the build works bad.
-  prePatch = ''
-    sed -i -e 's/-idirafter.*//' Makefile
-  '';
+  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
 
-  preBuild =
-    let
-      sslLibs = if sslEnable then "-lcrypt -lssl -lcrypto" else "";
-    in ''
-      makeFlagsArray=( "LIBS=${sslLibs} -lpam -lcap -fstack-protector" )
-    '';
+  enableParallelBuilding = true;
 
-  # It won't link without this flag, used in CFLAGS
-
-  buildInputs = [ openssl libcap pam ];
-
-  installPhase = ''
-    mkdir -pv $out/sbin
-    install -v -m 755 vsftpd $out/sbin/vsftpd
-
-    mkdir -pv $out/share/man/man{5,8}
-    install -v -m 644 vsftpd.8 $out/share/man/man8/vsftpd.8
-    install -v -m 644 vsftpd.conf.5 $out/share/man/man5/vsftpd.conf.5
-
-    mkdir -pv $out/etc/xinetd.d
-    install -v -m 644 xinetd.d/vsftpd $out/etc/xinetd.d/vsftpd
-  '';
-
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+  meta = with stdenv.lib; {
+    description = "A very secure FTP daemon";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.linux;
   };
 }

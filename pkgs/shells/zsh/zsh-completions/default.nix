@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
-  name = "zsh-completions-${version}";
-  version = "0.28.0";
+  pname = "zsh-completions";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
-    repo = "zsh-completions";
-    rev = "${version}";
-    sha256 = "02n1svaw74y0za856w8zjb98nzg1h6bmy4xsar71irsk1mj3m5h2";
+    repo = pname;
+    rev = version;
+    sha256 = "12l9wrx0aysyj62kgp5limglz0nq73w8c415wcshxnxmhyk6sw6d";
   };
 
   installPhase= ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Additional completion definitions for zsh";
-    homepage = https://github.com/zsh-users/zsh-completions;
+    homepage = "https://github.com/zsh-users/zsh-completions";
     license = stdenv.lib.licenses.free;
 
     platforms = stdenv.lib.platforms.unix;

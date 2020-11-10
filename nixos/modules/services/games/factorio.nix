@@ -4,14 +4,13 @@ with lib;
 
 let
   cfg = config.services.factorio;
-  factorio = pkgs.factorio-headless;
   name = "Factorio";
-  stateDir = cfg.stateDir;
+  stateDir = "/var/lib/${cfg.stateDirName}";
   mkSavePath = name: "${stateDir}/saves/${name}.zip";
   configFile = pkgs.writeText "factorio.conf" ''
     use-system-read-write-data-directories=true
     [path]
-    read-data=${factorio}/share/factorio/data
+    read-data=${cfg.package}/share/factorio/data
     write-data=${stateDir}
   '';
   serverSettings = {
@@ -37,7 +36,7 @@ let
     only_admins_can_pause_the_game = true;
     autosave_only_on_server = true;
     admins = [];
-  };
+  } // cfg.extraSettings;
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
 in
@@ -55,7 +54,7 @@ in
         '';
       };
       saveName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "default";
         description = ''
           The name of the savegame that will be used by the server.
@@ -80,11 +79,11 @@ in
           customizations.
         '';
       };
-      stateDir = mkOption {
-        type = types.path;
-        default = "/var/lib/factorio";
+      stateDirName = mkOption {
+        type = types.str;
+        default = "factorio";
         description = ''
-          The server's data directory.
+          Name of the directory under /var/lib holding the server's data.
 
           The configuration and map will be stored here.
         '';
@@ -102,17 +101,25 @@ in
         '';
       };
       game-name = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = "Factorio Game";
         description = ''
           Name of the game as it will appear in the game listing.
         '';
       };
       description = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = "";
         description = ''
           Description of the game that will appear in the listing.
+        '';
+      };
+      extraSettings = mkOption {
+        type = types.attrs;
+        default = {};
+        example = { admins = [ "username" ];};
+        description = ''
+          Extra game configuration that will go into server-settings.json
         '';
       };
       public = mkOption {
@@ -130,28 +137,37 @@ in
         '';
       };
       username = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Your factorio.com login credentials. Required for games with visibility public.
         '';
       };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.factorio-headless;
+        defaultText = "pkgs.factorio-headless";
+        example = "pkgs.factorio-headless-experimental";
+        description = ''
+          Factorio version to use. This defaults to the stable channel.
+        '';
+      };
       password = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Your factorio.com login credentials. Required for games with visibility public.
         '';
       };
       token = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Authentication token. May be used instead of 'password' above.
         '';
       };
       game-password = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Game password.
@@ -176,20 +192,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    users = {
-      users.factorio = {
-        uid             = config.ids.uids.factorio;
-        description     = "Factorio server user";
-        group           = "factorio";
-        home            = stateDir;
-        createHome      = true;
-      };
-
-      groups.factorio = {
-        gid = config.ids.gids.factorio;
-      };
-    };
-
     systemd.services.factorio = {
       description   = "Factorio headless server";
       wantedBy      = [ "multi-user.target" ];
@@ -198,28 +200,40 @@ in
       preStart = toString [
         "test -e ${stateDir}/saves/${cfg.saveName}.zip"
         "||"
-        "${factorio}/bin/factorio"
+        "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--create=${mkSavePath cfg.saveName}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
       ];
 
       serviceConfig = {
-        User = "factorio";
-        Group = "factorio";
         Restart = "always";
         KillSignal = "SIGINT";
-        WorkingDirectory = stateDir;
-        PrivateTmp = true;
+        DynamicUser = true;
+        StateDirectory = cfg.stateDirName;
         UMask = "0007";
         ExecStart = toString [
-          "${factorio}/bin/factorio"
+          "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--port=${toString cfg.port}"
           "--start-server=${mkSavePath cfg.saveName}"
           "--server-settings=${serverSettingsFile}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
         ];
+
+        # Sandboxing
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictRealtime = true;
+        RestrictNamespaces = true;
+        MemoryDenyWriteExecute = true;
       };
     };
 

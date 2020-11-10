@@ -2,7 +2,8 @@
 , yad, mkvtoolnix-cli, libnotify }:
 
 stdenv.mkDerivation {
-  name = "mpv-convert-script-2016-03-18.lua";
+  pname = "mpv-convert-script";
+  version = "2016-03-18";
   src = fetchgit {
     url = "https://gist.github.com/Zehkul/25ea7ae77b30af959be0";
     rev = "f95cee43e390e843a47e8ec9d1711a12a8cd343d";
@@ -24,12 +25,14 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   installPhase = ''
-    cp convert_script.lua $out
+    mkdir -p $out/share/mpv/scripts
+    cp convert_script.lua $out/share/mpv/scripts
   '';
+  passthru.scriptName = "convert_script.lua";
 
   meta = {
     description = "Convert parts of a video while you are watching it in mpv";
-    homepage = https://gist.github.com/Zehkul/25ea7ae77b30af959be0;
+    homepage = "https://gist.github.com/Zehkul/25ea7ae77b30af959be0";
     maintainers = [ lib.maintainers.Profpatsch ];
     longDescription = ''
       When this script is loaded into mpv, you can hit Alt+W to mark the beginning

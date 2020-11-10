@@ -1,30 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, locale, pytest }:
+{ lib, buildPythonPackage, fetchPypi, locale, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "6.7";
+  version = "7.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02qkfpykbq35id8glfgwc38yc430427yd05z1wc5cnld8zgicmgi";
+    sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
   };
 
-  patches = stdenv.lib.optional (stdenv.lib.versionAtLeast version "6.7") (substituteAll {
-    src = ./fix-paths.patch;
-    locale = "${locale}/bin/locale";
-  });
-
-  buildInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test tests
+  postPatch = ''
+    substituteInPlace src/click/_unicodefun.py \
+      --replace "'locale'" "'${locale}/bin/locale'"
   '';
 
-  # https://github.com/pallets/click/issues/823
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
-    homepage = http://click.pocoo.org/;
+  meta = with lib; {
+    homepage = "https://click.palletsprojects.com/";
     description = "Create beautiful command line interfaces in Python";
     longDescription = ''
       A Python package for creating beautiful command line interfaces in a

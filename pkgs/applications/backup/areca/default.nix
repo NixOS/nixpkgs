@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ant, jre, jdk, swt, acl, attr }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "areca-7.5";
 
   src = fetchurl {
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     substituteInPlace areca.sh --replace "bin/" ""
     substituteInPlace bin/areca_run.sh --replace "/usr/java" "${jre}/lib/openjdk"
     substituteInPlace bin/areca_run.sh --replace "/usr/lib/java/swt.jar" "${swt}/jars/swt.jar"
+
+    # Fix for NixOS/nixpkgs/issues/53716
+    sed -i -e 's;^;#include <attr/attributes.h>;' jni/com_myJava_file_metadata_posix_jni_wrapper_FileAccessWrapper.c
+    substituteInPlace jni/com_myJava_file_metadata_posix_jni_wrapper_FileAccessWrapper.c --replace attr/xattr.h sys/xattr.h
 
     sed -i "s#^PROGRAM_DIR.*#PROGRAM_DIR=$out#g" bin/areca_run.sh
     sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${stdenv.lib.makeLibraryPath [ swt acl ]}#g" bin/areca_run.sh
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.areca-backup.org/;
+    homepage = "http://www.areca-backup.org/";
     description = "An Open Source personal backup solution";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];

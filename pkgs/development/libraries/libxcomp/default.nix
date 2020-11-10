@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libjpeg, libpng, libX11, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libxcomp-${version}";
+  pname = "libxcomp";
   version = "3.5.99.16";
 
   src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "NX compression library";
-    homepage = http://wiki.x2go.org/doku.php/wiki:libs:nx-libs;
+    homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

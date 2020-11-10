@@ -4,44 +4,72 @@ with lib;
 
 let
   cfg = config.services.radarr;
+
 in
 {
   options = {
     services.radarr = {
       enable = mkEnableOption "Radarr";
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/radarr/.config/Radarr";
+        description = "The directory where Radarr stores its data files.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for the Radarr web interface.";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "radarr";
+        description = "User account under which Radarr runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "radarr";
+        description = "Group under which Radarr runs.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.radarr = {
       description = "Radarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        test -d /var/lib/radarr/ || {
-          echo "Creating radarr data directory in /var/lib/radarr/"
-          mkdir -p /var/lib/radarr/
-        }
-        chown -R radarr:radarr /var/lib/radarr/
-        chmod 0700 /var/lib/radarr/
-      '';
 
       serviceConfig = {
         Type = "simple";
-        User = "radarr";
-        Group = "radarr";
-        PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.radarr}/bin/Radarr";
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
-    users.users.radarr = {
-      uid = config.ids.uids.radarr;
-      home = "/var/lib/radarr";
-      group = "radarr";
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 7878 ];
     };
-    users.groups.radarr.gid = config.ids.gids.radarr;
 
+    users.users = mkIf (cfg.user == "radarr") {
+      radarr = {
+        group = cfg.group;
+        home = cfg.dataDir;
+        uid = config.ids.uids.radarr;
+      };
+    };
+
+    users.groups = mkIf (cfg.group == "radarr") {
+      radarr.gid = config.ids.gids.radarr;
+    };
   };
 }

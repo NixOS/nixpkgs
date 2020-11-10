@@ -1,16 +1,19 @@
-{ fetchFromGitHub, git, gnupg1compat, makeWrapper, openssl, stdenv }:
+{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, stdenv
+, libxslt, docbook_xsl
+}:
 
 stdenv.mkDerivation rec {
-
-  name = "git-crypt-${meta.version}";
+  pname = "git-crypt";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "AGWA";
-    repo = "git-crypt";
-    rev = meta.version;
-    sha256 = "4fe45f903a4b3cc06a5fe11334b914c225009fe8440d9e91a54fdf21cf4dcc4d";
-    inherit name;
+    repo = pname;
+    rev = version;
+    sha256 = "13m9y0m6gc3mlw3pqv9x4i0him2ycbysizigdvdanhh514kga602";
   };
+
+  nativeBuildInputs = [ libxslt ];
 
   buildInputs = [ openssl makeWrapper ];
 
@@ -19,13 +22,18 @@ stdenv.mkDerivation rec {
       --replace '(escape_shell_arg(our_exe_path()))' '= "git-crypt"'
   '';
 
-  installPhase = ''
-    make install PREFIX=$out
-    wrapProgram $out/bin/* --prefix PATH : $out/bin:${git}/bin:${gnupg1compat}/bin
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "ENABLE_MAN=yes"
+    "DOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl-nons/manpages/docbook.xsl"
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/git-crypt --prefix PATH : $out/bin:${git}/bin:${gnupg}/bin
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.agwa.name/projects/git-crypt;
+    homepage = "https://www.agwa.name/projects/git-crypt";
     description = "Transparent file encryption in git";
     longDescription = ''
       git-crypt enables transparent encryption and decryption of files in a git
@@ -40,7 +48,6 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
     license = licenses.gpl3;
-    version = "0.5.0";
     maintainers = [ maintainers.dochang ];
     platforms = platforms.unix;
   };

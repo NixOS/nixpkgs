@@ -12,22 +12,22 @@
 , jedi
 , decorator
 , pickleshare
-, simplegeneric
 , traitlets
 , prompt_toolkit
 , pexpect
 , appnope
-, typing
 , backcall
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "6.5.0";
+  version = "7.17.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0f2ef9eada4a68ef63ee10b6dde4f35c840035c50fd24265f8052c98947d5a4";
+    sha256 = "b70974aaa2674b05eb86a910c02ed09956a33f2dd6c71afc60f0b128a77e7f28";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -42,13 +42,12 @@ buildPythonPackage rec {
     jedi
     decorator
     pickleshare
-    simplegeneric
     traitlets
     prompt_toolkit
+    pygments
     pexpect
     backcall
-  ] ++ lib.optionals stdenv.isDarwin [appnope]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  ] ++ lib.optionals stdenv.isDarwin [appnope];
 
   LC_ALL="en_US.UTF-8";
 
@@ -58,15 +57,14 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  # IPython 6.0.0 and above does not support Python < 3.3.
-  # The last IPython version to support older Python versions
-  # is 5.3.x.
-  disabled = pythonOlder "3.3";
+  pythonImportsCheck = [
+    "IPython"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "IPython: Productive Interactive Computing";
-    homepage = http://ipython.org/;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds fridh ];
+    homepage = "http://ipython.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

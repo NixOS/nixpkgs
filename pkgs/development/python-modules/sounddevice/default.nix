@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , cffi
 , numpy
 , portaudio
@@ -9,11 +10,12 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.3.11";
+  version = "0.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pfcbgbl77nggchxb2i5rb78m7hpgn65aqpz99yfx1fgfbmy9yg1";
+    sha256 = "007cfef077c447eebbdbca3d510ca4365c211c2c6c4d2912d6eec43c8cbcbc02";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];
@@ -30,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Play and Record Sound with Python";
-    homepage = http://python-sounddevice.rtfd.org/;
+    homepage = "http://python-sounddevice.rtfd.org/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fridh ];
   };

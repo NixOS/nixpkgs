@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libconfig, pkgconfig, libevent, openssl }:
 
-stdenv.mkDerivation rec {
-  name = "nntp-proxy-${version}";
+stdenv.mkDerivation {
+  pname = "nntp-proxy";
   version = "2014-01-06";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple NNTP proxy with SSL support";
-    homepage = https://github.com/nieluj/nntp-proxy;
+    homepage = "https://github.com/nieluj/nntp-proxy";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.fadenb ];
     platforms = stdenv.lib.platforms.all;

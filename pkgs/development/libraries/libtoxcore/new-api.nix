@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
 , libvpx, check, libconfig, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "tox-core-new-20160727";
 
   src = fetchFromGitHub {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

@@ -1,33 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, isPy27
+, aenum
 , wrapt
+, typing
 , pyserial
 , nose
 , mock
+, hypothesis
+, future
 , pytest
 , pytest-timeout }:
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "2.2.1";
+  version = "3.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5e93b2ee32bdd597d9d908afe5171c402a04c9678ba47b60f33506738b1375b";
+    sha256 = "2d3c223b7adc4dd46ce258d4a33b7e0dbb6c339e002faa40ee4a69d5fdce9449";
   };
 
-  propagatedBuildInputs = [ wrapt pyserial ];
-  checkInputs = [ nose mock pytest pytest-timeout ];
+  propagatedBuildInputs = [ wrapt pyserial aenum ] ++ lib.optional (pythonOlder "3.5") typing;
+  checkInputs = [ nose mock pytest hypothesis future ];
 
+  # Add the scripts to PATH
   checkPhase = ''
-    pytest -k "not test_writer_and_reader \
-           and not test_reader \
-           and not test_socketcan_on_ci_server"
+    PATH=$out/bin:$PATH pytest -c /dev/null
   '';
 
   meta = with lib; {
-    homepage = https://github.com/hardbyte/python-can;
+    homepage = "https://github.com/hardbyte/python-can";
     description = "CAN support for Python";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ sorki ];

@@ -3,12 +3,12 @@
 # at runtime, need jdk
 
 stdenv.mkDerivation rec {
-  name = "groovy-${version}";
-  version = "2.5.2";
+  pname = "groovy";
+  version = "3.0.6";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "0bi85gvgpwd9ndg0kiwlrp560934dzy1072zpf587vrmpvqrcps9";
+    sha256 = "1wimpcg4nyxykbkh407d7h0b828vmrf7sv412mgmif57p3aw433f";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An agile dynamic language for the Java Platform";
-    homepage = http://groovy-lang.org/;
+    homepage = "http://groovy-lang.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

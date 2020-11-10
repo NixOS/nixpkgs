@@ -1,19 +1,27 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, libevent, pkgconfig, makeWrapper }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, makeWrapper
+, bison
+, ncurses
+, libevent
+}:
 
 let
 
   bashCompletion = fetchFromGitHub {
     owner = "imomaliev";
     repo = "tmux-bash-completion";
-    rev = "fcda450d452f07d36d2f9f27e7e863ba5241200d";
-    sha256 = "092jpkhggjqspmknw7h3icm0154rg21mkhbc71j5bxfmfjdxmya8";
+    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
+    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "tmux-${version}";
-  version = "2.7";
+  pname = "tmux";
+  version = "3.1c";
 
   outputs = [ "out" "man" ];
 
@@ -21,12 +29,20 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "1yr4l8ckd67c3id4vrbpha91xxpdfpw0cpbr3v81lam0m7k4rgba";
+    sha256 = "1fqgpzfas85dn0sxlvvg6rj488jwgnxs8d3gqcm8lgs211m9qhcf";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [
+    pkgconfig
+    autoreconfHook
+    bison
+  ];
 
-  buildInputs = [ ncurses libevent makeWrapper ];
+  buildInputs = [
+    ncurses
+    libevent
+    makeWrapper
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -39,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://tmux.github.io/;
+    homepage = "https://tmux.github.io/";
     description = "Terminal multiplexer";
 
     longDescription =

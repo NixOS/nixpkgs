@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, cmake, bison
+{ stdenv, fetchurl, cmake, bison, pkgconfig
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
-, cctools, CoreServices, developer_cmds }:
+, cctools, CoreServices, developer_cmds
+, libtirpc, rpcsvc-proto
+}:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
 let
 self = stdenv.mkDerivation rec {
-  name = "mysql-${version}";
-  version = "5.7.23";
+  pname = "mysql";
+  version = "5.7.27";
 
   src = fetchurl {
-    url = "mirror://mysql/MySQL-5.7/${name}.tar.gz";
-    sha256 = "0rbc3xsc11lq2dm0ip6gxa16c06hi74scb97x5cw7yhbabaz4c07";
+    url = "mirror://mysql/MySQL-5.7/${pname}-${version}.tar.gz";
+    sha256 = "1fhv16zr46pxm1j8vb8x8mh3nwzglg01arz8gnazbmjqldr5idpq";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
@@ -19,12 +21,10 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ cmake bison ];
+  nativeBuildInputs = [ cmake bison pkgconfig rpcsvc-proto ];
 
-  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
+  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib libtirpc ]
      ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
-
-  enableParallelBuilding = true;
 
   outputs = [ "out" "static" ];
 
@@ -57,7 +57,7 @@ self = stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
-  CXXFLAGS = "-fpermissive";
+  CXXFLAGS = "-fpermissive -std=c++11";
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
@@ -75,9 +75,13 @@ self = stdenv.mkDerivation rec {
     mysqlVersion = "5.7";
   };
 
-  meta = {
-    homepage = https://www.mysql.com/;
+  meta = with stdenv.lib; {
+    homepage = "https://www.mysql.com/";
     description = "The world's most popular open source database";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = with licenses; [
+      artistic1 bsd0 bsd2 bsd3 bsdOriginal
+      gpl2 lgpl2 lgpl21 mit publicDomain licenses.zlib
+    ];
   };
 }; in self

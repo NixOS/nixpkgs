@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapackWithoutAtlas
-, gmp, mpfr, pari, ntl, gsl, blas, mpfi
+{ stdenv, lib, fetchurl, fetchpatch, texlive, bison, flex, lapack, blas
+, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
 , readline, gettext, libpng, libao, gfortran, perl
-, enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
+, enableGUI ? false, libGL ? null, libGLU ? null, xorg ? null, fltk ? null
 }:
 
-assert enableGUI -> libGLU_combined != null && xorg != null && fltk != null;
+assert enableGUI -> libGLU != null && libGL != null && xorg != null && fltk != null;
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
-  name = "${attr}-${version}";
-  attr = if enableGUI then "giac-with-xcas" else "giac";
-  version = "1.4.9-59"; # TODO try to remove preCheck phase on upgrade
+  pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
+  version = "1.5.0-21"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "0dv5p5y6gkrsmz3xa7fw87rjyabwdwk09mqb09kb7gai9n9dgayk";
+    sha256 = "1b9khiv0mk2xzw1rblm2jy6qsf8y6f9k7qy15sxpb21d72hzzbl2";
   };
 
   patches = stdenv.lib.optionals (!enableGUI) [
@@ -37,17 +37,26 @@ stdenv.mkDerivation rec {
 
   # perl is only needed for patchShebangs fixup.
   buildInputs = [
-    gmp mpfr pari ntl gsl blas mpfi
-    readline gettext libpng libao perl
+    gmp mpfr pari ntl gsl blas mpfi glpk nauty
+    readline gettext libpng libao perl ecm
     # gfortran.cc default output contains static libraries compiled without -fPIC
     # we want libgfortran.so.3 instead
     (stdenv.lib.getLib gfortran.cc)
-    liblapackWithoutAtlas
+    lapack blas
   ] ++ stdenv.lib.optionals enableGUI [
-    libGLU_combined fltk xorg.libX11
+    libGL libGLU fltk xorg.libX11
   ];
 
-  outputs = [ "out" "doc" ];
+  /* fixes:
+  configure:16211: checking for main in -lntl
+  configure:16230: g++ -o conftest -g -O2   conftest.cpp -lntl  -llapack -lblas -lgfortran -ldl -lpng16 -lm -lmpfi -lmpfr -lgmp  >&5
+  /nix/store/y9c1v4x7y39j2rfbg17agjwqdzxpsn18-ntl-11.3.2/lib/libntl.so: undefined reference to `pthread_key_create'
+  */
+  NIX_CFLAGS_LINK="-lpthread";
+
+  # xcas Phys and Turtle menus are broken with split outputs
+  # and interactive use is likely to need docs
+  outputs = [ "out" ] ++ stdenv.lib.optional (!enableGUI) "doc";
 
   doCheck = true;
   preCheck = ''
@@ -64,7 +73,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
     "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
-    "--enable-ao"
+    "--enable-ao" "--enable-ecm" "--enable-glpk"
   ] ++ stdenv.lib.optionals enableGUI [
     "--enable-gui" "--with-x"
   ];
@@ -80,18 +89,22 @@ stdenv.mkDerivation rec {
     # reference cycle
     rm "$out/share/giac/doc/el/"{casinter,tutoriel}/Makefile
 
-    mkdir -p "$doc/share/giac"
-    mv "$out/share/giac/doc" "$doc/share/giac"
-    mv "$out/share/giac/examples" "$doc/share/giac"
+    if [ -n "$doc" ]; then
+      mkdir -p "$doc/share/giac"
+      mv "$out/share/giac/doc" "$doc/share/giac"
+      mv "$out/share/giac/examples" "$doc/share/giac"
+    fi
+  '' + stdenv.lib.optionalString (!enableGUI) ''
+    for i in pixmaps application-registry applications icons; do
+      rm -r "$out/share/$i";
+    done;
   '';
 
   meta = with stdenv.lib; {
     description = "A free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
-    ## xcas is buildable on darwin but there are specific instructions I could
-    ## not test
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);
     maintainers = [ maintainers.symphorien ];
   };
 }

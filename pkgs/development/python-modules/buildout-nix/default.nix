@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "zc.buildout";
-  version = "2.12.1";
+  version = "2.13.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e180b62fd129a68cb3a9ec8eb0ef457e18921269a93e87ef2cc34519415332d";
+    sha256 = "1dyc5g3yv7wm3hf3fcsh6y1wivzjj1bspafr5qqb653z9a31lsfn";
   };
 
   patches = [ ./nix.patch ];
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   postInstall = "mv $out/bin/buildout{,-nix}";
 
   meta = {
-    homepage = http://www.buildout.org;
+    homepage = "http://www.buildout.org";
     description = "A software build and configuration system";
     license = stdenv.lib.licenses.zpl21;
     maintainers = [ stdenv.lib.maintainers.goibhniu ];

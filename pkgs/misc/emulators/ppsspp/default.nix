@@ -1,45 +1,70 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qtmultimedia
-, glew, libzip, snappy, zlib, withGamepads ? true, SDL2 }:
+{ SDL2
+, cmake
+, fetchFromGitHub
+, ffmpeg_3
+, glew
+, lib
+, libzip
+, mkDerivation
+, pkgconfig
+, python3
+, qtbase
+, qtmultimedia
+, snappy
+, zlib
+}:
 
-assert withGamepads -> (SDL2 != null);
-with stdenv.lib;
-
-stdenv.mkDerivation rec {
-  name = "ppsspp-${version}";
-  version = "1.4.2";
+mkDerivation rec {
+  pname = "ppsspp";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
-    repo = "ppsspp";
+    repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0m4qkhx7q496sm7ibg2n7rm3npxzfr93iraxgndk0vhfk8vy8w75";
+    sha256 = "sha256-W41Poq5S+opkasIGYo13SQZWQF1HjfFnH7u9DW5HNA0=";
   };
 
-  patchPhase = ''
-    echo 'const char *PPSSPP_GIT_VERSION = "${src.rev}";' >> git-version.cpp
+  postPatch = ''
+    substituteInPlace git-version.cmake --replace unknown ${src.rev}
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qtbase qtmultimedia glew libzip snappy zlib ]
-    ++ optionals withGamepads [ SDL2 SDL2.dev ];
+  nativeBuildInputs = [ cmake pkgconfig python3 ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DUSING_QT_UI=ON" ];
+  buildInputs = [
+    SDL2
+    ffmpeg_3
+    glew
+    libzip
+    qtbase
+    qtmultimedia
+    snappy
+    zlib
+  ];
+
+  cmakeFlags = [
+    "-DOpenGL_GL_PREFERENCE=GLVND"
+    "-DUSE_SYSTEM_FFMPEG=ON"
+    "-DUSE_SYSTEM_LIBZIP=ON"
+    "-DUSE_SYSTEM_SNAPPY=ON"
+    "-DUSING_QT_UI=ON"
+    "-DHEADLESS=OFF"
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/ppsspp
-    mv PPSSPPQt $out/bin/ppsspp
+    mkdir -p $out/share/ppsspp
+    install -Dm555 PPSSPPQt $out/bin/ppsspp
     mv assets $out/share/ppsspp
   '';
 
-  enableParallelBuilding = true;
-
-  meta = {
-    homepage = https://www.ppsspp.org/;
-    description = "A PSP emulator for Android, Windows, Mac and Linux, written in C++";
+  meta = with lib; {
+    description = "A HLE Playstation Portable emulator, written in C++";
+    homepage = "https://www.ppsspp.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fuuzetsu AndersonTorres ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
+# TODO: add SDL headless port

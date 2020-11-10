@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, libX11, perl, libXtst, xextproto, libXi, libXinerama, libxkbcommon }:
+{ stdenv, fetchurl, pkgconfig, libX11, perl, libXtst, xorgproto, libXi, libXinerama, libxkbcommon }:
 
 stdenv.mkDerivation rec {
-  name = "xdotool-${version}";
+  pname = "xdotool";
   version = "3.20160805.1";
 
   src = fetchurl {
@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig perl ];
-  buildInputs = [ libX11 libXtst xextproto libXi libXinerama libxkbcommon ];
+  buildInputs = [ libX11 libXtst xorgproto libXi libXinerama libxkbcommon ];
 
   preBuild = ''
     mkdir -p $out/lib
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    homepage = https://www.semicomplete.com/projects/xdotool/;
+    homepage = "https://www.semicomplete.com/projects/xdotool/";
     description = "Fake keyboard/mouse input, window management, and more";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric];

@@ -1,33 +1,31 @@
-{ stdenv, fetchhg, autoreconfHook, zlib, darwin }:
+{ stdenv, fetchFromGitHub, cmake, zlib, Cocoa }:
 
 stdenv.mkDerivation rec {
-  name = "atomicparsley-${version}";
-  version = "0.9.6";
+  pname = "atomicparsley";
+  version = "20200701.154658.b0d6223";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/wez/atomicparsley";
-    sha256 = "05n4kbn91ps52h3wi1qb2jwygjsc01qzx4lgkv5mvwl5i49rj8fm";
+  src = fetchFromGitHub {
+    owner = "wez";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-EHO4WkxoAXUhuJKMNYmBbGfOgtO9uklzXtWS4QsV1c8=";
   };
 
-  buildInputs =
-    [ autoreconfHook
-      zlib
-    ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  nativeBuildInputs = [ cmake ];
 
-  installPhase = "install -D AtomicParsley $out/bin/AtomicParsley";
+  buildInputs = [ zlib ]
+                ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  installPhase = ''
+    runHook preInstall
+    install -D AtomicParsley $out/bin/AtomicParsley
+    runHook postInstall
+  '';
 
   meta = with stdenv.lib; {
-    description = ''
-      A lightweight command line program for reading, parsing and
-      setting metadata into MPEG-4 files
-    '';
-
-    longDescription = ''
-      This is a maintained fork of the original AtomicParsley.
-    '';
-
-    homepage = https://bitbucket.org/wez/atomicparsley;
-    license = licenses.gpl2;
+    description = "A CLI program for reading, parsing and setting metadata into MPEG-4 files";
+    homepage = "https://github.com/wez/atomicparsley";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pjones ];
   };

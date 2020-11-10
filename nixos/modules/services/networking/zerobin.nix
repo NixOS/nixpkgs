@@ -74,7 +74,7 @@ in
     };
 
     config = mkIf (cfg.enable) {
-      users.users."${cfg.user}" =
+      users.users.${cfg.user} =
       if cfg.user == "zerobin" then {
         isSystemUser = true;
         group = cfg.group;
@@ -82,7 +82,7 @@ in
         createHome = true;
       }
       else {};
-      users.groups."${cfg.group}" = {};
+      users.groups.${cfg.group} = {};
 
       systemd.services.zerobin = {
         enable = true;

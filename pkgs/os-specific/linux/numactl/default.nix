@@ -1,22 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "numactl-${version}";
-  version = "2.0.12";
+  pname = "numactl";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
-    owner = "numactl";
-    repo = "numactl";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0crhpxwakp0gvd7wwpbkfd3brnrdf89lkbf03axnbrs0b6kaygg2";
+    sha256 = "0hahpdp5xqy9cbg251bdxqkml341djn2h856g435h4ngz63sr9fs";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-      url = https://git.alpinelinux.org/cgit/aports/plain/testing/numactl/musl.patch?id=0592b128c71c3e70d493bc7a13caed0d7fae91dd;
-      sha256 = "080b0sygmg7104qbbh1amh3b322yyiajwi2d3d0vayffgva0720v";
-    });
 
   postPatch = ''
     patchShebangs test
@@ -29,9 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
-    homepage = https://github.com/numactl/numactl;
+    homepage = "https://github.com/numactl/numactl";
     license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ wkennington ];
   };
 }

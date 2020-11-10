@@ -3,10 +3,10 @@
 { fetchurl, stdenv }:
 let
   defaultRepos = [
-    http://central.maven.org/maven2
-    http://oss.sonatype.org/content/repositories/releases
-    http://oss.sonatype.org/content/repositories/public
-    http://repo.typesafe.com/typesafe/releases
+    "http://repo1.maven.org/maven2"
+    "http://oss.sonatype.org/content/repositories/releases"
+    "http://oss.sonatype.org/content/repositories/public"
+    "http://repo.typesafe.com/typesafe/releases"
   ];
 in
 
@@ -67,7 +67,7 @@ in
     # packages packages that mention this derivation in their buildInputs.
     installPhase = ''
       mkdir -p $out/share/java
-      ln -s ${jar} $out/share/java
+      ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
     '';
     # We also add a `jar` attribute that can be used to easily obtain the path
     # to the downloaded jar file.

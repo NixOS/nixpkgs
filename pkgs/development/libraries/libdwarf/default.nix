@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libelf }:
+{ stdenv, fetchurl, libelf, zlib }:
 
 let
-  version = "20180809";
+  version = "20181024";
   src = fetchurl {
     url = "https://www.prevanders.net/libdwarf-${version}.tar.gz";
     # Upstream displays this hash broken into three parts:
@@ -10,21 +10,22 @@ let
            + "5be7f9ee368f1cc8940cea4ddda01ff99d28bbf1fe58";
   };
   meta = {
-    homepage = https://www.prevanders.net/dwarf.html;
+    homepage = "https://www.prevanders.net/dwarf.html";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl21Plus;
   };
 
 in rec {
-  libdwarf = stdenv.mkDerivation rec {
-    name = "libdwarf-${version}";
+  libdwarf = stdenv.mkDerivation {
+    pname = "libdwarf";
+    inherit version;
 
     configureFlags = [ "--enable-shared" "--disable-nonshared" ];
 
     preConfigure = ''
       cd libdwarf
     '';
-    buildInputs = [ libelf ];
+    buildInputs = [ libelf zlib ];
 
     installPhase = ''
       mkdir -p $out/lib $out/include
@@ -36,8 +37,9 @@ in rec {
     inherit meta src;
   };
 
-  dwarfdump = stdenv.mkDerivation rec {
-    name = "dwarfdump-${version}";
+  dwarfdump = stdenv.mkDerivation {
+    pname = "dwarfdump";
+    inherit version;
 
     preConfigure = ''
       cd dwarfdump

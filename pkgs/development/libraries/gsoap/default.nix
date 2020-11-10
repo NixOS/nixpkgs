@@ -4,12 +4,12 @@ let
   majorVersion = "2.8";
 
 in stdenv.mkDerivation rec {
-  name = "gsoap-${version}";
-  version = "${majorVersion}.53";
+  pname = "gsoap";
+  version = "${majorVersion}.108";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${version}.zip";
-    sha256 = "0n35dh32gidi65c36cwjd91304pwiabfblvd64kg21djpjl06qcr";
+    sha256 = "0x58bwlclk7frv03kg8bp0pm7zl784samvbzskrnr7dl5v866nvl";
   };
 
   buildInputs = [ openssl zlib ];
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C/C++ toolkit for SOAP web services and XML-based applications";
-    homepage = http://www.cs.fsu.edu/~engelen/soap.html;
+    homepage = "http://www.cs.fsu.edu/~engelen/soap.html";
     # gsoap is dual/triple licensed (see homepage for details):
     # 1. gSOAP Public License 1.3 (based on Mozilla Public License 1.1).
     #    Components NOT covered by the gSOAP Public License are:

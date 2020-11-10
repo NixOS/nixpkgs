@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , nose
 , pandas
@@ -8,10 +9,12 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.9.0";
+  version = "0.11.0";
+  disabled = pythonOlder "3.6";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f";
+    sha256 = "390f8437b14f5ce845062f2865ad51656464c306d09bb97d7764c6cba1dd607c";
   };
 
   checkInputs = [ nose ];
@@ -26,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statisitical data visualization";
-    homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
+    homepage = "https://seaborn.pydata.org/";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fridh ];
   };

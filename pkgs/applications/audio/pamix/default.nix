@@ -3,7 +3,7 @@
 , libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "pamix-${version}";
+  pname = "pamix";
   version = "1.6";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pulseaudio terminal mixer";
-    homepage    = https://github.com/patroclos/PAmix;
+    homepage    = "https://github.com/patroclos/PAmix";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];

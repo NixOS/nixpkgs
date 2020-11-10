@@ -1,10 +1,6 @@
-{ stdenv, fetchurl, xorg, jre, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, jdk14, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret }:
 
 let
-  rpath = stdenv.lib.makeLibraryPath (with xorg; [
-    libXtst
-  ]);
-
   desktopItem = makeDesktopItem {
     name = "apache-directory-studio";
     exec = "ApacheDirectoryStudio";
@@ -14,26 +10,23 @@ let
     genericName = "Apache Directory Studio";
     categories = "Java;Network";
   };
-
+  version = "2.0.0-M15";
+  versionWithDate = "2.0.0.v20200411-M15";
 in
 stdenv.mkDerivation rec {
-  name = "apache-directory-studio-${version}";
-  version = "2.0.0.v20170904-M13";
+  pname = "apache-directory-studio";
+  inherit version;
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "mirror://apache/directory/studio/${version}/ApacheDirectoryStudio-${version}-linux.gtk.x86_64.tar.gz";
-        sha256 = "1jfnm6m0ijk31r30hhrxxnizk742dm317iny041p29v897rma7aq";
-      }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "mirror://apache/directory/studio/${version}/ApacheDirectoryStudio-${version}-linux.gtk.x86.tar.gz";
-        sha256 = "1bxmgram42qyhrqkgp5k8770f5mjjdd4c6xl4gj09smiycm1qa4n";
+        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
+        sha256 = "1rkyb0qcsl9hk2qcwp5mwaab69q3sn77v5xyn9mbvi5wg9icbc37";
       }
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ glib libsecret ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
 
   installPhase = ''
     dest="$out/libexec/ApacheDirectoryStudio"
@@ -43,10 +36,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         "$dest/ApacheDirectoryStudio"
+
     makeWrapper "$dest/ApacheDirectoryStudio" \
         "$out/bin/ApacheDirectoryStudio" \
-        --prefix PATH : "${jre}/bin" \
-        --prefix LD_LIBRARY_PATH : "${rpath}"
+        --prefix PATH : "${jdk14}/bin"
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
   '';

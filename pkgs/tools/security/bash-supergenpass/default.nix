@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, openssl, coreutils, gnugrep }:
 
-stdenv.mkDerivation rec {
-  name = "bash-supergenpass-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "bash-supergenpass-unstable";
   version = "2018-04-18";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fgaz ];
-    homepage = https://github.com/lanzz/bash-supergenpass;
+    homepage = "https://github.com/lanzz/bash-supergenpass";
   };
 }
 

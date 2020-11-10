@@ -2,14 +2,14 @@
 , curl, libxml2, pam, sblim-sfcc }:
 
 stdenv.mkDerivation rec {
-  name = "openwsman-${version}";
-  version = "2.6.5";
+  pname = "openwsman";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner  = "Openwsman";
     repo   = "openwsman";
     rev    = "v${version}";
-    sha256 = "1r0zslgpcr4m20car4s3hsccy10xcb39qhpw3dhpjv42xsvvs5xv";
+    sha256 = "19dj38jyzhhhvk863cikcwk5awzlq3337pxmsaqqm4wrcygrkfmx";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_RUBY_GEM=no"
+    "-DBUILD_PYTHON=no"
+    "-DBUILD_PYTHON3=yes"
   ];
 
   preConfigure = ''
@@ -28,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description  = "Openwsman server implementation and client API with bindings";
-    downloadPage = https://github.com/Openwsman/openwsman/releases;
-    homepage     = https://openwsman.github.io;
+    downloadPage = "https://github.com/Openwsman/openwsman/releases";
+    homepage     = "https://openwsman.github.io";
     license      = licenses.bsd3;
     maintainers  = with maintainers; [ deepfire ];
     platforms    = platforms.linux; # PAM is not available on Darwin

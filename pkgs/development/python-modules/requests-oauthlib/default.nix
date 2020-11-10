@@ -2,12 +2,12 @@
 , oauthlib, requests }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "1.3.0";
   pname = "requests-oauthlib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8886bfec5ad7afb391ed5443b1f697c6f4ae98d0e5620839d8b4499c032ada3f";
+    sha256 = "0smaxs5ixng4z0k6dsgmm6s972ka3p6a2ykdpnl23mqzlw0ic9ml";
   };
 
   doCheck = false;        # Internet tests fail when building in chroot
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "OAuthlib authentication support for Requests";
-    homepage = https://github.com/requests/requests-oauthlib;
+    homepage = "https://github.com/requests/requests-oauthlib";
     maintainers = with maintainers; [ prikhi ];
   };
 }

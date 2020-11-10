@@ -1,6 +1,6 @@
 /* TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
-  - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
+  - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
@@ -24,7 +24,7 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
+    inherit bin combinePkgs buildEnv lib makeWrapper writeText
       stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
@@ -38,9 +38,6 @@ let
     clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
 
-      dvidvi = orig.dvidvi // {
-        hasRunfiles = false; # only contains docs that's in bin.core.doc already
-      };
       texlive-msg-translations = orig.texlive-msg-translations // {
         hasRunfiles = false; # only *.po for tlmgr
       };
@@ -69,7 +66,7 @@ let
 
   flatDeps = pname: attrs:
     let
-      version = attrs.version or bin.texliveYear;
+      version = attrs.version or (builtins.toString attrs.revision);
       mkPkgV = tlType: let
         pkg = attrs // {
           sha512 = attrs.sha512.${tlType};
@@ -84,15 +81,15 @@ let
             # the fake derivations are used for filtering of hyphenation patterns
           else { inherit pname version; tlType = "run"; }
         )]
-        ++ lib.optional (attrs.sha512 ? "doc") (mkPkgV "doc")
-        ++ lib.optional (attrs.sha512 ? "source") (mkPkgV "source")
+        ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
+        ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
         ++ combinePkgs (attrs.deps or {});
     };
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
@@ -100,31 +97,20 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-              map (up: "${up}/${urlName}.tar.xz") urlPrefixes
-            );
+        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
 
-      # Upstream refuses to distribute stable tarballs,
-      # so we host snapshots on IPFS or on our own servers.
-      # Common packages should get served from the binary cache anyway.
-      # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
+      # The tarballs on CTAN mirrors for the current release are constantly
+      # receiving updates, so we can't use those directly. Stable snapshots
+      # need to be used instead. Ideally, for the release branches of NixOS we
+      # should be switching to the tlnet-final versions
+      # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
-        # A snapshot temporarily hosted by @xeji.
-        # TODO: remove when there is a reliable long-term solution
-        https://cat3.de/texlive-2018/tlnet/archive
+        # tlnet-final snapshot
+        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
+        #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
-        # TODO: Add second, faster and more reliable snapshot mirror,
-        # maybe on one of our project's servers
-
-        # IPFS seeded by the mirror above - this may be quite slow
-        https://ipfs.io/ipfs/QmT4Z67wXin1Z9DhvqwSSkSZSuu8hT6LgDyMu6CBm9Tb7t/tlnet/archive
-
-        # The canonical source moves quickly and will be broken almost immediately
-        http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
-
-        # Should be stable for historic, archived releases
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
-        # TODO: use this later when 2018 is archived
-
+        # Daily snapshots hosted by one of the texlive release managers
+        https://texlive.info/tlnet-archive/2020/10/09/tlnet/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -171,12 +157,6 @@ let
   combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
     (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
 
-  # TODO: replace by buitin once it exists
-  fastUnique = comparator: list: with lib;
-    let un_adj = l: if length l < 2 then l
-      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
-    in un_adj (lib.sort comparator list);
-
 in
   tl // {
     inherit bin combine;
@@ -189,9 +169,7 @@ in
           addMetaAttrs rec {
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
-            hydraPlatforms = lib.optionals
-              (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
-            maintainers = [ lib.maintainers.vcunat ];
+            maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {
             ${pname} = attrs;
@@ -199,7 +177,7 @@ in
           })
         )
         { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust
+            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
             scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
     );

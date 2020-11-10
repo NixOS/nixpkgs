@@ -2,16 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.72";
+  version = "1.78";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab6b492443adb90c66267b3d24d602ae69a93c68f4b9f135ba01cb06d36ce5a2";
+    sha256 = "1ee0a0b6c2376680fea6642d5080baa419fd73df104a62d58a8baf7a8bbe4564";
   };
+
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [ numpy ];
   # Checks try to write to $HOME, which does not work with nix
@@ -25,7 +28,7 @@ buildPythonPackage rec {
       applications which address the needs of current and future work in
       bioinformatics.
     '';
-    homepage = https://biopython.org/wiki/Documentation;
+    homepage = "https://biopython.org/wiki/Documentation";
     maintainers = with lib.maintainers; [ luispedro ];
     license = lib.licenses.bsd3;
   };

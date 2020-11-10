@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "capnproto-${version}";
-  version = "0.6.1";
+  pname = "capnproto";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "https://capnproto.org/capnproto-c++-${version}.tar.gz";
-    sha256 = "010s9yhq4531wvdfrdf2477zswhck6cjfby79w73rff3v06090l0";
+    sha256 = "03f1862ljdshg7d0rg3j7jzgm3ip55kzd2y91q7p0racax3hxx6i";
   };
 
   meta = with stdenv.lib; {

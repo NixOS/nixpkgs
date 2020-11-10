@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hardinfo-${version}";
+  pname = "hardinfo";
   version = "0.5.1";
 
   src = fetchurl {
@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   # Fixes '#error You must compile this program without "-O"'
   hardeningDisable = [ "all" ];
 
+  # Ignore undefined references to a bunch of libsoup symbols
+  NIX_LDFLAGS = "--unresolved-symbol=ignore-all";
+
   preConfigure = ''
     patchShebangs configure
 
@@ -27,6 +30,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s/^CFLAGS = \(.*\)/CFLAGS = \1 -std=gnu89/" Makefile.in
 
     substituteInPlace ./arch/linux/common/modules.h --replace /sbin/modinfo modinfo
+    substituteInPlace ./arch/linux/common/os.h --replace /lib/libc.so.6 ${stdenv.glibc.out}/lib/libc.so.6
   '';
 
   # Makefile supports DESTDIR but not PREFIX (it hardcodes $DESTDIR/usr/).
@@ -37,10 +41,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hardinfo.org/;
+    homepage = "http://hardinfo.org/";
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
   };
 }

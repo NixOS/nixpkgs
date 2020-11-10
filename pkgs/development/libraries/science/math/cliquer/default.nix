@@ -4,15 +4,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.21";
-  name = "cliquer-${version}";
+  version = "1.22";
+  pname = "cliquer";
 
   # autotoolized version of the original cliquer
   src = fetchFromGitHub {
     owner = "dimpase";
     repo = "autocliquer";
     rev = "v${version}";
-    sha256 = "180i4qj1a25qfp75ig2d3144xfpb1dgcgpha0iqqghd7di4awg7z";
+    sha256 = "00gcmrhi2fjn8b246w5a3b0pl7p6haxy5wjvd9kcqib1xanz59z4";
   };
 
   doCheck = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://users.aalto.fi/~pat/cliquer.html;
+    homepage = "https://users.aalto.fi/~pat/cliquer.html";
     downloadPage = src.meta.homepage; # autocliquer
     description = "Routines for clique searching";
     longDescription = ''
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

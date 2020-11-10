@@ -33,10 +33,11 @@ let
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
-    name = "libav-${version}";
+    pname = "libav";
+    inherit version;
 
     src = fetchurl {
-      url = "${meta.homepage}/releases/${name}.tar.xz";
+      url = "${meta.homepage}/releases/${pname}-${version}.tar.xz";
       inherit sha1; # upstream directly provides sha1 of releases over https
     };
 
@@ -102,7 +103,7 @@ let
     setOutputFlags = false;
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
-    buildFlags = "all alltools install-man";
+    buildFlags = [ "all" "alltools" "install-man" ];
 
 
     postInstall = ''
@@ -120,7 +121,7 @@ let
     passthru = { inherit vdpauSupport; };
 
     meta = with stdenv.lib; {
-      homepage = https://libav.org/;
+      homepage = "https://libav.org/";
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;

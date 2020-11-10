@@ -1,7 +1,7 @@
 with import ../../.. {};
 with vmTools;
 
-rec {
+{
 
 
   # Run the PatchELF derivation in a VM.

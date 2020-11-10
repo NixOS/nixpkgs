@@ -1,28 +1,43 @@
-{ stdenv, intltool, fetchurl, pkgconfig
-, itstool, libxml2, libxslt, gnome3 }:
+{ stdenv
+, gettext
+, fetchurl
+, pkgconfig
+, itstool
+, libxml2
+, libxslt
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
-  name = "yelp-xsl-${version}";
-  version = "3.28.0";
+  pname = "yelp-xsl";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp-xsl/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "14rznm1qpsnmkwksnkd5j7zplakl01kvrcw0fdmd5gdc65xz9kcc";
+    url = "mirror://gnome/sources/yelp-xsl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0ryzvkcgxp7xi0icmpdl2rinjn904s8imbxdi6wshzxblqymc8dk";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "yelp-xsl"; attrPath = "gnome3.yelp-xsl"; };
-  };
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+    itstool
+    libxml2
+    libxslt
+  ];
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool itstool libxml2 libxslt ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Yelp;
+    homepage = "https://wiki.gnome.org/Apps/Yelp";
     description = "Yelp's universal stylesheets for Mallard and DocBook";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = [licenses.gpl2 licenses.lgpl2];
     platforms = platforms.linux;
   };

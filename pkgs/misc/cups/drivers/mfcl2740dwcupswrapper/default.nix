@@ -1,11 +1,11 @@
 { stdenv, fetchurl, dpkg, makeWrapper, coreutils, gnugrep, gnused, perl, mfcl2740dwlpr }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl2740dwcupswrapper-${version}";
+  pname = "mfcl2740dwcupswrapper";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf101726/${name}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf101726/${pname}-${version}.i386.deb";
     sha256 = "078453e19f20ab6c7fc4d63c3e09f162f3d1410c04c23a294b6ffbd720b35ffb";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L2740DW CUPS wrapper driver";
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     license = stdenv.lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ stdenv.lib.maintainers.enzime ];

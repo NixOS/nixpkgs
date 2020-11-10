@@ -1,23 +1,30 @@
-{ stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
+{ stdenv, fetchurl, fetchpatch, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
 , libpng, libX11, gettext, boost, libnotify, gtk2, doxygen, spring
 , makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
 
 stdenv.mkDerivation rec {
-  name = "springlobby-${version}";
-  version = "0.267";
+  pname = "springlobby";
+  version = "0.270";
 
   src = fetchurl {
-    url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "0yv7j9l763iqx7hdi2pcz5jkj0068yrffb8nrav7pwg0g3s0znak";
+    url = "https://springlobby.springrts.com/dl/stable/springlobby-${version}.tar.bz2";
+    sha256 = "1r1g2hw9ipsmsmzbhsi7bxqra1za6x7j1kw12qzl5psqyq8rqbgs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig gettext doxygen makeWrapper ];
   buildInputs = [
-    cmake wxGTK30 openal curl gettext libtorrentRasterbar pcre jsoncpp
-    boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
+    wxGTK30 openal curl libtorrentRasterbar pcre jsoncpp
+    boost libpng libX11 libnotify gtk2 glib minizip alure
   ];
 
-  patches = [ ./revert_58b423e.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
+  patches = [
+    ./revert_58b423e.patch # Allows springLobby to continue using system installed spring until #707 is fixed
+    ./fix-certs.patch
+    (fetchpatch {
+      url = "https://github.com/springlobby/springlobby/commit/252c4cb156c1442ed9b4faec3f26265bc7c295ff.patch";
+      sha256 = "sha256-Nq1F5fRPnCkZwl9KgrfuUmpIMK3hUOyZQYIKElWpmzU=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
@@ -28,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://springlobby.info/;
-    repositories.git = git://github.com/springlobby/springlobby.git;
+    homepage = "https://springlobby.info/";
+    repositories.git = "git://github.com/springlobby/springlobby.git";
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom qknight domenkozar ];

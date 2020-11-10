@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "consul-template-${version}";
+  pname = "consul-template";
   version = "0.19.4";
   rev = "v${version}";
 
@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/hashicorp/consul-template/;
+    homepage = "https://github.com/hashicorp/consul-template/";
     description = "Generic template rendering and notifications with Consul";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-magic";
-  version = "0.4.15";
+  version = "0.4.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f3765c0f582d2dfc72c15f3b5a82aecfae9498bd29ca840d72f37d7bd38bfcd5";
+    sha256 = "b757db2a5289ea3f1ced9e60f072965243ea43a2221430048fd8cacab17be0ce";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A python interface to the libmagic file type identification library";
-    homepage = https://github.com/ahupp/python-magic;
+    homepage = "https://github.com/ahupp/python-magic";
     license = lib.licenses.mit;
   };
 }

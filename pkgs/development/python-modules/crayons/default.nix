@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "crayons";
-  version = "0.1.2";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17c0v0dkk8sn8kyyy2w7myxq9981glrbczh6h8sdcr750lb6j5sy";
+    sha256 = "dcb85b87aa03bb65bd3a073d012796b024cabeb086033e616759e2abb769440b";
   };
 
   propagatedBuildInputs = [ colorama ];
 
   meta = with stdenv.lib; {
     description = "TextUI colors for Python";
-    homepage = https://github.com/kennethreitz/crayons;
+    homepage = "https://github.com/kennethreitz/crayons";
     license = licenses.mit;
   };
 }

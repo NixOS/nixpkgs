@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, apr, expat, gnused
 , sslSupport ? true, openssl
-, bdbSupport ? false, db
+, bdbSupport ? true, db
 , ldapSupport ? !stdenv.isCygwin, openldap
 , libiconv
 , cyrus_sasl, autoreconfHook
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://apr.apache.org/;
+    homepage = "http://apr.apache.org/";
     description = "A companion library to APR, the Apache Portable Runtime";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.unix;

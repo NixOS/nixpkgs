@@ -1,31 +1,52 @@
-{ lib, buildPythonPackage, fetchPypi
-, cheroot, contextlib2, portend, routes, six
-, setuptools_scm, zc_lockfile
-, backports_unittest-mock, objgraph, pathpy, pytest, pytestcov
-, backports_functools_lru_cache, requests_toolbelt
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+, setuptools_scm
+, cheroot, portend, more-itertools, zc_lockfile, routes
+, jaraco_collections
+, objgraph, pytest, pytestcov, pathpy, requests_toolbelt, pytest-services
+, fetchpatch
 }:
 
 buildPythonPackage rec {
-  pname = "CherryPy";
-  version = "17.3.0";
+  pname = "cherrypy";
+  version = "18.6.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "c3e4d76232ade4c47666b9008f92556465df517b8dca833ece3bed027028ae7d";
+    pname = "CherryPy";
+    inherit version;
+    sha256 = "16f410izp2c4qhn4n3l5l3qirmkf43h2amjqms8hkl0shgfqwq2n";
   };
 
-  propagatedBuildInputs = [ cheroot contextlib2 portend routes six zc_lockfile ];
+  propagatedBuildInputs = [
+    # required
+    cheroot portend more-itertools zc_lockfile
+    jaraco_collections
+    # optional
+    routes
+  ];
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
 
-  checkInputs = [ backports_unittest-mock objgraph pathpy pytest pytestcov backports_functools_lru_cache requests_toolbelt ];
+  checkInputs = [
+    objgraph pytest pytestcov pathpy requests_toolbelt pytest-services
+  ];
 
+  # Keyboard interrupt ends test suite run
+  # daemonize and autoreload tests have issue with sockets within sandbox
+  # Disable doctest plugin because times out
   checkPhase = ''
-    LANG=en_US.UTF-8 pytest
+    substituteInPlace pytest.ini --replace "--doctest-modules" ""
+    pytest \
+      -k 'not KeyboardInterrupt and not daemonize and not Autoreload' \
+      --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes \
+      --deselect=cherrypy/test/test_tools.py::ToolTests::testCombinedTools \
+      ${stdenv.lib.optionalString stdenv.isDarwin
+        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
   '';
 
-  meta = with lib; {
-    homepage = "http://www.cherrypy.org";
+  meta = with stdenv.lib; {
+    homepage = "https://www.cherrypy.org";
     description = "A pythonic, object-oriented HTTP framework";
     license = licenses.bsd3;
   };

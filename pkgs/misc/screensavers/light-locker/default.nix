@@ -1,46 +1,78 @@
 { stdenv
 , fetchFromGitHub
-, which
-, xfce
-, glib
+, nix-update-script
+, meson
+, ninja
 , pkgconfig
+, gtk3
+, glib
+, intltool
+, dbus-glib
 , libX11
 , libXScrnSaver
-, libXxf86misc
-, gtk3
-, dbus-glib
+, libXxf86vm
+, libXext
 , systemd
+, pantheon
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "${basename}-${version}";
-  basename = "light-locker";
-  version = "1.8.0";
+  pname = "light-locker";
+  version = "1.9.0";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "the-cavalry";
-    repo = basename;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1zsafc10bmliknf12h3mgy7f73lvgph0q0wkaqp42iagmw11yaj8";
+    sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ which xfce.xfce4-dev-tools glib systemd
-                  libX11 libXScrnSaver libXxf86misc gtk3 dbus-glib wrapGAppsHook ];
+  nativeBuildInputs = [
+    intltool
+    meson
+    ninja
+    pkgconfig
+    wrapGAppsHook
+  ];
 
-  preConfigure = ''
-    ./autogen.sh
+  buildInputs = [
+    dbus-glib
+    glib
+    gtk3
+    libX11
+    libXScrnSaver
+    libXext
+    libXxf86vm
+    systemd
+  ];
+
+  mesonFlags = [
+    "-Dmit-ext=true"
+    "-Ddpms-ext=true"
+    "-Dxf86gamma-ext=true"
+    "-Dsystemd=true"
+    "-Dupower=true"
+    "-Dlate-locking=true"
+    "-Dlock-on-suspend=true"
+    "-Dlock-on-lid=true"
+    "-Dgsettings=true"
+  ];
+
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  configureFlags = [ "--with-xf86gamma-ext" "--with-mit-ext"
-                     "--with-dpms-ext" "--with-systemd"
-                     # ConsoleKit and UPower were dropped in favor
-                     # of systemd replacements
-                     "--without-console-kit" "--without-upower" ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/the-cavalry/light-locker;
+    homepage = "https://github.com/the-cavalry/light-locker";
     description = "A simple session-locker for LightDM";
     longDescription = ''
       A simple locker (forked from gnome-screensaver) that aims to
@@ -52,7 +84,7 @@ stdenv.mkDerivation rec {
       ConsoleKit/UPower or logind/systemd.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ obadz ];
+    maintainers = with maintainers; [ obadz ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

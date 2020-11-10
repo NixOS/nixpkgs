@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "meinheld";
-  version = "0.6.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rg5878njn66cc0x2fwrakikz24946r0cxxl6j8vvz5phd4zygi9";
+    sha256 = "008c76937ac2117cc69e032dc69cea9f85fc605de9bac1417f447c41c16a56d6";
   };
 
   propagatedBuildInputs = [ greenlet ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "High performance asynchronous Python WSGI Web Server";
-    homepage = http://meinheld.org/;
+    homepage = "https://meinheld.org/";
     license = licenses.bsd3;
   };
 }

@@ -1,12 +1,15 @@
-{ stdenv, fetchgit, libjack2, libGL, pkgconfig, xorg }:
+{ stdenv, fetchFromGitHub, libjack2, libGL, pkgconfig, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "dragonfly-reverb-${src.rev}";
+  pname = "dragonfly-reverb";
+  version = "3.2.1";
 
-  src = fetchgit {
-    url = "https://github.com/michaelwillis/dragonfly-reverb";
-    rev = "0.9.1";
-    sha256 = "1dbykx044h768bbzabdagl4jh65gqgfsxsrarjrkp07sqnhlnhpd";
+  src = fetchFromGitHub {
+    owner = "michaelwillis";
+    repo = "dragonfly-reverb";
+    rev = version;
+    sha256 = "0vfm2510shah67k87mdyar4wr4vqwii59y9lqfhwm6blxparkrqa";
+    fetchSubmodules = true;
   };
 
   patchPhase = ''
@@ -19,15 +22,22 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    mkdir -p $out/bin
     mkdir -p $out/lib/lv2/
-    cp -a bin/DragonflyReverb.lv2/ $out/lib/lv2/
+    mkdir -p $out/lib/vst/
+    cd bin
+    for bin in DragonflyEarlyReflections DragonflyPlateReverb DragonflyHallReverb DragonflyRoomReverb; do
+      cp -a $bin        $out/bin/
+      cp -a $bin-vst.so $out/lib/vst/
+      cp -a $bin.lv2/   $out/lib/lv2/ ;
+    done
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/michaelwillis/dragonfly-reverb;
+    homepage = "https://github.com/michaelwillis/dragonfly-reverb";
     description = "A hall-style reverb based on freeverb3 algorithms";
     maintainers = [ maintainers.magnetophon ];
-    license = licenses.gpl2;
+    license = licenses.gpl3;
     platforms = ["x86_64-linux"];
   };
 }

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx-testing";
-  version = "0.7.2";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d30f93007620e137b33edf19f52a7225eab853546b7e588ef09d1342e821e94";
+    sha256 = "ef661775b5722d7b00f67fc229104317d35637a4fb4434bf2c005afdf1da4d09";
   };
 
   checkInputs = [ mock ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/sphinx-doc/sphinx-testing;
+    homepage = "https://github.com/sphinx-doc/sphinx-testing";
     license = lib.licenses.bsd2;
     description = "Testing utility classes and functions for Sphinx extensions";
   };

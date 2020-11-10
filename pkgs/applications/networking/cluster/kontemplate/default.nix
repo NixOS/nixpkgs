@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name          = "kontemplate-${version}";
-  version       = "1.7.0";
+  pname = "kontemplate";
+  version       = "1.8.0";
   goPackagePath = "github.com/tazjin/kontemplate";
   goDeps        = ./deps.nix;
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "tazjin";
     repo   = "kontemplate";
     rev    = "v${version}";
-    sha256 = "0vzircajhrfq1nykwpl52cqgzyhy51w4ff7ldpgi95w3a4fz1hzz";
+    sha256 = "123mjmmm4hynraq1fpn3j5i0a1i87l265kkjraxxxbl0zacv74i1";
   };
 
   meta = with lib; {
@@ -20,7 +20,7 @@ buildGoPackage rec {
     license          = licenses.gpl3;
     maintainers      = with maintainers; [ mbode tazjin ];
     platforms        = platforms.unix;
-    repositories.git = git://github.com/tazjin/kontemplate.git;
+    repositories.git = "git://github.com/tazjin/kontemplate.git";
 
     longDescription = ''
       Kontemplate is a simple CLI tool that can take sets of

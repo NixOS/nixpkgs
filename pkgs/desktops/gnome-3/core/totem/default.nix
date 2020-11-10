@@ -1,44 +1,108 @@
-{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1
-, clutter-gtk, clutter-gst, python3Packages, shared-mime-info
-, pkgconfig, gtk3, glib, gobjectIntrospection
-, wrapGAppsHook, itstool, libxml2, vala, gnome3
-, gdk_pixbuf, tracker, nautilus }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, gst_all_1
+, clutter-gtk
+, clutter-gst
+, python3Packages
+, shared-mime-info
+, pkgconfig
+, gtk3
+, glib
+, gobject-introspection
+, totem-pl-parser
+, wrapGAppsHook
+, itstool
+, libxml2
+, vala
+, gnome3
+, grilo
+, grilo-plugins
+, libpeas
+, adwaita-icon-theme
+, gnome-desktop
+, gsettings-desktop-schemas
+, gdk-pixbuf
+, xvfb_run
+}:
 
 stdenv.mkDerivation rec {
-  name = "totem-${version}";
-  version = "3.26.2";
+  pname = "totem";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1llyisls3pzf5bwkpxyfyxc2d3gpa09n5pjy7qsjdqrp3ya4k36g";
+    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0bs33ijvxbr2prb9yj4dxglsszslsn9k258n311sld84masz4ad8";
   };
 
-  doCheck = true;
-
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
-
-  nativeBuildInputs = [ meson ninja vala pkgconfig intltool python3Packages.python itstool gobjectIntrospection wrapGAppsHook ];
-  buildInputs = [
-    gtk3 glib gnome3.grilo clutter-gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly gst_all_1.gst-libav gnome3.libpeas shared-mime-info
-    gdk_pixbuf libxml2 gnome3.defaultIconTheme gnome3.gnome-desktop
-    gnome3.gsettings-desktop-schemas tracker nautilus
-    python3Packages.pygobject3 python3Packages.dbus-python # for plug-ins
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    pkgconfig
+    gettext
+    python3Packages.python
+    itstool
+    gobject-introspection
+    wrapGAppsHook
   ];
+
+  buildInputs = [
+    gtk3
+    glib
+    grilo
+    clutter-gtk
+    clutter-gst
+    totem-pl-parser
+    grilo-plugins
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+    libpeas
+    shared-mime-info
+    gdk-pixbuf
+    libxml2
+    adwaita-icon-theme
+    gnome-desktop
+    gsettings-desktop-schemas
+    # for plug-ins
+    python3Packages.pygobject3
+    python3Packages.dbus-python
+  ];
+
+  checkInputs = [
+    xvfb_run
+  ];
+
+  mesonFlags = [
+    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+  ];
+
+  # Tests do not work with GStreamer 1.18.
+  # https://gitlab.gnome.org/GNOME/totem/-/issues/450
+  doCheck = false;
 
   postPatch = ''
     chmod +x meson_compile_python.py meson_post_install.py # patchShebangs requires executable file
-    patchShebangs .
+    patchShebangs \
+      ./meson_compile_python.py \
+      ./meson_post_install.py
   '';
 
-  mesonFlags = [
-    "-Dwith-nautilusdir=${placeholder "out"}/lib/nautilus/extensions-3.0"
-    # https://bugs.launchpad.net/ubuntu/+source/totem/+bug/1712021
-    # https://bugzilla.gnome.org/show_bug.cgi?id=784236
-    # https://github.com/mesonbuild/meson/issues/1994
-    "-Denable-vala=no"
-  ];
+  checkPhase = ''
+    runHook preCheck
+
+    xvfb-run -s '-screen 0 800x600x24' \
+      ninja test
+
+    runHook postCheck
+  '';
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 
@@ -50,10 +114,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Videos;
+    homepage = "https://wiki.gnome.org/Apps/Videos";
     description = "Movie player for the GNOME desktop based on GStreamer";
-    maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
     platforms = platforms.linux;
   };
 }

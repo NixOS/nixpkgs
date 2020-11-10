@@ -1,19 +1,29 @@
-{ stdenv, fetchFromBitbucket, python3 }:
+{ stdenv, fetchFromGitHub, python3 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.0.0b3";
+  version = "3.2.7";
 
-  src = fetchFromBitbucket {
-    owner = "plas";
+  src = fetchFromGitHub {
+    owner = pname;
     repo = pname;
-    rev = "a511d4539c532b6dddf6d7f1586d30e1ac35bd86";
-    sha256 = "1s3pp97r6p3j81idglnml4faxryk7saszxmv3gys1agdfj75qczr";
+    rev = "v${version}";
+    sha256 = "0gzvdgg5l4j0wgkh7lp4wjabrpxvvs5m7mnpszqixxijdffjd4cj";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ jedi pyserial tkinter docutils pylint ];
+  propagatedBuildInputs = with python3.pkgs; [
+    jedi
+    pyserial
+    tkinter
+    docutils
+    pylint
+    mypy
+    pyperclip
+    asttokens
+    send2trash
+  ];
 
   preInstall = ''
     export HOME=$(mktemp -d)
@@ -35,7 +45,7 @@ buildPythonApplication rec {
       evaluation, detailed visualization of the call stack and a mode
       for explaining the concepts of references and heap.
     '';
-    homepage = https://www.thonny.org/;
+    homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

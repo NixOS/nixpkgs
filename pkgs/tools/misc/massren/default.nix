@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "massren-${version}";
+  pname = "massren";
   version = "1.5.4";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Easily rename multiple files using your text editor";
     license = licenses.mit;
-    homepage = https://github.com/laurent22/massren;
+    homepage = "https://github.com/laurent22/massren";
     maintainers = with maintainers; [ andrew-d ];
   };
 }

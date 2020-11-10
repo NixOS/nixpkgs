@@ -1,64 +1,15 @@
-{ stdenv, lib, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt
-, libGL , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
-, gdk_pixbuf, atk }:
+{ stdenv, openjdk11, fetchFromGitHub, jetbrains }:
 
-# TODO: Investigate building from source instead of patching binaries.
-# TODO: Binary patching for not just x86_64-linux but also x86_64-darwin i686-linux
-
-let drv = stdenv.mkDerivation rec {
-  pname = "jetbrainsjdk";
-  version = "152b1248.6";
-  name = pname + "-" + version;
-
-  src = if stdenv.hostPlatform.system == "x86_64-linux" then
-    fetchurl {
-      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbsdk8u${version}_linux_x64.tar.gz";
-      sha256 = "12l81g8zhaymh4rzyfl9nyzmpkgzc7wrphm3j4plxx129yn9i7d7";
-    }
-  else
-    throw "unsupported system: ${stdenv.hostPlatform.system}";
-
-  nativeBuildInputs = [ file ];
-
-  unpackCmd = "mkdir jdk; pushd jdk; tar -xzf $src; popd";
-
-  installPhase = ''
-    cd ..
-
-    exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file"
-    done
-
-    mv $sourceRoot $out
-    jrePath=$out/jre
-  '';
-
-  postFixup = let
-    arch = "amd64";
-    rSubPaths = [
-      "lib/${arch}/jli"
-      "lib/${arch}/server"
-      "lib/${arch}/xawt"
-      "lib/${arch}"
-    ];
-    in ''
-    rpath+="''${rpath:+:}${stdenv.lib.concatStringsSep ":" (map (a: "$jrePath/${a}") rSubPaths)}"
-    find $out -type f -perm -0100 \
-        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$rpath" {} \;
-    find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
-  '';
-
-  rpath = lib.makeLibraryPath ([
-    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
-    alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk
-  ] ++ (with xorg; [
-    libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm
-  ]));
-
-  passthru.home = drv;
-
+openjdk11.overrideAttrs (oldAttrs: rec {
+  pname = "jetbrains-jdk";
+  version = "11.0.7-b64";
+  src = fetchFromGitHub {
+    owner = "JetBrains";
+    repo = "JetBrainsRuntime";
+    rev = "jb${stdenv.lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "1gxqi6dkyriv9j29ppan638w1ns2g9m4q1sq7arf9kwqr05zim90";
+  };
+  patches = [];
   meta = with stdenv.lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";
     longDescription = ''
@@ -74,7 +25,10 @@ let drv = stdenv.mkDerivation rec {
     '';
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = with platforms; [ "x86_64-linux" ];
+    maintainers = with maintainers; [ edwtjo petabyteboy ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
   };
-}; in drv
+  passthru = oldAttrs.passthru // {
+    home = "${jetbrains.jdk}/lib/openjdk";
+  };
+})

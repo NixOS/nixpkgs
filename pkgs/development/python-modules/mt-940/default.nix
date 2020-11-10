@@ -1,35 +1,31 @@
-{ buildPythonPackage, stdenv, pytestrunner, pyyaml, pytest, enum34
-, pytestpep8, pytestflakes,fetchFromGitHub, isPy3k, lib, glibcLocales
+{ lib, buildPythonPackage, fetchPypi, isPy3k
+, enum34, pyyaml, pytest
 }:
 
 buildPythonPackage rec {
-  version = "4.10.0";
-  pname = "mt940";
+  version = "4.23.0";
+  pname = "mt-940";
 
-  src = fetchFromGitHub {
-    owner = "WoLpH";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1dsf2di8rr0iw2vaz6dppalby3y7i8x2bl0qjqvaiqacjxxvwj65";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "9274bc8298b2d4b69cb3936bdcda315b50e45975789f519a237bdec58346b8d7";
   };
 
-  patches = [
-    ./no-coverage.patch
-  ];
+  propagatedBuildInputs = lib.optional (!isPy3k) enum34;
 
-  propagatedBuildInputs = [ pyyaml pytestrunner ]
-    ++ lib.optional (!isPy3k) enum34;
+  checkInputs = [ pyyaml pytest ];
 
-  LC_ALL="en_US.UTF-8";
-
-  checkInputs = [ pytestpep8 pytestflakes pytest glibcLocales ];
+  # requires tests files that are not present
+  doCheck = false;
   checkPhase = ''
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "mt940" ];
+
+  meta = with lib; {
     description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";
-    homepage = https://pythonhosted.org/mt-940/;
+    homepage = "https://github.com/WoLpH/mt940";
     license = licenses.bsd3;
   };
 }

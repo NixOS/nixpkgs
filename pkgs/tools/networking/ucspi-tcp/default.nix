@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       Interface, using the TCP protocol. UCSPI tools are available for several
       different networks.
     '';
-    homepage = http://cr.yp.to/ucspi-tcp.html;
+    homepage = "http://cr.yp.to/ucspi-tcp.html";
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python2
+{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python3
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
-  name = "pcsclite-${version}";
-  version = "1.8.23";
+  pname = "pcsclite";
+  version = "1.9.0";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
+    sha256 = "1y9f9zipnrmgiw0mxrvcgky8vfrcmg6zh40gbln5a93i2c1x8j01";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
     "--enable-confdir=/etc"
-    "--enable-ipcdir=/run/pcscd"
   ] ++ stdenv.lib.optional stdenv.isLinux
          "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
     ++ stdenv.lib.optional (!stdenv.isLinux)
@@ -35,15 +34,14 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcsc-spy "$dev"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl python2 ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
+  nativeBuildInputs = [ pkgconfig perl ];
+  buildInputs = [ python3 ] ++ stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
              ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
-    homepage = https://pcsclite.apdu.fr/;
+    homepage = "https://pcsclite.apdu.fr/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = with platforms; unix;
   };
 }

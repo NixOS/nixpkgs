@@ -1,44 +1,41 @@
-{ stdenv, callPackage
-, tiles ? true, Cocoa, CoreFoundation
+{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA
+, tiles ? true, Cocoa
 , debug ? false
+, useXdgDir ? false
+, version ? "2019-11-22"
+, rev ? "a6c8ece992bffeae3788425dd4b3b5871e66a9cd"
+, sha256 ? "0ww2q5gykxm802z1kffmnrfahjlx123j1gfszklpsv0b1fccm1ab"
 }:
 
 let
-  inherit (stdenv.lib) optionals optionalString substring;
-  inherit (callPackage ./common.nix { inherit tiles Cocoa debug; }) common utils;
-  inherit (utils) fetchFromCleverRaven installXDGAppLauncher installMacOSAppLauncher;
+  common = callPackage ./common.nix {
+    inherit CoreFoundation tiles Cocoa debug useXdgDir;
+  };
+
+  self = common.overrideAttrs (common: rec {
+    pname = common.pname + "-git";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "CleverRaven";
+      repo = "Cataclysm-DDA";
+      inherit rev sha256;
+    };
+
+    makeFlags = common.makeFlags ++ [
+      "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
+    ];
+
+    passthru = common.passthru // {
+      pkgs = pkgs.override { build = self; };
+      withMods = wrapCDDA self;
+    };
+
+    meta = common.meta // {
+      maintainers = with lib.maintainers;
+      common.meta.maintainers ++ [ rardiol ];
+    };
+  });
 in
 
-stdenv.mkDerivation (common // rec {
-  version = "2018-07-15";
-  name = "cataclysm-dda-git-${version}";
-
-  src = fetchFromCleverRaven {
-    rev = "e1e5d81";
-    sha256 = "198wfj8l1p8xlwicj92cq237pzv2ha9pcf240y7ijhjpmlc9jkr1";
-  };
-
-  buildInputs = common.buildInputs
-    ++ optionals stdenv.isDarwin [ CoreFoundation ];
-
-  patches = [ ./patches/fix_locale_dir_git.patch ];
-
-  makeFlags = common.makeFlags ++ [
-    "VERSION=git-${version}-${substring 0 8 src.rev}"
-  ];
-
-  postInstall = optionalString tiles
-  ( if !stdenv.isDarwin
-    then installXDGAppLauncher
-    else installMacOSAppLauncher
-  );
-
-  # https://hydra.nixos.org/build/65193254
-  # src/weather_data.cpp:203:1: fatal error: opening dependency file obj/tiles/weather_data.d: No such file or directory
-  # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
-  enableParallelBuilding = false;
-
-  meta = with stdenv.lib.maintainers; common.meta // {
-    maintainers = common.meta.maintainers ++ [ rardiol ];
-  };
-})
+self

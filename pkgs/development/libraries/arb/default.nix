@@ -1,13 +1,12 @@
-{stdenv, fetchFromGitHub, fetchpatch, mpir, gmp, mpfr, flint}:
+{stdenv, fetchFromGitHub, mpir, gmp, mpfr, flint}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "arb";
-  version = "2.14.0";
+  version = "2.17.0";
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
-    repo = "${pname}";
-    rev = "${version}";
-    sha256 = "1ndxg7h4xvccjgp5l9z2f8b66dsff6fhf86bn5n7f75a1ksd7554";
+    repo = pname;
+    rev = version;
+    sha256 = "05lpy3hkl5f8ik19aw40cqydrb932xaf2n8hbq9ib5dnk7f010p1";
   };
   buildInputs = [mpir gmp mpfr flint];
   configureFlags = [
@@ -20,8 +19,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit version;
     description = ''A library for arbitrary-precision interval arithmetic'';
+    homepage = "http://arblib.org/";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = with maintainers; [ raskin timokau ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, python27Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
+{ stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
 
-let cairocffi-xcffib = python27Packages.cairocffi.override {
+let cairocffi-xcffib = python37Packages.cairocffi.override {
     withXcffib = true;
   };
 in
 
-python27Packages.buildPythonApplication rec {
+python37Packages.buildPythonApplication rec {
   name = "qtile-${version}";
-  version = "0.12.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "0ynmmnh12mr3gwgz0j7l2hvm8c0y5gzsw80jszdkp4s5bh1q0nrj";
+    sha256 = "1klv1k9847nyx71sfrhqyl1k51k2w8phqnp2bns4dvbqii7q125l";
   };
 
   patches = [
@@ -23,16 +23,29 @@ python27Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace libqtile/manager.py --subst-var-by out $out
+    substituteInPlace libqtile/core/manager.py --subst-var-by out $out
     substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${glib.out}
     substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pango.out}
-    substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
+    substituteInPlace libqtile/backend/x11/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxcb cairo pango python27Packages.xcffib ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
+
+  pythonPath = with python37Packages; [
+    xcffib
+    cairocffi-xcffib
+    setuptools
+    setuptools_scm
+    dateutil
+    dbus-python
+    mpd2
+    psutil
+    pyxdg
+    pygobject3
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
@@ -41,10 +54,10 @@ python27Packages.buildPythonApplication rec {
       --run 'export QTILE_SAVED_PATH=$PATH'
   '';
 
-  doCheck = false; # Requires X server.
+  doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
 
   meta = with stdenv.lib; {
-    homepage = http://www.qtile.org/;
+    homepage = "http://www.qtile.org/";
     license = licenses.mit;
     description = "A small, flexible, scriptable tiling window manager written in Python";
     platforms = platforms.linux;

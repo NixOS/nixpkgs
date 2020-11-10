@@ -1,32 +1,35 @@
-{ stdenv, fetchFromGitHub, gtk3 }:
+{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "iconpack-obsidian-${version}";
-  version = "4.3";
+  pname = "iconpack-obsidian";
+  version = "4.13";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
-    repo = "iconpack-obsidian";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0np2s4mbaykwwv516959r5d9gfdmqb5hadsx18x2if4751a9qz49";
+    sha256 = "1hh0hnd2d08l4n5r73fkngv08f8230pp94k9qq8xgmchvjfg6j8y";
   };
 
   nativeBuildInputs = [ gtk3 ];
 
-  installPhase = ''
-     mkdir -p $out/share/icons
-     mv Obsidian* $out/share/icons
-  '';
+  propagatedBuildInputs = [ gnome-icon-theme mint-x-icons hicolor-icon-theme ];
+  # still missing parent themes: Ambiant-MATE, Faenza-Dark, KFaenza
 
-  postFixup = ''
+  dontDropIconThemeCache = true;
+
+  installPhase = ''
+    mkdir -p $out/share/icons
+    mv Obsidian* $out/share/icons
+
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
   '';
 
   meta = with stdenv.lib; {
-    description = "Gnome Icon Pack based upon Faenza";
-    homepage = https://github.com/madmaxms/iconpack-obsidian;
+    description = "Gnome icon pack based upon Faenza";
+    homepage = "https://github.com/madmaxms/iconpack-obsidian";
     license = licenses.lgpl3;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;

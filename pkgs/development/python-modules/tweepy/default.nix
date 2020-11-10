@@ -1,28 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, requests, six, requests_oauthlib }:
+{ lib, buildPythonPackage, fetchPypi, requests, six, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "3.6.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "901500666de5e265d93e611dc05066bb020481c85550d6bcbf8030212938902c";
-  };
-
-  # Fix build with pip 10
-  # https://github.com/tweepy/tweepy/pull/1030
-  patches = fetchpatch {
-    url = "${meta.homepage}/commit/778bd7a31d2f5fae98652735e7844533589ca221.patch";
-    sha256 = "1sqmjn0ngiynhfkdkcs33qmvl49ysfp8522hvxjk8bx252y9qw2h";
+    sha256 = "bfd19a5c11f35f7f199c795f99d9cbf8a52eb33f0ecfb6c91ee10b601180f604";
   };
 
   doCheck = false;
   propagatedBuildInputs = [ requests six requests_oauthlib ];
 
   meta = with lib; {
-    homepage = https://github.com/tweepy/tweepy;
+    homepage = "https://github.com/tweepy/tweepy";
     description = "Twitter library for python";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

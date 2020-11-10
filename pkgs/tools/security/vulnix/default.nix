@@ -1,17 +1,22 @@
-{ stdenv, pythonPackages, nix, ronn }:
+{ stdenv
+, python3Packages
+, nix
+, ronn
+}:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.7.1";
+  version = "1.9.6";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "15c32976sgb5clixngi6z1fk5h02v1kn1a89h8rkbkvyhfnjgg8m";
+    sha256 = "0anyxmqgn4kx102l3qjhh1f2b0cg7mnlapfhriyjw0zyy5gyqvng";
   };
 
-  buildInputs = [ ronn ];
+  outputs = [ "out" "doc" "man" ];
+  nativeBuildInputs = [ ronn ];
 
-  checkInputs = with pythonPackages; [
+  checkInputs = with python3Packages; [
     freezegun
     pytest
     pytestcov
@@ -20,35 +25,33 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     nix
-  ] ++ (with pythonPackages; [
+  ] ++ (with python3Packages; [
     click
     colorama
-    lxml
     pyyaml
     requests
+    setuptools
     toml
     zodb
   ]);
-
-  outputs = [ "out" "doc" ];
 
   postBuild = "make -C doc";
 
   checkPhase = "py.test src/vulnix";
 
   postInstall = ''
-    install -D -t $out/share/man/man1 doc/vulnix.1
-    install -D -t $out/share/man/man5 doc/vulnix-whitelist.5
     install -D -t $doc/share/doc/vulnix README.rst CHANGES.rst
     gzip $doc/share/doc/vulnix/*.rst
+    install -D -t $man/share/man/man1 doc/vulnix.1
+    install -D -t $man/share/man/man5 doc/vulnix-whitelist.5
   '';
 
   dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "NixOS vulnerability scanner";
-    homepage = https://github.com/flyingcircusio/vulnix;
+    homepage = "https://github.com/flyingcircusio/vulnix";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ckauhaus plumps ];
+    maintainers = with maintainers; [ ckauhaus ];
   };
 }

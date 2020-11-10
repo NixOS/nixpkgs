@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus, nettle
+{ stdenv, fetchurl, pkgconfig, dbus, nettle, fetchpatch
 , libidn, libnetfilter_conntrack }:
 
 with stdenv.lib;
@@ -12,12 +12,16 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.79";
+  name = "dnsmasq-2.82";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "07w6cw706yyahwvbvslhkrbjf2ynv567cgy9pal8bz8lrbsp9bbq";
+    sha256 = "0cn1xd1s6xs78jmrmwjnh9m6w3q38pk6dyqy2phvasqiyd33cll4";
   };
+
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    sed '1i#include <linux/sockios.h>' -i src/dhcp.c
+  '';
 
   preBuild = ''
     makeFlagsArray=("COPTS=${copts}")
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist \
       --replace "/usr/local/sbin" "$out/bin"
   '' + optionalString stdenv.isLinux ''
-    install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
+    install -Dm644 dbus/dnsmasq.conf $out/share/dbus-1/system.d/dnsmasq.conf
     install -Dm755 contrib/lease-tools/dhcp_lease_time $out/bin/dhcp_lease_time
     install -Dm755 contrib/lease-tools/dhcp_release $out/bin/dhcp_release
     install -Dm755 contrib/lease-tools/dhcp_release6 $out/bin/dhcp_release6
@@ -67,9 +71,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
-    homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
+    homepage = "http://www.thekelleys.org.uk/dnsmasq/doc.html";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ eelco fpletz globin ];
   };
 }

@@ -1,44 +1,52 @@
-{ stdenv, newScope, makeWrapper, electron, xdg_utils, makeDesktopItem
-, auth0ClientID ? "0spuNKfIGeLAQ_Iki9t3fGxbfJl3k8SU"
-, auth0Domain ? "nixpkgs.auth0.com" }:
+{ stdenv, lib, fetchurl, xdg_utils, dpkg, makeWrapper, autoPatchelfHook
+, libXtst, libXScrnSaver, gtk3, nss, alsaLib, udev, libnotify, wrapGAppsHook
+}:
 
 let
-  callPackage = newScope self;
-  self = {
-    fetchNodeModules = callPackage ./fetchNodeModules.nix {};
-    rambox-bare = callPackage ./bare.nix {
-      inherit auth0ClientID auth0Domain;
+  version = "0.7.7";
+in stdenv.mkDerivation rec {
+  pname = "rambox";
+  inherit version;
+  src = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-amd64.deb";
+      sha256 = "0bij4f1bkg94gc8pq7r6yfym5zcvwc2ymdnmnmh5m4h1pa1gk6x9";
     };
-    sencha = callPackage ./sencha {};
-  };
-  desktopItem = makeDesktopItem rec {
-    name = "Rambox";
-    exec = "rambox";
-    icon = "${self.rambox-bare}/resources/Icon.png";
-    desktopName = name;
-    genericName = "Rambox messenger";
-    categories = "Network;";
-  };
-in
+    i686-linux = fetchurl {
+      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-i386.deb";
+      sha256 = "1nhgqjha10jvyf9nsghvlkibg7byj8qz140639ygag9qlpd51rfs";
+    };
+  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-with self;
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
+  buildInputs = [ libXtst libXScrnSaver gtk3 nss alsaLib ];
+  runtimeDependencies = [ (lib.getLib udev) libnotify ];
 
-stdenv.mkDerivation {
-  name = "rambox-${rambox-bare.version}";
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  unpackPhase = ":";
+  unpackPhase = "dpkg-deb -x $src .";
 
   installPhase = ''
-    makeWrapper ${electron}/bin/electron $out/bin/rambox \
-      --add-flags "${rambox-bare} --without-update" \
-      --prefix PATH : ${xdg_utils}/bin
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    mkdir -p $out/bin
+    cp -r opt $out
+    ln -s $out/opt/Rambox/rambox $out/bin
+
+    # provide resources
+    cp -r usr/share $out
+    substituteInPlace $out/share/applications/rambox.desktop \
+      --replace Exec=/opt/Rambox/rambox Exec=rambox
   '';
 
-  inherit (rambox-bare.meta // {
-    platforms = [ "i686-linux" "x86_64-linux" ];
-  });
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${xdg_utils}/bin
+    )
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Free and Open Source messaging and emailing app that combines common web applications into one";
+    homepage = "https://rambox.pro";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gnidorah ma27 ];
+    platforms = ["i686-linux" "x86_64-linux"];
+    hydraPlatforms = [];
+  };
 }

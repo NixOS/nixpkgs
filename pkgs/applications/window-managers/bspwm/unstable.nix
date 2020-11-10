@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libxcb, libXinerama, xcbutil, xcbutilkeysyms, xcbutilwm }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bspwm-unstable-2016-09-30";
 
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tiling window manager based on binary space partitioning (git version)";
-    homepage = https://github.com/baskerville/bspwm;
+    homepage = "https://github.com/baskerville/bspwm";
     maintainers = [ stdenv.lib.maintainers.meisternu stdenv.lib.maintainers.epitrochoid ];
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;

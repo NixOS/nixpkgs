@@ -1,29 +1,87 @@
-{ stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
-, libxml2, python3, libnotify, wrapGAppsHook, libmediaart
-, gobjectIntrospection, gnome-online-accounts, grilo, grilo-plugins
-, pkgconfig, gtk3, glib, desktop-file-utils, appstream-glib
-, itstool, gnome3, gst_all_1 }:
+{ stdenv
+, meson
+, ninja
+, gettext
+, fetchurl
+, gdk-pixbuf
+, tracker
+, libxml2
+, python3
+, libnotify
+, wrapGAppsHook
+, libmediaart
+, gobject-introspection
+, gnome-online-accounts
+, grilo
+, grilo-plugins
+, pkgconfig
+, gtk3
+, pango
+, glib
+, desktop-file-utils
+, appstream-glib
+, itstool
+, gnome3
+, gst_all_1
+, libdazzle
+, libsoup
+, gsettings-desktop-schemas
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "3.28.2.1";
+  version = "3.38.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09lvpiqhijiq0kddnfi9rmmw806qh9a03czfhssqczd9fxmmbx5v";
+    sha256 = "1sda943nd646nq2y5anj0d7aaxxddznva5bh5gsx6qx0mxhi5jrv";
   };
 
-  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobjectIntrospection ];
-  buildInputs = with gst_all_1; [
-    gtk3 glib libmediaart gnome-online-accounts
-    gdk_pixbuf gnome3.defaultIconTheme python3
-    grilo grilo-plugins libnotify
-    gnome3.gsettings-desktop-schemas tracker
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    itstool
+    pkgconfig
+    libxml2
+    wrapGAppsHook
+    desktop-file-utils
+    appstream-glib
+    gobject-introspection
   ];
-  propagatedBuildInputs = with python3.pkgs; [ pycairo dbus-python requests pygobject3 ];
+
+  buildInputs = [
+    gtk3
+    pango
+    glib
+    libmediaart
+    gnome-online-accounts
+    gobject-introspection
+    gdk-pixbuf
+    gnome3.adwaita-icon-theme
+    python3
+    grilo
+    grilo-plugins
+    libnotify
+    libdazzle
+    libsoup
+    gsettings-desktop-schemas
+    tracker
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
+
+  propagatedBuildInputs = with python3.pkgs; [
+    pycairo
+    dbus-python
+    pygobject3
+  ];
 
 
   postPatch = ''
@@ -35,6 +93,9 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
+  # handle setup hooks better
+  strictDeps = false;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
@@ -43,10 +104,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Music;
+    homepage = "https://wiki.gnome.org/Apps/Music";
     description = "Music player and management application for the GNOME desktop environment";
-    maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

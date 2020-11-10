@@ -1,15 +1,17 @@
---- nexus-3.5.1-02/bin/nexus	2017-08-18 17:51:08.000000000 +0200
-+++ nexus	2017-08-31 12:41:01.271475645 +0200
-@@ -72,7 +72,7 @@
+diff --git a/bin/nexus b/bin/nexus
+index d06cb44..37c606e 100755
+--- a/bin/nexus
++++ b/bin/nexus
+@@ -88,7 +88,7 @@ create_db_entry() {
    fi
    db_new_file=${db_file}_new
    if [ -f "$db_file" ]; then
--    awk '$1 != "'"$test_dir"'" {print $0}' $db_file > $db_new_file
-+    awk '$1 != "'"$test_dir"'" {print $scriptname}' $db_file > $db_new_file
+-    awk '$2 != "'"$test_dir"'" {print $0}' $db_file > $db_new_file
++    awk '$2 != "'"$test_dir"'" {print $scriptname}' $db_file > $db_new_file
      rm "$db_file"
      mv "$db_new_file" "$db_file"
    fi
-@@ -236,7 +236,7 @@
+@@ -246,7 +246,7 @@ read_vmoptions() {
  
  unpack_file() {
    if [ -f "$1" ]; then
@@ -18,32 +20,24 @@
      bin/unpack200 -r "$1" "$jar_file"
  
      if [ $? -ne 0 ]; then
-@@ -360,8 +360,14 @@
+@@ -377,9 +377,14 @@ fi
  
  old_pwd=`pwd`
  
 -progname=`basename "$0"`
 -linkdir=`dirname "$0"`
 +scriptname=$0
-+
+ 
 +if [ ! -z "$ALTERNATIVE_NAME" ]; then
 +  scriptname=`dirname "$0"`"/"$ALTERNATIVE_NAME
 +fi
 +
 +progname=`basename "$scriptname"`
 +linkdir=`dirname "$scriptname"`
- 
  cd "$linkdir"
  prg="$progname"
-@@ -522,7 +528,6 @@
  
- $INSTALL4J_JAVA_PREFIX nohup "$app_java_home/bin/java" -server -Dinstall4j.jvmDir="$app_java_home" -Dexe4j.moduleName="$prg_dir/$progname" "-XX:+UnlockDiagnosticVMOptions" "-Dinstall4j.launcherId=245" "-Dinstall4j.swt=false" "$vmov_1" "$vmov_2" "$vmov_3" "$vmov_4" "$vmov_5" $INSTALL4J_ADD_VM_PARAMS -classpath "$local_classpath" com.install4j.runtime.launcher.UnixLauncher start 9d17dc87 "" "" org.sonatype.nexus.karaf.NexusMain  > /dev/null 2>&1 &
- 
--
-     ;;
-     start-launchd)
-         echo "Starting nexus"
-@@ -569,7 +574,7 @@
+@@ -590,7 +595,7 @@ return_code=$?
  
      ;;
      *)

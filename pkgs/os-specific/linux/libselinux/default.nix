@@ -8,26 +8,25 @@ assert enablePython -> swig != null && python != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libselinux-${version}";
-  version = "2.7";
+  pname = "libselinux";
+  version = "2.9";
   inherit (libsepol) se_release se_url;
 
-  outputs = [ "bin" "out" "dev" "man" "py" ];
+  outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libselinux-${version}.tar.gz";
-    sha256 = "0mwcq78v6ngbq06xmb9dvilpg0jnl2vs9fgrpakhmmiskdvc1znh";
+    sha256 = "14r69mgmz7najf9wbizvp68q56mqx4yjbkxjlbcqg5a47s3wik0v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsepol pcre fts ]
-             ++ optionals enablePython [ swig python ];
+  nativeBuildInputs = [ pkgconfig ] ++ optionals enablePython [ swig python ];
+  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -36,7 +35,8 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN5DIR=$(man)/share/man/man5"
     "MAN8DIR=$(man)/share/man/man8"
-    "PYSITEDIR=$(py)/${python.sitePackages}"
+    "PYTHON=${python.pythonForBuild}/bin/python"
+    "PYTHONLIBDIR=$(py)/${python.sitePackages}"
     "SBINDIR=$(bin)/sbin"
     "SHLIBDIR=$(out)/lib"
 

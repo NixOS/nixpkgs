@@ -4,24 +4,23 @@
   karchive, kconfig, kcrash, kguiaddons, kinit, kparts, kwindowsystem
 }:
 
-let
+mkDerivation rec {
   pname = "krusader";
-  version = "2.7.1";
-in mkDerivation rec {
-  name = "krusader-${version}";
+  version = "2.7.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
-    sha256 = "1svxj1qygyr3a4dkx0nh2d6r4q7pfj00brzghl94mf4q0rz4vhfm";
-  };
-
-  meta = with lib; {
-    description = "Norton/Total Commander clone for KDE";
-    license = licenses.gpl2;
-    homepage = http://www.krusader.org;
-    maintainers = with maintainers; [ sander ];
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "02b1jz5a7cjr13v6c7fczrhs1xmg1krnva5fxk8x2bf4nd1rm8s1";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+
   propagatedBuildInputs = [ karchive kconfig kcrash kguiaddons kinit kparts kwindowsystem ];
+
+  meta = with lib; {
+    description = "Norton/Total Commander clone for KDE";
+    homepage = "http://www.krusader.org";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ sander turion ];
+  };
 }

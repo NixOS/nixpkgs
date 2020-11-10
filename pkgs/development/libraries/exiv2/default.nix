@@ -1,55 +1,121 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, zlib, expat, gettext
-, autoconf }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, zlib
+, expat
+, cmake
+, which
+, libxml2
+, python3
+, gettext
+, doxygen
+, graphviz
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
-  name = "exiv2-0.26.2018.06.09";
+  pname = "exiv2";
+  version = "0.27.3";
 
-    #url = "http://www.exiv2.org/builds/${name}-trunk.tar.gz";
-  src = fetchFromGitHub rec {
+  outputs = [ "out" "dev" "doc" "man" ];
+
+  src = fetchFromGitHub {
     owner = "exiv2";
     repo  = "exiv2";
-    rev = "4aa57ad";
-    sha256 = "1kblpxbi4wlb0l57xmr7g23zn9adjmfswhs6kcwmd7skwi2yivcd";
+    rev = "v${version}";
+    sha256 = "0d294yhcdw8ziybyd4rp5hzwknzik2sm0cz60ff7fljacv75bjpy";
   };
 
   patches = [
-    (fetchurl rec {
-      name = "CVE-2017-9239.patch";
-      url = let patchname = "0006-1296-Fix-submitted.patch";
-          in "https://src.fedoraproject.org/lookaside/pkgs/exiv2/${patchname}"
-          + "/sha512/${sha512}/${patchname}";
-      sha512 = "3f9242dbd4bfa9dcdf8c9820243b13dc14990373a800c4ebb6cf7eac5653cfef"
-             + "e6f2c47a94fbee4ed24f0d8c2842729d721f6100a2b215e0f663c89bfefe9e32";
-    })
-    # Two backports from master, submitted as https://github.com/Exiv2/exiv2/pull/398
+    # Fix aarch64 build https://github.com/Exiv2/exiv2/pull/1271
     (fetchpatch {
-      name = "CVE-2018-12264.diff";
-      url = "https://github.com/vcunat/exiv2/commit/fd18e853.diff";
-      sha256 = "0y7ahh45lpaiazjnfllndfaa5pyixh6z4kcn2ywp7qy4ra7qpwdr";
+      name = "cmake-fix-aarch64.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/bbe0b70840cf28b7dd8c0b7e9bb1b741aeda2efd.patch";
+      sha256 = "13zw1mn0ag0jrz73hqjhdsh1img7jvj5yddip2k2sb5phy04rzfx";
     })
+
+    # Use correct paths with multiple outputs
+    # https://github.com/Exiv2/exiv2/pull/1275
     (fetchpatch {
-      name = "CVE-2018-12265.diff";
-      url = "https://github.com/vcunat/exiv2/commit/9ed1671bd4.diff";
-      sha256 = "1cn446pfcgsh1bn9vxikkkcy1cqq7ghz2w291h1094ydqg6w7q6w";
+      url = "https://github.com/Exiv2/exiv2/commit/48f2c9dbbacc0ef84c8ebf4cb1a603327f0b8750.patch";
+      sha256 = "vjB3+Ld4c/2LT7nq6uatYwfHTh+HeU5QFPFXuNLpIPA=";
+    })
+    # https://github.com/Exiv2/exiv2/pull/1294
+    (fetchpatch {
+      url = "https://github.com/Exiv2/exiv2/commit/306c8a6fd4ddd70e76043ab255734720829a57e8.patch";
+      sha256 = "0D/omxYxBPGUu3uSErlf48dc6Ukwc2cEN9/J3e7a9eU=";
     })
   ];
-
-  postPatch = "patchShebangs ./src/svn_version.sh";
-
-  preConfigure = "make config"; # needed because not using tarball
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
+    cmake
+    doxygen
     gettext
-    autoconf # needed because not using tarball
+    graphviz
+    libxslt
   ];
-  propagatedBuildInputs = [ zlib expat ];
+
+  propagatedBuildInputs = [
+    expat
+    zlib
+  ];
+
+  checkInputs = [
+    libxml2.bin
+    python3
+    which
+  ];
+
+  cmakeFlags = [
+    "-DEXIV2_ENABLE_NLS=ON"
+    "-DEXIV2_BUILD_DOC=ON"
+  ];
+
+  buildFlags = [
+    "all"
+    "doc"
+  ];
+
+  doCheck = true;
+
+  # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
+  checkTarget = "tests";
+
+  preCheck = ''
+    patchShebangs ../test/
+    mkdir ../test/tmp
+
+    ${stdenv.lib.optionalString (stdenv.isAarch64 || stdenv.isAarch32) ''
+      # Fix tests on arm
+      # https://github.com/Exiv2/exiv2/issues/933
+      rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
+    ''}
+
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
+      # Removing tests depending on charset conversion
+      substituteInPlace ../test/Makefile --replace "conversions.sh" ""
+      rm -f ../tests/bugfixes/redmine/test_issue_460.py
+      rm -f ../tests/bugfixes/redmine/test_issue_662.py
+      rm -f ../tests/bugfixes/github/test_issue_1046.py
+     ''}
+  '';
+
+  # With CMake we have to enable samples or there won't be
+  # a tests target. This removes them.
+  postInstall = ''
+    ( cd "$out/bin"
+      mv exiv2 .exiv2
+      rm *
+      mv .exiv2 exiv2
+    )
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.exiv2.org/;
+    homepage = "https://www.exiv2.org/";
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
+    maintainers = [ ];
   };
 }

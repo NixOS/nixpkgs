@@ -1,35 +1,75 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja
-, pkgconfig, python, gst-plugins-base, libxml2
-, flex, perl, gettext, gobjectIntrospection
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, python3
+, bash-completion
+, gst-plugins-base
+, gst-plugins-bad
+, gst-devtools
+, libxml2
+, flex
+, gettext
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-editing-services-${version}";
-  version = "1.14.2";
+  pname = "gst-editing-services";
+  version = "1.18.0";
+
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
+
+  src = fetchurl {
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1a00f07v0yjqz1hydhgkjjarm4rk99yjicbz5wkfl5alhzag1bjd";
+  };
+
+  patches = [
+    ./fix_pkgconfig_includedir.patch
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    gobject-introspection
+    gst-devtools
+    python3
+    flex
+
+    # documentation
+    # TODO add hotdoc here
+  ];
+
+  buildInputs = [
+    bash-completion
+    libxml2
+  ];
+
+  propagatedBuildInputs = [
+    gst-plugins-base
+    gst-plugins-bad
+  ];
+
+  mesonFlags = [
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
-    homepage    = "https://gstreamer.freedesktop.org";
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
   };
-
-  src = fetchurl {
-    url = "${meta.homepage}/src/gstreamer-editing-services/${name}.tar.xz";
-    sha256 = "0d0zqvgxp51mmffz5vvscsdzqqw9mjsv6bnk6ivg2dxnkv8q1ch5";
-  };
-
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection python flex perl ];
-
-  propagatedBuildInputs = [ gst-plugins-base libxml2 ];
-
-  patches = [
-    (fetchpatch {
-        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370413";
-        sha256 = "1xcgbs18g6n5p7z7kqj7ffakwmkxq7ijajyvhyl7p3zvqll9dc7x";
-    })
-    ./fix_pkgconfig_includedir.patch
-  ];
 }

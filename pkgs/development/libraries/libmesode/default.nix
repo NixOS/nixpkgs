@@ -1,15 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool, openssl, expat, pkgconfig, check }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libtool, openssl, expat, pkgconfig, check }:
 
 stdenv.mkDerivation rec {
-  name = "libmesode-${version}";
-  version = "0.9.1";
+  pname = "libmesode";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "boothj5";
     repo = "libmesode";
     rev = version;
-    sha256 = "1zb1x422zkpnxrz9d2b7pmi8ms60lbw49yh78mydqfypsmj2iyfh";
+    sha256 = "0xzfg1xx88cn36352nnjlb1p7xyw32yqkhjzq10px88iaaqz1vv0";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-ssl-certificate-verification.diff";
+      url = "https://github.com/profanity-im/libmesode/commit/532ed1e9d3e71e5bea0752e03dbacd4139d750d1.diff";
+      sha256 = "140jp7xzskik0sb6aqjsw7z477a124cxl7dkm80m2nyzjng4pzg5";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ openssl expat libtool check ];
@@ -31,7 +39,7 @@ stdenv.mkDerivation rec {
       Whilst Profanity will run against libstrophe, libmesode provides extra
       TLS functionality such as manual SSL certificate verification.
     '';
-    homepage = https://github.com/boothj5/libmesode/;
+    homepage = "https://github.com/boothj5/libmesode/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.devhell ];

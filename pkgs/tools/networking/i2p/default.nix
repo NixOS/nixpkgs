@@ -1,13 +1,16 @@
 { stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
-  name = "wrapper-${version}";
-  version = "3.5.32";
+  pname = "wrapper";
+  version = "3.5.43";
+
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "1v388p5jjbpwybw0zjv5glzny17fwdwppaci2lqcsnm6qw0667f1";
+    sha256 = "19cx3854rk7b2056z8pvxnf4simsg5js7czsy2bys7jl6vh2x02b";
   };
+
   buildInputs = [ jdk ];
+
   buildPhase = ''
     export ANT_HOME=${ant}
     export JAVA_HOME=${jdk}/lib/openjdk/jre/
@@ -16,6 +19,7 @@ let wrapper = stdenv.mkDerivation rec {
     sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
     ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
   '';
+
   installPhase = ''
     mkdir -p $out/{bin,lib}
     cp bin/wrapper $out/bin/wrapper
@@ -27,17 +31,22 @@ let wrapper = stdenv.mkDerivation rec {
 in
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.35";
+  pname = "i2p";
+  version = "0.9.47";
+
   src = fetchurl {
-    url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "02p76vn1777lgv4zs27r6i9s4yk7b2x61b25i8dqmn6j60y3fa4g";
+    url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
+    sha256 = "0krcdm73qing7z918wpml9sk6dn0284wps2ghkmlrdaklfkavk6v";
   };
+
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];
+
   buildPhase = ''
     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
     ant preppkg-linux-only
-    '';
+  '';
+
   installPhase = ''
     set -B
     mkdir -p $out/{bin,share}
@@ -61,13 +70,13 @@ stdenv.mkDerivation rec {
     mv $out/man $out/share/
     chmod +x $out/bin/* $out/i2psvc
     rm $out/{osid,postinstall.sh,INSTALL-headless.txt}
-    '';
+  '';
 
   meta = with stdenv.lib; {
-    homepage = https://geti2p.net;
     description = "Applications and router for I2P, anonymity over the Internet";
-    maintainers = [ maintainers.joelmo ];
+    homepage = "https://geti2p.net";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ joelmo ];
   };
 }

@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ libxml2 sqlite zlib proj geos libiconv ];
 
   configureFlags = [ "--disable-freexl" ];
 
   enableParallelBuilding = true;
+
+  CFLAGS = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   postInstall = "" + optionalString stdenv.isDarwin ''
     ln -s $out/lib/mod_spatialite.{so,dylib}
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Extensible spatial index library in C++";
-    homepage = https://www.gaia-gis.it/fossil/libspatialite;
+    homepage = "https://www.gaia-gis.it/fossil/libspatialite";
     # They allow any of these
     license = with licenses; [ gpl2Plus lgpl21Plus mpl11 ];
     platforms = platforms.unix;

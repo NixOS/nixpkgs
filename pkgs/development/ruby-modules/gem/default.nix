@@ -39,11 +39,12 @@ lib.makeOverridable (
 , meta ? {}
 , patches ? []
 , gemPath ? []
-, dontStrip ? true
+, dontStrip ? false
 # Assume we don't have to build unless strictly necessary (e.g. the source is a
 # git checkout).
 # If you need to apply patches, make sure to set `dontBuild = false`;
 , dontBuild ? true
+, dontInstallManpages ? false
 , propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
 , buildFlags ? []
@@ -62,7 +63,6 @@ let
     else if type == "git" then
       fetchgit {
         inherit (attrs.source) url rev sha256 fetchSubmodules;
-        leaveDotGit = true;
       }
     else if type == "url" then
       fetchurl attrs.source
@@ -94,11 +94,12 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   inherit src;
 
+
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack
 
     if [[ -f $src && $src == *.gem ]]; then
-      if [[ -z "$dontBuild" ]]; then
+      if [[ -z "''${dontBuild-}" ]]; then
         # we won't know the name of the directory that RubyGems creates,
         # so we'll just use a glob to find it and move it over.
         gempkg="$src"
@@ -141,6 +142,12 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       gempkg=$(echo "$output" | grep -oP 'File: \K(.*)')
 
       echo "gem package built: $gempkg"
+    elif [[ "$type" == "git" ]]; then
+      git init
+      # remove variations to improve the likelihood of a bit-reproducible output
+      rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config
+      # support `git ls-files`
+      git add .
     fi
 
     runHook postBuild
@@ -172,7 +179,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       '${version}' \
       '${lib.escapeShellArgs buildFlags}' \
       '${attrs.source.url}' \
-      '${src}' \
+      '.' \
       '${attrs.source.rev}'
     ''}
 
@@ -198,12 +205,23 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       $gempkg $gemFlags -- $buildFlags
 
     # looks like useless files which break build repeatability and consume space
-    rm -fv $out/${ruby.gemPath}/doc/*/*/created.rid || true
-    rm -fv $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
+    pushd $out/${ruby.gemPath}
+    rm -fv doc/*/*/created.rid || true
+    rm -fv {gems/*/ext/*,extensions/*/*/*}/{Makefile,mkmf.log,gem_make.out} || true
+    rm -fvr cache
+    popd
 
     # write out metadata and binstubs
     spec=$(echo $out/${ruby.gemPath}/specifications/*.gemspec)
     ruby ${./gem-post-build.rb} "$spec"
+    ''}
+
+    ${lib.optionalString (!dontInstallManpages) ''
+    for section in {1..9}; do
+      mandir="$out/share/man/man$section"
+      find $out/lib \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) \
+        -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
+    done
     ''}
 
     runHook postInstall

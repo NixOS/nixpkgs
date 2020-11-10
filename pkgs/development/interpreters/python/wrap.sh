@@ -16,8 +16,8 @@ buildPythonPath() {
     declare -A pythonPathsSeen=()
     program_PYTHONPATH=
     program_PATH=
-    pythonPathsSeen["@python@"]=1
-    addToSearchPath program_PATH @python@/bin
+    pythonPathsSeen["@pythonHost@"]=1
+    addToSearchPath program_PATH @pythonHost@/bin
     for path in $pythonPath; do
         _addToPythonPath $path
     done
@@ -53,7 +53,13 @@ wrapPythonProgramsIn() {
             # Strip suffix, like "3" or "2.7m" -- we don't have any choice on which
             # Python to use besides one with this hook anyway.
             if head -n1 "$f" | grep -q '#!.*/env.*\(python\|pypy\)'; then
-                sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)[^ ]*^#! @executable@^"
+                sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)[^ ]*^#!@executable@^"
+            fi
+
+            if head -n1 "$f" | grep -q '#!.*'; then
+                # Cross-compilation hack: ensure shebangs are for the host
+                echo "Rewriting $(head -n 1 $f) to #!@pythonHost@"
+                sed -i "$f" -e "1 s^#!@python@^#!@pythonHost@^"
             fi
 
             # catch /python and /.python-wrapped
@@ -67,12 +73,23 @@ wrapPythonProgramsIn() {
                     # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
                     local -a wrap_args=("$f"
                                     --prefix PATH ':' "$program_PATH"
-                                    --set PYTHONNOUSERSITE "true"
                                     )
+
+                    if [ -z "$permitUserSite" ]; then
+                        wrap_args+=(--set PYTHONNOUSERSITE "true")
+                    fi
 
                     # Add any additional arguments provided by makeWrapperArgs
                     # argument to buildPythonPackage.
-                    local -a user_args="($makeWrapperArgs)"
+                    # We need to support both the case when makeWrapperArgs
+                    # is an array and a IFS-separated string.
+                    # TODO: remove the string branch when __structuredAttrs are used.
+                    if [[ "${makeWrapperArgs+defined}" == "defined" && "$(declare -p makeWrapperArgs)" =~ ^'declare -a makeWrapperArgs=' ]]; then
+                        local -a user_args=("${makeWrapperArgs[@]}")
+                    else
+                        local -a user_args="(${makeWrapperArgs:-})"
+                    fi
+
                     local -a wrapProgramArgs=("${wrap_args[@]}" "${user_args[@]}")
                     wrapProgram "${wrapProgramArgs[@]}"
                 fi
@@ -92,7 +109,7 @@ _addToPythonPath() {
     pythonPathsSeen[$dir]=1
     # addToSearchPath is defined in stdenv/generic/setup.sh. It will have
     # the effect of calling `export program_X=$dir/...:$program_X`.
-    addToSearchPath program_PYTHONPATH $dir/lib/@libPrefix@/site-packages
+    addToSearchPath program_PYTHONPATH $dir/@sitePackages@
     addToSearchPath program_PATH $dir/bin
 
     # Inspect the propagated inputs (if they exist) and recur on them.
@@ -113,9 +130,9 @@ createBuildInputsPth() {
             if $(echo -n $x |grep -q python-recursive-pth-loader); then
                 continue
             fi
-            if test -d "$x"/lib/@libPrefix@/site-packages; then
-                echo $x/lib/@libPrefix@/site-packages \
-                    >> "$out"/lib/@libPrefix@/site-packages/${name}-nix-python-$category.pth
+            if test -d "$x"/@sitePackages@; then
+                echo $x/@sitePackages@ \
+                    >> "$out"/@sitePackages@/${name}-nix-python-$category.pth
             fi
         done
     fi

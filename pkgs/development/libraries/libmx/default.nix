@@ -1,11 +1,11 @@
 { stdenv, fetchurl
 , libtool, pkgconfig, automake, autoconf, intltool
-, glib, gobjectIntrospection, gtk2, gtk-doc
+, glib, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
 }:
 
 stdenv.mkDerivation rec {
-  name = "libmx-${version}";
+  pname = "libmx";
   version = "1.4.7";
 
   src = fetchurl {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     automake autoconf libtool
     intltool
-    gobjectIntrospection glib
+    gobject-introspection glib
     gtk2 gtk-doc clutter clutter-gtk
   ];
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.clutter-project.org/;
+    homepage = "http://www.clutter-project.org/";
     description = "A Clutter-based toolkit";
     longDescription =
       ''Mx is a widget toolkit using Clutter that provides a set of standard

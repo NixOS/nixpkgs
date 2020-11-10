@@ -1,44 +1,51 @@
-{ stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
 let
-  common = { stname, target, patches ? [], postInstall ? "" }:
-    stdenv.mkDerivation rec {
-      version = "0.14.51";
+  common = { stname, target, postInstall ? "" }:
+    buildGoModule rec {
+      version = "1.11.1";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "1ycly3vh10s04pk0fk9hb0my7w5b16dfgmnk1mi0zjylcii3yzi5";
+        sha256 = "0x5a24r74i9am6a8k32qkb2vck28d2jiy4yhpb4g774m4krjqxd2";
       };
 
-      inherit patches;
+      vendorSha256 = "0ap287996ix119hkdyssn2q2bqjbgdshi9a67hf8msfp7k9warm7";
 
-      buildInputs = [ go ];
-      nativeBuildInputs = [ removeReferencesTo ];
+      doCheck = false;
+
+      patches = [
+        ./add-stcli-target.patch
+      ];
+      BUILD_USER="nix";
+      BUILD_HOST="nix";
 
       buildPhase = ''
-        # Syncthing expects that it is checked out in $GOPATH, if that variable is
-        # set.  Since this isn't true when we're fetching source, we can explicitly
-        # unset it and force Syncthing to set up a temporary one for us.
-        env GOPATH= BUILD_USER=nix BUILD_HOST=nix go run build.go -no-upgrade -version v${version} build ${target}
+        runHook preBuild
+        go run build.go -no-upgrade -version v${version} build ${target}
+        runHook postBuild
       '';
 
       installPhase = ''
+        runHook preInstall
         install -Dm755 ${target} $out/bin/${target}
         runHook postInstall
       '';
 
       inherit postInstall;
 
-      preFixup = ''
-        find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
-      '';
+      passthru.tests = with nixosTests; {
+        init = syncthing-init;
+        relay = syncthing-relay;
+      };
 
       meta = with lib; {
-        homepage = https://www.syncthing.net/;
+        homepage = "https://syncthing.net/";
         description = "Open Source Continuous File Synchronization";
+        changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
         maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
         platforms = platforms.unix;
@@ -79,7 +86,6 @@ in {
   syncthing-cli = common {
     stname = "syncthing-cli";
 
-    patches = [ ./add-stcli-target.patch ];
     target = "stcli";
   };
 

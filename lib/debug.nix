@@ -14,35 +14,78 @@
 */
 { lib }:
 let
-  inherit (builtins) trace isAttrs isList isInt
-          head substring attrNames;
-  inherit (lib) id elem isFunction;
+  inherit (lib)
+    isInt
+    attrNames
+    isList
+    isAttrs
+    substring
+    addErrorContext
+    attrValues
+    concatLists
+    concatStringsSep
+    const
+    elem
+    generators
+    head
+    id
+    isDerivation
+    isFunction
+    mapAttrs
+    trace;
 in
 
 rec {
 
   # -- TRACING --
 
-  /* Trace msg, but only if pred is true.
+  /* Conditionally trace the supplied message, based on a predicate.
+
+     Type: traceIf :: bool -> string -> a -> a
 
      Example:
        traceIf true "hello" 3
        trace: hello
        => 3
   */
-  traceIf = pred: msg: x: if pred then trace msg x else x;
+  traceIf =
+    # Predicate to check
+    pred:
+    # Message that should be traced
+    msg:
+    # Value to return
+    x: if pred then trace msg x else x;
 
-  /* Trace the value and also return it.
+  /* Trace the supplied value after applying a function to it, and
+     return the original value.
+
+     Type: traceValFn :: (a -> b) -> a -> a
 
      Example:
        traceValFn (v: "mystring ${v}") "foo"
        trace: mystring foo
        => "foo"
   */
-  traceValFn = f: x: trace (f x) x;
+  traceValFn =
+    # Function to apply
+    f:
+    # Value to trace and return
+    x: trace (f x) x;
+
+  /* Trace the supplied value and return it.
+
+     Type: traceVal :: a -> a
+
+     Example:
+       traceVal 42
+       # trace: 42
+       => 42
+  */
   traceVal = traceValFn id;
 
   /* `builtins.trace`, but the value is `builtins.deepSeq`ed first.
+
+     Type: traceSeq :: a -> b -> b
 
      Example:
        trace { a.b.c = 3; } null
@@ -52,7 +95,11 @@ rec {
        trace: { a = { b = { c = 3; }; }; }
        => null
   */
-  traceSeq = x: y: trace (builtins.deepSeq x x) y;
+  traceSeq =
+    # The value to trace
+    x:
+    # The value to return
+    y: trace (builtins.deepSeq x x) y;
 
   /* Like `traceSeq`, but only evaluate down to depth n.
      This is very useful because lots of `traceSeq` usages
@@ -63,7 +110,7 @@ rec {
        trace: { a = { b = {…}; }; }
        => null
    */
-  traceSeqN = depth: x: y: with lib;
+  traceSeqN = depth: x: y:
     let snip = v: if      isList  v then noQuotes "[…]" v
                   else if isAttrs v then noQuotes "{…}" v
                   else v;
@@ -76,27 +123,49 @@ rec {
     in trace (generators.toPretty { allowPrettyValues = true; }
                (modify depth snip x)) y;
 
-  /* A combination of `traceVal` and `traceSeq` */
-  traceValSeqFn = f: v: traceValFn f (builtins.deepSeq v v);
+  /* A combination of `traceVal` and `traceSeq` that applies a
+     provided function to the value to be traced after `deepSeq`ing
+     it.
+  */
+  traceValSeqFn =
+    # Function to apply
+    f:
+    # Value to trace
+    v: traceValFn f (builtins.deepSeq v v);
+
+  /* A combination of `traceVal` and `traceSeq`. */
   traceValSeq = traceValSeqFn id;
 
+  /* A combination of `traceVal` and `traceSeqN` that applies a
+  provided function to the value to be traced. */
+  traceValSeqNFn =
+    # Function to apply
+    f:
+    depth:
+    # Value to trace
+    v: traceSeqN depth (f v) v;
+
   /* A combination of `traceVal` and `traceSeqN`. */
-  traceValSeqNFn = f: depth: v: traceSeqN depth (f v) v;
   traceValSeqN = traceValSeqNFn id;
 
 
   # -- TESTING --
 
-  /* Evaluate a set of tests.  A test is an attribute set {expr,
-     expected}, denoting an expression and its expected result.  The
-     result is a list of failed tests, each represented as {name,
-     expected, actual}, denoting the attribute name of the failing
-     test and its expected and actual results.  Used for regression
-     testing of the functions in lib; see tests.nix for an example.
-     Only tests having names starting with "test" are run.
-     Add attr { tests = ["testName"]; } to run these test only
+  /* Evaluate a set of tests.  A test is an attribute set `{expr,
+     expected}`, denoting an expression and its expected result.  The
+     result is a list of failed tests, each represented as `{name,
+     expected, actual}`, denoting the attribute name of the failing
+     test and its expected and actual results.
+
+     Used for regression testing of the functions in lib; see
+     tests.nix for an example. Only tests having names starting with
+     "test" are run.
+
+     Add attr { tests = ["testName"]; } to run these tests only.
   */
-  runTests = tests: lib.concatLists (lib.attrValues (lib.mapAttrs (name: test:
+  runTests =
+    # Tests to run
+    tests: concatLists (attrValues (mapAttrs (name: test:
     let testsToRun = if tests ? tests then tests.tests else [];
     in if (substring 0 4 name == "test" ||  elem name testsToRun)
        && ((testsToRun == []) || elem name tests.tests)
@@ -105,8 +174,11 @@ rec {
       then [ { inherit name; expected = test.expected; result = test.expr; } ]
       else [] ) tests));
 
-  # create a test assuming that list elements are true
-  # usage: { testX = allTrue [ true ]; }
+  /* Create a test assuming that list elements are `true`.
+
+     Example:
+       { testX = allTrue [ true ]; }
+  */
   testAllTrue = expr: { inherit expr; expected = map (x: true) expr; };
 
 
@@ -120,9 +192,9 @@ rec {
           + "and will be removed in the next release. "
           + "Please use more specific concatenation "
           + "for your uses (`lib.concat(Map)StringsSep`)." )
-    (lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
+    (concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
 
-  showVal = with lib;
+  showVal =
     trace ( "Warning: `showVal` is deprecated "
           + "and will be removed in the next release, "
           + "please use `traceSeqN`" )
@@ -170,7 +242,7 @@ rec {
     trace ( "Warning: `addErrorContextToAttrs` is deprecated "
           + "and will be removed in the next release. "
           + "Please use `builtins.addErrorContext` directly." )
-    (lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v) attrs);
+    (mapAttrs (a: v: addErrorContext "while evaluating ${a}" v) attrs);
 
   # example: (traceCallXml "myfun" id 3) will output something like
   # calling myfun arg 1: 3 result: 3

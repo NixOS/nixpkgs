@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   meta = with lib; {
-    homepage = http://packages.python.org/Flask-Principal/;
+    homepage = "http://packages.python.org/Flask-Principal/";
     description = "Identity management for flask";
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];

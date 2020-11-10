@@ -1,5 +1,5 @@
-{ stdenv, lib, buildEnv, substituteAll
-, dwarf-fortress, dwarf-fortress-unfuck
+{ stdenv, lib, buildEnv, substituteAll, runCommand
+, dwarf-fortress
 , dwarf-therapist
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
@@ -11,6 +11,8 @@
 , enableIntro ? true
 , enableTruetype ? true
 , enableFPS ? false
+, enableTextMode ? false
+, enableSound ? true
 }:
 
 let
@@ -33,49 +35,54 @@ let
          ++ lib.optional enableTWBT twbt.art
          ++ [ dwarf-fortress ];
 
+  fixup = lib.singleton (runCommand "fixup" {} (''
+    mkdir -p $out/data/init
+  '' + (if (theme != null) then ''
+    cp ${lib.head themePkg}/data/init/init.txt $out/data/init/init.txt
+  '' else ''
+    cp ${dwarf-fortress}/data/init/init.txt $out/data/init/init.txt
+  '') + lib.optionalString enableDFHack ''
+    mkdir -p $out/hack
+
+    # Patch the MD5
+    orig_md5=$(cat "${dwarf-fortress}/hash.md5.orig")
+    patched_md5=$(cat "${dwarf-fortress}/hash.md5")
+    input_file="${dfhack_}/hack/symbols.xml"
+    output_file="$out/hack/symbols.xml"
+
+    echo "[DFHack Wrapper] Fixing Dwarf Fortress MD5:"
+    echo "  Input:   $input_file"
+    echo "  Search:  $orig_md5"
+    echo "  Output:  $output_file"
+    echo "  Replace: $patched_md5"
+
+    substitute "$input_file" "$output_file" --replace "$orig_md5" "$patched_md5"
+  '' + lib.optionalString enableTWBT ''
+    substituteInPlace $out/data/init/init.txt \
+      --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
+  '' + 
+ lib.optionalString enableTextMode ''
+    substituteInPlace $out/data/init/init.txt \
+      --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TEXT]'
+  '' + ''
+    substituteInPlace $out/data/init/init.txt \
+      --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
+      --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
+      --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]' \
+      --replace '[SOUND:YES]' '[SOUND:${unBool enableSound}]'
+  ''));
+
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress.dfVersion}";
 
-    paths = themePkg ++ pkgs;
+    paths = fixup ++ themePkg ++ pkgs;
     pathsToLink = [ "/" "/hack" "/hack/scripts" ];
-
-    postBuild = ''
-      # De-symlink init.txt
-      cp $out/data/init/init.txt init.txt
-      rm -f $out/data/init/init.txt
-      mv init.txt $out/data/init/init.txt
-    '' + lib.optionalString enableDFHack ''
-      # De-symlink symbols.xml
-      rm $out/hack/symbols.xml
-
-      # Patch the MD5
-      orig_md5=$(cat "${dwarf-fortress}/hash.md5.orig")
-      patched_md5=$(cat "${dwarf-fortress}/hash.md5")
-      input_file="${dfhack_}/hack/symbols.xml"
-      output_file="$out/hack/symbols.xml"
-
-      echo "[DFHack Wrapper] Fixing Dwarf Fortress MD5:"
-      echo "  Input:   $input_file"
-      echo "  Search:  $orig_md5"
-      echo "  Output:  $output_file"
-      echo "  Replace: $patched_md5"
-
-      substitute "$input_file" "$output_file" --replace "$orig_md5" "$patched_md5"
-    '' + lib.optionalString enableTWBT ''
-      substituteInPlace $out/data/init/init.txt \
-        --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
-    '' + ''
-      substituteInPlace $out/data/init/init.txt \
-        --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
-        --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
-        --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
-    '';
 
     ignoreCollisions = true;
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dwarf-fortress-${dwarf-fortress.dfVersion}";
 
   dfInit = substituteAll {

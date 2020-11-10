@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, ant, jdk }:
+{ fetchurl, stdenv, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "fop-${version}";
+  pname = "fop";
   version = "2.1";
 
   src = fetchurl {
-    url = "mirror://apache/xmlgraphics/fop/source/${name}-src.tar.gz";
+    url = "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
     sha256 = "165rx13q47l6qc29ppr7sg1z26vw830s3rkklj5ap7wgvy0ivbz5";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # There is a fop script in the source archive, but it has many impurities.
     # Instead of patching out 90 % of the script, we write our own.
     cat > "$out/bin/fop" <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     java_exec_args="-Djava.awt.headless=true"
     exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
     EOF
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
 
       This package contains the fop command line tool.
     '';
-    homepage = https://xmlgraphics.apache.org/fop/;
+    homepage = "https://xmlgraphics.apache.org/fop/";
     license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ndowens ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

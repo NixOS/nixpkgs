@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "miniUPnP client";
-    homepage = http://miniupnp.free.fr/;
+    homepage = "http://miniupnp.free.fr/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

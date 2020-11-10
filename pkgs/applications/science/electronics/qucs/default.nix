@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.0.19";
-  name = "qucs-${version}";
+  pname = "qucs";
 
   src = fetchFromGitHub {
     owner = "Qucs";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Integrated circuit simulator";
-    homepage = http://qucs.sourceforge.net;
+    homepage = "http://qucs.sourceforge.net";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "git-recent-${version}";
-  version = "1.0.4";
+  pname = "git-recent";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     rev = "v${version}";
-    sha256 = "0dbnm5b2v04fy0jgzphm3xvz9scx0n4p10fw8wjd0cy56308h79k";
+    sha256 = "1g8i6vpjnnfh7vc1269c91bap267w4bxdqqwnzb8x18vqgn2fx8i";
   };
 
   buildInputs = [ makeWrapper ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/paulirish/git-recent;
+    homepage = "https://github.com/paulirish/git-recent";
     description = "See your latest local git branches, formatted real fancy";
     license = licenses.mit;
     platforms = platforms.all;

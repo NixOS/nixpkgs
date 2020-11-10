@@ -1,27 +1,22 @@
-{ stdenv, fetchzip, ocaml, findlib, dune, jsonm, hex, sexplib }:
+{ stdenv, fetchurl, buildDunePackage, jsonm, hex, sexplib0 }:
 
-let version = "0.6.0"; in
+buildDunePackage rec {
+  pname = "ezjsonm";
+  version = "1.2.0";
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-ezjsonm-${version}";
+  useDune2 = true;
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ezjsonm/archive/${version}.tar.gz";
-    sha256 = "18g64lhai0bz65b9fil12vlgfpwa9b5apj7x6d7n4zzm18qfazvj";
+  src = fetchurl {
+    url = "https://github.com/mirage/ezjsonm/releases/download/v${version}/ezjsonm-v${version}.tbz";
+    sha256 = "1q6cf63cc614lr141rzhm2w4rhi1snfqai6fmkhvfjs84hfbw2w7";
   };
 
-  buildInputs = [ ocaml findlib dune ];
-  propagatedBuildInputs = [ jsonm hex sexplib ];
-
-  buildPhase = "dune build -p ezjsonm";
-
-  inherit (dune) installPhase;
+  propagatedBuildInputs = [ jsonm hex sexplib0 ];
 
   meta = {
     description = "An easy interface on top of the Jsonm library";
-    homepage = https://github.com/mirage/ezjsonm;
+    homepage = "https://github.com/mirage/ezjsonm";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    platforms = ocaml.meta.platforms or [];
   };
 }

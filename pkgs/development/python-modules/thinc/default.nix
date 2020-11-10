@@ -4,93 +4,78 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, cython
+, blis
+, catalogue
 , cymem
+, cython
 , darwin
-, msgpack-numpy
-, msgpack-python
-, preshed
-, numpy
-, murmurhash
-, pathlib
 , hypothesis
-, tqdm
-, cytoolz
-, plac
-, six
 , mock
-, termcolor
-, wrapt
-, dill
+, murmurhash
+, numpy
+, pathlib
+, plac
+, preshed
+, srsly
+, tqdm
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "6.11.2";
+  version = "7.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "028a014192e1914c151222794781d14e1c9fddf47a859aa36077f07871d0c30a";
+    sha256 = "772f1a27b9b31e51003d1d2a7476cc49cc81044dd87088112237f93bd2091f0b";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>=" \
-      --replace "plac>=0.9,<1.0" "plac>=0.9" \
-      --replace "hypothesis>=2,<3" "hypothesis>=2"
-  '';
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Accelerate CoreFoundation CoreGraphics CoreVideo
   ]);
 
   propagatedBuildInputs = [
-   cython
+   blis
+   catalogue
    cymem
-   msgpack-numpy
-   msgpack-python
-   preshed
-   numpy
+   cython
    murmurhash
-   pytest
-   hypothesis
-   tqdm
-   cytoolz
+   numpy
    plac
-   six
-   mock
-   termcolor
-   wrapt
-   dill
+   preshed
+   srsly
+   tqdm
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
   checkInputs = [
+    hypothesis
+    mock
     pytest
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py --replace \
-      "'pathlib>=1.0.0,<2.0.0'," \
-      "\"pathlib>=1.0.0,<2.0.0; python_version<'3.4'\","
-
-    substituteInPlace setup.py --replace \
-      "'cytoolz>=0.8,<0.9'," \
-      "'cytoolz>=0.8',"
-  '';
-
   # Cannot find cython modules.
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "blis>=0.4.0,<0.5.0" "blis>=0.4.0,<1.0" \
+      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
+      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
+      --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
+  '';
 
   checkPhase = ''
     pytest thinc/tests
   '';
 
+  pythonImportsCheck = [ "thinc" ];
+
   meta = with stdenv.lib; {
     description = "Practical Machine Learning for NLP in Python";
-    homepage = https://github.com/explosion/thinc;
+    homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu sdll ];
+    maintainers = with maintainers; [ aborsu danieldk sdll ];
     };
 }

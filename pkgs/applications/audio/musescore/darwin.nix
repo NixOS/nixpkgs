@@ -8,8 +8,8 @@ in
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "musescore-darwin-${version}";
-  version = "${concatStringsSep "." versionComponents}";
+  pname = "musescore-darwin";
+  version = concatStringsSep "." versionComponents;
 
   src = fetchurl {
     url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
+    homepage = "https://musescore.org/";
     license = licenses.gpl2;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ yurrriq ];
-    repositories.git = https://github.com/musescore/MuseScore;
+    repositories.git = "https://github.com/musescore/MuseScore";
   };
 }

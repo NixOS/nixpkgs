@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -15,10 +16,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose ];
 
+  # "OSError: AF_UNIX path too long" for darwin
+  doCheck = !stdenv.isDarwin;
+
   meta = {
     license = lib.licenses.lgpl21;
     description = "Exclude specific directories from nosetests runs";
-    homepage = https://github.com/kgrandis/nose-exclude;
+    homepage = "https://github.com/kgrandis/nose-exclude";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

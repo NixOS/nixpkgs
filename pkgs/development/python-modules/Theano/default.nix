@@ -1,8 +1,6 @@
 { stdenv
 , runCommandCC
-, lib
 , fetchPypi
-, gcc
 , buildPythonPackage
 , isPyPy
 , pythonOlder
@@ -37,7 +35,11 @@ let
     '';
 
   # Theano spews warnings and disabled flags if the compiler isn't named g++
-  cxx_compiler = wrapped "g++" "\\$HOME/.theano"
+  cxx_compiler_name =
+    if stdenv.cc.isGNU then "g++" else
+    if stdenv.cc.isClang then "clang++" else
+    throw "Unknown C++ compiler";
+  cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
     (    stdenv.lib.optional cudaSupport libgpuarray_
       ++ stdenv.lib.optional cudnnSupport cudnn );
 
@@ -45,13 +47,13 @@ let
 
 in buildPythonPackage rec {
   pname = "Theano";
-  version = "1.0.2";
+  version = "1.0.5";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6768e003d328a17011e6fca9126fbb8a6ffd3bb13cb21c450f3e724cca29abde";
+    sha256 = "129f43ww2a6badfdr6b88kzjzz2b0wk0dwkvwb55z6dsagfkk53f";
   };
 
   postPatch = ''
@@ -66,7 +68,9 @@ in buildPythonPackage rec {
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
-  preCheck = ''
+  # needs to be postFixup so it runs before pythonImportsCheck even when
+  # doCheck = false (meaning preCheck would be disabled)
+  postFixup = ''
     mkdir -p check-phase
     export HOME=$(pwd)/check-phase
   '';
@@ -79,8 +83,10 @@ in buildPythonPackage rec {
   checkInputs = [ nose ];
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
 
+  pythonImportsCheck = [ "theano" ];
+
   meta = with stdenv.lib; {
-    homepage = http://deeplearning.net/software/theano/;
+    homepage = "http://deeplearning.net/software/theano/";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
     maintainers = with maintainers; [ maintainers.bcdarwin ];

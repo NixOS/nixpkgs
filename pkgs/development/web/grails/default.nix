@@ -10,12 +10,12 @@ let
     ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {
-  name = "grails-${version}";
-  version = "3.3.8";
+  pname = "grails";
+  version = "4.1.0.M1";
 
   src = fetchurl {
     url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
-    sha256 = "1hfqlaiv29im6pyqi7irl28ws7nn2jc4g4718gysfmm1gvlprpn0";
+    sha256 = "0l99x3g485qjpdd7ga553xpi1s6rq21p8v16qjzqwdhyld961qsr";
   };
 
   buildInputs = [ unzip ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       over configuration to provide a productive and stream-lined development
       experience.
     '';
-    homepage = https://grails.org/;
+    homepage = "https://grails.org/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

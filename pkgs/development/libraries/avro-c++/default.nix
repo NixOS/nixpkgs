@@ -3,7 +3,8 @@
 let version = "1.8.2"; in
 
 stdenv.mkDerivation {
-  name = "avro-c++-${version}";
+  pname = "avro-c++";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A C++ library which implements parts of the Avro Specification";
-    homepage = https://avro.apache.org/;
+    homepage = "https://avro.apache.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ rasendubi ];
     platforms = stdenv.lib.platforms.all;

@@ -1,3 +1,4 @@
+
 { mkDerivation, lib, fetchurl, cmake, gettext, pkgconfig, extra-cmake-modules
 , qtquickcontrols, qtwebkit, qttools, kde-cli-tools, qtbase
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
@@ -7,17 +8,13 @@
 , libksysguard, konsole, llvmPackages, makeWrapper, kpurpose, boost
 }:
 
-let
-  pname = "kdevelop";
-  version = "5.2.4";
-  qtVersion = "5.${lib.versions.minor qtbase.version}";
-in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "kdevelop";
+  version = "5.5.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1jbks7nh9rybz4kg152l39hfj2x0p6mjins8x9mz03bbv8jf8gic";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "1nkl3z1n1l7ly2zvmbx2sdhx5q72wcvpwhzsz3qgw1474qd9i3i2";
   };
 
   nativeBuildInputs = [
@@ -37,13 +34,20 @@ mkDerivation rec {
     shared-mime-info libksysguard konsole kcrash karchive kguiaddons kpurpose
   ];
 
+  # https://cgit.kde.org/kdevelop.git/commit/?id=716372ae2e8dff9c51e94d33443536786e4bd85b
+  # required as nixos seems to be unable to find CLANG_BUILTIN_DIR
+  cmakeFlags = [
+    "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${lib.getVersion llvmPackages.clang}/include"
+  ];
+
+  dontWrapQtApps = true;
+
   postInstall = ''
     # The kdevelop! script (shell environment) needs qdbus and kioclient5 in PATH.
     wrapProgram "$out/bin/kdevelop!" \
       --prefix PATH ":" "${lib.makeBinPath [ qttools kde-cli-tools ]}"
 
-    wrapProgram "$out/bin/kdevelop" \
-      --prefix QT_PLUGIN_PATH : $out/lib/qt-${qtVersion}/plugins
+    wrapQtApp "$out/bin/kdevelop"
 
     # Fix the (now wrapped) kdevelop! to find things in right places:
     # - Fixup the one use where KDEV_BASEDIR is assumed to contain kdevelop.
@@ -63,7 +67,7 @@ mkDerivation rec {
         programing languages. It is based on KDevPlatform, KDE and Qt
         libraries and is under development since 1998.
       '';
-    homepage = https://www.kdevelop.org;
+    homepage = "https://www.kdevelop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
   };
 }

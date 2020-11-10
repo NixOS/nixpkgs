@@ -5,19 +5,18 @@
 , qtbase, qtsvg, qtwebengine
 # buildInputs
 , r2-for-cutter
-, python3 }:
+, python3
+, wrapQtAppsHook }:
 
-let
-  version = "1.7.1";
-in
 stdenv.mkDerivation rec {
-  name = "radare2-cutter-${version}";
+  pname = "radare2-cutter";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "cutter";
     rev = "v${version}";
-    sha256 = "0dfi6f016jnh3swppvks5qkvmk0j2hvggh9sd1f40kg9pg5p08hy";
+    sha256 = "0ljj3j3apbbw628n2nyrxpbnclixx20bqjxm0xwggqzz9vywsar0";
   };
 
   postUnpack = "export sourceRoot=$sourceRoot/src";
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ qmake pkgconfig ];
-  buildInputs = [ qtbase qtsvg qtwebengine r2-for-cutter python3 ];
+  buildInputs = [ qtbase qtsvg qtwebengine r2-for-cutter python3 wrapQtAppsHook ];
 
   qmakeFlags = [
     "CONFIG+=link_pkgconfig"

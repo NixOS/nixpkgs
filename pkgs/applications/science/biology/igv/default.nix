@@ -1,33 +1,35 @@
-{ stdenv, fetchurl, unzip, jre }:
+{ stdenv, fetchzip, jdk11 }:
 
 stdenv.mkDerivation rec {
-  name = "igv-${version}";
-  version = "2.4.14";
-
-  src = fetchurl {
-    url = "https://data.broadinstitute.org/igv/projects/downloads/2.4/IGV_${version}.zip";
-    sha256 = "0z9hk01czkdgi55b0qdvvi43jsqkkx6gl7wglamv425c6rklcvhc";
+  pname = "igv";
+  version = "2.8.11";
+  src = fetchzip {
+    url = "https://data.broadinstitute.org/igv/projects/downloads/2.8/IGV_${version}.zip";
+    sha256 = "1hiwnrrh42qzc7kdc7bypgcgn488pz8g462xzchbhgx7jjdbbwhm";
   };
-
-  buildInputs = [ unzip jre ];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}
     cp -Rv * $out/share/
 
     sed -i "s#prefix=.*#prefix=$out/share#g" $out/share/igv.sh
-    sed -i 's#java#${jre}/bin/java#g' $out/share/igv.sh
+    sed -i 's#java#${jdk11}/bin/java#g' $out/share/igv.sh
+
+    sed -i "s#prefix=.*#prefix=$out/share#g" $out/share/igvtools
+    sed -i 's#java#${jdk11}/bin/java#g' $out/share/igvtools
 
     ln -s $out/share/igv.sh $out/bin/igv
+    ln -s $out/share/igvtools $out/bin/igvtools
 
     chmod +x $out/bin/igv
+    chmod +x $out/bin/igvtools
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.broadinstitute.org/igv/;
+    homepage = "https://www.broadinstitute.org/igv/";
     description = "A visualization tool for interactive exploration of genomic datasets";
-    license = licenses.lgpl21;
+    license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

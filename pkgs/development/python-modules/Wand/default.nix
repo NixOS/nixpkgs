@@ -1,50 +1,33 @@
 { stdenv
-, lib
 , buildPythonPackage
 , fetchPypi
-, imagemagick
-, pytest
-, psutil
-, memory_profiler
-, pytest_xdist
+, imagemagick7Big
 }:
 
-let
-  soext = stdenv.hostPlatform.extensions.sharedLibrary;
-  magick_wand_library = "${imagemagick}/lib/libMagickWand-6.Q16${soext}";
-  imagemagick_library = "${imagemagick}/lib/libMagickCore-6.Q16${soext}";
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "Wand";
-  version = "0.4.4";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28e0454c9d16d69c5d5034918d96320d8f9f1377b4fdaf4944eec2f938c74704";
+    sha256 = "d21429288fe0de63d829dbbfb26736ebaed9fd0792c2a0dc5943c5cab803a708";
   };
-
-  checkInputs = [ pytest pytest_xdist memory_profiler psutil ];
-
-  buildInputs = [ imagemagick ];
-
-  patches = [
-    ./libraries.patch
-  ];
-
-  inherit magick_wand_library imagemagick_library;
 
   postPatch = ''
-    substituteAllInPlace wand/api.py
+    substituteInPlace wand/api.py --replace \
+      "magick_home = os.environ.get('MAGICK_HOME')" \
+      "magick_home = '${imagemagick7Big}'"
   '';
 
-  # No tests
+  # tests not included with pypi release
   doCheck = false;
-  meta = {
-    description = "Ctypes-based simple MagickWand API binding for Python";
-    homepage = http://wand-py.org/;
-    license = with lib.licenses; [ mit ];
-  };
 
-  passthru = {
-    inherit imagemagick;
+  passthru.imagemagick = imagemagick7Big;
+
+  meta = with stdenv.lib; {
+    description = "Ctypes-based simple MagickWand API binding for Python";
+    homepage = "http://wand-py.org/";
+    license = [ licenses.mit ];
+    maintainers = with maintainers; [ infinisil ];
   };
 }

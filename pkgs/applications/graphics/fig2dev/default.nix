@@ -1,14 +1,15 @@
 { stdenv, fetchurl, ghostscript, libpng } :
 
 let
-  version = "3.2.7a";
+  version = "3.2.7b";
 
 in stdenv.mkDerivation {
-  name = "fig2dev-${version}";
+  pname = "fig2dev";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";
-    sha256 = "0a7vkfl38fvkhg3na5gr9c4fskas9wbs84y9djg85nzwbshik8mx";
+    sha256 = "1ck8gnqgg13xkxq4hrdy706i4xdgrlckx6bi6wxm1g514121pp27";
   };
 
   buildInputs = [ libpng ];
@@ -17,7 +18,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tool to convert Xfig files to other formats";
-    homepage = http://mcj.sourceforge.net/;
+    homepage = "http://mcj.sourceforge.net/";
     license = licenses.xfig;
     platforms = platforms.linux;
   };

@@ -1,26 +1,66 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, glib, gtk3, wrapGAppsHook, desktop-file-utils
-, gettext, itstool, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_43, systemd, python3 }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, glib
+, gtk3
+, wrapGAppsHook
+, gettext
+, itstool
+, libxml2
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_43
+, systemd
+, python3
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-logs-${version}";
-  version = "3.28.5";
+  pname = "gnome-logs";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-logs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0zw6nx1hckv46hn978g57anp4zq4alvz9dpwibgx02wb6gq1r23a";
+    url = "mirror://gnome/sources/gnome-logs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0w1nfdxbv3f0wnhmdy21ydvr4swfc108hypda561p7l9lrhnnxj4";
   };
 
-  mesonFlags = [
-    "-Dtests=true"
-    "-Dman=true"
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gnome-logs/-/issues/52
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/b42defceefc775220b525f665a3b662ab9593b81.patch";
+      sha256 = "1s0zscmhwy7r0xff17wh8ik8x9xw1vrkipw5vl5i770bxnljps8n";
+    })
   ];
 
   nativeBuildInputs = [
-    (python3.withPackages (pkgs: with pkgs; [ dogtail ]))
-    meson ninja pkgconfig wrapGAppsHook gettext itstool desktop-file-utils
-    libxml2 libxslt docbook_xsl docbook_xml_dtd_43
+    python3
+    meson
+    ninja
+    pkgconfig
+    wrapGAppsHook
+    gettext
+    itstool
+    libxml2
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_43
   ];
-  buildInputs = [ glib gtk3 systemd gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme ];
+
+  buildInputs = [
+    glib
+    gtk3
+    systemd
+    gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme
+  ];
+
+  mesonFlags = [
+    "-Dman=true"
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -37,9 +77,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Logs;
+    homepage = "https://wiki.gnome.org/Apps/Logs";
     description = "A log viewer for the systemd journal";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

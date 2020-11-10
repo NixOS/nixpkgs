@@ -1,41 +1,44 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome3, libtool, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, glib, itstool, libxml2, mate-panel, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome3, gtk3, libtool, polkit, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-power-manager-${version}";
-  version = "1.21.0";
+  pname = "mate-power-manager";
+  version = "1.24.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1l7rxv16j95w26igs4n7fdfv5hqm91b9ddc1lw5m26s42nkzzf85";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0fni41p3kraxwjnx9l5mdspng0zib1gfdxwlaiyq31mh4g79yjyj";
   };
+
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+    libtool
+    wrapGAppsHook
+  ];
 
   buildInputs = [
      glib
      itstool
      libxml2
      libcanberra-gtk3
-     gnome3.gtk
+     gtk3
      gnome3.libgnome-keyring
      libnotify
      dbus-glib
      upower
-     mate.mate-panel
-  ];
-
-  nativeBuildInputs = [
-    pkgconfig
-    intltool
-    libtool
-    wrapGAppsHook
+     polkit
+     mate-panel
   ];
 
   configureFlags = [ "--enable-applets" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "The MATE Power Manager";
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo maintainers.chpatrick ];
+    maintainers = with maintainers; [ romildo chpatrick ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses ? null, perl ? null }:
+{ stdenv, fetchurl, ncurses ? null, perl ? null, lib }:
 
 stdenv.mkDerivation rec {
   name = "liboping-1.10.0";
@@ -7,6 +7,9 @@ stdenv.mkDerivation rec {
     url = "http://verplant.org/liboping/files/${name}.tar.bz2";
     sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
+
+  NIX_CFLAGS_COMPILE = lib.optionalString
+    stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   buildInputs = [ ncurses perl ];
 
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
       Included is a sample application, called oping, which demonstrates the
       library's abilities.
     '';
-    homepage = http://noping.cc/;
+    homepage = "http://noping.cc/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

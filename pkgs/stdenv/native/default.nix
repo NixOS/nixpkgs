@@ -1,8 +1,8 @@
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 }:
 
-assert crossSystem == null;
+assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system;
@@ -78,7 +78,7 @@ let
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }) }:
+    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
 
     import ../generic {
       buildPlatform = localSystem;
@@ -94,10 +94,10 @@ let
         if system == "x86_64-cygwin" then prehookCygwin else
         prehookBase;
 
-      extraNativeBuildInputs =
-        if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
+      extraNativeBuildInputs = extraNativeBuildInputs ++
+        (if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
         if system == "x86_64-cygwin" then extraNativeBuildInputsCygwin else
-        [];
+        []);
 
       initialPath = extraPath ++ path;
 
@@ -121,8 +121,8 @@ in
 
     cc = let
       nativePrefix = { # switch
-        "i686-solaris" = "/usr/gnu";
-        "x86_64-solaris" = "/opt/local/gcc47";
+        i686-solaris = "/usr/gnu";
+        x86_64-solaris = "/opt/local/gcc47";
       }.${system} or "/usr";
     in
     import ../../build-support/cc-wrapper {
@@ -163,6 +163,7 @@ in
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];
       overrides = self: super: { inherit (prevStage) xz; };
+      extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
     };
   })
 

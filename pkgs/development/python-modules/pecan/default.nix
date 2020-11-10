@@ -1,35 +1,59 @@
 { stdenv
 , fetchPypi
 , buildPythonPackage
+, isPy27
 # Python deps
-, singledispatch
 , logutils
-, webtest
 , Mako
+, singledispatch
+, six
+, webtest
+# Test Inputs
+, pytestCheckHook
 , genshi
-, Kajiki
-, sqlalchemy
 , gunicorn
 , jinja2
+, Kajiki
+, mock
+, sqlalchemy
+, uwsgi
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "pecan";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24f06cf88a488b75f433e62b33c1c97e4575d0cd91eec9eec841a81cecfd6de3";
+    sha256 = "4b2acd6802a04b59e306d0a6ccf37701d24376f4dc044bbbafba3afdf9d3389a";
   };
 
-  propagatedBuildInputs = [ singledispatch logutils ];
-  buildInputs = [
-    webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
+  propagatedBuildInputs = [
+    logutils
+    Mako
+    singledispatch
+    six
+    webtest
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    genshi
+    gunicorn
+    jinja2
+    mock
+    sqlalchemy
+    virtualenv
+  ] ++ stdenv.lib.optionals isPy27 [ Kajiki ];
+
+  pytestFlagsArray = [
+    "--pyargs pecan "
   ];
 
   meta = with stdenv.lib; {
     description = "Pecan";
-    homepage = "https://github.com/pecan/pecan";
+    homepage = "http://www.pecanpy.org/";
+    changelog = "https://pecan.readthedocs.io/en/latest/changes.html";
   };
 }

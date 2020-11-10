@@ -1,43 +1,40 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
-, intltool, libxml2, xkeyboard_config, isocodes, itstool, wayland
-, libseccomp, bubblewrap, gobjectIntrospection, gtk-doc, docbook_xsl }:
+{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, gnome3, gtk3, glib
+, gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
+, libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-desktop-${version}";
-  version = "3.28.2";
+  pname = "gnome-desktop";
+  version = "3.38.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0c439hhpfd9axmv4af6fzhibksh69pnn2nnbghbbqqbwy6zqfl30";
+    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1q1vri9vsrdwhhl26dk1f79a3dhwfn9dhbaiczli826nzq9kb40p";
   };
 
-  # TODO: remove with 3.30
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
-    pkgconfig which itstool intltool libxslt libxml2 gobjectIntrospection
-    gtk-doc docbook_xsl
+    pkgconfig meson ninja gettext libxslt libxml2 gobject-introspection
+    gtk-doc docbook_xsl glib
   ];
   buildInputs = [
-    libX11 bubblewrap xkeyboard_config isocodes wayland
-    gtk3 glib libseccomp
+    bubblewrap xkeyboard_config isocodes wayland
+    gtk3 glib libseccomp systemd
   ];
 
-  propagatedBuildInputs = [ gnome3.gsettings-desktop-schemas ];
+  propagatedBuildInputs = [ gsettings-desktop-schemas ];
 
   patches = [
     (substituteAll {
       src = ./bubblewrap-paths.patch;
-      BUBBLEWRAP_BIN = "${bubblewrap}/bin/bwrap";
+      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
+      inherit (builtins) storeDir;
     })
   ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Ddesktop_docs=false"
   ];
 
   passthru = {
@@ -51,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "Library with common API for various GNOME modules";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

@@ -13,51 +13,54 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "3.0.2";
-    url = "https://dl.winehq.org/wine/source/3.0/wine-${version}.tar.xz";
-    sha256 = "1zv3nk31s758ghp4795ym3w8l5868c2dllmjx9245qh9ahvp3mya";
+    version = "5.0.2";
+    url = "https://dl.winehq.org/wine/source/5.0/wine-${version}.tar.xz";
+    sha256 = "1g7c5djbi262h6zivmxbk26rsflwq8mrghr7hci3ajw7f3s89hn2";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
-      version = "2.47";
-      url = "http://dl.winehq.org/wine/wine-gecko/${version}/wine_gecko-${version}-x86.msi";
-      sha256 = "0fk4fwb4ym8xn0i5jv5r5y198jbpka24xmxgr8hjv5b3blgkd2iv";
+      version = "2.47.1";
+      url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86.msi";
+      sha256 = "0ld03pjm65xkpgqkvfsmk6h9krjsqbgxw4b8rvl2fj20j8l0w2zh";
     };
     gecko64 = fetchurl rec {
-      version = "2.47";
-      url = "http://dl.winehq.org/wine/wine-gecko/${version}/wine_gecko-${version}-x86_64.msi";
-      sha256 = "0zaagqsji6zaag92fqwlasjs8v9hwjci5c2agn9m7a8fwljylrf5";
+      version = "2.47.1";
+      url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86_64.msi";
+      sha256 = "0jj7azmpy07319238g52a8m4nkdwj9g010i355ykxnl8m5wjwcb9";
     };
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "4.7.3";
-      url = "http://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
-      sha256 = "0fkd22v2vm3ml76x1ngg42byvmry24xb92vpl4j84zhw6wbq0jnj";
+      version = "4.9.4";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
+      sha256 = "1p8g45xphxnns7dkg9rbaknarbjy5cjhrngaf0fsgk9z68wgz9ji";
     };
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "3.17";
-    url = "https://dl.winehq.org/wine/source/3.x/wine-${version}.tar.xz";
-    sha256 = "08fcziadw40153a9rv630m7iz6ipfzylms5y191z4sj2vvhy5vac";
+    version = "5.20";
+    url = "https://dl.winehq.org/wine/source/5.x/wine-${version}.tar.xz";
+    sha256 = "sha256-j1Ui+M6+vbqhL1jhumcaEfZjcuCu33T7kyz1qJOQhhw=";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
-    # https://github.com/wine-compholio/wine-staging/releases
+    # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "1ds9q90xjg59ikic98kqkhmijnqx4yplvwsm6rav4mx72yci7d4w";
+    sha256 = "sha256-1oWoLb5w9g3wDghpvHpNsJCws7QoZ/E2dqxLuaIgi6o=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
+
+    # Just keep list empty, if current release haven't broken patchsets
+    disabledPatchsets = [ ];
   };
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20180603";
-    sha256 = "02valprlb64cc40ivd8sxgxy2hsgqn22s49a47inl6pknj5nmvar";
+    version = "20200412";
+    sha256 = "0ccr8wdmhkhbccxs5hvn44ppl969n8j0c3rnnir5v6akjcb2nzzv";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

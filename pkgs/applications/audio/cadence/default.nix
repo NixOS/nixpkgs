@@ -1,65 +1,100 @@
 { stdenv
-, fetchurl
+, a2jmidid
+, coreutils
+, lib
+, libjack2
+, fetchpatch
+, fetchzip
+, jack_capture
 , pkgconfig
+, pulseaudioFull
 , qtbase
 , makeWrapper
-, jack2Full
-, python3Packages
-, a2jmidid
+, mkDerivation
+, python3
 }:
+#ladish missing, claudia can't work.
+#pulseaudio needs fixes (patchShebangs .pa ...)
+#desktop needs icons and exec fixing.
 
- stdenv.mkDerivation rec {
-  version = "0.9.0";
-  name = "cadence";
+mkDerivation rec {
+  version = "0.9.1";
+  pname = "cadence";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";
-    sha256 = "07z1mnb0bmldb3i31bgw816pnvlvr9gawr51rpx3mhixg5wpiqzb";
+    sha256 = "07z8grnnpkd0nf3y3r6qjlk1jlzrbhdrp9mnhrhhmws54p1bhl20";
   };
 
-  buildInputs = [
-    makeWrapper
+  patches = [
+    # Fix installation without DESTDIR
+    (fetchpatch {
+      url = "https://github.com/falkTX/Cadence/commit/1fd3275e7daf4b75f59ef1f85a9e2e93bd5c0731.patch";
+      sha256 = "0q791jsh8vmjg678dzhbp1ykq8xrrlxl1mbgs3g8if1ccj210vd8";
+    })
+  ];
+
+  postPatch = ''
+      libjackso=$(realpath ${lib.makeLibraryPath [libjack2]}/libjack.so.0);
+      substituteInPlace ./src/jacklib.py --replace libjack.so.0 $libjackso
+      substituteInPlace ./src/cadence.py --replace "/usr/bin/pulseaudio" \
+        "${lib.makeBinPath[pulseaudioFull]}/pulseaudio"
+      substituteInPlace ./c++/jackbridge/JackBridge.cpp --replace libjack.so.0 $libjackso
+  '';
+
+  nativeBuildInputs = [
     pkgconfig
+  ];
+
+  buildInputs = [
     qtbase
+    jack_capture
+    pulseaudioFull
+    ((python3.withPackages (ps: with ps; [
+          pyqt5
+          dbus-python
+        ])))
   ];
 
-  apps = [
-    "cadence"
-    "cadence-jacksettings"
-    "cadence-pulse2loopback"
-    "claudia"
-    "cadence-aloop-daemon"
-    "cadence-logs"
-    "cadence-render"
-    "catarina"
-    "claudia-launcher"
-    "cadence-pulse2jack"
-    "cadence-session-start"
-    "catia"
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/etc"
   ];
 
-  makeFlags = ''
-    PREFIX=""
-    DESTDIR=$(out)
-  '';
+  dontWrapQtApps = true;
 
-  propagatedBuildInputs = with python3Packages; [ pyqt5 ];
-
-  postInstall = ''
-    # replace with our own wrappers.
-    for app in $apps; do
-      rm $out/bin/$app
-      makeWrapper ${python3Packages.python.interpreter} $out/bin/$app \
-        --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-        --add-flags "-O $out/share/cadence/src/$app.py"
-    done
-  '';
+  # Replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise.
+  preFixup = let
+    outRef = placeholder "out";
+    prefix = "${outRef}/share/cadence/src";
+    scriptAndSource = lib.mapAttrs' (script: source:
+      lib.nameValuePair ("${outRef}/bin/" + script) ("${prefix}/" + source)
+    ) {
+      "cadence" = "cadence.py";
+      "claudia" = "claudia.py";
+      "catarina" = "catarina.py";
+      "catia" = "catia.py";
+      "cadence-jacksettings" = "jacksettings.py";
+      "cadence-aloop-daemon" = "cadence_aloop_daemon.py";
+      "cadence-logs" = "logs.py";
+      "cadence-render" = "render.py";
+      "claudia-launcher" = "claudia_launcher.py";
+      "cadence-session-start" = "cadence_session_start.py";
+    };
+  in lib.mapAttrsToList (script: source: ''
+    rm -f ${script}
+    makeQtWrapper ${source} ${script} \
+      --prefix PATH : "${lib.makeBinPath [
+        jack_capture # cadence-render
+        pulseaudioFull # cadence, cadence-session-start
+        ]}"
+  '') scriptAndSource;
 
   meta = {
-    homepage = https://github.com/falkTX/Cadence/;
+    homepage = "https://github.com/falkTX/Cadence/";
     description = "Collection of tools useful for audio production";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ genesis ];
-    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ genesis worldofpeace ];
+    platforms = [ "x86_64-linux" ];
   };
 }

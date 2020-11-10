@@ -1,8 +1,22 @@
-{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config, coreutils
+{ stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
 , blas64 ? null
+# Multi-threaded applications must not call a threaded OpenBLAS
+# (the only exception is when an application uses OpenMP as its
+# *only* form of multi-threading). See
+#     https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+#     https://github.com/xianyi/OpenBLAS/issues/2543
+# This flag builds a single-threaded OpenBLAS using the flags
+# stated in thre.
+, singleThreaded ? false
+, buildPackages
+# Select a specific optimization target (other than the default)
+# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+, target ? null
+, enableStatic ? false
+, enableShared ? true
 }:
 
 with stdenv.lib;
@@ -10,57 +24,59 @@ with stdenv.lib;
 let blas64_ = blas64; in
 
 let
+  setTarget = x: if target == null then x else target;
+
   # To add support for a new platform, add an element to this set.
   configs = {
     armv6l-linux = {
-      BINARY = "32";
-      TARGET = "ARMV6";
-      DYNAMIC_ARCH = "0";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 32;
+      TARGET = setTarget "ARMV6";
+      DYNAMIC_ARCH = false;
+      USE_OPENMP = true;
     };
 
     armv7l-linux = {
-      BINARY = "32";
-      TARGET = "ARMV7";
-      DYNAMIC_ARCH = "0";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 32;
+      TARGET = setTarget "ARMV7";
+      DYNAMIC_ARCH = false;
+      USE_OPENMP = true;
     };
 
     aarch64-linux = {
-      BINARY = "64";
-      TARGET = "ARMV8";
-      DYNAMIC_ARCH = "1";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 64;
+      TARGET = setTarget "ARMV8";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
 
     i686-linux = {
-      BINARY = "32";
-      TARGET = "P2";
-      DYNAMIC_ARCH = "1";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 32;
+      TARGET = setTarget "P2";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
 
     x86_64-darwin = {
-      BINARY = "64";
-      TARGET = "ATHLON";
-      DYNAMIC_ARCH = "1";
-      # Note that clang is available through the stdenv on OSX and
-      # thus is not an explicit dependency.
-      CC = "clang";
-      USE_OPENMP = "0";
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
 
     x86_64-linux = {
-      BINARY = "64";
-      TARGET = "ATHLON";
-      DYNAMIC_ARCH = "1";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = true;
+      NO_AVX512 = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
+    powerpc64le-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER5";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
   };
 in
@@ -76,15 +92,29 @@ let
     if blas64_ != null
       then blas64_
       else hasPrefix "x86_64" stdenv.hostPlatform.system;
+  # Convert flag values to format OpenBLAS's build expects.
+  # `toString` is almost what we need other than bools,
+  # which we need to map {true -> 1, false -> 0}
+  # (`toString` produces empty string `""` for false instead of `0`)
+  mkMakeFlagValue = val:
+    if !builtins.isBool val then toString val
+    else if val then "1" else "0";
+  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+
+  shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
+
 in
 stdenv.mkDerivation rec {
-  name = "openblas-${version}";
-  version = "0.3.3";
+  pname = "openblas";
+  version = "0.3.12";
+
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "0cpkvfvc14xm9mifrm919rp8vrq70gpl7r2sww4f0izrl39wklwx";
+    sha256 = "0mk1kjkr96bvvcq2zigzjrs0cnhwsf6gfi0855mp9yifn8lvp20y";
   };
 
   inherit blas64;
@@ -104,21 +134,39 @@ stdenv.mkDerivation rec {
     "relro" "bindnow"
   ];
 
-  nativeBuildInputs =
-    [gfortran perl which]
-    ++ optionals stdenv.isDarwin [coreutils];
+  nativeBuildInputs = [
+    perl
+    which
+  ];
 
-  makeFlags =
-    [
-      "FC=gfortran"
-      ''PREFIX="''$(out)"''
-      "NUM_THREADS=64"
-      "INTERFACE64=${if blas64 then "1" else "0"}"
-      "NO_STATIC=1"
-    ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
-    ++ mapAttrsToList (var: val: var + "=" + val) config;
+  depsBuildBuild = [
+    buildPackages.gfortran
+    buildPackages.stdenv.cc
+  ];
 
-    patches = [];
+  makeFlags = mkMakeFlagsFromConfig (config // {
+    FC = "${stdenv.cc.targetPrefix}gfortran";
+    CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
+    PREFIX = placeholder "out";
+    NUM_THREADS = 64;
+    INTERFACE64 = blas64;
+    NO_STATIC = !enableStatic;
+    NO_SHARED = !enableShared;
+    CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
+    HOSTCC = "cc";
+    # Makefile.system only checks defined status
+    # This seems to be a bug in the openblas Makefile:
+    # on x86_64 it expects NO_BINARY_MODE=
+    # but on aarch64 it expects NO_BINARY_MODE=0
+    NO_BINARY_MODE = if stdenv.isx86_64
+        then toString (stdenv.hostPlatform != stdenv.buildPlatform)
+        else stdenv.hostPlatform != stdenv.buildPlatform;
+  } // (stdenv.lib.optionalAttrs singleThreaded {
+    # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+    USE_THREAD = false;
+    USE_LOCKING = true; # available with openblas >= 0.3.7
+    USE_OPENMP = false; # openblas will refuse building with both USE_OPENMP=1 and USE_THREAD=0
+  }));
 
   doCheck = true;
   checkTarget = "tests";
@@ -135,19 +183,24 @@ Cflags: -I$out/include
 Libs: -L$out/lib -lopenblas
 EOF
     done
+
+    # Setup symlinks for blas / lapack
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
   '';
 
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
-    homepage = https://github.com/xianyi/OpenBLAS;
+    homepage = "https://github.com/xianyi/OpenBLAS";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };
-
-  # We use linkName to pass a different name to --with-blas-libs for
-  # fflas-ffpack and linbox, because we use blas on darwin but openblas
-  # elsewhere.
-  # See see https://github.com/NixOS/nixpkgs/pull/45013.
-  passthru.linkName = "openblas";
 }

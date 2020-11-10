@@ -1,19 +1,22 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, ipython_genutils, jupyterlab_launcher, notebook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jupyterlab_server
+, notebook
+, pythonOlder
+}:
+
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "0.34.6";
-  disabled = !isPy3k;
+  version = "2.2.8";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6e5a3855a0d55e6aa4ab704379da5da3db2e652442e79acfa2e9d14ef50ccb3";
+    sha256 = "c8377bee30504919c1e79949f9fe35443ab7f5c4be622c95307e8108410c8b8c";
   };
 
-  propagatedBuildInputs = [
-    ipython_genutils
-    jupyterlab_launcher
-    notebook
-  ];
+  propagatedBuildInputs = [ jupyterlab_server notebook ];
 
   makeWrapperArgs = [
     "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab"
@@ -25,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension.";
     license = with licenses; [ bsd3 ];
-    homepage = "http://jupyter.org/";
+    homepage = "https://jupyter.org/";
     maintainers = with maintainers; [ zimbatm costrouc ];
   };
 }

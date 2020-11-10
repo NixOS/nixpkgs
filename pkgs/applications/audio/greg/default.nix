@@ -3,7 +3,6 @@
 with pythonPackages; buildPythonApplication rec {
   pname = "greg";
   version = "0.4.7";
-  name = pname + "-" + version;
 
   disabled = !isPy3k;
 

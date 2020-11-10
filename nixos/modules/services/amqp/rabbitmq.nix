@@ -17,6 +17,7 @@ in {
   options = {
     services.rabbitmq = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the RabbitMQ server, an Advanced Message
@@ -80,16 +81,26 @@ in {
       configItems = mkOption {
         default = {};
         type = types.attrsOf types.str;
-        example = ''
+        example = literalExample ''
           {
             "auth_backends.1.authn" = "rabbit_auth_backend_ldap";
             "auth_backends.1.authz" = "rabbit_auth_backend_internal";
           }
         '';
         description = ''
-          New style config options.
+          Configuration options in RabbitMQ's new config file format,
+          which is a simple key-value format that can not express nested
+          data structures. This is known as the <literal>rabbitmq.conf</literal> file,
+          although outside NixOS that filename may have Erlang syntax, particularly
+          prior to RabbitMQ 3.7.0.
 
-          See http://www.rabbitmq.com/configure.html
+          If you do need to express nested data structures, you can use
+          <literal>config</literal> option. Configuration from <literal>config</literal>
+          will be merged into these options by RabbitMQ at runtime to
+          form the final configuration.
+
+          See https://www.rabbitmq.com/configure.html#config-items
+          For the distinct formats, see https://www.rabbitmq.com/configure.html#config-file-formats
         '';
       };
 
@@ -97,10 +108,17 @@ in {
         default = "";
         type = types.str;
         description = ''
-          Verbatim advanced configuration file contents.
-          Prefered way is to use configItems.
+          Verbatim advanced configuration file contents using the Erlang syntax.
+          This is also known as the <literal>advanced.config</literal> file or the old config format.
 
-          See http://www.rabbitmq.com/configure.html
+          <literal>configItems</literal> is preferred whenever possible. However, nested
+          data structures can only be expressed properly using the <literal>config</literal> option.
+
+          The contents of this option will be merged into the <literal>configItems</literal>
+          by RabbitMQ at runtime to form the final configuration.
+
+          See the second table on https://www.rabbitmq.com/configure.html#config-items
+          For the distinct formats, see https://www.rabbitmq.com/configure.html#config-file-formats
         '';
       };
 
@@ -148,7 +166,10 @@ in {
       after = [ "network.target" "epmd.socket" ];
       wants = [ "network.target" "epmd.socket" ];
 
-      path = [ cfg.package pkgs.procps ];
+      path = [
+        cfg.package
+        pkgs.coreutils # mkdir/chown/chmod for preStart
+      ];
 
       environment = {
         RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";
@@ -162,11 +183,11 @@ in {
       } //  optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
 
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         ExecStart = "${cfg.package}/sbin/rabbitmq-server";
         ExecStop = "${cfg.package}/sbin/rabbitmqctl shutdown";
         User = "rabbitmq";
         Group = "rabbitmq";
+        LogsDirectory = "rabbitmq";
         WorkingDirectory = cfg.dataDir;
         Type = "notify";
         NotifyAccess = "all";
@@ -180,11 +201,8 @@ in {
       preStart = ''
         ${optionalString (cfg.cookie != "") ''
             echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
-            chown rabbitmq:rabbitmq ${cfg.dataDir}/.erlang.cookie
             chmod 600 ${cfg.dataDir}/.erlang.cookie
         ''}
-        mkdir -p /var/log/rabbitmq
-        chown rabbitmq:rabbitmq /var/log/rabbitmq
       '';
     };
 

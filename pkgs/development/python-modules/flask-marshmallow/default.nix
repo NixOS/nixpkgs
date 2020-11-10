@@ -4,17 +4,17 @@
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "0.9.0";
+  version = "0.13.0";
 
   meta = {
     homepage = "https://github.com/marshmallow-code/flask-marshmallow";
     description = "Flask + marshmallow for beautiful APIs";
     license = lib.licenses.mit;
-  }; 
+  };
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db7aff4130eb99fd05ab78fd2e2c58843ba0f208899aeb1c14aff9cd98ae8c80";
+    sha256 = "aefc1f1d96256c430a409f08241bab75ffe97e5d14ac5d1f000764e39bf4873a";
   };
 
   propagatedBuildInputs = [ flask marshmallow ];

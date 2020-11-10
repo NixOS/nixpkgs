@@ -1,28 +1,32 @@
-{ stdenv, buildPackages, lib, fetchurl, autoreconfHook, pkgconfig, libxslt, xz }:
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig
+, libxslt, xz, elf-header
+, withStatic ? false }:
 
 let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
   modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
 in stdenv.mkDerivation rec {
-  name = "kmod-${version}";
-  version = "25";
+  pname = "kmod";
+  version = "27";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "1kgixs4m3jvwk7fb3d18n6j77qhgi9qfv4csj35rs5ancr4ycrbi";
+    url = "mirror://kernel/linux/utils/kernel/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "035wzfzjx4nwidk747p8n085mgkvy531ppn16krrajx2dkqzply1";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
-  buildInputs = [ xz ];
+  buildInputs = [ xz ] ++ lib.optional stdenv.isDarwin elf-header;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--with-xz"
     "--with-modulesdirs=${modulesDirs}"
-  ];
+  ] ++ lib.optional withStatic "--enable-static";
 
-  patches = [ ./module-dir.patch ];
+  patches = [ ./module-dir.patch ./no-name-field.patch ]
+    ++ lib.optional stdenv.isDarwin ./darwin.patch
+    ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
     for prog in rmmod insmod lsmod modinfo modprobe depmod; do
@@ -34,9 +38,17 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";
+    longDescription = ''
+      kmod is a set of tools to handle common tasks with Linux kernel modules
+      like insert, remove, list, check properties, resolve dependencies and
+      aliases. These tools are designed on top of libkmod, a library that is
+      shipped with kmod.
+    '';
+    homepage = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/";
+    downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
+    changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

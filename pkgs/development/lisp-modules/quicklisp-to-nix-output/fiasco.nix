@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''fiasco'';
-  version = ''20180228-git'';
+  version = ''20200610-git'';
 
   parasites = [ "fiasco-self-tests" ];
 
   description = ''A Common Lisp test framework that treasures your failures, logical continuation of Stefil.'';
 
-  deps = [ args."alexandria" ];
+  deps = [ args."alexandria" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fiasco/2018-02-28/fiasco-20180228-git.tgz'';
-    sha256 = ''0a67wvi5whmlw7kiv3b3rzy9kxn9m3135j9cnn92vads66adpxpy'';
+    url = ''http://beta.quicklisp.org/archive/fiasco/2020-06-10/fiasco-20200610-git.tgz'';
+    sha256 = ''1wb0ibw6ka9fbsb40zjipn7vh3jbzyfsvcc9gq19nqhbqa8gy9r4'';
   };
 
   packageName = "fiasco";
@@ -21,8 +21,10 @@ rec {
 }
 /* (SYSTEM fiasco DESCRIPTION
     A Common Lisp test framework that treasures your failures, logical continuation of Stefil.
-    SHA256 0a67wvi5whmlw7kiv3b3rzy9kxn9m3135j9cnn92vads66adpxpy URL
-    http://beta.quicklisp.org/archive/fiasco/2018-02-28/fiasco-20180228-git.tgz
-    MD5 a924e43c335836d2e44731dee6a1b8e6 NAME fiasco FILENAME fiasco DEPS
-    ((NAME alexandria FILENAME alexandria)) DEPENDENCIES (alexandria) VERSION
-    20180228-git SIBLINGS NIL PARASITES (fiasco-self-tests)) */
+    SHA256 1wb0ibw6ka9fbsb40zjipn7vh3jbzyfsvcc9gq19nqhbqa8gy9r4 URL
+    http://beta.quicklisp.org/archive/fiasco/2020-06-10/fiasco-20200610-git.tgz
+    MD5 c5a84e4a0a8afe45729cd6e39af772ac NAME fiasco FILENAME fiasco DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME trivial-gray-streams FILENAME trivial-gray-streams))
+    DEPENDENCIES (alexandria trivial-gray-streams) VERSION 20200610-git
+    SIBLINGS NIL PARASITES (fiasco-self-tests)) */

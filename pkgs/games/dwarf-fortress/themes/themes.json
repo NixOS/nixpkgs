@@ -1,72 +1,87 @@
 [
   {
-      "name": "taffer",
-      "version": "44.10a",
-      "sha256": "0gp8hmv55bp34db0caksdpd3kn2glh7sz03gyxknzdymh1cpy0qv"
+    "name": "afro-graphics",
+    "version": "47.04",
+    "sha256": "1x1ir0qi3g8wgzwm1pnrkrqb6lhnjq87vs30l8kva6y5wr4sz7q0"
   },
   {
-      "name": "spacefox",
-      "version": "44.10a",
-      "sha256": "0ngipq1aha8cd34k4hkrfbi238gp36qpymr2f87d3nwbj2vi9hmh"
+    "name": "autoreiv",
+    "version": "47.01",
+    "sha256": "1c2xchlfq7ajpcq8qgrzkw5yfgm0k3fiwq6n7l4724dlbim3rjp2"
   },
   {
-      "name": "gemset",
-      "version": "44.10a",
-      "sha256": "14q69dyqzhxsfv1a4vh17fx7r7mylfimmjrydz6ygdypblgc9zm6"
+    "name": "cla",
+    "version": "0.47.xx-v26.3",
+    "sha256": "0ca81r3821jja4pqib75qxcsgg3s0wxzyq1jb4jc0495cvzxw7qa"
   },
   {
-      "name": "wanderlust",
-      "version": "44.10",
-      "sha256": "016acv0ab2wj4rn9slhbf626977zas6q4372f7avaf99ihcmwi85"
+    "name": "dfgraphics",
+    "version": "42.05",
+    "sha256": "18xyqn458hh8l2qgbvrvz17nbp6yk91d7rqlxlp1g5wr9qfq28rp"
   },
   {
-      "name": "rally-ho",
-      "version": "44.10",
-      "sha256": "1pij5llnc8hfsqgyrwj1ak123wxhhk7yhlpnj033gwbpp0lnqz2x"
+    "name": "gemset",
+    "version": "47.04",
+    "sha256": "015nkkdnpykhz6a1n8qi3wgap19a4wavz4n2xbvfa4g770lcjd92"
   },
   {
-      "name": "phoebus",
-      "version": "44.10",
-      "sha256": "1fvl5251wzjns159snhw01p214k53vpdlyj7piv545r23q7wg2ji"
+    "name": "ironhand",
+    "version": "47.04",
+    "sha256": "0x3hi1isgc2cv7c3qz87rm7ik0kbd748djpnghvjdqpj3a0n1ih2"
   },
   {
-      "name": "obsidian",
-      "version": "44.10",
-      "sha256": "06lixlkprjd829zn10g5zljnxymsh81g31dj86hn2jvlch4dh98q"
+    "name": "jolly-bastion",
+    "version": "47.04",
+    "sha256": "0799ad90g62nvpdcl6zq3vr2nvfc62lprm4br9n2hbs8wgrra6rq"
   },
   {
-      "name": "mayday",
-      "version": "44.10",
-      "sha256": "1g15ha0w93iyj5ni2pavhwrsckhnw80xvwrvw4dbp5zx1y41f3x9"
+    "name": "mayday",
+    "version": "47.04a",
+    "sha256": "1hpj40762n81grsddg3nc5jxc0bqmy2xamxvsgxzb2bx0b7akz0w"
   },
   {
-      "name": "jolly-bastion",
-      "version": "44.10",
-      "sha256": "038qvr08776rinlqa6zwb8qqxyrc75nnyyqjsasr2rf9d2f9yf8j"
+    "name": "meph",
+    "version": "47.04_v5.5.0_V1.1.2",
+    "sha256": "0q8hfm66rag61qd2hab7lsr4nyg52bn1hvy6bl7z6kv4yj5cra50"
   },
   {
-      "name": "ironhand",
-      "version": "44.10",
-      "sha256": "14hngixd4gkw0lzqzlkj9ljmrxr8b3wgjk67n6zysgyi3f38f5j2"
+    "name": "obsidian",
+    "version": "47.04a",
+    "sha256": "0y5kmj362i9y8w1n5d1nx80yq88c0xqps9i02gvnls6r421a4nms"
   },
   {
-      "name": "afro-graphics",
-      "version": "44.10",
-      "sha256": "050mrpy9q6g9y4133al7rdsj6c9hy2wva7jqmc56babvmmcpcc2j"
+    "name": "phoebus",
+    "version": "47.04a",
+    "sha256": "1ihbqs5a3b8pydbcynblvgw2bxkgr9hhpmgjlji7a7zvz8m6h6pw"
   },
   {
-      "name": "cla",
-      "version": "44.xx-v25",
-      "sha256": "1h8nwa939qzqklbi8vwsq9p2brvv7sc0pbzzrdjnb221lr9p58zk"
+    "name": "rally-ho",
+    "version": "47.04",
+    "sha256": "0pmvpfbj07ll674lw7mjgkb4kgjk4mxr82fjq4ppvwrnzx6vi2g0"
   },
   {
-      "name": "tergel",
-      "version": "44.03",
-      "sha256": "1kgk0cav5b6v7mca36gm84b2p556ibd8yy4rwbfc4i6i3hlsdw07"
+    "name": "spacefox",
+    "version": "47.04",
+    "sha256": "0sk3k5bcpfl2xind4vfrgzbcqqbw0mg47pm3d3h44vi6hl3bdaqj"
   },
   {
-      "name": "autoreiv",
-      "version": "44.03",
-      "sha256": "03w9dp42718p5gnswynw3p9wz85y61gkzz60jf71arw1zhf23wm0"
+    "name": "taffer",
+    "version": "47.04",
+    "sha256": "1ly2sc0pb2kybb8grj19zx372whblmd0bj8p64akpi2rrywi13sy"
+  },
+  {
+    "name": "tergel",
+    "version": "47.01",
+    "sha256": "142sd1i11vvirn68rp4gqzl67ww597df1lc57ycnpnz0n3q39kxy"
+  },
+  {
+    "name": "vettlingr",
+    "version": "1.4a",
+    "sha256": "1p4y0dm52rb49dnmcnivddlsd94m4gr1pxn04fpjbrvck22klgpj"
+  },
+  {
+    "name": "wanderlust",
+    "version": "47.04",
+    "sha256": "1z56m8zplq5d18sbkwg5lwcy8iwfa5hbxixsm3hdxm04qyld1z89"
   }
 ]

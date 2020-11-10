@@ -1,35 +1,64 @@
-{ stdenv, python2Packages, fetchurl, gettext }:
+{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+, enablePlayback ? true
+, gst_all_1
+}:
 
 let
-  pythonPackages = python2Packages;
+  pythonPackages = python3Packages;
+  pyqt5 = if enablePlayback then
+    pythonPackages.pyqt5_with_qtmultimedia
+  else
+    pythonPackages.pyqt5
+  ;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "1.4.2";
+  version = "2.5.1";
 
-  src = fetchurl {
-    url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
-    sha256 = "0d12k40d9fbcn801gp5zdsgvjdrh4g97vda3ga16rmmvfwwfxbgh";
+  src = fetchFromGitHub {
+    owner = "metabrainz";
+    repo = pname;
+    rev = "release-${version}";
+    sha256 = "13q926iqwdba6ds5s3ir57c9bkg8gcv6dhqvhmg00fnzkq9xqk3d";
   };
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
+    ++ stdenv.lib.optionals (pyqt5.multimediaEnabled) [
+      qt5.qtmultimedia.bin
+      gst_all_1.gstreamer
+      gst_all_1.gst-vaapi
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+    ]
+  ;
 
   propagatedBuildInputs = with pythonPackages; [
-    pyqt4
+    pyqt5
     mutagen
+    chromaprint
     discid
+    dateutil
   ];
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
+  prePatch = ''
+    # Pesky unicode punctuation.
+    substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
-  doCheck = false;
+  # In order to spare double wrapping, we use:
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  ''
+    + stdenv.lib.optionalString (pyqt5.multimediaEnabled) ''
+      makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    ''
+  ;
 
   meta = with stdenv.lib; {
-    homepage = http://musicbrainz.org/doc/MusicBrainz_Picard;
+    homepage = "https://picard.musicbrainz.org/";
     description = "The official MusicBrainz tagger";
     maintainers = with maintainers; [ ehmry ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

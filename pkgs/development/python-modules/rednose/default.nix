@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, nose, six, colorama, termstyle }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+, nose, six, colorama, termstyle }:
 
 buildPythonPackage rec {
   pname = "rednose";
@@ -13,12 +14,17 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "six==1.10.0" "six>=1.10.0"
   '';
 
+  # Do not test on Python 2 because the tests suite gets stuck
+  # https://github.com/NixOS/nixpkgs/issues/60786
+  # Also macOS tests are broken on python38
+  doCheck = !(isPy27 || (stdenv.isDarwin && pythonAtLeast "3.8"));
+
   checkInputs = [ six ];
   propagatedBuildInputs = [ nose colorama termstyle ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A python nose plugin adding color to console results";
-    homepage = https://github.com/JBKahn/rednose;
+    homepage = "https://github.com/JBKahn/rednose";
     license = licenses.mit;
   };
 }

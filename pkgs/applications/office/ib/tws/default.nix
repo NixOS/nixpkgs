@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "9542";
-  name = "ib-tws-${version}";
+  pname = "ib-tws";
 
   src = requireFile rec {
     name = "ibtws_${version}.jar";
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Trader Work Station of Interactive Brokers";
-    homepage = https://www.interactivebrokers.com;
+    homepage = "https://www.interactivebrokers.com";
     license = licenses.unfree;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;

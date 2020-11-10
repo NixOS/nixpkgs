@@ -1,112 +1,169 @@
-# Zabbix agent daemon.
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-
   cfg = config.services.zabbixAgent;
 
-  zabbix = cfg.package;
+  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
+  inherit (lib) attrValues concatMapStringsSep literalExample optionalString types;
+  inherit (lib.generators) toKeyValue;
 
-  stateDir = "/var/run/zabbix";
+  user = "zabbix-agent";
+  group = "zabbix-agent";
 
-  logDir = "/var/log/zabbix";
+  moduleEnv = pkgs.symlinkJoin {
+    name = "zabbix-agent-module-env";
+    paths = attrValues cfg.modules;
+  };
 
-  pidFile = "${stateDir}/zabbix_agentd.pid";
-
-  configFile = pkgs.writeText "zabbix_agentd.conf"
-    ''
-      Server = ${cfg.server}
-
-      LogFile = ${logDir}/zabbix_agentd
-
-      PidFile = ${pidFile}
-
-      StartAgents = 1
-
-      ${config.services.zabbixAgent.extraConfig}
-    '';
+  configFile = pkgs.writeText "zabbix_agent.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
 
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "zabbixAgent" "extraConfig" ] "Use services.zabbixAgent.settings instead.")
+  ];
 
-  ###### interface
+  # interface
 
   options = {
 
     services.zabbixAgent = {
+      enable = mkEnableOption "the Zabbix Agent";
 
-      enable = mkOption {
-        default = false;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.zabbix.agent;
+        defaultText = "pkgs.zabbix.agent";
+        description = "The Zabbix package to use.";
+      };
+
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [ nettools ];
+        defaultText = "[ nettools ]";
+        example = "[ nettools mysql ]";
         description = ''
-          Whether to run the Zabbix monitoring agent on this machine.
-          It will send monitoring data to a Zabbix server.
+          Packages to be added to the Zabbix <envar>PATH</envar>.
+          Typically used to add executables for scripts, but can be anything.
         '';
       };
 
-      package = mkOption {
-        type = types.attrs; # Note: pkgs.zabbixXY isn't a derivation, but an attrset of { server = ...; agent = ...; }.
-        default = pkgs.zabbix;
-        defaultText = "pkgs.zabbix";
-        example = literalExample "pkgs.zabbix34";
-        description = ''
-          The Zabbix package to use.
+      modules = mkOption {
+        type = types.attrsOf types.package;
+        description = "A set of modules to load.";
+        default = {};
+        example = literalExample ''
+          {
+            "dummy.so" = pkgs.stdenv.mkDerivation {
+              name = "zabbix-dummy-module-''${cfg.package.version}";
+              src = cfg.package.src;
+              buildInputs = [ cfg.package ];
+              sourceRoot = "zabbix-''${cfg.package.version}/src/modules/dummy";
+              installPhase = '''
+                mkdir -p $out/lib
+                cp dummy.so $out/lib/
+              ''';
+            };
+          }
         '';
       };
 
       server = mkOption {
-        default = "127.0.0.1";
+        type = types.str;
         description = ''
           The IP address or hostname of the Zabbix server to connect to.
         '';
       };
 
-      extraConfig = mkOption {
-        default = "";
-        type = types.lines;
+      listen = {
+        ip = mkOption {
+          type = types.str;
+          default = "0.0.0.0";
+          description = ''
+            List of comma delimited IP addresses that the agent should listen on.
+          '';
+        };
+
+        port = mkOption {
+          type = types.port;
+          default = 10050;
+          description = ''
+            Agent will listen on this port for connections from the server.
+          '';
+        };
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
         description = ''
-          Configuration that is injected verbatim into the configuration file.
+          Open ports in the firewall for the Zabbix Agent.
         '';
+      };
+
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ int str (listOf str) ]);
+        default = {};
+        description = ''
+          Zabbix Agent configuration. Refer to
+          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd"/>
+          for details on supported values.
+        '';
+        example = {
+          Hostname = "example.org";
+          DebugLevel = 4;
+        };
       };
 
     };
 
   };
 
-
-  ###### implementation
+  # implementation
 
   config = mkIf cfg.enable {
 
-    users.users = mkIf (!config.services.zabbixServer.enable) (singleton
-      { name = "zabbix";
-        uid = config.ids.uids.zabbix;
-        description = "Zabbix daemon user";
-      });
+    services.zabbixAgent.settings = mkMerge [
+      {
+        LogType = "console";
+        Server = cfg.server;
+        ListenIP = cfg.listen.ip;
+        ListenPort = cfg.listen.port;
+        LoadModule = builtins.attrNames cfg.modules;
+      }
+      (mkIf (cfg.modules != {}) { LoadModulePath = "${moduleEnv}/lib"; })
+    ];
 
-    systemd.services."zabbix-agent" =
-      { description = "Zabbix Agent";
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.listen.port ];
+    };
 
-        wantedBy = [ "multi-user.target" ];
+    users.users.${user} = {
+      description = "Zabbix Agent daemon user";
+      inherit group;
+      isSystemUser = true;
+    };
 
-        path = [ pkgs.nettools ];
+    users.groups.${group} = { };
 
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir} ${logDir}
-            chown zabbix ${stateDir} ${logDir}
-          '';
+    systemd.services.zabbix-agent = {
+      description = "Zabbix Agent";
 
-        serviceConfig.ExecStart = "@${zabbix.agent}/sbin/zabbix_agentd zabbix_agentd --config ${configFile}";
-        serviceConfig.Type = "forking";
-        serviceConfig.RemainAfterExit = true;
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = 2;
+      wantedBy = [ "multi-user.target" ];
+
+      path = [ "/run/wrappers" ] ++ cfg.extraPackages;
+
+      serviceConfig = {
+        ExecStart = "@${cfg.package}/sbin/zabbix_agentd zabbix_agentd -f --config ${configFile}";
+        Restart = "always";
+        RestartSec = 2;
+
+        User = user;
+        Group = group;
+        PrivateTmp = true;
       };
-
-    environment.systemPackages = [ zabbix.agent ];
+    };
 
   };
 

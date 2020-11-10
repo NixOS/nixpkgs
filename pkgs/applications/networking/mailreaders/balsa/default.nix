@@ -1,50 +1,66 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gtk3, gmime, gnutls,
-  webkitgtk, libesmtp, openssl, libnotify, enchant, gpgme,
-  libcanberra-gtk3, libsecret, gtksourceview, gobjectIntrospection,
-  hicolor-icon-theme, wrapGAppsHook
+{ stdenv
+, fetchurl
+, glib
+, gmime3
+, gnutls
+, gobject-introspection
+, gpgme
+, gtk3
+, gtksourceview
+, gtkspell3
+, intltool
+, libcanberra-gtk3
+, libesmtp
+, libical
+, libnotify
+, libsecret
+, openssl
+, pkgconfig
+, webkitgtk
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "balsa-${version}";
-  version = "2.5.6";
+  pname = "balsa";
+  version = "2.6.1";
 
   src = fetchurl {
-    url = "https://pawsa.fedorapeople.org/balsa/${name}.tar.bz2";
-    sha256 = "17k6wcsl8gki7cskr3hhmfj6n54rha8ca3b6fzd8blsl5shsankx";
+    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
+    sha256 = "1xkxx801p7sbfkn0bh3cz85wra4xf1z1zhjqqc80z1z1nln7fhb4";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
-    gobjectIntrospection
-    hicolor-icon-theme
+    gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
     glib
-    gtk3
-    gmime
+    gmime3
     gnutls
-    webkitgtk
-    openssl
-    libnotify
-    enchant
     gpgme
-    libcanberra-gtk3
+    gtk3
     gtksourceview
-    libsecret
+    gtkspell3
+    libcanberra-gtk3
     libesmtp
+    libical
+    libnotify
+    libsecret
+    openssl
+    webkitgtk
   ];
 
   configureFlags = [
     "--with-canberra"
-    "--with-gpgme"
     "--with-gtksourceview"
     "--with-libsecret"
     "--with-ssl"
     "--with-unique"
     "--without-gnome"
+    "--with-spell-checker=gtkspell"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
@@ -52,7 +68,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://pawsa.fedorapeople.org/balsa/;
+    homepage = "http://pawsa.fedorapeople.org/balsa/";
     description = "An e-mail client for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

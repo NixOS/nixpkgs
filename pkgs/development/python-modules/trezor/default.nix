@@ -1,27 +1,84 @@
-{ lib, fetchPypi, buildPythonPackage,
-  protobuf, hidapi, ecdsa, mnemonic, requests, pyblake2, click, libusb1, rlp, isPy3k
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, installShellFiles
+, attrs
+, click
+, construct
+, ecdsa
+, hidapi
+, libusb1
+, mnemonic
+, pillow
+, protobuf
+, pyblake2
+, requests
+, rlp
+, shamir-mnemonic
+, typing-extensions
+, trezor-udev-rules
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.10.2";
+  version = "0.12.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4dba4d5c53d3ca22884d79fb4aa68905fb8353a5da5f96c734645d8cf537138d";
+    sha256 = "0r0j0y0ii62ppawc8qqjyaq0fkmmb0zk1xb3f9navxp556w2dljv";
   };
 
-  propagatedBuildInputs = [ protobuf hidapi ecdsa mnemonic requests pyblake2 click libusb1 rlp ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  # There are no actual tests: "ImportError: No module named tests"
-  doCheck = false;
+  propagatedBuildInputs = [
+    attrs
+    click
+    construct
+    ecdsa
+    hidapi
+    libusb1
+    mnemonic
+    pillow
+    protobuf
+    pyblake2
+    requests
+    rlp
+    shamir-mnemonic
+    typing-extensions
+  ] ++ lib.optionals stdenv.isLinux [
+    trezor-udev-rules
+  ];
 
-  meta = {
-    description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
-    homepage = https://github.com/trezor/python-trezor;
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ np ];
+  checkInputs = [
+    pytest
+  ];
+
+  # disable test_tx_api.py as it requires being online
+  checkPhase = ''
+    runHook preCheck
+    pytest --pyargs tests --ignore tests/test_tx_api.py
+    runHook postCheck
+  '';
+
+  postFixup = ''
+    mkdir completions
+    _TREZORCTL_COMPLETE=source_bash $out/bin/trezorctl > completions/trezorctl || true
+    _TREZORCTL_COMPLETE=source_zsh $out/bin/trezorctl > completions/_trezorctl || true
+    _TREZORCTL_COMPLETE=source_fish $out/bin/trezorctl > completions/trezorctl.fish || true
+    installShellCompletion --bash completions/trezorctl
+    installShellCompletion --zsh completions/_trezorctl
+    installShellCompletion --fish completions/trezorctl.fish
+  '';
+
+  meta = with lib; {
+    description = "Python library for communicating with Trezor Hardware Wallet";
+    homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ np prusnak mmahut _1000101 ];
   };
 }

@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, callPackage, libpng12, imagemagick,
-  autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin }:
+{ stdenv, fetchurl, callPackage, libpng12, imagemagick
+, autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin
+, runtimeShell }:
 
 # TODO: Figure out why the resultant binary is somehow linked against
 # libpng16.so.16 rather than libpng12.
 
 stdenv.mkDerivation rec {
-  name = "autotrace-${version}";
+  pname = "autotrace";
   version = "0.31.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/autotrace/AutoTrace/0.31.1/${name}.tar.gz";
+    url = "mirror://sourceforge/autotrace/AutoTrace/0.31.1/${pname}-${version}.tar.gz";
     sha256 = "1xmgja5fv48mdbsa51inf7ksz36nqd6bsaybrk5xgprm6cy946js";
   };
 
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     # pstoedit-config no longer exists, it was replaced with pkg-config
     mkdir wrappers
     cat >wrappers/pstoedit-config <<'EOF'
-    #!${stdenv.shell}
+    #!${runtimeShell}
     # replace --version with --modversion for pkg-config
     args=''${@/--version/--modversion}
     exec pkg-config pstoedit "''${args[@]}"
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://autotrace.sourceforge.net/;
+    homepage = "http://autotrace.sourceforge.net/";
     description = "Utility for converting bitmap into vector graphics";
     platforms = platforms.unix;
     maintainers = with maintainers; [ hodapp ];

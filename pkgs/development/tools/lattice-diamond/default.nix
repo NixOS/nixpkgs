@@ -1,7 +1,7 @@
 { stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib, 
-    freetype, fontconfig, xorg }:
+    freetype, fontconfig, xorg, libusb-compat-0_1 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "diamond-3.10";
 
   nativeBuildInputs = [ rpmextract patchelf makeWrapper file ];
@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
   libPath = stdenv.lib.makeLibraryPath [
     glib zlib freetype fontconfig
     xorg.libSM xorg.libICE xorg.libXrender xorg.libXext xorg.libX11 xorg.libXt
+    libusb-compat-0_1
   ];
 
   meta = {

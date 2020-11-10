@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, lib, bison
-, qt4, xapian, file, python, perl
+{ mkDerivation, stdenv, fetchurl, lib, bison
+, qtbase, xapian, file, python, perl
 , djvulibre, groff, libxslt, unzip, poppler_utils, antiword, catdoc, lyx
 , libwpd, unrtf, untex
 , ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv, zlib
@@ -7,21 +7,21 @@
 
 assert stdenv.hostPlatform.system != "powerpc-linux";
 
-stdenv.mkDerivation rec {
-  ver = "1.23.7";
+mkDerivation rec {
+  ver = "1.24.5";
   name = "recoll-${ver}";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/recoll/${name}.tar.gz";
-    sha256 = "186bj8zx2xw9hwrzvzxdgdin9nj7msiqh5j57w5g7j4abdlsisjn";
+    sha256 = "10m3a0ghnyipjcxapszlr8adyy2yaaxx4vgrkxrfmz13814z89cv";
   };
 
-  configureFlags = [ "--enable-recollq" ]
+  configureFlags = [ "--enable-recollq" "--disable-webkit" ]
     ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
     ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
 
   buildInputs = [ xapian file python bison zlib ]
-    ++ lib.optional withGui qt4
+    ++ lib.optional withGui qtbase
     ++ lib.optional stdenv.isDarwin libiconv;
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
-  # the absolute path to the filtering command. 
+  # the absolute path to the filtering command.
   postInstall = ''
     for f in $out/share/recoll/filters/* ; do
       if [[ ! "$f" =~ \.zip$ ]]; then
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
     description = "A full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive
-      members, email attachments. 
+      members, email attachments.
     '';
-    homepage = http://www.lesbonscomptes.com/recoll/;
+    homepage = "https://www.lesbonscomptes.com/recoll/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.jcumming ];

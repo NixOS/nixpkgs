@@ -1,23 +1,22 @@
-{ stdenv, fetchzip, ocaml, findlib, dune, configurator, cstruct }:
+{ stdenv, fetchurl, buildDunePackage, cstruct, bigarray-compat, ounit }:
 
-let version = "2.0.1"; in
+buildDunePackage rec {
+  pname = "io-page";
+  version = "2.3.0";
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-io-page-${version}";
+  minimumOCamlVersion = "4.02.3";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/io-page/archive/${version}.tar.gz";
-    sha256 = "1rw04dwrlx5hah5dkjf7d63iff82j9cifr8ifjis5pdwhgwcff8i";
+  src = fetchurl {
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "1hx27pwf419hrhwaw9cphbnl8akz8yy73hqj49l15g2k7shah1cn";
   };
 
-  buildInputs = [ ocaml findlib dune configurator ];
-  propagatedBuildInputs = [ cstruct ];
-
-  inherit (dune) installPhase;
+  propagatedBuildInputs = [ cstruct bigarray-compat ];
+  checkInputs = [ ounit ];
+  doCheck = true;
 
   meta = {
-    homepage = https://github.com/mirage/io-page;
-    inherit (ocaml.meta) platforms;
+    homepage = "https://github.com/mirage/io-page";
     license = stdenv.lib.licenses.isc;
     description = "IO memory page library for Mirage backends";
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

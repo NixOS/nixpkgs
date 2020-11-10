@@ -1,38 +1,97 @@
-{ stdenv, intltool, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra-gtk3
-, pkgconfig, gtk3, glib, clutter-gtk, clutter-gst, udev, gst_all_1, itstool
-, libgudev, autoreconfHook, vala, docbook_xml_dtd_43, docbook_xsl, appstream-glib
-, libxslt, yelp-tools, gnome-common, gtk-doc
-, adwaita-icon-theme, librsvg, totem, gdk_pixbuf, gnome3, gnome-desktop, libxml2 }:
+{ stdenv
+, gettext
+, fetchurl
+, wrapGAppsHook
+, gnome-video-effects
+, libcanberra-gtk3
+, pkgconfig
+, gtk3
+, glib
+, clutter-gtk
+, clutter-gst
+, udev
+, gst_all_1
+, itstool
+, libgudev
+, vala
+, docbook_xml_dtd_43
+, docbook_xsl
+, appstream-glib
+, libxslt
+, yelp-tools
+, gnome-common
+, gtk-doc
+, adwaita-icon-theme
+, librsvg
+, totem
+, gdk-pixbuf
+, gnome3
+, gnome-desktop
+, libxml2
+, meson
+, ninja
+, dbus
+, python3
+}:
 
 stdenv.mkDerivation rec {
-  name = "cheese-${version}";
-  version = "3.28.0";
+  pname = "cheese";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "06da5qc5hdvwwd5vkbgbx8pjx1l3mvr07yrnnv3v1hfc3wp7l7jw";
+    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
   };
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "cheese"; attrPath = "gnome3.cheese"; };
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool vala wrapGAppsHook libxml2 appstream-glib
-    libxslt docbook_xml_dtd_43 docbook_xsl
-    autoreconfHook gtk-doc yelp-tools gnome-common
+    appstream-glib
+    docbook_xml_dtd_43
+    docbook_xsl
+    gettext
+    gnome-common
+    gtk-doc
+    itstool
+    libxml2
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
+    yelp-tools
   ];
-  buildInputs = [ gtk3 glib gnome-video-effects
-                  gdk_pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer
-                  gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome-desktop
-                  gst_all_1.gst-plugins-bad clutter-gtk clutter-gst
-                  libcanberra-gtk3 libgudev ];
+
+  buildInputs = [
+    adwaita-icon-theme
+    clutter-gst
+    clutter-gtk
+    dbus
+    gdk-pixbuf
+    glib
+    gnome-desktop
+    gnome-video-effects
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+    gtk3
+    libcanberra-gtk3
+    libgudev
+    librsvg
+    udev
+  ];
 
   outputs = [ "out" "man" "devdoc" ];
-
-  patches = [
-    gtk-doc.respect_xml_catalog_files_var_patch
-  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -41,7 +100,7 @@ stdenv.mkDerivation rec {
       # vp8enc preset
       --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
       # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${totem}/share"
     )
   '';
@@ -49,9 +108,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Cheese;
+    homepage = "https://wiki.gnome.org/Apps/Cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

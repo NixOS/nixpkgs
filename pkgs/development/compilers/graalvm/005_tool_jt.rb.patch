@@ -1,0 +1,46 @@
+diff --git a/tool/jt.rb b/tool/jt.rb
+index 870d88edcb..0a6e4c367b 100755
+--- a/tool/jt.rb
++++ b/tool/jt.rb
+@@ -152,13 +152,16 @@ module Utilities
+   end
+ 
+   def find_mx
+-    if which('mx')
+-      'mx'
++    if ENV.key?("MX_GIT_CACHE_DIR")
++      "mx-internal"
+     else
+-      mx_repo = find_or_clone_repo("https://github.com/graalvm/mx.git")
+-      "#{mx_repo}/mx"
++      if which('mx')
++        'mx'
++      else
++        mx_repo = find_or_clone_repo("https://github.com/graalvm/mx.git")
++        "#{mx_repo}/mx"
++      end
+     end
+-  end
+ 
+   def find_launcher(use_native)
+     if use_native
+@@ -444,8 +447,8 @@ module Commands
+           --no-sforceimports                         do not run sforceimports before building
+           parser                                     build the parser
+           options                                    build the options
+-          graalvm                                    build a minimal JVM-only GraalVM containing only TruffleRuby, 
+-                                                     available by default in mxbuild/truffleruby-jvm, 
++          graalvm                                    build a minimal JVM-only GraalVM containing only TruffleRuby,
++                                                     available by default in mxbuild/truffleruby-jvm,
+                                                      the Ruby is symlinked into rbenv or chruby if available
+               --graal      include the GraalVM Compiler in the build
+               --native     build native ruby image as well, available in mxbuild/truffleruby-native
+@@ -491,7 +494,7 @@ module Commands
+       jt test compiler                               run compiler tests
+       jt test integration [TESTS]                    run integration tests
+       jt test bundle [--jdebug]                      tests using bundler
+-      jt test gems [TESTS]                           tests using gems 
++      jt test gems [TESTS]                           tests using gems
+       jt test ecosystem [TESTS]                      tests using the wider ecosystem such as bundler, Rails, etc
+       jt test cexts [--no-openssl] [--no-gems] [test_names...]
+                                                      run C extension tests (set GEM_HOME)

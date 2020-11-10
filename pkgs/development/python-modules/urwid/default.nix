@@ -1,37 +1,29 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isPy27, glibcLocales }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "urwid";
-  version = "1.3.1";
+  version = "2.1.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18cnd1wdjcas08x5qwa5ayw6jsfcn33w4d9f7q3s29fy6qzc1kng";
+    sha256 = "09nmi2nmvpcmbh3w3fb0dn0c7yp7r20i5pfcr6q722xh6mp8cw3q";
   };
 
-  patches = [
-   # fix tests
-   (fetchpatch {
-     url = "https://github.com/urwid/urwid/commit/4b0ed8b6030450e6d99909a7c683e9642e546387.patch";
-     sha256 = "0azpn0ylbg8mfpr0y27n4lnq0ph75a4d4m9wdv3napnhf1vh9ahx";
-   })
-   # fix tests
-   (fetchpatch {
-     url = "https://github.com/floppym/urwid/commit/f68f2cf089cfd5ec45863baf59a91d5aeb0cf5c3.patch";
-     sha256 = "1b3vz7mrwz2bqvdwvbyv2j835f9lzapgw0j2km4sam76bxmgfpgq";
-   })
-  ];
+  # tests need to be able to set locale
+  LC_ALL = "en_US.UTF-8";
+  checkInputs = [ glibcLocales ];
 
-  postPatch = ''
-    # Several tests keep failing on Hydra
-    rm urwid/tests/test_vterm.py
-  '';
+  # tests which assert on strings don't decode results correctly
+  doCheck = isPy3k;
+
+  pythonImportsCheck = [ "urwid" ];
 
   meta = with stdenv.lib; {
     description = "A full-featured console (xterm et al.) user interface library";
-    homepage = http://excess.org/urwid;
-    repositories.git = git://github.com/wardi/urwid.git;
+    homepage = "http://excess.org/urwid";
+    repositories.git = "git://github.com/wardi/urwid.git";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
-})
+}

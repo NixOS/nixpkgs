@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.1.5";
-  name = "apvlv-${version}";
+  pname = "apvlv";
 
   src = fetchFromGitHub {
     owner = "naihe2010";
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/naihe2010/apvlv/commit/a3a895772a27d76dab0c37643f0f4c73f9970e62.patch";
       sha256 = "1fpc7wr1ajilvwi5gjsy5g9jcx4bl03gp5dmajg90ljqbhwz2bfi";
     })
+    ./fix-build-with-poppler-0.73.0.patch
   ];
 
   installPhase = ''
@@ -52,10 +53,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
     cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
+  ''
+  + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    install -D ../apvlv.desktop $out/share/applications/apvlv.desktop
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://naihe2010.github.io/apvlv/;
+    homepage = "http://naihe2010.github.io/apvlv/";
     description = "PDF viewer with Vim-like behaviour";
     longDescription = ''
       apvlv is a PDF/DJVU/UMD/TXT Viewer Under Linux/WIN32

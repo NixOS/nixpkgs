@@ -1,20 +1,22 @@
 {stdenv, fetchurl, help2man}:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2.439";
-  name = "fatsort-${version}";
+  version = "1.6.3.622";
+  pname = "fatsort";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fatsort/${name}.tar.xz";
-    sha256 = "1q51qq69854kr12knhyqjv7skj95qld6j04pv5v3xvxs0y9zkg5x";
+    url = "mirror://sourceforge/fatsort/${pname}-${version}.tar.xz";
+    sha256 = "1z2nabm38lg56h05yx3jjsndbqxk1zbjcisrczzamypn13m98728";
   };
 
   patches = [ ./fatsort-Makefiles.patch ];
 
   buildInputs = [ help2man ];
 
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   meta = with stdenv.lib; {
-    homepage = http://fatsort.sourceforge.net/;
+    homepage = "http://fatsort.sourceforge.net/";
     description = "Sorts FAT partition table, for devices that don't do sorting of files";
     maintainers = [ maintainers.kovirobi ];
     license = licenses.gpl2;

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "1.13.0";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7031f9c78a70b9586d2db4a2ec135c4e04194cabff58695ef0cc95e7cd66bc01";
+    sha256 = "4138e79eb35981ad391406cbb7227bce7eba8bad788dcf1a89c2e4a8b740debe";
   };
 
   checkInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatically mock your HTTP interactions to simplify and speed up testing";
-    homepage = https://github.com/kevin1024/vcrpy;
+    homepage = "https://github.com/kevin1024/vcrpy";
     license = licenses.mit;
   };
 }

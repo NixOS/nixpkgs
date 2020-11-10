@@ -1,25 +1,29 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
-  name = "pmd-${version}";
-  version = "6.7.0";
-
-  buildInputs = [ unzip ];
+  pname = "pmd";
+  version = "6.26.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "0bnbr8zq28dgvwka563g5lbya5jhmjrahnbwagcs4afpsrm7zj6c";
+    sha256 = "1vlqwrbqk2cbp8kgxkm61c4blai81ib35yjf6wms16w0hvbqf2b4";
   };
+
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
-    cp -R * $out
+    cp -R {bin,lib} $out
+    wrapProgram $out/bin/run.sh --prefix PATH : ${openjdk.jre}/bin
+    runHook postInstall
   '';
 
-  meta = {
-    description = "Scans Java source code and looks for potential problems";
-    homepage = http://pmd.sourceforge.net/;
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "An extensible cross-language static code analyzer";
+    homepage = "https://pmd.github.io/";
+    changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
+    platforms = platforms.unix;
+    license = with licenses; [ bsdOriginal asl20 lgpl3Plus ];
   };
 }
-

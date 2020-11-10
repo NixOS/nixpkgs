@@ -7,7 +7,7 @@
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages = [
-    pkgs.w3m-nox # needed for the manual anyway
+    pkgs.w3m-nographics # needed for the manual anyway
     pkgs.testdisk # useful for repairing boot problems
     pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
     pkgs.efibootmgr
@@ -19,10 +19,14 @@
     pkgs.cryptsetup # needed for dm-crypt volumes
     pkgs.mkpasswd # for generating password files
 
+    # Some text editors.
+    pkgs.vim
+
     # Some networking tools.
     pkgs.fuse
     pkgs.fuse3
     pkgs.sshfs-fuse
+    pkgs.rsync
     pkgs.socat
     pkgs.screen
 
@@ -46,7 +50,7 @@
   ];
 
   # Include support for various filesystems.
-  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" "xfs" "ntfs" "cifs" ];
+  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" "xfs" "zfs" "ntfs" "cifs" ];
 
   # Configure host id for ZFS to work
   networking.hostId = lib.mkDefault "8425e349";

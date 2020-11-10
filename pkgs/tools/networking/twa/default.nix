@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , gawk
 , host
+, jq
 , lib
 , makeWrapper
 , ncurses
@@ -11,19 +12,26 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "twa-${version}";
-  version = "1.5.1";
+  pname = "twa";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "twa";
     rev = version;
-    sha256 = "14pwiq1kza92w2aq358zh5hrxpxpfhg31am03b56g6vlvqzsvib7";
+    sha256 = "1ab3bcyhfach9y15w8ffvqqan2qk8h62n6z8nqbgygi7n1mf6jzx";
   };
 
   dontBuild = true;
 
-  buildInputs = [ makeWrapper bash gawk curl netcat host.dnsutils ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ bash
+                  curl
+                  gawk
+                  host.dnsutils
+                  jq
+                  netcat ];
 
   installPhase = ''
     install -Dm 0755 twa "$out/bin/twa"
@@ -32,12 +40,16 @@ stdenv.mkDerivation rec {
     install -Dm 0644 README.md "$out/share/doc/twa/README.md"
 
     wrapProgram "$out/bin/twa" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ curl netcat ncurses host.dnsutils ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ curl
+                                                 host.dnsutils
+                                                 jq
+                                                 ncurses
+                                                 netcat ]}
   '';
 
   meta = with lib; {
     description = "A tiny web auditor with strong opinions";
-    homepage = https://github.com/trailofbits/twa;
+    homepage = "https://github.com/trailofbits/twa";
     license = licenses.mit;
     maintainers = with maintainers; [ avaq ];
     platforms = platforms.unix;

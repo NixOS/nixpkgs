@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, glib, gettext }:
+{ stdenv, fetchFromGitHub, glib, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-topicons-plus-${version}";
-  version = "21";
+  pname = "gnome-shell-extension-topicons-plus";
+  version = "22";
 
   src = fetchFromGitHub {
     owner = "phocean";
     repo = "TopIcons-plus";
     rev = "v${version}";
-    sha256 = "15p61krd7lcmgr1d4s2ydfjy3pyq79pq5100xzy6dln1538901m3";
+    sha256 = "196s1gdir52gbc444pzrb5l7gn5xr5vqk5ajqaiqryqlmp3i8vil";
   };
 
   buildInputs = [ glib ];
@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALL_PATH=$(out)/share/gnome-shell/extensions" ];
 
+  uuid = "TopIcons@phocean.net";
+
   meta = with stdenv.lib; {
     description = "Brings all icons back to the top panel, so that it's easier to keep track of apps running in the backround";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
-    homepage = https://github.com/phocean/TopIcons-plus;
+    homepage = "https://github.com/phocean/TopIcons-plus";
+    # Unmaintained and no longer working with GNOME Shell 3.34+
+    broken = stdenv.lib.versionAtLeast gnome3.gnome-shell.version "3.32";
   };
 }

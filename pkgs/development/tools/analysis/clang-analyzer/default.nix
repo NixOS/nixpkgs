@@ -1,7 +1,7 @@
 { stdenv, fetchurl, clang, llvmPackages, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name    = "clang-analyzer-${version}";
+  pname = "clang-analyzer";
   version = "3.4";
 
   src = fetchurl {

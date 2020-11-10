@@ -1,14 +1,14 @@
-{ lib, pythonPackages }:
+{ lib, python3Packages }:
 
-with pythonPackages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "nyx";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pm7vfcqr02pzqz4b2f6sw5prxxmgqwr1912am42xmy2i53n7nrq";
+    sha256 = "02rrlllz2ci6i6cs3iddyfns7ang9a54jrlygd2jw1f9s6418ll8";
   };
 
   propagatedBuildInputs = [ stem ];
@@ -18,7 +18,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line monitor for Tor";
-    homepage = https://nyx.torproject.org/;
+    homepage = "https://nyx.torproject.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ offline ];
   };

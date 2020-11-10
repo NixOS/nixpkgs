@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "pprof-unstable-${version}";
+  pname = "pprof-unstable";
   version = "2018-08-15";
   rev = "781f11b1fcf71fae9d185e7189b5e686f575075a";
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool for visualization and analysis of profiling data";
-    homepage = https://github.com/google/pprof;
+    homepage = "https://github.com/google/pprof";
     license = licenses.asl20;
     longDescription = ''
       pprof reads a collection of profiling samples in profile.proto format and generates reports to visualize and help analyze the data. It can generate both text and graphical reports (through the use of the dot visualization package).

@@ -1,35 +1,51 @@
-{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file, libintl, hicolor-icon-theme }:
-
-with stdenv.lib;
-
-let
-  version = "1.33";
-in
+{ stdenv
+, fetchurl
+, gtk3
+, which
+, pkgconfig
+, intltool
+, file
+, libintl
+, hicolor-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "geany-${version}";
+  pname = "geany";
+  version = "1.37";
+
+  outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchurl {
-    url = "https://download.geany.org/${name}.tar.bz2";
-    sha256 = "66baaff43f12caebcf0efec9a5533044dc52837f799c73a1fd7312caa86099c2";
+    url = "https://download.geany.org/${pname}-${version}.tar.bz2";
+    sha256 = "dde52584823b769c56704c27dbedddb7a6bbaf4eacb9587d10bbc387816e3d51";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool libintl ];
-  buildInputs = [ gtk2 which file hicolor-icon-theme ];
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+    libintl
+    which
+    file
+    hicolor-icon-theme
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk3
+  ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  patchPhase = "patchShebangs .";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.
       It was developed to provide a small and fast IDE, which has only a few dependencies from other packages.
       Another goal was to be as independent as possible from a special Desktop Environment like KDE or GNOME.
-      Geany only requires the GTK2 runtime libraries.
+      Geany only requires the GTK runtime libraries.
       Some basic features of Geany:
       - Syntax highlighting
       - Code folding
@@ -44,9 +60,9 @@ stdenv.mkDerivation rec {
       - Simple project management
       - Plugin interface
     '';
-    homepage = https://www.geany.org/;
+    homepage = "https://www.geany.org/";
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
   };
 }

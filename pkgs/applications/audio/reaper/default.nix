@@ -1,70 +1,49 @@
 { stdenv, fetchurl, autoPatchelfHook, makeWrapper
-, alsaLib, xorg
-, fetchFromGitHub, pkgconfig, gnome3
-, gnome2, gdk_pixbuf, cairo, glib, freetype
-, libpulseaudio
+, alsaLib, xorg, libjack2
+, gtk3, pango, gdk-pixbuf, cairo, glib, freetype
+, libpulseaudio, xdg_utils
 }:
 
-let
-  libSwell = stdenv.mkDerivation {
-    name = "libSwell";
-
-    src = fetchFromGitHub {
-      owner = "justinfrankel";
-      repo = "WDL";
-      rev = "e87f5bdee7327b63398366fde6ec0a3f08bf600d";
-      sha256 = "147idjqc6nc23w9krl8a9w571k5jx190z3id6ir6cr8zsx0lakdb";
-    };
-
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gnome3.gtk ];
-
-    buildPhase = ''
-      cd WDL/swell
-      make
-    '';
-
-    installPhase = ''
-      mv libSwell.so $out
-    '';
-  };
-
-in stdenv.mkDerivation rec {
-  name = "reaper-${version}";
-  version = "5.94";
+stdenv.mkDerivation rec {
+  pname = "reaper";
+  version = "6.12c";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${stdenv.lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "16g5q12wh1cfbl9wq03vb7vpsd870k7i7883z0wn492x7y9syz8z";
+    sha256 = "1xnd4qvgwsz1dmgb656i611776dqcb84m1gh30i8jhpwcr9ym46w";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   buildInputs = [
     alsaLib
-    stdenv.cc.cc.lib
 
     xorg.libX11
     xorg.libXi
 
-    gnome3.gtk
-    gdk_pixbuf
-    gnome2.pango
+    gdk-pixbuf
+    pango
     cairo
     glib
     freetype
+
+    xdg_utils
+  ];
+
+  runtimeDependencies = [
+    gtk3
   ];
 
   dontBuild = true;
 
   installPhase = ''
-    ./install-reaper.sh --install $out/opt
+    XDG_DATA_HOME="$out/share" ./install-reaper.sh \
+      --install $out/opt \
+      --integrate-user-desktop
     rm $out/opt/REAPER/uninstall-reaper.sh
 
-    cp ${libSwell.out} $out/opt/REAPER/libSwell.so
-
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpulseaudio libjack2 ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
@@ -73,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Digital audio workstation";
-    homepage = https://www.reaper.fm/;
+    homepage = "https://www.reaper.fm/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jfrankenau ];

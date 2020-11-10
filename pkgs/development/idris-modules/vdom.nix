@@ -6,6 +6,8 @@ build-idris-package  {
   name = "vdom";
   version = "0.6.0";
 
+  ipkgName = "idris-vdom";
+
   src = fetchFromGitHub {
     owner = "brandondyck";
     repo = "idris-vdom";
@@ -15,7 +17,7 @@ build-idris-package  {
 
   meta = {
     description = "Virtual DOM in pure Idris";
-    homepage = https://github.com/brandondyck/idris-vdom;
+    homepage = "https://github.com/brandondyck/idris-vdom";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
 , libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
-, imagemagick, intltool, autoreconfHook, which, defaultIconTheme
+, imagemagick, intltool, autoreconfHook, which, gnome3
 }:
 
 let
   version = "1.0.2";
 
-  ETL = stdenv.mkDerivation rec {
+  ETL = stdenv.mkDerivation {
     name = "ETL-0.04.19";
 
     src = fetchFromGitHub {
@@ -21,8 +21,9 @@ let
     nativeBuildInputs = [ autoreconfHook ];
   };
 
-  synfig = stdenv.mkDerivation rec {
-    name = "synfig-${version}";
+  synfig = stdenv.mkDerivation {
+    pname = "synfig";
+    inherit version;
 
     src = fetchFromGitHub {
        repo   = "synfig";
@@ -46,8 +47,9 @@ let
     meta.broken = true;
   };
 in
-stdenv.mkDerivation rec {
-  name = "synfigstudio-${version}";
+stdenv.mkDerivation {
+  pname = "synfigstudio";
+  inherit version;
 
   src = fetchFromGitHub {
      repo   = "synfig";
@@ -105,7 +107,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
     libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
-    synfig which defaultIconTheme
+    synfig which gnome3.adwaita-icon-theme
   ];
 
   postInstall = ''
@@ -117,7 +119,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A 2D animation program";
-    homepage = http://www.synfig.org;
+    homepage = "http://www.synfig.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

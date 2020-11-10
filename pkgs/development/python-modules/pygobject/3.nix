@@ -1,28 +1,38 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobjectIntrospection, pycairo, cairo, which, ncurses}:
+{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobject-introspection,
+pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
 
 buildPythonPackage rec {
-  major = "3.26";
-  minor = "1";
-  version = "${major}.${minor}";
-  format = "other";
   pname = "pygobject";
-  name = pname + "-" + version;
+  version = "3.38.0";
+
+  disabled = ! isPy3k;
+
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pygobject/${major}/${name}.tar.xz";
-    sha256 = "1afi0jdjd9sanrzjwhv7z1k7qxlb91fqa6yqc2dbpjkhkjdpnmzm";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "A3LRu5Ei/Bn1AKJJsfOMK7Z0hQAPWIdJe0sgWz5whNU=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection ];
+  buildInputs = [ glib gobject-introspection ]
                  ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
   propagatedBuildInputs = [ pycairo cairo ];
 
-  meta = {
-    homepage = https://pygobject.readthedocs.io/;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "python3.pkgs.${pname}3";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }

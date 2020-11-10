@@ -2,7 +2,6 @@
 , lib
 , writeTextFile
 , python
-, sage-src
 , sagelib
 , env-locations
 , gfortran
@@ -15,11 +14,16 @@
 , python3
 , pkg-config
 , pari
-, gap-libgap-compatible
-, libgap
+, gap
 , ecl
 , maxima-ecl
 , singular
+, fflas-ffpack
+, givaro
+, gd
+, libpng
+, linbox
+, m4ri
 , giac
 , palp
 , rWrapper
@@ -37,7 +41,8 @@
 , lcalc
 , rubiks
 , flintqs
-, openblas-cblas-pc
+, blas
+, lapack
 , flint
 , gmp
 , mpfr
@@ -45,9 +50,19 @@
 , zlib
 , gsl
 , ntl
+, jdk8
+, less
 }:
 
+assert (!blas.isILP64) && (!lapack.isILP64);
+
+# This generates a `sage-env` shell file that will be sourced by sage on startup.
+# It sets up various environment variables, telling sage where to find its
+# dependencies.
+
 let
+  jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+
   runtimepath = (lib.makeBinPath ([
     "@sage-local@"
     "@sage-local@/build"
@@ -66,13 +81,13 @@ let
     binutils.bintools
     pkg-config
     pari
-    gap-libgap-compatible
-    libgap
+    gap
     ecl
     maxima-ecl
     singular
     giac
     palp
+    # needs to be rWrapper since the default `R` doesn't include R's default libraries
     rWrapper
     gfan
     cddlib
@@ -88,6 +103,8 @@ let
     lcalc
     rubiks
     flintqs
+    jdk # only needed for `jmol` which may be replaced in the future
+    less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
   ]
   ));
 in
@@ -95,27 +112,35 @@ writeTextFile rec {
   name = "sage-env";
   destination = "/${name}";
   text = ''
-    export PKG_CONFIG_PATH='${lib.concatStringsSep ":" (map (pkg: "${pkg}/lib/pkgconfig") [
-        # This is only needed in the src/sage/misc/cython.py test and I'm not sure if there's really a use-case
-        # for it outside of the tests. However since singular and openblas are runtime dependencies anyways
-        # and openblas-cblas-pc is tiny, it doesn't really hurt to include.
+    export PKG_CONFIG_PATH='${lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
+        # This should only be needed during build. However, since the  doctests
+        # also test the cython build (for example in src/sage/misc/cython.py),
+        # it is also needed for the testsuite to pass. We could fix the
+        # testsuite instead, but since all the packages are also runtime
+        # dependencies it doesn't really hurt to include them here.
         singular
-        openblas-cblas-pc
-      ])
+        blas lapack
+        fflas-ffpack givaro
+        gd
+        libpng zlib
+        gsl
+        linbox
+        m4ri
+      ]
     }'
-    export SAGE_ROOT='${sage-src}'
+    export SAGE_ROOT='${sagelib.src}'
     export SAGE_LOCAL='@sage-local@'
     export SAGE_SHARE='${sagelib}/share'
     orig_path="$PATH"
     export PATH='${runtimepath}'
 
     # set dependent vars, like JUPYTER_CONFIG_DIR
-    source "${sage-src}/src/bin/sage-env"
-    export PATH="${runtimepath}:$orig_path" # sage-env messes with PATH
+    source "${sagelib.src}/src/bin/sage-env"
+    export PATH="$RUNTIMEPATH_PREFIX:${runtimepath}:$orig_path" # sage-env messes with PATH
 
     export SAGE_LOGS="$TMPDIR/sage-logs"
     export SAGE_DOC="''${SAGE_DOC_OVERRIDE:-doc-placeholder}"
-    export SAGE_DOC_SRC="''${SAGE_DOC_SRC_OVERRIDE:-${sage-src}/src/doc}"
+    export SAGE_DOC_SRC="''${SAGE_DOC_SRC_OVERRIDE:-${sagelib.src}/src/doc}"
 
     # set locations of dependencies
     . ${env-locations}/sage-env-locations
@@ -126,7 +151,7 @@ writeTextFile rec {
     export LDFLAGS='${
       lib.concatStringsSep " " (map (pkg: "-L${pkg}/lib") [
         flint
-        libgap
+        gap
         glpk
         gmp
         mpfr
@@ -146,7 +171,7 @@ writeTextFile rec {
         gmp.dev
         glpk
         flint
-        libgap
+        gap
         pynac
         mpfr.dev
       ])
@@ -154,9 +179,11 @@ writeTextFile rec {
 
     export SAGE_LIB='${sagelib}/${python.sitePackages}'
 
-    export SAGE_EXTCODE='${sage-src}/src/ext'
+    export SAGE_EXTCODE='${sagelib.src}/src/ext'
 
-    # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}:$DYLD_LIBRARY_PATH"
+  # for find_library
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
+} // {
+  lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support
 }

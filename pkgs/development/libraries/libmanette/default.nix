@@ -1,22 +1,40 @@
-{ stdenv, fetchurl, ninja, meson, pkgconfig, vala, gobjectIntrospection
-, glib, libgudev, libevdev, gnome3 }:
+{ stdenv
+, fetchurl
+, ninja
+, meson
+, pkgconfig
+, vala
+, gobject-introspection
+, glib
+, libgudev
+, libevdev
+, gnome3
+}:
 
-let
-  version = "0.2.1";
+stdenv.mkDerivation rec {
   pname = "libmanette";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "0.2.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "14vqz30p4693yy3yxs0gj858x25sl2kawib1g9lj8g5frgl0hd82";
+    sha256 = "gAbghIDAy9T3SewVWCfRAER88jkD+tgkCnxMMhqgmis=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection ];
-  buildInputs = [ glib libgudev libevdev ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    vala
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    glib
+    libgudev
+    libevdev
+  ];
 
   doCheck = true;
 
@@ -28,9 +46,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A simple GObject game controller library";
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://gitlab.gnome.org/aplazas/libmanette";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

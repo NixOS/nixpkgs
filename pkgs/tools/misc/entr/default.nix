@@ -1,12 +1,12 @@
 { stdenv, fetchurl, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "entr-${version}";
-  version = "4.1";
+  pname = "entr";
+  version = "4.6";
 
   src = fetchurl {
-    url = "http://entrproject.org/code/${name}.tar.gz";
-    sha256 = "0y7gvyf0iykpf3gfw09m21hy51m6qn4cpkbrm4nnn7pwrwycj0y5";
+    url = "http://entrproject.org/code/${pname}-${version}.tar.gz";
+    sha256 = "0vcflgagna2gdlpjsd6748c73j2829xlhm276mi838zl1n121phn";
   };
 
   postPatch = ''
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://entrproject.org/;
+    homepage = "http://entrproject.org/";
     description = "Run arbitrary commands when files change";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub synthetica ];
   };
 }

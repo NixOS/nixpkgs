@@ -1,13 +1,27 @@
-{ stdenv, fetchFromGitHub, inkscape, imagemagick, potrace, svgo, scfbuild }:
+{ stdenv, fetchFromGitHub, fetchpatch, inkscape, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
-  name = "twemoji-color-font-${meta.version}";
+  pname = "twemoji-color-font";
+  version = "12.0.1";
   src = fetchFromGitHub {
     owner = "eosrei";
     repo = "twemoji-color-font";
-    rev = "v${meta.version}";
-    sha256 = "0z8r7z2r0r2wng4a7hvqvkcpd43l0d57yl402r7ci5bnmb02yvsa";
+    rev = "v${version}";
+    sha256 = "00pbgqpkq21wl8fs0q1xp49xb10m48b9sz8cdc58flkd2vqfssw2";
   };
+
+  patches = [
+    # Fix build with Inkscape 1.0
+    # https://github.com/eosrei/twemoji-color-font/pull/82
+    (fetchpatch {
+      url = "https://github.com/eosrei/twemoji-color-font/commit/208ad63c2ceb38c528b5237abeb2b85ceedc1d37.patch";
+      sha256 = "TV8I++BEnVUQg7FNbnrEQ/MLV9n3drmspqjmDZgTGFI=";
+      postFetch = ''
+        substituteInPlace $out \
+          --replace "inkscape --without-gui" "inkscape --export-png"
+      '';
+    })
+  ];
 
   nativeBuildInputs = [ inkscape imagemagick potrace svgo scfbuild ];
   # silence inkscape errors about non-writable home
@@ -21,7 +35,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "1.4";
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for
@@ -38,6 +51,5 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/eosrei/twemoji-color-font/releases";
     license = with licenses; [ cc-by-40 mit ];
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
   };
 }

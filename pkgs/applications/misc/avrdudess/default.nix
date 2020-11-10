@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, unzip, mono, avrbinutils, avrgcc, avrdude, gtk2, xdg_utils }:
+{ stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg_utils }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "avrdudess-2.2.20140102";
 
   src = fetchurl {
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     unzip "$src" -d "$out/avrdudess"
 
     cat >> "$out/bin/avrdudess" << __EOF__
-    #!${stdenv.shell}
+    #!${runtimeShell}
     export LD_LIBRARY_PATH="${stdenv.lib.makeLibraryPath [gtk2 mono]}"
     # We need PATH from user env for xdg-open to find its tools, which
     # typically depend on the currently running desktop environment.
-    export PATH="${stdenv.lib.makeBinPath [ avrgcc avrbinutils avrdude xdg_utils ]}:\$PATH"
+    export PATH="${stdenv.lib.makeBinPath [ avrdude xdg_utils ]}:\$PATH"
 
     # avrdudess must have its resource files in its current working directory
     cd $out/avrdudess && exec ${mono}/bin/mono "$out/avrdudess/avrdudess.exe" "\$@"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GUI for AVRDUDE (AVR microcontroller programmer)";
-    homepage = https://github.com/zkemble/AVRDUDESS;
+    homepage = "https://github.com/zkemble/AVRDUDESS";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

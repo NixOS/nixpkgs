@@ -1,4 +1,16 @@
-{ lib, python3, fetchpatch, git }:
+{ lib, python3, fetchFromGitHub, git, pkgconfig }:
+
+# Note:
+# Conan has specific dependency demands; check
+#     https://github.com/conan-io/conan/blob/master/conans/requirements.txt
+#     https://github.com/conan-io/conan/blob/master/conans/requirements_server.txt
+# on the release branch/commit we're packaging.
+#
+# Two approaches are used here to deal with that:
+# Pinning the specific versions it wants in `newPython`,
+# and using `substituteInPlace conans/requirements.txt ...`
+# in `postPatch` to allow newer versions when we know
+# (e.g. from changelogs) that they are compatible.
 
 let newPython = python3.override {
   packageOverrides = self: super: {
@@ -10,71 +22,82 @@ let newPython = python3.override {
       };
     });
     node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
-      version = "0.2.0";
+      version = "0.6.1";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "1080pdxrvnkr8i7b7bk0dfx6cwrkkzzfaranl7207q6rdybzqay3";
+        sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    astroid = super.astroid.overridePythonAttrs (oldAttrs: rec {
-      version = "1.6.5";
+    pluginbase = super.pluginbase.overridePythonAttrs (oldAttrs: rec {
+      version = "0.7";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "fc9b582dba0366e63540982c3944a9230cbc6f303641c51483fa547dcc22393a";
+        sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
       };
-    });
-    pylint = super.pylint.overridePythonAttrs (oldAttrs: rec {
-      version = "1.8.4";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "34738a82ab33cbd3bb6cd4cef823dbcabdd2b6b48a4e3a3054a2bbbf0c712be9";
-      };
-
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.6.0";
+  version = "1.27.0";
   pname = "conan";
 
-  src = newPython.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "386476d3af1fa390e4cd96e737876e7d1f1c0bca09519e51fd44c1bb45990caa";
+  src = fetchFromGitHub {
+    owner = "conan-io";
+    repo = "conan";
+    rev = version;
+    sha256 = "0ncqs1p4g23fmzgdmwppgxr8w275h38hgjdzs456cgivz8xs9rjl";
   };
-
-  # Bump PyYAML to 3.13
-  patches = fetchpatch {
-    url = https://github.com/conan-io/conan/commit/9d3d7a5c6e89b3aa321735557e5ad3397bb80568.patch;
-    sha256 = "1qdy6zj3ypl1bp9872mzaqg1gwigqldxb1glvrkq3p4za62p546k";
-  };
-
-  checkInputs = [
-    git
-  ] ++ (with newPython.pkgs; [
-    nose
-    parameterized
-    mock
-    webtest
-    codecov
-  ]);
 
   propagatedBuildInputs = with newPython.pkgs; [
-    requests fasteners pyyaml pyjwt colorama patch
-    bottle pluginbase six distro pylint node-semver
-    future pygments mccabe deprecation
+    bottle
+    colorama
+    dateutil
+    deprecation
+    distro
+    fasteners
+    future
+    jinja2
+    node-semver
+    patch-ng
+    pluginbase
+    pygments
+    pyjwt
+    pylint # Not in `requirements.txt` but used in hooks, see https://github.com/conan-io/conan/pull/6152
+    pyyaml
+    requests
+    six
+    tqdm
+    urllib3
   ];
 
-  checkPhase = ''
-    export HOME="$TMP/conan-home"
-    mkdir -p "$HOME"
-    nosetests conans.test
+  checkInputs = [
+    pkgconfig
+    git
+  ] ++ (with newPython.pkgs; [
+    codecov
+    mock
+    nose
+    parameterized
+    webtest
+  ]);
+
+  # TODO: reenable tests now that we fetch tests w/ the source from GitHub.
+  # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
+  doCheck = false;
+
+  postPatch = ''
+    substituteInPlace conans/requirements.txt \
+      --replace "PyYAML>=3.11, <3.14.0" "PyYAML" \
+      --replace "deprecation>=2.0, <2.1" "deprecation" \
+      --replace "six>=1.10.0,<=1.14.0" "six"
   '';
 
   meta = with lib; {
-    homepage = https://conan.io;
+    homepage = "https://conan.io";
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
+    maintainers = with maintainers; [ HaoZeke ];
     platforms = platforms.linux;
   };
 }

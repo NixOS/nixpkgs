@@ -1,29 +1,45 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles }:
 
-buildGoPackage rec {
-  name = "rclone-${version}";
-  version = "1.43.1";
-
-  goPackagePath = "github.com/ncw/rclone";
+buildGoModule rec {
+  pname = "rclone";
+  version = "1.53.2";
 
   src = fetchFromGitHub {
-    owner = "ncw";
-    repo = "rclone";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0iz427gdm8cxx3kbjmhw7jsvi9j0ppb5aqcq4alwf72fvpvql3mx";
+    sha256 = "0ns55b6s4zdw94jlialps3knclghj9xqx84ff8hyrl9ksq02kd3w";
   };
 
-  outputs = [ "bin" "out" "man" ];
+  vendorSha256 = "1l4iz31k1pylvf0zrp4nhxna70s1ma4981x6q1s3dhszjxil5c88";
 
-  postInstall = ''
-    install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
-  '';
+  subPackages = [ "." ];
+
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/rclone/rclone/fs.Version=${version}" ];
+
+  postInstall =
+    let
+      rcloneBin =
+        if stdenv.buildPlatform == stdenv.hostPlatform
+        then "$out"
+        else stdenv.lib.getBin buildPackages.rclone;
+    in
+    ''
+      installManPage rclone.1
+      for shell in bash zsh fish; do
+        ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
+        installShellCompletion rclone.$shell
+      done
+    '';
 
   meta = with stdenv.lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
-    homepage = https://rclone.org;
+    homepage = "https://rclone.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ danielfullmer marsam ];
   };
 }

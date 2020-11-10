@@ -1,25 +1,22 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchgit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
-  version = "1.22";
-  name = "${pname}-${version}";
+  version = "1.24";
 
   src = fetchgit {
-    sha256 = "1fmd05r00wx4zc90lbi804jl7xwdl11jq2a1kp5lqimk3yyvfw4c";
-    url = "git://anonscm.debian.org/users/robert/datefudge.git";
-    rev = "fe27db47a0f250fb56164114fff8ae8d5af47ab6";
+    url = "https://salsa.debian.org/debian/${pname}.git";
+    rev = "debian/${version}";
+    sha256 = "1nh433yx4y4djp0bs6aawqbwk7miq7fsbs9wpjlyh2k9dvil2lrm";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
      --replace "/usr" "/" \
      --replace "-o root -g root" ""
     substituteInPlace datefudge.sh \
      --replace "@LIBDIR@" "$out/lib/"
-    '';
-
-  preInstallPhase = "mkdir -P $out/lib/datefudge";
+  '';
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -32,7 +29,7 @@ stdenv.mkDerivation rec {
       different by pre-loading a small library which modifies the time,
       gettimeofday and clock_gettime system calls.
     '';
-    homepage = https://packages.qa.debian.org/d/datefudge.html;
+    homepage = "https://packages.qa.debian.org/d/datefudge.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

@@ -1,17 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pyotp";
-  version = "2.2.6";
+  version = "2.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69";
+    sha256 = "01eceab573181188fe038d001e42777884a7f5367203080ef5bda0e30fe82d28";
   };
+
+  pythonImportsCheck = [ "pyotp" ];
 
   meta = with lib; {
     description = "Python One Time Password Library";
-    homepage = https://github.com/pyotp/pyotp;
+    homepage = "https://github.com/pyotp/pyotp";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

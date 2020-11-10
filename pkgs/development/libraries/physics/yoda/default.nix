@@ -1,21 +1,26 @@
-{ stdenv, fetchurl, python2Packages, root, makeWrapper, zlib, withRootSupport ? false }:
+{ stdenv, fetchurl, python, root, makeWrapper, zlib, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "yoda-${version}";
-  version = "1.7.1";
+  pname = "yoda";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "0yq20fnckf6h0a53ghxsgia6ikq71ch9a0w0khq188r7rlg9gmzd";
+    sha256 = "12msmjiajvy2xj2m64n2fxblai5xg06a829wi7scsc7nw2jhxpfr";
   };
 
-  pythonPath = []; # python wrapper support
-
-  buildInputs = with python2Packages; [ python numpy matplotlib makeWrapper ]
+  nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
+  buildInputs = [ python ]
+    ++ (with python.pkgs; [ numpy matplotlib ])
     ++ stdenv.lib.optional withRootSupport root;
   propagatedBuildInputs = [ zlib ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    touch pyext/yoda/*.{pyx,pxd}
+    patchShebangs .
+  '';
 
   postInstall = ''
     for prog in "$out"/bin/*; do
@@ -25,10 +30,13 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  doInstallCheck = true;
+  installCheckTarget = "check";
+
   meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://yoda.hepforge.org;
+    license     = stdenv.lib.licenses.gpl3;
+    homepage    = "https://yoda.hepforge.org";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };

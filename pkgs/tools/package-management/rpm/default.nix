@@ -1,21 +1,22 @@
-{ stdenv
+{ stdenv, lib
 , pkgconfig, autoreconfHook
-, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua
+, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
 }:
 
 stdenv.mkDerivation rec {
-  name = "rpm-${version}";
-  version = "4.14.2";
+  pname = "rpm";
+  version = "4.15.1";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
-    sha256 = "0armd7dqr8bl0isx8l4xlylm7dikasmxhhcbz336fkp2x30w5jw0";
+    url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
+    sha256 = "0c6jwail90fhha3bpx70w4a2i8ycxwvnx6zwxm121l8wc3wlbvyx";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ];
+  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ]
+                ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
@@ -50,13 +51,18 @@ stdenv.mkDerivation rec {
       sed -i $out/lib/rpm/macros -e "s/^%__$tool.*/%__$tool $tool/"
     done
 
+    # Avoid helper scripts pointing to absolute paths
+    for tool in find-provides find-requires; do
+      sed -i $out/lib/rpm/$tool -e "s#/usr/lib/rpm/#$out/lib/rpm/#"
+    done
+
     # symlinks produced by build are incorrect
     ln -sf $out/bin/{rpm,rpmquery}
     ln -sf $out/bin/{rpm,rpmverify}
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.rpm.org/;
+    homepage = "http://www.rpm.org/";
     license = licenses.gpl2;
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];

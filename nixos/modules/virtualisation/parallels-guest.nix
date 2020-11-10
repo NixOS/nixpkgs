@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -32,7 +32,7 @@ in
       };
 
       package = mkOption {
-        type = types.package;
+        type = types.nullOr types.package;
         default = config.boot.kernelPackages.prl-tools;
         defaultText = "config.boot.kernelPackages.prl-tools";
         example = literalExample "config.boot.kernelPackages.prl-tools";
@@ -47,7 +47,7 @@ in
   config = mkIf config.hardware.parallels.enable {
     services.xserver = {
       drivers = singleton
-        { name = "prlvideo"; modules = [ prl-tools ]; libPath = [ prl-tools ]; };
+        { name = "prlvideo"; modules = [ prl-tools ]; };
 
       screenSection = ''
         Option "NoMTRR"
@@ -64,7 +64,8 @@ in
     };
 
     hardware.opengl.package = prl-tools;
-    hardware.opengl.package32 = pkgs_i686.linuxPackages.prl-tools.override { libsOnly = true; kernel = null; };
+    hardware.opengl.package32 = pkgs.pkgsi686Linux.linuxPackages.prl-tools.override { libsOnly = true; kernel = null; };
+    hardware.opengl.setLdLibraryPath = true;
 
     services.udev.packages = [ prl-tools ];
 

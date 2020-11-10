@@ -2,14 +2,14 @@
 fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "oysttyer-${version}";
-  version = "2.9.1";
+  pname = "oysttyer";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner  = "oysttyer";
     repo   = "oysttyer";
-    rev    = "${version}";
-    sha256 = "05bfak4jr8ln4847rkj5qkazqnjym65k1phav3yicbyr3mxywhjw";
+    rev    = version;
+    sha256 = "0cm1hvi68iqgjsg15xdii271pklgzjn9j9afb1c460z71kgy3wz2";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit version;
     description = "Perl Console Twitter Client";
-    homepage    = http://oysttyer.github.io/;
+    homepage    = "http://oysttyer.github.io/";
     maintainers = with maintainers; [ woffs ];
     license = with licenses; [ ffsl ];
   };

@@ -2,14 +2,14 @@
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "1.24.0";
+  version = "1.27.0";
   pname = "rtv";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
     repo = "rtv";
     rev = "v${version}";
-    sha256 = "0vzhnqys8nr6ymsi1mnv092z3i7nwyhgnj4jv6mjifak9j3164fw";
+    sha256 = "1hw7xy2kjxq7y3wcibcz4l7zj8icvigialqr17l362xry0y17y5j";
   };
 
   # Tests try to access network
@@ -38,9 +38,9 @@ buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/michael-lazar/rtv;
+    homepage = "https://github.com/michael-lazar/rtv";
     description = "Browse Reddit from your Terminal";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgeerds wedens ];
+    maintainers = with maintainers; [ matthiasbeyer wedens ];
   };
 }

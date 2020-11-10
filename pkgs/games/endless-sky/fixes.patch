@@ -2,15 +2,6 @@ diff --git a/SConstruct b/SConstruct
 index 48fd080..419b40d 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -1,7 +1,7 @@
- import os
- 
- # Load any environment variables that alter the build.
--env = Environment()
-+env = Environment(ENV = os.environ)
- if 'CCFLAGS' in os.environ:
- 	env.Append(CCFLAGS = os.environ['CCFLAGS'])
- if 'CXXFLAGS' in os.environ:
 @@ -55,7 +55,7 @@ sky = env.Program("endless-sky", Glob("build/" + env["mode"] + "/*.cpp"))
  
  

@@ -1,20 +1,20 @@
 { stdenv, gettext, fetchurl, vala, desktop-file-utils
-, meson, ninja, pkgconfig, gtk3, glib, libxml2
+, meson, ninja, pkgconfig, python3, gtk3, glib, libxml2
 , wrapGAppsHook, itstool, gnome3 }:
 
 let
   pname = "baobab";
-  version = "3.28.0";
+  version = "3.38.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qsx7vx5c3n4yxlxbr11sppw7qwcv9z3g45b5xb9y7wxw5lv42sk";
+    sha256 = "0ac3fbl15l836yvgw724q4whbkws9v4b6l2xy6bnp0b0g0a6i104";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
-  buildInputs = [ gtk3 glib gnome3.defaultIconTheme ];
+  nativeBuildInputs = [ meson ninja pkgconfig vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook python3 ];
+  buildInputs = [ gtk3 glib gnome3.adwaita-icon-theme ];
 
   doCheck = true;
 
@@ -26,9 +26,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical application to analyse disk usage in any GNOME environment";
-    homepage = https://wiki.gnome.org/Apps/DiskUsageAnalyzer;
+    homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

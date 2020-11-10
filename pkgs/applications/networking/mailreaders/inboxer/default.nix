@@ -1,10 +1,10 @@
 { stdenv, fetchurl, binutils, patchelf, makeWrapper
-, expat, xorg, gdk_pixbuf, glib, gnome2, cairo, atk, freetype
+, expat, xorg, gdk-pixbuf, glib, gnome2, cairo, atk, freetype, pango
 , fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, udev }:
 
 stdenv.mkDerivation rec {
-  name = "inboxer-${version}";
-  version = "1.1.5";
+  pname = "inboxer";
+  version = "1.2.1";
 
   meta = with stdenv.lib; {
     description = "Unofficial, free and open-source Google Inbox Desktop App";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/denysdovhan/inboxer/releases/download/v${version}/inboxer_${version}_amd64.deb";
-    sha256 = "11xid07rqn7j6nxn0azxwf0g8g3jhams2fmf9q7xc1is99zfy7z4";
+    sha256 = "0nyxas07d6ckgjazxapmc6iyakd2cddla6wflr5rhfp78d7kax3a";
   };
 
   unpackPhase = ''
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
       xorg.libXtst
       xorg.libXScrnSaver
       xorg.libxcb
-      gdk_pixbuf
+      gdk-pixbuf
       glib
-      gnome2.pango
+      pango
       gnome2.GConf
       expat
       stdenv.cc.cc.lib

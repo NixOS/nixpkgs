@@ -53,8 +53,11 @@ in
         Type = "notify";
         NotifyAccess = "all";
       };
+      restartTriggers = [
+        config.environment.etc."salt/master".source
+      ];
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa ];
+  meta.maintainers = with lib.maintainers; [ Flakebi ];
 }

@@ -9,11 +9,11 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.7.2";
+  version = "1.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rzwd9bjw6bj01xcmimqfim1g0njjyyyal0f93frm1la4hcmq96v";
+    sha256 = "1ckxzch3wk5cg80mppky5jib5z4fzslny3001r5zg4ar1ixbc1w1";
   };
 
   # explicit check:
@@ -22,28 +22,29 @@ buildPythonPackage rec {
     "fortify"
   ];
 
-  # currently fails, probably because of formatting changes in gdb 8.0
-  # https://trac.sagemath.org/ticket/24692
+  # known failure: https://github.com/sagemath/cysignals/blob/582dbf6a7b0f9ade0abe7a7b8720b7fb32435c3c/testgdb.py#L5
   doCheck = false;
+  checkTarget = "check-install";
 
   preCheck = ''
     # Make sure cysignals-CSI is in PATH
     export PATH="$out/bin:$PATH"
   '';
 
-  buildInputs = lib.optionals pariSupport [
-    pari
-  ];
-
   propagatedBuildInputs = [
     cython
+  ] ++ lib.optionals pariSupport [
+    # When cysignals is built with pari, including cysignals into the
+    # buildInputs of another python package will cause cython to link against
+    # pari.
+    pari
   ];
 
   enableParallelBuilding = true;
 
   meta = {
     description = "Interrupt and signal handling for Cython";
-    homepage = https://github.com/sagemath/cysignals/;
+    homepage = "https://github.com/sagemath/cysignals/";
     maintainers = with lib.maintainers; [ timokau ];
     license = lib.licenses.lgpl3Plus;
   };

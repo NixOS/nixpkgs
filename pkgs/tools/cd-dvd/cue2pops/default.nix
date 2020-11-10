@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "cue2pops-${version}";
+stdenv.mkDerivation {
+  pname = "cue2pops";
   version = "git-2018-01-04";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Convert CUE to ISO suitable to POPStarter";
-    homepage = https://github.com/makefu/cue2pops-linux;
+    homepage = "https://github.com/makefu/cue2pops-linux";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };

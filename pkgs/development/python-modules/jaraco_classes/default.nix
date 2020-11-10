@@ -1,13 +1,17 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm, six }:
+{ buildPythonPackage, fetchPypi, isPy27, setuptools_scm, six, more-itertools }:
 
 buildPythonPackage rec {
   pname = "jaraco.classes";
-  version = "1.5";
+  version = "3.1.0";
+  disabled = isPy27;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "002zsifikv6qwigkjlij7jhyvbwv6793m8h9ckbkx2jizmgc80fi";
+    sha256 = "1avsxzm5mwylmy2zbxq3xvn48z5djb0qy3hwv4ryncprivzri1n3";
   };
+
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ six more-itertools ];
+
   doCheck = false;
-  buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six ];
 }

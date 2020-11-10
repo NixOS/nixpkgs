@@ -1,15 +1,15 @@
 { stdenv, makeWrapper, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
-  name = "cfr-${version}";
-  version = "0.132";
+  pname = "cfr";
+  version = "0.150";
 
   src = fetchurl {
     url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
-    sha256 = "1fpmd5v3x91lw6jc7x997ic2kklj449fndyg14zvgxawhdkic2z1";
+    sha256 = "09lq21phnhr374wb8gj355jsqj8c4m5m818r3pbr8f8zpaamjxfj";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     jar=$out/share/java/cfr_${version}.jar
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       Java beta 103 changes), Java 7 String switches etc, but is written
       entirely in Java 6.
     '';
-    homepage = http://www.benf.org/other/cfr/;
+    homepage = "http://www.benf.org/other/cfr/";
     license = licenses.mit;
     platforms = platforms.all;
   };

@@ -11,8 +11,6 @@ let
 
   # build nsd with the options needed for the given config
   nsdPkg = pkgs.nsd.override {
-    configFile = "${configFile}/nsd.conf";
-
     bind8Stats = cfg.bind8Stats;
     ipv6 = cfg.ipv6;
     ratelimit = cfg.ratelimit.enable;
@@ -244,7 +242,7 @@ let
       };
 
       data = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example = "";
         description = ''
@@ -252,7 +250,7 @@ let
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
         '';
       };
-      
+
       dnssec = mkEnableOption "DNSSEC";
 
       dnssecPolicy = {
@@ -435,7 +433,9 @@ let
 
   dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
 
-  dnssec = length (attrNames dnssecZones) != 0; 
+  dnssec = dnssecZones != {};
+
+  dnssecTools = pkgs.bind.override { enablePython = true; };
 
   signZones = optionalString dnssec ''
     mkdir -p ${stateDir}/dnssec
@@ -445,8 +445,8 @@ let
     ${concatStrings (mapAttrsToList signZone dnssecZones)}
   '';
   signZone = name: zone: ''
-    ${pkgs.bind}/bin/dnssec-keymgr -g ${pkgs.bind}/bin/dnssec-keygen -s ${pkgs.bind}/bin/dnssec-settime -K ${stateDir}/dnssec -c ${policyFile name zone.dnssecPolicy} ${name}
-    ${pkgs.bind}/bin/dnssec-signzone -S -K ${stateDir}/dnssec -o ${name} -O full -N date ${stateDir}/zones/${name}
+    ${dnssecTools}/bin/dnssec-keymgr -g ${dnssecTools}/bin/dnssec-keygen -s ${dnssecTools}/bin/dnssec-settime -K ${stateDir}/dnssec -c ${policyFile name zone.dnssecPolicy} ${name}
+    ${dnssecTools}/bin/dnssec-signzone -S -K ${stateDir}/dnssec -o ${name} -O full -N date ${stateDir}/zones/${name}
     ${nsdPkg}/sbin/nsd-checkzone ${name} ${stateDir}/zones/${name}.signed && mv -v ${stateDir}/zones/${name}.signed ${stateDir}/zones/${name}
   '';
   policyFile = name: policy: pkgs.writeText "${name}.policy" ''
@@ -482,7 +482,7 @@ in
     };
 
     extraConfig = mkOption {
-      type = types.str;
+      type = types.lines;
       default = "";
       description = ''
         Extra nsd config.
@@ -895,15 +895,14 @@ in
               + "want, please enable 'services.nsd.rootServer'.";
     };
 
-    environment.systemPackages = [ nsdPkg ];
-
-    users.groups = singleton {
-      name = username;
-      gid = config.ids.gids.nsd;
+    environment = {
+      systemPackages = [ nsdPkg ];
+      etc."nsd/nsd.conf".source = "${configFile}/nsd.conf";
     };
 
-    users.users = singleton {
-      name = username;
+    users.groups.${username}.gid = config.ids.gids.nsd;
+
+    users.users.${username} = {
       description = "NSD service user";
       home = stateDir;
       createHome  = true;
@@ -914,18 +913,17 @@ in
     systemd.services.nsd = {
       description = "NSD authoritative only domain name service";
 
-      after = [ "keys.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      wants = [ "keys.target" ];
 
+      startLimitBurst = 4;
+      startLimitIntervalSec = 5 * 60;  # 5 mins
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
         StandardError = "null";
         PIDFile = pidFile;
         Restart = "always";
         RestartSec = "4s";
-        StartLimitBurst = 4;
-        StartLimitInterval = "5min";
       };
 
       preStart = ''
@@ -953,11 +951,7 @@ in
       '';
     };
 
-    nixpkgs.config = mkIf dnssec {
-      bind.enablePython = true;
-    };
-
-    systemd.timers."nsd-dnssec" = mkIf dnssec {
+    systemd.timers.nsd-dnssec = mkIf dnssec {
       description = "Automatic DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];
@@ -968,7 +962,7 @@ in
       };
     };
 
-    systemd.services."nsd-dnssec" = mkIf dnssec {
+    systemd.services.nsd-dnssec = mkIf dnssec {
       description = "DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];
@@ -977,7 +971,7 @@ in
       script = signZones;
 
       postStop = ''
-        ${pkgs.systemd}/bin/systemctl kill -s SIGHUP nsd.service
+        /run/current-system/systemd/bin/systemctl kill -s SIGHUP nsd.service
       '';
     };
 

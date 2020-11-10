@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitHub, openssl, libevent }:
+{ stdenv, fetchFromGitHub, fetchpatch, openssl, libevent }:
 
 stdenv.mkDerivation rec {
-  name = "coturn-${version}";
-  version = "4.5.0.7";
+  pname = "coturn";
+  version = "4.5.1.3";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    rev = "${version}";
-    sha256 = "1781fx8lqgc54j973xzgq9d7k3g2j03va82jb4217gd3a93pa65l";
+    rev = version;
+    sha256 = "1801931k4qdvc7jvaqxvjyhbh1xsvjz0pjajf6xc222n4ggar1q5";
   };
 
   buildInputs = [ openssl libevent ];
 
-  patches = [ ./pure-configure.patch ];
+  patches = [
+    ./pure-configure.patch
+  ];
 
   meta = with stdenv.lib; {
-    homepage = http://coturn.net/;
+    homepage = "https://coturn.net/";
     license = with licenses; [ bsd3 ];
     description = "A TURN server";
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # 2018-10-21
     maintainers = [ maintainers.ralith ];
   };
 }

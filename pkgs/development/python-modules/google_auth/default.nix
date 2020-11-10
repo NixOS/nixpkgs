@@ -1,31 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, mock, oauth2client, flask, requests, urllib3, pytest-localserver, six, pyasn1-modules, cachetools, rsa }:
+{ stdenv, buildPythonPackage, fetchpatch, fetchPypi, pythonOlder
+, pytestCheckHook, cachetools, flask, freezegun, mock, oauth2client
+, pyasn1-modules, pytest, pytest-localserver, requests, responses, rsa
+, setuptools, six, urllib3 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.5.1";
+  version = "1.22.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ca363facbf2622d9ba828017536ccca2e0f58bd15e659b52f312172f8815530";
+    sha256 = "1fs448jcx2cbpk0nq3picndfryjsakmd9allggvh7mrqjiw723ww";
   };
 
-  checkInputs = [ pytest mock oauth2client flask requests urllib3 pytest-localserver ];
-  propagatedBuildInputs = [ six pyasn1-modules cachetools rsa ];
+  disabled = pythonOlder "3.5";
 
-  # The removed test tests the working together of google_auth and google's https://pypi.python.org/pypi/oauth2client
-  # but the latter is deprecated. Since it is not currently part of the nixpkgs collection and deprecated it will
-  # probably never be. We just remove the test to make the tests work again.
-  postPatch = ''rm tests/test__oauth2client.py'';
+  propagatedBuildInputs = [ six pyasn1-modules cachetools rsa setuptools ];
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    flask
+    freezegun
+    mock
+    oauth2client
+    pytestCheckHook
+    pytest-localserver
+    requests
+    responses
+    urllib3
+  ];
 
   meta = with stdenv.lib; {
-    description = "This library simplifies using Google’s various server-to-server authentication mechanisms to access Google APIs.";
-    homepage = "https://google-auth.readthedocs.io/en/latest/";
+    description = "Google Auth Python Library";
+    longDescription = ''
+      This library simplifies using Google’s various server-to-server
+      authentication mechanisms to access Google APIs.
+    '';
+    homepage = "https://github.com/googleapis/google-auth-library-python";
+    changelog =
+      "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
+    # Documentation: https://googleapis.dev/python/google-auth/latest/index.html
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

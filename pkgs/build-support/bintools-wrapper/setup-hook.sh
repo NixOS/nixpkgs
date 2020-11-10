@@ -2,8 +2,6 @@
 #
 # See comments in cc-wrapper's setup hook. This works exactly the same way.
 
-set -u
-
 # Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
 # native compile.
 #
@@ -12,11 +10,11 @@ set -u
 
 bintoolsWrapper_addLDVars () {
     # See ../setup-hooks/role.bash
-    local role_post role_pre
+    local role_post
     getHostRoleEnvHook
 
     if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_${role_pre}LDFLAGS+=" -L$1/lib64"
+        export NIX_LDFLAGS${role_post}+=" -L$1/lib64"
     fi
 
     if [[ -d "$1/lib" ]]; then
@@ -24,8 +22,9 @@ bintoolsWrapper_addLDVars () {
         # Python and Haskell packages often only have directories like $out/lib/ghc-8.4.3/ or
         # $out/lib/python3.6/, so having them in LDFLAGS just makes the linker search unnecessary
         # directories and bloats the size of the environment variable space.
-        if [[ -n "$(echo $1/lib/lib*)" ]]; then
-            export NIX_${role_pre}LDFLAGS+=" -L$1/lib"
+        local -a glob=( $1/lib/lib* )
+        if [ "${#glob[*]}" -gt 0 ]; then
+            export NIX_LDFLAGS${role_post}+=" -L$1/lib"
         fi
     fi
 }
@@ -53,7 +52,7 @@ fi
 
 # Export tool environment variables so various build systems use the right ones.
 
-export NIX_${role_pre}BINTOOLS=@out@
+export NIX_BINTOOLS${role_post}=@out@
 
 for cmd in \
     ar as ld nm objcopy objdump readelf ranlib strip strings size windres
@@ -61,9 +60,7 @@ do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
     then
-        upper_case="$(echo "$cmd" | tr "[:lower:]" "[:upper:]")"
-        export "${role_pre}${upper_case}=@targetPrefix@${cmd}";
-        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
+        export "${cmd^^}${role_post}=@targetPrefix@${cmd}";
     fi
 done
 
@@ -72,5 +69,4 @@ done
 export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
-unset -v role_pre role_post cmd upper_case
-set +u
+unset -v role_post cmd upper_case

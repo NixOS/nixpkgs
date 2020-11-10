@@ -1,27 +1,31 @@
 { coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
 , enableLDAP ? false, openldap
-, enableMySQL ? false, mysql, zlib
+, enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
 , enablePAM ? false, pam
+, enableSPF ? true, libspf2
+, enableDMARC ? true, opendmarc
 }:
 
 stdenv.mkDerivation rec {
-  name = "exim-4.91";
+  pname = "exim";
+  version = "4.94";
 
   src = fetchurl {
-    url = "https://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
-    sha256 = "066ip7a5lqfn9rcr14j4nm0kqysw6mzvbbb0ip50lmfm0fqsqmzc";
+    url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
+    sha256 = "1nsb2i5mqxfz1sl1bmbxmpb2qiaf3wffhfiw4j9vfpagy3xfhzpp";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ coreutils db openssl perl pcre ]
     ++ stdenv.lib.optional enableLDAP openldap
-    ++ stdenv.lib.optionals enableMySQL [ mysql zlib ]
+    ++ stdenv.lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ stdenv.lib.optional enableAuthDovecot dovecot
-    ++ stdenv.lib.optional enablePAM pam;
+    ++ stdenv.lib.optional enablePAM pam
+    ++ stdenv.lib.optional enableSPF libspf2
+    ++ stdenv.lib.optional enableDMARC opendmarc;
 
   preBuild = ''
-    ${stdenv.lib.optionalString enableMySQL "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${mysql}/share/mysql/pkgconfig/"}
     sed '
       s:^\(BIN_DIRECTORY\)=.*:\1='"$out"'/bin:
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
       s:^\(FIXED_NEVER_USERS\)=root$:\1=0:
       s:^# \(WITH_CONTENT_SCAN\)=.*:\1=yes:
       s:^# \(AUTH_PLAINTEXT\)=.*:\1=yes:
-      s:^# \(SUPPORT_TLS\)=.*:\1=yes:
+      s:^# \(USE_OPENSSL\)=.*:\1=yes:
       s:^# \(USE_OPENSSL_PC=openssl\)$:\1:
       s:^# \(LOG_FILE_PATH=syslog\)$:\1:
       s:^# \(HAVE_IPV6=yes\)$:\1:
@@ -44,18 +48,19 @@ stdenv.mkDerivation rec {
       s:^# \(RM_COMMAND\)=.*:\1=${coreutils}/bin/rm:
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
       s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
+      s:^# \(LOOKUP_DSEARCH=yes\)$:\1:
       ${stdenv.lib.optionalString enableLDAP ''
         s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
         s:^# \(LOOKUP_LDAP=yes\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap -llber:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap -llber:
       ''}
       ${stdenv.lib.optionalString enableMySQL ''
         s:^# \(LOOKUP_MYSQL=yes\)$:\1:
-        s:^# \(LOOKUP_MYSQL_PC=mariadb\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${mysql}/include/mysql/:
+        s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
       ''}
       ${stdenv.lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
@@ -64,6 +69,14 @@ stdenv.mkDerivation rec {
         s:^# \(SUPPORT_PAM\)=.*:\1=yes:
         s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
         s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
+      ''}
+      ${stdenv.lib.optionalString enableSPF ''
+        s:^# \(SUPPORT_SPF\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lspf2\):\1:
+      ''}
+      ${stdenv.lib.optionalString enableDMARC ''
+        s:^# \(SUPPORT_DMARC\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lopendmarc\):\1:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d
@@ -86,11 +99,11 @@ stdenv.mkDerivation rec {
       done )
   '';
 
-  meta = {
-    homepage = http://exim.org/;
+  meta = with stdenv.lib; {
+    homepage = "http://exim.org/";
     description = "A mail transfer agent (MTA)";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.tv ];
+    license = with licenses; [ gpl2Plus bsd3 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ tv ajs124 das_j ];
   };
 }

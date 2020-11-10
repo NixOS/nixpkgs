@@ -1,17 +1,17 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "thinkingrock-binary-2.2.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/thinkingrock/ThinkingRock/TR%202.2.1/tr-2.2.1.tar.gz;
+    url = "mirror://sourceforge/thinkingrock/ThinkingRock/TR%202.2.1/tr-2.2.1.tar.gz";
     sha256 = "0hnwvvyc8miiz8w2g4iy7s4rgfy0kfbncgbgfzpsq6nrzq334kgm";
   };
 
   /* it would be a really bad idea to put thinkingrock tr executable in PATH!
      the tr.sh script does use the coreutils tr itself
      That's why I've renamed the wrapper and called it thinkingrock
-     However you may not rename the bin/tr script cause it will notice and throw an 
+     However you may not rename the bin/tr script cause it will notice and throw an
      "java.lang.IllegalArgumentException: Malformed branding token: thinkingrock"
      exception. I hope that's fine
   */
@@ -24,18 +24,18 @@ stdenv.mkDerivation {
     mkdir -p $out/{nix-support/tr-files,bin}
     cp -r . $out/nix-support/tr-files
     cat >> $out/bin/thinkingrock << EOF
-    #!/bin/sh
+    #!${runtimeShell}
     exec $out/nix-support/tr-files/bin/tr "$@"
     EOF
     chmod +x $out/bin/thinkingrock
   '';
-  
+
   installPhase = ":";
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "Task management system";
-    homepage = http://www.thinkingrock.com.au/;
-    license = "CDDL"; # Common Development and Distribution License
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.thinkingrock.com.au/";
+    license = licenses.cddl;
+    platforms = platforms.unix;
   };
 }

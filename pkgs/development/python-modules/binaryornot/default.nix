@@ -10,9 +10,9 @@ buildPythonPackage rec {
   };
 
   prePatch = ''
-    # See https://github.com/audreyr/binaryornot/issues/40
+    # TypeError: binary() got an unexpected keyword argument 'average_size'
     substituteInPlace tests/test_check.py \
-      --replace "average_size=512" "average_size=128"
+      --replace "average_size=512" ""
   '';
 
   propagatedBuildInputs = [ chardet ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis ];
 
   meta = with lib; {
-    homepage = https://github.com/audreyr/binaryornot;
+    homepage = "https://github.com/audreyr/binaryornot";
     description = "Ultra-lightweight pure Python package to check if a file is binary or text";
     license = licenses.bsd3;
   };

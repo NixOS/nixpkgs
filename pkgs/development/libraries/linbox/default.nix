@@ -1,25 +1,26 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , givaro
 , pkgconfig
 , blas
+, lapack
 , fflas-ffpack
 , gmpxx
-, optimize ? false # impure
 , withSage ? false # sage support
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "linbox";
-  version = "1.5.2";
+  version = "1.6.3"; # TODO: Check postPatch script on update
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1wfivlwp30mzdy1697w7rzb8caajim50mc8h27k82yipn2qc5n4i";
+    sha256 = "10j6dspbsq7d2l4q3y0c1l1xwmaqqba2fxg59q5bhgk9h5d7q571";
   };
 
   nativeBuildInputs = [
@@ -34,33 +35,35 @@ stdenv.mkDerivation rec {
     fflas-ffpack
   ];
 
-  configureFlags = [
-    "--with-blas-libs=-l${blas.linkName}"
-    "--disable-optimization"
-  ] ++ stdenv.lib.optionals (!optimize) [
-    # disable SIMD instructions (which are enabled *when available* by default)
-    "--disable-sse"
-    "--disable-sse2"
-    "--disable-sse3"
-    "--disable-ssse3"
-    "--disable-sse41"
-    "--disable-sse42"
-    "--disable-avx"
-    "--disable-avx2"
-    "--disable-fma"
-    "--disable-fma4"
-  ] ++ stdenv.lib.optionals withSage [
-    "--enable-sage"
+  patches = [
+    # Remove inappropriate `const &` qualifiers on data members that can be
+    # modified via member functions.
+    # See also: https://github.com/linbox-team/linbox/pull/256
+    ./patches/linbox-pr256-part2.patch # TODO: Remove on 1.7.0 update
   ];
 
-  patches = stdenv.lib.optionals withSage [
-    # https://trac.sagemath.org/ticket/24214#comment:39
-    # Will be resolved by
-    # https://github.com/linbox-team/linbox/issues/69
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/sagemath/sage/a843f48b7a4267e44895a3dfa892c89c85b85611/build/pkgs/linbox/patches/linbox_charpoly_fullCRA.patch";
-      sha256 = "16nxfzfknra3k2yk3xy0k8cq9rmnmsch3dnkb03kx15h0y0jmibk";
-    })
+  postPatch = ''
+    # Remove @LINBOXSAGE_LIBS@ that is actually undefined.
+    # See also: https://github.com/linbox-team/linbox/pull/249
+    # TODO: Remove on 1.7.0 update
+    find . -type f -exec sed -e 's/@LINBOXSAGE_LIBS@//' -i {} \;
+  '';
+
+  configureFlags = [
+    "--with-blas-libs=-lblas"
+    "--disable-optimization"
+  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+    # disable SIMD instructions (which are enabled *when available* by default)
+    "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
+    "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
+    "--${if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"}-sse41"
+    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-sse42"
+    "--${if stdenv.hostPlatform.avxSupport    then "enable" else "disable"}-avx"
+    "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
+    "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
+    "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
+  ] ++ stdenv.lib.optionals withSage [
+    "--enable-sage"
   ];
 
   doCheck = true;
@@ -73,6 +76,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.timokau];
     platforms = stdenv.lib.platforms.unix;
-    homepage = http://linalg.org/;
+    homepage = "https://linalg.org/";
   };
 }

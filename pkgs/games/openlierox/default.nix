@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xproto, gd, SDL, SDL_image, SDL_mixer, zlib
+{ stdenv, fetchurl, libX11, xorgproto, gd, SDL, SDL_image, SDL_mixer, zlib
 , libxml2, pkgconfig, curl, cmake, libzip }:
 
 stdenv.mkDerivation {
@@ -28,11 +28,11 @@ stdenv.mkDerivation {
     cp -R ../share/gamedir/* $out/share/OpenLieroX
   '';
 
-  buildInputs = [ libX11 xproto gd SDL SDL_image SDL_mixer zlib libxml2
+  buildInputs = [ libX11 xorgproto gd SDL SDL_image SDL_mixer zlib libxml2
     pkgconfig curl cmake libzip ];
 
   meta = {
-    homepage = http://openlierox.net;
+    homepage = "http://openlierox.net";
     description = "Real-time game with Worms-like shooting";
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.linux;

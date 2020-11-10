@@ -1,25 +1,26 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
-, python-Levenshtein, pytest }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
+, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.1.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
     rev = "v${version}";
-    sha256 = "0kdcmzr3sgzjsw5fmvdylgrn8akqjbs433jbgqzp498njl9cc6qx";
+    sha256 = "0s5r6l39ck2scks54hmwwdf4lcihqqnqzjfx9lz2b67vxkajpwmc";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six termcolor ] ++ stdenv.lib.optional isPy27 enum34;
 
   checkInputs = [ hypothesis mock python-Levenshtein pytest ];
 
+  # ignore test which asserts exact usage statement, default behavior
+  # changed in python3.8. This can likely be remove >=0.3.1
   checkPhase = ''
-    py.test
+    py.test -k 'not testInitRequiresFlag'
   '';
-
 
   meta = with stdenv.lib; {
     description = "A library for automatically generating command line interfaces";

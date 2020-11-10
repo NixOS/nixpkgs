@@ -1,13 +1,13 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "ipmicfg-${version}";
-  version = "1.28.0";
-  buildVersion = "180302";
+  pname = "ipmicfg";
+  version = "1.30.0";
+  buildVersion = "190710";
 
   src = fetchzip {
-    url = "ftp://ftp.supermicro.com/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "0hw853cwaaxmxy1sa3m7l9gqalwpbbvp4ghk8inr7dzwxjljmr02";
+    url = "https://www.supermicro.com/wftp/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
+    sha256 = "0srkzivxa4qlf3x9zdkri7xfq7kjj4fsmn978vzmzsvbxkqswd5a";
     extraPostFetch = "chmod u+rwX,go-rwx+X $out/";
   };
 

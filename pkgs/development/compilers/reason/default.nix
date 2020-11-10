@@ -1,37 +1,37 @@
 { stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune
-, menhir, merlin_extend, ppx_tools_versioned, utop
+, fix, menhir, merlin-extend, ppx_tools_versioned, utop, cppo
 }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-reason-${version}";
-  version = "3.3.3";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = "fefe5e4db3a54a7946c2220ee037dd2f407011c9";
-    sha256 = "1x0dbacgq9pa36zgzwrc0gm14wbb6v27y9bf7wcwk55a1ck0am18";
+    rev = "6017d6dd930f4989177c3f7c3c20cffbaabaa49a";
+    sha256 = "17wkcl3r0ckhlki9fk0mcwbnd7kpkqm1h0xjw2j2x1097n470df0";
   };
 
-  propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ makeWrapper ocaml findlib dune utop menhir ];
+  propagatedBuildInputs = [ menhir merlin-extend ppx_tools_versioned ];
+
+  buildInputs = [ ocaml findlib dune cppo fix utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
-  installPhase = ''
-    for p in reason rtop
-    do
-      ${dune.installPhase} $p.install
-    done
+  inherit (dune) installPhase;
 
+  postInstall = ''
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
-      --set OCAMLPATH $out/lib/ocaml/${ocaml.version}/site-lib:$OCAMLPATH
+      --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH" \
+      --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://reasonml.github.io/;
+    homepage = "https://reasonml.github.io/";
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;

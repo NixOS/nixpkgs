@@ -1,9 +1,11 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala, dockbarx, gtk2, xfce, pythonPackages }:
+{ stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala_0_46
+, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
 
 stdenv.mkDerivation rec {
+  pname = "xfce4-dockbarx-plugin";
+  version = "${ver}-${rev}";
   ver = "0.5";
   rev = "a2dcb66";
-  name = "xfce4-dockbarx-plugin-${ver}-${rev}";
 
   src = fetchFromGitHub {
     owner = "TiZ-EX1";
@@ -14,8 +16,8 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ dockbarx ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python2 vala gtk2 pythonPackages.wrapPython ]
+  nativeBuildInputs = [ pkgconfig wafHook ];
+  buildInputs = [ python2 vala_0_46 gtk2 pythonPackages.wrapPython ]
     ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
     ++ pythonPath;
 
@@ -25,18 +27,12 @@ stdenv.mkDerivation rec {
     substituteInPlace src/dockbarx.vala --replace '/usr/bin/env python2' ${bash}/bin/bash
   '';
 
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf build";
-
-  installPhase = "python waf install";
-
   postFixup = ''
     wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $pythonPath"
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/TiZ-EX1/xfce4-dockbarx-plugin;
+    homepage = "https://github.com/TiZ-EX1/xfce4-dockbarx-plugin";
     description = "A plugins to embed DockbarX into xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -2,18 +2,21 @@
 
 buildPythonPackage rec {
   pname = "relatorio";
-  version = "0.8.0";
+  version = "0.9.2";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bddf85d029c5c85a0f976d73907e14e4c3093065fe8527170c91abf0218546d9";
+    sha256 = "0753e78b235b1e8da275509351257a861cf2cf9fafe1b414f8c1deb858a4f94e";
   };
+
   propagatedBuildInputs = [
     genshi
     lxml
     python_magic
   ];
+
   meta = {
-    homepage = http://relatorio.tryton.org/;
+    homepage = "https://relatorio.tryton.org/";
     description = "A templating library able to output odt and pdf files";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.gpl3;

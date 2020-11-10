@@ -1,6 +1,6 @@
 { fetchFromGitHub, maven, jdk, makeWrapper, stdenv, ... }:
 stdenv.mkDerivation rec {
-  name = "exhibitor-${version}";
+  pname = "exhibitor";
   version = "1.5.6";
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
   meta = with stdenv.lib; {
-    homepage = https://github.com/soabase/exhibitor;
+    homepage = "https://github.com/soabase/exhibitor";
     description = "ZooKeeper co-process for instance monitoring, backup/recovery, cleanup and visualization";
     license = licenses.asl20;
     platforms = platforms.unix;

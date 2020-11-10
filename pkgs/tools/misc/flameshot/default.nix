@@ -1,39 +1,26 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, qttools }:
+{ mkDerivation, lib, fetchFromGitHub, qtbase, cmake, qttools, qtsvg }:
 
-stdenv.mkDerivation rec {
-  name = "flameshot-${version}";
-  version = "0.5.1";
-
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase ];
-
-  qmakeFlags = [
-    # flameshot.pro assumes qmake is being run in a git checkout and uses it
-    # to determine the version being built. Let's replace that.
-    "VERSION=${version}"
-    "PREFIX=/"
-  ];
-  patchPhase = ''
-    sed -i 's/VERSION =/#VERSION =/g' flameshot.pro
-    sed -i 's,USRPATH = /usr/local,USRPATH = /,g' flameshot.pro
-  '';
-
-  installFlags = [ "INSTALL_ROOT=$(out)" ];
+mkDerivation rec {
+  pname = "flameshot";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
-    owner = "lupoDharkael";
+    owner = "flameshot-org";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "13h77np93r796jf289v4r687cmnpqkyqs34dm9gif4akaig74ky0";
+    sha256 = "1z77igs60lz106vsf6wsayxjafxm3llf2lm4dpvsqyyrxybfq191";
   };
+
+  nativeBuildInputs = [ cmake qttools qtsvg ];
+  buildInputs = [ qtbase ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
-    homepage = https://github.com/lupoDharkael/flameshot;
+    homepage = "https://flameshot.js.org";
     maintainers = [ maintainers.scode ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

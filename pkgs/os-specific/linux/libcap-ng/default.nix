@@ -3,14 +3,14 @@
 assert python2 != null || python3 != null -> swig != null;
 
 stdenv.mkDerivation rec {
-  name = "libcap-ng-${version}";
+  pname = "libcap-ng";
   # When updating make sure to test that the version with
   # all of the python bindings still works
-  version = "0.7.9";
+  version = "0.7.11";
 
   src = fetchurl {
-    url = "${meta.homepage}/${name}.tar.gz";
-    sha256 = "0a0k484kwv0zilry2mbl9k56cnpdhsjxdxin17jas6kkyfy345aa";
+    url = "${meta.homepage}/${pname}-${version}.tar.gz";
+    sha256 = "1s8akhnnazk0b5c6z5i3x54rjb26p8pz2wdl1m21ml3231qmr0c5";
   };
 
   nativeBuildInputs = [ swig ];
@@ -30,11 +30,10 @@ stdenv.mkDerivation rec {
     (if python3 != null then "--with-python3" else "--without-python3")
   ];
 
-  meta = let inherit (stdenv.lib) platforms licenses maintainers; in {
+  meta = let inherit (stdenv.lib) platforms licenses; in {
     description = "Library for working with POSIX capabilities";
-    homepage = http://people.redhat.com/sgrubb/libcap-ng/;
+    homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
     platforms = platforms.linux;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

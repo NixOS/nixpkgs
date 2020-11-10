@@ -1,17 +1,17 @@
-{ pythonPackages, fetchurl, lib }:
+{ pythonPackages, fetchurl, lib, nixosTests }:
 
 with pythonPackages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "rss2email";
-  version = "3.9";
+  version = "3.12.2";
 
-  propagatedBuildInputs = [ feedparser beautifulsoup4 html2text ];
+  propagatedBuildInputs = [ feedparser html2text ];
+  checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
-    url = "mirror://pypi/r/rss2email/${name}.tar.gz";
-    sha256 = "02wj9zhmc2ym8ba1i0z9pm1c622z2fj7fxwagnxbvpr1402ahmr5";
+    url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
+    sha256 = "12w6x80wsw6xm17fxyymnl45aavsagg932zw621wcjz154vjghjr";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -29,19 +29,20 @@ buildPythonApplication rec {
 
     # copy documentation
     mkdir -p $doc/share/doc/rss2email
-    cp AUTHORS COPYING CHANGELOG README $doc/share/doc/rss2email/
+    cp AUTHORS COPYING CHANGELOG README.rst $doc/share/doc/rss2email/
   '';
 
-  # The tests currently fail, see
-  # https://github.com/rss2email/rss2email/issues/14
-  # postCheck = ''
-  #   env PYTHONPATH=.:$PYTHONPATH python ./test/test.py
-  # '';
+  postCheck = ''
+    env PATH=$out/bin:$PATH python ./test/test.py
+  '';
 
   meta = with lib; {
-    description = "A tool that converts RSS/Atom newsfeeds to email.";
-    homepage = https://pypi.python.org/pypi/rss2email;
+    description = "A tool that converts RSS/Atom newsfeeds to email";
+    homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jb55 Profpatsch ];
+    maintainers = with maintainers; [ jb55 Profpatsch ekleog ];
+  };
+  passthru.tests = {
+    smoke-test = nixosTests.rss2email;
   };
 }

@@ -1,34 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
-, pytestcov
-, coverage
-, jsonschema
+, fetchFromGitHub
+, bootstrapped-pip
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.31.1";
+  version = "0.34.2";
+  format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0a2e54558a0628f2145d2fc822137e322412115173e8a2ddbe1c9024338ae83c";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "1mwh35ycv07ajnpcjc4rjdmndh6nyg03gdgag5m8c2af7z1xlcmj";
+    name = "${pname}-${version}-source";
   };
 
-  checkInputs = [ pytest pytestcov coverage ];
-
-  propagatedBuildInputs = [ jsonschema ];
+  nativeBuildInputs = [
+    bootstrapped-pip
+    setuptools
+  ];
 
   # No tests in archive
   doCheck = false;
+  pythonImportsCheck = [ "wheel" ];
 
   # We add this flag to ignore the copy installed by bootstrapped-pip
-  installFlags = [ "--ignore-installed" ];
+  pipInstallFlags = [ "--ignore-installed" ];
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://bitbucket.org/pypa/wheel/";
     description = "A built-package format for Python";
-    license = with lib.licenses; [ mit ];
-    homepage = https://bitbucket.org/pypa/wheel/;
+    longDescription = ''
+      This library is the reference implementation of the Python wheel packaging standard,
+      as defined in PEP 427.
+
+      It has two different roles:
+
+      - A setuptools extension for building wheels that provides the bdist_wheel setuptools command
+      - A command line tool for working with wheel files
+
+      It should be noted that wheel is not intended to be used as a library,
+      and as such there is no stable, public API.
+    '';
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }

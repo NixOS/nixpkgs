@@ -1,14 +1,14 @@
-{ stdenv, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
-, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations }:
+{ stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
+, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
 
-stdenv.mkDerivation rec {
-  name = "qdigidoc-${version}";
-  version = "3.13.6";
+mkDerivation rec {
+  pname = "qdigidoc";
+  version = "4.2.3";
 
   src = fetchgit {
-    url = "https://github.com/open-eid/qdigidoc";
+    url = "https://github.com/open-eid/DigiDoc4-Client";
     rev = "v${version}";
-    sha256 = "1qq9fgvkc7fi37ly3kgxksrm4m5rxk9k5s5cig8z0cszsfk6h9lx";
+    sha256 = "1hj49vvg8vrayr9kpz73fafa7k298hmiamkyd8c3ipy6s51xh6q4";
     fetchSubmodules = true;
   };
 
@@ -24,11 +24,6 @@ stdenv.mkDerivation rec {
       --replace $\{TSL_URL} file://${tsl}
   '';
 
-  patches = [
-    # https://github.com/open-eid/qdigidoc/pull/163
-    ./qt511.patch
-  ];
-
   buildInputs = [
     libdigidocpp
     opensc
@@ -36,19 +31,20 @@ stdenv.mkDerivation rec {
     openssl
     pcsclite
     qtbase
+    qtsvg
     qttranslations
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/qdigidocclient \
+    wrapProgram $out/bin/qdigidoc4 \
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
   meta = with stdenv.lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
-    homepage = https://www.id.ee/;
+    homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yegortimoshenko mmahut ];
   };
 }

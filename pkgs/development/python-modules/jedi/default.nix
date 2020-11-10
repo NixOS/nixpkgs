@@ -1,17 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.12.1";
+  # switch back to stable version on the next release.
+  # current stable is incompatible with parso
+  version = "2020-08-06";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b409ed0f6913a701ed474a614a3bb46e6953639033e31f769ca7581da5bd1ec1";
+  src = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "jedi";
+    rev = "216f976fd5cab7a460e5d287e853d11759251e52";
+    sha256 = "1kb2ajzigadl95pnwglg8fxz9cvpg9hx30hqqj91jkgrc7djdldj";
+    fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "parso==0.1.0" "parso"
-  '';
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 
@@ -25,9 +26,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/davidhalter/jedi;
+    homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

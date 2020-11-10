@@ -2,14 +2,14 @@
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "awf-${version}";
-  version = "1.3.1";
+  pname = "awf";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "valr";
     repo = "awf";
     rev = "v${version}";
-    sha256 = "18dqa2269cwr0hrn67vp0ifwbv8vc2xn6mg145pbnc038hicql8m";
+    sha256 = "0jl2kxwpvf2n8974zzyp69mqhsbjnjcqm39y0jvijvjb1iy8iman";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       in a single window allowing to see the visual effect of the
       applied theme.
     '';
-    homepage = https://github.com/valr/awf;
+    homepage = "https://github.com/valr/awf";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ michalrus ];

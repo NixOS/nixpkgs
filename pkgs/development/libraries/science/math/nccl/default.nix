@@ -1,24 +1,48 @@
-{ callPackage, cudatoolkit_8, cudatoolkit_9 }:
+{ stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
 
-let
-  generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
-    inherit (args) cudatoolkit;
+stdenv.mkDerivation rec {
+  name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
+  version = "2.7.8-1";
+
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "nccl";
+    rev = "v${version}";
+    sha256 = "0xxiwaw239dc9g015fka3k1nvm5zyl00dzgxnwzkang61dys9wln";
   };
 
-in
+  outputs = [ "out" "dev" ];
 
-{
-  nccl_cudatoolkit_8 = generic rec {
-    version = "2.1.4";
-    cudatoolkit = cudatoolkit_8;
-    srcName = "nccl_${version}-1+cuda${cudatoolkit.majorVersion}_x86_64.txz";
-    sha256 = "1lwwm8kdhna5m318yg304kl2gsz1jwhv4zv4gn8av2m57zh848zi";
-  };
+  nativeBuildInputs = [ which addOpenGLRunpath ];
 
-  nccl_cudatoolkit_9 = generic rec {
-    version = "2.1.4";
-    cudatoolkit = cudatoolkit_9;
-    srcName = "nccl_${version}-1+cuda${cudatoolkit.majorVersion}_x86_64.txz";
-    sha256 = "0pajmqzkacpszs63jh2hw2qqc49kj75kcf7r0ky8hdh560q8xn0p";
+  buildInputs = [ cudatoolkit ];
+
+  preConfigure = ''
+    patchShebangs src/collectives/device/gen_rules.sh
+  '';
+
+  makeFlags = [
+    "CUDA_HOME=${cudatoolkit}"
+    "PREFIX=$(out)"
+  ];
+
+  postFixup = ''
+    moveToOutput lib/libnccl_static.a $dev
+
+    # Set RUNPATH so that libnvidia-ml in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/lib*.so
+  '';
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
+    homepage = "https://developer.nvidia.com/nccl";
+    license = licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ mdaiter orivej ];
   };
 }

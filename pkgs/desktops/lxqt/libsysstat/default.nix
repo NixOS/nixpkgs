@@ -1,23 +1,37 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, lxqt }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, lxqt-build-tools
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
-  name = "libsysstat-${version}";
-  version = "0.4.1";
+mkDerivation rec {
+  pname = "libsysstat";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = "libsysstat";
+    repo = pname;
     rev = version;
-    sha256 = "0ad5pcr5lq1hvrfijvddvz2fvsmh1phb54wb0f756av0kyiwq0gb";
+    sha256 = "1dlshyv7pd7gwl55rd3msppjdpz2pwp5f4da9a9wapg7kiskqahf";
   };
 
-  nativeBuildInputs = [ cmake lxqt.lxqt-build-tools ];
+  nativeBuildInputs = [
+    cmake
+    lxqt-build-tools
+  ];
 
-  buildInputs = [ qt5.qtbase ];
+  buildInputs = [
+    qtbase
+  ];
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+
+  meta = with lib; {
     description = "Library used to query system info and statistics";
-    homepage = https://github.com/lxqt/libsysstat;
+    homepage = "https://github.com/lxqt/libsysstat";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

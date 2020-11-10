@@ -1,29 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
 }:
 
 buildPythonPackage rec {
-  pname = "lark-parser"; # PyPI name
-  version = "2017-12-18";
+  pname = "lark-parser";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
-    owner = "erezsh";
+    owner = "lark-parser";
     repo = "lark";
-    rev = "9d6cde9b1ba971f02ea8106fa3b71a934e83d6fa";
-    sha256 = "0nv6nxd8wx9dwhn37m94fkc10gknckrjs1hzajxygla3dpql455j";
+    rev = version;
+    sha256 = "1q2dvkkfx9dvag5v5ps0ki4avh7i003gn9sj30jy1rsv1bg4y2mb";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
+  # tests of Nearley support require js2py
+  preCheck = ''
+    rm -r tests/test_nearley
   '';
-
-  doCheck = false; # Requires js2py
 
   meta = {
     description = "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
-    homepage = https://github.com/erezsh/lark;
+    homepage = "https://github.com/lark-parser/lark";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fridh ];
   };

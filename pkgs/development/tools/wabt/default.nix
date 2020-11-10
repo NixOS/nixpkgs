@@ -1,25 +1,31 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ stdenv, fetchpatch, fetchFromGitHub, cmake, python3, substituteAll }:
 
 stdenv.mkDerivation rec {
-  name = "wabt-${version}";
-  version = "1.0.5";
+  pname = "wabt";
+  version = "1.0.19";
 
   src = fetchFromGitHub {
-    owner  = "WebAssembly";
-    repo   = "wabt";
-    rev    = version;
-    sha256 = "1cbak3ach7cna98j2r0v3y38c59ih2gv0p6f43qp782pyj07hzfy";
+    owner = "WebAssembly";
+    repo = "wabt";
+    rev = version;
+    sha256 = "0g1iy1icnjfkc0dadkrif4nlixpvq626023rgj02m9al64gf9hvx";
+    fetchSubmodules = true;
   };
 
+  # https://github.com/WebAssembly/wabt/pull/1408
+  patches = [ (fetchpatch {
+    url = "https://github.com/WebAssembly/wabt/pull/1408/commits/28505f4db6e4561cf6840af5c304a9aa900c4987.patch";
+    sha256 = "1nh1ddsak6w51np17xf2r7i0czxrjslz1i4impmmp88h5bp2yjba";
+  }) ];
+
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCMAKE_PROJECT_VERSION=${version}" ];
   buildInputs = [ python3 ];
 
   meta = with stdenv.lib; {
     description = "The WebAssembly Binary Toolkit";
     longDescription = ''
-      WABT (we pronounce it "wabbit") is a suite of tools for WebAssembly,
-      including:
+      WABT (pronounced "wabbit") is a suite of tools for WebAssembly, including:
        * wat2wasm: translate from WebAssembly text format to the WebAssembly
          binary format
        * wasm2wat: the inverse of wat2wasm, translate from the binary format
@@ -33,9 +39,9 @@ stdenv.mkDerivation rec {
          format
        * wasm2c: convert a WebAssembly binary file to a C source and header
     '';
-    homepage = https://github.com/WebAssembly/wabt;
+    homepage = "https://github.com/WebAssembly/wabt";
     license = licenses.asl20;
     maintainers = with maintainers; [ ekleog ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

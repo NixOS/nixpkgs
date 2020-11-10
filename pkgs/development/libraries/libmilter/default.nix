@@ -1,7 +1,7 @@
 { stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation rec {
-  name = "libmilter-${version}";
+  pname = "libmilter";
   version = "8.15.2";
 
   src = fetchurl {
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cd libmilter
     cat > a.m4 <<EOF
+      define(\`confCC', \`$CC')
+      define(\`confAR', \`$AR')
       define(\`confEBINDIR', \`$out/libexec')
       define(\`confINCLUDEDIR', \`$out/include')
       define(\`confLIBDIR', \`$out/lib')
@@ -26,16 +28,18 @@ stdenv.mkDerivation rec {
       define(\`confLIBGRP', \`root')
       APPENDDEF(\`confENVDEF', \`-DNETINET6')
     EOF
+    export MILTER_SOVER=1
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch];
+  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ./darwin.patch ];
 
-  buildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 ];
 
   meta = with stdenv.lib; {
     description = "Sendmail Milter mail filtering API library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.sendmail;
   };
 }

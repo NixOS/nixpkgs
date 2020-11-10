@@ -1,21 +1,32 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, brotli }:
 
-buildGoPackage rec {
-  name = "wal-g-${version}";
-  version = "0.1.12";
+buildGoModule rec {
+  pname = "wal-g";
+  version = "0.2.17";
 
   src = fetchFromGitHub {
-    owner  = "wal-g";
-    repo   = "wal-g";
-    rev    = "v${version}";
-    sha256 = "06k71xz96jpg6966xj48a8j07v0vk37b5v2k1bnqrbin4sma3s0c";
+    owner = "wal-g";
+    repo = "wal-g";
+    rev = "v${version}";
+    sha256 = "0r6vy2b3xqwa22286srwngk63sq4aza6aj7brwc130vypcps7svp";
   };
 
-  goPackagePath = "github.com/wal-g/wal-g";
-  meta = {
-    inherit (src.meta) homepage;
-    license = stdenv.lib.licenses.asl20;
-    description = "An archival restoration tool for Postgres";
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+  vendorSha256 = "0r73l4kxzldca1vg5mshq6iqsxcrndcbmbp3d7i9pxyb2kig8gv5";
+
+  buildInputs = [ brotli ];
+
+  subPackages = [ "main/pg" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version} -X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}" ];
+
+  postInstall = ''
+    mv $out/bin/pg $out/bin/wal-g
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/wal-g/wal-g";
+    license = licenses.asl20;
+    description = "An archival restoration tool for PostgreSQL";
+    maintainers = with maintainers; [ ocharles marsam ];
   };
 }

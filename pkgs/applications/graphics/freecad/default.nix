@@ -1,36 +1,51 @@
-{ stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
-, hdf5, vtk, medfile, zlib, python27Packages, swig, gfortran, fetchpatch
-, soqt, libf2c, makeWrapper, makeDesktopItem
-, mpi ? null }:
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
+opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
 
 assert mpi != null;
 
 let
-  pythonPackages = python27Packages;
-in stdenv.mkDerivation rec {
-  name = "freecad-${version}";
-  version = "0.17";
+  pythonPackages = python3Packages;
+in mkDerivation rec {
+  pname = "freecad-unstable";
+  version = "2020-10-17";
 
-  src = fetchurl {
-    url = "https://github.com/FreeCAD/FreeCAD/archive/${version}.tar.gz";
-    sha256 = "1yv6abdzlpn4wxy315943xwrnbywxqfgkjib37qwfvbb8y9p60df";
+  src = fetchFromGitHub {
+    owner = "FreeCAD";
+    repo = "FreeCAD";
+    rev = "f3bdaaa55a6c03b297924c40819d23e4603fa55b";
+    sha256 = "1q1iy4i9k65v8z7h8a6r4bf5ycn124jp26xwp0xwbar4gnkx2jiq";
   };
 
-  buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts
-    zlib  swig gfortran soqt libf2c makeWrapper  mpi vtk hdf5 medfile
-  ] ++ (with pythonPackages; [
-    matplotlib pycollada pyside pysideShiboken pysideTools pivy python boost
-  ]);
-
-  patches = [
-    # Fix for finding boost_python. Boost >= 1.67.0 appends the Python version.
-    (fetchpatch {
-      url = https://github.com/FreeCAD/FreeCAD/commit/3c9e6b038ed544e446c61695dab62f83e781a28a.patch;
-      sha256 = "0f09qywzn0y41hylizb5g8jy74fi53iqmvqr5zznaz16wpw4hqbp";
-    })
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkgconfig
+    pythonPackages.pyside2-tools
+    wrapQtAppsHook
   ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    cmake coin3d xercesc ode eigen opencascade-occt gts
+    zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
+    libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
+  ] ++ (with pythonPackages; [
+    matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
+    GitPython # for addon manager
+  ]);
+
+  cmakeFlags = [
+    "-DBUILD_QT5=ON"
+    "-DSHIBOKEN_INCLUDE_DIR=${pythonPackages.shiboken2}/include"
+    "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
+    ("-DPYSIDE_INCLUDE_DIR=${pythonPackages.pyside2}/include"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtCore"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtWidgets"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtGui"
+      )
+    "-DPYSIDE_LIBRARY=PySide2::pyside2"
+  ];
 
   # This should work on both x86_64, and i686 linux
   preBuild = ''
@@ -40,50 +55,23 @@ in stdenv.mkDerivation rec {
   # Their main() removes PYTHONPATH=, and we rely on it.
   preConfigure = ''
     sed '/putenv("PYTHONPATH/d' -i src/Main/MainGui.cpp
+
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/FreeCAD --prefix PYTHONPATH : $PYTHONPATH \
-      --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
+  qtWrapperArgs = [
+    "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+  ];
 
-    mkdir -p $out/share/mime/packages
-    cat << EOF > $out/share/mime/packages/freecad.xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-      <mime-type type="application/x-extension-fcstd">
-        <sub-class-of type="application/zip"/>
-        <comment>FreeCAD Document</comment>
-        <glob pattern="*.fcstd"/>
-      </mime-type>
-    </mime-info>
-    EOF
-
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications/* $out/share/applications/
-    for entry in $out/share/applications/*.desktop; do
-      substituteAllInPlace $entry
-    done
+  postFixup = ''
+    mv $out/share/doc $out
   '';
-
-  desktopItem = makeDesktopItem {
-    name = "freecad";
-    desktopName = "FreeCAD";
-    genericName = "CAD Application";
-    comment = meta.description;
-    exec = "@out@/bin/FreeCAD %F";
-    categories = "Science;Education;Engineering;";
-    startupNotify = "true";
-    mimeType = "application/x-extension-fcstd;";
-    extraEntries = ''
-      Path=@out@/share/freecad
-    '';
-  };
 
   meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
-    homepage = https://www.freecadweb.org/;
+    homepage = "https://www.freecadweb.org/";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.viric ];
+    maintainers = with maintainers; [ viric gebner ];
     platforms = platforms.linux;
   };
 }

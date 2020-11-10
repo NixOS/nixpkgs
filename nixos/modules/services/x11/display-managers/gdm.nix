@@ -14,9 +14,49 @@ let
       exec "$@"
     '';
 
+  # Solves problems like:
+  # https://wiki.archlinux.org/index.php/Talk:Bluetooth_headset#GDMs_pulseaudio_instance_captures_bluetooth_headset
+  # Instead of blacklisting plugins, we use Fedora's PulseAudio configuration for GDM:
+  # https://src.fedoraproject.org/rpms/gdm/blob/master/f/default.pa-for-gdm
+  pulseConfig = pkgs.writeText "default.pa" ''
+    load-module module-device-restore
+    load-module module-card-restore
+    load-module module-udev-detect
+    load-module module-native-protocol-unix
+    load-module module-default-device-restore
+    load-module module-rescue-streams
+    load-module module-always-sink
+    load-module module-intended-roles
+    load-module module-suspend-on-idle
+    load-module module-position-event-sounds
+  '';
+
+  defaultSessionName = config.services.xserver.displayManager.defaultSession;
+
+  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "user"
+    ])
+  ];
+
+  meta = {
+    maintainers = teams.gnome.members;
+  };
 
   ###### interface
 
@@ -24,57 +64,42 @@ in
 
     services.xserver.displayManager.gdm = {
 
-      enable = mkEnableOption ''
-        GDM as the display manager.
-        <emphasis>GDM in NixOS is not well-tested with desktops other
-        than GNOME, so use with caution, as it could render the
-        system unusable.</emphasis>
-      '';
+      enable = mkEnableOption "GDM, the GNOME Display Manager";
 
-      debug = mkEnableOption ''
-        debugging messages in GDM
-      '';
+      debug = mkEnableOption "debugging messages in GDM";
 
-      autoLogin = mkOption {
-        default = {};
+      # Auto login options specific to GDM
+      autoLogin.delay = mkOption {
+        type = types.int;
+        default = 0;
         description = ''
-          Auto login configuration attrset.
+          Seconds of inactivity after which the autologin will be performed.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically log in as the sepecified <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the autologin.
-              '';
-            };
-
-            delay = mkOption {
-              type = types.int;
-              default = 0;
-              description = ''
-                Seconds of inactivity after which the autologin will be performed.
-              '';
-            };
-
-          };
-        };
       };
 
       wayland = mkOption {
+        type = types.bool;
         default = true;
         description = ''
-          Allow GDM run on Wayland instead of Xserver
+          Allow GDM to run on Wayland instead of Xserver.
+          Note to enable Wayland with Nvidia you need to
+          enable the <option>nvidiaWayland</option>.
+        '';
+      };
+
+      nvidiaWayland = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to allow wayland to be used with the proprietary
+          NVidia graphics driver.
+        '';
+      };
+
+      autoSuspend = mkOption {
+        default = true;
+        description = ''
+          Suspend the machine after inactivity.
         '';
         type = types.bool;
       };
@@ -87,12 +112,6 @@ in
   ###### implementation
 
   config = mkIf cfg.gdm.enable {
-
-    assertions = [
-      { assertion = cfg.gdm.autoLogin.enable -> cfg.gdm.autoLogin.user != null;
-        message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
-      }
-    ];
 
     services.xserver.displayManager.lightdm.enable = false;
 
@@ -116,9 +135,7 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          GDM_SESSIONS_DIR = "${cfg.session.desktops}/share/xsessions";
-          # Find the mouse
-          XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
+          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -126,14 +143,52 @@ in
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
+        preStart = optionalString (defaultSessionName != null) ''
+          # Set default session in session chooser to a specified values – basically ignore session history.
+          ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
+        '';
       };
 
-    # Because sd_login_monitor_new requires /run/systemd/machines
-    systemd.services.display-manager.wants = [ "systemd-machined.service" ];
+    systemd.tmpfiles.rules = [
+      "d /run/gdm/.config 0711 gdm gdm"
+    ] ++ optionals config.hardware.pulseaudio.enable [
+      "d /run/gdm/.config/pulse 0711 gdm gdm"
+      "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
+    ] ++ optionals config.services.gnome3.gnome-initial-setup.enable [
+      # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
+      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
+    ];
+
+    # Otherwise GDM will not be able to start correctly and display Wayland sessions
+    systemd.packages = with pkgs.gnome3; [ gdm gnome-session gnome-shell ];
+    environment.systemPackages = [ pkgs.gnome3.adwaita-icon-theme ];
+
+    systemd.services.display-manager.wants = [
+      # Because sd_login_monitor_new requires /run/systemd/machines
+      "systemd-machined.service"
+      # setSessionScript wants AccountsService
+      "accounts-daemon.service"
+      # Failed to open gpu '/dev/dri/card0': GDBus.Error:org.freedesktop.DBus.Error.AccessDenied: Operation not permitted
+      # https://github.com/NixOS/nixpkgs/pull/25311#issuecomment-609417621
+      "systemd-udev-settle.service"
+    ];
+
     systemd.services.display-manager.after = [
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
+      "getty@tty${gdm.initialVT}.service"
+      "plymouth-quit.service"
+      "plymouth-start.service"
+      "systemd-udev-settle.service"
+    ];
+    systemd.services.display-manager.conflicts = [
+       "getty@tty${gdm.initialVT}.service"
+       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
+       # Currently this breaks switching configurations while using plymouth.
+    ];
+    systemd.services.display-manager.onFailure = [
+      "plymouth-quit.service"
     ];
 
     systemd.services.display-manager.serviceConfig = {
@@ -141,8 +196,10 @@ in
       KillMode = "mixed";
       IgnoreSIGPIPE = "no";
       BusName = "org.gnome.DisplayManager";
-      StandardOutput = "syslog";
       StandardError = "inherit";
+      ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
+      KeyringMode = "shared";
+      EnvironmentFile = "-/etc/locale.conf";
     };
 
     systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];
@@ -152,27 +209,70 @@ in
 
     services.dbus.packages = [ gdm ];
 
+    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
+    services.udev.extraRules = ''
+      # disable Wayland on Cirrus chipsets
+      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      # disable Wayland on Hi1710 chipsets
+      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ${optionalString (!cfg.gdm.nvidiaWayland) ''
+        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ''}
+      # disable Wayland when modesetting is disabled
+      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-disable-wayland"
+    '';
+
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm = pkgs.writeText "dconf-gdm-profile" ''
-      system-db:local
-      ${gdm}/share/dconf/profile/gdm
-    '';
+    programs.dconf.profiles.gdm =
+    let
+      customDconf = pkgs.writeTextFile {
+        name = "gdm-dconf";
+        destination = "/dconf/gdm-custom";
+        text = ''
+          ${optionalString (!cfg.gdm.autoSuspend) ''
+            [org/gnome/settings-daemon/plugins/power]
+            sleep-inactive-ac-type='nothing'
+            sleep-inactive-battery-type='nothing'
+            sleep-inactive-ac-timeout=0
+            sleep-inactive-battery-timeout=0
+          ''}
+        '';
+      };
+
+      customDconfDb = pkgs.stdenv.mkDerivation {
+        name = "gdm-dconf-db";
+        buildCommand = ''
+          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
+        '';
+      };
+    in pkgs.stdenv.mkDerivation {
+      name = "dconf-gdm-profile";
+      buildCommand = ''
+        # Check that the GDM profile starts with what we expect.
+        if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
+          echo "GDM dconf profile changed, please update gdm.nix"
+          exit 1
+        fi
+        # Insert our custom DB behind it.
+        sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
+      '';
+    };
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
     # presented and there's a little delay.
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
-      WaylandEnable=${if cfg.gdm.wayland then "true" else "false"}
-      ${optionalString cfg.gdm.autoLogin.enable (
+      WaylandEnable=${boolToString cfg.gdm.wayland}
+      ${optionalString cfg.autoLogin.enable (
         if cfg.gdm.autoLogin.delay > 0 then ''
           TimedLoginEnable=true
-          TimedLogin=${cfg.gdm.autoLogin.user}
+          TimedLogin=${cfg.autoLogin.user}
           TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
         '' else ''
           AutomaticLoginEnable=true
-          AutomaticLogin=${cfg.gdm.autoLogin.user}
+          AutomaticLogin=${cfg.autoLogin.user}
         '')
       }
 
@@ -188,7 +288,7 @@ in
       ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
-    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.session.wrapper;
+    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
@@ -202,82 +302,31 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
       '';
 
-      gdm.text = ''
-        auth     requisite      pam_nologin.so
-        auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
-
-        auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so
-        auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
-        ${optionalString config.security.pam.enableEcryptfs
-          "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
-
-        ${optionalString (! config.security.pam.enableEcryptfs)
-          "auth     required       pam_deny.so"}
-
-        account  sufficient     pam_unix.so
-
-        password requisite      pam_unix.so nullok sha512
-        ${optionalString config.security.pam.enableEcryptfs
-          "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required       pam_unix.so
-        ${optionalString config.security.pam.enableEcryptfs
-          "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-        session  required       pam_loginuid.so
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
-      '';
-
       gdm-password.text = ''
-        auth     requisite      pam_nologin.so
-        auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
-
-        auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so
-        auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
-        ${optionalString config.security.pam.enableEcryptfs
-          "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
-        ${optionalString (! config.security.pam.enableEcryptfs)
-          "auth     required       pam_deny.so"}
-
-        account  sufficient     pam_unix.so
-
-        password requisite      pam_unix.so nullok sha512
-        ${optionalString config.security.pam.enableEcryptfs
-          "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required       pam_unix.so
-        ${optionalString config.security.pam.enableEcryptfs
-          "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-        session  required       pam_loginuid.so
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
+        auth      substack      login
+        account   include       login
+        password  substack      login
+        session   include       login
       '';
 
       gdm-autologin.text = ''
-        auth     requisite      pam_nologin.so
+        auth      requisite     pam_nologin.so
 
-        auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     required       pam_permit.so
+        auth      required      pam_succeed_if.so uid >= 1000 quiet
+        auth      required      pam_permit.so
 
-        account  sufficient     pam_unix.so
+        account   sufficient    pam_unix.so
 
-        password requisite      pam_unix.so nullok sha512
+        password  requisite     pam_unix.so nullok sha512
 
-        session  optional       pam_keyinit.so revoke
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required       pam_unix.so
-        session  required       pam_loginuid.so
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session   optional      pam_keyinit.so revoke
+        session   include       login
       '';
 
     };

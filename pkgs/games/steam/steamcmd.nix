@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, steam-run, bash
+{ stdenv, fetchurl, steam-run, bash, coreutils
 , steamRoot ? "~/.local/share/Steam"
 }:
 
-stdenv.mkDerivation rec {
-  name = "steamcmd-${version}";
+stdenv.mkDerivation {
+  pname = "steamcmd";
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
 
   src = fetchurl {
-    url = https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz;
+    url = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz";
     sha256 = "0z0y0zqvhydmfc9y9vg5am0vz7m3gbj4l2dwlrfz936hpx301gyf";
   };
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     substitute ${./steamcmd.sh} $out/bin/steamcmd \
-      --subst-var shell \
       --subst-var out \
+      --subst-var-by coreutils ${coreutils} \
       --subst-var-by steamRoot "${steamRoot}" \
       --subst-var-by steamRun ${steam-run}
     chmod 0755 $out/bin/steamcmd

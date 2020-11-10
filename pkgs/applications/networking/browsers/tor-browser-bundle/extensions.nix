@@ -15,7 +15,7 @@
 
 {
   https-everywhere = stdenv.mkDerivation rec {
-    name = "https-everywhere-${version}";
+    pname = "https-everywhere";
     version = "2017.10.4";
 
     extid = "https-everywhere-eff@eff.org";
@@ -46,7 +46,7 @@
   };
 
   noscript = stdenv.mkDerivation rec {
-    name = "noscript-${version}";
+    pname = "noscript";
     version = "5.1.2";
 
     extid = "{73a6fe31-595d-460b-a920-fcc0f8843232}";
@@ -56,7 +56,7 @@
       sha256 = "1fzspdiwhjabwz1yxb3gzj7giz9jbc1xxm65i93rvhzcp537cs42";
     };
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     installPhase = ''
       install -m 444 -D $src "$out/$extid.xpi"
@@ -64,7 +64,7 @@
   };
 
   torbutton = stdenv.mkDerivation rec {
-    name = "torbutton-${version}";
+    pname = "torbutton";
     version = "1.9.8.1";
 
     extid = "torbutton@torproject.org";
@@ -87,7 +87,7 @@
   };
 
   tor-launcher = stdenv.mkDerivation rec {
-    name = "tor-launcher-${version}";
+    pname = "tor-launcher";
     version = "0.2.13";
 
     extid = "tor-launcher@torproject.org";

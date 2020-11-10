@@ -1,14 +1,14 @@
 { stdenv, fetchurl, makeWrapper, jre, unzip }:
 
 let
-  version = "1.2.71";
-in stdenv.mkDerivation rec {
+  version = "1.4.0";
+in stdenv.mkDerivation {
   inherit version;
-  name = "kotlin-${version}";
+  pname = "kotlin";
 
   src = fetchurl {
     url = "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip";
-    sha256 = "0yzanv2jkjx3vfixzvjsihfi00khs7zr47y01cil8bylzvyr50p4";
+    sha256 = "0qgiabpkisqjm9iryidrynqy452vzmpgaw54rd9blr9w7g8r20sr";
   };
 
   propagatedBuildInputs = [ jre ] ;
@@ -37,10 +37,10 @@ in stdenv.mkDerivation rec {
       It is developed by a team at JetBrains although it is an OSS language
       and has external contributors.
     '';
-    homepage = http://kotlinlang.org/;
+    homepage = "https://kotlinlang.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers;
-      [ nequissimus ];
+      [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

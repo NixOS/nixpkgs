@@ -1,15 +1,15 @@
 { stdenv, fetchurl, yap, tcsh, perl, patchelf }:
 
 stdenv.mkDerivation rec {
-  name = "TPTP-${version}";
-  version = "7.1.0";
+  pname = "TPTP";
+  version = "7.2.0";
 
   src = fetchurl {
-    url = [
-      "http://www.cs.miami.edu/~tptp/TPTP/Distribution/TPTP-v${version}.tgz"
-      "http://www.cs.miami.edu/~tptp/TPTP/Archive/TPTP-v${version}.tgz"
+    urls = [
+      "http://tptp.cs.miami.edu/TPTP/Distribution/TPTP-v${version}.tgz"
+      "http://tptp.cs.miami.edu/TPTP/Archive/TPTP-v${version}.tgz"
     ];
-    sha256 = "0slqbqv4y43wz6wnh72s4n540ssapah0d12mndi0c7xr04kf2v2d";
+    sha256 = "0yq8452b6mym4yscy46pshg0z2my8xi74b5bp2qlxd5bjwcrg6rl";
   };
 
   nativeBuildInputs = [ patchelf ];

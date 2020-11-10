@@ -1,18 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
 
 
 # Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
 assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.version "4.0";
 
 stdenv.mkDerivation rec {
+  # linux kernel above 5.7 comes with its own exfat implementation https://github.com/arter97/exfat-linux/issues/27
+  # Assertion moved here due to some tests unintenionally triggering it,
+  # e.g. nixosTests.kernel-latest; it's unclear how/why so far.
+  assertion = assert lib.versionOlder kernel.version "5.8"; null;
+
   name = "exfat-nofuse-${version}-${kernel.version}";
-  version = "2018-04-16";
+  version = "2020-04-15";
 
   src = fetchFromGitHub {
-    owner = "dorimanx";
+    owner = "barrybingo";
     repo = "exfat-nofuse";
-    rev = "01c30ad52625a7261e1b0d874553b6ca7af25966";
-    sha256 = "0n1ibamf1yj8iqapc86lfscnky9p07ngsi4f2kpv3d5r2s6mzsh6";
+    rev = "297a5739cd4a942a1d814d05a9cd9b542e7b8fc8";
+    sha256 = "14jahy7n6pr482fjfrlf9ck3f2rkr5ds0n5r85xdfsla37ria26d";
   };
 
   hardeningDisable = [ "pic" ];
@@ -21,6 +26,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
   installPhase = ''
@@ -29,10 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "exfat kernel module";
-    homepage = https://github.com/dorimanx/exfat-nofuse;
+    inherit (src.meta) homepage;
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.linux;
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

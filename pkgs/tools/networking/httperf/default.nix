@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "httperf";
-  name = "${pname}-${version}";
   version = "0.9.1";
 
   src = fetchFromGitHub {
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The httperf HTTP load generator";
-    homepage = https://github.com/httperf/httperf;
+    homepage = "https://github.com/httperf/httperf";
     maintainers = with maintainers; [ nand0p ];
     license = licenses.gpl2;
     platforms = platforms.linux;

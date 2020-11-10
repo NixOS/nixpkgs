@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub
   , qt4, qmake4Hook, openssl
-  , xproto, libX11, libXScrnSaver, scrnsaverproto
+  , xorgproto, libX11, libXScrnSaver
   , xz, zlib
 }:
-stdenv.mkDerivation rec {
-  name = "vacuum-im-${version}";
+stdenv.mkDerivation {
+  pname = "vacuum-im";
   version = "1.3.0.20160104";
 
   src = fetchFromGitHub {
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qt4 openssl xproto libX11 libXScrnSaver scrnsaverproto xz zlib
+    qt4 openssl xorgproto libX11 libXScrnSaver xz zlib
   ];
 
   # hack: needed to fix build issues in
-  # http://hydra.nixos.org/build/38322959/nixlog/1
+  # https://hydra.nixos.org/build/38322959/nixlog/1
   # should be an upstream issue but it's easy to fix
   NIX_LDFLAGS = "-lz";
 
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;
-    homepage = http://www.vacuum-im.org;
+    homepage = "http://www.vacuum-im.org";
   };
 }

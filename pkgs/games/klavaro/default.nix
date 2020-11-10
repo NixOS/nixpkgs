@@ -1,30 +1,45 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, intltool, curl, gtk3 }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, curl
+, file
+, gtk3
+, intltool
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  name = "klavaro-${version}";
-  version = "3.03";
+  pname = "klavaro";
+  version = "3.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/klavaro/${name}.tar.bz2";
-    sha256 = "1dc75jd5bx5w3rr4zaqyf2cci3vzgac18fia0h04fzsfwlhrz5g0";
+    url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
+    sha256 = "1rkxaqb62w4mv86fcnmr32lq6y0h4hh92wmsy5ddb9a8jnzx6r7w";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper intltool curl gtk3 ];
+  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
+  buildInputs = [ curl gtk3 ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
+  # Fixes /usr/bin/file: No such file or directory
+  preConfigure = ''
+    substituteInPlace configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+  '';
+
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
 
-  meta = {
-    description = "Just another free touch typing tutor program";
-    homepage = http://klavaro.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.mimadrid];
+  meta = with stdenv.lib; {
+    description = "Free touch typing tutor program";
+    homepage = "http://klavaro.sourceforge.net/";
+    changelog = "https://sourceforge.net/p/klavaro/code/HEAD/tree/trunk/ChangeLog";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mimame davidak ];
   };
 }

@@ -1,17 +1,18 @@
-{ stdenv, cmake, boost, bison, flex, fetchFromGitHub, perl, python3, python3Packages, zlib, minisatUnstable, cryptominisat }:
+{ stdenv, cmake, boost, bison, flex, fetchFromGitHub, perl
+, python3, python3Packages, zlib, minisat, cryptominisat }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.0";
-  name = "stp-${version}";
+  pname = "stp";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "stp";
     repo = "stp";
-    rev    = "stp-${version}";
-    sha256 = "1jh23wjm62nnqfx447g2y53bbangq04hjrvqc35v9xxpcjgj3i49";
+    rev    = version;
+    sha256 = "1yg2v4wmswh1sigk47drwsxyayr472mf4i47lqmlcgn9hhbx1q87";
   };
 
-  buildInputs = [ boost zlib minisatUnstable cryptominisat python3 ];
+  buildInputs = [ boost zlib minisat cryptominisat python3 ];
   nativeBuildInputs = [ cmake bison flex perl ];
   preConfigure = ''
     python_install_dir=$out/${python3Packages.python.sitePackages}
@@ -23,9 +24,8 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # `make -f lib/Interface/CMakeFiles/cppinterface.dir/build.make lib/Interface/CMakeFiles/cppinterface.dir/cpp_interface.cpp.o`:
-  # include/stp/AST/UsefulDefs.h:41:29: fatal error: stp/AST/ASTKind.h: No such file or directory
-  enableParallelBuilding = false;
+  # seems to build fine now, may revert if concurrency does become an issue
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Simple Theorem Prover";

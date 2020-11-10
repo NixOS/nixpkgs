@@ -1,5 +1,5 @@
-{stdenv, fetchurl, perl, CryptSSLeay, LWP, unzip, xz, dpkg, TimeDate, DBFile
-, FileDesktopEntry, libxslt, docbook_xsl, makeWrapper
+{stdenv, fetchurl, unzip, xz, dpkg
+, libxslt, docbook_xsl, makeWrapper
 , python3Packages
 , perlPackages, curl, gnupg, diffutils
 , sendmailPath ? "/run/wrappers/bin/sendmail"
@@ -9,17 +9,15 @@ let
   inherit (python3Packages) python setuptools;
 in stdenv.mkDerivation rec {
   version = "2.16.8";
-  name = "debian-devscripts-${version}";
+  pname = "debian-devscripts";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
     sha256 = "0xy1nvqrnifx46g8ch69pk31by0va6hn10wpi1fkrsrgncanjjh1";
   };
 
-  buildInputs = [ perl CryptSSLeay LWP unzip xz dpkg TimeDate DBFile 
-    FileDesktopEntry libxslt python setuptools makeWrapper
-    perlPackages.ParseDebControl perlPackages.LWPProtocolHttps
-    curl gnupg diffutils ];
+  buildInputs = [ unzip xz dpkg libxslt python setuptools makeWrapper curl gnupg diffutils ] ++
+    (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";

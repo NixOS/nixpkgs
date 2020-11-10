@@ -1,25 +1,33 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, qtest, num }:
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, qtest, num }:
 
-let version = "2.9.0"; in
+let version = "3.1.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-batteries-${version}";
 
-  src = fetchzip {
-    url = "https://github.com/ocaml-batteries-team/batteries-included/archive/v${version}.tar.gz";
-    sha256 = "1wianim29kkkf4c31k7injjp3ji69ki5krrp6csq8ycswg791dby";
+  src = fetchurl {
+    url = "https://github.com/ocaml-batteries-team/batteries-included/releases/download/v${version}/batteries-${version}.tar.gz";
+    sha256 = "0bq1np3ai3r559s3vivn45yid25fwz76rvbmsg30j57j7cyr3jqm";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild qtest ];
+  # Fix a test case
+  patches = [(fetchpatch {
+    url = "https://github.com/ocaml-batteries-team/batteries-included/commit/7cbd9617d4efa5b3d647b1cc99d9a25fa01ac6dd.patch";
+    sha256 = "0q4kq10psr7n1xdv4rspk959n1a5mk9524pzm5v68ab2gkcgm8sk";
+
+  })];
+
+  buildInputs = [ ocaml findlib ocamlbuild ];
+  checkInputs = [ qtest ];
   propagatedBuildInputs = [ num ];
 
-  doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.07" && !stdenv.isAarch64;
-  checkTarget = "test test";
+  doCheck = stdenv.lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
+  checkTarget = "test";
 
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://batteries.forge.ocamlcore.org/;
+    homepage = "http://batteries.forge.ocamlcore.org/";
     description = "OCaml Batteries Included";
     longDescription = ''
       A community-driven effort to standardize on an consistent, documented,
@@ -29,7 +37,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

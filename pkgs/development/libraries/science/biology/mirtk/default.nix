@@ -1,17 +1,22 @@
-{ stdenv, lib, gtest, fetchgit, cmake, boost, eigen, python, vtk, zlib }:
+{ stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib, tbb }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
-  name = "mirtk-${version}";
+  pname = "mirtk";
 
-  # uses submodules so can't use fetchFromGitHub
-  src = fetchgit {
-    url = "https://github.com/BioMedIA/MIRTK.git";
+  src = fetchFromGitHub {
+    owner = "BioMedIA";
+    repo = "MIRTK";
     rev = "v${version}";
     sha256 = "0i2v97m66ir5myvi5b123r7zcagwy551b73s984gk7lksl5yiqxk";
+    fetchSubmodules = true;
   };
 
-  cmakeFlags = "-DWITH_VTK=ON -DBUILD_ALL_MODULES=ON -DBUILD_TESTING=ON";
+  cmakeFlags = [
+    "-DWITH_VTK=ON"
+    "-DBUILD_ALL_MODULES=ON"
+    "-DWITH_TBB=ON"
+  ];
 
   doCheck = true;
 
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake gtest ];
-  buildInputs = [ boost eigen python vtk zlib ];
+  buildInputs = [ boost eigen python vtk zlib tbb ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/BioMedIA/MIRTK";

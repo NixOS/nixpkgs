@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, pythonPackages, lzop, postgresql, pv }:
+{ stdenv, fetchurl, python3Packages, lzop, postgresql, pv }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "wal-e-${version}";
-  version = "0.6.10";
+python3Packages.buildPythonApplication rec {
+  pname = "wal-e";
+  version = "1.1.1";
 
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/wal-e/wal-e/archive/v${version}.tar.gz";
-    sha256 = "1hms24xz7wx3b91vv56fhcc3j0cszwqwnmwhka4yl90202hvdir2";
+    sha256 = "5TTd7NTO73+MCJf3dHIcNojjHdoaKJ1T051iW7Kt9Ow=";
   };
 
   # needs tox
   doCheck = false;
 
-  propagatedBuildInputs = [
-    pythonPackages.boto
-    pythonPackages.gevent
+  propagatedBuildInputs = (with python3Packages; [
+    boto
+    gevent
+    google_cloud_storage
+  ]) ++ [
     postgresql
     lzop
     pv
@@ -24,8 +26,8 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A Postgres WAL-shipping disaster recovery and replication toolkit";
-    homepage = https://github.com/wal-e/wal-e;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    homepage = "https://github.com/wal-e/wal-e";
+    maintainers = [];
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
   };

@@ -1,17 +1,17 @@
 { stdenv, fetchurl , alsaLib, }:
 
 stdenv.mkDerivation rec {
-  name = "zita-alsa-pcmi-${version}";
-  version = "0.2.0";
+  pname = "zita-alsa-pcmi";
+  version = "0.3.2";
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "1rgv332g82rrrlm4vdam6p2pyrisxbi7b3izfaa0pcjglafsy7j9";
+    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "12d7vdg74yh21w69qi0wg57iz4876j94qbiq09bvscih6xz9y78s";
   };
 
   buildInputs = [ alsaLib ];
 
   buildPhase = ''
-    cd libs
+    cd source
     make PREFIX="$out"
 
     # create lib link for building apps
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
     # apps
     cd ../apps
-    CXXFLAGS+=" -I../libs" \
-    LDFLAGS+=" -L../libs" \
+    CXXFLAGS+=" -I../source" \
+    LDFLAGS+=" -L../source" \
     make PREFIX="$out"
   '';
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
     mkdir "$out/include"
     mkdir "$out/bin"
 
-    cd ../libs
+    cd ../source
 
-    # libs
+    # source
     install -Dm755 libzita-alsa-pcmi.so.$version \
       "$out/lib/libzita-alsa-pcmi.so.$version"
 
@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
     install -Dm755 ../apps/alsa_delay \
       "$out/bin/alsa_delay"
     install -Dm755 ../apps/alsa_loopback \
-      "$out/bin/alsa_delay"
+      "$out/bin/alsa_loopback"
   '';
 
   meta = {
     description = "The successor of clalsadrv, provides easy access to ALSA PCM devices";
-    version = "${version}";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
+    version = version;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

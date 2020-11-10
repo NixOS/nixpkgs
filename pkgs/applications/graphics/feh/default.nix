@@ -1,16 +1,17 @@
 { stdenv, fetchurl, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, perlPackages }:
+, curl, libexif, jpegexiforient, perlPackages
+, enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "feh-${version}";
-  version = "2.28";
+  pname = "feh";
+  version = "3.5";
 
   src = fetchurl {
-    url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "1nfka7w6pzj2bbwx8vydr2wwm7z8mrbqiy1xrq97c1g5bxy2vlhk";
+    url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
+    sha256 = "07jklibpi4ig9pbdrwhllsfffxn2h8xf4ma36qii00w4hb69v3rq";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -20,24 +21,22 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
-    "PREFIX=$(out)" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0";
+    "PREFIX=${placeholder "out"}" "exif=1"
+  ] ++ optional stdenv.isDarwin "verscmp=0"
+    ++ optional enableAutoreload "inotify=1";
 
-  postBuild = ''
-    pushd man
-    make
-    popd
-  '';
-
+  installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${makeBinPath [ libjpeg jpegexiforient ]}" \
                                --add-flags '--theme=feh'
-    install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
-  checkInputs = [ perlPackages.TestCommand perlPackages.TestHarness ];
+  checkInputs = [ perlPackages.perl perlPackages.TestCommand ];
   preCheck = ''
-    export PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl"
+    export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
+  '';
+  postCheck = ''
+    unset PERL5LIB
   '';
 
   doCheck = true;
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.viric maintainers.willibutz ];
+    maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
 }

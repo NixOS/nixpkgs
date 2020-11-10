@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ config, stdenv, fetchFromGitHub, pkgconfig, cmake
 
 # dependencies
 , glib, libXinerama
@@ -27,12 +27,13 @@
 
 , wirelessSupport     ? true      , wirelesstools ? null
 , nvidiaSupport       ? false     , libXNVCtrl ? null
-, pulseSupport        ? false     , libpulseaudio ? null
+, pulseSupport        ? config.pulseaudio or false, libpulseaudio ? null
 
 , curlSupport         ? true      , curl ? null
 , rssSupport          ? curlSupport
 , weatherMetarSupport ? curlSupport
 , weatherXoapSupport  ? curlSupport
+, journalSupport      ? true, systemd ? null
 , libxml2 ? null
 }:
 
@@ -51,7 +52,7 @@ assert luaImlib2Support    -> luaSupport && imlib2Support
 assert luaCairoSupport     -> luaSupport && toluapp != null
                                          && cairo   != null;
 assert luaCairoSupport || luaImlib2Support
-                           -> lua.luaversion == "5.1";
+                           -> lua.luaversion == "5.3";
 
 assert wirelessSupport     -> wirelesstools != null;
 assert nvidiaSupport       -> libXNVCtrl != null;
@@ -61,18 +62,19 @@ assert curlSupport         -> curl != null;
 assert rssSupport          -> curlSupport && libxml2 != null;
 assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport  -> curlSupport && libxml2 != null;
+assert journalSupport      -> systemd != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "conky-${version}";
-  version = "1.10.8";
+  pname = "conky";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "18kxjmaplqvn81vmvybvpc9qczm7wgcgd4af3a8vsqdv77cn5bwq";
+    sha256 = "0y2g66fjqp2hdk0y1h4ijxhnv34j16gizvxpmbigwh4n6zijcm6v";
   };
 
   postPatch = ''
@@ -82,7 +84,7 @@ stdenv.mkDerivation rec {
     # Drop examples, since they contain non-ASCII characters that break docbook2x :(
     sed -i 's/ Example: .*$//' doc/config_settings.xml
 
-    substituteInPlace cmake/Conky.cmake --replace "#set(RELEASE true)" "set(RELEASE true)"
+    substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -103,6 +105,7 @@ stdenv.mkDerivation rec {
     ++ optional  weatherXoapSupport libxml2
     ++ optional  nvidiaSupport      libXNVCtrl
     ++ optional  pulseSupport       libpulseaudio
+    ++ optional  journalSupport     systemd
     ;
 
   cmakeFlags = []
@@ -123,6 +126,7 @@ stdenv.mkDerivation rec {
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
     ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
     ++ optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
+    ++ optional journalSupport      "-DBUILD_JOURNAL=ON"
     ;
 
   # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
@@ -130,7 +134,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://conky.sourceforge.net/;
+    homepage = "http://conky.sourceforge.net/";
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;

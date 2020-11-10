@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "3.1.0";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41975e79406502c092732c57ef0c2c2eb318d91e8e765f81f5d4ab6c1db727c5";
+    sha256 = "198as30xy6p760niqps2zdvq2xcmr765h06pmda8fa9y077wl4a7";
   };
 
   propagatedBuildInputs = [ pyasn1 pyasn1-modules ];
@@ -28,4 +28,10 @@ buildPythonPackage rec {
   '';
 
   doCheck = !stdenv.isDarwin;
+
+  meta = with stdenv.lib; {
+    description = "Python modules for implementing LDAP clients";
+    homepage = "https://www.python-ldap.org/";
+    license = licenses.psfl;
+  };
 }

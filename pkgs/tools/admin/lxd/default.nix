@@ -1,44 +1,72 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+{ stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables
+, squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
+, libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
+, writeShellScriptBin, apparmor-profiles, apparmor-parser
+, criu
+, bash
+, installShellFiles
+, nftablesSupport ? false
 }:
 
+let
+  networkPkgs = if nftablesSupport then
+    [ iptables-nftables-compat ]
+  else
+    [ iptables ebtables ];
+
+in
 buildGoPackage rec {
-  name = "lxd-3.0.0";
+  pname = "lxd";
+  version = "4.7";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0m5prdf9sk8k5bws1zva4n9ycggmy76wnjr6wb423066pszz24ww";
+    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1v95cnbs54gzyhzflwb8x0ykja202nll5p48l2nra7cpdsk4a5q1";
   };
+
+  postPatch = ''
+    substituteInPlace shared/usbid/load.go \
+      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+  '';
 
   preBuild = ''
     # unpack vendor
     pushd go/src/github.com/lxc/lxd
-    rm dist/src/github.com/lxc/lxd
-    cp -r dist/src/* ../../..
-    rm -r dist
+    rm _dist/src/github.com/lxc/lxd
+    cp -r _dist/src/* ../../..
     popd
   '';
 
-  postInstall = ''
-    # binaries from test/
-    rm $bin/bin/{deps,macaroon-identity}
+  buildFlags = [ "-tags libsqlite3" ];
 
-    wrapProgram $bin/bin/lxd --prefix PATH ":" ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables
-    ]}
+  postInstall = ''
+    # test binaries, code generation
+    rm $out/bin/{deps,macaroon-identity,generate}
+
+    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath (
+      networkPkgs
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
+      ++ [ (writeShellScriptBin "apparmor_parser" ''
+             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+           '') ]
+      )
+    }
+
+    installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl ];
+  nativeBuildInputs = [ installShellFiles pkgconfig makeWrapper ];
+  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
+                  raft-canonical.dev sqlite-replication udev.dev ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
-    homepage = https://linuxcontainers.org/lxd/;
+    homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin fpletz ];
+    maintainers = with maintainers; [ fpletz wucke13 ];
     platforms = platforms.linux;
   };
 }

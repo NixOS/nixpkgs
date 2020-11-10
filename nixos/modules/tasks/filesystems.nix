@@ -12,7 +12,7 @@ let
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
-  fileSystems = if fileSystems' ? "result"
+  fileSystems = if fileSystems' ? result
                 then # use topologically sorted fileSystems everywhere
                      fileSystems'.result
                 else # the assertion below will catch this,
@@ -159,7 +159,7 @@ in
           "/bigdisk".label = "bigdisk";
         }
       '';
-      type = types.loaOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
+      type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = "/"</literal>).  Each
@@ -193,7 +193,7 @@ in
 
     boot.specialFileSystems = mkOption {
       default = {};
-      type = types.loaOf (types.submodule coreFileSystemOpts);
+      type = types.attrsOf (types.submodule coreFileSystemOpts);
       internal = true;
       description = ''
         Special filesystems that are mounted very early during boot.
@@ -209,9 +209,16 @@ in
 
     assertions = let
       ls = sep: concatMapStringsSep sep (x: x.mountPoint);
+      notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs");
     in [
-      { assertion = ! (fileSystems' ? "cycle");
+      { assertion = ! (fileSystems' ? cycle);
         message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
+      }
+      { assertion = ! (any notAutoResizable fileSystems);
+        message = let
+          fs = head (filter notAutoResizable fileSystems);
+        in
+          "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${if fs.fsType == "auto" then " fsType has to be explicitly set and" else ""} only the ext filesystems and f2fs support it.";
       }
     ];
 
@@ -230,6 +237,8 @@ in
       let
         fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" ];
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
+        # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
+        escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
       in ''
         # This is a generated file.  Do not edit!
         #
@@ -238,10 +247,10 @@ in
 
         # Filesystems.
         ${concatMapStrings (fs:
-            (if fs.device != null then fs.device
-             else if fs.label != null then "/dev/disk/by-label/${fs.label}"
+            (if fs.device != null then escape fs.device
+             else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
              else throw "No device specified for mount point ‘${fs.mountPoint}’.")
-            + " " + fs.mountPoint
+            + " " + escape fs.mountPoint
             + " " + fs.fsType
             + " " + builtins.concatStringsSep "," fs.options
             + " 0"
@@ -295,6 +304,11 @@ in
 
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
 
+    systemd.tmpfiles.rules = [
+      "d /run/keys 0750 root ${toString config.ids.gids.keys}"
+      "z /run/keys 0750 root ${toString config.ids.gids.keys}"
+    ];
+
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
     boot.specialFileSystems = {
       "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
@@ -303,8 +317,8 @@ in
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
       "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "ptmxmode=0666" "gid=${toString config.ids.gids.tty}" ]; };
 
-      # To hold secrets that shouldn't be written to disk (generally used for NixOps, harmless elsewhere)
-      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" "gid=${toString config.ids.gids.keys}" ]; };
+      # To hold secrets that shouldn't be written to disk
+      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" ]; };
     } // optionalAttrs (!config.boot.isContainer) {
       # systemd-nspawn populates /sys by itself, and remounting it causes all
       # kinds of weird issues (most noticeably, waiting for host disk device

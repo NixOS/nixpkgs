@@ -1,30 +1,45 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, intltool, itstool, libxml2 }:
+, librsvg, gettext, itstool, libxml2
+, meson, ninja, glib, vala, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mahjongg-${version}";
-  version = "3.22.0";
+  pname = "gnome-mahjongg";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "f5972a14fa4ad04153bd6e68475b85cd79c6b44f6cac1fe1edb64dbad4135218";
+    url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1wslwhr782pdzrvca7wa6smvyid5yr42kjlra6qd9ji5qss0i1wj";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-mahjongg"; attrPath = "gnome3.gnome-mahjongg"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    meson ninja vala desktop-file-utils
+    pkgconfig gnome3.adwaita-icon-theme
+    libxml2 itstool gettext wrapGAppsHook
+    glib # for glib-compile-schemas
+  ];
   buildInputs = [
-    gtk3 wrapGAppsHook librsvg intltool itstool libxml2
-    gnome3.defaultIconTheme
+    glib
+    gtk3
+    librsvg
   ];
 
+  mesonFlags = [
+    "-Dcompile-schemas=enabled"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Mahjongg;
+    homepage = "https://wiki.gnome.org/Apps/Mahjongg";
     description = "Disassemble a pile of tiles by removing matching pairs";
-    maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

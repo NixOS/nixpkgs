@@ -1,18 +1,20 @@
-{ stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
+{ stdenv, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
   unidecode, mock, pytest , backports-shutil-which, ConfigArgParse,
-  pythondaemon, pymsgbox }:
+  python-daemon, pymsgbox }:
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.12.0";
+  version = "0.14.1";
 
-  src = fetchPypi{
-    inherit pname version;
-    sha256 = "55af1ad2a6c95aef1fc5588c2002c9e54edbb14e248776b64d00628235ceda3e";
+  src = fetchFromGitHub {
+    owner = "romanz";
+    repo = "trezor-agent";
+    rev = "v${version}";
+    sha256 = "16y1y9ahcv3wj7f0v4mfiwzkmn2hz1iv7y13cgr57sxa3ymyqx6c";
   };
 
   propagatedBuildInputs = [ unidecode backports-shutil-which ConfigArgParse
-    pythondaemon pymsgbox ecdsa ed25519 mnemonic semver ];
+    python-daemon pymsgbox ecdsa ed25519 mnemonic semver ];
 
   checkInputs = [ mock pytest ];
 
@@ -22,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Using hardware wallets as SSH/GPG agent";
-    homepage = https://github.com/romanz/trezor-agent;
+    homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];
   };

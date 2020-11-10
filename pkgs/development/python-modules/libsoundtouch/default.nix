@@ -7,8 +7,7 @@
 , enum34
 }:
 
-buildPythonPackage rec {
-  name    = "${pname}-${version}";
+buildPythonPackage {
   pname   = "libsoundtouch";
   version = "0.4.0";
 
@@ -29,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Bose Soundtouch Python library";
-    homepage    = https://github.com/CharlesBlonde/libsoundtouch;
+    homepage    = "https://github.com/CharlesBlonde/libsoundtouch";
     license     = licenses.asl20;
   };
 }

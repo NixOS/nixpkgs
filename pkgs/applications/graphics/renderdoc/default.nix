@@ -1,32 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
-, vulkan-loader, xorg
-, python36, bison, pcre, automake, autoconf
+, vulkan-loader, libglvnd, xorg, python3, python3Packages
+, bison, pcre, automake, autoconf, addOpenGLRunpath
 }:
 let
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
-    rev = "renderdoc-modified-5";
-    sha256 = "0ihrxbx56p5wn589fbbsns93fp91sypqdzfxdy7l7v9sf69a41mw";
+    rev = "renderdoc-modified-7";
+    sha256 = "15r2m5kcs0id64pa2fsw58qll3jyh71jzc04wy20pgsh2326zis6";
   };
+  pythonPackages = python3Packages;
 in
-stdenv.mkDerivation rec {
-  version = "1.1";
-  name = "renderdoc-${version}";
+mkDerivation rec {
+  version = "1.10";
+  pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0kb9m1dm0mnglqyh1srvl0f1bgjghxzbqarn0xfqw49wphqwhmcd";
+    sha256 = "1ibf2lv3q69fkzv1nsva2mbdjlayrpxicrd96d9nfcw64f2mv6ds";
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python36
-  ];
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
+  ]; # ++ (with pythonPackages; [pyside2 pyside2-tools shiboken2]);
+  # TODO: figure out how to make cmake recognise pyside2
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf ];
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf addOpenGLRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -40,26 +42,30 @@ stdenv.mkDerivation rec {
     "-DBUILD_VERSION_DIST_VER=${version}"
     "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
     "-DBUILD_VERSION_STABLE=ON"
-    # TODO: add once pyside2 is in nixpkgs
-    #"-DPYSIDE2_PACKAGE_DIR=${python36Packages.pyside2}"
   ];
 
-  # Future work: define these in the above array via placeholders
+  # TODO: define these in the above array via placeholders, once those are widely supported
   preConfigure = ''
     cmakeFlags+=" -DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
     cmakeFlags+=" -DRENDERDOC_SWIG_PACKAGE=$PWD/../swig"
   '';
 
+  dontWrapQtApps = true;
   preFixup = ''
-    wrapProgram $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
+    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
+  '';
+
+  # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
+  postFixup = ''
+    addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A single-frame graphics debugger";
-    homepage = https://renderdoc.org/;
+    homepage = "https://renderdoc.org/";
     license = licenses.mit;
     longDescription = ''
       RenderDoc is a free MIT licensed stand-alone graphics debugger that

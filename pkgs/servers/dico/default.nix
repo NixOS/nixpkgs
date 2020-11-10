@@ -2,29 +2,24 @@
 , guile, python, pcre, libffi, groff }:
 
 stdenv.mkDerivation rec {
-  name = "dico-2.7";
+  pname = "dico";
+  version = "2.10";
 
   src = fetchurl {
-    url = "mirror://gnu/dico/${name}.tar.xz";
-    sha256 = "0dg4aacnmlf3ljssd7dwh8z5644xzq8k1501mbsx8nz8p8a9mbsq";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0qag47mzs00d53hnrmh381r0jay42766vp5xrffmzmsn2307x8vl";
   };
 
   hardeningDisable = [ "format" ];
 
-  # XXX: Add support for GNU SASL.
   buildInputs =
     [ libtool gettext zlib readline gsasl guile python pcre libffi groff ];
 
-  # dicod fails to load modules, so the tests fail
-  doCheck = false;
-
-  preBuild = ''
-    sed -i -e '/gets is a security/d' gnu/stdio.in.h
-  '';
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Flexible dictionary server and client implementing RFC 2229";
-    homepage    = http://www.gnu.org/software/dico/;
+    homepage    = "https://www.gnu.org/software/dico/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;

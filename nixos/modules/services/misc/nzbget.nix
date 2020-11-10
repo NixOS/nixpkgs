@@ -4,17 +4,40 @@ with lib;
 
 let
   cfg = config.services.nzbget;
-in {
+  pkg = pkgs.nzbget;
+  stateDir = "/var/lib/nzbget";
+  configFile = "${stateDir}/nzbget.conf";
+  configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${value}") nixosOpts);
+
+  nixosOpts = {
+    # allows nzbget to run as a "simple" service
+    OutputMode = "loggable";
+    # use journald for logging
+    WriteLog = "none";
+    ErrorTarget = "screen";
+    WarningTarget = "screen";
+    InfoTarget = "screen";
+    DetailTarget = "screen";
+    # required paths
+    ConfigTemplate = "${pkg}/share/nzbget/nzbget.conf";
+    WebDir = "${pkg}/share/nzbget/webui";
+    # nixos handles package updates
+    UpdateCheck = "none";
+  };
+
+in
+{
+  imports = [
+    (mkRemovedOptionModule [ "services" "misc" "nzbget" "configFile" ] "The configuration of nzbget is now managed by users through the web interface.")
+    (mkRemovedOptionModule [ "services" "misc" "nzbget" "dataDir" ] "The data directory for nzbget is now /var/lib/nzbget.")
+    (mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
+  ];
+
+  # interface
+
   options = {
     services.nzbget = {
       enable = mkEnableOption "NZBGet";
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nzbget;
-        defaultText = "pkgs.nzbget";
-        description = "The NZBGet package to use";
-      };
 
       user = mkOption {
         type = types.str;
@@ -30,6 +53,8 @@ in {
     };
   };
 
+  # implementation
+
   config = mkIf cfg.enable {
     systemd.services.nzbget = {
       description = "NZBGet Daemon";
@@ -40,54 +65,26 @@ in {
         p7zip
       ];
       preStart = ''
-        datadir=/var/lib/nzbget
-        cfgtemplate=${cfg.package}/share/nzbget/nzbget.conf
-        test -d $datadir || {
-          echo "Creating nzbget data directory in $datadir"
-          mkdir -p $datadir
-        }
-        test -f $configfile || {
-          echo "nzbget.conf not found. Copying default config $cfgtemplate to $configfile"
-          cp $cfgtemplate $configfile
-          echo "Setting $configfile permissions to 0700 (needs to be written and contains plaintext credentials)"
-          chmod 0700 $configfile
-          echo "Setting temporary \$MAINDIR variable in default config required in order to allow nzbget to complete initial start"
-          echo "Remember to change this to a proper value once NZBGet startup has been completed"
-          sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' $configfile
-        }
-        echo "Ensuring proper ownership of $datadir (${cfg.user}:${cfg.group})."
-        chown -R ${cfg.user}:${cfg.group} $datadir
-      '';
-
-      script = ''
-        configfile=/var/lib/nzbget/nzbget.conf
-        args="--daemon --configfile $configfile"
-        # The script in preStart (above) copies nzbget's config template to datadir on first run, containing paths that point to the nzbget derivation installed at the time. 
-        # These paths break when nzbget is upgraded & the original derivation is garbage collected. If such broken paths are found in the config file, override them to point to 
-        # the currently installed nzbget derivation.
-        cfgfallback () {
-          local hit=`grep -Po "(?<=^$1=).*+" "$configfile" | sed 's/[ \t]*$//'` # Strip trailing whitespace
-          ( test $hit && test -e $hit ) || {
-            echo "In $configfile, valid $1 not found; falling back to $1=$2"
-            args+=" -o $1=$2"
-          }
-        }
-        cfgfallback ConfigTemplate ${cfg.package}/share/nzbget/nzbget.conf
-        cfgfallback WebDir ${cfg.package}/share/nzbget/webui
-        ${cfg.package}/bin/nzbget $args
+        if [ ! -f ${configFile} ]; then
+          ${pkgs.coreutils}/bin/install -m 0700 ${pkg}/share/nzbget/nzbget.conf ${configFile}
+        fi
       '';
 
       serviceConfig = {
-        Type = "forking";
+        StateDirectory = "nzbget";
+        StateDirectoryMode = "0750";
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = "true";
+        UMask = "0002";
         Restart = "on-failure";
+        ExecStart = "${pkg}/bin/nzbget --server --configfile ${stateDir}/nzbget.conf ${configOpts}";
+        ExecStop = "${pkg}/bin/nzbget --quit";
       };
     };
 
     users.users = mkIf (cfg.user == "nzbget") {
       nzbget = {
+        home = stateDir;
         group = cfg.group;
         uid = config.ids.uids.nzbget;
       };

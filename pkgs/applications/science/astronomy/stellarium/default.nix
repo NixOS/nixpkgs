@@ -1,38 +1,42 @@
-{ mkDerivation, lib, fetchFromGitHub
-, cmake, freetype, libpng, libGLU_combined, openssl, perl, libiconv
+{ stdenv, lib, mkDerivation, fetchFromGitHub
+, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
 , qtscript, qtserialport, qttools
-, qtmultimedia, qtlocation, makeWrapper, qtbase
+, qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
 }:
 
 mkDerivation rec {
-  name = "stellarium-${version}";
-  version = "0.18.2";
+  pname = "stellarium";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "17764i52dmipaz62k5n23fyx07d7cjir0dgav0s5b6sjd8gbjwbf";
+    sha256 = "08abrshrzhdfcg3b2vzfmnq8fhzrasadg1ajs81kcw96yjc59vak";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
 
   buildInputs = [
-    freetype libpng libGLU_combined openssl libiconv qtscript qtserialport qttools
-    qtmultimedia qtlocation qtbase makeWrapper
+    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
+    qtmultimedia qtlocation qtbase
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/stellarium \
-      --prefix QT_PLUGIN_PATH : "${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins"
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
+                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out"/Stellarium.app/Contents/MacOS/stellarium
   '';
 
   meta = with lib; {
     description = "Free open-source planetarium";
-    homepage = http://stellarium.org/;
+    homepage = "http://stellarium.org/";
     license = licenses.gpl2;
-
-    platforms = platforms.linux; # should be mesaPlatforms, but we don't have qt on darwin
+    platforms = platforms.unix;
     maintainers = with maintainers; [ peti ma27 ];
   };
 }

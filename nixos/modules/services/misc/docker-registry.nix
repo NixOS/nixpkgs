@@ -14,11 +14,12 @@ let
     log.fields.service = "registry";
     storage = {
       cache.blobdescriptor = blobCache;
-      filesystem.rootdirectory = cfg.storagePath;
       delete.enabled = cfg.enableDelete;
-    };
+    } // (if cfg.storagePath != null
+          then { filesystem.rootdirectory = cfg.storagePath; }
+          else {});
     http = {
-      addr = ":${builtins.toString cfg.port}";
+      addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
     };
     health.storagedriver = {
@@ -61,9 +62,12 @@ in {
     };
 
     storagePath = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       default = "/var/lib/docker-registry";
-      description = "Docker registry storage path.";
+      description = ''
+        Docker registry storage path for the filesystem storage backend. Set to
+        null to configure another backend via extraConfig.
+      '';
     };
 
     enableDelete = mkOption {
@@ -134,15 +138,20 @@ in {
 
       script = ''
         ${pkgs.docker-distribution}/bin/registry garbage-collect ${configFile}
-        ${pkgs.systemd}/bin/systemctl restart docker-registry.service
+        /run/current-system/systemd/bin/systemctl restart docker-registry.service
       '';
 
       startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
-    users.users.docker-registry = {
-      createHome = true;
-      home = cfg.storagePath;
-    };
+    users.users.docker-registry =
+      (if cfg.storagePath != null
+      then {
+        createHome = true;
+        home = cfg.storagePath;
+      }
+      else {}) // {
+        isSystemUser = true;
+      };
   };
 }

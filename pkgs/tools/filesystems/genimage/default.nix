@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "genimage-${version}";
+  pname = "genimage";
   version = "9";
 
   src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.pengutronix.de/cgit/genimage;
+    homepage = "https://git.pengutronix.de/cgit/genimage";
     description = "Generate filesystem images from directory trees";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

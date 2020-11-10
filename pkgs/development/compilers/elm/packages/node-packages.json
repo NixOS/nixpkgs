@@ -1,0 +1,13 @@
+[
+    "elm-analyse",
+    "elm-coverage",
+    "elm-doc-preview",
+    "@elm-tooling/elm-language-server",
+    "elm-live",
+    "elm-test",
+    "elm-upgrade",
+    "elm-verify-examples",
+    "elm-xref",
+    "create-elm-app",
+    "elm-optimize-level-2"
+]

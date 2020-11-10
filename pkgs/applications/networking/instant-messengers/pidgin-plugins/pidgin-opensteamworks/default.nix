@@ -1,28 +1,34 @@
-{ stdenv, fetchFromGitHub, pidgin, unzip, glib, json-glib, nss, nspr, libgnome-keyring } :
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin, glib, json-glib, nss, nspr
+, libsecret
+} :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-opensteamworks-${version}";
-  version = "1.6.1";
+  pname = "pidgin-opensteamworks";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "pidgin-opensteamworks";
-    rev = "${version}";
-    sha256 = "6ab27831e454ad3b440e4f06b52e0b3671a4f8417ba4da3ab6f56c56d82cc29b";
+    rev = version;
+    sha256 = "0zxd45g9ycw5kmm4i0800jnqg1ms2gbqcld6gkyv6n3ac1wxizpj";
   };
 
-  preConfigure = "cd steam-mobile";
-  postInstall = ''
-    mkdir -p $out/lib/purple-2
-    mkdir -p $out/share/pixmaps/pidgin/protocols/
-    cp libsteam.so $out/lib/purple-2/
-    unzip releases/icons.zip -d $out/share/pixmaps/pidgin/protocols/
-  '';
+  sourceRoot = "source/steam-mobile";
 
-  buildInputs = [ pidgin unzip glib json-glib nss nspr libgnome-keyring ];
+  installFlags = [
+    "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
+    "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+  buildInputs = [
+    pidgin glib json-glib nss nspr libsecret
+  ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/EionRobb/pidgin-opensteamworks;
+    homepage = "https://github.com/EionRobb/pidgin-opensteamworks";
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;
     platforms = platforms.linux;

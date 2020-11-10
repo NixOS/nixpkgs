@@ -9,10 +9,11 @@
 , fetchurl
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , gtk3
+, lib
 , libX11
 , libxcb
 , libXScrnSaver
@@ -27,97 +28,95 @@
 , libXtst
 , libnotify
 , libpulseaudio
+, libuuid
 , nspr
 , nss
 , pango
 , stdenv
 , systemd
 , at-spi2-atk
+, at-spi2-core
+, autoPatchelfHook
+, wrapGAppsHook
 }:
 
 let
 
-  mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "53.0.2907.99";
+  mirror = "https://get.geo.opera.com/pub/opera/desktop";
 
-  rpath = stdenv.lib.makeLibraryPath [
+in stdenv.mkDerivation rec {
 
-    # These provide shared libraries loaded when starting. If one is missing,
-    # an error is shown in stderr.
-    alsaLib.out
-    atk.out
-    cairo.out
-    cups
-    curl.out
-    dbus.lib
-    expat.out
-    fontconfig.lib
-    freetype.out
-    gdk_pixbuf.out
-    glib.out
-    gnome2.GConf
-    gtk3.out
-    libX11.out
-    libXScrnSaver.out
-    libXcomposite.out
-    libXcursor.out
-    libXdamage.out
-    libXext.out
-    libXfixes.out
-    libXi.out
-    libXrandr.out
-    libXrender.out
-    libXtst.out
-    libxcb.out
-    libnotify.out
-    nspr.out
-    nss.out
-    pango.out
-    stdenv.cc.cc.lib
-
-    # This is a little tricky. Without it the app starts then crashes. Then it
-    # brings up the crash report, which also crashes. `strace -f` hints at a
-    # missing libudev.so.0.
-    systemd.lib
-
-    # Works fine without this except there is no sound.
-    libpulseaudio.out
-
-    at-spi2-atk
-  ];
-
-in stdenv.mkDerivation {
-
-  name = "opera-${version}";
+  pname = "opera";
+  version = "68.0.3618.63";
 
   src = fetchurl {
-    url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "0fih5047xv275rmbcr2drji81wxi6p0kyp172mmn328g3pzddmwx";
+    url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
+    sha256 = "1643043ywz94x2yr7xyw7krfq53iwkr8qxlbydzq6zb2zina7jxd";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
 
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    alsaLib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    cairo
+    cups
+    curl
+    dbus
+    expat
+    fontconfig.lib
+    freetype
+    gdk-pixbuf
+    glib
+    gnome2.GConf
+    gtk3
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libnotify
+    libuuid
+    libxcb
+    nspr
+    nss
+    pango
+    stdenv.cc.cc.lib
+  ];
+
+  runtimeDependencies = [
+    # Works fine without this except there is no sound.
+    libpulseaudio.out
+
+    # This is a little tricky. Without it the app starts then crashes. Then it
+    # brings up the crash report, which also crashes. `strace -f` hints at a
+    # missing libudev.so.0.
+    (lib.getLib systemd)
+  ];
+
   installPhase = ''
-    mkdir --parent $out
-    mv * $out/
+    mkdir -p $out
+    cp -r . $out/
     mv $out/lib/*/opera/*.so $out/lib/
   '';
 
-  postFixup = ''
-    find $out -executable -type f \
-    | while read f
-      do
-        patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "$out/lib:${rpath}" \
-          "$f"
-      done
-  '';
-
-  meta = {
-    homepage = http://www.opera.com;
+  meta = with lib; {
+    homepage = "https://www.opera.com";
     description = "Web browser";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
   };
 }

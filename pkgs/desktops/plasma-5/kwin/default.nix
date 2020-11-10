@@ -1,18 +1,21 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib, fetchpatch,
   extra-cmake-modules, kdoctools,
 
   epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,
   xwayland,
 
-  qtdeclarative, qtmultimedia, qtscript, qtx11extras,
+  qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors,
+  qtvirtualkeyboard, qtx11extras,
 
   breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets,
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, qtsensors, libcap, libdrm
+  plasma-framework, libcap, libdrm, mesa
 }:
+
+# TODO (ttuegel): investigate qmlplugindump failure
 
 mkDerivation {
   name = "kwin";
@@ -21,16 +24,25 @@ mkDerivation {
     epoxy libICE libSM libinput libxkbcommon udev wayland xcb-util-cursor
     xwayland
 
-    qtdeclarative qtmultimedia qtscript qtx11extras qtsensors
+    qtdeclarative qtmultimedia qtquickcontrols2 qtscript qtsensors
+    qtvirtualkeyboard qtx11extras
 
     breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
-    libcap libdrm
+    libcap libdrm mesa
   ];
   outputs = [ "bin" "dev" "out" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./0001-follow-symlinks.patch
+    ./0002-xwayland.patch
+    (fetchpatch { # included in >= 5.18.6
+      name = "EGL_TEXTURE_Y_XUXV_WL.diff";
+      url = "https://github.com/KDE/kwin/commit/2c76cc478.diff";
+      sha256 = "1ywaky05h5j1x758q3yhp3ap45ispffghyxynqz5lybl5n6yyxhy";
+    })
+  ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];

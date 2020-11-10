@@ -1,19 +1,18 @@
 { stdenv, fetchFromGitHub, wrapGAppsHook
 , autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkgconfig
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
-, gobjectIntrospection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
+, gobject-introspection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
 , cairomm , dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
 , gst-plugins-good, libsigcxx }:
 
 stdenv.mkDerivation rec {
-  name = "workrave-${version}";
-  version = "1.10.21";
+  pname = "workrave";
+  version = "1.10.31";
 
-  src = let
-  in fetchFromGitHub {
-    sha256 = "150qca8c552fakjlzkgarsxgp87l1xcwn19svqsa9d0cygqxjgia";
+  src = fetchFromGitHub {
+    sha256 = "0v2mx2idaxlsyv5w66b7pknlill9j9i2gqcs3vq54gak7ix9fj1p";
     rev = with stdenv.lib;
-      "v" + concatStringsSep "_" (splitString "." version);
+      "v" + concatStringsSep "_" (splitVersion version);
     repo = "workrave";
     owner = "rcaelers";
   };
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah
-    gobjectIntrospection glib glibmm gtkmm3 atk pango pangomm cairo cairomm
+    gobject-introspection glib glibmm gtkmm3 atk pango pangomm cairo cairomm
     dbus dbus-glib gdome2 gstreamer gst-plugins-base gst-plugins-good libsigcxx
   ];
 
@@ -38,8 +37,8 @@ stdenv.mkDerivation rec {
       Repetitive Strain Injury (RSI). The program frequently alerts you to
       take micro-pauses, rest breaks and restricts you to your daily limit.
     '';
-    homepage = http://www.workrave.org/;
-    downloadPage = https://github.com/rcaelers/workrave/releases;
+    homepage = "http://www.workrave.org/";
+    downloadPage = "https://github.com/rcaelers/workrave/releases";
     license = licenses.gpl3;
     maintainers = with maintainers; [ prikhi ];
     platforms = platforms.linux;

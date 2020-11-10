@@ -1,24 +1,31 @@
-{ stdenv, fetchurl, SDL2, pkgconfig, flac, libsndfile }:
+{ config, stdenv, fetchurl, zlib, pkgconfig, mpg123, libogg, libvorbis, portaudio, libsndfile, flac
+, usePulseAudio ? config.pulseaudio or false, libpulseaudio }:
 
 let
-  version = "0.2.7025-beta20.1";
-in stdenv.mkDerivation rec {
-  name = "openmpt123-${version}";
+  version = "0.5.2";
+in stdenv.mkDerivation {
+  pname = "openmpt123";
+  inherit version;
+
   src = fetchurl {
-    url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}.tar.gz";
-    sha256 = "0qp2nnz6pnl1d7yv9hcjyim7q6yax5881k1jxm8jfgjqagmz5k6p";
+    url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
+    sha256 = "1cwpc4j90dpxa2siia68rg9qwwm2xk6bhxnslfjj364507jy6s4l";
   };
+
+  enableParallelBuilding = true;
+  doCheck = true;
+
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL2 flac libsndfile ];
-  makeFlags = [ "NO_PULSEAUDIO=1 NO_LTDL=1 TEST=0 EXAMPLES=0" ]
-  ++ stdenv.lib.optional (stdenv.isDarwin) "SHARED_SONAME=0";
-  installFlags = "PREFIX=\${out}";
+  buildInputs = [ zlib mpg123 libogg libvorbis portaudio libsndfile flac ]
+  ++ stdenv.lib.optional usePulseAudio libpulseaudio;
+
+  configureFlags = stdenv.lib.optional (!usePulseAudio) "--without-pulseaudio";
 
   meta = with stdenv.lib; {
     description = "A cross-platform command-line based module file player";
-    homepage = https://lib.openmpt.org/libopenmpt/;
+    homepage = "https://lib.openmpt.org/libopenmpt/";
     license = licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ gnidorah ];
+    platforms = platforms.linux;
   };
 }

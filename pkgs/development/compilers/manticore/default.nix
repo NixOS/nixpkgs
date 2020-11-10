@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, coreutils, autoreconfHook, smlnj }:
 
 let
-  rev= "f8e08c89dd98b7b8dba318d245dcd4abd3328ae2";
-in stdenv.mkDerivation rec {
-  name = "manticore-${version}";
-  version = "2017.08.22";
+  rev = "7376cb20ba5285a6b076a73c821e4743809c1d9d";
+in stdenv.mkDerivation {
+  pname = "manticore";
+  version = "2019.12.03";
  
   src = fetchFromGitHub {
     owner = "ManticoreProject";
     repo = "manticore";
-    sha256 = "06icq0qdzwyzbsyms53blxpb9i26n2vn7ci8p9xvvnq687hxhr73";
+    sha256 = "17h3ar7d6145dyrm006r3gd5frk3v4apjk383n78dh4vlniv1ay2";
     inherit rev;
   };
 
@@ -50,6 +50,6 @@ in stdenv.mkDerivation rec {
       parallel array comprehensions.  
     '';
 
-    homepage = http://manticore.cs.uchicago.edu/;
+    homepage = "http://manticore.cs.uchicago.edu/";
   };
 }

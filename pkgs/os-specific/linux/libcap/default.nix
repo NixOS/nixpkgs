@@ -1,12 +1,12 @@
 { stdenv, buildPackages, fetchurl, attr, perl, pam }:
 
 stdenv.mkDerivation rec {
-  name = "libcap-${version}";
-  version = "2.25";
+  pname = "libcap";
+  version = "2.44";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${name}.tar.xz";
-    sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
+    sha256 = "1qf80lifygbnxwvqjf8jz5j24n6fqqx4ixnkbf76xs2vrmcq664j";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
   '';
 
-  installFlags = "RAISE_SETFCAP=no";
+  installFlags = [ "RAISE_SETFCAP=no" ];
 
   postInstall = ''
     rm "$lib"/lib/*.a
-    mkdir -p "$doc/share/doc/${name}"
-    cp License "$doc/share/doc/${name}/"
+    mkdir -p "$doc/share/doc/${pname}-${version}"
+    cp License "$doc/share/doc/${pname}-${version}/"
   '' + stdenv.lib.optionalString (pam != null) ''
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for working with POSIX capabilities";
+    homepage = "https://sites.google.com/site/fullycapable";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd3;
   };

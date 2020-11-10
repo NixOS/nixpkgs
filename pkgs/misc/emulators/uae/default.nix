@@ -14,11 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 alsaLib SDL ];
 
   hardeningDisable = [ "format" ];
+  LDFLAGS = [ "-lm" ];
 
   meta = {
     description = "Ultimate/Unix/Unusable Amiga Emulator";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://web.archive.org/web/20130901222855/http://www.amigaemulator.org/;
+    homepage = "http://web.archive.org/web/20130901222855/http://www.amigaemulator.org/";
     maintainers = [ stdenv.lib.maintainers.sander ];
     platforms = stdenv.lib.platforms.linux;
   };

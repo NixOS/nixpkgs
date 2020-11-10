@@ -1,23 +1,53 @@
-{ stdenv, fetchurl, cmake, cfitsio, libusb, zlib, boost, libnova
-, curl, libjpeg, gsl }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, cfitsio
+, libusb1
+, zlib
+, boost
+, libnova
+, curl
+, libjpeg
+, gsl
+, fftw
+}:
 
-stdenv.mkDerivation {
-  name = "indilib-1.1.0";
+stdenv.mkDerivation rec {
+  pname = "indilib";
+  version = "1.8.6";
 
-  src = fetchurl {
-    url = mirror://sourceforge/indi/libindi_1.1.0.tar.gz;
-    sha256 = "1bs6lkwqd4aashg93mqqkc7nrg7fbx9mdw85qs5263jqa6sr780w";
+  src = fetchFromGitHub {
+    owner = "indilib";
+    repo = "indi";
+    rev = "v${version}";
+    sha256 = "1yzvcm7lwhwssnvv6gp8f7igmnvs35bpidmzz6z15awm5841yw30";
   };
 
-  patches = [ ./udev-dir.patch ] ;
+  patches = [
+    ./udev-dir.patch
+  ];
 
-  buildInputs = [ curl cmake cfitsio libusb zlib boost
-                            libnova libjpeg gsl ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  meta = {
-    homepage = http://www.indilib.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    description = "Implementaion of the INDI protocol for POSIX operating systems";
-    platforms = stdenv.lib.platforms.unix;
+  buildInputs = [
+    curl
+    cfitsio
+    libusb1
+    zlib
+    boost
+    libnova
+    libjpeg
+    gsl
+    fftw
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.indilib.org/";
+    description = "Implementation of the INDI protocol for POSIX operating systems";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ hjones2199 ];
+    platforms = [ "x86_64-linux" ];
   };
 }

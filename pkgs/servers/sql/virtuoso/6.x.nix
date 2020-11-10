@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SQL/RDF database used by, e.g., KDE-nepomuk";
-    homepage = http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/;
+    homepage = "http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/";
     platforms = platforms.linux;
-    maintainers = [ ];
+    license = licenses.gpl2;
   };
 }

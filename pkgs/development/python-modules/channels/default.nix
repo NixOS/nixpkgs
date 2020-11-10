@@ -3,11 +3,11 @@
 }:
 buildPythonPackage rec {
   pname = "channels";
-  version = "2.1.3";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d503d18b92cef488ba68808a2205e055d29a6a1abae92d277f8f7a9c8752f13";
+    sha256 = "08e756406d7165cb32f6fc3090c0643f41ca9f7e0f7fada0b31194662f20f414";
   };
 
   # Files are missing in the distribution
@@ -18,6 +18,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Brings event-driven capabilities to Django with a channel system";
     license = licenses.bsd3;
-    homepage = https://github.com/django/channels;
+    homepage = "https://github.com/django/channels";
   };
 }

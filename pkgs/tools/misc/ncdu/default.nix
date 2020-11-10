@@ -1,21 +1,21 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ncdu-${version}";
-  version = "1.13";
+  pname = "ncdu";
+  version = "1.15.1";
 
   src = fetchurl {
-    url = "https://dev.yorhel.nl/download/${name}.tar.gz";
-    sha256 = "0ni56ymlii577src4dzfbrq1mznbf6i0nka4bvh2sb1971f2ingl";
+    url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
+    sha256 = "1c1zxalm5asyhn4p1hd51h7khw17515gbqmvdz63kc8xpx6xqbdh";
   };
 
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    description = "Ncurses disk usage analyzer";
-    homepage = https://dev.yorhel.nl/ncdu;
+    description = "Disk usage analyzer with an ncurses interface";
+    homepage = "https://dev.yorhel.nl/ncdu";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub zowoq ];
   };
 }

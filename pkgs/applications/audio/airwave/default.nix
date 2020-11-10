@@ -22,6 +22,7 @@ let
     };
     nativeBuildInputs = [ unzip ];
     installPhase = "cp -r . $out";
+    meta.license = stdenv.lib.licenses.unfree;
   };
 
   wine-wow64 = wine.override {
@@ -62,7 +63,7 @@ multiStdenv.mkDerivation {
   # Cf. https://github.com/phantom-code/airwave/issues/57
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK";
+  cmakeFlags = [ "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK" ];
 
   postInstall = ''
     mv $out/bin $out/libexec
@@ -82,7 +83,7 @@ multiStdenv.mkDerivation {
       protocol to correctly embed the plugin editor into the host
       window.
     '';
-    homepage = https://github.com/phantom-code/airwave;
+    homepage = "https://github.com/phantom-code/airwave";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus ];

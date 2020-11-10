@@ -12,8 +12,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "A python port of YUI CSS Compressor";
-    homepage = https://pypi.python.org/pypi/csscompressor;
+    homepage = "https://pypi.python.org/pypi/csscompressor";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.ahmedtd];
+    maintainers = [];
   };
 }

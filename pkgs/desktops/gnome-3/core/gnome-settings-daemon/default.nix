@@ -1,39 +1,115 @@
-{ fetchurl, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, perl, gettext, glib, libnotify, lcms2, libXtst
-, libxkbfile, libpulseaudio, alsaLib, libcanberra-gtk3, upower, colord, libgweather, polkit
-, geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libxml2, networkmanager
-, docbook_xsl, wrapGAppsHook, ibus, xkeyboard_config, tzdata, nss }:
+{ stdenv
+, fetchpatch
+, substituteAll
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, perl
+, gettext
+, gtk3
+, glib
+, libnotify
+, libgnomekbd
+, lcms2
+, libpulseaudio
+, alsaLib
+, libcanberra-gtk3
+, upower
+, colord
+, libgweather
+, polkit
+, gsettings-desktop-schemas
+, geoclue2
+, systemd
+, libgudev
+, libwacom
+, libxslt
+, libxml2
+, modemmanager
+, networkmanager
+, gnome-desktop
+, geocode-glib
+, docbook_xsl
+, wrapGAppsHook
+, python3
+, tzdata
+, nss
+, gcr
+, gnome-session-ctl
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-settings-daemon-${version}";
-  version = "3.28.1";
+  pname = "gnome-settings-daemon";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0z9dip9p0iav646cmxisii5sbkdr9hmaklc5fzvschpbjkhphksr";
+    url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0r010wzw3dj87mapzvq15zv93i86wg0x0rpii3x2wapq3bcj30g2";
   };
 
   patches = [
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/aae1e774dd9de22fe3520cf9eb2bfbf7216f5eb0.patch";
+      sha256 = "O4m0rOW8Zrgu3Q0p0OA8b951VC0FjYbOUk9MLzB9icI=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
   ];
 
-  # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    perl
+    gettext
+    libxml2
+    libxslt
+    docbook_xsl
+    wrapGAppsHook
+    python3
+  ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig perl gettext libxml2 libxslt docbook_xsl wrapGAppsHook ];
-
-  buildInputs = with gnome3; [
-    ibus gtk glib gsettings-desktop-schemas networkmanager
-    libnotify gnome-desktop lcms2 libXtst libxkbfile libpulseaudio alsaLib
-    libcanberra-gtk3 upower colord libgweather xkeyboard_config nss
-    polkit geocode-glib geoclue2 librsvg xf86_input_wacom udev libgudev libwacom
+  buildInputs = [
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    modemmanager
+    networkmanager
+    libnotify
+    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+    gnome-desktop
+    lcms2
+    libpulseaudio
+    alsaLib
+    libcanberra-gtk3
+    upower
+    colord
+    libgweather
+    nss
+    polkit
+    geocode-glib
+    geoclue2
+    systemd
+    libgudev
+    libwacom
+    gcr
   ];
 
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
+    "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
   ];
+
+  # Default for release buildtype but passed manually because
+  # we're using plain
+  NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
+
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
@@ -44,14 +120,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-settings-daemon";
-      attrPath = "gnome3.gnome-settings-daemon";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

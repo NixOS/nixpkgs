@@ -1,31 +1,29 @@
-{
-  stdenv, pythonPackages, openssl,
-
+{ lib
+, python3
+, openssl
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
-  extraInputs ? []
+, extraInputs ? []
 }:
-
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "2018.3.2";
+  version = "3002.1";
 
-  src = pythonPackages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "d86eeea2e5387f4a64bbf0a11d103bfc8aac1122e19d39cc0945d33efdc797bd";
+    sha256 = "0pp7qcfwsvg4419hzfka1180pw3saa9mrhl0z9951zn9fw2nllsc";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3.pkgs; [
+    distro
     jinja2
     markupsafe
     msgpack
-    pycrypto
+    pycryptodomex
     pyyaml
     pyzmq
     requests
-    tornado_4
-  ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) [
-    futures
+    tornado
   ] ++ extraInputs;
 
   patches = [ ./fix-libcrypto-loading.patch ];
@@ -40,10 +38,11 @@ pythonPackages.buildPythonApplication rec {
   # as is it rather long.
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://saltstack.com/;
+  meta = with lib; {
+    homepage = "https://saltstack.com/";
+    changelog = "https://docs.saltstack.com/en/latest/topics/releases/${version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [ Flakebi ];
     license = licenses.asl20;
   };
 }

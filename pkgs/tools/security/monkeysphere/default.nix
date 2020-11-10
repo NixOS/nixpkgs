@@ -1,31 +1,66 @@
 { stdenv, fetchurl, makeWrapper
 , perl, libassuan, libgcrypt
-, perlPackages, lockfileProgs, gnupg
+, perlPackages, lockfileProgs, gnupg, coreutils
+# For the tests:
+, openssh, which, socat, cpio, hexdump, procps, openssl
 }:
 
-stdenv.mkDerivation rec {
-  name = "monkeysphere-${version}";
-  version = "0.41";
+let
+  # A patch is needed to run the tests inside the Nix sandbox:
+  # /etc/passwd: "nixbld:x:1000:100:Nix build user:/build:/noshell"
+  # sshd: "User nixbld not allowed because shell /noshell does not exist"
+  opensshUnsafe = openssh.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
+  });
+in stdenv.mkDerivation rec {
+  pname = "monkeysphere";
+  version = "0.44";
+
+  # The patched OpenSSH binary MUST NOT be used (except in the check phase):
+  disallowedRequisites = [ opensshUnsafe ];
 
   src = fetchurl {
     url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
-    sha256 = "0jz7kwkwgylqprnl8bwvl084s5gjrilza77ln18i3f6x48b2y6li";
+    sha256 = "1ah7hy8r9gj96pni8azzjb85454qky5l17m3pqn37854l6grgika";
   };
 
   patches = [ ./monkeysphere.patch ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl libassuan libgcrypt ];
+  postPatch = ''
+    sed -i "s,/usr/bin/env,${coreutils}/bin/env," src/share/ma/update_users
+  '';
 
-  makeFlags = ''
-    PREFIX=/
-    DESTDIR=$(out)
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl libassuan libgcrypt ]
+    ++ stdenv.lib.optional doCheck
+      ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
+      (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
+
+  makeFlags = [
+    "PREFIX=/"
+    "DESTDIR=$(out)"
+  ];
+
+  # The tests should be run (and succeed) when making changes to this package
+  # but they aren't enabled by default because they "drain" entropy (GnuPG
+  # still uses /dev/random).
+  doCheck = false;
+  preCheck = stdenv.lib.optionalString doCheck ''
+    patchShebangs tests/
+    patchShebangs src/
+    sed -i \
+      -e "s,/usr/sbin/sshd,${opensshUnsafe}/bin/sshd," \
+      -e "s,/bin/true,${coreutils}/bin/true," \
+      -e "s,/bin/false,${coreutils}/bin/false," \
+      -e "s,openssl\ req,${openssl}/bin/openssl req," \
+      tests/basic
+    sed -i "s/<(hd/<(hexdump/" tests/keytrans
   '';
 
   postFixup =
     let wrapperArgs = runtimeDeps:
           "--prefix PERL5LIB : "
-          + (with perlPackages; stdenv.lib.makePerlPath [
+          + (with perlPackages; makePerlPath [ # Optional (only required for keytrans)
               CryptOpenSSLRSA
               CryptOpenSSLBignum
             ])
@@ -38,7 +73,7 @@ stdenv.mkDerivation rec {
           (wrapMonkeysphere runtimeDeps)
           programs;
     in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
-      + wrapPrograms [ lockfileProgs ] [ "monkeysphere" ]
+      + wrapPrograms [ gnupg lockfileProgs ] [ "monkeysphere" ]
       + ''
         # These 4 programs depend on the program name ($0):
         for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
@@ -50,7 +85,7 @@ stdenv.mkDerivation rec {
       '';
 
   meta = with stdenv.lib; {
-    homepage = http://web.monkeysphere.info/;
+    homepage = "http://web.monkeysphere.info/";
     description = "Leverage the OpenPGP web of trust for SSH and TLS authentication";
     longDescription = ''
       The Monkeysphere project's goal is to extend OpenPGP's web of
@@ -62,7 +97,7 @@ stdenv.mkDerivation rec {
       familiar with, such as your web browser0 or secure shell.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

@@ -1,25 +1,60 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook
-, glib, gdk_pixbuf, gobjectIntrospection }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, libxslt
+, docbook-xsl-ns
+, glib
+, gdk-pixbuf
+, gobject-introspection
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
-  ver_maj = "0.7";
-  ver_min = "7";
-  name = "libnotify-${ver_maj}.${ver_min}";
+  pname = "libnotify";
+  version = "0.7.9";
+
+  outputs = [ "out" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libnotify/${ver_maj}/${name}.tar.xz";
-    sha256 = "017wgq9n00hx39n0hm784zn18hl721hbaijda868cm96bcqwxd4w";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0qa7cx6ra5hwqnxw95b9svgjg5q6ynm8y843iqjszxvds5z53h36";
   };
 
-  # disable tests as we don't need to depend on gtk+(2/3)
-  configureFlags = [ "--disable-tests" ];
+  mesonFlags = [
+    # disable tests as we don't need to depend on GTK (2/3)
+    "-Dtests=false"
+    "-Ddocbook_docs=disabled"
+    "-Dgtk_doc=false"
+  ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gobjectIntrospection ];
-  buildInputs = [ glib gdk_pixbuf ];
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    libxslt
+    docbook-xsl-ns
+  ];
 
-  meta = {
-    homepage = https://developer.gnome.org/notification-spec/;
+  propagatedBuildInputs = [
+    gdk-pixbuf
+    glib
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://developer.gnome.org/notification-spec/";
     description = "A library that sends desktop notifications to a notification daemon";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
+    license = licenses.lgpl21;
   };
 }

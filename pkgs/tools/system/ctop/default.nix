@@ -1,25 +1,26 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "ctop-unstable-${version}";
-  version = "2017-05-28";
-  rev = "b4e1fbf29073625ec803025158636bdbcf2357f4";
-
-  goPackagePath = "github.com/bcicen/ctop";
+buildGoModule rec {
+  pname = "ctop";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "bcicen";
-    repo = "ctop";
-    sha256 = "162pc7gds66cgznqlq9gywr0qij5pymn7xszlq9rn4w2fm64qgg3";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0zslxd00pypn6ri7r420mqxjqy3i6qv944f7899saapsb2m08w7j";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "0a5rwnf251jbp7jz2ln8z9hqp0112c6kx0y09nncvlcki35qq9sh";
 
-  meta = with stdenv.lib; {
-    description = "Concise commandline monitoring for containers";
-    homepage = https://ctop.sh/;
+  doCheck = false;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.build=v${version}" ];
+
+  meta = with lib; {
+    description = "Top-like interface for container metrics";
+    homepage = "https://ctop.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux ];
+    maintainers = with maintainers; [ apeyroux marsam ];
   };
 }

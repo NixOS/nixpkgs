@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, scons, pkgconfig, dbus, dbus-glib
+{ fetchurl, stdenv, sconsPackages, pkgconfig, dbus, dbus-glib
 , ncurses, libX11, libXt, libXpm, libXaw, libXext
 , libusb1, docbook_xml_dtd_412, docbook_xsl, bc
 , libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
+    sconsPackages.scons_3_1_2 pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
     python2Packages.python
     python2Packages.wrapPython
   ];
@@ -42,32 +42,36 @@ stdenv.mkDerivation rec {
     ./0002-scons-envs-patch.patch
   ];
 
-  # - leapfetch=no disables going online at build time to fetch leap-seconds
-  #   info. See <gpsd-src>/build.txt for more info.
-  buildPhase = ''
-    patchShebangs .
-    sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
-    scons \
-      -j $NIX_BUILD_CORES \
-      prefix="$out" \
-      leapfetch=no \
-      gpsd_user=${gpsdUser} \
-      gpsd_group=${gpsdGroup} \
-      systemd=yes \
-      udevdir="$out/lib/udev" \
-      python_libdir="$out/lib/${python2Packages.python.libPrefix}/site-packages"
+  postPatch = ''
+    sed -i -e '17i#include <sys/sysmacros.h>' serial.c
   '';
 
-  checkPhase = ''
+  # - leapfetch=no disables going online at build time to fetch leap-seconds
+  #   info. See <gpsd-src>/build.txt for more info.
+  preBuild = ''
+    patchShebangs .
+    sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
+
+    sconsFlags+=" udevdir=$out/lib/udev"
+    sconsFlags+=" python_libdir=$out/lib/${python2Packages.python.libPrefix}/site-packages"
+  '';
+
+  sconsFlags = [
+    "leapfetch=no"
+    "gpsd_user=${gpsdUser}"
+    "gpsd_group=${gpsdGroup}"
+    "systemd=yes"
+  ];
+
+  preCheck = ''
     export LD_LIBRARY_PATH="$PWD"
-    scons check
   '';
 
   # TODO: the udev rules file and the hotplug script need fixes to work on NixOS
-  installPhase = ''
+  preInstall = ''
     mkdir -p "$out/lib/udev/rules.d"
-    scons install udev-install
   '';
+  installTargets = [ "install" "udev-install" ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
@@ -93,8 +97,8 @@ stdenv.mkDerivation rec {
       diagnostic monitoring and profiling of receivers and feeding
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
-    homepage = http://catb.org/gpsd/;
-    license = "BSD-style";
+    homepage = "http://catb.org/gpsd/";
+    license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];
   };

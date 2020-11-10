@@ -5,27 +5,37 @@
 , idna
 , outcome
 , contextvars
-, pytest
+, pytestCheckHook
 , pyopenssl
 , trustme
 , sniffio
+, stdenv
+, jedi
+, pylint
+, astor
+, yapf
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.7.0";
-  disabled = pythonOlder "3.5";
+  version = "0.17.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0df152qnj4xgxrxzd8619f8h77mzry7z8sp4m76fi21gnrcr297n";
+    sha256 = "0zcxirpdvvl54pbfkgw7vz984879xwvdygqfpggnam24is2zjp78";
   };
 
-  checkInputs = [ pytest pyopenssl trustme ];
+  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
-  checkPhase = ''
-    py.test -k 'not test_getnameinfo and not test_SocketType_resolve and not test_getprotobyname'
-  '';
+  disabledTests = [
+    "getnameinfo"
+    "SocketType_resolve"
+    "getprotobyname"
+    "waitpid"
+    "static_tool_sees_all_symbols"
+  ];
+
   propagatedBuildInputs = [
     attrs
     sortedcontainers
@@ -35,9 +45,12 @@ buildPythonPackage rec {
     sniffio
   ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
 
+  # tests are failing on Darwin
+  doCheck = !stdenv.isDarwin;
+
   meta = {
     description = "An async/await-native I/O library for humans and snake people";
-    homepage = https://github.com/python-trio/trio;
+    homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

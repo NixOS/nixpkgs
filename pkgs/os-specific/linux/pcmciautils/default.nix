@@ -1,10 +1,9 @@
-{ stdenv, fetchurl
+{ config, lib, stdenv, fetchurl
 , yacc, flex
 , sysfsutils, kmod, udev
-, firmware # Special pcmcia cards.
-, config   # Special hardware (map memory & port & irq)
-, lib      # used to generate postInstall script.
-}:
+, firmware   ? config.pcmciaUtils.firmware or [] # Special pcmcia cards.
+, configOpts ? config.pcmciaUtils.config or null # Special hardware (map memory & port & irq)
+}:                   # used to generate postInstall script.
 
 # FIXME: should add an option to choose between hotplug and udev.
 stdenv.mkDerivation rec {
@@ -28,12 +27,12 @@ stdenv.mkDerivation rec {
     " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
   ''
   + (if firmware == [] then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
-  + (if config == null then "" else ''
-    ln -sf ${config} ./config/config.opts'')
+  + (if configOpts == null then "" else ''
+    ln -sf ${configOpts} ./config/config.opts'')
   ;
 
-  makeFlags = "LEX=flex";
-  installFlags = ''INSTALL=install DESTDIR=''${out}'';
+  makeFlags = [ "LEX=flex" ];
+  installFlags = [ "INSTALL=install" "DESTDIR=${placeholder "out"}" ];
   postInstall =
     lib.concatMapStrings (path: ''
       for f in : $(find ${path} -type f); do
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
     '') firmware;
 
   meta = {
-    homepage = https://www.kernel.org/pub/linux/utils/kernel/pcmcia/;
+    homepage = "https://www.kernel.org/pub/linux/utils/kernel/pcmcia/";
     longDescription = "
       PCMCIAutils contains the initialization tools necessary to allow
       the PCMCIA subsystem to behave (almost) as every other

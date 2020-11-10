@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   };
   src = [ ftesrc ftecommon ];
 
-  buildFlags = "PREFIX=$(out)";
+  buildFlags = [ "PREFIX=$(out)" ];
 
-  installFlags = "PREFIX=$(out) INSTALL_NONROOT=1";
+  installFlags = [ "PREFIX=$(out)" "INSTALL_NONROOT=1" ];
 
   meta = with stdenv.lib; {
     description = "A free text editor for developers";
-    homepage = http://fte.sourceforge.net/;
+    homepage = "http://fte.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.all;

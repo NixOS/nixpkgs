@@ -1,11 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "progressbar";
   version = "2.5";
-
-  # https://github.com/niltonvolpato/python-progressbar/issues/54
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/progressbar;
+    homepage = "https://pypi.python.org/pypi/progressbar";
     description = "Text progressbar library for python";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ domenkozar ];

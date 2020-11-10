@@ -6,39 +6,45 @@
 , ipython
 , jinja2
 , python-oauth2
+, prometheus_client
+, async_generator
 , pamela
 , sqlalchemy
 , tornado
 , traitlets
 , requests
+, notebook
 , pythonOlder
 , nodePackages
+, oauthlib
+, certipy
+, jupyter-telemetry
 }:
 
 let
   # js/css assets that setup.py tries to fetch via `npm install` when building
   # from source.
-  bootstrap = 
+  bootstrap =
     fetchzip {
       url = "https://registry.npmjs.org/bootstrap/-/bootstrap-3.3.7.tgz";
       sha256 = "0r7s54bbf68ri1na9bbabyf12mcpb6zk5ja2q6z82aw1fa4xi3yd";
     };
-  font-awesome = 
+  font-awesome =
     fetchzip {
       url = "https://registry.npmjs.org/font-awesome/-/font-awesome-4.7.0.tgz";
       sha256 = "1xnxbdlfdd60z5ix152m8r2kk9dkwlqwpypky1mm3dv64ajnzdbk";
     };
-  jquery = 
+  jquery =
     fetchzip {
       url = "https://registry.npmjs.org/jquery/-/jquery-3.2.1.tgz";
       sha256 = "1j6y18miwzafdj8kfpwbmbn9qvgnbnpc7l4arqrhqj33m04xrlgi";
     };
-  moment = 
+  moment =
     fetchzip {
-      url = "https://registry.npmjs.org/moment/-/moment-2.18.1.tgz";
-      sha256 = "1b4vyvs24v6y92pf2iqjm5aa7jg7khcpspn00girc7lpi917f9vw";
+      url = "https://registry.npmjs.org/moment/-/moment-2.22.2.tgz";
+      sha256 = "12gb3p0rz5wyjwykv9g0pix7dd352lx1z7rzdjsf2brhwc4ffyip";
     };
-  requirejs = 
+  requirejs =
     fetchzip {
       url = "https://registry.npmjs.org/requirejs/-/requirejs-2.3.4.tgz";
       sha256 = "0q6mkj0iv341kks06dya6lfs2kdw0n6vc7n4a7aa3ia530fk9vja";
@@ -48,11 +54,12 @@ in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "0.8.1";
+  version = "1.1.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "100cf18d539802807a45450d38fefbb376cf1c810f3b1b31be31638829a5c69c";
+    sha256 = "1mqknz0rxqzx4nc57vscvfh2d4znzlzpy83ancqxdaq3b8i70al5";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -103,17 +110,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alembic ipython jinja2 pamela python-oauth2 requests sqlalchemy tornado
-    traitlets
+    traitlets prometheus_client async_generator notebook certipy oauthlib
+    jupyter-telemetry
   ];
 
   # Disable tests because they take an excessive amount of time to complete.
   doCheck = false;
 
-  disabled = pythonOlder "3.4";
-  
+
   meta = with lib; {
     description = "Serves multiple Jupyter notebook instances";
-    homepage = http://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
   };

@@ -1,11 +1,9 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, meson, ninja, python3, granite
-, gtk3, gnome3, libsoup, libsecret, gobjectIntrospection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, nix-update-script, pantheon, pkgconfig, meson, ninja, python3, vala
+, gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "taxi";
   version = "0.0.1";
-
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
@@ -15,18 +13,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobjectIntrospection
+    vala
+    gobject-introspection
     meson
     ninja
     pkgconfig
     python3
-    vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.libgee
-    granite
+    pantheon.granite
+    libgee
     gtk3
     libsecret
     libsoup
@@ -37,9 +35,15 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "The FTP Client that drives you anywhere";
-    homepage    = https://github.com/Alecaddd/taxi;
+    homepage    = "https://github.com/Alecaddd/taxi";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms   = platforms.linux;

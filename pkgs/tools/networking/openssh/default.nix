@@ -1,47 +1,58 @@
-{ stdenv, fetchurl, fetchpatch, zlib, openssl, libedit, pkgconfig, pam, autoreconfHook
+{ stdenv
+, fetchurl
+, fetchpatch
+, zlib
+, openssl
+, libedit
+, pkgconfig
+, pam
+, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? true
 , withGssapiPatches ? false
 , kerberos
-, linkOpenssl? true
+, libfido2
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+, linkOpenssl ? true
 }:
 
 let
 
+  version = "8.4p1";
+
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://salsa.debian.org/ssh-team/openssh/raw/"
-      + "e395eed38096fcda74398424ea94de3ec44effd5"
-      + "/debian/patches/gssapi.patch";
-    sha256 = "0x7xysgdahb4jaq0f28g2d7yzp0d3mh59i4xnffszvjndhvbk27x";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
+    sha256 = "1z1ckzimlkm1dmr9f5fqjnjg28gsqcwx6xka0klak857548d2lp2";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-${version}";
-  version = if hpnSupport then "7.7p1" else "7.7p1";
+  pname = "openssh";
+  inherit version;
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_7_P1.tar.gz";
-        sha256 = "1l4k8mg3gnzxbz53cma8s6ak56waz03ijsr08p8vgpi0c2rc5ri5";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-${replaceStrings [ "." "p" ] [ "_" "_P" ] version}.tar.gz";
+        sha256 = "06mr2q8d9kbj145r7mzmpm3a4ilnssibwlbjyy0bjsqrqnrll3zl";
       }
     else
       fetchurl {
-        url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "13vbbrvj3mmfhj83qyrg5c0ipr6bzw5s65dy4k8gr7p9hkkfffyp";
+        url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
+        sha256 = "091b3pxdlj47scxx6kkf4agkx8c8sdacdxx8m1dw1cby80pd40as";
       };
 
   patches =
     [
       ./locale_archive.patch
-      ./fix-host-key-algorithms-plus.patch
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
+
+      ./ssh-keysign.patch
     ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
@@ -52,11 +63,10 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ] ++ optional (hpnSupport || withGssapiPatches) autoreconfHook;
   buildInputs = [ zlib openssl libedit pam ]
-    ++ optional withKerberos kerberos
-    ++ optional hpnSupport autoreconfHook
-    ;
+    ++ optional withFIDO libfido2
+    ++ optional withKerberos kerberos;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -75,9 +85,12 @@ stdenv.mkDerivation rec {
     "--disable-strip"
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ optional withFIDO "--with-security-key-builtin=yes"
     ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
+
+  buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
   enableParallelBuilding = true;
 
@@ -96,10 +109,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://www.openssh.com/;
     description = "An implementation of the SSH protocol";
+    homepage = "https://www.openssh.com/";
+    changelog = "https://www.openssh.com/releasenotes.html";
     license = stdenv.lib.licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ eelco aneeshusa ];
   };
 }

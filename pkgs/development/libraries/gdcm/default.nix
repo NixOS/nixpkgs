@@ -1,29 +1,39 @@
-{ stdenv, fetchurl, cmake, vtk }:
+{ stdenv, fetchurl, cmake, vtk_7, darwin
+, enablePython ? false, python ? null,  swig ? null}:
 
 stdenv.mkDerivation rec {
-  version = "2.8.7";
-  name = "gdcm-${version}";
+  version = "3.0.8";
+  pname = "gdcm";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gdcm/${name}.tar.bz2";
-    sha256 = "1psl4r0i3hfhjjm9y8q5ml9lnlal4212bm8df21087dddi9nfl62";
+    url = "mirror://sourceforge/gdcm/${pname}-${version}.tar.bz2";
+    sha256 = "1q9p0r7wszn51yak9wdp61fd9i0wj3f8ja2frmhk7d1gxic7j1rk";
   };
 
   dontUseCmakeBuildDir = true;
+
+  cmakeFlags = [
+    "-DGDCM_BUILD_APPLICATIONS=ON"
+    "-DGDCM_BUILD_SHARED_LIBS=ON"
+    "-DGDCM_USE_VTK=ON"
+  ]
+  ++ stdenv.lib.optional enablePython [
+    "-DGDCM_WRAP_PYTHON:BOOL=ON"
+    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
+  ];
+
   preConfigure = ''
     cmakeDir=$PWD
     mkdir ../build
     cd ../build
   '';
 
-  cmakeFlags = ''
-    -DGDCM_BUILD_APPLICATIONS=ON
-    -DGDCM_BUILD_SHARED_LIBS=ON
-    -DGDCM_USE_VTK=ON
-  '';
-
   enableParallelBuilding = true;
-  buildInputs = [ cmake vtk ];
+  buildInputs = [ cmake vtk_7 ]
+    ++ stdenv.lib.optional stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.ApplicationServices
+      darwin.apple_sdk.frameworks.Cocoa
+    ] ++ stdenv.lib.optional enablePython [ swig python ];
   propagatedBuildInputs = [ ];
 
   meta = with stdenv.lib; {
@@ -32,9 +42,8 @@ stdenv.mkDerivation rec {
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.
     '';
-    homepage = http://gdcm.sourceforge.net/;
+    homepage = "http://gdcm.sourceforge.net/";
     license = with licenses; [ bsd3 asl20 ];
     platforms = platforms.all;
   };
 }
-

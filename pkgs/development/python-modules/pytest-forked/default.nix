@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-forked";
-  version = "0.2";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e4500cd0509ec4a26535f7d4112a8cc0f17d3a41c29ffd4eab479d2a55b30805";
+    sha256 = "6aa9ac7e00ad1a539c41bec6d21011332de671e938c7637378ec9710204e37ca";
   };
 
   buildInputs = [ pytest setuptools_scm ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Run tests in isolated forked subprocesses";
-    homepage = https://github.com/pytest-dev/pytest-forked;
+    homepage = "https://github.com/pytest-dev/pytest-forked";
     license = lib.licenses.mit;
   };
 

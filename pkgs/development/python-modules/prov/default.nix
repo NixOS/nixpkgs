@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "prov";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "640dc158d931403bc6c1a0ad80702caae71f810bac21f90ec605865c8444b7bb";
+    sha256 = "1a9h406laclxalmdny37m0yyw7y17n359akclbahimdggq853jd0";
   };
 
   prePatch = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python library for W3C Provenance Data Model (PROV)";
-    homepage = https://github.com/trungdong/prov;
+    homepage = "https://github.com/trungdong/prov";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];
   };

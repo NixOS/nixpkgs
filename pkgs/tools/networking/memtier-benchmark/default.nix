@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "memtier-benchmark-${version}";
-  version = "1.2.11";
+  pname = "memtier-benchmark";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner  = "redislabs";
     repo   = "memtier_benchmark";
     rev    = "refs/tags/${version}";
-    sha256 = "0a1lz4j9whj6yf94xn7rna00abgrv2qs30vmpns1n9zqlpaj6b6a";
+    sha256 = "0m2qnnc71qpdj8w421bxn0zxz6ddvzy7b0n19jvyncnzvk1ff0sq";
   };
 
   patchPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Redis and Memcached traffic generation and benchmarking tool";
-    homepage    = https://github.com/redislabs/memtier_benchmark;
+    homepage    = "https://github.com/redislabs/memtier_benchmark";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];

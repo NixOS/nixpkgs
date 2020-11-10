@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, glibc, libGLU_combined, freetype, glib, libSM, libICE, libXi, libXv
+{ stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
 , libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11
-, zlib, fontconfig, dpkg, libproxy, libxml2, gstreamer, gst_all_1, dbus }:
+, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus }:
 
 let
   arch =
@@ -20,7 +20,7 @@ let
     libICE
     libXi
     libXv
-    libGLU_combined
+    libGLU libGL
     libXrender
     libXrandr
     libXfixes
@@ -33,14 +33,14 @@ let
     fontconfig
     libproxy
     libxml2
-    gstreamer
     dbus
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
   ];
 in
 stdenv.mkDerivation rec {
-  name = "googleearth-${version}";
+  pname = "googleearth";
+  inherit version;
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-stable/google-earth-stable_${version}-r0_${arch}.deb";
     inherit sha256;
@@ -79,6 +79,15 @@ stdenv.mkDerivation rec {
     for a in $out/opt/google/earth/free/*.so* ; do
       patchelf --set-rpath "${fullPath}:\$ORIGIN" $a
     done
+
+    # Add desktop config file and icons
+    mkdir -p $out/share/{applications,icons/hicolor/{16x16,22x22,24x24,32x32,48x48,64x64,128x128,256x256}/apps,pixmaps}
+    ln -s $out/opt/google/earth/free/google-earth.desktop $out/share/applications/google-earth.desktop
+    sed -i -e "s|Exec=.*|Exec=$out/bin/googleearth|g" $out/opt/google/earth/free/google-earth.desktop
+    for size in 16 22 24 32 48 64 128 256; do
+      ln -s $out/opt/google/earth/free/product_logo_"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/google-earth.png
+    done
+    ln -s $out/opt/google/earth/free/product_logo_256.png $out/share/pixmaps/google-earth.png
   '';
 
   checkPhase = ''
@@ -89,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A world sphere viewer";
-    homepage = http://earth.google.com;
+    homepage = "http://earth.google.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ markus1189 ];
     platforms = platforms.linux;

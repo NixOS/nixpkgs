@@ -1,26 +1,29 @@
-{ stdenv, fetchurl, pkgs }:
+{ stdenv, fetchurl, makeWrapper, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "pipes-${version}";
-  version = "1.2.0";
+  pname = "pipes";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/pipeseroni/pipes.sh/archive/v${version}.tar.gz";
-    sha256 = "1v0xhgq30zkfjk9l5g8swpivh7rxfjbzhbjpr2c5c836wgn026fb";
+    sha256 = "09m4alb3clp3rhnqga5v6070p7n1gmnwp2ssqhq87nf2ipfpcaak";
   };
 
-  buildInputs = with pkgs; [ bash ];
+  buildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir $out -p
     make PREFIX=$out/ install
+
+    wrapProgram $out/bin/pipes.sh \
+      --set PATH "${stdenv.lib.makeBinPath [ coreutils ncurses ]}"
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pipeseroni/pipes.sh;
+    homepage = "https://github.com/pipeseroni/pipes.sh";
     description = "Animated pipes terminal screensaver";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;
   };
 }

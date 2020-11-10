@@ -1,23 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, six, cryptography }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, cryptography
+, mock
+, pyfakefs
+}:
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "0.3.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ddbhg4nsabi9w66l8vkr0i5r80jqihlic5yrdl3v1aqahvxph1j";
+    sha256 = "1hzprnd407g2xh9kyv8j8pq949hwr1snmg3fp65pqfbghzv6i424";
   };
-
-  # The pypi package does not include tests
-  # Check https://github.com/Yubico/python-fido2/pull/8
-  doCheck = false;
 
   propagatedBuildInputs = [ six cryptography ];
 
+  checkInputs = [ mock pyfakefs ];
+
   meta = with lib; {
     description = "Provides library functionality for FIDO 2.0, including communication with a device over USB.";
-    homepage = https://github.com/Yubico/python-fido2;
-    license = licenses.mpl20;
+    homepage = "https://github.com/Yubico/python-fido2";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ prusnak ];
   };
 }

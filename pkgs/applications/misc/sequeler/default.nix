@@ -1,33 +1,39 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, vala, gobjectIntrospection, gettext, wrapGAppsHook, python3, desktop-file-utils
-, gtk3, glib, granite, libgee, libgda, gtksourceview, libxml2, libsecret }:
+{ stdenv, fetchFromGitHub, nix-update-script
+, vala, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
+, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
 
 let
-  version = "0.6.2";
   sqlGda = libgda.override {
     mysqlSupport = true;
     postgresSupport = true;
   };
 
 in stdenv.mkDerivation rec {
-  name = "sequeler-${version}";
+  pname = "sequeler";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
-    repo = "sequeler";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0j5z3z34jc1acclmlkjpv7fcs4f2gf0bcfnvcpn3zdzw9fzj0sw7";
+    sha256 = "090plqnby2wxzr1waq5kz89w3269j363mgxwfz9g7qg55lddaahz";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection gettext wrapGAppsHook python3 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkgconfig vala gettext wrapGAppsHook python3 desktop-file-utils ];
 
-  buildInputs = [ gtk3 glib granite libgee sqlGda gtksourceview libxml2 libsecret ];
+  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
 
   postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Friendly SQL Client";
@@ -37,9 +43,9 @@ in stdenv.mkDerivation rec {
       editor with language recognition, and visualize SELECT results in a
       Gtk.Grid Widget.
     '';
-    homepage = https://github.com/Alecaddd/sequeler;
+    homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ];
+    maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

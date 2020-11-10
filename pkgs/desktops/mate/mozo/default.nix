@@ -1,25 +1,28 @@
-{ stdenv, fetchurl, pkgconfig, intltool, mate, pythonPackages }:
+{ stdenv, python3, fetchurl, pkgconfig, gettext, mate, gtk3, glib, wrapGAppsHook, gobject-introspection }:
 
-stdenv.mkDerivation rec {
-  name = "mozo-${version}";
-  version = "1.20.1";
+python3.pkgs.buildPythonApplication rec {
+  pname = "mozo";
+  version = "1.24.0";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "16rkwbq385i2acll0kcsnp4ghdyljylhp06bjdsvbwv6bjspyyrp";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "01lyi47a04xk0by5bvnfmqgv5sysk2wdlri6a4ssmy1qhgwh9zr3";
   };
-  
-  pythonPath = [ mate.mate-menus pythonPackages.pygobject3 ];
 
-  nativeBuildInputs = [ pkgconfig intltool pythonPackages.wrapPython ];
+  nativeBuildInputs = [ pkgconfig gettext gobject-introspection wrapGAppsHook ];
 
-  buildInputs = [ pythonPackages.python ] ++ pythonPath;
+  propagatedBuildInputs =  [ mate.mate-menus python3.pkgs.pygobject3 ];
 
-  preFixup = "wrapPythonPrograms";
+  buildInputs = [ gtk3 glib ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "MATE Desktop menu editor";
-    homepage = https://github.com/mate-desktop/mozo;
+    homepage = "https://github.com/mate-desktop/mozo";
     license = with licenses; [ lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

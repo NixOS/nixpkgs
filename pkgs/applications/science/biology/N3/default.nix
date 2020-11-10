@@ -1,26 +1,23 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper,
-  perl, MNI-Perllib, GetoptTabular,
+  perlPackages,
   libminc, EBTKS }:
 
 stdenv.mkDerivation rec {
   pname = "N3";
-  name  = "${pname}-2017-09-18";
+  version = "unstable-2018-08-09";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
     repo   = pname;
-    rev    = "2fdd939f0f2b24a4039bc6a8ade4a190a1d8e75d";
-    sha256 = "13z21c4r09hna3q1csvcn4i7ws5ixbdaja6ch421xv6nydjh2w5g";
+    rev    = "010fc2ac58ce1d67b8e6a863fac0809d3203cb9b";
+    sha256 = "06hci7gzhy8p34ggvx7gah2k9yxpwhgmq1cgw8pcd1r82g4rg6kd";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc EBTKS ];
-  propagatedBuildInputs = [ perl MNI-Perllib GetoptTabular ];
+  propagatedBuildInputs = with perlPackages; [ perl MNI-Perllib GetoptTabular ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DEBTKS_DIR=${EBTKS}/lib/" ];
-
-  checkPhase = "ctest --output-on-failure";
-  # don't run the tests as they fail at least due to missing program wrappers in this phase ...
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${EBTKS}/lib/" ];
 
   postFixup = ''
     for p in $out/bin/*; do
@@ -29,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/BIC-MNI/${pname}";
+    homepage = "https://github.com/BIC-MNI/N3";
     description = "MRI non-uniformity correction for MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

@@ -1,16 +1,15 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, easy-format }:
+{ stdenv, fetchFromGitHub, buildDunePackage, easy-format }:
 
-stdenv.mkDerivation rec {
-  version = "1.2.0";
-  name = "ocaml${ocaml.version}-biniou-${version}";
+buildDunePackage rec {
+  pname = "biniou";
+  version = "1.2.1";
+
   src = fetchFromGitHub {
-    owner = "mjambon";
-    repo = "biniou";
-    rev = "v${version}";
-    sha256 = "0mjpgwyfq2b2izjw0flmlpvdjgqpq8shs89hxj1np2r50csr8dcb";
+    owner = "ocaml-community";
+    repo = pname;
+    rev = version;
+    sha256 = "0x2kiy809n1j0yf32l7hj102y628jp5jdrkbi3z7ld8jq04h1790";
   };
-
-  buildInputs = [ ocaml findlib dune ];
 
   propagatedBuildInputs = [ easy-format ];
 
@@ -18,11 +17,8 @@ stdenv.mkDerivation rec {
    patchShebangs .
   '';
 
-  inherit (dune) installPhase;
-
   meta = {
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
     description = "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     license = stdenv.lib.licenses.bsd3;

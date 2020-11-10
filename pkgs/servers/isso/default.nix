@@ -1,43 +1,33 @@
-{ stdenv, python2, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-let python = python2.override {
-  packageOverrides = self: super: {
-    misaka = super.misaka.overridePythonAttrs (old: rec {
-      version = "1.0.2";
-      src = old.src.override {
-        inherit version;
-        sha256 = "05rmjxlfhghj90m1kc55lx3z8igabw5y8wmly66p3hphdy4f95v1";
-      };
-      propagatedBuildInputs = [ ];
-    });
-    html5lib = super.html5lib.overridePythonAttrs (old: rec {
-      version = "0.9999999";
-      src = old.src.override {
-        inherit version;
-        sha256 = "2612a191a8d5842bfa057e41ba50bbb9dcb722419d2408c78cff4758d0754868";
-      };
-      checkInputs = with self; [ nose flake8 ];
-      propagatedBuildInputs = with self; [ six ];
-      checkPhase = ''
-        nosetests
-      '';
-    });
-  };
-};
+with python3Packages; buildPythonApplication rec {
 
-in with python.pkgs; buildPythonApplication rec {
   pname = "isso";
-  version = "0.10.6";
+  # Can not use 0.12.2 because of:
+  # https://github.com/posativ/isso/issues/617
+  version = "unstable-2020-09-14";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = version;
-    sha256 = "19x9xbwd15fikhchyl4i1wrqx589hdmh279xhnxdszrq898igywb";
+    rev = "f4d2705d4f1b51f444d0629355a6fcbcec8d57b5";
+    sha256 = "02jgfzq3svd54zj09jj7lm2r7ypqqjynzxa9dgnnm0pqvq728wzr";
   };
 
-  propagatedBuildInputs = [ misaka werkzeug ipaddr configparser html5lib ];
+  propagatedBuildInputs = [
+    itsdangerous
+    jinja2
+    misaka
+    html5lib
+    werkzeug
+    bleach
+    flask-caching
+  ];
+
+  buildInputs = [
+    cffi
+  ];
 
   checkInputs = [ nose ];
 
@@ -47,8 +37,9 @@ in with python.pkgs; buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A commenting server similar to Disqus";
-    homepage = https://posativ.org/isso/;
+    homepage = "https://posativ.org/isso/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
   };
 }
+

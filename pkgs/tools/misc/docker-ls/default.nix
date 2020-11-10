@@ -1,14 +1,14 @@
 { buildGoPackage, fetchFromGitHub, stdenv, docker }:
 
 buildGoPackage rec {
-  name = "docker-ls-${version}";
-  version = "0.3.1";
+  pname = "docker-ls";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "docker-ls";
     rev = "v${version}";
-    sha256 = "1dhadi1s3nm3r8q5a0m59fy4jdya8p7zvm22ci7ifm3mmw960xly";
+    sha256 = "1hb9b0jhaf01zlmkm353mz608kwb79dzic3gvb2fhyrh8d17w2iv";
   };
 
   goPackagePath = "github.com/mayflower/docker-ls";
@@ -21,7 +21,7 @@ buildGoPackage rec {
       with tags.
     '';
 
-    homepage = https://github.com/mayflower/docker-ls;
+    homepage = "https://github.com/mayflower/docker-ls";
     maintainers = with maintainers; [ ma27 ];
     platforms = docker.meta.platforms;
     license = licenses.mit;

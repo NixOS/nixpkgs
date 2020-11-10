@@ -1,10 +1,10 @@
 { stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
-, glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg, gobjectIntrospection
+, glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   version = "1.8.19";
-  name = "gnome-encfs-manager-${version}";
+  pname = "gnome-encfs-manager";
 
   src = fetchurl {
     url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.xz";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ autoconf automake intltool libtool vala glib encfs
     gtk3 libgnome-keyring gnome3.libgee xorg.libSM xorg.libICE
-    wrapGAppsHook gobjectIntrospection  ];
+    wrapGAppsHook gobject-introspection  ];
 
   patches = [ ./makefile-mkdir.patch ];
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.libertyzero.com/GEncfsM/;
-    downloadPage = https://launchpad.net/gencfsm/;
+    homepage = "http://www.libertyzero.com/GEncfsM/";
+    downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,10 +1,10 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, libGL, glew
-, xorg , ffmpeg, python3 , libjpeg, libpng, libtiff, eigen
+, xorg , ffmpeg_3, python3 , libjpeg, libpng, libtiff, eigen
 , Carbon ? null, Cocoa ? null
 }:
 
-stdenv.mkDerivation rec {
-  name = "pangolin-${version}";
+stdenv.mkDerivation {
+  pname = "pangolin";
 
   version = "2017-08-02";
 
@@ -15,18 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "0pfbaarlsw7f7cmsppm7m13nz0k530wwwyczy2l9k448p3v7x9j0";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen ]; 
+  nativeBuildInputs = [ cmake pkgconfig doxygen ];
 
-  buildInputs = [ 
-    libGL 
-    glew 
-    xorg.libX11 
-    ffmpeg 
-    python3 
-    libjpeg 
-    libpng 
-    libtiff 
-    eigen 
+  buildInputs = [
+    libGL
+    glew
+    xorg.libX11
+    ffmpeg_3
+    python3
+    libjpeg
+    libpng
+    libtiff
+    eigen
   ]
   ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       integration, and has a flexible real-time plotter for visualising
       graphical data.
     '';
-    homepage = https://github.com/stevenlovegrove/Pangolin;
+    homepage = "https://github.com/stevenlovegrove/Pangolin";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.expipiplus1 ];
     platforms = stdenv.lib.platforms.all;

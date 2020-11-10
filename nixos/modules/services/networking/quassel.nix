@@ -16,10 +16,21 @@ in
 
     services.quassel = {
 
-      enable = mkOption {
+      enable = mkEnableOption "the Quassel IRC client daemon";
+
+      certificateFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to the certificate used for SSL connections with clients.
+        '';
+      };
+
+      requireSSL = mkOption {
+        type = types.bool;
         default = false;
         description = ''
-          Whether to run the Quassel IRC client daemon.
+          Require SSL for connections from clients.
         '';
       };
 
@@ -71,18 +82,30 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.requireSSL -> cfg.certificateFile != null;
+        message = "Quassel needs a certificate file in order to require SSL";
+      }];
 
-    users.users = mkIf (cfg.user == null) [
-      { name = "quassel";
+    users.users = optionalAttrs (cfg.user == null) {
+      quassel = {
+        name = "quassel";
         description = "Quassel IRC client daemon";
         group = "quassel";
         uid = config.ids.uids.quassel;
-      }];
+      };
+    };
 
-    users.groups = mkIf (cfg.user == null) [
-      { name = "quassel";
+    users.groups = optionalAttrs (cfg.user == null) {
+      quassel = {
+        name = "quassel";
         gid = config.ids.gids.quassel;
-      }];
+      };
+    };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${user} - - -"
+    ];
 
     systemd.services.quassel =
       { description = "Quassel IRC client daemon";
@@ -91,16 +114,16 @@ in
         after = [ "network.target" ] ++ optional config.services.postgresql.enable "postgresql.service"
                                      ++ optional config.services.mysql.enable "mysql.service";
 
-        preStart = ''
-          mkdir -p ${cfg.dataDir}
-          chown ${user} ${cfg.dataDir}
-        '';
-
         serviceConfig =
         {
-          ExecStart = "${quassel}/bin/quasselcore --listen=${concatStringsSep '','' cfg.interfaces} --port=${toString cfg.portNumber} --configdir=${cfg.dataDir}";
+          ExecStart = concatStringsSep " " ([
+            "${quassel}/bin/quasselcore"
+            "--listen=${concatStringsSep "," cfg.interfaces}"
+            "--port=${toString cfg.portNumber}"
+            "--configdir=${cfg.dataDir}"
+          ] ++ optional cfg.requireSSL "--require-ssl"
+            ++ optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}");
           User = user;
-          PermissionsStartOnly = true;
         };
       };
 

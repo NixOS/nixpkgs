@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name="libfixposix-${version}";
+  pname = "libfixposix";
   version="0.4.3";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sionescu/libfixposix;
+    homepage = "https://github.com/sionescu/libfixposix";
     description = "Thin wrapper over POSIX syscalls and some replacement functionality";
     license = licenses.boost;
     maintainers = with maintainers; [ orivej raskin ];

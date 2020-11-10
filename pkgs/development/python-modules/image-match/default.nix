@@ -26,7 +26,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ascribe/image-match;
+    homepage = "https://github.com/ascribe/image-match";
     description = "Quickly search over billions of images";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai ];

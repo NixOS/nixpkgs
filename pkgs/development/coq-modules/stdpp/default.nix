@@ -1,10 +1,14 @@
-{ stdenv, fetchzip, coq }:
+{ stdenv, fetchFromGitLab, coq }:
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-stdpp-1.1";
-  src = fetchzip {
-    url = "https://gitlab.mpi-sws.org/robbertkrebbers/coq-stdpp/-/archive/coq-stdpp-1.1.0/coq-stdpp-coq-stdpp-1.1.0.tar.gz";
-    sha256 = "0z8zl288x9w32w06sjax01jcpy12wd5i3ygps58dl2hfy7r3lwg0";
+stdenv.mkDerivation rec {
+  name = "coq${coq.coq-version}-stdpp-${version}";
+  version = "1.4.0";
+  src = fetchFromGitLab {
+    domain = "gitlab.mpi-sws.org";
+    owner = "iris";
+    repo = "stdpp";
+    rev = "coq-stdpp-${version}";
+    sha256 = "1m6c7ibwc99jd4cv14v3r327spnfvdf3x2mnq51f9rz99rffk68r";
   };
 
   buildInputs = [ coq ];
@@ -14,7 +18,7 @@ stdenv.mkDerivation {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = {
-    homepage = "https://gitlab.mpi-sws.org/robbertkrebbers/coq-stdpp";
+    inherit (src.meta) homepage;
     description = "An extended “Standard Library” for Coq";
     inherit (coq.meta) platforms;
     license = stdenv.lib.licenses.bsd3;
@@ -22,7 +26,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
+    compatibleCoqVersions = v: builtins.elem v [ "8.8" "8.9" "8.10" "8.11" "8.12" ];
   };
 
 }

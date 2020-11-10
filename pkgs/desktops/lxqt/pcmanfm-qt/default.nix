@@ -1,45 +1,54 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qt5, libfm-qt, menu-cache, lxmenu-data }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, lxqt
+, qtbase
+, qttools
+, qtx11extras
+, libfm-qt
+, menu-cache
+, lxmenu-data
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "0.13.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0xnhdxx45fmbi5dqic3j2f7yq01s0xysimafj5zqs0a29zw3i4m0";
+    sha256 = "12rzcv5n4s299c8787islkn4xcjb9bbrj12mxcd5ii91jq39aii4";
   };
 
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt-build-tools
+    lxqt.lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
+    qtbase
+    qttools
+    qtx11extras
     libfm-qt
     libfm-qt
     menu-cache
     lxmenu-data
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   postPatch = ''
-    for dir in autostart config; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
+    substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
-    homepage = https://github.com/lxqt/pcmanfm-qt;
+    homepage = "https://github.com/lxqt/pcmanfm-qt";
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

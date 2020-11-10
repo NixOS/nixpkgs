@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, xmlstarlet, gtk2, glib, xorg, Cocoa }:
+{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.8.1";
-  _build = "449";
+  _version = "2.8.6";
+  _build = "455";
   version = "${_version}-${_build}";
   name = "jameica-${version}";
 
@@ -17,13 +17,13 @@ let
     comment = "Free Runtime Environment for Java Applications.";
     desktopName = "Jameica";
     genericName = "Jameica";
-    categories = "Application;Office;";
+    categories = "Office;";
   };
 in
 stdenv.mkDerivation rec {
   inherit name version;
 
-  nativeBuildInputs = [ ant jdk makeWrapper xmlstarlet ];
+  nativeBuildInputs = [ ant jdk makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
                 ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
@@ -31,23 +31,13 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    sha256 = "1w25lxjskn1yxllbv0vgvcc9f9xvgv9430dm4b59ia9baf98syd2";
+    sha256 = "1pndklxsvixy6zyblqr62ki3pqaq8lfrzgasrvhclqxxh76gjlss";
   };
 
   # there is also a build.gradle, but it only seems to be used to vendor 3rd party libraries
   # and is not able to build the application itself
   buildPhase = ''
-    (cd build; ant init compile jar)
-  '';
-
-  # jameica itself loads ./plugin.xml to determine it's version.
-  # Unfortunately, the version attribute there seems to be wrong,
-  # so it thinks it's older than it really is,
-  # and refuses to load plugins destined for its version.
-  # Set version manually to workaround that.
-  postPatch = ''
-    xml ed -u '/system/@version' -v '${version}' plugin.xml > plugin.xml.new
-    mv plugin.xml.new plugin.xml
+    (cd build; ant -Dsystem.version=${version} init compile jar)
   '';
 
   installPhase = ''
@@ -72,8 +62,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.willuhn.de/products/jameica/;
-    description = "Free Runtime Environment for Java Applications.";
+    homepage = "https://www.willuhn.de/products/jameica/";
+    description = "Free Runtime Environment for Java Applications";
     longDescription = ''
       Runtime Environment for plugins like Hibiscus (HBCI Online Banking),
       SynTAX (accounting) and JVerein (club management).

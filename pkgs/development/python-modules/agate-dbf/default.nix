@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
     pname = "agate-dbf";
-    version = "0.2.0";
+    version = "0.2.2";
 
     propagatedBuildInputs = [ agate dbf dbfread ];
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0pkk6m873xpqj77ja6ylmg8v41abpn4bvsqw6mh2hjyd0snw2rh6";
+      sha256 = "589682b78c5c03f2dc8511e6e3edb659fb7336cd118e248896bb0b44c2f1917b";
     };
 
     meta = with stdenv.lib; {
       description = "Adds read support for dbf files to agate";
-      homepage    = https://github.com/wireservice/agate-dbf;
+      homepage    = "https://github.com/wireservice/agate-dbf";
       license     = with licenses; [ mit ];
       maintainers = with maintainers; [ vrthra ];
     };

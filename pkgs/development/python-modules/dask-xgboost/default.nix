@@ -6,16 +6,15 @@
 , distributed
 , pytest
 , scikitlearn
-, scipy
 }:
 
 buildPythonPackage rec {
-  version = "0.1.5";
+  version = "0.1.11";
   pname = "dask-xgboost";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1860d06965fe68def1c83b9195130a92050fd4bc28bf2be689898a3a74ee1316";
+    sha256 = "3fbe1bf4344dc74edfbe9f928c7e3e6acc26dc57cefd8da8ae56a15469c6941c";
   };
 
   checkInputs = [ pytest scikitlearn ];
@@ -28,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-xgboost;
+    homepage = "https://github.com/dask/dask-xgboost";
     description = "Interactions between Dask and XGBoost";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

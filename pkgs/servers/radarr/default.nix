@@ -1,31 +1,31 @@
 { stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "radarr-${version}";
-  version = "0.2.0.1120";
+  pname = "radarr";
+  version = "0.2.0.1504";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.develop.${version}.linux.tar.gz";
-    sha256 = "0vsjaza0k4djb3vnazl2py4qmbxqfyyr0x9p4flq78yn79hp3439";
+    sha256 = "1h7pqn39vxd0vr1fwrnvfpxv5vhh4zcr0s8h0zvgplay2z6b6bvb";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share/${name}}
-    cp -r * $out/share/${name}/.
+    mkdir -p $out/{bin,share/${pname}-${version}}
+    cp -r * $out/share/${pname}-${version}/.
 
     makeWrapper "${mono}/bin/mono" $out/bin/Radarr \
-      --add-flags "$out/share/${name}/Radarr.exe" \
+      --add-flags "$out/share/${pname}-${version}/Radarr.exe" \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
 
   meta = with stdenv.lib; {
-    description = "A Usenet/BitTorrent movie downloader.";
-    homepage = https://radarr.video/;
+    description = "A Usenet/BitTorrent movie downloader";
+    homepage = "https://radarr.video/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo purcell ];
     platforms = platforms.all;
   };
 }

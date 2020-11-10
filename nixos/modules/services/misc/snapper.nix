@@ -44,7 +44,7 @@ in
     configs = mkOption {
       default = { };
       example = literalExample {
-        "home" = {
+        home = {
           subvolume = "/home";
           extraConfig = ''
             ALLOW_USERS="alice"
@@ -120,6 +120,16 @@ in
     };
 
     services.dbus.packages = [ pkgs.snapper ];
+
+    systemd.services.snapperd = {
+      description = "DBus interface for snapper";
+      inherit documentation;
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.opensuse.Snapper";
+        ExecStart = "${pkgs.snapper}/bin/snapperd";
+      };
+    };
 
     systemd.services.snapper-timeline = {
       description = "Timeline of Snapper Snapshots";

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "fstrm-${version}";
-  version = "0.4.0";
+  pname = "fstrm";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
     rev = "v${version}";
-    sha256 = "11i8b3wy6j3z3fcv816xccxxlrfkczdr8bm2gnan6yv4ppbji4ny";
+    sha256 = "0b6x9wgyn92vykkmd3ynhnpbdl77zb4wf4rm7p0h8p9pwq953hdm";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Frame Streams implementation in C";
-    homepage = https://github.com/farsightsec/fstrm;
+    homepage = "https://github.com/farsightsec/fstrm";
     license = licenses.asl20;
     platforms = platforms.unix;
   };

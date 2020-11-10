@@ -7,15 +7,15 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.17.0";
+  version = "1.22.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11d3ssjifms6bid77jk06zl5wl3srihijmv5kggxa0w2l59y8h9m";
+    sha256 = "1lq2x95553vdmhw13cxcgsd2g2i32izhsb7hxd4m1iwf9b3msbpv";
   };
 
   propagatedBuildInputs = [
-    pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
+    paramiko pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
   ];
 
   checkInputs = [ pytest mock glibcLocales ];
@@ -24,7 +24,8 @@ buildPythonApplication rec {
     export HOME=.
     export LC_ALL="en_US.UTF-8"
 
-    py.test
+    py.test \
+      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
   meta = {
@@ -34,7 +35,8 @@ buildPythonApplication rec {
       Rich command-line interface for MySQL with auto-completion and
       syntax highlighting.
     '';
-    homepage = http://mycli.net;
+    homepage = "http://mycli.net";
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.jojosch ];
   };
 }

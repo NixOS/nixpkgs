@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
 
   version = "2.4.2035";
-  name = "grafx2-${version}";
+  pname = "grafx2";
 
   src = fetchurl {
-    url = "https://grafx2.googlecode.com/files/${name}-src.tgz";
+    url = "https://grafx2.googlecode.com/files/${pname}-${version}-src.tgz";
     sha256 = "0svsy6rqmdj11b400c242i2ixihyz0hds0dgicqz6g6dcgmcl62q";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Bitmap paint program inspired by the Amiga programs Deluxe Paint and Brilliance";
-    homepage = http://pulkomandy.tk/projects/GrafX2;
+    homepage = "http://pulkomandy.tk/projects/GrafX2";
     license = stdenv.lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ stdenv.lib.maintainers.zoomulator ];

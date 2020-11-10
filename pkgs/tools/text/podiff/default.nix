@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "podiff-${version}";
-  version = "1.1";
+stdenv.mkDerivation {
+  pname = "podiff";
+  version = "1.2";
 
   src = fetchurl {
-    url = "ftp://download.gnu.org.ua/pub/release/podiff/podiff-1.1.tar.gz";
-    sha256 = "1zz6bcmka5zvk2rq775qv122lqh54aijkxlghvx7z0r6kh880x59";
+    url = "ftp://download.gnu.org.ua/pub/release/podiff/podiff-1.2.tar.gz";
+    sha256 = "1l2b4hh53xlx28riigwarzkhxpv1pcz059xj1ka33ccvxc6c20k9";
   };
 
   patchPhase = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Finds differences in translations between two PO files, or revisions";
-    homepage = http://puszcza.gnu.org.ua/software/podiff;
+    homepage = "http://puszcza.gnu.org.ua/software/podiff";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

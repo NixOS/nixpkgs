@@ -1,18 +1,37 @@
-{ buildGo110Package, fetchzip, lib }:
+{ buildGoPackage, fetchurl, fetchFromGitHub, lib }:
 
-buildGo110Package rec {
+let
+  gouiJS = fetchurl {
+    url = "https://storage.googleapis.com/perkeep-release/gopherjs/goui.js";
+    sha256 = "0xbkdpd900gnmzj8p0x38dn4sv170pdvgzcvzsq70s80p6ykkh6g";
+  };
+
+  publisherJS = fetchurl {
+    url = "https://storage.googleapis.com/perkeep-release/gopherjs/publisher.js";
+    sha256 = "09hd7p0xscqnh612jbrjvh3njmlm4292zd5sbqx2lg0aw688q8p2";
+  };
+
+in buildGoPackage rec {
   name = "perkeep-${version}";
-  version = "0.10.1";
+  version = "unstable-2020-03-23";
 
-  src = fetchzip {
-    url = "https://perkeep.org/dl/perkeep-${version}-src.zip";
-    sha256 = "0rqibc6w4m1r50i2pjcgz1k9dxh18v7jwj4s29y470bc526wv422";
+  src = fetchFromGitHub {
+    owner = "perkeep";
+    repo = "perkeep";
+    rev = "c2e31370ddefd86b6112a5d891100ea3382a4254";
+    sha256 = "0jf02k20ms7h60wglcq6dj3vqi9rlfww7db5iplgwznbij70c1i4";
   };
 
   goPackagePath = "perkeep.org";
 
   buildPhase = ''
     cd "$NIX_BUILD_TOP/go/src/$goPackagePath"
+
+    # Skip network fetches
+    sed -i '/fetchAllJS/a if true { return nil }' make.go
+    cp ${publisherJS} app/publisher/publisher.js
+    cp ${gouiJS} server/perkeepd/ui/goui.js
+
     go run make.go
   '';
 
@@ -24,7 +43,7 @@ buildGo110Package rec {
 
   meta = with lib; {
     description = "A way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
-    homepage = https://perkeep.org;
+    homepage = "https://perkeep.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan kalbasit ];
     platforms = platforms.unix;

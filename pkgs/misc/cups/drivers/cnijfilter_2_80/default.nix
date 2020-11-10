@@ -6,8 +6,8 @@
 /* this derivation is basically just a transcription of the rpm .spec
    file included in the tarball */
 
-stdenv.mkDerivation rec {
-  name = "cnijfilter-${version}";
+stdenv.mkDerivation {
+  pname = "cnijfilter";
 
   /* important note about versions: cnijfilter packages seem to use
      versions in a non-standard way.  the version indicates which
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Canon InkJet printer drivers for the iP5400, MP520, MP210, MP140, iP3500, and MP610 series.  (MP520 drivers also work for MX700.)";
-    homepage = http://support-asia.canon-asia.com/content/EN/0100084101.html;
+    homepage = "http://support-asia.canon-asia.com/content/EN/0100084101.html";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jerith666 ];

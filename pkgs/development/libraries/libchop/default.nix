@@ -1,6 +1,6 @@
 { fetchurl, stdenv, zlib, bzip2, libgcrypt
 , gdbm, gperf, tdb, gnutls, db, libuuid
-, lzo, pkgconfig, guile
+, lzo, pkgconfig, guile, rpcsvc-proto, libtirpc
 }:
 
 stdenv.mkDerivation rec {
@@ -11,16 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "0fpdyxww41ba52d98blvnf543xvirq1v9xz1i3x1gm9lzlzpmc2g";
   };
 
-  patches = [ ./gets-undeclared.patch ./size_t.patch ];
+  patches = [ ./gets-undeclared.patch ./size_t.patch ./0001-Fix-RPC-compilation-when-using-libtirpc-rather-than-.patch ];
 
-  nativeBuildInputs = [ pkgconfig gperf ];
-  
+  nativeBuildInputs = [ pkgconfig gperf rpcsvc-proto ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
+
   buildInputs =
     [ zlib bzip2 lzo
       libgcrypt
       gdbm db tdb
       gnutls libuuid
-      guile
+      guile libtirpc
     ];
 
   doCheck = false;
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
          line.  It is written in C and has Guile (Scheme) bindings.
       '';
 
-    homepage = http://nongnu.org/libchop/;
+    homepage = "https://www.nongnu.org/libchop/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.gnu ++ platforms.linux;

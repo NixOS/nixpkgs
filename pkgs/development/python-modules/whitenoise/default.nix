@@ -1,12 +1,13 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "4.0";
+  version = "5.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e206c5adfb849942ddd057e599ac472ec1a85d56ae78a5ba24f243ea46a89c5";
+    sha256 = "05ce0be39ad85740a78750c86a93485c40f08ad8c62a6006de0233765996e5c7";
   };
 
   # No tests
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Radically simplified static file serving for WSGI applications";
-    homepage = http://whitenoise.evans.io/;
+    homepage = "http://whitenoise.evans.io/";
     license = licenses.mit;
   };
 }

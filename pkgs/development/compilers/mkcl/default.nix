@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, makeWrapper, gmp, gcc }:
 
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "mkcl-${version}";
-  version = "1.1.10.2017-11-14";
+  pname = "mkcl";
+  version = "1.1.11";
 
   src = fetchFromGitHub {
     owner = "jcbeaudoin";
     repo = "mkcl";
-    rev = "d3f5afe945907153db2be5a17a419966f83d7653";
-    sha256 = "1jfmnh96b5dy1874a9y843vihd14ya4by46rb4h5izldp6x3j3kl";
+    rev = "v${version}";
+    sha256 = "0i2bfkda20lfypis6i4m7srfz6miyf66d8knp693d6sms73m2l26";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,7 +40,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   meta = {
     description = "ANSI Common Lisp Implementation";
-    homepage = https://common-lisp.net/project/mkcl/;
+    homepage = "https://common-lisp.net/project/mkcl/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tohl ];

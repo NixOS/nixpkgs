@@ -1,20 +1,22 @@
-{ stdenv, lib, gnome2, fetchurl, pkgs, xorg, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
+, atk, at-spi2-atk, at-spi2-core, alsaLib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
+, freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
+, libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
+, libXrender, libXtst, libXScrnSaver
+}:
 
 stdenv.mkDerivation rec {
-  name = "postman-${version}";
-  version = "6.3.0";
+  pname = "postman";
+  version = "7.34.0";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "09m511y977478567lc28mhy68b99ssajzhirc1c4anxnvvs7s6fa";
-    name = "${name}.tar.gz";
+    sha256 = "13d3wc49wp8rh8kxrn1krsyh24g5m6wl0mfhvbjylv0q6kp5jlan";
+    name = "${pname}.tar.gz";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  dontPatchELF = true;
-
-  buildPhase = ":";   # nothing to build
+  dontBuild = true; # nothing to build
+  dontConfigure = true;
 
   desktopItem = makeDesktopItem {
     name = "postman";
@@ -23,73 +25,79 @@ stdenv.mkDerivation rec {
     comment = "API Development Environment";
     desktopName = "Postman";
     genericName = "Postman";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
+
+  buildInputs = [
+    stdenv.cc.cc.lib
+    atk
+    at-spi2-atk
+    at-spi2-core
+    alsaLib
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    freetype
+    fontconfig
+    nss
+    nspr
+    pango
+    udev
+    libuuid
+    libX11
+    libxcb
+    libXi
+    libXcursor
+    libXdamage
+    libXrandr
+    libXcomposite
+    libXext
+    libXfixes
+    libXrender
+    libXtst
+    libXScrnSaver
+  ];
+
+  nativeBuildInputs = [ wrapGAppsHook ];
+
 
   installPhase = ''
     mkdir -p $out/share/postman
     cp -R app/* $out/share/postman
+    rm $out/share/postman/Postman
 
     mkdir -p $out/bin
-    ln -s $out/share/postman/Postman $out/bin/postman
+    ln -s $out/share/postman/_Postman $out/bin/postman
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
-    iconDir=$out/share/icons/hicolor/128x128/apps
-    mkdir -p $iconDir
-    ln -s $out/share/postman/resources/app/assets/icon.png $iconDir/postman.png
+    iconRootDir=$out/share/icons
+    iconSizeDir=$out/share/icons/hicolor/128x128/apps
+    mkdir -p $iconSizeDir
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconRootDir/postman.png
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconSizeDir/postman.png
   '';
 
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      gnome2.pango
-      gnome2.GConf
-      pkgs.atk
-      pkgs.alsaLib
-      pkgs.cairo
-      pkgs.cups
-      pkgs.dbus.daemon.lib
-      pkgs.expat
-      pkgs.gdk_pixbuf
-      pkgs.glib
-      pkgs.gtk2-x11
-      pkgs.freetype
-      pkgs.fontconfig
-      pkgs.nss
-      pkgs.nspr
-      pkgs.udev.lib
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXi
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXrandr
-      xorg.libXcomposite
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrender
-      xorg.libX11
-      xorg.libXtst
-      xorg.libXScrnSaver
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}:$out/share/postman" \
-      $out/share/postman/Postman
-    patchelf --set-rpath "${libPath}" $out/share/postman/libnode.so
-    patchelf --set-rpath "${libPath}" $out/share/postman/libffmpeg.so
-
-    wrapProgram $out/share/postman/Postman --prefix LD_LIBRARY_PATH : ${libPath}
+  postFixup = ''
+    pushd $out/share/postman
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" _Postman
+    for file in $(find . -type f \( -name \*.node -o -name _Postman -o -name \*.so\* \) ); do
+      ORIGIN=$(patchelf --print-rpath $file); \
+      patchelf --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}:$ORIGIN" $file
+    done
+    popd
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.getpostman.com;
+    homepage = "https://www.getpostman.com";
     description = "API Development Environment";
-    license = stdenv.lib.licenses.postman;
+    license = licenses.postman;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ xurei ];
+    maintainers = with maintainers; [ xurei evanjs ];
   };
 }

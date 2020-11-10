@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "PyMySQL";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gvi63f1zq1bbd30x28kqyx351hal1yc323ckp0mihainb5n1iwy";
+    sha256 = "263040d2779a3b84930f7ac9da5132be0fefcd6f453a885756656103f8ee1fdd";
   };
 
   propagatedBuildInputs = [ cryptography ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python MySQL Client";
-    homepage = https://github.com/PyMySQL/PyMySQL;
+    homepage = "https://github.com/PyMySQL/PyMySQL";
     license = licenses.mit;
     maintainers = [ maintainers.kalbasit ];
   };

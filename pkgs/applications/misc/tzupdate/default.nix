@@ -1,22 +1,22 @@
-{ stdenv, python }:
+{ stdenv, python3 }:
 
 let
-  inherit (python.pkgs) buildPythonApplication fetchPypi requests;
+  inherit (python3.pkgs) buildPythonApplication fetchPypi requests;
 in
 buildPythonApplication rec {
   pname = "tzupdate";
-  version = "1.2.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wj2r1wirnn5kllaasdldimvp3cc3w7w890iqrjksz5wwjbnj8pk";
+    sha256 = "5b55795c390e4ccc90e649c8cc387447daaf30a21d68f7196b49824cbcba8adc";
   };
 
   propagatedBuildInputs = [ requests ];
 
   meta = with stdenv.lib; {
-    description = "Update timezone information based on geoip.";
-    homepage = https://github.com/cdown/tzupdate;
+    description = "Update timezone information based on geoip";
+    homepage = "https://github.com/cdown/tzupdate";
     maintainers = [ maintainers.michaelpj ];
     license = licenses.unlicense;
   };

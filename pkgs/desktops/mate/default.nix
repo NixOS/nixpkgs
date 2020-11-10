@@ -1,17 +1,15 @@
-{ pkgs, newScope }:
+{ newScope }:
 
 let
   callPackage = newScope self;
 
   self = rec {
 
-    getRelease = version:
-      pkgs.stdenv.lib.concatStringsSep "." (pkgs.stdenv.lib.take 2 (pkgs.stdenv.lib.splitString "." version));
-  
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
+    caja-with-extensions = callPackage ./caja-with-extensions { };
     engrampa = callPackage ./engrampa { };
     eom = callPackage ./eom { };
     libmatekbd = callPackage ./libmatekbd { };
@@ -41,6 +39,7 @@ let
     mate-system-monitor = callPackage ./mate-system-monitor { };
     mate-terminal = callPackage ./mate-terminal { };
     mate-themes = callPackage ./mate-themes { };
+    mate-tweak = callPackage ./mate-tweak { };
     mate-user-guide = callPackage ./mate-user-guide { };
     mate-user-share = callPackage ./mate-user-share { };
     mate-utils = callPackage ./mate-utils { };
@@ -75,7 +74,6 @@ let
       mate-applets
       mate-backgrounds
       mate-calc
-      mate-icon-theme-faenza
       mate-indicator-applet
       mate-media
       mate-netbook
@@ -90,7 +88,7 @@ let
       mozo
       pluma
     ];
-  
+
   };
 
 in self

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, smlnj, rsync }:
 
 stdenv.mkDerivation rec {
-  name = "twelf-${version}";
+  pname = "twelf";
   version = "1.7.1";
 
   src = fetchurl {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       a foundational proof-carrying-code system, and a type safety proof for
       Standard ML.
     '';
-    homepage = http://twelf.org/wiki/Main_Page;
+    homepage = "http://twelf.org/wiki/Main_Page";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ jwiegley ];
     platforms = stdenv.lib.platforms.unix;

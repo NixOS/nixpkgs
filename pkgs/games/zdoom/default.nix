@@ -3,7 +3,7 @@
 , libsndfile, mpg123 }:
 
 stdenv.mkDerivation rec {
-  name = "zdoom-${version}";
+  pname = "zdoom";
   majorVersion = "2.8";
   version = "${majorVersion}.1";
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://zdoom.org/;
+    homepage = "http://zdoom.org/";
     description = "Enhanced port of the official DOOM source code";
     # Doom source license, MAME license
     license = licenses.unfreeRedistributable;

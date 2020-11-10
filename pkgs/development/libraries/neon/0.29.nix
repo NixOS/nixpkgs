@@ -15,10 +15,10 @@ in
 
 stdenv.mkDerivation rec {
   version = "0.29.6";
-  name = "neon-${version}";
+  pname = "neon";
 
   src = fetchurl {
-    url = "http://www.webdav.org/neon/${name}.tar.gz";
+    url = "http://www.webdav.org/neon/${pname}-${version}.tar.gz";
     sha256 = "0hzbjqdx1z8zw0vmbknf159wjsxbcq8ii0wgwkqhxj3dimr0nr4w";
   };
 
@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
   checkInputs = [ perl ];
   doCheck = false; # fails, needs the net
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An HTTP and WebDAV client library";
-    homepage = http://www.webdav.org/neon/;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.webdav.org/neon/";
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
   };
 }

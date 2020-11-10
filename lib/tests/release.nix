@@ -1,16 +1,22 @@
-{ pkgs ? import ((import ../.).cleanSource ../..) {} }:
+{ # The pkgs used for dependencies for the testing itself
+  # Don't test properties of pkgs.lib, but rather the lib in the parent directory
+  pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; }
+}:
 
-pkgs.stdenv.mkDerivation {
-  name = "nixpkgs-lib-tests";
-  buildInputs = [ pkgs.nix ];
-  NIX_PATH="nixpkgs=${pkgs.path}";
-
-  buildCommand = ''
+pkgs.runCommandNoCC "nixpkgs-lib-tests" {
+  buildInputs = [
+    pkgs.nix
+    (import ./check-eval.nix)
+    (import ./maintainers.nix {
+      inherit pkgs;
+      lib = import ../.;
+    })
+  ];
+} ''
     datadir="${pkgs.nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp
     export NIX_BUILD_HOOK=
     export NIX_CONF_DIR=$TEST_ROOT/etc
-    export NIX_DB_DIR=$TEST_ROOT/db
     export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
     export NIX_LOG_DIR=$TEST_ROOT/var/log/nix
     export NIX_STATE_DIR=$TEST_ROOT/var/nix
@@ -19,13 +25,8 @@ pkgs.stdenv.mkDerivation {
     cacheDir=$TEST_ROOT/binary-cache
     nix-store --init
 
-    cd ${pkgs.path}/lib/tests
-    bash ./modules.sh
-
-    [[ "$(nix-instantiate --eval --strict misc.nix)" == "[ ]" ]]
-
-    [[ "$(nix-instantiate --eval --strict systems.nix)" == "[ ]" ]]
+    cp -r ${../.} lib
+    bash lib/tests/modules.sh
 
     touch $out
-  '';
-}
+''

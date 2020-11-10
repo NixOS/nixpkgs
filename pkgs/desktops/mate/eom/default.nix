@@ -1,23 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, dbus-glib, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, shared-mime-info, gnome3, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, itstool, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, libpeas, shared-mime-info, gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "eom-${version}";
-  version = "1.21.2";
+  pname = "eom";
+  version = "1.24.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "08idw219mw0v0nkaphy0jvxi67gqm4nzbbnhnwjksxbma2gmpvss";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0dralsc0dvs0l38cysdhx6kiaiqlb8qi6g9xz2cm6mjqyq3d3f9f";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     itstool
     wrapGAppsHook
   ];
 
   buildInputs = [
-    dbus-glib
     exempi
     lcms2
     libexif
@@ -25,15 +24,17 @@ stdenv.mkDerivation rec {
     librsvg
     libxml2
     shared-mime-info
-    gnome3.gtk
-    gnome3.libpeas
+    gtk3
+    libpeas
     mate.mate-desktop
     hicolor-icon-theme
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "An image viewing and cataloging program for the MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

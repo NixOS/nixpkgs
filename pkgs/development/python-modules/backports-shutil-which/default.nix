@@ -1,12 +1,12 @@
-{ stdenv, fetchPypi, fetchFromGitHub, buildPythonPackage, pytest }:
+{ stdenv, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "backports.shutil_which";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16sa3adkf71862cb9pk747pw80a2f1v5m915ijb4fgj309xrlhyx";
+    sha256 = "fe39f567cbe4fad89e8ac4dbeb23f87ef80f7fe8e829669d0221ecdb0437c133";
   };
 
   checkInputs = [ pytest ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Backport of shutil.which from Python 3.3";
-    homepage = https://github.com/minrk/backports.shutil_which;
+    homepage = "https://github.com/minrk/backports.shutil_which";
     license = licenses.psfl;
     maintainers = with maintainers; [ jluttine ];
   };

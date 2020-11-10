@@ -1,22 +1,26 @@
 { lib
-, fetchurl
-, python2Packages
+, python3Packages
+, salt
 }:
 
-python2Packages.buildPythonApplication rec {
-  name = "salt-pepper-${version}";
-  version = "0.5.5";
-  src = fetchurl {
-    url = "https://github.com/saltstack/pepper/releases/download/${version}/${name}.tar.gz";
-    sha256 = "1wj1k64ly6af6qsmiizlx32jxh23a37smd9wb57l5zl0x8sfqq1n";
+python3Packages.buildPythonApplication rec {
+  pname = "salt-pepper";
+  version = "0.7.5";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "1wh6yidwdk8jvjpr5g3azhqgsk24c5rlzmw6l86dmi0mpvmxm94w";
   };
 
-  doCheck = false; # no tests available
+  buildInputs = with python3Packages; [ setuptools setuptools_scm salt ];
+  checkInputs = with python3Packages; [
+    pytest mock pyzmq pytest-rerunfailures pytestcov cherrypy tornado
+  ];
 
   meta = with lib; {
     description = "A CLI front-end to a running salt-api system";
-    homepage = https://github.com/saltstack/pepper;
+    homepage = "https://github.com/saltstack/pepper";
     maintainers = [ maintainers.pierrer ];
     license = licenses.asl20;
+    broken = true; # ModuleNotFoundError: No module named 'pytestsalt'
   };
 }

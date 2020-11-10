@@ -13,10 +13,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/nicolargo/batinfo;
+    homepage = "https://github.com/nicolargo/batinfo";
     description = "A simple Python lib to retrieve battery information";
     license = licenses.lgpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ koral ];
   };
 }

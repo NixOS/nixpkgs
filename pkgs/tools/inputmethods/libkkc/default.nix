@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, vala, gobjectIntrospection, intltool, python2Packages, glib
+, vala, gobject-introspection, intltool, python2Packages, glib
 , pkgconfig
 , libgee, json-glib, marisa, libkkc-data
 }:
@@ -7,15 +7,14 @@
 stdenv.mkDerivation rec {
   pname = "libkkc";
   version = "0.3.5";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/download/v${version}/${name}.tar.gz";
+    url = "${meta.homepage}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "89b07b042dae5726d306aaa1296d1695cb75c4516f4b4879bc3781fe52f62aef";
   };
 
   nativeBuildInputs = [
-    vala gobjectIntrospection
+    vala gobject-introspection
     python2Packages.python python2Packages.marisa
     intltool glib pkgconfig
   ];
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Japanese Kana Kanji conversion input method library";
-    homepage    = https://github.com/ueno/libkkc;
+    homepage    = "https://github.com/ueno/libkkc";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ vanzef ];
     platforms   = platforms.linux;

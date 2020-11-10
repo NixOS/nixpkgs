@@ -1,17 +1,44 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib, python3
-, gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
-, glib, gnome-online-accounts, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkgconfig
+, wrapGAppsHook
+, libdazzle
+, libgweather
+, geoclue2
+, geocode-glib
+, python3
+, gettext
+, libxml2
+, gnome3
+, gtk3
+, evolution-data-server
+, libsoup
+, glib
+, gnome-online-accounts
+, gsettings-desktop-schemas
+, libhandy
+, adwaita-icon-theme
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "3.28.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0x6wxngf8fkwgbl6x7rzp0srrb43rm55klpb2vfjk2hahpbjvxyw";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "04pmjzwcy1lswkri30rnvac99dff8zajs41as0j1cqrd1058i03j";
   };
+
+  patches = [
+    # Port to libhandy-1
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-calendar/-/commit/8be361b6ce8f0f8053e1609decbdbdc164ec8448.patch";
+      sha256 = "Ue0pWwcbYyCZPHPPoR0dXW5n948/AZ3wVDMTIZDOnyE=";
+    })
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -20,21 +47,40 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    libxml2
+    wrapGAppsHook
+    python3
+  ];
+
   buildInputs = [
-    gtk evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
-    gsettings-desktop-schemas gnome3.defaultIconTheme
+    gtk3
+    evolution-data-server
+    libsoup
+    glib
+    gnome-online-accounts
+    libdazzle
+    libgweather
+    geoclue2
+    geocode-glib
+    gsettings-desktop-schemas
+    adwaita-icon-theme
+    libhandy
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
+    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/meson_post_install.py
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Calendar;
+    homepage = "https://wiki.gnome.org/Apps/Calendar";
     description = "Simple and beautiful calendar application for GNOME";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

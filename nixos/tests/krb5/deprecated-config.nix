@@ -1,7 +1,7 @@
 # Verifies that the configuration suggested in deprecated example values
 # will result in the expected output.
 
-import ../make-test.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ...} : {
   name = "krb5-with-deprecated-config";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eqyiel ];
@@ -43,6 +43,8 @@ import ../make-test.nix ({ pkgs, ...} : {
 
     '';
   in ''
-    $machine->succeed("diff /etc/krb5.conf ${snapshot}");
+    machine.succeed(
+        "diff /etc/krb5.conf ${snapshot}"
+    )
   '';
 })

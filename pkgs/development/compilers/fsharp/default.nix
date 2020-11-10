@@ -3,7 +3,7 @@
 { stdenv, fetchurl, mono, pkgconfig, dotnetbuildhelpers, autoconf, automake, which }:
 
 stdenv.mkDerivation rec {
-  name = "fsharp-${version}";
+  pname = "fsharp";
   version = "4.0.1.1";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets
-    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "/bin/sh"
+    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "${stdenv.shell}"
     ./autogen.sh --prefix $out
   '';
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A functional CLI language";
-    homepage = https://fsharp.org/;
+    homepage = "https://fsharp.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
     platforms = with stdenv.lib.platforms; unix;

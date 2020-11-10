@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 
-fetchFromGitHub rec {
+fetchFromGitHub {
   name = "myrica-2.011.20160403";
 
   owner = "tomokuni";
@@ -15,7 +15,7 @@ fetchFromGitHub rec {
   '';
 
   meta = with lib; {
-    homepage = https://myrica.estable.jp/;
+    homepage = "https://myrica.estable.jp/";
     license = licenses.ofl;
     maintainers = with maintainers; [ mikoim ];
     platforms = platforms.all;

@@ -2,12 +2,12 @@
 mfcl8690cdwlpr, perl, stdenv}:
 
 stdenv.mkDerivation rec {
-  name = "mfcl8690cdwcupswrapper-${version}";
-  version = "1.3.0-0";
+  pname = "mfcl8690cdwcupswrapper";
+  version = "1.4.0-0";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf103250/${name}.i386.deb";
-    sha256 = "16nnh3hd5yv0m4191wja9fvxxzngzfccfj2rfhcswbakajyk5ywn";
+    url = "http://download.brother.com/welcome/dlf103250/${pname}-${version}.i386.deb";
+    sha256 = "1bl9r8mmj4vnanwpfjqgq3c9lf2v46wp5k6r2n9iqprf7ldd1kb2";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L8690CDW CUPS wrapper driver";
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.fuzzy-id ];

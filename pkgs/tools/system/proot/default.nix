@@ -1,27 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, talloc, docutils
-, enableStatic ? true }:
+{ stdenv, fetchFromGitHub
+, talloc, docutils, swig, python, coreutils, enablePython ? true }:
 
-({ version, rev, sha256, patches }: stdenv.mkDerivation {
-  name = "proot-${version}";
-  inherit version;
+stdenv.mkDerivation {
+  pname = "proot";
+  version = "20190510";
 
   src = fetchFromGitHub {
-    inherit rev sha256;
     repo = "proot";
-    owner = "cedric-vincent";
+    owner = "proot-me";
+    rev = "803e54d8a1b3d513108d3fc413ba6f7c80220b74";
+    sha256 = "0gwzqm5wpscj3fchlv3qggf3zzn0v00s4crb5ciwljan1zrqadhy";
   };
 
-  buildInputs = [ talloc ] ++ stdenv.lib.optional enableStatic stdenv.cc.libc.static;
-  nativeBuildInputs = [ docutils ];
+  postPatch = ''
+    substituteInPlace src/GNUmakefile \
+      --replace /bin/echo ${coreutils}/bin/echo
+    # our cross machinery defines $CC and co just right
+    sed -i /CROSS_COMPILE/d src/GNUmakefile
+  '';
+
+  buildInputs = [ talloc ] ++ stdenv.lib.optional enablePython python;
+  nativeBuildInputs = [ docutils ] ++ stdenv.lib.optional enablePython swig;
 
   enableParallelBuilding = true;
-
-  inherit patches;
-
-  preBuild = stdenv.lib.optionalString enableStatic ''
-    export LDFLAGS="-static"
-  '';
 
   makeFlags = [ "-C src" ];
 
@@ -29,33 +30,17 @@
     make -C doc proot/man.1
   '';
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     install -Dm644 doc/proot/man.1 $out/share/man/man1/proot.1
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://proot-me.github.io;
+    homepage = "https://proot-me.github.io";
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ianwookim makefu ];
+    maintainers = with maintainers; [ ianwookim makefu veprbl dtzWill ];
   };
-})
-(if stdenv.isAarch64 then rec {
-  version = "5.1.0";
-  sha256 = "0azsqis99gxldmbcg43girch85ysg4hwzf0h1b44bmapnsm89fbz";
-  rev = "v${version}";
-  patches = [
-    (fetchpatch { # debian patch for aarch64 build
-      sha256 = "18milpzjkbfy5ab789ia3m4pyjyr9mfzbw6kbjhkj4vx9jc39svv";
-      url = "https://sources.debian.net/data/main/p/proot/5.1.0-1.2/debian/patches/arm64.patch";
-    })
-  ];
-} else {
-  version = "5.1.0.20171015";
-  sha256 = "0jam87msh5jx8vpb19n6xwxw1xlig5amdcqif7gn2rc8nhswpxif";
-  rev = "0bf2ee17daafeeadfed079cec97fe1ac781e696a";
-  patches = [];
-})
+}

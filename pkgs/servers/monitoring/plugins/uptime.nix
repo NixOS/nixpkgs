@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "check-uptime-${version}";
+stdenv.mkDerivation {
+  pname = "check-uptime";
   version = "20161112";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Uptime check plugin for Sensu/Nagios/others";
-    homepage    = https://github.com/madrisan/nagios-plugins-uptime;
+    homepage    = "https://github.com/madrisan/nagios-plugins-uptime";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
   };

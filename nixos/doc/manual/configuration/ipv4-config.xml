@@ -10,7 +10,7 @@
   automatically configure network interfaces. However, you can configure an
   interface manually as follows:
 <programlisting>
-<link linkend="opt-networking.interfaces._name__.ipv4.addresses">networking.interfaces.eth0.ipv4.addresses</link> = [ {
+<link linkend="opt-networking.interfaces._name_.ipv4.addresses">networking.interfaces.eth0.ipv4.addresses</link> = [ {
   address = "192.168.1.2";
   prefixLength = 24;
 } ];

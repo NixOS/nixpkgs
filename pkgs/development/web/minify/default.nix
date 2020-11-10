@@ -1,18 +1,25 @@
-{ buildGoPackage, fetchFromGitHub }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-buildGoPackage rec {
-  name = "minify-${version}";
-  version = "v2.0.0";
-  rev = "41f3effd65817bac8acea89d49b3982211803a4d";
-
-  goPackagePath = "github.com/tdewolff/minify";
+buildGoModule rec {
+  pname = "minify";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "tdewolff";
-    repo = "minify";
-    sha256 = "15d9ivg1a9v9c2n0a9pfw74952xhd4vqgx8d60dhvif9lx1d8wlq";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "06xzb681g4lfrpqa1rhpq5mm83vpik8qp6gjxqm2n21bfph88jm2";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "120d3nzk8cr5496cxp5p6ydlzw9mmpg7dllqhv1kpgwlbxmd8vr3";
+
+  doCheck = false;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
+
+  meta = with lib; {
+    description = "Minifiers for web formats";
+    license = licenses.mit;
+    homepage = "https://go.tacodewolff.nl/minify";
+  };
 }

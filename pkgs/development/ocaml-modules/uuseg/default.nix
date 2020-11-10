@@ -2,7 +2,7 @@
 
 let
   pname = "uuseg";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation rec {
@@ -18,13 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild cmdliner topkg uutf ];
   propagatedBuildInputs = [ uucp uchar ];
 
-  unpackCmd = "tar xjf $src";
-
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
     description = "An OCaml library for segmenting Unicode text";
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

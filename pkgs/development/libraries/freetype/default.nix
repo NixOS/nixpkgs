@@ -1,4 +1,5 @@
 { stdenv, fetchurl
+, buildPackages
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
@@ -12,8 +13,8 @@ let
   inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "freetype-${version}";
-  version = "2.9";
+  pname = "freetype";
+  version = "2.10.4";
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
@@ -24,18 +25,19 @@ in stdenv.mkDerivation rec {
       autofit which can be used instead of hinting instructions included in
       fonts.
     '';
-    homepage = https://www.freetype.org/;
+    homepage = "https://www.freetype.org/";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/${name}.tar.bz2";
-    sha256 = "12jcdz1in20yaa55izxalg3hm1pf7nydfrzps5bzb4zgihybmzz6";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+
   # dependence on harfbuzz is looser than the reverse dependence
   nativeBuildInputs = [ pkgconfig which makeWrapper ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
@@ -48,7 +50,10 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
+  configureFlags = [ "--bindir=$(dev)/bin" "--enable-freetype-config" ];
+
+  # native compiler to generate building tool
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
 
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
@@ -58,7 +63,11 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = glib.flattenInclude + ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkgconfig} ${pkgconfig}
+
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
   '';
+
 }

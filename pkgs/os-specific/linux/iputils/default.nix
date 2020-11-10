@@ -1,88 +1,70 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, libxslt, docbook_xsl, docbook_xml_dtd_44
-, libcap, nettle, libidn2, openssl
+, meson, ninja, pkgconfig, gettext, libxslt, docbook_xsl_ns
+, libcap, libidn2
 }:
 
 with stdenv.lib;
 
 let
-  time = "20180629";
-  # ninfod probably could build on cross, but the Makefile doesn't pass --host
-  # etc to the sub configure...
-  withNinfod = stdenv.hostPlatform == stdenv.buildPlatform;
+  version = "20200821";
   sunAsIsLicense = {
     fullName = "AS-IS, SUN MICROSYSTEMS license";
-    url = "https://github.com/iputils/iputils/blob/s${time}/rdisc.c";
+    url = "https://github.com/iputils/iputils/blob/s${version}/rdisc.c";
   };
-in stdenv.mkDerivation {
-  name = "iputils-${time}";
+in stdenv.mkDerivation rec {
+  pname = "iputils";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = "iputils";
-    repo = "iputils";
-    rev = "s${time}";
-    sha256 = "19rpl48pjgmyqlm4h7sml5gy7yg4cxciadxcs24q1zj40c05jls0";
+    owner = pname;
+    repo = pname;
+    rev = "s${version}";
+    sha256 = "1jhbcz75a4ij1myyyi110ma1d8d5hpm3scz9pyw7js6qym50xvh4";
   };
 
   patches = [
+    # Proposed upstream patch to reduce dependency on systemd: https://github.com/iputils/iputils/pull/297
     (fetchpatch {
-      name = "dont-hardcode-the-location-of-xsltproc.patch";
-      url = "https://github.com/iputils/iputils/commit/d0ff83e87ea9064d9215a18e93076b85f0f9e828.patch";
-      sha256 = "05wrwf0bfmax69bsgzh3b40n7rvyzw097j8z5ix0xsg0kciygjvx";
-    })
-    (fetchpatch {
-      name = "add-missing-idn-declarations.patch";
-      url = "https://github.com/iputils/iputils/commit/5007d7067918fb3d950d34c01d059e5222db679a.patch";
-      sha256 = "0dhgxdhjcbb2q6snm3mjp38l066knykmrx4k8rn167cizn7akpdx";
-    })
-    (fetchpatch {
-      name = "fix-ping-idn.patch";
-      url = "https://github.com/iputils/iputils/commit/25899e849aa3abc1ad29ebf0b830262a859eaed5.patch";
-      sha256 = "1bqjcdjjnc2j6indcli7s7gbbhkcaligvh94asixfrmjzkbn533n";
+      url = "https://github.com/iputils/iputils/commit/13d6aefd57fd471ecad06e19073dcc44608dff5e.patch";
+      sha256 = "1n62zxmzp7hgz9qapbbpqv3fxqvc3qyd2a73jhp357x6by84kj49";
     })
   ];
 
-  prePatch = ''
-    substituteInPlace doc/custom-man.xsl \
-      --replace "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    for xmlFile in doc/*.xml; do
-      substituteInPlace $xmlFile \
-        --replace "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" "${docbook_xml_dtd_44}/xml/dtd/docbook/docbookx.dtd"
-    done
-  '';
+  mesonFlags = [
+    "-DBUILD_RARPD=true"
+    "-DBUILD_TRACEROUTE6=true"
+    "-DBUILD_TFTPD=true"
+    "-DNO_SETCAP_OR_SUID=true"
+    "-Dsystemdunitdir=etc/systemd/system"
+    "-DINSTALL_SYSTEMD_UNITS=true"
+  ]
+    # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
+    ++ optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
 
-  # Disable idn usage w/musl: https://github.com/iputils/iputils/pull/111
-  makeFlags = optional stdenv.hostPlatform.isMusl "USE_IDN=no";
-
-  nativeBuildInputs = [ libxslt.bin ];
-  buildInputs = [ libcap nettle ]
-    ++ optional (!stdenv.hostPlatform.isMusl) libidn2
-    ++ optional withNinfod openssl; # TODO: Build with nettle
-
-  buildFlags = "man all" + optionalString withNinfod " ninfod";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man8
-
-    for tool in arping clockdiff ping rarpd rdisc tftpd tracepath traceroute6; do
-      cp $tool $out/bin/
-      cp doc/$tool.8 $out/share/man/man8/
-    done
-
-    # TODO: Requires kernel module pg3
-    cp ipg $out/bin/
-    cp doc/pg3.8 $out/share/man/man8/
-  '' + optionalString withNinfod ''
-    cp ninfod/ninfod $out/bin/
-    cp doc/ninfod.8 $out/share/man/man8/
-  '';
+  nativeBuildInputs = [ meson ninja pkgconfig gettext libxslt.bin docbook_xsl_ns ];
+  buildInputs = [ libcap ]
+    ++ optional (!stdenv.hostPlatform.isMusl) libidn2;
 
   meta = {
-    homepage = https://github.com/iputils/iputils;
     description = "A set of small useful utilities for Linux networking";
+    inherit (src.meta) homepage;
+    changelog = "https://github.com/iputils/iputils/releases/tag/s${version}";
     license = with licenses; [ gpl2Plus bsd3 sunAsIsLicense ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos lheckemann ];
+
+    longDescription = ''
+      A set of small useful utilities for Linux networking including:
+
+      arping
+      clockdiff
+      ninfod
+      ping
+      rarpd
+      rdisc
+      tftpd
+      tracepath
+      traceroute6
+    '';
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Documentation production system for software manuals";
-    homepage = https://www.chiark.greenend.org.uk/~sgtatham/halibut/;
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/halibut/";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

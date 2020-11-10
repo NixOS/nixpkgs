@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, SDL2, SDL2_image, pkgconfig
+{ stdenv, fetchFromGitLab, SDL2, SDL2_image, pkgconfig
 , libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
 }:
 
 stdenv.mkDerivation rec {
-  name = "commandergenius-${version}";
-  version = "2.2.2";
+  pname = "commandergenius";
+  version = "2.3.3";
 
-  src = fetchFromGitHub {
-    owner = "gerstrong";
+  src = fetchFromGitLab {
+    owner = "Dringgstein";
     repo = "Commander-Genius";
     rev = "v${version}";
-    sha256 = "1mfw25pgr492ayqw3b85mwp20wh6anrr90gdy605nv1yjma62pmj";
+    sha256 = "04nb23wwvc3yywz3cr6gvn02fa7psfs22ssg4wk12s08z1azvz3h";
   };
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer libGL boost libvorbis zlib curl python3 ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       made for it. All of the original data files
       are required to do so
     '';
-    homepage = https://github.com/gerstrong/Commander-Genius;
+    homepage = "https://github.com/gerstrong/Commander-Genius";
     maintainers = with maintainers; [ hce ];
     license = licenses.gpl2;
     platforms = platforms.linux;

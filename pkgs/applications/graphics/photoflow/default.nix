@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gettext, glib, libxml2, pkgconfig, swig, automake, gobjectIntrospection, cmake, ninja, libtiff, libjpeg, fftw, exiv2, lensfun, gtkmm2, libraw, lcms2, libexif, vips, expat, pcre, pugixml }:
+{ stdenv, fetchFromGitHub, gettext, glib, libxml2, pkgconfig, swig, automake, gobject-introspection, cmake, ninja, libtiff, libjpeg, fftw, exiv2, lensfun, gtkmm2, libraw, lcms2, libexif, vips, expat, pcre, pugixml }:
 
 stdenv.mkDerivation {
   name = "photoflow-unstable-2018-08-28";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     pkgconfig
     swig
     automake
-    gobjectIntrospection
+    gobject-introspection
     cmake
     ninja
   ];
@@ -47,10 +47,10 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A fully non-destructive photo retouching program providing a complete RAW image editing workflow";
-    homepage = https://aferrero2707.github.io/PhotoFlow/;
+    homepage = "https://aferrero2707.github.io/PhotoFlow/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.MtP ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = true;
   };
 }

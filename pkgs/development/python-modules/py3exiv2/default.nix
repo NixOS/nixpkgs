@@ -2,26 +2,18 @@
 
 buildPythonPackage rec {
   pname = "py3exiv2";
-  version = "0.4.0";
+  version = "0.8.0";
   disabled = !(isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4042492db49efbdfc53e0afa89509695826b3fb74fb52444ed04f64c229a65f5";
+    sha256 = "1v419f1kkqw8hqyc3yhzslnbzk52j8j3wfknfkjg308n5mf5bn09";
   };
 
   buildInputs = [ exiv2 boost ];
 
   # work around python distutils compiling C++ with $CC (see issue #26709)
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
-
-  # fix broken libboost_python3 detection
-  patches = [
-    (substituteAll {
-      src = ./setup.patch;
-      version = "3${stdenv.lib.versions.minor python.version}";
-    })
-  ];
 
   meta = {
     homepage = "https://launchpad.net/py3exiv2";

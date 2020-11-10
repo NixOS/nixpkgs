@@ -1,22 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, mccabe, pycodestyle, pydocstyle, pyflakes
+{ lib, buildPythonPackage, fetchPypi
+, eradicate, mccabe, pycodestyle, pydocstyle, pyflakes
 , pytest, ipdb }:
 
 buildPythonPackage rec {
   pname = "pylama";
-  version = "7.4.3";
+  version = "7.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "390c1dab1daebdf3d6acc923e551b035c3faa77d8b96b98530c230493f9ec712";
+    sha256 = "9bae53ef9c1a431371d6a8dca406816a60d547147b60a4934721898f553b7d8f";
   };
 
-  patches = fetchpatch {
-    url = "${meta.homepage}/pull/116.patch";
-    sha256 = "00jz5k2w0xahs1m3s603j6l4cwzz92qsbbk81fh17nq0f47999mv";
-  };
-
-  propagatedBuildInputs = [ mccabe pycodestyle pydocstyle pyflakes ];
+  propagatedBuildInputs = [
+    eradicate
+    mccabe
+    pycodestyle
+    pydocstyle
+    pyflakes
+  ];
 
   checkInputs = [ pytest ipdb ];
 
@@ -25,9 +26,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Code audit tool for python";
-    homepage = https://github.com/klen/pylama;
+    homepage = "https://github.com/klen/pylama";
     # ambiguous license declarations: https://github.com/klen/pylama/issues/64
-    license = licenses.lgpl3;
+    license = [ licenses.lgpl3 ];
     maintainers = with maintainers; [ dotlambda ];
   };
 }

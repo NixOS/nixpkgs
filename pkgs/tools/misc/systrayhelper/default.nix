@@ -1,20 +1,18 @@
 { stdenv, pkgconfig, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "systrayhelper-${version}";
-  version = "0.0.3";
-  rev = "0953942245566bf358ba937af840947100380e15";
+  pname = "systrayhelper";
+  version = "0.0.5";
+  rev = "ded1f2ed4d30f6ca2c89a13db0bd3046c6d6d0f9";
 
   goPackagePath = "github.com/ssbc/systrayhelper";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "ssbc";
     repo = "systrayhelper";
-    sha256 = "12xmzcw94in4m1hl4hbfdsbvkkaqrljgb67b95m1qwkkjak3q9g6";
+    sha256 = "0bn3nf43m89qmh8ds5vmv0phgdz32idz1zisr47jmvqm2ky1a45s";
   };
-
-  goDeps = ./deps.nix;
 
   # re date: https://github.com/NixOS/nixpkgs/pull/45997#issuecomment-418186178
   # > .. keep the derivation deterministic. Otherwise, we would have to rebuild it every time.
@@ -36,6 +34,5 @@ buildGoPackage rec {
     license     = licenses.mit;
     # It depends on the inputs, i guess? not sure about solaris, for instance. go supports it though
     # I hope nix can figure this out?! ¯\\_(ツ)_/¯
-    platforms   = platforms.all;
   };
 }

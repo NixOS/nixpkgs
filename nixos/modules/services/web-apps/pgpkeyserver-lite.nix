@@ -33,7 +33,7 @@ in
         description = "
           Which hostname to set the vHost to that is proxying to sks.
         ";
-      };     
+      };
 
       hkpAddress = mkOption {
         default = builtins.head sksCfg.hkpAddress;
@@ -60,7 +60,7 @@ in
     services.nginx.virtualHosts = let
       hkpPort = builtins.toString cfg.hkpPort;
     in {
-      "${cfg.hostname}" = {
+      ${cfg.hostname} = {
         root = webPkg;
         locations = {
           "/pks".extraConfig = ''

@@ -1,31 +1,31 @@
-{ stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2, polkit
-, bash, gtk3, glib, wrapGAppsHook
-, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
+{ stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2
+, bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
+, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk-pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-system-monitor-${version}";
-  version = "3.28.2";
+  pname = "gnome-system-monitor";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "164in885dyfvna5yjzgdyrbrsskvh5wzxdmkjgb4mbh54lzqd1zb";
+    url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1x5gd30g87im7fnqj63njlac69zywfd1r0vgsxkjag2hsns7mgvk";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig gettext itstool wrapGAppsHook
-    polkit # for ITS file
+    pkgconfig gettext itstool wrapGAppsHook meson ninja python3
   ];
   buildInputs = [
-    bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.defaultIconTheme librsvg
-    gnome3.gsettings-desktop-schemas systemd
+    bash gtk3 glib libxml2 gtkmm3 libgtop gdk-pixbuf gnome3.adwaita-icon-theme librsvg
+    gsettings-desktop-schemas systemd
   ];
 
-  # fails to build without --enable-static
-  configureFlags = ["--enable-systemd" "--enable-static"];
-
-  enableParallelBuilding = true;
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/SystemMonitor;
+    homepage = "https://wiki.gnome.org/Apps/SystemMonitor";
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

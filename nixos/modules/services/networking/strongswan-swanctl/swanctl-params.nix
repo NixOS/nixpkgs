@@ -6,7 +6,7 @@
 #
 #   git clone https://github.com/strongswan/strongswan.git
 #   cd strongswan
-#   git diff 5.5.3..5.6.0 src/swanctl/swanctl.opt
+#   git diff 5.7.2..5.8.0 src/swanctl/swanctl.opt
 
 lib: with (import ./param-constructors.nix lib);
 
@@ -227,6 +227,22 @@ in {
       irrespective of the value of this option (even when set to no).
     '';
 
+    childless = mkEnumParam [ "allow" "force" "never" ] "allow" ''
+      Use childless IKE_SA initiation (RFC 6023) for IKEv2.  Acceptable values
+      are <literal>allow</literal> (the default), <literal>force</literal> and
+      <literal>never</literal>. If set to <literal>allow</literal>, responders
+      will accept childless IKE_SAs (as indicated via notify in the IKE_SA_INIT
+      response) while initiators continue to create regular IKE_SAs with the
+      first CHILD_SA created during IKE_AUTH, unless the IKE_SA is initiated
+      explicitly without any children (which will fail if the responder does not
+      support or has disabled this extension).  If set to
+      <literal>force</literal>, only childless initiation is accepted and the
+      first CHILD_SA is created with a separate CREATE_CHILD_SA exchange
+      (e.g. to use an independent DH exchange for all CHILD_SAs). Finally,
+      setting the option to <literal>never</literal> disables support for
+      childless IKE_SAs as responder.
+    '';
+
     send_certreq = mkYesNoParam yes ''
       Send certificate request payloads to offer trusted root CA certificates to
       the peer. Certificate requests help the peer to choose an appropriate
@@ -246,6 +262,14 @@ in {
       <listitem><para><literal>always</literal> causes certificate payloads to be sent
       unconditionally whenever certificate authentication is used.</para></listitem>
       </itemizedlist>
+    '';
+
+    ppk_id = mkOptionalStrParam ''
+       String identifying the Postquantum Preshared Key (PPK) to be used.
+    '';
+
+    ppk_required = mkYesNoParam no ''
+       Whether a Postquantum Preshared Key (PPK) is required for this connection.
     '';
 
     keyingtries = mkIntParam 1 ''
@@ -340,6 +364,16 @@ in {
       List of named IP pools to allocate virtual IP addresses
       and other configuration attributes from. Each name references a pool by
       name from either the pools section or an external pool.
+    '';
+
+    if_id_in = mkStrParam "0" ''
+      XFRM interface ID set on inbound policies/SA, can be overridden by child
+      config, see there for details.
+    '';
+
+    if_id_out = mkStrParam "0" ''
+      XFRM interface ID set on outbound policies/SA, can be overridden by child
+      config, see there for details.
     '';
 
     mediation = mkYesNoParam no ''
@@ -791,7 +825,7 @@ in {
         Updown script to invoke on CHILD_SA up and down events.
       '';
 
-      hostaccess = mkYesNoParam yes ''
+      hostaccess = mkYesNoParam no ''
         Hostaccess variable to pass to <literal>updown</literal> script.
       '';
 
@@ -922,6 +956,56 @@ in {
         <literal>0xffffffff</literal>.
       '';
 
+      set_mark_in = mkStrParam "0/0x00000000" ''
+        Netfilter mark applied to packets after the inbound IPsec SA processed
+        them. This way it's not necessary to mark packets via Netfilter before
+        decryption or right afterwards to match policies or process them
+        differently (e.g. via policy routing).
+
+        An additional mask may be appended to the mark, separated by
+        <literal>/</literal>. The default mask if omitted is 0xffffffff. The
+        special value <literal>%same</literal> uses the value (but not the mask)
+        from <option>mark_in</option> as mark value, which can be fixed,
+        <literal>%unique</literal> or <literal>%unique-dir</literal>.
+
+        Setting marks in XFRM input requires Linux 4.19 or higher.
+      '';
+
+      set_mark_out = mkStrParam "0/0x00000000" ''
+        Netfilter mark applied to packets after the outbound IPsec SA processed
+        them. This allows processing ESP packets differently than the original
+        traffic (e.g. via policy routing).
+
+        An additional mask may be appended to the mark, separated by
+        <literal>/</literal>. The default mask if omitted is 0xffffffff. The
+        special value <literal>%same</literal> uses the value (but not the mask)
+        from <option>mark_out</option> as mark value, which can be fixed,
+        <literal>%unique_</literal> or <literal>%unique-dir</literal>.
+
+        Setting marks in XFRM output is supported since Linux 4.14. Setting a
+        mask requires at least Linux 4.19.
+      '';
+
+      if_id_in = mkStrParam "0" ''
+        XFRM interface ID set on inbound policies/SA. This allows installing
+        duplicate policies/SAs and associates them with an interface with the
+        same ID. The special value <literal>%unique</literal> sets a unique
+        interface ID on each CHILD_SA instance, beyond that the value
+        <literal>%unique-dir</literal> assigns a different unique interface ID
+        for each CHILD_SA direction (in/out).
+      '';
+
+      if_id_out = mkStrParam "0" ''
+        XFRM interface ID set on outbound policies/SA. This allows installing
+        duplicate policies/SAs and associates them with an interface with the
+        same ID. The special value <literal>%unique</literal> sets a unique
+        interface ID on each CHILD_SA instance, beyond that the value
+        <literal>%unique-dir</literal> assigns a different unique interface ID
+        for each CHILD_SA direction (in/out).
+
+        The daemon will not install routes for CHILD_SAs that have this option set.
+     '';
+
       tfc_padding = mkParamOfType (with lib.types; either int (enum ["mtu"])) 0 ''
         Pads ESP packets with additional data to have a consistent ESP packet
         size for improved Traffic Flow Confidentiality. The padding defines the
@@ -944,6 +1028,33 @@ in {
         and the installation will fail if it's not supported by either kernel or
         device. The value <literal>auto</literal> enables offloading, if it's
         supported, but the installation does not fail otherwise.
+      '';
+
+      copy_df = mkYesNoParam yes ''
+        Whether to copy the DF bit to the outer IPv4 header in tunnel mode. This
+        effectively disables Path MTU discovery (PMTUD). Controlling this
+        behavior is not supported by all kernel interfaces.
+      '';
+
+      copy_ecn = mkYesNoParam yes ''
+        Whether to copy the ECN (Explicit Congestion Notification) header field
+        to/from the outer IP header in tunnel mode. Controlling this behavior is
+        not supported by all kernel interfaces.
+      '';
+
+      copy_dscp = mkEnumParam [ "out" "in" "yes" "no" ] "out" ''
+        Whether to copy the DSCP (Differentiated Services Field Codepoint)
+        header field to/from the outer IP header in tunnel mode. The value
+        <literal>out</literal> only copies the field from the inner to the outer
+        header, the value <literal>in</literal> does the opposite and only
+        copies the field from the outer to the inner header when decapsulating,
+        the value <literal>yes</literal> copies the field in both directions,
+        and the value <literal>no</literal> disables copying the field
+        altogether. Setting this to <literal>yes</literal> or
+        <literal>in</literal> could allow an attacker to adversely affect other
+        traffic at the receiver, which is why the default is
+        <literal>out</literal>. Controlling this behavior is not supported by
+        all kernel interfaces.
       '';
 
       start_action = mkEnumParam ["none" "trap" "start"] "none" ''
@@ -1058,6 +1169,24 @@ in {
     } ''
       IKE preshared secret section for a specific secret. Each IKE PSK is
       defined in a unique section having the <literal>ike</literal> prefix.
+    '';
+
+    ppk = mkPrefixedAttrsOfParams {
+      secret = mkOptionalStrParam ''
+	      Value of the PPK. It may either be an ASCII string, a hex encoded string
+	      if it has a <literal>0x</literal> prefix or a Base64 encoded string if
+	      it has a <literal>0s</literal> prefix in its value. Should have at least
+	      256 bits of entropy for 128-bit security.
+      '';
+
+      id = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
+	      PPK identity the PPK belongs to. Multiple unique identities may be
+	      specified, each having an <literal>id</literal> prefix, if a secret is
+	      shared between multiple peers.
+      '';
+    } ''
+	    Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
+	    defined in a unique section having the <literal>ppk</literal> prefix.
     '';
 
     private = mkPrefixedAttrsOfParams {

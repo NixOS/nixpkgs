@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, fuse, pkgconfig }:
+{ stdenv, fetchFromGitHub, fuse3, pkgconfig, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "tup-${version}";
-  version = "0.7.5";
+  pname = "tup";
+  version = "0.7.10";
+  outputs = [ "bin" "man" "out" ];
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "0jzp1llq6635ldb7j9qb29j2k0x5mblimdqg3179dvva1hv0ia23";
+    sha256 = "1qd07h4wi0743l7z2vybfvhwp61g2p2pc5qhl40672ryl24nvd1d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse ];
+  buildInputs = [ fuse3 pcre ];
 
   configurePhase = ''
-    sed -i 's/`git describe`/v${version}/g' Tupfile
+    sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
+    sed -i 's/pcre-confg/pkg-config pcre/g' Tupfile Tuprules.tup
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
@@ -23,17 +25,17 @@ stdenv.mkDerivation rec {
   # generate' instead
   buildPhase = ''
     ./build.sh
+    ./build/tup init
     ./build/tup generate script.sh
     ./script.sh
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp tup $out/bin/
-
-    mkdir -p $out/share/man/man1
-    cp tup.1 $out/share/man/man1/
+    install -D tup -t $bin/bin/
+    install -D tup.1 -t $man/share/man/man1/
   '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
     description = "A fast, file-based build system";
@@ -45,8 +47,9 @@ stdenv.mkDerivation rec {
       algorithms to avoid doing unnecessary work. This means you can stay focused on
       your project rather than on your build system.
     '';
-    homepage = http://gittup.org/tup/;
+    homepage = "http://gittup.org/tup/";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

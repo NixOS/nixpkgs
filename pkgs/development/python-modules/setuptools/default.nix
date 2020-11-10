@@ -1,38 +1,72 @@
 { stdenv
-, fetchPypi
+, buildPythonPackage
+, fetchFromGitHub
 , python
 , wrapPython
 , unzip
+, callPackage
+, bootstrapped-pip
+, lib
+, pipInstallHook
+, setuptoolsBuildHook
 }:
 
-# Should use buildPythonPackage here somehow
-stdenv.mkDerivation rec {
+let
   pname = "setuptools";
-  version = "40.2.0";
-  name = "${python.libPrefix}-${pname}-${version}";
+  version = "47.3.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "47881d54ede4da9c15273bac65f9340f8929d4f0213193fa7894be384f2dcfa6";
+  # Create an sdist of setuptools
+  sdist = stdenv.mkDerivation rec {
+    name = "${pname}-${version}-sdist.tar.gz";
+
+    src = fetchFromGitHub {
+      owner = "pypa";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "0sy3p4ibgqx67hzn1f254jh8070a8kl9g2la62p3c74k2x7p0r7f";
+      name = "${pname}-${version}-source";
+    };
+
+    buildPhase = ''
+      ${python.pythonForBuild.interpreter} bootstrap.py
+      ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
+    '';
+
+    installPhase = ''
+      echo "Moving sdist..."
+      mv dist/*.tar.gz $out
+    '';
   };
+in buildPythonPackage rec {
+  inherit pname version;
+  # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
+  # Instead, we override it to remove setuptools to avoid a circular dependency.
+  # The same is done for pip and the pipInstallHook.
+  format = "other";
 
-  nativeBuildInputs = [ unzip wrapPython ];
-  buildInputs = [ python ];
-  doCheck = false;  # requires pytest
-  installPhase = ''
-      dst=$out/${python.sitePackages}
-      mkdir -p $dst
-      export PYTHONPATH="$dst:$PYTHONPATH"
-      ${python.interpreter} setup.py install --prefix=$out
-      wrapPythonPrograms
+  src = sdist;
+
+  nativeBuildInputs = [
+    bootstrapped-pip
+    (pipInstallHook.override{pip=null;})
+    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+  ];
+
+  preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+    export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
 
-  pythonPath = [];
+  pipInstallFlags = [ "--ignore-installed" ];
+
+  # Adds setuptools to nativeBuildInputs causing infinite recursion.
+  catchConflicts = false;
+
+  # Requires pytest, causing infinite recursion.
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = https://pypi.python.org/pypi/setuptools;
+    homepage = "https://pypi.python.org/pypi/setuptools";
     license = with licenses; [ psfl zpl20 ];
     platforms = python.meta.platforms;
     priority = 10;

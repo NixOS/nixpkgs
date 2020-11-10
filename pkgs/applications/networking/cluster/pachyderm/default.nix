@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "pachyderm-${version}";
-  version = "1.4.6";
+  pname = "pachyderm";
+  version = "1.8.5";
   rev = "v${version}";
 
   goPackagePath = "github.com/pachyderm/pachyderm";
@@ -12,12 +12,12 @@ buildGoPackage rec {
     inherit rev;
     owner = "pachyderm";
     repo = "pachyderm";
-    sha256 = "1fivihn9s04lmzdiwg0f05qm708fb14xy81pbc31wxdyjw28m8ns";
+    sha256 = "1b9x2xn0sxsjid15lnwr79lps8xzf24i7jfl0i48nabdigmi04wp";
   };
 
   meta = with lib; {
     description = "Containerized Data Analytics";
-    homepage = https://github.com/pachyderm/pachyderm;
+    homepage = "https://github.com/pachyderm/pachyderm";
     license = licenses.asl20;
     maintainers = with maintainers; [offline];
   };

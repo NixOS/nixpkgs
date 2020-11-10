@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, cmake, pkgconfig, ois, ogre, libX11, boost }:
 
 stdenv.mkDerivation rec {
-  name = "ogre-paged-${version}";
+  pname = "ogre-paged";
   version = "1.2.0";
 
   src = fetchurl {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Paged Geometry for Ogre3D";
-    homepage = https://github.com/RigsOfRods/ogre-paged;
+    homepage = "https://github.com/RigsOfRods/ogre-paged";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };

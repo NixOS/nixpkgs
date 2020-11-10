@@ -1,12 +1,12 @@
 { fetchurl, stdenv, writeText, jdk, maven, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "soapui-${version}";
-  version = "5.4.0";
+  pname = "soapui";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/downloads.eviware/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
-    sha256 = "1yqx1fsh8mr5zf36df7pi25dysb28gfscr1667jzd5s0k9jl42xd";
+    sha256 = "0v1wiy61jgvlxjk8qdvcnyn1gh2ysxf266zln7r4wpzwd5gc3dpw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Most Advanced REST & SOAP Testing Tool in the World";
-    homepage = https://www.soapui.org/;
+    homepage = "https://www.soapui.org/";
     license = "SoapUI End User License Agreement";
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.all;

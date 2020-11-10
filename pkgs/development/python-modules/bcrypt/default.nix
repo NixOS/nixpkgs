@@ -1,15 +1,16 @@
-{ stdenv, buildPythonPackage, isPyPy, fetchPypi
+{ stdenv, buildPythonPackage, isPyPy, fetchPypi, pythonOlder
 , cffi, pycparser, mock, pytest, py, six }:
 
 with stdenv.lib;
 
 buildPythonPackage rec {
-  version = "3.1.4";
+  version = "3.2.0";
   pname = "bcrypt";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67ed1a374c9155ec0840214ce804616de49c3df9c5bc66740687c1c9b1cd9e8d";
+    sha256 = "5b93c1726e50a93a033c36e5ca7fdcd29a5c7395af50a6892f5d9e7c6cfbfb29";
   };
   buildInputs = [ pycparser mock pytest py ];
   propagatedBuildInputs = [ six ] ++ optional (!isPyPy) cffi;
@@ -18,6 +19,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ domenkozar ];
     description = "Modern password hashing for your software and your servers";
     license = licenses.asl20;
-    homepage = https://github.com/pyca/bcrypt/;
+    homepage = "https://github.com/pyca/bcrypt/";
   };
 }

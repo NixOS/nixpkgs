@@ -5,7 +5,8 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "es-${version}";
+  pname = "es";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/wryun/es-shell/releases/download/v${version}/es-${version}.tar.gz";
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--with-readline" ];
 
   meta = with stdenv.lib; {
-    description = "Es is an extensible shell";
+    description = "An extensible shell with higher order functions";
     longDescription =
       ''
         Es is an extensible shell. The language was derived
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
         functional programming languages, such as Scheme,
         and the Tcl embeddable programming language.
       '';
-    homepage = http://wryun.github.io/es-shell/;
+    homepage = "http://wryun.github.io/es-shell/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ sjmackenzie ttuegel ];
     platforms = platforms.all;

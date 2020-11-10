@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "grip";
-  version = "4.4.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "joeyespo";
     repo = "grip";
     rev = "v${version}";
-    sha256 = "1768n3w40qg1njkzqjyl5gkva0h31k8h250821v69imj1zimymag";
+    sha256 = "0hphplnyi903jx7ghfxplg1qlj2kpcav1frr2js7p45pbh5ib9rm";
   };
 
   patches = [
     # Render "front matter", used in our RFC template and elsewhere
     (fetchpatch {
-      url = https://github.com/joeyespo/grip/pull/249.patch;
+      url = "https://github.com/joeyespo/grip/pull/249.patch";
       sha256 = "07za5iymfv647dfrvi6hhj54a96hgjyarys51zbi08c51shqyzpg";
     })
   ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
-    homepage = https://github.com/joeyespo/grip;
+    homepage = "https://github.com/joeyespo/grip";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

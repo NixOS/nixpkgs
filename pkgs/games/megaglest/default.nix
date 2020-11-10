@@ -1,4 +1,4 @@
-{ stdenv, cmake, pkgconfig, git, curl, SDL2, xercesc, openal, lua, vlc
+{ stdenv, cmake, pkgconfig, git, curl, SDL2, xercesc, openal, lua, libvlc
 , libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
 , fontconfig, freetype, xorg, makeWrapper, bash, which, gnome3, libGLU, glib
 , fetchFromGitHub
@@ -17,18 +17,19 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "megaglest-${version}";
+  pname = "megaglest";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "MegaGlest";
     repo = "megaglest-source";
-    rev = "${version}";
+    rev = version;
     fetchSubmodules = true;
     sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg vlc wxGTK
+  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
     glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
 
   configurePhase = ''
@@ -48,9 +49,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "MegaGlest is an entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
+    description = "An entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = stdenv.lib.licenses.gpl3;
-    homepage = http://megaglest.org/;
+    homepage = "http://megaglest.org/";
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.linux;
   };

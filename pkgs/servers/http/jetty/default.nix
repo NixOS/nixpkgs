@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "jetty-${version}";
-  version = "9.4.8.v20171121";
+  pname = "jetty";
+  version = "9.4.31.v20200723";
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";
     name = "jetty-distribution-${version}.tar.gz";
-    sha256 = "0bvwi70vdk468yqgvgq99lwrpy2y5znrl0b1cr8j6ygmsgnvvmjh";
+    sha256 = "1j1dhlrlj7xnijp55c1hd9r47m6bq37vpjkaf8f9fg7q9m2z9x6x";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Web server and javax.servlet container";
-    homepage = http://www.eclipse.org/jetty/;
+    homepage = "https://www.eclipse.org/jetty/";
     platforms = stdenv.lib.platforms.all;
     license = [ stdenv.lib.licenses.asl20 stdenv.lib.licenses.epl10 ];
   };

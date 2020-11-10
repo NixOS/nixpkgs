@@ -9,13 +9,13 @@ let
   cfg = config.services.openafsClient;
 
   cellServDB = pkgs.fetchurl {
-    url = http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14;
+    url = "http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14";
     sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
   };
 
   clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.cellServDB);
 
-  afsConfig = pkgs.runCommand "afsconfig" {} ''
+  afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
     mkdir -p $out
     echo ${cfg.cellName} > $out/ThisCell
     cat ${cellServDB} ${clientServDB} > $out/CellServDB
@@ -149,11 +149,13 @@ in
       packages = {
         module = mkOption {
           default = config.boot.kernelPackages.openafs;
+          defaultText = "config.boot.kernelPackages.openafs";
           type = types.package;
           description = "OpenAFS kernel module package. MUST match the userland package!";
         };
         programs = mkOption {
           default = getBin pkgs.openafs;
+          defaultText = "getBin pkgs.openafs";
           type = types.package;
           description = "OpenAFS programs package. MUST match the kernel module package!";
         };
@@ -196,7 +198,7 @@ in
 
     environment.etc = {
       clientCellServDB = {
-        source = pkgs.runCommand "CellServDB" {} ''
+        source = pkgs.runCommand "CellServDB" { preferLocalBuild = true; } ''
           cat ${cellServDB} ${clientServDB} > $out
         '';
         target = "openafs/CellServDB";

@@ -6,6 +6,10 @@ with lib;
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
 
   options = {
@@ -16,7 +20,7 @@ with lib;
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable Evolution Data Server, a collection of services for 
+          Whether to enable Evolution Data Server, a collection of services for
           storing addressbooks and calendars.
         '';
       };

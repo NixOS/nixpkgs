@@ -1,21 +1,18 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "scdoc-${version}";
-  version = "1.5.1";
+  pname = "scdoc";
+  version = "1.11.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/scdoc";
-    rev = version;
-    sha256 = "0fm3x6ma1pzlajfcy32ayqrcab8lwl64nxfaqgc6019mxw87y1ja";
+  src = fetchurl {
+    url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
+    sha256 = "17cjh3lcfppyl2mzpanylla93gdgdv5spc8jldshvayzizhfghwa";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "-static" "" \
       --replace "/usr/local" "$out"
-    # It happens from time to time that the version wasn't updated:
-    sed -iE 's/VERSION=[0-9]\.[0-9]\.[0-9]/VERSION=${version}/' Makefile
   '';
 
   doCheck = true;
@@ -26,7 +23,8 @@ stdenv.mkDerivation rec {
       scdoc is a simple man page generator written for POSIX systems written in
       C99.
     '';
-    homepage = https://git.sr.ht/~sircmpwn/scdoc/;
+    homepage = "https://git.sr.ht/~sircmpwn/scdoc";
+    changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${version}";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

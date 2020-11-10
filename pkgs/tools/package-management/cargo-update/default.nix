@@ -1,29 +1,52 @@
-{ stdenv, callPackage, defaultCrateOverrides, fetchFromGitHub, cmake, curl, libssh2, libgit2, openssl, zlib }:
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, pkg-config
+, installShellFiles
+, ronn
+, curl
+, libgit2
+, libssh2
+, openssl
+, Security
+, zlib
+}:
 
-((callPackage ./cargo-update.nix {}).cargo_update {}).override {
-  crateOverrides = defaultCrateOverrides // {
-    cargo-update = attrs: rec {
-      name = "cargo-update-${version}";
-      version = "1.5.2";
+rustPlatform.buildRustPackage rec {
+  pname = "cargo-update";
+  version = "4.1.2";
 
-      src = fetchFromGitHub {
-        owner = "nabijaczleweli";
-        repo = "cargo-update";
-        rev = "v${version}";
-        sha256 = "1bvrdgcw2akzd78wgvsisvghi8pvdk3szyg9s46qxv4km9sf88s7";
-      };
+  src = fetchFromGitHub {
+    owner = "nabijaczleweli";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0bpl4y5p0acn1clxgwn2sifx6ggpq9jqw5zrmva7asjf8p8dx3v5";
+  };
 
-      nativeBuildInputs = [ cmake ];
-      buildInputs = [ libssh2 libgit2 openssl zlib ]
-        ++ stdenv.lib.optional stdenv.isDarwin curl;
+  cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v4.1.2.patch ];
+  cargoSha256 = "150fpb7wyyxi40z4wai6c94mn84g700c2228316g6y8i07c8ix0d";
 
-      meta = with stdenv.lib; {
-        description = "A cargo subcommand for checking and applying updates to installed executables";
-        homepage = https://github.com/nabijaczleweli/cargo-update;
-        license = with licenses; [ mit ];
-        maintainers = with maintainers; [ gerschtli ];
-        platforms = platforms.all;
-      };
-    };
+  nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
+
+  buildInputs = [ libgit2 libssh2 openssl zlib ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+
+  postBuild = ''
+    # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
+    HOME=$TMPDIR \
+    RUBYOPT="-E utf-8:utf-8" \
+      ronn -r --organization="cargo-update developers" man/*.md
+  '';
+
+  postInstall = ''
+    installManPage man/*.1
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A cargo subcommand for checking and applying updates to installed executables";
+    homepage = "https://github.com/nabijaczleweli/cargo-update";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gerschtli filalex77 johntitor ];
   };
 }

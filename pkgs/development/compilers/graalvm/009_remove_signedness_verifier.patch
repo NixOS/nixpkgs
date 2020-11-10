@@ -1,0 +1,21 @@
+diff --git a/substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/query/SizeAndSignednessVerifier.java b/substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/query/SizeAndSignednessVerifier.java
+index 23a76357fd2..f13694b6ed7 100644
+--- a/substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/query/SizeAndSignednessVerifier.java
++++ b/substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/query/SizeAndSignednessVerifier.java
+@@ -249,15 +249,6 @@ public final class SizeAndSignednessVerifier extends NativeInfoTreeVisitor {
+     }
+ 
+     private void checkSignedness(boolean isUnsigned, ResolvedJavaType type, ResolvedJavaMethod method) {
+-        if (isSigned(type)) {
+-            if (isUnsigned) {
+-                addError("Type " + type.toJavaName(false) + " is signed, but accessed C value is unsigned", method);
+-            }
+-        } else if (nativeLibs.isWordBase(type)) {
+-            /* every Word type other than Signed is assumed to be unsigned. */
+-            if (!isUnsigned) {
+-                addError("Type " + type.toJavaName(false) + " is unsigned, but accessed C value is signed", method);
+-            }
+-        }
++
+     }
+ }

@@ -1,22 +1,23 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage, setuptools_scm
 , requests, requests-file, idna, pytest
 , responses
 }:
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "2.2.0";
+  version = "2.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d5s8v6kpsgazyahflhji1cfdcf89rv7l7z55v774bhzvcjp2y99";
+    sha256 = "ab0e38977a129c72729476d5f8c85a8e1f8e49e9202e1db8dca76e95da7be9a8";
   };
 
   propagatedBuildInputs = [ requests requests-file idna ];
   checkInputs = [ pytest responses ];
+  nativeBuildInputs = [ setuptools_scm ];
 
   meta = {
-    homepage = https://github.com/john-kurkowski/tldextract;
+    homepage = "https://github.com/john-kurkowski/tldextract";
     description = "Accurately separate the TLD from the registered domain and subdomains of a URL, using the Public Suffix List.";
     license = lib.licenses.bsd3;
   };

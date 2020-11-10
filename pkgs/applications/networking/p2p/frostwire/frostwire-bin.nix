@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "6.7.2";
-  name = "frostwire-${version}";
+  version = "6.8.7";
+  pname = "frostwire";
 
   src = fetchurl {
-    url = "https://dl.frostwire.com/frostwire/${version}/frostwire-${version}.noarch.tar.gz";
-    sha256 = "1dxk2cmwbn4ahkmr8qpiq1dpkkyswg5wz1cnv36izafpr87lxfvj";
+    url = "https://dl.frostwire.com/frostwire/${version}/frostwire-${version}.amd64.tar.gz";
+    sha256 = "1m9v4abm8jbyz46hin63vi6irs32n1xzg85bdyb48vpdxh6iwv04";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.frostwire.com/;
+    homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux"];
   };
 }

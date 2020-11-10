@@ -23,6 +23,10 @@ let
   '';
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "tarsnap" "cachedir" ] "Use services.tarsnap.archives.<name>.cachedir")
+  ];
+
   options = {
     services.tarsnap = {
       enable = mkOption {

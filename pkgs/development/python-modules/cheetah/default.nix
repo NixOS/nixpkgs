@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = http://www.cheetahtemplate.org/;
+    homepage = "http://www.cheetahtemplate.org/";
     description = "A template engine and code generation tool";
     license = lib.licenses.mit;
   };

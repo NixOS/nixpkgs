@@ -1,23 +1,21 @@
 { stdenv, fetchFromGitHub
 , boost, zlib, openssl
 , upnpSupport ? true, miniupnpc ? null
-, aesniSupport ? false
-, avxSupport ? false
+, aesniSupport ? stdenv.hostPlatform.aesSupport
+, avxSupport   ? stdenv.hostPlatform.avxSupport
 }:
 
 assert upnpSupport -> miniupnpc != null;
 
 stdenv.mkDerivation rec {
-
-  name = pname + "-" + version;
   pname = "i2pd";
-  version = "2.21.0";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "02zsig63cambwm479ckw4kl1dk00g1q2sbzsvn9vy1xpjy928n7v";
+    sha256 = "0ibk222fwgjaxrmhrk5avcmmbj52ibcsydm2m02xnlpr8kcqsjnc";
   };
 
   buildInputs = with stdenv.lib; [ boost zlib openssl ]
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://i2pd.website;
+    homepage = "https://i2pd.website";
     description = "Minimal I2P router written in C++";
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];

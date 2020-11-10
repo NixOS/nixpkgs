@@ -1,7 +1,7 @@
-{stdenv, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
+{ mkDerivation, stdenv, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
 
-stdenv.mkDerivation rec {
-  name = "caneda-${version}";
+mkDerivation rec {
+  pname = "caneda";
   version = "0.3.1";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source EDA software focused on easy of use and portability";
-    homepage = http://caneda.org;
+    homepage = "http://caneda.org";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

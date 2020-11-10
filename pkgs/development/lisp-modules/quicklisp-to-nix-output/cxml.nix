@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cxml'';
-  version = ''20110619-git'';
+  version = ''20200610-git'';
 
-  parasites = [ "cxml-dom" "cxml-klacks" "cxml-test" "cxml-xml" ];
+  parasites = [ "cxml/dom" "cxml/klacks" "cxml/test" "cxml/xml" ];
 
-  description = '''';
+  description = ''Closure XML - a Common Lisp XML parser'';
 
   deps = [ args."alexandria" args."babel" args."closure-common" args."puri" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cxml/2011-06-19/cxml-20110619-git.tgz'';
-    sha256 = ''04k6syn9p7qsazi84kab9n9ki2pb5hrcs0ilw7wikxfqnbabm2yk'';
+    url = ''http://beta.quicklisp.org/archive/cxml/2020-06-10/cxml-20200610-git.tgz'';
+    sha256 = ''0545rh4mfxqx2yn9b48s0hzd5w80kars7hpykbg0lgf7ys5218mq'';
   };
 
   packageName = "cxml";
@@ -19,10 +19,10 @@ rec {
   asdFilesToKeep = ["cxml.asd"];
   overrides = x: x;
 }
-/* (SYSTEM cxml DESCRIPTION NIL SHA256
-    04k6syn9p7qsazi84kab9n9ki2pb5hrcs0ilw7wikxfqnbabm2yk URL
-    http://beta.quicklisp.org/archive/cxml/2011-06-19/cxml-20110619-git.tgz MD5
-    587755dff60416d4f716f4e785cf747e NAME cxml FILENAME cxml DEPS
+/* (SYSTEM cxml DESCRIPTION Closure XML - a Common Lisp XML parser SHA256
+    0545rh4mfxqx2yn9b48s0hzd5w80kars7hpykbg0lgf7ys5218mq URL
+    http://beta.quicklisp.org/archive/cxml/2020-06-10/cxml-20200610-git.tgz MD5
+    0b6f34edb79f7b63cc5855f18d0d66f0 NAME cxml FILENAME cxml DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME closure-common FILENAME closure-common) (NAME puri FILENAME puri)
      (NAME trivial-features FILENAME trivial-features)
@@ -30,5 +30,5 @@ rec {
     DEPENDENCIES
     (alexandria babel closure-common puri trivial-features
      trivial-gray-streams)
-    VERSION 20110619-git SIBLINGS NIL PARASITES
-    (cxml-dom cxml-klacks cxml-test cxml-xml)) */
+    VERSION 20200610-git SIBLINGS (cxml-dom cxml-klacks cxml-test) PARASITES
+    (cxml/dom cxml/klacks cxml/test cxml/xml)) */

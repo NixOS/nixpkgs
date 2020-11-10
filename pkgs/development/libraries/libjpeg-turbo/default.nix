@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, nasm
-}:
+{ stdenv, fetchFromGitHub, cmake, nasm, enableStatic ? false, enableShared ? true }:
 
 stdenv.mkDerivation rec {
-  name = "libjpeg-turbo-${version}";
-  version = "1.5.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libjpeg-turbo/${name}.tar.gz";
-    sha256 = "08r5b5mywwrxv4axvq80dm31cklz81grczlzlxr2xqa6pgi90j5j";
-  }; # github releases still need autotools, surprisingly
+  pname = "libjpeg-turbo";
+  version = "2.0.5";
+
+  src = fetchFromGitHub {
+    owner = "libjpeg-turbo";
+    repo = "libjpeg-turbo";
+    rev = version;
+    sha256 = "0p32yivybxdicm01qa9h1vj91apygzxpvnklrjmbx8z9z2l3qxc9";
+  };
 
   patches =
     stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
@@ -16,18 +18,21 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
-  nativeBuildInputs = [ nasm ];
+  nativeBuildInputs = [ cmake nasm ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
+    "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
+  ];
 
-  doCheck = true; # not cross;
-  checkTarget = "test";
+  doInstallCheck = true;
+  installCheckTarget = "test";
 
   meta = with stdenv.lib; {
-    homepage = http://libjpeg-turbo.virtualgl.org/;
+    homepage = "https://libjpeg-turbo.org/";
     description = "A faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ vcunat colemickens ];
     platforms = platforms.all;
   };
 }

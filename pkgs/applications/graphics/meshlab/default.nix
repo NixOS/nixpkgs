@@ -1,69 +1,96 @@
-{ fetchFromGitHub, libGLU, llvmPackages, qtbase, qtscript, qtxmlpatterns }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fetchpatch
+, libGLU
+, qtbase
+, qtscript
+, qtxmlpatterns
+, lib3ds
+, bzip2
+, muparser
+, eigen
+, glew
+, gmp
+, levmar
+, qhull
+, cmake
+}:
 
-let
-  meshlabRev = "d596d7c086c51fbdfb56050f9c30b55dd0286d4c";
-  vcglibRev = "6c3c940e34327322507c703889f9f1cfa73ab183";
-  # ^ this should be the latest commit in the vcglib devel branch at the time of the meshlab revision
+mkDerivation rec {
+  pname = "meshlab";
+  version = "2020.07";
 
-  stdenv = llvmPackages.stdenv; # only building with clang seems to be tested upstream
-in stdenv.mkDerivation {
-  name = "meshlab-20180627-beta";
+  src = fetchFromGitHub {
+    owner = "cnr-isti-vclab";
+    repo = "meshlab";
+    rev = "Meshlab-${version}";
+    sha256 = "0vj849b57zk3k6lx35zzcjhr9gdy4hxqnnkb8chwy7hw262cm3ri";
+    fetchSubmodules = true; # for vcglib
+  };
 
-  srcs =
-    [
-      (fetchFromGitHub {
-        owner = "cnr-isti-vclab";
-        repo = "meshlab";
-        rev = meshlabRev;
-        sha256 = "0xi7wiyy0yi545l5qvccbqahlcsf70mhx829gf7bq29640si4rax";
-        name = "meshlab-${meshlabRev}";
-      })
-      (fetchFromGitHub {
-        owner = "cnr-isti-vclab";
-        repo = "vcglib";
-        rev = vcglibRev;
-        sha256 = "0jfgjvf21y9ncmyr7caipy3ardhig7hh9z8miy885c99b925hhwd";
-        name = "vcglib-${vcglibRev}";
-      })
-    ];
+  buildInputs = [
+    libGLU
+    qtbase
+    qtscript
+    qtxmlpatterns
+    lib3ds
+    bzip2
+    muparser
+    eigen
+    glew
+    gmp
+    levmar
+    qhull
+  ];
 
-  sourceRoot = "meshlab-${meshlabRev}";
+  nativeBuildInputs = [ cmake ];
 
+  patches = [
+    # Make cmake use the system qhull. The next meshlab will not need this patch because it is already in master.
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/cnr-isti-vclab/meshlab/pull/747.patch";
+      sha256 = "0wx9f6zn458xz3lsqcgvsbwh1pgi3g0lah93nlbsb0sagng7n565";
+    })
+  ];
+
+  preConfigure = ''
+    substituteAll ${./meshlab.desktop} install/linux/resources/meshlab.desktop
+    cd src
+  '';
+
+  cmakeFlags = [
+    "-DALLOW_BUNDLED_EIGEN=OFF"
+    "-DALLOW_BUNDLED_GLEW=OFF"
+    "-DALLOW_BUNDLED_LIB3DS=OFF"
+    "-DALLOW_BUNDLED_MUPARSER=OFF"
+    "-DALLOW_BUNDLED_QHULL=OFF"
+    # disable when available in nixpkgs
+    "-DALLOW_BUNDLED_OPENCTM=ON"
+    "-DALLOW_BUNDLED_SSYNTH=ON"
+    # some plugins are disabled unless these are on
+    "-DALLOW_BUNDLED_NEWUOA=ON"
+    "-DALLOW_BUNDLED_LEVMAR=ON"
+  ];
+
+  postFixup = ''
+    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlabserver-wrapped
+  '';
+
+  # Meshlab is not format-security clean; without disabling hardening, we get:
+  # src/common/GLLogStream.h:61:37: error: format not a string literal and no format arguments [-Werror=format-security]
+  #  61 |         int chars_written = snprintf(buf, buf_size, f, std::forward<Ts>(ts)...);
+  #     |
   hardeningDisable = [ "format" ];
+
   enableParallelBuilding = true;
 
-  patches = [ ./fix-20180627-beta.patch ];
-
-  buildPhase = ''
-    # MeshLab has ../vcglib hardcoded everywhere, so move the source dir
-    mv ../vcglib-${vcglibRev} ../vcglib
-
-    cd src
-    export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
-    export QMAKESPEC="linux-clang"
-
-    pushd external
-    qmake -recursive external.pro
-    buildPhase
-    popd
-    qmake -recursive meshlab_full.pro
-    buildPhase
-  '';
-
-  installPhase = ''
-    mkdir -p $out/opt/meshlab $out/bin
-    cp -Rv distrib/* $out/opt/meshlab
-    ln -s $out/opt/meshlab/meshlab $out/bin/meshlab
-    ln -s $out/opt/meshlab/meshlabserver $out/bin/meshlabserver
-  '';
-
-  buildInputs = [ libGLU llvmPackages.openmp qtbase qtscript qtxmlpatterns ];
-
   meta = {
-    description = "A system for processing and editing 3D triangular meshes.";
-    homepage = http://www.meshlab.net/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    description = "A system for processing and editing 3D triangular meshes";
+    homepage = "https://www.meshlab.net/";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ viric ];
+    platforms = with lib.platforms; linux;
   };
 }

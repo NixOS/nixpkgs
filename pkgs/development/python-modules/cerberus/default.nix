@@ -2,17 +2,21 @@
 
 buildPythonPackage rec {
   pname = "Cerberus";
-  version = "1.2";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5c2e048fb15ecb3c088d192164316093fcfa602a74b3386eefb2983aa7e800a";
+    sha256 = "12cm547hpypqd7bwcl4wr4w6varibc1dagzicg5qbp86yaa6cbih";
   };
 
   checkInputs = [ pytestrunner pytest ];
 
+  checkPhase = ''
+    pytest -k 'not nested_oneofs'
+  '';
+
   meta = with stdenv.lib; {
-    homepage = http://python-cerberus.org/;
+    homepage = "http://python-cerberus.org/";
     description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
     license = licenses.mit;
   };

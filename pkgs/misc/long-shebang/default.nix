@@ -1,7 +1,8 @@
 { stdenv, fetchurl }: let
   version = "1.2.0";
 in stdenv.mkDerivation {
-  name = "long-shebang-${version}";
+  pname = "long-shebang";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/shlevy/long-shebang/releases/download/v${version}/long-shebang-${version}.tar.xz";
@@ -11,7 +12,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "A tool for #! scripts with more than one argument";
 
-    homepage = https://github.com/shlevy/long-shebang;
+    homepage = "https://github.com/shlevy/long-shebang";
 
     license = stdenv.lib.licenses.mit;
 

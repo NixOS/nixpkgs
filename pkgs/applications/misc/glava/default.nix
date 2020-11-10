@@ -1,25 +1,14 @@
-{ stdenv, fetchgit, fetchurl, writeScript
+{ stdenv, writeScript, fetchFromGitHub
 , libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
-, enableGlfw ? false, glfw }:
+, enableGlfw ? false, glfw, runtimeShell }:
 
 let
   inherit (stdenv.lib) optional makeLibraryPath;
 
-  # gl.xml
-  gl = fetchurl {
-    url = https://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/56312cfe680e4be5ae61bbf1c628e420f8731718/xml/gl.xml;
-    sha256 = "1c45bcgaxiic5gmb3gkrd9qcvascvij97vz5y6fc3a2y7x3gjc5l";
-  };
-  # EGL 1.5
-  egl = fetchurl {
-    url = https://www.khronos.org/registry/EGL/api/KHR/khrplatform.h;
-    sha256 = "0p0vs4siiya05cvbqq7cw3ci2zvvlfh8kycgm9k9cwvmrkj08349";
-  };
-
   wrapperScript = writeScript "glava" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     case "$1" in
-      --copy-config)
+      --copy-config|-C)
         # The binary would symlink it, which won't work in Nix because the
         # garbage collector will eventually remove the original files after
         # updates
@@ -32,13 +21,14 @@ let
   '';
 in
   stdenv.mkDerivation rec {
-    name = "glava-${version}";
-    version = "1.5.1";
+    pname = "glava";
+    version = "1.6.3";
 
-    src = fetchgit {
-      url = "https://github.com/wacossusca34/glava.git";
+    src = fetchFromGitHub {
+      owner = "wacossusca34";
+      repo = "glava";
       rev = "v${version}";
-      sha256 = "1k8x0a0g2pm7ficsk4az9s7mjbm85a987apjg5c4y6iyldxgd6sb";
+      sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
     };
 
     buildInputs = [
@@ -54,12 +44,19 @@ in
       python3
     ];
 
-    patchPhase = ''
-      mkdir -p glad/include/KHR
+    preConfigure = ''
+      for f in $(find -type f);do
+        substituteInPlace $f \
+          --replace /etc/xdg $out/etc/xdg
+      done
 
-      cp ${gl} glad/gl.xml
-      cp ${egl} glad/include/KHR/khrplatform.h
-      patchShebangs .
+      substituteInPlace Makefile \
+        --replace '$(DESTDIR)$(SHADERDIR)' '$(SHADERDIR)'
+
+      substituteInPlace Makefile \
+        --replace 'unknown' 'v${version}'
+
+      export CFLAGS="-march=native"
     '';
 
     makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";
@@ -85,7 +82,7 @@ in
       description = ''
         OpenGL audio spectrum visualizer
       '';
-      homepage = https://github.com/wacossusca34/glava;
+      homepage = "https://github.com/wacossusca34/glava";
       platforms = platforms.linux;
       license = licenses.gpl3;
       maintainers = with maintainers; [

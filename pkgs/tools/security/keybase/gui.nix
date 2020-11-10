@@ -1,9 +1,28 @@
-{ stdenv, fetchurl, alsaLib, atk, cairo, cups
-, dbus, expat, fontconfig, freetype, gcc, gdk_pixbuf, glib, gnome2, gtk3
-, libnotify, nspr, nss, pango, systemd, xorg }:
+{ stdenv, lib, fetchurl, alsaLib, atk, cairo, cups, udev
+, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
+, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
+, runtimeShell, gsettings-desktop-schemas }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  versionSuffix = "20200527202541.39ca0071e5";
+in
+
+stdenv.mkDerivation rec {
+  pname = "keybase-gui";
+  version = "5.5.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+
+  src = fetchurl {
+
+    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
+    sha256 = "1n54a86491aqazqa4rgljbji638nj83ciibqxq46sa2m1php9dfd";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
     alsaLib
     atk
     cairo
@@ -12,18 +31,18 @@ let
     expat
     fontconfig
     freetype
-    gcc.cc
-    gdk_pixbuf
+    gdk-pixbuf
     glib
-    gnome2.GConf
+    gsettings-desktop-schemas
     gtk3
+    libappindicator-gtk3
     libnotify
     nspr
     nss
     pango
     systemd
     xorg.libX11
-    xorg.libxcb
+    xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -32,29 +51,31 @@ let
     xorg.libXi
     xorg.libXrandr
     xorg.libXrender
-    xorg.libXScrnSaver
     xorg.libXtst
+    xorg.libxcb
   ];
-in
-stdenv.mkDerivation rec {
-  name = "keybase-gui-${version}";
-  version = "2.5.0-20180807164805.0fda758997";
-  src = fetchurl {
-    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version}_amd64.deb";
-    sha256 = "135sm3h5i2h9j06py827psjbhhiqy1mb133s92p7jp6q1mhr8j1x";
-  };
-  phases = ["unpackPhase" "installPhase" "fixupPhase"];
+
+  runtimeDependencies = [
+    (lib.getLib udev)
+    libappindicator-gtk3
+  ];
+
+  dontBuild = true;
+  dontConfigure = true;
+  dontPatchELF = true;
+
   unpackPhase = ''
     ar xf $src
     tar xf data.tar.xz
   '';
+
   installPhase = ''
     mkdir -p $out/bin
     mv usr/share $out/share
     mv opt/keybase $out/share/
 
     cat > $out/bin/keybase-gui <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     checkFailed() {
       if [ "\$NIX_SKIP_KEYBASE_CHECKS" = "1" ]; then
@@ -83,15 +104,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/keybase.desktop \
       --replace run_keybase $out/bin/keybase-gui
   '';
-  postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"
-  '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.keybase.io/;
-    description = "The Keybase official GUI.";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ puffnfresh np ];
+    homepage = "https://www.keybase.io/";
+    description = "The Keybase official GUI";
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np filalex77 ];
     license = licenses.bsd3;
   };
 }

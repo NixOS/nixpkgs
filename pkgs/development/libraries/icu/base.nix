@@ -1,5 +1,5 @@
-{ version, sha256, patches ? [], patchFlags ? "" }:
-{ stdenv, fetchurl, fixDarwinDylibNames
+{ version, sha256, patches ? [], patchFlags ? [] }:
+{ stdenv, lib, fetchurl, fixDarwinDylibNames
   # Cross-compiled icu4c requires a build-root of a native compile
 , buildRootOnly ? false, nativeBuildRoot
 }:
@@ -9,8 +9,7 @@ let
 
   baseAttrs = {
     src = fetchurl {
-      url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
-        + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
+      url = "https://github.com/unicode-org/icu/releases/download/release-${lib.replaceChars [ "." ] [ "-" ] version}/icu4c-${lib.replaceChars [ "." ] [ "_" ] version}-src.tgz";
       inherit sha256;
     };
 
@@ -20,7 +19,7 @@ let
     '';
 
     # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
-    postPatch = if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
+    postPatch = if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl") && lib.versionOlder version "62.1"
       then "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
       else null; # won't find locale_t on darwin
 
@@ -44,7 +43,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Unicode and globalization support library";
-      homepage = http://site.icu-project.org/;
+      homepage = "http://site.icu-project.org/";
       maintainers = with maintainers; [ raskin ];
       platforms = platforms.all;
     };
@@ -58,15 +57,21 @@ let
 
     # FIXME: This fixes dylib references in the dylibs themselves, but
     # not in the programs in $out/bin.
-    buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    nativeBuildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
       sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
-    '' + ''
+    '' + (let
+      replacements = [
+        { from = "\${prefix}/include"; to = "${placeholder "dev"}/include"; } # --cppflags-searchpath
+        { from = "\${pkglibdir}/Makefile.inc"; to = "${placeholder "dev"}/lib/icu/Makefile.inc"; } # --incfile
+        { from = "\${pkglibdir}/pkgdata.inc"; to = "${placeholder "dev"}/lib/icu/pkgdata.inc"; } # --incpkgdatafile
+      ];
+    in ''
       substituteInPlace "$dev/bin/icu-config" \
-        --replace \''${pkglibdir}/Makefile.inc "$dev/lib/icu/Makefile.inc"
-    '';
+        ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
+    '');
 
     postFixup = ''moveToOutput lib/icu "$dev" '';
   };

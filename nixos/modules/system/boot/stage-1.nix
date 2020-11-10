@@ -11,7 +11,9 @@ let
 
   udev = config.systemd.package;
 
-  modulesTree = config.system.modulesTree;
+  kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+
+  modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;
 
 
@@ -30,11 +32,11 @@ let
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
   # A utility for enumerating the shared-library dependencies of a program
-  findLibs = pkgs.writeShellScriptBin "find-libs" ''
+  findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
     set -euo pipefail
 
     declare -A seen
-    declare -a left
+    left=()
 
     patchelf="${pkgs.buildPackages.patchelf}/bin/patchelf"
 
@@ -46,7 +48,7 @@ let
       done
     }
 
-    add_needed $1
+    add_needed "$1"
 
     while [ ''${#left[@]} -ne 0 ]; do
       next=''${left[0]}
@@ -109,37 +111,44 @@ let
       copy_bin_and_libs ${pkgs.utillinux}/sbin/blkid
 
       # Copy dmsetup and lvm.
-      copy_bin_and_libs ${pkgs.lvm2}/sbin/dmsetup
-      copy_bin_and_libs ${pkgs.lvm2}/sbin/lvm
+      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
+      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/lvm
 
       # Add RAID mdadm tool.
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
 
       # Copy udev.
-      copy_bin_and_libs ${udev}/lib/systemd/systemd-udevd
       copy_bin_and_libs ${udev}/bin/udevadm
+      copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
       for BIN in ${udev}/lib/udev/*_id; do
         copy_bin_and_libs $BIN
       done
+      # systemd-udevd is only a symlink to udevadm these days
+      ln -sf udevadm $out/bin/systemd-udevd
 
       # Copy modprobe.
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Copy resize2fs if needed.
-      ${optionalString (any (fs: fs.autoResize) fileSystems) ''
+      # Copy resize2fs if any ext* filesystems are to be resized
+      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
 
       # Copy secrets if needed.
+      #
+      # TODO: move out to a separate script; see #85000.
       ${optionalString (!config.boot.loader.supportsInitrdSecrets)
           (concatStringsSep "\n" (mapAttrsToList (dest: source:
              let source' = if source == null then dest else source; in
                ''
                   mkdir -p $(dirname "$out/secrets/${dest}")
-                  cp -a ${source'} "$out/secrets/${dest}"
+                  # Some programs (e.g. ssh) doesn't like secrets to be
+                  # symlinks, so we use `cp -L` here to match the
+                  # behaviour when secrets are natively supported.
+                  cp -Lr ${source'} "$out/secrets/${dest}"
                 ''
           ) config.boot.initrd.secrets))
        }
@@ -147,7 +156,7 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
@@ -196,16 +205,27 @@ let
     ''; # */
 
 
-  udevRules = pkgs.runCommand "udev-rules"
-    { allowedReferences = [ extraUtils ]; }
-    ''
+  linkUnits = pkgs.runCommand "link-units" {
+      allowedReferences = [ extraUtils ];
+      preferLocalBuild = true;
+    } ''
+      mkdir -p $out
+      cp -v ${udev}/lib/systemd/network/*.link $out/
+    '';
+
+  udevRules = pkgs.runCommand "udev-rules" {
+      allowedReferences = [ extraUtils ];
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
       cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
+      cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
       cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
+      cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
       ${config.boot.initrd.extraUdevRulesCommands}
 
@@ -214,14 +234,12 @@ let
             --replace ata_id ${extraUtils}/bin/ata_id \
             --replace scsi_id ${extraUtils}/bin/scsi_id \
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
-            --replace ${pkgs.utillinux}/sbin/blkid ${extraUtils}/bin/blkid \
-            --replace /sbin/blkid ${extraUtils}/bin/blkid \
-            --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
-            --replace /sbin/mdadm ${extraUtils}/bin/mdadm \
+            --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
+            --replace ${pkgs.utillinux}/bin/blkid ${extraUtils}/bin/blkid \
+            --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
+            --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
             --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
-            --replace /usr/bin/readlink ${extraUtils}/bin/readlink \
-            --replace /usr/bin/basename ${extraUtils}/bin/basename \
-            --replace ${udev}/bin/udevadm ${extraUtils}/bin/udevadm
+            --replace ${udev} ${extraUtils}
       done
 
       # Work around a bug in QEMU, which doesn't implement the "READ
@@ -251,12 +269,12 @@ let
     postInstall = ''
       echo checking syntax
       # check both with bash
-      ${pkgs.bash}/bin/sh -n $target
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
       # and with ash shell, just in case
-      ${extraUtils}/bin/ash -n $target
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit udevRules extraUtils modulesClosure;
+    inherit linkUnits udevRules extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice;
 
@@ -289,6 +307,7 @@ let
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
+    name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor prepend;
 
     contents =
@@ -298,9 +317,10 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
-            { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
-            ''
+        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
+              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+              preferLocalBuild = true;
+            } ''
               target=$out
               ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
@@ -355,7 +375,8 @@ let
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . | cpio -H newc -o) | gzip >>"$1"
+        (cd "$tmp" && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null) | \
+          ${config.boot.initrd.compressor} >> "$1"
       '';
 
 in
@@ -373,6 +394,17 @@ in
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
         <literal><replaceable>resume_offset</replaceable></literal>.
+      '';
+    };
+
+    boot.initrd.enable = mkOption {
+      type = types.bool;
+      default = !config.boot.isContainer;
+      defaultText = "!config.boot.isContainer";
+      description = ''
+        Whether to enable the NixOS initial RAM disk (initrd). This may be
+        needed to perform some initialisation tasks (like mounting
+        network/encrypted file systems) before continuing the boot process.
       '';
     };
 
@@ -487,8 +519,7 @@ in
     };
 
     boot.initrd.secrets = mkOption
-      { internal = true;
-        default = {};
+      { default = {};
         type = types.attrsOf (types.nullOr types.path);
         description =
           ''
@@ -525,21 +556,25 @@ in
       };
 
     fileSystems = mkOption {
-      options.neededForBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          If set, this file system will be mounted in the initial
-          ramdisk.  By default, this applies to the root file system
-          and to the file system containing
-          <filename>/nix/store</filename>.
-        '';
-      };
+      type = with lib.types; attrsOf (submodule {
+        options.neededForBoot = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, this file system will be mounted in the initial ramdisk.
+            Note that the file system will always be mounted in the initial
+            ramdisk if its mount point is one of the following:
+            ${concatStringsSep ", " (
+              forEach utils.pathsNeededForBoot (i: "<filename>${i}</filename>")
+            )}.
+          '';
+        };
+      });
     };
 
   };
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf config.boot.initrd.enable {
     assertions = [
       { assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
@@ -548,6 +583,25 @@ in
           resumeDevice == "" || builtins.substring 0 1 resumeDevice == "/";
         message = "boot.resumeDevice has to be an absolute path."
           + " Old \"x:y\" style is no longer supported.";
+      }
+      # TODO: remove when #85000 is fixed
+      { assertion = !config.boot.loader.supportsInitrdSecrets ->
+          all (source:
+            builtins.isPath source ||
+            (builtins.isString source && hasPrefix builtins.storeDir source))
+          (attrValues config.boot.initrd.secrets);
+        message = ''
+          boot.loader.initrd.secrets values must be unquoted paths when
+          using a bootloader that doesn't natively support initrd
+          secrets, e.g.:
+
+            boot.initrd.secrets = {
+              "/etc/secret" = /path/to/secret;
+            };
+
+          Note that this will result in all secrets being stored
+          world-readable in the Nix store!
+        '';
       }
     ];
 

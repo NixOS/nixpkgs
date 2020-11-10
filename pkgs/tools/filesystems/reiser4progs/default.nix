@@ -1,12 +1,13 @@
 {stdenv, fetchurl, libaal}:
 
-let version = "1.2.1"; in
+let version = "2.0.1"; in
 stdenv.mkDerivation rec {
-  name = "reiser4progs-${version}";
+  pname = "reiser4progs";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/reiser4/reiser4-utils/${name}.tar.gz";
-    sha256 = "03vdqvpyd48wxrpqpb9kg76giaffw9b8k334kr4wc0zxgybknhl7";
+    url = "mirror://sourceforge/reiser4/reiser4-utils/${pname}-${version}.tar.gz";
+    sha256 = "1r7m95mnp6xmp1j5k99jhmz6g9y2qq7cghlmdxsfbr3xviqfs45d";
   };
 
   buildInputs = [libaal];
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit version;
-    homepage = https://sourceforge.net/projects/reiser4/;
+    homepage = "https://sourceforge.net/projects/reiser4/";
     description = "Reiser4 utilities";
     license = licenses.gpl2;
     platforms = platforms.linux;

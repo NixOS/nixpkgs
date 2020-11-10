@@ -1,76 +1,147 @@
-{ stdenv, fetchurl, python3, python3Packages, zbar }:
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, wrapQtAppsHook
+, python3
+, zbar
+, secp256k1
+, enableQt ? true
+# for updater.nix
+, writeScript
+, common-updater-scripts
+, bash
+, coreutils
+, curl
+, gnugrep
+, gnupg
+, gnused
+, nix
+}:
 
 let
-  qdarkstyle = python3Packages.buildPythonPackage rec {
-    pname = "QDarkStyle";
-    version = "2.5.4";
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "1w715m1i5pycfqcpkrggpn0rs9cakx6cm5v8rggcxnf4p0i0kdiy";
+  version = "4.0.3";
+
+  # electrum is not compatible with dnspython 2.0.0 yet
+  # use the latest 1.x release instead
+  py = python3.override {
+    packageOverrides = self: super: {
+      dnspython = super.dnspython_1;
     };
-    doCheck = false; # no tests
+  };
+
+  libsecp256k1_name =
+    if stdenv.isLinux then "libsecp256k1.so.0"
+    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
+
+  libzbar_name =
+    if stdenv.isLinux then "libzbar.so.0"
+    else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
+
+  # Not provided in official source releases, which are what upstream signs.
+  tests = fetchFromGitHub {
+    owner = "spesmilo";
+    repo = "electrum";
+    rev = version;
+    sha256 = "1r40i0v7nm35m3pzbd0l5z4qphl13s31l9v5njmyvpfjirdmhjbv";
+
+    extraPostFetch = ''
+      mv $out ./all
+      mv ./all/electrum/tests $out
+    '';
   };
 in
 
-python3Packages.buildPythonApplication rec {
-  name = "electrum-${version}";
-  version = "3.2.3";
+py.pkgs.buildPythonApplication {
+  pname = "electrum";
+  inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "022iw4cq0c009wvqn7wd815jc0nv8198lq3cawn8h6c28hw2mhs1";
+    sha256 = "0q891fgzxvyzjxfczynx92hvclfs8i3nr5nr9sgbvz13hsg4s6lg";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  postUnpack = ''
+    # can't symlink, tests get confused
+    cp -ar ${tests} $sourceRoot/electrum/tests
+  '';
+
+  nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
+
+  propagatedBuildInputs = with py.pkgs; [
+    aiohttp
+    aiohttp-socks
+    aiorpcx
+    attrs
+    bitstring
     dnspython
     ecdsa
     jsonrpclib-pelix
     matplotlib
     pbkdf2
     protobuf
-    pyaes
     pycryptodomex
-    pyqt5
     pysocks
-    qdarkstyle
     qrcode
     requests
-    tlslite
-    typing
-
+    tlslite-ng
     # plugins
+    ckcc-protocol
     keepkey
     trezor
     btchip
-
-    # TODO plugins
-    # amodem
-  ];
+  ] ++ stdenv.lib.optionals enableQt [ pyqt5 qdarkstyle ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc5 icons.qrc -o electrum/gui/qt/icons_rc.py
-    # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' electrum/gui/qt/icons_rc.py
-    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" electrum/qrscanner.py
-  '';
+    substituteInPlace ./electrum/ecc_fast.py \
+      --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
+  '' + (if enableQt then ''
+    substituteInPlace ./electrum/qrscanner.py \
+      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+  '' else ''
+    sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+  '');
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     # Despite setting usr_share above, these files are installed under
     # $out/nix ...
     mv $out/${python3.sitePackages}/nix/store"/"*/share $out
     rm -rf $out/${python3.sitePackages}/nix
 
     substituteInPlace $out/share/applications/electrum.desktop \
-      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
+                "Exec=$out/bin/electrum %u" \
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
+                "Exec=$out/bin/electrum --testnet %u"
+
   '';
 
-  doCheck = false;
+  postFixup = stdenv.lib.optionalString enableQt ''
+    wrapQtApp $out/bin/electrum
+  '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
+  checkInputs = with py.pkgs; [ pytest ];
+
+  checkPhase = ''
+    py.test electrum/tests
     $out/bin/electrum help >/dev/null
   '';
+
+  passthru.updateScript = import ./update.nix {
+    inherit (stdenv) lib;
+    inherit
+      writeScript
+      common-updater-scripts
+      bash
+      coreutils
+      curl
+      gnupg
+      gnugrep
+      gnused
+      nix
+    ;
+  };
 
   meta = with stdenv.lib; {
     description = "A lightweight Bitcoin wallet";
@@ -80,8 +151,9 @@ python3Packages.buildPythonApplication rec {
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://electrum.org/;
+    homepage = "https://electrum.org/";
     license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ ehmry joachifm np ];
   };
 }

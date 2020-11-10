@@ -58,7 +58,7 @@ let
     };
   };
   cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}") (filterAttrs (k: v: v != null && v != "") (cliOptionsCommon //
-               cliOptionsPerConfig."${cfg.configType}" //
+               cliOptionsPerConfig.${cfg.configType} //
                s3CommonOptions //
                optionalAttrs cfg.s3Backup { s3backup = "true"; } //
                optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }
@@ -252,7 +252,7 @@ in
         example = ["host1:2181" "host2:2181"];
       };
       zkConfigExhibitorPath = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           If the ZooKeeper shared config is also running Exhibitor, the URI path for the REST call
         '';
@@ -405,10 +405,12 @@ in
         cp -Rf ${pkgs.zookeeper}/* ${cfg.baseDir}/zookeeper
         chown -R zookeeper ${cfg.baseDir}/zookeeper/conf
         chmod -R u+w ${cfg.baseDir}/zookeeper/conf
+        replace_what=$(echo ${pkgs.zookeeper} | sed 's/[\/&]/\\&/g')
+        replace_with=$(echo ${cfg.baseDir}/zookeeper | sed 's/[\/&]/\\&/g')
+        sed -i 's/'"$replace_what"'/'"$replace_with"'/g' ${cfg.baseDir}/zookeeper/bin/zk*.sh
       '';
     };
-    users.users = singleton {
-      name = "zookeeper";
+    users.users.zookeeper = {
       uid = config.ids.uids.zookeeper;
       description = "Zookeeper daemon user";
       home = cfg.baseDir;

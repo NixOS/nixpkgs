@@ -11,7 +11,7 @@ let
   inherit (stdenv) lib;
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
-    "libressl" = libressl;
+    libressl = libressl;
   };
 
 in
@@ -20,8 +20,8 @@ assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 buildPackage {
   pname = "s6-networking";
-  version = "2.3.0.3";
-  sha256 = "1kfjl7da6wkmyq1mvq9irkbzk2wbi0axjfbcw5cym5y11mqswsjs";
+  version = "2.3.1.2";
+  sha256 = "1029bgwfmv903y5ji93j75m7p2jgchdxya1khxzb42q2z7yxnlyr";
 
   description = "A suite of small networking utilities for Unix systems";
 

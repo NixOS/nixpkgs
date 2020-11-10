@@ -6,17 +6,15 @@ assert mysqlSupport -> mysql_jdbc != null;
 with stdenv.lib;
 let
   extraJars = optional mysqlSupport mysql_jdbc;
-
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "liquibase";
-  version = "3.6.2";
+  version = "4.1.1";
 
   src = fetchurl {
-    url = "https://github.com/liquibase/liquibase/releases/download/${pname}-parent-${version}/${name}-bin.tar.gz";
-    sha256 = "199ybjk0xxsg04v5x5l4arljmzj96hxva6ym6bp7av7dny0nqvfx";
+    url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "0gq3y2cgqb1dky5baqjydwmnaimczvsfg8dqc55c7aqcgy7hp3pg";
   };
 
   buildInputs = [ jre makeWrapper ];
@@ -32,21 +30,17 @@ stdenv.mkDerivation rec {
       done
     '';
     in ''
-      mkdir -p $out/{bin,lib,sdk}
-      mv ./* $out/
+      mkdir -p $out
+      mv ./{lib,licenses,liquibase.jar} $out/
 
-      # Clean up documentation.
-      mkdir -p $out/share/doc/${name}
-      mv $out/LICENSE.txt \
-         $out/README.txt \
-         $out/share/doc/${name}
+      mkdir -p $out/share/doc/${pname}-${version}
+      mv LICENSE.txt \
+         README.txt \
+         ABOUT.txt \
+         changelog.txt \
+         $out/share/doc/${pname}-${version}
 
-      # Remove silly files.
-      rm $out/liquibase.bat $out/liquibase.spec
-
-      # we provide our own script
-      rm $out/liquibase
-
+      mkdir -p $out/bin
       # there’s a lot of escaping, but I’m not sure how to improve that
       cat > $out/bin/liquibase <<EOF
       #!/usr/bin/env bash
@@ -63,9 +57,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version Control for your database";
-    homepage = http://www.liquibase.org/;
+    homepage = "https://www.liquibase.org/";
+    changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nequissimus ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

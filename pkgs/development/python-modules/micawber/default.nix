@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "micawber";
-  version = "0.3.5";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pnq6j8f144virhri0drgf0058x6qcxfd5yrb0ynbwr8djh326yn";
+    sha256 = "5e1e6fbab5bfc1edc6d575b900707c24a3484c51cf2e01f059a7e070724a3633";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 ];
 
   meta = with stdenv.lib; {
-    homepage = http://micawber.readthedocs.io/en/latest/;
+    homepage = "https://micawber.readthedocs.io/en/latest/";
     description = "A small library for extracting rich content from urls";
     license = licenses.mit;
     longDescription = ''

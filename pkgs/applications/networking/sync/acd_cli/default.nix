@@ -3,7 +3,6 @@
 , fusepy, sqlalchemy }:
 
 buildPythonApplication rec {
-  name = pname + "-" + version;
   pname = "acd_cli";
   version = "0.3.2";
 
@@ -33,7 +32,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A command line interface and FUSE filesystem for Amazon Cloud Drive";
-    homepage = https://github.com/yadayada/acd_cli;
+    homepage = "https://github.com/yadayada/acd_cli";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ edwtjo ];

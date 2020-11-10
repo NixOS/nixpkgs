@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   program = "dex";
   name = "${program}-${version}";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "jceb";
     repo = program;
     rev = "v${version}";
-    sha256 = "13dkjd1373mbvskrdrp0865llr3zvdr90sc6a6jqswh3crmgmz4k";
+    sha256 = "03aapcywnz4kl548cygpi25m8adwbmqlmwgxa66v4156ax9dqs86";
   };
 
   propagatedBuildInputs = [ python3 ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A program to generate and execute DesktopEntry files of the Application type";
-    homepage = https://github.com/jceb/dex;
+    homepage = "https://github.com/jceb/dex";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
   };

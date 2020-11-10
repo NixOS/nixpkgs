@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Bitcoin client query library";
-    homepage = https://github.com/libbitcoin/libbitcoin-client;
+    homepage = "https://github.com/libbitcoin/libbitcoin-client";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin ];
 

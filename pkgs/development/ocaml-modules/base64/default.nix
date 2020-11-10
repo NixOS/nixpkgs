@@ -1,24 +1,25 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ lib, fetchurl, buildDunePackage, alcotest, bos, dune-configurator }:
 
-let version = "2.0.0"; in
+buildDunePackage rec {
+  pname = "base64";
+  version = "3.4.0";
 
-stdenv.mkDerivation {
-  name = "ocaml-base64-${version}";
+  useDune2 = true;
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-base64/archive/v${version}.tar.gz";
-    sha256 = "1nv55gwq5vaxmrcz9ja2s165b1p9fhcxszc1l76043gpa56qm4fs";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-v${version}.tbz";
+    sha256 = "0d0n5gd4nkdsz14jnxq13f1f7rzxmndg5xql039a8wfppmazd70w";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ bos dune-configurator ];
 
-  createFindlibDestdir = true;
+  doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
-    homepage = https://github.com/mirage/ocaml-base64;
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://github.com/mirage/ocaml-base64";
     description = "Base64 encoding and decoding in OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

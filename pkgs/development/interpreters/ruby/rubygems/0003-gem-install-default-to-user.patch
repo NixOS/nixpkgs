@@ -1,0 +1,26 @@
+From d69249d0ff210316121b44d971ddd2439b1bc393 Mon Sep 17 00:00:00 2001
+From: zimbatm <zimbatm@zimbatm.com>
+Date: Wed, 21 Sep 2016 09:40:39 +0100
+Subject: [PATCH 3/3] gem install default to user
+
+Default to not installing gems to the read-only system derivation.
+---
+ lib/rubygems/path_support.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/rubygems/path_support.rb b/lib/rubygems/path_support.rb
+index ed680d65..749b9ea6 100644
+--- a/lib/rubygems/path_support.rb
++++ b/lib/rubygems/path_support.rb
+@@ -23,7 +23,7 @@ class Gem::PathSupport
+   # hashtable, or defaults to ENV, the system environment.
+   #
+   def initialize(env)
+-    @home = env["GEM_HOME"] || Gem.default_dir
++    @home = env["GEM_HOME"] || Gem.user_dir
+ 
+     if File::ALT_SEPARATOR
+       @home = @home.gsub(File::ALT_SEPARATOR, File::SEPARATOR)
+-- 
+2.21.0
+

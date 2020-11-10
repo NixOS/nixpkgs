@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gauche-${version}";
-  version = "0.9.6";
+  pname = "gauche";
+  version = "0.9.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/gauche/Gauche-${version}.tgz";
-    sha256 = "1bwwwvyxsrp2a4cfib6hn0hcgwzmp2znylm088w09f331miji2fd";
+    sha256 = "1yzpszhw52vkpr65r5d4khf3489mnnvnw58dd2wsvvx7499k5aac";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "--with-iconv=${libiconv}"
     "--with-dbm=gdbm"
     "--with-zlib=${zlib}"
-    "--with-ca-bundle=$SSL_CERT_FILE"
+    "--with-ca-bundle=${cacert}/etc/ssl/certs/ca-bundle.crt"
     # TODO: Enable slib
     #       Current slib in nixpkgs is specialized to Guile
     # "--with-slib=${slibGuile}/lib/slib"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "R7RS Scheme scripting engine";
-    homepage = https://practical-scheme.net/gauche/;
+    homepage = "https://practical-scheme.net/gauche/";
     maintainers = with maintainers; [ mnacamura ];
     license = licenses.bsd3;
     platforms = platforms.unix;

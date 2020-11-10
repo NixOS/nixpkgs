@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bicpl";
-  name  = "${pname}-2017-09-10";
+  version = "unstable-2017-09-10";
 
   owner = "BIC-MNI";
 
@@ -17,9 +17,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libminc netpbm ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib" "-DBUILD_TESTING=FALSE" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
 
-  checkPhase = "ctest --output-on-failure";
   doCheck = false;
   # internal_volume_io.h: No such file or directory
 

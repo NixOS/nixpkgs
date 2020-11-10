@@ -2,7 +2,8 @@
 
 let version = "0.2"; in
 stdenv.mkDerivation {
-  name = "regionset-${version}";
+  pname = "regionset";
+  inherit version;
 
   src = fetchurl {
     url = "http://linvdr.org/download/regionset/regionset-${version}.tar.gz";
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     inherit version;
-    homepage = http://linvdr.org/projects/regionset/;
+    homepage = "http://linvdr.org/projects/regionset/";
     description = "Tool for changing the region code setting of DVD players";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

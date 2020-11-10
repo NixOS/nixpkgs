@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, perl, perlPackages, buildPerlPackage }:
+{ stdenv, fetchFromGitHub, perl, perlPackages }:
 
 assert stdenv ? glibc;
 
-buildPerlPackage rec {
-  name = "ninka-${version}";
+perlPackages.buildPerlPackage {
+  pname = "ninka";
   version = "2.0-pre";
 
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ buildPerlPackage rec {
     rev = "b89b59ecd057dfc939d0c75acaddebb58fcd8cba";
     sha256 = "1grlis1kycbcjvjgqvn7aw81q1qx49ahvxg2k7cgyr79mvgpgi9m";
   };
-  
+
   buildInputs = with perlPackages; [ perl TestOutput DBDSQLite DBI TestPod TestPodCoverage SpreadsheetParseExcel ];
 
   doCheck = false;    # hangs
@@ -28,7 +28,7 @@ buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     description = "A sentence based license detector";
-    homepage = http://ninka.turingmachine.org/;
+    homepage = "http://ninka.turingmachine.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.all;

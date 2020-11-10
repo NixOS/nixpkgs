@@ -19,7 +19,7 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = !targetPlatform.isRiscV;
+    useMusl = !stdenv.targetPlatform.isRiscV;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -33,6 +33,15 @@ in with pkgs; rec {
     '';
   };
 
+  bootGCC = gcc.cc.override { enableLTO = false; };
+  bootBinutils = binutils.bintools.override {
+    withAllTargets = false;
+    # Don't need two linkers, disable whatever's not primary/default.
+    gold = false;
+    # bootstrap is easier w/static
+    enableShared = false;
+  };
+
   build =
 
     stdenv.mkDerivation {
@@ -44,7 +53,7 @@ in with pkgs; rec {
         set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
-      '' + (if (hostPlatform.libc == "glibc") then ''
+      '' + (if (stdenv.hostPlatform.libc == "glibc") then ''
         # Copy what we need of Glibc.
         cp -d ${libc.out}/lib/ld*.so* $out/lib
         cp -d ${libc.out}/lib/libc*.so* $out/lib
@@ -75,7 +84,7 @@ in with pkgs; rec {
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
-    '' else if (hostPlatform.libc == "musl") then ''
+    '' else if (stdenv.hostPlatform.libc == "musl") then ''
         # Copy what we need from musl
         cp ${libc.out}/lib/* $out/lib
         cp -rL ${libc.dev}/include $out
@@ -109,12 +118,14 @@ in with pkgs; rec {
         cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
-        cp -d ${gcc.cc.out}/bin/gcc $out/bin
-        cp -d ${gcc.cc.out}/bin/cpp $out/bin
-        cp -d ${gcc.cc.out}/bin/g++ $out/bin
-        cp -d ${gcc.cc.lib}/lib/libgcc_s.so* $out/lib
-        cp -d ${gcc.cc.lib}/lib/libstdc++.so* $out/lib
-        cp -rd ${gcc.cc.out}/lib/gcc $out/lib
+        cp -d ${bootGCC.out}/bin/gcc $out/bin
+        cp -d ${bootGCC.out}/bin/cpp $out/bin
+        cp -d ${bootGCC.out}/bin/g++ $out/bin
+        cp -d ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
+        cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp.a* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp_nonshared.a $out/lib
+        cp -rd ${bootGCC.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -122,11 +133,11 @@ in with pkgs; rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc.cc.out}/libexec/* $out/libexec
+        cp -rd ${bootGCC.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
         mkdir -p $out/include
-        cp -rd ${gcc.cc.out}/include/c++ $out/include
+        cp -rd ${bootGCC.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
@@ -137,7 +148,7 @@ in with pkgs; rec {
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
-      '' + lib.optionalString (hostPlatform != buildPlatform) ''
+      '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
@@ -148,8 +159,9 @@ in with pkgs; rec {
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils.bintools.out}/bin/$i $out/bin
+          cp ${bootBinutils.out}/bin/$i $out/bin
         done
+        cp '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
 
         chmod -R u+w $out
 
@@ -165,13 +177,14 @@ in with pkgs; rec {
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
         nuke-refs $out/lib/gcc/*/*/*
+        nuke-refs $out/lib/gcc/*/*/include-fixed/*/*
 
         mkdir $out/.pack
         mv $out/* $out/.pack
         mv $out/.pack $out/pack
 
         mkdir $out/on-server
-        XZ_OPT=-9 tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
+        XZ_OPT="-9 -e" tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
         cp ${busyboxMinimal}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox
@@ -199,21 +212,21 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (hostPlatform.libc == "glibc") then
+  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
-      inherit (hostPlatform) system;
+      inherit (stdenv.buildPlatform) system; # Used to determine where to build
       inherit bootstrapFiles;
     }
-    else if (hostPlatform.libc == "musl") then
+    else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
-      inherit (hostPlatform) system;
+      inherit (stdenv.buildPlatform) system; # Used to determine where to build
       inherit bootstrapFiles;
     }
     else throw "unsupported libc";
 
   test = derivation {
     name = "test-bootstrap-tools";
-    inherit (hostPlatform) system;
+    inherit (stdenv.hostPlatform) system; # We cannot "cross test"
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 
@@ -232,12 +245,12 @@ in with pkgs; rec {
       grep --version
       gcc --version
 
-    '' + lib.optionalString (hostPlatform.libc == "glibc") ''
+    '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
       ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-    '' + lib.optionalString (hostPlatform.libc == "musl") ''
+    '' + lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
       ldmusl=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
       export CPP="cpp -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"

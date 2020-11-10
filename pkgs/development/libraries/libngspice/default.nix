@@ -2,12 +2,13 @@
 
 # Note that this does not provide the ngspice command-line utility. For that see
 # the ngspice derivation.
-stdenv.mkDerivation {
-  name = "libngspice-28";
+stdenv.mkDerivation rec {
+  pname = "libngspice";
+  version = "33";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-28.tar.gz";
-    sha256 = "0rnz2rdgyav16w7wfn3sfrk2lwvvgz1fh0l9107zkcldijklz04l";
+    url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
+    sha256 = "1wa1hmpn13spmxqgbb1m7vgy32mwvjqwrxhymzll8z65q5nbd7dr";
   };
 
   nativeBuildInputs = [ flex bison ];
@@ -17,9 +18,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";
-    homepage = http://ngspice.sourceforge.net;
-    license = with licenses; [ "BSD" gpl2 ];
+    homepage = "http://ngspice.sourceforge.net";
+    license = with licenses; [ bsd3 gpl2Plus lgpl2Plus ]; # See https://sourceforge.net/p/ngspice/ngspice/ci/master/tree/COPYING
     maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,9 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, unittest2, mock, requests, simplejson }:
+{ lib, buildPythonPackage, fetchPypi, requests, pytest, pytestcov, pytest-mock, pytest_xdist }:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.6.0";
+  version = "2.54.0";
 
   # Tests require network connectivity and there's no easy way to disable
   # them. ~ C.
@@ -11,16 +10,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce8fc8af33e12d3d92b083b86952227e9af6854eaf6a044a7725ac543b0582f8";
+    sha256 = "a622bce0d6d0ac99a53b6e6a6475c39250207d644f28ad0ed276af7b96d12617";
   };
 
-  checkInputs = [ unittest2 mock ];
+  propagatedBuildInputs = [ requests ];
 
-  propagatedBuildInputs = [ requests ] ++ lib.optional (!isPy3k) simplejson;
+  checkInputs = [ pytest pytestcov pytest-mock pytest_xdist ];
 
   meta = with lib; {
     description = "Stripe Python bindings";
-    homepage = https://github.com/stripe/stripe-python;
+    homepage = "https://github.com/stripe/stripe-python";
     license = licenses.mit;
   };
 }

@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, which, autoconf, automake, flex, yacc
-, glibc, perl, kerberos, libxslt, docbook_xsl, docbook_xml_dtd_43
-, libtool_2, removeReferencesTo
+{ stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
+, yacc , glibc, perl, kerberos, libxslt, docbook_xsl
+, docbook_xml_dtd_43 , libtool_2, removeReferencesTo
 , ncurses # Extra ncurses utilities. Only needed for debugging.
 , tsmbac ? null # Tivoli Storage Manager Backup Client from IBM
 }:
 
 with (import ./srcs.nix { inherit fetchurl; });
 
-stdenv.mkDerivation rec {
-  name = "openafs-${version}";
+stdenv.mkDerivation {
+  pname = "openafs";
   inherit version srcs;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoconf automake flex libxslt libtool_2 perl
     removeReferencesTo which yacc ];
 
   buildInputs = [ kerberos ncurses ];
 
-  patches = [ ./bosserver.patch ] ++ stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
+  patches = [ ./bosserver.patch ./cross-build.patch ] ++ stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
 
   outputs = [ "out" "dev" "man" "doc" "server" ];
 
@@ -89,9 +90,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     outputsToInstall = [ "out" "doc" "man" ];
     description = "Open AFS client";
-    homepage = https://www.openafs.org;
+    homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.z77z maintainers.spacefrogg ];
+    maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
   };
 }

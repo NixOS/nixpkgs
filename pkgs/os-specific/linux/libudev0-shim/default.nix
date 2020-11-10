@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, udev }:
 
 stdenv.mkDerivation rec {
-  name = "libudev0-shim-${version}";
+  pname = "libudev0-shim";
   version = "1";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Shim to preserve libudev.so.0 compatibility";
-    homepage = https://github.com/archlinux/libudev0-shim;
+    homepage = "https://github.com/archlinux/libudev0-shim";
     platforms = platforms.linux;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

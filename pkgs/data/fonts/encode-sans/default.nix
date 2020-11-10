@@ -1,9 +1,9 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip rec {
   name = "encode-sans-1.002";
 
-  url = https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip;
+  url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -13,7 +13,7 @@ fetchzip rec {
 
   sha256 = "16mx894zqlwrhnp4rflgayxhxppmsj6k7haxdngajhb30rlwf08p";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A versatile sans serif font family";
     longDescription = ''
       The Encode Sans family is a versatile workhorse. Featuring a huge range of
@@ -23,7 +23,7 @@ fetchzip rec {
 
       Designed by Pablo Impallari and Andres Torresi.
     '';
-    homepage = http://www.impallari.com/projects/overview/encode;
+    homepage = "http://www.impallari.com/projects/overview/encode";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

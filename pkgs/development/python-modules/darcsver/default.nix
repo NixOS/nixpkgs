@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Darcsver, generate a version number from Darcs history";
-    homepage = https://pypi.python.org/pypi/darcsver;
+    homepage = "https://pypi.python.org/pypi/darcsver";
     license = "BSD-style";
   };
 }

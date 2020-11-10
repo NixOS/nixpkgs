@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "ttylog-${version}";
+  pname = "ttylog";
   version = "0.31";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = http://ttylog.sourceforge.net;
+    homepage = "http://ttylog.sourceforge.net";
     description = "Simple serial port logger";
     longDescription = ''
       A serial port logger which can be used to print everything to stdout
@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

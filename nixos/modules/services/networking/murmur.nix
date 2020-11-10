@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.murmur;
+  forking = cfg.logFile != null;
   configFile = pkgs.writeText "murmurd.ini" ''
     database=/var/lib/murmur/murmur.sqlite
     dbDriver=QSQLITE
@@ -12,8 +13,8 @@ let
     autobanTimeframe=${toString cfg.autobanTimeframe}
     autobanTime=${toString cfg.autobanTime}
 
-    logfile=/var/log/murmur/murmurd.log
-    pidfile=${cfg.pidfile}
+    logfile=${optionalString (cfg.logFile != null) cfg.logFile}
+    ${optionalString forking "pidfile=/run/murmur/murmurd.pid"}
 
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
@@ -45,6 +46,11 @@ let
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
+  ];
+
   options = {
     services.murmur = {
       enable = mkOption {
@@ -78,10 +84,11 @@ in
         description = "The amount of time an IP ban lasts (in seconds).";
       };
 
-      pidfile = mkOption {
-        type = types.path;
-        default = "/run/murmur/murmurd.pid";
-        description = "Path to PID file for Murmur daemon.";
+      logFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/log/murmur/murmurd.log";
+        description = "Path to the log file for Murmur daemon. Empty means log to journald.";
       };
 
       welcometext = mkOption {
@@ -232,7 +239,35 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra configuration to put into mumur.ini.";
+        description = "Extra configuration to put into murmur.ini.";
+      };
+
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/lib/murmur/murmurd.env";
+        description = ''
+          Environment file as defined in <citerefentry>
+          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+          </citerefentry>.
+
+          Secrets may be passed to the service without adding them to the world-readable
+          Nix store, by specifying placeholder variables as the option value in Nix and
+          setting these variables accordingly in the environment file.
+
+          <programlisting>
+            # snippet of murmur-related config
+            services.murmur.password = "$MURMURD_PASSWORD";
+          </programlisting>
+
+          <programlisting>
+            # content of the environment file
+            MURMURD_PASSWORD=verysecretpassword
+          </programlisting>
+
+          Note that this file needs to be available on the host on which
+          <literal>murmur</literal> is running.
+        '';
       };
     };
   };
@@ -243,27 +278,34 @@ in
       home            = "/var/lib/murmur";
       createHome      = true;
       uid             = config.ids.uids.murmur;
+      group           = "murmur";
+    };
+    users.groups.murmur = {
+      gid             = config.ids.gids.murmur;
     };
 
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network-online.target "];
+      preStart    = ''
+        ${pkgs.envsubst}/bin/envsubst \
+          -o /run/murmur/murmurd.ini \
+          -i ${configFile}
+      '';
 
       serviceConfig = {
-        Type      = "forking";
+        # murmurd doesn't fork when logging to the console.
+        Type = if forking then "forking" else "simple";
+        PIDFile = mkIf forking "/run/murmur/murmurd.pid";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ExecStart = "${pkgs.murmur}/bin/murmurd -ini /run/murmur/murmurd.ini";
+        Restart = "always";
         RuntimeDirectory = "murmur";
-        PIDFile   = cfg.pidfile;
-        Restart   = "always";
-        User      = "murmur";
-        ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile}";
-        PermissionsStartOnly = true;
+        RuntimeDirectoryMode = "0700";
+        User = "murmur";
+        Group = "murmur";
       };
-
-      preStart = ''
-        mkdir -p /var/log/murmur
-        chown -R murmur /var/log/murmur
-      '';
     };
   };
 }

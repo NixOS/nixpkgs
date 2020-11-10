@@ -4,38 +4,42 @@ let
   hts-nim = fetchFromGitHub {
     owner = "brentp";
     repo = "hts-nim";
-    rev = "9cd83e30522ab64cd71eb8209be4154aa5579ce1";
-    sha256 = "10g408idy14667varq1syf06rrbpk63i3ib7i5dh1md4ib19av6f";
+    rev = "v0.3.4";
+    sha256 = "0670phk1bq3l9j2zaa8i5wcpc5dyfrc0l2a6c21g0l2mmdczffa7";
   };
 
   docopt = fetchFromGitHub {
     owner = "docopt";
     repo = "docopt.nim";
-    rev = "v0.6.5";
-    sha256 = "0yx79m4jkdcazwlky55nwf39zj5kdhymrrdrjq29mahiwx83x5zr";
+    rev = "v0.6.7";
+    sha256 = "1ga7ckg21fzwwvh26jp2phn2h3pvkn8g8sm13dxif33rp471bv37";
   };
 
 in stdenv.mkDerivation rec {
-  name = "mosdepth-${version}";
-  version = "0.2.3";
+  pname = "mosdepth";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${version}";
-    sha256 = "1b9frrwhcvay3alhn0d02jccc2qlbij1732hzq9nhwnr4kvsvxx7";
+    sha256 = "01gm9gj2x2zs4yx6wk761fi1papi7qr3gp4ln1kkn8n2f9y9h849";
   };
 
-  buildInputs = [ nim ];
+  nativeBuildInputs = [ nim ];
+  buildInputs = [ htslib pcre ];
 
-  buildPhase = "nim -p:${hts-nim}/src -p:${docopt}/src c -d:release mosdepth.nim";
+  buildPhase = ''
+    HOME=$TMPDIR
+    nim -p:${hts-nim}/src -p:${docopt}/src c --nilseqs:on -d:release mosdepth.nim
+  '';
+
   installPhase = "install -Dt $out/bin mosdepth";
-  fixupPhase = "patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc htslib pcre ]} $out/bin/mosdepth";
 
   meta = with stdenv.lib; {
-    description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing.";
+    description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
     license = licenses.mit;
-    homepage = https://github.com/brentp/mosdepth;
+    homepage = "https://github.com/brentp/mosdepth";
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.linux;
   };

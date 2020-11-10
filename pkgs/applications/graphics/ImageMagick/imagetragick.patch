@@ -1,8 +1,0 @@
---- a/config/policy.xml
-+++ b/config/policy.xml
-67a68,72
->   <policy domain="coder" rights="none" pattern="EPHEMERAL" />
->   <policy domain="coder" rights="none" pattern="URL" />
->   <policy domain="coder" rights="none" pattern="HTTPS" />
->   <policy domain="coder" rights="none" pattern="MVG" />
->   <policy domain="coder" rights="none" pattern="MSL" />

@@ -7,6 +7,7 @@ build-idris-package  {
   name = "hrtime";
   version = "2017-04-16";
 
+  ipkgName = "hrTime";
   idrisDeps = [ idrisscript ];
 
   src = fetchFromGitHub {
@@ -18,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris library for high resolution time";
-    homepage = https://github.com/pierrebeaucamp/idris-hrtime;
+    homepage = "https://github.com/pierrebeaucamp/idris-hrtime";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
   };

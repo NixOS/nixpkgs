@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "opa";
   version = "4310";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "MLstate";
@@ -15,6 +14,8 @@ stdenv.mkDerivation rec {
     rev = "a13d45af30bc955c40c4b320353fb21e4ecacbc5";
     sha256 = "1qs91rq9xrafv2mf2v415k8lv91ab3ycz0xkpjh1mng5ca3pjlf3";
   };
+
+  patches = [ ./ocaml-4.03.patch ];
 
   # Paths so the opa compiler code generation will use the same programs as were
   # used to build opa.
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     (
     cat ./compiler/buildinfos/buildInfos.ml.pre
-    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt 
+    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt
     echo let opa_git_version = ${version}
     echo 'let opa_git_sha = "xxxx"'
     cat ./compiler/buildinfos/buildInfos.ml.post
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     done
     export CAMLP4O=${ocamlPackages.camlp4}/bin/camlp4o
     export CAMLP4ORF=${ocamlPackages.camlp4}/bin/camlp4orf
+    export OCAMLBUILD=${ocamlPackages.ocamlbuild}/bin/ocamlbuild
+    substituteInPlace _tags --replace ', warn_error_A' ""
   '';
 
   prefixKey = "-prefix ";
@@ -67,7 +70,7 @@ stdenv.mkDerivation rec {
       web applications using a single technology. Among the the many features of Opa are these:
       Opa is concise, simple, concurrent, dynamically distributed, and secure.
     '';
-    homepage = http://opalang.org/;
+    homepage = "http://opalang.org/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = with stdenv.lib.platforms; unix;

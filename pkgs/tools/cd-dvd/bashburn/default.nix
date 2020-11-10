@@ -3,13 +3,13 @@
 , vorbis-tools, xorriso }:
 
 stdenv.mkDerivation rec {
-  name = "bashburn-${version}";
+  pname = "bashburn";
   version = "3.1.0";
 
   src = fetchurl {
     sha256 = "0g5va5rjdrvacanmqr6pbxk2rl565ahkfbsvxsp1jvhvxvhmv3dp";
     url = "http://bashburn.dose.se/index.php?s=file_download&id=25";
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
   };
 
   nativeBuildInputs = [ utillinux ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       - manipulate ISO-files
       - and probably more...
     '';
-    homepage = http://bashburn.dose.se/;
+    homepage = "http://bashburn.dose.se/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

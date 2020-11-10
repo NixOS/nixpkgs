@@ -1,48 +1,64 @@
-{ stdenv, fetchurl, pkgconfig, wayland, libGL, mesa_noglu, libxkbcommon, cairo, libxcb
-, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput
+{ stdenv, fetchurl, meson, ninja, pkg-config, wayland
+, libGL, mesa, libxkbcommon, cairo, libxcb
+, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
+, colord, lcms2, pipewire ? null
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
 , libwebp ? null, xwayland ? null, wayland-protocols
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "weston-${version}";
-  version = "5.0.0";
+  pname = "weston";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1bsc9ry566mpk6fdwkqpvwq2j7m79d9cvh7d3lgf6igsphik98hm";
+    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "1zlql0xgiqc3pvgbpnnvj4xvpd91pwva8qf83xfb23if377ddxaw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
   buildInputs = [
-    wayland libGL mesa_noglu libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus libinput pango libunwind freerdp vaapi libva
+    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
+    mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
     libwebp wayland-protocols
+    colord lcms2 pipewire
   ];
 
-  configureFlags = [
-    "--enable-x11-compositor"
-    "--enable-drm-compositor"
-    "--enable-wayland-compositor"
-    "--enable-headless-compositor"
-    "--enable-fbdev-compositor"
-    "--enable-screen-sharing"
-    "--enable-clients"
-    "--enable-weston-launch"
-    "--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
-  ] ++ stdenv.lib.optional (freerdp != null) "--enable-rdp-compositor"
-    ++ stdenv.lib.optional (vaapi != null) "--enable-vaapi-recorder"
-    ++ stdenv.lib.optionals (xwayland != null) [
-        "--enable-xwayland"
-        "--with-xserver-path=${xwayland.out}/bin/Xwayland"
-      ];
+  mesonFlags= [
+    "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
+    "-Dbackend-rdp=${boolToString (freerdp != null)}"
+    "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
+    "-Dremoting=false" # TODO
+    "-Dpipewire=${boolToString (pipewire != null)}"
+    "-Dimage-webp=${boolToString (libwebp != null)}"
+    "-Ddemo-clients=false"
+    "-Dsimple-clients="
+    "-Dtest-junit-xml=false"
+    # TODO:
+    #"--enable-clients"
+    #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
+  ] ++ optionals (xwayland != null) [
+    "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Reference implementation of a Wayland compositor";
-    homepage = https://wayland.freedesktop.org/;
-    license = licenses.mit;
+  passthru.providedSessions = [ "weston" ];
+
+  meta = {
+    description = "A lightweight and functional Wayland compositor";
+    longDescription = ''
+      Weston is the reference implementation of a Wayland compositor, as well
+      as a useful environment in and of itself.
+      Out of the box, Weston provides a very basic desktop, or a full-featured
+      environment for non-desktop uses such as automotive, embedded, in-flight,
+      industrial, kiosks, set-top boxes and TVs. It also provides a library
+      allowing other projects to build their own full-featured environments on
+      top of Weston's core. A small suite of example or demo clients are also
+      provided.
+    '';
+    homepage = "https://gitlab.freedesktop.org/wayland/weston";
+    license = licenses.mit; # Expat version
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

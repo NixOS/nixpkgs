@@ -8,14 +8,14 @@ buildPythonPackage rec {
     sha256 = "1ldpgil0kaf6wz5gvl9xdx35a62vc6bmgi3wbh9320dj5v2qk4wh";
   };
 
-  buildInputs = [ pytest mock ];
+  checkInputs = [ pytest mock ];
 
   checkPhase = ''
     py.test
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/GreenSteam/pep257/;
+    homepage = "https://github.com/GreenSteam/pep257/";
     description = "Python docstring style checker";
     longDescription = "Static analysis tool for checking compliance with Python PEP 257.";
     license = licenses.mit;

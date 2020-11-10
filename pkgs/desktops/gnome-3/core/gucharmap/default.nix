@@ -1,68 +1,108 @@
-{ stdenv, intltool, fetchFromGitLab, fetchpatch, pkgconfig, gtk3, defaultIconTheme
-, glib, desktop-file-utils, gtk-doc, autoconf, automake, libtool
-, wrapGAppsHook, gnome3, itstool, libxml2, yelp-tools
-, docbook_xsl, docbook_xml_dtd_412, gsettings-desktop-schemas
-, callPackage, unzip, gobjectIntrospection }:
+{ stdenv
+, intltool
+, fetchFromGitLab
+, meson
+, ninja
+, pkgconfig
+, python3
+, gtk3
+, adwaita-icon-theme
+, glib
+, desktop-file-utils
+, gtk-doc
+, wrapGAppsHook
+, gnome3
+, itstool
+, libxml2
+, yelp-tools
+, docbook_xsl
+, docbook_xml_dtd_412
+, gsettings-desktop-schemas
+, callPackage
+, unzip
+, unicode-character-database
+, unihan-database
+, runCommand
+, symlinkJoin
+, gobject-introspection
+}:
 
 let
-  unicode-data = callPackage ./unicode-data.nix {};
+  # TODO: make upstream patch allowing to use the uncompressed file,
+  # preferably from XDG_DATA_DIRS.
+  # https://gitlab.gnome.org/GNOME/gucharmap/issues/13
+  unihanZip = runCommand "unihan" {} ''
+    mkdir -p $out/share/unicode
+    ln -s ${unihan-database.src} $out/share/unicode/Unihan.zip
+  '';
+  ucd = symlinkJoin {
+    name = "ucd+unihan";
+    paths = [
+      unihanZip
+      unicode-character-database
+    ];
+  };
 in stdenv.mkDerivation rec {
-  name = "gucharmap-${version}";
-  version = "11.0.1";
+  pname = "gucharmap";
+  version = "13.0.2";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = "gucharmap";
+    repo = pname;
     rev = version;
-    sha256 = "13iw4fa6mv8vi8bkwk0bbhamnzbaih0c93p4rh07khq6mxa6hnpi";
+    sha256 = "099za9mc6qdq9pwcbjp3d7hxjbaa43vk2w9qw4yiyswl1xq3jw62";
   };
 
-  patches = [
-    # Fix locale path to allow split outputs
-    # https://gitlab.gnome.org/GNOME/gucharmap/issues/10
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gucharmap/commit/b2b03f16aa869ac0ec1a05c55c4d4e4c4b513576.patch;
-      sha256 = "1543mcyz96x23m9pzx04ny15m4a2pqmiksl1y5r51k3sw4fyisci";
-    })
-  ];
-
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook unzip intltool itstool
-    autoconf automake libtool gtk-doc docbook_xsl docbook_xml_dtd_412
-    yelp-tools libxml2 desktop-file-utils gobjectIntrospection
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+    unzip
+    intltool
+    itstool
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+    yelp-tools
+    libxml2
+    desktop-file-utils
+    gobject-introspection
   ];
 
-  buildInputs = [ gtk3 glib gsettings-desktop-schemas defaultIconTheme ];
+  buildInputs = [
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    adwaita-icon-theme
+  ];
 
-  configureFlags = [
-    "--with-unicode-data=${unicode-data}"
-    "--enable-gtk-doc"
+  mesonFlags = [
+    "-Ducd_path=${ucd}/share/unicode"
+    "-Dvapi=false"
   ];
 
   doCheck = true;
 
   postPatch = ''
-    patchShebangs gucharmap/gen-guch-unicode-tables.pl
-  '';
-
-  preConfigure = ''
-    NOCONFIGURE=1 ./autogen.sh
+    patchShebangs data/meson_desktopfile.py gucharmap/gen-guch-unicode-tables.pl gucharmap/meson_compileschemas.py
   '';
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gucharmap";
+      packageName = pname;
     };
   };
 
   meta = with stdenv.lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
-    homepage = https://wiki.gnome.org/Apps/Gucharmap;
+    homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

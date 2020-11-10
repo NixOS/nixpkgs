@@ -5,7 +5,8 @@
 let
   version = "5.8.2";
 in stdenv.mkDerivation rec {
-  name = "ekho-${version}";
+  pname = "ekho";
+  inherit version;
 
   meta = with stdenv.lib; {
     description = "Chinese text-to-speech software";
@@ -23,7 +24,7 @@ in stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/e-guidedog/Ekho/${version}/${name}.tar.xz";
+    url = "mirror://sourceforge/e-guidedog/Ekho/${version}/${pname}-${version}.tar.xz";
     sha256 = "0ym6lpcpsvwvsiwlzkl1509a2hljwcw7synngrmqjq1n49ww00nj";
   };
 

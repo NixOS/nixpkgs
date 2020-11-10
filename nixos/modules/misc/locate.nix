@@ -7,6 +7,11 @@ let
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isFindutils = hasPrefix "findutils" cfg.locate.name;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths" )
+  ];
+
   options.services.locate = with types; {
     enable = mkOption {
       type = bool;
@@ -122,13 +127,9 @@ in {
       { LOCATE_PATH = cfg.output;
       };
 
-    warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support searching as user other than root"
+    warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
             ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
-
-    # directory creation needs to be separated from main service
-    # because ReadWritePaths fails when the directory doesn't already exist
-    systemd.tmpfiles.rules = [ "d ${dirOf cfg.output} 0755 root root -" ];
 
     systemd.services.update-locatedb =
       { description = "Update Locate Database";

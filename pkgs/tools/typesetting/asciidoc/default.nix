@@ -5,7 +5,7 @@
 , highlight ? null
 , pygments ? null
 , graphviz ? null
-, tetex ? null
+, texlive ? null
 , dblatexFull ? null
 , libxslt ? null
 , w3m ? null
@@ -47,7 +47,7 @@ assert enableStandardFeatures ->
   highlight != null &&
   pygments != null &&
   graphviz != null &&
-  tetex != null &&
+  texlive != null &&
   dblatexFull != null &&
   libxslt != null &&
   w3m != null &&
@@ -111,7 +111,7 @@ let
   };
 
   # there are no archives or tags, using latest commit in master branch as per 2013-09-22
-  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl rec {
+  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl {
     name = "mplw-${commit}.tar.gz";
     url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
     sha256 = "0yfhkm2dr8gnp0fcg25x89hwiymkri2m5cyqzmzragzwj0hbmcf1";
@@ -220,8 +220,8 @@ stdenv.mkDerivation rec {
         -e "s|fdp|${graphviz}/bin/fdp|g" \
         -i "filters/graphviz/graphviz2png.py"
 
-    sed -e "s|run('latex|run('${tetex}/bin/latex|g" \
-        -e "s|cmd = 'dvipng'|cmd = '${tetex}/bin/dvipng'|g" \
+    sed -e "s|run('latex|run('${texlive}/bin/latex|g" \
+        -e "s|cmd = 'dvipng'|cmd = '${texlive}/bin/dvipng'|g" \
         -i "filters/latex/latex2png.py"
 
     sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
@@ -238,7 +238,8 @@ stdenv.mkDerivation rec {
     # use it to work around an impurity in the tetex package; tetex tools
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ tetex coreutils gnused ]}')|" \
+    # TODO: Is this still necessary when using texlive?
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ texlive coreutils gnused ]}')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
@@ -258,7 +259,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = "mkdir -p $out/etc/vim";
-  makeFlags = if stdenv.isCygwin then "DESTDIR=/." else null;
+  makeFlags = stdenv.lib.optional stdenv.isCygwin "DESTDIR=/.";
 
   meta = with stdenv.lib; {
     description = "Text-based document generation system";
@@ -272,7 +273,7 @@ stdenv.mkDerivation rec {
       the backend output markups (which can be almost any type of SGML/XML
       markup) can be customized and extended by the user.
     '';
-    homepage = http://www.methods.co.nz/asciidoc/;
+    homepage = "http://www.methods.co.nz/asciidoc/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

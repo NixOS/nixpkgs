@@ -44,13 +44,13 @@ EOF
   *) to ignore the error and continue
 EOF
 
-    read reply
+    read -n 1 reply
 
     if [ -n "$allowShell" -a "$reply" = f ]; then
         exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
     elif [ -n "$allowShell" -a "$reply" = i ]; then
         echo "Starting interactive shell..."
-        setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
+        setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
     elif [ "$reply" = r ]; then
         echo "Rebooting..."
         reboot -f
@@ -120,7 +120,7 @@ eval "exec $logOutFd>&1 $logErrFd>&2"
 if test -w /dev/kmsg; then
     tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
         if test -n "$line"; then
-            echo "<7>stage-1-init: $line" > /dev/kmsg
+            echo "<7>stage-1-init: [$(date)] $line" > /dev/kmsg
         fi
     done &
 else
@@ -143,6 +143,14 @@ for o in $(cat /proc/cmdline); do
         init=*)
             set -- $(IFS==; echo $o)
             stage2Init=$2
+            ;;
+        boot.persistence=*)
+            set -- $(IFS==; echo $o)
+            persistence=$2
+            ;;
+        boot.persistence.opt=*)
+            set -- $(IFS==; echo $o)
+            persistence_opt=$2
             ;;
         boot.trace|debugtrace)
             # Show each command.
@@ -183,6 +191,12 @@ for o in $(cat /proc/cmdline); do
         copytoram)
             copytoram=1
             ;;
+        findiso=*)
+            # if an iso name is supplied, try to find the device where
+            # the iso resides on
+            set -- $(IFS==; echo $o)
+            isoPath=$2
+            ;;
     esac
 done
 
@@ -204,6 +218,9 @@ done
 # Create device nodes in /dev.
 @preDeviceCommands@
 echo "running udev..."
+ln -sfn /proc/self/fd /dev/fd
+mkdir -p /etc/systemd
+ln -sfn @linkUnits@ /etc/systemd/network
 mkdir -p /etc/udev
 ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
@@ -246,10 +263,7 @@ checkFS() {
     if [ "$fsType" = iso9660 -o "$fsType" = udf ]; then return 0; fi
 
     # Don't check resilient COWs as they validate the fs structures at mount time
-    if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
-
-    # Skip fsck for bcachefs - not implemented yet.
-    if [ "$fsType" = bcachefs ]; then return 0; fi
+    if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
 
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
@@ -263,7 +277,7 @@ checkFS() {
         return 0
     fi
 
-    # Device might be already mounted manually 
+    # Device might be already mounted manually
     # e.g. NBD-device or the host filesystem of the file which contains encrypted root fs
     if mount | grep -q "^$device on "; then
         echo "skip checking already mounted $device"
@@ -331,8 +345,10 @@ mountFS() {
 
     # Filter out x- options, which busybox doesn't do yet.
     local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
+    # Prefix (lower|upper|work)dir with /mnt-root (overlayfs)
+    local optionsPrefixed="$( echo "$optionsFiltered" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
 
-    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
+    echo "$device /mnt-root$mountPoint $fsType $optionsPrefixed" >> /etc/fstab
 
     checkFS "$device" "$fsType"
 
@@ -340,17 +356,23 @@ mountFS() {
     case $options in
         *x-nixos.autoresize*)
             if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                modprobe "$fsType"
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"
+            elif [ "$fsType" = f2fs ]; then
+                echo "resizing $device..."
+                fsck.f2fs -fp "$device"
+                resize.f2fs "$device"
             fi
             ;;
     esac
 
-    # Create backing directories for unionfs-fuse.
-    if [ "$fsType" = unionfs-fuse ]; then
-        for i in $(IFS=:; echo ${options##*,dirs=}); do
-            mkdir -m 0700 -p /mnt-root"${i%=*}"
+    # Create backing directories for overlayfs
+    if [ "$fsType" = overlay ]; then
+        for i in upper work; do
+             dir="$( echo "$optionsPrefixed" | grep -o "${i}dir=[^,]*" )"
+             mkdir -m 0700 -p "${dir##*=}"
         done
     fi
 
@@ -358,12 +380,14 @@ mountFS() {
 
     mkdir -p "/mnt-root$mountPoint"
 
-    # For CIFS mounts, retry a few times before giving up.
+    # For ZFS and CIFS mounts, retry a few times before giving up.
+    # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
     local n=0
     while true; do
         mount "/mnt-root$mountPoint" && break
-        if [ "$fsType" != cifs -o "$n" -ge 10 ]; then fail; break; fi
+        if [ \( "$fsType" != cifs -a "$fsType" != zfs \) -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."
+        sleep 1
         n=$((n + 1))
     done
 
@@ -441,6 +465,27 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
     fi
 fi
 
+# If we have a path to an iso file, find the iso and link it to /dev/root
+if [ -n "$isoPath" ]; then
+  mkdir -p /findiso
+
+  for delay in 5 10; do
+    blkid | while read -r line; do
+      device=$(echo "$line" | sed 's/:.*//')
+      type=$(echo "$line" | sed 's/.*TYPE="\([^"]*\)".*/\1/')
+
+      mount -t "$type" "$device" /findiso
+      if [ -e "/findiso$isoPath" ]; then
+        ln -sf "/findiso$isoPath" /dev/root
+        break 2
+      else
+        umount /findiso
+      fi
+    done
+
+    sleep "$delay"
+  done
+fi
 
 # Try to find and mount the root device.
 mkdir -p $targetRoot
@@ -501,6 +546,14 @@ while read -u 3 mountPoint; do
       continue
     fi
 
+    if [ "$mountPoint" = / ] && [ "$device" = tmpfs ] && [ ! -z "$persistence" ]; then
+        echo persistence...
+        waitDevice "$persistence"
+        echo enabling persistence...
+        mountFS "$persistence" "$mountPoint" "$persistence_opt" "auto"
+        continue
+    fi
+
     mountFS "$device" "$mountPoint" "$options" "$fsType"
 done
 
@@ -554,7 +607,7 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 # Start stage 2.  `switch_root' deletes all files in the ramfs on the
 # current root.  Note that $stage2Init might be an absolute symlink,
 # in which case "-e" won't work because we're not in the chroot yet.
-if ! test -e "$targetRoot/$stage2Init" -o ! -L "$targetRoot/$stage2Init"; then
+if [ ! -e "$targetRoot/$stage2Init" ] && [ ! -L "$targetRoot/$stage2Init" ] ; then
     echo "stage 2 init script ($targetRoot/$stage2Init) not found"
     fail
 fi

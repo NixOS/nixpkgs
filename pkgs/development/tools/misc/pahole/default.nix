@@ -1,12 +1,12 @@
 { stdenv, fetchgit, cmake, elfutils, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pahole-${version}";
-  version = "1.12";
+  pname = "pahole";
+  version = "1.17";
   src = fetchgit {
-    url = https://git.kernel.org/pub/scm/devel/pahole/pahole.git;
-    sha256 = "1a8xfwqdc2j3ydh9bk2pkvsaf3lrkbxj66vj991c7knc31ix8kpw";
+    url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git";
     rev = "v${version}";
+    sha256 = "13dxsmhpf9n2wqggf4gd6f12rm0vhv0q96jd50gkvaxzzvgpzzbc";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-D__LIB=lib" ];
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/cgit/devel/pahole/pahole.git/;
+    homepage = "https://git.kernel.org/cgit/devel/pahole/pahole.git/";
     description = "Pahole and other DWARF utils";
     license = licenses.gpl2;
 

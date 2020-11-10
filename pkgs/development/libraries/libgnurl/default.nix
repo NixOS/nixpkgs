@@ -1,37 +1,46 @@
-{ stdenv, fetchurl, autoreconfHook, perl, zlib, gnutls, gss, openssl
-, libidn }:
+{ stdenv, fetchurl, libtool, groff, perl, pkgconfig, python2, zlib, gnutls,
+  libidn2, libunistring, nghttp2 }:
 
 stdenv.mkDerivation rec {
-  version = "7.54.1";
-
-  name = "libgnurl-${version}";
+  pname = "libgnurl";
+  version = "7.72.0";
 
   src = fetchurl {
-    url = "https://gnunet.org/sites/default/files/gnurl-${version}.tar.bz2";
-    sha256 = "0szbj352h95sgc9kbx9wzkgjksmg3g5k6cvlc7hz3wrbdh5gb0a4";
+    url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";
+    sha256 = "1y4laraq37kw8hc8jlzgcw7y37bfd0n71q0sy3d3z6yg7zh2prxi";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perl gnutls gss openssl zlib libidn ];
+  nativeBuildInputs = [ libtool groff perl pkgconfig python2 ];
 
-  preConfigure = ''
-    sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
-  '';
+  buildInputs = [ gnutls zlib libidn2 libunistring nghttp2 ];
 
   configureFlags = [
-    "--enable-ipv6" "--with-gnutls" "--without-libmetalink" "--without-winidn"
-    "--without-librtmp" "--without-nghttp2" "--without-nss" "--without-cyassl"
-    "--without-polarssl" "--without-ssl" "--without-winssl"
-    "--without-darwinssl" "--disable-sspi" "--disable-ntlm-wb" "--disable-ldap"
-    "--disable-rtsp" "--disable-dict" "--disable-telnet" "--disable-tftp"
-    "--disable-pop3" "--disable-imap" "--disable-smtp" "--disable-gopher"
-    "--disable-file" "--disable-ftp" "--disable-smb"
+    "--disable-ntlm-wb"
+    "--without-ca-bundle"
+    "--with-ca-fallback"
+    # below options will cause errors if enabled
+    "--disable-ftp"
+    "--disable-tftp"
+    "--disable-file"
+    "--disable-ldap"
+    "--disable-dict"
+    "--disable-rtsp"
+    "--disable-telnet"
+    "--disable-pop3"
+    "--disable-imap"
+    "--disable-smb"
+    "--disable-smtp"
+    "--disable-gopher"
+    "--without-ssl" # disables only openssl, not ssl in general
+    "--without-libpsl"
+    "--without-librtmp"
   ];
 
   meta = with stdenv.lib; {
     description = "A fork of libcurl used by GNUnet";
-    homepage    = https://gnunet.org/gnurl;
-    maintainers = with maintainers; [ falsifian vrthra ];
+    homepage    = "https://gnunet.org/en/gnurl.html";
+    maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
+    license = licenses.curl;
   };
 }

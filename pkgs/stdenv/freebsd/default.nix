@@ -2,7 +2,7 @@
 , localSystem, crossSystem, config, overlays
 }:
 
-assert crossSystem == null;
+assert crossSystem == localSystem;
 let inherit (localSystem) system; in
 
 

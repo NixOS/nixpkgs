@@ -2,21 +2,21 @@
 
 let
 
-  major = "2018";
-  minor = "02";
-  patch = "15";
+  major = "2020";
+  minor = "08";
+  patch = "07";
 
   version = "${major}.${minor}.${patch}";
 
-  serious-proton = stdenv.mkDerivation rec {
-    name = "serious-proton-${version}";
+  serious-proton = stdenv.mkDerivation {
+    pname = "serious-proton";
     inherit version;
 
     src = fetchFromGitHub {
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version}";
-      sha256 = "0b4n4pn7x3y63i9y15f8983zlpdvmx7151iph1lcc49j3hmpd0gy";
+      sha256 = "1mfizhmwh6xgb5n34l3wrbxm21f7gsvsyacsmnxw9rkz0ya7ch30";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -24,7 +24,7 @@ let
 
     meta = with lib; {
       description = "C++ game engine coded on top of SFML used for EmptyEpsilon";
-      homepage = https://github.com/daid/SeriousProton;
+      homepage = "https://github.com/daid/SeriousProton";
       license = licenses.mit;
       maintainers = with maintainers; [ fpletz ];
       platforms = platforms.linux;
@@ -34,15 +34,15 @@ let
 in
 
 
-stdenv.mkDerivation rec {
-  name = "empty-epsilon-${version}";
+stdenv.mkDerivation {
+  pname = "empty-epsilon";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "1by0wrw00frrlcs1kd003zkmfkwa1pnbnva2qn8km3xnl9chf11d";
+    sha256 = "0p41wx9yk09xjmfkjpdgi3b2999ps2am3xqwd866q11f6ci7viv5";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -58,9 +58,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open source bridge simulator based on Artemis";
-    homepage = https://daid.github.io/EmptyEpsilon/;
+    homepage = "https://daid.github.io/EmptyEpsilon/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz lheckemann ma27 ];
     platforms = platforms.linux;
   };
 }

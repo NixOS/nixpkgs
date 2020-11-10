@@ -1,25 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "flatbuffers-${version}";
-  version = "1.8.0";
+  pname = "flatbuffers";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "1qq8qbv8wkiiizj8s984f17bsbjsrhbs9q1nw1yjgrw0grcxlsi9";
+    sha256 = "0f7xd66vc1lzjbn7jzd5kyqrgxpsfxi4zc7iymhb5xrwyxipjl1g";
   };
 
-  buildInputs = [ cmake ];
+  preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''
+    rm BUILD
+  '';
+
+  nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
 
-  # Not sure how tests are supposed to be run.
-  # "make: *** No rule to make target 'check'.  Stop."
-  doCheck = false;
+  cmakeFlags = [ "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}" ];
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkTarget = "test";
 
   meta = {
-    description = "Memory Efficient Serialization Library.";
+    description = "Memory Efficient Serialization Library";
     longDescription = ''
       FlatBuffers is an efficient cross platform serialization library for
       games and other memory constrained apps. It allows you to directly
@@ -29,6 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.teh ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
-    homepage = http://google.github.io/flatbuffers;
+    homepage = "https://google.github.io/flatbuffers/";
   };
 }

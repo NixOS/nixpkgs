@@ -1,18 +1,22 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pruneLibtoolFiles, libde265, x265, libpng, libjpeg }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libde265, x265, libpng,
+  libjpeg, libaom }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.2";
-  name = "libheif-${version}";
+  pname = "libheif";
+  version = "1.9.1";
+
+  outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "0hk8mzig2kp5f94j4jwqxzjrm7ffk16ffvxl92rf0afsh6vgnz7w";
+    sha256 = "0hjs1i076jmy4ryj8y2zs293wx53kzg38y8i42cbcsqydvsdp6hz";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig pruneLibtoolFiles ];
-  buildInputs = [ libde265 x265 libpng libjpeg ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libde265 x265 libpng libjpeg libaom ];
+  # TODO: enable dav1d and rav1e codecs when libheif can find them via pkg-config
 
   enableParallelBuilding = true;
 

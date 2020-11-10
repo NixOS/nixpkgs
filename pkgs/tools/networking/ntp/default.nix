@@ -8,11 +8,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ntp-4.2.8p12";
+  name = "ntp-4.2.8p15";
 
   src = fetchurl {
     url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
-    sha256 = "0m04ndn0674kcf9x0aggjya07a3hlig2nlzzpwk7vmqka0mj56vh";
+    sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
   };
 
   # The hardcoded list of allowed system calls for seccomp is
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     "--with-openssl-libdir=${openssl.out}/lib"
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
+    "--with-yielding-select=yes"
   ] ++ stdenv.lib.optional stdenv.isLinux "--enable-linuxcaps"
     ++ stdenv.lib.optional withSeccomp "--enable-libseccomp";
 
@@ -39,13 +40,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.ntp.org/;
+    homepage = "http://www.ntp.org/";
     description = "An implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
-      url = https://www.eecis.udel.edu/~mills/ntp/html/copyright.html;
+      url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco thoughtpolice ];
     platforms = platforms.linux;
   };
 }

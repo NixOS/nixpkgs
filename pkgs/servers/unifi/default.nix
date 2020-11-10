@@ -2,8 +2,9 @@
 
 let
   generic = { version, sha256, suffix ? "" }:
-  stdenv.mkDerivation rec {
-    name = "unifi-controller-${version}";
+  stdenv.mkDerivation {
+    pname = "unifi-controller";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.ubnt.com/unifi/${version}${suffix}/unifi_sysvinit_all.deb";
@@ -18,8 +19,6 @@ let
       runHook postUnpack
     '';
 
-    doConfigure = false;
-
     installPhase = ''
       runHook preInstall
 
@@ -31,31 +30,31 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://www.ubnt.com/;
+      homepage = "http://www.ubnt.com/";
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ wkennington ];
+      maintainers = with maintainers; [ erictapen globin patryk27 ];
     };
   };
 
-in rec {
+in {
 
-  # https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
+  # https://community.ui.com/releases / https://www.ui.com/download/unifi
+  # Outdated FAQ: https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
 
   unifiLTS = generic {
-    version = "5.6.39";
-    sha256  = "025qq517j32r1pnabg2q8lhy65c6qsk17kzw3aijhrc2gpgj2pa7";
+    version = "5.6.42";
+    sha256 = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
   };
 
   unifiStable = generic {
-    version = "5.8.30";
-    sha256  = "051cx1y51xmhvd3s8zbmknrcjdi46mj4yf1rlnngzr77rj77sqvi";
+    version = "5.14.23";
+    sha256 = "1aar05yjm3z5a30x505w4kakbyz35i7mk7xyg0wm4ml6h94d84pv";
   };
 
-  unifiTesting = generic {
-    version = "5.9.29";
-    suffix  = "-04b5d20997";
-    sha256  = "0djdjh7lwaa5nvhvz2yh6dn07iad5nq4jpab7rc909sljl6wvwvx";
+  unifiBeta = generic {
+    version = "6.0.28";
+    sha256 = "14q8r4mcqx0v3sh8zwqg4cc3iszqn5201q5r4c20cwqdd4ivf97q";
   };
 }

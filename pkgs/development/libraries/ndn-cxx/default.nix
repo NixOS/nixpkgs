@@ -1,33 +1,38 @@
-{ stdenv, fetchgit, openssl, doxygen, boost, sqlite, cryptopp, pkgconfig, python, pythonPackages }:
-let
-  version = "4c32e7";
-in
-stdenv.mkDerivation {
-  name = "ndn-cxx-0.1-${version}";
-  src = fetchgit {
-    url = "https://github.com/named-data/ndn-cxx.git";
-    rev = "4c32e748863d5165cc0e3d6b54a8383f4836cdf1";
-    sha256 = "18szs3j3ig8wlcqngran0daxaj7j2qsmch0212ids6fymj1hgax4";
+{ stdenv
+, fetchFromGitHub
+, doxygen
+, pkg-config
+, python3
+, python3Packages
+, wafHook
+, boost
+, openssl
+, sqlite
+}:
+
+stdenv.mkDerivation rec {
+  pname = "ndn-cxx";
+  version = "0.7.1";
+
+  src = fetchFromGitHub {
+    owner = "named-data";
+    repo = "ndn-cxx";
+    rev = "${pname}-${version}";
+    sha256 = "1lcaqc79n3d9sip7knddblba17sz18b0w7nlxmj3fz3lb3z9qd51";
   };
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl doxygen boost sqlite cryptopp python pythonPackages.sphinx];
-  preConfigure = ''
-    patchShebangs waf
-    ./waf configure \
-      --with-cryptopp=${cryptopp} \
-      --boost-includes=${boost.dev}/include \
-      --boost-libs=${boost.out}/lib \
-      --with-examples \
-      --prefix=$out
-  '';
-  buildPhase = ''
-    ./waf
-  '';
-  installPhase = ''
-    ./waf install
-  '';
+
+  nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
+
+  buildInputs = [ boost openssl sqlite ];
+
+  wafConfigureFlags = [
+    "--with-openssl=${openssl.dev}"
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
+  ];
+
   meta = with stdenv.lib; {
-    homepage = http://named-data.net/;
+    homepage = "http://named-data.net/";
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)
@@ -43,8 +48,7 @@ stdenv.mkDerivation {
       and consuming less resources overall.
     '';
     license = licenses.lgpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ maintainers.sjmackenzie ];
-    broken = true; # 2018-04-11
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sjmackenzie ];
   };
 }

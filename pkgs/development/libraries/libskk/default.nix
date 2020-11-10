@@ -1,21 +1,21 @@
 { stdenv, fetchFromGitHub,
   libtool, gettext, pkgconfig,
-  vala, gnome-common, gobjectIntrospection,
-  libgee, json-glib, skk-dicts }:
+  vala, gnome-common, gobject-introspection,
+  libgee, json-glib, skk-dicts, libxkbcommon }:
 
 stdenv.mkDerivation rec {
-  name = "libskk-${version}";
-  version = "1.0.4";
+  pname = "libskk";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "ueno";
     repo = "libskk";
     rev = version;
-    sha256 = "1yvyscr22rrh0jja1bz70jzwi5776jyw39pgbgrx00j79vsv7b51";
+    sha256 = "0y279pcgs3jrsi9vzx086xhz9jbz23dqqijp4agygc9ackp9sxy5";
   };
 
-  buildInputs = [ skk-dicts ];
-  nativeBuildInputs = [ vala gnome-common gobjectIntrospection libtool gettext pkgconfig ];
+  buildInputs = [ skk-dicts libxkbcommon ];
+  nativeBuildInputs = [ vala gnome-common gobject-introspection libtool gettext pkgconfig ];
   propagatedBuildInputs = [ libgee json-glib ];
 
   preConfigure = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       as well as various dictionary types including: file dictionary (such as SKK-JISYO.[SML]),
       user dictionary, skkserv, and CDB format dictionary.
     '';
-    homepage = https://github.com/ueno/libskk;
+    homepage = "https://github.com/ueno/libskk";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
     platforms = stdenv.lib.platforms.linux;

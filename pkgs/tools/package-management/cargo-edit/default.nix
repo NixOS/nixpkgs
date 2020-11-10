@@ -1,31 +1,40 @@
-{ stdenv, lib, darwin
-, rustPlatform, fetchFromGitHub
-, openssl, pkgconfig }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, libiconv
+, Security
+, zlib
+}:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-edit-${version}";
-  version = "0.3.1";
+  pname = "cargo-edit";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "killercup";
-    repo = "cargo-edit";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0g3dikwk6n48dmhx9qchmzyrhcr40242lhvlcyk1nqbpvs3b51fm";
+    hash = "sha256:0fh1lq793k4ddpqsf2av447hcb74vcq53afkm3g4672k48mjjw1y";
   };
 
-  cargoSha256 = "1bq0mjn44f0sn94nb9wqal4swhkzn7f3vbk5jyay4v3wqfz1gb7r";
+  cargoSha256 = "1h1sy54p7zxijydnhzvkxli90d72biv1inni17licb0vb9dihmnf";
 
-  nativeBuildInputs = lib.optional (!stdenv.isDarwin) pkgconfig;
-  buildInputs = lib.optional (!stdenv.isDarwin) openssl;
-  propagatedBuildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  nativeBuildInputs = [ pkg-config ];
 
-  patches = [ ./disable-network-based-test.patch ];
+  buildInputs = [ openssl zlib ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
+
+  doCheck = false; # integration tests depend on changing cargo config
 
   meta = with lib; {
     description = "A utility for managing cargo dependencies from the command line";
-    homepage = https://github.com/killercup/cargo-edit;
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ gerschtli jb55 ];
-    platforms = platforms.all;
+    homepage = "https://github.com/killercup/cargo-edit";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ gerschtli jb55 filalex77 killercup ];
   };
 }

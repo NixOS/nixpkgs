@@ -1,5 +1,5 @@
 { stdenv, fetchurl,  libX11, libXext, libXrandr, libXrender,
-  xproto, xextproto, randrproto, renderproto, kbproto,  patches ? [] }:
+  xorgproto, patches ? [] }:
 
 stdenv.mkDerivation rec {
   name = "evilwm-1.1.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libX11 libXext libXrandr libXrender
-                  xproto xextproto randrproto renderproto kbproto ];
+                  xorgproto ];
 
   prePatch = ''substituteInPlace ./Makefile --replace /usr $out \
                                             --replace "CC = gcc" "#CC = gcc"'';
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   meta = with stdenv.lib; {
-    homepage = http://www.6809.org.uk/evilwm/;
+    homepage = "http://www.6809.org.uk/evilwm/";
     description = "Minimalist window manager for the X Window System";
 
     license = {
       shortName = "evilwm";
       fullName = "Custom, inherited from aewm and 9wm";
-      url = http://www.6809.org.uk/evilwm/;
+      url = "http://www.6809.org.uk/evilwm/";
       free = true;
     };  # like BSD/MIT, but Share-Alike'y; See README.
 

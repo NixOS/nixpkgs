@@ -1,15 +1,16 @@
 { stdenv, fetchurl, clang, which, libobjc }:
 
 let
-  version = "2.7.0";
+  version = "2.8.0";
 in
 
-stdenv.mkDerivation rec {
-  name = "gnustep-make-${version}";
+stdenv.mkDerivation {
+  pname = "gnustep-make";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${version}.tar.gz";
-    sha256 = "1khiygfkz0zhh9b5nybn40g0xnnjxchk24n49hff1bwanszir84h";
+    sha256 = "0pfaylrr3xgn5026anmja4rv4l7nzzaqsrkxycyi0p4lvm12kklz";
   };
 
   configureFlags = [
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
   meta = {
     description = "A build manager for GNUstep";
-    homepage = http://gnustep.org/;
+    homepage = "http://gnustep.org/";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = stdenv.lib.platforms.unix;

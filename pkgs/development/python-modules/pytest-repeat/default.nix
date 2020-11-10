@@ -3,27 +3,34 @@
 , fetchPypi
 , setuptools_scm
 , pytest
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84aba2fcca5dc2f32ae626a01708f469f17b3384ec3d1f507698077f274909d6";
+    sha256 = "1nbdmklpi0ra1jnfm032wz96y9nxdlcr4m9sjlnffwm7n4x43g2j";
   };
 
-  buildInputs = [ setuptools_scm pytest ];
+  nativeBuildInputs = [
+    setuptools_scm
+  ];
+
+  checkInputs = [
+    pytest
+  ];
 
   checkPhase = ''
-    py.test
+    pytest
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Pytest plugin for repeating tests";
-    homepage = https://github.com/pytest-dev/pytest-repeat;
-    maintainers = with lib.maintainers; [ costrouc ];
-    license = lib.licenses.mpl20;
+    homepage = "https://github.com/pytest-dev/pytest-repeat";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

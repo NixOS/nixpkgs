@@ -1,20 +1,22 @@
-{ stdenv, fetchPypi, buildPythonPackage, unidecode, regex, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, python, text-unidecode }:
 
 buildPythonPackage rec {
     pname = "python-slugify";
-    version = "1.2.5";
+    version = "4.0.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "5dbb360b882b2dabe0471a1a92f604504d83c2a73c71f2098d004ab62e695534";
+      sha256 = "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270";
     };
-    doCheck = !isPy3k;
-    # (only) on python3 unittest loader (loadTestsFromModule) fails
 
-    propagatedBuildInputs = [ unidecode regex ];
+    propagatedBuildInputs = [ text-unidecode ];
+
+    checkPhase = ''
+      ${python.interpreter} test.py
+    '';
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/un33k/python-slugify;
+      homepage = "https://github.com/un33k/python-slugify";
       description = "A Python Slugify application that handles Unicode";
       license = licenses.mit;
       platforms = platforms.all;

@@ -10,25 +10,31 @@ let
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
 in
 
-{ stdenv, fetchurl, ncurses, buildEnv
-, libX11, xproto, useX11 ? safeX11 stdenv
+{ stdenv, fetchurl, ncurses, buildEnv, libunwind
+, libX11, xorgproto, useX11 ? safeX11 stdenv && !stdenv.lib.versionAtLeast version "4.09"
+, aflSupport ? false
 , flambdaSupport ? false
+, spaceTimeSupport ? false
 }:
 
 assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
+assert aflSupport -> stdenv.lib.versionAtLeast version "4.05";
 assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
+assert spaceTimeSupport -> stdenv.lib.versionAtLeast version "4.04";
 
 let
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optional optionals optionalString;
-   name = "ocaml${optionalString flambdaSupport "+flambda"}-${version}";
+   name = "ocaml${optionalString aflSupport "+afl"}${optionalString spaceTimeSupport "+spacetime"}${optionalString flambdaSupport "+flambda"}-${version}";
 in
 
-stdenv.mkDerivation (args // rec {
-
-  x11env = buildEnv { name = "x11env"; paths = [libX11 xproto]; };
+let
+  x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
+in
+
+stdenv.mkDerivation (args // {
 
   inherit name;
   inherit version;
@@ -39,15 +45,24 @@ stdenv.mkDerivation (args // rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = optionals useX11 [ "-x11lib" x11lib
-                                      "-x11include" x11inc ]
-  ++ optional flambdaSupport "-flambda"
+  configureFlags =
+    let flags = new: old:
+      if stdenv.lib.versionAtLeast version "4.08"
+      then new else old
+    ; in
+    optionals useX11 (flags
+      [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
+      [ "-x11lib" x11lib "-x11include" x11inc ])
+  ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
+  ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
+  ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
   ;
 
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
-    ++ optionals useX11 [ libX11 xproto ];
-  installTargets = "install" + optionalString useNativeCompilers " installopt";
+    ++ optionals useX11 [ libX11 xorgproto ];
+  propagatedBuildInputs = optional spaceTimeSupport libunwind;
+  installTargets = [ "install" ] ++ optional useNativeCompilers "installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
@@ -62,7 +77,7 @@ stdenv.mkDerivation (args // rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://caml.inria.fr/ocaml;
+    homepage = "http://caml.inria.fr/ocaml";
     branch = versionNoPatch;
     license = with licenses; [
       qpl /* compiler */

@@ -1,36 +1,39 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, numpy
+, isPy27
+, packaging
+, pytest
 , nose
-, six
+, numpy
+, h5py
+, pydicom
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "2.3.0";
+  version = "3.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf34aeb0f7ca52dc528ae4f842607cea307b334163857ff1d64d43068f637ada";
+    sha256 = "5827b644d1b0833603710dac198f5f8cbb9002769f97001a191e863b32f5956c";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    nose
-    six
-  ];
+  propagatedBuildInputs = [ numpy scipy h5py packaging pydicom ];
 
-  # Failing tests
-  # nibabel.tests.test_minc1.test_old_namespace
-  # nibabel.gifti.tests.test_parse_gifti_fast.test_parse_dataarrays
-  # nibabel.gifti.tests.test_giftiio.test_read_deprecated
-  doCheck = false;
+  checkInputs = [ nose pytest ];
 
-  meta = with stdenv.lib; {
-    homepage = http://nipy.org/nibabel/;
+  checkPhase = ''
+    pytest
+  '';
+
+  meta = with lib; {
+    homepage = "https://nipy.org/nibabel";
     description = "Access a multitude of neuroimaging data formats";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];
+    platforms = platforms.x86_64;  # https://github.com/nipy/nibabel/issues/861
   };
 }

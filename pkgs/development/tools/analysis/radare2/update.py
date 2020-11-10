@@ -5,6 +5,8 @@
 # and is formatted with black.
 import fileinput
 import json
+import xml.etree.ElementTree as ET
+from urllib.parse import urlparse
 import re
 import subprocess
 import tempfile
@@ -30,18 +32,27 @@ def prefetch_github(owner: str, repo: str, ref: str) -> str:
 
 
 def get_radare2_rev() -> str:
-    url = "https://api.github.com/repos/radare/radare2/releases/latest"
-    with urllib.request.urlopen(url) as response:
-        release = json.load(response)  # type: ignore
-    return release["tag_name"]
+    feed_url = "http://github.com/radareorg/radare2/releases.atom"
+    with urllib.request.urlopen(feed_url) as resp:
+        tree = ET.fromstring(resp.read())
+    releases = tree.findall(".//{http://www.w3.org/2005/Atom}entry")
+    for release in releases:
+        link = release.find("{http://www.w3.org/2005/Atom}link")
+        assert link is not None
+        url = urlparse(link.attrib["href"])
+        tag = url.path.split("/")[-1]
+        if re.match(r"[0-9.]+", tag):
+            return tag
+        else:
+            print(f"ignore {tag}")
+    raise RuntimeError(f"No release found at {feed_url}")
 
 
 def get_cutter_version() -> str:
     version_expr = """
-(with import <nixpkgs> {}; (builtins.parseDrvName (qt5.callPackage ./cutter.nix {}).name).version)
+(with import <nixpkgs> {}; lib.getVersion (qt5.callPackage <radare2/cutter.nix> {}))
 """
-    with SCRIPT_DIR:
-        return sh("nix", "eval", "--raw", version_expr.strip())
+    return sh("nix", "eval", "--raw", version_expr.strip(), "-I", "radare2={0}".format(SCRIPT_DIR))
 
 
 def get_r2_cutter_rev() -> str:
@@ -62,15 +73,15 @@ def git(dirname: str, *args: str) -> str:
 def get_repo_info(dirname: str, rev: str) -> Dict[str, str]:
     sha256 = prefetch_github("radare", "radare2", rev)
 
-    cs_tip = None
+    cs_ver = None
     with open(Path(dirname).joinpath("shlr", "Makefile")) as makefile:
         for l in makefile:
-            match = re.match("CS_TIP=(\S+)", l)
+            match = re.match("CS_VER=(\S+)", l)
             if match:
-                cs_tip = match.group(1)
-    assert cs_tip is not None
+                cs_ver = match.group(1)
+    assert cs_ver is not None
 
-    cs_sha256 = prefetch_github("aquynh", "capstone", cs_tip)
+    cs_sha256 = prefetch_github("aquynh", "capstone", cs_ver)
 
     return dict(
         rev=rev,
@@ -78,7 +89,7 @@ def get_repo_info(dirname: str, rev: str) -> Dict[str, str]:
         version_commit=git(dirname, "rev-list", "--all", "--count"),
         gittap=git(dirname, "describe", "--tags", "--match", "[0-9]*"),
         gittip=git(dirname, "rev-parse", "HEAD"),
-        cs_tip=cs_tip,
+        cs_ver=cs_ver,
         cs_sha256=cs_sha256,
     )
 
@@ -91,7 +102,7 @@ def write_package_expr(version: str, info: Dict[str, str]) -> str:
     rev = "{info["rev"]}";
     version = "{version}";
     sha256 = "{info["sha256"]}";
-    cs_tip = "{info["cs_tip"]}";
+    cs_ver = "{info["cs_ver"]}";
     cs_sha256 = "{info["cs_sha256"]}";
   }}"""
 
@@ -109,7 +120,7 @@ def main() -> None:
             "https://github.com/radare/radare2",
             ".",
         )
-        nix_file = str(Path(__file__).parent.joinpath("default.nix"))
+        nix_file = str(SCRIPT_DIR.joinpath("default.nix"))
 
         radare2_info = get_repo_info(dirname, radare2_rev)
 

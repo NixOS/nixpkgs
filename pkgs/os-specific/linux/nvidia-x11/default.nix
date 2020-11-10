@@ -1,7 +1,11 @@
-{ lib, callPackage, fetchurl }:
+{ lib, callPackage, fetchpatch, fetchurl, stdenv }:
 
 let
-  generic = args: callPackage (import ./generic.nix args) { };
+
+generic = args:
+if ((!lib.versionOlder args.version "391")
+    && stdenv.hostPlatform.system != "x86_64-linux") then null
+  else callPackage (import ./generic.nix args) { };
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
 
@@ -16,35 +20,54 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = generic {
-    version = "390.87";
-    sha256_32bit = "0rlr1f4lnpb8c4qz4w5r8xw5gdy9bzz26qww45qyl1qav3wwaaaw";
-    sha256_64bit = "07k1kq8lkgbvjyr2dnbxcz6nppcwpq17wf925w8kfq78345hla9q";
-    settingsSha256 = "0xlaiy7jr95z0v2c6cwll89nxnb142pybw7m08jg44r7n13ffv3r";
-    persistencedSha256 = "0mhwk321garyl6m12261cj03ycv0qz1sbrlbq6cqwjpq4f1s7h58";
+  stable = if stdenv.hostPlatform.system == "x86_64-linux"
+    then generic {
+      version = "455.28";
+      sha256_64bit = "03ysf61qrb272yqkn7bhn9d65lcfhmqc2c0dbh5prp5f2ndlkqg4";
+      settingsSha256 = "0r9vclmh48yhcrnz9yrswfipj5450ga73jywdjg19gaq2s2aaf1f";
+      persistencedSha256 = "04v9d2g1r0x5dgyy9hqqyp0p9a3qxy1kzl13vklfqrwswb8jw7z1";
+    }
+    else legacy_390;
 
-    patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
+  # No active beta right now
+  beta = stable;
+
+  # Vulkan developer beta driver
+  vulkan_beta = generic {
+    version = "450.56.11";
+    persistencedVersion = "450.57";
+    settingsVersion = "450.57";
+    sha256_64bit = "1k64h8sp4rf6kc7liypznjgkmxi67njy1s8xy2r341fhl62pl010";
+    settingsSha256 = "1clbj9a3kv3j8jg35c197gd7b3f9f9f4h9ll5hlax95hdg12lgan";
+    persistencedSha256 = "17747z1fsbiznfsmahxmz8kmhwwcjanpfih60v5mwzk63gy4i3d5";
+    url = "https://developer.nvidia.com/vulkan-beta-4505611-linux";
   };
 
-  beta = stable; # not enough interest to maintain beta ATM
-
+  # Last one supporting x86
+  legacy_390 = generic {
+    version = "390.138";
+    sha256_32bit = "0y3qjygl0kfz9qs0rp9scn1k3l8ym9dib7wpkyh5gs4klcip7xkv";
+    sha256_64bit = "0rnnb5l4i8s76vlg6yvlrxhm2x9wdqw7k5hgf4fyaa3cr3k1kysz";
+    settingsSha256 = "0ad6hwl56nvbdv9g85lw7ywadqvc2gaq9x6d2vjcia9kg4vrmfqx";
+    persistencedSha256 = "15jciyq6i3pz1g67xzqlwmc62v3xswzhjcqmfcdndvlvhcibsimr";
+  };
 
   legacy_340 = generic {
-    version = "340.104";
-    sha256_32bit = "1l8w95qpxmkw33c4lsf5ar9w2fkhky4x23rlpqvp1j66wbw1b473";
-    sha256_64bit = "18k65gx6jg956zxyfz31xdp914sq3msn665a759bdbryksbk3wds";
-    settingsSha256 = "1vvpqimvld2iyfjgb9wvs7ca0b0f68jzfdpr0icbyxk4vhsq7sxk";
-    persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
+    version = "340.108";
+    sha256_32bit = "1jkwa1phf0x4sgw8pvr9d6krmmr3wkgwyygrxhdazwyr2bbalci0";
+    sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
+    settingsSha256 = "0zm29jcf0mp1nykcravnzb5isypm8l8mg2gpsvwxipb7nk1ivy34";
+    persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
 
-    patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];
+    patches = [ ./vm_operations_struct-fault.patch ];
   };
 
   legacy_304 = generic {
     version = "304.137";
     sha256_32bit = "1y34c2gvmmacxk2c72d4hsysszncgfndc4s1nzldy2q9qagkg66a";
     sha256_64bit = "1qp3jv6279k83k3z96p6vg3dd35y9bhmlyyyrkii7sib7bdmc7zb";
-    settingsSha256 = "0i5znfq6jkabgi8xpcy12pdpww6a67i8mq60z1kjq36mmnb25pmi";
+    settingsSha256 = "129f0j0hxzjd7g67qwxn463rxp295fsq8lycwm6272qykmab46cj";
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
@@ -65,5 +88,6 @@ rec {
         '';
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
+    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

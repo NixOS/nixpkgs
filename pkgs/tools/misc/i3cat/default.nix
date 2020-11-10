@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "i3cat-${version}";
+  pname = "i3cat";
   version = "20150321-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "b9ba886a7c769994ccd8d4627978ef4b51fcf576";
 

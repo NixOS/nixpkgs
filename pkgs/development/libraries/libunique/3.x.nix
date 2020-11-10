@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
-, dbus, dbus-glib, gtk3, gobjectIntrospection
-, gtkdoc, docbook_xml_dtd_45, docbook_xsl
+, dbus, dbus-glib, gtk3, gobject-introspection
+, gtk-doc, docbook_xml_dtd_45, docbook_xsl
 , libxslt, libxml2 }:
 
 with stdenv.lib;
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   majorVer = "3.0";
   minorVer = "2";
   version = "${majorVer}.${minorVer}";
-  name = "libunique3-${version}";
-  srcName = "libunique-${version}";  
+  pname = "libunique3";
+  srcName = "libunique-${version}";
 
   src = fetchurl {
     url = "http://ftp.gnome.org/pub/GNOME/sources/libunique/${majorVer}/${srcName}.tar.xz";
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ dbus dbus-glib gtk3 gobjectIntrospection gtkdoc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
+  buildInputs = [ dbus dbus-glib gtk3 gobject-introspection gtk-doc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
 
   meta = {
-    homepage = https://wiki.gnome.org/Attic/LibUnique;
+    homepage = "https://wiki.gnome.org/Attic/LibUnique";
     description = "A library for writing single instance applications";
     license = licenses.lgpl21;
     maintainers = [ maintainers.AndersonTorres ];

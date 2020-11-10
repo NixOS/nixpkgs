@@ -1,12 +1,12 @@
-{ stdenv, binutils , fetchurl, glibc }:
+{ stdenv, binutils , fetchurl, ncurses5 }:
 
 stdenv.mkDerivation rec {
-  version = "0.0.28";
-  name = "kythe-${version}";
+  version = "0.0.30";
+  pname = "kythe";
 
   src = fetchurl {
-    url = "https://github.com/google/kythe/releases/download/v0.0.28/kythe-v0.0.28.tar.gz";
-    sha256 = "1qc7cngpxw66m3krpr5x50ns7gb3bpv2bdfzpb5afl12qp0mi6zm";
+    url = "https://github.com/kythe/kythe/releases/download/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "12bwhqkxfbkh3mm4wfvqflwhmbzpmlhlfykdpy6h7p9ih9ky8w6r";
   };
 
   buildInputs =
@@ -20,17 +20,18 @@ stdenv.mkDerivation rec {
     cd tools
     for exe in http_server \
                 kythe read_entries triples verifier \
-                write_entries write_tables; do
+                write_entries write_tables entrystream; do
       echo "Patching:" $exe
       patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $exe
-      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64" $exe
+      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ]}" $exe
     done
     cd ../
     cp -R ./ $out
+    ln -s $out/tools $out/bin
   '';
 
   meta = with stdenv.lib; {
-    description = "A pluggable, (mostly) language-agnostic ecosystem for building tools that work with code.";
+    description = "A pluggable, (mostly) language-agnostic ecosystem for building tools that work with code";
     longDescription = ''
     The Kythe project was founded to provide and support tools and standards
       that encourage interoperability among programs that manipulate source
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
       source code — including build systems, compilers, interpreters, static
       analyses, editors, code-review applications, and more — to share
       information with each other smoothly.  '';
-    homepage = https://kythe.io/;
+    homepage = "https://kythe.io/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.mpickering ];

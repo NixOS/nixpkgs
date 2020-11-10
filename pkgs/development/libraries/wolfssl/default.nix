@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "wolfssl-${version}";
-  version = "3.15.3";
+  pname = "wolfssl";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "00mpq1z8j37a873dbk9knb835m3qlwqnd1rslirqkc44hpz1i64j";
+    sha256 = "138ppnwkqkfi7nnqpd0b93dqaph72ma65m9286bz2qzlis1x8r0v";
   };
 
   configureFlags = [ "--enable-all" ];

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "vault";
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -12,12 +12,12 @@ import ./make-test.nix ({ pkgs, ... }:
 
   testScript =
     ''
-      startAll;
+      start_all()
 
-      $machine->waitForUnit('multi-user.target');
-      $machine->waitForUnit('vault.service');
-      $machine->waitForOpenPort(8200);
-      $machine->succeed('vault operator init');
-      $machine->succeed('vault status | grep Sealed | grep true');
+      machine.wait_for_unit("multi-user.target")
+      machine.wait_for_unit("vault.service")
+      machine.wait_for_open_port(8200)
+      machine.succeed("vault operator init")
+      machine.succeed("vault status | grep Sealed | grep true")
     '';
 })

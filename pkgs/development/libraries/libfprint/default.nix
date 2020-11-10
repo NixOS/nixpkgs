@@ -1,22 +1,57 @@
-{ stdenv, fetchurl, pkgconfig, libusb, pixman, glib, nss, nspr, gdk_pixbuf }:
+{ stdenv
+, fetchFromGitLab
+, pkgconfig
+, meson
+, ninja
+, gusb
+, pixman
+, glib
+, nss
+, gobject-introspection
+, coreutils
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+}:
 
 stdenv.mkDerivation rec {
-  name = "libfprint-0.7.0";
+  pname = "libfprint";
+  version = "1.90.3";
+  outputs = [ "out" "devdoc" ];
 
-  src = fetchurl {
-    url = "https://people.freedesktop.org/~anarsoul/${name}.tar.xz";
-    sha256 = "1wzi12zvdp8sw3w5pfbd9cwz6c71627bkr88rxv6gifbyj6fwgl6";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "libfprint";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1fs0qrfrqnvc6kcsg81l5p89n8jnsx9dr1pzxpb8ghwas8c9v52i";
   };
 
-  buildInputs = [ libusb pixman glib nss nspr gdk_pixbuf ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    meson
+    ninja
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+    gobject-introspection
+  ];
 
-  configureFlags = [ "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
+  buildInputs = [
+    gusb
+    pixman
+    glib
+    nss
+  ];
+
+  mesonFlags = [
+    "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+  ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/fprint/libfprint/;
+    homepage = "https://fprint.freedesktop.org/";
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
-    license = licenses.lgpl2;
+    license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

@@ -1,27 +1,47 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, dbus }:
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkgconfig
+, makeWrapper
+, dbus
+, libpulseaudio
+, notmuch
+, ethtool
+}:
 
 rustPlatform.buildRustPackage rec {
-  name = "i3status-rust-${version}";
-  version = "0.9.0.2018-10-02";
+  pname = "i3status-rust";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "greshake";
-    repo = "i3status-rust";
-    rev = "11c2a21693ffcd0b6c2e0ac919b2232918293963";
-    sha256 = "019m9qpw7djq6g7lzbm7gjcavlgsp93g3cd7cb408nxnfsi7i9dp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1f1gvgb1zk8gw596vaz9iihbpybwzs5shd25qq7bn2bhr4hqlbb9";
   };
 
-  cargoSha256 = "1wnify730f7c3cb8wllqvs7pzrq54g5x81xspvz5gq0iqr0q38zc";
+  cargoSha256 = "1dcfclk8lbqvq2hywr80jm63p1i1kz3893zq99ipgryia46vd397";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  buildInputs = [ dbus ];
+  buildInputs = [ dbus libpulseaudio notmuch ];
+
+  cargoBuildFlags = [
+    "--features=notmuch"
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/i3status-rs --prefix PATH : "${ethtool}/bin"
+  '';
+
+  # Currently no tests are implemented, so we avoid building the package twice
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Very resource-friendly and feature-rich replacement for i3status";
-    homepage = https://github.com/greshake/i3status-rust;
+    homepage = "https://github.com/greshake/i3status-rust";
     license = licenses.gpl3;
-    maintainers = [ maintainers.backuitist ];
+    maintainers = with maintainers; [ backuitist globin ma27 ];
     platforms = platforms.linux;
   };
 }

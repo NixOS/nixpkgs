@@ -1,36 +1,85 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gst-plugins-base, bzip2, libva, wayland
-, libdrm, udev, xorg, libGLU_combined, gstreamer, gst-plugins-bad, nasm
-, libvpx, python
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gst-plugins-base
+, bzip2
+, libva
+, wayland
+, libdrm
+, udev
+, xorg
+, libGLU
+, libGL
+, gstreamer
+, gst-plugins-bad
+, nasm
+, libvpx
+, python3
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-vaapi-${version}";
-  version = "1.14.2";
+  pname = "gstreamer-vaapi";
+  version = "1.18.0";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "12hdyfma2lnfj38dj6y891vsxnxrlbqjbd36xx13mgasgzi6843z";
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0ccyzv15jzf0pi0ndrmfww016cn4c0y4265bacdvnxbgff6fpvy6";
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ meson ninja pkgconfig bzip2 ];
-
-  buildInputs = [
-    gstreamer gst-plugins-base gst-plugins-bad libva wayland libdrm udev
-    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM
-    xorg.libICE libGLU_combined nasm libvpx python
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
-  preConfigure = ''
-    export GST_PLUGIN_PATH_1_0=$out/lib/gstreamer-1.0
-    mkdir -p $GST_PLUGIN_PATH_1_0
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    bzip2
+
+    # documentation
+    # TODO add hotdoc here
+  ];
+
+  buildInputs = [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    libva
+    wayland
+    libdrm
+    udev
+    xorg.libX11
+    xorg.libXext
+    xorg.libXv
+    xorg.libXrandr
+    xorg.libSM
+    xorg.libICE
+    libGL
+    libGLU
+    nasm
+    libvpx
+    python3
+  ];
+
+  mesonFlags = [
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = {
-    homepage = https://gstreamer.freedesktop.org;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+  meta = with stdenv.lib; {
+    description = "Set of VAAPI GStreamer Plug-ins";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ tstrobel ];
+    platforms = platforms.linux;
   };
 }

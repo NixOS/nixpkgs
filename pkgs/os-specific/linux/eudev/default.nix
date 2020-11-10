@@ -3,10 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="eudev";
-    version = "3.2.6";
+    version = "3.2.9";
     name="${baseName}-${version}";
     url="http://dev.gentoo.org/~blueness/eudev/eudev-${version}.tar.gz";
-    sha256 = "1qdpnvsv3qqwy6jl4i4b1dn212y6nvawpaladb7plfping9p2n46";
+    sha256 = "1z6lfhhbjs6j7pbp6ybn17ywjsdl87ql6g1p3m2y26aa10cqcqc9";
   };
 
   nativeBuildInputs = [ pkgconfig ];

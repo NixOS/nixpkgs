@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, alsaLib ? null, fftwFloat, fltk13
-, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
+, fluidsynth_1 ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
-, qtbase, qtx11extras, qttools, SDL ? null }:
+, qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "lmms-${version}";
-  version = "1.2.0-rc6";
+mkDerivation rec {
+  pname = "lmms";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
     rev = "v${version}";
-    sha256 = "1pqir5srfrknfd8nmbz565ymq18ffw8d8k9pbmzggaxvlcr12b25";
+    sha256 = "006hwv1pbh3y5whsxkjk20hsbgwkzr4dawz43afq1gil69y7xpda";
     fetchSubmodules = true;
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     alsaLib
     fftwFloat
     fltk13
-    fluidsynth
+    fluidsynth_1
     lame
     libgig
     libjack2
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "DAW similar to FL Studio (music production software)";
-    homepage = https://lmms.io;
+    homepage = "https://lmms.io";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ goibhniu yegortimoshenko ];
   };
 }

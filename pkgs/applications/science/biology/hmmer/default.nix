@@ -1,28 +1,25 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "3.1b2";
-  name = "hmmer-${version}";
+  version = "3.3.1";
+  pname = "hmmer";
 
   src = fetchurl {
-    url = "http://eddylab.org/software/hmmer3/${version}/${name}.tar.gz";
-    sha256 = "0djmgc0pfli0jilfx8hql1axhwhqxqb8rxg2r5rg07aw73sfs5nx";
+    url = "http://eddylab.org/software/hmmer/${pname}-${version}.tar.gz";
+    sha256 = "1mcvr74w6ffd5z0p8v3jss473mbgard9lz5whjnk95c661lnmrlc";
   };
 
   meta = with stdenv.lib; {
     description = "Biosequence analysis using profile hidden Markov models";
     longDescription = ''
-HMMER is used for searching sequence databases for sequence homologs, and for making sequence alignments. It implements methods using probabilistic models called profile hidden Markov models (profile HMMs).
-
-HMMER is often used together with a profile database, such as Pfam or many of the databases that participate in Interpro. But HMMER can also work with query sequences, not just profiles, just like BLAST. For example, you can search a protein query sequence against a database with phmmer, or do an iterative search with jackhmmer.
-
-HMMER is designed to detect remote homologs as sensitively as possible, relying on the strength of its underlying probability models. In the past, this strength came at significant computational expense, but as of the new HMMER3 project, HMMER is now essentially as fast as BLAST.
-
-HMMER can be downloaded and installed as a command line tool on your own hardware, and now it is also more widely accessible to the scientific community via new search servers at the European Bioinformatics Institute.
+      HMMER is used for searching sequence databases for sequence homologs, and for making sequence alignments. It implements methods using probabilistic models called profile hidden Markov models (profile HMMs).
+      HMMER is often used together with a profile database, such as Pfam or many of the databases that participate in Interpro. But HMMER can also work with query sequences, not just profiles, just like BLAST. For example, you can search a protein query sequence against a database with phmmer, or do an iterative search with jackhmmer.
+      HMMER is designed to detect remote homologs as sensitively as possible, relying on the strength of its underlying probability models. In the past, this strength came at significant computational expense, but as of the new HMMER3 project, HMMER is now essentially as fast as BLAST.
+      HMMER can be downloaded and installed as a command line tool on your own hardware, and now it is also more widely accessible to the scientific community via new search servers at the European Bioinformatics Institute.
     '';
-    homepage = http://hmmer.org/;
+    homepage = "http://hmmer.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

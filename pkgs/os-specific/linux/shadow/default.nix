@@ -1,5 +1,5 @@
 { stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_412, docbook_xsl, gnome-doc-utils, flex, bison
+, docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
 , pam ? null, glibcCross ? null
 }:
 
@@ -11,30 +11,32 @@ let
     else assert stdenv.hostPlatform.libc == "glibc"; stdenv.cc.libc;
 
   dots_in_usernames = fetchpatch {
-    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch;
+    url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch";
     sha256 = "1fj3rg6x3jppm5jvi9y7fhd2djbi4nc5pgwisw00xlh4qapgz692";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "shadow-${version}";
-  version = "4.6";
+  pname = "shadow";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = "${version}";
-    sha256 = "1llcv77lvpc4h3rgww9ms736kbdisiylcr2z02863f41afxbwl82";
+    rev = version;
+    sha256 = "13407r6qwss00504qy740jghb2dzd561la7dhp47rg8w3g8jarpn";
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
-    docbook_xml_dtd_412 docbook_xsl gnome-doc-utils flex bison
+    docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
 
   patches =
     [ ./keep-path.patch
+      # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
+      ./respect-xml-catalog-files-var.patch
       dots_in_usernames
     ];
 
@@ -52,11 +54,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export ac_cv_func_setpgrp_void=yes
     export shadow_cv_logdir=/var/log
-    (
-    head -n -1 "${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
-    tail -n +3 "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml"
-    ) > xmlcatalog
-    configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
 
   configureFlags = [
@@ -81,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/shadow-maint;
+    homepage = "https://github.com/shadow-maint";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = licenses.bsd3;
     platforms = platforms.linux;
