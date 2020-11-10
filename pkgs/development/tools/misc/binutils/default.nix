@@ -23,8 +23,8 @@ let
   # is now upstream.
   # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
   version = "${minorVersion}${patchVersion}";
-  minorVersion = "2.31";
-  patchVersion =   ".1";
+  minorVersion = if stdenv.targetPlatform.isOr1k then "2.34" else "2.31";
+  patchVersion = if stdenv.targetPlatform.isOr1k then     "" else   ".1";
 
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
@@ -43,14 +43,20 @@ let
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
     sha256 = {
       "2.31.1" = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
+      "2.34"   = "1rin1f5c7wm4n3piky6xilcrpf2s0n3dd5vqq8irrxkcic3i1w49";
     }.${version};
   });
 
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or non-boot-src;
 
+  # Platforms where we directly use the final source.
+  # Generally for cross-compiled platforms, where the boot source won't compile.
+  skipBootSrc = stdenv.targetPlatform.isOr1k;
+
   # Select the specific source according to the platform in use.
   src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src
+    else if skipBootSrc then non-boot-src
     else normal-src;
 
   patchesDir = ./patches + "/${minorVersion}";
@@ -102,6 +108,9 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison
+  ] ++ lib.optionals (lib.versionAtLeast version "2.34") [
+    perl
+    texinfo
   ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook
   ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ texinfo flex ];
