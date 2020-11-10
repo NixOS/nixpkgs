@@ -78,6 +78,8 @@ in {
       '';
     }];
 
+    environment.systemPackages = [ pkgs.grafana-loki ]; # logcli
+
     users.groups.${cfg.group} = { };
     users.users.${cfg.user} = {
       description = "Loki Service User";
