@@ -45,6 +45,11 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "tokenizers == 0.9.2" "tokenizers"
+  '';
+
   preCheck = ''
     export HOME="$TMPDIR"
 
