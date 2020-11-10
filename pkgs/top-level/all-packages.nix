@@ -17215,7 +17215,7 @@ in
     postgresql_9_5
     postgresql_9_6
     postgresql_10
-    postgresql_11_local
+    postgresql_11
     postgresql_12
     postgresql_13
   ;
