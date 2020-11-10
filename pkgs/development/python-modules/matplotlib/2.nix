@@ -39,18 +39,26 @@ buildPythonPackage rec {
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    which
+    sphinx
+  ];
 
-  buildInputs = [ which sphinx ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+  buildInputs = [
+    freetype
+    libpng
+  ]
+    ++ stdenv.lib.optionals enableGhostscript [ ghostscript ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ]
+    ++ stdenv.lib.optionals enableTk [ tcl tk libX11 ];
 
   requiredPythonModules =
-    [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
-      libpng mock pytz ]
+    [ cycler dateutil nose numpy pyparsing tornado kiwisolver
+      mock pytz ]
     ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
+    ++ stdenv.lib.optionals enableTk [ tkinter ]
     ++ stdenv.lib.optionals enableQt [ pyqt4 ]
     ++ stdenv.lib.optionals python.isPy2 [ functools32 subprocess32 ];
 

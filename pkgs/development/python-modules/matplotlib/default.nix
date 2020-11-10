@@ -32,17 +32,25 @@ buildPythonPackage rec {
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    which
+    sphinx
+  ];
 
-  buildInputs = [ which sphinx ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+  buildInputs = [
+    freetype
+    libpng
+  ]
+    ++ stdenv.lib.optionals enableGhostscript [ ghostscript ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ]
+    ++ stdenv.lib.optionals enableTk [ tcl tk libX11 ];
 
   requiredPythonModules =
-    [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
-      certifi libpng mock pytz pillow ]
+    [ cycler dateutil numpy pyparsing tornado  kiwisolver
+      certifi mock pytz pillow ]
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
+    ++ stdenv.lib.optionals enableTk [ tkinter ]
     ++ stdenv.lib.optionals enableQt [ pyqt5 ];
 
   setup_cfg = if stdenv.isDarwin then ./setup-darwin.cfg else ./setup.cfg;
