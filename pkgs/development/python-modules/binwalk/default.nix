@@ -22,6 +22,10 @@
 let
   visualizationSupport = (pyqtgraph != null) && (matplotlib != null);
   version = "2.2.0";
+
+  runtimeDeps = [
+    zlib xz ncompress gzip bzip2 gnutar p7zip cabextract cramfsswap cramfsprogs sasquatch squashfsTools lzma 
+  ];
 in
 buildPythonPackage {
   pname = "binwalk";
@@ -34,8 +38,7 @@ buildPythonPackage {
     sha256 = "1bxgj569fzwv6jhcbl864nmlsi9x1k1r20aywjxc8b9b1zgqrlvc";
   };
 
-  requiredPythonModules = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract cramfsswap cramfsprogs sasquatch squashfsTools lzma pycrypto ]
-  ++ stdenv.lib.optionals visualizationSupport [ matplotlib pyqtgraph ];
+  requiredPythonModules = [ pycrypto ] ++ stdenv.lib.optionals visualizationSupport [ matplotlib pyqtgraph ];
 
   # setup.py only installs version.py during install, not test
   postPatch = ''
@@ -46,6 +49,10 @@ buildPythonPackage {
   preCheck = ''
     HOME=$(mktemp -d)
   '';
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}"
+  ];
 
   checkInputs = [ nose ];
 
