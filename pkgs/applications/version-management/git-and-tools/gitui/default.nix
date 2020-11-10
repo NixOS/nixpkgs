@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, libiconv, xorg, python3, Security }:
+{ stdenv, rustPlatform, fetchFromGitHub, libiconv, xorg, python3, Security, AppKit }:
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
   version = "0.10.1";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ python3 ];
   buildInputs = [ ]
     ++ stdenv.lib.optional stdenv.isLinux xorg.libxcb
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security AppKit ];
 
   meta = with stdenv.lib; {
     description = "Blazing fast terminal-ui for git written in rust";
