@@ -7269,6 +7269,8 @@ in
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
+  siril = callPackage ../applications/science/astronomy/siril { };
+
   sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
 
   sit = callPackage ../applications/version-management/sit {
