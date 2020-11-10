@@ -11,20 +11,7 @@ in {
     enable = mkEnableOption "the Promtail ingresser";
 
     configuration = mkOption {
-      type = with lib.types; let
-        valueType = nullOr (oneOf [
-          bool
-          int
-          float
-          str
-          (lazyAttrsOf valueType)
-          (listOf valueType)
-        ]) // {
-          description = "JSON value";
-          emptyValue.value = {};
-          deprecationMessage = null;
-        };
-      in valueType;
+      type = (pkgs.formats.json {}).type;
       description = ''
         Specify the configuration for Promtail in Nix.
       '';
