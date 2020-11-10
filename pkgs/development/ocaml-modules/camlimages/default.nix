@@ -1,8 +1,10 @@
-{ lib, fetchFromGitLab, buildDunePackage, dune-configurator, cppo, lablgtk, stdio }:
+{ lib, fetchFromGitLab, buildDunePackage, dune-configurator, cppo
+, graphics, lablgtk, stdio
+}:
 
 buildDunePackage rec {
   pname = "camlimages";
-  version = "5.0.3";
+  version = "5.0.4";
 
   useDune2 = true;
 
@@ -12,10 +14,10 @@ buildDunePackage rec {
     owner = "camlspotter";
     repo = pname;
     rev = version;
-    sha256 = "1ng9pkvrzlibfyf97iqvmbsqcykz8v1ln106xhq9nigih5i68zyd";
+    sha256 = "1m2c76ghisg73dikz2ifdkrbkgiwa0hcmp21f2fm2rkbf02rq3f4";
   };
 
-  buildInputs = [ dune-configurator cppo lablgtk stdio ];
+  buildInputs = [ dune-configurator cppo graphics lablgtk stdio ];
 
   meta = with lib; {
     branch = "5.0";
