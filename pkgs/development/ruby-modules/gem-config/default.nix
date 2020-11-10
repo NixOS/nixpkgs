@@ -25,7 +25,7 @@
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libselinux ? null, libsepol ? null
+, bundler, libsass, libexif, libselinux ? null, libsepol ? null
 }@args:
 
 let
@@ -177,6 +177,11 @@ in
 
   eventmachine = attrs: {
     buildInputs = [ openssl ];
+  };
+
+  exif = attrs: {
+    buildFlags = [ "--with-exif-dir=${libexif}" ];
+    buildInputs = [ libexif ];
   };
 
   ffi = attrs: {
