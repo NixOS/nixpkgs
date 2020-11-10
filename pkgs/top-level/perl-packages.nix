@@ -8300,12 +8300,12 @@ let
     };
   };
 
-  FutureAsyncAwait = buildPerlModule {
+  FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.45";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.45.tar.gz";
-      sha256 = "1aq19b21r9i4c1mxkrv0irnx16234cnzsx50178c7xif4gqkar9k";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
+      sha256 = "1iqbs7n8923xjkai51hiczn5an8cskddl7qrfi30axjl1d56h6r0";
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseSublike ];
