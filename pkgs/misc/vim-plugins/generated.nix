@@ -5773,6 +5773,18 @@ let
     meta.homepage = "https://github.com/rakr/vim-one/";
   };
 
+  vim-openscad = buildVimPluginFrom2Nix {
+    pname = "vim-openscad";
+    version = "2020-07-08";
+    src = fetchFromGitHub {
+      owner = "sirtaj";
+      repo = "vim-openscad";
+      rev = "81db508b1888fdbea994d43ccef1acd86c8af3f7";
+      sha256 = "1wcdfayjpb9h0lzwdi5nda4c0ch263fdr0379l9k1gf47bgq9cx2";
+    };
+    meta.homepage = "https://github.com/sirtaj/vim-openscad/";
+  };
+
   vim-operator-replace = buildVimPluginFrom2Nix {
     pname = "vim-operator-replace";
     version = "2015-02-24";
