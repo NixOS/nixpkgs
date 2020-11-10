@@ -688,6 +688,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
   };
 
+  Archi = callPackage ../tools/misc/Archi { };
+
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
