@@ -10,7 +10,7 @@ substituteAll {
     inherit utillinux;
 
     postInstall = ''
-      t=$out/etc/bash_completion.d
+      t=$out/share/bash-completion/completions
       mkdir -p $t
       cp ${./nixos-container-completion.sh} $t/nixos-container
     '';
