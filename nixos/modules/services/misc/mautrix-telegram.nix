@@ -93,12 +93,19 @@ in {
         default = null;
         description = ''
           File containing environment variables to be passed to the mautrix-telegram service,
-          in which secret tokens can be specified securely by defining values for
+          in which secret tokens can be specified securely by defining values for e.g.
           <literal>MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN</literal>,
           <literal>MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN</literal>,
           <literal>MAUTRIX_TELEGRAM_TELEGRAM_API_ID</literal>,
           <literal>MAUTRIX_TELEGRAM_TELEGRAM_API_HASH</literal> and optionally
           <literal>MAUTRIX_TELEGRAM_TELEGRAM_BOT_TOKEN</literal>.
+          </para>
+
+          <para>
+          These environment variables can also be used to set other options by
+          replacing hierachy levels by <literal>.</literal>, converting the name
+          to uppercase and prepending <literal>MAUTRIX_TELEGRAM_</literal>.
+          For example, the first value above maps to <option>appservice.as_token</option>.
         '';
       };
 
