@@ -144,7 +144,7 @@ let
       list = ''[ ${lib.concatMapStringsSep " " drvName partitionedRequiredPythonModules.wrong} ]'';
       in lib.warn ''
         ${name}: Non-Python packages are in `requiredPythonModules`: ${list}
-        These are likely meant to be in `buildInputs`. If their executables need to be included in wrappers, set `makeWrapperArgs=["--prefix PATH : ''${lib.makeBinPath ${list} }";`.
+        If these are libraries, then they should be in `buildInputs`. If their executables need to be included in wrappers, set `makeWrapperArgs=["--prefix PATH : ''${lib.makeBinPath ${list} }";`.
       '' partitionedRequiredPythonModules.right
     else
       partitionedRequiredPythonModules.right;
