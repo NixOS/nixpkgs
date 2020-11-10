@@ -3,7 +3,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gp-saml-gui";
-  version = "c557c32ce9429fec2d7054f63195b30b97cba47d";
+  version = "2020-10-13";
 
   src = fetchFromGitHub {
     owner = "dlenski";
@@ -13,9 +13,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook webkitgtk gobject-introspection ];
-  buildInputs = [
-    gtk3 glib-networking
-  ];
+  buildInputs = [ gtk3 glib-networking ];
 
   propagatedBuildInputs = with python3Packages; [ requests pygobject3 ];
 
