@@ -39,7 +39,7 @@ in {
     };
 
     configuration = mkOption {
-      type = types.attrs;
+      type = (pkgs.formats.json {}).type;
       default = {};
       description = ''
         Specify the configuration for Loki in Nix.
