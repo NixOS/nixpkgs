@@ -8,6 +8,7 @@
 , bison ? null
 , flex
 , texinfo
+, perl
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -21,7 +22,10 @@ let
   # Remove gold-symbol-visibility patch when updating, the proper fix
   # is now upstream.
   # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
-  version = "2.31.1";
+  version = "${minorVersion}${patchVersion}";
+  minorVersion = "2.31";
+  patchVersion =   ".1";
+
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -33,19 +37,28 @@ let
     rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
     sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
   };
-  # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
-  normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
+
+  # binutils sources not part of the bootstrap.
+  non-boot-src = (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
+    sha256 = {
+      "2.31.1" = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
+    }.${version};
   });
+
+  # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
+  normal-src = stdenv.__bootPackages.binutils-unwrapped.src or non-boot-src;
+
+  # Select the specific source according to the platform in use.
+  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src
+    else normal-src;
+
   patchesDir = ./patches + "/${minorVersion}";
 in
 
 stdenv.mkDerivation {
   pname = targetPrefix + basename;
-  inherit version;
-
-  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else normal-src;
+  inherit src version;
 
   patches = [
     # Make binutils output deterministic by default.
