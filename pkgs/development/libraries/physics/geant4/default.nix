@@ -38,6 +38,9 @@
 # For enablePython
 , boost
 , python3
+
+# For tests
+, callPackage
 }:
 
 let
@@ -108,6 +111,8 @@ stdenv.mkDerivation rec {
           inherit stdenv fetchurl;
           geant_version = version;
       };
+
+    tests = callPackage ./tests.nix {};
   };
 
   # Set the myriad of envars required by Geant4 if we use a nix-shell.
