@@ -17213,11 +17213,17 @@ in
 
   inherit (import ../servers/sql/postgresql pkgs)
     postgresql_9_5
+    postgresql_9_5_debug
     postgresql_9_6
+    postgresql_9_6_debug
     postgresql_10
+    postgresql_10_debug
     postgresql_11
+    postgresql_11_debug
     postgresql_12
+    postgresql_12_debug
     postgresql_13
+    postgresql_13_debug
   ;
   postgresql = postgresql_11.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
