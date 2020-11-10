@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2020.8.1";
+  version = "2020.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c98202abb4977aac6a2995a7f4ed2f7e51739db6fd72861d29681f865c27c1b";
+    sha256 = "ad052d293eadb5b64631bfffac62c496427ad4105e76eef19a5422ba762ee734";
   };
 
   nativeBuildInputs = [ setuptools_scm git ];
