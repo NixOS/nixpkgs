@@ -2,7 +2,6 @@
 , yodl, icmake, flexcpp, bobcat
 }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "bisonc++";
   version = "6.04.00";
 
