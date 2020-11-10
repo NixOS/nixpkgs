@@ -1229,14 +1229,6 @@ self: super: {
     sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
 
-  # this will probably need to get updated with every ghcide update,
-  # we need an override because ghcide is tracking haskell-lsp closely.
-  ghcide = dontCheck (super.ghcide.overrideScope (self: super: {
-    hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck self.lsp-test_0_11_0_7;
-  }));
-  implicit-hie-cradle = super.implicit-hie-cradle.override { hie-bios = dontCheck super.hie-bios_0_7_1; };
-
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
@@ -1459,25 +1451,27 @@ self: super: {
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 } // (let
-  inherit (self) hls-ghcide hls-brittany;
-  hlsScopeOverride = self: super: {
-    # haskell-language-server uses its own fork of ghcide
-    # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = dontCheck hls-ghcide;
-    # we are faster than stack here
-    hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck super.lsp-test_0_11_0_7;
-    # fourmolu can‘t compile with an older aeson
+  # fourmolu can‘t compile with an older aeson
+  overrideAeson = name: value: value.overrideScope (self: super: {
     aeson = dontCheck super.aeson_1_5_2_0;
-    # brittany has an aeson upper bound of 1.5
-    brittany = hls-brittany;
+  });
+  in pkgs.lib.mapAttrs overrideAeson {
+    # tons of overrides for bleeding edge versions for ghcide and hls
+    # overriding aeson on all of them to prevent double compilations
+    # this shouldn‘t break anything because nearly all their reverse deps are
+    # in this list or marked as broken anyways
+    haskell-language-server = dontCheck super.haskell-language-server;
+    fourmolu = dontCheck super.fourmolu;
+    stylish-haskell = super.stylish-haskell_0_12_2_0;
+    ghcide = dontCheck super.ghcide;
+    refinery = super.refinery_0_3_0_0;
     data-tree-print = doJailbreak super.data-tree-print;
     ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
-  };
-  in {
-    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
-    hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
-    hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
-    fourmolu = dontCheck (super.fourmolu.overrideScope hlsScopeOverride);
+    hie-bios = dontCheck super.hie-bios_0_7_1;
+    lsp-test = dontCheck super.lsp-test_0_11_0_7;
+    # the hls brittany is objectively better, because there hasn‘t been a
+    # brittany release in a while and this version works with 8.10.
+    # And we need to build it anyways.
+    brittany = dontCheck super.hls-brittany;
   }
 )  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
