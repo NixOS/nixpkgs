@@ -10889,6 +10889,8 @@ in
     };
   });
 
+  bisoncpp = callPackage ../development/tools/parsing/bisonc++ { };
+
   black = with python3Packages; toPythonApplication black;
 
   blackfire = callPackage ../development/tools/misc/blackfire { };
