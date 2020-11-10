@@ -263,6 +263,14 @@ in {
           may be served via HTTPS.
         '';
       };
+
+      extraConfig = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Extra text to append to nextcloud override config options.
+        '';
+      };
     };
 
     caching = {
@@ -420,6 +428,7 @@ in {
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+              ${optionalString (c.extraConfig != null) c.extraConfig}
             ];
           '';
           occInstallCmd = let
