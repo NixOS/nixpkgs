@@ -1,7 +1,6 @@
 { lib, fetchPypi, buildPythonPackage, pythonOlder
 , dateutil
 , importlib-metadata
-, poetry
 , poetry-core
 , pytzdata
 , typing
