@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.2.1";
+  version = "1.2.2";
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "v${version}";
-    sha256 = "sha256-7qpVyQUbT+GChJl1TnKOONSyRDvzQ0M2z9RdN7PNl9U=";
+    sha256 = "sha256-Ax1D4QupSIYNsvhWu4IiT5L5N5A4TLVNz3B6CQOpZGk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -24,6 +24,8 @@ python3.pkgs.buildPythonApplication rec {
     maestral
     packaging
     pyqt5
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    python3.pkgs.importlib-resources
   ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];
