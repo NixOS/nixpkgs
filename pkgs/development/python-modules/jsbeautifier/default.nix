@@ -1,6 +1,6 @@
-{ lib, fetchPypi, buildPythonApplication, editorconfig, pytest, six }:
+{ lib, fetchPypi, buildPythonPackage, editorconfig, pytest, six }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "jsbeautifier";
   version = "1.13.0";
 
