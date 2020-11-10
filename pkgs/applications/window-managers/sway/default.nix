@@ -7,25 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
-  version = "1.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0r3b7h778l9i20z3him9i2qsaynpn9y78hzfgv3cqi8fyry2c4f9";
+    sha256 = "1xsa3h8zhf29p0mi90baxpr76jkd9pd1gr97ky8cnjbcs4isj9j0";
   };
 
   patches = [
     ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
   ];
-
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace "v1.5" "1.5" \
-      --replace "wlroots_version = ['>=0.11.0', '<0.12.0']" "wlroots_version = ['>=0.11.0', '<0.13.0']"
-  '';
 
   nativeBuildInputs = [
     meson ninja pkg-config wayland scdoc
