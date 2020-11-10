@@ -13,6 +13,46 @@ let
     makeWrapper "${jdk}/bin/java" "$out/bin/apksigner" \
       --add-flags "-jar ${builtins.head build-tools}/libexec/android-sdk/build-tools/28.0.3/lib/apksigner.jar"
   '';
+
+  runtimeDeps = [
+    binutils-unwrapped
+    bzip2
+    colordiff
+    coreutils
+    cpio
+    db
+    diffutils
+    dtc
+    e2fsprogs
+    file
+    findutils
+    fontforge-fonttools
+    gettext
+    gnutar
+    gzip
+    libarchive
+    libcaca
+    lz4
+    openssl
+    pgpdump
+    sng
+    sqlite
+    squashfsTools
+    unzip
+    xxd
+    xz
+    zip
+    zstd
+    acl
+    cdrkit
+  ] ++ lib.optionals stdenv.isLinux [
+    acl
+    cdrkit
+  ] ++ lib.optionals enableBloat [
+    abootimg apksigner apktool cbfstool colord ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
+    hdf5 imagemagick llvm jdk mono odt2txt openssh pdftk poppler_utils qemu R tcpdump wabt
+  ];
+
 in
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
@@ -38,7 +78,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
-  nativeBuildInputs = [ docutils help2man ];
+  nativeBuildInputs = [
+    docutils
+    help2man
+  ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
@@ -46,28 +89,34 @@ python3Packages.buildPythonApplication rec {
   # Still missing these tools: docx2txt dumppdf dumpxsb enjarify lipo ocamlobjinfo oggDump otool procyon
   #
   # TODO: remove non-Python run-time dependencies. Note having them here does not hurt.
-  requiredPythonModules = [
-      binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
-      dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
-      xz zip zstd
-    ]
-    ++ (with python3Packages; [
-      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python_magic progressbar33 pypdf2 rpm tlsh
-    ])
-    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit ]
-    ++ lib.optionals enableBloat ([
-      abootimg apksigner apktool cbfstool colord ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono odt2txt openssh pdftk poppler_utils qemu R tcpdump wabt
-    ] ++ (with python3Packages; [ binwalk guestfs h5py ]));
+  requiredPythonModules = with python3Packages; [
+    argcomplete
+    debian
+    defusedxml
+    jsondiff
+    jsbeautifier
+    libarchive-c
+    python_magic
+    progressbar33
+    pypdf2
+    rpm
+    tlsh
+  ] ++ lib.optionals stdenv.isLinux [
+    pyxattr
+  ] ++ lib.optionals enableBloat [
+    binwalk
+    guestfs
+    h5py
+  ];
 
-  checkInputs = with python3Packages; [ pytest ] ++ requiredPythonModules;
+  checkInputs = with python3Packages; [
+    pytest
+  ];
 
   makeWrapperArgs = [
     # Extend PATH with non-Python run-time dependencies.
     # TODO remove Python run-time dependencies.
-    "--prefix PATH : ${stdenv.lib.makeBinPath requiredPythonModules }"
+    "--prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps }"
   ];
 
   postInstall = ''
