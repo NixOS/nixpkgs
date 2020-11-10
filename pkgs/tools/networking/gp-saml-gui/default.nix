@@ -3,7 +3,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gp-saml-gui";
-  version = "2020-10-13";
+  version = "unstable-2020-10-13";
 
   src = fetchFromGitHub {
     owner = "dlenski";
