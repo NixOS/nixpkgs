@@ -1,4 +1,5 @@
 { lib, fetchurl, fetchFromGitHub, callPackage
+, fetchpatch
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -197,9 +198,9 @@ in rec {
     inherit storeDir stateDir confDir boehmgc;
   });
 
-  nixUnstable = lib.lowPrio (callPackage common rec {
+  nixUnstable = lib.lowPrio ((callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20201105_cdc840d";
+    suffix = "pre20201105_cdc840d_patched";
 
     src = fetchFromGitHub {
       owner = "NixOS";
@@ -209,7 +210,13 @@ in rec {
     };
 
     inherit storeDir stateDir confDir boehmgc;
-  });
+  }).overrideAttrs(o: { patches = [
+      # Revert e8c3795 to work around https://github.com/NixOS/nix/issues/4235
+      (fetchpatch {
+        url = "https://github.com/hercules-ci/nix/commit/f9e9839bce403f99734682a1eb3e98b14fef7c17.patch";
+        sha256 = "0fwkagky9bqx0yvfj7syb6ksk35k9508cvidwwxr60x0jv2zj45b";
+      })
+    ]; }));
 
   nixFlakes = nixUnstable;
 
