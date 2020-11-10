@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "4.3.6";
+  version = "4.3.7";
   # pip is not able to import version info on raumel.yaml
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fn7mdykm4id78k4faibi92q9yxbjbyxb90ww0by03c31m8z5348";
+    sha256 = "0kwwv9dv9rgsqvp15r2vma7hii9lkkqn0n2irvp5h32cbhzzq4hh";
   };
 
   format = "pyproject";
