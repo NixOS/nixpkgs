@@ -1,4 +1,12 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, systemd, fetchpatch }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, systemd
+, fetchpatch
+}:
 
 buildGoModule rec {
   version = "2.0.0";
@@ -31,6 +39,8 @@ buildGoModule rec {
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
+
+  passthru.tests = { inherit (nixosTests) loki; };
 
   doCheck = true;
 
