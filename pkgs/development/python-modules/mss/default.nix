@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "6.0.0";
+  version = "6.1.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dicp55adbqxb7hqlck95hngb1klv5s26lszw3xim30k18bwqaxl";
+    sha256 = "aebd069f3e05667fe9c7b9fa4b1771fe42a4710ce1058ce0236936ce06fa5394";
   };
 
   propagatedBuildInputs = [ ];
