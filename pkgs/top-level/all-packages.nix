@@ -22331,6 +22331,7 @@ in
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
+  # Needs qtwebkit which is broken on qt5.15
   merkaartor = libsForQt514.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
