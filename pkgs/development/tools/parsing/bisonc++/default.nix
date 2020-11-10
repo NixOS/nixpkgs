@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     ./build install x
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit version;
     description = "A parser generator like bison, but it generates C++ code";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
     homepage = "https://fbb-git.gitlab.io/bisoncpp/";
   };
 }
