@@ -179,6 +179,10 @@ in
     buildInputs = [ openssl ];
   };
 
+  exif = attrs: {
+    buildFlags = [ "--with-exif-dir=${libexif}" ];
+  };
+
   ffi = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libffi ];
