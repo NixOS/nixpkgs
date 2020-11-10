@@ -34,8 +34,6 @@ mkDerivation rec {
 
   requiredPythonModules = pypkgs;
 
-  requiredPythonModules = pypkgs;
-
   qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   dontWrapQtApps = true;
