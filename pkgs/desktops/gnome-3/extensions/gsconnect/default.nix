@@ -1,16 +1,37 @@
-{ stdenv, fetchFromGitHub, substituteAll, python3, openssl, gsound
-, meson, ninja, libxml2, pkgconfig, gobject-introspection, wrapGAppsHook
-, glib, gtk3, at-spi2-core, upower, openssh, gnome3, gjs }:
+{ stdenv
+, fetchFromGitHub
+, substituteAll
+, openssl
+, gsound
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook
+, glib
+, gtk3
+, openssh
+, gnome3
+, gjs
+, nixosTests
+, atk
+, harfbuzz
+, pango
+, gdk-pixbuf
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-gsconnect";
-  version = "41";
+  version = "43";
+
+  outputs = [ "out" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    sha256 = "0lcj7k16jki54bsyh01j4ss4hhfddnahcw02zlmlkl637qdv1b5j";
+    sha256 = "0hm14hg4nhv9hrmjcf9dgm7dsvzpjfifihjmb6yc78y9yjw0i3v7";
   };
 
   patches = [
@@ -19,24 +40,23 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       gapplication = "${glib.bin}/bin/gapplication";
     })
+
+    # Allow installing installed tests to a separate output
+    ./installed-tests-path.patch
   ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson
+    ninja
+    pkg-config
     gobject-introspection # for locating typelibs
     wrapGAppsHook # for wrapping daemons
-    libxml2 # xmllint
   ];
 
   buildInputs = [
     glib # libgobject
     gtk3
-    at-spi2-core # atspi
-    gnome3.nautilus # TODO: this contaminates the package with nautilus and gnome-autoar typelibs but it is only needed for the extension
-    gnome3.nautilus-python
     gsound
-    upower
-    gnome3.caribou
     gjs # for running daemon
     gnome3.evolution-data-server # for libebook-contacts typelib
   ];
@@ -51,11 +71,13 @@ stdenv.mkDerivation rec {
     "-Dsshkeygen_path=${openssh}/bin/ssh-keygen"
     "-Dsession_bus_services_dir=${placeholder "out"}/share/dbus-1/services"
     "-Dpost_install=true"
+    "-Dinstalled_test_prefix=${placeholder ''installedTests''}"
   ];
 
   postPatch = ''
     patchShebangs meson/nmh.sh
     patchShebangs meson/post-install.sh
+    patchShebangs installed-tests/prepare-tests.sh
 
     # TODO: do not include every typelib everywhere
     # for example, we definitely do not need nautilus
@@ -65,20 +87,34 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = ''
+  postFixup = let
+    testDeps = [
+      gtk3 harfbuzz atk pango.out gdk-pixbuf
+    ];
+  in ''
     # Let’s wrap the daemons
     for file in $out/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/service/{daemon,nativeMessagingHost}.js; do
       echo "Wrapping program $file"
       wrapGApp "$file"
     done
+
+    wrapProgram "$installedTests/libexec/installed-tests/gsconnect/minijasmine" \
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
+      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
 
   uuid = "gsconnect@andyholmes.github.io";
 
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.gsconnect;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ etu ];
     platforms = platforms.linux;
   };

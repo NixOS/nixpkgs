@@ -2995,6 +2995,8 @@ in
 
     libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
+    libthai = callPackage ../tools/inputmethods/ibus-engines/ibus-libthai { };
+
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
@@ -5326,6 +5328,9 @@ in
   libgaminggear = callPackage ../development/libraries/libgaminggear { };
 
   libhandy = callPackage ../development/libraries/libhandy { };
+
+  # Needed for apps that still depend on the unstable verison of the library (not libhandy-1)
+  libhandy_0 = callPackage ../development/libraries/libhandy/0.x.nix { };
 
   libgumath = callPackage ../development/libraries/libgumath { };
 
@@ -13185,7 +13190,10 @@ in
 
   herqq = libsForQt514.callPackage ../development/libraries/herqq { };
 
-  hidapi = callPackage ../development/libraries/hidapi { };
+  hidapi = callPackage ../development/libraries/hidapi {
+    # TODO: remove once `udev` is `systemdMinimal` everywhere.
+    udev = systemdMinimal;
+  };
 
   highfive = callPackage ../development/libraries/highfive { };
 
@@ -13659,6 +13667,8 @@ in
 
   libdap = callPackage ../development/libraries/libdap { };
 
+  libdatrie = callPackage ../development/libraries/libdatrie { };
+
   libdazzle = callPackage ../development/libraries/libdazzle { };
 
   libdbi = callPackage ../development/libraries/libdbi { };
@@ -13760,7 +13770,9 @@ in
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
-  libfido2 = callPackage ../development/libraries/libfido2 { };
+  libfido2 = callPackage ../development/libraries/libfido2 {
+    udev = systemdMinimal;
+  };
 
   libfilezilla = callPackage ../development/libraries/libfilezilla {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -14375,6 +14387,8 @@ in
 
   libtcod = callPackage ../development/libraries/libtcod { };
 
+  libthai = callPackage ../development/libraries/libthai { };
+
   libtheora = callPackage ../development/libraries/libtheora { };
 
   libthreadar = callPackage ../development/libraries/libthreadar { };
@@ -14449,6 +14463,8 @@ in
   libusb1 = callPackage ../development/libraries/libusb1 {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
+    # TODO: remove once `udev` is `systemdMinimal` everywhere.
+    udev = systemdMinimal;
   };
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
@@ -18831,6 +18847,8 @@ in
 
   sysprof = callPackage ../development/tools/profiling/sysprof { };
 
+  libsysprof-capture = callPackage ../development/tools/profiling/sysprof/capture.nix { };
+
   sysklogd = callPackage ../os-specific/linux/sysklogd { };
 
   syslinux = callPackage ../os-specific/linux/syslinux { };
@@ -18858,17 +18876,34 @@ in
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
-    withResolved = false;
-    withLogind = false;
-    withHostnamed = false;
-    withLocaled = false;
-    withTimedated = false;
-    withHwdb = false;
-    withEfi = false;
-    withImportd = false;
+    withAnalyze = false;
+    withApparmor = false;
+    withCompression = false;
+    withCoredump = false;
     withCryptsetup = false;
-    cryptsetup = null;
+    withDocumentation = false;
+    withEfi = false;
+    withHostnamed = false;
+    withHwdb = false;
+    withImportd = false;
+    withLocaled = false;
+    withLogind = false;
+    withMachined = false;
+    withNetworkd = false;
+    withNss = false;
+    withPCRE2 = false;
+    withPolkit = false;
+    withRemote = false;
+    withResolved = false;
+    withShellCompletions = false;
+    withTimedated = false;
+    withTimesyncd = false;
+    withUserDb = false;
+    glib = null;
+    libgcrypt = null;
     lvm2 = null;
+    libfido2 = null;
+    p11-kit = null;
   };
 
 
@@ -21142,7 +21177,6 @@ in
   xrdp = callPackage ../applications/networking/remote/xrdp { };
 
   freerdp = callPackage ../applications/networking/remote/freerdp {
-    inherit libpulseaudio;
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
   };
 
@@ -25989,6 +26023,8 @@ in
     nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
     mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
   };
+
+  gnome-connections = callPackage ../desktops/gnome-3/apps/gnome-connections { };
 
   gnome-tour = callPackage ../desktops/gnome-3/core/gnome-tour { };
 

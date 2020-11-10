@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames pruneLibtoolFiles ];
+  nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [ openssl db gettext kerberos ]
     ++ lib.optional enableLdap openldap

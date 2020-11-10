@@ -1,7 +1,12 @@
-From e10186284103d3ad8e425980b096eac813cae631 Mon Sep 17 00:00:00 2001
+From 5d2b9a03f24b4dbc423adff52b2eeb478c4b5913 Mon Sep 17 00:00:00 2001
+Message-Id: <5d2b9a03f24b4dbc423adff52b2eeb478c4b5913.1601082838.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Sun,  5 Apr 2020 23:06:03 -0400
+Subject: [PATCH 3/7] Fix glitches in gala
+
 From: worldofpeace <worldofpeace@protonmail.ch>
-Date: Sun, 5 Apr 2020 23:06:03 -0400
-Subject: [PATCH] Fix glitches in gala
 
 This fixes issues for users of mutter like in gala[0].
 
@@ -12,7 +17,7 @@ Upstream report: https://gitlab.gnome.org/GNOME/mutter/issues/536
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/clutter/clutter/clutter-actor.c b/clutter/clutter/clutter-actor.c
-index ecf9a597d..07b8b7155 100644
+index ecf9a59..07b8b71 100644
 --- a/clutter/clutter/clutter-actor.c
 +++ b/clutter/clutter/clutter-actor.c
 @@ -17831,7 +17831,7 @@ _clutter_actor_get_paint_volume_mutable (ClutterActor *self)
@@ -25,5 +30,4 @@ index ecf9a597d..07b8b7155 100644
      }
    else
 -- 
-2.25.1
-
+git-series 0.9.1
