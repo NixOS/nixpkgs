@@ -15355,7 +15355,9 @@ in
 
     packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
-    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
+    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
+      inherit (darwin.apple_sdk.frameworks) AGL Cocoa Foundation;
+    };
 
     libqglviewer = callPackage ../development/libraries/libqglviewer {
       inherit (darwin.apple_sdk.frameworks) AGL;
