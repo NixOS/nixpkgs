@@ -9,10 +9,19 @@ buildPythonPackage rec {
     sha256 = "27c04d42a7187becf7a8309d4846aa4f235ac8b7dafd758335b109f5cbd3b962";
   };
 
-  requiredPythonModules =
-    stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ] ++
-    stdenv.lib.optionals stdenv.isDarwin [ darwin.IOKit darwin.apple_sdk.frameworks.CoreFoundation ] ++
-    [ cython ];
+  buildInputs = [
+    libusb1
+    udev 
+  ];
+
+  nativeBuildInputs = [
+    cython
+  ];
+
+  requiredPythonModules = [
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    darwin.IOKit darwin.apple_sdk.frameworks.CoreFoundation
+  ];
 
   # Fix the USB backend library lookup
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
