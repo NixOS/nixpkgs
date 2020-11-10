@@ -4141,6 +4141,8 @@ in
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
+  gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
+
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
