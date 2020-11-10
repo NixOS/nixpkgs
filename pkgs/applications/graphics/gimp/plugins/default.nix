@@ -138,14 +138,14 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
        Layer/Liquid Rescale
     */
     pname = "lqr-plugin";
-    version = "0.7.1";
+    version = "0.7.2";
     buildInputs = with pkgs; [ liblqr1 ];
-    src = fetchurl {
-      url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/gimp-lqr-plugin-${version}.tar.bz2";
-      sha256 = "sha256-YpgYPjHZkueJWS51QGmugXavGS+1x4o20St31qoRng4=";
+    src = fetchFromGitHub {
+      owner = "carlobaldassi";
+      repo = "gimp-lqr-plugin";
+      rev = "v${version}";
+      sha256 = "81ajdZ2zQi/THxnBlSeT36tVTEzrS1YqLGpHMhFTKAo=";
     };
-    #postInstall = ''mkdir -p $out/nix-support; echo "${liblqr1}" > "$out/nix-support/propagated-user-env-packages"'';
-    installPhase = "installPlugins src/gimp-lqr-plugin";
   };
 
   gmic = pkgs.gmic-qt.override {
