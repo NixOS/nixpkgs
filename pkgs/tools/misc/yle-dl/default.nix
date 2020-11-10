@@ -12,9 +12,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   requiredPythonModules = with python3Packages; [
-    attrs ConfigArgParse ffmpeg_3 future lxml requests
+    attrs ConfigArgParse future lxml requests
   ];
-  requiredPythonModules = [ rtmpdump php wget ];
+  makeWrapperArgs = [
+    "--prefix PATH ${stdenv.lib.makeBinPath [ ffmpeg_3 rtmpdump php wget ]}"
+  ];
 
   doCheck = false; # tests require network access
   checkInputs = with python3Packages; [ ffmpeg_3 pytest pytestrunner ];
@@ -24,6 +26,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://aajanki.github.io/yle-dl/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg SuperSandro2000 ];
-    platforms = platforms.unix;
   };
 }
