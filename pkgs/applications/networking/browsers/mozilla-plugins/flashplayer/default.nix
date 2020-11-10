@@ -74,7 +74,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "flashplayer";
-  version = "32.0.0.445";
+  version = "32.0.0.453";
 
   src = fetchurl {
     url =
@@ -85,14 +85,14 @@ stdenv.mkDerivation rec {
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "0jn1g8k8fkikhi0xlcsx5a43lxrj6ynwbxn55b17wacsqw20b9ii"
+          "0jjzx7jpaz2a4p5x5535v8286pakhfymrq6zi16skv4cfixc0q99"
         else
-          "104af8sy0qq45agg3lpjwn1cp8lhpcjiim6gqn4cymcfp8d7ngg0"
+          "1ikgxl33g503bm7v1209bmwppx0j40dnlm01hddx5i2qzv7dwh2v"
       else
         if arch == "x86_64" then
-          "1dd52nhnl3f1d7r82gq28scna5qr39gpfqkgrhzd6cxd2vnhnhjn"
+          "0dryf849xjr767zlpvg8wsy4fh4dl8gbca4l7a1yc47lgq1ffzsq"
         else
-          "09ayb637cyf5x06xmhvad2znss7ak7r4n8z3wq7qmn0pmjdsa5a3";
+          "1y0xawsm9qsk0js6p6n5g5yy24kh2kn1kbmsla59g204l6xwsla1";
   };
 
   nativeBuildInputs = [ unzip ];
