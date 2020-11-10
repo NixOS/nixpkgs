@@ -127,21 +127,22 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     name = "wavelet-sharpen-0.1.2";
     NIX_LDFLAGS = "-lm";
     src = fetchurl {
-      url = "http://registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
+      url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
     };
     installPhase = "installPlugins src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
   };
 
-  lqrPlugin = pluginDerivation {
+  lqrPlugin = pluginDerivation rec {
     /* menu:
        Layer/Liquid Rescale
     */
-    name = "lqr-plugin-0.6.1";
+    pname = "lqr-plugin";
+    version = "0.7.1";
     buildInputs = with pkgs; [ liblqr1 ];
     src = fetchurl {
-      url = "http://registry.gimp.org/files/gimp-lqr-plugin-0.6.1.tar.bz2";
-      sha256 = "00hklkpcimcbpjly4rjhfipaw096cpy768g9wixglwrsyqhil7l9";
+      url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/gimp-lqr-plugin-${version}.tar.bz2";
+      sha256 = "sha256-YpgYPjHZkueJWS51QGmugXavGS+1x4o20St31qoRng4=";
     };
     #postInstall = ''mkdir -p $out/nix-support; echo "${liblqr1}" > "$out/nix-support/propagated-user-env-packages"'';
     installPhase = "installPlugins src/gimp-lqr-plugin";
@@ -196,34 +197,10 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
   lightning = scriptDerivation {
     name = "Lightning";
     src = fetchurl {
-      url = "http://registry.gimp.org/files/Lightning.scm";
+      url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/Lightning.scm";
       sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";
     };
   };
-
-  /* space in name trouble ?
-
-  rainbowPlasma = scriptDerivation {
-    # http://registry.gimp.org/node/164
-    name = "rainbow-plasma";
-    src = fetchurl {
-      url = "http://registry.gimp.org/files/Rainbow Plasma.scm";
-      sha256 = "34308d4c9441f9e7bafa118af7ec9540f10ea0df75e812e2f3aa3fd7b5344c23";
-      name = "Rainbow-Plasma.scm"; # nix doesn't like spaces, does it?
-    };
-  };
-  */
-
-  /* doesn't seem to be working :-(
-  lightningGate = scriptDerivation {
-    # http://registry.gimp.org/node/153
-    name = "lightning-gate";
-    src = fetchurl {
-      url = "http://registry.gimp.org/files/LightningGate.scm";
-      sha256 = "181w1zi9a99kn2mfxjp43wkwcgw5vbb6iqjas7a9mhm8p04csys2";
-    };
-  };
-  */
 
 } // stdenv.lib.optionalAttrs (config.allowAliases or true) {
 
