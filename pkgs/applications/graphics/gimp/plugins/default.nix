@@ -8,8 +8,8 @@ let
   inherit (pkgs) stdenv fetchurl pkgconfig intltool glib fetchFromGitHub;
   inherit (gimp) targetPluginDir targetScriptDir;
 
-  pluginDerivation = a: let
-    name = a.name or "${a.pname}-${a.version}";
+  pluginDerivation = attrs: let
+    name = attrs.name or "${attrs.pname}-${attrs.version}";
   in stdenv.mkDerivation ({
     prePhases = "extraLib";
     extraLib = ''
@@ -22,12 +22,16 @@ let
         for p in "$@"; do cp "$p" -r $out/${targetPluginDir}/${name}; done
       }
     '';
+
+    # Override installation paths.
+    PKG_CONFIG_GIMP_2_0_GIMPLIBDIR = "${placeholder "out"}/${gimp.targetLibDir}";
+    PKG_CONFIG_GIMP_2_0_GIMPDATADIR = "${placeholder "out"}/${gimp.targetDataDir}";
   }
-  // a
+  // attrs
   // {
       name = "gimp-plugin-${name}";
-      buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or []);
-      nativeBuildInputs = [ pkgconfig intltool ] ++ (a.nativeBuildInputs or []);
+      buildInputs = [ gimp gimp.gtk glib ] ++ (attrs.buildInputs or []);
+      nativeBuildInputs = [ pkgconfig intltool ] ++ (attrs.nativeBuildInputs or []);
     }
   );
 
@@ -49,10 +53,6 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
     };
     NIX_LDFLAGS = "-lm";
-    patchPhase = ''
-      sed -e 's,^\(GIMP_PLUGIN_DIR=\).*,\1'"$out/${gimp.name}-plugins", \
-       -e 's,^\(GIMP_DATA_DIR=\).*,\1'"$out/share/${gimp.name}", -i configure
-    '';
     hardeningDisable = [ "format" ];
     meta = with stdenv.lib; {
       description = "The GIMP Animation Package";
@@ -99,7 +99,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     version = "2.0.3";
     buildInputs = with pkgs; [ fftw ];
     nativeBuildInputs = with pkgs; [ autoreconfHook ];
-    makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/lib/gimp/2.0" ];
+    makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/${gimp.targetLibDir}" ];
     src = fetchFromGitHub {
       owner = "bootchk";
       repo = "resynthesizer";
