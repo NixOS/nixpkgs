@@ -5,20 +5,26 @@ with lib;
 let
   cfg = config.services.clight;
 
-  toConf = v:
+  toConf' = v:
     if builtins.isFloat v then toString v
     else if isInt v       then toString v
     else if isBool v      then boolToString v
     else if isString v    then ''"${escape [''"''] v}"''
-    else if isList v      then "[ " + concatMapStringsSep ", " toConf v + " ]"
+    else if isList v      then "[ " + concatMapStringsSep ", " toConf' v + " ]"
     else abort "clight.toConf: unexpected type (v = ${v})";
+  toConf = n: v:
+    if isAttrs v then ''
+      ${toString n}:
+      {
+        ${concatStringsSep "\n  " (mapAttrsToList toConf v)}
+      };
+    '' else "${toString n} = ${toConf' v};";
 
   clightConf = pkgs.writeText "clight.conf"
-    (concatStringsSep "\n" (mapAttrsToList
-      (name: value: "${toString name} = ${toConf value};")
+    (concatStringsSep "\n" (mapAttrsToList toConf
       (filterAttrs
         (_: value: value != null)
-        cfg.settings)));
+        cfg.settings)) + "\n");
 in {
   options.services.clight = {
     enable = mkOption {
@@ -49,11 +55,12 @@ in {
     };
 
     settings = let
-      validConfigTypes = with types; either int (either str (either bool float));
+      validConfigTypes' = with types; either int (either str (either bool float));
+      validConfigTypes = with types; either validConfigTypes' (listOf validConfigTypes');
     in mkOption {
-      type = with types; attrsOf (nullOr (either validConfigTypes (listOf validConfigTypes)));
+      type = with types; attrsOf (nullOr (either validConfigTypes (attrsOf validConfigTypes)));
       default = {};
-      example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
+      example = { sensor.captures = [20 20]; gamma.long_transition = true; backlight.ac_timeouts = [ 120 300 60 ]; };
       description = ''
         Additional configuration to extend clight.conf. See
         <link xlink:href="https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf"/> for a
@@ -69,10 +76,10 @@ in {
     services.upower.enable = true;
 
     services.clight.settings = {
-      gamma_temp = with cfg.temperature; mkDefault [ day night ];
+      gamma.temp = with cfg.temperature; mkDefault [ day night ];
     } // (optionalAttrs (config.location.provider == "manual") {
-      latitude = mkDefault config.location.latitude;
-      longitude = mkDefault config.location.longitude;
+      daytime.latitude = mkDefault config.location.latitude;
+      daytime.longitude = mkDefault config.location.longitude;
     });
 
     services.geoclue2.appConfig.clightc = {
