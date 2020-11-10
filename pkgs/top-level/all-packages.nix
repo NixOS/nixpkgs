@@ -1064,6 +1064,8 @@ in
 
   cloud-custodian = python3Packages.callPackage ../tools/networking/cloud-custodian  { };
 
+  coconut = with python3Packages; toPythonApplication coconut;
+
   cod = callPackage ../tools/misc/cod { };
 
   codespell = with python3Packages; toPythonApplication codespell;
@@ -2144,6 +2146,8 @@ in
   gdrivefs = python27Packages.gdrivefs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
+
+  go-chromecast = callPackage ../applications/video/go-chromecast { };
 
   go-rice = callPackage ../tools/misc/go.rice {};
 
@@ -3357,7 +3361,9 @@ in
 
   dog = callPackage ../tools/system/dog { };
 
-  dogdns = callPackage ../tools/networking/dogdns { };
+  dogdns = callPackage ../tools/networking/dogdns {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
@@ -3793,6 +3799,8 @@ in
   featherpad = qt5.callPackage ../applications/editors/featherpad {};
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
+
+  fend = callPackage ../tools/misc/fend { };
 
   ferm = callPackage ../tools/networking/ferm { };
 
@@ -9627,7 +9635,7 @@ in
     stdenv = gcc7Stdenv;
   });
 
-  llvmPackages_latest = llvmPackages_10;
+  llvmPackages_latest = llvmPackages_11;
 
   llvmPackages_rocm = callPackage ../development/compilers/llvm/rocm { };
 
@@ -15293,7 +15301,7 @@ in
       kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5 kinfocenter kmenuedit
       kscreen kscreenlocker ksshaskpass ksysguard kwallet-pam kwayland-integration
       kwin kwrited milou oxygen plasma-browser-integration plasma-desktop
-      plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
+      plasma-integration plasma-nm plasma-pa plasma-thunderbolt plasma-vault plasma-workspace
       plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
       systemsettings user-manager xdg-desktop-portal-kde
     ;
@@ -18379,7 +18387,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_8;
+      linux_latest_for_hardened = pkgs.linux_5_9;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
@@ -22704,6 +22712,7 @@ in
   pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
 
   mupdf = callPackage ../applications/misc/mupdf { };
+  mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17.nix { };
 
   mystem = callPackage ../applications/misc/mystem { };
 
@@ -24358,6 +24367,7 @@ in
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
+  dockapps = callPackage ../applications/window-managers/windowmaker/dockapps { };
 
   wily = callPackage ../applications/editors/wily { };
 
@@ -24367,15 +24377,7 @@ in
 
   write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
 
-  alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
-
   wllvm = callPackage  ../development/tools/wllvm { };
-
-  wmcalclock = callPackage ../applications/window-managers/windowmaker/dockapps/wmcalclock.nix { };
-
-  wmsm.app = callPackage ../applications/window-managers/windowmaker/dockapps/wmsm.app.nix { };
-
-  wmsystemtray = callPackage ../applications/window-managers/windowmaker/dockapps/wmsystemtray.nix { };
 
   wmname = callPackage ../applications/misc/wmname { };
 
@@ -24927,7 +24929,6 @@ in
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
-  freicoin = callPackage ../applications/blockchains/freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;

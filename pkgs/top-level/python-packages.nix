@@ -1250,6 +1250,8 @@ in {
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
+  coconut = callPackage ../development/python-modules/coconut { };
+
   cocotb = callPackage ../development/python-modules/cocotb { };
 
   codecov = callPackage ../development/python-modules/codecov { };
@@ -1350,6 +1352,8 @@ in {
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
 
   cppy = callPackage ../development/python-modules/cppy { };
+
+  cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
   cram = callPackage ../development/python-modules/cram { };
 
@@ -2529,6 +2533,8 @@ in {
   };
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
+
+  googlemaps = callPackage ../development/python-modules/googlemaps { };
 
   google-music = callPackage ../development/python-modules/google-music { };
 
@@ -4244,6 +4250,8 @@ in {
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
+
+  openrouteservice = callPackage ../development/python-modules/openrouteservice/default.nix { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
