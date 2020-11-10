@@ -23,8 +23,12 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
+  buildInputs = [
+    cairo
+  ];
+
   checkInputs = [ pytest pytestrunner glibcLocales ];
-  requiredPythonModules = [ cairo cffi ] ++ lib.optional withXcffib xcffib;
+  requiredPythonModules = [ cffi ] ++ lib.optional withXcffib xcffib;
 
   checkPhase = ''
     py.test $out/${python.sitePackages}
