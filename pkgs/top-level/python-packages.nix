@@ -8,13 +8,14 @@
 
 { pkgs
 , stdenv
-, python_
+, python
 , overrides ? (self: super: {})
 }:
 
 with pkgs.lib;
 
 let
+  python_ = python;
   packages = ( self:
 
 let

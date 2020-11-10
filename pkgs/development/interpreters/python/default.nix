@@ -18,7 +18,7 @@ with pkgs;
     , self
     }: let
       pythonPackages = callPackage ../../../top-level/python-packages.nix {
-        python_ = self;
+        python = self;
         overrides = packageOverrides;
       };
     in rec {
