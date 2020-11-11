@@ -1,10 +1,9 @@
 { stdenv, fetchurl }:
 
-let version = "4.7.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
   pname = "Archi";
-  inherit version;
+  version = "4.7.1";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
