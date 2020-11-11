@@ -2586,8 +2586,6 @@ extra-packages:
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
   - network == 2.6.3.1                  # newer versions don't compile with GHC 7.4.x and below
   - network == 3.0.*                    # required by network-bsd, HTTP, and many others (2019-04-30)
-  - ormolu == 0.0.5.0                   # required by haskell-language-server
-  - pandoc-types == 1.21                # required by for pandoc_2_10_1
   - pantry == 0.2.0.0                   # required by stack-2.1.3.1
   - parallel == 3.2.0.3                 # newer versions don't work with GHC 6.12.3
   - patience ^>= 0.1                    # required by chell-0.4.x
