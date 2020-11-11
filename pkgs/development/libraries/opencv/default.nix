@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "opencv";
-  version = "2.4.13";
+  version = "2.4.13.7";
 
   src = fetchFromGitHub {
-    owner = "Itseez";
+    owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "1k29rxlvrhgc5hadg2nc50wa3d2ls9ndp373257p756a0aividxh";
+    sha256 = "062js7zhh4ixi2wk61wyi23qp9zsk5vw24iz2i5fab2hp97y5zq3";
   };
 
   patches =
@@ -87,6 +87,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    broken = true;
   };
 }
