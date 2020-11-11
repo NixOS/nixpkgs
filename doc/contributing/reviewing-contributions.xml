@@ -7,8 +7,8 @@
  <warning>
   <para>
    The following section is a draft, and the policy for reviewing is still being discussed in issues such as <link
-	   xlink:href="https://github.com/NixOS/nixpkgs/issues/11166">#11166 </link> and <link
-	   xlink:href="https://github.com/NixOS/nixpkgs/issues/20836">#20836 </link>.
+    xlink:href="https://github.com/NixOS/nixpkgs/issues/11166">#11166 </link> and <link
+    xlink:href="https://github.com/NixOS/nixpkgs/issues/20836">#20836 </link>.
   </para>
  </warning>
  <para>
