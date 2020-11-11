@@ -87,6 +87,7 @@ multiStdenv.mkDerivation {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus ];
+    broken = true;
     hydraPlatforms = [];
   };
 }
