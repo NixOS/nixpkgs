@@ -179,8 +179,8 @@ stdenv.lib.mapAttrs (_n: stdenv.lib.recurseIntoAttrs)
     mktplcRef = {
       name = "scala";
       publisher = "scala-lang";
-      version = "0.3.8";
-      sha256 = "17dl10m3ayf57sqgil4mr9fjdm7i8gb5clrs227b768pp2d39ll9";
+      version = "0.4.5";
+      sha256 = "0nrj32a7a86vwc9gfh748xs3mmfwbc304dp7nks61f0lx8b4wzxw";
     };
     meta = {
       license = stdenv.lib.licenses.mit;
