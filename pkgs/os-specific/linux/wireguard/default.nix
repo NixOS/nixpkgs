@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1nd2kc3c62907kxm1084dw7krd8xsy3hxydmcpz4jvk03vm5dnkg";
   };
 
+  # Fix building on Linux > 5.4.76
+  patches = [ ./wireguard-5.4.76+.patch ];
+
   hardeningDisable = [ "pic" ];
 
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

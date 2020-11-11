@@ -1,0 +1,11 @@
+--- a/src/compat/compat-asm.h	2020-11-10 19:11:15.526802518 +0500
++++ b/src/compat/compat-asm.h	2020-11-10 19:11:21.678802669 +0500
+@@ -40,7 +40,7 @@
+ #undef pull
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 5, 0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 76)
+ #define SYM_FUNC_START ENTRY
+ #define SYM_FUNC_END ENDPROC
+ #endif
