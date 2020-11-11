@@ -7994,6 +7994,8 @@ in
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
+  wit = callPackage ../tools/misc/wit { };
+
   woff2 = callPackage ../development/web/woff2 { };
 
   woof = callPackage ../tools/misc/woof { };
