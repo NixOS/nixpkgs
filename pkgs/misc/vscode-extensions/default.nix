@@ -191,8 +191,8 @@ stdenv.lib.mapAttrs (_n: stdenv.lib.recurseIntoAttrs)
     mktplcRef = {
       name = "metals";
       publisher = "scalameta";
-      version = "1.9.4";
-      sha256 = "029s1al1f3qk4pa3539rs045g9jwkhbmdg7wj7biqc6shcria4ca";
+      version = "1.9.6";
+      sha256 = "12sjzk64kz7z8zqh3zg1dyb3v4c5xxgi1ain1jvw8hwf0hicqlgi";
     };
     meta = {
       license = stdenv.lib.licenses.asl20;
