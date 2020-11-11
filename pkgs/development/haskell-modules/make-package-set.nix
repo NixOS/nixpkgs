@@ -221,6 +221,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #   , overrides : Defaulted (HaskellPackageOverrideSet)
     #   , modifier : Defaulted
     #   , returnShellEnv : Defaulted
+    #   , withHoogle : Defaulted
     #   } -> NixShellAwareDerivation
     # Given a path to a haskell package directory, an optional package name
     # which defaults to the base name of the path, an optional set of source
@@ -231,20 +232,26 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # If 'returnShellEnv' is true this returns a derivation which will give you
     # an environment suitable for developing the listed packages with an
     # incremental tool like cabal-install.
+    # If 'withHoogle' is true (the default if a shell environment is requested)
+    # then 'ghcWithHoogle' is used to generate the derivation (instead of
+    # 'ghcWithPackages'), see the documentation there for more information.
     developPackage =
       { root
       , name ? builtins.baseNameOf root
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
-      , returnShellEnv ? pkgs.lib.inNixShell }:
+      , returnShellEnv ? pkgs.lib.inNixShell
+      , withHoogle ? returnShellEnv }:
       let drv =
         (extensible-self.extend
            (pkgs.lib.composeExtensions
               (self.packageSourceOverrides source-overrides)
               overrides))
         .callCabal2nix name root {};
-      in if returnShellEnv then (modifier drv).env else modifier drv;
+      in if returnShellEnv
+           then (modifier drv).envFunc {inherit withHoogle;}
+           else modifier drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
