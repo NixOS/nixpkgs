@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   version = "1.3.2";
   pname = "nanoflann";
-  
+
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";
