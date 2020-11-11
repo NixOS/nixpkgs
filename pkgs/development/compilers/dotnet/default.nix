@@ -105,6 +105,15 @@ rec {
 
   # v5.0.0
 
+  aspnetcore_5_0 = buildAspNetCore {
+    version = "5.0.0";
+    sha512 = {
+      x86_64-linux = "402046ee144915ef7d75a788cf19552eea56cf897681721b74bfc403fd366f71eb7e56f6b83ea299b6b812c6b87378c15e7bfe249415427dcd147dfeacd084d0";
+      aarch64-linux = "13e174de1cf10135531468c2a76852de2c37253f4d8b487ff25d249c2d7a1c590475545ca246515338baff2950422ec6c5ffe2180e8327f25cb5f9fede696ccc";
+      x86_64-darwin = "b47a9958f5412b22edb2cb47702ad442c389901ede3ca2a7f75d901f8ed608494431849f498c2191327065ff1db52a1658b1a8c0feb53aaec4c814fb0baf6818";
+    };
+  };
+
   net_5_0 = buildNetCore {
     version = "5.0.0";
     sha512 = {
