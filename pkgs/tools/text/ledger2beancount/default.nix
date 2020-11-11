@@ -12,13 +12,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ledger2beancount";
-  version = "2.1";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "zacchiro";
     repo = "ledger2beancount";
     rev = version;
-    sha256 = "0w88jb1x0w02jwwf6ipx3cxr89kzffrrdqws3556zrvvs01bh84j";
+    sha256 = "0kimp8l9ax37grfv5r5iw0g0xnrpkak022fl10y3i7kc4nyi1s99";
   };
 
   phases = [
