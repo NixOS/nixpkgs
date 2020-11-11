@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
-, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused }:
+, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused
+, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = { inherit (nixosTests) sbt-extras; };
+
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
       set -xo errexit
