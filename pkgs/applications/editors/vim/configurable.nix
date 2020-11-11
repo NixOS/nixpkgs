@@ -1,5 +1,5 @@
 { source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
-, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
+, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python3, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 , vimPlugins
@@ -62,8 +62,6 @@ let
 
   common = callPackage ./common.nix {};
 
-  isPython3 = python.isPy3 or false;
-
 in stdenv.mkDerivation rec {
 
   pname = "vim_configurable";
@@ -106,9 +104,10 @@ in stdenv.mkDerivation rec {
     "--with-luajit"
   ]
   ++ stdenv.lib.optionals pythonSupport [
-    "--enable-python${if isPython3 then "3" else ""}interp=yes"
-    "--with-python${if isPython3 then "3" else ""}-config-dir=${python}/lib"
-    "--disable-python${if (!isPython3) then "3" else ""}interp"
+    "--enable-python3interp=yes"
+    "--with-python3-config-dir=${python3}/lib"
+    # Disables Python 2
+    "--disable-pythoninterp"
   ]
   ++ stdenv.lib.optional nlsSupport          "--enable-nls"
   ++ stdenv.lib.optional perlSupport         "--enable-perlinterp"
@@ -134,7 +133,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
     ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
     ++ stdenv.lib.optional luaSupport lua
-    ++ stdenv.lib.optional pythonSupport python
+    ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional tclSupport tcl
     ++ stdenv.lib.optional rubySupport ruby;
 
@@ -163,7 +162,7 @@ in stdenv.mkDerivation rec {
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''
-    wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
+    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin"
   '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
 
     rewrap () {

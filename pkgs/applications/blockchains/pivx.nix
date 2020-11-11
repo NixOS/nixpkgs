@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       Zero Knowledge cryptography proofs for industry-leading transaction anonymity.
     '';
     license = licenses.mit;
-    homepage = "https://www.dash.org";
+    homepage = "https://pivx.org";
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.unix;
   };

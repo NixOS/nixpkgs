@@ -1017,9 +1017,9 @@
   "vultr": {
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v1.4.1",
-    "sha256": "1jx9p4bwpa5zxig6gfk4akfsnbivvyhwcw8id2ch2ga9a67pwald",
-    "version": "1.4.1"
+    "rev": "v1.5.0",
+    "sha256": "04qy366ignn53bbdj9s3032qr1x7h84q36qzl5ywydlw2va0qbsd",
+    "version": "1.5.0"
   },
   "wavefront": {
     "owner": "terraform-providers",

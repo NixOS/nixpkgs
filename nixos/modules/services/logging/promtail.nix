@@ -6,25 +6,14 @@ let
     echo '${builtins.toJSON conf}' | ${pkgs.buildPackages.jq}/bin/jq 'del(._module)' > $out
   '';
 
+  allowSystemdJournal = cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;
 in {
   options.services.promtail = with types; {
     enable = mkEnableOption "the Promtail ingresser";
 
+
     configuration = mkOption {
-      type = with lib.types; let
-        valueType = nullOr (oneOf [
-          bool
-          int
-          float
-          str
-          (lazyAttrsOf valueType)
-          (listOf valueType)
-        ]) // {
-          description = "JSON value";
-          emptyValue.value = {};
-          deprecationMessage = null;
-        };
-      in valueType;
+      type = (pkgs.formats.json {}).type;
       description = ''
         Specify the configuration for Promtail in Nix.
       '';
@@ -80,6 +69,8 @@ in {
         RestrictRealtime = true;
         MemoryDenyWriteExecute = true;
         PrivateUsers = true;
+
+        SupplementaryGroups = lib.optional (allowSystemdJournal) "systemd-journal";
       } // (optionalAttrs (!pkgs.stdenv.isAarch64) { # FIXME: figure out why this breaks on aarch64
         SystemCallFilter = "@system-service";
       });

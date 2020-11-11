@@ -161,10 +161,11 @@ let
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
-      postFixup = ''
-        path="PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat sudo ]}"
+      postFixup = let
+        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat ]}:$PATH";
+      in ''
         for i in $out/libexec/zfs/zpool.d/*; do
-          sed -i "2i$path" $i
+          sed -i '2i${path}' $i
         done
       '';
 
