@@ -10,8 +10,8 @@ mkDerivation {
   version = "0.1.0.0";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "1w15p988a5h11fcp25lllaj7j78f35gzg5bixy1vs7ld0p6jj7n9";
-    rev = "8682517e9ff92caa35e727e28445896f97c61e8d";
+    sha256 = "027fq6752024wzzq9izsilm5lkq9gmpxf82rixbimbijw0yk4pwj";
+    rev = "372a12e797069dc3ac4fa33dcaabe3b992999d7c";
     fetchSubmodules = true;
   };
   postUnpack = "sourceRoot+=/plugins/hls-hlint-plugin; echo source root reset to $sourceRoot";
