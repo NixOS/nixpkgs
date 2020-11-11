@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
     ln -s $out/Archi $out/bin/Archi
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "ArchiMate modelling toolkit";
     longDescription = ''
       Archi is an open source modelling toolkit to create ArchiMate
       models and sketches.
     '';
     homepage = "https://www.archimatetool.com/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.earldouglas ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ earldouglas ];
   };
 }
