@@ -1819,6 +1819,8 @@ in
 
   compsize = callPackage ../os-specific/linux/compsize { };
 
+  copilot-cli = callPackage ../tools/admin/copilot-cli { };
+
   cot = with python3Packages; toPythonApplication cot;
 
   coturn = callPackage ../servers/coturn { };
