@@ -234,7 +234,17 @@
      </listitem>
     </itemizedlist>
    </listitem>
-
+   <listitem>
+    <para>
+     Starting with this release, the hydra-build-result
+     <literal>nixos-<replaceable>YY.MM</replaceable></literal>
+     branches no longer exist in the <link
+     xlink:href="https://github.com/nixos/nixpkgs-channels">deprecated
+     nixpkgs-channels repository</link>.  These branches are now in
+     <link xlink:href="https://github.com/nixos/nixpkgs">the main nixpkgs
+     repository</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
