@@ -228,6 +228,9 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # optional set of arbitrary overrides, and an optional haskell package
     # modifier, return a derivation appropriate for nix-build or nix-shell to
     # build that package.
+    # If 'returnShellEnv' is true this returns a derivation which will give you
+    # an environment suitable for developing the listed packages with an
+    # incremental tool like cabal-install.
     developPackage =
       { root
       , name ? builtins.baseNameOf root
@@ -245,6 +248,13 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
+    # Put 'hoogle' into the derivation's PATH with a database containing all
+    # the package's dependencies; run 'hoogle server --local' in a shell to
+    # host a search engine for the dependencies.
+    #
+    # To reload the Hoogle server automatically on .cabal file changes try
+    # this:
+    # echo *.cabal | entr -r -- nix-shell --run 'hoogle server --local'
     ghcWithHoogle = selectFrom:
       let
         packages = selectFrom self;
