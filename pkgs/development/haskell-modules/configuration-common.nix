@@ -1452,10 +1452,10 @@ self: super: {
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 } // (let
   # fourmolu can‘t compile with an older aeson
-  overrideAeson = name: value: value.overrideScope (self: super: {
+  localOverride = name: value: doDistribute (value.overrideScope (self: super: {
     aeson = dontCheck super.aeson_1_5_2_0;
-  });
-  in pkgs.lib.mapAttrs overrideAeson {
+  }));
+  in pkgs.lib.mapAttrs localOverride {
     # tons of overrides for bleeding edge versions for ghcide and hls
     # overriding aeson on all of them to prevent double compilations
     # this shouldn‘t break anything because nearly all their reverse deps are
@@ -1469,6 +1469,8 @@ self: super: {
     ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck super.lsp-test_0_11_0_7;
+    hls-plugin-api = super.hls-plugin-api;
+    implicit-hie-cradle = super.implicit-hie-cradle;
     # the hls brittany is objectively better, because there hasn‘t been a
     # brittany release in a while and this version works with 8.10.
     # And we need to build it anyways.
