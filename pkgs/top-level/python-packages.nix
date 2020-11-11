@@ -6476,6 +6476,8 @@ in {
 
   scp = callPackage ../development/python-modules/scp { };
 
+  scramp = callPackage ../development/python-modules/scramp { };
+
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
