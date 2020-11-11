@@ -287,9 +287,6 @@ in {
   libexecinfo = super.libexecinfo.override { enableShared = false; };
 
   xorg = super.xorg.overrideScope' (xorgself: xorgsuper: {
-    libX11 = xorgsuper.libX11.overrideAttrs (attrs: {
-      depsBuildBuild = attrs.depsBuildBuild ++ [ (self.buildPackages.stdenv.cc.libc.static or null) ];
-    });
     xauth = xorgsuper.xauth.overrideAttrs (attrs: {
       # missing transitive dependencies
       preConfigure = attrs.preConfigure or "" + ''
