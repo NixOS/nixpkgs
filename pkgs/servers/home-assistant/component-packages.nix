@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.117.5";
+  version = "0.117.6";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -312,7 +312,7 @@
     "google_maps" = ps: with ps; [ ]; # missing inputs: locationsharinglib
     "google_pubsub" = ps: with ps; [ google_cloud_pubsub ];
     "google_translate" = ps: with ps; [ gtts-token ];
-    "google_travel_time" = ps: with ps; [ ]; # missing inputs: googlemaps
+    "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];
     "gpmdp" = ps: with ps; [ websocket_client ];
     "gpsd" = ps: with ps; [ ]; # missing inputs: gps3
