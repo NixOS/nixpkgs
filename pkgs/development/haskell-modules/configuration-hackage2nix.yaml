@@ -7728,6 +7728,7 @@ broken-packages:
   - mcl
   - mcm
   - mcmaster-gloss-examples
+  - mcmc
   - mcmc-samplers
   - mcmc-synthesis
   - mcpi
@@ -8560,6 +8561,7 @@ broken-packages:
   - pbc4hs
   - PBKDF2
   - pcap-enumerator
+  - pcapng
   - pcd-loader
   - pcf
   - pcf-font
