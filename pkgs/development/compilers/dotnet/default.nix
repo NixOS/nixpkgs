@@ -105,6 +105,15 @@ rec {
 
   # v5.0.0
 
+  net_5_0 = buildNetCore {
+    version = "5.0.0";
+    sha512 = {
+      x86_64-linux = "d4d67df5ff5f6dde0d865a6e87559955bd57429df396cf7d05fe77f09e6220c67dc5e66439b1801ca4d301a62f81f666122bf4b623b31a46b861677dcafc62a4";
+      aarch64-linux = "c7a5ae2bd4e0edbd3b681c2997ebf1633bfa1cd30a4333cb63fc9945b4e7c9278282516fb5bc22c710ce6fb59dc2e28230c07b0e99826165fa148406ab8afb0f";
+      x86_64-darwin = "eba97211e158a0c1c15b03a79b42027319d83456dc377a2513c32defb560cd43fcfa1e84154a43243b77ca6b454c4dbc32be4153f0ba9c954c7b1e69ab5d7c53";
+    };
+  };
+
   sdk_5_0 = buildNetCoreSdk {
     version = "5.0.100-rc.1.20452.10";
     sha512 = {
