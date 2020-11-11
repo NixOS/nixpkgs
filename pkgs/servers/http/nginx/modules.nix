@@ -40,7 +40,8 @@ in
       rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
       sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
     }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
-      cp -a ${gitsrc} $out
+      cp -r ${gitsrc} $out
+      chmod -R +w "$out"
       substituteInPlace $out/filter/config \
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
     '';
