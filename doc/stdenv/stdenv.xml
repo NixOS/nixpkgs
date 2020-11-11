@@ -2111,16 +2111,106 @@ postInstall = ''
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
-      cmake
+      <anchor xml:id="cmake"/>
+       cmake
      </term>
      <listitem>
       <para>
-       Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to CMAKE_PREFIX_PATH so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting configurePhase to a custom value, or by setting dontUseCmakeConfigure. cmakeFlags controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
+       Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake, however, if ninja is present, then the ninja generator will be used instead. In addition, dependencies are added automatically to CMAKE_PREFIX_PATH so that packages are correctly detected by CMake. By default, the cmake configurePhase can be thought of as:
+       <programlisting>
+mkdir build
+cd build
+cmake ..</programlisting>
       </para>
+      <variablelist>
+       <title>Variables controlling CMake</title>
+       <varlistentry>
+        <term>
+         <varname>cmakeFlags</varname>
+        </term>
+        <listitem>
+         <para>
+          Flags passed to cmake. <literal>cmakeFlags = "-DBUILD_SHARED_LIB=ON -DENABLE_LTO=ON";</literal>
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>cmakeFlagsArray</varname>
+        </term>
+        <listitem>
+         <para>
+          Flag array passed to cmake. <literal>cmakeFlagsArray = [ "-DBUILD_SHARED_LIB=ON" "-DENABLE_LTO=ON" ];</literal>
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>dontUseCmakeBuildDir</varname>
+        </term>
+        <listitem>
+         <para>
+          Avoid creating and changing directory to <literal>build</literal>.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>cmakeDir</varname>
+        </term>
+        <listitem>
+         <para>
+          Set directory which contains the top-level CMakeLists.txt file. Defaults to the parent directory <literal>".."</literal>, otherwise the current directory <literal>"."</literal> if <literal>dontUseCmakeBuildDir</literal> is set to true. For example, if a project has the cmake files located in a top-level source directory called <literal>cmake/</literal>, then you will want to set the value to <literal>../cmake</literal> so that cmake can reference CMakeLists.txt from the build directory.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>dontFixCmake</varname>
+        </term>
+        <listitem>
+         <para>
+          Avoid replacing instances of <literal>/usr</literal> and <literal>/opt</literal> with <literal>/var/empty</literal> in cmake files.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>dontAddPrefix</varname>
+        </term>
+        <listitem>
+         <para>
+          Avoid setting <literal>-DCMAKE_INSTALL_PREFIX</literal> to <literal>$prefix</literal>.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>doCheck</varname>
+        </term>
+        <listitem>
+         <para>
+          Whether or not to also build ctest project.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>dontUseCmakeConfigure</varname>
+        </term>
+        <listitem>
+         <para>
+          Avoid the cmake configure step altogether.
+         </para>
+        </listitem>
+       </varlistentry>
+      </variablelist>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       xcbuildHook
