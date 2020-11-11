@@ -507,7 +507,17 @@ in
               Type = "oneshot";
               RemainAfterExit = true;
             };
-            script = (importLib {
+            script = concatStringsSep "\n" ([''
+            ZFS_FORCE="${optionalString cfgZfs.forceImportAll "-f"}"
+
+            for o in $(cat /proc/cmdline); do
+              case $o in
+                zfs_force|zfs_force=1)
+                  ZFS_FORCE="-f"
+                  ;;
+              esac
+            done
+            '']) + (importLib {
               # See comments at importLib definition.
               zpoolCmd="${packages.zfsUser}/sbin/zpool";
               awkCmd="${pkgs.gawk}/bin/awk";
