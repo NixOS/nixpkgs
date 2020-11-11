@@ -1,12 +1,18 @@
-# install these packages into your profile. Then add
-# ~/.nix-profile/gimp-version-plugins to your plugin list you can find at
-# preferences -> Folders -> Plug-ins
-# same applies for the scripts
+# Use `gimp-with-plugins` package for GIMP with all plug-ins.
+# If you just want a subset of plug-ins, you can specify them explicitly:
+# `gimp-with-plugins.override { plugins = with gimpPlugins; [ gap ]; }`.
 
-{ config, pkgs, gimp }:
+{ config, lib, pkgs }:
+
 let
-  inherit (pkgs) stdenv fetchurl pkgconfig intltool glib fetchFromGitHub;
-  inherit (gimp) targetPluginDir targetScriptDir;
+  inherit (pkgs) stdenv fetchurl pkg-config intltool glib fetchFromGitHub;
+in
+
+lib.makeScope pkgs.newScope (self:
+
+let
+  # Use GIMP from the scope.
+  inherit (self) gimp;
 
   pluginDerivation = attrs: let
     name = attrs.name or "${attrs.pname}-${attrs.version}";
@@ -14,12 +20,12 @@ let
     prePhases = "extraLib";
     extraLib = ''
       installScripts(){
-        mkdir -p $out/${targetScriptDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${targetScriptDir}/${name}; done
+        mkdir -p $out/${gimp.targetScriptDir}/${name};
+        for p in "$@"; do cp "$p" -r $out/${gimp.targetScriptDir}/${name}; done
       }
       installPlugins(){
-        mkdir -p $out/${targetPluginDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${targetPluginDir}/${name}; done
+        mkdir -p $out/${gimp.targetPluginDir}/${name};
+        for p in "$@"; do cp "$p" -r $out/${gimp.targetPluginDir}/${name}; done
       }
     '';
 
@@ -30,8 +36,16 @@ let
   // attrs
   // {
       name = "gimp-plugin-${name}";
-      buildInputs = [ gimp gimp.gtk glib ] ++ (attrs.buildInputs or []);
-      nativeBuildInputs = [ pkgconfig intltool ] ++ (attrs.nativeBuildInputs or []);
+      buildInputs = [
+        gimp
+        gimp.gtk
+        glib
+      ] ++ (attrs.buildInputs or []);
+
+      nativeBuildInputs = [
+        pkg-config
+        intltool
+      ] ++ (attrs.nativeBuildInputs or []);
     }
   );
 
@@ -39,10 +53,11 @@ let
     phases = [ "extraLib" "installPhase" ];
     installPhase = "installScripts ${src}";
   } // attrs);
-
 in
+{
+  # Allow overriding GIMP package in the scope.
+  inherit (pkgs) gimp;
 
-stdenv.lib.makeScope pkgs.newScope (self: with self; {
   gap = pluginDerivation {
     /* menu:
        Video
@@ -201,9 +216,4 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
       sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";
     };
   };
-
-} // stdenv.lib.optionalAttrs (config.allowAliases or true) {
-
-  resynthesizer2 = resynthesizer;
-
 })
