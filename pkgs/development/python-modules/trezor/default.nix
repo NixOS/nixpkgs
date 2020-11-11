@@ -35,6 +35,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildInputs = lib.optionals stdenv.isLinux [
+    trezor-udev-rules
+  ];
+
   requiredPythonModules = [
     attrs
     click
@@ -50,8 +54,6 @@ buildPythonPackage rec {
     rlp
     shamir-mnemonic
     typing-extensions
-  ] ++ lib.optionals stdenv.isLinux [
-    trezor-udev-rules
   ];
 
   checkInputs = [
