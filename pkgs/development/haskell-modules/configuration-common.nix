@@ -1470,6 +1470,7 @@ self: super: {
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck super.lsp-test_0_11_0_7;
     hls-plugin-api = super.hls-plugin-api;
+    hls-hlint-plugin = super.hls-hlint-plugin;
     implicit-hie-cradle = super.implicit-hie-cradle;
     # the hls brittany is objectively better, because there hasn‘t been a
     # brittany release in a while and this version works with 8.10.
