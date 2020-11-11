@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "deepmerge";
-  version = "0.1.0";
+  version = "0.1.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d1ab9lxwymqxxd58j50id1wib48xym3ss5xw172i2jfwwwzfdrx";
+    sha256 = "07rcz699fr0jgx6i6fvh8dxa72j7745inix760nw3g46jwk487gs";
   };
 
   propagatedBuildInputs = [

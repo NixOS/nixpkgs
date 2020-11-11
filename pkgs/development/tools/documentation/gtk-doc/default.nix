@@ -14,7 +14,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gtk-doc";
-  version = "1.32";
+  version = "1.33.0";
 
   format = "other";
 
@@ -22,8 +22,8 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
-    sha256 = "14fihxj662gg4ln1ngff6s52zzkpbcc58qa0nxysxypnhp0h4ypk";
+    rev = version;
+    sha256 = "ahOTEWwVVwHt8TDWBnPKHIAUq0GXllEvMRmaKul1Tq0=";
   };
 
   patches = [

@@ -169,6 +169,7 @@ itchyny/thumbnail.vim
 itchyny/vim-cursorword
 itchyny/vim-gitbranch
 ivanov/vim-ipython
+jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
 jaredgorski/SpaceCamp
 jaxbot/semantic-highlight.vim
@@ -429,6 +430,7 @@ rhysd/vim-operator-surround
 rodjek/vim-puppet
 romainl/vim-cool
 roman/golden-ratio
+romgrk/barbar.nvim
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -609,6 +611,7 @@ whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+wlangstroth/vim-racket
 wsdjeg/vim-fetch
 xavierd/clang_complete
 xolox/vim-easytags

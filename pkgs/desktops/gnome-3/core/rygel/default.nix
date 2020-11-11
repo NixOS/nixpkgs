@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.38.4";
+  version = "0.40.0";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0rm1m1z8rcvyj9873wqcz5i3qdg8j6gv6k1p01xifk0y9phg7rzc";
+    sha256 = "0xrbdsgm78h3g4qcvq2p8k70q31x9xdbb35bixz36q6h9s1wqznn";
   };
 
   nativeBuildInputs = [
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ] ++ (with gst_all_1; [
     gstreamer
+    gst-editing-services
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
@@ -77,6 +78,8 @@ stdenv.mkDerivation rec {
     "-Dapi-docs=false"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    # Build all plug-ins except for tracker 2
+    "-Dplugins=external,gst-launch,lms,media-export,mpris,playbin,ruih,tracker3"
   ];
 
   doCheck = true;

@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, perl, autoconf, automake
-, libtool, flex, libevent, hwloc, munge, zlib
+, libtool, flex, libevent, hwloc, munge, zlib, pandoc
 } :
 
 let
-  version = "3.1.5";
+  version = "3.2.0";
 
 in stdenv.mkDerivation {
   pname = "pmix";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     repo = "openpmix";
     owner = "openpmix";
     rev = "v${version}";
-    sha256 = "0fvfsig20amcigyn4v3gcdxc0jif44vqg37b8zzh0s8jqqj7jz5w";
+    sha256 = "171hpz0m6lpyjd1hkxy7fl06fcgymz8cssqgbxzg92b7x595276b";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
     patchShebangs ./config
   '';
 
-  nativeBuildInputs = [ perl autoconf automake libtool flex ];
+  nativeBuildInputs = [ pandoc perl autoconf automake libtool flex ];
 
   buildInputs = [ libevent hwloc munge zlib ];
 

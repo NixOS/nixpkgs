@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-topology-conf-${version}";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "1zwxc9zhfcmyffjjbibzpdvf4kx7wv9g2zl6xz7y0d6srfr9jgw3";
+    sha256 = "01zdg6q4s6d01k39z96wi4vbhrfw1i2g4yi5dijwfk6a5vjfdq2m";
   };
 
   dontBuild = true;

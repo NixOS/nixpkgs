@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     export TZDIR=${tzdata}/share/zoneinfo
-    ctest --output-on-failure --exclude-regex 'regression|recur|timezones|libical-glib-array|libical-glib-component|libical-glib-timezone'
+    ctest --output-on-failure
 
     runHook postInstallCheck
   '';
