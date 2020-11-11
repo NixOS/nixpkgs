@@ -1,0 +1,53 @@
+From 5e4409f30817798377689ef6c229f1c82815e6e8 Mon Sep 17 00:00:00 2001
+From: Dave Airlie <airlied@redhat.com>
+Date: Tue, 6 Oct 2020 18:13:44 -0400
+Subject: [PATCH] Fix out-of-tree clang build due to sysexits change
+
+The sysexists change broke clang building out of tree against llvm.
+
+https://reviews.llvm.org/D88467
+---
+ llvm/include/llvm/Config/config.h.cmake      | 3 ---
+ llvm/include/llvm/Config/llvm-config.h.cmake | 3 +++
+ llvm/include/llvm/Support/ExitCodes.h        | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/llvm/include/llvm/Config/config.h.cmake b/llvm/include/llvm/Config/config.h.cmake
+index 9ad0d827dfd8..fc3f94570e98 100644
+--- a/llvm/include/llvm/Config/config.h.cmake
++++ b/llvm/include/llvm/Config/config.h.cmake
+@@ -208,9 +208,6 @@
+ /* Define to 1 if you have the <sys/types.h> header file. */
+ #cmakedefine HAVE_SYS_TYPES_H ${HAVE_SYS_TYPES_H}
+ 
+-/* Define to 1 if you have the <sysexits.h> header file. */
+-#cmakedefine HAVE_SYSEXITS_H ${HAVE_SYSEXITS_H}
+-
+ /* Define if the setupterm() function is supported this platform. */
+ #cmakedefine LLVM_ENABLE_TERMINFO ${LLVM_ENABLE_TERMINFO}
+ 
+diff --git a/llvm/include/llvm/Config/llvm-config.h.cmake b/llvm/include/llvm/Config/llvm-config.h.cmake
+index ee299876825e..452c56e408de 100644
+--- a/llvm/include/llvm/Config/llvm-config.h.cmake
++++ b/llvm/include/llvm/Config/llvm-config.h.cmake
+@@ -88,4 +88,7 @@
+ /* Define if LLVM was built with a dependency to the tensorflow compiler */
+ #cmakedefine LLVM_HAVE_TF_AOT
+ 
++/* Define to 1 if you have the <sysexits.h> header file. */
++#cmakedefine HAVE_SYSEXITS_H ${HAVE_SYSEXITS_H}
++
+ #endif
+diff --git a/llvm/include/llvm/Support/ExitCodes.h b/llvm/include/llvm/Support/ExitCodes.h
+index 2715c5ca4128..b9041f5557d5 100644
+--- a/llvm/include/llvm/Support/ExitCodes.h
++++ b/llvm/include/llvm/Support/ExitCodes.h
+@@ -16,7 +16,7 @@
+ #ifndef LLVM_SUPPORT_EXITCODES_H
+ #define LLVM_SUPPORT_EXITCODES_H
+ 
+-#include "llvm/Config/config.h"
++#include "llvm/Config/llvm-config.h"
+ 
+ #if HAVE_SYSEXITS_H
+ #include <sysexits.h>

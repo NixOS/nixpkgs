@@ -10,6 +10,8 @@
 , version
 , release_version
 , buildOverride
+, chromiumBeta
+, chromiumDev
 , zlib
 , buildPackages
 , debugVersion ? false
@@ -97,6 +99,13 @@ in stdenv.mkDerivation (rec {
     rm test/ExecutionEngine/frem.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
+  '' + optionalString (
+    (buildOverride == chromiumBeta.upstream-info.deps.clang) ||
+    (buildOverride == chromiumDev.upstream-info.deps.clang)
+  ) ''
+    # Apply patch needed to build llvm versions from non-stable chromium
+    # TODO Also apply this for chromium stable once it's needed
+    patch -p2 -i ${./fix-out-of-tree-build.patch}
   '';
 
   # hacky fix: created binaries need to be run before installation
