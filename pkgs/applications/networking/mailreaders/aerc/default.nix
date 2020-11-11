@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.4.0";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/aerc/archive/${version}.tar.gz";
-    sha256 = "05qy14k9wmyhsg1hiv4njfx1zn1m9lz4d1p50kc36v7pq0n4csfk";
+    sha256 = "1vk8kxpjjcxn829lwxwchcn4bjyy6xjrjci31lk9zfak1r225fc7";
   };
 
   runVend = true;
-  vendorSha256 = "13zs5113ip85yl6sw9hzclxwlnrhy18d39vh9cwbq97dgnh9rz89";
+  vendorSha256 = "0rn5v1w54xh97zvwpyj0pkybb5fp0ljj8ld9d33c7fr0gm8dvxgl";
 
   doCheck = false;
 
