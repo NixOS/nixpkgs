@@ -36,8 +36,11 @@ buildPythonPackage rec {
     gst-plugins-base
   ];
 
-  requiredPythonModules = [
+  buildInputs = [
     gst-plugins-base
+  ];
+
+  requiredPythonModules = [
     pygobject3
   ];
 
