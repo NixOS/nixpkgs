@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "aws-okta";
-  version = "1.0.6";
+  version = "1.0.8";
 
   goPackagePath = "github.com/segmentio/aws-okta";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "segmentio";
     repo = "aws-okta";
     rev = "v${version}";
-    sha256 = "1nhcqj3vhdgk0a0smmyqphjw2slcvqbb8xd8bx506j8h8x84p6yf";
+    sha256 = "14bg9rdfxkpw00phc8faz4ghiyb0j7a9qai74lidrzplzl139bzf";
   };
 
   buildFlags = [ "--tags" "release" ];
