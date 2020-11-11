@@ -315,6 +315,7 @@ in
   samba = handleTest ./samba.nix {};
   sanoid = handleTest ./sanoid.nix {};
   sbt = handleTest ./sbt.nix {};
+  sbt-extras = handleTest ./sbt-extras.nix {};
   scala = handleTest ./scala.nix {};
   sddm = handleTest ./sddm.nix {};
   service-runner = handleTest ./service-runner.nix {};
