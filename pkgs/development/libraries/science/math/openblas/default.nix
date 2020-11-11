@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, which
+{ stdenv, fetchFromGitHub, perl, which, fetchpatch
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -132,6 +132,15 @@ stdenv.mkDerivation rec {
     "strictoverflow"
     # don't interfere with dynamic target detection
     "relro" "bindnow"
+  ];
+
+  patches = [
+    (fetchpatch {
+      # still a PR, fix seg fault crashes on some architectures
+      name = "revert-lazily-reinit-thread-after-fork";
+      url = "https://github.com/xianyi/OpenBLAS/commit/7c71f9448fb78dd36d7a8a0742c67b1a01a27d81.patch";
+      sha256 = "1kqmywa14b1rxni277n6kc05pvcfyalvqraz1016mr00x2pnp3sy";
+    })
   ];
 
   nativeBuildInputs = [
