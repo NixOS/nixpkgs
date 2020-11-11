@@ -45,7 +45,10 @@ buildPythonPackage rec {
     })
   ];
 
-  requiredPythonModules = if withApplePCSC then [ PCSC ] else [ pcsclite ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${stdenv.lib.makeBinPath (if withApplePCSC then [ PCSC ] else [ pcsclite ])}"
+  ];
+
   nativeBuildInputs = [ swig ];
 
   meta = {
