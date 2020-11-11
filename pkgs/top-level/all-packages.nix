@@ -192,6 +192,8 @@ in
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
+  cp437 = callPackage ../tools/misc/cp437 { };
+
   cpu-x = callPackage ../applications/misc/cpu-x { };
 
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
@@ -4139,6 +4141,8 @@ in
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
+  gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
+
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
@@ -7571,6 +7575,8 @@ in
 
   timetable = callPackage ../applications/office/timetable { };
 
+  timekeeper = callPackage ../applications/office/timekeeper { };
+
   timezonemap = callPackage ../development/libraries/timezonemap { };
 
   tzupdate = callPackage ../applications/misc/tzupdate { };
@@ -8647,6 +8653,8 @@ in
   aliceml = callPackage ../development/compilers/aliceml { };
 
   arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
+
+  asciigraph = callPackage ../tools/text/asciigraph { };
 
   asn1c = callPackage ../development/compilers/asn1c { };
 
@@ -15790,6 +15798,8 @@ in
 
   spice-up = callPackage ../applications/office/spice-up { };
 
+  spicetify-cli = callPackage ../applications/misc/spicetify-cli { };
+
   spirv-cross = callPackage ../tools/graphics/spirv-cross { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
@@ -16863,6 +16873,8 @@ in
   lwan = callPackage ../servers/http/lwan { };
 
   labelImg = callPackage ../applications/science/machine-learning/labelimg { };
+
+  mackerel-agent = callPackage ../servers/monitoring/mackerel-agent { };
 
   mailman = callPackage ../servers/mail/mailman/wrapped.nix { };
 

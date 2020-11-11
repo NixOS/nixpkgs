@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ctop";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "bcicen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zslxd00pypn6ri7r420mqxjqy3i6qv944f7899saapsb2m08w7j";
+    sha256 = "0mm1gapnz67mwc346jr530xwpiajq1b2f295s8gz5nrb2a23mqln";
   };
 
   vendorSha256 = "0a5rwnf251jbp7jz2ln8z9hqp0112c6kx0y09nncvlcki35qq9sh";
