@@ -8654,6 +8654,8 @@ in
 
   arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
 
+  asciigraph = callPackage ../tools/text/asciigraph { };
+
   asn1c = callPackage ../development/compilers/asn1c { };
 
   aspectj = callPackage ../development/compilers/aspectj { };
