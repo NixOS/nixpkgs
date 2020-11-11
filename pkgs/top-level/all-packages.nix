@@ -8674,8 +8674,6 @@ in
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
-  bluespec = callPackage ../development/compilers/bluespec { };
-
   ciao = callPackage ../development/compilers/ciao { };
 
   colm = callPackage ../development/compilers/colm { };

@@ -65,6 +65,7 @@ mapAliases ({
   bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
+  bluespec = throw "bluespec has been removed, as it's unmaintained"; # added 2020-11-11
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
