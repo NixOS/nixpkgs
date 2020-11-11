@@ -5,7 +5,9 @@
 , llvmPackages
 , openssl
 , pkg-config
+, stdenv
 , systemd
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +31,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl systemd ];
+  buildInputs = [ openssl ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ systemd ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   cargoBuildFlags = [ "--features final" ];
 
@@ -41,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
     maintainers = with maintainers; [ akru xrelkd ];
-    platforms = platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
