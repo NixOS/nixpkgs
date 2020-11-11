@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "pistol";
-  version = "0.1.4";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "doronbehar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1x9wb0gj5l71xz15ia0i2hrnhcpf457i21w41jzw2ink2fbdxp3b";
+    sha256 = "0kspix7ac4fb0gblrlhnf8hi2ijc997qqkhmy47jibmj6120lmqk";
   };
 
-  vendorSha256 = "0dg4f9g6895nv3c6d74ijl6hzsyn620ndspbcq7ynvb1z0hsg6iz";
+  vendorSha256 = "08fjavadx5mwibzc130mlhp4zph6iwv15xnd4rsniw6zldkzmczy";
 
   doCheck = false;
 
