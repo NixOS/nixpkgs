@@ -41,6 +41,8 @@ let
 
     enableParallelBuilding = !stdenv.isDarwin;
 
+    separateDebugInfo = true;
+
     buildFlags = [ "world" ];
 
     NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
@@ -163,7 +165,6 @@ let
     ];
     buildInputs = [ makeWrapper ];
 
-    separateDebugInfo = true;
 
     # We include /bin to ensure the $out/bin directory is created, which is
     # needed because we'll be removing the files from that directory in postBuild
