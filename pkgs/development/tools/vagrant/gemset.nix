@@ -138,10 +138,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1w923wmdi3gyiky0asqdw5dnh3gcjs2xyn82ajvjfjwh6sn0clgi";
+      sha256 = "07q48aca4r782jh53znqq7ams4pcf1dhmq21dwhyxzjqfclcb48g";
       type = "gem";
     };
-    version = "3.2.1";
+    version = "3.3.0";
   };
   little-plugger = {
     groups = ["default"];
