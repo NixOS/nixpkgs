@@ -17,7 +17,6 @@ with pkgs.lib;
 let
   python_ = python;
   packages = ( self:
-
 let
   python = toPythonModule python_;
 
@@ -5290,7 +5289,9 @@ in {
 
   pyparsing = callPackage ../development/python-modules/pyparsing { };
 
-  pyparted = callPackage ../development/python-modules/pyparted { };
+  pyparted = callPackage ../development/python-modules/pyparted {
+    inherit (pkgs) parted;
+  };
 
   pypblib = callPackage ../development/python-modules/pypblib { };
 

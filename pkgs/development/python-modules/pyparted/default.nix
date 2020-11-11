@@ -2,9 +2,11 @@
 , fetchFromGitHub
 , buildPythonPackage
 , isPyPy
-, pkgs
+, parted
 , python
 , six
+, e2fsprogs
+, pkg-config
 }:
 
 buildPythonPackage rec {
@@ -20,7 +22,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i -e 's|mke2fs|${pkgs.e2fsprogs}/bin/mke2fs|' tests/baseclass.py
+    sed -i -e 's|mke2fs|${e2fsprogs}/bin/mke2fs|' tests/baseclass.py
     sed -i -e '
       s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
     ' tests/test__ped_ped.py
@@ -35,12 +37,12 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    PATH="${pkgs.parted}/sbin:$PATH"
+    PATH="${parted}/sbin:$PATH"
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   checkInputs = [ six ];
-  requiredPythonModules = [ pkgs.parted ];
+  buildInputs = [ parted ];
 
   checkPhase = ''
     patchShebangs Makefile
