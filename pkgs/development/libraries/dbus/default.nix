@@ -13,6 +13,10 @@
 , docbook_xml_dtd_44
 , docbook-xsl-nons
 , xmlto
+
+, libxcb
+, libXau
+, libXdmcp
 }:
 
 assert
@@ -80,13 +84,14 @@ stdenv.mkDerivation rec {
     "--with-system-socket=/run/dbus/system_bus_socket"
     "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
-  ] ++ lib.optional (!x11Support) "--without-x";
+  ] ++ [ (if x11Support then "--with-x" else "--without-x") ];
 
   # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
   # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
   # problems building without x11Support so disabled in that case for now
   NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
-  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
+  NIX_CFLAGS_LINK = (lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed")
+    + (lib.optionalString stdenv.hostPlatform.isStatic " -lX11 -lxcb -lXau -lXdmcp");
 
   enableParallelBuilding = true;
 
