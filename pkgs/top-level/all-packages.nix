@@ -17977,6 +17977,11 @@ in
 
   linux_mptcp = linux_mptcp_95;
 
+  linux_mptcp_5_9 = linux_5_9.override {
+    structuredExtraConfig = with lib.kernel; {
+      MPTCP      = yes;
+      MPTCP_IPV6 = yes;
+    };
   };
 
   linux_mptcp_95 = callPackage ../os-specific/linux/kernel/linux-mptcp-95.nix {
