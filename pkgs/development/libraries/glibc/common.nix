@@ -206,6 +206,8 @@ stdenv.mkDerivation ({
 
 
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    unset NIX_COREFOUNDATION_RPATH
+
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
     cat > config.cache << "EOF"
