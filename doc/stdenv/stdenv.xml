@@ -2113,8 +2113,7 @@ postInstall = ''
     </varlistentry>
 
     <varlistentry>
-     <term>
-      <anchor xml:id="cmake"/>
+     <term xml:id="cmake">
        cmake
      </term>
      <listitem>
@@ -2129,7 +2128,7 @@ cmake ..</programlisting>
        <title>Variables controlling CMake</title>
        <varlistentry>
         <term>
-         <varname>cmakeFlags</varname>
+         <varname xml:id="cmake-cmakeflags">cmakeFlags</varname>
         </term>
         <listitem>
          <para>
@@ -2139,7 +2138,7 @@ cmake ..</programlisting>
        </varlistentry>
        <varlistentry>
         <term>
-         <varname>cmakeFlagsArray</varname>
+         <varname xml:id="cmake-cmakeflagsarray">cmakeFlagsArray</varname>
         </term>
         <listitem>
          <para>
@@ -2149,7 +2148,7 @@ cmake ..</programlisting>
        </varlistentry>
        <varlistentry>
         <term>
-         <varname>dontUseCmakeBuildDir</varname>
+         <varname xml:id="cmake-dontusecmakebuilddir">dontUseCmakeBuildDir</varname>
         </term>
         <listitem>
          <para>
@@ -2159,7 +2158,7 @@ cmake ..</programlisting>
        </varlistentry>
        <varlistentry>
         <term>
-         <varname>cmakeDir</varname>
+         <varname xml:id="cmake-cmakedir">cmakeDir</varname>
         </term>
         <listitem>
          <para>
@@ -2169,7 +2168,7 @@ cmake ..</programlisting>
        </varlistentry>
        <varlistentry>
         <term>
-         <varname>dontFixCmake</varname>
+         <varname xml:id="cmake-dontfixcmake">dontFixCmake</varname>
         </term>
         <listitem>
          <para>
@@ -2179,7 +2178,7 @@ cmake ..</programlisting>
        </varlistentry>
        <varlistentry>
         <term>
-         <varname>dontAddPrefix</varname>
+         <varname xml:id="cmake-dontaddprefix">dontAddPrefix</varname>
         </term>
         <listitem>
          <para>
@@ -2189,7 +2188,7 @@ cmake ..</programlisting>
        </varlistentry>
        <varlistentry>
         <term>
-         <varname>doCheck</varname>
+         <varname xml:id="cmake-docheck">doCheck</varname>
         </term>
         <listitem>
          <para>
@@ -2199,7 +2198,7 @@ cmake ..</programlisting>
        </varlistentry>
        <varlistentry>
         <term>
-         <varname>dontUseCmakeConfigure</varname>
+         <varname xml:id="cmake-dontusecmakeconfigure">dontUseCmakeConfigure</varname>
         </term>
         <listitem>
          <para>
