@@ -55,6 +55,10 @@ let
       optionals stdenv.isDarwin [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
 
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
+
         # Downgrade minimal required SDK to 10.12
         ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
         ./qtbase.patch.d/macos-sdk-10.12/0001-Revert-QCocoaDrag-set-image-only-on-the-first-drag-i.patch
