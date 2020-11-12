@@ -1,4 +1,4 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA
+{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false
@@ -19,11 +19,6 @@ let
       sha256 = "15l6w6lxays7qmsv0ci2ry53asb9an9dh7l7fc13256k085qcg68";
     };
 
-    passthru = common.passthru // {
-      pkgs = pkgs.override { build = self; };
-      withMods = wrapCDDA self;
-    };
-
     meta = common.meta // {
       maintainers = with lib.maintainers;
       common.meta.maintainers ++ [ skeidel ];
@@ -31,4 +26,4 @@ let
   });
 in
 
-self
+attachPkgs pkgs self
