@@ -7176,6 +7176,9 @@ in
 
   plujain-ramp = callPackage ../applications/audio/plujain-ramp { };
 
+  inherit (callPackage ../servers/plik { })
+    plik plikd;
+
   plex = callPackage ../servers/plex { };
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
