@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "terraform-provider-lxd";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "sl1pm4t";
     repo = "terraform-provider-lxd";
     rev = "v${version}";
-    sha256 = "1k54021178zybh9dqly2ly8ji9x5rka8dn9xd6rv7gkcl5w3y6fv";
+    sha256 = "00gj7zj45wm9sf7a7nybjijdrdr00g2yf8h41c6j679a6nfnx0fd";
   };
 
-  vendorSha256 = "1shdpl1zsbbpc3mfs0l65ykq2h15ggvqylaixcap4j4lfl7m9my0";
+  vendorSha256 = "0xq8zgx8h47pc88nkdvy5skpr8vk87b4212mm5msfxk8n7nl4fi2";
 
   doCheck = false;
 
