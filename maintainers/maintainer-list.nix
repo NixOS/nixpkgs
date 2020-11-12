@@ -2023,6 +2023,16 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+  dbirks = {
+    email = "david@birks.dev";
+    github = "dbirks";
+    githubId = 7545665;
+    name = "David Birks";
+    keys = [{
+      longkeyid = "ed25519/0xBB999F83D9A19A36";
+      fingerprint = "B26F 9AD8 DA20 3392 EF87  C61A BB99 9F83 D9A1 9A36";
+    }];
+  };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
     github = "dbohdan";
