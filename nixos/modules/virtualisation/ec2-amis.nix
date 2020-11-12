@@ -329,24 +329,24 @@ let self = {
   "20.03".ap-east-1.hvm-ebs = "ami-0d18fdd309cdefa86";
   "20.03".sa-east-1.hvm-ebs = "ami-09859378158ae971d";
 
-  # 20.09.1465.9a0b14b097d
-  "20.09".eu-west-1.hvm-ebs = "ami-0d90f16418e3c364c";
-  "20.09".eu-west-2.hvm-ebs = "ami-0635ec0780ea57cfe";
-  "20.09".eu-west-3.hvm-ebs = "ami-0714e94352f2eabb9";
-  "20.09".eu-central-1.hvm-ebs = "ami-0979d39762a4d2a02";
-  "20.09".eu-north-1.hvm-ebs = "ami-0b14e273185c66e9b";
-  "20.09".us-east-1.hvm-ebs = "ami-0f8b063ac3f2d9645";
-  "20.09".us-east-2.hvm-ebs = "ami-0959202a0393fdd0c";
-  "20.09".us-west-1.hvm-ebs = "ami-096d50833b785478b";
-  "20.09".us-west-2.hvm-ebs = "ami-0fc31031df0df6104";
-  "20.09".ca-central-1.hvm-ebs = "ami-0787786a38cde3905";
-  "20.09".ap-southeast-1.hvm-ebs = "ami-0b3f693d3a2a0b9ae";
-  "20.09".ap-southeast-2.hvm-ebs = "ami-02471872bc876b610";
-  "20.09".ap-northeast-1.hvm-ebs = "ami-06505fd2bf44a59a7";
-  "20.09".ap-northeast-2.hvm-ebs = "ami-0754b4c014eea1e8a";
-  "20.09".ap-south-1.hvm-ebs = "ami-05100e32242ae65a6";
-  "20.09".ap-east-1.hvm-ebs = "ami-045288859a39de009";
-  "20.09".sa-east-1.hvm-ebs = "ami-0a937748db48fb00d";
+  # 20.09.1632.a6a3a368dda
+  "20.09".eu-west-1.hvm-ebs = "ami-01a79d5ce435f4db3";
+  "20.09".eu-west-2.hvm-ebs = "ami-0cbe14f32904e6331";
+  "20.09".eu-west-3.hvm-ebs = "ami-07f493412d6213de6";
+  "20.09".eu-central-1.hvm-ebs = "ami-01d4a0c2248cbfe38";
+  "20.09".eu-north-1.hvm-ebs = "ami-0003f54dd99d68e0f";
+  "20.09".us-east-1.hvm-ebs = "ami-068a62d478710462d";
+  "20.09".us-east-2.hvm-ebs = "ami-01ac677ff61399caa";
+  "20.09".us-west-1.hvm-ebs = "ami-04befdb203b4b17f6";
+  "20.09".us-west-2.hvm-ebs = "ami-0fb7bd4a43261c6b2";
+  "20.09".ca-central-1.hvm-ebs = "ami-06d5ee429f153f856";
+  "20.09".ap-southeast-1.hvm-ebs = "ami-0db0304e23c535b2a";
+  "20.09".ap-southeast-2.hvm-ebs = "ami-045983c4db7e36447";
+  "20.09".ap-northeast-1.hvm-ebs = "ami-0beb18d632cf64e5a";
+  "20.09".ap-northeast-2.hvm-ebs = "ami-0dd0316af578862db";
+  "20.09".ap-south-1.hvm-ebs = "ami-008d15ced81c88aed";
+  "20.09".ap-east-1.hvm-ebs = "ami-071f49713f86ea965";
+  "20.09".sa-east-1.hvm-ebs = "ami-05ded1ae35209b5a8";
 
   latest = self."20.09";
 }; in self
