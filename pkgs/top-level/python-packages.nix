@@ -6038,6 +6038,8 @@ in {
 
   rednose = callPackage ../development/python-modules/rednose { };
 
+  reedsolo = callPackage ../development/python-modules/reedsolo { };
+
   regex = callPackage ../development/python-modules/regex { };
 
   regional = callPackage ../development/python-modules/regional { };
