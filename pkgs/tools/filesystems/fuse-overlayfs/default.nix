@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse3 ];
 
+  propagateBuildInputs = [ fuse3 ];
+
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with stdenv.lib; {
