@@ -19,9 +19,11 @@ let
   if isNull build then
     true
   else if build.isTiles then
-    mod.forTiles
+    mod.forTiles or false
+  else if build.isCurses then
+    mod.forCurses or false
   else
-    mod.forCurses;
+    false;
 in
 
 lib.makeExtensible (_: pkgs')
