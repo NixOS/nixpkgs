@@ -2,12 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "3.1.5";
+  version = "3.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1algq30j6rz12b1902bpw7iijx5lhrfqhl80d4ac6xzkrrpshqy1";
-    extension = "zip";
+    sha256 = "0jl6192dwrlm5ybkbh7ywmyaymrc3cmz9y07nm7qdli9n9rfpwzx";
   };
 
   meta = with stdenv.lib; {
