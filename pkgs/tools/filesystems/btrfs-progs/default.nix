@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed -i s/-O1/-O2/ configure";
 
   postInstall = ''
-    install -v -m 444 -D btrfs-completion $out/etc/bash_completion.d/btrfs
+    install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
   configureFlags = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
