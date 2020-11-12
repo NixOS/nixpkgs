@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "NoiseTorch";
-  version = "0.7.2-beta";
+  version = "0.8.0-beta";
 
   src = fetchFromGitHub {
     owner = "lawl";
     repo = "NoiseTorch";
     rev = version;
-    sha256 = "06xlqjma8h7lcnqgc9226blps6m9dp487hk71lslfxj0jkay548k";
+    sha256 = "0cb9vbszxrgq83q5p5y5vgs2fvywlwmjglcamhibscag2zdd8kdp";
   };
 
-  patches = [ ./version.patch ./config.patch ./embedlibrnnoise.patch ];
+  patches = [ ./version.patch ./embedlibrnnoise.patch ];
 
   vendorSha256 = null;
 
