@@ -392,6 +392,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Historic Permission Notice and Disclaimer";
   };
 
+  hpndSellVariant = spdx {
+    fullName = "Historical Permission Notice and Disclaimer - sell variant";
+    spdxId = "HPND-sell-variant";
+  };
+
   # Intel's license, seems free
   iasl = {
     fullName = "iASL";
