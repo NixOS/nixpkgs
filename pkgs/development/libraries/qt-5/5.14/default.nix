@@ -58,6 +58,10 @@ let
         # Downgrade minimal required SDK to 10.12
         ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
         ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
+
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
