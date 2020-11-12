@@ -1758,6 +1758,21 @@ let
     buildInputs = [ TestWarn ];
   };
 
+  CatalystAuthenticationStoreLDAP = buildPerlPackage {
+    pname = "Catalyst-Authentication-Store-LDAP";
+    version = "1.016";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-LDAP-1.016.tar.gz";
+      sha256 = "0cm399vxqqf05cjgs1j5v3sk4qc6nmws5nfhf52qvpbwc4m82mq8";
+    };
+    propagatedBuildInputs = [ NetLDAP CatalystPluginAuthentication ClassAccessorFast ];
+    buildInputs = [ TestMore TestMockObject TestException NetLDAPServerTest ];
+    meta = {
+      description= "Authentication from an LDAP Directory";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
   CatalystComponentInstancePerContext = buildPerlPackage {
     pname = "Catalyst-Component-InstancePerContext";
     version = "0.001001";
@@ -14907,6 +14922,47 @@ let
     meta = {
       description = "Check and manipulate IPv6 addresses";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetLDAPServer = buildPerlPackage {
+    pname = "Net-LDAP-Server";
+    version = "0.43";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AA/AAR/Net-LDAP-Server-0.43.tar.gz";
+      sha256 = "0qmh3cri3fpccmwz6bhwp78yskrb3qmalzvqn0a23hqbsfs4qv6x";
+    };
+    propagatedBuildInputs = [ NetLDAP ConvertASN1 ];
+    meta = {
+      description = "LDAP server side protocol handling";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
+  NetLDAPSID = buildPerlPackage {
+    pname = "Net-LDAP-SID";
+    version = "0.0001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-SID-0.001.tar.gz";
+      sha256 = "1mnnpkmj8kpb7qw50sm8h4sd8py37ssy2xi5hhxzr5whcx0cvhm8";
+    };
+    meta = {
+      description= "Active Directory Security Identifier manipulation";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  NetLDAPServerTest = buildPerlPackage {
+    pname = "Net-LDAP-Server-Test";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-Server-Test-0.22.tar.gz";
+      sha256 = "13idip7jky92v4adw60jn2gcc3zf339gsdqlnc9nnvqzbxxp285i";
+    };
+    propagatedBuildInputs = [ NetLDAP NetLDAPServer TestMore DataDump NetLDAPSID ];
+    meta = {
+      description= "test Net::LDAP code";
+      license = with stdenv.lib.licenses; [ artistic1 ];
     };
   };
 
