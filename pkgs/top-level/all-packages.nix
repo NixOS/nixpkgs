@@ -6723,6 +6723,8 @@ in
 
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
+  qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
+
   qview = libsForQt5.callPackage ../applications/graphics/qview {};
 
   wayback_machine_downloader = callPackage ../applications/networking/wayback_machine_downloader { };
