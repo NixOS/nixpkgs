@@ -20,9 +20,9 @@ in {
         type = types.package;
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
-        default = null;
+      environmentFiles = mkOption {
+        type = types.nullOr (types.listOf types.path);
+        default = [];
         example = "/run/keys/telegraf.env";
         description = ''
           File to load as environment file. Environment variables
@@ -59,7 +59,7 @@ in {
   ###### implementation
   config = mkIf config.services.telegraf.enable {
     systemd.services.telegraf = let
-      finalConfigFile = if config.services.telegraf.environmentFile == null
+      finalConfigFile = if config.services.telegraf.environmentFiles == []
                         then configFile
                         else "/var/run/telegraf/config.toml";
     in {
@@ -67,8 +67,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
-        EnvironmentFile = config.services.telegraf.environmentFile;
-        ExecStartPre = lib.optional (config.services.telegraf.environmentFile != null)
+        EnvironmentFile = config.services.telegraf.environmentFiles;
+        ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])
           (pkgs.writeShellScript "pre-start" ''
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /var/run/telegraf/config.toml
