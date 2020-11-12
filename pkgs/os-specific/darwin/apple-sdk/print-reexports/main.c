@@ -1,3 +1,22 @@
+/**
+ * Display the list of re-exported libraries from a TAPI v2 .tbd file, one per
+ * line on stdout.
+ *
+ * TAPI files are the equivalent of library files for the purposes of linking.
+ * Like dylib files, they may re-export other libraries. In upstream usage
+ * these refer to the absolute paths of dylibs, and are resolved to .tbd files
+ * in combination with the syslibroot option. In nixpkgs, the .tbd files refer
+ * directly to other .tbd files without a syslibroot. Note that each .tbd file
+ * contains an install name, so the re-exported path does not affect the final
+ * result.
+ *
+ * In nixpkgs each framework is a distinct store path and some frameworks
+ * re-export other frameworks. The re-exported names are rewritten to refer to
+ * the store paths of dependencies via textual substitution. This utility is
+ * used to emit every file that is listed as a re-exported library, which
+ * allows the framework builder to verify their existence.
+ */
+
 #include <stdio.h>
 #include <sys/errno.h>
 #include <yaml.h>
