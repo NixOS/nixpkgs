@@ -54,7 +54,10 @@ let
     qtbase =
       optionals stdenv.isDarwin [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
-        ./qtbase.patch.d/0002-qtbase-mac.patch
+
+        # Downgrade minimal required SDK to 10.12
+        ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+        ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
