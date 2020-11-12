@@ -1,5 +1,15 @@
-{ stdenv, mkDerivation, fetchurl, autoPatchelfHook
-, ffmpeg_3, openssl, qtbase, zlib, pkgconfig
+{ stdenv
+, mkDerivation
+, fetchurl
+, autoPatchelfHook
+, pkg-config
+, ffmpeg_3
+, openssl
+, qtbase
+, zlib
+
+, withJava ? true
+, jre_headless
 }:
 
 let
@@ -27,9 +37,16 @@ in mkDerivation {
 
   sourceRoot = "makemkv-oss-${version}";
 
-  nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
+  nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+
+  qtWrapperArgs =
+    let
+      binPath = stdenv.lib.makeBinPath [ jre_headless ];
+    in stdenv.lib.optionals withJava [
+      ''--prefix PATH : ${binPath}''
+    ];
 
   installPhase = ''
     runHook preInstall
