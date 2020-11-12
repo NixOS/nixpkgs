@@ -64,6 +64,10 @@ let
         ./qtbase.patch.d/macos-sdk-10.12/0005-Revert-macOS-Fix-use-of-deprecated-NSOffState.patch
         ./qtbase.patch.d/macos-sdk-10.12/0006-git-checkout-v5.15.0-src-plugins-platforms-cocoa-qco.patch
         ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
+
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
