@@ -74,8 +74,8 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
+    mkdir -p $out/share/bash-completion/completions
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud.inc
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.

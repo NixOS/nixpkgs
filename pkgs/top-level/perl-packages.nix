@@ -511,10 +511,10 @@ let
     buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
     preCheck = "rm t/30cluster.t"; # do not run failing tests
     postInstall = ''
-      mkdir -p $out/etc/bash_completion.d
+      mkdir -p $out/share/bash-completion/completions
       mv $out/bin/clusterssh_bash_completion.dist \
-         $out/etc/bash_completion.d/clusterssh_bash_completion
-      substituteInPlace $out/etc/bash_completion.d/clusterssh_bash_completion \
+         $out/share/bash-completion/completions/clusterssh_bash_completion
+      substituteInPlace $out/share/bash-completion/completions/clusterssh_bash_completion \
          --replace '/bin/true' '${pkgs.coreutils}/bin/true' \
          --replace 'grep' '${pkgs.gnugrep}/bin/grep' \
          --replace 'sed' '${pkgs.gnused}/bin/sed'

@@ -35,8 +35,8 @@ python3Packages.buildPythonApplication rec {
 
     sed 's/b2/backblaze-b2/' -i contrib/bash_completion/b2
 
-    mkdir -p "$out/etc/bash_completion.d"
-    cp contrib/bash_completion/b2 "$out/etc/bash_completion.d/backblaze-b2"
+    mkdir -p "$out/share/bash-completion/completions"
+    cp contrib/bash_completion/b2 "$out/share/bash-completion/completions/backblaze-b2"
   '';
 
   meta = with lib; {

@@ -47,10 +47,12 @@ in with py.pkgs; buildPythonApplication rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    echo "complete -C $out/bin/aws_completer aws" > $out/etc/bash_completion.d/awscli
+    mkdir -p $out/share/bash-completion/completions
+    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
+
     mkdir -p $out/share/zsh/site-functions
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+
     rm $out/bin/aws.cmd
   '';
 

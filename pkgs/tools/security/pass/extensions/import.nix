@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   installFlags = [
     "PREFIX=$(out)"
-    "BASHCOMPDIR=$(out)/etc/bash_completion.d"
+    "BASHCOMPDIR=$(out)/share/bash-completion/completions"
   ];
 
   postFixup = ''

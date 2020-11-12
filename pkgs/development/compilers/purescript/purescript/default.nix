@@ -47,8 +47,8 @@ in stdenv.mkDerivation rec {
     install -D -m555 -T purs $PURS
     ${patchelf libPath}
 
-    mkdir -p $out/etc/bash_completion.d/
-    $PURS --bash-completion-script $PURS > $out/etc/bash_completion.d/purs-completion.bash
+    mkdir -p $out/share/bash-completion/completions
+    $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
   '';
 
   passthru.tests = {
