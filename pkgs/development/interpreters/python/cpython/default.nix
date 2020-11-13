@@ -64,9 +64,6 @@ assert bluezSupport -> bluez != null;
 
 assert mimetypesSupport -> mime-types != null;
 
-assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
-  "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
-
 assert lib.assertMsg (reproducibleBuild -> stripBytecode)
   "Deterministic builds require stripping bytecode.";
 
@@ -109,11 +106,14 @@ let
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
   ] ++ [
     nukeReferences
+    buildPackages.which
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
   ] ++ optionals (stdenv.cc.isClang && enableLTO) [
     stdenv.cc.cc.libllvm.out
+  ] ++ optionals (stdenv.cc.isClang && enableOptimizations) [
+    stdenv.cc.cc.libllvm
   ];
 
   buildInputs = filter (p: p != null) ([
