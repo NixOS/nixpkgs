@@ -149,17 +149,8 @@ let
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
     patches = [
-      ./patches/remove-webp-include-69.patch
-      ./patches/no-build-timestamps.patch
-      ./patches/widevine-79.patch
-      # Unfortunately, chromium regularly breaks on major updates and
-      # then needs various patches backported in order to be compiled with GCC.
-      # Good sources for such patches and other hints:
-      # - https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
-      # - https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
-      # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
-      #
-      # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
+      ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
+      ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
     ] ++ optionals (useVaapi && versionRange "86" "87") [
       # Check for enable-accelerated-video-decode on Linux:
@@ -239,7 +230,7 @@ let
 
     gnFlags = mkGnFlags ({
       use_lld = false;
-      use_gold = true;
+      use_gold = stdenv.buildPlatform.is64bit;  # ld.gold outs-of-memory on i686
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
 
@@ -314,15 +305,8 @@ let
     NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
-      # Build paralelism: on Hydra the build was frequently running into memory
-      # exhaustion, and even other users might be running into similar issues.
-      # -j is halved to avoid memory problems, and -l is slightly increased
-      # so that the build gets slight preference before others
-      # (it will often be on "critical path" and at risk of timing out)
       buildCommand = target: ''
-        ninja -C "${buildPath}"  \
-          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
-          "${target}"
+        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName
@@ -341,7 +325,12 @@ let
       patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
     '';
 
-    passthru.updateScript = ./update.py;
+    passthru = {
+      updateScript = ./update.py;
+      chromiumDeps = {
+        gn = gnChromium;
+      };
+    };
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.
