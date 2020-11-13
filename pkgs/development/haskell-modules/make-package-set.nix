@@ -221,6 +221,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #   , overrides : Defaulted (HaskellPackageOverrideSet)
     #   , modifier : Defaulted
     #   , returnShellEnv : Defaulted
+    #   , withHoogle : Defaulted
     #   } -> NixShellAwareDerivation
     # Given a path to a haskell package directory, an optional package name
     # which defaults to the base name of the path, an optional set of source
@@ -228,23 +229,39 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # optional set of arbitrary overrides, and an optional haskell package
     # modifier, return a derivation appropriate for nix-build or nix-shell to
     # build that package.
+    # If 'returnShellEnv' is true this returns a derivation which will give you
+    # an environment suitable for developing the listed packages with an
+    # incremental tool like cabal-install.
+    # If 'withHoogle' is true (the default if a shell environment is requested)
+    # then 'ghcWithHoogle' is used to generate the derivation (instead of
+    # 'ghcWithPackages'), see the documentation there for more information.
     developPackage =
       { root
       , name ? builtins.baseNameOf root
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
-      , returnShellEnv ? pkgs.lib.inNixShell }:
+      , returnShellEnv ? pkgs.lib.inNixShell
+      , withHoogle ? returnShellEnv }:
       let drv =
         (extensible-self.extend
            (pkgs.lib.composeExtensions
               (self.packageSourceOverrides source-overrides)
               overrides))
         .callCabal2nix name root {};
-      in if returnShellEnv then (modifier drv).env else modifier drv;
+      in if returnShellEnv
+           then (modifier drv).envFunc {inherit withHoogle;}
+           else modifier drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
+    # Put 'hoogle' into the derivation's PATH with a database containing all
+    # the package's dependencies; run 'hoogle server --local' in a shell to
+    # host a search engine for the dependencies.
+    #
+    # To reload the Hoogle server automatically on .cabal file changes try
+    # this:
+    # echo *.cabal | entr -r -- nix-shell --run 'hoogle server --local'
     ghcWithHoogle = selectFrom:
       let
         packages = selectFrom self;

@@ -5,7 +5,7 @@
  */
 let
 
-  inherit (import ./fixed-points.nix {}) makeExtensible;
+  inherit (import ./fixed-points.nix { inherit lib; }) makeExtensible;
 
   lib = makeExtensible (self: let
     callLibs = file: import file { lib = self; };
@@ -69,7 +69,7 @@ let
       importJSON importTOML warn info showWarnings nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
-      makeExtensible makeExtensibleWithCustomName;
+      composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
