@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wal-g";
-  version = "0.2.17";
+  version = "0.2.18";
 
   src = fetchFromGitHub {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "0r6vy2b3xqwa22286srwngk63sq4aza6aj7brwc130vypcps7svp";
+    sha256 = "1clsh42sgfrzyg3vr215wrpi93cb8y8ky3cb1v2l6cs4psh3py1q";
   };
 
-  vendorSha256 = "0r73l4kxzldca1vg5mshq6iqsxcrndcbmbp3d7i9pxyb2kig8gv5";
+  vendorSha256 = "1ax8niw4zfwvh5ikxnkbsjc9fdz1lziqlwig9nwrhzfp45ysbakh";
 
   buildInputs = [ brotli ];
 
