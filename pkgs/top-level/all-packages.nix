@@ -20369,6 +20369,21 @@ in
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
 
+  inherit (callPackages ../applications/networking/browsers/chromium-git { })
+    chromium-git_78
+    chromium-git_79
+    chromium-git_80
+    chromium-git_81
+    chromium-git_82
+    chromium-git_83
+    chromium-git_84
+    chromium-git_85
+    chromium-git_86
+    chromium-git_87
+    chromium-git_88;
+
+  chronos = callPackage ../applications/networking/cluster/chronos { };
+
   chuck = callPackage ../applications/audio/chuck {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
