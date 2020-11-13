@@ -477,7 +477,9 @@ in
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
-      [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+      [ "/etc/ssh/authorized_keys.d/%u" ]
+      ++ lib.optionals config.users.mutableUsers
+      [ "%h/.ssh/authorized_keys" "%h/.ssh/authorized_keys2" ];
 
     services.openssh.extraConfig = mkOrder 0
       ''
