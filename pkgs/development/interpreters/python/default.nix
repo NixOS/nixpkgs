@@ -39,7 +39,7 @@ with pkgs;
         pkgs = pythonPackages;
         interpreter = "${self}/bin/${executable}";
         inherit executable implementation libPrefix pythonVersion sitePackages;
-        inherit sourceVersion;
+        inherit sourceVersion packageOverrides;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
         inherit hasDistutilsCxxPatch pythonForBuild;
