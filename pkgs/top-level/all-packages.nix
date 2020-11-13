@@ -234,6 +234,7 @@ in
 
   archiver = callPackage ../applications/misc/archiver { };
 
+  # It segfaults if it uses qt5.15
   digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox { };
 
   grsync = callPackage ../applications/misc/grsync { };
