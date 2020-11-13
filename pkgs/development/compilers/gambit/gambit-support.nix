@@ -13,7 +13,7 @@ rec {
         --replace "$(grep '^PACKAGE_VERSION=.*$' configure)" 'PACKAGE_VERSION="v${git-version}"' \
         --replace "$(grep '^PACKAGE_STRING=.*$' configure)" 'PACKAGE_STRING="Gambit v${git-version}"' ;
       substituteInPlace include/makefile.in \
-                --replace "echo > stamp.h;" "(echo '#define ___STAMP_VERSION \"${git-version}\"'; echo '#define ___STAMP_YMD ${toString stampYmd}'; echo '#define ___STAMP_HMS ${toString stampHms}';) > stamp.h;";
+        --replace "echo > stamp.h;" "(echo '#define ___STAMP_VERSION \"${git-version}\"'; echo '#define ___STAMP_YMD ${toString stampYmd}'; echo '#define ___STAMP_HMS ${toString stampHms}';) > stamp.h;";
     '';
     modules = true;
     extraOptions = [];
@@ -28,13 +28,13 @@ rec {
 
   gambit-bootstrap = import ./bootstrap.nix ( pkgs );
 
-  meta = {
+  meta = with lib; {
     description = "Optimizing Scheme to C compiler";
     homepage    = "http://gambitscheme.org";
-    license     = lib.licenses.lgpl21; # dual, also asl20
-    # NB regarding platforms: continuously tested on Linux,
-    # tested on macOS once in a while, *should* work everywhere.
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thoughtpolice raskin fare ];
+    license     = licenses.lgpl21Only; # dual, also asl20
+    # NB regarding platforms: continuously tested on Linux x86_64 and regularly tested on macOS x86_64.
+    # *should* work everywhere.
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice raskin fare ];
   };
 }

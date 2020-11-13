@@ -1,5 +1,5 @@
 { gccStdenv, lib, git, openssl, autoconf, pkgs, makeStaticLibraries, gcc, coreutils, gnused, gnugrep,
-  src, version, git-version,
+  src, version, git-version, stampYmd ? 0, stampHms ? 0,
   gambit-support, optimizationSetting ? "-O1", gambit-params ? pkgs.gambit-support.stable-params }:
 
 # Note that according to a benchmark run by Marc Feeley on May 2018,
@@ -26,6 +26,7 @@ gccStdenv.mkDerivation rec {
   bootstrap = gambit-support.gambit-bootstrap;
 
   nativeBuildInputs = [ git autoconf ];
+
   # TODO: if/when we can get all the library packages we depend on to have static versions,
   # we could use something like (makeStaticLibraries openssl) to enable creation
   # of statically linked binaries by gsc.
@@ -61,9 +62,9 @@ gccStdenv.mkDerivation rec {
     # "--enable-coverage"
     # "--enable-inline-jumps"
     # "--enable-char-size=1" # default is 4
-  ] ++
-    # due not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
-    lib.optional (!gccStdenv.isDarwin) "--enable-poll";
+  ] ++ gambit-params.extraOptions
+    # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
+    ++ lib.optional (!gccStdenv.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
@@ -74,19 +75,22 @@ gccStdenv.mkDerivation rec {
            XMKMF=${coreutils}/bin/false
     unset CFLAGS LDFLAGS LIBS CPPFLAGS CXXFLAGS
 
-    ${gambit-params.fix-stamp git-version}
+    ${gambit-params.fixStamp git-version stampYmd stampHms}
 
     ./configure --prefix=$out/gambit ${builtins.concatStringsSep " " configureFlags}
 
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
-      --replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}" \
-      --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
+      ${lib.optionalString (gccStdenv.isDarwin && !gambit-params.stable)
+         ''--replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''} \
+        --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
 
     ./config.status
   '';
 
   buildPhase = ''
+    # The MAKEFLAGS setting is a workaround for https://github.com/gambit/gambit/issues/833
+    export MAKEFLAGS="--output-sync=recurse"
     echo "Make bootstrap compiler, from release bootstrap"
     mkdir -p boot
     cp -rp ${bootstrap}/gambit/. boot/.
