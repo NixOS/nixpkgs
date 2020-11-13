@@ -210,6 +210,8 @@ let
           sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
         '';
 
+        disallowedRequisites = op (!jitSupport) stdenv.cc.cc;
+
         meta = with stdenv.lib; {
           description = "The Ruby language";
           homepage    = "http://www.ruby-lang.org/en/";
