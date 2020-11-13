@@ -4,8 +4,11 @@ with lib;
 
 let
 
-  autologinArg = optionalString (config.services.mingetty.autologinUser != null) "--autologin ${config.services.mingetty.autologinUser}";
-  gettyCmd = extraArgs: "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login ${autologinArg} ${extraArgs}";
+  cfg = config.services.mingetty;
+
+  autologinArg = optionalString (cfg.autologinUser != null) "--autologin ${cfg.autologinUser}";
+  loginOptionsArg = optionalString (cfg.loginOptions != null) "\"--login-options=${cfg.loginOptions}\"";
+  gettyCmd = extraArgs: "@${pkgs.utillinux}/sbin/agetty agetty --login-program=${cfg.loginProgram} ${loginOptionsArg} ${autologinArg} ${extraArgs}";
 
 in
 
@@ -52,6 +55,23 @@ in
             Bitrates to allow for agetty's listening on serial ports. Listing more
             bitrates gives more interoperability but at the cost of long delays
             for getting a sync on the line.
+        '';
+      };
+
+      loginProgram = mkOption {
+        type = types.path;
+        default = "${pkgs.shadow}/bin/login";
+        description = ''
+          Path to the login binary executed by agetty.
+        '';
+      };
+
+      loginOptions = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "--flag --foo=bar";
+        description = ''
+          List of options passed to the login binary executed by agetty.
         '';
       };
 
