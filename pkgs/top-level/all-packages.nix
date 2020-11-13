@@ -7649,6 +7649,10 @@ in
 
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
+  tor-browser-bundle-mutable = callPackage ../applications/networking/browsers/tor-browser-bundle-bin/mutable.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
+
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
