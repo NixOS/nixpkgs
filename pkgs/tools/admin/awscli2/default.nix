@@ -69,6 +69,9 @@ with py.pkgs; buildPythonApplication rec {
   ];
 
   postInstall = ''
+    mkdir -p $out/${python3.sitePackages}/awscli/data
+    ${python3.interpreter} scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
+
     mkdir -p $out/share/bash-completion/completions
     echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
 
