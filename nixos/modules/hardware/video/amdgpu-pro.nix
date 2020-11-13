@@ -15,7 +15,7 @@ let
 
   opengl = config.hardware.opengl;
 
-  kernel = pkgs.linux_4_9.override {
+  kernel = pkgs.linux_4_18.override {
     extraConfig = ''
       KALLSYMS_ALL y
     '';

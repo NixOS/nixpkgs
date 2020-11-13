@@ -18,8 +18,8 @@ index e7b8a32..bad8f25 100755
 -
 -FW_DIR="/lib/firmware/$KERNELVER"
 -mkdir -p $FW_DIR
--cp -ar /usr/src/amdgpu-17.40-492261/firmware/radeon $FW_DIR
--cp -ar /usr/src/amdgpu-17.40-492261/firmware/amdgpu $FW_DIR
+-cp -ar /usr/src/amdgpu-18.30-641594/firmware/radeon $FW_DIR
+-cp -ar /usr/src/amdgpu-18.30-641594/firmware/amdgpu $FW_DIR
 -- 
 2.15.1
 

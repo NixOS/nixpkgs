@@ -1,0 +1,11 @@
+--- a/amd/amdkcl/kcl_pci.c	2018-09-17 11:48:14.257542945 -0500
++++ b/amd/amdkcl/kcl_pci.c	2018-09-17 12:18:37.921341917 -0500
+@@ -1,7 +1,7 @@
+ #include <kcl/kcl_pci.h>
+ #include <linux/version.h>
+ 
+-#if defined(BUILD_AS_DKMS)
++#if defined(BUILD_AS_DKMS) && LINUX_VERSION_CODE < KERNEL_VERSION(4, 16, 0)
+ 
+ /**
+  * pci_enable_atomic_ops_to_root - enable AtomicOp requests to root port
