@@ -20478,7 +20478,7 @@ in
     pygments = python27Packages.pygments;
   };
 
-  csound-qt = libsForQt514.callPackage ../applications/audio/csound/csound-qt {
+  csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt {
     python = python27;
   };
 
