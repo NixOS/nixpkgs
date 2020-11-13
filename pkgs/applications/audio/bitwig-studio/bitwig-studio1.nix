@@ -55,6 +55,10 @@ stdenv.mkDerivation rec {
     substitute usr/share/applications/bitwig-studio.desktop \
       $out/share/applications/bitwig-studio.desktop \
       --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+
+    # We only support x86_64-linux anyway,
+    # and these files cannot be correctly autoPatchelfHooked
+    rm -r $out/libexec/bin32
   '';
 
   postFixup = ''
