@@ -36,19 +36,28 @@ assert (repos != []) || (url != "") || (urls != []);
 
 
 let
+  classifierSplit =
+    with stdenv.lib.strings;
+      splitString "$" artifactId;
+  artifactId_ = builtins.head classifierSplit;
+  classifier =
+    with stdenv.lib;
+      if builtins.length classifierSplit > 1
+      then concatStrings ["-" (builtins.elemAt classifierSplit 1)]
+      else "";
   name_ =
     with stdenv.lib; concatStrings [
       (replaceChars ["."] ["_"] groupId) "_"
-      (replaceChars ["."] ["_"] artifactId) "-"
+      (replaceChars ["."] ["_"] artifactId_) "-"
       version
     ];
   mkJarUrl = repoUrl:
     with stdenv.lib; concatStringsSep "/" [
       (removeSuffix "/" repoUrl)
       (replaceChars ["."] ["/"] groupId)
-      artifactId
+      artifactId_
       version
-      "${artifactId}-${version}.jar"
+      "${artifactId_}-${version}${classifier}.jar"
     ];
   urls_ =
     if url != "" then [url]
@@ -57,7 +66,7 @@ let
   jar =
     fetchurl (
       builtins.removeAttrs args ["groupId" "artifactId" "version" "repos" "url" ]
-        // { urls = urls_; name = "${name_}.jar"; }
+        // { urls = urls_; name = "${name_}${classifier}.jar"; }
     );
 in
   stdenv.mkDerivation {
@@ -67,7 +76,7 @@ in
     # packages packages that mention this derivation in their buildInputs.
     installPhase = ''
       mkdir -p $out/share/java
-      ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
+      ln -s ${jar} $out/share/java/${artifactId_}-${version}${classifier}.jar
     '';
     # We also add a `jar` attribute that can be used to easily obtain the path
     # to the downloaded jar file.
