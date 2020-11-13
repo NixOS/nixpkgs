@@ -1110,9 +1110,9 @@ self: super: {
       })
       (pkgs.fetchpatch {
         # Relax dependency constraints,
-        # upstream PR: https://github.com/james-preston/hail/pull/15
-        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/15.patch";
-        sha256 = "03kdvr8hxi6isb8yxp5rgcmz855n19m1yacn3d56a4i58j2mldjw";
+        # upstream PR: https://github.com/james-preston/hail/pull/16
+        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/16.patch";
+        sha256 = "0dpagpn654zjrlklihsg911lmxjj8msylbm3c68xa5aad1s9gcf7";
       })
     ];
   });

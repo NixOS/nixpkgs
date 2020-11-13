@@ -14,15 +14,32 @@
 , zlib
 }:
 
+# NOTE: as of late 2020, yosys has switched to an automation robot that
+# automatically tags their repository Makefile with a new build number every
+# day when changes are committed. please MAKE SURE that the version number in
+# the 'version' field exactly matches the YOSYS_VER field in the Yosys
+# makefile!
+#
+# if a change in yosys isn't yet available under a build number like this (i.e.
+# it was very recently merged, within an hour), wait a few hours for the
+# automation robot to tag the new version, like so:
+#
+#     https://github.com/YosysHQ/yosys/commit/71ca9a825309635511b64b3ec40e5e5e9b6ad49b
+#
+# note that while most nix packages for "unstable versions" use a date-based
+# version scheme, synchronizing the nix package version here with the unstable
+# yosys version number helps users report better bugs upstream, and is
+# ultimately less confusing than using dates.
+
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "2020.10.20";
+  version = "0.9+3675";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "06347b119b08257eff37cdd10ed802e794c1a3cf";
-    sha256 = "07058r8095192gwkiy2yyvj9vxv09fcw9bqi2b39wn85lh5kx2k2";
+    rev    = "71ca9a825309635511b64b3ec40e5e5e9b6ad49b";
+    sha256 = "03jlhfvm5rxx8yybf94nqd3ld2y6brp8r0k6gfi56chv3iqqavy3";
   };
 
   enableParallelBuilding = true;
@@ -55,11 +72,17 @@ stdenv.mkDerivation rec {
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
 
     if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
-      echo "yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
+      echo "ERROR: yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
+      exit 1
+    fi
+
+    if ! grep -q "YOSYS_VER := ${version}" Makefile; then
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (${version}), failing."
       exit 1
     fi
   '';
 
+  checkTarget = "test";
   doCheck = true;
   checkInputs = [ verilog ];
 
@@ -68,10 +91,10 @@ stdenv.mkDerivation rec {
   # they just assume that 'yosys-abc' is available -- but it's not installed
   # when using ABCEXTERNAL
   #
-  # add a symlink to fake things so that both variants work the same way.
-  postInstall = ''
-    ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc
-  '';
+  # add a symlink to fake things so that both variants work the same way. this
+  # is also needed at build time for the test suite.
+  postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
+  postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
 
   meta = with stdenv.lib; {
     description = "Open RTL synthesis framework and tools";

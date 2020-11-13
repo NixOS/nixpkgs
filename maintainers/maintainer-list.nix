@@ -2023,6 +2023,16 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+  dbirks = {
+    email = "david@birks.dev";
+    github = "dbirks";
+    githubId = 7545665;
+    name = "David Birks";
+    keys = [{
+      longkeyid = "ed25519/0xBB999F83D9A19A36";
+      fingerprint = "B26F 9AD8 DA20 3392 EF87  C61A BB99 9F83 D9A1 9A36";
+    }];
+  };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
     github = "dbohdan";
@@ -3883,6 +3893,8 @@
   };
   jcumming = {
     email = "jack@mudshark.org";
+    github = "jcumming";
+    githubId = 1982341;
     name = "Jack Cummings";
   };
   jD91mZM2 = {
@@ -9969,5 +9981,11 @@
     github = "bb2020";
     githubId = 19290397;
     name = "Tunc Uzlu";
+  };
+  pulsation = {
+    name = "Philippe Sam-Long";
+    email = "1838397+pulsation@users.noreply.github.com";
+    github = "pulsation";
+    githubId = 1838397;
   };
 }

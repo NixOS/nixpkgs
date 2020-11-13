@@ -1,13 +1,14 @@
-{ stdenv, fetchFromGitHub, icmake
+{ stdenv, fetchFromGitLab, icmake
 , libmilter, libX11, openssl, readline
 , utillinux, yodl }:
 
 stdenv.mkDerivation rec {
   pname = "bobcat";
-  version = "4.08.03";
+  version = "5.05.00";
 
-  src = fetchFromGitHub {
-    sha256 = "163mdl8hxids7123bjxmqhcaqyc1dv7hv8k33s713ac6lzawarq2";
+  src = fetchFromGitLab {
+    sha256 = "sha256:14lvxzkxmkk54s97ah996m6s1wbw1g3iwawbhsf8qw7sf75vlp1h";
+    domain = "gitlab.com";
     rev = version;
     repo = "bobcat";
     owner = "fbb-git";
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Brokken's Own Base Classes And Templates";
-    homepage = "https://fbb-git.github.io/bobcat/";
+    homepage = "https://fbb-git.gitlab.io/bobcat/";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

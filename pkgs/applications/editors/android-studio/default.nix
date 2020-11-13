@@ -9,9 +9,9 @@ let
     inherit buildFHSUserEnv;
   };
   stableVersion = {
-    version = "4.1.0.19"; # "Android Studio 4.1.0"
-    build = "201.6858069";
-    sha256Hash = "sha256-S5Uh/EpjE61l/z4UsPP7UEJ9Rk/hQidVVWX0bg/60gI=";
+    version = "4.1.1.0"; # "Android Studio 4.1.1"
+    build = "201.6953283";
+    sha256Hash = "sha256-aAMhhJWcVFdvEZt8fI3tF12Eg3TzlU+kUFMNeCYN1os=";
   };
   betaVersion = {
     version = "4.1.0.18"; # "Android Studio 4.1 RC 3"

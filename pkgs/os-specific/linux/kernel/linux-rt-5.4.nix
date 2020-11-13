@@ -6,7 +6,7 @@
 , ... } @ args:
 
 let
-  version = "5.4.74-rt41"; # updated by ./update-rt.sh
+  version = "5.4.74-rt42"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in buildLinux (args // {
@@ -21,7 +21,7 @@ in buildLinux (args // {
     name = "rt";
     patch = fetchurl {
       url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-      sha256 = "0ap5zvdx6zxwqh2cy67rha4zgz3k8vqzd2vhll1mx81d10fmvmp8";
+      sha256 = "11hk5ps2nsffcjmccp839l55nzbl9irss0ralj2y1xah1ikbs7fh";
     };
   }; in [ rt-patch ] ++ lib.remove rt-patch kernelPatches;
 

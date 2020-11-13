@@ -479,6 +479,8 @@ in
 
   ociTools = callPackage ../build-support/oci-tools { };
 
+  octant = callPackage ../applications/networking/cluster/octant { };
+
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
@@ -2531,6 +2533,8 @@ in
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
   socklog = callPackage ../tools/system/socklog { };
+
+  ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stagit = callPackage ../development/tools/stagit { };
 
@@ -8582,6 +8586,8 @@ in
 
   ### DEVELOPMENT / COMPILERS
 
+  _4th = callPackage ../development/compilers/4th { };
+
   abcl = callPackage ../development/compilers/abcl {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -10899,6 +10905,8 @@ in
     };
   });
 
+  bisoncpp = callPackage ../development/tools/parsing/bisonc++ { };
+
   black = with python3Packages; toPythonApplication black;
 
   blackfire = callPackage ../development/tools/misc/blackfire { };
@@ -11945,7 +11953,9 @@ in
 
   travis = callPackage ../development/tools/misc/travis { };
 
-  tree-sitter = callPackage ../development/tools/parsing/tree-sitter { };
+  tree-sitter = callPackage ../development/tools/parsing/tree-sitter {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   trellis = callPackage ../development/tools/trellis { };
 
@@ -12652,7 +12662,10 @@ in
 
   flyway = callPackage ../development/tools/flyway { };
 
-  fmt = callPackage ../development/libraries/fmt/default.nix { };
+  inherit (callPackages ../development/libraries/fmt { })
+    fmt_6 fmt_7;
+
+  fmt = fmt_7;
 
   fplll = callPackage ../development/libraries/fplll {};
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
@@ -16788,7 +16801,9 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
-  gerbera = callPackage ../servers/gerbera { };
+  gerbera = callPackage ../servers/gerbera {
+    fmt = fmt_6;
+  };
 
   gobetween = callPackage ../servers/gobetween { };
 
@@ -17030,6 +17045,12 @@ in
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
+
+  hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
+
+  pulseaudio-hsphfpd = callPackage ../servers/pulseaudio/pali.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+  };
 
   pulseaudio = callPackage ../servers/pulseaudio {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
@@ -17963,18 +17984,11 @@ in
 
   linux_mptcp = linux_mptcp_95;
 
-  linux_mptcp_94 = callPackage ../os-specific/linux/kernel/linux-mptcp-94.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((stdenv.hostPlatform.platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+  linux_mptcp_5_9 = linux_5_9.override {
+    structuredExtraConfig = with lib.kernel; {
+      MPTCP      = yes;
+      MPTCP_IPV6 = yes;
+    };
   };
 
   linux_mptcp_95 = callPackage ../os-specific/linux/kernel/linux-mptcp-95.nix {
@@ -21597,7 +21611,9 @@ in
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
-  waybar = callPackage ../applications/misc/waybar { };
+  waybar = callPackage ../applications/misc/waybar {
+    fmt = fmt_6;
+  };
 
   hikari = callPackage ../applications/window-managers/hikari { };
 
@@ -22800,8 +22816,6 @@ in
     inherit (gnome2) libglade;
   };
 
-  obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
-
   obs-studio = libsForQt514.callPackage ../applications/video/obs-studio { };
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
@@ -23282,6 +23296,8 @@ in
   quirc = callPackage ../tools/graphics/quirc {};
 
   quilter = callPackage ../applications/editors/quilter { };
+
+  quisk = python38Packages.callPackage ../applications/radio/quisk { };
 
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
 
@@ -24248,7 +24264,7 @@ in
     onlyLibVLC = true;
   };
 
-  vmpk = callPackage ../applications/audio/vmpk { };
+  vmpk = libsForQt5.callPackage ../applications/audio/vmpk { };
 
   vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
 
@@ -24975,6 +24991,8 @@ in
   sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
 
   tessera = callPackage ../applications/blockchains/tessera.nix { };
+
+  turbo-geth = callPackage ../applications/blockchains/turbo-geth.nix { };
 
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = true; };
   vertcoind = callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = false; };

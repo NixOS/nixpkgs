@@ -599,8 +599,6 @@ let
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
-    mstruct =  callPackage ../development/ocaml-modules/mstruct { };
-
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };

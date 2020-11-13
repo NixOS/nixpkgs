@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vgrep";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "vrothberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1waxp66286q325avvsq58s8qkfjqa39s5p8c3z59scpm0244nr80";
+    sha256 = "06rnmg6ljj4f1g602wdp2wy9v0m1m0sj6jl6wywyjl8grjqc3vac";
   };
 
   vendorSha256 = null;
