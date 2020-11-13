@@ -19,8 +19,8 @@ with stdenv.lib;
 let
   majorVersion = "1";
   minorVersion = "5";
-  maintenanceVersion = "2";
-  src_sha256 = "0g24v1clkcj1vnw16jxx6rav4hqaiag0nvd6iyvgc2c7l9k59g7g";
+  maintenanceVersion = "3";
+  src_sha256 = "sha256:0jds8lrhk4hfdv7dg5p2ibzin9ivga7wrx7zwcmz6dqp3x792n1i";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
@@ -32,10 +32,6 @@ stdenv.mkDerivation rec {
      url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
      sha256 = src_sha256;
    };
-
-  prePatch = ''
-    export PATH=$PATH:${cmake}/bin
-    '';
 
   patches = [
     ./use-system-utf8proc-julia-1.3.patch
@@ -61,24 +57,30 @@ stdenv.mkDerivation rec {
     sed -e 's/Failed to resolve /failed to resolve /g' -i ./stdlib/LibGit2/test/libgit2.jl
   '';
 
+  dontUseCmakeConfigure = true;
+
   buildInputs = [
     arpack fftw fftwSinglePrec libgit2 libunwind mpfr
     pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
   ] ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which cmake ];
 
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march = { x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; i686 = "pentium4"; }.${arch}
+      march = {
+        x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64";
+        i686 = "pentium4";
+        aarch64 = "armv8-a";
+      }.${arch}
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
-      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; }.${arch}
+      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; aarch64 = "aarch64"; }.${arch}
                   or (throw "unsupported architecture: ${arch}");
-      # Julia applies a lot of patches to its dependencies, so for now do not use the system LLVM
-      # https://github.com/JuliaLang/julia/tree/master/deps/patches
+    # Julia applies a lot of patches to its dependencies, so for now do not use the system LLVM
+    # https://github.com/JuliaLang/julia/tree/master/deps/patches
     in [
       "ARCH=${arch}"
       "MARCH=${march}"
@@ -152,7 +154,7 @@ stdenv.mkDerivation rec {
     homepage = "https://julialang.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin rob garrison ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     broken = stdenv.isi686;
   };
 }
