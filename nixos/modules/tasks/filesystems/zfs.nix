@@ -175,13 +175,9 @@ in
 
       forceImportAll = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Forcibly import all ZFS pool(s).
-
-          This is enabled by default for backwards compatibility purposes, but it is highly
-          recommended to disable this option, as it bypasses some of the safeguards ZFS uses
-          to protect your ZFS pools.
 
           If you set this option to <literal>false</literal> and NixOS subsequently fails to
           import your non-root ZFS pool(s), you should manually import each pool with
@@ -507,6 +503,7 @@ in
               Type = "oneshot";
               RemainAfterExit = true;
             };
+            environment.ZFS_FORCE = optionalString cfgZfs.forceImportAll "-f";
             script = (importLib {
               # See comments at importLib definition.
               zpoolCmd="${packages.zfsUser}/sbin/zpool";

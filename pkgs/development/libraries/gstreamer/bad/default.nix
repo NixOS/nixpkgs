@@ -116,16 +116,18 @@ in stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    orc # for orcc
     python3
     gettext
     gobject-introspection
   ] ++ optionals stdenv.isLinux [
-    wayland-protocols
+    wayland # for wayland-scanner
   ];
 
   buildInputs = [
     gst-plugins-base
     orc
+    gobject-introspection
     faad2
     libass
     libkate
@@ -179,6 +181,7 @@ in stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     bluez
     wayland
+    wayland-protocols
   ] ++ optionals (!stdenv.isDarwin) [
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
@@ -281,6 +284,9 @@ in stdenv.mkDerivation rec {
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
   ];
+
+  # Argument list too long
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs \
