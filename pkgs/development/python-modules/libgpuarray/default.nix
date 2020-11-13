@@ -7,7 +7,7 @@
 , numpy
 , six
 , nose
-, Mako
+, mako
 , cudaSupport ? false, cudatoolkit , nvidia_x11
 , openclSupport ? true, ocl-icd, clblas
 }:
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     six
-    Mako
+    mako
   ];
 
   enableParallelBuilding = true;

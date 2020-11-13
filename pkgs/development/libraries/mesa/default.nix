@@ -148,7 +148,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkgconfig meson ninja
     intltool bison flex file
-    python3Packages.python python3Packages.Mako
+    python3Packages.python python3Packages.mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland # For wayland-scanner during the build
   ];

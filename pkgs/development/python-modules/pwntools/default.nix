@@ -3,7 +3,7 @@
 , debugger
 , fetchPypi
 , isPy3k
-, Mako
+, mako
 , makeWrapper
 , packaging
 , pysocks
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    Mako
+    mako
     packaging
     pysocks
     pygments

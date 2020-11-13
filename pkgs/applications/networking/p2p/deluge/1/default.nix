@@ -18,7 +18,7 @@ pythonPackages.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pyGtkGlade twisted Mako chardet pyxdg pyopenssl service-identity
+    pyGtkGlade twisted mako chardet pyxdg pyopenssl service-identity
     libtorrentRasterbar.dev libtorrentRasterbar.python setuptools
   ];
 
