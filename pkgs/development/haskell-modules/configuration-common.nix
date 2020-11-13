@@ -1395,20 +1395,10 @@ self: super: {
   liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
   Diff_0_3_4 = dontCheck super.Diff_0_3_4;
 
-  # We want the latest version of cryptonite. This is a first step towards
-  # resolving https://github.com/NixOS/nixpkgs/issues/81915.
-  cryptonite = doDistribute self.cryptonite_0_27;
-
   # We want the latest version of Pandoc.
-  skylighting = doDistribute super.skylighting_0_10_0_3;
-  skylighting-core = doDistribute super.skylighting-core_0_10_0_3;
   hslua = doDistribute self.hslua_1_1_2;
-  jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
-  pandoc = doDistribute self.pandoc_2_11_1_1;
   # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
   pandoc-citeproc = doJailbreak (doDistribute self.pandoc-citeproc_0_17_0_2);
-  pandoc-types = doDistribute self.pandoc-types_1_22;
-  rfc5051 = doDistribute self.rfc5051_0_2;
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
@@ -1420,9 +1410,6 @@ self: super: {
   microaeson = doJailbreak super.microaeson;
 
   autoapply = super.autoapply.override { th-desugar = self.th-desugar_1_11; };
-
-  # binary-instances needs the latest version.
-  time-compat = self.time-compat_1_9_4;
 
   # - Deps are required during the build for testing and also during execution,
   #   so add them to build input and also wrap the resulting binary so they're in
@@ -1462,7 +1449,6 @@ self: super: {
     # in this list or marked as broken anyways
     haskell-language-server = dontCheck super.haskell-language-server;
     fourmolu = dontCheck super.fourmolu;
-    stylish-haskell = super.stylish-haskell_0_12_2_0;
     ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
       # 2020-11-13: Bumping bounds via an already upstream merged change
       # https://github.com/haskell/ghcide/pull/905
@@ -1473,7 +1459,6 @@ self: super: {
     refinery = super.refinery_0_3_0_0;
     data-tree-print = doJailbreak super.data-tree-print;
     ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_3;
-    hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck super.lsp-test_0_11_0_7;
     hls-plugin-api = super.hls-plugin-api;
     hls-hlint-plugin = super.hls-hlint-plugin;
