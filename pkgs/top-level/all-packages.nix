@@ -5012,6 +5012,8 @@ in
 
   knockknock = callPackage ../tools/security/knockknock { };
 
+  knoxite = callPackage ../tools/backup/knoxite { };
+
   kore = callPackage ../development/web/kore { };
 
   krakenx = callPackage ../tools/system/krakenx { };
