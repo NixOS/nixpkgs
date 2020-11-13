@@ -53,10 +53,10 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     pkgconfig sphinx ncurses
+    installShellFiles
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
-    installShellFiles
   ];
 
   propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
@@ -113,10 +113,10 @@ buildPythonApplication rec {
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
     runHook postInstall
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-    "$out/bin/kitty" + complete setup fish > "$out/share/fish/vendor_completions.d/kitty.fish"
-    "$out/bin/kitty" + complete setup bash > "$out/share/bash-completion/completions/kitty.bash"
-    "$out/bin/kitty" + complete setup zsh > "$out/share/zsh/site-functions/_kitty"
+    installShellCompletion --cmd kitty \
+      --bash <("$out/bin/kitty" + complete setup bash) \
+      --fish <("$out/bin/kitty" + complete setup fish) \
+      --zsh  <("$out/bin/kitty" + complete setup zsh)
   '';
 
   postInstall = ''
