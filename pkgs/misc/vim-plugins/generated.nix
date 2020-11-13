@@ -3411,12 +3411,12 @@ let
     pname = "telescope-nvim";
     version = "2020-11-13";
     src = fetchFromGitHub {
-      owner = "nvim-lua";
+      owner = "nvim-telescope";
       repo = "telescope.nvim";
       rev = "3e58e1ab7d4c80fec7d9b02e3f27503bd72f21ff";
       sha256 = "0ilxdffipa7mcaam1x21h0k578q2mq76a4ajnmmmis7066jk39z4";
     };
-    meta.homepage = "https://github.com/nvim-lua/telescope.nvim/";
+    meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
   };
 
   tender-vim = buildVimPluginFrom2Nix {
