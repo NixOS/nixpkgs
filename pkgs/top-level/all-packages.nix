@@ -20961,7 +20961,7 @@ in
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
-  fritzing = libsForQt514.callPackage ../applications/science/electronics/fritzing { };
+  fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
   fsv = callPackage ../applications/misc/fsv { };
 
