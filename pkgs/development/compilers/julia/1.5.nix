@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       }.${arch}
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
-      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; aarch64 = "armv8-a"; }.${arch}
+      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; aarch64 = "generic"; }.${arch}
                   or (throw "unsupported architecture: ${arch}");
     # Julia applies a lot of patches to its dependencies, so for now do not use the system LLVM
     # https://github.com/JuliaLang/julia/tree/master/deps/patches
