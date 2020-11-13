@@ -1414,7 +1414,7 @@ self: super: {
   domain-auth = dontCheck super.domain-auth;
 
   # stack-2.5.1 needs a more current version of pantry to compile
-  pantry = self.pantry_0_5_1_3;
+  pantry = self.pantry_0_5_1_4;
 
   # Too tight version bounds, see https://github.com/haskell-hvr/microaeson/pull/4
   microaeson = doJailbreak super.microaeson;
