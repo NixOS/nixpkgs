@@ -9748,6 +9748,12 @@
     githubId = 10643;
     name = "Jason A. Donenfeld";
   };
+  zyansheep = {
+    email = "zyansheep@protonmail.com";
+    github = "zyansheep";
+    githubId = 20029431;
+    name = "Zyansheep";
+  };
   zzamboni = {
     email = "diego@zzamboni.org";
     github = "zzamboni";
