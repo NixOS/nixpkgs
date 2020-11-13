@@ -2993,6 +2993,12 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+  foo-dogsquared = {
+    email = "foo.dogsquared@gmail.com";
+    github = "foo-dogsquared";
+    githubId = 34962634;
+    name = "Gabriel Arazas";
+  };
   fooker = {
     email = "fooker@lab.sh";
     github = "fooker";
