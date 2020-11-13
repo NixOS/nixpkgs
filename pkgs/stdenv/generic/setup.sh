@@ -606,7 +606,7 @@ fi
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
 HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
-XDG_DATA_DIRS="${_XDG_DATA_DIRS-}${_XDG_DATA_DIRS:+${XDG_DATA_DIRS:+:}}${XDG_DATA_DIRS-}"
+export XDG_DATA_DIRS="${_XDG_DATA_DIRS-}${_XDG_DATA_DIRS:+${XDG_DATA_DIRS:+:}}${XDG_DATA_DIRS-}"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
     echo "final host path: $HOST_PATH"
