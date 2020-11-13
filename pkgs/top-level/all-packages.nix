@@ -210,7 +210,7 @@ in
 
   hobbes = callPackage ../development/tools/hobbes { };
 
-  html5validator = python36Packages.callPackage ../applications/misc/html5validator { };
+  html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
