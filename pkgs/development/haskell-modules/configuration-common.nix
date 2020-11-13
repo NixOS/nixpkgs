@@ -1463,10 +1463,16 @@ self: super: {
     haskell-language-server = dontCheck super.haskell-language-server;
     fourmolu = dontCheck super.fourmolu;
     stylish-haskell = super.stylish-haskell_0_12_2_0;
-    ghcide = dontCheck super.ghcide;
+    ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
+      # 2020-11-13: Bumping bounds via an already upstream merged change
+      # https://github.com/haskell/ghcide/pull/905
+      url = https://github.com/haskell/ghcide/commit/9b8aaf9b06846571cc0b5d46680e686e4f9153a3.patch;
+      sha256 = "0j8980dmvwjcs72ahq2zc14hwkyd5ybgzyy1az3zq5flp383fai6";
+      includes = [ "ghcide.cabal" ];
+    }));
     refinery = super.refinery_0_3_0_0;
     data-tree-print = doJailbreak super.data-tree-print;
-    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
+    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_3;
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck super.lsp-test_0_11_0_7;
     hls-plugin-api = super.hls-plugin-api;
