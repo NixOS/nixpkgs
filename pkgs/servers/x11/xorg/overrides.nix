@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3, libxslt,
+  mcpp, epoxy, openssl, pkgconfig, llvm_6, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -73,9 +73,7 @@ self: super:
 
   mkfontdir = self.mkfontscale;
 
-  libxcb = (super.libxcb.override {
-    python = python3;
-  }).overrideAttrs (attrs: {
+  libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
   });
@@ -332,10 +330,6 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ freetype fontconfig ];
   });
 
-  xcbproto = super.xcbproto.override {
-    python = python3;
-  };
-
   xcbutil = super.xcbutil.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
   });
@@ -463,8 +457,8 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
+    prePatch = "patchShebangs rules/merge.py";
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool libxslt ];
-
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
     # 1: compatibility for X11/xkb location
@@ -790,7 +784,7 @@ self: super:
       rev = "f66d39544bb8339130c96d282a80f87ca1606caf";
       sha256 = "14rwbbn06l8qpx7s5crxghn80vgcx8jmfc7qvivh72d81r0kvywl";
     };
-    buildInputs = attrs.buildInputs ++ [self.libXfixes self.libXScrnSaver self.pixman];
+    buildInputs = attrs.buildInputs ++ [ self.libXScrnSaver self.libXfixes self.libXv self.pixman ];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook self.utilmacros];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
 
