@@ -1,5 +1,5 @@
 { go, govers, lib, fetchgit, fetchhg, fetchbzr, rsync
-, removeReferencesTo, fetchFromGitHub, stdenv }:
+, removeReferencesTo, fetchFromGitHub, stdenv, stdenvNoCC }:
 
 { buildInputs ? []
 , nativeBuildInputs ? []
@@ -48,27 +48,50 @@ let
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  dep2src = goDep:
-    {
-      inherit (goDep) goPackagePath;
-      src = if goDep.fetch.type == "git" then
-        fetchgit {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else if goDep.fetch.type == "hg" then
-        fetchhg {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else if goDep.fetch.type == "bzr" then
-        fetchbzr {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else if goDep.fetch.type == "FromGitHub" then
-        fetchFromGitHub {
-          inherit (goDep.fetch) owner repo rev sha256;
-        }
-      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
+  fetchrepo = fetch:
+    if fetch.type == "git" then
+      fetchgit {
+        inherit (fetch) url rev sha256;
+      }
+    else if fetch.type == "hg" then
+      fetchhg {
+        inherit (fetch) url rev sha256;
+      }
+    else if fetch.type == "bzr" then
+      fetchbzr {
+        inherit (fetch) url rev sha256;
+      }
+    else if fetch.type == "FromGitHub" then
+      fetchFromGitHub {
+        inherit (fetch) owner repo rev sha256;
+      }
+    else abort "Unrecognized package fetch type: ${fetch.type}";
+
+  # treat moduleDir(empty string for root) as go module, omit subdirectories which contains go.mod
+  fetchmod = repo: moduleDir:
+    stdenvNoCC.mkDerivation {
+      inherit (repo) name;
+      unpackPhase = ''
+        mkdir $out
+        prefix=${repo}/${moduleDir}
+        for path in $prefix/*; do
+          if [ ! -f $path/go.mod ]; then
+            ln -s $path $out/
+          fi;
+        done
+      '';
+      dontBuild = true;
+      installPhase = "true";
     };
+
+    dep2src = goDep:
+      {
+        inherit (goDep) goPackagePath;
+        src = let repo = fetchrepo goDep.fetch;
+              in if goDep.fetch ? moduleDir
+                then fetchmod repo goDep.fetch.moduleDir
+                else repo;
+      };
 
   importGodeps = { depsFile }:
     map dep2src (import depsFile);
@@ -112,13 +135,8 @@ let
         exit 10
       fi
     '' + lib.flip lib.concatMapStrings goPath ({ src, goPackagePath }: ''
-      mkdir goPath
-      (cd goPath; unpackFile "${src}")
-      mkdir -p "go/src/$(dirname "${goPackagePath}")"
-      chmod -R u+w goPath/*
-      mv goPath/* "go/src/${goPackagePath}"
-      rmdir goPath
-
+      mkdir -p "go/src/${goPackagePath}"
+      cp -RP ${src}/* "go/src/${goPackagePath}/"
     '') + (lib.optionalString (extraSrcPaths != []) ''
       ${rsync}/bin/rsync -a ${lib.concatMapStringsSep " " (p: "${p}/src") extraSrcPaths} go
 
@@ -234,8 +252,8 @@ let
     shellHook = ''
       d=$(mktemp -d "--suffix=-$name")
     '' + toString (map (dep: ''
-       mkdir -p "$d/src/$(dirname "${dep.goPackagePath}")"
-       ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
+       mkdir -p "$d/src/${dep.goPackagePath}"
+       cp -RP ${dep.src}/* "$d/src/${dep.goPackagePath}/"
     ''
     ) goPath) + ''
       export GOPATH=${lib.concatStringsSep ":" ( ["$d"] ++ ["$GOPATH"] ++ ["$PWD"] ++ extraSrcPaths)}
