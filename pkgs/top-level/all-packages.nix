@@ -2508,7 +2508,7 @@ in
 
   psstop = callPackage ../tools/system/psstop { };
 
-  precice = callPackage ../development/libraries/precice { python3 = python37; };
+  precice = callPackage ../development/libraries/precice { };
 
   pueue = callPackage ../applications/misc/pueue { };
 
