@@ -4489,9 +4489,7 @@ in
     hdf4 = null;
   };
 
-  haproxy = callPackage ../tools/networking/haproxy {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
+  haproxy = callPackage ../tools/networking/haproxy { };
 
   hackertyper = callPackage ../tools/misc/hackertyper { };
 
@@ -4702,8 +4700,8 @@ in
   idevicerestore = callPackage ../tools/misc/idevicerestore { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
-            stdenv = llvmPackages.libcxxStdenv;
-            libcxx = llvmPackages.libcxx;
+            stdenv = llvmPackages_7.libcxxStdenv;
+            libcxx = llvmPackages_7.libcxx;
             boost = boost160.override { inherit stdenv; };
             avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
           })
@@ -5709,7 +5707,9 @@ in
     docbook-xsl = docbook_xsl;
   };
 
-  mosh = callPackage ../tools/networking/mosh { };
+  mosh = callPackage ../tools/networking/mosh {
+    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
+  };
 
   mpage = callPackage ../tools/text/mpage { };
 
@@ -9601,7 +9601,7 @@ in
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
 
-  llvmPackages = recurseIntoAttrs llvmPackages_7;
+  llvmPackages = recurseIntoAttrs llvmPackages_9;
 
   llvmPackages_5 = callPackage ../development/compilers/llvm/5 {
     inherit (stdenvAdapters) overrideCC;
@@ -11083,10 +11083,7 @@ in
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
-  ccls = callPackage ../development/tools/misc/ccls {
-    llvmPackages = llvmPackages_8;
-    stdenv = llvmPackages_8.stdenv;
-  };
+  ccls = callPackage ../development/tools/misc/ccls { };
 
   credstash = with python3Packages; toPythonApplication credstash;
 
@@ -12360,9 +12357,7 @@ in
 
   cln = callPackage ../development/libraries/cln { };
 
-  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
+  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
 
   clucene_core_1 = callPackage ../development/libraries/clucene-core {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
@@ -13393,7 +13388,9 @@ in
 
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
-  jemalloc = callPackage ../development/libraries/jemalloc { };
+  jemalloc = callPackage ../development/libraries/jemalloc {
+    stdenv = if stdenv.cc.isClang then llvmPackages_8.stdenv else stdenv;
+  };
 
   jemalloc450 = callPackage ../development/libraries/jemalloc/jemalloc450.nix { };
 
@@ -14714,7 +14711,6 @@ in
   libGLU = mesa_glu;
 
   mesa = callPackage ../development/libraries/mesa {
-    llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
@@ -17113,6 +17109,7 @@ in
   };
 
   mariadb = callPackage ../servers/sql/mariadb {
+    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
     # As per mariadb's cmake, "static jemalloc_pic.a can only be used up to jemalloc 4".
     # https://jira.mariadb.org/browse/MDEV-15034
     jemalloc450 = jemalloc450.override ({ disableInitExecTls = true; });
@@ -19176,7 +19173,9 @@ in
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
-  coreclr = callPackage ../development/compilers/coreclr { };
+  coreclr = callPackage ../development/compilers/coreclr {
+    llvmPackages = llvmPackages_7;
+  };
 
   corefonts = callPackage ../data/fonts/corefonts { };
 

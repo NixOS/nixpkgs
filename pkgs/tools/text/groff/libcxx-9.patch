@@ -1,0 +1,13 @@
+diff --git a/lib/math.in.h b/lib/math.in.h
+index c30fc20..6b3715c 100644
+--- a/lib/math.in.h
++++ b/lib/math.in.h
+@@ -34,7 +34,7 @@
+ #endif
+ 
+ #ifndef _GL_INLINE_HEADER_BEGIN
+- #error "Please include config.h first."
++# include <config.h>
+ #endif
+ _GL_INLINE_HEADER_BEGIN
+ #ifndef _GL_MATH_INLINE
