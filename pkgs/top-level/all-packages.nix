@@ -28704,6 +28704,8 @@ in
   libjack2 = jack2.override { prefix = "lib"; };
   jack2Full = jack2; # TODO: move to aliases.nix
 
+  jstest-gtk = callPackage ../tools/misc/jstest-gtk { };
+
   keynav = callPackage ../tools/X11/keynav { };
 
   kmon = callPackage ../tools/system/kmon { };
