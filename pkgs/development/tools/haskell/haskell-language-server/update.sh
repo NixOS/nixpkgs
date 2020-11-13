@@ -16,24 +16,6 @@ set -eo pipefail
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # ===========================
-# ghcide fork on https://github.com/wz1000/ghcide
-# ===========================
-
-# ghcide derivation created with cabal2nix.
-ghcide_derivation_file="${script_dir}/hls-ghcide.nix"
-
-# This is the current revision of hls in Nixpkgs.
-ghcide_old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$ghcide_derivation_file")"
-
-# This is the revision of ghcide used by hls on GitHub.
-ghcide_new_version=$(curl --silent "https://api.github.com/repos/haskell/haskell-language-server/contents/ghcide" | jq '.sha' --raw-output)
-
-echo "Updating haskell-language-server's ghcide from old version $ghcide_old_version to new version $ghcide_new_version."
-echo "Running cabal2nix and outputting to ${ghcide_derivation_file}..."
-
-cabal2nix --revision "$ghcide_new_version" "https://github.com/haskell/ghcide" > "$ghcide_derivation_file"
-
-# ===========================
 # HLS maintainer's Brittany fork
 # ===========================
 
@@ -67,5 +49,7 @@ echo "Updating haskell-language-server from old version $hls_old_version to new 
 echo "Running cabal2nix and outputting to ${hls_derivation_file}..."
 
 cabal2nix --revision "$hls_new_version" "https://github.com/haskell/haskell-language-server.git" > "$hls_derivation_file"
+cabal2nix --revision "$hls_new_version" --subpath plugins/tactics "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-tactics-plugin.nix"
+cabal2nix --revision "$hls_new_version" --subpath plugins/hls-hlint-plugin "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-hlint-plugin.nix"
 
 echo "Finished."
