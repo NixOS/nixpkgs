@@ -222,19 +222,27 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #   , modifier : Defaulted
     #   , returnShellEnv : Defaulted
     #   , withHoogle : Defaulted
+    #   , cabal2nixOptions : Defaulted
     #   } -> NixShellAwareDerivation
+    #
     # Given a path to a haskell package directory, an optional package name
     # which defaults to the base name of the path, an optional set of source
     # overrides as appropriate for the 'packageSourceOverrides' function, an
     # optional set of arbitrary overrides, and an optional haskell package
     # modifier, return a derivation appropriate for nix-build or nix-shell to
     # build that package.
+    #
     # If 'returnShellEnv' is true this returns a derivation which will give you
     # an environment suitable for developing the listed packages with an
     # incremental tool like cabal-install.
+    #
     # If 'withHoogle' is true (the default if a shell environment is requested)
     # then 'ghcWithHoogle' is used to generate the derivation (instead of
     # 'ghcWithPackages'), see the documentation there for more information.
+    #
+    # 'cabal2nixOptions' can contain extra command line arguments to pass to
+    # 'cabal2nix' when generating the package derivation, for example setting
+    # a cabal flag with '--flag=myflag'.
     developPackage =
       { root
       , name ? builtins.baseNameOf root
@@ -242,13 +250,14 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       , overrides ? self: super: {}
       , modifier ? drv: drv
       , returnShellEnv ? pkgs.lib.inNixShell
-      , withHoogle ? returnShellEnv }:
+      , withHoogle ? returnShellEnv
+      , cabal2nixOptions ? "" }:
       let drv =
         (extensible-self.extend
            (pkgs.lib.composeExtensions
               (self.packageSourceOverrides source-overrides)
               overrides))
-        .callCabal2nix name root {};
+        .callCabal2nixWithOptions name root cabal2nixOptions {};
       in if returnShellEnv
            then (modifier drv).envFunc {inherit withHoogle;}
            else modifier drv;
