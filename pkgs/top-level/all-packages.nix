@@ -22192,7 +22192,7 @@ in
 
   lsp-plugins = callPackage ../applications/audio/lsp-plugins { };
 
-  luminanceHDR = libsForQt514.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
