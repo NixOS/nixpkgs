@@ -12671,7 +12671,10 @@ in
 
   flyway = callPackage ../development/tools/flyway { };
 
-  fmt = callPackage ../development/libraries/fmt/default.nix { };
+  inherit (callPackages ../development/libraries/fmt { })
+    fmt_6 fmt_7;
+
+  fmt = fmt_7;
 
   fplll = callPackage ../development/libraries/fplll {};
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
@@ -16806,7 +16809,9 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
-  gerbera = callPackage ../servers/gerbera { };
+  gerbera = callPackage ../servers/gerbera {
+    fmt = fmt_6;
+  };
 
   gobetween = callPackage ../servers/gobetween { };
 
@@ -21614,7 +21619,9 @@ in
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
-  waybar = callPackage ../applications/misc/waybar { };
+  waybar = callPackage ../applications/misc/waybar {
+    fmt = fmt_6;
+  };
 
   hikari = callPackage ../applications/window-managers/hikari { };
 
