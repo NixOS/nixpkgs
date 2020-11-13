@@ -5112,6 +5112,8 @@ in
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
+  lunar-client = callPackage ../games/lunar-client {};
+
   lvmsync = callPackage ../tools/backup/lvmsync { };
 
   kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
