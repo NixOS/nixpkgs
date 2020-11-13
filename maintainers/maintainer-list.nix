@@ -3311,6 +3311,16 @@
     githubId = 1621335;
     name = "Andrew Trachenko";
   };
+  govanify = {
+    name = "Gauvain 'GovanifY' Roussel-Tarbouriech";
+    email = "gauvain@govanify.com";
+    github = "govanify";
+    githubId = 6375438;
+    keys = [{
+      longkeyid = "rsa4096/0xDE62E1E2A6145556";
+      fingerprint = "5214 2D39 A7CE F8FA 872B  CA7F DE62 E1E2 A614 5556";
+    }];
+  };
   gpyh = {
     email = "yacine.hmito@gmail.com";
     github = "yacinehmito";
