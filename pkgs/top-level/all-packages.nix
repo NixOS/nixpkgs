@@ -190,6 +190,8 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  dunnart = libsForQt5.callPackage ../applications/graphics/dunnart { };
+
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
   glade = callPackage ../development/tools/glade { };
