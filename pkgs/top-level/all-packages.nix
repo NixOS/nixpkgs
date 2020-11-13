@@ -22681,7 +22681,7 @@ in
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
 
-  rssguard = libsForQt514.callPackage ../applications/networking/feedreaders/rssguard { };
+  rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
