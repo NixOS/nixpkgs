@@ -485,6 +485,9 @@ activatePackage() {
     # TODO(@Ericson2314): Don't special-case native compilation
     if [[ -z "${strictDeps-}" || "$hostOffset" -le -1 ]]; then
         addToSearchPath _PATH "$pkg/bin"
+    fi
+
+    if [[ "$hostOffset" -le -1 ]]; then
         addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
