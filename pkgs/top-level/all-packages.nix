@@ -20455,7 +20455,7 @@ in
 
   cntr = callPackage ../applications/virtualization/cntr { };
 
-  communi = libsForQt514.callPackage ../applications/networking/irc/communi { };
+  communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
   confclerk = callPackage ../applications/misc/confclerk { };
 
