@@ -3324,6 +3324,7 @@ broken-packages:
   - bdd
   - bdo
   - beam
+  - beam-automigrate
   - beam-core
   - beam-migrate
   - beam-mysql
@@ -3932,7 +3933,6 @@ broken-packages:
   - cmt
   - cmv
   - cnc-spec-compiler
-  - co-log
   - co-log-polysemy-formatting
   - co-log-sys
   - Coadjute
@@ -3990,7 +3990,6 @@ broken-packages:
   - commsec
   - commsec-keyexchange
   - ComonadSheet
-  - compact
   - compact-map
   - compact-mutable
   - compact-mutable-vector
@@ -7287,6 +7286,7 @@ broken-packages:
   - language-lua-qq
   - language-lua2
   - language-mixal
+  - language-Modula2
   - language-ninja
   - language-oberon
   - language-objc
@@ -8774,14 +8774,14 @@ broken-packages:
   - polysemy-http
   - polysemy-kvstore-jsonfile
   - polysemy-methodology
-  - polysemy-optics
+  - polysemy-methodology-composite
   - polysemy-path
   - polysemy-RandomFu
   - polysemy-resume
   - polysemy-test
   - polysemy-time
+  - polysemy-vinyl
   - polysemy-webserver
-  - polysemy-zoo
   - polyseq
   - polytypeable
   - polytypeable-utils
@@ -10777,7 +10777,6 @@ broken-packages:
   - typelevel-tensor
   - TypeNat
   - typeparams
-  - typerep-map
   - types-compat
   - typesafe-precure
   - typescript-docs
@@ -11517,4 +11516,4 @@ broken-packages:
   - zuramaru
   - Zwaluw
   - zxcvbn-dvorak
-  - zxcvbn-hs
+  - zxcvbn-h
