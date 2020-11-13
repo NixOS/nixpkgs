@@ -7946,6 +7946,8 @@ in {
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
+  neuralcoref = callPackage ../development/python-modules/neuralcoref {};
+
 });
 
 in fix' (extends overrides packages)
