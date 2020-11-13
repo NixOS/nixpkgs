@@ -2197,6 +2197,10 @@ in {
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  flatbuffers = callPackage ../development/python-modules/flatbuffers {
+    inherit (pkgs) flatbuffers;
+  };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
@@ -7083,6 +7087,7 @@ in {
     nccl = pkgs.nccl_cudatoolkit_10;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (pkgs) flatbuffers;
   };
 
   tensorflow-build_2 = callPackage ../development/python-modules/tensorflow/2 {
@@ -7092,6 +7097,7 @@ in {
     nccl = pkgs.nccl_cudatoolkit_11;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (pkgs) flatbuffers;
   };
 
   tensorflow-build = self.tensorflow-build_1;
