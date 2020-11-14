@@ -908,6 +908,7 @@
     "repo": "terraform-provider-template",
     "rev": "v2.2.0",
     "sha256": "12pn1i06jz4xl50md94yfdggg3pg5bv1viwf35izizm5rnyksyv2",
+    "vendorSha256": null,
     "version": "2.2.0"
   },
   "tencentcloud": {
