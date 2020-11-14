@@ -1,5 +1,6 @@
 { mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -20,6 +21,14 @@
 
 mkDerivation rec {
   name = "elisa";
+
+  patches = [
+    # Backporting build fix for QT < 5.14
+    (fetchpatch {
+      url = "https://invent.kde.org/multimedia/elisa/-/commit/159134b4716f07eb1d4ecbaeaae6e1c342088ef0.patch";
+      sha256 = "1ijlmmlfzwvmpkb5dnpmg552zz5y5b02spmfd7kz0z1g08cfxdhi";
+    })
+  ];
 
   buildInputs = [ libvlc ];
 
