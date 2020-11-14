@@ -182,6 +182,8 @@ in
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
+
   cm256cc = callPackage ../development/libraries/cm256cc {  };
 
   conftest = callPackage ../development/tools/conftest { };
