@@ -9518,6 +9518,7 @@ in
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+    libgit2 = libgit2_0_27;
   };
 
   julia_13 = callPackage ../development/compilers/julia/1.3.nix {
