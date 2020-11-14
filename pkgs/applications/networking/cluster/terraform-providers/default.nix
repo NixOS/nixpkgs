@@ -96,14 +96,6 @@ let
       '';
     });
 
-    # https://github.com/hashicorp/terraform-provider-dns/pull/101
-    dns = automated-providers.dns.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-dns hashicorp/terraform-provider-dns
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-dns hashicorp/terraform-provider-dns
-      '';
-    });
-
     # https://github.com/hashicorp/terraform-provider-external/pull/41
     external = automated-providers.external.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
