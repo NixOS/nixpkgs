@@ -35,6 +35,7 @@
     "repo": "terraform-provider-archive",
     "rev": "v2.0.0",
     "sha256": "1d5n379zyjp2srg43g78a8h33qwcpkfkj7c35idvbyydi35vzlpl",
+    "vendorSha256": null,
     "version": "2.0.0"
   },
   "arukas": {
