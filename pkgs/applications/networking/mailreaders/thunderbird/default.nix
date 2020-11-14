@@ -332,6 +332,5 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     license = licenses.mpl20;
-    timeout = 28800; # eight hours
   };
 }
