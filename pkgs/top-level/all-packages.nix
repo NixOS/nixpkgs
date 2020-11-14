@@ -1589,6 +1589,8 @@ in
 
   bsod = callPackage ../misc/emulators/bsod { };
 
+  simh = callPackage ../misc/emulators/simh { };
+
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
   btrbk = callPackage ../tools/backup/btrbk {
