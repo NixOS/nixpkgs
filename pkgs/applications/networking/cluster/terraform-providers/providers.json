@@ -946,6 +946,7 @@
     "repo": "terraform-provider-tls",
     "rev": "v3.0.0",
     "sha256": "1p9d5wrr4xwf2i930zlcarm1zl8ysj3nyc6rrbhpxk04kr6ap0wz",
+    "vendorSha256": null,
     "version": "3.0.0"
   },
   "triton": {
