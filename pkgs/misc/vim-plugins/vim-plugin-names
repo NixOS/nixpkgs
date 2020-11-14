@@ -375,6 +375,7 @@ nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
+nvim-lua/popup.nvim
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
