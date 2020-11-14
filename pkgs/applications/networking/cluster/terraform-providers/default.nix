@@ -88,14 +88,6 @@ let
     # providers that were moved to the `hashicorp` organization,
     # but haven't updated their references yet:
 
-    # https://github.com/hashicorp/terraform-provider-archive/pull/67
-    archive = automated-providers.archive.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-archive hashicorp/terraform-provider-archive
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-archive hashicorp/terraform-provider-archive
-      '';
-    });
-
     # https://github.com/hashicorp/terraform-provider-external/pull/41
     external = automated-providers.external.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
