@@ -2,6 +2,6 @@ set -e
 
 source $stdenv/setup
 
-unzip $src
+tar xzvf $src
 mkdir $out
 mv batik-* $out/batik
