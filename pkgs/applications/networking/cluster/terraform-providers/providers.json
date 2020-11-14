@@ -251,9 +251,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/dns",
     "repo": "terraform-provider-dns",
-    "rev": "v2.2.0",
-    "sha256": "11xdxj6hfclaq9glbh14nihmrsk220crm9ld8bdv77w0bppmrrch",
-    "version": "2.2.0"
+    "rev": "v3.0.0",
+    "sha256": "160dbmg7xg7iyc70f66dphyiysrdbscwya2n28idi8wp5rjx8bid",
+    "vendorSha256": null,
+    "version": "3.0.0"
   },
   "dnsimple": {
     "owner": "terraform-providers",
