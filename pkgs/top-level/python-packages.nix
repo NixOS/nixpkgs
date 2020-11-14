@@ -3612,6 +3612,8 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  log-symbols = callPackage ../development/python-modules/log-symbols { };
+
   loguru = callPackage ../development/python-modules/loguru { };
 
   logutils = callPackage ../development/python-modules/logutils { };
