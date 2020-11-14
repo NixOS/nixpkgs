@@ -232,7 +232,6 @@ self: super: {
   hnix = dontCheck (super.hnix.override {
     # 2020-09-18: Those packages are all needed by hnix at versions newer than on stackage
     neat-interpolation = self.neat-interpolation_0_5_1_2; # at least 0.5.1
-    data-fix = self.data-fix_0_3_0; # at least 0.3
     prettyprinter = self.prettyprinter_1_7_0; # at least 1.7
 
   });
@@ -946,12 +945,7 @@ self: super: {
   # Generate cli completions for dhall.
   dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
-  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (
-    super.dhall-nix.overrideScope (self: super: {
-      dhall = super.dhall_1_36_0;
-      repline = self.repline_0_4_0_0;
-      haskeline = self.haskeline_0_8_1_0;
-    }));
+  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
@@ -1292,19 +1286,7 @@ self: super: {
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
-  # 2020-08-14: gi-pango from stackage is to old for the C libs it links against in nixpkgs.
-  # That's why we need to bump a ton of dependency versions to unbreak them.
-  gi-pango = assert super.gi-pango.version == "1.0.22"; self.gi-pango_1_0_23;
-  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_4) [ pkgs.gobject-introspection ];
-  haskell-gi = assert super.haskell-gi.version == "0.23.1"; self.haskell-gi_0_24_5;
-  gi-cairo = assert super.gi-cairo.version == "1.0.23"; self.gi-cairo_1_0_24;
-  gi-glib = assert super.gi-glib.version == "2.0.23"; self.gi-glib_2_0_24;
-  gi-gobject = assert super.gi-gobject.version == "2.0.22"; self.gi-gobject_2_0_24;
-  gi-atk = assert super.gi-atk.version == "2.0.21"; self.gi-atk_2_0_22;
-  gi-gio = assert super.gi-gio.version == "2.0.26"; self.gi-gio_2_0_27;
-  gi-gdk = assert super.gi-gdk.version == "3.0.22"; self.gi-gdk_3_0_23;
-  gi-gtk = assert super.gi-gtk.version == "3.0.33"; self.gi-gtk_3_0_35;
-  gi-gdkpixbuf = assert super.gi-gdkpixbuf.version == "2.0.23"; self.gi-gdkpixbuf_2_0_24;
+  haskell-gi-base = addBuildDepends super.haskell-gi-base [ pkgs.gobject-introspection ];
 
   # 2020-08-14: Needs some manual patching to be compatible with haskell-gi-base 0.24
   # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
@@ -1398,18 +1380,13 @@ self: super: {
   # We want the latest version of Pandoc.
   hslua = doDistribute self.hslua_1_1_2;
   # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
-  pandoc-citeproc = doJailbreak (doDistribute self.pandoc-citeproc_0_17_0_2);
+  pandoc-citeproc = doJailbreak super.pandoc-citeproc;
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
 
-  # stack-2.5.1 needs a more current version of pantry to compile
-  pantry = self.pantry_0_5_1_4;
-
   # Too tight version bounds, see https://github.com/haskell-hvr/microaeson/pull/4
   microaeson = doJailbreak super.microaeson;
-
-  autoapply = super.autoapply.override { th-desugar = self.th-desugar_1_11; };
 
   # - Deps are required during the build for testing and also during execution,
   #   so add them to build input and also wrap the resulting binary so they're in
@@ -1436,36 +1413,22 @@ self: super: {
   # quickcheck-instances is only used in the tests of binary-instances.
   binary-instances = dontCheck super.binary-instances;
 
-  # INSERT NEW OVERRIDES ABOVE THIS LINE
-} // (let
-  # fourmolu can‘t compile with an older aeson
-  localOverride = name: value: doDistribute (value.overrideScope (self: super: {
-    aeson = dontCheck super.aeson_1_5_2_0;
+  # tons of overrides for bleeding edge versions for ghcide and hls
+  # overriding aeson on all of them to prevent double compilations
+  # this shouldn‘t break anything because nearly all their reverse deps are
+  # in this list or marked as broken anyways
+  haskell-language-server = dontCheck super.haskell-language-server;
+  fourmolu = dontCheck super.fourmolu;
+  ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
+    # 2020-11-13: Bumping bounds via an already upstream merged change
+    # https://github.com/haskell/ghcide/pull/905
+    url = https://github.com/haskell/ghcide/commit/9b8aaf9b06846571cc0b5d46680e686e4f9153a3.patch;
+    sha256 = "0j8980dmvwjcs72ahq2zc14hwkyd5ybgzyy1az3zq5flp383fai6";
+    includes = [ "ghcide.cabal" ];
   }));
-  in pkgs.lib.mapAttrs localOverride {
-    # tons of overrides for bleeding edge versions for ghcide and hls
-    # overriding aeson on all of them to prevent double compilations
-    # this shouldn‘t break anything because nearly all their reverse deps are
-    # in this list or marked as broken anyways
-    haskell-language-server = dontCheck super.haskell-language-server;
-    fourmolu = dontCheck super.fourmolu;
-    ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
-      # 2020-11-13: Bumping bounds via an already upstream merged change
-      # https://github.com/haskell/ghcide/pull/905
-      url = https://github.com/haskell/ghcide/commit/9b8aaf9b06846571cc0b5d46680e686e4f9153a3.patch;
-      sha256 = "0j8980dmvwjcs72ahq2zc14hwkyd5ybgzyy1az3zq5flp383fai6";
-      includes = [ "ghcide.cabal" ];
-    }));
-    refinery = super.refinery_0_3_0_0;
-    data-tree-print = doJailbreak super.data-tree-print;
-    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_3;
-    lsp-test = dontCheck super.lsp-test_0_11_0_7;
-    hls-plugin-api = super.hls-plugin-api;
-    hls-hlint-plugin = super.hls-hlint-plugin;
-    implicit-hie-cradle = super.implicit-hie-cradle;
-    # the hls brittany is objectively better, because there hasn‘t been a
-    # brittany release in a while and this version works with 8.10.
-    # And we need to build it anyways.
-    brittany = dontCheck super.hls-brittany;
-  }
-)  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+  data-tree-print = doJailbreak super.data-tree-print;
+  # the hls brittany is objectively better, because there hasn‘t been a
+  # brittany release in a while and this version works with 8.10.
+  # And we need to build it anyways.
+  brittany = dontCheck super.hls-brittany;
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

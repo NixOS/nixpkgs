@@ -62,18 +62,6 @@ self: super: {
   system-fileio = doJailbreak super.system-fileio;
   unliftio-core = doJailbreak super.unliftio-core;
 
-  # Use the latest version to fix the build.
-  optics = self.optics_0_3;
-  optics-extra = self.optics-extra_0_3;
-  optics-th = self.optics-th_0_3_0_2;
-
-  insert-ordered-containers = super.insert-ordered-containers.override {
-    optics-core = self.optics-core_0_3_0_1;
-    optics-extra = self.optics-extra_0_3.override {
-      optics-core = self.optics-core_0_3_0_1;
-    };
-  };
-
   # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
   monoidal-containers = doJailbreak super.monoidal-containers;
 
