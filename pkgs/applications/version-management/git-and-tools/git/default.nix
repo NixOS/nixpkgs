@@ -249,6 +249,7 @@ stdenv.mkDerivation {
      '')
    + stdenv.lib.optionalString stdenv.isDarwin ''
     # enable git-credential-osxkeychain by default if darwin
+    mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF
     [credential]
       helper = osxkeychain
