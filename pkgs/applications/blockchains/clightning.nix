@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip gettext ];
   buildInputs =
-    let py3 = python3.withPackages (p: [ p.Mako ]);
+    let py3 = python3.withPackages (p: [ p.mako ]);
     in [ sqlite gmp zlib py3 ];
 
   makeFlags = [ "prefix=$(out) VERSION=v${version}" ];

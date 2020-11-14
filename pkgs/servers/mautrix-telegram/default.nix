@@ -26,7 +26,7 @@ in buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    Mako
+    mako
     aiohttp
     mautrix
     sqlalchemy

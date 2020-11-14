@@ -1,7 +1,7 @@
 { stdenv
 , fetchPypi
 , buildPythonPackage
-, Mako
+, mako
 , pytest
 , numpy
 , cffi
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   buildInputs = [ opencl-headers ocl-icd pybind11 ];
 
-  propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
+  propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six mako ];
 
   src = fetchPypi {
     inherit pname version;

@@ -18,9 +18,9 @@
 , scipy
 , matplotlib
 # => grc - the gnu radio companion
-, Mako
+, mako
 , cheetah
-, pygtk # Note: GR is migrating to Mako. Cheetah should be removed for GR3.8
+, pygtk # Note: GR is migrating to mako. Cheetah should be removed for GR3.8
 # => gr-wavelet: collection of wavelet blocks
 , gsl
 # => gr-qtgui: the Qt-based GUI
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ];
 
   propagatedBuildInputs = [
-    Mako
+    mako
     cheetah
     numpy
     scipy

@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
-, Mako
+, mako
 , boost
 , numpy
 , pytools
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     cudatoolkit
     compyte
     python
-    Mako
+    mako
   ];
 
   meta = with stdenv.lib; {

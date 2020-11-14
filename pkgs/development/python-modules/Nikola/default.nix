@@ -11,7 +11,7 @@
 , pillow
 , dateutil
 , docutils
-, Mako
+, mako
 , unidecode
 , lxml
 , Yapsy
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # requirements.txt
-    doit pygments pillow dateutil docutils Mako markdown unidecode
+    doit pygments pillow dateutil docutils mako markdown unidecode
     lxml Yapsy PyRSS2Gen Logbook blinker natsort requests piexif Babel
     # requirements-extras.txt
     phpserialize jinja2 toml notebook ruamel_yaml aiohttp watchdog

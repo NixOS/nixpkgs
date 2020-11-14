@@ -20977,7 +20977,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
 
   gnuradio = callPackage ../applications/radio/gnuradio {
-    inherit (python2Packages) cheetah lxml Mako matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
+    inherit (python2Packages) cheetah lxml mako matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     fftw = fftwFloat;
     qwt = qwt6_qt4;

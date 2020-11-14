@@ -19,7 +19,7 @@
 , idna
 , itsdangerous
 , jinja2
-, Mako
+, mako
 , markupsafe
 , python-dateutil
 , pytz
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     idna
     itsdangerous
     jinja2
-    Mako
+    mako
     markupsafe
     python-dateutil
     pytz

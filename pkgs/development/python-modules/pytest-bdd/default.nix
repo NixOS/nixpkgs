@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
 , execnet
 , glob2
-, Mako
+, mako
 , mock
 , parse
 , parse-type
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1yqzz44as4pxffmg4hk9lijvnvlc2chg1maq1fbj5i4k4jpagvjz";
   };
 
-  propagatedBuildInputs = [ glob2 Mako parse parse-type py pytest six ];
+  propagatedBuildInputs = [ glob2 mako parse parse-type py pytest six ];
 
   # Tests require extra dependencies
   checkInputs = [ execnet mock pytest ];

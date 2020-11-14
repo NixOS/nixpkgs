@@ -4,7 +4,7 @@
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  pname = "mako";
+  pname = "Mako";
   version = "1.4.1";
 
   src = fetchFromGitHub {
