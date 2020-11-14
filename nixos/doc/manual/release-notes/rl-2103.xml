@@ -335,6 +335,22 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
        official documentation</link> of the json_exporter.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Androidenv was updated, removing the <literal>includeDocs</literal> and <literal>lldbVersions</literal>
+       arguments. Docs only covered a single version of the Android SDK, LLDB is now bundled with the NDK,
+       and both are no longer available to download from the Android package repositories. Additionally, since
+       the package lists have been updated, some older versions of Android packages may not be bundled. If you
+       depend on older versions of Android packages, we recommend overriding the repo.
+     </para>
+     <para>
+       Android packages are now loaded from a repo.json file created by parsing Android repo XML files. The arguments
+       <literal>repoJson</literal> and <literal>repoXmls</literal> have been added to allow overriding the built-in
+       androidenv repo.json with your own. Additionally, license files are now written to allow compatibility
+       with Gradle-based tools, and the <literal>extraLicenses</literal> argument has been added to accept more
+       SDK licenses if your project requires it. See the androidenv documentation for more details.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
