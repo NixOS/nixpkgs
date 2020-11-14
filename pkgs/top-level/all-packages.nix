@@ -849,6 +849,8 @@ in
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  archivy = python3Packages.callPackage ../applications/misc/archivy { };
+
   arandr = callPackage ../tools/X11/arandr { };
 
   inherit (callPackages ../servers/nosql/arangodb {
