@@ -136,14 +136,6 @@ let
       '';
     });
 
-    # https://github.com/hashicorp/terraform-provider-random/pull/107
-    random = automated-providers.random.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-random hashicorp/terraform-provider-random
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-random hashicorp/terraform-provider-random
-      '';
-    });
-
     # https://github.com/hashicorp/terraform-provider-template/pull/79
     template = automated-providers.template.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
