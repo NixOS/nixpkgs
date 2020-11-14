@@ -2578,6 +2578,18 @@ let
     meta.homepage = "https://github.com/mfussenegger/nvim-dap/";
   };
 
+  nvim-dap-virtual-text = buildVimPluginFrom2Nix {
+    pname = "nvim-dap-virtual-text";
+    version = "2020-11-09";
+    src = fetchFromGitHub {
+      owner = "theHamsta";
+      repo = "nvim-dap-virtual-text";
+      rev = "7c4bbfb1caa2b5be1e863962bd0bc142e10b801f";
+      sha256 = "1ry4799s4nj4nhfd2p0hbb3r8vp87zgwn0cw1h8w1hhyv9gfjn82";
+    };
+    meta.homepage = "https://github.com/theHamsta/nvim-dap-virtual-text/";
+  };
+
   nvim-gdb = buildVimPluginFrom2Nix {
     pname = "nvim-gdb";
     version = "2020-10-01";
