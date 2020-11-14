@@ -18996,6 +18996,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     ubootRaspberryPi3_64bit
     ubootRaspberryPiZero
     ubootRock64
+    ubootRockPi4
     ubootRockPro64
     ubootROCPCRK3399
     ubootSheevaplug
