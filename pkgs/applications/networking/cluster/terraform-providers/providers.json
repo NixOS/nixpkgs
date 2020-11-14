@@ -395,9 +395,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/http",
     "repo": "terraform-provider-http",
-    "rev": "v1.2.0",
-    "sha256": "0q8ichbqrq62q1j0rc7sdz1jzfwg2l9v4ac9jqf6y485dblhmwqd",
-    "version": "1.2.0"
+    "rev": "v2.0.0",
+    "sha256": "0x6a9qf819g16dj9inyvhwff67xy0ixyy70ck56lkidrldara444",
+    "vendorSha256": null,
+    "version": "2.0.0"
   },
   "huaweicloud": {
     "owner": "terraform-providers",
