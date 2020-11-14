@@ -1,7 +1,7 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
 , withPrometheusExporter ? true
-, stdenv, lib, fetchurl
+, stdenv, lib, fetchurl, nixosTests
 , openssl, zlib
 , lua5_3 ? null, pcre ? null, systemd ? null
 }:
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin "CC=cc";
 
   enableParallelBuilding = true;
+
+  passthru.tests.haproxy = nixosTests.haproxy;
 
   meta = with lib; {
     description = "Reliable, high performance TCP/HTTP load balancer";
