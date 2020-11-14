@@ -128,14 +128,6 @@ let
       '';
     });
 
-    # https://github.com/hashicorp/terraform-provider-null/pull/43
-    null = automated-providers.null.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-null hashicorp/terraform-provider-null
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-null hashicorp/terraform-provider-null
-      '';
-    });
-
     # https://github.com/hashicorp/terraform-provider-template/pull/79
     template = automated-providers.template.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
