@@ -617,6 +617,7 @@
     "repo": "terraform-provider-null",
     "rev": "v3.0.0",
     "sha256": "0r1kvsc96922i85hdvf1pk8aicxjr6bc69gc63qi21hrl0jpvr7r",
+    "vendorSha256": null,
     "version": "3.0.0"
   },
   "nutanix": {
