@@ -128,14 +128,6 @@ let
       '';
     });
 
-    # https://github.com/hashicorp/terraform-provider-template/pull/79
-    template = automated-providers.template.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-template hashicorp/terraform-provider-template
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-template hashicorp/terraform-provider-template
-      '';
-    });
-
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
     cloudfoundry = callPackage ./cloudfoundry {};
