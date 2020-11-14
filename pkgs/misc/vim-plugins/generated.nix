@@ -2566,6 +2566,18 @@ let
     meta.homepage = "https://github.com/roxma/nvim-completion-manager/";
   };
 
+  nvim-dap = buildVimPluginFrom2Nix {
+    pname = "nvim-dap";
+    version = "2020-11-14";
+    src = fetchFromGitHub {
+      owner = "mfussenegger";
+      repo = "nvim-dap";
+      rev = "926b049d7200ec7f0c69e5bcb6cbfa737207cafb";
+      sha256 = "0a1bkl5wg5q1w3yljii4qjry6pfvx6iyyz9ahkvb5ij015lg2lvg";
+    };
+    meta.homepage = "https://github.com/mfussenegger/nvim-dap/";
+  };
+
   nvim-gdb = buildVimPluginFrom2Nix {
     pname = "nvim-gdb";
     version = "2020-10-01";
