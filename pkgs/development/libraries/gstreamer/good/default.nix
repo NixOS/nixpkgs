@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.18.0";
+  version = "1.18.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1b4b3a6fm2wyqpnx300pg1sz01m9qhfajadk3b7sbzisg8vvqab3";
+    sha256 = "0v329xi4qhlfh9aksfyviryqk9lclm4wj1lxrjnbdv4haldfj472";
   };
 
   nativeBuildInputs = [
