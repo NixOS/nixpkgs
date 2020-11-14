@@ -26784,6 +26784,8 @@ in
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
+  qucs-s = callPackage ../applications/science/electronics/qucs-s { };
+
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
