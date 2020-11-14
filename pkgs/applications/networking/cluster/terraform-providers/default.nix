@@ -88,14 +88,6 @@ let
     # providers that were moved to the `hashicorp` organization,
     # but haven't updated their references yet:
 
-    # https://github.com/hashicorp/terraform-provider-external/pull/41
-    external = automated-providers.external.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-external hashicorp/terraform-provider-external
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-external hashicorp/terraform-provider-external
-      '';
-    });
-
     # https://github.com/hashicorp/terraform-provider-helm/pull/522
     helm = automated-providers.helm.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
