@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-policyinsights";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "ed229e3845c477e88dde413825d4fba0d38b3a5ffab4e694c7d0da995f3db0f3";
+    sha256 = "2c64533f6eab08dc16450fc5d7c7651557fc0edc8ef1278dda336333d648a7c4";
   };
 
   propagatedBuildInputs = [
