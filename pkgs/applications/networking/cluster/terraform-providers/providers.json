@@ -298,6 +298,7 @@
     "repo": "terraform-provider-external",
     "rev": "v2.0.0",
     "sha256": "16wciz08gicicsirij2ql0gy8dg0372jjsqmaigkl2n07mqz2b6a",
+    "vendorSha256": null,
     "version": "2.0.0"
   },
   "fastly": {
