@@ -1,9 +1,9 @@
 {
-  stdenv, lib, fetchFromGitHub, makeDesktopItem, prusa-slicer
+  stdenv, dbus, lib, fetchFromGitHub, makeDesktopItem, prusa-slicer
 }:
 let
   appname = "SuperSlicer";
-  version = "2.2.54.2";
+  version = "2.3.55.2";
   pname = "super-slicer";
   description = "PrusaSlicer fork with more features and faster development cycle";
   override = super: {
@@ -12,9 +12,11 @@ let
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      sha256 = "sha256-ThmsxFXI1uReK+JwpHrIWzHpBdIOP77kDjv+QaK+Azk=";
+      sha256 = "sha256:0q3af3n78732v8bdqfs7crfl1y4wphbd7pli5pqj5y129chsvzwl";
       rev = version;
     };
+
+    buildInputs = super.buildInputs ++ [ dbus ];
 
     # See https://github.com/supermerill/SuperSlicer/issues/432
     cmakeFlags = super.cmakeFlags ++ [
