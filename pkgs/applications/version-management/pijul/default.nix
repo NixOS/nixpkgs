@@ -15,14 +15,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-alpha";
+  version = "1.0.0-alpha.1";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "0dnw2cxsxb20my81szyqjsmmnkakxawvsk6cnd1fi88k4lr0z2xh";
+    sha256 = "113j7f6l9yvgm3x65p268940hk2svspg0n63lg0dpp8hakk3mslq";
   };
 
-  cargoSha256 = "130vryqs0g4a0328ivqafdylwqs64g4mp8vgmz6nz4c9l3h9wgcx";
+  cargoSha256 = "0lciyhh4yv2z9aii0xph8sird4f9624pk9hynx7441hwjjdmgy59";
 
   cargoBuildFlags = stdenv.lib.optional gitImportSupport "--features=git";
   LIBCLANG_PATH = "${libclang}/lib";
