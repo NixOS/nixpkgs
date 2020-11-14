@@ -381,6 +381,7 @@ nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
 nvim-treesitter/nvim-treesitter-refactor
+nvim-treesitter/nvim-treesitter-textobjects
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
 Olical/conjure

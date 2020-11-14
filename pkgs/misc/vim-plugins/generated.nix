@@ -2662,6 +2662,18 @@ let
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-refactor/";
   };
 
+  nvim-treesitter-textobjects = buildVimPluginFrom2Nix {
+    pname = "nvim-treesitter-textobjects";
+    version = "2020-11-05";
+    src = fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter-textobjects";
+      rev = "2b4d0f3cce49c025146a020aea7ed069efd57bc1";
+      sha256 = "0ighv85xm62glbf1793lmya1cfbhizpq3nyl46xbx2y7akg799xb";
+    };
+    meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects/";
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2020-04-08";
