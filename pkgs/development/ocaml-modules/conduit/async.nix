@@ -1,17 +1,20 @@
-{ stdenv, buildDunePackage, async, async_ssl, ppx_sexp_conv, conduit }:
+{ lib, buildDunePackage
+, async, core, conduit, cstruct
+, ke, fmt, bigstringaf, rresult
+}:
 
-if !stdenv.lib.versionAtLeast conduit.version "1.0"
+if !lib.versionAtLeast conduit.version "1.0"
 then conduit
 else
 
 buildDunePackage {
 	pname = "conduit-async";
-	useDune2 = true;
-	inherit (conduit) version src;
+	inherit (conduit) version src useDune2;
 
-	buildInputs = [ ppx_sexp_conv ];
+	propagatedBuildInputs = [ core async conduit cstruct ];
 
-	propagatedBuildInputs = [ async async_ssl conduit ];
+	doCheck = true;
+	checkInputs = [ ke fmt bigstringaf rresult ];
 
 	meta = conduit.meta // {
 		description = "A network connection establishment library for Async";

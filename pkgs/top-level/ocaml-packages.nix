@@ -143,9 +143,17 @@ let
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
 
+    conduit-async-ssl = callPackage ../development/ocaml-modules/conduit/async-ssl.nix { };
+
+    conduit-async-tls = callPackage ../development/ocaml-modules/conduit/async-tls.nix { };
+
     conduit-lwt = callPackage ../development/ocaml-modules/conduit/lwt.nix { };
 
-    conduit-lwt-unix = callPackage ../development/ocaml-modules/conduit/lwt-unix.nix { };
+    conduit-lwt-ssl = callPackage ../development/ocaml-modules/conduit/lwt-ssl.nix { };
+
+    conduit-lwt-tls = callPackage ../development/ocaml-modules/conduit/lwt-tls.nix { };
+
+    conduit-tls = callPackage ../development/ocaml-modules/conduit/tls.nix { };
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
