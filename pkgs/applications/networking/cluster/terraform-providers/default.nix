@@ -136,14 +136,6 @@ let
       '';
     });
 
-    # https://github.com/hashicorp/terraform-provider-tls/pull/71
-    tls = automated-providers.tls.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-tls hashicorp/terraform-provider-tls
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-tls hashicorp/terraform-provider-tls
-      '';
-    });
-
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
     cloudfoundry = callPackage ./cloudfoundry {};
