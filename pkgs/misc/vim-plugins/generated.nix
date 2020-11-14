@@ -2830,6 +2830,18 @@ let
     meta.homepage = "https://github.com/aklt/plantuml-syntax/";
   };
 
+  playground = buildVimPluginFrom2Nix {
+    pname = "playground";
+    version = "2020-10-19";
+    src = fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "playground";
+      rev = "0cb0a18378db84c4c2bdb38c28e897958d2ec14d";
+      sha256 = "1808kwf3ccrjaqxr43l23kfj8s0zijdk0rpriymqk143b29nk52c";
+    };
+    meta.homepage = "https://github.com/nvim-treesitter/playground/";
+  };
+
   plenary-nvim = buildVimPluginFrom2Nix {
     pname = "plenary-nvim";
     version = "2020-11-06";
