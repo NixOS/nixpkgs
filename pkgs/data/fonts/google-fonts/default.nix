@@ -30,7 +30,11 @@ stdenv.mkDerivation {
     rm -rv ofl/comfortaa/*.ttf \
       ofl/mavenpro/*.ttf \
       ofl/muli/*.ttf \
-      ofl/oswald/*.ttf
+      ofl/oswald/*.ttf \
+
+    # This abomination of a font causes crashes with `libfontconfig',
+    # It has an absurd number of symbols
+    rm -r ofl/adobeblank/
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
