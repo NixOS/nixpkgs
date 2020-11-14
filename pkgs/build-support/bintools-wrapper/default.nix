@@ -179,6 +179,7 @@ stdenv.mkDerivation {
           mips64   = "btsmip";
           mips64el = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
+      else if targetPlatform.isMmix then "mmix"
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
       else if targetPlatform.isMsp430 then "msp430"

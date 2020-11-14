@@ -17,6 +17,7 @@ rec {
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isMips         = { cpu = { family = "mips"; }; };
+    isMmix         = { cpu = { family = "mmix"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
