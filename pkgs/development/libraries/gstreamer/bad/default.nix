@@ -89,13 +89,13 @@ let
   inherit (stdenv.lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.18.0";
+  version = "1.18.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0pqqq5bs9fjwcmbwgsgxs2dx6gznhxs7ii5pmjkslr6xmlfap0pk";
+    sha256 = "1cn18cbqyysrxnrk5bpxdzd5xcws9g2kmm5rbv00cx6rhn69g5f1";
   };
 
   patches = [
