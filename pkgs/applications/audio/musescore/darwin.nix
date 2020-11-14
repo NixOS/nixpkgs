@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = concatStringsSep "." versionComponents;
 
   # The disk image contains the .app and a symlink to /Applications.
-  sourceRoot="${appName}.app";
+  sourceRoot = "${appName}.app";
 
   src = fetchurl {
     url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
