@@ -3746,6 +3746,8 @@ in {
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
+  marshmallow2 = callPackage ../development/python-modules/marshmallow/2.nix { };
+
   marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
 
   marshmallow-polyfield = callPackage ../development/python-modules/marshmallow-polyfield { };

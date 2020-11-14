@@ -1,20 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi,
-  dateutil, simplejson, isPy27
+{ lib, buildPythonPackage, fetchPypi
+, dateutil, simplejson, isPy27, pytest
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow";
   version = "3.9.1";
   disabled = isPy27;
-
-  meta = {
-    homepage = "https://github.com/marshmallow-code/marshmallow";
-    description = ''
-      A lightweight library for converting complex objects to and from
-      simple Python datatypes.
-    '';
-    license = lib.licenses.mit;
-  };
 
   src = fetchPypi {
     inherit pname version;
@@ -23,5 +15,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ dateutil simplejson ];
 
-  doCheck = false;
+  checkInputs = [ pytest pytz ];
+
+  pythonImportCheck = [ "marshmallow" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/marshmallow-code/marshmallow";
+    description = "lightweight library for converting complex objects to and from simple Python datatypes.";
+    license = licenses.mit;
+    maintainers = with maintainers; [ freezeboy ];
+  };
 }
