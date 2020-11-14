@@ -5290,6 +5290,8 @@ in {
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
+  phonemizer = callPackage ../development/python-modules/phonemizer { };
+
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
   pyopengl = callPackage ../development/python-modules/pyopengl { };
