@@ -1165,6 +1165,8 @@ in
 
   gaia = callPackage ../development/libraries/gaia { };
 
+  antiprism = callPackage ../applications/science/geometry/antiprism { };
+
   gama = callPackage ../applications/science/geometry/gama { };
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
