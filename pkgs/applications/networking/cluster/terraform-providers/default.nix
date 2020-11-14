@@ -120,14 +120,6 @@ let
       '';
     });
 
-    # https://github.com/hashicorp/terraform-provider-local/pull/40
-    local = automated-providers.local.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-local hashicorp/terraform-provider-local
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-local hashicorp/terraform-provider-local
-      '';
-    });
-
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
     cloudfoundry = callPackage ./cloudfoundry {};

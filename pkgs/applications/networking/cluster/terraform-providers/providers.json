@@ -510,6 +510,7 @@
     "repo": "terraform-provider-local",
     "rev": "v2.0.0",
     "sha256": "0c1mk63lh3qmj8pl80lyvvsgyg4gg7673abr8cfxrj45635h74z5",
+    "vendorSha256": null,
     "version": "2.0.0"
   },
   "logentries": {
