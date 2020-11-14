@@ -380,6 +380,7 @@ nvim-lua/popup.nvim
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
+nvim-treesitter/nvim-treesitter-refactor
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
 Olical/conjure

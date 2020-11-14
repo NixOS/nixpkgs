@@ -2650,6 +2650,18 @@ let
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
 
+  nvim-treesitter-refactor = buildVimPluginFrom2Nix {
+    pname = "nvim-treesitter-refactor";
+    version = "2020-10-07";
+    src = fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter-refactor";
+      rev = "9d4b9daf2f138a5de538ee094bd899591004f8e2";
+      sha256 = "0ma5zsl70mi92b9y8nhgkppdiqfjj0bl3gklhjv1c3lg7kny7511";
+    };
+    meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-refactor/";
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2020-04-08";
