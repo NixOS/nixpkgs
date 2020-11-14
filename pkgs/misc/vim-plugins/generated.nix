@@ -483,6 +483,18 @@ let
     meta.homepage = "https://github.com/neoclide/coc.nvim/";
   };
 
+  codi-vim = buildVimPluginFrom2Nix {
+    pname = "codi-vim";
+    version = "2020-07-25";
+    src = fetchFromGitHub {
+      owner = "metakirby5";
+      repo = "codi.vim";
+      rev = "08e26f4dc4bdb0cbc790474beb29a48e7a9c8ceb";
+      sha256 = "1qwacymipshfvvg7ya7gsfz1r65q44qjjsgya6wm81n04q9rpxfx";
+    };
+    meta.homepage = "https://github.com/metakirby5/codi.vim/";
+  };
+
   colorizer = buildVimPluginFrom2Nix {
     pname = "colorizer";
     version = "2020-07-23";
