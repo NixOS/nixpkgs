@@ -24,7 +24,10 @@ buildPythonPackage rec {
   # unittest_mixins doesn't seem to be very active
   checkPhase = ''
     cd test
-    pytest test_{core,process_code,pytest_assumptions}.py
+    # test_core.py and test_process_code.py should also be tested here, but tests
+    # were broken on version 1.0.3
+    # https://github.com/tarpas/pytest-testmon/issues/158
+    pytest test_pytest_assumptions.py
   '';
 
   meta = with lib; {
