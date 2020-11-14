@@ -7013,6 +7013,8 @@ in {
 
   spidev = callPackage ../development/python-modules/spidev { };
 
+  spinners = callPackage ../development/python-modules/spinners { };
+
   splinter = callPackage ../development/python-modules/splinter { };
 
   spotipy = callPackage ../development/python-modules/spotipy { };
