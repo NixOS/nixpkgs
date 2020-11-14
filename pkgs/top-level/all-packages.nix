@@ -8179,6 +8179,8 @@ in
     inherit (chickenPackages_4) eggDerivation fetchegg;
   };
 
+  ulogd = callPackage ../os-specific/linux/ulogd { };
+
   unar = callPackage ../tools/archivers/unar { stdenv = clangStdenv; };
 
   unp = callPackage ../tools/archivers/unp { };
