@@ -122,4 +122,6 @@ self: super: {
   liquid-vector = markBroken super.liquid-vector;
   liquidhaskell = markBroken super.liquidhaskell;
 
+  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_4;
 }
