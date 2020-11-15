@@ -21368,6 +21368,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
 
   gnunet-gtk = callPackage ../applications/networking/p2p/gnunet/gtk.nix { };
+  
+  gnunet-fuse = callPackage ../applications/networking/p2p/gnunet/fuse.nix { };
 
   gocr = callPackage ../applications/graphics/gocr { };
 
