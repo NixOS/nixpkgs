@@ -27,9 +27,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    $out/bin/velero completion bash > helm.bash
-    $out/bin/velero completion zsh > helm.zsh
-    installShellCompletion helm.{bash,zsh}
+    $out/bin/velero completion bash > velero.bash
+    $out/bin/velero completion zsh > velero.zsh
+    installShellCompletion velero.{bash,zsh}
   '';
 
   meta = with stdenv.lib; {
