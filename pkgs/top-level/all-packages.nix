@@ -24738,6 +24738,8 @@ in
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
+  xlife = callPackage ../applications/graphics/xlife { };
+
   xmobar = haskellPackages.xmobar;
 
   xmonad-log = callPackage ../tools/misc/xmonad-log { };
