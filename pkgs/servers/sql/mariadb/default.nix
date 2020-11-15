@@ -34,12 +34,13 @@ common = rec { # attributes common to both builds
     name   = "mariadb-${version}.tar.gz";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ]
+    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     ncurses openssl zlib pcre libiconv curl
   ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ perl cctools CoreServices ]
     ++ optional (!stdenv.hostPlatform.isDarwin && withStorageToku) [ jemalloc450 ]
     ++ optional (!stdenv.hostPlatform.isDarwin && !withStorageToku) [ jemalloc ];
 

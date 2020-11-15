@@ -74,6 +74,8 @@ let
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 
+  git-chglog = callPackage ./git-chglog { };
+
   git-cinnabar = callPackage ./git-cinnabar { };
 
   git-codeowners = callPackage ./git-codeowners { };
@@ -196,7 +198,7 @@ let
   gitstatus = callPackage ./gitstatus { };
 
   gitui = callPackage ./gitui {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
 
   grv = callPackage ./grv { };

@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "psautohint";
-  version = "2.1.1";
+  version = "2.1.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = "adobe-type-tools";
     repo   = pname;
-    sha256 = "00n9bycjmvx1fb4332bdj53f01q86ajndrvid9idpiyzybmd5vp4";
+    sha256 = "1s2l54gzn11y07zaggprwif7r3ia244qijjhkbvjdx4jsgc5df8n";
     rev    = "v${version}";
     fetchSubmodules = true; # data dir for tests
   };

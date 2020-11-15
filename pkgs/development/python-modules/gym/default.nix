@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # The test needs MuJoCo that is not free library.
   doCheck = false;
 
-  pythonImportCheck = [ "gym" ];
+  pythonImportsCheck = [ "gym" ];
 
   meta = with lib; {
     description = "A toolkit by OpenAI for developing and comparing your reinforcement learning agents";

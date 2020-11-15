@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.5.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-F1NbzcMoct0mjWKY2itz4cBqVToY7HpoaRzk3l683fY=";
+    sha256 = "1l4acikxkxvmdqn10ck4w4f100vz7kfrzghz5h4haj7ycrr35j3l";
   };
 
-  cargoSha256 = "sha256-eBY+34VEPEAv5bqerxR3i7cJrVb1GtvmWyrM7uuef2E=";
+  cargoSha256 = "0rmy0jnf5rqd4dqyl6rinxb3n3rzqnixrybs4i27lcas9m753z40";
 
   buildInputs = with stdenv;
     lib.optionals isDarwin [ CoreFoundation libiconv libresolv Security ];
@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ filalex77 kloenk ];
   };
 }

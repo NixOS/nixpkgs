@@ -529,14 +529,6 @@ rec {
     meta.description = "Writing Emacs plugin in OCaml";
   };
 
-  email_message = janePackage {
-    pname = "email_message";
-    hash = "131jd72k4s8cdbgg6gyg7w5v8mphdlvdx4fgvh8d9a1m7kkvbxfg";
-    propagatedBuildInputs = [ async angstrom core_extended cryptokit magic-mime ounit ];
-    patches = [ ./email-message-angstrom-0.14.patch ];
-    meta.description = "E-mail message parser";
-  };
-
   incremental_kernel = janePackage {
     version = "0.11.1";
     pname = "incremental_kernel";

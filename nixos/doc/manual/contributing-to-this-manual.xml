@@ -12,7 +12,7 @@ xlink:href="https://github.com/NixOS/nixpkgs">Nixpkgs</link> repository.
   You can quickly check your edits with the following:
  </para>
 <screen>
-<prompt>$ </prompt>cd /path/to/nixpkgs/nixos/doc/manual
+<prompt>$ </prompt>cd /path/to/nixpkgs
 <prompt>$ </prompt>nix-build nixos/release.nix -A manual.x86_64-linux
 </screen>
  <para>

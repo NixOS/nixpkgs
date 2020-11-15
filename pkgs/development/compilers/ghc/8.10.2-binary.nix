@@ -2,6 +2,14 @@
 , fetchurl, perl, gcc
 , ncurses6, gmp, glibc, libiconv, numactl
 , llvmPackages
+
+  # minimal = true; will remove files that aren't strictly necessary for
+  # regular builds and GHC bootstrapping.
+  # This is "useful" for staying within hydra's output limits for at least the
+  # aarch64-linux architecture.
+  # Examples of unnecessary files are the bundled documentation and files that
+  # are only needed for profiling builds.
+, minimal ? false
 }:
 
 # Prebuilt only does native
@@ -82,7 +90,6 @@ stdenv.mkDerivation rec {
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
     '' +
-
     # We have to patch the GMP paths for the integer-gmp package.
     ''
       find . -name integer-gmp.buildinfo \
@@ -90,6 +97,12 @@ stdenv.mkDerivation rec {
     '' + stdenv.lib.optionalString stdenv.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
+    '' +
+    # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+    # FFI_LIB_DIR is a good indication of places it must be needed.
+    stdenv.lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      find . -name package.conf.in \
+          -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
     stdenv.lib.optionalString stdenv.isLinux ''
@@ -128,14 +141,35 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    for p in $(find "$out" -type f -executable); do
-      if isELF "$p"; then
-        echo "Patchelfing $p"
-        patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
-      fi
-    done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  postFixup = stdenv.lib.optionalString stdenv.isLinux
+    (if stdenv.hostPlatform.isAarch64 then
+      # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
+      # are 2 directories deep from $out/lib, so pooling symlinks there makes
+      # a short rpath.
+      ''
+      (cd $out/lib; ln -s ${ncurses6.out}/lib/libtinfo.so.6)
+      (cd $out/lib; ln -s ${gmp.out}/lib/libgmp.so.10)
+      (cd $out/lib; ln -s ${numactl.out}/lib/libnuma.so.1)
+      for p in $(find "$out/lib" -type f -name "*\.so*"); do
+        (cd $out/lib; ln -s $p)
+      done
+
+      for p in $(find "$out/lib" -type f -executable); do
+        if isELF "$p"; then
+          echo "Patchelfing $p"
+          patchelf --set-rpath "\$ORIGIN:\$ORIGIN/../.." $p
+        fi
+      done
+      ''
+    else
+      ''
+      for p in $(find "$out" -type f -executable); do
+        if isELF "$p"; then
+          echo "Patchelfing $p"
+          patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+        fi
+      done
+    '') + stdenv.lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
@@ -146,6 +180,13 @@ stdenv.mkDerivation rec {
     for file in $(find "$out" -name setup-config); do
       substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
     done
+  '' +
+  stdenv.lib.optionalString minimal ''
+    # Remove profiling objects
+    find $out -type f -name '*.p_o' -delete
+    rm $out/lib/ghc-*/bin/ghc-iserv-prof
+    # Remove docs
+    rm -r $out/share/{doc,man}
   '';
 
   doInstallCheck = true;
@@ -169,6 +210,18 @@ stdenv.mkDerivation rec {
     enableShared = true;
   };
 
-  meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+  meta = let
+    platforms = ["x86_64-linux" "armv7l-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+  in {
+    homepage = "http://haskell.org/ghc";
+    description = "The Glasgow Haskell Compiler";
+    license = stdenv.lib.licenses.bsd3;
+
+    # The minimal variation can not be distributed because it removes the
+    # documentation, including licensing information that is required for
+    # distribution.
+    inherit platforms;
+    hydraPlatforms = stdenv.lib.optionals (!minimal) platforms;
+    maintainers = with stdenv.lib.maintainers; [ lostnet ];
+  };
 }

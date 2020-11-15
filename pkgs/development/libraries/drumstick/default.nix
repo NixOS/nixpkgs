@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, alsaLib, cmake, docbook_xsl, docbook_xml_dtd_45, doxygen
-, fluidsynth, pkgconfig, qtbase, qtsvg
+{ stdenv, fetchurl
+, cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, pkg-config, wrapQtAppsHook
+, alsaLib, fluidsynth, qtbase, qtsvg, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
@@ -11,18 +12,25 @@ stdenv.mkDerivation rec {
     sha256 = "1n9wvg79yvkygrkc8xd8pgrd3d7hqmr7gh24dccf0px23lla9b3m";
   };
 
+  patches = [
+    ./drumstick-fluidsynth.patch
+    ./drumstick-plugins.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace library/rt/backendmanager.cpp --subst-var out
+  '';
+
   outputs = [ "out" "dev" "man" ];
 
   enableParallelBuilding = true;
 
-  #Temporarily remove drumstick-piano; Gives segment fault. Submitted ticket
-  postInstall = ''
-    rm $out/bin/drumstick-vpiano
-    '';
+  nativeBuildInputs = [
+    cmake docbook_xml_dtd_45 docbook_xml_dtd_45 docbook_xsl doxygen pkg-config wrapQtAppsHook
+  ];
 
-  nativeBuildInputs = [ cmake pkgconfig docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_45 ];
   buildInputs = [
-    alsaLib doxygen fluidsynth qtbase qtsvg
+    alsaLib fluidsynth libpulseaudio qtbase qtsvg
   ];
 
   meta = with stdenv.lib; {

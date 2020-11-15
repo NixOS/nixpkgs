@@ -1,20 +1,35 @@
-{ stdenv, python, fetchpatch }:
+{ stdenv, fetchFromGitHub, python3, fetchpatch }:
 
-with python.pkgs;
+
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      self = py;
+
+      # not compatible with prompt_toolkit >=2.0
+      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+        name = "${oldAttrs.pname}-${version}";
+        version = "1.0.18";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "09h1153wgr5x2ny7ds0w2m81n3bb9j8hjb8sjfnrg506r01clkyx";
+        };
+      });
+    };
+  };
+in
+with py.pkgs;
 
 buildPythonApplication rec {
   pname = "haxor-news";
-  version = "0.4.3";
+  version = "unstable-2020-10-20";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5b9af8338a0f8b95a8133b66ef106553823813ac171c0aefa3f3f2dbeb4d7f88";
-  };
-
-  # allow newer click version
-  patches = fetchpatch {
-    url = "${meta.homepage}/commit/5b0d3ef1775756ca15b6d83fba1fb751846b5427.patch";
-    sha256 = "1551knh2f7yarqzcpip16ijmbx8kzdna8cihxlxx49ww55f5sg67";
+  # haven't done a stable release in 3+ years, but actively developed
+  src = fetchFromGitHub {
+    owner = "donnemartin";
+    repo = pname;
+    rev = "811a5804c09406465b2b02eab638c08bf5c4fa7f";
+    sha256 = "1g3dfsyk4727d9jh9w6j5r51ag07851cls7v7a7hmdvdixpvbzp6";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +41,7 @@ buildPythonApplication rec {
     six
   ];
 
+  # will fail without pre-seeded config files
   doCheck = false;
 
   checkInputs = [ mock ];

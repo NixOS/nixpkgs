@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # tests require docker
   doCheck = false;
 
-  pythonImportCheck = [ "dockerspawner" ];
+  pythonImportsCheck = [ "dockerspawner" ];
 
   meta = with lib; {
     description = "Dockerspawner: A custom spawner for Jupyterhub";

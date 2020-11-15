@@ -6,12 +6,15 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   machine = { ... }: {
     services.telegraf.enable = true;
+    services.telegraf.environmentFiles = [pkgs.writeText "secrets" ''
+      SECRET=example
+    ''];
     services.telegraf.extraConfig = {
       agent.interval = "1s";
       agent.flush_interval = "1s";
       inputs.exec = {
         commands = [
-          "${pkgs.runtimeShell} -c 'echo example,tag=a i=42i'"
+          "${pkgs.runtimeShell} -c 'echo $SECRET,tag=a i=42i'"
         ];
         timeout = "5s";
         data_format = "influx";

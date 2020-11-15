@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     desktop-file-utils
     gobject-introspection
     wrapGAppsHook
+    gtk3 # for gtk-update-icon-cache
   ];
 
   buildInputs = [

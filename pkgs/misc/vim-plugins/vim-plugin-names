@@ -109,6 +109,7 @@ fatih/vim-go
 fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
 fenetikm/falcon
+fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
@@ -159,7 +160,6 @@ iamcco/coc-vimlsp
 ianks/vim-tsx
 idanarye/vim-merginal
 idris-hackers/idris-vim
-ihsanturk/neuron.vim
 Inazuma110/deoplete-greek
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
@@ -169,6 +169,7 @@ itchyny/thumbnail.vim
 itchyny/vim-cursorword
 itchyny/vim-gitbranch
 ivanov/vim-ipython
+jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
 jaredgorski/SpaceCamp
 jaxbot/semantic-highlight.vim
@@ -372,7 +373,7 @@ nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
 nvim-lua/lsp_extensions.nvim
-nvim-lua/telescope.nvim
+nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
 ocaml/vim-ocaml
@@ -429,6 +430,7 @@ rhysd/vim-operator-surround
 rodjek/vim-puppet
 romainl/vim-cool
 roman/golden-ratio
+romgrk/barbar.nvim
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -553,6 +555,7 @@ unblevable/quick-scope
 urbit/hoon.vim
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
+vigoux/LanguageTool.nvim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vim-pandoc/vim-pandoc
@@ -608,6 +611,7 @@ whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+wlangstroth/vim-racket
 wsdjeg/vim-fetch
 xavierd/clang_complete
 xolox/vim-easytags

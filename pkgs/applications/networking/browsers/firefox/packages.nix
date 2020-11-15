@@ -26,7 +26,6 @@ rec {
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
-      timeout = 28800; # eight hours
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";

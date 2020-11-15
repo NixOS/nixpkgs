@@ -28,6 +28,20 @@ let
       utillinux # needed for mount and mountpoint
     ];
 
+  scriptType = with types;
+    let scriptOptions =
+      { deps = mkOption
+          { type = types.listOf types.str;
+            default = [ ];
+            description = "List of dependencies. The script will run after these.";
+          };
+        text = mkOption
+          { type = types.lines;
+            description = "The content of the script.";
+          };
+      };
+    in either str (submodule { options = scriptOptions; });
+
 in
 
 {
@@ -40,16 +54,14 @@ in
       default = {};
 
       example = literalExample ''
-        { stdio = {
-            text = '''
-              # Needed by some programs.
-              ln -sfn /proc/self/fd /dev/fd
-              ln -sfn /proc/self/fd/0 /dev/stdin
-              ln -sfn /proc/self/fd/1 /dev/stdout
-              ln -sfn /proc/self/fd/2 /dev/stderr
-            ''';
-            deps = [];
-          };
+        { stdio.text =
+          '''
+            # Needed by some programs.
+            ln -sfn /proc/self/fd /dev/fd
+            ln -sfn /proc/self/fd/0 /dev/stdin
+            ln -sfn /proc/self/fd/1 /dev/stdout
+            ln -sfn /proc/self/fd/2 /dev/stderr
+          ''';
         }
       '';
 
@@ -62,7 +74,7 @@ in
         idempotent and fast.
       '';
 
-      type = types.attrsOf types.unspecified; # FIXME
+      type = types.attrsOf scriptType;
 
       apply = set: {
         script =
@@ -125,7 +137,7 @@ in
         idempotent and fast.
       '';
 
-      type = types.attrsOf types.unspecified;
+      type = with types; attrsOf scriptType;
 
       apply = set: {
         script = ''

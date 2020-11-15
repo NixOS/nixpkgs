@@ -29,6 +29,7 @@
 , libbs2b
 , libmodplug
 , mpeg2dec
+, libmicrodns
 , openjpeg
 , libopus
 , librsvg
@@ -65,6 +66,7 @@
 , wayland-protocols
 , wildmidi
 , fluidsynth
+, libva
 , libvdpau
 , wayland
 , libwebp
@@ -87,41 +89,45 @@ let
   inherit (stdenv.lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.16.2";
+  version = "1.18.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0x0y0hm0ga3zqi5q4090hw5sjh59y1ry9ak16qsaascm72i7mjzi";
+    sha256 = "0pqqq5bs9fjwcmbwgsgxs2dx6gznhxs7ii5pmjkslr6xmlfap0pk";
   };
 
   patches = [
-    # Fix build with neon 0.31
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1165
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/f10b424418e448211e3427a76fcd046e157ef0b7.patch";
-      sha256 = "0l1f6kqcl04q7w12a2b4qibcvjz6gqhs0csdv2wbvfd6zndpjm6p";
-    })
     ./fix_pkgconfig_includedir.patch
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1235
-    ./opencv-4.3.patch
+    # Fixes srt usage failing with
+    #     Failed to open SRT: failed to set SRTO_LINGER (reason: Operation not supported: Bad parameters)
+    # see https://github.com/Haivision/srt/issues/1374
+    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891
+    # is shown as being in a release tag that nixpkgs uses.
+    (fetchpatch {
+      name = "gstreamer-srtobject-typecast-SRTO_LINGER-to-linger.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891.patch";
+      sha256 = "0596lvgi93sj3yn98grgmsrhnqhhq7fnjk91qi4xc6618fpqmp9x";
+    })
   ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkgconfig
+    orc # for orcc
     python3
     gettext
     gobject-introspection
   ] ++ optionals stdenv.isLinux [
-    wayland-protocols
+    wayland # for wayland-scanner
   ];
 
   buildInputs = [
     gst-plugins-base
     orc
+    gobject-introspection
     faad2
     libass
     libkate
@@ -130,6 +136,7 @@ in stdenv.mkDerivation rec {
     libbs2b
     libmodplug
     mpeg2dec
+    libmicrodns
     openjpeg
     libopus
     librsvg
@@ -154,6 +161,7 @@ in stdenv.mkDerivation rec {
     soundtouch
     srtp
     fluidsynth
+    libva
     libvdpau
     libwebp
     xvidcore
@@ -173,6 +181,7 @@ in stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     bluez
     wayland
+    wayland-protocols
   ] ++ optionals (!stdenv.isDarwin) [
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
@@ -215,11 +224,14 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
 
+    "-Davtp=disabled"
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
     "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing
+    "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
     # As of writing, with `libmpcdec` in `buildInputs` we get
     #   "Could not find libmpcdec header files, but Musepack was enabled via options"
@@ -236,19 +248,16 @@ in stdenv.mkDerivation rec {
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
+    "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
     "-Dvoaacenc=disabled" # required `vo-aacenc` library not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
     "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
+    "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
-
-    # Requires CUDA and we haven't figured out how to make Meson find CUDA yet;
-    # it probably searches via pkgconfig, for which we have no .pc files,
-    # see https://github.com/NixOS/nixpkgs/issues/54395
-    "-Dnvdec=disabled"
-    "-Dnvenc=disabled"
+    "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
   ]
   ++ optionals stdenv.isDarwin [
     "-Dbluez=disabled"
@@ -275,6 +284,14 @@ in stdenv.mkDerivation rec {
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
   ];
+
+  # Argument list too long
+  strictDeps = true;
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   # This package has some `_("string literal")` string formats
   # that trip up clang with format security enabled.

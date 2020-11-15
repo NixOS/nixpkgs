@@ -539,13 +539,19 @@ let
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
+    mirage = callPackage ../development/ocaml-modules/mirage { };
+
     mirage-block = callPackage ../development/ocaml-modules/mirage-block { };
 
     mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
 
+    mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
+
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
+
+    mirage-console = callPackage ../development/ocaml-modules/mirage-console { };
 
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
@@ -566,6 +572,8 @@ let
     mirage-fs = callPackage ../development/ocaml-modules/mirage-fs { };
 
     mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
+
+    mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
@@ -592,8 +600,6 @@ let
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
-
-    mstruct =  callPackage ../development/ocaml-modules/mstruct { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
@@ -647,6 +653,8 @@ let
     ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
+
+    ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
     ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
 

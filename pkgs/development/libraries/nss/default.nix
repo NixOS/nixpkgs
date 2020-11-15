@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, darwin, fixDarwinDylibNames, buildPackages, ninja }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, darwin, fixDarwinDylibNames, buildPackages, ninja
+, # allow FIPS mode. Note that this makes the output non-reproducible.
+  # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
+  enableFIPS ? false
+}:
 
 let
   nssPEM = fetchurl {
@@ -20,10 +24,9 @@ in stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
 
-  buildInputs = [ zlib sqlite ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = [ zlib sqlite ];
 
   propagatedBuildInputs = [ nspr ];
 
@@ -68,6 +71,9 @@ in stdenv.mkDerivation rec {
           else if platform.isx86_32 then "ia32"
           else if platform.isAarch32 then "arm"
           else if platform.isAarch64 then "arm64"
+          else if platform.isPower && platform.is64bit then (
+            if platform.isLittleEndian then "ppc64le" else "ppc64"
+          )
           else platform.parsed.cpu.name;
     # yes, this is correct. nixpkgs uses "host" for the platform the binary will run on whereas nss uses "host" for the platform that the build is running on
     target = getArch stdenv.hostPlatform;
@@ -84,6 +90,7 @@ in stdenv.mkDerivation rec {
       -Dhost_arch=${host} \
       -Duse_system_zlib=1 \
       --enable-libpkix \
+      ${stdenv.lib.optionalString enableFIPS "--enable-fips"} \
       ${stdenv.lib.optionalString stdenv.isDarwin "--clang"} \
       ${stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
@@ -129,7 +136,8 @@ in stdenv.mkDerivation rec {
   postFixup = let
     isCross = stdenv.hostPlatform != stdenv.buildPlatform;
     nss = if isCross then buildPackages.nss.tools else "$out";
-  in ''
+  in
+  (stdenv.lib.optionalString enableFIPS (''
     for libname in freebl3 nssdbm3 softokn3
     do '' +
     (if stdenv.isDarwin
@@ -142,7 +150,8 @@ in stdenv.mkDerivation rec {
      '') + ''
         ${nss}/bin/shlibsign -v -i "$libfile"
     done
-
+  '')) +
+  ''
     moveToOutput bin "$tools"
     moveToOutput bin/nss-config "$dev"
     moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example

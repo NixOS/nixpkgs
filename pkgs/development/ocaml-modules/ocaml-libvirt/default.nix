@@ -1,27 +1,23 @@
-{ stdenv, fetchgit, libvirt, autoconf, ocaml, findlib }:
+{ stdenv, fetchFromGitLab, libvirt, autoreconfHook, pkg-config, ocaml, findlib, perl }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-libvirt";
-  rev = "bab7f84ade84ceaddb08b6948792d49b3d04b897";
-  version = "0.6.1.4.2017-11-08-unstable"; # libguestfs-1.34+ needs ocaml-libvirt newer than the latest release 0.6.1.4
+  version = "0.6.1.5";
 
-  src = fetchgit {
-    url = "git://git.annexia.org/git/ocaml-libvirt.git";
-    rev = rev;
-    sha256 = "0vxgx1n58fp4qmly6i5zxiacr7303127d6j78a295xin1p3a8xcw";
+  src = fetchFromGitLab {
+    owner = "libvirt";
+    repo = "libvirt-ocaml";
+    rev = "v${version}";
+    sha256 = "0xpkdmknk74yqxgw8z2w8b7ss8hpx92xnab5fsqg2byyj55gzf2k";
   };
 
   propagatedBuildInputs = [ libvirt ];
 
-  nativeBuildInputs = [ autoconf findlib ];
+  nativeBuildInputs = [ autoreconfHook pkg-config findlib perl ];
 
   buildInputs = [ ocaml ];
 
   createFindlibDestdir = true;
-
-  preConfigure = ''
-    autoconf
-  '';
 
   buildPhase = "make all opt CPPFLAGS=-Wno-error";
 

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, setuptools
 , transitions, websockets, passlib, docopt, pyyaml, nose }:
 
 buildPythonPackage rec {
@@ -12,7 +12,9 @@ buildPythonPackage rec {
     sha256 = "1n9c8yj11npiq9qxivwmfhib1qkjpcyw42a7q0w641bdrz3x6r37";
   };
 
-  propagatedBuildInputs = [ transitions websockets passlib docopt pyyaml ];
+  propagatedBuildInputs = [
+    transitions websockets passlib docopt pyyaml setuptools
+  ];
 
   postPatch = ''
     # test tries to bind same port multiple times and fails

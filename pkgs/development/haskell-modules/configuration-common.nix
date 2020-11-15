@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "05yvl09ksyvzykibs95996rni9x6w03yfqyv2fadd73z1m6lq5bf";
+      sha256 = "1g5ba1lv0v4zjk5ghdp78wxgszspfda1lrl734fi7hyavqrfjxkz";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -81,6 +81,11 @@ self: super: {
   # which happens in nix-shell when a non-interactive bash is on PATH
   # PR to master: https://github.com/pcapriotti/optparse-applicative/pull/408
   optparse-applicative = appendPatch super.optparse-applicative (pkgs.fetchpatch {
+    name = "optparse-applicative-0.15.1-hercules-ci-compgen.diff";
+    url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
+    sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
+  });
+  optparse-applicative_0_16_0_0 = appendPatch super.optparse-applicative_0_16_0_0 (pkgs.fetchpatch {
     name = "optparse-applicative-0.15.1-hercules-ci-compgen.diff";
     url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
     sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
@@ -335,7 +340,7 @@ self: super: {
   # Needs the latest version of vty and brick.
   matterhorn = super.matterhorn.overrideScope (self: super: {
     brick = self.brick_0_57;
-    vty = self.vty_5_31;
+    vty = self.vty_5_32;
   });
 
   memcache = dontCheck super.memcache;
@@ -922,8 +927,9 @@ self: super: {
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
-  # Compiles some C++ source which requires these headers
+  # Compiles some C or C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary super.VulkanMemoryAllocator pkgs.vulkan-headers;
+  vulkan-utils = addExtraLibrary super.vulkan-utils pkgs.vulkan-headers;
 
   # https://github.com/dmwit/encoding/pull/3
   encoding = doJailbreak (appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch);
@@ -1109,9 +1115,9 @@ self: super: {
       })
       (pkgs.fetchpatch {
         # Relax dependency constraints,
-        # upstream PR: https://github.com/james-preston/hail/pull/15
-        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/15.patch";
-        sha256 = "03kdvr8hxi6isb8yxp5rgcmz855n19m1yacn3d56a4i58j2mldjw";
+        # upstream PR: https://github.com/james-preston/hail/pull/16
+        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/16.patch";
+        sha256 = "0dpagpn654zjrlklihsg911lmxjj8msylbm3c68xa5aad1s9gcf7";
       })
     ];
   });
@@ -1172,9 +1178,6 @@ self: super: {
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
-  # 2020-06-22: NOTE: QuickCheck upstreamed https://github.com/phadej/binary-instances/issues/7
-  binary-instances = dontCheck super.binary-instances;
-
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
@@ -1226,14 +1229,6 @@ self: super: {
     sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
 
-  # this will probably need to get updated with every ghcide update,
-  # we need an override because ghcide is tracking haskell-lsp closely.
-  ghcide = dontCheck (super.ghcide.overrideScope (self: super: {
-    hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck self.lsp-test_0_11_0_7;
-  }));
-  implicit-hie-cradle = super.implicit-hie-cradle.override { hie-bios = dontCheck super.hie-bios_0_7_1; };
-
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
@@ -1254,62 +1249,11 @@ self: super: {
   x509-validation = dontCheck super.x509-validation;
   tls = dontCheck super.tls;
 
-  patch = appendPatches super.patch [
-    # Upstream PR: https://github.com/reflex-frp/patch/pull/20
-    # Makes tests work with hlint 3
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/3ed23a4e4049ee17e64a1a5bbebf1990cdbe033a.patch";
-      sha256 ="1hfa980wln8kzbqw1lr8ddszgcibw25xf12ki2jb9xkl464aynzf";
-    })
-    # Upstream PR: https://github.com/reflex-frp/patch/pull/17
-    # Bumps version dependencies
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/a191ed9ded708ed7ff0cf53ad6dafaf54db5b95a.patch";
-      sha256 ="1x9w5fimhk3a0l2aa5z91nqaa6s2irz1775iidd0191m6w25vszp";
-    })
-  ];
-
-  reflex = appendPatches super.reflex [
-    # Upstream PR: https://github.com/reflex-frp/reflex/pull/434
-    # Bump version bounds
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/commit/e6104bdfd7f664f524b6765275490722e376df4d.patch";
-      sha256 ="1awp5p4640cnhfd50dplsvp0kzy6h8r0hpbw1s40blni74r3dhzr";
-    })
-    # Upstream PR: https://github.com/reflex-frp/reflex/pull/436
-    # Fix build with newest dependent-map version
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/commit/dc3bf44d822d70594e3c474fe3869261776c3554.patch";
-      sha256 ="0rbjfj9b8p6zkvd5j4pak5kpgard6cyfvzk750s4xwpc1v84iiqd";
-    })
-    # Upstream PR: https://github.com/reflex-frp/reflex/pull/437
-    # Fix tests with newer dep versions
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/commit/87c74a1b9d9098eae8a56148c59ed4963a5232c2.patch";
-      sha256 ="0qhjjgd6n4fms1hpbblny78c95bfh74izhx9dvrdlnhz6q7xlm9q";
-    })
-  ];
+  # Allow building with recent versions of hlint.
+  patch = doJailbreak super.patch;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
-  # Tests disabled because of very old dep: https://github.com/reflex-frp/reflex-dom/issues/393
-  reflex-dom-core = doDistribute (unmarkBroken (dontCheck (appendPatches super.reflex-dom-core [
-    # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/388
-    # Fix upper bounds
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex-dom/commit/5ef04d8e478f410d2c63603b84af052c9273a533.patch";
-      sha256 ="0d0b819yh8mqw8ih5asdi9qcca2kmggfsi8gf22akfw1n7xvmavi";
-      stripLen = 2;
-      extraPrefix = "";
-    })
-    # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/394
-    # Bump dependent-map
-    (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex-dom/commit/695bd17d5dcdb1bf321ee8858670731637f651db.patch";
-      sha256 ="0llky3i37rakgsw9vqaqmwryv7s91w8ph8xjkh83nxjs14p5zfyk";
-      stripLen = 2;
-      extraPrefix = "";
-    })
-  ])));
+  reflex-dom-core = doDistribute (unmarkBroken (dontCheck super.reflex-dom-core));
 
   # add unreleased commit fixing version constraint as a patch
   # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
@@ -1351,7 +1295,7 @@ self: super: {
   # 2020-08-14: gi-pango from stackage is to old for the C libs it links against in nixpkgs.
   # That's why we need to bump a ton of dependency versions to unbreak them.
   gi-pango = assert super.gi-pango.version == "1.0.22"; self.gi-pango_1_0_23;
-  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_3) [ pkgs.gobject-introspection ];
+  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_4) [ pkgs.gobject-introspection ];
   haskell-gi = assert super.haskell-gi.version == "0.23.1"; self.haskell-gi_0_24_5;
   gi-cairo = assert super.gi-cairo.version == "1.0.23"; self.gi-cairo_1_0_24;
   gi-glib = assert super.gi-glib.version == "2.0.23"; self.gi-glib_2_0_24;
@@ -1379,13 +1323,6 @@ self: super: {
   splot = appendPatch super.splot (pkgs.fetchpatch {
     url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
     sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
-  });
-
-  # Version bumps have not been merged by upstream yet.
-  # https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/5
-  dependent-sum-aeson-orphans = appendPatch super.dependent-sum-aeson-orphans (pkgs.fetchpatch {
-    url = "https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/5a369e433ad7e3eef54c7c3725d34270f6aa48cc.patch";
-    sha256 = "1lzrcicvdg77hd8j2fg37z19amp5yna5xmw1fc06zi0j95csll4r";
   });
 
   # Tests are broken because of missing files in hackage tarball.
@@ -1467,7 +1404,7 @@ self: super: {
   skylighting-core = doDistribute super.skylighting-core_0_10_0_3;
   hslua = doDistribute self.hslua_1_1_2;
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
-  pandoc = doDistribute self.pandoc_2_11_0_4;
+  pandoc = doDistribute self.pandoc_2_11_1_1;
   # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
   pandoc-citeproc = doJailbreak (doDistribute self.pandoc-citeproc_0_17_0_2);
   pandoc-types = doDistribute self.pandoc-types_1_22;
@@ -1475,35 +1412,75 @@ self: super: {
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
-  # INSERT NEW OVERRIDES ABOVE THIS LINE
 
   # stack-2.5.1 needs a more current version of pantry to compile
-  pantry = self.pantry_0_5_1_3;
+  pantry = self.pantry_0_5_1_4;
 
   # Too tight version bounds, see https://github.com/haskell-hvr/microaeson/pull/4
   microaeson = doJailbreak super.microaeson;
 
-  # haskell-language-server needs a more current version of pantry to compile
+  autoapply = super.autoapply.override { th-desugar = self.th-desugar_1_11; };
+
+  # binary-instances needs the latest version.
+  time-compat = self.time-compat_1_9_4;
+
+  # - Deps are required during the build for testing and also during execution,
+  #   so add them to build input and also wrap the resulting binary so they're in
+  #   PATH.
+  update-nix-fetchgit = let deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
+  in generateOptparseApplicativeCompletion "update-nix-fetchgit" (overrideCabal
+    (addTestToolDepends (super.update-nix-fetchgit.overrideScope (self: super: {
+      optparse-generic = self.optparse-generic_1_4_4;
+      optparse-applicative = self.optparse-applicative_0_16_0_0;
+    })) deps) (drv: {
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.makeWrapper ];
+      postInstall = drv.postInstall or "" + ''
+        wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${
+          pkgs.lib.makeBinPath deps
+        }"
+      '';
+    }));
+
+  optparse-generic_1_4_4 = super.optparse-generic_1_4_4.override {
+    optparse-applicative = self.optparse-applicative_0_16_0_0;
+  };
+
+  # Our quickcheck-instances is too old for the newer binary-instances, but
+  # quickcheck-instances is only used in the tests of binary-instances.
+  binary-instances = dontCheck super.binary-instances;
+
+  # INSERT NEW OVERRIDES ABOVE THIS LINE
 } // (let
-  inherit (self) hls-ghcide hls-brittany;
-  hlsScopeOverride = self: super: {
-    # haskell-language-server uses its own fork of ghcide
-    # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = dontCheck hls-ghcide;
-    # we are faster than stack here
+  # fourmolu can‘t compile with an older aeson
+  localOverride = name: value: doDistribute (value.overrideScope (self: super: {
+    aeson = dontCheck super.aeson_1_5_2_0;
+  }));
+  in pkgs.lib.mapAttrs localOverride {
+    # tons of overrides for bleeding edge versions for ghcide and hls
+    # overriding aeson on all of them to prevent double compilations
+    # this shouldn‘t break anything because nearly all their reverse deps are
+    # in this list or marked as broken anyways
+    haskell-language-server = dontCheck super.haskell-language-server;
+    fourmolu = dontCheck super.fourmolu;
+    stylish-haskell = super.stylish-haskell_0_12_2_0;
+    ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
+      # 2020-11-13: Bumping bounds via an already upstream merged change
+      # https://github.com/haskell/ghcide/pull/905
+      url = https://github.com/haskell/ghcide/commit/9b8aaf9b06846571cc0b5d46680e686e4f9153a3.patch;
+      sha256 = "0j8980dmvwjcs72ahq2zc14hwkyd5ybgzyy1az3zq5flp383fai6";
+      includes = [ "ghcide.cabal" ];
+    }));
+    refinery = super.refinery_0_3_0_0;
+    data-tree-print = doJailbreak super.data-tree-print;
+    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_3;
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck super.lsp-test_0_11_0_7;
-    # fourmolu can‘t compile with an older aeson
-    aeson = dontCheck super.aeson_1_5_2_0;
-    # brittany has an aeson upper bound of 1.5
-    brittany = hls-brittany;
-    data-tree-print = doJailbreak super.data-tree-print;
-    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
-  };
-  in {
-    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
-    hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
-    hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
-    fourmolu = dontCheck (super.fourmolu.overrideScope hlsScopeOverride);
+    hls-plugin-api = super.hls-plugin-api;
+    hls-hlint-plugin = super.hls-hlint-plugin;
+    implicit-hie-cradle = super.implicit-hie-cradle;
+    # the hls brittany is objectively better, because there hasn‘t been a
+    # brittany release in a while and this version works with 8.10.
+    # And we need to build it anyways.
+    brittany = dontCheck super.hls-brittany;
   }
 )  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

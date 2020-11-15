@@ -17,10 +17,10 @@ in stdenv.mkDerivation rec {
   # $ nix-build nixos/release-combined.nix -A nixos.tests.ec2-nixops
   # growpart is needed in initrd in nixos/system/boot/grow-partition.nix
   pname = "cloud-utils";
-  version = "0.31";
+  version = "0.32";
   src = fetchurl {
     url = "https://launchpad.net/cloud-utils/trunk/${version}/+download/cloud-utils-${version}.tar.gz";
-    sha256 = "07fl3dlqwdzw4xx7mcxhpkks6dnmaxha80zgs9f6wmibgzni8z0r";
+    sha256 = "0xxdi55lzw7j91zfajw7jhd2ilsqj2dy04i9brlk8j3pvb5ma8hk";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];

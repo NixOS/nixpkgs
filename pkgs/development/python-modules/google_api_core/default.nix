@@ -1,32 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
-, google_auth, protobuf, googleapis_common_protos, requests, setuptools, grpcio
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, google_auth, protobuf
+, googleapis_common_protos, requests, grpcio, mock, pytest, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "1.22.1";
-  disabled = isPy27; # google namespace no longer works on python2
+  version = "1.22.4";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35cba563034d668ae90ffe1f03193a84e745b38f09592f60258358b5e5ee6238";
+    sha256 = "06pck3hwl1pks26q843hv6pxchby9viab05mxf72k7ksab17m7aa";
   };
 
-  propagatedBuildInputs = [
-    googleapis_common_protos protobuf
-    google_auth requests setuptools grpcio
-  ];
+  propagatedBuildInputs =
+    [ googleapis_common_protos protobuf google_auth requests grpcio ];
 
-  # requires nox
-  doCheck = false;
-  checkInputs = [ mock ];
+  checkInputs = [ google_auth mock protobuf pytest-asyncio pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "google.auth"
-    "google.protobuf"
-    "google.api"
-  ];
+  # prevent google directory from shadowing google imports
+  preCheck = ''
+    rm -r google
+  '';
+
+  pythonImportsCheck = [ "google.auth" "google.protobuf" "google.api" ];
 
   meta = with lib; {
     description = "Core Library for Google Client Libraries";
@@ -35,7 +30,8 @@ buildPythonPackage rec {
       helpers used by all Google API clients.
     '';
     homepage = "https://github.com/googleapis/python-api-core";
-    changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "mirage-unix";
   version = "4.0.0";
 
+  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
     sha256 = "0kyd83bkpjhn382b4mw3a4325xr8vms78znxqvifpcyfvfnlx7hj";
