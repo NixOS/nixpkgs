@@ -10189,6 +10189,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   ceptre = callPackage ../development/interpreters/ceptre { };
 
+  cling = callPackage ../development/interpreters/cling { };
+
   clips = callPackage ../development/interpreters/clips { };
 
   clisp = callPackage ../development/interpreters/clisp { };
