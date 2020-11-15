@@ -151,6 +151,8 @@ in stdenv.mkDerivation {
   '' + lib.optionalString withNS ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
+  '' + lib.optionalString (nativeComp && withNS) ''
+    ln -snf $out/lib/emacs/28.0.50/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
   '';
 
   postFixup = lib.concatStringsSep "\n" [
