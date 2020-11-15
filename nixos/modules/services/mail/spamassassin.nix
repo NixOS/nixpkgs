@@ -126,6 +126,8 @@ in
     };
 
     systemd.services.sa-update = {
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       script = ''
         set +e
         ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/" spamd
@@ -152,33 +154,44 @@ in
       };
     };
 
+    systemd.services.spamd-init = {
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      script = ''
+        mkdir -p /var/lib/spamassassin
+        chown spamd:spamd /var/lib/spamassassin -R
+        if [ "$(ls -A /var/lib/spamassassin)" = "" ]; then
+          echo "'/var/lib/spamassassin' is empty, running sa-update..."
+          set +e
+          ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/" spamd
+          v=$?
+          set -e
+          # 0 and 1 no error, exitcode > 1 means error:
+          # https://spamassassin.apache.org/full/3.1.x/doc/sa-update.html#exit_codes
+          if [ $v -gt 1 ]; then
+            echo "sa-update execution error"
+            exit $v
+          fi
+          echo "sa-update run successfully."
+        fi
+      '';
+    };
+
     systemd.services.spamd = {
-      description = "Spam Assassin Server";
+      description = "SpamAssassin Server";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "spamd-init.service" ];
+      after = [
+        "network.target"
+        "spamd-init.service"
+      ];
 
       serviceConfig = {
         ExecStart = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
-
-      # 0 and 1 no error, exitcode > 1 means error:
-      # https://spamassassin.apache.org/full/3.1.x/doc/sa-update.html#exit_codes
-      preStart = ''
-        echo "Recreating '/var/lib/spamasassin' with creating '3.004001' (or similar) and 'sa-update-keys'"
-        mkdir -p /var/lib/spamassassin
-        chown spamd:spamd /var/lib/spamassassin -R
-        set +e
-        ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/" spamd
-        v=$?
-        set -e
-        if [ $v -gt 1 ]; then
-          echo "sa-update execution error"
-          exit $v
-        fi
-        chown spamd:spamd /var/lib/spamassassin -R
-      '';
     };
   };
 }
