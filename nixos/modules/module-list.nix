@@ -128,6 +128,7 @@
   ./programs/gnome-documents.nix
   ./programs/gnome-terminal.nix
   ./programs/gpaste.nix
+  ./programs/gping.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/hamster.nix
