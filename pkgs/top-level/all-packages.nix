@@ -3348,7 +3348,7 @@ in
 
   volctl = callPackage ../tools/audio/volctl { };
 
-  vorta = python3Packages.callPackage ../applications/backup/vorta { qt5 = qt514; };
+  vorta = python3Packages.callPackage ../applications/backup/vorta { };
 
   utahfs = callPackage ../applications/networking/utahfs { };
 
@@ -9202,6 +9202,10 @@ in
       JavaVM JavaRuntimeSupport Cocoa;
     inherit (darwin) libiconv libobjc libresolv;
   }) mx jvmci8 graalvm8;
+
+  inherit (callPackages ../development/compilers/graalvm/community-edition.nix { })
+    graalvm8-ce
+    graalvm11-ce;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
@@ -19201,7 +19205,9 @@ in
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
-  scheherazade = callPackage ../data/fonts/scheherazade { };
+  scheherazade = callPackage ../data/fonts/scheherazade { version = "2.100"; };
+
+  scheherazade-new = callPackage ../data/fonts/scheherazade { };
 
   signwriting = callPackage ../data/fonts/signwriting { };
 

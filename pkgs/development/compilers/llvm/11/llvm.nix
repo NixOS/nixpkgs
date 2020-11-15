@@ -32,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "1k7i2syqdm29l10di3ws64i02snh9jhd1s2jzgh8565b0vg25wlc";
-  polly_src = fetch "polly" "0l0n09f6sy30x825w85v8n7pvya0ciq89r0abv66n8ggwmrk3rnw";
+  src = fetch pname "0s94lwil98w7zb7cjrbnxli0z7gklb312pkw74xs1d6zk346hgwi";
+  polly_src = fetch "polly" "0h442ivcslr3dv3q3g1nw5avh77f8cxsp6zild1hgspj266xpynw";
 
   unpackPhase = ''
     unpackFile $src
@@ -96,7 +96,7 @@ in stdenv.mkDerivation (rec {
   '';
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
-  LDFLAGS = optionalString enableSharedLibraries "-Wl,--build-id=sha1";
+  LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
