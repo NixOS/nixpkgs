@@ -382,9 +382,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/helm",
     "repo": "terraform-provider-helm",
-    "rev": "v1.2.2",
-    "sha256": "1hjlf0pzc9jkcvqi52kvqwmd8v0cvnhhcbahzxmv0zkdwh310c12",
-    "version": "1.2.2"
+    "rev": "v1.3.2",
+    "sha256": "0mpbf03483jqrwd9cx4pdn2pcv4swfs5nbp021gaqr0jf1w970x6",
+    "vendorSha256": null,
+    "version": "1.3.2"
   },
   "heroku": {
     "owner": "terraform-providers",

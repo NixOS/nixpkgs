@@ -85,17 +85,6 @@ let
       '';
     });
 
-    # providers that were moved to the `hashicorp` organization,
-    # but haven't updated their references yet:
-
-    # https://github.com/hashicorp/terraform-provider-helm/pull/522
-    helm = automated-providers.helm.overrideAttrs (attrs: {
-      prePatch = attrs.prePatch or "" + ''
-        substituteInPlace go.mod --replace terraform-providers/terraform-provider-helm hashicorp/terraform-provider-helm
-        substituteInPlace main.go --replace terraform-providers/terraform-provider-helm hashicorp/terraform-provider-helm
-      '';
-    });
-
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
     cloudfoundry = callPackage ./cloudfoundry {};
