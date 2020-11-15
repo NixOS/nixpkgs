@@ -1,10 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27 }:
 
 
 buildPythonPackage rec {
-
   pname = "versioneer";
   version = "0.19";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
