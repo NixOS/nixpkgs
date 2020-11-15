@@ -39,33 +39,6 @@ let
       passthru = data;
     };
 
-  # Google is now using the vendored go modules, which works a bit differently
-  # and is not 100% compatible with the pre-modules vendored folders.
-  #
-  # Instead of switching to goModules which requires a goModSha256, patch the
-  # goPackage derivation so it can install the top-level.
-  patchGoModVendor = drv:
-    drv.overrideAttrs (attrs: {
-      buildFlags = "-mod=vendor";
-
-      # override configurePhase to not move the source into GOPATH
-      configurePhase = ''
-        export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
-        export GOCACHE=$TMPDIR/go-cache
-        export GO111MODULE=on
-      '';
-
-      # just build and install into $GOPATH/bin
-      buildPhase = ''
-        go install -mod=vendor -v -p 16 .
-
-        runHook postBuild
-      '';
-
-      # don't run the tests, they are broken in this setup
-      doCheck = false;
-    });
-
   # These providers are managed with the ./update-all script
   automated-providers = lib.mapAttrs (_: attrs:
     (if (lib.hasAttr "vendorSha256" attrs) then buildWithGoModule else buildWithGoPackage)
@@ -73,9 +46,6 @@ let
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
-    # Override providers that use Go modules + vendor/ folder
-    google-beta = patchGoModVendor automated-providers.google-beta;
-
     acme = automated-providers.acme.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
         substituteInPlace go.mod --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
