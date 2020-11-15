@@ -36,7 +36,7 @@ let
   patches = [
     # Fix build on ARM (#406)
     (fetchpatch {
-      url = "https://bitbucket.org/multicoreware/x265/issues/attachments/406/multicoreware/x265/1527562952.26/406/X265-2.8-asm-primitives.patch";
+      url = "https://bitbucket.org/multicoreware/x265_git/issues/attachments/406/multicoreware/x265_git/1599791236.73/406/X265-2.8-asm-primitives.patch";
       sha256 = "1vf8bpl37gbd9dcbassgkq9i0rp24qm3bl6hx9zv325174bn402v";
     })
   ];
