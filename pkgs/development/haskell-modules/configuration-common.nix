@@ -231,7 +231,6 @@ self: super: {
   # ghc 8.10.
   hnix = dontCheck (super.hnix.override {
     # 2020-09-18: Those packages are all needed by hnix at versions newer than on stackage
-    neat-interpolation = self.neat-interpolation_0_5_1_2; # at least 0.5.1
     prettyprinter = self.prettyprinter_1_7_0; # at least 1.7
 
   });
@@ -335,12 +334,6 @@ self: super: {
     then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
     else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
-
-  # Needs the latest version of vty and brick.
-  matterhorn = super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_57;
-    vty = self.vty_5_32;
-  });
 
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
