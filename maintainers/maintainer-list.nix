@@ -7661,6 +7661,12 @@
     githubId = 25388474;
     name = "Matej Urbas";
   };
+  mveytsman = {
+    email = "maxim@ontoillogical.com";
+    github = "mveytsman";
+    githubId = 34720;
+    name = "Max Veytsman";
+  };
   mvnetbiz = {
     email = "mvnetbiz@gmail.com";
     github = "mvnetbiz";
