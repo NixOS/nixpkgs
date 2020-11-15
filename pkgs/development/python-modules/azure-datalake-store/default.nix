@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "This project is the Python filesystem library for Azure Data Lake Store";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }
