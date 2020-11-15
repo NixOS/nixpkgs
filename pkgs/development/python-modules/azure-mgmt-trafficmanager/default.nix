@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Traffic Manager Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

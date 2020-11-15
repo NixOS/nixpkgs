@@ -6159,10 +6159,10 @@
     githubId = 6455574;
     name = "Matt Votava";
   };
-  mwilsoninsight = {
-    email = "max.wilson@insight.com";
-    github = "mwilsoninsight";
-    githubId = 47782621;
+  maxwilson = {
+    email = "nixpkgs@maxwilson.dev";
+    github = "mwilsoncoding";
+    githubId = 43796009;
     name = "Max Wilson";
   };
   myrl = {
