@@ -1419,4 +1419,8 @@ self: super: {
 
   # 2020-11-15: aeson 1.5.4.1 needs to new quickcheck-instances for testing
   aeson = dontCheck super.aeson;
+
+  # 2020-11-15: nettle tests are pre MonadFail change
+  # https://github.com/stbuehler/haskell-nettle/issues/10
+  nettle = dontCheck super.nettle;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
