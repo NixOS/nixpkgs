@@ -74,7 +74,6 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers = {
     # Override providers that use Go modules + vendor/ folder
-    google = patchGoModVendor automated-providers.google;
     google-beta = patchGoModVendor automated-providers.google-beta;
 
     acme = automated-providers.acme.overrideAttrs (attrs: {
