@@ -4,6 +4,8 @@ stdenv.mkDerivation {
   pname = "google-fonts";
   version = "2019-07-14";
 
+  outputs = [ "out" "adobeBlank" ];
+
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
@@ -30,11 +32,7 @@ stdenv.mkDerivation {
     rm -rv ofl/comfortaa/*.ttf \
       ofl/mavenpro/*.ttf \
       ofl/muli/*.ttf \
-      ofl/oswald/*.ttf \
-
-    # This abomination of a font causes crashes with `libfontconfig',
-    # It has an absurd number of symbols
-    rm -r ofl/adobeblank/
+      ofl/oswald/*.ttf
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
@@ -43,6 +41,9 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    adobeBlankDest=$adobeBlank/share/fonts/truetype
+    install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
+    rm -r ofl/adobeblank
     dest=$out/share/fonts/truetype
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '';
