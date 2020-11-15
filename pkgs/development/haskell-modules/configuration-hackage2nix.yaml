@@ -2781,6 +2781,7 @@ dont-distribute-packages:
   - accelerate-io-JuicyPixels
   - accelerate-io-repa
   - accelerate-io-vector
+  - accelerate-kullback-liebler
   - accelerate-llvm-ptx
   - bindings-yices
   - boolector
@@ -2807,7 +2808,10 @@ dont-distribute-packages:
   - yices-painless
 
   # these packages don't evaluate because they have broken (system) dependencies
+  - XML
   - comark
+  - couch-simple
+  - diagrams-hsqml
   - diagrams-reflex
   - dialog
   - fltkhs-demos
@@ -2817,14 +2821,27 @@ dont-distribute-packages:
   - ghcjs-dom-hello
   - ghcjs-dom-webkit
   - gi-javascriptcore
+  - gi-webkit
   - gi-webkit2
   - gi-webkit2webextension
-  - gi-webkit
   - gsmenu
   - haste-gapi
   - haste-perch
   - hbro
   - hplayground
+  - hs-mesos
+  - hsqml
+  - hsqml-datamodel
+  - hsqml-datamodel-vinyl
+  - hsqml-datemodel-vinyl
+  - hsqml-demo-manic
+  - hsqml-demo-morris
+  - hsqml-demo-notes
+  - hsqml-demo-notes
+  - hsqml-demo-samples
+  - hsqml-morris
+  - hsqml-morris
+  - hstorchat
   - imprevu-happstack
   - jsaddle-webkit2gtk
   - jsaddle-webkitgtk
@@ -2855,10 +2872,13 @@ dont-distribute-packages:
   - wai-middleware-brotli
   - web-browser-in-haskell
   - webkit
-  - webkitgtk3-javascriptcore
   - webkitgtk3
+  - webkitgtk3-javascriptcore
   - websnap
-  - XML
 
 broken-packages:
   # These packages don't compile or depend on packages that don't compile.
+  - git-remote-ipfs
+  - ipld-cid
+  - multibase
+  - multihash-serialise
