@@ -355,11 +355,13 @@
     "version": "3.47.0"
   },
   "google-beta": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/google-beta",
     "repo": "terraform-provider-google-beta",
-    "rev": "v3.18.0",
-    "sha256": "1rsaqrgr6ddgx1pala83y70dk32s0mvf6vi877awmimxjzsa1l4r",
-    "version": "3.18.0"
+    "rev": "v3.47.0",
+    "sha256": "1nk0bg2q7dg65rn3j5pkdjv07x0gs7bkv1bpfvlhi9p4fzx9g4by",
+    "vendorSha256": "0c2q4d2khsi3v9b659q1kmncnlshv4px6ch99jpcymwqg3xrxda2",
+    "version": "3.47.0"
   },
   "grafana": {
     "owner": "terraform-providers",
