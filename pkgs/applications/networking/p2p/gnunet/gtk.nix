@@ -5,6 +5,8 @@
 , gtk3
 , libextractor
 , libgcrypt
+, libqrencode
+, libunique3
 , libxml2
 , pkg-config
 , wrapGAppsHook
@@ -12,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "1zdzgq16h77w6ybwg3lqjsjr965np6iqvncqvkbj07glqd4wss0j";
+    sha256 = "sha256-ipMSf2GxpEwkhcTJx94xOZ7bI7nCXZptaSf4QlY9LKM=";
   };
 
   nativeBuildInputs= [
@@ -31,10 +33,14 @@ stdenv.mkDerivation rec {
     gtk3
     libextractor
     libgcrypt
+    libqrencode
+    libunique3
     libxml2
   ];
 
   patchPhase = "patchShebangs pixmaps/icon-theme-installer";
+  GNUNET_CFLAGS="${gnunet}/include";
+  configureFlags = "--with-gnutls=${gnutls}";
 
   meta = gnunet.meta // {
     description = "GNUnet GTK User Interface";
