@@ -76,7 +76,6 @@ let
     # Override providers that use Go modules + vendor/ folder
     google = patchGoModVendor automated-providers.google;
     google-beta = patchGoModVendor automated-providers.google-beta;
-    ibm = patchGoModVendor automated-providers.ibm;
 
     acme = automated-providers.acme.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
