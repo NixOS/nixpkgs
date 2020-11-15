@@ -1165,8 +1165,6 @@ in
 
   gaia = callPackage ../development/libraries/gaia { };
 
-  gama = callPackage ../applications/science/geometry/gama { };
-
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gammy = qt5.callPackage ../tools/misc/gammy { };
@@ -26171,6 +26169,10 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   };
 
   ### SCIENCE/GEOMETRY
+
+  antiprism = callPackage ../applications/science/geometry/antiprism { };
+
+  gama = callPackage ../applications/science/geometry/gama { };
 
   drgeo = callPackage ../applications/science/geometry/drgeo {
     inherit (gnome2) libglade;
