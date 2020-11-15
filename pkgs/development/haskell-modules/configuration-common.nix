@@ -1470,6 +1470,20 @@ self: super: {
   pandoc-types = self.pandoc-types_1_21;
   rfc5051 = self.rfc5051_0_2;
 
+  # 2020-11-15: Taffybar and gi-* dependencies need these overrides to
+  # be compatible with haskell-gi-base 0.24.
+  # Note: Some generated dependencies in hackage-packages.nix have
+  # been edited to remove the broken flag.
+  taffybar = appendPatch super.taffybar (pkgs.fetchpatch {
+    # Compatibility fix for haskell-gi-base 0.24
+    url = "https://github.com/taffybar/taffybar/pull/494/commits/a7443324a549617f04d49c6dfeaf53f945dc2b98.patch";
+    sha256 = "0prskimfpapgncwc8si51lf0zxkkdghn33y3ysjky9a82dsbhcqi";
+  });
+  gi-dbusmenu = assert super.gi-dbusmenu.version == "0.4.7"; self.gi-dbusmenu_0_4_8;
+  gi-dbusmenugtk3 = assert super.gi-dbusmenugtk3.version == "0.4.8"; self.gi-dbusmenugtk3_0_4_9;
+  gi-gtk-hs = assert super.gi-gtk-hs.version == "0.3.8.1"; self.gi-gtk-hs_0_3_9;
+  gi-xlib = assert super.gi-xlib.version == "2.0.8"; self.gi-xlib_2_0_9;
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
