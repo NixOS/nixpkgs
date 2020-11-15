@@ -235,11 +235,13 @@
     "version": "2.7.0"
   },
   "digitalocean": {
-    "owner": "terraform-providers",
+    "owner": "digitalocean",
+    "provider-source-address": "registry.terraform.io/digitalocean/digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v1.19.0",
-    "sha256": "0plfkwkfb19f7bzky4jfa2kmkqvbah02c6j6applsd3jyiawpbgy",
-    "version": "1.19.0"
+    "rev": "v2.2.0",
+    "sha256": "14v9sh2qqdflzzp5mvkr7hd5c21hch8b8shxiwm0ar4qgdxq3wfy",
+    "vendorSha256": null,
+    "version": "2.2.0"
   },
   "dme": {
     "owner": "terraform-providers",
