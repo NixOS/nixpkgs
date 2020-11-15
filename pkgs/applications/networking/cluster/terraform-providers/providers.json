@@ -419,10 +419,12 @@
   },
   "ibm": {
     "owner": "IBM-Cloud",
+    "provider-source-address": "registry.terraform.io/IBM-Cloud/ibm",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.7.0",
-    "sha256": "1kb2dxdygvph65hh7qiba9kl9k5aygxxvx3x1qi28jwny594j82a",
-    "version": "1.7.0"
+    "rev": "v1.14.0",
+    "sha256": "1r3y7r0mnbzd7xk6d5f7pvysl3p8vl5i5phya89dfwrk2x9xyw21",
+    "vendorSha256": null,
+    "version": "1.14.0"
   },
   "icinga2": {
     "owner": "terraform-providers",
