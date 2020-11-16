@@ -11,6 +11,7 @@
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , bluez ? null, bluezSupport ? false
 , zlib
+, tzdata ? null
 , self
 , configd
 , autoreconfHook
@@ -68,6 +69,8 @@ let
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
 
+  tzdataSupport = tzdata != null && passthru.pythonAtLeast "3.9";
+
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";
@@ -100,7 +103,8 @@ let
     zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
-    ++ optionals stdenv.isDarwin [ configd ]);
+    ++ optionals stdenv.isDarwin [ configd ])
+    ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
@@ -293,6 +297,8 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
+  ] ++ optionals tzdataSupport [
+    "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optional static "LDFLAGS=-static";
 
   preConfigure = ''
@@ -348,8 +354,8 @@ in with passthru; stdenv.mkDerivation {
     done
 
     # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
-    find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
-    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
+    find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out ${optionalString tzdataSupport "-e ${tzdata}"} '{}' +
+    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out ${optionalString tzdataSupport "-e ${tzdata}"} '{}' +
 
     # Make the sysconfigdata module accessible on PYTHONPATH
     # This allows build Python to import host Python's sysconfigdata
