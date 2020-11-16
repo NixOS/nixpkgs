@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/libexec
       cp clojure-tools-${version}.jar $out/libexec
+      cp exec.jar $out/libexec
       cp example-deps.edn $out
       cp deps.edn $out
-      cp exec.jar $out
 
       substituteInPlace clojure --replace PREFIX $out
 
