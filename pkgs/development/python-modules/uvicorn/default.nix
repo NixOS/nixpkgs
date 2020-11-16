@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , click
 , h11
@@ -7,21 +8,26 @@
 , uvloop
 , websockets
 , wsproto
-, pytest
+, pytestCheckHook
 , requests
 , isPy27
+, trustme
+, pyyaml
+, typing-extensions
+, pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.11.5";
+  version = "0.12.2";
   disabled = isPy27;
 
+  # PyPi doesn't have tests bundled
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0cf0vw6kzxwlkvk5gw85wv3kg1kdil0wkq3s7rmxpvrk6gjk8jvq";
+    sha256 = "02ly3ffqzmd90n8wrf2073y98v9f33sc44mx6zx578hlz14pxclr";
   };
 
   propagatedBuildInputs = [
@@ -31,19 +37,24 @@ buildPythonPackage rec {
     uvloop
     websockets
     wsproto
+  ] ++ lib.optional (pythonOlder "3.8") [ typing-extensions ];
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+    pyyaml
+    requests
+    trustme
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11==0.8.*" "h11" \
-      --replace "httptools==0.0.13" "httptools"
-  '';
+  pythonImportsCheck = [ "uvicorn" ];
 
-  checkInputs = [ pytest requests ];
-  # watchgod required the watchgod package, which isn't available in nixpkgs
-  checkPhase = ''
-    pytest --ignore=tests/supervisors/test_watchgodreload.py
-  '';
+  __darwinAllowLocalNetworking = true;
+
+  pytestFlagsArray = [
+    # watchgod required the watchgod package, which isn't available in nixpkgs
+    "--ignore=tests/supervisors/test_watchgodreload.py"
+  ];
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
