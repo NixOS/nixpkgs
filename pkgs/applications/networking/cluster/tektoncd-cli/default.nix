@@ -27,10 +27,10 @@ buildGoModule rec {
     mkdir -p "$out/share/man/man1"
     cp docs/man/man1/* "$out/share/man/man1"
 
-    # TODO: Move to enhanced installShellCompletion when merged: PR #83630
-    $out/bin/tkn completion bash > tkn.bash
-    $out/bin/tkn completion zsh  > _tkn
-    installShellCompletion tkn.bash --zsh _tkn
+    installShellCompletion --cmd tkn \
+      --bash <($out/bin/tkn completion bash) \
+      --fish <($out/bin/tkn completion fish) \
+      --zsh <($out/bin/tkn completion zsh)
   '';
 
   meta = with lib; {
