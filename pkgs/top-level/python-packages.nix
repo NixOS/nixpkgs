@@ -5279,6 +5279,8 @@ in {
 
   pync = callPackage ../development/python-modules/pync { };
 
+  pynest2d = callPackage ../development/python-modules/pynest2d { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 { };
