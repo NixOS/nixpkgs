@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
-, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, gettext ? null
-, enableNls ? true, enableTiny ? false }:
+, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
+, gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
 
@@ -41,6 +41,8 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
+    tests = { inherit (nixosTests) nano; };
+
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
       set -o errexit
@@ -73,7 +75,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.nano-editor.org/";
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [ joachifm nequissimus ];
     platforms = platforms.all;
   };
 }
