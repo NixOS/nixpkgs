@@ -70,6 +70,8 @@ let
 
     bos = callPackage ../development/ocaml-modules/bos { };
 
+    ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
