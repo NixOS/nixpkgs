@@ -129,6 +129,12 @@ rec {
     platform = {};
   };
 
+  or1k = {
+    config = "or1k-elf";
+    libc = "newlib";
+    platform = {};
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";

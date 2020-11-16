@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "2.4.4";
+  version = "2.4.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a455ae30ccb9328731fca7f7f4cefaa7da69a2fe3e43d1b742bae5ff4693c695";
+    sha256 = "2be6c03dafce0a786cfab5d120196efccaf300cab5aee4d2fdad644b7bee1aef";
   };
 
   propagatedBuildInputs = [ jinja2 requests pillow rasterio shapely ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libusb1, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.1.17";
+  name = "libmtp-1.1.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "1p3r38nvdip40ab1h4scj3mzfjkx6kd14szjqyw9r6wz5pslr8zq";
+    sha256 = "1w41l93yi0dmw218daiw36rylkc8rammxx37csh1ij24q18gx03j";
   };
 
   outputs = [ "bin" "dev" "out" ];
