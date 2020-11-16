@@ -6503,6 +6503,8 @@ in {
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
 
+  seccomp = callPackage ../development/python-modules/seccomp { };
+
   secp256k1 = callPackage ../development/python-modules/secp256k1 { inherit (pkgs) secp256k1 pkgconfig; };
 
   secretstorage = if isPy3k then
