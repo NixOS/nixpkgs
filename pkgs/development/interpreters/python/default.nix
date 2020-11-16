@@ -199,6 +199,7 @@ in {
     gdbm = null;
     sqlite = null;
     configd = null;
+    tzdata = null;
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
