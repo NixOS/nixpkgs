@@ -216,6 +216,11 @@ in rec {
         url = "https://github.com/hercules-ci/nix/commit/f9e9839bce403f99734682a1eb3e98b14fef7c17.patch";
         sha256 = "0fwkagky9bqx0yvfj7syb6ksk35k9508cvidwwxr60x0jv2zj45b";
       })
+      # BoehmGCStackAllocator: ignore stack protection page https://github.com/NixOS/nix/pull/4264
+      (fetchpatch {
+        url = "https://github.com/hercules-ci/nix/commit/bc8eb384e7dd192f1ae91e929f5c9fa249502a2c.patch";
+        sha256 = "144ya6vf4brl4bb2bjbvihrcqr9fiwf8pvylgz2zlhbi6q710zq7";
+      })
     ]; }));
 
   nixFlakes = nixUnstable;
