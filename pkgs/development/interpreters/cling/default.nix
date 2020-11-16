@@ -1,5 +1,4 @@
 { clangStdenv,
-  stdenv,
   python,
   fetchFromGitHub,
   libffi,
@@ -24,7 +23,8 @@
 let
   # For using cling as a library (i.e. with xeus-cling)
   clingFull = clangStdenv.mkDerivation rec {
-    name = "cling";
+    pname = "cling";
+    version = "0.7";
 
     src = fetchgit {
       url = "http://root.cern.ch/git/clang.git";
