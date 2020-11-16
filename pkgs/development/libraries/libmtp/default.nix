@@ -1,18 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, libusb1, libiconv }:
+{ stdenv, fetchFromGitHub, autoconf, automake, gettext, libtool, pkgconfig
+, libusb1
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.1.18";
+  pname = "libmtp";
+  version = "1.1.18";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "1w41l93yi0dmw218daiw36rylkc8rammxx37csh1ij24q18gx03j";
+  src = fetchFromGitHub {
+    owner = "libmtp";
+    repo = "libmtp";
+    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    sha256 = "0lniy0xq397zddlhsv6n4qjn0wwakli5p3ydzxmbzn0z0jgngjja";
   };
 
   outputs = [ "bin" "dev" "out" ];
 
-  buildInputs = [ libiconv ];
-  propagatedBuildInputs = [ libusb1 ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gettext
+    libtool
+    pkgconfig
+  ];
+
+  buildInputs = [
+    libiconv
+  ];
+
+  propagatedBuildInputs = [
+    libusb1
+  ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   # tried to install files to /lib/udev, hopefully OK
   configureFlags = [ "--with-udev=$$bin/lib/udev" ];
