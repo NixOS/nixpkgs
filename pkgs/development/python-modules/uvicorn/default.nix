@@ -51,6 +51,8 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
+  __darwinAllowLocalNetworking = true;
+
   pytestFlagsArray = [
     # watchgod required the watchgod package, which isn't available in nixpkgs
     "--ignore=tests/supervisors/test_reload.py"
