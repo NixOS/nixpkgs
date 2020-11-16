@@ -24,6 +24,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     services.journald.extraConfig = "Storage=volatile";
     test-support.displayManager.auto.user = "alice";
 
+    services.journald.enableHttpGateway = true;
+
     systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
       #!${pkgs.runtimeShell}
       PATH=${lib.makeBinPath (with pkgs; [ utillinux coreutils ])}
@@ -168,5 +170,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed("systemctl status systemd-cryptsetup@luks1.service")
         machine.succeed("mkdir -p /tmp/luks1")
         machine.succeed("mount /dev/mapper/luks1 /tmp/luks1")
+
+    with subtest("the systemd-journal-gatewayd service is running"):
+        machine.succeed(
+            "${pkgs.curl}/bin/curl -s localhost:19531/machine | ${pkgs.jq}/bin/jq -e '.hostname == \"machine\"'"
+        )
   '';
 })
