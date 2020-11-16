@@ -15,15 +15,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makefile = if stdenv.hostPlatform.isDarwin
-  	     then "makefile.osx"
-	     else if stdenv.hostPlatform.isFreeBSD
-  	     then "makefile.bsd"
-  	     else if stdenv.hostPlatform.isOpenBSD
-  	     then "makefile.bsd"
-  	     else if stdenv.hostPlatform.isWindows
-  	     then "makefile.win"
-	     else "makefile.linux"; # I think Linux is a safe default...
+  makefile =
+    if stdenv.hostPlatform.isDarwin
+      then "makefile.osx"
+    else if stdenv.hostPlatform.isFreeBSD
+      then "makefile.bsd"
+    else if stdenv.hostPlatform.isOpenBSD
+      then "makefile.bsd"
+    else if stdenv.hostPlatform.isWindows
+      then "makefile.win"
+    else "makefile.linux"; # I think Linux is a safe default...
 
   makeFlags = [ "CC=${stdenv.cc}/bin/cc" "-C src/" ];
 
