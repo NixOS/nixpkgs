@@ -1,4 +1,7 @@
-{ stdenv, buildDunePackage, cohttp, ocaml_lwt, uri, ppx_sexp_conv, logs }:
+{ stdenv, buildDunePackage
+, cohttp, ocaml_lwt, uri, logs
+, ppx_sexp_conv
+}:
 
 if !stdenv.lib.versionAtLeast cohttp.version "0.99"
 then cohttp
@@ -10,7 +13,7 @@ buildDunePackage {
 	pname = "cohttp-lwt";
 	inherit (cohttp) version src useDune2 meta;
 
-	buildInputs = [ uri ppx_sexp_conv ];
+	buildInputs = [ ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ cohttp ocaml_lwt logs ];
+	propagatedBuildInputs = [ cohttp ocaml_lwt logs uri ];
 }

@@ -1,19 +1,27 @@
-{ stdenv, buildDunePackage, cohttp-lwt
-, conduit-lwt-unix, ppx_sexp_conv
-, cmdliner, fmt, magic-mime
+{ lib, buildDunePackage, cohttp-lwt, cohttp-lwt-unix-nossl
+, conduit-lwt, conduit-lwt-tls, ca-certs
+, cmdliner, magic-mime, logs, fmt, ocaml_lwt
 }:
 
-if !stdenv.lib.versionAtLeast cohttp-lwt.version "0.99"
+if !lib.versionAtLeast cohttp-lwt.version "0.99"
 then cohttp-lwt
 else
 
 buildDunePackage {
 	pname = "cohttp-lwt-unix";
-	inherit (cohttp-lwt) version src meta;
+	inherit (cohttp-lwt) version src useDune2;
 
-	useDune2 = true;
+	minimumOCamlVersion = "4.08";
 
-	buildInputs = [ cmdliner ppx_sexp_conv ];
+	propagatedBuildInputs = [
+		cohttp-lwt cohttp-lwt-unix-nossl conduit-lwt conduit-lwt-tls ca-certs
+		cmdliner magic-mime logs fmt ocaml_lwt
+	];
 
-	propagatedBuildInputs = [ cohttp-lwt conduit-lwt-unix fmt magic-mime ];
+	# requires system trust anchor not available in sandbox
+	doCheck = false;
+
+	meta = cohttp-lwt.meta // {
+		description = "CoHTTP implementation for Unix and Windows using Lwt";
+	};
 }

@@ -139,6 +139,10 @@ let
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
+    cohttp-lwt-unix-nossl = callPackage ../development/ocaml-modules/cohttp/lwt-unix-nossl.nix { };
+
+    cohttp-lwt-unix-ssl = callPackage ../development/ocaml-modules/cohttp/lwt-unix-ssl.nix { };
+
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };

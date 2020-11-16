@@ -1,5 +1,8 @@
-{ stdenv, buildDunePackage, async, cohttp, conduit-async, uri, ppx_sexp_conv
-, logs, magic-mime }:
+{ stdenv, buildDunePackage
+, async, cohttp, conduit-async, conduit-async-ssl
+, uri, logs, magic-mime, mirage-crypto, ipaddr
+, ounit, ppx_sexp_conv
+}:
 
 if !stdenv.lib.versionAtLeast cohttp.version "0.99" then
 	cohttp
@@ -14,7 +17,13 @@ else
 
 		buildInputs = [ ppx_sexp_conv ];
 
-		propagatedBuildInputs = [ async cohttp conduit-async logs magic-mime uri ];
+		propagatedBuildInputs = [
+			async cohttp conduit-async conduit-async-ssl logs magic-mime
+			uri mirage-crypto ipaddr
+		];
+
+		doCheck = true;
+		checkInputs = [ ounit ];
 
 		meta = cohttp.meta // {
 			description = "CoHTTP implementation for the Async concurrency library";
