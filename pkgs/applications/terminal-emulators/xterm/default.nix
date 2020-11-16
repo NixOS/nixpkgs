@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper
+{ stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper, nixosTests
 , enableDecLocator ? true
 }:
 
@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/applications xterm.desktop
     install -D -t $out/share/icons/hicolor/48x48/apps icons/xterm-color_48x48.xpm
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.xterm;
 
   meta = {
     homepage = "https://invisible-island.net/xterm";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk, pcre2 }:
+{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk, pcre2, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "stupidterm";
@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/stupidterm.desktop \
       --replace "Exec=st" "Exec=$out/bin/stupidterm"
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.stupidterm;
 
   meta = with stdenv.lib; {
     description = "Simple wrapper around the VTE terminal emulator widget for GTK";

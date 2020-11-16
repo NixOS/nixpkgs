@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
-, qtquickcontrols, qtgraphicaleffects, qmake }:
+, qtquickcontrols, qtgraphicaleffects, qmake, nixosTests }:
 
 mkDerivation rec {
   version = "1.1.1";
@@ -30,6 +30,8 @@ mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.test = nixosTests.terminal-emulators.cool-retro-term;
 
   meta = {
     description = "Terminal emulator which mimics the old cathode display";

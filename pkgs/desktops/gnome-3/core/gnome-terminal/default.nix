@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
 , gtk3, gsettings-desktop-schemas, vte, gettext, which, libuuid, vala
 , desktop-file-utils, itstool, wrapGAppsHook, glib, pcre2
-, libxslt, docbook-xsl-nons }:
+, libxslt, docbook-xsl-nons, nixosTests}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
       packageName = "gnome-terminal";
       attrPath = "gnome3.gnome-terminal";
     };
+
+    tests.test = nixosTests.terminal-emulators.gnome-terminal;
   };
 
   enableParallelBuilding = true;

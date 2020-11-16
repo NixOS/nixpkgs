@@ -8,6 +8,7 @@
 , pcre2
 , glib
 , makeWrapper
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/sakura \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.sakura;
 
   meta = with stdenv.lib; {
     homepage = "https://www.pleyades.net/david/projects/sakura";

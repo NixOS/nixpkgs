@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, efl, pcre, mesa }:
+{ stdenv, fetchurl, meson, ninja, pkg-config, efl, pcre, mesa, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-D edje-cc=${efl}/bin/edje_cc"
   ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.terminology;
 
   meta = {
     description = "Powerful terminal emulator based on EFL";

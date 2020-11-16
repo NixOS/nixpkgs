@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , rustPlatform
+, nixosTests
 
 , cmake
 , gzip
@@ -131,6 +132,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   dontPatchELF = true;
+
+  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
 
   meta = with lib; {
     description = "A cross-platform, GPU-accelerated terminal emulator";

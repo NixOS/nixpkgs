@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, nixosTests
 , pkgconfig
 , freetype
 , fontconfig
@@ -80,6 +81,8 @@ stdenv.mkDerivation rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
     install -D icons/wayst.svg $out/share/icons/hicolor/scalable/apps/wayst.svg
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.wayst;
 
   meta = with lib; {
     description = "A simple terminal emulator";

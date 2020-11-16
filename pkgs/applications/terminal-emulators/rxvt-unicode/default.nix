@@ -5,6 +5,7 @@
 , perlSupport      ? true
 , gdkPixbufSupport ? true
 , unicode3Support  ? true
+, nixosTests
 }:
 
 let
@@ -76,6 +77,8 @@ stdenv.mkDerivation {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
     cp -r ${desktopItem}/share/applications/ $out/share/
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 
   meta = {
     inherit description;

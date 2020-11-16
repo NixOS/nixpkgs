@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, autoconf, makeDesktopItem
+{ stdenv, lib, fetchurl, pkgconfig, autoconf, makeDesktopItem, nixosTests
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
@@ -109,6 +109,8 @@ stdenv.mkDerivation rec {
     ];
     startupNotify = "false";
   };
+
+  passthru.tests.test = nixosTests.terminal-emulators.mlterm;
 
   meta = with lib; {
     description = "Multi Lingual TERMinal emulator";

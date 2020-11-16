@@ -1,5 +1,5 @@
 { stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte, wrapGAppsHook
-, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
+, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs, nixosTests
 }:
 
 let version = "0.3.2"; in
@@ -34,6 +34,8 @@ stdenv.mkDerivation {
   '';
 
   doCheck = true;
+
+  passthru.tests.test = nixosTests.terminal-emulators.lxterminal;
 
   meta = {
     description = "The standard terminal emulator of LXDE";

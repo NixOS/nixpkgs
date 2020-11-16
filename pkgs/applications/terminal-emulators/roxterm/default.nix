@@ -1,7 +1,7 @@
 { at-spi2-core, cmake, dbus, dbus-glib, docbook_xsl, epoxy, fetchpatch, fetchFromGitHub
 , glib, gtk3, harfbuzz, libXdmcp, libXtst, libpthreadstubs
 , libselinux, libsepol, libtasn1, libxkbcommon, libxslt, p11-kit, pcre2
-, pkgconfig, stdenv, utillinuxMinimal, vte, wrapGAppsHook, xmlto
+, pkgconfig, stdenv, utillinuxMinimal, vte, wrapGAppsHook, xmlto, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
       utillinuxMinimal glib docbook_xsl xmlto libselinux
       libsepol libxkbcommon epoxy at-spi2-core libXtst libtasn1 p11-kit
     ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.roxterm;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/realh/roxterm";

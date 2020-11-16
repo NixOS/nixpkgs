@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, nixosTests
 , libX11, libXext, libXaw
 , pkgconfig, imlib2, libast }:
 
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXext libXaw imlib2 ];
   propagatedBuildInputs = [ libast ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.eterm;
 
   meta = with stdenv.lib; {
     description = "Terminal emulator";

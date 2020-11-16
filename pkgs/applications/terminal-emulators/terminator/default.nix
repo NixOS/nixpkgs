@@ -9,6 +9,7 @@
 , libnotify
 , wrapGAppsHook
 , vte
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -60,6 +61,8 @@ python3.pkgs.buildPythonApplication rec {
 
     runHook postCheck
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.terminator;
 
   meta = with stdenv.lib; {
     description = "Terminal emulator with support for tiling and tabs";

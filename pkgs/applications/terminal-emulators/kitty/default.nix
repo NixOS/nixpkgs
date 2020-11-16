@@ -16,6 +16,7 @@
   libpng,
   python3,
   zlib,
+  nixosTests,
 }:
 
 with python3Packages;
@@ -66,6 +67,8 @@ buildPythonApplication rec {
   patches = [
     ./fix-paths.patch
   ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
   # Causes build failure due to warning
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "strictoverflow";

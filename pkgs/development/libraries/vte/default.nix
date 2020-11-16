@@ -20,6 +20,7 @@
 , zlib
 , icu
 , systemd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -79,6 +80,10 @@ stdenv.mkDerivation rec {
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
   '';
+
+  passthru.tests = {
+    inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://www.gnome.org/";
