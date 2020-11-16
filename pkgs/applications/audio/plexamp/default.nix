@@ -2,13 +2,13 @@
 
 let
   pname = "plexamp";
-  version = "3.2.0";
+  version = "3.3.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
-    sha256 = "R1BhobnwoU7oJ7bNes8kH2neXqHlMPbRCNjcHyzUPqo=";
     name="${pname}-${version}.AppImage";
+    sha256 = "6/asP8VR+rJ52lKKds46gSw1or9suUEmyR75pjdWHIQ=";
   };
 
   appimageContents = appimageTools.extractType2 {

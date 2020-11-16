@@ -542,6 +542,7 @@
   ./services/monitoring/kapacitor.nix
   ./services/monitoring/loki.nix
   ./services/monitoring/longview.nix
+  ./services/monitoring/mackerel-agent.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
@@ -680,6 +681,7 @@
   ./services/networking/murmur.nix
   ./services/networking/mxisd.nix
   ./services/networking/namecoind.nix
+  ./services/networking/nar-serve.nix
   ./services/networking/nat.nix
   ./services/networking/ndppd.nix
   ./services/networking/networkmanager.nix

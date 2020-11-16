@@ -39,13 +39,13 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.19.1";
+  version = "1.19.4";
   format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b8456987b637232602ceb4d663cb34106f7eb780e247d51a260b84760fd8f491";
+    sha256 = "141ec3a3300ab89c7f2b0775289954d193cc8edb621ea05f99db9cb181530512";
   };
 
   nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
@@ -95,6 +95,7 @@ in buildPythonPackage rec {
   meta = {
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

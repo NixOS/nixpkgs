@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6d94af6c0d5aee0bb88d058a180f4d3341209e112f85a1c7ce0df7887cbf867";
+    sha256 = "1ab0128be96a01c6ba3d10db21b8018583b15995ad9a088cb3e4c3df90a62e46";
   };
 
   checkInputs = [ pytest mock ];

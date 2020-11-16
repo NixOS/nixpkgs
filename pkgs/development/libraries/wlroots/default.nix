@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "08d5d52m8wy3imfc6mdxpx8swhh2k4s1gmfaykg02j59z84awc6p";
+    sha256 = "01j38lmgs2c6fq68v8b75pkilia2wsgzgp46ivfbi9hhx47kgcfn";
   };
 
   # $out for the library and $examples for the example programs (in examples):
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libpng ffmpeg
   ];
 
-  mesonFlags = [ "-Dlogind-provider=systemd" ];
+  mesonFlags = [ "-Dlogind-provider=systemd" "-Dlibseat=disabled" ];
 
   postFixup = ''
     # Install ALL example programs to $examples:

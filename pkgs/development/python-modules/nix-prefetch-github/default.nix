@@ -8,18 +8,17 @@
 , jinja2
 , git
 , pytestCheckHook
-, pytest-black
 , pytestcov
 , pytest-isort
 }:
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "4.0";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-STUyMUCWAHfDA6dkpiOqSRBL3/tubedUbWa94Kp/764=";
+    sha256 = "ZdaWIkpJk8AvTZmA76VMTXeOUTrWLe+W3vh/e0zwWB4=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  checkInputs = [ pytestCheckHook pytest-black pytestcov pytest-isort git ];
+  checkInputs = [ pytestCheckHook pytestcov pytest-isort git ];
   checkPhase = ''
     pytest -m 'not network'
   '';

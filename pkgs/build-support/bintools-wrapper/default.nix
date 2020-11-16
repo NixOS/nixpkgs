@@ -179,12 +179,14 @@ stdenv.mkDerivation {
           mips64   = "btsmip";
           mips64el = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
+      else if targetPlatform.isMmix then "mmix"
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
       else if targetPlatform.isMsp430 then "msp430"
       else if targetPlatform.isAvr then "avr"
       else if targetPlatform.isAlpha then "alpha"
       else if targetPlatform.isVc4 then "vc4"
+      else if targetPlatform.isOr1k then "or1k"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
        else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);

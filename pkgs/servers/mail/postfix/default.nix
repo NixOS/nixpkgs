@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre, m4
-, buildPackages
+, buildPackages, nixosTests
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, libmysqlclient
@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.5.6";
+  version = "3.5.7";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0shyxk83adv4pbfilmskyrgjpb57vyhmvqbmfqawxbc22mksmh4f";
+    sha256 = "0q89iwan5yd84yrzdv3sqg1zanmw56bl2f5gyv5wfg8m9vqp995p";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -95,6 +95,8 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/libexec/postfix/postfix-script \
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
+
+  passthru.tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
 
   meta = with lib; {
     homepage = "http://www.postfix.org/";

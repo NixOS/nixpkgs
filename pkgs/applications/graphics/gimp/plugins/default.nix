@@ -1,33 +1,51 @@
-# install these packages into your profile. Then add
-# ~/.nix-profile/gimp-version-plugins to your plugin list you can find at
-# preferences -> Folders -> Plug-ins
-# same applies for the scripts
+# Use `gimp-with-plugins` package for GIMP with all plug-ins.
+# If you just want a subset of plug-ins, you can specify them explicitly:
+# `gimp-with-plugins.override { plugins = with gimpPlugins; [ gap ]; }`.
 
-{ config, pkgs, gimp }:
+{ config, lib, pkgs }:
+
 let
-  inherit (pkgs) stdenv fetchurl pkgconfig intltool glib fetchFromGitHub;
-  inherit (gimp) targetPluginDir targetScriptDir;
+  inherit (pkgs) stdenv fetchurl pkg-config intltool glib fetchFromGitHub;
+in
 
-  pluginDerivation = a: let
-    name = a.name or "${a.pname}-${a.version}";
+lib.makeScope pkgs.newScope (self:
+
+let
+  # Use GIMP from the scope.
+  inherit (self) gimp;
+
+  pluginDerivation = attrs: let
+    name = attrs.name or "${attrs.pname}-${attrs.version}";
   in stdenv.mkDerivation ({
     prePhases = "extraLib";
     extraLib = ''
       installScripts(){
-        mkdir -p $out/${targetScriptDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${targetScriptDir}/${name}; done
+        mkdir -p $out/${gimp.targetScriptDir}/${name};
+        for p in "$@"; do cp "$p" -r $out/${gimp.targetScriptDir}/${name}; done
       }
       installPlugins(){
-        mkdir -p $out/${targetPluginDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${targetPluginDir}/${name}; done
+        mkdir -p $out/${gimp.targetPluginDir}/${name};
+        for p in "$@"; do cp "$p" -r $out/${gimp.targetPluginDir}/${name}; done
       }
     '';
+
+    # Override installation paths.
+    PKG_CONFIG_GIMP_2_0_GIMPLIBDIR = "${placeholder "out"}/${gimp.targetLibDir}";
+    PKG_CONFIG_GIMP_2_0_GIMPDATADIR = "${placeholder "out"}/${gimp.targetDataDir}";
   }
-  // a
+  // attrs
   // {
       name = "gimp-plugin-${name}";
-      buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or []);
-      nativeBuildInputs = [ pkgconfig intltool ] ++ (a.nativeBuildInputs or []);
+      buildInputs = [
+        gimp
+        gimp.gtk
+        glib
+      ] ++ (attrs.buildInputs or []);
+
+      nativeBuildInputs = [
+        pkg-config
+        intltool
+      ] ++ (attrs.nativeBuildInputs or []);
     }
   );
 
@@ -35,10 +53,11 @@ let
     phases = [ "extraLib" "installPhase" ];
     installPhase = "installScripts ${src}";
   } // attrs);
-
 in
+{
+  # Allow overriding GIMP package in the scope.
+  inherit (pkgs) gimp;
 
-stdenv.lib.makeScope pkgs.newScope (self: with self; {
   gap = pluginDerivation {
     /* menu:
        Video
@@ -49,10 +68,6 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
     };
     NIX_LDFLAGS = "-lm";
-    patchPhase = ''
-      sed -e 's,^\(GIMP_PLUGIN_DIR=\).*,\1'"$out/${gimp.name}-plugins", \
-       -e 's,^\(GIMP_DATA_DIR=\).*,\1'"$out/share/${gimp.name}", -i configure
-    '';
     hardeningDisable = [ "format" ];
     meta = with stdenv.lib; {
       description = "The GIMP Animation Package";
@@ -99,7 +114,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     version = "2.0.3";
     buildInputs = with pkgs; [ fftw ];
     nativeBuildInputs = with pkgs; [ autoreconfHook ];
-    makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/lib/gimp/2.0" ];
+    makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/${gimp.targetLibDir}" ];
     src = fetchFromGitHub {
       owner = "bootchk";
       repo = "resynthesizer";
@@ -127,24 +142,25 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     name = "wavelet-sharpen-0.1.2";
     NIX_LDFLAGS = "-lm";
     src = fetchurl {
-      url = "http://registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
+      url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
     };
     installPhase = "installPlugins src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
   };
 
-  lqrPlugin = pluginDerivation {
+  lqrPlugin = pluginDerivation rec {
     /* menu:
        Layer/Liquid Rescale
     */
-    name = "lqr-plugin-0.6.1";
+    pname = "lqr-plugin";
+    version = "0.7.2";
     buildInputs = with pkgs; [ liblqr1 ];
-    src = fetchurl {
-      url = "http://registry.gimp.org/files/gimp-lqr-plugin-0.6.1.tar.bz2";
-      sha256 = "00hklkpcimcbpjly4rjhfipaw096cpy768g9wixglwrsyqhil7l9";
+    src = fetchFromGitHub {
+      owner = "carlobaldassi";
+      repo = "gimp-lqr-plugin";
+      rev = "v${version}";
+      sha256 = "81ajdZ2zQi/THxnBlSeT36tVTEzrS1YqLGpHMhFTKAo=";
     };
-    #postInstall = ''mkdir -p $out/nix-support; echo "${liblqr1}" > "$out/nix-support/propagated-user-env-packages"'';
-    installPhase = "installPlugins src/gimp-lqr-plugin";
   };
 
   gmic = pkgs.gmic-qt.override {
@@ -196,37 +212,8 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
   lightning = scriptDerivation {
     name = "Lightning";
     src = fetchurl {
-      url = "http://registry.gimp.org/files/Lightning.scm";
+      url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/Lightning.scm";
       sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";
     };
   };
-
-  /* space in name trouble ?
-
-  rainbowPlasma = scriptDerivation {
-    # http://registry.gimp.org/node/164
-    name = "rainbow-plasma";
-    src = fetchurl {
-      url = "http://registry.gimp.org/files/Rainbow Plasma.scm";
-      sha256 = "34308d4c9441f9e7bafa118af7ec9540f10ea0df75e812e2f3aa3fd7b5344c23";
-      name = "Rainbow-Plasma.scm"; # nix doesn't like spaces, does it?
-    };
-  };
-  */
-
-  /* doesn't seem to be working :-(
-  lightningGate = scriptDerivation {
-    # http://registry.gimp.org/node/153
-    name = "lightning-gate";
-    src = fetchurl {
-      url = "http://registry.gimp.org/files/LightningGate.scm";
-      sha256 = "181w1zi9a99kn2mfxjp43wkwcgw5vbb6iqjas7a9mhm8p04csys2";
-    };
-  };
-  */
-
-} // stdenv.lib.optionalAttrs (config.allowAliases or true) {
-
-  resynthesizer2 = resynthesizer;
-
 })

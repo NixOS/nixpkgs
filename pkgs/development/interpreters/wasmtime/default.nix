@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01k1fpk2qp4kv0xr4f0xmrjkr98j5ws48r1aks8l80mffs4ynqfr";
+    sha256 = "0q7wsnq5zdskxwzsxwm98jfnv2frnwca1dkhwndcn9yyz2gyw57m";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0vghcs1nbxlkmw9wfikzb1ndscx7fkmgv5q8dnfcisl05zpkj7si";
+  cargoSha256 = "1r1fm28zaxfbzd17jzaz8ql6ss6y6djgdhpfpkvpbw9l8l06x4lc";
 
   nativeBuildInputs = [ python cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++

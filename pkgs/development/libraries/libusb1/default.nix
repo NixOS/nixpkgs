@@ -2,14 +2,14 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkgconfig
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
-, systemd ? null
+, enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, udev ? null
 , libobjc
 , IOKit
 , withStatic ? false
 }:
 
-assert enableSystemd -> systemd != null;
+assert enableUdev -> udev != null;
 
 stdenv.mkDerivation rec {
   pname = "libusb";
@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs =
-    stdenv.lib.optional enableSystemd systemd ++
+    stdenv.lib.optional enableUdev udev ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   dontDisableStatic = withStatic;
 
-  configureFlags = stdenv.lib.optional (!enableSystemd) "--disable-udev";
+  configureFlags = stdenv.lib.optional (!enableUdev) "--disable-udev";
 
-  preFixup = stdenv.lib.optionalString enableSystemd ''
-    sed 's,-ludev,-L${stdenv.lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
+  preFixup = stdenv.lib.optionalString enableUdev ''
+    sed 's,-ludev,-L${stdenv.lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
   meta = with stdenv.lib; {

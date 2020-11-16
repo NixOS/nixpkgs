@@ -5,15 +5,15 @@
 , nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
 
 stdenv.mkDerivation rec {
-  version = "2020-11-04";
+  version = "2020-11-12";
   pname = "oh-my-zsh";
-  rev = "3e6ee85a161c8089955c19364728e167025a911d";
+  rev = "9b119866dd0e2d5054abd992f4dfbf346ac81b0d";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "/8ySf5ulSx2HtPG/tzPzOI1ljksxF+hGwjXFhGIseBk=";
+    sha256 = "0m65ii79lp8mhl4adicg4qqzj93321gxpg6s91h0wbpkdgd53qxw";
   };
 
   installPhase = ''
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       if [ ! "null" = "$latestSha" ]; then
         nixpkgs="$(git rev-parse --show-toplevel)"
         default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
-        latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.author.date' | sed 's|"\(.*\)T.*|\1|g')"
+        latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
         update-source-version oh-my-zsh "$latestSha" --version-key=rev
         update-source-version oh-my-zsh "$latestDate" --ignore-same-hash
         nixfmt "$default_nix"

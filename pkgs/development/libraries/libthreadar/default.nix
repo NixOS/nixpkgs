@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "1.3.1";
   pname = "libthreadar";
 
   src = fetchurl {
     url = "mirror://sourceforge/libthreadar/${pname}-${version}.tar.gz";
-    sha256 = "0g2wxykawlsj6ma9slbbk0bxynqvmkwhaln2fiwc21x7nhjvpn9z";
+    sha256 = "0x1kkccy81rcqbhlw88sw7lykp7398vmrvp6f9yy42k9bl4yxn2q";
   };
 
   outputs = [ "out" "dev" ];

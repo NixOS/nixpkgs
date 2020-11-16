@@ -14,6 +14,7 @@
 , self
 , configd
 , autoreconfHook
+, autoconf-archive
 , python-setup-hook
 , nukeReferences
 # For the Python package set
@@ -67,6 +68,8 @@ let
 
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
+  ] ++ optionals (!stdenv.isDarwin && passthru.pythonAtLeast "3.10") [
+    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
   ] ++ [
     nukeReferences
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -291,13 +294,6 @@ in with passthru; stdenv.mkDerivation {
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
     '' + optionalString stripBytecode ''
     find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
-    '' + ''
-    # *strip* shebang from libpython gdb script - it should be dual-syntax and
-    # interpretable by whatever python the gdb in question is using, which may
-    # not even match the major version of this python. doing this after the
-    # bytecode compilations for the same reason.
-    mkdir -p $out/share/gdb
-    sed '/^#!/d' Tools/gdb/libpython.py > $out/share/gdb/libpython.py
   '';
 
   preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -314,8 +310,6 @@ in with passthru; stdenv.mkDerivation {
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash
   ];
-
-  separateDebugInfo = true;
 
   inherit passthru;
 

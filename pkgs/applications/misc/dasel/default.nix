@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dasel";
-  version = "1.1.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:11xm47p7n79mq2zkv9q9m5v4a1gga01pkzi2j42gq1ma9hwz4idz";
+    sha256 = "14xh5fjh0ngf8rmhqgfxmz25yz7far3sf8yza9iprs7y7ad61qz9";
   };
 
-  vendorSha256 = "sha256:1552k85z4s6gv7sss7dccv3h8x22j2sr12icp6s7s0a3i4iwyksw";
+  vendorSha256 = "1552k85z4s6gv7sss7dccv3h8x22j2sr12icp6s7s0a3i4iwyksw";
 
   meta = with stdenv.lib; {
     description = "Query and update data structures from the command line";

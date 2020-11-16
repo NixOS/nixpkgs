@@ -42,13 +42,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.36.5";
+  version = "3.38.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1py7sqrpvg2qvswxclshysx7hd9jk65i6cwqsagd6rg6rnjhblp0";
+    sha256 = "0cvs47h7xhalkh8xcchllaws212ml3d23aj0pmfq0qyzkw65f8g9";
   };
 
   patches = [
@@ -124,8 +124,11 @@ let self = stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+  # Install udev files into our own tree.
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+
   passthru = {
-    libdir = "${self}/lib/mutter-6";
+    libdir = "${self}/lib/mutter-7";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

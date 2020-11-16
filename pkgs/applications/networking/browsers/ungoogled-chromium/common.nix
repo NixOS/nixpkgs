@@ -22,7 +22,7 @@
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
-, libdrm ? null, wayland ? null, mesa_drivers ? null, libxkbcommon ? null # useOzone
+, libdrm ? null, wayland ? null, mesa ? null, libxkbcommon ? null # useOzone
 
 # package customization
 , useOzone ? false
@@ -153,7 +153,7 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio
-      ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
+      ++ optionals useOzone [ libdrm wayland mesa.drivers libxkbcommon ];
 
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
@@ -344,7 +344,12 @@ let
       patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
     '';
 
-    passthru.updateScript = ./update.py;
+    passthru = {
+      updateScript = ./update.py;
+      chromiumDeps = {
+        gn = gnChromium;
+      };
+    };
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.

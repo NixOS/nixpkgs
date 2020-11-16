@@ -6,8 +6,10 @@ let
   cfg = config.services.codimd;
 
   prettyJSON = conf:
-    pkgs.runCommand "codimd-config.json" { preferLocalBuild = true; } ''
-      echo '${builtins.toJSON conf}' | ${pkgs.jq}/bin/jq \
+    pkgs.runCommandLocal "codimd-config.json" {
+      nativeBuildInputs = [ pkgs.jq ];
+    } ''
+      echo '${builtins.toJSON conf}' | jq \
         '{production:del(.[]|nulls)|del(.[][]?|nulls)}' > $out
     '';
 in
@@ -878,7 +880,6 @@ in
       };
     };
 
-
     environmentFile = mkOption {
       type = with types; nullOr path;
       default = null;
@@ -906,6 +907,14 @@ in
 
         Note that this file needs to be available on the host on which
         <literal>CodiMD</literal> is running.
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.codimd;
+      description = ''
+        Package that provides CodiMD.
       '';
     };
   };
@@ -938,7 +947,7 @@ in
       '';
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
-        ExecStart = "${pkgs.codimd}/bin/codimd";
+        ExecStart = "${cfg.package}/bin/codimd";
         EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=${cfg.workDir}/config.json"

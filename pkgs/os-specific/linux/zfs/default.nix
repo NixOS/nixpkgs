@@ -161,10 +161,11 @@ let
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
-      postFixup = ''
-        path="PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat sudo ]}"
+      postFixup = let
+        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat ]}:$PATH";
+      in ''
         for i in $out/libexec/zfs/zpool.d/*; do
-          sed -i "2i$path" $i
+          sed -i '2i${path}' $i
         done
       '';
 
@@ -202,9 +203,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.0-rc5";
+    version = "2.0.0-rc6";
 
-    sha256 = "0vnldx95c36yy18v1hfr8r4cmmh3hw4n6pwz30drkwgywakjwnsd";
+    sha256 = "0p027x9hsawniwa9h3yayfbcx010anwcfy45rqgkg2r91zr2nfvw";
     isUnstable = true;
   };
 }

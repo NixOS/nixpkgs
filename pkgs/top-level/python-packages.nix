@@ -913,6 +913,8 @@ in {
 
   bluepy = callPackage ../development/python-modules/bluepy { };
 
+  bme680 = callPackage ../development/python-modules/bme680 { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
@@ -1200,6 +1202,8 @@ in {
 
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean { };
 
+  click-help-colors = callPackage ../development/python-modules/click-help-colors { };
+
   click-log = callPackage ../development/python-modules/click-log { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
@@ -1245,6 +1249,8 @@ in {
   cntk = callPackage ../development/python-modules/cntk { };
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
+
+  coconut = callPackage ../development/python-modules/coconut { };
 
   cocotb = callPackage ../development/python-modules/cocotb { };
 
@@ -1346,6 +1352,8 @@ in {
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
 
   cppy = callPackage ../development/python-modules/cppy { };
+
+  cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
   cram = callPackage ../development/python-modules/cram { };
 
@@ -1811,8 +1819,6 @@ in {
 
   dot2tex = callPackage ../development/python-modules/dot2tex { inherit (pkgs) graphviz; };
 
-  dotnetcore2 = callPackage ../development/python-modules/dotnetcore2 { inherit (pkgs) substituteAll dotnet-sdk; };
-
   dparse = callPackage ../development/python-modules/dparse { };
 
   dpath = callPackage ../development/python-modules/dpath { };
@@ -2005,6 +2011,8 @@ in {
   fastcache = callPackage ../development/python-modules/fastcache { };
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
+
+  fastecdsa = callPackage ../development/python-modules/fastecdsa { };
 
   fasteners = callPackage ../development/python-modules/fasteners { };
 
@@ -2472,6 +2480,8 @@ in {
 
   google_cloud_firestore = callPackage ../development/python-modules/google_cloud_firestore { };
 
+  google-cloud-iam = callPackage ../development/python-modules/google-cloud-iam { };
+
   google_cloud_iot = callPackage ../development/python-modules/google_cloud_iot { };
 
   google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
@@ -2526,6 +2536,8 @@ in {
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
+  googlemaps = callPackage ../development/python-modules/googlemaps { };
+
   google-music = callPackage ../development/python-modules/google-music { };
 
   google-music-proto = callPackage ../development/python-modules/google-music-proto { };
@@ -2559,6 +2571,10 @@ in {
   gpy = callPackage ../development/python-modules/gpy { };
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
+
+  gradient_sdk = callPackage ../development/python-modules/gradient_sdk { };
+
+  gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -2826,6 +2842,8 @@ in {
 
   hyperlink = callPackage ../development/python-modules/hyperlink { };
 
+  hyperopt = callPackage ../development/python-modules/hyperopt { };
+
   hypothesis_4 = callPackage ../development/python-modules/hypothesis/2.nix
     { }; # File name is called 2.nix because this one will need to remain for Python 2.
 
@@ -2924,6 +2942,8 @@ in {
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   infoqscraper = callPackage ../development/python-modules/infoqscraper { };
+
+  inform = callPackage ../development/python-modules/inform { };
 
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
@@ -4000,6 +4020,8 @@ in {
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
+  nestedtext = callPackage ../development/python-modules/nestedtext { };
+
   netaddr = callPackage ../development/python-modules/netaddr { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
@@ -4118,6 +4140,7 @@ in {
   notify-py = callPackage ../development/python-modules/notify-py { };
 
   notmuch = callPackage ../development/python-modules/notmuch { inherit (pkgs) notmuch; };
+  notmuch2 = callPackage ../development/python-modules/notmuch/2.nix { inherit (pkgs) notmuch; };
 
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
@@ -4230,6 +4253,8 @@ in {
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
+
+  openrouteservice = callPackage ../development/python-modules/openrouteservice/default.nix { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
@@ -5266,6 +5291,8 @@ in {
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
+  phonemizer = callPackage ../development/python-modules/phonemizer { };
+
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
   pyopengl = callPackage ../development/python-modules/pyopengl { };
@@ -5290,6 +5317,8 @@ in {
   pyparsing = callPackage ../development/python-modules/pyparsing { };
 
   pyparted = callPackage ../development/python-modules/pyparted { };
+
+  pypass = callPackage ../development/python-modules/pypass { };
 
   pypblib = callPackage ../development/python-modules/pypblib { };
 
@@ -6452,6 +6481,8 @@ in {
 
   scp = callPackage ../development/python-modules/scp { };
 
+  scramp = callPackage ../development/python-modules/scramp { };
+
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
@@ -6650,6 +6681,8 @@ in {
 
   smartypants = callPackage ../development/python-modules/smartypants { };
 
+  smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
+
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
 
   smmap = callPackage ../development/python-modules/smmap { };
@@ -6831,6 +6864,8 @@ in {
   sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
+
+  sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
 
@@ -7467,12 +7502,7 @@ in {
 
   vdf = callPackage ../development/python-modules/vdf { };
 
-  vdirsyncer = callPackage ../development/python-modules/vdirsyncer {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Security;
-    inherit (pkgs) pkg-config openssl rustPlatform;
-  };
-
-  vdirsyncerStable = callPackage ../development/python-modules/vdirsyncer/stable.nix { };
+  vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
   vega = callPackage ../development/python-modules/vega { };
 
@@ -7661,6 +7691,14 @@ in {
     };
   };
 
+  wxPython_4_1 = callPackage ../development/python-modules/wxPython/4.1.nix {
+    inherit (pkgs) pkgconfig;
+    wxGTK = pkgs.wxGTK31.override {
+      withGtk2 = false;
+      withWebKit = true;
+    };
+  };
+
   wxPython = self.wxPython30;
 
   x11_hash = callPackage ../development/python-modules/x11_hash { };
@@ -7809,7 +7847,7 @@ in {
 
   zeep = callPackage ../development/python-modules/zeep { };
 
-  zeitgeist = disabledIf isPy3k (toPythonModule (pkgs.zeitgeist.override { python2Packages = self; })).py;
+  zeitgeist = (toPythonModule (pkgs.zeitgeist.override { python3 = python; })).py;
 
   zerobin = callPackage ../development/python-modules/zerobin { };
 

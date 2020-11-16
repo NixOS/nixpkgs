@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "amfora";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "makeworld-the-better-one";
     repo = "amfora";
     rev = "v${version}";
-    sha256 = "011h5xzwiafh3fdp9wil8n618p45ph9swa66lw6s82ijpiizz79s";
+    sha256 = "1f5r12hmdgj26p4ss5pcpfcvqlcn19fr9xvvvk2izckcr48p4fy7";
   };
 
-  vendorSha256 = "10f3bh3r3jc1185r8r1ihg8rprdpl8qwg5b6wqwsda96ydkbpi2b";
+  vendorSha256 = "0mkk7xxfxxp1w9890mkmag11mzxhy2zmh8v1macpyp1zmzgs21f8";
 
   postInstall = ''
     sed -i "s:amfora:$out/bin/amfora:" amfora.desktop

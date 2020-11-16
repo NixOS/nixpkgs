@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "hidapi";
-  version = "0.9.0.post3";
+  version = "0.10.0.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a2442928f17ba742d9c53073f48b152051c5747d758d2fefd937543da5ab2e5";
+    sha256 = "27c04d42a7187becf7a8309d4846aa4f235ac8b7dafd758335b109f5cbd3b962";
   };
 
   propagatedBuildInputs =
@@ -26,11 +26,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hid" ];
 
   meta = with stdenv.lib; {
-    description = "A Cython interface to the hidapi from https://github.com/signal11/hidapi";
+    description = "A Cython interface to the hidapi from https://github.com/libusb/hidapi";
     homepage = "https://github.com/trezor/cython-hidapi";
     # license can actually be either bsd3 or gpl3
     # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
     license = licenses.bsd3;
-    maintainers = with maintainers; [ np ];
+    maintainers = with maintainers; [ np prusnak ];
   };
 }
