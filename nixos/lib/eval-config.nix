@@ -27,11 +27,10 @@
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                  in if e == "" then [] else [(import e)]
 }:
-
-let extraArgs_ = extraArgs; pkgs_ = pkgs;
-in
-
 let
+  extraArgs_ = extraArgs;
+  pkgs_ = pkgs;
+
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
@@ -51,17 +50,18 @@ let
     };
   };
 
-in rec {
-
-  # Merge the option definitions in all modules, forming the full
-  # system configuration.
-  inherit (lib.evalModules {
+  evalResult = lib.evalModules {
     inherit prefix check;
     modules = baseModules ++ extraModules ++ [ pkgsModule ] ++ modules;
     args = extraArgs;
     specialArgs =
       { modulesPath = builtins.toString ../modules; } // specialArgs;
-  }) config options _module;
+  };
+in
+rec {
+  # Merge the option definitions in all modules, forming the full
+  # system configuration.
+  inherit (evalResult) config options _module;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
