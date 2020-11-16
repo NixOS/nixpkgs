@@ -27,6 +27,10 @@ let
       name = "${pname}-${version}-source";
     };
 
+    patches = [
+      ./tag-date.patch
+    ];
+
     buildPhase = ''
       ${python.pythonForBuild.interpreter} bootstrap.py
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
