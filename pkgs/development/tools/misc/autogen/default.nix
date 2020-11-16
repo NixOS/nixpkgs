@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
+  # Setting the man page date to make the man output binary
+  # reproducible. If we do not set that env variable, we'll end up
+  # with the build datetime in the man output.
+  MAN_PAGE_DATE = "1970-01-01";
+
   nativeBuildInputs = [
     which pkgconfig perl autoreconfHook/*patches applied*/
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
