@@ -56,7 +56,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage    = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
-    license     = licenses.asl20;
+    license     = licenses.bsl11;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ rushmorem thoughtpolice rvolosatovs ];
   };

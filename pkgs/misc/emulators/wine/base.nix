@@ -1,5 +1,5 @@
 { stdenv, lib, pkgArches, callPackage,
-  name, version, src, monos, geckos, platforms,
+  name, version, src, mingwGccs, monos, geckos, platforms,
   pkgconfig, fontforge, makeWrapper, flex, bison,
   supportFlags,
   buildScript ? null, configureFlags ? []
@@ -15,9 +15,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 }) // rec {
   inherit name src configureFlags;
 
+  # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkgconfig fontforge makeWrapper flex bison
-  ];
+  ]
+  ++ lib.optionals supportFlags.mingwSupport mingwGccs;
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
   [ pkgs.freetype ]
@@ -92,6 +96,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   # drive_c/windows/system32 will only contain a few files instead of
   # hundreds, there will be an error about winemenubuilder and MountMgr
   # on startup of Wine, and the Drives tab in winecfg will show an error.
+  # TODO: binutils 2.34 contains a fix for this bug, re-enable stripping once available.
   dontStrip = true;
 
   ## FIXME
@@ -136,7 +141,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   # https://bugs.winehq.org/show_bug.cgi?id=43530
   # https://github.com/NixOS/nixpkgs/issues/31989
   hardeningDisable = [ "bindnow" ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify";
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
+    ++ lib.optional (supportFlags.mingwSupport) "format";
 
   passthru = { inherit pkgArches; };
   meta = {

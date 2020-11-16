@@ -603,6 +603,8 @@ in
 
   adlplug = callPackage ../applications/audio/adlplug { };
 
+  arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
+
   tuijam = callPackage ../applications/audio/tuijam { inherit (python3Packages) buildPythonApplication; };
 
   opnplug = callPackage ../applications/audio/adlplug {
@@ -1163,8 +1165,6 @@ in
 
   gaia = callPackage ../development/libraries/gaia { };
 
-  gama = callPackage ../applications/science/geometry/gama { };
-
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gammy = qt5.callPackage ../tools/misc/gammy { };
@@ -1588,6 +1588,8 @@ in
     makeSetupHook { } ../build-support/setup-hooks/breakpoint-hook.sh;
 
   bsod = callPackage ../misc/emulators/bsod { };
+
+  simh = callPackage ../misc/emulators/simh { };
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
@@ -5689,6 +5691,8 @@ in
 
   mmake = callPackage ../tools/misc/mmake { };
 
+  mmixware = callPackage ../development/tools/mmixware { };
+
   modemmanager = callPackage ../tools/networking/modem-manager {};
 
   modem-manager-gui = callPackage ../applications/networking/modem-manager-gui {};
@@ -6209,6 +6213,8 @@ in
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
+  update-nix-fetchgit = haskell.lib.justStaticExecutables haskellPackages.update-nix-fetchgit;
+
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
   update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
@@ -6726,6 +6732,8 @@ in
   quilt = callPackage ../development/tools/quilt { };
 
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
+
+  qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
 
   qview = libsForQt5.callPackage ../applications/graphics/qview {};
 
@@ -9522,6 +9530,12 @@ in
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
+
+julia_15 = callPackage ../development/compilers/julia/1.5.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
+
 
   julia_1 = julia_10;
   julia = julia_1;
@@ -18978,6 +18992,7 @@ in
     ubootRaspberryPi3_64bit
     ubootRaspberryPiZero
     ubootRock64
+    ubootRockPi4
     ubootRockPro64
     ubootROCPCRK3399
     ubootSheevaplug
@@ -19689,7 +19704,9 @@ in
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
-  scheherazade = callPackage ../data/fonts/scheherazade { };
+  scheherazade = callPackage ../data/fonts/scheherazade { version = "2.100"; };
+
+  scheherazade-new = callPackage ../data/fonts/scheherazade { };
 
   signwriting = callPackage ../data/fonts/signwriting { };
 
@@ -26142,6 +26159,10 @@ in
   };
 
   ### SCIENCE/GEOMETRY
+
+  antiprism = callPackage ../applications/science/geometry/antiprism { };
+
+  gama = callPackage ../applications/science/geometry/gama { };
 
   drgeo = callPackage ../applications/science/geometry/drgeo {
     inherit (gnome2) libglade;
