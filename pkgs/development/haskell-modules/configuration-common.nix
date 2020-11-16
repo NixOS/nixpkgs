@@ -1418,4 +1418,9 @@ self: super: {
   # 2020-11-15: nettle tests are pre MonadFail change
   # https://github.com/stbuehler/haskell-nettle/issues/10
   nettle = dontCheck super.nettle;
+
+  # 2020-11-17: Disable tests for hackage-security because of this issue:
+  # https://github.com/haskell/hackage-security/issues/247
+  hackage-security = dontCheck super.hackage-security;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
