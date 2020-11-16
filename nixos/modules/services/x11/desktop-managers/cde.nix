@@ -60,6 +60,7 @@ in {
       chmod a+w+t /var/dt/{tmp,appconfig/appmanager}
     '';
 
+    services.xserver.displayManager.dtlogin.enable = mkDefault true;
     services.xserver.desktopManager.session = [
     { name = "CDE";
       start = ''

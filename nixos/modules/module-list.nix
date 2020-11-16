@@ -921,6 +921,7 @@
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/default.nix
+  ./services/x11/display-managers/dtlogin.nix
   ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/lightdm.nix
   ./services/x11/display-managers/sddm.nix

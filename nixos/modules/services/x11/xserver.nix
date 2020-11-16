@@ -565,7 +565,8 @@ in
 
     services.xserver.displayManager.lightdm.enable =
       let dmconf = cfg.displayManager;
-          default = !(dmconf.gdm.enable
+          default = !(dmconf.dtlogin.enable
+                    || dmconf.gdm.enable
                     || dmconf.sddm.enable
                     || dmconf.xpra.enable );
       in mkIf (default) true;
