@@ -8,8 +8,8 @@
   fetchgit,
   makeWrapper,
   runCommand,
-  glibc,
   llvmPackages_5,
+  callPackage,
 
   # Provide flags to Cling to prevent it from looking for system include paths,
   # and pass it the paths to glibc and the LLVM C++
@@ -23,8 +23,7 @@
 let
   # For using cling as a library (i.e. with xeus-cling)
   clingFull = clangStdenv.mkDerivation rec {
-    pname = "cling";
-    version = "0.7";
+    name = "cling";
 
     src = fetchgit {
       url = "http://root.cern.ch/git/clang.git";
@@ -68,22 +67,6 @@ let
 
       make -j8
     '';
-
-    installPhase = ''
-      make install
-
-      if [[ ${toString isolate} ]]; then
-        wrapProgram $out/bin/cling \
-            --add-flags "-nostdinc -nostdinc++" \
-            --add-flags "-I $out/include" \
-            --add-flags "-I ${glibc.dev}/include" \
-            --add-flags "-I ${llvmPackages_5.libcxx}/include/c++/v1" \
-            --add-flags "-I $out/lib/clang/5.0.2/include" \
-            --add-flags "-L $out/lib" \
-            --add-flags "-L ${llvmPackages_5.libcxx}/lib" \
-            --add-flags "-l ${llvmPackages_5.libcxx}/lib/libc++.so"
-      fi
-    '';
   };
 
   # For using Cling as a standalone executable
@@ -103,6 +86,16 @@ let
     cp -r share/cling $out/share
   '';
 
+  baseCling = if standalone then clingStandalone else clingFull;
+
 in
 
-if standalone then clingStandalone else clingFull
+if isolate then
+  runCommand (if standalone then "cling-standalone-isolated" else "cling-full-isolated") {
+    buildInputs = [makeWrapper];
+  } ''
+    makeWrapper ${baseCling}/bin/cling $out/bin/cling \
+      --add-flags "${clangStdenv.lib.concatStringsSep " " (callPackage ./flags.nix {cling = baseCling;})}"
+  ''
+else
+  baseCling
