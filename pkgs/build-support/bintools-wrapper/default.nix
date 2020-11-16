@@ -186,6 +186,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isAvr then "avr"
       else if targetPlatform.isAlpha then "alpha"
       else if targetPlatform.isVc4 then "vc4"
+      else if targetPlatform.isCr16 then "cr16"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
        else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);

@@ -8857,7 +8857,7 @@ in
   gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
     then ../development/compilers/gcc/6
     else ../development/compilers/gcc/9);
-  gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
+  gcc = if (with stdenv.targetPlatform; isVc4 || isCr16 || libc == "relibc")
     then gcc6 else gcc9;
 
   gcc-unwrapped = gcc.cc;
@@ -10711,6 +10711,9 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   mspdebug = callPackage ../development/misc/msp430/mspdebug.nix { };
 
   vc4-newlib = callPackage ../development/misc/vc4/newlib.nix {};
+
+  cr16-newlib = callPackage ../development/misc/cr16/newlib.nix { };
+
   resim = callPackage ../misc/emulators/resim {};
 
   rappel = callPackage ../development/misc/rappel/default.nix { };
@@ -12897,6 +12900,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     else if name == "avrlibc" then targetPackages.avrlibcCross or avrlibcCross
     else if name == "newlib" && stdenv.targetPlatform.isMsp430 then targetPackages.msp430NewlibCross or msp430NewlibCross
     else if name == "newlib" && stdenv.targetPlatform.isVc4 then targetPackages.vc4-newlib or vc4-newlib
+    else if name == "newlib" && stdenv.targetPlatform.isCr16 then targetPackages.cr16-newlib or cr16-newlib
     else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64

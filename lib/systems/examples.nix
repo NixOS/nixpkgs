@@ -123,6 +123,11 @@ rec {
     config = "avr";
   };
 
+  cr16 = {
+    config = "cr16-elf";
+    libc = "newlib";
+  };
+
   vc4 = {
     config = "vc4-elf";
     libc = "newlib";
