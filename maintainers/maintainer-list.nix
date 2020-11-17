@@ -3193,12 +3193,6 @@
     githubId = 313929;
     name = "Gabriel Ebner";
   };
-  genesis = {
-    email = "ronan@aimao.org";
-    github = "bignaux";
-    githubId = 149484;
-    name = "Ronan Bignaux";
-  };
   georgewhewell = {
     email = "georgerw@gmail.com";
     github = "georgewhewell";
