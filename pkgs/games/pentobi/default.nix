@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A computer opponent for the board game Blokus";
     homepage = "https://pentobi.sourceforge.io";
     license = licenses.gpl3;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
