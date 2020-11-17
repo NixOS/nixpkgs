@@ -155,6 +155,9 @@ in
       users.groups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
 
+      # TODO: remove once docker 20.10 is released
+      systemd.enableUnifiedCgroupHierarchy = false;
+
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
         environment = proxy_env;
