@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mahatma-kaganovich/xkbd";
     description = "onscreen soft keyboard for X11";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
