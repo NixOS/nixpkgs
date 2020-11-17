@@ -49,6 +49,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     b2sdk
     boto
+    boto3
     cffi
     cryptography
     ecdsa
