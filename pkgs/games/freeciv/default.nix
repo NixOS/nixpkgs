@@ -28,7 +28,8 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
+    ++ optional qtClient [ qt5.wrapQtAppsHook ];
 
   buildInputs = [ lua5_3 zlib bzip2 curl lzma gettext libiconv ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
