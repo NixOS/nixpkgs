@@ -52,14 +52,12 @@ let
 
     preConfigure = ''
       echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
+      cp -r $clingSrc ./tools/cling
+      chmod -R a+w ./tools/cling
     '';
 
     nativeBuildInputs = [python git cmake makeWrapper];
     buildInputs = [libffi llvmPackages_5.llvm zlib];
-
-    preBuild = ''
-      cp -r $clingSrc ./tools/cling
-    '';
 
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
@@ -76,7 +74,7 @@ let
     buildInputs = [makeWrapper];
     inherit clingUnwrapped;
   } ''
-    makeWrapper $cling/bin/cling $out/bin/cling \
+    makeWrapper $clingUnwrapped/bin/cling $out/bin/cling \
       --add-flags "${envToUse.lib.concatStringsSep " " (callPackage ./flags.nix {cling = clingUnwrapped;})}"
   '';
 in
