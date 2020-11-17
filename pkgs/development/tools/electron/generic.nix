@@ -1,4 +1,19 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, glib, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core, libdrm, mesa }:
+{ stdenv
+, libXScrnSaver
+, makeWrapper
+, fetchurl
+, wrapGAppsHook
+, glib
+, gtk3
+, unzip
+, atomEnv
+, libuuid
+, at-spi2-atk
+, at-spi2-core
+, libdrm
+, mesa
+, libxkbcommon
+}:
 
 version: hashes:
 let
@@ -34,7 +49,11 @@ let
     src = fetcher version (get tags platform) (get hashes platform);
   };
 
-  electronLibPath = with stdenv.lib; makeLibraryPath ([ libuuid at-spi2-atk at-spi2-core ] ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]);
+  electronLibPath = with stdenv.lib; makeLibraryPath (
+    [ libuuid at-spi2-atk at-spi2-core ]
+    ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
+    ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
+  );
 
   linux = {
     buildInputs = [ glib gtk3 ];
