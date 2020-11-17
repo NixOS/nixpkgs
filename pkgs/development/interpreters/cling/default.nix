@@ -1,6 +1,6 @@
-{ clangStdenv,
-  python,
+{ python,
   fetchFromGitHub,
+  clangStdenv,
   libffi,
   git,
   cmake,
@@ -21,8 +21,13 @@
 }:
 
 let
+  # Make sure to use the stdenv that uses libc++ (the LLVM C++ standard library)
+  # and not libstdc++ (the GNU one)
+  # envToUse = llvmPackages_5.libcxxStdenv;
+  envToUse = clangStdenv;
+
   # For using cling as a library (i.e. with xeus-cling)
-  clingFull = clangStdenv.mkDerivation rec {
+  clingFull = envToUse.mkDerivation rec {
     name = "cling";
 
     src = fetchgit {
@@ -95,7 +100,7 @@ if isolate then
     buildInputs = [makeWrapper];
   } ''
     makeWrapper ${baseCling}/bin/cling $out/bin/cling \
-      --add-flags "${clangStdenv.lib.concatStringsSep " " (callPackage ./flags.nix {cling = baseCling;})}"
+      --add-flags "${envToUse.lib.concatStringsSep " " (callPackage ./flags.nix {cling = baseCling;})}"
   ''
 else
   baseCling

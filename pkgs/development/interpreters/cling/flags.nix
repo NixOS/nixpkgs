@@ -1,4 +1,4 @@
-{cling, llvmPackages_5, glibc}:
+{cling, gcc-unwrapped, glibc}:
 
 # This file contains a list of flags used to "isolate" a Cling installation.
 # This means
@@ -18,11 +18,10 @@
 [
   "-nostdinc"
   "-nostdinc++"
+  "-I" "${gcc-unwrapped}/include/c++/9.3.0"
   "-I" "${cling}/include"
   "-I" "${glibc.dev}/include"
-  "-I" "${llvmPackages_5.libcxx}/include/c++/v1"
+  "-I" "${gcc-unwrapped}/include/c++/9.3.0/x86_64-unknown-linux-gnu"
   "-I" "${cling}/lib/clang/5.0.2/include"
   "-L" "${cling}/lib"
-  "-L" "${llvmPackages_5.libcxx}/lib"
-  "-l" "${llvmPackages_5.libcxx}/lib/libc++.so"
 ]
