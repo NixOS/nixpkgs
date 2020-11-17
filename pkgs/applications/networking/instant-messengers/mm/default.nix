@@ -12,9 +12,10 @@ buildGoModule {
 
   vendorSha256 = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A file system based matrix client";
     homepage = "https://git.lost.host/meutraa/mm";
-    license = stdenv.lib.licenses.isc;
+    license = licenses.isc;
+    maintainers = with maintainers; [ meutraa ];
   };
 }
