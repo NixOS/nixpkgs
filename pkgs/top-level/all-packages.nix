@@ -24126,8 +24126,6 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     inherit (gnome2) libgnomeui;
   };
 
-  vuescan = callPackage ../applications/graphics/vuescan { };
-
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
