@@ -26,7 +26,6 @@
 # LTO is disabled since it caused segfaults on wayland see https://github.com/NixOS/nixpkgs/issues/10142
 , ltoSupport ? false, overrideCC, buildPackages
 , gssSupport ? true, kerberos
-, pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
 ## privacy-related options
 
@@ -73,7 +72,6 @@
 }:
 
 assert stdenv.cc.libc or null != null;
-assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSupport requires both wayland and webrtc support.";
 assert ltoSupport -> stdenv.isDarwin -> throw "LTO is broken on Darwin (see PR#19312).";
 
 let
@@ -116,13 +114,7 @@ buildStdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
-  ] ++ lib.optional pipewireSupport
-    (fetchpatch {
-      # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
-      url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
-      sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
-    })
-  ++ patches;
+  ] ++ patches;
 
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
@@ -152,7 +144,6 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  gssSupport kerberos
   ++ lib.optional  ltoSupport llvmPackages.libunwind
   ++ lib.optionals waylandSupport [ libxkbcommon ]
-  ++ lib.optionals pipewireSupport [ pipewire ]
   ++ lib.optionals (lib.versionAtLeast ffversion "82") [ gnum4 ]
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
@@ -172,13 +163,6 @@ buildStdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-  '' + lib.optionalString pipewireSupport ''
-    # substitute the /usr/include/ lines for the libraries that pipewire provides.
-    # The patch we pick from fedora only contains the generated moz.build files
-    # which hardcode the dependency paths instead of running pkg_config.
-    substituteInPlace \
-      media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
-      --replace /usr/include ${pipewire.dev}/include
   '' + lib.optionalString (lib.versionAtLeast ffversion "80") ''
     substituteInPlace dom/system/IOUtils.h \
       --replace '#include "nspr/prio.h"'          '#include "prio.h"'
