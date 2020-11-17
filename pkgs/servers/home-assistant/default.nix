@@ -91,6 +91,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
       --replace "cryptography==3.2" "cryptography" \
       --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
