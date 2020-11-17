@@ -1,4 +1,5 @@
 { stdenv, runCommand, fetchurl
+, fetchpatch
 , ensureNewerSourcesHook
 , cmake, pkgconfig
 , which, git
@@ -134,6 +135,11 @@ in rec {
     patches = [
       ./0000-fix-SPDK-build-env.patch
       ./ceph-glibc-2-32-sigdescr_np.patch
+      (fetchpatch {
+        name = "CVE-2020-25660";
+        url = "https://github.com/ceph/ceph/compare/2c93eff00150f0cc5f106a559557a58d3d7b6f1f...6c14c2fb5650426285428dfe6ca1597e5ea1d07d.patch";
+        sha256 = "032hl15q34gq7y6bnljmklpsbd3bpkzmg7r3w0x0ly786iz7zwhm";
+      })
     ];
 
     nativeBuildInputs = [
