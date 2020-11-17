@@ -36,9 +36,13 @@ let
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
     '';
 
+    # Here we untar the sdist and retar it in order to control the timestamps
+    # of all the files included
     installPhase = ''
-      echo "Moving sdist..."
-      mv dist/*.tar.gz $out
+      echo "Repackaging sdist..."
+      mkdir temp
+      tar -xzf dist/*.tar.gz -C temp/
+      tar -czf $out -C temp/ --mtime='1970-01-01' ${pname}-${version}.post0
     '';
   };
 in buildPythonPackage rec {
