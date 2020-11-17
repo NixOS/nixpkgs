@@ -34,15 +34,16 @@ let
     buildPhase = ''
       ${python.pythonForBuild.interpreter} bootstrap.py
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
+
+      # Here we untar the sdist and retar it in order to control the timestamps
+      # of all the files included
+      tar -xzf dist/${pname}-${version}.post0.tar.gz -C dist/
+      tar -czf dist/${name} -C dist/ --mtime='1970-01-01' ${pname}-${version}.post0
     '';
 
-    # Here we untar the sdist and retar it in order to control the timestamps
-    # of all the files included
     installPhase = ''
-      echo "Repackaging sdist..."
-      mkdir temp
-      tar -xzf dist/*.tar.gz -C temp/
-      tar -czf $out -C temp/ --mtime='1970-01-01' ${pname}-${version}.post0
+      echo "Moving sdist..."
+      mv dist/${name} $out
     '';
   };
 in buildPythonPackage rec {
