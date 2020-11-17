@@ -1,6 +1,6 @@
 { stdenv, rustPlatform, fetchFromGitHub, pkg-config, less, Security, libiconv
 , installShellFiles, makeWrapper, writeScript, common-updater-scripts, git
-, nixfmt, nix, coreutils, gnused, gnugrep, gawk }:
+, nixfmt, nix, coreutils, gnused, gnugrep, gawk, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
@@ -32,6 +32,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
+    tests = { inherit (nixosTests) bat; };
+
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
       set -o errexit
