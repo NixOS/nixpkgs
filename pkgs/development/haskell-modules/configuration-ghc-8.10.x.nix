@@ -83,14 +83,6 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
 
-  # https://github.com/commercialhaskell/pantry/issues/21
-  pantry = appendPatch super.pantry (pkgs.fetchpatch {
-    name = "add-cabal-3.2.x-support.patch";
-    url = "https://patch-diff.githubusercontent.com/raw/commercialhaskell/pantry/pull/22.patch";
-    sha256 = "198hsfjsy83s7rp71llf05cwa3vkm74g73djg5p4sk4awm9s6vf2";
-    excludes = ["package.yaml"];
-  });
-
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = generateOptparseApplicativeCompletion "hnix"
     (overrideCabal super.hnix (drv: {
