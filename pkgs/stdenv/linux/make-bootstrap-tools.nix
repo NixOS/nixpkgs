@@ -152,7 +152,7 @@ in with pkgs; rec {
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
-        cp -d ${isl_0_17.out}/lib/libisl*.so* $out/lib
+        cp -d ${isl_0_20.out}/lib/libisl*.so* $out/lib
 
       '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
