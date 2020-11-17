@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ stdenv, fetchFromGitHub, python2, xvfb_run
+, palette ? "Broica"
+, numOfColors ? 8 }:
+
+assert numOfColors == 4 || numOfColors == 8;
 
 stdenv.mkDerivation rec {
   pname = "cdetheme";
@@ -11,16 +15,23 @@ stdenv.mkDerivation rec {
     sha256 = "1v5c4db69cmzdci8xxlkx3s3cifg1h5160qq5siwfps0sj7pvggj";
   };
 
-  dontBuild = true;
+  dontInstall = true;
 
-  pythonPath = with python2Packages; [ pyqt4 pillow pyxdg pyyaml ];
-  nativeBuildInputs = with python2Packages; [ python wrapPython ];
+  buildInputs = [
+    (python2.withPackages (pythonPackages: with pythonPackages; [
+      pyqt4 pillow pyxdg pyyaml
+    ]))
+    xvfb_run
+  ];
 
-  installPhase = ''
-    mkdir -p $out/share/themes
-    cp -r cdetheme $out/share/themes
-    patchShebangs $out/share/themes/cdetheme/scripts/switchtheme
-    wrapPythonProgramsIn "$out/share/themes/cdetheme/scripts" "$out $pythonPath"
+  buildPhase = ''
+    export HOME=$(pwd)
+    cd cdetheme/scripts
+    substituteInPlace switchtheme \
+      --replace "Globals.themesrcdir=Globals.themedir" "Globals.themesrcdir='$HOME/cdetheme'" \
+      --replace "Globals.themedir=os.path.join(userhome,'.themes','cdetheme')" "Globals.themedir='$out/share/themes/cdetheme'" \
+      --replace "opts.ncolors=8" ""
+    xvfb-run python ./switchtheme ../palettes/${palette}.dp ${builtins.toString numOfColors} 0 0 false true false
   '';
 
   meta = with stdenv.lib; {
