@@ -17518,8 +17518,6 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   shaarli = callPackage ../servers/web-apps/shaarli { };
 
-  shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
-
   shiori = callPackage ../servers/web-apps/shiori { };
 
   inherit (callPackages ../servers/web-apps/matomo {})
