@@ -17030,8 +17030,9 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   openbgpd = callPackage ../servers/openbgpd { };
 
-  openafs = callPackage ../servers/openafs/1.6 { tsmbac = null; ncurses = null; };
   openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
+  # Current stable release; don't backport release updates!
+  openafs = openafs_1_8;
 
   openresty = callPackage ../servers/http/openresty {
     withPerl = false;
@@ -18279,8 +18280,9 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
-    openafs = callPackage ../servers/openafs/1.6/module.nix { };
     openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
+    # Current stable release; don't backport release updates!
+    openafs = openafs_1_8;
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
