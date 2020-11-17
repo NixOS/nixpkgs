@@ -1423,4 +1423,6 @@ self: super: {
   # https://github.com/haskell/hackage-security/issues/247
   hackage-security = dontCheck super.hackage-security;
 
+  # 2020-11-17: persistent-test is ahead of the persistent version in stack
+  persistent-sqlite = dontCheck super.persistent-sqlite;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
