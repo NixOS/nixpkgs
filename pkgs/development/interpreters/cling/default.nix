@@ -9,15 +9,8 @@
   makeWrapper,
   runCommand,
   llvmPackages_5,
-  callPackage,
-
-  # Provide flags to Cling to prevent it from looking for system include paths,
-  # and pass it the paths to glibc and the LLVM C++
-  isolate ? true,
-
-  # Produce a "standalone" version of Cling, suitable for running as an executable.
-  # If set to false, the output will include extra files for using Cling as a library.
-  standalone ? false
+  gcc-unwrapped,
+  glibc
 }:
 
 let
@@ -70,13 +63,39 @@ let
     ];
   };
 
+  # The flags passed to the wrapped cling should
+  # a) prevent it from searching for system include files and libs, and
+  # b) provide it with the include files and libs it needs (C and C++ standard library)
+
+  # These are also exposed as cling.flags because it's handy to be able to pass them
+  # to tools that wrap Cling, particularly Jupyter kernels such as xeus-cling and the built-in
+  # jupyter-cling-kernel. Both of these use Cling as a library by linking against
+  # libclingJupyter.so, so the makeWrapper approach to wrapping the binary doesn't work.
+  # Thus, if you're packaging a Jupyter kernel, you either need to pass these flags as extra
+  # args to xcpp (for xeus-cling) or put them in the environment variable CLING_OPTS
+  # (for jupyter-cling-kernel)
+  flags = [
+    "-nostdinc"
+    "-nostdinc++"
+    "-I" "${gcc-unwrapped}/include/c++/9.3.0"
+    "-I" "${clingUnwrapped}/include"
+    "-I" "${glibc.dev}/include"
+    "-I" "${gcc-unwrapped}/include/c++/9.3.0/x86_64-unknown-linux-gnu"
+    "-I" "${clingUnwrapped}/lib/clang/5.0.2/include"
+    "-L" "${clingUnwrapped}/lib"
+  ];
+
   cling = runCommand "cling-isolated" {
     buildInputs = [makeWrapper];
     inherit clingUnwrapped;
+    inherit flags;
   } ''
     makeWrapper $clingUnwrapped/bin/cling $out/bin/cling \
-      --add-flags "${envToUse.lib.concatStringsSep " " (callPackage ./flags.nix {cling = clingUnwrapped;})}"
+      --add-flags "$flags"
   '';
 in
 
-cling // { unwrapped = clingUnwrapped; }
+cling // {
+  unwrapped = clingUnwrapped;
+  flags = flags;
+}
