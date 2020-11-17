@@ -27,8 +27,9 @@ let
   envToUse = clangStdenv;
 
   # For using cling as a library (i.e. with xeus-cling)
-  clingFull = envToUse.mkDerivation rec {
-    name = "cling";
+  clingUnwrapped = envToUse.mkDerivation rec {
+    pname = "cling";
+    version = "0.7";
 
     src = fetchgit {
       url = "http://root.cern.ch/git/clang.git";
@@ -43,64 +44,41 @@ let
       deepClone = true;
     };
 
-    configurePhase = ''
-      echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
-    '';
-
     clingSrc = fetchgit {
       url = "https://github.com/root-project/cling.git";
       rev = "70163975eee5a76b45a1ca4016bfafebc9b57e07";
       sha256 = "1zwnpxbqk6c0694sdmcxymivnpfc7hl2by6411n6vjxinavlpqz4";
     };
 
-    buildInputs = [python git cmake libffi llvmPackages_5.llvm makeWrapper zlib];
-
-    buildPhase = ''
-      cp -r ${clingSrc} ./tools/cling
-      mkdir dist
-      mkdir build
-      cd build
-
-      # Note that -DCLING_INCLUDE_TESTS=ON causes the cling/tools targets to be built;
-      # see cling/tools/CMakeLists.txt
-      cmake .. \
-        -DCMAKE_INSTALL_PREFIX=$out \
-        -DCMAKE_BUILD_TYPE=Release \
-        "-DLLVM_TARGETS_TO_BUILD=host;NVPTX" \
-        -DLLVM_ENABLE_RTTI=ON \
-        -DCLING_INCLUDE_TESTS=ON
-
-      make -j8
+    preConfigure = ''
+      echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
     '';
+
+    nativeBuildInputs = [python git cmake makeWrapper];
+    buildInputs = [libffi llvmPackages_5.llvm zlib];
+
+    preBuild = ''
+      cp -r $clingSrc ./tools/cling
+    '';
+
+    cmakeFlags = [
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
+      "-DLLVM_ENABLE_RTTI=ON"
+
+      # Setting -DCLING_INCLUDE_TESTS=ON causes the cling/tools targets to be built;
+      # see cling/tools/CMakeLists.txt
+      "-DCLING_INCLUDE_TESTS=ON"
+    ];
   };
 
-  # For using Cling as a standalone executable
-  # (contains only the files in cling/tools/packaging/dist-files.txt)
-  clingStandalone = runCommand "cling-standalone" {} ''
-    cd ${clingFull}
-
-    mkdir -p $out/bin
-    cp -r bin/cling $out/bin
-
-    mkdir -p $out/lib
-    cp -r lib/clang $out/lib
-
-    cp -r include $out
-
-    mkdir -p $out/share
-    cp -r share/cling $out/share
+  cling = runCommand "cling-isolated" {
+    buildInputs = [makeWrapper];
+    inherit clingUnwrapped;
+  } ''
+    makeWrapper $cling/bin/cling $out/bin/cling \
+      --add-flags "${envToUse.lib.concatStringsSep " " (callPackage ./flags.nix {cling = clingUnwrapped;})}"
   '';
-
-  baseCling = if standalone then clingStandalone else clingFull;
-
 in
 
-if isolate then
-  runCommand (if standalone then "cling-standalone-isolated" else "cling-full-isolated") {
-    buildInputs = [makeWrapper];
-  } ''
-    makeWrapper ${baseCling}/bin/cling $out/bin/cling \
-      --add-flags "${envToUse.lib.concatStringsSep " " (callPackage ./flags.nix {cling = baseCling;})}"
-  ''
-else
-  baseCling
+cling // { unwrapped = clingUnwrapped; }
