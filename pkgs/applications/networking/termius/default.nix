@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
     platforms = [ "x86_64-linux" ];
   };
 }
