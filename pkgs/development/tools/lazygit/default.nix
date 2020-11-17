@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Simple terminal UI for git commands";
     homepage = "https://github.com/jesseduffield/lazygit";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz equirosa filalex77 ];
+    maintainers = with maintainers; [ fpletz equirosa Br1ght0ne ];
   };
 }

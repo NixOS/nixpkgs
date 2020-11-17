@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage rec {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras davidtwco filalex77 Frostman marsam ];
+    maintainers = with maintainers; [ bbigras davidtwco Br1ght0ne Frostman marsam ];
   };
 }

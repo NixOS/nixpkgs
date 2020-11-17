@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "Render markdown on the CLI, with pizzazz!";
     homepage = "https://github.com/charmbracelet/glow";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehmry filalex77 penguwin ];
+    maintainers = with maintainers; [ ehmry Br1ght0ne penguwin ];
   };
 }
