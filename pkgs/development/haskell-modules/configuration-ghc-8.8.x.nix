@@ -124,4 +124,8 @@ self: super: {
 
   # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
   exceptions = super.exceptions_0_10_4;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
 }
