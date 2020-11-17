@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The GNU Linear Programming Kit";
 
     longDescription =
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = "https://www.gnu.org/software/glpk/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ bjg timokau ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ bjg ] ++ teams.sage.members;
+    platforms = platforms.all;
   };
 }
