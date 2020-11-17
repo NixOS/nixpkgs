@@ -5346,6 +5346,8 @@ in {
 
   pypoppler = callPackage ../development/python-modules/pypoppler { };
 
+  pyppeteer = callPackage ../development/python-modules/pyppeteer { };
+
   pyprind = callPackage ../development/python-modules/pyprind { };
 
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
