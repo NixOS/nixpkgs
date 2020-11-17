@@ -11825,7 +11825,10 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   shallot = callPackage ../tools/misc/shallot { };
 
-  shards = callPackage ../development/tools/build-managers/shards { };
+  inherit (callPackage ../development/tools/build-managers/shards { })
+    shards_0_11
+    shards_0_12
+    shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
 
