@@ -29338,6 +29338,8 @@ in
     nixUnstable
     nixFlakes;
 
+  nixStatic = pkgsStatic.nix;
+
   nixops = callPackage ../tools/package-management/nixops { };
 
   nixopsUnstable = lowPrio (callPackage ../applications/networking/cluster/nixops { });
