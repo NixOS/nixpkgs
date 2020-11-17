@@ -221,6 +221,11 @@ in rec {
         url = "https://github.com/hercules-ci/nix/commit/bc8eb384e7dd192f1ae91e929f5c9fa249502a2c.patch";
         sha256 = "144ya6vf4brl4bb2bjbvihrcqr9fiwf8pvylgz2zlhbi6q710zq7";
       })
+      # BoehmGCStackAllocator: disable GC with coroutines https://github.com/NixOS/nix/pull/4264
+      (fetchpatch {
+        url = "https://github.com/hercules-ci/nix/commit/ced7f31ac252ebbeb8610dcb329ee09e84aca8aa.patch";
+        sha256 = "0pfhbqvlyr54fygnan0iyzcpxga4j3sdp65khqbn1vbvlk2smjvp";
+      })
     ]; }));
 
   nixFlakes = nixUnstable;
