@@ -8709,6 +8709,8 @@ in
     chicken
     egg2nix;
 
+  cc65 = callPackage ../development/compilers/cc65 { };
+
   ccl = callPackage ../development/compilers/ccl {
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
