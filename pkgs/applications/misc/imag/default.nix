@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     description = "Commandline personal information management suite";
     homepage = "https://imag-pim.org/";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ filalex77 minijackson ];
+    maintainers = with maintainers; [ Br1ght0ne minijackson ];
     platforms = platforms.unix;
   };
 }

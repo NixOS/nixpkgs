@@ -19,6 +19,6 @@ buildGoPackage rec {
     description = "A simple terminal UI for both docker and docker-compose";
     homepage = "https://github.com/jesseduffield/lazydocker";
     license = licenses.mit;
-    maintainers = with maintainers; [ das-g filalex77 ];
+    maintainers = with maintainers; [ das-g Br1ght0ne ];
   };
 }

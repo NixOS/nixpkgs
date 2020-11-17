@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     description = "Write licenses to stdout";
     homepage = "https://github.com/raftario/licensor";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }
