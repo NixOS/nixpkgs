@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "0cb1n0skanwwkwgzlswwhvfb4iji1bw9iqskmczlhakpw3j1yaqa";
+    sha256 = "0cgbmv6qk1haj709hjx5q4sl7wgh91i459gzs1203adwc7rvk6jv";
   };
 
   buildInputs = lib.optionals enableStatic [ stdenv.cc.libc stdenv.cc.libc.static ];
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin ++ freebsd;
+    # https://github.com/NixOS/nixpkgs/issues/101229
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ hhm ];
     priority = 10;
   };
