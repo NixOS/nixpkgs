@@ -4984,6 +4984,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyee = callPackage ../development/python-modules/pyee { };
+
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };
@@ -5343,6 +5345,8 @@ in {
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
   pypoppler = callPackage ../development/python-modules/pypoppler { };
+
+  pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
   pyprind = callPackage ../development/python-modules/pyprind { };
 
