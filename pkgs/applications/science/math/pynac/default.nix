@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "http://pynac.org";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms   = platforms.unix;
   };
 }

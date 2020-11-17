@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Cython bindings for PARI";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     homepage = "https://github.com/defeo/cypari2";
   };
 }
