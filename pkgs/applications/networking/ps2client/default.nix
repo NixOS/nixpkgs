@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   patchPhase = ''
    sed -i -e "s|-I/usr/include||g" -e "s|-I/usr/local/include||g" Makefile
   '';
-  
+
   installPhase = ''
     make PREFIX=$out install
   '';

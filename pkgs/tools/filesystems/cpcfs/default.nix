@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
 
   pname = "cpcfs";
   version = "0.85.4";
-  
+
   src = fetchFromGitHub {
     owner = "derikz";
     repo = "cpcfs";

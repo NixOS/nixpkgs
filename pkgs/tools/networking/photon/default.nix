@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   installPhase = ''
     mkdir -p "$out"/{bin,share/photon}
     cp -R photon.py core plugins $out/share/photon
- 
+
     makeWrapper ${python3Packages.python.interpreter} $out/bin/photon \
       --set PYTHONPATH "$PYTHONPATH:$out/share/photon" \
       --add-flags "-O $out/share/photon/photon.py"
