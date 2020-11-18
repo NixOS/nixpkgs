@@ -5770,6 +5770,8 @@ in {
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
+  python-bidi = callPackage ../development/python-modules/python-bidi { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-constraint = callPackage ../development/python-modules/python-constraint { };
