@@ -19,15 +19,11 @@ let
 
     src = fetchgit {
       url = "http://root.cern.ch/git/clang.git";
-
       # This commit has the tag cling-0.7 so we use it, even though cpt.py
       # tries to use refs/tags/cling-patches-rrelease_50
       rev = "354b25b5d915ff3b1946479ad07f3f2768ea1621";
       branchName = "cling-patches";
-
-      sha256 = "181xfci1r9bs8r9grj9wbgi95sy85dj2nc6ggw9yjlhx94d0412y";
-      leaveDotGit = true;
-      deepClone = true;
+      sha256 = "0q8q2nnvjx3v59ng0q3qqqhzmzf4pmfqqiy3rz1f3drx5w3lgyjg";
     };
 
     clingSrc = fetchgit {
