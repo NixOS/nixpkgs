@@ -10,22 +10,13 @@
 
 buildPythonPackage rec {
   pname = "async_stagger";
-  version = "0.3.0";
+  version = "0.3.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "007l54fbk2dfzv3vmqz98m1i37mzxkkva5r4fiwq2pg8nb61fy0w";
+    sha256 = "1mj3daaqxjdavbxcjrdwx5ky9maa2blbv53aa6d7w9zxkrz3b7xa";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix test failures on Python 3.8
-      # https://github.com/twisteroidambassador/async_stagger/issues/4
-      url = "https://github.com/twisteroidambassador/async_stagger/commit/736ab20ff9c172628d911f1e6f72420399ec9631.patch";
-      sha256 = "1ygqd9n56sj83lvgmv6nrx3m0sp3646s5k7z697qx43xslixj731";
-    })
-  ];
 
   checkInputs = [
     pytestCheckHook
