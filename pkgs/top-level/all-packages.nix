@@ -7517,7 +7517,9 @@ in
 
   tcpkali = callPackage ../applications/networking/tcpkali { };
 
-  tcpreplay = callPackage ../tools/networking/tcpreplay { };
+  tcpreplay = callPackage ../tools/networking/tcpreplay {
+    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
+  };
 
   tdns-cli = callPackage ../tools/networking/tdns-cli { };
 
