@@ -358,6 +358,8 @@ in {
 
   apsw = callPackage ../development/python-modules/apsw { };
 
+  arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
+
   area = callPackage ../development/python-modules/area { };
 
   arelle = callPackage ../development/python-modules/arelle { gui = true; };
