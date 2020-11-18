@@ -1,27 +1,20 @@
-{ python,
-  fetchFromGitHub,
-  clangStdenv,
-  libffi,
-  git,
-  cmake,
-  zlib,
-  fetchgit,
-  makeWrapper,
-  runCommand,
-  llvmPackages_5,
-  gcc-unwrapped,
-  glibc
+{ stdenv
+, python
+, libffi
+, git
+, cmake
+, zlib
+, fetchgit
+, makeWrapper
+, runCommand
+, llvmPackages_5
+, gcc-unwrapped
+, glibc
 }:
 
 let
-  # Make sure to use the stdenv that uses libc++ (the LLVM C++ standard library)
-  # and not libstdc++ (the GNU one)
-  # envToUse = llvmPackages_5.libcxxStdenv;
-  envToUse = clangStdenv;
-
-  # For using cling as a library (i.e. with xeus-cling)
-  clingUnwrapped = envToUse.mkDerivation rec {
-    pname = "cling";
+  unwrapped = stdenv.mkDerivation rec {
+    pname = "cling-unwrapped";
     version = "0.7";
 
     src = fetchgit {
@@ -40,7 +33,7 @@ let
     clingSrc = fetchgit {
       url = "https://github.com/root-project/cling.git";
       rev = "70163975eee5a76b45a1ca4016bfafebc9b57e07";
-      sha256 = "1zwnpxbqk6c0694sdmcxymivnpfc7hl2by6411n6vjxinavlpqz4";
+      sha256 = "1mv2fhk857kp5rq714bq49iv7gy9fgdwibydj5wy1kq2m3sf3ysi";
     };
 
     preConfigure = ''
@@ -49,11 +42,10 @@ let
       chmod -R a+w ./tools/cling
     '';
 
-    nativeBuildInputs = [python git cmake makeWrapper];
-    buildInputs = [libffi llvmPackages_5.llvm zlib];
+    nativeBuildInputs = [ python git cmake ];
+    buildInputs = [ libffi llvmPackages_5.llvm zlib ];
 
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
       "-DLLVM_ENABLE_RTTI=ON"
 
@@ -61,6 +53,14 @@ let
       # see cling/tools/CMakeLists.txt
       "-DCLING_INCLUDE_TESTS=ON"
     ];
+
+    meta = with stdenv.lib; {
+      description = "The Interactive C++ Interpreter";
+      homepage = "https://root.cern/cling/";
+      license = with licenses; [ lgpl21 ncsa ];
+      maintainers = with maintainers; [ thomasjm ];
+      platforms = platforms.unix;
+    };
   };
 
   # The flags passed to the wrapped cling should
@@ -78,24 +78,20 @@ let
     "-nostdinc"
     "-nostdinc++"
     "-I" "${gcc-unwrapped}/include/c++/9.3.0"
-    "-I" "${clingUnwrapped}/include"
+    "-I" "${unwrapped}/include"
     "-I" "${glibc.dev}/include"
     "-I" "${gcc-unwrapped}/include/c++/9.3.0/x86_64-unknown-linux-gnu"
-    "-I" "${clingUnwrapped}/lib/clang/5.0.2/include"
-    "-L" "${clingUnwrapped}/lib"
+    "-I" "${unwrapped}/lib/clang/5.0.2/include"
+    "-L" "${unwrapped}/lib"
   ];
 
-  cling = runCommand "cling-isolated" {
-    buildInputs = [makeWrapper];
-    inherit clingUnwrapped;
-    inherit flags;
-  } ''
-    makeWrapper $clingUnwrapped/bin/cling $out/bin/cling \
-      --add-flags "$flags"
-  '';
 in
 
-cling // {
-  unwrapped = clingUnwrapped;
-  flags = flags;
-}
+runCommand "cling-${unwrapped.version}" {
+  buildInputs = [ makeWrapper ];
+  inherit unwrapped flags;
+  inherit (unwrapped) meta;
+} ''
+  makeWrapper $unwrapped/bin/cling $out/bin/cling \
+    --add-flags "$flags"
+''
