@@ -1239,7 +1239,22 @@ self: super: {
   patch = doJailbreak super.patch;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
-  reflex-dom-core = doDistribute (unmarkBroken (dontCheck super.reflex-dom-core));
+  reflex-dom-core = doDistribute (unmarkBroken (dontCheck (appendPatch super.reflex-dom-core (pkgs.fetchpatch {
+    url = https://github.com/reflex-frp/reflex-dom/commit/6aed7b7ebb70372778f1a29a724fcb4de815ba04.patch;
+    sha256 = "1g7lgwj7rpziilif2gian412iy05gqbzwx9w0m6ajq3clxs5zs7l";
+    stripLen = 2;
+    extraPrefix = "";
+    includes = ["reflex-dom-core.cabal" ];
+  }))));
+
+  # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
+  reflex-dom = appendPatch super.reflex-dom (pkgs.fetchpatch {
+    url = https://github.com/reflex-frp/reflex-dom/commit/6aed7b7ebb70372778f1a29a724fcb4de815ba04.patch;
+    sha256 = "1g7lgwj2rpziilif2gian412iy05gqbzwx9w0m6ajq3clxs5zs7l";
+    stripLen = 2;
+    extraPrefix = "";
+    includes = ["reflex-dom.cabal" ];
+  });
 
   # add unreleased commit fixing version constraint as a patch
   # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
@@ -1431,4 +1446,37 @@ self: super: {
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
 
+  dependent-sum-aeson-orphans = appendPatch super.dependent-sum-aeson-orphans (pkgs.fetchpatch {
+    # 2020-11-18: https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/9
+    # Bump version bounds for ghc 8.10
+    url = https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/e1f5898116222a1bc557d41f3395066f83736093.patch;
+    sha256 = "01fj29xdblxpz4drasaygf9875fipylpj8w164lb0cszd1vmqwnb";
+  });
+
+  # 2020-11-18: https://github.com/srid/rib/issues/169
+  # aeson bound out of sync
+  rib-core = doJailbreak super.rib-core;
+
+  # 2020-11-18: https://github.com/obsidiansystems/aeson-gadt-th/issues/25
+  # Testsuite is broken
+  aeson-gadt-th = dontCheck super.aeson-gadt-th;
+
+  # 2020-11-18: https://github.com/srid/neuron/issues/474
+  # base upper bound is incompatible with ghc 8.10
+  neuron = doJailbreak super.neuron;
+
+  reflex = appendPatches super.reflex [
+    # https://github.com/reflex-frp/reflex/pull/444
+    # Fixes for ghc 8.10
+    (pkgs.fetchpatch {
+      url = https://github.com/reflex-frp/reflex/commit/d230632427fc1b7031163567c97f20050610c122.patch;
+      sha256 = "0gafqqi6q16m5y4mrc2f7lhahmazvcbiadn2v84y9p3zvx2v26xy";
+    })
+    # https://github.com/reflex-frp/reflex/pull/444
+    # Bound bumps for ghc 8.10
+    (pkgs.fetchpatch {
+      url = https://patch-diff.githubusercontent.com/raw/reflex-frp/reflex/pull/448.patch;
+      sha256 = "0a8gcq9g8dyyafkvs54mi3fnisff20r0x0qzmhxcp9md61nkf7gq";
+    })
+  ];
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
