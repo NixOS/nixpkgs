@@ -92,6 +92,7 @@ in rec {
       [ "nixos.channel"
         "nixos.dummy.x86_64-linux"
         "nixos.iso_minimal.x86_64-linux"
+        "nixos.amazonImage.x86_64-linux"
         "nixos.manual.x86_64-linux"
         "nixos.tests.boot.biosCdrom.x86_64-linux"
         "nixos.tests.containers-imperative.x86_64-linux"
