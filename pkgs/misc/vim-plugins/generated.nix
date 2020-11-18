@@ -556,6 +556,18 @@ let
     meta.homepage = "https://github.com/rhysd/committia.vim/";
   };
 
+  completion-buffers = buildVimPluginFrom2Nix {
+    pname = "completion-buffers";
+    version = "2020-09-26";
+    src = fetchFromGitHub {
+      owner = "steelsojka";
+      repo = "completion-buffers";
+      rev = "441a58b77c04409e8ccb35fd4970598ae551462f";
+      sha256 = "14q5n7h5kaqf71cfd9mlhwb0xsihm6d3kizrxhlfnzxk6zkn8p0s";
+    };
+    meta.homepage = "https://github.com/steelsojka/completion-buffers/";
+  };
+
   completion-nvim = buildVimPluginFrom2Nix {
     pname = "completion-nvim";
     version = "2020-11-16";
@@ -2676,12 +2688,12 @@ let
 
   nvim-treesitter = buildVimPluginFrom2Nix {
     pname = "nvim-treesitter";
-    version = "2020-11-17";
+    version = "2020-11-18";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "00d5408527ffff3deffc750a8f46c1e916e730b8";
-      sha256 = "1fdpvq0613j0sdadw3nng895vhvhj4x504nd0x255qdn7k8l7pl8";
+      rev = "289cdc9da8f7f21dcbf814032e9277ef0e9790a0";
+      sha256 = "0fqsl6rva6rb0zdpkv8myn7x5frxg5nmjykhx0jxc23zx5q65nj3";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
