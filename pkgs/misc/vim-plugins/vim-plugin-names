@@ -243,6 +243,7 @@ kristijanhusak/vim-carbon-now-sh
 kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
+kyazdani42/nvim-tree.lua
 lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
