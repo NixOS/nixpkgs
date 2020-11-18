@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchPypi, darwin, python,
-pyobjc-core }:
+pyobjc-core, pyobjc-framework-Cocoa }:
 
 buildPythonPackage rec {
   pname = "pyobjc-framework-IMServicePlugIn";
@@ -27,18 +27,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyobjc-core
+    pyobjc-framework-Cocoa
   ];
 
   # clang-7: error: argument unused during compilation: '-fno-strict-overflow'
   hardeningDisable = [ "strictoverflow" ];
 
-  # show test names instead of just dots
-  setuptoolsCheckFlagsArray = [ "--verbosity=3" ];
-
-  preCheck = ''
-    # testConstants in PyObjCTest.test_cfsocket.TestSocket returns: Segmentation fault: 11
-    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
-  '';
+  dontUseSetuptoolsCheck = true;
+  pythonImportcheck = [ "pyobjc-framework-IMServicePlugIn" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework IMServicePlugIn on Mac OS X";
