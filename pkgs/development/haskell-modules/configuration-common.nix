@@ -1425,4 +1425,10 @@ self: super: {
 
   # 2020-11-17: persistent-test is ahead of the persistent version in stack
   persistent-sqlite = dontCheck super.persistent-sqlite;
+
+  # The tests for semver-range need to be updated for the MonadFail change in
+  # ghc-8.8:
+  # https://github.com/adnelson/semver-range/issues/15
+  semver-range = dontCheck super.semver-range;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
