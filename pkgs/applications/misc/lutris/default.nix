@@ -1,4 +1,4 @@
-{ buildPythonApplication, lib, fetchFromGitHub, fetchpatch
+{ buildPythonApplication, lib, fetchFromGitHub, fetchpatch, substituteAll
 
 # build inputs
 , atk
@@ -56,6 +56,7 @@ let
     wine
     fluidsynth
     xorgserver
+    xorg.xrandr
     xorg.setxkbmap
     xorg.xkbcomp
   ];
@@ -92,6 +93,13 @@ in buildPythonApplication rec {
     pango
     webkitgtk
   ] ++ gstDeps;
+
+  patches = [
+    (substituteAll  {
+      src = ./0001-patch-xrandr-usage.patch;
+      xrandr = "${xorg.xrandr}/bin/xrandr";
+    })
+  ];
 
   propagatedBuildInputs = [
     evdev distro pyyaml pygobject3 requests pillow dbus-python keyring

@@ -1,0 +1,52 @@
+From 507abde20b8c6ca6fa360554b95dd0787ab01fb1 Mon Sep 17 00:00:00 2001
+From: Jonathan Ringer <jonringer117@gmail.com>
+Date: Wed, 18 Nov 2020 10:37:19 -0800
+Subject: [PATCH] patch xrandr usage
+
+---
+ lutris/util/graphics/xrandr.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lutris/util/graphics/xrandr.py b/lutris/util/graphics/xrandr.py
+index cb5ff8a..adf7104 100644
+--- a/lutris/util/graphics/xrandr.py
++++ b/lutris/util/graphics/xrandr.py
+@@ -14,7 +14,7 @@ def _get_vidmodes():
+     """Return video modes from XrandR"""
+     logger.debug("Retrieving video modes from XrandR")
+     try:
+-        xrandr_output = subprocess.check_output(["xrandr"])
++        xrandr_output = subprocess.check_output(["@xrandr@"])
+     except subprocess.CalledProcessError as ex:
+         logger.error("Unable to read xrandr: %s", ex)
+         return ""
+@@ -83,7 +83,7 @@ def turn_off_except(display):
+     for output in get_outputs():
+         if output.name != display:
+             logger.info("Turning off %s", output[0])
+-            subprocess.Popen(["xrandr", "--output", output.name, "--off"])
++            subprocess.Popen(["@xrandr@", "--output", output.name, "--off"])
+ 
+ 
+ def get_resolutions():
+@@ -118,7 +118,7 @@ def change_resolution(resolution):
+             logger.warning("Resolution %s doesn't exist.", resolution)
+         else:
+             logger.info("Changing resolution to %s", resolution)
+-            subprocess.Popen(["xrandr", "-s", resolution])
++            subprocess.Popen(["@xrandr@", "-s", resolution])
+     else:
+         for display in resolution:
+             logger.debug("Switching to %s on %s", display.mode, display.name)
+@@ -135,7 +135,7 @@ def change_resolution(resolution):
+             logger.info("Switching resolution of %s to %s", display.name, display.mode)
+             subprocess.Popen(
+                 [
+-                    "xrandr",
++                    "@xrandr@",
+                     "--output",
+                     display.name,
+                     "--mode",
+-- 
+2.28.0
+
