@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig python3 ];
   buildInputs = [ openssl libxml2 boost libuuid ];
 
-  # using the url below since the 0.7.6 release did carry a broken CMake file,
-  # supposedly fixed in the next release
-  # https://github.com/cern-fts/davix/issues/40
+  # using the url below since the github release page states
+  # "please ignore the GitHub-generated tarballs, as they are incomplete"
+  # https://github.com/cern-fts/davix/releases/tag/R_0_7_6
   src = fetchurl {
-    url = "http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/davix/${version}/davix-${version}.tar.gz";
+    url = "https://github.com/cern-fts/${pname}/releases/download/R_${stdenv.lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.gz";
     sha256 = "0wq66spnr616cns72f9dvr2xfvkdvfqqmc6d7dx29fpp57zzvrx2";
   };
 
