@@ -6008,6 +6008,8 @@ in {
 
   pyupdate = callPackage ../development/python-modules/pyupdate { };
 
+  pyupgrade = callPackage ../development/python-modules/pyupgrade { };
+
   pyusb = callPackage ../development/python-modules/pyusb { libusb1 = pkgs.libusb1; };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
