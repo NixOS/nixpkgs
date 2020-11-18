@@ -9740,6 +9740,12 @@
     githubId = 1108325;
     name = "Théo Zimmermann";
   };
+  znewman01 = {
+    name = "Zachary Newman";
+    email = "nixpkgs@z.znewman.net";
+    github = "znewman01";
+    githubId = 873857;
+  };
   zohl = {
     email = "zohl@fmap.me";
     github = "zohl";
