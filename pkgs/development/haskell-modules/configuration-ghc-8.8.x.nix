@@ -95,11 +95,6 @@ self: super: {
   # https://github.com/kowainik/relude/issues/241
   relude = dontCheck super.relude;
 
-  # The tests for semver-range need to be updated for the MonadFail change in
-  # ghc-8.8:
-  # https://github.com/adnelson/semver-range/issues/15
-  semver-range = dontCheck super.semver-range;
-
   # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
