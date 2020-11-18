@@ -244,6 +244,7 @@ kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 kyazdani42/nvim-tree.lua
+kyazdani42/nvim-web-devicons
 lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
