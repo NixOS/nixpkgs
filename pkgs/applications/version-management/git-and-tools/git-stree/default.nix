@@ -12,9 +12,9 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc/bash_completion.d
+    mkdir -p $out/bin $out/share/bash-completion/completions
     install -m 0755 git-stree $out/bin/
-    install -m 0644 git-stree-completion.bash $out/etc/bash_completion.d/
+    install -m 0644 git-stree-completion.bash $out/share/bash-completion/completions/
   '';
 
   meta = with lib; {

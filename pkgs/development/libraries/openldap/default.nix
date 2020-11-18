@@ -1,22 +1,13 @@
 { stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.51";
+  pname = "openldap";
+  version = "2.4.56";
 
   src = fetchurl {
-    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "0qmy2jkk6v9iqwrsdsn8s7lwzaplr01a2mgf21r6nl66lig7g47l";
+    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
+    sha256 = "1q0m26kbab96r73y0dll0c36411kvfillal0i75kngy9cc1hwli5";
   };
-
-  patches = [
-    (fetchurl {
-      # Fix a null-ptr dereference for unauthenticated packet in slapd
-      # NO CVE yet
-      # https://bugs.openldap.org/show_bug.cgi?id=9370
-      url = "https://git.openldap.org/openldap/openldap/-/commit/4c774220a752bf8e3284984890dc0931fe73165d.patch";
-      sha256 = "1vkbb6szscnhch5zzf6iq104l3dkwd50rih8jk9y0s2vgyz76mil";
-    })
-  ];
 
   # TODO: separate "out" and "bin"
   outputs = [ "out" "dev" "man" "devdoc" ];

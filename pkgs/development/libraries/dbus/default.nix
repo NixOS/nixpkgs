@@ -5,6 +5,8 @@
 , expat
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , systemd
+, audit
+, libapparmor
 , libX11 ? null
 , libICE ? null
 , libSM ? null
@@ -70,7 +72,8 @@ stdenv.mkDerivation rec {
       libX11
       libICE
       libSM
-    ] ++ lib.optional enableSystemd systemd;
+    ] ++ lib.optional enableSystemd systemd
+    ++ lib.optionals (!stdenv.isDarwin) [ audit libapparmor ];
   # ToDo: optional selinux?
 
   configureFlags = [
@@ -86,7 +89,8 @@ stdenv.mkDerivation rec {
     "--with-system-socket=/run/dbus/system_bus_socket"
     "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
-  ] ++ lib.optional (!x11Support) "--without-x";
+  ] ++ lib.optional (!x11Support) "--without-x"
+  ++ lib.optionals (!stdenv.isDarwin) [ "--enable-apparmor" "--enable-libaudit" ];
 
   # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
   # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
