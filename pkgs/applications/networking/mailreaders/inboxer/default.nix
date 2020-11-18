@@ -1,10 +1,10 @@
 { stdenv, fetchurl, binutils, patchelf, makeWrapper
-, expat, xorg, gdk-pixbuf, glib, gnome2, cairo, atk, freetype, pango
+, expat, xorg, gdk-pixbuf, glib, gnome2, gnome3, cairo, atk, freetype, pango
 , fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, udev }:
 
 stdenv.mkDerivation rec {
   pname = "inboxer";
-  version = "1.2.1";
+  version = "1.3.2";
 
   meta = with stdenv.lib; {
     description = "Unofficial, free and open-source Google Inbox Desktop App";
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
       glib
       pango
       gnome2.GConf
+      gnome3.gtk
       expat
       stdenv.cc.cc.lib
       libpulseaudio
