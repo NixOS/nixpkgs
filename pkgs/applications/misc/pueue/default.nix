@@ -18,11 +18,10 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
 
   postInstall = ''
-    # zsh completion generation fails. See: https://github.com/Nukesor/pueue/issues/57
-    for shell in bash fish; do
+    for shell in bash fish zsh; do
       $out/bin/pueue completions $shell .
-      installShellCompletion pueue.$shell
     done
+    installShellCompletion pueue.{bash,fish} _pueue
   '';
 
   meta = with lib; {
