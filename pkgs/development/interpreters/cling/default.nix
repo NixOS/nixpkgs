@@ -73,10 +73,10 @@ let
   flags = [
     "-nostdinc"
     "-nostdinc++"
-    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
+    "-I" "${stdenv.cc.cc}/include/c++/${stdenv.cc.cc.version}"
     "-I" "${unwrapped}/include"
     "-I" "${glibc.dev}/include"
-    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/$(${gcc-unwrapped}/bin/gcc -dumpmachine)"
+    "-I" "${stdenv.cc.cc}/include/c++/${stdenv.cc.cc.version}/$(${stdenv.cc}/bin/gcc -dumpmachine)"
     "-I" "${unwrapped}/lib/clang/5.0.2/include"
     "-L" "${unwrapped}/lib"
   ];
