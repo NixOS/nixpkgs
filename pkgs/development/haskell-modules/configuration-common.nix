@@ -1395,7 +1395,13 @@ self: super: {
   # overriding aeson on all of them to prevent double compilations
   # this shouldn‘t break anything because nearly all their reverse deps are
   # in this list or marked as broken anyways
-  haskell-language-server = dontCheck super.haskell-language-server;
+  # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
+  # https://github.com/haskell/haskell-language-server/issues/610
+  # https://github.com/haskell/haskell-language-server/issues/611
+  haskell-language-server = dontCheck (super.haskell-language-server.override {
+    lsp-test = dontCheck self.lsp-test_0_11_0_7;
+  });
+
   fourmolu = dontCheck super.fourmolu;
   ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
     # 2020-11-13: Bumping bounds via an already upstream merged change
