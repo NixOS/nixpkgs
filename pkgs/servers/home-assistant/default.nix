@@ -45,10 +45,14 @@ let
       });
     };
 
-  py = python3.override {
-    # Put packageOverrides at the start so they are applied after defaultOverrides
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
-  };
+  py = python3.override(oa: {
+    # Put packageOverrides at the start so they are applied after
+    # defaultOverrides and upstream overrides
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
+      [ packageOverrides ]
+      ++ defaultOverrides
+      ++ (lib.optional (oa ? packageOverrides) oa.packageOverrides));
+  });
 
   componentPackages = import ./component-packages.nix;
 
