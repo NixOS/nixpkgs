@@ -65,7 +65,6 @@ let
         ./patches/specify_pkglibdir_at_runtime.patch
         ./patches/findstring.patch
       ]
-      ++ lib.optional (atLeast "10") ./patches/stabilize-timetz-dst.patch
       ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
 
     installTargets = [ "install-world" ];
@@ -200,9 +199,9 @@ in self: {
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.14";
+    version = "10.15";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0fxj30jvwq5pqpbj97vhlxgmn2ah59a78s9jyjr7vxyqj7sdh71q";
+    sha256 = "0zhzj9skag1pgqas2rnd217vj41ilaalqna17j47gyngpvhbqmjr";
     this = self.postgresql_10;
     inherit self;
   };
