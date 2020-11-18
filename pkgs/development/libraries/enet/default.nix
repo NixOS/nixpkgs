@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "enet-1.3.16";
+  name = "enet-1.3.17";
 
   src = fetchurl {
     url = "http://enet.bespin.org/download/${name}.tar.gz";
-    sha256 = "1lggc82rbzscci057dqqyhkbq4j6mr5k01hbrvn06jkzc2xpxdxv";
+    sha256 = "1p6f9mby86af6cs7pv6h48032ip9g32c05cb7d9mimam8lchz3x3";
   };
 
   meta = {
