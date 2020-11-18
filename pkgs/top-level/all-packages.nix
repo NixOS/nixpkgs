@@ -13197,6 +13197,8 @@ in
 
   sselp = callPackage ../tools/X11/sselp{ };
 
+  svkbd = callPackage ../tools/X11/svkbd { };
+
   stm32cubemx = callPackage ../development/tools/misc/stm32cubemx { };
 
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
