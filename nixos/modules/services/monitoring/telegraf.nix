@@ -38,17 +38,13 @@ in {
         description = "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {
-          outputs = {
-            influxdb = {
-              urls = ["http://localhost:8086"];
-              database = "telegraf";
-            };
+          outputs.influxdb = {
+            urls = ["http://localhost:8086"];
+            database = "telegraf";
           };
-          inputs = {
-            statsd = {
-              service_address = ":8125";
-              delete_timings = true;
-            };
+          inputs.statsd = {
+            service_address = ":8125";
+            delete_timings = true;
           };
         };
       };
