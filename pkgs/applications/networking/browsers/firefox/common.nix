@@ -4,7 +4,7 @@
 
 { lib, stdenv, pkgconfig, pango, perl, python2, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, libnotify
+, freetype, fontconfig, file, nspr, nss_3_53, libnotify
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification
 , libvpx_1_8
@@ -93,7 +93,7 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  nss_pkg = if lib.versionAtLeast ffversion "82" then nss_latest else nss;
+  nss_pkg = if lib.versionAtLeast ffversion "82" then nss_latest else nss_3_53;
 in
 
 stdenv.mkDerivation ({
