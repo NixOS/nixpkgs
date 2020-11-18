@@ -18,6 +18,11 @@ buildGoModule rec {
     stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
     "${bash}/bin/bash";
 
+  # fix hardcoded GOFLAGS in makefile. remove once https://github.com/direnv/direnv/issues/718 is closed.
+  postPatch = ''
+    substituteInPlace GNUmakefile --replace "export GOFLAGS=-mod=vendor" ""
+  '';
+
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
     make BASH_PATH=$BASH_PATH

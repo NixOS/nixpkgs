@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.keybase.io/";
     description = "The Keybase official GUI";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np filalex77 ];
+    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne ];
     license = licenses.bsd3;
   };
 }

@@ -5130,6 +5130,8 @@ in
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
+  lunar-client = callPackage ../games/lunar-client {};
+
   lvmsync = callPackage ../tools/backup/lvmsync { };
 
   kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
@@ -8707,6 +8709,8 @@ in
     chicken
     egg2nix;
 
+  cc65 = callPackage ../development/compilers/cc65 { };
+
   ccl = callPackage ../development/compilers/ccl {
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
@@ -8795,12 +8799,13 @@ in
   copper = callPackage ../development/compilers/copper {};
 
   inherit (callPackages ../development/compilers/crystal {
-    inherit (llvmPackages_10) stdenv clang llvm;
+    llvmPackages = llvmPackages_10;
   })
     crystal_0_31
     crystal_0_32
     crystal_0_33
     crystal_0_34
+    crystal_0_35
     crystal
     crystal2nix;
 
@@ -9474,18 +9479,15 @@ in
     graalvm8-ee
     graalvm11-ee;
 
-  openshot-qt = let
-    # Cannot use a newer Qt (5.15) version because it requires qtwebkit
-    # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
-    pkgs_ = pkgs.extend(_: prev: {
-      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
-        pkgs = oldAttrs.pkgs.extend(_: _: {
-          qt5 = pkgs.qt514;
-          libsForQt5 = pkgs.libsForQt514;
-        });
-      });
-    });
-  in pkgs_.libsForQt514.callPackage ../applications/video/openshot-qt { };
+  # Cannot use a newer Qt (5.15) version because it requires qtwebkit
+  # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
+  openshot-qt = (pkgs.extend (final: prev: rec {
+    qt5 = if stdenv.isDarwin then prev.qt5 else prev.qt514;
+    libsForQt5 = if stdenv.isDarwin then prev.libsForQt5 else prev.libsForQt514;
+    pythonInterpreters = prev.pythonInterpreters.override {
+      pkgs = final;
+    };
+  })).libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   openspin = callPackage ../development/compilers/openspin { };
 
@@ -9524,6 +9526,7 @@ in
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+    libgit2 = libgit2_0_27;
   };
 
   julia_13 = callPackage ../development/compilers/julia/1.3.nix {
@@ -9966,6 +9969,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   cargo-generate = callPackage ../development/tools/rust/cargo-generate {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
   maturin = callPackage ../development/tools/rust/maturin { };
   inherit (rustPackages) rls;
@@ -11823,7 +11828,10 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   shallot = callPackage ../tools/misc/shallot { };
 
-  shards = callPackage ../development/tools/build-managers/shards { };
+  inherit (callPackage ../development/tools/build-managers/shards { })
+    shards_0_11
+    shards_0_12
+    shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
 
@@ -15398,7 +15406,9 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
     packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
-    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
+    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
+      inherit (darwin.apple_sdk.frameworks) AGL Cocoa Foundation;
+    };
 
     libqglviewer = callPackage ../development/libraries/libqglviewer {
       inherit (darwin.apple_sdk.frameworks) AGL;
@@ -16151,6 +16161,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools { };
+  vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
 
   vtkWithQt5 = vtk.override { qtLib = qt514; };
@@ -17516,8 +17527,6 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
   shaarli = callPackage ../servers/web-apps/shaarli { };
-
-  shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
 
   shiori = callPackage ../servers/web-apps/shiori { };
 
@@ -21605,6 +21614,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
 
+  spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
+
   spotifyd = callPackage ../applications/audio/spotifyd {
     withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
@@ -21841,7 +21852,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
-  jackmix = callPackage ../applications/audio/jackmix { };
+  jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
   jalv = callPackage ../applications/audio/jalv { };
@@ -24118,15 +24129,11 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
-  vdirsyncerStable = with python3Packages; toPythonApplication vdirsyncerStable;
-
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   verbiste = callPackage ../applications/misc/verbiste {
     inherit (gnome2) libgnomeui;
   };
-
-  vuescan = callPackage ../applications/graphics/vuescan { };
 
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
