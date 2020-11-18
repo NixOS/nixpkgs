@@ -2890,6 +2890,18 @@ let
     meta.homepage = "https://github.com/dleonard0/pony-vim-syntax/";
   };
 
+  popfix = buildVimPluginFrom2Nix {
+    pname = "popfix";
+    version = "2020-11-16";
+    src = fetchFromGitHub {
+      owner = "RishabhRD";
+      repo = "popfix";
+      rev = "f7bb13a4e22716154904f8417928cb91e4284f22";
+      sha256 = "1xmqhryr1san24386fxd60j7qrjlqx6zka87x3bjgg66rq4wqcrh";
+    };
+    meta.homepage = "https://github.com/RishabhRD/popfix/";
+  };
+
   popup-nvim = buildVimPluginFrom2Nix {
     pname = "popup-nvim";
     version = "2020-10-08";
