@@ -7251,7 +7251,9 @@ in
 
   sn0int = callPackage ../tools/security/sn0int { };
 
-  snabb = callPackage ../tools/networking/snabb { } ;
+  snabb = callPackage ../tools/networking/snabb { };
+
+  snallygaster = callPackage ../tools/security/snallygaster { };
 
   snapcast = callPackage ../applications/audio/snapcast { };
 
