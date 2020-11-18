@@ -86,6 +86,7 @@ with frameworks; with libs; {
   Metal                   = {};
   MetalKit                = { inherit AppKit ModelIO Metal; };
   ModelIO                 = {};
+  MultipeerConnectivity   = { inherit Cocoa; };
   NetFS                   = {};
   NetworkExtension        = {};
   NotificationCenter      = { inherit AppKit; };
