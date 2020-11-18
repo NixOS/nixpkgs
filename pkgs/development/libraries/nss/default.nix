@@ -9,6 +9,12 @@ let
     url = "http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz";
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
+
+  # NOTE: Whenever you updated this version check if the `cacert` package also
+  #       needs an update. You can run the regular updater script for cacerts.
+  #       It will rebuild itself using the version of this package (NSS) and if
+  #       an update is required do the required changes to the expression.
+  #       Example: nix-shell ./maintainers/scripts/update.nix --argstr package cacert
   version = "3.57";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
