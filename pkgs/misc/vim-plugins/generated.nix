@@ -2638,6 +2638,18 @@ let
     meta.homepage = "https://github.com/norcalli/nvim-terminal.lua/";
   };
 
+  nvim-tree-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-tree-lua";
+    version = "2020-10-31";
+    src = fetchFromGitHub {
+      owner = "kyazdani42";
+      repo = "nvim-tree.lua";
+      rev = "ef893b523d366a0dde44b61d9cb327f2bea65f1d";
+      sha256 = "0g4sz0q5mipa6f8hybbkd42jg6ayw3ih2lv1ml4pjyp378cqbkg6";
+    };
+    meta.homepage = "https://github.com/kyazdani42/nvim-tree.lua/";
+  };
+
   nvim-treesitter = buildVimPluginFrom2Nix {
     pname = "nvim-treesitter";
     version = "2020-11-17";
