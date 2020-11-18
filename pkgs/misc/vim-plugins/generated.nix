@@ -2626,6 +2626,18 @@ let
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
 
+  nvim-lsputils = buildVimPluginFrom2Nix {
+    pname = "nvim-lsputils";
+    version = "2020-11-13";
+    src = fetchFromGitHub {
+      owner = "RishabhRD";
+      repo = "nvim-lsputils";
+      rev = "6abfc5411c8292eea756816b2db9f0ee9ab344ff";
+      sha256 = "07s3psv27nr99f6d6173cykvqqiv22dqljy89j8wnqkh2rskzfrq";
+    };
+    meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal-lua";
     version = "2019-10-17";

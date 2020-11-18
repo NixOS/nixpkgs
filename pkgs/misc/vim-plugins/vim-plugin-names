@@ -437,6 +437,7 @@ rhysd/git-messenger.vim
 rhysd/vim-clang-format
 rhysd/vim-grammarous
 rhysd/vim-operator-surround
+RishabhRD/nvim-lsputils
 RishabhRD/popfix
 rodjek/vim-puppet
 romainl/vim-cool
