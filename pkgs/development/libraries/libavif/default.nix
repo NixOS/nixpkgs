@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DAVIF_CODEC_AOM=ON"
-    "-DAVIF_CODEC_DAV1D=ON"
+    "-DAVIF_CODEC_AOM=ON" # best encoder (slow but small)
+    "-DAVIF_CODEC_DAV1D=ON" # best decoder (fast)
+    "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
   ];
 
