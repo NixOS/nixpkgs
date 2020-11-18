@@ -2734,6 +2734,18 @@ let
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
 
+  nvim-treesitter-context = buildVimPluginFrom2Nix {
+    pname = "nvim-treesitter-context";
+    version = "2020-11-14";
+    src = fetchFromGitHub {
+      owner = "romgrk";
+      repo = "nvim-treesitter-context";
+      rev = "f70b9e30ff0b149c0eb2c1e4bdbdef594bdab30b";
+      sha256 = "04mjl32gahaw2xky8yaghmgakiiy47dcjj6k4p793xfcs1kf4bsh";
+    };
+    meta.homepage = "https://github.com/romgrk/nvim-treesitter-context/";
+  };
+
   nvim-treesitter-refactor = buildVimPluginFrom2Nix {
     pname = "nvim-treesitter-refactor";
     version = "2020-10-07";
