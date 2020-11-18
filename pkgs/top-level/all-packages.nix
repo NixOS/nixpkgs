@@ -2294,6 +2294,8 @@ in
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
+  kenlm = callPackage ../tools/text/kenlm { };
+
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
   klaus = with python3Packages; toPythonApplication klaus;
