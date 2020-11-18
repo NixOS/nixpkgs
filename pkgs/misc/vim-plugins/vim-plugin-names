@@ -51,6 +51,7 @@ chrisbra/Recover.vim
 chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
+ChristianChiarulli/nvcode-color-schemes.vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
 chuling/ci_dark
