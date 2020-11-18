@@ -23731,6 +23731,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   squeezelite = callPackage ../applications/audio/squeezelite { };
 
+  snallygaster = with python3Packages; toPythonApplication snallygaster;
+
   ltunify = callPackage ../tools/misc/ltunify { };
 
   src = callPackage ../applications/version-management/src {

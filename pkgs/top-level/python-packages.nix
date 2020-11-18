@@ -6709,6 +6709,8 @@ in {
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
+  snallygaster = callPackage ../development/python-modules/snallygaster { };
+
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snapperGUI = callPackage ../development/python-modules/snappergui { };
