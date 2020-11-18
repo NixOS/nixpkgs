@@ -443,6 +443,7 @@ RishabhRD/nvim-lsputils
 RishabhRD/popfix
 rodjek/vim-puppet
 romainl/vim-cool
+romainl/vim-qf
 roman/golden-ratio
 romgrk/barbar.nvim
 ron89/thesaurus_query.vim
