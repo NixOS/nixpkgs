@@ -22202,7 +22202,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
     inherit (gnome3) gnome-desktop;
-    wine = wineWowPackages.staging;
+    wine = wineStable;
   };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix {
     buildFHSUserEnv = buildFHSUserEnvBubblewrap;
