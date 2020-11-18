@@ -16,6 +16,7 @@
 , "bower"
 , "bower2nix"
 , "browserify"
+, "btc-rpc-explorer"
 , "castnow"
 , "clean-css-cli"
 , "clubhouse-cli"
