@@ -73,7 +73,7 @@ let
   flags = [
     "-nostdinc"
     "-nostdinc++"
-    "-I" "${gcc-unwrapped}/include/c++/9.3.0"
+    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
     "-I" "${unwrapped}/include"
     "-I" "${glibc.dev}/include"
     "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/$(${gcc-unwrapped}/bin/gcc -dumpmachine)"
