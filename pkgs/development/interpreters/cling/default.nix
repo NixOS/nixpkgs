@@ -18,7 +18,7 @@ let
     version = "0.7";
 
     src = fetchgit {
-      url = "http://root.cern.ch/git/clang.git";
+      url = "http://root.cern/git/clang.git";
       # This commit has the tag cling-0.7 so we use it, even though cpt.py
       # tries to use refs/tags/cling-patches-rrelease_50
       rev = "354b25b5d915ff3b1946479ad07f3f2768ea1621";
