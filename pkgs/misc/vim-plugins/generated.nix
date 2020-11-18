@@ -2626,6 +2626,18 @@ let
     meta.homepage = "https://github.com/sakhnik/nvim-gdb/";
   };
 
+  nvim-highlite = buildVimPluginFrom2Nix {
+    pname = "nvim-highlite";
+    version = "2020-11-18";
+    src = fetchFromGitHub {
+      owner = "Iron-E";
+      repo = "nvim-highlite";
+      rev = "b8b78237b8002f6a1cda1a205db11770ca748777";
+      sha256 = "136zd50kj3mzvh5m1f73spbfl7wsmac7676p8yhw4mhg9wv0vv7w";
+    };
+    meta.homepage = "https://github.com/Iron-E/nvim-highlite/";
+  };
+
   nvim-hs-vim = buildVimPluginFrom2Nix {
     pname = "nvim-hs-vim";
     version = "2020-08-29";

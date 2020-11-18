@@ -165,6 +165,7 @@ idris-hackers/idris-vim
 Inazuma110/deoplete-greek
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
+Iron-E/nvim-highlite
 itchyny/calendar.vim
 itchyny/lightline.vim
 itchyny/thumbnail.vim
