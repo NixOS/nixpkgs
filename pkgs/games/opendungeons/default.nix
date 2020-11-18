@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cmakepaths.patch ];
 
+  postPatch = ''
+    sed -i "s|<OIS/|<ois/|" \
+      source/modes/AbstractApplicationMode.h \
+      source/modes/InputManager.cpp
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake ogre cegui boost sfml openal ois ];
   NIX_LDFLAGS = "-lpthread";

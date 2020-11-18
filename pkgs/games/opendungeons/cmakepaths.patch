@@ -1,6 +1,6 @@
---- ../CMakeLists.txt	
-+++ ../CMakeLists.txt	
-@@ -31,12 +31,12 @@
+--- a/CMakeLists.txt	
++++ b/CMakeLists.txt	
+@@ -30,12 +30,12 @@
      set(OD_PLUGINS_CFG_PATH ".")
  else()
      # Set binary and data install locations if we want to use the installer
