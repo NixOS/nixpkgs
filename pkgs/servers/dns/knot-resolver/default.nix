@@ -2,8 +2,8 @@
 # native deps.
 , runCommand, pkgconfig, meson, ninja, makeWrapper
 # build+runtime deps.
-, knot-dns, luajitPackages, libuv, gnutls, lmdb, systemd, dns-root-data
-, nghttp2, libcap_ng # optionals, in principle
+, knot-dns, luajitPackages, libuv, gnutls, lmdb
+, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -54,9 +54,9 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optional stdenv.isLinux systemd # passing sockets, sd_notify
-    ++ [ nghttp2 libcap_ng ]
-    ## optional dependencies; TODO: libedit, dnstap
+    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
+    ++ [ nghttp2 ]
+    ## optional dependencies; TODO: dnstap
     ;
 
   mesonFlags = [
