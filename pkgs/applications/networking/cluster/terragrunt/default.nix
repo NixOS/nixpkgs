@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, terraform }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
 
 buildGoModule rec {
   pname = "terragrunt";
@@ -18,11 +18,6 @@ buildGoModule rec {
   buildInputs = [ makeWrapper ];
 
   buildFlagsArray = [ "-ldflags=" "-X main.VERSION=v${version}" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/terragrunt \
-      --set TERRAGRUNT_TFPATH ${lib.getBin terraform.full}/bin/terraform
-  '';
 
   meta = with lib; {
     description = "A thin wrapper for Terraform that supports locking for Terraform state and enforces best practices";
