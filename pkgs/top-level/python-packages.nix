@@ -6737,6 +6737,8 @@ in {
     usePython = true;
   });
 
+  sockjs = callPackage ../development/python-modules/sockjs { };
+
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
 
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
