@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       "https://groups.google.com/forum/#!searchin/fplll-devel/FPLLL$20${version}"
     ];
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [raskin] ++ teams.sage.members;
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }
