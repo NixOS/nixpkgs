@@ -823,5 +823,11 @@ self: super: builtins.intersectAttrs super {
         ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_version}
         ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_major_version}
        '';
+    testToolDepends = [ self.cabal-install pkgs.git ];
+    testTarget = "func-test"; # wrapper test accesses internet
+    preCheck = ''
+      export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
+      export HOME=$TMPDIR
+    '';
   });
 }
