@@ -454,6 +454,7 @@ roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
 roxma/vim-tmux-clipboard
+RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rust-lang/rust.vim
 ryanoasis/vim-devicons
