@@ -1,7 +1,7 @@
 { stdenv, lib, pkgArches, callPackage,
   name, version, src, mingwGccs, monos, geckos, platforms,
   pkgconfig, fontforge, makeWrapper, flex, bison,
-  supportFlags,
+  supportFlags, utillinux, autoconf, perl,
   buildScript ? null, configureFlags ? []
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   strictDeps = true;
 
   nativeBuildInputs = [
-    pkgconfig fontforge makeWrapper flex bison
+    autoconf pkgconfig fontforge makeWrapper flex bison utillinux perl
   ]
   ++ lib.optionals supportFlags.mingwSupport mingwGccs;
 
@@ -76,6 +76,12 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     # Also look for root certificates at $NIX_SSL_CERT_FILE
     ./cert-path.patch
   ];
+
+  postPatch = ''
+    if [ -d ./tools ]; then
+      patchShebangs $(find ./tools -executable -type f)
+    fi
+  '';
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
