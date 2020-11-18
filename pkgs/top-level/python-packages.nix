@@ -7230,6 +7230,8 @@ in {
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
+  tokenize-rt = callPackage ../development/python-modules/tokenize-rt { };
+
   tokenizers = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
