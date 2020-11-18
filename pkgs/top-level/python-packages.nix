@@ -9,18 +9,15 @@
 { pkgs
 , stdenv
 , python
-, overrides ? (self: super: {})
 }:
 
 with pkgs.lib;
 
-let
-  packages = ( self:
+self:
 
 let
+  inherit (self) callPackage;
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
-
-  callPackage = pkgs.newScope self;
 
   namePrefix = python.libPrefix + "-";
 
@@ -102,7 +99,7 @@ in {
 
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
-  inherit fetchPypi callPackage;
+  inherit fetchPypi;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;
@@ -7960,6 +7957,4 @@ in {
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
-});
-
-in fix' (extends overrides packages)
+}
