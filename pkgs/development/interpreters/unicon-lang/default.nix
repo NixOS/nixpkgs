@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libX11, libXt }:
+{ stdenv, fetchurl, unzip, libX11, libXt, libnsl }:
 
 stdenv.mkDerivation {
   pname = "unicon-lang";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     url = "http://unicon.org/dist/uni-2-4-2010.zip";
     sha256 = "1g9l2dfp99dqih2ir2limqfjgagh3v9aqly6x0l3qavx3qkkwf61";
   };
-  buildInputs = [ libX11 libXt unzip ];
+  buildInputs = [ libnsl libX11 libXt unzip ];
 
   hardeningDisable = [ "fortify" ];
 
