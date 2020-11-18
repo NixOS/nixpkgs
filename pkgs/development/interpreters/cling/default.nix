@@ -27,7 +27,7 @@ let
     };
 
     clingSrc = fetchgit {
-      url = "https://github.com/root-project/cling.git";
+      url = "http://root.cern/git/cling.git";
       rev = "70163975eee5a76b45a1ca4016bfafebc9b57e07";
       sha256 = "1mv2fhk857kp5rq714bq49iv7gy9fgdwibydj5wy1kq2m3sf3ysi";
     };
