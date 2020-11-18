@@ -22198,6 +22198,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   lime = callPackage ../development/libraries/lime { };
 
+  loki-mq = callPackage ../development/libraries/loki-mq { };
+
   luakit = callPackage ../applications/networking/browsers/luakit {
     inherit (luajitPackages) luafilesystem;
   };
