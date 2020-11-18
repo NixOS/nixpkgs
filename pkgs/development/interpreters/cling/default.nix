@@ -76,7 +76,7 @@ let
     "-I" "${gcc-unwrapped}/include/c++/9.3.0"
     "-I" "${unwrapped}/include"
     "-I" "${glibc.dev}/include"
-    "-I" "${gcc-unwrapped}/include/c++/9.3.0/x86_64-unknown-linux-gnu"
+    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/$(${gcc-unwrapped}/bin/gcc -dumpmachine)"
     "-I" "${unwrapped}/lib/clang/5.0.2/include"
     "-L" "${unwrapped}/lib"
   ];
