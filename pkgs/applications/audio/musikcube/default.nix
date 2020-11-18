@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.94.0";
+  version = "0.95.0";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "0hifyawsr38vsx12aqw38nms4kzbaghihib1r80x56f1jjsdhww0";
+    sha256 = "16ksr4yjkg88bpij1i49dzi07ffhqq8b36r090y4fq5czrc420rc";
   };
 
   nativeBuildInputs = [

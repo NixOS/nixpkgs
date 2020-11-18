@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, git, which }:
+{ stdenv, fetchFromGitHub, buildGoPackage, git, which, removeReferencesTo, go }:
 
 buildGoPackage rec {
   pname = "quorum";
@@ -23,6 +23,12 @@ buildGoPackage rec {
   installPhase = ''
     mkdir -pv $out/bin
     cp -v build/bin/geth build/bin/bootnode build/bin/swarm $out/bin
+  '';
+
+  # fails with `GOFLAGS=-trimpath`
+  allowGoReference = true;
+  preFixup = ''
+    find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
   '';
 
   meta = with stdenv.lib; {

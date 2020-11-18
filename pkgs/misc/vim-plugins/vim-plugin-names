@@ -305,7 +305,9 @@ mboughaba/i3config.vim
 megaannum/forms
 megaannum/self
 mengelbrecht/lightline-bufferline
+metakirby5/codi.vim
 mfukar/robotframework-vim
+mfussenegger/nvim-dap
 mg979/vim-visual-multi
 mhartington/oceanic-next
 mhinz/vim-crates
@@ -373,9 +375,14 @@ nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
 nvim-lua/lsp_extensions.nvim
+nvim-lua/plenary.nvim
+nvim-lua/popup.nvim
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
+nvim-treesitter/nvim-treesitter-refactor
+nvim-treesitter/nvim-treesitter-textobjects
+nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
 Olical/conjure
@@ -490,6 +497,7 @@ ternjs/tern_for_vim
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
+theHamsta/nvim-dap-virtual-text
 thinca/vim-ft-diff_fold
 thinca/vim-prettyprint
 thinca/vim-quickrun

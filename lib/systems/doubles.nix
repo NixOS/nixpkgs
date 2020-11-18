@@ -37,6 +37,8 @@ let
     "vc4-none"
     "or1k-none"
 
+    "mmix-mmixware"
+
     "js-ghcjs"
 
     "aarch64-genode" "i686-genode" "x86_64-genode"
@@ -57,6 +59,7 @@ in {
   i686          = filterDoubles predicates.isi686;
   x86_64        = filterDoubles predicates.isx86_64;
   mips          = filterDoubles predicates.isMips;
+  mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
   vc4           = filterDoubles predicates.isVc4;
   or1k          = filterDoubles predicates.isOr1k;

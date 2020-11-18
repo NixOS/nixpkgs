@@ -69,7 +69,6 @@ self: super: {
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;
-  quickcheck-instances = doJailbreak super.quickcheck-instances;
   setlocale = doJailbreak super.setlocale;
   split = doJailbreak super.split;
   system-fileio = doJailbreak super.system-fileio;
@@ -104,9 +103,6 @@ self: super: {
   # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
-
-  # Only 0.7 is compatible with ghc 8.7 https://hackage.haskell.org/package/apply-refact/changelog
-  apply-refact = super.apply-refact_0_7_0_0;
 
   # The package needs the latest Cabal version.
   cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });

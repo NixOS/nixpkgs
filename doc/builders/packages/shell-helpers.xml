@@ -8,18 +8,14 @@
   <itemizedlist>
    <listitem>
     <para>
-     <literal>autojump</literal>: <command>autojump-share</command>
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      <literal>fzf</literal>: <command>fzf-share</command>
     </para>
    </listitem>
   </itemizedlist>
-  E.g. <literal>autojump</literal> can then used in the .bashrc like this:
+  E.g. <literal>fzf</literal> can then used in the .bashrc like this:
 <screen>
-  source "$(autojump-share)/autojump.bash"
+  source "$(fzf-share)/completion.bash"
+  source "$(fzf-share)/key-bindings.bash"
 </screen>
  </para>
 </section>

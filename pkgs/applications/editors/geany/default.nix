@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geany";
-  version = "1.37";
+  version = "1.37.1";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://download.geany.org/${pname}-${version}.tar.bz2";
-    sha256 = "dde52584823b769c56704c27dbedddb7a6bbaf4eacb9587d10bbc387816e3d51";
+    sha256 = "060sachn33xpx3a609f09y97qq5ky17gvv686zbvrn618ij7bi8q";
   };
 
   nativeBuildInputs = [

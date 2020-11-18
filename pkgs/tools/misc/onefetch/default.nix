@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 kloenk ];
+    maintainers = with maintainers; [ Br1ght0ne kloenk ];
   };
 }

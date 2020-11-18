@@ -17,6 +17,7 @@
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
 , ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
+, wrapQtAppsHook ? null
 , variant ? "fresh"
 } @ args:
 
@@ -303,7 +304,14 @@ in (mkDrv rec {
 
     mkdir -p $dev
     cp -r include $dev
+  '' + lib.optionalString kdeIntegration ''
+      for prog in $out/bin/*
+      do
+        wrapQtApp $prog
+      done
   '';
+
+  dontWrapQtApps = true;
 
   configureFlags = [
     (if withHelp then "" else "--without-help")
@@ -382,7 +390,8 @@ in (mkDrv rec {
 
   nativeBuildInputs = [
     gdb fontforge autoconf automake bison pkgconfig libtool
-  ] ++ lib.optional (!kdeIntegration) wrapGAppsHook;
+  ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
+    ++ lib.optional kdeIntegration wrapQtAppsHook;
 
   buildInputs = with xorg;
     [ ant ArchiveZip boost cairo clucene_core
