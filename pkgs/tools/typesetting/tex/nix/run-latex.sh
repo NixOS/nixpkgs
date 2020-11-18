@@ -41,7 +41,10 @@ showError() {
     exit 1
 }
 
+pass=1
+
 runLaTeX() {
+    echo "PASS $pass..."
     if ! $latex $latexFlags $rootName >$tmpFile 2>&1; then showError; fi
     runNeeded=
     if fgrep -q \
@@ -51,6 +54,8 @@ runLaTeX() {
         "$tmpFile"; then
         runNeeded=1
     fi
+    echo
+    ((pass=pass+1))
 }
 
 echo
@@ -61,10 +66,7 @@ if test -n "$copySources"; then
 fi
 
 
-echo "PASS 1..."
 runLaTeX
-echo
-
 
 for auxFile in $(find . -name "*.aux"); do
     # Run bibtex to process all bibliographies.  There may be several
@@ -89,11 +91,8 @@ for auxFile in $(find . -name "*.aux"); do
     fi
 done
 
-
 if test "$runNeeded"; then
-    echo "PASS 2..."
     runLaTeX
-    echo
 fi
 
 
@@ -105,20 +104,14 @@ if test -f $rootNameBase.idx; then
     makeindex $makeindexFlags $rootNameBase.idx
     runNeeded=1
     echo
-fi    
-
-
-if test "$runNeeded"; then
-    echo "PASS 3..."
-    runLaTeX
-    echo
 fi
 
 
+runLaTeX
+
+
 if test "$runNeeded"; then
-    echo "PASS 4..."
     runLaTeX
-    echo
 fi
 
 
