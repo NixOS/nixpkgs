@@ -8,7 +8,6 @@
 , makeWrapper
 , runCommand
 , llvmPackages_5
-, gcc-unwrapped
 , glibc
 }:
 
