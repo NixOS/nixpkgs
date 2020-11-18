@@ -21,7 +21,7 @@ in {
       };
 
       environmentFiles = mkOption {
-        type = types.nullOr (types.listOf types.path);
+        type = types.listOf types.path;
         default = [];
         example = "/run/keys/telegraf.env";
         description = ''
