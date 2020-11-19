@@ -78,7 +78,7 @@ in
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network-online.service" "firewall.service" ] ++ (if cfg.docker then [ "docker.service" ] else []);
+      after = [ "network-online.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
       wants = [ "network-online.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
