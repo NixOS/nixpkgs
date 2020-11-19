@@ -172,6 +172,12 @@
       please note that your non-root pools will now be forcibly imported.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>openafs</package> now points to <package>openafs_1_8</package>,
+     which is the new stable release.  OpenAFS 1.6 was removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
