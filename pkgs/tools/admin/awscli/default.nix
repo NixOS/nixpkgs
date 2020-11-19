@@ -19,15 +19,16 @@ let
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.150"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.18.181"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jrxzr4dx2s6ychmrz19yz8i4kqcwj7f8ly82ydwvrr0ff62374g";
+    sha256 = "0l1zkhzq76bxm5b2m41arpppalq0w4m5fwqaidfq451jz9f32f62";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
+    substituteInPlace setup.py --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5"
   '';
 
   # No tests included
