@@ -1486,4 +1486,12 @@ self: super: {
   stan = doJailbreak (dontCheck super.stan);
   # 2020-11-19: Disabling tests with this issue: https://github.com/cchalmers/pcg-random/issues/10
   pcg-random = dontCheck super.pcg-random;
+
+  # Use an already merged upstream patch fixing the build with primitive >= 0.7.2
+  # The version bounds were correctly specified before, so we need to jailbreak as well
+  streamly = appendPatch (doJailbreak super.streamly) (pkgs.fetchpatch {
+    url = "https://github.com/composewell/streamly/commit/2c88cb631fdcb5c0d3a8bc936e1e63835800be9b.patch";
+    sha256 = "0g2m0y46zr3xs9fswkm4h9adhsg6gzl5zwgidshsjh3k3rq4h7b1";
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
