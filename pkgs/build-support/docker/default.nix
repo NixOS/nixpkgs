@@ -48,7 +48,7 @@ let
     # A user is required by nix
     # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
     export USER=nobody
-    ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
+    ${buildPackages.nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
     mkdir -p nix/var/nix/gcroots/docker/
     for i in ${lib.concatStringsSep " " contentsList}; do
@@ -443,7 +443,7 @@ rec {
       runCommand "${name}.tar.gz" {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
-        buildInputs = [ pigz ];
+        nativeBuildInputs = [ pigz ];
       } "${stream} | pigz -nT > $out";
 
   # 1. extract the base image
@@ -762,7 +762,7 @@ rec {
             else
               lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
         paths = referencesByPopularity overallClosure;
-        buildInputs = [ jq ];
+        nativeBuildInputs = [ jq ];
       } ''
         ${if (tag == null) then ''
           outName="$(basename "$out")"
@@ -826,7 +826,7 @@ rec {
           # take images can know in advance how the image is supposed to be used.
           isExe = true;
         };
-        buildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeWrapper ];
       } ''
         makeWrapper ${streamScript} $out --add-flags ${conf}
       '';
