@@ -22,9 +22,15 @@ let
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
     executable = "pypy${if isPy3k then "3" else ""}";
-    pythonForBuild = self; # No cross-compiling for now.
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
+
+    # No cross-compiling for now.
+    pythonForBuild = self;
+    pythonPackagesBuildBuild = {};
+    pythonPackagesBuildTarget = {};
+    pythonPackagesHostHost = {};
+    pythonPackagesTargetTarget = {};
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";

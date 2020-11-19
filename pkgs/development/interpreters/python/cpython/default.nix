@@ -20,7 +20,11 @@
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , buildPackages
-, pythonForBuild ? buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"}
+, pkgsBuildBuild
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, pythonForBuild ? buildPackages.${pythonAttr}
 , sourceVersion
 , sha256
 , passthruFun
@@ -36,6 +40,7 @@
 # Not using optimizations on Darwin
 # configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
 , enableOptimizations ? (!stdenv.isDarwin)
+, pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -54,6 +59,7 @@ with stdenv.lib;
 
 let
 
+
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";
@@ -62,6 +68,10 @@ let
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
     inherit hasDistutilsCxxPatch pythonForBuild;
+    pythonPackagesBuildBuild = pkgsBuildBuild.${pythonAttr};
+    pythonPackagesBuildTarget = pkgsBuildTarget.${pythonAttr};
+    pythonPackagesHostHost = pkgsHostHost.${pythonAttr};
+    pythonPackagesTargetTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
