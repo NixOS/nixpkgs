@@ -25043,6 +25043,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   ### GAMES
 
+  _1oom = callPackage ../games/1oom { };
+
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
 
   _20kly = callPackage ../games/20kly { };
