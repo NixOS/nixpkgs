@@ -26,6 +26,19 @@
       http://169.254.169.254/latest/api/token
   }
 
+  preflight_imds_token() {
+    # retry-delay of 1 selected to give the system a second to get going,
+    # but not add a lot to the bootup time
+    ${curl}/bin/curl \
+      -v \
+      --retry 3 \
+      --retry-delay 1 \
+      --fail \
+      --connect-timeout 1 \
+      -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" \
+      http://169.254.169.254/1.0/meta-data/instance-id
+  }
+
   try=1
   while [ $try -le 3 ]; do
     echo "(attempt $try/3) getting an EC2 instance metadata service v2 token..."
@@ -37,6 +50,14 @@
   if [ "x$IMDS_TOKEN" == "x" ]; then
     echo "failed to fetch an IMDS2v token."
   fi
+
+  try=1
+  while [ $try -le 10 ]; do
+    echo "(attempt $try/10) validating the EC2 instance metadata service v2 token..."
+    preflight_imds_token && break
+    try=$((try + 1))
+    sleep 1
+  done
 
   echo "getting EC2 instance metadata..."
 
