@@ -14,6 +14,12 @@ let
     selfTargetTarget = pkgsTargetTarget.darwin or {}; # might be missing
   };
 
+  # Prefix for binaries. Customarily ends with a dash separator.
+  #
+  # TODO(@Ericson2314) Make unconditional, or optional but always true by
+  # default.
+  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                                        (stdenv.targetPlatform.config + "-");
 in
 
 lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
@@ -103,6 +109,16 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
+
+  postLinkSignHook = pkgs.writeTextFile {
+    name = "post-link-sign-hook";
+    executable = true;
+
+    text = ''
+      CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
+        ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
+    '';
+  };
 
   maloader = callPackage ../os-specific/darwin/maloader {
   };
