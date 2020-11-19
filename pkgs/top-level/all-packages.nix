@@ -12686,8 +12686,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   flyway = callPackage ../development/tools/flyway { };
 
-  inherit (callPackages ../development/libraries/fmt { })
-    fmt_6 fmt_7;
+  inherit (callPackages ../development/libraries/fmt { }) fmt_7;
 
   fmt = fmt_7;
 
