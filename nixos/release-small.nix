@@ -28,7 +28,7 @@ let
 in rec {
 
   nixos = {
-    inherit (nixos') channel manual options iso_minimal dummy;
+    inherit (nixos') channel manual options iso_minimal amazonImage dummy;
     tests = {
       inherit (nixos'.tests)
         containers-imperative
