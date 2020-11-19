@@ -7,6 +7,7 @@
 , fetchgit
 , makeWrapper
 , runCommand
+, runCommandNoCC
 , llvmPackages_5
 , glibc
 }:
