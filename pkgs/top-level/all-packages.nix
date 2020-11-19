@@ -5203,6 +5203,8 @@ in
 
   mmv = callPackage ../tools/misc/mmv { };
 
+  mmv-go = callPackage ../tools/misc/mmv-go { };
+
   most = callPackage ../tools/misc/most { };
 
   motion = callPackage ../applications/video/motion { };
