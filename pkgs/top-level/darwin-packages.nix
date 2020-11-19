@@ -21,17 +21,43 @@ lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced:
 
   # Must use pkgs.callPackage to avoid infinite recursion.
 
-  apple-source-releases = pkgs.callPackage ../os-specific/darwin/apple-source-releases { } self;
+  # Open source packages that are built from source
+  appleSourcePackages = pkgs.callPackage ../os-specific/darwin/apple-source-releases { } self;
 
   impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
 
-  apple_sdk = pkgs.callPackage ../os-specific/darwin/apple-sdk {
+  # macOS 10.12 SDK
+  apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk {
     inherit (buildPackages.darwin) print-reexports;
     inherit (self) darwin-stubs;
   };
+
+  # macOS 11.0 SDK
+  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
+
+  # Pick an SDK
+  apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
+
+  # Pick the source of libraries: either Apple's open source releases, or the
+  # SDK.
+  useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
+
+  chooseLibs = {
+    inherit (
+      if useAppleSDKLibs
+        then apple_sdk
+        else appleSourcePackages
+    ) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit;
+
+    inherit (
+      if useAppleSDKLibs
+        then apple_sdk.frameworks
+        else appleSourcePackages
+    ) Security;
+  };
 in
 
-impure-cmds // apple-source-releases // {
+impure-cmds // appleSourcePackages // chooseLibs // {
 
   inherit apple_sdk;
 
@@ -41,7 +67,7 @@ impure-cmds // apple-source-releases // {
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages_7) llvm clang-unwrapped;
+    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -72,7 +98,7 @@ impure-cmds // apple-source-releases // {
 
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
 
-  checkReexportsHook = makeSetupHook {
+  checkReexportsHook = pkgs.makeSetupHook {
     deps = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
@@ -89,7 +115,7 @@ impure-cmds // apple-source-releases // {
 
   iproute2mac = callPackage ../os-specific/darwin/iproute2mac { };
 
-  libobjc = apple-source-releases.objc4;
+  libobjc = self.objc4;
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
@@ -110,7 +136,10 @@ impure-cmds // apple-source-releases // {
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 
-  CF = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
+  # TODO: make swift-corefoundation build with apple_sdk_11_0.Libsystem
+  CF = if useAppleSDKLibs
+    then apple_sdk.frameworks.CoreFoundation
+    else callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
 
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
