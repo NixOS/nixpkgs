@@ -59,7 +59,6 @@ impure-cmds // apple-source-releases // {
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-    libcxxabi = pkgs.libcxxabi;
   };
 
   # TODO: remove alias.
