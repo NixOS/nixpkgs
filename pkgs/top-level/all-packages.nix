@@ -1253,6 +1253,11 @@ in
 
   pass = callPackage ../tools/security/pass { };
 
+  pass-nodmenu = callPackage ../tools/security/pass {
+    dmenuSupport = false;
+    pass = pass-nodmenu;
+  };
+
   pass-wayland = callPackage ../tools/security/pass {
     waylandSupport = true;
     pass = pass-wayland;
