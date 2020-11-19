@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mlterm";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mlterm/01release/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "17h6j4nmbyvsx2shm8mqm7smzq9i7mbqxjw19c2m0rhf5yzqhr3k";
+    sha256 = "03fnynwv7d1aicwk2rp31sgncv5m65agvygqvsgn59v9di40gnnb";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf wrapGAppsHook ];

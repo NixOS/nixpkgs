@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Interrupt and signal handling for Cython";
     homepage = "https://github.com/sagemath/cysignals/";
-    maintainers = with lib.maintainers; [ timokau ];
-    license = lib.licenses.lgpl3Plus;
+    maintainers = teams.sage.members;
+    license = licenses.lgpl3Plus;
   };
 }

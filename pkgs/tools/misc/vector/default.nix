@@ -8,6 +8,8 @@
      then [ "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ]
      else [ "leveldb" "leveldb/leveldb-sys-2" "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ])
      ++
+     (lib.optional stdenv.targetPlatform.isUnix "unix")
+     ++
      [ "sinks" "sources" "transforms" ])
 , coreutils
 , CoreServices

@@ -43,6 +43,6 @@ buildPythonApplication rec {
     description = "A collection of more than 1000 solitaire card games";
     homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ kierdavis genesis ];
+    maintainers = with maintainers; [ kierdavis ];
   };
 }

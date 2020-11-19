@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, pkgs, lib, php }:
 let
   pname = "psalm";
-  version = "4.1.0";
+  version = "4.1.1";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-    sha256 = "1mpbw9q0fgh6vdfwsm222fz1vi9jrw6l5k1mz4gyv5kxvbyzmn4c";
+    sha256 = "05qjrg8wxlqxihv7xl31n73ygx7ykvcpbh2gq958iin4rr1bcy88";
   };
 
   phases = [ "installPhase" ];

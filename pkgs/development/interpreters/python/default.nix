@@ -14,13 +14,70 @@ with pkgs;
     , packageOverrides
     , sitePackages
     , hasDistutilsCxxPatch
-    , pythonForBuild
-    , self
+    , pythonPackagesBuildBuild
+    , pythonForBuild # provides pythonPackagesBuildHost
+    , pythonPackagesBuildTarget
+    , pythonPackagesHostHost
+    , self # is pythonPackagesHostTarget
+    , pythonPackagesTargetTarget
     }: let
-      pythonPackages = callPackage ../../../top-level/python-packages.nix {
-        python = self;
-        overrides = packageOverrides;
-      };
+      pythonPackages = callPackage
+        ({ pkgs, stdenv, python, overrides }: let
+          pythonPackagesFun = import ../../../top-level/python-packages.nix {
+            inherit stdenv pkgs;
+            python = self;
+          };
+          otherSplices = {
+            selfBuildBuild = pythonPackagesBuildBuild;
+            selfBuildHost = pythonForBuild.pkgs;
+            selfBuildTarget = pythonPackagesBuildTarget;
+            selfHostHost = pythonPackagesHostHost;
+            selfTargetTarget = pythonPackagesTargetTarget;
+          };
+          keep = self: {
+            # TODO maybe only define these here so nothing is needed to be kept in sync.
+            inherit (self)
+              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder
+              python bootstrapped-pip buildPythonPackage buildPythonApplication
+              fetchPypi
+              hasPythonModule requiredPythonModules makePythonPath disabledIf
+              toPythonModule toPythonApplication
+              buildSetupcfg
+
+              eggUnpackHook
+              eggBuildHook
+              eggInstallHook
+              flitBuildHook
+              pipBuildHook
+              pipInstallHook
+              pytestCheckHook
+              pythonCatchConflictsHook
+              pythonImportsCheckHook
+              pythonNamespacesHook
+              pythonRecompileBytecodeHook
+              pythonRemoveBinBytecodeHook
+              pythonRemoveTestsDirHook
+              setuptoolsBuildHook
+              setuptoolsCheckHook
+              venvShellHook
+              wheelUnpackHook
+
+              wrapPython
+
+              pythonPackages
+
+              recursivePthLoader
+            ;
+          };
+        in lib.makeScopeWithSplicing
+          pkgs.splicePackages
+          pkgs.newScope
+          otherSplices
+          keep
+          (lib.extends overrides pythonPackagesFun))
+        {
+          overrides = packageOverrides;
+        };
     in rec {
         isPy27 = pythonVersion == "2.7";
         isPy35 = pythonVersion == "3.5";
@@ -48,7 +105,6 @@ with pkgs;
           python = self;
         };
   };
-
 in {
 
   python27 = callPackage ./cpython/2.7 {
