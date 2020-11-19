@@ -1479,4 +1479,11 @@ self: super: {
       sha256 = "0a8gcq9g8dyyafkvs54mi3fnisff20r0x0qzmhxcp9md61nkf7gq";
     })
   ];
+
+  # 2020-11-19: jailbreaking because of pretty-simple bound out of date
+  # https://github.com/kowainik/stan/issues/408
+  # Tests disabled because of: https://github.com/kowainik/stan/issues/409
+  stan = doJailbreak (dontCheck super.stan);
+  # 2020-11-19: Disabling tests with this issue: https://github.com/cchalmers/pcg-random/issues/10
+  pcg-random = dontCheck super.pcg-random;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
