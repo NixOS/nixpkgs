@@ -38,7 +38,7 @@ buildPythonPackage rec {
       installed automatically for you if you install this library.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     homepage = "https://github.com/python-babel/flask-babel";
   };
 }
