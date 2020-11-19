@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (python3Packages) docutils dulwich python;
+  inherit (python3Packages) docutils python;
 
 in python3Packages.buildPythonApplication rec {
   pname = "mercurial";
@@ -17,12 +17,10 @@ in python3Packages.buildPythonApplication rec {
 
   format = "other";
 
-  inherit python; # pass it so that the same version can be used in hg2git
+  passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
   buildInputs = [ makeWrapper docutils unzip ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
-
-  propagatedBuildInputs = [ dulwich ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
