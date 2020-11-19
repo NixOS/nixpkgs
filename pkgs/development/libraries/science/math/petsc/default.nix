@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.14.0";
+  version = "3.14.1";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "1hq3igm90bnl44vyjdbkpqmqk7496pakcswzc2vq57l8d27nhdxz";
+    sha256 = "1y3fhg0l69qp9qn6vjyqdhqhhbvsa7jp8g7zcm0pwzm7gkcldqnx";
   };
 
   nativeBuildInputs = [ blas gfortran gfortran.cc.lib lapack python ];
