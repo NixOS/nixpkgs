@@ -102,6 +102,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     deps = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
+  sigtool = callPackage ../os-specific/darwin/sigtool { };
+
   maloader = callPackage ../os-specific/darwin/maloader {
   };
 
