@@ -78,8 +78,8 @@ let
   ];
 
   # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at
-  # https://github.com/root-project/cling/blob/master/lib/Interpreter/CIFactory.cpp#L108:L112
-  # Note: it would be nice to put the compiler in Cling's PATH and let it do this by itself, but
+  # https://github.com/root-project/cling/blob/v0.7/lib/Interpreter/CIFactory.cpp#L107:L111
+  # Note: it would be nice to just put the compiler in Cling's PATH and let it do this by itself, but
   # unfortunately passing -nostdinc/-nostdinc++ disables Cling's autodetection logic.
   compilerIncludeFlags = runCommandNoCC "compiler-include-flags.txt" {} ''
     export LC_ALL=C
