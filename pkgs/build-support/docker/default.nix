@@ -31,6 +31,7 @@
   writeScript,
   writeText,
   writePython3,
+  system,  # Note: This is the cross system we're compiling for
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -56,6 +57,16 @@ let
     done;
   '';
 
+  # Map nixpkgs architecture to Docker notation
+  # Reference: https://github.com/docker-library/official-images#architectures-other-than-amd64
+  getArch = nixSystem: {
+    aarch64-linux = "arm64v8";
+    armv7l-linux = "arm32v7";
+    x86_64-linux = "amd64";
+    powerpc64le-linux = "ppc64le";
+    i686-linux = "i386";
+  }.${nixSystem} or "Can't map Nix system ${nixSystem} to Docker architecture notation. Please check that your input and your requested build are correct or update the mapping in Nixpkgs.";
+
 in
 rec {
 
@@ -72,7 +83,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? buildPackages.go.GOARCH
+    , arch ? getArch system
 
       # This is used to set name to the pulled image
     , finalImageName ? imageName
@@ -488,7 +499,7 @@ rec {
       baseJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = buildPackages.go.GOARCH;
+            architecture = getArch system;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
@@ -715,7 +726,7 @@ rec {
       streamScript = writePython3 "stream" {} ./stream_layered_image.py;
       baseJson = writeText "${name}-base.json" (builtins.toJSON {
          inherit config;
-         architecture = buildPackages.go.GOARCH;
+         architecture = getArch system;
          os = "linux";
       });
 
