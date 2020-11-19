@@ -1078,6 +1078,8 @@ in
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
+  ctrlr = callPackage ../applications/audio/ctrlr { };
+
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crowbar = callPackage ../tools/security/crowbar { };
