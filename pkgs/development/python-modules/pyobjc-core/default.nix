@@ -24,13 +24,13 @@ buildPythonPackage rec {
 
   buildInputs = [
     cffi
-  ] ++ (with darwin.apple_sdk.frameworks;[
+  ] ++ (with darwin.apple_sdk.frameworks; [
     Carbon
     Cocoa
-    CoreFoundation
+    Foundation
   ]);
 
-  propagatedBuildInputs = with darwin;[
+  propagatedBuildInputs = with darwin; [
     objc4
   ] ++ [
     # required for namespaced import of PyObjCTools.TestSupport from pyobjc-framework-*
