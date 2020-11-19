@@ -81,7 +81,7 @@ let
   # https://github.com/root-project/cling/blob/master/lib/Interpreter/CIFactory.cpp#L108:L112
   # Note: it would be nice to put the compiler in Cling's PATH and let it do this by itself, but
   # unfortunately passing -nostdinc/-nostdinc++ disables Cling's autodetection logic.
-  compilerIncludeFlags = runCommand "compiler-include-flags.txt" {} ''
+  compilerIncludeFlags = runCommandNoCC "compiler-include-flags.txt" {} ''
     export LC_ALL=C
     ${stdenv.cc}/bin/c++ -xc++ -E -v /dev/null 2>&1 | sed -n -e '/^.include/,''${' -e '/^ \/.*++/p' -e '}' > tmp
     sed -e 's/^/-isystem /' -i tmp
