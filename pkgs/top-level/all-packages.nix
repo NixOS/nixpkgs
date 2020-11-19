@@ -21654,6 +21654,8 @@ in
 
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
 
+  i3altlayout = callPackage ../applications/window-managers/i3/altlayout.nix { };
+
   i3-easyfocus = callPackage ../applications/window-managers/i3/easyfocus.nix { };
 
   i3-layout-manager = callPackage ../applications/window-managers/i3/layout-manager.nix { };
