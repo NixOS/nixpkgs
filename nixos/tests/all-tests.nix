@@ -103,6 +103,7 @@ in
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
+  fcitx = handleTest ./fcitx {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
   firefox-esr = handleTest ./firefox.nix { esr = true; };
