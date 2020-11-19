@@ -1463,10 +1463,6 @@ self: super: {
   # aeson bound out of sync
   rib-core = doJailbreak super.rib-core;
 
-  # 2020-11-18: https://github.com/obsidiansystems/aeson-gadt-th/issues/25
-  # Testsuite is broken
-  aeson-gadt-th = dontCheck super.aeson-gadt-th;
-
   # 2020-11-18: https://github.com/srid/neuron/issues/474
   # base upper bound is incompatible with ghc 8.10
   neuron = doJailbreak super.neuron;
