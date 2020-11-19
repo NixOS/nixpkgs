@@ -24,8 +24,12 @@ in
 , sourceRoot
 , sha256
 , cargoUpdateHook ? ""
+, cargoExtraManifests ? []
 , ...
 } @ args:
+let
+  cargoSyncArgs = builtins.concatStringsSep " " (builtins.map (manifest: "--sync=" + manifest) cargoExtraManifests);
+in
 stdenv.mkDerivation ({
   name = "${name}-vendor.tar.gz";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
@@ -55,7 +59,7 @@ stdenv.mkDerivation ({
 
     ${cargoUpdateHook}
 
-    cargo vendor $name | cargo-vendor-normalise > $CARGO_CONFIG
+    cargo vendor ${cargoSyncArgs} $name | cargo-vendor-normalise > $CARGO_CONFIG
 
     # Add the Cargo.lock to allow hash invalidation
     cp Cargo.lock.orig $name/Cargo.lock

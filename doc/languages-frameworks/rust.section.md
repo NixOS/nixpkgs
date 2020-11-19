@@ -170,6 +170,24 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
+### Vendoring dependencies for nested crates that aren't referenced in a workspace
+The following example shows how to pass a list of additional manifest paths for vendoring.
+This list translates to several `--sync=$path` arguments passed to `cargo-vendor`.
+
+```nix
+{ rustPlatform, ... }:
+
+rustPlatform.buildRustPackage  {
+    (...)
+
+    depsExtraArgs = {
+      cargoExtraManifests = [ "path/to/nested/Cargo.toml" ];
+    };
+
+    (...)
+}
+```
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation
