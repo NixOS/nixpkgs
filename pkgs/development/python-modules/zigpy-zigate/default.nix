@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pyserial
 , pyserial-asyncio
+, pyusb
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -21,12 +22,13 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-zigate";
     rev = "v${version}";
-    sha256 = "EV6DV+BytUcPMtzYVKDnq/Uv2efg3stjL5uVlL62II4=";
+    sha256 = "0ycrsmp3n3awiyj0gbq6xnaa2s9mpc5l7mlmfc00rfnx7rr2z4ha";
   };
 
   buildInputs = [
     pyserial
     pyserial-asyncio
+    pyusb
     zigpy
   ];
 
