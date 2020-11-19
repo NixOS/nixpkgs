@@ -10,7 +10,7 @@
 , libvpx_1_8
 , icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs, nasm, fetchpatch
+, rust-cbindgen, rust-cbindgen_0_15, nodejs, nasm, fetchpatch
 , gnum4
 , debugBuild ? false
 
@@ -94,6 +94,7 @@ let
             else "/bin";
 
   nss_pkg = if lib.versionAtLeast ffversion "82" then nss_latest else nss_3_53;
+  rust-cbindgen_pkg = if lib.versionAtLeast ffversion "83" then rust-cbindgen_0_15 else rust-cbindgen;
 in
 
 stdenv.mkDerivation ({
@@ -207,7 +208,7 @@ stdenv.mkDerivation ({
       pkgconfig
       python2
       python3
-      rust-cbindgen
+      rust-cbindgen_pkg
       rustc
       which
     ]
