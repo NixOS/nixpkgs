@@ -76,6 +76,7 @@ let
     "-I" "${unwrapped}/include"
     "-I" "${glibc.dev}/include"
     "-I" "${stdenv.cc.cc}/include/c++/${stdenv.cc.cc.version}/$(${stdenv.cc}/bin/gcc -dumpmachine)"
+    "-I" "${stdenv.cc.cc}/include/c++/${stdenv.cc.cc.version}/backward"
     "-I" "${unwrapped}/lib/clang/5.0.2/include"
     "-L" "${unwrapped}/lib"
   ];
