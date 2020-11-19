@@ -3,6 +3,7 @@
 buildDunePackage rec {
   pname = "mirage-protocols";
   version = "4.0.1";
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-protocols/releases/download/v${version}/mirage-protocols-v${version}.tbz";
