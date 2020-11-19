@@ -22177,6 +22177,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     portaudio = null;
   };
 
+  lokinet = callPackage ../applications/networking/p2p/lokinet { };
+
   loxodo = callPackage ../applications/misc/loxodo { };
 
   lsd2dsl = libsForQt514.callPackage ../applications/misc/lsd2dsl { };
