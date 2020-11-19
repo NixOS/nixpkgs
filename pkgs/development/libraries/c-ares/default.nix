@@ -7,11 +7,12 @@
 
 let self =
 stdenv.mkDerivation rec {
-  name = "c-ares-1.15.0";
+  pname = "c-ares";
+  version = "1.17.1";
 
   src = fetchurl {
-    url = "https://c-ares.haxx.se/download/${name}.tar.gz";
-    sha256 = "0lk8knip4xk6qzksdkn7085mmgm4ixfczdyyjw656c193y3rgnvc";
+    url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
+    sha256 = "0h7wjfnk2092glqcp9mqaax7xx0s13m501z1gi0gsjl2vvvd0gfp";
   };
 
   meta = with stdenv.lib; {
