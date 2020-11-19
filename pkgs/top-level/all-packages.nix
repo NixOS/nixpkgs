@@ -12685,8 +12685,7 @@ in
 
   flyway = callPackage ../development/tools/flyway { };
 
-  inherit (callPackages ../development/libraries/fmt { })
-    fmt_6 fmt_7;
+  inherit (callPackages ../development/libraries/fmt { }) fmt_7;
 
   fmt = fmt_7;
 
