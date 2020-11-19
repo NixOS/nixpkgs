@@ -81,7 +81,7 @@ in
 # not be passed.
 assert args ? localSystem -> !(args ? system || args ? platform);
 
-import ./. (builtins.removeAttrs args [ "system" "platform" "inNixShell" ] // {
+import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
   inherit config overlays crossSystem crossOverlays;
   # Fallback: Assume we are building packages on the current (build, in GNU
   # Autotools parlance) system.

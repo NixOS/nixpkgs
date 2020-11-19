@@ -11,6 +11,7 @@
 , icu, icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
+, gnum4
 , debugBuild ? false
 
 
@@ -148,6 +149,7 @@ stdenv.mkDerivation ({
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
   ++ lib.optional  waylandSupport libxkbcommon
+  ++ lib.optionals (lib.versionAtLeast ffversion "82") [ gnum4 ]
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
@@ -158,6 +160,8 @@ stdenv.mkDerivation ({
   ]
   ++ lib.optional (pname == "firefox-esr" && lib.versionOlder ffversion "69")
     "-Wno-error=format-security");
+
+  MACH_USE_SYSTEM_PYTHON = "1";
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
@@ -318,6 +322,7 @@ stdenv.mkDerivation ({
     isFirefox3Like = true;
     gtk = gtk2;
     nspr = nspr_pkg;
+    inherit alsaSupport;
     inherit ffmpegSupport;
     inherit gssSupport;
     inherit execdir;

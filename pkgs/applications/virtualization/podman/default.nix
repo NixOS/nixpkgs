@@ -14,6 +14,10 @@ buildGoPackage rec {
     sha256 = "1rbapks11xg0vgl9m322mijirx0wm6c4yav8aw2y41wsr7qd7db4";
   };
 
+  patches = [
+    ./CVE-2020-14370.patch
+  ];
+
   goPackagePath = "github.com/containers/libpod";
 
   outputs = [ "bin" "out" "man" ];

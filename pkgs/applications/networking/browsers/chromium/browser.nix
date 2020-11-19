@@ -13,7 +13,7 @@ mkChromiumDerivation (base: rec {
 
   installPhase = ''
     mkdir -p "$libExecPath"
-    cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"

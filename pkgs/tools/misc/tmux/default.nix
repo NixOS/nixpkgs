@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkgconfig
 , makeWrapper
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0y9lv1yr0x50v3k70vzkc8hfr7yijlsi30p7dr7i8akp3lwmmc7h";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-27347.patch";
+      url = "https://github.com/tmux/tmux/commit/a868bacb46e3c900530bed47a1c6f85b0fbe701c.patch";
+      sha256 = "1mxvrs2vm52as128riddvxgzqbx1zrjs38n3gvjyl2p9h6xp5k4k";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig

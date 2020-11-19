@@ -528,7 +528,7 @@ in {
               };
               "/" = {
                 priority = 900;
-                extraConfig = "try_files $uri $uri/ /index.php$request_uri;";
+                extraConfig = "rewrite ^ /index.php;";
               };
               "~ ^/store-apps" = {
                 priority = 201;
@@ -552,7 +552,7 @@ in {
               "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)".extraConfig = ''
                 return 404;
               '';
-              "~ \\.php(?:$|/)" = {
+              "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
                 priority = 500;
                 extraConfig = ''
                   include ${config.services.nginx.package}/conf/fastcgi.conf;
@@ -570,19 +570,18 @@ in {
                   fastcgi_read_timeout 120s;
                 '';
               };
-              "~ \\.(?:css|js|svg|gif|map)$".extraConfig = ''
+              "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
                 try_files $uri /index.php$request_uri;
                 expires 6M;
-                access_log off;
-              '';
-              "~ \\.woff2?$".extraConfig = ''
-                try_files $uri /index.php$request_uri;
-                expires 7d;
                 access_log off;
               '';
               "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
                 try_files $uri/ =404;
                 index index.php;
+              '';
+              "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
+                try_files $uri /index.php$request_uri;
+                access_log off;
               '';
             };
             extraConfig = ''

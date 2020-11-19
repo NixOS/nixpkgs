@@ -8,12 +8,12 @@
 
 let
   executableName = "element-desktop";
-  version = "1.7.7";
+  version = "1.7.13";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-desktop";
     rev = "v${version}";
-    sha256 = "1h3v3d41ykgwn397nhm9zaqgf3n69zh592sjzrprvk1gsn5kj5h2";
+    sha256 = "04nm5amhc0bqqwcc1c9x88lnbjaaryfs0xhi4as65l5ac4jdkzjc";
   };
   electron = electron_8;
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, tcl, tk, xlibsWrapper, makeWrapper}:
+{ stdenv, fetchurl, tcl, tk, Cocoa, xlibsWrapper, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "3.0";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "08pgjvd2vvmqk3h641x63nxp7wqimb9r30889mkyfh2agc62sjbc";
   };
 
-  buildInputs = [tcl tk xlibsWrapper makeWrapper];
+  buildInputs = [ tcl tk xlibsWrapper makeWrapper ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 
   hardeningDisable = [ "format" ];
 

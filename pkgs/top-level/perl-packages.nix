@@ -5078,10 +5078,10 @@ let
 
   DBI = buildPerlPackage {
     pname = "DBI";
-    version = "1.642";
+    version = "1.643";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.642.tar.gz;
-      sha256 = "3f2025023a56286cebd15cb495e36ccd9b456c3cc229bf2ce1f69e9ebfc27f5d";
+      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.643.tar.gz;
+      sha256 = "8a2b993db560a2c373c174ee976a51027dd780ec766ae17620c20393d2e836fa";
     };
     postInstall = stdenv.lib.optionalString (perl ? crossVersion) ''
       mkdir -p $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI
