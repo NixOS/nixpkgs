@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.4.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0k89w4bsfbpzw963ykg1cyszi3h3nk393qd31m6y46pcfxkqh4rd";
+    sha256 = "13hcj6g7k7yvj7nry2ar6f5mg58ln7frrvq1cg5f8mczxh1ch6zl";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,14 +40,6 @@ buildPythonPackage rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
 
-  patches = [
-    ./0001-Find-include-directory.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace pybind11/__init__.py --subst-var-by include "$out/include"
-  '';
-
   preFixup = ''
     pushd ..
     export PYBIND11_USE_CMAKE=1
@@ -65,7 +57,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
     description = "Seamless operability between C++11 and Python";
     longDescription = ''
@@ -73,7 +65,7 @@ buildPythonPackage rec {
       C++ types in Python and vice versa, mainly to create Python
       bindings of existing C++ code.
     '';
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.yuriaisaka ];
+    license = licenses.bsd3;
+    maintainers = with maintainers;[ yuriaisaka ];
   };
 }

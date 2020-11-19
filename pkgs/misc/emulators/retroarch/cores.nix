@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
+{ stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
-, ffmpeg, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
+, ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
 , buildPackages }:
 
@@ -630,6 +630,13 @@ in with stdenv.lib.licenses;
       rev = "02987af9b81a9c3294af8fb9d5a34f9826a2cf4d";
       sha256 = "0gl7irmn5d8lk7kf484vgw6kb325fq4ghwsni3il4nm5n2a8yglh";
     };
+    patches = [
+      (fetchpatch {
+        name = "fix_mame_build_on_make-4.3.patch";
+        url = "https://github.com/libretro/mame2016-libretro/commit/5874fae3d124f5e7c8a91634f5473a8eac902e47.patch";
+        sha256 = "061f1lcm72glksf475ikl8w10pnbgqa7049ylw06nikis2qdjlfn";
+      })
+    ];
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
@@ -716,6 +723,25 @@ in with stdenv.lib.licenses;
     license = gpl2;
     makefile = "Makefile";
     preBuild = "cd libretro";
+  };
+
+  np2kai = mkLibRetroCore rec {
+    core = "np2kai";
+    src = fetchFromGitHub rec {
+      owner = "AZO234";
+      repo = "NP2kai";
+      rev = "4a317747724669343e4c33ebdd34783fb7043221";
+      sha256 = "0kxysxhx6jyk82mx30ni0ydzmwdcbnlxlnarrlq018rsnwb4md72";
+    };
+    description = "Neko Project II kai libretro port";
+    license = mit;
+    makefile = "Makefile.libretro";
+    preBuild = ''
+      cd sdl2
+      substituteInPlace ${makefile} \
+        --replace 'GIT_VERSION :=' 'GIT_VERSION ?='
+      export GIT_VERSION=${builtins.substring 0 7 src.rev}
+    '';
   };
 
   o2em = mkLibRetroCore rec {
@@ -815,7 +841,7 @@ in with stdenv.lib.licenses;
     description = "ppsspp libretro port";
     license = gpl2;
     extraNativeBuildInputs = [ cmake pkgconfig ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg python37 snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";

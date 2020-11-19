@@ -1,14 +1,20 @@
-{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline }:
+{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
+, CoreFoundation, IOKit
+}:
 
 stdenv.mkDerivation rec {
-  name = "bacula-9.6.3";
+  name = "bacula-9.6.6";
 
   src = fetchurl {
     url    = "mirror://sourceforge/bacula/${name}.tar.gz";
-    sha256 = "02jvijwfw8nqrq61pyr5b9d5zjpmrsimkg6dq42rbd71g2k6a4zc";
+    sha256 = "10c25igfvff09nz5ll8rxc46f659rnwimj1v9cdhr67lwdswk1k2";
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      IOKit
+    ]
     # acl relies on attr, which I can't get to build on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
 

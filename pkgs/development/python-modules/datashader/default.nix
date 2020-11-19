@@ -30,11 +30,11 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05p81aff7x70yj8llclclgz6klvfzqixwxfng6awn3y5scv18w40";
+    sha256 = "b1f80415f72f92ccb660aaea7b2881ddd35d07254f7c44101709d42e819d6be6";
   };
 
   propagatedBuildInputs = [
@@ -74,8 +74,9 @@ buildPythonPackage rec {
       --replace "'numba >=0.37.0,<0.49'" "'numba'"
   '';
 
+  # dask doesn't do well with large core counts
   checkPhase = ''
-    pytest -n $NIX_BUILD_CORES datashader
+    pytest -n $NIX_BUILD_CORES datashader -k 'not dask.array'
   '';
 
   meta = with lib; {

@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , substituteAll
-, pkgconfig
+, pkg-config
 , gtk-doc
 , gobject-introspection
 , gjs
@@ -21,13 +21,15 @@
 , fuse
 , utillinuxMinimal
 , libselinux
+, libsodium
 , libarchive
 , libcap
 , bzip2
 , yacc
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_42
+, openssl
 , python3
 }:
 
@@ -37,13 +39,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2020.3";
+  version = "2020.7";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "01cch4as23xspq6pck59al7x5jj60wl21g8p3iqbdxcjl1p3jxsq";
+    sha256 = "0clriq2ypz1fycd6mpjyrhzid44svzpzw0amnank593h69b216ax";
   };
 
   patches = [
@@ -59,6 +61,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-test-paths.patch;
       python3 = testPython.interpreter;
+      openssl = "${openssl}/bin/openssl";
     })
   ];
 
@@ -66,14 +69,14 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     gtk-doc
     gobject-introspection
     which
     makeWrapper
     yacc
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_42
   ];
 
@@ -85,6 +88,7 @@ in stdenv.mkDerivation rec {
     gpgme
     fuse
     libselinux
+    libsodium
     libcap
     libarchive
     bzip2
@@ -96,22 +100,23 @@ in stdenv.mkDerivation rec {
     gjs
   ];
 
-  preConfigure = ''
-    env NOCONFIGURE=1 ./autogen.sh
-  '';
-
   enableParallelBuilding = true;
 
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
+    "--with-ed25519-libsodium"
   ];
 
   makeFlags = [
     "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
+
+  preConfigure = ''
+    env NOCONFIGURE=1 ./autogen.sh
+  '';
 
   postFixup = let
     typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [

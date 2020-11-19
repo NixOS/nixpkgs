@@ -53,7 +53,7 @@ addEntry() {
       echo "exec $stage2"
     )"
 
-    [ "$path" != "$defaultConfig" ] || { 
+    [ "$path" != "$defaultConfig" ] || {
       echo "$content" > $tmp
       echo "# older configurations: $targetOther" >> $tmp
       chmod +x $tmp

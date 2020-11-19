@@ -33,11 +33,11 @@
 
 buildPythonPackage rec {
   pname = "bokeh";
-  version = "2.0.2";
+  version = "2.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9248bdb0156797abf6d04b5eac581dcb121f5d1db7acbc13282b0609314893a";
+    sha256 = "c4a3f97afe5f525019dd58ee8c4e3d43f53fe1b1ac264ccaae9b02c07b2abc17";
   };
 
   patches = [

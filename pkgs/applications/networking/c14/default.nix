@@ -13,10 +13,8 @@ buildGoPackage rec {
     sha256 = "0b1piviy6vvdbak8y8bc24rk3c1fi67vv3352pmnzvrhsar2r5yf";
   };
 
-  goDeps = ./deps.nix;
-
   meta = with stdenv.lib; {
-    description = "C14 is designed for data archiving & long-term backups.";
+    description = "C14 is designed for data archiving & long-term backups";
     homepage = "https://www.online.net/en/storage/c14-cold-storage";
     license = licenses.mit;
     maintainers = with maintainers; [ apeyroux ];

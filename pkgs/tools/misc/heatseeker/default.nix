@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple
   # as a substitution, and this works since we have the path to coreutils stty.
   patchPhase = ''
-    substituteInPlace src/screen/unix.rs --replace "/bin/stty" "${coreutils}/bin/stty" 
+    substituteInPlace src/screen/unix.rs --replace "/bin/stty" "${coreutils}/bin/stty"
   '';
 
   # some tests require a tty, this variable turns them off for Travis CI,

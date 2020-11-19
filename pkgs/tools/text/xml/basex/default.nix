@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "basex";
-  version = "8.6.6";
+  version = "9.4.3";
 
   src = fetchurl {
-    url = "http://files.basex.org/releases/${version}/BaseX866.zip";
-    sha256 = "1kws6swisdaa17yhijjvkh2ikwz9rd5cw8mdjvkqw6vlcp1nq6m4";
+    url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
+    hash = "sha256-IZhRg2JcYQXQKU/lYZpLLcsSdjZZO+toY5yvk+RKUCY=";
   };
 
   buildInputs = [ unzip jre ];
@@ -25,23 +25,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out"
-    cp -r * "$out"
-
     # Remove Windows batch files (unclutter $out/bin)
-    rm -f "$out"/bin/*.bat
+    rm ./bin/*.bat
 
-    # Move some top-level stuff to $out/share/basex (unclutter $out)
-    mkdir -p "$out/share/basex"
-    mv "$out"/*.txt "$out/share/basex/"
-    mv "$out"/webapp "$out/share/basex/"
+    mkdir -p "$out/share/basex" "$out/share/applications"
 
-    # Remove empty directories
-    rmdir "$out/repo"
-    rmdir "$out/data"
+    cp -R bin etc lib webapp src BaseX.jar "$out"
+    cp -R readme.txt webapp "$out/share/basex"
 
     # Install desktop file
-    mkdir -p "$out/share/applications"
     cp "$desktopItem"/share/applications/* "$out/share/applications/"
 
     # Use substitutions instead of wrapper scripts
@@ -65,7 +57,7 @@ stdenv.mkDerivation rec {
       highly interactive front-end (basexgui). Apart from two local standalone
       modes, BaseX offers a client/server architecture.
     '';
-    homepage = "http://basex.org/";
+    homepage = "https://basex.org/";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

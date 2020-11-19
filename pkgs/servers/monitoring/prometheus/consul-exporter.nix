@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "consul_exporter";
-  version = "0.3.0";
+  version = "0.7.1";
 
   goPackagePath = "github.com/prometheus/consul_exporter";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "prometheus";
     repo = "consul_exporter";
     rev = "v${version}";
-    sha256 = "1zffbxyfmqpbdqkx5rb5vjgd9j4p4zcrh6jvn1zhbdzrcs7khnd9";
+    sha256 = "16ibafcbpiplsh1awcvblzzf2cbr4baf8wiwpdpibgmcwwf9m5ya";
   };
 
   meta = with stdenv.lib; {

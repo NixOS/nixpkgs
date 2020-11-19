@@ -1,11 +1,11 @@
 { stdenv, fetchurl, alsa-ucm-conf, alsa-topology-conf }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-lib-1.2.2";
+  name = "alsa-lib-1.2.3";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "1v5kb8jyvrpkvvq7dq8hfbmcj68lml97i4s0prxpfx2mh3c57s6q";
+    sha256 = "13k7dx1g749z74rz71hs5j8z0pqdjgx7l69pn0vsy7jizhi0kw02";
   };
 
   patches = [

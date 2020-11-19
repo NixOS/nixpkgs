@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
   pname = "psensor";
 
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://wpitchoune.net/psensor/files/psensor-${version}.tar.gz";
-    sha256 = "1smbidbby4rh14jnh9kn7y64qf486aqnmyxcgacjvkz27cqqnw4r";
+    sha256 = "1ark901va79gfq5p8h8dqypjgm3f8crmj37520q3slwz2rfphkq8";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];

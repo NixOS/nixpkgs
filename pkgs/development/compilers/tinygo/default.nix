@@ -14,7 +14,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "0das5z5y2x1970yi9c4yssxvwrrjhdmsj495q0r5mb02amvc954v";
   };
- 
+
   overrideModAttrs = (_: {
       patches = [];
       preBuild = ''
@@ -27,7 +27,9 @@ buildGoModule rec {
   preBuild = "cp ${gomod} go.mod";
 
   vendorSha256 = "19194dlzpl6zzw2gqybma5pwip71rw8z937f104k6c158qzzgy62";
-  enableParallelBuilding = true;
+
+  doCheck = false;
+
   subPackages = [ "." ];
   buildInputs = [ llvm clang-unwrapped makeWrapper ];
   propagatedBuildInputs = [ lld avrgcc avrdude openocd gcc-arm-embedded ];
@@ -44,6 +46,5 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

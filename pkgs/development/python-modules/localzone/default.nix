@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "localzone";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "ags-slc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "154l7qglsm4jrhqddvlas8cgl9qm2z4dzihv05jmsyqjikcmfwk8";
+    sha256 = "1vzn1vm3zf86l7qncbmghjrwyvla9dc2v8abn8jajbl47gm7r5f7";
   };
 
   propagatedBuildInputs = [ dnspython sphinx ];

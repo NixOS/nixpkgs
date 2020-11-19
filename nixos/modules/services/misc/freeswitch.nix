@@ -95,9 +95,11 @@ in {
           -conf ${configPath} \\
           -base /var/lib/freeswitch";
         ExecReload = "${pkg}/bin/fs_cli -x reloadxml";
-        Restart = "always";
+        Restart = "on-failure";
         RestartSec = "5s";
+        CPUSchedulingPolicy = "fifo";
       };
     };
+    environment.systemPackages = [ pkg ];
   };
 }

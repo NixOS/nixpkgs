@@ -1,13 +1,13 @@
 { lib, buildPythonPackage, fetchPypi, isPy27, substituteAll, git, gitdb, mock, nose, ddt }:
 
 buildPythonPackage rec {
-  version = "3.1.2";
+  version = "3.1.11";
   pname = "GitPython";
   disabled = isPy27; # no longer supported
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "864a47472548f3ba716ca202e034c1900f197c0fb3a08f641c20c3cafd15ed94";
+    sha256 = "befa4d101f91bad1b632df4308ec64555db684c360bd7d2130b4807d49ce86b8";
   };
 
   patches = [

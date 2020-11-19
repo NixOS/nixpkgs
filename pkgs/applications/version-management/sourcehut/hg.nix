@@ -4,17 +4,13 @@
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.26.0";
+  version = "0.26.19";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~sircmpwn/hg.sr.ht";
     rev = version;
-    sha256 = "06sgd7pzjabwv66i4v5abqdnx955lqgjmbxxqkhhyq9k45jhlzci";
+    sha256 = "0dc0lgqq8zdaywbd50dlxypk1lv0nffvqr3889v10ycy45qcfymv";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -27,7 +23,6 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   meta = with stdenv.lib; {

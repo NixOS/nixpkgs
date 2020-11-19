@@ -1,17 +1,15 @@
 { stdenv, fetchurl, lvm2, json_c
-, openssl, libuuid, pkgconfig, popt
-, enablePython ? false, python2 ? null }:
-
-assert enablePython -> python2 != null;
+, openssl, libuuid, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-2.1.0";
+  pname = "cryptsetup";
+  version = "2.3.4";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v2.1/${name}.tar.xz";
-    sha256 = "15y8n547garz0x5kqv09gscdsrz0c0y1y6c5cp8pccwg3xsb5vm3";
+    url = "mirror://kernel/linux/utils/cryptsetup/v2.3/${pname}-${version}.tar.xz";
+    sha256 = "0wrpz2fzbsszmsgxxbssxjgylpyiindh24z8g13m2fxmjsxyw5lx";
   };
 
   # Disable 4 test cases that fail in a sandbox
@@ -19,9 +17,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tests
-    ${stdenv.lib.optionalString enablePython ''
-      patchShebangs ./python/pycryptsetup-test.py
-    ''}
 
     # O_DIRECT is filesystem dependent and fails in a sandbox (on tmpfs)
     # and on several filesystem types (btrfs, zfs) without sandboxing.
@@ -34,11 +29,10 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
-  ] ++ stdenv.lib.optional enablePython "--enable-python";
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ lvm2 json_c openssl libuuid popt ]
-    ++ stdenv.lib.optional enablePython python2;
+  buildInputs = [ lvm2 json_c openssl libuuid popt ];
 
   doCheck = true;
 

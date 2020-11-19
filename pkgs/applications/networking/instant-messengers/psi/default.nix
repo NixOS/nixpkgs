@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, wrapQtAppsHook
 , qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca2-qt5, libXScrnSaver, hunspell
+, libidn, qca-qt5, libXScrnSaver, hunspell
 }:
 stdenv.mkDerivation rec {
   pname = "psi";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
     qtbase qtmultimedia qtx11extras qttools qtwebengine
-    libidn qca2-qt5 libXScrnSaver hunspell
+    libidn qca-qt5 libXScrnSaver hunspell
   ];
   enableParallelBuilding = true;
   meta = with stdenv.lib; {
-    description = "Psi, an XMPP (Jabber) client";
+    description = "An XMPP (Jabber) client";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

@@ -7,7 +7,7 @@ with stdenv;
 
 let
   majorVersion = "0";
-  minorVersion = "221";
+  minorVersion = "226";
 
   desktopItem = makeDesktopItem {
     name = "MAME";
@@ -26,7 +26,7 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "1pqwa5qcrk0wgbyns6fkv7j3pn7byf216cixc3phhhgvfidgr8ww";
+    sha256 = "0pnsvz4vkjkqb1ac5wzwz31vx0iknyg5ffly90nhl13kcr656jrj";
   };
 
   hardeningDisable = [ "fortify" ];
@@ -51,7 +51,9 @@ in mkDerivation {
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
   # install directory, so we add absolute paths here
-  patches = [ ./emuopts.patch ];
+  patches = [
+    ./emuopts.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/emu/emuopts.cpp \

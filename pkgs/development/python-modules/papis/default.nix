@@ -1,9 +1,9 @@
 { lib, buildPythonPackage, fetchFromGitHub, xdg_utils
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
-, pylibgen, click, python-slugify, habanero, isbnlib
+, click, python-slugify, habanero, isbnlib, typing-extensions
 , prompt_toolkit, pygments, stevedore, tqdm, lxml
-, python-doi, isPy3k, pythonOlder
+, python-doi, isPy3k, pythonOlder, pytestcov
 #, optional, dependencies
 , whoosh, pytest
 , stdenv
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.9";
+  version = "0.11.1";
   disabled = !isPy3k;
 
   # Missing tests on Pypi
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15i79q6nr7gcpcafdz5797axmp6r3081sys07k1k2vi5b2g3qc4k";
+    sha256 = "0bbkjyw1fsvvp0380l404h2lys8ib4xqga5s6401k1y1hld28nl6";
   };
 
   propagatedBuildInputs = [
     requests filetype pyparsing configparser arxiv2bib
     pyyaml chardet beautifulsoup4 colorama bibtexparser
-    pylibgen click python-slugify habanero isbnlib
-    prompt_toolkit pygments
+    click python-slugify habanero isbnlib
+    prompt_toolkit pygments typing-extensions
     stevedore tqdm lxml
     python-doi
     # optional dependencies
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "lxml<=4.3.5" "lxml~=4.3" \
+      --replace "isbnlib>=3.9.1,<3.10" "isbnlib~=3.9" \
       --replace "python-slugify>=1.2.6,<4" "python-slugify"
   '';
 
@@ -43,7 +44,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin && pythonOlder "3.8";
 
   checkInputs = ([
-    pytest
+    pytest pytestcov
   ]) ++ [
     xdg_utils
   ];
@@ -54,7 +55,7 @@ buildPythonPackage rec {
   checkPhase = ''
     HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders \
       -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url \
-      and not test_validate_arxivid and not test_downloader_getter"
+      and not test_validate_arxivid and not test_downloader_getter and not match"
   '';
 
   meta = {

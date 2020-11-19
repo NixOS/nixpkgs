@@ -2,14 +2,14 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkgconfig
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
-, systemd ? null
+, enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, udev ? null
 , libobjc
 , IOKit
 , withStatic ? false
 }:
 
-assert enableSystemd -> systemd != null;
+assert enableUdev -> udev != null;
 
 stdenv.mkDerivation rec {
   pname = "libusb";
@@ -22,19 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "0mxbpg01kgbk5nh6524b0m4xk7ywkyzmc3yhi5asqcsd3rbhjj98";
   };
 
-  outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs =
-    stdenv.lib.optional enableSystemd systemd ++
+    stdenv.lib.optional enableUdev udev ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   dontDisableStatic = withStatic;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  configureFlags = stdenv.lib.optional (!enableUdev) "--disable-udev";
 
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    sed 's,-ludev,-L${stdenv.lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
+  preFixup = stdenv.lib.optionalString enableUdev ''
+    sed 's,-ludev,-L${stdenv.lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
   meta = with stdenv.lib; {

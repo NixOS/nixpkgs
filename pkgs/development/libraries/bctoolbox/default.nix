@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
-  version = "4.3.1";
+  version = "4.4.0";
 
   nativeBuildInputs = [ cmake bcunit ];
   buildInputs = [ mbedtls ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1y91jcrma4kjqpm6w5ahlygjsyvx7l8zjrjvq7g2n39jmw175cvs";
+    sha256 = "1r3ymwk10ry6mz4zd08q7l5msq7h15931l7f0clw2siqs8r81x7c";
   };
 
   # Do not build static libraries

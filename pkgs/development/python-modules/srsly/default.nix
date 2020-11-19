@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, cython
 , mock
 , numpy
 , pathlib
@@ -12,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "1.0.2";
+  version = "2.3.1";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n0f9kbbz5akpbiqqz4j3p7zqai3zasw8cqai9zj1pv7sn0qn9ar";
+    sha256 = "3dcce93c69ff18e8a8d7decfdfdf8e1fd44c4446cdee8d0e5d545d6b172dc377";
   };
 
-  propagatedBuildInputs = lib.optional (pythonOlder "3.4") pathlib;
+  nativeBuildInputs = [ cython ];
 
   checkInputs = [
     mock
@@ -31,6 +34,8 @@ buildPythonPackage rec {
   # TypeError: cannot serialize '_io.BufferedRandom' object
   # Possibly because of sandbox restrictions.
   doCheck = false;
+
+  pythonImportsCheck = [ "srsly" ];
 
   meta = with stdenv.lib; {
     description = "Modern high-performance serialization utilities for Python";

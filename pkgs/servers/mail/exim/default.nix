@@ -4,15 +4,16 @@
 , enableAuthDovecot ? false, dovecot
 , enablePAM ? false, pam
 , enableSPF ? true, libspf2
+, enableDMARC ? true, opendmarc
 }:
 
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.93.0.4";
+  version = "4.94";
 
   src = fetchurl {
-    url = "https://ftp.exim.org/pub/exim/exim4/fixes/${pname}-${version}.tar.xz";
-    sha256 = "01g4sfycv13glnmfrapwhjbdw6z1z7w5bwjldxjmglwfw5p3czak";
+    url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
+    sha256 = "1nsb2i5mqxfz1sl1bmbxmpb2qiaf3wffhfiw4j9vfpagy3xfhzpp";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ stdenv.lib.optional enableAuthDovecot dovecot
     ++ stdenv.lib.optional enablePAM pam
-    ++ stdenv.lib.optional enableSPF libspf2;
+    ++ stdenv.lib.optional enableSPF libspf2
+    ++ stdenv.lib.optional enableDMARC opendmarc;
 
   preBuild = ''
     sed '
@@ -46,6 +48,7 @@ stdenv.mkDerivation rec {
       s:^# \(RM_COMMAND\)=.*:\1=${coreutils}/bin/rm:
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
       s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
+      s:^# \(LOOKUP_DSEARCH=yes\)$:\1:
       ${stdenv.lib.optionalString enableLDAP ''
         s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
         s:^# \(LOOKUP_LDAP=yes\)$:\1:
@@ -71,6 +74,10 @@ stdenv.mkDerivation rec {
         s:^# \(SUPPORT_SPF\)=.*:\1=yes:
         s:^# \(LDFLAGS += -lspf2\):\1:
       ''}
+      ${stdenv.lib.optionalString enableDMARC ''
+        s:^# \(SUPPORT_DMARC\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lopendmarc\):\1:
+      ''}
       #/^\s*#.*/d
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
@@ -92,11 +99,11 @@ stdenv.mkDerivation rec {
       done )
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://exim.org/";
     description = "A mail transfer agent (MTA)";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.tv ];
+    license = with licenses; [ gpl2Plus bsd3 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ tv ajs124 das_j ];
   };
 }

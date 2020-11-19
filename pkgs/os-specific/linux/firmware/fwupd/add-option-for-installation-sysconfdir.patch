@@ -1,5 +1,5 @@
 diff --git a/data/meson.build b/data/meson.build
-index bb749fd4..b611875b 100644
+index 14454458..12a798c0 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -17,7 +17,7 @@ endif
@@ -73,10 +73,10 @@ index 826a3c1d..b78db663 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index 87ea67e5..3a4374db 100644
+index a6fb55dd..aedb7530 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -175,6 +175,12 @@ endif
+@@ -183,6 +183,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -90,19 +90,16 @@ index 87ea67e5..3a4374db 100644
  gio = dependency('gio-2.0', version : '>= 2.45.8')
  giounix = dependency('gio-unix-2.0', version : '>= 2.45.8', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index 3da9b6c4..6c80275b 100644
+index 0a0e2853..198ae930 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -24,6 +24,7 @@ option('plugin_coreboot', type : 'boolean', value : true, description : 'enable
- option('systemd', type : 'boolean', value : true, description : 'enable systemd support')
- option('systemdunitdir', type: 'string', value: '', description: 'Directory for systemd units')
- option('elogind', type : 'boolean', value : false, description : 'enable elogind support')
+@@ -1,3 +1,4 @@
 +option('sysconfdir_install', type: 'string', value: '', description: 'sysconfdir to use during installation')
- option('tests', type : 'boolean', value : true, description : 'enable tests')
- option('udevdir', type: 'string', value: '', description: 'Directory for udev rules')
- option('efi-cc', type : 'string', value : 'gcc', description : 'the compiler to use for EFI modules')
+ option('build', type : 'combo', choices : ['all', 'standalone', 'library'], value : 'all', description : 'build type')
+ option('agent', type : 'boolean', value : true, description : 'enable the fwupd agent')
+ option('consolekit', type : 'boolean', value : true, description : 'enable ConsoleKit support')
 diff --git a/plugins/ata/meson.build b/plugins/ata/meson.build
-index 8444bb8a..fa4a8ad1 100644
+index f32b97fe..679ccc7b 100644
 --- a/plugins/ata/meson.build
 +++ b/plugins/ata/meson.build
 @@ -7,7 +7,7 @@ install_data([
@@ -125,11 +122,37 @@ index ed4eee70..76dbdb1d 100644
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
+diff --git a/plugins/msr/meson.build b/plugins/msr/meson.build
+index d829e153..e2917bbe 100644
+--- a/plugins/msr/meson.build
++++ b/plugins/msr/meson.build
+@@ -5,7 +5,7 @@ install_data(['msr.quirk'],
+ )
+ 
+ install_data(['fwupd-msr.conf'],
+-  install_dir: join_paths(sysconfdir, 'modules-load.d')
++  install_dir: join_paths(sysconfdir_install, 'modules-load.d')
+ )
+ 
+ shared_module('fu_plugin_msr',
+diff --git a/plugins/platform-integrity/meson.build b/plugins/platform-integrity/meson.build
+index 6f1c4bc5..c5d043fc 100644
+--- a/plugins/platform-integrity/meson.build
++++ b/plugins/platform-integrity/meson.build
+@@ -7,7 +7,7 @@ install_data([
+ )
+ 
+ install_data(['fwupd-platform-integrity.conf'],
+-  install_dir: join_paths(sysconfdir, 'modules-load.d')
++  install_dir: join_paths(sysconfdir_install, 'modules-load.d')
+ )
+ 
+ shared_module('fu_plugin_platform_integrity',
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
-index 25fc5c7d..77eb9a83 100644
+index 92762791..08bb37ea 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -27,7 +27,7 @@ shared_module('fu_plugin_redfish',
+@@ -26,7 +26,7 @@ shared_module('fu_plugin_redfish',
  )
  
  install_data(['redfish.conf'],
@@ -139,10 +162,10 @@ index 25fc5c7d..77eb9a83 100644
  
  if get_option('tests')
 diff --git a/plugins/thunderbolt/meson.build b/plugins/thunderbolt/meson.build
-index 06ab34ee..297a9182 100644
+index 6b2368fb..2bd06fed 100644
 --- a/plugins/thunderbolt/meson.build
 +++ b/plugins/thunderbolt/meson.build
-@@ -46,7 +46,7 @@ executable('tbtfwucli',
+@@ -31,7 +31,7 @@ fu_plugin_thunderbolt = shared_module('fu_plugin_thunderbolt',
  )
  
  install_data(['thunderbolt.conf'],
@@ -152,10 +175,10 @@ index 06ab34ee..297a9182 100644
  # we use functions from 2.52 in the tests
  if get_option('tests') and umockdev.found() and gio.version().version_compare('>= 2.52')
 diff --git a/plugins/uefi/meson.build b/plugins/uefi/meson.build
-index 5838cecc..9ba3d5cd 100644
+index 2d1b2d22..c4217a72 100644
 --- a/plugins/uefi/meson.build
 +++ b/plugins/uefi/meson.build
-@@ -101,7 +101,7 @@ if get_option('man')
+@@ -97,7 +97,7 @@ if get_option('man')
  endif
  
  install_data(['uefi.conf'],

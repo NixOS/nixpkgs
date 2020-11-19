@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "pdfcpu";
-  version = "0.3.3";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09z4z2csp7ld47q36x2id5zadaihisbnk7bkdvci826hwm8km7sl";
+    sha256 = "13b1ncpx189ca0h70j5cdp0jwlj95kasysryz1l6g13cwn9n6mii";
   };
 
-  vendorSha256 = "09alkpfyxapycv6zsaz7prgbr0a1jzd78n7w2mh01mg4hhb2j3k7";
+  vendorSha256 = "11w9i1829hk1qb9w24dyxv1bi49358a274g60x11fp5x5cw7bqa7";
+
+  # No tests
+  doCheck = false;
 
   subPackages = [ "cmd/pdfcpu" ];
 
@@ -20,6 +23,5 @@ buildGoModule rec {
     homepage = "https://pdfcpu.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = "https://www.lysator.liu.se/~nisse/misc/";
     description = "Standalone version of arguments parsing functions from GLIBC";
-    platforms = with platforms; darwin ++ [ "x86_64-linux" ];
+    platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ amar1729 ];
     license = licenses.gpl2;
   };

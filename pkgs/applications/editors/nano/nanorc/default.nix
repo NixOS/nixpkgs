@@ -1,14 +1,17 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, writeScript, nixosTests, common-updater-scripts
+, coreutils, git, gnused, nix, nixfmt }:
 
-stdenv.mkDerivation {
+let
+  owner = "scopatz";
+  repo = "nanorc";
+in stdenv.mkDerivation rec {
   pname = "nanorc";
-  version = "2018-09-05";
+  version = "2020-10-10";
 
   src = fetchFromGitHub {
-    owner = "scopatz";
-    repo = "nanorc";
-    rev = "1e589cb729d24fba470228d429e6dde07973d597";
-    sha256 = "136yxr38lzrfv8bar0c6c56rh54q9s94zpwa19f425crh44drppl";
+    inherit owner repo;
+    rev = builtins.replaceStrings [ "-" ] [ "." ] version;
+    sha256 = "3B2nNFYkwYHCX6pQz/hMO/rnVqlCiw1BSNmGmJ6KCqE=";
   };
 
   dontBuild = true;
@@ -17,6 +20,32 @@ stdenv.mkDerivation {
     mkdir -p $out/share
 
     install *.nanorc $out/share/
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!${stdenv.shell}
+    set -o errexit
+    PATH=${
+      stdenv.lib.makeBinPath [
+        common-updater-scripts
+        coreutils
+        git
+        gnused
+        nix
+        nixfmt
+      ]
+    }
+    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"' | sed 's|\\.|-|g')"
+    latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags git@github.com:${owner}/${repo} '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)"
+    if [ "$oldVersion" != "$latestTag" ]; then
+      nixpkgs="$(git rev-parse --show-toplevel)"
+      default_nix="$nixpkgs/pkgs/applications/editors/nano/nanorc/default.nix"
+      newTag=$(echo $latestTag | sed 's|\.|-|g')
+      update-source-version ${pname} "$newTag" --version-key=version --print-changes
+      nixfmt "$default_nix"
+    else
+      echo "${pname} is already up-to-date"
+    fi
   '';
 
   meta = {

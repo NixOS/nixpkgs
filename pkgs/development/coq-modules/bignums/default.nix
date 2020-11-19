@@ -25,6 +25,10 @@ let params = {
         rev = "V8.11.0";
         sha256 = "1xcd7c7qlvs0narfba6px34zq0mz8rffnhxw0kzhhg6i4iw115dp";
       };
+      "8.12" = {
+        rev = "V8.12.0";
+        sha256 = "14ijb3qy2hin3g4djx437jmnswxxq7lkfh3dwh9qvrds9a015yg8";
+      };
     };
     param = params.${coq.coq-version};
 in
@@ -39,7 +43,9 @@ stdenv.mkDerivation {
     inherit (param) rev sha256;
   };
 
-  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
+  buildInputs = with coq.ocamlPackages; [ ocaml findlib coq ]
+  ++ stdenv.lib.optional (!stdenv.lib.versionAtLeast coq.coq-version "8.10") camlp5
+  ;
 
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 

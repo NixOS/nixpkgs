@@ -1,4 +1,4 @@
-{ lib, buildFHSUserEnv }:
+{ lib, buildFHSUserEnv, fetchFromGitHub }:
 
 let
   pio-pkgs = pkgs:
@@ -19,6 +19,14 @@ let
       platformio
     ]);
 
+  src = fetchFromGitHub {
+    owner = "platformio";
+    repo = "platformio-core";
+    rev = "v5.0.2";
+    sha256 = "1hbw8nbllyj0xyx1rz2chx9vyqf9949dcdx4v9hnfbsjwwpcfi0a";
+  };
+
+
 in buildFHSUserEnv {
   name = "platformio";
 
@@ -34,7 +42,10 @@ in buildFHSUserEnv {
   };
 
   extraInstallCommands = ''
+    mkdir -p $out/lib/udev/rules.d
+
     ln -s $out/bin/platformio $out/bin/pio
+    ln -s ${src}/scripts/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
   '';
 
   runScript = "platformio";

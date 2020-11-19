@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "BSEQuencer";
-  version = "1.4.2";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = pname;
-    rev = "${version}";
-    sha256 = "1fz0p0ba00b7k7a8q9mxwj01jwl8xwh9a2npn00pbbdrg9zv4fdr";
+    rev = version;
+    sha256 = "0hagnn104ybzdp13r95idw20fhmzif8p3kmiypnr20m6c64rdd29";
   };
 
   nativeBuildInputs = [ pkgconfig ];

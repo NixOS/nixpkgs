@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "do-agent";
-  version = "3.5.6";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
-    rev = "${version}";
-    sha256 = "1gl034cslqa30fqy2p9rymgx398s1rcgbmfvzk5zjlrw47327k8i";
+    rev = version;
+    sha256 = "141hmkswb65sq99ad6vg4dkrbhsmni88hlrfdxqdn89hvsz8f7b2";
   };
 
   buildFlagsArray = ''
@@ -17,6 +17,12 @@ buildGoModule rec {
   '';
 
   vendorSha256 = null;
+
+  doCheck = false;
+
+  postInstall = ''
+    install -Dm444 -t $out/lib/systemd/system $src/packaging/etc/systemd/system/do-agent.service
+  '';
 
   meta = with lib; {
     description = "DigitalOcean droplet system metrics agent";

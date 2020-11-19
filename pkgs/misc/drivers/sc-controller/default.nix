@@ -16,6 +16,9 @@ buildPythonApplication rec {
     sha256 = "1dskjh5qcjf4x21n4nk1zvdfivbgimsrc2lq1id85bibzps29499";
   };
 
+  # see https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
@@ -34,9 +37,6 @@ buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
-    # gdk-pixbuf setup hook can not choose between propagated librsvg
-    # and our librsvg with GObject introspection.
-    GDK_PIXBUF_MODULE_FILE=$(echo ${librsvg}/lib/gdk-pixbuf-2.0/*/loaders.cache)
   '';
 
   postFixup = ''
@@ -55,6 +55,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage    = "https://github.com/kozec/sc-controller";
     # donations: https://www.patreon.com/kozec
+    broken = true;
     description = "User-mode driver and GUI for Steam Controller and other controllers";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

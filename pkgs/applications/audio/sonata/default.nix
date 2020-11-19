@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, intltool, wrapGAppsHook
-, python3Packages, gnome3, gtk3, gsettings-desktop-schemas, gobject-introspection }:
+{ stdenv, fetchFromGitHub, wrapGAppsHook, gettext
+, python3Packages, gnome3, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
   inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
@@ -16,25 +16,37 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    intltool wrapGAppsHook
+    glib
     gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
+    gtk3
+    gdk-pixbuf
   ];
+
+  # The optional tagpy dependency (for editing metadata) is not yet
+  # included because it's difficult to build.
+  pythonPath = [
+    dbus-python
+    mpd2
+    pygobject3
+    setuptools
+  ];
+
+  # Otherwise the setup hook for gobject-introspection is not run:
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   postPatch = ''
     # Remove "Local MPD" tab which is not suitable for NixOS.
     sed -i '/localmpd/d' sonata/consts.py
   '';
-
-  propagatedBuildInputs = [
-    gobject-introspection gtk3 pygobject3 setuptools
-  ];
-
-  # The optional tagpy dependency (for editing metadata) is not yet
-  # included because it's difficult to build.
-  pythonPath = [ dbus-python pygobject3 mpd2 ];
 
   meta = {
     description = "An elegant client for the Music Player Daemon";

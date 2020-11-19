@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "ecdsa";
-  version = "0.14.1";
+  version = "0.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "64c613005f13efec6541bb0a33290d0d03c27abab5f15fbab20fb0ee162bdd8e";
+    sha256 = "8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277";
   };
 
   propagatedBuildInputs = [ six ];
@@ -22,7 +22,6 @@ buildPythonPackage rec {
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
     license = licenses.mit;
-    maintainers = with maintainers; [ aszlig ];
   };
 
 }

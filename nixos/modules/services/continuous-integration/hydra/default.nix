@@ -37,8 +37,6 @@ let
 
   haveLocalDB = cfg.dbi == localDB;
 
-  inherit (config.system) stateVersion;
-
   hydra-package =
   let
     makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set \"${key}\" \"${value}\"") hydraEnv);
@@ -96,7 +94,8 @@ in
 
       package = mkOption {
         type = types.package;
-        defaultText = "pkgs.hydra";
+        default = pkgs.hydra-unstable;
+        defaultText = "pkgs.hydra-unstable";
         description = "The Hydra package.";
       };
 
@@ -224,34 +223,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    warnings = optional (cfg.package.migration or false) ''
-      You're currently deploying an older version of Hydra which is needed to
-      make some required database changes[1]. As soon as this is done, it's recommended
-      to run `hydra-backfill-ids` and set `services.hydra.package` to `pkgs.hydra-unstable`
-      after that.
-
-      [1] https://github.com/NixOS/hydra/pull/711
-    '';
-
-    services.hydra.package = with pkgs;
-      mkDefault (
-        if pkgs ? hydra
-          then throw ''
-            The Hydra package doesn't exist anymore in `nixpkgs`! It probably exists
-            due to an overlay. To upgrade Hydra, you need to take two steps as some
-            bigger changes in the database schema were implemented recently[1]. You first
-            need to deploy `pkgs.hydra-migration`, run `hydra-backfill-ids` on the server
-            and then deploy `pkgs.hydra-unstable`.
-
-            If you want to use `pkgs.hydra` from your overlay, please set `services.hydra.package`
-            explicitly to `pkgs.hydra` and make sure you know what you're doing.
-
-            [1] https://github.com/NixOS/hydra/pull/711
-          ''
-        else if versionOlder stateVersion "20.03" then hydra-migration
-        else hydra-unstable
-      );
 
     users.groups.hydra = {
       gid = config.ids.gids.hydra;

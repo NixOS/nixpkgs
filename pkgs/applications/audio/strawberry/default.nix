@@ -30,18 +30,18 @@
 , withGstreamer ? true
 , gst_all_1 ? null
 , withVlc ? true
-, vlc ? null
+, libvlc ? null
 }:
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.6.10";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "0qf510hlxbndqzwq62mdzfclqxr3caf1a34kd770k84x8vrb4pld";
+    sha256 = "0v3rbpaz6pqkam0cj86ydq8gc2rhas8mhwgvy31djvxng9nv3h5j";
   };
 
   buildInputs = [
@@ -75,7 +75,7 @@ mkDerivation rec {
     gst-plugins-good
     gst-plugins-ugly
   ])
-  ++ lib.optional withVlc vlc;
+  ++ lib.optional withVlc libvlc;
 
   nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
 

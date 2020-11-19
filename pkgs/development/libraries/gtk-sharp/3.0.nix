@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, mono
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, mono
 , glib
 , pango
 , gtk3
@@ -14,27 +18,30 @@
 , monoDLLFixer
 }:
 
-stdenv.mkDerivation {
-  name = "gtk-sharp-2.99.3";
+stdenv.mkDerivation rec {
+  pname = "gtk-sharp";
+  version = "2.99.3";
 
   builder = ./builder.sh;
   src = fetchurl {
-    #"mirror://gnome/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.tar.xz";
-    url = "http://ftp.gnome.org/pub/GNOME/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "18n3l9zcldyvn4lwi8izd62307mkhz873039nl6awrv285qzah34";
   };
-
-  # patch bad usage of glib, which wasn't tolerated anymore
-  # prePatch = ''
-  #   for f in glib/glue/{thread,list,slist}.c; do
-  #     sed -i 's,#include <glib/.*\.h>,#include <glib.h>,g' "$f"
-  #   done
-  # '';
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     mono glib pango gtk3 GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
+  ];
+
+  patches = [
+    # Fixes MONO_PROFILE_ENTER_LEAVE undeclared when compiling against newer versions of mono.
+    # @see https://github.com/mono/gtk-sharp/pull/266
+    (fetchpatch {
+      name = "MONO_PROFILE_ENTER_LEAVE.patch";
+      url = "https://github.com/mono/gtk-sharp/commit/401df51bc461de93c1a78b6a7a0d5adc63cf186c.patch";
+      sha256 = "0hrkcr5a7wkixnyp60v4d6j3arsb63h54rd30lc5ajfjb3p92kcf";
+    })
   ];
 
   dontStrip = true;
@@ -47,6 +54,5 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
-    broken = true; # 2018-09-21, build has failed since 2018-04-28
   };
 }

@@ -22,8 +22,6 @@ buildGoPackage rec {
     sha256 = "0g6nvgqjabprcl9z5ci5frhbam1dzq978h1d6aanf8vvzslfgdpq";
   };
 
-  goDeps = ./deps.nix;
-
   postInstall = with stdenv; let
     binPath = lib.makeBinPath [ mercurial git ];
   in ''

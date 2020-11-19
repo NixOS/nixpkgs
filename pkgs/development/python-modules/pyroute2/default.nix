@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.5.12";
+  version = "0.5.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lry042qsamdzyw6zpmdld0v14g6cl05jsr9qdb7h5wnahf80mq1";
+    sha256 = "774c5ecf05fe40f0f601a7ab33c19ca0b24f00bf4a094e58deaa5333b7ca49b5";
   };
 
   # requires root priviledges

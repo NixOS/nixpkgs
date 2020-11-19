@@ -10,7 +10,7 @@
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
-, enableConvert        ? true, ffmpeg ? null
+, enableConvert        ? true, ffmpeg_3 ? null
 , enableDiscogs        ? true
 , enableEmbyupdate     ? true
 , enableFetchart       ? true
@@ -31,6 +31,7 @@
 , enableAlternatives   ? false
 , enableCheck          ? false, liboggz ? null
 , enableCopyArtifacts  ? false
+, enableExtraFiles     ? false
 
 , bashInteractive, bash-completion
 }:
@@ -39,7 +40,7 @@ assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableCheck       -> flac != null && mp3val != null && liboggz != null;
-assert enableConvert     -> ffmpeg != null;
+assert enableConvert     -> ffmpeg_3 != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
 assert enableGmusic      -> pythonPackages.gmusicapi      != null;
@@ -100,6 +101,7 @@ let
   externalTestArgs.beets = (beets.override {
     enableAlternatives = false;
     enableCopyArtifacts = false;
+    enableExtraFiles = false;
   }).overrideAttrs (stdenv.lib.const {
     doInstallCheck = false;
   });
@@ -110,6 +112,7 @@ let
     alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
     check = callPackage ./check-plugin.nix pluginArgs;
     copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
+    extrafiles = callPackage ./extrafiles-plugin.nix pluginArgs;
   };
 
 in pythonPackages.buildPythonApplication rec {
@@ -146,7 +149,7 @@ in pythonPackages.buildPythonApplication rec {
               || enableAcousticbrainz)
                                     pythonPackages.requests
     ++ optional enableCheck         plugins.check
-    ++ optional enableConvert       ffmpeg
+    ++ optional enableConvert       ffmpeg_3
     ++ optional enableDiscogs       pythonPackages.discogs_client
     ++ optional enableGmusic        pythonPackages.gmusicapi
     ++ optional enableKeyfinder     keyfinder-cli
@@ -156,7 +159,9 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableThumbnails    pythonPackages.pyxdg
     ++ optional enableWeb           pythonPackages.flask
     ++ optional enableAlternatives  plugins.alternatives
-    ++ optional enableCopyArtifacts plugins.copyartifacts;
+    ++ optional enableCopyArtifacts plugins.copyartifacts
+    ++ optional enableExtraFiles    plugins.extrafiles
+  ;
 
   buildInputs = [
     imagemagick
@@ -185,6 +190,16 @@ in pythonPackages.buildPythonApplication rec {
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
     ./mutagen-1.43.patch
+    (fetchpatch {
+      # Fixes failing testcases around the werkzeug component; can dropped after 1.4.9
+      url = "https://github.com/beetbox/beets/commit/d43d54e21cde97f57f19486925ab56b419254cc8.patch";
+      sha256 = "13n2gzmcgfi0m2ycl2r1hpczgksplnkc3y6b66vg57rx5y8nnv5c";
+    })
+
+    # Fixes 548 tests due to breaking changes to the ast module
+    # https://github.com/beetbox/beets/pull/3621
+    # Can be dropped after 1.4.9
+    ./compatibility-with-breaking-changes-to-the-ast-module.patch
   ];
 
   postPatch = ''
@@ -200,7 +215,7 @@ in pythonPackages.buildPythonApplication rec {
       s,"mp3val","${mp3val}/bin/mp3val",
     }' beetsplug/badfiles.py
   '' + optionalString enableConvert ''
-    sed -i -e 's,\(util\.command_output(\)\([^)]\+\)),\1[b"${ffmpeg.bin}/bin/ffmpeg" if args[0] == b"ffmpeg" else args[0]] + \2[1:]),' beetsplug/convert.py
+    sed -i -e 's,\(util\.command_output(\)\([^)]\+\)),\1[b"${ffmpeg_3.bin}/bin/ffmpeg" if args[0] == b"ffmpeg" else args[0]] + \2[1:]),' beetsplug/convert.py
   '' + optionalString enableReplaygain ''
     sed -i -re '
       s!^( *cmd *= *b?['\'''"])(bs1770gain['\'''"])!\1${bs1770gain}/bin/\2!

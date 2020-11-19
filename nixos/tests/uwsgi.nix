@@ -33,6 +33,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("uwsgi.service")
       machine.wait_for_open_port(8000)
-      assert "Hello World" in machine.succeed("curl -v 127.0.0.1:8000")
+      assert "Hello World" in machine.succeed("curl -fv 127.0.0.1:8000")
     '';
 })

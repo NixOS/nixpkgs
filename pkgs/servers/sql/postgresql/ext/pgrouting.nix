@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pgrouting";
-  version = "3.0.0";
+  version = "3.1.0";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ postgresql boost ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "pgRouting";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "101lyhhfcv3chrp2h5q04l155hr6wvx427cv1kgd4ryzk88wxx5i";
+    sha256 = "0sdyq0a98snmcq6g6mgmadlz6cgvacivv34943azhnzspa3iy409";
   };
 
   installPhase = ''

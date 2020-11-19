@@ -10,6 +10,7 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     shell = "${pkgs.bash}/bin/bash";
+    inherit (config.boot) systemdExecutable;
     isExecutable = true;
     inherit (config.nix) readOnlyStore;
     inherit useHostResolvConf;
@@ -72,6 +73,15 @@ in
         '';
       };
 
+      systemdExecutable = mkOption {
+        default = "systemd";
+        type = types.str;
+        description = ''
+          The program to execute to start systemd. Typically
+          <literal>systemd</literal>, which will find systemd in the
+          PATH.
+        '';
+      };
     };
 
   };

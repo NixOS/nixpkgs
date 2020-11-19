@@ -152,6 +152,14 @@ let
       """)
       print(y[0]['test'])
     '';
+
+    python2NoLibs = writePython2 "test_python2_no_libs" {} ''
+      print("success")
+    '';
+
+    python3NoLibs = writePython3 "test_python3_no_libs" {} ''
+      print("success")
+    '';
   };
 
 

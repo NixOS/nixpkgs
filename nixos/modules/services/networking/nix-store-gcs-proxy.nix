@@ -42,9 +42,9 @@ in
       description = "A HTTP nix store that proxies requests to Google Storage";
       wantedBy = ["multi-user.target"];
 
+      startLimitIntervalSec = 10;
       serviceConfig = {
         RestartSec = 5;
-        StartLimitInterval = 10;
         ExecStart = ''
           ${pkgs.nix-store-gcs-proxy}/bin/nix-store-gcs-proxy \
             --bucket-name ${cfg.bucketName} \

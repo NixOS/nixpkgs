@@ -2,21 +2,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
-    rev = "582ce09f216d4812f7d152f6eedf0b034fc4dbbd";
-    sha256 = "12hlqgh74z8vmd7fkxh4vk3dqp8hlhzkxnbyywk6nphi562n6w5w";
+    rev = "v${version}";
+    sha256 = "sha256-QpUhUE65/IuT/VenziPX6z+CbJswbPPIv/ZnTthZpEU=";
   };
 
-  cargoSha256 = "0yr8vwlpfsg47sg0032yrsdcgxyky0hy4963zkh0pmjykbyqkb3h";
+  cargoSha256 = "sha256-iUzVd4XtD+41yTV/BmqWLenzAUNPfS7vIHm1KfuPe9A=";
+
+  RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
-  postInstall = ''
-    wrapProgram $out/bin/evcxr --prefix PATH : ${stdenv.lib.makeBinPath [ cargo gcc ]}
+  postInstall = let
+    wrap = exe: ''
+      wrapProgram $out/bin/${exe} \
+        --prefix PATH : ${stdenv.lib.makeBinPath [ cargo gcc ]} \
+        --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
+    '';
+  in ''
+    ${wrap "evcxr"}
+    ${wrap "evcxr_jupyter"}
     rm $out/bin/testing_runtime
   '';
 
@@ -25,6 +34,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/google/evcxr";
     license = licenses.asl20;
     maintainers = with maintainers; [ protoben ma27 ];
-    platforms = platforms.all;
   };
 }

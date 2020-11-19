@@ -8,12 +8,8 @@ let
   mkTlpConfig = tlpConfig: generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {
       mkValueString = val:
-        if isInt val then toString val
-        else if isString val then val
-        else if true == val then "1"
-        else if false == val then "0"
-        else if isList val then "\"" + (concatStringsSep " " val) + "\""
-        else err "invalid value provided to mkTlpConfig:" (toString val);
+        if isList val then "\"" + (toString val) + "\""
+        else toString val;
     } "=";
   } tlpConfig;
 in
@@ -27,10 +23,24 @@ in
         description = "Whether to enable the TLP power management daemon.";
       };
 
+      settings = mkOption {type = with types; attrsOf (oneOf [bool int float str (listOf str)]);
+        default = {};
+        example = {
+          SATA_LINKPWR_ON_BAT = "med_power_with_dipm";
+          USB_BLACKLIST_PHONE = 1;
+        };
+        description = ''
+          Options passed to TLP. See https://linrunner.de/tlp for all supported options..
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Additional configuration variables for TLP";
+        description = ''
+          Verbatim additional configuration variables for TLP.
+          DEPRECATED: use services.tlp.settings instead.
+        '';
       };
     };
   };
@@ -39,8 +49,20 @@ in
   config = mkIf cfg.enable {
     boot.kernelModules = [ "msr" ];
 
+    warnings = optional (cfg.extraConfig != "") ''
+      Using config.services.tlp.extraConfig is deprecated and will become unsupported in a future release. Use config.services.tlp.settings instead.
+    '';
+
+    assertions = [{
+      assertion = cfg.enable -> config.powerManagement.scsiLinkPolicy == null;
+      message = ''
+        `services.tlp.enable` and `config.powerManagement.scsiLinkPolicy` cannot be set both.
+        Set `services.tlp.settings.SATA_LINKPWR_ON_AC` and `services.tlp.settings.SATA_LINKPWR_ON_BAT` instead.
+      '';
+    }];
+
     environment.etc = {
-      "tlp.conf".text = cfg.extraConfig;
+      "tlp.conf".text = (mkTlpConfig cfg.settings) + cfg.extraConfig;
     } // optionalAttrs enableRDW {
       "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
         "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
@@ -48,18 +70,25 @@ in
 
     environment.systemPackages = [ tlp ];
 
-    # FIXME: When the config is parametrized we need to move these into a
-    # conditional on the relevant options being enabled.
-    powerManagement = {
-      scsiLinkPolicy = null;
-      cpuFreqGovernor = null;
-      cpufreq.max = null;
-      cpufreq.min = null;
+
+    services.tlp.settings = let
+      cfg = config.powerManagement;
+      maybeDefault = val: lib.mkIf (val != null) (lib.mkDefault val);
+    in {
+      CPU_SCALING_GOVERNOR_ON_AC = maybeDefault cfg.cpuFreqGovernor;
+      CPU_SCALING_GOVERNOR_ON_BAT = maybeDefault cfg.cpuFreqGovernor;
+      CPU_SCALING_MIN_FREQ_ON_AC = maybeDefault cfg.cpufreq.min;
+      CPU_SCALING_MAX_FREQ_ON_AC = maybeDefault cfg.cpufreq.max;
+      CPU_SCALING_MIN_FREQ_ON_BAT = maybeDefault cfg.cpufreq.min;
+      CPU_SCALING_MAX_FREQ_ON_BAT = maybeDefault cfg.cpufreq.max;
     };
 
     services.udev.packages = [ tlp ];
 
     systemd = {
+      # use native tlp instead because it can also differentiate between AC/BAT
+      services.cpufreq.enable = false;
+
       packages = [ tlp ];
       # XXX: These must always be disabled/masked according to [1].
       #

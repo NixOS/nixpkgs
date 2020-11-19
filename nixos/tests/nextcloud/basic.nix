@@ -26,12 +26,13 @@ in {
       };
     };
 
-    nextcloud = { config, pkgs, ... }: {
+    nextcloud = { config, pkgs, ... }: let
+      cfg = config;
+    in {
       networking.firewall.allowedTCPPorts = [ 80 ];
 
       services.nextcloud = {
         enable = true;
-        nginx.enable = true;
         hostName = "nextcloud";
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
@@ -42,6 +43,8 @@ in {
           startAt = "20:00";
         };
       };
+
+      environment.systemPackages = [ cfg.services.nextcloud.occ ];
     };
   };
 
@@ -67,6 +70,8 @@ in {
   in ''
     start_all()
     nextcloud.wait_for_unit("multi-user.target")
+    # This is just to ensure the nextcloud-occ program is working
+    nextcloud.succeed("nextcloud-occ status")
     nextcloud.succeed("curl -sSf http://nextcloud/login")
     nextcloud.succeed(
         "${withRcloneEnv} ${copySharedFile}"

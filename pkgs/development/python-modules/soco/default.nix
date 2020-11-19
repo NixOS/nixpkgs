@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, xmltodict, requests
+, toml
 
 # Test dependencies
 , pytest, pytestcov, coveralls, pylint, flake8, graphviz, mock, sphinx
@@ -14,13 +15,7 @@ buildPythonPackage rec {
     sha256 = "0dgca286vhrabm4r4jj545k895z6w2c70ars06vrjhf9cpgg7qck";
   };
 
-  postPatch = ''
-    # https://github.com/SoCo/SoCo/pull/670
-    substituteInPlace requirements-dev.txt \
-      --replace "pytest-cov>=2.4.0,<2.6" "pytest-cov>=2.4.0"
-  '';
-
-  propagatedBuildInputs = [ xmltodict requests ];
+  propagatedBuildInputs = [ xmltodict requests toml ];
   checkInputs = [
     pytest pytestcov coveralls pylint flake8 graphviz mock sphinx
     sphinx_rtd_theme

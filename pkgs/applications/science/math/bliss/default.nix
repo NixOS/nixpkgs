@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin $out/share/doc/bliss $out/lib $out/include/bliss
-    mv bliss $out/bin 
+    mv bliss $out/bin
     mv html/* COPYING* $out/share/doc/bliss
     mv *.a $out/lib
     mv *.h *.hh $out/include/bliss
   '';
 
   meta = with stdenv.lib; {
-    description = "bliss is an open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs.";
+    description = "An open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
     homepage = "http://www.tcs.hut.fi/Software/bliss/";
     license = licenses.lgpl3;
     platforms = [ "i686-linux" "x86_64-linux" ];

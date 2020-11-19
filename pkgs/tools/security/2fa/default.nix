@@ -16,7 +16,6 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
-    platforms = platforms.all;
     maintainers = with maintainers; [ rvolosatovs ];
     license = licenses.bsd3;
   };

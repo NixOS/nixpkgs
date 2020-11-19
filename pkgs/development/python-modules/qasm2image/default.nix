@@ -48,5 +48,6 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [
       pandaman
     ];
+    broken = true;  # last update Oct 2018, failed tests don't error the build, and out-of-date with latest python3Packages.qiskit
   };
 }

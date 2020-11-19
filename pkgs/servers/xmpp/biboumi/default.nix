@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "biboumi";
-  version = "8.3";
+  version = "8.5";
 
   src = fetchurl {
     url = "https://git.louiz.org/biboumi/snapshot/biboumi-${version}.tar.xz";
-    sha256 = "0896f52nh8vd0idkdznv3gj6wqh1nqhjbwv0m560f0h62f01vm7k";
+    sha256 = "0rn9p99iqdyvxjzjq9w0ra7pkk0mngjy65nlg3hqfdw8kq9mv5qf";
   };
 
   louiz_catch = fetchgit {
@@ -24,10 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
-    substituteInPlace unit/biboumi.service.cmake --replace /bin/kill ${coreutils}/bin/kill
     cp $louiz_catch/single_include/catch.hpp tests/
-    # echo "policy_directory=$out/etc/biboumi" >> conf/biboumi.cfg
-    # TODO include conf/biboumi.cfg as example somewhere
   '';
 
   enableParallelBuilding = true;

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.8.2";
+  version = "4.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05fd825eb01c290877657a56df4c6e4c311b3965bda790c613a3d6fb01a5462a";
+    sha256 = "84729e322ad1d5b4d25f805bfa05b902dd96450f43842c4e99067d5e1369eb25";
   };
 
   checkInputs = [ pytest ];

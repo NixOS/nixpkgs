@@ -1,9 +1,9 @@
 { stdenv, fetchurl, SDL2, SDL2_ttf, SDL2_image, SDL2_mixer, pkgconfig, lua, zlib, unzip }:
 
 let
-  version = "3.3.1";
+  version = "3.3.2";
 
-  # I took several games at random from http://instead.syscall.ru/games/
+  # I took several games at random from https://instead.syscall.ru/games/
   games = [
     (fetchurl {
       url = "http://instead-games.googlecode.com/files/instead-apple-day-1.2.zip";
@@ -33,13 +33,18 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
-    sha256 = "10bppcdjnd0all71l5akdvy7fx0c8s8x0za9qxszs8cjmlv9z1q0";
+    sha256 = "u5j2kDKRvMQPsG8iA6uOBScuyE/e1BJIK2+qVL6jqQs=";
   };
 
   NIX_LDFLAGS = "-llua -lgcc_s";
 
   nativeBuildInputs = [ pkgconfig unzip ];
   buildInputs = [ SDL2 SDL2_ttf SDL2_image SDL2_mixer lua zlib ];
+
+  postPatch = ''
+    substituteInPlace configure.sh \
+      --replace "/tmp/sdl-test" $(mktemp)
+  '';
 
   configurePhase = ''
     { echo 2; echo $out; } | ./configure.sh
@@ -59,7 +64,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple text adventure interpreter for Unix and Windows";
-    homepage = "http://instead.syscall.ru/";
+    homepage = "https://instead.syscall.ru/";
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with maintainers; [ pSub ];

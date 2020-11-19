@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, nss, nspr, gconf, fontconfig, freetype
+{ stdenv, lib, fetchurl, glib, nss, nspr, gconf, fontconfig, freetype
 , pango , cairo, libX11 , libXi, libXcursor, libXext, libXfixes
 , libXrender, libXcomposite , alsaLib, libXdamage, libXtst, libXrandr
 , expat, libcap, systemd , dbus, gtk2 , gdk-pixbuf, libnotify
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     cp -v {encryptr-bin,icudtl.dat,nw.pak} $out/bin
     mv -v $out/bin/encryptr{-bin,}
     cp -v lib* $out/lib
-    ln -sv ${systemd.lib}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -sv ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
              --set-rpath $out/lib:${rpath} \

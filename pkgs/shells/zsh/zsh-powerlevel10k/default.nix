@@ -3,21 +3,35 @@
 # To make use of this derivation, use
 # `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";`
 
+let
+  # match gitstatus version with given `gitstatus_version`:
+  # https://github.com/romkatv/powerlevel10k/blob/master/gitstatus/build.info
+  gitstatus = pkgs.gitAndTools.gitstatus.overrideAttrs (oldAtttrs: rec {
+    version = "1.2.0";
+
+    src = fetchFromGitHub {
+      owner = "romkatv";
+      repo = "gitstatus";
+      rev = "v${version}";
+      sha256 = "0xi5ab0rsj6xs4vqgn2j5rih1nncghr83yn395mk1is1f4bsmp0s";
+    };
+  });
+in
 stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
     rev = "v${version}";
-    sha256 = "1z6abvp642n40biya88n86ff1wiry00dlwawqwxp7q5ds55jhbv1";
+    sha256 = "0w5rv7z47nys3x113mdddpb2pf1d9pmz9myh4xjzrcy4hp4qv421";
   };
 
   patches = [
     (substituteAll {
       src = ./gitstatusd.patch;
-      gitstatusdPath = "${pkgs.gitAndTools.gitstatus}/bin/gitstatusd";
+      gitstatusdPath = "${gitstatus}/bin/gitstatusd";
     })
   ];
 

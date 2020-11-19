@@ -1,12 +1,12 @@
 {stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.6";
+  version = "1.6.8";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "1xrj7vy05nc6bky4wnrmrbxfibvk5vq4dp2fwk4jk4amzbn0x3wh";
+    sha256 = "0fbrrn7mkhv5xci4cffxxb8qzr9c0n3y58jymq2aqlpzyq8klfz2";
   };
 
   configureFlags = [
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-Wno-error";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error";
 
   meta = with stdenv.lib; {
     description = "A distributed memory object caching system";

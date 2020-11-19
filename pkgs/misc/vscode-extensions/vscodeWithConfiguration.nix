@@ -1,22 +1,22 @@
 # wrapper over vscode to control extensions per project (extensions folder will be created in execution path)
-{ lib                             
-, writeShellScriptBin             
-, extensionsFromVscodeMarketplace 
+{ lib
+, writeShellScriptBin
+, extensionsFromVscodeMarketplace
 , vscodeDefault
 }:
 ## User input
-{ vscode ? vscodeDefault                          
+{ vscode ? vscodeDefault
 # extensions to be symlinked into the project's extensions folder
-, nixExtensions        ? []                   
+, nixExtensions        ? []
 # extensions to be copied into the project's extensions folder
-, mutableExtensions    ? []        
-, vscodeExtsFolderName ? ".vscode-exts"        
+, mutableExtensions    ? []
+, vscodeExtsFolderName ? ".vscode-exts"
 , user-data-dir ? ''"''${TMP}vscodeWithConfiguration/vscode-data-dir"''
 }:
-let 
+let
   nixExtsDrvs = extensionsFromVscodeMarketplace nixExtensions;
   mutExtsDrvs = extensionsFromVscodeMarketplace mutableExtensions;
-  mutableExtsPaths = lib.forEach mutExtsDrvs ( e: 
+  mutableExtsPaths = lib.forEach mutExtsDrvs ( e:
   {
     origin = ''${e}/share/vscode/extensions/${e.vscodeExtUniqueId}'';
     target = ''${vscodeExtsFolderName}/${e.vscodeExtUniqueId}-${(lib.findSingle (ext: ''${ext.publisher}.${ext.name}'' == e.vscodeExtUniqueId) "" "m" mutableExtensions ).version}'';
@@ -39,16 +39,16 @@ let
         cp -a ${ePath.origin} ${ePath.target}
         chmod -R u+rwx ${ePath.target}
       fi
-      '') mutableExtsPaths} 
+      '') mutableExtsPaths}
   '';
 in
   writeShellScriptBin "code" ''
-    if ! [[ "$@" =~ "--list-extension" ]]; then 
-      mkdir -p "${vscodeExtsFolderName}" 
+    if ! [[ "$@" =~ "--list-extension" ]]; then
+      mkdir -p "${vscodeExtsFolderName}"
       ${rmExtensions}
       ${cpExtensions}
     fi
-    ${vscode}/bin/code --extensions-dir "${vscodeExtsFolderName}" ${ 
+    ${vscode}/bin/code --extensions-dir "${vscodeExtsFolderName}" ${
       lib.optionalString (user-data-dir != "") ''--user-data-dir ${user-data-dir }''
       } "$@"
   ''

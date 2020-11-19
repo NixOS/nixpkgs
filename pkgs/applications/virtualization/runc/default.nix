@@ -14,13 +14,13 @@
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc90";
+  version = "1.0.0-rc92";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
+    sha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
@@ -30,7 +30,6 @@ buildGoPackage rec {
 
   buildInputs = [ libselinux libseccomp libapparmor apparmor-parser ];
 
-  # these will be the default in the next release
   makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" "BUILDTAGS+=selinux" ];
 
   buildPhase = ''
@@ -46,7 +45,7 @@ buildGoPackage rec {
     installManPage man/*/*.[1-9]
   '';
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, which, autoreconfHook
-, rep-gtk, pango, gdk-pixbuf
+, rep-gtk, pango, gdk-pixbuf-xlib
 , imlib, gettext, texinfo
 , libXinerama, libXrandr, libXtst, libICE, libSM
 , makeWrapper
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ which
-    rep-gtk pango gdk-pixbuf imlib gettext texinfo
+    rep-gtk pango gdk-pixbuf-xlib imlib gettext texinfo
     libXinerama libXrandr libXtst libICE libSM
     makeWrapper ];
 

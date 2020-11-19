@@ -1,34 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
-, google_auth, protobuf, googleapis_common_protos, requests, setuptools, grpcio, mock }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, google_auth, protobuf
+, googleapis_common_protos, requests, grpcio, mock, pytest, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "1.16.0";
-  disabled = isPy27; # google namespace no longer works on python2
+  version = "1.22.4";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qh30ji399gngv2j1czzvi3h0mgx3lfdx2n8qp8vii7ihyh65scj";
+    sha256 = "4a9d7ac2527a9e298eebb580a5e24e7e41d6afd97010848dd0f306cae198ec1a";
   };
 
-  propagatedBuildInputs = [
-    googleapis_common_protos protobuf
-    google_auth requests setuptools grpcio
-  ];
+  propagatedBuildInputs =
+    [ googleapis_common_protos protobuf google_auth requests grpcio ];
 
-  # requires nox
-  doCheck = false;
-  checkInputs = [ mock ];
+  checkInputs = [ google_auth mock protobuf pytest-asyncio pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "google.auth"
-    "google.protobuf"
-    "google.api"
-  ];
+  # prevent google directory from shadowing google imports
+  preCheck = ''
+    rm -r google
+  '';
+
+  pythonImportsCheck = [ "google.auth" "google.protobuf" "google.api" ];
 
   meta = with lib; {
-    description = "This library is not meant to stand-alone. Instead it defines common helpers used by all Google API clients.";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    description = "Core Library for Google Client Libraries";
+    longDescription = ''
+      This library is not meant to stand-alone. Instead it defines common
+      helpers used by all Google API clients.
+    '';
+    homepage = "https://github.com/googleapis/python-api-core";
+    changelog =
+      "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

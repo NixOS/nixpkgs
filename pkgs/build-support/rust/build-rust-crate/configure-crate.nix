@@ -1,5 +1,6 @@
-{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs }:
-{ build
+{ lib, stdenv, rust, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
+{
+  build
 , buildDependencies
 , colors
 , completeBuildDeps
@@ -16,7 +17,6 @@
 , libName
 , libPath
 , release
-, target_os
 , verbose
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
@@ -30,6 +30,9 @@ let version_ = lib.splitString "-" crateVersion;
     optLevel = if release then 3 else 0;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
+    envFeatures = lib.concatStringsSep " " (
+      map (f: lib.replaceChars ["-"] ["_"] (lib.toUpper f)) crateFeatures
+    );
 in ''
   ${echo_colored colors}
   ${noisily colors verbose}
@@ -39,7 +42,7 @@ in ''
   noisily cd "${workspace_member}"
 ''}
   ${lib.optionalString (workspace_member == null) ''
-  echo_colored "Searching for matching Cargo.toml (${crateName})" 
+  echo_colored "Searching for matching Cargo.toml (${crateName})"
   local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
   if [ -z "$cargo_toml_dir" ]; then
     echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
@@ -49,7 +52,7 @@ in ''
 ''}
 
   runHook preConfigure
- 
+
   symlink_dependency() {
     # $1 is the nix-store path of a dependency
     # $2 is the target path
@@ -120,8 +123,8 @@ in ''
   export CARGO_PKG_AUTHORS="${authors}"
   export CARGO_PKG_DESCRIPTION="${crateDescription}"
 
-  export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}
-  export CARGO_CFG_TARGET_OS=${target_os}
+  export CARGO_CFG_TARGET_ARCH=${rust.toTargetArch stdenv.hostPlatform}
+  export CARGO_CFG_TARGET_OS=${rust.toTargetOs stdenv.hostPlatform}
   export CARGO_CFG_TARGET_FAMILY="unix"
   export CARGO_CFG_UNIX=1
   export CARGO_CFG_TARGET_ENV="gnu"
@@ -132,8 +135,8 @@ in ''
   export CARGO_MANIFEST_DIR=$(pwd)
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
-  export TARGET="${stdenv.hostPlatform.config}"
-  export HOST="${stdenv.hostPlatform.config}"
+  export TARGET="${rust.toRustTarget stdenv.hostPlatform}"
+  export HOST="${rust.toRustTarget stdenv.buildPlatform}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
   export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
@@ -161,14 +164,24 @@ in ''
        EXTRA_BUILD_FLAGS="$EXTRA_BUILD_FLAGS $(tr '\n' ' ' < target/link.build)"
      fi
      noisily rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
-       ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
+       ${mkRustcFeatureArgs crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
        -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
 
      mkdir -p target/build/${crateName}.out
      export RUST_BACKTRACE=1
      BUILD_OUT_DIR="-L $OUT_DIR"
      mkdir -p $OUT_DIR
-     target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+
+     (
+       # Features should be set as environment variable for build scripts:
+       # https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
+       for feature in ${envFeatures}; do
+         export CARGO_FEATURE_$feature=1
+       done
+
+       target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+     )
+
      set +e
      EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
      EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')

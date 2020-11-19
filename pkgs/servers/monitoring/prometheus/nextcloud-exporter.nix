@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage, nixosTests }:
 
 buildGoPackage rec {
   pname = "prometheus-nextcloud-exporter";
@@ -17,8 +17,10 @@ buildGoPackage rec {
 
   doCheck = true;
 
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) nextcloud; };
+
   meta = with lib; {
-    description = "Prometheus exporter for Nextcloud servers.";
+    description = "Prometheus exporter for Nextcloud servers";
     homepage = "https://github.com/xperimental/nextcloud-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ willibutz ];

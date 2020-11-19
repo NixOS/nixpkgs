@@ -3,6 +3,7 @@
 , meson
 , ninja
 , pkgconfig
+, python3
 , gettext
 , gobject-introspection
 , gst-plugins-base
@@ -11,14 +12,27 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.16.2";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0vn23nxwvs96g7gcxw5zbnw23hkhky8a8r42wq68411vgf1s41yy";
+    sha256 = "03y7nyjaagis7mmg8vbhxmnc1v9xf2y3cab2s3q2vgsc0l8r7l9a";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
+
+  patches = [
+    # To use split outputs, we need this so double prefix won't be used in the
+    # pkg-config files. Hopefully, this won't be needed on the next release,
+    # _if_
+    # https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/merge_requests/1
+    # will be merged. For the current release, this merge request won't apply.
+    ./fix_pkgconfig_includedir.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -26,6 +40,10 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     pkgconfig
+    python3
+
+    # documentation
+    # TODO add hotdoc here
   ];
 
   buildInputs = [
@@ -35,7 +53,13 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   meta = with stdenv.lib; {
     description = "GStreamer RTSP server";

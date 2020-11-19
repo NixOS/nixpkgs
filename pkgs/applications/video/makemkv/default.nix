@@ -1,23 +1,33 @@
-{ stdenv, mkDerivation, fetchurl, autoPatchelfHook
-, ffmpeg, openssl, qtbase, zlib, pkgconfig
+{ stdenv
+, mkDerivation
+, fetchurl
+, autoPatchelfHook
+, pkg-config
+, ffmpeg_3
+, openssl
+, qtbase
+, zlib
+
+, withJava ? true
+, jre_headless
 }:
 
 let
-  version = "1.15.1";
+  version = "1.15.3";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "0c9661sdlld8b1g2pk8lbn3gz7cikh9bjqss11ffkriwii1x9fw0";
+    hash = "sha256-Y23aetnwqLGaBIgJ/AP0oCrh8P5jpVrcMJgmc0Oe+i8=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "0rm1zykqagy2g8hb7pjrc6akdsym8pgdnx66hnna161jbah3sssy";
+    hash = "sha256-Qruq9YKAaNF1pDtOhptP95UjFL2NA4EuROR4v6XZHEw=";
   };
 in mkDerivation {
   pname = "makemkv";
@@ -27,9 +37,16 @@ in mkDerivation {
 
   sourceRoot = "makemkv-oss-${version}";
 
-  nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
+  nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
-  buildInputs = [ ffmpeg openssl qtbase zlib ];
+  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+
+  qtWrapperArgs =
+    let
+      binPath = stdenv.lib.makeBinPath [ jre_headless ];
+    in stdenv.lib.optionals withJava [
+      ''--prefix PATH : ${binPath}''
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -55,6 +72,6 @@ in mkDerivation {
     license = licenses.unfree;
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.titanous ];
+    maintainers = with maintainers; [ danieldk titanous ];
   };
 }

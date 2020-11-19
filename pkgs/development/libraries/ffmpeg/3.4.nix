@@ -6,7 +6,7 @@
 
 callPackage ./generic.nix (rec {
   version = branch;
-  branch = "3.4.7";
-  sha256 = "0hj91gjps92f4w3yyqss89yrs6s75574hbj5gz9g5affd6294yhc";
+  branch = "3.4.8";
+  sha256 = "1d0r4yja2dkkyhdwx1migq46gsrcbajiv66263a5sq5bfr9dqkch";
   darwinFrameworks = [ Cocoa CoreMedia ];
 } // args)

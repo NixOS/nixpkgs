@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pcl-1.11.0";
+  name = "pcl-1.11.1";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = name;
-    sha256 = "0nr3j71gh1v8x6wjr7a7xyr0438sw7vf621a5kbw4lmsxbj55k8g";
+    sha256 = "1cli2rxqsk6nxp36p5mgvvahjz8hm4fb68yi8cf9nw4ygbcvcwb1";
   };
 
   enableParallelBuilding = true;
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://pointclouds.org/";
+    homepage = "https://pointclouds.org/";
+    broken = stdenv.lib.versionAtLeast qtbase.version "5.15";
     description = "Open project for 2D/3D image and point cloud processing";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric];

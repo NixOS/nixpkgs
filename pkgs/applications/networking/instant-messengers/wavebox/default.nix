@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
     alsaLib gtk3 nss
   ];
 
-  runtimeDependencies = [ udev.lib libnotify ];
+  runtimeDependencies = [ (getLib udev) libnotify ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/wavebox

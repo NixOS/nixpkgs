@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "3.36";
+  version = "3.38.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1nqn4a6dr4l1fpzj3mv4swhpnvhjcqlwsyhwm59sdzqgdfx4hbwr";
+    hash = "sha256-x0XdHebhog8ZorB6Q4uO98yiNaaqc0ENt/E3sCHpsqI=";
   };
 
   doCheck = true;
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

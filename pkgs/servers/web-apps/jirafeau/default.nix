@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "mojo42";
     repo = "Jirafeau";
-    rev = "${version}";
+    rev = version;
     sha256 = "09gq5zhynygpqj0skq7ifnn9yjjg7qnc6kjvaas7f53av2707z4c";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Jirafeau is a web site permitting to upload a file in a simple way and give an unique link to it.";
+    description = "Website permitting upload of a file in a simple way and giving a unique link to it";
     license = licenses.agpl3;
     homepage = "https://gitlab.com/mojo42/Jirafeau";
     platforms = platforms.all;

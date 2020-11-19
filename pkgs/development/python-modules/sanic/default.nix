@@ -9,11 +9,9 @@
 , ujson
 , pytest
 , gunicorn
-, pytestcov
 , aiohttp
 , beautifulsoup4
 , pytest-sanic
-, pytest-sugar
 , pytest-benchmark
 
 # required just httpcore / requests-async
@@ -100,11 +98,9 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     gunicorn
-    pytestcov
     aiohttp
     beautifulsoup4
     pytest-sanic
-    pytest-sugar
     pytest-benchmark
     uvicorn
   ];

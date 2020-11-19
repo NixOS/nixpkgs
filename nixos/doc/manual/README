@@ -1,12 +1,3 @@
-To build the manual, you need Nix installed on your system (no need
-for NixOS). To install Nix, follow the instructions at
+Moved to: ./contributing-to-this-manual.xml. Link:
 
-    https://nixos.org/nix/download.html
-
-When you have Nix on your system, in the root directory of the project
-(i.e., `nixpkgs`), run:
-
-    nix-build nixos/release.nix -A manual.x86_64-linux
-
-When this command successfully finishes, it will tell you where the
-manual got generated.
+https://nixos.org/manual/nixos/unstable/#chap-contributing

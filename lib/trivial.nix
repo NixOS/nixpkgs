@@ -171,7 +171,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Nightingale";
+  codeName = "Okapi";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -281,6 +281,12 @@ rec {
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
+  /* Reads a TOML file.
+
+     Type :: path -> any
+  */
+  importTOML = path:
+    builtins.fromTOML (builtins.readFile path);
 
   ## Warnings
 
@@ -332,4 +338,55 @@ rec {
   */
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
+
+  /* Convert the given positive integer to a string of its hexadecimal
+     representation. For example:
+
+     toHexString 0 => "0"
+
+     toHexString 16 => "10"
+
+     toHexString 250 => "FA"
+  */
+  toHexString = i:
+    let
+      toHexDigit = d:
+        if d < 10
+        then toString d
+        else
+          {
+            "10" = "A";
+            "11" = "B";
+            "12" = "C";
+            "13" = "D";
+            "14" = "E";
+            "15" = "F";
+          }.${toString d};
+    in
+      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+
+  /* `toBaseDigits base i` converts the positive integer i to a list of its
+     digits in the given base. For example:
+
+     toBaseDigits 10 123 => [ 1 2 3 ]
+
+     toBaseDigits 2 6 => [ 1 1 0 ]
+
+     toBaseDigits 16 250 => [ 15 10 ]
+  */
+  toBaseDigits = base: i:
+    let
+      go = i:
+        if i < base
+        then [i]
+        else
+          let
+            r = i - ((i / base) * base);
+            q = (i - r) / base;
+          in
+            [r] ++ go q;
+    in
+      assert (base >= 2);
+      assert (i >= 0);
+      lib.reverseList (go i);
 }

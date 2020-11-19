@@ -6,7 +6,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "yenc";
   version = "0.4.0";
   src = fetchurl {

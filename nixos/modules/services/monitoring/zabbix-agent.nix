@@ -3,8 +3,9 @@
 let
   cfg = config.services.zabbixAgent;
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption;
+  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
   inherit (lib) attrValues concatMapStringsSep literalExample optionalString types;
+  inherit (lib.generators) toKeyValue;
 
   user = "zabbix-agent";
   group = "zabbix-agent";
@@ -14,19 +15,15 @@ let
     paths = attrValues cfg.modules;
   };
 
-  configFile = pkgs.writeText "zabbix_agent.conf" ''
-    LogType = console
-    Server = ${cfg.server}
-    ListenIP = ${cfg.listen.ip}
-    ListenPort = ${toString cfg.listen.port}
-    ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}
-    ${concatMapStringsSep "\n" (name: "LoadModule = ${name}") (builtins.attrNames cfg.modules)}
-    ${cfg.extraConfig}
-  '';
+  configFile = pkgs.writeText "zabbix_agent.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
 
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "zabbixAgent" "extraConfig" ] "Use services.zabbixAgent.settings instead.")
+  ];
+
   # interface
 
   options = {
@@ -105,15 +102,18 @@ in
         '';
       };
 
-      # TODO: for bonus points migrate this to https://github.com/NixOS/rfcs/pull/42
-      extraConfig = mkOption {
-        default = "";
-        type = types.lines;
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ int str (listOf str) ]);
+        default = {};
         description = ''
-          Configuration that is injected verbatim into the configuration file. Refer to
+          Zabbix Agent configuration. Refer to
           <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd"/>
           for details on supported values.
         '';
+        example = {
+          Hostname = "example.org";
+          DebugLevel = 4;
+        };
       };
 
     };
@@ -123,6 +123,17 @@ in
   # implementation
 
   config = mkIf cfg.enable {
+
+    services.zabbixAgent.settings = mkMerge [
+      {
+        LogType = "console";
+        Server = cfg.server;
+        ListenIP = cfg.listen.ip;
+        ListenPort = cfg.listen.port;
+        LoadModule = builtins.attrNames cfg.modules;
+      }
+      (mkIf (cfg.modules != {}) { LoadModulePath = "${moduleEnv}/lib"; })
+    ];
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.listen.port ];

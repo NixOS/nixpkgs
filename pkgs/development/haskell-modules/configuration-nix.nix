@@ -95,7 +95,16 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
   # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
-  cachix = disableLibraryProfiling super.cachix;
+  cachix = overrideSrc (disableLibraryProfiling super.cachix) {
+    src = (pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "1471050f5906ecb7cd0d72115503d07d2e3beb17";
+      sha256 = "1lkrmhv5x9dpy53w33kxnhv4x4qm711ha8hsgccrjmxaqcsdm59g";
+    }) + "/cachix";
+    version = "0.5.1";
+  };
+  hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput super.niv;
@@ -442,6 +451,9 @@ self: super: builtins.intersectAttrs super {
                             [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
   });
 
+  # requires an X11 display in test suite
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+
   # depends on 'hie' executable
   lsp-test = dontCheck super.lsp-test;
 
@@ -538,6 +550,7 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
+  splitmix_0_1_0_3 = dontCheck super.splitmix_0_1_0_3;
 
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
@@ -567,9 +580,20 @@ self: super: builtins.intersectAttrs super {
   }));
 
   # Expects z3 to be on path so we replace it with a hard
+  #
+  # The tests expect additional solvers on the path, replace the
+  # available ones also with hard coded paths, and remove the missing
+  # ones from the test.
   sbv = overrideCabal super.sbv (drv: {
     postPatch = ''
-      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
+      sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
+      sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
+      sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
+
+      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, cvc4, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
+   '';
   });
 
   # The test-suite requires a running PostgreSQL server.
@@ -630,6 +654,7 @@ self: super: builtins.intersectAttrs super {
   # Tests require internet
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
+  pantry_0_5_1_4 = dontCheck super.pantry_0_5_1_4;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -639,31 +664,28 @@ self: super: builtins.intersectAttrs super {
   spago =
     let
       # Spago needs a small patch to work with the latest versions of rio.
-      # https://github.com/purescript/spago/pull/616
-      # This can probably be removed when a version after spago-0.15.1 is released.
+      # https://github.com/purescript/spago/pull/647
       spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
-        url = "https://github.com/purescript/spago/pull/616/commits/95b5fa0f1d3bfb07972d1ef5004b8bee8a070667.patch";
-        sha256 = "0v3890lwhddfrq9mhbq92962pkxra8kwbin97wg3s0b02dk65ysc";
+        url = "https://github.com/purescript/spago/pull/647/commits/917ee541a966db74f0f5d11f2f86df0030c35dd7.patch";
+        sha256 = "1nspqgcjk6z90cl9zhard0rn2q979kplcqz72x8xv5mh57zabk0w";
       });
 
-      # Spago basically compiles with LTS-14, but it requires a newer version
-      # of directory.  This is to work around a bug only present on windows, so
-      # we can safely jailbreak spago and use the older directory package from
-      # LTS-14.
+      # spago requires an older version of megaparsec, but it appears to work
+      # fine with newer versions.
       spagoWithOverrides = doJailbreak spagoWithPatches;
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
-      docsSearchVersion = "v0.0.8";
+      docsSearchVersion = "v0.0.10";
 
       docsSearchAppJsFile = pkgs.fetchurl {
         url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
-        sha256 = "00pzi7pgjicpa0mg0al80gh2q1q2lqiyb3kjarpydlmn8dfjny7v";
+        sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
       };
 
       purescriptDocsSearchFile = pkgs.fetchurl {
         url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
-        sha256 = "1hsi1hc4p1z2xbw82w2jxmmczw6mravli1r89vrkivb72sqdjya7";
+        sha256 = "0wc1zyhli4m2yykc6i0crm048gyizxh7b81n8xc4yb7ibjqwhyj3";
       };
 
       spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
@@ -717,14 +739,10 @@ self: super: builtins.intersectAttrs super {
 
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
-
-  # dhall's tests access the network.
-  dhall_1_29_0 = dontCheck super.dhall_1_29_0;
-  dhall_1_31_1 = dontCheck super.dhall_1_31_1;
-  dhall_1_32_0 = dontCheck super.dhall_1_32_0;
+  primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg ];
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -734,6 +752,7 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
+  hie-bios_0_5_0 = dontCheck super.hie-bios_0_5_0;
 
   # Compiling the readme throws errors and has no purpose in nixpkgs
   aeson-gadt-th =
@@ -754,18 +773,6 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
-  postgresql-syntax = super.postgresql-syntax.override {
-    rerebase = self.rerebase_1_6_1;
-  };
-
-  rerebase_1_6_1 = super.rerebase_1_6_1.override {
-    rebase = self.rebase_1_6_1;
-  };
-
-  rebase_1_6_1 = super.rebase_1_6_1.override {
-    selective = super.selective_0_4_1;
-  };
-
   # Fix compilation of Setup.hs by removing the module declaration.
   # See: https://github.com/tippenein/guid/issues/1
   guid = overrideCabal (super.guid) (drv: {
@@ -776,4 +783,29 @@ self: super: builtins.intersectAttrs super {
   # Tests disabled as recommended at https://github.com/luke-clifton/shh/issues/39
   shh = dontCheck super.shh;
 
+  # The test suites fail because there's no PostgreSQL database running in our
+  # build sandbox.
+  hasql-queue = dontCheck super.hasql-queue;
+  postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
+  postgresql-pure = dontCheck super.postgresql-pure;
+
+  retrie = overrideCabal super.retrie (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ];
+  });
+
+  nix-output-monitor = overrideCabal super.nix-output-monitor {
+    # Can't ran the golden-tests with nix, because they call nix
+    testTarget = "unit-tests";
+  };
+
+  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
+    postInstall = let
+      inherit (pkgs.lib) concatStringsSep take splitString;
+      ghc_version = self.ghc.version;
+      ghc_major_version = concatStringsSep "." (take 2 (splitString "." ghc_version));
+    in ''
+        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_version}
+        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_major_version}
+       '';
+  });
 }

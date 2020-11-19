@@ -46,16 +46,16 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
-    sdkVer = "24";
-    ndkVer = "18b";
+    sdkVer = "29";
+    ndkVer = "21";
     platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
   };
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "24";
-    ndkVer = "18b";
+    sdkVer = "29";
+    ndkVer = "21";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
@@ -109,6 +109,11 @@ rec {
     platform = platforms.riscv-multiplatform "32";
   };
 
+  mmix = {
+    config = "mmix-unknown-mmixware";
+    libc = "newlib";
+  };
+
   msp430 = {
     config = "msp430-elf";
     libc = "newlib";
@@ -120,6 +125,12 @@ rec {
 
   vc4 = {
     config = "vc4-elf";
+    libc = "newlib";
+    platform = {};
+  };
+
+  or1k = {
+    config = "or1k-elf";
     libc = "newlib";
     platform = {};
   };
@@ -164,14 +175,23 @@ rec {
   };
 
   #
+  # Redox
+  #
+
+  x86_64-unknown-redox = {
+    config = "x86_64-unknown-redox";
+    libc = "relibc";
+  };
+
+  #
   # Darwin
   #
 
   iphone64 = {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    sdkVer = "12.4";
-    xcodeVer = "10.3";
+    sdkVer = "13.2";
+    xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -180,8 +200,8 @@ rec {
   iphone32 = {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
-    sdkVer = "12.4";
-    xcodeVer = "10.3";
+    sdkVer = "13.2";
+    xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -190,8 +210,8 @@ rec {
   iphone64-simulator = {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
-    sdkVer = "12.4";
-    xcodeVer = "10.3";
+    sdkVer = "13.2";
+    xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};
@@ -200,8 +220,8 @@ rec {
   iphone32-simulator = {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
-    sdkVer = "12.4";
-    xcodeVer = "10.3";
+    sdkVer = "13.2";
+    xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};

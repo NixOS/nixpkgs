@@ -1,16 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "0.7.4";
+  version = "1.0.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "92f24b0fe11e90b57343494ce38699043d9e6828a22a99dddbcf99c0adb4c1f7";
+    sha256 = "c751436350c105f403e382574d34a6ad73e4a677cb0ff5bc9a87581cc07094e1";
   };
 
   checkInputs = [

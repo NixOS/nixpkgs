@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, nvidia_x11, cudatoolkit, ncurses }:
+{ stdenv, fetchFromGitHub, cmake, cudatoolkit, ncurses, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   pname = "nvtop";
@@ -6,22 +6,26 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Syllo";
-    repo  = "nvtop";
+    repo = "nvtop";
     rev = version;
     sha256 = "1b6yz54xddip1r0k8cbqg41dpyhds18fj29bj3yf40xvysklb0f4";
   };
 
   cmakeFlags = [
     "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"
-    "-DNVML_LIBRARIES=${nvidia_x11}/lib/libnvidia-ml.so"
+    "-DNVML_LIBRARIES=${cudatoolkit}/targets/x86_64-linux/lib/stubs/libnvidia-ml.so"
     "-DCMAKE_BUILD_TYPE=Release"
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ ncurses nvidia_x11 cudatoolkit ];
+  nativeBuildInputs = [ cmake addOpenGLRunpath ];
+  buildInputs = [ ncurses cudatoolkit ];
+
+  postFixup = ''
+    addOpenGLRunpath $out/bin/nvtop
+  '';
 
   meta = with stdenv.lib; {
-    description = "A (h)top like like task monitor for NVIDIA GPUs";
+    description = "A (h)top like task monitor for NVIDIA GPUs";
     homepage = "https://github.com/Syllo/nvtop";
     license = licenses.gpl3;
     platforms = platforms.linux;

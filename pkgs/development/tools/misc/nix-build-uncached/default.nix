@@ -1,25 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, nix, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
 
 buildGoModule rec {
   pname = "nix-build-uncached";
-  version = "0.1.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-build-uncached";
     rev = "v${version}";
-    sha256 = "0jkpg3ab56lg2kdms9w9ka9ba89py3ajksjsi1rd3iqi74zz2mmh";
+    sha256 = "1v9xyv0hhvfw61k4pbgzrlgy7igl619cangi40fkh7gdvs01dxz4";
   };
 
-  goPackagePath = "github.com/Mic92/nix-build-uncached";
   vendorSha256 = null;
 
-  nativeBuildInputs = [ makeWrapper ];
+  doCheck = false;
 
-  postInstall = ''
-    wrapProgram $out/bin/nix-build-uncached \
-      --prefix PATH ":" ${lib.makeBinPath [ nix ]}
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
   meta = with lib; {
     description = "A CI friendly wrapper around nix-build";

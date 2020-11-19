@@ -9,13 +9,13 @@ let
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
   afl = stdenv.mkDerivation rec {
     pname = "afl";
-    version = "2.56b";
+    version = "2.57b";
 
     src = fetchFromGitHub {
       owner = "google";
       repo = pname;
       rev = "v${version}";
-      sha256 = "1q1g59gkm48aa4cg9h70jx4i2gapmypgp5rzs156b2avd95vwkn1";
+      sha256 = "0fqj3g6ds1f21kxz7m9mc1fspi9r4jg9jcmi60inwxijrc5ncvr6";
     };
     enableParallelBuilding = true;
 

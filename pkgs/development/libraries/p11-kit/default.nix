@@ -4,19 +4,24 @@
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.23.20";
+  version = "0.23.21";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    sha256 = "00xxhzgd7cpin9nzwrrzykvhjwqg5l45p0cq2gv68y3sxq2p9q6y";
+    sha256 = "1w24brn8j3vwfp07p2hldw2ci06pk1cx1dvjk8jjxkccp20fk958";
   };
 
   outputs = [ "out" "dev"];
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+  # for cross platform builds of p11-kit, libtasn1 in nativeBuildInputs
+  # provides the asn1Parser binary on the hostPlatform needed for building.
+  # at the same time, libtasn1 in buildInputs provides the libasn1 library
+  # to link against for the target platform.
+  # hence, libtasn1 is required in both native and build inputs.
+  nativeBuildInputs = [ autoreconfHook pkgconfig which libtasn1 ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
 
   autoreconfPhase = ''
@@ -30,6 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  # Tests run in fakeroot for non-root users
+  preCheck = ''
+    if [ "$(id -u)" != "0" ]; then
+      export FAKED_MODE=1
+    fi
+  '';
 
   doCheck = !stdenv.isDarwin;
 

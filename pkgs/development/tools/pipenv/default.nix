@@ -6,7 +6,7 @@ with python3.pkgs;
 
 let
 
-  runtimeDeps = [
+  runtimeDeps = ps: with ps; [
     certifi
     setuptools
     pip
@@ -14,15 +14,15 @@ let
     virtualenv-clone
   ];
 
-  pythonEnv = python3.withPackages(ps: with ps; runtimeDeps);
+  pythonEnv = python3.withPackages runtimeDeps;
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2020.5.28";
+  version = "2020.11.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "072lc4nywcf9q9irvanwcz7w0sd9dcyannz208jm6glyj8a271l1";
+    sha256 = "d6ac39d1721517b23aca12cdb4c726dc318ec4d7bdede5c1220bbb81775005c3";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -36,7 +36,7 @@ in buildPythonApplication rec {
       --replace "sys.executable" "'${pythonEnv.interpreter}'"
   '';
 
-  propagatedBuildInputs = runtimeDeps;
+  propagatedBuildInputs = runtimeDeps python3.pkgs;
 
   doCheck = true;
   checkPhase = ''

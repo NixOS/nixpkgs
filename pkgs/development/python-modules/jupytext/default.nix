@@ -3,20 +3,22 @@
 , nbformat
 , pytest
 , pyyaml
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.4.2";
+  version = "1.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58b4c6bf48ba2e18bfc2d8358e852b6e3538ff664843398be09157c184ee1a27";
+    sha256 = "1cebc9f5975b4c08db3de6d7d61b35f8c33a24cf2c8c04eee7b8a7aab8ddc39b";
   };
 
   propagatedBuildInputs = [
     pyyaml
     nbformat
+    toml
   ] ++ lib.optionals isPy27 [ mock ]; # why they put it in install_requires, who knows
 
   checkInputs = [

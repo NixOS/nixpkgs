@@ -18,7 +18,10 @@ import ../make-test-python.nix ({ pkgs, ...} : {
         realms = {
           "ATHENA.MIT.EDU" = {
             admin_server = "athena.mit.edu";
-            kdc = "athena.mit.edu";
+            kdc = [
+              "athena01.mit.edu"
+              "athena02.mit.edu"
+            ];
           };
         };
         domain_realm = {
@@ -65,7 +68,8 @@ import ../make-test-python.nix ({ pkgs, ...} : {
       [realms]
         ATHENA.MIT.EDU = {
           admin_server = athena.mit.edu
-          kdc = athena.mit.edu
+          kdc = athena01.mit.edu
+          kdc = athena02.mit.edu
         }
 
       [domain_realm]

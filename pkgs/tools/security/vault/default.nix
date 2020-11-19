@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles }:
+{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
 
 buildGoPackage rec {
   pname = "vault";
-  version = "1.4.2";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "0aschysngs6f50plqkqbnhgl6zryd0bpypr50zd45cgww7jvvqd4";
+    sha256 = "144v7vmp2amv29y6d50jzc21zrcw0g6qlwks16mvqy2hnbsnzdwa";
   };
 
   goPackagePath = "github.com/hashicorp/vault";
@@ -17,15 +17,14 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [
-    "-tags='vault'"
-    "-ldflags=\"-X github.com/hashicorp/vault/sdk/version.GitCommit='v${version}'\""
-  ];
+  buildFlagsArray = [ "-tags=vault" "-ldflags=-s -w -X ${goPackagePath}/sdk/version.GitCommit=${src.rev}" ];
 
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash
   '';
+
+  passthru.tests.vault = nixosTests.vault;
 
   meta = with stdenv.lib; {
     homepage = "https://www.vaultproject.io/";

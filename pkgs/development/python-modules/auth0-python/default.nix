@@ -3,15 +3,16 @@
 , fetchPypi
 , requests
 , mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.9.2";
+  version = "3.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12870b4806095b707c4eed7bf8cdfeb3722d990366bc6a9772d1520e90efa73b";
+    sha256 = "2e968d01364c8c94fbe85154ab77ebe9e51a3f8282405bb33748071452063004";
   };
 
   propagatedBuildInputs = [
@@ -20,6 +21,17 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # jwt package is not available in nixpkgs
+    "--ignore=auth0/v3/test/authentication/test_token_verifier.py"
+  ];
+
+  # tries to ping websites (e.g. google.com)
+  disabledTests = [
+    "can_timeout"
   ];
 
   meta = with lib; {

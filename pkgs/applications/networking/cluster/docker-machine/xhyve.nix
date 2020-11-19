@@ -31,7 +31,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/machine-drivers/docker-machine-driver-xhyve";
-    description = "Xhyve driver for docker-machine.";
+    description = "Xhyve driver for docker-machine";
     license = licenses.bsd3;
     maintainers = with maintainers; [ periklis ];
     platforms = platforms.darwin;

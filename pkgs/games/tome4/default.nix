@@ -9,7 +9,7 @@ let
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "False";
+    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
     categories = "Game;RolePlaying;";

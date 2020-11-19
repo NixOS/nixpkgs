@@ -59,6 +59,7 @@ buildPythonApplication rec {
     description = "GTK3 & python based GUI for Syncthing";
     homepage = "https://github.com/syncthing/syncthing-gtk";
     license = licenses.gpl2;
+    broken = true;
     maintainers = with maintainers; [ ];
     platforms = syncthing.meta.platforms;
   };

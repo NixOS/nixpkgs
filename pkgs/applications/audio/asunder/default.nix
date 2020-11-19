@@ -12,11 +12,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.9.5";
+  version = "2.9.7";
   pname = "asunder";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
-    sha256 = "069x6az2r3wlb2hd07iz0hxpxwknw7s9h7pyhnkmzv1pw9ci3kk4";
+    sha256 = "1x3l308ss0iqhz90qyjb94gyd8b4piyrm2nzjmg5kf049k9prjf1";
   };
 
   nativeBuildInputs = [ intltool makeWrapper pkgconfig ];

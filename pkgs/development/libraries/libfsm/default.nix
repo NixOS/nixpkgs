@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libfsm";
-  version = "0.1pre1905_${builtins.substring 0 8 src.rev}";
+  version = "0.1pre2442_${builtins.substring 0 8 src.rev}";
 
   src = fetchFromGitHub {
     owner  = "katef";
     repo   = pname;
-    rev    = "bd5937fad42b26a86bac1fe3ec49eff73581bd1d";
-    sha256 = "1q3grbmvjnnvc2sshswbd40cc2j2hnwibmljcqx9jqgda0wd6pgv";
+    rev    = "9c5095f7364fa464efff6c81fad9b60b19dfcc99";
+    sha256 = "1bs51agvrrwqid0slq2svj2yj7kkjdsnv3xsrk8zmf1jbgza6jrm";
     fetchSubmodules = true;
   };
 

@@ -24,7 +24,6 @@ configurePhase()
           i?86-*)   echo OBJTYPE=386;;
           *power*)  echo OBJTYPE=power;;
           *sparc*)  echo OBJTYPE=sparc;;
-          *) exit 12
         esac
         if [[ $system =~ .*linux.* ]]; then
           echo SYSVERSION=2.6.x

@@ -25,12 +25,13 @@
 , frei0r
 , phonon-backend-gstreamer
 , qtdeclarative
-, qtquickcontrols
+, qtmultimedia
+, qtquickcontrols2
 , qtscript
-, qtwebkit
 , rttr
 , kpurpose
 , kdeclarative
+, wrapGAppsHook
 }:
 
 mkDerivation {
@@ -59,9 +60,9 @@ mkDerivation {
     mlt
     phonon-backend-gstreamer
     qtdeclarative
-    qtquickcontrols
+    qtmultimedia
+    qtquickcontrols2
     qtscript
-    qtwebkit
     shared-mime-info
     libv4l
     ffmpeg-full
@@ -69,6 +70,7 @@ mkDerivation {
     rttr
     kpurpose
     kdeclarative
+    wrapGAppsHook
   ];
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
@@ -82,12 +84,20 @@ mkDerivation {
       sed -i CMakeLists.txt -e '/find_package(Qt5 REQUIRED/ s|)| Concurrent)|'
       substituteAllInPlace src/kdenlivesettings.kcfg
     '';
+
+  dontWrapGApps = true;
+
   # Frei0r path needs to be set too or Kdenlive will complain. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
   # https://github.com/NixOS/nixpkgs/issues/29614#issuecomment-488849325
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     license = with lib.licenses; [ gpl2Plus ];
   };

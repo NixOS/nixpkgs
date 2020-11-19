@@ -1,31 +1,34 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pyelftools";
-  version = "0.26";
+  version = "unstable-2020-09-23";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "86ac6cee19f6c945e8dedf78c6ee74f1112bd14da5a658d8c9d4103aed5756a2";
+  src = fetchFromGitHub {
+    owner = "eliben";
+    repo = pname;
+    rev = "ab84e68837113b2d700ad379d94c1dd4a73125ea";
+    sha256 = "sha256-O7l1kj0k8bOSOtZJVzS674oVnM+X3oP00Ybs0qjb64Q=";
   };
 
+  doCheck = stdenv.is64bit && !stdenv.isDarwin;
+
   checkPhase = ''
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" test/external_tools/readelf
     ${python.interpreter} test/all_tests.py
   '';
 
-  # Tests cannot pass against system-wide readelf
-  # https://github.com/eliben/pyelftools/issues/65
-  doCheck = false;
+  pythonImportsCheck = [ "elftools" ];
 
   meta = with stdenv.lib; {
     description = "A library for analyzing ELF files and DWARF debugging information";
     homepage = "https://github.com/eliben/pyelftools";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.igsha ];
+    maintainers = with maintainers; [ igsha pamplemousse ];
   };
 
 }

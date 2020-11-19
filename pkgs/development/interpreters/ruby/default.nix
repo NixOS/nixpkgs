@@ -44,11 +44,22 @@ let
       , groff, docSupport ? true
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
-      # ruby -e "puts RbConfig::CONFIG['configure_args']"
-      # puts a reference to the C compiler in the binary.
-      # This might be required by some gems at runtime,
-      # but we allow to strip it out for smaller closure size.
-      , removeReferencesTo, removeReferenceToCC ? true
+      # By default, ruby has 3 observed references to stdenv.cc:
+      #
+      # - If you run:
+      #     ruby -e "puts RbConfig::CONFIG['configure_args']"
+      # - In:
+      #     $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+      #   Or (usually):
+      #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
+      # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
+      #
+      # Since some Gems require JIT support, there's probably no
+      # escape from this reference. Hence, it was decided to enable this
+      # feature by default, as it's enabled by default by ruby's ./configure
+      # script. If you'd like to have a ruby without reference to cc, setting
+      # jitSupport to false should remove all known references mentioned above.
+      , removeReferencesTo, jitSupport ? true
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
@@ -108,6 +119,9 @@ let
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
+          # Make the build reproducible for ruby <= 2.7
+          # See https://github.com/ruby/io-console/commit/679a941d05d869f5e575730f6581c027203b7b26#diff-d8422f096931c58d4463e2489f62a228b0f24f0492950ba88c8c89a0d741cfe6
+          sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
         # Force the revision.h generation. Somehow `revision.tmp` is an empty
@@ -116,8 +130,9 @@ let
         # https://github.com/ruby/ruby/commit/97a5af62a318fcd93a4e5e4428d576c0280ddbae
         buildFlags = lib.optionals atLeast27 [ "REVISION_LATEST=0" ];
 
-        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby_${tag}"]
+        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op (!jitSupport) "--disable-jit-support"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
@@ -125,6 +140,10 @@ let
             "--with-out-ext=tk"
             # on yosemite, "generating encdb.h" will hang for a very long time without this flag
             "--with-setjmp-type=setjmp"
+            # silence linker warnings after upgrading darwin.cctools to 949.0.1,
+            # which ruby treats as problem with LDFLAGS
+            # https://github.com/NixOS/nixpkgs/issues/101330
+            "LDFLAGS=-Wl,-w"
           ]
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
@@ -150,11 +169,14 @@ let
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
           ${
-            lib.optionalString removeReferenceToCC ''
+            lib.optionalString (!jitSupport) ''
               # Get rid of the CC runtime dependency
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
                 $out/lib/libruby*
+              ${removeReferencesTo}/bin/remove-references-to \
+                -t ${stdenv.cc} \
+                $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
             ''
           }
           # Bundler tries to create this directory
@@ -192,7 +214,7 @@ let
           description = "The Ruby language";
           homepage    = "http://www.ruby-lang.org/en/";
           license     = licenses.ruby;
-          maintainers = with maintainers; [ vrthra manveru ];
+          maintainers = with maintainers; [ vrthra manveru marsam ];
           platforms   = platforms.all;
         };
 
@@ -240,10 +262,10 @@ in {
   };
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "1" "";
+    version = rubyVersion "2" "7" "2" "";
     sha256 = {
-      src = "0674x98f542y02r7n2yv2qhmh97blqhi2mvh2dn5f000vlxlh66l";
-      git = "0qk729kr5wm67xmwpljpdprwhp5wvn5y4ikqy00p1zcgwlwdcs33";
+      src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
+      git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
     };
   };
 }

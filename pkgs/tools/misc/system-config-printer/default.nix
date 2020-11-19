@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
+{ stdenv, fetchFromGitHub, fetchpatch, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
 , docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret, packagekit
@@ -24,7 +24,20 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace /bin/bash ${bash}/bin/bash
   '';
 
-  patches = [ ./detect_serverbindir.patch ];
+  patches = [
+    ./detect_serverbindir.patch
+
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=958104
+    # (Fixes will be included in next upstream release.)
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/system-config-printer/commit/cf9903466c1a2d18a701f3b5e8c7e03483e1244d.patch";
+      sha256 = "03gpav618w50q90m2kdkgwclc7fv17m493fgjd633zfavb5kqr3n";
+    })
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/system-config-printer/commit/b9289dfe105bdb502f183f0afe7a115ecae5f2af.patch";
+      sha256 = "12w47hy3ly4phh8jcqxvdnd5sgbnbp8dnscjd7d5y2i43kxj7b23";
+    })
+  ];
 
   buildInputs = [
     glib udev libusb1 cups

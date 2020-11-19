@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, xorg, alsaLib, libGLU, libGL, aalib
-, libvorbis, libtheora, speex, zlib, perl, ffmpeg
+, libvorbis, libtheora, speex, zlib, perl, ffmpeg_3
 , flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
 , libmpcdec
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext
-    alsaLib libGLU libGL aalib libvorbis libtheora speex perl ffmpeg flac
+    alsaLib libGLU libGL aalib libvorbis libtheora speex perl ffmpeg_3 flac
     libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
   ];
 

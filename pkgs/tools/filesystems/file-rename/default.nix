@@ -11,6 +11,12 @@ perlPackages.buildPerlPackage {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # Fix an incorrect platform test that misidentifies Darwin as Windows
+  postPatch = ''
+    substituteInPlace Makefile.PL \
+      --replace '/win/i' '/MSWin32/'
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/rename \
       --prefix PERL5LIB : $out/${perlPackages.perl.libPrefix}

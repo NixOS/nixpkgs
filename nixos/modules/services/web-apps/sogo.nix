@@ -77,7 +77,6 @@ in {
         // Paths
         WOSendMail = "/run/wrappers/bin/sendmail";
         SOGoMailSpoolPath = "/var/lib/sogo/spool";
-        SOGoZipPath = "${pkgs.zip}/bin/zip";
         // Enable CSRF protection
         SOGoXSRFValidationEnabled = YES;
         // Remove dates from log (jornald does that)

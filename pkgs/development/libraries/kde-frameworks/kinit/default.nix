@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore, writeScript,
+  mkDerivation, lib, writeScript,
   extra-cmake-modules, kdoctools,
   kconfig, kcrash, ki18n, kio, kparts, kservice, kwindowsystem, plasma-framework
 }:

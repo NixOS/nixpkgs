@@ -1,31 +1,20 @@
 { lib
-, python3Packages
+, python3
 , stdenv
 , writeTextDir
 , substituteAll
 , pkgsHostHost
+, fetchpatch
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.54.1";
+  version = "0.56.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1p4n0b6jn8pyj6rwxg48ayphji8v1482cabrwhzf2avnf92znxig";
+    sha256 = "04vj250bwrzq7c0z1r96b0z0vgirvn0m367wm3ygqmfdy67x6799";
   };
-
-  postFixup = ''
-    pushd $out/bin
-    # undo shell wrapper as meson tools are called with python
-    for i in *; do
-      mv ".$i-wrapped" "$i"
-    done
-    popd
-
-    # Do not propagate Python
-    rm $out/nix-support/propagated-build-inputs
-  '';
 
   patches = [
     # Upstream insists on not allowing bindir and other dir options
@@ -55,6 +44,19 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+
+    # When Meson removes build_rpath from DT_RUNPATH entry, it just writes
+    # the shorter NUL-terminated new rpath over the old one to reduce
+    # the risk of potentially breaking the ELF files.
+    # But this can cause much bigger problem for Nix as it can produce
+    # cut-in-half-by-\0 store path references.
+    # Let’s just clear the whole rpath and hope for the best.
+    ./clear-old-rpath.patch
+
+    # Patch out default boost search paths to avoid impure builds on
+    # unsandboxed non-NixOS builds, see:
+    # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
+    ./boost-Do-not-add-system-paths-on-nix.patch
   ];
 
   setupHook = ./setup-hook.sh;
@@ -67,6 +69,18 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
+
+  postFixup = ''
+    pushd $out/bin
+    # undo shell wrapper as meson tools are called with python
+    for i in *; do
+      mv ".$i-wrapped" "$i"
+    done
+    popd
+
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
+  '';
 
   meta = with lib; {
     homepage = "https://mesonbuild.com";

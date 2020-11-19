@@ -12,14 +12,14 @@
  </para>
 
 <screen>
-<![CDATA[$ cd pkgs/servers/monitoring
-$ mkdir sensu
-$ cd sensu
-$ cat > Gemfile
+<prompt>$ </prompt>cd pkgs/servers/monitoring
+<prompt>$ </prompt>mkdir sensu
+<prompt>$ </prompt>cd sensu
+<prompt>$ </prompt>cat > Gemfile
 source 'https://rubygems.org'
 gem 'sensu'
-$ $(nix-build '<nixpkgs>' -A bundix --no-out-link)/bin/bundix --magic
-$ cat > default.nix
+<prompt>$ </prompt>$(nix-build '&lt;nixpkgs>' -A bundix --no-out-link)/bin/bundix --magic
+<prompt>$ </prompt>cat > default.nix
 { lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
@@ -37,7 +37,7 @@ bundlerEnv rec {
     maintainers = with maintainers; [ theuni ];
     platforms   = platforms.unix;
   };
-}]]>
+}
 </screen>
 
  <para>
@@ -49,17 +49,16 @@ bundlerEnv rec {
  </para>
 
 <screen>
-<![CDATA[$ cd pkgs/servers/monitoring/sensu
-$ nix-shell -p bundler --run 'bundle lock --update'
-$ nix-shell -p bundix --run 'bundix'
-]]>
+<prompt>$ </prompt>cd pkgs/servers/monitoring/sensu
+<prompt>$ </prompt>nix-shell -p bundler --run 'bundle lock --update'
+<prompt>$ </prompt>nix-shell -p bundix --run 'bundix'
 </screen>
 
  <para>
   For tools written in Ruby - i.e. where the desire is to install a package and then execute e.g. <command>rake</command> at the command line, there is an alternative builder called <literal>bundlerApp</literal>. Set up the <filename>gemset.nix</filename> the same way, and then, for example:
  </para>
 
-<screen>
+<programlisting>
 <![CDATA[{ lib, bundlerApp }:
 
 bundlerApp {
@@ -75,7 +74,7 @@ bundlerApp {
     platforms   = platforms.unix;
   };
 }]]>
-</screen>
+</programlisting>
 
  <para>
   The chief advantage of <literal>bundlerApp</literal> over <literal>bundlerEnv</literal> is the executables introduced in the environment are precisely those selected in the <literal>exes</literal> list, as opposed to <literal>bundlerEnv</literal> which adds all the executables made available by gems in the gemset, which can mean e.g. <command>rspec</command> or <command>rake</command> in unpredictable versions available from various packages.

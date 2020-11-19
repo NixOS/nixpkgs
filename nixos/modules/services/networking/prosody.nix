@@ -261,7 +261,7 @@ let
 
   toLua = x:
     if builtins.isString x then ''"${x}"''
-    else if builtins.isBool x then (if x == true then "true" else "false")
+    else if builtins.isBool x then boolToString x
     else if builtins.isInt x then toString x
     else if builtins.isList x then ''{ ${lib.concatStringsSep ", " (map (n: toLua n) x) } }''
     else throw "Invalid Lua value";
@@ -655,7 +655,7 @@ in
 
         description = "Define the virtual hosts";
 
-        type = with types; loaOf (submodule vHostOpts);
+        type = with types; attrsOf (submodule vHostOpts);
 
         example = {
           myhost = {
@@ -772,7 +772,7 @@ in
       };
 
       disco_items = {
-      ${ lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)} 
+      ${ lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
       };
 
       allow_registration = ${toLua cfg.allowRegistration}

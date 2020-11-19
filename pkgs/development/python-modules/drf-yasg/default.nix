@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.16.1";
+  version = "1.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ri5h5xsacm99c6gvb4ldwisbqgiv2vq8qbn7vrh6vplzlpyvzb8";
+    sha256 = "d50f197c7f02545d0b736df88c6d5cf874f8fea2507ad85ad7de6ae5bf2d9e5a";
   };
 
   nativeBuildInputs = [

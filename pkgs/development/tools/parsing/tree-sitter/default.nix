@@ -3,6 +3,9 @@
 , writeShellScript, runCommand, which
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
 , callPackage
+, enableShared ? true
+, enableStatic ? false
+, Security
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -11,9 +14,9 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.16.4";
-  sha256 = "1m0zxz7h4w2zny7yhrlxwqvizcf043cizg7ca5dn3h9k16adcxil";
-  cargoSha256 = "0hxm73diwiybljm6yy3vmwfdpg33b4rlg0h7afq4xgccq2vkwafs";
+  version = "0.17.3";
+  sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
+  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -49,20 +52,31 @@ in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version cargoSha256;
 
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
   nativeBuildInputs = [ emscripten which ];
 
   postPatch = ''
     # needed for the tests
     rm -rf test/fixtures/grammars
     ln -s ${grammars} test/fixtures/grammars
+
+    # These functions do not appear in the source code
+    sed -i /_ts_query_context/d lib/binding_web/exports.json
+    sed -i /___assert_fail/d lib/binding_web/exports.json
   '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
   preBuild = ''
-    HOME=/tmp
     bash ./script/build-wasm --debug
+  '';
+
+  postInstall = ''
+    PREFIX=$out make install
+    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
@@ -90,12 +104,10 @@ in rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Profpatsch ];
-    # Darwin needs some more work with default libraries
     # Aarch has test failures with how tree-sitter compiles the generated C files
-    broken = stdenv.isDarwin || stdenv.isAarch64;
+    broken = stdenv.isAarch64;
   };
 
 }

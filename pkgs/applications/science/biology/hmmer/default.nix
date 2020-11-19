@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "3.3";
+  version = "3.3.1";
   pname = "hmmer";
 
   src = fetchurl {
     url = "http://eddylab.org/software/hmmer/${pname}-${version}.tar.gz";
-    sha256 = "0v3kcgkr6jihq0xmpgn2xd5q7wiwvj6yswa905k2c0v7mx0bz1h1";
+    sha256 = "1mcvr74w6ffd5z0p8v3jss473mbgard9lz5whjnk95c661lnmrlc";
   };
 
   meta = with stdenv.lib; {
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "http://hmmer.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
   };
 }

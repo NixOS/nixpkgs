@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, writeText }:
+{ stdenv, fetchFromGitHub, writeText, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
-  version = "3.17.12+190823";
+  version = "3.23.7+201006";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
-    sha256 = "1i7jpxndrbya5ggl4babscwzmxx4c0jwri5kpl7h2ihqrn90m4b5";
+    sha256 = "19p978p0flknsg3iqlrrbr76qsk5ha2a84nxywqsvjrjvqrh5jrc";
   };
 
   phpConfig = writeText "config.php" ''
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.limesurvey;
+  };
 
   meta = with stdenv.lib; {
     description = "Open source survey application";

@@ -21,6 +21,8 @@ let
     "i686-linux" = "i386";
   }."${stdenv.system}";
 
+  electron = electron_7;
+
 in
 
 stdenv.mkDerivation rec {
@@ -69,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_7}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';

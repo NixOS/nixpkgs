@@ -1,28 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, bison, pkgconfig
+{ stdenv, fetchFromGitHub, bison, meson, ninja, pkgconfig
 , libuecc, libsodium, libcap, json_c, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "fastd";
-  version = "19";
+  version = "21";
 
   src = fetchFromGitHub {
     owner  = "Neoraider";
     repo = "fastd";
     rev = "v${version}";
-    sha256 = "1h3whjvy2n2cyvbkbg4y1z9vlrn790spzbdhj4glwp93xcykhz5i";
+    sha256 = "1p4k50dk8byrghbr0fwmgwps8df6rlkgcd603r14i71m5g27z5gw";
   };
 
-  postPatch = ''
-    substituteInPlace src/crypto/cipher/CMakeLists.txt \
-      --replace 'add_subdirectory(aes128_ctr)' ""
-  '';
-
-  nativeBuildInputs = [ pkgconfig bison cmake ];
+  nativeBuildInputs = [ pkgconfig bison meson ninja ];
   buildInputs = [ libuecc libsodium libcap json_c openssl ];
-
-  cmakeFlags = [
-    "-DENABLE_OPENSSL=true"
-  ];
 
   enableParallelBuilding = true;
 

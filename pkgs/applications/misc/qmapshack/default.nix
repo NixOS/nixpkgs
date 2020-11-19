@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "qmapshack";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = pname;
     rev = "V_${version}";
-    sha256 = "0hghynb4ac98fg1pwc645zriqkghxwp8mr3jhr87pa6fh0y848py";
+    sha256 = "157bssrbwcc1w58b0v60jb3wrjf2ig4z6z6crjnpvflkqj5p8vwy";
   };
 
   nativeBuildInputs = [ cmake ];

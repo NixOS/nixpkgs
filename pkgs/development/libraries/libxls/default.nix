@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxls";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://github.com/libxls/libxls/releases/download/v${version}/libxls-${version}.tar.gz";
-    sha256 = "1akadsyl10rp101ccjmrxr7933c3v641k377bn74jv6cdkcm4zld";
+    sha256 = "1y7wk55blk16hmvf9dz5ci84hlhv6pw6mnr1mfnibfw3gsxmzhyv";
   };
 
   nativeBuildInputs = [ unzip ];

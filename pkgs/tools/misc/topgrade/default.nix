@@ -1,27 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "4.5.0";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0df79vlbclv1qx4zwir728c6ggqfawxh2x1py16m5q0ga1hd799j";
+    sha256 = "17vrnwx8qv2s2m9sj7h4gxxrnppqs9yzjzp8jsyfnpqd66h60wcg";
   };
 
-  cargoSha256 = "0wwxh71i94h68sryckbvrr43gd19qjcs0cgcpycnimkhdcdy8nlj";
+  cargoSha256 = "1k5lslin5qpmgz1zkz6xazjnapbr0i5r2ifzcz7bdbxwkaaliksd";
 
   buildInputs = lib.optional stdenv.isDarwin Foundation;
 
-  # TODO: add manpage (topgrade.8) to postInstall on next update
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage topgrade.8
+  '';
 
   meta = with lib; {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ filalex77 hugoreeves ];
+    maintainers = with maintainers; [ Br1ght0ne hugoreeves ];
   };
 }

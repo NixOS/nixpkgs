@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "lmms";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
     rev = "v${version}";
-    sha256 = "08k2nfj0rw9mahr7pr90n79wviqmjmflrgcljc6y3x30v84wbp26";
+    sha256 = "006hwv1pbh3y5whsxkjk20hsbgwkzr4dawz43afq1gil69y7xpda";
     fetchSubmodules = true;
   };
 

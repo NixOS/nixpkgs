@@ -39,21 +39,21 @@ in {
 
   clientbuffer = zncDerivation rec {
     name = "znc-clientbuffer-${version}";
-    version = "git-2015-08-27";
+    version = "git-2020-04-24";
     module_name = "clientbuffer";
 
     src = fetchFromGitHub {
-      owner = "jpnurmi";
+      owner = "CyberShadow";
       repo = "znc-clientbuffer";
-      rev = "fe0f368e1fcab2b89d5c94209822d9b616cea840";
-      sha256 = "1s8bqqlwy9kmcpmavil558rd2b0wigjlzp2lpqpcqrd1cg25g4a7";
+      rev = "2e32d508aa975c0a307d09575a0198f8c56c11fa";
+      sha256 = "1jaspnrbv3pzsnbysqygc8s8g3q07zx5nlrdpgwv9j8aryg0pcnh";
     };
 
     meta = with stdenv.lib; {
       description = "ZNC module for client specific buffers";
-      homepage = "https://github.com/jpnurmi/znc-clientbuffer";
+      homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = licenses.asl20;
-      maintainers = with maintainers; [ hrdinka ];
+      maintainers = with maintainers; [ hrdinka szlend ];
     };
   };
 

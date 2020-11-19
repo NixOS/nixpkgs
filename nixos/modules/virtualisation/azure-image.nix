@@ -6,7 +6,7 @@ let
 in
 {
   imports = [ ./azure-common.nix ];
-  
+
   options = {
     virtualisation.azureImage.diskSize = mkOption {
       type = with types; int;

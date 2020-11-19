@@ -10,6 +10,9 @@
 , libSM ? null
 , x11Support ? (stdenv.isLinux || stdenv.isDarwin)
 , dbus
+, docbook_xml_dtd_44
+, docbook-xsl-nons
+, xmlto
 }:
 
 assert
@@ -20,14 +23,20 @@ assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.12.16";
+  version = "1.12.20";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "107ckxaff1cv4q6kmfdi2fb1nlsv03312a7kf6lb4biglhpjv8jl";
+    sha256 = "1zp5gpx61v1cpqf2zwb1cidhp9xylvw49d3zydkxqk6b1qa20xpp";
   };
 
-  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
+  patches = [
+    # 'generate.consistent.ids=1' ensures reproducible docs, for further details see
+    # http://docbook.sourceforge.net/release/xsl/current/doc/html/generate.consistent.ids.html
+    # Also applied upstream in https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/189,
+    # expected in version 1.14
+    ./docs-reproducible-ids.patch
+  ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
 
   postPatch = ''
     substituteInPlace tools/Makefile.in \
@@ -43,10 +52,13 @@ stdenv.mkDerivation rec {
       --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
   '';
 
-  outputs = [ "out" "dev" "lib" "doc" ];
+  outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [
     pkgconfig
+    docbook_xml_dtd_44
+    docbook-xsl-nons
+    xmlto
   ];
 
   propagatedBuildInputs = [
@@ -63,6 +75,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-user-session"
+    "--enable-xml-docs"
     "--libexecdir=${placeholder ''out''}/libexec"
     "--datadir=/etc"
     "--localstatedir=/var"

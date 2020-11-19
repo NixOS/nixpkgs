@@ -11,7 +11,7 @@ die() {
 usage() {
     echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
     echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>]"
-    echo "                              [--ignore-same-hash]"
+    echo "                              [--ignore-same-hash] [--print-changes]"
 }
 
 args=()
@@ -32,6 +32,9 @@ for arg in "$@"; do
         ;;
         --ignore-same-hash)
             ignoreSameHash="true"
+        ;;
+        --print-changes)
+            printChanges="true"
         ;;
         --help)
             usage
@@ -102,6 +105,9 @@ fi
 
 if [[ "$oldVersion" = "$newVersion" ]]; then
     echo "$scriptName: New version same as old version, nothing to do." >&2
+    if [ -n "$printChanges" ]; then
+        printf '[]\n'
+    fi
     exit 0
 fi
 
@@ -197,3 +203,7 @@ fi
 
 rm -f "$nixFile.bak"
 rm -f "$attr.fetchlog"
+
+if [ -n "$printChanges" ]; then
+    printf '[{"attrPath":"%s","oldVersion":"%s","newVersion":"%s","files":["%s"]}]\n' "$attr" "$oldVersion" "$newVersion" "$nixFile"
+fi

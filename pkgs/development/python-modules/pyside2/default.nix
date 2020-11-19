@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.12.3";
+  version = "5.15.1";
 
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-everywhere-src-${version}.tar.xz";
-    sha256 = "0hk89jm8pa0q6kifask5rrffa3bvx02dg2f97ibv7wds9dysnyjg";
+    url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
+    sha256 = "1yn3f414ql8rrvwxlfpp2sckpmb89zj5iszgy1690mrjh7cc2xgi";
   };
 
   patches = [
@@ -23,11 +23,12 @@ stdenv.mkDerivation rec {
     "-DPYTHON_EXECUTABLE=${python.interpreter}"
   ];
 
-  nativeBuildInputs = [ cmake ninja qt5.qmake shiboken2 python ];
+  nativeBuildInputs = [ cmake ninja qt5.qmake python ];
   buildInputs = with qt5; [
     qtbase qtxmlpatterns qtmultimedia qttools qtx11extras qtlocation qtscript
     qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
   ];
+  propagatedBuildInputs = [ shiboken2 ];
 
   meta = with stdenv.lib; {
     description = "LGPL-licensed Python bindings for Qt";

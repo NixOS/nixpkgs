@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchPypi, libredirect
-, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
+, case, pytest, boto3, moto, kombu, billiard, pytz, future, vine
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.4.4";
+  version = "4.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zk42fxznrhww0dxak9b6nkfqg02z49zr839k6ql7nk3him7n0y2";
+    sha256 = "d220b13a8ed57c78149acf82c006785356071844afe0b27012a4991d44026f9f";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ case pytest boto3 moto ];
-  propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
+  propagatedBuildInputs = [ kombu billiard pytz future vine ];
 
   meta = with lib; {
     homepage = "https://github.com/celery/celery/";

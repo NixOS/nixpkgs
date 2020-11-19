@@ -23,9 +23,9 @@
 , xlaSupport ? cudaSupport
 # Default from ./configure script
 , cudaCapabilities ? [ "3.5" "5.2" ]
-, sse42Support ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") ["westmere" "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512"]
-, avx2Support  ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
-, fmaSupport   ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
+, sse42Support ? stdenv.hostPlatform.sse4_2Support
+, avx2Support  ? stdenv.hostPlatform.avx2Support
+, fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
 , Foundation, Security
 }:
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.15.2";
+  version = "1.15.4";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -103,7 +103,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1q0848drjvnaaa38dgns8knmpmkj5plzsc98j20m5ybv68s55w78";
+      sha256 = "0lg8ahyr2k7dmp0yfypk8ivl9a0xcg3j0f0dakmn5ljk8nsji0bj";
     };
 
     patches = [
@@ -131,6 +131,13 @@ let
         sha256 = "077cpj0kzyqxzdya1dwh8df17zfzhqn7c685hx6iskvw2979zg2n";
       })
       ./lift-gast-restriction.patch
+
+      (fetchpatch {
+        # fix compilation with numpy >= 1.19
+        name = "add-const-overload.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch";
+        sha256 = "1xp1icacig0xm0nmb05sbrf4nw4xbln9fhc308birrv8286zx7wv";
+      })
 
       # cuda 10.2 does not have "-bin2c-path" option anymore
       # https://github.com/tensorflow/tensorflow/issues/34429
@@ -248,6 +255,9 @@ let
       # include security vulnerabilities. So we make it optional.
       # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
       sed -i '/tensorboard >=/d' tensorflow/tools/pip_package/setup.py
+
+      substituteInPlace tensorflow/tools/pip_package/setup.py \
+        --replace "numpy >= 1.16.0, < 1.19.0" "numpy >= 1.16.0"
     '';
 
     preConfigure = let
@@ -300,9 +310,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "09j57w6kc0vkfcdwr0qggy3qgrgq82kfa2jrwvvcnij4bl3wj40j"
+        "1bi6aydidgi943hiqj0d279jbz2g173hvafdqla1ifw2qdsm73pb"
       else
-        "14g8z49qz7d8n1c2mcsfhr7yqpcy7mhmpm6hgmqvpgb8vm7yvwrc";
+        "0l5510fr8n22c4hx9llr0vqqhx9wlgkyxl55fxbixhssd0ai05r4";
     };
 
     buildAttrs = {
@@ -435,5 +445,7 @@ in buildPythonPackage {
     libtensorflow = bazel-build.out;
   };
 
-  inherit (bazel-build) meta;
+  meta = bazel-build.meta // {
+    broken = gast.version != "0.3.2";
+  };
 }

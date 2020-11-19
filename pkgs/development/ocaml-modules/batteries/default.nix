@@ -1,26 +1,28 @@
 { stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, qtest, num }:
 
-let version = "3.0.0"; in
+let version = "3.1.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-batteries-${version}";
 
   src = fetchurl {
     url = "https://github.com/ocaml-batteries-team/batteries-included/releases/download/v${version}/batteries-${version}.tar.gz";
-    sha256 = "0d833amm4p0pczgl7wriv99f3r5r6345p5gi9d97sm0hqx27vzwi";
+    sha256 = "0bq1np3ai3r559s3vivn45yid25fwz76rvbmsg30j57j7cyr3jqm";
   };
 
-  # Fixes tests with OCaml 4.10
+  # Fix a test case
   patches = [(fetchpatch {
-    url = "https://github.com/ocaml-batteries-team/batteries-included/commit/6d8d67f9fb48181be3d527b32df15899b00cd5dd.patch";
-    sha256 = "0msk8c5bjm6gm011i75b1rza332i1r4adj58qzli6gyjlvfj1hx4";
+    url = "https://github.com/ocaml-batteries-team/batteries-included/commit/7cbd9617d4efa5b3d647b1cc99d9a25fa01ac6dd.patch";
+    sha256 = "0q4kq10psr7n1xdv4rspk959n1a5mk9524pzm5v68ab2gkcgm8sk";
+
   })];
 
-  buildInputs = [ ocaml findlib ocamlbuild qtest ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
+  checkInputs = [ qtest ];
   propagatedBuildInputs = [ num ];
 
-  doCheck = stdenv.lib.versions.majorMinor ocaml.version != "4.07" && !stdenv.isAarch64;
-  checkTarget = "test test";
+  doCheck = stdenv.lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
+  checkTarget = "test";
 
   createFindlibDestdir = true;
 

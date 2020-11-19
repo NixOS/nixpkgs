@@ -37,7 +37,15 @@ stdenv.mkDerivation {
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
   postFixup = ''
-    addOpenGLRunpath $out/lib/lib*.so
+    for lib in $out/lib/lib*.so; do
+      # patchelf fails on libcudnn_cnn_infer due to it being too big.
+      # Most programs will still get the RPATH since they link to
+      # other things.
+      # (https://github.com/NixOS/patchelf/issues/222)
+      if [ "$(basename $lib)" != libcudnn_cnn_infer.so ]; then
+        addOpenGLRunpath $lib
+      fi
+    done
   '';
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg
+{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg_3
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig yasm ];
   buildInputs = with stdenv.lib;
-    [ freetype ffmpeg ]
+    [ freetype ffmpeg_3 ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray+=(
       "--cc=$CC"
-      "--host-cc=$BUILD_CC"
+      "--host-cc=$CC_FOR_BUILD"
       "--as=$AS"
       "--nm=$NM"
       "--ar=$AR"
@@ -199,6 +199,7 @@ stdenv.mkDerivation rec {
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ [ "-lfreetype" ]
   );
 
   installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";

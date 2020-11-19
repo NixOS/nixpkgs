@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "socket_wrapper-1.2.4";
+  name = "socket_wrapper-1.2.5";
 
   src = fetchurl {
     url = "mirror://samba/cwrap/${name}.tar.gz";
-    sha256 = "07m0g5sxjl15h8h95ppf42mkilp9h1xc9camryg8l9bw8b2v8m4a";
+    sha256 = "1wb3gq0rj5h92mhq6f1hb2qy4ypkxvn8y87ag88c7gc71nkpa1fx";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

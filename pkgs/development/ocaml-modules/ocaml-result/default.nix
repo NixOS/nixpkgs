@@ -1,20 +1,13 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
+{ lib, buildDunePackage, fetchurl }:
 
-let version = "1.2"; in
+buildDunePackage rec {
+  pname = "result";
+  version = "1.5";
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-result-${version}";
-
-  src = fetchFromGitHub {
-    owner = "janestreet";
-    repo = "result";
-    rev = version;
-    sha256 = "1jwzpcmxwgkfsbjz9zl59v12hf1vv4r9kiifancn9p8gm206g3g0";
+  src = fetchurl {
+    url = "https://github.com/janestreet/result/releases/download/${version}/result-${version}.tbz";
+    sha256 = "0cpfp35fdwnv3p30a06wd0py3805qxmq3jmcynjc3x2qhlimwfkw";
   };
-
-  buildInputs = [ ocaml findlib ];
-
-  createFindlibDestdir = true;
 
   meta = {
     homepage = "https://github.com/janestreet/result";
@@ -24,7 +17,6 @@ stdenv.mkDerivation {
       while staying compatible with older version of OCaml should use the
       Result module defined in this library.
     '';
-    license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    license = lib.licenses.bsd3;
   };
 }

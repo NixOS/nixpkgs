@@ -88,9 +88,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfdashboard = callPackage ./applications/xfdashboard {};
 
-  # TODO: this repo is inactive for many years. Remove?
-  xfce4-volumed = callPackage ./applications/xfce4-volumed { };
-
   xfce4-volumed-pulse = callPackage ./applications/xfce4-volumed-pulse { };
 
   xfce4-notifyd = callPackage ./applications/xfce4-notifyd { };
@@ -175,7 +172,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4notifyd = xfce4-notifyd;
   xfce4taskmanager = xfce4-taskmanager;
   xfce4terminal = xfce4-terminal;
-  xfce4volumed = xfce4-volumed;
   xfce4volumed_pulse = xfce4-volumed-pulse;
   xfce4icontheme = xfce4-icon-theme;
   xfwm4themes = xfwm4-themes;

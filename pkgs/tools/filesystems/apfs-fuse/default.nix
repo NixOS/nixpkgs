@@ -15,6 +15,10 @@ stdenv.mkDerivation {
   buildInputs = [ fuse3 bzip2 zlib attr ];
   nativeBuildInputs = [ cmake ];
 
+  postFixup = ''
+    ln -s $out/bin/apfs-fuse $out/bin/mount.fuse.apfs-fuse
+  '';
+
   meta = with stdenv.lib; {
     homepage    = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";

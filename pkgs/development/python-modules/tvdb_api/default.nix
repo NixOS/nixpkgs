@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "tvdb_api";
-  version = "2.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b1de28a5100121d91b1f6a8ec7e86f2c4bdf48fb22fab3c6fe21e7fb7346bf8f";
+    sha256 = "6a0135815cb680da38d78121d4d659d8e54a25f4db2816cd86d62916b92f23b2";
   };
 
   propagatedBuildInputs = [ requests-cache ];

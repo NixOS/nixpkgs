@@ -26,17 +26,18 @@ in stdenv.mkDerivation rec {
     sha256 = "01gm9gj2x2zs4yx6wk761fi1papi7qr3gp4ln1kkn8n2f9y9h849";
   };
 
-  buildInputs = [ nim ];
+  nativeBuildInputs = [ nim ];
+  buildInputs = [ htslib pcre ];
 
   buildPhase = ''
     HOME=$TMPDIR
     nim -p:${hts-nim}/src -p:${docopt}/src c --nilseqs:on -d:release mosdepth.nim
   '';
+
   installPhase = "install -Dt $out/bin mosdepth";
-  fixupPhase = "patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc htslib pcre ]} $out/bin/mosdepth";
 
   meta = with stdenv.lib; {
-    description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing.";
+    description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
     license = licenses.mit;
     homepage = "https://github.com/brentp/mosdepth";
     maintainers = with maintainers; [ jbedo ];

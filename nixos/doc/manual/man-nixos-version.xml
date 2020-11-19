@@ -33,7 +33,7 @@
   <para>
    This command shows the version of the currently active NixOS configuration.
    For example:
-<screen>$ nixos-version
+<screen><prompt>$ </prompt>nixos-version
 16.03.1011.6317da4 (Emu)
 </screen>
    The version consists of the following elements:
@@ -111,7 +111,7 @@
      <para>
       Show the full SHA1 hash of the Git commit from which this configuration
       was built, e.g.
-<screen>$ nixos-version --hash
+<screen><prompt>$ </prompt>nixos-version --hash
 6317da40006f6bc2480c6781999c52d88dde2acf
 </screen>
      </para>

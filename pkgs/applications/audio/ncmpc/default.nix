@@ -10,13 +10,13 @@ assert pcreSupport -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "ncmpc";
-  version = "0.38";
+  version = "0.42";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "ncmpc";
     rev    = "v${version}";
-    sha256 = "1kidpd1xrfax3v31q93r9g9b7jd841476q47wgd94h1a86b70gs9";
+    sha256 = "1c21sbdm6pp3kwhnzc7c6ksna7madvsmfa7j91as2g8485symqv2";
   };
 
   buildInputs = [ glib ncurses mpd_clientlib boost ]

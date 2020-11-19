@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "eventstat";
-  version = "0.04.09";
+  version = "0.04.10";
   src = fetchzip {
     url = "https://kernel.ubuntu.com/~cking/tarballs/eventstat/eventstat-${version}.tar.gz";
-    sha256 = "1b3m58mak62ym2amnmk62c2d6fypk30fw6jsmirh1qz7dwix4bl5";
+    sha256 = "0rmg49m56qxji7gwci03pkk4f4hnaq1n2x1348dqkaf5zs5nhi6b";
   };
   buildInputs = [ ncurses ];
   installFlags = [ "DESTDIR=$(out)" ];

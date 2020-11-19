@@ -1,86 +1,106 @@
 #!/usr/bin/env bash
-set -e
+
+# This script is meant to be used to mark failing hydra builds as broken in the meta attrs
+# To use the script, you should pass the list of failing attrs as arguments to the script.
+#
+# Example: `cat failing-attrs | xargs ./pkgs/common-update/scripts/mark-broken`
+#
+# Generating a list of failing attrs: (this should be improved at a later date)
+#   - Go to the most recent hydra evaluation with all builds completed
+#   - Select the "builds still failing" tab
+#   - Highlight and select all packages, should be prefixed with `nixpkgs.`
+#   - Use regex and editor foo to leave only the attr names
+#   - Use the above example command to then execute the script
+#
+# OTHER NOTES:
+#   - The `denyFileList` and `denyAttrList` will likely need to be updated slightly
+#     to align with the conventions used in nixpkgs at execution time
+#   - Any attrs which failed for any reason will be written to `failed-marks.txt`.
+#     Those attrs will likely need manual attention as disablement will likely be conditional.
 
 scriptName=mark-broken # do not use the .wrapped name
 
-die() {
-    echo "$scriptName: error: $1" >&2
-    exit 1
+failMark() {
+        local attr=$1
+        shift 1
+
+        echo "$attr: $@" >&2
+        echo $attr >> failed-marks.txt
 }
 
 usage() {
-    echo "Usage: $scriptName <attr> [--new-value=<new-value>]"
+    echo "Usage: $scriptName <attrs>"
 }
 
-args=()
-
-for arg in "$@"; do
-    case $arg in
-        --new-value=*)
-            newValue="${arg#*=}"
-        ;;
-        --help)
-            usage
-            exit 0
-        ;;
-        --*)
-            echo "$scriptName: Unknown argument: $arg"
-            usage
-            exit 1
-        ;;
-        *)
-            args["${#args[*]}"]=$arg
-        ;;
-    esac
-done
-
-attr=${args[0]}
-
-if (( "${#args[*]}" < 1 )); then
+if (( "${#@}" < 1 )); then
     echo "$scriptName: Too few arguments"
     usage
     exit 1
 fi
 
-if (( "${#args[*]}" > 1 )); then
-    echo "$scriptName: Too many arguments"
-    usage
-    exit 1
-fi
+# in case we resolve to an auto-generated file, just skip these entries
+denyFileList=(
+        node-packages.nix # node, it will mark all node packages as broken
+        generic-builder.nix # haskell, it will mark all haskell packages as broken
+)
 
-if [ -z $newValue ]; then
-  newValue="true"
-fi
+# ignore older versions of parameterized packages sets, these likely need
+# to be conditionally disabled
+denyAttrList=(
+        python27Packages
+        python37Packages
+        libsForQt512
+        linuxPackages_
+        rubyPackages_
+)
 
-nixFile=$(nix-instantiate --eval --json -E "with import ./. {}; (builtins.unsafeGetAttrPos \"description\" $attr.meta).file" | jq -r .)
-if [[ ! -f "$nixFile" ]]; then
-    die "Couldn't evaluate 'builtins.unsafeGetAttrPos \"description\" $attr.meta' to locate the .nix file!"
-fi
+function attemptToMarkBroken() {
+        local attr=$1
 
-# Insert broken attribute
-sed -i.bak "$nixFile" -r \
-  -e "/^\s*broken\s*=.*$/d" \
-  -e "s/(\s*)meta\s*=.*\{/&\n\1  broken = $newValue;/"
+        # skip likely to be noisy attrs
+        for badAttr in ${denyAttrList[@]};do
+                if [[ $attr =~ $badAttr ]]; then
+                        failMark $attr "attr contained $badAttr, skipped."
+                        return
+                fi
+        done
 
-if cmp -s "$nixFile" "$nixFile.bak"; then
-    mv "$nixFile.bak" "$nixFile"
-    die "Failed to mark the package as broken! Does it have a meta attribute?"
-fi
+        nixFile=$(nix-instantiate --eval --json -E "with import ./. {}; (builtins.unsafeGetAttrPos \"description\" $attr.meta).file" 2>/dev/null | jq -r .)
+        if [[ ! -f "$nixFile" ]]; then
+            failMark $attr "Couldn't locate correct file"
+            return
+        fi
 
-if [[ "$newValue" == "true" ]]; then
-    # broken should evaluate to true in any case now
-    markedSuccessfully=$(nix-instantiate --eval -E "with import ./. {}; $attr.meta.broken" || true)
-    if [[ ! "$markedSuccessfully" == "true" ]]; then
-        mv "$nixFile.bak" "$nixFile"
-        die "Couldn't verify the broken attribute to be set correctly, restoring backup!"
-    fi
-else
-    # we can not check if broken evaluates to the correct value, but we can check that it does evaluate
-    if ! nix-instantiate --eval -E "with import ./. {}; $attr.meta.broken" >/dev/null; then
-        mv "$nixFile.bak" "$nixFile"
-        die "Couldn't verify the broken attribute to be set correctly, restoring backup!"
-    fi
-fi
+        # skip files which are auto-generated
+        for filename in ${denyFileList[@]};do
+                if [[ "$filename" == $(basename $nixFile) ]]; then
+                        failMark $attr "filename matched $filename, skipped."
+                        return
+                fi
+        done
 
-rm -f "$nixFile.bak"
-rm -f "$attr.fetchlog"
+        # Insert broken attribute
+        sed -i.bak "$nixFile" -r \
+          -e "/^\s*broken\s*=.*$/d" \
+          -e "s/(\s*)meta\s*=.*\{/&\n\1  broken = true;/"
+
+        if cmp -s "$nixFile" "$nixFile.bak"; then
+            mv "$nixFile.bak" "$nixFile"
+            failMark $attr "Does it have a meta attribute?"
+            return
+        fi
+
+        # broken should evaluate to true in any case now
+        markedSuccessfully=$(nix-instantiate --eval -E "with import ./. {}; $attr.meta.broken")
+        if [[ "$markedSuccessfully" != "true" ]]; then
+            mv "$nixFile.bak" "$nixFile"
+            failMark $attr "$attr.meta.broken doesn't evaluate to true."
+            return
+        fi
+
+        rm -f "$nixFile.bak"
+}
+
+for attr in $@; do
+        attemptToMarkBroken $attr
+done

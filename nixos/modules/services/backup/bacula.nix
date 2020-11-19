@@ -18,7 +18,7 @@ let
         Pid Directory = "/run";
         ${fd_cfg.extraClientConfig}
       }
-     
+
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
@@ -26,7 +26,7 @@ let
         Monitor = "${value.monitor}";
       }
       '') fd_cfg.director)}
-     
+
       Messages {
         Name = Standard;
         syslog = all, !skipped, !restored
@@ -35,7 +35,7 @@ let
     '';
 
   sd_cfg = config.services.bacula-sd;
-  sd_conf = pkgs.writeText "bacula-sd.conf" 
+  sd_conf = pkgs.writeText "bacula-sd.conf"
     ''
       Storage {
         Name = "${sd_cfg.name}";
@@ -80,7 +80,7 @@ let
     '';
 
   dir_cfg = config.services.bacula-dir;
-  dir_conf = pkgs.writeText "bacula-dir.conf" 
+  dir_conf = pkgs.writeText "bacula-dir.conf"
     ''
     Director {
       Name = "${dir_cfg.name}";
@@ -125,10 +125,10 @@ let
 
           The password is plain text. It is not generated through any special
           process but as noted above, it is better to use random text for
-          security reasons. 
+          security reasons.
         '';
       };
-      
+
       monitor = mkOption {
         default = "no";
         example = "yes";
@@ -140,7 +140,7 @@ let
 
           Please note that if this director is being used by a Monitor, we
           highly recommend to set this directive to yes to avoid serious
-          security problems. 
+          security problems.
         '';
       };
     };
@@ -163,7 +163,7 @@ let
           type of autochanger, what you specify here can vary. This directive
           is optional. See the Using AutochangersAutochangersChapter chapter of
           this manual for more details of using this and the following
-          autochanger directives.         
+          autochanger directives.
           '';
       };
 
@@ -200,7 +200,7 @@ let
           Extra configuration to be passed in Autochanger directive.
         '';
         example = ''
-   
+
         '';
       };
     };
@@ -222,7 +222,7 @@ let
           if you are archiving to disk storage. In this case, you must supply
           the full absolute path to the directory. When specifying a tape
           device, it is preferable that the "non-rewind" variant of the device
-          file name be given. 
+          file name be given.
         '';
       };
 
@@ -290,7 +290,7 @@ in {
           Whether to enable the Bacula File Daemon.
         '';
       };
- 
+
       name = mkOption {
         default = "${config.networking.hostName}-fd";
         description = ''
@@ -300,7 +300,7 @@ in {
           Clients. This directive is required.
         '';
       };
- 
+
       port = mkOption {
         default = 9102;
         type = types.int;
@@ -310,7 +310,7 @@ in {
           the Client resource of the Director's configuration file.
         '';
       };
- 
+
       director = mkOption {
         default = {};
         description = ''
@@ -349,14 +349,14 @@ in {
           Whether to enable Bacula Storage Daemon.
         '';
       };
- 
+
       name = mkOption {
         default = "${config.networking.hostName}-sd";
         description = ''
           Specifies the Name of the Storage daemon.
         '';
       };
- 
+
       port = mkOption {
         default = 9103;
         type = types.int;
@@ -410,7 +410,7 @@ in {
           console = all
         '';
       };
- 
+
     };
 
     services.bacula-dir = {
@@ -429,7 +429,7 @@ in {
           required.
         '';
       };
- 
+
       port = mkOption {
         default = 9101;
         type = types.int;
@@ -442,7 +442,7 @@ in {
           specify DirAddresses (N.B plural) directive.
         '';
       };
- 
+
       password = mkOption {
         # TODO: required?
         description = ''

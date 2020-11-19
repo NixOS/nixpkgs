@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://synapse-bt.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

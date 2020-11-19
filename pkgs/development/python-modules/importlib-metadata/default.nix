@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "00ikdj4gjhankdljnz7g5ggak4k9lql2926x0x117ir9j2lv7x86";
+    sha256 = "10vz0ydrzspdhdbxrzwr9vhs693hzh4ff71lnqsifvdzvf66bfwh";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ zipp ]
     ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
 
-  checkInputs = [ importlib-resources packaging ];
+  doCheck = false; # Cyclic dependencies.
 
   # removing test_main.py - it requires 'pyflakefs'
   # and adding `pyflakefs` to `checkInputs` causes infinite recursion.

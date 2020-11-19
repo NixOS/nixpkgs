@@ -10,7 +10,7 @@ in {
   meta = {
     doc = ./trezord.xml;
   };
-  
+
   ### interface
 
   options = {
@@ -40,7 +40,7 @@ in {
       };
     };
   };
-  
+
   ### implementation
 
   config = mkIf cfg.enable {

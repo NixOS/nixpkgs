@@ -6,6 +6,7 @@
 , pkg-config
 , dbus
 , openssl
+, Foundation
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,12 +25,12 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
-  buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ];
+  buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
 
   meta = with lib; {
     description = "A console IRC client";
     homepage = "https://github.com/osa1/tiny";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
 # Inputs
-, curl, libmms, libnfs, samba
+, curl, libmms, libnfs, liburing, samba
 # Archive support
 , bzip2, zziplib
 # Codecs
@@ -19,10 +19,17 @@
 # Tag support
 , libid3tag
 , nixosTests
+# For documentation
+, doxygen
+, python3Packages # for sphinx-build
+# For tests
+, gtest
+, zip
 }:
 
 let
   lib = stdenv.lib;
+  concatAttrVals = nameList: set: lib.concatMap (x: set.${x} or []) nameList;
 
   featureDependencies = {
     # Storage plugins
@@ -30,6 +37,7 @@ let
     webdav        = [ curl expat ];
     # Input plugins
     curl          = [ curl ];
+    io_uring      = [ liburing ];
     mms           = [ libmms ];
     nfs           = [ libnfs ];
     smbclient     = [ samba ];
@@ -78,15 +86,19 @@ let
     zeroconf      = [ avahi dbus ];
   };
 
+  nativeFeatureDependencies = {
+    documentation = [ doxygen python3Packages.sphinx ];
+  };
+
   run = { features ? null }:
     let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
       platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smbclient" ]
-                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "systemd" "syslog" ];
+                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "io_uring" "systemd" "syslog" ];
 
-      knownFeatures = builtins.attrNames featureDependencies;
+      knownFeatures = builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
 
       features_ = if (features == null )
@@ -103,26 +115,54 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.23";
+      version = "0.22.2";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "0jnhjhm1ilpcwb4f58b8pgyzjq3dlr0j2xyk0zck0afwkdxyj9cb";
+        sha256 = "1pg3h3bvrsp24pv53yvwl5kr4m2csaxffdbrj5rm3b7w6pbqpfix";
       };
 
-      buildInputs = [ glib boost ]
-        ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
+      buildInputs = [
+        glib
+        boost
+        # According to the configurePhase of meson, gtest is considered a
+        # runtime dependency. Quoting:
+        #
+        #    Run-time dependency GTest found: YES 1.10.0
+        gtest
+      ]
+        ++ concatAttrVals features_ featureDependencies
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
-      nativeBuildInputs = [ meson ninja pkgconfig ];
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+      ]
+        ++ concatAttrVals features_ nativeFeatureDependencies;
+
+      # Otherwise, the meson log says:
+      #
+      #    Program zip found: NO
+      checkInputs = [ zip ];
+
+      doCheck = true;
 
       enableParallelBuilding = true;
 
       mesonAutoFeatures = "disabled";
-      mesonFlags =
-        map (x: "-D${x}=enabled") features_
+
+      outputs = [ "out" "doc" ]
+        ++ lib.optional (builtins.elem "documentation" features_) "man";
+
+      mesonFlags = [
+        "-Dtest=true"
+        "-Dmanpages=true"
+        "-Dhtml_manual=true"
+      ]
+        ++ map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
         ++ lib.optional (builtins.elem "zeroconf" features_)
           "-Dzeroconf=avahi"
@@ -157,7 +197,7 @@ in
     "yajl" "sqlite"
     "soundcloud" "qobuz" "tidal"
   ] ++ lib.optionals stdenv.isLinux [
-    "alsa" "systemd" "syslog"
+    "alsa" "systemd" "syslog" "io_uring"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "mad" "jack" "nfs"
   ]; };

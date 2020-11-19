@@ -13,7 +13,7 @@ mkChromiumDerivation (base: rec {
 
   installPhase = ''
     mkdir -p "$libExecPath"
-    cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
@@ -77,18 +77,11 @@ mkChromiumDerivation (base: rec {
       of source code for Google Chrome (which has some additional features).
     '';
     homepage = "https://www.chromium.org/";
-    maintainers = with maintainers; [ bendlas thefloweringash primeos ];
-    # Overview of the maintainer roles:
-    # nixos-unstable:
-    # - TODO: Need a new maintainer for x86_64 [0]
-    # - @thefloweringash: aarch64
-    # - @primeos: Provisional maintainer (x86_64)
-    # Stable channel:
-    # - TODO (need someone to test backports [0])
-    # [0]: https://github.com/NixOS/nixpkgs/issues/78450
+    maintainers = with maintainers; [ primeos thefloweringash bendlas ]; # See README.md
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
-    timeout = 172800; # 48 hours
+    timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+    broken = channel == "dev"; # Blocked on https://bugs.chromium.org/p/chromium/issues/detail?id=1141896
   };
 })

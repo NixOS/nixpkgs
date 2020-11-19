@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask, markdown }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, flask, markdown }:
 
 buildPythonPackage rec {
   pname = "Flask-API";
   version = "2.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

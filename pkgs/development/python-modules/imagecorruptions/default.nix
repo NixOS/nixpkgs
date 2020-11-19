@@ -19,7 +19,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "'opencv-python >= 3.4.5'," ""
   '';
-  
+
   propagatedBuildInputs = [
     numpy
     scikitimage

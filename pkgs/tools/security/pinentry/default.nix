@@ -2,7 +2,7 @@
 , libgpgerror, libassuan, qtbase, wrapQtAppsHook
 , ncurses, gtk2, gcr
 , libcap ? null, libsecret ? null
-, enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+, enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "emacs" ] ++ lib.optionals stdenv.isLinux [ "gnome3" ]
 }:
 
 with stdenv.lib;

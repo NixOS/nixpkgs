@@ -7,20 +7,20 @@
  <para>
   The system can be shut down (and automatically powered off) by doing:
 <screen>
-# shutdown
+<prompt># </prompt>shutdown
 </screen>
   This is equivalent to running <command>systemctl poweroff</command>.
  </para>
  <para>
   To reboot the system, run
 <screen>
-# reboot
+<prompt># </prompt>reboot
 </screen>
   which is equivalent to <command>systemctl reboot</command>. Alternatively,
   you can quickly reboot the system using <literal>kexec</literal>, which
   bypasses the BIOS by directly loading the new kernel into memory:
 <screen>
-# systemctl kexec
+<prompt># </prompt>systemctl kexec
 </screen>
  </para>
  <para>

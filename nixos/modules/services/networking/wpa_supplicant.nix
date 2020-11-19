@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
@@ -233,6 +233,9 @@ in {
       path = [ pkgs.wpa_supplicant ];
 
       script = ''
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
+        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        fi
         iface_args="-s -u -D${cfg.driver} -c ${configFile}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do

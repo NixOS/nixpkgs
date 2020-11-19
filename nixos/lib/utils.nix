@@ -2,9 +2,16 @@ pkgs: with pkgs.lib;
 
 rec {
 
-  # Check whenever fileSystem is needed for boot
-  fsNeededForBoot = fs: fs.neededForBoot
-                     || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
+  # Copy configuration files to avoid having the entire sources in the system closure
+  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+    cp ${filePath} $out
+  '';
+
+  # Check whenever fileSystem is needed for boot.  NOTE: Make sure
+  # pathsNeededForBoot is closed under the parent relationship, i.e. if /a/b/c
+  # is in the list, put /a and /a/b in as well.
+  pathsNeededForBoot = [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
+  fsNeededForBoot = fs: fs.neededForBoot || elem fs.mountPoint pathsNeededForBoot;
 
   # Check whenever `b` depends on `a` as a fileSystem
   fsBefore = a: b: a.mountPoint == b.device

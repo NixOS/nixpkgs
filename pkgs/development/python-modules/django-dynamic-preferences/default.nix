@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "django-dynamic-preferences";
-  version = "1.8.1";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "727f71f865ff29df93c01a0a1686af0dca19776ee786f876ea0ae7e062719b24";
+    sha256 = "e4b2bb7b2563c5064ba56dd76441c77e06b850ff1466a386a1cd308909a6c7de";
   };
 
-  propagatedBuildInputs = [ six django persisting-theory ]; 
+  propagatedBuildInputs = [ six django persisting-theory ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting DYNAMIC_PREFERENCES, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings
   doCheck = false;

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "ExifRead";
-  version = "2.1.2";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b90jf6m9vxh9nanhpyvqdq7hmfx5iggw1l8kq10jrs6xgr49qkr";
+    sha256 = "a0f74af5040168d3883bbc980efe26d06c89f026dc86ba28eb34107662d51766";
   };
 
   meta = with stdenv.lib; {

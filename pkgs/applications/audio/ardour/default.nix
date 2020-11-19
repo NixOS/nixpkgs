@@ -8,21 +8,18 @@
 , curl
 , dbus
 , doxygen
-, ffmpeg
+, ffmpeg_3
 , fftw
 , fftwSinglePrec
 , flac
-, fluidsynth
 , glibc
 , glibmm
 , graphviz
 , gtkmm2
-, hidapi
 , itstool
 , libarchive
 , libjack2
 , liblo
-, libltc
 , libogg
 , libpulseaudio
 , librdf_raptor
@@ -42,11 +39,11 @@
 , perl
 , pkg-config
 , python3
-, qm-dsp
 , readline
 , rubberband
 , serd
 , sord
+, soundtouch
 , sratom
 , suil
 , taglib
@@ -55,13 +52,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.0";
+  version = "6.3";
 
   # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "162jd96zahl05fdmjwvpdfjxbhd6ifbav6xqa0vv6rsdl4zk395q";
+    sha256 = "050p1adgyirr790a3xp878pq3axqwzcmrk3drgm9z6v753h0xhcd";
   };
 
   patches = [
@@ -87,19 +84,16 @@ stdenv.mkDerivation rec {
     cppunit
     curl
     dbus
-    ffmpeg
+    ffmpeg_3
     fftw
     fftwSinglePrec
     flac
-    fluidsynth
     glibmm
     gtkmm2
-    hidapi
     itstool
     libarchive
     libjack2
     liblo
-    libltc
     libogg
     libpulseaudio
     librdf_raptor
@@ -118,11 +112,11 @@ stdenv.mkDerivation rec {
     pango
     perl
     python3
-    qm-dsp
     readline
     rubberband
     serd
     sord
+    soundtouch
     sratom
     suil
     taglib
@@ -136,11 +130,11 @@ stdenv.mkDerivation rec {
     "--no-phone-home"
     "--optimize"
     "--ptformat"
-    "--qm-dsp-include=${qm-dsp}/include/qm-dsp"
     "--run-tests"
     "--test"
-    "--use-external-libs"
   ];
+  # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
+  # "--use-external-libs"
 
   # Ardour's wscript requires git revision and date to be available.
   # Since they are not, let's generate the file manually.
@@ -149,8 +143,8 @@ stdenv.mkDerivation rec {
     sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
     substituteInPlace libs/ardour/video_tools_paths.cc \
-      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
-      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg_3}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg_3}/bin/ffprobe");'
   '';
 
   postInstall = ''

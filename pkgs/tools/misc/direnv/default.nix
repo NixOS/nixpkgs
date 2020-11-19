@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoModule, bash }:
+{ stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.21.3";
+  version = "2.24.0";
 
   vendorSha256 = null;
 
@@ -10,13 +10,18 @@ buildGoModule rec {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "1adi6ld9g4zgz0f6q0kkzrywclqrmikyp7yh22zm9lfdvd5hs8wp";
+    sha256 = "1hgivmz6f5knpchkyi3njj1h81hixm77ad5g2v0m9bid09b97nh8";
   };
 
   # we have no bash at the moment for windows
   BASH_PATH =
     stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
     "${bash}/bin/bash";
+
+  # fix hardcoded GOFLAGS in makefile. remove once https://github.com/direnv/direnv/issues/718 is closed.
+  postPatch = ''
+    substituteInPlace GNUmakefile --replace "export GOFLAGS=-mod=vendor" ""
+  '';
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
@@ -27,6 +32,13 @@ buildGoModule rec {
     make install DESTDIR=$out
     mkdir -p $out/share/fish/vendor_conf.d
     echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+  '';
+
+  checkInputs = [ fish zsh ];
+
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    make test-go test-bash test-fish test-zsh
   '';
 
   meta = with stdenv.lib; {

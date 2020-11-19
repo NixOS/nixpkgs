@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "icestorm";
-  version = "2019.09.13";
+  version = "2020.08.19";
 
   passthru = rec {
     pythonPkg = if usePyPy then pypy3 else python3;
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchFromGitHub {
-    owner  = "cliffordwolf";
+    owner  = "YosysHQ";
     repo   = "icestorm";
-    rev    = "0ec00d892a91cc68e45479b46161f649caea2933";
-    sha256 = "1qlh99fafb7xga702k64fmc9m700nsddrfgcq4x8qn8fplsb64f1";
+    rev    = "da52117ccd5b4147f64dc7345357ec5439cd7543";
+    sha256 = "072bl3vmvb06ry0ci3b1sfjpm3iigb874khzja4azcai969ybp4k";
   };
 
   nativeBuildInputs = [ pkgconfig ];

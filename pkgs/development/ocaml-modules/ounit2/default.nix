@@ -1,14 +1,14 @@
 { lib, buildDunePackage, fetchurl, stdlib-shims }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.02.3";
+  minimumOCamlVersion = "4.04";
 
   pname = "ounit2";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "https://github.com/gildor478/ounit/releases/download/v${version}/ounit-v${version}.tbz";
-    sha256 = "1h4xdcyzwyhxg263w9b16x9n6cb11fzazmwnsnpich4djpl9lhsk";
+    sha256 = "1naahh24lbyxmrnzpfz8karniqbf1nknivf96mrvsr6zlx5ad072";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];

@@ -12,13 +12,13 @@ let
   ;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.3.2";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "1785wnxhasp4j8w2a8bgbfp3gyhc7zac18r5fqw5qcndz2hfk5mc";
+    sha256 = "13q926iqwdba6ds5s3ir57c9bkg8gcv6dhqvhmg00fnzkq9xqk3d";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
@@ -37,6 +37,7 @@ in pythonPackages.buildPythonApplication rec {
     mutagen
     chromaprint
     discid
+    dateutil
   ];
 
   prePatch = ''
@@ -57,7 +58,7 @@ in pythonPackages.buildPythonApplication rec {
     homepage = "https://picard.musicbrainz.org/";
     description = "The official MusicBrainz tagger";
     maintainers = with maintainers; [ ehmry ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

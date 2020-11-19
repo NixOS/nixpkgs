@@ -1,29 +1,71 @@
-{ stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
-, gobject-introspection, gdk-pixbuf, librsvg, libgweather
-, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
-, webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, python3
+, pkgconfig
+, gnome3
+, gtk3
+, gobject-introspection
+, gdk-pixbuf
+, librsvg
+, libgweather
+, geoclue2
+, wrapGAppsHook
+, folks
+, libchamplain
+, gfbgraph
+, libsoup
+, gsettings-desktop-schemas
+, webkitgtk
+, gjs
+, libgee
+, libhandy
+, geocode-glib
+, evolution-data-server
+, gnome-online-accounts
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "3.36.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.1.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "114pia3nd8k7j6ll7za7qzv0ggcdvcw6b3w4lppqqrwqvswik8jv";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1y59afvfrylkikqd0ax0nj41zs6b54219l7k5bp5gzh9lxq06xgk";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext python3 wrapGAppsHook ];
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+  ];
+
   buildInputs = [
+    evolution-data-server
+    folks
+    gdk-pixbuf
+    geoclue2
+    geocode-glib
+    gfbgraph
+    gjs
+    gnome-online-accounts
+    gnome3.adwaita-icon-theme
     gobject-introspection
-    gtk3 geoclue2 gjs libgee folks gfbgraph
-    geocode-glib libchamplain libsoup
-    gdk-pixbuf librsvg libgweather
-    gsettings-desktop-schemas evolution-data-server
-    gnome-online-accounts gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    libchamplain
+    libgee
+    libgweather
+    libhandy
+    librsvg
+    libsoup
     webkitgtk
   ];
 

@@ -4,8 +4,18 @@
   openMPISupport ? false, openmpi ? null,
   buildDocs ? false,
   cudaArchList ? null,
-  numpy, pyyaml, cffi, click, typing, cmake, oneDNN, hypothesis, numactl, psutil,
-  linkFarm, symlinkJoin,
+
+  # Native build inputs
+  cmake, utillinux, linkFarm, symlinkJoin, which,
+
+  # Build inputs
+  numactl,
+
+  # Propagated build inputs
+  dataclasses, numpy, pyyaml, cffi, click, typing-extensions,
+
+  # Unit tests
+  hypothesis, psutil,
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
@@ -17,7 +27,7 @@
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorflow-tensorboard, protobuf,
 
-  utillinux, which, isPy3k }:
+  isPy3k, pythonOlder }:
 
 assert !openMPISupport || openmpi != null;
 
@@ -25,15 +35,11 @@ assert !openMPISupport || openmpi != null;
 assert !cudaSupport || cudatoolkit != null;
 assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
-                        in majorIs == "9" || majorIs == "10");
+                        in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
-let
-  hasDependency = dep: pkg: lib.lists.any (inp: inp == dep) pkg.buildInputs;
-  matchesCudatoolkit = hasDependency cudatoolkit;
-in
 # confirm that cudatoolkits are sync'd across dependencies
-assert !(openMPISupport && cudaSupport) || matchesCudatoolkit openmpi;
-assert !cudaSupport || matchesCudatoolkit magma;
+assert !(openMPISupport && cudaSupport) || openmpi.cudatoolkit == cudatoolkit;
+assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
   cudatoolkit_joined = symlinkJoin {
@@ -104,13 +110,16 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
 in buildPythonPackage rec {
-  version = "1.4.1";
   pname = "pytorch";
+  # Don't forget to update pytorch-bin to the same version.
+  version = "1.7.0";
+
   disabled = !isPy3k;
 
   outputs = [
     "out"   # output standard python package
-    "dev"   # output libtorch only
+    "dev"   # output libtorch headers
+    "lib"   # output libtorch libraries
   ];
 
   src = fetchFromGitHub {
@@ -118,8 +127,24 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1aa1il4f98pswfj20cv27yfb91l1jcq4515i7mvq7sh5647yzwms";
+    sha256 = "0hb11m5kvs4nsi5bc9ijnv6k07593p9dw40rcn33s9vspinrcjd4";
   };
+
+  patches = lib.optionals stdenv.isDarwin [
+    # pthreadpool added support for Grand Central Dispatch in April
+    # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
+    # that is available starting with macOS 10.13. However, our current
+    # base is 10.12. Until we upgrade, we can fall back on the older
+    # pthread support.
+    ./pthreadpool-disable-gcd.diff
+  ];
+
+  # The dataclasses module is included with Python >= 3.7. This should
+  # be fixed with the next PyTorch release.
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'dataclasses'" "'dataclasses; python_version < \"3.7\"'"
+  '';
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
@@ -127,24 +152,6 @@ in buildPythonPackage rec {
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '';
-
-  patches = [
-    # Prevents a race condition which would be introduced by pull 30333.
-    # See https://github.com/pytorch/pytorch/issues/32277
-    # Can be removed >1.5.0.
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/pytorch/pytorch/pull/30332.patch";
-      sha256 = "1v9dwbhz3rdxcx6sz8y8j9n3bj6nqs78b1r8yg89yc15n6l4cqx2";
-    })
-
-    # Fixes errors with gcc-9 compilation. Cherry-picked on advice from ezyang.
-    # See https://github.com/pytorch/pytorch/issues/32277
-    # Can be removed >1.5.0.
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/pytorch/pytorch/pull/30333.patch";
-      sha256 = "139413fl37h2fnil0cv99a67mqqnsh02k74b92by1qyr6pcfyg3q";
-    })
-  ];
 
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
@@ -154,9 +161,9 @@ in buildPythonPackage rec {
 
   USE_MKL = blas.implementation == "mkl";
 
-  # Unlike MKL, MKLDNN is FOSS, so we enable support for it by default. Note
-  # that this was renamed to dnnl and then renamed again to oneDNN upstream, but
-  # pytorch still calls it by the old name mkldnn.
+  # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
+  # it by default. PyTorch currently uses its own vendored version
+  # of oneDNN through Intel iDeep.
   USE_MKLDNN = mklDnnSupport;
   USE_MKLDNN_CBLAS = mklDnnSupport;
 
@@ -205,7 +212,7 @@ in buildPythonPackage rec {
     ninja
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
-  buildInputs = [ blas blas.provider oneDNN ]
+  buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 
@@ -214,9 +221,11 @@ in buildPythonPackage rec {
     click
     numpy
     pyyaml
+    typing-extensions
     # the following are required for tensorboard support
     pillow six future tensorflow-tensorboard protobuf
-  ] ++ lib.optionals openMPISupport [ openmpi ];
+  ] ++ lib.optionals openMPISupport [ openmpi ]
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   checkInputs = [ hypothesis ninja psutil ];
 
@@ -242,33 +251,35 @@ in buildPythonPackage rec {
   ];
   postInstall = ''
     mkdir $dev
-    cp -r $out/${python.sitePackages}/torch/lib     $dev/lib
     cp -r $out/${python.sitePackages}/torch/include $dev/include
     cp -r $out/${python.sitePackages}/torch/share   $dev/share
+
+    mkdir $lib
+    cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
   '';
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    for f in $(ls $dev/lib/*.dylib); do
-        install_name_tool -id $dev/lib/$(basename $f) $f || true
+    for f in $(ls $lib/lib/*.dylib); do
+        install_name_tool -id $lib/lib/$(basename $f) $f || true
     done
 
-    install_name_tool -change @rpath/libshm.dylib $dev/lib/libshm.dylib $dev/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libshm.dylib $lib/lib/libshm.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch_python.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libtorch.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_observers.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_observers.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_observers.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_observers.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_module_test_dynamic.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_module_test_dynamic.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_detectron_ops.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_detectron_ops.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_detectron_ops.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_detectron_ops.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libshm.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libshm.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libshm.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
 

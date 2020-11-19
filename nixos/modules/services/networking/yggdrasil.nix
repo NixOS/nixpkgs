@@ -195,5 +195,8 @@ in {
     # Make yggdrasilctl available on the command line.
     environment.systemPackages = [ cfg.package ];
   });
-  meta.maintainers = with lib.maintainers; [ gazally ehmry ];
+  meta = {
+    doc = ./yggdrasil.xml;
+    maintainers = with lib.maintainers; [ gazally ehmry ];
+  };
 }

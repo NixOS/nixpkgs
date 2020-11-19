@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
+{ stdenv, fetchurl, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
 
 let
   options = rec {
     /* TODO: there are also FreeBSD and Windows versions */
     x86_64-linux = {
       arch = "linuxx86";
-      sha256 = "0hs1f3z7crgzvinpj990kv9gvbsipxvcvwbmk54n51nasvc5025q";
+      sha256 = "0d5bsizgpw9hv0jfsf4bp5sf6kxh8f9hgzz9hsjzpfhs3npmmac4";
       runtime = "lx86cl64";
       kernel = "linuxx8664";
     };
@@ -17,26 +17,44 @@ let
     };
     armv7l-linux = {
       arch = "linuxarm";
-      sha256 = "0p0l1dzsygb6i1xxgbipjpxkn46xhq3jm41a34ga1qqp4x8lkr62";
+      sha256 = throw "ccl all-in-one linuxarm archive missing upstream";
       runtime = "armcl";
       kernel = "linuxarm";
     };
     x86_64-darwin = {
       arch = "darwinx86";
-      sha256 = "5adbea3d8b4a2e29af30d141f781c6613844f468c0ccfa11bae908c3e9641939";
+      sha256 = "1l060719k8mjd70lfdnr0hkybk7v88zxvfrsp7ww50q808cjffqk";
       runtime = "dx86cl64";
       kernel = "darwinx8664";
     };
     armv6l-linux = armv7l-linux;
   };
   cfg = options.${stdenv.hostPlatform.system} or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
+
+  # The 1.12 github release of CCL seems to be missing the usual
+  # ccl-1.12-linuxarm.tar.gz tarball, so we build it ourselves here
+  linuxarm-src = runCommand "ccl-1.12-linuxarm.tar.gz" {
+    outer = fetchurl {
+      url = "https://github.com/Clozure/ccl/archive/v1.12.tar.gz";
+      sha256 = "0lmxhll6zgni0l41h4kcf3khbih9r0f8xni6zcfvbi3dzfs0cjkp";
+    };
+    inner = fetchurl {
+      url = "https://github.com/Clozure/ccl/releases/download/v1.12/linuxarm.tar.gz";
+      sha256 = "0x4bjx6cxsjvxyagijhlvmc7jkyxifdvz5q5zvz37028va65243c";
+    };
+  } ''
+    tar xf $outer
+    tar xf $inner -C ccl
+    tar czf $out ccl
+  '';
+
 in
 
 stdenv.mkDerivation rec {
   pname = "ccl";
-  version  = "1.11.5";
+  version  = "1.12";
 
-  src = fetchurl {
+  src = if cfg.arch == "linuxarm" then linuxarm-src else fetchurl {
     url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
     sha256 = cfg.sha256;
   };
@@ -88,6 +106,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://ccl.clozure.com/";
     maintainers = with maintainers; [ raskin muflax tohl ];
     platforms   = attrNames options;
-    license     = licenses.lgpl21;
+    license     = licenses.asl20;
   };
 }

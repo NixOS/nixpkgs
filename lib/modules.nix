@@ -1,12 +1,53 @@
 { lib }:
 
-with lib.lists;
-with lib.strings;
-with lib.trivial;
-with lib.attrsets;
-with lib.options;
-with lib.debug;
-with lib.types;
+let
+  inherit (lib)
+    all
+    any
+    attrByPath
+    attrNames
+    catAttrs
+    concatLists
+    concatMap
+    count
+    elem
+    filter
+    findFirst
+    flip
+    foldl
+    foldl'
+    getAttrFromPath
+    head
+    id
+    imap1
+    isAttrs
+    isBool
+    isFunction
+    isString
+    length
+    mapAttrs
+    mapAttrsToList
+    mapAttrsRecursiveCond
+    min
+    optional
+    optionalAttrs
+    optionalString
+    recursiveUpdate
+    reverseList sort
+    setAttrByPath
+    toList
+    types
+    warn
+    ;
+  inherit (lib.options)
+    isOption
+    mkOption
+    showDefs
+    showFiles
+    showOption
+    unknownModule
+    ;
+in
 
 rec {
 
@@ -58,6 +99,23 @@ rec {
             default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
           };
+
+          _module.freeformType = mkOption {
+            # Disallow merging for now, but could be implemented nicely with a `types.optionType`
+            type = types.nullOr (types.uniq types.attrs);
+            internal = true;
+            default = null;
+            description = ''
+              If set, merge all definitions that don't have an associated option
+              together using this type. The result then gets combined with the
+              values of all declared options to produce the final <literal>
+              config</literal> value.
+
+              If this is <literal>null</literal>, definitions without an option
+              will throw an error unless <option>_module.check</option> is
+              turned off.
+            '';
+          };
         };
 
         config = {
@@ -65,35 +123,55 @@ rec {
         };
       };
 
-      collected = collectModules
-        (specialArgs.modulesPath or "")
-        (modules ++ [ internalModule ])
-        ({ inherit config options lib; } // specialArgs);
+      merged =
+        let collected = collectModules
+          (specialArgs.modulesPath or "")
+          (modules ++ [ internalModule ])
+          ({ inherit lib options config; } // specialArgs);
+        in mergeModules prefix (reverseList collected);
 
-      options = mergeModules prefix (reverseList collected);
+      options = merged.matchedOptions;
 
-      # Traverse options and extract the option values into the final
-      # config set.  At the same time, check whether all option
-      # definitions have matching declarations.
-      # !!! _module.check's value can't depend on any other config values
-      # without an infinite recursion. One way around this is to make the
-      # 'config' passed around to the modules be unconditionally unchecked,
-      # and only do the check in 'result'.
-      config = yieldConfig prefix options;
-      yieldConfig = prefix: set:
-        let res = removeAttrs (mapAttrs (n: v:
-          if isOption v then v.value
-          else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
-        in
-        if options._module.check.value && set ? _definedNames then
-          foldl' (res: m:
-            foldl' (res: name:
-              if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
-              res m.names)
-            res set._definedNames
-        else
-          res;
-      result = {
+      config =
+        let
+
+          # For definitions that have an associated option
+          declaredConfig = mapAttrsRecursiveCond (v: ! isOption v) (_: v: v.value) options;
+
+          # If freeformType is set, this is for definitions that don't have an associated option
+          freeformConfig =
+            let
+              defs = map (def: {
+                file = def.file;
+                value = setAttrByPath def.prefix def.value;
+              }) merged.unmatchedDefns;
+            in if defs == [] then {}
+            else declaredConfig._module.freeformType.merge prefix defs;
+
+        in if declaredConfig._module.freeformType == null then declaredConfig
+          # Because all definitions that had an associated option ended in
+          # declaredConfig, freeformConfig can only contain the non-option
+          # paths, meaning recursiveUpdate will never override any value
+          else recursiveUpdate freeformConfig declaredConfig;
+
+      checkUnmatched =
+        if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
+          let
+            firstDef = head merged.unmatchedDefns;
+            baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' does not exist. Definition values:${showDefs [ firstDef ]}";
+          in
+            if attrNames options == [ "_module" ]
+              then throw ''
+                ${baseMsg}
+
+                However there are no options defined in `${showOption prefix}'. Are you sure you've
+                declared your options properly? This can happen if you e.g. declared your options in `types.submodule'
+                under `config' rather than `options'.
+              ''
+            else throw baseMsg
+        else null;
+
+      result = builtins.seq checkUnmatched {
         inherit options;
         config = removeAttrs config [ "_module" ];
         inherit (config) _module;
@@ -174,12 +252,16 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    let addMeta = config: if m ? meta
-      then mkMerge [ config { meta = m.meta; } ]
-      else config;
+    let
+      addMeta = config: if m ? meta
+        then mkMerge [ config { meta = m.meta; } ]
+        else config;
+      addFreeformType = config: if m ? freeformType
+        then mkMerge [ config { _module.freeformType = m.freeformType; } ]
+        else config;
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
+      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
@@ -188,7 +270,7 @@ rec {
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
-          config = addMeta (m.config or {});
+          config = addFreeformType (addMeta (m.config or {}));
         }
     else
       { _file = m._file or file;
@@ -196,7 +278,7 @@ rec {
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]);
+        config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
@@ -233,7 +315,23 @@ rec {
      declarations in all modules, combining them into a single set.
      At the same time, for each option declaration, it will merge the
      corresponding option definitions in all machines, returning them
-     in the ‘value’ attribute of each option. */
+     in the ‘value’ attribute of each option.
+
+     This returns a set like
+       {
+         # A recursive set of options along with their final values
+         matchedOptions = {
+           foo = { _type = "option"; value = "option value of foo"; ... };
+           bar.baz = { _type = "option"; value = "option value of bar.baz"; ... };
+           ...
+         };
+         # A list of definitions that weren't matched by any option
+         unmatchedDefns = [
+           { file = "file.nix"; prefix = [ "qux" ]; value = "qux"; }
+           ...
+         ];
+       }
+  */
   mergeModules = prefix: modules:
     mergeModules' prefix modules
       (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
@@ -280,9 +378,9 @@ rec {
       defnsByName' = byName "config" (module: value:
           [{ inherit (module) file; inherit value; }]
         ) configs;
-    in
-    (flip mapAttrs declsByName (name: decls:
-      # We're descending into attribute ‘name’.
+
+      resultsByName = flip mapAttrs declsByName (name: decls:
+        # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
           defns = defnsByName.${name} or [];
@@ -291,7 +389,10 @@ rec {
         in
           if nrOptions == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
-            in evalOptionValue loc opt defns'
+            in {
+              matchedOptions = evalOptionValue loc opt defns';
+              unmatchedDefns = [];
+            }
           else if nrOptions != 0 then
             let
               firstOption = findFirst (m: isOption m.options) "" decls;
@@ -299,9 +400,27 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
-            mergeModules' loc decls defns
-      ))
-    // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
+            mergeModules' loc decls defns);
+
+      matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
+
+      # an attrset 'name' => list of unmatched definitions for 'name'
+      unmatchedDefnsByName =
+        # Propagate all unmatched definitions from nested option sets
+        mapAttrs (n: v: v.unmatchedDefns) resultsByName
+        # Plus the definitions for the current prefix that don't have a matching option
+        // removeAttrs defnsByName' (attrNames matchedOptions);
+    in {
+      inherit matchedOptions;
+
+      # Transforms unmatchedDefnsByName into a list of definitions
+      unmatchedDefns = concatLists (mapAttrsToList (name: defs:
+        map (def: def // {
+          # Set this so we know when the definition first left unmatched territory
+          prefix = [name] ++ (def.prefix or []);
+        }) defs
+      ) unmatchedDefnsByName);
+    };
 
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.
@@ -371,7 +490,13 @@ rec {
       # Handle properties, check types, and merge everything together.
       res =
         if opt.readOnly or false && length defs' > 1 then
-          throw "The option `${showOption loc}' is read-only, but it's set multiple times."
+          let
+            # For a better error message, evaluate all readOnly definitions as
+            # if they were the only definition.
+            separateDefs = map (def: def // {
+              value = (mergeDefinitions loc opt.type [ def ]).mergedValue;
+            }) defs';
+          in throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
         else
           mergeDefinitions loc opt.type defs';
 
@@ -379,7 +504,11 @@ rec {
       # yield a value computed from the definitions
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
-    in opt //
+      warnDeprecation =
+        if opt.type.deprecationMessage == null then id
+        else warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+
+    in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
@@ -415,8 +544,8 @@ rec {
     mergedValue =
       if isDefined then
         if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
-        else let firstInvalid = findFirst (def: ! type.check def.value) null defsFinal;
-        in throw "The option value `${showOption loc}' in `${firstInvalid.file}' is not of type `${type.description}'."
+        else let allInvalid = filter (def: ! type.check def.value) defsFinal;
+        in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
@@ -528,14 +657,13 @@ rec {
   fixupOptionType = loc: opt:
     let
       options = opt.options or
-        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
+        (throw "Option `${showOption loc}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
       f = tp:
         let optionSetIn = type: (tp.name == type) && (tp.functor.wrapped.name == "optionSet");
         in
         if tp.name == "option set" || tp.name == "submodule" then
           throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
         else if optionSetIn "attrsOf" then types.attrsOf (types.submodule options)
-        else if optionSetIn "loaOf"   then types.loaOf   (types.submodule options)
         else if optionSetIn "listOf"  then types.listOf  (types.submodule options)
         else if optionSetIn "nullOr"  then types.nullOr  (types.submodule options)
         else tp;
@@ -632,7 +760,7 @@ rec {
 
        mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "<replacement instructions>"
 
-     causes a warning if the user defines boot.loader.grub.bootDevice.
+     causes a assertion if the user defines boot.loader.grub.bootDevice.
 
      replacementInstructions is a string that provides instructions on
      how to achieve the same functionality without the removed option,
@@ -788,4 +916,21 @@ rec {
       ];
     };
 
+  /* Use this function to import a JSON file as NixOS configuration.
+
+     importJSON -> path -> attrs
+  */
+  importJSON = file: {
+    _file = file;
+    config = lib.importJSON file;
+  };
+
+  /* Use this function to import a TOML file as NixOS configuration.
+
+     importTOML -> path -> attrs
+  */
+  importTOML = file: {
+    _file = file;
+    config = lib.importTOML file;
+  };
 }

@@ -1,13 +1,9 @@
 { buildBazelPackage
 , fetchFromGitHub
-, fetchpatch
 , git
 , go
 , python
 , stdenv
-, iana-etc
-, mailcap
-, tzdata
 }:
 
 let
@@ -17,13 +13,13 @@ let
 in
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "1fc3sp79znbbq1yjap56lham72n7cap8yfghpzrzmpl5brybjkvm";
+    sha256 = "0n28q27510ymg5d455hrbk7z8wawszgjmqjjhb4zximqhvxks7kh";
   };
 
   nativeBuildInputs = [ go git python ];
@@ -60,7 +56,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "0i77nnbd1sd39qw4vm3n5mwkag3dskqjhzr7qs4w1arbiih45zd4";
+    sha256 = "0rfdwss8aahydiybwhi3j0qw12j1l91k9lbn1vaip0bmnq5qfwh9";
   };
 
   buildAttrs = {
@@ -77,7 +73,7 @@ buildBazelPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
-    description = "Tools for building Bazel targets when source files change.";
+    description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;

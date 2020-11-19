@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ettercap";
-  version = "0.8.3";
+  version = "0.8.3.1";
 
   src = fetchFromGitHub {
     owner = "Ettercap";
     repo = "ettercap";
     rev = "v${version}";
-    sha256 = "0m40bmbrv9a8qlg54z3b5f8r541gl9vah5hm0bbqcgyyljpg39bz";
+    sha256 = "1sdf1ssa81ib6k0mc5m2jzbjl4jd1yv6ahv5dwx2x9w4b2pyqg1c";
   };
 
   strictDeps = true;

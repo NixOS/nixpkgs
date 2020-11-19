@@ -67,6 +67,16 @@ in let
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         "''${gappsWrapperArgs[@]}"
+
+      # We need to replace the ssh-askpass-sublime executable because the default one
+      # will not function properly, in order to work it needs to pass an argv[0] to
+      # the sublime_merge binary, and the built-in version will will try to call the
+      # sublime_merge wrapper script which cannot pass through the original argv[0] to
+      # the sublime_merge binary. Thankfully the ssh-askpass-sublime functionality is
+      # very simple and can be replaced with a simple wrapper script.
+      rm $out/ssh-askpass-sublime
+      makeWrapper $out/.${primaryBinary}-wrapped $out/ssh-askpass-sublime \
+        --argv0 "/ssh-askpass-sublime"
     '';
   };
 in stdenv.mkDerivation (rec {

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://pgloader.io/";
-    description = "pgloader loads data into PostgreSQL and allows you to implement Continuous Migration from your current database to PostgreSQL";
+    description = "Loads data into PostgreSQL and allows you to implement Continuous Migration from your current database to PostgreSQL";
     maintainers = with maintainers; [ mguentner ];
     license = licenses.postgresql;
     platforms = platforms.all;

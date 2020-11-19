@@ -48,7 +48,7 @@ in
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
-    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
+    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.

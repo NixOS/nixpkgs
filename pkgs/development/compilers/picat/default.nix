@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "picat";
-  version = "2.8-2";
+  version = "3.0p2";
 
   src = fetchurl {
-    url = "http://picat-lang.org/download/picat28_src.tar.gz";
-    sha256 = "10hf2fxxbpq28gi39icr8c9wafdiy9ddfkk6l4rx7kkqyrdi7n85";
+    url    = "http://picat-lang.org/download/picat30_2_src.tar.gz";
+    sha256 = "0sn4fqj2ryalcndx1df5kx5rzb4pfcrza5ljlg9dkfbqv02xgxkd";
   };
 
   buildInputs = [ zlib ];
@@ -16,6 +16,7 @@ stdenv.mkDerivation {
          else throw "Unsupported system";
 
   hardeningDisable = [ "format" ];
+  enableParallelBuilding = true;
 
   buildPhase = ''
     cd emu

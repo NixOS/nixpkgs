@@ -14,7 +14,7 @@
 , musepackSupport ? true, libmpc, libmpcdec, taglib
 , vorbisSupport ? true, libvorbis
 , speexSupport ? true, speex
-, ffmpegSupport ? true, ffmpeg
+, ffmpegSupport ? true, ffmpeg_3
 , sndfileSupport ? true, libsndfile
 , wavpackSupport ? true, wavpack
 # Misc
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ opt vorbisSupport libvorbis
     ++ opt speexSupport speex
-    ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg
+    ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg_3
     ++ opt (ffmpegSupport && withffmpeg4) ffmpeg_4
     ++ opt sndfileSupport libsndfile
     ++ opt wavpackSupport wavpack

@@ -5,11 +5,11 @@ let
 in
 buildPythonApplication rec {
   pname = "tzupdate";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12jvyza9pfhazkzq94nizacknnp32lf7kalrjmpz1z2bqqxhx0fm";
+    sha256 = "5b55795c390e4ccc90e649c8cc387447daaf30a21d68f7196b49824cbcba8adc";
   };
 
   propagatedBuildInputs = [ requests ];

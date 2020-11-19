@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "electricsheep";
-  version = "2.7b33-2017-10-20";
+  version = "3.0.2-2019-10-05";
 
   src = fetchFromGitHub {
     owner = "scottdraves";
     repo = pname;
-    rev = "c02c19b9364733fc73826e105fc983a89a8b4f40";
+    rev = "37ba0fd692d6581f8fe009ed11c9650cd8174123";
     sha256 = "1z49l53j1lhk7ahdy96lm9r0pklwpf2i5s6y2l2rn6l4z8dxkjmk";
   };
 
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "CPPFLAGS=-I${glee}/include/GL"
+  ];
+
+  makeFlags = [
+    ''CXXFLAGS+="-DGL_GLEXT_PROTOTYPES"''
   ];
 
   preBuild = ''

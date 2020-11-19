@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gnum4 ];
+  nativeBuildInputs = [
+    pkgconfig
+    gnum4
+    glib # for glib-compile-schemas
+  ];
+
   buildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
   ]);

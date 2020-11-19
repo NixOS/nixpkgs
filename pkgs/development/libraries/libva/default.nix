@@ -1,40 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
-, libXext, libdrm, libXfixes, wayland, libffi, libX11
-, libGL, mesa
+{ stdenv, lib, fetchFromGitHub, fetchpatch, meson, pkg-config, ninja, wayland
+, libdrm
 , minimal ? false, libva-minimal
-, buildPackages
+, libX11, libXext, libXfixes, libffi, libGL
+, mesa
 }:
 
 stdenv.mkDerivation rec {
   name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.7.1"; # Also update the hash for libva-utils!
+  version = "2.9.1"; # Also update the hash for libva-utils!
 
-  # update libva-utils and vaapiIntel as well
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "0ywasac7z3hwggj8szp83sbxi2naa0a3amblx64y7i1hyyrn0csq";
+    sha256 = "1c9rwrz30q2p47spzb9gsakwci9c5mw6i309z7p7hr2d8233ay4x";
   };
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    # Add FHS paths for non-NixOS applications.
-    "--with-drivers-path=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
-    "ac_cv_path_WAYLAND_SCANNER=${buildPackages.wayland}/bin/wayland-scanner"
-  ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
-
-  installFlags = [
-    "dummy_drv_video_ladir=$(out)/lib/dri"
+  mesonFlags = [
+    # Add FHS paths for non-NixOS applications:
+    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ];
 
   meta = with stdenv.lib; {

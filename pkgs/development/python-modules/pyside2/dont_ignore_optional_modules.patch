@@ -1,6 +1,6 @@
---- pyside-setup-everywhere-src-5.12.3/sources/pyside2/CMakeLists.txt~	2019-06-15 19:07:48.368704430 +0200
-+++ pyside-setup-everywhere-src-5.12.3/sources/pyside2/CMakeLists.txt	2019-06-15 19:08:04.429489908 +0200
-@@ -219,7 +219,7 @@
+--- pyside-setup-opensource-src-5.14.2/sources/cmake_helpers/helpers.cmake~	2020-07-17 10:29:30.555285529 +0200
++++ pyside-setup-opensource-src-5.14.2/sources/cmake_helpers/helpers.cmake	2020-07-17 10:29:49.817003683 +0200
+@@ -139,7 +139,7 @@
      # If the module was found, and also the module path is the same as the
      # Qt5Core base path, we will generate the list with the modules to be installed
      set(looked_in_message ". Looked in: ${${_name_dir}}")

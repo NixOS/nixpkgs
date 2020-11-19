@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdrm json_c pciutils ];
 
   meta = with stdenv.lib; {
-    description = "Small utility to dump info about DRM devices.";
+    description = "Small utility to dump info about DRM devices";
     homepage = "https://github.com/ascent12/drm_info";
     license = licenses.mit;
     maintainers = with maintainers; [ tadeokondrak ];

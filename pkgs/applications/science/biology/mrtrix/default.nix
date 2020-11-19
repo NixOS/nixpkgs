@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mrtrix";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner  = "MRtrix3";
     repo   = "mrtrix3";
     rev    = version;
-    sha256 = "1vvmmbw3m0bdfwp4szr62ygzsvkj0ss91cx5zlkspsr1rff05f9b";
+    sha256 = "0p4d1230j6664rnb9l65cpyfj9ncbcm39yv1r9y77br9rkkv1za3";
     fetchSubmodules = true;
   };
 

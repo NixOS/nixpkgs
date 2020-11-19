@@ -7,17 +7,19 @@
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.1.18";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c19890d94bc4e5b76e7ac1a3e4c9e2b49b4d95214156d140a781042b8389725";
+    sha256 = "e79d83d4947a0945488699324802eda4ad4a63c7680ad5b2a42c71f4faa2cd8b";
   };
 
   propagatedBuildInputs = [
     sqlalchemy
     snowflake-connector-python
   ];
+
+  pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
   meta = with lib; {
     description = "Snowflake SQLAlchemy Dialect";

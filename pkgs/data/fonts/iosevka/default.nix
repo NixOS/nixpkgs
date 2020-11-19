@@ -1,5 +1,5 @@
 { stdenv, lib, pkgs, fetchFromGitHub, nodejs, nodePackages, remarshal
-, ttfautohint-nox, otfcc
+, ttfautohint-nox
 
 # Custom font set options.
 # See https://github.com/be5invis/Iosevka#build-your-own-style
@@ -27,23 +27,30 @@
 
 assert (privateBuildPlan != null) -> set != null;
 
+let
+  # We don't know the attribute name for the Iosevka package as it
+  # changes not when our update script is run (which in turn updates
+  # node-packages.json, but when node-packages/generate.sh is run
+  # (which updates node-packages.nix).
+  #
+  # Doing it this way ensures that the package can always be built,
+  # although possibly an older version than ioseva-bin.
+  nodeIosevka = (
+    lib.findSingle
+      (drv: drv ? packageName && drv.packageName == "iosevka")
+      (throw "no 'iosevka' package found in nodePackages")
+      (throw "multiple 'iosevka' packages found in nodePackages")
+      (lib.attrValues nodePackages)
+  ).override (drv: { dontNpmInstall = true; });
+in
 stdenv.mkDerivation rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
-
-  version = "2.3.3";
-
-  src = fetchFromGitHub {
-    owner = "be5invis";
-    repo = "Iosevka";
-    rev = "v${version}";
-    sha256 = "0k7xij473g5g0lwhb6qpn70v3n2d025dww3nlb7jwbpnp03zliz0";
-  };
+  inherit (nodeIosevka) version src;
 
   nativeBuildInputs = [
     nodejs
-    nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
+    nodeIosevka
     remarshal
-    otfcc
     ttfautohint-nox
   ];
 
@@ -61,25 +68,29 @@ stdenv.mkDerivation rec {
       echo -e "\n" >> parameters.toml
       cat "$extraParametersPath" >> parameters.toml
     ''}
-    ln -s ${
-      nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
-    }/lib/node_modules/iosevka-build-deps/node_modules .
+    ln -s ${nodeIosevka}/lib/node_modules/iosevka/node_modules .
     runHook postConfigure
   '';
 
   buildPhase = ''
     runHook preBuild
-    npm run build --no-update-notifier -- ttf::$pname >/dev/null
+    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES ttf::$pname >/dev/null
     runHook postBuild
   '';
 
   installPhase = ''
-    fontdir="$out/share/fonts/$pname"
+    runHook preInstall
+    fontdir="$out/share/fonts/truetype"
     install -d "$fontdir"
     install "dist/$pname/ttf"/* "$fontdir"
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = ./update-default.sh;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://be5invis.github.io/Iosevka";
@@ -96,6 +107,7 @@ stdenv.mkDerivation rec {
       ttuegel
       babariviere
       rileyinman
+      AluisioASG
     ];
   };
 }

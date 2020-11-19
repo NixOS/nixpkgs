@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
 , ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
-, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark
+, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
 , withGUI ? true
   , qtbase ? null
   , qtmultimedia ? null
@@ -13,13 +13,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "46.0.0";
+  version = "51.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "1vyfvpsllnzhzaaz3s9lqlnkmnqchyhxj2d47bfyizs982r5kg24";
+    sha256 = "06k2slgac0fhgypmdriwdc5s09mry22vxk316ixfj5sv3irwn7wc";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat file xdg_utils boost libebml zlib fmt
-    libmatroska libogg libvorbis flac cmark
+    libmatroska libogg libvorbis flac cmark pcre2
   ] ++ optional  stdenv.isDarwin libiconv
     ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     (enableFeature withGUI "qt")
   ];
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++14";
+  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
 
   dontWrapQtApps = true;
   postFixup = optionalString withGUI ''

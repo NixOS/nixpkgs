@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, lib, Security }:
+{ stdenv, rustPlatform, fetchFromGitHub, lib, Security, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wireguard-exporter";
@@ -15,8 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) wireguard; };
+
   meta = with lib; {
-    description = "A Prometheus exporter for WireGuard, written in Rust.";
+    description = "A Prometheus exporter for WireGuard, written in Rust";
     homepage = "https://github.com/MindFlavor/prometheus_wireguard_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 globin ];

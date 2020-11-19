@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ gobject-introspection pygobject3 graphviz gtk3 ];
 
   meta = with lib; {
-    description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";
+    description = "An interactive viewer for graphs written in Graphviz's dot";
     homepage = "https://github.com/jrfonseca/xdot.py";
     license = licenses.lgpl3Plus;
   };

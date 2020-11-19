@@ -30,12 +30,12 @@ let
 
 in buildPythonPackage rec {
   pname = "PyQt5";
-  version = "5.14.2";
+  version = "5.15.1";
   format = "other";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "1c4y4qi1l540gd125ikj0al00k5pg65kmqaixcfbzslrsrphq8xx";
+    sha256 = "18grs2p698ihjgi8agksv6sajakciywyr29ihslqvl260a2np9yr";
   };
 
   outputs = [ "out" "dev" ];

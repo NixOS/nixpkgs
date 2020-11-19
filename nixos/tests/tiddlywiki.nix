@@ -44,7 +44,7 @@ import ./make-test-python.nix ({ ... }: {
           configured.succeed(
               "curl --fail -o /dev/null 127.0.0.1:3000 --user somelogin:somesecret"
           )
-      
+
       with subtest("restart preserves changes"):
           # given running wiki
           default.wait_for_unit("tiddlywiki.service")

@@ -7,6 +7,8 @@
 
   weechat-matrix = python3Packages.callPackage ./weechat-matrix { };
 
+  weechat-notify-send = python3Packages.callPackage ./weechat-notify-send { };
+
   wee-slack = callPackage ./wee-slack { };
 
   weechat-autosort = callPackage ./weechat-autosort { };

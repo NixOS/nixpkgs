@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "opentx";
-  version = "2.3.7";
+  version = "2.3.10";
 
   src = fetchFromGitHub {
     owner = "opentx";
     repo = "opentx";
     rev = "release/${version}";
-    sha256 = "1wl3bk7s8h20dfys1hblzxc0br9zlwhcqlghgsbn81ki0xb6jmkf";
+    sha256 = "1pp3k1802gl1rji98clv17wj0619dliq821mpi4446lk22q692yq";
   };
 
   enableParallelBuilding = true;

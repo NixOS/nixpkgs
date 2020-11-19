@@ -3,7 +3,7 @@
 rustPlatform.buildRustPackage rec {
   name = "tdns-cli";
   version = "0.0.5";
-  
+
   src = fetchFromGitHub {
     owner = "rotty";
     repo = name;

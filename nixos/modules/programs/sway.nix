@@ -86,8 +86,7 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        swaylock swayidle
-        xwayland alacritty dmenu
+        swaylock swayidle alacritty dmenu
         rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
@@ -104,6 +103,7 @@ in {
         Extra packages to be installed system wide.
       '';
     };
+
   };
 
   config = mkIf cfg.enable {
@@ -130,6 +130,7 @@ in {
     programs.dconf.enable = mkDefault true;
     # To make a Sway session available if a display manager like SDDM is enabled:
     services.xserver.displayManager.sessionPackages = [ swayPackage ];
+    programs.xwayland.enable = mkDefault true;
   };
 
   meta.maintainers = with lib.maintainers; [ gnidorah primeos colemickens ];

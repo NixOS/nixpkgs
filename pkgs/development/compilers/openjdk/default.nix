@@ -10,7 +10,7 @@
 
 let
   major = "14";
-  update = ".0.1";
+  update = ".0.2";
   build = "-ga";
 
   openjdk = stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "0ic7dcrzk62jc65yrshs6xlclmsha7z52bia5s2bkllw1zpmdmip";
+      sha256 = "1s1pc6ihzf0awp4hbaqfxmbica0hnrg8nr7s0yd2hfn7nan8xmf3";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
@@ -30,6 +30,10 @@ let
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
+
+    passthru = {
+      inherit gtk3;
+    };
 
     patches = [
       ./fix-java-home-jdk10.patch
@@ -91,6 +95,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/

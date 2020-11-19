@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "0.23.0-RC1";
+  version = "0.26.0-RC1";
   pname = "dotty-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/dotty-${version}.tar.gz";
-    sha256 = "0c64dw2qp8mhgsll8viqaiy34wq1ablkbc4bi813a1r4nqg57sv0";
+    sha256 = "16njy9f0lk7q5x5w1k4yqy644005w4cxhq20r8i2qslhxjndz66f";
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Research platform for new language concepts and compiler technologies for Scala.";
+    description = "Research platform for new language concepts and compiler technologies for Scala";
     longDescription = ''
        Dotty is a platform to try out new language concepts and compiler technologies for Scala.
        The focus is mainly on simplification. We remove extraneous syntax (e.g. no XML literals),

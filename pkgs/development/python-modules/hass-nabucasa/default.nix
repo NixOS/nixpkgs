@@ -1,25 +1,26 @@
 { lib, buildPythonPackage, fetchFromGitHub, fetchpatch
 , acme, aiohttp, snitun, attrs, pycognito, warrant
-, pytest-aiohttp, asynctest, pytest  }:
+, pytest-aiohttp, asynctest, atomicwrites, pytest, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.32.2";
+  version = "0.37.1";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "1hfi5q222kgbgrj5yvr4lbhca49hcs6sc2yhxc4pjxqsc12bv1f1";
+    sha256 = "/GFNrLi1I69gUDIwnHa2q/pxkiRl9PKxpKtb56JrmuA=";
   };
 
-  # upstreamed in https://github.com/NabuCasa/hass-nabucasa/pull/119
   postPatch = ''
-    sed -i 's/"acme.*/"acme>=0.40.0,<2.0"/' setup.py
-    cat setup.py
+    sed -i 's/"acme.*"/"acme"/' setup.py
+    sed -i 's/"cryptography.*"/"cryptography"/' setup.py
   '';
 
-  propagatedBuildInputs = [ acme aiohttp snitun attrs warrant pycognito ];
+  propagatedBuildInputs = [
+    acme aiohttp atomicwrites snitun attrs warrant pycognito
+  ];
 
   checkInputs = [ pytest pytest-aiohttp asynctest ];
 

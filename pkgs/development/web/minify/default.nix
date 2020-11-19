@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "120d3nzk8cr5496cxp5p6ydlzw9mmpg7dllqhv1kpgwlbxmd8vr3";
 
+  doCheck = false;
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
 
   meta = with lib; {

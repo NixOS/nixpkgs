@@ -102,7 +102,7 @@ in {
         PIDFile = "/run/unit/unit.pid";
         ExecStart = ''
           ${cfg.package}/bin/unitd --control 'unix:/run/unit/control.unit.sock' --pid '/run/unit/unit.pid' \
-                                   --log '${cfg.logDir}/unit.log' --state '${cfg.stateDir}' \
+                                   --log '${cfg.logDir}/unit.log' --state '${cfg.stateDir}' --tmp '/tmp' \
                                    --user ${cfg.user} --group ${cfg.group}
         '';
         ExecStop = ''
@@ -120,9 +120,12 @@ in {
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
+        PrivateUsers = false;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         LockPersonality = true;

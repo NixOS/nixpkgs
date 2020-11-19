@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, mcpp, bzip2, expat, openssl, lmdb
+{ stdenv, lib, fetchFromGitHub, bzip2, expat, openssl, lmdb
 , darwin, libiconv, Security
 , cpp11 ? false
 }:
 
 let
-  zeroc_mcpp = mcpp.overrideAttrs (self: rec {
+  zeroc_mcpp = stdenv.mkDerivation rec {
     pname = "zeroc-mcpp";
     version = "2.7.2.14";
 
@@ -15,8 +15,9 @@ let
       sha256 = "1psryc2ql1cp91xd3f8jz84mdaqvwzkdq2pr96nwn03ds4cd88wh";
     };
 
+    configureFlags = [ "--enable-mcpplib" ];
     installFlags = [ "PREFIX=$(out)" ];
-  });
+  };
 
 in stdenv.mkDerivation rec {
   pname = "zeroc-ice";
@@ -63,7 +64,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.zeroc.com/ice.html";
+    homepage = "https://www.zeroc.com/ice.html";
     description = "The internet communications engine";
     license = licenses.gpl2;
     platforms = platforms.unix;

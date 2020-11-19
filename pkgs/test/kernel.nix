@@ -1,53 +1,79 @@
+# to run these tests:
+# nix-instantiate --eval --strict . -A tests.kernel-config
+#
+# make sure to use NON EXISTING kernel settings else they may conflict with
+# common-config.nix
 { lib, pkgs }:
 
-with lib.kernel;
-with lib.asserts;
-with lib.modules;
+with lib;
+with kernel;
 
-# To test nixos/modules/system/boot/kernel_config.nix;
 let
-  # copied from release-lib.nix
-  assertTrue = bool:
-    if bool
-    then pkgs.runCommand "evaluated-to-true" {} "touch $out"
-    else pkgs.runCommand "evaluated-to-false" {} "false";
-
   lts_kernel = pkgs.linuxPackages.kernel;
 
-  kernelTestConfig = structuredConfig: (lts_kernel.override {
-    structuredExtraConfig = structuredConfig;
-  }).configfile.structuredConfig;
+  # to see the result once the module transformed the lose structured config
+  getConfig = structuredConfig:
+    (lts_kernel.override {
+      structuredExtraConfig = structuredConfig;
+    }).configfile.structuredConfig;
 
   mandatoryVsOptionalConfig = mkMerge [
-    { USB_DEBUG = option yes;}
-    { USB_DEBUG = yes;}
+    { NIXOS_FAKE_USB_DEBUG = yes;}
+    { NIXOS_FAKE_USB_DEBUG = option yes; }
   ];
 
   freeformConfig = mkMerge [
-    { MMC_BLOCK_MINORS = freeform "32"; } # same as default, won't trigger any error
-    { MMC_BLOCK_MINORS = freeform "64"; } # will trigger an error but the message is not great:
+    { NIXOS_FAKE_MMC_BLOCK_MINORS = freeform "32"; } # same as default, won't trigger any error
+    { NIXOS_FAKE_MMC_BLOCK_MINORS = freeform "64"; } # will trigger an error but the message is not great:
   ];
 
   yesWinsOverNoConfig = mkMerge [
-    # default for "8139TOO_PIO" is no
-    { "8139TOO_PIO"  = yes; } # yes wins over no by default
-    { "8139TOO_PIO"  = no; }
+    # default for "NIXOS_TEST_BOOLEAN" is no
+    { "NIXOS_TEST_BOOLEAN"  = yes; } # yes wins over no by default
+    { "NIXOS_TEST_BOOLEAN"  = no; }
   ];
+
+  optionalNoWins = mkMerge [
+    { NIXOS_FAKE_USB_DEBUG = option yes;}
+    { NIXOS_FAKE_USB_DEBUG = yes;}
+  ];
+
+  allOptionalRemainOptional = mkMerge [
+    { NIXOS_FAKE_USB_DEBUG = option yes;}
+    { NIXOS_FAKE_USB_DEBUG = option yes;}
+  ];
+
 in
-{
+runTests {
+  testEasy = {
+    expr = (getConfig { NIXOS_FAKE_USB_DEBUG = yes;}).NIXOS_FAKE_USB_DEBUG;
+    expected = { tristate = "y"; optional = false; freeform = null; };
+  };
+
   # mandatory flag should win over optional
-  mandatoryCheck = (kernelTestConfig mandatoryVsOptionalConfig);
+  testMandatoryCheck = {
+    expr = (getConfig mandatoryVsOptionalConfig).NIXOS_FAKE_USB_DEBUG.optional;
+    expected = false;
+  };
+
+  testYesWinsOverNo = {
+    expr = (getConfig yesWinsOverNoConfig)."NIXOS_TEST_BOOLEAN".tristate;
+    expected = "y";
+  };
+
+  testAllOptionalRemainOptional = {
+    expr = (getConfig allOptionalRemainOptional)."NIXOS_FAKE_USB_DEBUG".optional;
+    expected = true;
+  };
 
   # check that freeform options are unique
   # Should trigger
-  # > The option `settings.MMC_BLOCK_MINORS.freeform' has conflicting definitions, in `<unknown-file>' and `<unknown-file>'
-  freeformCheck = let
-    res = builtins.tryEval ( (kernelTestConfig freeformConfig).MMC_BLOCK_MINORS.freeform);
-  in
-    assertTrue (res.success == false);
+  # > The option `settings.NIXOS_FAKE_MMC_BLOCK_MINORS.freeform' has conflicting definitions, in `<unknown-file>' and `<unknown-file>'
+  testTreeform = let
+    res = builtins.tryEval ( (getConfig freeformConfig).NIXOS_FAKE_MMC_BLOCK_MINORS.freeform);
+  in {
+    expr = res.success;
+    expected = false;
+  };
 
-  yesVsNoCheck = let
-    res = kernelTestConfig yesWinsOverNoConfig;
-  in
-    assertTrue (res."8139TOO_PIO".tristate == "y");
 }

@@ -74,7 +74,7 @@ in
         with subtest("test5 user should not be able to run commands under root"):
             machine.fail("sudo -u test5 sudo -n -u root true")
 
-        with subtest("test5 user should be able to keep his environment"):
+        with subtest("test5 user should be able to keep their environment"):
             machine.succeed("sudo -u test5 sudo -n -E -u test1 true")
 
         with subtest("users in group 'barfoo' should not be able to keep their environment"):

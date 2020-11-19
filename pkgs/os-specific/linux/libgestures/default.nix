@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
 
   meta = with stdenv.lib; {
-    description = "ChromiumOS libgestures modified to compile for Linux.";
+    description = "ChromiumOS libgestures modified to compile for Linux";
     license = licenses.bsd3;
     platforms = platforms.linux;
     homepage = "https://chromium.googlesource.com/chromiumos/platform/gestures";

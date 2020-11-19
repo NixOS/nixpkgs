@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, perlPackages
+{ stdenv, fetchurl, pkg-config, intltool, perlPackages
 , goffice, gnome3, wrapGAppsHook, gtk3, bison, python3Packages
 , itstool
 }:
@@ -7,16 +7,16 @@ let
   inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "gnumeric";
-  version = "1.12.47";
+  version = "1.12.48";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1khrf72kiq50y8b5prbj2207k9shn36h2b2i588cc4wa28s9y5a0";
+    sha256 = "14556b0vyxdvdwjlin0rv7jk0vq4nplbmvp9j89bhkfk84xf7k2p";
   };
 
   configureFlags = [ "--disable-component" ];
 
-  nativeBuildInputs = [ pkgconfig intltool bison itstool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool bison itstool wrapGAppsHook ];
 
   # ToDo: optional libgda, introspection?
   buildInputs = [

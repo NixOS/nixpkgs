@@ -14,15 +14,18 @@ self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
                                  makeStaticLibraries
                                  propagateBuildInputs;
-  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs;
+  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs optionalString;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
-  makeStaticDarwin = stdenv: stdenv // {
+  makeStaticDarwin = stdenv_: let stdenv = stdenv_.override {
+    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
+    extraBuildInputs = [ self.buildPackages.darwin.CF ];
+  }; in stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + " -static-libgcc";
+                      + optionalString stdenv.cc.isGNU " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
         substitutions = {
           libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
@@ -159,7 +162,7 @@ in {
     enableShared = false;
   };
   mkl = super.mkl.override { enableStatic = true; };
-  nix = super.nix.override { withAWS = false; };
+  nix = super.nix.override { enableStatic = true; };
   openssl = (super.openssl_1_1.override { static = true; }).overrideAttrs (o: {
     # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
     configureFlags = (removeUnknownConfigureFlags o.configureFlags);
@@ -191,6 +194,9 @@ in {
   gsm = super.gsm.override {
     staticSupport = true;
   };
+  crc32c = super.crc32c.override {
+    staticOnly = true;
+  };
   parted = super.parted.override {
     enableStatic = true;
   };
@@ -215,6 +221,10 @@ in {
   };
   libressl = super.libressl.override {
     buildShared = false;
+  };
+  libjpeg_turbo = super.libjpeg_turbo.override {
+    enableStatic = true;
+    enableShared = false;
   };
 
   darwin = super.darwin // {
@@ -242,7 +252,7 @@ in {
   };
 
   zstd = super.zstd.override {
-    enableShared = false;
+    static = true;
   };
 
   llvmPackages_8 = super.llvmPackages_8 // {
@@ -265,7 +275,6 @@ in {
   ) super.ocaml-ng;
 
   python27 = super.python27.override { static = true; };
-  python35 = super.python35.override { static = true; };
   python36 = super.python36.override { static = true; };
   python37 = super.python37.override { static = true; };
   python38 = super.python38.override { static = true; };
@@ -274,4 +283,35 @@ in {
 
 
   libev = super.libev.override { static = true; };
+
+  libexecinfo = super.libexecinfo.override { enableShared = false; };
+
+  tree-sitter = super.tree-sitter.override {
+    enableShared = false;
+    enableStatic = true;
+  };
+
+  xorg = super.xorg.overrideScope' (xorgself: xorgsuper: {
+    libX11 = xorgsuper.libX11.overrideAttrs (attrs: {
+      depsBuildBuild = attrs.depsBuildBuild ++ [ (self.buildPackages.stdenv.cc.libc.static or null) ];
+    });
+    xauth = xorgsuper.xauth.overrideAttrs (attrs: {
+      # missing transitive dependencies
+      preConfigure = attrs.preConfigure or "" + ''
+        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
+      '';
+    });
+    xdpyinfo = xorgsuper.xdpyinfo.overrideAttrs (attrs: {
+      # missing transitive dependencies
+      preConfigure = attrs.preConfigure or "" + ''
+        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
+      '';
+    });
+    libxcb = xorgsuper.libxcb.overrideAttrs (attrs: {
+      configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
+    });
+    libXi= xorgsuper.libXi.overrideAttrs (attrs: {
+      configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
+    });
+  });
 }

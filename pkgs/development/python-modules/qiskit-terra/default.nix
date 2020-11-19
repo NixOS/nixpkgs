@@ -8,12 +8,11 @@
 , fastjsonschema
 , jsonschema
 , numpy
-, marshmallow
-, marshmallow-polyfield
 , networkx
 , ply
 , psutil
 , python-constraint
+, python-dateutil
 , retworkx
 , scipy
 , sympy
@@ -36,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.14.1";
+  version = "0.15.1";
 
   disabled = pythonOlder "3.5";
 
@@ -44,7 +43,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "0pd7x2jrqy7q1s38ychqw9bayjn2rvi6rq7c2c0kd160rwj1l2sc";
+    sha256 = "1p7y36gj3675dmp05nwi0m9nc7h0bwyimir3ncf9wbkx3crrh99c";
   };
 
   nativeBuildInputs = [ cython ];
@@ -54,13 +53,12 @@ buildPythonPackage rec {
     fastjsonschema
     jsonschema
     numpy
-    marshmallow
-    marshmallow-polyfield
     matplotlib
     networkx
     ply
     psutil
     python-constraint
+    python-dateutil
     retworkx
     scipy
     sympy
@@ -74,10 +72,6 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  postPatch = ''
-    # Fix relative imports in tests
-    touch test/python/dagcircuit/__init__.py
-  '';
 
   # *** Tests ***
   checkInputs = [
@@ -103,9 +97,9 @@ buildPythonPackage rec {
   preCheck = ''
     export PACKAGEDIR=$out/${python.sitePackages}
     echo "Moving Qiskit test files to package directory"
-    cp -r $TMP/source/test $PACKAGEDIR
-    cp -r $TMP/source/examples $PACKAGEDIR
-    cp -r $TMP/source/qiskit/schemas/examples $PACKAGEDIR/qiskit/schemas/
+    cp -r $TMP/$sourceRoot/test $PACKAGEDIR
+    cp -r $TMP/$sourceRoot/examples $PACKAGEDIR
+    cp -r $TMP/$sourceRoot/qiskit/schemas/examples $PACKAGEDIR/qiskit/schemas/
 
     # run pytest from Nix's $out path
     pushd $PACKAGEDIR
@@ -124,6 +118,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://qiskit.org/terra";
     downloadPage = "https://github.com/QISKit/qiskit-terra/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

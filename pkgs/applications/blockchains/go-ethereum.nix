@@ -2,30 +2,19 @@
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.14";
+  version = "1.9.24";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vqsx4q7jn6vhmrm9kkk810d5nvnmyb6bni38ynkxcwlrp3qs6v2";
+    sha256 = "0nrx5fwfij9wajd3lj76hh1yv4zg4q3jc76a76m22djn1njl0n5j";
   };
 
-  usb = fetchFromGitHub {
-    owner = "karalabe";
-    repo = "usb";
-    rev = "911d15fe12a9c411cf5d0dd5635231c759399bed";
-    sha256 = "0asd5fz2rhzkjmd8wjgmla5qmqyz4jaa6qf0n2ycia16jsck6wc2";
-  };
+  runVend = true;
+  vendorSha256 = "1qbg44cryiv9kvcak6qjrbmkc9bxyk5fybj62vdkskqfjvv86068";
 
-  vendorSha256 = "01mbmc8qlp08127dlmcqz0viasmg7mrzqzmyw21an69sabcr112n";
-
-  overrideModAttrs = (_: {
-      postBuild = ''
-      cp -r --reflink=auto ${usb}/libusb vendor/github.com/karalabe/usb
-      cp -r --reflink=auto ${usb}/hidapi vendor/github.com/karalabe/usb
-      '';
-    });
+  doCheck = false;
 
   subPackages = [
     "cmd/abidump"
@@ -42,7 +31,6 @@ buildGoModule rec {
     "cmd/puppeth"
     "cmd/rlpdump"
     "cmd/utils"
-    "cmd/wnode"
   ];
 
   # Fix for usb-related segmentation faults on darwin
@@ -53,6 +41,6 @@ buildGoModule rec {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3 gpl3 ];
-    maintainers = with maintainers; [ adisbladis asymmetric lionello xrelkd ];
+    maintainers = with maintainers; [ adisbladis lionello xrelkd RaghavSood ];
   };
 }

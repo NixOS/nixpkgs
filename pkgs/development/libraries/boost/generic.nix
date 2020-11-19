@@ -113,7 +113,8 @@ stdenv.mkDerivation {
     if version == "1.55.0"
     then ./darwin-1.55-no-system-python.patch
     else ./darwin-no-system-python.patch)
-  ++ optional (versionAtLeast version "1.70") ./cmake-paths.patch;
+  ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
+  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch;
 
   meta = {
     homepage = "http://boost.org/";
@@ -145,11 +146,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ which ]
+    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
-    ++ optional stdenv.isDarwin fixDarwinDylibNames
     ++ optional enablePython python
     ++ optional enableNumpy python.pkgs.numpy;
 

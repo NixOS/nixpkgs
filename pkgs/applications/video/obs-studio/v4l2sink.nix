@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-v4l2sink";
-  version = "0.1.0";
+  version = "0.1.0-12-g1ec3c8a";
 
   src = fetchFromGitHub {
     owner = "CatxFish";
     repo = "obs-v4l2sink";
     rev = version;
-    sha256 = "0l4lavaywih5lzwgxcbnvdrxhpvkrmh56li06s3aryikngxwsk3z";
+    sha256 = "03ah91cm1qz26k90mfx51l0d598i9bcmw39lkikjs1msm4c9dfxx";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,4 +1,7 @@
 { stdenv
+# Note: either stdenv.mkDerivation or, for octaveFull, the qt-5 mkDerivation
+# with wrapQtAppsHook (comes from libsForQt5.callPackage)
+, mkDerivation
 , fetchurl
 , gfortran
 , ncurses
@@ -55,7 +58,7 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "5.2.0";
   pname = "octave";
 

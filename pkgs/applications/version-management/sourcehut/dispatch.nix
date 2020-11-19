@@ -4,17 +4,13 @@
 
 buildPythonPackage rec {
   pname = "dispatchsrht";
-  version = "0.14.1";
+  version = "0.14.9";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/dispatch.sr.ht";
     rev = version;
-    sha256 = "0h3nn73qvxspqv0myiss0y5i8jynh2rh9m57awy89vv6rwgai7vq";
+    sha256 = "JUffuJTKY4I8CrJc8tJWL+CbJCZtiqtUSO9SgYoeux0=";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -26,7 +22,6 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   meta = with stdenv.lib; {

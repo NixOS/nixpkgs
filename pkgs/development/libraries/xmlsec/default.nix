@@ -1,8 +1,9 @@
 { stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool
-, openssl, nss, makeWrapper }:
+, openssl, nss, lib, runCommandCC, writeText }:
 
+lib.fix (self:
 let
-  version = "1.2.28";
+  version = "1.2.30";
 in
 stdenv.mkDerivation {
   pname = "xmlsec";
@@ -10,17 +11,25 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "1m12caglhyx08g8lh2sl3nkldlpryzdx2d572q73y3m33s0w9vhk";
+    sha256 = "1j5bf7ni45jghyrbf7a14wx2pvfara557zyry7g7h8840c5kd11d";
   };
+
+  patches = [
+    ./lt_dladdsearchdir.patch
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
+  postPatch = ''
+    substituteAllInPlace src/dl.c
+  '';
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
 
   enableParallelBuilding = true;
   doCheck = true;
+  checkInputs = [ nss.tools ];
 
   # enable deprecated soap headers required by lasso
   # https://dev.entrouvert.org/issues/18771
@@ -34,8 +43,26 @@ stdenv.mkDerivation {
     moveToOutput "lib/xmlsec1Conf.sh" "$dev"
   '';
 
-  postFixup = ''
-    wrapProgram "$out/bin/xmlsec1" --prefix LD_LIBRARY_PATH ":" "$out/lib"
+  passthru.tests.libxmlsec1-crypto = runCommandCC "libxmlsec1-crypto-test"
+    {
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ self libxml2 libxslt libtool ];
+    } ''
+    $CC $(pkg-config --cflags --libs xmlsec1) -o crypto-test ${writeText "crypto-test.c" ''
+      #include <xmlsec/xmlsec.h>
+      #include <xmlsec/crypto.h>
+
+      int main(int argc, char **argv) {
+        return xmlSecInit() ||
+          xmlSecCryptoDLLoadLibrary(argc > 1 ? argv[1] : 0) ||
+          xmlSecCryptoInit();
+      }
+    ''}
+
+    for crypto in "" gcrypt gnutls nss openssl; do
+      ./crypto-test $crypto
+    done
+    touch $out
   '';
 
   meta = {
@@ -47,3 +74,4 @@ stdenv.mkDerivation {
     updateWalker = true;
   };
 }
+)

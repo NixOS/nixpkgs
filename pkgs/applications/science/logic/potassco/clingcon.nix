@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "potassco";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "1q7517h10jfvjdk2czq8d6y57r8kr1j1jj2k2ip2qxkpyfigk4rs";

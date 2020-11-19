@@ -8,7 +8,7 @@
 , pandas
 , tables
 , git
-, ffmpeg
+, ffmpeg_3
 , scikitimage
 , matplotlib
 , qdarkstyle
@@ -30,12 +30,12 @@
 
 buildPythonPackage rec {
   pname = "stytra";
-  version = "0.8.27";
+  version = "0.8.34";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc1ca5f75f47ec1eeb3d62722437bed4ddf598e130b3dd22f0e663f61857df5";
+    sha256 = "aab9d07575ef599a9c0ae505656e3c03ec753462df3c15742f1f768f2b578f0a";
   };
   doCheck = false;
   checkInputs = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pandas
     tables
     git
-    ffmpeg
+    ffmpeg_3
     scikitimage
     matplotlib
     qdarkstyle

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildDunePackage, configurator, cstruct, bigarray-compat, ounit }:
+{ stdenv, fetchurl, buildDunePackage, cstruct, bigarray-compat, ounit }:
 
 buildDunePackage rec {
   pname = "io-page";

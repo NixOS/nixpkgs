@@ -1,29 +1,21 @@
-{ stdenv, fetchurl, perl, zlib, makeWrapper }:
+{ stdenv, fetchFromGitHub, asciidoc-full, gperf, perl, autoreconfHook, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "3.4.1";
+  version = "3.7.12";
 
-  src = fetchurl {
-    sha256 = "1pppi4jbkkj641cdynmc35jaj40jjicw7gj75ran5qs5886jcblc";
-    url = "mirror://samba/ccache/${pname}-${version}.tar.xz";
+  src = fetchFromGitHub {
+    owner = "ccache";
+    repo = "ccache";
+    rev = "v${version}";
+    sha256 = "1xnv4g4n1jk1i98sa53k8w6q7hbwbw62svs30lssppysbrv8x3gz";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ asciidoc-full autoreconfHook gperf perl ];
 
   buildInputs = [ zlib ];
 
   outputs = [ "out" "man" ];
-
-  # non to be fail on filesystems with unconventional blocksizes (zfs on Hydra?)
-  patches = [
-    ./fix-debug-prefix-map-suite.patch
-    ./skip-fs-dependent-test.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace Makefile.in --replace 'objs) $(extra_libs)' 'objs)'
-  '';
 
   doCheck = !stdenv.isDarwin;
 
@@ -71,8 +63,8 @@ let ccache = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
-    homepage = "http://ccache.samba.org/";
-    downloadPage = "https://ccache.samba.org/download.html";
+    homepage = "https://ccache.dev/";
+    downloadPage = "https://ccache.dev/download.html";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

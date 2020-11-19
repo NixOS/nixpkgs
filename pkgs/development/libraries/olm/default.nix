@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "olm";
-  version = "3.1.4";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://matrix.org/git/olm/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0f7azjxc77n4ib9nj3cwyk3vhk8r2dsyf7id6nvqyxqxwxn95a8w";
+    sha256 = "0iacbi9iibhzifh1bk6bi5xin557lvqmbf4ccsb8drj50dbxjiyr";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Implements double cryptographic ratchet and Megolm ratchet";
     license = stdenv.lib.licenses.asl20;
-    homepage = "https://matrix.org/git/olm/about";
+    homepage = "https://gitlab.matrix.org/matrix-org/olm";
     platforms = with stdenv.lib.platforms; darwin ++ linux;
   };
 }

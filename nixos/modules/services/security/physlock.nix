@@ -52,6 +52,14 @@ in
         '';
       };
 
+      lockMessage = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Message to show on physlock login terminal.
+        '';
+      };
+
       lockOn = {
 
         suspend = mkOption {
@@ -107,10 +115,11 @@ in
                 ++ cfg.lockOn.extraTargets;
         before   = optional cfg.lockOn.suspend   "systemd-suspend.service"
                 ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
+                ++ optional (cfg.lockOn.hibernate || cfg.lockOn.suspend) "systemd-suspend-then-hibernate.service"
                 ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}";
+          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
         };
       };
 

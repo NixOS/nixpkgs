@@ -1,52 +1,65 @@
 { lib
-, substituteAll
-, buildPythonApplication
-, fetchFromGitHub
-, distutils_extra
-, setuptools-git
+, fetchFromGitLab
+# native
 , intltool
-, pygtk
-, libX11
-, libXtst
 , wrapGAppsHook
-, gnome3
+, file
+# not native
+, xorg
+, gobject-introspection
+, gtk3
+, python3
 }:
-buildPythonApplication rec {
-  pname = "screenkey";
-  version = "0.9";
 
-  src = fetchFromGitHub {
-    owner = "wavexx";
+python3.pkgs.buildPythonApplication rec {
+  pname = "screenkey";
+  version = "1.2";
+
+  src = fetchFromGitLab {
+    owner = "screenkey";
     repo = "screenkey";
-    rev = "screenkey-${version}";
-    sha256 = "14g7fiv9n7m03djwz1pp5034pffi87ssvss9bc1q8vq0ksn23vrw";
+    rev = "v${version}";
+    sha256 = "1x13n57iy2pg3h3r994q3g5nbmh2gwk3qidmmcv0g7qa89n2gwbj";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      inherit libX11 libXtst;
-    })
-  ];
-
   nativeBuildInputs = [
-    distutils_extra
-    setuptools-git
+    python3.pkgs.distutils_extra
+    # Shouldn't be needed once https://gitlab.com/screenkey/screenkey/-/issues/122 is fixed.
     intltool
-
+    # We are not sure why is this needed, but without it we get "file: command
+    # not found" errors during build.
+    file
     wrapGAppsHook
+    # for setup hook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gtk3
   ];
 
-  propagatedBuildInputs = [
-    pygtk
+  propagatedBuildInputs = with python3.pkgs; [
+    pycairo
+    pygobject3
   ];
+
+  # Prevent double wrapping because of wrapGAppsHook
+  dontWrapGApps = true;
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # screenkey does not have any tests
   doCheck = false;
+
+  # Fix CDLL python calls for non absolute paths of xorg libraries
+  postPatch = ''
+    substituteInPlace Screenkey/xlib.py \
+      --replace libX11.so.6 ${lib.getLib xorg.libX11}/lib/libX11.so.6 \
+      --replace libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
+  '';
 
   meta = with lib; {
     homepage = "https://www.thregr.org/~wavexx/software/screenkey/";

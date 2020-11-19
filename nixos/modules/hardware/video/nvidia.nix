@@ -16,6 +16,8 @@ let
         kernelPackages.nvidia_x11
     else if elem "nvidiaBeta" drivers then
         kernelPackages.nvidia_x11_beta
+    else if elem "nvidiaVulkanBeta" drivers then
+        kernelPackages.nvidia_x11_vulkan_beta
     else if elem "nvidiaLegacy304" drivers then
       kernelPackages.nvidia_x11_legacy304
     else if elem "nvidiaLegacy340" drivers then
@@ -233,7 +235,7 @@ in
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_libs32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
-      ++ filter (p: p != null) [ nvidia_x11.persistenced ];
+      ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;
 

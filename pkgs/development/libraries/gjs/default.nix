@@ -8,7 +8,7 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_68
+, spidermonkey_78
 , pango
 , cairo
 , readline
@@ -17,6 +17,7 @@
 , dbus
 , gdk-pixbuf
 , makeWrapper
+, which
 , xvfb_run
 , nixosTests
 }:
@@ -28,11 +29,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.64.2";
+  version = "1.66.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ywrsfmkxaw11z83dnmb9yqkn6k3c1mkxw2mv6arbwad6x6q7zqm";
+    sha256 = "0k1ld2bc4c3zbyjpfgx15v5n02iywdvm106rys5jqr7zbr2l0hld";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -42,6 +43,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     makeWrapper
+    which # for locale detection
     libxml2 # for xml-stripblanks
   ];
 
@@ -49,7 +51,7 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     cairo
     readline
-    spidermonkey_68
+    spidermonkey_78
     dbus # for dbus-run-session
   ];
 
@@ -74,11 +76,10 @@ in stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
-  # Gio test is failing
-  # https://github.com/NixOS/nixpkgs/pull/81626#issuecomment-599325843
-  doCheck = false;
+  doCheck = true;
 
   postPatch = ''
+    patchShebangs build/choose-tests-locale.sh
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
   '';
 
@@ -87,15 +88,23 @@ in stdenv.mkDerivation rec {
     # in the GIR files. When running tests, the library is not yet installed,
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
-    mkdir -p $out/lib $installedTests/libexec/gjs/installed-tests
+    mkdir -p $out/lib $installedTests/libexec/installed-tests/gjs
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
-    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/gjs/installed-tests/libgimarshallingtests.so
-    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/gjs/installed-tests/libregress.so
-    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/gjs/installed-tests/libwarnlib.so
+    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
+    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
+    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
   '';
 
   postInstall = ''
-    wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
+    # TODO: make the glib setup hook handle moving the schemas in other outputs.
+    installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/${pname}-${version}"
+    mkdir -p "$installedTestsSchemaDatadir"
+    mv "$installedTests/share/glib-2.0" "$installedTestsSchemaDatadir"
+  '';
+
+  postFixup = ''
+    wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
+      --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
       --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
 

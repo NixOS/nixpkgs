@@ -14,7 +14,6 @@
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
-, patchelfUnstable # needed until 0.10 is released
 }:
 
 with stdenv.lib;
@@ -24,7 +23,7 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.6";
+  version = "6.1.16";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -41,12 +40,12 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "b031c30d770f28c5f884071ad933e8c1f83e65b93aaba03a4012077c1d90a54f";
+    sha256 = "49c1990da16d8a3d5bda8cdb961ec8195a901e67e4c79aea44c1521a5fc2f9f1";
   };
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.

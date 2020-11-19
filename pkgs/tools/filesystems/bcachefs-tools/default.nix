@@ -1,17 +1,18 @@
-{ stdenv, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
-, liburcu, zlib, libaio, zstd, lz4, valgrind, python3Packages
+{ stdenv, fetchFromGitHub, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
+, liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages
 , fuseSupport ? false, fuse3 ? null }:
 
 assert fuseSupport -> fuse3 != null;
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "2020-04-04";
+  version = "2020-08-25";
 
-  src = fetchgit {
-    url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "5d6e237b728cfb7c3bf2cb1a613e64bdecbd740d";
-    sha256 = "1syym9k3njb0bk2mg6832cbf6r42z6y8b6hjv7dg4gmv2h7v7l7g";
+  src = fetchFromGitHub {
+    owner = "koverstreet";
+    repo = "bcachefs-tools";
+    rev = "487ddeb03c574e902c5b749b4307e87e2150976a";
+    sha256 = "1pcid7apxmbl9dyvxcqby3k489wi69k8pl596ddzmkw5gmhgvgid";
   };
 
   postPatch = ''
@@ -29,10 +30,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
-    zstd lz4 python3Packages.pytest
+    zstd lz4 python3Packages.pytest udev valgrind
   ] ++ stdenv.lib.optional fuseSupport fuse3;
 
-  doCheck = true;
+  doCheck = false; # needs bcachefs module loaded on builder
 
   checkFlags = [
     "BCACHEFS_TEST_USE_VALGRIND=no"

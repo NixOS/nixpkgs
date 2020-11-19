@@ -1,4 +1,4 @@
-{ cmake, fetchFromGitHub, fetchpatch, json_c, libpcap, ncurses, stdenv }:
+{ cmake, fetchFromGitHub, fetchpatch, json_c, libpcap, ncurses, stdenv, libtirpc }:
 
 stdenv.mkDerivation rec {
   pname = "nfstrace";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "epam";
     repo = "nfstrace";
-    rev = "${version}";
+    rev = version;
     sha256 = "1djsyn7i3xp969rnmsdaf5vwjiik9wylxxrc5nm7by00i76c1vsg";
   };
 
@@ -23,13 +23,14 @@ stdenv.mkDerivation rec {
       --replace "-Wno-braced-scalar-init" ""
   '';
 
-  buildInputs = [ json_c libpcap ncurses ];
+  buildInputs = [ json_c libpcap ncurses libtirpc ];
   nativeBuildInputs = [ cmake ];
 
   # To build with GCC 8+ it needs:
   CXXFLAGS = "-Wno-class-memaccess -Wno-ignored-qualifiers";
   # CMake can't find json_c without:
-  NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" "-Wno-error=address-of-packed-member" ];
+  NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" "-Wno-error=address-of-packed-member" "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
 
   doCheck = false; # requires network access
 

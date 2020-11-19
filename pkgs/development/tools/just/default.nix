@@ -1,18 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, dash
-, installShellFiles }:
+{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.5.11";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0li5lspxfrim8gymqzzd5djjfbfi7jh1m234qlzy5vkx2q9qg0xv";
+    sha256 = "07fjixz8y5rxfwpyr1kiimnn27jhc20gacd17i0yvfcpy5qf8z5p";
   };
 
-  cargoSha256 = "1sp8xrh3gmgmphh1bv050p1ybjybk9x8kswyxz2rd93q3zb5hpzz";
+  cargoSha256 = "1zn0kiqi8p25lscjd661gczay631nwzadl36cfzqnbww6blayy1j";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  --name _just     completions/just.zsh
   '';
 
-  checkInputs = [ coreutils bash dash ];
+  checkInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty
@@ -41,22 +40,12 @@ rustPlatform.buildRustPackage rec {
 
   # Skip "edit" when running "cargo test",
   # since this test case needs "cat".
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo test --
-        --skip edit
-        ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- \
-        --skip edit \
-        ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
-    runHook postCheck
-  '';
+  checkFlagsArray = [ "--skip=edit" ];
 
   meta = with stdenv.lib; {
     description = "A handy way to save and run project-specific commands";
     homepage = "https://github.com/casey/just";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.all;
   };
 }

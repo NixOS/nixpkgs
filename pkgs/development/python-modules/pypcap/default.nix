@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pynetwork/pypcap";
     description = "Simplified object-oriented Python wrapper for libpcap";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv
+, lib
 , desktop-file-utils
 , fetchurl
-, fetchpatch
 , gettext
 , glib
 , gtk3
@@ -20,23 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.36.0";
+  version = "3.38.1";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "024i0gzqnm79rpr4gqxdvcj6gvf82xdlcp2p1k9ikcppmi6xnw46";
+    sha256 = "1z2i9187f2jx456l7h07wy8m9a0p7pj3xiv1aji3snq7rjb1lkj0";
   };
-
-  patches = [
-    # Fix 32-bit builds
-    # https://gitlab.gnome.org/GNOME/sysprof/merge_requests/24
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/sysprof/commit/5dea152c7728f5a37370ad8a229115833e36b4f6.patch";
-      sha256 = "0c76s7r329pbdlmgvm3grn89iylrxv5wg87craqp937nwk3wb80g";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -50,7 +41,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     gnome3.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib libdazzle ];
+  buildInputs = [ glib gtk3 pango polkit systemd.dev (lib.getLib systemd) libdazzle ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"

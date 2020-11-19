@@ -1,24 +1,15 @@
 { stdenv, fetchpatch, fetchFromGitHub, htslib, zlib, bzip2, lzma, ncurses, boost }:
 
-let
-  htslibPatch = fetchpatch {
-    url = "https://github.com/dellytools/delly/commit/0e5c710b0c5ea790bb39699d4cbd49cf4fb86f14.diff";
-    sha256 = "09bz1qqvzhdzm99hf9zgrv80kq9jlr1m2mdvx96p2hk5lpnbdl7y";
-    excludes = [ "src/htslib" ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "delly";
-  version = "0.8.2";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
       owner = "dellytools";
       repo = pname;
       rev = "v${version}";
-      sha256 = "14bkmixz7737xj192ww96s3a20zc7xs7r04db8avw3ggi3i1s1cs";
+      sha256 = "1af1y20hd8x2yvix0gjvx038w7chf4fiyr68ny5yvrx5b2gw0vbq";
   };
-
-  patches = [ htslibPatch ];
 
   buildInputs = [ zlib htslib bzip2 lzma ncurses boost ];
 
@@ -34,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
-    license = licenses.gpl3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
     platforms = platforms.linux;
     longDescription = ''

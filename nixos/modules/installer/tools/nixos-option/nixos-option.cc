@@ -224,7 +224,7 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
 
 bool isAggregateOptionType(Context & ctx, Value & v)
 {
-    return optionTypeIs(ctx, v, "attrsOf") || optionTypeIs(ctx, v, "listOf") || optionTypeIs(ctx, v, "loaOf");
+    return optionTypeIs(ctx, v, "attrsOf") || optionTypeIs(ctx, v, "listOf");
 }
 
 MakeError(OptionPathError, EvalError);

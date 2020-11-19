@@ -10,27 +10,14 @@ assert client -> libX11 != null;
 
 stdenv.mkDerivation rec {
   pname = "amule";
-  version = "2.3.2";
+  version = "unstable-20201006";
 
   src = fetchFromGitHub {
     owner = "amule-project";
     repo = "amule";
-    rev = version;
-    sha256 = "010wxm6g9f92x6fympj501zbnjka32rzbx0sk3a2y4zpih5d2nsn";
+    rev = "6f8951527eda670c7266984ce476061bfe8867fc";
+    sha256 = "12b44b6hz3mb7nsn6xhzvm726xs06xcim013i1appif4dr8njbx1";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/amule-project/amule/pull/135.patch";
-      sha256 = "1n24r1j28083b8ipbnh1nf6i4j6vx59pdkfl1c0g6bb4psx9wvvi";
-      name = "libupnp_18.patch";
-    })
-    (fetchpatch {
-      name = "amule-cryptopp_6.patch";
-      url = "https://github.com/amule-project/amule/commit/27c13f3e622b8a3eaaa05bb62b0149604bdcc9e8.patch";
-      sha256 = "0kq095gi3xl665wr864zlhp5f3blk75pr725yany8ilzcwrzdrnm";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/libs/ec/file_generator.pl \

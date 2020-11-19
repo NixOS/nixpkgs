@@ -55,7 +55,7 @@ in {
     pname       = "check_mssql_health";
     version     = "2.6.4.15";
     sha256      = "12z0b3c2p18viy7s93r6bbl8fvgsqh80136d07118qhxshp1pwxg";
-    description = "Check plugin for Microsoft SQL Server.";
+    description = "Check plugin for Microsoft SQL Server";
     buildInputs = [ perlPackages.DBDsybase ];
   };
 
@@ -63,7 +63,7 @@ in {
     pname       = "check_nwc_health";
     version     = "7.10.0.6";
     sha256      = "092rhaqnk3403z0y60x38vgh65gcia3wrd6gp8mr7wszja38kxv2";
-    description = "Check plugin for network equipment.";
+    description = "Check plugin for network equipment";
     buildInputs = [ perlPackages.NetSNMP ];
   };
 
@@ -71,7 +71,7 @@ in {
     pname       = "check_ups_health";
     version     = "2.8.3.3";
     sha256      = "0qc2aglppwr9ms4p53kh9nr48625sqrbn46xs0k9rx5sv8hil9hm";
-    description = "Check plugin for UPSs.";
+    description = "Check plugin for UPSs";
     buildInputs = [ perlPackages.NetSNMP ];
   };
 }

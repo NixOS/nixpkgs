@@ -1,33 +1,44 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "1.7.0";
-  k3sVersion = "1.17.3-k3s1";
+  version = "3.2.1";
+  k3sVersion = "1.18.9-k3s1";
 
-  goPackagePath = "github.com/rancher/k3d";
+  excludedPackages = ''tools'';
 
   src = fetchFromGitHub {
     owner  = "rancher";
     repo   = "k3d";
     rev    = "v${version}";
-    sha256 = "0aij2l7zmg4cxbw7pwf7ddc64di25hpjvbmp1madhz9q28rwfa9w";
+    sha256 = "1910vir9yc3xvb23260xljnfpznyhnk4gddy752rrndz7rk1b5c3";
   };
 
   buildFlagsArray = ''
     -ldflags=
       -w -s
-      -X github.com/rancher/k3d/version.Version=${version}
-      -X github.com/rancher/k3d/version.K3sVersion=v${k3sVersion}
+      -X github.com/rancher/k3d/v3/version.Version=v${version}
+      -X github.com/rancher/k3d/v3/version.K3sVersion=v${k3sVersion}
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd k3d \
+      --bash <($out/bin/k3d completion bash) \
+      --fish <($out/bin/k3d completion fish) \
+      --zsh <($out/bin/k3d completion zsh)
   '';
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rancher/k3d";
     description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kuznero jlesquembre ngerstle ];
+    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
   };
 }

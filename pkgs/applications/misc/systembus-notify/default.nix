@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "systembus-notify";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "systembus-notify";
     rev = "v${version}";
-    sha256 = "11zq84qfmbyl51d3r6294l2bjhlgwa9bx7d263g9fkqrwsg0si0y";
+    sha256 = "1pdn45rfpwhrf20hs87qmk2j8sr7ab8161f81019wnypnb1q2fsv";
   };
 
   buildInputs = [ systemd ];

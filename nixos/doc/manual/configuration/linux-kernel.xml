@@ -126,13 +126,13 @@ nixpkgs.config.packageOverrides = pkgs:
    <literal>mellanox</literal> drivers.
   </para>
 
-<screen><![CDATA[
-$ nix-build '<nixpkgs>' -A linuxPackages.kernel.dev
-$ nix-shell '<nixpkgs>' -A linuxPackages.kernel
-$ unpackPhase
-$ cd linux-*
-$ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
-# insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
-]]></screen>
+<screen>
+<prompt>$ </prompt>nix-build '&lt;nixpkgs>' -A linuxPackages.kernel.dev
+<prompt>$ </prompt>nix-shell '&lt;nixpkgs>' -A linuxPackages.kernel
+<prompt>$ </prompt>unpackPhase
+<prompt>$ </prompt>cd linux-*
+<prompt>$ </prompt>make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
+<prompt># </prompt>insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
+</screen>
  </section>
 </chapter>

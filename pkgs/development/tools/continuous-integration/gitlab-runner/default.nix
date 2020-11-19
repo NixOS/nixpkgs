@@ -1,22 +1,23 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl }:
 
 let
-  version = "13.0.1";
+  version = "13.5.0";
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64
   docker_x86_64 = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-x86_64.tar.xz";
-    sha256 = "1hrdi9fvni21lrc7lx8bjxdiqyf02cihl7pxlvcji0j1lmxyz721";
+    sha256 = "1cahv98hhwcc0czg7c86sqk0r6kw3gxnx8j6mqp1zm19aa30sabk";
   };
 
   docker_arm = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-arm.tar.xz";
-    sha256 = "0k41k6brmdh9rz6k4kis0wabgvrfl1vm63w36h2kk2vnwxg27s91";
+    sha256 = "1wk7xn8jap8699cpgqkpgxmd908qjxlsfjswknrha1n8y2c5bjgx";
   };
 in
 buildGoPackage rec {
   inherit version;
   pname = "gitlab-runner";
   goPackagePath = "gitlab.com/gitlab-org/gitlab-runner";
+  subPackages = [ "." ];
   commonPackagePath = "${goPackagePath}/common";
   buildFlagsArray = ''
     -ldflags=
@@ -29,13 +30,12 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "155f1lvvx1rq50xjfl4ligxnya9js2rkzp45vwwfdwrvy0qlx8sf";
+    sha256 = "0qfzdbhj68lq5pa1hvb703yx9grh3hvnnw6jb4bj4fckncd3avgm";
   };
 
   patches = [ ./fix-shell-path.patch ];
 
   postInstall = ''
-    touch $out/bin/hello
     install -d $out/bin/helper-images
     ln -sf ${docker_x86_64} $out/bin/helper-images/prebuilt-x86_64.tar.xz
     ln -sf ${docker_arm} $out/bin/helper-images/prebuilt-arm.tar.xz

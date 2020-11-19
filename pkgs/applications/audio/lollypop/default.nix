@@ -1,11 +1,13 @@
 { lib
 , fetchgit
+, nix-update-script
 , meson
 , ninja
 , pkgconfig
 , python3
 , gtk3
 , gst_all_1
+, libhandy
 , libsecret
 , libsoup
 , appstream-glib
@@ -23,7 +25,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.2.35";
+  version = "1.4.5";
 
   format = "other";
   doCheck = false;
@@ -32,7 +34,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "19nw9qh17yyi9ih1nwngbbwjx1vr26haqhmzsdqf0yjgsgf9vldx";
+    sha256 = "1i5qcpp3fpkda08g6nkiiff8lsjmv5xsvpa0512kigq5z0lsagrx";
   };
 
   nativeBuildInputs = [
@@ -56,6 +58,7 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
+    libhandy
     libsoup
     pango
     totem-pl-parser
@@ -90,6 +93,13 @@ python3.pkgs.buildPythonApplication rec  {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";

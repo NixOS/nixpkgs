@@ -254,7 +254,7 @@ let f(h, h + 1, i) = i + h
 
   <variablelist>
    <title>Variables specifying dependencies</title>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsBuildBuild">
     <term>
      <varname>depsBuildBuild</varname>
     </term>
@@ -267,7 +267,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-nativeBuildInputs">
     <term>
      <varname>nativeBuildInputs</varname>
     </term>
@@ -280,7 +280,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsBuildTarget">
     <term>
      <varname>depsBuildTarget</varname>
     </term>
@@ -296,7 +296,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsHostHost">
     <term>
      <varname>depsHostHost</varname>
     </term>
@@ -306,7 +306,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-buildInputs">
     <term>
      <varname>buildInputs</varname>
     </term>
@@ -319,7 +319,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsTargetTarget">
     <term>
      <varname>depsTargetTarget</varname>
     </term>
@@ -329,7 +329,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsBuildBuildPropagated">
     <term>
      <varname>depsBuildBuildPropagated</varname>
     </term>
@@ -339,7 +339,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-propagatedNativeBuildInputs">
     <term>
      <varname>propagatedNativeBuildInputs</varname>
     </term>
@@ -349,7 +349,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsBuildTargetPropagated">
     <term>
      <varname>depsBuildTargetPropagated</varname>
     </term>
@@ -359,7 +359,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsHostHostPropagated">
     <term>
      <varname>depsHostHostPropagated</varname>
     </term>
@@ -369,7 +369,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-propagatedBuildInputs">
     <term>
      <varname>propagatedBuildInputs</varname>
     </term>
@@ -379,7 +379,7 @@ let f(h, h + 1, i) = i + h
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-depsTargetTargetPropagated">
     <term>
      <varname>depsTargetTargetPropagated</varname>
     </term>
@@ -396,7 +396,7 @@ let f(h, h + 1, i) = i + h
 
   <variablelist>
    <title>Variables affecting <literal>stdenv</literal> initialisation</title>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-NIX_DEBUG">
     <term>
      <varname>NIX_DEBUG</varname>
     </term>
@@ -410,7 +410,7 @@ let f(h, h + 1, i) = i + h
 
   <variablelist>
    <title>Attributes affecting build properties</title>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-enableParallelBuilding">
     <term>
      <varname>enableParallelBuilding</varname>
     </term>
@@ -427,7 +427,7 @@ let f(h, h + 1, i) = i + h
 
   <variablelist>
    <title>Special variables</title>
-   <varlistentry>
+   <varlistentry xml:id="var-stdenv-passthru">
     <term>
      <varname>passthru</varname>
     </term>
@@ -475,9 +475,12 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
-     </para>
-     <para>
-      The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+      The script will be run with <varname>UPDATE_NIX_ATTR_PATH</varname> environment variable set to the attribute path it is supposed to update.
+      <note>
+       <para>
+        The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+       </para>
+      </note>
      </para>
      <para>
       For information about how to run the updates, execute <command>nix-shell maintainers/scripts/update.nix</command>.
@@ -504,7 +507,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
     There are a number of variables that control what phases are executed and in what order:
     <variablelist>
      <title>Variables affecting phase control</title>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-phases">
       <term>
        <varname>phases</varname>
       </term>
@@ -517,7 +520,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
        </para>
       </listitem>
      </varlistentry>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-prePhases">
       <term>
        <varname>prePhases</varname>
       </term>
@@ -527,7 +530,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
        </para>
       </listitem>
      </varlistentry>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-preConfigurePhases">
       <term>
        <varname>preConfigurePhases</varname>
       </term>
@@ -537,7 +540,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
        </para>
       </listitem>
      </varlistentry>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-preBuildPhases">
       <term>
        <varname>preBuildPhases</varname>
       </term>
@@ -547,7 +550,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
        </para>
       </listitem>
      </varlistentry>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-preInstallPhases">
       <term>
        <varname>preInstallPhases</varname>
       </term>
@@ -557,7 +560,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
        </para>
       </listitem>
      </varlistentry>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-preFixupPhases">
       <term>
        <varname>preFixupPhases</varname>
       </term>
@@ -567,7 +570,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
        </para>
       </listitem>
      </varlistentry>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-preDistPhases">
       <term>
        <varname>preDistPhases</varname>
       </term>
@@ -577,7 +580,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
        </para>
       </listitem>
      </varlistentry>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-postPhases">
       <term>
        <varname>postPhases</varname>
       </term>
@@ -635,7 +638,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
 
    <variablelist>
     <title>Variables controlling the unpack phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-src">
      <term>
       <varname>srcs</varname> / <varname>src</varname>
      </term>
@@ -645,7 +648,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-sourceRoot">
      <term>
       <varname>sourceRoot</varname>
      </term>
@@ -655,7 +658,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-setSourceRoot">
      <term>
       <varname>setSourceRoot</varname>
      </term>
@@ -665,7 +668,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preUnpack">
      <term>
       <varname>preUnpack</varname>
      </term>
@@ -675,7 +678,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postUnpack">
      <term>
       <varname>postUnpack</varname>
      </term>
@@ -685,7 +688,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontUnpack">
      <term>
       <varname>dontUnpack</varname>
      </term>
@@ -695,7 +698,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontMakeSourcesWritable">
      <term>
       <varname>dontMakeSourcesWritable</varname>
      </term>
@@ -705,7 +708,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-unpackCmd">
      <term>
       <varname>unpackCmd</varname>
      </term>
@@ -727,7 +730,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
 
    <variablelist>
     <title>Variables controlling the patch phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontPatch">
      <term>
       <varname>dontPatch</varname>
      </term>
@@ -737,7 +740,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-patches">
      <term>
       <varname>patches</varname>
      </term>
@@ -747,7 +750,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-patchFlags">
      <term>
       <varname>patchFlags</varname>
      </term>
@@ -757,7 +760,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-prePatch">
      <term>
       <varname>prePatch</varname>
      </term>
@@ -767,7 +770,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postPatch">
      <term>
       <varname>postPatch</varname>
      </term>
@@ -789,7 +792,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
 
    <variablelist>
     <title>Variables controlling the configure phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-configureScript">
      <term>
       <varname>configureScript</varname>
      </term>
@@ -799,7 +802,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-configureFlags">
      <term>
       <varname>configureFlags</varname>
      </term>
@@ -809,7 +812,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontConfigure">
      <term>
       <varname>dontConfigure</varname>
      </term>
@@ -819,7 +822,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-configureFlagsArray">
      <term>
       <varname>configureFlagsArray</varname>
      </term>
@@ -829,7 +832,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontAddPrefix">
      <term>
       <varname>dontAddPrefix</varname>
      </term>
@@ -839,7 +842,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-prefix">
      <term>
       <varname>prefix</varname>
      </term>
@@ -849,7 +852,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-prefixKey">
      <term>
       <varname>prefixKey</varname>
      </term>
@@ -859,7 +862,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontAddDisableDepTrack">
      <term>
       <varname>dontAddDisableDepTrack</varname>
      </term>
@@ -869,7 +872,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontFixLibtool">
      <term>
       <varname>dontFixLibtool</varname>
      </term>
@@ -885,7 +888,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontDisableStatic">
      <term>
       <varname>dontDisableStatic</varname>
      </term>
@@ -898,7 +901,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-configurePlatforms">
      <term>
       <varname>configurePlatforms</varname>
      </term>
@@ -913,7 +916,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preConfigure">
      <term>
       <varname>preConfigure</varname>
      </term>
@@ -923,7 +926,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postConfigure">
      <term>
       <varname>postConfigure</varname>
      </term>
@@ -945,7 +948,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
 
    <variablelist>
     <title>Variables controlling the build phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontBuild">
      <term>
       <varname>dontBuild</varname>
      </term>
@@ -955,7 +958,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-makefile">
      <term>
       <varname>makefile</varname>
      </term>
@@ -965,7 +968,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-makeFlags">
      <term>
       <varname>makeFlags</varname>
      </term>
@@ -983,7 +986,7 @@ makeFlags = [ "PREFIX=$(out)" ];
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-makeFlagsArray">
      <term>
       <varname>makeFlagsArray</varname>
      </term>
@@ -999,7 +1002,7 @@ preBuild = ''
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-buildFlags">
      <term>
       <varname>buildFlags</varname> / <varname>buildFlagsArray</varname>
      </term>
@@ -1009,7 +1012,7 @@ preBuild = ''
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preBuild">
      <term>
       <varname>preBuild</varname>
      </term>
@@ -1019,7 +1022,7 @@ preBuild = ''
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postBuild">
      <term>
       <varname>postBuild</varname>
      </term>
@@ -1049,7 +1052,7 @@ preBuild = ''
 
    <variablelist>
     <title>Variables controlling the check phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-doCheck">
      <term>
       <varname>doCheck</varname>
      </term>
@@ -1067,11 +1070,11 @@ preBuild = ''
      </term>
      <listitem>
       <para>
-       See the build phase for details.
+       See the <link xlink:href="#var-stdenv-makeFlags">build phase</link> for details.
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-checkTarget">
      <term>
       <varname>checkTarget</varname>
      </term>
@@ -1081,7 +1084,7 @@ preBuild = ''
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-checkFlags">
      <term>
       <varname>checkFlags</varname> / <varname>checkFlagsArray</varname>
      </term>
@@ -1091,7 +1094,7 @@ preBuild = ''
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-checkInputs">
      <term>
       <varname>checkInputs</varname>
      </term>
@@ -1101,7 +1104,7 @@ preBuild = ''
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preCheck">
      <term>
       <varname>preCheck</varname>
      </term>
@@ -1111,7 +1114,7 @@ preBuild = ''
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postCheck">
      <term>
       <varname>postCheck</varname>
      </term>
@@ -1133,7 +1136,7 @@ preBuild = ''
 
    <variablelist>
     <title>Variables controlling the install phase</title>
-     <varlistentry>
+     <varlistentry xml:id="var-stdenv-dontInstall">
      <term>
        <varname>dontInstall</varname>
      </term>
@@ -1149,11 +1152,11 @@ preBuild = ''
      </term>
      <listitem>
       <para>
-       See the build phase for details.
+       See the <link xlink:href="#var-stdenv-makeFlags">build phase</link> for details.
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-installTargets">
      <term>
       <varname>installTargets</varname>
      </term>
@@ -1165,7 +1168,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-installFlags">
      <term>
       <varname>installFlags</varname> / <varname>installFlagsArray</varname>
      </term>
@@ -1175,7 +1178,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preInstall">
      <term>
       <varname>preInstall</varname>
      </term>
@@ -1185,7 +1188,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postInstall">
      <term>
       <varname>postInstall</varname>
      </term>
@@ -1229,7 +1232,7 @@ installTargets = "install-bin install-doc";</programlisting>
 
    <variablelist>
     <title>Variables controlling the fixup phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontFixup">
      <term>
       <varname>dontFixup</varname>
      </term>
@@ -1239,7 +1242,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontStrip">
      <term>
       <varname>dontStrip</varname>
      </term>
@@ -1249,7 +1252,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontStripHost">
      <term>
       <varname>dontStripHost</varname>
      </term>
@@ -1259,7 +1262,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontStripTarget">
      <term>
       <varname>dontStripTarget</varname>
      </term>
@@ -1269,7 +1272,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontMoveSbin">
      <term>
       <varname>dontMoveSbin</varname>
      </term>
@@ -1279,7 +1282,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-stripAllList">
      <term>
       <varname>stripAllList</varname>
      </term>
@@ -1289,7 +1292,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-stripAllFlags">
      <term>
       <varname>stripAllFlags</varname>
      </term>
@@ -1299,7 +1302,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-stripDebugList">
      <term>
       <varname>stripDebugList</varname>
      </term>
@@ -1309,7 +1312,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-stripDebugFlags">
      <term>
       <varname>stripDebugFlags</varname>
      </term>
@@ -1319,7 +1322,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontPatchELF">
      <term>
       <varname>dontPatchELF</varname>
      </term>
@@ -1329,7 +1332,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontPatchShebangs">
      <term>
       <varname>dontPatchShebangs</varname>
      </term>
@@ -1339,7 +1342,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontPruneLibtoolFiles">
      <term>
       <varname>dontPruneLibtoolFiles</varname>
      </term>
@@ -1349,7 +1352,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-forceShare">
      <term>
       <varname>forceShare</varname>
      </term>
@@ -1359,7 +1362,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-setupHook">
      <term>
       <varname>setupHook</varname>
      </term>
@@ -1370,7 +1373,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preFixup">
      <term>
       <varname>preFixup</varname>
      </term>
@@ -1380,7 +1383,7 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postFixup">
      <term>
       <varname>postFixup</varname>
      </term>
@@ -1419,7 +1422,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
 
    <variablelist>
     <title>Variables controlling the installCheck phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-doInstallCheck">
      <term>
       <varname>doInstallCheck</varname>
      </term>
@@ -1431,7 +1434,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-installCheckTarget">
      <term>
       <varname>installCheckTarget</varname>
      </term>
@@ -1441,7 +1444,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-installCheckFlags">
      <term>
       <varname>installCheckFlags</varname> / <varname>installCheckFlagsArray</varname>
      </term>
@@ -1451,7 +1454,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-installCheckInputs">
      <term>
       <varname>installCheckInputs</varname>
      </term>
@@ -1461,7 +1464,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preInstallCheck">
      <term>
       <varname>preInstallCheck</varname>
      </term>
@@ -1471,7 +1474,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postInstallCheck">
      <term>
       <varname>postInstallCheck</varname>
      </term>
@@ -1493,7 +1496,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
 
    <variablelist>
     <title>Variables controlling the distribution phase</title>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-distTarget">
      <term>
       <varname>distTarget</varname>
      </term>
@@ -1503,7 +1506,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-distFlags">
      <term>
       <varname>distFlags</varname> / <varname>distFlagsArray</varname>
      </term>
@@ -1513,7 +1516,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-tarballs">
      <term>
       <varname>tarballs</varname>
      </term>
@@ -1523,7 +1526,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-dontCopyDist">
      <term>
       <varname>dontCopyDist</varname>
      </term>
@@ -1533,7 +1536,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-preDist">
      <term>
       <varname>preDist</varname>
      </term>
@@ -1543,7 +1546,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
       </para>
      </listitem>
     </varlistentry>
-    <varlistentry>
+    <varlistentry xml:id="var-stdenv-postDist">
      <term>
       <varname>postDist</varname>
      </term>
@@ -1635,10 +1638,6 @@ substitute ./foo.in ./foo.out \
     --replace "a string containing spaces" "some other text" \
     --subst-var someVar
 </programlisting>
-     </para>
-     <para>
-      <function>substitute</function> is implemented using the <command
-      xlink:href="http://replace.richardlloyd.org.uk/">replace</command> command. Unlike with the <command>sed</command> command, you don’t have to worry about escaping special characters. It supports performing substitutions on binary files (such as executables), though there you’ll probably want to make sure that the replacement string is as long as the replaced string.
      </para>
     </listitem>
    </varlistentry>
@@ -1836,6 +1835,19 @@ addEnvHooks "$hostOffset" myBashFunction
     </varlistentry>
     <varlistentry>
      <term>
+      <literal>move-systemd-user-units.sh</literal>
+     </term>
+     <listitem>
+      <para>
+       This setup hook moves any systemd user units installed in the lib
+       subdirectory into share. In addition, a link is provided from share to
+       lib for compatibility. This is needed for systemd to find user services
+       when installed into the user profile.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <literal>set-source-date-epoch-to-latest.sh</literal>
      </term>
      <listitem>
@@ -2019,6 +2031,9 @@ addEnvHooks "$hostOffset" myBashFunction
        In certain situations you may want to run the main command (<command>autoPatchelf</command>) of the setup hook on a file or a set of directories instead of unconditionally patching all outputs. This can be done by setting the <varname>dontAutoPatchelf</varname> environment variable to a non-empty value.
       </para>
       <para>
+       By default <command>autoPatchelf</command> will fail as soon as any ELF file requires a dependency which cannot be resolved via the given build inputs. In some situations you might prefer to just leave missing dependencies unpatched and continue to patch the rest. This can be achieved by setting the <envar>autoPatchelfIgnoreMissingDeps</envar> environment variable to a non-empty value.
+      </para>
+      <para>
        The <command>autoPatchelf</command> command also recognizes a <parameter class="command">--no-recurse</parameter> command line flag, which prevents it from recursing into subdirectories.
       </para>
      </listitem>
@@ -2055,7 +2070,7 @@ nativeBuildInputs = [ breakpointHook ];
        The <literal>installManPage</literal> function takes one or more paths to manpages to install. The manpages must have a section suffix, and may optionally be compressed (with <literal>.gz</literal> suffix). This function will place them into the correct directory.
       </para>
       <para>
-       The <literal>installShellCompletion</literal> function takes one or more paths to shell completion files. By default it will autodetect the shell type from the completion file extension, but you may also specify it by passing one of <literal>--bash</literal>, <literal>--fish</literal>, or <literal>--zsh</literal>. These flags apply to all paths listed after them (up until another shell flag is given). Each path may also have a custom installation name provided by providing a flag <literal>--name NAME</literal> before the path. If this flag is not provided, zsh completions will be renamed automatically such that <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>.
+       The <literal>installShellCompletion</literal> function takes one or more paths to shell completion files. By default it will autodetect the shell type from the completion file extension, but you may also specify it by passing one of <literal>--bash</literal>, <literal>--fish</literal>, or <literal>--zsh</literal>. These flags apply to all paths listed after them (up until another shell flag is given). Each path may also have a custom installation name provided by providing a flag <literal>--name NAME</literal> before the path. If this flag is not provided, zsh completions will be renamed automatically such that <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>. A root name may be provided for all paths using the flag <literal>--cmd NAME</literal>; this synthesizes the appropriate name depending on the shell (e.g. <literal>--cmd foo</literal> will synthesize the name <literal>foo.bash</literal> for bash and <literal>_foo</literal> for zsh). The path may also be a fifo or named fd (such as produced by <literal>&lt;(cmd)</literal>), in which case the shell and name must be provided.
 <programlisting>
 nativeBuildInputs = [ installShellFiles ];
 postInstall = ''
@@ -2066,6 +2081,11 @@ postInstall = ''
   installShellCompletion --zsh --name _foobar share/completions.zsh
   # implicit behavior
   installShellCompletion share/completions/foobar.{bash,fish,zsh}
+  # using named fd
+  installShellCompletion --cmd foobar \
+    --bash &lt;($out/bin/foobar --bash-completion) \
+    --fish &lt;($out/bin/foobar --fish-completion) \
+    --zsh &lt;($out/bin/foobar --zsh-completion)
 '';
 </programlisting>
       </para>

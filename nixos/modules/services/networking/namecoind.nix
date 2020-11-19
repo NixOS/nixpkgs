@@ -89,7 +89,7 @@ in
       };
 
       rpc.password = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Password for RPC connections.
@@ -149,11 +149,6 @@ in
 
   config = mkIf cfg.enable {
 
-    services.dnschain.extraConfig = ''
-      [namecoin]
-      config = ${configFile}
-    '';
-
     users.users.namecoin = {
       uid  = config.ids.uids.namecoin;
       description = "Namecoin daemon user";
@@ -170,6 +165,8 @@ in
       after    = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      startLimitIntervalSec = 120;
+      startLimitBurst = 5;
       serviceConfig = {
         User  = "namecoin";
         Group = "namecoin";
@@ -181,8 +178,6 @@ in
         TimeoutStopSec     = "60s";
         TimeoutStartSec    = "2s";
         Restart            = "always";
-        StartLimitInterval = "120s";
-        StartLimitBurst    = "5";
       };
 
       preStart = optionalString (cfg.wallet != "${dataDir}/wallet.dat")  ''

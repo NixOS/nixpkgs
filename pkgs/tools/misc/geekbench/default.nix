@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ stdenv, fetchurl, makeWrapper, ocl-icd, vulkan-loader, linuxPackages }:
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
-  version = "5.1.1";
+  version = "5.2.5";
 
   src = fetchurl {
     url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-    sha256 = "1wjyn3fkc2zgj0xrd73kidrg1d1wqmil278ak36wf87685w4n0b1";
+    sha256 = "0mq33khmsay646csr7j7mqb1fr2dlacb58hjqyxfbh83r0a1q67p";
   };
 
   dontConfigure = true;
@@ -15,12 +15,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/lib
     cp -r geekbench.plar geekbench5 geekbench_x86_64 $out/bin
+
+    # needed for compute benchmark
+    ln -s ${linuxPackages.nvidia_x11}/lib/libcuda.so $out/lib/
+    ln -s ${ocl-icd}/lib/libOpenCL.so $out/lib/
+    ln -s ${ocl-icd}/lib/libOpenCL.so.1 $out/lib/
+    ln -s ${vulkan-loader}/lib/libvulkan.so $out/lib/
+    ln -s ${vulkan-loader}/lib/libvulkan.so.1 $out/lib/
 
     for f in geekbench5 geekbench_x86_64 ; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) $out/bin/$f
-      wrapProgram $out/bin/$f --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+      wrapProgram $out/bin/$f --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/lib/"
     done
   '';
 

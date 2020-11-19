@@ -115,13 +115,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # NOTE: Purity check is disabled for checkPhase because it doesn't fare well
+  # with the DMD linker. See https://github.com/NixOS/nixpkgs/issues/97420
   checkPhase = ''
     cd dmd
-    make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHELL=$SHELL
+    NIX_ENFORCE_PURITY= \
+      make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHELL=$SHELL
+
     cd ../druntime
-    make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${pathToDmd} BUILD=release
+    NIX_ENFORCE_PURITY= \
+      make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${pathToDmd} BUILD=release
+
     cd ../phobos
-    make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
+    NIX_ENFORCE_PURITY= \
+      make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
+
     cd ..
   '';
 

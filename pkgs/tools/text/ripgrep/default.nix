@@ -31,14 +31,13 @@ rustPlatform.buildRustPackage rec {
     installManPage $releaseDir/build/ripgrep-*/out/rg.1
 
     installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
-    installShellCompletion --zsh "$src/complete/_rg"
+    installShellCompletion --zsh complete/_rg
   '';
 
   meta = with stdenv.lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = with maintainers; [ tailhook globin ma27 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
   };
 }

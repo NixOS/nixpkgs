@@ -6,6 +6,7 @@
 , ipython
 , python
 , scikit-build
+, cmake
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,17 @@ buildPythonPackage rec {
     sha256 = "7218ad6bd81f8649b211974bf108933910f016d66b49651effe7bbf63667d141";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    cmake
+    scikit-build
+  ];
 
-  propagatedBuildInputs = [ ipython scikit-build ];
+  dontUseCmakeConfigure = true;
+
+  propagatedBuildInputs = [
+    ipython
+  ];
 
   disabled = isPyPy;
 
@@ -27,8 +36,12 @@ buildPythonPackage rec {
     rm -f _line_profiler.c
   '';
 
+  checkInputs = [
+    ipython
+  ];
+
   checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH cd tests && ${python.interpreter} -m unittest discover -s .
   '';
 
   meta = {
@@ -36,6 +49,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/rkern/line_profiler";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
-    broken = true;
   };
 }

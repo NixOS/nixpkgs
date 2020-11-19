@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, nixosTests }:
 
 python3Packages.buildPythonApplication rec {
   name = "tor-exporter-${version}";
@@ -26,6 +26,8 @@ python3Packages.buildPythonApplication rec {
           --set PYTHONPATH "$PYTHONPATH" \
           --add-flags "$out/share/prometheus-tor-exporter.py"
   '';
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) tor; };
 
   meta = with lib; {
     description = "Prometheus exporter that exposes metrics from a Tor daemon";

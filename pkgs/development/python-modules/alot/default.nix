@@ -19,6 +19,10 @@ buildPythonPackage rec {
     sha256 = "0s94m17yph1gq9f2svipb3bbwbw1s4j3zf2xkg5h91006v8286r6";
   };
 
+  postPatch = ''
+    substituteInPlace alot/settings/manager.py --replace /usr/share "$out/share"
+  '';
+
   nativeBuildInputs = lib.optional withManpage sphinx;
 
   propagatedBuildInputs = [

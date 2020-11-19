@@ -2,36 +2,39 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "0.97-219";
+  version = "1.2.6";
+  tagHash = "0423683af6500dacbbc0194cb97eedaa312a34f2"; # from `git rev-parse v1.2.6`
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    # Tailscale uses "git describe" as version numbers. v0.97-219
-    # means "tag v0.97 plus 219 commits", which is what this rev is.
-    rev = "afbfe4f217a2a202f0eefe943c7c1ef648311339";
-    sha256 = "1an897ys3gycdmclqd0yqs9f7q88zxqxyc6r0gcgs4678svxhb68";
+    rev = "v${version}";
+    sha256 = "0p2ygv2vwpjq6yhhaxis8j9gxkv0qcx0byxlf0vbmy9xqb03cs87";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
-  goPackagePath = "tailscale.com";
-  overrideModAttrs = (_: {
-    preBuild = ''
-    rm ipn/e2e_test.go
-    rm control/controlclient/auto_test.go
-    rm control/controlclient/direct_test.go
-    '';
-  });
-  vendorSha256 = "1v90lbwgrc2m4kvpglf2jykrm8rry3pbhqqbc3mcysrzmqlw84yl";
+  vendorSha256 = "01g3jkgl3jrygd154gmjm3dq13nkppd993iym7assdz8mr3rq31s";
+
+  doCheck = false;
+
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
+
+  preBuild = ''
+    export buildFlagsArray=(
+      -tags="xversion"
+      -ldflags="-X tailscale.com/version.Long=${version} -X tailscale.com/version.Short=${version} -X tailscale.com/version.GitCommit=${tagHash}"
+    )
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${
       lib.makeBinPath [ iproute iptables ]
     }
+    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
+    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
 
   meta = with lib; {

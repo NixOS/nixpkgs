@@ -1,24 +1,34 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, xwininfo, xdotool, xprop }:
+, xwininfo, xdotool, xprop, gawk, coreutils
+, gnugrep, procps }:
 
 stdenv.mkDerivation {
   pname = "tdrop";
-  version = "unstable-2018-11-13";
+  version = "unstable-2020-05-14";
 
   src = fetchFromGitHub {
     owner = "noctuid";
     repo = "tdrop";
-    rev = "198795c0d2573a31979330d6a2ae946eb81deebf";
-    sha256 = "1fhibqgmls64mylcb6q46ipmg1q6pvaqm26vz933gqav6cqsbdzs";
+    rev = "a9f2862515e5c190ac61d394e7fe7e1039871b89";
+    sha256 = "1zxhihgba33k8byjsracsyhby9qpdngbly6c8hpz3pbsyag5liwc";
   };
 
   dontBuild = true;
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  postInstall = ''
-    wrapProgram $out/bin/tdrop \
-      --prefix PATH : ${lib.makeBinPath [ xwininfo xdotool xprop ]}
+  postInstall = let
+    binPath = lib.makeBinPath [
+      xwininfo
+      xdotool
+      xprop
+      gawk
+      coreutils
+      gnugrep
+      procps
+    ];
+  in ''
+    wrapProgram $out/bin/tdrop --prefix PATH : ${binPath}
   '';
 
   nativeBuildInputs = [ makeWrapper ];

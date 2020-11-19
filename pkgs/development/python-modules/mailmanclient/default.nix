@@ -2,19 +2,15 @@
 
 buildPythonPackage rec {
   pname = "mailmanclient";
-  version = "3.3.0";
+  version = "3.3.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8736cbe152ae1bd58b46ccfbcafb6a1e301513530772e7fda89f91d1e5c1ae9";
+    sha256 = "0pjgzpvhdb6ql8asb20xr8d01m646zpghmcp9fmscks0n1k4di4g";
   };
 
   propagatedBuildInputs = [ six httplib2 requests ];
-
-  # no tests with Pypi tar ball, checkPhase removes setup.py which invalidates import check
-  doCheck = false;
-  pythonImportsCheck = [ "mailmanclient" ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.gnu.org/software/mailman/";

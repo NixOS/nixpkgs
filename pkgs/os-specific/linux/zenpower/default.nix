@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "0.1.10";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "ocerman";
     repo = "zenpower";
     rev = "v${version}";
-    sha256 = "1fqqaj7fq49yi2yip518036w80r9w7mkxpbkrxqzlydpma1x9v5m";
+    sha256 = "116yrw4ygh3fqwhniaqq0nps29pq87mi2q1375f1ylkfiak8n63a";
   };
 
   hardeningDisable = [ "pic" ];

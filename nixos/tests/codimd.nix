@@ -21,7 +21,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       services = {
         codimd = {
           enable = true;
-          configuration.dbURL = "postgres://codimd:snakeoilpassword@localhost:5432/codimddb";
+          configuration.dbURL = "postgres://codimd:\${DB_PASSWORD}@localhost:5432/codimddb";
+
+          /*
+           * Do not use pkgs.writeText for secrets as
+           * they will end up in the world-readable Nix store.
+           */
+          environmentFile = pkgs.writeText "codimd-env" ''
+            DB_PASSWORD=snakeoilpassword
+          '';
         };
         postgresql = {
           enable = true;

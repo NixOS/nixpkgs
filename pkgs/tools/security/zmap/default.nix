@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0yaahaiawkjk020hvsb8pndbrk8k10wxkfba1irp12a4sj6rywcs";
   };
 
+  patches = [
+    # fix build with json-c 0.14 https://github.com/zmap/zmap/pull/609
+    ./cmake-json-0.14-fix.patch
+  ];
+
   cmakeFlags = [ "-DRESPECT_INSTALL_PREFIX_CONFIG=ON" ];
   dontUseCmakeBuildDir = true;
 

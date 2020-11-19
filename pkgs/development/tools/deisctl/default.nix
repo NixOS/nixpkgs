@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://deis.io";
-    description = "A command-line utility used to provision and operate a Deis cluster.";
+    description = "A command-line utility used to provision and operate a Deis cluster";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [

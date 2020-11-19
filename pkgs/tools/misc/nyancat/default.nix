@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Nyancat in your terminal, rendered through ANSI escape sequences.";
+    description = "Nyancat in your terminal, rendered through ANSI escape sequences";
     homepage = "https://nyancat.dakko.us";
     license = licenses.ncsa;
     maintainers = with maintainers; [ midchildan ];

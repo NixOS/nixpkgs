@@ -2,20 +2,14 @@
 
 buildGoModule rec {
   pname = "age";
-  version = "unstable-2020-03-25";
-  goPackagePath = "github.com/FiloSottile/age";
+  version = "1.0.0-beta5";
   vendorSha256 = "0km7a2826j3fk2nrkmgc990chrkcfz006wfw14yilsa4p2hmfl7m";
-
-  subPackages = [
-    "cmd/age"
-    "cmd/age-keygen"
-  ];
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
-    rev = "f0f8092d60bb96737fa096c29ec6d8adb5810390";
-    sha256 = "079kfc8d1pr39hr4qnx48kviyzwg4p8m4pz0bdkypns4aq8ppbfk";
+    rev = "v${version}";
+    sha256 = "1hdbxd359z8zvnz7h8c4pa16nc7r8db36lx3gpks38lpi0r8hzqk";
   };
 
   meta = with lib; {

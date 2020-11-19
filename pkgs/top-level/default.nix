@@ -38,6 +38,9 @@
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
   stdenvStages ? import ../stdenv
+
+, # Ignore unexpected args.
+  ...
 } @ args:
 
 let # Rename the function arguments

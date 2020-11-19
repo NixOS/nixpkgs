@@ -1,6 +1,7 @@
 { cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python3, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
+, removeReferencesTo
 
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
         having a black belt in shell scripting.
       '';
       license = licenses.mit;
-      maintainers = with maintainers; [ afldcr filalex77 ];
+      maintainers = with maintainers; [ afldcr Br1ght0ne ];
       platforms = platforms.linux;
     };
 
@@ -74,6 +75,10 @@ stdenv.mkDerivation rec {
     '' else "";
 
     nativeBuildInputs = [
-      cmake pkgconfig
+      cmake pkgconfig removeReferencesTo
     ];
+
+    postFixup = ''
+        remove-references-to -t ${stdenv.cc} $out/bin/polybar
+    '';
 }

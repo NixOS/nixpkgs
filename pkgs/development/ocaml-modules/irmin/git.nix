@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
+  useDune2 = true;
+
   propagatedBuildInputs = [ git irmin ];
 
   checkInputs = lib.optionals doCheck [ git-unix irmin-mem irmin-test ];

@@ -20,16 +20,16 @@
   has booted, you can make the selected configuration the default for
   subsequent boots:
 <screen>
-# /run/current-system/bin/switch-to-configuration boot</screen>
+<prompt># </prompt>/run/current-system/bin/switch-to-configuration boot</screen>
  </para>
 
  <para>
   Second, you can switch to the previous configuration in a running system:
 <screen>
-# nixos-rebuild switch --rollback</screen>
+<prompt># </prompt>nixos-rebuild switch --rollback</screen>
   This is equivalent to running:
 <screen>
-# /nix/var/nix/profiles/system-<replaceable>N</replaceable>-link/bin/switch-to-configuration switch</screen>
+<prompt># </prompt>/nix/var/nix/profiles/system-<replaceable>N</replaceable>-link/bin/switch-to-configuration switch</screen>
   where <replaceable>N</replaceable> is the number of the NixOS system
   configuration. To get a list of the available configurations, do:
 <screen>

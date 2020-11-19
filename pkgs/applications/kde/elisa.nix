@@ -3,6 +3,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
+, qtbase
 , qtmultimedia
 , qtquickcontrols2
 , qtwebsockets
@@ -14,13 +15,13 @@
 , kinit
 , kirigami2
 , baloo
-, vlc
+, libvlc
 }:
 
 mkDerivation rec {
   name = "elisa";
 
-  buildInputs = [ vlc ];
+  buildInputs = [ libvlc ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
@@ -42,5 +43,6 @@ mkDerivation rec {
     description = "A simple media player for KDE";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
+    broken = lib.versionOlder qtbase.version "5.14";
   };
 }

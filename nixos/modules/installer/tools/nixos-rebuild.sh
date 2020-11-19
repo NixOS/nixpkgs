@@ -1,6 +1,6 @@
-#! @shell@
+#! @runtimeShell@
 
-if [ -x "@shell@" ]; then export SHELL="@shell@"; fi;
+if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 
 set -e
 set -o pipefail
@@ -17,11 +17,13 @@ showSyntax() {
 origArgs=("$@")
 extraBuildFlags=()
 lockFlags=()
+flakeFlags=()
 action=
 buildNix=1
 fast=
 rollback=
 upgrade=
+upgrade_all=
 repair=
 profile=/nix/var/nix/profiles/system
 buildHost=
@@ -54,6 +56,10 @@ while [ "$#" -gt 0 ]; do
       --upgrade)
         upgrade=1
         ;;
+      --upgrade-all)
+        upgrade=1
+        upgrade_all=1
+        ;;
       --repair)
         repair=1
         extraBuildFlags+=("$i")
@@ -62,7 +68,7 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net)
+      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net|--impure)
         extraBuildFlags+=("$i")
         ;;
       --option)
@@ -99,6 +105,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --flake)
         flake="$1"
+        flakeFlags=(--experimental-features 'nix-command flakes')
         shift 1
         ;;
       --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
@@ -221,15 +228,22 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
 fi
 
 
-# If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
+# If ‘--upgrade’ or `--upgrade-all` is given,
+# run ‘nix-channel --update nixos’.
 if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
-    nix-channel --update nixos
+    # If --upgrade-all is passed, or there are other channels that
+    # contain a file called ".update-on-nixos-rebuild", update them as
+    # well. Also upgrade the nixos channel.
 
-    # If there are other channels that contain a file called
-    # ".update-on-nixos-rebuild", update them as well.
     for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
-        if [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
-            nix-channel --update "$(basename "$channelpath")"
+        channel_name=$(basename "$channelpath")
+
+        if [[ "$channel_name" == "nixos" ]]; then
+            nix-channel --update "$channel_name"
+        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
+            nix-channel --update "$channel_name"
+        elif [[ -n $upgrade_all ]] ; then
+            nix-channel --update "$channel_name"
         fi
     done
 fi
@@ -281,16 +295,19 @@ fi
 
 # Resolve the flake.
 if [[ -n $flake ]]; then
-    flake=$(nix flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
+    flake=$(nix "${flakeFlags[@]}" flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
 fi
 
 # Find configuration.nix and open editor instead of building.
 if [ "$action" = edit ]; then
     if [[ -z $flake ]]; then
         NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
-        exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
+        if [[ -d $NIXOS_CONFIG ]]; then
+            NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
+        fi
+        exec ${EDITOR:-nano} "$NIXOS_CONFIG"
     else
-        exec nix edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
+        exec nix "${flakeFlags[@]}" edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
     fi
     exit 1
 fi
@@ -416,7 +433,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
             outLink=$tmpDir/result
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" \
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
               "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
             pathToConfig="$(readlink -f $outLink)"
         fi
@@ -426,22 +443,24 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
             pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
         else
-            echo "$0: 'build-vm' is not supported with '--flake'" >&2
-            exit 1
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vm" \
+              "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm-with-bootloader ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
         else
-            echo "$0: 'build-vm-with-bootloader' is not supported with '--flake'" >&2
-            exit 1
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vmWithBootLoader" \
+              "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            pathToConfig="$(readlink -f ./result)"
         fi
     else
         showSyntax

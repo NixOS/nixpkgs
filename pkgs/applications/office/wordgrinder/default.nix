@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "LUA_INCLUDE=${lua52Packages.lua}/include"
     "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
+    "OBJDIR=$TMP/wg-build"
   ];
 
   preBuild = stdenv.lib.optionalString stdenv.isLinux ''

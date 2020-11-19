@@ -46,10 +46,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Detects usage of unsafe Rust in a Rust crate and its dependencies.";
+    description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
     homepage = "https://github.com/rust-secure-code/cargo-geiger";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ evanjs ];
-    platforms = platforms.all;
   };
 }

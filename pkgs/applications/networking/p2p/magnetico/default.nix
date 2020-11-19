@@ -18,13 +18,12 @@ buildGoModule rec {
     make magneticow magneticod
   '';
 
-  doCheck = true;
   checkPhase = ''
     make test
   '';
 
   meta = with lib; {
-    description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite.";
+    description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
     homepage     = "https://github.com/boramalper/magnetico";
     license      = licenses.agpl3;
     badPlatforms = platforms.darwin;

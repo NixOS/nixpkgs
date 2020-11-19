@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, pytest-flakes, pytestpep8, tox }:
 buildPythonPackage rec {
   pname = "pytest-quickcheck";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e368390c9e3fd48eb3edec0c4eef08d7332f1143ad7b7190d32376b2fd2e62ff";
+    sha256 = "2427808b54ccdec26a40cdba934a6c042fab9ebadb60d563a01f367bef87fe58";
   };
 
   buildInputs = [ pytest ];
@@ -15,5 +15,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     homepage = "https://pypi.python.org/pypi/pytest-quickcheck";
     description = "pytest plugin to generate random data inspired by QuickCheck";
+    broken = true; # missing pytest-codestyle
   };
 }

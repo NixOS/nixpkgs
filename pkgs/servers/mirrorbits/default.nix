@@ -30,6 +30,7 @@ buildGoPackage rec {
   '';
 
   goPackagePath = "github.com/etix/mirrorbits";
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [ pkgconfig ];

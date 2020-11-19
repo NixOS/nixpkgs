@@ -1,16 +1,17 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, keyring, pbkdf2, pyaes}:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, lz4, keyring, pbkdf2, pycryptodome, pyaes}:
+
 buildPythonPackage rec {
   pname = "browser-cookie3";
-  version = "0.9.1";
+  version = "0.11.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42e73e0276083ff162080860cd039138760921a56a0f316775cecee37d444c3f";
+    sha256 = "3d140c6b651dbd8b8555aca6472557fcfda4dd93afc26ea3a200be922a843e2c";
   };
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ keyring pbkdf2 pyaes ];
+  propagatedBuildInputs = [ lz4 keyring pbkdf2 pyaes pycryptodome ];
 
   # No tests implemented
   doCheck = false;

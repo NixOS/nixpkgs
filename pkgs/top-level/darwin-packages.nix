@@ -14,7 +14,9 @@ in
     extraBuildInputs = [];
   };
 
-  apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
+  apple_sdk = callPackage ../os-specific/darwin/apple-sdk {
+    inherit (darwin) darwin-stubs print-reexports;
+  };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
@@ -40,6 +42,10 @@ in
   cf-private = darwin.apple_sdk.frameworks.CoreFoundation;
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
+
+  darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
+
+  print-reexports = callPackage ../os-specific/darwin/apple-sdk/print-reexports { };
 
   maloader = callPackage ../os-specific/darwin/maloader {
     inherit (darwin) opencflite;
@@ -85,5 +91,11 @@ in
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
   libtapi = callPackage ../os-specific/darwin/libtapi {};
+
+  ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
+
+  discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
 })

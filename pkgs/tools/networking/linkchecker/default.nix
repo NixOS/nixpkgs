@@ -1,27 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, python2Packages, gettext }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, gettext }:
 
-python2Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "linkchecker";
-  version = "9.4.0";
+  version = "unstable-2020-08-15";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1vbwl2vb8dyzki27z3sl5yf9dhdd2cpkg10vbgaz868dhpqlshgs";
+    rev = "0086c28b3a419faa60562f2713346996062c03c2";
+    sha256 = "0am5id8vqlqn1gb9jri0vjgiq5ffgrjq8yzdk1zc98gn2n0397wl";
   };
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = [
     ConfigArgParse
     argcomplete
+    beautifulsoup4
     dnspython
     pyxdg
     requests
   ];
 
-  checkInputs = with python2Packages; [
+  checkInputs = [
     parameterized
     pytest
   ];
@@ -29,21 +32,16 @@ python2Packages.buildPythonApplication rec {
   postPatch = ''
     sed -i 's/^requests.*$/requests>=2.2/' requirements.txt
     sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
-    sed -i 's~/usr/lib/python2.7/argparse.py~~g' po/Makefile
   '';
 
+  # test_timeit2 is flakey, and depends sleep being precise to the milisecond
   checkPhase = ''
-    runHook preCheck
-
-    # the mime test fails for me...
-    rm tests/test_mimeutil.py
     ${lib.optionalString stdenv.isDarwin ''
       # network tests fails on darwin
       rm tests/test_network.py
     ''}
-    make test PYTESTOPTS="--tb=short" TESTS="tests/test_*.py tests/logger/test_*.py"
-
-    runHook postCheck
+      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
+        -k 'not TestLoginUrl and not test_timeit2'
   '';
 
   meta = {

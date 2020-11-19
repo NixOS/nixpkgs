@@ -7,7 +7,7 @@
 , requests_download
 , zipfile36
 , pythonOlder
-, pytest_4
+, pytest
 , testpath
 , responses
 , pytoml
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     zipfile36
   ];
 
-  checkInputs = [ pytest_4 testpath responses ];
+  checkInputs = [ pytest testpath responses ];
 
   # Disable test that needs some ini file.
   # Disable test that wants hg

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, pyqt5, git-annex-adapter }:
+{ stdenv, buildPythonApplication, fetchFromGitHub, pyqt5, qt5, git-annex-adapter }:
 
 buildPythonApplication rec {
   pname = "git-annex-metadata-gui";
@@ -13,6 +13,12 @@ buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace setup.py --replace "'PyQt5', " ""
+  '';
+
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   propagatedBuildInputs = [ pyqt5 git-annex-adapter ];

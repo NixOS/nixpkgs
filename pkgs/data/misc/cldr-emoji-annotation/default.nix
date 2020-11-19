@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cldr-emoji-annotation";
-  version = "36.12.120200305_0";
+  version = "37.0_13.0_0_2";
 
   src = fetchFromGitHub {
     owner = "fujiwarat";
     repo = "cldr-emoji-annotation";
     rev = version;
-    sha256 = "1zg4czaqnfjkd4hx06h8q56z8iiw22crwqr69w94s4hy9zcanfrs";
+    sha256 = "0la3h6l58j9jfjvzwz65x56ijx7sppirwpqbqc06if4c2g0kzswj";
   };
 
   nativeBuildInputs = [

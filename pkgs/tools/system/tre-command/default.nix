@@ -1,23 +1,28 @@
-{ rustPlatform, fetchFromGitHub, stdenv }:
+{ rustPlatform, fetchFromGitHub, stdenv, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "tre";
-  version = "0.2.3";
+  pname = "tre-command";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "dduan";
     repo = "tre";
     rev = "v${version}";
-    sha256 = "1fazw2wn738iknbv54gv7qll7d4q2gy9bq1s3f3cv21cdv6bqral";
+    sha256 = "10c8mpqzpw7m3vrm2vl2rx678z3c37hxpqyh3fn83dlh9f4f0j87";
   };
 
-  cargoSha256 = "16bvnwgjf3kj99d77j1pkldbasxfwy55sj9sv9vf2z6llfmzfabd";
+  cargoSha256 = "0jd6cfs2zi2n34kirpsy12l76whaqwm1pkqa57w1ms5z658z07wj";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  preFixup = ''
+    installManPage manual/tre.1
+  '';
 
   meta = with stdenv.lib; {
     description = "Tree command, improved";
     homepage = "https://github.com/dduan/tre";
     license = licenses.mit;
     maintainers = [ maintainers.dduan ];
-    platforms = platforms.all;
   };
 }

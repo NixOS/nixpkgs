@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "0.6.3-beta";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "luntergroup";
     repo = "octopus";
     rev = "v${version}";
-    sha256 = "042fycg8ppld7iajpzq2d8h8wr0nw43zbl57y125sfihryvr373n";
+    sha256 = "0y3g0xc3x3adbcmds6hh60023pfv1qrz6ak7jd88fg9vxi9bdrfb";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

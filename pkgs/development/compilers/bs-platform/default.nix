@@ -4,19 +4,21 @@ let
 in
 (build-bs-platform rec {
   inherit stdenv runCommand fetchFromGitHub ninja nodejs python3;
-  version = "7.3.2";
+  version = "8.2.0";
   ocaml-version = "4.06.1";
+
+  patches = [ ./jscomp-release-ninja.patch ];
 
   src = fetchFromGitHub {
     owner = "BuckleScript";
     repo = "bucklescript";
     rev = version;
-    sha256 = "1nvp7wiiv149r4qf9bgc84bm4w7s44sjq9i7j103v24wllzz218s";
+    sha256 = "1hql7sxps1k17zmwyha6idq6nw20abpq770l55ry722birclmsmf";
     fetchSubmodules = true;
   };
 }).overrideAttrs (attrs: {
   meta = with stdenv.lib; {
-    description = "A JavaScript backend for OCaml focused on smooth integration and clean generated code.";
+    description = "A JavaScript backend for OCaml focused on smooth integration and clean generated code";
     homepage = "https://bucklescript.github.io";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ turbomack gamb anmonteiro ];

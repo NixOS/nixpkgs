@@ -38,7 +38,7 @@ pet = buildGoModule rec {
 
   vendorSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j"; <co xml:id='ex-buildGoModule-1' />
 
-  subPackages = [ "." ]; <co xml:id='ex-buildGoModule-2' />
+  runVend = true; <co xml:id='ex-buildGoModule-2' />
 
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
@@ -61,19 +61,14 @@ pet = buildGoModule rec {
     </callout>
     <callout arearefs='ex-buildGoModule-2'>
      <para>
-      <varname>subPackages</varname> limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
+      <varname>runVend</varname> runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
      </para>
     </callout>
    </calloutlist>
   </para>
 
   <para>
-    <varname>vendorSha256</varname> can also take <varname>null</varname> as an input.
-
-    When `null` is used as a value, rather than fetching the dependencies
-    and vendoring them, we use the vendoring included within the source repo.
-    If you'd like to not have to update this field on dependency changes, 
-    run `go mod vendor` in your source repo and set 'vendorSha256 = null;'
+   <varname>vendorSha256</varname> can also take <varname>null</varname> as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set 'vendorSha256 = null;'
   </para>
  </section>
 
@@ -92,7 +87,6 @@ deis = buildGoPackage rec {
   version = "1.13.0";
 
   goPackagePath = "github.com/deis/deis"; <co xml:id='ex-buildGoPackage-1' />
-  subPackages = [ "client" ]; <co xml:id='ex-buildGoPackage-2' />
 
   src = fetchFromGitHub {
     owner = "deis";
@@ -101,9 +95,7 @@ deis = buildGoPackage rec {
     sha256 = "1qv9lxqx7m18029lj8cw3k7jngvxs4iciwrypdy0gd2nnghc68sw";
   };
 
-  goDeps = ./deps.nix; <co xml:id='ex-buildGoPackage-3' />
-
-  buildFlags = [ "--tags" "release" ]; <co xml:id='ex-buildGoPackage-4' />
+  goDeps = ./deps.nix; <co xml:id='ex-buildGoPackage-2' />
 }
 </programlisting>
   </example>
@@ -118,20 +110,7 @@ deis = buildGoPackage rec {
     </callout>
     <callout arearefs='ex-buildGoPackage-2'>
      <para>
-      <varname>subPackages</varname> limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
-     </para>
-     <para>
-      In this example only <literal>github.com/deis/deis/client</literal> will be built.
-     </para>
-    </callout>
-    <callout arearefs='ex-buildGoPackage-3'>
-     <para>
       <varname>goDeps</varname> is where the Go dependencies of a Go program are listed as a list of package source identified by Go import path. It could be imported as a separate <varname>deps.nix</varname> file for readability. The dependency data structure is described below.
-     </para>
-    </callout>
-    <callout arearefs='ex-buildGoPackage-4'>
-     <para>
-      <varname>buildFlags</varname> is a list of flags passed to the go build command.
      </para>
     </callout>
    </calloutlist>
@@ -199,5 +178,71 @@ for p in $NIX_PROFILES; do
 done
 </screen>
   </para>
+ </section>
+
+ <section xml:id="ssec-go-common-attributes">
+  <title>Attributes used by the builders</title>
+
+  <para>
+   Both <link xlink:href="#ssec-go-modules"><varname>buildGoModule</varname></link> and <link xlink:href="#ssec-go-modules"><varname>buildGoPackage</varname></link> can be tweaked to behave slightly differently, if the following attributes are used:
+  </para>
+
+  <variablelist>
+   <varlistentry xml:id="var-go-buildFlagsArray">
+    <term>
+     <varname>buildFlagsArray</varname> and <varname>buildFlags</varname>
+    </term>
+    <listitem>
+     <para>
+      These attributes set build flags supported by <varname>go build</varname>. We recommend using <varname>buildFlagsArray</varname>. The most common use case of these attributes is to make the resulting executable aware of its own version. For example:
+     </para>
+     <example xml:id='ex-goBuildFlags-nospaces'>
+      <title>buildFlagsArray</title>
+<programlisting>
+  buildFlagsArray = [
+    "-ldflags=-X main.Version=${version} -X main.Commit=${version}" <co xml:id='ex-goBuildFlags-1' />
+  ];
+</programlisting>
+     </example>
+     <calloutlist>
+      <callout arearefs='ex-goBuildFlags-1'>
+       <para>
+        Note: single quotes are not needed.
+       </para>
+      </callout>
+     </calloutlist>
+     <example xml:id='ex-goBuildFlags-noarray'>
+      <title>buildFlagsArray</title>
+<programlisting>
+  buildFlagsArray = ''
+    -ldflags=
+    -X main.Version=${version}
+    -X main.Commit=${version}
+  '';
+</programlisting>
+     </example>
+    </listitem>
+   </varlistentry>
+   <varlistentry xml:id="var-go-deleteVendor">
+    <term>
+     <varname>deleteVendor</varname>
+    </term>
+    <listitem>
+     <para>
+      Removes the pre-existing vendor directory. This should only be used if the dependencies included in the vendor folder are broken or incomplete.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry xml:id="var-go-subPackages">
+    <term>
+     <varname>subPackages</varname>
+    </term>
+    <listitem>
+     <para>
+      Limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </section>
 </section>

@@ -7,15 +7,15 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "blackmagic";
-  version = "unstable-2020-02-20";
+  version = "unstable-2020-08-05";
   # `git describe --always`
-  firmwareVersion = "v1.6.1-409-g7a595ea";
+  firmwareVersion = "v1.6.1-539-gdd74ec8";
 
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "7a595ead255f2a052fe4561c24a0577112c9de84";
-    sha256 = "01kdm1rkj7ll0px882crf9w27d2ka8f3hcdmvhb9jwd60bf5dlap";
+    rev = "dd74ec8e6f734302daa1ee361af88dfb5043f166";
+    sha256 = "18w8y64fs7wfdypa4vm3migk5w095z8nbd8qp795f322mf2bz281";
     fetchSubmodules = true;
   };
 

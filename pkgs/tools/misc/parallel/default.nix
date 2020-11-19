@@ -1,12 +1,20 @@
-{ fetchurl, stdenv, perl, makeWrapper, procps }:
+{ fetchurl, stdenv, perl, makeWrapper, procps, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20200522";
+  name = "parallel-20200922";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "10is46v5dpccxibby0zikg1q68mdwpmgdpxk796zka93idd6id29";
+    sha256 = "0wj19kwjk0hwm8bk9yfcf3rpr0314lmjy5xxlvvdqnbbc4ml2418";
   };
+
+  patches = [
+    ./fix-max-line-length-allowed.diff
+  ];
+
+  postPatch = ''
+    substituteInPlace src/parallel --subst-var-by coreutils ${coreutils}
+  '';
 
   outputs = [ "out" "man" ];
 

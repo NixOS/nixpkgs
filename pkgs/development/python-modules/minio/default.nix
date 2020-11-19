@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "5.0.10";
+  version = "6.0.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ecb7637a35f806733e9d112eacfa599a58d7c3d4698fda2b5c86fff5d34b417";
+    sha256 = "97d275ff01ddae45101eced0d9d5258f2869308c949b17d86a77b77a2a50b7b3";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +29,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ faker mock nose pytestCheckHook ];
+  # example credentials aren't present
+  pytestFlagsArray = [ "--ignore=tests/unit/credentials_test.py" ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";

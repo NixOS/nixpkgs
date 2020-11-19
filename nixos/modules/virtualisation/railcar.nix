@@ -29,9 +29,9 @@ let
         default = "none";
         description = ''
           The type of the filesystem to be mounted.
-          Linux: filesystem types supported by the kernel as listed in 
-          `/proc/filesystems` (e.g., "minix", "ext2", "ext3", "jfs", "xfs", 
-          "reiserfs", "msdos", "proc", "nfs", "iso9660"). For bind mounts 
+          Linux: filesystem types supported by the kernel as listed in
+          `/proc/filesystems` (e.g., "minix", "ext2", "ext3", "jfs", "xfs",
+          "reiserfs", "msdos", "proc", "nfs", "iso9660"). For bind mounts
           (when options include either bind or rbind), the type is a dummy,
           often "none" (not listed in /proc/filesystems).
         '';
@@ -41,13 +41,13 @@ let
         description = "Source for the in-container mount";
       };
       options = mkOption {
-        type = loaOf (str);
+        type = attrsOf (str);
         default = [ "bind" ];
         description = ''
           Mount options of the filesystem to be used.
-        
-          Support optoions are listed in the mount(8) man page. Note that 
-          both filesystem-independent and filesystem-specific options 
+
+          Support options are listed in the mount(8) man page. Note that
+          both filesystem-independent and filesystem-specific options
           are listed.
         '';
       };
@@ -61,7 +61,7 @@ in
     containers = mkOption {
       default = {};
       description = "Declarative container configuration";
-      type = with types; loaOf (submodule ({ name, config, ... }: {
+      type = with types; attrsOf (submodule ({ name, config, ... }: {
         options = {
           cmd = mkOption {
             type = types.lines;

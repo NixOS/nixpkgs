@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, protobuf, grpcio }:
+{ stdenv, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.29.0";
+  version = "1.33.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f681c1ebd5472b804baa391b16dc59d92b065903999566f4776bfbd010bcec9";
+    sha256 = "af40774c0275f5465f49fd92bfcd9831b19b013de4cc77b8fb38aea76fa6dce3";
   };
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [ protobuf grpcio ];
+  propagatedBuildInputs = [ protobuf grpcio setuptools ];
 
   # no tests in the package
   doCheck = false;

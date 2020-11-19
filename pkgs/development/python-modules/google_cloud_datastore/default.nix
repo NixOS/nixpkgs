@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "1.11.0";
+  version = "1.15.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p0ifkhj48fa3m1y5990412s8msnn6mbz5p5g8ffln7jq7dvn57j";
+    sha256 = "3da44b4c8230a83e69dd9429324cca9d3000ee8a8bb11f3b005c7837fcd844b3";
   };
 
   checkInputs = [ pytest mock ];

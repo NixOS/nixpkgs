@@ -1,13 +1,13 @@
-gdiff --git a/setup.py b/setup.py
-index 8d3df15..6156206 100755
+diff --git a/setup.py b/setup.py
+index f962330..b02b6dd 100755
 --- a/setup.py
 +++ b/setup.py
- -2322,11 +2322,7 @@ if v4l2_ENABLED:                                                                                                                                                       
-     videodev2_h = "/usr/include/linux/videodev2.h"                                                                                                                                           
-     constants_pxi = "xpra/codecs/v4l2/constants.pxi"                                                                                                                                         
-     if not os.path.exists(videodev2_h) or should_rebuild(videodev2_h, constants_pxi):                                                                                                        
--        ENABLE_DEVICE_CAPS = 0                                                                                                                                                               
--        if os.path.exists(videodev2_h):                                                                                                                                                      
+@@ -2224,11 +2224,7 @@ if v4l2_ENABLED:
+     videodev2_h = "/usr/include/linux/videodev2.h"
+     constants_pxi = "xpra/codecs/v4l2/constants.pxi"
+     if not os.path.exists(videodev2_h) or should_rebuild(videodev2_h, constants_pxi):
+-        ENABLE_DEVICE_CAPS = 0
+-        if os.path.exists(videodev2_h):
 -            with open(videodev2_h) as f:
 -                hdata = f.read()
 -            ENABLE_DEVICE_CAPS = int(hdata.find("device_caps")>=0)

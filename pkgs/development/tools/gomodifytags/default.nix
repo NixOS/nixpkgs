@@ -6,7 +6,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  goPackagePath = "github.com/fatih/gomodifytags";
+  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "fatih";
@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "Go tool to modify struct field tags.";
+    description = "Go tool to modify struct field tags";
     homepage = "https://github.com/fatih/gomodifytags";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
     license = stdenv.lib.licenses.bsd3;

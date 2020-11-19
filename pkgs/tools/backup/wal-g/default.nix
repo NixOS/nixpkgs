@@ -1,21 +1,19 @@
-{ stdenv, buildGoModule, fetchFromGitHub, brotli }:
+{ lib, buildGoModule, fetchFromGitHub, brotli }:
 
 buildGoModule rec {
   pname = "wal-g";
-  version = "0.2.15";
+  version = "0.2.18";
 
   src = fetchFromGitHub {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "1hslhs9i4wib6c74gdq9yail958ff1y11pymjww2xr84wkwd9v7i";
+    sha256 = "1clsh42sgfrzyg3vr215wrpi93cb8y8ky3cb1v2l6cs4psh3py1q";
   };
 
-  vendorSha256 = "0jjr33k27k6h27sa01ipz0aydch3i9klknqb3yq8f048zkb54gv8";
+  vendorSha256 = "1ax8niw4zfwvh5ikxnkbsjc9fdz1lziqlwig9nwrhzfp45ysbakh";
 
   buildInputs = [ brotli ];
-
-  doCheck = true;
 
   subPackages = [ "main/pg" ];
 
@@ -25,10 +23,10 @@ buildGoModule rec {
     mv $out/bin/pg $out/bin/wal-g
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/wal-g/wal-g";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     description = "An archival restoration tool for PostgreSQL";
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    maintainers = with maintainers; [ ocharles marsam ];
   };
 }

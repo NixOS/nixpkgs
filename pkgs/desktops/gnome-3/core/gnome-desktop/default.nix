@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
+{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, gnome3, gtk3, glib
 , gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
 , libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
-  version = "3.36.2";
+  version = "3.38.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12f724inw3sv289xqprvwh8r3qw89z67m74j3hyhkbp1n7f99y9q";
+    sha256 = "1q1vri9vsrdwhhl26dk1f79a3dhwfn9dhbaiczli826nzq9kb40p";
   };
 
   nativeBuildInputs = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     gtk-doc docbook_xsl glib
   ];
   buildInputs = [
-    libX11 bubblewrap xkeyboard_config isocodes wayland
+    bubblewrap xkeyboard_config isocodes wayland
     gtk3 glib libseccomp systemd
   ];
 

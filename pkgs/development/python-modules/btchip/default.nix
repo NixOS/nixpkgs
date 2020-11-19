@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "btchip-python";
-  version = "0.1.28";
+  version = "0.1.31";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10yxwlsr99gby338rsnczkfigcy36fiajpkr6f44438qlvbx02fs";
+    sha256 = "4167f3c6ea832dd189d447d0d7a8c2a968027671ae6f43c680192f2b72c39b2c";
   };
 
   propagatedBuildInputs = [ hidapi pyscard ecdsa ];

@@ -1,4 +1,4 @@
-{ pkgs, makeScope, libsForQt5 }:
+{ pkgs, makeScope, libsForQt5, qt5 }:
 let
   packages = self: with self; {
 
@@ -43,7 +43,7 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./qterminal {};
-    compton-conf = pkgs.qt5.callPackage ./compton-conf {};
+    compton-conf = qt5.callPackage ./compton-conf {};
     obconf-qt = callPackage ./obconf-qt {};
     lximage-qt = callPackage ./lximage-qt {};
     qps = callPackage ./qps {};
@@ -53,14 +53,14 @@ let
 
     preRequisitePackages = [
       pkgs.gvfs # virtual file systems support for PCManFM-QT
-      pkgs.libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
-      pkgs.libsForQt5.libkscreen # provides plugins for screen management software
+      libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
+      libsForQt5.libkscreen # provides plugins for screen management software
       pkgs.libfm
       pkgs.libfm-extra
       pkgs.lxmenu-data
       pkgs.menu-cache
       pkgs.openbox # default window manager
-      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
+      qt5.qtsvg # provides QT5 plugins for svg icons
     ];
 
     corePackages = [

@@ -1,20 +1,22 @@
 { lib, fetchPypi, buildPythonPackage, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint
+, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "2.41.0";
+  version = "2.47.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xmhgn62a8a7282yd003zz63mrgyajb6sg29bfyllx3mxmdlb0iz";
+    sha256 = "7f621ed0e5a30c2b67c0e50778627b7a35e1ccfea9db19ea89b4c72a8faf42c0";
   };
 
   propagatedBuildInputs = [
     intervaltree
+    jinja2
     pyflakes
+    pyyaml
     requests
     lxml
     google-i18n-address

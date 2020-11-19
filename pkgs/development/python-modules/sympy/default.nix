@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.5.1"; # Upgrades may break sage. Please test or ping @timokau.
+  version = "1.6.2"; # Upgrades may break sage. Please test or ping @timokau.
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d77901d748287d15281f5ffe5b0fef62dd38f357c2b827c44ff07f35695f4e7e";
+    sha256 = "1cfadcc80506e4b793f5b088558ca1fcbeaec24cd6fc86f1fdccaa3ee1d48708";
   };
 
   checkInputs = [ glibcLocales ];

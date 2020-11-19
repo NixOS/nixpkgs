@@ -1,15 +1,17 @@
-{ stdenv, fetchPypi, buildPythonPackage, flask }:
+{ stdenv, fetchPypi, buildPythonPackage, flask
+, brotli
+}:
 
 buildPythonPackage rec {
-  version = "1.4.0";
+  version = "1.8.0";
   pname = "Flask-Compress";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cxdbdiyxkspg7vkchfmaqr7c6q79gwvakna3fjcc6nivps971j6";
+    sha256 = "c132590e7c948877a96d675c13cbfa64edec0faafa2381678dea6f36aa49a552";
   };
 
-  propagatedBuildInputs = [ flask ];
+  propagatedBuildInputs = [ flask brotli ];
 
   meta = with stdenv.lib; {
     description = "Compress responses in your Flask app with gzip";

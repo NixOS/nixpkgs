@@ -71,6 +71,13 @@ let
       NO_AVX512 = true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
+
+    powerpc64le-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER5";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
   };
 in
 
@@ -99,12 +106,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.9";
+  version = "0.3.12";
+
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "0nq51j45shb32n6086xff3x374kx5qhr2cwjzvppx4s2z0ahflal";
+    sha256 = "0mk1kjkr96bvvcq2zigzjrs0cnhwsf6gfi0855mp9yifn8lvp20y";
   };
 
   inherit blas64;
@@ -132,12 +142,6 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
-  ];
-
-  # Disable an optimisation which seems to cause issues, pending an
-  # upstream fix: https://github.com/xianyi/OpenBLAS/issues/2496
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
-    ./0001-Disable-optimised-aarch64-dgemm_beta-pending-fix.patch
   ];
 
   makeFlags = mkMakeFlagsFromConfig (config // {

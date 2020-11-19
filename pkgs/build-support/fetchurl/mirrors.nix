@@ -426,7 +426,6 @@
   # Maven Central
   maven = [
     "https://repo1.maven.org/maven2/"
-    "https://central.maven.org/maven2/"
   ];
 
   # Alsa Project

@@ -51,22 +51,23 @@ with lib;
     services.mingetty.helpLine = ''
       The "nixos" and "root" accounts have empty passwords.
 
-      Type `sudo systemctl start sshd` to start the SSH daemon.
-      You then must set a password for either "root" or "nixos"
-      with `passwd` to be able to login.
+      An ssh daemon is running. You then must set a password
+      for either "root" or "nixos" with `passwd` or add an ssh key
+      to /home/nixos/.ssh/authorized_keys be able to login.
     '' + optionalString config.services.xserver.enable ''
       Type `sudo systemctl start display-manager' to
       start the graphical user interface.
     '';
 
-    # Allow sshd to be started manually through "systemctl start sshd".
+    # We run sshd by default. Login via root is only possible after adding a
+    # password via "passwd" or by adding a ssh key to /home/nixos/.ssh/authorized_keys.
+    # The latter one is particular useful if keys are manually added to
+    # installation device for head-less systems i.e. arm boards by manually
+    # mounting the storage in a different system.
     services.openssh = {
       enable = true;
-      # Allow password login to the installation, if the user sets a password via "passwd"
-      # It is safe as root doesn't have a password by default and SSH is disabled by default
       permitRootLogin = "yes";
     };
-    systemd.services.sshd.wantedBy = mkOverride 50 [];
 
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = mkDefault true;

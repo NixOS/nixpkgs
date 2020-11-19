@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1500vim2lmkkls758pwhlx3piqbw6ap0nnhdwz9pcxih4s4as2nk";
 
+  doCheck = false;
+
   outputs = [ "out" "man"];
   postInstall = ''
     install -D --mode=444 man/j.1 man/jump.1 -t $man/man/man1/
@@ -26,7 +28,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Jump helps you navigate faster by learning your habits.";
+    description = "Navigate directories faster by learning your habits";
     longDescription = ''
       Jump integrates with the shell and learns about your
       navigational habits by keeping track of the directories you visit. It
@@ -34,7 +36,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ sondr3 ];
   };
 }

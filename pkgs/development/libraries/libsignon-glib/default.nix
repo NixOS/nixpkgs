@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, meson, ninja, vala, python3, gtk-doc, docbook_xsl, docbook_xml_dtd_43, docbook_xml_dtd_412, glib, check, gobject-introspection }:
+{ stdenv, fetchgit, nix-update-script, pkgconfig, meson, ninja, vala, python3, gtk-doc, docbook_xsl, docbook_xml_dtd_43, docbook_xml_dtd_412, glib, check, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libsignon-glib";
@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
     chmod +x build-aux/gen-error-map.py
     patchShebangs build-aux/gen-error-map.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A library for managing single signon credentials which can be used from GLib applications";

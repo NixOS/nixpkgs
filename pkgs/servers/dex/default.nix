@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "dex";
-  version = "2.17.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1z94svpiwrs64m83gpfnniv0ac1fnmvywvl05f20ind1wlf8bvwn";
+    sha256 = "1fr5r7d0xwj0b69jhszyyif4yc4kiy7zpfcpf83zdy12mh8f96c8";
   };
 
   goPackagePath = "github.com/dexidp/dex";

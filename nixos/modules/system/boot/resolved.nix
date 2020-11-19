@@ -136,7 +136,7 @@ in
       }
     ];
 
-    users.users.resolved.group = "systemd-resolve";
+    users.users.systemd-resolve.group = "systemd-resolve";
 
     # add resolve to nss hosts database if enabled and nscd enabled
     # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
@@ -148,6 +148,7 @@ in
 
     systemd.services.systemd-resolved = {
       wantedBy = [ "multi-user.target" ];
+      aliases = [ "dbus-org.freedesktop.resolve1.service" ];
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
     };
 

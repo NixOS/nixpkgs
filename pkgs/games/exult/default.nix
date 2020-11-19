@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, SDL, libogg, libvorbis, zlib, unzip }:
+{ stdenv, fetchurl, pkgconfig, SDL2, libogg, libvorbis, zlib, unzip }:
 
 let
 
@@ -12,26 +12,19 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "exult-1.4.9rc1";
+  name = "exult-1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/exult/${name}.tar.gz";
-    sha256 = "0a03a2l3ji6h48n106d4w55l8v6lni1axniafnvvv5c5n3nz5bgd";
+    sha256 = "1dm27qkxj30567zb70q4acddsizn0xyi3z87hg7lysxdkyv49s3s";
   };
 
   configureFlags = [ "--disable-tools" ];
 
-  patches =
-    [ # Arch Linux patch set.
-      ./arch.patch
-    ];
-
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL libogg libvorbis zlib unzip ];
+  buildInputs = [ SDL2 libogg libvorbis zlib unzip ];
 
   enableParallelBuilding = true;
-
-  makeFlags = [ "DESTDIR=$(out)" ];
 
   NIX_LDFLAGS = "-lX11";
 

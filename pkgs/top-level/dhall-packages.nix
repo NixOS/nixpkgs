@@ -11,8 +11,20 @@ let
       buildDhallPackage =
         callPackage ../development/interpreters/dhall/build-dhall-package.nix { };
 
+      buildDhallGitHubPackage =
+        callPackage ../development/interpreters/dhall/build-dhall-github-package.nix { };
+
+      buildDhallDirectoryPackage =
+        callPackage ../development/interpreters/dhall/build-dhall-directory-package.nix { };
+
     in
-      { inherit buildDhallPackage;
+      { inherit
+          buildDhallPackage
+          buildDhallGitHubPackage
+          buildDhallDirectoryPackage
+        ;
+
+        lib = import ../development/dhall-modules/lib.nix { inherit lib; };
 
         dhall-kubernetes =
           callPackage ../development/dhall-modules/dhall-kubernetes.nix { };

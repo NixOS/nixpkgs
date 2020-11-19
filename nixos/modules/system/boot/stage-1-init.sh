@@ -120,7 +120,7 @@ eval "exec $logOutFd>&1 $logErrFd>&2"
 if test -w /dev/kmsg; then
     tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
         if test -n "$line"; then
-            echo "<7>stage-1-init: $line" > /dev/kmsg
+            echo "<7>stage-1-init: [$(date)] $line" > /dev/kmsg
         fi
     done &
 else
@@ -143,6 +143,14 @@ for o in $(cat /proc/cmdline); do
         init=*)
             set -- $(IFS==; echo $o)
             stage2Init=$2
+            ;;
+        boot.persistence=*)
+            set -- $(IFS==; echo $o)
+            persistence=$2
+            ;;
+        boot.persistence.opt=*)
+            set -- $(IFS==; echo $o)
+            persistence_opt=$2
             ;;
         boot.trace|debugtrace)
             # Show each command.
@@ -210,6 +218,7 @@ done
 # Create device nodes in /dev.
 @preDeviceCommands@
 echo "running udev..."
+ln -sfn /proc/self/fd /dev/fd
 mkdir -p /etc/systemd
 ln -sfn @linkUnits@ /etc/systemd/network
 mkdir -p /etc/udev
@@ -347,6 +356,7 @@ mountFS() {
     case $options in
         *x-nixos.autoresize*)
             if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                modprobe "$fsType"
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"
@@ -370,12 +380,14 @@ mountFS() {
 
     mkdir -p "/mnt-root$mountPoint"
 
-    # For CIFS mounts, retry a few times before giving up.
+    # For ZFS and CIFS mounts, retry a few times before giving up.
+    # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
     local n=0
     while true; do
         mount "/mnt-root$mountPoint" && break
-        if [ "$fsType" != cifs -o "$n" -ge 10 ]; then fail; break; fi
+        if [ \( "$fsType" != cifs -a "$fsType" != zfs \) -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."
+        sleep 1
         n=$((n + 1))
     done
 
@@ -532,6 +544,14 @@ while read -u 3 mountPoint; do
       umount /tmp-iso
       rmdir /tmp-iso
       continue
+    fi
+
+    if [ "$mountPoint" = / ] && [ "$device" = tmpfs ] && [ ! -z "$persistence" ]; then
+        echo persistence...
+        waitDevice "$persistence"
+        echo enabling persistence...
+        mountFS "$persistence" "$mountPoint" "$persistence_opt" "auto"
+        continue
     fi
 
     mountFS "$device" "$mountPoint" "$options" "$fsType"

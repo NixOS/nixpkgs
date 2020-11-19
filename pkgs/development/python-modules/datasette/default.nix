@@ -2,19 +2,22 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aiofiles
+, asgi-csrf
 , click
 , click-default-group
 , janus
 , jinja2
 , hupper
+, mergedeep
 , pint
 , pluggy
+, python-baseconv
+, pyyaml
 , uvicorn
 # Check Inputs
 , pytestCheckHook
 , pytestrunner
 , pytest-asyncio
-, black
 , aiohttp
 , beautifulsoup4
 , asgiref
@@ -23,26 +26,30 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.39";
+  version = "0.46";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";
     rev = version;
-    sha256 = "07d46512bc9sdan9lv39sf1bwlf7vf1bfhcsm825vk7sv7g9kczd";
+    sha256 = "0g4dfq5ykifa9628cb4i7gvx98p8hvb99gzfxk3bkvq1v9p4kcqq";
   };
 
   nativeBuildInputs = [ pytestrunner ];
 
   propagatedBuildInputs = [
     aiofiles
+    asgi-csrf
     click
     click-default-group
     janus
     jinja2
     hupper
+    mergedeep
     pint
     pluggy
+    python-baseconv
+    pyyaml
     uvicorn
     setuptools
   ];
@@ -52,7 +59,6 @@ buildPythonPackage rec {
     pytest-asyncio
     aiohttp
     beautifulsoup4
-    black
     asgiref
   ];
 
@@ -60,29 +66,32 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "click~=7.1.1" "click" \
       --replace "click-default-group~=1.2.2" "click-default-group" \
-      --replace "Jinja2~=2.10.3" "Jinja2" \
       --replace "hupper~=1.9" "hupper" \
       --replace "pint~=0.9" "pint" \
-      --replace "pluggy~=0.13.0" "pint" \
+      --replace "pluggy~=0.13.0" "pluggy" \
       --replace "uvicorn~=0.11" "uvicorn" \
-      --replace "aiofiles~=0.4.0" "aiofiles" \
-      --replace "janus~=0.4.0" "janus" \
       --replace "PyYAML~=5.3" "PyYAML"
   '';
 
-  # many tests require network access
-  # test_black fails on darwin
-  dontUseSetuptoolsCheck = true;
+  # takes 30-180 mins to run entire test suite, not worth the cpu resources, slows down reviews
+  # with pytest-xdist, it still takes around 10mins with 32 cores
+  # just run the messages tests, as this should give some indictation of correctness
   pytestFlagsArray = [
-    "--ignore=tests/test_api.py"
-    "--ignore=tests/test_csv.py"
-    "--ignore=tests/test_html.py"
-    "--ignore=tests/test_docs.py"
-    "--ignore=tests/test_black.py"
+    "tests/test_messages.py"
   ];
   disabledTests = [
     "facet"
     "_invalid_database" # checks error message when connecting to invalid database
+  ];
+
+  pythonImportsCheck = [
+    "datasette"
+    "datasette.cli"
+    "datasette.app"
+    "datasette.database"
+    "datasette.renderer"
+    "datasette.tracer"
+    "datasette.plugins"
   ];
 
   meta = with lib; {

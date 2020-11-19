@@ -1,25 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "mike-engel";
     repo = pname;
     rev = version;
-    sha256 = "0pmxis3m3madwnmswz9hn0i8fz6a9bg11slgrrwql7mx23ijqf6y";
+    sha256 = "07mnkr7hi29fyyyn7llb30p4ndiqz4gf1lnhm44qm09alaxmfvws";
   };
 
-  cargoSha256 = "165g1v0c8jxs8ddm8ld0hh7k8mvk3566ig43pf99hnw009fg1yc2";
+  cargoSha256 = "0jkzy7ssg9v9phhlldq6s4rfs3sn17y2r1k0jr10g9j15lzixa04";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+
+  doInstallCheck = true;
+  installCheckPhase = "$out/bin/jwt --version";
 
   meta = with stdenv.lib; {
     description = "Super fast CLI tool to decode and encode JWTs";
     homepage = "https://github.com/mike-engel/jwt-cli";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ rycee ];
-    platforms = platforms.all;
   };
 }

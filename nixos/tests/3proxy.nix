@@ -134,6 +134,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
+    start_all()
+
+    peer0.wait_for_unit("network-online.target")
+
     peer1.wait_for_unit("3proxy.service")
     peer1.wait_for_open_port("9999")
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
-, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
+, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
 , nvidia_cg_toolkit, zlib, openssl, portaudio
 }:
 let
@@ -10,7 +10,7 @@ let
     cairo
     libjpeg_original
     glib
-    gnome2.pango
+    pango
     libGLU
     nvidia_cg_toolkit
     zlib
@@ -47,7 +47,7 @@ let
       # This adds it to lightworks' search path while keeping the default
       # using the FONTCONFIG_FILE env variable
       echo "<?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
           <dir>/usr/share/fonts/truetype</dir>
           <include>/etc/fonts/fonts.conf</include>

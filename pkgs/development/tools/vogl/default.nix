@@ -47,7 +47,7 @@ mkDerivation {
   ];
 
   meta = with lib; {
-    description = "OpenGL capture / playback debugger.";
+    description = "OpenGL capture / playback debugger";
     homepage = "https://github.com/ValveSoftware/vogl";
     license = licenses.mit;
     maintainers = [ maintainers.deepfire ];

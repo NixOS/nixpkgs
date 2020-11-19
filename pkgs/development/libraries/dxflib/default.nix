@@ -1,12 +1,40 @@
-{stdenv, fetchurl}:
+{ stdenv
+, fetchurl
+, qmake
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.12.2";
+  version = "3.17.0";
   pname = "dxflib";
   src = fetchurl {
-    url = "http://www.qcad.org/archives/dxflib/${pname}-${version}.src.tar.gz";
-    sha256 = "20ad9991eec6b0f7a3cc7c500c044481a32110cdc01b65efa7b20d5ff9caefa9";
+    url = "http://www.qcad.org/archives/dxflib/${pname}-${version}-src.tar.gz";
+    sha256 = "09yjgzh8677pzkkr7a59pql5d11451c22pxksk2my30mapxsri96";
   };
+  nativeBuildInputs = [
+    qmake
+  ];
+  preConfigure = ''
+    sed -i 's/CONFIG += staticlib/CONFIG += shared/' dxflib.pro
+  '';
+  installPhase = ''
+    install -d -m 0755 $out/lib
+    cp -pr *.so* $out/lib
+    install -d -m 0755 $out/include/dxflib
+    cp -pr src/*.h $out/include/dxflib
+    # Generate pkgconfig file
+    install -d -m 0755 $out/lib/pkgconfig
+    cat << 'EOF' > $out/lib/pkgconfig/dxflib.pc
+    prefix=${placeholder "out"}
+    libdir=${placeholder "out"}/lib
+    includedir=${placeholder "out"}/include
+    Name: dxflib
+    Description: A C++ library for reading and writing DXF files
+    Version: %{version}
+    Libs: -L${placeholder "out"}/lib -ldxflib
+    Cflags: -I${placeholder "out"}/include/dxflib
+    EOF
+  '';
+  doCheck = true;
 
   meta = {
     maintainers = with stdenv.lib.maintainers; [raskin];
@@ -14,4 +42,3 @@ stdenv.mkDerivation rec {
     description = ''DXF file format library'';
   };
 }
-

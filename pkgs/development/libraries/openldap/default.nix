@@ -1,12 +1,22 @@
 { stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.50";
+  name = "openldap-2.4.51";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "1f46nlfwmys110j36sifm7ah8m8f3s10c3vaiikmmigmifapvdaw";
+    sha256 = "0qmy2jkk6v9iqwrsdsn8s7lwzaplr01a2mgf21r6nl66lig7g47l";
   };
+
+  patches = [
+    (fetchurl {
+      # Fix a null-ptr dereference for unauthenticated packet in slapd
+      # NO CVE yet
+      # https://bugs.openldap.org/show_bug.cgi?id=9370
+      url = "https://git.openldap.org/openldap/openldap/-/commit/4c774220a752bf8e3284984890dc0931fe73165d.patch";
+      sha256 = "1vkbb6szscnhch5zzf6iq104l3dkwd50rih8jk9y0s2vgyz76mil";
+    })
+  ];
 
   # TODO: separate "out" and "bin"
   outputs = [ "out" "dev" "man" "devdoc" ];
@@ -23,7 +33,8 @@ stdenv.mkDerivation rec {
     "STRIP="
     "prefix=$(out)"
     "moduledir=$(out)/lib/modules"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   configureFlags = [
     "--enable-overlays"
@@ -40,8 +51,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
   postBuild = ''
-    make $makeFlags -C contrib/slapd-modules/passwd/sha2
-    make $makeFlags -C contrib/slapd-modules/passwd/pbkdf2
+    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
+    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/pbkdf2
   '';
 
   doCheck = false; # needs a running LDAP server

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland, scdoc
-, wayland-protocols, ffmpeg_4, x264, libpulseaudio, ocl-icd, opencl-headers
+, wayland-protocols, ffmpeg, x264, libpulseaudio, ocl-icd, opencl-headers
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config wayland scdoc ];
   buildInputs = [
-    wayland-protocols ffmpeg_4 x264 libpulseaudio ocl-icd opencl-headers
+    wayland-protocols ffmpeg x264 libpulseaudio ocl-icd opencl-headers
   ];
 
   meta = with stdenv.lib; {

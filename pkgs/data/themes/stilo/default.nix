@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stilo-themes";
-  version = "3.34-2";
+  version = "3.36-3";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1i5cl61dk8sxa6h61ghynm4wp1qzp3c7kwf4ks0ddzzk9dbvdrhb";
+    sha256 = "0haxzqxyfx3rc305w7f744fp2xb6j7yn28ldynnvmm47h7ga3as3";
   };
 
   nativeBuildInputs = [ meson ninja sassc ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Minimalistic GTK, gnome shell and Xfce themes";
     homepage = "https://github.com/lassekongo83/stilo-themes";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

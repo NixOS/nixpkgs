@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , python3Packages
+, wrapQtAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0kxcx1xf6h9z8x0k483d6ykpnmfr30n6z3r6lgqxvbl42pq75li7";
   };
 
-  nativeBuildInputs = with python3Packages; [ pyqt5 ];
+  nativeBuildInputs = with python3Packages; [ pyqt5 wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     pyaes
@@ -26,6 +27,8 @@ python3Packages.buildPythonApplication rec {
     dnspython
     jsonrpclib-pelix
     pysocks
+    trezor
+    btchip
   ];
 
   preBuild = ''
@@ -33,6 +36,10 @@ python3Packages.buildPythonApplication rec {
     pyrcc5 icons.qrc -o gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   checkPhase = ''
@@ -54,4 +61,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ ];
   };
 }
-

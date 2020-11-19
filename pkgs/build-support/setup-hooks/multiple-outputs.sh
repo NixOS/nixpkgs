@@ -61,7 +61,7 @@ _multioutConfig() {
             local shareDocName="$(sed -n "s/^PACKAGE_TARNAME='\(.*\)'$/\1/p" < "$confScript")"
         fi
                                     # PACKAGE_TARNAME sometimes contains garbage.
-        if [ -n "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_-]'; then
+        if [ -z "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_-]'; then
             shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
         fi
     fi

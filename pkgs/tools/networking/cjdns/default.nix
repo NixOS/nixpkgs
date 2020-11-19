@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, nodejs, which, python27, utillinux, nixosTests }:
 
-let version = "20.6"; in
-stdenv.mkDerivation {
-  name = "cjdns-"+version;
+stdenv.mkDerivation rec {
+  pname = "cjdns";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
     rev = "cjdns-v${version}";
-    sha256 = "1d5rrnqb5dcmm5cg2ky1cgxz6ncb23n1j797j9zzw6xxdvkf3kgi";
+    sha256 = "1s9d8yrdrj2gviig05jhr0fnzazb88lih0amxfk0av786rvh7ymj";
   };
 
   buildInputs = [ which python27 nodejs ] ++

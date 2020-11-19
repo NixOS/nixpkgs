@@ -28,5 +28,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Console-based network statistics utility for Linux";
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # required isdn headers have been removed from the linux kernel
   };
 }

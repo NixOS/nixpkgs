@@ -1,4 +1,4 @@
-{stdenv, python3Packages, gettext, qt5, fetchFromGitHub}:
+{stdenv, python3Packages, fetchpatch, gettext, qt5, fetchFromGitHub}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
@@ -9,10 +9,19 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arsenetar";
     repo = "dupeguru";
-    rev = "${version}";
+    rev = version;
     sha256 = "0ma4f1c6vmpz8gi4sdy43x1ik7wh42wayvk1iq520d3i714kfcpy";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # already merged to master, remove next version bump
+    (fetchpatch {
+      name = "remove-m-from-so-var.patch";
+      url = "https://github.com/arsenetar/dupeguru/commit/bd0f53bcbe463c48fe141b73af13542da36d82ba.patch";
+      sha256 = "07iisz8kcr7v8lb21inzj1avlpfhh9k8wcivbd33w49cr3mmnr26";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -40,15 +49,15 @@ python3Packages.buildPythonApplication rec {
   # Avoid double wrapping Python programs.
   dontWrapQtApps = true;
 
+  # TODO: A bug in python wrapper
+  # see https://github.com/NixOS/nixpkgs/pull/75054#discussion_r357656916
   preFixup = ''
-    # TODO: A bug in python wrapper
-    # see https://github.com/NixOS/nixpkgs/pull/75054#discussion_r357656916
     makeWrapperArgs="''${qtWrapperArgs[@]}"
   '';
 
+  # Executable in $out/bin is a symlink to $out/share/dupeguru/run.py
+  # so wrapPythonPrograms hook does not handle it automatically.
   postFixup = ''
-    # Executable in $out/bin is a symlink to $out/share/dupeguru/run.py
-    # so wrapPythonPrograms hook does not handle it automatically.
     wrapPythonProgramsIn "$out/share/dupeguru" "$out $pythonPath"
   '';
 

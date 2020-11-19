@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-taskwhisperer";
-  version = "12";
+  version = "16";
 
   src = fetchFromGitHub {
     owner = "cinatic";
     repo = "taskwhisperer";
     rev = "v${version}";
-    sha256 = "187p6p498dd258avsfqqsm322g58y75pc2wbhb4jpmm9insqm1bj";
+    sha256 = "05w2dfpr5vrydb7ij4nd2gb7c31nxix3j48rb798r4jzl1rakyah";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonafato ];
     homepage = "https://github.com/cinatic/taskwhisperer";
-    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesnt't support 3.34
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, beautifulsoup4
 , requests
 , future
 , pyyaml
@@ -9,14 +10,15 @@
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "2.7.1";
+  version = "2.8.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w8ihj9gram2d4wkbki8f6gr8hsd950b3wzfi1qqqm17lqfk8k7h";
+    sha256 = "a662990737d86984156a48f769e6528d947e90fd1561bb5e19d0036b59b9fd6f";
   };
 
   propagatedBuildInputs = [
+    beautifulsoup4
     requests
     future
     pyyaml

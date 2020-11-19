@@ -16,16 +16,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.64";
+  version = "0.2.68";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "1fgzcw0955vjypwwx3ja8sil0vxwvhsnspn1bjl869ccbnx2x4hs";
+    sha256 = "0ga1v4s8ks2v632mim8ljya0gi2j8bbwj98yfm3g00p0z1i526qk";
   };
 
-  cargoSha256 = "0svmbay9waaq9fpc8lg1nys6l35xsjvkri5v1frlgxida5dzghpq";
+  cargoSha256 = "1n9pf29xid6jcas5yx94k4cpmqgx0kpqq7gwf83jisjywxzygh6w";
 
   nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
   buildInputs =

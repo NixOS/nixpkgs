@@ -1,5 +1,5 @@
 { go, govers, lib, fetchgit, fetchhg, fetchbzr, rsync
-, removeReferencesTo, fetchFromGitHub, stdenv }:
+, fetchFromGitHub, stdenv }:
 
 { buildInputs ? []
 , nativeBuildInputs ? []
@@ -29,6 +29,9 @@
 # go2nix dependency file
 , goDeps ? null
 
+# Whether to delete the vendor folder supplied with the source.
+, deleteVendor ? false
+
 , dontRenameImports ? false
 
 # Do not enable this without good reason
@@ -41,10 +44,6 @@
 with builtins;
 
 let
-  removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
-
-  removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
-
   dep2src = goDep:
     {
       inherit (goDep) goPackagePath;
@@ -75,7 +74,7 @@ let
   package = stdenv.mkDerivation (
     (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs"]) // {
 
-    nativeBuildInputs = [ removeReferencesTo go ]
+    nativeBuildInputs = [ go ]
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
@@ -85,6 +84,7 @@ let
     GOHOSTOS = go.GOHOSTOS or null;
 
     GO111MODULE = "off";
+    GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
@@ -96,6 +96,18 @@ let
       mkdir -p "go/src/$(dirname "$goPackagePath")"
       mv "$sourceRoot" "go/src/$goPackagePath"
 
+    '' + lib.optionalString (deleteVendor == true) ''
+      if [ ! -d "go/src/$goPackagePath/vendor" ]; then
+        echo "vendor folder does not exist, 'deleteVendor' is not needed"
+        exit 10
+      else
+        rm -rf "go/src/$goPackagePath/vendor"
+      fi
+    '' + lib.optionalString (goDeps != null) ''
+      if [ -d "go/src/$goPackagePath/vendor" ]; then
+        echo "vendor folder exists, 'goDeps' is not needed"
+        exit 10
+      fi
     '' + lib.flip lib.concatMapStrings goPath ({ src, goPackagePath }: ''
       mkdir goPath
       (cd goPath; unpackFile "${src}")
@@ -208,10 +220,6 @@ let
       [ -e "$dir" ] && cp -r $dir $out
 
       runHook postInstall
-    '';
-
-    preFixup = preFixup + ''
-      find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
 
     strictDeps = true;

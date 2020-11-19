@@ -6,11 +6,12 @@
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "7.0.0";
+  version = "8.1.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7230b25052b2b9074cc338b44338b4bd43575a48ad7b9c2ce7f36d7e0d117012";
+    sha256 = "4dfa4a0cd0a752d980347c816cab2169f0938c1d37275311810396dcf3c27912";
   };
 
   checkInputs = [
@@ -20,7 +21,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
       export CUDA_PATH=${cudatoolkit}
-  ''; 
+  '';
 
   propagatedBuildInputs = [
     cudatoolkit

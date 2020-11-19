@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchPypi
 , chameleon, colander, iso8601, peppercorn, translationstring, zope_deprecation
-, nose, coverage, beautifulsoup4, flaky }:
+, nose, coverage, beautifulsoup4, flaky, pyramid, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "deform";
-  version = "2.0.8";
+  version = "2.0.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8936b70c622406eb8c8259c88841f19eb2996dffcf2bac123126ada851da7271";
+    sha256 = "35d9acf144245772a70d05bd24b8263e8cd284f0d564011e8bf331d6150acfc7";
   };
 
   postPatch = ''
@@ -30,6 +30,8 @@ buildPythonPackage rec {
     coverage
     beautifulsoup4
     flaky
+    pyramid
+    pytestCheckHook
   ];
 
   meta = with lib; {

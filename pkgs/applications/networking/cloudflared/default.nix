@@ -1,18 +1,19 @@
-{ stdenv, buildGoModule, fetchFromGitHub, runCommand }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2020.3.2";
+  version = "2020.11.5";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "1vbxm5z72y9zfg4carmja3fc1vhkanmc25pgnlw550p1l14y6404";
+    sha256 = "09bjqcrz7s40m7afb80dpx7jncp5prn2p6bksspv5wqc84l2nn5d";
   };
 
-  vendorSha256 = "14w2iz3ycbzfvlr8a6qn86aaa8687cm203d73wpfkfskp277hwz0";
-  deleteVendor = true;
+  vendorSha256 = null;
+
+  doCheck = false;
 
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
 

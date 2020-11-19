@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   sourceRoot = "source/pico";
   preConfigure = "./autogen.sh";
   meta = {
-    description = "Text to speech voice sinthesizer from SVox.";
+    description = "Text to speech voice sinthesizer from SVox";
     homepage = "https://github.com/naggety/picotts";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.canndrew ];

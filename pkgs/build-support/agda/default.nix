@@ -30,6 +30,16 @@ let
 
   withPackages = arg: if builtins.isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
 
+  extensions = [
+    "agda"
+    "agda-lib"
+    "agdai"
+    "lagda"
+    "lagda.md"
+    "lagda.org"
+    "lagda.rst"
+    "lagda.tex"
+  ];
 
   defaults =
     { pname
@@ -39,6 +49,7 @@ let
     , libraryFile ? "${libraryName}.agda-lib"
     , buildPhase ? null
     , installPhase ? null
+    , extraExtensions ? []
     , ...
     }: let
       agdaWithArgs = withPackages (builtins.filter (p: p ? isAgdaDerivation) buildInputs);
@@ -59,7 +70,7 @@ let
         installPhase = if installPhase != null then installPhase else ''
           runHook preInstall
           mkdir -p $out
-          find \( -name '*.agda' -or -name '*.agdai' -or -name '*.agda-lib' \) -exec cp -p --parents -t "$out" {} +
+          find \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
       };

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''fare-quasiquote'';
-  version = ''20190521-git'';
+  version = ''20200925-git'';
 
   description = ''Portable, matchable implementation of quasiquote'';
 
   deps = [ args."fare-utils" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fare-quasiquote/2019-05-21/fare-quasiquote-20190521-git.tgz'';
-    sha256 = ''1skrj68dnmihckip1vyc31xysbdsw9ihb7imks73cickkvv6yjfj'';
+    url = ''http://beta.quicklisp.org/archive/fare-quasiquote/2020-09-25/fare-quasiquote-20200925-git.tgz'';
+    sha256 = ''0k25kx4gvr046bcnv5mqxbb4483v9p2lk7dvzjkgj2cxrvczmj8b'';
   };
 
   packageName = "fare-quasiquote";
@@ -19,11 +19,10 @@ rec {
 }
 /* (SYSTEM fare-quasiquote DESCRIPTION
     Portable, matchable implementation of quasiquote SHA256
-    1skrj68dnmihckip1vyc31xysbdsw9ihb7imks73cickkvv6yjfj URL
-    http://beta.quicklisp.org/archive/fare-quasiquote/2019-05-21/fare-quasiquote-20190521-git.tgz
-    MD5 e08c24d35a485a74642bd0c7c06662d6 NAME fare-quasiquote FILENAME
+    0k25kx4gvr046bcnv5mqxbb4483v9p2lk7dvzjkgj2cxrvczmj8b URL
+    http://beta.quicklisp.org/archive/fare-quasiquote/2020-09-25/fare-quasiquote-20200925-git.tgz
+    MD5 7af0a97c445d88acacecfc851496adb3 NAME fare-quasiquote FILENAME
     fare-quasiquote DEPS ((NAME fare-utils FILENAME fare-utils)) DEPENDENCIES
-    (fare-utils) VERSION 20190521-git SIBLINGS
-    (fare-quasiquote-extras fare-quasiquote-optima fare-quasiquote-readtable
-     fare-quasiquote-test)
+    (fare-utils) VERSION 20200925-git SIBLINGS
+    (fare-quasiquote-extras fare-quasiquote-optima fare-quasiquote-readtable)
     PARASITES NIL) */

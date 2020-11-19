@@ -1,0 +1,58 @@
+From 5a9f9fbaa1322b2ad0a52fcdd171d4f44d031918 Mon Sep 17 00:00:00 2001
+Message-Id: <5a9f9fbaa1322b2ad0a52fcdd171d4f44d031918.1601082838.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Wed, 30 Oct 2019 15:23:24 -0700
+Subject: [PATCH 4/7] profiler: track changes in GLib and Sysprof
+
+From: Christian Hergert <chergert@redhat.com>
+
+This tracks the changes to gdbus-codegen in terms of how GUnixFDList is
+done to use the UnixFD annotation.
+
+https://gitlab.gnome.org/GNOME/mutter/merge_requests/908
+(cherry picked from commit 605171291993460f31d470a8143d6438d0c6169c)
+---
+ src/backends/meta-profiler.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/src/backends/meta-profiler.c b/src/backends/meta-profiler.c
+index 10d433a..0d62701 100644
+--- a/src/backends/meta-profiler.c
++++ b/src/backends/meta-profiler.c
+@@ -51,13 +51,12 @@ G_DEFINE_TYPE_WITH_CODE (MetaProfiler,
+ static gboolean
+ handle_start (MetaDBusSysprof3Profiler *dbus_profiler,
+               GDBusMethodInvocation    *invocation,
++              GUnixFDList              *fd_list,
+               GVariant                 *options,
+               GVariant                 *fd_variant)
+ {
+   MetaProfiler *profiler = META_PROFILER (dbus_profiler);
+   GMainContext *main_context = g_main_context_default ();
+-  GDBusMessage *message;
+-  GUnixFDList *fd_list;
+   const char *group_name;
+   int position;
+   int fd = -1;
+@@ -73,8 +72,6 @@ handle_start (MetaDBusSysprof3Profiler *dbus_profiler,
+ 
+   g_variant_get (fd_variant, "h", &position);
+ 
+-  message = g_dbus_method_invocation_get_message (invocation);
+-  fd_list = g_dbus_message_get_unix_fd_list (message);
+   if (fd_list)
+     fd = g_unix_fd_list_get (fd_list, position, NULL);
+ 
+@@ -98,7 +95,7 @@ handle_start (MetaDBusSysprof3Profiler *dbus_profiler,
+ 
+   g_debug ("Profiler running");
+ 
+-  meta_dbus_sysprof3_profiler_complete_start (dbus_profiler, invocation);
++  meta_dbus_sysprof3_profiler_complete_start (dbus_profiler, invocation, NULL);
+   return TRUE;
+ }
+ 
+-- 
+git-series 0.9.1

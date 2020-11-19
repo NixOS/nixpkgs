@@ -15,15 +15,15 @@
 , adwaita-icon-theme
 }:
 
- python3.pkgs.buildPythonApplication rec {
-  name = "accerciser-${version}";
-  version = "3.36.1";
+python3.pkgs.buildPythonApplication rec {
+  pname = "accerciser";
+  version = "3.38.0";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/accerciser/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1ig9zcg8z7yv2c28q0a4q57ckkpmzjsbnancx01rjihrrjbg9ib2";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0fd9vv2abd2if2qj4nlfy7mpd7rc4sx18zhmxd5ijlnfhkpggbp5";
   };
 
   nativeBuildInputs = [

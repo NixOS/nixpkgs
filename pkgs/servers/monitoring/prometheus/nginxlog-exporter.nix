@@ -22,6 +22,5 @@ buildGoPackage rec {
     homepage = "https://github.com/martin-helmich/prometheus-nginxlog-exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ mmahut ];
-    platforms = platforms.all;
   };
 }

@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "idsk";
-  version = "0.19";
+  version = "0.20";
 
   src = fetchFromGitHub {
     repo = "idsk";
     owner = "cpcsdk";
     rev = "v${version}";
-    sha256 = "0b4my5cz5kbzh4n65jr721piha6zixaxmfiss2zidip978k9rb6f";
+    sha256 = "05zbdkb9s6sfkni6k927795w2fqdhnf3i7kgl27715sdmmdab05d";
   };
 
   nativeBuildInputs = [ cmake ];

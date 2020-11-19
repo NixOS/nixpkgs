@@ -1,12 +1,12 @@
-{stdenv, fetchurl, which}:
+{stdenv, fetchurl, fetchpatch, which, nixosTests}:
 let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.62";
+    version="0.9.64";
     name="${baseName}-${version}";
     url="mirror://sourceforge/firejail/firejail/firejail-${version}.tar.xz";
-    sha256="1q2silgy882fl61p5qa9f9jqkxcqnwa71jig3c729iahx4f0hs05";
+    sha256="1zgjwy2k57nx0r63fzr15gijah098ig0bll66jd615vc9q3snfz5";
   };
   buildInputs = [
     which
@@ -62,6 +62,8 @@ stdenv.mkDerivation {
   # At high parallelism, the build sometimes fails with:
   # bash: src/fsec-optimize/fsec-optimize: No such file or directory
   enableParallelBuilding = false;
+
+  passthru.tests = nixosTests.firejail;
 
   meta = {
     inherit (s) version;

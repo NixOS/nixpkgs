@@ -50,6 +50,12 @@ let
 
             environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
 
+            # The installed tests need to be added to the test VM’s closure.
+            # Otherwise, their dependencies might not actually be registered
+            # as valid paths in the VM’s Nix store database,
+            # and `nix-store --query` commands run as part of the tests
+            # (for example when building Flatpak runtimes) will fail.
+            environment.variables.TESTED_PACKAGE_INSTALLED_TESTS = "${tested.installedTests}/share";
           };
 
           testScript =
@@ -88,6 +94,7 @@ in
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
+  gsconnect = callInstalledTest ./gsconnect.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
   glib-testing = callInstalledTest ./glib-testing.nix {};
@@ -95,5 +102,6 @@ in
   libxmlb = callInstalledTest ./libxmlb.nix {};
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
+  pipewire = callInstalledTest ./pipewire.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

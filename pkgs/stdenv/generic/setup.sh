@@ -219,12 +219,13 @@ printWords() {
 # Initialisation.
 
 
-# Set a fallback default value for SOURCE_DATE_EPOCH, used by some
-# build tools to provide a deterministic substitute for the "current"
-# time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
-# confuses some applications.
+# Set a fallback default value for SOURCE_DATE_EPOCH, used by some build tools
+# to provide a deterministic substitute for the "current" time. Note that
+# 315532800 = 1980-01-01 12:00:00. We use this date because python's wheel
+# implementation uses zip archive and zip does not support dates going back to
+# 1970.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=1}
+: ${SOURCE_DATE_EPOCH:=315532800}
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -1036,7 +1037,7 @@ checkPhase() {
     runHook preCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom checkPhase, doing nothing"
         runHook postCheck
         return
     fi
@@ -1181,7 +1182,7 @@ installCheckPhase() {
     runHook preInstallCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
        && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then

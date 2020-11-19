@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "4.7.5";
+  version = "4.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aee283c49601fa4c13adc64c09c978838a7e812f85377ae130a24d7198c0331e";
+    sha256 = "fbb77a75e529021e7c4a8d4e823d88ef4d23674a202be4f5addffc72cbb91430";
   };
 
   checkInputs = [ pytest pytestrunner pytestcov ];

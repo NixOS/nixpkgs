@@ -20,18 +20,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    # install bdf fonts
+    # install otb and bdf fonts
     fontDir="$out/share/fonts"
-    install -m 644 -D *.bdf -t "$fontDir"
-    mkfontdir "$fontDir"
-
-    # install otb fonts
-    fontDir="$otb/share/fonts"
-    install -m 644 -D *.otb -t "$fontDir"
+    install -m 644 -D *.bdf *.otb -t "$fontDir"
     mkfontdir "$fontDir"
   '';
-
-  outputs = [ "out"  "otb" ];
 
   meta = with stdenv.lib; {
     description = "A Unicode font";

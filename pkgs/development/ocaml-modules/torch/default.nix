@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildDunePackage
 , fetchFromGitHub
 , cmdliner
@@ -15,17 +16,15 @@
 
 buildDunePackage rec {
   pname = "torch";
-  version = "0.8";
-
-  owner = "LaurentMazare";
+  version = "0.10";
 
   minimumOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
-    inherit owner;
+    owner = "LaurentMazare";
     repo   = "ocaml-${pname}";
     rev    = version;
-    sha256 = "19w31paj24pns2ahk9j9rgpkb5hpcd41kfaarxrlddww5dl6pxvi";
+    sha256 = "1rqrv6hbical8chk0bl2nf60q6m4b5d1gab9fc5q03vkz2987f9b";
   };
 
   propagatedBuildInputs = [
@@ -44,10 +43,10 @@ buildDunePackage rec {
 
   preBuild = ''export LIBTORCH=${pytorch.dev}/'';
 
-  doCheck = true;
+  doCheck = !stdenv.isAarch64;
   checkPhase = "dune runtest";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Ocaml bindings to Pytorch";
     maintainers = [ maintainers.bcdarwin ];

@@ -5,16 +5,18 @@
 
 buildGoModule rec {
   pname = "go-tools";
-  version = "2020.1.4";
+  version = "2020.1.6";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
     rev = version;
-    sha256 = "182j3zzx1bj4j4jiamqn49v9nd3vcrx727f7i9zgcrgmiscvw3mh";
+    sha256 = "1r83gx7k4fiz3wlshhniz1i39xv492nni1nvfxjfqgnmkavb6r4x";
   };
 
-  vendorSha256 = "0nbbngsphklzhcmqafrw1im2l1vnfcma9sb4vskdpdrsadv5ss5r";
+  vendorSha256 = "1g04rzirjv90s1i542cqi2abhgh8b74qwhp1hp1cszgb7k8nndmr";
+
+  doCheck = false;
 
   meta = with lib; {
     description = "A collection of tools and libraries for working with Go code, including linters and static analysis";

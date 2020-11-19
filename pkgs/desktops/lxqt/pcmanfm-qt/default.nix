@@ -42,6 +42,10 @@ mkDerivation rec {
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
+  postPatch = ''
+    substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
+  '';
+
   meta = with lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     homepage = "https://github.com/lxqt/pcmanfm-qt";

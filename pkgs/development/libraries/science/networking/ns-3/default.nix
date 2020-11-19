@@ -26,7 +26,7 @@
 
 # All modules can be enabled by choosing 'all_modules'.
 # we include here the DCE mandatory ones
-, modules ? [ "core" "network" "internet" "point-to-point" "fd-net-device" "netanim"]
+, modules ? [ "core" "network" "internet" "point-to-point" "point-to-point-layout" "fd-net-device" "netanim" ]
 , lib
 }:
 
@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
-  version = "30";
+  version = "32";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo   = "ns-3-dev";
     rev    = "ns-3.${version}";
-    sha256 = "0smdi3gglmafpc7a20hj2lbmwks3d5fpsicpn39lmm3svazw0bvp";
+    sha256 = "158yjhsrmslj1q4zcq5p16hv9i82qnxx714l7idicncn0wzrfx7k";
   };
 
   nativeBuildInputs = [ wafHook ];
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs doc/ns3_html_theme/get_version.sh
+    # FIX/Remove when https://github.com/NixOS/nixpkgs/pull/69310 gets merged
+    sed -i 's/program.ns3_module_dependencies.copy()/program.ns3_module_dependencies[:]/g' wscript
   '';
 
   wafConfigureFlags = with stdenv.lib; [

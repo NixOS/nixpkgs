@@ -37,6 +37,7 @@
     };
     services.postfix.enable = true;
     nix = {
+      distributedBuilds = true;
       buildMachines = [{
         hostName = "localhost";
         systems = [ system ];

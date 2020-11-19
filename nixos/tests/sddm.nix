@@ -44,8 +44,8 @@ let
       machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
-        services.xserver.displayManager.sddm = {
-          enable = true;
+        services.xserver.displayManager = {
+          sddm.enable = true;
           autoLogin = {
             enable = true;
             user = "alice";

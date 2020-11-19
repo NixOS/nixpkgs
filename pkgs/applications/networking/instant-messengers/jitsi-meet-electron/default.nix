@@ -2,17 +2,20 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-, electron_8
+, electron_9
 }:
 
+let
+  electron = electron_9;
+in
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-electron";
-  version = "2.0.2";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "https://github.com/jitsi/jitsi-meet-electron/releases/download/v${version}/jitsi-meet-x86_64.AppImage";
-    sha256 = "04y3qn2clvsfiyp9s6ib09mfxspv3kpr9248sda8s09n1cm0jpps";
-    name="${pname}-${version}.AppImage";
+    sha256 = "0af87lvqw3sagi2cayripm62q17nfd841xz0ghvbixzfnqkvgf7x";
+    name = "${pname}-${version}.AppImage";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_8}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Jitsi Meet desktop application powered by Electron";
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
     license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = teams.jitsi.members;
     platforms = [ "x86_64-linux" ];
   };
 }

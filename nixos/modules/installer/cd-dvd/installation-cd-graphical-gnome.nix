@@ -9,17 +9,26 @@ with lib;
 
   isoImage.edition = "gnome";
 
-  services.xserver.desktopManager.gnome3.enable = true;
-
-  services.xserver.displayManager.gdm = {
+  services.xserver.desktopManager.gnome3 = {
+    # Add firefox to favorite-apps
+    favoriteAppsOverride = ''
+      [org.gnome.shell]
+      favorite-apps=[ 'firefox.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+    '';
     enable = true;
-    # autoSuspend makes the machine automatically suspend after inactivity.
-    # It's possible someone could/try to ssh'd into the machine and obviously
-    # have issues because it's inactive.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/pull/63790
-    # * https://gitlab.gnome.org/GNOME/gnome-control-center/issues/22
-    autoSuspend = false;
+  };
+
+  services.xserver.displayManager = {
+    gdm = {
+      enable = true;
+      # autoSuspend makes the machine automatically suspend after inactivity.
+      # It's possible someone could/try to ssh'd into the machine and obviously
+      # have issues because it's inactive.
+      # See:
+      # * https://github.com/NixOS/nixpkgs/pull/63790
+      # * https://gitlab.gnome.org/GNOME/gnome-control-center/issues/22
+      autoSuspend = false;
+    };
     autoLogin = {
       enable = true;
       user = "nixos";

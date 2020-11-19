@@ -232,25 +232,29 @@ let
               '';
             preStop = ''
               state="/run/nixos/network/routes/${i.name}"
-              while read cidr; do
-                echo -n "deleting route $cidr... "
-                ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
-              done < "$state"
-              rm -f "$state"
+              if [ -e "$state" ]; then
+                while read cidr; do
+                  echo -n "deleting route $cidr... "
+                  ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+                done < "$state"
+                rm -f "$state"
+              fi
 
               state="/run/nixos/network/addresses/${i.name}"
-              while read cidr; do
-                echo -n "deleting address $cidr... "
-                ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
-              done < "$state"
-              rm -f "$state"
+              if [ -e "$state" ]; then
+                while read cidr; do
+                  echo -n "deleting address $cidr... "
+                  ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+                done < "$state"
+                rm -f "$state"
+              fi
             '';
           };
 
         createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
-            bindsTo = [ "dev-net-tun.device" ];
-            after = [ "dev-net-tun.device" "network-pre.target" ];
+            bindsTo = optional (!config.boot.isContainer) "dev-net-tun.device";
+            after = optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
             partOf = [ "network-setup.service" ];
             before = [ "network-setup.service" ];

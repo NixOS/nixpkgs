@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pythonPackages
+, python3Packages
 , cmake
 , llvmPackages
 , libffi, libxml2, zlib
@@ -8,16 +8,16 @@
 stdenv.mkDerivation rec {
 
   pname   = "CastXML";
-  version = "0.2.0";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1qpgr5hyb692h7l5igmq53m6a6vi4d9qp8ks893cflfx9955h3ip";
+    sha256 = "0ypj67xrgj228myp7l1gsjw1ja97q68nmj98dsd33srmiayqraj4";
   };
 
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
+  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optionals withMan [ python3Packages.sphinx ];
 
   clangVersion = lib.getVersion llvmPackages.clang;
 

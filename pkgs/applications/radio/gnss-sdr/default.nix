@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.12";
+  version = "0.0.13";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "0i9cz85jc2m758pzy3bq4dk4vj9wv7k2z118lasb09xldx01dwsq";
+    sha256 = "0a3k47fl5dizzhbqbrbmckl636lznyjby2d2nz6fz21637hvrnby";
   };
 
   buildInputs = [

@@ -6,7 +6,7 @@
 , gettext
 , glib
 , gtk3
-, libhandy
+, libhandy_0
 , meson
 , ninja
 , pango
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     dbus
     glib
     gtk3
-    libhandy
+    libhandy_0
     pango
   ];
 

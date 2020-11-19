@@ -3,7 +3,7 @@
 , xorg, libcap, alsaLib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
-, speexdsp, systemd, webrtc-audio-processing
+, soxr, speexdsp, systemd, webrtc-audio-processing
 
 , x11Support ? false
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile speexdsp fftwFloat ]
+    [ libtool libsndfile soxr speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optionals (!libOnly) (
@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport  avahi
   );
+
+  prePatch = ''
+    substituteInPlace bootstrap.sh \
+      --replace pkg-config $PKG_CONFIG
+  '';
 
   autoreconfPhase = ''
     # Performs an autoreconf
@@ -118,6 +123,10 @@ stdenv.mkDerivation rec {
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
+
+  passthru = {
+    pulseDir = "lib/pulse-" + lib.versions.majorMinor version;
+  };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, gtk2, cmake, pkgconfig, libXdamage }:
+{ stdenv, fetchFromGitHub, gtk2, cmake, pkgconfig, libXdamage }:
 
 stdenv.mkDerivation rec {
   version = "0.4.2";
   pname = "xwinmosaic";
 
-  src = fetchgit {
-    url = "https://github.com/soulthreads/xwinmosaic/";
-    rev = "refs/tags/v0.4.2";
+  src = fetchFromGitHub {
+    owner = "soulthreads";
+    repo = pname;
+    rev = "refs/tags/v${version}";
     sha256 = "16qhrpgn84fz0q3nfvaz5sisc82zk6y7c0sbvbr69zfx5fwbs1rr";
   };
 

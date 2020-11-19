@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   extra-cmake-modules,
   libpthreadstubs, libXdmcp,
   qtbase, qttools, qtx11extras
@@ -14,7 +14,9 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ libpthreadstubs libXdmcp qttools qtx11extras ];
   propagatedBuildInputs = [ qtbase ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./platform-plugins-path.patch
+  ];
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PATH=\"''${!outputBin}/$qtPluginPrefix\""
   '';

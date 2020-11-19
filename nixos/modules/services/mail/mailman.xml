@@ -1,0 +1,59 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-mailman">
+  <title>Mailman</title>
+  <para>
+    <link xlink:href="https://www.list.org">Mailman</link> is free
+    software for managing electronic mail discussion and e-newsletter
+    lists. Mailman and its web interface can be configured using the
+    corresponding NixOS module. Note that this service is best used with
+    an existing, securely configured Postfix setup, as it does not automatically configure this.
+  </para>
+
+  <section xml:id="module-services-mailman-basic-usage">
+    <title>Basic usage</title>
+    <para>
+      For a basic configuration, the following settings are suggested:
+      <programlisting>{ config, ... }: {
+  services.postfix = {
+    enable = true;
+    relayDomains = ["hash:/var/lib/mailman/data/postfix_domains"];
+    sslCert = config.security.acme.certs."lists.example.org".directory + "/full.pem";
+    sslKey = config.security.acme.certs."lists.example.org".directory + "/key.pem";
+    config = {
+      transport_maps = ["hash:/var/lib/mailman/data/postfix_lmtp"];
+      local_recipient_maps = ["hash:/var/lib/mailman/data/postfix_lmtp"];
+    };
+  };
+  services.mailman = {
+    <link linkend="opt-services.mailman.enable">enable</link> = true;
+    <link linkend="opt-services.mailman.serve.enable">serve.enable</link> = true;
+    <link linkend="opt-services.mailman.hyperkitty.enable">hyperkitty.enable</link> = true;
+    <link linkend="opt-services.mailman.hyperkitty.enable">webHosts</link> = ["lists.example.org"];
+    <link linkend="opt-services.mailman.hyperkitty.enable">siteOwner</link> = "mailman@example.org";
+  };
+  <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">services.nginx.virtualHosts."lists.example.org".enableACME</link> = true;
+  <link linkend="opt-services.mailman.hyperkitty.enable">networking.firewall.allowedTCPPorts</link> = [ 25 80 443 ];
+}</programlisting>
+    </para>
+    <para>
+      DNS records will also be required:
+      <itemizedlist>
+        <listitem><para><literal>AAAA</literal> and <literal>A</literal> records pointing to the host in question, in order for browsers to be able to discover the address of the web server;</para></listitem>
+        <listitem><para>An <literal>MX</literal> record pointing to a domain name at which the host is reachable, in order for other mail servers to be able to deliver emails to the mailing lists it hosts.</para></listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      After this has been done and appropriate DNS records have been
+      set up, the Postorius mailing list manager and the Hyperkitty
+      archive browser will be available at
+      https://lists.example.org/. Note that this setup is not
+      sufficient to deliver emails to most email providers nor to
+      avoid spam -- a number of additional measures for authenticating
+      incoming and outgoing mails, such as SPF, DMARC and DKIM are
+      necessary, but outside the scope of the Mailman module.
+    </para>
+  </section>
+</chapter>

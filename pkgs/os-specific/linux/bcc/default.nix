@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
+{ stdenv, fetchurl, fetchpatch
+, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
 , systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.14.0";
+  version = "0.17.0";
+
+  disabled = !stdenv.isLinux;
 
   src = fetchurl {
     url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "1hw02bib06fjyw61as5pmhf0qxy0wv0nw8fff2i8a9d1zcd8xf3p";
+    sha256 = "sha256-aEy8WwtKGaf7GZOTK5IHhwzenqU2U+vpWrcNWMCGvMw=";
   };
   format = "other";
 

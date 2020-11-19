@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.15";
+  version = "3.10.16";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0ghbanj142n0hgydzfjmnkdgri2kswsjal3mn10c723kih4ir4yr";
+    sha256 = "0pbpaasd7kj6y25nm45y1qyb9sxd4570f7g6zkfcpf6pa3nx7qkq";
   };
 
   patches = [

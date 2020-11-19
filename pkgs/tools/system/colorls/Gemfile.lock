@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     clocale (0.0.4)
-    colorls (1.3.3)
+    colorls (1.4.2)
       clocale (~> 0)
       filesize (~> 0)
       manpages (~> 0)

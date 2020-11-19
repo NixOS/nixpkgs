@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "ameba";
-  version = "0.12.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "crystal-ameba";
     repo = "ameba";
     rev = "v${version}";
-    sha256 = "0c2j2qki0czkpsqxv75qg95pk9f0w4rqa5ln07rs4bj9dk2lrr3l";
+    sha256 = "0wyfx9nwda0s3arpdalz5zgh83v6wfz1a3l2k5v0jglpczq3m04m";
   };
 
   meta = with stdenv.lib; {

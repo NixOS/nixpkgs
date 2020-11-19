@@ -11,23 +11,23 @@ let
       then cfg.package
       else cfg.package.withPackages (_: cfg.extraPlugins);
 
+  toStr = value:
+    if true == value then "yes"
+    else if false == value then "no"
+    else if isString value then "'${lib.replaceStrings ["'"] ["''"] value}'"
+    else toString value;
+
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeText "postgresql.conf"
-    ''
-      hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
-      ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
-      log_destination = 'stderr'
-      log_line_prefix = '${cfg.logLinePrefix}'
-      listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
-      port = ${toString cfg.port}
-      ${cfg.extraConfig}
-    ''; 
+  configFile = pkgs.writeText "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "postgresql" "extraConfig" ] "Use services.postgresql.settings instead.")
+  ];
 
   ###### interface
 
@@ -55,9 +55,13 @@ in
 
       dataDir = mkOption {
         type = types.path;
+        defaultText = "/var/lib/postgresql/\${config.services.postgresql.package.psqlSchema}";
         example = "/var/lib/postgresql/11";
         description = ''
-          Data directory for PostgreSQL.
+          The data directory for PostgreSQL. If left as the default value
+          this directory will automatically be created before the PostgreSQL server starts, otherwise
+          the sysadmin is responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
         '';
       };
 
@@ -65,11 +69,16 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Defines how users authenticate themselves to the server. By
-          default, "trust" access to local users will always be granted
-          along with any other custom options. If you do not want this,
-          set this option using "lib.mkForce" to override this
-          behaviour.
+          Defines how users authenticate themselves to the server. See the
+          <link xlink:href="https://www.postgresql.org/docs/current/auth-pg-hba-conf.html">
+          PostgreSQL documentation for pg_hba.conf</link>
+          for details on the expected format of this option. By default,
+          peer based authentication will be used for users connecting
+          via the Unix socket, and md5 password authentication will be
+          used for users connecting via TCP. Any added rules will be
+          inserted above the default rules. If you'd like to replace the
+          default rules entirely, you can use <function>lib.mkForce</function> in your
+          module.
         '';
       };
 
@@ -208,10 +217,28 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Additional text to be appended to <filename>postgresql.conf</filename>.";
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ bool float int str ]);
+        default = {};
+        description = ''
+          PostgreSQL configuration. Refer to
+          <link xlink:href="https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE"/>
+          for an overview of <literal>postgresql.conf</literal>.
+
+          <note><para>
+            String values will automatically be enclosed in single quotes. Single quotes will be
+            escaped with two single quotes as described by the upstream documentation linked above.
+          </para></note>
+        '';
+        example = literalExample ''
+          {
+            log_connections = true;
+            log_statement = "all";
+            logging_collector = true
+            log_disconnections = true
+            log_destination = lib.mkForce "syslog";
+          }
+        '';
       };
 
       recoveryConfig = mkOption {
@@ -221,14 +248,15 @@ in
           Contents of the <filename>recovery.conf</filename> file.
         '';
       };
+
       superUser = mkOption {
         type = types.str;
-        default= if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
+        default = "postgres";
         internal = true;
+        readOnly = true;
         description = ''
-          NixOS traditionally used 'root' as superuser, most other distros use 'postgres'.
-          From 17.09 we also try to follow this standard. Internal since changing this value
-          would lead to breakage while setting up databases.
+          PostgreSQL superuser account to use for various operations. Internal since changing
+          this value would lead to breakage while setting up databases.
         '';
         };
     };
@@ -240,6 +268,16 @@ in
 
   config = mkIf cfg.enable {
 
+    services.postgresql.settings =
+      {
+        hba_file = "${pkgs.writeText "pg_hba.conf" cfg.authentication}";
+        ident_file = "${pkgs.writeText "pg_ident.conf" cfg.identMap}";
+        log_destination = "stderr";
+        log_line_prefix = cfg.logLinePrefix;
+        listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
+        port = cfg.port;
+      };
+
     services.postgresql.package =
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
@@ -249,10 +287,7 @@ in
             else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
             else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
 
-    services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09"
-                  then "/var/lib/postgresql/${cfg.package.psqlSchema}"
-                  else "/var/db/postgresql");
+    services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
     services.postgresql.authentication = mkAfter
       ''
@@ -291,59 +326,28 @@ in
 
         preStart =
           ''
-            # Create data directory.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              mkdir -m 0700 -p ${cfg.dataDir}
+              # Cleanup the data directory.
               rm -f ${cfg.dataDir}/*.conf
-              chown -R postgres:postgres ${cfg.dataDir}
-            fi
-          ''; # */
 
-        script =
-          ''
-            # Initialise the database.
-            if ! test -e ${cfg.dataDir}/PG_VERSION; then
+              # Initialise the database.
               initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
+
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
             ${optionalString (cfg.recoveryConfig != null) ''
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-            ${optionalString (!groupAccessAvailable) ''
-              # postgresql pre 11.0 doesn't start if state directory mode is group accessible
-              chmod 0700 "${cfg.dataDir}"
-            ''}
-
-            exec postgres
           '';
-
-        serviceConfig =
-          { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-            User = "postgres";
-            Group = "postgres";
-            PermissionsStartOnly = true;
-            RuntimeDirectory = "postgresql";
-            Type = if versionAtLeast cfg.package.version "9.6"
-                   then "notify"
-                   else "simple";
-
-            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
-            # http://www.postgresql.org/docs/current/static/server-shutdown.html
-            KillSignal = "SIGINT";
-            KillMode = "mixed";
-
-            # Give Postgres a decent amount of time to clean up after
-            # receiving systemd's SIGINT.
-            TimeoutSec = 120;
-          };
 
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
+            PSQL="psql --port=${toString cfg.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
@@ -368,6 +372,32 @@ in
               '') user.ensurePermissions)}
             '') cfg.ensureUsers}
           '';
+
+        serviceConfig = mkMerge [
+          { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            User = "postgres";
+            Group = "postgres";
+            RuntimeDirectory = "postgresql";
+            Type = if versionAtLeast cfg.package.version "9.6"
+                   then "notify"
+                   else "simple";
+
+            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
+            # http://www.postgresql.org/docs/current/static/server-shutdown.html
+            KillSignal = "SIGINT";
+            KillMode = "mixed";
+
+            # Give Postgres a decent amount of time to clean up after
+            # receiving systemd's SIGINT.
+            TimeoutSec = 120;
+
+            ExecStart = "${postgresql}/bin/postgres";
+          }
+          (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+            StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
+            StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
+          })
+        ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
       };

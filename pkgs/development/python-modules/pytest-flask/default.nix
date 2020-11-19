@@ -1,21 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools_scm }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools_scm, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pytest-flask";
-  version = "0.15.1";
+  version = "1.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ri3p3hibb1r2wcblpvs64s4jz40ci4jki4s2nf3xf7iz2wwbn6b";
+    sha256 = "4d5678a045c07317618d80223ea124e21e8acc89dae109542dd1fdf6783d96c2";
   };
 
   doCheck = false;
 
-  buildInputs = [
-     pytest
-  ];
-
   propagatedBuildInputs = [
+    pytest
     flask
     werkzeug
   ];

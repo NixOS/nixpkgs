@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "grim";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14gqilgd27c4j2wn7fla72yj8syx0542rsanh61syikrv0hxgkvy";
+    sha256 = "0fjmjq0ws9rlblkcqxxw2lv7zvvyi618jqzlnz5z9zb477jwdfib";
   };
 
   nativeBuildInputs = [

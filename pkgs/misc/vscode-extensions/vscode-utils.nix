@@ -1,12 +1,7 @@
 { stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip, jq }:
 let
-  extendedPkgVersion = lib.getVersion vscode;
-  extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
-
-
   buildVscodeExtension = a@{
     name,
-    namePrefix ? "${extendedPkgName}-extension-",
     src,
     # Same as "Unique Identifier" on the extension's web page.
     # For the moment, only serve as unique extension dir.
@@ -18,14 +13,14 @@ let
     buildInputs ? [],
     ...
   }:
-  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
+  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
 
-    name = namePrefix + name;
+    name = "vscode-extension-${name}";
 
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
-    installPrefix = "share/${extendedPkgName}/extensions/${vscodeExtUniqueId}";
+    installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
     buildInputs = [ unzip ] ++ buildInputs;
 
@@ -80,7 +75,7 @@ let
    vscodeDefault = vscode;
   };
 
-  
+
   vscodeExts2nix = import ./vscodeExts2nix.nix {
     inherit lib writeShellScriptBin;
     vscodeDefault = vscode;
@@ -90,7 +85,7 @@ let
     inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace jq;
     vscodeDefault = vscode;
   };
-in 
+in
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace

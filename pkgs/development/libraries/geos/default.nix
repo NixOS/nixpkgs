@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
+  # https://trac.osgeo.org/geos/ticket/993
+  configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-inline";
+
   meta = with stdenv.lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
     homepage = "https://trac.osgeo.org/geos";

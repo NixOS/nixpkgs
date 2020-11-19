@@ -6,13 +6,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "9.2";
+  version = "10.0";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "083z51sjv70asr04rv53wb9gf4396nblq1zl22qw7jdr28hji4is";
+    sha256 = "1c6q20y0x9aacwa7vp6gj3yvfzain7hnk6skxmvg3wazp02l91kn";
   };
 
   nativeBuildInputs = [ perl procps autoreconfHook ];

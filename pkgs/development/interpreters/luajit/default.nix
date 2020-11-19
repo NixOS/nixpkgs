@@ -11,7 +11,7 @@
 , enableFFI ? true
 , enableJIT ? true
 , enableJITDebugModule ? enableJIT
-, enableGC64 ? stdenv.hostPlatform.isAarch64
+, enableGC64 ? true
 , enable52Compat ? false
 , enableValgrindSupport ? false
 , valgrind ? null
@@ -104,6 +104,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://luajit.org";
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ thoughtpolice smironov vcunat andir ];
+    maintainers = with maintainers; [ thoughtpolice smironov vcunat andir lblasc ];
   } // extraMeta;
 }

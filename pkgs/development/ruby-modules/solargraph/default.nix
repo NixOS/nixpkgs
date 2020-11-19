@@ -8,10 +8,9 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "solargraph";
 
   meta = with lib; {
-    description = "IDE tools for the Ruby language";
-    homepage = "http://www.github.com/castwide/solargraph";
+    description = "A Ruby language server";
+    homepage = "https://solargraph.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ worldofpeace nicknovitski angristan ];
-    platforms = platforms.unix;
   };
 }

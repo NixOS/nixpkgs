@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f3900e8a5de27447acbf900b4750b0ddfd7ec1ea7fbaf11dfa911141bc522af0";
+    sha256 = "9723364577b79ad9958a68851fe2acb94da6fd25170c595516a8289e6a129043";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
