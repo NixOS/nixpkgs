@@ -92,7 +92,7 @@ in
 
 runCommand "cling-${unwrapped.version}" {
   buildInputs = [ makeWrapper ];
-  inherit unwrapped flags;
+  inherit unwrapped flags compilerIncludeFlags;
   inherit (unwrapped) meta;
 } ''
   makeWrapper $unwrapped/bin/cling $out/bin/cling \
