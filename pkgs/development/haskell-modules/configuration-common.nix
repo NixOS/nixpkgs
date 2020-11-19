@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1g5ba1lv0v4zjk5ghdp78wxgszspfda1lrl734fi7hyavqrfjxkz";
+      sha256 = "13s6czv4p6n6s16kr5r255vldrn9038qjd5yl5xrh91xk6z410cd";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -252,7 +252,13 @@ self: super: {
   angel = dontCheck super.angel;
   apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
-  aws = dontCheck super.aws;                            # needs aws credentials
+  aws = appendPatch (dontCheck super.aws)               # needs aws credentials
+        (pkgs.fetchpatch {
+          # https://github.com/aristidb/aws/pull/271
+          # bump a version bound
+          url = https://github.com/aristidb/aws/commit/3639262ccd6761dea76f052692ac3aefbd254723.patch;
+          sha256 = "0nxaspldgayqjnidda8w7wps5gdpr2wz6vynl7vkaw8kzxks9bci";
+        });
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
   binary-search = dontCheck super.binary-search;
@@ -1431,6 +1437,10 @@ self: super: {
 
   # 2020-11-17: persistent-test is ahead of the persistent version in stack
   persistent-sqlite = dontCheck super.persistent-sqlite;
+
+  # 2020-11-19: hasn‘t bumped aeson bound
+  # https://git-annex.branchable.com/bugs/aeson_bound_can_be_bumped_to___60___1.6
+  git-lfs = doJailbreak super.git-lfs;
 
   # The tests for semver-range need to be updated for the MonadFail change in
   # ghc-8.8:
