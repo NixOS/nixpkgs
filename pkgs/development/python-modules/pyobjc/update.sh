@@ -195,7 +195,7 @@ generate_framework_nix() {
     CryptoTokenKit)
       build_frameworks="CryptoTokenKit Foundation"
       python_frameworks="Cocoa"
-      tests=true
+      tests=false
       ;;
     DeviceCheck)
       python_frameworks="Cocoa"

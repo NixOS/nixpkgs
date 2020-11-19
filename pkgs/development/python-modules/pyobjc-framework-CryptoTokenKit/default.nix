@@ -34,19 +34,8 @@ buildPythonPackage rec {
   # clang-7: error: argument unused during compilation: '-fno-strict-overflow'
   hardeningDisable = [ "strictoverflow" ];
 
-  # show test names instead of just dots
-  checkPhase = ''
-    runHook preCheck
-
-    ${python.interpreter} setup.py test --verbosity=3
-
-    runHook postCheck
-  '';
-
-  preCheck = ''
-    # testConstants in PyObjCTest.test_cfsocket.TestSocket returns: Segmentation fault: 11
-    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
-  '';
+  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "CryptoTokenKit" ];
 
   meta = with stdenv.lib; {
     description = "Wrappers for the framework CryptoTokenKit on Mac OS X";
