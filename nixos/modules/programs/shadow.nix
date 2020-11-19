@@ -46,34 +46,24 @@ let
 in
 
 {
-
-  ###### interface
-
-  options = {
-
-    users.defaultUserShell = lib.mkOption {
-      description = ''
-        This option defines the default shell assigned to user
-        accounts. This can be either a full system path or a shell package.
-
-        This must not be a store path, since the path is
-        used outside the store (in particular in /etc/passwd).
-      '';
-      example = literalExample "pkgs.zsh";
-      type = types.either types.path types.shellPackage;
-    };
-
-  };
-
-
-  ###### implementation
+  imports = [
+    (mkChangedOptionModule [ "users" "defaultUserShell" ] [ "users" "defaults" "shell" ]
+      (config:
+        let
+          value = config.users.defaultUserShell;
+          basename = builtins.baseNameOf value;
+          pkg = pkgs.${basename};
+          basenameIsPkgName =
+            hasAttr basename pkgs &&
+            types.shellPackage.check pkg &&
+            utils.toShellPath pkg == value;
+        in if types.shellPackage.check value then value
+          else if basenameIsPkgName then pkg
+          else throw "could not figure out which package provides ${value}"))
+  ];
 
   config = {
-
-    environment.systemPackages =
-      lib.optional config.users.mutableUsers pkgs.shadow ++
-      lib.optional (types.shellPackage.check config.users.defaultUserShell)
-        config.users.defaultUserShell;
+    environment.systemPackages = optional config.users.mutableUsers pkgs.shadow;
 
     environment.etc =
       { # /etc/login.defs: global configuration for pwdutils.  You
@@ -85,7 +75,7 @@ in
           ''
             GROUP=100
             HOME=/home
-            SHELL=${utils.toShellPath config.users.defaultUserShell}
+            SHELL=${utils.toShellPath config.users.defaults.shell}
           '';
       };
 

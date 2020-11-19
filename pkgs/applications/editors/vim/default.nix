@@ -15,7 +15,7 @@ in
 stdenv.mkDerivation {
   pname = "vim";
 
-  inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
+  inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta passthru;
 
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ ncurses ]

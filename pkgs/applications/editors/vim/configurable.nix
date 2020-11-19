@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   pname = "vim_configurable";
 
-  inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
+  inherit (common) version postPatch hardeningDisable enableParallelBuilding meta passthru;
 
   src = builtins.getAttr source {
     default = common.src; # latest release

@@ -40,6 +40,8 @@ stdenv.mkDerivation (rec {
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
+
+  passthru.editorCommand = "ed";
 } // stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   # This may be moved above during a stdenv rebuild.
   preConfigure = ''

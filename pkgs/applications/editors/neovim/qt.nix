@@ -45,6 +45,8 @@ let
       inherit (neovim.meta) platforms;
       inherit version;
     };
+
+    passthru.editorCommand = "nvim-qt --nofork";
   };
 in
   stdenv.mkDerivation {
@@ -73,7 +75,7 @@ in
       makeWrapper
     ];
 
-    passthru = {
+    passthru = unwrapped.passthru // {
       inherit unwrapped;
     };
 

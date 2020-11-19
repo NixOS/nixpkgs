@@ -1,5 +1,6 @@
 [
   ./config/debug-info.nix
+  ./config/defaults.nix
   ./config/fonts/fontconfig.nix
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
@@ -169,7 +170,6 @@
   ./programs/udevil.nix
   ./programs/usbtop.nix
   ./programs/venus.nix
-  ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/waybar.nix
   ./programs/wireshark.nix

@@ -36,4 +36,6 @@ stdenv.mkDerivation {
     license     = with licenses; [ bsd2 mit vim ];
     platforms   = platforms.unix;
   };
+
+  passthru.pagerCommand = "vimpager";
 }

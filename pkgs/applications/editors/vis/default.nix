@@ -68,4 +68,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "vis";
 }

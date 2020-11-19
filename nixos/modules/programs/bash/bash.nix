@@ -51,22 +51,6 @@ in
   options = {
 
     programs.bash = {
-
-      /*
-      enable = mkOption {
-        default = true;
-        description = ''
-          Whenever to configure Bash as an interactive shell.
-          Note that this tries to make Bash the default
-          <option>users.defaultUserShell</option>,
-          which in turn means that you might need to explicitly
-          set this variable if you have another shell configured
-          with NixOS.
-        '';
-        type = types.bool;
-      };
-      */
-
       shellAliases = mkOption {
         default = {};
         description = ''
@@ -230,8 +214,6 @@ in
     # Configuration for readline in bash. We use "option default"
     # priority to allow user override using both .text and .source.
     environment.etc.inputrc.source = mkOptionDefault ./inputrc;
-
-    users.defaultUserShell = mkDefault pkgs.bashInteractive;
 
     environment.pathsToLink = optionals cfg.enableCompletion [
       "/etc/bash_completion.d"

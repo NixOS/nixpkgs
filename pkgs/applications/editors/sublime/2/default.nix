@@ -62,4 +62,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
+
+  passthru.editorCommand = "sublime2 -w";
 }

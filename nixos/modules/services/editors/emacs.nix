@@ -6,14 +6,13 @@ let
 
   cfg = config.services.emacs;
 
-  editorScript = pkgs.writeScriptBin "emacseditor" ''
-    #!${pkgs.runtimeShell}
+  editorScript = (pkgs.writeShellScriptBin "emacseditor" ''
     if [ -z "$1" ]; then
       exec ${cfg.package}/bin/emacsclient --create-frame --alternate-editor ${cfg.package}/bin/emacs
     else
       exec ${cfg.package}/bin/emacsclient --alternate-editor ${cfg.package}/bin/emacs "$@"
     fi
-  '';
+  '') // { editorCommand = "emacseditor"; };
 
   desktopApplicationFile = pkgs.writeTextFile {
     name = "emacsclient.desktop";
@@ -77,7 +76,7 @@ in
       default = false;
       description = ''
         When enabled, configures emacsclient to be the default editor
-        using the EDITOR environment variable.
+        using <option>users.defaults.editor</option>.
       '';
     };
   };
@@ -94,9 +93,9 @@ in
       };
     } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
 
-    environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
+    environment.systemPackages = [ cfg.package desktopApplicationFile ];
 
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
+    users.defaults.editor = mkIf cfg.defaultEditor editorScript;
   };
 
   meta.doc = ./emacs.xml;

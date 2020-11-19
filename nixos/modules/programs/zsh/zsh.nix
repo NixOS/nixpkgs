@@ -47,7 +47,7 @@ in
           Whether to configure zsh as an interactive shell. To enable zsh for
           a particular user, use the <option>users.users.&lt;name?&gt;.shell</option>
           option for that user. To enable zsh system-wide use the
-          <option>users.defaultUserShell</option> option.
+          <option>users.defaults.shell</option> option.
         '';
         type = types.bool;
       };
@@ -282,8 +282,6 @@ in
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
-
-    #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"

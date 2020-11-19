@@ -336,9 +336,15 @@ rec {
         in if isDerivation res then res else toDerivation res;
     };
 
-    shellPackage = package // {
-      check = x: (package.check x) && (hasAttr "shellPath" x);
+    packageWithAttr = type: attr: package // {
+      name = "${type}Package";
+      description = "${type} package";
+      check = x: package.check x && hasAttr attr x;
     };
+
+    editorPackage = packageWithAttr "editor" "editorCommand";
+    pagerPackage = packageWithAttr "pager" "pagerCommand";
+    shellPackage = packageWithAttr "shell" "shellPath";
 
     path = mkOptionType {
       name = "path";

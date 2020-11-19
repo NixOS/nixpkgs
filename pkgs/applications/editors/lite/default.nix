@@ -55,4 +55,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ Br1ght0ne ];
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "lite";
 }

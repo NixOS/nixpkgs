@@ -53,4 +53,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.free;
     broken = true; # since 2020-02-08
   };
+
+  passthru.editorCommand = "vi";
 }

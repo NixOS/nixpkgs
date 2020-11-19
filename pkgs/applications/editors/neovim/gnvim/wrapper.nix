@@ -32,8 +32,9 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  passthru.unwrapped = gnvim-unwrapped;
+  passthru = gnvim-unwrapped.passthru // {
+    unwrapped = gnvim-unwrapped;
+  };
 
   inherit (gnvim-unwrapped) meta;
 }
-

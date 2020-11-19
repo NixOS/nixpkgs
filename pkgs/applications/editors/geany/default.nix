@@ -65,4 +65,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
   };
+
+  passthru.editorCommand = "geany -imnst";
 }

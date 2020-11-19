@@ -423,15 +423,13 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
    </para>
   </section>
 
-  <section xml:id="module-services-emacs-editor-variable">
-   <title>Configuring the <varname>EDITOR</varname> variable</title>
-
-<!--<title><command>emacsclient</command> as the Default Editor</title>-->
+  <section xml:id="module-services-emacs-default-editor">
+   <title><command>emacsclient</command> as the Default Editor</title>
 
    <para>
     If <xref linkend="opt-services.emacs.defaultEditor"/> is
-    <literal>true</literal>, the <varname>EDITOR</varname> variable will be set
-    to a wrapper script which launches <command>emacsclient</command>.
+    <literal>true</literal>, <option>users.defaults.editor</option> will
+    be set to a wrapper script that launches <command>emacsclient</command>.
    </para>
 
    <para>

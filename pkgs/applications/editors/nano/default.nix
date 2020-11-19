@@ -78,4 +78,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ joachifm nequissimus ];
     platforms = platforms.all;
   };
+
+  passthru.editorCommand = "nano";
 }

@@ -24,4 +24,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "wily";
 }

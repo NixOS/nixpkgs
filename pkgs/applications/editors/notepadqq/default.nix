@@ -38,4 +38,6 @@ mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.rszibele ];
   };
+
+  passthru.editorCommand = "notepadqq";
 }

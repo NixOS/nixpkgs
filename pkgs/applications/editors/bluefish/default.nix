@@ -21,4 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = [maintainers.vbgl];
     platforms = platforms.all;
   };
+
+  passthru.editorCommand = "bluefish";
 }

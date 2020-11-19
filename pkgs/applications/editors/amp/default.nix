@@ -28,4 +28,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.sb0 ];
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "amp";
 }

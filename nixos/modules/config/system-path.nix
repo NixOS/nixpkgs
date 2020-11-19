@@ -27,9 +27,7 @@ let
       pkgs.gnutar
       pkgs.gzip
       pkgs.xz
-      pkgs.less
       pkgs.libcap
-      pkgs.nano
       pkgs.ncurses
       pkgs.netcat
       config.programs.ssh.package

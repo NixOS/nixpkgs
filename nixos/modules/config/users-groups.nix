@@ -210,7 +210,7 @@ let
         default = false;
         description = ''
           If true, the user's shell will be set to
-          <option>users.defaultUserShell</option>.
+          <option>users.defaults.shell</option>.
         '';
       };
 
@@ -295,7 +295,7 @@ let
 
     config = mkMerge
       [ { name = mkDefault name;
-          shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
+          shell = mkIf config.useDefaultShell (mkDefault cfg.defaults.shell);
         }
         (mkIf config.isNormalUser {
           group = mkDefault "users";
@@ -518,7 +518,7 @@ in {
         uid = ids.uids.root;
         description = "System administrator";
         home = "/root";
-        shell = mkDefault cfg.defaultUserShell;
+        shell = mkDefault cfg.defaults.shell;
         group = "root";
       };
       nobody = {

@@ -28,4 +28,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.s1341 ];
   };
+
+  passthru.pagerCommand = "page";
 }

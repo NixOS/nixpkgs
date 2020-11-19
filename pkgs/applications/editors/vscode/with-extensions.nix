@@ -60,7 +60,7 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   buildInputs = [ vscode makeWrapper ];
   dontPatchELF = true;
   dontStrip = true;
-  meta = vscode.meta;
+  inherit (vscode) meta passthru;
 } ''
   mkdir -p "$out/bin"
   mkdir -p "$out/share/applications"

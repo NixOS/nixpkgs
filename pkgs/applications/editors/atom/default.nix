@@ -88,5 +88,7 @@ let
       maintainers = with maintainers; [ offline ysndr ];
       platforms = platforms.x86_64;
     };
+
+    passthru.editorCommand = "${pname} -w";
   };
 in stdenv.lib.mapAttrs common versions

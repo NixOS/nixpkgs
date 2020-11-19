@@ -24,4 +24,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.flosse ];
     license = licenses.gpl3;
   };
+
+  passthru.editorCommand = "leafpad";
 }

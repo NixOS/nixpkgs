@@ -47,4 +47,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ minijackson ];
   };
+
+  passthru.editorCommand = "gnvim";
 }

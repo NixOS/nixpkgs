@@ -48,4 +48,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin mirrexagon ];
     platforms = platforms.linux;
   };
+
+  passthru.editorCommand = "textadept";
 }
