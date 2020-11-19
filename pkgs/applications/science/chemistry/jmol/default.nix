@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
      homepage = "https://sourceforge.net/projects/jmol";
      license = licenses.lgpl2;
      platforms = platforms.all;
-     maintainers = with maintainers; [ timokau mounium ];
+     maintainers = with maintainers; [ mounium ] ++ teams.sage.members;
   };
 }

@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mons";
-  version = "20200107";
+  version = "20200320";
 
   src = fetchFromGitHub {
     owner = "Ventto";
     repo = pname;
-    rev = "0c9e1a1dddff23a0525ed8e4ec9af8f9dd8cad4c";
-    sha256 = "02c41mw3g1mgl91hhpz1n45iaqk9s7mdk1ixm8yv6sv17hy8rr4w";
+    rev = "375bbba3aa700c8b3b33645a7fb70605c8b0ff0c";
+    sha256 = "19r5y721yrxhd9jp99s29jjvm0p87vl6xfjlcj38bljq903f21cl";
     fetchSubmodules = true;
   };
 
-  # PR: https://github.com/Ventto/mons/pull/36
-  preConfigure = ''sed -i 's/usr\///' Makefile'';
-  
   nativeBuildInputs = [ help2man ];
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   meta = with lib; {
     description = "POSIX Shell script to quickly manage 2-monitors display";

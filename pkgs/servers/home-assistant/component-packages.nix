@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.117.6";
+  version = "0.118.0";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -85,6 +85,7 @@
     "blinkt" = ps: with ps; [ ]; # missing inputs: blinkt
     "blockchain" = ps: with ps; [ ]; # missing inputs: python-blockchain-api
     "bloomsky" = ps: with ps; [ ];
+    "blueprint" = ps: with ps; [ ];
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
     "bluetooth_tracker" = ps: with ps; [ bt_proximity ]; # missing inputs: pybluez
@@ -126,6 +127,7 @@
     "co2signal" = ps: with ps; [ ]; # missing inputs: co2signal
     "coinbase" = ps: with ps; [ ]; # missing inputs: coinbase
     "coinmarketcap" = ps: with ps; [ coinmarketcap ];
+    "color_extractor" = ps: with ps; [ ]; # missing inputs: colorthief
     "comed_hourly_pricing" = ps: with ps; [ ];
     "comfoconnect" = ps: with ps; [ ]; # missing inputs: pycomfoconnect
     "command_line" = ps: with ps; [ ];
@@ -367,7 +369,6 @@
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
     "hydrawise" = ps: with ps; [ ]; # missing inputs: hydrawiser
     "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
-    "ialarm" = ps: with ps; [ ]; # missing inputs: pyialarm
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
     "iaqualink" = ps: with ps; [ ]; # missing inputs: iaqualink
     "icloud" = ps: with ps; [ pyicloud ];
@@ -528,7 +529,7 @@
     "nederlandse_spoorwegen" = ps: with ps; [ ]; # missing inputs: nsapi
     "nello" = ps: with ps; [ ]; # missing inputs: pynello
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
-    "nest" = ps: with ps; [ aiohttp-cors python-nest ]; # missing inputs: google-nest-sdm
+    "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ ]; # missing inputs: netdata
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
@@ -623,7 +624,7 @@
     "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
     "poolsense" = ps: with ps; [ ]; # missing inputs: poolsense
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
-    "profiler" = ps: with ps; [ pyprof2calltree ];
+    "profiler" = ps: with ps; [ objgraph pyprof2calltree ]; # missing inputs: guppy3
     "progettihwsw" = ps: with ps; [ ]; # missing inputs: progettihwsw
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
     "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
@@ -659,7 +660,7 @@
     "random" = ps: with ps; [ ];
     "raspihats" = ps: with ps; [ smbus-cffi ]; # missing inputs: raspihats
     "raspyrfm" = ps: with ps; [ ]; # missing inputs: raspyrfm-client
-    "recollect_waste" = ps: with ps; [ ]; # missing inputs: recollect-waste
+    "recollect_waste" = ps: with ps; [ ]; # missing inputs: aiorecollect
     "recorder" = ps: with ps; [ sqlalchemy ];
     "recswitch" = ps: with ps; [ ]; # missing inputs: pyrecswitch
     "reddit" = ps: with ps; [ praw ];

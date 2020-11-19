@@ -19,6 +19,10 @@
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , buildPackages
+, pkgsBuildBuild
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
 , sourceVersion
 , sha256
 , passthruFun
@@ -35,7 +39,8 @@ with stdenv.lib;
 
 let
 
-  pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
+  pythonAttr = "python${sourceVersion.major}${sourceVersion.minor}";
+  pythonForBuild = buildPackages.${pythonAttr};
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -45,6 +50,10 @@ let
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
     inherit hasDistutilsCxxPatch pythonForBuild;
+    pythonPackagesBuildBuild = pkgsBuildBuild.${pythonAttr};
+    pythonPackagesBuildTarget = pkgsBuildTarget.${pythonAttr};
+    pythonPackagesHostHost = pkgsHostHost.${pythonAttr};
+    pythonPackagesTargetTarget = pkgsTargetTarget.${pythonAttr} or {};
   } // {
     inherit ucsEncoding;
   };

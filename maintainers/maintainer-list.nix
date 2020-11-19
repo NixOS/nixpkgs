@@ -3193,12 +3193,6 @@
     githubId = 313929;
     name = "Gabriel Ebner";
   };
-  genesis = {
-    email = "ronan@aimao.org";
-    github = "bignaux";
-    githubId = 149484;
-    name = "Ronan Bignaux";
-  };
   georgewhewell = {
     email = "georgerw@gmail.com";
     github = "georgewhewell";
@@ -6159,10 +6153,10 @@
     githubId = 6455574;
     name = "Matt Votava";
   };
-  mwilsoninsight = {
-    email = "max.wilson@insight.com";
-    github = "mwilsoninsight";
-    githubId = 47782621;
+  maxwilson = {
+    email = "nixpkgs@maxwilson.dev";
+    github = "mwilsoncoding";
+    githubId = 43796009;
     name = "Max Wilson";
   };
   myrl = {

@@ -9,18 +9,15 @@
 { pkgs
 , stdenv
 , python
-, overrides ? (self: super: {})
 }:
 
 with pkgs.lib;
 
-let
-  packages = ( self:
+self:
 
 let
+  inherit (self) callPackage;
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
-
-  callPackage = pkgs.newScope self;
 
   namePrefix = python.libPrefix + "-";
 
@@ -102,7 +99,7 @@ in {
 
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
-  inherit fetchPypi callPackage;
+  inherit fetchPypi;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;
@@ -201,6 +198,8 @@ in {
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
+
+  aioextensions = callPackage ../development/python-modules/aioextensions { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
@@ -355,6 +354,8 @@ in {
   APScheduler = callPackage ../development/python-modules/APScheduler { };
 
   apsw = callPackage ../development/python-modules/apsw { };
+
+  arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
   area = callPackage ../development/python-modules/area { };
 
@@ -2195,6 +2196,10 @@ in {
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  flatbuffers = callPackage ../development/python-modules/flatbuffers {
+    inherit (pkgs) flatbuffers;
+  };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
@@ -4018,6 +4023,8 @@ in {
 
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
+  ndjson = callPackage ../development/python-modules/ndjson { };
+
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   neo = callPackage ../development/python-modules/neo { };
@@ -5768,6 +5775,8 @@ in {
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
+  python-bidi = callPackage ../development/python-modules/python-bidi { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-constraint = callPackage ../development/python-modules/python-constraint { };
@@ -6737,6 +6746,8 @@ in {
     usePython = true;
   });
 
+  sockjs = callPackage ../development/python-modules/sockjs { };
+
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
 
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
@@ -7079,6 +7090,7 @@ in {
     nccl = pkgs.nccl_cudatoolkit_10;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (pkgs) flatbuffers;
   };
 
   tensorflow-build_2 = callPackage ../development/python-modules/tensorflow/2 {
@@ -7088,6 +7100,7 @@ in {
     nccl = pkgs.nccl_cudatoolkit_11;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (pkgs) flatbuffers;
   };
 
   tensorflow-build = self.tensorflow-build_1;
@@ -7960,6 +7973,4 @@ in {
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
-});
-
-in fix' (extends overrides packages)
+}

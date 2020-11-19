@@ -1056,6 +1056,8 @@ in
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
+  fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
+
   fedora-coreos-config-transpiler = callPackage ../development/tools/fedora-coreos-config-transpiler { };
 
   ccextractor = callPackage ../applications/video/ccextractor { };
@@ -2234,9 +2236,7 @@ in
 
   gringo = callPackage ../tools/misc/gringo { };
 
-  grobi = callPackage ../tools/X11/grobi {
-    buildGoModule = buildGo114Module;
-  };
+  grobi = callPackage ../tools/X11/grobi { };
 
   gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
 
@@ -5242,9 +5242,9 @@ in
 
   nixnote2 = libsForQt514.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = hiPrio nodejs-12_x;
+  nodejs = hiPrio nodejs-14_x;
 
-  nodejs-slim = nodejs-slim-12_x;
+  nodejs-slim = nodejs-slim-14_x;
 
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix { };
@@ -9533,14 +9533,12 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
-julia_15 = callPackage ../development/compilers/julia/1.5.nix {
+  julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
-
-
   julia_1 = julia_10;
-  julia = julia_1;
+  julia = julia_15;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
@@ -11736,7 +11734,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     lua = lua5;
   } // (config.radare or {}))) radare2 r2-for-cutter;
 
-  radare2-cutter = libsForQt514.callPackage ../development/tools/analysis/radare2/cutter.nix { };
+  radare2-cutter = libsForQt515.callPackage ../development/tools/analysis/radare2/cutter.nix { };
 
   ragel = ragelStable;
 
@@ -12640,7 +12638,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
     openal = if stdenv.isDarwin then null else openal;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
-    rav1e = null;
+    rav1e = if stdenv.isDarwin then null else rav1e;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
@@ -14895,6 +14893,9 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   nss_3_44 = lowPrio (callPackage ../development/libraries/nss/3.44.nix { });
   nssTools = nss.tools;
 
+  # required for stable thunderbird and firefox-esr-78
+  nss_3_53 = lowPrio (callPackage ../development/libraries/nss/3.53.nix { });
+
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
 
   nsss = skawarePackages.nsss;
@@ -15794,6 +15795,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
   spandsp = callPackage ../development/libraries/spandsp {};
+  spandsp3 = callPackage ../development/libraries/spandsp/3.nix {};
 
   spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt {};
 
@@ -17026,8 +17028,10 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   openbgpd = callPackage ../servers/openbgpd { };
 
-  openafs = callPackage ../servers/openafs/1.6 { tsmbac = null; ncurses = null; };
   openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
+  openafs_1_9 = callPackage ../servers/openafs/1.9 { tsmbac = null; ncurses = null; };
+  # Current stable release; don't backport release updates!
+  openafs = openafs_1_8;
 
   openresty = callPackage ../servers/http/openresty {
     withPerl = false;
@@ -17290,10 +17294,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = callPackage ../servers/monitoring/prometheus {
-    buildGoPackage = buildGo114Package;
-    go = go_1_14;
-  };
+  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
@@ -18278,8 +18279,10 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
-    openafs = callPackage ../servers/openafs/1.6/module.nix { };
     openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
+    openafs_1_9 = callPackage ../servers/openafs/1.9/module.nix { };
+    # Current stable release; don't backport release updates!
+    openafs = openafs_1_8;
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
