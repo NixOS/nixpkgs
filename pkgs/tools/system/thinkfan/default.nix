@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thinkfan";
-  version = "1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
     rev = version;
-    sha256 = "1fxd1w3z65glw6y04myn7ihgswkx6sqnkky159mik4n96pfrsvr5";
+    sha256 = "18vgm5w5pjnpipa34j4x87q10695w2jnqwvc2f027afy7mnzw7kz";
   };
 
   cmakeFlags = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -Dm755 {.,$out/bin}/thinkfan
 
     cd "$NIX_BUILD_TOP"; cd "$sourceRoot" # attempt to be a bit robust
-    install -Dm644 {.,$out/share/doc/thinkfan}/README
+    install -Dm644 {.,$out/share/doc/thinkfan}/README.md
     cp -R examples $out/share/doc/thinkfan
     install -Dm644 {src,$out/share/man/man1}/thinkfan.1
 
