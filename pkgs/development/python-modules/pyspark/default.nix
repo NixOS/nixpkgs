@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sed -i "s/'pypandoc'//" setup.py
 
     # Current release works fine with py4j 0.10.8.1
-    substituteInPlace setup.py --replace py4j==0.10.7 'py4j>=0.10.7,<0.11'
+    substituteInPlace setup.py --replace py4j==0.10.9 'py4j>=0.10.7,<0.11'
   '';
 
   propagatedBuildInputs = [ py4j ];
