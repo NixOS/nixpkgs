@@ -1241,7 +1241,7 @@ self: super: {
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom = appendPatch super.reflex-dom (pkgs.fetchpatch {
     url = https://github.com/reflex-frp/reflex-dom/commit/6aed7b7ebb70372778f1a29a724fcb4de815ba04.patch;
-    sha256 = "1g7lgwj2rpziilif2gian412iy05gqbzwx9w0m6ajq3clxs5zs7l";
+    sha256 = "1ndqw5r85axynmx55ld6qr8ik1i1mkh6wrnkzpxbwyil2ms8mxn0";
     stripLen = 2;
     extraPrefix = "";
     includes = ["reflex-dom.cabal" ];
