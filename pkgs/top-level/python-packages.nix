@@ -5460,6 +5460,8 @@ in {
 
   pyroma = callPackage ../development/python-modules/pyroma { };
 
+  pyro-api = callPackage ../development/python-modules/pyro-api { };
+
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl { };
 
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
