@@ -63,9 +63,9 @@ let
   # a) prevent it from searching for system include files and libs, and
   # b) provide it with the include files and libs it needs (C and C++ standard library)
 
-  # These are also exposed as cling.flags because it's handy to be able to pass them
-  # to tools that wrap Cling, particularly Jupyter kernels such as xeus-cling and the built-in
-  # jupyter-cling-kernel. Both of these use Cling as a library by linking against
+  # These are also exposed as cling.flags/cling.compilerIncludeFlags because it's handy to be
+  # able to pass them to tools that wrap Cling, particularly Jupyter kernels such as xeus-cling
+  # and the built-in jupyter-cling-kernel. Both of these use Cling as a library by linking against
   # libclingJupyter.so, so the makeWrapper approach to wrapping the binary doesn't work.
   # Thus, if you're packaging a Jupyter kernel, you either need to pass these flags as extra
   # args to xcpp (for xeus-cling) or put them in the environment variable CLING_OPTS
