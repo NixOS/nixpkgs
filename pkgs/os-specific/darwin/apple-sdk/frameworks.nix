@@ -107,7 +107,7 @@ with frameworks; with libs; {
   SecurityInterface       = { inherit Cocoa Security SecurityFoundation; };
   ServiceManagement       = { inherit Security; };
   Social                  = {};
-  SpriteKit               = { inherit AppKit; };
+  SpriteKit               = { inherit AppKit Cocoa; };
   StoreKit                = {};
   SyncServices            = {};
   SystemConfiguration     = { inherit Security; };
