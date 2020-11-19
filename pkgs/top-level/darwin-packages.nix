@@ -70,6 +70,8 @@ impure-cmds // apple-source-releases // {
 
   print-reexports = callPackage ../os-specific/darwin/print-reexports { };
 
+  rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
+
   checkReexportsHook = makeSetupHook {
     deps = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
