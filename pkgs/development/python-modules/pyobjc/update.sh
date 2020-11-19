@@ -316,7 +316,7 @@ generate_framework_nix() {
       ;;
     LaunchServices)
       python_frameworks="CoreServices"
-      tests=true
+      tests=false
       ;;
     libdispatch)
       build_frameworks="Foundation"
