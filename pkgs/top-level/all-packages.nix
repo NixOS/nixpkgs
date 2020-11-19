@@ -10190,6 +10190,8 @@ in
 
   ceptre = callPackage ../development/interpreters/ceptre { };
 
+  cling = callPackage ../development/interpreters/cling { };
+
   clips = callPackage ../development/interpreters/clips { };
 
   clisp = callPackage ../development/interpreters/clisp { };
