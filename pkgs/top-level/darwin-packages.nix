@@ -68,7 +68,11 @@ impure-cmds // apple-source-releases // {
 
   darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
 
-  print-reexports = callPackage ../os-specific/darwin/apple-sdk/print-reexports { };
+  print-reexports = callPackage ../os-specific/darwin/print-reexports { };
+
+  checkReexportsHook = makeSetupHook {
+    deps = [ pkgs.darwin.print-reexports ];
+  } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
   maloader = callPackage ../os-specific/darwin/maloader {
   };
