@@ -96,6 +96,6 @@ runCommand "cling-${unwrapped.version}" {
   inherit (unwrapped) meta;
 } ''
   makeWrapper $unwrapped/bin/cling $out/bin/cling \
-    --add-flags "$(cat ${compilerIncludeFlags})" \
+    --add-flags "$(cat "$compilerIncludeFlags")" \
     --add-flags "$flags"
 ''
