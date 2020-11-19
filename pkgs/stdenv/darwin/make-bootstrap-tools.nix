@@ -1,9 +1,15 @@
-{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem }:
-
-with import pkgspath { inherit system; };
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem, crossSystem ? null }:
 
 let
-  llvmPackages = llvmPackages_7;
+  pkgs = import pkgspath ({ inherit system; } // (if (crossSystem != null) then { inherit crossSystem; } else {}));
+in
+
+with pkgs;
+
+let
+  llvmPackageSet = if stdenv.hostPlatform.isAarch64 then "llvmPackages_11" else "llvmPackages_7";
+  llvmPackages = pkgs."${llvmPackageSet}";
+  storePrefixLen = builtins.stringLength builtins.storeDir;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -23,23 +29,26 @@ in rec {
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
-    buildInputs = [nukeReferences cpio];
+    nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ]
+      ++ lib.optionals targetPlatform.isAarch64 [ buildPackages.darwin.sigtool ];
 
     buildCommand = ''
-      mkdir -p $out/bin $out/lib $out/lib/system
+      mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
 
-      # Copy libSystem's .o files for various low-level boot stuff.
-      cp -d ${darwin.Libsystem}/lib/*.o $out/lib
+      ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
+        # Copy libSystem's .o files for various low-level boot stuff.
+        cp -d ${darwin.Libsystem}/lib/*.o $out/lib
 
-      # Resolv is actually a link to another package, so let's copy it properly
-      cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
+        # Resolv is actually a link to another package, so let's copy it properly
+        cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
 
-      cp -rL ${darwin.Libsystem}/include $out
-      chmod -R u+w $out/include
-      cp -rL ${darwin.ICU}/include*             $out/include
-      cp -rL ${libiconv}/include/*       $out/include
-      cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
-      mv $out/include $out/include-Libsystem
+        cp -rL ${darwin.Libsystem}/include $out
+        chmod -R u+w $out/include
+        cp -rL ${darwin.ICU}/include*             $out/include
+        cp -rL ${libiconv}/include/*       $out/include
+        cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
+        mv $out/include $out/include-Libsystem
+      ''}
 
       # Copy coreutils, bash, etc.
       cp ${coreutils_}/bin/* $out/bin
@@ -76,16 +85,32 @@ in rec {
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
-
-      cp -rL ${llvmPackages.clang-unwrapped.lib}/lib/clang $out/lib
+      cp -rd ${llvmPackages.clang-unwrapped.lib}/lib/* $out/lib
 
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
+      cp -d ${llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
       cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
       cp -d ${libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
+
+      ${lib.optionalString targetPlatform.isAarch64 ''
+        # copy .tbd assembly utils
+        cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
+        cp -d ${pkgs.libyaml}/lib/libyaml*.dylib $out/lib
+
+        # copy package extraction tools
+        cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
+        cp -d ${pkgs.xar}/lib/libxar*.dylib $out/lib
+        cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
+
+        # copy sigtool
+        cp -d ${pkgs.darwin.sigtool}/bin/sigtool $out/bin
+        cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
+      ''}
 
       cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
@@ -93,22 +118,27 @@ in rec {
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
-      for i in as ld ar ranlib nm strip otool install_name_tool lipo; do
+      for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
         cp ${cctools_}/bin/$i $out/bin
       done
 
       cp -d ${darwin.libtapi}/lib/libtapi* $out/lib
 
-      cp -rd ${pkgs.darwin.CF}/Library $out
+      ${lib.optionalString targetPlatform.isx86_64 ''
+        cp -rd ${pkgs.darwin.CF}/Library $out
+      ''}
 
       chmod -R u+w $out
 
       nuke-refs $out/bin/*
 
       rpathify() {
-        local libs=$(${cctools_}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local libs=$(${stdenv.cc.targetPrefix}otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local newlib
         for lib in $libs; do
-          ${cctools_}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
+          newlib=''${lib:${toString (storePrefixLen + 1)}}
+          newlib=''${newlib#*/}
+          ${stdenv.cc.targetPrefix}install_name_tool -change $lib "@rpath/$newlib" "$1"
         done
       }
 
@@ -116,20 +146,27 @@ in rec {
       for i in $out/bin/*; do
         if test -x $i -a ! -L $i; then
           chmod +w $i
-          strip $i || true
+          ${stdenv.cc.targetPrefix}strip $i || true
         fi
       done
 
-      for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/*/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
+      for i in $out/bin/* $out/lib/*.dylib $out/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
         if test -x "$i" -a ! -L "$i"; then
           echo "Adding rpath to $i"
           rpathify $i
         fi
       done
 
+      for i in $out/bin/*; do
+        if test -x "$i" -a ! -L "$i" -a "$(basename $i)" != codesign; then
+          echo "Adding @executable_path to rpath in $i"
+          ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/..' $i
+        fi
+      done
+
       nuke-refs $out/lib/*
       nuke-refs $out/lib/system/*
-      nuke-refs $out/lib/clang/*/lib/darwin/*
+      nuke-refs $out/lib/darwin/*
       nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
 
       mkdir $out/.pack
@@ -143,7 +180,7 @@ in rec {
       cp ${bzip2_.bin}/bin/bzip2 $out/on-server
 
       chmod u+w $out/on-server/*
-      strip $out/on-server/*
+      ${stdenv.cc.targetPrefix}strip $out/on-server/*
       nuke-refs $out/on-server/*
 
       (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
@@ -318,7 +355,10 @@ in rec {
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = import test-pkgspath {
-    inherit system;
+    # if the bootstrap tools are for another platform, we should be testing
+    # that platform.
+    system = if crossSystem != null then crossSystem else system;
+
     stdenvStages = args: let
         args' = args // { inherit bootstrapFiles; };
       in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
