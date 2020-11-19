@@ -21645,9 +21645,7 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
-  waybar = callPackage ../applications/misc/waybar {
-    fmt = fmt_6;
-  };
+  waybar = callPackage ../applications/misc/waybar {};
 
   hikari = callPackage ../applications/window-managers/hikari { };
 
