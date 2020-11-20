@@ -22453,6 +22453,15 @@ let
         sha512 = "/aMOAYEFXDdjG0wytpTL5YQLfZnnTmLNjn+AIrJ/6HVnTfDqLsVKUUwkDf4I4kgex36BvjuXEn/TX9B/1ESyqQ==";
       };
     };
+    "file-or-stdin-1.0.2" = {
+      name = "file-or-stdin";
+      packageName = "file-or-stdin";
+      version = "1.0.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/file-or-stdin/-/file-or-stdin-1.0.2.tgz";
+        sha1 = "48d578b93b8a8cc9c163d950cc9636e3fc8acc1c";
+      };
+    };
     "file-size-0.0.5" = {
       name = "file-size";
       packageName = "file-size";
@@ -27700,6 +27709,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/inspect-property/-/inspect-property-0.0.6.tgz";
         sha512 = "LgjHkRl9W6bj2n+kWrAOgvCYPTYt+LanE4rtd/vKNq6yEb+SvVV7UTLzoSPpDX6/U1cAz7VfqPr+lPAIz7wHaQ==";
+      };
+    };
+    "inspect-with-kind-1.0.5" = {
+      name = "inspect-with-kind";
+      packageName = "inspect-with-kind";
+      version = "1.0.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/inspect-with-kind/-/inspect-with-kind-1.0.5.tgz";
+        sha512 = "MAQUJuIo7Xqk8EVNP+6d3CKq9c80hi4tjIbIAT6lmGW9W6WzlHiu9PS8uSuUYU+Do+j1baiFp3H25XEVxDIG2g==";
       };
     };
     "int53-1.0.0" = {
@@ -41591,6 +41609,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/polished/-/polished-3.6.7.tgz";
         sha512 = "b4OViUOihwV0icb9PHmWbR+vPqaSzSAEbgLskvb7ANPATVXGiYv/TQFHQo65S53WU9i5EQ1I03YDOJW7K0bmYg==";
+      };
+    };
+    "poor-mans-t-sql-formatter-1.6.10" = {
+      name = "poor-mans-t-sql-formatter";
+      packageName = "poor-mans-t-sql-formatter";
+      version = "1.6.10";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/poor-mans-t-sql-formatter/-/poor-mans-t-sql-formatter-1.6.10.tgz";
+        sha1 = "a93683ba41dc82fffccccb1c859ae40921f98229";
       };
     };
     "portfinder-1.0.28" = {
@@ -91380,6 +91407,34 @@ in
       description = "Fast, disk space efficient package manager";
       homepage = https://pnpm.js.org/;
       license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  poor-mans-t-sql-formatter-cli = nodeEnv.buildNodePackage {
+    name = "poor-mans-t-sql-formatter-cli";
+    packageName = "poor-mans-t-sql-formatter-cli";
+    version = "1.6.10";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/poor-mans-t-sql-formatter-cli/-/poor-mans-t-sql-formatter-cli-1.6.10.tgz";
+      sha1 = "472f6172a1e969a6793ea6fd5ad698b448946d77";
+    };
+    dependencies = [
+      sources."commander-2.11.0"
+      sources."file-or-stdin-1.0.2"
+      sources."get-stdin-5.0.1"
+      sources."graceful-fs-4.2.4"
+      sources."inspect-with-kind-1.0.5"
+      sources."kind-of-6.0.3"
+      sources."poor-mans-t-sql-formatter-1.6.10"
+      sources."strip-bom-3.0.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A T-SQL formatting utility in JS, transpiled from the C# library of the same name.";
+      homepage = "https://github.com/TaoK/poor-mans-t-sql-formatter-npm-cli#readme";
+      license = "AGPL-3.0";
     };
     production = true;
     bypassCache = true;

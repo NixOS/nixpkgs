@@ -156,6 +156,7 @@
 , "peerflix-server"
 , "pm2"
 , "pnpm"
+, "poor-mans-t-sql-formatter-cli"
 , "postcss-cli"
 , "prettier"
 , "pscid"
