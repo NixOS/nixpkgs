@@ -9061,6 +9061,12 @@
     githubId = 844343;
     name = "Thiago K. Okada";
   };
+  thibautmarty = {
+    email = "github@thibautmarty.fr";
+    github = "ThibautMarty";
+    githubId = 3268082;
+    name = "Thibaut Marty";
+  };
   thmzlt = {
     email = "git@thomazleite.com";
     github = "thmzlt";
