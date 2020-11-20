@@ -1,0 +1,27 @@
+--- a/tests/test_primer.py
++++ b/tests/test_primer.py
+@@ -150,13 +150,13 @@ def test_gen_check_output(self) -> None:
+         if lib.WINDOWS:
+             return
+
+-        false_bin = "/usr/bin/false" if system() == "Darwin" else "/bin/false"
++        false_bin = "false"
+         with self.assertRaises(CalledProcessError):
+             loop.run_until_complete(lib._gen_check_output([false_bin]))
+
+         with self.assertRaises(asyncio.TimeoutError):
+             loop.run_until_complete(
+-                lib._gen_check_output(["/bin/sleep", "2"], timeout=0.1)
++                lib._gen_check_output(["sleep", "2"], timeout=0.1)
+             )
+
+     @event_loop()
+@@ -176,7 +176,7 @@ def test_git_checkout_or_rebase(self) -> None:
+     @event_loop()
+     def test_process_queue(self, mock_stdout: Mock) -> None:
+         loop = asyncio.get_event_loop()
+-        config_path = Path(lib.__file__).parent / "primer.json"
++        config_path = Path(__file__).parent / "data/primer.json"
+         with patch("black_primer.lib.git_checkout_or_rebase", return_false):
+             with TemporaryDirectory() as td:
+                 return_val = loop.run_until_complete(
