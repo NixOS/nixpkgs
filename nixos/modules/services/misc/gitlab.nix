@@ -756,7 +756,8 @@ in {
     };
 
     systemd.services.gitaly = {
-      after = [ "network.target" ];
+      after = [ "network.target" "gitlab.service" ];
+      requires = [ "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         openssh
@@ -845,7 +846,7 @@ in {
     };
 
     systemd.services.gitlab = {
-      after = [ "gitlab-workhorse.service" "gitaly.service" "network.target" "gitlab-postgresql.service" "redis.service" ];
+      after = [ "gitlab-workhorse.service" "network.target" "gitlab-postgresql.service" "redis.service" ];
       requires = [ "gitlab-sidekiq.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
