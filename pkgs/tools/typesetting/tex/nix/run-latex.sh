@@ -41,9 +41,10 @@ showError() {
     exit 1
 }
 
-pass=1
+pass=0
 
 runLaTeX() {
+    ((pass=pass+1))
     echo "PASS $pass..."
     if ! $latex $latexFlags $rootName >$tmpFile 2>&1; then showError; fi
     runNeeded=
@@ -55,7 +56,6 @@ runLaTeX() {
         runNeeded=1
     fi
     echo
-    ((pass=pass+1))
 }
 
 echo
@@ -106,9 +106,13 @@ if test -f $rootNameBase.idx; then
     echo
 fi
 
-
-runLaTeX
-
+# We check that pass is less than 2 to catch situations where the document is
+# simple enough (no bibtex, etc.) so that it would otherwise require only one
+# pass but also contains a ToC.
+# In essence this check ensures that we do at least two passes on all documents.
+if test "$runNeeded" = 1 -o "$pass" -lt 2 ; then
+    runLaTeX
+fi
 
 if test "$runNeeded"; then
     runLaTeX
