@@ -1438,10 +1438,6 @@ self: super: {
   # 2020-11-17: persistent-test is ahead of the persistent version in stack
   persistent-sqlite = dontCheck super.persistent-sqlite;
 
-  # 2020-11-19: hasn‘t bumped aeson bound
-  # https://git-annex.branchable.com/bugs/aeson_bound_can_be_bumped_to___60___1.6
-  git-lfs = doJailbreak super.git-lfs;
-
   # The tests for semver-range need to be updated for the MonadFail change in
   # ghc-8.8:
   # https://github.com/adnelson/semver-range/issues/15
