@@ -25051,6 +25051,8 @@ in
 
   ### GAMES
 
+  _1oom = callPackage ../games/1oom { };
+
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
 
   _20kly = callPackage ../games/20kly { };
