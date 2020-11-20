@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "picat";
-  version = "3.0p2";
+  version = "3.0p3";
 
   src = fetchurl {
-    url    = "http://picat-lang.org/download/picat30_2_src.tar.gz";
-    sha256 = "0sn4fqj2ryalcndx1df5kx5rzb4pfcrza5ljlg9dkfbqv02xgxkd";
+    url    = "http://picat-lang.org/download/picat30_3_src.tar.gz";
+    sha256 = "052w0vk2xfmky5nv280ysb8in6vaph7i79yvbddqmahzszarq5hw";
   };
 
   buildInputs = [ zlib ];
@@ -18,25 +18,18 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    cd emu
-    make -f Makefile.$ARCH
-  '';
+  buildPhase = "cd emu && make -j $NIX_BUILD_CORES -f Makefile.$ARCH";
 
   installPhase = ''
     mkdir -p $out/bin
     cp picat $out/bin/picat
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Logic-based programming langage";
-    longDescription = ''
-      Picat is a simple, and yet powerful, logic-based multi-paradigm
-      programming language aimed for general-purpose applications.
-    '';
-    homepage = "http://picat-lang.org/";
-    license = stdenv.lib.licenses.mpl20;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.earldouglas ];
+    homepage    = "http://picat-lang.org/";
+    license     = licenses.mpl20;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ earldouglas thoughtpolice ];
   };
 }
