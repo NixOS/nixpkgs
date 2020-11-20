@@ -8,18 +8,18 @@ let
   py = python.override {
     packageOverrides = self: super: {
       flask = super.flask.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.2";
+        version = "1.1.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0j6f4a9rpfh25k1gp7azqhnni4mb4fgy50jammgjgddw1l3w0w92";
+          sha256 = "0q3h295izcil7lswkzfnyg3k5gq4hpmqmpl6i7s5m1n9szi1myjf";
         };
       });
 
       cookiecutter = super.cookiecutter.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.0";
+        version = "1.7.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0glsvaz8igi2wy1hsnhm9fkn6560vdvdixzvkq6dn20z3hpaa5hk";
+          sha256 = "1b2xa5dypk1vf8aq599fd8zw4y0pwvq3hgl7ia8aiv8gg3ab5dpg";
         };
       });
     };
@@ -31,11 +31,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.6.2";
+  version = "1.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0scnymhhiiqrs2j0jaypxgq2wg1qf1w8f55qfay0b3nf51y6mh8y";
+    sha256 = "1drb8qcn30r44m0jy0y1nvhzxphn3qari5qwmsdb6wlkdppwxg3f";
   };
 
   # Tests are not included in the PyPI package
@@ -67,7 +67,7 @@ buildPythonApplication rec {
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
-      --replace "boto3~=1.14.0, >=1.14.23" "boto3~=1.14" \
+      --replace "boto3~=1.14.23" "boto3~=1.14" \
       --replace "docker~=4.2.0" "docker~=4.3.1" \
       --replace "jmespath~=0.9.5" "jmespath~=0.10.0" \
       --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
