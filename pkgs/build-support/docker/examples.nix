@@ -408,10 +408,15 @@ rec {
     };
 
   # basic example, with cross compilation
-  cross-aarch64 = pkgsCross.aarch64-multiplatform.dockerTools.buildImage {
+  cross = let
+    # Cross compile for x86_64 if on aarch64
+    crossPkgs =
+      if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
+      else pkgsCross.aarch64-multiplatform;
+  in crossPkgs.dockerTools.buildImage {
     name = "hello-cross";
     tag = "latest";
-    contents = pkgsCross.aarch64-multiplatform.hello;
+    contents = crossPkgs.hello;
   };
 
 }
