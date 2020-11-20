@@ -3547,8 +3547,6 @@ in {
 
   lockfile = callPackage ../development/python-modules/lockfile { };
 
-  locustio = callPackage ../development/python-modules/locustio { };
-
   Logbook = callPackage ../development/python-modules/Logbook { };
 
   logfury = callPackage ../development/python-modules/logfury { };
