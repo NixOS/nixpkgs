@@ -19,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3be5275b569844dfa267c80a1e23dc0957411dd501cae0ed3cccf43467031ceb";
+    sha256 = "0fdx4ygyjimi9hw3prfnml44s50qljjkcgv7wpgmrxy25jxx6vss";
   };
 
   postPatch = ''
