@@ -347,8 +347,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/certifi/gocertifi";
-      rev = "ee1a9a0726d2";
-      sha256 = "08l6lqaw83pva6fa0aafmhmy1mhb145av21772zfh3ij809a37i4";
+      rev = "2c3bb06c6054";
+      sha256 = "00g5jy613nkm96k6ylbcwdwpdhm84mvw2gqr3gmj5mhwmsc8x97p";
     };
   }
   {
@@ -671,8 +671,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/getsentry/raven-go";
-      rev = "v0.1.2";
-      sha256 = "1dl80kar4lzdcfl3w6jssi1ld6bv0rmx6sp6bz6rzysfr9ilm02z";
+      rev = "v0.2.0";
+      sha256 = "0imfwmsb72168fqandf2lxhzhngf2flxhzaar8hcnnfjv2a291lf";
     };
   }
   {

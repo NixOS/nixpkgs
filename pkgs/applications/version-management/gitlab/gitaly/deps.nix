@@ -428,8 +428,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/getsentry/raven-go";
-      rev = "v0.1.2";
-      sha256 = "1dl80kar4lzdcfl3w6jssi1ld6bv0rmx6sp6bz6rzysfr9ilm02z";
+      rev = "v0.2.0";
+      sha256 = "0imfwmsb72168fqandf2lxhzhngf2flxhzaar8hcnnfjv2a291lf";
     };
   }
   {
@@ -437,8 +437,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/getsentry/sentry-go";
-      rev = "v0.5.1";
-      sha256 = "1kfn0gcb4c6amhagv04ydpl6p9cqw7f0lxas688a0rf89iwdzz89";
+      rev = "v0.7.0";
+      sha256 = "13n9r7845wsq9z61rbvlqjjjg4aifplc74v3kv0i1lys2fw8a5k9";
     };
   }
   {
@@ -1396,6 +1396,15 @@
     };
   }
   {
+    goPackagePath = "github.com/oklog/ulid";
+    fetch = {
+      type = "git";
+      url = "https://github.com/oklog/ulid";
+      rev = "v2.0.2";
+      sha256 = "1apm4r23kxsm0c9hlxsr7xh6xwrk2cjqylbpxd4ffxbl6bwflja0";
+    };
+  }
+  {
     goPackagePath = "github.com/olekukonko/tablewriter";
     fetch = {
       type = "git";
@@ -1436,8 +1445,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/opentracing/opentracing-go";
-      rev = "v1.0.2";
-      sha256 = "0i0ghg94dg8lk05mw5n23983wq04yjvkjmdkc9z5y1f3508938h9";
+      rev = "v1.2.0";
+      sha256 = "04rgdwl29kimp2wnm4dycnzp7941hvpj6wym85x23c6fclacm94h";
     };
   }
   {
@@ -1465,6 +1474,15 @@
       url = "https://github.com/otiai10/mint";
       rev = "v1.3.0";
       sha256 = "0kfc95jc2hfgwzcpdfa5hrxgj7s6rzx5jc0n1sn863bsngx2q1ca";
+    };
+  }
+  {
+    goPackagePath = "github.com/pborman/getopt";
+    fetch = {
+      type = "git";
+      url = "https://github.com/pborman/getopt";
+      rev = "7148bc3a4c30";
+      sha256 = "0zhvvmv671r1fbdd5hbv3flx8k2rb60giqx115w0553c56qkqfpj";
     };
   }
   {
@@ -1634,8 +1652,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/sirupsen/logrus";
-      rev = "v1.6.0";
-      sha256 = "1zf9is1yxxnna0d1pyag2m9ziy3l27zb2j92p9msm1gx5jjrvzzj";
+      rev = "v1.7.0";
+      sha256 = "1a59pw7zimvm8k423iq9l4f4qjj1ia1xc6pkmhwl2mxc46y2n442";
     };
   }
   {
@@ -1733,8 +1751,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/stretchr/testify";
-      rev = "v1.5.1";
-      sha256 = "09r89m1wy4cjv2nps1ykp00qjpi0531r07q3s34hr7m6njk4srkl";
+      rev = "v1.6.1";
+      sha256 = "1yhiqqzjvi63pf01rgzx68gqkkvjx03fvl5wk30br5l6s81s090l";
     };
   }
   {
@@ -1913,8 +1931,8 @@
     fetch = {
       type = "git";
       url = "https://gitlab.com/gitlab-org/gitlab-shell.git";
-      rev = "1a2bfecd2f0e";
-      sha256 = "197b3yn7lp6dbzcgxrj3ns2a839adcfmcwi3h53i1sr6952ciayx";
+      rev = "3f9890ef73dc";
+      sha256 = "1zx7x3g18xzw7fs7cayd20llxabv5r93m2mp6ixgr99ksvi6zix7";
     };
   }
   {
@@ -1922,8 +1940,8 @@
     fetch = {
       type = "git";
       url = "https://gitlab.com/gitlab-org/labkit.git";
-      rev = "45895e129029";
-      sha256 = "17adv1gcdg0jiy8i5lr064pm3p9ywq6s0iwh9w4q5pycp4qkmn48";
+      rev = "40dcf811328c";
+      sha256 = "1x22iz53wjg1qps0bnr4lniik09szmy99ny2kb6smjpv9cr6klw7";
     };
   }
   {
@@ -2030,8 +2048,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "af09f7315aff";
-      sha256 = "0kr94lzr8ngrc6913j5xh6g4r7g087dbdgnpzi6rjcl0bf8nsr22";
+      rev = "e3ed0017c211";
+      sha256 = "0nz91nxgfcbcxirscdrxcq5a97z5pyz0g0k2chjxx228dz59aw1i";
     };
   }
   {
@@ -2248,6 +2266,15 @@
       url = "https://gopkg.in/yaml.v2";
       rev = "v2.3.0";
       sha256 = "1md0hlyd9s6myv3663i9l59y74n4xjazifmmyxn43g86fgkc5lzj";
+    };
+  }
+  {
+    goPackagePath = "gopkg.in/yaml.v3";
+    fetch = {
+      type = "git";
+      url = "https://gopkg.in/yaml.v3";
+      rev = "9f266ea9e77c";
+      sha256 = "1bbai3lzb50m0x2vwsdbagrbhvfylj9k1m32hgbqwldqx4p9ay35";
     };
   }
   {
