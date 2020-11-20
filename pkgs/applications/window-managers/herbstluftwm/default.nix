@@ -38,10 +38,11 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A manual tiling window manager for X";
     homepage = "https://herbstluftwm.org/";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thibautmarty ];
   };
 }
