@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, elinks, mailcap, runtimeShell, sqlite, zlib
-, glibcLocales
+, glibcLocales, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
     rev    = version;
     sha256 = "0r16fy02z61dbjdxc28yzj5i4f6r7aakh453gaqc8ilm1nsxhmnp";
   };
+
+  patches = [
+    # CVE-2020-28896
+    (fetchpatch {
+      url = "https://github.com/neomutt/neomutt/commit/9c36717a3e2af1f2c1b7242035455ec8112b4b06.patch";
+      sha256 = "1jd9k4a4d8qkf0yv7labi5z7d2rs5c3k349lr7waivqakldav84b";
+    })
+  ];
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
