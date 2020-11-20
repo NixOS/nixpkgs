@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "2020-08-25";
+  version = "2020-11-20";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
-    rev = "352f8e3e269ff2c650da50ce36313547c2a1fbb6";
-    sha256 = "1503z1zj1xvjpry2h7fpg1frx7lcm54zs3azcgiv5i3ar4wqfkz9";
+    rev = "7474cb8e1f70e9f4a8bf382708a7f15465453af5";
+    sha256 = "1lxkgcnv32wqk4hlckv13xy84g38jzgc4qxp9vsbkrgz87hkdvwj";
   };
 
   nativeBuildInputs = [ cmake jq ];
