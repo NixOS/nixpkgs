@@ -261,7 +261,7 @@ self: super: {
         });
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
-  binary-search = dontCheck super.binary-search;
+  binary-search = dontCheck (appendPatch super.binary-search ./patches/binary-search-fix-for-ghc-8.patch);
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
   bloodhound = dontCheck super.bloodhound;
   buildwrapper = dontCheck super.buildwrapper;
