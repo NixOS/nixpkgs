@@ -333,11 +333,12 @@
     "version": "3.1.0"
   },
   "gitlab": {
-    "owner": "terraform-providers",
+    "owner": "gitlabhq",
+    "provider-source-address": "registry.terraform.io/gitlabhq/gitlab",
     "repo": "terraform-provider-gitlab",
-    "rev": "v2.9.0",
-    "sha256": "0l0b69nxxskpsylcgli2sm9qq7p4hw96dsri24w38shhnxmpysbb",
-    "version": "2.9.0"
+    "rev": "v3.1.0",
+    "sha256": "1an34ckz7lz1k25lkjpbmls55zp9pacr46vjnjjpqx6bx5s95f5g",
+    "version": "3.1.0"
   },
   "google": {
     "owner": "terraform-providers",
