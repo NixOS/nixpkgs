@@ -7621,6 +7621,8 @@ in
 
   stabber = callPackage ../misc/stabber { };
 
+  staticjinja = with python3.pkgs; toPythonApplication staticjinja;
+
   stress = callPackage ../tools/system/stress { };
 
   stress-ng = callPackage ../tools/system/stress-ng { };
