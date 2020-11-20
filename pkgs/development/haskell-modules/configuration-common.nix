@@ -1422,7 +1422,8 @@ self: super: {
   # brittany release in a while and this version works with 8.10.
   # And we need to build it anyways.
   # 2020-11-15: jailbreaking because we have strict 0.4 which is to new
-  brittany = dontCheck (doJailbreak super.hls-brittany);
+  brittany = self.hls-brittany;
+  hls-brittany = dontCheck (doJailbreak super.hls-brittany);
 
   # 2020-11-15: aeson 1.5.4.1 needs to new quickcheck-instances for testing
   aeson = dontCheck super.aeson;
