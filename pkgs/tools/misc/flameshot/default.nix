@@ -18,7 +18,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
-    homepage = "https://flameshot.js.org";
+    homepage = "https://github.com/flameshot-org/flameshot";
     maintainers = [ maintainers.scode ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
