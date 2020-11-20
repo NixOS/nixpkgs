@@ -22863,7 +22863,7 @@ in
 
   obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
 
-  obs-ndi = libsForQt514.callPackage ../applications/video/obs-studio/obs-ndi.nix { };
+  obs-ndi = libsForQt5.callPackage ../applications/video/obs-studio/obs-ndi.nix { };
 
   obsidian = callPackage ../applications/misc/obsidian { };
 
