@@ -1477,8 +1477,10 @@ self: super: {
   # https://github.com/kowainik/stan/issues/408
   # Tests disabled because of: https://github.com/kowainik/stan/issues/409
   stan = doJailbreak (dontCheck super.stan);
+
   # 2020-11-19: Disabling tests with this issue: https://github.com/cchalmers/pcg-random/issues/10
-  pcg-random = dontCheck super.pcg-random;
+  # Issue has been fixed in 0.1.3.7, we can enable tests again, once stackage bumps the version
+  pcg-random = assert super.pcg-random.version == "0.1.3.6"; dontCheck super.pcg-random;
 
   # Use an already merged upstream patch fixing the build with primitive >= 0.7.2
   # The version bounds were correctly specified before, so we need to jailbreak as well
