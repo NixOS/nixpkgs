@@ -2668,10 +2668,6 @@ package-maintainers:
     - streaming-wai
   kiwi:
     - Unique
-    - glirc
-    - matterhorn
-    - mattermost-api
-    - mattermost-api-qc
   psibi:
     - path-pieces
     - persistent
@@ -2682,9 +2678,6 @@ package-maintainers:
     - Agda
   roberth:
     - arion-compose
-    - hercules-ci-agent
-    - hercules-ci-api-core
-    - hercules-ci-api-agent
   cdepillabout:
     - pretty-simple
     - spago
@@ -5514,6 +5507,7 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
+  - glirc
   - GLMatrix
   - glob-posix
   - global
@@ -6188,6 +6182,9 @@ broken-packages:
   - HERA
   - herbalizer
   - HerbiePlugin
+  - hercules-ci-agent
+  - hercules-ci-api-agent
+  - hercules-ci-api-core
   - heredocs
   - Hermes
   - hermit
@@ -7719,6 +7716,9 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matsuri
+  - matterhorn
+  - mattermost-api
+  - mattermost-api-qc
   - maude
   - maxent
   - maxent-learner-hw
