@@ -39,7 +39,6 @@ in {
       services.syncoid = {
         enable = true;
         sshKey = "/var/lib/syncoid/id_ecdsa";
-        commonArgs = [ "--no-sync-snap" ];
         commands."pool/test".target = "root@target:pool/test";
       };
     };
