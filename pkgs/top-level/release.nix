@@ -62,7 +62,7 @@ let
               # jobs.stack.x86_64-darwin
               jobs.stdenv.x86_64-darwin
               jobs.vim.x86_64-darwin
-              jobs.cachix.x86_64-darwin
+              # jobs.cachix.x86_64-darwin
 
               # UI apps
               # jobs.firefox-unwrapped.x86_64-darwin
@@ -105,7 +105,7 @@ let
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
               jobs.thunderbird.x86_64-linux
-              jobs.cachix.x86_64-linux
+              # jobs.cachix.x86_64-linux
 
               /*
               jobs.tests.cc-wrapper.x86_64-linux
