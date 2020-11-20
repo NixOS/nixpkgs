@@ -109,8 +109,8 @@ in {
   };
 
   scala_2_13 = common {
-    version = "2.13.3";
-    sha256 = "yfNzG8zybPOaxUExcvtBZGyxn2O4ort1846JZ1ziaX8=";
+    version = "2.13.4";
+    sha256 = "1alcnzmxga00nsvgy8yky91zw5b4q0xg2697vrrdgjlglpxiqwdw";
     test = { inherit (nixosTests) scala_2_13; };
     pname = "scala_2_13";
   };
