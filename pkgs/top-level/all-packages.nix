@@ -22845,6 +22845,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
 
+  obs-move-transition = callPackage ../applications/video/obs-studio/obs-move-transition.nix { };
+
   obs-v4l2sink = libsForQt514.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
 
   obs-ndi = libsForQt514.callPackage ../applications/video/obs-studio/obs-ndi.nix { };
