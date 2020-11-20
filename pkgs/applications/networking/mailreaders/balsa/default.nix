@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gtk3, gmime, gnutls,
   webkitgtk, libesmtp, openssl, libnotify, gtkspell3, gpgme,
   libcanberra-gtk3, libsecret, gtksourceview, gobject-introspection,
-  wrapGAppsHook
+  wrapGAppsHook, libical
 }:
 
 stdenv.mkDerivation rec {
   pname = "balsa";
-  version = "2.5.9";
+  version = "2.5.11";
 
   src = fetchurl {
     url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
-    sha256 = "19gs1qfvbk9qx4rjmgrmvid00kl9k153zjjx8zjii2lz09w7g19i";
+    sha256 = "1w8cbrj0w90fc2kxdf94krkwdh58w5px9qmkiqcb6rlm06n0wg9d";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     gtksourceview
     libsecret
     libesmtp
+    libical
   ];
 
   configureFlags = [
