@@ -8856,11 +8856,19 @@ in
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
   gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
 
-  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then ../development/compilers/gcc/6
-    else ../development/compilers/gcc/9);
-  gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then gcc6 else gcc9;
+  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then
+      ../development/compilers/gcc/6
+    else if (with stdenv.targetPlatform; isMips) then
+      ../development/compilers/gcc/8
+    else
+      ../development/compilers/gcc/9);
+
+  gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then
+          gcc6
+        else if (with stdenv.targetPlatform; isMips) then
+          gcc8
+        else
+          gcc9;
 
   gcc-unwrapped = gcc.cc;
 
