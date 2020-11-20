@@ -567,6 +567,8 @@ in {
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
+    system.build.users-groups-spec = spec;
+
     # Install all the user shells
     environment.systemPackages = systemShells;
 
