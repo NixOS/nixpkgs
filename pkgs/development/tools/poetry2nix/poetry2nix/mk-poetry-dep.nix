@@ -27,6 +27,7 @@ pythonPackages.callPackage
     , ...
     }@args:
     let
+      inherit (pkgs) stdenv;
       inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromPypi moduleName;
 
       inherit (import ./pep425.nix {
@@ -113,9 +114,10 @@ pythonPackages.callPackage
 
       buildInputs = (
         baseBuildInputs
+        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isLocal buildSystemPkgs
-        ++ lib.optional (!__isBootstrap) [ pythonPackages.poetry ]
+        ++ lib.optional (!__isBootstrap) pythonPackages.poetry
       );
 
       propagatedBuildInputs =
