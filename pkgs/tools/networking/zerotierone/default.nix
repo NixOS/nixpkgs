@@ -2,22 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
-  version = "1.4.6";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "1f8hh05wx59dc0fbzdzwq05x0gmrdfl4v103wbcyjmzsbazaw6p3";
+    sha256 = "0k0pirk5vg33s3vbzjjgyqpv57iz4qgm2jifpbr1kx40kgpf575a";
   };
 
   preConfigure = ''
-      substituteInPlace ./osdep/ManagedRoute.cpp \
-        --replace '/usr/sbin/ip' '${iproute}/bin/ip'
-
-      substituteInPlace ./osdep/ManagedRoute.cpp \
-        --replace '/sbin/ip' '${iproute}/bin/ip'
-
       patchShebangs ./doc/build.sh
       substituteInPlace ./doc/build.sh \
         --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
