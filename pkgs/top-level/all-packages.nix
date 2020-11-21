@@ -22455,6 +22455,8 @@ in
 
   packet = callPackage ../development/tools/packet { };
 
+  packet-sd = callPackage ../development/tools/packet-sd { };
+
   packet-cli = callPackage ../development/tools/packet-cli { };
 
   pb_cli = callPackage ../tools/misc/pb_cli {};
