@@ -115,6 +115,8 @@ in
         default = {};
         description = ''
           Any other configuration options you want to add.
+          See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuring-howto-packetbeat.html'/>
+          for all the configuration options available for packetbeat.
         '';
         example = ''
           output = {
@@ -251,6 +253,11 @@ in
 
       serviceConfig = mkMerge [
         {
+          DynamicUser = "yes";
+          AmbientCapabilities = [
+            "CAP_NET_RAW"
+            "CAP_NET_ADMIN"
+          ];
           ExecStart = ''
             ${cfg.package}/bin/packetbeat \
               -c ${format.generate "packetbeat.yml" cfg.settings} \
