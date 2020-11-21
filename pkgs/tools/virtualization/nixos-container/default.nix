@@ -1,4 +1,10 @@
-{ substituteAll, perlPackages, shadow, utillinux }:
+{ substituteAll
+, perlPackages
+, shadow
+, utillinux
+, configurationDirectory ? "/etc/nixos-containers"
+, stateDirectory ? "/var/lib/nixos-containers"
+}:
 
 substituteAll {
     name = "nixos-container";
@@ -8,6 +14,8 @@ substituteAll {
     perl = "${perlPackages.perl}/bin/perl -I${perlPackages.FileSlurp}/${perlPackages.perl.libPrefix}";
     su = "${shadow.su}/bin/su";
     inherit utillinux;
+
+    inherit configurationDirectory stateDirectory;
 
     postInstall = ''
       t=$out/etc/bash_completion.d
