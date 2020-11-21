@@ -153,8 +153,8 @@ stdenv.mkDerivation {
       cp -a contrib $out/share/git/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
-      mkdir -p $out/etc/bash_completion.d
-      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
+      mkdir -p $out/share/bash-completion/completions
+      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -249,6 +249,7 @@ stdenv.mkDerivation {
      '')
    + stdenv.lib.optionalString stdenv.isDarwin ''
     # enable git-credential-osxkeychain by default if darwin
+    mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF
     [credential]
       helper = osxkeychain

@@ -28,6 +28,21 @@ stdenv.mkDerivation rec {
   # fix build with gcc9
   NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
 
+  # Even when statically linking, libstdc++.la is put in dependency_libs here,
+  # and hence libstdc++.so passed to the linker, just pass -lstdc++ and let the
+  # compiler do what it does best.  (libaudiofile.la is a generated file, so we
+  # have to run `make` that far first).
+  #
+  # Without this, the executables in this package (sfcommands and examples)
+  # fail to build: https://github.com/NixOS/nixpkgs/issues/103215
+  #
+  # There might be a more sensible way to do this with autotools, but I am not
+  # smart enough to discover it.
+  preBuild = lib.optionalString stdenv.targetPlatform.isStatic ''
+    make -C libaudiofile $makeFlags
+    sed -i "s/dependency_libs=.*/dependency_libs=' -lstdc++'/" libaudiofile/libaudiofile.la
+  '';
+
   patches = [
     ./gcc-6.patch
     ./CVE-2015-7747.patch

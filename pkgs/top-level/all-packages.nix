@@ -5530,7 +5530,6 @@ in
   mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
 
   mailutils = callPackage ../tools/networking/mailutils {
-    guile = guile_2_0;  # compilation fails with guile 2.2
     sasl = gsasl;
   };
 
@@ -8952,7 +8951,7 @@ in
         inherit noSysDirs;
         # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
         profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-        isl = if !stdenv.isDarwin then isl_0_17 else null;
+        isl = if !stdenv.isDarwin then isl_0_20 else null;
 
         # just for stage static
         crossStageStatic = true;
@@ -9045,7 +9044,7 @@ in
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
-    isl = if !stdenv.isDarwin then isl_0_17 else null;
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
 
   gcc10 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/10 {
@@ -9059,7 +9058,7 @@ in
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
-    isl = if !stdenv.isDarwin then isl_0_17 else null;
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
 
   gcc_latest = gcc10;
@@ -12498,9 +12497,9 @@ in
   dbus-sharp-glib-1_0 = callPackage ../development/libraries/dbus-sharp-glib/dbus-sharp-glib-1.0.nix { };
   dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
 
-  makeDBusConf = { suidHelper, serviceDirectories }:
+  makeDBusConf = { suidHelper, serviceDirectories, apparmor }:
     callPackage ../development/libraries/dbus/make-dbus-conf.nix {
-      inherit suidHelper serviceDirectories;
+      inherit suidHelper serviceDirectories apparmor;
     };
 
   dee = callPackage ../development/libraries/dee { };
@@ -15173,8 +15172,9 @@ in
     python = python37;
   };
 
-  protobuf = protobuf3_13;
+  protobuf = protobuf3_14;
 
+  protobuf3_14 = callPackage ../development/libraries/protobuf/3.14.nix { };
   protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
   protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
