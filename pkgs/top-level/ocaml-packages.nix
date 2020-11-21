@@ -932,6 +932,8 @@ let
 
     rpclib = callPackage ../development/ocaml-modules/rpclib { };
 
+    rpclib-lwt = callPackage ../development/ocaml-modules/rpclib/lwt.nix { };
+
     rresult = callPackage ../development/ocaml-modules/rresult { };
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
