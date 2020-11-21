@@ -2879,7 +2879,7 @@ in
 
   clementineUnfree = clementine.unfree;
 
-  mellowplayer = libsForQt514.callPackage ../applications/audio/mellowplayer { };
+  mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
