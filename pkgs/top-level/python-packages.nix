@@ -3355,6 +3355,8 @@ in {
 
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
 
+  ledgerwallet = callPackage ../development/python-modules/ledgerwallet { };
+
   lektor = callPackage ../development/python-modules/lektor { };
 
   leveldb = callPackage ../development/python-modules/leveldb { };
