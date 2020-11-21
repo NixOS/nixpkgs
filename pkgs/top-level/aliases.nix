@@ -258,6 +258,7 @@ mapAliases ({
   inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.";
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
+  i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
   jasper = throw "jasper has been removed: abandoned upstream with many vulnerabilities";
   jbuilder = dune; # added 2018-09-09
