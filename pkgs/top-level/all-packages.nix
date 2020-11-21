@@ -28567,4 +28567,5 @@ in
 
   psftools = callPackage ../os-specific/linux/psftools {};
 
+  lc3tools = callPackage ../development/tools/lc3tools {};
 }
