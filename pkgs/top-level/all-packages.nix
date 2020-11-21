@@ -4585,7 +4585,7 @@ in
 
   hecate = callPackage ../applications/editors/hecate { };
 
-  heaptrack = libsForQt514.callPackage ../development/tools/profiling/heaptrack {};
+  heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
 
   heimdall = libsForQt5.callPackage ../tools/misc/heimdall { };
 
