@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
+{ stdenv, fetchurl, fetchpatch, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
   name = "openldap-2.4.50";
@@ -7,6 +7,24 @@ stdenv.mkDerivation rec {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
     sha256 = "1f46nlfwmys110j36sifm7ah8m8f3s10c3vaiikmmigmifapvdaw";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-25692.patch";
+      url = "https://git.openldap.org/openldap/openldap/-/commit/4c774220a752bf8e3284984890dc0931fe73165d.patch";
+      sha256 = "0mpmf2wqn1wsn94qrarahqff9600lb852zpvyh0g8bwr4cmi4bx7";
+    })
+    (fetchpatch {
+      name = "CVE-2020-25709.patch";
+      url = "https://git.openldap.org/openldap/openldap/-/commit/67670f4544e28fb09eb7319c39f404e1d3229e65.patch";
+      sha256 = "12rks96gzk80892mfjm93rvyda1rv2sh9zqdnz5j885l9wkksfaf";
+    })
+    (fetchpatch {
+      name = "CVE-2020-25710.patch";
+      url = "https://git.openldap.org/openldap/openldap/-/commit/bdb0d459187522a6063df13871b82ba8dcc6efe2.patch";
+      sha256 = "1v72zcz8dk8mr259ig1xrqqb4rjffzfsbmmzn9jgmi3qnf6cilyk";
+    })
+  ];
 
   # TODO: separate "out" and "bin"
   outputs = [ "out" "dev" "man" "devdoc" ];
