@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cc65";
-  version = "2.18";
+  version = "2.19";
 
   src = fetchFromGitHub {
     owner = "cc65";
     repo = pname;
     rev = "V${version}";
-    sha256 = "sha256-XRGhukYite1GtPkO9clmkwvvU62OnYphO8V1Rrr7yMg=";
+    sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}"];
