@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "6.4.1";
+  version = "7.1.0";
 
   src = fetchurl {
     url = "https://deb.termius.com/pool/main/t/termius-app/termius-app_${version}_amd64.deb";
-    sha256 = "0vc4nz5yndg11zhs92xj496jqzlhy9g0vqlfqrmg8zpf9ciygbqz";
+    sha256 = "801579b931ca0ad5340085df8863042336e2b609dd1cd6771260c873f3d2bb73";
   };
 
   desktopItem = makeDesktopItem {
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     cp -R "opt" "$out"
     cp -R "usr/share" "$out/share"
     chmod -R g-w "$out"
-
     # Desktop file
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne th0rgal ];
     platforms = [ "x86_64-linux" ];
   };
 }
