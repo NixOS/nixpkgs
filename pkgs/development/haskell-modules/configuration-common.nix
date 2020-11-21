@@ -937,8 +937,9 @@ self: super: {
   # Test suite depends on cabal-install
   doctest = dontCheck super.doctest;
 
-  # https://github.com/haskell-servant/servant-auth/issues/113
-  servant-auth-client = dontCheck super.servant-auth-client;
+  # dontCheck: https://github.com/haskell-servant/servant-auth/issues/113
+  # doJailbreak: waiting on revision 1 to hit hackage
+  servant-auth-client = doJailbreak (dontCheck super.servant-auth-client);
 
   # Generate cli completions for dhall.
   dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
@@ -1478,6 +1479,9 @@ self: super: {
   # https://github.com/kowainik/stan/issues/408
   # Tests disabled because of: https://github.com/kowainik/stan/issues/409
   stan = doJailbreak (dontCheck super.stan);
+
+  # Due to tests restricting base in 0.8.0.0 release
+  http-media = doJailbreak super.http-media;
 
   # 2020-11-19: Disabling tests with this issue: https://github.com/cchalmers/pcg-random/issues/10
   # Issue has been fixed in 0.1.3.7, we can enable tests again, once stackage bumps the version
