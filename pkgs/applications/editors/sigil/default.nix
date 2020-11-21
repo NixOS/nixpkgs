@@ -24,6 +24,10 @@ mkDerivation rec {
     python3Packages.lxml
   ];
 
+  prePatch = ''
+    sed -i '/^QTLIB_DIR=/ d' src/Resource_Files/bash/sigil-sh_install
+  '';
+
   dontWrapQtApps = true;
 
   preFixup = ''

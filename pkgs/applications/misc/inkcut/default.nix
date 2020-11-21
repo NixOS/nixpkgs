@@ -1,16 +1,20 @@
-{ lib, python3Packages, fetchFromGitHub, wrapQtAppsHook }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapQtAppsHook
+}:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "inkcut";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c0mfdfy9iq4l683f3aa7cm7x2w9px83dyigc7655wvaq3bxi2rp";
+    sha256 = "1zn5i69f3kimcwdd2qkqd3hd1hq76a6i5wxxfb91ih2hj04vdbmx";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
