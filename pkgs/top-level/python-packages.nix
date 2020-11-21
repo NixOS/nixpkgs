@@ -4779,6 +4779,8 @@ in {
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
 
+  psycopg2cffi = callPackage ../development/python-modules/psycopg2cffi { };
+
   ptable = callPackage ../development/python-modules/ptable { };
 
   ptest = callPackage ../development/python-modules/ptest { };
