@@ -8,6 +8,7 @@
 # Runtime
 , coreutils, faac, pciutils, procps, utillinux
 , pulseaudioSupport ? true, libpulseaudio ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -45,7 +46,8 @@ in mkDerivation {
     qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
   ];
 
-  runtimeDependencies = optional pulseaudioSupport libpulseaudio;
+  runtimeDependencies = optional pulseaudioSupport libpulseaudio
+    ++ optional alsaSupport alsaLib;
 
   installPhase =
     let
