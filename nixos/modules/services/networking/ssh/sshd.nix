@@ -122,6 +122,15 @@ in
         '';
       };
 
+      sftpServerExecutable = mkOption {
+        type = types.str;
+        example = "internal-sftp";
+        description = ''
+          The sftp server executable.  Can be a path or "internal-sftp" to use
+          the sftp server built into the sshd binary.
+        '';
+      };
+
       sftpFlags = mkOption {
         type = with types; listOf str;
         default = [];
@@ -386,6 +395,7 @@ in
       };
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
+    services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
 
     environment.etc = authKeysFiles //
       { "ssh/moduli".source = cfg.moduliFile;
@@ -505,7 +515,7 @@ in
         ''}
 
         ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
+          Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
         ''}
 
         PermitRootLogin ${cfg.permitRootLogin}
