@@ -51,8 +51,10 @@ chrisbra/Recover.vim
 chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
+ChristianChiarulli/nvcode-color-schemes.vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
+chuling/ci_dark
 ckarnell/antonys-macro-repeater
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
@@ -103,6 +105,7 @@ enricobacis/vim-airline-clock
 ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
+euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
 fannheyward/coc-markdownlint
 farmergreg/vim-lastplace
@@ -164,6 +167,7 @@ idris-hackers/idris-vim
 Inazuma110/deoplete-greek
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
+Iron-E/nvim-highlite
 itchyny/calendar.vim
 itchyny/lightline.vim
 itchyny/thumbnail.vim
@@ -243,6 +247,8 @@ kristijanhusak/vim-carbon-now-sh
 kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
+kyazdani42/nvim-tree.lua
+kyazdani42/nvim-web-devicons
 lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
@@ -435,15 +441,20 @@ rhysd/git-messenger.vim
 rhysd/vim-clang-format
 rhysd/vim-grammarous
 rhysd/vim-operator-surround
+RishabhRD/nvim-lsputils
+RishabhRD/popfix
 rodjek/vim-puppet
 romainl/vim-cool
+romainl/vim-qf
 roman/golden-ratio
 romgrk/barbar.nvim
+romgrk/nvim-treesitter-context
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
 roxma/vim-tmux-clipboard
+RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rust-lang/rust.vim
 ryanoasis/vim-devicons
@@ -486,6 +497,7 @@ slashmili/alchemist.vim
 sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf
+steelsojka/completion-buffers
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 sunaku/vim-dasht
@@ -509,6 +521,7 @@ thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
+tjdevries/nlua.nvim
 tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux

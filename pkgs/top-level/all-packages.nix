@@ -1481,7 +1481,7 @@ in
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
-  birdtray = libsForQt514.callPackage ../applications/misc/birdtray { };
+  birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
   bitbucket-cli = python2Packages.bitbucket-cli;
 
@@ -3520,7 +3520,7 @@ in
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
-  strawberry = libsForQt514.callPackage ../applications/audio/strawberry { };
+  strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
   tealdeer = callPackage ../tools/misc/tealdeer {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5024,21 +5024,21 @@ in
 
   kpcli = callPackage ../tools/security/kpcli { };
 
-  krename = libsForQt514.callPackage ../applications/misc/krename { };
+  krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
-  kronometer = libsForQt514.callPackage ../tools/misc/kronometer { };
+  kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
   krop = callPackage ../applications/graphics/krop { };
 
-  kdiff3 = libsForQt514.callPackage ../tools/text/kdiff3 { };
+  kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
-  peruse = libsForQt514.callPackage ../tools/misc/peruse { };
+  peruse = libsForQt5.callPackage ../tools/misc/peruse { };
 
   ksmoothdock = libsForQt514.callPackage ../applications/misc/ksmoothdock { };
 
@@ -6298,7 +6298,7 @@ in
 
   paperless = callPackage ../applications/office/paperless { };
 
-  paperwork = callPackage ../applications/office/paperwork { };
+  paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   papertrail = callPackage ../tools/text/papertrail { };
 
@@ -6442,6 +6442,8 @@ in
   philter = callPackage ../tools/networking/philter { };
 
   phodav = callPackage ../tools/networking/phodav { };
+
+  pim6sd = callPackage ../servers/pim6sd { };
 
   pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
@@ -6688,7 +6690,7 @@ in
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
-  qlcplus = libsForQt512.callPackage ../applications/misc/qlcplus { };
+  qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
   qnial = callPackage ../development/interpreters/qnial { };
 
@@ -6934,7 +6936,7 @@ in
 
   rshijack = callPackage ../tools/networking/rshijack { };
 
-  rsibreak = libsForQt514.callPackage ../applications/misc/rsibreak { };
+  rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
     pythonPackages = python3Packages;
@@ -7158,7 +7160,7 @@ in
 
   sigal = callPackage ../applications/misc/sigal { };
 
-  sigil = libsForQt514.callPackage ../applications/editors/sigil { };
+  sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
@@ -9228,7 +9230,7 @@ in
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc884;
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8102;
 
   inherit (haskellPackages) ghc;
 
@@ -10803,7 +10805,7 @@ in
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9 electron_10;
+    electron electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9 electron_10 electron_11;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -11545,7 +11547,7 @@ in
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
-  massif-visualizer = libsForQt514.callPackage ../development/tools/analysis/massif-visualizer { };
+  massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven {
@@ -12297,7 +12299,7 @@ in
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
+  cachix = haskell.lib.justStaticExecutables (haskell.lib.unmarkBroken haskell.packages.ghc883.cachix);
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
@@ -12685,8 +12687,7 @@ in
 
   flyway = callPackage ../development/tools/flyway { };
 
-  inherit (callPackages ../development/libraries/fmt { })
-    fmt_6 fmt_7;
+  inherit (callPackages ../development/libraries/fmt { }) fmt_7;
 
   fmt = fmt_7;
 
@@ -15381,7 +15382,13 @@ in
 
     grantlee = callPackage ../development/libraries/grantlee/5 { };
 
+    qtcurve = callPackage ../data/themes/qtcurve {};
+
+    herqq = callPackage ../development/libraries/herqq { };
+
     kdb = callPackage ../development/libraries/kdb { };
+
+    kde2-decoration = callPackage ../data/themes/kde2 { };
 
     kdiagram = callPackage ../development/libraries/kdiagram { };
 
@@ -15446,6 +15453,8 @@ in
     pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+
+    qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
       inherit (darwin.apple_sdk.libs) utmp;
@@ -16162,6 +16171,7 @@ in
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
 
+  vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools { };
@@ -16830,9 +16840,7 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
-  gerbera = callPackage ../servers/gerbera {
-    fmt = fmt_6;
-  };
+  gerbera = callPackage ../servers/gerbera {};
 
   gobetween = callPackage ../servers/gobetween { };
 
@@ -19432,8 +19440,6 @@ in
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
 
-  kde2-decoration = libsForQt514.callPackage ../data/themes/kde2 { };
-
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
@@ -19685,8 +19691,6 @@ in
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
   qogir-theme = callPackage ../data/themes/qogir { };
-
-  qtcurve = libsForQt514.callPackage ../data/themes/qtcurve {};
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
@@ -20017,7 +20021,7 @@ in
 
   msgviewer = callPackage ../applications/networking/mailreaders/msgviewer { };
 
-  amarok = libsForQt514.callPackage ../applications/audio/amarok { };
+  amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
 
   amfora = callPackage ../applications/networking/browsers/amfora { };
@@ -20420,7 +20424,7 @@ in
 
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
-  clipgrab = libsForQt514.callPackage ../applications/video/clipgrab { };
+  clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
   clipcat = callPackage ../applications/misc/clipcat { };
 
@@ -20449,7 +20453,7 @@ in
 
   cntr = callPackage ../applications/virtualization/cntr { };
 
-  communi = libsForQt514.callPackage ../applications/networking/irc/communi { };
+  communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
   confclerk = callPackage ../applications/misc/confclerk { };
 
@@ -20472,7 +20476,7 @@ in
     pygments = python27Packages.pygments;
   };
 
-  csound-qt = libsForQt514.callPackage ../applications/audio/csound/csound-qt {
+  csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt {
     python = python27;
   };
 
@@ -20517,7 +20521,7 @@ in
 
   curseradio = callPackage ../applications/audio/curseradio { };
 
-  cutecom = libsForQt514.callPackage ../tools/misc/cutecom { };
+  cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
   cvs = callPackage ../applications/version-management/cvs { };
 
@@ -20955,7 +20959,7 @@ in
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
-  fritzing = libsForQt514.callPackage ../applications/science/electronics/fritzing { };
+  fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
   fsv = callPackage ../applications/misc/fsv { };
 
@@ -21175,7 +21179,7 @@ in
 
   redoflacs = callPackage ../applications/audio/redoflacs { };
 
-  flameshot = libsForQt514.callPackage ../tools/misc/flameshot { };
+  flameshot = libsForQt5.callPackage ../tools/misc/flameshot { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer (config.flashplayer or {});
 
@@ -21642,9 +21646,7 @@ in
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
-  waybar = callPackage ../applications/misc/waybar {
-    fmt = fmt_6;
-  };
+  waybar = callPackage ../applications/misc/waybar {};
 
   hikari = callPackage ../applications/window-managers/hikari { };
 
@@ -21653,6 +21655,8 @@ in
   };
 
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
+
+  i3altlayout = callPackage ../applications/window-managers/i3/altlayout.nix { };
 
   i3-easyfocus = callPackage ../applications/window-managers/i3/easyfocus.nix { };
 
@@ -21955,7 +21959,7 @@ in
 
   keyfinder-cli = libsForQt5.callPackage ../applications/audio/keyfinder-cli { };
 
-  kgraphviewer = libsForQt514.callPackage ../applications/graphics/kgraphviewer { };
+  kgraphviewer = libsForQt5.callPackage ../applications/graphics/kgraphviewer { };
 
   khal = callPackage ../applications/misc/khal { };
 
@@ -21978,7 +21982,8 @@ in
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
-  kmymoney = libsForQt5.callPackage ../applications/office/kmymoney { };
+  # Pinned to qt5.14 due to kdewebkit (depends on qtwebkit) which is currently broken with qt5.15
+  kmymoney = libsForQt514.callPackage ../applications/office/kmymoney { };
 
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
@@ -22000,7 +22005,7 @@ in
 
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
-  ktorrent = libsForQt514.callPackage ../applications/networking/p2p/ktorrent { };
+  ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
@@ -22187,7 +22192,7 @@ in
 
   lsp-plugins = callPackage ../applications/audio/lsp-plugins { };
 
-  luminanceHDR = libsForQt514.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
@@ -22308,6 +22313,7 @@ in
 
   meme = callPackage ../applications/graphics/meme { };
 
+  # Needs qtwebkit which is broken on qt5.15
   mendeley = libsForQt514.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
   };
@@ -22323,6 +22329,7 @@ in
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
+  # Needs qtwebkit which is broken on qt5.15
   merkaartor = libsForQt514.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
@@ -22352,7 +22359,7 @@ in
 
   minishift = callPackage ../applications/networking/cluster/minishift { };
 
-  minitube = libsForQt514.callPackage ../applications/video/minitube { };
+  minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
   mimic = callPackage ../applications/audio/mimic { };
 
@@ -22609,11 +22616,10 @@ in
 
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
-  ostinato = callPackage ../applications/networking/ostinato {
-    wireshark = wireshark.override { qt5 = qt514; };
-  };
+  ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
   p4 = callPackage ../applications/version-management/p4 { };
+  # Broken with Qt5.15 because qtwebkit is broken with it
   p4v = libsForQt514.callPackage ../applications/version-management/p4v { };
 
   partio = callPackage ../development/libraries/partio {};
@@ -22675,7 +22681,7 @@ in
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
 
-  rssguard = libsForQt514.callPackage ../applications/networking/feedreaders/rssguard { };
+  rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
@@ -22847,11 +22853,13 @@ in
     inherit (gnome2) libglade;
   };
 
-  obs-studio = libsForQt514.callPackage ../applications/video/obs-studio { };
+  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
 
-  obs-v4l2sink = libsForQt514.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
+  obs-move-transition = callPackage ../applications/video/obs-studio/obs-move-transition.nix { };
+
+  obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
 
   obs-ndi = libsForQt514.callPackage ../applications/video/obs-studio/obs-ndi.nix { };
 
@@ -23167,7 +23175,7 @@ in
 
   properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
-  protonmail-bridge = libsForQt512.callPackage ../applications/networking/protonmail-bridge { };
+  protonmail-bridge = libsForQt5.callPackage ../applications/networking/protonmail-bridge { };
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
@@ -23175,9 +23183,9 @@ in
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
-  psi = libsForQt514.callPackage ../applications/networking/instant-messengers/psi { };
+  psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
-  psi-plus = libsForQt514.callPackage ../applications/networking/instant-messengers/psi-plus { };
+  psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
 
   psol = callPackage ../development/libraries/psol { };
 
@@ -23421,8 +23429,9 @@ in
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
-  retroshare = libsForQt514.callPackage ../applications/networking/p2p/retroshare { };
-  retroshare06 = retroshare;
+  # This package is currently broken with libupnp
+  # But when unbroken, it should work with the stable Qt5
+  retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
 
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
 
@@ -23678,7 +23687,7 @@ in
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
-  skrooge = libsForQt514.callPackage ../applications/office/skrooge {};
+  skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
   smartgithg = callPackage ../applications/version-management/smartgithg {
     jre = openjdk11;
@@ -23694,11 +23703,11 @@ in
 
   sipp = callPackage ../development/tools/misc/sipp { };
 
-  skanlite = libsForQt514.callPackage ../applications/office/skanlite { };
+  skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
 
   soci = callPackage ../development/libraries/soci { };
 
-  sonic-lineup = libsForQt514.callPackage ../applications/audio/sonic-lineup { };
+  sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
@@ -23873,7 +23882,7 @@ in
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
-  teamspeak_client = libsForQt512.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskell = haskell.lib.justStaticExecutables haskellPackages.taskell;
@@ -24210,7 +24219,7 @@ in
     system-libvirt = libvirt;
   };
 
-  virt-manager-qt = libsForQt514.callPackage ../applications/virtualization/virt-manager/qt.nix {
+  virt-manager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
     qtermwidget = lxqt.qtermwidget;
   };
 
@@ -24372,7 +24381,7 @@ in
 
   wayvnc = callPackage ../applications/networking/remote/wayvnc { };
 
-  webcamoid = libsForQt514.callPackage ../applications/video/webcamoid { };
+  webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
@@ -24910,7 +24919,7 @@ in
 
   zombietrackergps = libsForQt514.callPackage ../applications/gis/zombietrackergps { };
 
-  zoom-us = libsForQt514.callPackage ../applications/networking/instant-messengers/zoom-us { };
+  zoom-us = libsForQt5.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
 
@@ -25046,6 +25055,8 @@ in
 
   ### GAMES
 
+  _1oom = callPackage ../games/1oom { };
+
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
 
   _20kly = callPackage ../games/20kly { };
@@ -25151,7 +25162,7 @@ in
 
   chessx = libsForQt5.callPackage ../games/chessx { };
 
-  chiaki = libsForQt514.callPackage ../games/chiaki { };
+  chiaki = libsForQt5.callPackage ../games/chiaki { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
@@ -25595,7 +25606,7 @@ in
 
   papermc = callPackage ../games/papermc { };
 
-  pentobi = libsForQt514.callPackage ../games/pentobi { };
+  pentobi = libsForQt5.callPackage ../games/pentobi { };
 
   performous = callPackage ../games/performous {
     boost = boost166;
@@ -25680,11 +25691,11 @@ in
 
   rrootage = callPackage ../games/rrootage { };
 
-  saga = libsForQt514.callPackage ../applications/gis/saga {
+  saga = libsForQt5.callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  samplv1 = callPackage ../applications/audio/samplv1 { qt5 = qt514; };
+  samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
@@ -26585,7 +26596,7 @@ in
 
   xfitter = callPackage ../applications/science/physics/xfitter {};
 
-  xflr5 = libsForQt514.callPackage ../applications/science/physics/xflr5 { };
+  xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
 
   ### SCIENCE/PROGRAMMING
 
@@ -26814,7 +26825,7 @@ in
 
   adms = callPackage ../applications/science/electronics/adms { };
 
-  appcsxcad = libsForQt514.callPackage ../applications/science/electronics/appcsxcad { };
+  appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
 
   # Since version 8 Eagle requires an Autodesk account and a subscription
   # in contrast to single payment for the charged editions.
@@ -26823,7 +26834,7 @@ in
     openssl = openssl_1_0_2;
   };
 
-  eagle = libsForQt514.callPackage ../applications/science/electronics/eagle/eagle.nix { };
+  eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
@@ -26865,8 +26876,6 @@ in
   openems = callPackage ../applications/science/electronics/openems { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
-
-  qcsxcad = libsForQt514.callPackage ../applications/science/electronics/qcsxcad { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
@@ -27143,7 +27152,7 @@ in
 
   cached-nix-shell = callPackage ../tools/nix/cached-nix-shell {};
 
-  calaos_installer = libsForQt514.callPackage ../misc/calaos/installer {};
+  calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
   ccemux = callPackage ../misc/emulators/ccemux { };
 
@@ -27942,7 +27951,7 @@ in
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
-  tellico = libsForQt514.callPackage ../applications/misc/tellico { };
+  tellico = libsForQt5.callPackage ../applications/misc/tellico { };
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
 
@@ -27993,7 +28002,7 @@ in
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
-  vnote = libsForQt514.callPackage ../applications/office/vnote { };
+  vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
@@ -28308,7 +28317,7 @@ in
     inherit pkgs;
   };
 
-  golden-cheetah = libsForQt512.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = libsForQt514.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 

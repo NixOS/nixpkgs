@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.32.0";
+  version = "1.33.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "da12b7bd79bbe978a7945a44b600604fbc10ece2935d31f243e751f99135e34f";
+    sha256 = "900ba027bdee6b97f21cd22d1db3d1a6233ede5de2db4754db860438bdad72d2";
   };
 
   disabled = pythonOlder "3.5";

@@ -10,43 +10,34 @@
 , dbus
 , libnotify
 , wrapGAppsHook
+, fetchFromGitLab
+, which
+, gettext
+, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
-  inherit (python3Packages.paperwork-backend) version src;
+  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
   pname = "paperwork";
 
   sourceRoot = "source/paperwork-gtk";
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
-    themeDir="$(echo "${gnome3.adwaita-icon-theme}/share/icons/"*)"
-    sed -i -e "s,/usr/share/icons/gnome,$themeDir," src/paperwork/deps.py
+    chmod a+w -R ..
+    patchShebangs ../tools
 
-    sed -i -e 's,sys\.prefix,"",g' \
-      src/paperwork/frontend/aboutdialog/__init__.py \
-      src/paperwork/frontend/mainwindow/__init__.py \
-      setup.py
+    export HOME=$(mktemp -d)
 
-    sed -i -e '/^UI_FILES_DIRS = \[/,/^\]$/ {
-      c UI_FILES_DIRS = ["'"$out/share/paperwork"'"]
-    }' src/paperwork/frontend/util/__init__.py
-
-    sed -i -e '/^LOCALE_PATHS = \[/,/^\]$/ {
-      c LOCALE_PATHS = ["'"$out/share"'"]
-    }' src/paperwork/paperwork.py
-
-    sed -i -e 's/"icon"/"icon-name"/g' \
-      src/paperwork/frontend/mainwindow/mainwindow.glade
-
-    sed -i -e 's/"logo"/"logo-icon-name"/g' \
-      src/paperwork/frontend/aboutdialog/aboutdialog.glade
-
-    cat - ../AUTHORS.py > src/paperwork/_version.py <<EOF
+    cat - ../AUTHORS.py > src/paperwork_gtk/_version.py <<EOF
     # -*- coding: utf-8 -*-
     version = "${version}"
     authors_code=""
     EOF
+  '';
+
+  preBuild = ''
+    make l10n_compile
   '';
 
   ASPELL_CONF = "dict-dir ${buildEnv {
@@ -56,22 +47,33 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     # paperwork-shell needs to be re-wrapped with access to paperwork
-    cp ${python3Packages.paperwork-backend}/bin/.paperwork-shell-wrapped $out/bin/paperwork-shell
+    cp ${python3Packages.paperwork-shell}/bin/.paperwork-cli-wrapped $out/bin/paperwork-cli
     # install desktop files and icons
-    XDG_DATA_HOME=$out/share $out/bin/paperwork-shell install
+    XDG_DATA_HOME=$out/share $out/bin/paperwork-gtk install --user
   '';
 
-  checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
+  checkInputs = [ xvfb_run dbus.daemon ];
 
   nativeBuildInputs = [
     wrapGAppsHook
+    gobject-introspection
+    (lib.getBin gettext)
+    which
   ];
 
   buildInputs = [
     gnome3.adwaita-icon-theme
     libnotify
     librsvg
+    gtk3
+    cairo
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # A few parts of chkdeps need to have a display and a dbus session, so we not
   # only need to run a virtual X server + dbus but also have a large enough
@@ -79,14 +81,15 @@ python3Packages.buildPythonApplication rec {
   preCheck = ''
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      paperwork-shell chkdeps paperwork
+      $out/bin/paperwork-gtk chkdeps
   '';
 
   propagatedBuildInputs = with python3Packages; [
     paperwork-backend
+    paperwork-shell
+    openpaperwork-gtk
+    openpaperwork-core
     pypillowfight
-    gtk3
-    cairo
     pyxdg
     dateutil
     setuptools
