@@ -5788,6 +5788,8 @@ in {
 
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
+  python-crontab = callPackage ../development/python-modules/python-crontab { };
+
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
 
   python-daemon = callPackage ../development/python-modules/python-daemon { };

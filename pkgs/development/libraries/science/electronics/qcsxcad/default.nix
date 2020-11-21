@@ -1,11 +1,10 @@
-{ stdenv
+{ lib
 , mkDerivation
 , fetchFromGitHub
 , cmake
 , csxcad
 , tinyxml
 , vtkWithQt5
-, wrapQtAppsHook
 , qtbase
 }:
 
@@ -20,13 +19,13 @@ mkDerivation {
     sha256 = "11kbh0mxbdfh7s5azqin3i2alic5ihmdfj0jwgnrhlpjk4cbf9rn";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DCSXCAD_ROOT_DIR=${csxcad}"
     "-DENABLE_RPATH=OFF"
   ];
@@ -40,7 +39,7 @@ mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt library for CSXCAD";
     homepage = "https://github.com/thliebig/QCSXCAD";
     license = licenses.gpl3;

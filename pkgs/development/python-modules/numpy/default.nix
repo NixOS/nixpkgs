@@ -58,9 +58,13 @@ in buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
+  # we default openblas to build with 64 threads
+  # if a machine has more than 64 threads, it will segfault
+  # see https://github.com/xianyi/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
   preBuild = ''

@@ -81,8 +81,8 @@ self: super: {
   snap-server = doJailbreak super.snap-server;
   exact-pi = doJailbreak super.exact-pi;
   time-compat = doJailbreak super.time-compat;
-  http-media = doJailbreak super.http-media;
-  servant-server = doJailbreak super.servant-server;
+  http-media = unmarkBroken (doJailbreak super.http-media);
+  servant-server = unmarkBroken (doJailbreak super.servant-server);
   foundation = dontCheck super.foundation;
   vault = dontHaddock super.vault;
 
