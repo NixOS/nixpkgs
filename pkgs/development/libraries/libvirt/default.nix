@@ -4,10 +4,11 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto, darwin
+, curl, libiconv, gmp, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto, darwin
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
+, enableZfs ? false, zfs
 }:
 
 with stdenv.lib;
@@ -47,7 +48,7 @@ in stdenv.mkDerivation rec {
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 utillinux systemd libnl numad zfs
+    libpciaccess lvm2 utillinux systemd libnl numad
     libapparmor libcap_ng numactl attr parted libtirpc
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
@@ -55,6 +56,8 @@ in stdenv.mkDerivation rec {
     openiscsi
   ] ++ optionals enableCeph [
     ceph
+  ] ++ optionals enableZfs [
+    zfs
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -97,7 +100,7 @@ in stdenv.mkDerivation rec {
     "--with-macvtap"
     "--with-virtualport"
     "--with-storage-disk"
-  ] ++ optionals (stdenv.isLinux && zfs != null) [
+  ] ++ optionals (stdenv.isLinux && enableZfs) [
     "--with-storage-zfs"
   ] ++ optionals enableIscsi [
     "--with-storage-iscsi"
