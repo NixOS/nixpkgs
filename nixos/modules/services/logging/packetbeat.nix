@@ -68,7 +68,7 @@ in
               };
 
               protocols = mkOption {
-                type = format.type;
+                type = types.listOf format.type;
                 description = ''
                   Configuration of what protocols packetbeat should gather info about.
                   See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-protocols.html'/>
@@ -157,51 +157,64 @@ in
           timeout = mkDefault "30s";
           period = mkDefault "10s";
         };
-        protocols = mapAttrs (name: mkDefault) {
-          icmp = {
+        protocols = mkBefore [
+          {
+            "type" = "icmp";
             enabled = true;
-          };
-          amqp = {
+          }
+          {
+            "type" = "amqp";
             ports = [ 5672 ];
-          };
-          cassandra = {
+          }
+          {
+            "type" = "cassandra";
             ports = [ 9042 ];
-          };
-          dhcpv4 = {
+          }
+          {
+            "type" = "dhcpv4";
             ports = [ 67 68 ];
-          };
-          dns = {
+          }
+          {
+            "type" = "dns";
             ports = [ 53 ];
-          };
-          http = {
+          }
+          {
+            "type" = "http";
             ports = [ 80 8080 8000 5000 8002 ];
-          };
-          memcache = {
+          }
+          {
+            "type" = "memcache";
             ports = [ 11211 ];
-          };
-          mysql = {
+          }
+          {
+            "type" = "mysql";
             ports = [ 3306 3307 ];
-          };
-          pgsql = {
+          }
+          {
+            "type" = "pgsql";
             ports = [ 5432 ];
-          };
-          redis = {
+          }
+          {
+            "type" = "redis";
             ports = [ 6379 ];
-          };
-          thrift = {
+          }
+          {
+            "type" = "thrift";
             ports = [ 9090 ];
-          };
-          mongodb = {
+          }
+          {
+            "type" = "mongodb";
             ports = [ 27017 ];
-          };
-          nfs = {
+          }
+          {
+            "type" = "nfs";
             ports = [ 2049 ];
-          };
-          tls = {
+          }
+          {
+            "type" = "tls";
             ports = [ 443 993 995 5223 8443 8883 9243 ];
-          };
-        };
-
+          }
+        ];
       };
       output = {
         elasticsearch = {
