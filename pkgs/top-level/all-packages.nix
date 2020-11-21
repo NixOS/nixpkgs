@@ -25224,6 +25224,8 @@ in
 
   displaycal = callPackage ../applications/graphics/displaycal {};
 
+  domination = callPackage ../games/domination { };
+
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
