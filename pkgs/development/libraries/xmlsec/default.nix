@@ -1,5 +1,7 @@
 { stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool
-, openssl, nss, lib, runCommandCC, writeText }:
+# nss_3_53 is used instead of the latest due to a number of issues:
+# https://github.com/lsh123/xmlsec/issues?q=is%3Aissue+is%3Aopen+nss
+, openssl, nss_3_53, lib, runCommandCC, writeText }:
 
 lib.fix (self:
 let
@@ -25,11 +27,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
+  buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss_3_53 ];
 
   enableParallelBuilding = true;
   doCheck = true;
-  checkInputs = [ nss.tools ];
+  checkInputs = [ nss_3_53.tools ];
 
   # enable deprecated soap headers required by lasso
   # https://dev.entrouvert.org/issues/18771
