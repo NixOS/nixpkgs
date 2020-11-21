@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, nixosTests }:
+{ stdenv, fetchurl, unzip }:
 
 let
   version = "1.6.0";
@@ -39,8 +39,6 @@ in stdenv.mkDerivation {
     mv vault $out/bin
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
   '';
-
-  passthru.tests.vault = nixosTests.vault;
 
   meta = with stdenv.lib; {
     homepage = "https://www.vaultproject.io";
