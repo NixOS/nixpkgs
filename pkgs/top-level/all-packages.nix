@@ -25262,9 +25262,7 @@ in
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam = libsForQt514.callPackage ../applications/graphics/digikam {
-    opencv3 = opencv3WithoutCuda;
-  };
+  digikam = libsForQt514.callPackage ../applications/graphics/digikam {};
 
   displaycal = callPackage ../applications/graphics/displaycal {};
 
