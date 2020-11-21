@@ -11,6 +11,7 @@
 , file
 , protobufc
 , libiconv
+, nixosTests
 }:
 stdenv.mkDerivation rec {
   pname = "postgis";
@@ -64,6 +65,8 @@ stdenv.mkDerivation rec {
     mkdir -p $doc/share/doc/postgis
     mv doc/* $doc/share/doc/postgis/
   '';
+
+  passthru.tests.postgis = nixosTests.postgis;
 
   meta = with stdenv.lib; {
     description = "Geographic Objects for PostgreSQL";
