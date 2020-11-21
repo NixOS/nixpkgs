@@ -234,16 +234,29 @@ in
         };
       };
       processors = mkDefault [
-        ''
-          if.contains.tags: forwarded
-          then:
-            - drop_fields:
-              fields: [host]
-          else:
-            - add_host_metadata: ~
-        ''
-        "add_cloud_metadata: ~"
-        "add_docker_metadata: ~"
+        {
+          "if.contains.tags" = "forwarded";
+          "then" = [
+            {
+              drop_fields = {
+                fields = [
+                  "host"
+                ];
+              };
+            }
+          ];
+          "else" = [
+            {
+              add_host_metadata = null;
+            }
+          ];
+        }
+        {
+          add_cloud_metadata = null;
+        }
+        {
+          add_docker_metadata = null;
+        }
       ];
     };
 
