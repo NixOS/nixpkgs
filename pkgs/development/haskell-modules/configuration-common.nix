@@ -1500,4 +1500,21 @@ self: super: {
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
   snap = doJailbreak super.snap;
 
+  # 2020-11-21: cachix + chachix-api needs a patch for ghc 8.10 compat. Can be removed once released
+  # https://github.com/cachix/cachix/pull/331
+  cachix-api = appendPatch super.cachix-api (pkgs.fetchpatch {
+    url = https://github.com/cachix/cachix/commit/bfeec151a03afad72401815fe8bbb1b0d5d63b0d.patch;
+    sha256 = "0rglyd77g4j72l5g0sj9zpq2hy3v992bm6nhj58pmj4j2aj67y74";
+    stripLen = 2;
+    extraPrefix = "";
+    includes = [ "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" ];
+  });
+  cachix = appendPatch super.cachix (pkgs.fetchpatch {
+    url = https://github.com/cachix/cachix/commit/bfeec151a03afad72401815fe8bbb1b0d5d63b0d.patch;
+    sha256 = "06jmpz8l5vh9cch5aqdbrln7bm3fghxsicwy1m93avli320kp8pp";
+    stripLen = 2;
+    extraPrefix = "";
+    excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
