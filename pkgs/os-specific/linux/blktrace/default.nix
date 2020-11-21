@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ libaio ];
 
+  patches = [ ./cve-2018-10689.patch ];
+
   preConfigure = ''
     sed s,/usr/local,$out, -i Makefile
   '';
