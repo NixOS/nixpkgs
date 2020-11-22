@@ -31,13 +31,13 @@ uhd
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "4.21.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "y6BVwnSJXiapgm9pAuby1DLLeU5MSyB4uqEa3oS35/U=";
+    sha256 = "1vnalzlhvw6ngyg6rbf3h5ph6llf9637208g7fzbki27wxkbfbpm";
     fetchSubmodules = false;
   };
 
