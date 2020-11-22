@@ -34,10 +34,18 @@ stdenv.mkDerivation rec {
     sha256 = "0r58xnjgkw0kmnnzhb32mk5gkkani5kbi5krybpbag156fqhgxg4";
   };
 
-  patches = optional smimeSupport (fetchpatch {
-    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
-    sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
-  });
+  patches = [
+    # CVE-2020-28896
+    (fetchpatch {
+      url = "https://gitlab.com/muttmua/mutt/-/commit/04b06aaa3e0cc0022b9b01dbca2863756ebbf59a.patch";
+      sha256 = "117mm757yj4k4cb9f1cmc9p0dqmi2mf92qsxvi8a794b9kdj5m2z";
+    })
+  ] ++ optional smimeSupport [
+    (fetchpatch {
+      url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
+      sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
+    })
+  ];
 
   buildInputs =
     [ ncurses which perl ]
