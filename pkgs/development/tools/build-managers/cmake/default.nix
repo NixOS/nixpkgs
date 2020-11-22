@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.18.4";
+  version = "3.19.0";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "0xsg5lw3i4bw610q987cwz3iz06x3lrbbaa2mnzyr4kaiqsn2z2r";
+    sha256 = "14zlrb7awiazxc5wlvgah9rw1dm4ziczbxiyqsvp4zmaan0ninpx";
   };
 
   patches = [
