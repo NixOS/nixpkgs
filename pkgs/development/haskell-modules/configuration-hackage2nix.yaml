@@ -8032,6 +8032,7 @@ broken-packages:
   - mu-protobuf
   - mu-rpc
   - mu-schema
+  - mu-servant-server
   - mu-tracing
   - MuCheck
   - MuCheck-Hspec
@@ -9150,6 +9151,7 @@ broken-packages:
   - rclient
   - rdioh
   - react-flux
+  - react-flux-servant
   - react-haskell
   - react-tutorial-haskell-server
   - reaction-logic
@@ -9359,6 +9361,7 @@ broken-packages:
   - rfc-prelude
   - rfc-psql
   - rfc-redis
+  - rfc-servant
   - rg
   - rhythm-game-tutorial
   - rib
@@ -9623,6 +9626,23 @@ broken-packages:
   - serpentine
   - serv
   - serv-wai
+  - servant-auth-cookie
+  - servant-auth-token
+  - servant-auth-token-acid
+  - servant-auth-token-api
+  - servant-auth-token-leveldb
+  - servant-auth-token-persistent
+  - servant-auth-token-rocksdb
+  - servant-cli
+  - servant-csharp
+  - servant-db-postgresql
+  - servant-examples
+  - servant-iCalendar
+  - servant-jquery
+  - servant-js
+  - servant-openapi3
+  - servant-snap
+  - servant-waargonaut
   - server-generic
   - serversession-backend-acid-state
   - serversession-backend-persistent
@@ -10893,6 +10913,7 @@ broken-packages:
   - verilog
   - verismith
   - versioning
+  - versioning-servant
   - vflow-types
   - vfr-waypoints
   - vgrep
