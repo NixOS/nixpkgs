@@ -13051,6 +13051,8 @@ in
 
   pgpkeyserver-lite = callPackage ../servers/web-apps/pgpkeyserver-lite {};
 
+  pgweb = callPackage ../development/tools/database/pgweb { };
+
   gpgstats = callPackage ../tools/security/gpgstats { };
 
   gpshell = callPackage ../development/tools/misc/gpshell { };
