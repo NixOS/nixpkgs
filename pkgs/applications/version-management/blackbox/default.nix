@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "1.20181219";
+  version = "2.0.0";
   pname   = "blackbox";
 
   src = fetchFromGitHub {
     owner  = "stackexchange";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1lpwwwc3rf992vdf3iy1ds07n1xkmad065im2bqzc6kdsbkn7rjx";
+    sha256 = "1plwdmzds6dq2rlp84dgiashrfg0kg4yijhnxaapz2q4d1vvx8lq";
   };
 
   installPhase = ''
