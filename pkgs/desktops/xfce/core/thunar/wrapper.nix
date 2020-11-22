@@ -14,6 +14,8 @@ symlinkJoin {
     wrapProgram "$out/bin/thunar-settings" \
       --set "THUNARX_MODULE_DIR" "$out/lib/thunarx-3"
 
+    rm -f "$out/lib/systemd/user"
+    mkdir "$out/lib/systemd/user"
     for file in "lib/systemd/user/thunar.service" "share/dbus-1/services/org.xfce.FileManager.service" \
       "share/dbus-1/services/org.xfce.Thunar.FileManager1.service" \
       "share/dbus-1/services/org.xfce.Thunar.service"
