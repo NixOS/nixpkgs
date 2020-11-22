@@ -394,9 +394,7 @@ self: super: {
   tickle = dontCheck super.tickle;
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
-  # Aarch64 affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
-  # Darwin https://hydra.nixos.org/build/129070963/nixlog/1
-  trifecta = if (pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.isDarwin) then dontCheck super.trifecta else super.trifecta;
+  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta; # affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
   wai-logger = dontCheck super.wai-logger;
