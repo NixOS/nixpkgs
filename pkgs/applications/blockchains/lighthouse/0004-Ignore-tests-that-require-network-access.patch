@@ -1,0 +1,24 @@
+From 12fd701a9c92bff1c3b030b9dd70d29d01a0d8b6 Mon Sep 17 00:00:00 2001
+From: Pascal Bach <pascal.bach@nextrem.ch>
+Date: Thu, 18 Feb 2021 14:30:35 +0100
+Subject: [PATCH 4/4] Ignore tests that require network access
+
+---
+ validator_client/slashing_protection/tests/interop.rs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/validator_client/slashing_protection/tests/interop.rs b/validator_client/slashing_protection/tests/interop.rs
+index 62cd03e2..fd426e24 100644
+--- a/validator_client/slashing_protection/tests/interop.rs
++++ b/validator_client/slashing_protection/tests/interop.rs
+@@ -21,6 +21,7 @@ fn test_root_dir() -> PathBuf {
+ }
+ 
+ #[test]
++#[ignore]
+ fn generated() {
+     for entry in test_root_dir()
+         .join("generated")
+-- 
+2.30.1
+

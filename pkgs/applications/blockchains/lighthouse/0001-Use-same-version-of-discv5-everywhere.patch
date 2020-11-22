@@ -1,0 +1,96 @@
+From 19b48346efa96952e38bc69b12c48f7faf88c68e Mon Sep 17 00:00:00 2001
+From: Pascal Bach <pascal.bach@nextrem.ch>
+Date: Sat, 5 Jun 2021 17:08:14 +0200
+Subject: [PATCH] Use only a single version do discv5
+
+---
+ Cargo.lock                     | 38 +++-------------------------------
+ beacon_node/network/Cargo.toml |  2 +-
+ 2 files changed, 4 insertions(+), 36 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 9f992430..10073977 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1639,38 +1639,6 @@ version = "1.0.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "212d0f5754cb6769937f4501cc0e67f4f4483c8d2c3e1e922ee9edbe4ab4c7c0"
+ 
+-[[package]]
+-name = "discv5"
+-version = "0.1.0-beta.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f6f52d2228d51e8f868a37d5b5b25b82c13552b635d5b47c3a5d53855a6fc4f0"
+-dependencies = [
+- "aes-ctr",
+- "aes-gcm 0.8.0",
+- "arrayvec",
+- "digest 0.9.0",
+- "enr",
+- "fnv",
+- "futures 0.3.14",
+- "hex",
+- "hkdf",
+- "k256",
+- "lazy_static",
+- "lru_time_cache",
+- "parking_lot",
+- "rand 0.7.3",
+- "rlp 0.5.0",
+- "sha2 0.9.3",
+- "smallvec",
+- "tokio 1.5.0",
+- "tokio-stream",
+- "tokio-util 0.6.6",
+- "tracing",
+- "tracing-subscriber",
+- "uint",
+- "zeroize",
+-]
+-
+ [[package]]
+ name = "discv5"
+ version = "0.1.0-beta.3"
+@@ -2033,7 +2001,7 @@ dependencies = [
+  "base64 0.13.0",
+  "directory",
+  "dirs 3.0.2",
+- "discv5 0.1.0-beta.3 (git+https://github.com/sigp/discv5?rev=02d2c896c66f8dc2b848c3996fedcd98e1dfec69)",
++ "discv5",
+  "error-chain",
+  "eth2_ssz",
+  "eth2_ssz_derive",
+@@ -2856,7 +2824,7 @@ version = "0.1.0"
+ dependencies = [
+  "beacon_chain",
+  "bs58 0.4.0",
+- "discv5 0.1.0-beta.3 (git+https://github.com/sigp/discv5?rev=02d2c896c66f8dc2b848c3996fedcd98e1dfec69)",
++ "discv5",
+  "environment",
+  "eth1",
+  "eth2",
+@@ -4170,7 +4138,7 @@ name = "network"
+ version = "0.2.0"
+ dependencies = [
+  "beacon_chain",
+- "discv5 0.1.0-beta.3 (registry+https://github.com/rust-lang/crates.io-index)",
++ "discv5",
+  "environment",
+  "error-chain",
+  "eth2_libp2p",
+diff --git a/beacon_node/network/Cargo.toml b/beacon_node/network/Cargo.toml
+index 0f0fad35..4d802424 100644
+--- a/beacon_node/network/Cargo.toml
++++ b/beacon_node/network/Cargo.toml
+@@ -15,7 +15,7 @@ slog-term = "2.6.0"
+ slog-async = "2.5.0"
+ logging = { path = "../../common/logging" }
+ environment = { path = "../../lighthouse/environment" }
+-discv5 = { version = "0.1.0-beta.3" }
++discv5 = { git = "https://github.com/sigp/discv5 ", rev = "02d2c896c66f8dc2b848c3996fedcd98e1dfec69", features = ["libp2p"] }
+ 
+ [dependencies]
+ beacon_chain =  { path = "../beacon_chain" }
+-- 
+2.31.1
+

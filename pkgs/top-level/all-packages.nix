@@ -28325,6 +28325,8 @@ in
 
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
 
+  lighthouse-ethereum = callPackage ../applications/blockchains/lighthouse { };
+
   lightning-loop = callPackage ../applications/blockchains/lightning-loop { };
 
   lightning-pool = callPackage ../applications/blockchains/lightning-pool { };
