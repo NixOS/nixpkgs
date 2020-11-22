@@ -1,15 +1,15 @@
-import ../make-test-python.nix ( 
+import ../make-test-python.nix (
   {
     pkgs, ...
-  }: 
+  }:
     # copy_from_host works only for store paths
     rec {
         name = "fcitx";
-        machine = 
-        { 
-          pkgs, 
-          ... 
-        }: 
+        machine =
+        {
+          pkgs,
+          ...
+        }:
           {
             virtualisation.memorySize = 1024;
 
@@ -19,11 +19,11 @@ import ../make-test-python.nix (
 
             environment.systemPackages = [
               # To avoid clashing with xfce4-terminal
-              pkgs.alacritty 
+              pkgs.alacritty
             ];
 
 
-            services.xserver = 
+            services.xserver =
             {
               enable = true;
 
@@ -37,7 +37,7 @@ import ../make-test-python.nix (
 
               desktopManager.xfce.enable = true;
             };
-              
+
             i18n = {
               inputMethod = {
                 enabled = "fcitx";
@@ -50,14 +50,14 @@ import ../make-test-python.nix (
           }
         ;
 
-        testScript = { nodes, ... }: 
-        let 
+        testScript = { nodes, ... }:
+        let
             user = nodes.machine.config.users.users.alice;
             userName      = user.name;
             userHome      = user.home;
             xauth         = "${userHome}/.Xauthority";
             fcitx_confdir = "${userHome}/.config/fcitx";
-        in 
+        in
         ''
             # We need config files before login session
             # So copy first thing
@@ -92,7 +92,7 @@ import ../make-test-python.nix (
             machine.send_key("ctrl-alt-shift-u")
             machine.sleep(5)
             machine.sleep(1)
-            
+
             ### Search for smiling face
             machine.send_chars("smil")
             machine.sleep(1)
