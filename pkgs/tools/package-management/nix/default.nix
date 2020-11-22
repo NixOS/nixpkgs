@@ -189,10 +189,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.7";
+    name = "nix-2.3.9";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "dd8f52849414e5a878afe7e797aa4e22bab77c875d9da5a38d5f1bada704e596";
+      sha256 = "72331fdba220517a0ccabcf5c9735703c31674bfb4ef0b64da5d8f715d6022fa";
     };
 
     inherit storeDir stateDir confDir boehmgc;
