@@ -23292,7 +23292,7 @@ in
 
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
-  qsyncthingtray = libsForQt514.callPackage ../applications/misc/qsyncthingtray { };
+  qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
   qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion {
     guvcview = guvcview.override {
