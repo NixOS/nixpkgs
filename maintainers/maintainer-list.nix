@@ -2371,6 +2371,16 @@
     githubId = 2025623;
     name = "Luc Chabassier";
   };
+  dwoffinden = {
+    email = "daw@hey.com";
+    github = "dwoffinden";
+    githubId = 1432131;
+    name = "Daniel Woffinden";
+    keys = [{
+      longkeyid = "rsa4096/0xF3EA503B360FBD40";
+      fingerprint = "46FC 889E BC38 100E 51E8  3245 F3EA 503B 360F BD40";
+    }];
+  };
   dxf = {
     email = "dingxiangfei2009@gmail.com";
     github = "dingxiangfei2009";
