@@ -73,13 +73,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.4.0";
+  version = "78.5.0";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "04b6n3gsan0a5abh371ws3c3rry4dcb3c6rbqmcxkzrdjg2xr5vn6xhlg3dgl3l01p0hp1xqpckj8g5yb2dq2x07xgg1hnyhs9aadh5";
+      "0c32dz8p7rrr0w13l2ynf9snj59ij1v2ld3s75vz1hvks4dikwgcbm44wmvmbisvgyfgzdsphafzlq3kz3j1ja30qjigl0dj709vr6s";
   };
 
   nativeBuildInputs = [
