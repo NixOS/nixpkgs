@@ -4463,6 +4463,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pdoc3 = callPackage ../development/python-modules/pdoc3 { };
+
   pecan = callPackage ../development/python-modules/pecan { };
 
   peewee = callPackage ../development/python-modules/peewee { };
