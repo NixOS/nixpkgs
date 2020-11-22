@@ -3510,9 +3510,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rage = callPackage ../tools/security/rage {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  rage = callPackage ../tools/security/rage { };
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
