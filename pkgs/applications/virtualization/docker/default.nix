@@ -4,6 +4,7 @@
 , sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
 , procps, libseccomp
+, nixosTests
 }:
 
 with lib;
@@ -183,6 +184,8 @@ rec {
 
       installManPage man/*/*.[1-9]
     '';
+
+    passthru.tests = { inherit (nixosTests) docker; };
 
     meta = {
       homepage = "https://www.docker.com/";
