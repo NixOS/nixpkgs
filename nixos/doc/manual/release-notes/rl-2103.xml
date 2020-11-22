@@ -211,6 +211,22 @@
       and <literal>slaptest</literal> is buggy with schemas directly in the config file.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Amazon EC2 and OpenStack Compute (nova) images now re-fetch instance meta data and user data from the instance
+       metadata service (IMDS) on each boot. For example: stopping an EC2 instance, changing its user data, and
+       restarting the instance will now cause it to fetch and apply the new user data.
+     </para>
+     <warning>
+       <para>
+         Specifically, <literal>/etc/ec2-metadata</literal> is re-populated on each boot. Some NixOS scripts that read
+         from this directory are guarded to only run if the files they want to manipulate do not already exist, and so
+         will not re-apply their changes if the IMDS response changes. Examples: <literal>root</literal>'s SSH key is
+         only added if <literal>/root/.ssh/authorized_keys</literal> does not exist, and SSH host keys are only set from
+         user data if they do not exist in <literal>/etc/ssh</literal>.
+       </para>
+     </warning>
+   </listitem>
   </itemizedlist>
  </section>
 
