@@ -1,0 +1,65 @@
+commit 28ede03f28b1f1a5cc555b29709751ed64d01e0b
+Author: Robert Hensing <robert@roberthensing.nl>
+Date:   Sun Nov 22 10:25:24 2020 -0500
+
+    inline-c-cpp: Use Cabal 2.2 cxx-* options instead of c=clang++ hack
+
+diff --git a/inline-c-cpp/inline-c-cpp.cabal b/inline-c-cpp/inline-c-cpp.cabal
+index c45ce3a..a9ba3dd 100644
+--- a/inline-c-cpp.cabal
++++ b/inline-c-cpp.cabal
+@@ -1,3 +1,4 @@
++cabal-version:       2.2
+ name:                inline-c-cpp
+ version:             0.4.0.2
+ synopsis:            Lets you embed C++ code into Haskell.
+@@ -11,7 +12,6 @@ copyright:           (c) 2015-2016 FP Complete Corporation, (c) 2017-2019 France
+ category:            FFI
+ tested-with:         GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5, GHC == 8.8.4, GHC == 8.10.2
+ build-type:          Simple
+-cabal-version:       >=1.10
+ extra-source-files:  test/*.h
+ 
+ source-repository head
+@@ -32,16 +32,19 @@ library
+                      , containers
+   hs-source-dirs:      src
+   default-language:    Haskell2010
+-  ghc-options:         -Wall -optc-xc++ -optc-std=c++11
++  ghc-options:         -Wall
+   include-dirs:        include
+   install-includes:    HaskellException.hxx HaskellStablePtr.hxx
+   extra-libraries:     stdc++
+-  c-sources:           cxx-src/HaskellException.cxx cxx-src/HaskellStablePtr.cxx
+-  cc-options:          -Wall -std=c++11
++  cxx-sources:         cxx-src/HaskellException.cxx cxx-src/HaskellStablePtr.cxx
++  -- cxx-options is for .cxx _file_ compilation whereas -optcxx is
++  -- for TemplateHaskell, so we duplicate the options
++  cxx-options:         -Wall -std=c++11
++  ghc-options:         -optcxx=-Wall
++                       -optcxx=-std=c++11
+   if os(darwin)
+     -- avoid https://gitlab.haskell.org/ghc/ghc/issues/11829
+     ld-options:        -Wl,-keep_dwarf_unwind
+-    ghc-options:       -pgmc=clang++
+ 
+ test-suite tests
+   type:                exitcode-stdio-1.0
+@@ -57,11 +60,12 @@ test-suite tests
+                      , template-haskell
+                      , vector
+   default-language:    Haskell2010
+-  ghc-options:
+-    -optc-std=c++11
+-  if os(darwin)
+-    ghc-options: -pgmc=clang++
++  -- cxx-options is for .cxx _file_ compilation whereas -optcxx is
++  -- for TemplateHaskell, so we duplicate the options
++  cxx-options:         -Wall -Werror -std=c++11
++  ghc-options:         -optcxx=-Wall
++                       -optcxx=-Werror
++                       -optcxx=-std=c++11
+   extra-libraries:     stdc++
+-  cc-options:          -Wall -Werror -optc-xc++ -std=c++11
+   if os(darwin)
+     ld-options: -Wl,-keep_dwarf_unwind

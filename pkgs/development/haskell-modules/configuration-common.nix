@@ -173,9 +173,8 @@ self: super: {
     else addExtraLibrary super.double-conversion pkgs.libcxx;
 
   inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
-    '';
+    # See https://github.com/fpco/inline-c/pull/120
+    patches = [ ./patches/inline-c-cpp-hercules-ci-unhack-cc-options.patch  ];
   });
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
