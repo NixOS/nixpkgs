@@ -20681,6 +20681,8 @@ in
 
   denemo = callPackage ../applications/audio/denemo { };
 
+  dns-over-https = callPackage ../tools/networking/dns-over-https { };
+
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
   dvdbackup = callPackage ../applications/video/dvdbackup { };
