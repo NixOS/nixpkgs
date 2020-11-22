@@ -7,6 +7,14 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
+        pname = "botocore";
+        version = "1.19.23";
+        src = super.fetchPypi {
+          inherit pname version;
+          sha256 = "07j851gc3zxz7q9894hh201jcgabgqvzmsnf6g0xkcia9fjgr7lz";
+        };
+      });
       rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.2";
         src = oldAttrs.src.override {
@@ -19,15 +27,16 @@ let
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.150"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.18.183"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jrxzr4dx2s6ychmrz19yz8i4kqcwj7f8ly82ydwvrr0ff62374g";
+    sha256 = "0n1pmdl33r1v8qnrcg08ihvri9zm4fvsp14605vwmlkxvs8nb7s5";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
+    substituteInPlace setup.py --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5"
   '';
 
   # No tests included
