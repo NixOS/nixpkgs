@@ -3507,6 +3507,8 @@ in {
 
   kitchen = callPackage ../development/python-modules/kitchen { };
 
+  kivy-garden = callPackage ../development/python-modules/kivy-garden { };
+
   kiwisolver = if isPy3k then
     callPackage ../development/python-modules/kiwisolver { }
   else
