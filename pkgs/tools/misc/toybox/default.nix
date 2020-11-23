@@ -2,6 +2,7 @@
   stdenv, lib, fetchFromGitHub, which,
   enableStatic ? false,
   enableMinimal ? false,
+  enableShell ? false,
   extraConfig ? ""
 }:
 
@@ -36,7 +37,11 @@ stdenv.mkDerivation rec {
           "defconfig"
     }
 
-    cat $extraConfigPath .config > .config-
+    ${lib.optionalString enableShell ''
+      echo "CONFIG_SH=y" >> .config-
+    ''}
+    cat $extraConfigPath .config >> .config-
+
     mv .config- .config
 
     make oldconfig
@@ -54,6 +59,10 @@ stdenv.mkDerivation rec {
   checkTarget = "tests";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  passthru = lib.mkIf enableShell ({
+    shellPath = "/bin/bash";
+  });
 
   meta = with stdenv.lib; {
     description = "Lightweight implementation of some Unix command line utilities";
