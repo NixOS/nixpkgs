@@ -5496,6 +5496,12 @@
     githubId = 1191859;
     name = "Maxim Krivchikov";
   };
+  mazurel = {
+    email = "mateusz.mazur@yahoo.com";
+    github = "Mazurel";
+    githubId = 22836301;
+    name = "Mateusz Mazur";
+  };
   mbakke = {
     email = "mbakke@fastmail.com";
     github = "mbakke";
