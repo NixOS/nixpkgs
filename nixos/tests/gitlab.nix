@@ -33,9 +33,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
         initialRootPasswordFile = pkgs.writeText "rootPassword" initialRootPassword;
         smtp.enable = true;
         secrets = {
-          secretFile = pkgs.writeText "secret" "Aig5zaic";
-          otpFile = pkgs.writeText "otpsecret" "Riew9mue";
-          dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
+          secretFile = pkgs.writeText "secret" "r8X9keSKynU7p4aKlh4GO1Bo77g5a7vj";
+          otpFile = pkgs.writeText "otpsecret" "Zu5hGx3YvQx40DvI8WoZJQpX2paSDOlG";
+          dbFile = pkgs.writeText "dbsecret" "lsGltKWTejOf6JxCVa7nLDenzkO9wPLR";
           jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
       };

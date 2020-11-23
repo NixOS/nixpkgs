@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, tcpdump }:
+{ stdenv, fetchurl, libpcap, tcpdump, Carbon, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "tcpreplay";
@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1plgjm3dr9rr5q71s7paqk2wgrvkihbk2yrf9g3zaks3m750497d";
   };
 
-  buildInputs = [ libpcap ];
+  buildInputs = [ libpcap ]
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon CoreServices
+    ];
+
 
   configureFlags = [
     "--disable-local-libopts"
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://tcpreplay.appneta.com/";
     license = with licenses; [ bsd3 gpl3 ];
     maintainers = with maintainers; [ eleanor ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

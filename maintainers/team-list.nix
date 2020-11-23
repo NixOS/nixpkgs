@@ -113,6 +113,7 @@ with lib.maintainers; {
     members = [
       timokau
       omasanori
+      raskin
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
   };

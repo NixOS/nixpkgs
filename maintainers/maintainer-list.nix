@@ -9998,4 +9998,10 @@
     github = "pulsation";
     githubId = 1838397;
   };
+  zupo = {
+    name = "Nejc Zupan";
+    email = "nejczupan+nix@gmail.com";
+    github = "zupo";
+    githubId = 311580;
+  };
 }

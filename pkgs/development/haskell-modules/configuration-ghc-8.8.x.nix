@@ -86,20 +86,6 @@ self: super: {
   foundation = dontCheck super.foundation;
   vault = dontHaddock super.vault;
 
-  servant = unmarkBroken super.servant;
-  servant-auth = unmarkBroken super.servant-auth;
-  servant-conduit = unmarkBroken super.servant-conduit;
-  servant-auth-client = unmarkBroken super.servant-auth-client;
-  servant-client = unmarkBroken super.servant-client;
-  servant-client-core = unmarkBroken super.servant-client-core;
-  servant-auth-server = unmarkBroken super.servant-auth-server;
-  servant-auth-swagger = unmarkBroken super.servant-auth-swagger;
-  servant-swagger = unmarkBroken super.servant-swagger;
-  servant-blaze = unmarkBroken super.servant-blaze;
-  servant-swagger-ui-core = unmarkBroken super.servant-swagger-ui-core;
-  swagger2 = unmarkBroken super.swagger2;
-  cachix-api = unmarkBroken super.cachix-api;
-
   # https://github.com/snapframework/snap-core/issues/288
   snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
 
