@@ -3507,6 +3507,10 @@ in {
 
   kitchen = callPackage ../development/python-modules/kitchen { };
 
+  kivy = callPackage ../development/python-modules/kivy {
+    inherit (pkgs) mesa;
+  };
+
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
 
   kiwisolver = if isPy3k then
