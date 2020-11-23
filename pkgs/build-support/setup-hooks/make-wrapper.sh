@@ -67,11 +67,16 @@ makeWrapper() {
             value="${params[$((n + 3))]}"
             n=$((n + 3))
             if test -n "$value"; then
-                if test "$p" = "--suffix"; then
-                    echo "export $varName=\$$varName\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
-                else
-                    echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
-                fi
+                IFS="${separator}" read -r -a values <<< "${value}"
+                for x in "${values[@]}"; do
+                    echo "if [[ \"${separator}\$${varName}${separator}\" != *'${separator}${x}${separator}'* ]]; then"
+                    if test "$p" = "--suffix"; then
+                        echo "export $varName=\$$varName\${$varName:+${separator@Q}}${x@Q}"
+                    else
+                        echo "export $varName=${x@Q}\${$varName:+${separator@Q}}\$$varName"
+                    fi
+                    echo "fi"
+                done >> "$wrapper"
             fi
         elif [[ "$p" == "--suffix-each" ]]; then
             varName="${params[$((n + 1))]}"
