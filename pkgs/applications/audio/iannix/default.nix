@@ -26,6 +26,6 @@ mkDerivation rec {
     homepage = "https://www.iannix.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nico202 ];
+    maintainers = with maintainers; [ freezeboy ];
   };
 }
