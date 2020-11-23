@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, python3 }:
+{ stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     install -Dm0755 src/wsdd.py $out/bin/wsdd
     wrapProgram $out/bin/wsdd --prefix PYTHONPATH : "$PYTHONPATH"
   '';
+
+  passthru = {
+    tests.samba-wsdd = nixosTests.samba-wsdd;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/christgau/wsdd";

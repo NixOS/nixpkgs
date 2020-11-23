@@ -315,6 +315,7 @@ in
   runInMachine = handleTest ./run-in-machine.nix {};
   rxe = handleTest ./rxe.nix {};
   samba = handleTest ./samba.nix {};
+  samba-wsdd = handleTest ./samba-wsdd.nix {};
   sanoid = handleTest ./sanoid.nix {};
   sbt = handleTest ./sbt.nix {};
   sbt-extras = handleTest ./sbt-extras.nix {};
