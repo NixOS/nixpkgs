@@ -3,17 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.9.1";
+  version = "2.9.4";
 
+  # This is necessary due to typo in the lein-pkg tagged with 2.9.4
+  lein-pkg-version = "7677dabea40a2d17a42a718ca8c7e450b09e153c";
   src = fetchurl {
-    url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "1h0gpzpr7xk6hvmrrq41bcp2k9aai348baf8ad9bxvci01n4zb12";
+    url = "https://raw.github.com/technomancy/leiningen/${lein-pkg-version}/bin/lein-pkg";
+    sha256 = "0qbxwfj2g75bh322041wjawrd4xzvb4vj28pza1zlx4iv1wp9lc0";
   };
 
   jarsrc = fetchurl {
     # NOTE: This is actually a .jar, Github has issues
     url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.zip";
-    sha256 = "1y2mva5s2w2szzn1b9rhz0dvkffls4ravii677ybcf2w9wd86z7a";
+    sha256 = "0v3hi2rv3zk1wrlfb4cdppmpi9flrfn2klqpad2g0z9lh2a36g0f";
   };
 
   JARNAME = "${pname}-${version}-standalone.jar";
