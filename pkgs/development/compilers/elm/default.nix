@@ -112,7 +112,12 @@ let
 
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
+      elm-graphql = nodePkgs."@dillonkearns/elm-graphql";
+
       elm-optimize-level-2 = nodePkgs."elm-optimize-level-2";
+
+      elm-review = patchBinwrap [elmi-to-json]
+        nodePkgs.elm-review;
 
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
     };
