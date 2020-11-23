@@ -17624,6 +17624,8 @@ in
 
   webmetro = callPackage ../servers/webmetro { };
 
+  wsdd = callPackage ../servers/wsdd { };
+
   webhook = callPackage ../servers/http/webhook { };
 
   winstone = throw "Winstone is not supported anymore. Alternatives are Jetty or Tomcat.";
