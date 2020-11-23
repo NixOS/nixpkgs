@@ -6953,6 +6953,18 @@
     githubId = 138074;
     name = "Pedro Pombeiro";
   };
+  poscat = {
+    email = "poscat@mail.poscat.moe";
+    github = "poscat0x04";
+    githubId = 53291983;
+    name = "Poscat Tarski";
+    keys = [
+      {
+        longkeyid = "rsa4096/2D2595A00D08ACE0";
+        fingerprint = "48AD DE10 F27B AFB4 7BB0  CCAF 2D25 95A0 0D08 ACE0";
+      }
+    ];
+  };
   pradeepchhetri = {
     email = "pradeep.chhetri89@gmail.com";
     github = "pradeepchhetri";
