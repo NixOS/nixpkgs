@@ -332,6 +332,20 @@ let
     };
   };
 
+  AnyEventAIO = buildPerlPackage {
+    pname ="AnyEvent-AIO";
+    version = "1.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-AIO-1.1.tar.gz";
+      sha256 = "0svh0mlp17g0ypq8bgs3h3axg8v7h0z45hryacgn6q8mcj65n43b";
+    };
+    propagatedBuildInputs = [ AnyEvent IOAIO ];
+    meta = {
+      description = "Truly asynchronous file and directory I/O";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AnyEventCacheDNS = buildPerlModule {
     pname = "AnyEvent-CacheDNS";
     version = "0.08";
@@ -9937,6 +9951,25 @@ let
     doCheck = false;
     meta = {
       description = "Perl core IO modules";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  IOAIO = buildPerlPackage {
+    pname = "IO-AIO";
+    version = "4.72";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/IO-AIO-4.72.tar.gz";
+      sha256 = "17vfbqagpab8lsbf5nmp2frvxw7hvsyy2i87dpid8djzr615wnvf";
+    };
+    buildInputs = [ CanaryStability ];
+    propagatedBuildInputs = [ commonsense ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/treescan
+    '';
+    meta = {
+      description = "Asynchronous/Advanced Input/Output";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
