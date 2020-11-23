@@ -1,5 +1,12 @@
 { stdenv, fetchurl, zlib }:
 
+let
+  ARCH = {
+    i686-linux    = "linux32";
+    x86_64-linux  = "linux64";
+    aarch64-linux = "linux64";
+  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
 stdenv.mkDerivation {
   pname = "picat";
   version = "3.0p3";
@@ -11,19 +18,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib ];
 
-  ARCH = if stdenv.hostPlatform.system == "i686-linux" then "linux32"
-         else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
-         else throw "Unsupported system";
+  inherit ARCH;
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
 
   buildPhase = "cd emu && make -j $NIX_BUILD_CORES -f Makefile.$ARCH";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp picat $out/bin/picat
-  '';
+  installPhase = "mkdir -p $out/bin && cp picat $out/bin/picat";
 
   meta = with stdenv.lib; {
     description = "Logic-based programming langage";

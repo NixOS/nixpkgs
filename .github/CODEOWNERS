@@ -213,7 +213,7 @@
 /doc/builders/images/dockertools.xml         @roberth
 
 # Blockchains
-/pkgs/applications/blockchains  @mmahut
+/pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq

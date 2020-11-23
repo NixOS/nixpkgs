@@ -135,7 +135,7 @@ in
       #keys = 96; # unused
       #haproxy = 97; # dynamically allocated as of 2020-03-11
       mongodb = 98;
-      openldap = 99;
+      #openldap = 99; # dynamically allocated as of PR#94610
       #users = 100; # unused
       cgminer = 101;
       munin = 102;
@@ -451,7 +451,7 @@ in
       keys = 96;
       #haproxy = 97; # dynamically allocated as of 2020-03-11
       #mongodb = 98; # unused
-      openldap = 99;
+      #openldap = 99; # dynamically allocated as of PR#94610
       munin = 102;
       #logcheck = 103; # unused
       #nix-ssh = 104; # unused

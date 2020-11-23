@@ -2,6 +2,8 @@
 , fetchPypi
 , buildPythonPackage
 , isPy3k
+, cython
+, jinja2
 , numpy
 , pytest
 , pytest-astropy
@@ -19,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "cf69d1a3f140ca8fe1664202072201395495a73c334a69fc965fab6a6e1d281a";
   };
 
-  nativeBuildInputs = [ astropy-helpers ];
+  nativeBuildInputs = [ astropy-helpers cython jinja2 ];
 
   propagatedBuildInputs = [ numpy pytest ]; # yes it really has pytest in install_requires
 
