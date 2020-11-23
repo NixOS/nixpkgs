@@ -24,8 +24,6 @@ wget -nH -r -c --no-parent "${WGET_ARGS[@]}" -A '*.tar.xz.sig' -A '*.tar.xz.mirr
 # Delete *.mirrorlist (they were only needed to find *.sha256 files)
 find -type f -name '*.mirrorlist' -delete
 
-#read -p "See current files in $(pwd)"
-
 csv=$(mktemp)
 # KDE sig files
 find . -type f -name '*.sig' | while read src; do
@@ -53,8 +51,6 @@ find . -type f -name '*.sha256' | while read src; do
     path=$(dirname ${src:2})
     echo "$name,$version,$sha256,$filename,$path" >>$csv
 done
-
-#read -p "See CSV in $csv"
 
 cat >"$SRCS" <<EOF
 # DO NOT EDIT! This file is generated automatically.
