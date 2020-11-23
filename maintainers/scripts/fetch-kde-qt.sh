@@ -24,19 +24,22 @@ wget -nH -r -c --no-parent "${WGET_ARGS[@]}" -A '*.tar.xz.sig' -A '*.tar.xz.mirr
 # Delete *.mirrorlist (they were only needed to find *.sha256 files)
 find -type f -name '*.mirrorlist' -delete
 
+# we need the host to properly construct urls for 'manual' mirrorlist fetching for kde
+host=$(echo ${WGET_ARGS[@]} | cut -d/ -f1-3)
+
 csv=$(mktemp)
 # KDE sig files
 find . -type f -name '*.sig' | while read src; do
     filename="${src##*/}"
     filename="${filename%.sig}"
+    path=$(dirname ${src:2})
     mirrorlistFile="${filename}.mirrorlist"
-    wget -c "${WGET_ARGS[@]}${mirrorlistFile}"
+    wget -c "${host}/${path}/${mirrorlistFile}"
     # "parsing" html - this seems wrong, but could not find sha256 sums anywhere else for kde archives
     sha256=$(gawk -F "</*tr>|</*td>|<td style=\"[^\"]*\">" "/SHA256/ { print \$5 }" $mirrorlistFile)
     nameVersion="${filename%.tar.*}"
     name=$(echo "$nameVersion" | sed -e 's,-[[:digit:]].*,,' | sed -e 's,-opensource-src$,,' | sed -e 's,-everywhere-src$,,')
     version=$(echo "$nameVersion" | sed -e 's,^\([[:alpha:]][[:alnum:]]*-\)\+,,')
-    path=$(dirname ${src:2})
     echo "$name,$version,$sha256,$filename,$path" >>$csv
 done
 
