@@ -1,7 +1,7 @@
-{ lib, stdenv, pkgs, python, makeSetupHook, waf }:
+{ lib, stdenv, pkgs, python3, makeSetupHook, waf }:
 
 makeSetupHook {
-  deps = [ python ];
+  deps = [ python3 ];
   substitutions = {
     inherit waf;
     crossFlags = lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system)
