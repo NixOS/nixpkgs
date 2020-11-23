@@ -494,7 +494,7 @@ in
 
   nukeReferences = callPackage ../build-support/nuke-references { };
 
-  referencesByPopularity = callPackage ../build-support/references-by-popularity { };
+  referencesByPopularity = buildPackages.callPackage ../build-support/references-by-popularity { };
 
   removeReferencesTo = callPackage ../build-support/remove-references-to { };
 
