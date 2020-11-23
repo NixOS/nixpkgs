@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-volume-mixer";
-  version = "3.36.6";
+  version = "3.38.0";
 
   src = fetchFromGitHub {
     owner = "aleho";
     repo = "gnome-shell-volume-mixer";
     rev = version;
-    sha256 = "1s80w5csv82hxky33ql734z9df8zkg1r8xmxc9hl759z6rbqml9g";
+    sha256 = "12iqw1ggzqjgnb6pnp32z8d847wx2sbiz5dl316cgmc2pzn9anj5";
   };
 
   patches = [
