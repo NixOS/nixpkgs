@@ -46,7 +46,7 @@ assert enableQt -> qwt != null;
   meta = with stdenv.lib; {
     homepage = "https://www.cgsecurity.org/wiki/Main_Page";
     downloadPage = "https://www.cgsecurity.org/wiki/TestDisk_Download";
-    description = "Testdisk / Photorec - Data recovery utilities";
+    description = "Data recovery utilities";
     longDescription = ''
       TestDisk is a powerful free data recovery software. It was primarily
       designed to help recover lost partitions and/or make non-booting disks

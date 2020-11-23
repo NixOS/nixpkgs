@@ -35,8 +35,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password install the <literal>mkpasswd</literal>
-    package and run <literal>mkpasswd -m sha-512</literal>.
+    To generate a hashed password run <literal>mkpasswd -m sha-512</literal>.
 
     If set to an empty string (<literal>""</literal>), this user will
     be able to log in without being asked for a password (but not via remote

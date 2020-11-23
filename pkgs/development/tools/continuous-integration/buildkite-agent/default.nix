@@ -1,8 +1,8 @@
-{ fetchFromGitHub, stdenv, buildGoPackage,
+{ fetchFromGitHub, stdenv, buildGoModule,
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
-buildGoPackage rec {
+buildGoModule rec {
   name = "buildkite-agent-${version}";
-  version = "3.17.0";
+  version = "3.25.0";
 
   goPackagePath = "github.com/buildkite/agent";
 
@@ -10,17 +10,18 @@ buildGoPackage rec {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "0a7x919kxnpdn0pnhc5ilx1z6ninx8zgjvsd0jcg4qwh0qqp5ppr";
+    sha256 = "VxAGi2NpXpc3U+GNIvGJSkdHGODrX2s8oY+dQ8QXIHQ=";
   };
+
+  vendorSha256 = "X1K6uKiMFXTDT1PcedGQ8HLGox8ePP7Cz0Ihf4m9ts8=";
+
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  # on Linux, the TMPDIR is /build which is the same prefix as this package
-  # remove once #35068 is merged
-  noAuditTmpdir = stdenv.isLinux;
+  doCheck = false;
 
   postInstall = ''
     # Fix binary name
@@ -43,6 +44,6 @@ buildGoPackage rec {
     homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
     maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
-    platforms = platforms.unix;
+    platforms = with platforms; unix ++ darwin;
   };
 }

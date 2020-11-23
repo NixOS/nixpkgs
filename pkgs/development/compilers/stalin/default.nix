@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.ece.purdue.edu/~qobi/software.html";
     license = stdenv.lib.licenses.gpl2Plus;
-    description = "Stalin, an optimizing Scheme compiler";
+    description = "An optimizing Scheme compiler";
 
     maintainers = [ ];
     platforms = ["i686-linux"];  # doesn't want to work on 64-bit platforms

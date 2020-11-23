@@ -69,6 +69,10 @@ let
       meta.broken = since "10";
     };
 
+    hsd = super.hsd.override {
+      buildInputs = [ self.node-gyp-build pkgs.unbound ];
+    };
+
     insect = super.insect.override (drv: {
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });

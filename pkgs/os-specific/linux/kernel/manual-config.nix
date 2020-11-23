@@ -34,6 +34,13 @@ in {
   randstructSeed ? "",
   # Use defaultMeta // extraMeta
   extraMeta ? {},
+
+  # for module compatibility
+  isXen      ? features.xen_dom0 or false,
+  isZen      ? false,
+  isLibre    ? false,
+  isHardened ? false,
+
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
   # ignored
@@ -86,6 +93,9 @@ let
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
+        inherit isXen isZen isHardened isLibre;
+        kernelOlder = stdenv.lib.versionOlder version;
+        kernelAtLeast = stdenv.lib.versionAtLeast version;
       };
 
       inherit src;
@@ -233,10 +243,10 @@ let
         rm -fR drivers
 
         # Keep all headers
-        find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.h' -print0 | xargs -0 -r chmod u-w
 
         # Keep linker scripts (they are required for out-of-tree modules on aarch64)
-        find .  -type f -name '*.lds' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
         # Keep root and arch-specific Makefiles
         chmod u-w Makefile
@@ -246,7 +256,7 @@ let
         chmod u-w -R scripts
 
         # Delete everything not kept
-        find . -type f -perm -u=w -print0 | xargs -0 rm
+        find . -type f -perm -u=w -print0 | xargs -0 -r rm
 
         # Delete empty directories
         find -empty -type d -delete

@@ -5,13 +5,14 @@
 
 mkDerivation rec {
   pname = "barrier";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "debauchee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gbg3p7c0vcsdzsjj1ssx6k8xpj3rpyvais12266f0xvnbvihczd";
+    sha256 = "11vqkzpcjiv3pq6ps022223j6skgm1d23dj18n4a5nsf53wsvvp4";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];

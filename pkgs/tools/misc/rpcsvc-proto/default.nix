@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "rpcsvc-proto";
@@ -6,14 +6,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "thkukuk";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "006l1f824r9bcbwn1s1vbs33cdwhs66jn6v97yas597y884y40z9";
   };
 
   outputs = [ "out" "man" ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook ];
+
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace rpcsvc/Makefile.am \
+      --replace '$(top_builddir)/rpcgen/rpcgen' '${buildPackages.rpcsvc-proto}/bin/rpcgen'
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/thkukuk/rpcsvc-proto";

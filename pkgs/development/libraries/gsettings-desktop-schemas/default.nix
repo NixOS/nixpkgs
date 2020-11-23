@@ -1,22 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, glib, gobject-introspection
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, gobject-introspection
 , meson
 , ninja
 , python3
   # just for passthru
-, gnome3 }:
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "3.36.1";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gsettings-desktop-schemas/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1nf97vq07gadwdla6kws8z510xlmv0a7wlyqwwnhyagq7kjdnjq0";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0rwcg9sd5rv7gjwapcd1jjk6l16w0p3j7wkicq1rdch4c0kch12p";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gsettings-desktop-schemas"; };
-  };
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkgconfig
+    python3
+  ];
+
+  buildInputs = [
+    glib
+    gobject-introspection
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/meson/post-install.py
+    patchShebangs build-aux/meson/post-install.py
+  '';
 
   # meson installs the schemas to share/glib-2.0/schemas
   # We add the override file there too so it will be compiled and later moved by
@@ -32,16 +51,15 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  postPatch = ''
-    chmod +x build-aux/meson/post-install.py
-    patchShebangs build-aux/meson/post-install.py
-  '';
-
-  buildInputs = [ glib gobject-introspection ];
-
-  nativeBuildInputs = [ pkgconfig python3 meson ninja glib ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
+    description = "Collection of GSettings schemas for settings shared by various components of a desktop";
+    license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
   };
 }

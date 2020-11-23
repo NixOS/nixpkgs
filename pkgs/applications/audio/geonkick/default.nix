@@ -1,14 +1,15 @@
-{ stdenv, fetchFromGitLab, cmake, pkg-config, redkite, libsndfile, rapidjson, libjack2, lv2, libX11, cairo }:
+{ stdenv, fetchFromGitLab, cmake, pkg-config, redkite, libsndfile, rapidjson
+, libjack2, lv2, libX11, cairo }:
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
-  version = "2.3.8";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     owner = "iurie-sw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07809yy2q7dd6fcp0yndlg1vw2ca2zisnsplb3xrxvzdvrqlw910";
+    sha256 = "19zbz4v2n5ph4af721xls7ignmis2q2yqyd0m97g9b3njrgnfy3n";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -16,13 +17,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ redkite libsndfile rapidjson libjack2 lv2 libX11 cairo ];
 
   # https://github.com/iurie-sw/geonkick/issues/120
-  cmakeFlags = [ "-DGKICK_REDKITE_SDK_PATH=${redkite}" "-DCMAKE_INSTALL_LIBDIR=lib" ];
+  cmakeFlags = [
+    "-DGKICK_REDKITE_SDK_PATH=${redkite}"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://gitlab.com/iurie-sw/geonkick";
     description = "A free software percussion synthesizer";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

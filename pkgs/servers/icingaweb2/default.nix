@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, php }: with lib; stdenv.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    sha256 = "1hmw681a2qv578npr389szkxpbhcfqzq9c1wzkbjjm3avnvi37mf";
+    sha256 = "1zrni1hzblaangiqm7iqbvg2h9rdc2l3pzzymz52r7mri4qnr4s8";
   };
 
   nativeBuildInputs = [ makeWrapper ];

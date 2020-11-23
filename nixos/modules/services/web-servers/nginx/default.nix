@@ -86,7 +86,7 @@ let
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
-      ssl_ciphers ${cfg.sslCiphers};
+      ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
       ${optionalString (cfg.recommendedTlsSettings) ''
@@ -261,10 +261,7 @@ let
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
 
-          ${optionalString (vhost.basicAuthFile != null || vhost.basicAuth != {}) ''
-            auth_basic secured;
-            auth_basic_user_file ${if vhost.basicAuthFile != null then vhost.basicAuthFile else mkHtpasswd vhostName vhost.basicAuth};
-          ''}
+          ${mkBasicAuth vhostName vhost}
 
           ${mkLocations vhost.locations}
 
@@ -293,9 +290,19 @@ let
       ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
+      ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
+
+  mkBasicAuth = name: zone: optionalString (zone.basicAuthFile != null || zone.basicAuth != {}) (let
+    auth_file = if zone.basicAuthFile != null
+      then zone.basicAuthFile
+      else mkHtpasswd name zone.basicAuth;
+  in ''
+    auth_basic secured;
+    auth_basic_user_file ${auth_file};
+  '');
+  mkHtpasswd = name: authDef: pkgs.writeText "${name}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}
     '') authDef)
@@ -487,7 +494,7 @@ in
       };
 
       sslCiphers = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
         default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
         description = "Ciphers to choose from when negotiating TLS handshakes.";
@@ -693,6 +700,8 @@ in
         ${cfg.preStart}
         ${execCommand} -t
       '';
+
+      startLimitIntervalSec = 60;
       serviceConfig = {
         ExecStart = execCommand;
         ExecReload = [
@@ -701,7 +710,6 @@ in
         ];
         Restart = "always";
         RestartSec = "10s";
-        StartLimitInterval = "1min";
         # User and group
         User = cfg.user;
         Group = cfg.group;

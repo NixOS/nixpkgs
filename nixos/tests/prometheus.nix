@@ -19,7 +19,6 @@ let
       secret_key = s3.secretKey;
       insecure = true;
       signature_version2 = false;
-      encrypt_sse =  false;
       put_user_metadata = {};
       http_config = {
         idle_conn_timeout = "0s";
@@ -193,13 +192,13 @@ in import ./make-test-python.nix {
     # Check if prometheus responds to requests:
     prometheus.wait_for_unit("prometheus.service")
     prometheus.wait_for_open_port(${toString queryPort})
-    prometheus.succeed("curl -s http://127.0.0.1:${toString queryPort}/metrics")
+    prometheus.succeed("curl -sf http://127.0.0.1:${toString queryPort}/metrics")
 
     # Let's test if pushing a metric to the pushgateway succeeds:
     prometheus.wait_for_unit("pushgateway.service")
     prometheus.succeed(
         "echo 'some_metric 3.14' | "
-        + "curl --data-binary \@- "
+        + "curl -f --data-binary \@- "
         + "http://127.0.0.1:${toString pushgwPort}/metrics/job/some_job"
     )
 

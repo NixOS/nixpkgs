@@ -9,7 +9,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Cockatrice";
     repo = "Cockatrice";
-    rev = "${version}";
+    rev = version;
     sha256 = "1yaxm7q0ja3rgx197hh8ynjc6ncc4hm0qdn9v7f0l4fbv0bdpv34";
   };
 

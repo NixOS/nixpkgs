@@ -15,7 +15,7 @@ let # in mariadb # spans the whole file
 
 libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-mytopEnv = perl.withPackages (p: with p; [ DataDumper DBDmysql DBI TermReadKey ]);
+mytopEnv = perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
 
 mariadb = server // {
   inherit client; # MariaDB Client
@@ -23,23 +23,24 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.4.14";
+  version = "10.4.15";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "1z469j39chq7d3dp39cljjbzcz0wl1g7rii85x46290jw1cwsbzr";
+    sha256 = "0cdfzr768cb7n9ag9gqahr8c6igfn513md67xn4rf98ajmnxg0r7";
     name   = "mariadb-${version}.tar.gz";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ]
+    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     ncurses openssl zlib pcre libiconv curl
   ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ perl cctools CoreServices ]
     ++ optional (!stdenv.hostPlatform.isDarwin && withStorageToku) [ jemalloc450 ]
     ++ optional (!stdenv.hostPlatform.isDarwin && !withStorageToku) [ jemalloc ];
 

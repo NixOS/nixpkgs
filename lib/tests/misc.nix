@@ -87,6 +87,26 @@ runTests {
     expected = true;
   };
 
+  testComposeManyExtensions0 = {
+    expr = let obj = makeExtensible (self: { foo = true; });
+               emptyComposition = composeManyExtensions [];
+               composed = obj.extend emptyComposition;
+           in composed.foo;
+    expected = true;
+  };
+
+  testComposeManyExtensions =
+    let f = self: super: { bar = false; baz = true; };
+        g = self: super: { bar = super.baz or false; };
+        h = self: super: { qux = super.bar or false; };
+        obj = makeExtensible (self: { foo = self.qux; });
+    in {
+    expr = let composition = composeManyExtensions [f g h];
+               composed = obj.extend composition;
+           in composed.foo;
+    expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
+  };
+
   testBitAnd = {
     expr = (bitAnd 3 10);
     expected = 2;
@@ -152,6 +172,20 @@ runTests {
   testSplitStringsLastEmpty = {
     expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+  };
+
+  testSplitStringsRegex = {
+    expr = strings.splitString "\\[{}]()^$?*+|." "A\\[{}]()^$?*+|.B";
+    expected = [ "A" "B" ];
+  };
+
+  testSplitStringsDerivation = {
+    expr = take 3  (strings.splitString "/" (derivation {
+      name = "name";
+      builder = "builder";
+      system = "system";
+    }));
+    expected = ["" "nix" "store"];
   };
 
   testSplitVersionSingle = {

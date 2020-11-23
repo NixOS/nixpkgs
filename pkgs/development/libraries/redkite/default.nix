@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "redkite";
-  version = "1.0.3";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "iurie-sw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m2db7c791fi33snkjwnvlxapmf879g5r8azlkx7sr6vp2s0jq2k";
+    sha256 = "0c5k0a6ydb8szdgniqsva8l9j2sishlhsww13b3a9grvr7hb2bpq";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ cairo ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://gitlab.com/iurie-sw/redkite";
     description = "A small GUI toolkit";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

@@ -17,6 +17,11 @@ let
     '';
   };
 
+  defaultFavoriteAppsOverride = ''
+    [org.gnome.shell]
+    favorite-apps=[ 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+  '';
+
   nixos-gsettings-desktop-schemas = let
     defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome3.gnome-shell ];
   in
@@ -42,8 +47,7 @@ let
        [org.gnome.desktop.screensaver]
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
 
-       [org.gnome.shell]
-       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
+       ${cfg.favoriteAppsOverride}
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -69,6 +73,7 @@ in
       core-os-services.enable = mkEnableOption "essential services for GNOME3";
       core-shell.enable = mkEnableOption "GNOME Shell services";
       core-utilities.enable = mkEnableOption "GNOME core utilities";
+      core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
       games.enable = mkEnableOption "GNOME games";
 
       experimental-features = {
@@ -121,6 +126,17 @@ in
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
         apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
+      };
+
+      favoriteAppsOverride = mkOption {
+        internal = true; # this is messy
+        default = defaultFavoriteAppsOverride;
+        type = types.lines;
+        example = literalExample ''
+          [org.gnome.shell]
+          favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
+        '';
+        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -179,6 +195,14 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable || flashbackEnabled) {
+      # Seed our configuration into nixos-generate-config
+      system.nixos-generate-config.desktopConfiguration = ''
+        # Enable the GNOME 3 Desktop Environment.
+        services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome3.enable = true;
+      '';
+
       services.gnome3.core-os-services.enable = true;
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
@@ -207,6 +231,11 @@ in
 
        # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
+
+      # Install gnome-software if flatpak is enabled
+      services.flatpak.guiPackages = [
+        pkgs.gnome3.gnome-software
+      ];
     })
 
     (mkIf flashbackEnabled {
@@ -294,6 +323,12 @@ in
         gnome-shell
       ];
 
+      services.udev.packages = with pkgs.gnome3; [
+        # Force enable KMS modifiers for devices that require them.
+        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
+        mutter
+      ];
+
       services.avahi.enable = mkDefault true;
 
       xdg.portal.extraPortals = [
@@ -323,7 +358,7 @@ in
         source-sans-pro
       ];
 
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
         gnome-backgrounds
@@ -368,7 +403,7 @@ in
       };
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
         baobab
@@ -387,17 +422,15 @@ in
         gnome-logs
         gnome-maps
         gnome-music
-        gnome-photos
+        pkgs.gnome-photos
         gnome-screenshot
-        gnome-software
         gnome-system-monitor
         gnome-weather
         nautilus
+        pkgs.gnome-connections
         simple-scan
         totem
         yelp
-        # Unsure if sensible for NixOS
-        /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
       # Enable default program modules
@@ -426,11 +459,42 @@ in
 
     (mkIf serviceCfg.games.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
-        aisleriot atomix five-or-more four-in-a-row gnome-chess gnome-klotski
-        gnome-mahjongg gnome-mines gnome-nibbles gnome-robots gnome-sudoku
-        gnome-taquin gnome-tetravex hitori iagno lightsoff quadrapassel
-        swell-foop tali
+        aisleriot
+        atomix
+        five-or-more
+        four-in-a-row
+        gnome-chess
+        gnome-klotski
+        gnome-mahjongg
+        gnome-mines
+        gnome-nibbles
+        gnome-robots
+        gnome-sudoku
+        gnome-taquin
+        gnome-tetravex
+        hitori
+        iagno
+        lightsoff
+        quadrapassel
+        swell-foop
+        tali
       ] config.environment.gnome3.excludePackages);
+    })
+
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
+    (mkIf serviceCfg.core-developer-tools.enable {
+      environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
+        dconf-editor
+        devhelp
+        pkgs.gnome-builder
+        # boxes would make sense in this option, however
+        # it doesn't function well enough to be included
+        # in default configurations.
+        # https://github.com/NixOS/nixpkgs/issues/60908
+        /* gnome-boxes */
+      ] config.environment.gnome3.excludePackages);
+
+      services.sysprof.enable = true;
     })
   ];
 

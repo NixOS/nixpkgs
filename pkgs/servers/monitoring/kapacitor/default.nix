@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "kapacitor";
-  version = "1.5.6";
+  version = "1.5.7";
 
   goPackagePath = "github.com/influxdata/kapacitor";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "influxdata";
     repo = "kapacitor";
     rev = "v${version}";
-    sha256 = "1jb04lnxjrms7x5nlrsd1s465rramm9z4zkqpfw1vfdsqa2dd8rc";
+    sha256 = "0lzx25d4y5d8rsddgnypfskcxa5qlwc294sdzmn8dlq995yphpac";
   };
 
   meta = with lib; {

@@ -13,8 +13,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl gmp mpfr ppl ocaml findlib camlidl ];
   propagatedBuildInputs = [ mlgmpidl ];
 
-  prefixKey = "-prefix ";
-  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
+  outputs = [ "out" "bin" "dev" ];
+
+  configurePhase = ''
+    runHook preConfigure
+    ./configure -prefix $out
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
+    runHook postConfigure
+  '';
+
+  postInstall = ''
+    mkdir -p $dev/lib
+    mv $out/lib/ocaml $dev/lib/
+    mkdir -p $bin
+    mv $out/bin $bin/
+  '';
 
   meta = {
     license = stdenv.lib.licenses.lgpl21;

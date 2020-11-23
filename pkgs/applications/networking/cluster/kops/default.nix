@@ -64,8 +64,8 @@ rec {
   };
 
   kops_1_18 = mkKops rec {
-    version = "1.18.1";
-    sha256 = "0jw23vmq2v9czxyansggq4fapz1bcaclmxpw6na4dsn8zcssz320";
+    version = "1.18.2";
+    sha256 = "17na83j6sfhk69w9ssvicc0xd1904z952ad3zzbpha50lcy6nlhp";
     rev = "v${version}";
   };
 }

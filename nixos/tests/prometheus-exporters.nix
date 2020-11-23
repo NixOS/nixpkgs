@@ -563,6 +563,37 @@ let
       '';
     };
 
+    rtl_433 = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        # Mock rtl_433 binary to return a dummy metric stream.
+        nixpkgs.overlays = [ (self: super: {
+          rtl_433 = self.runCommand "rtl_433" {} ''
+            mkdir -p "$out/bin"
+            cat <<EOF > "$out/bin/rtl_433"
+            #!/bin/sh
+            while true; do
+              printf '{"time" : "2020-04-26 13:37:42", "model" : "zopieux", "id" : 55, "channel" : 3, "temperature_C" : 18.000}\n'
+              sleep 4
+            done
+            EOF
+            chmod +x "$out/bin/rtl_433"
+          '';
+        }) ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-rtl_433-exporter.service")
+        wait_for_open_port(9550)
+        wait_until_succeeds(
+            "curl -sSf localhost:9550/metrics | grep -q '{}'".format(
+                'rtl_433_temperature_celsius{channel="3",id="55",location="",model="zopieux"} 18'
+            )
+        )
+      '';
+    };
+
     snmp = {
       exporterConfig = {
         enable = true;
@@ -575,6 +606,50 @@ let
         wait_for_unit("prometheus-snmp-exporter.service")
         wait_for_open_port(9116)
         succeed("curl -sSf localhost:9116/metrics | grep -q 'snmp_request_errors_total 0'")
+      '';
+    };
+
+    sql = {
+      exporterConfig = {
+        configuration.jobs.points = {
+          interval = "1m";
+          connections = [
+            "postgres://prometheus-sql-exporter@/data?host=/run/postgresql&sslmode=disable"
+          ];
+          queries = {
+            points = {
+              labels = [ "name" ];
+              help = "Amount of points accumulated per person";
+              values = [ "amount" ];
+              query = "SELECT SUM(amount) as amount, name FROM points GROUP BY name";
+            };
+          };
+        };
+        enable = true;
+        user = "prometheus-sql-exporter";
+      };
+      metricProvider = {
+        services.postgresql = {
+          enable = true;
+          initialScript = builtins.toFile "init.sql" ''
+            CREATE DATABASE data;
+            \c data;
+            CREATE TABLE points (amount INT, name TEXT);
+            INSERT INTO points(amount, name) VALUES (1, 'jack');
+            INSERT INTO points(amount, name) VALUES (2, 'jill');
+            INSERT INTO points(amount, name) VALUES (3, 'jack');
+
+            CREATE USER "prometheus-sql-exporter";
+            GRANT ALL PRIVILEGES ON DATABASE data TO "prometheus-sql-exporter";
+            GRANT SELECT ON points TO "prometheus-sql-exporter";
+          '';
+        };
+        systemd.services.prometheus-sql-exporter.after = [ "postgresql.service" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-sql-exporter.service")
+        wait_for_open_port(9237)
+        succeed("curl http://localhost:9237/metrics | grep -c 'sql_points{' | grep -q 2")
       '';
     };
 

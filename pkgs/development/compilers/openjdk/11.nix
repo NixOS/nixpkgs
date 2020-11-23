@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
+{ stdenv, lib, fetchFromGitHub, bash, pkgconfig, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
@@ -11,16 +11,18 @@
 let
   major = "11";
   minor = "0";
-  update = "8";
-  build = "10";
+  update = "9";
+  build = "11";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "${major}.${minor}.${update}+${build}";
 
-    src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1sdncn1bk4h8xxfnmrl1125maqy6mc0v0y1dyifwsa04wasj9hbz";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jdk${major}u";
+      rev = "jdk-${version}";
+      sha256 = "11j2rqz9nag5y562g99py4p72f2kv4wwwyrnaspmrzax00wynyx7";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];

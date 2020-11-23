@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "alerta-server";
-  version = "8.0.3";
+  version = "8.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "894d240c51428225264867a80094b9743d71272635a18ddfefa5832b61fed2c6";
+    sha256 = "32a97eee95aea5527f6efa844c18b727fe4a6d61356ea3c0769a29a163ddcb7e";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     pymongo
     python-dateutil
     pytz
-    pyyaml  
+    pyyaml
     requests
     requests-hawk
     sentry-sdk

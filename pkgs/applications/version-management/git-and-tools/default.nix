@@ -34,6 +34,8 @@ let
 
   gh = callPackage ./gh { };
 
+  ghorg = callPackage ./ghorg { };
+
   ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
@@ -71,6 +73,8 @@ let
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
+
+  git-chglog = callPackage ./git-chglog { };
 
   git-cinnabar = callPackage ./git-cinnabar { };
 
@@ -194,7 +198,7 @@ let
   gitstatus = callPackage ./gitstatus { };
 
   gitui = callPackage ./gitui {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
 
   grv = callPackage ./grv { };

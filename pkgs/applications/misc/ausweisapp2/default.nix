@@ -8,7 +8,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
-    rev = "${version}";
+    rev = version;
     sha256 = "1vibk3wmn54qr2mwz537hrr959y0r1zabp0gsijhzj2mk68g9pnb";
   };
 

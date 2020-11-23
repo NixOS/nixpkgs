@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [
-    folks
+    (folks.override { telepathySupport = true; })
     telepathy-logger
     evolution-data-server
     telepathy-mission-control

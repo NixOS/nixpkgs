@@ -109,6 +109,11 @@ rec {
     platform = platforms.riscv-multiplatform "32";
   };
 
+  mmix = {
+    config = "mmix-unknown-mmixware";
+    libc = "newlib";
+  };
+
   msp430 = {
     config = "msp430-elf";
     libc = "newlib";
@@ -120,6 +125,12 @@ rec {
 
   vc4 = {
     config = "vc4-elf";
+    libc = "newlib";
+    platform = {};
+  };
+
+  or1k = {
+    config = "or1k-elf";
     libc = "newlib";
     platform = {};
   };

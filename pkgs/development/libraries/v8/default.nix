@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   gnFlags = [
     "use_custom_libcxx=false"
-    "is_clang=${if stdenv.cc.isClang then "true" else "false"}"
+    "is_clang=${lib.boolToString stdenv.cc.isClang}"
     "use_sysroot=false"
     # "use_system_icu=true"
     "is_component_build=false"

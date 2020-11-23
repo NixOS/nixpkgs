@@ -27,7 +27,6 @@ still shows most of the available features is in `./gwenview.nix`.
 
 {
   lib, libsForQt5, fetchurl,
-  okteta
 }:
 
 let
@@ -107,6 +106,7 @@ let
       kcharselect = callPackage ./kcharselect.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kdebugsettings = callPackage ./kdebugsettings.nix {};
+      kdeconnect-kde = callPackage ./kdeconnect-kde.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
       kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
@@ -209,9 +209,6 @@ let
       rocs = callPackage ./rocs.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
-      # Okteta was removed from kde applications and will now be released independently
-      # Lets keep an alias for compatibility reasons
-      inherit okteta;
     };
 
 in lib.makeScope libsForQt5.newScope packages

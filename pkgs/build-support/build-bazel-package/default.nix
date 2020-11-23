@@ -9,7 +9,7 @@ let
 in
 
 args@{
-  name
+  name ? "${args.pname}-${args.version}"
 , bazel ? bazelPkg
 , bazelFlags ? []
 , bazelBuildFlags ? []

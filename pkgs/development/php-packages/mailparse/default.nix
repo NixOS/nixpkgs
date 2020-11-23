@@ -3,8 +3,8 @@
 buildPecl {
   pname = "mailparse";
 
-  version = "3.0.3";
-  sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
+  version = "3.1.1";
+  sha256 = "02nfjbgyjbr48rw6r46gd713hkxh7nghg2rcbr726zhzz182c3y7";
 
   internalDeps = [ php.extensions.mbstring ];
   postConfigure = ''

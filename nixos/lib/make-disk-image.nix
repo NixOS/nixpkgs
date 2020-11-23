@@ -28,6 +28,9 @@
   #   partition of reasonable size is created in addition to the root partition.
   # For "legacy", the msdos partition table is used and a single large root
   #   partition is created.
+  # For "legacy+gpt", the GPT partition table is used, a 1MiB no-fs partition for
+  #   use by the bootloader is created, and a single large root partition is
+  #   created.
   # For "hybrid", the GPT partition table is used and a mandatory ESP
   #   partition of reasonable size is created in addition to the root partition.
   #   Also a legacy MBR will be present.
@@ -54,7 +57,7 @@
   format ? "raw"
 }:
 
-assert partitionTableType == "legacy" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
+assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
 # We use -E offset=X below, which is only supported by e2fsprogs
 assert partitionTableType != "none" -> fsType == "ext4";
 
@@ -75,6 +78,7 @@ let format' = format; in let
 
   rootPartition = { # switch-case
     legacy = "1";
+    "legacy+gpt" = "2";
     efi = "2";
     hybrid = "3";
   }.${partitionTableType};
@@ -84,6 +88,16 @@ let format' = format; in let
       parted --script $diskImage -- \
         mklabel msdos \
         mkpart primary ext4 1MiB -1
+    '';
+    "legacy+gpt" = ''
+      parted --script $diskImage -- \
+        mklabel gpt \
+        mkpart no-fs 1MB 2MB \
+        set 1 bios_grub on \
+        align-check optimal 1 \
+        mkpart primary ext4 2MB -1 \
+        align-check optimal 2 \
+        print
     '';
     efi = ''
       parted --script $diskImage -- \

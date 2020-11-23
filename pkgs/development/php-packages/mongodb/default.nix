@@ -3,8 +3,8 @@
 buildPecl {
   pname = "mongodb";
 
-  version = "1.6.1";
-  sha256 = "1j1w4n33347j9kwvxwsrix3gvjbiqcn1s5v59pp64s536cci8q0m";
+  version = "1.8.2";
+  sha256 = "01l300204ph9nd7khd9qazpdbi1biqvmjqbxbngdfjk9n5d8vvzw";
 
   nativeBuildInputs = [ pkgs.pkgconfig ];
   buildInputs = with pkgs; [

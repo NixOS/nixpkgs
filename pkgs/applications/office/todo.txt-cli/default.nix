@@ -13,8 +13,8 @@ in stdenv.mkDerivation {
   installPhase = ''
     install -vd $out/bin
     install -vm 755 todo.sh $out/bin
-    install -vd $out/etc/bash_completion.d
-    install -vm 644 todo_completion $out/etc/bash_completion.d/todo
+    install -vd $out/share/bash-completion/completions
+    install -vm 644 todo_completion $out/share/bash-completion/completions/todo
     install -vd $out/etc/todo
     install -vm 644 todo.cfg $out/etc/todo/config
   '';

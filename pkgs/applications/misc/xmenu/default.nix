@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xmenu";
-  version = "4.3.1";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xmenu";
     rev = "v${version}";
-    sha256 = "0m97w1nwak5drcxxlyisqb73fxkapy2rlph9mg531kbx3k2h30r1";
+    sha256 = "1s70zvsaqnsjqs298vw3py0vcvia68xlks1wcz37pb88bwligz1x";
   };
 
   buildInputs = [ imlib2 libX11 libXft libXinerama ];
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   postPatch = "sed -i \"s:/usr/local:$out:\" config.mk";
 
   meta = with stdenv.lib; {
-    description = "XMenu is a menu utility for X";
+    description = "A menu utility for X";
     homepage = "https://github.com/phillbush/xmenu";
-    license = licenses.publicDomain;
+    license = licenses.mit;
     maintainers = with maintainers; [ neonfuz ];
     platforms = platforms.all;
   };

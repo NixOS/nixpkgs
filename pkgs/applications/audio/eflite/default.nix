@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://eflite.sourceforge.net";
-    description = "EFlite is a speech server for screen readers";
+    description = "Speech server for screen readers";
     longDescription = ''
       EFlite is a speech server for Emacspeak and other screen
       readers that allows them to interface with Festival Lite,

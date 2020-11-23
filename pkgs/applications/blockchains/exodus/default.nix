@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
+{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
 atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
 cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "20.8.28";
+  version = "20.11.10";
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "fde9165f71f0d641f6892ddce3ec26d200e8095a383f2b4c8f924de4041d65ef";
+    sha256 = "1a7qrh5mdkqpz5cpk5jdq0s2cfrvn7ja76r5cmhs70ba1xnzd8rq";
   };
 
   sourceRoot = ".";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       gtk3-x11
-      gnome2.pango
+      pango
       atk
       cairo
       gdk-pixbuf

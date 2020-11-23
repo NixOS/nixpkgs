@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
   pname = "libcap-ng";
   # When updating make sure to test that the version with
   # all of the python bindings still works
-  version = "0.7.10";
+  version = "0.7.11";
 
   src = fetchurl {
     url = "${meta.homepage}/${pname}-${version}.tar.gz";
-    sha256 = "1gzzy12agfa9ddipdf72h9y68zqqnvsjjylv4vnq6hj4w2safk58";
+    sha256 = "1s8akhnnazk0b5c6z5i3x54rjb26p8pz2wdl1m21ml3231qmr0c5";
   };
 
   nativeBuildInputs = [ swig ];

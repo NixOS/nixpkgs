@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   postInstall = "opaline -prefix $out";
 
   meta = {
-    description = "Ott: tool for the working semanticist";
+    description = "A tool for the working semanticist";
     longDescription = ''
       Ott is a tool for writing definitions of programming languages and
       calculi. It takes as input a definition of a language syntax and

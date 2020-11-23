@@ -2,7 +2,8 @@
 # native deps.
 , runCommand, pkgconfig, meson, ninja, makeWrapper
 # build+runtime deps.
-, knot-dns, luajitPackages, libuv, gnutls, lmdb, systemd, dns-root-data
+, knot-dns, luajitPackages, libuv, gnutls, lmdb
+, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -11,16 +12,16 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals;
+inherit (stdenv.lib) optional optionals optionalString;
 lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.1.3";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "20cd829027e39a9f7d993894e3640e886825b492d9ac1a744ac5616cc101458b";
+    sha256 = "8824267ca3331fa06d418c1351b68c648da0af121bcbc84c6e08f5b1e28d9433";
   };
 
   outputs = [ "out" "dev" ];
@@ -38,6 +39,11 @@ unwrapped = stdenv.mkDerivation rec {
     # ExecStart can't be overwritten in overrides.
     # We need that to use wrapped executable and correct config file.
     sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+  ''
+    # some tests have issues with network sandboxing, apparently
+  + optionalString doInstallCheck ''
+    echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
+    sed '/^[[:blank:]]*test_dstaddr,$/d' -i tests/config/doh2.test.lua
   '';
 
   preConfigure = ''
@@ -48,8 +54,9 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optional stdenv.isLinux systemd # passing sockets, sd_notify
-    ## optional dependencies; TODO: libedit, dnstap
+    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
+    ++ [ nghttp2 ]
+    ## optional dependencies; TODO: dnstap
     ;
 
   mesonFlags = [
@@ -67,10 +74,12 @@ unwrapped = stdenv.mkDerivation rec {
   postInstall = ''
     rm "$out"/lib/libkres.a
     rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
+  '' + optionalString stdenv.targetPlatform.isLinux ''
+    rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
   doInstallCheck = with stdenv; hostPlatform == buildPlatform;
-  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx ];
+  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs
   '';

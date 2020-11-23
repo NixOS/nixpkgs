@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "samblaster";
-  version = "0.1.24";
+  version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "GregoryFaust";
     repo = "samblaster";
     rev = "v.${version}";
-    sha256 = "0iv2ddfw8363vb2x8gr3p8g88whb6mb9m0pf71i2cqsbv6jghap7";
+    sha256 = "0g24fq5hplnfgqkh3xqpg3lgx3wmxwnh9c7m6yw7pbi40lmgl1jv";
   };
 
   installPhase = ''

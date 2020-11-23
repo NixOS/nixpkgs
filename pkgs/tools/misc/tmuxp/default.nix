@@ -4,11 +4,11 @@ with python.pkgs;
 
 buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.5.6";
+  version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c305fc45bbf1093561e03cdcd37b2ab1f2efb9e208e74b2dc294cf414859bd8a";
+    sha256 = "feec0be98a60c8cd8557bce388156202496dd9c8998e6913e595e939aeb0f735";
   };
 
   postPatch = ''

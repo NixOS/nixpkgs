@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lindig";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "04lv98nxmzanvyn4c0k6k0ax29f5xfdl8qzpf5hwadslq213a044";
   };
 

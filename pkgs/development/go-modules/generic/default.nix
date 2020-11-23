@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, removeReferencesTo, stdenv, vend }:
+{ go, cacert, git, lib, stdenv, vend }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -43,14 +43,6 @@ with builtins;
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "disabled" ];
 
-  removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
-
-  removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
-
-  deleteFlag = if deleteVendor then "true" else "false";
-
-  vendCommand = if runVend then "${vend}/bin/vend" else "false";
-
   go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
 
     name = "${name}-go-modules";
@@ -81,27 +73,26 @@ let
 
     buildPhase = args.modBuildPhase or ''
       runHook preBuild
-
-      if [ ${deleteFlag} == "true" ]; then
-        if [ ! -d vendor ]; then
-          echo "vendor folder does not exist, 'deleteVendor' is not needed"
-          exit 10
-        else
-          rm -rf vendor
-        fi
+    '' + lib.optionalString (deleteVendor == true) ''
+      if [ ! -d vendor ]; then
+        echo "vendor folder does not exist, 'deleteVendor' is not needed"
+        exit 10
+      else
+        rm -rf vendor
       fi
-
+    '' + ''
       if [ -d vendor ]; then
         echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
         exit 10
       fi
 
-      if [ ${vendCommand} != "false" ]; then
-        echo running vend to rewrite vendor folder
-        ${vendCommand}
-      else
-        go mod vendor
-      fi
+    ${if runVend then ''
+      echo "running 'vend' to rewrite vendor folder"
+      ${vend}/bin/vend
+    '' else ''
+      go mod vendor
+    ''}
+
       mkdir -p vendor
 
       runHook postBuild
@@ -126,12 +117,12 @@ let
   ) // overrideModAttrs modArgs) else "";
 
   package = go.stdenv.mkDerivation (args // {
-    nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
+    nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;
 
     GO111MODULE = "on";
-    GOFLAGS = "-mod=vendor";
+    GOFLAGS = [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -141,10 +132,10 @@ let
       export GOSUMDB=off
       export GOPROXY=off
       cd "$modRoot"
-      if [ -n "${go-modules}" ]; then
-          rm -rf vendor
-          ln -s ${go-modules} vendor
-      fi
+    '' + lib.optionalString (go-modules != "") ''
+      rm -rf vendor
+      cp -r --reflink=auto ${go-modules} vendor
+    '' + ''
 
       runHook postConfigure
     '';
@@ -232,10 +223,6 @@ let
       [ -e "$dir" ] && cp -r $dir $out
 
       runHook postInstall
-    '';
-
-    preFixup = (args.preFixup or "") + ''
-      find $out/{bin,libexec,lib} -type f 2>/dev/null | xargs -r ${removeExpr removeReferences} || true
     '';
 
     strictDeps = true;

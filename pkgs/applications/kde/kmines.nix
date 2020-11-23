@@ -4,7 +4,7 @@ mkDerivation {
   name = "kmines";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.kmines";
-    description = "KMines is a classic Minesweeper game";
+    description = "A classic Minesweeper game";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

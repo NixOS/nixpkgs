@@ -22,8 +22,8 @@ let
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
-    rev = "v5.0.1";
-    sha256 = "01xh61ldilg6fg95l1p870rld2xffhnl9f9ndvbi5jdn8q634pmw";
+    rev = "v5.0.2";
+    sha256 = "1hbw8nbllyj0xyx1rz2chx9vyqf9949dcdx4v9hnfbsjwwpcfi0a";
   };
 
 

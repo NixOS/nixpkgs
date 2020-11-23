@@ -12,9 +12,9 @@
 }:
 
 let
-  version = "1.6.0";
+  version = "1.7.0";
   device = if cudaSupport then "cuda" else "cpu";
-  srcs = import ./binary-hashes.nix;
+  srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
 in stdenv.mkDerivation {
   inherit version;
@@ -45,6 +45,14 @@ in stdenv.mkDerivation {
 
     # We do not care about Java support...
     rm -f $out/lib/lib*jni* 2> /dev/null || true
+
+    # Fix up library paths for split outputs
+    substituteInPlace $dev/share/cmake/Torch/TorchConfig.cmake \
+      --replace \''${TORCH_INSTALL_PREFIX}/lib "$out/lib" \
+
+    substituteInPlace \
+      $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
+      --replace \''${_IMPORT_PREFIX}/lib "$out/lib" \
   '';
 
   postFixup = let
@@ -100,7 +108,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  passthru.tests = callPackage ./test { };
+  passthru.tests.cmake = callPackage ./test { };
 
   meta = with stdenv.lib; {
     description = "C++ API of the PyTorch machine learning framework";

@@ -3,21 +3,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.1.17";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
-    sha256 = "VHhvdIBFPE5CkWVQ4tzMionUnAkZTucVXl5zp5prgok=";
+    sha256 = "yJzfymA4elyyeVR8FzTJe8wgs+vm3RWwcOh7IlmBYPE=";
   };
 
-  cargoSha256 = "/f/suiI5XzI0+lCscsqLZTWU6slHdXgR+5epYpxyU1w=";
+  cargoSha256 = "7zqr54H6GemiM/xuHOH6+s669IG2orj1neoqAH+wnV4=";
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
     ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
+
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+    install -D dist/appimage/tectonic.desktop -t $out/share/applications/
+    install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+  '';
 
   doCheck = true;
 

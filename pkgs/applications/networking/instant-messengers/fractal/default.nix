@@ -12,7 +12,7 @@
 , pkg-config
 , gtksourceview4
 , glib
-, libhandy
+, libhandy_0
 , gtk3
 , dbus
 , openssl
@@ -63,10 +63,10 @@ rustPlatform.buildRustPackage rec {
       gtkSupport = true;
     })
     gst_all_1.gstreamer
-    gst_all_1.gst-validate
+    gst_all_1.gst-devtools
     gtk3
     gtksourceview4
-    libhandy
+    libhandy_0
     openssl
     sqlite
   ];

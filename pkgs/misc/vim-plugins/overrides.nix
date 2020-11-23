@@ -1,7 +1,7 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
-, llvmPackages, rustPlatform
+, llvmPackages, rustPlatform, buildGoModule
 , pkgconfig, curl, openssl, libgit2, libiconv
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -60,18 +60,19 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.158";
+    version = "0.1.160";
     LanguageClient-neovim-src = fetchFromGitHub {
       owner = "autozimu";
       repo = "LanguageClient-neovim";
       rev = version;
-      sha256 = "14xggdgp5qw4yj4gdsgr8s2nxm098m88q8rx6fzd2j20njv308ki";
+      sha256 = "143cifahav1pfmpx3j1ihx433jrwxf6z27s0wxndgjkd2plkks58";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
-      name = "LanguageClient-neovim-bin";
+      pname = "LanguageClient-neovim-bin";
+      inherit version;
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0nin1gydf6q4mmxljm2xbd1jfl3wpzx3pvlqwspahblv9j2bf5ck";
+      cargoSha256 = "0mf94j85awdcqa6cyb89bipny9xg13ldkznjf002fq747f55my2a";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -467,6 +468,21 @@ self: super: {
     '';
   });
 
+  vim-markdown-composer =
+  let
+    vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
+      pname = "vim-markdown-composer-bin";
+      inherit (super.vim-markdown-composer) src version;
+      cargoSha256 = "iuhq2Zhdkib8hw4uvXBjwE5ZiN1kzairlzufaGuVkWc=";
+    };
+  in super.vim-markdown-composer.overrideAttrs(oldAttrs: rec {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/vim-markdown-composer/after/ftplugin/markdown/composer.vim \
+        --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
+        "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
+    '';
+  });
+
   vim-metamath = super.vim-metamath.overrideAttrs(old: {
     preInstall = "cd vim";
   });
@@ -577,6 +593,20 @@ self: super: {
         echo "Building unicode cache"
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
+  });
+
+  vim-hexokinase = super.vim-hexokinase.overrideAttrs(old: {
+    preFixup = let
+      hexokinase = buildGoModule {
+        name = "hexokinase";
+        src = old.src + "/hexokinase";
+        vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+      };
+    in ''
+      ln -s ${hexokinase}/bin/hexokinase $target/hexokinase/hexokinase
+    '';
+
+    meta.platforms = stdenv.lib.platforms.all;
   });
 
   vim-clap = super.vim-clap.overrideAttrs(old: {

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
         having a black belt in shell scripting.
       '';
       license = licenses.mit;
-      maintainers = with maintainers; [ afldcr filalex77 ];
+      maintainers = with maintainers; [ afldcr Br1ght0ne ];
       platforms = platforms.linux;
     };
 

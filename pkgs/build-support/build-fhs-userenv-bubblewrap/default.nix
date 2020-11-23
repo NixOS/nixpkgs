@@ -77,13 +77,13 @@ let
       done
     fi
 
-    auto_mounts=""
+    declare -a auto_mounts
     # loop through all directories in the root
     for dir in /*; do
       # if it is a directory and it is not in the blacklist
       if [[ -d "$dir" ]] && grep -v "$dir" <<< "$blacklist" >/dev/null; then
         # add it to the mount list
-        auto_mounts="$auto_mounts --bind $dir $dir"
+        auto_mounts+=(--bind "$dir" "$dir")
       fi
     done
 
@@ -97,7 +97,7 @@ let
       --ro-bind /nix /nix \
       ${etcBindFlags} \
       $ro_mounts \
-      $auto_mounts \
+      "''${auto_mounts[@]}" \
       ${init runScript}/bin/${name}-init ${initArgs}
   '';
 

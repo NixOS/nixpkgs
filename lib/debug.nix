@@ -14,9 +14,25 @@
 */
 { lib }:
 let
-  inherit (builtins) trace isAttrs isList isInt
-          head substring attrNames;
-  inherit (lib) id elem isFunction;
+  inherit (lib)
+    isInt
+    attrNames
+    isList
+    isAttrs
+    substring
+    addErrorContext
+    attrValues
+    concatLists
+    concatStringsSep
+    const
+    elem
+    generators
+    head
+    id
+    isDerivation
+    isFunction
+    mapAttrs
+    trace;
 in
 
 rec {
@@ -94,7 +110,7 @@ rec {
        trace: { a = { b = {…}; }; }
        => null
    */
-  traceSeqN = depth: x: y: with lib;
+  traceSeqN = depth: x: y:
     let snip = v: if      isList  v then noQuotes "[…]" v
                   else if isAttrs v then noQuotes "{…}" v
                   else v;
@@ -149,7 +165,7 @@ rec {
   */
   runTests =
     # Tests to run
-    tests: lib.concatLists (lib.attrValues (lib.mapAttrs (name: test:
+    tests: concatLists (attrValues (mapAttrs (name: test:
     let testsToRun = if tests ? tests then tests.tests else [];
     in if (substring 0 4 name == "test" ||  elem name testsToRun)
        && ((testsToRun == []) || elem name tests.tests)
@@ -176,9 +192,9 @@ rec {
           + "and will be removed in the next release. "
           + "Please use more specific concatenation "
           + "for your uses (`lib.concat(Map)StringsSep`)." )
-    (lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
+    (concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
 
-  showVal = with lib;
+  showVal =
     trace ( "Warning: `showVal` is deprecated "
           + "and will be removed in the next release, "
           + "please use `traceSeqN`" )
@@ -226,7 +242,7 @@ rec {
     trace ( "Warning: `addErrorContextToAttrs` is deprecated "
           + "and will be removed in the next release. "
           + "Please use `builtins.addErrorContext` directly." )
-    (lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v) attrs);
+    (mapAttrs (a: v: addErrorContext "while evaluating ${a}" v) attrs);
 
   # example: (traceCallXml "myfun" id 3) will output something like
   # calling myfun arg 1: 3 result: 3

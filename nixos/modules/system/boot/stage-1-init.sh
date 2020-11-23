@@ -120,7 +120,7 @@ eval "exec $logOutFd>&1 $logErrFd>&2"
 if test -w /dev/kmsg; then
     tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
         if test -n "$line"; then
-            echo "<7>stage-1-init: $line" > /dev/kmsg
+            echo "<7>stage-1-init: [$(date)] $line" > /dev/kmsg
         fi
     done &
 else
@@ -356,6 +356,7 @@ mountFS() {
     case $options in
         *x-nixos.autoresize*)
             if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                modprobe "$fsType"
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"

@@ -1,6 +1,6 @@
 { autoPatchelfHook, fetchurl, lib, makeDesktopItem, makeWrapper, stdenv, wrapGAppsHook
 , at-spi2-core, atk, alsaLib, cairo, cups, dbus, expat, gcc-unwrapped
-, gdk-pixbuf, glib, gnome2, gtk3-x11, libudev0-shim, libuuid, nss, nspr, xorg
+, gdk-pixbuf, glib, pango, gtk3-x11, libudev0-shim, libuuid, nss, nspr, xorg
 , streamlink }:
 
 let
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gcc-unwrapped
     gdk-pixbuf
     glib
-    gnome2.pango
+    pango
     gtk3-x11
     nss
     nspr

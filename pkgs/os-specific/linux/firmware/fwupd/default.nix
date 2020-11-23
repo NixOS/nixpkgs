@@ -3,6 +3,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
+, fetchFromGitHub
 , substituteAll
 , gtk-doc
 , pkg-config
@@ -88,7 +89,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.4.6";
+    version = "1.5.1";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -97,7 +98,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "AKG5stioIveQc7ooYb/2UoOaBzbPUFzYk8tZK0rzvK0=";
+      sha256 = "0fpxcl6bighiipyl4qspjhi0lwisrgq8jdahm68mk34rmrx50sgf";
     };
 
     patches = [
@@ -117,6 +118,12 @@ let
         src = ./installed-tests-path.patch;
         # Needs a different set of modules than po/make-images.
         inherit installedTestsPython;
+      })
+
+      # Skip tests requiring network.
+      (fetchpatch {
+        url = "https://github.com/fwupd/fwupd/commit/db15442c7c217610954786bd40779c14ed0e034b.patch";
+        sha256 = "/jzpGMJcqLisjecKpSUfA8ZCU53n7BOPR6tMgEX/qL8=";
       })
     ];
 
@@ -229,6 +236,19 @@ let
       addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
     '';
 
+    postInstall =
+      let
+        testFw = fetchFromGitHub {
+          owner = "fwupd";
+          repo = "fwupd-test-firmware";
+          rev = "42b62c62dc85ecfb8e38099fe5de0625af87a722";
+          sha256 = "XUpxE003DZSeLJMtyV5UN5CNHH89/nEVKpCbMStm91Q=";
+        };
+      in ''
+        # These files have weird licenses so they are shipped separately.
+        cp --recursive --dereference "${testFw}/installed-tests/tests" "$installedTests/libexec/installed-tests/fwupd"
+      '';
+
     preFixup = let
       binPath = [
         efibootmgr
@@ -254,6 +274,8 @@ let
       done
     '';
 
+    separateDebugInfo = true;
+
     passthru = {
       filesInstalledToEtc = [
         "fwupd/ata.conf"
@@ -277,8 +299,8 @@ let
         "fwupd/remotes.d/dell-esrt.conf"
       ];
 
-      # BlacklistPlugins key in fwupd/daemon.conf
-      defaultBlacklistedPlugins = [
+      # DisabledPlugins key in fwupd/daemon.conf
+      defaultDisabledPlugins = [
         "test"
         "invalid"
       ];
@@ -302,9 +324,9 @@ let
 
           config = configparser.RawConfigParser()
           config.read('${self}/etc/fwupd/daemon.conf')
-          package_blacklisted_plugins = config.get('fwupd', 'BlacklistPlugins').rstrip(';').split(';')
-          passthru_blacklisted_plugins = ${listToPy passthru.defaultBlacklistedPlugins}
-          assert package_blacklisted_plugins == passthru_blacklisted_plugins, f'Default blacklisted plug-ins in the package {package_blacklisted_plugins} do not match those listed in passthru.defaultBlacklistedPlugins {passthru_blacklisted_plugins}'
+          package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
+          passthru_disabled_plugins = ${listToPy passthru.defaultDisabledPlugins}
+          assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'
 
           pathlib.Path(os.getenv('out')).touch()
         '';

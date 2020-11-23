@@ -2,9 +2,9 @@
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "3.8.1";
-  # rev is the 3.8.1 commit, mainly for kustomize version command output
-  rev = "6a50372dd5686df22750b0c729adaf369fbf193c";
+  version = "3.8.7";
+  # rev is the 3.8.7 commit, mainly for kustomize version command output
+  rev = "ad092cc7a91c07fdf63a2e4b7f13fa588a39af4f";
 
   buildFlagsArray = let t = "sigs.k8s.io/kustomize/api/provenance"; in
     ''
@@ -17,13 +17,13 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    sha256 = "07zdp6xv8viwnaz1qacwhg82dlzcrgb8dls6yz9qk4qcnsk6badx";
+    sha256 = "1942cyaj6knf8mc3q2vcz6rqqc6lxdd6nikry9m0idk5l1b09x1m";
   };
 
   # avoid finding test and development commands
   sourceRoot = "source/kustomize";
 
-  vendorSha256 = "01ff3w4hwp4ynqhg8cplv0i2ixs811d2x2j6xbh1lslyyh3z3wc5";
+  vendorSha256 = "0y77ykfcbn4l0x85c3hb1lgjpy64kimx3s1qkn38gpmi4lphvkkl";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";

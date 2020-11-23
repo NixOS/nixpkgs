@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , param
 , pyyaml
 , requests
@@ -9,13 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyct";
-  version = "0.4.6";
+  version = "0.4.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df7b2d29f874cabdbc22e4f8cba2ceb895c48aa33da4e0fe679e89873e0a4c6e";
+    sha256 = "23d7525b5a1567535c093aea4b9c33809415aa5f018dd77f6eb738b1226df6f7";
   };
 
+  doCheck = !isPy27;
   checkInputs = [ pytest ];
   propagatedBuildInputs = [
     param

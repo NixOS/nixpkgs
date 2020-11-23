@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "3.4";
+  version = "3.6";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    sha256 = "0s46cni16ph93havmkrlai3k13mdppyca1s2bqm751a6rirmsgj0";
+    sha256 = "1srd6vrqgjlf906zdyxp4bg6gihkxn62cpzyfv0zzpsqsj13iwh1";
   };
 
   buildInputs = [ makeWrapper perl ];

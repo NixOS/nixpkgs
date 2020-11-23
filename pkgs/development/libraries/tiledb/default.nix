@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.0.7";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    sha256 = "00g8ibsbnl4wjfx3qg4qy6s7z6dsj898j0yqfhw1gjr1pb5dsapb";
+    sha256 = "12f3jvb9b6ji5w2n2k3sjn156ikaf06mriwbqlc54ii1zznaw43r";
   };
 
   # (bundled) blosc headers have a warning on some archs that it will be using
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cmake
     python
     doxygen
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   checkInputs = [
     gtest
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     openssl
     boost
     libpqxx
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ];
 
   # emulate the process of pulling catch down
   postPatch = ''

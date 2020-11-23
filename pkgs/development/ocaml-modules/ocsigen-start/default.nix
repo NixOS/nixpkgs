@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, macaque, safepass, yojson
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
 , cohttp-lwt-unix
 , resource-pooling
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   createFindlibDestdir = true;
-  
+
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-start";

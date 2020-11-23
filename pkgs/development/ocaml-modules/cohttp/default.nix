@@ -7,6 +7,8 @@ buildDunePackage rec {
 	pname = "cohttp";
 	version = "2.5.4";
 
+	useDune2 = true;
+
 	minimumOCamlVersion = "4.04.1";
 
 	src = fetchurl {

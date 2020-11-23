@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchzip {
     url = "http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
-    sha256 = "1bp26x5mhbl25s9djlq6yani1vaqrgbi5mjljhwhj97iapwsd0yb";
+    sha256 = "1m00cdg1520ampg3i2j64si8gmwph7j4189agjlimx3fjjsp3xrh";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -19,13 +19,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = ''
-      AsciidoctorJ is the official library for running Asciidoctor on the JVM.
-    '';
+    description = "Official library for running Asciidoctor on the JVM";
     longDescription = ''
-      AsciidoctorJ is the official library for running Asciidoctor on the JVM. 
-      Using AsciidoctorJ, you can convert AsciiDoc content or analyze the 
-      structure of a parsed AsciiDoc document from Java and other JVM 
+      AsciidoctorJ is the official library for running Asciidoctor on the JVM.
+      Using AsciidoctorJ, you can convert AsciiDoc content or analyze the
+      structure of a parsed AsciiDoc document from Java and other JVM
       languages.
     '';
     homepage = "https://asciidoctor.org/docs/asciidoctorj/";
@@ -33,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];
   };
-} 
+}

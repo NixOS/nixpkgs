@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.3.3";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jbnx23f1323sh1rfx8rza2pzr4li4199wblrl4vw4zp5hj4qnkm";
+    sha256 = "0dxjcab10kqfkflq1x9np5wxlysq33swdwi2f28bi7q312sw5x2y";
     fetchSubmodules = true;
   };
-  cargoSha256 = "08zi3ynbi44rdgid9qalgsb5g8dcwclr6ynwxvhi8r0v5i7swwrx";
+  cargoSha256 = "0lhdrsvmf5b4fq2yg9vc00q1sgc1fjk0fh5axs2zffcpsp73ay2k";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
@@ -52,12 +52,14 @@ rustPlatform.buildRustPackage rec {
   # Skipping until resolved
   doCheck = false;
 
-  # TODO: Move to enhanced installShellCompletion when merged: PR #83630
   postInstall = ''
-    $out/bin/deno completions bash > deno.bash
-    $out/bin/deno completions fish > deno.fish
-    $out/bin/deno completions zsh  > _deno
-    installShellCompletion deno.{bash,fish} --zsh _deno
+    # remove test plugin and test server
+    rm -rf $out/lib $out/bin/test_server
+
+    installShellCompletion --cmd deno \
+      --bash <($out/bin/deno completions bash) \
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
   '';
 
   passthru.updateScript = ./update/update.ts;

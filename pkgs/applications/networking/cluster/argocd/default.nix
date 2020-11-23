@@ -2,23 +2,21 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "1.4.2";
-  commit = "48cced9d925b5bc94f6aa9fa4a8a19b2a59e128a";
+  version = "1.7.8";
+  commit = "ef5010c3a0b5e027fd642732d03c5b0391b1e574";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "01vsyrks1k5yfvrarv8ia0isr7snilr21b7lfiy860si82r2r8hj";
+    sha256 = "1pwk6mzmlsx43c75wl5lglpxgc2jkgzra4443hwp6n0wfgzajfp4";
   };
 
-  vendorSha256 = "0r2nh7v00m6zbdnhsgjn01q9pkiz41ckkqgfnpqmkxaqmjz31iyj";
+  vendorSha256 = "0c5gykijwjrq3cx9qg9hm5j7axccngc1kp5qj3429a2ilw80l8pl";
 
   doCheck = false;
 
   nativeBuildInputs = [ packr ];
-
-  patches = [ ./use-go-module.patch ];
 
   buildFlagsArray = ''
      -ldflags=

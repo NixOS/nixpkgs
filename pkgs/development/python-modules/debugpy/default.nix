@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cxwbq97n5pfmq0hji1ybbc6i1jg5bjy830dq23zqxbwxxwjx98m";
+    sha256 = "1r5w5ngipj5fgjylrmlw3jrh5y2n67n68l91sj9329549x4ww8dh";
   };
 
   patches = [
@@ -32,6 +32,11 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./hardcode-gdb.patch;
       inherit gdb;
+    })
+
+    (substituteAll {
+      src = ./hardcode-version.patch;
+      inherit version;
     })
 
     # Fix importing debugpy in:

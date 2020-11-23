@@ -3,8 +3,8 @@
 buildPecl {
   pname = "ast";
 
-  version = "1.0.5";
-  sha256 = "16c5isldm4csjbcvz1qk2mmrhgvh24sxsp6w6f5a37xpa3vciawp";
+  version = "1.0.10";
+  sha256 = "13s5r1szd80g1mqickghdd38mvjkwss221322mmbrykcfgp4fs30";
 
   meta.maintainers = lib.teams.php.members;
 }

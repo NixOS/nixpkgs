@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Contains a small database of Conway polynomials";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

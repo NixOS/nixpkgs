@@ -290,8 +290,8 @@ in
       hound = 259;
       leaps = 260;
       ipfs  = 261;
-      stanchion = 262;
-      riak-cs = 263;
+      # stanchion = 262; # unused, removed 2020-10-14
+      # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
@@ -468,7 +468,7 @@ in
       #minecraft = 114; # unused
       vault = 115;
       #ripped = 116; # unused
-      #murmur = 117; # unused
+      murmur = 117;
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
@@ -593,8 +593,8 @@ in
       hound = 259;
       leaps = 260;
       ipfs = 261;
-      stanchion = 262;
-      riak-cs = 263;
+      # stanchion = 262; # unused, removed 2020-10-14
+      # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;

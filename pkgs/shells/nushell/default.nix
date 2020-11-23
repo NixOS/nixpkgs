@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "19bpxx9pi3cl5y7h5qg4a2pmvwqavm1vciyvsq96kxkc7rq2xwvl";
+    sha256 = "1nj8cjj5db5r4wnxbcsd5z9n5kqf2p1j54l5z0m650370z41df1f";
   };
 
-  cargoSha256 = "1ghbzahz8lbk11sjy2kis12w22rjr92aaw451rmc86pk2lsxn0dx";
+  cargoSha256 = "0sh6z8dclla3lrjzwfjb7avsbkagaq9d9q3d8ll8y0mahv1a135w";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
@@ -35,11 +35,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
-
-  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    unset SDKROOT
-  '';
 
   checkPhase = ''
     runHook preCheck
@@ -52,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 johntitor marsam ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 

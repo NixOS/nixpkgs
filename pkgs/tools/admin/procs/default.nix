@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.10.4";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1a28kkxcrdfmrq2mmsfkdxfp3msklwga5nbfhjb7a7s64xh8jmjv";
+    sha256 = "0aaspzx8sna1m5zldql0ps3sldazwr32q0md0p8z3nimww24i3b3";
   };
 
-  cargoSha256 = "1xlxjr0pkwlzm7f5xlrsf76in28r9jj41n6gn44vxqbh4x161gs1";
+  cargoSha256 = "1nb38nnmmc4hf8crp0bka029hlph15zm796nqziq25i26cgz4xvp";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     license = licenses.mit;
-    maintainers = with maintainers; [ dalance filalex77 ];
+    maintainers = with maintainers; [ dalance Br1ght0ne ];
     platforms = with platforms; linux ++ darwin;
   };
 }

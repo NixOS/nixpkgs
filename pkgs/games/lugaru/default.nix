@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DSYSTEM_INSTALL=ON" ];
 
   meta = {
-    description = "Lugaru HD: Third person ninja rabbit fighting game";
+    description = "Third person ninja rabbit fighting game";
     homepage = "https://osslugaru.gitlab.io";
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

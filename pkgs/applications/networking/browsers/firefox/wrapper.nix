@@ -2,9 +2,9 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
+, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd
 , gnome3/*.gnome-shell*/
-, browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
+, browserpass, chrome-gnome-shell, uget-integrator, plasma5, bukubrow
 , tridactyl-native
 , fx_cast_bridge
 , udev
@@ -39,6 +39,7 @@ let
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
+      alsaSupport = browser.alsaSupport or false;
 
       plugins =
         let
@@ -64,7 +65,7 @@ let
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
-          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
+          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
@@ -76,6 +77,7 @@ let
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
+            ++ lib.optional alsaSupport alsaLib
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk2 ];
 

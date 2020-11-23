@@ -3,7 +3,7 @@
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
-, openssl, gperf, tinyxml2, taglib, libssh, swig, jre
+, openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
 , libxml2, systemd
 , alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
@@ -45,14 +45,14 @@ assert useWayland -> wayland != null && wayland-protocols != null && waylandpp !
 
 let
   kodiReleaseDate = "20200728";
-  kodiVersion = "18.8";
+  kodiVersion = "18.9";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "0qpkpz43s207msvv3qkiy6vzqwcgmydxv3py7vc29mv6h30chrva";
+    sha256 = "0nnf7823pixj6n2fkjc8rbdjwayvhlbglij2by4rnjzzfgmqmw20";
   };
 
   cmakeProto = fetchurl {
@@ -211,7 +211,7 @@ in stdenv.mkDerivation {
       which
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-      jre yasm gettext python2Packages.python flatbuffers
+      jre_headless yasm gettext python2Packages.python flatbuffers
 
       # for TexturePacker
       giflib zlib libpng libjpeg lzo

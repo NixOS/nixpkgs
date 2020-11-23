@@ -75,6 +75,7 @@
 , "eslint_d"
 , "expo-cli"
 , {"fast-cli": "1.x"}
+, "fauna-shell"
 , "fkill-cli"
 , "forever"
 , "fx"
@@ -93,13 +94,16 @@
 , "html-minifier"
 , "htmlhint"
 , "http-server"
+, "hsd"
+, "hs-airdrop"
+, "hs-client"
 , "hueadm"
 , "inliner"
 , "imapnotify"
 , "indium"
 , "insect"
 , "ionic"
-, { "iosevka-build-deps": "../../data/fonts/iosevka" }
+, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v3.7.1.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
@@ -215,6 +219,7 @@
 , "vim-language-server"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
+, "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
 , { "vscode-lldb-build-deps": "../../misc/vscode-extensions/vscode-lldb/build-deps" }
 , "vue-cli"

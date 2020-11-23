@@ -9,6 +9,7 @@
 , buildGoPackage
 , git
 , runc
+, kmod
 , libseccomp
 , pkgconfig
 , ethtool
@@ -221,11 +222,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "k3s";
+  version = k3sVersion;
 
   # Important utilities used by  the kubelet, see
   # https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494
   # Note the list in that issue is stale and some aren't relevant for k3s.
   k3sRuntimeDeps = [
+    kmod
     socat
     iptables
     iproute

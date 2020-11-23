@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ++ optional withMysql "--enable-mysql";
 
   meta = with stdenv.lib; {
-    description = "pmacct is a small set of multi-purpose passive network monitoring tools";
+    description = "A small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]

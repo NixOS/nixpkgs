@@ -65,16 +65,16 @@ Platform Vendor      Advanced Micro Devices, Inc.</screen>
       <title>AMD</title>
 
       <para>
-	Modern AMD <link
-	xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
-	Core Next</link> (GCN) GPUs are supported through the
-	<package>rocm-opencl-icd</package> package. Adding this package to
-	<xref linkend="opt-hardware.opengl.extraPackages"/> enables OpenCL
-	support:
+       Modern AMD <link
+       xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
+       Core Next</link> (GCN) GPUs are supported through the
+       <package>rocm-opencl-icd</package> package. Adding this package to
+       <xref linkend="opt-hardware.opengl.extraPackages"/> enables OpenCL
+       support:
 
-	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
-  rocm-opencl-icd
-];</programlisting>
+       <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+         rocm-opencl-icd
+       ];</programlisting>
       </para>
     </section>
 
@@ -100,9 +100,9 @@ Platform Vendor      Advanced Micro Devices, Inc.</screen>
        support. For example, for Gen8 and later GPUs, the following
        configuration can be used:
 
-	      <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
-  intel-compute-runtime
-];</programlisting>
+      <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+        intel-compute-runtime
+      ];</programlisting>
 
       </para>
     </section>
@@ -173,31 +173,31 @@ GPU1:
       <title>AMD</title>
 
       <para>
-	Modern AMD <link
-	xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
-	Core Next</link> (GCN) GPUs are supported through either radv, which is
-	part of <package>mesa</package>, or the <package>amdvlk</package> package.
-	Adding the <package>amdvlk</package> package to
-	<xref linkend="opt-hardware.opengl.extraPackages"/> makes both drivers
-	available for applications and lets them choose. A specific driver can
-	be forced as follows:
+       Modern AMD <link
+       xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
+       Core Next</link> (GCN) GPUs are supported through either radv, which is
+       part of <package>mesa</package>, or the <package>amdvlk</package> package.
+       Adding the <package>amdvlk</package> package to
+       <xref linkend="opt-hardware.opengl.extraPackages"/> makes both drivers
+       available for applications and lets them choose. A specific driver can
+       be forced as follows:
 
-	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
-  pkgs.<package>amdvlk</package>
-];
+       <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+         pkgs.<package>amdvlk</package>
+       ];
 
-# To enable Vulkan support for 32-bit applications, also add:
-<xref linkend="opt-hardware.opengl.extraPackages32"/> = [
-  pkgs.driversi686Linux.<package>amdvlk</package>
-];
+       # To enable Vulkan support for 32-bit applications, also add:
+       <xref linkend="opt-hardware.opengl.extraPackages32"/> = [
+         pkgs.driversi686Linux.<package>amdvlk</package>
+       ];
 
-# For amdvlk
-<xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
-   "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
-# For radv
-<xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
-  "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-</programlisting>
+       # For amdvlk
+       <xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
+          "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
+       # For radv
+       <xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
+         "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+       </programlisting>
       </para>
     </section>
   </section>

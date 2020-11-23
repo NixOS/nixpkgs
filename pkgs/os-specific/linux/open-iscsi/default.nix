@@ -25,8 +25,16 @@ stdenv.mkDerivation rec {
     sed -i 's|/usr|/|' Makefile
   '';
 
+  installFlags = [
+    "install"
+    "install_systemd"
+  ];
+
   postInstall = ''
     cp usr/iscsistart $out/sbin/
+    for f in $out/lib/systemd/system/*; do
+      substituteInPlace $f --replace /sbin $out/bin
+    done
     $out/sbin/iscsistart -v
   '';
 

@@ -797,6 +797,9 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });

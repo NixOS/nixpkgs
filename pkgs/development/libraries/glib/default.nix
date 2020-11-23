@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.64.5";
+  version = "2.66.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04fczq693wivkqd2qxvvi3sncqgznsvzfiiwsll1rbayf795pgcw";
+    sha256 = "1cdmyyycw2mf5s0f5sfd59q91223s4smcqi8n2fwrccwm5ji7wvr";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
+    "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder ''dev''}/bin"
   ];

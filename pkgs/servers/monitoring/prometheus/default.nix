@@ -1,13 +1,13 @@
-{ lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage, nixosTests }:
+{ stdenv, lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage, nixosTests }:
 
 let
-  version = "2.20.1";
+  version = "2.22.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "0svhx08pbz55nhn6g9pn79zbhyvr394k5w3ny1mq3wp382h62r5j";
+    sha256 = "04pf3shdfd25wf8snkan5hzv1gjzazjw06i11xaamnc8gfahnzdv";
   };
 
   webui = mkYarnPackage {
@@ -59,7 +59,7 @@ in buildGoPackage rec {
     cp -a $src/console_libraries $src/consoles $out/etc/prometheus
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
 
   passthru.tests = { inherit (nixosTests) prometheus; };
 

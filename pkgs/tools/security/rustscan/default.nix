@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, nmap
-}:
+{ stdenv, fetchFromGitHub, rustPlatform, nmap, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
@@ -11,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "0dhy7b73ipsxsr7wlc3r5yy39i3cjrdszhsw9xwjj31692s3b605";
   };
 
@@ -22,6 +18,8 @@ rustPlatform.buildRustPackage rec {
       --replace 'Command::new("nmap")' 'Command::new("${nmap}/bin/nmap")'
   '';
 
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+
   checkFlags = [
     "--skip=infer_ulimit_lowering_no_panic"
     "--skip=google_dns_runs"
@@ -29,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=parse_hosts_file_and_incorrect_hosts"
   ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Faster Nmap Scanning with Rust";
     homepage = "https://github.com/RustScan/RustScan";
     license = licenses.gpl3Only;

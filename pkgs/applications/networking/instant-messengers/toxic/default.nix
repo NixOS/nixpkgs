@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "toxic";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner  = "Tox";
     repo   = "toxic";
     rev    = "v${version}";
-    sha256 = "09l2j3lwvrq7bf3051vjsnml9w63790ly3iylgf26gkrmld6k31w";
+    sha256 = "0p1cmj1kyp506y5xm04mhlznhf5wcylvgsn6b307ms91vjqs3fg2";
   };
 
   makeFlags = [ "PREFIX=$(out)"];

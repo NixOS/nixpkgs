@@ -3,8 +3,8 @@
 buildPecl {
   pname = "yaml";
 
-  version = "2.0.4";
-  sha256 = "1036zhc5yskdfymyk8jhwc34kvkvsn5kaf50336153v4dqwb11lp";
+  version = "2.1.0";
+  sha256 = "0rmn2irzny24ivzc09ss46s2s48i0zy2cww7ikphljqbfx6zdjss";
 
   configureFlags = [ "--with-yaml=${pkgs.libyaml}" ];
 

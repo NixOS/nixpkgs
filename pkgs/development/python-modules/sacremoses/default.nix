@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alvations";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "1gzr56w8yx82mn08wax5m0xyg15ym4ri5l80gmagp8r53443j770";
   };
 
