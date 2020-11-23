@@ -962,6 +962,10 @@ in
 
   charm = callPackage ../applications/misc/charm { };
 
+  chars = callPackage ../tools/text/chars {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
