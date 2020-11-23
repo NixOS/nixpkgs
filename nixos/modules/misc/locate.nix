@@ -98,6 +98,7 @@ in {
         "ftpfs"
         "fuse"
         "fusectl"
+        "fuse.sshfs"
         "gfs"
         "gfs2"
         "hostfs"
