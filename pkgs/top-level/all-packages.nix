@@ -21835,6 +21835,10 @@ in
 
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
+  imgbrd-grabber = qt5.callPackage ../applications/graphics/imgbrd-grabber/default.nix {
+    typescript = nodePackages.typescript;
+  };
+
   imgcat = callPackage ../applications/graphics/imgcat { };
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
