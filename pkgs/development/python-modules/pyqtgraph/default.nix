@@ -1,10 +1,10 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, scipy
 , numpy
-, pyqt4
 , pyopengl
+, pyqt5
+, scipy
 }:
 
 buildPythonPackage rec {
@@ -16,13 +16,16 @@ buildPythonPackage rec {
     sha256 = "0p5k73wjfh0zzjvby8b5107cx7x0c2rdj66zh1nc8y95i0anf2na";
   };
 
-  propagatedBuildInputs = [ scipy numpy pyqt4 pyopengl ];
+  propagatedBuildInputs = [ numpy pyopengl pyqt5 scipy ];
 
-  doCheck = false;  # "PyQtGraph requires either PyQt4 or PySide; neither package could be imported."
+  doCheck = false;  # tries to create windows (QApps) on collection, which fails (probably due to no display)
+
+  pythonImportsCheck = [ "pyqtgraph" ];
 
   meta = with stdenv.lib; {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "http://www.pyqtgraph.org/";
+    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ koral ];
