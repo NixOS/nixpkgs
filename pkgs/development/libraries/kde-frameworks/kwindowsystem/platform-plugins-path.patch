@@ -1,25 +1,45 @@
-Index: kwindowsystem-5.64.0/src/pluginwrapper.cpp
-===================================================================
---- kwindowsystem-5.64.0.orig/src/pluginwrapper.cpp
-+++ kwindowsystem-5.64.0/src/pluginwrapper.cpp
-@@ -37,16 +37,10 @@ Q_GLOBAL_STATIC(KWindowSystemPluginWrapp
+From 5d73d02656298d0af860c8ed7f6be679e3d69e09 Mon Sep 17 00:00:00 2001
+From: Tom Hall <tahall256@protonmail.ch>
+Date: Tue, 24 Nov 2020 19:31:20 +0000
+Subject: [PATCH] Fix platform plugins path
+
+---
+ src/pluginwrapper.cpp | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
+
+diff --git a/src/pluginwrapper.cpp b/src/pluginwrapper.cpp
+index a255d83..8f4caac 100644
+--- a/src/pluginwrapper.cpp
++++ b/src/pluginwrapper.cpp
+@@ -24,22 +24,12 @@ Q_GLOBAL_STATIC(KWindowSystemPluginWrapper, s_pluginWrapper)
  static QStringList pluginCandidates()
  {
      QStringList ret;
 -    const auto paths = QCoreApplication::libraryPaths();
 -    for (const QString &path : paths) {
--        QDir pluginDir(path + QLatin1String("/kf5/org.kde.kwindowsystem.platforms"));
--        if (!pluginDir.exists()) {
--            continue;
+-        static const QStringList searchFolders {
+-            QStringLiteral("/kf5/org.kde.kwindowsystem.platforms"),
+-            QStringLiteral("/kf5/kwindowsystem"),
+-        };
+-        for (const QString &searchFolder : searchFolders) {
+-            QDir pluginDir(path + searchFolder);
+-            if (!pluginDir.exists()) {
+-                continue;
+-            }
+-            const auto entries = pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+-            for (const QString &entry : entries) {
+-                ret << pluginDir.absoluteFilePath(entry);
+-            }
 -        }
--        const auto entries = pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
--        for (const QString &entry : entries) {
--            ret << pluginDir.absoluteFilePath(entry);
--        }
-+    QDir pluginDir(QLatin1String(NIXPKGS_QT_PLUGIN_PATH) + QLatin1Literal("/kf5/org.kde.kwindowsystem.platforms"));
++    QDir pluginDir(QLatin1String(NIXPKGS_QT_PLUGIN_PATH)
++            + QLatin1Literal("/kf5/org.kde.kwindowsystem.platforms")
++            + QLatin1Literal("/kf5/kwindowsystem"));
 +    const auto entries = pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
 +    for (const QString &entry : entries) {
 +        ret << pluginDir.absoluteFilePath(entry);
      }
      return ret;
  }
+-- 
+2.28.0
+
