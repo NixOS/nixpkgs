@@ -338,7 +338,8 @@ self: super: {
     then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
     else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
-
+  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
+  matterhorn = doJailbreak super.matterhorn; # this is needed until the end of time :')
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
