@@ -56,6 +56,11 @@
        section of the NixOS manual</link> for more information.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       <xref linkend="opt-services.samba-wsdd.enable" /> Web Services Dynamic Discovery host daemon
+     </para>
+   </listitem>
   </itemizedlist>
 
  </section>

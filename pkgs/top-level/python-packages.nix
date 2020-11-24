@@ -7011,6 +7011,8 @@ in {
 
   sumo = callPackage ../development/python-modules/sumo { };
 
+  sumtypes = callPackage ../development/python-modules/sumtypes { };
+
   sunpy = callPackage ../development/python-modules/sunpy { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
