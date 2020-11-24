@@ -6,11 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "memcached-1.51";
+  pname = "memcached";
   version = "1.51";
 
   src = if isPy3k then fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "python3-${pname}";
     sha256 = "0na8b369q8fivh3y0nvzbvhh3lgvxiyyv9xp93cnkvwfsr8mkgkw";
   } else fetchurl {
     url = "http://ftp.tummy.com/pub/python-memcached/old-releases/python-${pname}-${version}.tar.gz";

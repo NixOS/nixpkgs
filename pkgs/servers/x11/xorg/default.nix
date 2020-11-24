@@ -1157,7 +1157,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libxcb = callPackage ({ stdenv, pkgconfig, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python }: stdenv.mkDerivation {
+  libxcb = callPackage ({ stdenv, pkgconfig, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python3 }: stdenv.mkDerivation {
     name = "libxcb-1.14";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1165,7 +1165,7 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0d2chjgyn5lr9sfhacfvqgnj9l9faz11vn322a06jd6lk3dxcpm5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig python ];
+    nativeBuildInputs = [ pkgconfig python3 ];
     buildInputs = [ libxslt libpthreadstubs libXau xcbproto libXdmcp ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
@@ -1430,7 +1430,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
+  xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python3 }: stdenv.mkDerivation {
     name = "xcb-proto-1.14.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1438,7 +1438,7 @@ lib.makeScope newScope (self: with self; {
       sha256 = "1hzwazgyywd9mz4mjj1yv8ski27qqx7ypmyr27m39hrajyddsjph";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig python ];
+    nativeBuildInputs = [ pkgconfig python3 ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
@@ -1963,7 +1963,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videointel = callPackage ({ stdenv, pkgconfig, fetchurl, cairo, xorgproto, libdrm, libpng, udev, libpciaccess, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, libXfixes, xorgserver, libXrandr, libXrender, libxshmfence, libXtst, libXvMC, libXv }: stdenv.mkDerivation {
+  xf86videointel = callPackage ({ stdenv, pkgconfig, fetchurl, cairo, xorgproto, libdrm, libpng, udev, libpciaccess, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, libXfixes, xorgserver, libXrandr, libXrender, libxshmfence, libXtst, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-intel-2.99.917";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1972,7 +1972,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ cairo xorgproto libdrm libpng udev libpciaccess libX11 xcbutil libxcb libXcursor libXdamage libXext libXfixes xorgserver libXrandr libXrender libxshmfence libXtst libXvMC libXv ];
+    buildInputs = [ cairo xorgproto libdrm libpng udev libpciaccess libX11 xcbutil libxcb libXcursor libXdamage libXext libXfixes xorgserver libXrandr libXrender libxshmfence libXtst libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2522,7 +2522,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xkeyboardconfig = callPackage ({ stdenv, python3, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+  xkeyboardconfig = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, python3 }: stdenv.mkDerivation {
     name = "xkeyboard-config-2.31";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2532,9 +2532,6 @@ lib.makeScope newScope (self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig python3 ];
     buildInputs = [ libX11 xorgproto ];
-    prePatch = ''
-      patchShebangs rules/merge.py
-    '';
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 

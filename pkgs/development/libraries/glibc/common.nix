@@ -160,6 +160,10 @@ stdenv.mkDerivation ({
       "libc_cv_as_needed=no"
     ] ++ lib.optional withGd "--with-gd";
 
+  makeFlags = [
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+  ];
+
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   outputs = [ "out" "bin" "dev" "static" ];

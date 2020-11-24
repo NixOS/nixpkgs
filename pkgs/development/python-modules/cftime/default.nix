@@ -1,10 +1,11 @@
 { buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 , coveralls
 , pytestcov
 , cython
 , numpy
+, python
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,23 @@ buildPythonPackage rec {
     sha256 = "ab5d5076f7d3e699758a244ada7c66da96bae36e22b9e351ce0ececc36f0a57f";
   };
 
-  checkInputs = [ pytest coveralls pytestcov ];
-  buildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy ];
+  checkInputs = [
+    pytestCheckHook
+    coveralls
+    pytestcov
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  nativeBuildInputs = [
+    cython
+    numpy
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
+
+  # ERROR test/test_cftime.py - ModuleNotFoundError: No module named 'cftime._cft...
+  doCheck = false;
 
   meta = {
     description = "Time-handling functionality from netcdf4-python";

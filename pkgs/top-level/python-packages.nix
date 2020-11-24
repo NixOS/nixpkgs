@@ -3451,13 +3451,13 @@ in {
       p.overrideAttrs (super: {
         meta = super.meta // {
           outputsToInstall = [ "py" ];
-          broken = (super.meta.broken or false) || pythonAtLeast "3.8";
+          broken = super.meta.broken or isPy27;
         };
       }))
     (p:
       p.override {
         enablePython = true;
-        inherit python;
+        python3 = python;
       })
     (p: p.py)
   ];
@@ -6545,6 +6545,8 @@ in {
     callPackage ../development/python-modules/seaborn/0.9.1.nix { };
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
+
+  seccomp = callPackage ../development/python-modules/seccomp { };
 
   secp256k1 = callPackage ../development/python-modules/secp256k1 { inherit (pkgs) secp256k1 pkgconfig; };
 

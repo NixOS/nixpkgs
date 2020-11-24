@@ -281,9 +281,9 @@ stdenv.mkDerivation {
     "-Dmount-path=${utillinux}/bin/mount"
     "-Dumount-path=${utillinux}/bin/umount"
     "-Dcreate-log-dirs=false"
-    # Upstream uses cgroupsv2 by default. To support docker and other
-    # container managers we still need v1.
-    "-Ddefault-hierarchy=hybrid"
+
+    # Use cgroupsv2. This is already the upstream default, but better be explicit.
+    "-Ddefault-hierarchy=unified"
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
     "-Dman=true"

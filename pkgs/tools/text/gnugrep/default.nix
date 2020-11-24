@@ -5,7 +5,7 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let version = "3.5"; in
+let version = "3.6"; in
 
 stdenv.mkDerivation {
   pname = "gnugrep";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    sha256 = "0jm4hynsqf32rw1j3kv239wzg47qm6glqh6841ar9ay20xvwfamq";
+    sha256 = "0gipv6bzkm1aihj0ncqpyh164xrzgcxcv9r1kwzyk2g1mzl1azk6";
   };
 
   # Perl is needed for testing

@@ -9,6 +9,8 @@ buildPythonPackage rec {
     sha256 = "af40774c0275f5465f49fd92bfcd9831b19b013de4cc77b8fb38aea76fa6dce3";
   };
 
+  outputs = [ "out" "dev" ];
+
   enableParallelBuilding = true;
 
   propagatedBuildInputs = [ protobuf grpcio setuptools ];

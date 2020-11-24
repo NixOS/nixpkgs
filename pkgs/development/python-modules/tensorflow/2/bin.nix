@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, pythonOlder, isPy38
+, isPy3k, pythonOlder, pythonAtLeast, isPy38
 , astor
 , gast
 , google-pasta
@@ -54,7 +54,7 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
-  disabled = isPy38;
+  disabled = pythonAtLeast "3.8";
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
