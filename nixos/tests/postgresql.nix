@@ -32,6 +32,12 @@ let
         services.postgresql = {
           enable = true;
           package = postgresql-package;
+          includes = [
+            {
+              kind = "include_if_exists";
+              path = pkgs.writeText "test" "shared_buffers = 0MB";
+            }
+          ];
         };
 
         services.postgresqlBackup = {

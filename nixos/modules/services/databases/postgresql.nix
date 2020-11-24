@@ -11,14 +11,19 @@ let
       then cfg.package
       else cfg.package.withPackages (_: cfg.extraPlugins);
 
+  escapeQuotes = lib.replaceStrings ["'"] ["''"];
+
   toStr = value:
     if true == value then "yes"
     else if false == value then "no"
-    else if isString value then "'${lib.replaceStrings ["'"] ["''"] value}'"
+    else if isString value then "'${escapeQuotes value}'"
     else toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeText "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+  configFile = pkgs.writeText "postgresql.conf" (concatStringsSep "\n" (
+    (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings) ++
+    (map (i: "${i.kind} '${escapeQuotes (toString i.path)}'") cfg.includes)
+  ));
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
@@ -238,6 +243,35 @@ in
             log_disconnections = true
             log_destination = lib.mkForce "syslog";
           }
+        '';
+      };
+
+      includes = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            kind = mkOption {
+              type = types.enum [ "include" "include_if_exists" "include_dir" ];
+            };
+            path = mkOption {
+              type = with types; either str path;
+            };
+          };
+        });
+        default = [];
+        description = ''
+          List of PostgreSQL include directives of kinds
+          <literal>include</literal>, <literal>include_if_exists</literal> or
+          <literal>include_dir</literal>.
+          Refer to
+          <link xlink:href="https://www.postgresql.org/docs/11/config-setting.html#CONFIG-INCLUDES"/>
+          for an overview.
+
+          <note><para>
+            Include directives are placed after <literal>settings</literal>.
+          </para> </note>
+        '';
+        example = literalExample ''
+          [{ kind = "include"; filename = "/someCluster/shared.conf"; }]
         '';
       };
 
