@@ -2695,6 +2695,7 @@ package-maintainers:
     - streaming-wai
   kiwi:
     - irc-core
+    - QuickCheck_2_14_2
     - random_1_2_0
     - Unique
   psibi:
