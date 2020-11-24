@@ -54,6 +54,16 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--with-sudo")
   '';
 
+  preBuild = ''
+    # glibc-2.32 includes a full set of NSS stub module declarations
+    # that conflict with the ones in sssd source. Define _NSS_H to
+    # prevent them from breaking the compilation, but just for this
+    # one file.
+    cat >> Makefile <<EOF
+      src/responder/nss/nss_cmd.\$(OBJEXT) : DEFS = -DHAVE_CONFIG_H -D_NSS_H
+    EOF
+  '';
+
   enableParallelBuilding = true;
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils doxygen python python3 popt
