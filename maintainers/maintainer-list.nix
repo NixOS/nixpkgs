@@ -9532,6 +9532,12 @@
     githubId = 11824817;
     name = "Marti Serra";
   };
+  xvuko = {
+    email = "nix@vuko.pl";
+    github = "xvuko";
+    githubId = 28767436;
+    name = "Jan Wiśniewski";
+  };
   xwvvvvwx = {
     email = "davidterry@posteo.de";
     github = "xwvvvvwx";
