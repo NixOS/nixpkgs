@@ -17,6 +17,12 @@ buildPythonApplication rec {
     sha256 = "1zn5i69f3kimcwdd2qkqd3hd1hq76a6i5wxxfb91ih2hj04vdbmx";
   };
 
+  patches = [
+    # https://github.com/inkcut/inkcut/pull/292 but downloaded
+    # because of https://github.com/NixOS/nixpkgs/issues/32084
+    ./avoid-name-clash-between-inkcut-and-extension.patch
+  ];
+
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
@@ -48,6 +54,15 @@ buildPythonApplication rec {
 
   dontWrapQtApps = true;
   makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+
+  postInstall = ''
+    mkdir -p $out/share/inkscape/extensions
+
+    cp plugins/inkscape/* $out/share/inkscape/extensions
+
+    sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_cut.py
+    sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_open.py
+  '';
 
   meta = with lib; {
     homepage = "https://www.codelv.com/projects/inkcut/";
