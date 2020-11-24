@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
                 ++ stdenv.lib.optional enableXXHash xxHash;
   nativeBuildInputs = [perl];
 
+  preConfigure = ''
+    export CXXFLAGS="$CXXFLAGS -frandom-seed=123456"
+  '';
+
   configureFlags = [
     "--with-nobody-group=nogroup"
 
