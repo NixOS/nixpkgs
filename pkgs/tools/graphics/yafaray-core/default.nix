@@ -7,13 +7,13 @@
 stdenv.mkDerivation rec {
 
     pname = "yafaray-core";
-    version = "3.5.0";
+    version = "3.5.1";
 
     src = fetchFromGitHub {
       owner  = "YafaRay";
       repo   = "Core";
       rev    = "v${version}";
-      sha256 = "05r08ynm6p9jq9l3v1v3lqkrfx3bm6zlqcxm1yk7mdv1zv2yxikd";
+      sha256 = "043ixf3h4ay2fahsw9lh0pha82f7ri04mlfhvn2pg251012jvhrx";
     };
 
     preConfigure = ''

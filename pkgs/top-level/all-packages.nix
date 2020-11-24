@@ -230,6 +230,8 @@ in
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
 
+  devour = callPackage ../tools/X11/devour {};
+
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
@@ -961,6 +963,10 @@ in
   chamber = callPackage ../tools/admin/chamber {  };
 
   charm = callPackage ../applications/misc/charm { };
+
+  chars = callPackage ../tools/text/chars {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
@@ -2875,7 +2881,7 @@ in
 
   clementineUnfree = clementine.unfree;
 
-  mellowplayer = libsForQt514.callPackage ../applications/audio/mellowplayer { };
+  mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
@@ -7465,6 +7471,8 @@ in
   surfraw = callPackage ../tools/networking/surfraw { };
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
+
+  swapview = callPackage ../os-specific/linux/swapview/default.nix { };
 
   swec = callPackage ../tools/networking/swec { };
 
@@ -13515,6 +13523,8 @@ in
 
   lasso = callPackage ../development/libraries/lasso { };
 
+  LAStools = callPackage ../development/libraries/LAStools { };
+
   LASzip = callPackage ../development/libraries/LASzip { };
   LASzip2 = callPackage ../development/libraries/LASzip/LASzip2.nix { };
 
@@ -17613,6 +17623,8 @@ in
   wallabag = callPackage ../servers/web-apps/wallabag { };
 
   webmetro = callPackage ../servers/webmetro { };
+
+  wsdd = callPackage ../servers/wsdd { };
 
   webhook = callPackage ../servers/http/webhook { };
 
@@ -22908,7 +22920,7 @@ in
 
   obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
 
-  obs-ndi = libsForQt514.callPackage ../applications/video/obs-studio/obs-ndi.nix { };
+  obs-ndi = libsForQt5.callPackage ../applications/video/obs-studio/obs-ndi.nix { };
 
   obsidian = callPackage ../applications/misc/obsidian { };
 
@@ -27065,6 +27077,8 @@ in
   };
 
   netlogo = callPackage ../applications/science/misc/netlogo { };
+
+  nextinspace = python3Packages.callPackage ../applications/science/misc/nextinspace { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
 

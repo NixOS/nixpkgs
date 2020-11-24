@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.0.1";
   pname = "gpac";
 
   src = fetchFromGitHub {
     owner = "gpac";
     repo = "gpac";
     rev = "v${version}";
-    sha256 = "11jrklaahhdfqhci7f3lzv8wchh9bc91rg6w8ibh6varrk692vsb";
+    sha256 = "0gj46jpprfqv3wyagblv3a52chbplyzhvpra66v63czjibqsslm5";
   };
 
   postPatch = ''
