@@ -2784,6 +2784,8 @@ in
     inherit (pythonPackages) gyp;
   };
 
+  bumpver = callPackage ../applications/version-management/bumpver { };
+
   bup = callPackage ../tools/backup/bup { };
 
   burp = callPackage ../tools/backup/burp { };
