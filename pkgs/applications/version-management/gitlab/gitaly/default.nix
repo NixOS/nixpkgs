@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby,
-  bundlerEnv, pkgconfig, libgit2_0_27 }:
+{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
+, bundlerEnv, pkgconfig
+# libgit2 + dependencies
+, libgit2, openssl, zlib, pcre, http-parser }:
 
 let
   rubyEnv = bundlerEnv rec {
@@ -35,8 +37,9 @@ in buildGoModule rec {
     inherit rubyEnv;
   };
 
+  buildFlags = [ "-tags=static,system_libgit2" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_0_27 ];
+  buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
   doCheck = false;
 
   postInstall = ''
