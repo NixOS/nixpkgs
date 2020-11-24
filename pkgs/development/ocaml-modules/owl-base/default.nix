@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "owl-base";
-  version = "0.10.0";
+  version = "1.0.0";
 
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/owlbarn/owl/releases/download/${version}/owl-${version}.tbz";
-    sha256 = "148ny2cdzga1l36kcibvlz5xlyi5zvkywifxaqn8lf79n1swmlzf";
+    sha256 = "1gny4351ws2r7dp53nampfyh39l0z6qqvxj5v3d05mpdi2aa06yr";
   };
 
   minimumOCamlVersion = "4.10";

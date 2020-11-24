@@ -65,6 +65,11 @@ stdenv.mkDerivation rec {
     ./alsa-profiles-use-libdir.patch
     # Move installed tests into their own output.
     ./installed-tests-path.patch
+    # Fix older clients (e.g. Chrome/Chromium):
+    (fetchpatch { # protocol-native: do version check on HELLO
+      url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b8c7b36d3b8be16593f554964cf2f852c21b5c2c.patch";
+      sha256 = "18461grisrgqbad6bfa1bm17mslddgfmjfprc9vjvab2mmpsjss9";
+    })
   ];
 
   nativeBuildInputs = [

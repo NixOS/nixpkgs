@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.3.0";
+  version = "2.3.1";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -103,7 +103,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1dd5fgyiazyfy7y2iv4v42qnap51fr6dzwb26inrsj7aaas06j71";
+      sha256 = "1lvmrqfnwzh24fl5rdkksiqfv2bn0ld5gvzq1z57rphfkf0zg996";
     };
 
     patches = [
@@ -116,12 +116,6 @@ let
       (fetchpatch {
         url = "https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch";
         sha256 = "1xp1icacig0xm0nmb05sbrf4nw4xbln9fhc308birrv8286zx7wv";
-      })
-
-      # see https://github.com/tensorflow/tensorflow/issues/40884
-      (fetchpatch {
-        url = "https://github.com/tensorflow/tensorflow/pull/41867/commits/65341f73d110bf173325768947343e1bb8f699fc.patch";
-        sha256 = "18ykkycaag1pcarz53bz6ydxjlah92j4178qn58gcayx1fy7hvh3";
       })
     ];
 
@@ -287,9 +281,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "0pf8128chkm6fxnhd4956n6gvijlj00mjmvry33gq3xx3bayhs9g"
+        "11blnw3ghp1kdi9hh9pdqa4qni9ysc3nk9iqqk9bg4dlr9zl1yld"
       else
-        "0mkgss2nyk21zlj8hp24cs3dmpdnxk8qi6qq4hyc18lp82p09xwa";
+        "1kkghhwhl8frs68kv28r408lps7mpgq1xvq6hc3k0j35asv1g2kc";
     };
 
     buildAttrs = {

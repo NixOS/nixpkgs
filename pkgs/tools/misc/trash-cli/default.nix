@@ -1,25 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch, coreutils
-, python3Packages, substituteAll }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.20.11.7";
+  version = "0.20.11.23";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "0083vagy0jkahb5sw1il7r53ggk45zbjwwjsqd76v7ph3v1awf4v";
+    sha256 = "1fjkmpnbpzxniypql68cpwc2rrnih8b34p8pzabrf55f49wcmcph";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./nix-paths.patch;
-      df = "${coreutils}/bin/df";
-      libc = let ext = if stdenv.isDarwin then ".dylib" else ".so.6";
-             in "${stdenv.cc.libc}/lib/libc${ext}";
-    })
-  ];
+  propagatedBuildInputs = [ python3Packages.psutil ];
 
   checkInputs = with python3Packages; [
     nose

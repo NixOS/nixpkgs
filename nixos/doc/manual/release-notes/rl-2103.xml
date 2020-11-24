@@ -56,6 +56,11 @@
        section of the NixOS manual</link> for more information.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       <xref linkend="opt-services.samba-wsdd.enable" /> Web Services Dynamic Discovery host daemon
+     </para>
+   </listitem>
   </itemizedlist>
 
  </section>
@@ -90,6 +95,18 @@
     </para>
    </listitem>
    <listitem>
+     <para>
+       <literal>rubyMinimal</literal> was removed due to being unused and
+       unusable. The default ruby interpreter includes JIT support, which makes
+       it reference it's compiler. Since JIT support is probably needed by some
+       Gems, it was decided to enable this feature with all cc references by
+       default, and allow to build a Ruby derivation without references to cc,
+       by setting <literal>jitSupport = false;</literal> in an overlay. See
+       <link xlink:href="https://github.com/NixOS/nixpkgs/pull/90151">#90151</link>
+       for more info.
+     </para>
+   </listitem>
+   <listitem>
     <para>
      The option <option>fonts.enableFontDir</option> has been renamed to
      <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
@@ -112,6 +129,13 @@
     <para>
       The socket for the <literal>pdns-recursor</literal> module was moved from <literal>/var/lib/pdns-recursor</literal>
       to <literal>/run/pdns-recursor</literal> to match upstream.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Paperwork was updated to version 2. The on-disk format slightly changed,
+      and it is not possible to downgrade from Paperwork 2 back to Paperwork
+      1.3. Back your documents up before upgrading. See <link xlink:href="https://forum.openpaper.work/t/paperwork-2-0/112/5">this thread</link> for more details.
     </para>
    </listitem>
    <listitem>
@@ -159,6 +183,54 @@
       behaviour. If you have this explicitly set to <literal>true</literal>,
       please note that your non-root pools will now be forcibly imported.
     </para>
+   </listitem>
+   <listitem>
+    <para>
+     <package>openafs</package> now points to <package>openafs_1_8</package>,
+     which is the new stable release.  OpenAFS 1.6 was removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>openldap</literal> module now has support for OLC-style
+      configuration, users of the <literal>configDir</literal> option may wish
+      to migrate. If you continue to use <literal>configDir</literal>, ensure that
+      <literal>olcPidFile</literal> is set to <literal>/run/slapd/slapd.pid</literal>.
+    </para>
+    <para>
+      As a result, <literal>extraConfig</literal> and <literal>extraDatabaseConfig</literal>
+      are removed. To help with migration, you can convert your <literal>slapd.conf</literal>
+      file to OLC configuration with the following script (find the location of this
+      configuration file by running <literal>systemctl status openldap</literal>, it is the
+      <literal>-f</literal> option.
+    </para>
+    <programlisting>
+      TMPDIR=$(mktemp -d)
+      slaptest -f /path/to/slapd.conf $TMPDIR
+      slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
+    </programlisting>
+    <para>
+      This will dump your current configuration in LDIF format, which should be
+      straightforward to convert into Nix settings. This does not show your schema
+      configuration, as this is unnecessarily verbose for users of the default schemas
+      and <literal>slaptest</literal> is buggy with schemas directly in the config file.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Amazon EC2 and OpenStack Compute (nova) images now re-fetch instance meta data and user data from the instance
+       metadata service (IMDS) on each boot. For example: stopping an EC2 instance, changing its user data, and
+       restarting the instance will now cause it to fetch and apply the new user data.
+     </para>
+     <warning>
+       <para>
+         Specifically, <literal>/etc/ec2-metadata</literal> is re-populated on each boot. Some NixOS scripts that read
+         from this directory are guarded to only run if the files they want to manipulate do not already exist, and so
+         will not re-apply their changes if the IMDS response changes. Examples: <literal>root</literal>'s SSH key is
+         only added if <literal>/root/.ssh/authorized_keys</literal> does not exist, and SSH host keys are only set from
+         user data if they do not exist in <literal>/etc/ssh</literal>.
+       </para>
+     </warning>
    </listitem>
   </itemizedlist>
  </section>

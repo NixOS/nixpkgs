@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/graph-algorithms/edge-addition-planarity-suite";
     description = "A library for implementing graph algorithms";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

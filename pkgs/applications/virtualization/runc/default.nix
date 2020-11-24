@@ -45,7 +45,7 @@ buildGoPackage rec {
     installManPage man/*/*.[1-9]
   '';
 
-  passthru.tests = { inherit (nixosTests) cri-o podman; };
+  passthru.tests = { inherit (nixosTests) cri-o docker podman; };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

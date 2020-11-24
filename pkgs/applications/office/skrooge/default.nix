@@ -30,6 +30,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DSKG_DESIGNER=OFF"
     "-DSKG_WEBENGINE=ON"
+    "-DBUILD_TESTS=ON"
   ];
 
   meta = with lib; {

@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/M4444/TMatrix";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ infinisil filalex77 ];
+    maintainers = with maintainers; [ infinisil Br1ght0ne ];
   };
 }

@@ -234,5 +234,17 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm file-in-store nix-store --verify --check-contents",
             "docker run --rm file-in-store |& grep 'some data'",
         )
+
+    with subtest("Ensure cross compiled image can be loaded and has correct arch."):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.cross}'",
+        )
+        assert (
+            docker.succeed(
+                "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
+                + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
+            ).strip()
+            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64v8"}"
+        )
   '';
 })

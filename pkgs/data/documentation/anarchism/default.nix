@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = pname;
-    rev = "debian%2F${version}"; # %2F = urlquote("/")
+    rev = "debian/${version}";
     sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/share/doc/anarchism $out/share/applications $out/share/icons/hicolor/scalable/apps 
+    mkdir -p $out/share/doc/anarchism $out/share/applications $out/share/icons/hicolor/scalable/apps
     cp -r {html,markdown} $out/share/doc/anarchism
     cp debian/anarchism.svg $out/share/icons/hicolor/scalable/apps
     cp debian/anarchism.desktop $out/share/applications

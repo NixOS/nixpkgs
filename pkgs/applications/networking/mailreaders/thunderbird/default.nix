@@ -32,7 +32,7 @@
 , nasm
 , nodejs
 , nspr
-, nss
+, nss_3_53
 , pango
 , perl
 , pkgconfig
@@ -70,13 +70,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.4.3";
+  version = "78.5.0";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "0h5ddqp1z2dphyy4mjcb7v9mrrxlnjw8rwklm0yqsbvs9m96pc1yyp4clb3wmgs7kzh3wxdwi450842m3b13wdg5h0ls7rhamd1yi0c";
+      "0c32dz8p7rrr0w13l2ynf9snj59ij1v2ld3s75vz1hvks4dikwgcbm44wmvmbisvgyfgzdsphafzlq3kz3j1ja30qjigl0dj709vr6s";
   };
 
   nativeBuildInputs = [
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     libvpx
     libwebp
     nspr
-    nss
+    nss_3_53
     pango
     perl
     sqlite
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE =[
     "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss.dev}/include/nss"
+    "-I${nss_3_53.dev}/include/nss"
   ];
 
   patches = [

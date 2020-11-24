@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl git ];
 
   postInstall = ''
-    install -Dm644 README -t"$out/share/doc/${pname}-${version}/"
-    install -Dm755 contrib/tg-completion.bash -t "$out/etc/bash_completion.d/"
+    install -Dm644 README -t "$out/share/doc/${pname}-${version}/"
+    install -Dm755 contrib/tg-completion.bash -t "$out/share/bash-completion/completions/"
   '';
 
   meta = with stdenv.lib; {

@@ -161,7 +161,6 @@ in stdenv.mkDerivation rec {
     soundtouch
     srtp
     fluidsynth
-    libva
     libvdpau
     libwebp
     xvidcore
@@ -180,6 +179,7 @@ in stdenv.mkDerivation rec {
     faac
   ] ++ optionals stdenv.isLinux [
     bluez
+    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
   ] ++ optionals (!stdenv.isDarwin) [
@@ -259,6 +259,9 @@ in stdenv.mkDerivation rec {
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
   ]
+  ++ optionals (!stdenv.isLinux) [
+    "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ]
   ++ optionals stdenv.isDarwin [
     "-Dbluez=disabled"
     "-Dchromaprint=disabled"
@@ -272,6 +275,7 @@ in stdenv.mkDerivation rec {
     "-Ddvb=disabled"
     "-Dfbdev=disabled"
     "-Duvch264=disabled" # requires gudev
+    "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above

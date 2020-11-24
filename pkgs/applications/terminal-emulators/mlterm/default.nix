@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, autoconf, makeDesktopItem
+{ stdenv, lib, fetchFromGitHub, pkgconfig, autoconf, makeDesktopItem
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
@@ -10,11 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlterm";
-  version = "3.9.0";
+  version = "3.9.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/mlterm/01release/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "17h6j4nmbyvsx2shm8mqm7smzq9i7mbqxjw19c2m0rhf5yzqhr3k";
+  src = fetchFromGitHub {
+    owner = "arakiken";
+    repo = pname;
+    rev = "rel-${lib.replaceStrings [ "." ] [ "_" ] version}"; # 3.9.1 -> rel-3_9_1
+    sha256 = "1hh196kz2n3asv8r8r2bdk5b2w93zq7rw4880ciiq1554h0ib7fj";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf wrapGAppsHook ];

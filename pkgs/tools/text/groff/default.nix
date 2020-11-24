@@ -82,10 +82,6 @@ stdenv.mkDerivation rec {
     moveToOutput bin/afmtodit $perl
     moveToOutput bin/gperl $perl
     moveToOutput bin/chem $perl
-    moveToOutput share/groff/${version}/font/devpdf $perl
-
-    # idk if this is needed, but Fedora does it
-    moveToOutput share/groff/${version}/tmac/pdf.tmac $perl
 
     moveToOutput bin/gpinyin $perl
     moveToOutput lib/groff/gpinyin $perl

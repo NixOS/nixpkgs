@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+({ pkgs, ... }:
   let
     dbDomain = "example.org";
     dbSuffix = "dc=example,dc=org";
@@ -7,8 +7,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     ldapRootPassword = "foobar";
 
     testUser = "alice";
-  in
-  {
+  in import ./make-test-python.nix {
     name = "sssd-ldap";
 
     meta = with pkgs.stdenv.lib.maintainers; {
@@ -18,34 +17,53 @@ import ./make-test-python.nix ({ pkgs, ... }:
     machine = { pkgs, ... }: {
       services.openldap = {
         enable = true;
-        rootdn = "cn=${ldapRootUser},${dbSuffix}";
-        rootpw = ldapRootPassword;
-        suffix = dbSuffix;
-        declarativeContents = ''
-          dn: ${dbSuffix}
-          objectClass: top
-          objectClass: dcObject
-          objectClass: organization
-          o: ${dbDomain}
+        settings = {
+          children = {
+            "cn=schema".includes = [
+              "${pkgs.openldap}/etc/schema/core.ldif"
+              "${pkgs.openldap}/etc/schema/cosine.ldif"
+              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              "${pkgs.openldap}/etc/schema/nis.ldif"
+            ];
+            "olcDatabase={1}mdb" = {
+              attrs = {
+                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+                olcDatabase = "{1}mdb";
+                olcDbDirectory = "/var/db/openldap";
+                olcSuffix = dbSuffix;
+                olcRootDN = "cn=${ldapRootUser},${dbSuffix}";
+                olcRootPW = ldapRootPassword;
+              };
+            };
+          };
+        };
+        declarativeContents = {
+          ${dbSuffix} = ''
+            dn: ${dbSuffix}
+            objectClass: top
+            objectClass: dcObject
+            objectClass: organization
+            o: ${dbDomain}
 
-          dn: ou=posix,${dbSuffix}
-          objectClass: top
-          objectClass: organizationalUnit
+            dn: ou=posix,${dbSuffix}
+            objectClass: top
+            objectClass: organizationalUnit
 
-          dn: ou=accounts,ou=posix,${dbSuffix}
-          objectClass: top
-          objectClass: organizationalUnit
+            dn: ou=accounts,ou=posix,${dbSuffix}
+            objectClass: top
+            objectClass: organizationalUnit
 
-          dn: uid=${testUser},ou=accounts,ou=posix,${dbSuffix}
-          objectClass: person
-          objectClass: posixAccount
-          # userPassword: somePasswordHash
-          homeDirectory: /home/${testUser}
-          uidNumber: 1234
-          gidNumber: 1234
-          cn: ""
-          sn: ""
-        '';
+            dn: uid=${testUser},ou=accounts,ou=posix,${dbSuffix}
+            objectClass: person
+            objectClass: posixAccount
+            # userPassword: somePasswordHash
+            homeDirectory: /home/${testUser}
+            uidNumber: 1234
+            gidNumber: 1234
+            cn: ""
+            sn: ""
+          '';
+        };
       };
 
       services.sssd = {
