@@ -247,9 +247,10 @@ let
       WakaTime.vscode-wakatime = callPackage ./wakatime {};
     };
 
+    # overlays
     aliases = self: super: {
       # aliases
-      ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
+      ms-vscode.Go = super.golang.Go;
     };
 
     # TODO: add overrides overlay, so that we can have a generated.nix
@@ -258,6 +259,6 @@ let
     # overlays will be applied left to right, overrides should come after aliases.
     overlays = lib.optionals (config.allowAliases or true) [ aliases ];
 
-    toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
+    toFix = lib.foldl' (lib.flip lib.fixedPoints.recursiveExtends) baseExtensions overlays;
 in
   lib.fix toFix
