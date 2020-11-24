@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/spaam/svtplay-dl";
     description = "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ maintainers.rycee ];
   };
 }
