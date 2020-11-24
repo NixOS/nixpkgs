@@ -2698,6 +2698,9 @@ package-maintainers:
     - config-value
     - glirc
     - irc-core
+    - matterhorn
+    - mattermost-api
+    - mattermost-api-qc
     - QuickCheck_2_14_2
     - random_1_2_0
     - Unique
@@ -7739,9 +7742,6 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matsuri
-  - matterhorn
-  - mattermost-api
-  - mattermost-api-qc
   - maude
   - maxent
   - maxent-learner-hw
