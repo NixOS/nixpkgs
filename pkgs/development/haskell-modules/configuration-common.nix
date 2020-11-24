@@ -399,6 +399,7 @@ self: super: {
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
+  random_1_2_0 = super.random_1_2_0.override ({ splitmix = self.splitmix_0_1_0_3; });
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
