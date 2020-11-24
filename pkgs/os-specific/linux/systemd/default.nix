@@ -57,11 +57,12 @@
 
 , withAnalyze ? true
 , withApparmor ? true
-, withCoredump ? true
 , withCompression ? true  # adds bzip2, lz4 and xz
+, withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
+, withHomed ? false
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? true
@@ -72,14 +73,15 @@
 , withNss ? true
 , withPCRE2 ? true
 , withPolkit ? true
+, withPortabled ? false
 , withRemote ? true
 , withResolved ? true
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
 , withUserDb ? true
-, withHomed ? false, p11-kit, libfido2
-# , withPortabled ? false TODO
+, p11-kit
+, libfido2
 
   # name argument
 , pname ? "systemd"
@@ -94,7 +96,7 @@
 assert withResolved -> (libgcrypt != null && libgpgerror != null);
 assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
-  && gnutar != null && gnupg != null && withCompression );
+  && gnutar != null && gnupg != null && withCompression);
 
 assert withEfi -> (gnu-efi != null);
 assert withRemote -> lib.getDev curl != null;
@@ -104,7 +106,6 @@ assert withHomed -> withCryptsetup;
 
 assert withCryptsetup ->
 (cryptsetup != null);
-
 let
   wantCurl = withRemote || withImportd;
 
@@ -196,20 +197,20 @@ stdenv.mkDerivation {
       pam
     ]
 
-    ++ lib.optional  withApparmor libapparmor
-    ++ lib.optional  wantCurl (lib.getDev curl)
+    ++ lib.optional withApparmor libapparmor
+    ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz ]
-    ++ lib.optional  withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional  withEfi gnu-efi
-    ++ lib.optional  withKexectools kexectools
-    ++ lib.optional  withLibseccomp libseccomp
-    ++ lib.optional  withNetworkd iptables
-    ++ lib.optional  withPCRE2 pcre2
-    ++ lib.optional  withResolved libgpgerror
-    ++ lib.optional  withSelinux libselinux
-    ++ lib.optional  withRemote libmicrohttpd
+    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+    ++ lib.optional withEfi gnu-efi
+    ++ lib.optional withKexectools kexectools
+    ++ lib.optional withLibseccomp libseccomp
+    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPCRE2 pcre2
+    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withSelinux libselinux
+    ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit libfido2 ]
-    ;
+  ;
 
   #dontAddPrefix = true;
 
@@ -240,7 +241,7 @@ stdenv.mkDerivation {
     "-Dnetworkd=${lib.boolToString withNetworkd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
     "-Dcryptsetup=${lib.boolToString withCryptsetup}"
-    "-Dportabled=false"
+    "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
     "-Dsysusers=false"
