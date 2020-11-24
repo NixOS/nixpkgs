@@ -397,9 +397,9 @@ in
           mr ${getLib pkgs.openssl}/lib/libcrypto*.so*,
           mr ${getLib pkgs.openssl}/lib/libssl*.so*,
           mr ${getLib pkgs.systemd}/lib/libsystemd*.so*,
-          mr ${getLib pkgs.utillinuxMinimal.out}/lib/libblkid.so*,
-          mr ${getLib pkgs.utillinuxMinimal.out}/lib/libmount.so*,
-          mr ${getLib pkgs.utillinuxMinimal.out}/lib/libuuid.so*,
+          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libblkid.so*,
+          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libmount.so*,
+          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libuuid.so*,
           mr ${getLib pkgs.xz}/lib/liblzma*.so*,
           mr ${getLib pkgs.zlib}/lib/libz*.so*,
 

@@ -13,7 +13,7 @@
 , libseccomp
 , pkgconfig
 , ethtool
-, utillinux
+, util-linux
 , ipset
 , fetchFromGitHub
 , fetchurl
@@ -234,7 +234,7 @@ stdenv.mkDerivation rec {
     iproute
     bridge-utils
     ethtool
-    utillinux
+    util-linux
     ipset
     conntrack-tools
   ];

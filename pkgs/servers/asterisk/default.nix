@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchsvn,
   jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
-  utillinux, dmidecode, libuuid, newt,
+  util-linux, dmidecode, libuuid, newt,
   lua, speex,
   srtp, wget, curl, iksemel, pkgconfig
 }:
@@ -14,7 +14,7 @@ let
                     dmidecode libuuid newt
                     lua speex
                     srtp wget curl iksemel ];
-    nativeBuildInputs = [ utillinux pkgconfig ];
+    nativeBuildInputs = [ util-linux pkgconfig ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton

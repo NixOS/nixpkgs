@@ -19,7 +19,7 @@
 , automake
 , libtool
 , fuse
-, utillinuxMinimal
+, util-linuxMinimal
 , libselinux
 , libsodium
 , libarchive
@@ -93,7 +93,7 @@ in stdenv.mkDerivation rec {
     libarchive
     bzip2
     xz
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
 
     # for installed tests
     testPython

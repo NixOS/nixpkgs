@@ -2647,7 +2647,7 @@ in
   mstflint = callPackage ../tools/misc/mstflint { };
 
   mcelog = callPackage ../os-specific/linux/mcelog {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
   };
 
   sqlint = callPackage ../development/tools/sqlint { };
@@ -3633,21 +3633,21 @@ in
   elk7Version = "7.5.1";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch6-oss = callPackage ../servers/search/elasticsearch/6.x.nix {
     enableUnfree = false;
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7-oss = callPackage ../servers/search/elasticsearch/7.x.nix {
     enableUnfree = false;
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch = elasticsearch6;
@@ -13066,7 +13066,7 @@ in
 
   gnutls = callPackage ../development/libraries/gnutls/default.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
-    utillinux = utillinuxMinimal; # break the cyclic dependency
+    util-linux = util-linuxMinimal; # break the cyclic dependency
   };
 
   gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
@@ -17878,7 +17878,7 @@ in
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid = if stdenv.isLinux
-    then utillinuxMinimal
+    then util-linuxMinimal
     else null;
 
   light = callPackage ../os-specific/linux/light { };
@@ -17911,7 +17911,7 @@ in
   };
 
   fusePackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/fuse {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
   });
   fuse = lowPrio fusePackages.fuse_2;
   fuse3 = fusePackages.fuse_3;
@@ -18963,7 +18963,7 @@ in
 
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     # provide a super minimal gnupg used for systemd-machined
     gnupg = callPackage ../tools/security/gnupg/22.nix {
       enableMinimal = true;
@@ -19083,7 +19083,7 @@ in
     stdenv = crossLibcStdenv;
   };
 
-  eudev = callPackage ../os-specific/linux/eudev { utillinux = utillinuxMinimal; };
+  eudev = callPackage ../os-specific/linux/eudev { util-linux = util-linuxMinimal; };
 
   libudev0-shim = callPackage ../os-specific/linux/libudev0-shim { };
 
@@ -19107,17 +19107,17 @@ in
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
-              else unixtools.utillinux;
+  util-linux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
+              else unixtools.util-linux;
 
-  utillinuxCurses = utillinux;
+  util-linuxCurses = util-linux;
 
-  utillinuxMinimal = if stdenv.isLinux then appendToName "minimal" (utillinux.override {
+  util-linuxMinimal = if stdenv.isLinux then appendToName "minimal" (util-linux.override {
     minimal = true;
     ncurses = null;
     perl = null;
     systemd = null;
-  }) else utillinux;
+  }) else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 

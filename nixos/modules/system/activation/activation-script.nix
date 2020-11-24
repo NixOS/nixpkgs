@@ -25,7 +25,7 @@ let
       stdenv.cc.libc # nscd in update-users-groups.pl
       shadow
       nettools # needed for hostname
-      utillinux # needed for mount and mountpoint
+      util-linux # needed for mount and mountpoint
     ];
 
   scriptType = with types;

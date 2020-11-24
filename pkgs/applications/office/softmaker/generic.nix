@@ -8,7 +8,7 @@
 , coreutils, libredirect
 
   # Extra utilities used by the SoftMaker applications.
-, gnugrep, utillinux, which
+, gnugrep, util-linux, which
 
 , pname, version, edition, suiteName, src, archive
 
@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
     extraWrapperArgs = ''
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
       --set NIX_REDIRECTS "/bin/ls=${coreutils}/bin/ls" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ coreutils gnugrep utillinux which ]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ coreutils gnugrep util-linux which ]}"
     '';
   in ''
     runHook preInstall

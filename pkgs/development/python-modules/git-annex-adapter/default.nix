@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, substituteAll
-, python, utillinux, pygit2, gitMinimal, git-annex, cacert
+, python, util-linux, pygit2, gitMinimal, git-annex, cacert
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     gitMinimal
-    utillinux # `rev` is needed in tests/test_process.py
+    util-linux # `rev` is needed in tests/test_process.py
   ];
 
   propagatedBuildInputs = [ pygit2 cacert ];

@@ -4,7 +4,7 @@
 
   boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
   libxkbfile, xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config,
-  xorgserver, utillinux,
+  xorgserver, util-linux,
 
   qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg, qtx11extras,
 
@@ -39,7 +39,7 @@ mkDerivation {
   '';
   CXXFLAGS = [
     "-I${lib.getDev xorgserver}/include/xorg"
-    ''-DNIXPKGS_HWCLOCK=\"${lib.getBin utillinux}/sbin/hwclock\"''
+    ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/sbin/hwclock\"''
   ];
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"

@@ -1,7 +1,7 @@
 { stdenv , fetchFromGitHub
 , pkgconfig, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
-, protobuf, utillinux, qt4, qrencode
+, protobuf, util-linux, qt4, qrencode
 , withGui }:
 
 with stdenv.lib;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db5 openssl utillinux
+  buildInputs = [ openssl db5 openssl util-linux
                   protobuf boost zlib miniupnpc libevent ]
                   ++ optionals withGui [ qt4 qrencode ];
 
