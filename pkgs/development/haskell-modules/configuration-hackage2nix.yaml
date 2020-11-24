@@ -2694,6 +2694,7 @@ package-maintainers:
     # - pipes-mongodb
     - streaming-wai
   kiwi:
+    - irc-core
     - Unique
   psibi:
     - path-pieces
@@ -6994,7 +6995,6 @@ broken-packages:
   - iptadmin
   - IPv6DB
   - Irc
-  - irc-core
   - irc-dcc
   - irc-fun-bot
   - irc-fun-client
