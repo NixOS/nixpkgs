@@ -749,9 +749,9 @@
   "postgresql": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-postgresql",
-    "rev": "v1.6.0",
-    "sha256": "0m9x60hrry0cqx4bhmql081wjcbay3750jwzqiph5vpj9717banf",
-    "version": "1.6.0"
+    "rev": "v1.7.1",
+    "sha256": "0qlz00svvbwxslp8v7bi7mx5mvnjmh2cvg33a006gh4fy5n75shy",
+    "version": "1.7.1"
   },
   "powerdns": {
     "owner": "terraform-providers",
