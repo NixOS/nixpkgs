@@ -15,7 +15,6 @@
   moreutils,
   nix,
   pigz,
-  referencesByPopularity,
   rsync,
   runCommand,
   runtimeShell,
@@ -772,7 +771,7 @@ rec {
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
-        paths = referencesByPopularity overallClosure;
+        paths = buildPackages.referencesByPopularity overallClosure;
         nativeBuildInputs = [ jq ];
       } ''
         ${if (tag == null) then ''
