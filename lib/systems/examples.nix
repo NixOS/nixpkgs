@@ -34,6 +34,11 @@ rec {
     platform = platforms.raspberrypi;
   };
 
+  remarkable1 = {
+    config = "armv7l-unknown-linux-gnueabihf";
+    platform = platforms.zero-gravitas;
+  };
+
   armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
     platform = platforms.armv7l-hf-multiplatform;
