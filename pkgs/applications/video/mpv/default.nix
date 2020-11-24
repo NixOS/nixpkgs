@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchFromGitHub, fetchpatch
+{ config, stdenv, fetchFromGitHub
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
@@ -184,14 +184,6 @@ in stdenv.mkDerivation rec {
   postBuild = optionalString stdenv.isDarwin ''
     python3 TOOLS/osxbundle.py -s build/mpv
   '';
-
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    # Fix cocoa backend. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/188169854313b99d01da8f69fe129f0a487eb7c4.patch";
-      sha256 = "062sz4666prb2wg1rn5q8brqkzlq6lxn8sxic78a8lb0125c01f7";
-    })
-  ];
 
   postInstall = ''
     # Use a standard font
