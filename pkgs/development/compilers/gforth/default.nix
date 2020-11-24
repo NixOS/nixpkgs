@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, m4 }:
+{ stdenv, lib, fetchurl, m4, buildPackages, gforth }:
 
 let
   version = "0.7.3";
+  crossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 stdenv.mkDerivation {
   pname = "gforth";
@@ -11,9 +12,8 @@ stdenv.mkDerivation {
     sha256 = "1c1bahc9ypmca8rv2dijiqbangm1d9av286904yw48ph7ciz4qig";
   };
 
-  buildInputs = [ m4 ];
-
-  configureFlags = lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
+  nativeBuildInputs = [ m4 ] ++ lib.optional crossCompiling gforth;
+  configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
