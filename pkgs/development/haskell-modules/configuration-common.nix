@@ -1502,4 +1502,7 @@ self: super: {
     excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
   });
 
+  # 2020-11-23: Disable tests until: https://github.com/cdornan/fmt/issues/30
+  fmt = dontCheck super.fmt;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
