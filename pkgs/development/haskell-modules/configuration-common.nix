@@ -1502,4 +1502,7 @@ self: super: {
     excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
   });
 
+  # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
+  pipes-text = doJailbreak super.pipes-text;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
