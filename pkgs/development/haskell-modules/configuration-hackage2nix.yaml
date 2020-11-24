@@ -8699,7 +8699,6 @@ broken-packages:
   - pipes-s3
   - pipes-shell
   - pipes-sqlite-simple
-  - pipes-text
   - pipes-transduce
   - pipes-vector
   - pipes-zeromq4
