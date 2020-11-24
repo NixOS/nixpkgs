@@ -109,6 +109,11 @@ let
 
       # Copy some util-linux stuff.
       copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
+      copy_bin_and_libs ${pkgs.util-linux}/bin/lsblk
+      copy_bin_and_libs ${pkgs.util-linux}/bin/sfdisk
+
+      # Copy partprobe
+      copy_bin_and_libs ${pkgs.parted}/bin/partprobe
 
       # Copy dmsetup and lvm.
       copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup

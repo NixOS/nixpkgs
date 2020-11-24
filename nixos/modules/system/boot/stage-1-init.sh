@@ -355,6 +355,35 @@ mountFS() {
 
     checkFS "$device" "$fsType"
 
+    # Optionally expand the filesystem.
+    case $options in
+        *x-nixos.autoexpand*)
+            # Given a device of /dev/disk/by-label/NIXOS_SD
+            # PKNAME will be /dev/mmcblk0
+            # KNAME will be /dev/mmcblk0p1
+            local pname=$(lsblk -npo PKNAME "$device")
+            local kname=$(lsblk -npo KNAME "$device")
+            # strip off the prefix
+            local part=${kname#"$pname"}
+            # strip off p, as in mmcblk0p1
+            part=${part#"p"}
+            echo "expanding $device: $pname, partition $part..."
+
+            # Expand the given partition to the next partition boundary/end of disk
+            # sfdisk usually does the BLKRRPART ioctl to have the kernel re-read
+            # partitions. However, there's a race between that and resizing below
+            echo ",+," | sfdisk -N"$part" --no-reread --no-tell-kernel "$pname"
+
+            # Run partprobe to update the partition table. This is synchronous,
+            # unlike BLKRRPART
+            ls /dev/disk/by-label
+            lsblk "$pname"
+            partprobe "$pname"
+            ls /dev/disk/by-label
+            lsblk "$pname"
+            ;;
+    esac
+
     # Optionally resize the filesystem.
     case $options in
         *x-nixos.autoresize*)

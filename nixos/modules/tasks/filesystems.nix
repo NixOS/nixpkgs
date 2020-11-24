@@ -107,6 +107,17 @@ let
         '';
       };
 
+      autoExpand = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set, the partition is grown to the largest contiguous
+          extend possible. This is typically used when writing a
+          disk image to an SD card and growing the root partition
+          on first boot.
+        '';
+      };
+
       noCheck = mkOption {
         default = false;
         type = types.bool;
@@ -124,8 +135,11 @@ let
         # (same here)
         else if config.fsType == "reiserfs" then "-q"
         else null;
+      extraOptions = 
+        optional config.autoResize "x-nixos.autoresize" ++
+        optional config.autoExpand "x-nixos.autoexpand";
     in {
-      options = mkIf config.autoResize [ "x-nixos.autoresize" ];
+      options = mkIf (extraOptions != []) extraOptions;
       formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
     };
 
