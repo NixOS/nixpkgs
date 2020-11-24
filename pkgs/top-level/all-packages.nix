@@ -20653,7 +20653,7 @@ in
   djview4 = pkgs.djview;
 
   dmenu = callPackage ../applications/misc/dmenu {
-    patches = config.dmenu.patches or [ ../applications/misc/dmenu/xim.patch ];
+    patches = config.dmenu.patches or [ ];
   };
   dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix {};
 
