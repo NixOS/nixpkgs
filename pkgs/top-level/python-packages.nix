@@ -4505,6 +4505,8 @@ in {
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
+  phx-class-registry = callPackage ../development/python-modules/phx-class-registry { };
+
   piccata = callPackage ../development/python-modules/piccata { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
