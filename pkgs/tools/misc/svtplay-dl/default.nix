@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
-, gitMinimal }:
+, gitMinimal, ffmpeg }:
 
 let
 
@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/svtplay-dl" \
+      --prefix PATH : "${ffmpeg}" \
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
