@@ -64,7 +64,7 @@ while [ "$#" -gt 0 ]; do
         repair=1
         extraBuildFlags+=("$i")
         ;;
-      --max-jobs|-j|--cores|-I|--builders)
+      --max-jobs|-j|--cores|-I|--builders|--extra-substituters)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;

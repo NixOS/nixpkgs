@@ -85,6 +85,10 @@
     <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
 
+   <arg>
+    <option>--extra-substituters</option> <replaceable>substituter-spec</replaceable>
+   </arg>
+
    <sbr/>
 
    <arg>
@@ -441,6 +445,21 @@
       existing builders specified in <filename>/etc/nix/machines</filename> can
       be ignored: <command>--builders ""</command> for example when they are
       not reachable due to network connectivity.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--extra-substituters</option> <replaceable>substituter-spec</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Allow ad-hoc addition of binary cache substituters for building the new
+      system. This requires the user executing <command>nixos-rebuild</command>
+      (usually root) to be configured as a trusted user in the Nix daemon.
+      This can be achieved by using the <literal>nix.trustedUsers</literal> NixOS
+      option.
      </para>
     </listitem>
    </varlistentry>
