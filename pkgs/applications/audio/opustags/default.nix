@@ -1,13 +1,13 @@
 { stdenv, lib, cmake, pkgconfig, libogg, fetchFromGitHub, libiconv }:
 stdenv.mkDerivation rec {
   pname = "opustags";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "fmang";
     repo = "opustags";
     rev = version;
-    sha256 = "191zx2g3lijybgcy3a4fz5l35cagdrcdr0difhcfz0zn60hwnvqc";
+    sha256 = "1dicv4s395b9gb4jpr0rnxdq9azr45pid62q3x08lb7cvyq3yxbh";
   };
 
   buildInputs = [ libogg ];
