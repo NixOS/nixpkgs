@@ -7,6 +7,14 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.3";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
+        };
+      });
+
       rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.2";
         src = oldAttrs.src.override {
@@ -19,11 +27,11 @@ let
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.150"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.18.184"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jrxzr4dx2s6ychmrz19yz8i4kqcwj7f8ly82ydwvrr0ff62374g";
+    sha256 = "052j5mnmr0mvw44xm92pp9sv8fwrvng8rdzg77mp6nv88ff4prlx";
   };
 
   postPatch = ''
