@@ -5,9 +5,9 @@ buildGoModule rec {
   version = "0.1.4";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "cortextool";
+    rev = "v${version}";
     sha256 = "0p3g418bg6agk6manibazlb2rplv8253z5gka5nb37jvccz6k38v";
   };
 
