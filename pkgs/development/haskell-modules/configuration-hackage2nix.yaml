@@ -2694,6 +2694,8 @@ package-maintainers:
     # - pipes-mongodb
     - streaming-wai
   kiwi:
+    - config-schema
+    - config-value
     - irc-core
     - QuickCheck_2_14_2
     - random_1_2_0
@@ -4142,9 +4144,7 @@ broken-packages:
   - conffmt
   - confide
   - config-parser
-  - config-schema
   - config-select
-  - config-value
   - config-value-getopt
   - ConfigFileTH
   - Configger
