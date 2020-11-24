@@ -1,4 +1,4 @@
-{ stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, python3Packages, utillinux }:
+{ stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, python3Packages, util-linux }:
 
 let
 
@@ -15,7 +15,7 @@ let
 
     buildInputs = [
       btrfs-progs               # for btrfs/ioctl.h
-      utillinux                 # for uuid.h
+      util-linux                 # for uuid.h
     ];
 
     nativeBuildInputs = [
@@ -56,7 +56,8 @@ let
 in
 
 runCommand "bees-service" {
-  inherit bash bees coreutils utillinux;
+  inherit bash bees coreutils;
+  utillinux = util-linux; # needs to be a valid shell variable name
   btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
 } ''
   mkdir -p -- "$out/bin"

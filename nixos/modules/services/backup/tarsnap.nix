@@ -308,7 +308,7 @@ in
         requires    = [ "network-online.target" ];
         after       = [ "network-online.target" ];
 
-        path = with pkgs; [ iputils tarsnap utillinux ];
+        path = with pkgs; [ iputils tarsnap util-linux ];
 
         # In order for the persistent tarsnap timer to work reliably, we have to
         # make sure that the tarsnap server is reachable after systemd starts up
@@ -355,7 +355,7 @@ in
         description = "Tarsnap restore '${name}'";
         requires    = [ "network-online.target" ];
 
-        path = with pkgs; [ iputils tarsnap utillinux ];
+        path = with pkgs; [ iputils tarsnap util-linux ];
 
         script = let
           tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';

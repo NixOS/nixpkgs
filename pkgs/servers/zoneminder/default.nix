@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkgconfig
 , curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
-, polkit, utillinuxMinimal, x264, zlib
+, polkit, util-linuxMinimal, x264, zlib
 , coreutils, procps, psmisc, nixosTests }:
 
 # NOTES:
@@ -148,7 +148,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     curl ffmpeg_3 glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap

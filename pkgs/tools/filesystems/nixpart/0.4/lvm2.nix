@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, utillinux, coreutils }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, util-linux, coreutils }:
 
 let
   v = "2.02.106";
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   postInstall =
     ''
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
-        --replace $out/sbin/blkid ${utillinux.bin}/sbin/blkid
+        --replace $out/sbin/blkid ${util-linux.bin}/sbin/blkid
 
       # Systemd stuff
       mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators

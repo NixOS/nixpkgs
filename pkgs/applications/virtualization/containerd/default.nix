@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, utillinux, nixosTests }:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, util-linux, nixosTests }:
 
 with lib;
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/containerd/containerd";
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles utillinux ];
+  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
   buildInputs = [ btrfs-progs ];
 

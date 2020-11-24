@@ -9,7 +9,7 @@
 , pam
 , useSystemd ? stdenv.isLinux
 , systemd ? null
-, utillinux ? null
+, util-linux ? null
 , pkcs11Support ? false
 , pkcs11helper ? null
 }:
@@ -63,7 +63,7 @@ let
         '' + optionalString useSystemd ''
           install -Dm555 ${update-resolved} $out/libexec/update-systemd-resolved
           wrapProgram $out/libexec/update-systemd-resolved \
-            --prefix PATH : ${makeBinPath [ runtimeShell iproute systemd utillinux ]}
+            --prefix PATH : ${makeBinPath [ runtimeShell iproute systemd util-linux ]}
         '';
 
         enableParallelBuilding = true;

@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, cacert, utillinux
+, unbound, dns-root-data, gettext, cacert, util-linux
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl pkgconfig ]
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
-    ++ lib.optionals doCheck [ which nettools utillinux ];
+    ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ];
 

@@ -11,7 +11,7 @@
 , qtbase ? null
 , qttools ? null
 , wrapQtAppsHook ? null
-, utillinux
+, util-linux
 , python3
 , qrencode
 , libevent
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin hexdump
     ++ optional withGui wrapQtAppsHook;
   buildInputs = [ db48 boost zlib zeromq miniupnpc libevent ]
-    ++ optionals stdenv.isLinux [ utillinux ]
+    ++ optionals stdenv.isLinux [ util-linux ]
     ++ optionals withGui [ qtbase qttools qrencode ];
 
   postInstall = optional withGui ''

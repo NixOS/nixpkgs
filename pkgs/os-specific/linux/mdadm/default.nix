@@ -1,4 +1,4 @@
-{ stdenv, utillinux, coreutils, fetchurl, groff, system-sendmail }:
+{ stdenv, util-linux, coreutils, fetchurl, groff, system-sendmail }:
 
 stdenv.mkDerivation rec {
   name = "mdadm-4.1";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
         -e 's@/usr/sbin/sendmail@${system-sendmail}/bin/sendmail@' -i Makefile
     sed -i \
         -e 's@/usr/bin/basename@${coreutils}/bin/basename@g' \
-        -e 's@BINDIR/blkid@${utillinux}/bin/blkid@g' \
+        -e 's@BINDIR/blkid@${util-linux}/bin/blkid@g' \
         *.rules
   '';
 

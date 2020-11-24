@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, utillinux, http-parser
+{ stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
 , pkgconfig, which
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
@@ -55,7 +55,7 @@ in
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which utillinux pkgconfig python ]
+    nativeBuildInputs = [ which util-linux pkgconfig python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
     configureFlags = let

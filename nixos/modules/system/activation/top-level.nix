@@ -97,10 +97,11 @@ let
     allowSubstitutes = false;
     buildCommand = systemBuilder;
 
-    inherit (pkgs) utillinux coreutils;
+    inherit (pkgs) coreutils;
     systemd = config.systemd.package;
     shell = "${pkgs.bash}/bin/sh";
     su = "${pkgs.shadow.su}/bin/su";
+    utillinux = pkgs.util-linux;
 
     kernelParams = config.boot.kernelParams;
     installBootLoader =

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, autoreconfHook, utillinux, nukeReferences, coreutils
+, autoreconfHook, util-linux, nukeReferences, coreutils
 , perl, buildPackages
 , configFile ? "all"
 
@@ -50,11 +50,11 @@ let
         # The arrays must remain the same length, so we repeat a flag that is
         # already part of the command and therefore has no effect.
         substituteInPlace ./module/${optionalString isUnstable "os/linux/"}zfs/zfs_ctldir.c \
-          --replace '"/usr/bin/env", "umount"' '"${utillinux}/bin/umount", "-n"' \
-          --replace '"/usr/bin/env", "mount"'  '"${utillinux}/bin/mount", "-n"'
+          --replace '"/usr/bin/env", "umount"' '"${util-linux}/bin/umount", "-n"' \
+          --replace '"/usr/bin/env", "mount"'  '"${util-linux}/bin/mount", "-n"'
       '' + optionalString buildUser ''
-        substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount" \
-                                                      --replace "/bin/mount"              "${utillinux}/bin/mount"
+        substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${util-linux}/bin/umount" \
+                                                      --replace "/bin/mount"              "${util-linux}/bin/mount"
         substituteInPlace ./lib/libshare/${optionalString isUnstable "os/linux/"}nfs.c --replace "/usr/sbin/exportfs" "${
           # We don't *need* python support, but we set it like this to minimize closure size:
           # If it's disabled by default, no need to enable it, even if we have python enabled
@@ -142,7 +142,7 @@ let
       postInstall = optionalString buildKernel ''
         # Add reference that cannot be detected due to compressed kernel module
         mkdir -p "$out/nix-support"
-        echo "${utillinux}" >> "$out/nix-support/extra-refs"
+        echo "${util-linux}" >> "$out/nix-support/extra-refs"
       '' + optionalString buildUser ''
         # Remove provided services as they are buggy
         rm $out/etc/systemd/system/zfs-import-*.service
@@ -162,7 +162,7 @@ let
       '';
 
       postFixup = let
-        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat ]}:$PATH";
+        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmontools sysstat ]}:$PATH";
       in ''
         for i in $out/libexec/zfs/zpool.d/*; do
           sed -i '2i${path}' $i

@@ -3,7 +3,7 @@
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
-, openssl, gperf, cppunit, poppler, utillinux
+, openssl, gperf, cppunit, poppler, util-linux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, clucene_core, libcdr, lcms
@@ -405,7 +405,7 @@ in (mkDrv rec {
       neon nspr nss openldap openssl pam perl pkgconfig poppler
       python3 sane-backends unzip which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
-      libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
+      libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
       librevenge libe-book libmwaw glm ncurses epoxy
       libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
     ]

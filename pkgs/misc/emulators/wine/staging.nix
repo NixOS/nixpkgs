@@ -8,7 +8,7 @@ let patch = (callPackage ./sources.nix {}).staging;
 in assert stdenv.lib.getVersion wineUnstable == patch.version;
 
 (stdenv.lib.overrideDerivation wineUnstable (self: {
-  buildInputs = build-inputs [ "perl" "utillinux" "autoconf" "gitMinimal" ] self.buildInputs;
+  buildInputs = build-inputs [ "perl" "util-linux" "autoconf" "gitMinimal" ] self.buildInputs;
 
   name = "${self.name}-staging";
 
