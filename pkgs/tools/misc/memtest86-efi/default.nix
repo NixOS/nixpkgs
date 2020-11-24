@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchzip
-, utillinux
+, util-linux
 , jq
 , mtools
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    utillinux
+    util-linux
     jq
     mtools
   ];

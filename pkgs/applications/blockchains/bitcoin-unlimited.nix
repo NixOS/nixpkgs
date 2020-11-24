@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, utillinux, protobuf, qrencode, libevent, python3
+, zlib, miniupnpc, util-linux, protobuf, qrencode, libevent, python3
 , withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
 , Foundation, ApplicationServices, AppKit }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook python3 ]
     ++ optionals withGui [ wrapQtAppsHook qttools ];
   buildInputs = [ openssl db48 boost zlib
-                  miniupnpc utillinux protobuf libevent ]
+                  miniupnpc util-linux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ]
                   ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
 

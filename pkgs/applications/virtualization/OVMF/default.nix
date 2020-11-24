@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, utillinux, nasm, iasl
+{ stdenv, lib, edk2, util-linux, nasm, iasl
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
 }:
@@ -24,7 +24,7 @@ edk2.mkDerivation projectDscPath {
 
   outputs = [ "out" "fd" ];
 
-  buildInputs = [ utillinux nasm iasl ];
+  buildInputs = [ util-linux nasm iasl ];
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 

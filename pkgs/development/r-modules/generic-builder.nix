@@ -1,10 +1,10 @@
-{ stdenv, R, libcxx, xvfb_run, utillinux, Cocoa, Foundation, gettext, gfortran }:
+{ stdenv, R, libcxx, xvfb_run, util-linux, Cocoa, Foundation, gettext, gfortran }:
 
 { name, buildInputs ? [], requireX ? false, ... } @ attrs:
 
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R gettext] ++
-                stdenv.lib.optionals requireX [utillinux xvfb_run] ++
+                stdenv.lib.optionals requireX [util-linux xvfb_run] ++
                 stdenv.lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
 
   NIX_CFLAGS_COMPILE =

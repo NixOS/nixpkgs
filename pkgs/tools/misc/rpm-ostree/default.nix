@@ -33,7 +33,7 @@
 , json_c
 , zchunk
 , libmodulemd
-, utillinux
+, util-linux
 , sqlite
 , cppunit
 }:
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     json_c
     zchunk
     libmodulemd
-    utillinux # for smartcols.pc
+    util-linux # for smartcols.pc
     sqlite
     cppunit
   ];

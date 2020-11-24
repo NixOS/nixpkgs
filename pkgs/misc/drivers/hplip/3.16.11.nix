@@ -2,7 +2,7 @@
 , pkgconfig
 , cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
 , net-snmp, openssl, nettools
-, bash, coreutils, utillinux
+, bash, coreutils, util-linux
 , qtSupport ? true
 , withPlugin ? false
 }:
@@ -175,7 +175,7 @@ python2Packages.buildPythonApplication {
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
       --replace /usr/bin/nohup "" \
-      --replace {,${utillinux}/bin/}logger \
+      --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
   '';
 

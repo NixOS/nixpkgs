@@ -149,8 +149,8 @@ in
                   print int($2*${toString cfg.memoryPercent}/100.0/${toString devicesCount}*1024)
               }' /proc/meminfo)
 
-              ${pkgs.utillinux}/sbin/zramctl --size $mem --algorithm ${cfg.algorithm} /dev/${dev}
-              ${pkgs.utillinux}/sbin/mkswap /dev/${dev}
+              ${pkgs.util-linux}/sbin/zramctl --size $mem --algorithm ${cfg.algorithm} /dev/${dev}
+              ${pkgs.util-linux}/sbin/mkswap /dev/${dev}
             '';
             restartIfChanged = false;
           };

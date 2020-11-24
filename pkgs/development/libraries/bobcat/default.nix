@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, icmake
 , libmilter, libX11, openssl, readline
-, utillinux, yodl }:
+, util-linux, yodl }:
 
 stdenv.mkDerivation rec {
   pname = "bobcat";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "fbb-git";
   };
 
-  buildInputs = [ libmilter libX11 openssl readline utillinux ];
+  buildInputs = [ libmilter libX11 openssl readline util-linux ];
   nativeBuildInputs = [ icmake yodl ];
 
   setSourceRoot = ''

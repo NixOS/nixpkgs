@@ -18,7 +18,7 @@
 
   # Mandatory dependencies
 , libcap
-, utillinux
+, util-linux
 , kbd
 , kmod
 
@@ -277,9 +277,9 @@ stdenv.mkDerivation {
 
     "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
-    "-Dsulogin-path=${utillinux}/bin/sulogin"
-    "-Dmount-path=${utillinux}/bin/mount"
-    "-Dumount-path=${utillinux}/bin/umount"
+    "-Dsulogin-path=${util-linux}/bin/sulogin"
+    "-Dmount-path=${util-linux}/bin/mount"
+    "-Dumount-path=${util-linux}/bin/umount"
     "-Dcreate-log-dirs=false"
     # Upstream uses cgroupsv2 by default. To support docker and other
     # container managers we still need v1.
@@ -326,12 +326,12 @@ stdenv.mkDerivation {
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
-        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
-        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/mkswap ${lib.getBin util-linux}/sbin/mkswap \
+        --replace /sbin/swapon ${lib.getBin util-linux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin util-linux}/sbin/swapoff \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin util-linux}/sbin/sulogin \
         --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency

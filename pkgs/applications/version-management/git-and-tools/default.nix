@@ -133,7 +133,7 @@ let
   git-radar = callPackage ./git-radar { };
 
   git-recent = callPackage ./git-recent {
-    utillinux = if stdenv.isLinux then utillinuxMinimal else utillinux;
+    util-linux = if stdenv.isLinux then util-linuxMinimal else util-linux;
   };
 
   git-remote-codecommit = python3Packages.callPackage ./git-remote-codecommit { };

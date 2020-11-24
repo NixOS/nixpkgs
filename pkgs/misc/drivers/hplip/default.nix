@@ -3,7 +3,7 @@
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools
-, bash, coreutils, utillinux
+, bash, coreutils, util-linux
 # To remove references to gcc-unwrapped
 , removeReferencesTo, qt5
 , withQt5 ? true
@@ -219,7 +219,7 @@ python3Packages.buildPythonApplication {
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
       --replace /usr/bin/nohup "" \
-      --replace {,${utillinux}/bin/}logger \
+      --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
     remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
   '' + stdenv.lib.optionalString withQt5 ''

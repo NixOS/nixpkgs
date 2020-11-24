@@ -22,7 +22,7 @@
 
 # Additional dependencies according to other distros.
 ## Ubuntu
-, liberation_ttf, curl, utillinux, xdg_utils, wget
+, liberation_ttf, curl, util-linux, xdg_utils, wget
 ## Arch Linux.
 , flac, harfbuzz, icu, libpng, libopus, snappy, speechd
 ## Gentoo
@@ -59,7 +59,7 @@ let
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
     libexif
-    liberation_ttf curl utillinux xdg_utils wget
+    liberation_ttf curl util-linux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     kerberos libdrm mesa coreutils
