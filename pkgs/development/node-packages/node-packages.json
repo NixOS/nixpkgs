@@ -80,6 +80,7 @@
 , {"fast-cli": "1.x"}
 , "fauna-shell"
 , "fkill-cli"
+, "flood"
 , "forever"
 , "fx"
 , "get-graphql-schema"
