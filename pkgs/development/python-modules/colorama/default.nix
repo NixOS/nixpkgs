@@ -18,4 +18,3 @@ buildPythonPackage rec {
     description = "Cross-platform colored terminal text";
   };
 }
-
