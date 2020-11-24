@@ -10483,10 +10483,10 @@ in
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
-  python = python2;
+  python = python3;
   python2 = python27;
   python3 = python38;
-  pypy = pypy2;
+  pypy = pypy3;
   pypy2 = pypy27;
   pypy3 = pypy36;
 
