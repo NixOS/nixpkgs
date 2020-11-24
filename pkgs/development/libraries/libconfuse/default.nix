@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     owner = "martinh";
   };
 
+  postPatch = ''
+    substituteInPlace tests/Makefile.am \
+      --replace 'TESTS            += empty_string' "" \
+      --replace 'TESTS            += print_filter' ""
+  '';
+
   nativeBuildInputs = [ autoreconfHook flex ];
 
   enableParallelBuilding = true;
