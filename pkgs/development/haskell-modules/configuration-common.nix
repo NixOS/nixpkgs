@@ -366,6 +366,9 @@ self: super: {
   punycode = dontCheck super.punycode;
   pwstore-cli = dontCheck super.pwstore-cli;
   quantities = dontCheck super.quantities;
+  QuickCheck_2_14_2 = super.QuickCheck_2_14_2.override( {
+    splitmix = self.splitmix_0_1_0_3;
+  });
   redis-io = dontCheck super.redis-io;
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
