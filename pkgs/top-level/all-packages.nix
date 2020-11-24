@@ -8676,7 +8676,7 @@ in
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
-  bluespec = callPackage ../development/compilers/bluespec { 
+  bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
   };
 

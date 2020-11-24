@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
       repo   = "bsc";
       rev    = "103357f32cf63f2ca2b16ebc8e2c675ec5562464";
       sha256 = "sha256:1nynlnrdjgx9alr816spn3s1rvcsgcx56bqvvzklfgrh009rz95h";
-    }; 
+    };
 
   enableParallelBuilding = true;
 
