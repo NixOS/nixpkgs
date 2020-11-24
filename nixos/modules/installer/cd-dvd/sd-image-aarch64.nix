@@ -19,7 +19,6 @@
   # - ttyAMA0: for QEMU's -machine virt
   # Also increase the amount of CMA to ensure the virtual console on the RPi3 works.
   boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
-  boot.kernelPackages = pkgs.linuxPackages_4_19;
 
   boot.initrd.availableKernelModules = [
     # Allows early (earlier) modesetting for the Raspberry Pi
