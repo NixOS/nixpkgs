@@ -1,25 +1,26 @@
-{ lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
+{ lib, fetchFromGitHub, ... }:
+
 {
   pname = "gerbil-utils";
-  version = "unstable-2020-10-18";
-  git-version = "0.2-36-g8b481b7";
-  gerbil-package = "clan";
-  gerbil = gerbil-unstable;
-  gambit-params = gambit-support.unstable-params;
-  version-path = "version";
+  version = "unstable-2021-07-30";
+  git-version = "0.2-134-g124e025";
   softwareName = "Gerbil-utils";
+  gerbil-package = "clan";
+  version-path = "version";
+
   pre-src = {
     fun = fetchFromGitHub;
     owner = "fare";
     repo = "gerbil-utils";
-    rev = "8b481b787e13e07e14d0718d670aab016131a090";
-    sha256 = "0br8k5b2wcv4wcp65r2bfhji3af2qgqjspf41syqslq9awx47f3m";
+    rev = "124e025e5b3105fe6bb42cfd9f66e7eb90ea84b2";
+    sha256 = "0r6ybzi9rnr4la26xkjj25liymb5p1q0fxjw0p9xbsc9kpvynqvb";
   };
-  meta = {
+
+  meta = with lib; {
     description = "Gerbil Clan: Community curated Collection of Common Utilities";
     homepage    = "https://github.com/fare/gerbil-utils";
-    license     = lib.licenses.lgpl21;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    license     = licenses.lgpl21;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ fare ];
   };
 }
