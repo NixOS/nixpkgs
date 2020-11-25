@@ -1,4 +1,4 @@
-{ lib
+{ stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -20,6 +20,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ notebook nbdime git ];
 
+  # all Tests on darwin fail or are skipped due to sandbox
+  doCheck = !stdenv.isDarwin;
+
   checkInputs = [ pytest ];
 
   checkPhase = ''
@@ -28,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab_git" ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Jupyter lab extension for version control with Git.";
     license = with licenses; [ bsd3 ];
     homepage = "https://github.com/jupyterlab/jupyterlab-git";
