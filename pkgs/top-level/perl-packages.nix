@@ -19278,6 +19278,22 @@ let
     };
   };
 
+  TermReadPassword = buildPerlPackage rec {
+    pname = "Term-ReadPassword";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PH/PHOENIX/${pname}-${version}.tar.gz";
+      sha256 = "08s3zdqbr01qf4h8ryc900qq1cjcdlyy2dq0gppzzy9mbcs6da71";
+    };
+
+    outputs = [ "out" ];
+
+    meta = {
+      description = "This module lets you ask the user for a password in the traditional way, from the keyboard, without echoing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TermShell = buildPerlModule {
     pname = "Term-Shell";
     version = "0.11";
