@@ -787,6 +787,15 @@ self: super: {
     meta.platforms = lib.platforms.all;
   });
 
+  vim-textobj-entire = super.vim-textobj-entire.overrideAttrs(old: {
+    dependencies = with super; [ vim-textobj-user ];
+    meta = {
+      description = "Text objects to select the entire buffer";
+      homepage = "https://www.vim.org/scripts/script.php?script_id=2610";
+      maintainers = with lib.maintainers; [ farlion ];
+    };
+  });
+
 } // (
   let
     nodePackageNames = [

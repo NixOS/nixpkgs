@@ -8034,6 +8034,18 @@ let
     meta.homepage = "https://github.com/glts/vim-textobj-comment/";
   };
 
+  vim-textobj-entire = buildVimPluginFrom2Nix {
+    pname = "vim-textobj-entire";
+    version = "2018-01-19";
+    src = fetchFromGitHub {
+      owner = "kana";
+      repo = "vim-textobj-entire";
+      rev = "64a856c9dff3425ed8a863b9ec0a21dbaee6fb3a";
+      sha256 = "0kv0s85wbcxn9hrvml4hdzbpf49b1wwr3nk6gsz3p5rvfs6fbvmm";
+    };
+    meta.homepage = "https://github.com/kana/vim-textobj-entire/";
+  };
+
   vim-textobj-function = buildVimPluginFrom2Nix {
     pname = "vim-textobj-function";
     version = "2014-05-03";
