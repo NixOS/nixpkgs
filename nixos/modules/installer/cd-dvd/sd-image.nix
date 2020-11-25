@@ -74,7 +74,8 @@ in
     bootSize = mkOption {
       type = types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
-      default = 120;
+      # A kernel, initrd, and dtbs are about 60MiB, and we want room for at least 2
+      default = 248;
       description = ''
         Size of the /boot partition, in megabytes.
       '';
