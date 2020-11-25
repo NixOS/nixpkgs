@@ -68,6 +68,24 @@ rec {
   #
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
 
+  # Similar to the function `extends`, but the attrs are merged recursively
+  #
+  #     f = self: { foo.bar = "fizz"; }
+  #     g = self: super: { foo.baq = super.foo.bar + "buzz"; }
+  #
+  #     nix-repl> fix (recursiveExtends g f)
+  #     { foo = {
+  #         baq = "fizzbuzz"; # created from "g"
+  #         bar = "fizz";     # still remains from the initial attr set in "f"
+  #       };
+  #     }
+  #
+  # Caution should be used when applying this function, as recursing deeply into attrs
+  # is much more expensive than overriding top-level attrs with //.
+  #
+  #   Type: recursiveExtends :: AttrSet a => (a -> a -> a) -> (a -> a) -> (a -> a)
+  recursiveExtends = f: rattrs: self: let super = rattrs self; in lib.recursiveUpdate super (f self super);
+
   # Compose two extending functions of the type expected by 'extends'
   # into one where changes made in the first are available in the
   # 'super' of the second
