@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glade";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glade/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfgs2dpjd8dnnjkfc4xdy8yjjavlzimqzyfr1pq1m1h96z506hp";
+    sha256 = "1dxsiz9ahqkxg2a1dw9sbd8jg59y5pdz4c1gvnbmql48gmj8gz4q";
   };
 
   nativeBuildInputs = [
