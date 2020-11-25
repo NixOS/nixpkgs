@@ -5170,7 +5170,6 @@ broken-packages:
   - FM-SBLEX
   - fmark
   - FModExRaw
-  - fmt
   - fmt-for-rio
   - fmt-terminal-colors
   - fn-extra
