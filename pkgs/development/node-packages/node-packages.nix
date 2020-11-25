@@ -66455,6 +66455,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  coc-vimlsp = nodeEnv.buildNodePackage {
+    name = "coc-vimlsp";
+    packageName = "coc-vimlsp";
+    version = "0.10.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-vimlsp/-/coc-vimlsp-0.10.2.tgz";
+      sha512 = "g6jCDkNRJwuPmqMN2czK90BMLec8Sdnx6uR3RZDZO2NThIduezrSbsFBpICKW93vmIprk1CvC+Pry+kRY3Mhrw==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "vim language server extension for coc.nvim";
+      homepage = "https://github.com/iamcco/coc-vim#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   coc-vimtex = nodeEnv.buildNodePackage {
     name = "coc-vimtex";
     packageName = "coc-vimtex";
