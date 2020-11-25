@@ -109,9 +109,8 @@ in {
       '';
     }];
 
-    system.autoUpgrade.flags = [ "--no-build-output" ]
-      ++ (if cfg.flake == null then
-        (if cfg.channel == null then
+    system.autoUpgrade.flags = (if cfg.flake == null then
+        [ "--no-build-output" ] ++ (if cfg.channel == null then
           [ "--upgrade" ]
         else [
           "-I"
