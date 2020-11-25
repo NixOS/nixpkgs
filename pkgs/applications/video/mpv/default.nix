@@ -31,28 +31,29 @@
   , mesa   ? null
 
 , alsaSupport        ? stdenv.isLinux, alsaLib       ? null
+, archiveSupport     ? true,           libarchive    ? null
 , bluraySupport      ? true,           libbluray     ? null
 , bs2bSupport        ? true,           libbs2b       ? null
 , cacaSupport        ? true,           libcaca       ? null
 , cmsSupport         ? true,           lcms2         ? null
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav     ? null
+, jackaudioSupport   ? false,          libjack2      ? null
 , libpngSupport      ? true,           libpng        ? null
+, openalSupport      ? true,           openalSoft    ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
+, sixelSupport       ? false,          libsixel      ? null
 , speexSupport       ? true,           speex         ? null
 , swiftSupport       ? false,          swift         ? null
 , theoraSupport      ? true,           libtheora     ? null
 , vaapiSupport       ? stdenv.isLinux, libva         ? null
+, vapoursynthSupport ? false,          vapoursynth   ? null
 , vdpauSupport       ? true,           libvdpau      ? null
 , xineramaSupport    ? stdenv.isLinux, libXinerama   ? null
 , xvSupport          ? stdenv.isLinux, libXv         ? null
 , zimgSupport        ? true,           zimg          ? null
-, archiveSupport     ? true,           libarchive    ? null
-, jackaudioSupport   ? false,          libjack2      ? null
-, openalSupport      ? true,           openalSoft    ? null
-, vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 
 with stdenv.lib;
@@ -76,6 +77,7 @@ assert pulseSupport       -> available libpulseaudio;
 assert rubberbandSupport  -> available rubberband;
 assert screenSaverSupport -> available libXScrnSaver;
 assert sdl2Support        -> available SDL2;
+assert sixelSupport       -> available libsixel;
 assert speexSupport       -> available speex;
 assert theoraSupport      -> available libtheora;
 assert vaapiSupport       -> available libva;
@@ -134,6 +136,7 @@ in stdenv.mkDerivation rec {
     (enableFeature dvdnavSupport   "dvdnav")
     (enableFeature openalSupport   "openal")
     (enableFeature sdl2Support     "sdl2")
+    (enableFeature sixelSupport    "sixel")
     (enableFeature vaapiSupport    "vaapi")
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
@@ -161,6 +164,7 @@ in stdenv.mkDerivation rec {
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional sdl2Support        SDL2
+    ++ optional sixelSupport       libsixel
     ++ optional speexSupport       speex
     ++ optional theoraSupport      libtheora
     ++ optional vaapiSupport       libva
