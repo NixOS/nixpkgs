@@ -9,7 +9,7 @@
 , colladaSupport ? true, opencollada
 , makeWrapper
 , pugixml, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
-, embree
+, embree, gmp
 }:
 
 with lib;
@@ -18,11 +18,11 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.90.1";
+  version = "2.91.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "169xcmm1zkvab14qdxggqc758xdkqs7r7imwi6yx2fl2djacr3g7";
+    sha256 = "0x396lgmk0dq9115yrc36s8zwxzmjr490sr5n2y6w27y17yllyjm";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
       tbb
       makeWrapper
       embree
+      gmp
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
