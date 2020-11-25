@@ -2910,6 +2910,8 @@ in {
 
   imagesize = callPackage ../development/python-modules/imagesize { };
 
+  imantics = callPackage ../development/python-modules/imantics { };
+
   IMAPClient = callPackage ../development/python-modules/imapclient { };
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
