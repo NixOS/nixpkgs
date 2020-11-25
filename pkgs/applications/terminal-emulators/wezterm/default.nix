@@ -53,8 +53,9 @@ rustPlatform.buildRustPackage {
     repo = pname;
     rev = "3bd8d8c84591f4d015ff9a47ddb478e55c231fda";
     sha256 = "13xf3685kir4p159hsxrqkj9p2lwgfp0n13h9zadslrd44l8b8j8";
+    fetchSubmodules = true;
   };
-  cargoSha256 = "1i983ix7kdq7kd1i14kk3ra7jiihrd7n4pxmfifbj48g3kyxn2pq";
+  cargoSha256 = "1ghjpyd3f5dqi6bblr6d2lihdschpyj5djfd1600hvb41x75lmhx";
 
   nativeBuildInputs = [
     pkg-config
