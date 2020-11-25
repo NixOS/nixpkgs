@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wordgrinder";
-  version = "0.7.2";
+  version = "0.8";
 
   src = fetchFromGitHub {
     repo = "wordgrinder";
     owner = "davidgiven";
     rev = version;
-    sha256 = "08lnq5wmspfqdjmqm15gizcq0xr7mg4h62qhvwj63v0sd6ks1cal";
+    sha256 = "124d1bnn2aqs6ik8pdazzni6a0583prz9lfdjrbwyb97ipqga9pm";
   };
 
   makeFlags = [
