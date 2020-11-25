@@ -5423,6 +5423,8 @@ in
 
   libngspice = callPackage ../development/libraries/libngspice { };
 
+  libnixxml = callPackage ../development/libraries/libnixxml { };
+
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
   libportal = callPackage ../development/libraries/libportal { };
@@ -27771,6 +27773,8 @@ in
   disnix = callPackage ../tools/package-management/disnix { };
 
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {});
+
+  dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
 
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
 
