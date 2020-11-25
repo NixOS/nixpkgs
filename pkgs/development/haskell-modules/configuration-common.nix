@@ -1508,4 +1508,7 @@ self: super: {
   # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
   blas-hs = dontCheck super.blas-hs;
 
+  # 2020-11-23: https://github.com/cdornan/fmt/issues/30
+  fmt = dontCheck super.fmt;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
