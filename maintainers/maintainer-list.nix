@@ -1152,9 +1152,9 @@
     githubId = 50839;
     name = "Brian Jones";
   };
-  boothead = {
+  commandodev = {
     email = "ben@perurbis.com";
-    github = "boothead";
+    github = "commandodev";
     githubId = 87764;
     name = "Ben Ford";
   };
