@@ -3733,6 +3733,16 @@
       fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293";
     }];
   };
+  islandusurper = {
+    email = "ashagua@gmail.com";
+    name = "Lyle Mantooth";
+    github = "IslandUsurper";
+    githubId = 17701;
+    keys = [{
+      longkeyid = "rsa3072/0x6DB52EAE123A5789";
+      fingerprint = "CA84 771F 492B C486 E07D  255C 6DB5 2EAE 123A 5789";
+    }];
+  };
   ivan = {
     email = "ivan@ludios.org";
     github = "ivan";
