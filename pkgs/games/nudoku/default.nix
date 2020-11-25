@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     description = "An ncurses based sudoku game";
     homepage = "http://jubalh.github.io/nudoku/";
     license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
