@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost }:
+{ stdenv, fetchurl, boost, llvmPackages }:
 
 stdenv.mkDerivation rec {
   pname = "mdds";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
+  buildInputs = stdenv.lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+
   checkInputs = [ boost ];
 
   meta = with stdenv.lib; {
@@ -21,7 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/mdds/mdds";
     description = "A collection of multi-dimensional data structure and indexing algorithm";
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
     license = licenses.mit;
   };
 }
