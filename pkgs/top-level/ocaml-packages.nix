@@ -662,7 +662,9 @@ let
 
     ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
-    ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
+    ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
+
+    ocaml-migrate-parsetree-1-8 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/1.8.x.nix { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
