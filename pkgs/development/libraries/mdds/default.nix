@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/mdds/mdds";
     description = "A collection of multi-dimensional data structure and indexing algorithm";
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
     license = licenses.mit;
   };
 }
