@@ -3545,7 +3545,6 @@ broken-packages:
   - blakesum
   - blakesum-demo
   - blas
-  - blas-hs
   - BlastHTTP
   - blastxml
   - blatex

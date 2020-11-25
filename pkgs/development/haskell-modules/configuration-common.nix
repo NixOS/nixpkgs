@@ -1505,4 +1505,7 @@ self: super: {
   # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
   pipes-text = doJailbreak super.pipes-text;
 
+  # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
+  blas-hs = dontCheck super.blas-hs;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
