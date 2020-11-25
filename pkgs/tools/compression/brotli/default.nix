@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
-    rev = "v" + version;
+    rev = "v${version}";
     sha256 = "z6Dhrabav1MDQ4rAcXaDv0aN+qOoh9cvoXZqEWBB13c=";
   };
 
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sOeXNVsCaBSD9i82GRUDrkyreGeQ7qaJWjjy/uLL0/0=";
   });
 
-  cmakeFlags = []
-    ++ stdenv.lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
+  cmakeFlags = stdenv.lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [ "out" "dev" "lib" ];
 
@@ -52,9 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-
     description = "A generic-purpose lossless compression algorithm and tool";
-
     longDescription =
       ''  Brotli is a generic-purpose lossless compression algorithm that
           compresses data using a combination of a modern variant of the LZ77
@@ -67,7 +64,6 @@ stdenv.mkDerivation rec {
           in the following internet draft:
           http://www.ietf.org/id/draft-alakuijala-brotli
       '';
-
     license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
