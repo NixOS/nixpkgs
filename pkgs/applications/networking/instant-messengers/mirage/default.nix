@@ -38,7 +38,7 @@ mkDerivation rec {
 
   pythonPath = pypkgs;
 
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
+  qmakeFlags = [ "PREFIX=${placeholder "out"}" "CONFIG+=qtquickcompiler" ];
 
   dontWrapQtApps = true;
   postInstall = ''
