@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = { inherit (nixosTests) xterm; };
+
     updateScript = let
       # Tags that end in letters are unstable
       suffixes = stdenv.lib.concatStringsSep " "
