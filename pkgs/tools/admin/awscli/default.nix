@@ -1,4 +1,5 @@
 { lib
+, nixosTests
 , python3
 , groff
 , less
@@ -64,7 +65,11 @@ in with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru.python = py; # for aws_shell
+  passthru = {
+    python = py; # for aws_shell
+
+    tests = { inherit (nixosTests) awscli; };
+  };
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";
