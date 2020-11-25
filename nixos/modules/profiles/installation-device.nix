@@ -67,6 +67,7 @@ with lib;
     services.openssh = {
       enable = true;
       permitRootLogin = "yes";
+      openFirewall = true;
     };
 
     # Enable wpa_supplicant, but don't start it by default.
