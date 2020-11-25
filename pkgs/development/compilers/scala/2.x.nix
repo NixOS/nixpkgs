@@ -6,7 +6,7 @@ with lib;
 let
   repo = "git@github.com:scala/scala.git";
 
-  common = { version, sha256, test, pname }:
+  common = { version, sha256, tests, pname }:
     stdenv.mkDerivation rec {
       inherit version;
 
@@ -40,7 +40,7 @@ let
       '';
 
       passthru = {
-        tests = [ test ];
+        inherit tests;
 
         updateScript = writeScript "update.sh" ''
           #!${stdenv.shell}
@@ -90,28 +90,28 @@ in {
   scala_2_10 = common {
     version = "2.10.7";
     sha256 = "koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
-    test = { inherit (nixosTests) scala_2_10; };
+    tests = [ nixosTests.scala.scala_2_10 ];
     pname = "scala_2_10";
   };
 
   scala_2_11 = common {
     version = "2.11.12";
     sha256 = "sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
-    test = { inherit (nixosTests) scala_2_11; };
+    tests = [ nixosTests.scala.scala_2_11 ];
     pname = "scala_2_11";
   };
 
   scala_2_12 = common {
     version = "2.12.12";
     sha256 = "NSDNHzye//YrrudfMuUtHl3BIL4szzQGSeRw5I9Sfis=";
-    test = { inherit (nixosTests) scala_2_12; };
+    tests = [ nixosTests.scala.scala_2_12 ];
     pname = "scala_2_12";
   };
 
   scala_2_13 = common {
     version = "2.13.4";
     sha256 = "1alcnzmxga00nsvgy8yky91zw5b4q0xg2697vrrdgjlglpxiqwdw";
-    test = { inherit (nixosTests) scala_2_13; };
+    tests = [ nixosTests.scala.scala_2_13 ];
     pname = "scala_2_13";
   };
 }
