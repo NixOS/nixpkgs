@@ -131,6 +131,7 @@ in
 
       openssh = {
         enable = true;
+        openFirewall = true;
 
         authorizedKeysFiles = [ "${keysDirectory}/%u_${keyType}.pub" ];
       };
