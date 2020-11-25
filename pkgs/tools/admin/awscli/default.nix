@@ -14,16 +14,24 @@ let
           sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
         };
       });
+      # TODO: https://github.com/aws/aws-cli/pull/5712
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.3";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
+        };
+      });
     };
   };
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.150"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.18.185"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jrxzr4dx2s6ychmrz19yz8i4kqcwj7f8ly82ydwvrr0ff62374g";
+    sha256 = "0yf8dmjgiib5s4dimc1896zxrrj0sl5kzrp7x8spm6xkcvwb02l1";
   };
 
   postPatch = ''
