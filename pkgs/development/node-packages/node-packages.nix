@@ -84078,10 +84078,10 @@ in
   mastodon-bot = nodeEnv.buildNodePackage {
     name = "mastodon-bot";
     packageName = "mastodon-bot";
-    version = "1.10.0";
+    version = "1.10.2";
     src = fetchurl {
-      url = "https://registry.npmjs.org/mastodon-bot/-/mastodon-bot-1.10.0.tgz";
-      sha512 = "QRgdYB8llfN6iVpDXSXjJJ7b2fQRoT3hZJdPIUBX9aN1ci0mZlTX3mITcxXbmGtIyBHBhLavHwwxaBzYYuosqw==";
+      url = "https://registry.npmjs.org/mastodon-bot/-/mastodon-bot-1.10.2.tgz";
+      sha512 = "1hljd0khxrskgjjm6mhj2s90x5xmwzfrnxzirnhrcrc5sbmrj0xrabwdfp23c9iqc5p1hp8q2a53pryhr58nhl8i53svsyzmsph3s6i";
     };
     dependencies = [
       sources."acorn-5.7.4"
