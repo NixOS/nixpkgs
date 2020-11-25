@@ -41,7 +41,7 @@ in mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Streaming media player for Plex";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ kylewlacy ];
+    maintainers = with maintainers; [ ];
     homepage = "https://plex.tv";
   };
 }
