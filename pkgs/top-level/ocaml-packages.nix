@@ -820,7 +820,9 @@ let
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
-    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
+    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
 
