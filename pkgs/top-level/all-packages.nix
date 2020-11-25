@@ -15232,6 +15232,8 @@ in
 
   libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
 
+  libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
+
   libfpx = callPackage ../development/libraries/libfpx { };
 
   libgadu = callPackage ../development/libraries/libgadu { };
