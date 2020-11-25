@@ -666,6 +666,8 @@ let
 
     ocaml-migrate-parsetree-1-8 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/1.8.x.nix { };
 
+    ocaml-migrate-parsetree-2-1 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/2.1.x.nix { };
+
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
     ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
