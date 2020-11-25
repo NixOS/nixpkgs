@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitLab, fetchurl, pkg-config, qmake, qtx11extras, qttools, mpv }:
+{ stdenv, mkDerivation, fetchFromGitLab, fetchpatch, pkg-config, qmake, qtx11extras, qttools, mpv }:
 
 mkDerivation rec {
   pname = "mpc-qt";
@@ -12,9 +12,9 @@ mkDerivation rec {
   };
 
   patches = [
-    (fetchurl {
+    (fetchpatch {
       url = "https://gitlab.com/mpc-qt/mpc-qt/-/commit/02f2bc7a22e863a89ba322b9acb61cf1aef23ba0.diff";
-      sha256 = "15gcpcs54k09pndlpcfwb3fa0cg9fszyyb6vbp0hpgspy43183lx";
+      sha256 = "0khld55i194zgi18d0wch5459lfzzkbfdbl1im8akvq8ks5xijis";
     })
   ];
 
