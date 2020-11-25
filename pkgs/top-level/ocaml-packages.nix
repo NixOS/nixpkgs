@@ -672,7 +672,9 @@ let
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
-    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
+    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
