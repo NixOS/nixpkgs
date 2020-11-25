@@ -1755,6 +1755,12 @@
     githubId = 1740337;
     name = "Chris Ostrouchov";
   };
+  confus = {
+    email = "con-f-use@gmx.net";
+    github = "con-f-use";
+    githubId = 11145016;
+    name = "J.C.";
+  };
   contrun = {
     email = "uuuuuu@protonmail.com";
     github = "contrun";
