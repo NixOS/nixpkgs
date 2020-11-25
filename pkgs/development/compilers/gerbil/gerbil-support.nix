@@ -9,7 +9,7 @@ selfPop (gerbil-support: with gerbil-support; {
   prePackages-unstable =
     let pks = [ ./gerbil-libp2p.nix ./smug-gerbil.nix ./ftw.nix
                 ./gerbil-utils.nix ./gerbil-crypto.nix ./gerbil-poo.nix
-                ./gerbil-persist.nix ./gerbil-ethereum.nix ];
+                ./gerbil-persist.nix ./gerbil-ethereum.nix ./glow-lang.nix ];
         call = pkg: callPackage pkg (unpop prePackage-defaults);
         pkgName = pkg: lib.removeSuffix ".nix" (baseNameOf pkg);
         f = pkg: { name = pkgName pkg; value = call pkg; }; in
