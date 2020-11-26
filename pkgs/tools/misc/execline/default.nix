@@ -1,7 +1,4 @@
-{ lib, skawarePackages
-# for execlineb-with-builtins
-, coreutils, gnugrep, writeScriptBin, runCommand, runCommandCC
-}:
+{ skawarePackages }:
 
 with skawarePackages;
 
