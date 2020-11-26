@@ -1,7 +1,7 @@
 # https://nim-lang.github.io/Nim/packaging.html
 
-{ stdenv, lib, fetchgit, fetchurl, makeWrapper, gdb, openssl, pcre, readline
-, boehmgc, sqlite, nim-unwrapped, nim }:
+{ stdenv, lib, fetchurl, fetchgit, fetchFromGitHub, makeWrapper, gdb, openssl
+, pcre, readline, boehmgc, sqlite, nim-unwrapped, nimble-unwrapped }:
 
 let
   version = "1.4.0";
@@ -153,21 +153,52 @@ let
 
       inherit meta;
     };
+
+    nimble-unwrapped = stdenv.mkDerivation rec {
+      pname = "nimble-unwrapped";
+      version = "0.12.0";
+
+      src = fetchFromGitHub {
+        owner = "nim-lang";
+        repo = "nimble";
+        rev = "v" + version;
+        sha256 = "0vx0mdk31n00dr2rhiip6f4x7aa3z3mnblnmwk7f65ixd5hayq6y";
+      };
+
+      nativeBuildInputs = [ nim-unwrapped ];
+      buildInputs = [ openssl ];
+
+      nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
+
+      buildPhase = ''
+        runHook preBuild
+        HOME=$NIX_BUILD_TOP nim c $nimFlags src/nimble
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preBuild
+        install -Dt $out/bin src/nimble
+        runHook postBuild
+      '';
+    };
+
   };
 
   wrapped = let
-    nim = nim-unwrapped;
+    nim' = nim-unwrapped;
+    nimble' = nimble-unwrapped;
     inherit (stdenv) targetPlatform;
   in stdenv.mkDerivation {
-    name = "${targetPlatform.config}-nim-wrapper-${nim.version}";
-    inherit (nim) version;
+    name = "${targetPlatform.config}-nim-wrapper-${nim'.version}";
+    inherit (nim') version;
     preferLocalBuild = true;
 
     nativeBuildInputs = [ makeWrapper ];
 
     unpackPhase = ''
       runHook preUnpack
-      tar xf ${nim.src} nim-$version/config/nim.cfg
+      tar xf ${nim'.src} nim-$version/config/nim.cfg
       cd nim-$version
       runHook postUnpack
     '';
@@ -210,7 +241,7 @@ let
         substituteAll config/nim.cfg $out/etc/nim/nim.cfg \
           --replace "cc = gcc" ""
 
-        for binpath in ${nim}/bin/nim?*; do
+        for binpath in ${nim'}/bin/nim?*; do
           local binname=`basename $binpath`
           makeWrapper \
             $binpath $out/bin/${targetPlatform.config}-$binname \
@@ -219,9 +250,14 @@ let
         done
 
         makeWrapper \
-          ${nim}/nim/bin/nim $out/bin/${targetPlatform.config}-nim \
+          ${nim'}/nim/bin/nim $out/bin/${targetPlatform.config}-nim \
           $wrapperArgs
         ln -s $out/bin/${targetPlatform.config}-nim $out/bin/nim
+
+        makeWrapper \
+          ${nimble'}/bin/nimble $out/bin/${targetPlatform.config}-nimble \
+          --suffix PATH : $out/bin
+        ln -s $out/bin/${targetPlatform.config}-nimble $out/bin/nimble
 
         runHook postBuild
       '';
@@ -229,11 +265,10 @@ let
     dontInstall = true;
 
     meta = meta // {
-      description = nim.meta.description
+      description = nim'.meta.description
         + " (${targetPlatform.config} wrapper)";
       platforms = lib.platforms.unix;
     };
-
   };
 
 in wrapped // wrapperInputs
