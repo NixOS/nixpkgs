@@ -1,8 +1,9 @@
-{ buildPythonPackage, cachetools, fetchFromGitHub, lib }:
+{ buildPythonPackage, cachetools, fetchFromGitHub, isPy27, lib }:
 
 buildPythonPackage rec {
   pname = "CoAPthon3";
   version = "1.0.1";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "Tanganelli";
