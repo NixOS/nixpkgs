@@ -10257,13 +10257,15 @@ in
 
   dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
 
-  dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
-
   dhall-bash = haskell.lib.justStaticExecutables haskellPackages.dhall-bash;
+
+  dhall-docs = haskell.lib.justStaticExecutables haskellPackages.dhall-docs;
+
+  dhall-lsp-server = haskell.lib.justStaticExecutables haskellPackages.dhall-lsp-server;
 
   dhall-json = haskell.lib.justStaticExecutables haskellPackages.dhall-json;
 
-  dhall-lsp-server = haskell.lib.justStaticExecutables haskellPackages.dhall-lsp-server;
+  dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
