@@ -3741,6 +3741,8 @@ in
 
   exif = callPackage ../tools/graphics/exif { };
 
+  exifprobe = callPackage ../tools/graphics/exifprobe { };
+
   exiftags = callPackage ../tools/graphics/exiftags { };
 
   exiftool = perlPackages.ImageExifTool;
