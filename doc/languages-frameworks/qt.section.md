@@ -5,7 +5,8 @@ This section describes the differences between Nix expressions for Qt libraries 
 
 There are primarily two problems which the Qt infrastructure is designed to address: ensuring consistent versioning of all dependencies and finding dependencies at runtime.
 
-**Nix expression for a Qt package (default.nix)**
+
+## Nix expression for a Qt package (default.nix) {#qt-default-nix}
 
 ```nix
 { mkDerivation, lib, qtbase }: #1
