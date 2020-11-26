@@ -6129,6 +6129,12 @@
     githubId = 5139265;
     name = "James Wood";
   };
+  mudrii = {
+    email = "mudreac@gmail.com";
+    github = "mudrii";
+    githubId = 220262;
+    name = "Ion Mudreac";
+  };
   muflax = {
     email = "mail@muflax.com";
     github = "muflax";
