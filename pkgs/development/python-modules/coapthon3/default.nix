@@ -1,19 +1,25 @@
-{ buildPythonPackage, cachetools, fetchPypi, lib }:
+{ buildPythonPackage, cachetools, fetchFromGitHub, lib }:
 
 buildPythonPackage rec {
   pname = "CoAPthon3";
   version = "1.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1w6bwwd3qjp4b4fscagqg9wqxpdgvf4sxgzbk2d2rjqwlkyr1lnx";
+  src = fetchFromGitHub {
+    owner = "Tanganelli";
+    repo = pname;
+    rev = version;
+    sha256 = "1im35i5i72y1p9qj8ixkwq7q6ksbrmi42giqiyfgjp1ym38snl69";
   };
 
   propagatedBuildInputs = [ cachetools ];
 
+  # tests take in the order of 10 minutes to execute and sometimes hang forever on tear-down
+  doCheck = false;
+  pythonImportsCheck = [ "coapthon" ];
+
   meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Python3 library to the CoAP protocol compliant with the RFC.";
-    homepage = "https://github.com/Tanganelli/${pname}";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];
   };
