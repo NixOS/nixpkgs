@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
-, libmspack, systemd, Foundation
+, libmspack, systemd, Foundation, json_c, check
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace ' etc ' ' '
   '';
 
+  enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack
+    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
   ] ++ stdenv.lib.optional stdenv.isLinux systemd
     ++ stdenv.lib.optional stdenv.isDarwin Foundation;
 
@@ -31,8 +32,11 @@ stdenv.mkDerivation rec {
     "--with-xml=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
     "--with-libcurl=${curl.dev}"
+    "--with-libjson=${json_c.dev}"
     "--with-system-libmspack"
     "--enable-milter"
+    "--disable-unrar" # disable unrar because it's non-free and requires some extra patching to work properly
+    "--enable-check"
   ] ++ stdenv.lib.optional stdenv.isLinux
     "--with-systemdsystemunitdir=$(out)/lib/systemd";
 
@@ -40,6 +44,10 @@ stdenv.mkDerivation rec {
     mkdir $out/etc
     cp etc/*.sample $out/etc
   '';
+
+  # Only required for the unit tests
+  hardeningDisable = [ "format" ];
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = "https://www.clamav.net";
