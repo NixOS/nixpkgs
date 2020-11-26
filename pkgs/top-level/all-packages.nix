@@ -15834,6 +15834,8 @@ in
 
   snappy = callPackage ../development/libraries/snappy { };
 
+  snow = callPackage ../tools/security/snow { };
+
   soapyairspy = callPackage ../applications/radio/soapyairspy { };
 
   soapybladerf = callPackage ../applications/radio/soapybladerf { };
