@@ -2860,6 +2860,8 @@ in
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
+  poweralertd = callPackage ../tools/misc/poweralertd { };
+
   ps_mem = callPackage ../tools/system/ps_mem { };
 
   psstop = callPackage ../tools/system/psstop { };
