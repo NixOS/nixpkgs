@@ -4621,6 +4621,8 @@ in {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  pydata-sphinx-theme = callPackage ../development/python-modules/pydata-sphinx-theme { };
+
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
