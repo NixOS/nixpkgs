@@ -1255,6 +1255,8 @@ in {
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
+  coapthon3 = callPackage ../development/python-modules/coapthon3 { };
+
   coconut = callPackage ../development/python-modules/coconut { };
 
   cocotb = callPackage ../development/python-modules/cocotb { };

@@ -9035,6 +9035,12 @@
     githubId = 619015;
     name = "Svintsov Dmitry";
   };
+  urbas = {
+    email = "matej.urbas@gmail.com";
+    github = "urbas";
+    githubId = 771193;
+    name = "Matej Urbas";
+  };
   uri-canva = {
     email = "uri@canva.com";
     github = "uri-canva";
