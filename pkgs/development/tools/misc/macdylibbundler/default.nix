@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram $out/bin/dylibbundler \
-      --prefix PATH : "${cctools}/bin"
+      --prefix PATH ":" "${cctools}/bin"
   '';
 
   meta = with stdenv.lib; {
