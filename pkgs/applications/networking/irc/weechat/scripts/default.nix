@@ -1,17 +1,21 @@
 { callPackage, luaPackages, python3Packages }:
 
 {
-  weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
-    inherit (luaPackages) cjson luaffi;
-  };
+  autojoin = callPackage ./autojoin { };
 
-  weechat-matrix = python3Packages.callPackage ./weechat-matrix { };
+  text-item = callPackage ./text-item { };
 
   weechat-notify-send = python3Packages.callPackage ./weechat-notify-send { };
 
   wee-slack = callPackage ./wee-slack { };
 
   weechat-autosort = callPackage ./weechat-autosort { };
+
+  weechat-matrix = python3Packages.callPackage ./weechat-matrix { };
+
+  weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
+    inherit (luaPackages) cjson luaffi;
+  };
 
   weechat-otr = callPackage ./weechat-otr { };
 }
