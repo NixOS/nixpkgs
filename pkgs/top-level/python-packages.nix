@@ -3994,6 +3994,8 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
+  myst-nb = callPackage ../development/python-modules/myst-nb { };
+
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
