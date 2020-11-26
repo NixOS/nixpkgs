@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, last, exonerate, minia, python3Packages, bwa
-, samtools, findutils }:
+, samtools, findutils, python }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tebreak";
@@ -30,6 +30,12 @@ python3Packages.buildPythonApplication rec {
       sed -i "s|'lastal'|'${last}/bin/lastal'|" $f
       sed -i "s|'lastdb'|'${last}/bin/lastdb'|" $f
     done
+  '';
+
+  checkPhase = ''
+    $out/bin/tebreak -b test/data/example.ins.bam  -r test/data/Homo_sapiens_chr4_50000000-60000000_assembly19.fasta -p 4 --pickle test/example.pickle --detail_out test/example.tebreak.detail.out -i lib/teref.human.fa
+    pushd test
+    ${python.interpreter} checktest.py
   '';
 
   meta = with stdenv.lib; {
