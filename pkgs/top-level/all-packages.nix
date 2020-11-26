@@ -13501,6 +13501,8 @@ in
 
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
+  jsonnet-bundler = callPackage ../development/tools/jsonnet-bundler { };
+
   go-jsonnet = callPackage ../development/compilers/go-jsonnet { };
 
   jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
