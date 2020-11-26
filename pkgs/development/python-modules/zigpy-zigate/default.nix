@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "0ycrsmp3n3awiyj0gbq6xnaa2s9mpc5l7mlmfc00rfnx7rr2z4ha";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     pyserial
     pyserial-asyncio
     pyusb
