@@ -13,10 +13,12 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "GNU barcode generator";
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux; # Maybe other non-darwin Unix
+    platforms = platforms.unix; # Maybe other non-darwin Unix
     downloadPage = "https://ftp.gnu.org/gnu/barcode/";
     updateWalker = true;
     homepage = "https://www.gnu.org/software/barcode/";
     license = licenses.gpl3;
   };
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "ac_cv_func_calloc_0_nonnull=yes" ;
+  patches = stdenv.lib.optional stdenv.isDarwin [ ./patches/darwin.patch ];
 }
