@@ -33,6 +33,7 @@
 , "coc-jest"
 , "coc-json"
 , "coc-lists"
+, "coc-markdownlint"
 , "coc-metals"
 , "coc-pairs"
 , "coc-prettier"
