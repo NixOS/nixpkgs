@@ -5,7 +5,7 @@ This section describes the differences between Nix expressions for Qt libraries 
 
 There are primarily two problems which the Qt infrastructure is designed to address: ensuring consistent versioning of all dependencies and finding dependencies at runtime.
 
-**Nix expression for a Qt package (default.nix)**
+## Nix expression for a Qt package (default.nix) {#qt-default-nix}
 
 ```nix
 { mkDerivation, lib, qtbase }: #1
@@ -21,21 +21,21 @@ mkDerivation { #2
 
 * **#2:** Use `mkDerivation` instead of `stdenv.mkDerivation`. `mkDerivation` is a wrapper around `stdenv.mkDerivation` which applies some Qt-specific settings. This deriver accepts the same arguments as `stdenv.mkDerivation`; refer to [Chapter 6, The Standard Environment](#chap-stdenv), The Standard Environment for details.
 
-> To use another deriver instead of `stdenv.mkDerivation`, use `mkDerivationWith`:
+  To use another deriver instead of `stdenv.mkDerivation`, use `mkDerivationWith`:
 
-```nix
-mkDerivationWith myDeriver {
-  # ...
-}
-```
+  ```nix
+  mkDerivationWith myDeriver {
+    # ...
+  }
+  ```
 
-> If you cannot use `mkDerivationWith`, please refer to Locating runtime dependencies below.
+  If you cannot use `mkDerivationWith`, please refer to Locating runtime dependencies below.
 
 * **#3:** `mkDerivation` accepts the same arguments as `stdenv.mkDerivation`, such as `buildInputs`.
 
 ---
 
-**Locating runtime dependencies**
+## Locating runtime dependencies {#qt-runtime-dependencies}
 Qt applications need to be wrapped to find runtime dependencies. If you cannot use `mkDerivation` or `mkDerivationWith` above, include `wrapQtAppsHook` in `nativeBuildInputs`:
 
 ```nix
@@ -80,10 +80,10 @@ mkDerivation {
   meta.broken = builtins.compareVersions qtbase.version "5.9.0" &lt; 0;
 }
 ```
-**Adding a library to Nixpkgs**
+## Adding a library to Nixpkgs
    Add a Qt library to all-packages.nix by adding it to the collection inside `mkLibsForQt5`. This ensures that the library is built with every available version of Qt as needed.
 
-**Example 15.9. Adding a Qt library to all-packages.nix**
+### Example Adding a Qt library to all-packages.nix {#qt-library-all-packages-nix}
 
 ```
 {
@@ -98,10 +98,10 @@ mkDerivation {
   # ...
 }
 ```
-**Adding an application to Nixpkgs**
+## Adding an application to Nixpkgs
 Add a Qt application to *all-packages.nix* using `libsForQt5.callPackage` instead of the usual `callPackage`. The former ensures that all dependencies are built with the same version of Qt.
 
-**Example 15.10 Adding a QT application to all-packages.nix**
+### Example Adding a QT application to all-packages.nix {#qt-application-all-packages-nix}
 ```nix
 {
   # ...
