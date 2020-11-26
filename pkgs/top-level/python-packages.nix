@@ -3198,6 +3198,8 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
+  jupyter-book = callPackage ../development/python-modules/jupyter-book { };
+
   jupyter-cache = callPackage ../development/python-modules/jupyter-cache { };
 
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
