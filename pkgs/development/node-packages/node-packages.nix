@@ -64547,6 +64547,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  coc-markdownlint = nodeEnv.buildNodePackage {
+    name = "coc-markdownlint";
+    packageName = "coc-markdownlint";
+    version = "1.8.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-markdownlint/-/coc-markdownlint-1.8.0.tgz";
+      sha512 = "HgdVA3F61GPN4sPxVNyeVWQd0p8oykchGgpovcX5QAVveAcWpUpxYXquX1y2B+EhBFZYNEOQVsr5zdVPzrko6w==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Markdownlint extension for coc.nvim";
+      homepage = "https://github.com/fannheyward/coc-markdownlint#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   coc-metals = nodeEnv.buildNodePackage {
     name = "coc-metals";
     packageName = "coc-metals";
