@@ -22381,6 +22381,8 @@ in
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
+  mcomix3 = callPackage ../applications/graphics/mcomix3 {};
+
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
