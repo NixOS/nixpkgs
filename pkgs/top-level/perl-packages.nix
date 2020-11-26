@@ -15706,6 +15706,22 @@ let
     propagatedBuildInputs = [ Moo ];
   };
 
+  ParallelPipes = buildPerlModule {
+    pname = "Parallel-Pipes";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Parallel-Pipes-0.005.tar.gz";
+      sha256 = "44bd9e2be33d7b314f81c9b886a95d53514689090635f9fad53181f2d3051fd5";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      homepage = "https://github.com/skaji/Parallel-Pipes";
+      description = "Parallel processing using pipe(2) for communication and synchronization";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   ParallelPrefork = buildPerlPackage {
     pname = "Parallel-Prefork";
     version = "0.18";
