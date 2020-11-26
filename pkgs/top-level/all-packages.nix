@@ -9794,6 +9794,7 @@ in
 
   nim = callPackage ../development/compilers/nim { };
   nim-unwrapped = nim.unwrapped;
+  nimble-unwrapped = nim.nimble-unwrapped;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
