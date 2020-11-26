@@ -10243,6 +10243,8 @@ in
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
+  clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter { jdk = openjdk11; };
+
   clojure = callPackage ../development/interpreters/clojure { };
 
   clojure-lsp = callPackage ../development/tools/misc/clojure-lsp { };
