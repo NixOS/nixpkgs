@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Ogg Opus tags editor";
     platforms = platforms.all;
     broken = stdenv.isDarwin;
-    maintainers = [ maintainers.kmein ];
+    maintainers = with maintainers; [ kmein SuperSandro2000 ];
     license = licenses.bsd3;
   };
 }
