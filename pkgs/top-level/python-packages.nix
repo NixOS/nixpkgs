@@ -6850,6 +6850,8 @@ in {
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
+  sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
+
   sphinx-panels = callPackage ../development/python-modules/sphinx-panels { };
 
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
