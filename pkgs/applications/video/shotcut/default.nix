@@ -1,6 +1,23 @@
-{ stdenv, fetchFromGitHub, fetchpatch, mkDerivation, SDL2, frei0r, gettext, mlt
-, jack1, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
-, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools, genericUpdater
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, mkDerivation
+, SDL2
+, frei0r
+, gettext
+, mlt
+, jack1
+, pkgconfig
+, qtbase
+, qtmultimedia
+, qtx11extras
+, qtwebsockets
+, qtquickcontrols2
+, qtgraphicaleffects
+, libmlt
+, qmake
+, qttools
+, genericUpdater
 , common-updater-scripts
 }:
 
@@ -9,20 +26,28 @@ assert stdenv.lib.versionAtLeast mlt.version "6.22.1";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.10.31";
+  version = "20.11.25";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "16ypq1v396pibhh33nm78p6hr5fz3h74l0ykg9f72b8whw23jyz6";
+    sha256 = "1nm71gnjd082m7bxlmrkngn079m3fdrb059f7wy23qj7khgpi3iz";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    SDL2 frei0r gettext mlt libmlt
-    qtbase qtmultimedia qtwebkit qtx11extras qtwebsockets qtquickcontrols
+    SDL2
+    frei0r
+    gettext
+    mlt
+    libmlt
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qtwebsockets
+    qtquickcontrols2
     qtgraphicaleffects
   ];
 
@@ -43,9 +68,9 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2]}"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]}"
     "--prefix PATH : ${mlt}/bin"
-    ];
+  ];
 
   postInstall = ''
     mkdir -p $out/share/shotcut
