@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
     # Still using GPLv2 but as the rest of the Linphone projects have switched
     # to GPLv3, this might too, so check this when bumping the version number.
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ raskin jluttine ];
     platforms = platforms.linux;
   };
