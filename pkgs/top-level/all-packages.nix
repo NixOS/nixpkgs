@@ -3596,6 +3596,8 @@ in
 
   wshowkeys = callPackage ../tools/wayland/wshowkeys { };
 
+  wsl-open = callPackage ../tools/misc/wsl-open { };
+
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
 
   xob = callPackage ../tools/X11/xob { };
