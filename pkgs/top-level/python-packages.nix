@@ -6850,6 +6850,8 @@ in {
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
+  sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
+
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp { };
 
   sphinxcontrib-autoapi = callPackage ../development/python-modules/sphinxcontrib-autoapi { };
