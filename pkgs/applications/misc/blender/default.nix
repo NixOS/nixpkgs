@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg_3, gettext, glew
+{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
-    [ boost ffmpeg_3 gettext glew ilmbase
+    [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
       opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
       alembic
