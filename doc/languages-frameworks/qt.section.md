@@ -1,7 +1,7 @@
 
 Qt
 =
-This section describes the differences between Nix expressions for Qt libraries and applications and Nix expressions for other C++ software. Some knowledge of the latter is assumed. 
+This section describes the differences between Nix expressions for Qt libraries and applications and Nix expressions for other C++ software. Some knowledge of the latter is assumed.
 
 There are primarily two problems which the Qt infrastructure is designed to address: ensuring consistent versioning of all dependencies and finding dependencies at runtime.
 
@@ -20,7 +20,7 @@ mkDerivation { #2
 * **#1:** Import `mkDerivation` and Qt (such as `qtbase` modules directly. *Do not* import Qt package sets; the Qt versions of dependencies may not be coherent, causing build and runtime failures.
 
 * **#2:** Use `mkDerivation` instead of `stdenv.mkDerivation`. `mkDerivation` is a wrapper around `stdenv.mkDerivation` which applies some Qt-specific settings. This deriver accepts the same arguments as `stdenv.mkDerivation`; refer to [Chapter 6, The Standard Environment](#chap-stdenv), The Standard Environment for details.
-   
+
 > To use another deriver instead of `stdenv.mkDerivation`, use `mkDerivationWith`:
 
 ```nix
@@ -82,7 +82,7 @@ mkDerivation {
 ```
 **Adding a library to Nixpkgs**
    Add a Qt library to all-packages.nix by adding it to the collection inside `mkLibsForQt5`. This ensures that the library is built with every available version of Qt as needed.
-   
+
 **Example 15.9. Adding a Qt library to all-packages.nix**
 
 ```
