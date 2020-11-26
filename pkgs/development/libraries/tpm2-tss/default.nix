@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "07yz459xnj7cs99mfhnq8wr9cvkrnbd479scqyxz55nlimrg8dc9";
+    sha256 = "106yhsjwjadxsl9dqxywg287mdwsksman02hdalhav18vcnvnlpj";
   };
 
   nativeBuildInputs = [
