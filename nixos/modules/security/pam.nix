@@ -17,15 +17,17 @@ let
   ];
   action = types.either types.int (types.enum ["ignore" "bad" "die" "ok" "done" "reset"]);
 
+  controlType = types.either
+    (types.enum [ "required" "requisite" "sufficient" "optional" "include" "substack" ])
+    (types.addCheck (types.attrsOf action) (x: all returnCode.check (attrNames x)));
+
   pamEntry = types.submodule {
     options = {
       entryType = mkOption {
         type = types.enum [ "account" "auth" "password" "session" ];
       };
       control = mkOption {
-        type = types.either
-          (types.enum [ "required" "requisite" "sufficient" "optional" "include" "substack" ])
-          (types.addCheck (types.attrsOf action) (x: all returnCode.check (attrNames x)));
+        type = controlType;
       };
       path = mkOption {
         type = types.str; # Not types.path, to support builtin modules (e.g. pam_unix.so)
@@ -730,7 +732,7 @@ in {
 
       control = mkOption {
         default = "sufficient";
-        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        type = controlType;
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -809,7 +811,7 @@ in {
 
       control = mkOption {
         default = "sufficient";
-        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        type = controlType;
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -874,7 +876,7 @@ in {
       };
       control = mkOption {
         default = "sufficient";
-        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        type = controlType;
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
