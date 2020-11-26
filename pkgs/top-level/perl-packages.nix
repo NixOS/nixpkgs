@@ -86,7 +86,7 @@ let
        makeFullPerlPath [ pkgs.perlPackages.CGI ]
        => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
   */
-  makeFullPerlPath = deps: makePerlPath (stdenv.lib.misc.closePropagation deps);
+  makeFullPerlPath = deps: makePerlPath (requiredPerlModules deps);
 
 
   ack = buildPerlPackage {
