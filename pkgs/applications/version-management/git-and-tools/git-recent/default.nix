@@ -1,6 +1,6 @@
 {stdenv, git, less, fetchFromGitHub, makeWrapper
-# utillinuxMinimal is included because we need the column command
-, utillinux
+# util-linuxMinimal is included because we need the column command
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp git-recent $out/bin
     wrapProgram $out/bin/git-recent \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git less utillinux ]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ git less util-linux ]}"
   '';
 
   meta = with stdenv.lib; {

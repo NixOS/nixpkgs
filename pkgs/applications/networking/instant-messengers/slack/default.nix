@@ -25,6 +25,7 @@
 , libpulseaudio
 , libuuid
 , libxcb
+, libxkbcommon
 , mesa
 , nspr
 , nss
@@ -39,9 +40,16 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   pname = "slack";
+
+  x86_64-darwin-version = "4.11.1";
+  x86_64-darwin-sha256 = "0a5rq8zhgdckwxnyjv6nrgpnj682j1rd9yc4nwvsbvpzv15kmd35";
+
+  x86_64-linux-version = "4.11.1";
+  x86_64-linux-sha256 = "1r43g3xnla5aq38l3mpba8jb1gx9m2b6pr84prsclz27nr0rfm6g";
+
   version = {
-    x86_64-darwin = "4.10.3";
-    x86_64-linux = "4.10.3";
+    x86_64-darwin = x86_64-darwin-version;
+    x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
   src = let
@@ -49,11 +57,11 @@ let
   in {
     x86_64-darwin = fetchurl {
       url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "0r77l57vr603xamich4h4gbdd5vdcj0sjs6yjpymfx9s0f98v8bb";
+      sha256 = x86_64-darwin-sha256;
     };
     x86_64-linux = fetchurl {
       url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = "1gnjj2iyk8cwjajg8h9qpmzx10j4qjxjzciq8csg45qfzwkr3drf";
+      sha256 = x86_64-linux-sha256;
     };
   }.${system} or throwSystem;
 
@@ -67,6 +75,8 @@ let
 
   linux = stdenv.mkDerivation rec {
     inherit pname version src meta;
+
+    passthru.updateScript = ./update.sh;
 
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib
@@ -90,6 +100,7 @@ let
       libpulseaudio
       libuuid
       libxcb
+      libxkbcommon
       mesa
       nspr
       nss
@@ -151,6 +162,8 @@ let
 
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
+
+    passthru.updateScript = ./update.sh;
 
     nativeBuildInputs = [ undmg ];
 

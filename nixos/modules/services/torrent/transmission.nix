@@ -197,7 +197,7 @@ in
           install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
            '${cfg.home}/${settingsDir}/settings.json'
         '')];
-        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f";
+        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
@@ -236,6 +236,7 @@ in
           # an AppArmor profile is provided to get a confinement based upon paths and rights.
           builtins.storeDir
           "/etc"
+          "/run"
           ] ++
           optional (cfg.settings.script-torrent-done-enabled &&
                     cfg.settings.script-torrent-done-filename != "")
@@ -396,9 +397,9 @@ in
           mr ${getLib pkgs.openssl}/lib/libcrypto*.so*,
           mr ${getLib pkgs.openssl}/lib/libssl*.so*,
           mr ${getLib pkgs.systemd}/lib/libsystemd*.so*,
-          mr ${getLib pkgs.utillinuxMinimal.out}/lib/libblkid.so*,
-          mr ${getLib pkgs.utillinuxMinimal.out}/lib/libmount.so*,
-          mr ${getLib pkgs.utillinuxMinimal.out}/lib/libuuid.so*,
+          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libblkid.so*,
+          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libmount.so*,
+          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libuuid.so*,
           mr ${getLib pkgs.xz}/lib/liblzma*.so*,
           mr ${getLib pkgs.zlib}/lib/libz*.so*,
 
@@ -408,6 +409,7 @@ in
           #r @{PROC}/@{pid}/environ,
           r @{PROC}/@{pid}/mounts,
           rwk /tmp/tr_session_id_*,
+          r /run/systemd/resolve/stub-resolv.conf,
 
           r ${pkgs.openssl.out}/etc/**,
           r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},

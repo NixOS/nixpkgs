@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cre2";
-  version = "0.3.0";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "marcomaggi";
-    repo = "cre2";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1h9jwn6z8kjf4agla85b5xf7gfkdwncp0mfd8zwk98jkm8y2qx9q";
   };

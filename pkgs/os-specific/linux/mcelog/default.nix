@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, utillinux }:
+{ stdenv, fetchFromGitHub, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "mcelog";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace '"unknown"' '"${version}"'
 
     for i in triggers/*; do
-      substituteInPlace $i --replace 'logger' '${utillinux}/bin/logger'
+      substituteInPlace $i --replace 'logger' '${util-linux}/bin/logger'
     done
   '';
 

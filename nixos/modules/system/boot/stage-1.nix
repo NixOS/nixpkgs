@@ -107,8 +107,8 @@ let
         copy_bin_and_libs $BIN
       done
 
-      # Copy some utillinux stuff.
-      copy_bin_and_libs ${pkgs.utillinux}/sbin/blkid
+      # Copy some util-linux stuff.
+      copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
 
       # Copy dmsetup and lvm.
       copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
@@ -235,7 +235,7 @@ let
             --replace scsi_id ${extraUtils}/bin/scsi_id \
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
             --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
-            --replace ${pkgs.utillinux}/bin/blkid ${extraUtils}/bin/blkid \
+            --replace ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
             --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
             --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
             --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \

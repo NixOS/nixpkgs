@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     description = "A utility for managing cargo dependencies from the command line";
     homepage = "https://github.com/killercup/cargo-edit";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ gerschtli jb55 filalex77 killercup ];
+    maintainers = with maintainers; [ gerschtli jb55 Br1ght0ne killercup ];
   };
 }

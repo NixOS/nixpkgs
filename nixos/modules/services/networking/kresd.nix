@@ -23,18 +23,14 @@ let
       '';
 
   configFile = pkgs.writeText "kresd.conf" (
-    optionalString (cfg.listenDoH != []) ''
-      modules.load('http')
-    ''
+    ""
     + concatMapStrings (mkListen "dns") cfg.listenPlain
     + concatMapStrings (mkListen "tls") cfg.listenTLS
-    + concatMapStrings (mkListen "doh") cfg.listenDoH
+    + concatMapStrings (mkListen "doh2") cfg.listenDoH
     + cfg.extraConfig
   );
 
-  package = if cfg.listenDoH == []
-    then pkgs.knot-resolver # never force `extraFeatures = false`
-    else pkgs.knot-resolver.override { extraFeatures = true; };
+  package = pkgs.knot-resolver;
 in {
   meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
 
@@ -92,7 +88,7 @@ in {
       default = [];
       example = [ "198.51.100.1:443" "[2001:db8::1]:443" "443" ];
       description = ''
-        Addresses and ports on which kresd should provide DNS over HTTPS (see RFC 8484).
+        Addresses and ports on which kresd should provide DNS over HTTPS/2 (see RFC 8484).
         For detailed syntax see ListenStream in man systemd.socket.
       '';
     };

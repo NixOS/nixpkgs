@@ -13,7 +13,7 @@ let
     inherit stdenv fetchurl buildPythonApplication;
     inherit pykickstart pyparted pyblock cryptsetup libselinux multipath_tools;
     inherit useNixUdev;
-    inherit (pkgs) lsof utillinux systemd;
+    inherit (pkgs) lsof util-linux systemd;
   };
 
   cryptsetup = import ./cryptsetup.nix {
@@ -27,7 +27,7 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) fetchpatch pkgconfig utillinux systemd coreutils;
+    inherit (pkgs) fetchpatch pkgconfig util-linux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
@@ -37,7 +37,7 @@ let
 
   parted = import ./parted.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) fetchpatch utillinux readline libuuid gettext check lvm2;
+    inherit (pkgs) fetchpatch util-linux readline libuuid gettext check lvm2;
   };
 
   pyblock = import ./pyblock.nix {

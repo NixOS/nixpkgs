@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "recode";
-  version = "3.7.7";
+  version = "3.7.8";
 
   # Use official tarball, avoid need to bootstrap/generate build system
   src = fetchurl {
     url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1yrqgw74qrdmy82lxd1cxlfclrf2fqi0qp7afjmfc6b7f0xzcih9";
+    sha256 = "19yg20z1smj9kag1axgvc4s4kd6jmw75h0pa8xqxl3xqqyn5rdsg";
   };
 
   nativeBuildInputs = [ python3 python3.pkgs.cython perl intltool flex texinfo libiconv ];

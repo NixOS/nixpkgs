@@ -7,6 +7,7 @@
 , python3
 , gtk3
 , gst_all_1
+, libhandy
 , libsecret
 , libsoup
 , appstream-glib
@@ -24,7 +25,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.3.2";
+  version = "1.4.5";
 
   format = "other";
   doCheck = false;
@@ -33,7 +34,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "14854j1dhq67s1vzs0lqy345vbl6f5w8nb36n4i33fmpva2flsk3";
+    sha256 = "1i5qcpp3fpkda08g6nkiiff8lsjmv5xsvpa0512kigq5z0lsagrx";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
+    libhandy
     libsoup
     pango
     totem-pl-parser

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
 , gnugrep, parted, glib, libuuid, pkgconfig, gtkmm3, libxml2
-, gpart, hdparm, procps, utillinux, polkit, wrapGAppsHook, substituteAll
+, gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix PATH : "${stdenv.lib.makeBinPath [ gpart hdparm utillinux procps coreutils gnused gnugrep ]}"
+       --prefix PATH : "${stdenv.lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep ]}"
     )
   '';
 

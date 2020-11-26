@@ -201,8 +201,8 @@ in
       ''
         if [ -d /proc/xen ]; then
             ${pkgs.kmod}/bin/modprobe xenfs 2> /dev/null
-            ${pkgs.utillinux}/bin/mountpoint -q /proc/xen || \
-                ${pkgs.utillinux}/bin/mount -t xenfs none /proc/xen
+            ${pkgs.util-linux}/bin/mountpoint -q /proc/xen || \
+                ${pkgs.util-linux}/bin/mount -t xenfs none /proc/xen
         fi
       '';
 

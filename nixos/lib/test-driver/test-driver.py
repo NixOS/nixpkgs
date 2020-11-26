@@ -634,8 +634,7 @@ class Machine:
                 shutil.copy(intermediate, abs_target)
 
     def dump_tty_contents(self, tty: str) -> None:
-        """Debugging: Dump the contents of the TTY<n>
-        """
+        """Debugging: Dump the contents of the TTY<n>"""
         self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
 
     def get_screen_text(self) -> str:
@@ -860,8 +859,7 @@ class Machine:
         self.send_monitor_command("set_link virtio-net-pci.1 off")
 
     def unblock(self) -> None:
-        """Make the machine reachable.
-        """
+        """Make the machine reachable."""
         self.send_monitor_command("set_link virtio-net-pci.1 on")
 
 

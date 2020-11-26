@@ -1,32 +1,25 @@
 { lib
-, iputils
-, python3
-, python3Packages
+, rustPlatform
+, fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.1";
+  version = "0.1.7";
 
-  propagatedBuildInputs = with python3Packages; [ colorama ];
-
-  src = python3Packages.fetchPypi {
-    inherit version;
-    pname  = "pinggraph";
-    sha256 = "0q5ma98457zb6vxsnhmrr3p38j1vg0gl155y0adzfg67wlniac92";
+  src = fetchFromGitHub {
+    owner = "orf";
+    repo = "gping";
+    rev = "v${version}";
+    sha256 = "0sdv6mf7mrgsdinv94mhai5jaw04s6r9cq0wxkph9b4hhywi0lys";
   };
 
-  # Make path to ping explicit
-  postFixup = ''
-    substituteInPlace $out/${python3.sitePackages}/gping/pinger.py \
-      --replace 'subprocess.getoutput("ping ' 'subprocess.getoutput("${iputils}/bin/ping ' \
-      --replace 'args = ["ping"]' 'args = ["${iputils}/bin/ping"]'
-  '';
+  cargoSha256 = "0rrqjlyn7k8f7ndzra16a9k4l6mjfim84lfi886q3irbn234b1va";
 
   meta = with lib; {
     description = "Ping, but with a graph";
     homepage = "https://github.com/orf/gping";
-    license = licenses.gpl2;
+    license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };
 }

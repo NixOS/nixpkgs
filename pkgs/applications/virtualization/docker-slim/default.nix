@@ -40,6 +40,6 @@ buildGoPackage rec {
     description = "Minify and secure Docker containers";
     homepage = "https://dockersl.im/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 marsam mbrgm ];
+    maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
   };
 }

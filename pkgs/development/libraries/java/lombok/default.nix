@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "lombok-1.18.12";
+  name = "lombok-1.18.16";
 
   src = fetchurl {
     url = "https://projectlombok.org/downloads/${name}.jar";
-    sha256 = "01jl6i5wzjxyk36fcq6ji90x9h143gvnwhv86cbkqaxhxh41af29";
+    sha256 = "1msys7xkaj0d7fi112fmb2z50mk46db58agzrrdyimggsszwn1kj";
   };
 
   buildCommand = ''

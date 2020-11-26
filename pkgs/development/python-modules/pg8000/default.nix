@@ -1,22 +1,23 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, scramp
 , isPy3k
 , passlib
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.16.5";
+  version = "1.16.6";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8af70cdfcc1fadafa32468a6af563e1c0b5271c4dcc99a4490030a128cb295a3";
+    sha256 = "8fc1e6a62ccb7c9830f1e7e9288e2d20eaf373cc8875b5c55b7d5d9b7717be91";
   };
 
-  propagatedBuildInputs = [ passlib ];
+  propagatedBuildInputs = [ passlib scramp ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/tlocke/pg8000";

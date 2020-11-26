@@ -5,23 +5,23 @@
 , llvmPackages
 , openssl
 , pkg-config
+, stdenv
 , systemd
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "08dkcrga1x18csh6pw6f54x5xwijppyjhg46cf4p452xc1l3a6ir";
+    sha256 = "cs84Zz0nhagGDu5sDFTaFZF3SPEgJU8F4vGX7KLihOM=";
   };
 
-  cargoSha256 = "1xliragihwjfc5qmfm0ng519bw8a28m1w1yqcl9mpk8zywiybaah";
-
-  cargoPatches = [ ./lock.patch ];
+  cargoSha256 = "6suNkHw1BbISb0MkYkUaD+mpUal+kn3y1SFVqzJFqJc=";
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
   nativeBuildInputs = [
@@ -31,7 +31,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl systemd ];
+  buildInputs = [ openssl ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ systemd ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   cargoBuildFlags = [ "--features final" ];
 
@@ -43,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
     maintainers = with maintainers; [ akru xrelkd ];
-    platforms = platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

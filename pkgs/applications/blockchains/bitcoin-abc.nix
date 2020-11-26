@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, openssl, db53, boost
-, zlib, miniupnpc, qtbase ? null , qttools ? null, utillinux, protobuf, qrencode, libevent
+, zlib, miniupnpc, qtbase ? null , qttools ? null, util-linux, protobuf, qrencode, libevent
 , withGui, python3, jemalloc, zeromq4 }:
 
 with stdenv.lib;
@@ -20,7 +20,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ openssl db53 boost zlib python3 jemalloc zeromq4
-                  miniupnpc utillinux protobuf libevent ]
+                  miniupnpc util-linux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
   cmakeFlags = optionals (!withGui) [

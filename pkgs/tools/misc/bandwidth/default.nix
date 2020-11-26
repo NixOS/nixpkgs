@@ -1,13 +1,8 @@
 { stdenv, fetchurl, nasm }:
 
 let
-  arch =
-    if      stdenv.hostPlatform.system == "x86_64-linux" then "bandwidth64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "bandwidth32"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then "bandwidth-mac64"
-    else if stdenv.hostPlatform.system == "i686-darwin" then "bandwidth-mac32"
-    else if stdenv.hostPlatform.system == "i686-cygwin" then "bandwidth-win32"
-    else throw "Unknown architecture";
+  inherit (stdenv.hostPlatform.parsed.cpu) bits;
+  arch = "bandwidth${toString bits}";
 in
 stdenv.mkDerivation rec {
   pname = "bandwidth";
@@ -18,21 +13,25 @@ stdenv.mkDerivation rec {
     sha256 = "0x798xj3vhiwq2hal0vmf92sq4h7yalp3i6ylqwhnnpv99m2zws4";
   };
 
-  buildInputs = [ nasm ];
+  postPatch = ''
+    sed -i 's,^CC=gcc .*,,' OOC/Makefile Makefile*
+    sed -i 's,ar ,$(AR) ,g' OOC/Makefile
+  '';
 
-  buildFlags = [ arch ]
-    ++ stdenv.lib.optionals stdenv.cc.isClang [ "CC=clang" "LD=clang" ];
+  nativeBuildInputs = [ nasm ];
+
+  buildFlags = [ arch ];
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${arch} $out/bin
-    ln -s ${arch} $out/bin/bandwidth
+    cp ${arch} $out/bin/bandwidth
   '';
 
   meta = with stdenv.lib; {
     homepage = "https://zsmith.co/bandwidth.html";
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.x86;
+    maintainers = with maintainers; [ r-burns ];
   };
 }

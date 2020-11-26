@@ -286,7 +286,7 @@ in
             before = [ mountPoint' "systemd-fsck@${device'}.service" ];
             requires = [ device'' ];
             after = [ device'' ];
-            path = [ pkgs.utillinux ] ++ config.system.fsPackages;
+            path = [ pkgs.util-linux ] ++ config.system.fsPackages;
             script =
               ''
                 if ! [ -e "${fs.device}" ]; then exit 1; fi

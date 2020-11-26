@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, ntfs3g, utillinux
+{ stdenv, fetchurl, intltool, ntfs3g, util-linux
 , mediaDir ? "/media/"
 , lockDir ? "/var/lock/pmount"
 , whiteList ? "/etc/pmount.allow"
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
-  buildInputs = [ intltool utillinux ];
+  buildInputs = [ intltool util-linux ];
 
   configureFlags = [
     "--with-media-dir=${mediaDir}"
     "--with-lock-dir=${lockDir}"
     "--with-whitelist=${whiteList}"
-    "--with-mount-prog=${utillinux}/bin/mount"
-    "--with-umount-prog=${utillinux}/bin/umount"
+    "--with-mount-prog=${util-linux}/bin/mount"
+    "--with-umount-prog=${util-linux}/bin/umount"
     "--with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
   ];
 

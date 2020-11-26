@@ -25,13 +25,13 @@
 }:
 
 buildPythonPackage rec {
-    version = "3.2.6";
+    version = "3.3.6";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "1p990cqx3p2pd1rc9wn66m56wahaq8dlr88frz49vb7nv4zw4a8q";
+      sha256 = "0xvfkxvh01r5ibd5mpisp8bz385hgpn27b988y8v65z7hqr3y1nf";
     };
 
     buildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
       DBI
       dbplyr
       hexbin
+      lazyeval
       lme4
       tidyr
     ]) ++ extraRPackages ++ rWrapper.recommendedPackages;
@@ -69,14 +70,6 @@ buildPythonPackage rec {
       # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
       # This patch sets R_LIBS_SITE when rpy2 is imported.
       ./rpy2-3.x-r-libs-site.patch
-
-      # pandas 1.x compatibility, already merged upstream
-      # https://github.com/rpy2/rpy2/issues/636
-      (fetchpatch {
-        name = "pandas-1.x.patch";
-        url = "https://github.com/rpy2/rpy2/commit/fbd060e364b70012e8d26cc74df04ee53f769379.patch";
-        sha256 = "19rdqydwjmqg25ibmsbx7lggrr9fsyjn283zgvz1wj4iyfjwp1za";
-      })
     ];
     postPatch = ''
       substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
@@ -98,7 +91,7 @@ buildPythonPackage rec {
     ];
 
     meta = {
-      homepage = "http://rpy.sourceforge.net/rpy2";
+      homepage = "https://rpy2.github.io/";
       description = "Python interface to R";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;

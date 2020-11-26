@@ -71,6 +71,9 @@ stdenv.mkDerivation rec {
 
     # add gpg2 symlink to make sure git does not break when signing commits
     ln -s $out/bin/gpg $out/bin/gpg2
+
+    # Make libexec tools available in PATH
+    ln -s -t $out/bin $out/libexec/*
   '';
 
   meta = with stdenv.lib; {

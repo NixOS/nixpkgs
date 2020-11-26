@@ -16,11 +16,6 @@ rustPlatform.buildRustPackage {
     inherit rev sha256;
   };
 
-  # FIXME: Temporary fixes for our rust 1.46.0
-  patches = [
-    ./no-track_env_var.patch # Requires rustc 1.47.0
-  ];
-
   buildAndTestSubdir = "crates/rust-analyzer";
 
   cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
@@ -34,7 +29,7 @@ rustPlatform.buildRustPackage {
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
-    export RUST_SRC_PATH=${rustPlatform.rustcSrc}
+    export RUST_SRC_PATH=${rustPlatform.rustLibSrc}
   '';
 
   doInstallCheck = true;

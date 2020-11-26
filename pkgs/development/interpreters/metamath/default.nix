@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation {
   pname = "metamath";
-  version = "0.182";
+  version = "0.193";
 
   buildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "metamath";
     repo = "metamath-exe";
-    rev = "5df616efe4119ff88daf77e7041d45b6fa39c578";
-    sha256 = "0amjdgy42c7jypf6sz98iczlxcyl9bqx67ws1q8w2zdqk2izsyjp";
+    rev = "f973c81222ebe36580a24f0fa7bbb600990af7d6";
+    sha256 = "1s9hyknfvhj86g3giayyf3dxzg23iij0rs7bdvj075v9qbyhqn9b";
   };
 
   meta = with stdenv.lib; {

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "splitbrain";
-    repo = "${pname}";
+    repo = pname;
     rev = "release_stable_${version}";
     sha256 = "09swcqyd06l3481k190gmlr3b33dlv1lw1kk9nyh5b4sa5p3k7kk";
   };

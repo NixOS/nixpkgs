@@ -1,34 +1,41 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, shared ? false }:
+{ stdenv, lib, fetchFromGitHub, cmake, check, validatePkgConfig, shared ? false }:
 
 stdenv.mkDerivation rec {
   pname = "pugixml";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "pugixml";
     rev = "v${version}";
-    sha256 = "0iraznwm78pyyzc9snvd3dyz8gddvmxsm1b3kpw7wixkvcawdviv";
+    sha256 = "dywnLSJHeGaR3+0lTLpacWQL0rWlF8+LNCy+oCCO9C4=";
   };
 
-  patches = [
-    # To be removed after a version newer than 1.9 is released
-    (fetchpatch {
-      url = "https://github.com/zeux/pugixml/pull/193.patch";
-      sha256 = "0s4anqlr2ppfibxyl29nrqbcprrg89k7il6303dm91s6620ydmka";
-    })
+  outputs = if shared then [ "out" "dev" ] else [ "out" ];
+
+  nativeBuildInputs = [ cmake validatePkgConfig ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTS=ON"
+    "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  checkInputs = [ check ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}" ];
+  # Hack to be able to run the test, broken because we use
+  # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
+  preBuild = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="`pwd`''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+  '' else ''
+    export LD_LIBRARY_PATH="`pwd`''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+  '';
 
   preConfigure = ''
     # Enable long long support (required for filezilla)
     sed -ire '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' src/pugiconfig.hpp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Light-weight, simple and fast XML parser for C++ with XPath support";
     homepage = "https://pugixml.org";
     license = licenses.mit;

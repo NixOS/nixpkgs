@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gweled.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
   };
 }

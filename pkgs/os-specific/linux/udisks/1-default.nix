@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus-glib
 , polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm
-, libxslt, docbook_xsl, utillinux, libgudev }:
+, libxslt, docbook_xsl, util-linux, libgudev }:
 
 stdenv.mkDerivation rec {
   name = "udisks-1.0.5";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
       substituteInPlace src/main.c --replace \
         "/sbin:/bin:/usr/sbin:/usr/bin" \
-        "${utillinux}/bin:${mdadm}/sbin:/run/current-system/sw/bin:/run/current-system/sw/bin"
+        "${util-linux}/bin:${mdadm}/sbin:/run/current-system/sw/bin:/run/current-system/sw/bin"
     '';
 
   buildInputs =

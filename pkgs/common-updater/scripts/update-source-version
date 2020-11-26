@@ -10,7 +10,7 @@ die() {
 
 usage() {
     echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
-    echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>]"
+    echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
     echo "                              [--ignore-same-hash] [--print-changes]"
 }
 
@@ -29,6 +29,9 @@ for arg in "$@"; do
             if [[ ! -f "$nixFile" ]]; then
                 die "Could not find provided file $nixFile"
             fi
+        ;;
+        --rev=*)
+            newRevision="${arg#*=}"
         ;;
         --ignore-same-hash)
             ignoreSameHash="true"
@@ -111,6 +114,13 @@ if [[ "$oldVersion" = "$newVersion" ]]; then
     exit 0
 fi
 
+if [[ -n "$newRevision" ]]; then
+    oldRevision=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.src.rev" | tr -d '"')
+    if [[ -z "$oldRevision" ]]; then
+        die "Couldn't evaluate source revision from '$attr.src'!"
+    fi
+fi
+
 # Escape regex metacharacter that are allowed in store path names
 oldVersionEscaped=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
 oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
@@ -172,6 +182,15 @@ fi
 sed -i "$nixFile" -re "s|\"$oldHashEscaped\"|\"$tempHash\"|"
 if cmp -s "$nixFile" "$nixFile.bak"; then
     die "Failed to replace source hash of '$attr' to a temporary hash!"
+fi
+
+# Replace new revision, if given
+if [[ -n "$newRevision" ]]; then
+    sed -i "$nixFile" -re "s|\"$oldRevision\"|\"$newRevision\"|"
+
+    if cmp -s "$nixFile" "$nixFile.bak"; then
+        die "Failed to replace source revision '$oldRevision' to '$newRevision' in '$attr'!"
+    fi
 fi
 
 # If new hash not given on the command line, recalculate it ourselves.

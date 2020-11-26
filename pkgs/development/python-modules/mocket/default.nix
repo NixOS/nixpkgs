@@ -9,17 +9,16 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25aba0b343784b27b1d77e731ed868a728d5209911f9f4728f33088582e491c9";
+    sha256 = "15npwf0f8g5vmwpmyvmsyi4p9ia1w95z8jips0nkfs978pnjy69g";
   };
 
   patchPhase = ''
-    substituteInPlace requirements.txt \
-      --replace "python-magic==0.4.18" "python-magic" \
-      --replace "urllib3==1.25.10" "urllib3"
+    sed -iE "s,python-magic==.*,python-magic," requirements.txt
+    sed -iE "s,urllib3==.*,urllib3," requirements.txt
     substituteInPlace setup.py --replace 'setup_requires=["pipenv"]' "setup_requires=[]"
   '';
 

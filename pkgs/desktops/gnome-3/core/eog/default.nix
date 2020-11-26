@@ -8,6 +8,7 @@
 , libxml2
 , libjpeg
 , libpeas
+, libportal
 , gnome3
 , gtk3
 , glib
@@ -27,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "3.36.3";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1p1lrnsgk5iyw7h02qzax4s74dqqsh5lk85b0qsj7hwx91qm61xp";
+    sha256 = "1xqcfil3b68clafnxg1migp54psqh5x6arnlvdqgmvvpq9hwj7dp";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libjpeg
+    libportal
     gtk3
     gdk-pixbuf
     glib

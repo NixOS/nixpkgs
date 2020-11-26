@@ -66,14 +66,12 @@ self: super: {
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
-  primitive = doJailbreak super.primitive_0_7_1_0;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
   splitmix = self.splitmix_0_1_0_3;
   tar = doJailbreak super.tar;
-  th-abstraction = self.th-abstraction_0_4_0_0;
   time-compat = doJailbreak super.time-compat;
   vector = doJailbreak (dontCheck super.vector);
   zlib = doJailbreak super.zlib;
@@ -95,10 +93,7 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
-  QuickCheck = appendPatch super.QuickCheck_2_14_1 (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/QuickCheck-2.14.1.patch";
-    sha256 = "0n89nx95w353h4dzala57gb0y7hx4wbkv5igs89dza50p7ybq9an";
-  });
+  QuickCheck = super.QuickCheck_2_14_2;
   regex-base = appendPatch (doJailbreak super.regex-base) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/regex-base-0.94.0.0.patch";
     sha256 = "0k5fglbl7nnhn8400c4cpnflxcbj9p3xi5prl9jfmszr31jwdy5d";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mxml";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "mxml";
     rev = "v${version}";
-    sha256 = "1kv36fxxh7bwfydhb90zjgsrvpyzvx1p5d0ayfvd3j8gip2rjhnp";
+    sha256 = "0zvib87rgsib0w9xp6bks5slq5ma1qbgyyyvr23cv7zkbgw3xgil";
   };
 
   enableParallelBuilding = true;

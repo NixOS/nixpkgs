@@ -40,18 +40,18 @@ in {
   '';
 
   nextcloud18 = generic {
-    version = "18.0.9";
-    sha256 = "0rigg5pv2vnxgmjznlvxfc41s00raxa8jhib5vsznhj55qn99jm1";
+    version = "18.0.10";
+    sha256 = "0kv9mdn36shr98kh27969b8xs7pgczbyjklrfskxy9mph7bbzir6";
     insecure = true;
   };
 
   nextcloud19 = generic {
-    version = "19.0.3";
-    sha256 = "0sc9cnsdh8kj60h7i3knh40ngdz1w1wmdqw2v2axfkmax22kjl7w";
+    version = "19.0.4";
+    sha256 = "0y5fccn61qf9fxjjpqdvhmxr9w5n4dgl1d7wcl2dzjv4bmqi2ms6";
   };
 
   nextcloud20 = generic {
-    version = "20.0.0";
-    sha256 = "1n2cv1i56g6qpzkbl5xaf420zzr4y7isg0lskmr7ymk83way0wx2";
+    version = "20.0.1";
+    sha256 = "1z1fzz1i41k4dhdhi005l3gzkvnmmgqqz3rdr374cvk73q7bbiln";
   };
 }

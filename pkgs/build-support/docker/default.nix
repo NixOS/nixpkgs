@@ -15,7 +15,6 @@
   moreutils,
   nix,
   pigz,
-  referencesByPopularity,
   rsync,
   runCommand,
   runtimeShell,
@@ -25,12 +24,13 @@
   storeDir ? builtins.storeDir,
   substituteAll,
   symlinkJoin,
-  utillinux,
+  util-linux,
   vmTools,
   writeReferencesToFile,
   writeScript,
   writeText,
   writePython3,
+  system,  # Note: This is the cross system we're compiling for
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -48,13 +48,23 @@ let
     # A user is required by nix
     # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
     export USER=nobody
-    ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
+    ${buildPackages.nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
     mkdir -p nix/var/nix/gcroots/docker/
     for i in ${lib.concatStringsSep " " contentsList}; do
     ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
     done;
   '';
+
+  # Map nixpkgs architecture to Docker notation
+  # Reference: https://github.com/docker-library/official-images#architectures-other-than-amd64
+  getArch = nixSystem: {
+    aarch64-linux = "arm64v8";
+    armv7l-linux = "arm32v7";
+    x86_64-linux = "amd64";
+    powerpc64le-linux = "ppc64le";
+    i686-linux = "i386";
+  }.${nixSystem} or "Can't map Nix system ${nixSystem} to Docker architecture notation. Please check that your input and your requested build are correct or update the mapping in Nixpkgs.";
 
 in
 rec {
@@ -72,7 +82,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? buildPackages.go.GOARCH
+    , arch ? getArch system
 
       # This is used to set name to the pulled image
     , finalImageName ? imageName
@@ -194,7 +204,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        nativeBuildInputs = [ utillinux e2fsprogs jshon rsync jq ];
+        nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
       } ''
       mkdir disk
       mkfs /dev/${vmTools.hd}
@@ -340,7 +350,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee $out/layer.tar | tarsum)
+      tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee -p $out/layer.tar | tarsum)
 
       # Add a 'checksum' field to the JSON, with the value set to the
       # checksum of the tarball.
@@ -425,7 +435,7 @@ rec {
         echo "Packing layer..."
         mkdir -p $out
         tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
-                    tee $out/layer.tar |
+                    tee -p $out/layer.tar |
                     ${tarsum}/bin/tarsum)
 
         cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
@@ -443,7 +453,7 @@ rec {
       runCommand "${name}.tar.gz" {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
-        buildInputs = [ pigz ];
+        nativeBuildInputs = [ pigz ];
       } "${stream} | pigz -nT > $out";
 
   # 1. extract the base image
@@ -488,7 +498,7 @@ rec {
       baseJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = buildPackages.go.GOARCH;
+            architecture = getArch system;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
@@ -715,7 +725,7 @@ rec {
       streamScript = writePython3 "stream" {} ./stream_layered_image.py;
       baseJson = writeText "${name}-base.json" (builtins.toJSON {
          inherit config;
-         architecture = buildPackages.go.GOARCH;
+         architecture = getArch system;
          os = "linux";
       });
 
@@ -761,8 +771,8 @@ rec {
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
-        paths = referencesByPopularity overallClosure;
-        buildInputs = [ jq ];
+        paths = buildPackages.referencesByPopularity overallClosure;
+        nativeBuildInputs = [ jq ];
       } ''
         ${if (tag == null) then ''
           outName="$(basename "$out")"
@@ -826,7 +836,7 @@ rec {
           # take images can know in advance how the image is supposed to be used.
           isExe = true;
         };
-        buildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeWrapper ];
       } ''
         makeWrapper ${streamScript} $out --add-flags ${conf}
       '';

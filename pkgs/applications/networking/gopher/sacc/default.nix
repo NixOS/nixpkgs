@@ -1,15 +1,14 @@
-{ stdenv, fetchgit, ncurses
+{ stdenv, fetchurl, ncurses
 , patches ? [] # allow users to easily override config.def.h
 }:
 
 stdenv.mkDerivation rec {
   pname = "sacc";
-  version = "1.01";
+  version = "1.02";
 
-  src = fetchgit {
-    url = "git://bitreich.org/sacc";
-    rev = version;
-    sha256 = "0n6ghbi715m7hrxzqggx1bpqj8h7569s72b9bzk6m4gd29jaq9hz";
+  src = fetchurl {
+    url = "ftp://bitreich.org/releases/sacc/sacc-${version}.tgz";
+    sha512 = "18ja95cscgjaj1xqn70dj0482f76d0561bdcc47flqfsjh4mqckjqr65qv7awnw6rzm03i5cp45j1qx12y0y83skgsar4pplmy8q014";
   };
 
   inherit patches;

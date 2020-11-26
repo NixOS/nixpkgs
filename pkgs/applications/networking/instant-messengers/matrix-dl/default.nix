@@ -1,14 +1,14 @@
 { lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "matrix-dl-unstable";
-  version = "2019-09-22";
+  pname = "matrix-dl";
+  version = "unstable-2020-07-14";
 
   src = fetchFromGitHub {
     owner = "rubo77";
-    repo = "matrix-dl";
-    rev = "e91610f45b7b3b0aca34923309fc83ba377f8a69";
-    sha256 = "036xfdd21pcfjlilknc67z5jqpk0vz07853wwcsiac32iypc6f2q";
+    repo = pname;
+    rev = "b1a86d1421f39ee327284e1023f09dc165e3c8a5";
+    sha256 = "1l8nh8z7kz24v0wcy3ll3w6in2yxwa1yz8lyc3x0blz37d8ss4ql";
   };
 
   propagatedBuildInputs = with python3Packages; [

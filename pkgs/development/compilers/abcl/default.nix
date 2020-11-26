@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "0wpfj7q9vq2k2mkp2wx2yvrcq0v8229ddyk8viiaizs7msn588ac";
+    sha256 = "0zr5mmqyj484vza089l8vc88d07g0m8ymxzglvar3ydwyvi1x1qx";
   };
   configurePhase = ''
     mkdir nix-tools

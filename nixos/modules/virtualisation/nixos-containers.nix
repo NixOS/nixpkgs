@@ -614,17 +614,17 @@ in
               '';
             };
 
-		    timeoutStartSec = mkOption {
-		      type = types.str;
-		      default = "1min";
-		      description = ''
-		        Time for the container to start. In case of a timeout,
-		        the container processes get killed.
-		        See <citerefentry><refentrytitle>systemd.time</refentrytitle>
-		        <manvolnum>7</manvolnum></citerefentry>
-		        for more information about the format.
-		       '';
-		    };
+            timeoutStartSec = mkOption {
+              type = types.str;
+              default = "1min";
+              description = ''
+                Time for the container to start. In case of a timeout,
+                the container processes get killed.
+                See <citerefentry><refentrytitle>systemd.time</refentrytitle>
+                <manvolnum>7</manvolnum></citerefentry>
+                for more information about the format.
+               '';
+            };
 
             bindMounts = mkOption {
               type = with types; attrsOf (submodule bindMountOpts);

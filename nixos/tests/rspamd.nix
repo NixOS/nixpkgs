@@ -209,7 +209,7 @@ in
               return false
             end,
             score = 5.0,
-	          description = 'Allow no cows',
+            description = 'Allow no cows',
             group = "cows",
           }
           rspamd_logger.infox(rspamd_config, 'Work dammit!!!')

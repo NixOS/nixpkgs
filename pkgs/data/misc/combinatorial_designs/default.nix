@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

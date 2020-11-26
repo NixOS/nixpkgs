@@ -1,8 +1,7 @@
 {stdenv
-, removeReferencesTo
 , lib
 , fetchurl
-, utillinux
+, util-linux
 , gpgme
 , openssl
 , libuuid
@@ -18,17 +17,17 @@ with lib;
 
 buildGoPackage rec {
   pname = "singularity";
-  version = "3.6.3";
+  version = "3.7.0";
 
   src = fetchurl {
     url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
-    sha256 = "1zd29s8lggv4x5xracgzywayg1skl9qc2bqh1zdxh1wrg9sqbadi";
+    sha256 = "0y6lm23g6a2ljm78w8iyak7yivxvpj3i55fjbd56m9b2ykssm5pv";
   };
 
   goPackagePath = "github.com/sylabs/singularity";
 
   buildInputs = [ gpgme openssl libuuid ];
-  nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper cryptsetup ];
+  nativeBuildInputs = [ util-linux which makeWrapper cryptsetup ];
   propagatedBuildInputs = [ coreutils squashfsTools ];
 
   postPatch = ''

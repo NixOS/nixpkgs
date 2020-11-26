@@ -33,20 +33,20 @@
 , json_c
 , zchunk
 , libmodulemd
-, utillinux
+, util-linux
 , sqlite
 , cppunit
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2020.5";
+  version = "2020.8";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "MLLCmnStvGuSbVBdfOm2Sdzzz7LvPQkgDt9G0CDqCkA=";
+    sha256 = "1iyl6bjkj3drlwds579bh25xcmlwj9lkkbdmcdanq5b3shbmpyhi";
   };
 
   nativeBuildInputs = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     json_c
     zchunk
     libmodulemd
-    utillinux # for smartcols.pc
+    util-linux # for smartcols.pc
     sqlite
     cppunit
   ];
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
-    homepage = "https://rpm-ostree.readthedocs.io/en/latest/";
+    homepage = "https://coreos.github.io/rpm-ostree/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;

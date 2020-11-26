@@ -4,7 +4,7 @@
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
 # TODO: Shouldn't be required:
-, pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
+, pcre, xorg, util-linux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
 , xdg_utils
 }:
 
@@ -22,12 +22,12 @@ let
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.4.5";
+  version = "2.4.7";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0nhzypgc45f5gqy53azj7mljnj7p9p0m7bil02f9cih1dg5sdxx5";
+    sha256 = "1j2v29952l0am357pqvvgzm2zghmwhlr833kgp85hssxpr9xy4vv";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ in mkDerivation rec {
     tl-expected hunspell
     tg_owt
     # TODO: Shouldn't be required:
-    pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
+    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy at-spi2-core libXtst
   ];
 
   enableParallelBuilding = true;

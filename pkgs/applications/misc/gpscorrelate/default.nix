@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, fetchpatch, pkgconfig, exiv2, libxml2, gtk3
-, libxslt, docbook_xsl, docbook_xml_dtd_42, desktop-file-utils }:
+, libxslt, docbook_xsl, docbook_xml_dtd_42, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gpscorrelate";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     libxslt
     pkgconfig
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -15,23 +15,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "2.72.0";
+  version = "2.72.2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yhf9xyxdawbihsx89dpjlac800wrmpwx63rphad2nj225y9q40f";
+    sha256 = "1ijqpx1pagc6qg63ynqrinvckwc8aaw1i0lx48gg5szwk8afib4i";
   };
-
-  patches = [
-    # to work with latest glslang, remove on release >2.72.0
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/libplacebo/-/commit/523056828ab86c2f17ea65f432424d48b6fdd389.patch";
-      sha256 = "051vhd0l3yad1fzn5zayi08kqs9an9j8p7m63kgqyfv1ksnydpcs";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

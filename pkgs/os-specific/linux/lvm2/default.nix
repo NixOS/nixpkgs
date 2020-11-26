@@ -2,7 +2,7 @@
 , fetchpatch
 , fetchurl
 , pkgconfig
-, utillinux
+, util-linux
 , libuuid
 , thin-provisioning-tools, libaio
 , enableCmdlib ? false

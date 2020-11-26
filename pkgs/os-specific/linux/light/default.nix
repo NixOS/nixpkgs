@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.2.2";
   pname = "light";
   src = fetchFromGitHub {
     owner = "haikarainen";
     repo = "light";
     rev = "v${version}";
-    sha256 = "0zrjipd392bzjvxx0rjrb0cgi0ix1d83fwgw1mcy8kc4d16cgyjg";
+    sha256 = "1a70zcf88ifsnwll486aicjnh48zisdf8f7vi34ihw61kdadsq9s";
   };
 
   configureFlags = [ "--with-udev" ];

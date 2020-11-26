@@ -1,6 +1,4 @@
-{ lib, fetchurl, buildDunePackage, pkg-config, gsl
-, dune-configurator
-}:
+{ stdenv, fetchurl, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
 
 buildDunePackage rec {
   pname = "gsl";
@@ -14,11 +12,12 @@ buildDunePackage rec {
   };
 
   buildInputs = [ dune-configurator gsl pkg-config ];
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Accelerate ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://mmottl.github.io/gsl-ocaml/";
     description = "OCaml bindings to the GNU Scientific Library";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

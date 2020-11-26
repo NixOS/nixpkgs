@@ -20,6 +20,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/seebye/ueberzug";
     description = "An alternative for w3mimgdisplay";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

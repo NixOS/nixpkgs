@@ -1,7 +1,7 @@
 { stdenv, lib, fetchzip }:
 
 # Note that plugins are supposed to be installed as:
-#   $path/logstash/{inputs,codecs,filters,outputs}/*.rb 
+#   $path/logstash/{inputs,codecs,filters,outputs}/*.rb
 stdenv.mkDerivation rec {
   version = "1.4.2";
   pname = "logstash-contrib";
@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/logstash
     cp -r lib/* $out
+    runHook postInstall
   '';
 
   meta = with lib; {

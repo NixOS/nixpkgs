@@ -1,6 +1,23 @@
-{ stdenv, fetchFromGitHub, fetchpatch, mkDerivation, SDL2, frei0r, gettext, mlt
-, jack1, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
-, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools, genericUpdater
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, mkDerivation
+, SDL2
+, frei0r
+, gettext
+, mlt
+, jack1
+, pkgconfig
+, qtbase
+, qtmultimedia
+, qtx11extras
+, qtwebsockets
+, qtquickcontrols2
+, qtgraphicaleffects
+, libmlt
+, qmake
+, qttools
+, genericUpdater
 , common-updater-scripts
 }:
 
@@ -9,28 +26,40 @@ assert stdenv.lib.versionAtLeast mlt.version "6.22.1";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.09.13";
+  version = "20.11.25";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1q7ba6j3b2yzn3y5z9s5ldh15wrvhi6vymhwm910nqa5379dcc21";
+    sha256 = "1nm71gnjd082m7bxlmrkngn079m3fdrb059f7wy23qj7khgpi3iz";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    SDL2 frei0r gettext mlt libmlt
-    qtbase qtmultimedia qtwebkit qtx11extras qtwebsockets qtquickcontrols
+    SDL2
+    frei0r
+    gettext
+    mlt
+    libmlt
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qtwebsockets
+    qtquickcontrols2
     qtgraphicaleffects
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
-  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" "SHOTCUT_VERSION=${version}" ];
+  qmakeFlags = [
+    "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
+    "SHOTCUT_VERSION=${version}"
+    "DEFINES+=SHOTCUT_NOUPGRADE"
+  ];
 
   prePatch = ''
-    sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
+    sed 's_shotcutPath, "melt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
     sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
     sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
     NICE=$(type -P nice)
@@ -39,9 +68,9 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2]}"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]}"
     "--prefix PATH : ${mlt}/bin"
-    ];
+  ];
 
   postInstall = ''
     mkdir -p $out/share/shotcut

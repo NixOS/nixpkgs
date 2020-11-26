@@ -51,6 +51,11 @@ stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
   version = "1.2.141.0";
 
+  # If we were to use "dev" here instead of headers, the setupHook would be
+  # placed in that output instead of "out".
+  outputs = ["out" "headers"];
+  outputInclude = "headers";
+
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
@@ -78,6 +83,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${localGlslang}"
+    "-DBUILD_LAYER_SUPPORT_FILES=ON"
   ];
 
   # Help vulkan-loader find the validation layers

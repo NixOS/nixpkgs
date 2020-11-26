@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeDesktopItem, dpkg, atk, at-spi2-atk, glib, pango, gdk-pixbuf
 , gtk3, cairo, freetype, fontconfig, dbus, xorg, nss, nspr, alsaLib, cups, expat
-, udev, libpulseaudio, utillinux, makeWrapper }:
+, udev, libpulseaudio, util-linux, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   installPhase = let
     libPath = lib.makeLibraryPath ([
       stdenv.cc.cc gtk3 atk at-spi2-atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
-      nss nspr alsaLib libpulseaudio cups expat udev utillinux
+      nss nspr alsaLib libpulseaudio cups expat udev util-linux
     ] ++ (with xorg; [
       libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
       libXrender libX11 libXtst libXScrnSaver

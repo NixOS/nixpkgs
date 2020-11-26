@@ -6,11 +6,12 @@
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "7.7.0";
+  version = "8.1.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b4032adf839f63bab7fc9f3e7066ef86abe0928e834aa5d132e4e7ce907951ed";
+    sha256 = "4dfa4a0cd0a752d980347c816cab2169f0938c1d37275311810396dcf3c27912";
   };
 
   checkInputs = [

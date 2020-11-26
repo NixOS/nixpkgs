@@ -1037,7 +1037,7 @@ checkPhase() {
     runHook preCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom checkPhase, doing nothing"
         runHook postCheck
         return
     fi
@@ -1182,7 +1182,7 @@ installCheckPhase() {
     runHook preInstallCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
        && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then

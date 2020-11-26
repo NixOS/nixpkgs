@@ -86,11 +86,11 @@ rec {
      future.
 
      Instead of jailbreaking, you can patch the cabal file.
-     
+
      Note that jailbreaking at this time, doesn't lift bounds on
-     conditional branches. 
+     conditional branches.
      https://github.com/peti/jailbreak-cabal/issues/7 has further details.
-     
+
    */
   doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
 
@@ -155,6 +155,9 @@ rec {
 
   addBuildDepend = drv: x: addBuildDepends drv [x];
   addBuildDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.buildDepends or []) ++ xs; });
+
+  addTestToolDepend = drv: x: addTestToolDepends drv [x];
+  addTestToolDepends = drv: xs: overrideCabal drv (drv: { testToolDepends = (drv.testToolDepends or []) ++ xs; });
 
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
   addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
@@ -231,6 +234,31 @@ rec {
     installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
   });
+
+  /* Create a documentation tarball suitable for uploading to Hackage instead
+     of building the package.
+   */
+  documentationTarball = pkg:
+    pkgs.lib.overrideDerivation pkg (drv: {
+      name = "${drv.name}-docs";
+      # Like sdistTarball, disable the "doc" output here.
+      outputs = [ "out" ];
+      buildPhase = ''
+        runHook preHaddock
+        ./Setup haddock --for-hackage
+        runHook postHaddock
+      '';
+      haddockPhase = ":";
+      checkPhase = ":";
+      installPhase = ''
+        runHook preInstall
+        mkdir -p "$out"
+        tar --format=ustar \
+          -czf "$out/${drv.name}-docs.tar.gz" \
+          -C dist/doc/html "${drv.name}-docs"
+        runHook postInstall
+      '';
+    });
 
   /* Use the gold linker. It is a linker for ELF that is designed
      "to run as fast as possible on modern systems"

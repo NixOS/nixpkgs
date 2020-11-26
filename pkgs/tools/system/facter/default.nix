@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, libyamlcpp, openssl, ruby, utillinux }:
+{ stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, libyamlcpp, openssl, ruby, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "facter";
-  version = "3.14.13";
+  version = "3.14.14";
 
   src = fetchFromGitHub {
-    sha256 = "1rink4xxh7f2ckqfl4pc3ljm9rfb5c4npsqzlys4f2snmq4d0h39";
+    sha256 = "07pfa11i3nn2dk5g3c1qj3g7d2s8gd2fr0lmfijndaqxm7gjrn1a";
     rev = version;
     repo = pname;
     owner = "puppetlabs";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby utillinux ];
+  buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby util-linux ];
 
   enableParallelBuilding = true;
 

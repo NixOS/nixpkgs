@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchFromGitHub, fetchpatch
+{ config, stdenv, fetchFromGitHub
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
@@ -31,33 +31,29 @@
   , mesa   ? null
 
 , alsaSupport        ? stdenv.isLinux, alsaLib       ? null
+, archiveSupport     ? true,           libarchive    ? null
 , bluraySupport      ? true,           libbluray     ? null
 , bs2bSupport        ? true,           libbs2b       ? null
 , cacaSupport        ? true,           libcaca       ? null
 , cmsSupport         ? true,           lcms2         ? null
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav     ? null
+, jackaudioSupport   ? false,          libjack2      ? null
 , libpngSupport      ? true,           libpng        ? null
+, openalSupport      ? true,           openalSoft    ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
-# NOTE: samba support should be removed on the next mpv release, see also:
-# https://github.com/NixOS/nixpkgs/pull/89145#issuecomment-636424362
-# Please remove this line on the next mpv release.
-, sambaSupport       ? false,          samba         ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
-, sndioSupport       ? true,           sndio         ? null
+, sixelSupport       ? false,          libsixel      ? null
 , speexSupport       ? true,           speex         ? null
 , swiftSupport       ? false,          swift         ? null
 , theoraSupport      ? true,           libtheora     ? null
 , vaapiSupport       ? stdenv.isLinux, libva         ? null
+, vapoursynthSupport ? false,          vapoursynth   ? null
 , vdpauSupport       ? true,           libvdpau      ? null
 , xineramaSupport    ? stdenv.isLinux, libXinerama   ? null
 , xvSupport          ? stdenv.isLinux, libXv         ? null
 , zimgSupport        ? true,           zimg          ? null
-, archiveSupport     ? true,           libarchive    ? null
-, jackaudioSupport   ? false,          libjack2      ? null
-, openalSupport      ? true,           openalSoft    ? null
-, vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 
 with stdenv.lib;
@@ -80,9 +76,8 @@ assert openalSupport      -> available openalSoft;
 assert pulseSupport       -> available libpulseaudio;
 assert rubberbandSupport  -> available rubberband;
 assert screenSaverSupport -> available libXScrnSaver;
-assert sambaSupport       -> available samba;
 assert sdl2Support        -> available SDL2;
-assert sndioSupport       -> available sndio;
+assert sixelSupport       -> available libsixel;
 assert speexSupport       -> available speex;
 assert theoraSupport      -> available libtheora;
 assert vaapiSupport       -> available libva;
@@ -100,13 +95,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner  = "mpv-player";
     repo   = "mpv";
     rev    = "v${version}";
-    sha256 = "0kmy1q0hp87vq4rpv7py04x8bpg1wmlzaibavmkf713jqp6qy596";
+    sha256 = "sha256-3l32qQBpvWVjbLp5CZtO039oDQeH7C/cNAKtJxrzlRk=";
   };
 
   postPatch = ''
@@ -140,9 +135,8 @@ in stdenv.mkDerivation rec {
     (enableFeature cddaSupport     "cdda")
     (enableFeature dvdnavSupport   "dvdnav")
     (enableFeature openalSupport   "openal")
-    (enableFeature sambaSupport    "libsmbclient")
     (enableFeature sdl2Support     "sdl2")
-    (enableFeature sndioSupport    "sndio")
+    (enableFeature sixelSupport    "sixel")
     (enableFeature vaapiSupport    "vaapi")
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
@@ -168,10 +162,9 @@ in stdenv.mkDerivation rec {
     ++ optional openalSupport      openalSoft
     ++ optional pulseSupport       libpulseaudio
     ++ optional rubberbandSupport  rubberband
-    ++ optional sambaSupport       samba
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional sdl2Support        SDL2
-    ++ optional sndioSupport       sndio
+    ++ optional sixelSupport       libsixel
     ++ optional speexSupport       speex
     ++ optional theoraSupport      libtheora
     ++ optional vaapiSupport       libva
@@ -195,14 +188,6 @@ in stdenv.mkDerivation rec {
   postBuild = optionalString stdenv.isDarwin ''
     python3 TOOLS/osxbundle.py -s build/mpv
   '';
-
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    # Fix cocoa backend. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/188169854313b99d01da8f69fe129f0a487eb7c4.patch";
-      sha256 = "062sz4666prb2wg1rn5q8brqkzlq6lxn8sxic78a8lb0125c01f7";
-    })
-  ];
 
   postInstall = ''
     # Use a standard font

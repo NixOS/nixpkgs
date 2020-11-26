@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, curl, jansson, autoconf, automake
+{ stdenv, fetchFromGitHub, curl, jansson, autoconf, automake
 , aesni ? stdenv.hostPlatform.aesSupport }:
 
 let
@@ -8,9 +8,10 @@ in
 stdenv.mkDerivation {
   name = "cpuminer-multi-${date}-${stdenv.lib.strings.substring 0 7 rev}";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "hyc";
+    repo = "cpuminer-multi";
     inherit rev;
-    url = "https://github.com/wolf9466/cpuminer-multi.git";
     sha256 = "11dg4rra4dgfb9x6q85irn0hrkx2lkwyrdpgdh10pag09s3vhy4v";
   };
 

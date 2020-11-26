@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip
+{ stdenv, lib, fetchurl, iosevka, unzip
 , variant ? ""
 }:
 
@@ -29,17 +29,11 @@ in stdenv.mkDerivation rec {
     unzip -d $out/share/fonts/truetype $src
   '';
 
-  meta = with lib; {
-    homepage = "https://be5invis.github.io/Iosevka/";
-    downloadPage = "https://github.com/be5invis/Iosevka/releases";
-    description = ''
-      Slender monospace sans-serif and slab-serif typeface inspired by Pragmata
-      Pro, M+ and PF DIN Mono, designed to be the ideal font for programming.
-    '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.cstrahan ];
+  meta = iosevka.meta // {
+    maintainers = with lib.maintainers; [
+      cstrahan
+    ];
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update-bin.sh;
 }

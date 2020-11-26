@@ -7,7 +7,7 @@
 #  $ nix-build '<nixpkgs>' -A dockerTools.examples.redis
 #  $ docker load < result
 
-{ pkgs, buildImage, pullImage, shadowSetup, buildImageWithNixDb }:
+{ pkgs, buildImage, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross }:
 
 rec {
   # 1. basic example
@@ -406,5 +406,17 @@ rec {
       tag = "latest";
       contents = [ pkgs.bash pkgs.coreutils ] ++ nonRootShadowSetup { uid = 999; user = "somebody"; };
     };
+
+  # basic example, with cross compilation
+  cross = let
+    # Cross compile for x86_64 if on aarch64
+    crossPkgs =
+      if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
+      else pkgsCross.aarch64-multiplatform;
+  in crossPkgs.dockerTools.buildImage {
+    name = "hello-cross";
+    tag = "latest";
+    contents = crossPkgs.hello;
+  };
 
 }

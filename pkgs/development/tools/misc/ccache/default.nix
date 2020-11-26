@@ -1,23 +1,46 @@
-{ stdenv, fetchFromGitHub, asciidoc-full, gperf, perl, autoreconfHook, zlib, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, substituteAll
+, binutils
+, asciidoc
+, cmake
+, perl
+, zstd
+, xcodebuild
+, makeWrapper
+}:
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "3.7.12";
+  version = "4.1";
 
   src = fetchFromGitHub {
-    owner = "ccache";
-    repo = "ccache";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1xnv4g4n1jk1i98sa53k8w6q7hbwbw62svs30lssppysbrv8x3gz";
+    sha256 = "1az11q3wmr8wc7alx9l70wq9am41cm0y17g5gsaqmahws3dxfi8m";
   };
 
-  nativeBuildInputs = [ asciidoc-full autoreconfHook gperf perl ];
+  patches = lib.optional stdenv.isDarwin (substituteAll {
+    src = ./force-objdump-on-darwin.patch;
+    objdump = "${binutils.bintools}/bin/objdump";
+  });
 
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [ asciidoc cmake perl ];
+
+  buildInputs = [ zstd ];
 
   outputs = [ "out" "man" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
+  checkInputs = lib.optional stdenv.isDarwin xcodebuild;
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
+      -E '^(test.nocpp2|test.modules)$'
+    ''}
+  '';
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
@@ -63,9 +86,10 @@ let ccache = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
-    homepage = "https://ccache.dev/";
+    homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ metadark r-burns ];
     platforms = platforms.unix;
   };
 };

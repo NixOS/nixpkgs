@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12vfxnny3giirdf1xhacy24dvy5zm7iil6h019s0l63876vingnc";
+    sha256 = "00d3cnd3n6laa6rphw5w9xk8slpp4a603vzhixzg01sghq26gy22";
   };
 
-  vendorSha256 = "0hj7h58j0v98plrqfldq59d084j76aiy82mfm8zi0vcqg6gxf4pb";
+  vendorSha256 = "0y816r75rp1a4rp7j0a8wzrfi2mdf4ji1vz2vaj5s7x9ik6rc13r";
+
+  subPackages = [ "cmd/starboard" ];
 
   doCheck = false;
 

@@ -22,6 +22,7 @@
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
+, withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
@@ -101,7 +102,8 @@ in stdenv.mkDerivation {
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff libXft
         gconf cairo ]
-    ++ lib.optionals (withX || withNS) [ imagemagick librsvg ]
+    ++ lib.optionals (withX || withNS) [ librsvg ]
+    ++ lib.optionals withImageMagick [ imagemagick ]
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
@@ -126,6 +128,7 @@ in stdenv.mkDerivation {
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-nativecomp"
+    ++ lib.optional withImageMagick "--with-imagemagick"
     ;
 
   installTargets = [ "tags" "install" ];
@@ -142,7 +145,7 @@ in stdenv.mkDerivation {
     rm -rf $siteVersionDir
   '' + lib.optionalString withCsrc ''
     for srcdir in src lisp lwlib ; do
-      dstdir=$siteVersionDir/$srcdir
+      dstdir=$out/share/emacs/$siteVersionDir/$srcdir
       mkdir -p $dstdir
       find $srcdir -name "*.[chm]" -exec cp {} $dstdir \;
       cp $srcdir/TAGS $dstdir

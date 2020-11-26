@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
+    url = "https://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
     sha256 = "0c5xy57gwr14vp3wy3jpqi5dl6y7n01p2dy4jlgl9bf9x7616r6n";
   };
 

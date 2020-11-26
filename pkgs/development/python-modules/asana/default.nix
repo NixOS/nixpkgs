@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.8.2";
+  version = "0.10.3";
 
   # upstream reportedly doesn't support 3.7 yet, blocked on
   # https://bugs.python.org/issue34226
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "asana";
     repo = "python-asana";
     rev = "v${version}";
-    sha256 = "113zwnrpim1pdw8dzid2wpp5gzr2zk26jjl4wrwhgj0xk1cw94yi";
+    sha256 = "11nsfygcfpc2qb2gy4npi9w00cqfh88g7k3rsfq7xambz1zjdz1n";
   };
 
   checkInputs = [ pytest responses ];

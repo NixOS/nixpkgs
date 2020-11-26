@@ -14,13 +14,15 @@
   };
 
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
 
-  name = "ghidra-9.1.2";
+  pname = "ghidra";
+  version = "9.2";
+  versiondate = "20201113";
 
   src = fetchzip {
-    url = "https://ghidra-sre.org/ghidra_9.1.2_PUBLIC_20200212.zip";
-    sha256 = "0j48pijypg44bw06azbrgfqjkigb13ljfdxib70sxwyqia3vkbbm";
+    url = "https://www.ghidra-sre.org/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    sha256 = "0lcvmbq04qkdsf0bz509frgw79bhyxyixkqg1k712p3576ng3nby";
   };
 
   nativeBuildInputs = [
@@ -62,7 +64,7 @@ in stdenv.mkDerivation {
     homepage = "https://ghidra-sre.org/";
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.ck3d ];
+    maintainers = with maintainers; [ ck3d govanify ];
   };
 
 }

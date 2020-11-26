@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.z88dk.org";
     description = "z80 Development Kit";
     license     = licenses.clArtistic;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

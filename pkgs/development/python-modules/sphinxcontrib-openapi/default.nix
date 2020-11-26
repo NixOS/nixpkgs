@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , setuptools_scm
 , m2r
 , pyyaml
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
   version = "0.7.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

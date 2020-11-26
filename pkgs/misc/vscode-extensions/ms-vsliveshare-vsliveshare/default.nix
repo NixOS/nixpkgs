@@ -2,7 +2,7 @@
 #  -  <https://github.com/msteen/nixos-vsliveshare/blob/master/pkgs/vsliveshare/default.nix>
 #  -  <https://github.com/NixOS/nixpkgs/issues/41189>
 { lib, gccStdenv, vscode-utils, autoPatchelfHook, bash, file, makeWrapper, dotnet-sdk_3
-, curl, gcc, icu, libkrb5, libsecret, libunwind, libX11, lttng-ust, openssl, utillinux, zlib
+, curl, gcc, icu, libkrb5, libsecret, libunwind, libX11, lttng-ust, openssl, util-linux, zlib
 , desktop-file-utils, xprop
 }:
 
@@ -30,7 +30,7 @@ let
 
     # General
     gcc.cc.lib
-    utillinux # libuuid
+    util-linux # libuuid
   ];
 
 in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtension {

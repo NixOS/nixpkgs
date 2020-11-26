@@ -93,6 +93,8 @@ rec {
     mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
     mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
+    mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
+
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
     powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
@@ -113,6 +115,8 @@ rec {
     avr      = { bits = 8; family = "avr"; };
 
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
+
+    or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
 
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
@@ -268,19 +272,20 @@ rec {
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
     # the nnormalized name for macOS.
-    macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
-    ios     = { execFormat = macho;   families = { inherit darwin; }; };
-    freebsd = { execFormat = elf;     families = { inherit bsd; }; };
-    linux   = { execFormat = elf;     families = { }; };
-    netbsd  = { execFormat = elf;     families = { inherit bsd; }; };
-    none    = { execFormat = unknown; families = { }; };
-    openbsd = { execFormat = elf;     families = { inherit bsd; }; };
-    solaris = { execFormat = elf;     families = { }; };
-    wasi    = { execFormat = wasm;    families = { }; };
-    redox   = { execFormat = elf;     families = { }; };
-    windows = { execFormat = pe;      families = { }; };
-    ghcjs   = { execFormat = unknown; families = { }; };
-    genode  = { execFormat = elf;     families = { }; };
+    macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
+    ios      = { execFormat = macho;   families = { inherit darwin; }; };
+    freebsd  = { execFormat = elf;     families = { inherit bsd; }; };
+    linux    = { execFormat = elf;     families = { }; };
+    netbsd   = { execFormat = elf;     families = { inherit bsd; }; };
+    none     = { execFormat = unknown; families = { }; };
+    openbsd  = { execFormat = elf;     families = { inherit bsd; }; };
+    solaris  = { execFormat = elf;     families = { }; };
+    wasi     = { execFormat = wasm;    families = { }; };
+    redox    = { execFormat = elf;     families = { }; };
+    windows  = { execFormat = pe;      families = { }; };
+    ghcjs    = { execFormat = unknown; families = { }; };
+    genode   = { execFormat = elf;     families = { }; };
+    mmixware = { execFormat = unknown; families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -382,7 +387,7 @@ rec {
       else if (elemAt l 1) == "elf"
         then { cpu = elemAt l 0; vendor = "unknown";  kernel = "none";     abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
-    "3" = # Awkwards hacks, beware!
+    "3" = # Awkward hacks, beware!
       if elemAt l 1 == "apple"
         then { cpu = elemAt l 0; vendor = "apple";    kernel = elemAt l 2;                   }
       else if (elemAt l 1 == "linux") || (elemAt l 2 == "gnu")
@@ -393,6 +398,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "wasi";                       }
       else if (elemAt l 2 == "redox")
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "redox";                      }
+      else if (elemAt l 2 == "mmixware")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])

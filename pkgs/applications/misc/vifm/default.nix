@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper
 , pkgconfig
 , ncurses, libX11
-, utillinux, file, which, groff
+, util-linux, file, which, groff
 
   # adds support for handling removable media (vifm-media). Linux only!
 , mediaSupport ? false, python3 ? null, udisks2 ? null, lib ? null
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ ncurses libX11 utillinux file which groff ];
+  buildInputs = [ ncurses libX11 util-linux file which groff ];
 
   postFixup = let
     path = lib.makeBinPath

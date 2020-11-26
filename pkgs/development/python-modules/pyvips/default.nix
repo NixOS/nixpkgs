@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.1.12";
+  version = "2.1.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pg0dxhxgi2m7bb5bi5wpx9hgnbi8ws1bz6w2dldbhi52pizghl4";
+    sha256 = "4f1f6fa19893048bf6b950eb7eb2d4cdfeb8b940a9defaca5d4f79e5acd5085f";
   };
 
   nativeBuildInputs = [ pytestrunner pkgconfig pkg-config ];

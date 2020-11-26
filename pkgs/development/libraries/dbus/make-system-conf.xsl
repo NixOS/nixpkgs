@@ -16,10 +16,14 @@
 
   <xsl:param name="serviceDirectories" />
   <xsl:param name="suidHelper" />
+  <xsl:param name="apparmor" />
 
   <xsl:template match="/busconfig">
     <busconfig>
       <xsl:copy-of select="child::node()[name() != 'include' and name() != 'standard_system_servicedirs' and name() != 'servicehelper' and name() != 'servicedir' and name() != 'includedir']" />
+
+      <!-- configure AppArmor -->
+      <apparmor mode="{$apparmor}"/>
 
       <!-- set suid helper -->
       <servicehelper><xsl:value-of select="$suidHelper" /></servicehelper>

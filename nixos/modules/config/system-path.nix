@@ -37,7 +37,7 @@ let
       pkgs.procps
       pkgs.su
       pkgs.time
-      pkgs.utillinux
+      pkgs.util-linux
       pkgs.which
       pkgs.zstd
     ];

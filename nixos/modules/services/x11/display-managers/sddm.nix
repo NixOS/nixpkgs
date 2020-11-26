@@ -9,7 +9,12 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  inherit (pkgs) sddm;
+  sddm = if config.services.xserver.desktopManager.lxqt.enable then
+    # TODO: Move lxqt to libsForQt515
+    pkgs.libsForQt514.sddm
+  else
+    pkgs.libsForQt5.sddm
+  ;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh

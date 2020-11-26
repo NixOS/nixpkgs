@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     description = "Find and replace text in source files";
     homepage = "https://github.com/TankerHQ/ruplacer";
     license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

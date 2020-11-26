@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    sha256 = "01hvjlxclbmrzqb8qz1h2sdkpybpg14q81na8kfi94w3bkkkmzzf";
+    sha256 = "1pkjbwpi0047lbc55cva99rj6p70gbw09l14vrym0igwipnxxx0z";
   };
 
   installPhase = ''

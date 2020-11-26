@@ -14,6 +14,6 @@ mkDerivation {
   buildInputs = [ kdeclarative libkmahjongg knewstuff libkdegames ];
   meta = {
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ genesis ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

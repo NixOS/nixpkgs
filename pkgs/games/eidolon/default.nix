@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.sr.ht/~nicohman/eidolon";
-    rev = "${version}";
+    rev = version;
     sha256 = "1yn3k569pxzw43mmsk97088xpkdc714rks3ncchbb6ccx25kgxrr";
   };
   cargoPatches = [ ./cargo-lock.patch ];

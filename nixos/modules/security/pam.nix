@@ -436,7 +436,7 @@ let
           entryType = "auth";
           control = "sufficient";
           path = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so";
-          arguments = ["file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"];
+          arguments = ["file=${lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles}"];
         }) ++ (optional cfg.fprintAuth {
           entryType = "auth"; control = "sufficient"; path = "${pkgs.fprintd}/lib/security/pam_fprintd.so";
         }) ++ (optional cfg.p11Auth {

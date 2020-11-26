@@ -10,26 +10,31 @@
 , pytest
 , setuptools
 , wheel
+, isPy27
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "20.1.1";
+  version = "20.2.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "01wq01ysv0ijcrg8a4mj72zb8al15b8vw8g3ywhxq53kbsyhfxn4";
+    sha256 = "eMVV4ftgV71HLQsSeaOchYlfaJVgzNrwUynn3SA1/Do=";
     name = "${pname}-${version}-source";
   };
 
-  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
-  # Also update pkgs/development/interpreters/python/hooks/pip-install-hook.sh accordingly
-  patches = [ ./reproducible.patch ];
-
   nativeBuildInputs = [ bootstrapped-pip ];
+
+  patches = lib.optionals isPy27 [
+    (fetchpatch {
+      url = "https://github.com/pypa/pip/commit/94fbb6cf78c267bf7cdf83eeeb2536ad56cfe639.patch";
+      sha256 = "Z6x5yxBp8QkU/GOfb1ltI0dVt//MaI09XK3cdY42kFs=";
+    })
+  ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.

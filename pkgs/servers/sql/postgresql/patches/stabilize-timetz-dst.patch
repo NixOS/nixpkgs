@@ -1,0 +1,117 @@
+From 4a071afbd056282746a5bc9362e87f579a56402d Mon Sep 17 00:00:00 2001
+From: Tom Lane <tgl@sss.pgh.pa.us>
+Date: Thu, 29 Oct 2020 15:28:14 -0400
+Subject: [PATCH 1/1] Stabilize timetz test across DST transitions.
+
+The timetz test cases I added in commit a9632830b were unintentionally
+sensitive to whether or not DST is active in the PST8PDT time zone.
+Thus, they'll start failing this coming weekend, as reported by
+Bernhard M. Wiedemann in bug #16689.  Fortunately, DST-awareness is
+not significant to the purpose of these test cases, so we can just
+force them all to PDT (DST hours) to preserve stability of the
+results.
+
+Back-patch to v10, as the prior patch was.
+
+Discussion: https://postgr.es/m/16689-57701daa23b377bf@postgresql.org
+Git viewer: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=4a071afbd056282746a5bc9362e87f579a56402d;hp=f90149e6285aaae6b48559afce1bd638ee26c33e
+---
+ src/test/regress/expected/timetz.out | 32 ++++++++++++++--------------
+ src/test/regress/sql/timetz.sql      | 16 +++++++-------
+ 2 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/src/test/regress/expected/timetz.out b/src/test/regress/expected/timetz.out
+index 038bb5fa09..1ab5ed5105 100644
+--- a/src/test/regress/expected/timetz.out
++++ b/src/test/regress/expected/timetz.out
+@@ -91,45 +91,45 @@ SELECT f1 AS "Ten" FROM TIMETZ_TBL WHERE f1 >= '00:00-07';
+ (12 rows)
+ 
+ -- Check edge cases
+-SELECT '23:59:59.999999'::timetz;
++SELECT '23:59:59.999999 PDT'::timetz;
+        timetz       
+ --------------------
+  23:59:59.999999-07
+ (1 row)
+ 
+-SELECT '23:59:59.9999999'::timetz;  -- rounds up
++SELECT '23:59:59.9999999 PDT'::timetz;  -- rounds up
+    timetz    
+ -------------
+  24:00:00-07
+ (1 row)
+ 
+-SELECT '23:59:60'::timetz;  -- rounds up
++SELECT '23:59:60 PDT'::timetz;  -- rounds up
+    timetz    
+ -------------
+  24:00:00-07
+ (1 row)
+ 
+-SELECT '24:00:00'::timetz;  -- allowed
++SELECT '24:00:00 PDT'::timetz;  -- allowed
+    timetz    
+ -------------
+  24:00:00-07
+ (1 row)
+ 
+-SELECT '24:00:00.01'::timetz;  -- not allowed
+-ERROR:  date/time field value out of range: "24:00:00.01"
+-LINE 1: SELECT '24:00:00.01'::timetz;
++SELECT '24:00:00.01 PDT'::timetz;  -- not allowed
++ERROR:  date/time field value out of range: "24:00:00.01 PDT"
++LINE 1: SELECT '24:00:00.01 PDT'::timetz;
+                ^
+-SELECT '23:59:60.01'::timetz;  -- not allowed
+-ERROR:  date/time field value out of range: "23:59:60.01"
+-LINE 1: SELECT '23:59:60.01'::timetz;
++SELECT '23:59:60.01 PDT'::timetz;  -- not allowed
++ERROR:  date/time field value out of range: "23:59:60.01 PDT"
++LINE 1: SELECT '23:59:60.01 PDT'::timetz;
+                ^
+-SELECT '24:01:00'::timetz;  -- not allowed
+-ERROR:  date/time field value out of range: "24:01:00"
+-LINE 1: SELECT '24:01:00'::timetz;
++SELECT '24:01:00 PDT'::timetz;  -- not allowed
++ERROR:  date/time field value out of range: "24:01:00 PDT"
++LINE 1: SELECT '24:01:00 PDT'::timetz;
+                ^
+-SELECT '25:00:00'::timetz;  -- not allowed
+-ERROR:  date/time field value out of range: "25:00:00"
+-LINE 1: SELECT '25:00:00'::timetz;
++SELECT '25:00:00 PDT'::timetz;  -- not allowed
++ERROR:  date/time field value out of range: "25:00:00 PDT"
++LINE 1: SELECT '25:00:00 PDT'::timetz;
+                ^
+ --
+ -- TIME simple math
+diff --git a/src/test/regress/sql/timetz.sql b/src/test/regress/sql/timetz.sql
+index b699e4b03c..ce763d89e8 100644
+--- a/src/test/regress/sql/timetz.sql
++++ b/src/test/regress/sql/timetz.sql
+@@ -36,14 +36,14 @@ SELECT f1 AS "None" FROM TIMETZ_TBL WHERE f1 < '00:00-07';
+ SELECT f1 AS "Ten" FROM TIMETZ_TBL WHERE f1 >= '00:00-07';
+ 
+ -- Check edge cases
+-SELECT '23:59:59.999999'::timetz;
+-SELECT '23:59:59.9999999'::timetz;  -- rounds up
+-SELECT '23:59:60'::timetz;  -- rounds up
+-SELECT '24:00:00'::timetz;  -- allowed
+-SELECT '24:00:00.01'::timetz;  -- not allowed
+-SELECT '23:59:60.01'::timetz;  -- not allowed
+-SELECT '24:01:00'::timetz;  -- not allowed
+-SELECT '25:00:00'::timetz;  -- not allowed
++SELECT '23:59:59.999999 PDT'::timetz;
++SELECT '23:59:59.9999999 PDT'::timetz;  -- rounds up
++SELECT '23:59:60 PDT'::timetz;  -- rounds up
++SELECT '24:00:00 PDT'::timetz;  -- allowed
++SELECT '24:00:00.01 PDT'::timetz;  -- not allowed
++SELECT '23:59:60.01 PDT'::timetz;  -- not allowed
++SELECT '24:01:00 PDT'::timetz;  -- not allowed
++SELECT '25:00:00 PDT'::timetz;  -- not allowed
+ 
+ --
+ -- TIME simple math
+-- 
+2.20.1

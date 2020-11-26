@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, rpmextract
+, dpkg
 }:
 
 # The raw package that fetches and extracts the Plex RPM. Override the source
@@ -8,23 +8,26 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.20.3.3483-211702a9f";
+  version = "1.20.5.3600-47c0d9038";
   pname = "plexmediaserver";
 
   # Fetch the source
-  src = fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/redhat/plexmediaserver-${version}.x86_64.rpm";
-    sha256 = "0b05mxmvjn2sr0aqy8s2c41gz0vlpmwjwx42jpqddk3qzidvwkbd";
+  src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
+    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
+    sha256 = "18zj4baa085gbgc0y5gx7gnwzl131xyk34m5xcipfvfb434y98cp";
+  } else fetchurl {
+    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
+    sha256 = "01rq2q6avjsvnns7jsd2a9vnmd4584fwdkp833gjgrrrqkf6h45y";
   };
 
   outputs = [ "out" "basedb" ];
 
-  nativeBuildInputs = [ rpmextract ];
+  nativeBuildInputs = [ dpkg ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" "distPhase" ];
 
   unpackPhase = ''
-    rpmextract $src
+    dpkg-deb -R $src .
   '';
 
   installPhase = ''
@@ -52,8 +55,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://plex.tv/";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [
+      badmutex
       colemickens
       forkk
       lnl7

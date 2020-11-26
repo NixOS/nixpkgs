@@ -143,7 +143,7 @@ in
           Set a UUID that uniquely identifies the server.
 
           This can be generated with
-          <literal>nix-shell -p utillinux --run uuidgen</literal>.
+          <literal>nix-shell -p util-linux --run uuidgen</literal>.
         '';
       };
     };

@@ -3,7 +3,7 @@
   "version": "0.4.0-dev",
   "dependencies": {
     "node-fetch": "^2.6.1",
-    "vscode-languageclient": "7.0.0-next.9",
+    "vscode-languageclient": "7.0.0-next.12",
     "@rollup/plugin-commonjs": "^13.0.2",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "@types/glob": "^7.1.3",

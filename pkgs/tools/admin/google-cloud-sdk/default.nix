@@ -21,18 +21,18 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "1lkmilj873ia8kigyfmqfjnlpi7jzq3q4m0ip3lr0a111nr3wi4m";
+      sha256 = "0kldvy63gba5k6ymybnggw3q3rlav1gcbpxiwnv6670lk5qzqdsw";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0q20vaqr9rrzcp57jrskcmbdvqrfpr4lscki85824fdlpklc00ga";
+      sha256 = "1ifl4skwqhkapfwhymyz7v4jpwpd01n4x3956w5ci8c3zvw8l118";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "315.0.0";
+  version = "319.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -74,8 +74,8 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
+    mkdir -p $out/share/bash-completion/completions
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud.inc
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.

@@ -19,21 +19,15 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "13.0.14";
+  version = "13.6.0";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "16ynkwiv0faa60msashj5w1bc4rdh7yv2qjmpcbf7dwq54gqmlbv";
+    sha256 = "1b3vjg5sxrg8cfxn1nh8j26h847kxrfnn2chbb5v3ivhp1kp6zh2";
   };
-
-  # Fix a check which assumes that hook files are writeable by their
-  # owner.
-  patches = [
-    ./fix-executable-check.patch
-  ];
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
 
@@ -44,11 +38,11 @@ in buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ rubyEnv.wrappedRuby libgit2_0_27 ];
   goDeps = ./deps.nix;
-  preBuild = "rm -r go/src/gitlab.com/gitlab-org/labkit/vendor";
+  preBuild = "rm -rf go/src/gitlab.com/gitlab-org/labkit/vendor";
 
   postInstall = ''
     mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib,proto,git-hooks,gitlab-shell} $ruby
+    cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
   '';
 
   outputs = [ "out" "ruby" ];

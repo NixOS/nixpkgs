@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "A console IRC client";
     homepage = "https://github.com/osa1/tiny";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

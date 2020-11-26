@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, utillinux }:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, util-linux, nixosTests }:
 
 with lib;
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/containerd/containerd";
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles utillinux ];
+  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
   buildInputs = [ btrfs-progs ];
 
@@ -41,6 +41,8 @@ buildGoPackage rec {
     make man
     installManPage man/*.[1-9]
   '';
+
+  passthru.tests = { inherit (nixosTests) docker; };
 
   meta = {
     homepage = "https://containerd.io/";

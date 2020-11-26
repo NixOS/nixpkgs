@@ -499,8 +499,8 @@ let
                 list, targetList
             )
         with subtest("Test MTU and MAC Address are configured"):
-            assert "mtu 1342" in machine.succeed("ip link show dev tap0")
-            assert "mtu 1343" in machine.succeed("ip link show dev tun0")
+            machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
+            machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
             assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
       '' # network-addresses-* only exist in scripted networking
       + optionalString (!networkd) ''

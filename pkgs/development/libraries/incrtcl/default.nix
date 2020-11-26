@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rmdir $out/bin
     mv $out/lib/itcl${version}/* $out/lib
+    ln -s libitcl${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
+      $out/lib/libitcl${stdenv.lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
     rmdir $out/lib/itcl${version}
   '';
 

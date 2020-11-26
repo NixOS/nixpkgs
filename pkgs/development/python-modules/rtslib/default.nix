@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "rtslib";
-  version = "2.1.72";
+  version = "2.1.74";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     rev = "v${version}";
-    sha256 = "13kycf9xkyxm1ik8yh3qpd96vird8y65daigyiyb4jvx0lmrd0kv";
+    sha256 = "1in10z6ckmkfhykar435k1fmswbfajysv4g9nsav893ij8g694fy";
   };
 
   propagatedBuildInputs = [ six pyudev pygobject3 ];

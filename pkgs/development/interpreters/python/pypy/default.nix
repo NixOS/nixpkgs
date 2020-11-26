@@ -22,9 +22,15 @@ let
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
     executable = "pypy${if isPy3k then "3" else ""}";
-    pythonForBuild = self; # No cross-compiling for now.
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
+
+    # No cross-compiling for now.
+    pythonForBuild = self;
+    pythonPackagesBuildBuild = {};
+    pythonPackagesBuildTarget = {};
+    pythonPackagesHostHost = {};
+    pythonPackagesTargetTarget = {};
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -151,7 +157,7 @@ in with passthru; stdenv.mkDerivation rec {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ andersk ];
   };
 }

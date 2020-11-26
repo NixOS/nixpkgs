@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     "-DLOGDIR=/var/log/rspamd"
     "-DLOCAL_CONFDIR=/etc/rspamd"
     "-DENABLE_JEMALLOC=ON"
-  ] ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON";
+  ] ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON"
+  ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
 
   passthru.tests.rspamd = nixosTests.rspamd;
 

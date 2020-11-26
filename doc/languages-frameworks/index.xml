@@ -7,7 +7,7 @@
  </para>
  <xi:include href="agda.section.xml" />
  <xi:include href="android.section.xml" />
- <xi:include href="beam.xml" />
+ <xi:include href="beam.section.xml" />
  <xi:include href="bower.xml" />
  <xi:include href="coq.xml" />
  <xi:include href="crystal.section.xml" />
@@ -19,6 +19,7 @@
  <xi:include href="ios.section.xml" />
  <xi:include href="java.xml" />
  <xi:include href="lua.section.xml" />
+ <xi:include href="maven.section.xml" />
  <xi:include href="node.section.xml" />
  <xi:include href="ocaml.xml" />
  <xi:include href="perl.xml" />

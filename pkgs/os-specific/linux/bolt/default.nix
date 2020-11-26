@@ -1,28 +1,49 @@
-{ stdenv, meson, ninja, pkgconfig, fetchFromGitLab,
-  python3, umockdev, gobject-introspection, dbus,
-  asciidoc, libxml2, libxslt, docbook_xml_dtd_45, docbook_xsl,
-  glib, systemd, polkit
+{ stdenv
+, meson
+, ninja
+, pkgconfig
+, fetchFromGitLab
+, python3
+, umockdev
+, gobject-introspection
+, dbus
+, asciidoc
+, libxml2
+, libxslt
+, docbook_xml_dtd_45
+, docbook_xsl
+, glib
+, systemd
+, polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "1qamls0fll0qc27lqavf56hv1yj6v6n4ry90g7bcnwpvccmd82yd";
+    sha256 = "sha256-lcJE+bMK2S2GObHMy/Fu12WGb3T1HrWjsNyZPz4/f4E=";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
-    asciidoc libxml2 libxslt docbook_xml_dtd_45 docbook_xsl
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2
+    libxslt
+    meson
+    ninja
+    pkgconfig
   ] ++ stdenv.lib.optional (!doCheck) python3;
 
   buildInputs = [
-    glib systemd polkit
+    glib
+    polkit
+    systemd
   ];
 
   doCheck = true;
@@ -32,7 +53,9 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [
-    dbus umockdev gobject-introspection
+    dbus
+    gobject-introspection
+    umockdev
     (python3.withPackages
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
@@ -55,7 +78,7 @@ stdenv.mkDerivation rec {
     description = "Thunderbolt 3 device management daemon";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.callahad ];
+    maintainers = with maintainers; [ callahad ];
     platforms = platforms.linux;
   };
 }

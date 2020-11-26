@@ -36,7 +36,7 @@ let
 
       $SMARTD_MESSAGE
       EOF
-      } | ${pkgs.utillinux}/bin/wall 2>/dev/null
+      } | ${pkgs.util-linux}/bin/wall 2>/dev/null
     ''}
     ${optionalString nx.enable ''
       export DISPLAY=${nx.display}

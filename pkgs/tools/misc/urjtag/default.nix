@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, pkgconfig, gettext, libtool, bison
-, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb-compat-0_1, readline
+, flex, which, subversion, fetchurl, makeWrapper, libftdi1, libusb-compat-0_1, readline
 , python3
 , svfSupport ? true
 , bsdlSupport ? true
@@ -7,19 +7,18 @@
 , jedecSupport ? true
 }:
 
-stdenv.mkDerivation {
-  version = "0.10";
+stdenv.mkDerivation rec {
+  version = "2019.12";
   pname = "urjtag";
 
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/urjtag/svn/trunk/urjtag";
-    rev = "2051";
-    sha256 = "0pyl0y27136nr8mmjdml7zjnfnpbjmgqzkjk99j3hvj38k10wq7f";
+  src = fetchurl {
+    url = "https://downloads.sourceforge.net/project/urjtag/urjtag/${version}/urjtag-${version}.tar.xz";
+    sha256 = "1k2vmvvarik0q3llbfbk8ad35mcns7w1ln9gla1mn7z9c6x6x90r";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gettext autoconf automake libtool bison flex which
-    subversion makeWrapper readline libftdi libusb-compat-0_1 python3 ];
+    subversion makeWrapper readline libftdi1 libusb-compat-0_1 python3 ];
 
   configureFlags = [
     (stdenv.lib.enableFeature svfSupport   "svf")
@@ -27,8 +26,6 @@ stdenv.mkDerivation {
     (stdenv.lib.enableFeature staplSupport "stapl")
     (stdenv.lib.enableFeature jedecSupport "jedec-exp")
   ];
-
-  preConfigure = "./autogen.sh";
 
   meta = {
     description = "Enhanced, modern tool for communicating over JTAG with flash chips, CPUs,and many more";

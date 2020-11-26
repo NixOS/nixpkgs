@@ -17,10 +17,6 @@ let
     mkdir -p "$out/lib"
     ln -s "${pkgs.pipewire.jack}/lib" "$out/lib/pipewire"
   '';
-  pulse-libs = pkgs.runCommand "pulse-libs" {} ''
-    mkdir -p "$out/lib"
-    ln -s "${pkgs.pipewire.pulse}/lib" "$out/lib/pipewire"
-  '';
 in {
 
   meta = {
@@ -50,7 +46,7 @@ in {
       };
 
       pulse = {
-        enable = mkEnableOption "PulseAudio emulation";
+        enable = mkEnableOption "PulseAudio server emulation";
       };
     };
   };
@@ -61,23 +57,24 @@ in {
     assertions = [
       {
         assertion = cfg.pulse.enable -> !config.hardware.pulseaudio.enable;
-        message = "PipeWire based PulseAudio emulation doesn't use the PulseAudio service";
+        message = "PipeWire based PulseAudio server emulation replaces PulseAudio";
       }
       {
         assertion = cfg.jack.enable -> !config.services.jack.jackd.enable;
-        message = "PIpeWire based JACK emulation doesn't use the JACK service";
+        message = "PipeWire based JACK emulation doesn't use the JACK service";
       }
     ];
 
     environment.systemPackages = [ pkgs.pipewire ]
-                                 ++ lib.optional cfg.jack.enable jack-libs
-                                 ++ lib.optional cfg.pulse.enable pulse-libs;
+                                 ++ lib.optional cfg.jack.enable jack-libs;
 
-    systemd.packages = [ pkgs.pipewire ];
+    systemd.packages = [ pkgs.pipewire ]
+                       ++ lib.optional cfg.pulse.enable pkgs.pipewire.pulse;
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
+    systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
     systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
     services.udev.packages = [ pkgs.pipewire ];
 
@@ -100,6 +97,6 @@ in {
       source = "${pkgs.pipewire}/share/alsa/alsa.conf.d/50-pipewire.conf";
     };
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional (cfg.jack.enable || cfg.pulse.enable) "/run/current-system/sw/lib/pipewire";
+      lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
   };
 }

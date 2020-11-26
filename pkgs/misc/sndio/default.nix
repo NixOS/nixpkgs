@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   pname = "sndio";
   version = "1.7.0";
   enableParallelBuilding = true;
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ alsaLib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isLinux alsaLib;
 
   src = fetchurl {
     url = "http://www.sndio.org/sndio-${version}.tar.gz";

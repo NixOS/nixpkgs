@@ -1,5 +1,5 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
 , flock
 , withMysql ? false
 , withPgsql ? false
@@ -21,7 +21,7 @@ let
     fi
   '';
 
-  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
+  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
 
 in stdenv.mkDerivation rec {
   version = "20.03";

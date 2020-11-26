@@ -1,7 +1,7 @@
 {stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
  autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite,
  liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which,
- openssh, gawk, findutils, utillinux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
+ openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
  rsync, glibc, rpcsvc-proto, libtirpc
 }:
 let
@@ -24,7 +24,7 @@ let
   buildInputs = [
     fuse bison flex_2_5_35 openssl ncurses readline
     autoconf automake libtool pkgconfig zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper utillinux libtirpc
+    acl sqlite liburcu attr makeWrapper util-linux libtirpc
     (python3.withPackages (pkgs: [
       pkgs.flask
       pkgs.prettytable
@@ -56,7 +56,7 @@ let
     openssh # ssh
     rsync # rsync, e.g. for geo-replication
     systemd # systemctl
-    utillinux # mount umount
+    util-linux # mount umount
     which # which
     xfsprogs # xfs_info
   ];
@@ -76,9 +76,9 @@ stdenv.mkDerivation
     substituteInPlace libglusterfs/src/glusterfs/lvm-defaults.h \
       --replace '/sbin/' '${lvm2}/bin/'
     substituteInPlace libglusterfs/src/glusterfs/compat.h \
-      --replace '/bin/umount' '${utillinux}/bin/umount'
+      --replace '/bin/umount' '${util-linux}/bin/umount'
     substituteInPlace contrib/fuse-lib/mount-gluster-compat.h \
-      --replace '/bin/mount' '${utillinux}/bin/mount'
+      --replace '/bin/mount' '${util-linux}/bin/mount'
   '';
 
   # Note that the VERSION file is something that is present in release tarballs

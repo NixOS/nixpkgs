@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = ''Programs for computing automorphism groups of graphs and digraphs'';
     license = licenses.asl20;
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
     # I'm not sure if the filename will remain the same for future changelog or
     # if it will track changes to minor releases. Lets see. Better than nothing

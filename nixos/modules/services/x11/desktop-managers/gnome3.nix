@@ -73,6 +73,7 @@ in
       core-os-services.enable = mkEnableOption "essential services for GNOME3";
       core-shell.enable = mkEnableOption "GNOME Shell services";
       core-utilities.enable = mkEnableOption "GNOME core utilities";
+      core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
       games.enable = mkEnableOption "GNOME games";
 
       experimental-features = {
@@ -322,6 +323,12 @@ in
         gnome-shell
       ];
 
+      services.udev.packages = with pkgs.gnome3; [
+        # Force enable KMS modifiers for devices that require them.
+        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
+        mutter
+      ];
+
       services.avahi.enable = mkDefault true;
 
       xdg.portal.extraPortals = [
@@ -351,7 +358,7 @@ in
         source-sans-pro
       ];
 
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
         gnome-backgrounds
@@ -396,7 +403,7 @@ in
       };
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
         baobab
@@ -415,16 +422,15 @@ in
         gnome-logs
         gnome-maps
         gnome-music
-        gnome-photos
+        pkgs.gnome-photos
         gnome-screenshot
         gnome-system-monitor
         gnome-weather
         nautilus
+        pkgs.gnome-connections
         simple-scan
         totem
         yelp
-        # Unsure if sensible for NixOS
-        /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
       # Enable default program modules
@@ -453,11 +459,42 @@ in
 
     (mkIf serviceCfg.games.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
-        aisleriot atomix five-or-more four-in-a-row gnome-chess gnome-klotski
-        gnome-mahjongg gnome-mines gnome-nibbles gnome-robots gnome-sudoku
-        gnome-taquin gnome-tetravex hitori iagno lightsoff quadrapassel
-        swell-foop tali
+        aisleriot
+        atomix
+        five-or-more
+        four-in-a-row
+        gnome-chess
+        gnome-klotski
+        gnome-mahjongg
+        gnome-mines
+        gnome-nibbles
+        gnome-robots
+        gnome-sudoku
+        gnome-taquin
+        gnome-tetravex
+        hitori
+        iagno
+        lightsoff
+        quadrapassel
+        swell-foop
+        tali
       ] config.environment.gnome3.excludePackages);
+    })
+
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
+    (mkIf serviceCfg.core-developer-tools.enable {
+      environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
+        dconf-editor
+        devhelp
+        pkgs.gnome-builder
+        # boxes would make sense in this option, however
+        # it doesn't function well enough to be included
+        # in default configurations.
+        # https://github.com/NixOS/nixpkgs/issues/60908
+        /* gnome-boxes */
+      ] config.environment.gnome3.excludePackages);
+
+      services.sysprof.enable = true;
     })
   ];
 

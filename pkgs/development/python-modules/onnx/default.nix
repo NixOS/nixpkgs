@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.7.0";
+  version = "1.8.0";
 
   # Due to Protobuf packaging issues this build of Onnx with Python 2 gives
   # errors on import.
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j6rgfbhsw3a8id8pyg18y93k68lbjbj1kq6qia36h69f6pvlyjy";
+    sha256 = "5f787fd3ce1290e12da335237b3b921152157e51aa09080b65631b3ce3fcc50c";
   };
 
   nativeBuildInputs = [ cmake ];

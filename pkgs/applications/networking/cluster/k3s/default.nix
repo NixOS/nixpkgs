@@ -13,7 +13,7 @@
 , libseccomp
 , pkgconfig
 , ethtool
-, utillinux
+, util-linux
 , ipset
 , fetchFromGitHub
 , fetchurl
@@ -222,6 +222,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "k3s";
+  version = k3sVersion;
 
   # Important utilities used by  the kubelet, see
   # https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494
@@ -233,7 +234,7 @@ stdenv.mkDerivation rec {
     iproute
     bridge-utils
     ethtool
-    utillinux
+    util-linux
     ipset
     conntrack-tools
   ];

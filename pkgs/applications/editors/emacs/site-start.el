@@ -52,9 +52,6 @@ least specific (the system profile)"
          (file-name-directory load-file-name)))) ; .../emacs/site-lisp/
       (version
        (file-name-as-directory
-        (concat
-         (number-to-string emacs-major-version)
-         "."
-         (number-to-string emacs-minor-version))))
+        emacs-version))
       (src (file-name-as-directory "src")))
   (setq find-function-C-source-directory (concat emacs version src)))

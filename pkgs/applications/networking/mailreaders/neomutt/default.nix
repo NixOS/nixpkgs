@@ -6,32 +6,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200925";
+  version = "20201120";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "1q931n9sijq1iin3swzk57rz7qmy485hvr1fahy5i2wd1xx9yhb2";
+    sha256 = "0z6xavgd0zv9pqvfsdyvhhi1q3y7zxhgg24isbnn9r6mldafqwna";
   };
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
     mailcap sqlite
-  ];
-
-  patches = [
-    # To be removed on next release. Fixes two bugs in the sidebar behavior.
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/96753674e70edb695c1dc7af73e3317956c1b259.patch";
-      sha256 = "0yjmgdfhn8ra7bc3d40c3c29imgpgbhzphjxp6575llh9kw5h53s";
-    })
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/6078653c9233644ca76c24bdb64e49bd443dd714.patch";
-      sha256 = "1s1p86bqpc9xq9z5qfh0mxxh6syps8shq0dm7bbkg1bz7qya5phy";
-    })
   ];
 
   nativeBuildInputs = [

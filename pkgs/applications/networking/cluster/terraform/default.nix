@@ -114,7 +114,7 @@ let
           (orig: { passthru = orig.passthru // passthru; })
         else
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
-            inherit (terraform) name;
+            inherit (terraform) name meta;
             buildInputs = [ makeWrapper ];
 
             buildCommand = pluginDir + ''

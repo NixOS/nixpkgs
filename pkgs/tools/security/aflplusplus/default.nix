@@ -124,8 +124,8 @@ let
 
     meta = {
       description = ''
-        AFL++ is a heavily enhanced version of AFL, incorporating many features and
-        improvements from the community.
+        A heavily enhanced version of AFL, incorporating many features
+        and improvements from the community
       '';
       homepage    = "https://aflplus.plus";
       license     = stdenv.lib.licenses.asl20;

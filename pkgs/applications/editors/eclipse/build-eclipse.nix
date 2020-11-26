@@ -1,6 +1,6 @@
 { stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
 , zlib, jdk, glib, gtk, libXtst, gsettings-desktop-schemas, webkitgtk
-, makeWrapper, ... }:
+, makeWrapper, perl, ... }:
 
 { name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
 
@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
+
+    # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
+    ${perl}/bin/perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin\n||' $out/eclipse/eclipse.ini
   ''; # */
 
   meta = {

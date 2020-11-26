@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.0";
+  version = "2.1.1";
   pname = "PasteDeploy";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7559878b6e92023041484be9bcb6d767cf4492fc3de7257a5dae76a7cc11a9b";
+    sha256 = "6dead6ab9823a85d585ef27f878bc647f787edb9ca8da0716aa9f1261b464817";
   };
 
   buildInputs = [ pytestrunner ];

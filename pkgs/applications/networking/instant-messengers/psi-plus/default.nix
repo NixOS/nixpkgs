@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, wrapQtAppsHook
+{ mkDerivation, lib, fetchFromGitHub, cmake
 , qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
 , libidn, qca-qt5, libsecret, libXScrnSaver, hunspell
 , libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "psi-plus";
   version = "1.4.1473";
 
@@ -19,15 +19,16 @@ stdenv.mkDerivation rec {
     "-DENABLE_PLUGINS=ON"
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake qttools ];
 
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qttools qtwebengine
+    qtbase qtmultimedia qtx11extras qtwebengine
     libidn qca-qt5 libsecret libXScrnSaver hunspell
     libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/psiplus/";
     description = "XMPP (Jabber) client";
     maintainers = with maintainers; [ orivej misuzu ];
     license = licenses.gpl2;

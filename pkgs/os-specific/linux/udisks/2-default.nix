@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkgconfig, gettext, gnused
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
-, expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
+, expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
 , gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
 , xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       bash = "${bash}/bin/bash";
-      blkid = "${utillinux}/bin/blkid";
+      blkid = "${util-linux}/bin/blkid";
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
       sed = "${gnused}/bin/sed";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       src = ./force-path.patch;
       path = stdenv.lib.makeBinPath [
         btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils
-        xfsprogs ntfs3g parted utillinux
+        xfsprogs ntfs3g parted util-linux
       ];
     })
 

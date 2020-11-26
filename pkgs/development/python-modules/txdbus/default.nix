@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "txdbus";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eefcffa4efbf82ba11222f17f5989fe1b2b6ef57226ef896c4a7084c990ba217";
+    sha256 = "8375a5fb68a12054f0def91af800c821fb2232949337756ed975f88d8ea2bc97";
   };
 
   propagatedBuildInputs = [ six twisted ];

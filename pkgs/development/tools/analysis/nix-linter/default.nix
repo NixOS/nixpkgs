@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , fixplate
 , tasty
 , tasty-hunit
@@ -35,6 +36,14 @@ mkDerivation rec {
   libraryHaskellDepends = [ fixplate ];
   executableHaskellDepends = [ streamly mtl path pretty-terminal text base aeson cmdargs containers hnix bytestring path-io ];
   testHaskellDepends = [ tasty tasty-hunit tasty-th ];
+
+  patches = [
+    # raise upper bound on hnix https://github.com/Synthetica9/nix-linter/pull/46
+    (fetchpatch {
+      url = "https://github.com/Synthetica9/nix-linter/commit/b406024e525977b3c69d78d6a94a683e2ded121f.patch";
+      sha256 = "0viwbprslcmy70bxy3v27did79nqhlc0jcx4kp0lycswaccvnp1j";
+    })
+  ];
 
   description = "Linter for Nix(pkgs), based on hnix";
   homepage = "https://github.com/Synthetica9/nix-linter";

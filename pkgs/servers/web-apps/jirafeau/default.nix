@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "mojo42";
     repo = "Jirafeau";
-    rev = "${version}";
+    rev = version;
     sha256 = "09gq5zhynygpqj0skq7ifnn9yjjg7qnc6kjvaas7f53av2707z4c";
   };
 

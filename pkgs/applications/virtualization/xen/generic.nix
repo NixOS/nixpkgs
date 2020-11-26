@@ -14,7 +14,7 @@ config:
 # Scripts
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
 , iproute, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
-, lvm2, utillinux, procps, systemd
+, lvm2, util-linux, procps, systemd
 
 # Documentation
 # python2Packages.markdown
@@ -28,7 +28,7 @@ let
   #TODO: fix paths instead
   scriptEnvPath = concatMapStringsSep ":" (x: "${x}/bin") [
     which perl
-    coreutils gawk gnused gnugrep diffutils utillinux multipath-tools
+    coreutils gawk gnused gnugrep diffutils util-linux multipath-tools
     iproute inetutils iptables bridge-utils openvswitch nbd drbd
   ];
 
@@ -146,8 +146,8 @@ stdenv.mkDerivation (rec {
       --replace /usr/sbin/lvs ${lvm2}/bin/lvs
 
     substituteInPlace tools/misc/xenpvnetboot \
-      --replace /usr/sbin/mount ${utillinux}/bin/mount \
-      --replace /usr/sbin/umount ${utillinux}/bin/umount
+      --replace /usr/sbin/mount ${util-linux}/bin/mount \
+      --replace /usr/sbin/umount ${util-linux}/bin/umount
 
     substituteInPlace tools/xenmon/xenmon.py \
       --replace /usr/bin/pkill ${procps}/bin/pkill

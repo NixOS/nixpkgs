@@ -1,6 +1,6 @@
-{ clipnotify, makeWrapper, xsel, dmenu, utillinux, gawk, stdenv, fetchFromGitHub, fetchpatch, lib }:
+{ clipnotify, makeWrapper, xsel, dmenu, util-linux, gawk, stdenv, fetchFromGitHub, fetchpatch, lib }:
 let
-  runtimePath = lib.makeBinPath [ clipnotify xsel dmenu utillinux gawk ];
+  runtimePath = lib.makeBinPath [ clipnotify xsel dmenu util-linux gawk ];
 in
 stdenv.mkDerivation rec {
   pname = "clipmenu";

@@ -1,7 +1,10 @@
 { stdenv
 , fetchurl
 , substituteAll
-, intltool
+, asciidoc
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, gettext
 , itstool
 , libxslt
 , gexiv2
@@ -15,7 +18,6 @@
 , dbus
 , evolution-data-server
 , exempi
-, flac
 , giflib
 , glib
 , gnome3
@@ -35,9 +37,10 @@
 , libsoup
 , libtiff
 , libuuid
-, libvorbis
 , libxml2
+, networkmanager
 , poppler
+, systemd
 , taglib
 , upower
 , totem-pl-parser
@@ -45,15 +48,18 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "2.3.3";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06abxrnrz7xayykrabn135rpsm6z0fqw7gibrb9j09l6swlalwkl";
+    sha256 = "1kfi5d6pccqx28hbnja6k1mpwjd53k5zs704sg01rlzmbshz1zn6";
   };
 
   nativeBuildInputs = [
-    intltool
+    asciidoc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    gettext
     itstool
     libxslt
     meson
@@ -69,7 +75,6 @@ stdenv.mkDerivation rec {
     dbus
     evolution-data-server
     exempi
-    flac
     giflib
     glib
     gexiv2
@@ -92,9 +97,10 @@ stdenv.mkDerivation rec {
     libsoup
     libtiff
     libuuid
-    libvorbis
     libxml2
+    networkmanager
     poppler
+    systemd
     taglib
     upower
   ];
@@ -102,19 +108,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
-    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
-    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tracker;
-    })
-    # https://bugzilla.gnome.org/show_bug.cgi?id=795576
-    (fetchurl {
-      url = "https://bugzilla.gnome.org/attachment.cgi?id=371427";
-      sha256 = "187flswvzymjfxwfrrhizb1cvs780zm39aa3i2vwa5fbllr7kcpf";
+      inherit asciidoc;
     })
   ];
 

@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "3.36.4";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09gmzrlljdqkj3w6wa1c27wypy6j8z9dw3jzv9izfqvp38liibsn";
+    sha256 = "0grscz96bwj79ka4qvxh8h75avdx6824k8k38ylmaj6xbl6gi0hy";
   };
 
   nativeBuildInputs = [

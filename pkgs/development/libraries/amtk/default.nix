@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, gtk3
-, pkgconfig, gnome3, dbus, xvfb_run }:
-let
-  version = "5.1.1";
+{ stdenv
+, fetchurl
+, gtk3
+, pkgconfig
+, gobject-introspection
+, gnome3
+, dbus
+, xvfb_run
+}:
+
+stdenv.mkDerivation rec {
   pname = "amtk";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1wax6mim8dj0m21k8ima7ysm3bzzp54r00jganwbzakq8bfnnrgr";
+    sha256 = "0y3hmmflw4i0y0yb9a8rlihbv3cbwnvdcf1n5jycwzpq9jxla1c2";
   };
 
   nativeBuildInputs = [
     pkgconfig
     dbus
+    gobject-introspection
   ];
 
   buildInputs = [

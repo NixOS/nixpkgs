@@ -1,4 +1,5 @@
 { stdenv
+, fetchpatch
 , substituteAll
 , fetchurl
 , meson
@@ -36,18 +37,25 @@
 , tzdata
 , nss
 , gcr
+, gnome-session-ctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "3.36.1";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0jzf2nznpcrjqq7fjwk66kw8a6x87kgbdjidc2msaqmm379xncry";
+    sha256 = "0r010wzw3dj87mapzvq15zv93i86wg0x0rpii3x2wapq3bcj30g2";
   };
 
   patches = [
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/aae1e774dd9de22fe3520cf9eb2bfbf7216f5eb0.patch";
+      sha256 = "O4m0rOW8Zrgu3Q0p0OA8b951VC0FjYbOUk9MLzB9icI=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tzdata;
@@ -95,6 +103,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
+    "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
   ];
 
   # Default for release buildtype but passed manually because

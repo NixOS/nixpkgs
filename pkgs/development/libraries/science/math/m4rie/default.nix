@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       It uses the M4RI library, implementing the same operations over the finite field F2.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

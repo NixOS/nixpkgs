@@ -1,27 +1,30 @@
 {
-  mkDerivation, lib, fetchgit,
-  extra-cmake-modules,
+  stdenv, extra-cmake-modules, fetchurl,
 
   kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui,
+  knewstuff, kplotting, kwidgetsaddons, kxmlgui, wrapQtAppsHook,
 
   qtx11extras, qtwebsockets,
 
   eigen, zlib,
 
-  cfitsio, indilib, xplanet
+  cfitsio, indilib, xplanet, libnova, gsl
 }:
 
-mkDerivation {
-  name = "kstars";
-  
-  src = fetchgit {
-    url = "https://anongit.kde.org/kstars.git";
-    rev = "7acc527939280edd22823371dc4e22494c6c626a";
-    sha256 = "1n1lgi7p3dj893fdnzjbnrha40p4apl0dy8zppcabxwrb1khb84v";
+stdenv.mkDerivation rec {
+  pname = "kstars";
+  version = "3.4.3";
+
+  src = fetchurl {
+    url = "https://mirrors.mit.edu/kde/stable/kstars/kstars-${version}.tar.xz";
+    sha256 = "0j5yxg6ay6sic194skz6vjzg6yvrpb3gvypvs0frjrcjbsl1j4f8";
   };
-  
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+
+  patches = [
+    ./indi-fix.patch
+  ];
+
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
   buildInputs = [
     kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
     knewstuff kplotting kwidgetsaddons kxmlgui
@@ -30,10 +33,14 @@ mkDerivation {
 
     eigen zlib
 
-    cfitsio indilib xplanet
+    cfitsio indilib xplanet libnova gsl
   ];
 
-  meta = with lib; {
+  cmakeFlags = [
+    "-DINDI_NIX_ROOT=${indilib}"
+  ];
+
+  meta = with stdenv.lib; {
     description = "Virtual planetarium astronomy software";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
     longDescription = ''

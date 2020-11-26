@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, meson, ninja, pkgconfig
-, dpdk, libbsd, libpcap, lua5_3, numactl, utillinux
+, dpdk, libbsd, libpcap, lua5_3, numactl, util-linux
 , gtk2, which, withGtk ? false
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patches = [ ./configure.patch ];
 
   postPatch = ''
-    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
+    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${util-linux}/bin/lscpu
   '';
 
   postInstall = ''

@@ -69,7 +69,6 @@ self: super: {
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;
-  quickcheck-instances = doJailbreak super.quickcheck-instances;
   setlocale = doJailbreak super.setlocale;
   split = doJailbreak super.split;
   system-fileio = doJailbreak super.system-fileio;
@@ -82,8 +81,8 @@ self: super: {
   snap-server = doJailbreak super.snap-server;
   exact-pi = doJailbreak super.exact-pi;
   time-compat = doJailbreak super.time-compat;
-  http-media = doJailbreak super.http-media;
-  servant-server = doJailbreak super.servant-server;
+  http-media = unmarkBroken (doJailbreak super.http-media);
+  servant-server = unmarkBroken (doJailbreak super.servant-server);
   foundation = dontCheck super.foundation;
   vault = dontHaddock super.vault;
 
@@ -96,17 +95,9 @@ self: super: {
   # https://github.com/kowainik/relude/issues/241
   relude = dontCheck super.relude;
 
-  # The tests for semver-range need to be updated for the MonadFail change in
-  # ghc-8.8:
-  # https://github.com/adnelson/semver-range/issues/15
-  semver-range = dontCheck super.semver-range;
-
   # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
-
-  # Only 0.7 is compatible with ghc 8.7 https://hackage.haskell.org/package/apply-refact/changelog
-  apply-refact = super.apply-refact_0_7_0_0;
 
   # The package needs the latest Cabal version.
   cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
@@ -126,4 +117,10 @@ self: super: {
   liquid-vector = markBroken super.liquid-vector;
   liquidhaskell = markBroken super.liquidhaskell;
 
+  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_4;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
 }

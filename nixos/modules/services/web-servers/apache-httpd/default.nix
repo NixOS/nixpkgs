@@ -750,8 +750,8 @@ in
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting
             # successfully.
-            for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${cfg.user} ' | cut -f2 -d ' '); do
-                ${pkgs.utillinux}/bin/ipcrm -s $i
+            for i in $(${pkgs.util-linux}/bin/ipcs -s | grep ' ${cfg.user} ' | cut -f2 -d ' '); do
+                ${pkgs.util-linux}/bin/ipcrm -s $i
             done
           '';
 

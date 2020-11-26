@@ -3,23 +3,29 @@
 , fetchFromGitHub
 , cryptsetup
 , pkg-config
+, clang
+, llvmPackages
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fido2luks";
-  version = "0.2.3";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "shimunn";
     repo = pname;
     rev = version;
-    sha256 = "0340xp7q6f0clb7wmqpgllllwsixmsy37k1f5kj3hwvb730rz93x";
+    sha256 = "1v5gxcz4zbc673i5kbsnjq8bikf7jdbn3wjfz1wppjrgwnkgvsh9";
   };
 
   buildInputs = [ cryptsetup ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config clang ];
 
-  cargoSha256 = "0rp4f6xnwmvf3pv6h0qwsg01jrndf77yn67675ac39kxzmrzfy2f";
+  configurePhase = ''
+    export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
+  '';
+
+  cargoSha256 = "19drjql13z8bw257z10kjppxm25jlfgrpc9g1jf68ka5j2b3nx7k";
 
   meta = with stdenv.lib; {
     description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator";

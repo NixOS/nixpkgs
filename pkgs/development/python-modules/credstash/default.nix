@@ -1,6 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, nose
-, fetchpatch
-}:
+{ stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "credstash";
@@ -25,7 +23,7 @@ buildPythonPackage rec {
   # file ensures that Python imports the module from site-packages library.
   postInstall = "rm $out/bin/credstash.py";
 
-  nativeBuildInputs = [ nose ];
+  nativeBuildInputs = [ pytest ];
 
   propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
 

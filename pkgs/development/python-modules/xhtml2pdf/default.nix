@@ -6,17 +6,23 @@
 , pypdf2
 , reportlab
 , six
+, python-bidi
+, arabic-reshaper
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.4";
+  version = "0.2.5";
 
-  propagatedBuildInputs = [pillow html5lib pypdf2 reportlab six];
+  propagatedBuildInputs = [
+    pillow html5lib pypdf2 reportlab six
+    setuptools python-bidi arabic-reshaper
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6793fbbdcb6bb8a4a70132966d8d95e95ea3498cdf0e82252d2b8e9aae34fcb5";
+    sha256 = "6797e974fac66f0efbe927c1539a2756ca4fe8777eaa5882bac132fc76b39421";
   };
 
   meta = with stdenv.lib; {

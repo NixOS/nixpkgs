@@ -79,6 +79,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-session = callPackage ./core/gnome-session { };
 
+  gnome-session-ctl = callPackage ./core/gnome-session/ctl.nix { };
+
   gnome-shell = callPackage ./core/gnome-shell { };
 
   gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };

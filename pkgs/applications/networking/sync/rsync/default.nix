@@ -35,7 +35,13 @@ stdenv.mkDerivation rec {
                 ++ stdenv.lib.optional enableXXHash xxHash;
   nativeBuildInputs = [perl];
 
-  configureFlags = ["--with-nobody-group=nogroup"]
+  configureFlags = [
+    "--with-nobody-group=nogroup"
+
+    # disable the included zlib explicitly as it otherwise still compiles and
+    # links them even.
+    "--with-included-zlib=no"
+  ]
     # Work around issue with cross-compilation:
     #     configure.sh: error: cannot run test program while cross compiling
     # Remove once 3.2.4 or more recent is released.

@@ -21,14 +21,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.1.1";
+  version = "6.1.2";
   pname = "pytest";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f593023c1a0f916110285b6efd7f99db07d59546e3d8c36fc60e2ab05d3be92";
+    sha256 = "c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e";
   };
 
   checkInputs = [ hypothesis pygments ];

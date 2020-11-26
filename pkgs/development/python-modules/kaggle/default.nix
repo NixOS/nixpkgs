@@ -12,18 +12,20 @@
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.5.6";
+  version = "1.5.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f5qrkgklcpgbwncrif7aw4f86dychqplh7k3f4rljwnr9yhjb1w";
+    sha256 = "444aeecfb646dbb889c767ee2ab071f63fe3a2b85f72f08f2bd772353d3e3b93";
   };
 
   # The version bounds in the setup.py file are unnecessarily restrictive.
+  # They have both python-slugify and slugify, don't know why
   patchPhase = ''
     substituteInPlace setup.py \
-      --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3'
-  '';
+      --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3' \
+      --replace " 'slugify'," " "
+    '';
 
   propagatedBuildInputs = [
     certifi

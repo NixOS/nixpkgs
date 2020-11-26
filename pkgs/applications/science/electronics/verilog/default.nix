@@ -1,43 +1,45 @@
-{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison, readline, ncurses
-, bzip2, zlib
-# Test inputs
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, bison
+, bzip2
+, flex
+, gperf
+, ncurses
 , perl
+, readline
+, zlib
 }:
 
 let
   iverilog-test = fetchFromGitHub {
-    owner = "steveicarus";
-    repo = "ivtest";
-    rev = "6882cb8ec08926c4e356c6092f0c5f8c23328d5c";
-    sha256 = "04sj5nqzwls1y760kgnd9c2whkcrr8kvj9lisd5rvk0w580kjb2x";
+    owner  = "steveicarus";
+    repo   = "ivtest";
+    rev    = "253609b89576355b3bef2f91e90db62223ecf2be";
+    sha256 = "18i7jlr2csp7mplcrwjhllwvb6w3v7x7mnx7vdw48nd3g5scrydx";
   };
 in
 stdenv.mkDerivation rec {
-  pname = "iverilog";
-  version = "unstable-2020-08-24";
+  pname   = "iverilog";
+  version = "11.0";
 
   src = fetchFromGitHub {
-    owner = "steveicarus";
-    repo = pname;
-    rev = "d8556e4c86e1465b68bdc8d5ba2056ba95a42dfd";
-    sha256 = "sha256-sT9j/0Q2FD5MOGpH/quMGvAuM7t7QavRHKD9lX7Elfs=";
+    owner  = "steveicarus";
+    repo   = pname;
+    rev    = "v${stdenv.lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0nzcyi6l2zv9wxzsv9i963p3igyjds0n55x0ph561mc3pfbc7aqp";
   };
+
+  nativeBuildInputs = [ autoconf bison flex gperf ];
+
+  buildInputs = [ bzip2 ncurses readline zlib ];
+
+  preConfigure = "sh autoconf.sh";
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    chmod +x $PWD/autoconf.sh
-    $PWD/autoconf.sh
-  '';
+  doCheck = true;
 
-  nativeBuildInputs = [ autoconf gperf flex bison ];
-
-  buildInputs = [ readline ncurses bzip2 zlib ];
-
-  # tests from .travis.yml
-  doCheck = true; # runs ``make check``
-  # most tests pass, but some that rely on exact text of floating-point numbers fail on aarch64.
-  doInstallCheck = !stdenv.isAarch64;
   installCheckInputs = [ perl ];
 
   installCheckPhase = ''
@@ -58,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
-    homepage = "http://iverilog.icarus.com/";
-    license = with licenses; [ gpl2Plus lgpl21Plus] ;
-    maintainers = with maintainers; [ winden ];
-    platforms = platforms.all;
+    homepage    = "http://iverilog.icarus.com/";  # https does not work
+    license     = with licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with maintainers; [ winden thoughtpolice ];
+    platforms   = platforms.all;
   };
 }

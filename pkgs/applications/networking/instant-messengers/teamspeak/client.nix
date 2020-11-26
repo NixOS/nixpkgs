@@ -33,13 +33,13 @@ in
 stdenv.mkDerivation rec {
   pname = "teamspeak-client";
 
-  version = "3.5.3";
+  version = "3.5.6";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "0fp9v2rkxf0zgvf3wcx8nsmf93bzdc22xlqxk3r8cb0415adp76a"
-                else "0ni7hijprc8xygyz41568f1m9wwhl8lk5c3q28bm9m5r6qym39l6";
+                then "sha256:0hjai1bd4mq3g2dlyi0zkn8s4zlgxd38skw77mb78nc4di5gvgpg"
+                else "sha256:1y1c65nap91nv9xkvd96fagqbfl56p9n0rl6iac0i29bkysdmija";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -99,15 +99,15 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
     license = {
       fullName = "Teamspeak client license";
-      url = "http://sales.teamspeakusa.com/licensing.php";
+      url = "https://www.teamspeak.com/en/privacy-and-terms/";
       free = false;
     };
-    maintainers = [ stdenv.lib.maintainers.lhvwb ];
+    maintainers = with maintainers; [ lhvwb lukegb ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -24,7 +24,7 @@ let
 
     miniInit = ''
       #!${pkgs.runtimeShell} -xe
-      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
+      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.util-linux ]}"
 
       mkdir -p /run/dbus
       cat > /etc/passwd <<EOF
@@ -72,7 +72,7 @@ let
 
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs "${guestAdditions}/bin/mount.vboxsf"
-      copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
+      copy_bin_and_libs "${pkgs.util-linux}/bin/unshare"
       ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
 
@@ -122,7 +122,7 @@ let
         "$diskImage" "$out/disk.vdi"
     '';
 
-    buildInputs = [ pkgs.utillinux pkgs.perl ];
+    buildInputs = [ pkgs.util-linux pkgs.perl ];
   } ''
     ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
     ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s

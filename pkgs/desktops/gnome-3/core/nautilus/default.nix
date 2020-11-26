@@ -32,12 +32,23 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "3.36.3";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1y0fsd7j48v4qkc051cg41mz7jycgw4vd4g37lw682p7n5xgrjmn";
+    sha256 = "1zfh48ibap6jnw20rxls7nbv4zzqs6n5abr2dzyvfx5p2cmq2gha";
   };
+
+  patches = [
+    # Allow changing extension directory using environment variable.
+    ./extension_dir.patch
+
+    # Hardcode required paths.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit tracker;
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -85,10 +96,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
   '';
-
-  patches = [
-    ./extension_dir.patch
-  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

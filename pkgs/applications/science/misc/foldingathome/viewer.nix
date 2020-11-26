@@ -11,7 +11,7 @@
 }:
 let
   majMin = stdenv.lib.versions.majorMinor version;
-  version = "7.6.13";
+  version = "7.6.21";
 in
 stdenv.mkDerivation rec {
   inherit version;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.foldingathome.org/releases/public/release/fahviewer/debian-stable-64bit/v${majMin}/fahviewer_${version}_amd64.deb";
-    sha256 = "09yfvk16j1iwx8h1xg678ks3bc8760gfdn7n32j8r893kd32cwyk";
+    sha256 = "00fd00pf6fcpplcaahvy9ir60mk69d9rcmwsyq3jrv9mxqm9aq7p";
   };
 
   nativeBuildInputs = [

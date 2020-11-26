@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rmdir $out/bin
     mv $out/lib/itk${version}/* $out/lib
+    ln -s libitk${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
+      $out/lib/libitk${stdenv.lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
     rmdir $out/lib/itk${version}
   '';
 

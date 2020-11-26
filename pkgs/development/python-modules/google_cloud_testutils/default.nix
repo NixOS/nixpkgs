@@ -1,34 +1,22 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, google_auth
-}:
+{ stdenv, buildPythonPackage, fetchPypi, google_auth, pytest, six }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "google-cloud-testutils";
-  version = "unstable-36ffa923c7037e8b4fdcaa76272cb6267e908a9d";
+  version = "0.1.0";
 
-  # google-cloud-testutils is not "really"
-  # released as a python package
-  # but it is required for google-cloud-* tests
-  # so why not package it as a module
-  src = fetchFromGitHub {
-    owner = "googleapis";
-    repo = "google-cloud-python";
-    rev = "36ffa923c7037e8b4fdcaa76272cb6267e908a9d";
-    sha256 = "1fvcnssmpgf4lfr7l9h7cz984rbc5mfr1j1br12japcib5biwzjy";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1bn1pz00lxym3vkl6l45b3nydpmfdvmylwggh2lspldrxwx39a0k";
   };
 
-  propagatedBuildInputs = [ six google_auth ];
+  propagatedBuildInputs = [ google_auth six ];
 
-  postPatch = ''
-    cd test_utils
-  '';
+  # There are no tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "System test utilities for google-cloud-python";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-test-utils";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

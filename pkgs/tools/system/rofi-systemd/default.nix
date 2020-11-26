@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rofi, systemd, coreutils, utillinux, gawk, makeWrapper
+{ stdenv, fetchFromGitHub, rofi, systemd, coreutils, util-linux, gawk, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   wrapperPath = with stdenv.lib; makeBinPath [
     rofi
     coreutils
-    utillinux
+    util-linux
     gawk
     systemd
   ];

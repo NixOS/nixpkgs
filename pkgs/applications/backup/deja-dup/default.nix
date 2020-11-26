@@ -12,7 +12,7 @@
 , coreutils
 , libsoup
 , libsecret
-, libhandy
+, libhandy_0
 , wrapGAppsHook
 , libgpgerror
 , json-glib
@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
-  version = "42.4";
+  version = "42.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    sha256 = "c4E6mHYVb8TWVTVlmHidcLa9ebHJ27iStsNNLJhY8vY=";
+    sha256 = "1xgsd9a9y36lv6f2vjw2nxi9zj2zl1gv6rcyzkqajf91vgmxwf8k";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libsecret
-    libhandy
+    libhandy_0
     libgpgerror
     json-glib
   ];

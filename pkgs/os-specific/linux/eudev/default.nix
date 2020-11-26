@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, gperf, utillinux, kmod}:
+{stdenv, fetchurl, pkgconfig, glib, gperf, util-linux, kmod}:
 let
   s = # Generated upstream information
   rec {
@@ -11,7 +11,7 @@ let
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glib gperf utillinux kmod
+    glib gperf util-linux kmod
   ];
 in
 stdenv.mkDerivation {

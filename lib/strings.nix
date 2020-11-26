@@ -561,7 +561,9 @@ rec {
        enableFeature false "shared"
        => "--disable-shared"
   */
-  enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
+  enableFeature = enable: feat:
+    assert isString feat; # e.g. passing openssl instead of "openssl"
+    "--${if enable then "enable" else "disable"}-${feat}";
 
   /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
      standard GNU Autoconf scripts.
@@ -583,7 +585,9 @@ rec {
        withFeature false "shared"
        => "--without-shared"
   */
-  withFeature = with_: feat: "--${if with_ then "with" else "without"}-${feat}";
+  withFeature = with_: feat:
+    assert isString feat; # e.g. passing openssl instead of "openssl"
+    "--${if with_ then "with" else "without"}-${feat}";
 
   /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
      standard GNU Autoconf scripts.

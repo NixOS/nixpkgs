@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emreyolcu/discrete-scroll";
     platforms = platforms.darwin;
     license = licenses.mit;
+    maintainers = with lib.maintainers; [ bb2020 ];
   };
 }
