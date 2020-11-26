@@ -1,6 +1,5 @@
+# Qt {#sec-language-qt}
 
-Qt
-=
 This section describes the differences between Nix expressions for Qt libraries and applications and Nix expressions for other C++ software. Some knowledge of the latter is assumed.
 
 There are primarily two problems which the Qt infrastructure is designed to address: ensuring consistent versioning of all dependencies and finding dependencies at runtime.
