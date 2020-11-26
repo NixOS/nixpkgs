@@ -25,7 +25,7 @@
  <xi:include href="perl.xml" />
  <xi:include href="php.section.xml" />
  <xi:include href="python.section.xml" />
- <xi:include href="qt.xml" />
+ <xi:include href="qt.section.xml" />
  <xi:include href="r.section.xml" />
  <xi:include href="ruby.xml" />
  <xi:include href="rust.section.xml" />
