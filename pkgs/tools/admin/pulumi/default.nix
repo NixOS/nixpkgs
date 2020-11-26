@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper }:
 
 with lib;
-
 let
-  data = import ./data.nix {};
-in stdenv.mkDerivation {
+  data = import ./data.nix { };
+in
+stdenv.mkDerivation {
   pname = "pulumi";
   version = data.version;
 
@@ -32,6 +32,7 @@ in stdenv.mkDerivation {
       ghuntley
       peterromfeldhk
       jlesquembre
+      mudrii
     ];
   };
 }
