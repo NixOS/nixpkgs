@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoPatchelfHook, makeDesktopItem, makeWrapper
+{ stdenv, fetchurl, autoPatchelfHook, makeDesktopItem, makeWrapper, copyDesktopItems
 
   # Dynamic Libraries
 , curl, libGL, libX11, libXext, libXmu, libXrandr, libXrender
@@ -27,6 +27,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     makeWrapper
   ];
 
@@ -110,16 +111,13 @@ in stdenv.mkDerivation {
     # remove broken symbolic links
     find $out -xtype l -ls -exec rm {} \;
 
-    # Add desktop items
-    ${desktopItems.planmaker.buildCommand}
-    ${desktopItems.presentations.buildCommand}
-    ${desktopItems.textmaker.buildCommand}
-
     # Add mime types
     install -D -t $out/share/mime/packages ${pname}/mime/softmaker-*office*${shortEdition}.xml
 
     runHook postInstall
   '';
+
+  desktopItems = builtins.attrValues desktopItems;
 
   meta = with stdenv.lib; {
     description = "An office suite with a word processor, spreadsheet and presentation program";
