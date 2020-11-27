@@ -25,6 +25,7 @@ buildVscodeMarketplaceExtension {
 
   meta = with stdenv.lib; {
     description = "Format nix files with nixpkgs-fmt";
+    homepage = "https://github.com/B4dM4n/vscode-nixpkgs-fmt";
     license = licenses.mit;
     maintainers = with maintainers; [ zeratax ];
   };
