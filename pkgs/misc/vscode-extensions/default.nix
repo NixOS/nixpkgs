@@ -25,6 +25,8 @@ let
         };
       };
 
+      b4dm4n.nixpkgs-fmt  = callPackage ./nixpkgs-fmt {};
+
       bbenoist.Nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
