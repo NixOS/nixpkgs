@@ -5,7 +5,7 @@
 }:
 
 let
-  recoll'= recoll.override { inherit python; };
+  recoll'= recoll.override { python3Packages = python.pkgs; };
   mutagen'= python.pkgs.mutagen;
 in
 
