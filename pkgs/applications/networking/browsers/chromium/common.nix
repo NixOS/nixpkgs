@@ -18,20 +18,14 @@
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
 , pipewire_0_2
+, libva
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-, libva ? null # useVaapi
 , libdrm ? null, wayland ? null, mesa ? null, libxkbcommon ? null # useOzone
 
 # package customization
-, useOzone ? false
-, useVaapi ? !(useOzone || stdenv.isAarch64) # Built if supported, but disabled in the wrapper
-# VA-API TODOs:
-# - Ozone: M81 fails to build due to "ozone_platform_gbm = false"
-#   - Possible solutions: Write a patch to fix the build (wrong gn dependencies)
-#     or build with minigbm
-# - AArch64: Causes serious regressions (https://github.com/NixOS/nixpkgs/pull/85253#issuecomment-614405879)
+, useOzone ? true
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -141,8 +135,8 @@ let
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
       pipewire_0_2
-    ] ++ optional useVaapi libva
-      ++ optional gnomeKeyringSupport libgnome-keyring3
+      libva
+    ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio
@@ -256,8 +250,6 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
-    } // optionalAttrs useVaapi {
-      use_vaapi = true;
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
