@@ -19127,6 +19127,8 @@ in
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
+  ugtrain = callPackage ../tools/misc/ugtrain { };
+
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
