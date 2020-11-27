@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20201120";
+  version = "20201127";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "0z6xavgd0zv9pqvfsdyvhhi1q3y7zxhgg24isbnn9r6mldafqwna";
+    sha256 = "sha256-BkDGKZmpwahDw1vD67CyWfxD93H83kcpv5JBGVL5F/o=";
   };
 
   buildInputs = [
