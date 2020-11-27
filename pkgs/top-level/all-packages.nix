@@ -21634,6 +21634,8 @@ in
 
   eteroj.lv2 = libsForQt5.callPackage ../applications/audio/eteroj.lv2 { };
 
+  etebase-server = with python3Packages; toPythonApplication etebase-server;
+
   etesync-dav = callPackage ../applications/misc/etesync-dav {};
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };

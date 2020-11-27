@@ -2060,6 +2060,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
+  etebase-server = callPackage ../servers/etebase { };
+
   etesync = callPackage ../development/python-modules/etesync { };
 
   eth-hash = callPackage ../development/python-modules/eth-hash { };
