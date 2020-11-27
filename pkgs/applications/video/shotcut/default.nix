@@ -4,6 +4,7 @@
 , mkDerivation
 , SDL2
 , frei0r
+, ladspaPlugins
 , gettext
 , mlt
 , jack1
@@ -14,14 +15,12 @@
 , qtwebsockets
 , qtquickcontrols2
 , qtgraphicaleffects
-, libmlt
 , qmake
 , qttools
 , genericUpdater
 , common-updater-scripts
 }:
 
-assert stdenv.lib.versionAtLeast libmlt.version "6.22.1";
 assert stdenv.lib.versionAtLeast mlt.version "6.22.1";
 
 mkDerivation rec {
@@ -40,9 +39,9 @@ mkDerivation rec {
   buildInputs = [
     SDL2
     frei0r
+    ladspaPlugins
     gettext
     mlt
-    libmlt
     qtbase
     qtmultimedia
     qtx11extras
@@ -51,7 +50,7 @@ mkDerivation rec {
     qtgraphicaleffects
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
+  NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
   qmakeFlags = [
     "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
     "SHOTCUT_VERSION=${version}"
@@ -68,6 +67,7 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
+    "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
     "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]}"
     "--prefix PATH : ${mlt}/bin"
   ];
