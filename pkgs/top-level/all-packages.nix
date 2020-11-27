@@ -4743,6 +4743,8 @@ in
       irods
       irods-icommands;
 
+  igmpproxy = callPackage ../tools/networking/igmpproxy { };
+
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
 
