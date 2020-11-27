@@ -7901,6 +7901,8 @@ in
 
   usync = callPackage ../applications/misc/usync { };
 
+  uwc = callPackage ../tools/text/uwc { };
+
   uwsgi = callPackage ../servers/uwsgi { };
 
   v2ray = callPackage ../tools/networking/v2ray { };
