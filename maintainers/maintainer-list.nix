@@ -2613,6 +2613,12 @@
     githubId = 231483;
     name = "Jack Kelly";
   };
+  enderger = {
+    name = "Daniel Hutzley";
+    github = "Enderger";
+    githubId = 36283171;
+    email = "endergeryt@gmail.com";
+  };
   enorris = {
     name = "Eric Norris";
     email = "erictnorris@gmail.com";
