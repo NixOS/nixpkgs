@@ -678,6 +678,7 @@ self: super: {
       "coc-tslint-plugin"
       "coc-tsserver"
       "coc-vetur"
+      "coc-vimlsp"
       "coc-vimtex"
       "coc-wxml"
       "coc-yaml"
