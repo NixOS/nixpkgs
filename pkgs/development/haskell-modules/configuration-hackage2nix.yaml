@@ -2701,8 +2701,6 @@ package-maintainers:
     - matterhorn
     - mattermost-api
     - mattermost-api-qc
-    - QuickCheck_2_14_2
-    - random_1_2_0
     - Unique
   psibi:
     - path-pieces
