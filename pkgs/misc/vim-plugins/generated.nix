@@ -471,18 +471,6 @@ let
     meta.homepage = "https://github.com/iamcco/coc-spell-checker/";
   };
 
-  coc-vimlsp = buildVimPluginFrom2Nix {
-    pname = "coc-vimlsp";
-    version = "2020-08-01";
-    src = fetchFromGitHub {
-      owner = "iamcco";
-      repo = "coc-vimlsp";
-      rev = "efb672fe82d8619d83d3978714393e13aee8e296";
-      sha256 = "16whzvyzbx8zh7z33w7pir264dmbapkanb15mkazfhkh0wm3sfvf";
-    };
-    meta.homepage = "https://github.com/iamcco/coc-vimlsp/";
-  };
-
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc-nvim";
     version = "2020-11-17";
