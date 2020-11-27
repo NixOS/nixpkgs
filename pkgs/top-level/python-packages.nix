@@ -2879,6 +2879,8 @@ in {
 
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
+  ifcopenshell = callPackage ../development/python-modules/ifcopenshell { };
+
   ignite = callPackage ../development/python-modules/ignite { };
 
   ihatemoney = callPackage ../development/python-modules/ihatemoney { };
