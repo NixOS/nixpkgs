@@ -3177,6 +3177,7 @@ broken-packages:
   - arbor-monad-metric-datadog
   - arbtt
   - arch-hs
+  - archive-libarchive
   - archiver
   - archlinux
   - archlinux-web
@@ -3459,6 +3460,7 @@ broken-packages:
   - bindings-apr-util
   - bindings-bfd
   - bindings-cctools
+  - bindings-common
   - bindings-dc1394
   - bindings-eskit
   - bindings-EsounD
@@ -3780,6 +3782,7 @@ broken-packages:
   - call-haskell-from-anything
   - camfort
   - campfire
+  - candid
   - canon
   - canonical-filepath
   - canonical-json
@@ -3936,6 +3939,9 @@ broken-packages:
   - citeproc-hs-pandoc-filter
   - cj-token
   - cjk
+  - cl3
+  - cl3-hmatrix-interface
+  - cl3-linear-interface
   - clac
   - clafer
   - claferIG
@@ -4226,6 +4232,7 @@ broken-packages:
   - CoreDump
   - CoreErlang
   - CoreFoundation
+  - corenlp-parser
   - Coroutine
   - coroutine-enumerator
   - coroutine-iteratee
@@ -4243,6 +4250,7 @@ broken-packages:
   - cparsing
   - CPBrainfuck
   - cpio-conduit
+  - cpkg
   - CPL
   - cplusplus-th
   - cprng-aes-effect
@@ -4332,6 +4340,7 @@ broken-packages:
   - curry-frontend
   - CurryDB
   - cursedcsv
+  - cursor-fuzzy-time-gen
   - curves
   - custom-prelude
   - CV
@@ -5022,6 +5031,7 @@ broken-packages:
   - fastirc
   - fastly
   - FastPush
+  - fastsum
   - FastxPipe
   - fathead-util
   - fault-tree
@@ -5206,6 +5216,7 @@ broken-packages:
   - FormalGrammars
   - format
   - format-status
+  - formatn
   - formattable
   - forml
   - formlets
@@ -5323,6 +5334,7 @@ broken-packages:
   - fusion
   - futun
   - future
+  - fuzzy-time-gen
   - fuzzy-timings
   - fwgl
   - fwgl-glfw
@@ -6082,6 +6094,7 @@ broken-packages:
   - hasql-postgres-options
   - hasql-queue
   - hasql-simple
+  - hasql-th
   - hastache
   - hastache-aeson
   - haste
@@ -6163,6 +6176,7 @@ broken-packages:
   - hdr-histogram
   - HDRUtils
   - headergen
+  - heap-console
   - heapsort
   - heart-app
   - heart-core
@@ -6181,6 +6195,7 @@ broken-packages:
   - hedgehog-gen-json
   - hedgehog-generic
   - hedgehog-golden
+  - hedgehog-servant
   - Hedi
   - hedis-config
   - hedis-pile
@@ -6779,6 +6794,7 @@ broken-packages:
   - hw-json-simd
   - hw-json-simple-cursor
   - hw-json-standard-cursor
+  - hw-prim-bits
   - hw-simd
   - hw-uri
   - hwall-auth-iitk
@@ -7418,6 +7434,7 @@ broken-packages:
   - lhe
   - lhs2TeX-hl
   - lhslatex
+  - libarchive
   - LibClang
   - libconfig
   - libcspm
@@ -7835,6 +7852,10 @@ broken-packages:
   - midimory
   - midisurface
   - mighttpd
+  - migrant-core
+  - migrant-hdbc
+  - migrant-postgresql-simple
+  - migrant-sqlite-simple
   - mikmod
   - mikrokosmos
   - miku
@@ -7908,6 +7929,7 @@ broken-packages:
   - monad-log
   - monad-lrs
   - monad-mersenne-random
+  - monad-metrics-extensible
   - monad-mock
   - monad-open
   - monad-parallel-progressbar
@@ -8114,6 +8136,9 @@ broken-packages:
   - nagios-plugin-ekg
   - nakadi-client
   - named-lock
+  - named-servant
+  - named-servant-client
+  - named-servant-server
   - named-sop
   - namelist
   - namespace
@@ -8190,6 +8215,7 @@ broken-packages:
   - network-hans
   - network-house
   - network-interfacerequest
+  - network-messagepack-rpc-websocket
   - network-minihttp
   - network-msgpack-rpc
   - network-netpacket
@@ -8815,6 +8841,7 @@ broken-packages:
   - postgresql-simple-queue
   - postgresql-simple-sop
   - postgresql-simple-typed
+  - postgresql-syntax
   - postgresql-tx-query
   - postgresql-tx-squeal
   - postgresql-typed-lifted
@@ -9220,6 +9247,8 @@ broken-packages:
   - reflex-gloss
   - reflex-gloss-scene
   - reflex-libtelnet
+  - reflex-localize
+  - reflex-localize-dom
   - reflex-orphans
   - reflex-process
   - reflex-sdl2
@@ -9400,6 +9429,7 @@ broken-packages:
   - roc-cluster
   - roc-cluster-demo
   - rock
+  - rocksdb-haskell
   - roku-api
   - rollbar
   - rollbar-hs
@@ -9571,6 +9601,7 @@ broken-packages:
   - sdl2-cairo-image
   - sdl2-compositor
   - sdl2-fps
+  - sdr
   - seakale
   - seakale-postgresql
   - seakale-tests
@@ -9623,23 +9654,78 @@ broken-packages:
   - serpentine
   - serv
   - serv-wai
+  - servant-aeson-specs
   - servant-auth-cookie
+  - servant-auth-hmac
   - servant-auth-token
   - servant-auth-token-acid
   - servant-auth-token-api
   - servant-auth-token-leveldb
   - servant-auth-token-persistent
   - servant-auth-token-rocksdb
+  - servant-auth-wordpress
+  - servant-avro
+  - servant-cassava
   - servant-cli
+  - servant-client-js
+  - servant-client-namedargs
   - servant-csharp
+  - servant-db
   - servant-db-postgresql
+  - servant-dhall
+  - servant-docs-simple
+  - servant-ede
+  - servant-ekg
+  - servant-elm
   - servant-examples
+  - servant-fiat-content
+  - servant-generate
+  - servant-generic
+  - servant-github
+  - servant-haxl-client
+  - servant-hmac-auth
+  - servant-http2-client
   - servant-iCalendar
   - servant-jquery
   - servant-js
+  - servant-JuicyPixels
+  - servant-kotlin
+  - servant-matrix-param
+  - servant-mock
+  - servant-namedargs
+  - servant-nix
   - servant-openapi3
+  - servant-pagination
+  - servant-pandoc
+  - servant-pool
+  - servant-postgresql
+  - servant-proto-lens
+  - servant-purescript
+  - servant-pushbullet-client
+  - servant-py
+  - servant-quickcheck
+  - servant-rawm-client
+  - servant-reason
+  - servant-reflex
+  - servant-router
+  - servant-scotty
+  - servant-seo
+  - servant-serf
+  - servant-server-namedargs
+  - servant-smsc-ru
   - servant-snap
+  - servant-streaming
+  - servant-streaming-client
+  - servant-streaming-docs
+  - servant-streaming-server
+  - servant-swagger-tags
+  - servant-to-elm
   - servant-waargonaut
+  - servant-yaml
+  - servant-zeppelin
+  - servant-zeppelin-client
+  - servant-zeppelin-server
+  - servant-zeppelin-swagger
   - server-generic
   - serversession-backend-acid-state
   - serversession-backend-persistent
@@ -9795,6 +9881,7 @@ broken-packages:
   - skeletons
   - skell
   - skemmtun
+  - skews
   - skulk
   - skylark-client
   - skylighting-lucid
@@ -10538,6 +10625,7 @@ broken-packages:
   - tomato-rubato-openal
   - toml
   - tonatona-google-server-api
+  - tonatona-servant
   - too-many-cells
   - toodles
   - top
@@ -10720,6 +10808,9 @@ broken-packages:
   - typesafe-precure
   - typescript-docs
   - typograffiti
+  - typson-beam
+  - typson-esqueleto
+  - typson-selda
   - tyro
   - u2f
   - uber
@@ -11135,6 +11226,7 @@ broken-packages:
   - wsedit
   - wshterm
   - wsjtx-udp
+  - wss-client
   - wstunnel
   - wtk
   - wtk-gtk
@@ -11405,6 +11497,7 @@ broken-packages:
   - zeromq3-haskell
   - zeromq4-clone-pattern
   - zeromq4-conduit
+  - zeromq4-patterns
   - zeroth
   - zettelkast
   - ZFS
