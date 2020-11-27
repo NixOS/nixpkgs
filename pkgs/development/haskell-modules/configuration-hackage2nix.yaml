@@ -2694,6 +2694,13 @@ package-maintainers:
     # - pipes-mongodb
     - streaming-wai
   kiwi:
+    - config-schema
+    - config-value
+    - glirc
+    - irc-core
+    - matterhorn
+    - mattermost-api
+    - mattermost-api-qc
     - Unique
   psibi:
     - path-pieces
@@ -4139,9 +4146,7 @@ broken-packages:
   - conffmt
   - confide
   - config-parser
-  - config-schema
   - config-select
-  - config-value
   - config-value-getopt
   - ConfigFileTH
   - Configger
@@ -5530,7 +5535,6 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
-  - glirc
   - GLMatrix
   - glob-posix
   - global
@@ -6994,7 +6998,6 @@ broken-packages:
   - iptadmin
   - IPv6DB
   - Irc
-  - irc-core
   - irc-dcc
   - irc-fun-bot
   - irc-fun-client
@@ -7737,9 +7740,6 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matsuri
-  - matterhorn
-  - mattermost-api
-  - mattermost-api-qc
   - maude
   - maxent
   - maxent-learner-hw
