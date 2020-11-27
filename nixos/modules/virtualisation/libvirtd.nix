@@ -81,11 +81,12 @@ in {
       type = types.lines;
       default = ''
         namespaces = []
+        memory_backing_dir = "/dev/shm"
       '';
       description = ''
         Contents written to the qemu configuration file, qemu.conf.
-        Make sure to include a proper namespace configuration when
-        supplying custom configuration.
+        Make sure to include a proper namespace and memory_backing_dir 
+        configuration when supplying custom configuration.
       '';
     };
 
