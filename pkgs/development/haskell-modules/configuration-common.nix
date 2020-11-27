@@ -1519,4 +1519,12 @@ self: super: {
   # 2020-11-23: https://github.com/cdornan/fmt/issues/30
   fmt = dontCheck super.fmt;
 
+
+  # 2020-11-27: Tests broken
+  # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
+  servant-swagger = dontCheck super.servant-swagger;
+
+  # 2020-11-27: cxx-options is broken in Cabal 3.2.0.0
+  hercules-ci-agent = addSetupDepend super.hercules-ci-agent self.Cabal_3_2_1_0;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
