@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ./proverif      $out/bin
     cp ./proveriftotex $out/bin
+    install -D -t $out/share/emacs/site-lisp/ emacs/proverif.el
   '';
 
   meta = {
