@@ -7,7 +7,7 @@
 , libdrm
 , mesa-demos
 , procps
-, utillinux
+, util-linux
 , vulkan-tools
 , qtbase
 , qtcharts
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec{
     libdrm
     mesa-demos
     procps
-    utillinux
+    util-linux
     vulkan-tools
     qtbase
     qtcharts

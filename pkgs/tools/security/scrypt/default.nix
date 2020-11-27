@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, utillinux, getconf }:
+{ stdenv, fetchurl, openssl, util-linux, getconf }:
 
 stdenv.mkDerivation rec {
   pname = "scrypt";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  checkInputs = [ utillinux ];
+  checkInputs = [ util-linux ];
 
   meta = with stdenv.lib; {
     description = "Encryption utility";

@@ -1260,6 +1260,11 @@ in
 
   pass = callPackage ../tools/security/pass { };
 
+  pass-nodmenu = callPackage ../tools/security/pass {
+    dmenuSupport = false;
+    pass = pass-nodmenu;
+  };
+
   pass-wayland = callPackage ../tools/security/pass {
     waylandSupport = true;
     pass = pass-wayland;
@@ -2489,6 +2494,8 @@ in
 
   pev = callPackage ../development/tools/analysis/pev { };
 
+  phd2 = callPackage ../applications/science/astronomy/phd2 { };
+
   phoronix-test-suite = callPackage ../tools/misc/phoronix-test-suite { };
 
   photon = callPackage ../tools/networking/photon { };
@@ -2647,7 +2654,7 @@ in
   mstflint = callPackage ../tools/misc/mstflint { };
 
   mcelog = callPackage ../os-specific/linux/mcelog {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
   };
 
   sqlint = callPackage ../development/tools/sqlint { };
@@ -3579,6 +3586,8 @@ in
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
+  wlsunset = callPackage ../tools/wayland/wlsunset { };
+
   wob = callPackage ../tools/misc/wob { };
 
   wtype = callPackage ../tools/wayland/wtype { };
@@ -3631,21 +3640,21 @@ in
   elk7Version = "7.5.1";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch6-oss = callPackage ../servers/search/elasticsearch/6.x.nix {
     enableUnfree = false;
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7-oss = callPackage ../servers/search/elasticsearch/7.x.nix {
     enableUnfree = false;
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch = elasticsearch6;
@@ -3690,6 +3699,8 @@ in
 
   entr = callPackage ../tools/misc/entr { };
 
+  envchain = callPackage ../tools/misc/envchain { inherit (pkgs.darwin.apple_sdk.frameworks) Security; };
+
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
   eplot = callPackage ../tools/graphics/eplot { };
@@ -3729,6 +3740,8 @@ in
   executor = with python3Packages; toPythonApplication executor;
 
   exif = callPackage ../tools/graphics/exif { };
+
+  exifprobe = callPackage ../tools/graphics/exifprobe { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
 
@@ -4308,6 +4321,8 @@ in
 
   gopro = callPackage ../tools/video/gopro { };
 
+  goreleaser = callPackage ../tools/misc/goreleaser { };
+
   goreplay = callPackage ../tools/networking/goreplay { };
 
   gource = callPackage ../applications/version-management/gource { };
@@ -4729,6 +4744,8 @@ in
           })
       irods
       irods-icommands;
+
+  igmpproxy = callPackage ../tools/networking/igmpproxy { };
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
@@ -5239,6 +5256,8 @@ in
 
   nbench = callPackage ../tools/misc/nbench { };
 
+  ncrack = callPackage ../tools/security/ncrack { };
+
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
@@ -5415,6 +5434,8 @@ in
   libnabo = callPackage ../development/libraries/libnabo { };
 
   libngspice = callPackage ../development/libraries/libngspice { };
+
+  libnixxml = callPackage ../development/libraries/libnixxml { };
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
@@ -7126,6 +7147,8 @@ in
 
   sewer = callPackage ../tools/admin/sewer { };
 
+  sftpman = callPackage ../tools/filesystems/sftpman { };
+
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
@@ -7923,6 +7946,8 @@ in
   verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {};
+
+  versus = callPackage ../applications/networking/versus { };
 
   vgrep = callPackage ../tools/text/vgrep { };
 
@@ -8755,7 +8780,9 @@ in
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
-  bluespec = callPackage ../development/compilers/bluespec { };
+  bluespec = callPackage ../development/compilers/bluespec {
+    gmp-static = gmp.override { withStatic = true; };
+  };
 
   ciao = callPackage ../development/compilers/ciao { };
 
@@ -8905,6 +8932,8 @@ in
     inherit (stdenv) isx86_64;
   };
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
+
+  fasmg = callPackage ../development/compilers/fasmg { };
 
   flyctl = callPackage ../development/web/flyctl { };
 
@@ -9608,6 +9637,10 @@ in
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
+  knightos-genkfs = callPackage ../development/tools/knightos/genkfs {
+    asciidoc = asciidoc-full;
+  };
+
   knightos-kcc = callPackage ../development/tools/knightos/kcc { };
 
   knightos-kimg = callPackage ../development/tools/knightos/kimg {
@@ -9805,12 +9838,13 @@ in
 
   nim = callPackage ../development/compilers/nim { };
   nim-unwrapped = nim.unwrapped;
+  nimble-unwrapped = nim.nimble-unwrapped;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = libsForQt514.callPackage ../development/compilers/nextpnr {
+  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
@@ -13100,7 +13134,7 @@ in
 
   gnutls = callPackage ../development/libraries/gnutls/default.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
-    utillinux = utillinuxMinimal; # break the cyclic dependency
+    util-linux = util-linuxMinimal; # break the cyclic dependency
   };
 
   gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
@@ -13508,6 +13542,8 @@ in
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
   jsonnet = callPackage ../development/compilers/jsonnet { };
+
+  jsonnet-bundler = callPackage ../development/tools/jsonnet-bundler { };
 
   go-jsonnet = callPackage ../development/compilers/go-jsonnet { };
 
@@ -14967,8 +15003,6 @@ in
 
   non = callPackage ../applications/audio/non { };
 
-  noise-suppression-for-voice = callPackage ../development/libraries/noise-suppression-for-voice { };
-
   ntl = callPackage ../development/libraries/ntl { };
 
   nspr = callPackage ../development/libraries/nspr {
@@ -15843,6 +15877,8 @@ in
   };
 
   snappy = callPackage ../development/libraries/snappy { };
+
+  snow = callPackage ../tools/security/snow { };
 
   soapyairspy = callPackage ../applications/radio/soapyairspy { };
 
@@ -17280,6 +17316,7 @@ in
   };
 
   influxdb = callPackage ../servers/nosql/influxdb { };
+  influxdb2 = callPackage ../servers/nosql/influxdb2 { };
 
   mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
     inherit (darwin) cctools developer_cmds;
@@ -17318,7 +17355,7 @@ in
 
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
-  pynagsystemd = callPackage ../servers/monitoring/nagios/plugins/pynagsystemd.nix { };
+  check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j { };
 
@@ -17909,7 +17946,7 @@ in
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid = if stdenv.isLinux
-    then utillinuxMinimal
+    then util-linuxMinimal
     else null;
 
   light = callPackage ../os-specific/linux/light { };
@@ -17942,7 +17979,7 @@ in
   };
 
   fusePackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/fuse {
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
   });
   fuse = lowPrio fusePackages.fuse_2;
   fuse3 = fusePackages.fuse_3;
@@ -18992,7 +19029,7 @@ in
 
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
-    utillinux = utillinuxMinimal;
+    util-linux = util-linuxMinimal;
     # provide a super minimal gnupg used for systemd-machined
     gnupg = callPackage ../tools/security/gnupg/22.nix {
       enableMinimal = true;
@@ -19112,7 +19149,7 @@ in
     stdenv = crossLibcStdenv;
   };
 
-  eudev = callPackage ../os-specific/linux/eudev { utillinux = utillinuxMinimal; };
+  eudev = callPackage ../os-specific/linux/eudev { util-linux = util-linuxMinimal; };
 
   libudev0-shim = callPackage ../os-specific/linux/libudev0-shim { };
 
@@ -19136,17 +19173,17 @@ in
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
-              else unixtools.utillinux;
+  util-linux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
+              else unixtools.util-linux;
 
-  utillinuxCurses = utillinux;
+  util-linuxCurses = util-linux;
 
-  utillinuxMinimal = if stdenv.isLinux then appendToName "minimal" (utillinux.override {
+  util-linuxMinimal = if stdenv.isLinux then appendToName "minimal" (util-linux.override {
     minimal = true;
     ncurses = null;
     perl = null;
     systemd = null;
-  }) else utillinux;
+  }) else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
@@ -20362,6 +20399,8 @@ in
 
   blugon = callPackage ../applications/misc/blugon { };
 
+  bombadillo = callPackage ../applications/networking/browsers/bombadillo { };
+
   bombono = callPackage ../applications/video/bombono {};
 
   bomi = libsForQt5.callPackage ../applications/video/bomi {
@@ -20440,6 +20479,8 @@ in
   carla = libsForQt5.callPackage ../applications/audio/carla { };
 
   castor = callPackage ../applications/networking/browsers/castor { };
+
+  catfs = callPackage ../os-specific/linux/catfs { };
 
   catimg = callPackage ../tools/misc/catimg { };
 
@@ -21773,6 +21814,8 @@ in
     inherit (xorg) xrdb;
   };
 
+  multilockscreen = callPackage ../misc/screensavers/multilockscreen { };
+
   i3minator = callPackage ../tools/misc/i3minator { };
 
   i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
@@ -22277,7 +22320,7 @@ in
 
   loxodo = callPackage ../applications/misc/loxodo { };
 
-  lsd2dsl = libsForQt514.callPackage ../applications/misc/lsd2dsl { };
+  lsd2dsl = libsForQt5.callPackage ../applications/misc/lsd2dsl { };
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
@@ -22383,6 +22426,8 @@ in
   matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder {};
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
+
+  mcomix3 = callPackage ../applications/graphics/mcomix3 {};
 
   mcpp = callPackage ../development/compilers/mcpp { };
 
@@ -22776,9 +22821,7 @@ in
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
-  shotcut = libsForQt514.callPackage ../applications/video/shotcut {
-    libmlt = mlt;
-  };
+  shotcut = libsForQt5.callPackage ../applications/video/shotcut { };
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
     stdenv = gcc8Stdenv;
@@ -23086,6 +23129,8 @@ in
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 
+  pcloud = callPackage ../applications/networking/pcloud { };
+
   pcsxr = callPackage ../misc/emulators/pcsxr {
     ffmpeg = ffmpeg_2;
   };
@@ -23268,7 +23313,7 @@ in
 
   properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
-  protonmail-bridge = libsForQt5.callPackage ../applications/networking/protonmail-bridge { };
+  protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
@@ -23352,7 +23397,7 @@ in
 
   garmindev = callPackage ../applications/misc/qlandkartegt/garmindev.nix {};
 
-  qmapshack = libsForQt514.callPackage ../applications/misc/qmapshack { };
+  qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview {
     boost = boost17x;
@@ -24858,6 +24903,8 @@ in
   xkb-switch = callPackage ../tools/X11/xkb-switch { };
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
+
+  xlife = callPackage ../applications/graphics/xlife { };
 
   xmobar = haskellPackages.xmobar;
 
@@ -26802,6 +26849,8 @@ in
       else smlnj;
   };
 
+  key = callPackage ../applications/science/logic/key { };
+
   lean = callPackage ../applications/science/logic/lean {};
   lean2 = callPackage ../applications/science/logic/lean2 {};
   lean3 = lean;
@@ -27788,6 +27837,8 @@ in
   disnix = callPackage ../tools/package-management/disnix { };
 
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {});
+
+  dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
 
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
 

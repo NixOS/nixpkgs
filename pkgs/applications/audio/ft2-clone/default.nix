@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
     homepage = "https://16-bits.org/ft2.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    # From HOW-TO-COMPILE.txt:
+    # > This code is NOT big-endian compatible
+    platforms = platforms.littleEndian;
   };
 }
 

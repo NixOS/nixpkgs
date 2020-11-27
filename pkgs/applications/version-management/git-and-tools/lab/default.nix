@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg_utils }:
 
 buildGoModule rec {
   pname = "lab";
@@ -17,6 +17,8 @@ buildGoModule rec {
 
   doCheck = false;
 
+  buildInputs = [ makeWrapper ];
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   postInstall = ''
@@ -24,9 +26,10 @@ buildGoModule rec {
     export LAB_CORE_HOST=a LAB_CORE_USER=b LAB_CORE_TOKEN=c
     $out/bin/lab completion bash > $out/share/bash-completion/completions/lab
     $out/bin/lab completion zsh > $out/share/zsh/site-functions/_lab
+    wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ xdg_utils ]}";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;

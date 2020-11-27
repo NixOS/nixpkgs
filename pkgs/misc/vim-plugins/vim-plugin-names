@@ -48,6 +48,7 @@ chrisbra/CheckAttach
 chrisbra/csv.vim
 chrisbra/NrrwRgn
 chrisbra/Recover.vim
+chrisbra/SudoEdit.vim
 chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
@@ -576,6 +577,7 @@ udalov/kotlin-vim
 ujihisa/neco-look
 unblevable/quick-scope
 urbit/hoon.vim
+Valloric/MatchTagAlways
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
 vigoux/LanguageTool.nvim

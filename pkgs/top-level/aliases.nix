@@ -307,7 +307,7 @@ mapAliases ({
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   mess = mame; # added 2019-10-30
   mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # added 2020-05-23
-  mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
+  mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained; try mcomix3 a Python 3 fork"; # added 2019-12-10, modified 2020-11-25
   mirage = throw "mirage has been femoved from nixpkgs, as it's unmaintained"; # added 2019-12-10
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
@@ -470,6 +470,7 @@ mapAliases ({
   phonon-backend-gstreamer = throw "phonon-backend-gstreamer: Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon-backend-vlc = throw "phonon-backend-vlc: Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon = throw "phonon: Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
+  pynagsystemd = throw "pynagsystemd was removed as it was unmaintained and incompatible with recent systemd versions. Instead use its fork check_systemd."; # added 2020-10-24
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05
   quake3game = ioquake3; # added 2016-01-14
@@ -491,7 +492,7 @@ mapAliases ({
   retroshare06 = retroshare;
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
-  rfkill = throw "rfkill has been removed, as it's included in utillinux"; # added 2020-08-23
+  rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
@@ -642,6 +643,7 @@ mapAliases ({
   unicorn-emu = unicorn; # added 2020-10-29
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   usbguard-nox = usbguard; # added 2019-09-04
+  utillinux = util-linux; # added 2020-11-24
   uzbl = throw "uzbl has been removed from nixpkgs, as it's unmaintained and uses insecure libraries";
   v4l_utils = v4l-utils; # added 2019-08-07
   v8_3_16_14 = throw "v8_3_16_14 was removed in 2019-11-01: no longer referenced by other packages";

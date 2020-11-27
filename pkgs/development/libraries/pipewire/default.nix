@@ -19,7 +19,6 @@
 , libsndfile
 , vulkan-headers
 , vulkan-loader
-, libpulseaudio
 , makeFontsConf
 , callPackage
 , nixosTests
@@ -40,7 +39,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.15";
+  version = "0.3.16";
 
   outputs = [
     "out"
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "1lmsn13pbr0cigb5ri9nd3102ffbaf8nsz5c8aawf6lsz7mhkx9x";
+    sha256 = "0ivfx3rbg2iwjdh412zjpk9y5mzw7zh6asv4sji8lq0dzhwbz1qc";
   };
 
   patches = [
@@ -65,11 +64,8 @@ stdenv.mkDerivation rec {
     ./alsa-profiles-use-libdir.patch
     # Move installed tests into their own output.
     ./installed-tests-path.patch
-    # Fix older clients (e.g. Chrome/Chromium):
-    (fetchpatch { # protocol-native: do version check on HELLO
-      url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b8c7b36d3b8be16593f554964cf2f852c21b5c2c.patch";
-      sha256 = "18461grisrgqbad6bfa1bm17mslddgfmjfprc9vjvab2mmpsjss9";
-    })
+    # Change the path of the pipewire-pulse binary in the service definition.
+    ./pipewire-pulse-path.patch
   ];
 
   nativeBuildInputs = [
@@ -78,7 +74,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -86,7 +81,6 @@ stdenv.mkDerivation rec {
     dbus
     glib
     libjack2
-    libpulseaudio
     libsndfile
     udev
     vulkan-headers
@@ -104,7 +98,7 @@ stdenv.mkDerivation rec {
     "-Dudevrulesdir=lib/udev/rules.d"
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    "-Dlibpulse-path=${placeholder "pulse"}/lib"
+    "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
     "-Dlibjack-path=${placeholder "jack"}/lib"
     "-Dgstreamer=${mesonBool gstreamerSupport}"
     "-Dffmpeg=${mesonBool ffmpegSupport}"
@@ -118,10 +112,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # Pulseaudio asserts lead to dev references.
-  # TODO This should be fixed in the pulseaudio sources instead.
-  preFixup = ''
-    remove-references-to -t ${libpulseaudio.dev} "$(readlink -f $pulse/lib/libpulse.so)"
+  postInstall = ''
+    moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
+    moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+    moveToOutput "bin/pipewire-pulse" "$pulse"
   '';
 
   passthru.tests = {

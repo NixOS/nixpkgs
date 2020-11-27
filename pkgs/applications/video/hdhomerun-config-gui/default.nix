@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hdhomerun-config-gui";
-  version = "20200521";
+  version = "20200907";
 
   src = fetchurl {
     url = "https://download.silicondust.com/hdhomerun/hdhomerun_config_gui_${version}.tgz";
-    sha256 = "1r1rwfgi714nwblyg8nqjzkpm4n2lg7kqqqas47hvbn5waimz1ja";
+    sha256 = "17zf0hzw68b0xdkh1maqhl96jb7171mbhd29y64as29nps9x4fmz";
   };
 
   nativeBuildInputs = [ pkg-config ];

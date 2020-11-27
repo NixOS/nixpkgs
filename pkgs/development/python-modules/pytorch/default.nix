@@ -6,7 +6,7 @@
   cudaArchList ? null,
 
   # Native build inputs
-  cmake, utillinux, linkFarm, symlinkJoin, which,
+  cmake, util-linux, linkFarm, symlinkJoin, which,
 
   # Build inputs
   numactl,
@@ -207,7 +207,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    utillinux
+    util-linux
     which
     ninja
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];

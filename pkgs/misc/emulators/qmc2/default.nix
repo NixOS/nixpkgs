@@ -3,7 +3,7 @@
 , minizip, zlib
 , qtbase, qtsvg, qtmultimedia, qtwebkit, qttranslations, qtxmlpatterns
 , rsync, SDL2, xwininfo
-, utillinux
+, util-linux
 , xorg
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qttools pkgconfig ];
   buildInputs = [ minizip qtbase qtsvg qtmultimedia qtwebkit
                   qttranslations qtxmlpatterns rsync SDL2
-                  xwininfo zlib utillinux xorg.libxcb ];
+                  xwininfo zlib util-linux xorg.libxcb ];
 
   makeFlags = [ "DESTDIR=$(out)"
                 "PREFIX=/"

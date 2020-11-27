@@ -6,6 +6,8 @@ buildDunePackage {
   pname = "ppx_sqlexpr";
   inherit (sqlexpr) version src meta;
 
+  minimumOCamlVersion = "4.06";
+
   postPatch = ''
     substituteInPlace src/ppx/jbuild --replace ppx_core ppxlib
   '';

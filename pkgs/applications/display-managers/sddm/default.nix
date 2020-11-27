@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.18.1";
+  version = "0.19.0";
 
 in mkDerivation {
   pname = "sddm";
@@ -14,7 +14,7 @@ in mkDerivation {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "0an1zafz0yhxd9jgd3gzdwmaw5f9vs4c924q56lp2yxxddbmzjcq";
+    sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
   };
 
   patches = [

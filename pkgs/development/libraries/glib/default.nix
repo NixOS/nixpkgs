@@ -1,7 +1,7 @@
 { config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
-# use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
-, utillinuxMinimal ? null
+# use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
+, util-linuxMinimal ? null
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
@@ -13,7 +13,7 @@
 
 with stdenv.lib;
 
-assert stdenv.isLinux -> utillinuxMinimal != null;
+assert stdenv.isLinux -> util-linuxMinimal != null;
 
 # TODO:
 # * Make it build without python
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]);

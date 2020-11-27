@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "A Python wrapper for Pinboard.in";
     maintainers = with maintainers; [ djanatyn ];
     license = licenses.asl20;
-    homepage = "http://github.com/lionheart/pinboard.py";
+    homepage = "https://github.com/lionheart/pinboard.py";
   };
 }
