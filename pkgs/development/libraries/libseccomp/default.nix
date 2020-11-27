@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, utillinux, gperf }:
+{ stdenv, fetchurl, getopt, util-linux, gperf }:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  checkInputs = [ utillinux ];
+  checkInputs = [ util-linux ];
   doCheck = false; # dependency cycle
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.

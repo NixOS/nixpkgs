@@ -23,7 +23,7 @@
 , libselinux ? null
 , libsepol ? null
 , p11-kit ? null
-, utillinux ? null
+, util-linux ? null
 , qtbase
 , qtx11extras
 , qttools
@@ -35,13 +35,13 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "0v3rbpaz6pqkam0cj86ydq8gc2rhas8mhwgvy31djvxng9nv3h5j";
+    sha256 = "145djlfvbkx2b1wqipk51mz82dhm27vmh9x00lkn24q1xz1y6h5n";
   };
 
   buildInputs = [
@@ -67,7 +67,7 @@ mkDerivation rec {
     libselinux
     libsepol
     p11-kit
-    utillinux
+    util-linux
   ]
   ++ lib.optionals withGstreamer (with gst_all_1; [
     gstreamer

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, which, nixosTests}:
+{stdenv, fetchurl, fetchpatch, which, xdg-dbus-proxy, nixosTests}:
 let
   s = # Generated upstream information
   rec {
@@ -25,6 +25,10 @@ stdenv.mkDerivation {
     substituteInPlace etc/firejail.config --replace \
       '# follow-symlink-as-user yes' \
       'follow-symlink-as-user no'
+
+    # Fix the path to 'xdg-dbus-proxy' hardcoded in the 'common.h' file
+    substituteInPlace src/include/common.h \
+      --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
   '';
 
   preConfigure = ''

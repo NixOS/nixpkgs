@@ -4,8 +4,9 @@
 , pkgconfig
 , flint
 , gmp
-, python2
+, python3
 , singular
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +24,8 @@ stdenv.mkDerivation rec {
     flint
     gmp
     singular
-    singular
-    python2
+    python3
+    ncurses
   ];
 
   nativeBuildInputs = [

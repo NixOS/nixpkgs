@@ -70,5 +70,6 @@ buildPythonPackage rec {
       + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
     maintainers = with maintainers; [ primeos ];
+    knownVulnerabilities = [ "CVE-2020-25659" "https://github.com/advisories/GHSA-hggm-jpg3-v476" ];
   };
 }

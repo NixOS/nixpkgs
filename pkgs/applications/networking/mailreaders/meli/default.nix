@@ -8,6 +8,7 @@
 , sqlite
 , file
 , gzip
+, makeWrapper
 , notmuch
   # Build with support for notmuch backend
 , withNotmuch ? true
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
 
-  nativeBuildInputs = [ pkgconfig gzip ];
+  nativeBuildInputs = [ pkgconfig gzip makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
@@ -39,6 +40,13 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/man/man5
     gzip < docs/meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
     gzip < docs/meli-themes.5 > $out/share/man/man5/meli-themes.5.gz
+  '' + lib.optionalString withNotmuch ''
+    # Fixes this runtime error when meli is started with notmuch configured:
+    # $ meli
+    # libnotmuch5 was not found in your system. Make sure it is installed and
+    # in the library paths.
+    # notmuch is not a valid mail backend
+    wrapProgram $out/bin/meli --set LD_LIBRARY_PATH ${notmuch}/lib
   '';
 
   meta = with stdenv.lib; {

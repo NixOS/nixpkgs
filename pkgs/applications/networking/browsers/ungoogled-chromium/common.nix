@@ -9,7 +9,7 @@
 
 , python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
-, utillinux, alsaLib
+, util-linux, alsaLib
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
@@ -141,7 +141,7 @@ let
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
-      utillinux alsaLib
+      util-linux alsaLib
       bison gperf kerberos
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU libGL

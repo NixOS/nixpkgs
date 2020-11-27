@@ -48,6 +48,7 @@ chrisbra/CheckAttach
 chrisbra/csv.vim
 chrisbra/NrrwRgn
 chrisbra/Recover.vim
+chrisbra/SudoEdit.vim
 chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
@@ -94,6 +95,7 @@ eagletmt/ghcmod-vim
 eagletmt/neco-ghc
 easymotion/vim-easymotion
 editorconfig/editorconfig-vim
+edwinb/idris2-vim
 ehamberg/vim-cute-python
 eikenb/acp
 elixir-editors/vim-elixir
@@ -575,6 +577,7 @@ udalov/kotlin-vim
 ujihisa/neco-look
 unblevable/quick-scope
 urbit/hoon.vim
+Valloric/MatchTagAlways
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
 vigoux/LanguageTool.nvim

@@ -2,8 +2,9 @@
 , makeWrapper, installShellFiles, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
-, btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
+, btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
 , procps, libseccomp
+, nixosTests
 }:
 
 with lib;
@@ -139,7 +140,7 @@ rec {
 
     outputs = ["out" "man"];
 
-    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux git ]);
+    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
     installPhase = ''
       cd ./go/src/${goPackagePath}
@@ -183,6 +184,8 @@ rec {
 
       installManPage man/*/*.[1-9]
     '';
+
+    passthru.tests = { inherit (nixosTests) docker; };
 
     meta = {
       homepage = "https://www.docker.com/";

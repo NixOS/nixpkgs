@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, utillinux
+{ stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, util-linux
 , gnugrep, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace debootstrap \
       --replace 'CHROOT_CMD="chroot '  'CHROOT_CMD="${coreutils}/bin/chroot ' \
-      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${utillinux}/bin/unshare ' \
+      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${util-linux}/bin/unshare ' \
       --replace /usr/bin/dpkg ${dpkg}/bin/dpkg \
       --replace '#!/bin/sh' '#!/bin/bash' \
       --subst-var-by VERSION ${version}

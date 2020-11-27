@@ -15,7 +15,6 @@
   moreutils,
   nix,
   pigz,
-  referencesByPopularity,
   rsync,
   runCommand,
   runtimeShell,
@@ -25,7 +24,7 @@
   storeDir ? builtins.storeDir,
   substituteAll,
   symlinkJoin,
-  utillinux,
+  util-linux,
   vmTools,
   writeReferencesToFile,
   writeScript,
@@ -205,7 +204,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        nativeBuildInputs = [ utillinux e2fsprogs jshon rsync jq ];
+        nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
       } ''
       mkdir disk
       mkfs /dev/${vmTools.hd}
@@ -772,7 +771,7 @@ rec {
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
-        paths = referencesByPopularity overallClosure;
+        paths = buildPackages.referencesByPopularity overallClosure;
         nativeBuildInputs = [ jq ];
       } ''
         ${if (tag == null) then ''

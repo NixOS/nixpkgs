@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.7.1";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1l4acikxkxvmdqn10ck4w4f100vz7kfrzghz5h4haj7ycrr35j3l";
+    sha256 = "0c56na9s3g7rdb4cc6ccsnfby2ihf5zrfs3lg9qxiqsfr7mcn4w9";
   };
 
-  cargoSha256 = "0rmy0jnf5rqd4dqyl6rinxb3n3rzqnixrybs4i27lcas9m753z40";
+  cargoSha256 = "05rrww53g3k2c8mpxvyc067qsgs7w9sxnzdlvmca1idbqa0k9060";
 
   buildInputs = with stdenv;
     lib.optionals isDarwin [ CoreFoundation libiconv libresolv Security ];

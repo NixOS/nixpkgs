@@ -10,7 +10,7 @@ let
   # So an extension's attribute name should be of the form:
   # "${mktplcRef.publisher}.${mktplcRef.name}".
   #
-  self = stdenv.lib.mapAttrs (_n: stdenv.lib.recurseIntoAttrs)
+  baseExtensions = self: stdenv.lib.mapAttrs (_n: stdenv.lib.recurseIntoAttrs)
     {
 
       alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
@@ -191,8 +191,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.9.6";
-          sha256 = "12sjzk64kz7z8zqh3zg1dyb3v4c5xxgi1ain1jvw8hwf0hicqlgi";
+          version = "1.9.7";
+          sha256 = "0v599yssvk358gxfxnyzzkyk0y5krsbp8n4rkp9wb2ncxqsqladr";
         };
         meta = {
           license = stdenv.lib.licenses.asl20;
@@ -245,11 +245,19 @@ let
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
       WakaTime.vscode-wakatime = callPackage ./wakatime {};
-    } // lib.optionalAttrs (config.allowAliases or true) (
-    with self; {
+    };
+
+    aliases = self: super: {
       # aliases
-      ms-vscode.Go = golang.Go;
-    }
-  );
+      ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) Go; };
+    };
+
+    # TODO: add overrides overlay, so that we can have a generated.nix
+    # then apply extension specific modifcations to packages.
+
+    # overlays will be applied left to right, overrides should come after aliases.
+    overlays = lib.optionals (config.allowAliases or true) [ aliases ];
+
+    toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
-self
+  lib.fix toFix

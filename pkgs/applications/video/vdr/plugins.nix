@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
-, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses
+, libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
@@ -146,7 +146,7 @@ in {
 
     nativeBuildInputs = [
       perl # for pod2man and pos2html
-      utillinux
+      util-linux
       groff
     ];
 

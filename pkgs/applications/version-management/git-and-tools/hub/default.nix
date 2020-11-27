@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, groff, installShellFiles, utillinux }:
+{ stdenv, buildGoPackage, fetchFromGitHub, groff, installShellFiles, util-linux }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -16,7 +16,7 @@ buildGoPackage rec {
     sha256 = "1qjab3dpia1jdlszz3xxix76lqrm4zbmqzd9ymld7h06awzsg2vh";
   };
 
-  nativeBuildInputs = [ groff installShellFiles utillinux ];
+  nativeBuildInputs = [ groff installShellFiles util-linux ];
 
   postPatch = ''
     patchShebangs .

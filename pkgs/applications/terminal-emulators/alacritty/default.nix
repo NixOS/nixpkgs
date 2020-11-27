@@ -52,17 +52,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  # 0.5.0 is not compatible with gnome 3.38
-  version = "0.6.0-rc1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "RuIJvB0J/BQFqemOkEUiqS1uz0gMS49Dd8UQt0nbrQ0=";
+    sha256 = "vQdNwNiUvoJWRT1foPRadirI2zWjnzU3sGnIxeHKlj8=";
   };
 
-  cargoSha256 = "+3iZywLvy+8C7j6g9bqij2DSLjBoE2u1GXgfV04cWRY=";
+  cargoSha256 = "1PQSg6EmwVMZj2ALw6qsbtPMCtALVHx5TR05FjGD/QE=";
 
   nativeBuildInputs = [
     cmake
@@ -75,7 +74,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-  ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.isDarwin [
     AppKit
     CoreGraphics
     CoreServices

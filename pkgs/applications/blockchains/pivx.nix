@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, pkgconfig, autoreconfHook, wrapQtAppsHook ? null
 , openssl, db48, boost, zlib, miniupnpc, gmp
 , qrencode, glib, protobuf, yasm, libevent
-, utillinux, qtbase ? null, qttools ? null
+, util-linux, qtbase ? null, qttools ? null
 , enableUpnp ? false
 , disableWallet ? false
 , disableDaemon ? false 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
-  buildInputs = [ glib gmp openssl db48 yasm boost zlib libevent miniupnpc protobuf utillinux ]
+  buildInputs = [ glib gmp openssl db48 yasm boost zlib libevent miniupnpc protobuf util-linux ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]

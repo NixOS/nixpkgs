@@ -662,7 +662,11 @@ let
 
     ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
-    ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
+    ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
+
+    ocaml-migrate-parsetree-1-8 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/1.8.x.nix { };
+
+    ocaml-migrate-parsetree-2-1 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/2.1.x.nix { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
@@ -1256,6 +1260,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_10 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.10.nix { });
 
   ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
+
+  ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_11;
 

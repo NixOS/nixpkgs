@@ -1152,9 +1152,9 @@
     githubId = 50839;
     name = "Brian Jones";
   };
-  boothead = {
+  commandodev = {
     email = "ben@perurbis.com";
-    github = "boothead";
+    github = "commandodev";
     githubId = 87764;
     name = "Ben Ford";
   };
@@ -1754,6 +1754,12 @@
     github = "costrouc";
     githubId = 1740337;
     name = "Chris Ostrouchov";
+  };
+  confus = {
+    email = "con-f-use@gmx.net";
+    github = "con-f-use";
+    githubId = 11145016;
+    name = "J.C.";
   };
   contrun = {
     email = "uuuuuu@protonmail.com";
@@ -4801,12 +4807,6 @@
       fingerprint = "5A9A 1C9B 2369 8049 3B48  CF5B 81A1 5409 4816 2372";
     }];
   };
-  kylewlacy = {
-    email = "kylelacy+nix@pm.me";
-    github = "kylewlacy";
-    githubId = 1362179;
-    name = "Kyle Lacy";
-  };
   laikq = {
     email = "gwen@quasebarth.de";
     github = "laikq";
@@ -5496,6 +5496,12 @@
     githubId = 1191859;
     name = "Maxim Krivchikov";
   };
+  mazurel = {
+    email = "mateusz.mazur@yahoo.com";
+    github = "Mazurel";
+    githubId = 22836301;
+    name = "Mateusz Mazur";
+  };
   mbakke = {
     email = "mbakke@fastmail.com";
     github = "mbakke";
@@ -6128,6 +6134,12 @@
     github = "laMudri";
     githubId = 5139265;
     name = "James Wood";
+  };
+  mudrii = {
+    email = "mudreac@gmail.com";
+    github = "mudrii";
+    githubId = 220262;
+    name = "Ion Mudreac";
   };
   muflax = {
     email = "mail@muflax.com";
@@ -6968,6 +6980,12 @@
       longkeyid = "rsa4096/4F74D5361C4CA31E";
       fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E";
     }];
+  };
+  preisschild = {
+    email = "florian@florianstroeger.com";
+    github = "Preisschild";
+    githubId = 11898437;
+    name = "Florian Ströger";
   };
   priegger = {
     email = "philipp@riegger.name";
@@ -9035,6 +9053,12 @@
     githubId = 619015;
     name = "Svintsov Dmitry";
   };
+  urbas = {
+    email = "matej.urbas@gmail.com";
+    github = "urbas";
+    githubId = 771193;
+    name = "Matej Urbas";
+  };
   uri-canva = {
     email = "uri@canva.com";
     github = "uri-canva";
@@ -9997,5 +10021,11 @@
     email = "1838397+pulsation@users.noreply.github.com";
     github = "pulsation";
     githubId = 1838397;
+  };
+  zupo = {
+    name = "Nejc Zupan";
+    email = "nejczupan+nix@gmail.com";
+    github = "zupo";
+    githubId = 311580;
   };
 }

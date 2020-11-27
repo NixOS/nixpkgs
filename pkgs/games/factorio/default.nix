@@ -63,11 +63,11 @@ let
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
         stable        = bdist { sha256 = "0zixscff0svpb0yg8nzczp2z4filqqxi1k0z0nrpzn2hhzhf1464"; version = "1.0.0"; withAuth = true; };
-        experimental  = bdist { sha256 = "0zixscff0svpb0yg8nzczp2z4filqqxi1k0z0nrpzn2hhzhf1464"; version = "1.0.0"; withAuth = true; };
+        experimental  = bdist { sha256 = "0z7krilzk91sblik2i9lvsifwq9j5j6jv7jhmndkz4qmp845w1ax"; version = "1.1.1"; withAuth = true; };
       };
       headless = {
         stable        = bdist { sha256 = "0r0lplns8nxna2viv8qyx9mp4cckdvx6k20w2g2fwnj3jjmf3nc1"; version = "1.0.0"; };
-        experimental  = bdist { sha256 = "0r0lplns8nxna2viv8qyx9mp4cckdvx6k20w2g2fwnj3jjmf3nc1"; version = "1.0.0"; };
+        experimental  = bdist { sha256 = "1nb9w876dij3ar14s5y96k04nbh9i4a7rggbbck5xmr7pa6snqx4"; version = "1.1.1"; };
       };
       demo = {
         stable        = bdist { sha256 = "0h9cqbp143w47zcl4qg4skns4cngq0k40s5jwbk0wi5asjz8whqn"; version = "1.0.0"; };
@@ -104,10 +104,15 @@ let
               ];
             })
             (_: { # This preHook hides the credentials from /proc
-                  preHook = ''
-                    echo -n "${username}" >username
-                    echo -n "${token}"    >token
-                  '';
+                  preHook =
+                    if username != "" && token != "" then ''
+                      echo -n "${username}" >username
+                      echo -n "${token}"    >token
+                    '' else ''
+                      # Deliberately failing since username/token was not provided, so we can't fetch.
+                      # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
+                      exit 1
+                    '';
                   failureHook = ''
                     cat <<EOF
                     ${helpMsg}

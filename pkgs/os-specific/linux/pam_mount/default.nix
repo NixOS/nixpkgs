@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, utillinux }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "pam_mount";
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/mtcrypt.c \
-      --replace @@NIX_UTILLINUX@@ ${utillinux}/bin
+      --replace @@NIX_UTILLINUX@@ ${util-linux}/bin
   '';
 
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
 
-  buildInputs = [ pam libHX utillinux libxml2 pcre perl openssl cryptsetup ];
+  buildInputs = [ pam libHX util-linux libxml2 pcre perl openssl cryptsetup ];
 
   enableParallelBuilding = true;
 
