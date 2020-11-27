@@ -9,3 +9,4 @@ curl https://repology.org/api/v1/repository/nix_unstable/problems \
    | jq -r '.[] | select(.type == "homepage_permanent_https_redirect") | .data | "s@\(.url)@\(.target)@"' \
    | sort | uniq | tee script.sed
 find -name '*.nix' | xargs -P4 -- sed -f script.sed -i
+rm script.sed
