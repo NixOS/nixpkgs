@@ -20367,6 +20367,8 @@ in
 
   blugon = callPackage ../applications/misc/blugon { };
 
+  bombadillo = callPackage ../applications/networking/browsers/bombadillo { };
+
   bombono = callPackage ../applications/video/bombono {};
 
   bomi = libsForQt5.callPackage ../applications/video/bomi {
