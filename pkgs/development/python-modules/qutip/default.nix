@@ -1,9 +1,8 @@
 { stdenv
-, lib
 , python
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , setuptoolsBuildHook
 , gcc
 , hypothesis
@@ -19,10 +18,11 @@ buildPythonPackage rec {
   version = "4.5.2";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    sha256 = "18iz5wyixyj6v559my6rgi1w1gxg7b3wm5lfavkjz3ldjhd9m8sn";
+  src = fetchFromGitHub {
+    owner = "qutip";
+    repo = "qutip";
+    rev = "v${version}";
+    sha256 = "107jgkrhh6kwvcskx59jys5kf31jrwg1cdzd2b651hh3yhndh91r";
   };
 
   postPatch = ''
@@ -43,19 +43,23 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  buildPhase = ''
+  ${python.interpreter} setup.py --with-openmp bdist_wheel
+  '';
+
+  doCheck = false;
 
   checkInputs = [ hypothesis ];
 
   checkPhase = ''
     runHook preCheck
     pushd dist
-    ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
+    ${python.interpreter} -c 'import qutip.testing as qt; qt.run()'
     popd
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Quantum Toolbox in Python";
     homepage = "https://qutip.org";
     changelog = "http://qutip.org/docs/latest/changelog.html";
