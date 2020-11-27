@@ -16087,10 +16087,6 @@ in
     inherit (pythonPackages) twisted;
   };
 
-  thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix {
-    inherit (pythonPackages) twisted;
-  };
-
   tidyp = callPackage ../development/libraries/tidyp { };
 
   tinycdb = callPackage ../development/libraries/tinycdb { };
@@ -28018,9 +28014,7 @@ in
 
   sct = callPackage ../tools/X11/sct {};
 
-  scylladb = callPackage ../servers/scylladb {
-    thrift = thrift-0_10;
-  };
+  scylladb = callPackage ../servers/scylladb { };
 
   seafile-shared = callPackage ../misc/seafile-shared { };
 
