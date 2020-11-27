@@ -5534,6 +5534,12 @@
     githubId = 158568;
     name = "Matthias C. M. Troffaes";
   };
+  mcncm = {
+    email = "33966432+mcncm@users.noreply.github.com";
+    github = "mcncm";
+    githubId = 33966432;
+    name = "mcncm";
+  };
   McSinyx = {
     email = "vn.mcsinyx@gmail.com";
     github = "McSinyx";
