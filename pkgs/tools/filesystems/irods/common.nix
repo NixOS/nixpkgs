@@ -51,6 +51,6 @@ with stdenv;
     homepage = "https://irods.org";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
