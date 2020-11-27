@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
       remarshal -i "$privateBuildPlanJSONPath" -o private-build-plans.toml -if json -of toml
     ''}
     ${lib.optionalString (extraParameters != null) ''
-      echo -e "\n" >> parameters.toml
-      cat "$extraParametersPath" >> parameters.toml
+      echo -e "\n" >> params/parameters.toml
+      cat "$extraParametersPath" >> params/parameters.toml
     ''}
     ln -s ${nodeIosevka}/lib/node_modules/iosevka/node_modules .
     runHook postConfigure

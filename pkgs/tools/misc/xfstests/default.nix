@@ -1,7 +1,7 @@
 { stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
 , fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
 , libuuid, libxfs, lvm2, openssl, perl, procps, quota
-, time, utillinux, which, writeScript, xfsprogs, runtimeShell }:
+, time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "xfstests-2019-09-08";
@@ -96,7 +96,7 @@ stdenv.mkDerivation {
 
     export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils
                                    libcap lvm2 perl procps killall quota
-                                   utillinux which xfsprogs]}:$PATH
+                                   util-linux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 

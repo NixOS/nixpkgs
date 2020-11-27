@@ -147,10 +147,10 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
-    mtools, libfaketime, utillinux, zstd }: stdenv.mkDerivation {
+    mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux zstd ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime util-linux zstd ];
 
       inherit (config.sdImage) compressImage;
 
@@ -221,7 +221,7 @@ in
         set -euo pipefail
         set -x
         # Figure out device names for the boot device and root filesystem.
-        rootPart=$(${pkgs.utillinux}/bin/findmnt -n -o SOURCE /)
+        rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
 
         # Resize the root partition and the filesystem to fit the disk

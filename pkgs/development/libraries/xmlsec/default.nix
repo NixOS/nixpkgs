@@ -32,6 +32,11 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   doCheck = true;
   checkInputs = [ nss_3_53.tools ];
+  preCheck = ''
+  substituteInPlace tests/testrun.sh \
+    --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
+    --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+  '';
 
   # enable deprecated soap headers required by lasso
   # https://dev.entrouvert.org/issues/18771

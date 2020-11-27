@@ -28,7 +28,7 @@
 , nss ? null, nspr ? null
 
 # Linux Only Dependencies
-, linuxHeaders, utillinux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
+, linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
 , libaio ? null, libxfs ? null, zfs ? null
 , ...
 }:
@@ -154,7 +154,7 @@ in rec {
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
       snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ optionals stdenv.isLinux [
-      linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
+      linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
     ] ++ optionals hasRadosgw [

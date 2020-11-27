@@ -1227,6 +1227,8 @@ in {
 
   clint = callPackage ../development/python-modules/clint { };
 
+  clintermission = callPackage ../development/python-modules/clintermission { };
+
   clize = callPackage ../development/python-modules/clize { };
 
   clldutils = callPackage ../development/python-modules/clldutils { };
@@ -1252,6 +1254,8 @@ in {
   cntk = callPackage ../development/python-modules/cntk { };
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
+
+  coapthon3 = callPackage ../development/python-modules/coapthon3 { };
 
   coconut = callPackage ../development/python-modules/coconut { };
 
@@ -1906,6 +1910,8 @@ in {
   email_validator = callPackage ../development/python-modules/email-validator { };
 
   emcee = callPackage ../development/python-modules/emcee { };
+
+  emv = callPackage ../development/python-modules/emv { };
 
   emoji = callPackage ../development/python-modules/emoji { };
 
@@ -2908,6 +2914,8 @@ in {
 
   imagesize = callPackage ../development/python-modules/imagesize { };
 
+  imantics = callPackage ../development/python-modules/imantics { };
+
   IMAPClient = callPackage ../development/python-modules/imapclient { };
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
@@ -3443,6 +3451,8 @@ in {
 
   librosa = callPackage ../development/python-modules/librosa { };
 
+  libsass = (callPackage ../development/python-modules/libsass { inherit (pkgs) libsass; });
+
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
   libselinux = pipe pkgs.libselinux [
@@ -3790,6 +3800,8 @@ in {
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
+
+  mlxtend = callPackage ../development/python-modules/mlxtend { };
 
   mmh3 = callPackage ../development/python-modules/mmh3 { };
 
@@ -4694,6 +4706,8 @@ in {
   pprintpp = callPackage ../development/python-modules/pprintpp { };
 
   pproxy = callPackage ../development/python-modules/pproxy { };
+
+  ppscore = callPackage ../development/python-modules/ppscore { };
 
   pq = callPackage ../development/python-modules/pq { };
 
@@ -6622,6 +6636,8 @@ in {
 
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
+  shap = callPackage ../development/python-modules/shap { };
+
   shapely = callPackage ../development/python-modules/shapely { };
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
@@ -6702,6 +6718,8 @@ in {
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
   slicedimage = callPackage ../development/python-modules/slicedimage { };
+
+  slicer = callPackage ../development/python-modules/slicer { };
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
@@ -7797,6 +7815,8 @@ in {
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
+
+  xmljson = callPackage ../development/python-modules/xmljson { };
 
   xmlschema = callPackage ../development/python-modules/xmlschema { };
 

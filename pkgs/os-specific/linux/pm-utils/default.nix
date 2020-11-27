@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, coreutils, gnugrep, utillinux, kmod
+{ stdenv, fetchurl, coreutils, gnugrep, util-linux, kmod
 , procps, kbd, dbus }:
 
 let
 
   binPath = stdenv.lib.makeBinPath
-    [ coreutils gnugrep utillinux kmod procps kbd dbus ];
+    [ coreutils gnugrep util-linux kmod procps kbd dbus ];
 
   sbinPath = stdenv.lib.makeSearchPathOutput "bin" "sbin"
     [ procps ];

@@ -26,7 +26,9 @@ pythonNamespacesHook() {
 
             # remove __pycache__/ entry, can be interpreter specific. E.g. __init__.cpython-38.pyc
             # use null characters to perserve potential whitespace in filepath
-            @findutils@/bin/find $pycachePath -name '__init__*' -print0 | xargs -0 rm -v
+            if [ -d "$pycachePath" ]; then
+                @findutils@/bin/find "$pycachePath" -name '__init__*' -exec rm -v "{}" +
+            fi
         done
     done
 

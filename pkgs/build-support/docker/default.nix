@@ -24,7 +24,7 @@
   storeDir ? builtins.storeDir,
   substituteAll,
   symlinkJoin,
-  utillinux,
+  util-linux,
   vmTools,
   writeReferencesToFile,
   writeScript,
@@ -204,7 +204,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        nativeBuildInputs = [ utillinux e2fsprogs jshon rsync jq ];
+        nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
       } ''
       mkdir disk
       mkfs /dev/${vmTools.hd}

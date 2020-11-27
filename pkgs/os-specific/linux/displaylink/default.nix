@@ -1,4 +1,4 @@
-{ stdenv, lib, unzip, utillinux,
+{ stdenv, lib, unzip, util-linux,
   libusb1, evdi, systemd, makeWrapper, requireFile, substituteAll }:
 
 let
@@ -7,7 +7,7 @@ let
     else if stdenv.hostPlatform.system == "i686-linux" then "x86"
     else throw "Unsupported architecture";
   bins = "${arch}-ubuntu-1604";
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc utillinux libusb1 evdi ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc util-linux libusb1 evdi ];
 
 in stdenv.mkDerivation rec {
   pname = "displaylink";

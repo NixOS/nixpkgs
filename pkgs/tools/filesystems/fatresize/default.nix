@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, parted, utillinux, pkg-config }:
+{ stdenv, fetchFromGitHub, parted, util-linux, pkg-config }:
 
 stdenv.mkDerivation rec {
 
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1vhz84kxfyl0q7mkqn68nvzzly0a4xgzv76m6db0bk7xyczv1qr2";
   };
 
-  buildInputs = [ parted utillinux ];
+  buildInputs = [ parted util-linux ];
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ parted utillinux ];
+  propagatedBuildInputs = [ parted util-linux ];
 
   meta = with stdenv.lib; {
     description = "The FAT16/FAT32 non-destructive resizer";
