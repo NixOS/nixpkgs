@@ -18,7 +18,7 @@
 }:
 
 let
-  version = "246.4";
+  version = "246.6";
 in stdenv.mkDerivation {
   inherit version;
   pname = "systemd";
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0ns12w55yv680p4l7f2i9il7scdph7hips68d9k8cyvxk2w9xg0x";
+    sha256 = "1yhj2jlighqqpw1xk9q52f3pncjn47ipi224k35d6syb94q2b988";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
