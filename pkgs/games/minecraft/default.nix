@@ -37,6 +37,7 @@ let
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
     categories = "Game;";
+    fileValidation = false;
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
