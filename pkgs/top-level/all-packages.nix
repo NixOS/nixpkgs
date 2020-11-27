@@ -11490,6 +11490,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
 
+  kotlin-language-server = callPackage ../development/tools/kotlin-language-server { };
+
   kube-aws = callPackage ../development/tools/kube-aws { };
 
   kubectx = callPackage ../development/tools/kubectx { };
