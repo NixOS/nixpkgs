@@ -15,7 +15,6 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , enableVaapi ? false # Disabled by default due to unofficial support
-, useOzone ? true
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
@@ -34,15 +33,13 @@ let
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs
-              cupsSupport pulseSupport useOzone;
+              cupsSupport pulseSupport;
       gnChromium = gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
         src = fetchgit {
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
-      # TODO: Cleanup useOzone and useVaapi in common.nix:
-      useVaapi = !stdenv.isAarch64; # TODO: Might be best to not set use_vaapi anymore (default is fine)
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
