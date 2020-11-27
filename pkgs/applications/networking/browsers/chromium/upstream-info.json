@@ -10,6 +10,11 @@
         "rev": "e002e68a48d1c82648eadde2f6aafa20d08c36f2",
         "sha256": "0x4c7amxwzxs39grqs3dnnz0531mpf1p75niq7zhinyfqm86i4dk"
       }
+    },
+    "chromedriver": {
+      "version": "87.0.4280.20",
+      "sha256_linux": "1cpk7mb32z3a7c7cbaaxskpv91il3i8kgsdp2q8zw9w762kql953",
+      "sha256_darwin": "06mx2yk6xy46azvkbyvhqm11prxbh67pfi50fcwxb0zqllbq7scr"
     }
   },
   "beta": {

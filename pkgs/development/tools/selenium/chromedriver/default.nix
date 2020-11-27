@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, cairo, fontconfig, freetype, gdk-pixbuf, glib
-, glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
+{ stdenv, fetchurl, unzip, makeWrapper
+, cairo, fontconfig, freetype, gdk-pixbuf, glib
+, glibc, gtk2, libX11, nspr, nss, pango, gconf
 , libxcb, libXi, libXrender, libXext
 }:
+
 let
+  upstream-info = (stdenv.lib.importJSON ../../../../applications/networking/browsers/chromium/upstream-info.json).stable.chromedriver;
   allSpecs = {
     x86_64-linux = {
       system = "linux64";
-      sha256 = "1cpk7mb32z3a7c7cbaaxskpv91il3i8kgsdp2q8zw9w762kql953";
+      sha256 = upstream-info.sha256_linux;
     };
 
     x86_64-darwin = {
       system = "mac64";
-      sha256 = "06mx2yk6xy46azvkbyvhqm11prxbh67pfi50fcwxb0zqllbq7scr";
+      sha256 = upstream-info.sha256_darwin;
     };
   };
 
@@ -25,10 +28,10 @@ let
     libX11 nspr nss pango libXrender
     gconf libxcb libXext libXi
   ];
-in
-stdenv.mkDerivation rec {
+
+in stdenv.mkDerivation rec {
   pname = "chromedriver";
-  version = "87.0.4280.20";
+  version = upstream-info.version;
 
   src = fetchurl {
     url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
@@ -47,10 +50,18 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://sites.google.com/a/chromium.org/chromedriver";
+    homepage = "https://chromedriver.chromium.org/";
     description = "A WebDriver server for running Selenium tests on Chrome";
+    longDescription = ''
+      WebDriver is an open source tool for automated testing of webapps across
+      many browsers. It provides capabilities for navigating to web pages, user
+      input, JavaScript execution, and more. ChromeDriver is a standalone
+      server that implements the W3C WebDriver standard.
+    '';
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu maintainers.marsam ];
+    maintainers = with maintainers; [ goibhniu marsam primeos ];
+    # Note from primeos: By updating Chromium I also update Google Chrome and
+    # ChromeDriver.
     platforms = attrNames allSpecs;
   };
 }
