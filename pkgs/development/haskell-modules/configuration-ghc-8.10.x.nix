@@ -96,4 +96,7 @@ self: super: {
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
 
+  # cxx-options is broken in Cabal 3.2.0.0
+  hercules-ci-agent = addSetupDepend super.hercules-ci-agent self.Cabal_3_2_1_0;
+
 }
