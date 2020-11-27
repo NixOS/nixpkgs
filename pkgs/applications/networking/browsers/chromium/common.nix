@@ -263,7 +263,6 @@ let
       link_pulseaudio = true;
     } // optionalAttrs useOzone {
       use_ozone = true;
-      ozone_platform_gbm = false;
       use_xkbcommon = true;
       use_glib = true;
       use_gtk = true;
