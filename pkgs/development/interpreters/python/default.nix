@@ -15,7 +15,7 @@ with pkgs;
     , sitePackages
     , hasDistutilsCxxPatch
     , pythonPackagesBuildBuild
-    , pythonForBuild # provides pythonPackagesBuildHost
+    , pythonPackagesBuildHost
     , pythonPackagesBuildTarget
     , pythonPackagesHostHost
     , self # is pythonPackagesHostTarget
@@ -29,7 +29,7 @@ with pkgs;
           };
           otherSplices = {
             selfBuildBuild = pythonPackagesBuildBuild;
-            selfBuildHost = pythonForBuild.pkgs;
+            selfBuildHost = pythonPackagesBuildHost;
             selfBuildTarget = pythonPackagesBuildTarget;
             selfHostHost = pythonPackagesHostHost;
             selfTargetTarget = pythonPackagesTargetTarget;
@@ -99,7 +99,8 @@ with pkgs;
         inherit sourceVersion;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
-        inherit hasDistutilsCxxPatch pythonForBuild;
+        inherit hasDistutilsCxxPatch;
+        pythonForBuild = pythonPackagesBuildHost;
 
         tests = callPackage ./tests.nix {
           python = self;
@@ -188,7 +189,6 @@ in {
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (python38.override {
     self = python3Minimal;
-    pythonForBuild = pkgs.buildPackages.python3Minimal;
     # strip down that python version as much as possible
     openssl = null;
     readline = null;
