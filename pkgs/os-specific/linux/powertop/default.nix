@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
     substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "xset"
+    substituteInPlace src/tuning/bluetooth.cpp --replace "/usr/bin/hcitool" "hcitool"
   '';
 
   meta = with stdenv.lib; {
