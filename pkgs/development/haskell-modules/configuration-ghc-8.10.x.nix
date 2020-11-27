@@ -73,6 +73,9 @@ self: super: {
   shellmet = doJailbreak super.shellmet;
   shower = doJailbreak super.shower;
 
+  # Broken test compile
+  servant-swagger = dontCheck super.servant-swagger;
+
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
 
