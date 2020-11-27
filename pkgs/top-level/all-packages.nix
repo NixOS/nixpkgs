@@ -1086,6 +1086,10 @@ in
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
+  ctrlr = callPackage ../applications/audio/ctrlr {
+    inherit (gnome3) zenity;
+  };
+
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crowbar = callPackage ../tools/security/crowbar { };
