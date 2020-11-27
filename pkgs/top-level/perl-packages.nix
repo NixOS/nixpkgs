@@ -596,6 +596,27 @@ let
     };
   };
 
+  Appcpm = buildPerlModule {
+    pname = "App-cpm";
+    version = "0.994";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.994.tar.gz";
+      sha256 = "4242ecb64aaae09034eddb1b338e005567ace29f2ac2d1bca4d4bcf4e15d21c4";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy ModuleCPANfile ParallelPipes locallib ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/cpm
+    '';
+    meta = {
+      homepage = "https://github.com/skaji/cpm";
+      description = "A fast CPAN module installer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   Applify = buildPerlPackage {
     pname = "Applify";
     version = "0.21";
