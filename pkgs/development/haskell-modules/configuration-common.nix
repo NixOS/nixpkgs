@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "13s6czv4p6n6s16kr5r255vldrn9038qjd5yl5xrh91xk6z410cd";
+      sha256 = "1l2syrslba4mrxjzj0iblflz72siw3ibqri6p5hf59fk7rmm30a8";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -81,11 +81,6 @@ self: super: {
   # which happens in nix-shell when a non-interactive bash is on PATH
   # PR to master: https://github.com/pcapriotti/optparse-applicative/pull/408
   optparse-applicative = appendPatch super.optparse-applicative (pkgs.fetchpatch {
-    name = "optparse-applicative-0.15.1-hercules-ci-compgen.diff";
-    url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
-    sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
-  });
-  optparse-applicative_0_16_0_0 = appendPatch super.optparse-applicative_0_16_0_0 (pkgs.fetchpatch {
     name = "optparse-applicative-0.15.1-hercules-ci-compgen.diff";
     url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
     sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
@@ -300,6 +295,9 @@ self: super: {
   github-rest = dontCheck super.github-rest;  # test suite needs the network
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
+  #next release supports random 1.1; jailbroken because i didn't know about vty when glguy was updating the bounds
+  #should be fixed soon. maybe even before this is merged. currently glirc is 2.37
+  glirc = doJailbreak (super.glirc.override { random = self.random_1_2_0; });
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
   haeredes = dontCheck super.haeredes;
@@ -340,7 +338,8 @@ self: super: {
     then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
     else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
-
+  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
+  matterhorn = doJailbreak super.matterhorn; # this is needed until the end of time :')
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
@@ -371,6 +370,9 @@ self: super: {
   punycode = dontCheck super.punycode;
   pwstore-cli = dontCheck super.pwstore-cli;
   quantities = dontCheck super.quantities;
+  QuickCheck_2_14_2 = super.QuickCheck_2_14_2.override( {
+    splitmix = self.splitmix_0_1_0_3;
+  });
   redis-io = dontCheck super.redis-io;
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
@@ -394,9 +396,7 @@ self: super: {
   tickle = dontCheck super.tickle;
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
-  # Aarch64 affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
-  # Darwin https://hydra.nixos.org/build/129070963/nixlog/1
-  trifecta = if (pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.isDarwin) then dontCheck super.trifecta else super.trifecta;
+  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta; # affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
   wai-logger = dontCheck super.wai-logger;
@@ -406,6 +406,7 @@ self: super: {
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
+  random_1_2_0 = super.random_1_2_0.override ({ splitmix = self.splitmix_0_1_0_3; });
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
@@ -1380,7 +1381,7 @@ self: super: {
   in generateOptparseApplicativeCompletion "update-nix-fetchgit" (overrideCabal
     (addTestToolDepends (super.update-nix-fetchgit.overrideScope (self: super: {
       optparse-generic = self.optparse-generic_1_4_4;
-      optparse-applicative = self.optparse-applicative_0_16_0_0;
+      optparse-applicative = self.optparse-applicative_0_16_1_0;
     })) deps) (drv: {
       buildTools = drv.buildTools or [ ] ++ [ pkgs.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
@@ -1389,10 +1390,6 @@ self: super: {
         }"
       '';
     }));
-
-  optparse-generic_1_4_4 = super.optparse-generic_1_4_4.override {
-    optparse-applicative = self.optparse-applicative_0_16_0_0;
-  };
 
   # Our quickcheck-instances is too old for the newer binary-instances, but
   # quickcheck-instances is only used in the tests of binary-instances.
@@ -1483,10 +1480,6 @@ self: super: {
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
 
-  # 2020-11-19: Disabling tests with this issue: https://github.com/cchalmers/pcg-random/issues/10
-  # Issue has been fixed in 0.1.3.7, we can enable tests again, once stackage bumps the version
-  pcg-random = assert super.pcg-random.version == "0.1.3.6"; dontCheck super.pcg-random;
-
   # Use an already merged upstream patch fixing the build with primitive >= 0.7.2
   # The version bounds were correctly specified before, so we need to jailbreak as well
   streamly = appendPatch (doJailbreak super.streamly) (pkgs.fetchpatch {
@@ -1516,5 +1509,22 @@ self: super: {
     extraPrefix = "";
     excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
   });
+
+  # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
+  pipes-text = doJailbreak super.pipes-text;
+
+  # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
+  blas-hs = dontCheck super.blas-hs;
+
+  # 2020-11-23: https://github.com/cdornan/fmt/issues/30
+  fmt = dontCheck super.fmt;
+
+
+  # 2020-11-27: Tests broken
+  # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
+  servant-swagger = dontCheck super.servant-swagger;
+
+  # 2020-11-27: cxx-options is broken in Cabal 3.2.0.0
+  hercules-ci-agent = addSetupDepend super.hercules-ci-agent self.Cabal_3_2_1_0;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
