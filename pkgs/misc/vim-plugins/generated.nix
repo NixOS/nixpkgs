@@ -447,18 +447,6 @@ let
     meta.homepage = "https://github.com/antoinemadec/coc-fzf/";
   };
 
-  coc-markdownlint = buildVimPluginFrom2Nix {
-    pname = "coc-markdownlint";
-    version = "2020-11-12";
-    src = fetchFromGitHub {
-      owner = "fannheyward";
-      repo = "coc-markdownlint";
-      rev = "a9304f7b096871e15c2992d0d09e7c7f3a3675d4";
-      sha256 = "0r7mr4qmw04hhxihfn4pndpv0dakwjcj6jf1jccgydxc35qv14vj";
-    };
-    meta.homepage = "https://github.com/fannheyward/coc-markdownlint/";
-  };
-
   coc-neco = buildVimPluginFrom2Nix {
     pname = "coc-neco";
     version = "2020-04-07";
