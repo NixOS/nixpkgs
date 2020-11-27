@@ -1,4 +1,5 @@
 { stdenv
+, buildPackages
 , fetchurl
 , meson
 , ninja
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   doCheck = true;
   checkInputs = [ python3 ];
