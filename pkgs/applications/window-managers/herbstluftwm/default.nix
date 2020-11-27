@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, cmake, pkgconfig, python3, libX11, libXext, libXinerama, libXrandr, asciidoc
-, xdotool, xorgserver, xsetroot, xterm, runtimeShell }:
+, xdotool, xorgserver, xsetroot, xterm, runtimeShell
+, nixosTests }:
 
 # Doc generation is disabled by default when cross compiling because asciidoc
 # dependency is broken when cross compiling for now
@@ -74,6 +75,10 @@ in stdenv.mkDerivation rec {
   '';
 
   pytestFlagsArray = [ "../tests" ];
+
+  passthru = {
+    tests.herbstluftwm = nixosTests.herbstluftwm;
+  };
 
   meta = with lib; {
     description = "A manual tiling window manager for X";
