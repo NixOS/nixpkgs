@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "qmapshack";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = pname;
     rev = "V_${version}";
-    sha256 = "157bssrbwcc1w58b0v60jb3wrjf2ig4z6z6crjnpvflkqj5p8vwy";
+    sha256 = "1q8qczp9bgk3dzdswb1x64fcn3xg339s0yx31nablb518hcb8jkr";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,8 +21,6 @@ mkDerivation rec {
     "-DQUAZIP_INCLUDE_DIR=${quazip}/include/quazip5"
     "-DLIBQUAZIP_LIBRARY=${quazip}/lib/libquazip.so"
   ];
-
-  enableParallelBuilding = true;
 
   patches = [
     "${src}/FindPROJ4.patch"
@@ -36,7 +34,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Maproom/qmapshack";
     description = "Consumer grade GIS software";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda sikmir ];
     platforms = with platforms; linux;
   };
