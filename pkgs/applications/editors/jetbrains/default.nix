@@ -90,7 +90,7 @@ let
           It allows you to quickly migrate and refactor relational databases,
           construct efficient, statically checked SQL queries and much more.
         '';
-        maintainers = with maintainers; [ loskutov ];
+        maintainers = with maintainers; [ ];
         platforms = platforms.linux;
       };
     });
