@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "libmtp";
     repo = "libmtp";
     rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "0lniy0xq397zddlhsv6n4qjn0wwakli5p3ydzxmbzn0z0jgngjja";
+    sha256 = "0rya6dsb67a7ny2i1jzdicnday42qb8njqw6r902k712k5p7d1r9";
   };
 
   outputs = [ "bin" "dev" "out" ];
