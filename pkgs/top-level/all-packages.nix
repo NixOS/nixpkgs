@@ -9802,6 +9802,8 @@ in
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
+  muon = callPackage ../development/compilers/muon { };
+
   nim = callPackage ../development/compilers/nim { };
   nim-unwrapped = nim.unwrapped;
   nimble-unwrapped = nim.nimble-unwrapped;
