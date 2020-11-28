@@ -27718,6 +27718,8 @@ in
 
   nixdoc = callPackage ../tools/nix/nixdoc {};
 
+  dnadd = callPackage ../tools/nix/dnadd { };
+
   nix-doc = callPackage ../tools/package-management/nix-doc { };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
