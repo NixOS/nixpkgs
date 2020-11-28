@@ -114,7 +114,8 @@ stdenv.mkDerivation {
     then ./darwin-1.55-no-system-python.patch
     else ./darwin-no-system-python.patch)
   ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
-  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch;
+  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch
+  ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) ./cross.patch;
 
   meta = {
     homepage = "http://boost.org/";

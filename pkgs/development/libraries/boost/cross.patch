@@ -1,0 +1,13 @@
+diff --git a/bootstrap.sh b/bootstrap.sh
+index ca0b08d58..5d4105ffe 100755
+--- a/bootstrap.sh
++++ b/bootstrap.sh
+@@ -223,7 +223,7 @@ rm -f config.log
+ if test "x$BJAM" = x; then
+   $ECHO -n "Building Boost.Build engine with toolset $TOOLSET... "
+   pwd=`pwd`
+-  (cd "$my_dir/tools/build/src/engine" && ./build.sh "$TOOLSET") > bootstrap.log 2>&1
++  (cd "$my_dir/tools/build/src/engine" && CXX="$CXX_FOR_BUILD" ./build.sh "$TOOLSET") > bootstrap.log 2>&1
+   if [ $? -ne 0 ]; then
+       echo
+       echo "Failed to build Boost.Build build engine" 
