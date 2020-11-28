@@ -209,6 +209,7 @@ in
   memcached = handleTest ./memcached.nix {};
   metabase = handleTest ./metabase.nix {};
   minecraft = handleTest ./minecraft.nix {};
+  minecraft-server = handleTest ./minecraft-server.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   minidlna = handleTest ./minidlna.nix {};
