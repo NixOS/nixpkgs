@@ -8575,7 +8575,9 @@ in
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
-  burning-oil = pkgs.runCommand "bash-oil" {} ''
+  burning-oil = pkgs.runCommand "bash-oil" {
+    passthru.shellPath = "/bin/bash";
+  } ''
     mkdir -p $out/bin
     ln -s ${oil}/bin/osh $out/bin/sh
     ln -s ${oil}/bin/osh $out/bin/bash
