@@ -169,7 +169,7 @@ let
       '';
       homepage = "https://www.factorio.com/";
       license = stdenv.lib.licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen priegger ];
+      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
       platforms = [ "x86_64-linux" ];
     };
   };
