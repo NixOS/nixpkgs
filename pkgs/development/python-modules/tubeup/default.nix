@@ -2,7 +2,7 @@
 , buildPythonPackage
 , internetarchive
 , fetchPypi
-, youtube-dl
+, youtube-dlc
 , docopt
 , isPy27
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "docopt==0.6.2" "docopt"
   '';
 
-  propagatedBuildInputs = [ internetarchive docopt youtube-dl ];
+  propagatedBuildInputs = [ internetarchive docopt youtube-dlc ];
 
   pythonImportsCheck = [ "tubeup" ];
 
