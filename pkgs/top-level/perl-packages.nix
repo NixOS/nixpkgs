@@ -10703,12 +10703,12 @@ let
     };
   };
 
-  LaTeXML = buildPerlPackage {
+  LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.4";
+    version = "0.8.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRMILLER/LaTeXML-0.8.4.tar.gz";
-      sha256 = "92599b45fb587ac14b2ba9cc84b85d9ddc2deaf1cbdc2e89e7a6559e1fbb34cc";
+      url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
+      sha256 = "0dr69rgl4si9i9ww1r4dc7apgb7y6f7ih808w4g0924cvz823s0x";
     };
     propagatedBuildInputs = [ shortenPerlShebang ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
     doCheck = false;  # epub test fails
