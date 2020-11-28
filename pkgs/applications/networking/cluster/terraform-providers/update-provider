@@ -132,13 +132,21 @@ update_attr sha256 "$sha256"
 repo_root=$(git rev-parse --show-toplevel)
 
 if [[ $old_vendor_sha256 != "null" || "$vendor" = 1 ]]; then
+  echo "=== Calculating vendorSha256 ==="
   update_attr vendorSha256 "0000000000000000000000000000000000000000000000000000000000000000"
   # Hackish way to find out the desired sha256. First build, then extract the
   # error message from the logs.
   set +e
-  logs=$(nix-build "$repo_root" -A "terraform-providers.$provider_name.go-modules" 2>&1)
+  nix-build --no-out-link "$repo_root" -A "terraform-providers.$provider_name.go-modules" 2>vendor_log.txt
   set -e
-  [[ $logs =~ got:\ +([^\ ]+) ]]
+  logs=$(< vendor_log.txt)
+  if ! [[ $logs =~ got:\ +([^\ ]+) ]]; then
+    echo "ERROR: could not find new hash in output:"
+    cat vendor_log.txt
+    rm -f vendor_log.txt
+    exit 1
+  fi
+  rm -f vendor_log.txt
   vendorSha256=${BASH_REMATCH[1]}
   # Deal with nix unstable
   if [[ $vendorSha256 = sha256-* ]]; then
@@ -148,4 +156,5 @@ if [[ $old_vendor_sha256 != "null" || "$vendor" = 1 ]]; then
 fi
 
 # Check that the provider builds
+echo "=== Building terraform-providers.$provider_name ==="
 nix-build "$repo_root" -A "terraform-providers.$provider_name"
