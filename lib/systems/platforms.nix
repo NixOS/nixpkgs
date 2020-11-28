@@ -456,7 +456,7 @@ rec {
   ## Other
   ##
 
-  riscv-multiplatform = bits: {
+  riscv-multiplatform = {
     name = "riscv-multiplatform";
     kernelArch = "riscv";
     kernelTarget = "vmlinux";
