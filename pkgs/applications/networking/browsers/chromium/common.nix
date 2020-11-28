@@ -216,6 +216,7 @@ let
       is_official_build = true;
       is_debug = false;
 
+      use_vaapi = !stdenv.isAarch64; # TODO: Remove once M88 is released
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
