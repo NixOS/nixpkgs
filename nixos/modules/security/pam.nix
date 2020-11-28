@@ -18,10 +18,11 @@ let
   action = types.either types.int (types.enum ["ignore" "bad" "die" "ok" "done" "reset"]);
 
   controlType = types.either
-    (types.enum [ "required" "requisite" "sufficient" "optional" "include" "substack" ])
+    (types.enum [ "required" "requisite" "sufficient" "optional" ])
     (types.addCheck (types.attrsOf action) (x: all returnCode.check (attrNames x)));
 
-  pamEntry = types.submodule {
+  # Nixos modules don't recursively check attrs, so add manual checks to distinguish rule/include types.
+  pamRule = types.addCheck (types.submodule {
     options = {
       control = mkOption {
         type = controlType;
@@ -40,11 +41,28 @@ let
         description = "Arbitrary string arguments passed to this module";
       };
     };
-  };
+  }) (x: controlType.check x.control);
+
+  includeType = types.enum [ "include" "substack" ];
+  pamInclude = types.addCheck (types.submodule {
+    options = {
+      control = mkOption {
+        type = includeType;
+        description = "The include method to use";
+      };
+      entries = mkOption {
+        type = types.either types.str pamEntries;
+        description = ''
+          The PAM rules to include (either as a path or as entries).
+        '';
+      };
+    };
+  }) (x: includeType.check x.control);
 
   pamEntries = types.submodule {
     options = listToAttrs (map (t: nameValuePair t (mkOption {
-      type = types.listOf pamEntry;
+      type = types.listOf (types.either pamRule pamInclude);
+      default = [];
       description = "PAM entries for ${type} functionality";
     })) [ "account" "auth" "password" "session" ]);
   };
@@ -619,17 +637,20 @@ let
 
   motd = pkgs.writeText "motd" config.users.motd;
 
-  makePAMService = name: service: let
-    argumentToString = value: if hasInfix " " value then "[${escape [ "]" ] value}]" else value;
-    controlToString = value:
-      if isString value then value
-      else concatStringsSep " " (mapAttrsToList (name: value: "${name}=${toString value}") value);
-    entryToString = moduleType: { control, path, arguments}: (concatStringsSep " " (
-      [ moduleType (controlToString control) path ] ++ (map argumentToString arguments)
+  makePAMConfig = entries: let
+    includeToArgs = {control, entries}: [
+      control (if isString entries then entries else pkgs.writeText "pam.conf" (makePAMConfig entries))
+    ];
+    ruleToArgs = {control, path, arguments}: let
+      argumentToString = value: if hasInfix " " value then "[${escape [ "]" ] value}]" else value;
+      controlToString = value:
+        if isString value then value
+        else concatStringsSep " " (mapAttrsToList (name: value: "${name}=${toString value}") value);
+    in [(controlToString control) path] ++ (map argumentToString arguments);
+    entryToString = moduleType: attrs: concatStringsSep " " ([ moduleType ] ++ (
+      (if pamInclude.check attrs then includeToArgs else ruleToArgs) attrs
     ));
-  in nameValuePair ("pam.d/${name}") {
-    text = concatStringsSep "\n" (flatten (mapAttrsToList (type: map (entryToString type)) service.entries));
-  };
+  in concatStringsSep "\n" (flatten (mapAttrsToList (type: map (entryToString type)) entries));
 in {
 
   imports = [(mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])];
@@ -942,7 +963,7 @@ in {
       };
     };
 
-    environment.etc = mapAttrs' makePAMService config.security.pam.services;
+    environment.etc = mapAttrs' (name: attrs: nameValuePair "pam.d/${name}" { text = makePAMConfig attrs.entries; }) config.security.pam.services;
 
     security.pam.services = {
       other.entries = let
