@@ -14,6 +14,7 @@ let
     type = "Application";
     categories = "Game;RolePlaying;";
     genericName = pname;
+    fileValidation = false;
   };
 
 in stdenv.mkDerivation {

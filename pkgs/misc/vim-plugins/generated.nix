@@ -447,18 +447,6 @@ let
     meta.homepage = "https://github.com/antoinemadec/coc-fzf/";
   };
 
-  coc-markdownlint = buildVimPluginFrom2Nix {
-    pname = "coc-markdownlint";
-    version = "2020-11-12";
-    src = fetchFromGitHub {
-      owner = "fannheyward";
-      repo = "coc-markdownlint";
-      rev = "a9304f7b096871e15c2992d0d09e7c7f3a3675d4";
-      sha256 = "0r7mr4qmw04hhxihfn4pndpv0dakwjcj6jf1jccgydxc35qv14vj";
-    };
-    meta.homepage = "https://github.com/fannheyward/coc-markdownlint/";
-  };
-
   coc-neco = buildVimPluginFrom2Nix {
     pname = "coc-neco";
     version = "2020-04-07";
@@ -481,18 +469,6 @@ let
       sha256 = "0i2znngg8jyxgns1kqi5168c4899wj2b8h8n14yy6pxgidhgqvzp";
     };
     meta.homepage = "https://github.com/iamcco/coc-spell-checker/";
-  };
-
-  coc-vimlsp = buildVimPluginFrom2Nix {
-    pname = "coc-vimlsp";
-    version = "2020-08-01";
-    src = fetchFromGitHub {
-      owner = "iamcco";
-      repo = "coc-vimlsp";
-      rev = "efb672fe82d8619d83d3978714393e13aee8e296";
-      sha256 = "16whzvyzbx8zh7z33w7pir264dmbapkanb15mkazfhkh0wm3sfvf";
-    };
-    meta.homepage = "https://github.com/iamcco/coc-vimlsp/";
   };
 
   coc-nvim = buildVimPluginFrom2Nix {
@@ -1735,6 +1711,18 @@ let
       sha256 = "1na61qb31z80973jfi7ziw2zv6y73rm0bpfb6iqxjppmg4iqgl3i";
     };
     meta.homepage = "https://github.com/parsonsmatt/intero-neovim/";
+  };
+
+  investigate-vim = buildVimPluginFrom2Nix {
+    pname = "investigate-vim";
+    version = "2020-02-29";
+    src = fetchFromGitHub {
+      owner = "keith";
+      repo = "investigate.vim";
+      rev = "aef9332ba3cfc070fb59fd7a4ac82bae2b42cd7b";
+      sha256 = "1jiipch8jr66h1cywwj0zdlx45p70d359s8ljdwcndjwicrqslmk";
+    };
+    meta.homepage = "https://github.com/keith/investigate.vim/";
   };
 
   iosvkem = buildVimPluginFrom2Nix {

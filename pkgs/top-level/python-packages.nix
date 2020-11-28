@@ -4947,6 +4947,8 @@ in {
 
   pycm = callPackage ../development/python-modules/pycm { };
 
+  pycmarkgfm = callPackage ../development/python-modules/pycmarkgfm { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
@@ -6485,6 +6487,8 @@ in {
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
+
+  scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 

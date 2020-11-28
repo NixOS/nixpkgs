@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     maintainers = with maintainers; [ msm ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

@@ -878,9 +878,7 @@ let
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
 
-    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc {
-      ppxlib = ppxlib.override { legacy = true; };
-    };
+    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
 
@@ -937,6 +935,8 @@ let
     rope = callPackage ../development/ocaml-modules/rope { };
 
     rpclib = callPackage ../development/ocaml-modules/rpclib { };
+
+    rpclib-lwt = callPackage ../development/ocaml-modules/rpclib/lwt.nix { };
 
     rresult = callPackage ../development/ocaml-modules/rresult { };
 

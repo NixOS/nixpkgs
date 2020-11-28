@@ -109,7 +109,6 @@ ervandew/supertab
 esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
-fannheyward/coc-markdownlint
 farmergreg/vim-lastplace
 fatih/vim-go
 fcpg/vim-osc52
@@ -162,7 +161,6 @@ hsanson/vim-android
 hsitz/VimOrganizer
 hugolgst/vimsence
 iamcco/coc-spell-checker
-iamcco/coc-vimlsp
 ianks/vim-tsx
 idanarye/vim-merginal
 idris-hackers/idris-vim
@@ -239,6 +237,7 @@ kbenzie/vim-spirv
 kchmck/vim-coffee-script
 KeitaNakamura/neodark.vim
 keith/swift.vim
+keith/investigate.vim
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold

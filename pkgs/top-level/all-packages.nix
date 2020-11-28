@@ -210,7 +210,7 @@ in
 
   hobbes = callPackage ../development/tools/hobbes { };
 
-  html5validator = python36Packages.callPackage ../applications/misc/html5validator { };
+  html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
@@ -938,13 +938,13 @@ in
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
-  aws-sam-cli = callPackage ../development/tools/aws-sam-cli { python = python3; };
+  aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   iamy = callPackage ../tools/admin/iamy { };
 
-  azure-cli = callPackage ../tools/admin/azure-cli { python = python37; };
+  azure-cli = callPackage ../tools/admin/azure-cli { };
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
@@ -2508,7 +2508,7 @@ in
 
   psstop = callPackage ../tools/system/psstop { };
 
-  precice = callPackage ../development/libraries/precice { python3 = python37; };
+  precice = callPackage ../development/libraries/precice { };
 
   pueue = callPackage ../applications/misc/pueue { };
 
@@ -7909,6 +7909,8 @@ in
 
   usync = callPackage ../applications/misc/usync { };
 
+  uwc = callPackage ../tools/text/uwc { };
+
   uwsgi = callPackage ../servers/uwsgi { };
 
   v2ray = callPackage ../tools/networking/v2ray { };
@@ -9835,6 +9837,8 @@ in
   };
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
+
+  muon = callPackage ../development/compilers/muon { };
 
   nim = callPackage ../development/compilers/nim { };
   nim-unwrapped = nim.unwrapped;
@@ -18930,8 +18934,6 @@ in
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
   qemu_xen = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-slim; });
   qemu_xen-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-light; });
-  qemu_xen_4_8 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_8-slim; });
-  qemu_xen_4_8-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_8-light; });
   qemu_xen_4_10 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_10-slim; });
   qemu_xen_4_10-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_10-light; });
 
@@ -19158,6 +19160,8 @@ in
   udisks = udisks2;
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
+
+  ugtrain = callPackage ../tools/misc/ugtrain { };
 
   untie = callPackage ../os-specific/linux/untie { };
 
@@ -21452,8 +21456,8 @@ in
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
-  manim = python37Packages.callPackage ../applications/video/manim {
-    opencv = python37Packages.opencv3;
+  manim = python3Packages.callPackage ../applications/video/manim {
+    opencv = python3Packages.opencv3;
   };
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
@@ -21847,6 +21851,7 @@ in
   ike = callPackage ../applications/networking/ike { };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
+    python = python3;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
   };
 
@@ -23961,8 +23966,7 @@ in
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  # this can be changed to python3 once pyside2 is updated to support the latest python version
-  syncplay = python37.pkgs.callPackage ../applications/networking/syncplay { };
+  syncplay = python3.pkgs.callPackage ../applications/networking/syncplay { };
 
   inherit (callPackages ../applications/networking/syncthing { })
     syncthing
@@ -24111,6 +24115,8 @@ in
   thunderbird-bin-68 = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix { };
 
   ticpp = callPackage ../development/libraries/ticpp { };
+
+  tickrs = callPackage ../applications/misc/tickrs { };
 
   tig = gitAndTools.tig;
 
@@ -24841,9 +24847,6 @@ in
   xen-slim = xenPackages.xen-slim;
   xen-light = xenPackages.xen-light;
 
-  xen_4_8 = xenPackages.xen_4_8-vanilla;
-  xen_4_8-slim = xenPackages.xen_4_8-slim;
-  xen_4_8-light = xenPackages.xen_4_8-light;
   xen_4_10 = xenPackages.xen_4_10-vanilla;
   xen_4_10-slim = xenPackages.xen_4_10-slim;
   xen_4_10-light = xenPackages.xen_4_10-light;
@@ -27749,6 +27752,8 @@ in
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nixdoc = callPackage ../tools/nix/nixdoc {};
+
+  dnadd = callPackage ../tools/nix/dnadd { };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };
 
