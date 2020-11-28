@@ -1,16 +1,12 @@
 { stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, nixUnstable, dysnomia, libintl, libiconv }:
 
 stdenv.mkDerivation {
-  name = "disnix-0.9.1";
+  name = "disnix-0.10";
 
   src = fetchurl {
-    url = "https://github.com/svanderburg/disnix/releases/download/disnix-0.9.1/disnix-0.9.1.tar.gz";
-    sha256 = "0bidln5xw3raqkvdks9aipis8aaza8asgyapmilnxkkrxgmw7rdf";
+    url = "https://github.com/svanderburg/disnix/releases/download/disnix-0.10/disnix-0.10.tar.gz";
+    sha256 = "0mciqbc2h60nc0i6pd36w0m2yr96v97ybrzrqzh5f67ac1f0gqwg";
   };
-
-  configureFlags = [
-    " --with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libxml2 libxslt getopt nixUnstable libintl libiconv dysnomia ];
