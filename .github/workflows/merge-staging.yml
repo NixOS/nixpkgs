@@ -28,3 +28,12 @@ jobs:
           from_branch: staging-next
           target_branch: staging
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on failure
+        uses: peter-evans/create-or-update-comment@v1
+        if: ${{ failure() }}
+        with:
+          issue-number: 105153
+          body: |
+            An automatic merge [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
+
