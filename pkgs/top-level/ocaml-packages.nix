@@ -599,6 +599,8 @@ let
 
     mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
 
+    mirage-types = callPackage ../development/ocaml-modules/mirage/types.nix { };
+
     mirage-unix = callPackage ../development/ocaml-modules/mirage-unix { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
