@@ -97,6 +97,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Remove CVE-2020-{29129,29130} for QEMU >5.1.0
+  postPatch = ''
+    (cd slirp && patch -p1 < ${fetchpatch {
+      name = "CVE-2020-29129_CVE-2020-29130.patch";
+      url = "https://gitlab.freedesktop.org/slirp/libslirp/-/commit/2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f.patch";
+      sha256 = "01vbjqgnc0kp881l5p6b31cyyirhwhavm6x36hlgkymswvl3wh9w";
+    }})
+  '';
+
   hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
