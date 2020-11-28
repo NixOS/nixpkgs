@@ -374,24 +374,24 @@ in
       };
 
       # Mainly avoid reference to bootstrap tools
-      allowedRequisites = with prevStage; with lib;
-        # Simple executable tools
-        concatMap (p: [ (getBin p) (getLib p) ]) [
-            gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
-          ]
-        # Library dependencies
-        ++ map getLib (
-            [ attr acl zlib pcre libidn2 libunistring ]
-            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
-          )
-        # More complicated cases
-        ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
-        ++  [ /*propagated from .dev*/ linuxHeaders
-            binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
-          ]
-          ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
-            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
+      # allowedRequisites = with prevStage; with lib;
+      #   # Simple executable tools
+      #   concatMap (p: [ (getBin p) (getLib p) ]) [
+      #       gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
+      #       gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
+      #     ]
+      #   # Library dependencies
+      #   ++ map getLib (
+      #       [ attr acl zlib pcre libidn2 libunistring ]
+      #       ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
+      #     )
+      #   # More complicated cases
+      #   ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
+      #   ++  [ /*propagated from .dev*/ linuxHeaders
+      #       binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
+      #     ]
+      #     ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
+      #       [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {
         inherit (prevStage)
