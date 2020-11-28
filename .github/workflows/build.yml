@@ -1,0 +1,28 @@
+name: "Build Packages"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: cachix/install-nix-action@v10
+      with:
+        nix_path: nixpkgs=.
+    - uses: kloenk/ofbuild@0.0.2
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: cachix/install-nix-action@v10
+      with:
+        nix_path: nixpkgs=.
+    - uses: kloenk/ofbuild@0.0.2
