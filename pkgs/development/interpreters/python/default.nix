@@ -28,11 +28,11 @@ with pkgs;
             python = self;
           };
           otherSplices = {
-            selfBuildBuild = pythonOnBuildForBuild;
-            selfBuildHost = pythonOnBuildForHost;
-            selfBuildTarget = pythonOnBuildForTarget;
-            selfHostHost = pythonOnHostForHost;
-            selfTargetTarget = pythonOnTargetForTarget;
+            selfBuildBuild = pythonOnBuildForBuild.pkgs;
+            selfBuildHost = pythonOnBuildForHost.pkgs;
+            selfBuildTarget = pythonOnBuildForTarget.pkgs;
+            selfHostHost = pythonOnHostForHost.pkgs;
+            selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
           };
           keep = self: {
             # TODO maybe only define these here so nothing is needed to be kept in sync.
