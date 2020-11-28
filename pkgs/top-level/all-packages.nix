@@ -22759,6 +22759,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  n8n = callPackage ../applications/networking/n8n {};
+
   neap = callPackage ../applications/misc/neap { };
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
