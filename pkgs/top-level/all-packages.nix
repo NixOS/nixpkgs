@@ -23371,6 +23371,8 @@ in
     boost = boost17x;
   };
 
+  qmplay2 = libsForQt5.callPackage ../applications/video/qmplay2 { };
+
   qmetro = callPackage ../applications/misc/qmetro { };
 
   qmidiarp = callPackage ../applications/audio/qmidiarp {};
