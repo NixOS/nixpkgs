@@ -18283,6 +18283,10 @@ in
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
+    akvcam = callPackage ../os-specific/linux/akvcam {
+      inherit (qt5) qmake;
+    };
+
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
     anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
