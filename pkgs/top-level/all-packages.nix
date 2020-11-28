@@ -8581,7 +8581,7 @@ in
     mkdir -p $out/bin
     cat <<PROG > $out/bin/bash
     #!${oil}/bin/osh
-    exec ${oil}/bin/osh "$@"
+    exec ${oil}/bin/osh "\$@"
     PROG
     chmod +x "$out/bin/bash"
     ln -s ${oil}/bin/osh $out/bin/sh
