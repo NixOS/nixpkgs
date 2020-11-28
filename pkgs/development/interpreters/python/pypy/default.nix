@@ -31,11 +31,11 @@ let
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
 
-    pythonPackagesBuildBuild = pkgsBuildBuild.${pythonAttr};
-    pythonPackagesBuildHost = pkgsBuildHost.${pythonAttr};
-    pythonPackagesBuildTarget = pkgsBuildTarget.${pythonAttr};
-    pythonPackagesHostHost = pkgsHostHost.${pythonAttr};
-    pythonPackagesTargetTarget = pkgsTargetTarget.${pythonAttr} or {};
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";

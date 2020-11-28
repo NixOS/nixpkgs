@@ -14,12 +14,12 @@ with pkgs;
     , packageOverrides
     , sitePackages
     , hasDistutilsCxxPatch
-    , pythonPackagesBuildBuild
-    , pythonPackagesBuildHost
-    , pythonPackagesBuildTarget
-    , pythonPackagesHostHost
-    , self # is pythonPackagesHostTarget
-    , pythonPackagesTargetTarget
+    , pythonOnBuildForBuild
+    , pythonOnBuildForHost
+    , pythonOnBuildForTarget
+    , pythonOnHostForHost
+    , pythonOnTargetForTarget
+    , self # is pythonOnHostForTarget
     }: let
       pythonPackages = callPackage
         ({ pkgs, stdenv, python, overrides }: let
@@ -28,11 +28,11 @@ with pkgs;
             python = self;
           };
           otherSplices = {
-            selfBuildBuild = pythonPackagesBuildBuild;
-            selfBuildHost = pythonPackagesBuildHost;
-            selfBuildTarget = pythonPackagesBuildTarget;
-            selfHostHost = pythonPackagesHostHost;
-            selfTargetTarget = pythonPackagesTargetTarget;
+            selfBuildBuild = pythonOnBuildForBuild;
+            selfBuildHost = pythonOnBuildForHost;
+            selfBuildTarget = pythonOnBuildForTarget;
+            selfHostHost = pythonOnHostForHost;
+            selfTargetTarget = pythonOnTargetForTarget;
           };
           keep = self: {
             # TODO maybe only define these here so nothing is needed to be kept in sync.
@@ -100,7 +100,7 @@ with pkgs;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
         inherit hasDistutilsCxxPatch;
-        pythonForBuild = pythonPackagesBuildHost;
+        pythonForBuild = pythonOnBuildForHost;
 
         tests = callPackage ./tests.nix {
           python = self;
