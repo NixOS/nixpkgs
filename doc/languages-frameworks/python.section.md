@@ -153,7 +153,7 @@ The dot product of [1 2] and [3 4] is: 11
 But if we maintain the script ourselves, and if there are more dependencies, it
 may be nice to encode those dependencies in source to make the script re-usable
 without that bit of knowledge. That can be done by using `nix-shell` as a
-[shebang](https://en.wikipedia.org/wiki/Shebang_(Unix), like so:
+[shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)), like so:
 
 ```python
 #!/usr/bin/env nix-shell
