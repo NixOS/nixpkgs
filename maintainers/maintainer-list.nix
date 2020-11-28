@@ -2901,6 +2901,12 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  fehnomenal = {
+    email = "fehnomenal@fehn.systems";
+    github = "fehnomenal";
+    githubId = 9959940;
+    name = "Andreas Fehn";
+  };
   felschr = {
     email = "dev@felschr.com";
     github = "felschr";
