@@ -11,21 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libavif";
-  version = "0.8.1";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fs222cn1d60pv5fjsr92axk5dival70b6yqw0wng5ikk9zsdkhy";
+    sha256 = "1qvjd3xi9r89pcblxdgz4c6hqp67ss53b1x9zkg7lrik7g3lwq8d";
   };
 
   # reco: encode libaom slowest but best, decode dav1d fastest
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DAVIF_CODEC_AOM=ON"
-    "-DAVIF_CODEC_DAV1D=ON"
+    "-DAVIF_CODEC_AOM=ON" # best encoder (slow but small)
+    "-DAVIF_CODEC_DAV1D=ON" # best decoder (fast)
+    "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
   ];
 

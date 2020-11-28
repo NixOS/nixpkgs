@@ -1,27 +1,118 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap
-, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, e2fsprogs, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, pcre2
-, linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi, bashInteractive
-, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, ninja, meson, python3Packages, glibcLocales
-, patchelf
-, substituteAll
-, getent
-, cryptsetup, lvm2
+{ stdenv
+, lib
+, fetchFromGitHub
 , buildPackages
-, perl
-, withSelinux ? false, libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
+, ninja
+, meson
+, m4
+, pkgconfig
+, coreutils
+, gperf
+, getent
+, patchelf
+, glibcLocales
+, glib
+, substituteAll
+, gettext
+, python3Packages
+
+  # Mandatory dependencies
+, libcap
+, util-linux
+, kbd
+, kmod
+
+  # Optional dependencies
+, pam
+, cryptsetup
+, lvm2
+, audit
+, acl
+, lz4
+, libgcrypt
+, libgpgerror
+, libidn2
+, curl
+, gnutar
+, gnupg
+, zlib
+, xz
+, libuuid
+, libapparmor
+, intltool
+, bzip2
+, pcre2
+, e2fsprogs
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnu-efi
+, iptables
+, withSelinux ? false
+, libselinux
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
+, kexectools
+, bashInteractive
+, libmicrohttpd
+
+, withAnalyze ? true
+, withApparmor ? true
+, withCompression ? true  # adds bzip2, lz4 and xz
+, withCoredump ? true
+, withCryptsetup ? true
+, withDocumentation ? true
+, withEfi ? stdenv.hostPlatform.isEfi
+, withHomed ? false
+, withHostnamed ? true
+, withHwdb ? true
+, withImportd ? true
+, withLocaled ? true
+, withLogind ? true
+, withMachined ? true
+, withNetworkd ? true
+, withNss ? true
+, withPCRE2 ? true
+, withPolkit ? true
+, withPortabled ? false
+, withRemote ? true
+, withResolved ? true
+, withShellCompletions ? true
+, withTimedated ? true
+, withTimesyncd ? true
+, withUserDb ? true
+, p11-kit
+, libfido2
+
+  # name argument
+, pname ? "systemd"
+
+
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
 }:
 
+assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withImportd ->
+(curl.dev != null && zlib != null && xz != null && libgcrypt != null
+  && gnutar != null && gnupg != null && withCompression);
+
+assert withEfi -> (gnu-efi != null);
+assert withRemote -> lib.getDev curl != null;
+assert withCoredump -> withCompression;
+
+assert withHomed -> withCryptsetup;
+
+assert withCryptsetup ->
+(cryptsetup != null);
 let
+  wantCurl = withRemote || withImportd;
+
   version = "246.6";
-in stdenv.mkDerivation {
-  inherit version;
-  pname = "systemd";
+in
+stdenv.mkDerivation {
+  inherit version pname;
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -54,7 +145,7 @@ in stdenv.mkDerivation {
     ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0019-revert-get-rid-of-seat_can_multi_session.patch
+    ./0019-logind-seat-debus-show-CanMultiSession-again.patch
   ];
 
   postPatch = ''
@@ -71,24 +162,55 @@ in stdenv.mkDerivation {
   outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
-    [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-      ninja meson
+    [
+      pkgconfig
+      gperf
+      ninja
+      meson
       coreutils # meson calls date, stat etc.
       glibcLocales
-      patchelf getent m4
-      perl # to patch the libsystemd.so and remove dependencies on aarch64
+      patchelf
+      getent
+      m4
 
-      (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
+      intltool
+      gettext
+
+      libxslt
+      docbook_xsl
+      docbook_xml_dtd_42
+      docbook_xml_dtd_45
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
     ];
+
   buildInputs =
-    [ linuxHeaders libcap curl.dev kmod xz pam acl
-      cryptsetup libuuid glib libgcrypt libgpgerror libidn2
-      pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
-    [ libffi audit lz4 bzip2 libapparmor
-      iptables gnu-efi
-    ] ++ stdenv.lib.optional withSelinux libselinux;
+    [
+      acl
+      audit
+      glib
+      kmod
+      libcap
+      libgcrypt
+      libidn2
+      libuuid
+      linuxHeaders
+      pam
+    ]
+
+    ++ lib.optional withApparmor libapparmor
+    ++ lib.optional wantCurl (lib.getDev curl)
+    ++ lib.optionals withCompression [ bzip2 lz4 xz ]
+    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+    ++ lib.optional withEfi gnu-efi
+    ++ lib.optional withKexectools kexectools
+    ++ lib.optional withLibseccomp libseccomp
+    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPCRE2 pcre2
+    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withSelinux libselinux
+    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optionals withHomed [ p11-kit libfido2 ]
+  ;
 
   #dontAddPrefix = true;
 
@@ -104,23 +226,33 @@ in stdenv.mkDerivation {
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
+    "-Dglib=${lib.boolToString (glib != null)}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
-    "-Dimportd=true"
-    "-Dlz4=true"
-    "-Dhomed=false"
-    "-Dhostnamed=true"
-    "-Dnetworkd=true"
-    "-Dportabled=false"
-    "-Dremote=false"
+    "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
+    "-Dimportd=${lib.boolToString withImportd}"
+    "-Dlz4=${lib.boolToString withCompression}"
+    "-Dhomed=${stdenv.lib.boolToString withHomed}"
+    "-Dlogind=${lib.boolToString withLogind}"
+    "-Dlocaled=${lib.boolToString withLocaled}"
+    "-Dhostnamed=${lib.boolToString withHostnamed}"
+    "-Dmachined=${lib.boolToString withMachined}"
+    "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Dpolkit=${lib.boolToString withPolkit}"
+    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
+    "-Dportabled=${lib.boolToString withPortabled}"
+    "-Dhwdb=${lib.boolToString withHwdb}"
+    "-Dremote=${lib.boolToString withRemote}"
     "-Dsysusers=false"
-    "-Dtimedated=true"
-    "-Dtimesyncd=true"
+    "-Dtimedated=${lib.boolToString withTimedated}"
+    "-Dtimesyncd=${lib.boolToString withTimesyncd}"
+    "-Duserdb=${lib.boolToString withUserDb}"
+    "-Dcoredump=${lib.boolToString withCoredump}"
     "-Dfirstboot=false"
-    "-Dlocaled=true"
-    "-Dresolve=true"
+    "-Dresolve=${lib.boolToString withResolved}"
     "-Dsplit-usr=false"
-    "-Dlibcurl=true"
+    "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=true"
     "-Dquotacheck=false"
@@ -141,19 +273,14 @@ in stdenv.mkDerivation {
     "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
 
-    (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
-
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
     "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
-    "-Dsulogin-path=${utillinux}/bin/sulogin"
-    "-Dmount-path=${utillinux}/bin/mount"
-    "-Dumount-path=${utillinux}/bin/umount"
+    "-Dsulogin-path=${util-linux}/bin/sulogin"
+    "-Dmount-path=${util-linux}/bin/mount"
+    "-Dumount-path=${util-linux}/bin/umount"
     "-Dcreate-log-dirs=false"
     # Upstream uses cgroupsv2 by default. To support docker and other
     # container managers we still need v1.
@@ -161,6 +288,21 @@ in stdenv.mkDerivation {
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
     "-Dman=true"
+
+    "-Defi=${lib.boolToString withEfi}"
+    "-Dgnu-efi=${lib.boolToString withEfi}"
+  ] ++ lib.optionals withEfi [
+    "-Defi-libdir=${toString gnu-efi}/lib"
+    "-Defi-includedir=${toString gnu-efi}/include/efi"
+    "-Defi-ldsdir=${toString gnu-efi}/lib"
+  ] ++ lib.optionals (withShellCompletions == false) [
+    "-Dbashcompletiondir=no"
+    "-Dzshcompletiondir=no"
+  ] ++ lib.optionals (!withNss) [
+    "-Dnss-myhostname=false"
+    "-Dnss-mymachines=false"
+    "-Dnss-resolve=false"
+    "-Dnss-systemd=false"
   ];
 
   preConfigure = ''
@@ -172,7 +314,6 @@ in stdenv.mkDerivation {
       src/core/mount.c \
       src/core/swap.c \
       src/cryptsetup/cryptsetup-generator.c \
-      src/fsck/fsck.c \
       src/journal/cat.c \
       src/nspawn/nspawn.c \
       src/remount-fs/remount-fs.c \
@@ -186,14 +327,12 @@ in stdenv.mkDerivation {
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
-        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
-        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
-        --replace /sbin/mke2fs ${lib.getBin e2fsprogs}/sbin/mke2fs \
-        --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
+        --replace /sbin/mkswap ${lib.getBin util-linux}/sbin/mkswap \
+        --replace /sbin/swapon ${lib.getBin util-linux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin util-linux}/sbin/swapoff \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin util-linux}/sbin/sulogin \
         --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
@@ -227,14 +366,17 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = toString [
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
-    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+    "-UPOLKIT_AGENT_BINARY_PATH"
+    "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
     # Set the release_agent on /sys/fs/cgroup/systemd to the
     # currently running systemd (/run/current-system/systemd) so
     # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    "-USYSTEMD_CGROUP_AGENT_PATH"
+    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
   ];
 
   doCheck = false; # fails a bunch of tests
@@ -266,7 +408,9 @@ in stdenv.mkDerivation {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
-  ''; # */
+  '' + lib.optionalString (!withDocumentation) ''
+    rm -rf $out/share/doc
+  '';
 
   enableParallelBuilding = true;
 
@@ -278,12 +422,12 @@ in stdenv.mkDerivation {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ andir eelco flokli ];
+    maintainers = with maintainers; [ andir eelco flokli kloenk ];
   };
 }

@@ -106,7 +106,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.10";
+  version = "0.3.12";
 
   outputs = [ "out" "dev" ];
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "174id98ga82bhz2v7sy9yj6pqy0h0088p3mkdikip69p9rh3d17b";
+    sha256 = "0mk1kjkr96bvvcq2zigzjrs0cnhwsf6gfi0855mp9yifn8lvp20y";
   };
 
   inherit blas64;
@@ -142,12 +142,6 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
-  ];
-
-  # Disable an optimisation which seems to cause issues, pending an
-  # upstream fix: https://github.com/xianyi/OpenBLAS/issues/2496
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
-    ./0001-Disable-optimised-aarch64-dgemm_beta-pending-fix.patch
   ];
 
   makeFlags = mkMakeFlagsFromConfig (config // {

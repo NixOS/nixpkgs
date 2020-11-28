@@ -13,6 +13,7 @@
 , libgsf
 , libexif
 , libheif
+, librsvg
 , ApplicationServices
 , python27
 , libpng
@@ -26,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.10.1";
+  version = "8.10.2";
 
   outputs = [ "bin" "out" "man" "dev" ];
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "0zfhp86vbxs5qdnjy8hvdcjslfkafvd3s3rjr2dppwm0iz4gdbfx";
+    sha256 = "1psi39a4h0awwbyizbsk467z0djwq0rh8hvkklbsd5b92m7768sp";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     libexif
     libheif
     libpng
+    librsvg
     python27
     libpng
     expat

@@ -27,7 +27,7 @@
 , nss ? null, nspr ? null
 
 # Linux Only Dependencies
-, linuxHeaders, utillinux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
+, linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
 , libaio ? null, libxfs ? null, zfs ? null
 , ...
 }:
@@ -133,6 +133,7 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
+      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [
@@ -147,7 +148,7 @@ in rec {
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
       snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ optionals stdenv.isLinux [
-      linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
+      linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
     ] ++ optionals hasRadosgw [
@@ -207,12 +208,12 @@ in rec {
   ceph-client = runCommand "ceph-client-${version}" {
       meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices";
     } ''
-      mkdir -p $out/{bin,etc,${sitePackages}}
+      mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
       cp -r ${ceph}/${sitePackages} $out/${sitePackages}
-      cp -r ${ceph}/etc/bash_completion.d $out/etc
+      cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out
       substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out

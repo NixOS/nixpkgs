@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "duf";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "duf";
     rev = "v${version}";
-    sha256 = "093kir1zwpkl0jic4p1f032ir5k7kra94di2indzn0fa4j4r7a0i";
+    sha256 = "0n0nvrqrlr75dmf2j6ja615ighzs35cfixn7z9cwdz3vhj1xhc5f";
   };
 
   dontStrip = true;

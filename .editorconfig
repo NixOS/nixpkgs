@@ -76,10 +76,12 @@ trim_trailing_whitespace = unset
 
 [pkgs/build-support/dotnetenv/Wrapper/**]
 end_of_line = unset
+indent_style = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
 [pkgs/build-support/upstream-updater/**]
+indent_style = unset
 trim_trailing_whitespace = unset
 
 [pkgs/development/compilers/elm/registry.dat]
@@ -95,6 +97,9 @@ trim_trailing_whitespace = unset
 
 [pkgs/development/node-packages/composition.nix]
 insert_final_newline = unset
+
+[pkgs/development/{perl-modules,ocaml-modules,tools/ocaml}/**]
+indent_style = unset
 
 [pkgs/servers/dict/wordnet_structures.py]
 trim_trailing_whitespace = unset

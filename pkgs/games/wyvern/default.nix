@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.sr.ht/~nicohman/wyvern";
-    rev = "${version}";
+    rev = version;
     sha256 = "1sl3yhash1527amc8rs4374fd7jbgnkyy7qpw94ms2gs80sdv3s5";
   };
   cargoPatches = [ ./cargo-lock.patch ];

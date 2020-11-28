@@ -1,16 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchurl, qmake4Hook, makeDesktopItem
-, qt4, protobuf, libpcap, wireshark, gzip, diffutils, gawk
+{ lib, mkDerivation, fetchFromGitHub, fetchurl, qmake, makeDesktopItem
+, qtbase, qtscript, protobuf, libpcap, wireshark, gzip, diffutils, gawk
+, libnl
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "ostinato";
-  version = "0.9";
+  version = "1.1";
 
   src = fetchFromGitHub  {
     owner  = "pstavirs";
     repo   = "ostinato";
     rev    = "v${version}";
-    sha256 = "109gxj6djdsk7rp1nxpx39kfi75xfl9p9qgffh1cpcdpbsbvq5bx";
+    sha256 = "0B3jOj5rA3/rD2gXS2praZImeP34zN06fOPy/IswXOg=";
   };
 
   ostinatoIcon = fetchurl {
@@ -18,14 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "f5c067823f2934e4d358d76f65a343efd69ad783a7aeabd7ab4ce3cd03490d70";
   };
 
-  buildInputs = [ qt4 protobuf libpcap ];
+  buildInputs = [ qtbase protobuf libpcap qtscript libnl ];
 
-  nativeBuildInputs = [ qmake4Hook ];
+  nativeBuildInputs = [ qmake ];
 
   patches = [ ./drone_ini.patch ];
+  prePatch = ''
+    sed -i 's|/usr/include/libnl3|${libnl.dev}/include/libnl3|' server/drone.pro
+  '';
 
   desktopItem = makeDesktopItem {
-    type          = "application";
+    type          = "Application";
     name          = "ostinato";
     desktopName   = "Ostinato";
     genericName   = "Packet/Traffic Generator and Analyzer";
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
       GenericName[it]=Generatore ed Analizzatore di pacchetti di rete
       Comment[it]=Generatore ed Analizzatore di pacchetti di rete con interfaccia amichevole
     '';
+    fileValidation = false;
   };
 
   postInstall = ''
@@ -58,7 +63,7 @@ stdenv.mkDerivation rec {
   # pdmlprotocol.h:23:25: fatal error: protocol.pb.h: No such file or directory
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A packet traffic generator and analyzer";
     homepage    = "https://ostinato.org";
     license     = licenses.gpl3;

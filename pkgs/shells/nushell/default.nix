@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.21.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "19bpxx9pi3cl5y7h5qg4a2pmvwqavm1vciyvsq96kxkc7rq2xwvl";
+    sha256 = "0rbg0jchg59x0g4h0xahdm9qah8l8g4i2s8lkaqzdkm4yv29gqx4";
   };
 
-  cargoSha256 = "1ghbzahz8lbk11sjy2kis12w22rjr92aaw451rmc86pk2lsxn0dx";
+  cargoSha256 = "1sbgn68n0rqh1m98dm3r2a3pqqqx4v7axw5djw8qlx4gv7xw1ql0";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 johntitor marsam ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 

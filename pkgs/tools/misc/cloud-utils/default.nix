@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, gawk, gnused, utillinux, file
+, gawk, gnused, util-linux, file
 , wget, python3, qemu-utils, euca2ools
 , e2fsprogs, cdrkit
 , gptfdisk }:
@@ -7,7 +7,7 @@
 let
   # according to https://packages.debian.org/sid/cloud-image-utils + https://packages.debian.org/sid/admin/cloud-guest-utils
   guestDeps = [
-    e2fsprogs gptfdisk gawk gnused utillinux
+    e2fsprogs gptfdisk gawk gnused util-linux
   ];
   binDeps = guestDeps ++ [
     wget file qemu-utils cdrkit
@@ -17,10 +17,10 @@ in stdenv.mkDerivation rec {
   # $ nix-build nixos/release-combined.nix -A nixos.tests.ec2-nixops
   # growpart is needed in initrd in nixos/system/boot/grow-partition.nix
   pname = "cloud-utils";
-  version = "0.31";
+  version = "0.32";
   src = fetchurl {
     url = "https://launchpad.net/cloud-utils/trunk/${version}/+download/cloud-utils-${version}.tar.gz";
-    sha256 = "07fl3dlqwdzw4xx7mcxhpkks6dnmaxha80zgs9f6wmibgzni8z0r";
+    sha256 = "0xxdi55lzw7j91zfajw7jhd2ilsqj2dy04i9brlk8j3pvb5ma8hk";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];

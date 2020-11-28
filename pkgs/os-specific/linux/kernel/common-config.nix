@@ -132,6 +132,7 @@ let
       IP_MROUTE_MULTIPLE_TABLES   = yes;
       IP_MULTICAST                = yes;
       IP_MULTIPLE_TABLES          = yes;
+      IPV6                        = yes;
       IPV6_ROUTER_PREF            = yes;
       IPV6_ROUTE_INFO             = yes;
       IPV6_OPTIMISTIC_DAD         = yes;
@@ -773,6 +774,8 @@ let
       USERFAULTFD   = yes;
       X86_CHECK_BIOS_CORRUPTION = yes;
       X86_MCE                   = yes;
+
+      RAS = yes; # Needed for EDAC support
 
       # Our initrd init uses shebang scripts, so can't be modular.
       BINFMT_SCRIPT = yes;

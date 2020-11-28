@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
-, utillinux, openisns, openssl, kmod, perl, systemd, pkgconf
+, util-linux, openisns, openssl, kmod, perl, systemd, pkgconf
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.1.2";
 
   nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];
-  buildInputs = [ kmod openisns.lib openssl systemd utillinux ];
+  buildInputs = [ kmod openisns.lib openssl systemd util-linux ];
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
@@ -25,8 +25,16 @@ stdenv.mkDerivation rec {
     sed -i 's|/usr|/|' Makefile
   '';
 
+  installFlags = [
+    "install"
+    "install_systemd"
+  ];
+
   postInstall = ''
     cp usr/iscsistart $out/sbin/
+    for f in $out/lib/systemd/system/*; do
+      substituteInPlace $f --replace /sbin $out/bin
+    done
     $out/sbin/iscsistart -v
   '';
 

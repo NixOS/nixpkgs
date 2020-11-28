@@ -135,7 +135,7 @@ in
       #keys = 96; # unused
       #haproxy = 97; # dynamically allocated as of 2020-03-11
       mongodb = 98;
-      openldap = 99;
+      #openldap = 99; # dynamically allocated as of PR#94610
       #users = 100; # unused
       cgminer = 101;
       munin = 102;
@@ -290,8 +290,8 @@ in
       hound = 259;
       leaps = 260;
       ipfs  = 261;
-      stanchion = 262;
-      riak-cs = 263;
+      # stanchion = 262; # unused, removed 2020-10-14
+      # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
@@ -451,7 +451,7 @@ in
       keys = 96;
       #haproxy = 97; # dynamically allocated as of 2020-03-11
       #mongodb = 98; # unused
-      openldap = 99;
+      #openldap = 99; # dynamically allocated as of PR#94610
       munin = 102;
       #logcheck = 103; # unused
       #nix-ssh = 104; # unused
@@ -593,8 +593,8 @@ in
       hound = 259;
       leaps = 260;
       ipfs = 261;
-      stanchion = 262;
-      riak-cs = 263;
+      # stanchion = 262; # unused, removed 2020-10-14
+      # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;

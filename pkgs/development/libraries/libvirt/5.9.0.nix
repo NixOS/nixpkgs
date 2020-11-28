@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchgit
 , pkgconfig, makeWrapper, libtool, autoconf, automake, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr
-, iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
+, iproute, iptables, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, glib, rpcsvc-proto, libtirpc
@@ -36,12 +36,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig rpcsvc-proto ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib libtirpc
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl attr parted
+    libpciaccess lvm2 util-linux systemd libnl numad zfs
+    libapparmor libcap_ng numactl attr parted libtirpc
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
   ] ++ optionals enableIscsi [

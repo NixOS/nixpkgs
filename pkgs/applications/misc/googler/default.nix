@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jarun/googler";
     description = "Google Search, Google Site Search, Google News from the terminal";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ koral filalex77 ];
+    maintainers = with maintainers; [ koral Br1ght0ne ];
     platforms = python.meta.platforms;
   };
 }

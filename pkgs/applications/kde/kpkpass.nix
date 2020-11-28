@@ -8,6 +8,7 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ lgpl21 ];
     maintainers = [ lib.maintainers.bkchr ];
+    broken = lib.versionOlder qtbase.version "5.13";
   };
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [ qtbase karchive ];

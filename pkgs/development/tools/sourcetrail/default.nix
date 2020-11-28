@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "CoatiSoftware";
     repo = "Sourcetrail";
-    rev = "${version}";
+    rev = version;
     sha256 = "0jp9y86xzkcxikc1cn4f6gqgg6zdssck08677ldagw25p1zadvzw";
   };
 

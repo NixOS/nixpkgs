@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, amoeba-data, alsaLib, expat, freetype, gtk2, libvorbis, libGLU, pkgconfig }:
+{ stdenv, fetchurl, amoeba-data, alsaLib, expat, freetype, gtk2, libvorbis, libGLU, xorg, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "amoeba-${version}-${debver}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ alsaLib expat freetype gtk2 libvorbis libGLU ];
+  buildInputs = [ alsaLib expat freetype gtk2 libvorbis libGLU xorg.libXxf86vm ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1/

@@ -1,7 +1,7 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
-, llvmPackages, rustPlatform
+, llvmPackages, rustPlatform, buildGoModule
 , pkgconfig, curl, openssl, libgit2, libiconv
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -468,6 +468,21 @@ self: super: {
     '';
   });
 
+  vim-markdown-composer =
+  let
+    vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
+      pname = "vim-markdown-composer-bin";
+      inherit (super.vim-markdown-composer) src version;
+      cargoSha256 = "iuhq2Zhdkib8hw4uvXBjwE5ZiN1kzairlzufaGuVkWc=";
+    };
+  in super.vim-markdown-composer.overrideAttrs(oldAttrs: rec {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/vim-markdown-composer/after/ftplugin/markdown/composer.vim \
+        --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
+        "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
+    '';
+  });
+
   vim-metamath = super.vim-metamath.overrideAttrs(old: {
     preInstall = "cd vim";
   });
@@ -580,6 +595,20 @@ self: super: {
       '';
   });
 
+  vim-hexokinase = super.vim-hexokinase.overrideAttrs(old: {
+    preFixup = let
+      hexokinase = buildGoModule {
+        name = "hexokinase";
+        src = old.src + "/hexokinase";
+        vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+      };
+    in ''
+      ln -s ${hexokinase}/bin/hexokinase $target/hexokinase/hexokinase
+    '';
+
+    meta.platforms = stdenv.lib.platforms.all;
+  });
+
   vim-clap = super.vim-clap.overrideAttrs(old: {
     preFixup = let
       maple-bin = rustPlatform.buildRustPackage {
@@ -619,12 +648,12 @@ self: super: {
 } // (
   let
     nodePackageNames = [
-      "coc-go"
       "coc-css"
       "coc-diagnostic"
       "coc-emmet"
       "coc-eslint"
       "coc-git"
+      "coc-go"
       "coc-highlight"
       "coc-html"
       "coc-imselect"
@@ -632,6 +661,7 @@ self: super: {
       "coc-jest"
       "coc-json"
       "coc-lists"
+      "coc-markdownlint"
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
@@ -648,6 +678,7 @@ self: super: {
       "coc-tslint-plugin"
       "coc-tsserver"
       "coc-vetur"
+      "coc-vimlsp"
       "coc-vimtex"
       "coc-wxml"
       "coc-yaml"

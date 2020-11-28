@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.6.0";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "1m8ly2h52mw67kqc7qqpf7sxxnyk4fnw2qavjpj6zgw3i6dhj0p1";
+    sha256 = "0318fw04fman20hjdjsgix6fg4fp85mrsm3bb629kxn30xi6wsh3";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
+
+  patches = [ ./fix-luajit-darwin.patch ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

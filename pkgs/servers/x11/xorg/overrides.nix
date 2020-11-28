@@ -82,13 +82,6 @@ self: super:
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
-    patches = [
-      # Fixes an issue that happens when cross-compiling for us.
-      (fetchpatch {
-        url = "https://cgit.freedesktop.org/xorg/lib/libX11/patch/?id=0327c427d62f671eced067c6d9b69f4e216a8cac";
-        sha256 = "11k2mx56hjgw886zf1cdf2nhv7052d5rggimfshg6lq20i38vpza";
-      })
-    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -325,8 +318,9 @@ self: super:
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
-        mkdir -p $out/share
+        mkdir -p $out/share/man/man7
         ln -sfn ${self.xkeyboardconfig}/etc/X11 $out/share/X11
+        ln -sfn ${self.xkeyboardconfig}/share/man/man7/xkeyboard-config.7.gz $out/share/man/man7
       '';
   });
 

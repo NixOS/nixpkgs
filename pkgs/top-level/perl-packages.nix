@@ -332,6 +332,20 @@ let
     };
   };
 
+  AnyEventAIO = buildPerlPackage {
+    pname ="AnyEvent-AIO";
+    version = "1.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-AIO-1.1.tar.gz";
+      sha256 = "0svh0mlp17g0ypq8bgs3h3axg8v7h0z45hryacgn6q8mcj65n43b";
+    };
+    propagatedBuildInputs = [ AnyEvent IOAIO ];
+    meta = {
+      description = "Truly asynchronous file and directory I/O";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AnyEventCacheDNS = buildPerlModule {
     pname = "AnyEvent-CacheDNS";
     version = "0.08";
@@ -511,10 +525,10 @@ let
     buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
     preCheck = "rm t/30cluster.t"; # do not run failing tests
     postInstall = ''
-      mkdir -p $out/etc/bash_completion.d
+      mkdir -p $out/share/bash-completion/completions
       mv $out/bin/clusterssh_bash_completion.dist \
-         $out/etc/bash_completion.d/clusterssh_bash_completion
-      substituteInPlace $out/etc/bash_completion.d/clusterssh_bash_completion \
+         $out/share/bash-completion/completions/clusterssh_bash_completion
+      substituteInPlace $out/share/bash-completion/completions/clusterssh_bash_completion \
          --replace '/bin/true' '${pkgs.coreutils}/bin/true' \
          --replace 'grep' '${pkgs.gnugrep}/bin/grep' \
          --replace 'sed' '${pkgs.gnused}/bin/sed'
@@ -579,6 +593,27 @@ let
       homepage = "https://github.com/miyagawa/cpanminus";
       description = "Get, unpack, build and install modules from CPAN";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Appcpm = buildPerlModule {
+    pname = "App-cpm";
+    version = "0.994";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.994.tar.gz";
+      sha256 = "4242ecb64aaae09034eddb1b338e005567ace29f2ac2d1bca4d4bcf4e15d21c4";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy ModuleCPANfile ParallelPipes locallib ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/cpm
+    '';
+    meta = {
+      homepage = "https://github.com/skaji/cpm";
+      description = "A fast CPAN module installer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -847,7 +882,7 @@ let
       sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
     };
     meta = {
-      homepage = "http://github.com/timj/perl-Astro-FITS-Header/tree/master";
+      homepage = "https://github.com/timj/perl-Astro-FITS-Header/tree/master";
       description = "Object-oriented interface to FITS HDUs";
       license = stdenv.lib.licenses.free;
     };
@@ -1300,7 +1335,7 @@ let
     buildInputs = [ FileSlurp ];
     propagatedBuildInputs = [ ClassLoad DirSelf FileShareDir ModulePluggable MooseXGetopt namespaceclean  ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training";
+      homepage = "https://metacpan.org/release/Bot-Training";
       description = "Plain text training material for bots like Hailo and AI::MegaHAL";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1316,7 +1351,7 @@ let
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training-MegaHAL";
+      homepage = "https://metacpan.org/release/Bot-Training-MegaHAL";
       description = "Provide megahal.trn via Bot::Training";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1332,7 +1367,7 @@ let
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training-StarCraft";
+      homepage = "https://metacpan.org/release/Bot-Training-StarCraft";
       description = "Provide starcraft.trn via Bot::Training";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1756,6 +1791,21 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ TestWarn ];
+  };
+
+  CatalystAuthenticationStoreLDAP = buildPerlPackage {
+    pname = "Catalyst-Authentication-Store-LDAP";
+    version = "1.016";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-LDAP-1.016.tar.gz";
+      sha256 = "0cm399vxqqf05cjgs1j5v3sk4qc6nmws5nfhf52qvpbwc4m82mq8";
+    };
+    propagatedBuildInputs = [ NetLDAP CatalystPluginAuthentication ClassAccessorFast ];
+    buildInputs = [ TestMore TestMockObject TestException NetLDAPServerTest ];
+    meta = {
+      description= "Authentication from an LDAP Directory";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
   };
 
   CatalystComponentInstancePerContext = buildPerlPackage {
@@ -3103,6 +3153,23 @@ let
        description = "TidyAll plugin to sort and align Moose-style attributes";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+  };
+
+  CommandRunner = buildPerlModule {
+    pname = "Command-Runner";
+    version = "0.103";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Command-Runner-0.103.tar.gz";
+      sha256 = "0f180b5c3b3fc9db7b83d4a5fdd959db34f7d6d2472f817dbf8b4b795a9dc82a";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ CaptureTiny StringShellQuote Win32ShellQuote ];
+    meta = {
+      homepage = "https://github.com/skaji/Command-Runner";
+      description = "Run external commands and Perl code refs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
   };
 
   commonsense = buildPerlPackage {
@@ -8300,12 +8367,12 @@ let
     };
   };
 
-  FutureAsyncAwait = buildPerlModule {
+  FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.45";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.45.tar.gz";
-      sha256 = "1aq19b21r9i4c1mxkrv0irnx16234cnzsx50178c7xif4gqkar9k";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
+      sha256 = "1iqbs7n8923xjkai51hiczn5an8cskddl7qrfi30axjl1d56h6r0";
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseSublike ];
@@ -9922,6 +9989,25 @@ let
     doCheck = false;
     meta = {
       description = "Perl core IO modules";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  IOAIO = buildPerlPackage {
+    pname = "IO-AIO";
+    version = "4.72";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/IO-AIO-4.72.tar.gz";
+      sha256 = "17vfbqagpab8lsbf5nmp2frvxw7hvsyy2i87dpid8djzr615wnvf";
+    };
+    buildInputs = [ CanaryStability ];
+    propagatedBuildInputs = [ commonsense ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/treescan
+    '';
+    meta = {
+      description = "Asynchronous/Advanced Input/Output";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -14570,6 +14656,27 @@ let
     };
   };
 
+  NetAsyncHTTP = buildPerlModule {
+    pname = "Net-Async-HTTP";
+    version = "0.47";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.47.tar.gz";
+      sha256 = "1lwy1ijrhibi087p3q5zvadhkq0slfrzfhb76cmkx4mpyv5v4l8f";
+    };
+    buildInputs = [ HTTPCookies TestIdentity TestMetricsAny TestRefcount ];
+    propagatedBuildInputs = [ Future HTTPMessage IOAsync MetricsAny StructDumb URI ];
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      # network tests fail on Darwin/sandbox, so disable these
+      rm -f t/20local-connect.t t/22local-connect-pipeline.t t/23local-connect-redir.t
+      rm -f t/90rt75615.t t/90rt75616.t t/90rt93232.t
+    '';
+    meta = {
+      description = "Use HTTP with IO::Async";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   NetAsyncPing = buildPerlPackage {
     pname = "Net-Async-Ping";
     version = "0.004001";
@@ -14583,6 +14690,25 @@ let
       description = "asyncronously check remote host for reachability";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "https://github.com/frioux/Net-Async-Ping";
+    };
+  };
+
+  NetAsyncWebSocket = buildPerlModule {
+    pname = "Net-Async-WebSocket";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-WebSocket-0.13.tar.gz";
+      sha256 = "000nw7gnj7ks55nib3fiikxx9bfmbla6fimxrbn2z2n7sd187b0d";
+    };
+    propagatedBuildInputs = [ IOAsync ProtocolWebSocket URI ];
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      # network tests fail on Darwin/sandbox, so disable these
+      rm -f t/02server.t t/03cross.t
+    '';
+    meta = {
+      description = "Use WebSockets with IO::Async";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -14867,6 +14993,47 @@ let
     meta = {
       description = "Check and manipulate IPv6 addresses";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetLDAPServer = buildPerlPackage {
+    pname = "Net-LDAP-Server";
+    version = "0.43";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AA/AAR/Net-LDAP-Server-0.43.tar.gz";
+      sha256 = "0qmh3cri3fpccmwz6bhwp78yskrb3qmalzvqn0a23hqbsfs4qv6x";
+    };
+    propagatedBuildInputs = [ NetLDAP ConvertASN1 ];
+    meta = {
+      description = "LDAP server side protocol handling";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
+  NetLDAPSID = buildPerlPackage {
+    pname = "Net-LDAP-SID";
+    version = "0.0001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-SID-0.001.tar.gz";
+      sha256 = "1mnnpkmj8kpb7qw50sm8h4sd8py37ssy2xi5hhxzr5whcx0cvhm8";
+    };
+    meta = {
+      description= "Active Directory Security Identifier manipulation";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  NetLDAPServerTest = buildPerlPackage {
+    pname = "Net-LDAP-Server-Test";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-Server-Test-0.22.tar.gz";
+      sha256 = "13idip7jky92v4adw60jn2gcc3zf339gsdqlnc9nnvqzbxxp285i";
+    };
+    propagatedBuildInputs = [ NetLDAP NetLDAPServer TestMore DataDump NetLDAPSID ];
+    meta = {
+      description= "test Net::LDAP code";
+      license = with stdenv.lib.licenses; [ artistic1 ];
     };
   };
 
@@ -15575,6 +15742,22 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     propagatedBuildInputs = [ Moo ];
+  };
+
+  ParallelPipes = buildPerlModule {
+    pname = "Parallel-Pipes";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Parallel-Pipes-0.005.tar.gz";
+      sha256 = "44bd9e2be33d7b314f81c9b886a95d53514689090635f9fad53181f2d3051fd5";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      homepage = "https://github.com/skaji/Parallel-Pipes";
+      description = "Parallel processing using pipe(2) for communication and synchronization";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
   };
 
   ParallelPrefork = buildPerlPackage {
@@ -19149,6 +19332,22 @@ let
     };
   };
 
+  TermReadPassword = buildPerlPackage rec {
+    pname = "Term-ReadPassword";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PH/PHOENIX/${pname}-${version}.tar.gz";
+      sha256 = "08s3zdqbr01qf4h8ryc900qq1cjcdlyy2dq0gppzzy9mbcs6da71";
+    };
+
+    outputs = [ "out" ];
+
+    meta = {
+      description = "This module lets you ask the user for a password in the traditional way, from the keyboard, without echoing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TermShell = buildPerlModule {
     pname = "Term-Shell";
     version = "0.11";
@@ -21115,6 +21314,21 @@ let
     };
   };
 
+  TextMultiMarkdown = buildPerlPackage {
+    pname = "Text-MultiMarkdown";
+    version = "1.000035";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-MultiMarkdown-1.000035.tar.gz";
+      sha256 = "2467dd13751dc2979d7c880b24e762952130fdf42a1ed3ee04fdf72d4b52646a";
+    };
+    buildInputs = [ ListMoreUtils TestException ];
+    propagatedBuildInputs = [ HTMLParser TextMarkdown ];
+    meta = {
+      description = "Convert MultiMarkdown syntax to (X)HTML";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   TestNumberDelta = buildPerlPackage {
     pname = "Test-Number-Delta";
     version = "1.06";
@@ -22361,6 +22575,21 @@ let
     propagatedBuildInputs = [ URI ];
     meta = {
       description = "Database of robots.txt-derived permissions";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  WWWTwilioAPI = buildPerlPackage {
+    pname = "WWW-Twilio-API";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SC/SCOTTW/WWW-Twilio-API-0.21.tar.gz";
+      sha256 = "582db53a091f8da3670c037733314f2510af5e8ee0ba42a0e391e2f2e3ca7734";
+    };
+    prePatch = "rm examples.pl";
+    propagatedBuildInputs = [ LWPProtocolhttps ];
+    meta = {
+      description = "Accessing Twilio's REST API with Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

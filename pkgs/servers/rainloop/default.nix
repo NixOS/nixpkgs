@@ -24,7 +24,8 @@
          */
         function __get_custom_data_full_path()
         {
-          return '${dataPath}'; // custom data folder path
+          $v = getenv('RAINLOOP_DATA_DIR', TRUE);
+          return $v === FALSE ? '${dataPath}' : $v;
         }
       '';
 
@@ -33,6 +34,8 @@
         cp -r rainloop/* $out
         rm -rf $out/data
         cp ${includeScript} $out/include.php
+        mkdir $out/data
+        chmod 700 $out/data
       '';
 
       meta = with stdenv.lib; {
@@ -44,13 +47,13 @@
         maintainers = with maintainers; [ das_j ];
       };
     });
-  in {
-    rainloop-community = common {
-      edition = "community";
-      sha256 = "0a8qafm4khwj8cnaiaxvjb9073w6fr63vk1b89nks4hmfv10jn6y";
-    };
-    rainloop-standard = common {
-      edition = "";
-      sha256 = "0961g4mci080f7y98zx9r4qw620l4z3na1ivvlyhhr1v4dywqvch";
-    };
-  }
+in {
+  rainloop-community = common {
+    edition = "community";
+    sha256 = "0a8qafm4khwj8cnaiaxvjb9073w6fr63vk1b89nks4hmfv10jn6y";
+  };
+  rainloop-standard = common {
+    edition = "";
+    sha256 = "0961g4mci080f7y98zx9r4qw620l4z3na1ivvlyhhr1v4dywqvch";
+  };
+}

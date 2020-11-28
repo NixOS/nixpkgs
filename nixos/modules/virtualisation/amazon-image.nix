@@ -11,6 +11,7 @@ with lib;
 let
   cfg = config.ec2;
   metadataFetcher = import ./ec2-metadata-fetcher.nix {
+    inherit (pkgs) curl;
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
   };
@@ -48,7 +49,7 @@ in
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
-    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
+    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
@@ -123,7 +124,7 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need swapon in the initrd.
-        copy_bin_and_libs ${pkgs.utillinux}/sbin/swapon
+        copy_bin_and_libs ${pkgs.util-linux}/sbin/swapon
       '';
 
     # Don't put old configurations in the GRUB menu.  The user has no

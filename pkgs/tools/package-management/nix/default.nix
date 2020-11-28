@@ -32,8 +32,8 @@ common =
       inherit name src;
       version = lib.getVersion name;
 
-      is30 = lib.versionAtLeast version "3.0pre";
-      isExactly30 = lib.versionAtLeast version "2.3" && lib.versionOlder version "3.0";
+      is24 = lib.versionAtLeast version "2.4pre";
+      isExactly24 = lib.versionAtLeast version "2.4" && lib.versionOlder version "2.4";
 
       VERSION_SUFFIX = suffix;
 
@@ -41,7 +41,7 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals is30
+        ++ lib.optionals is24
           [ autoreconfHook
             autoconf-archive
             bison flex
@@ -54,7 +54,7 @@ common =
           brotli boost editline
         ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is30 [ libarchive gmock ]
+        ++ lib.optionals is24 [ libarchive gmock ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -93,9 +93,9 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # For Nix 3.0, patch around an issue where the Nix configure step pulls in the
+        # For Nix 2.4, patch around an issue where the Nix configure step pulls in the
         # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly30) ''
+        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly24) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
@@ -188,24 +188,24 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.8";
+    name = "nix-2.3.9";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "c7119823c1eabdcc9e527cc96a91f11a0b0e63f3840a02fe7573538dad2dad2a";
+      sha256 = "72331fdba220517a0ccabcf5c9735703c31674bfb4ef0b64da5d8f715d6022fa";
     };
 
     inherit storeDir stateDir confDir boehmgc;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-3.0${suffix}";
-    suffix = "pre20201020_e0ca98c";
+    name = "nix-2.4${suffix}";
+    suffix = "pre20201118_79aa7d9";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "e0ca98c2071b815578470e280df8fdb750c7e23b";
-      hash = "sha256-KVS/Z6FzMBOl5XCyOLwfiVoX7G2LQRa9HMGNnJRPCoo=";
+      rev = "79aa7d95183cbe6c0d786965f0dbff414fd1aa67";
+      sha256 = "0aa0xggrczylwp3da3q9m4ad9j6gzi7wpa3ph4i8a1ng36kl91c7";
     };
 
     inherit storeDir stateDir confDir boehmgc;

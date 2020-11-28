@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.117.0";
+  version = "0.118.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -74,7 +74,7 @@
     "bbb_gpio" = ps: with ps; [ ]; # missing inputs: Adafruit_BBIO
     "bbox" = ps: with ps; [ ]; # missing inputs: pybbox
     "beewi_smartclim" = ps: with ps; [ ]; # missing inputs: beewi_smartclim
-    "bh1750" = ps: with ps; [ ]; # missing inputs: i2csense smbus-cffi
+    "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ ]; # missing inputs: blockchain
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
@@ -85,11 +85,12 @@
     "blinkt" = ps: with ps; [ ]; # missing inputs: blinkt
     "blockchain" = ps: with ps; [ ]; # missing inputs: python-blockchain-api
     "bloomsky" = ps: with ps; [ ];
+    "blueprint" = ps: with ps; [ ];
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
     "bluetooth_tracker" = ps: with ps; [ bt_proximity ]; # missing inputs: pybluez
-    "bme280" = ps: with ps; [ ]; # missing inputs: i2csense smbus-cffi
-    "bme680" = ps: with ps; [ ]; # missing inputs: bme680 smbus-cffi
+    "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
+    "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
     "bond" = ps: with ps; [ ]; # missing inputs: bond-api
@@ -126,6 +127,7 @@
     "co2signal" = ps: with ps; [ ]; # missing inputs: co2signal
     "coinbase" = ps: with ps; [ ]; # missing inputs: coinbase
     "coinmarketcap" = ps: with ps; [ coinmarketcap ];
+    "color_extractor" = ps: with ps; [ ]; # missing inputs: colorthief
     "comed_hourly_pricing" = ps: with ps; [ ];
     "comfoconnect" = ps: with ps; [ ]; # missing inputs: pycomfoconnect
     "command_line" = ps: with ps; [ ];
@@ -222,7 +224,7 @@
     "enphase_envoy" = ps: with ps; [ ]; # missing inputs: envoy_reader
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
     "environment_canada" = ps: with ps; [ ]; # missing inputs: env_canada
-    "envirophat" = ps: with ps; [ ]; # missing inputs: envirophat smbus-cffi
+    "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ ]; # missing inputs: pyenvisalink
     "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
     "epson" = ps: with ps; [ ]; # missing inputs: epson-projector
@@ -312,7 +314,7 @@
     "google_maps" = ps: with ps; [ ]; # missing inputs: locationsharinglib
     "google_pubsub" = ps: with ps; [ google_cloud_pubsub ];
     "google_translate" = ps: with ps; [ gtts-token ];
-    "google_travel_time" = ps: with ps; [ ]; # missing inputs: googlemaps
+    "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];
     "gpmdp" = ps: with ps; [ websocket_client ];
     "gpsd" = ps: with ps; [ ]; # missing inputs: gps3
@@ -358,7 +360,7 @@
     "hp_ilo" = ps: with ps; [ ]; # missing inputs: python-hpilo
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "htu21d" = ps: with ps; [ ]; # missing inputs: i2csense smbus-cffi
+    "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "huawei_lte" = ps: with ps; [ getmac stringcase ]; # missing inputs: huawei-lte-api url-normalize
     "huawei_router" = ps: with ps; [ ];
     "hue" = ps: with ps; [ aiohue ];
@@ -367,7 +369,6 @@
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
     "hydrawise" = ps: with ps; [ ]; # missing inputs: hydrawiser
     "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
-    "ialarm" = ps: with ps; [ ]; # missing inputs: pyialarm
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
     "iaqualink" = ps: with ps; [ ]; # missing inputs: iaqualink
     "icloud" = ps: with ps; [ pyicloud ];
@@ -528,7 +529,7 @@
     "nederlandse_spoorwegen" = ps: with ps; [ ]; # missing inputs: nsapi
     "nello" = ps: with ps; [ ]; # missing inputs: pynello
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
-    "nest" = ps: with ps; [ aiohttp-cors python-nest ]; # missing inputs: google-nest-sdm
+    "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ ]; # missing inputs: netdata
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
@@ -623,7 +624,7 @@
     "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
     "poolsense" = ps: with ps; [ ]; # missing inputs: poolsense
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
-    "profiler" = ps: with ps; [ pyprof2calltree ];
+    "profiler" = ps: with ps; [ objgraph pyprof2calltree ]; # missing inputs: guppy3
     "progettihwsw" = ps: with ps; [ ]; # missing inputs: progettihwsw
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
     "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
@@ -657,9 +658,9 @@
     "rainforest_eagle" = ps: with ps; [ ]; # missing inputs: eagle200_reader uEagle
     "rainmachine" = ps: with ps; [ ]; # missing inputs: regenmaschine
     "random" = ps: with ps; [ ];
-    "raspihats" = ps: with ps; [ ]; # missing inputs: raspihats smbus-cffi
+    "raspihats" = ps: with ps; [ smbus-cffi ]; # missing inputs: raspihats
     "raspyrfm" = ps: with ps; [ ]; # missing inputs: raspyrfm-client
-    "recollect_waste" = ps: with ps; [ ]; # missing inputs: recollect-waste
+    "recollect_waste" = ps: with ps; [ ]; # missing inputs: aiorecollect
     "recorder" = ps: with ps; [ sqlalchemy ];
     "recswitch" = ps: with ps; [ ]; # missing inputs: pyrecswitch
     "reddit" = ps: with ps; [ praw ];

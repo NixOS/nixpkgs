@@ -8,6 +8,8 @@ buildDunePackage rec {
 
   useDune2 = true;
 
+  minimumOCamlVersion = "4.06";
+
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "google-drive-ocamlfuse";

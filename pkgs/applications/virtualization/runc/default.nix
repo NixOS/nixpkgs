@@ -9,6 +9,8 @@
 , apparmor-parser
 , libseccomp
 , libselinux
+, makeWrapper
+, procps
 , nixosTests
 }:
 
@@ -26,7 +28,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/opencontainers/runc";
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config which ];
+  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
 
   buildInputs = [ libselinux libseccomp libapparmor apparmor-parser ];
 
@@ -43,9 +45,12 @@ buildGoPackage rec {
   installPhase = ''
     install -Dm755 runc $out/bin/runc
     installManPage man/*/*.[1-9]
+    wrapProgram $out/bin/runc \
+      --prefix PATH : ${lib.makeBinPath [ procps ]} \
+      --prefix PATH : /run/current-system/systemd/bin
   '';
 
-  passthru.tests = { inherit (nixosTests) cri-o podman; };
+  passthru.tests = { inherit (nixosTests) cri-o docker podman; };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

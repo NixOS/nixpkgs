@@ -22,7 +22,7 @@
 
 # Additional dependencies according to other distros.
 ## Ubuntu
-, liberation_ttf, curl, utillinux, xdg_utils, wget
+, liberation_ttf, curl, util-linux, xdg_utils, wget
 ## Arch Linux.
 , flac, harfbuzz, icu, libpng, libopus, snappy, speechd
 ## Gentoo
@@ -59,7 +59,7 @@ let
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
     libexif
-    liberation_ttf curl utillinux xdg_utils wget
+    liberation_ttf curl util-linux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     kerberos libdrm mesa coreutils
@@ -150,10 +150,10 @@ in stdenv.mkDerivation {
     description = "A freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ primeos msteen ];
+    maintainers = with maintainers; [ primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # will try to merge PRs and respond to issues but I'm not actually using
-    # Google Chrome. msteen is the actual user/maintainer.
+    # Google Chrome.
     platforms = [ "x86_64-linux" ];
   };
 }

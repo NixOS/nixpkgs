@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "earlyoom";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "earlyoom";
     rev = "v${version}";
-    sha256 = "1cn0bgbgiq69i8mk8zxly1f7j01afm82g672qzccz6swsi2637j4";
+    sha256 = "16iyn51xlrsbshc7p5xl2338yyfzknaqc538sa7mamgccqwgyvvq";
   };
 
   nativeBuildInputs = stdenv.lib.optionals withManpage [ pandoc installShellFiles ];

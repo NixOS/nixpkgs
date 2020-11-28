@@ -124,6 +124,10 @@ stdenv.mkDerivation rec {
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
+  passthru = {
+    pulseDir = "lib/pulse-" + lib.versions.majorMinor version;
+  };
+
   meta = {
     description = "Sound server for POSIX and Win32 systems";
     homepage    = "http://www.pulseaudio.org/";

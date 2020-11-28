@@ -5,11 +5,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "075dyblmlfdlhgbb1dwk6jzlqx93q90n6zwpr3mpii5n1zjmab0g";
+    sha256 = "03ij2hnh393gw59hgrz3qrmgc4qw82bc9nd98sks4jrp5gwk4zz2";
   };
 
   buildInputs = [ blas lapack gmm fltk libjpeg zlib libGLU libGL

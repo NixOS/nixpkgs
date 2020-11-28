@@ -33,7 +33,10 @@ buildPythonPackage rec {
 
   buildInputs = [ python libxml2 libxslt ];
 
+  outputs = [ "out" "dev" ];
+
   preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
     echo "preConfigure: Fixing shiboken_generator install target."
     substituteInPlace generator/CMakeLists.txt --replace \
       \"$\{GENERATORRUNNER_PLUGIN_DIR}\" lib/generatorrunner/

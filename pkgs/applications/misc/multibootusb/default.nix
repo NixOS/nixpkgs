@@ -1,6 +1,6 @@
 { fetchFromGitHub, libxcb, mtools, p7zip, parted, procps, qemu, unzip, zip,
   coreutils, gnugrep, which, gnused, e2fsprogs, autoPatchelfHook, gptfdisk,
-  python36Packages, qt5, runtimeShell, stdenv, utillinux, wrapQtAppsHook }:
+  python36Packages, qt5, runtimeShell, stdenv, util-linux, wrapQtAppsHook }:
 
 # Note: Multibootusb is tricky to maintain. It relies on the
 # $PYTHONPATH variable containing some of their code, so that
@@ -30,7 +30,7 @@ python36Packages.buildPythonApplication rec {
     gnugrep
     which
     parted
-    utillinux
+    util-linux
     qemu
     p7zip
     gnused

@@ -45,7 +45,7 @@ let
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
-    "--config.file=${prometheusYml}"
+    "--config.file=/run/prometheus/prometheus-substituted.yaml"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
@@ -522,6 +522,45 @@ in {
       '';
     };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/root/prometheus.env";
+      description = ''
+        Environment file as defined in <citerefentry>
+        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+        </citerefentry>.
+
+        Secrets may be passed to the service without adding them to the
+        world-readable Nix store, by specifying placeholder variables as
+        the option value in Nix and setting these variables accordingly in the
+        environment file.
+
+        Environment variables from this file will be interpolated into the
+        config file using envsubst with this syntax:
+        <literal>$ENVIRONMENT ''${VARIABLE}</literal>
+
+        <programlisting>
+          # Example scrape config entry handling an OAuth bearer token
+          {
+            job_name = "home_assistant";
+            metrics_path = "/api/prometheus";
+            scheme = "https";
+            bearer_token = "\''${HOME_ASSISTANT_BEARER_TOKEN}";
+            [...]
+          }
+        </programlisting>
+
+        <programlisting>
+          # Content of the environment file
+          HOME_ASSISTANT_BEARER_TOKEN=someoauthbearertoken
+        </programlisting>
+
+        Note that this file needs to be available on the host on which
+        <literal>Prometheus</literal> is running.
+      '';
+    };
+
     configText = mkOption {
       type = types.nullOr types.lines;
       default = null;
@@ -662,12 +701,19 @@ in {
     systemd.services.prometheus = {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
+      preStart = ''
+         ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/run/prometheus/prometheus-substituted.yaml" \
+                                                  -i "${prometheusYml}"
+      '';
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/prometheus" +
           optionalString (length cmdlineArgs != 0) (" \\\n  " +
             concatStringsSep " \\\n  " cmdlineArgs);
         User = "prometheus";
         Restart  = "always";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        RuntimeDirectory = "prometheus";
+        RuntimeDirectoryMode = "0700";
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
       };

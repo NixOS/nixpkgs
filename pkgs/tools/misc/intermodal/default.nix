@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
     license = licenses.cc0;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

@@ -1,9 +1,10 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildGoPackage
-, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
+, makeWrapper, installShellFiles, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
-, btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
+, btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
 , procps, libseccomp
+, nixosTests
 }:
 
 with lib;
@@ -94,7 +95,7 @@ rec {
 
     goPackagePath = "github.com/docker/docker-ce";
 
-    nativeBuildInputs = [ pkgconfig go-md2man go libtool removeReferencesTo installShellFiles ];
+    nativeBuildInputs = [ pkgconfig go-md2man go libtool installShellFiles ];
     buildInputs = [
       makeWrapper
     ] ++ optionals (stdenv.isLinux) [
@@ -139,7 +140,7 @@ rec {
 
     outputs = ["out" "man"];
 
-    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux git ]);
+    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
     installPhase = ''
       cd ./go/src/${goPackagePath}
@@ -184,11 +185,7 @@ rec {
       installManPage man/*/*.[1-9]
     '';
 
-    preFixup = ''
-      find $out -type f -exec remove-references-to -t ${stdenv.cc.cc} '{}' +
-    '' + optionalString (stdenv.isLinux) ''
-      find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
-    '';
+    passthru.tests = { inherit (nixosTests) docker; };
 
     meta = {
       homepage = "https://www.docker.com/";

@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
-    rev = "${version}";
+    rev = version;
     sha256 = "18gz94h2x1z6g6r7v9cdixkbcaigd7cl08af6smlkaa89j0aki32";
   };
 

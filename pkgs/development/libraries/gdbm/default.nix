@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # not cross;
 
+  patches = [ ./0001-Remove-duplicate-assignments.patch ];
+
   # Linking static stubs on cygwin requires correct ordering.
   # Consider upstreaming this.
 

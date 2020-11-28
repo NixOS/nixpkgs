@@ -55,6 +55,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage    = "https://github.com/kozec/sc-controller";
     # donations: https://www.patreon.com/kozec
+    broken = true;
     description = "User-mode driver and GUI for Steam Controller and other controllers";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

@@ -6,9 +6,7 @@
  <para>
   Kakoune can be built to autoload plugins:
 <programlisting>(kakoune.override {
-  configure = {
-    plugins = with pkgs.kakounePlugins; [ parinfer-rust ];
-  };
+  plugins = with pkgs.kakounePlugins; [ parinfer-rust ];
 })</programlisting>
  </para>
 </section>

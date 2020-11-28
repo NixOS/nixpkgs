@@ -13,7 +13,7 @@ buildGoModule rec {
     let t = goPackagePath;
     in ''
       -ldflags=
-        -s -X ${t}/pkg/buildinfo.Version=${version}
+        -s -X ${t}/pkg/buildinfo.Version=v${version}
            -X ${t}/pkg/buildinfo.GitSHA=${rev}
            -X ${t}/pkg/buildDate=unknown
     '';

@@ -1,29 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, scdoc }:
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.1.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    sha256 = "03zgi0rlra3gz8cbqwmhpjxsg5048anfc6ccd2w50fjhx6farsnv";
+    sha256 = "1ybrx82c4djp7izyqhvzk0rcf9ac7nv5g5ahxr0k0jhm752ba5z2";
   };
 
-  vendorSha256 = "1jq2x4yxshsy4ahp7nrry8dc9cyjj46mljs447rq57sgix4ndpq8";
+  vendorSha256 = "1ma7nvyn6ylbi8bd7x900i94pzs877kfy9xh0nf1bbify1vcpd29";
 
   subPackages = [ "cmd/shfmt" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
-  patches = [
-    # fix failing test on go 1.15, remove with > 3.1.2
-    (fetchpatch {
-      url = "https://github.com/mvdan/sh/commit/88956f97dae1f268af6c030bf2ba60762ebb488a.patch";
-      sha256 = "1zg8i7kklr12zjkaxh8djd2bzkdx8klgfj271r2wivkc2x61shgv";
-    })
-  ];
+  nativeBuildInputs = [ installShellFiles scdoc ];
+
+  postBuild = ''
+    scdoc < cmd/shfmt/shfmt.1.scd > shfmt.1
+    installManPage shfmt.1
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";

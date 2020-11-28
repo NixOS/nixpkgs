@@ -108,4 +108,13 @@ with lib.maintainers; {
     ];
     scope = "Maintain Podman and CRI-O related packages and modules.";
   };
+
+  sage = {
+    members = [
+      timokau
+      omasanori
+      raskin
+    ];
+    scope = "Maintain SageMath and the dependencies that are likely to break it.";
+  };
 }

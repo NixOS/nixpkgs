@@ -203,6 +203,20 @@ rec {
   # Legacy attribute, for compatibility with existing configs only.
   raspberrypi2 = armv7l-hf-multiplatform;
 
+  zero-gravitas = {
+    name = "zero-gravitas";
+    kernelBaseConfig = "zero-gravitas_defconfig";
+    kernelArch = "arm";
+    # kernelTarget verified by checking /boot on reMarkable 1 device
+    kernelTarget = "zImage";
+    kernelAutoModules = false;
+    kernelDTB = true;
+    gcc = {
+      fpu = "neon";
+      cpu = "cortex-a9";
+    };
+  };
+
   scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
       cpu = "cortex-a9";

@@ -7,18 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.8.25";
+  version = "0.8.26-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "1jdklmysr25rlwgx7pz0jw66j1w60h98kqghzjhr90zhynzh39lz";
+    sha256 = "17ji1gjrx3gzw4msaz9kgvm132y14wgh8z183l3mfw1cj44a6kqk";
   };
 
-  cargoSha256 = "08yfafrspkd1g1mhlfwngbknkxjkyymbcga8n2rdsk7mz0hm0vgy";
-
-  cargoPatches = [ ./substrate-wasm-builder-runner.patch ];
+  cargoSha256 = "07zwlwx02xw1y20br2c4grwv7bprhynqy7gav4qh3vw117ijpiqk";
 
   nativeBuildInputs = [ clang ];
 

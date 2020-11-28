@@ -1,22 +1,49 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, grpc
+, protobuf
+, openssl
+, nlohmann_json
+, gtest
+, fmt
+, spdlog
+, c-ares
+, abseil-cpp
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "2.4.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "1w1kyjzvvy5lj16kn3yyf7iil2cqlfkszi8kvagql7f5h5l6w9b1";
+    sha256 = "1abx5h6xy0h3mz29ial5si8smkmjzla050d130pcc6dzr4ic642w";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ python3 ]; # just for shebang of bin/bear
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  doCheck = false; # all fail
+  buildInputs = [
+    grpc
+    protobuf
+    openssl
+    nlohmann_json
+    gtest
+    fmt
+    spdlog
+    c-ares
+    abseil-cpp
+    zlib
+  ];
 
-  patches = [ ./ignore_wrapper.patch ./cmakepaths.patch ];
+  patches = [
+    # Default libexec would be set to /nix/store/*-bear//nix/store/*-bear/libexec/...
+    ./no-double-relative.patch
+  ];
 
   meta = with stdenv.lib; {
     description = "Tool that generates a compilation database for clang tooling";

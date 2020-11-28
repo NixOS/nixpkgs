@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, multipath-tools, lsof, utillinux
+, pyudev, six, libselinux, multipath-tools, lsof, util-linux
 }:
 
 buildPythonPackage rec {
@@ -19,11 +19,11 @@ buildPythonPackage rec {
       -e '/^def set_friendly_names/a \    return False' \
       blivet/devicelibs/mpath.py
     sed -i -e '/"wipefs"/ {
-      s|wipefs|${utillinux}/sbin/wipefs|
+      s|wipefs|${util-linux}/sbin/wipefs|
       s/-f/--force/
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
-    sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
+    sed -i -r -e 's|"(u?mount)"|"${util-linux}/bin/\1"|' blivet/util.py
   '';
 
   propagatedBuildInputs = [

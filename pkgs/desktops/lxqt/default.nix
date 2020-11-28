@@ -43,7 +43,7 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./qterminal {};
-    compton-conf = pkgs.qt5.callPackage ./compton-conf {};
+    compton-conf = qt5.callPackage ./compton-conf {};
     obconf-qt = callPackage ./obconf-qt {};
     lximage-qt = callPackage ./lximage-qt {};
     qps = callPackage ./qps {};

@@ -5,7 +5,7 @@
  */
 let
 
-  inherit (import ./fixed-points.nix {}) makeExtensible;
+  inherit (import ./fixed-points.nix { inherit lib; }) makeExtensible;
 
   lib = makeExtensible (self: let
     callLibs = file: import file { lib = self; };
@@ -69,7 +69,7 @@ let
       importJSON importTOML warn info showWarnings nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
-      makeExtensible makeExtensibleWithCustomName;
+      composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
@@ -101,7 +101,7 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
-      makeScope;
+      makeScope makeScopeWithSplicing;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet;

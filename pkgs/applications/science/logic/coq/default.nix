@@ -35,6 +35,7 @@ let
    "8.11.1" = "0qriy9dy36dajsv5qmli8gd6v55mah02ya334nw49ky19v7518m0";
    "8.11.2" = "0f77ccyxdgbf1nrj5fa8qvrk1cyfy06fv8gj9kzfvlcgn0cf48sa";
    "8.12.0" = "18dc7k0piv6v064zgdadpw6mkkxk7j663hb3svgj5236fihjr0cz";
+   "8.12.1" = "1rkcyjjrzcqw9xk93hsq0vvji4f8r5iq0f739mghk60bghkpnb7q";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -109,7 +110,7 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ]
   ++ stdenv.lib.optional (!versionAtLeast "8.6") gnumake42
   ;
-  buildInputs = [ ncurses ]
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
   ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
   ++ stdenv.lib.optional (!versionAtLeast "8.12") ocamlPackages.num
   ++ stdenv.lib.optionals buildIde
@@ -117,10 +118,7 @@ self = stdenv.mkDerivation {
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
      else [ ocamlPackages.lablgtk ]);
 
-  propagatedBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ stdenv.lib.optional (versionAtLeast "8.12") ocamlPackages.num;
-
-  propagatedUserEnvPkgs = [ ocamlPackages.ocaml ocamlPackages.findlib ];
+  propagatedBuildInputs = stdenv.lib.optional (versionAtLeast "8.12") ocamlPackages.num;
 
   postPatch = ''
     UNAME=$(type -tp uname)

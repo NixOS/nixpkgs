@@ -13,7 +13,7 @@
 , evolution-data-server
 , gnome-online-accounts
 , libuuid
-, libhandy
+, libhandy_0
 , webkitgtk
 , zeitgeist
 , gnome3
@@ -22,16 +22,13 @@
 , tracker
 }:
 
-let
-  version = "3.36.3";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnome-notes";
-  inherit version;
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
-    sha256 = "1midnphyg038s94ahhzv0pvbzzzn62ccky28c9nazxqvw4hvdsbh";
+    sha256 = "H/bMCsbGKQe/KgmhchXt0vF7dNrKs6XIminDBJFyvis=";
   };
 
   doCheck = true;
@@ -57,7 +54,7 @@ stdenv.mkDerivation {
     glib
     gtk3
     libuuid
-    libhandy
+    libhandy_0 # doesn't support libhandy-1 yet
     webkitgtk
     tracker
     gnome-online-accounts

@@ -7,7 +7,7 @@
 , installShellFiles
 , Security
 , gitMinimal
-, utillinuxMinimal
+, util-linuxMinimal
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
-  checkInputs = [ gitMinimal utillinuxMinimal ];
+  checkInputs = [ gitMinimal util-linuxMinimal ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     description = "Commandline personal information management suite";
     homepage = "https://imag-pim.org/";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ filalex77 minijackson ];
+    maintainers = with maintainers; [ Br1ght0ne minijackson ];
     platforms = platforms.unix;
   };
 }

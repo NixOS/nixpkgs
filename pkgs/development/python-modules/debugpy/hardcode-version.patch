@@ -1,0 +1,51 @@
+diff --git a/setup.py b/setup.py
+index cfec60d..32ca206 100644
+--- a/setup.py
++++ b/setup.py
+@@ -24,7 +24,6 @@ elif "--abi" in sys.argv:
+ from setuptools import setup  # noqa
+ 
+ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+-import versioneer  # noqa
+ 
+ del sys.path[0]
+ 
+@@ -86,7 +85,7 @@ if __name__ == "__main__":
+     if not os.getenv("SKIP_CYTHON_BUILD"):
+         cython_build()
+ 
+-    cmds = versioneer.get_cmdclass()
++    cmds = {}
+     cmds["bdist_wheel"] = bdist_wheel
+ 
+     extras = {}
+@@ -96,7 +95,7 @@ if __name__ == "__main__":
+ 
+     setup(
+         name="debugpy",
+-        version=versioneer.get_version(),
++        version="@version@",
+         description="An implementation of the Debug Adapter Protocol for Python",  # noqa
+         long_description=long_description,
+         long_description_content_type="text/markdown",
+diff --git a/src/debugpy/__init__.py b/src/debugpy/__init__.py
+index baa5a7c..5355327 100644
+--- a/src/debugpy/__init__.py
++++ b/src/debugpy/__init__.py
+@@ -27,7 +27,6 @@ __all__ = [
+ import codecs
+ import os
+ 
+-from debugpy import _version
+ from debugpy.common import compat
+ 
+ 
+@@ -204,7 +203,7 @@ def trace_this_thread(should_trace):
+     return api.trace_this_thread(should_trace)
+ 
+ 
+-__version__ = _version.get_versions()["version"]
++__version__ = "@version@"
+ 
+ # Force absolute path on Python 2.
+ __file__ = os.path.abspath(__file__)

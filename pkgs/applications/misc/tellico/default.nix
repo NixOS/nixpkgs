@@ -1,7 +1,7 @@
 { lib
 , fetchurl
 , mkDerivation
-, kdeApplications
+, libkcddb
 , kinit
 , kdelibs4support
 , solid
@@ -46,7 +46,7 @@ mkDerivation rec {
     exempi
     extra-cmake-modules
     karchive
-    kdeApplications.libkcddb
+    libkcddb
     kdelibs4support
     kfilemetadata
     khtml

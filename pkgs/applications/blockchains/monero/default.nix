@@ -17,13 +17,13 @@ assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
 stdenv.mkDerivation rec {
   pname = "monero";
-  version = "0.17.1.1";
+  version = "0.17.1.3";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "18x27dm24k04vx0yz57zi02rk0wrmbn4wr8alqf48dq6z9wr0fhp";
+    sha256 = "1ddkdfd8i5q509qziwcx1f6nm8axs4a1ppzv2y5lgsqpq375if6j";
     fetchSubmodules = true;
   };
 
