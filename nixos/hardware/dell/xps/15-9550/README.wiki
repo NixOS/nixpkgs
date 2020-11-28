@@ -1,0 +1,52 @@
+= Dell XPS 15 9550 =
+
+Most of this I presume also applies to the XPS 13 1530, the 13" variant.
+
+== Tested Hardware ==
+
+* CPU: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+* RAM: 16 GB
+* HDD: 512 GiB SSD
+* Screen: 15" 4k (3840✕2160)
+* Graphics: NVIDIA Corporation GM107M, with Intel Graphics too.
+* Input: Touchscreen and trackpad.
+
+
+== Firmware Configuration ==
+
+Not much tweaking of NixOS itself was needed. But we currently cannot automate the firmware setup, so this must be done by hand.
+
+=== Before installation ===
+
+These settings are needed both for booting the final install, and installer itself. Therefore, they must be done first.
+
+* ''Disable Secure Boot (but keep UEFI Boot).'' Thakfully doing so is as easy as changing any other simple setting.
+
+* ''Disable Intel hardware RAID and use AHCI instead.'' Intel doesn't seem to provide a working linux driver for this.  (If you just have SSD it's pointless and just slows things down needlessly anyways.)
+
+
+=== After installation ===
+
+* ''Add systemd-boot to UEFI boot list.'' The (uneditable anyways) settings mapping drive UUIDs to HD* work fine.
+
+=== Optional ===
+
+* ''Disable C-States.'' This is a processor idling thing. It seems to cause random crashes (Blank screen, no normal panic debug dump). Unfortunately, without it, the computer cannot be suspended. On the other hand, it doesn't seem to affect acpi's estimation of battery life when the computer is running with minimal load, but I haven't tested battery life in practice. I list it as optional as there's a tradeoff, and the crashes are rare enough one can probably get through installation just fine.
+
+* ''Update BIOS.'' According to Reddit, this helps with battery life.
+
+* ''Update Intel's Thunderbolt firmware.'' Without this, the Thunderbolt port will only work as power source, and not transfer data.
+
+=== Troubleshooting ===
+
+==== rcu_sched freezing problems ====
+
+After a recent update my machine became unstable. X couldn't start and even running `lspci` would lock the machine. I'm not sure what the root cause was, but I found the fix here: https://wiki.archlinux.org/index.php/Dell_XPS_15_9560#Troubleshooting
+
+TL;DR I added this line:
+
+```
+boot.kernelParams = [ "acpi_rev_override=1" "pcie_aspm=off" "nouveau.modeset=0" ];
+```
+
+Some more detail about the problem can be found here: https://bbs.archlinux.org/viewtopic.php?id=223056

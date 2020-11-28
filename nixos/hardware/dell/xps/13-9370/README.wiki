@@ -1,0 +1,16 @@
+= Dell XPS 13 9370 =
+
+== Battery drain when sleeping ==
+
+The laptop uses the S2 sleep mode by default instead of S3, which leads to
+draining a lot of battery during sleep.
+
+Though this is intentional by the manufacturer and might cause lockups when
+forced  I - @moredread - never had any issues with it.
+
+See https://wiki.archlinux.org/index.php/Dell_XPS_13_(9370)#Power_Management
+and https://bugzilla.kernel.org/show_bug.cgi?id=199689#c3 for reference
+
+== Additional resources ==
+
+* Arch linux wiki: [https://wiki.archlinux.org/index.php/Dell_XPS_13_(9370) Dell XPS 13 9370]

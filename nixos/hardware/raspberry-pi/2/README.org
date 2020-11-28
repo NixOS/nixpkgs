@@ -1,0 +1,23 @@
+** Status
+
+The code in master as of June 2015 should be able to prepare a bootable NixOS
+for Raspberry PI 2.
+
+There are still some drawbacks:
+
+NixOS does not provide a /boot/config.txt (the FAT32 partition). Making NixOS
+work in the Raspberry PI 2 is mainly the result of the recent work of ambro718,
+Dezgeg and viric (#nixos@irc.freenode.net).
+
+** Download
+
+If you want to test, you can flash this 4GB SD image (DOS partition table +
+fat32 + ext4 rootfs):
+
+magnet:?xt=urn:btih:0def3f6acb3bceddb22cb24098f58e40e2853ec2&dn=rpi2-nixos-4b09501f2-img.xz&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80
+
+Then you should be able to nixos-rebuild any configuration.nix changes.
+
+The image is the result of a "nixos-install" alone. No root password has been
+set, and it does not include a nixpkgs checkout or channel. In fact I (viric)
+created the FS into a NBD, not a real SD, to create this image.
