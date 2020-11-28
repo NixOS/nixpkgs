@@ -6535,7 +6535,7 @@ in
 
   tab = callPackage ../tools/text/tab { };
 
-  tautulli = callPackage ../servers/tautulli { python = python2; };
+  tautulli = python3Packages.callPackage ../servers/tautulli { };
 
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
