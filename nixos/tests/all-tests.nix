@@ -194,6 +194,7 @@ in
   limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
+  lsd = handleTest ./lsd.nix {};
   lxd = handleTest ./lxd.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};
   #logstash = handleTest ./logstash.nix {};
