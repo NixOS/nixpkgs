@@ -135,8 +135,8 @@ in ''
   export CARGO_MANIFEST_DIR=$(pwd)
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
-  export TARGET="${rust.toRustTarget stdenv.hostPlatform}"
-  export HOST="${rust.toRustTarget stdenv.buildPlatform}"
+  export TARGET="${rust.toRustTargetSpec stdenv.hostPlatform}"
+  export HOST="${rust.toRustTargetSpec stdenv.buildPlatform}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
   export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
