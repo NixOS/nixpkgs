@@ -19,12 +19,11 @@
 , nukeReferences
 # For the Python package set
 , packageOverrides ? (self: super: {})
-, buildPackages
 , pkgsBuildBuild
+, pkgsBuildHost
 , pkgsBuildTarget
 , pkgsHostHost
 , pkgsTargetTarget
-, pythonForBuild ? buildPackages.${pythonAttr}
 , sourceVersion
 , sha256
 , passthruFun
@@ -58,7 +57,8 @@ assert bluezSupport -> bluez != null;
 with stdenv.lib;
 
 let
-
+  buildPackages = pkgsBuildHost;
+  inherit (passthru) pythonForBuild;
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -67,11 +67,12 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit hasDistutilsCxxPatch pythonForBuild;
-    pythonPackagesBuildBuild = pkgsBuildBuild.${pythonAttr};
-    pythonPackagesBuildTarget = pkgsBuildTarget.${pythonAttr};
-    pythonPackagesHostHost = pkgsHostHost.${pythonAttr};
-    pythonPackagesTargetTarget = pkgsTargetTarget.${pythonAttr} or {};
+    inherit hasDistutilsCxxPatch;
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
@@ -94,8 +95,6 @@ let
     ++ optionals stdenv.isDarwin [ configd ]);
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
-
-  inherit pythonForBuild;
 
   pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
