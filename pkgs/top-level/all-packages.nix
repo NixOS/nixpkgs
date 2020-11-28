@@ -20756,6 +20756,8 @@ in
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
 
+  dsf2flac = callPackage ../applications/audio/dsf2flac { };
+
   dunst = callPackage ../applications/misc/dunst { };
 
   du-dust = callPackage ../tools/misc/dust { };
