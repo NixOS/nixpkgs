@@ -448,7 +448,7 @@ let
           path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so";
         }) ++
         (optional cfg.rootOK {control = "sufficient"; path = "pam_rootok.so";}) ++
-        (optional cfg.requireWheel { control = "required"; path = "pam_wheel.so use_uid"; }) ++
+        (optional cfg.requireWheel { control = "required"; path = "pam_wheel.so"; arguments=["use_uid"]; }) ++
         (optional cfg.logFailures {control = "required"; path = "pam_tally.so";}) ++
         (optional (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth) {
           control = "sufficient";
@@ -652,9 +652,6 @@ let
     ));
   in concatStringsSep "\n" (flatten (mapAttrsToList (type: map (entryToString type)) entries));
 in {
-
-  imports = [(mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])];
-
   ###### interface
 
   options = {
