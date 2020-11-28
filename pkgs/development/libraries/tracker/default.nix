@@ -12,7 +12,7 @@
 , docbook_xml_dtd_45
 , libxml2
 , glib
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , vala
 , sqlite
 , libxslt
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     asciidoc
     gettext
     libxslt
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
     gobject-introspection
     gtk-doc
     docbook-xsl-nons

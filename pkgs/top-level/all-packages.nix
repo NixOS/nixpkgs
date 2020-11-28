@@ -540,6 +540,8 @@ in
 
   wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook { };
 
+  wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
+
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
 
   setupDebugInfoDirs = makeSetupHook { } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
