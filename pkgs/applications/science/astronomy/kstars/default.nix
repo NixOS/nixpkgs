@@ -1,8 +1,8 @@
 {
-  stdenv, extra-cmake-modules, fetchurl,
+  lib, mkDerivation, extra-cmake-modules, fetchurl,
 
   kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui, wrapQtAppsHook,
+  knewstuff, kplotting, kwidgetsaddons, kxmlgui,
 
   qtx11extras, qtwebsockets,
 
@@ -11,7 +11,7 @@
   cfitsio, indilib, xplanet, libnova, gsl
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kstars";
   version = "3.4.3";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ./indi-fix.patch
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
     knewstuff kplotting kwidgetsaddons kxmlgui
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "-DINDI_NIX_ROOT=${indilib}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual planetarium astronomy software";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
     longDescription = ''
