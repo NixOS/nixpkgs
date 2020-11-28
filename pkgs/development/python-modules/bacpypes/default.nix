@@ -2,14 +2,14 @@
 , wheel, pytestCheckHook, pytestrunner }:
 
 buildPythonPackage rec {
-  version = "0.18.0";
+  version = "0.18.1";
   pname = "bacpypes";
 
   src = fetchFromGitHub {
     owner = "JoelBender";
     repo = "bacpypes";
-    rev = "${version}";
-    sha256 = "1nz0qi46z6n455mw2ppxgz091qh0irizlxpvkx7iw1l7f6mmgj0x";
+    rev = version;
+    sha256 = "1fxrh57z3fjl95db8jh71grkv5id8qk65g6k5jqcs9v3dgkg8jkl";
   };
 
   propagatedBuildInputs = [ wheel ];

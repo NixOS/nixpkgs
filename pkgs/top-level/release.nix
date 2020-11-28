@@ -30,7 +30,7 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
-      metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
+      #metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
       manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };

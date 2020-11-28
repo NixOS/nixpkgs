@@ -43,21 +43,21 @@ stdenv.mkDerivation (rec {
     darwin.apple_sdk.frameworks.Cocoa
   ];
 
-  CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+    "-DLLVM_ENABLE_RTTI=OFF"
     "-DClang_DIR=${clang-unwrapped}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
   ] ++ stdenv.lib.optionals enableManpages [
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
-  ]
-;
+  ];
 
   enableParallelBuilding = true;
 

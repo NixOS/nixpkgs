@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Docutils -- Python Documentation Utilities";
+    description = "Python Documentation Utilities";
     homepage = "http://docutils.sourceforge.net/";
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };

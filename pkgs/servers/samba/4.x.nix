@@ -24,6 +24,7 @@
 , libtasn1
 , tdb
 , cmocka
+, rpcsvc-proto
 , nixosTests
 
 , enableLDAP ? false, openldap
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
+    rpcsvc-proto
   ] ++ optionals stdenv.isDarwin [
     rpcgen
     fixDarwinDylibNames

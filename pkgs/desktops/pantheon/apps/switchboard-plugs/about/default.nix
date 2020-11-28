@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , substituteAll
@@ -47,6 +48,20 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # Get OS Info from GLib.Environment
+    # https://github.com/elementary/switchboard-plug-about/pull/128
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-about/commit/5ed29988e3a895b2df66e5529df0f12a94d5517c.patch";
+      sha256 = "1ipDxnpDZjpSEzZdtOeNe5U+QOXiB5M+hC3yDAsl/rQ=";
+    })
+
+    # Use Pretty Name
+    # https://github.com/elementary/switchboard-plug-about/pull/134
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-about/commit/653d131dc8fac10ae7523f2bf6b179ffffa9c0fd.patch";
+      sha256 = "AsM49Dc9/yn2tG6fqjfedeOlDXUu+iEoyNUmNYLH+zE=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit pciutils;

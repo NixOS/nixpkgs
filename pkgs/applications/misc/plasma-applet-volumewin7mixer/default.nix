@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ plasma-framework kwindowsystem plasma-pa ];
 
   meta = with stdenv.lib; {
-    description = "A fork of the default volume plasmoid with a Windows 7 theme (vertical sliders).";
+    description = "A fork of the default volume plasmoid with a Windows 7 theme (vertical sliders)";
     homepage = "https://github.com/Zren/plasma-applet-volumewin7mixer";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

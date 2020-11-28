@@ -35,13 +35,13 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.7.2";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YUR9SDiRV/gJKx4H1cgdDnKGulTQPVP7MpHyihUEgqg=";
+    sha256 = "sha256-tJcpjviCXA1Y/PX1jlXphXZZMWBAAg3kdbsj41tmunE=";
   };
 
   buildInputs = [

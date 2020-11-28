@@ -1,4 +1,4 @@
-From 5e235e1f720f37fc5581b40c9a13d365368e74a8 Mon Sep 17 00:00:00 2001
+From a8ccba372d865429b578e72fd104a693b96101b3 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Tue, 11 Oct 2016 13:12:08 +0300
 Subject: [PATCH 09/18] Change /usr/share/zoneinfo to /etc/zoneinfo
@@ -66,10 +66,10 @@ index 15cc1b8851..d0abde5933 100644
                  return -EINVAL;
  
 diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
-index a3f442518e..feff49e280 100644
+index c9fc8dd5cd..44fc04dc88 100644
 --- a/src/firstboot/firstboot.c
 +++ b/src/firstboot/firstboot.c
-@@ -459,7 +459,7 @@ static int process_timezone(void) {
+@@ -460,7 +460,7 @@ static int process_timezone(void) {
          if (isempty(arg_timezone))
                  return 0;
  
@@ -79,7 +79,7 @@ index a3f442518e..feff49e280 100644
          (void) mkdir_parents(etc_localtime, 0755);
          if (symlink(e, etc_localtime) < 0)
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 0117a9939d..d86445b40f 100644
+index 07f294c78a..cf86d1f494 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -1699,8 +1699,8 @@ static int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t u
@@ -128,5 +128,5 @@ index 3e78b2f575..de5477a08f 100644
                          return -ENOMEM;
  
 -- 
-2.27.0
+2.28.0
 

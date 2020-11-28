@@ -7,7 +7,7 @@
 }:
 
 buildBazelPackage rec {
-  name = "bazel-remote-${version}";
+  pname = "bazel-remote";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -82,7 +82,7 @@ buildBazelPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/buchgr/bazel-remote";
-    description = "A remote HTTP/1.1 cache for Bazel.";
+    description = "A remote HTTP/1.1 cache for Bazel";
     license = licenses.asl20;
     maintainers = [ maintainers.uri-canva ];
     platforms = platforms.darwin ++ platforms.linux;

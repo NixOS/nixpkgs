@@ -55,10 +55,10 @@ let
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
-    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    EnableHidpi=${boolToString cfg.enableHidpi}
 
     [Wayland]
-    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    EnableHidpi=${boolToString cfg.enableHidpi}
     SessionDir=${dmcfg.sessionData.desktops}/share/wayland-sessions
 
     ${optionalString dmcfg.autoLogin.enable ''

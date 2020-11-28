@@ -1,6 +1,8 @@
 { stdenv, fetchurl, cmake, bison, pkgconfig
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
-, cctools, CoreServices, developer_cmds }:
+, cctools, CoreServices, developer_cmds
+, libtirpc, rpcsvc-proto
+}:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
@@ -19,9 +21,9 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ cmake bison pkgconfig ];
+  nativeBuildInputs = [ cmake bison pkgconfig rpcsvc-proto ];
 
-  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
+  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib libtirpc ]
      ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
 
   outputs = [ "out" "static" ];

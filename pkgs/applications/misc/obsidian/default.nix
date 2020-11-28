@@ -30,12 +30,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "obsidian";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchurl {
     url =
       "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.asar.gz";
-    sha256 = "1skilcqfawvvyj9dnacsmlls55cqq6a4hzz9is165cwkyab185c5";
+    sha256 = "0qahgm9gf4sap28wy7cxbf41h8zldplbwxnv8shyajbkxn108g5p";
   };
 
   nativeBuildInputs = [ makeWrapper graphicsmagick ];
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description =
-      "Obsidian is a powerful knowledge base that works on top of a local folder of plain text Markdown files";
+      "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     license = licenses.obsidian;
     maintainers = with maintainers; [ conradmearns zaninime ];

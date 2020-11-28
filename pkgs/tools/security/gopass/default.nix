@@ -54,7 +54,7 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
+    description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];

@@ -7,6 +7,7 @@
 , requests
 , numpy
 , parameterized
+, protobuf
 , sacremoses
 , sentencepiece
 , timeout-decorator
@@ -17,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j9nzhl0zw5z9rnvzfih7v6bax353rxp05b3f0cvkii3b5dbkc2j";
+    sha256 = "1v09gryxsg57d2cjwagna1535m8mbxlazdbhsww210lxa818m5qj";
   };
 
   propagatedBuildInputs = [
-    boto3
     filelock
     numpy
+    protobuf
     regex
     requests
     sacremoses
@@ -43,11 +44,6 @@ buildPythonPackage rec {
     pytestCheckHook
     timeout-decorator
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tokenizers == 0.8.1.rc2" "tokenizers>=0.8"
-  '';
 
   preCheck = ''
     export HOME="$TMPDIR"
@@ -67,8 +63,10 @@ buildPythonPackage rec {
 
   # Disable tests that require network access.
   disabledTests = [
-    "PegasusTokenizationTest"
-    "T5TokenizationTest"
+    "BlenderbotSmallTokenizerTest"
+    "Blenderbot3BTokenizerTests"
+    "TokenizationTest"
+    "TestTokenizationBart"
     "test_all_tokenizers"
     "test_batch_encoding_is_fast"
     "test_batch_encoding_pickle"

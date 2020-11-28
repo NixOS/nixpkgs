@@ -101,5 +101,6 @@ in
   libxmlb = callInstalledTest ./libxmlb.nix {};
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
+  pipewire = callInstalledTest ./pipewire.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

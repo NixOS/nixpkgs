@@ -278,6 +278,10 @@ in
       home            = "/var/lib/murmur";
       createHome      = true;
       uid             = config.ids.uids.murmur;
+      group           = "murmur";
+    };
+    users.groups.murmur = {
+      gid             = config.ids.gids.murmur;
     };
 
     systemd.services.murmur = {
@@ -300,6 +304,7 @@ in
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
         User = "murmur";
+        Group = "murmur";
       };
     };
   };

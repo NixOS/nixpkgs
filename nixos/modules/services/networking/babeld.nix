@@ -87,9 +87,37 @@ in
       description = "Babel routing daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.babeld}/bin/babeld -c ${configFile}";
+      serviceConfig = {
+        ExecStart = "${pkgs.babeld}/bin/babeld -c ${configFile} -I /run/babeld/babeld.pid -S /var/lib/babeld/state";
+        CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+        IPAddressAllow = [ "fe80::/64" "ff00::/8" "::1/128" "127.0.0.0/8" ];
+        IPAddressDeny = "any";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        MemoryDenyWriteExecute = true;
+        ProtectSystem = "strict";
+        ProtectClock = true;
+        ProtectKernelTunables = false; # Couldn't write sysctl: Read-only file system
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = false; # kernel_route(ADD): Operation not permitted
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" ];
+        UMask = "0177";
+        RuntimeDirectory = "babeld";
+        StateDirectory = "babeld";
+      };
     };
-
   };
-
 }

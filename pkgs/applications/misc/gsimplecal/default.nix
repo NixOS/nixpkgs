@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1sa05ifjp41xipfspk5n6l3wzpzmp3i45q88l01p4l6k6drsq336";
   };
 
+  postPatch = ''
+    sed -ie '/sys\/sysctl.h/d' src/Unique.cpp
+  '';
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];

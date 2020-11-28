@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "erfa";
-  version = "1.7.0";
+  version = "1.7.1";
 
   buildInputs = [ autoreconfHook ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "liberfa";
     repo = "erfa";
     rev = "v${version}";
-    sha256 = "1z4k2phrw6wwi0kax6ac80jk9c036gi7pmhmg6gaf3lk81k6xz2r";
+    sha256 = "0j7v9y7jsw9vjmhdpksq44ah2af10b9gl1vfm8riw178lvf246wg";
   };
 
   configureFlags = [ "--enable-shared" ];

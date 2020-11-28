@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-headers";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
     rev = version;
-    sha256 = "1fnd8qwss6pxcch5j9qi1pdz70828zxsg4m8apgrhyj0p9lm0rbg";
+    sha256 = "069sivqajp7z4p44lmrz23lvf237xpkjxd4lzrg27836pwqcz9bj";
   };
 
   nativeBuildInputs = [ cmake ];

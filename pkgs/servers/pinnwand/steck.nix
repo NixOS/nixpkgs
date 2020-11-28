@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/supakeen/steck";
     license = licenses.mit;
-    description = "Client for pinnwand pastebin.";
+    description = "Client for pinnwand pastebin";
     maintainers = with maintainers; [ hexa ];
   };
 }

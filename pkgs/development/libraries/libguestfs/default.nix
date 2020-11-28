@@ -3,6 +3,7 @@
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
 , gmp, readline, file, numactl, xen, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
+, libtirpc
 , appliance ? null
 , javaSupport ? false, jdk ? null }:
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex db
     numactl xen libapparmor getopt perlPackages.ModuleBuild
+    libtirpc
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
     ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
     ++ stdenv.lib.optional javaSupport jdk;
@@ -89,5 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
+    # this is to avoid "output size exceeded"
+    hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else platforms.linux;
   };
 }

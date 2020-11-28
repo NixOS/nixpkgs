@@ -19,7 +19,7 @@ assert withSQLite -> sqlite != null;
 assert withPgSQL -> postgresql != null;
 assert withMysql -> libmysqlclient != null;
 
-let inherit (stdenv.lib) optional; in
+let inherit (stdenv.lib) getDev optional optionalString; in
 
 stdenv.mkDerivation rec {
   version = "1.7.5";
@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
     ++ optional withPgSQL postgresql
     ++ optional withMysql [ libmysqlclient zlib ];
 
+  MYSQL_CONFIG =
+    optionalString withMysql "${getDev libmysqlclient}/bin/mysql_config";
+
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
   ] ++ optional withJansson "--enable-jansson"
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
     ++ optional withMysql "--enable-mysql";
 
   meta = with stdenv.lib; {
-    description = "pmacct is a small set of multi-purpose passive network monitoring tools";
+    description = "A small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]

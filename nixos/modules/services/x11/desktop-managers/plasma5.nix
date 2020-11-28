@@ -184,6 +184,14 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      # Seed our configuration into nixos-generate-config
+      system.nixos-generate-config.desktopConfiguration = ''
+        # Enable the Plasma 5 Desktop Environment.
+        services.xserver.enable = true;
+        services.xserver.displayManager.sddm.enable = true;
+        services.xserver.desktopManager.plasma5.enable = true;
+      '';
+
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;

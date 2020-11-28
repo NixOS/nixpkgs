@@ -13,6 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "10f3bh3r3jc1185r8r1ihg8rprdpl8qwg5b6wqwsda96ydkbpi2b";
 
+  postInstall = ''
+    sed -i "s:amfora:$out/bin/amfora:" amfora.desktop
+    install -Dm644 amfora.desktop -t $out/share/applications
+  '';
+
   doCheck = false;
 
   meta = with lib; {

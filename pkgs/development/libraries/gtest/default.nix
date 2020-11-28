@@ -1,4 +1,4 @@
-{ stdenv, cmake, ninja, fetchFromGitHub }:
+{ stdenv, cmake, ninja, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-cmake-config-includedir.patch
+    (fetchpatch {
+      name = "fix-pkgconfig-paths.patch";
+      url = "https://github.com/google/googletest/commit/5126ff48d9ac54828d1947d1423a5ef2a8efee3b.patch";
+      sha256 = "sha256-TBvECU/9nuvwjsCjWJP2b6DNy+FYnHIFZeuVW7g++JE=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ninja ];

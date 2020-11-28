@@ -152,6 +152,9 @@ in
       ./desktop-managers/default.nix
       (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
         "See the 16.09 release notes for more information.")
+      (mkRemovedOptionModule
+        [ "services" "xserver" "startDbusSession" ]
+        "The user D-Bus session is now always socket activated and this option can safely be removed.")
       (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
         "Use services.xserver.fontPath instead of useXFS")
     ];
@@ -297,14 +300,6 @@ in
         type = types.nullOr types.int;
         default = null;
         description = "DPI resolution to use for X server.";
-      };
-
-      startDbusSession = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start a new DBus session when you log in with dbus-launch.
-        '';
       };
 
       updateDbusEnvironment = mkOption {

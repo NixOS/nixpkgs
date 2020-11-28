@@ -46,6 +46,33 @@ stdenv.mkDerivation rec {
                        # while the VM depends on <= gcc48:
                        "stackprotector" ];
 
+  # gcc 4.8 used for the build:
+  #
+  # gcc5 crashes during compilation; gcc >= 4.9 produces a
+  # binary that crashes when forking a child process. See:
+  # http://forum.world.st/OSProcess-fork-issue-with-Debian-built-VM-td4947326.html
+  #
+  # (stack protection is disabled above for gcc 4.8 compatibility.)
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [
+    bash
+    unzip
+    glibc
+    openssl
+    gcc48
+    libGLU libGL
+    freetype
+    xorg.libX11
+    xorg.libICE
+    xorg.libSM
+    alsaLib
+    cairo
+    pharo-share
+    libuuid
+  ];
+
+  enableParallelBuilding = true;
+
   # Regenerate the configure script.
   # Unnecessary? But the build breaks without this.
   autoreconfPhase = ''
@@ -123,35 +150,9 @@ stdenv.mkDerivation rec {
     ln -s ${libgit2}/lib/libgit2.so* "$out/"
   '';
 
-  enableParallelBuilding = true;
-
-  # gcc 4.8 used for the build:
-  #
-  # gcc5 crashes during compilation; gcc >= 4.9 produces a
-  # binary that crashes when forking a child process. See:
-  # http://forum.world.st/OSProcess-fork-issue-with-Debian-built-VM-td4947326.html
-  #
-  # (stack protection is disabled above for gcc 4.8 compatibility.)
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [
-    bash
-    unzip
-    glibc
-    openssl
-    gcc48
-    libGLU libGL
-    freetype
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
-    alsaLib
-    cairo
-    pharo-share
-    libuuid
-  ];
-
   meta = with stdenv.lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
+    homepage = "https://pharo.org";
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
       Smalltalk-inspired environment. By providing a stable and small core
@@ -165,7 +166,6 @@ stdenv.mkDerivation rec {
       Please fill bug reports on http://bugs.pharo.org under the 'Ubuntu
       packaging (ppa:pharo/stable)' project.
     '';
-    homepage = "http://pharo.org";
     license = licenses.mit;
     maintainers = [ maintainers.lukego ];
     platforms = [ "i686-linux" "x86_64-linux" ];

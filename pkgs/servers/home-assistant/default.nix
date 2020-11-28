@@ -67,7 +67,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.116.2";
+  hassVersion = "0.117.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -83,28 +83,20 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0q4yqcikkph05mkvg160664lyf0f1qkpm7yc6kh9hgigambxi0yp";
+    sha256 = "1f5axspj5hffmaqhpmrrflyd0c62lww36yvd2wr999yix7jhsfnc";
   };
-
-  patches = [
-    (fetchpatch {
-      #  Fix group tests when run in parallel, remove >= 0.117.0
-      url = "https://github.com/home-assistant/core/pull/41446/commits/c79dc478b7136b6df43707bf0ad6b53419c8a909.patch";
-      sha256 = "1cl81swq960vd2f733dcqq60c0jjzrkm0l2sibcblhmyw597b4vj";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
-      --replace "cryptography==2.9.2" "cryptography" \
+      --replace "cryptography==3.2.0" "cryptography" \
       --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 jinja2
+    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 httpx jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
     setuptools voluptuous voluptuous-serialize yarl
     # From default_config. frontend, http, image, mobile_app and recorder components as well as
@@ -198,7 +190,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";
-    description = "Open-source home automation platform running on Python 3";
+    description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
   };

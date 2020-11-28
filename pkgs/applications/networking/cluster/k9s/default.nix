@@ -23,7 +23,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    description = "Kubernetes CLI To Manage Your Clusters In Style.";
+    description = "Kubernetes CLI To Manage Your Clusters In Style";
     homepage = "https://github.com/derailed/k9s";
     license = licenses.asl20;
     maintainers = with maintainers; [ Gonzih markus1189 ];

@@ -1,6 +1,11 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused gawk
 
+# Update script for the vscode versions and hashes.
+# Usually doesn't need to be called by hand,
+# but is called by a bot: https://github.com/samuela/nixpkgs-upkeep/actions
+# Call it by hand if the bot fails to automatically update the versions.
+
 set -eou pipefail
 
 ROOT="$(dirname "$(readlink -f "$0")")"

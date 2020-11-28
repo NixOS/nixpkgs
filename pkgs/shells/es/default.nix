@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--with-readline" ];
 
   meta = with stdenv.lib; {
-    description = "Es is an extensible shell";
+    description = "An extensible shell with higher order functions";
     longDescription =
       ''
         Es is an extensible shell. The language was derived

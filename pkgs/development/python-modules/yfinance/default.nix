@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.54";
+  version = "0.1.55";
 
   # GitHub source releases aren't tagged
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cee223cbd31e14955869f7978bcf83776d644345c7dea31ba5d41c309bfb0d3d";
+    sha256 = "65d39bccf16bef35f6a08bf0df33650c0515b5ce8ea3c53924601f5fe00590cb";
   };
 
   propagatedBuildInputs = [

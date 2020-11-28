@@ -14,7 +14,6 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, useVaapi ? false # Deprecated, use enableVaapi instead!
 , enableVaapi ? false # Disabled by default due to unofficial support
 , useOzone ? false
 , cupsSupport ? true
@@ -47,6 +46,7 @@ let
       });
     } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "87") {
       useOzone = true; # YAY: https://chromium-review.googlesource.com/c/chromium/src/+/2382834 \o/
+      useVaapi = !stdenv.isAarch64; # TODO: Might be best to not set use_vaapi anymore (default is fine)
       gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-08-17";
         src = fetchgit {
@@ -147,13 +147,6 @@ let
       ''
     else browser;
 
-  optionalVaapiFlags = if useVaapi # TODO: Remove after 20.09:
-    then throw ''
-      Chromium's useVaapi was replaced by enableVaapi and you don't need to pass
-      "--ignore-gpu-blacklist" anymore (also no rebuilds are required anymore).
-    '' else lib.optionalString
-      (enableVaapi)
-      "--add-flags --enable-accelerated-video-decode";
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -180,7 +173,7 @@ in stdenv.mkDerivation {
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
-      ${optionalVaapiFlags} \
+      ${lib.optionalString enableVaapi "--add-flags --enable-accelerated-video-decode"} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF

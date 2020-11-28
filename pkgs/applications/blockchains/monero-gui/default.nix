@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.0.1";
+  version = "0.17.1.1";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1i9a3ampppyzsl4sllbqlr3w43sjpb3fdfxhb1j4n49p8g0jzmf3";
+    sha256 = "0aqhp4rmqsgwjb875kgh6qwz0wyyiag1fksyic9cnhgg5j5y95nx";
   };
 
   nativeBuildInputs = [
@@ -65,9 +65,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/version.js.in \
        --replace '@VERSION_TAG_GUI@' '${version}'
 
-    # remove this line on the next release
-    rm cmake/Version.cmake
-
     # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \
       --replace 'QApplication::applicationDirPath() + "' '"${monero}/bin'
@@ -78,10 +75,7 @@ stdenv.mkDerivation rec {
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)'
   '';
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=$out/bin"
-    "-DARCH=${arch}"
-  ];
+  cmakeFlags = [ "-DARCH=${arch}" ];
 
   desktopItem = makeDesktopItem {
     name = "monero-wallet-gui";

@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, pkgs, lib, php }:
 let
   pname = "phpstan";
-  version = "0.12.48";
+  version = "0.12.51";
 in
 mkDerivation {
   inherit pname version;
 
   src = pkgs.fetchurl {
     url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "170yzz23lyipyckv8y2x9masv5qdmbskwwlbfc8750xb3g2q7pzl";
+    sha256 = "0pfy14c0r64hdzlq5x1w225za2566s8vhh4hnfasmfh52s7v77p4";
   };
 
   phases = [ "installPhase" ];

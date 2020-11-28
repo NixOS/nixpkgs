@@ -48,7 +48,7 @@ in with python.pkgs; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://supakeen.com/project/pinnwand/";
     license = licenses.mit;
-    description = "A Python pastebin that tries to keep it simple.";
+    description = "A Python pastebin that tries to keep it simple";
     maintainers = with maintainers; [ hexa ];
   };
 }

@@ -60,6 +60,9 @@ python3.pkgs.buildPythonApplication rec {
       ${python3.interpreter} setup.py test
   '';
 
+  # necessary for wrapGAppsHook
+  strictDeps = false;
+
   meta = {
     homepage = "http://gajim.org/";
     description = "Jabber client written in PyGTK";

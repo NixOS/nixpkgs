@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook
 , asciidoctor, pkgconfig, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, json_c, kmod, which, utillinux, systemd, keyutils
+, json_c, kmod, which, utillinux, udev, keyutils
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs =
-    [ json_c kmod utillinux systemd keyutils
+    [ json_c kmod utillinux udev keyutils
     ];
 
   configureFlags =

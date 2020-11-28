@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline }:
+{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
+, CoreFoundation, IOKit
+}:
 
 stdenv.mkDerivation rec {
   name = "bacula-9.6.5";
@@ -9,6 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      IOKit
+    ]
     # acl relies on attr, which I can't get to build on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
 

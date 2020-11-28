@@ -23,16 +23,16 @@ assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia";
     rev = "v${version}";
-    sha256 = "1870wd03c3x0da9p3jmkvfx8am87ak0dcsvp2qkjvglbl396kd8y";
+    sha256 = "sha256-br5GRzWprQTixNrE0WpNIB7Ayj5oEfyCg5JY4MnX5rA=";
   };
 
-  cargoSha256 = "0bb51vdppdjhsxbfy3lyqvw5r5j58r3wi0qb68m2a45k3za7liss";
+  cargoSha256 = "sha256-SpCdoLCtvU9jpG/ivB/+4KhRdKZxN3/+7P/RlR6n9/c=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,6 +62,8 @@ rustPlatform.buildRustPackage rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    # Defaults to "ginstall" from some reason, although upstream's Makefiles check uname
+    "INSTALL=install"
   ];
 
   buildFlags = [
@@ -100,6 +102,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sequoia-pgp.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ minijackson doronbehar ];
-    broken = stdenv.targetPlatform.isDarwin;
   };
 }

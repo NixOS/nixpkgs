@@ -252,8 +252,8 @@ i18n.inputMethod = {
   <para>
    Hime is an extremely easy-to-use input method framework. It is lightweight,
    stable, powerful and supports many commonly used input methods, including
-   Cangjie, Zhuyin, Dayi, Rank, Shrimp, Greek, Japanese Anthy, Korean Pinyin,
-   Latin Alphabet, Rancang hunting birds, cool music, etc...
+   Cangjie, Zhuyin, Dayi, Rank, Shrimp, Greek, Korean Pinyin, Latin Alphabet,
+   etc...
   </para>
 
   <para>

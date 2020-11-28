@@ -318,6 +318,42 @@ let
         '';
       };
 
+      gnupg = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If enabled, pam_gnupg will attempt to automatically unlock the
+            user's GPG keys with the login password via
+            <command>gpg-agent</command>. The keygrips of all keys to be
+            unlocked should be written to <filename>~/.pam-gnupg</filename>,
+            and can be queried with <command>gpg -K --with-keygrip</command>.
+            Presetting passphrases must be enabled by adding
+            <literal>allow-preset-passphrase</literal> in
+            <filename>~/.gnupg/gpg-agent.conf</filename>.
+          '';
+        };
+
+        noAutostart = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Don't start <command>gpg-agent</command> if it is not running.
+            Useful in conjunction with starting <command>gpg-agent</command> as
+            a systemd user service.
+          '';
+        };
+
+        storeOnly = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Don't send the password immediately after login, but store for PAM
+            <literal>session</literal>.
+          '';
+        };
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -386,6 +422,7 @@ let
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
             || cfg.googleAuthenticator.enable
+            || cfg.gnupg.enable
             || cfg.duoSecurity.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
@@ -397,6 +434,10 @@ let
                  " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
                 "auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"}
+              ${optionalString cfg.gnupg.enable
+                "auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"
+                + optionalString cfg.gnupg.storeOnly " store-only"
+               }
               ${optionalString cfg.googleAuthenticator.enable
                 "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
               ${optionalString cfg.duoSecurity.enable
@@ -472,6 +513,10 @@ let
                " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
           ${optionalString (cfg.enableGnomeKeyring)
               "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
+          ${optionalString cfg.gnupg.enable
+              "session optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"
+              + optionalString cfg.gnupg.noAutostart " no-autostart"
+           }
           ${optionalString (config.virtualisation.lxc.lxcfs.enable)
                "session optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all"}
         '');

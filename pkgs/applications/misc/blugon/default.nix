@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 libX11 libXrandr ];
 
+  # Remove at next release
+  # https://github.com/jumper149/blugon/commit/d262cd05
+  postPatch = ''
+    sed -i 's,CC = gcc,CC ?= gcc,g' backends/scg/Makefile
+  '';
+
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {

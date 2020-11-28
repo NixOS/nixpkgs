@@ -28,6 +28,7 @@
 , fontconfig
 , tzdata
 , nss
+, libgudev
 }:
 
 stdenv.mkDerivation rec {
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     fontconfig
     nss
+    libgudev
   ];
 
   nativeBuildInputs = [

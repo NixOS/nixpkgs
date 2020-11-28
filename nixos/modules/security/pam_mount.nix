@@ -39,8 +39,16 @@ in
     environment.etc."security/pam_mount.conf.xml" = {
       source =
         let
-          extraUserVolumes = filterAttrs (n: u: u.cryptHomeLuks != null) config.users.users;
-          userVolumeEntry = user: "<volume user=\"${user.name}\" path=\"${user.cryptHomeLuks}\" mountpoint=\"${user.home}\" />\n";
+          extraUserVolumes = filterAttrs (n: u: u.cryptHomeLuks != null || u.pamMount != {}) config.users.users;
+          mkAttr = k: v: ''${k}="${v}"'';
+          userVolumeEntry = user: let
+            attrs = {
+              user = user.name;
+              path = user.cryptHomeLuks;
+              mountpoint = user.home;
+            } // user.pamMount;
+          in
+            "<volume ${concatStringsSep " " (mapAttrsToList mkAttr attrs)} />\n";
         in
          pkgs.writeText "pam_mount.conf.xml" ''
           <?xml version="1.0" encoding="utf-8" ?>

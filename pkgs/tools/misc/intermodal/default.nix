@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "intermodal";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wqf227ljfys16jfbxi6mlkgdczgqrh15ixl9vi6higlxfi2wsj2";
+    sha256 = "0mn0wm3bihn7ffqk0p79mb1hik54dbhc9diq1wh9ylpld2iqmz68";
   };
 
-  cargoSha256 = "0lx8y1y5mf8ga7iz74dnfyf2b9jx15wishw0khfxknmh96h2y99h";
+  cargoSha256 = "0kf5afarfwcl47b40pwnslfvxmxllmb995vc5ls2lpz4cx0jwahn";
 
   # include_hidden test tries to use `chflags` on darwin
   checkFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];

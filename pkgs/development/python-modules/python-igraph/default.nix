@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "python-igraph";
-  version = "0.8.2";
+  version = "0.8.3";
   disabled = !isPy3k; # fails to build
 
   nativeBuildInputs = [ pkgconfig ];
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4601638d7d22eae7608cdf793efac75e6c039770ec4bd2cecf76378c84ce7d72";
+    sha256 = "e1f27622eddeb2bd5fdcbadb41ef048e884790bb050f9627c086dc609d0f1236";
   };
 
   # NB: We want to use our igraph, not vendored igraph, but even with

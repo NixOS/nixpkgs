@@ -39,7 +39,7 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Bukubrow is a WebExtension for Buku, a command-line bookmark manager";
+    description = "A WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";
     license = licenses.gpl3;
     maintainers = with maintainers; [ infinisil ];

@@ -24,11 +24,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config zlib ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
-  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    unset SDKROOT
-  '';
-
   meta = with stdenv.lib; {
     description = "For when you really just want to serve some files over HTTP right now!";
     homepage = "https://github.com/svenstaro/miniserve";

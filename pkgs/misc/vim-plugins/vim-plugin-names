@@ -98,6 +98,7 @@ elmcast/elm-vim
 elzr/vim-json
 embear/vim-localvimrc
 enomsg/vim-haskellConcealPlus
+enricobacis/vim-airline-clock
 ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
@@ -369,6 +370,8 @@ numirias/semshi
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
+nvim-lua/lsp_extensions.nvim
+nvim-lua/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
 ocaml/vim-ocaml
@@ -494,7 +497,6 @@ thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
-tjdevries/lsp_extensions.nvim
 tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux

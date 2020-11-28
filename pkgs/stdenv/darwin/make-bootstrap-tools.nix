@@ -100,6 +100,8 @@ in rec {
         cp ${cctools_}/bin/$i $out/bin
       done
 
+      cp -d ${darwin.libtapi}/lib/libtapi* $out/lib
+
       cp -rd ${pkgs.darwin.CF}/Library $out
 
       chmod -R u+w $out

@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "Converts image formats supported by ImageMagick to the KnightOS image format";
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    platforms   = platforms.unix;
   };
 }

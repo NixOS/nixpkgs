@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "noaa-apt";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "martinber";
     repo = "noaa-apt";
     rev = "v${version}";
-    sha256 = "0fqki4a9c54rixdz5bpswvn433f9saw6yazgw4av3xdd7g2fdvvj";
+    sha256 = "0fmbg6lw7lmm402hzddpzgi7y9mc6kic14x8rif7fampk20mv3ms";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  cargoSha256 = "1pzcq31inazmc9cz31fspzqkp0lpkjid8ai3g17sin1pfzby5jlh";
+  cargoSha256 = "0w4rbbz8lsh31xkgibzndiic47690nfcjrn1411dskf7ali6djy8";
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.
@@ -55,10 +55,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "NOAA APT image decoder.";
+    description = "NOAA APT image decoder";
     homepage = "http://noaa-apt.mbernardi.com.ar/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ trepetti ];
+    platforms = platforms.all;
     changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${version}";
   };
 }

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A C++ Library for Parsing Expressions with Strings, Complex Numbers, Vectors, Matrices and more.";
+    description = "A C++ Library for Parsing Expressions with Strings, Complex Numbers, Vectors, Matrices and more";
     homepage = "https://beltoforion.de/en/muparserx/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     lzip
     pkgconfig
     python3
-    valgrind
+    (stdenv.lib.optionalString (!stdenv.isDarwin) valgrind)
     libxslt
   ];
 

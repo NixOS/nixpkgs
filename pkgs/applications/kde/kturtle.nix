@@ -4,7 +4,7 @@ mkDerivation {
   name = "kturtle";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/utilities/org.kde.kturtle";
-    description = "KTurtle is an educational programming environment for learning how to program";
+    description = "An educational programming environment for learning how to program";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

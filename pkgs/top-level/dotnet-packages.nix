@@ -327,14 +327,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Boogie = buildDotnetPackage rec {
     baseName = "Boogie";
-    version = "2019-06-20";
-    name = "${baseName}-unstable-${version}";
+    version = "2.4.1";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
-      rev = "2e8fae4dc1724d8f9e7b1f877116e56b0773337e";
-      sha256 = "01wjps3yfx8q0qy0zrmmfd1ixjxi2dhkn1wfazb5qm2slav39dp2";
+      rev = "v${version}";
+      sha256 = "13f6ifkh6gpy4bvx5zhgwmk3wd5rfxzl9wxwfhcj1c90fdrhwh1b";
     };
 
     # emulate `nuget restore Source/Boogie.sln`
@@ -379,7 +378,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Dafny = buildDotnetPackage rec {
+  Dafny = let
+    z3 = pkgs.z3.overrideAttrs (oldAttrs: rec {
+      version = "4.8.4";
+      name = "z3-${version}";
+
+      src = fetchFromGitHub {
+        owner = "Z3Prover";
+        repo = "z3";
+        rev = "z3-${version}";
+        sha256 = "014igqm5vwswz0yhz0cdxsj3a6dh7i79hvhgc3jmmmz3z0xm1gyn";
+      };
+    });
+    self' = pkgs.dotnetPackages.override ({
+      pkgs = pkgs // { inherit z3; };
+    });
+    Boogie = assert self'.Boogie.version == "2.4.1"; self'.Boogie;
+  in buildDotnetPackage rec {
     baseName = "Dafny";
     version = "2.3.0";
 
@@ -396,7 +411,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     '';
 
     preBuild = ''
-      ln -s ${pkgs.z3} Binaries/z3
+      ln -s ${z3} Binaries/z3
     '';
 
     buildInputs = [ Boogie ];

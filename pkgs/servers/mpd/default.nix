@@ -24,7 +24,6 @@
 , python3Packages # for sphinx-build
 # For tests
 , gtest
-, fetchpatch # used to fetch an upstream patch fixing a failing test
 , zip
 }:
 
@@ -116,13 +115,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22";
+      version = "0.22.1";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "1lsi4fgrarabkahfhf5zbmppg7jba7m362gxyqhv54hmqprl1qff";
+        sha256 = "16cdmr5w1ikz4ih1nwxnynfdf8qiz4k8bak1sazkkhyavzl3jrl4";
       };
 
       buildInputs = [
@@ -155,7 +154,8 @@ let
 
       mesonAutoFeatures = "disabled";
 
-      outputs = [ "out" "doc" "man" ];
+      outputs = [ "out" "doc" ]
+        ++ lib.optional (builtins.elem "documentation" features_) "man";
 
       mesonFlags = [
         "-Dtest=true"

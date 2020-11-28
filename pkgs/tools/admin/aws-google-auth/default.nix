@@ -4,6 +4,7 @@
 , beautifulsoup4
 , boto3
 , configparser
+, filelock
 , keyring
 , keyrings-alt
 , lxml
@@ -19,7 +20,7 @@
 
 buildPythonApplication rec {
   pname = "aws-google-auth";
-  version = "0.0.34";
+  version = "0.0.36";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   # https://github.com/cevoaustralia/aws-google-auth/issues/120
@@ -27,13 +28,14 @@ buildPythonApplication rec {
     owner = "cevoaustralia";
     repo = "aws-google-auth";
     rev = version;
-    sha256 = "12c5ssdy870szrizhs4d7dzcpq3hvszjvl8ba60qf1ak5jsr1ay4";
+    sha256 = "099r020v33sij2b3816cjp4fpy35c886l559szfxqx6kgy19y9z7";
   };
 
-  propagatedBuildInputs = [ 
+  propagatedBuildInputs = [
     beautifulsoup4
     boto3
     configparser
+    filelock
     keyring
     keyrings-alt
     lxml
@@ -43,10 +45,10 @@ buildPythonApplication rec {
     tabulate
     tzlocal
   ] ++ lib.optional withU2F python-u2flib-host;
-  
-  checkInputs = [ 
+
+  checkInputs = [
     mock
-    nose 
+    nose
   ];
 
   preCheck = ''

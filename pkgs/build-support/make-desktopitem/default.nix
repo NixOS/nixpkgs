@@ -1,50 +1,60 @@
 { lib, runCommandLocal, desktop-file-utils }:
 
-{ name
+# See https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
+{ name # The name of the desktop file
 , type ? "Application"
 , exec
 , icon ? null
 , comment ? null
-, terminal ? "false"
-, desktopName
+, terminal ? false
+, desktopName # The name of the application
 , genericName ? null
 , mimeType ? null
 , categories ? null
 , startupNotify ? null
-, extraEntries ? null
+, extraDesktopEntries ? {} # Extra key-value pairs to add to the [Desktop Entry] section. This may override other values
+, extraEntries ? "" # Extra configuration. Will be appended to the end of the file and may thus contain extra sections
 , fileValidation ? true # whether to validate resulting desktop file.
 }:
 
 let
-  optionalEntriesList = [{k="Icon";          v=icon;}
-                         {k="Comment";       v=comment;}
-                         {k="GenericName";   v=genericName;}
-                         {k="MimeType";      v=mimeType;}
-                         {k="Categories";    v=categories;}
-                         {k="StartupNotify"; v=startupNotify;}];
+  # like builtins.toString, but null -> null instead of null -> ""
+  nullableToString = value: if value == null then null
+        else if builtins.isBool value then lib.boolToString value
+        else builtins.toString value;
 
-  valueNotNull = {k, v}: v != null;
-  entriesToKeep = builtins.filter valueNotNull optionalEntriesList;
+  # The [Desktop entry] section of the desktop file, as attribute set.
+  mainSection = {
+    "Type" = toString type;
+    "Exec" = nullableToString exec;
+    "Icon" = nullableToString icon;
+    "Comment" = nullableToString comment;
+    "Terminal" = nullableToString terminal;
+    "Name" = toString desktopName;
+    "GenericName" = nullableToString genericName;
+    "MimeType" = nullableToString mimeType;
+    "Categories" = nullableToString categories;
+    "StartupNotify" = nullableToString startupNotify;
+  } // extraDesktopEntries;
 
-  mkEntry = {k, v}:  k + "=" + v;
-  optionalEntriesString  = lib.concatMapStringsSep "\n" mkEntry entriesToKeep;
+  # Map all entries to a list of lines
+  desktopFileStrings =
+    ["[Desktop Entry]"]
+    ++ builtins.filter
+      (v: v != null)
+      (lib.mapAttrsToList
+        (name: value: if value != null then "${name}=${value}" else null)
+        mainSection
+      )
+    ++ (if extraEntries == "" then [] else ["${extraEntries}"]);
 in
 runCommandLocal "${name}.desktop" {}
-  ''
+  (''
     mkdir -p "$out/share/applications"
     cat > "$out/share/applications/${name}.desktop" <<EOF
-    [Desktop Entry]
-    Type=${type}
-    Exec=${exec}
-    Terminal=${terminal}
-    Name=${desktopName}
-    ${optionalEntriesString}
-    ${if extraEntries == null then ''EOF'' else ''
-    ${extraEntries}
-    EOF''}
-
-    ${lib.optionalString fileValidation ''
-      echo "Running desktop-file validation"
-      ${desktop-file-utils}/bin/desktop-file-validate "$out/share/applications/${name}.desktop"
-    ''}
-  ''
+    ${builtins.concatStringsSep "\n" desktopFileStrings}
+    EOF
+  '' + lib.optionalString fileValidation ''
+    echo "Running desktop-file validation"
+    ${desktop-file-utils}/bin/desktop-file-validate "$out/share/applications/${name}.desktop"
+  '')

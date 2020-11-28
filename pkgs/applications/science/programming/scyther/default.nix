@@ -13,7 +13,7 @@ let
   };
 
   meta = with lib; {
-    description = "Scyther is a tool for the automatic verification of security protocols.";
+    description = "A tool for the automatic verification of security protocols";
     homepage = "https://www.cs.ox.ac.uk/people/cas.cremers/scyther/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ infinisil ];

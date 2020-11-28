@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "LightBurn is layout, editing, and control software for your laser cutter.";
+    description = "Layout, editing, and control software for your laser cutter";
     homepage = "https://lightburnsoftware.com/";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ q3k ];

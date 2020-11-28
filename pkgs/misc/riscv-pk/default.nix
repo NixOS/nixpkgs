@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "RISC-V Proxy Kernel and Bootloader.";
+    description = "RISC-V Proxy Kernel and Bootloader";
     homepage = "https://github.com/riscv/riscv-pk";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.riscv;

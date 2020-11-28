@@ -2,6 +2,7 @@
 , uri, xmlm, omd, ezjsonm }:
 
 buildDunePackage rec {
+  useDune2 = true;
   minimumOCamlVersion = "4.02.3";
 
   version = "2.4.0";

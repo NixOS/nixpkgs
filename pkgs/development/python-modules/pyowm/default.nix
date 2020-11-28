@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "3.0.0";
+  version = "3.1.1";
 
   disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f06ac5f2356f0964f088b1f840a6d382499054bd18539ffb1e7c84f29c2c39b6";
+    sha256 = "a7b18297a9189dbe5f6b454b12d61a407e35c7eb9ca75bcabfe5e1c83245290d";
   };
 
   propagatedBuildInputs = [ requests geojson ];

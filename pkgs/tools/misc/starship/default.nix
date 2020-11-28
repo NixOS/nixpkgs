@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.45.2";
+  version = "0.46.2";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kxmgx4pnayp3jf6cgmka05x3aymxr79rim5nff6k3cg5zaqrz59";
+    sha256 = "092nqxl3vdk8k589bv3g05c598k77f4wsxcgymfb1h1fc0lfzqs4";
   };
 
   nativeBuildInputs = [ installShellFiles ] ++ stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
@@ -31,14 +31,17 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "0x9a322anwrgpxfqrvqb1ikavp8qffa93wdvj5kln1d2rgmxr2sy";
+  cargoSha256 = "1smz7084ppz79p8migpy0cqp6azf7sixv9ga65l2f3zfna7kbk78";
 
   checkFlags = [
     "--skip=directory_in_home"
-    "--skip=fish_directory_in_home"
     "--skip=home_directory"
-    "--skip=truncated_directory_in_home"
     "--skip=directory_in_root"
+    "--skip=truncation_symbol_not_truncated_home"
+    "--skip=truncation_symbol_truncated_home"
+    "--skip=folder_with_glide_yaml"
+    "--skip=shows_multiple_tfms"
+    "--skip=shows_pinned_in_project_below_root_with_global_json"
   ];
 
   meta = with stdenv.lib; {

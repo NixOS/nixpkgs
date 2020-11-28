@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Denable_docs=true"
-    "-Denable_kmods=${if mod then "true" else "false"}"
+    "-Denable_kmods=${lib.boolToString mod}"
   ]
   ++ lib.optional (!shared) "-Ddefault_library=static"
   ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"

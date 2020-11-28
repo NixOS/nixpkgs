@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cxwbq97n5pfmq0hji1ybbc6i1jg5bjy830dq23zqxbwxxwjx98m";
+    sha256 = "1f6a62hg82fn9ddrl6g11x2h27zng8jmrlfbnnra6q590i5v1ixr";
   };
 
   patches = [
@@ -44,6 +44,13 @@ buildPythonPackage rec {
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
   ];
+
+  postPatch = ''
+    # Use nixpkgs version instead of versioneer
+    substituteInPlace setup.py \
+      --replace "cmds = versioneer.get_cmdclass()" "cmds = {}" \
+      --replace "version=versioneer.get_version()" "version='${version}'"
+  '';
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
   # Compile flags taken from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh

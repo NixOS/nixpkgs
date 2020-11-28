@@ -33,6 +33,7 @@ let
       pkgs.ncurses
       pkgs.netcat
       config.programs.ssh.package
+      pkgs.mkpasswd
       pkgs.procps
       pkgs.su
       pkgs.time
@@ -142,6 +143,7 @@ in
         "/share/kservices5"
         "/share/kservicetypes5"
         "/share/kxmlgui5"
+        "/share/systemd"
       ];
 
     system.path = pkgs.buildEnv {

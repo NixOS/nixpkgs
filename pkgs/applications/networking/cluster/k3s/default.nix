@@ -9,6 +9,7 @@
 , buildGoPackage
 , git
 , runc
+, kmod
 , libseccomp
 , pkgconfig
 , ethtool
@@ -150,7 +151,7 @@ let
     '';
 
     meta = {
-      description = "The various binaries that get packaged into the final k3s binary.";
+      description = "The various binaries that get packaged into the final k3s binary";
       license = licenses.asl20;
       homepage = "https://k3s.io";
       maintainers = [ maintainers.euank ];
@@ -211,7 +212,7 @@ let
     '';
 
     meta = {
-      description = "The k3s go binary which is used by the final wrapped output below.";
+      description = "The k3s go binary which is used by the final wrapped output below";
       license = licenses.asl20;
       homepage = "https://k3s.io";
       maintainers = [ maintainers.euank ];
@@ -226,6 +227,7 @@ stdenv.mkDerivation rec {
   # https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494
   # Note the list in that issue is stale and some aren't relevant for k3s.
   k3sRuntimeDeps = [
+    kmod
     socat
     iptables
     iproute
@@ -257,7 +259,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A lightweight Kubernetes distribution.";
+    description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
     maintainers = [ maintainers.euank ];

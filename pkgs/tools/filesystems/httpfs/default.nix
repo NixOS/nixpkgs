@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "HTTPFS2, a FUSE-based HTTP file system for Linux";
+    description = "FUSE-based HTTP filesystem for Linux";
 
     homepage = "http://httpfs.sourceforge.net/";
 

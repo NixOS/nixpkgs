@@ -3,7 +3,7 @@
 }:
 let
   appname = "SuperSlicer";
-  version = "2.2.53.1";
+  version = "2.2.54.2";
   pname = "super-slicer";
   description = "PrusaSlicer fork with more features and faster development cycle";
   override = super: {
@@ -12,7 +12,7 @@ let
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      sha256 = "sha256-CAhwmQ63N/XJYToTnIV84lNnjDGNbkmYPzNKNL/wVxs=";
+      sha256 = "sha256-ThmsxFXI1uReK+JwpHrIWzHpBdIOP77kDjv+QaK+Azk=";
       rev = version;
     };
 
@@ -23,8 +23,7 @@ let
 
     postInstall = ''
       mkdir -p "$out/share/pixmaps/"
-      # Change slic3r++ to SuperSlicer at the next release!
-      ln -s "$out/share/slic3r++/icons/Slic3r.png" "$out/share/pixmaps/${appname}.png"
+      ln -s "$out/share/SuperSlicer/icons/Slic3r.png" "$out/share/pixmaps/${appname}.png"
       mkdir -p "$out/share/applications"
       cp "$desktopItem"/share/applications/* "$out/share/applications/"
     '';

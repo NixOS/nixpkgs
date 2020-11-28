@@ -65,10 +65,21 @@
    </listitem>
    <listitem>
     <para>
-      The option <option>fonts.enableFontDir</option> has been renamed to
-      <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
-      has also been changed to <literal>/run/current-system/sw/share/X11/fonts</literal>,
-      for consistency with other X11 resources.
+     If the <varname>services.dbus</varname> module is enabled, then
+     the user D-Bus session is now always socket activated. The
+     associated options <varname>services.dbus.socketActivated</varname>
+     and <varname>services.xserver.startDbusSession</varname> have
+     therefore been removed and you will receive a warning if
+     they are present in your configuration. This change makes the
+     user D-Bus session available also for non-graphical logins.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <option>fonts.enableFontDir</option> has been renamed to
+     <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
+     has also been changed to <literal>/run/current-system/sw/share/X11/fonts</literal>,
+     for consistency with other X11 resources.
     </para>
    </listitem>
    <listitem>
@@ -80,6 +91,22 @@
       <literal>withScripting</literal>. Additionally, <literal>kicad/base.nix</literal> no longer
       provides default argument values since these are provided by
       <literal>kicad/default.nix</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The socket for the <literal>pdns-recursor</literal> module was moved from <literal>/var/lib/pdns-recursor</literal>
+      to <literal>/run/pdns-recursor</literal> to match upstream.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      PowerDNS has been updated from <literal>4.2.x</literal> to <literal>4.3.x</literal>. Please
+      be sure to review the <link xlink:href="https://doc.powerdns.com/authoritative/upgrading.html#x-to-4-3-0">Upgrade Notes</link>
+      provided by upstream before upgrading. Worth specifically noting is that the service now runs
+      entirely as a dedicated <literal>pdns</literal> user, instead of starting as <literal>root</literal>
+      and dropping privileges, as well as the default <literal>socket-dir</literal> location changing from
+      <literal>/var/lib/powerdns</literal> to <literal>/run/pdns</literal>.
     </para>
    </listitem>
   </itemizedlist>

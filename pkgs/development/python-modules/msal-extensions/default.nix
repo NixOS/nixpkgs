@@ -1,9 +1,11 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, isPy27
 
 # pythonPackages
 , msal
+, pathlib2
 , portalocker
 }:
 
@@ -19,6 +21,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     msal
     portalocker
+  ] ++ lib.optionals isPy27 [
+    pathlib2
   ];
 
   # No tests found

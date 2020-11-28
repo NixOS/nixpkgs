@@ -101,13 +101,7 @@ let
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
     };
-    camlimages_4_1 = callPackage ../development/ocaml-modules/camlimages/4.1.nix {
-      giflib = pkgs.giflib_4_1;
-    };
-    camlimages =
-          if lib.versionOlder "4.06" ocaml.version
-          then callPackage ../development/ocaml-modules/camlimages { }
-          else camlimages_4_1;
+    camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
@@ -320,6 +314,10 @@ let
 
     gnuplot = callPackage ../development/ocaml-modules/gnuplot {
       inherit (pkgs) gnuplot;
+    };
+
+    gsl = callPackage ../development/ocaml-modules/gsl {
+      inherit (pkgs) gsl;
     };
 
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
@@ -541,6 +539,10 @@ let
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
+    mirage-block = callPackage ../development/ocaml-modules/mirage-block { };
+
+    mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
+
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
@@ -560,6 +562,12 @@ let
     mirage-flow-combinators = callPackage ../development/ocaml-modules/mirage-flow/combinators.nix { };
 
     mirage-flow-unix = callPackage ../development/ocaml-modules/mirage-flow/unix.nix { };
+
+    mirage-fs = callPackage ../development/ocaml-modules/mirage-fs { };
+
+    mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
+
+    mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
@@ -747,6 +755,8 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
+
+    parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
@@ -1021,7 +1031,7 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.13.nix {
-      inherit ctypes dune-configurator janePackage num octavius ppxlib re;
+      inherit ctypes dune-configurator janePackage num octavius ppxlib re zarith;
       inherit (pkgs) openssl;
     }
     else if lib.versionOlder "4.07" ocaml.version
@@ -1050,25 +1060,10 @@ let
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
 
-    ppx_core =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_core
-      else callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
-
     ppx_optcomp =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.ppx_optcomp
       else callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
-
-    ppx_driver =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_driver
-      else callPackage ../development/ocaml-modules/janestreet/ppx-driver.nix {};
-
-    ppx_type_conv =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_type_conv
-      else callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
 
     ppx_compare =
       if lib.versionOlder "4.03" ocaml.version
@@ -1114,11 +1109,6 @@ let
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.ppx_enumerate
       else callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
-
-    ppx_fail =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_fail
-      else callPackage ../development/ocaml-modules/janestreet/ppx-fail.nix {};
 
     ppx_fields_conv =
       if lib.versionOlder "4.03" ocaml.version

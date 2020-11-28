@@ -12,9 +12,9 @@
 }:
 
 let
-  version = "1.6.0";
+  version = "1.7.0";
   device = if cudaSupport then "cuda" else "cpu";
-  srcs = import ./binary-hashes.nix;
+  srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
 in stdenv.mkDerivation {
   inherit version;

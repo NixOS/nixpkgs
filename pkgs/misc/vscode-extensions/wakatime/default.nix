@@ -8,8 +8,8 @@ in
     mktplcRef = {
       name = "vscode-wakatime";
       publisher = "WakaTime";
-      version = "4.0.8";
-      sha256 = "1yma86x5g8fip388afgg20k3sxpkf8bfn98d3850jg6b3zjlw19r";
+      version = "4.0.9";
+      sha256 = "0sm2fr9zbk1759r52dpnz9r7xbvxladlpinlf2i0hyaa06bhp3b1";
     };
 
     postPatch = ''

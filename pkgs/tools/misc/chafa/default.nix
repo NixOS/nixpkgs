@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
                    ];
 
   meta = with stdenv.lib; {
-    description = "Terminal graphics for the 21st century.";
+    description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;

@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    description = "Minimalist dependency manager for Go written in Go.";
+    description = "Minimalist dependency manager for Go written in Go";
     homepage = "https://github.com/sparrc/gdm";
     license = licenses.unlicense;
     maintainers = [ maintainers.mic92 ];

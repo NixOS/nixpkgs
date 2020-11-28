@@ -66,7 +66,7 @@ self: super: {
   unliftio-core = doJailbreak super.unliftio-core;
 
   # Use the latest version to fix the build.
-  dhall = self.dhall_1_35_0;
+  dhall = self.dhall_1_36_0;
   lens = self.lens_4_19_2;
   optics = self.optics_0_3;
   optics-core = self.optics-core_0_3_0_1;
@@ -128,5 +128,8 @@ self: super: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }));
+
+  # Break out of "Cabal < 3.2" constraint.
+  stylish-haskell = doJailbreak super.stylish-haskell;
 
 }

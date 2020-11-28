@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "A tool to create or extract KnightOS packages";
     license     = licenses.lgpl2Only;
     maintainers = with maintainers; [ siraben ];
+    platforms   = platforms.unix;
   };
 }

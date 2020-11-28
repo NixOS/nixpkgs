@@ -12,6 +12,8 @@ python2Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python2Packages; [ python-wifi ];
 
+  patches = [ ./fix_pluginpath.patch ];
+
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {

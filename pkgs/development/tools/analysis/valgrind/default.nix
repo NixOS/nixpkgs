@@ -86,5 +86,6 @@ stdenv.mkDerivation rec {
       "riscv32-linux" "riscv64-linux"
       "alpha-linux"
     ];
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

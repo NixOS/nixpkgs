@@ -1,12 +1,12 @@
 { mkDerivation, lib, fetchurl, pkgconfig, qtbase, qttools, alsaLib, libjack2 }:
 
 mkDerivation rec {
-  version = "0.6.2";
+  version = "0.6.3";
   pname = "qmidinet";
 
   src = fetchurl {
     url = "mirror://sourceforge/qmidinet/${pname}-${version}.tar.gz";
-    sha256 = "0siqzyhwg3l9av7jbca3bqdww7xspjlpi9ya4mkj211xc3a3a1d6";
+    sha256 = "04jbvnf6yp9l0bhl1ym6zqkmaz8c2az3flq7qgflaxzj3isns1p1";
   };
 
   hardeningDisable = [ "format" ];

@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "IPMIView";
-  version = "2.16.0";
-  buildVersion = "190815";
+  version = "2.17.0";
+  buildVersion = "200505";
 
   src = fetchurl {
     url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    sha256 = "0qw9zfnj0cyvab7ndamlw2y0gpczjhh1jkz8340kl42r2xmhkvpl";
+    sha256 = "0ba0694krj2q77zwdn22v2qzjdy52a7ryhgc3m51s7p17ahigz97";
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/libawt_xawt.so
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ freetype ]}" ./jre/lib/amd64/libfontmanager.so
     patchelf --set-rpath "${gcc-unwrapped.lib}/lib" ./libiKVM64.so
+    patchelf --set-rpath "${gcc-unwrapped.lib}/lib" ./libiKVM_v11_64.so
     patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
   '';
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     exec = "IPMIView";
     desktopName = name;
     genericName = "Supermicro BMC manager";
-    categories = "Network;Configuration";
+    categories = "Network";
   };
 
   installPhase = ''
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/IPMIView20.jar" \
       --run 'WORK_DIR=''${XDG_DATA_HOME:-~/.local/share}/ipmiview
              mkdir -p $WORK_DIR
-             ln -snf '$out'/iKVM.jar '$out'/libiKVM* '$out'/libSharedLibrary* $WORK_DIR
+             ln -snf '$out'/iKVM.jar '$out'/iKVM_ssl.jar '$out'/libiKVM* '$out'/libSharedLibrary* $WORK_DIR
              cd $WORK_DIR'
   '';
 

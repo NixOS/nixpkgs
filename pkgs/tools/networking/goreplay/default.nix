@@ -19,7 +19,7 @@ buildGoPackage rec {
   meta = {
     homepage = "https://github.com/buger/goreplay";
     license = stdenv.lib.licenses.lgpl3Only;
-    description = "GoReplay is an open-source tool for capturing and replaying live HTTP traffic.";
+    description = "Open-source tool for capturing and replaying live HTTP traffic";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
   };

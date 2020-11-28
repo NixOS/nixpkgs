@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
      test "$?" == 124 && echo "ok")
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Launcher for Pharo distributions";
+    homepage = "https://pharo.org";
     longDescription = ''
-
       Pharo's goal is to deliver a clean, innovative, free open-source
       Smalltalk-inspired environment. By providing a stable and small
       core system, excellent dev tools, and maintained releases, Pharo
@@ -75,8 +75,7 @@ stdenv.mkDerivation rec {
       access it very rapidly from your OS application launcher. As a
       result, launching any image is never more than 3 clicks away.
     '';
-    homepage = "http://pharo.org";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
     platforms = pharo.meta.platforms;
   };

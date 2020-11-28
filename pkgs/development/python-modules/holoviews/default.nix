@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.13.3";
+  version = "1.13.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e6753651a8598f21fc2c20e8456865ecec276cfea1519182a76d957506727934";
+    sha256 = "3f8a00ce1cc67a388a3a949441accd7e7e9ca9960ba16b49ee96a50305105a01";
   };
 
   propagatedBuildInputs = [

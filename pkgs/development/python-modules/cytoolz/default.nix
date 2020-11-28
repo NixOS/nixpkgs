@@ -6,19 +6,18 @@
 , toolz
 , python
 , fetchpatch
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.10.1";
+  version = "0.11.0";
+  disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p4a9nadsy1337gy2cnb5yanbn03j3zm6d9adyqad9bk3nlbpxc2";
+    sha256 = "c64f3590c3eb40e1548f0d3c6b2ccde70493d0b8dc6cc7f9f3fec0bb3dcd4222";
   };
-
-  # Extension types
-  disabled = isPyPy;
 
   checkInputs = [ nose ];
   propagatedBuildInputs = [ toolz ];

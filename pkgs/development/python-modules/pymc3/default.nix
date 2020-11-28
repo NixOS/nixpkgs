@@ -14,6 +14,8 @@
 , pytest
 , nose
 , parameterized
+, fastprogress
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -41,6 +43,8 @@ buildPythonPackage rec {
     h5py
     arviz
     packaging
+    fastprogress
+    typing-extensions
   ];
 
   checkInputs = [
@@ -52,6 +56,7 @@ buildPythonPackage rec {
   # The test suite is computationally intensive and test failures are not
   # indicative for package usability hence tests are disabled by default.
   doCheck = false;
+  pythonImportsCheck = [ "pymc3" ];
 
   # For some reason tests are run as a part of the *install* phase if enabled.
   # Theano writes compiled code to ~/.theano hence we set $HOME.

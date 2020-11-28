@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description =
-      "Coordinate your helpers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
+      "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
     license = licenses.gpl2;
     homepage = "https://engelsystem.de";
     maintainers = with maintainers; [ kloenk ];

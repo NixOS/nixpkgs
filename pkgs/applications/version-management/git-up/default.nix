@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/msiemens/PyGitUp";
-    description = "A git pull replacement that rebases all local branches when pulling.";
+    description = "A git pull replacement that rebases all local branches when pulling";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;

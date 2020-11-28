@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "bazel-kazel";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "repo-infra";
     rev = "v${version}";
-    sha256 = "121asn0h2vfgqnjk72wqjcfq0w15k15abjdm39i8hv455kzrc2hs";
+    sha256 = "1fn6ppyjgg3v80n9rc9712xms5yq3xkkd95zyd64l5gh9mshjn86";
   };
 
   vendorSha256 = "1pzkjh4n9ai8yqi98bkdhicjdr2l8j3fckl5n90c2gdcwqyxvgkf";

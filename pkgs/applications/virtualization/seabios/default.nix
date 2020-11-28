@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "seabios";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "https://www.seabios.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "00z7vdahpxa37irlf8ld350dp6z9qfyfb56vbfqr319hsv13srrp";
+    sha256 = "1zc1brgafbbf5hmdr1qc1p859cabpz73l8sklq83xa4sn9icqw7b";
   };
 
   buildInputs = [ iasl python ];

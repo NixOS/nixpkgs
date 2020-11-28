@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pdfminer_six";
-  version = "20200726";
+  version = "20201018";
 
   disabled = !isPy3k;
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "pdfminer";
     repo = "pdfminer.six";
     rev = version;
-    sha256 = "1hlaz7ax1czb028x3nhk3l2jy07f26q5hbhmdirljaaga24vd96z";
+    sha256 = "1a2fxxnnjqbx344znpvx7cnv1881dk6585ibw01inhfq3w6yj2lr";
   };
 
   propagatedBuildInputs = [ chardet cryptography sortedcontainers ];

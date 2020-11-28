@@ -1,18 +1,22 @@
-{ stdenv, python3Packages, nginx }:
+{ stdenv, fetchFromGitHub, python3Packages, nginx }:
 
 python3Packages.buildPythonApplication rec {
   pname = "devpi-server";
-  version = "5.5.0";
+  version = "6.0.0.dev0";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "0lily4a0k13bygx07x2f2q4nkwny0fj34hpac9i6mc70ysdn1hhi";
+  src = fetchFromGitHub {
+    owner = "devpi";
+    repo = "devpi";
+    rev = "68ee291ef29a93f6d921d4927aec8d13919b4a4c";
+    sha256 = "1ivd5dy9f2gq07w8n2gywa0n0d9wv8644l53ni9fz7i69jf8q2fm";
   };
+  sourceRoot = "source/server";
 
   propagatedBuildInputs = with python3Packages; [
     py
     appdirs
     devpi-common
+    defusedxml
     execnet
     itsdangerous
     repoze_lru

@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.3.3";
+  version = "3.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ecd69cf6b2f0235345ebe607a15325cf1384c85b24ffbe1d68c3754357f87488";
+    sha256 = "2d3c223b7adc4dd46ce258d4a33b7e0dbb6c339e002faa40ee4a69d5fdce9449";
   };
 
   propagatedBuildInputs = [ wrapt pyserial aenum ] ++ lib.optional (pythonOlder "3.5") typing;

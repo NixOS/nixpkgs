@@ -6,12 +6,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "0.3.0";
+  version = "0.3.1";
   pname = "vimwiki-markdown";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "1icfnc623f9pyn59wgb76g0fnsx41s87q69x354qy17gw23bxabx";
+    sha256 = "50032c62947422c8afbc1733e50526818df7d885d1cc41a27ff65fc26cd3c1c5";
   };
 
   propagatedBuildInputs= [

@@ -32,8 +32,8 @@ let
         fi
         if [ -n "$dns" ]; then
           rm -f /etc/resolv.conf
-          for i in $dns; do
-            echo "nameserver $dns" >> /etc/resolv.conf
+          for server in $dns; do
+            echo "nameserver $server" >> /etc/resolv.conf
           done
         fi
       fi

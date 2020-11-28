@@ -8,7 +8,29 @@ in
 
 rec {
 
-  inherit (builtins) stringLength substring head tail isString replaceStrings;
+  inherit (builtins)
+    compareVersions
+    elem
+    elemAt
+    filter
+    fromJSON
+    head
+    isInt
+    isList
+    isString
+    match
+    parseDrvName
+    readFile
+    replaceStrings
+    split
+    storeDir
+    stringLength
+    substring
+    tail
+    toJSON
+    typeOf
+    unsafeDiscardStringContext
+    ;
 
   /* Concatenate a list of strings.
 
@@ -120,7 +142,7 @@ rec {
     subDir:
     # List of base paths
     paths:
-    concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) paths));
+    concatStringsSep ":" (map (path: path + "/" + subDir) (filter (x: x != null) paths));
 
   /* Construct a Unix-style search path by appending the given
      `subDir` to the specified `output` of each of the packages. If no
@@ -313,7 +335,17 @@ rec {
        escapeNixString "hello\${}\n"
        => "\"hello\\\${}\\n\""
   */
-  escapeNixString = s: escape ["$"] (builtins.toJSON s);
+  escapeNixString = s: escape ["$"] (toJSON s);
+
+  /* Turn a string into an exact regular expression
+
+     Type: string -> string
+
+     Example:
+       escapeRegex "[^a-z]*"
+       => "\\[\\^a-z]\\*"
+  */
+  escapeRegex = escape (stringToCharacters "\\[{()^$?*+|.");
 
   /* Quotes a string if it can't be used as an identifier directly.
 
@@ -327,7 +359,7 @@ rec {
   */
   escapeNixIdentifier = s:
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
-    if builtins.match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
+    if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
     then s else escapeNixString s;
 
   # Obsolete - use replaceStrings instead.
@@ -386,8 +418,6 @@ rec {
   /* Cut a string with a separator and produces a list of strings which
      were separated by this separator.
 
-     NOTE: this function is not performant and should never be used.
-
      Example:
        splitString "." "foo.bar.baz"
        => [ "foo" "bar" "baz" ]
@@ -396,26 +426,11 @@ rec {
   */
   splitString = _sep: _s:
     let
-      sep = addContextFrom _s _sep;
-      s = addContextFrom _sep _s;
-      sepLen = stringLength sep;
-      sLen = stringLength s;
-      lastSearch = sLen - sepLen;
-      startWithSep = startAt:
-        substring startAt sepLen s == sep;
-
-      recurse = index: startAt:
-        let cutUntil = i: [(substring startAt (i - startAt) s)]; in
-        if index <= lastSearch then
-          if startWithSep index then
-            let restartAt = index + sepLen; in
-            cutUntil index ++ recurse restartAt restartAt
-          else
-            recurse (index + 1) startAt
-        else
-          cutUntil sLen;
+      sep = builtins.unsafeDiscardStringContext _sep;
+      s = builtins.unsafeDiscardStringContext _s;
+      splits = builtins.filter builtins.isString (builtins.split (escapeRegex sep) s);
     in
-      recurse 0 0;
+      map (v: addContextFrom _sep (addContextFrom _s v)) splits;
 
   /* Return a string without the specified prefix, if the prefix matches.
 
@@ -473,7 +488,7 @@ rec {
        versionOlder "1.1" "1.1"
        => false
   */
-  versionOlder = v1: v2: builtins.compareVersions v2 v1 == 1;
+  versionOlder = v1: v2: compareVersions v2 v1 == 1;
 
   /* Return true if string v1 denotes a version equal to or newer than v2.
 
@@ -499,7 +514,7 @@ rec {
   */
   getName = x:
    let
-     parse = drv: (builtins.parseDrvName drv).name;
+     parse = drv: (parseDrvName drv).name;
    in if isString x
       then parse x
       else x.pname or (parse x.name);
@@ -516,7 +531,7 @@ rec {
   */
   getVersion = x:
    let
-     parse = drv: (builtins.parseDrvName drv).version;
+     parse = drv: (parseDrvName drv).version;
    in if isString x
       then parse x
       else x.version or (parse x.name);
@@ -534,7 +549,7 @@ rec {
     let
       components = splitString "/" url;
       filename = lib.last components;
-      name = builtins.head (splitString sep filename);
+      name = head (splitString sep filename);
     in assert name != filename; name;
 
   /* Create an --{enable,disable}-<feat> string that can be passed to
@@ -624,14 +639,14 @@ rec {
   */
   floatToString = float: let
     result = toString float;
-    precise = float == builtins.fromJSON result;
+    precise = float == fromJSON result;
   in if precise then result
     else lib.warn "Imprecise conversion from float to string ${result}" result;
 
   /* Check whether a value can be coerced to a string */
   isCoercibleToString = x:
-    builtins.elem (builtins.typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
-    (builtins.isList x && lib.all isCoercibleToString x) ||
+    elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
+    (isList x && lib.all isCoercibleToString x) ||
     x ? outPath ||
     x ? __toString;
 
@@ -650,8 +665,8 @@ rec {
   isStorePath = x:
     if isCoercibleToString x then
       let str = toString x; in
-      builtins.substring 0 1 str == "/"
-      && dirOf str == builtins.storeDir
+      substring 0 1 str == "/"
+      && dirOf str == storeDir
     else
       false;
 
@@ -669,8 +684,8 @@ rec {
   */
   # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
-    let may_be_int = builtins.fromJSON str; in
-    if builtins.isInt may_be_int
+    let may_be_int = fromJSON str; in
+    if isInt may_be_int
     then may_be_int
     else throw "Could not convert ${str} to int.";
 
@@ -692,10 +707,10 @@ rec {
   readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
     (rootPath: file:
       let
-        lines = lib.splitString "\n" (builtins.readFile file);
+        lines = lib.splitString "\n" (readFile file);
         removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
         relativePaths = removeComments lines;
-        absolutePaths = builtins.map (path: rootPath + "/${path}") relativePaths;
+        absolutePaths = map (path: rootPath + "/${path}") relativePaths;
       in
         absolutePaths);
 
@@ -709,7 +724,7 @@ rec {
        fileContents ./version
        => "1.0"
   */
-  fileContents = file: removeSuffix "\n" (builtins.readFile file);
+  fileContents = file: removeSuffix "\n" (readFile file);
 
 
   /* Creates a valid derivation name from a potentially invalid one.
@@ -727,13 +742,13 @@ rec {
   sanitizeDerivationName = string: lib.pipe string [
     # Get rid of string context. This is safe under the assumption that the
     # resulting string is only used as a derivation name
-    builtins.unsafeDiscardStringContext
+    unsafeDiscardStringContext
     # Strip all leading "."
-    (x: builtins.elemAt (builtins.match "\\.*(.*)" x) 0)
+    (x: elemAt (match "\\.*(.*)" x) 0)
     # Split out all invalid characters
     # https://github.com/NixOS/nix/blob/2.3.2/src/libstore/store-api.cc#L85-L112
     # https://github.com/NixOS/nix/blob/2242be83c61788b9c0736a92bb0b5c7bbfc40803/nix-rust/src/store/path.rs#L100-L125
-    (builtins.split "[^[:alnum:]+._?=-]+")
+    (split "[^[:alnum:]+._?=-]+")
     # Replace invalid character ranges with a "-"
     (concatMapStrings (s: if lib.isList s then "-" else s))
     # Limit to 211 characters (minus 4 chars for ".drv")

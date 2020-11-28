@@ -73,19 +73,26 @@ buildPythonPackage rec {
       --replace "PyYAML~=5.3" "PyYAML"
   '';
 
-  # test_html is very slow
-  # test_black fails on darwin
-  dontUseSetuptoolsCheck = true;
+  # takes 30-180 mins to run entire test suite, not worth the cpu resources, slows down reviews
+  # with pytest-xdist, it still takes around 10mins with 32 cores
+  # just run the messages tests, as this should give some indictation of correctness
   pytestFlagsArray = [
-    "--ignore=tests/test_html.py"
-    "--ignore=tests/test_docs.py"
-    "--ignore=tests/test_black.py"
+    "tests/test_messages.py"
   ];
   disabledTests = [
     "facet"
     "_invalid_database" # checks error message when connecting to invalid database
   ];
-  pythonImportsCheck = [ "datasette" ];
+
+  pythonImportsCheck = [
+    "datasette"
+    "datasette.cli"
+    "datasette.app"
+    "datasette.database"
+    "datasette.renderer"
+    "datasette.tracer"
+    "datasette.plugins"
+  ];
 
   meta = with lib; {
     description = "An instant JSON API for your SQLite databases";

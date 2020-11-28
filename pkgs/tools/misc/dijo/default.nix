@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   cargoSha256 = "0pm048xf8hkva8q8fjmhrdnk7h2im28ix7xy784xwkkdnilm4j7f";
 
   meta = with lib; {
-    description = "Scriptable, curses-based, digital habit tracker.";
+    description = "Scriptable, curses-based, digital habit tracker";
     homepage = "https://github.com/NerdyPepper/dijo";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];

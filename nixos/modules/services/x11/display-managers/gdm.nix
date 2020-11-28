@@ -264,7 +264,7 @@ in
     # presented and there's a little delay.
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
-      WaylandEnable=${if cfg.gdm.wayland then "true" else "false"}
+      WaylandEnable=${boolToString cfg.gdm.wayland}
       ${optionalString cfg.autoLogin.enable (
         if cfg.gdm.autoLogin.delay > 0 then ''
           TimedLoginEnable=true

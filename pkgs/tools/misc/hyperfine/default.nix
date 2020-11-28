@@ -1,19 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles
+{ stdenv, fetchCrate, rustPlatform, installShellFiles
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperfine";
-  version = "1.10.0";
+  version = "1.11.0";
 
-  src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = pname;
-    rev    = "refs/tags/v${version}";
-    sha256 = "0389lmyipmm4irrl39zw2748f2sdddfzwms4i4763xdykdvi8b57";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "0dla2jzwcxkdx3n4fqkkh6wirqs2f31lvqsw2pjf1jbnnif54mzh";
   };
 
-  cargoSha256 = "06scvp7x1yixdadarsm461hbc256spx4aqhmjjn72x7hxn22h9cg";
+  cargoSha256 = "12qdllhydd29xh20l5gir6qpj4a1nkzp8ics344rcwj8wsj7g5zw";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptoverif";
-  version = "2.01pl1";
+  version = "2.03pl1";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    sha256 = "1bkmrv3wsy8mwhrxd3z3br9zgv37c2w6443rm4s9jl0aphcgnbiw";
+    sha256 = "0q7qa1qm7mbky3m36445gdmgmkb9mrhrdsk7mmwn8fzw0rfc6z00";
   };
 
   buildInputs = [ ocaml ];

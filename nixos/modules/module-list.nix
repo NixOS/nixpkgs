@@ -59,6 +59,7 @@
   ./hardware/pcmcia.nix
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
+  ./hardware/rtl-sdr.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
   ./hardware/tuxedo-keyboard.nix
@@ -79,6 +80,7 @@
   ./hardware/xpadneo.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix
+  ./i18n/input-method/hime.nix
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
@@ -171,6 +173,7 @@
   ./programs/wavemon.nix
   ./programs/waybar.nix
   ./programs/wireshark.nix
+  ./programs/wshowkeys.nix
   ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix

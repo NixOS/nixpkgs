@@ -5,7 +5,10 @@
 
   # For fixing up execution of /bin/ls, which is necessary for
   # product unlocking.
-, coreutils
+, coreutils, libredirect
+
+  # Extra utilities used by the SoftMaker applications.
+, gnugrep, utillinux, which
 
 , pname, version, edition, suiteName, src, archive
 
@@ -52,7 +55,26 @@ in stdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  installPhase = ''
+  installPhase = let
+    # SoftMaker/FreeOffice collects some system information upon
+    # unlocking the product. But in doing so, it attempts to execute
+    # /bin/ls. If the execve syscall fails, the whole unlock
+    # procedure fails. This works around that by rewriting /bin/ls
+    # to the proper path.
+    #
+    # In addition, it expects some common utilities (which, whereis)
+    # to be in the path.
+    #
+    # SoftMaker Office restarts itself upon some operations, such
+    # changing the theme and unlocking. Unfortunately, we do not
+    # have control over its environment then and it will fail
+    # with an error.
+    extraWrapperArgs = ''
+      --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+      --set NIX_REDIRECTS "/bin/ls=${coreutils}/bin/ls" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ coreutils gnugrep utillinux which ]}"
+    '';
+  in ''
     runHook preInstall
 
     mkdir -p $out/share
@@ -61,9 +83,12 @@ in stdenv.mkDerivation {
     # Wrap rather than symlinking, so that the programs can determine
     # their resource path.
     mkdir -p $out/bin
-    makeWrapper $out/share/${pname}${edition}/planmaker $out/bin/${pname}-planmaker
-    makeWrapper $out/share/${pname}${edition}/presentations $out/bin/${pname}-presentations
-    makeWrapper $out/share/${pname}${edition}/textmaker $out/bin/${pname}-textmaker
+    makeWrapper $out/share/${pname}${edition}/planmaker $out/bin/${pname}-planmaker \
+      ${extraWrapperArgs}
+    makeWrapper $out/share/${pname}${edition}/presentations $out/bin/${pname}-presentations \
+      ${extraWrapperArgs}
+    makeWrapper $out/share/${pname}${edition}/textmaker $out/bin/${pname}-textmaker \
+      ${extraWrapperArgs}
 
     for size in 16 32 48 64 96 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
