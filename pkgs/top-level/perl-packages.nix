@@ -10710,14 +10710,18 @@ let
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
       sha256 = "0dr69rgl4si9i9ww1r4dc7apgb7y6f7ih808w4g0924cvz823s0x";
     };
-    propagatedBuildInputs = [ shortenPerlShebang ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
-    doCheck = false;  # epub test fails
-    postInstall = ''
-      shortenPerlShebang $out/bin/latexml
-      shortenPerlShebang $out/bin/latexmlc
-      shortenPerlShebang $out/bin/latexmlfind
-      shortenPerlShebang $out/bin/latexmlmath
-      shortenPerlShebang $out/bin/latexmlpost
+    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
+    preCheck = ''
+      rm t/931_epub.t # epub test fails
+    '';
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    # shebangs need to be patched before executables are copied to $out
+    preBuild = ''
+      patchShebangs bin/
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      for file in bin/*; do
+        shortenPerlShebang "$file"
+      done
     '';
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";
