@@ -53,7 +53,10 @@ buildPythonPackage rec {
     export DETERMINISTIC_TESTS=true
   '';
 
-  disabledTests = [ "test_verbosity" ];
+  disabledTests = [
+    "test_verbosity"
+    "test_create_collections" # Flaky test exceeds deadline on hydra: https://github.com/pimutils/vdirsyncer/issues/837
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";
