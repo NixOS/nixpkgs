@@ -6,33 +6,45 @@ There are primarily two problems which the Qt infrastructure is designed to addr
 
 ## Nix expression for a Qt package (default.nix) {#qt-default-nix}
 
-```nix
-{ mkDerivation, lib, qtbase }: #1
-mkDerivation { #2
+```{=docbook}
+<programlisting>
+{ mkDerivation, lib, qtbase }: <co xml:id='qt-default-nix-co-1' />
+
+mkDerivation { <co xml:id='qt-default-nix-co-2' />
   pname = "myapp";
   version = "1.0";
 
-  buildInputs = [ qtbase ]; #3
+  buildInputs = [ qtbase ]; <co xml:id='qt-default-nix-co-3' />
 }
+</programlisting>
+
+ <calloutlist>
+  <callout arearefs='qt-default-nix-co-1'>
+   <para>
+    Import <literal>mkDerivation</literal> and Qt (such as <literal>qtbase</literal> modules directly. <emphasis>Do not</emphasis> import Qt package sets; the Qt versions of dependencies may not be coherent, causing build and runtime failures.
+   </para>
+  </callout>
+  <callout arearefs='qt-default-nix-co-2'>
+   <para>
+    Use <literal>mkDerivation</literal> instead of <literal>stdenv.mkDerivation</literal>. <literal>mkDerivation</literal> is a wrapper around <literal>stdenv.mkDerivation</literal> which applies some Qt-specific settings. This deriver accepts the same arguments as <literal>stdenv.mkDerivation</literal>; refer to <xref linkend='chap-stdenv' /> for details.
+   </para>
+   <para>
+    To use another deriver instead of <literal>stdenv.mkDerivation</literal>, use <literal>mkDerivationWith</literal>:
+<programlisting>
+mkDerivationWith myDeriver {
+  # ...
+}
+</programlisting>
+    If you cannot use <literal>mkDerivationWith</literal>, please refer to <xref linkend='qt-runtime-dependencies' />.
+   </para>
+  </callout>
+  <callout arearefs='qt-default-nix-co-3'>
+   <para>
+    <literal>mkDerivation</literal> accepts the same arguments as <literal>stdenv.mkDerivation</literal>, such as <literal>buildInputs</literal>.
+   </para>
+  </callout>
+ </calloutlist>
 ```
-
-* **#1:** Import `mkDerivation` and Qt (such as `qtbase` modules directly. *Do not* import Qt package sets; the Qt versions of dependencies may not be coherent, causing build and runtime failures.
-
-* **#2:** Use `mkDerivation` instead of `stdenv.mkDerivation`. `mkDerivation` is a wrapper around `stdenv.mkDerivation` which applies some Qt-specific settings. This deriver accepts the same arguments as `stdenv.mkDerivation`; refer to [Chapter 6, The Standard Environment](#chap-stdenv), The Standard Environment for details.
-
-  To use another deriver instead of `stdenv.mkDerivation`, use `mkDerivationWith`:
-
-  ```nix
-  mkDerivationWith myDeriver {
-    # ...
-  }
-  ```
-
-  If you cannot use `mkDerivationWith`, please refer to Locating runtime dependencies below.
-
-* **#3:** `mkDerivation` accepts the same arguments as `stdenv.mkDerivation`, such as `buildInputs`.
-
----
 
 ## Locating runtime dependencies {#qt-runtime-dependencies}
 Qt applications need to be wrapped to find runtime dependencies. If you cannot use `mkDerivation` or `mkDerivationWith` above, include `wrapQtAppsHook` in `nativeBuildInputs`:
