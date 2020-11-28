@@ -10323,8 +10323,10 @@ in
     hadoop_2_7
     hadoop_2_8
     hadoop_2_9
-    hadoop_3_0
-    hadoop_3_1;
+    hadoop_2_10
+    hadoop_3_1
+    hadoop_3_2
+    hadoop_3_3;
   hadoop = hadoop_2_7;
 
   io = callPackage ../development/interpreters/io { };
@@ -13451,6 +13453,8 @@ in
   intel-gmmlib = callPackage ../development/libraries/intel-gmmlib { };
 
   intel-media-driver = callPackage ../development/libraries/intel-media-driver { };
+
+  isa-l = callPackage ../development/libraries/isa-l { };
 
   intltool = callPackage ../development/tools/misc/intltool { };
 
