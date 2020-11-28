@@ -240,6 +240,8 @@ in
 
   digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox { };
 
+  gretl = callPackage ../applications/science/math/gretl { };
+
   grsync = callPackage ../applications/misc/grsync { };
 
   dockerTools = callPackage ../build-support/docker {
