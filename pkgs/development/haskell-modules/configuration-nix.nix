@@ -830,4 +830,7 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR
     '';
   });
+
+  # tests depend on a specific version of solc
+  hevm = dontCheck (doJailbreak super.hevm);
 }
