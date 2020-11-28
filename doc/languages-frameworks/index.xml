@@ -27,7 +27,7 @@
  <xi:include href="python.section.xml" />
  <xi:include href="qt.xml" />
  <xi:include href="r.section.xml" />
- <xi:include href="ruby.xml" />
+ <xi:include href="ruby.section.xml" />
  <xi:include href="rust.section.xml" />
  <xi:include href="texlive.xml" />
  <xi:include href="titanium.section.xml" />
