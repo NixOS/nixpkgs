@@ -1,43 +1,49 @@
-{ stdenv, fetchFromGitHub, python3, libpulseaudio, glib, gtk3, gobject-introspection, wrapGAppsHook }:
+{ stdenv, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection, libpulseaudio, glib, gtk3, pango, xorg }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "volctl";
-  version = "0.6.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "buzz";
     repo = pname;
-    rev = version;
-    sha256 = "0rppqc5wiqxd83z2mgvhi6gdx7yhy9wnav1dbbi1wvm7lzw6fnil";
+    rev = "v${version}";
+    sha256 = "02scfscf4mdrphzrd7cbwbhpig9bhvaws8qk4zc81z8vvf3mcfv2";
   };
+
+  postPatch = ''
+    substituteInPlace volctl/lib/xwrappers.py \
+      --replace 'libXfixes.so' "${xorg.libXfixes}/lib/libXfixes.so" \
+      --replace 'libXfixes.so.3' "${xorg.libXfixes}/lib/libXfixes.so.3"
+  '';
+
+  preBuild = ''
+    export LD_LIBRARY_PATH=${libpulseaudio}/lib
+  '';
 
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    libpulseaudio
-  ];
-
-  pythonPath = with python3.pkgs; [
+  propagatedBuildInputs = [ pango gtk3 ] ++ (with python3Packages; [
+    click
+    pycairo
     pygobject3
-  ];
+    pyyaml
+  ]);
 
+  # with strictDeps importing "gi.repository.Gtk" fails with "gi.RepositoryError: Typelib file for namespace 'Pango', version '1.0' not found"
   strictDeps = false;
 
-  preBuild = ''
-    export LD_LIBRARY_PATH=${libpulseaudio}/lib
-  '';
+  # no tests included
+  doCheck = false;
+
+  pythonImportsCheck = [ "volctl" ];
 
   preFixup = ''
     glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
-
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib"
-    )
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib")
   '';
 
   meta = with stdenv.lib; {
