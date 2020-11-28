@@ -5053,7 +5053,7 @@ in
 
   krakenx = callPackage ../tools/system/krakenx { };
 
-  partition-manager = libsForQt514.callPackage ../tools/misc/partition-manager { };
+  partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
 
