@@ -413,6 +413,7 @@ ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
+prabirshrestha/async.vim
 prabirshrestha/asyncomplete.vim
 prabirshrestha/vim-lsp
 preservim/nerdcommenter
