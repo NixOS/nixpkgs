@@ -2843,6 +2843,12 @@
     githubId = 25955146;
     name = "eyJhb";
   };
+  ezemtsov = {
+    email = "eugene.zemtsov@gmail.com";
+    github = "ezemtsov";
+    githubId = 21081069;
+    name = "Evgeny Zemtsov";
+  };
   f--t = {
     email = "git@f-t.me";
     github = "f--t";
