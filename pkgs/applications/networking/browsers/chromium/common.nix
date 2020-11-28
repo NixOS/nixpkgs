@@ -214,10 +214,8 @@ let
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
       is_official_build = true;
-      is_debug = false;
 
       use_vaapi = !stdenv.isAarch64; # TODO: Remove once M88 is released
-      proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
@@ -233,7 +231,6 @@ let
       rtc_use_pipewire = true;
 
       treat_warnings_as_errors = false;
-      is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
       symbol_level = 0;
