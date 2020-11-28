@@ -202,7 +202,7 @@ in rec {
       sha256 = "10s0xdhmg0dhpj13ybcq72pw3xgb2dq5v5h2mwidzqyh9g17wndh";
     };
   };
-  
+
   onedark-theme = mkDerivation {
     pluginName = "onedark-theme";
     version = "unstable-2020-06-07";
