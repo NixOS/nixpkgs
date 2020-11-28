@@ -24085,6 +24085,8 @@ in
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
+  tickrs = callPackage ../applications/misc/tickrs { };
+
   tig = gitAndTools.tig;
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
