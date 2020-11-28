@@ -208,6 +208,7 @@ in
   mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
   metabase = handleTest ./metabase.nix {};
+  minecraft = handleTest ./minecraft.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   minidlna = handleTest ./minidlna.nix {};

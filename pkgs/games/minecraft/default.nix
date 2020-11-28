@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, nixosTests
 , makeDesktopItem
 , makeWrapper
 , wrapGAppsHook
@@ -147,5 +148,8 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = { inherit (nixosTests) minecraft; };
+    updateScript = ./update.sh;
+  };
 }
