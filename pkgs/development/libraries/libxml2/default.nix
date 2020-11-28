@@ -42,6 +42,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/libxml2/commit/50f06b3efb638efb0abd95dc62dca05ae67882c2.patch";
       sha256 = "093f1ic5qfiq8nk9mc6b8p1qcs8m9hir3ardr6r5il4zi2dnjrj4";
     })
+    # Fix compatibility with Python 3.9.
+    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/149
+    (fetchpatch {
+      name = "python39.patch";
+      url = "https://gitlab.gnome.org/nwellnhof/libxml2/-/commit/e4fb36841800038c289997432ca547c9bfef9db1.patch";
+      sha256 = "0h3vpy9fg3339b14qa64640ypp65z3hrrrmpjl8qm72srkp24ci5";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
