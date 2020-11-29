@@ -4070,7 +4070,7 @@ in
 
   galen = callPackage ../development/tools/galen {};
 
-  gallery-dl = callPackage ../applications/misc/gallery-dl { };
+  gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
 
   gandi-cli = callPackage ../tools/networking/gandi-cli { };
 
