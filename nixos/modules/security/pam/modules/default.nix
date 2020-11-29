@@ -187,10 +187,10 @@ in
     ./limits.nix
     ./make-home-dir.nix
     ./motd.nix
-    ./mount.nix
     ./oath.nix
     ./otpw.nix
     ./p11.nix
+    ./pam_mount.nix
     ./ssh-agent.nix
     ./u2f.nix
     ./unix.nix

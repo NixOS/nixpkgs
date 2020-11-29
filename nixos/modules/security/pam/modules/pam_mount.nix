@@ -4,9 +4,9 @@ with lib;
 
 let
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.mount;
+  cfg = pamCfg.modules.pam_mount;
 
-  anyEnable = any (attrByPath [ "modules" "mount" "enable" ] false) (attrValues pamCfg.services);
+  anyEnable = any (attrByPath [ "modules" "pam_mount" "enable" ] false) (attrValues pamCfg.services);
 
   moduleOptions = global: {
     enable = mkOption {
@@ -36,23 +36,23 @@ in
           ({ config, ... }: {
             options = {
               # Extra volumes can only be defined globally
-              modules.mount = removeAttrs (moduleOptions false) [ "extraVolumes" ];
+              modules.pam_mount = removeAttrs (moduleOptions false) [ "extraVolumes" ];
             };
 
-            config = mkIf config.modules.mount.enable {
-              auth.mount = {
+            config = mkIf config.modules.pam_mount.enable {
+              auth.pam_mount = {
                 control = "optional";
                 path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
                 order = 23000;
               };
 
-              password.mount = {
+              password.pam_mount = {
                 control = "optional";
                 path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
                 order = 3000;
               };
 
-              session.mount = {
+              session.pam_mount = {
                 control = "optional";
                 path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
                 order = 6000;
@@ -62,7 +62,7 @@ in
         );
       };
 
-      modules.mount = moduleOptions true;
+      modules.pam_mount = moduleOptions true;
     };
   };
 
