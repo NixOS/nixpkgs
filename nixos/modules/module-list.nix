@@ -856,7 +856,6 @@
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
-  ./services/web-apps/codimd.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
@@ -865,6 +864,7 @@
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/hedgedoc.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ihatemoney
