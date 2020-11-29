@@ -27,7 +27,7 @@
 , bluezSupport ? true, bluez ? null, sbc ? null
 , nativeHspSupport ? true
 , ofonoSupport ? true
-, hsphfpdSupport ? false
+, hsphfpdSupport ? true
 }:
 
 let
