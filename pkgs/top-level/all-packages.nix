@@ -4383,6 +4383,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ucg = callPackage ../tools/text/ucg { };
+
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
   groff = callPackage ../tools/text/groff {
