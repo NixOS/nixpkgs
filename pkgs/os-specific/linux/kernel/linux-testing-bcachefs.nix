@@ -1,14 +1,14 @@
 { stdenv, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, ... } @ args:
 
 buildLinux (args // {
-  version = "5.8.0-2020.09.07";
-  modDirVersion = "5.8.0";
+  version = "5.9.0-2020.11.20";
+  modDirVersion = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs";
-    rev = "fb2821e72648f35d3cff61ac26041d634fd1dacf";
-    sha256 = "0f9hx6fz27rm8h1lk9868v727klvyzcbw6hcgm5mypbfq1nqirdy";
+    rev = "6a505b63ed3003faf5000f19fd08bbd477d93fbc";
+    sha256 = "1rf34gzv9npafp1c3i6lymk3b0gnqp4rb0wl33pw6yrpgnsry3cc";
   };
 
   extraConfig = "BCACHEFS_FS m";
