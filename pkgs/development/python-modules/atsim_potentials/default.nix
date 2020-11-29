@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.2.1";
+  version = "0.3.0";
   pname = "atsim.potentials";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2abdec2fb4e8198f4e0e41634ad86625d5356a4a3f1ba1f41568d0697df8f36f";
+    sha256 = "70082fc40b0ab7565a671c2d764fe3db08bc6ce45da44e1c1e8b77a65d1f7a23";
   };
 
   checkInputs = [ pytest ];
