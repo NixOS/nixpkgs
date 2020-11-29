@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''(
     cd src
-    ./mk.sh ${stdenv.buildPlatform.platform.kernelArch}
+    ./mk.sh ${stdenv.buildPlatform.linuxArch}
   )'';
 
   installPhase = ''

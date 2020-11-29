@@ -75,7 +75,7 @@ in
 
     CROSVM_CARGO_TEST_KERNEL_BINARY =
       lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
-        "${linux}/${stdenv.hostPlatform.platform.kernelTarget}";
+        "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
 
     passthru = {
       inherit adhdSrc;

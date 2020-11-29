@@ -592,6 +592,22 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
      <literal>/etc/netgroup</literal> defines network-wide groups and may affect to setups using NIS.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Platforms, like <varname>stdenv.hostPlatform</varname>, no longer have a <varname>platform</varname> attribute.
+     It has been (mostly) flattoned away:
+    </para>
+    <itemizedlist>
+     <listitem><para><varname>platform.gcc</varname> is now <varname>gcc</varname></para></listitem>
+     <listitem><para><literal>platform.kernel*</literal> is now <literal>linux-kernel.*</literal></para></listitem>
+    </itemizedlist>
+    <para>
+     Additionally, <varname>platform.kernelArch</varname> moved to the top level as <varname>linuxArch</varname> to match the other <literal>*Arch</literal> variables.
+    </para>
+    <para>
+     The <varname>platform</varname> grouping of these things never meant anything, and was just a historial/implementation artifact that was overdue removal.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

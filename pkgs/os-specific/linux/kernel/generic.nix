@@ -42,7 +42,7 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.platform.name != "pc" ||
+, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc" ||
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 
@@ -51,10 +51,10 @@
 , isLibre    ? false
 , isHardened ? false
 
-# easy overrides to stdenv.hostPlatform.platform members
-, autoModules ? stdenv.hostPlatform.platform.kernelAutoModules
-, preferBuiltin ? stdenv.hostPlatform.platform.kernelPreferBuiltin or false
-, kernelArch ? stdenv.hostPlatform.platform.kernelArch
+# easy overrides to stdenv.hostPlatform.linux-kernel members
+, autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
+, preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
+, kernelArch ? stdenv.hostPlatform.linuxArch
 
 , ...
 }:
@@ -87,7 +87,7 @@ let
   intermediateNixConfig = configfile.moduleStructuredConfig.intermediateNixConfig
     # extra config in legacy string format
     + extraConfig
-    + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
+    + stdenv.hostPlatform.linux-kernel.extraConfig or "";
 
   structuredConfigFromPatches =
         map ({extraStructuredConfig ? {}, ...}: {settings=extraStructuredConfig;}) kernelPatches;
@@ -113,11 +113,11 @@ let
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ];
 
-    platformName = stdenv.hostPlatform.platform.name;
+    platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
-    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.platform.kernelBaseConfig;
+    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
     # e.g. "bzImage"
-    kernelTarget = stdenv.hostPlatform.platform.kernelTarget;
+    kernelTarget = stdenv.hostPlatform.linux-kernel.target;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that

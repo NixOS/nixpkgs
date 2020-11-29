@@ -59,7 +59,7 @@ in
 
     system.build.installBootLoader = generationsDirBuilder;
     system.boot.loader.id = "generationsDir";
-    system.boot.loader.kernelFile = platform.kernelTarget;
+    system.boot.loader.kernelFile = linux-kernel.target;
 
   };
 }
