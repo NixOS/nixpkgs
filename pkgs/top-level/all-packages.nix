@@ -21435,6 +21435,8 @@ in
 
   wooting-udev-rules = callPackage ../os-specific/linux/wooting-udev-rules { };
 
+  wooting-xinput-udev-rules = callPackage ../os-specific/linux/wooting-xinput-udev-rules { };
+
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_ro_ssids = wpa_supplicant.override {
