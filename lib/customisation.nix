@@ -231,6 +231,7 @@ rec {
       } // keep self;
       self = f self // {
         newScope = scope: newScope (spliced // scope);
+        makeScopeWithSplicing = makeScopeWithSplicing splicePackages self.newScope;
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.

@@ -131,6 +131,17 @@ in
 
   newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
 
+  makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
+
+  topProjectedSpliced = attr: {
+    selfBuildBuild   = pkgs.pkgsBuildBuild.${attr};
+    selfBuildHost    = pkgs.pkgsBuildHost.${attr};
+    selfBuildTarget  = pkgs.pkgsBuildTarget.${attr};
+    selfHostHost     = pkgs.pkgsHostHost.${attr};
+    selfHostTarget   = pkgs.pkgsHostTarget.${attr};
+    selfTargetTarget = pkgs.pkgsTargetTarget.${attr} or {};
+  };
+
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
   __splicedPackages = splicedPackages // { recurseForDerivations = false; };
