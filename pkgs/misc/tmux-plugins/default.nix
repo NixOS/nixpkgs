@@ -180,6 +180,26 @@ in rec {
     };
   };
 
+  jump = mkDerivation {
+    pluginName = "jump";
+    version = "2020-06-26";
+    rtpFilePath = "tmux-jump.tmux";
+    src = fetchFromGitHub {
+      owner = "schasse";
+      repo = "tmux-jump";
+      rev = "416f613d3eaadbe1f6f9eda77c49430527ebaffb";
+      sha256 = "1xbzdyhsgaq2in0f8f491gwjmx6cxpkf2c35d2dk0kg4jfs505sz";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/schasse/tmux-jump";
+      description = "Vimium/Easymotion like navigation for tmux";
+      license = licenses.gpl3;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ arnarg ];
+    };
+  };
+
   logging = mkDerivation {
     pluginName = "logging";
     version = "unstable-2019-04-19";
