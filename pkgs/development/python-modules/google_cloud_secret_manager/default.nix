@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cm3xqacxnbpv2706bd2jl86mvcsphpjlvhzngz2k2p48a0jjx8r";
+    sha256 = "c2b0c93b559c3b6eb2dc75f7ab33d49fad8fe954f6094ac2b14323ce053058f0";
   };
 
   propagatedBuildInputs = [
