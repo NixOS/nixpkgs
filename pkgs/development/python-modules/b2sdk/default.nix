@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.1.4";
+  version = "1.2.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g527qdda105r5g9yjh4lxzlmz34m2bdz8dydqqy09igdsmiyi9j";
+    sha256 = "jkb/nUepuQ2Lm+qxlp/PSSAwCwLiDmvwdFvgTgnopv8=";
   };
 
   pythonImportsCheck = [ "b2sdk" ];
