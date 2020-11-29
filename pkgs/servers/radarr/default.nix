@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnetCorePackages, patchelf, openssl }:
+{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnetCorePackages, patchelf, openssl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "radarr";
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --set-rpath ${icu}/lib $out/share/${pname}-${version}/System.Globalization.Native.so
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.radarr;
+  };
 
   meta = with stdenv.lib; {
     description = "A Usenet/BitTorrent movie downloader";
