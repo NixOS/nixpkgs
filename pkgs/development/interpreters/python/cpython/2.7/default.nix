@@ -18,8 +18,8 @@
 , ucsEncoding ? 4
 # For the Python package set
 , packageOverrides ? (self: super: {})
-, buildPackages
 , pkgsBuildBuild
+, pkgsBuildHost
 , pkgsBuildTarget
 , pkgsHostHost
 , pkgsTargetTarget
@@ -28,6 +28,7 @@
 , passthruFun
 , static ? false
 , enableOptimizations ? (!stdenv.isDarwin)
+, pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
 assert x11Support -> tcl != null
@@ -38,9 +39,8 @@ assert x11Support -> tcl != null
 with stdenv.lib;
 
 let
-
-  pythonAttr = "python${sourceVersion.major}${sourceVersion.minor}";
-  pythonForBuild = buildPackages.${pythonAttr};
+  buildPackages = pkgsBuildHost;
+  inherit (passthru) pythonForBuild;
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -49,11 +49,12 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit hasDistutilsCxxPatch pythonForBuild;
-    pythonPackagesBuildBuild = pkgsBuildBuild.${pythonAttr};
-    pythonPackagesBuildTarget = pkgsBuildTarget.${pythonAttr};
-    pythonPackagesHostHost = pkgsHostHost.${pythonAttr};
-    pythonPackagesTargetTarget = pkgsTargetTarget.${pythonAttr} or {};
+    inherit hasDistutilsCxxPatch;
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   } // {
     inherit ucsEncoding;
   };

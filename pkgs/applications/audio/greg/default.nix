@@ -13,8 +13,7 @@ with pythonPackages; buildPythonApplication rec {
     sha256 = "0bdzgh2k1ppgcvqiasxwp3w89q44s4jgwjidlips3ixx1bzm822v";
   };
 
-  buildInputs = with pythonPackages; [ feedparser ];
-  propagatedBuildInputs = buildInputs;
+  propagatedBuildInputs = [ setuptools feedparser ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/manolomartinez/greg";

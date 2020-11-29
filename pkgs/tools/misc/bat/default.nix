@@ -1,4 +1,5 @@
 { stdenv
+, nixosTests
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -37,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/bat" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
   '';
+
+  passthru.tests = { inherit (nixosTests) bat; };
 
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";

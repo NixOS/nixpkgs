@@ -775,6 +775,8 @@ let
       X86_CHECK_BIOS_CORRUPTION = yes;
       X86_MCE                   = yes;
 
+      RAS = yes; # Needed for EDAC support
+
       # Our initrd init uses shebang scripts, so can't be modular.
       BINFMT_SCRIPT = yes;
       # For systemd-binfmt

@@ -14,12 +14,12 @@ with pkgs;
     , packageOverrides
     , sitePackages
     , hasDistutilsCxxPatch
-    , pythonPackagesBuildBuild
-    , pythonForBuild # provides pythonPackagesBuildHost
-    , pythonPackagesBuildTarget
-    , pythonPackagesHostHost
-    , self # is pythonPackagesHostTarget
-    , pythonPackagesTargetTarget
+    , pythonOnBuildForBuild
+    , pythonOnBuildForHost
+    , pythonOnBuildForTarget
+    , pythonOnHostForHost
+    , pythonOnTargetForTarget
+    , self # is pythonOnHostForTarget
     }: let
       pythonPackages = callPackage
         ({ pkgs, stdenv, python, overrides }: let
@@ -28,11 +28,11 @@ with pkgs;
             python = self;
           };
           otherSplices = {
-            selfBuildBuild = pythonPackagesBuildBuild;
-            selfBuildHost = pythonForBuild.pkgs;
-            selfBuildTarget = pythonPackagesBuildTarget;
-            selfHostHost = pythonPackagesHostHost;
-            selfTargetTarget = pythonPackagesTargetTarget;
+            selfBuildBuild = pythonOnBuildForBuild.pkgs;
+            selfBuildHost = pythonOnBuildForHost.pkgs;
+            selfBuildTarget = pythonOnBuildForTarget.pkgs;
+            selfHostHost = pythonOnHostForHost.pkgs;
+            selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
           };
           keep = self: {
             # TODO maybe only define these here so nothing is needed to be kept in sync.
@@ -99,7 +99,10 @@ with pkgs;
         inherit sourceVersion;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
-        inherit hasDistutilsCxxPatch pythonForBuild;
+        inherit hasDistutilsCxxPatch;
+        # TODO: rename to pythonOnBuild
+        # Not done immediately because its likely used outside Nixpkgs.
+        pythonForBuild = pythonOnBuildForHost;
 
         tests = callPackage ./tests.nix {
           python = self;
@@ -188,7 +191,6 @@ in {
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (python38.override {
     self = python3Minimal;
-    pythonForBuild = pkgs.buildPackages.python3Minimal;
     # strip down that python version as much as possible
     openssl = null;
     readline = null;

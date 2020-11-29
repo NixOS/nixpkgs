@@ -1,21 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ stdenv, fetchFromGitHub, rustPlatform, darwin, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    sha256 = "0bw83l3s7yraxiwbwcm0nfqqhv2dkd208qz7nm89whzdjzf340gj";
+    sha256 = "sha256-Gc2bL7KqDqab0hCCOi2rtEw+5r0bSETzTipLLdX/ipk=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
-  cargoSha256 = "11ywms0vgrm4ildsgl99agjimk5f3l56hlr5aa70kagxam4k6vmn";
+  cargoSha256 = "sha256-Bdkq3cTuziTQ7/BkvuBHbfuxRIXnz4h2OadoAGNTBc0=";
 
   doCheck = false;
+
+  postInstall = ''
+    installShellCompletion $releaseDir/build/bottom-*/out/btm.{bash,fish} --zsh $releaseDir/build/bottom-*/out/_btm
+  '';
 
   meta = with stdenv.lib; {
     description = "A cross-platform graphical process/system monitor with a customizable interface";
@@ -25,4 +31,3 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.unix;
   };
 }
-

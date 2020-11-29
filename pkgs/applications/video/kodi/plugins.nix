@@ -481,12 +481,12 @@ let self = rec {
 
     plugin = "inputstream-adaptive";
     namespace = "inputstream.adaptive";
-    version = "2.3.12";
+    version = "2.4.6";
 
     src = fetchFromGitHub {
       owner = "peak3d";
       repo = "inputstream.adaptive";
-      rev = version;
+      rev = "${version}-${rel}";
       sha256 = "09d9b35mpaf3g5m51viyan9hv7d2i8ndvb9wm0j7rs5gwsf0k71z";
     };
 

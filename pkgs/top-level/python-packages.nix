@@ -2896,6 +2896,8 @@ in {
 
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
+  ifcopenshell = callPackage ../development/python-modules/ifcopenshell { };
+
   ignite = callPackage ../development/python-modules/ignite { };
 
   ihatemoney = callPackage ../development/python-modules/ihatemoney { };
@@ -4947,6 +4949,8 @@ in {
 
   pycm = callPackage ../development/python-modules/pycm { };
 
+  pycmarkgfm = callPackage ../development/python-modules/pycmarkgfm { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
@@ -6486,6 +6490,8 @@ in {
 
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
+  scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
+
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
   scikitlearn = let args = { inherit (pkgs) gfortran glibcLocales; };
@@ -7888,6 +7894,8 @@ in {
     ffmpegSupport = false;
     phantomjsSupport = false;
   };
+
+  youtube-dlc = callPackage ../development/python-modules/youtube-dlc { };
 
   yowsup = callPackage ../development/python-modules/yowsup { };
 

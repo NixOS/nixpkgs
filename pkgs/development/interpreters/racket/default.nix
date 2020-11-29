@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "18pz6gjzqy6a62xkcmjanhr7kgxpvpmc0blrk4igz8ldcybz44if";
+    sha256 = "0gmp2ahmfd97nn9bwpfx9lznjmjkd042slnrrbdmyh59cqh98y2m";
   };
 
   FONTCONFIG_FILE = fontsConf;

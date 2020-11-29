@@ -1,14 +1,15 @@
-{ mkDerivation, stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
+{ mkDerivation, lib, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "iannix";
-  version = "2016-01-31";
+  version = "0.9.20-b";
+
   src = fetchFromGitHub {
     owner = "iannix";
     repo = "IanniX";
-    rev = "f84becdcbe154b20a53aa2622068cb8f6fda0755";
-    sha256 = "184ydb9f1303v332k5k3f1ki7cb6nkxhh6ij0yn72v7dp7figrgj";
+    rev = "v${version}";
+    sha256 = "6jjgMvD2VkR3ztU5LguqhtNd+4/ZqRy5pVW5xQ6K20Q=";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -20,11 +21,11 @@ mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "Graphical open-source sequencer,";
+  meta = with lib; {
+    description = "Graphical open-source sequencer";
     homepage = "https://www.iannix.org/";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ freezeboy ];
   };
 }

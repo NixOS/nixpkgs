@@ -648,12 +648,12 @@ self: super: {
 } // (
   let
     nodePackageNames = [
-      "coc-go"
       "coc-css"
       "coc-diagnostic"
       "coc-emmet"
       "coc-eslint"
       "coc-git"
+      "coc-go"
       "coc-highlight"
       "coc-html"
       "coc-imselect"
@@ -661,6 +661,7 @@ self: super: {
       "coc-jest"
       "coc-json"
       "coc-lists"
+      "coc-markdownlint"
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
@@ -677,6 +678,7 @@ self: super: {
       "coc-tslint-plugin"
       "coc-tsserver"
       "coc-vetur"
+      "coc-vimlsp"
       "coc-vimtex"
       "coc-wxml"
       "coc-yaml"

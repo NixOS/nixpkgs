@@ -5,10 +5,16 @@
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
 , sourceVersion
 , pythonVersion
 , sha256
 , passthruFun
+, pythonAttr ? "pypy${stdenv.lib.substring 0 1 pythonVersion}${stdenv.lib.substring 2 3 pythonVersion}"
 }:
 
 assert zlibSupport -> zlib != null;
@@ -25,12 +31,11 @@ let
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
 
-    # No cross-compiling for now.
-    pythonForBuild = self;
-    pythonPackagesBuildBuild = {};
-    pythonPackagesBuildTarget = {};
-    pythonPackagesHostHost = {};
-    pythonPackagesTargetTarget = {};
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";

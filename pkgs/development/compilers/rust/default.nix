@@ -24,15 +24,23 @@
     if platform.isDarwin then "macos"
     else platform.parsed.kernel.name;
 
-  # Target triple. Rust has slightly different naming conventions than we use.
+  # Returns the name of the rust target, even if it is custom. Adjustments are
+  # because rust has slightly different naming conventions than we do.
   toRustTarget = platform: with platform.parsed; let
-    cpu_ = platform.rustc.arch or {
+    cpu_ = platform.rustc.platform.arch or {
       "armv7a" = "armv7";
       "armv7l" = "armv7";
       "armv6l" = "arm";
     }.${cpu.name} or cpu.name;
   in platform.rustc.config
     or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+
+  # Returns the name of the rust target if it is standard, or the json file
+  # containing the custom target spec.
+  toRustTargetSpec = platform:
+    if (platform.rustc or {}) ? platform
+    then builtins.toFile (toRustTarget platform + ".json") (builtins.toJSON platform.rustc.platform)
+    else toRustTarget platform;
 
   # This just contains tools for now. But it would conceivably contain
   # libraries too, say if we picked some default/recommended versions from

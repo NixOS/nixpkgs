@@ -9,7 +9,7 @@ let
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.2.0";
+      version = "2.3.8";
 
       src = fetchurl {
         url =
@@ -23,7 +23,7 @@ let
         install -Dm755 $src $out/bin/amm
         sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
       '' + optionalString (disableRemoteLogging) ''
-        sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+        sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
       '';
 
@@ -75,10 +75,10 @@ let
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "9xe4GT5YpVCtDPaZvi9PZwFW/wcNhg+QCdbJ4Tl2lFk=";
+    sha256 = "1kzk0437h2wd9jhwkvjkiaj6mscz4bh85iv266x9zz4zssb355hs";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "KRwh2YOcHpXLA9BlBKzkc9oswdOQbcm3WVqgYaGyi4A=";
+    sha256 = "0js84m6yqjd7d77md38z6nk3qzlm1ms8brzczaw05zq2c90pdbz7";
   };
 }

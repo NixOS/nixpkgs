@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "1.3.18";
+  version = "1.4.15";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -16,8 +16,8 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "1dldy137ia8qxhf7d5xzq5slm12bhnmw4kx7fm37n1ajjdcn5sf7";
-      x86_64-darwin = "0zm9vhxlfs1ldd8za4yha54psqwl0al4hzdfxjfp7ir98i9a4cj7";
+      x86_64-linux = "12wh7f1a9sn250lqnb8c9b5gqr8r76kxrhl0kgsm2lg93jgpvvbb";
+      x86_64-darwin = "1jzfqwyz3vkmmkdzx3iw36fbjq7fns46v8crmg5n09w9kvf22qil";
     }.${system} or throwSystem;
   };
 
@@ -52,9 +52,9 @@ let
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
       mv $out/bin/{${name},${pname}}
-      install -Dm444 ${appimageContents}/joplin.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/joplin.png -t $out/share/pixmaps
-      substituteInPlace $out/share/applications/joplin.desktop \
+      install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
+      install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
+      substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
   };

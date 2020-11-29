@@ -33,6 +33,7 @@
 , "coc-jest"
 , "coc-json"
 , "coc-lists"
+, "coc-markdownlint"
 , "coc-metals"
 , "coc-pairs"
 , "coc-prettier"
@@ -49,6 +50,7 @@
 , "coc-tslint-plugin"
 , "coc-tsserver"
 , "coc-vetur"
+, "coc-vimlsp"
 , "coc-vimtex"
 , "coc-wxml"
 , "coc-yaml"
@@ -187,6 +189,7 @@
 , "ssb-server"
 , "stackdriver-statsd-backend"
 , "stf"
+, "stylelint"
 , "svgo"
 , "swagger"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
