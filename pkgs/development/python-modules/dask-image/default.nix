@@ -12,12 +12,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.0";
+  version = "0.4.0";
   pname = "dask-image";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15svy8y57i30878pijyd0pxn10bnk7ffmmgwva5rpip4b7grsgv0";
+    sha256 = "a6873a39af21b856a4eb7efee6838e6897b1399f21ab9e65403e69eb62f96c2d";
   };
 
   nativeBuildInputs = [ pytest-flake8 ];
