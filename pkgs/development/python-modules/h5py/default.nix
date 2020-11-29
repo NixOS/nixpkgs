@@ -10,13 +10,13 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "2.10.0";
+  version = "3.1.0";
   pname = "h5py";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84412798925dc870ffd7107f045d7659e60f5d46d1c70c700375248bf6bf512d";
+    sha256 = "1e2516f190652beedcb8c7acfa1c6fa92d99b42331cbef5e5c7ec2d65b0fc3c2";
   };
 
   configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
