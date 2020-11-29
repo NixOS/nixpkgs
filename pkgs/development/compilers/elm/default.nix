@@ -114,7 +114,7 @@ let
 
       elm-optimize-level-2 = nodePkgs."elm-optimize-level-2";
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
+      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-install elm-git-install;
     };
 
 in hsPkgs.elmPkgs // elmNodePackages // {
