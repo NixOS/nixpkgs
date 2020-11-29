@@ -46,6 +46,32 @@ in {
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Literal string to append to /etc/pipewire/pipewire.conf.
+        '';
+      };
+
+      sessionManager = mkOption {
+        type = types.nullOr types.string;
+        default = null;
+        example = literalExample ''"''${pipewire}/bin/pipewire-media-session"'';
+        description = ''
+          Path to the pipewire session manager executable.
+        '';
+      };
+
+      sessionManagerArguments = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        example = literalExample ''[ "-p" "bluez5.msbc-support=true" ]'';
+        description = ''
+          Arguments passed to the pipewire session manager.
+        '';
+      };
+
       alsa = {
         enable = mkEnableOption "ALSA support";
         support32Bit = mkEnableOption "32-bit ALSA support on 64-bit systems";
@@ -74,6 +100,8 @@ in {
         message = "PipeWire based JACK emulation doesn't use the JACK service";
       }
     ];
+
+    services.pipewire.sessionManager = mkDefault "${cfg.package}/bin/pipewire-media-session";
 
     environment.systemPackages = [ cfg.package ]
                                  ++ lib.optional cfg.jack.enable jack-libs;
@@ -109,6 +137,42 @@ in {
     };
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
+
+    environment.etc."pipewire/pipewire.conf" = {
+      # Adapted from src/daemon/pipewire.conf.in
+      text = ''
+        set-prop link.max-buffers 16 # version < 3 clients can't handle more
+
+        add-spa-lib audio.convert* audioconvert/libspa-audioconvert
+        add-spa-lib api.alsa.* alsa/libspa-alsa
+        add-spa-lib api.v4l2.* v4l2/libspa-v4l2
+        add-spa-lib api.libcamera.* libcamera/libspa-libcamera
+        add-spa-lib api.bluez5.* bluez5/libspa-bluez5
+        add-spa-lib api.vulkan.* vulkan/libspa-vulkan
+        add-spa-lib api.jack.* jack/libspa-jack
+        add-spa-lib support.* support/libspa-support
+
+        load-module libpipewire-module-rtkit # rt.prio=20 rt.time.soft=200000 rt.time.hard=200000
+        load-module libpipewire-module-protocol-native
+        load-module libpipewire-module-profiler
+        load-module libpipewire-module-metadata
+        load-module libpipewire-module-spa-device-factory
+        load-module libpipewire-module-spa-node-factory
+        load-module libpipewire-module-client-node
+        load-module libpipewire-module-client-device
+        load-module libpipewire-module-portal
+        load-module libpipewire-module-access
+        load-module libpipewire-module-adapter
+        load-module libpipewire-module-link-factory
+        load-module libpipewire-module-session-manager
+
+        create-object spa-node-factory factory.name=support.node.driver node.name=Dummy priority.driver=8000
+
+        exec ${cfg.sessionManager} ${lib.concatStringsSep " " cfg.sessionManagerArguments}
+
+        ${cfg.extraConfig}
+      '';
+    };
 
     environment.etc."pipewire/media-session.d/with-alsa" = mkIf cfg.alsa.enable { text = ""; };
     environment.etc."pipewire/media-session.d/with-pulseaudio" = mkIf cfg.pulse.enable { text = ""; };
