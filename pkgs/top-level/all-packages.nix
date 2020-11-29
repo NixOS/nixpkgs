@@ -463,6 +463,8 @@ in
 
   madonctl = callPackage ../applications/misc/madonctl { };
 
+  copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
+
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
@@ -25072,7 +25074,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  zombietrackergps = libsForQt514.callPackage ../applications/gis/zombietrackergps { };
+  zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
 
   zoom-us = libsForQt5.callPackage ../applications/networking/instant-messengers/zoom-us { };
 

@@ -910,7 +910,7 @@ in {
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
-  blockdiagcontrib-cisco = callPackage ../development/python-modules/blockdiagcontrib-cisco { };
+  blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # Added 2020-11-29
 
   block-io = callPackage ../development/python-modules/block-io { };
 
@@ -2756,6 +2756,8 @@ in {
   hiro = callPackage ../development/python-modules/hiro { };
 
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
+
+  hjson = callPackage ../development/python-modules/hjson { };
 
   hkdf = callPackage ../development/python-modules/hkdf { };
 

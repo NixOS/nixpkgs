@@ -4,7 +4,7 @@
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
+, dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos, libdrm, mesa
 , libxkbcommon, wayland # ozone/wayland
 
@@ -38,7 +38,7 @@
 , chromium
 
 , gsettings-desktop-schemas
-, gnome2, gnome3
+, gnome3
 }:
 
 with stdenv.lib;
@@ -49,8 +49,6 @@ let
   };
 
   version = chromium.upstream-info.version;
-  gtk = if (versionAtLeast version "59.0.0.0") then gtk3 else gtk2;
-  gnome = if (versionAtLeast version "59.0.0.0") then gnome3 else gnome2;
 
   deps = [
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
@@ -65,7 +63,7 @@ let
     kerberos libdrm mesa coreutils
     libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
-    ++ [ gtk ];
+    ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
 
@@ -79,10 +77,10 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk
+    gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    gnome3.adwaita-icon-theme
   ];
 
   unpackPhase = ''
