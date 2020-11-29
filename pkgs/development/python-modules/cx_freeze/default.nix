@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, ncurses }:
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
@@ -11,7 +11,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  propagatedBuildInputs = [ ncurses ];
+  propagatedBuildInputs = [
+    importlib-metadata # upstream has this for 3.8 as well
+    ncurses
+  ];
 
   # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
   prePatch = ''
