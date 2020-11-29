@@ -596,6 +596,27 @@ let
     };
   };
 
+  Appcpm = buildPerlModule {
+    pname = "App-cpm";
+    version = "0.994";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.994.tar.gz";
+      sha256 = "4242ecb64aaae09034eddb1b338e005567ace29f2ac2d1bca4d4bcf4e15d21c4";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy ModuleCPANfile ParallelPipes locallib ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/cpm
+    '';
+    meta = {
+      homepage = "https://github.com/skaji/cpm";
+      description = "A fast CPAN module installer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   Applify = buildPerlPackage {
     pname = "Applify";
     version = "0.21";
@@ -861,7 +882,7 @@ let
       sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
     };
     meta = {
-      homepage = "http://github.com/timj/perl-Astro-FITS-Header/tree/master";
+      homepage = "https://github.com/timj/perl-Astro-FITS-Header/tree/master";
       description = "Object-oriented interface to FITS HDUs";
       license = stdenv.lib.licenses.free;
     };
@@ -1314,7 +1335,7 @@ let
     buildInputs = [ FileSlurp ];
     propagatedBuildInputs = [ ClassLoad DirSelf FileShareDir ModulePluggable MooseXGetopt namespaceclean  ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training";
+      homepage = "https://metacpan.org/release/Bot-Training";
       description = "Plain text training material for bots like Hailo and AI::MegaHAL";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1330,7 +1351,7 @@ let
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training-MegaHAL";
+      homepage = "https://metacpan.org/release/Bot-Training-MegaHAL";
       description = "Provide megahal.trn via Bot::Training";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1346,7 +1367,7 @@ let
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
     meta = {
-      homepage = "http://metacpan.org/release/Bot-Training-StarCraft";
+      homepage = "https://metacpan.org/release/Bot-Training-StarCraft";
       description = "Provide starcraft.trn via Bot::Training";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -10682,21 +10703,25 @@ let
     };
   };
 
-  LaTeXML = buildPerlPackage {
+  LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.4";
+    version = "0.8.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRMILLER/LaTeXML-0.8.4.tar.gz";
-      sha256 = "92599b45fb587ac14b2ba9cc84b85d9ddc2deaf1cbdc2e89e7a6559e1fbb34cc";
+      url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
+      sha256 = "0dr69rgl4si9i9ww1r4dc7apgb7y6f7ih808w4g0924cvz823s0x";
     };
-    propagatedBuildInputs = [ shortenPerlShebang ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
-    doCheck = false;  # epub test fails
-    postInstall = ''
-      shortenPerlShebang $out/bin/latexml
-      shortenPerlShebang $out/bin/latexmlc
-      shortenPerlShebang $out/bin/latexmlfind
-      shortenPerlShebang $out/bin/latexmlmath
-      shortenPerlShebang $out/bin/latexmlpost
+    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
+    preCheck = ''
+      rm t/931_epub.t # epub test fails
+    '';
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    # shebangs need to be patched before executables are copied to $out
+    preBuild = ''
+      patchShebangs bin/
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      for file in bin/*; do
+        shortenPerlShebang "$file"
+      done
     '';
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";

@@ -2,6 +2,7 @@
   name, version, src, mingwGccs, monos, geckos, platforms,
   pkgconfig, fontforge, makeWrapper, flex, bison,
   supportFlags,
+  patches,
   buildScript ? null, configureFlags ? []
 }:
 
@@ -9,6 +10,7 @@ with import ./util.nix { inherit lib; };
 
 let
   vkd3d = callPackage ./vkd3d.nix {};
+  patches' = patches;
 in
 stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   builder = buildScript;
@@ -73,10 +75,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ])
   ++ [ pkgs.xorg.libX11 pkgs.perl ]));
 
-  patches = [
-    # Also look for root certificates at $NIX_SSL_CERT_FILE
-    ./cert-path.patch
-  ];
+  patches = [ ] ++ patches';
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in

@@ -43,6 +43,7 @@ mkDerivation rec {
       GenericName[it]=Generatore ed Analizzatore di pacchetti di rete
       Comment[it]=Generatore ed Analizzatore di pacchetti di rete con interfaccia amichevole
     '';
+    fileValidation = false;
   };
 
   postInstall = ''

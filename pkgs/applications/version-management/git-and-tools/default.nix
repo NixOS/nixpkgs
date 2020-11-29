@@ -203,6 +203,8 @@ let
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
 
+  glab = callPackage ./glab { };
+
   grv = callPackage ./grv { };
 
   hub = callPackage ./hub { };

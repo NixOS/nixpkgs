@@ -910,7 +910,7 @@ in {
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
-  blockdiagcontrib-cisco = callPackage ../development/python-modules/blockdiagcontrib-cisco { };
+  blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # Added 2020-11-29
 
   block-io = callPackage ../development/python-modules/block-io { };
 
@@ -2757,6 +2757,8 @@ in {
 
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
+  hjson = callPackage ../development/python-modules/hjson { };
+
   hkdf = callPackage ../development/python-modules/hkdf { };
 
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
@@ -2895,6 +2897,8 @@ in {
   ifaddr = callPackage ../development/python-modules/ifaddr { };
 
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
+
+  ifcopenshell = callPackage ../development/python-modules/ifcopenshell { };
 
   ignite = callPackage ../development/python-modules/ignite { };
 
@@ -4947,6 +4951,8 @@ in {
 
   pycm = callPackage ../development/python-modules/pycm { };
 
+  pycmarkgfm = callPackage ../development/python-modules/pycmarkgfm { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
@@ -6486,6 +6492,8 @@ in {
 
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
+  scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
+
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
   scikitlearn = let args = { inherit (pkgs) gfortran glibcLocales; };
@@ -7886,6 +7894,8 @@ in {
     ffmpegSupport = false;
     phantomjsSupport = false;
   };
+
+  youtube-dlc = callPackage ../development/python-modules/youtube-dlc { };
 
   yowsup = callPackage ../development/python-modules/yowsup { };
 

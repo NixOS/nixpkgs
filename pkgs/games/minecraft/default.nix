@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, nixosTests
 , makeDesktopItem
 , makeWrapper
 , wrapGAppsHook
@@ -37,6 +38,7 @@ let
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
     categories = "Game;";
+    fileValidation = false;
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
@@ -146,5 +148,8 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = { inherit (nixosTests) minecraft; };
+    updateScript = ./update.sh;
+  };
 }

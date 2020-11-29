@@ -1,6 +1,6 @@
 { fetchFromGitHub, fetchpatch, stdenv
 , autoreconfHook, intltool, pkgconfig
-, gtk3, xdotool, which, wrapGAppsHook }:
+, gtk3, libayatana-appindicator, xdotool, which, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "clipit";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook autoreconfHook intltool ];
-  configureFlags = [ "--with-gtk3" ];
-  buildInputs = [ gtk3 ];
+  configureFlags = [ "--with-gtk3" "--enable-appindicator=yes" ];
+  buildInputs = [ gtk3 libayatana-appindicator ];
 
   gappsWrapperArgs = [
     "--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ xdotool which ]}"

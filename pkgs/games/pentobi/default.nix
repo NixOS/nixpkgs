@@ -3,14 +3,14 @@
 }:
 
 mkDerivation rec {
-  version = "18.3";
+  version = "18.4";
   pname = "pentobi";
 
   src = fetchFromGitHub {
     owner = "enz";
     repo = "pentobi";
     rev = "v${version}";
-    sha256 = "9AymvAlXi0zkkcakTR0mC4gmyrweZR4EwlhORkmVshw=";
+    sha256 = "1wawy6s3i4pcc6n6kfspn5b4g957ds0728mgwzw19agp5yyid73b";
   };
 
   nativeBuildInputs = [ cmake docbook_xsl qttools ];

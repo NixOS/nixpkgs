@@ -4,24 +4,26 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "10.0.0";
+  version = "14.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "9b44b2d0b281fc1999324a715fb5cf4f47d392a35bc0a01f24bb8dbc4c123acd";
+    sha256 = "fbb13448fb52a4090ee91940ae8676403dbe8ae81044b7a5cd3c9e58b47d66de";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
   ] ++ lib.optionals (!isPy3k) [
     azure-mgmt-nspkg
   ];

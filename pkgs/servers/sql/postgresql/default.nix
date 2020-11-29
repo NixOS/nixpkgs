@@ -41,6 +41,8 @@ let
 
     enableParallelBuilding = !stdenv.isDarwin;
 
+    separateDebugInfo = true;
+
     buildFlags = [ "world" ];
 
     NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
@@ -54,6 +56,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
@@ -162,6 +165,7 @@ let
     ];
     buildInputs = [ makeWrapper ];
 
+
     # We include /bin to ensure the $out/bin directory is created, which is
     # needed because we'll be removing the files from that directory in postBuild
     # below. See #22653
@@ -230,5 +234,4 @@ in self: {
     this = self.postgresql_13;
     inherit self;
   };
-
 }

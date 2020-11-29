@@ -20,6 +20,15 @@ stdenv.mkDerivation {
     name = "${s.name}.tar.bz2";
   };
 
+  patches = [
+    # Adds the /nix directory when using an overlay.
+    # Required to run any programs under this mode.
+    ./mount-nix-dir-on-overlay.patch
+    # By default fbuilder hardcodes the firejail binary to the install path.
+    # On NixOS the firejail binary is a setuid wrapper available in $PATH.
+    ./fbuilder-call-firejail-on-path.patch
+  ];
+
   prePatch = ''
     # Allow whitelisting ~/.nix-profile
     substituteInPlace etc/firejail.config --replace \
