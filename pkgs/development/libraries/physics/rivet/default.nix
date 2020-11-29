@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "0yjpx7n6ry3pfgkf7d7v7mcc3yv7681kf8nq2b1fgspl8jbd0hf0";
+    sha256 = "08g0f84l7r6vm4n7gn36qi3bzacscpv061m9xar2572vf10wxpak";
   };
 
   patches = [
