@@ -321,6 +321,8 @@ stdenv.mkDerivation rec {
       gnugrep curl runtimeShell;
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
     homepage = "https://www.thunderbird.net";
