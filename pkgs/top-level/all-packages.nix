@@ -8269,7 +8269,7 @@ in
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
-  wafHook = callPackage ../development/tools/build-managers/wafHook { };
+  wafHook = callPackage ../development/tools/build-managers/wafHook { python = python3; };
 
   wagyu = callPackage ../tools/misc/wagyu { };
 
