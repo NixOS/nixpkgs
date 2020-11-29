@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ansi2html";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a9vihsvd03hb0a4dbiklyy686adp9q2ipl79mkxmdr6gfp8bbln";
+    sha256 = "0f124ea7efcf3f24f1f9398e527e688c9ae6eab26b0b84e1299ef7f94d92c596";
   };
 
   propagatedBuildInputs = [ six setuptools ];
