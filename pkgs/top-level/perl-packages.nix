@@ -4027,6 +4027,21 @@ let
     perlPreHook = stdenv.lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
   };
 
+  CryptFormat = buildPerlPackage {
+    pname = "Crypt-Format";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Format-0.10.tar.gz";
+      sha256 = "89ddc010a6c91d5be7a1874a528eed6eda39f2c401c18e63d80ddfbf7127e2dd";
+    };
+    buildInputs = [ TestException TestFailWarnings ];
+    meta = {
+      description = "Conversion utilities for encryption applications";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptIDEA = buildPerlPackage {
     pname = "Crypt-IDEA";
     version = "1.10";
