@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url  = "https://bobswift.atlassian.net/wiki/download/attachments/16285777/${pname}-${version}-distribution.zip";
     sha256  = "091dhjkx7fdn23cj7c4071swncsbmknpvidmmjzhc0355l3p4k2g";
-    extraPostFetch = "chmod go-w $out";
   };
 
   tools = [

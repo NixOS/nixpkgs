@@ -240,6 +240,8 @@ in
 
   digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox { };
 
+  gretl = callPackage ../applications/science/math/gretl { };
+
   grsync = callPackage ../applications/misc/grsync { };
 
   dockerTools = callPackage ../build-support/docker {
@@ -460,6 +462,8 @@ in
   libredirect = callPackage ../build-support/libredirect { };
 
   madonctl = callPackage ../applications/misc/madonctl { };
+
+  copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
@@ -3430,7 +3434,7 @@ in
 
   dropbear = callPackage ../tools/networking/dropbear { };
 
-  dsview = libsForQt514.callPackage ../applications/science/electronics/dsview { };
+  dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
 
   dtach = callPackage ../tools/misc/dtach { };
 
@@ -4616,7 +4620,7 @@ in
 
   hecate = callPackage ../applications/editors/hecate { };
 
-  heaptrack = libsForQt514.callPackage ../development/tools/profiling/heaptrack {};
+  heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
 
   heimdall = libsForQt5.callPackage ../tools/misc/heimdall { };
 
@@ -5053,7 +5057,7 @@ in
 
   krakenx = callPackage ../tools/system/krakenx { };
 
-  partition-manager = libsForQt514.callPackage ../tools/misc/partition-manager { };
+  partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
 
@@ -6535,7 +6539,7 @@ in
 
   tab = callPackage ../tools/text/tab { };
 
-  tautulli = callPackage ../servers/tautulli { python = python2; };
+  tautulli = python3Packages.callPackage ../servers/tautulli { };
 
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
@@ -15629,6 +15633,8 @@ in
 
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
+  qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray {};
+
   qwt = callPackage ../development/libraries/qwt {};
 
   qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix {
@@ -18317,6 +18323,10 @@ in
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
+    akvcam = callPackage ../os-specific/linux/akvcam {
+      inherit (qt5) qmake;
+    };
+
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
     anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
@@ -20784,9 +20794,11 @@ in
     buildServerGui = false;
   };
 
-  droopy = python37Packages.callPackage ../applications/networking/droopy { };
+  droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
+
+  dsf2flac = callPackage ../applications/audio/dsf2flac { };
 
   dunst = callPackage ../applications/misc/dunst { };
 
@@ -25060,7 +25072,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  zombietrackergps = libsForQt514.callPackage ../applications/gis/zombietrackergps { };
+  zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
 
   zoom-us = libsForQt5.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
@@ -27841,7 +27853,9 @@ in
 
   disnix = callPackage ../tools/package-management/disnix { };
 
-  dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {});
+  dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {
+    inherit (pythonPackages) supervisor;
+  });
 
   dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
 

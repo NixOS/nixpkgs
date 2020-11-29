@@ -493,7 +493,9 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
-    lwt = callPackage ../development/ocaml-modules/lwt { };
+    lwt = callPackage ../development/ocaml-modules/lwt {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     ocaml_lwt = lwt;
 
@@ -670,7 +672,9 @@ let
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
-    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
+    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
@@ -816,7 +820,9 @@ let
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
-    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
+    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
 

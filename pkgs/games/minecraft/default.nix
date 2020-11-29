@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, nixosTests
+, copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , wrapGAppsHook
@@ -37,7 +39,6 @@ let
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
     categories = "Game;";
-    fileValidation = false;
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
@@ -99,7 +100,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
   buildInputs = [ gobject-introspection ];
 
   sourceRoot = ".";
@@ -109,11 +110,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt
     mv minecraft-launcher $out/opt
 
-    ${desktopItem.buildCommand}
     install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
+
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -139,6 +143,8 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
+  desktopItems = [ desktopItem ];
+
   meta = with stdenv.lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
@@ -147,5 +153,8 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = { inherit (nixosTests) minecraft; };
+    updateScript = ./update.sh;
+  };
 }

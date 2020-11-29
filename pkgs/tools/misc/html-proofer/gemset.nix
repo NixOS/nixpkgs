@@ -37,10 +37,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "05h3liirjx6wvh97vdl59hmwzgji1ih61xq1w5nl87cmhpsxaqsf";
+      sha256 = "1i05vgyhyyps867zgpcd13wdidf0cpra39rhfff1jhkc1hn766lm";
       type = "gem";
     };
-    version = "3.17.2";
+    version = "3.17.3";
   };
   mercenary = {
     groups = ["default"];
@@ -79,10 +79,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1nif9bn7zlizfcsk464b8n5gvspdim34hl7ldw2y7w4lcnwgg4zg";
+      sha256 = "0pxm7hx2lhmanm8kljd39f1j1742kl0a31zx98jsjiwrkfb5hhc6";
       type = "gem";
     };
-    version = "2.0.3";
+    version = "2.0.4";
   };
   parallel = {
     groups = ["default"];

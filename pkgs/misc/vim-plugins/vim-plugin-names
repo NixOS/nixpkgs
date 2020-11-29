@@ -236,8 +236,8 @@ kassio/neoterm
 kbenzie/vim-spirv
 kchmck/vim-coffee-script
 KeitaNakamura/neodark.vim
-keith/swift.vim
 keith/investigate.vim
+keith/swift.vim
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
@@ -413,6 +413,7 @@ ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
+prabirshrestha/async.vim
 prabirshrestha/asyncomplete.vim
 prabirshrestha/vim-lsp
 preservim/nerdcommenter

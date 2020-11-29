@@ -1,4 +1,5 @@
 { stdenv
+, nixosTests
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
@@ -25,6 +26,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = stdenv.lib.optionals stdenv.isDarwin [
     "--skip meta::filetype::test::test_socket_type"
   ];
+
+  passthru.tests = { inherit (nixosTests) lsd; };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Peltoche/lsd";
