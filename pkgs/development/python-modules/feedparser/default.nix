@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "feedparser";
-  version = "5.2.1";
+  version = "6.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ycva69bqssalhqg45rbrfipz3l6hmycszy26k0351fhq990c0xx";
+    sha256 = "1b00a105425f492f3954fd346e5b524ca9cef3a4bbf95b8809470e9857aa1074";
   };
 
   # lots of networking failures
