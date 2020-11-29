@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, fetchzip }:
+{ stdenv
+, fetchurl
+, fetchzip
+, autoPatchelfHook
+, libsecret
+}:
 
 stdenv.mkDerivation rec {
 
@@ -19,10 +24,24 @@ stdenv.mkDerivation rec {
     else
       throw "Unsupported system";
 
+  buildInputs = [
+    libsecret
+  ];
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
+
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       ''
-        install -Dm755 Archi $out/bin/Archi
+        for i in configuration features p2 plugins Archi.ini Archi
+        do
+          mkdir -p $out/bin
+          cp -rf $i $out/bin/
+        done
+
+        install -D -m755 Archi $out/bin/Archi
         rm Archi
       ''
     else
