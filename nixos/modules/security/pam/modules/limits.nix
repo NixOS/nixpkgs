@@ -60,7 +60,7 @@ let
   };
 
   moduleOption = mkOption {
-    type = with types; listOf (submodule limitSubmodule);
+    type = with types; attrsOf (submodule limitSubmodule);
     default = [];
     description = ''
       Define resource limits that should apply to users or groups.
@@ -79,7 +79,7 @@ let
   makeLimitsConf = limits: pkgs.writeText "limits.conf"
     (concatMapStringsSep "\n" ({ domain, type, item, value }:
       "${domain} ${type} ${item} ${toString value}")
-    limits);
+    (attrValues limits));
 in
 {
   options = {

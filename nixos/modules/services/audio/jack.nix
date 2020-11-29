@@ -226,10 +226,10 @@ in {
         isSystemUser = true;
       };
       # http://jackaudio.org/faq/linux_rt_config.html
-      security.pam.modules.limits = [
-        { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = 99; }
-        { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
-      ];
+      security.pam.modules.limits = {
+        jackRtprio = { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = 99; };
+        jackMemlock = { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; };
+      };
       users.groups.jackaudio = {};
 
       environment = {
