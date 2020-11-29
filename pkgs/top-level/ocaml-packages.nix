@@ -736,6 +736,8 @@ let
 
     octavius = callPackage ../development/ocaml-modules/octavius { };
 
+    odate = callPackage ../development/ocaml-modules/odate { };
+
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
