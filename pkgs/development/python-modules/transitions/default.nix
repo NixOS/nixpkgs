@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a2841b24789dfd345267cb92e26b79da75fd03f6021d1a5222c71b5c9ae3c16";
+    sha256 = "e441c66a0c753d56c01c3e5e547f21dbe4a5569c939f12477475c5e81d79769b";
   };
 
   postPatch = ''
