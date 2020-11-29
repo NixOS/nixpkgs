@@ -11,9 +11,13 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
+  # tests are no longer packaged in pypi
+  doCheck = false;
   checkPhase = ''
     py.test -p no:logging
   '';
+
+  pythonImportsCheck =  [ "colorlog" ];
 
   meta = with stdenv.lib; {
     description = "Log formatting with colors";
