@@ -1,4 +1,8 @@
-{ stdenv, mkDerivation, fetchurl, pkgconfig, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras }:
+{ stdenv, mkDerivation, fetchurl
+, pkg-config, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras
+# Enable jack session support
+, jackSession ? false
+}:
 
 mkDerivation rec {
   version = "0.6.3";
@@ -20,9 +24,12 @@ mkDerivation rec {
     dbus
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  configureFlags = [ "--enable-jack-version" ];
+  configureFlags = [
+    "--enable-jack-version"
+    (stdenv.lib.strings.enableFeature jackSession "jack-session")
+  ];
 
   meta = with stdenv.lib; {
     description = "A Qt application to control the JACK sound server daemon";
