@@ -14,11 +14,11 @@ else
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "6.12.1";
+  version = "6.12.4";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "04c1sz113015gyhj3w7flw7l4bv0v50q6n04kk8dybcravzy2xgx";
+    sha256 = "00m6v2k4mg8705dy41934lznl6gj91i6dk7p1nkaccm51nna25kz";
   };
 
   buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline
