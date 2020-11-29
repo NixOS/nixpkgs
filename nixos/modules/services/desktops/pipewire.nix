@@ -117,23 +117,25 @@ in {
     services.udev.packages = [ cfg.package ];
 
     # If any paths are updated here they must also be updated in the package test.
-    sound.enable = mkIf cfg.alsa.enable true;
-    sound.extraConfig = mkIf cfg.alsa.enable ''
-      pcm_type.pipewire {
-        libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
-        ${optionalString enable32BitAlsaPlugins
-          "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
-      }
-      pcm.!default {
-        @func getenv
-        vars [ PCM ]
-        default "plug:pipewire"
-        playback_mode "-1"
-        capture_mode "-1"
-      }
-    '';
+    environment.etc."alsa/conf.d/49-pipewire-modules.conf" = mkIf cfg.alsa.enable {
+      text = ''
+        pcm_type.pipewire {
+          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
+          ${optionalString enable32BitAlsaPlugins
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
+        }
+        ctl_type.pipewire {
+          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
+          ${optionalString enable32BitAlsaPlugins
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
+        }
+      '';
+    };
     environment.etc."alsa/conf.d/50-pipewire.conf" = mkIf cfg.alsa.enable {
       source = "${cfg.package}/share/alsa/alsa.conf.d/50-pipewire.conf";
+    };
+    environment.etc."alsa/conf.d/99-pipewire-default.conf" = mkIf cfg.alsa.enable {
+      source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
     };
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
