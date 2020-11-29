@@ -2757,6 +2757,8 @@ in {
 
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
+  hjson = callPackage ../development/python-modules/hjson { };
+
   hkdf = callPackage ../development/python-modules/hkdf { };
 
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
