@@ -252,6 +252,19 @@
   <itemizedlist>
    <listitem>
     <para>
+     The Mailman NixOS module (<literal>services.mailman</literal>) has a new
+     option <xref linkend="opt-services.mailman.enablePostfix" />, defaulting
+     to true, that controls integration with Postfix.
+    </para>
+    <para>
+     If this option is disabled, default MTA config becomes not set and you
+     should set the options in <literal>services.mailman.settings.mta</literal>
+     according to the desired configuration as described in
+     <link xlink:href="https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html">Mailman documentation</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The default-version of <literal>nextcloud</literal> is <package>nextcloud20</package>.
      Please note that it's <emphasis>not</emphasis> possible to upgrade <literal>nextcloud</literal>
      across multiple major versions! This means that it's e.g. not possible to upgrade
