@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, setuptools, futures
-, backports_functools_lru_cache, mock, pytestCheckHook, poetry, hypothesis, pylama
+{ lib, buildPythonPackage, fetchFromGitHub
 , colorama
+, hypothesis
+, poetry
+, pylama
+, pytestCheckHook
+, setuptools
 }:
 
 let
@@ -22,7 +26,12 @@ in buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [ colorama hypothesis pylama pytestCheckHook ];
+  checkInputs = [
+    colorama
+    hypothesis
+    pylama
+    pytestCheckHook
+  ];
 
   postCheck = ''
     # Confirm that the produced executable script is wrapped correctly and runs
