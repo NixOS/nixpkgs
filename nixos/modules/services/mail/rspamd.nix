@@ -371,6 +371,9 @@ in
     };
     services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
 
+    systemd.services.postfix.serviceConfig.SupplementaryGroups =
+      mkIf cfg.postfix.enable [ postfixCfg.group ];
+
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
 
@@ -399,6 +402,7 @@ in
 
         User = "${cfg.user}";
         Group = "${cfg.group}";
+        SupplementaryGroups = mkIf cfg.postfix.enable [ postfixCfg.group ];
 
         RuntimeDirectory = "rspamd";
         RuntimeDirectoryMode = "0755";
@@ -413,7 +417,8 @@ in
         PrivateDevices = true;
         PrivateMounts = true;
         PrivateTmp = true;
-        PrivateUsers = true;
+        # we need to chown socket to rspamd-milter
+        PrivateUsers = !cfg.postfix.enable;
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
