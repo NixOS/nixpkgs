@@ -15595,6 +15595,8 @@ in
 
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
+  qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray {};
+
   qwt = callPackage ../development/libraries/qwt {};
 
   qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix {
