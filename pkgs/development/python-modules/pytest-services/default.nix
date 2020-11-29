@@ -5,7 +5,9 @@
 , requests
 , psutil
 , pytest
+, setuptools_scm
 , subprocess32
+, toml
 , zc_lockfile
 }:
 
@@ -18,6 +20,11 @@ buildPythonPackage rec {
     sha256 = "2da740487d08ea63dfdf718f5d4ba11e590c99ddf5481549edebf7a3a42ca536";
   };
 
+  nativeBuildInputs = [
+    setuptools_scm
+    toml
+  ];
+
   propagatedBuildInputs = [
     requests
     psutil
@@ -27,6 +34,8 @@ buildPythonPackage rec {
 
   # no tests in PyPI tarball
   doCheck = false;
+
+  pythonImportsCheck = [ "pytest_services" ];
 
   meta = with lib; {
     description = "Services plugin for pytest testing framework";
