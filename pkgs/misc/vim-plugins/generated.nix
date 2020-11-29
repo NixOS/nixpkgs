@@ -1473,6 +1473,18 @@ let
     meta.homepage = "https://github.com/gregsexton/gitv/";
   };
 
+  glow-nvim = buildVimPluginFrom2Nix {
+    pname = "glow-nvim";
+    version = "2020-08-31";
+    src = fetchFromGitHub {
+      owner = "npxbr";
+      repo = "glow.nvim";
+      rev = "21ed617b1a16997a02f54ae05c1a9dc3f3c503bf";
+      sha256 = "0qkvxly52qdxw77mlrwzrjp8i6smzmsd6k4pd7qqq2w8s8y8rda3";
+    };
+    meta.homepage = "https://github.com/npxbr/glow.nvim/";
+  };
+
   golden-ratio = buildVimPluginFrom2Nix {
     pname = "golden-ratio";
     version = "2020-04-03";
