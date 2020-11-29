@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Limiter";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08d6d7534a847c532fd36d0df978f93908d8616813085941c862bbcfcf6811aa";
+    sha256 = "021279c905a1e24f181377ab3be711be7541734b494f4e6db2b8edeba7601e48";
   };
 
   propagatedBuildInputs = [ flask limits ];
