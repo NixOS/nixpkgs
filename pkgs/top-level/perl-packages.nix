@@ -18900,6 +18900,22 @@ let
     doCheck = false;                             # FIXME: 2/293 test failures
   };
 
+  SymbolGet = buildPerlPackage {
+    pname = "Symbol-Get";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Symbol-Get-0.10.tar.gz";
+      sha256 = "0ee5568c5ae3573ca874e09e4d0524466cfc1ad9a2c24d0bc91d4c7b06f21d9c";
+    };
+    buildInputs = [ TestDeep TestException ];
+    propagatedBuildInputs = [ CallContext ];
+    meta = {
+      description = "Read Perl's symbol table programmatically";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   SymbolGlobalName = buildPerlPackage {
     pname = "Symbol-Global-Name";
     version = "0.05";
