@@ -1,8 +1,12 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, configparser
+, pyparsing
 , pytest
 , future
+, openpyxl
+, wrapt
 }:
 
 buildPythonPackage rec {
@@ -15,7 +19,18 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ future ];
+  propagatedBuildInputs = [
+    configparser
+    future
+    openpyxl
+    pyparsing
+    wrapt
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "wrapt==1.11.2" "wrapt~=1.11"
+  '';
 
   # tests are not included with release
   doCheck = false;
@@ -29,5 +44,6 @@ buildPythonPackage rec {
     description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true; # missing cexprtk package
   };
 }
