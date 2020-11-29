@@ -5521,7 +5521,7 @@
     name = "Marius Bakke";
   };
   mbaillie = {
-    email = "martin@baillie.email";
+    email = "martin@baillie.id";
     github = "martinbaillie";
     githubId = 613740;
     name = "Martin Baillie";
