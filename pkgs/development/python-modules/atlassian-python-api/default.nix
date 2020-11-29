@@ -4,6 +4,7 @@
 , isPy3k
 , certifi
 , chardet
+, deprecated
 , idna
 , oauthlib
 , requests
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestrunner pytest ];
 
-  propagatedBuildInputs = [ oauthlib requests requests_oauthlib six ];
+  propagatedBuildInputs = [ deprecated oauthlib requests requests_oauthlib six ];
 
   meta = with lib; {
     description = "Python Atlassian REST API Wrapper";
