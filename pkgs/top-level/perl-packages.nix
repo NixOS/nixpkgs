@@ -1484,6 +1484,20 @@ let
     };
   };
 
+  BytesRandomSecureTiny = buildPerlPackage {
+    pname = "Bytes-Random-Secure-Tiny";
+    version = "1.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-Tiny-1.011.tar.gz";
+      sha256 = "03d967b5f82846909137d5ab9984ac570ac10a4401e0c602f3d2208c465ac982";
+    };
+    meta = {
+      description = "A tiny Perl extension to generate cryptographically-secure random bytes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CacheCache = buildPerlPackage {
     pname = "Cache-Cache";
     version = "1.08";
