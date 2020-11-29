@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "0.24.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c342dbd9daf5375b3f8bb94302b7ea9a9946f76684e457a38ff0d420b3b6556";
+    sha256 = "1bd1ee5c274a584929913d9118134e01afe106644cb749ccc3111e1a38a96cd3";
   };
 
   checkInputs = [ pytest mock ];
