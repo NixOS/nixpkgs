@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "Routes";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zamff3m0kc4vyfniyhxpkkcqv1rrgnmh37ykxv34nna1ws47vi6";
+    sha256 = "b6346459a15f0cbab01a45a90c3d25caf980d4733d628b4cc1952b865125d053";
   };
 
   propagatedBuildInputs = [ repoze_lru six webob ];
