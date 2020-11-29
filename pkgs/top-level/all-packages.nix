@@ -198,6 +198,8 @@ in
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
 
+  crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
