@@ -1484,6 +1484,20 @@ let
     };
   };
 
+  BytesRandomSecureTiny = buildPerlPackage {
+    pname = "Bytes-Random-Secure-Tiny";
+    version = "1.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-Tiny-1.011.tar.gz";
+      sha256 = "03d967b5f82846909137d5ab9984ac570ac10a4401e0c602f3d2208c465ac982";
+    };
+    meta = {
+      description = "A tiny Perl extension to generate cryptographically-secure random bytes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CacheCache = buildPerlPackage {
     pname = "Cache-Cache";
     version = "1.08";
@@ -1596,6 +1610,20 @@ let
       license = stdenv.lib.licenses.lgpl21Plus;
     };
     propagatedBuildInputs = [ Cairo Glib ];
+  };
+
+  CallContext = buildPerlPackage {
+    pname = "Call-Context";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Call-Context-0.03.tar.gz";
+      sha256 = "0ee6bf46bc72755adb7a6b08e79d12e207de5f7809707b3c353b58cb2f0b5a26";
+    };
+    meta = {
+      description = "Sanity-check calling context";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   cam_pdf = buildPerlModule {
@@ -3999,6 +4027,21 @@ let
     perlPreHook = stdenv.lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
   };
 
+  CryptFormat = buildPerlPackage {
+    pname = "Crypt-Format";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Format-0.10.tar.gz";
+      sha256 = "89ddc010a6c91d5be7a1874a528eed6eda39f2c401c18e63d80ddfbf7127e2dd";
+    };
+    buildInputs = [ TestException TestFailWarnings ];
+    meta = {
+      description = "Conversion utilities for encryption applications";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptIDEA = buildPerlPackage {
     pname = "Crypt-IDEA";
     version = "1.10";
@@ -4359,6 +4402,23 @@ let
     meta = {
       homepage = "https://metacpan.org/release/Crypt-PBKDF2";
       description = "The PBKDF2 password hash algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  CryptPerl = buildPerlPackage {
+    pname = "Crypt-Perl";
+    version = "0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.34.tar.gz";
+      sha256 = "0e1cb223df0041f6d9b010f11e6f97a97ab55a118a273938eb4fe85d403f1b11";
+    };
+    checkInputs = [ pkgs.openssl MathBigIntGMP ];
+    buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
+    propagatedBuildInputs = [ BytesRandomSecureTiny ClassAccessor ConvertASN1 CryptFormat MathProvablePrime SymbolGet TryTiny ];
+    meta = {
+      description = "Cryptography in pure Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
@@ -12234,6 +12294,22 @@ let
     };
   };
 
+  MathProvablePrime = buildPerlPackage {
+    pname = "Math-ProvablePrime";
+    version = "0.045";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Math-ProvablePrime-0.045.tar.gz";
+      sha256 = "32dce42861ce065a875a91ec14c6557e89af07df10cc450d1c4ded13dcbe3dd5";
+    };
+    buildInputs = [ FileWhich TestClass TestDeep TestException TestNoWarnings ];
+    propagatedBuildInputs = [ BytesRandomSecureTiny ];
+    meta = {
+      description = "Generate a provable prime number, in pure Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MathRandom = buildPerlPackage {
     pname = "Math-Random";
     version = "0.72";
@@ -18839,6 +18915,22 @@ let
       sha256 = "0xbdjdgzfj9zwa4j3ipr8bfk7bcici4hk89hq5d27rhg2isljd9i";
     };
     doCheck = false;                             # FIXME: 2/293 test failures
+  };
+
+  SymbolGet = buildPerlPackage {
+    pname = "Symbol-Get";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Symbol-Get-0.10.tar.gz";
+      sha256 = "0ee5568c5ae3573ca874e09e4d0524466cfc1ad9a2c24d0bc91d4c7b06f21d9c";
+    };
+    buildInputs = [ TestDeep TestException ];
+    propagatedBuildInputs = [ CallContext ];
+    meta = {
+      description = "Read Perl's symbol table programmatically";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   SymbolGlobalName = buildPerlPackage {
