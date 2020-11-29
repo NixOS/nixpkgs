@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "importlib_resources";
-  version = "3.0.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19f745a6eca188b490b1428c8d1d4a0d2368759f32370ea8fb89cad2ab1106c3";
+    sha256 = "7b51f0106c8ec564b1bef3d9c588bc694ce2b92125bbb6278f4f2f5b54ec3592";
   };
 
   nativeBuildInputs = [ setuptools_scm toml ];
