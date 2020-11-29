@@ -67,6 +67,7 @@ buildPythonPackage rec {
     "TestInstallServerExtension"
     "launch_socket"
     "sock_server"
+    "test_list_formats" # tries to find python MIME type
   ] ++ lib.optional stdenv.isDarwin [
     "test_delete"
     "test_checkpoints_follow_file"
