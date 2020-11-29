@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.0.0";
+  version = "1.3.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k2vinlhkzl7lzhvbz20x3a2r2zqqila0yxg3a3fax2r6qxbxxzi";
+    sha256 = "30d448e825904e2d763bbbe418831a788813c32f636b21c8d60ee5f474532898";
   };
 
   propagatedBuildInputs = [ packaging appdirs requests ];
