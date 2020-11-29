@@ -16,8 +16,13 @@ buildPythonPackage rec {
   # requires network access
   doCheck = false;
 
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "py4j==0.10.9" "py4j"
+  '';
+
   preFixup = ''
-      substituteInPlace "$out/bin/find-spark-home" \
+    substituteInPlace "$out/bin/find-spark-home" \
       --replace find_spark_home.py .find_spark_home.py-wrapped
   '';
 
