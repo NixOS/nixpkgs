@@ -99,5 +99,9 @@ in {
     };
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
+
+    environment.etc."pipewire/media-session.d/with-alsa" = mkIf cfg.alsa.enable { text = ""; };
+    environment.etc."pipewire/media-session.d/with-pulseaudio" = mkIf cfg.pulse.enable { text = ""; };
+    environment.etc."pipewire/media-session.d/with-jack" = mkIf cfg.jack.enable { text = ""; };
   };
 }
