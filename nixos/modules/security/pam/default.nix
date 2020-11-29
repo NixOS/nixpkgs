@@ -16,14 +16,14 @@ let
         default = entryType;
         internal = true;
         description = ''
-          The PAM type for this module. This should not be set manually.
+          The PAM type for this entry. This should not be set manually.
         '';
       };
 
       control = mkOption {
         type = pamLib.controlType;
         description = ''
-          The PAM control for this module. It can be either on of the
+          The PAM control for this entry. It can be either on of the
           historical basic control keywords, of a set of result-actions pairs.
         '';
         apply = value: if isString value then value else
@@ -32,13 +32,13 @@ let
 
       path = mkOption {
         type = types.str;
-        description = "The path to this module shared library";
+        description = "The path to this entry shared library";
       };
 
       args = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = "Arbitrary string arguments passed to this modules.";
+        description = "Arbitrary string arguments passed to this entry.";
         apply = value: concatStringsSep " " (map toString value);
       };
 
@@ -46,7 +46,8 @@ let
         type = types.int;
         description = ''
           The order in which this module appears in the PAM service.
-          Lower means firster.
+          The lower this values, the higher the entry will appear in the
+          resulting PAM file.
         '';
       };
 
