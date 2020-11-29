@@ -118,17 +118,19 @@ in
             };
 
             config = mkIf config.modules.u2f.enable {
-              auth.u2f = {
-                inherit (config.modules.u2f) control;
-                path = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
-                args = flatten [
-                  (optional config.modules.u2f.debug "debug")
-                  (optional (config.modules.u2f.authFile != null) "authFile=${config.modules.u2f.authFile}")
-                  (optional config.modules.u2f.interactive "interactive")
-                  (optional config.modules.u2f.cue "cue")
-                  (optional (config.modules.u2f.appId != null) "appid=${config.modules.u2f.appId}")
-                ];
-                order = 17000;
+              auth = mkDefault {
+                u2f = {
+                  inherit (config.modules.u2f) control;
+                  path = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
+                  args = flatten [
+                    (optional config.modules.u2f.debug "debug")
+                    (optional (config.modules.u2f.authFile != null) "authFile=${config.modules.u2f.authFile}")
+                    (optional config.modules.u2f.interactive "interactive")
+                    (optional config.modules.u2f.cue "cue")
+                    (optional (config.modules.u2f.appId != null) "appid=${config.modules.u2f.appId}")
+                  ];
+                  order = 17000;
+                };
               };
             };
           })

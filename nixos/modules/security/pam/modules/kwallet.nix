@@ -31,22 +31,26 @@ in
             };
 
             config = mkIf config.modules.kwallet.enable {
-              auth.kwallet = {
-                control = "optional";
-                path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
-                args = [
-                  "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
-                ];
-                order = 24000;
+              auth = mkDefault {
+                kwallet = {
+                  control = "optional";
+                  path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
+                  args = [
+                    "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
+                  ];
+                  order = 24000;
+                };
               };
 
-              session.kwallet = {
-                control = "optional";
-                path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
-                args = [
-                  "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
-                ];
-                order = 16000;
+              session = mkDefault {
+                kwallet = {
+                  control = "optional";
+                  path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
+                  args = [
+                    "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
+                  ];
+                  order = 16000;
+                };
               };
             };
           })

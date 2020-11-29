@@ -312,13 +312,15 @@ in {
               };
 
               config = mkIf (cfg.enable && config.modules.krb5.enable) {
-                account.krb5 = {
-                  control = "sufficient";
-                  path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
-                  order = 4000;
+                account = mkDefault {
+                  krb5 = {
+                    control = "sufficient";
+                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+                    order = 4000;
+                  };
                 };
 
-                auth = {
+                auth = mkDefault {
                   krb5 = {
                     control = { default = "ignore"; success = 1; service_err = "reset"; };
                     path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
@@ -339,17 +341,21 @@ in {
                   };
                 };
 
-                password.krb5 = {
-                  control = "sufficient";
-                  path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
-                  args = [ "use_first_pass" ];
-                  order = 6000;
+                password = mkDefault {
+                  krb5 = {
+                    control = "sufficient";
+                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+                    args = [ "use_first_pass" ];
+                    order = 6000;
+                  };
                 };
 
-                session.krb5 = {
-                  control = "optional";
-                  path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
-                  order = 9000;
+                session = mkDefault {
+                  krb5 = {
+                    control = "optional";
+                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+                    order = 9000;
+                  };
                 };
               };
             })

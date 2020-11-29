@@ -45,7 +45,7 @@ in
             };
 
             config = {
-              account = mkIf config.modules.googleOsLogin.enableAccountVerification {
+              account = mkIf config.modules.googleOsLogin.enableAccountVerification (mkDefault {
                 googleOsLoginDie = {
                   control = { success = "ok"; ignore = "ignore"; default = "die"; };
                   path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so";
@@ -56,12 +56,14 @@ in
                   path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so";
                   order = 10500;
                 };
-              };
+              });
 
-              auth.googleOsLogin = mkIf config.modules.googleOsLogin.enableAuthentication {
-                control = { success = "done";  perm_denied = "bad";  default = "ignore"; };
-                path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so";
-                order = 10000;
+              auth = mkDefault {
+                googleOsLogin = mkIf config.modules.googleOsLogin.enableAuthentication {
+                  control = { success = "done";  perm_denied = "bad";  default = "ignore"; };
+                  path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so";
+                  order = 10000;
+                };
               };
             };
           })

@@ -40,22 +40,28 @@ in
             };
 
             config = mkIf config.modules.pam_mount.enable {
-              auth.pam_mount = {
-                control = "optional";
-                path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
-                order = 23000;
+              auth = mkDefault {
+                pam_mount = {
+                  control = "optional";
+                  path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
+                  order = 23000;
+                };
               };
 
-              password.pam_mount = {
-                control = "optional";
-                path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
-                order = 3000;
+              password = mkDefault {
+                pam_mount = {
+                  control = "optional";
+                  path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
+                  order = 3000;
+                };
               };
 
-              session.pam_mount = {
-                control = "optional";
-                path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
-                order = 6000;
+              session = mkDefault {
+                pam_mount = {
+                  control = "optional";
+                  path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
+                  order = 6000;
+                };
               };
             };
           })

@@ -29,10 +29,12 @@ in
             };
 
             config = mkIf config.modules.duoSecurity.enable {
-              auth.duoSecurity = {
-                control = "required";
-                path = "${pkgs.duo-unix}/lib/security/pam_duo.so";
-                order = 28000;
+              auth = mkDefault {
+                duoSecurity = {
+                  control = "required";
+                  path = "${pkgs.duo-unix}/lib/security/pam_duo.so";
+                  order = 28000;
+                };
               };
             };
           })

@@ -54,18 +54,22 @@ in
             };
 
             config = mkIf config.modules.gnupg.enable {
-              auth.gnupg = {
-                control = "optional";
-                path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
-                args = optional config.modules.gnupg.storeOnly "store-only";
-                order = 26000;
+              auth = mkDefault {
+                gnupg = {
+                  control = "optional";
+                  path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
+                  args = optional config.modules.gnupg.storeOnly "store-only";
+                  order = 26000;
+                };
               };
 
-              session.gnupg = {
-                control = "optional";
-                path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
-                args = optional config.modules.gnupg.noAutostart "no-autostart";
-                order = 18000;
+              session = mkDefault {
+                gnupg = {
+                  control = "optional";
+                  path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
+                  args = optional config.modules.gnupg.noAutostart "no-autostart";
+                  order = 18000;
+                };
               };
             };
           })

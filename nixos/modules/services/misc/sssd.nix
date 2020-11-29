@@ -68,30 +68,38 @@ in {
               };
 
               config = mkIf (cfg.enable && config.modules.sssd.enable) {
-                account.sssd = {
-                  control = if cfg.enableStrictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
-                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                  order = 3000;
+                account = mkDefault {
+                  sssd = {
+                    control = if cfg.enableStrictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
+                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                    order = 3000;
+                  };
                 };
 
-                auth.sssd = {
-                  control = "sufficient";
-                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                  args = [ "use_first_pass" ];
-                  order = 33000;
+                auth = mkDefault {
+                  sssd = {
+                    control = "sufficient";
+                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                    args = [ "use_first_pass" ];
+                    order = 33000;
+                  };
                 };
 
-                password.sssd = {
-                  control = "sufficient";
-                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                  args = [ "use_authtok" ];
-                  order = 5000;
+                password = mkDefault {
+                  sssd = {
+                    control = "sufficient";
+                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                    args = [ "use_authtok" ];
+                    order = 5000;
+                  };
                 };
 
-                session.sssd = {
-                  control = "optional";
-                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                  order = 8000;
+                session = mkDefault {
+                  sssd = {
+                    control = "optional";
+                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                    order = 8000;
+                  };
                 };
               };
             })

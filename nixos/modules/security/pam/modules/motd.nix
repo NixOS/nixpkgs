@@ -32,11 +32,13 @@ in
             };
 
             config = mkIf (config.modules.motd.enable && topCfg.users.motd != null) {
-              session.motd = {
-                control = "optional";
-                path = "${pkgs.pam}/lib/security/pam_motd.so";
-                args = [ "motd=${config.motdFile}" ];
-                order = 14000;
+              session = mkDefault {
+                motd = {
+                  control = "optional";
+                  path = "${pkgs.pam}/lib/security/pam_motd.so";
+                  args = [ "motd=${config.motdFile}" ];
+                  order = 14000;
+                };
               };
             };
           })

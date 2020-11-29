@@ -53,7 +53,7 @@ in
             };
 
             config = mkIf config.modules.p11.enable {
-              auth = {
+              auth = mkDefault {
                 p11 = {
                   inherit (configmodules.p11) control;
                   path = "${pkgs.pam_p11}/lib/security/pam_p11.so";

@@ -238,29 +238,37 @@ in
               };
 
               config = mkIf (cfg.enable && config.modules.ldap.enable) {
-                account.ldap = {
-                  control = "sufficient";
-                  path = "${pam_ldap}/lib/security/pam_ldap.so";
-                  order = 2000;
+                account = mkDefault {
+                  ldap = {
+                    control = "sufficient";
+                    path = "${pam_ldap}/lib/security/pam_ldap.so";
+                    order = 2000;
+                  };
                 };
 
-                auth.ldap = {
-                  control = "sufficient";
-                  path = "${pam_ldap}/lib/security/pam_ldap.so";
-                  args = [ "use_first_pass" ];
-                  order = 32000;
+                auth = mkDefault {
+                  ldap = {
+                    control = "sufficient";
+                    path = "${pam_ldap}/lib/security/pam_ldap.so";
+                    args = [ "use_first_pass" ];
+                    order = 32000;
+                  };
                 };
 
-                password.ldap = {
-                  control = "sufficient";
-                  path = "${pam_ldap}/lib/security/pam_ldap.so";
-                  order = 4000;
+                password = mkDefault {
+                  ldap = {
+                    control = "sufficient";
+                    path = "${pam_ldap}/lib/security/pam_ldap.so";
+                    order = 4000;
+                  };
                 };
 
-                session.ldap = {
-                  control = "optional";
-                  path = "${pam_ldap}/lib/security/pam_ldap.so";
-                  order = 7000;
+                session = mkDefault {
+                  ldap = {
+                    control = "optional";
+                    path = "${pam_ldap}/lib/security/pam_ldap.so";
+                    order = 7000;
+                  };
                 };
               };
             })
@@ -276,7 +284,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = optional pamAnyEnable pam_ldap;
+    #environment.systemPackages = optional pamAnyEnable pam_ldap;
 
     environment.etc = optionalAttrs (!cfg.daemon.enable) {
       "ldap.conf" = ldapConfig;
@@ -350,6 +358,6 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "users" "ldap" "bind" "password" ] [ "users" "ldap" "bind" "passwordFile" ])
-    (mkRenamedOptionModule [ "users" "ldap" "loginPam" ] [ "security" "pam" "modules" "ldap" "enable" ])
+    #(mkRenamedOptionModule [ "users" "ldap" "loginPam" ] [ "security" "pam" "modules" "ldap" "enable" ])
   ];
 }

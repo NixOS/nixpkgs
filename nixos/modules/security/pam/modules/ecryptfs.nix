@@ -35,17 +35,23 @@ in
             };
 
             config = mkIf config.modules.ecryptfs.enable {
-              auth.ecryptfs = commonEntryConfig // {
-                args = [ "unwrap" ];
-                order = 22000;
+              auth = mkDefault {
+                ecryptfs = commonEntryConfig // {
+                  args = [ "unwrap" ];
+                  order = 22000;
+                };
               };
 
-              password.ecryptfs = commonEntryConfig // {
-                order = 2000;
+              password = mkDefault {
+                ecryptfs = commonEntryConfig // {
+                  order = 2000;
+                };
               };
 
-              session.ecryptfs = commonEntryConfig // {
-                order = 5000;
+              session = mkDefault {
+                ecryptfs = commonEntryConfig // {
+                  order = 5000;
+                };
               };
             };
           })

@@ -55,13 +55,14 @@ let
   # prompts the user for password so we run it once with 'required' at an
   # earlier point and it will run again with 'sufficient' further down.
   # We use try_first_pass the second time to avoid prompting password twice
-  needRequired = moduleCfg: moduleCfg.ecryptfs.enable
+  /*needRequired = moduleCfg: moduleCfg.ecryptfs.enable
                          || moduleCfg.mount.enable
                          || moduleCfg.kwallet.enable
                          || moduleCfg.gnomeKeyring.enable
                          || moduleCfg.googleAuthenticator.enable
                          || moduleCfg.gnupg.enable
-                         || moduleCfg.duoSecurity.enable;
+                         || moduleCfg.duoSecurity.enable;*/
+  needRequired = _: false;
 in
 {
   options = {
@@ -74,14 +75,16 @@ in
             };
 
             config = {
-              account.unix = {
-                control = "required";
-                path = "pam_unix.so";
-                args = optional config.modules.unix.debug "debug";
-                order = 1000;
+              account = mkDefault {
+                unix = {
+                  control = "required";
+                  path = "pam_unix.so";
+                  args = optional config.modules.unix.debug "debug";
+                  order = 1000;
+                };
               };
 
-              auth = mkIf config.modules.unix.enableAuth {
+              auth = mkIf config.modules.unix.enableAuth (mkDefault {
                 unixRequired = mkIf (needRequired config.modules) {
                   control = "required";
                   path = "pam_unix.so";
@@ -105,24 +108,28 @@ in
                   ];
                   order = 30000;
                 };
+              });
+
+              password = mkDefault {
+                unix = {
+                  control = "sufficient";
+                  path = "pam_unix.so";
+                  args = flatten [
+                    "nullok"
+                    "sha512"
+                    (optional config.modules.unix.debug "debug")
+                  ];
+                  order = 1000;
+                };
               };
 
-              password.unix = {
-                control = "sufficient";
-                path = "pam_unix.so";
-                args = flatten [
-                  "nullok"
-                  "sha512"
-                  (optional config.modules.unix.debug "debug")
-                ];
-                order = 1000;
-              };
-
-              session.unix = {
-                control = "required";
-                path = "pam_unix.so";
-                order = 1000;
-                args = optional config.modules.unix.debug "debug";
+              session = mkDefault {
+                unix = {
+                  control = "required";
+                  path = "pam_unix.so";
+                  args = optional config.modules.unix.debug "debug";
+                  order = 1000;
+                };
               };
             };
           })

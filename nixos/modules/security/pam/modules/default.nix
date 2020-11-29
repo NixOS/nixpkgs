@@ -98,7 +98,7 @@ in
             config = {
               modules.setLoginUid = mkDefault config.modules.startSession;
 
-              auth = {
+              auth = mkDefault {
                 deny = {
                   control = "required";
                   path = "pam_deny.so";
@@ -125,7 +125,7 @@ in
                 };
               };
 
-              session = {
+              session = mkDefault {
                 forwardXAuth = mkIf config.modules.forwardXAuth {
                   control = "optional";
                   path = "pam_xauth.so";
@@ -175,26 +175,26 @@ in
   };
 
   imports = [
-    ./app-armor.nix
-    ./duo-security.nix
-    ./ecryptfs.nix
-    ./fprintd.nix
-    ./gnome-keyring.nix
-    ./gnupg.nix
-    ./google-authenticator.nix
-    ./google-os-login.nix
-    ./kwallet.nix
-    ./limits.nix
-    ./make-home-dir.nix
-    ./motd.nix
-    ./oath.nix
-    ./otpw.nix
-    ./p11.nix
-    ./pam_mount.nix
-    ./ssh-agent.nix
+   ./app-armor.nix
+   ./duo-security.nix
+   ./ecryptfs.nix
+   ./fprintd.nix
+   ./gnome-keyring.nix
+   ./gnupg.nix
+   ./google-authenticator.nix
+   ./google-os-login.nix
+   ./kwallet.nix
+   ./limits.nix
+   ./make-home-dir.nix
+   ./motd.nix
+   ./oath.nix
+   ./otpw.nix
+   ./p11.nix
+   ./pam_mount.nix
+   ./ssh-agent.nix
     ./u2f.nix
     ./unix.nix
-    ./usb.nix
-    ./yubico.nix
+   ./usb.nix
+   ./yubico.nix
   ];
 }

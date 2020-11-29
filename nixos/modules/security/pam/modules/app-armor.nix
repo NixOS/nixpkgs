@@ -30,7 +30,7 @@ in
             };
 
             config = mkIf (config.modules.appArmor.enable && topCfg.security.apparmor.enable) {
-              session = {
+              session = mkDefault {
                 appArmor = {
                   control = "optional";
                   path = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so";

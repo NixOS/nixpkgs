@@ -31,10 +31,12 @@ in
             };
 
             config = mkIf config.modules.usb.enable {
-              auth.usb = {
-                control = "sufficient";
-                path = "${pkgs.pam_usb}/lib/security/pam_usb.so";
-                order = 18000;
+              auth = mkDefault {
+                usb = {
+                  control = "sufficient";
+                  path = "${pkgs.pam_usb}/lib/security/pam_usb.so";
+                  order = 18000;
+                };
               };
             };
           })

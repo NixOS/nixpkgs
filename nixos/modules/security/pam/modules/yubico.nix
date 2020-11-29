@@ -77,14 +77,16 @@ in
             };
 
             config = mkIf config.modules.yubico.enable {
-              auth.yubico = {
-                inherit (config.modules.yubico) control;
-                path = "${pkgs.yubico-pam}/lib/security/pam_yubico.so";
-                args = flatten [
-                  "mode=${toString config.modules.yubico.mode}"
-                  (optional (config.modules.yubico.mode == "client") "id=${toString config.modules.yubico.id}")
-                  (optional config.modules.yubico.debug "debug")
-                ];
+              auth = mkDefault {
+                yubico = {
+                  inherit (config.modules.yubico) control;
+                  path = "${pkgs.yubico-pam}/lib/security/pam_yubico.so";
+                  args = flatten [
+                    "mode=${toString config.modules.yubico.mode}"
+                    (optional (config.modules.yubico.mode == "client") "id=${toString config.modules.yubico.id}")
+                    (optional config.modules.yubico.debug "debug")
+                  ];
+                };
               };
             };
           })

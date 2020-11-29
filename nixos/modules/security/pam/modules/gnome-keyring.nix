@@ -31,24 +31,30 @@ in
             };
 
             config = mkIf config.modules.gnomeKeyring.enable {
-              auth.gnomeKeyring = {
-                control = "optional";
-                path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
-                order = 25000;
+              auth = mkDefault {
+                gnomeKeyring = {
+                  control = "optional";
+                  path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                  order = 25000;
+                };
               };
 
-              password.gnomeKeyring = {
-                control = "optional";
-                path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
-                args = [ "use_authtok" ];
-                order = 10000;
+              password = mkDefault {
+                gnomeKeyring = {
+                  control = "optional";
+                  path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                  args = [ "use_authtok" ];
+                  order = 10000;
+                };
               };
 
-              session.gnomeKeyring = {
-                control = "optional";
-                path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
-                args = [ "auto_start" ];
-                order = 17000;
+              session = mkDefault {
+                gnomeKeyring = {
+                  control = "optional";
+                  path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                  args = [ "auto_start" ];
+                  order = 17000;
+                };
               };
             };
           })

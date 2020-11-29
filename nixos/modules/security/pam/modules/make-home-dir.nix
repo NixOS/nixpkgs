@@ -39,15 +39,17 @@ in
             };
 
             config = mkIf config.modules.makeHomeDir.enable {
-              session.makeHomeDir = {
-                control = "required";
-                path = "${pkgs.pam}/lib/security/pam_mkhomedir.so";
-                args = [
-                  "silent"
-                  "skel=${config.modules.makeHomeDir.skelDirectory}"
-                  "umask=0022"
-                ];
-                order = 3000;
+              session = mkDefault {
+                makeHomeDir = {
+                  control = "required";
+                  path = "${pkgs.pam}/lib/security/pam_mkhomedir.so";
+                  args = [
+                    "silent"
+                    "skel=${config.modules.makeHomeDir.skelDirectory}"
+                    "umask=0022"
+                  ];
+                  order = 3000;
+                };
               };
             };
           })

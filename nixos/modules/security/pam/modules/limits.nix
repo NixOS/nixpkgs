@@ -61,7 +61,7 @@ let
 
   moduleOption = mkOption {
     type = with types; attrsOf (submodule limitSubmodule);
-    default = [];
+    default = {};
     description = ''
       Define resource limits that should apply to users or groups.
       Each item in the list should be an attribute set with a
@@ -94,13 +94,15 @@ in
             config = {
               modules.limits = mkDefault cfg;
 
-              session.limits = mkIf (config.modules.limits != []) {
-                control = "required";
-                path = "${pkgs.pam}/lib/security/pam_limits.so";
-                args = [
-                  "conf=${makeLimitsConf config.modules.limits}"
-                ];
-                order = 13000;
+              session = mkDefault {
+                limits = mkIf (config.modules.limits != []) {
+                  control = "required";
+                  path = "${pkgs.pam}/lib/security/pam_limits.so";
+                  args = [
+                    "conf=${makeLimitsConf config.modules.limits}"
+                  ];
+                  order = 13000;
+                };
               };
             };
           })

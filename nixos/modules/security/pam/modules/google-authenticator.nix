@@ -29,11 +29,13 @@ in
             };
 
             config = mkIf config.modules.googleAuthenticator.enable {
-              auth.googleAuthenticator = {
-                control = "required";
-                path = "${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so";
-                args = [ "no_increment_hotp" ];
-                order = 27000;
+              auth = mkDefault {
+                googleAuthenticator = {
+                  control = "required";
+                  path = "${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so";
+                  args = [ "no_increment_hotp" ];
+                  order = 27000;
+                };
               };
             };
           })

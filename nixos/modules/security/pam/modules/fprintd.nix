@@ -30,7 +30,7 @@ in
             };
 
             config = mkIf config.modules.fprintd.enable {
-              auth = {
+              auth = mkDefault {
                 fprintd = {
                   control = "sufficient";
                   path = "${pkgs.fprintd}/lib/security/pam_fprintd.so";

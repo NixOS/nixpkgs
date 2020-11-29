@@ -58,15 +58,17 @@ in
             };
 
             config = mkIf config.modules.oath.enable {
-              auth.oath = {
-                control = "requisite";
-                path = "${pkgs.oathToolkit}/lib/security/pam_oath.so";
-                args = [
-                  "window=${toString config.modules.oath.window}"
-                  "usersfile=${toString config.modules.oath.usersFile}"
-                  "digits=${toString config.modules.oath.digits}"
-                ];
-                order = 19000;
+              auth = mkDefault {
+                oath = {
+                  control = "requisite";
+                  path = "${pkgs.oathToolkit}/lib/security/pam_oath.so";
+                  args = [
+                    "window=${toString config.modules.oath.window}"
+                    "usersfile=${toString config.modules.oath.usersFile}"
+                    "digits=${toString config.modules.oath.digits}"
+                  ];
+                  order = 19000;
+                };
               };
             };
           })

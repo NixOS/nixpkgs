@@ -31,16 +31,20 @@ in
             };
 
             config = mkIf config.modules.otpw.enable {
-              auth.otpw = {
-                control = "sufficient";
-                path = "${pkgs.otpw}/lib/security/pam_otpw.so";
-                order = 31000;
+              auth = mkDefault {
+                otpw = {
+                  control = "sufficient";
+                  path = "${pkgs.otpw}/lib/security/pam_otpw.so";
+                  order = 31000;
+                };
               };
 
-              session.otpw = {
-                control = "optional";
-                path = "${pkgs.otpw}/lib/security/pam_otpw.so";
-                order = 10000;
+              session = mkDefault {
+                otpw = {
+                  control = "optional";
+                  path = "${pkgs.otpw}/lib/security/pam_otpw.so";
+                  order = 10000;
+                };
               };
             };
           })
