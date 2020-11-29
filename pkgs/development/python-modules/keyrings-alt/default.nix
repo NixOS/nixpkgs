@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools_scm
+, pytest, backports_unittest-mock, keyring, setuptools_scm, toml
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
       --replace "--flake8" ""
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm toml ];
   propagatedBuildInputs = [ six ];
 
   checkInputs = [ pytest keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
