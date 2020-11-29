@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "bsddb3";
-  version = "6.2.7";
+  version = "6.2.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17yw0by4lycwpvnx06cnzbbchz4zvzbx3j89b20xa314xdizmxxh";
+    sha256 = "70d05ec8dc568f42e70fc919a442e0daadc2a905a1cfb7ca77f549d49d6e7801";
   };
 
   buildInputs = [ pkgs.db ];
