@@ -100,6 +100,9 @@ mapAliases ({
   cv = progress; # added 2015-09-06
   d1x_rebirth = dxx-rebirth; # added 2018-04-25
   d2x_rebirth = dxx-rebirth; # added 2018-04-25
+  dart_old = throw "dart_old has been removed. Please use dart-stable, dart-beta, or dart-dev."; # added 2020-11-28
+  dart_stable = dart-stable; # added 2020-11-28
+  dart_dev = dart-dev; # added 2020-11-28
   dat = nodePackages.dat;
   dbvisualizer = throw "dbvisualizer has been removed from nixpkgs, as it's unmaintained"; # added 2020-09-20
   dbus_daemon = dbus.daemon; # added 2018-04-25
