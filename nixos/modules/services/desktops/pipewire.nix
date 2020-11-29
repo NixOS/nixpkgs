@@ -79,6 +79,7 @@ in {
     services.udev.packages = [ pkgs.pipewire ];
 
     # If any paths are updated here they must also be updated in the package test.
+    sound.enable = mkIf cfg.alsa.enable true;
     sound.extraConfig = mkIf cfg.alsa.enable ''
       pcm_type.pipewire {
         libs.native = ${pkgs.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
