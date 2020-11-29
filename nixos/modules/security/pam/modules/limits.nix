@@ -10,15 +10,51 @@ let
     options = {
       domain = mkOption {
         type = types.str;
+        description = ''
+          domain field of the limit.
+          See
+          <citerefentry>
+          <refentrytitle>limits.conf</refentrytitle>
+          <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
+        '';
       };
       type = mkOption {
         type = types.str;
+        description = ''
+          type field of the limit.
+          See
+          <citerefentry>
+          <refentrytitle>limits.conf</refentrytitle>
+          <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
+        '';
       };
       item = mkOption {
         type = types.str;
+        description = ''
+          item field of the limit.
+          See
+          <citerefentry>
+          <refentrytitle>limits.conf</refentrytitle>
+          <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
+        '';
       };
       value = mkOption {
         type = with types; oneOf [ str int ];
+        description = ''
+          value field of the limit.
+          See
+          <citerefentry>
+          <refentrytitle>limits.conf</refentrytitle>
+          <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
+        '';
       };
     };
   };

@@ -14,6 +14,10 @@ let
       entryType = mkOption {
         type = types.enum [ "account" "auth" "password" "session" ];
         default = entryType;
+        internal = true;
+        description = ''
+          The PAM type for this module. This should not be set manually.
+        '';
       };
 
       control = mkOption {
