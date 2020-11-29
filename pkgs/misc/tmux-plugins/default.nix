@@ -377,6 +377,25 @@ in rec {
     };
   };
 
+  tilish = mkDerivation {
+    pluginName = "tilish";
+    version = "2020-08-12";
+    src = fetchFromGitHub {
+      owner = "jabirali";
+      repo = "tmux-tilish";
+      rev = "73d2404cdc0ef6bd7fbc8982edae0b0e2a4dd860";
+      sha256 = "1x58h3bg9d69j40fh8rcjpxvg0i6j04pj8p3jk57l3cghxis5j05";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/jabirali/tmux-tilish";
+      description = "Plugin which makes tmux work and feel like i3wm";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ arnarg ];
+    };
+  };
+
   tmux-colors-solarized = mkDerivation {
     pluginName = "tmuxcolors";
     version = "unstable-2019-07-14";
