@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
     # Change the path of the pipewire-pulse binary in the service definition.
     ./pipewire-pulse-path.patch
+    # Add flag to specify configuration directory (different from the installation directory).
+    ./pipewire-config-dir.patch
   ];
 
   nativeBuildInputs = [
@@ -106,6 +108,7 @@ stdenv.mkDerivation rec {
     "-Dbluez5-backend-native=${mesonBool nativeHspSupport}"
     "-Dbluez5-backend-ofono=${mesonBool ofonoSupport}"
     "-Dbluez5-backend-hsphfpd=${mesonBool hsphfpdSupport}"
+    "-Dpipewire_config_dir=/etc/pipewire"
   ];
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
