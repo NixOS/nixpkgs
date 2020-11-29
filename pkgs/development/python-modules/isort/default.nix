@@ -7,11 +7,11 @@ let
   testOpts = lib.concatMapStringsSep " " (t: "--deselect test_isort.py::${t}") skipTests;
 in buildPythonPackage rec {
   pname = "isort";
-  version = "4.3.21"; # Note 4.x is the last version that supports Python2
+  version = "5.6.4"; # Note 4.x is the last version that supports Python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1";
+    sha256 = "dcaeec1b5f0eca77faea2a35ab790b4f3680ff75590bfcb7145986905aab2f58";
   };
 
   propagatedBuildInputs = [
