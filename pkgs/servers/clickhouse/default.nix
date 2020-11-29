@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+    "-DUSE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
 
   postInstall = ''
