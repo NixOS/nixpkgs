@@ -12277,6 +12277,22 @@ let
     };
   };
 
+  MathProvablePrime = buildPerlPackage {
+    pname = "Math-ProvablePrime";
+    version = "0.045";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Math-ProvablePrime-0.045.tar.gz";
+      sha256 = "32dce42861ce065a875a91ec14c6557e89af07df10cc450d1c4ded13dcbe3dd5";
+    };
+    buildInputs = [ FileWhich TestClass TestDeep TestException TestNoWarnings ];
+    propagatedBuildInputs = [ BytesRandomSecureTiny ];
+    meta = {
+      description = "Generate a provable prime number, in pure Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MathRandom = buildPerlPackage {
     pname = "Math-Random";
     version = "0.72";
