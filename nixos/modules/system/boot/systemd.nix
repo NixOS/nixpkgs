@@ -1137,7 +1137,7 @@ in
 
     # Provide the systemd-user PAM service, required to run systemd
     # user instances.
-    security.pam.services.systemd-user =
+    security.pam.services.systemd-user.modules =
       { # Ensure that pam_systemd gets included. This is special-cased
         # in systemd to provide XDG_RUNTIME_DIR.
         startSession = true;

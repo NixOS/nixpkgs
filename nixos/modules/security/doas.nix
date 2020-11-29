@@ -238,9 +238,9 @@ in
       doas
     ];
 
-    security.pam.services.doas = {
-      allowNullPassword = true;
-      sshAgentAuth = true;
+    security.pam.services.doas.modules = {
+      unix.allowNullPassword = true;
+      sshAgent.enable = true;
     };
 
     environment.etc."doas.conf" = {

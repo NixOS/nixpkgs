@@ -142,7 +142,7 @@ in
 
     };
 
-    security.pam.services.netatalk.unixAuth = true;
+    security.pam.services.netatalk.modules.unix.enableAuth = true;
 
   };
 

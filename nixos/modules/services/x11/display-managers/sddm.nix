@@ -212,8 +212,8 @@ in
     };
 
     security.pam.services = {
-      sddm = {
-        allowNullPassword = true;
+      sddm.modules = {
+        unix.allowNullPassword = true;
         startSession = true;
       };
 

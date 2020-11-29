@@ -38,7 +38,69 @@ in {
           For this to work, the <literal>ssh</literal> SSS service must be enabled in the sssd configuration.
         '';
       };
+
+      enableStrictAccess = mkOption {
+        default = false;
+        type = types.bool;
+        description = "enforce sssd access control";
+      };
     };
+
+    security.pam =
+      let
+        pamModuleCfg = config.security.pam.modules.ldap;
+        moduleOptions = global: {
+          enable = mkOption {
+            type = types.bool;
+            default = if global then true else pamModuleCfg.enable;
+            description = ''
+              Whether to include authentication against SSSD in PAM
+            '';
+          };
+        };
+      in
+      {
+        services = mkOption {
+          type = with types; attrsOf (submodule
+            ({ config, ... }: {
+              options = {
+                modules.sssd = moduleOptions false;
+              };
+
+              config = mkIf (cfg.enable && config.modules.sssd.enable) {
+                account.sssd = {
+                  control = if cfg.enableStrictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
+                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                  order = 3000;
+                };
+
+                auth.sssd = {
+                  control = "sufficient";
+                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                  args = [ "use_first_pass" ];
+                  order = 33000;
+                };
+
+                password.sssd = {
+                  control = "sufficient";
+                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                  args = [ "use_authtok" ];
+                  order = 5000;
+                };
+
+                session.sssd = {
+                  control = "optional";
+                  path = "${pkgs.sssd}/lib/security/pam_sss.so";
+                  order = 8000;
+                };
+              };
+            })
+          );
+        };
+
+        modules.sssd = moduleOptions true;
+      };
+
   };
   config = mkMerge [
     (mkIf cfg.enable {
@@ -63,6 +125,8 @@ in {
           PIDFile = "/run/sssd.pid";
         };
       };
+
+      environment.systemPackages = [ pkgs.sssd ];
 
       environment.etc."sssd/sssd.conf" = {
         text = cfg.config;

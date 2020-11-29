@@ -33,10 +33,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    security.pam.services.sshd = {
-      makeHomeDir = true;
-      googleOsLoginAccountVerification = true;
-      # disabled for now: googleOsLoginAuthentication = true;
+    security.pam.services.sshd.modules = {
+      makeHomeDir.enable = true;
+      googleOsLogin.enableAccountVerification = true;
+      # disabled for now: googleOs.enableAuthentication = true;
     };
 
     security.sudo.extraConfig = ''

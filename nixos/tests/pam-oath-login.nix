@@ -24,7 +24,7 @@ in
   machine =
     { ... }:
     {
-      security.pam.oath = {
+      security.pam.modules.oath = {
         enable = true;
       };
 

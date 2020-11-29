@@ -49,6 +49,11 @@ let
       --set NIX_REDIRECTS "/etc/nslcd.conf=/run/nslcd/nslcd.conf"
   '';
 
+  pamCfg = config.security.pam;
+  pamModuleCfg = pamCfg.modules.ldap;
+  pamAnyEnable = any (attrByPath [ "modules" "ldap" "enable" ] false) (attrValues pamCfg.services);
+  pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
+
 in
 
 {
@@ -63,12 +68,6 @@ in
         type = types.bool;
         default = false;
         description = "Whether to enable authentication against an LDAP server.";
-      };
-
-      loginPam = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Whether to include authentication against LDAP in login PAM";
       };
 
       nsswitch = mkOption {
@@ -218,11 +217,66 @@ in
 
     };
 
+    security.pam =
+      let
+        moduleOptions = global: {
+          enable = mkOption {
+            type = types.bool;
+            default = if global then true else pamModuleCfg.enable;
+            description = ''
+              Whether to include authentication against LDAP in login PAM
+            '';
+          };
+        };
+      in
+      {
+        services = mkOption {
+          type = with types; attrsOf (submodule
+            ({ config, ... }: {
+              options = {
+                modules.ldap = moduleOptions false;
+              };
+
+              config = mkIf (cfg.enable && config.modules.ldap.enable) {
+                account.ldap = {
+                  control = "sufficient";
+                  path = "${pam_ldap}/lib/security/pam_ldap.so";
+                  order = 2000;
+                };
+
+                auth.ldap = {
+                  control = "sufficient";
+                  path = "${pam_ldap}/lib/security/pam_ldap.so";
+                  args = [ "use_first_pass" ];
+                  order = 32000;
+                };
+
+                password.ldap = {
+                  control = "sufficient";
+                  path = "${pam_ldap}/lib/security/pam_ldap.so";
+                  order = 4000;
+                };
+
+                session.ldap = {
+                  control = "optional";
+                  path = "${pam_ldap}/lib/security/pam_ldap.so";
+                  order = 7000;
+                };
+              };
+            })
+          );
+        };
+
+        modules.ldap = moduleOptions true;
+      };
+
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    environment.systemPackages = optional pamAnyEnable pam_ldap;
 
     environment.etc = optionalAttrs (!cfg.daemon.enable) {
       "ldap.conf" = ldapConfig;
@@ -294,7 +348,8 @@ in
 
   };
 
-  imports =
-    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
-    ];
+  imports = [
+    (mkRenamedOptionModule [ "users" "ldap" "bind" "password" ] [ "users" "ldap" "bind" "passwordFile" ])
+    (mkRenamedOptionModule [ "users" "ldap" "loginPam" ] [ "security" "pam" "modules" "ldap" "enable" ])
+  ];
 }

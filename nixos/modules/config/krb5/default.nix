@@ -72,6 +72,10 @@ let
             (mapAttrsToList mkRelation value)
         else value));
 
+  pamCfg = config.security.pam;
+  pamModuleCfg = pamCfg.modules.krb5;
+  pamAnyEnable = any (attrByPath [ "modules" "krb5" "enable" ] false) (attrValues pamCfg.services);
+
 in {
 
   ###### interface
@@ -286,13 +290,83 @@ in {
         '';
       };
     };
+
+    security.pam =
+      let
+        moduleOptions = global: {
+          enable = mkOption {
+            type = types.bool;
+            default = if global then true else pamModuleCfg.enable;
+            description = ''
+              Whether to include authentication against krb5 in login PAM
+            '';
+          };
+        };
+      in
+      {
+        services = mkOption {
+          type = with types; attrsOf (submodule
+            ({ config, ... }: {
+              options = {
+                modules.krb5 = moduleOptions false;
+              };
+
+              config = mkIf (cfg.enable && config.modules.krb5.enable) {
+                account.krb5 = {
+                  control = "sufficient";
+                  path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+                  order = 4000;
+                };
+
+                auth = {
+                  krb5 = {
+                    control = { default = "ignore"; success = 1; service_err = "reset"; };
+                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+                    args = [ "use_first_pass" ];
+                    order = 34000;
+                  };
+                  ccredsValidate = {
+                    control = { default = "die"; success = "done"; };
+                    path = "${pkgs.pam_ccreds}/lib/security/pam_ccreds.so";
+                    args = [ "action=validate" "use_first_pass" ];
+                    order = 34250;
+                  };
+                  ccredsStore = {
+                    control = "sufficient";
+                    path = "${pkgs.pam_ccreds}/lib/security/pam_ccreds.so";
+                    args = [ "action=store" "use_first_pass" ];
+                    order = 34750;
+                  };
+                };
+
+                password.krb5 = {
+                  control = "sufficient";
+                  path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+                  args = [ "use_first_pass" ];
+                  order = 6000;
+                };
+
+                session.krb5 = {
+                  control = "optional";
+                  path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+                  order = 9000;
+                };
+              };
+            })
+          );
+        };
+
+        modules.krb5 = moduleOptions true;
+      };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ cfg.kerberos ];
+    environment.systemPackages = [
+      cfg.kerberos
+    ] ++ (optionals pamAnyEnable [ pkgs.pam_krb5 pkgs.pam_ccreds ]);
 
     environment.etc."krb5.conf".text = if isString cfg.config
       then cfg.config

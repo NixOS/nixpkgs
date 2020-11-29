@@ -41,7 +41,7 @@ with lib;
 
     xdg.portal.extraPortals = [ pkgs.gnome3.gnome-keyring ];
 
-    security.pam.services.login.enableGnomeKeyring = true;
+    security.pam.services.login.modules.gnomeKeyring.enable = true;
 
     security.wrappers.gnome-keyring-daemon = {
       source = "${pkgs.gnome3.gnome-keyring}/bin/gnome-keyring-daemon";

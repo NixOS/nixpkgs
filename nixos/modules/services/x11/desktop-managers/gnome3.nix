@@ -249,7 +249,7 @@ in
             } ++ cfg.flashback.customSessions);
 
       security.pam.services.gnome-flashback = {
-        enableGnomeKeyring = true;
+        modules.gnomeKeyring.enable = true;
       };
 
       systemd.packages = with pkgs.gnome3; [

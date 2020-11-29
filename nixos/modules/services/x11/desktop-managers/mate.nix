@@ -103,7 +103,7 @@ in
     services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
-    security.pam.services.mate-screensaver.unixAuth = true;
+    security.pam.services.mate-screensaver.modules.unix.enableAuth = true;
 
     environment.pathsToLink = [ "/share" ];
   };

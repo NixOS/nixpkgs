@@ -219,9 +219,9 @@ in {
       permissions = "u+rx,g+rx,o-rx";
     };
 
-    security.pam.loginLimits = [
-      { domain = "netdata"; type = "soft"; item = "nofile"; value = "10000"; }
-      { domain = "netdata"; type = "hard"; item = "nofile"; value = "30000"; }
+    security.pam.modules.limits = [
+      { domain = "netdata"; type = "soft"; item = "nofile"; value = 10000; }
+      { domain = "netdata"; type = "hard"; item = "nofile"; value = 30000; }
     ];
 
     users.users = optionalAttrs (cfg.user == defaultUser) {
