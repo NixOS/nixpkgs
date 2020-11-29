@@ -3,7 +3,11 @@
 with lib;
 
 let
-  cfg = config.services.codimd;
+  cfg = config.services.hedgedoc;
+
+  name = if versionAtLeast config.system.stateVersion "21.03"
+    then "hedgedoc"
+    else "codimd";
 
   prettyJSON = conf:
     pkgs.runCommand "codimd-config.json" { preferLocalBuild = true; } ''
@@ -12,22 +16,26 @@ let
     '';
 in
 {
-  options.services.codimd = {
-    enable = mkEnableOption "the CodiMD Markdown Editor";
+  imports = [
+    (mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
+  ];
+
+  options.services.hedgedoc = {
+    enable = mkEnableOption "the HedgeDoc Markdown Editor";
 
     groups = mkOption {
       type = types.listOf types.str;
       default = [];
       description = ''
-        Groups to which the codimd user should be added.
+        Groups to which the user ${name} should be added.
       '';
     };
 
     workDir = mkOption {
       type = types.path;
-      default = "/var/lib/codimd";
+      default = "/var/lib/${name}";
       description = ''
-        Working directory for the CodiMD service.
+        Working directory for the HedgeDoc service.
       '';
     };
 
@@ -36,17 +44,17 @@ in
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "codimd.org";
+        example = "hedgedoc.org";
         description = ''
-          Domain name for the CodiMD instance.
+          Domain name for the HedgeDoc instance.
         '';
       };
       urlPath = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/url/path/to/codimd";
+        example = "/url/path/to/hedgedoc";
         description = ''
-          Path under which CodiMD is accessible.
+          Path under which HedgeDoc is accessible.
         '';
       };
       host = mkOption {
@@ -67,7 +75,7 @@ in
       path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/run/codimd.sock";
+        example = "/run/hedgedoc.sock";
         description = ''
           Specify where a UNIX domain socket should be placed.
         '';
@@ -75,7 +83,7 @@ in
       allowOrigin = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "localhost" "codimd.org" ];
+        example = [ "localhost" "hedgedoc.org" ];
         description = ''
           List of domains to whitelist.
         '';
@@ -199,7 +207,7 @@ in
         '';
         description = ''
           Specify which database to use.
-          CodiMD supports mysql, postgres, sqlite and mssql.
+          HedgeDoc supports mysql, postgres, sqlite and mssql.
           See <link xlink:href="https://sequelize.readthedocs.io/en/v3/">
           https://sequelize.readthedocs.io/en/v3/</link> for more information.
           Note: This option overrides <option>db</option>.
@@ -211,12 +219,12 @@ in
         example = literalExample ''
           {
             dialect = "sqlite";
-            storage = "/var/lib/codimd/db.codimd.sqlite";
+            storage = "/var/lib/${name}/db.${name}.sqlite";
           }
         '';
         description = ''
           Specify the configuration for sequelize.
-          CodiMD supports mysql, postgres, sqlite and mssql.
+          HedgeDoc supports mysql, postgres, sqlite and mssql.
           See <link xlink:href="https://sequelize.readthedocs.io/en/v3/">
           https://sequelize.readthedocs.io/en/v3/</link> for more information.
           Note: This option overrides <option>db</option>.
@@ -225,7 +233,7 @@ in
       sslKeyPath= mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/codimd/codimd.key";
+        example = "/var/lib/hedgedoc/hedgedoc.key";
         description = ''
           Path to the SSL key. Needed when <option>useSSL</option> is enabled.
         '';
@@ -233,7 +241,7 @@ in
       sslCertPath = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/codimd/codimd.crt";
+        example = "/var/lib/hedgedoc/hedgedoc.crt";
         description = ''
           Path to the SSL cert. Needed when <option>useSSL</option> is enabled.
         '';
@@ -241,7 +249,7 @@ in
       sslCAPath = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "/var/lib/codimd/ca.crt" ];
+        example = [ "/var/lib/hedgedoc/ca.crt" ];
         description = ''
           SSL ca chain. Needed when <option>useSSL</option> is enabled.
         '';
@@ -249,7 +257,7 @@ in
       dhParamPath = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/codimd/dhparam.pem";
+        example = "/var/lib/hedgedoc/dhparam.pem";
         description = ''
           Path to the SSL dh params. Needed when <option>useSSL</option> is enabled.
         '';
@@ -258,10 +266,10 @@ in
         type = types.str;
         default = "/tmp";
         description = ''
-          Path to the temp directory CodiMD should use.
+          Path to the temp directory HedgeDoc should use.
           Note that <option>serviceConfig.PrivateTmp</option> is enabled for
-          the CodiMD systemd service by default.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          the HedgeDoc systemd service by default.
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       defaultNotePath = mkOption {
@@ -269,7 +277,7 @@ in
         default = "./public/default.md";
         description = ''
           Path to the default Note file.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       docsPath = mkOption {
@@ -277,7 +285,7 @@ in
         default = "./public/docs";
         description = ''
           Path to the docs directory.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       indexPath = mkOption {
@@ -285,7 +293,7 @@ in
         default = "./public/views/index.ejs";
         description = ''
           Path to the index template file.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       hackmdPath = mkOption {
@@ -293,7 +301,7 @@ in
         default = "./public/views/hackmd.ejs";
         description = ''
           Path to the hackmd template file.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       errorPath = mkOption {
@@ -302,7 +310,7 @@ in
         defaultText = "./public/views/error.ejs";
         description = ''
           Path to the error template file.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       prettyPath = mkOption {
@@ -311,7 +319,7 @@ in
         defaultText = "./public/views/pretty.ejs";
         description = ''
           Path to the pretty template file.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       slidePath = mkOption {
@@ -320,13 +328,13 @@ in
         defaultText = "./public/views/slide.hbs";
         description = ''
           Path to the slide template file.
-          (Non-canonical paths are relative to CodiMD's base directory)
+          (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
       };
       uploadsPath = mkOption {
         type = types.str;
         default = "${cfg.workDir}/uploads";
-        defaultText = "/var/lib/codimd/uploads";
+        defaultText = "/var/lib/${name}/uploads";
         description = ''
           Path under which uploaded files are saved.
         '';
@@ -764,7 +772,7 @@ in
               type = types.str;
               default = "";
               description = ''
-                LDAP field which is used as the username on CodiMD.
+                LDAP field which is used as the username on HedgeDoc.
                 By default <option>useridField</option> is used.
               '';
             };
@@ -772,7 +780,7 @@ in
               type = types.str;
               example = "uid";
               description = ''
-                LDAP field which is a unique identifier for users on CodiMD.
+                LDAP field which is a unique identifier for users on HedgeDoc.
               '';
             };
             tlsca = mkOption {
@@ -838,7 +846,7 @@ in
             requiredGroups = mkOption {
               type = types.listOf types.str;
               default = [];
-              example = [ "Hackmd-users" "Codimd-users" ];
+              example = [ "Hedgedoc-Users" ];
               description = ''
                 Required group names.
               '';
@@ -884,31 +892,31 @@ in
       { assertion = cfg.configuration.db == {} -> (
           cfg.configuration.dbURL != "" && cfg.configuration.dbURL != null
         );
-        message = "Database configuration for CodiMD missing."; }
+        message = "Database configuration for HedgeDoc missing."; }
     ];
-    users.groups.codimd = {};
-    users.users.codimd = {
-      description = "CodiMD service user";
-      group = "codimd";
+    users.groups.${name} = {};
+    users.users.${name} = {
+      description = "HedgeDoc service user";
+      group = name;
       extraGroups = cfg.groups;
       home = cfg.workDir;
       createHome = true;
       isSystemUser = true;
     };
 
-    systemd.services.codimd = {
-      description = "CodiMD Service";
+    systemd.services.hedgedoc = {
+      description = "HedgeDoc Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
-        ExecStart = "${pkgs.codimd}/bin/codimd";
+        ExecStart = "${pkgs.hedgedoc}/bin/hedgedoc";
         Environment = [
           "CMD_CONFIG_FILE=${prettyJSON cfg.configuration}"
           "NODE_ENV=production"
         ];
         Restart = "always";
-        User = "codimd";
+        User = name;
         PrivateTmp = true;
       };
     };

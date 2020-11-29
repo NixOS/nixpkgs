@@ -57,7 +57,6 @@ in
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
-  codimd = handleTest ./codimd.nix {};
   consul = handleTest ./consul.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
@@ -140,6 +139,7 @@ in
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
+  hedgedoc = handleTest ./hedgedoc.nix {};
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
