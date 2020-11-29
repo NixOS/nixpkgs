@@ -20,7 +20,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ packaging appdirs requests ];
 
+  preCheck = "HOME=$TMPDIR";
   checkInputs = [ pytestCheckHook ];
+  # tries to touch network
   disabledTests = [
     "pooch_custom_url"
     "pooch_download"
@@ -29,6 +31,8 @@ buildPythonPackage rec {
     "pooch_corrupted"
     "check_availability"
     "downloader"
+    "test_retrieve"
+    "test_stream_download"
     "test_fetch"
     "decompress"
     "extractprocessor_fails"
