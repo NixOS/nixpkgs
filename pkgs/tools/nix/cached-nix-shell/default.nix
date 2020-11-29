@@ -28,9 +28,13 @@ in rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ ronn ];
 
-  postBuild = "make -f nix/Makefile post-build";
+  postBuild = ''
+    make -f nix/Makefile post-build
+  '';
 
-  postInstall = "make -f nix/Makefile post-install";
+  postInstall = ''
+    make -f nix/Makefile post-install
+  '';
 
   meta = with stdenv.lib; {
     description = "Instant startup time for nix-shell";
