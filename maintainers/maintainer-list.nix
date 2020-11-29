@@ -7301,6 +7301,12 @@
     githubId = 816465;
     name = "Redvers Davies";
   };
+  reedrw = {
+    email = "reedrw5601@gmail.com";
+    github = "reedrw";
+    githubId = 21069876;
+    name = "Reed Williams";
+  };
   refnil = {
     email = "broemartino@gmail.com";
     github = "refnil";
