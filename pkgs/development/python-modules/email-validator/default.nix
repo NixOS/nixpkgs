@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k, dnspython, idna, ipaddress }:
 
 buildPythonPackage rec {
-  pname = "email_validator";
+  pname = "email-validator";
   version = "1.1.2";
 
   src = fetchPypi {
