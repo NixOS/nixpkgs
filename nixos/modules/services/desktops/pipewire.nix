@@ -15,7 +15,7 @@ let
   # This doesn't work in general because of missing development information.
   jack-libs = pkgs.runCommand "jack-libs" {} ''
     mkdir -p "$out/lib"
-    ln -s "${pkgs.pipewire.jack}/lib" "$out/lib/pipewire"
+    ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
 in {
 
@@ -27,6 +27,16 @@ in {
   options = {
     services.pipewire = {
       enable = mkEnableOption "pipewire service";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.pipewire;
+        defaultText = "pkgs.pipewire";
+        example = literalExample "pkgs.pipewire";
+        description = ''
+          The pipewire derivation to use.
+        '';
+      };
 
       socketActivation = mkOption {
         default = true;
@@ -65,24 +75,24 @@ in {
       }
     ];
 
-    environment.systemPackages = [ pkgs.pipewire ]
+    environment.systemPackages = [ cfg.package ]
                                  ++ lib.optional cfg.jack.enable jack-libs;
 
-    systemd.packages = [ pkgs.pipewire ]
-                       ++ lib.optional cfg.pulse.enable pkgs.pipewire.pulse;
+    systemd.packages = [ cfg.package ]
+                       ++ lib.optional cfg.pulse.enable cfg.package.pulse;
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
     systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
-    services.udev.packages = [ pkgs.pipewire ];
+    services.udev.packages = [ cfg.package ];
 
     # If any paths are updated here they must also be updated in the package test.
     sound.enable = mkIf cfg.alsa.enable true;
     sound.extraConfig = mkIf cfg.alsa.enable ''
       pcm_type.pipewire {
-        libs.native = ${pkgs.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
+        libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
         ${optionalString enable32BitAlsaPlugins
           "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
       }
@@ -95,7 +105,7 @@ in {
       }
     '';
     environment.etc."alsa/conf.d/50-pipewire.conf" = mkIf cfg.alsa.enable {
-      source = "${pkgs.pipewire}/share/alsa/alsa.conf.d/50-pipewire.conf";
+      source = "${cfg.package}/share/alsa/alsa.conf.d/50-pipewire.conf";
     };
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
