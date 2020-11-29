@@ -39,6 +39,14 @@ let
         Whether the delay after typing a wrong password should be disabled.
       '';
     };
+
+    debug = mkOption {
+      default = if global then false else cfg.debug;
+      type = types.bool;
+      description = ''
+        Whether to enable the "debug" option of the pam_unix.so module.
+      '';
+    };
   };
 
   # Modules in this block require having the password set in PAM_AUTHTOK.
@@ -69,6 +77,7 @@ in
               account.unix = {
                 control = "required";
                 path = "pam_unix.so";
+                args = optional config.modules.unix.debug "debug";
                 order = 1000;
               };
 
@@ -80,6 +89,7 @@ in
                     (optional config.modules.unix.allowNullPassword "nullok")
                     (optionalString config.modules.unix.nodelay "nodelay")
                     "likeauth"
+                    (optional config.modules.unix.debug "debug")
                   ];
                   order = 21000;
                 };
@@ -91,6 +101,7 @@ in
                     (optional config.modules.unix.nodelay "nodelay")
                     "likeauth"
                     "try_first_pass"
+                    (optional config.modules.unix.debug "debug")
                   ];
                   order = 30000;
                 };
@@ -99,7 +110,11 @@ in
               password.unix = {
                 control = "sufficient";
                 path = "pam_unix.so";
-                args = [ "nullok" "sha512" ];
+                args = flatten [
+                  "nullok"
+                  "sha512"
+                  (optional config.modules.unix.debug "debug")
+                ];
                 order = 1000;
               };
 
@@ -107,6 +122,7 @@ in
                 control = "required";
                 path = "pam_unix.so";
                 order = 1000;
+                args = optional config.modules.unix.debug "debug";
               };
             };
           })
