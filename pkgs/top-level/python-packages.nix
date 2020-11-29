@@ -3056,7 +3056,9 @@ in {
 
   isodate = callPackage ../development/python-modules/isodate { };
 
-  isort = callPackage ../development/python-modules/isort { };
+  isort = callPackage ../development/python-modules/isort {
+    inherit (pkgs) poetry;
+  };
 
   isoweek = callPackage ../development/python-modules/isoweek { };
 
