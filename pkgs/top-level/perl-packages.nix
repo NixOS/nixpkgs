@@ -4407,6 +4407,23 @@ let
     };
   };
 
+  CryptPerl = buildPerlPackage {
+    pname = "Crypt-Perl";
+    version = "0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.34.tar.gz";
+      sha256 = "0e1cb223df0041f6d9b010f11e6f97a97ab55a118a273938eb4fe85d403f1b11";
+    };
+    checkInputs = [ pkgs.openssl MathBigIntGMP ];
+    buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
+    propagatedBuildInputs = [ BytesRandomSecureTiny ClassAccessor ConvertASN1 CryptFormat MathProvablePrime SymbolGet TryTiny ];
+    meta = {
+      description = "Cryptography in pure Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptEd25519 = buildPerlPackage {
     pname = "Crypt-Ed25519";
     version = "1.04";
