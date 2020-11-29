@@ -1612,6 +1612,20 @@ let
     propagatedBuildInputs = [ Cairo Glib ];
   };
 
+  CallContext = buildPerlPackage {
+    pname = "Call-Context";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Call-Context-0.03.tar.gz";
+      sha256 = "0ee6bf46bc72755adb7a6b08e79d12e207de5f7809707b3c353b58cb2f0b5a26";
+    };
+    meta = {
+      description = "Sanity-check calling context";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   cam_pdf = buildPerlModule {
     pname = "CAM-PDF";
     version = "1.60";
