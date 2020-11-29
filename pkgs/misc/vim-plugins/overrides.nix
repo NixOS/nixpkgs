@@ -273,6 +273,10 @@ self: super: {
     dependencies = with super; [ ultisnips ];
   });
 
+  nvim-lsputils = super.nvim-lsputils.overrideAttrs(old: {
+    dependencies = with super; [ popfix ];
+  });
+
   fzf-vim = super.fzf-vim.overrideAttrs(old: {
     dependencies = [ self.fzfWrapper ];
   });
