@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
   checkInputs = [ check dosfstools e2fsprogs perl python3 util-linux ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Create, destroy, resize, check, and copy partitions";
 
     longDescription = ''
@@ -59,13 +59,13 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/parted/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = [
-      # Add your name here!
+    maintainers = with maintainers; [
+      lukegb
     ];
 
     # GNU Parted requires libuuid, which is part of util-linux-ng.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
