@@ -1,6 +1,5 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
-gerbil-support.gerbilPackage {
+{
   pname = "gerbil-libp2p";
   version = "unstable-2018-12-27";
   git-version = "2376b3f";
@@ -11,7 +10,8 @@ gerbil-support.gerbilPackage {
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
   softwareName = "Gerbil-libp2p";
-  src = fetchFromGitHub {
+  pre-src = {
+    fun = fetchFromGitHub;
     owner = "vyzo";
     repo = "gerbil-libp2p";
     rev = "2376b3f39cee04dd4ec455c8ea4e5faa93c2bf88";

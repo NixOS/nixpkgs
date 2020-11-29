@@ -1,6 +1,5 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
-gerbil-support.gerbilPackage {
+{
   pname = "gerbil-crypto";
   version = "unstable-2020-08-01";
   git-version = "0.0-6-ga228862";
@@ -11,7 +10,8 @@ gerbil-support.gerbilPackage {
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
   softwareName = "Gerbil-crypto";
-  src = fetchFromGitHub {
+  pre-src = {
+    fun = fetchFromGitHub;
     owner = "fare";
     repo = "gerbil-crypto";
     rev = "a22886260849ec92c3a34bfeedc1574e41e49e33";

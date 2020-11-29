@@ -1,17 +1,17 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
-gerbil-support.gerbilPackage {
-  pname = "gerbil-ethereum";
+{
+  pname = "gerbil-poo";
+  gerbil-package = "clan/poo";
   version = "unstable-2020-10-17";
   git-version = "0.0-35-g44d490d";
-  gerbil-package = "clan/poo";
   gerbil = gerbil-unstable;
   gerbilInputs = with gerbil-support.gerbilPackages-unstable; [gerbil-utils gerbil-crypto];
   buildInputs = [];
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
   softwareName = "Gerbil-POO";
-  src = fetchFromGitHub {
+  pre-src = {
+    fun = fetchFromGitHub;
     owner = "fare";
     repo = "gerbil-poo";
     rev = "44d490d95b9d1b5d54eaedf2602419af8e086837";
