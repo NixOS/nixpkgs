@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.8.1";
+  version = "1.9.0";
 
 in stdenv.mkDerivation {
   name = "ucx-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "0yfnx4shgydkp447kipavjzgl6z58jan6l7znhdi8ry4zbgk568a";
+    sha256 = "0i0ji5ivzxjqh3ys1m517ghw3am7cw1hvf40ma7hsq3wznsyx5s1";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
