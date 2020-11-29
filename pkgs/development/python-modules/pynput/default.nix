@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, sphinx, setuptools-lint, xlib }:
+{ stdenv, buildPythonPackage, fetchPypi, sphinx, setuptools-lint, xlib, evdev }:
 
 buildPythonPackage rec {
   pname = "pynput";
@@ -11,7 +11,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ sphinx ];
 
-  propagatedBuildInputs = [ setuptools-lint xlib ];
+  propagatedBuildInputs = [ setuptools-lint xlib ]
+  ++ stdenv.lib.optionals stdenv.isLinux [
+    evdev
+  ];
 
   doCheck = false;
 
