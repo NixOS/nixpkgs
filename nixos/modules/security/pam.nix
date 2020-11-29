@@ -60,7 +60,7 @@ let
   }) (x: includeType.check x.control);
 
   pamEntries = types.submodule {
-    options = listToAttrs (map (t: nameValuePair t (mkOption {
+    options = listToAttrs (map (type: nameValuePair type (mkOption {
       type = types.listOf (types.either pamRule pamInclude);
       default = [];
       description = "PAM entries for ${type} functionality";
