@@ -22857,6 +22857,8 @@ in
 
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
+  sc68 = callPackage ../applications/audio/sc68 { };
+
   sidplayfp = callPackage ../applications/audio/sidplayfp { };
 
   sndpeek = callPackage ../applications/audio/sndpeek { };
