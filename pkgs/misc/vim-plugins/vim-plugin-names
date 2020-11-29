@@ -401,6 +401,7 @@ osyo-manga/vim-over
 osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
 overcache/NeoSolarized
+p00f/nvim-ts-rainbow
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
 pearofducks/ansible-vim
