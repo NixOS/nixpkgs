@@ -65,6 +65,11 @@ import ./make-test-python.nix {
     server.wait_for_open_port(443)
     server.wait_for_open_port(22)
 
+    # check that sslh depends on nscd because it runs as a DynamicUser but
+    # iptables require the username to resolve
+    server.succeed("systemctl show -p Wants sslh.service | grep nscd.service")
+    server.succeed("systemctl show -p After sslh.service | grep nscd.service")
+
     for arg in ["-6", "-4"]:
         client.wait_until_succeeds(f"ping {arg} -c1 server")
 

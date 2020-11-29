@@ -215,38 +215,44 @@ let
     in "${out}/bin/${scriptName}";
 
   unitConfig = { config, options, ... }: {
-    config = {
-      unitConfig =
-        optionalAttrs (config.requires != [])
-          { Requires = toString config.requires; }
-        // optionalAttrs (config.wants != [])
-          { Wants = toString config.wants; }
-        // optionalAttrs (config.after != [])
-          { After = toString config.after; }
-        // optionalAttrs (config.before != [])
-          { Before = toString config.before; }
-        // optionalAttrs (config.bindsTo != [])
-          { BindsTo = toString config.bindsTo; }
-        // optionalAttrs (config.partOf != [])
-          { PartOf = toString config.partOf; }
-        // optionalAttrs (config.conflicts != [])
-          { Conflicts = toString config.conflicts; }
-        // optionalAttrs (config.requisite != [])
-          { Requisite = toString config.requisite; }
-        // optionalAttrs (config.restartTriggers != [])
-          { X-Restart-Triggers = toString config.restartTriggers; }
-        // optionalAttrs (config.description != "") {
-          Description = config.description; }
-        // optionalAttrs (config.documentation != []) {
-          Documentation = toString config.documentation; }
-        // optionalAttrs (config.onFailure != []) {
-          OnFailure = toString config.onFailure; }
-        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
-          StartLimitIntervalSec = toString config.startLimitIntervalSec;
-        } // optionalAttrs (options.startLimitBurst.isDefined) {
-          StartLimitBurst = toString config.startLimitBurst;
-        };
-    };
+    config = mkMerge [
+      {
+        unitConfig =
+          optionalAttrs (config.requires != [])
+            { Requires = toString config.requires; }
+          // optionalAttrs (config.wants != [])
+            { Wants = toString config.wants; }
+          // optionalAttrs (config.after != [])
+            { After = toString config.after; }
+          // optionalAttrs (config.before != [])
+            { Before = toString config.before; }
+          // optionalAttrs (config.bindsTo != [])
+            { BindsTo = toString config.bindsTo; }
+          // optionalAttrs (config.partOf != [])
+            { PartOf = toString config.partOf; }
+          // optionalAttrs (config.conflicts != [])
+            { Conflicts = toString config.conflicts; }
+          // optionalAttrs (config.requisite != [])
+            { Requisite = toString config.requisite; }
+          // optionalAttrs (config.restartTriggers != [])
+            { X-Restart-Triggers = toString config.restartTriggers; }
+          // optionalAttrs (config.description != "") {
+            Description = config.description; }
+          // optionalAttrs (config.documentation != []) {
+            Documentation = toString config.documentation; }
+          // optionalAttrs (config.onFailure != []) {
+            OnFailure = toString config.onFailure; }
+          // optionalAttrs (options.startLimitIntervalSec.isDefined) {
+            StartLimitIntervalSec = toString config.startLimitIntervalSec;
+          } // optionalAttrs (options.startLimitBurst.isDefined) {
+            StartLimitBurst = toString config.startLimitBurst;
+          };
+      }
+      (mkIf (config.serviceConfig.DynamicUser or false) {
+        wants = [ "nscd.service" ];
+        after = [ "nscd.service" ];
+      })
+    ];
   };
 
   serviceConfig = { name, config, ... }: {
