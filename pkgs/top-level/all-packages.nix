@@ -463,6 +463,8 @@ in
 
   madonctl = callPackage ../applications/misc/madonctl { };
 
+  copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
+
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
