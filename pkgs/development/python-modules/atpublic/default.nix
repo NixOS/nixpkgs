@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    pytest --pyargs public
+    pytest
   '';
 
   meta = with lib; {
