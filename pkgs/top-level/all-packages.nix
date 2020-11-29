@@ -2664,22 +2664,18 @@ in
 
   arpoison = callPackage ../tools/networking/arpoison { };
 
-  asciidoc = callPackage ../tools/typesetting/asciidoc {
-    inherit (python2Packages) matplotlib numpy aafigure recursivePthLoader;
-    w3m = w3m-batch;
-    enableStandardFeatures = false;
+  asciidoc = callPackage ../tools/typesetting/asciidoc/minimal.nix {
+    python = python3;
   };
 
-  asciidoc-full = appendToName "full" (asciidoc.override {
-    inherit (python2Packages) pygments;
+  asciidoc-full = appendToName "full" (callPackage ../tools/typesetting/asciidoc {
+    inherit (python2Packages) pygments matplotlib numpy aafigure recursivePthLoader;
+    w3m = w3m-batch;
     texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
     enableStandardFeatures = true;
   });
 
-  asciidoc-full-with-plugins = appendToName "full-with-plugins" (asciidoc.override {
-    inherit (python2Packages) pygments;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
-    enableStandardFeatures = true;
+  asciidoc-full-with-plugins = appendToName "with-plugins" (asciidoc-full.override {
     enableExtraPlugins = true;
   });
 
