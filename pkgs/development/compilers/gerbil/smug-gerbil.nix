@@ -1,6 +1,5 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
-gerbil-support.gerbilPackage {
+{
   pname = "smug-gerbil";
   version = "unstable-2019-12-24";
   git-version = "95d60d4";
@@ -11,7 +10,8 @@ gerbil-support.gerbilPackage {
   gambit-params = gambit-support.unstable-params;
   version-path = ""; #"version";
   softwareName = "Smug-Gerbil";
-  src = fetchFromGitHub {
+  pre-src = {
+    fun = fetchFromGitHub;
     owner = "drewc";
     repo = "smug-gerbil";
     rev = "95d60d486c1603743c6d3c525e6d5f5761b984e5";
