@@ -1,24 +1,31 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
+{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnetCorePackages, patchelf, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "0.2.0.1504";
+  version = "3.0.0.4204";
 
   src = fetchurl {
-    url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.develop.${version}.linux.tar.gz";
-    sha256 = "1h7pqn39vxd0vr1fwrnvfpxv5vhh4zcr0s8h0zvgplay2z6b6bvb";
+    url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.linux-core-x64.tar.gz";
+    sha256 = "031k1awa9hzqmja3bwfakx4bs2rk2wvv0fs49c2il4ny44fyh0mp";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    patchelf
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}/.
 
-    makeWrapper "${mono}/bin/mono" $out/bin/Radarr \
-      --add-flags "$out/share/${pname}-${version}/Radarr.exe" \
+    makeWrapper "${dotnetCorePackages.netcore_3_1}/bin/dotnet" $out/bin/Radarr \
+      --add-flags "$out/share/${pname}-${version}/Radarr.dll" \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
-          curl sqlite libmediainfo ]}
+          curl sqlite libmediainfo mono openssl ]}
+  '';
+
+  postFixup = ''
+    patchelf --set-rpath ${icu}/lib $out/share/${pname}-${version}/System.Globalization.Native.so
   '';
 
   meta = with stdenv.lib; {
