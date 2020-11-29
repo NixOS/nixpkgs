@@ -703,11 +703,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libX11 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
-    name = "libX11-1.6.12";
+    name = "libX11-1.7.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.6.12.tar.bz2";
-      sha256 = "1ivfzl1qwk8zh7gc0m5vb58gdxz11jwg7w3d356w16j1d5s2427i";
+      url = "mirror://xorg/individual/lib/libX11-1.7.0.tar.bz2";
+      sha256 = "0m6bfwllr3pq2c00l51y62yiq15kphc8dw69zf67qhwmclxzkj1n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
