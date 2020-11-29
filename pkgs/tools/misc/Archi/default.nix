@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchzip }:
 
 stdenv.mkDerivation rec {
 
@@ -11,23 +11,25 @@ stdenv.mkDerivation rec {
         url = "https://www.archimatetool.com/downloads/archi/Archi-Linux64-${version}.tgz";
         sha256 = "0sd57cfnh5q2p17sd86c8wgmqyipg29rz6iaa5brq8mwn8ps2fdw";
       }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      throw "Unsupported system"
-      /*
-       * A Mac version is available; needs to be tested on a Mac system:
-       * fetchurl {
-       *   url = "https://www.archimatetool.com/downloads/archi/Archi-Mac-${version}.zip";
-       *   sha256 = "0zg0bs9i2kkr11bbssfxhrp4ym2zzhb2bk7m38z9cj99h7pmgyhr";
-       * }
-       */
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
+      fetchzip {
+        url = "https://www.archimatetool.com/downloads/archi/Archi-Mac-${version}.zip";
+        sha256 = "1h05lal5jnjwm30dbqvd6gisgrmf1an8xf34f01gs9pwqvqfvmxc";
+      }
     else
-       throw "Unsupported system";
+      throw "Unsupported system";
 
-  installPhase = ''
-    cp -r . $out
-    mkdir -p $out/bin
-    ln -s $out/Archi $out/bin/Archi
-  '';
+  installPhase =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      ''
+        install -Dm755 Archi $out/bin/Archi
+        rm Archi
+      ''
+    else
+      ''
+        mkdir -p "$out/Applications"
+        mv Archi.app "$out/Applications/"
+      '';
 
   meta = with stdenv.lib; {
     description = "ArchiMate modelling toolkit";
@@ -38,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.archimatetool.com/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [ earldouglas SuperSandro2000 ];
   };
 }
