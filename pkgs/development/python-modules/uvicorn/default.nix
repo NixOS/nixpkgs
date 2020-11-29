@@ -42,7 +42,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest requests ];
   # watchgod required the watchgod package, which isn't available in nixpkgs
   checkPhase = ''
-    pytest --ignore=tests/supervisors/test_watchgodreload.py
+    pytest --ignore=tests/supervisors/test_watchgodreload.py \
+      -k 'not test_supported_upgrade_request and not test_invalid_upgrade[WSProtocol]'
   '';
 
   meta = with lib; {
