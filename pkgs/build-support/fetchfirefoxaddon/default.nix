@@ -2,15 +2,19 @@
 let
 
 in
-  { name,
-  url,
-  sha256,
+  {
+  name
+, url
+, md5 ? ""
+, sha1 ? ""
+, sha256 ? ""
+, sha512 ? ""
 }:
 
 stdenv.mkDerivation rec {
 
   inherit name;
-  extid = "${sha256}@${name}";
+  extid = "${src.outputHash}@${name}";
   passthru = {
     exitd=extid;
   };
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
   src = fetchurl {
     url = url;
-    sha256 = sha256;
+    inherit md5 sha1 sha256 sha512;
   };
   nativeBuildInputs = [ coreutils unzip zip jq  ];
 }
