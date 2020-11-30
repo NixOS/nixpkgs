@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://www.etebase.com/";
     description = "A Python client library for Etebase";
-    license = licenses.lgpl3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ 3699n ];
   };
   
