@@ -62,7 +62,7 @@ in
 {
   options = {
     security.pam = utils.pam.mkPamModule {
-      inherit name mkModuleOptions;
+      inherit name mkModuleOptions mkAuthConfig;
       mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };

@@ -170,26 +170,26 @@ in
   };
 
   imports = [
-   ./app-armor.nix
-   ./duo-security.nix
-   ./ecryptfs.nix
-   ./fprintd.nix
-   ./gnome-keyring.nix
-   ./gnupg.nix
-   ./google-authenticator.nix
-   ./google-os-login.nix
-   ./kwallet.nix
-   ./limits.nix
-   ./make-home-dir.nix
-   ./motd.nix
-   ./oath.nix
-   ./otpw.nix
-   ./p11.nix
-   ./pam_mount.nix
-   ./ssh-agent.nix
+    ./app-armor.nix
+    ./duo-security.nix
+    ./ecryptfs.nix
+    ./fprintd.nix
+    ./gnome-keyring.nix
+    ./gnupg.nix
+    ./google-authenticator.nix
+    ./google-os-login.nix
+    ./kwallet.nix
+    ./limits.nix
+    ./make-home-dir.nix
+    ./motd.nix
+    ./oath.nix
+    ./otpw.nix
+    ./p11.nix
+    ./pam_mount.nix
+    ./ssh-agent.nix
     ./u2f.nix
     ./unix.nix
-   ./usb.nix
-   ./yubico.nix
+    ./usb.nix
+    ./yubico.nix
   ];
 }
