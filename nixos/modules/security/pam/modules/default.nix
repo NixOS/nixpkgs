@@ -173,7 +173,6 @@ in
     ./app-armor.nix
     ./duo-security.nix
     ./ecryptfs.nix
-    ./fprintd.nix
     ./gnome-keyring.nix
     ./gnupg.nix
     ./google-authenticator.nix
