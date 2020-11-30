@@ -1,10 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
   pamCfg = config.security.pam;
-  pamLib = pamCfg.lib;
   cfg = pamCfg.modules.p11;
 
   anyEnable = any (attrByPath [ "modules" "p11" "enable" ] false) (attrValues pamCfg.services);
@@ -25,7 +24,7 @@ let
 
     control = mkOption {
       default = if global then "sufficient" else cfg.control;
-      type = pamLib.controlType;
+      type = utils.pam.controlType;
       description = ''
         This option sets pam "control".
         If you want to have multi factor authentication, use "required".

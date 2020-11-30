@@ -1,13 +1,12 @@
 # This module provides configuration for the PAM (Pluggable
 # Authentication Modules) system.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
   cfg = config.security.pam;
-  pamLib = cfg.lib;
 
   pamEntryModule = entryType: { config, ... }: {
     options = {
@@ -21,7 +20,7 @@ let
       };
 
       control = mkOption {
-        type = pamLib.controlType;
+        type = utils.pam.controlType;
         description = ''
           The PAM control for this entry. It can be either on of the
           historical basic control keywords, of a set of result-actions pairs.
@@ -126,22 +125,10 @@ in
           name defining the name of the service.
         '';
       };
-
-      lib = mkOption {
-        default = {};
-        type = types.attrs;
-        internal = true;
-        description = ''
-          PAM specific functions that are used throughout modules hooking into
-          the PAM one.
-        '';
-      };
     };
   };
 
   config = {
-    security.pam.lib = import ./lib.nix { inherit lib; };
-
     environment.systemPackages = [ pkgs.pam ];
 
     security.wrappers = {
