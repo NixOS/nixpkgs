@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
   doInstallCheck = false;
-  
+
   meta = with lib; {
     homepage = "https://www.etesync.com/";
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
