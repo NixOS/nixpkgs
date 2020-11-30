@@ -1,4 +1,4 @@
-{ config, stdenv, lib, callPackage, fetchurl, fetchpatch, nss_3_44 }:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
