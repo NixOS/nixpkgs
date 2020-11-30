@@ -1,15 +1,15 @@
-{ lib,
-  wheel,
-  rustPlatform,
-  pipInstallHook,
-  setuptools-rust,
-  python,
-  msgpack,
-  requests,
-  openssl,
-  perl,
-  rustfmt,
-  fetchFromGitHub
+{ lib
+, wheel
+, rustPlatform
+, pipInstallHook
+, setuptools-rust
+, python
+, msgpack
+, requests
+, openssl
+, perl
+, rustfmt
+, fetchFromGitHub
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-    
+
   cargoSha256 = "0w8ypl6kj1mf6ahbdiwbd4jw6ldxdaig47zwk91jjsww5lbyx4lf";
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
   doInstallCheck = true;
-  
+
   buildPhase = ''
     ${python.interpreter} setup.py bdist_wheel
   '';
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.etebase.com/";
     description = "A Python client library for Etebase";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ 3699n ];
+    maintainers = with maintainers; [ _3699n ];
   };
-  
+
 }
