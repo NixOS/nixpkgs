@@ -9,7 +9,7 @@
     });
   };
 
-  config._module.assertions.test = {
+  config._module.checks.test = {
     enable = true;
     message = "Assertion failed";
     triggerPath = [ "foo" "bar" "baz" ];

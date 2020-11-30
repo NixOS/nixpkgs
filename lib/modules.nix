@@ -103,7 +103,13 @@ rec {
             type = types.bool;
             internal = prefix != [];
             default = check;
-            description = "Whether to check whether all option definitions have matching declarations.";
+            description = ''
+              Whether to check whether all option definitions have matching
+              declarations.
+
+              Note that this has nothing to do with the similarly named
+              <option>_module.checks</option> option
+            '';
           };
 
           _module.freeformType = mkOption {
@@ -123,11 +129,11 @@ rec {
             '';
           };
 
-          _module.assertions = mkOption {
+          _module.checks = mkOption {
             description = ''
-              Assertions and warnings to trigger during module evaluation. The
+              Evaluation checks to trigger during module evaluation. The
               attribute name will be displayed when it is triggered, allowing
-              users to disable/change these assertions again if necessary. See
+              users to disable/change these checks if necessary. See
               the section on Warnings and Assertions in the manual for more
               information.
             '';
@@ -151,7 +157,7 @@ rec {
               # TODO: Rename to assertion? Or allow also setting assertion?
               options.enable = mkOption {
                 description = ''
-                  Whether to enable this assertion.
+                  Whether to enable this check.
                   <note><para>
                     This is the inverse of asserting a condition: If a certain
                     condition should be <literal>true</literal>, then this
@@ -164,7 +170,7 @@ rec {
 
               options.type = mkOption {
                 description = ''
-                  The type of the assertion. The default
+                  The type of the check. The default
                   <literal>"error"</literal> type will cause evaluation to fail,
                   while the <literal>"warning"</literal> type will only show a
                   warning.
@@ -176,7 +182,7 @@ rec {
 
               options.message = mkOption {
                 description = ''
-                  The assertion message to display if this assertion triggers.
+                  The message to display if this check triggers.
                   To display option names in the message, add
                   <literal>options</literal> to the module function arguments
                   and use <literal>''${options.path.to.option}</literal>.
@@ -190,24 +196,24 @@ rec {
               options.triggerPath = mkOption {
                 description = ''
                   The <literal>config</literal> path which when evaluated should
-                  trigger this assertion. By default this is
+                  trigger this check. By default this is
                   <literal>[]</literal>, meaning evaluating
-                  <literal>config</literal> at all will trigger the assertion.
+                  <literal>config</literal> at all will trigger the check.
                   On NixOS this default is changed to
                   <literal>[ "system" "build" "toplevel"</literal> such that
-                  only a system evaluation triggers the assertions.
+                  only a system evaluation triggers the checks.
                   <warning><para>
                    Evaluating <literal>config</literal> from within the current
                    module evaluation doesn't cause a trigger. Only accessing it
                    from outside will do that. This means it's easy to miss
-                   assertions if this option doesn't have an externally-accessed
+                   failing checks if this option doesn't have an externally-accessed
                    value.
                   </para></warning>
                 '';
                 # Mark as internal as it's easy to misuse it
                 internal = true;
                 type = types.uniq (types.listOf types.str);
-                # Default to [], causing assertions to be triggered when
+                # Default to [], causing checks to be triggered when
                 # anything is evaluated. This is a safe and convenient default.
                 default = [];
                 example = [ "system" "build" "vm" ];
@@ -253,13 +259,13 @@ rec {
           else recursiveUpdate freeformConfig declaredConfig;
 
       /*
-      Inject a list of assertions into a config value, corresponding to their
+      Inject a list of checks into a config value, corresponding to their
       triggerPath (meaning when that path is accessed from the result of this
-      function, the assertion triggers).
+      function, the check triggers).
       */
-      injectAssertions = assertions: config: let
-        # Partition into assertions that are triggered on this level and ones that aren't
-        parted = lib.partition (a: length a.triggerPath == 0) assertions;
+      injectChecks = checks: config: let
+        # Partition into checks that are triggered on this level and ones that aren't
+        parted = lib.partition (a: length a.triggerPath == 0) checks;
 
         # From the ones that are triggered, filter out ones that aren't enabled
         # and group into warnings/errors
@@ -270,45 +276,45 @@ rec {
         errorTrigger = value:
           if byType.error or [] == [] then value else
           throw ''
-            Failed assertions:
+            Failed checks:
             ${lib.concatMapStringsSep "\n" (a: "- ${a.show}") byType.error}
           '';
         # Trigger for both warnings and errors
         trigger = value: warningTrigger (errorTrigger value);
 
-        # From the non-triggered assertions, split off the first element of triggerPath
-        # to get a mapping from nested attributes to a list of assertions for that attribute
+        # From the non-triggered checks, split off the first element of triggerPath
+        # to get a mapping from nested attributes to a list of checks for that attribute
         nested = lib.zipAttrs (map (a: {
           ${head a.triggerPath} = a // {
             triggerPath = lib.tail a.triggerPath;
           };
         }) parted.wrong);
 
-        # Recursively inject assertions if config is an attribute set and we
-        # have assertions under its attributes
+        # Recursively inject checks if config is an attribute set and we
+        # have checks under its attributes
         result =
           if isAttrs config
           then
             mapAttrs (name: value:
               if nested ? ${name}
-              then injectAssertions nested.${name} value
+              then injectChecks nested.${name} value
               else value
             ) config
           else config;
       in trigger result;
 
-      # List of assertions for this module evaluation, where each assertion also
+      # List of checks for this module evaluation, where each check also
       # has a `show` attribute for how to show it if triggered
-      assertions = mapAttrsToList (name: value:
+      checks = mapAttrsToList (name: value:
         let id =
           if lib.hasPrefix "_" name then ""
           else "[${showOption prefix}${optionalString (prefix != []) "/"}${name}] ";
         in value // {
           show = "${id}${value.message}";
         }
-      ) config._module.assertions;
+      ) config._module.checks;
 
-      finalConfig = injectAssertions assertions (removeAttrs config [ "_module" ]);
+      finalConfig = injectChecks checks (removeAttrs config [ "_module" ]);
 
       checkUnmatched =
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
@@ -931,7 +937,7 @@ rec {
         visible = false;
         apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config._module.assertions =
+      config._module.checks =
         let opt = getAttrFromPath optionName options; in {
         ${showOption optionName} = {
           enable = mkDefault opt.isDefined;
@@ -1001,7 +1007,7 @@ rec {
       })) from);
 
       config = {
-        _module.assertions =
+        _module.checks =
           let warningMessages = map (f:
             let val = getAttrFromPath f config;
                 opt = getAttrFromPath f options;
@@ -1072,7 +1078,7 @@ rec {
       });
       config = mkMerge [
         {
-          _module.assertions.${showOption from} = {
+          _module.checks.${showOption from} = {
             enable = mkDefault (warn && fromOpt.isDefined);
             type = "warning";
             message = "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";

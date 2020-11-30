@@ -29,7 +29,7 @@ with lib;
       '';
     };
 
-    _module.assertions = mkOption {
+    _module.checks = mkOption {
       type = types.attrsOf (types.submodule {
         triggerPath = mkDefault [ "system" "build" "toplevel" ];
       });
@@ -37,7 +37,7 @@ with lib;
 
   };
 
-  config._module.assertions = lib.listToAttrs (lib.imap1 (n: value:
+  config._module.checks = lib.listToAttrs (lib.imap1 (n: value:
     let
       name = "_${toString n}";
       isWarning = lib.isString value;

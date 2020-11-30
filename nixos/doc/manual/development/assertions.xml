@@ -3,39 +3,49 @@
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="5.0"
         xml:id="sec-assertions">
- <title>Warnings and Assertions</title>
+ <title>Evaluation Checks</title>
 
  <para>
   When configuration problems are detectable in a module, it is a good idea to
-  write an assertion or warning. Doing so provides clear feedback to the user
-  and can prevent errors before the build.
+  write a check for catching it early. Doing so can provide clear feedback to
+  the user and can prevent errors before the build.
  </para>
 
  <para>
   Although Nix has the <literal>abort</literal> and
   <literal>builtins.trace</literal>
   <link xlink:href="https://nixos.org/nix/manual/#ssec-builtins">functions</link>
-  to perform such tasks, they are not ideally suited for NixOS modules. Instead
-  of these functions, you can declare your warnings and assertions using the
-  NixOS module system.
+  to perform such tasks generally, they are not ideally suited for NixOS
+  modules. Instead of these functions, you can declare your evaluation checks
+  using the NixOS module system.
  </para>
 
  <section xml:id="sec-assertions-define">
-  <title>Defining Warnings and Assertions</title>
+  <title>Defining Checks</title>
 
   <para>
-   Both warnings and assertions can be defined using the <xref linkend="opt-_module.assertions"/> option. Each assertion needs an attribute name, under which you have to define an enable condition using <xref linkend="opt-_module.assertions._name_.enable"/> and a message using <xref linkend="opt-_module.assertions._name_.message"/>. Note that the enable condition is <emphasis>inverse</emphasis> of what an assertion would be: To assert a value being true, the enable condition should be false in that case, so that it isn't triggered. For the assertion message, you can add <literal>options</literal> to the module arguments and use <literal>${options.path.to.option}</literal> to print a context-aware string representation of the option path. Here is an example showing how this can be done.
+   Checks can be defined using the <xref linkend="opt-_module.checks"/> option.
+   Each check needs an attribute name, under which you have to define an enable
+   condition using <xref linkend="opt-_module.checks._name_.enable"/> and a
+   message using <xref linkend="opt-_module.checks._name_.message"/>. Note that
+   the enable condition is <emphasis>inverse</emphasis> of what an assertion
+   would be: To assert a value being true, the enable condition should be false
+   in that case, so that it isn't triggered. For the check message, you can add
+   <literal>options</literal> to the module arguments and use
+   <literal>${options.path.to.option}</literal> to print a context-aware string
+   representation of the option path. Here is an example showing how this can be
+   done.
   </para>
 
 <programlisting>
 { config, options, ... }: {
-  _module.assertions.gpgSshAgent = {
+  _module.checks.gpgSshAgent = {
     enable = config.programs.gnupg.agent.enableSSHSupport &amp;&amp; config.programs.ssh.startAgent;
     message = "You can't enable both ${options.programs.ssh.startAgent}"
       + " and ${options.programs.gnupg.agent.enableSSHSupport}!";
   };
 
-  _module.assertions.grafanaPassword = {
+  _module.checks.grafanaPassword = {
     enable = config.services.grafana.database.password != "";
     message = "The grafana password defined with ${options.services.grafana.database.password}"
       + " will be stored as plaintext in the Nix store!";
@@ -48,41 +58,51 @@
  </section>
 
  <section xml:id="sec-assertions-ignoring">
-  <title>Ignoring Warnings and Assertions</title>
+  <title>Ignoring Checks</title>
 
   <para>
-   Sometimes you can get warnings or assertions that don't apply to your specific case and you wish to ignore them, or at least make assertions non-fatal. You can do so for all assertions defined using <xref linkend="opt-_module.assertions"/> by using the attribute name of the definition, which is conveniently printed using <literal>[...]</literal> when the assertion is triggered. For above example, the evaluation output when the assertions are triggered looks as follows:
+   Sometimes you can get failing checks that don't apply to your specific case
+   and you wish to ignore them, or at least make errors non-fatal. You can do so
+   for all checks defined using <xref linkend="opt-_module.checks"/> by
+   using the attribute name of the definition, which is conveniently printed
+   using <literal>[...]</literal> when the check is triggered. For above
+   example, the evaluation output when the checks are triggered looks as
+   follows:
   </para>
 
 <programlisting>
 trace: warning: [grafanaPassword] The grafana password defined with
   services.grafana.database.password will be stored as plaintext in the Nix store!
-error: Failed assertions:
+error: Failed checks:
 - [gpgSshAgent] You can't enable both programs.ssh.startAgent and
   programs.gnupg.agent.enableSSHSupport!
 </programlisting>
 
   <para>
-   The <literal>[grafanaPassword]</literal> and <literal>[gpgSshAgent]</literal> strings tell you that these were defined under the <literal>grafanaPassword</literal> and <literal>gpgSshAgent</literal> attributes of <xref linkend="opt-_module.assertions"/> respectively. With this knowledge you can adjust them to your liking:
+   The <literal>[grafanaPassword]</literal> and <literal>[gpgSshAgent]</literal>
+   strings tell you that these were defined under the <literal>grafanaPassword
+   </literal> and <literal>gpgSshAgent</literal> attributes of
+   <xref linkend="opt-_module.checks"/> respectively. With this knowledge
+   you can adjust them to your liking:
   </para>
 
 <programlisting>
 { lib, ... }: {
-  # Change the assertion into a non-fatal warning
-  _module.assertions.gpgSshAgent.type = "warning";
+  # Change the error into a non-fatal warning
+  _module.checks.gpgSshAgent.type = "warning";
 
   # We don't care about this warning, disable it
-  _module.assertions.grafanaPassword.enable = lib.mkForce false;
+  _module.checks.grafanaPassword.enable = lib.mkForce false;
 }
 </programlisting>
 
 
  </section>
  <section xml:id="sec-assertions-submodules">
-  <title>Warnings and Assertions in Submodules</title>
+  <title>Checks in Submodules</title>
 
   <para>
-   Warnings and assertions can be defined within submodules in the same way. Here is an example:
+   Evaluation checks can be defined within submodules in the same way. Here is an example:
   </para>
 
 <programlisting>
@@ -92,7 +112,7 @@ error: Failed assertions:
     type = lib.types.attrsOf (lib.types.submodule ({ config, options, ... }: {
       options.port = lib.mkOption {};
 
-      config._module.assertions.portConflict = {
+      config._module.checks.portConflict = {
         enable = config.port == 80;
         message = "Port ${toString config.port} defined using"
           + " ${options.port} is usually used for HTTP";
@@ -105,7 +125,10 @@ error: Failed assertions:
 </programlisting>
 
   <para>
-   When this assertion is triggered, it shows both the submodule path along with the assertion attribute within that submodule, joined by a <literal>/</literal>. Note also how <literal>${options.port}</literal> correctly shows the context of the option.
+   When this check is triggered, it shows both the submodule path along with
+   the check attribute within that submodule, joined by a
+   <literal>/</literal>. Note also how <literal>${options.port}</literal>
+   correctly shows the context of the option.
   </para>
 
 <programlisting>
@@ -114,18 +137,21 @@ trace: warning: [myServices.foo/portConflict] Port 80 defined using
 </programlisting>
 
   <para>
-   Therefore to disable such an assertion, you can do so by changing the <xref linkend="opt-_module.assertions"/> option within the <literal>myServices.foo</literal> submodule:
+   Therefore to disable such a check, you can do so by changing the
+   <xref linkend="opt-_module.checks"/> option within the
+   <literal>myServices.foo</literal> submodule:
   </para>
 
 <programlisting>
 { lib, ... }: {
-  myServices.foo._module.assertions.portConflict.enable = lib.mkForce false;
+  myServices.foo._module.checks.portConflict.enable = lib.mkForce false;
 }
 </programlisting>
 
 <note>
  <para>
-  Assertions defined in submodules under <literal>types.listOf</literal> can't be ignored, since there's no way to change previously defined list items.
+  Checks defined in submodules under <literal>types.listOf</literal> can't be
+  ignored, since there's no way to change previously defined list items.
  </para>
 </note>
 

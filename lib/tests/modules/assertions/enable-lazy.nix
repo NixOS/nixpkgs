@@ -8,7 +8,7 @@
     default = true;
   };
 
-  config._module.assertions.test = {
+  config._module.checks.test = {
     enable = throw "enable evaluated";
     message = "Assertion failed";
     triggerPath = [ "foo" ];

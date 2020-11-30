@@ -8,7 +8,7 @@
     default = config.foo;
   };
 
-  config._module.assertions.foo = {
+  config._module.checks.foo = {
     enable = true;
     message = "Foo assertion";
     triggerPath = [ "foo" ];

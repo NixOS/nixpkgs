@@ -1,6 +1,6 @@
 {
 
-  _module.assertions.test = {
+  _module.checks.test = {
     enable = true;
     type = "warning";
     message = "Warning message";

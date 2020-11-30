@@ -1,6 +1,6 @@
 {
 
-  _module.assertions.test = {
+  _module.checks.test = {
     enable = false;
     message = "Assertion failed";
   };
