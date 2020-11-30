@@ -5,6 +5,7 @@
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
+, findutils
 }:
 
 let
@@ -94,7 +95,7 @@ in rec {
     makeSetupHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
-        inherit pythonSitePackages;
+        inherit pythonSitePackages findutils;
       };
     } ./python-namespaces-hook.sh) {};
 

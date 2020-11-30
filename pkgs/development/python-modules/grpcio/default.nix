@@ -6,6 +6,8 @@ buildPythonPackage rec {
   inherit (grpc) src version;
   pname = "grpcio";
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ cython pkgconfig ]
                     ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 

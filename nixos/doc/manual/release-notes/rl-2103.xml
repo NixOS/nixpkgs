@@ -336,6 +336,19 @@
      <literal>unbound-control</literal> without passing a custom configuration location.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     NixOS now defaults to the unified cgroup hierarchy (cgroupsv2).
+     See the <link xlink:href="https://www.redhat.com/sysadmin/fedora-31-control-group-v2">Fedora Article for 31</link>
+     for details on why this is desirable, and how it impacts containers.
+    </para>
+    <para>
+     If you want to run containers with a runtime that does not yet support cgroupsv2,
+     you can switch back to the old behaviour by setting
+     <xref linkend="opt-systemd.enableUnifiedCgroupHierarchy"/> = <literal>false</literal>;
+     and rebooting.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

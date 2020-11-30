@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
       ./dont_create_privsep_path.patch
 
       ./ssh-keysign.patch
+
+      # See https://github.com/openssh/openssh-portable/pull/206
+      ./ssh-copy-id-fix-eof.patch
     ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 

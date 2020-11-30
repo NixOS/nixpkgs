@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wql62cg8f95cwpy057cl764nni9g4sdn5lqj68x22kjs8w71yhz";
   };
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
 
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";
+
+  # Copy the python module code into a tarball that we can export and use as the
+  # src input for buildPythonPackage calls
+  postInstall = ''
+    cp -R ./src/python/ tmp-pythonsrc/
+    tar -zcf $pythonsrc --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
+  '';
 
   meta = with stdenv.lib; {
     description = "High level library for the Linux Kernel seccomp filter";

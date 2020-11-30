@@ -1,4 +1,5 @@
 { stdenv, pkgconfig, fetchPypi, buildPythonPackage
+, buildPackages
 , zstd, pytest }:
 
 buildPythonPackage rec {
@@ -12,7 +13,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "/usr/bin/pkg-config" "${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
+      --replace "/usr/bin/pkg-config" "${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config"
   '';
 
   nativeBuildInputs = [ pkgconfig ];
