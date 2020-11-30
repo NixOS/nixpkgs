@@ -51,9 +51,9 @@ let
       control = "requisite";
       path = "${pkgs.oathToolkit}/lib/security/pam_oath.so";
       args = [
-        "window=${toString config.modules.oath.window}"
-        "usersfile=${toString config.modules.oath.usersFile}"
-        "digits=${toString config.modules.oath.digits}"
+        "window=${toString svcCfg.modules.${name}.window}"
+        "usersfile=${toString svcCfg.modules.${name}.usersFile}"
+        "digits=${toString svcCfg.modules.${name}.digits}"
       ];
       order = 19000;
     };
