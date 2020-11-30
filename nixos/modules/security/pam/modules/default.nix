@@ -170,7 +170,6 @@ in
   };
 
   imports = [
-    ./duo-security.nix
     ./ecryptfs.nix
     ./gnome-keyring.nix
     ./gnupg.nix
