@@ -102,7 +102,7 @@ with pkgs;
         inherit hasDistutilsCxxPatch;
         # TODO: rename to pythonOnBuild
         # Not done immediately because its likely used outside Nixpkgs.
-        pythonForBuild = pythonOnBuildForHost;
+        pythonForBuild = pythonOnBuildForHost.override { inherit packageOverrides; self = pythonForBuild; };
 
         tests = callPackage ./tests.nix {
           python = self;
