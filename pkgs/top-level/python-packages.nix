@@ -3781,6 +3781,8 @@ in {
 
   mido = callPackage ../development/python-modules/mido { };
 
+  milc = callPackage ../development/python-modules/milc { };
+
   milksnake = callPackage ../development/python-modules/milksnake { };
 
   minidb = callPackage ../development/python-modules/minidb { };
