@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07rcq4c49zfaacyn5df62bs7qjf5hpmdm9mpb6nx510lylq0507x";
+    sha256 = "ce641b3ffaef407d5fe9b798955c6c6f2d1bfb58d6e11b4f87eb6fbb745a2711";
   };
 
   disabled = pythonOlder "3.6";
