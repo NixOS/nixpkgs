@@ -11,7 +11,7 @@ let
   pamEntryModule = entryType: { config, ... }: {
     options = {
       entryType = mkOption {
-        type = types.enum [ "account" "auth" "password" "session" ];
+        type = types.enum utils.pam.entryTypes;
         default = entryType;
         internal = true;
         description = ''
@@ -71,6 +71,7 @@ let
 
   mkEntriesOption = entryType: mkOption {
     type = entriesType entryType;
+    default = {};
     description = ''
       The ${moduleType}-type entries of this service.
     '';
@@ -79,6 +80,17 @@ let
 
   pamServiceModule = { config, ... }: {
     options = {
+      excludeDefaults = mkOption {
+        type = with types; listOf (enum utils.pam.entryTypes);
+        default = [ ];
+        example = utils.pam.entryTypes;
+        description = ''
+          By default, all enabled PAM modules add their configuration under
+          security.pam.services.<name>.{account,auth,password,session}. This
+          option allows to opt out of this by type of entries. The provided
+          example will get you a service with none of the defaults.
+        '';
+      };
 
       account = mkEntriesOption "account";
       auth = mkEntriesOption "auth";
@@ -148,20 +160,21 @@ in
             warn = {
               control = "required";
               path = "pam_warn.so";
-              order = 1;
+              order = 1000;
             };
             deny = {
               control = "required";
               path = "pam_warn.so";
-              order = 2;
+              order = 2000;
             };
           };
         in
-        { # TODO: find out what happens if we remove these mkForce
-          auth = mkForce otherEntries;
-          account = mkForce otherEntries;
-          password = mkForce otherEntries;
-          session = mkForce otherEntries;
+        {
+          excludeDefaults = utils.pam.entryTypes;
+          auth = otherEntries;
+          account = otherEntries;
+          password = otherEntries;
+          session = otherEntries;
         };
 
       # Most of these should be moved to specific modules.

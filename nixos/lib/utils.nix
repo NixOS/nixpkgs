@@ -145,6 +145,8 @@ rec {
     '';
 
   pam = rec {
+    entryTypes = [ "account" "auth" "password" "session" ];
+
     returnCode = types.enum [
       "success" "open_err" "symbol_err" "service_err" "system_err" "buf_err"
       "perm_denied" "auth_err" "cred_insufficient" "authinfo_unavail"
@@ -162,6 +164,8 @@ rec {
       (types.addCheck (types.attrsOf action) (x: all returnCode.check (attrNames x)));
 
     anyEnable = pamCfg: name: any (attrByPath [ "modules" name "enable" ] false) (attrValues pamCfg.services);
+
+    isTypeEnabled = svcCfg: type: all (t: t != type) svcCfg.excludeDefaults;
 
     # See nixos/modules/security/pam/modules/motd.nix for a simple example
     # See nixos/modules/security/pam/modules/unix.nix for a more complex one
@@ -188,12 +192,10 @@ rec {
                 };
 
                 config = mkIf (mkSvcConfigCondition config) {
-                  # TODO: remove those mkDefaults and replace them with the
-                  # include/exclude logic
-                  account = mkDefault (mkAccountConfig config);
-                  auth = mkDefault (mkAuthConfig config);
-                  password = mkDefault (mkPasswordConfig config);
-                  session = mkDefault (mkSessionConfig config);
+                  account = mkIf (isTypeEnabled config "account") (mkAccountConfig config);
+                  auth = mkIf (isTypeEnabled config "auth") (mkAuthConfig config);
+                  password = mkIf (isTypeEnabled config "password") (mkPasswordConfig config);
+                  session = mkIf (isTypeEnabled config "session") (mkSessionConfig config);
                 };
               })
             ];
