@@ -20617,8 +20617,6 @@ in
     python3Packages = python37Packages;
   };
 
-  cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
-
   crun = callPackage ../applications/virtualization/crun {};
 
   csdp = callPackage ../applications/science/math/csdp { };
