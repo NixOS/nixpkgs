@@ -5,6 +5,7 @@
 , pytest
 , testpath
 , tornado
+, trio
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     testpath
+    trio
   ];
 
   checkPhase = ''
