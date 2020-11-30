@@ -1,10 +1,9 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , colorama
 , hypothesis
-, poetry
+, poetry-core
 , pylama
 , pytestCheckHook
-, setuptools
 }:
 
 let
@@ -20,10 +19,8 @@ in buildPythonPackage rec {
     sha256 = "1m7jpqssnbsn1ydrw1dn7nrcrggqcvj9v6mk5ampxmvk94xd2r2q";
   };
 
-  nativeBuildInputs = [ poetry ];
-
-  propagatedBuildInputs = [
-    setuptools
+  nativeBuildInputs = [
+    poetry-core
   ];
 
   checkInputs = [
