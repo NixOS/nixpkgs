@@ -28692,5 +28692,7 @@ in
 
   systemc = callPackage ../applications/science/electronics/systemc/default.nix {};
 
+  systemc-verification = callPackage ../applications/science/electronics/systemc-verification/default.nix {};
+
   uvm-systemc = callPackage ../applications/science/electronics/uvm-systemc/default.nix {};
 }
