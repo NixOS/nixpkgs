@@ -11,6 +11,7 @@
 , isPyPy
 , cython
 , setuptoolsBuildHook
+, fetchpatch
  }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -51,7 +52,13 @@ in buildPythonPackage rec {
   nativeBuildInputs = [ gfortran cython setuptoolsBuildHook ];
   buildInputs = [ blas lapack ];
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
+  patches = [
+    # For compatibility with newer pytest
+    (fetchpatch {
+      url = "https://github.com/numpy/numpy/commit/ba315034759fbf91c61bb55390edc86e7b2627f3.patch";
+      sha256 = "F2P5q61CyhqsZfwkLmxb7A9YdE+43FXLbQkSjop2rVY=";
+    })
+  ] ++ lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.
