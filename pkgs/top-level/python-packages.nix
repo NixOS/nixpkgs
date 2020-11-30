@@ -6217,6 +6217,8 @@ in {
 
   rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
 
+  re-assert = callPackage ../development/python-modules/re-assert { };
+
   readchar = callPackage ../development/python-modules/readchar { };
 
   readme = callPackage ../development/python-modules/readme { };
