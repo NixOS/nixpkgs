@@ -2818,6 +2818,18 @@ let
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects/";
   };
 
+  nvim-ts-rainbow = buildVimPluginFrom2Nix {
+    pname = "nvim-ts-rainbow";
+    version = "2020-11-25";
+    src = fetchFromGitHub {
+      owner = "p00f";
+      repo = "nvim-ts-rainbow";
+      rev = "f8d1c895dfadb16f6ac61d5272098f2cd989e8aa";
+      sha256 = "1gdblzlh5f8cnjwkszxsvv72ryqwywbb4i1hanv879l3ji857iqi";
+    };
+    meta.homepage = "https://github.com/p00f/nvim-ts-rainbow/";
+  };
+
   nvim-web-devicons = buildVimPluginFrom2Nix {
     pname = "nvim-web-devicons";
     version = "2020-11-08";
