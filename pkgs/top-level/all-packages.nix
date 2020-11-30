@@ -6110,6 +6110,8 @@ in
 
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
 
+  oatpp = callPackage ../development/libraries/oatpp { };
+
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
