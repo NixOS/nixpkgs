@@ -162,6 +162,11 @@
    </listitem>
    <listitem>
     <para>
+    <package>cpp_ethereum</package> (aleth) has been abandoned upstream, and removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
     <package>riak-cs</package> package removed along with <varname>services.riak-cs</varname> module.
     </para>
    </listitem>
