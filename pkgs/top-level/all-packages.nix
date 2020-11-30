@@ -6995,6 +6995,8 @@ in
 
   rubocop = callPackage ../development/tools/rubocop { };
 
+  ruffle = callPackage ../misc/emulators/ruffle { };
+
   runelite = callPackage ../games/runelite { };
 
   runningx = callPackage ../tools/X11/runningx { };
