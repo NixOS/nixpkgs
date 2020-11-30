@@ -64,6 +64,12 @@
     githubId = 791309;
     name = "Jan Hrnko";
   };
+  _3699n = {
+    email = "nicholas@nvk.pm";
+    github = "3699n";
+    githubId = 7414843;
+    name = "Nicholas von Klitzing";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
