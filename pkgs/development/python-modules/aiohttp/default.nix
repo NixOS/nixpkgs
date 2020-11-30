@@ -21,6 +21,7 @@
 , brotlipy
 , freezegun
 , isPy38
+, re-assert
 }:
 
 buildPythonPackage rec {
@@ -37,10 +38,19 @@ buildPythonPackage rec {
   checkInputs = [
     pytestrunner pytestCheckHook gunicorn async_generator pytest_xdist
     pytest-mock pytestcov trustme brotlipy freezegun
+    re-assert
   ];
 
-  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
-    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
+  propagatedBuildInputs = [
+    attrs
+    chardet
+    multidict
+    async-timeout
+    typing-extensions
+    yarl
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    idna-ssl
+  ];
 
   disabledTests = [
     # disable tests which attempt to do loopback connections
@@ -54,6 +64,7 @@ buildPythonPackage rec {
     "proxy_https_bad_response"
     "partially_applied_handler"
     "middleware"
+    "test_mark_formdata_as_processed"
     # no longer compatible with pytest>=6
     "aiohttp_plugin_async_fixture"
   ] ++ lib.optionals stdenv.is32bit [
