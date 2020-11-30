@@ -1,4 +1,4 @@
-{ config, stdenv, lib, callPackage, fetchurl, nss_3_44 }:
+{ config, stdenv, lib, callPackage, fetchurl, fetchpatch, nss_3_44 }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
@@ -12,6 +12,17 @@ rec {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
       sha512 = "3va5a9471677jfzkhqp8xkba45n0bcpphbabhqbcbnps6p85m3y98pl5jy9q7cpq3a6gxc4ax7bp90yz2nfvfq7i64iz397xpprri2a";
     };
+
+    patches = [
+      # Fix compilation on aarch64 with newer rust version
+      # See https://bugzilla.mozilla.org/show_bug.cgi?id=1677690
+      # and https://bugzilla.redhat.com/show_bug.cgi?id=1897675
+      (fetchpatch {
+        name = "aarch64-simd-bgz-1677690.patch";
+        url = "https://github.com/mozilla/gecko-dev/commit/71597faac0fde4f608a60dd610d0cefac4972cc3.patch";
+        sha256 = "1f61nsgbv2c2ylgjs7wdahxrrlgc19gjy5nzs870zr1g832ybwin";
+      })
+    ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
