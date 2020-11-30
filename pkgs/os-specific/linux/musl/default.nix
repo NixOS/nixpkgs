@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
+    # wcsnrtombs destination buffer overflow, remove >= 1.2.2
+    (fetchurl {
+      name = "CVE-2020-28928.patch";
+      url = "https://www.openwall.com/lists/oss-security/2020/11/20/4/1";
+      sha256 = "077n2p165504nz9di6n8y5421591r3lsbcxgih8z26l6mvkhcs2h";
+    })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
