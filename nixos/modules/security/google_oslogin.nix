@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -29,6 +29,64 @@ in
         an instance, and to perform operations as root (sudo).
       '';
     };
+
+    security.pam =
+      let
+        name = "googleOsLogin";
+        pamCfg = config.security.pam;
+        modCfg = pamCfg.modules.${name};
+        path = "${package}/lib/pam_oslogin_login.so";
+      in
+      utils.pam.mkPamModule {
+        inherit name;
+
+        mkModuleOptions = global: {
+          enableAccountVerification = mkOption {
+            default = if global then false else modCfg.enableAccountVerification;
+            type = types.bool;
+            description = ''
+              If true, will use the Google OS Login PAM modules
+              (<literal>pam_oslogin_login</literal>,
+              <literal>pam_oslogin_admin</literal>) to verify possible OS Login
+              users and set sudoers configuration accordingly.
+              This only makes sense to enable for the <literal>sshd</literal> PAM
+              service.
+            '';
+          };
+
+          enableAuthentication = mkOption {
+            default = if global then false else modCfg.enableAuthentication;
+            type = types.bool;
+            description = ''
+              If true, will use the <literal>pam_oslogin_login</literal>'s user
+              authentication methods to authenticate users using 2FA.
+              This only makes sense to enable for the <literal>sshd</literal> PAM
+              service.
+            '';
+          };
+        };
+
+        mkAccountConfig = svcCfg: mkIf svcCfg.modules.${name}.enableAccountVerification {
+          "${name}Die" = {
+            inherit path;
+            control = { success = "ok"; ignore = "ignore"; default = "die"; };
+            order = 10000;
+          };
+          "${name}Ignore" = {
+            inherit path;
+            control = { success = "ok"; default = "ignore"; };
+            order = 10500;
+          };
+        };
+
+        mkAuthConfig = svcCfg: mkIf svcCfg.modules.${name}.enableAuthentication {
+          ${name} = {
+            inherit path;
+            control = { success = "done";  perm_denied = "bad";  default = "ignore"; };
+            order = 10000;
+          };
+        };
+      };
 
   };
 

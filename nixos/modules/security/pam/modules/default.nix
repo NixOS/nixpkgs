@@ -177,7 +177,6 @@ in
     ./gnome-keyring.nix
     ./gnupg.nix
     ./google-authenticator.nix
-    ./google-os-login.nix
     ./kwallet.nix
     ./limits.nix
     ./make-home-dir.nix
