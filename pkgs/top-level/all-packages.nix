@@ -14012,6 +14012,8 @@ in
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
+  libff = callPackage ../development/libraries/libff { };
+
   libffcall = callPackage ../development/libraries/libffcall { };
 
   libffi = callPackage ../development/libraries/libffi { };
