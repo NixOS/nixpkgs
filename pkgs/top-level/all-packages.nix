@@ -28691,4 +28691,6 @@ in
   lc3tools = callPackage ../development/tools/lc3tools {};
 
   systemc = callPackage ../applications/science/electronics/systemc/default.nix {};
+
+  uvm-systemc = callPackage ../applications/science/electronics/uvm-systemc/default.nix {};
 }
