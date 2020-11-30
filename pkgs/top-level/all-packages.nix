@@ -9543,15 +9543,7 @@ in
     graalvm8-ee
     graalvm11-ee;
 
-  # Cannot use a newer Qt (5.15) version because it requires qtwebkit
-  # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
-  openshot-qt = (pkgs.extend (final: prev: rec {
-    qt5 = if stdenv.isDarwin then prev.qt5 else prev.qt514;
-    libsForQt5 = if stdenv.isDarwin then prev.libsForQt5 else prev.libsForQt514;
-    pythonInterpreters = prev.pythonInterpreters.override {
-      pkgs = final;
-    };
-  })).libsForQt5.callPackage ../applications/video/openshot-qt { };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   openspin = callPackage ../development/compilers/openspin { };
 
@@ -10541,12 +10533,7 @@ in
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
-  pythonInterpreters = callPackage ./../development/interpreters/python {
-    # Overrides that apply to all Python interpreters and their packages
-    # Generally, this should be avoided.
-    pkgs = pkgs.extend (final: _: {
-    });
-  };
+  pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python310 python3Minimal pypy27 pypy36;
 
   # Python package sets.
@@ -20227,17 +20214,7 @@ in
 
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
 
-  cadence = let
-    # Use Qt 5.14 consistently
-    pkgs_ = pkgs.extend(_: prev: {
-      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
-        pkgs = oldAttrs.pkgs.extend(_: _: {
-          qt5 = pkgs.qt514;
-          libsForQt5 = pkgs.libsForQt514;
-        });
-      });
-    });
-  in pkgs_.libsForQt514.callPackage ../applications/audio/cadence { };
+  cadence = libsForQt5.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
@@ -23355,19 +23332,8 @@ in
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
 
-  # Our 3.10 LTS cannot use a newer Qt (5.15) version because it requires qtwebkit
-  # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
-  qgis-unwrapped = let
-    pkgs_ = pkgs.extend(_: prev: {
-      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
-        pkgs = oldAttrs.pkgs.extend(_: _: {
-          qt5 = pkgs.qt514;
-          libsForQt5 = pkgs.libsForQt514;
-        });
-      });
-    });
-  in pkgs_.libsForQt514.callPackage ../applications/gis/qgis/unwrapped.nix {
-      withGrass = false;
+  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
+    withGrass = false;
   };
 
   qgis = callPackage ../applications/gis/qgis { };
