@@ -73,19 +73,20 @@ rec {
                   check ? true
                 }:
     let
-      # This internal module declare internal options under the `_module'
-      # attribute.  These options are fragile, as they are used by the
-      # module system to change the interpretation of modules.
+      # An internal module that's always added, defining special options which
+      # change the behavior of the module evaluation itself. This is under a
+      # `_`-prefixed namespace in order to prevent name clashes with
+      # user-defined options
       internalModule = rec {
         # FIXME: Using ./modules.nix directly breaks the doc for some reason
         _file = "lib/modules.nix";
 
         key = _file;
 
-        # These options are set to be internal only for prefix != [], aka it's
-        # a submodule evaluation. This way their docs are displayed only once
-        # as a top-level NixOS option, but will be hidden for all submodules,
-        # even though they are available there too
+        # Most of these options are set to be internal only for prefix != [],
+        # aka it's a submodule evaluation. This way their docs are displayed
+        # only once as a top-level NixOS option, but will be hidden for all
+        # submodules, even though they are available there too
         options = {
           _module.args = mkOption {
             # Because things like `mkIf` are entirely useless for
@@ -101,7 +102,7 @@ rec {
 
           _module.check = mkOption {
             type = types.bool;
-            internal = prefix != [];
+            internal = true;
             default = check;
             description = ''
               Whether to check whether all option definitions have matching
