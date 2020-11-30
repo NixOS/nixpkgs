@@ -10052,4 +10052,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  alittlebitfour = {
+    name = "Ivan Larkou";
+    email = "ivan.larkou@outlook.com";
+    github = "ratatamatata";
+    githubId = 9656150;
+  };
 }

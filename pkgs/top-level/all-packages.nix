@@ -28689,4 +28689,6 @@ in
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
+
+  systemc = callPackage ../applications/science/electronics/systemc/default.nix {};
 }
