@@ -6015,7 +6015,6 @@ broken-packages:
   - haskell-type-exts
   - haskell-typescript
   - haskell-tyrant
-  - haskell-xmpp
   - haskell2010
   - haskell2020
   - haskell98
