@@ -93,7 +93,7 @@ self: super:
     (
       super.cffi.overridePythonAttrs (
         old: {
-          buildInputs = old.buildInputs ++ [ pkgs.libffi ];
+          buildInputs = old.buildInputs or [ ] ++ [ pkgs.libffi ];
         }
       )
     );
@@ -103,6 +103,12 @@ self: super:
       buildInputs = old.buildInputs ++ [
         self.cython
       ];
+    }
+  );
+
+  colour = super.colour.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.d2to1 ];
     }
   );
 
@@ -120,6 +126,8 @@ self: super:
 
   cryptography = super.cryptography.overridePythonAttrs (
     old: {
+      nativeBuildInputs = old.nativeBuildInputs or [ ]
+        ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) self.python.pythonForBuild.pkgs.cffi;
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
     }
   );
@@ -324,6 +332,17 @@ self: super:
     }
   );
 
+  jira = super.jira.overridePythonAttrs (
+    old: {
+      inherit (pkgs.python3Packages.jira) patches;
+      buildInputs = old.buildInputs ++ [
+        self.pytestrunner
+        self.cryptography
+        self.pyjwt
+      ];
+    }
+  );
+
   jsonpickle = super.jsonpickle.overridePythonAttrs (
     old: {
       dontPreferSetupPy = true;
@@ -499,6 +518,31 @@ self: super:
     buildInputs = oa.buildInputs ++ [ self.pbr ];
   });
 
+  mpi4py = super.mpi4py.overridePythonAttrs (
+    old:
+    let
+      cfg = pkgs.writeTextFile {
+        name = "mpi.cfg";
+        text = (
+          lib.generators.toINI
+            { }
+            {
+              mpi = {
+                mpicc = "${pkgs.openmpi.outPath}/bin/mpicc";
+              };
+            }
+        );
+      };
+    in
+    {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.openmpi ];
+      enableParallelBuilding = true;
+      preBuild = ''
+        ln -sf ${cfg} mpi.cfg
+      '';
+    }
+  );
+
   multiaddr = super.multiaddr.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
@@ -584,8 +628,8 @@ self: super:
       withMysql = old.passthru.withMysql or false;
     in
     {
-      buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
-      propagatedBuildInputs = old.propagatedBuildInputs
+      buildInputs = old.buildInputs or [ ] ++ [ pkgs.sqlite ];
+      propagatedBuildInputs = old.propagatedBuildInputs or [ ]
         ++ lib.optional withPostgres self.psycopg2
         ++ lib.optional withMysql self.mysql-connector;
     }
@@ -602,8 +646,8 @@ self: super:
     # "Vendor" dependencies (for build-system support)
     postPatch = ''
       echo "import sys" >> poetry/__init__.py
-      for path in ''${PYTHONPATH//:/ }; do echo $path; done | uniq | while read path; do
-        echo "sys.path.insert(0, \"$path\")" >> poetry/__init__.py
+      for path in $propagatedBuildInputs; do
+          echo "sys.path.insert(0, \"$path\")" >> poetry/__init__.py
       done
     '';
 
@@ -796,6 +840,14 @@ self: super:
     }
   );
 
+  python-bugzilla = super.python-bugzilla.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [
+        self.docutils
+      ];
+    }
+  );
+
   python-ldap = super.python-ldap.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.openldap pkgs.cyrus_sasl ];
@@ -921,6 +973,15 @@ self: super:
   pytest = super.pytest.overridePythonAttrs (
     old: {
       doCheck = false;
+    }
+  );
+
+  pytest-django = super.pytest-django.overridePythonAttrs (
+    old: {
+      postPatch = ''
+        substituteInPlace setup.py --replace "'pytest>=3.6'," ""
+        substituteInPlace setup.py --replace "'pytest>=3.6'" ""
+      '';
     }
   );
 
@@ -1090,6 +1151,43 @@ self: super:
     }
   );
 
+  torch = lib.makeOverridable
+    ({ enableCuda ? false
+     , cudatoolkit ? pkgs.cudatoolkit_10_1
+     , pkg ? super.torch
+     }: pkg.overrideAttrs (old:
+      {
+        preConfigure =
+          if (!enableCuda) then ''
+            export USE_CUDA=0
+          '' else ''
+            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${cudatoolkit}/targets/x86_64-linux/lib"
+          '';
+        preFixup = lib.optionalString (!enableCuda) ''
+          # For some reason pytorch retains a reference to libcuda even if it
+          # is explicitly disabled with USE_CUDA=0.
+          find $out -name "*.so" -exec ${pkgs.patchelf}/bin/patchelf --remove-needed libcuda.so.1 {} \;
+        '';
+        buildInputs = old.buildInputs ++ lib.optionals enableCuda [
+          pkgs.linuxPackages.nvidia_x11
+          pkgs.nccl.dev
+          pkgs.nccl.out
+        ];
+        propagatedBuildInputs = [
+          super.numpy
+          super.future
+        ];
+      })
+    )
+    { };
+
+  typeguard = super.typeguard.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py \
+        --replace 'setup()' 'setup(version="${old.version}")'
+    '';
+  });
+
   # nix uses a dash, poetry uses an underscore
   typing_extensions = super.typing_extensions or self.typing-extensions;
 
@@ -1193,4 +1291,30 @@ self: super:
     }
   );
 
+  credis = super.credis.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.cython ];
+    }
+  );
+
+  hashids = super.hashids.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.flit-core ];
+    }
+  );
+
+  supervisor = super.supervisor.overridePythonAttrs (
+    old: {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+        self.meld3
+        self.setuptools
+      ];
+    }
+  );
+
+  cytoolz = super.cytoolz.overridePythonAttrs (
+    old: {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.toolz ];
+    }
+  );
 }
