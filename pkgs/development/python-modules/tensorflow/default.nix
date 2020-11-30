@@ -288,9 +288,9 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "0vyy1hv0jy5pqwvnc8pxb9isgnbw07c4a4d4wn61db00np114crz"
+        "0zqn16s1j7p8l1q4857lsk14pk18vy0yg52rnigzs0kz9wijkjp0"
       else
-        "0vczv5f9s4dxgwdkmf1y9b9ybh5d3y1nllqhb5q8aj9kq73izyn9";
+        "18dbfbmwryapi7cf5rhks1m7a3bayd3gh9idm92vkr19sz6yjm3l";
     };
 
     buildAttrs = {
