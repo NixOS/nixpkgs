@@ -8,7 +8,7 @@ X.org upstream releases used to include [katamari](https://en.wiktionary.org/wik
 
 ```sh
 export release="X11R7.7"
-export url="mirror://xorg/X11R7.4/src/everything/"
+export url="mirror://xorg/$release/src/everything/"
 cat $(PRINT_PATH=1 nix-prefetch-url $url | tail -n 1) \
   | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'url'}$2\n"; }; }' \
   | sort > "tarballs-$release.list"
