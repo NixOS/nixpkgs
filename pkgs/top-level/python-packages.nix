@@ -5856,6 +5856,8 @@ in {
 
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
 
+  python-frontmatter = callPackage ../development/python-modules/python-frontmatter { };
+
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
