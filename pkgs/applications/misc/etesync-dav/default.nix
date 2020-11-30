@@ -2,32 +2,28 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
-  version = "0.20.0";
+  version = "0.30.6";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1q8h89hqi4kxphn1g5nbcia0haz5k57is9rycwaabm55mj9s9fah";
+    sha256 = "0cjz4p3a750fwvrxbzwda0sidw7nscahvppdshbsx49i6qrczpbg";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "Radicale==" "Radicale>="
+    substituteInPlace setup.py
   '';
 
   propagatedBuildInputs = with python3Packages; [
+    etebase
     etesync
     flask
     flask_wtf
     radicale3
   ];
 
-  checkInputs = with python3Packages; [
-    pytest
-  ];
-
-  checkPhase = ''
-    pytest
-  '';
-
+  doCheck = false;
+  doInstallCheck = false;
+  
   meta = with lib; {
     homepage = "https://www.etesync.com/";
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
