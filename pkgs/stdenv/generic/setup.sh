@@ -303,7 +303,7 @@ declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 addEnvHooks() {
     local depHostOffset="$1"
     shift
-    local pkgHookVarsSlice="${pkgHookVarVars[$depHostOffset + 1]}[@]"
+    local pkgHookVarsSlice="${pkgHookVarVars[$(( depHostOffset + 1 ))]}[@]"
     local pkgHookVar
     for pkgHookVar in "${!pkgHookVarsSlice}"; do
         eval "${pkgHookVar}s"'+=("$@")'
@@ -340,14 +340,14 @@ declare -a allPlatOffsets=(-1 0 1)
 # implements.
 findInputs() {
     local -r pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
-    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+    (( "$hostOffset" <= "$targetOffset" )) || exit 1
 
-    local varVar="${pkgAccumVarVars[$hostOffset + 1]}"
-    local varRef="$varVar[\$targetOffset - \$hostOffset]"
+    local varVar="${pkgAccumVarVars[$(( hostOffset + 1 ))]}"
+    local varRef="${varVar}[$(( targetOffset - hostOffset ))]"
     local var="${!varRef}"
     unset -v varVar varRef
 
@@ -355,7 +355,7 @@ findInputs() {
     # nix-shell doesn't use impure bash. This should replace the O(n)
     # case with an O(1) hash map lookup, assuming bash is implemented
     # well :D.
-    local varSlice="$var[*]"
+    local varSlice="${var}[*]"
     # ${..-} to hack around old bash empty array problem
     case "${!varSlice-}" in
         *" $pkg "*) return 0 ;;
@@ -372,28 +372,28 @@ findInputs() {
     # The current package's host and target offset together
     # provide a <=-preserving homomorphism from the relative
     # offsets to current offset
-    local -i mapOffsetResult
+    local mapOffsetResult
     function mapOffset() {
-        local -ri inputOffset="$1"
+        local -r inputOffset="$1"
         if (( "$inputOffset" <= 0 )); then
-            local -ri outputOffset="$inputOffset + $hostOffset"
+            local -r outputOffset=$(( inputOffset + hostOffset ))
         else
-            local -ri outputOffset="$inputOffset - 1 + $targetOffset"
+            local -r outputOffset=$(( inputOffset - 1 + targetOffset ))
         fi
         mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
     # dependencies we are currently exploring.
-    local -i relHostOffset
+    local relHostOffset
     for relHostOffset in "${allPlatOffsets[@]}"; do
         # `+ 1` so we start at 0 for valid index
-        local files="${propagatedDepFilesVars[$relHostOffset + 1]}"
+        local files="${propagatedDepFilesVars[$(( relHostOffset + 1 ))]}"
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
         mapOffset relHostOffset
-        local -i hostOffsetNext="$mapOffsetResult"
+        local hostOffsetNext="$mapOffsetResult"
 
         # Ensure we're in bounds relative to the package currently
         # being built.
@@ -401,18 +401,18 @@ findInputs() {
 
         # Target offset relative to the *host* offset of the package
         # whose immediate dependencies we are currently exploring.
-        local -i relTargetOffset
+        local relTargetOffset
         for relTargetOffset in "${allPlatOffsets[@]}"; do
             (( "$relHostOffset" <= "$relTargetOffset" )) || continue
 
-            local fileRef="${files}[$relTargetOffset - $relHostOffset]"
+            local fileRef="${files}[$((relTargetOffset - relHostOffset))]"
             local file="${!fileRef}"
             unset -v fileRef
 
             # Target offset relative to the package currently being
             # built.
             mapOffset relTargetOffset
-            local -i targetOffsetNext="$mapOffsetResult"
+            local targetOffsetNext="$mapOffsetResult"
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
@@ -466,8 +466,8 @@ done
 # Add package to the future PATH and run setup hooks
 activatePackage() {
     local pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
     (( "$hostOffset" <= "$targetOffset" )) || exit -1
@@ -497,14 +497,14 @@ activatePackage() {
 }
 
 _activatePkgs() {
-    local -i hostOffset targetOffset
+    local hostOffset targetOffset
     local pkg
 
     for hostOffset in "${allPlatOffsets[@]}"; do
-        local pkgsVar="${pkgAccumVarVars[$hostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[$(( hostOffset + 1 ))]}"
         for targetOffset in "${allPlatOffsets[@]}"; do
             (( "$hostOffset" <= "$targetOffset" )) || continue
-            local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
+            local pkgsRef="${pkgsVar}[$(( targetOffset - hostOffset ))]"
             local pkgsSlice="${!pkgsRef}[@]"
             for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
                 activatePackage "$pkg" "$hostOffset" "$targetOffset"
@@ -525,12 +525,12 @@ _activatePkgs
 # with this information to the relevant env hook array, but bash
 # doesn't have closures, so it's easier to just pass this in.
 _addToEnv() {
-    local -i depHostOffset depTargetOffset
+    local depHostOffset depTargetOffset
     local pkg
 
     for depHostOffset in "${allPlatOffsets[@]}"; do
-        local hookVar="${pkgHookVarVars[$depHostOffset + 1]}"
-        local pkgsVar="${pkgAccumVarVars[$depHostOffset + 1]}"
+        local hookVar="${pkgHookVarVars[$(( depHostOffset + 1 ))]}"
+        local pkgsVar="${pkgAccumVarVars[$(( depHostOffset + 1 ))]}"
         for depTargetOffset in "${allPlatOffsets[@]}"; do
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
