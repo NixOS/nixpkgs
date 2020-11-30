@@ -1,16 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
+  name = "gnupg";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.gnupg;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
       type = types.bool;
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       description = ''
         If enabled, pam_gnupg will attempt to automatically unlock the
         user's GPG keys with the login password via
@@ -25,7 +25,7 @@ let
 
     noAutostart = mkOption {
       type = types.bool;
-      default = if global then false else cfg.noAutostart;
+      default = if global then false else modCfg.noAutostart;
       description = ''
         Don't start <command>gpg-agent</command> if it is not running.
         Useful in conjunction with starting <command>gpg-agent</command> as
@@ -35,48 +35,38 @@ let
 
     storeOnly = mkOption {
       type = types.bool;
-      default = if global then false else cfg.storeOnly;
+      default = if global then false else modCfg.storeOnly;
       description = ''
         Don't send the password immediately after login, but store for PAM
         <literal>session</literal>.
       '';
     };
   };
+
+  control = "optional";
+  path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      args = optional svcCfg.modules.${name}.storeOnly "store-only";
+      order = 26000;
+    };
+  };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      args = optional config.modules.gnupg.noAutostart "no-autostart";
+      order = 18000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.gnupg = moduleOptions false;
-            };
-
-            config = mkIf config.modules.gnupg.enable {
-              auth = mkDefault {
-                gnupg = {
-                  control = "optional";
-                  path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
-                  args = optional config.modules.gnupg.storeOnly "store-only";
-                  order = 26000;
-                };
-              };
-
-              session = mkDefault {
-                gnupg = {
-                  control = "optional";
-                  path = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
-                  args = optional config.modules.gnupg.noAutostart "no-autostart";
-                  order = 18000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.gnupg = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig mkSessionConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

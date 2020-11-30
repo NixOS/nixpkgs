@@ -1,15 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
+  name = "kwallet";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.kwallet;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         If enabled, pam_wallet will attempt to automatically unlock the user's
@@ -19,45 +19,35 @@ let
       '';
     };
   };
+
+  control = "optional";
+  path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      args = [
+        "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
+      ];
+      order = 24000;
+    };
+  };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      args = [
+        "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
+      ];
+      order = 16000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.kwallet = moduleOptions false;
-            };
-
-            config = mkIf config.modules.kwallet.enable {
-              auth = mkDefault {
-                kwallet = {
-                  control = "optional";
-                  path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
-                  args = [
-                    "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
-                  ];
-                  order = 24000;
-                };
-              };
-
-              session = mkDefault {
-                kwallet = {
-                  control = "optional";
-                  path = "${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so";
-                  args = [
-                    "kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5"
-                  ];
-                  order = 16000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.kwallet = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

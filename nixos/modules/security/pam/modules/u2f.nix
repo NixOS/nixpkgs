@@ -3,14 +3,13 @@
 with lib;
 
 let
+  name = "u2f";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.u2f;
+  modCfg = pamCfg.modules.${name};
 
-  anyEnable = any (attrByPath [ "modules" "u2f" "enable" ] false) (attrValues pamCfg.services);
-
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         Enables U2F PAM (<literal>pam-u2f</literal>) module.
@@ -28,7 +27,7 @@ let
     };
 
     authFile = mkOption {
-      default = if global then null else cfg.authFile;
+      default = if global then null else modCfg.authFile;
       type = with types; nullOr path;
       description = ''
         By default <literal>pam-u2f</literal> module reads the keys from
@@ -47,7 +46,7 @@ let
     };
 
     appId = mkOption {
-      default = if global then null else cfg.appId;
+      default = if global then null else modCfg.appId;
       type = with types; nullOr str;
       description = ''
         By default <literal>pam-u2f</literal> module sets the application
@@ -61,7 +60,7 @@ let
     };
 
     control = mkOption {
-      default = if global then "sufficient" else cfg.control;
+      default = if global then "sufficient" else modCfg.control;
       type = utils.pam.controlType;
       description = ''
         This option sets pam "control".
@@ -77,7 +76,7 @@ let
     };
 
     debug = mkOption {
-      default = if global then false else cfg.debug;
+      default = if global then false else modCfg.debug;
       type = types.bool;
       description = ''
         Debug output to stderr.
@@ -85,7 +84,7 @@ let
     };
 
     interactive = mkOption {
-      default = if global then false else cfg.interactive;
+      default = if global then false else modCfg.interactive;
       type = types.bool;
       description = ''
         Set to prompt a message and wait before testing the presence of a U2F device.
@@ -94,7 +93,7 @@ let
     };
 
     cue = mkOption {
-      default = if global then false else cfg.cue;
+      default = if global then false else modCfg.cue;
       type = types.bool;
       description = ''
         By default <literal>pam-u2f</literal> module does not inform user
@@ -105,42 +104,31 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit (svcCfg.modules.${name}) control;
+      path = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
+      args = flatten [
+        (optional svcCfg.modules.${name}.debug "debug")
+        (optional (svcCfg.modules.${name}.authFile != null) "authFile=${svcCfg.modules.${name}.authFile}")
+        (optional svcCfg.modules.${name}.interactive "interactive")
+        (optional svcCfg.modules.${name}.cue "cue")
+        (optional (svcCfg.modules.${name}.appId != null) "appid=${svcCfg.modules.${name}.appId}")
+      ];
+      order = 17000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.u2f = moduleOptions false;
-            };
-
-            config = mkIf config.modules.u2f.enable {
-              auth = mkDefault {
-                u2f = {
-                  inherit (config.modules.u2f) control;
-                  path = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
-                  args = flatten [
-                    (optional config.modules.u2f.debug "debug")
-                    (optional (config.modules.u2f.authFile != null) "authFile=${config.modules.u2f.authFile}")
-                    (optional config.modules.u2f.interactive "interactive")
-                    (optional config.modules.u2f.cue "cue")
-                    (optional (config.modules.u2f.appId != null) "appid=${config.modules.u2f.appId}")
-                  ];
-                  order = 17000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.u2f = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 
-  config = mkIf (cfg.enable || anyEnable) {
+  config = mkIf (modCfg.enable || (utils.pam.anyEnable pamCfg name)) {
     environment.systemPackages = [ pkgs.pam_u2f ];
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.sssd;
@@ -48,65 +48,59 @@ in {
 
     security.pam =
       let
-        pamModuleCfg = config.security.pam.modules.ldap;
-        moduleOptions = global: {
+        name = "sssd";
+        pamCfg = config.security.pam;
+        pamModCfg = pamCfg.modules.${name};
+
+        path = "${pkgs.sssd}/lib/security/pam_sss.so";
+      in
+      utils.pam.mkPamModule {
+        inherit name;
+        mkSvcConfigCondition = svcCfg: cfg.enable && svcCfg.modules.${name}.enable;
+
+        mkModuleOptions = global: {
           enable = mkOption {
             type = types.bool;
-            default = if global then true else pamModuleCfg.enable;
+            default = if global then true else pamModCfg.enable;
             description = ''
               Whether to include authentication against SSSD in PAM
             '';
           };
         };
-      in
-      {
-        services = mkOption {
-          type = with types; attrsOf (submodule
-            ({ config, ... }: {
-              options = {
-                modules.sssd = moduleOptions false;
-              };
 
-              config = mkIf (cfg.enable && config.modules.sssd.enable) {
-                account = mkDefault {
-                  sssd = {
-                    control = if cfg.enableStrictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
-                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                    order = 3000;
-                  };
-                };
-
-                auth = mkDefault {
-                  sssd = {
-                    control = "sufficient";
-                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                    args = [ "use_first_pass" ];
-                    order = 33000;
-                  };
-                };
-
-                password = mkDefault {
-                  sssd = {
-                    control = "sufficient";
-                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                    args = [ "use_authtok" ];
-                    order = 5000;
-                  };
-                };
-
-                session = mkDefault {
-                  sssd = {
-                    control = "optional";
-                    path = "${pkgs.sssd}/lib/security/pam_sss.so";
-                    order = 8000;
-                  };
-                };
-              };
-            })
-          );
+        mkAccountConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = if cfg.enableStrictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
+            order = 3000;
+          };
         };
 
-        modules.sssd = moduleOptions true;
+        mkAuthConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = "sufficient";
+            args = [ "use_first_pass" ];
+            order = 33000;
+          };
+        };
+
+        mkPasswordConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = "sufficient";
+            args = [ "use_authtok" ];
+            order = 5000;
+          };
+        };
+
+        mkSessionConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = "optional";
+            order = 8000;
+          };
+        };
       };
 
   };

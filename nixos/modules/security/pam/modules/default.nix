@@ -1,16 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules;
+  modCfg = pamCfg.modules;
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     rootOK = mkOption {
       type = types.bool;
-      default = if global then false else cfg.rootOK;
+      default = if global then false else modCfg.rootOK;
       description = ''
       If true, root doesn't need to authenticate (e.g. for the
       <command>useradd</command> service).
@@ -18,7 +17,7 @@ let
     };
 
     startSession = mkOption {
-      default = if global then false else cfg.startSession;
+      default = if global then false else modCfg.startSession;
       type = types.bool;
       description = ''
         If set, the service will register a new session with
@@ -31,7 +30,7 @@ let
 
     setEnvironment = mkOption {
       type = types.bool;
-      default = if global then true else cfg.setEnvironment;
+      default = if global then true else modCfg.setEnvironment;
       description = ''
         Whether the service should set the environment variables
         listed in <option>environment.sessionVariables</option>
@@ -41,7 +40,7 @@ let
 
     setLoginUid = mkOption {
       type = types.bool;
-      default = if global then cfg.startSession else cfg.setLoginUid;
+      default = if global then modCfg.startSession else modCfg.setLoginUid;
       description = ''
         Set the login uid of the process
         (<filename>/proc/self/loginuid</filename>) for auditing
@@ -52,7 +51,7 @@ let
     };
 
     forwardXAuth = mkOption {
-      default = if global then false else cfg.forwardXAuth;
+      default = if global then false else modCfg.forwardXAuth;
       type = types.bool;
       description = ''
         Whether X authentication keys should be passed from the
@@ -62,7 +61,7 @@ let
     };
 
     requireWheel = mkOption {
-      default = if global then false else cfg.requireWheel;
+      default = if global then false else modCfg.requireWheel;
       type = types.bool;
       description = ''
         Whether to permit root access only to members of group wheel.
@@ -70,13 +69,13 @@ let
     };
 
     updateWtmp = mkOption {
-      default = if global then false else cfg.updateWtmp;
+      default = if global then false else modCfg.updateWtmp;
       type = types.bool;
       description = "Whether to update <filename>/var/log/wtmp</filename>.";
     };
 
     logFailures = mkOption {
-      default = if global then false else cfg.logFailures;
+      default = if global then false else modCfg.logFailures;
       type = types.bool;
       description = ''
         Whether to log authentication failures in
@@ -84,93 +83,89 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    deny = {
+      control = "required";
+      path = "pam_deny.so";
+      order = 100000;
+    };
+
+    logFailures = mkIf svcCfg.modules.logFailures {
+      control = "required";
+      path = "pam_tally.so";
+      order = 13000;
+    };
+
+    requireWheel = mkIf svcCfg.modules.requireWheel {
+      control = "required";
+      path = "pam_wheel.so";
+      args = [ "use_uid" ];
+      order = 12000;
+    };
+
+    rootOK = mkIf svcCfg.modules.rootOK {
+      control = "sufficient";
+      path = "pam_rootok.so";
+      order = 11000;
+    };
+  };
+
+  mkSessionConfig = svcCfg: {
+    forwardXAuth = mkIf svcCfg.modules.forwardXAuth {
+      control = "optional";
+      path = "pam_xauth.so";
+      args = [
+        "xauthpath=${pkgs.xorg.xauth}/bin/xauth"
+        "systemuser=99"
+      ];
+      order = 12000;
+    };
+
+    setEnvironment = mkIf svcCfg.modules.setEnvironment {
+      control = "required";
+      path = "pam_env.so";
+      args = [
+        "conffile=${config.system.build.pamEnvironment}"
+        "readenv=0"
+      ];
+      order = 500;
+    };
+
+    setLoginUid = mkIf svcCfg.modules.setLoginUid {
+      control = if config.boot.isContainer then "optional" else "required";
+      path = "pam_loginuid.so";
+      order = 2000;
+    };
+
+    startSession = mkIf svcCfg.modules.startSession {
+      control = "optional";
+      path = "${pkgs.systemd}/lib/security/pam_systemd.so";
+      order = 11000;
+    };
+
+    updateWtmp = mkIf svcCfg.modules.updateWtmp {
+      control = "required";
+      path = "${pkgs.pam}/lib/security/pam_lastlog.so";
+      args = [ "silent" ];
+      order = 4000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules = moduleOptions false;
-            };
-
-            config = {
-              modules.setLoginUid = mkDefault config.modules.startSession;
-
-              auth = mkDefault {
-                deny = {
-                  control = "required";
-                  path = "pam_deny.so";
-                  order = 100000;
-                };
-
-                logFailures = mkIf config.modules.logFailures {
-                  control = "required";
-                  path = "pam_tally.so";
-                  order = 13000;
-                };
-
-                requireWheel = mkIf config.modules.requireWheel {
-                  control = "required";
-                  path = "pam_wheel.so";
-                  args = [ "use_uid" ];
-                  order = 12000;
-                };
-
-                rootOK = mkIf config.modules.rootOK {
-                  control = "sufficient";
-                  path = "pam_rootok.so";
-                  order = 11000;
-                };
-              };
-
-              session = mkDefault {
-                forwardXAuth = mkIf config.modules.forwardXAuth {
-                  control = "optional";
-                  path = "pam_xauth.so";
-                  args = [
-                    "xauthpath=${pkgs.xorg.xauth}/bin/xauth"
-                    "systemuser=99"
-                  ];
-                  order = 12000;
-                };
-
-                setEnvironment = mkIf config.modules.setEnvironment {
-                  control = "required";
-                  path = "pam_env.so";
-                  args = [
-                    "conffile=${topCfg.system.build.pamEnvironment}"
-                    "readenv=0"
-                  ];
-                  order = 500;
-                };
-
-                setLoginUid = mkIf config.modules.setLoginUid {
-                  control = if topCfg.boot.isContainer then "optional" else "required";
-                  path = "pam_loginuid.so";
-                  order = 2000;
-                };
-
-                startSession = mkIf config.modules.startSession {
-                  control = "optional";
-                  path = "${pkgs.systemd}/lib/security/pam_systemd.so";
-                  order = 11000;
-                };
-
-                updateWtmp = mkIf config.modules.updateWtmp {
-                  control = "required";
-                  path = "${pkgs.pam}/lib/security/pam_lastlog.so";
-                  args = [ "silent" ];
-                  order = 4000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      # Those options should be directly under the modules option and not
+      # grouped under a name.
+      name = null;
+      inherit mkModuleOptions mkAuthConfig mkSessionConfig;
+      extraSubmodules = [(
+        { config, ... }: {
+          config = {
+            modules.setLoginUid = mkDefault config.modules.startSession;
+          };
+        }
+      )];
     };
   };
 

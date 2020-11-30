@@ -1,15 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
+  name = "apparmor";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.appArmor;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         Enable support for attaching AppArmor profiles at the
@@ -18,35 +18,24 @@ let
       '';
     };
   };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      control = "optional";
+      path = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so";
+      args = [
+        "order=user,group,default"
+        "debug"
+      ];
+      order = 15000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.appArmor = moduleOptions false;
-            };
-
-            config = mkIf (config.modules.appArmor.enable && topCfg.security.apparmor.enable) {
-              session = mkDefault {
-                appArmor = {
-                  control = "optional";
-                  path = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so";
-                  args = [
-                    "order=user,group,default"
-                    "debug"
-                  ];
-                  order = 15000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.appArmor = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkSessionConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable && config.security.apparmor.enable;
     };
   };
 }

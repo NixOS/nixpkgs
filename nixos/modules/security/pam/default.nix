@@ -64,13 +64,13 @@ let
     };
   };
 
-  entriesType = moduleName: types.orderOf {
+  entriesType = entryType: types.orderOf {
     before = a: b: a.value.order < b.value.order;
-    elemType = with types; (submodule (pamEntryModule moduleName));
+    elemType = with types; (submodule (pamEntryModule entryType));
   };
 
-  mkEntriesOption = moduleType: mkOption {
-    type = entriesType moduleType;
+  mkEntriesOption = entryType: mkOption {
+    type = entriesType entryType;
     description = ''
       The ${moduleType}-type entries of this service.
     '';

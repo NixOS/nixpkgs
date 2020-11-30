@@ -1,17 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "usb";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.usb;
+  modCfg = pamCfg.modules.${name};
 
-  anyEnable = any (attrByPath [ "modules" "usb" "enable" ] false) (attrValues pamCfg.services);
-
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
       type = types.bool;
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       description = ''
         Enable USB login for all login systems that support it. For more
         information, visit <link
@@ -19,35 +18,24 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      control = "sufficient";
+      path = "${pkgs.pam_usb}/lib/security/pam_usb.so";
+      order = 18000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.usb = moduleOptions false;
-            };
-
-            config = mkIf config.modules.usb.enable {
-              auth = mkDefault {
-                usb = {
-                  control = "sufficient";
-                  path = "${pkgs.pam_usb}/lib/security/pam_usb.so";
-                  order = 18000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.usb = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 
-  config = mkIf (cfg.enable || anyEnable) {
+  config = mkIf (modCfg.enable || (utils.pam.anyEnable pamCfg name)) {
     # Make sure pmount and pumount are setuid wrapped.
     security.wrappers = {
       pmount.source = "${pkgs.pmount.out}/bin/pmount";

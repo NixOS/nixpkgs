@@ -3,12 +3,13 @@
 with lib;
 
 let
+  name = "yubico";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.yubico;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         Enables Yubico PAM (<literal>yubico-pam</literal>) module.
@@ -22,7 +23,7 @@ let
       '';
     };
     control = mkOption {
-      default = if global then "sufficient" else cfg.control;
+      default = if global then "sufficient" else modCfg.control;
       type = utils.pam.controlType;
       description = ''
         This option sets pam "control".
@@ -38,19 +39,19 @@ let
     };
     id = mkOption {
       default = null;
-      example = if global then 42 else cfg.id;
+      example = 42;
       type = with types; nullOr int;
       description = "client id";
     };
     debug = mkOption {
-      default = if global then false else cfg.debug;
+      default = if global then false else modCfg.debug;
       type = types.bool;
       description = ''
         Debug output to stderr.
       '';
     };
     mode = mkOption {
-      default = if global then "client" else cfg.mode;
+      default = if global then "client" else modCfg.mode;
       type = types.enum [ "client" "challenge-response" ];
       description = ''
         Mode of operation.
@@ -64,35 +65,24 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit (svcCfg.modules.${name}) control;
+      path = "${pkgs.yubico-pam}/lib/security/pam_yubico.so";
+      args = flatten [
+        "mode=${toString svcCfg.modules.${name}.mode}"
+        (optional (svcCfg.modules.${name}.mode == "client") "id=${toString svcCfg.modules.${name}.id}")
+        (optional svcCfg.modules.${name}.debug "debug")
+      ];
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.yubico = moduleOptions false;
-            };
-
-            config = mkIf config.modules.yubico.enable {
-              auth = mkDefault {
-                yubico = {
-                  inherit (config.modules.yubico) control;
-                  path = "${pkgs.yubico-pam}/lib/security/pam_yubico.so";
-                  args = flatten [
-                    "mode=${toString config.modules.yubico.mode}"
-                    (optional (config.modules.yubico.mode == "client") "id=${toString config.modules.yubico.id}")
-                    (optional config.modules.yubico.debug "debug")
-                  ];
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.yubico = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -72,9 +72,8 @@ let
             (mapAttrsToList mkRelation value)
         else value));
 
+  pamModName = "krb5";
   pamCfg = config.security.pam;
-  pamModuleCfg = pamCfg.modules.krb5;
-  pamAnyEnable = any (attrByPath [ "modules" "krb5" "enable" ] false) (attrValues pamCfg.services);
 
 in {
 
@@ -293,76 +292,69 @@ in {
 
     security.pam =
       let
-        moduleOptions = global: {
+        pamModCfg = pamCfg.modules.${pamModName};
+        path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
+        ccreds_path = "${pkgs.pam_ccreds}/lib/security/pam_ccreds.so";
+      in
+      utils.pam.mkPamModule {
+        name = pamModName;
+        mkSvcConfigCondition = svcCfg: cfg.enable && svcCfg.modules.${pamModName}.enable;
+
+        mkModuleOptions = global: {
           enable = mkOption {
             type = types.bool;
-            default = if global then true else pamModuleCfg.enable;
+            default = if global then true else pamModCfg.enable;
             description = ''
               Whether to include authentication against krb5 in login PAM
             '';
           };
         };
-      in
-      {
-        services = mkOption {
-          type = with types; attrsOf (submodule
-            ({ config, ... }: {
-              options = {
-                modules.krb5 = moduleOptions false;
-              };
 
-              config = mkIf (cfg.enable && config.modules.krb5.enable) {
-                account = mkDefault {
-                  krb5 = {
-                    control = "sufficient";
-                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
-                    order = 4000;
-                  };
-                };
-
-                auth = mkDefault {
-                  krb5 = {
-                    control = { default = "ignore"; success = 1; service_err = "reset"; };
-                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
-                    args = [ "use_first_pass" ];
-                    order = 34000;
-                  };
-                  ccredsValidate = {
-                    control = { default = "die"; success = "done"; };
-                    path = "${pkgs.pam_ccreds}/lib/security/pam_ccreds.so";
-                    args = [ "action=validate" "use_first_pass" ];
-                    order = 34250;
-                  };
-                  ccredsStore = {
-                    control = "sufficient";
-                    path = "${pkgs.pam_ccreds}/lib/security/pam_ccreds.so";
-                    args = [ "action=store" "use_first_pass" ];
-                    order = 34750;
-                  };
-                };
-
-                password = mkDefault {
-                  krb5 = {
-                    control = "sufficient";
-                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
-                    args = [ "use_first_pass" ];
-                    order = 6000;
-                  };
-                };
-
-                session = mkDefault {
-                  krb5 = {
-                    control = "optional";
-                    path = "${pkgs.pam_krb5}/lib/security/pam_krb5.so";
-                    order = 9000;
-                  };
-                };
-              };
-            })
-          );
+        mkAccountConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = "sufficient";
+            order = 4000;
+          };
         };
 
-        modules.krb5 = moduleOptions true;
+        mkAuthConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = { default = "ignore"; success = 1; service_err = "reset"; };
+            args = [ "use_first_pass" ];
+            order = 34000;
+          };
+          ccredsValidate = {
+            control = { default = "die"; success = "done"; };
+            path = ccreds_path;
+            args = [ "action=validate" "use_first_pass" ];
+            order = 34250;
+          };
+          ccredsStore = {
+            control = "sufficient";
+            path = ccreds_path;
+            args = [ "action=store" "use_first_pass" ];
+            order = 34750;
+          };
+        };
+
+        mkPasswordConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = "sufficient";
+            args = [ "use_first_pass" ];
+            order = 6000;
+          };
+        };
+
+        mkSessionConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = "optional";
+            order = 9000;
+          };
+        };
       };
   };
 
@@ -372,7 +364,7 @@ in {
 
     environment.systemPackages = [
       cfg.kerberos
-    ] ++ (optionals pamAnyEnable [ pkgs.pam_krb5 pkgs.pam_ccreds ]);
+    ] ++ (optionals (utils.pam.anyEnable pamCfg pamModName) [ pkgs.pam_krb5 pkgs.pam_ccreds ]);
 
     environment.etc."krb5.conf".text = if isString cfg.config
       then cfg.config

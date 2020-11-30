@@ -160,5 +160,49 @@ rec {
     controlType = types.either
       (types.enum [ "required" "requisite" "sufficient" "optional" "include" "substack" ])
       (types.addCheck (types.attrsOf action) (x: all returnCode.check (attrNames x)));
+
+    anyEnable = pamCfg: name: any (attrByPath [ "modules" name "enable" ] false) (attrValues pamCfg.services);
+
+    # See nixos/modules/security/pam/modules/motd.nix for a simple example
+    # See nixos/modules/security/pam/modules/unix.nix for a more complex one
+    mkPamModule =
+      { name
+      , mkModuleOptions ? (global: {})
+      , mkSvcConfigCondition ? (svcCfg: true)
+      , mkAccountConfig ? (svcCfg: {})
+      , mkAuthConfig ? (svcCfg: {})
+      , mkPasswordConfig ? (svcCfg: {})
+      , mkSessionConfig ? (svcCfg: {})
+      , extraSubmodules ? []
+      }:
+      {
+        services = mkOption {
+          type = with types; attrsOf (submoduleWith {
+            shorthandOnlyDefinesConfig = true;
+            modules = extraSubmodules ++ [
+              ({ config, ... }: {
+                options = if name != null then {
+                  modules."${name}" = mkModuleOptions false;
+                } else {
+                  modules = mkModuleOptions false;
+                };
+
+                config = mkIf (mkSvcConfigCondition config) {
+                  # TODO: remove those mkDefaults and replace them with the
+                  # include/exclude logic
+                  account = mkDefault (mkAccountConfig config);
+                  auth = mkDefault (mkAuthConfig config);
+                  password = mkDefault (mkPasswordConfig config);
+                  session = mkDefault (mkSessionConfig config);
+                };
+              })
+            ];
+          });
+        };
+
+        modules = if name != null then {
+          "${name}" = mkModuleOptions true;
+        } else mkModuleOptions true;
+      };
   };
 }

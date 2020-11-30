@@ -1,14 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "duosec";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.duoSecurity;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         If set, use the Duo Security pam module
@@ -17,31 +18,20 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      control = "required";
+      path = "${pkgs.duo-unix}/lib/security/pam_duo.so";
+      order = 28000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.duoSecurity = moduleOptions false;
-            };
-
-            config = mkIf config.modules.duoSecurity.enable {
-              auth = mkDefault {
-                duoSecurity = {
-                  control = "required";
-                  path = "${pkgs.duo-unix}/lib/security/pam_duo.so";
-                  order = 28000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.duoSecurity = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

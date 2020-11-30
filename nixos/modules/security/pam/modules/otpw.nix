@@ -1,16 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "otpw";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.otpw;
+  modCfg = pamCfg.modules.${name};
 
-  anyEnable = any (attrByPath [ "modules" "otpw" "enable" ] false) (attrValues pamCfg.services);
-
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         Whether to enable the OTPW (one-time password) PAM module.
@@ -19,43 +18,34 @@ let
       '';
     };
   };
-in
-{
-  options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.otpw = moduleOptions false;
-            };
 
-            config = mkIf config.modules.otpw.enable {
-              auth = mkDefault {
-                otpw = {
-                  control = "sufficient";
-                  path = "${pkgs.otpw}/lib/security/pam_otpw.so";
-                  order = 31000;
-                };
-              };
+  path = "${pkgs.otpw}/lib/security/pam_otpw.so";
 
-              session = mkDefault {
-                otpw = {
-                  control = "optional";
-                  path = "${pkgs.otpw}/lib/security/pam_otpw.so";
-                  order = 10000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.otpw = moduleOptions true;
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit path;
+      control = "sufficient";
+      order = 31000;
     };
   };
 
-  config = mkIf (cfg.enable || anyEnable) {
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      inherit path;
+      control = "optional";
+      order = 10000;
+    };
+  };
+in
+{
+  options = {
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig mkSessionConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
+    };
+  };
+
+  config = mkIf (modCfg.enable || (utils.pam.anyEnable pamCfg name)) {
     environment.systemPackages = [ pkgs.otpw ];
   };
 }

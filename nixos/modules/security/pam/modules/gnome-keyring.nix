@@ -1,15 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
+  name = "gnome-keyring";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.gnomeKeyring;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         If enabled, pam_gnome_keyring will attempt to automatically unlock the
@@ -19,49 +19,38 @@ let
       '';
     };
   };
+
+  control = "optional";
+  path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      order = 25000;
+    };
+  };
+
+  mkPasswordConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      args = [ "use_authtok" ];
+      order = 10000;
+    };
+  };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      args = [ "auto_start" ];
+      order = 17000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.gnomeKeyring = moduleOptions false;
-            };
-
-            config = mkIf config.modules.gnomeKeyring.enable {
-              auth = mkDefault {
-                gnomeKeyring = {
-                  control = "optional";
-                  path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
-                  order = 25000;
-                };
-              };
-
-              password = mkDefault {
-                gnomeKeyring = {
-                  control = "optional";
-                  path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
-                  args = [ "use_authtok" ];
-                  order = 10000;
-                };
-              };
-
-              session = mkDefault {
-                gnomeKeyring = {
-                  control = "optional";
-                  path = "${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so";
-                  args = [ "auto_start" ];
-                  order = 17000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.gnomeKeyring = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig mkPasswordConfig mkSessionConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

@@ -1,14 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "googleAuthenticator";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.googleAuthenticator;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         If set, users with enabled Google Authenticator (created
@@ -17,32 +18,21 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      control = "required";
+      path = "${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so";
+      args = [ "no_increment_hotp" ];
+      order = 27000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.googleAuthenticator = moduleOptions false;
-            };
-
-            config = mkIf config.modules.googleAuthenticator.enable {
-              auth = mkDefault {
-                googleAuthenticator = {
-                  control = "required";
-                  path = "${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so";
-                  args = [ "no_increment_hotp" ];
-                  order = 27000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.googleAuthenticator = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

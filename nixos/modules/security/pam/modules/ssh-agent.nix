@@ -1,15 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
+  name = "sshAgent";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.sshAgent;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         Enable sudo logins if the user's SSH agent provides a key
@@ -19,34 +19,23 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      control = "sufficient";
+      path = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so";
+      args = [
+        "file=${concatStringsSep ":" config.services.openssh.authorizedKeysFiles}"
+      ];
+      order = 14000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.sshAgent = moduleOptions false;
-            };
-
-            config = mkIf config.modules.sshAgent.enable {
-              auth = mkDefault {
-                sshAgent = {
-                  control = "sufficient";
-                  path = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so";
-                  args = [
-                    "file=${lib.concatStringsSep ":" topCfg.services.openssh.authorizedKeysFiles}"
-                  ];
-                  order = 14000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.sshAgent = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

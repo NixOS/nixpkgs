@@ -1,78 +1,66 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "pam_mount";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.pam_mount;
+  modCfg = pamCfg.modules.${name};
 
-  anyEnable = any (attrByPath [ "modules" "pam_mount" "enable" ] false) (attrValues pamCfg.services);
-
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
       type = types.bool;
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       description = ''
         Enable PAM mount system to mount fileystems on user login.
       '';
     };
 
-    extraVolumes = mkOption {
+    # Extra volumes can only be defined globally
+    extraVolumes = if global then (mkOption {
       type = types.listOf types.str;
-      default = if global then [] else cfg.extraVolumes;
+      default = [];
       description = ''
         List of volume definitions for pam_mount.
         For more information, visit <link
         xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
       '';
+    }) else {};
+  };
+
+  control = "optional";
+  path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      order = 23000;
+    };
+  };
+
+  mkPasswordConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      order = 3000;
+    };
+  };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      inherit control path;
+      order = 6000;
     };
   };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              # Extra volumes can only be defined globally
-              modules.pam_mount = removeAttrs (moduleOptions false) [ "extraVolumes" ];
-            };
-
-            config = mkIf config.modules.pam_mount.enable {
-              auth = mkDefault {
-                pam_mount = {
-                  control = "optional";
-                  path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
-                  order = 23000;
-                };
-              };
-
-              password = mkDefault {
-                pam_mount = {
-                  control = "optional";
-                  path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
-                  order = 3000;
-                };
-              };
-
-              session = mkDefault {
-                pam_mount = {
-                  control = "optional";
-                  path = "${pkgs.pam_mount}/lib/security/pam_mount.so";
-                  order = 6000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.pam_mount = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig mkPasswordConfig mkSessionConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 
-  config = mkIf (cfg.enable || anyEnable) {
+  config = mkIf (modCfg.enable || (utils.pam.anyEnable pamCfg name)) {
     environment.systemPackages = [ pkgs.pam_mount ];
     environment.etc."security/pam_mount.conf.xml" = {
       source =
@@ -100,7 +88,7 @@ in
           <pmvarrun>${pkgs.pam_mount}/bin/pmvarrun -u %(USER) -o %(OPERATION)</pmvarrun>
 
           ${concatStrings (map userVolumeEntry (attrValues extraUserVolumes))}
-          ${concatStringsSep "\n" cfg.extraVolumes}
+          ${concatStringsSep "\n" modCfg.extraVolumes}
           </pam_mount>
         '';
     };

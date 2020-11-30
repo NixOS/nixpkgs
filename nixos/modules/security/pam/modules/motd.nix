@@ -1,51 +1,41 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
+  name = "motd";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.motd;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = "Whether to show the message of the day.";
     };
 
     motdFile = mkOption {
       type = types.path;
-      default = pkgs.writeText "motd" config.users.motd;
+      default = if global then (pkgs.writeText "motd" config.users.motd) else modCfg.motdFile;
       description = "The path to the motd file.";
     };
   };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      control = "optional";
+      path = "${pkgs.pam}/lib/security/pam_motd.so";
+      args = [ "motd=${svcCfg.modules.${name}.motdFile}" ];
+      order = 14000;
+    };
+  };
+
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.motd = moduleOptions false;
-            };
-
-            config = mkIf (config.modules.motd.enable && topCfg.users.motd != null) {
-              session = mkDefault {
-                motd = {
-                  control = "optional";
-                  path = "${pkgs.pam}/lib/security/pam_motd.so";
-                  args = [ "motd=${config.motdFile}" ];
-                  order = 14000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.motd = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkSessionConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable && (config.users.motd != null);
     };
 
     users.motd = mkOption {

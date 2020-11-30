@@ -1,15 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
-  topCfg = config;
+  name = "unix";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.unix;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enableAuth = mkOption {
-      default = if global then true else cfg.enableAuth;
+      default = if global then true else modCfg.enableAuth;
       type = types.bool;
       description = ''
         Whether users can log in with passwords defined in
@@ -18,7 +18,7 @@ let
     };
 
     allowNullPassword = mkOption {
-      default = if global then false else cfg.allowNullPassword;
+      default = if global then false else modCfg.allowNullPassword;
       type = types.bool;
       description = ''
         Whether to allow logging into accounts that have no password
@@ -33,7 +33,7 @@ let
     };
 
     nodelay = mkOption {
-      default = if global then false else cfg.nodelay;
+      default = if global then false else modCfg.nodelay;
       type = types.bool;
       description = ''
         Whether the delay after typing a wrong password should be disabled.
@@ -41,7 +41,7 @@ let
     };
 
     debug = mkOption {
-      default = if global then false else cfg.debug;
+      default = if global then false else modCfg.debug;
       type = types.bool;
       description = ''
         Whether to enable the "debug" option of the pam_unix.so module.
@@ -55,88 +55,77 @@ let
   # prompts the user for password so we run it once with 'required' at an
   # earlier point and it will run again with 'sufficient' further down.
   # We use try_first_pass the second time to avoid prompting password twice
-  /*needRequired = moduleCfg: moduleCfg.ecryptfs.enable
-                         || moduleCfg.mount.enable
-                         || moduleCfg.kwallet.enable
-                         || moduleCfg.gnomeKeyring.enable
-                         || moduleCfg.googleAuthenticator.enable
-                         || moduleCfg.gnupg.enable
-                         || moduleCfg.duoSecurity.enable;*/
-  needRequired = _: false;
+  needRequired = modulesCfg: modulesCfg.ecryptfs.enable
+                          || modulesCfg.pam_mount.enable
+                          || modulesCfg.kwallet.enable
+                          || modulesCfg.gnome-keyring.enable
+                          || modulesCfg.googleAuthenticator.enable
+                          || modulesCfg.gnupg.enable
+                          || modulesCfg.duosec.enable;
+
+  mkAuthConfig = svcCfg: let cond = svcCfg.modules.${name}.enableAuth; in {
+    "${name}Required" = mkIf (cond && (needRequired svcCfg.modules)) {
+      control = "required";
+      path = "pam_unix.so";
+      args = flatten [
+        (optional svcCfg.modules.${name}.allowNullPassword "nullok")
+        (optionalString svcCfg.modules.${name}.nodelay "nodelay")
+        "likeauth"
+        (optional svcCfg.modules.${name}.debug "debug")
+      ];
+      order = 21000;
+    };
+
+    ${name} = mkIf cond {
+      control = "sufficient";
+      path = "pam_unix.so";
+      args = flatten [
+        (optional svcCfg.modules.${name}.allowNullPassword "nullok")
+        (optional svcCfg.modules.${name}.nodelay "nodelay")
+        "likeauth"
+        "try_first_pass"
+        (optional svcCfg.modules.${name}.debug "debug")
+      ];
+      order = 30000;
+    };
+  };
+
+  mkAccountConfig = svcCfg: {
+    ${name} = {
+      control = "required";
+      path = "pam_unix.so";
+      args = optional svcCfg.modules.${name}.debug "debug";
+      order = 1000;
+    };
+  };
+
+  mkPasswordConfig = svcCfg: {
+    ${name} = {
+      control = "sufficient";
+      path = "pam_unix.so";
+      args = flatten [
+        "nullok"
+        "sha512"
+        (optional svcCfg.modules.${name}.debug "debug")
+      ];
+      order = 1000;
+    };
+  };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      control = "required";
+      path = "pam_unix.so";
+      args = optional svcCfg.modules.${name}.debug "debug";
+      order = 1000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.unix = moduleOptions false;
-            };
-
-            config = {
-              account = mkDefault {
-                unix = {
-                  control = "required";
-                  path = "pam_unix.so";
-                  args = optional config.modules.unix.debug "debug";
-                  order = 1000;
-                };
-              };
-
-              auth = mkIf config.modules.unix.enableAuth (mkDefault {
-                unixRequired = mkIf (needRequired config.modules) {
-                  control = "required";
-                  path = "pam_unix.so";
-                  args = flatten [
-                    (optional config.modules.unix.allowNullPassword "nullok")
-                    (optionalString config.modules.unix.nodelay "nodelay")
-                    "likeauth"
-                    (optional config.modules.unix.debug "debug")
-                  ];
-                  order = 21000;
-                };
-                unix = {
-                  control = "sufficient";
-                  path = "pam_unix.so";
-                  args = flatten [
-                    (optional config.modules.unix.allowNullPassword "nullok")
-                    (optional config.modules.unix.nodelay "nodelay")
-                    "likeauth"
-                    "try_first_pass"
-                    (optional config.modules.unix.debug "debug")
-                  ];
-                  order = 30000;
-                };
-              });
-
-              password = mkDefault {
-                unix = {
-                  control = "sufficient";
-                  path = "pam_unix.so";
-                  args = flatten [
-                    "nullok"
-                    "sha512"
-                    (optional config.modules.unix.debug "debug")
-                  ];
-                  order = 1000;
-                };
-              };
-
-              session = mkDefault {
-                unix = {
-                  control = "required";
-                  path = "pam_unix.so";
-                  args = optional config.modules.unix.debug "debug";
-                  order = 1000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.unix = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions
+              mkAccountConfig mkAuthConfig mkPasswordConfig mkSessionConfig;
     };
   };
 }

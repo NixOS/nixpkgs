@@ -1,14 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "makeHomeDir";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.makeHomeDir;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         Whether to try to create home directories for users
@@ -19,7 +20,7 @@ let
 
     skelDirectory = mkOption {
       type = types.str;
-      default = if global then "/var/empty" else cfg.skelDirectory;
+      default = if global then "/var/empty" else modCfg.skelDirectory;
       example =  "/etc/skel";
       description = ''
         Path to skeleton directory whose contents are copied to home
@@ -27,36 +28,25 @@ let
       '';
     };
   };
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      control = "required";
+      path = "${pkgs.pam}/lib/security/pam_mkhomedir.so";
+      args = [
+        "silent"
+        "skel=${svcCfg.modules.${name}.skelDirectory}"
+        "umask=0022"
+      ];
+      order = 3000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.makeHomeDir = moduleOptions false;
-            };
-
-            config = mkIf config.modules.makeHomeDir.enable {
-              session = mkDefault {
-                makeHomeDir = {
-                  control = "required";
-                  path = "${pkgs.pam}/lib/security/pam_mkhomedir.so";
-                  args = [
-                    "silent"
-                    "skel=${config.modules.makeHomeDir.skelDirectory}"
-                    "umask=0022"
-                  ];
-                  order = 3000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.makeHomeDir = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

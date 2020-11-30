@@ -1,10 +1,11 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "limits";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.limits;
+  modCfg = pamCfg.modules.${name};
 
   limitSubmodule = {
     options = {
@@ -59,9 +60,9 @@ let
     };
   };
 
-  moduleOption = mkOption {
+  mkModuleOptions = global: mkOption {
     type = with types; attrsOf (submodule limitSubmodule);
-    default = {};
+    default = if global then {} else modCfg;
     description = ''
       Define resource limits that should apply to users or groups.
       Each item in the list should be an attribute set with a
@@ -80,36 +81,21 @@ let
     (concatMapStringsSep "\n" ({ domain, type, item, value }:
       "${domain} ${type} ${item} ${toString value}")
     (attrValues limits));
+
+  mkSessionConfig = svcCfg: {
+    ${name} = {
+      control = "required";
+      path = "${pkgs.pam}/lib/security/pam_limits.so";
+      args = [ "conf=${makeLimitsConf svcCfg.modules.${name}}" ];
+      order = 13000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.limits = moduleOption;
-            };
-
-            config = {
-              modules.limits = mkDefault cfg;
-
-              session = mkDefault {
-                limits = mkIf (config.modules.limits != []) {
-                  control = "required";
-                  path = "${pkgs.pam}/lib/security/pam_limits.so";
-                  args = [
-                    "conf=${makeLimitsConf config.modules.limits}"
-                  ];
-                  order = 13000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.limits = moduleOption;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkSessionConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name} != {};
     };
   };
 }

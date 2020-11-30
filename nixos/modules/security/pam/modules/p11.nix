@@ -3,14 +3,13 @@
 with lib;
 
 let
+  name = "p11";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.p11;
+  modCfg = pamCfg.modules.${name};
 
-  anyEnable = any (attrByPath [ "modules" "p11" "enable" ] false) (attrValues pamCfg.services);
-
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then false else cfg.enable;
+      default = if global then false else modCfg.enable;
       type = types.bool;
       description = ''
         Enables P11 PAM (<literal>pam_p11</literal>) module.
@@ -23,7 +22,7 @@ let
     };
 
     control = mkOption {
-      default = if global then "sufficient" else cfg.control;
+      default = if global then "sufficient" else modCfg.control;
       type = utils.pam.controlType;
       description = ''
         This option sets pam "control".
@@ -40,36 +39,25 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      inherit (svcCfg.modules.p11) control;
+      path = "${pkgs.pam_p11}/lib/security/pam_p11.so";
+      args = [ "${pkgs.opensc}/lib/opensc-pkcs11.so" ];
+      order = 16000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.p11 = moduleOptions false;
-            };
-
-            config = mkIf config.modules.p11.enable {
-              auth = mkDefault {
-                p11 = {
-                  inherit (configmodules.p11) control;
-                  path = "${pkgs.pam_p11}/lib/security/pam_p11.so";
-                  args = [ "${pkgs.opensc}/lib/opensc-pkcs11.so" ];
-                  order = 16000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.p11 = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 
-  config = mkIf (cfg.enable || anyEnable) {
+  config = mkIf (modCfg.enable || (utils.pam.anyEnable pamCfg name)) {
     environment.systemPackages = [ pkgs.pam_p11 ];
   };
 }

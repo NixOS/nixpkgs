@@ -1,16 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
-# TODO: move this to its module
-
 let
+  name = "fprintd";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.fprintd;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enable = mkOption {
-      default = if global then config.services.fprintd.enable else cfg.enable;
+      default = if global then config.services.fprintd.enable else modCfg.enable;
       type = types.bool;
       description = ''
         If true, fingerprint reader will be used (if exists and
@@ -18,31 +17,20 @@ let
       '';
     };
   };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = {
+      control = "sufficient";
+      path = "${config.services.fprintd.package}/lib/security/pam_fprintd.so";
+      order = 15000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.fprintd = moduleOptions false;
-            };
-
-            config = mkIf config.modules.fprintd.enable {
-              auth = mkDefault {
-                fprintd = {
-                  control = "sufficient";
-                  path = "${pkgs.fprintd}/lib/security/pam_fprintd.so";
-                  order = 15000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.fprintd = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAuthConfig;
+      mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
     };
   };
 }

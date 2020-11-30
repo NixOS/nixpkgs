@@ -1,16 +1,15 @@
-{ config, pkgs, lib, ... }:
-
-# TODO: move this to google-os-login
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
 let
+  name = "googleOsLogin";
   pamCfg = config.security.pam;
-  cfg = pamCfg.modules.googleOsLogin;
+  modCfg = pamCfg.modules.${name};
 
-  moduleOptions = global: {
+  mkModuleOptions = global: {
     enableAccountVerification = mkOption {
-      default = if global then false else cfg.enableAccountVerification;
+      default = if global then false else modCfg.enableAccountVerification;
       type = types.bool;
       description = ''
         If true, will use the Google OS Login PAM modules
@@ -23,7 +22,7 @@ let
     };
 
     enableAuthentication = mkOption {
-      default = if global then false else cfg.enableAuthentication;
+      default = if global then false else modCfg.enableAuthentication;
       type = types.bool;
       description = ''
         If true, will use the <literal>pam_oslogin_login</literal>'s user
@@ -33,44 +32,34 @@ let
       '';
     };
   };
+
+  path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so";
+
+  mkAccountConfig = svcCfg: let cond = svcCfg.modules.${name}.enableAccountVerification; in {
+    "${name}Die" = mkIf cond {
+      inherit path;
+      control = { success = "ok"; ignore = "ignore"; default = "die"; };
+      order = 10000;
+    };
+    "${name}Ignore" = mkIf cond {
+      inherit path;
+      control = { success = "ok"; default = "ignore"; };
+      order = 10500;
+    };
+  };
+
+  mkAuthConfig = svcCfg: {
+    ${name} = mkIf svcCfg.modules.${name}.enableAuthentication {
+      inherit path;
+      control = { success = "done";  perm_denied = "bad";  default = "ignore"; };
+      order = 10000;
+    };
+  };
 in
 {
   options = {
-    security.pam = {
-      services = mkOption {
-        type = with types; attrsOf (submodule
-          ({ config, ... }: {
-            options = {
-              modules.googleOsLogin = moduleOptions false;
-            };
-
-            config = {
-              account = mkIf config.modules.googleOsLogin.enableAccountVerification (mkDefault {
-                googleOsLoginDie = {
-                  control = { success = "ok"; ignore = "ignore"; default = "die"; };
-                  path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so";
-                  order = 10000;
-                };
-                googleOsLoginIgnore = {
-                  control = { success = "ok"; default = "ignore"; };
-                  path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so";
-                  order = 10500;
-                };
-              });
-
-              auth = mkDefault {
-                googleOsLogin = mkIf config.modules.googleOsLogin.enableAuthentication {
-                  control = { success = "done";  perm_denied = "bad";  default = "ignore"; };
-                  path = "${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so";
-                  order = 10000;
-                };
-              };
-            };
-          })
-        );
-      };
-
-      modules.googleOsLogin = moduleOptions true;
+    security.pam = utils.pam.mkPamModule {
+      inherit name mkModuleOptions mkAccountConfig mkAuthConfig;
     };
   };
 }
