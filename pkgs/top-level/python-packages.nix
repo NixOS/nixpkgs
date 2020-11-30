@@ -5808,7 +5808,7 @@ in {
 
   pytest_xdist_2 = callPackage ../development/python-modules/pytest-xdist/2.nix { };
 
-  pytest_xdist = self.pytest_xdist_1;
+  pytest_xdist = self.pytest_xdist_2;
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
