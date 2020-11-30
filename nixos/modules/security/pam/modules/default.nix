@@ -170,7 +170,6 @@ in
   };
 
   imports = [
-    ./app-armor.nix
     ./duo-security.nix
     ./ecryptfs.nix
     ./gnome-keyring.nix
