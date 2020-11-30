@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpx";
-  version = "2.6.7";
+  version = "2.6.8";
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "markwal";
     repo = "GPX";
     rev = version;
-    sha256 = "1dl5vlsx05ipy10h18xigicb3k7m33sa9hfyd46hkpr2glx7jh4p";
+    sha256 = "1izs8s5npkbfrsyk17429hyl1vyrbj9dp6vmdlbb2vh6mfgl54h8";
   };
 
   meta = {
