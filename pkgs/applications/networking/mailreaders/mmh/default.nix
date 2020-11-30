@@ -10,6 +10,11 @@ in stdenv.mkDerivation rec {
     sha256 = "1q97p4g3f1q2m567i2dbx7mm7ixw3g91ww2rymwj42cxk9iyizhv";
   };
 
+  postPatch = ''
+    substituteInPlace sbr/Makefile.in \
+      --replace "ar " "${stdenv.cc.targetPrefix}ar "
+ '';
+
   buildInputs = [ ncurses ];
   nativeBuildInputs = [ autoreconfHook flex ];
 
