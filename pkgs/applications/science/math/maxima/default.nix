@@ -87,6 +87,10 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
+  passthru = {
+    ecl = ecl;
+  };
+
   meta = {
     description = "Computer algebra system";
     homepage = "http://maxima.sourceforge.net";

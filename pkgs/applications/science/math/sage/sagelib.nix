@@ -53,7 +53,6 @@
 , gmpy2
 , pplpy
 , sqlite
-, boehmgc # FIXME
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -129,7 +128,6 @@ buildPythonPackage rec {
     gmpy2
     pplpy
     sqlite
-    boehmgc # FIXME
   ];
 
   buildPhase = ''

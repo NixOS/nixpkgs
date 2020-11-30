@@ -50,10 +50,10 @@ let
   ];
 
   # remove python prefix, replace "-" in the name by "_", apply patch_names
-  # python2.7-some-pkg-1.0 -> some_pkg-1.0
+  # python3.8-some-pkg-1.0 -> some_pkg-1.0
   pkg_to_spkg_name = pkg: patch_names: let
     parts = lib.splitString "-" pkg.name;
-    # remove python2.7-
+    # remove python3.8-
     stripped_parts = if (builtins.head parts) == python3.libPrefix then builtins.tail parts else parts;
     version = lib.last stripped_parts;
     orig_pkgname = lib.init stripped_parts;
@@ -125,8 +125,6 @@ stdenv.mkDerivation rec {
     # the scripts in src/bin will find the actual sage source files using environment variables set in `sage-env`
     cp -r src/bin "$out/bin"
     cp -r build/bin "$out/build/bin"
-
-    ln -s "${python3}/bin/python3" "$out/bin/python3"
 
     cp -f '${sage-env}/sage-env' "$out/bin/sage-env"
     substituteInPlace "$out/bin/sage-env" \

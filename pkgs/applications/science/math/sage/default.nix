@@ -9,12 +9,13 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  python = pkgs.python3.override {
+  python3 = pkgs.python3.override {
     packageOverrides = self: super: {
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
         inherit sage-src env-locations pynac singular;
+        ecl = maxima-ecl.ecl;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };
@@ -42,7 +43,8 @@ let
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data;
     inherit singular maxima-ecl;
-    cysignals = python.pkgs.cysignals;
+    ecl = maxima-ecl.ecl;
+    cysignals = python3.pkgs.cysignals;
     three = nodePackages.three;
     mathjax = nodePackages.mathjax;
   };
@@ -50,21 +52,22 @@ let
   # The shell file that gets sourced on every sage start. Will also source
   # the env-locations file.
   sage-env = callPackage ./sage-env.nix {
-    sagelib = python.pkgs.sagelib;
+    sagelib = python3.pkgs.sagelib;
     inherit env-locations;
-    inherit python singular palp flint pynac pythonEnv maxima-ecl;
+    inherit python3 singular palp flint pynac pythonEnv maxima-ecl;
+    ecl = maxima-ecl.ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
   };
 
   # The documentation for sage, building it takes a lot of ram.
   sagedoc = callPackage ./sagedoc.nix {
     inherit sage-with-env;
-    inherit python maxima-ecl;
+    inherit python3 maxima-ecl;
   };
 
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
   sage-with-env = callPackage ./sage-with-env.nix {
-    inherit pythonEnv;
+    inherit python3 pythonEnv;
     inherit sage-env;
     inherit pynac singular maxima-ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
@@ -81,7 +84,7 @@ let
 
   sage-src = callPackage ./sage-src.nix {};
 
-  pythonRuntimeDeps = with python.pkgs; [
+  pythonRuntimeDeps = with python3.pkgs; [
     sagelib
     cvxopt
     networkx
@@ -95,11 +98,10 @@ let
     ipywidgets
     rpy2
     sphinx
-    typing
     pillow
   ];
 
-  pythonEnv = python.buildEnv.override {
+  pythonEnv = python3.buildEnv.override {
     extraLibs = pythonRuntimeDeps;
     ignoreCollisions = true;
   } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
@@ -108,7 +110,21 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  maxima-ecl = pkgs.maxima-ecl;
+  maxima-ecl = pkgs.maxima-ecl.override {
+    ecl = pkgs.ecl.override {
+      # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
+      # ECL. We apply a patch to fix it (write_error.patch), but it
+      # only works if threads are disabled.  sage 9.2 tests this
+      # (src/sage/interfaces/tests.py) and ships ecl like so.
+      # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1#note_1657275
+      threadSupport = false;
+
+      # if we don't use the system boehmgc, sending a SIGINT to ecl
+      # can segfault if we it happens during memory allocation.
+      # src/sage/libs/ecl.pyx would intermittently fail in this case.
+      useBoehmgc = true;
+    };
+  };
 
   # *not* to confuse with the python package "pynac"
   pynac = pkgs.pynac.override { inherit singular flint; };
