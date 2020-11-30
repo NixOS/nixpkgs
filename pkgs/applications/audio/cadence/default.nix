@@ -96,5 +96,7 @@ mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ worldofpeace ];
     platforms = [ "x86_64-linux" ];
+    # Needs QT 5.14
+    broken = true;
   };
 }
