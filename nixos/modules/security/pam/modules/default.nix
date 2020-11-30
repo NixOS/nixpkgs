@@ -171,7 +171,6 @@ in
 
   imports = [
     ./ecryptfs.nix
-    ./gnome-keyring.nix
     ./gnupg.nix
     ./google-authenticator.nix
     ./kwallet.nix
