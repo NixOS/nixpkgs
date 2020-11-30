@@ -38,12 +38,6 @@ in {
           For this to work, the <literal>ssh</literal> SSS service must be enabled in the sssd configuration.
         '';
       };
-
-      enableStrictAccess = mkOption {
-        default = false;
-        type = types.bool;
-        description = "enforce sssd access control";
-      };
     };
 
     security.pam =
@@ -66,12 +60,18 @@ in {
               Whether to include authentication against SSSD in PAM
             '';
           };
+
+          strictAccess = mkOption {
+            default = if global then false else pamModCfg.strictAccess;
+            type = types.bool;
+            description = "enforce sssd access control";
+          };
         };
 
         mkAccountConfig = svcCfg: {
           ${name} = {
             inherit path;
-            control = if cfg.enableStrictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
+            control = if svcCfg.modules.${name}.strictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
             order = 3000;
           };
         };
