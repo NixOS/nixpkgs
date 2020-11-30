@@ -278,23 +278,12 @@ checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
 ## Module assertions
 # Check that assertions are triggered by default for just evaluating config
 checkConfigError 'Failed checks:\n- \[test\] Assertion failed' config ./assertions/simple.nix
-# Check that assertions are only triggered if they have a triggerPath that's evaluated
-checkConfigError 'Failed checks:\n- \[test\] Assertion failed' config.foo ./assertions/trigger-lazy.nix
-checkConfigOutput true config.bar ./assertions/trigger-lazy.nix
-
-# The assertions enable condition should only be evaluated if the trigger is evaluated
-checkConfigError 'enable evaluated' config.foo ./assertions/enable-lazy.nix
-checkConfigOutput true config.bar ./assertions/enable-lazy.nix
 
 # Assertion is not triggered when enable is false
 checkConfigOutput '{ }' config ./assertions/enable-false.nix
 
 # Warnings should be displayed on standard error
 checkConfigCodeOutErr 0 '{ }' 'warning: \[test\] Warning message' config ./assertions/warning.nix
-
-# A triggerPath can be set to a submodule path
-checkConfigOutput '{ baz = <CODE>; }' config.foo.bar ./assertions/trigger-submodule.nix
-checkConfigError 'Failed checks:\n- \[test\] Assertion failed' config.foo.bar.baz ./assertions/trigger-submodule.nix
 
 # Check that multiple assertions and warnings can be triggered at once
 checkConfigError 'Failed checks:\n- \[test1\] Assertion 1 failed\n- \[test2\] Assertion 2 failed' config ./assertions/multi.nix
@@ -304,10 +293,6 @@ checkConfigError 'trace: warning: \[test3\] Warning 3 failed\ntrace: warning: \[
 checkConfigError 'Failed checks:\n- \[foo/test\] Assertion failed' config.foo ./assertions/submodule.nix
 checkConfigError 'Failed checks:\n- \[foo.bar/test\] Assertion failed' config.foo.bar ./assertions/submodule-attrsOf.nix
 checkConfigError 'Failed checks:\n- \[foo.bar.baz/test\] Assertion failed' config.foo.bar.baz ./assertions/submodule-attrsOf-attrsOf.nix
-
-# Assertions aren't triggered when the trigger path is only evaluated from within the same module evaluation
-# This behavior is necessary to allow assertions to depend on config values. This could potentially be changed in the future if all of NixOS' assertions are rewritten to not depend on any config values
-checkConfigOutput true config.bar ./assertions/non-cascading.nix
 
 # Assertions with an attribute starting with _ shouldn't have their name displayed
 checkConfigError 'Failed checks:\n- Assertion failed' config ./assertions/underscore-attributes.nix

@@ -29,12 +29,6 @@ with lib;
       '';
     };
 
-    _module.checks = mkOption {
-      type = types.attrsOf (types.submodule {
-        triggerPath = mkDefault [ "system" "build" "toplevel" ];
-      });
-    };
-
   };
 
   config._module.checks = lib.listToAttrs (lib.imap1 (n: value:

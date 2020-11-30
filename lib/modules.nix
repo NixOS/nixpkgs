@@ -192,32 +192,6 @@ rec {
                   Enabling both ''${options.services.foo.enable} and ''${options.services.bar.enable} is not possible.
                 '';
               };
-
-              options.triggerPath = mkOption {
-                description = ''
-                  The <literal>config</literal> path which when evaluated should
-                  trigger this check. By default this is
-                  <literal>[]</literal>, meaning evaluating
-                  <literal>config</literal> at all will trigger the check.
-                  On NixOS this default is changed to
-                  <literal>[ "system" "build" "toplevel"</literal> such that
-                  only a system evaluation triggers the checks.
-                  <warning><para>
-                   Evaluating <literal>config</literal> from within the current
-                   module evaluation doesn't cause a trigger. Only accessing it
-                   from outside will do that. This means it's easy to miss
-                   failing checks if this option doesn't have an externally-accessed
-                   value.
-                  </para></warning>
-                '';
-                # Mark as internal as it's easy to misuse it
-                internal = true;
-                type = types.uniq (types.listOf types.str);
-                # Default to [], causing checks to be triggered when
-                # anything is evaluated. This is a safe and convenient default.
-                default = [];
-                example = [ "system" "build" "vm" ];
-              };
             });
           };
         };
@@ -258,63 +232,34 @@ rec {
           # paths, meaning recursiveUpdate will never override any value
           else recursiveUpdate freeformConfig declaredConfig;
 
-      /*
-      Inject a list of checks into a config value, corresponding to their
-      triggerPath (meaning when that path is accessed from the result of this
-      function, the check triggers).
-      */
-      injectChecks = checks: config: let
-        # Partition into checks that are triggered on this level and ones that aren't
-        parted = lib.partition (a: length a.triggerPath == 0) checks;
+      # Triggers all checks defined by _module.checks before returning its argument
+      triggerChecks = let
 
-        # From the ones that are triggered, filter out ones that aren't enabled
-        # and group into warnings/errors
-        byType = lib.groupBy (a: a.type) (filter (a: a.enable) parted.right);
+        handleCheck = errors: name:
+          let
+            value = config._module.checks.${name};
+            show =
+              # Assertions with a _ prefix aren't meant to be configurable
+              if lib.hasPrefix "_" name then value.message
+              else "[${showOption prefix}${optionalString (prefix != []) "/"}${name}] ${value.message}";
+          in
+            if ! value.enable then errors
+            else if value.type == "warning" then lib.warn show errors
+            else if value.type == "error" then errors ++ [ show ]
+            else abort "Unknown check type ${value.type}";
 
-        # Triggers semantically are just lib.id, but they print warning cause errors in addition
-        warningTrigger = value: lib.foldr (w: warn w.show) value (byType.warning or []);
-        errorTrigger = value:
-          if byType.error or [] == [] then value else
-          throw ''
-            Failed checks:
-            ${lib.concatMapStringsSep "\n" (a: "- ${a.show}") byType.error}
-          '';
-        # Trigger for both warnings and errors
-        trigger = value: warningTrigger (errorTrigger value);
+        errors = lib.foldl' handleCheck [] (lib.attrNames config._module.checks);
 
-        # From the non-triggered checks, split off the first element of triggerPath
-        # to get a mapping from nested attributes to a list of checks for that attribute
-        nested = lib.zipAttrs (map (a: {
-          ${head a.triggerPath} = a // {
-            triggerPath = lib.tail a.triggerPath;
-          };
-        }) parted.wrong);
+        errorMessage = ''
+          Failed checks:
+          ${lib.concatMapStringsSep "\n" (a: "- ${a}") errors}
+        '';
 
-        # Recursively inject checks if config is an attribute set and we
-        # have checks under its attributes
-        result =
-          if isAttrs config
-          then
-            mapAttrs (name: value:
-              if nested ? ${name}
-              then injectChecks nested.${name} value
-              else value
-            ) config
-          else config;
-      in trigger result;
+        trigger = if errors == [] then null else throw errorMessage;
 
-      # List of checks for this module evaluation, where each check also
-      # has a `show` attribute for how to show it if triggered
-      checks = mapAttrsToList (name: value:
-        let id =
-          if lib.hasPrefix "_" name then ""
-          else "[${showOption prefix}${optionalString (prefix != []) "/"}${name}] ";
-        in value // {
-          show = "${id}${value.message}";
-        }
-      ) config._module.checks;
+      in builtins.seq trigger;
 
-      finalConfig = injectChecks checks (removeAttrs config [ "_module" ]);
+      finalConfig = triggerChecks (removeAttrs config [ "_module" ]);
 
       checkUnmatched =
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
