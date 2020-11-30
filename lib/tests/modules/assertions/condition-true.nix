@@ -1,6 +1,8 @@
 {
+
   _module.checks.test = {
-    check = false;
+    check = true;
     message = "Assertion failed";
   };
+
 }

@@ -4,7 +4,7 @@
     default = {};
     type = lib.types.submodule {
       _module.checks.test = {
-        enable = true;
+        check = false;
         message = "Assertion failed";
       };
     };

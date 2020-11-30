@@ -279,7 +279,8 @@ checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
 # Check that assertions are triggered by default for just evaluating config
 checkConfigError 'Failed checks:\n- \[test\] Assertion failed' config ./assertions/simple.nix
 
-# Assertion is not triggered when enable is false
+# Assertion is not triggered when enable is false or condition is true
+checkConfigOutput '{ }' config ./assertions/condition-true.nix
 checkConfigOutput '{ }' config ./assertions/enable-false.nix
 
 # Warnings should be displayed on standard error

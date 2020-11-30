@@ -1,7 +1,7 @@
 {
 
   _module.checks.test = {
-    enable = true;
+    check = false;
     type = "warning";
     message = "Warning message";
   };

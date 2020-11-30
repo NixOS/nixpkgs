@@ -4,7 +4,7 @@
     default = { bar.baz = {}; };
     type = lib.types.attrsOf (lib.types.attrsOf (lib.types.submodule {
       _module.checks.test = {
-        enable = true;
+        check = false;
         message = "Assertion failed";
       };
     }));

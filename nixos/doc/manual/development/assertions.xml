@@ -25,28 +25,26 @@
 
   <para>
    Checks can be defined using the <xref linkend="opt-_module.checks"/> option.
-   Each check needs an attribute name, under which you have to define an enable
-   condition using <xref linkend="opt-_module.checks._name_.enable"/> and a
-   message using <xref linkend="opt-_module.checks._name_.message"/>. Note that
-   the enable condition is <emphasis>inverse</emphasis> of what an assertion
-   would be: To assert a value being true, the enable condition should be false
-   in that case, so that it isn't triggered. For the check message, you can add
+   Each check needs an attribute name, under which you can define a trigger
+   assertion using <xref linkend="opt-_module.checks._name_.check"/> and a
+   message using <xref linkend="opt-_module.checks._name_.message"/>.
+   For the message, you can add
    <literal>options</literal> to the module arguments and use
    <literal>${options.path.to.option}</literal> to print a context-aware string
-   representation of the option path. Here is an example showing how this can be
+   representation of an option path. Here is an example showing how this can be
    done.
   </para>
 
 <programlisting>
 { config, options, ... }: {
   _module.checks.gpgSshAgent = {
-    enable = config.programs.gnupg.agent.enableSSHSupport &amp;&amp; config.programs.ssh.startAgent;
-    message = "You can't enable both ${options.programs.ssh.startAgent}"
-      + " and ${options.programs.gnupg.agent.enableSSHSupport}!";
+    check = config.programs.gnupg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
+    message = "If you have ${options.programs.gnupg.agent.enableSSHSupport} enabled,"
+      + " you can't enable ${options.programs.ssh.startAgent} as well!";
   };
 
   _module.checks.grafanaPassword = {
-    enable = config.services.grafana.database.password != "";
+    check = config.services.grafana.database.password == "";
     message = "The grafana password defined with ${options.services.grafana.database.password}"
       + " will be stored as plaintext in the Nix store!";
     # This is a non-fatal warning
@@ -74,8 +72,8 @@
 trace: warning: [grafanaPassword] The grafana password defined with
   services.grafana.database.password will be stored as plaintext in the Nix store!
 error: Failed checks:
-- [gpgSshAgent] You can't enable both programs.ssh.startAgent and
-  programs.gnupg.agent.enableSSHSupport!
+- [gpgSshAgent] If you have programs.gnupg.agent.enableSSHSupport
+  enabled, you can't enable programs.ssh.startAgent as well!
 </programlisting>
 
   <para>
@@ -87,12 +85,12 @@ error: Failed checks:
   </para>
 
 <programlisting>
-{ lib, ... }: {
+{
   # Change the error into a non-fatal warning
   _module.checks.gpgSshAgent.type = "warning";
 
   # We don't care about this warning, disable it
-  _module.checks.grafanaPassword.enable = lib.mkForce false;
+  _module.checks.grafanaPassword.enable = false;
 }
 </programlisting>
 
@@ -113,7 +111,7 @@ error: Failed checks:
       options.port = lib.mkOption {};
 
       config._module.checks.portConflict = {
-        enable = config.port == 80;
+        check = config.port != 80;
         message = "Port ${toString config.port} defined using"
           + " ${options.port} is usually used for HTTP";
         type = "warning";
@@ -143,8 +141,8 @@ trace: warning: [myServices.foo/portConflict] Port 80 defined using
   </para>
 
 <programlisting>
-{ lib, ... }: {
-  myServices.foo._module.checks.portConflict.enable = lib.mkForce false;
+{
+  myServices.foo._module.checks.portConflict.enable = false;
 }
 </programlisting>
 

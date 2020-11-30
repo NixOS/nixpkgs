@@ -36,7 +36,7 @@ with lib;
       name = "_${toString n}";
       isWarning = lib.isString value;
       result = {
-        enable = if isWarning then true else ! value.assertion;
+        check = if isWarning then false else value.assertion;
         type = if isWarning then "warning" else "error";
         message = if isWarning then value else value.message;
       };

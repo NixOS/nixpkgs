@@ -155,17 +155,22 @@ rec {
             default = {};
             internal = prefix != [];
             type = types.attrsOf (types.submodule {
-              # TODO: Rename to assertion? Or allow also setting assertion?
               options.enable = mkOption {
                 description = ''
-                  Whether to enable this check.
-                  <note><para>
-                    This is the inverse of asserting a condition: If a certain
-                    condition should be <literal>true</literal>, then this
-                    option should be set to <literal>false</literal> when that
-                    case occurs
-                  </para></note>
+                  Whether to enable this check. Set this to false to not trigger
+                  any errors or warning messages. This is useful for ignoring a
+                  check in case it doesn't make sense in certain scenarios.
                 '';
+                default = true;
+                type = types.bool;
+              };
+
+              options.check = mkOption {
+                description = ''
+                  The condition that must succeed in order for this check to be
+                  successful and not trigger a warning or error.
+                '';
+                readOnly = true;
                 type = types.bool;
               };
 
@@ -189,9 +194,7 @@ rec {
                   and use <literal>''${options.path.to.option}</literal>.
                 '';
                 type = types.str;
-                example = literalExample ''
-                  Enabling both ''${options.services.foo.enable} and ''${options.services.bar.enable} is not possible.
-                '';
+                example = "Enabling both \${options.services.foo.enable} and \${options.services.bar.enable} is not possible.";
               };
             });
           };
@@ -244,7 +247,7 @@ rec {
               if lib.hasPrefix "_" name then value.message
               else "[${showOption prefix}${optionalString (prefix != []) "/"}${name}] ${value.message}";
           in
-            if ! value.enable then errors
+            if value.enable -> value.check then errors
             else if value.type == "warning" then lib.warn show errors
             else if value.type == "error" then errors ++ [ show ]
             else abort "Unknown check type ${value.type}";
@@ -885,8 +888,7 @@ rec {
       });
       config._module.checks =
         let opt = getAttrFromPath optionName options; in {
-        ${showOption optionName} = {
-          enable = mkDefault opt.isDefined;
+        ${showOption optionName} = lib.mkIf opt.isDefined {
           message = ''
             The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
             ${replacementInstructions}
@@ -958,8 +960,7 @@ rec {
             let val = getAttrFromPath f config;
                 opt = getAttrFromPath f options;
             in {
-              ${showOption f} = {
-                enable = mkDefault (val != "_mkMergedOptionModule");
+              ${showOption f} = lib.mkIf (val != "_mkMergedOptionModule") {
                 type = "warning";
                 message = "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly.";
               };
@@ -1024,8 +1025,7 @@ rec {
       });
       config = mkMerge [
         {
-          _module.checks.${showOption from} = {
-            enable = mkDefault (warn && fromOpt.isDefined);
+          _module.checks.${showOption from} = mkIf (warn && fromOpt.isDefined) {
             type = "warning";
             message = "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
           };
