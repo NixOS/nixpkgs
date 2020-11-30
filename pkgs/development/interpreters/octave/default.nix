@@ -59,12 +59,12 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 mkDerivation rec {
-  version = "5.2.0";
+  version = "6.1.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-    sha256 = "1qcmcpsq1lfka19fxzvxjwjhg113c39a9a0x8plkhvwdqyrn5sig";
+    sha256 = "0mqa1g3fq0q45mqc0didr8vl6bk7jzj6gjsf1522qqjq2r04xwvg";
   };
 
   buildInputs = [
