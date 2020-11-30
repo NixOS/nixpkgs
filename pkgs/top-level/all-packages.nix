@@ -7831,6 +7831,8 @@ in
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
+  twtxt = callPackage ../applications/networking/twtxt { };
+
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
 
   txt2man = callPackage ../tools/misc/txt2man { };
