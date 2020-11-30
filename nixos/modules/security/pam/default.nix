@@ -73,7 +73,7 @@ let
     type = entriesType entryType;
     default = {};
     description = ''
-      The ${moduleType}-type entries of this service.
+      The ${entryType}-type entries of this service.
     '';
 
   };
@@ -86,7 +86,7 @@ let
         example = utils.pam.entryTypes;
         description = ''
           By default, all enabled PAM modules add their configuration under
-          security.pam.services.<name>.{account,auth,password,session}. This
+          security.pam.services.*.{account,auth,password,session}. This
           option allows to opt out of this by type of entries. The provided
           example will get you a service with none of the defaults.
         '';
