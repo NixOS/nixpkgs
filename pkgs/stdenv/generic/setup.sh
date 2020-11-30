@@ -1097,6 +1097,7 @@ installPhase() {
     runHook postInstall
 }
 
+declare -a fixupOutputHooks=()
 
 # The fixup phase performs generic, package-independent stuff, like
 # stripping binaries, running patchelf and setting
