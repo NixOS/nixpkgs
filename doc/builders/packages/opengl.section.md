@@ -2,7 +2,7 @@
 
 OpenGL support varies depending on which hardware is used and which drivers are available and loaded.
 
-Broadly, we support both GL vendors: Mesa and nVidia.
+Broadly, we support both GL vendors: Mesa and NVIDIA.
 
 ## NixOS Desktop
 
