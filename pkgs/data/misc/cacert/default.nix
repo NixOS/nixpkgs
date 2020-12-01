@@ -1,5 +1,6 @@
 { stdenv, fetchurl, nss, python3
 , blacklist ? []
+, includeEmail ? false
 
 # Used for tests only
 , runCommand
@@ -41,6 +42,10 @@ stdenv.mkDerivation {
     EOF
 
     cat ${certdata2pem} > certdata2pem.py
+    ${optionalString includeEmail ''
+      # Disable CAs used for mail signing
+      substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
+    ''}
   '';
 
   buildPhase = ''
