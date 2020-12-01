@@ -122,10 +122,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.5";
+  version = "15.2.6";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "05p7ssbfypf5x8bry361rrnyaihf89xzbqzhygdyrg7w1rxpna8d";
+    sha256 = "093pphgqrkrbv3484ayl0vac6a6s53zxa01yad0cbvnx0kyj55hh";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -135,11 +135,6 @@ in rec {
     patches = [
       ./0000-fix-SPDK-build-env.patch
       ./ceph-glibc-2-32-sigdescr_np.patch
-      (fetchpatch {
-        name = "CVE-2020-25660";
-        url = "https://github.com/ceph/ceph/compare/2c93eff00150f0cc5f106a559557a58d3d7b6f1f...6c14c2fb5650426285428dfe6ca1597e5ea1d07d.patch";
-        sha256 = "032hl15q34gq7y6bnljmklpsbd3bpkzmg7r3w0x0ly786iz7zwhm";
-      })
     ];
 
     nativeBuildInputs = [
