@@ -7,11 +7,12 @@
 , lxml
 , pillow
 , pybind11
-, pytest
+, pytestCheckHook
 , pytest-helpers-namespace
 , pytest-timeout
 , pytest_xdist
 , pytestrunner
+, python-dateutil
 , python-xmp-toolkit
 , python3
 , qpdf
@@ -44,11 +45,12 @@ buildPythonPackage rec {
     attrs
     hypothesis
     pillow
-    pytest
+    pytestCheckHook
     pytest-helpers-namespace
     pytest-timeout
     pytest_xdist
     pytestrunner
+    python-dateutil
     python-xmp-toolkit
   ];
 
