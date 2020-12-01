@@ -7671,6 +7671,8 @@ in
 
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn {};
 
+  tinyobjloader = callPackage ../development/libraries/tinyobjloader { };
+
   tinyprog = callPackage ../development/tools/misc/tinyprog { };
 
   tinyproxy = callPackage ../tools/networking/tinyproxy {};
