@@ -5360,6 +5360,8 @@ in
 
   libck = callPackage ../development/libraries/libck { };
 
+  libcork = callPackage ../development/libraries/libcork { };
+
   libconfig = callPackage ../development/libraries/libconfig { };
 
   libcmis = callPackage ../development/libraries/libcmis { };
