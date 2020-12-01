@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vimix-gtk-themes";
-  version = "2020-02-24";
+  version = "2020-11-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "18v7yhwzachjgy276rdhj5cg353f0qysa2kxk9gyc6s71q2gjzcv";
+    sha256 = "1m84p4cs9dfwc27zfjnwgkfdnfmlzbimq3g5z4mhz23cijm178rf";
   };
 
   buildInputs = [ gtk_engines ];
