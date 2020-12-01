@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "193wa13i2prfz1zr7nvwbgrxgacms57zj1n7x28yy5hmm3nnwbrd";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "test" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = ''
-    cp -a test/* $out/bin/
+    mkdir -p $test/bin
+    cp -a test/* $test/bin/
     mkdir -p $out/share
     cp -a doc $out/share/
     cp -a README AUTHORS TODO $out/share/doc/
