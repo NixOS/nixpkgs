@@ -18,7 +18,7 @@
 , typescript
 }:
 stdenv.mkDerivation rec {
-  name = "imgbrd-grabber";
+  pname = "imgbrd-grabber";
 
   version = "7.3.2";
   src = fetchFromGitHub {
@@ -84,4 +84,11 @@ stdenv.mkDerivation rec {
   '';
 
   sourceRoot = "source/src";
+
+  meta = with stdenv.lib; {
+    description = "Very customizable imageboard/booru downloader with powerful filenaming features.";
+    license = licenses.asl20;
+    homepage = "https://bionus.github.io/imgbrd-grabber/";
+    maintainers = [ maintainers.evanjs ];
+  };
 }
