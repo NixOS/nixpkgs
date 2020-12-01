@@ -8,7 +8,6 @@
   , more-itertools
   , pytest
   , pytestrunner
-  , random2
   , ukpostcodeparser
   , validators
 }:
@@ -17,11 +16,11 @@ assert pythonOlder "3.3" -> ipaddress != null;
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "4.17.1";
+  version = "4.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d4183b8f57316de3be27cd6c3b40e9f9343d27c95c96179f027316c58c2c239e";
+    sha256 = "0raxw6mgvf9523v7917zqw76vqnpp0d6v3i310qnjnhpxmm78yb2";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     email_validator
     freezegun
     pytest
-    random2
     ukpostcodeparser
     validators
   ]
