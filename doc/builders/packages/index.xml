@@ -20,6 +20,6 @@
  <xi:include href="steam.xml" />
  <xi:include href="cataclysm-dda.section.xml" />
  <xi:include href="urxvt.xml" />
- <xi:include href="weechat.xml" />
+ <xi:include href="weechat.section.xml" />
  <xi:include href="xorg.xml" />
 </chapter>
