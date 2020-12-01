@@ -6,7 +6,6 @@
 , pytestCheckHook
 , pytestcov
 , pytest-mock
-, pytest-testmon
 , requests
 , requests-toolbelt
 , requests-unixsocket
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytestcov
     pytest-mock
-    pytest-testmon
     requests
     requests-toolbelt
     requests-unixsocket
@@ -54,6 +52,7 @@ buildPythonPackage rec {
   # Deselect test_bind_addr_unix on darwin because times out
   # Deselect test_http_over_https_error on darwin because builtin cert fails
   # Disable warnings-as-errors because of deprecation warnings from socks on python 3.7
+  # Disable pytest-testmon because it doesn't work
   # adds many other pytest utilities which aren't necessary like linting
   preCheck = ''
     rm pytest.ini
