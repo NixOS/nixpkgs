@@ -1,0 +1,24 @@
+diff --git a/Makefile b/Makefile
+index 1fd0c25..0859399 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@ ifeq (${PREFIX},)
+ 	PREFIX=/usr
+ endif
+ sharedir = $(DESTDIR)$(PREFIX)/share
+-libexecdir = $(DESTDIR)$(PREFIX)/lib
++libexecdir = $(DESTDIR)$(PREFIX)/libexec
+
+ ifeq (${builddir},)
+ 	builddir=build
+@@ -23,8 +23,8 @@ ibus-engine-rime-static:
+ install:
+ 	install -m 755 -d $(sharedir)/ibus/component
+ 	install -m 644 -t $(sharedir)/ibus/component/ rime.xml
+-	install -m 755 -d $(libexecdir)/ibus-rime
+-	install -m 755 -t $(libexecdir)/ibus-rime/ $(builddir)/ibus-engine-rime
++	install -m 755 -d $(libexecdir)
++	install -m 755 -t $(libexecdir) $(builddir)/ibus-engine-rime
+ 	install -m 755 -d $(sharedir)/ibus-rime
+ 	install -m 755 -d $(sharedir)/ibus-rime/icons
+ 	install -m 644 -t $(sharedir)/ibus-rime/icons/ icons/*.png
