@@ -3198,6 +3198,10 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
+  jupyter-book = callPackage ../development/python-modules/jupyter-book { };
+
+  jupyter-cache = callPackage ../development/python-modules/jupyter-cache { };
+
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
 
   jupyter_client = if isPy3k then
@@ -3676,6 +3680,8 @@ in {
   else
     callPackage ../development/python-modules/markdown/3_1.nix { };
 
+  markdown-it-py = callPackage ../development/python-modules/markdown-it-py { };
+
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
@@ -3993,6 +3999,10 @@ in {
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
+
+  myst-nb = callPackage ../development/python-modules/myst-nb { };
+
+  myst-parser = callPackage ../development/python-modules/myst-parser { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
 
@@ -4610,6 +4620,8 @@ in {
   pkginfo = callPackage ../development/python-modules/pkginfo { };
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
+
+  pydata-sphinx-theme = callPackage ../development/python-modules/pydata-sphinx-theme { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
@@ -6851,6 +6863,18 @@ in {
   spglib = callPackage ../development/python-modules/spglib { };
 
   sphfile = callPackage ../development/python-modules/sphfile { };
+
+  sphinx-book-theme = callPackage ../development/python-modules/sphinx-book-theme { };
+
+  sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
+
+  sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
+
+  sphinx-panels = callPackage ../development/python-modules/sphinx-panels { };
+
+  sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
+
+  sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
 
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp { };
 
