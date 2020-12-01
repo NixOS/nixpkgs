@@ -21230,10 +21230,10 @@ let
 
   TextFormat = buildPerlModule {
     pname = "Text-Format";
-    version = "0.61";
+    version = "0.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Format-0.61.tar.gz";
-      sha256 = "bb8a3b8ff515c85101baf553a769337f944a05cde81f111ae78aff416bf4ae2b";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Format-0.62.tar.gz";
+      sha256 = "0104z7jjv46kqh77rnx8kvmsbr5dy0s56xm01dckq4ly65br0hkx";
     };
     meta = {
       homepage = "https://metacpan.org/release/Text-Format";
