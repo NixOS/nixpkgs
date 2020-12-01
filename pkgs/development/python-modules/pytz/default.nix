@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2020.1";
+  version = "2020.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c35965d010ce31b23eeb663ed3cc8c906275d6be1a34393a1d73a41febf4a048";
+    sha256 = "3e6b7dd2d1e0a59084bcee14a17af60c5c562cdc16d828e8eba2e683d3a7e268";
   };
 
   checkPhase = ''

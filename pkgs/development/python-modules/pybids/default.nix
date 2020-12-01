@@ -16,12 +16,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.12.3";
+  version = "0.12.4";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a084172ae5b26a5f26b17186ade98400cda52d9244d9f0b329041741ea82b5db";
+    sha256 = "830f3f518ab0d2e058e9ba6d6ff9a942792909c874433b3ad58a3339a23f46bf";
   };
 
   propagatedBuildInputs = [

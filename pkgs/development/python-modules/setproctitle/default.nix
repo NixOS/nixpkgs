@@ -1,16 +1,22 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "setproctitle";
-  version = "1.1.10";
+  version = "1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6283b7a58477dd8478fbb9e76defb37968ee4ba47b05ec1c053cb39638bd7398";
+    sha256 = "9b4e48722dd96cbd66d5bf2eab930fff8546cd551dd8d774c8a319448bd381a6";
   };
+
+  checkInputs = [ pytestCheckHook ];
+
+  # tries to compile programs with dependencies that aren't available
+  pytestFlagsArray = [ "--ignore=tests/setproctitle_test.py" ];
 
   meta = with stdenv.lib; {
     description = "Allows a process to change its title (as displayed by system tools such as ps and top)";

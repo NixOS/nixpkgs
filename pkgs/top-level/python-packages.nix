@@ -3056,7 +3056,11 @@ in {
 
   isodate = callPackage ../development/python-modules/isodate { };
 
-  isort = callPackage ../development/python-modules/isort { };
+  isort = if isPy3k then
+    callPackage ../development/python-modules/isort { }
+  else
+    callPackage ../development/python-modules/isort/4.nix {
+  };
 
   isoweek = callPackage ../development/python-modules/isoweek { };
 
@@ -3226,6 +3230,8 @@ in {
   jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git { };
 
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
+
+  jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
 
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
@@ -4342,7 +4348,9 @@ in {
 
   oyaml = callPackage ../development/python-modules/oyaml { };
 
-  packaging = callPackage ../development/python-modules/packaging { };
+  packaging = if isPy3k
+    then callPackage ../development/python-modules/packaging { }
+    else callPackage ../development/python-modules/packaging/2.nix { };
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
@@ -5628,7 +5636,7 @@ in {
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   # pytest>=6 is too new for most packages
-  pytest = if isPy3k then self.pytest_5 else self.pytest_4;
+  pytest = if isPy3k then self.pytest_6 else self.pytest_4;
 
   pytest_4 = callPackage
     ../development/python-modules/pytest/4.nix { # hypothesis tests require pytest that causes dependency cycle
@@ -5800,7 +5808,7 @@ in {
 
   pytest_xdist_2 = callPackage ../development/python-modules/pytest-xdist/2.nix { };
 
-  pytest_xdist = self.pytest_xdist_1;
+  pytest_xdist = self.pytest_xdist_2;
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
@@ -6218,6 +6226,8 @@ in {
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
+
+  re-assert = callPackage ../development/python-modules/re-assert { };
 
   readchar = callPackage ../development/python-modules/readchar { };
 

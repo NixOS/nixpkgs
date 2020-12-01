@@ -1,30 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools, isPy27, futures
-, backports_functools_lru_cache, mock, pytest
+{ lib, buildPythonPackage, fetchFromGitHub
+, colorama
+, hypothesis
+, poetry-core
+, pylama
+, pytestCheckHook
 }:
 
 let
-  skipTests = [ "test_requirements_finder" "test_pipfile_finder" ] ++ lib.optional isPy27 "test_standard_library_deprecates_user_issue_778";
-  testOpts = lib.concatMapStringsSep " " (t: "--deselect test_isort.py::${t}") skipTests;
 in buildPythonPackage rec {
   pname = "isort";
-  version = "4.3.21"; # Note 4.x is the last version that supports Python2
+  version = "5.6.4";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "isort";
+    rev = version;
+    sha256 = "1m7jpqssnbsn1ydrw1dn7nrcrggqcvj9v6mk5ampxmvk94xd2r2q";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ] ++ lib.optionals isPy27 [ futures backports_functools_lru_cache ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  checkInputs = [ mock pytest ];
+  checkInputs = [
+    colorama
+    hypothesis
+    pylama
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    # isort excludes paths that contain /build/, so test fixtures don't work
-    # with TMPDIR=/build/
-    PATH=$out/bin:$PATH TMPDIR=/tmp/ pytest ${testOpts}
-
+  postCheck = ''
     # Confirm that the produced executable script is wrapped correctly and runs
     # OK, by launching it in a subshell without PYTHONPATH
     (
@@ -34,9 +40,37 @@ in buildPythonPackage rec {
     )
   '';
 
+  preCheck = ''
+    HOME=$TMPDIR
+    export PATH=$PATH:$out/bin
+  '';
+
+  pytestFlagsArray = [
+    "--ignore=tests/integration/" # pulls in 10 other packages
+    "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
+  ];
+
+  disabledTests = [
+    "test_run" # doesn't like paths in /build
+    "test_pyi_formatting_issue_942"
+    "test_requirements_finder"
+    "test_pipfile_finder"
+    "test_main" # relies on git
+    "test_command_line" # not thread safe
+    "test_encoding_not_in_comment" # not python 3.9 compatible
+    "test_encoding_not_in_first_two_lines" # not python 3.9 compatible
+    "test_requirements_dir" # requires network
+    # plugin not available
+    "test_isort_literals_issue_1358"
+    "test_isort_supports_formatting_plugins_issue_1353"
+    "test_value_assignment_list"
+    # profiles not available
+    "test_isort_supports_shared_profiles_issue_970"
+  ];
+
   meta = with lib; {
     description = "A Python utility / library to sort Python imports";
-    homepage = "https://github.com/timothycrosley/isort";
+    homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar nand0p ];
   };

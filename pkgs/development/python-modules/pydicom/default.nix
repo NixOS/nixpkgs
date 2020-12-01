@@ -10,13 +10,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "2.1.1";
   pname = "pydicom";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "594c91f715c415ef439f498351ae68fb770c776fc5aa72f3c87eb500dc2a7470";
+    sha256 = "72a11086f6a277c1529a552583fde73e03256a912173f15e9bc256e5b28f28f1";
   };
 
   propagatedBuildInputs = [ numpy pillow ];

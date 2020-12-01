@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "HAP-python";
-  version = "2.9.2";
+  version = "3.0.0";
 
   # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1d2ji2psla7jq3f9grb0l665nf8qsy2rlbkr2qg1d1a7mvf80x7k";
+    sha256 = "07s1kjm9cz4m4ksj506la1ks3dq2b5mk412rjj9rpj98b0mxrr84";
   };
 
   disabled = !isPy3k;
