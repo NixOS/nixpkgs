@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://vprover.github.io/";
     description = "The Vampire Theorem Prover";
     platforms = platforms.unix;
-    license = licenses.unfree;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ gebner ];
   };
 }
