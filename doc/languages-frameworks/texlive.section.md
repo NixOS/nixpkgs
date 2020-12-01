@@ -3,8 +3,7 @@
 
 Since release 15.09 there is a new TeX Live packaging that lives entirely under attribute `texlive`.
 
-User's guide
------------------
+## User's guide
 
 - For basic usage just pull `texlive.combined.scheme-basic` for an environment with basic LaTeX support.
 - It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this:
@@ -30,7 +29,7 @@ texlive.combine {
 
 - You can list packages e.g. by `nix repl`.
 
-```
+```ShellSession
 $ nix repl
 nix-repl> :l <nixpkgs>
 nix-repl> texlive.collection-[TAB]
@@ -38,8 +37,8 @@ nix-repl> texlive.collection-[TAB]
 
 - Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example `scheme-basic`, into the combination.
 
-Custom packages
--------------------
+## Custom packages
+
 You may find that you need to use an external TeX package. A derivation for such package has to provide contents of the "texmf" directory in its output and provide the `tlType` attribute. Here is a (very verbose) example:
 
 ```nix
