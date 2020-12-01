@@ -4955,6 +4955,8 @@ in {
 
   pycmarkgfm = callPackage ../development/python-modules/pycmarkgfm { };
 
+  pycocotools = callPackage ../development/python-modules/pycocotools { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
