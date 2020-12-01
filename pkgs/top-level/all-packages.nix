@@ -10492,6 +10492,12 @@ in
   phpExtensions = php74Extensions;
   phpPackages = php74Packages;
 
+  php80 = callPackage ../development/interpreters/php/8.0.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
+  php80Extensions = recurseIntoAttrs php80.extensions;
+  php80Packages = recurseIntoAttrs php80.packages;
+
   # Import PHP74 interpreter, extensions and packages
   php74 = callPackage ../development/interpreters/php/7.4.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
