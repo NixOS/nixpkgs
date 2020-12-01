@@ -6,7 +6,7 @@ buildGoPackage rec {
   pname = "containerd";
   version = "1.4.3";
   # git commit for the above version's tag
-  commit = "7ad184331fa3e55e52b890ea95e65ba581ae3429";
+  commit = "269548fa27e0089a8b8278fc4fc781d7f65a939b";
 
   src = fetchFromGitHub {
     owner = "containerd";
