@@ -31,7 +31,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       ghuntley
       peterromfeldhk
-      jlesquembre
       mudrii
     ];
   };
