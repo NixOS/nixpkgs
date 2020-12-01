@@ -13,7 +13,7 @@
 
 let
   pname = "setuptools";
-  version = "47.3.1";
+  version = "50.3.2";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0sy3p4ibgqx67hzn1f254jh8070a8kl9g2la62p3c74k2x7p0r7f";
+      sha256 = "1cvjmxvf4p7ixcdxky9jdnvr9fab2pbriqr5bpjcgjh6pj1x42ni";
       name = "${pname}-${version}-source";
     };
 
@@ -34,16 +34,11 @@ let
     buildPhase = ''
       ${python.pythonForBuild.interpreter} bootstrap.py
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
-
-      # Here we untar the sdist and retar it in order to control the timestamps
-      # of all the files included
-      tar -xzf dist/${pname}-${version}.post0.tar.gz -C dist/
-      tar -czf dist/${name} -C dist/ --mtime="@$SOURCE_DATE_EPOCH"  ${pname}-${version}.post0
     '';
 
     installPhase = ''
       echo "Moving sdist..."
-      mv dist/${name} $out
+      mv dist/${pname}-${version}.post0.tar.gz $out
     '';
   };
 in buildPythonPackage rec {
