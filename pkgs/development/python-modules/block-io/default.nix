@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     substituteInPlace setup.py \
-      --replace "ecdsa==0.13" "ecdsa>=0.13" \
+      --replace "ecdsa==0.15" "ecdsa>=0.15" \
       --replace "base58==1.0.3" "base58>=1.0.3"
   '';
 

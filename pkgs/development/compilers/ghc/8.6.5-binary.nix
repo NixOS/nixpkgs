@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl, perl, gcc
-, ncurses5, gmp, glibc, libiconv
+, ncurses5, ncurses6, gmp, glibc, libiconv
 , llvmPackages
 }:
 
@@ -10,8 +10,12 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 let
   useLLVM = !stdenv.targetPlatform.isx86;
 
+  useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux";
+
+  ourNcurses = if useNcurses6 then ncurses6 else ncurses5;
+
   libPath = stdenv.lib.makeLibraryPath ([
-    ncurses5 gmp
+    ourNcurses gmp
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
 
   libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
@@ -34,12 +38,16 @@ stdenv.mkDerivation rec {
   # https://downloads.haskell.org/~ghc/8.6.5/
   src = fetchurl ({
     i686-linux = {
+      # Don't use the Fedora27 build (as below) because there isn't one!
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
       sha256 = "1p2h29qghql19ajk755xa0yxkn85slbds8m9n5196ris743vkp8w";
     };
     x86_64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb9-linux.tar.xz";
-      sha256 = "1pqlx6rdjs2110g0y1i9f8x18lmdizibjqd15f5xahcz39hgaxdw";
+      # This is the Fedora build because it links against ncurses6 where the
+      # deb9 one links against ncurses5, see here
+      # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
+      sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
     };
     aarch64-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
@@ -88,9 +96,12 @@ stdenv.mkDerivation rec {
     '' +
     # Rename needed libraries and binaries, fix interpreter
     stdenv.lib.optionalString stdenv.isLinux ''
-      find . -type f -perm -0100 -exec patchelf \
+      find . -type f -perm -0100 \
+          -exec patchelf \
           --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
-          --replace-needed libtinfo.so libtinfo.so.5 \
+          ${ # This isn't required for x86_64-linux where we use ncurses6
+             stdenv.lib.optionalString (!useNcurses6) "--replace-needed libtinfo.so libtinfo.so.5"
+           } \
           --interpreter ${glibcDynLinker} {} \;
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2

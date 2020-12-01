@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "1.9.6";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "301c6428c0880ecd4a9e3951b80e539c33863b6ff356a443db1758de4f297957";
+    sha256 = "63b038da116a643046181b02173fd894d87d2f85ecfd6aa7d5ece73c6ef501e9";
   };
 
   nativeBuildInputs = [
