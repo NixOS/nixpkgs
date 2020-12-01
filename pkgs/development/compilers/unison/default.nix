@@ -1,5 +1,7 @@
 { stdenv, fetchurl, autoPatchelfHook
 , ncurses5, zlib, gmp
+, makeWrapper
+, less
 }:
 
 stdenv.mkDerivation rec {
@@ -23,12 +25,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+  nativeBuildInputs = [ makeWrapper ] ++ (stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook);
   buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv ucm $out/bin
+    wrapProgram $out/bin/ucm --prefix PATH ":" "${stdenv.lib.makeBinPath [ less ]}";
   '';
 
   meta = with stdenv.lib; {

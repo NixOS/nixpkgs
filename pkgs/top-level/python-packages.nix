@@ -4548,6 +4548,8 @@ in {
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
+  phx-class-registry = callPackage ../development/python-modules/phx-class-registry { };
+
   piccata = callPackage ../development/python-modules/piccata { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
@@ -5853,6 +5855,8 @@ in {
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
+
+  python-frontmatter = callPackage ../development/python-modules/python-frontmatter { };
 
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 

@@ -9,9 +9,9 @@
  <xi:include href="dlib.xml" />
  <xi:include href="eclipse.xml" />
  <xi:include href="elm.xml" />
- <xi:include href="emacs.xml" />
+ <xi:include href="emacs.section.xml" />
  <xi:include href="ibus.xml" />
- <xi:include href="kakoune.xml" />
+ <xi:include href="kakoune.section.xml" />
  <xi:include href="linux.xml" />
  <xi:include href="locales.xml" />
  <xi:include href="nginx.xml" />

@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true; # Broken on Hydra since 2020-08-24
   };
 }

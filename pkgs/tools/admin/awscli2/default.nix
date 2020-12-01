@@ -73,7 +73,7 @@ with py.pkgs; buildPythonApplication rec {
     ${python3.interpreter} scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
 
     mkdir -p $out/share/bash-completion/completions
-    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
+    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/aws
 
     mkdir -p $out/share/zsh/site-functions
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions

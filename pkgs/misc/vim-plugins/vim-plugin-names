@@ -377,6 +377,7 @@ nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
 norcalli/nvim-terminal.lua
+npxbr/glow.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
@@ -401,6 +402,7 @@ osyo-manga/vim-over
 osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
 overcache/NeoSolarized
+p00f/nvim-ts-rainbow
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
 pearofducks/ansible-vim

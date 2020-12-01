@@ -180,6 +180,26 @@ in rec {
     };
   };
 
+  jump = mkDerivation {
+    pluginName = "jump";
+    version = "2020-06-26";
+    rtpFilePath = "tmux-jump.tmux";
+    src = fetchFromGitHub {
+      owner = "schasse";
+      repo = "tmux-jump";
+      rev = "416f613d3eaadbe1f6f9eda77c49430527ebaffb";
+      sha256 = "1xbzdyhsgaq2in0f8f491gwjmx6cxpkf2c35d2dk0kg4jfs505sz";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/schasse/tmux-jump";
+      description = "Vimium/Easymotion like navigation for tmux";
+      license = licenses.gpl3;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ arnarg ];
+    };
+  };
+
   logging = mkDerivation {
     pluginName = "logging";
     version = "unstable-2019-04-19";
@@ -374,6 +394,25 @@ in rec {
       repo = "tmux-plugin-sysstat";
       rev = "29e150f403151f2341f3abcb2b2487a5f011dd23";
       sha256 = "013mv9p6r2r0ls3p60l8hdad4hm8niv3wr27vgm925gxmibi4hyq";
+    };
+  };
+
+  tilish = mkDerivation {
+    pluginName = "tilish";
+    version = "2020-08-12";
+    src = fetchFromGitHub {
+      owner = "jabirali";
+      repo = "tmux-tilish";
+      rev = "73d2404cdc0ef6bd7fbc8982edae0b0e2a4dd860";
+      sha256 = "1x58h3bg9d69j40fh8rcjpxvg0i6j04pj8p3jk57l3cghxis5j05";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/jabirali/tmux-tilish";
+      description = "Plugin which makes tmux work and feel like i3wm";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ arnarg ];
     };
   };
 

@@ -757,7 +757,7 @@ in {
 
     systemd.services.gitaly = {
       after = [ "network.target" "gitlab.service" ];
-      requires = [ "gitlab.service" ];
+      bindsTo = [ "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         openssh

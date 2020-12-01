@@ -855,6 +855,8 @@ in
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  archivy = python3Packages.callPackage ../applications/misc/archivy { };
+
   arandr = callPackage ../tools/X11/arandr { };
 
   inherit (callPackages ../servers/nosql/arangodb {
@@ -4072,7 +4074,7 @@ in
 
   galen = callPackage ../development/tools/galen {};
 
-  gallery-dl = callPackage ../applications/misc/gallery-dl { };
+  gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
 
   gandi-cli = callPackage ../tools/networking/gandi-cli { };
 
@@ -4384,6 +4386,8 @@ in
   ripgrep-all = callPackage ../tools/text/ripgrep-all {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  ucg = callPackage ../tools/text/ucg { };
 
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
@@ -7831,6 +7835,8 @@ in
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
+  twtxt = callPackage ../applications/networking/twtxt { };
+
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
 
   txt2man = callPackage ../tools/misc/txt2man { };
@@ -9581,15 +9587,7 @@ in
     graalvm8-ee
     graalvm11-ee;
 
-  # Cannot use a newer Qt (5.15) version because it requires qtwebkit
-  # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
-  openshot-qt = (pkgs.extend (final: prev: rec {
-    qt5 = if stdenv.isDarwin then prev.qt5 else prev.qt514;
-    libsForQt5 = if stdenv.isDarwin then prev.libsForQt5 else prev.libsForQt514;
-    pythonInterpreters = prev.pythonInterpreters.override {
-      pkgs = final;
-    };
-  })).libsForQt5.callPackage ../applications/video/openshot-qt { };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   openspin = callPackage ../development/compilers/openspin { };
 
@@ -10579,12 +10577,7 @@ in
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
-  pythonInterpreters = callPackage ./../development/interpreters/python {
-    # Overrides that apply to all Python interpreters and their packages
-    # Generally, this should be avoided.
-    pkgs = pkgs.extend (final: _: {
-    });
-  };
+  pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python310 python3Minimal pypy27 pypy36;
 
   # Python package sets.
@@ -14049,6 +14042,8 @@ in
   libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
+
+  libff = callPackage ../development/libraries/libff { };
 
   libffcall = callPackage ../development/libraries/libffcall { };
 
@@ -20259,17 +20254,7 @@ in
 
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
 
-  cadence = let
-    # Use Qt 5.14 consistently
-    pkgs_ = pkgs.extend(_: prev: {
-      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
-        pkgs = oldAttrs.pkgs.extend(_: _: {
-          qt5 = pkgs.qt514;
-          libsForQt5 = pkgs.libsForQt514;
-        });
-      });
-    });
-  in pkgs_.libsForQt514.callPackage ../applications/audio/cadence { };
+  cadence = libsForQt5.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
@@ -20648,8 +20633,6 @@ in
   cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
     python3Packages = python37Packages;
   };
-
-  cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
   crun = callPackage ../applications/virtualization/crun {};
 
@@ -23389,19 +23372,8 @@ in
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
 
-  # Our 3.10 LTS cannot use a newer Qt (5.15) version because it requires qtwebkit
-  # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
-  qgis-unwrapped = let
-    pkgs_ = pkgs.extend(_: prev: {
-      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
-        pkgs = oldAttrs.pkgs.extend(_: _: {
-          qt5 = pkgs.qt514;
-          libsForQt5 = pkgs.libsForQt514;
-        });
-      });
-    });
-  in pkgs_.libsForQt514.callPackage ../applications/gis/qgis/unwrapped.nix {
-      withGrass = false;
+  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
+    withGrass = false;
   };
 
   qgis = callPackage ../applications/gis/qgis { };
@@ -23421,6 +23393,8 @@ in
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview {
     boost = boost17x;
   };
+
+  qmplay2 = libsForQt5.callPackage ../applications/video/qmplay2 { };
 
   qmetro = callPackage ../applications/misc/qmetro { };
 
@@ -28722,4 +28696,5 @@ in
 
   psftools = callPackage ../os-specific/linux/psftools {};
 
+  lc3tools = callPackage ../development/tools/lc3tools {};
 }
