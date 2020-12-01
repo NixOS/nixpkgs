@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-thunk";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCT-Thunk-Interface";
     rev = "rocm-${version}";
-    sha256 = "0xkp50ik7miz9whywnmiiqiamc7g8flfr9g8c02kxr0cay1in6cj";
+    hash = "sha256-FLH+GHXA0zepbR1wPPSez/hx1hiG2kkCTneDKhJJRjU=";
   };
 
   preConfigure = ''
