@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "0.7.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "out-of-cheese-error";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1whmvzpqm8x1q45mzrp4p40nj251drcryj9z4qjxgjlfsd5d1fxq";
+    sha256 = "0lvkrfszmn594n9qkf518c38c0fwzm32y997wlf28l3hpj6yqddq";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin  [ AppKit Security ];
 
-  cargoSha256 = "0adhgp6blwx7s1hlwqzzsgkzc43q9avxx8a9ykvvv2s1w7m9ql78";
+  cargoSha256 = "1aiyfsvmrqcmlw0z1944i9s5g3yxc39na5mf16pb9a4bhw8zcwjr";
   checkFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--skip=copy" ];
   cargoParallelTestThreads = false;
 

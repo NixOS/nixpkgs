@@ -15,11 +15,11 @@
  <xi:include href="linux.xml" />
  <xi:include href="locales.xml" />
  <xi:include href="nginx.xml" />
- <xi:include href="opengl.xml" />
+ <xi:include href="opengl.section.xml" />
  <xi:include href="shell-helpers.xml" />
  <xi:include href="steam.xml" />
  <xi:include href="cataclysm-dda.section.xml" />
  <xi:include href="urxvt.xml" />
- <xi:include href="weechat.xml" />
- <xi:include href="xorg.xml" />
+ <xi:include href="weechat.section.xml" />
+ <xi:include href="xorg.section.xml" />
 </chapter>
