@@ -170,10 +170,10 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        homepage = "https://zfsonlinux.org/";
+        homepage = "https://github.com/openzfs/zfs";
         license = licenses.cddl;
         platforms = platforms.linux;
-        maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
+        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
       };
     };
 in {
