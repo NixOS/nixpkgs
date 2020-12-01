@@ -8634,6 +8634,8 @@ in
 
   oil = callPackage ../shells/oil { };
 
+  oksh = callPackage ../shells/oksh { };
+
   pash = callPackage ../shells/pash { };
 
   tcsh = callPackage ../shells/tcsh { };
