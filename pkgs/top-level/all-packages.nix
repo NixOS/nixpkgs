@@ -4779,7 +4779,7 @@ in
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
-  inboxer = callPackage ../applications/networking/mailreaders/inboxer { };
+  inboxer = throw ''inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.''
 
   incron = callPackage ../tools/system/incron { };
 
