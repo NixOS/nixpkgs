@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation {
-  name = "daemon-0.6.4";
+  name = "daemon-0.7";
   src = fetchurl {
-    url = "http://libslack.org/daemon/download/daemon-0.6.4.tar.gz";
-    sha256 = "18aw0f8k3j30xqwv4z03962kdpqd10nf1w9liihylmadlx5fmff4";
+    url = "http://libslack.org/daemon/download/daemon-0.7.tar.gz";
+    sha256 = "0b17zzl7bqnkn7a4pr3l6fxqfmxfld7izphrab5nvhc4wzng4spn";
   };
   makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = [ perl ];
