@@ -53,7 +53,22 @@ import ./make-test-python.nix (
           podman.succeed("podman stop sleeping")
           podman.succeed("podman rm sleeping")
 
-      with subtest("Run container rootless with runc"):
+      with subtest("Run container as root with the default backend"):
+          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          podman.succeed(
+              "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+          )
+          podman.succeed("podman ps | grep sleeping")
+          podman.succeed("podman stop sleeping")
+          podman.succeed("podman rm sleeping")
+
+
+      podman.succeed(
+          "mkdir -p /tmp/podman-run-1000/libpod && chown alice -R /tmp/podman-run-1000"
+      )
+
+
+      with subtest("Run container rootless with crun"):
           podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           podman.succeed(
               su_cmd(
