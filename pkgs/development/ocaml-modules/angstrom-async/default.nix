@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "angstrom-async";
 
-  inherit (angstrom) version src;
+  inherit (angstrom) version useDune2 src;
 
   minimumOCamlVersion = "4.04.1";
 
