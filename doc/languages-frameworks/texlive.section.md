@@ -1,6 +1,3 @@
----
-title: TeX Live
----
 
 # TeX Live
 
