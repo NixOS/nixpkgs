@@ -1035,6 +1035,12 @@ environment.systemPackages = [
      </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The newly enabled <literal>systemd-pstore.service</literal> now automatically evacuates crashdumps and panic logs from the persistent storage to <literal>/var/lib/systemd/pstore</literal>.
+     This prevents NVRAM from filling up, which ensures the latest diagnostic data is always stored and alleviates problems with writing new boot configurations.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
