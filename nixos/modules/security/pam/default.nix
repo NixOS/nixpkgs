@@ -64,18 +64,13 @@ let
     };
   };
 
-  entriesType = entryType: types.orderOf {
-    before = a: b: a.value.order < b.value.order;
-    elemType = with types; (submodule (pamEntryModule entryType));
-  };
-
   mkEntriesOption = entryType: mkOption {
-    type = entriesType entryType;
+    type = with types; attrsOf (submodule (pamEntryModule entryType));
     default = {};
     description = ''
       The ${entryType}-type entries of this service.
     '';
-
+    apply = value: builtins.sort (lhs: rhs: lhs.order < rhs.order) (attrValues value);
   };
 
   pamServiceModule = { config, ... }: {
