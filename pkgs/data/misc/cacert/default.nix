@@ -117,7 +117,7 @@ stdenv.mkDerivation {
     homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ andir fpletz ];
+    maintainers = with maintainers; [ andir fpletz lukegb ];
     license = licenses.mpl20;
   };
 }
