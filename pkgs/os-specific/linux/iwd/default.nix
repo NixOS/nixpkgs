@@ -9,6 +9,8 @@
 , readline
 , openssl
 , python3Packages
+
+, withTestingTools ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -60,8 +62,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString withTestingTools ''
     cp -a test/* $out/bin/
+  '' + ''
     mkdir -p $out/share
     cp -a doc $out/share/
     cp -a README AUTHORS TODO $out/share/doc/
