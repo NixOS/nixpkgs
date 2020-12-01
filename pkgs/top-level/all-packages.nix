@@ -4779,8 +4779,6 @@ in
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
-  inboxer = throw ''inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.''
-
   incron = callPackage ../tools/system/incron { };
 
   industrializer = callPackage ../applications/audio/industrializer { };
