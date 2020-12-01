@@ -23,14 +23,6 @@ stdenv.mkDerivation rec {
     (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
   ];
 
-  postPatch = ''
-    mkdir -p $out/bin
-  '' + stdenv.lib.optionalString isPy27 ''
-    pushd "${pip.src.name}"
-    patch -p1 < ${builtins.elemAt pip.patches 0}
-    popd
-  '';
-
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ python ];
 
@@ -49,17 +41,17 @@ stdenv.mkDerivation rec {
 
     echo "Building setuptools wheel..."
     pushd setuptools
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
     echo "Building wheel wheel..."
     pushd wheel
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
     echo "Building pip wheel..."
     pushd pip
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
   '';
 

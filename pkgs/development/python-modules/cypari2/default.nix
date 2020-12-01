@@ -26,7 +26,7 @@ buildPythonPackage rec {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     # install "." instead of "*.whl"
-    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache --build=tmpdir .
+    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache
   '';
 
   nativeBuildInputs = [
