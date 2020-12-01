@@ -78,15 +78,15 @@ provider_name=$(basename "$provider")
 
 # Usage: read_attr <key>
 read_attr() {
-  jq -r ".$provider_name.\"$1\"" providers.json
+  jq -r ".\"$provider_name\".\"$1\"" providers.json
 }
 
 # Usage: update_attr <key> <value>
 update_attr() {
   if [[ "$2" == "null" ]]; then
-    jq -S ".$provider_name.\"$1\" = null" providers.json | sponge providers.json
+    jq -S ".\"$provider_name\".\"$1\" = null" providers.json | sponge providers.json
   else
-    jq -S ".$provider_name.\"$1\" = \"$2\"" providers.json | sponge providers.json
+    jq -S ".\"$provider_name\".\"$1\" = \"$2\"" providers.json | sponge providers.json
   fi
 }
 
