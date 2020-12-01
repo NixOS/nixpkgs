@@ -20,8 +20,8 @@
 }:
 
 let
-  apparmor-series = "2.13";
-  apparmor-patchver = "6";
+  apparmor-series = "3.0";
+  apparmor-patchver = "0";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with lib; {
@@ -33,8 +33,8 @@ let
   };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "13xshy7905d9q9n8d8i0jmdi9m36wr525g4wlsp8k21n7yvvh9j4";
+    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-series}/+download/apparmor-${apparmor-version}.tar.gz";
+    sha256 = "0pkm8f619c0ra8kpjmarzl9d409dn4sy0kl6mb92gd0ywlgpbzb6";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -58,12 +58,6 @@ let
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0007-Do-not-build-install-vim-file-with-utils-package.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
-      name = "0007-Do-not-build-install-vim-file-with-utils-package.patch";
-      sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
-    })
-    # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
     ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
@@ -150,7 +144,7 @@ let
 
     postInstall = ''
       sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
-      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
+      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
@@ -159,8 +153,6 @@ let
         --replace /usr/bin/perl "${perl}/bin/perl -I ${libapparmor}/${perl.libPrefix}"
 
       substituteInPlace $out/bin/aa-remove-unknown \
-       --replace "/usr/bin/aa-status" "$out/bin/aa-status" \
-       --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
        --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
       wrapProgram $out/bin/aa-remove-unknown \
        --prefix PATH : ${lib.makeBinPath [gawk]}
@@ -193,7 +185,7 @@ let
     prePatch = prePatchCommon;
     postPatch = "cd ./binutils";
     makeFlags = [ "LANGS=" "USE_SYSTEM=1" ];
-    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" ];
+    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "SBINDIR=$(out)/bin" ];
 
     inherit doCheck;
 

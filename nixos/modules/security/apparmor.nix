@@ -93,7 +93,10 @@ in
       }
     ) (attrNames cfg.policies);
 
-    environment.systemPackages = [ pkgs.apparmor-utils ];
+    environment.systemPackages = [
+      pkgs.apparmor-utils
+      pkgs.apparmor-bin-utils
+    ];
     environment.etc."apparmor.d".source = pkgs.linkFarm "apparmor.d" (
       # It's important to put only enabledPolicies here and not all cfg.policies
       # because aa-remove-unknown reads profiles from all /etc/apparmor.d/*
@@ -169,7 +172,7 @@ in
       serviceConfig = let
         killUnconfinedConfinables = pkgs.writeShellScript "apparmor-kill" ''
           set -eu
-          ${pkgs.apparmor-utils}/bin/aa-status --json |
+          ${pkgs.apparmor-bin-utils}/bin/aa-status --json |
           ${pkgs.jq}/bin/jq --raw-output '.processes | .[] | .[] | select (.status == "unconfined") | .pid' |
           xargs --verbose --no-run-if-empty --delimiter='\n' \
           kill
