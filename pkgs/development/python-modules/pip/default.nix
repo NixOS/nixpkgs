@@ -1,5 +1,4 @@
 { lib
-, python
 , buildPythonPackage
 , bootstrapped-pip
 , fetchPypi
@@ -8,10 +7,6 @@
 , virtualenv
 , pretend
 , pytest
-, setuptools
-, wheel
-, isPy27
-, fetchpatch
 }:
 
 buildPythonPackage rec {
