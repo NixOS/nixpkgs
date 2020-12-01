@@ -25,10 +25,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     mkdir -p $out/bin
-  '' + stdenv.lib.optionalString isPy27 ''
-    pushd "${pip.src.name}"
-    patch -p1 < ${builtins.elemAt pip.patches 0}
-    popd
   '';
 
   nativeBuildInputs = [ makeWrapper unzip ];
