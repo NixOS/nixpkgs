@@ -23161,6 +23161,8 @@ in
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav;
   };
 
+  peach = callPackage ../servers/peach { };
+
   peaclock = callPackage ../applications/misc/peaclock {
     stdenv = gccStdenv;
   };
