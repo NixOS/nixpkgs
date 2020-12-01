@@ -7276,6 +7276,8 @@ in {
 
   tinydb = callPackage ../development/python-modules/tinydb { };
 
+  tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
+
   tiros = callPackage ../development/python-modules/tiros { };
 
   tissue = callPackage ../development/python-modules/tissue { };
