@@ -21670,6 +21670,8 @@ in
 
   howl = callPackage ../applications/editors/howl { };
 
+  hdl-dump = callPackage ../tools/misc/hdl-dump { };
+
   hpcg = callPackage ../tools/misc/hpcg/default.nix { };
 
   hpl = callPackage ../tools/misc/hpl { mpi = openmpi; };
