@@ -25982,6 +25982,8 @@ in
 
   tremulous = callPackage ../games/tremulous { };
 
+  tts = callPackage ../tools/audio/tts { };
+
   tuxpaint = callPackage ../games/tuxpaint { };
 
   tuxtype = callPackage ../games/tuxtype { };
