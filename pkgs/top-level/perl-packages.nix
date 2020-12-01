@@ -598,10 +598,10 @@ let
 
   Appcpm = buildPerlModule {
     pname = "App-cpm";
-    version = "0.994";
+    version = "0.995";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.994.tar.gz";
-      sha256 = "4242ecb64aaae09034eddb1b338e005567ace29f2ac2d1bca4d4bcf4e15d21c4";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.995.tar.gz";
+      sha256 = "b17fb0b7f97eb86430952bf387b6f08b5252413cb97474d1bf26e3376a4cc496";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy ModuleCPANfile ParallelPipes locallib ];
@@ -8429,10 +8429,10 @@ let
 
   FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.46";
+    version = "0.47";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
-      sha256 = "1iqbs7n8923xjkai51hiczn5an8cskddl7qrfi30axjl1d56h6r0";
+      sha256 = "1ja85hzzl36sjikcyavjqy4m41f2yyrsr1ipypzi5mlw7clhmdi3";
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseSublike ];

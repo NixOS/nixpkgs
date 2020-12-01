@@ -10492,6 +10492,12 @@ in
   phpExtensions = php74Extensions;
   phpPackages = php74Packages;
 
+  php80 = callPackage ../development/interpreters/php/8.0.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
+  php80Extensions = recurseIntoAttrs php80.extensions;
+  php80Packages = recurseIntoAttrs php80.packages;
+
   # Import PHP74 interpreter, extensions and packages
   php74 = callPackage ../development/interpreters/php/7.4.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
@@ -21664,6 +21670,8 @@ in
 
   howl = callPackage ../applications/editors/howl { };
 
+  hdl-dump = callPackage ../tools/misc/hdl-dump { };
+
   hpcg = callPackage ../tools/misc/hpcg/default.nix { };
 
   hpl = callPackage ../tools/misc/hpl { mpi = openmpi; };
@@ -23160,6 +23168,8 @@ in
   pdfpc = callPackage ../applications/misc/pdfpc {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav;
   };
+
+  peach = callPackage ../servers/peach { };
 
   peaclock = callPackage ../applications/misc/peaclock {
     stdenv = gccStdenv;
@@ -25979,6 +25989,8 @@ in
   trackballs = callPackage ../games/trackballs { };
 
   tremulous = callPackage ../games/tremulous { };
+
+  tts = callPackage ../tools/audio/tts { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
 
