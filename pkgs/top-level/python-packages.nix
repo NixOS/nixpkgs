@@ -5353,6 +5353,8 @@ in {
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
+  pyosf = callPackage ../development/python-modules/pyosf { };
+
   pyosmium = callPackage ../development/python-modules/pyosmium { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
