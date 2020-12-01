@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , isPy27
 , dateutil
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "freezegun";
   version = "1.0.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
