@@ -6,7 +6,6 @@
 }:
 
 stdenv.mkDerivation rec {
-
   pname = "Archi";
   version = "4.7.1";
 
@@ -35,14 +34,12 @@ stdenv.mkDerivation rec {
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       ''
-        for i in configuration features p2 plugins Archi.ini Archi
-        do
-          mkdir -p $out/bin
-          cp -rf $i $out/bin/
+      mkdir -p $out/bin
+        for f in configuration features p2 plugins Archi.ini Archi; do
+          cp $f $out/bin/
         done
 
         install -D -m755 Archi $out/bin/Archi
-        rm Archi
       ''
     else
       ''
@@ -58,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.archimatetool.com/";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ earldouglas SuperSandro2000 ];
   };
 }
