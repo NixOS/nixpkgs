@@ -21,7 +21,7 @@ For example to update 'terraform-providers.aws' run:
 If the provider is not in the list already, use the form '<owner>/<provider>'
 to add the provider to the list:
 
-    ./update-provider hetnercloud/hcloud
+    ./update-provider hetznercloud/hcloud
 
 Options:
 
