@@ -6,7 +6,7 @@ The Nix expressions for the X.org packages reside in `pkgs/servers/x11/xorg/defa
 
 X.org upstream releases used to include [katamari](https://en.wiktionary.org/wiki/%E3%81%8B%E3%81%9F%E3%81%BE%E3%82%8A) releases, which included a holistic recommended version for each tarball, up until 7.7. To create a list of tarballs in a katamari release:
 
-```sh
+```ShellSession
 export release="X11R7.7"
 export url="mirror://xorg/$release/src/everything/"
 cat $(PRINT_PATH=1 nix-prefetch-url $url | tail -n 1) \
@@ -22,7 +22,7 @@ The upstream release process for [X11R7.8](https://x.org/wiki/Releases/7.8/) doe
 
 The generator is invoked as follows:
 
-```sh
+```ShellSession
 cd pkgs/servers/x11/xorg
 <tarballs.list perl ./generate-expr-from-tarballs.pl
 ```
