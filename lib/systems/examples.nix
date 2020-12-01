@@ -39,6 +39,11 @@ rec {
     platform = platforms.zero-gravitas;
   };
 
+  remarkable2 = {
+    config = "armv7l-unknown-linux-gnueabihf";
+    platform = platforms.zero-sugar;
+  };
+
   armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
     platform = platforms.armv7l-hf-multiplatform;
