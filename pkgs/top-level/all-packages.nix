@@ -21839,6 +21839,8 @@ in
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
+  ideamaker = callPackage ../applications/misc/ideamaker { };
+
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 
   ii = callPackage ../applications/networking/irc/ii {
