@@ -18,6 +18,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Abstyles License";
   };
 
+  afl20 = spdx {
+    spdxId = "AFL-2.0";
+    fullName = "Academic Free License v2.0";
+  };
+
   afl21 = spdx {
     spdxId = "AFL-2.1";
     fullName = "Academic Free License v2.1";
