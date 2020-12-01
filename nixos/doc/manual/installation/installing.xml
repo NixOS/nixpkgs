@@ -64,8 +64,8 @@
 
    <para>
     To manually configure the wifi on the minimal installer, run
-    <command>wpa_supplicant -B -i interface -c &lt;(wpa_passphrase 'SSID'
-    'key')</command>.
+    <command>wpa_passphrase '<replaceable>SSID</replaceable>' '<replaceable>key</replaceable>'
+     | sudo wpa_supplicant -B -i <replaceable>interface</replaceable> -c /dev/stdin</command>.
    </para>
 
    <para>
