@@ -6,7 +6,7 @@ Broadly, we support both GL vendors: Mesa and NVIDIA.
 
 ## NixOS Desktop
 
-The NixOS desktop or other non-headless configurations are the primary target for OpenGL libraries and applications. The current solution for discovering which drivers are available is based on [libglvnd](https://gitlab.freedesktop.org/glvnd/libglvnd). `libglvnd` performs "vendor-neutral dispatch", trying a variety of techniques to find the system's GL implementation. In practice, this will be either via standard GLX for X11 users or EGL for Wayland users, and supporting either nVidia or Mesa extensions.
+The NixOS desktop or other non-headless configurations are the primary target for OpenGL libraries and applications. The current solution for discovering which drivers are available is based on [libglvnd](https://gitlab.freedesktop.org/glvnd/libglvnd). `libglvnd` performs "vendor-neutral dispatch", trying a variety of techniques to find the system's GL implementation. In practice, this will be either via standard GLX for X11 users or EGL for Wayland users, and supporting either NVIDIA or Mesa extensions.
 
 ## Nix on GNU/Linux
 
