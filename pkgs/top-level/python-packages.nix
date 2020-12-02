@@ -4753,6 +4753,8 @@ in {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+  python-prjxray = callPackage ../development/python-modules/python-prjxray { };
+
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
