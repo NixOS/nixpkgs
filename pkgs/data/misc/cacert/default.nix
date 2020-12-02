@@ -1,6 +1,10 @@
 { stdenv, fetchurl, nss, python3
 , blacklist ? []
-, includeEmail ? false
+
+# Used for tests only
+, runCommand
+, cacert
+, openssl
 }:
 
 with stdenv.lib;
@@ -32,11 +36,6 @@ stdenv.mkDerivation {
     EOF
 
     cat ${certdata2pem} > certdata2pem.py
-    patch -p1 < ${./fix-unicode-ca-names.patch}
-    ${optionalString includeEmail ''
-      # Disable CAs used for mail signing
-      substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
-    ''}
   '';
 
   buildPhase = ''
@@ -60,11 +59,59 @@ stdenv.mkDerivation {
 
   setupHook = ./setup-hook.sh;
 
+  passthru.tests = {
+    # Test that building this derivation with a blacklist works, and that UTF-8 is supported.
+    blacklist-utf8 = let
+      blacklistCAToFingerprint = {
+        # "blacklist" uses the CA name from the NSS bundle, but we check for presence using the SHA256 fingerprint.
+        "CFCA EV ROOT" = "5C:C3:D7:8E:4E:1D:5E:45:54:7A:04:E6:87:3E:64:F9:0C:F9:53:6D:1C:CC:2E:F8:00:F3:55:C4:C5:FD:70:FD";
+        "NetLock Arany (Class Gold) Főtanúsítvány" = "6C:61:DA:C3:A2:DE:F0:31:50:6B:E0:36:D2:A6:FE:40:19:94:FB:D1:3D:F9:C8:D4:66:59:92:74:C4:46:EC:98";
+      };
+      mapBlacklist = f: concatStringsSep "\n" (mapAttrsToList f blacklistCAToFingerprint);
+    in runCommand "verify-the-cacert-filter-output" {
+      cacert = cacert.unbundled;
+      cacertWithExcludes = (cacert.override {
+        blacklist = builtins.attrNames blacklistCAToFingerprint;
+      }).unbundled;
+
+      nativeBuildInputs = [ openssl ];
+    } ''
+      isPresent() {
+        # isPresent <unbundled-dir> <ca name> <ca sha256 fingerprint>
+        for f in $1/etc/ssl/certs/*.crt; do
+          fingerprint="$(openssl x509 -in "$f" -noout -fingerprint -sha256 | cut -f2 -d=)"
+          if [[ "x$fingerprint" == "x$3" ]]; then
+            return 0
+          fi
+        done
+        return 1
+      }
+
+      # Ensure that each certificate is in the main "cacert".
+      ${mapBlacklist (caName: caFingerprint: ''
+        isPresent "$cacert" "${caName}" "${caFingerprint}" || ({
+          echo "CA fingerprint ${caFingerprint} (${caName}) is missing from the CA bundle. Consider picking a different CA for the blacklist test." >&2
+          exit 1
+        })
+      '')}
+
+      # Ensure that each certificate is NOT in the "cacertWithExcludes".
+      ${mapBlacklist (caName: caFingerprint: ''
+        isPresent "$cacertWithExcludes" "${caName}" "${caFingerprint}" && ({
+          echo "CA fingerprint ${caFingerprint} (${caName}) is present in the cacertWithExcludes bundle." >&2
+          exit 1
+        })
+      '')}
+
+      touch $out
+    '';
+  };
+
   meta = {
     homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ andir fpletz lukegb ];
     license = licenses.mpl20;
   };
 }
