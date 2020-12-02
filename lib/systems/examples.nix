@@ -7,7 +7,7 @@ let
 
   riscv = bits: {
     config = "riscv${bits}-unknown-linux-gnu";
-    platform = platforms.riscv-multiplatform bits;
+    platform = platforms.riscv-multiplatform;
   };
 in
 
@@ -110,13 +110,13 @@ rec {
   riscv64-embedded = {
     config = "riscv64-none-elf";
     libc = "newlib";
-    platform = platforms.riscv-multiplatform "64";
+    platform = platforms.riscv-multiplatform;
   };
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
     libc = "newlib";
-    platform = platforms.riscv-multiplatform "32";
+    platform = platforms.riscv-multiplatform;
   };
 
   mmix = {
