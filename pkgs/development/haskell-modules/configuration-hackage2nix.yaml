@@ -3194,7 +3194,6 @@ broken-packages:
   - arion
   - arith-encode
   - arithmetic-circuits
-  - arithmoi
   - armada
   - armor
   - arpa
