@@ -7296,6 +7296,8 @@ in {
 
   sybil = callPackage ../development/python-modules/sybil { };
 
+  symbiflow-fasm = callPackage ../development/python-modules/symbiflow-fasm { };
+
   symengine = callPackage ../development/python-modules/symengine { symengine = pkgs.symengine; };
 
   sympy = if isPy3k then
