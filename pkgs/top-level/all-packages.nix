@@ -22199,6 +22199,8 @@ in
 
   kvirc = libsForQt514.callPackage ../applications/networking/irc/kvirc { };
 
+  lambda-delta = callPackage ../misc/emulators/lambda-delta { };
+
   lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
