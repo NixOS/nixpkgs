@@ -6439,6 +6439,7 @@ in
   pinentry-gtk2 = (stdenv.lib.getOutput "gtk2" pinentry);
   pinentry-qt = (stdenv.lib.getOutput "qt" pinentry);
   pinentry-gnome = (stdenv.lib.getOutput "gnome3" pinentry);
+  pinentry-efl = (stdenv.lib.getOutput "efl" pinentry);
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
