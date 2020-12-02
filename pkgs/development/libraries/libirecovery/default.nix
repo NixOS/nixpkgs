@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl21;
     # Upstream description says it works on more platforms, but packager hasn't tried that yet
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ nh2 ];
   };
 }
