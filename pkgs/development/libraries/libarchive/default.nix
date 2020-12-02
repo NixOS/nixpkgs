@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
       compressed with gzip, bzip2, lzma, xz, ...
     '';
     homepage = "http://libarchive.org";
+    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
