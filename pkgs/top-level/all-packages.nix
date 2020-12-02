@@ -20254,6 +20254,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  prjxray-db = callPackage ../data/misc/prjxray-db { };
+
   profont = callPackage ../data/fonts/profont
     { inherit (buildPackages.xorg) mkfontscale; };
 
