@@ -85,11 +85,12 @@ in stdenv.mkDerivation rec {
     cp ${src}/pdftk.1 $out/share/man/man1
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Command-line tool for working with PDFs";
     homepage = "https://gitlab.com/pdftk-java/pdftk";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ raskin averelld ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin averelld ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
