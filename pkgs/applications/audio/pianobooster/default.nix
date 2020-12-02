@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, pkg-config, qttools
-, alsaLib, ftgl, libGLU, libjack2, qtbase, rtmidi
+, alsaLib, ftgl, libGLU, libjack2, qtbase, rtmidi,
+mkDerivation
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "pianobooster";
   version = "0.7.2b";
 
