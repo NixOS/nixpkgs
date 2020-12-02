@@ -1,0 +1,69 @@
+{
+    "name": "flarum/flarum",
+    "description": "Delightfully simple forum software.",
+    "type": "project",
+    "keywords": [
+        "forum",
+        "discussion"
+    ],
+    "homepage": "https://flarum.org/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Franz Liedke",
+            "email": "franz@develophp.org"
+        },
+        {
+            "name": "Daniel Klabbers",
+            "email": "daniel@klabbers.email",
+            "homepage": "https://luceos.com"
+        },
+        {
+            "name": "David Sevilla Martin",
+            "email": "me+flarum@datitisev.me",
+            "homepage": "https://datitisev.me"
+        },
+        {
+            "name": "Clark Winkelmann",
+            "email": "clark.winkelmann@gmail.com",
+            "homepage": "https://clarkwinkelmann.com"
+        },
+        {
+            "name": "Matthew Kilgore",
+            "email": "matthew@kilgore.dev"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/flarum/core/issues",
+        "source": "https://github.com/flarum/flarum",
+        "docs": "https://flarum.org/docs/"
+    },
+    "require": {
+        "flarum/approval": "^0.1.0",
+        "flarum/auth-facebook": "^0.1.0",
+        "flarum/auth-github": "^0.1.0",
+        "flarum/auth-twitter": "^0.1.0",
+        "flarum/bbcode": "^0.1.0",
+        "flarum/core": "^0.1.0",
+        "flarum/emoji": "^0.1.0",
+        "flarum/flags": "^0.1.0",
+        "flarum/lang-english": "^0.1.0",
+        "flarum/likes": "^0.1.0",
+        "flarum/lock": "^0.1.0",
+        "flarum/markdown": "^0.1.0",
+        "flarum/mentions": "^0.1.0",
+        "flarum/pusher": "^0.1.0",
+        "flarum/statistics": "^0.1.0",
+        "flarum/sticky": "^0.1.0",
+        "flarum/subscriptions": "^0.1.0",
+        "flarum/suspend": "^0.1.0",
+        "flarum/tags": "^0.1.0",
+        "fof/upload": "^0.10.0"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "beta",
+    "prefer-stable": true
+}
