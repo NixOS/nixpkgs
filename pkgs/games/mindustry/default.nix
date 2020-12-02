@@ -128,5 +128,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    # Hash mismatch on darwin:
+    # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
+    broken = stdenv.isDarwin;
   };
 }
