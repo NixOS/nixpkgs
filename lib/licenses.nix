@@ -734,6 +734,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     free = false;
   };
 
+  stk = {
+    shortName = "stk";
+    fullName = "Synthesis Tool Kit 4.3";
+    url = https://github.com/thestk/stk/blob/master/LICENSE;
+  };
+
   tcltk = spdx {
     spdxId = "TCL";
     fullName = "TCL/TK License";
