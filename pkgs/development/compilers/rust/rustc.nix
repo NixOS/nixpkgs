@@ -1,5 +1,4 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, targetPackages
 , fetchurl, file, python3
 , llvm_10, darwin, cmake, rust, rustPlatform
 , pkgconfig, openssl
@@ -93,8 +92,12 @@ in stdenv.mkDerivation rec {
     "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
   ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
+  ] ++ optionals stdenv.buildPlatform.isMusl [
+    "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals stdenv.hostPlatform.isMusl [
+    "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
-    "${setTarget}.musl-root=${targetPackages.stdenv.cc.libc}"
+    "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
