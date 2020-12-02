@@ -4342,7 +4342,6 @@ broken-packages:
   - custom-prelude
   - CV
   - cv-combinators
-  - cyclotomic
   - cypher
   - d-bus
   - d3js
