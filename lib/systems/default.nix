@@ -25,7 +25,7 @@ rec {
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
       # Just a guess, based on `system`
-      platform = platforms.selectBySystem final.system;
+      platform = platforms.select final;
       # Determine whether we are compatible with the provided CPU
       isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
       # Derived meta-data
