@@ -54,12 +54,21 @@ let
   # Dependencies that are required to build kernel modules
   moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
 
-  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
-    #!${stdenv.shell} -e
-    mkdir -p $4
-    cp -av $2 $4
-    cp -av $3 $4
-  ''; };
+  installkernel = (writeTextFile {
+    name = "installkernel";
+    executable = true;
+
+    text = ''
+      #!${stdenv.shell} -e
+      mkdir -p $4
+      cp -av $2 $4
+      cp -av $3 $4
+    '';
+  }).overrideAttrs (old: {
+    # allows to build kernels for a different architecture
+    # to be build on a remote builder
+    preferLocalBuild = false;
+  });
 
   commonMakeFlags = [
     "O=$(buildRoot)"
