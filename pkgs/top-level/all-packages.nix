@@ -2184,7 +2184,11 @@ in
 
   gh-ost = callPackage ../tools/misc/gh-ost { };
 
-  ghidra-bin = callPackage ../tools/security/ghidra { };
+  ghidra = callPackage ../tools/security/ghidra {
+    jdk = jdk11;
+  };
+
+  ghidra-bin = callPackage ../tools/security/ghidra/bin.nix { };
 
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
 
