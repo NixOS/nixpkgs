@@ -8065,6 +8065,8 @@ in {
 
   xattr = callPackage ../development/python-modules/xattr { };
 
+  xc-fasm = callPackage ../development/python-modules/xc-fasm { };
+
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xcffib = callPackage ../development/python-modules/xcffib { };
