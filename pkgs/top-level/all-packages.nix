@@ -703,6 +703,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
   };
 
+  archi = callPackage ../tools/misc/archi { };
+
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
@@ -1173,6 +1175,8 @@ in
   };
 
   fitnesstrax = callPackage ../applications/misc/fitnesstrax/default.nix { };
+
+  flood = nodePackages.flood;
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
@@ -3036,6 +3040,8 @@ in
       inherit (python2Packages) gyp;
       protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
+
+    rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
 
@@ -5362,6 +5368,8 @@ in
 
   libck = callPackage ../development/libraries/libck { };
 
+  libcork = callPackage ../development/libraries/libcork { };
+
   libconfig = callPackage ../development/libraries/libconfig { };
 
   libcmis = callPackage ../development/libraries/libcmis { };
@@ -7001,6 +7009,8 @@ in
 
   rubocop = callPackage ../development/tools/rubocop { };
 
+  ruffle = callPackage ../misc/emulators/ruffle { };
+
   runelite = callPackage ../games/runelite { };
 
   runningx = callPackage ../tools/X11/runningx { };
@@ -7672,6 +7682,8 @@ in
   tinyemu = callPackage ../applications/virtualization/tinyemu { };
 
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn {};
+
+  tinyobjloader = callPackage ../development/libraries/tinyobjloader { };
 
   tinyprog = callPackage ../development/tools/misc/tinyprog { };
 
@@ -10312,13 +10324,15 @@ in
 
   dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
 
-  dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
-
   dhall-bash = haskell.lib.justStaticExecutables haskellPackages.dhall-bash;
+
+  dhall-docs = haskell.lib.justStaticExecutables haskellPackages.dhall-docs;
+
+  dhall-lsp-server = haskell.lib.justStaticExecutables haskellPackages.dhall-lsp-server;
 
   dhall-json = haskell.lib.justStaticExecutables haskellPackages.dhall-json;
 
-  dhall-lsp-server = haskell.lib.justStaticExecutables haskellPackages.dhall-lsp-server;
+  dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
@@ -21847,6 +21861,8 @@ in
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
+  ideamaker = callPackage ../applications/misc/ideamaker { };
+
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 
   ii = callPackage ../applications/networking/irc/ii {
@@ -22189,6 +22205,8 @@ in
 
   kvirc = libsForQt514.callPackage ../applications/networking/irc/kvirc { };
 
+  lambda-delta = callPackage ../misc/emulators/lambda-delta { };
+
   lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
@@ -22386,7 +22404,7 @@ in
 
   mac = callPackage ../development/libraries/mac { };
 
-  macdylibbundler = callPackage ../development/tools/misc/macdylibbundler { };
+  macdylibbundler = callPackage ../development/tools/misc/macdylibbundler { inherit (darwin) cctools; };
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
@@ -26342,7 +26360,9 @@ in
 
   alliance = callPackage ../applications/science/electronics/alliance { };
 
-  ants = callPackage ../applications/science/biology/ants { };
+  ants = callPackage ../applications/science/biology/ants {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   aragorn = callPackage ../applications/science/biology/aragorn { };
 
