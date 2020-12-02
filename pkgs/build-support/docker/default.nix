@@ -1,4 +1,5 @@
 {
+  bashInteractive,
   buildPackages,
   cacert,
   callPackage,
@@ -688,6 +689,7 @@ rec {
   # Provide a /etc/passwd and /etc/group that contain root and nobody.
   # Useful when packaging binaries that insist on using nss to look up
   # username/groups (like nginx).
+  # /bin/sh is fine to not exist, and provided by another shim.
   fakeNss = symlinkJoin {
     name = "fake-nss";
     paths = [
@@ -704,6 +706,12 @@ rec {
       '')
     ];
   };
+
+  # This provides /bin/sh, pointing to bashInteractive.
+  binSh = runCommand "bin-sh" {} ''
+    mkdir -p $out/bin
+    ln -s ${bashInteractive}/bin/bash $out/bin/sh
+  '';
 
   # Build an image and populate its nix database with the provided
   # contents. The main purpose is to be able to use nix commands in
