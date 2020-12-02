@@ -1,30 +1,34 @@
-{ stdenv, fetchFromGitHub
-, libX11, libXt
+{ stdenv
+, fetchFromGitHub
+, libX11
+, libXt
 , withGraphics ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "icon-lang";
-  version = "9.5.20i";
-
+  version = "unstable-2020-02-05";
   src = fetchFromGitHub {
     owner = "gtownsend";
     repo = "icon";
-    rev = "v${version}";
-    sha256 = "0072b3jk8mc94w818z8bklhjdf9rf0d9a7lkvw40pz3niy7zv84s";
+    rev = "829cff33de4a21546fb269de3ef5acd7b4f0c0c7";
+    sha256 = "1lj2f13pbaajcy4v3744bz46rghhw5sv4dwwfnzhsllbj5gnjsv2";
   };
 
   buildInputs = stdenv.lib.optionals withGraphics [ libX11 libXt ];
 
-  configurePhase = let
-    target = if withGraphics then "X-Configure" else "Configure";
-    platform = if stdenv.isLinux  then "linux"
-          else if stdenv.isDarwin then "macintosh"
-          else if stdenv.isBSD    then "bsd"
-          else if stdenv.isCygwin then "cygwin"
-          else if stdenv.isSunOS  then "solaris"
-          else throw "unsupported system";
-  in "make ${target} name=${platform}";
+  configurePhase =
+    let
+      target = if withGraphics then "X-Configure" else "Configure";
+      platform =
+        if stdenv.isLinux then "linux"
+        else if stdenv.isDarwin then "macintosh"
+        else if stdenv.isBSD then "bsd"
+        else if stdenv.isCygwin then "cygwin"
+        else if stdenv.isSunOS then "solaris"
+        else throw "unsupported system";
+    in
+    "make ${target} name=${platform}";
 
   installPhase = "make Install dest=$out";
 
