@@ -4823,6 +4823,12 @@
     githubId = 2422454;
     name = "Kai Wohlfahrt";
   };
+  kyleondy = {
+    email = "kyle@ondy.org";
+    github = "kyleondy";
+    githubId = 1640900;
+    name = "Kyle Ondy";
+  };
   kylesferrazza = {
     name = "Kyle Sferrazza";
     email = "kyle.sferrazza@gmail.com";
