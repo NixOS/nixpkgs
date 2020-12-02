@@ -4,11 +4,11 @@ let
   archiveVersion = import ./archive-version.nix stdenv.lib;
   mkTool = { pname, makeTarget, description, homepage }: stdenv.mkDerivation rec {
     inherit pname;
-    version = "3.33.0";
+    version = "3.34.0";
 
     src = assert version == sqlite.version; fetchurl {
       url = "https://sqlite.org/2020/sqlite-src-${archiveVersion version}.zip";
-      sha256 = "1f09srlrmcab1sf8j2d89s2kvknlbxk7mbsiwpndw9mall27dgwh";
+      sha256 = "0giklai05shqalj1wwadi9hg5dx6vff8nrblqh9xxljnrq701hm5";
     };
 
     nativeBuildInputs = [ unzip ];
