@@ -36,7 +36,7 @@ map (p: p.name) pkgs.rxvt-unicode.plugins
 
 Alternatively, if your shell is bash or zsh and have completion enabled, simply type `nixpkgs.rxvt-unicode.plugins.<tab>`.
 
-In addition to `plugins` the options `extraDeps` and `perlDeps` can be used to install extra packages.  `extraDeps` can be used, for example, to provide `xsel` (a clipboard manager) to the clipboard plugin, without installing it globally:
+In addition to `plugins` the options `extraDeps` and `perlDeps` can be used to install extra packages. `extraDeps` can be used, for example, to provide `xsel` (a clipboard manager) to the clipboard plugin, without installing it globally:
 
 ```nix
 rxvt-unicode.override {
@@ -46,7 +46,7 @@ rxvt-unicode.override {
 }
 ```
 
-`perlDeps` is a handy way to provide Perl packages to your custom plugins (in `$HOME/.urxvt/ext`). For example, if you need `AnyEvent` you can do: 
+`perlDeps` is a handy way to provide Perl packages to your custom plugins (in `$HOME/.urxvt/ext`). For example, if you need `AnyEvent` you can do:
 
 ```nix
 rxvt-unicode.override {
@@ -58,10 +58,9 @@ rxvt-unicode.override {
 
 ## Packaging urxvt plugins {#sec-urxvt-pkg}
 
-Urxvt plugins resides in `pkgs/applications/misc/rxvt-unicode-plugins`.  To add a new plugin create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
+Urxvt plugins resides in `pkgs/applications/misc/rxvt-unicode-plugins`. To add a new plugin create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
 
-A plugin can be any kind of derivation, the only requirement is that it should always install perl scripts in `$out/lib/urxvt/perl`.  Look for existing plugins for examples.
-
+A plugin can be any kind of derivation, the only requirement is that it should always install perl scripts in `$out/lib/urxvt/perl`. Look for existing plugins for examples.
 
 If the plugin is itself a perl package that needs to be imported from other plugins or scripts, add the following passthrough:
 
