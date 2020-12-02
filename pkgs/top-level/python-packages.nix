@@ -7429,6 +7429,8 @@ in {
 
   textfsm = callPackage ../development/python-modules/textfsm { };
 
+  textx = callPackage ../development/python-modules/textx { };
+
   testpath = callPackage ../development/python-modules/testpath { };
 
   testrepository = callPackage ../development/python-modules/testrepository { };
