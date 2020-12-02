@@ -8,7 +8,7 @@
 , libxml2
 , stoken
 , zlib
-, fetchgit
+, vpnc-scripts
 , PCSC
 , head ? false
   , fetchFromGitLab
@@ -17,13 +17,7 @@
 
 assert (openssl != null) == (gnutls == null);
 
-let vpnc = fetchgit {
-  url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
-  rev = "c0122e891f7e033f35f047dad963702199d5cb9e";
-  sha256 = "11b1ls012mb704jphqxjmqrfbbhkdjb64j2q4k8wb5jmja8jnd14";
-};
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openconnect${lib.optionalString head "-head"}";
   version = if head then "2021-05-05" else "8.10";
 
@@ -42,7 +36,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   configureFlags = [
-    "--with-vpnc-script=${vpnc}/vpnc-script"
+    "--with-vpnc-script=${vpnc-scripts}/bin/vpnc-script"
     "--disable-nls"
     "--without-openssl-version-check"
   ];

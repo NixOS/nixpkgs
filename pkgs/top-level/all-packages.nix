@@ -9456,6 +9456,8 @@ in
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
+  vpnc-scripts = callPackage ../tools/networking/vpnc-scripts { };
+
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
   vp = callPackage ../applications/misc/vp {
