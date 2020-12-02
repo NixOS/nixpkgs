@@ -6980,7 +6980,6 @@ broken-packages:
   - int-multimap
   - intcode
   - integer-pure
-  - integer-roots
   - integreat
   - intel-aes
   - intensional-datatys
