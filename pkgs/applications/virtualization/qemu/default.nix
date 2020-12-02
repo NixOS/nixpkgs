@@ -83,6 +83,12 @@ stdenv.mkDerivation rec {
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
     ./CVE-2020-27617.patch
+    (fetchpatch {
+      # e1000e: infinite loop scenario in case of null packet descriptor, remove for QEMU >= 5.2.0-rc3
+      name = "CVE-2020-28916.patch";
+      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=c2cb511634012344e3d0fe49a037a33b12d8a98a";
+      sha256 = "1kvm6wl4vry0npiisxsn76h8nf1iv5fmqsyjvb46203f1yyg5pis";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
