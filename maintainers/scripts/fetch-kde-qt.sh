@@ -5,9 +5,9 @@ set -efuo pipefail
 
 print_usage() {
     echo "Usage: $0 [PATH|FILE]"
-    echo "This file expects a file 'fetch.sh' containing"
+    echo "This file expects a 'fetch.sh' containing"
     echo "   WGET_ARGS=(<base url>)"
-    echo "in PATH or as a sibling of FILE. If fetches all *.tar.xz.(sig|mirrorlist|sha256) files"
+    echo "in PATH or passed as FILE. If fetches all *.tar.xz.(sig|mirrorlist|sha256) files"
     echo "from <base url> and constructs a 'srcs.nix' file from them."
     echo ""
     echo "Sample invocation: $0 pkgs/development/libraries/kde-frameworks/"
