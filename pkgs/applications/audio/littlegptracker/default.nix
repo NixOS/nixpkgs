@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , SDL
 , jack2
 , Foundation
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
 
   installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with stdenv.lib; {
     description = "A music tracker similar to lsdj optimised to run on portable game consoles";
