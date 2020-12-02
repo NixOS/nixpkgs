@@ -3037,6 +3037,8 @@ in
       protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
+    rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
+
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
 
     table-chinese = callPackage ../tools/inputmethods/ibus-engines/ibus-table-chinese {
