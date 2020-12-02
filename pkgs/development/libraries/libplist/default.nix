@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ infinisil ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
