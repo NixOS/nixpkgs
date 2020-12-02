@@ -32,7 +32,9 @@ in rustPlatform.buildRustPackage.override {
     description =
       "Minimal mpd terminal client that aims to be simple yet highly configurable";
     homepage = "https://github.com/figsoda/mmtc";
+    changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    platforms = platforms.all;
   };
 }
