@@ -2939,6 +2939,12 @@
     githubId = 8182846;
     name = "Francesco Gazzetta";
   };
+  figsoda = {
+    email = "figsoda@pm.me";
+    github = "figsoda";
+    githubId = 40620903;
+    name = "figsoda";
+  };
   fionera = {
     email = "nix@fionera.de";
     github = "fionera";
