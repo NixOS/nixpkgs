@@ -2749,6 +2749,16 @@
     email = "adam.copp@gmail.com";
     name = "Adam Copp";
   };
+  ethancedwards8 = {
+    email = "ethancarteredwards@gmail.com";
+    github = "ethancedwards8";
+    githubId = 60861925;
+    name = "Ethan Carter Edwards";
+    keys = [{
+      longkeyid = "rsa4096/0xF93DDAFA26EF2458";
+      fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458";
+    }];
+  };
   ethercrow = {
     email = "ethercrow@gmail.com";
     github = "ethercrow";
