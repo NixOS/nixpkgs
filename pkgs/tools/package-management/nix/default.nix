@@ -189,10 +189,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.7";
+    name = "nix-2.3.9";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "dd8f52849414e5a878afe7e797aa4e22bab77c875d9da5a38d5f1bada704e596";
+      sha256 = "72331fdba220517a0ccabcf5c9735703c31674bfb4ef0b64da5d8f715d6022fa";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -202,13 +202,13 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20201102_550e11f";
+    suffix = "pre20201118_79aa7d9";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "550e11f077ae508abde5a33998a9d4029880e7b2";
-      sha256 = "186grfxsfqg7r92wgwbma66xc7p3iywn43ff7s59m4g6bvb0qgcl";
+      rev = "79aa7d95183cbe6c0d786965f0dbff414fd1aa67";
+      sha256 = "0aa0xggrczylwp3da3q9m4ad9j6gzi7wpa3ph4i8a1ng36kl91c7";
     };
 
     inherit storeDir stateDir confDir boehmgc;

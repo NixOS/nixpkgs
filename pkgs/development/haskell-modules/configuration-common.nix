@@ -140,11 +140,15 @@ self: super: {
   barbly = addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = if pkgs.stdenv.isDarwin
-    then dontCheck (overrideCabal super.hakyll (drv: {
+  hakyll = let
+    patched-hakyll = overrideCabal super.hakyll (drv: {
+      patches = [ ./patches/hakyll.patch ];
+    });
+  in if pkgs.stdenv.isDarwin
+    then dontCheck (overrideCabal patched-hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    else patched-hakyll;
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion

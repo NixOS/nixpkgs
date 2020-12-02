@@ -2931,6 +2931,8 @@ in {
 
   ipython = if isPy27 then
     callPackage ../development/python-modules/ipython/5.nix { }
+  else if isPy36 then
+    callPackage ../development/python-modules/ipython/7.16.nix { }
   else
     callPackage ../development/python-modules/ipython { };
 

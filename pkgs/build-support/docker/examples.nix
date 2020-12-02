@@ -7,7 +7,7 @@
 #  $ nix-build '<nixpkgs>' -A dockerTools.examples.redis
 #  $ docker load < result
 
-{ pkgs, buildImage, pullImage, shadowSetup, buildImageWithNixDb }:
+{ pkgs, buildImage, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross }:
 
 rec {
   # 1. basic example
@@ -298,21 +298,10 @@ rec {
     name = "no-store-paths";
     tag = "latest";
     extraCommands = ''
-      chmod a+w bin
-
       # This removes sharing of busybox and is not recommended. We do this
       # to make the example suitable as a test case with working binaries.
       cp -r ${pkgs.pkgsStatic.busybox}/* .
     '';
-    contents = [
-      # This layer has no dependencies and its symlinks will be dereferenced
-      # when creating the customization layer.
-      (pkgs.runCommand "layer-to-flatten" {} ''
-        mkdir -p $out/bin
-        ln -s /bin/true $out/bin/custom-true
-      ''
-      )
-    ];
   };
 
   nixLayered = pkgs.dockerTools.buildLayeredImageWithNixDb {
@@ -415,7 +404,19 @@ rec {
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
       tag = "latest";
-      contents = [ pkgs.bash pkgs.coreutils (nonRootShadowSetup { uid = 999; user = "somebody"; }) ];
+      contents = [ pkgs.bash pkgs.coreutils ] ++ nonRootShadowSetup { uid = 999; user = "somebody"; };
     };
+
+  # basic example, with cross compilation
+  cross = let
+    # Cross compile for x86_64 if on aarch64
+    crossPkgs =
+      if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
+      else pkgsCross.aarch64-multiplatform;
+  in crossPkgs.dockerTools.buildImage {
+    name = "hello-cross";
+    tag = "latest";
+    contents = crossPkgs.hello;
+  };
 
 }

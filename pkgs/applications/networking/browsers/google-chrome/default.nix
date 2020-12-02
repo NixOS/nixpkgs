@@ -6,6 +6,7 @@
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos, libdrm, mesa
+, libxkbcommon, wayland # ozone/wayland
 
 # Command line programs
 , coreutils
@@ -62,6 +63,7 @@ let
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     kerberos libdrm mesa coreutils
+    libxkbcommon wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
@@ -148,7 +150,10 @@ in stdenv.mkDerivation {
     description = "A freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
-    maintainers = [ maintainers.msteen ];
+    maintainers = with maintainers; [ primeos msteen ];
+    # Note from primeos: By updating Chromium I also update Google Chrome and
+    # will try to merge PRs and respond to issues but I'm not actually using
+    # Google Chrome. msteen is the actual user/maintainer.
     platforms = [ "x86_64-linux" ];
   };
 }

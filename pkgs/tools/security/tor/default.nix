@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.3.6";
+  version = "0.4.4.6";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0qmcrkjip0ywq77232m73pjwqiaj0q2klwklqlpbw575shvhcbba";
+    sha256 = "1p0zpqmbskygx0wmiijhprg8r45n2wqbbjl7kv4gbb83b0alq5az";
   };
 
   outputs = [ "out" "geoip" ];
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     maintainers = with maintainers;
-      [ phreedom doublec thoughtpolice joachifm ];
+      [ phreedom thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

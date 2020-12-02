@@ -54,7 +54,10 @@ let
     qtbase =
       optionals stdenv.isDarwin [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
-        ./qtbase.patch.d/0002-qtbase-mac.patch
+
+        # Downgrade minimal required SDK to 10.12
+        ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+        ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
@@ -70,7 +73,16 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [ ]
+    qtwebengine = [
+      # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
+      (fetchpatch {
+        name = "qtwebengine-bison-3.7-build.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
+        sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+      })
+    ]
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [ ./qtwebkit.patch ]
       ++ optionals stdenv.isDarwin [

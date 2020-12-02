@@ -25,6 +25,7 @@
 , libpulseaudio
 , libuuid
 , libxcb
+, libxkbcommon
 , mesa
 , nspr
 , nss
@@ -39,9 +40,16 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   pname = "slack";
+
+  x86_64-darwin-version = "4.11.1";
+  x86_64-darwin-sha256 = "0a5rq8zhgdckwxnyjv6nrgpnj682j1rd9yc4nwvsbvpzv15kmd35";
+
+  x86_64-linux-version = "4.11.1";
+  x86_64-linux-sha256 = "1r43g3xnla5aq38l3mpba8jb1gx9m2b6pr84prsclz27nr0rfm6g";
+
   version = {
-    x86_64-darwin = "4.8.0";
-    x86_64-linux = "4.8.0";
+    x86_64-darwin = x86_64-darwin-version;
+    x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
   src = let
@@ -49,11 +57,11 @@ let
   in {
     x86_64-darwin = fetchurl {
       url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "0k22w3c3brbc7ivmc5npqy8h7zxfgnbs7bqwii03psymm6sw53j2";
+      sha256 = x86_64-darwin-sha256;
     };
     x86_64-linux = fetchurl {
       url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = "0q8qpz5nwhps7y5gq1bl8hjw7vsk789srrv39hzc7jrl8f1bxzk0";
+      sha256 = x86_64-linux-sha256;
     };
   }.${system} or throwSystem;
 
@@ -90,6 +98,7 @@ let
       libpulseaudio
       libuuid
       libxcb
+      libxkbcommon
       mesa
       nspr
       nss
