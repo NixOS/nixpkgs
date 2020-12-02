@@ -1,16 +1,11 @@
 {stdenv, lib, coreutils, unzip, jq, zip, fetchurl,writeScript,  ...}:
-let
-
-in
-  {
-  name
+{ name
 , url
 , md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
 }:
-
 stdenv.mkDerivation rec {
 
   inherit name;

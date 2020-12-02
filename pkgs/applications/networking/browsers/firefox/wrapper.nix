@@ -1,6 +1,5 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config,
-
-replace, fetchurl, zip, unzip, jq
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
+, replace, fetchurl, zip, unzip, jq
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
