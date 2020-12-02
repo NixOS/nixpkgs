@@ -4887,7 +4887,6 @@ broken-packages:
   - EnumContainers
   - enumerate
   - enumerate-function
-  - enumeration
   - enumerator
   - enumerator-fd
   - enumerator-tf
