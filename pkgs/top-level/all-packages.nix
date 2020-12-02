@@ -10417,6 +10417,8 @@ in
 
   swift = callPackage ../development/compilers/swift { };
 
+  symbiflow-vtr = callPackage ../development/compilers/symbiflow-vtr { };
+
   swiProlog = callPackage ../development/compilers/swi-prolog {
     inherit (darwin.apple_sdk.frameworks) Security;
     jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
