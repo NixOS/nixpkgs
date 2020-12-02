@@ -127,6 +127,24 @@ in rec {
     };
   };
 
+  dracula = mkDerivation rec {
+    pluginName = "dracula";
+    version = "unstable-2020-12-2";
+    src = fetchFromGitHub {
+      owner = "dracula";
+      repo = "tmux";
+      rev = "cc310e585acbeaf3304eda662476f7f657010b01";
+      sha256 = "003nbv2rz2ihyqf3ryvdwn43ly0gi5z2r0pnqr9s9vw8dmwx0r3x";
+    };
+    meta = with stdenv.lib; {
+      homepage = "https://draculatheme.com/tmux";
+      description = "A feature packed Dracula theme for tmux!";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ethancedwards8 ];
+    };
+  };
+
   fingers = mkDerivation rec {
     pluginName = "fingers";
     rtpFilePath = "tmux-fingers.tmux";
