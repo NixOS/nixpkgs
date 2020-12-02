@@ -22539,6 +22539,8 @@ in
 
   MMA = callPackage ../applications/audio/MMA { };
 
+  mmtc = callPackage ../applications/audio/mmtc { };
+
   mmex = callPackage ../applications/office/mmex {
     wxGTK30 = wxGTK30.override {
       withWebKit = true;
