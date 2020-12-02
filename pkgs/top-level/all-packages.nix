@@ -365,7 +365,7 @@ in
 
   fetchhg = callPackage ../build-support/fetchhg { };
 
-  fetchfirefoxaddon = callPackage ../build-support/fetchfirefoxaddon {};
+  fetchFirefoxAddon = callPackage ../build-support/fetchfirefoxaddon {};
 
   # `fetchurl' downloads a file from the network.
   fetchurl = if stdenv.buildPlatform != stdenv.hostPlatform
