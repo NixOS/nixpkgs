@@ -359,6 +359,13 @@
    </listitem>
    <listitem>
     <para>
+     The <literal>services.dnscrypt-proxy2</literal> module now takes the upstream's example configuration and updates it with the user's settings.
+
+     An option has been added to restore the old behaviour if you prefer to declare the configuration from scratch.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      NixOS now defaults to the unified cgroup hierarchy (cgroupsv2).
      See the <link xlink:href="https://www.redhat.com/sysadmin/fedora-31-control-group-v2">Fedora Article for 31</link>
      for details on why this is desirable, and how it impacts containers.
