@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/src";
 
   meta = with stdenv.lib; {
-    description = "Very customizable imageboard/booru downloader with powerful filenaming features.";
+    description = "Very customizable imageboard/booru downloader with powerful filenaming features";
     license = licenses.asl20;
     homepage = "https://bionus.github.io/imgbrd-grabber/";
     maintainers = [ maintainers.evanjs ];
