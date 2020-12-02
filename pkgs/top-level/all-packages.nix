@@ -5364,6 +5364,8 @@ in
 
   libck = callPackage ../development/libraries/libck { };
 
+  libcork = callPackage ../development/libraries/libcork { };
+
   libconfig = callPackage ../development/libraries/libconfig { };
 
   libcmis = callPackage ../development/libraries/libcmis { };
@@ -21852,6 +21854,8 @@ in
   icewm = callPackage ../applications/window-managers/icewm {};
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
+
+  ideamaker = callPackage ../applications/misc/ideamaker { };
 
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 
