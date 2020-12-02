@@ -162,15 +162,16 @@ in
       (mkIf (cfg.authPassFile != null) { AuthPassFile = cfg.authPassFile; })
     ];
 
-    environment.etc."ssmtp/ssmtp.conf".source =
-      let
-        toStr = value:
+    # careful here: ssmtp REQUIRES all config lines to end with a newline char!
+    environment.etc."ssmtp/ssmtp.conf".text = with generators; toKeyValue {
+      mkKeyValue = mkKeyValueDefault {
+        mkValueString = value:
           if value == true then "YES"
           else if value == false then "NO"
-          else builtins.toString value
+          else mkValueStringDefault {} value
         ;
-      in
-        pkgs.writeText "ssmtp.conf" (concatStringsSep "\n" (mapAttrsToList (key: value: "${key}=${toStr value}") cfg.settings));
+      } "=";
+    } cfg.settings;
 
     environment.systemPackages = [pkgs.ssmtp];
 
