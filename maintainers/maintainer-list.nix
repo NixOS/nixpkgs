@@ -2407,6 +2407,12 @@
     githubId = 984691;
     name = "Evan Danaher";
   };
+  edbentley = {
+    email = "hello@edbentley.dev";
+    github = "edbentley";
+    githubId = 15923595;
+    name = "Ed Bentley";
+  };
   edcragg = {
     email = "ed.cragg@eipi.xyz";
     github = "nuxeh";
