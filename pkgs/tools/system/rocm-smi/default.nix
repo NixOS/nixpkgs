@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "rocm-smi";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROC-smi";
     rev = "rocm-${version}";
-    sha256 = "190x31s7mjpyp7hr6cgdnvn2s20qj3sqcxywycjm2i9ar429l2ni";
+    hash = "sha256-0QqaBMkqRVEl89x3hvWQGAgt7LbtMZPhuf7KenQYHaQ=";
   };
 
   format = "other";
