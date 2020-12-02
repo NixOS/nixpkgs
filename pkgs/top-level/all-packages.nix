@@ -17628,6 +17628,8 @@ in
 
   radicale = radicale3;
 
+  radicle-upstream = callPackage ../applications/version-management/git-and-tools/radicle-upstream {};
+
   rake = callPackage ../development/tools/build-managers/rake { };
 
   redis = callPackage ../servers/nosql/redis { };
