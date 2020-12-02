@@ -10421,6 +10421,8 @@ in
 
   symbiflow-yosys = callPackage ../development/compilers/symbiflow-yosys { };
 
+  symbiflow-yosys-plugins = callPackage ../development/compilers/symbiflow-yosys-plugins { };
+
   swiProlog = callPackage ../development/compilers/swi-prolog {
     inherit (darwin.apple_sdk.frameworks) Security;
     jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
