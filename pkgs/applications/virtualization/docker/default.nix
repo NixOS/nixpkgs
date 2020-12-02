@@ -41,6 +41,8 @@ rec {
         rev = containerdRev;
         sha256 = containerdSha256;
       };
+      # disable completion, can be removed when docker uses containerd >= 1.4
+      postInstall = [];
       # This should be removed once Docker uses containerd >=1.4
       nativeBuildInputs = oldAttrs.nativeBuildInputs ++ lib.optional withlibseccomp pkgconfig;
       buildInputs = oldAttrs.buildInputs ++ lib.optional withlibseccomp libseccomp;
