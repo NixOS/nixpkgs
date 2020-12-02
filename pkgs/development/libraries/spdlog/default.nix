@@ -15,7 +15,12 @@ let
 
       nativeBuildInputs = [ cmake ];
 
-      cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLE=OFF" "-DSPDLOG_BUILD_BENCH=OFF" ];
+      cmakeFlags = [
+        "-DSPDLOG_BUILD_SHARED=ON"
+        "-DSPDLOG_BUILD_EXAMPLE=OFF"
+        "-DSPDLOG_BUILD_BENCH=OFF"
+        "-DSPDLOG_BUILD_TESTS=ON"
+      ];
 
       outputs = [ "out" "doc" ];
 
@@ -23,6 +28,9 @@ let
         mkdir -p $out/share/doc/spdlog
         cp -rv ../example $out/share/doc/spdlog
       '';
+
+      doCheck = true;
+      preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
 
       meta = with stdenv.lib; {
         description    = "Very fast, header only, C++ logging library";

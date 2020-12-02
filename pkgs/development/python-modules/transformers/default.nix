@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , boto3
+, cookiecutter
 , filelock
 , regex
 , requests
@@ -9,7 +10,6 @@
 , parameterized
 , protobuf
 , sacremoses
-, sentencepiece
 , timeout-decorator
 , tokenizers
 , tqdm
@@ -18,23 +18,23 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.5.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02z5zz0rq7mbgdmsm2ccfdbca57qy7iqp0vc7jspsmdfif4acwia";
+    sha256 = "17djq32pq8d6vqip7i9pda0ldigmzckbbcd278llmpxdriqd4llg";
   };
 
   propagatedBuildInputs = [
+    cookiecutter
     filelock
     numpy
     protobuf
     regex
     requests
     sacremoses
-    sentencepiece
     tokenizers
     tqdm
   ];
@@ -47,8 +47,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "tokenizers == 0.9.3" "tokenizers" \
-      --replace "sentencepiece == 0.1.91" "sentencepiece"
+      --replace "tokenizers == 0.9.4" "tokenizers"
   '';
 
   preCheck = ''

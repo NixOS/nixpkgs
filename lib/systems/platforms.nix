@@ -217,6 +217,21 @@ rec {
     };
   };
 
+  zero-sugar = {
+    name = "zero-sugar";
+    kernelBaseConfig = "zero-sugar_defconfig";
+    kernelArch = "arm";
+    kernelDTB = true;
+    kernelAutoModules = false;
+    kernelPreferBuiltin = true;
+    kernelTarget = "zImage";
+    gcc = {
+      cpu = "cortex-a7";
+      fpu = "neon-vfpv4";
+      float-abi = "hard";
+    };
+  };
+
   scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
       cpu = "cortex-a9";

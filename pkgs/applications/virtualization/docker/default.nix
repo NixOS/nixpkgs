@@ -212,14 +212,14 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen rec {
-    version = "19.03.13";
+    version = "19.03.14";
     rev = "v${version}";
-    sha256 = "139qqy8jiz1phnngknpa7c1nk9iqwd3hcc9as8x50p1vnycwzr3f";
+    sha256 = "0szr5dgfrypb5kyj5l1rf7rw4iqj0d0cyx6skdqlbgf4dqwa6g9y";
     runcRev = "dc9208a3303feef5b3839f4323d9beb36df0a9dd"; # v1.0.0-rc10
     runcSha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
     # Note: Once all packaged Docker versions use containerd <=1.2 or >=1.4 remove the libseccomp and pkgconfig inputs above
-    containerdRev = "8fba4e9a7d01810a393d5d25a3621dc101981175"; # v1.3.7
-    containerdSha256 = "10zy507ajslizicagb64dvbs7wmw0j4x3hdhygbdh4g2nv3mgjb7";
+    containerdRev = "ea765aba0d05254012b0b9e595e995c09186427f"; # v1.3.9
+    containerdSha256 = "1isi1wgq61b4l0lxy1d8n6dnmcb8s5ihn2yqjb6525y3dj5c5i1j";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662"; # v0.18.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

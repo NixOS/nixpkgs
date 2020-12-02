@@ -12,6 +12,7 @@
 
 # GitHub actions
 /.github/workflows @Mic92 @zowoq
+/.github/workflows/merge-staging @FRidh
 
 # EditorConfig
 /.editorconfig @Mic92 @zowoq
