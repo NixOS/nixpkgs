@@ -3,13 +3,31 @@
 
 set -efuo pipefail
 
+print_usage() {
+    echo "Usage: $0 [PATH|FILE]"
+    echo "This file expects a file 'fetch.sh' containing"
+    echo "   WGET_ARGS=(<base url>)"
+    echo "in PATH or as a sibling of FILE. If fetches all *.tar.xz.(sig|mirrorlist|sha256) files"
+    echo "from <base url> and constructs a 'srcs.nix' file from them."
+    echo ""
+    echo "Sample invocation: $0 pkgs/development/libraries/kde-frameworks/"
+}
+
+if [ $# -eq 0 ]; then
+    print_usage
+    exit -2
+fi
+
 SRCS=
 if [ -d "$1" ]; then
     SRCS="$(pwd)/$1/srcs.nix"
     . "$1/fetch.sh"
-else
+elif [ -f "$1" ]; then
     SRCS="$(pwd)/$(dirname $1)/srcs.nix"
     . "$1"
+else
+    print_usage
+    exit -1
 fi
 
 tmp=$(mktemp -d)
@@ -88,3 +106,4 @@ popd >/dev/null
 rm -fr $tmp >/dev/null
 
 rm -f $csv >/dev/null
+
