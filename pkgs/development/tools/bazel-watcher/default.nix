@@ -64,6 +64,8 @@ buildBazelPackage rec {
 
     preBuild = ''
       patchShebangs .
+
+      substituteInPlace ibazel/BUILD --replace '{STABLE_GIT_VERSION}' ${version}
     '';
 
     installPhase = ''
