@@ -35,6 +35,7 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+, cargoBuildFlagsMultiple ? []
 , buildType ? "release"
 , meta ? {}
 , target ? rust.toRustTargetSpec stdenv.hostPlatform
@@ -206,21 +207,34 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
     runHook postConfigure
   '';
 
-  buildPhase = with builtins; args.buildPhase or ''
+  buildPhase = with builtins; let
+    mkCargoBuildCmd = buildFlags: ''
+      env \
+        "CC_${rust.toRustTarget stdenv.buildPlatform}"="${ccForBuild}" \
+        "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
+        "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
+        "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
+      cargo build -j $NIX_BUILD_CORES \
+        ${lib.optionalString (buildType == "release") "--release"} \
+        --target ${target} \
+        --frozen ${concatStringsSep " " buildFlags}
+    '';
+  in args.buildPhase or ''
     ${lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preBuild
 
     (
     set -x
-    env \
-      "CC_${rust.toRustTarget stdenv.buildPlatform}"="${ccForBuild}" \
-      "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
-      "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
-      "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      cargo build -j $NIX_BUILD_CORES \
-        ${lib.optionalString (buildType == "release") "--release"} \
-        --target ${target} \
-        --frozen ${concatStringsSep " " cargoBuildFlags}
+    ${if (builtins.length cargoBuildFlagsMultiple == 0) then (
+        mkCargoBuildCmd cargoBuildFlags
+      ) else (
+        builtins.concatStringsSep "\n" (
+          lib.lists.foldl (commands: additionalBuildFlags:
+            commands ++ [ (mkCargoBuildCmd (cargoBuildFlags ++ additionalBuildFlags)) ]
+          ) [] cargoBuildFlagsMultiple
+        )
+      )
+    }
     )
 
     runHook postBuild

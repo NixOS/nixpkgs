@@ -237,6 +237,27 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
+### Running `cargo build` multiple times with different build flags
+Using the `cargoBuildFlagsMultiple` attribute it's possible to run `cargo build` several times in the `buildPhase`.
+The argument takes a list of lists of strings. Each list of strings (2) represents the additional arguments passed to a distinct `cargo build` invocation.
+Every invocation still respects the `cargoBuildFlags` attribute. This effectively allows passing unique flags to each crate while also defining common flags.
+
+The following example shows how to build different crates that live in the same workspace:
+
+```nix
+buildRustPackage {
+    (...)
+
+    cargoBuildFlags = [ "--no-default-features" ]
+
+    cargoBuildFlagsMultiple = [
+      [ "--manifest-path=crates/a/Cargo.toml" "--features=a" ]
+      [ "--manifest-path=crates/b/Cargo.toml" "--features=b"]
+    ];
+
+    (...)
+```
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation
