@@ -1,15 +1,13 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
+{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, coreutils
 , runCommand, runtimeShell, writeText, terraform-providers, fetchpatch }:
 
 let
-  goPackagePath = "github.com/hashicorp/terraform";
-
-  generic = { version, sha256, ... }@attrs:
-    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" ];
-    in buildGoPackage ({
+  generic = { version, sha256, vendorSha256 ? null, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "vendorSha256" ];
+    in buildGoModule ({
       name = "terraform-${version}";
 
-      inherit goPackagePath;
+      inherit vendorSha256;
 
       src = fetchFromGitHub {
         owner = "hashicorp";
@@ -18,7 +16,7 @@ let
         inherit sha256;
       };
 
-      postPatch = ''
+      postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
           --replace "/bin/stty" "${coreutils}/bin/stty"
@@ -34,8 +32,11 @@ let
       '';
 
       preCheck = ''
-        export HOME=$TMP
+        export HOME=$TMPDIR
+        export TF_SKIP_REMOTE_TESTS=1
       '';
+
+      subPackages = [ "." ];
 
       meta = with stdenv.lib; {
         description =
@@ -159,6 +160,14 @@ in rec {
   terraform_0_13 = pluggable (generic {
     version = "0.13.5";
     sha256 = "1fnydzm5h65pdy2gkq403sllx05cvpldkdzdpcy124ywljb4x9d8";
+    patches = [ ./provider-path.patch ];
+    passthru = { inherit plugins; };
+  });
+
+  terraform_0_14 = pluggable (generic {
+    version = "0.14.0";
+    sha256 = "0pbglnvb6cx8zrz791lfa67dmjqfsyysbxm2083b1lhlmbybi9ax";
+    vendorSha256 = "1gxhdj98np482jm76aj6zbbmkn7vfk8b878hzz59iywgbdr1r4m1";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
