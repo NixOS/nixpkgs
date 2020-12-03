@@ -244,6 +244,14 @@
        </para>
      </warning>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>rspamd</literal> services is now sandboxed. It is run as
+      a dynamic user instead of root, so secrets and other files may have to
+      be moved or their permissions may have to be fixed. The sockets are now
+      located in <literal>/run/rspamd</literal> instead of <literal>/run</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

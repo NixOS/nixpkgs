@@ -217,6 +217,21 @@ rec {
     };
   };
 
+  zero-sugar = {
+    name = "zero-sugar";
+    kernelBaseConfig = "zero-sugar_defconfig";
+    kernelArch = "arm";
+    kernelDTB = true;
+    kernelAutoModules = false;
+    kernelPreferBuiltin = true;
+    kernelTarget = "zImage";
+    gcc = {
+      cpu = "cortex-a7";
+      fpu = "neon-vfpv4";
+      float-abi = "hard";
+    };
+  };
+
   scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
       cpu = "cortex-a9";
@@ -456,10 +471,9 @@ rec {
   ## Other
   ##
 
-  riscv-multiplatform = bits: {
+  riscv-multiplatform = {
     name = "riscv-multiplatform";
     kernelArch = "riscv";
-    bfdEmulation = "elf${bits}lriscv";
     kernelTarget = "vmlinux";
     kernelAutoModules = true;
     kernelBaseConfig = "defconfig";
@@ -469,17 +483,22 @@ rec {
     '';
   };
 
-  selectBySystem = system: {
-      i486-linux = pc32;
-      i586-linux = pc32;
-      i686-linux = pc32;
-      x86_64-linux = pc64;
-      armv5tel-linux = sheevaplug;
-      armv6l-linux = raspberrypi;
-      armv7a-linux = armv7l-hf-multiplatform;
-      armv7l-linux = armv7l-hf-multiplatform;
-      aarch64-linux = aarch64-multiplatform;
-      mipsel-linux = fuloong2f_n32;
-      powerpc64le-linux = powernv;
-    }.${system} or pcBase;
+  select = platform:
+    # x86
+    /**/ if platform.isx86_32 then pc32
+    else if platform.isx86_64 then pc64
+
+    # ARM
+    else if platform.isAarch32 then let
+      version = platform.parsed.cpu.version or "";
+      in     if lib.versionOlder version "6" then sheevaplug
+        else if lib.versionOlder version "7" then raspberrypi
+        else armv7l-hf-multiplatform
+    else if platform.isAarch64 then aarch64-multiplatform
+
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then fuloong2f_n32
+
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
+
+    else pcBase;
 }

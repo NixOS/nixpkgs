@@ -61,10 +61,8 @@ in {
         Restart = "always";
         ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home}'';
 
-        User = "nobody";
-        Group = "nogroup";
+        DynamicUser = true;
 
-        PrivateTmp = true;
         ProtectHome = true;
 
         RuntimeDirectory = "hoogle";

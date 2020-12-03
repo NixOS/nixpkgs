@@ -12,4 +12,5 @@
   kak-powerline = pkgs.callPackage ./kak-powerline.nix { };
   kak-prelude = pkgs.callPackage ./kak-prelude.nix { };
   kak-vertical-selection = pkgs.callPackage ./kak-vertical-selection.nix { };
+  openscad-kak = pkgs.callPackage ./openscad.kak.nix { };
 }

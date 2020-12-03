@@ -4,7 +4,7 @@
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python2Packages, pkgconfig
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
-, cairo, pixman, xorg, clisp, biber, xxHash
+, brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
 }:
 
@@ -245,20 +245,20 @@ chktex = stdenv.mkDerivation {
 };
 
 
-dvisvgm = stdenv.mkDerivation {
+dvisvgm = stdenv.mkDerivation rec {
   pname = "texlive-dvisvgm.bin";
-  inherit version;
+  version = "2.11";
+  # TODO: dvisvgm was switched to build from upstream sources
+  # to address https://github.com/NixOS/nixpkgs/issues/104847
+  # We might want to consider reverting that change in the future.
 
-  inherit (common) src;
+  src = fetchurl {
+    url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
+    sha256 = "12b6h0h8rc487yjh3sq9zsdabm9cs2vqcrb0znnfi8277f87zf3j";
+  };
 
   nativeBuildInputs = [ pkgconfig ];
-  # TODO: dvisvgm still uses vendored dependencies
-  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype /*potrace xxHash*/ ];
-
-  preConfigure = "cd texk/dvisvgm";
-
-  configureFlags = common.configureFlags
-    ++ [ "--with-system-kpathsea" ];
+  buildInputs = [ core/*kpathsea*/ brotli ghostscript zlib freetype woff2 potrace xxHash ];
 
   enableParallelBuilding = true;
 };

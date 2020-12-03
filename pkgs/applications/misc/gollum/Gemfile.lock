@@ -8,11 +8,11 @@ GEM
     gemojione (4.3.3)
       json
     github-markup (3.0.5)
-    gollum (5.1.1)
+    gollum (5.1.2)
       gemojione (~> 4.1)
       gollum-lib (~> 5.0)
       kramdown (~> 2.3)
-      kramdown-parser-gfm (~> 1.0.0)
+      kramdown-parser-gfm (~> 1.1.0)
       mustache (>= 0.99.5, < 1.0.0)
       octicons (~> 8.5)
       rss (~> 0.2.9)
@@ -39,7 +39,7 @@ GEM
     json (2.3.1)
     kramdown (2.3.0)
       rexml
-    kramdown-parser-gfm (1.0.1)
+    kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     loofah (2.8.0)
       crass (~> 1.0.2)

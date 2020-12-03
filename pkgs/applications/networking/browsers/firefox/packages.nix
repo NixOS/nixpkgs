@@ -1,4 +1,4 @@
-{ config, stdenv, lib, callPackage, fetchurl, nss_3_44 }:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
@@ -14,7 +14,14 @@ rec {
     };
 
     patches = [
-      ./no-buildconfig-ffx76.patch
+      # Fix compilation on aarch64 with newer rust version
+      # See https://bugzilla.mozilla.org/show_bug.cgi?id=1677690
+      # and https://bugzilla.redhat.com/show_bug.cgi?id=1897675
+      (fetchpatch {
+        name = "aarch64-simd-bgz-1677690.patch";
+        url = "https://github.com/mozilla/gecko-dev/commit/71597faac0fde4f608a60dd610d0cefac4972cc3.patch";
+        sha256 = "1f61nsgbv2c2ylgjs7wdahxrrlgc19gjy5nzs870zr1g832ybwin";
+      })
     ];
 
     meta = {
@@ -40,10 +47,6 @@ rec {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
       sha512 = "20h53cn7p4dds1yfm166iwbjdmw4fkv5pfk4z0pni6x8ddjvg19imzs6ggmpnfhaji8mnlknm7xp5j7x9vi24awvdxdds5n88rh25hd";
     };
-
-    patches = [
-      ./no-buildconfig-ffx76.patch
-    ];
 
     meta = {
       description = "A web browser built from Firefox Extended Support Release source tree";

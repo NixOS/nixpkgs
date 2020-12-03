@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "A client library to multiplex connections from and to iOS devices";
     homepage    = "https://github.com/libimobiledevice/libusbmuxd";
     license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ infinisil ];
   };
 }

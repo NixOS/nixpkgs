@@ -2755,6 +2755,16 @@
     email = "adam.copp@gmail.com";
     name = "Adam Copp";
   };
+  ethancedwards8 = {
+    email = "ethancarteredwards@gmail.com";
+    github = "ethancedwards8";
+    githubId = 60861925;
+    name = "Ethan Carter Edwards";
+    keys = [{
+      longkeyid = "rsa4096/0xF93DDAFA26EF2458";
+      fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458";
+    }];
+  };
   ethercrow = {
     email = "ethercrow@gmail.com";
     github = "ethercrow";
@@ -3436,6 +3446,12 @@
       longkeyid = "rsa4096/0x9CCCE36402CB49A6";
       fingerprint = "74B1 F67D 8E43 A94A 7554  0768 9CCC E364 02CB 49A6";
     }];
+  };
+  happysalada = {
+    email = "raphael@megzari.com";
+    github = "happysalada";
+    githubId = 5317234;
+    name = "Raphael Megzari";
   };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
@@ -4806,6 +4822,12 @@
     github = "kwohlfahrt";
     githubId = 2422454;
     name = "Kai Wohlfahrt";
+  };
+  kyleondy = {
+    email = "kyle@ondy.org";
+    github = "kyleondy";
+    githubId = 1640900;
+    name = "Kyle Ondy";
   };
   kylesferrazza = {
     name = "Kyle Sferrazza";
@@ -6213,6 +6235,16 @@
     githubId = 1916245;
     name = "Fernando Jose Pando";
   };
+  nasirhm = {
+    email = "nasirhussainm14@gmail.com";
+    github = "nasirhm";
+    githubId = 35005234;
+    name = "Nasir Hussain";
+    keys = [{
+      longkeyid = "rsa4096/0xD8126E559CE7C35D";
+      fingerprint = "7A10 AB8E 0BEC 566B 090C  9BE3 D812 6E55 9CE7 C35D";
+    }];
+  };
   Nate-Devv = {
     email = "natedevv@gmail.com";
     name = "Nathan Moore";
@@ -6758,6 +6790,12 @@
     github = "pcarrier";
     githubId = 8641;
     name = "Pierre Carrier";
+  };
+  pengmeiyu = {
+    email = "pengmyu@gmail.com";
+    github = "pmeiyu";
+    githubId = 8529551;
+    name = "Peng Mei Yu";
   };
   penguwin = {
     email = "penguwin@penguwin.eu";

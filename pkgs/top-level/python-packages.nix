@@ -3371,6 +3371,8 @@ in {
 
   leveldb = callPackage ../development/python-modules/leveldb { };
 
+  lexid = callPackage ../development/python-modules/lexid { };
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
@@ -4611,6 +4613,8 @@ in {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  pysbd = callPackage ../development/python-modules/pysbd { };
+
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
@@ -5350,6 +5354,8 @@ in {
   pyopengl = callPackage ../development/python-modules/pyopengl { };
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
+
+  pyosf = callPackage ../development/python-modules/pyosf { };
 
   pyosmium = callPackage ../development/python-modules/pyosmium { };
 
@@ -7275,6 +7281,8 @@ in {
   tinycss = callPackage ../development/python-modules/tinycss { };
 
   tinydb = callPackage ../development/python-modules/tinydb { };
+
+  tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
 
   tiros = callPackage ../development/python-modules/tiros { };
 

@@ -66,10 +66,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "14i6y3ilv9l7cqvkawl75js26cfj1pd8cphhmq9lic95ajvdf371";
+      sha256 = "0pmvxj7pka7pjpw060a9pfxsci1hmx45hk9hbp5m49xkkiiqf1gx";
       type = "gem";
     };
-    version = "5.1.1";
+    version = "5.1.2";
   };
   gollum-lib = {
     dependencies = ["gemojione" "github-markup" "gollum-rugged_adapter" "loofah" "nokogiri" "octicons" "rouge" "twitter-text"];
@@ -120,10 +120,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ykna2apphld9llmjnz0210fipp4fkmj2ja18l7iz9xikg0h0ihi";
+      sha256 = "0a8pb3v951f4x7h968rqfsa19c8arz21zw1vaj42jza22rap8fgv";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.1.0";
   };
   loofah = {
     dependencies = ["crass" "nokogiri"];
