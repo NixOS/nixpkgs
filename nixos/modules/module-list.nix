@@ -140,6 +140,7 @@
   ./programs/light.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
+  ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/neovim.nix
