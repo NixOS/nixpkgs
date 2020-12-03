@@ -1,5 +1,5 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, gawk
+, libelf, cpio, elfutils, zstd, gawk
 , writeTextFile
 }:
 
@@ -306,7 +306,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk ]
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd ]
       ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional  (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
