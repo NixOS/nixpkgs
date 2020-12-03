@@ -720,11 +720,11 @@
     "version": "0.8.0"
   },
   "packet": {
-    "owner": "terraform-providers",
+    "owner": "packethost",
     "repo": "terraform-provider-packet",
-    "rev": "v2.9.0",
-    "sha256": "0d9r272gidkwn4zr130ml047512qq5d5d599s63blzy6m38vilha",
-    "version": "2.9.0"
+    "rev": "v3.2.0",
+    "sha256": "sha256-YIv4OPRbR00YTVwz0iJ/y6qTbj50nsi5ylrWEx1kZck=",
+    "version": "3.2.0"
   },
   "pagerduty": {
     "owner": "terraform-providers",

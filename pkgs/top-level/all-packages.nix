@@ -2041,6 +2041,8 @@ in
 
   dyncall = callPackage ../development/libraries/dyncall { };
 
+  dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
+
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
   EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
@@ -3543,6 +3545,8 @@ in
   mozwire = callPackage ../tools/networking/mozwire {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  pax = callPackage ../tools/archivers/pax { };
 
   rage = callPackage ../tools/security/rage { };
 
@@ -12232,6 +12236,8 @@ in
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
   yq-go = callPackage ../development/tools/yq-go { };
+
+  ytt = callPackage ../development/tools/ytt {};
 
   winpdb = callPackage ../development/tools/winpdb { };
 
@@ -28133,6 +28139,8 @@ in
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
+  tagref = callPackage ../tools/misc/tagref { };
+
   tellico = libsForQt5.callPackage ../applications/misc/tellico { };
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
@@ -28142,6 +28150,7 @@ in
     terraform_0_11-full
     terraform_0_12
     terraform_0_13
+    terraform_0_14
     terraform_plugins_test
     ;
 
