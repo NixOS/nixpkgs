@@ -12231,6 +12231,8 @@ in
 
   yq-go = callPackage ../development/tools/yq-go { };
 
+  ytt = callPackage ../development/tools/ytt {};
+
   winpdb = callPackage ../development/tools/winpdb { };
 
   grabserial = callPackage ../development/tools/grabserial { };
