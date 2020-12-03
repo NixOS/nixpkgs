@@ -209,7 +209,7 @@ in
           manualCache = pkgs.runCommandLocal "man-cache" { }
           ''
             echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
-            ${pkgs.man-db}/bin/mandb -C man.conf -psc
+            ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
           '';
         in
         ''
