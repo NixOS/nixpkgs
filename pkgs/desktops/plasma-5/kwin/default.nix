@@ -33,15 +33,10 @@ mkDerivation {
     kwayland kwayland-server kwidgetsaddons kwindowsystem kxmlgui plasma-framework
     libcap libdrm mesa
   ];
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "dev" "out" ];
   patches = [
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
-    (fetchpatch { # included in >= 5.18.6
-      name = "EGL_TEXTURE_Y_XUXV_WL.diff";
-      url = "https://github.com/KDE/kwin/commit/2c76cc478.diff";
-      sha256 = "1ywaky05h5j1x758q3yhp3ap45ispffghyxynqz5lybl5n6yyxhy";
-    })
   ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''

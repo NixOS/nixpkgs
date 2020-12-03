@@ -14,12 +14,12 @@ diff --git a/startkde/plasma-session/startup.cpp b/startkde/plasma-session/start
 index 89cc144ba..8ca9e81d2 100644
 --- a/startkde/plasma-session/startup.cpp
 +++ b/startkde/plasma-session/startup.cpp
-@@ -210,7 +210,7 @@ Startup::Startup(QObject *parent):
+@@ -211,7 +211,7 @@ Startup::Startup(QObject *parent):
      upAndRunning(QStringLiteral("ksmserver"));
      const AutoStart autostart;
  
--    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"));
-+    QProcess::execute(QStringLiteral(NIXPKGS_START_KDEINIT_WRAPPER));
+-    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
++    QProcess::execute(QStringLiteral(NIXPKGS_START_KDEINIT_WRAPPER), QStringList());
  
      KJob* phase1;
      QProcessEnvironment kdedProcessEnv;
@@ -27,7 +27,7 @@ diff --git a/startkde/startplasma-waylandsession.cpp b/startkde/startplasma-wayl
 index f59654d18..5e3a93db0 100644
 --- a/startkde/startplasma-waylandsession.cpp
 +++ b/startkde/startplasma-waylandsession.cpp
-@@ -66,7 +66,7 @@ int main(int argc, char** argv)
+@@ -61,7 +61,7 @@ int main(int argc, char** argv)
      waitForKonqi();
      out << "startplasma-waylandsession: Shutting down...\n";
  
@@ -53,7 +53,7 @@ diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
 index a055d5635..62afb1513 100644
 --- a/startkde/startplasma.cpp
 +++ b/startkde/startplasma.cpp
-@@ -40,7 +40,7 @@ QTextStream out(stderr);
+@@ -41,7 +41,7 @@ QTextStream out(stderr);
  void messageBox(const QString &text)
  {
      out << text;
@@ -62,7 +62,7 @@ index a055d5635..62afb1513 100644
  }
  
  QStringList allServices(const QLatin1String& prefix)
-@@ -261,15 +261,15 @@ void setupX11()
+@@ -262,15 +262,15 @@ void setupX11()
  //     If the user has overwritten fonts, the cursor font may be different now
  //     so don't move this up.
  
@@ -83,19 +83,6 @@ index a055d5635..62afb1513 100644
  }
  
  // TODO: Check if Necessary
-@@ -286,11 +286,7 @@ bool syncDBusEnvironment()
- {
-     int exitCode;
-     // At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
--    if (!QStandardPaths::findExecutable(QStringLiteral("dbus-update-activation-environment")).isEmpty()) {
--        exitCode = runSync(QStringLiteral("dbus-update-activation-environment"), { QStringLiteral("--systemd"), QStringLiteral("--all") });
--    } else {
--        exitCode = runSync(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR "/ksyncdbusenv"), {});
--    }
-+    exitCode = runSync(QStringLiteral(NIXPKGS_DBUS_UPDATE_ACTIVATION_ENVIRONMENT), { QStringLiteral("--systemd"), QStringLiteral("--all") });
-     return exitCode == 0;
- }
- 
 @@ -306,7 +302,7 @@ void setupFontDpi()
      //TODO port to c++?
      const QByteArray input = "Xft.dpi: " + QByteArray::number(fontsCfg.readEntry("forceFontDPI", 0));
