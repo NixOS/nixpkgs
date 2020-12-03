@@ -19,7 +19,7 @@ in buildEnv {
         --prefix KODI_HOME : $out/share/kodi \
         --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
           (stdenv.lib.concatMap
-            (plugin: plugin.extraRuntimeDependencies) plugins)}"
+            (plugin: plugin.extraRuntimeDependencies or []) plugins)}"
     done
   '';
 
