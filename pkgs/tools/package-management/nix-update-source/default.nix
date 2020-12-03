@@ -12,6 +12,9 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ nix-prefetch-scripts ];
+
+  doCheck = false;
+
   passthru = {
     # NOTE: `fetch` should not be used within nixpkgs because it
     # uses a non-idiomatic structure. It is provided for use by
