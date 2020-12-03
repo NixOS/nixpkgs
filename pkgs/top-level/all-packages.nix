@@ -19098,6 +19098,7 @@ in
     withMachined = false;
     withNetworkd = false;
     withNss = false;
+    withOomd = false;
     withPCRE2 = false;
     withPolkit = false;
     withRemote = false;
