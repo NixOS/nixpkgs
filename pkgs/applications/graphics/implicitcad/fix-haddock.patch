@@ -1,0 +1,151 @@
+diff --git a/Graphics/Implicit/Export/NormedTriangleMeshFormats.hs b/Graphics/Implicit/Export/NormedTriangleMeshFormats.hs
+index 1e1360c..c17f955 100644
+--- a/Graphics/Implicit/Export/NormedTriangleMeshFormats.hs
++++ b/Graphics/Implicit/Export/NormedTriangleMeshFormats.hs
+@@ -26,15 +26,15 @@ obj (NormedTriangleMesh normedtriangles) = toLazyText $ vertcode <> normcode <>
+         n :: ℝ3 -> Builder
+         n (x,y,z) = "vn " <> bf x <> " " <> bf y <> " " <> bf z <> "\n"
+         verts = do
+-            -- | Extract the vertices for each triangle
+-            --   recall that a normed triangle is of the form ((vert, norm), ...)
++            --  Extract the vertices for each triangle.
++            --  recall that a normed triangle is of the form ((vert, norm), ...)
+             NormedTriangle ((a,_),(b,_),(c,_)) <- normedtriangles
+-            -- | The vertices from each triangle take up 3 positions in the resulting list
++            -- The vertices from each triangle take up 3 positions in the resulting list
+             [a,b,c]
+         norms = do
+-            -- | extract the normals for each triangle
++            -- extract the normals for each triangle
+             NormedTriangle ((_,a),(_,b),(_,c)) <- normedtriangles
+-            -- | The normals from each triangle take up 3 positions in the resulting list
++            -- The normals from each triangle take up 3 positions in the resulting list
+             [a,b,c]
+         vertcode = foldMap v verts
+         normcode = foldMap n norms
+diff --git a/Graphics/Implicit/Export/Render.hs b/Graphics/Implicit/Export/Render.hs
+index bd09297..c83ef51 100644
+--- a/Graphics/Implicit/Export/Render.hs
++++ b/Graphics/Implicit/Export/Render.hs
+@@ -233,7 +233,7 @@ getContour p1@(x1, y1) p2 res@(xres,yres) obj =
+             ]| y0<-pYs | y1'<-tail pYs |mX'' <-midsX | mX'T <-tail midsX | mY'' <-midsY                    | objY0 <- objV                        | objY1 <- tail objV
+             ] `using` parBuffer (max 1 $ div (fromℕ $ nx+ny) forcesteps) rdeepseq
+     in
+-      -- | Merge squares, etc
++      -- Merge squares
+       cleanLoopsFromSegs . fold $ fold segs
+   
+ -- utility functions
+diff --git a/Graphics/Implicit/Export/TriangleMeshFormats.hs b/Graphics/Implicit/Export/TriangleMeshFormats.hs
+index 19f0e50..beb4ede 100644
+--- a/Graphics/Implicit/Export/TriangleMeshFormats.hs
++++ b/Graphics/Implicit/Export/TriangleMeshFormats.hs
+@@ -52,7 +52,7 @@ cleanupTris tris =
+             zsame :: Eq a => ((a, a, a), (a, a, a), (a, a, a)) -> Bool
+             zsame ((_,_,z1),(_,_,z2),(_,_,z3)) = same (z1, z2, z3)
+         isDegenerateTri :: Triangle -> Bool
+-        isDegenerateTri (Triangle (a, b, c)) = isDegenerateTri2Axis floatTri  -- || (isDegenerateTriLine $ floatTri) || (isDegenerateTriPoint $ floatTri)
++        isDegenerateTri (Triangle (a, b, c)) = isDegenerateTri2Axis floatTri  
+           where
+             floatTri = (floatPoint a, floatPoint b, floatPoint c)
+     in TriangleMesh $ filter (not . isDegenerateTri) (unmesh tris)
+diff --git a/Graphics/Implicit/ExtOpenScad/Parser/Expr.hs b/Graphics/Implicit/ExtOpenScad/Parser/Expr.hs
+index c78c562..394b82d 100644
+--- a/Graphics/Implicit/ExtOpenScad/Parser/Expr.hs
++++ b/Graphics/Implicit/ExtOpenScad/Parser/Expr.hs
+@@ -51,9 +51,9 @@ expr0 = foldr ($) nonAssociativeExpr levels
+             pure $ Var "?" :$ [condition, trueExpr, falseExpr]
+            <|>
+             pure condition
+-      , \higher -> -- || boolean OR operator
++      , \higher -> -- boolean OR operator (||)
+           chainl1 higher $ binaryOperation <$> matchOR
+-      , \higher -> -- && boolean AND operator
++      , \higher -> -- boolean AND operator (&&)
+           chainl1 higher $ binaryOperation <$> matchAND
+       , \higher -> -- == and != operators
+           chainl1 higher $ binaryOperation <$> (matchEQ <|> matchNE)
+@@ -61,11 +61,11 @@ expr0 = foldr ($) nonAssociativeExpr levels
+           chainl1 higher $ binaryOperation <$> (matchLE <|> matchLT <|> matchGE <|> matchGT)
+       , \higher -> -- + and - operators
+           chainl1 higher $ binaryOperation . pure <$> oneOf "+-" <* whiteSpace
+-      , \higher -> -- ++ string/list concatenation operator. This is not available in OpenSCAD.
++      , \higher -> -- string/list concatenation operator (++). This is not available in OpenSCAD.
+           chainl1 higher $ binaryOperation <$> matchCAT
+-      , \higher -> -- ^ exponent operator. This is not available in OpenSCAD.
++      , \higher -> -- exponent operator (^). This is not available in OpenSCAD.
+           chainr1 higher $ binaryOperation <$> matchTok '^'
+-      , \higher -> -- *, /, % operators
++      , \higher -> -- multiplication (*), division (/), and modulus (%) operators
+           chainl1 higher $ binaryOperation . pure <$> oneOf "*/%" <* whiteSpace
+       , \higher ->
+           fix $ \self -> -- unary ! operator. OpenSCAD's YACC parser puts '!' at the same level of precedence as '-' and '+'.
+diff --git a/Graphics/Implicit/ExtOpenScad/Primitives.hs b/Graphics/Implicit/ExtOpenScad/Primitives.hs
+index 9d51902..6ba78f7 100644
+--- a/Graphics/Implicit/ExtOpenScad/Primitives.hs
++++ b/Graphics/Implicit/ExtOpenScad/Primitives.hs
+@@ -310,9 +310,9 @@ polygon = moduleWithoutSuite "polygon" $ \_ _ -> do
+             d2d3 = distanceSq p2 p3
+             isGridAligned :: ℝ2 -> ℝ2 -> Bool
+             isGridAligned (x1, y1) (x2, y2) = x1 == x2 || y1 == y2
+-          -- | Rectangles have no overlapping points,
+-          --   the distance on each side is equal to it's opposing side,
+-          --   and the distance between the pairs of opposing corners are equal.
++          -- Rectangles have no overlapping points,
++          -- the distance on each side is equal to it's opposing side,
++          -- and the distance between the pairs of opposing corners are equal.
+           in if (p1 /= p2 && p2 /= p3 && p3 /= p4 && p4 /= p1)
+                  && (d1d2==d3d4 && d1d3==d2d4)
+                  && (d1d4==d2d3) && isGridAligned p1 p2
+diff --git a/README.md b/README.md
+index e7db0ea..7274a54 100644
+--- a/README.md
++++ b/README.md
+@@ -285,7 +285,7 @@ Documentation
+ 
+ Documentation can be generated from the source code of ImplicitCAD by Haddock by running `cabal haddock`.
+ 
+-Releases of ImplicitCAD are uploaded to HackageDB which, in addition to making them avaialable through `cabal install`, puts the generated documentation on the Internet. So you can read the documentation for the most recent release of ImplicitCAD, 0.2.0, [on HackageDB](http://hackage.haskell.org/packages/archive/implicit/0.2.0/doc/html/Graphics-Implicit.html). 
++Releases of ImplicitCAD are uploaded to HackageDB which, in addition to making them avaialable through `cabal install`, puts the generated documentation on the Internet. So you can read the documentation for the most recent release of ImplicitCAD, 0.3.0.0, [on HackageDB](http://hackage.haskell.org/packages/archive/implicit/0.3.0.0/doc/html/Graphics-Implicit.html). 
+ 
+ In Implicit CAD, we consider objects as functions of `outwardness'. The boundary is 0, negative is the interior and positive the exterior. The magnitude is how far out or in. A description of the mathematical ideas underpinning ImplicitCAD are in a [blog post on colah's blog](http://christopherolah.wordpress.com/2011/11/06/manipulation-of-implicit-functions-with-an-eye-on-cad/). Note that substantial changes have happened since that post. You can also look at the [0.0.3 relase notes](http://christopherolah.wordpress.com/2012/02/06/implicitcad-0-0-3-release/).
+ 
+@@ -294,7 +294,7 @@ Status
+ 
+ ImplicitCAD is very much a work in progress.
+ 
+-What works (August 9th, 2019 -- regressions are possible if not probable):
++What works (January 26th, 2020 -- regressions are possible if not probable):
+ 
+  - CSG, bevelled CSG, shells.
+  - 2D output (svg, png, dxf).
+@@ -303,11 +303,11 @@ What works (August 9th, 2019 -- regressions are possible if not probable):
+ 
+ What still needs to be done:
+ 
+- - gcode generation for 3D printers, gcode generator config.
+- - openscad parser for backwards compatibility (partially complete).
+-
+-And a wishlist of things further in the future:
++ - ~gcode generation for 3D printers, gcode generator config.~ -- now a seperate program, [HSlice](https://github.com/julialongtin/hslice/)!
++ - Multi-material support.
+ 
++And a wishlist of things to be done as we go:
+  - More optimisation.
+  - Less bugs.
+- - Multi-material support.
++ - More coverage of the openscad language.
++ - Pull the hacklab laser cutter support, and place it in HSlice.
+diff --git a/programs/extopenscad.hs b/programs/extopenscad.hs
+index 494ebdc..cfa2f9b 100644
+--- a/programs/extopenscad.hs
++++ b/programs/extopenscad.hs
+@@ -350,7 +350,7 @@ run rawargs = do
+           else putStrLn "No objects to render."
+       _        -> hPutStr stderr "ERROR: File contains a mixture of 2D and 3D objects, what do you want to render?\n"
+ 
+-    -- | Always display our warnings, errors, and other non-textout messages on stderr.
++    -- Always display our warnings, errors, and other non-textout messages on stderr.
+     hPutStr stderr $ unlines $ show <$> filter (not . isTextOut) messages
+ 
+     let textOutHandler =

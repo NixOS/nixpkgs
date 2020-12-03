@@ -10096,4 +10096,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  simonvpe = {
+    name = "Simon Pettersson";
+    email = "simon+nix@thesourcerer.se";
+    github = "simonvpe";
+    githubId = 717925;
+  };
 }
