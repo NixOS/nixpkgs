@@ -10703,6 +10703,8 @@ in
 
   solargraph = callPackage ../development/ruby-modules/solargraph { };
 
+  rbenv = callPackage ../development/ruby-modules/rbenv { };
+
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
