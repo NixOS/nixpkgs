@@ -12,9 +12,9 @@
  <xi:include href="emacs.section.xml" />
  <xi:include href="ibus.xml" />
  <xi:include href="kakoune.section.xml" />
- <xi:include href="linux.xml" />
+ <xi:include href="linux.section.xml" />
  <xi:include href="locales.xml" />
- <xi:include href="nginx.xml" />
+ <xi:include href="nginx.section.xml" />
  <xi:include href="opengl.section.xml" />
  <xi:include href="shell-helpers.xml" />
  <xi:include href="steam.xml" />
