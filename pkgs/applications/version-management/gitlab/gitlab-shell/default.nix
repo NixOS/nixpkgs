@@ -2,12 +2,12 @@
 
 buildGoPackage rec {
   pname = "gitlab-shell";
-  version = "13.2.0";
+  version = "13.13.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "0drdpg4nmhzrmy8sl1f3hcd1278bpapgf0wmhi94xlyayh47j53a";
+    sha256 = "1zx7x3g18xzw7fs7cayd20llxabv5r93m2mp6ixgr99ksvi6zix7";
   };
 
   buildInputs = [ ruby ];
@@ -16,6 +16,10 @@ buildGoPackage rec {
 
   goPackagePath = "gitlab.com/gitlab-org/gitlab-shell";
   goDeps = ./deps.nix;
+
+  preBuild = ''
+    rm -rf "$NIX_BUILD_TOP/go/src/gitlab.com/gitlab-org/labkit/vendor"
+  '';
 
   postInstall = ''
     cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/bin/* $out/bin

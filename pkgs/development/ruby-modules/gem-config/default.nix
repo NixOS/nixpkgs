@@ -201,6 +201,16 @@ in
 
   gitlab-markup = attrs: { meta.priority = 1; };
 
+  gitlab-pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.0") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i 's;"https://gitlab.com.*";"${fetchurl {
+        url = "https://gitlab.com/gitlab-org/libpg_query/-/archive/gitlab-10-1.0.3/libpg_query-gitlab-10-1.0.3.tar.gz";
+        sha256 = "1519x4v6wrk189mjg4hlfah0f7hjy3syg8kk8b6g644gdspzs26j";
+      }}";' ext/pg_query/extconf.rb
+    '';
+  };
+
   glib2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ gtk2 pcre ];

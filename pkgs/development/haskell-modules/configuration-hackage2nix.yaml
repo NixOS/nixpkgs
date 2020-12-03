@@ -925,13 +925,13 @@ default-package-overrides:
   - ghost-buster ==0.1.1.0
   - gi-atk ==2.0.21
   - gi-cairo ==1.0.23
-  - gi-cairo-connector ==0.0.1
-  - gi-cairo-render ==0.0.1
+  - gi-cairo-connector ==0.1.0
+  - gi-cairo-render ==0.1.0
   - gi-dbusmenu ==0.4.7
   - gi-dbusmenugtk3 ==0.4.8
   - gi-gdk ==3.0.22
   - gi-gdkpixbuf ==2.0.23
-  - gi-gdkx11 ==3.0.9
+  - gi-gdkx11 ==3.0.10
   - gi-gio ==2.0.26
   - gi-glib ==2.0.23
   - gi-gobject ==2.0.22
@@ -5354,23 +5354,16 @@ broken-packages:
   - ghcprofview
   - ght
   - gi-cairo-again
-  - gi-cairo-connector
-  - gi-cairo-render
-  - gi-dbusmenu
-  - gi-dbusmenugtk3
-  - gi-gdkx11
   - gi-graphene
   - gi-gsk
   - gi-gstpbutils
   - gi-gsttag
   - gi-gtk-declarative
   - gi-gtk-declarative-app-simple
-  - gi-gtk-hs
   - gi-gtkosxapplication
   - gi-handy
   - gi-poppler
   - gi-wnck
-  - gi-xlib
   - giak
   - Gifcurry
   - ginsu
@@ -5587,8 +5580,6 @@ broken-packages:
   - gtfs
   - gtfs-realtime
   - gtk-serialized-event
-  - gtk-sni-tray
-  - gtk-strut
   - gtk-toy
   - gtk2hs-hello
   - gtk2hs-rpn
@@ -5665,7 +5656,6 @@ broken-packages:
   - Haggressive
   - hahp
   - haiji
-  - hail
   - hailgun-send
   - hairy
   - hakaru
@@ -10210,7 +10200,6 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
-  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core

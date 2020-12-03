@@ -219,17 +219,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         )
 
     with subtest("Ensure correct behavior when no store is needed"):
-        # This check tests two requirements simultaneously
-        #  1. buildLayeredImage can build images that don't need a store.
-        #  2. Layers of symlinks are eliminated by the customization layer.
-        #
+        # This check tests that buildLayeredImage can build images that don't need a store.
         docker.succeed(
             "docker load --input='${pkgs.dockerTools.examples.no-store-paths}'"
         )
-
-        # Busybox will not recognize argv[0] and print an error message with argv[0],
-        # but it confirms that the custom-true symlink is present.
-        docker.succeed("docker run --rm no-store-paths custom-true |& grep custom-true")
 
         # This check may be loosened to allow an *empty* store rather than *no* store.
         docker.succeed("docker run --rm no-store-paths ls /")
@@ -240,6 +233,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${pkgs.dockerTools.examples.filesInStore}'",
             "docker run --rm file-in-store nix-store --verify --check-contents",
             "docker run --rm file-in-store |& grep 'some data'",
+        )
+
+    with subtest("Ensure cross compiled image can be loaded and has correct arch."):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.cross}'",
+        )
+        assert (
+            docker.succeed(
+                "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
+                + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
+            ).strip()
+            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64v8"}"
         )
   '';
 })

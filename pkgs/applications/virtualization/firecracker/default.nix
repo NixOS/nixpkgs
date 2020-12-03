@@ -1,7 +1,7 @@
 { fetchurl, stdenv }:
 
 let
-  version = "0.21.1";
+  version = "0.21.3";
 
   suffix = {
     x86_64-linux  = "x86_64";
@@ -15,13 +15,13 @@ let
   };
 
   firecracker-bin = fetchbin "firecracker" {
-    x86_64-linux = "0g4fja3bz1fsyz8vj99199yblkn46ygf33ldwd1ssw8f957vbwnb";
-    aarch64-linux = "1qyppcxnh7f42fs4px5rvkk6lza57h2sq9naskvqn5zy4vsvq89s";
+    x86_64-linux = "13mvdl7gk837w485vk0rrj084ids3nxs60014psg65vl7akwb9rr";
+    aarch64-linux = "0s9gg6bz46yy0ix8s5wm1hcm420rh32ip3axa1by4rashgp804ka";
   };
 
   jailer-bin = fetchbin "jailer" {
-    x86_64-linux = "0x89pfmqci9d3i9fi9b9zm94yr2v7pq7kp3drlb952jkdfj0njyk";
-    aarch64-linux = "03fx9sk88jm23wqm8fraqd1ccfhbqvc310mkfv1f5p2ykhq2ahrk";
+    x86_64-linux = "0pyplam86arsc8mqhmmg47vin91b7nqpk3p6rnys3gs99mc1n5wm";
+    aarch64-linux = "1h7x5828s09a393n8w4si7qclxngkw0d6zas3zmhviyr2xbjbz87";
   };
 
 in

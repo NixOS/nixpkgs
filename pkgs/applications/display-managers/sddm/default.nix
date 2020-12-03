@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
 }:
@@ -19,6 +19,11 @@ in mkDerivation {
 
   patches = [
     ./sddm-ignore-config-mtime.patch
+    (fetchpatch {
+      name = "CVE-2020-28049.patch";
+      url = "https://github.com/sddm/sddm/commit/be202f533ab98a684c6a007e8d5b4357846bc222.patch";
+      sha256 = "119zqfldaqs4066wifn64n1xmhv1qd2acd9hcshw9hyl2j84pz8h";
+    })
   ];
 
   postPatch =

@@ -139,6 +139,9 @@ stdenv.mkDerivation rec {
   '';
 
   dontBuild = true;
+  
+  # This is primarily an IO bound build; there's little benefit to building remotely.
+  preferLocalBuild = true;
 
   # all binaries are already stripped
   dontStrip = true;

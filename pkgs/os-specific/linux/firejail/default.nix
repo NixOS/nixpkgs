@@ -31,6 +31,12 @@ stdenv.mkDerivation {
       url = "https://github.com/netblue30/firejail/commit/34193604fed04cad2b7b6b0f1a3a0428afd9ed5b.patch";
       sha256 = "0n4ch3qykxx870201l8lz81f7h84vk93pzz77f5cjbd30cxnbddl";
     })
+    # Adds the /nix directory when using an overlay.
+    # Required to run any programs under this mode.
+    ./mount-nix-dir-on-overlay.patch
+    # By default fbuilder hardcodes the firejail binary to the install path.
+    # On NixOS the firejail binary is a setuid wrapper available in $PATH.
+    ./fbuilder-call-firejail-on-path.patch
   ];
 
   prePatch = ''

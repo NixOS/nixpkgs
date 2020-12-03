@@ -11,6 +11,7 @@ with lib;
 let
   cfg = config.ec2;
   metadataFetcher = import ./ec2-metadata-fetcher.nix {
+    inherit (pkgs) curl;
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
   };

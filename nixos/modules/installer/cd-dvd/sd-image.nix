@@ -223,9 +223,10 @@ in
         # Figure out device names for the boot device and root filesystem.
         rootPart=$(${pkgs.utillinux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
+        partNum=$(lsblk -npo MAJ:MIN $rootPart | awk -F: '{print $2}')
 
         # Resize the root partition and the filesystem to fit the disk
-        echo ",+," | sfdisk -N2 --no-reread $bootDevice
+        echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
         ${pkgs.parted}/bin/partprobe
         ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
 

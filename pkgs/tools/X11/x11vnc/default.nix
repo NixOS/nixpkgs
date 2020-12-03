@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub,
+{ stdenv, fetchFromGitHub, fetchpatch,
   openssl, zlib, libjpeg, xorg, coreutils, libvncserver,
   autoreconfHook, pkgconfig }:
 
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1g652mmi79pfq4p5p7spaswa164rpzjhc5rn2phy5pm71lm0vib1";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-29074.patch";
+      url = "https://github.com/LibVNC/x11vnc/commit/69eeb9f7baa14ca03b16c9de821f9876def7a36a.patch";
+      sha256 = "0hdhp32g2i5m0ihmaxkxhsn3d5f2qasadvwpgxify4xnzabmyb2d";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
