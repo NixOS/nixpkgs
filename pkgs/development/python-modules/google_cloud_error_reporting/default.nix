@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y5vkkg1cmzshj5j68zk1876857z8a7sjm0wqhf4rzgqgkr2kcdd";
+    sha256 = "2fd6fe25343f7017c22e2733a0358c64b3171edc1669d0c8a1e1f07f86a048c4";
   };
 
   disabled = pythonOlder "3.6";
