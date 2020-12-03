@@ -72,8 +72,7 @@ in stdenv.mkDerivation rec {
     cp -r ${desktopItem}/share/applications $out/share
     ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/etc/udev/rules.d/
-    cp $src/Data/51-usb-device.rules $out/etc/udev/rules.d/
+    install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';
 
   meta = with lib; {
