@@ -60,7 +60,7 @@ in
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
-  codimd = handleTest ./codimd.nix {};
+  hedgedoc = handleTest ./hedgedoc.nix {};
   consul = handleTest ./consul.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-custom-pkgs.nix = handleTest ./containers-custom-pkgs.nix {};

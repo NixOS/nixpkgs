@@ -2929,10 +2929,6 @@ in
 
   cmt = callPackage ../applications/audio/cmt {};
 
-  codimd = callPackage ../servers/web-apps/codimd {
-    nodejs = nodejs-12_x;
-  };
-
   colord = callPackage ../tools/misc/colord { };
 
   colord-gtk = callPackage ../tools/misc/colord-gtk { };
@@ -17011,6 +17007,10 @@ in
   hbase = callPackage ../servers/hbase {};
 
   headphones = callPackage ../servers/headphones {};
+
+  hedgedoc = callPackage ../servers/web-apps/hedgedoc {
+    nodejs = nodejs-14_x;
+  };
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 

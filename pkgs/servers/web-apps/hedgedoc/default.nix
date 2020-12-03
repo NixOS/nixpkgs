@@ -2,14 +2,14 @@
 , which, nodejs, mkYarnPackage, python2, nixosTests }:
 
 mkYarnPackage rec {
-  name = "codimd";
-  version = "1.6.0";
+  name = "hedgedoc";
+  version = "1.7.0-rc2";
 
   src = fetchFromGitHub {
-    owner  = "codimd";
+    owner  = "hedgedoc";
     repo   = "server";
     rev    = version;
-    sha256 = "1208a24v664ha9qzr7ky6i3ynphkaj0xi5l3rsw743i22nv5aj33";
+    sha256 = "1c9s1hqap6i1caljirmki5kfccm64zqdh3j5rxbidcyq768mfa0r";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
@@ -20,19 +20,15 @@ mkYarnPackage rec {
   packageJSON = ./package.json;
 
   postConfigure = ''
-    rm deps/CodiMD/node_modules
-    cp -R "$node_modules" deps/CodiMD
-    chmod -R u+w deps/CodiMD
+    rm deps/HedgeDoc/node_modules
+    cp -R "$node_modules" deps/HedgeDoc
+    chmod -R u+w deps/HedgeDoc
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    cd deps/CodiMD
-
-    pushd node_modules/codemirror
-    npm run install
-    popd
+    cd deps/HedgeDoc
 
     pushd node_modules/sqlite3
     export CPPFLAGS="-I${nodejs}/include/node"
@@ -52,23 +48,23 @@ mkYarnPackage rec {
     mkdir -p $out
     cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
 
-    cat > $out/bin/codimd <<EOF
+    cat > $out/bin/hedgedoc <<EOF
       #!${stdenv.shell}/bin/sh
       ${nodejs}/bin/node $out/app.js
     EOF
-    chmod +x $out/bin/codimd
-    wrapProgram $out/bin/codimd \
+    chmod +x $out/bin/hedgedoc
+    wrapProgram $out/bin/hedgedoc \
       --set NODE_PATH "$out/lib/node_modules"
 
     runHook postDist
   '';
 
-  passthru.tests = { inherit (nixosTests) codimd; };
+  passthru.tests = { inherit (nixosTests) hedgedoc; };
 
   meta = with stdenv.lib; {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
-    homepage = "https://github.com/codimd/server";
+    homepage = "https://github.com/hedgedoc/server";
     maintainers = with maintainers; [ willibutz ma27 globin ];
     platforms = platforms.linux;
   };
