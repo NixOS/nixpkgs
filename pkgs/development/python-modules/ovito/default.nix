@@ -15,14 +15,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.1";
+  version = "3.3.2";
   pname = "ovito";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rm1qxa0fanaaqg0idr6rf2s2xlbyn1dzjzwh3rddy9mgl60lj2h";
+    sha256 = "02mn3qmgyh72n77fj7h2plh5c1a9qx84m9cs7z18kkdzc93b6rr8";
   };
 
   buildInputs = [ cmake ffmpeg netcdf qscintilla zlib boost zlib git fftw hdf5 libssh qt5.qtbase qt5.qtsvg ];
