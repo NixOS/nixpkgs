@@ -109,8 +109,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/etc/udev/rules.d/
-    cp $src/Data/51-usb-device.rules $out/etc/udev/rules.d/
+    install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';
 
   meta = with lib; {
