@@ -569,9 +569,9 @@ rec {
      standard GNU Autoconf scripts.
 
      Example:
-       enableFeature true "shared" "foo"
+       enableFeatureAs true "shared" "foo"
        => "--enable-shared=foo"
-       enableFeature false "shared" (throw "ignored")
+       enableFeatureAs false "shared" (throw "ignored")
        => "--disable-shared"
   */
   enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
