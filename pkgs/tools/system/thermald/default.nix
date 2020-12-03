@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "2.3";
+  version = "2.4.1";
 
   outputs = [ "out" "devdoc" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "0cisaca2c2z1x9xvxc4lr6nl6yqx5bww6brh73m0p1n643jgq1dl";
+    sha256 = "0rlac7v1b59m7gh767hkd8a0r4p001nd24786fnmryygbxynd2s6";
   };
 
   nativeBuildInputs = [
