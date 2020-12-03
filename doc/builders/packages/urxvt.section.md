@@ -28,7 +28,7 @@ rxvt-unicode.override {
 
 To get a list of all the plugins available, open the Nix REPL and run
 
-```nix
+```ShellSession
 $ nix repl
 :l <nixpkgs>
 map (p: p.name) pkgs.rxvt-unicode.plugins
