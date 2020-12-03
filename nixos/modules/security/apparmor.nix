@@ -111,33 +111,39 @@ in
     '';
     # For aa-logprof
     environment.etc."apparmor/severity.db".source = pkgs.apparmor-utils + "/etc/apparmor/severity.db";
-    environment.etc."apparmor/logprof.conf".text = ''
-      [settings]
-        # /etc/apparmor.d/ is read-only on NixOS
-        profiledir = /var/cache/apparmor/logprof
-        inactive_profiledir = /etc/apparmor.d/disable
-        # Use: journalctl -b --since today --grep audit: | aa-logprof
-        logfiles = /dev/stdin
+    environment.etc."apparmor/logprof.conf".source = pkgs.runCommand "logprof.conf" {
+      header = ''
+        [settings]
+          # /etc/apparmor.d/ is read-only on NixOS
+          profiledir = /var/cache/apparmor/logprof
+          inactive_profiledir = /etc/apparmor.d/disable
+          # Use: journalctl -b --since today --grep audit: | aa-logprof
+          logfiles = /dev/stdin
 
-        parser = ${pkgs.apparmor-parser}/bin/apparmor_parser
-        ldd = ${pkgs.glibc.bin}/bin/ldd
-        logger = ${pkgs.utillinux}/bin/logger
+          parser = ${pkgs.apparmor-parser}/bin/apparmor_parser
+          ldd = ${pkgs.glibc.bin}/bin/ldd
+          logger = ${pkgs.utillinux}/bin/logger
 
-        # customize how file ownership permissions are presented
-        # 0 - off
-        # 1 - default of what ever mode the log reported
-        # 2 - force the new permissions to be user
-        # 3 - force all perms on the rule to be user
-        default_owner_prompt = 1
+          # customize how file ownership permissions are presented
+          # 0 - off
+          # 1 - default of what ever mode the log reported
+          # 2 - force the new permissions to be user
+          # 3 - force all perms on the rule to be user
+          default_owner_prompt = 1
 
-        custom_includes = /etc/apparmor.d ${lib.concatMapStringsSep " " (p: "${p}/etc/apparmor.d") cfg.packages}
+          custom_includes = /etc/apparmor.d ${lib.concatMapStringsSep " " (p: "${p}/etc/apparmor.d") cfg.packages}
 
-      [qualifiers]
-        ${pkgs.runtimeShell} = icnu
-        ${pkgs.bashInteractive}/bin/sh = icnu
-        ${pkgs.bashInteractive}/bin/bash = icnu
-    '' + head (match "^.*\\[qualifiers](.*)" # Drop the original [settings] section.
-                     (readFile "${pkgs.apparmor-utils}/etc/apparmor/logprof.conf"));
+        [qualifiers]
+          ${pkgs.runtimeShell} = icnu
+          ${pkgs.bashInteractive}/bin/sh = icnu
+          ${pkgs.bashInteractive}/bin/bash = icnu
+      '';
+      footer = "${pkgs.apparmor-utils}/etc/apparmor/logprof.conf";
+      passAsFile = [ "header" ];
+    } ''
+      cp $headerPath $out
+      sed -n '/\\[qualifiers\\]/,''${n;p}' $footer > $out
+    '';
 
     boot.kernelParams = [ "apparmor=1" "security=apparmor" ];
 
