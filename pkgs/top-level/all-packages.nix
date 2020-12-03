@@ -365,6 +365,8 @@ in
 
   fetchhg = callPackage ../build-support/fetchhg { };
 
+  fetchFirefoxAddon = callPackage ../build-support/fetchfirefoxaddon {};
+
   # `fetchurl' downloads a file from the network.
   fetchurl = if stdenv.buildPlatform != stdenv.hostPlatform
    then buildPackages.fetchurl # No need to do special overrides twice,
@@ -10704,6 +10706,8 @@ in
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 
   solargraph = callPackage ../development/ruby-modules/solargraph { };
+
+  rbenv = callPackage ../development/ruby-modules/rbenv { };
 
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
