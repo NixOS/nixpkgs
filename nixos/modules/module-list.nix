@@ -230,6 +230,7 @@
   ./services/audio/squeezelite.nix
   ./services/audio/spotifyd.nix
   ./services/audio/ympd.nix
+  ./services/audio/mpdscheduler.nix
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix

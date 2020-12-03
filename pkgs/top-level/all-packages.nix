@@ -22666,6 +22666,8 @@ in
 
   ympd = callPackage ../applications/audio/ympd { };
 
+  mpdscheduler = callPackage ../applications/audio/mpdscheduler { };
+
   nload = callPackage ../applications/networking/nload { };
 
   normalize = callPackage ../applications/audio/normalize { };
