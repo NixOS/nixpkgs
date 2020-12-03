@@ -142,7 +142,7 @@ in
       passAsFile = [ "header" ];
     } ''
       cp $headerPath $out
-      sed -n '/\\[qualifiers\\]/,''${n;p}' $footer > $out
+      sed '1,/\[qualifiers\]/d' $footer >> $out
     '';
 
     boot.kernelParams = [ "apparmor=1" "security=apparmor" ];
