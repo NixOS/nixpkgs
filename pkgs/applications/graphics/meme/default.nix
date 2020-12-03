@@ -1,8 +1,12 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv
+, buildGoPackage
+, unstableGitUpdater
+, fetchFromGitHub
+}:
 
 buildGoPackage rec {
-  pname = "meme-unstable";
-  version = "2017-09-10";
+  pname = "meme";
+  version = "unstable-2017-09-10";
 
   owner = "nomad-software";
   repo = "meme";
@@ -13,6 +17,8 @@ buildGoPackage rec {
     rev = "a6521f2eecb0aac22937b0013747ed9cb40b81ea";
     sha256 = "1gbsv1d58ck6mj89q31s5b0ppw51ab76yqgz39jgwqnkidvzdfly";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with stdenv.lib; {
     description = "A command line utility for creating image macro style memes";

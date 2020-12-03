@@ -22,14 +22,14 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "120";
+  version = "120.2";
   buildVersion = makeBuildVersion version;
 
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "08l5c53izh5vmgahsj0qhpfiva0vs5qhh77bb770hzpadxvysyc8";
+    sha256 = "01a7qpwfr1n540fk0k65kl03biix0gmg66z7qn22mb2703laq1xc";
   };
 
   desktopItem = makeDesktopItem {
@@ -128,5 +128,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    # Hash mismatch on darwin:
+    # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
+    broken = stdenv.isDarwin;
   };
 }
