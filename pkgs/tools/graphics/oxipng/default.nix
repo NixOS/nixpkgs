@@ -1,15 +1,15 @@
 { stdenv, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  version = "4.0.1";
+  version = "4.0.2";
   pname = "oxipng";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "0mgd33cb112yg1bz8jhsbk2w8p2gdiw510bfv4z82b2mg6pl6b9r";
+    sha256 = "0m36af9w1l6pc71fjbgyzcsszizwayvcv5d750zz2bnj23c77m69";
   };
 
-  cargoSha256 = "01g3qansrvvv85b1kxg4609lnj3bizavg3r7651hn03cnlychj2n";
+  cargoSha256 = "16fby8ncdq0dyg9r0glrqwi04sja34br306c5sj22cq1dm3bb64q";
 
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
