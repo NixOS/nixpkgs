@@ -6,13 +6,15 @@
   </subtitle>
  </info>
  <xi:include href="preface.chapter.xml" />
+
  <part>
-  <title>Using Nixpkgs</title>
-  <xi:include href="using/configuration.xml" />
-  <xi:include href="using/overlays.xml" />
-  <xi:include href="using/overrides.xml" />
-  <xi:include href="functions.xml" />
+   <title>Using Nixpkgs</title>
+   <xi:include href="using/configuration.xml" />
+   <xi:include href="using/overlays.xml" />
+   <xi:include href="using/overrides.xml" />
+   <xi:include href="functions.xml" />
  </part>
+
  <part>
   <title>Standard environment</title>
   <xi:include href="stdenv/stdenv.xml" />
