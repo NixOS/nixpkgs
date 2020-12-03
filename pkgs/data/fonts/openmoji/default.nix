@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , scfbuild
 , python3Packages
@@ -13,13 +14,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openmoji";
-  version = "12.4.0";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
     repo = pname;
     rev = version;
-    sha256 = "0zis0i7fn7dqv39c9ms7f1p4dqqzwdfwkdgrijaak1cmb8rkn3a0";
+    sha256 = "sha256-7G6a+LFq79njyPhnDhhSJ98Smw5fWlfcsFj6nWBPsSk=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +61,7 @@ in stdenv.mkDerivation rec {
     install -Dm644 ${filename} $out/share/fonts/truetype/${filename}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
@@ -69,4 +70,3 @@ in stdenv.mkDerivation rec {
     description = "Open-source emojis for designers, developers and everyone else";
   };
 }
-
