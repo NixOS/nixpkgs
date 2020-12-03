@@ -23,6 +23,10 @@ buildPythonPackage rec {
     installManPage goobook.1
   '';
 
+  doCheck = false;
+
+  pythonImportsCheck = [ "goobook" ];
+
   meta = with stdenv.lib; {
     description = "Access your Google contacts from the command line";
     longDescription = ''

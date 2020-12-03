@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "A massively scalable open source NoSQL database";
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ cransom ];
+    maintainers = [];
   };
 }

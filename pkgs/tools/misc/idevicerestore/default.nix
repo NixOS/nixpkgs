@@ -4,6 +4,7 @@
 , libirecovery
 , libzip
 , libusbmuxd
+, IOKit
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     # Not listing other dependencies specified in
     # https://github.com/libimobiledevice/idevicerestore/blob/8a882038b2b1e022fbd19eaf8bea51006a373c06/README#L20
     # because they are inherited `libimobiledevice`.
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/libimobiledevice/idevicerestore";
@@ -51,8 +52,8 @@ stdenv.mkDerivation rec {
       This will download and restore a device to the latest firmware available.
     '';
     license = licenses.lgpl21Plus;
-    # configure.ac suggests it should work for darwin and mingw as well but not tried yet
-    platforms = platforms.linux;
+    # configure.ac suggests it should work for mingw as well but not tried yet
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ nh2 ];
   };
 }

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       devices to the Linux Desktop.
     '';
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ infinisil ];
   };
 }

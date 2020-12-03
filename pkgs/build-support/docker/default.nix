@@ -1,4 +1,5 @@
 {
+  bashInteractive,
   buildPackages,
   cacert,
   callPackage,
@@ -29,6 +30,7 @@
   writeReferencesToFile,
   writeScript,
   writeText,
+  writeTextDir,
   writePython3,
   system,  # Note: This is the cross system we're compiling for
 }:
@@ -70,7 +72,7 @@ in
 rec {
 
   examples = callPackage ./examples.nix {
-    inherit buildImage pullImage shadowSetup buildImageWithNixDb;
+    inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb;
   };
 
   pullImage = let
@@ -683,6 +685,33 @@ rec {
 
     in
     result;
+
+  # Provide a /etc/passwd and /etc/group that contain root and nobody.
+  # Useful when packaging binaries that insist on using nss to look up
+  # username/groups (like nginx).
+  # /bin/sh is fine to not exist, and provided by another shim.
+  fakeNss = symlinkJoin {
+    name = "fake-nss";
+    paths = [
+      (writeTextDir "etc/passwd" ''
+        root:x:0:0:root user:/var/empty:/bin/sh
+        nobody:x:65534:65534:nobody:/var/empty:/bin/sh
+      '')
+      (writeTextDir "etc/group" ''
+        root:x:0:
+        nobody:x:65534:
+      '')
+      (runCommand "var-empty" {} ''
+        mkdir -p $out/var/empty
+      '')
+    ];
+  };
+
+  # This provides /bin/sh, pointing to bashInteractive.
+  binSh = runCommand "bin-sh" {} ''
+    mkdir -p $out/bin
+    ln -s ${bashInteractive}/bin/bash $out/bin/sh
+  '';
 
   # Build an image and populate its nix database with the provided
   # contents. The main purpose is to be able to use nix commands in
