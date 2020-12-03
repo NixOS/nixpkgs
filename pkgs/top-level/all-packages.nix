@@ -2039,6 +2039,8 @@ in
 
   dyncall = callPackage ../development/libraries/dyncall { };
 
+  dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
+
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
   EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };

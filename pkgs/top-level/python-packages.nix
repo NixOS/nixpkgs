@@ -1452,6 +1452,8 @@ in {
 
   daemonize = callPackage ../development/python-modules/daemonize { };
 
+  daemonocle = callPackage ../development/python-modules/daemonocle { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   darcsver = callPackage ../development/python-modules/darcsver { };
