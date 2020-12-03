@@ -108,6 +108,11 @@ stdenv.mkDerivation rec {
     sfml
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/etc/udev/rules.d/
+    cp $src/Data/51-usb-device.rules $out/etc/udev/rules.d/
+  '';
+
   meta = with lib; {
     homepage = "https://dolphin-emu.org/";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
