@@ -652,6 +652,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  archseer = {
+    email = "blaz@mxxn.io";
+    github = "archseer";
+    githubId = 1372918;
+    name = "Blaž Hrastnik";
+  };
   arcnmx = {
     email = "arcnmx@users.noreply.github.com";
     github = "arcnmx";
