@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "hsphfpd";
-  version = "2020-10-25";
+  version = "2020-11-27";
 
   src = fetchFromGitHub {
     owner = "pali";
     repo = "hsphfpd-prototype";
-    rev = "601bf8f7bf2da97257aa6f786ec4cbb69b0ecbc8";
-    sha256 = "06hh0xmp143334x8dg5nmp5727g38q2m5kqsvlrfia6vw2hcq0v0";
+    rev = "58ffbf8f1b457e46801039d572cd344472828714";
+    sha256 = "1hyg3cz6s58k6a7a3hcbs6wfk14cflnikd9psi7sirq6cn1z0ggb";
   };
 
   nativeBuildInputs = [ makeWrapper ];

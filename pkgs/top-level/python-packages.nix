@@ -1452,6 +1452,8 @@ in {
 
   daemonize = callPackage ../development/python-modules/daemonize { };
 
+  daemonocle = callPackage ../development/python-modules/daemonocle { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   darcsver = callPackage ../development/python-modules/darcsver { };
@@ -4857,6 +4859,8 @@ in {
   pwntools = callPackage ../development/python-modules/pwntools { debugger = pkgs.gdb; };
 
   pxml = callPackage ../development/python-modules/pxml { };
+
+  py-air-control = callPackage ../development/python-modules/py-air-control { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
 
