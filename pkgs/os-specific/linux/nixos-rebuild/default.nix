@@ -67,6 +67,7 @@ substitute {
     repl = callPackage ./test/repl.nix { };
     simple-installer = nixosTests.installer.simple;
     specialisations = nixosTests.nixos-rebuild-specialisations;
+    switch = nixosTests.nixos-rebuild-switch;
     target-host = nixosTests.nixos-rebuild-target-host;
   };
 
