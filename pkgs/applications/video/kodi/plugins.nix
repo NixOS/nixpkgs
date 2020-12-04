@@ -489,13 +489,13 @@ let self = rec {
 
     plugin = "inputstream-adaptive";
     namespace = "inputstream.adaptive";
-    version = "2.4.6";
+    version = "2.6.7";
 
     src = fetchFromGitHub {
       owner = "peak3d";
       repo = "inputstream.adaptive";
       rev = "${version}-${rel}";
-      sha256 = "09d9b35mpaf3g5m51viyan9hv7d2i8ndvb9wm0j7rs5gwsf0k71z";
+      sha256 = "1pwqmbr78wp12jn6rwv63npdfc456adwz0amlxf6gvgg43li6p7s";
     };
 
     extraBuildInputs = [ expat ];
