@@ -41,7 +41,7 @@ let
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
     , firefoxLibName ? "firefox" # Important for tor package or the like
-    , extraExtensions ? [ ]
+    , nixExtensions ? null
     }:
 
     assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
@@ -100,19 +100,21 @@ let
       policiesJson = builtins.toFile "policies.json"
         (builtins.toJSON enterprisePolicies);
 
+      usesNixExtensions = nixExtensions != null;
+
       extensions = builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
-        throw "extraExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
+        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
         else
         a
-      ) extraExtensions;
+      ) (if usesNixExtensions then nixExtensions else []);
 
       enterprisePolicies =
       {
-        policies = {
+        policies = lib.optionalAttrs usesNixExtensions  {
           DisableAppUpdate = true;
         } //
-        {
+        lib.optionalAttrs usesNixExtensions {
           ExtensionSettings = {
             "*" = {
                 blocked_install_message = "You can't have manual extension mixed with nix extensions";
@@ -137,7 +139,7 @@ let
         // to be able to install addons that do not have an extid
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
-        lockPref("xpinstall.signatures.required", false);
+        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
         ${extraPrefs}
       '';
 
