@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, darwin, cffi, setuptools }:
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, darwin, cffi, setuptools, python }:
 
 buildPythonPackage rec {
   pname = "pyobjc-core";
@@ -11,10 +11,12 @@ buildPythonPackage rec {
     sha256 = "0z42b8nrgfa2wfxds5pwc0j8iysjkqi7i2xj33fxlf940idb3rrq";
   };
 
-  patchPhase = ''
+  postPatch = ''
     # Hard code correct SDK version
+    # Fix hardcoded paths
     substituteInPlace setup.py \
-      --replace 'get_sdk_level(self.sdk_root)' '"${darwin.apple_sdk.sdk.version}"'
+      --replace 'get_sdk_level(self.sdk_root)' '"${darwin.apple_sdk.sdk.version}"' \
+      --replace 'os.path.join(self.sdk_root, "usr/include/objc/runtime.h")' '"${darwin.objc4}/include/objc/runtime.h"'
 
     # Hard code OS version
     # This needs to be done here or pyobjc-frameworks-* don't get the change
