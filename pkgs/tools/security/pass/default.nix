@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, gnused, getopt, git, tree, gnupg, openssl, which, procps
-, qrencode , makeWrapper, pass, symlinkJoin
+, coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
+, which, procps , qrencode , makeWrapper, pass, symlinkJoin
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
@@ -78,8 +78,10 @@ stdenv.mkDerivation rec {
 
   wrapperPath = with stdenv.lib; makeBinPath ([
     coreutils
+    findutils
     getopt
     git
+    gnugrep
     gnupg
     gnused
     tree
