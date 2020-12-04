@@ -2672,6 +2672,8 @@ in
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
+  svt-av1 = callPackage ../tools/video/svt-av1 { };
+
   inherit (callPackages ../servers/rainloop { })
     rainloop-community
     rainloop-standard;
