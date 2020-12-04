@@ -1,4 +1,4 @@
-# Copyright 2020 Oliver Smith
+# SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 calamares_add_plugin( mobile
