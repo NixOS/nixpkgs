@@ -319,13 +319,13 @@ let self = rec {
 
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
-    version = "3.1.4";
+    version = "3.5.1";
 
     src = fetchFromGitHub rec {
       owner = "teeedubb";
       repo = owner + "-xbmc-repo";
-      rev = "db67704c3e16bdcdd3bdfe2926c609f1f6bdc4fb";
-      sha256 = "001a7zs3a4jfzj8ylxv2klc33mipmqsd5aqax7q81fbgwdlndvbm";
+      rev = "8260bf9b464846a1f1965da495d2f2b7ceb81d55";
+      sha256 = "1fj3ry5s44nf1jzxk4bmnpa4b9p23nrpmpj2a4i6xf94h7jl7p5k";
     };
 
     propagatedBuildInputs = [ steam ];
