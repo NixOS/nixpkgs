@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "202ee45af747f18642ae0a088d7c4553521714a511a1a9ec99b8144cf9928317";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [ ./gcc6.patch ];
 
   meta = with lib; {
