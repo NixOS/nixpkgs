@@ -98,43 +98,43 @@ let
               };
 
               propagatedBuildInputs = with super; [
-                octoprint-firmwarecheck
-                octoprint-filecheck
-                markupsafe
-                tornado
-                markdown
-                rsa
-                regex
+                blinker
+                cachelib
+                click
+                emoji
+                feedparser
+                filetype
                 flask
-                jinja2
-                flask_login
                 flask-babel
                 flask_assets
-                werkzeug
-                itsdangerous
-                cachelib
-                pyyaml
-                pyserial
-                netaddr
-                watchdog
-                sarge
-                netifaces
-                pylru
-                pkginfo
-                requests
-                semantic-version
-                psutil
-                click
-                feedparser
-                future
-                websocket_client
-                wrapt
-                emoji
+                flask_login
                 frozendict
+                future
+                itsdangerous
+                jinja2
+                markdown
+                markupsafe
+                netaddr
+                netifaces
+                octoprint-filecheck
+                octoprint-firmwarecheck
+                pkginfo
+                psutil
+                pylru
+                pyserial
+                pyyaml
+                regex
+                requests
+                rsa
+                sarge
+                semantic-version
                 sentry-sdk
-                filetype
+                tornado
                 unidecode
-                blinker
+                watchdog
+                websocket_client
+                werkzeug
+                wrapt
                 zeroconf
               ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
 
