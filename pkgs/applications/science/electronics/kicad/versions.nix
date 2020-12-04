@@ -27,25 +27,25 @@
   };
   "kicad-unstable" = {
     kicadVersion = {
-      version =			"2020-11-07";
+      version =			"2020-12-01";
       src = {
-        rev =			"9454f9df9245aea037d1ad5baf050c2d9101159c";
-        sha256 =		"03bd0dk234ihqnwrv4n40gi856xcjqgxplfwjzlwcq521gwykv30";
+        rev =			"3c521942ed52e83482c82d426170b4fbf327f846";
+        sha256 =		"sha256:09qab69sy3n44kjlzxxx7gbksyr1kg8n14kz0zf8n71zfcqagci4";
       };
     };
     libVersion = {
-      version =			"2020-11-07";
+      version =			"2020-12-01";
       libSources = {
         i18n.rev =		"e89d9a89bec59199c1ade56ee2556591412ab7b0";
-        i18n.sha256 =		"04zaqyhj3qr4ymyd3k5vjpcna64j8klpsygcgjcv29s3rdi8glfl";
-        symbols.rev =		"9c50f4333bafc5a1abf7786436db5ffb6a66758d";
-        symbols.sha256 =	"06ic59svz0256isy93863i5ay4k8wshvp1kspnqrc776wmq03l3k";
-        templates.rev =		"41eae4ccd3ac02fdb969e3aa272c07ab51dcf5af";
-        templates.sha256 =	"0xxfkpsgbnafmpaxpz1747zn7fhqp0kfl32rzjrx4vzxyp25q805";
-        footprints.rev =	"50015af7e603cc499199c7e1c6daa7c85dd732ae";
-        footprints.sha256 =	"16bic67klbj7sgj7cab8ha2fg3ypp9ap82gxkn6ijvpl7dka8bhb";
-        packages3d.rev =	"df0dc0074491bb665b2c3ce569cbd4aa16118ad6";
-        packages3d.sha256 =	"027jlcp9fpryldjkcxhb1b5bpwqna9kl6r0lnkd86x238kj3rd8v";
+        i18n.sha256 =		"sha256:04zaqyhj3qr4ymyd3k5vjpcna64j8klpsygcgjcv29s3rdi8glfl";
+        symbols.rev =		"e538abb015b4f289910a6f26b2f1b9cb8bf2efdb";
+        symbols.sha256 =	"sha256:117y4cm46anlrnw6y6mdjgl1a5gab6h6m7cwx3q7qb284m9bs5gi";
+        templates.rev =		"32a4f6fab863976fdcfa232e3e08fdcf3323a954";
+        templates.sha256 =	"sha256:13r94dghrh9slpj7nkzv0zqv5hk49s6pxm4q5ndqx0y8037ivmhk";
+        footprints.rev =	"15ffd67e01257d4d8134dbd6708cb58977eeccbe";
+        footprints.sha256 =	"sha256:1ad5k3wh2zqfibrar7pd3g363jk2q51dvraxnq3zlxa2x4znh7mw";
+        packages3d.rev =	"d8b7e8c56d535f4d7e46373bf24c754a8403da1f";
+        packages3d.sha256 =	"sha256:0dh8ixg0w43wzj5h3164dz6l1vl4llwxhi3qcdgj1lgvrs28aywd";
       };
     };
   };
