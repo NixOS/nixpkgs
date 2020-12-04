@@ -3379,8 +3379,8 @@ broken-packages:
   - base64-conduit
   - baserock-schema
   - basex-client
-  - basic
   - BASIC
+  - basic
   - baskell
   - batchd
   - battlenet
@@ -3528,6 +3528,7 @@ broken-packages:
   - BirdPP
   - birds-of-paradise
   - bisect-binary
+  - bishbosh
   - bit-array
   - bit-stream
   - bitcoin-address
@@ -3900,8 +3901,8 @@ broken-packages:
   - chatwork
   - cheapskate-terminal
   - check-pvp
-  - checked
   - Checked
+  - checked
   - checkmate
   - chell-quickcheck
   - chessIO
@@ -3995,6 +3996,7 @@ broken-packages:
   - cli-extras
   - cli-git
   - cli-nix
+  - clickhouse-haskell
   - clif
   - clifford
   - clifm
@@ -4359,8 +4361,8 @@ broken-packages:
   - damnpacket
   - Dangerous
   - danibot
-  - dao
   - Dao
+  - dao
   - dapi
   - darcs-benchmark
   - darcs-beta
@@ -4538,6 +4540,7 @@ broken-packages:
   - derive-gadt
   - derive-IG
   - derive-monoid
+  - derive-storable-plugin
   - derive-trie
   - derp-lib
   - describe
@@ -4806,11 +4809,13 @@ broken-packages:
   - ecma262
   - ecu
   - eddie
+  - ede
   - edenmodules
   - edenskel
   - edentv
   - edge
   - edges
+  - edis
   - edit
   - edit-lenses
   - editable
@@ -4891,6 +4896,7 @@ broken-packages:
   - enumfun
   - EnumMap
   - enummapmap
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -5011,8 +5017,9 @@ broken-packages:
   - f-ree-hack-cheats-free-v-bucks-generator
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
-  - facts
+  - factory
   - Facts
+  - facts
   - factual-api
   - fadno
   - fadno-braids
@@ -5137,6 +5144,7 @@ broken-packages:
   - first-class-instances
   - firstify
   - FirstOrderTheory
+  - fishfood
   - fit
   - fits-parse
   - fitsio
@@ -5164,6 +5172,7 @@ broken-packages:
   - flamethrower
   - flamingra
   - flashblast
+  - flat
   - flat-maybe
   - flatbuffers
   - flay
@@ -5569,6 +5578,7 @@ broken-packages:
   - gloss-export
   - gloss-game
   - gloss-sodium
+  - glpk-headers
   - glpk-hs
   - gltf-codec
   - glue
@@ -6158,8 +6168,8 @@ broken-packages:
   - hdaemonize-buildfix
   - hdbc-aeson
   - HDBC-mysql
-  - hdbc-postgresql-hstore
   - HDBC-postgresql-hstore
+  - hdbc-postgresql-hstore
   - hdbi
   - hdbi-conduit
   - hdbi-postgresql
@@ -6203,6 +6213,7 @@ broken-packages:
   - hedgehog-servant
   - Hedi
   - hedis-config
+  - hedis-namespace
   - hedis-pile
   - hedis-simple
   - hedis-tags
@@ -6380,9 +6391,11 @@ broken-packages:
   - hlibfam
   - HList
   - hlivy
-  - hlogger
   - HLogger
+  - hlogger
   - hlongurl
+  - hlrdb
+  - hlrdb-core
   - hls
   - hls-brittany
   - hlwm
@@ -7221,6 +7234,7 @@ broken-packages:
   - keera-hails-reactive-yampa
   - keera-hails-reactivelenses
   - keera-hails-reactivevalues
+  - kempe
   - kerry
   - Ketchup
   - keter
@@ -7793,8 +7807,8 @@ broken-packages:
   - mecab
   - mech
   - Mecha
-  - mechs
   - Mechs
+  - mechs
   - mediabus
   - mediabus-fdk-aac
   - mediabus-rtp
@@ -8324,6 +8338,7 @@ broken-packages:
   - numeric-ranges
   - numerical
   - numhask-array
+  - numhask-free
   - numhask-hedgehog
   - numhask-histogram
   - numhask-prelude
@@ -8500,6 +8515,7 @@ broken-packages:
   - pandoc-crossref
   - pandoc-csv2table
   - pandoc-filter-graphviz
+  - pandoc-filter-indent
   - pandoc-include
   - pandoc-include-code
   - pandoc-japanese-filters
@@ -8667,6 +8683,7 @@ broken-packages:
   - peyotls
   - peyotls-codec
   - pez
+  - pg-extras
   - pg-harness
   - pg-harness-server
   - pg-recorder
@@ -8802,6 +8819,7 @@ broken-packages:
   - polysemy-methodology
   - polysemy-methodology-composite
   - polysemy-optics
+  - polysemy-path
   - polysemy-RandomFu
   - polysemy-resume
   - polysemy-test
@@ -8974,6 +8992,7 @@ broken-packages:
   - prosidy
   - prosidyc
   - prosper
+  - proteaaudio
   - proteome
   - proto-lens-combinators
   - proto-lens-descriptors
@@ -9437,7 +9456,11 @@ broken-packages:
   - rocksdb-haskell
   - roku-api
   - rollbar
+  - rollbar-cli
+  - rollbar-client
   - rollbar-hs
+  - rollbar-wai
+  - rollbar-yesod
   - roller
   - RollingDirectory
   - ron-rdt
@@ -9702,6 +9725,7 @@ broken-packages:
   - servant-openapi3
   - servant-pagination
   - servant-pandoc
+  - servant-polysemy
   - servant-pool
   - servant-postgresql
   - servant-proto-lens
@@ -9926,6 +9950,7 @@ broken-packages:
   - Smooth
   - smsaero
   - smt-lib
+  - smt2-parser
   - SmtLib
   - smtlib2
   - smtlib2-debug
@@ -10094,6 +10119,7 @@ broken-packages:
   - sqlvalue-list
   - sqsd-local
   - squeal-postgresql
+  - squeeze
   - sr-extra
   - srcinst
   - sscan
@@ -10181,6 +10207,7 @@ broken-packages:
   - stmcontrol
   - stochastic
   - StockholmAlignment
+  - stocks
   - Stomp
   - storable
   - storable-static-array
@@ -10362,8 +10389,8 @@ broken-packages:
   - table
   - table-tennis
   - tableaux
-  - tables
   - Tables
+  - tables
   - tablestorage
   - Tablify
   - tabloid
@@ -10633,8 +10660,8 @@ broken-packages:
   - tonatona-servant
   - too-many-cells
   - toodles
-  - top
   - Top
+  - top
   - topkata
   - torch
   - TORCS
@@ -10888,6 +10915,7 @@ broken-packages:
   - uploadcare
   - upskirt
   - urbit-airlock
+  - urbit-api
   - ureader
   - urembed
   - uri
@@ -11155,6 +11183,7 @@ broken-packages:
   - WEditor
   - WEditorBrick
   - WEditorHyphen
+  - weekdaze
   - weighted
   - weighted-regexp
   - welshy
@@ -11343,6 +11372,7 @@ broken-packages:
   - yam-datasource
   - yam-logger
   - yam-redis
+  - yam-servant
   - yam-transaction
   - yam-transaction-odbc
   - yam-web
@@ -11363,6 +11393,7 @@ broken-packages:
   - yaop
   - yap
   - yarn-lock
+  - yarn2nix
   - yarr
   - yarr-image-io
   - yavie
