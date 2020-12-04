@@ -1942,6 +1942,18 @@ let
     meta.homepage = "https://github.com/leanprover/lean.vim/";
   };
 
+  lens-vim = buildVimPluginFrom2Nix {
+    pname = "lens-vim";
+    version = "2020-04-24";
+    src = fetchFromGitHub {
+      owner = "camspiers";
+      repo = "lens.vim";
+      rev = "868b195be3cc3000d1d3f875ee0a52a11972e5b9";
+      sha256 = "0qpx84k52pz29rx6q0zh3qq4g3a1gyvyfcipx3kaw4lxlld6agd5";
+    };
+    meta.homepage = "https://github.com/camspiers/lens.vim/";
+  };
+
   lessspace-vim = buildVimPluginFrom2Nix {
     pname = "lessspace-vim";
     version = "2019-09-12";
