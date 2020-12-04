@@ -125,7 +125,7 @@ autoPatchelfFile() {
     # This ensures that we get the output of all missing dependencies instead
     # of failing at the first one, because it's more useful when working on a
     # new package where you don't yet know its dependencies.
-    local -i depNotFound=0
+    local depNotFound=0
 
     for dep in $missing; do
         echo -n "  $dep -> " >&2

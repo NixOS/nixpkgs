@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-      shellPath = "/bin/osh";
+    shellPath = "/bin/osh";
   };
 }

@@ -8621,7 +8621,19 @@ in
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
-  bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
+  burning-oil = pkgs.runCommand "bash-oil" {
+    passthru.shellPath = "/bin/bash";
+  } ''
+    mkdir -p $out/bin
+    cat <<PROG > $out/bin/bash
+    #!${oil}/bin/osh
+    exec ${oil}/bin/osh "\$@"
+    PROG
+    chmod +x "$out/bin/bash"
+    ln -s ${oil}/bin/osh $out/bin/sh
+  '';
+
+  bash = lowPrio (burning-oil);
   bash_5 = lowPrio (callPackage ../shells/bash/5.0.nix { });
   bashInteractive_5 = lowPrio (callPackage ../shells/bash/5.0.nix {
     interactive = true;
@@ -8629,10 +8641,7 @@ in
   });
 
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = callPackage ../shells/bash/4.4.nix {
-    interactive = true;
-    withDocs = true;
-  };
+  bashInteractive = burning-oil;
 
   bash-completion = callPackage ../shells/bash/bash-completion { };
 
