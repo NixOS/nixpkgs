@@ -538,14 +538,14 @@ let self = rec {
 
   vfs-libarchive = mkKodiABIPlugin rec {
     namespace = "vfs.libarchive";
-    version = "1.0.7";
+    version = "2.0.0";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "01qhv095h5j67ispm4iw18pd3kl7a0mnjkgm92al9qqiyif8lzgh";
+      sha256 = "1q62p1i6rvqk2zv6f1cpffkh95lgclys2xl4dwyhj3acmqdxd9i5";
     };
 
     meta = with lib; {
