@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dumb-init";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15hgl8rz5dmrl5gx21sq5269l1hq539qn68xghjx0bv9hgbx0g20";
+    sha256 = "1ws944y8gch6h7iqvznfwlh9hnmdn36aqh9w6cbc7am8vbyq0ffa";
   };
 
   buildInputs = [ glibc.static ];
