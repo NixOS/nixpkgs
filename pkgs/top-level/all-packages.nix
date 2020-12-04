@@ -870,6 +870,8 @@ in
 
   arduino = arduino-core.override { withGui = true; };
 
+  arduino-ci = callPackage ../development/arduino/arduino-ci { };
+
   arduino-cli = callPackage ../development/arduino/arduino-cli { };
 
   arduino-core = callPackage ../development/arduino/arduino-core { };
