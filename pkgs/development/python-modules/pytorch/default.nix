@@ -297,6 +297,6 @@ in buildPythonPackage rec {
     homepage    = "https://pytorch.org/";
     license     = lib.licenses.bsd3;
     platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    maintainers = with lib.maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
   };
 }
