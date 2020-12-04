@@ -16,6 +16,10 @@ buildGoModule rec {
 
   vendorSha256 = "1552k85z4s6gv7sss7dccv3h8x22j2sr12icp6s7s0a3i4iwyksw";
 
+  buildFlagsArray = ''
+    -ldflags=-s -w -X github.com/tomwright/dasel/internal.Version=${version}
+  '';
+
   meta = with stdenv.lib; {
     description = "Query and update data structures from the command line";
     longDescription = ''
