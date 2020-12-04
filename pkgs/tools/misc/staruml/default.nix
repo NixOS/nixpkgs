@@ -51,5 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "http://staruml.io/";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
+    # incorrectly packaged
+    broken = true;
   };
 }
