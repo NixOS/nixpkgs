@@ -2306,6 +2306,8 @@ in
 
   ifm = callPackage ../tools/graphics/ifm {};
 
+  ink = callPackage ../tools/misc/ink { };
+
   interlock = callPackage ../servers/interlock {};
 
   jellyfin = callPackage ../servers/jellyfin { };
