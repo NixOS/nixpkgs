@@ -1,6 +1,6 @@
 # Emacs {#sec-emacs}
 
-## Configuring Emacs
+## Configuring Emacs {#sec-emacs-config}
 
 The Emacs package comes with some extra helpers to make it easier to configure. `emacsWithPackages` allows you to manage packages from ELPA. This means that you will not have to install that packages from within Emacs. For instance, if you wanted to use `company` `counsel`, `flycheck`, `ivy`, `magit`, `projectile`, and `use-package` you could use this as a `~/.config/nixpkgs/config.nix` override:
 
