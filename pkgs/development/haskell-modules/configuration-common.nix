@@ -38,11 +38,6 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
-  # Some packages add this (non-existent) dependency to express that they
-  # cannot compile in a given configuration. Win32 does this, for example, when
-  # compiled on Linux. We provide the name to avoid evaluation errors.
-  unbuildable = throw "package depends on meta package 'unbuildable'";
-
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
   # $ hoogle server
