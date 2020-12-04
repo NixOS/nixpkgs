@@ -1,4 +1,4 @@
-/* Copyright 2020 Oliver Smith
+/* SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #ifndef PARTITION_QMLVIEWSTEP_H
 #define PARTITION_QMLVIEWSTEP_H
