@@ -391,13 +391,13 @@ let self = rec {
 
     plugin = "pvr-hdhomerun";
     namespace = "pvr.hdhomerun";
-    version = "3.5.0";
+    version = "7.1.0";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hdhomerun";
       rev = "${version}-${rel}";
-      sha256 = "1zrkvfn0im2qmvqm93pa3cg8xkxv61sxlj8nsz4r5z9v9nhqadf6";
+      sha256 = "0gbwjssnd319csq2kwlyjj1rskg19m1dxac5dl2dymvx5hn3zrgm";
     };
 
     meta = {
