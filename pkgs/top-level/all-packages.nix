@@ -14016,6 +14016,8 @@ in
 
   libinjection = callPackage ../development/libraries/libinjection { };
 
+  libinklevel = callPackage ../development/libraries/libinklevel { };
+
   libnats-c = callPackage ../development/libraries/libnats-c {
     openssl = openssl_1_0_2;
   };
