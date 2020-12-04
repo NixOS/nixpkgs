@@ -295,14 +295,14 @@ let self = rec {
 
   steam-controller = mkKodiABIPlugin rec {
     namespace = "peripheral.steamcontroller";
-    version = "0.10.0";
+    version = "0.11.0";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = namespace;
-      rev = "ea345392ab5aa4485f3a48d2037fa8a8e8ab82de";
-      sha256 = "1hbd8fdvn7xkr9csz1g9wah78nhnq1rkazl4zwa31y70830k3279";
+      rev = "f68140ca44f163a03d3a625d1f2005a6edef96cb";
+      sha256 = "09lm8i119xlsxxk0c64rnp8iw0crr90v7m8iwi9r31qdmxrdxpmg";
     };
 
     extraBuildInputs = [ libusb1 ];
