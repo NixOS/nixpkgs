@@ -1,0 +1,92 @@
+/*
+
+A branding component can ship a stylesheet (like this one)
+which is applied to parts of the Calamares user-interface.
+In principle, all parts can be styled through CSS.
+Missing parts should be filed as issues.
+
+The IDs are based on the object names in the C++ code.
+You can use the Debug Dialog to find out object names:
+  - Open the debug dialog
+  - Choose tab *Tools*
+  - Click *Widget Tree* button
+The list of object names is printed in the log.
+
+Documentation for styling Qt Widgets through a stylesheet
+can be found at
+    https://doc.qt.io/qt-5/stylesheet-examples.html
+    https://doc.qt.io/qt-5/stylesheet-reference.html
+In Calamares, styling widget classes is supported (e.g.
+using `QComboBox` as a selector).
+
+This example stylesheet has all the actual styling commented out.
+The examples are not exhaustive.
+
+*/
+
+/*** Generic Widgets.
+ *
+ * You can style **all** widgets of a given class by selecting
+ * the class name. Some widgets have specialized sub-selectors.
+ */
+
+/*
+QPushButton { background-color: green; }
+*/
+
+/*** Main application window.
+ *
+ * The main application window has the sidebar, which in turn
+ * contains a logo and a list of items -- note that the list
+ * can **not** be styled, since it has its own custom C++
+ * delegate code.
+ */
+
+/*
+#mainApp { }
+#sidebarApp { }
+#logoApp { }
+*/
+
+/*** Welcome module.
+ *
+ * There are plenty of parts, but the buttons are the most interesting
+ * ones (donate, release notes, ...). The little icon image can be
+ * styled through *qproperty-icon*, which is a little obscure.
+ * URLs can reference the QRC paths of the Calamares application
+ * or loaded via plugins or within the filesystem. There is no
+ * comprehensive list of available icons, though.
+ */
+
+/*
+QPushButton#aboutButton { qproperty-icon: url(:/data/images/release.svg); }
+#donateButton,
+#supportButton,
+#releaseNotesButton,
+#knownIssuesButton { qproperty-icon: url(:/data/images/help.svg); }
+*/
+
+/*** Partitioning module.
+ *
+ * Many moving parts, which you will need to experiment with.
+ */
+
+/*
+#bootInfoIcon { }
+#bootInfoLable { }
+#deviceInfoIcon { }
+#defineInfoLabel { }
+#scrollAreaWidgetContents { }
+#partitionBarView { }
+*/
+
+/*** Licensing module.
+ *
+ * The licensing module paints individual widgets for each of
+ * the licenses. The item can be collapsed or expanded.
+ */
+
+/*
+#licenseItem {  }
+#licenseItemFullText {  }
+*/

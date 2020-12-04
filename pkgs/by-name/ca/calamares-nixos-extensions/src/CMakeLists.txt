@@ -35,6 +35,7 @@ find_package(Calamares 3.2.26 REQUIRED)
 # the (single) branding for your distro.
 #
 calamares_add_branding_subdirectory( branding/default NAME default )
+calamares_add_branding_subdirectory( branding/default-mobile NAME default-mobile )
 calamares_add_branding_subdirectory( branding/fancy NAME fancy )
 
 # This one has files in subdirectories
@@ -54,6 +55,7 @@ set(SKIPPED_MODULES "")
 
 calamares_add_module_subdirectory( modules/filekeeper )  # C++ job
 calamares_add_module_subdirectory( modules/freebsddisk )  # C++ viewmodule
+calamares_add_module_subdirectory( modules/mobile )
 calamares_add_module_subdirectory( modules/slowpython )  # Python job
 
 # If modules cannot be built, they usually call a macro

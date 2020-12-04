@@ -1,0 +1,17 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>mobile.qml</file>
+
+  <file>welcome.qml</file>
+
+  <file>default_pin.qml</file> <!-- default user: pin -->
+  <file>ssh_confirm.qml</file> <!-- sshd: enable or not? -->
+  <file>ssh_credentials.qml</file> <!-- sshd user: username, password -->
+
+  <file>fde_confirm.qml</file> <!-- enable FDE or not? -->
+  <file>fde_pass.qml</file> <!-- FDE password (optional) -->
+  <file>install_confirm.qml</file> <!-- final confirmation before install -->
+
+  <file>wait.qml</file> <!-- please wait while partitioning -->
+</qresource>
+</RCC>
