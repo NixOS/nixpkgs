@@ -29,6 +29,8 @@ project(calamares-branding LANGUAGES CXX)
 
 find_package(Calamares 3.2.26 REQUIRED)
 
+find_package(YAMLCPP REQUIRED)
+
 ### BRANDING
 #
 # Typically you would use only one branding, since that's
