@@ -22290,6 +22290,8 @@ in
 
   j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop { };
 
+  jabba = recurseIntoAttrs (callPackages ../development/compilers/jabba/default.nix { });
+
   jabcode = callPackage ../development/libraries/jabcode { };
 
   jabcode-writer = callPackage ../development/libraries/jabcode {
