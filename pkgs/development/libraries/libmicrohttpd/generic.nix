@@ -1,13 +1,8 @@
-{ stdenv, fetchurl, libgcrypt, curl, gnutls, pkgconfig, libiconv, libintl }:
+{ stdenv, libgcrypt, curl, gnutls, pkgconfig, libiconv, libintl, version, src }:
 
 stdenv.mkDerivation rec {
   pname = "libmicrohttpd";
-  version = "0.9.71";
-
-  src = fetchurl {
-    url = "mirror://gnu/libmicrohttpd/${pname}-${version}.tar.gz";
-    sha256 = "10mii4mifmfs3v7kgciqml7f0fj7ljp0sngrx64pnwmgbzl4bx78";
-  };
+  inherit version src;
 
   outputs = [ "out" "dev" "devdoc" "info" ];
   nativeBuildInputs = [ pkgconfig ];
