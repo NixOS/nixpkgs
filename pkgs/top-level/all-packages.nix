@@ -6795,6 +6795,8 @@ in
 
   qtikz = libsForQt514.callPackage ../applications/graphics/ktikz { };
 
+  quickfix = callPackage ../development/libraries/quickfix { };
+
   quickjs = callPackage ../development/interpreters/quickjs { };
 
   quickserve = callPackage ../tools/networking/quickserve { };
