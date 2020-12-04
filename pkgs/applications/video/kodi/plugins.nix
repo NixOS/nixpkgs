@@ -224,14 +224,14 @@ let self = rec {
 
   joystick = mkKodiABIPlugin rec {
     namespace = "peripheral.joystick";
-    version = "1.4.7";
+    version = "1.7.1";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
-      rev = "v${version}";
-      sha256 = "03gsp4kg41s3n4ib4wsv7m3krfipgwc2z07i4mnd5zvg0c4xrmap";
+      rev = "${version}-${rel}";
+      sha256 = "1dhj4afr9kj938xx70fq5r409mz6lbw4n581ljvdjj9lq7akc914";
     };
 
     meta = {
@@ -240,7 +240,7 @@ let self = rec {
       maintainers = with maintainers; [ edwtjo ];
     };
 
-    extraBuildInputs = [ udev ];
+    extraBuildInputs = [ tinyxml udev ];
   };
 
   simpleplugin = mkKodiPlugin rec {
