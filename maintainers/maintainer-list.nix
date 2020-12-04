@@ -7749,6 +7749,12 @@
     github = "s1341";
     githubId = 5682183;
   };
+  samb96 = {
+    email = "samb96@gmail.com";
+    github = "samb96";
+    githubId = 819426;
+    name = "Sam Bickley";
+  };
   samdoshi = {
     email = "sam@metal-fish.co.uk";
     github = "samdoshi";
