@@ -10,12 +10,12 @@
 
   - You can make branch from a commit of your local `nixos-version`. That will help you to avoid additional local compilations. Because you will receive packages from binary cache. For example
 
-  ```ShellSession
-  $ nixos-version --hash
-  0998212
-  $ git checkout 0998212
-  $ git checkout -b 'fix/pkg-name-update'
-  ```
+    ```ShellSession
+    $ nixos-version --hash
+    0998212
+    $ git checkout 0998212
+    $ git checkout -b 'fix/pkg-name-update'
+    ```
 
   - Please avoid working directly on the `master` branch.
 
@@ -42,25 +42,17 @@
 
   - nixpkgs:
 
-    - update pkg -\>
-
+    - update pkg
       - `nix-env -i pkg-name -f <path to your local nixpkgs folder>`
-
-    - add pkg -\>
-
-      - Make sure it\'s in `pkgs/top-level/all-packages.nix`
-
+    - add pkg
+      - Make sure it’s in `pkgs/top-level/all-packages.nix`
       - `nix-env -i pkg-name -f <path to your local nixpkgs folder>`
-
-    - _If you don\'t want to install pkg in you profile_.
-
+    - _If you don’t want to install pkg in you profile_.
       - `nix-build -A pkg-attribute-name <path to your local nixpkgs folder>/default.nix` and check results in the folder `result`. It will appear in the same directory where you did `nix-build`.
-
     - If you did `nix-env -i pkg-name` you can do `nix-env -e pkg-name` to uninstall it from your system.
 
   - NixOS and its modules:
-
-    - You can add new module to your NixOS configuration file (usually it\'s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
+    - You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
 
 - If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
 
@@ -69,9 +61,7 @@
 ## Submitting changes {#submitting-changes-submitting-changes}
 
 - Push your changes to your fork of nixpkgs.
-
 - Create the pull request
-
 - Follow [the contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md#submitting-changes).
 
 ## Submitting security fixes {#submitting-changes-submitting-security-fixes}
@@ -120,15 +110,15 @@ Depending if you use NixOS or other platforms you can use one of the following m
 
 ### Built on platform(s) {#submitting-changes-platform-diversity}
 
-Many Nix packages are designed to run on multiple platforms. As such, it\'s important to let the maintainer know which platforms your changes have been tested on. It\'s not always practical to test a change on all platforms, and is not required for a pull request to be merged. Only check the systems you tested the build on in this section.
+Many Nix packages are designed to run on multiple platforms. As such, it’s important to let the maintainer know which platforms your changes have been tested on. It’s not always practical to test a change on all platforms, and is not required for a pull request to be merged. Only check the systems you tested the build on in this section.
 
 ### Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests) {#submitting-changes-nixos-tests}
 
-Packages with automated tests are much more likely to be merged in a timely fashion because it doesn\'t require as much manual testing by the maintainer to verify the functionality of the package. If there are existing tests for the package, they should be run to verify your changes do not break the tests. Tests only apply to packages with NixOS modules defined and can only be run on Linux. For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
+Packages with automated tests are much more likely to be merged in a timely fashion because it doesn’t require as much manual testing by the maintainer to verify the functionality of the package. If there are existing tests for the package, they should be run to verify your changes do not break the tests. Tests only apply to packages with NixOS modules defined and can only be run on Linux. For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
 
 ### Tested compilation of all pkgs that depend on this change using `nixpkgs-review` {#submitting-changes-tested-compilation}
 
-If you are updating a package\'s version, you can use nixpkgs-review to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommited changes with the `wip` option or specifying a github pull request number.
+If you are updating a package’s version, you can use nixpkgs-review to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommited changes with the `wip` option or specifying a github pull request number.
 
 review changes from pull request number 12345:
 
@@ -150,7 +140,7 @@ nix run nixpkgs.nixpkgs-review -c nixpkgs-review rev HEAD
 
 ### Tested execution of all binary files (usually in `./result/bin/`) {#submitting-changes-tested-execution}
 
-It\'s important to test any executables generated by a build when you change or create a package in nixpkgs. This can be done by looking in `./result/bin` and running any files in there, or at a minimum, the main executable for the package. For example, if you make a change to texlive, you probably would only check the binaries associated with the change you made rather than testing all of them.
+It’s important to test any executables generated by a build when you change or create a package in nixpkgs. This can be done by looking in `./result/bin` and running any files in there, or at a minimum, the main executable for the package. For example, if you make a change to texlive, you probably would only check the binaries associated with the change you made rather than testing all of them.
 
 ### Meets Nixpkgs contribution standards {#submitting-changes-contribution-standards}
 
@@ -159,20 +149,15 @@ The last checkbox is fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blo
 ## Hotfixing pull requests {#submitting-changes-hotfixing-pull-requests}
 
 - Make the appropriate changes in you branch.
-
-- Don\'t create additional commits, do
-
+- Don’t create additional commits, do
   - `git rebase -i`
-
   - `git push --force` to your branch.
 
 ## Commit policy {#submitting-changes-commit-policy}
 
 - Commits must be sufficiently tested before being merged, both for the master and staging branches.
-
-- Hydra builds for master and staging should not be used as testing platform, it\'s a build farm for changes that have been already tested.
-
-- When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people\'s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
+- Hydra builds for master and staging should not be used as testing platform, it’s a build farm for changes that have been already tested.
+- When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
 
 ### Master branch {#submitting-changes-master-branch}
 
@@ -190,7 +175,7 @@ If the branch is already in a broken state, please refrain from adding extra new
 
 ### Stable release branches {#submitting-changes-stable-release-branches}
 
-For cherry-picking a commit to a stable release branch ("backporting"), use `git cherry-pick -x <original commit>` so that the original commit id is included in the commit.
+For cherry-picking a commit to a stable release branch (“backporting”), use `git cherry-pick -x <original commit>` so that the original commit id is included in the commit.
 
 Add a reason for the backport by using `git cherry-pick -xe <original commit>` instead when it is not obvious from the original commit message. It is not needed when it's a minor version update that includes security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
 
