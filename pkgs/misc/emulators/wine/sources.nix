@@ -44,32 +44,25 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "5.22";
-    url = "https://dl.winehq.org/wine/source/5.x/wine-${version}.tar.xz";
-    sha256 = "sha256-Cb0GyHyMl05q00UHzsh11yF+tW/Anfg41UU+DrvOTSE=";
+    version = "6.0-rc1";
+    url = "https://dl.winehq.org/wine/source/6.0/wine-${version}.tar.xz";
+    sha256 = "sha256-eN3JSPlGxmJ3m9WUPZGBJ0BIACG8lRy8resQLDi1O8g=";
     inherit (stable) mono gecko32 gecko64;
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-
-      # Hotfix picked from master for https://bugs.winehq.org/show_bug.cgi?id=50163
-      (pkgs.fetchpatch {
-        url = "https://bugs.winehq.org/attachment.cgi?id=68680";
-        sha256 = "sha256-GTPQhRWeu6DPadqgFiuVUjI6MzJPaTN4l//8DSG6hpo=";
-      })
      ];
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "sha256-HzAKLPlybO1lrkHo4Q1Y9H0vmjiqo9HiT05TcX08Ubk=";
+    sha256 = "sha256-wAvH2BV/j3PbrLYoALVj5YG0VO15ySRodSs2w70YcIs=";
     owner = "wine-staging";
     repo = "wine-staging";
-    #rev = "v${version}"; # revert back to this statement on next release
-    # Include hotfix for https://bugs.winehq.org/show_bug.cgi?id=50162
-    rev = "f257f37b92041fc718de04aa83ec3139b748ffa2";
+    # rev = "v${version}"; # revert back to this statement after stable release
+    rev = "v6.0rc1";
 
     # Just keep list empty, if current release haven't broken patchsets
     disabledPatchsets = [ ];
