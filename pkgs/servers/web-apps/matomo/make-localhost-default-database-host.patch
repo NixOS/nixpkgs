@@ -3,8 +3,8 @@ index 74de2535b4..bc172ad0eb 100644
 --- a/plugins/Installation/FormDatabaseSetup.php
 +++ b/plugins/Installation/FormDatabaseSetup.php
 @@ -82,7 +82,7 @@ class FormDatabaseSetup extends QuickForm2
- 
- 
+
+
          $defaults = array(
 -            'host'          => '127.0.0.1',
 +            'host'          => 'localhost',
