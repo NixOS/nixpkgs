@@ -28752,4 +28752,10 @@ in
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
+
+  wayfire = callPackage ../applications/window-managers/wayfire {};
+  wf-shell = callPackage ../applications/window-managers/wayfire/shell.nix {};
+  wcm = callPackage ../applications/window-managers/wayfire/wcm.nix {};
+  # wayfire-plugins-extra = callPackage ../applications/window-managers/wayfire/plugins.nix {};
+
 }

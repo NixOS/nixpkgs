@@ -10106,4 +10106,9 @@
     github = "zupo";
     githubId = 311580;
   };
+  ishan = {
+    name = "Ishan Agarwal";
+    email = "ishan365.ia@gmail.com";
+    github = "ishan9299";
+    githubId = 47824004;
 }

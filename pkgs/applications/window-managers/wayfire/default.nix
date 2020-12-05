@@ -11,15 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "wayfire";
-  version = "0.6.0";
+  version = "8aa8260972edaba6d237e1a61217a4d2303edc3e";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
     rev = version;
-    sha256 = "0000000000000000000000000000000000000000000000000000";
+    sha256 = "sha256-r9k8e0LCDxr8tEZvcBbkvZ2RqcKXYX+/fxalKoqT15U=";
     fetchSubmodules = true;
   };
 
