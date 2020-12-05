@@ -5414,6 +5414,8 @@ in {
 
   pypubsub = callPackage ../development/python-modules/pypubsub { };
 
+  pypugjs = callPackage ../development/python-modules/pypugjs { };
+
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { inherit (pkgs) pkgconfig; };
