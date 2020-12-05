@@ -16,19 +16,15 @@ class Config : public QObject
 
     /* default user */
     Q_PROPERTY( QString username READ username CONSTANT FINAL )
-    Q_PROPERTY( QString userPassword READ userPassword WRITE setUserPassword
-                NOTIFY userPasswordChanged)
+    Q_PROPERTY( QString userPassword READ userPassword WRITE setUserPassword NOTIFY userPasswordChanged )
 
     /* ssh server + credentials */
-    Q_PROPERTY( QString sshdUsername READ sshdUsername WRITE setSshdUsername
-                NOTIFY sshdUsernameChanged)
-    Q_PROPERTY( QString sshdPassword READ sshdPassword WRITE setSshdPassword
-                NOTIFY sshdPasswordChanged)
+    Q_PROPERTY( QString sshdUsername READ sshdUsername WRITE setSshdUsername NOTIFY sshdUsernameChanged )
+    Q_PROPERTY( QString sshdPassword READ sshdPassword WRITE setSshdPassword NOTIFY sshdPasswordChanged )
     Q_PROPERTY( bool isSshEnabled READ isSshEnabled WRITE setIsSshEnabled )
 
     /* full disk encryption */
-    Q_PROPERTY( QString fdePassword READ fdePassword WRITE setFdePassword
-                NOTIFY fdePasswordChanged)
+    Q_PROPERTY( QString fdePassword READ fdePassword WRITE setFdePassword NOTIFY fdePasswordChanged )
     Q_PROPERTY( bool isFdeEnabled READ isFdeEnabled WRITE setIsFdeEnabled )
 
     /* partition job */
@@ -56,20 +52,20 @@ public:
     /* default user */
     QString username() const { return m_username; }
     QString userPassword() const { return m_userPassword; }
-    void setUserPassword( const QString &userPassword );
+    void setUserPassword( const QString& userPassword );
 
     /* ssh server + credetials */
     QString sshdUsername() const { return m_sshdUsername; }
     QString sshdPassword() const { return m_sshdPassword; }
     bool isSshEnabled() { return m_isSshEnabled; }
-    void setSshdUsername( const QString &sshdUsername );
-    void setSshdPassword( const QString &sshdPassword );
+    void setSshdUsername( const QString& sshdUsername );
+    void setSshdPassword( const QString& sshdPassword );
     void setIsSshEnabled( bool isSshEnabled );
 
     /* full disk encryption */
     QString fdePassword() const { return m_fdePassword; }
     bool isFdeEnabled() { return m_isFdeEnabled; }
-    void setFdePassword( const QString &fdePassword );
+    void setFdePassword( const QString& fdePassword );
     void setIsFdeEnabled( bool isFdeEnabled );
 
     /* partition job */
@@ -121,13 +117,13 @@ private:
 
 signals:
     /* default user */
-    void userPasswordChanged ( QString userPassword );
+    void userPasswordChanged( QString userPassword );
 
     /* ssh server + credetials */
-    void sshdUsernameChanged ( QString sshdUsername );
-    void sshdPasswordChanged ( QString sshdPassword );
+    void sshdUsernameChanged( QString sshdUsername );
+    void sshdPasswordChanged( QString sshdPassword );
     /* isSshEnabled doesn't need a signal, we don't read it from QML */
 
     /* full disk encryption */
-    void fdePasswordChanged ( QString fdePassword );
+    void fdePasswordChanged( QString fdePassword );
 };

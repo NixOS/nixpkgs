@@ -47,13 +47,13 @@ MobileQmlViewStep::onLeave()
                                   m_config->fdePassword() );
     Calamares::JobResult res = partition->exec();
     if ( !res )
+    {
         cError() << "PARTITION JOB FAILED: " << res.message();
+    }
 
     /* Put users job in queue (should run after unpackfs) */
     m_jobs.clear();
-    QString cmdSshd = m_config->isSshEnabled()
-        ? m_config->cmdSshdEnable()
-        : m_config->cmdSshdDisable();
+    QString cmdSshd = m_config->isSshEnabled() ? m_config->cmdSshdEnable() : m_config->cmdSshdDisable();
     users = new UsersJob( m_config->cmdPasswd(),
                           cmdSshd,
                           m_config->cmdSshdUseradd(),

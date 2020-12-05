@@ -8,10 +8,14 @@ class UsersJob : public Calamares::Job
 {
     Q_OBJECT
 public:
-    UsersJob( QString cmdPasswd, QString cmdSshd, QString cmdSshdUseradd,
+    UsersJob( QString cmdPasswd,
+              QString cmdSshd,
+              QString cmdSshdUseradd,
               bool isSshEnabled,
-              QString username, QString password,
-              QString sshdUsername, QString sshdPassword );
+              QString username,
+              QString password,
+              QString sshdUsername,
+              QString sshdPassword );
 
     QString prettyName() const override;
     Calamares::JobResult exec() override;
