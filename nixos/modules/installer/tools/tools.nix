@@ -170,8 +170,8 @@ in
         # List packages installed in system profile. To search, run:
         # \$ nix search wget
         # environment.systemPackages = with pkgs; [
-        #   nano # don't forget to add an editor to edit configuration.nix!
-        #   wget vim
+        #   nano vim # don't forget to add an editor to edit configuration.nix!
+        #   wget
         #   firefox
         # ];
 
