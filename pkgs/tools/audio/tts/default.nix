@@ -61,6 +61,18 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/mozilla/TTS/commit/36fee428b9f3f4ec1914b090a2ec9d785314d9aa.patch";
       sha256 = "sha256-pP0NxiyrsvQ0A7GEleTdT87XO08o7WxPEpb6Bmj66dc=";
     })
+    (fetchpatch {
+      url = "https://github.com/Mic92/TTS/commit/5bf62009e8c19e8c1627d1f7aa54e11bc5fa91d7.patch";
+      sha256 = "sha256-ZxDytieD0zoP0/RXzG0bbVnl0oE+DF8iUVpHb8+2TqM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/mozilla/TTS/commit/3000647e542fce9773f4c5da082630befa5525f1.patch";
+      sha256 = "sha256-dl8Zy0dEw9z4ZZFcuP1WHzCVh2+nn0jDKOncoCK+syM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/mozilla/TTS/commit/fe86a076bb1c7e18078718be0aa36da427f325bd.patch";
+      sha256 = "sha256-cT5HYkLFzmSMwAHLOHgpG+v9HGKIbUxwS8Dt9SKHm+8=";
+    })
   ];
 
   preBuild = ''
