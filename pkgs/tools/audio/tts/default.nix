@@ -107,6 +107,7 @@ python3Packages.buildPythonApplication rec {
     inflect
     gdown
     pysbd
+    pyworld
   ];
 
   postInstall = ''
