@@ -6378,6 +6378,8 @@ in
 
   pandoc = callPackage ../development/tools/pandoc { };
 
+  pandoc-lua-filters = callPackage ../tools/misc/pandoc-lua-filters { };
+
   pamtester = callPackage ../tools/security/pamtester { };
 
   paperless = callPackage ../applications/office/paperless { };
