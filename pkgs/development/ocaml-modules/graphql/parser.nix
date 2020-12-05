@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "graphql_parser";
   version = "0.13.0";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {
@@ -14,7 +16,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ fmt re ];
 
-  checkInputs = lib.optional doCheck alcotest;
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 
