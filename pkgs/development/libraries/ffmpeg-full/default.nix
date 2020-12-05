@@ -164,9 +164,8 @@
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
- *   frei0r game-music-emu gsm libjack2 libmfx(intel-media-sdk) libssh
- *   libvpx(stable 1.3.0) openal openjpeg pulseaudio rtmpdump samba vid-stab
- *   wavpack x265 xavs
+ *   gsm libjack2 libmodplug libmfx(intel-media-sdk) nvenc pulseaudio samba
+ *   vid-stab
  *
  * Need fixes to support AArch64:
  *   libmfx(intel-media-sdk) nvenc
