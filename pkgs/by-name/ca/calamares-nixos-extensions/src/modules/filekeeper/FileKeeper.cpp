@@ -18,12 +18,12 @@
 
 #include "FileKeeper.h"
 
-#include <QProcess>
 #include <QDateTime>
+#include <QProcess>
 #include <QThread>
 
-#include <JobQueue.h>
 #include <GlobalStorage.h>
+#include <JobQueue.h>
 
 #include <utils/Logger.h>
 
@@ -33,9 +33,7 @@ FileKeeperJob::FileKeeperJob( QObject* parent )
 }
 
 
-FileKeeperJob::~FileKeeperJob()
-{
-}
+FileKeeperJob::~FileKeeperJob() {}
 
 
 QString
@@ -57,4 +55,4 @@ FileKeeperJob::setConfigurationMap( const QVariantMap& configurationMap )
     Q_UNUSED( configurationMap );
 }
 
-CALAMARES_PLUGIN_FACTORY_DEFINITION( FileKeeperJobFactory, registerPlugin<FileKeeperJob>(); )
+CALAMARES_PLUGIN_FACTORY_DEFINITION( FileKeeperJobFactory, registerPlugin< FileKeeperJob >(); )
