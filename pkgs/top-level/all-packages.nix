@@ -20299,6 +20299,8 @@ in
 
   sweet = callPackage ../data/themes/sweet { };
 
+  symbiflow-arch-defs = callPackage ../data/misc/symbiflow-arch-defs { };
+
   mime-types = callPackage ../data/misc/mime-types { };
 
   shared-mime-info = callPackage ../data/misc/shared-mime-info { };
