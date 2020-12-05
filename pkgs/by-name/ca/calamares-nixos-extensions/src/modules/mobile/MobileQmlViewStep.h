@@ -27,7 +27,7 @@ public:
     Calamares::JobList jobs() const override;
 
     void setConfigurationMap( const QVariantMap& configurationMap ) override;
-    void onLeave();
+    void onLeave() override;
     QObject* getConfig() override;
 
 private:
