@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper }:
+{ stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper, nixosTests }:
 
 with stdenv.lib;
 
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/navidrome \
       --prefix PATH : ${makeBinPath (optional ffmpegSupport ffmpeg)}
   '';
+
+  passthru.tests.navidrome = nixosTests.navidrome;
 
   meta = {
     description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
