@@ -28279,7 +28279,7 @@ in
 
   vttest = callPackage ../tools/misc/vttest { };
 
-  wacomtablet = libsForQt514.callPackage ../tools/misc/wacomtablet { };
+  wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
   wasmer = callPackage ../development/interpreters/wasmer { };
 
