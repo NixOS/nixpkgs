@@ -1,5 +1,5 @@
 {
-  mkDerivation, extra-cmake-modules, shared-mime-info,
+  mkDerivation, lib, extra-cmake-modules, shared-mime-info,
   qtbase, qtdeclarative, bluez-qt,
   kcoreaddons, kdbusaddons, kded, ki18n, kiconthemes, kio, knotifications,
   kwidgetsaddons, kwindowsystem, plasma-framework
