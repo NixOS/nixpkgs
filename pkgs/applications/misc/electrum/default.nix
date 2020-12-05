@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "4.0.5";
+  version = "4.0.6";
 
   # electrum is not compatible with dnspython 2.0.0 yet
   # use the latest 1.x release instead
@@ -43,7 +43,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "0fdsgxzgsxvx6hhjag894nzzdfq989bx1d4anljzcz2ppy4ivpxg";
+    sha256 = "0mdbg2sq56nv0hx0rrcbgrv1lv89nqc6cqigivgk665hhjm4v5kq";
 
     extraPostFetch = ''
       mv $out ./all
@@ -58,7 +58,7 @@ py.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "06ml9lwa5k2dp56sm5s7dsl6qirqmgim7rn853cqcq9n45z41437";
+    sha256 = "0sp8p720g3rqnh52ddhaw2v4hjgpxcwbackw9qc1g9xac1q0942d";
   };
 
   postUnpack = ''
