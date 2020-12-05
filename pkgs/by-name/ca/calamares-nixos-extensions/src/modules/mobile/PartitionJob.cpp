@@ -76,20 +76,20 @@ PartitionJob::exec()
     QString dev = m_targetDeviceRoot;
 
     QList< QPair<const QStringList, const QString> > commands = {
-        {{"mkdir", "-p", pathMount}, nullptr},
+        {{"mkdir", "-p", pathMount}, QString()},
     };
 
     if ( m_isFdeEnabled ) {
         commands.append({
             {{"sh", "-c", m_cmdLuksFormat + " " + dev}, passwordStdin},
             {{"sh", "-c", m_cmdLuksOpen + " " + dev + " " + cryptName}, passwordStdin},
-            {{"sh", "-c", m_cmdMkfsRoot + " " + cryptDev}, nullptr},
-            {{"sh", "-c", m_cmdMount + " " + cryptDev + " " + pathMount}, nullptr},
+            {{"sh", "-c", m_cmdMkfsRoot + " " + cryptDev}, QString()},
+            {{"sh", "-c", m_cmdMount + " " + cryptDev + " " + pathMount}, QString()},
         });
     } else {
         commands.append({
-            {{"sh", "-c", m_cmdMkfsRoot + " " + dev}, nullptr},
-            {{"sh", "-c", m_cmdMount + " " + dev + " " + pathMount}, nullptr}
+            {{"sh", "-c", m_cmdMkfsRoot + " " + dev}, QString()},
+            {{"sh", "-c", m_cmdMount + " " + dev + " " + pathMount}, QString()}
         });
     }
 
