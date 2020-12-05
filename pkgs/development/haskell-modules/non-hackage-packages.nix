@@ -7,9 +7,6 @@
 # files.
 self: super: {
 
-  multi-ghc-travis = throw ("haskellPackages.multi-ghc-travis has been renamed"
-    + " to haskell-ci, which is now on hackage");
-
   dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 
   # https://github.com/channable/vaultenv/issues/1
