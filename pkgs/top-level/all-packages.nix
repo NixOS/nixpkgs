@@ -3011,6 +3011,8 @@ in
     inherit (xorg) libXaw;
   };
 
+  netevent = callPackage ../tools/inputmethods/netevent { };
+
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
