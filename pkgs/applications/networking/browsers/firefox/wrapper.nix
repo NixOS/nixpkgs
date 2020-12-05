@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
-, replace, fetchurl, zip, unzip, jq
+, replace, fetchurl, zip, unzip, jq, writeTextFile
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
@@ -97,17 +97,26 @@ let
       #   EXTRA PREF CHANGES  #
       #                       #
       #########################
-      policiesJson = builtins.toFile "policies.json"
-        (builtins.toJSON enterprisePolicies);
+      policiesJson = writeTextFile {
+        name = "policies.json";
+        text = (builtins.toJSON enterprisePolicies);
+      };
 
       usesNixExtensions = nixExtensions != null;
 
-      extensions = builtins.map (a:
+      nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
+
+      extensions = if nameArray != (lib.unique nameArray) then
+        throw "Firefox addon name needs to be unique"
+      else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
         else
         a
       ) (if usesNixExtensions then nixExtensions else []);
+
+      # Check that every extension has a unqiue .name attribute
+      checkUnique = if extensions != (lib.unique extensions) then throw "Firefox extension names have to be unique" else {};
 
       enterprisePolicies =
       {
@@ -128,7 +137,14 @@ let
                 };
               }
             ) {} extensions;
-        }
+          } //
+          {
+            Extensions = {
+              Install = lib.foldr (e: ret:
+                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+                ) [] extensions;
+            };
+          }
         // extraPolicies;
       };
 
@@ -176,10 +192,10 @@ let
 
 
       buildCommand = lib.optionalString stdenv.isDarwin ''
-        mkdir -p $out/Applications
-        cp -R --no-preserve=mode,ownership ${browser}/Applications/${browserName}.app $out/Applications
-        rm -f $out${browser.execdir or "/bin"}/${browserName}
-      '' + ''
+          mkdir -p $out/Applications
+          cp -R --no-preserve=mode,ownership ${browser}/Applications/${browserName}.app $out/Applications
+          rm -f $out${browser.execdir or "/bin"}/${browserName}
+        '' + ''
         if [ ! -x "${browser}${browser.execdir or "/bin"}/${browserName}" ]
         then
             echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
@@ -319,18 +335,16 @@ let
         # preparing for autoconfig
         mkdir -p "$out/lib/${firefoxLibName}/defaults/pref"
 
-        cat > "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js" <<EOF
-          pref("general.config.filename", "mozilla.cfg");
-          pref("general.config.obscure_value", 0);
-        EOF
+        echo 'pref("general.config.filename", "mozilla.cfg");' >> "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
+        echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
 
         cat > "$out/lib/${firefoxLibName}/mozilla.cfg" < ${mozillaCfg}
 
         mkdir -p $out/lib/${firefoxLibName}/distribution/extensions
 
-        for i in ${toString extensions}; do
-          ln -s -t $out/lib/${firefoxLibName}/distribution/extensions $i/*
-        done
+        # for i in ${toString extensions}; do
+        #   ln -s -t $out/lib/${firefoxLibName}/distribution/extensions $i/*
+        # done
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
