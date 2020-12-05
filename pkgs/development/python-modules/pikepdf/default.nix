@@ -1,6 +1,5 @@
 { attrs
 , buildPythonPackage
-, defusedxml
 , fetchPypi
 , hypothesis
 , isPy3k
@@ -12,8 +11,11 @@
 , pytest-timeout
 , pytest_xdist
 , pytestrunner
+, pytestcov
 , python-xmp-toolkit
 , python3
+, wheel
+, python-dateutil
 , qpdf
 , setuptools-scm-git-archive
 , setuptools_scm
@@ -22,13 +24,22 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "1.18.0";
+  version = "2.2.0";
   disabled = ! isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d0840a5c16b535f9b6e56fb4421a43f88760e6cabcf7fd44bdd0436107b61dc";
+    sha256 = "dDAKMsQbPVeHcvaTPyOoixn3RIQYXnHlIlzi9+pa6ng=";
   };
+
+  # We are not sure why these deps are pinned in setup.py, but it seems pikepdf
+  # works without them updated. https://github.com/NixOS/nixpkgs/issues/105974
+  # is where the update to wheel is tracked. Should be removed at some point
+  # since wheel is updated in staging
+  preConfigure = ''
+    sed -i 's/wheel >= 0.35/wheel/g' setup.py
+    sed -i 's/setuptools >= 50/setuptools/g' setup.py
+  '';
 
   buildInputs = [
     pybind11
@@ -38,6 +49,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm-git-archive
     setuptools_scm
+    wheel
   ];
 
   checkInputs = [
@@ -47,12 +59,13 @@ buildPythonPackage rec {
     pytest
     pytest-helpers-namespace
     pytest-timeout
+    pytestcov
     pytest_xdist
     pytestrunner
     python-xmp-toolkit
   ];
 
-  propagatedBuildInputs = [ defusedxml lxml ];
+  propagatedBuildInputs = [ python-dateutil lxml ];
 
   postPatch = ''
     sed -i \
