@@ -1,4 +1,4 @@
-{stdenvNoCC, git, cacert}: let
+{stdenvNoCC, git, git-lfs, cacert}: let
   urlToName = url: rev: let
     inherit (stdenvNoCC.lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
@@ -20,6 +20,7 @@ in
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
 , preferLocalBuild ? true
+, fetchLFS ? false
 }:
 
 /* NOTE:
@@ -53,13 +54,15 @@ stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
-  nativeBuildInputs = [git];
+
+  nativeBuildInputs = [ git ]
+    ++ stdenvNoCC.lib.optionals fetchLFS [ git-lfs ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  inherit url rev leaveDotGit fetchSubmodules deepClone branchName postFetch;
+  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
