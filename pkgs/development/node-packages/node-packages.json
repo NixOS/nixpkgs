@@ -79,6 +79,7 @@
 , "expo-cli"
 , {"fast-cli": "1.x"}
 , "fauna-shell"
+, "fixjson"
 , "fkill-cli"
 , "flood"
 , "forever"
