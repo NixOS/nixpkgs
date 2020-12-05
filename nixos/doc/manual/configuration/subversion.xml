@@ -36,9 +36,9 @@
 
     <para>
 <programlisting>
-  services.httpd.enable = true;
-  services.httpd.adminAddr = ...;
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+services.httpd.enable = true;
+services.httpd.adminAddr = ...;
+networking.firewall.allowedTCPPorts = [ 80 443 ];
 </programlisting>
     </para>
 
@@ -54,24 +54,25 @@
     <para>
 <programlisting>
 services.httpd.extraModules = [
-    # note that order is *super* important here
-    { name = "dav_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_dav_svn.so"; }
-    { name = "authz_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_authz_svn.so"; }
-  ];
-  services.httpd.virtualHosts = {
-    "svn" = {
-       hostName = HOSTNAME;
-       documentRoot = DOCUMENTROOT;
-       locations."/svn".extraConfig = ''
-           DAV svn
-           SVNParentPath REPO_PARENT
-           AuthzSVNAccessFile ACCESS_FILE
-           AuthName "SVN Repositories"
-           AuthType Basic
-           AuthUserFile PASSWORD_FILE
-           Require valid-user
-      '';
-    }
+  # note that order is *super* important here
+  { name = "dav_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_dav_svn.so"; }
+  { name = "authz_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_authz_svn.so"; }
+];
+
+services.httpd.virtualHosts = {
+  "svn" = {
+     hostName = HOSTNAME;
+     documentRoot = DOCUMENTROOT;
+     locations."/svn".extraConfig = ''
+         DAV svn
+         SVNParentPath REPO_PARENT
+         AuthzSVNAccessFile ACCESS_FILE
+         AuthName "SVN Repositories"
+         AuthType Basic
+         AuthUserFile PASSWORD_FILE
+         Require valid-user
+    '';
+}
 </programlisting>
     </para>
 
@@ -93,7 +94,7 @@ services.httpd.extraModules = [
     </para>
     <para>
 <screen>
-<prompt>$ </prompt> svn create REPO_NAME
+<prompt>$ </prompt>svn create REPO_NAME
 </screen>
     </para>
     <para>Repository files need to be accessible by
@@ -101,7 +102,7 @@ services.httpd.extraModules = [
     </para>
     <para>
 <screen>
-<prompt>$ </prompt> chown -R wwwrun:wwwrun REPO_PARENT
+<prompt>$ </prompt>chown -R wwwrun:wwwrun REPO_PARENT
 </screen>
     </para>
     <para>
@@ -109,7 +110,7 @@ services.httpd.extraModules = [
     </para>
     <para>
 <screen>
-<prompt>$ </prompt> htpasswd -cs PASSWORD_FILE USER_NAME
+<prompt>$ </prompt>htpasswd -cs PASSWORD_FILE USER_NAME
 </screen>
     </para>
     <para>
@@ -118,7 +119,7 @@ services.httpd.extraModules = [
     </para>
     <para>
 <screen>
-<prompt>$ </prompt> htpasswd -s PASSWORD_FILE USER_NAME
+<prompt>$ </prompt>htpasswd -s PASSWORD_FILE USER_NAME
 </screen>
     </para>
     <para>

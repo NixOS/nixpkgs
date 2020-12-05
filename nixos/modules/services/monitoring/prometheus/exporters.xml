@@ -17,18 +17,18 @@
    exporter</link>, it provides hardware and OS metrics from the host it's
    running on. The exporter could be configured as follows:
 <programlisting>
-  services.prometheus.exporters.node = {
-    enable = true;
-    enabledCollectors = [
-      "logind"
-      "systemd"
-    ];
-    disabledCollectors = [
-      "textfile"
-    ];
-    openFirewall = true;
-    firewallFilter = "-i br0 -p tcp -m tcp --dport 9100";
-  };
+services.prometheus.exporters.node = {
+  enable = true;
+  enabledCollectors = [
+    "logind"
+    "systemd"
+  ];
+  disabledCollectors = [
+    "textfile"
+  ];
+  openFirewall = true;
+  firewallFilter = "-i br0 -p tcp -m tcp --dport 9100";
+};
 </programlisting>
    It should now serve all metrics from the collectors that are explicitly
    enabled and the ones that are

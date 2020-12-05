@@ -20,7 +20,7 @@
   To enable Flatpak, add the following to your
   <filename>configuration.nix</filename>:
 <programlisting>
-  <xref linkend="opt-services.flatpak.enable"/> = true;
+<xref linkend="opt-services.flatpak.enable"/> = true;
 </programlisting>
  </para>
  <para>

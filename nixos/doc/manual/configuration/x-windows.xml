@@ -120,17 +120,17 @@
    Use the option <xref linkend="opt-services.xserver.videoDrivers"/> to set one.
    The recommended configuration for modern systems is:
 <programlisting>
-  <xref linkend="opt-services.xserver.videoDrivers"/> = [ "modesetting" ];
-  <xref linkend="opt-services.xserver.useGlamor"/> = true;
+<xref linkend="opt-services.xserver.videoDrivers"/> = [ "modesetting" ];
+<xref linkend="opt-services.xserver.useGlamor"/> = true;
 </programlisting>
    If you experience screen tearing no matter what, this configuration was
    reported to resolve the issue:
 <programlisting>
-  <xref linkend="opt-services.xserver.videoDrivers"/> = [ "intel" ];
-  <xref linkend="opt-services.xserver.deviceSection"/> = ''
-    Option "DRI" "2"
-    Option "TearFree" "true"
-  '';
+<xref linkend="opt-services.xserver.videoDrivers"/> = [ "intel" ];
+<xref linkend="opt-services.xserver.deviceSection"/> = ''
+  Option "DRI" "2"
+  Option "TearFree" "true"
+'';
 </programlisting>
    Note that this will likely downgrade the performance compared to
   <literal>modesetting</literal> or <literal>intel</literal> with DRI 3 (default).
