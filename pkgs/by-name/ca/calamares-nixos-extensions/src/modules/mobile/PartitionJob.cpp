@@ -75,7 +75,7 @@ PartitionJob::exec()
     QString passwordStdin = m_password + "\n";
     QString dev = m_targetDeviceRoot;
 
-    QList< QPair<const QStringList, const QString> > commands = {
+    QList< QPair<QStringList, QString> > commands = {
         {{"mkdir", "-p", pathMount}, QString()},
     };
 
