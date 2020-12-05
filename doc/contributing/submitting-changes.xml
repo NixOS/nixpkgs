@@ -59,7 +59,7 @@
      Format the commit in a following way:
     </para>
 <programlisting>
-(pkg-name | nixos/&lt;module>): (from -> to | init at version | refactor | etc)
+	(pkg-name | nixos/&lt;module>): (from -> to | from ->! breaking_update_to | init at version | refactor | etc)
 Additional information.
 </programlisting>
     <itemizedlist>
@@ -75,6 +75,11 @@ Additional information.
         <listitem>
          <para>
           <command>firefox: 54.0.1 -> 55.0</command>
+         </para>
+        </listitem>
+        <listitem>
+         <para>
+          <command>onedrive: 2.3.13 ->! 2.4.2 (Notice the exclamation mark to be used when an update requires user intervention</command>
          </para>
         </listitem>
         <listitem>
