@@ -6,6 +6,8 @@ buildDunePackage rec {
   pname = "mirage-time";
   version = "2.0.1";
 
+  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/mirage/mirage-time/releases/download/v${version}/mirage-time-v${version}.tbz";
     sha256 = "1w6mm4g7fc19cs0ncs0s9fsnb1k1s04qqzs9bsqvq8ngsb90cbh0";
