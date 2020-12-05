@@ -16,7 +16,6 @@
 , uuid ? "44444444-4444-4444-8888-888888888888"
 , f2fs-tools
 , perl
-, fakeroot
 }:
 
 let
@@ -25,7 +24,7 @@ in
 pkgs.stdenv.mkDerivation {
   name = "f2fs-fs.img${lib.optionalString compressImage ".zst"}";
 
-  nativeBuildInputs = [ f2fs-tools perl fakeroot ]
+  nativeBuildInputs = [ f2fs-tools perl ]
   ++ lib.optional compressImage zstd;
 
   buildCommand =
@@ -64,7 +63,7 @@ pkgs.stdenv.mkDerivation {
       truncate -s $bytes $img
 
       mkfs.f2fs -l ${volumeLabel} -U ${uuid} -T 1 $img
-      fakeroot sload.f2fs -T 1 -f ./rootImage $img
+      sload.f2fs -T 1 -f ./rootImage $img
 
       # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
       if ! fsck.f2fs $img; then
