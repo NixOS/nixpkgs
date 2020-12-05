@@ -16,7 +16,7 @@
   boot.kernelPackages = pkgs.linuxPackages_rpi1;
 
   sdImage = {
-    populateFirmwareCommands = let
+    populateBootCommands = let
       configTxt = pkgs.writeText "config.txt" ''
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
@@ -29,15 +29,12 @@
         kernel=u-boot-rpi1.bin
       '';
       in ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
-        cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin firmware/u-boot-rpi0.bin
-        cp ${pkgs.ubootRaspberryPi}/u-boot.bin firmware/u-boot-rpi1.bin
-        cp ${configTxt} firmware/config.txt
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
+        cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin boot/u-boot-rpi0.bin
+        cp ${pkgs.ubootRaspberryPi}/u-boot.bin boot/u-boot-rpi1.bin
+        cp ${configTxt} boot/config.txt
+        ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./boot
       '';
-    populateRootCommands = ''
-      mkdir -p ./files/boot
-      ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
-    '';
   };
 
   # the installation media is also the installation target,

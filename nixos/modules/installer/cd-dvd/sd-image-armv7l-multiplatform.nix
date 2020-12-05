@@ -23,7 +23,7 @@
   boot.kernelParams = ["console=ttyS0,115200n8" "console=ttymxc0,115200n8" "console=ttyAMA0,115200n8" "console=ttyO0,115200n8" "console=ttySAC2,115200n8" "console=tty0"];
 
   sdImage = {
-    populateFirmwareCommands = let
+    populateBootCommands = let
       configTxt = pkgs.writeText "config.txt" ''
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
@@ -40,15 +40,12 @@
         enable_uart=1
       '';
       in ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
-        cp ${pkgs.ubootRaspberryPi2}/u-boot.bin firmware/u-boot-rpi2.bin
-        cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin firmware/u-boot-rpi3.bin
-        cp ${configTxt} firmware/config.txt
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
+        cp ${pkgs.ubootRaspberryPi2}/u-boot.bin boot/u-boot-rpi2.bin
+        cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin boot/u-boot-rpi3.bin
+        cp ${configTxt} boot/config.txt
+        ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./boot
       '';
-    populateRootCommands = ''
-      mkdir -p ./files/boot
-      ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
-    '';
   };
 
   # the installation media is also the installation target,

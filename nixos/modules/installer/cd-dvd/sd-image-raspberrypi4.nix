@@ -20,8 +20,6 @@
     # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
     populateBootCommands =
       "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./boot";
-    # As the boot process is done entirely in the firmware partition.
-    populateRootCommands = "";
   };
 
   # the installation media is also the installation target,

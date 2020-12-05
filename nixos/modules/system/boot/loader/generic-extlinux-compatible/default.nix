@@ -46,7 +46,7 @@ in
           Contains the builder command used to populate an image,
           honoring all options except the <literal>-c &lt;path-to-default-configuration&gt;</literal>
           argument.
-          Useful to have for sdImage.populateRootCommands
+          Useful to have for sdImage.populateBootCommands
         '';
       };
 

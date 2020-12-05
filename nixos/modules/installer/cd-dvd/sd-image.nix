@@ -91,14 +91,12 @@ in
     };
 
     populateRootCommands = mkOption {
-      default = ''
-        mkdir -p files/boot
-      '';
+      default = "";
       description = ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
-        root (/) partition on the SD image. Use this to
-        populate the ./files/boot (/boot) directory.
+        root (/) partition on the SD image. This can be used
+        to inject files into the rootfs.
       '';
     };
 
