@@ -57,15 +57,15 @@ rec {
      The output type of each function has to be the input type
      of the next function, and the last function returns the
      final value.
-  */
-  pipe = val: functions:
-    let reverseApply = x: f: f x;
-    in builtins.foldl' reverseApply val functions;
-  /* note please don’t add a function like `compose = flip pipe`.
+
+     note please don’t add a function like `compose = flip pipe`.
      This would confuse users, because the order of the functions
      in the list is not clear. With pipe, it’s obvious that it
      goes first-to-last. With `compose`, not so much.
   */
+  pipe = val: functions:
+    let reverseApply = x: f: f x;
+    in builtins.foldl' reverseApply val functions;
 
   ## Named versions corresponding to some builtin operators.
 
