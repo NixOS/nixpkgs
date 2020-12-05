@@ -1,13 +1,14 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules,
   kauth, kcompletion, kconfig, kconfigwidgets, kcoreaddons, ki18n, kiconthemes,
-  kservice, kwidgetsaddons, kwindowsystem, plasma-framework, qtscript, qtwebengine,
-  qtx11extras, knewstuff
+  knewstuff, kservice, kwidgetsaddons, kwindowsystem, plasma-framework,
+  qtbase, qtscript, qtwebengine, qtx11extras
 }:
 
 mkDerivation {
   name = "libksysguard";
+  meta.broken = lib.versionOlder qtbase.version "5.14.0";
   patches = [
     ./0001-qdiriterator-follow-symlinks.patch
   ];
