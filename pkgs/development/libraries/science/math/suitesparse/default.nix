@@ -4,14 +4,15 @@
 , blas, lapack
 , metis
 , fixDarwinDylibNames
-, gnum4
+, gmp
+, mpfr
 , enableCuda ? false
 , cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "suitesparse";
-  version = "5.7.2";
+  version = "5.8.1";
 
   outputs = [ "out" "dev" "doc" ];
 
@@ -19,17 +20,19 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${version}";
-    sha256 = "1imndff7yygjrbbrcscsmirdi8w0lkwj5dbhydxmf7lklwn4j3q6";
+    sha256 = "0qjlyfxs8s48rs63c2fzspisgq1kk4bwkgnhmh125hgkdhrq2w1c";
   };
 
   nativeBuildInputs = [
-    gnum4
   ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [
+  # Use compatible indexing for lapack and blas used
+  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
     blas lapack
     metis
     gfortran.cc.lib
+    gmp
+    mpfr
   ] ++ stdenv.lib.optional enableCuda cudatoolkit;
 
   preConfigure = ''
@@ -41,8 +44,6 @@ stdenv.mkDerivation rec {
     "INSTALL=${placeholder "out"}"
     "INSTALL_INCLUDE=${placeholder "dev"}/include"
     "JOBS=$(NIX_BUILD_CORES)"
-    "BLAS=-lblas"
-    "LAPACK=-llapack"
     "MY_METIS_LIB=-lmetis"
   ] ++ stdenv.lib.optionals blas.isILP64 [
     "CFLAGS=-DBLAS64"
@@ -50,7 +51,13 @@ stdenv.mkDerivation rec {
     "CUDA_PATH=${cudatoolkit}"
     "CUDART_LIB=${cudatoolkit.lib}/lib/libcudart.so"
     "CUBLAS_LIB=${cudatoolkit}/lib/libcublas.so"
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
+    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.8.1/SuiteSparse_config/SuiteSparse_config.mk#L368
+    "BLAS=-lblas"
+    "LAPACK=-llapack"
+  ]
+  ;
 
   buildFlags = [
     # Build individual shared libraries, not demos
