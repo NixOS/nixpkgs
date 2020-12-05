@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.1.4";
+  version = "3.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s69kdhl8vhqazhxqdvb06l83x0iqdm0yr4vp3p52alzi6a8lm33";
+    sha256 = "00z9xl40czmqk0vmxjvmjvwb41r893l4dad7nj1nh6blw3kw28li";
   };
 
   propagatedBuildInputs = [ future ];
