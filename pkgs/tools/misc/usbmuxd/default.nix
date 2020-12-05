@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "2019-11-11";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "9af2b12552693a47601347e1eafc1e94132d727e";
-    sha256 = "0w8mf2wfpqijg882vhb8xarlp6zja23xf0b59z5zi774pnpjbqvj";
+    rev = version;
+    sha256 = "0a2xgrb4b3ndam448z74wh1267nmrz1wcbpx4xz86pwbdc93snab";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ infinisil ];
   };
 }
