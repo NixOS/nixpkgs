@@ -25,7 +25,10 @@
 # customisation package in tandem.
 #
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
-project(calamares-branding LANGUAGES CXX)
+project(calamares-extensions
+    VERSION 1.0.0
+    LANGUAGES CXX
+)
 
 find_package(Calamares 3.2.26 REQUIRED)
 
@@ -64,3 +67,14 @@ calamares_add_module_subdirectory( modules/slowpython )  # Python job
 # which builds a list of explanations; show that list.
 calamares_explain_skipped_modules( ${SKIPPED_MODULES} )
 
+set( CALAMARES_VERSION ${calamares-extensions_VERSION_MAJOR}.${calamares-extensions_VERSION_MINOR}.${calamares-extensions_VERSION_PATCH} )
+# In rare cases we have hotfix-releases with a tweak
+if( calamares-extensions_VERSION_TWEAK )
+    set( CALAMARES_VERSION "${calamares-extensions_VERSION}.${calamares-extensions_VERSION_TWEAK}" )
+endif()
+set( CALAMARES_VERSION_SHORT "${CALAMARES_VERSION}" )
+
+add_custom_target(show-version
+    ${CMAKE_COMMAND} -E echo CALAMARES_VERSION=${CALAMARES_VERSION_SHORT}
+    USES_TERMINAL
+)
