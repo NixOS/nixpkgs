@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, lib
-, wrapGAppsHook, intltool, qpdf
+, wrapGAppsHook, intltool
 , python3Packages, gtk3, poppler_gi
 }:
 
@@ -22,7 +22,6 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     gtk3 poppler_gi
-    qpdf
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -34,6 +33,10 @@ python3Packages.buildPythonApplication rec {
 
   # incompatible with wrapGAppsHook
   strictDeps = false;
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   doCheck = false; # no tests
 
