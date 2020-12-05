@@ -15,7 +15,5 @@ calamares_add_plugin( mobile
         UsersJob.h
     RESOURCES
         mobile.qrc
-    LINK_PRIVATE_LIBRARIES
-        calamaresui
     SHARED_LIB
 )
