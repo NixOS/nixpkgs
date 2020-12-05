@@ -6507,6 +6507,8 @@ in {
     });
   in if isPy3k then pyxattr' else pyxattr_2;
 
+  pyworld = callPackage ../development/python-modules/pyworld { };
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
