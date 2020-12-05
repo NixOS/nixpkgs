@@ -115,7 +115,7 @@ let
 
   mkCheckService = name: cfg: nameValuePair "borgbackup-check-${name}" rec {
       description = "Check BorgBackup repository ${name}";
-      after = [ "borgbackup-job-${name}" ];
+      after = [ "borgbackup-job-${name}.service" ];
       conflicts = after;
       path = with pkgs; [ borgbackup openssh ];
       serviceConfig = {
