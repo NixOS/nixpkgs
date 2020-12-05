@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, lib
-, wrapGAppsHook, intltool
+, wrapGAppsHook, intltool, qpdf
 , python3Packages, gtk3, poppler_gi
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
-    owner = "jeromerobert";
+    owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "03siz4ar6flyvrrgh7hr7sslc6n9x5d9i13lc5rm2qnssd0qdich";
+    sha256 = "wJ6ImWpszfgErfLh7YgHirVKFIt0ij8A/CdYJmkNBP0=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     gtk3 poppler_gi
+    qpdf
   ];
 
   propagatedBuildInputs = with python3Packages; [
