@@ -1,0 +1,35 @@
+#   SPDX-FileCopyrightText: no
+#   SPDX-License-Identifier: CC0-1.0
+---
+BasedOnStyle: WebKit
+
+AlignAfterOpenBracket: Align
+AlignEscapedNewlines: DontAlign
+AllowAllParametersOfDeclarationOnNextLine: "false"
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: "false"
+AllowShortLoopsOnASingleLine: "false"
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: "false"
+BinPackParameters: "false"
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: "true"
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: 120
+Cpp11BracedListStyle: "false"
+FixNamespaceComments: "true"
+IncludeBlocks: Preserve
+IndentWidth: "4"
+MaxEmptyLinesToKeep: "2"
+NamespaceIndentation: None
+PointerAlignment: Left
+ReflowComments: "false"
+SortIncludes: "true"
+SpaceAfterCStyleCast: "false"
+SpacesBeforeTrailingComments: "2"
+# SpaceInEmptyBlock: "true"
+SpacesInAngles: "true"
+SpacesInParentheses: "true"
+SpacesInSquareBrackets: "true"
+Standard: Cpp11
