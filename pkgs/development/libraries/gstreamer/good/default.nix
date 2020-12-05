@@ -30,6 +30,7 @@
 , mpg123
 , twolame
 , gtkSupport ? false, gtk3 ? null
+, raspiCameraSupport ? false, libraspberrypi ? null
 , enableJack ? true, libjack2
 , libXdamage
 , libXext
@@ -43,6 +44,7 @@
 }:
 
 assert gtkSupport -> gtk3 != null;
+assert raspiCameraSupport -> ((libraspberrypi != null) && stdenv.isLinux && stdenv.isAarch64);
 
 let
   inherit (stdenv.lib) optionals;
@@ -95,6 +97,8 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXdamage
     wavpack
+  ] ++ optionals raspiCameraSupport [
+    libraspberrypi
   ] ++ optionals gtkSupport [
     # for gtksink
     gtk3
@@ -128,8 +132,8 @@ stdenv.mkDerivation rec {
     "-Dv4l2=disabled" # Linux-only
     "-Dximagesrc=disabled" # Linux-only
     "-Dpulse=disabled" # TODO check if we can keep this enabled
-  ] ++ optionals (!(stdenv.isLinux && stdenv.hostPlatform.isAarch64)) [
-    "-Drpicamsrc=disabled" # only works on Linux aarch64, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/blob/428c9b60532917c0ac49c9d48b15bdcd00a1370b/sys/rpicamsrc/meson.build#L10
+  ] ++ optionals (!raspiCameraSupport) [
+    "-Drpicamsrc=disabled"
   ];
 
   postPatch = ''
