@@ -8,6 +8,7 @@
 , rtl-sdr
 , soapysdr-with-plugins
 , uhd
+, log4cpp
 }:
 
 assert pythonSupport -> python != null && swig != null;
@@ -24,10 +25,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake makeWrapper boost
+    cmake makeWrapper boost log4cpp
     airspy gnuradio hackrf libbladeRF rtl-sdr uhd
   ] ++ stdenv.lib.optionals stdenv.isLinux [ soapysdr-with-plugins ]
-    ++ stdenv.lib.optionals pythonSupport [ python swig ];
+    ++ stdenv.lib.optionals pythonSupport [ python swig python.pkgs.cheetah ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do
