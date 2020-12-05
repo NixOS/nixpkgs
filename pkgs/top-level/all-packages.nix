@@ -2460,6 +2460,8 @@ in
 
   ocrmypdf = callPackage ../tools/text/ocrmypdf { };
 
+  ocrfeeder = callPackage ../applications/graphics/ocrfeeder { };
+
   onboard = callPackage ../applications/misc/onboard { };
 
   oneshot = callPackage ../tools/networking/oneshot { };
