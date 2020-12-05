@@ -189,6 +189,10 @@ mapAliases ({
   gnuradio-limesdr = gr-limesdr; # added 2019-05-27
   gnuradio-rds = gr-rds; # added 2019-05-27
   gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
+  # added 20-10-2020
+  gnuradio-with-packages = gnuradio3_7.override {
+    extraPackages = [ gr-nacl gr-gsm gr-ais gr-limesdr gr-rds gr-osmosdr ];
+  };
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
