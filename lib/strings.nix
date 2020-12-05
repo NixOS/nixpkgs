@@ -593,9 +593,9 @@ rec {
      standard GNU Autoconf scripts.
 
      Example:
-       with_Feature true "shared" "foo"
+       withFeatureAs true "shared" "foo"
        => "--with-shared=foo"
-       with_Feature false "shared" (throw "ignored")
+       withFeatureAs false "shared" (throw "ignored")
        => "--without-shared"
   */
   withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
