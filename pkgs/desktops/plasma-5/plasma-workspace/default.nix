@@ -16,6 +16,8 @@
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras,
+
+  wrapGAppsHook, glib-networking, gst_all_1,
 }:
 
 let inherit (lib) getBin getLib; in
@@ -35,6 +37,7 @@ mkDerivation {
     kholidays kquickcharts appstream-qt
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
+    wrapGAppsHook glib-networking gst_all_1.gstreamer
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
