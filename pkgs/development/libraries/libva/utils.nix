@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
-  inherit (libva) version;
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner  = "intel";
