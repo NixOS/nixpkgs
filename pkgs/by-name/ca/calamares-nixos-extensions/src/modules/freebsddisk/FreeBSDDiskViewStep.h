@@ -12,7 +12,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with Calamares. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *   SPDX-FileCopyrightText: 2020 Adriaan de Groot <groot@kde.org>
  *   SPDX-License-Identifier: GPL-3.0-or-later
  *   License-Filename: LICENSES/GPL-3.0
@@ -35,7 +35,7 @@ public:
     virtual ~FreeBSDDiskViewStep() override;
 
     QString prettyName() const override;
-    
+
     void setConfigurationMap( const QVariantMap& configurationMap ) override;
 };
 
