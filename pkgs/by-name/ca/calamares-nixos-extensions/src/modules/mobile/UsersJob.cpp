@@ -42,14 +42,14 @@ UsersJob::exec()
     using namespace CalamaresUtils;
     using namespace std;
 
-    QList< QPair<const QStringList, const QString> > commands = {
+    QList< QPair<QStringList, QString> > commands = {
         { {"sh", "-c", m_cmdPasswd + " " + m_username}, m_password + "\n" + m_password + "\n" },
-        { {"sh", "-c", m_cmdSshd}, nullptr},
+        { {"sh", "-c", m_cmdSshd}, QString()},
     };
 
     if (m_isSshEnabled) {
         commands.append({{"sh", "-c", m_cmdSshdUseradd + " " + m_sshdUsername},
-                         nullptr});
+                         QString()});
         commands.append({{"sh", "-c", m_cmdPasswd + " " + m_sshdUsername},
                          m_sshdPassword + "\n" + m_sshdPassword + "\n"});
     }
