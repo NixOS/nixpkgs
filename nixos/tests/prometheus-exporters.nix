@@ -530,6 +530,21 @@ let
       '';
     };
 
+    py-air-control = {
+      nodeName = "py_air_control";
+      exporterConfig = {
+        enable = true;
+        deviceHostname = "127.0.0.1";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-py-air-control-exporter.service")
+        wait_for_open_port(9896)
+        succeed(
+            "curl -sSf http://localhost:9896/metrics | grep -q 'py_air_control_sampling_error_total'"
+        )
+      '';
+    };
+
     redis = {
       exporterConfig = {
         enable = true;
