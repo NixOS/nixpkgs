@@ -24893,6 +24893,10 @@ in
 
   xkbmon = callPackage ../applications/misc/xkbmon { };
 
+  wayfire = callPackage ../applications/window-managers/wayfire {};
+  wcm = callPackage ../applications/window-managers/wayfire/wcm {};
+  wf-shell = callPackage ../applications/window-managers/wayfire/wfshell {};
+
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
   win-qemu = callPackage ../applications/virtualization/driver/win-qemu { };
@@ -28754,4 +28758,5 @@ in
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
+
 }
