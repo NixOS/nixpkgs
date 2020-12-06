@@ -182,8 +182,7 @@ stdenv.mkDerivation {
 
     if [ -n "$(shopt -s nullglob; echo "$out"/lib/lib*_mesa*)" ]; then
       # Move other drivers to a separate output
-      mv -t $drivers/lib \
-        $out/lib/lib*_mesa*
+      mv -t $drivers/lib $out/lib/lib*_mesa*
     fi
 
     if [ -n "$(shopt -s nullglob; echo "$out"/lib/libMesaOpenCL*)" ]; then
