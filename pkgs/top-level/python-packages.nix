@@ -1217,6 +1217,8 @@ in {
 
   clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash {};
 
+  clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver {};
+
   cliff = callPackage ../development/python-modules/cliff { };
 
   clifford = callPackage ../development/python-modules/clifford { };
