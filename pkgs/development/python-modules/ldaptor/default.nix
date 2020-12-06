@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "ldaptor";
-  version = "19.1.0";
+  version = "20.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "64c7b870c77e34e4f5f9cfdf330b9702e89b4dd0f64275704f86c1468312c755";
+    sha256 = "778f45d68a0b5d63a892c804c05e57b464413a41d8ae52f92ae569321473ab67";
   };
 
   propagatedBuildInputs = [

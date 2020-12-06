@@ -2,11 +2,11 @@
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.14.3";
+  version = "1.14.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f92f789e4f9241cd262ad7a555ca2c648a98178a953af117ef7fad46aa1d5591";
+    sha256 = "1a465cbe98a7fd391d47dce4b8f7e5b921e6cd805ef421d04f5f66ba8f06086c";
   };
 
   outputs = [ "out" "dev" ];
