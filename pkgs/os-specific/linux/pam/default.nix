@@ -1,4 +1,5 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4 }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4
+, ckpwdDir ? "/run/wrappers/bin" }:
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
@@ -44,7 +45,13 @@ stdenv.mkDerivation rec {
   # which is done by dlopening $out/lib/security/pam_foo.so
   # $out/etc was also missed: pam_env(login:session): Unable to open config file
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
+  preConfigure = 
+      # the unix_chkpwd binary needs to be suid to check /etc/shadow. NixOS
+      # builds a suid wrapper in /run/wrappers/bin/ for unix_chkpwd, use that
+      # instead of trying to use the one installed into the store.
+      sed -e 's%$(sbindir)/unix_chkpwd%${ckpwdDir}/unix_chkpwd%' -i modules/pam_unix/Makefile.am
+      sed -e 's%$(sbindir)/unix_chkpwd%${ckpwdDir}/unix_chkpwd%' -i modules/pam_unix/Makefile.in
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
       # export ac_cv_search_crypt=no
       # (taken from Alpine linux, apparently insecure but also doesn't build O:))
       # disable insecure modules
