@@ -281,8 +281,8 @@ in {
   python39 = super.python39.override { static = true; };
   python3Minimal = super.python3Minimal.override { static = true; };
 
-
-  libev = super.libev.override { static = true; };
+  # Note: -static doesn’t work on darwin
+  libev = super.libev.override { static = !super.stdenv.hostPlatform.isDarwin; };
 
   libexecinfo = super.libexecinfo.override { enableShared = false; };
 
