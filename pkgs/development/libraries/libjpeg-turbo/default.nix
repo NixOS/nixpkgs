@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "libjpeg-turbo";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     rev = version;
-    sha256 = "0p32yivybxdicm01qa9h1vj91apygzxpvnklrjmbx8z9z2l3qxc9";
+    sha256 = "0njdxfmyk8smj8bbd6fs3lxjaq3lybivwgg16gpnbiyl984dpi9b";
   };
 
   patches =

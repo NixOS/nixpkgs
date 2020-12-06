@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "2.47.0";
+  version = "3.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f621ed0e5a30c2b67c0e50778627b7a35e1ccfea9db19ea89b4c72a8faf42c0";
+    sha256 = "3ec836a9545f549707a8c8176038160185b9d08c1dd80304a906527da21bff68";
   };
 
   propagatedBuildInputs = [

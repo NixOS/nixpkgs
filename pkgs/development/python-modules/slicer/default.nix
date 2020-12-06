@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "slicer";
-  version = "0.0.4";
+  version = "0.0.5";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "21d53aac4e78c93fd83c0fd2f8f9d8a2195ac079dffdc0da81cd749da0f2f355";
+    sha256 = "8c0fe9845056207d7344d5850e93551f9be20656178d443332aa02da9c71ba44";
   };
 
   checkInputs = [ pytestCheckHook pandas pytorch ];

@@ -9,7 +9,7 @@
 , msgpack
 , isPy27
 , selectors34
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,16 +31,16 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
   # add testsupport.py to PATH
+  preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
   # ignore network related tests, which fail in sandbox
-  checkPhase = ''
-    PYTHONPATH=tests/PyroTests:$PYTHONPATH
-    pytest -k 'not StartNSfunc \
-               and not Broadcast \
-               and not GetIP' \
-           --ignore=tests/PyroTests/test_naming.py
-  '';
+  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
+  disabledTests = [
+    "StartNSfunc"
+    "Broadcast"
+    "GetIP"
+  ];
 
   meta = with stdenv.lib; {
     description = "Distributed object middleware for Python (RPC)";
