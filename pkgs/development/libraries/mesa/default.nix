@@ -239,10 +239,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE =
-    optionals stdenv.isDarwin ["-fno-common"]
-    ++ [ "-UPIPE_SEARCH_DIR"
-         "-DPIPE_SEARCH_DIR=\"${placeholder "drivers"}/lib/gallium-pipe\"" ];
+  NIX_CFLAGS_COMPILE = optionals stdenv.isDarwin ["-fno-common"] ++ [ 
+    "-UPIPE_SEARCH_DIR"
+    "-DPIPE_SEARCH_DIR=\"${placeholder "drivers"}/lib/gallium-pipe\"" 
+  ];
 
   passthru = {
     inherit libdrm;
