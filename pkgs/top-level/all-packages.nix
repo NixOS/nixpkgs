@@ -15471,6 +15471,8 @@ in
 
   mkLibsForQt5 = self: with self; {
 
+  wf-config = callPackage ../development/libraries/wfconfig {};
+
     ### KDE FRAMEWORKS
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
@@ -24891,6 +24893,10 @@ in
 
   xkbmon = callPackage ../applications/misc/xkbmon { };
 
+  wayfire = callPackage ../applications/window-managers/wayfire {};
+  wcm = callPackage ../applications/window-managers/wayfire/wcm {};
+  wf-shell = callPackage ../applications/window-managers/wayfire/wfshell {};
+
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
   win-qemu = callPackage ../applications/virtualization/driver/win-qemu { };
@@ -28752,10 +28758,5 @@ in
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
-
-  wayfire = callPackage ../applications/window-managers/wayfire {};
-  wf-shell = callPackage ../applications/window-managers/wayfire/shell.nix {};
-  wcm = callPackage ../applications/window-managers/wayfire/wcm.nix {};
-  # wayfire-plugins-extra = callPackage ../applications/window-managers/wayfire/plugins.nix {};
 
 }

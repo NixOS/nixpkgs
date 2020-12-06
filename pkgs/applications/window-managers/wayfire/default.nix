@@ -1,46 +1,42 @@
 { stdenv, fetchFromGitHub
-, meson, pkgconfig, ninja
+, meson, pkg-config, ninja
 , wayland, wayland-protocols
 , cairo, glm
 , libevdev, freetype, libinput
 , pixman, libxkbcommon, libdrm
 , libjpeg, libpng
-, libGL, mesa
+, libGL, mesa, wf-config
 , libcap, xcbutilerrors, xcbutilwm, libxml2
-, buildDocs ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "wayfire";
-  version = "8aa8260972edaba6d237e1a61217a4d2303edc3e";
+  version = "ee9c9d708065f6b17df4fa454e6741bed10899d4";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
     rev = version;
-    sha256 = "sha256-r9k8e0LCDxr8tEZvcBbkvZ2RqcKXYX+/fxalKoqT15U=";
+    sha256 = "sha256-zKaZr/tBTeMUeqgxSLKe+/rW+JGon+MzBzP3mnZh96E=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [
-    # egl glesv2
     wayland wayland-protocols
     cairo glm
     libevdev freetype libinput
     pixman libxkbcommon libdrm
     libjpeg libpng
-    libGL mesa
+    libGL mesa wf-config
     libcap xcbutilerrors xcbutilwm libxml2
   ];
   mesonFlags = [
     "-Duse_system_wlroots=disabled"
-    "-Duse_system_wfconfig=disabled"
+    "-Duse_system_wfconfig=enabled"
     "-Dwlroots:logind-provider=systemd"
     "-Dwlroots:libseat=disabled"
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "3D wayland compositor";
