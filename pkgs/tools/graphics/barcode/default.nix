@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "GNU barcode generator";
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix; # Maybe other non-darwin Unix
+    platforms = platforms.unix;
     downloadPage = "https://ftp.gnu.org/gnu/barcode/";
     updateWalker = true;
     homepage = "https://www.gnu.org/software/barcode/";
