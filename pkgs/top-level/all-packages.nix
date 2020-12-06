@@ -2374,6 +2374,8 @@ in
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
 
+  marl = callPackage ../development/libraries/marl {};
+
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
   masscan = callPackage ../tools/security/masscan {
