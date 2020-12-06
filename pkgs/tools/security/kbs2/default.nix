@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
-  version = "0.1.6";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0n83d4zvy74rn38fqq84lm58l24c3r87m2di2sw4cdr1hkjg3nbl";
+    sha256 = "1qf17ga5k1shim6lk5lqp6my90gj6qldc36f6l4634kndiv2xflb";
   };
 
-  cargoSha256 = "0kafyljn3b87k5m0wdii0gfa4wj1yfys8jqx79inj82m0w1khprk";
+  cargoSha256 = "03nilfc0wvzhvx48m0qj05dqb18ypgkpkmbfj5nb96nridizwg0r";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ stdenv.lib.optionals stdenv.isLinux [ python3 ];
@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkFlagsArray = [ "--skip=kbs2::config::tests::test_find_config_dir" ];
+  checkFlags = [ "--skip=kbs2::config::tests::test_find_config_dir" ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "--skip=test_ragelib_rewrap_keyfile" ];
 
   postInstall = ''
     mkdir -p $out/share/kbs2
@@ -38,6 +39,7 @@ rustPlatform.buildRustPackage rec {
   meta = with stdenv.lib; {
     description = "A secret manager backed by age";
     homepage = "https://github.com/woodruffw/kbs2";
+    changelog = "https://github.com/woodruffw/kbs2/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };
