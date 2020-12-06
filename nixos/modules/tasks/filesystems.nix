@@ -135,7 +135,7 @@ let
         # (same here)
         else if config.fsType == "reiserfs" then "-q"
         else null;
-      extraOptions = 
+      extraOptions =
         optional config.autoResize "x-nixos.autoresize" ++
         optional config.autoExpand "x-nixos.autoexpand";
     in {
