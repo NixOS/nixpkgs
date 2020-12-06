@@ -5,6 +5,7 @@
 , bc
 , pkgconfig
 , perl
+, pcre2
 , openssl
 , zlib
 , ffmpeg
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.10.8";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "ec4yvS+4/rTBHGEx2OP0yoNGDtzPucFOcZJ0o0cCAHg=";
+    sha256 = "Hhp+VupXQI/JVcRHog25IrmM7cThSRLZs3WIAjHCr1g=";
   };
 
   sourceRoot = "source/src";
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc pkgconfig perl ];
-  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc ];
+  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus pcre2 srtp jemalloc ];
 
   preBuild = ''
     patchShebangs core/colorg++
