@@ -3,7 +3,7 @@
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
-, pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
+, pango, systemd, libXScrnSaver, libcxx, libpulseaudio, libdrm, mesa }:
 
 let
   inherit binaryName;
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
     gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
     libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango systemd libXScrnSaver
+    libXtst nspr nss libxcb pango systemd libXScrnSaver libdrm mesa
    ];
 
   installPhase = ''
