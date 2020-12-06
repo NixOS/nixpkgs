@@ -997,7 +997,7 @@ in
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
-  ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
+  amazon-ec2-utils = callPackage ../tools/virtualization/amazon-ec2-utils { };
 
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
 

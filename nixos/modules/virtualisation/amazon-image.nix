@@ -137,7 +137,7 @@ in
     services.openssh.permitRootLogin = "prohibit-password";
 
     # Creates symlinks for block device names.
-    services.udev.packages = [ pkgs.ec2-utils ];
+    services.udev.packages = [ pkgs.amazon-ec2-utils ];
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";
