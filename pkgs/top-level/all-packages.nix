@@ -2376,6 +2376,8 @@ in
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
 
+  marl = callPackage ../development/libraries/marl {};
+
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
   masscan = callPackage ../tools/security/masscan {
@@ -21036,6 +21038,10 @@ in
   go-motion = callPackage ../development/tools/go-motion { };
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
+
+  greenfoot = callPackage ../applications/editors/greenfoot/default.nix {
+    jdk = jetbrains.jdk;
+  };
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
