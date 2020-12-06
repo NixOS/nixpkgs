@@ -10552,6 +10552,8 @@ in
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
 
+  opam-installer = callPackage ../development/tools/ocaml/opam/installer.nix { };
+
   open-watcom-bin = callPackage ../development/compilers/open-watcom-bin { };
 
   pforth = callPackage ../development/compilers/pforth {};
