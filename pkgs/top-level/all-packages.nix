@@ -29975,7 +29975,10 @@ in
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
-  zettlr = callPackage ../applications/misc/zettlr { };
+  zettlr = callPackage ../applications/misc/zettlr {
+    texlive = texlive.combined.scheme-medium;
+    inherit (haskellPackages) pandoc-citeproc;
+  };
 
   unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
 
