@@ -1,15 +1,11 @@
-{ stdenv, ocaml, findlib, dune_2, js_of_ocaml-compiler
+{ buildDunePackage, js_of_ocaml-compiler
 , ocamlbuild
 }:
 
-stdenv.mkDerivation {
+buildDunePackage {
 	pname = "js_of_ocaml-ocamlbuild"; 
 
-	inherit (js_of_ocaml-compiler) version src installPhase meta;
-
-	buildInputs = [ ocaml findlib dune_2 ];
+	inherit (js_of_ocaml-compiler) version src meta useDune2;
 
 	propagatedBuildInputs = [ ocamlbuild ];
-
-	buildPhase = "dune build -p js_of_ocaml-ocamlbuild";
 }

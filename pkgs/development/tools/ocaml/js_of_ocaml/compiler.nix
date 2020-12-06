@@ -1,5 +1,5 @@
 { lib, fetchurl, buildDunePackage
-, ocaml, findlib, cmdliner, dune_2, cppo, yojson, ocaml-migrate-parsetree
+, cmdliner, cppo, yojson, ocaml-migrate-parsetree
 , menhir
 }:
 
@@ -13,7 +13,7 @@ buildDunePackage rec {
 		sha256 = "0i0smhvsfx2ydmbyg5ai5cgqsfnng8rkcvys4i3fa55cw24aknrn";
 	};
 
-	nativeBuildInputs = [ ocaml findlib dune_2 cppo menhir ];
+	nativeBuildInputs = [ cppo menhir ];
   buildInputs = [ cmdliner ];
 
   configurePlatforms = [];
