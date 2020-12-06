@@ -1520,4 +1520,8 @@ self: super: {
   # 2020-11-27: cxx-options is broken in Cabal 3.2.0.0
   hercules-ci-agent = addSetupDepend super.hercules-ci-agent self.Cabal_3_2_1_0;
 
+  # 2020-12-05: http-client is fixed on too old version
+  essence-of-live-coding-warp = super.essence-of-live-coding-warp.override {
+    http-client = self.http-client_0_7_3;
+  };
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
