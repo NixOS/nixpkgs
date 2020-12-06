@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
 , xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
-, which, python, makeWrapper, docbook_xml_dtd_45 }:
+, which, python3, makeWrapper, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
   pname = "criu";
@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 ];
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python iptables ];
+  nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet iptables ];
+  propagatedBuildInputs = with python3.pkgs; [ python python3.pkgs.protobuf ];
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/criu \
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
+    wrapPythonPrograms
   '';
 
   meta = with stdenv.lib; {

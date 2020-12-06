@@ -483,8 +483,12 @@ activatePackage() {
     # the transition, we do include everything in thatcase.
     #
     # TODO(@Ericson2314): Don't special-case native compilation
-    if [[ ( -z "${strictDeps-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
+    if [[ -z "${strictDeps-}" || "$hostOffset" -le -1 ]]; then
         addToSearchPath _PATH "$pkg/bin"
+    fi
+
+    if [[ "$hostOffset" -le -1 ]]; then
+        addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
@@ -602,13 +606,16 @@ fi
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
 HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
+export XDG_DATA_DIRS="${_XDG_DATA_DIRS-}${_XDG_DATA_DIRS:+${XDG_DATA_DIRS:+:}}${XDG_DATA_DIRS-}"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
     echo "final host path: $HOST_PATH"
+    echo "final data dirs: $XDG_DATA_DIRS"
 fi
 
 unset _PATH
 unset _HOST_PATH
+unset _XDG_DATA_DIRS
 
 
 # Make GNU Make produce nested output.

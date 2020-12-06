@@ -13,9 +13,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ bzip2 qtbase libnova proj openjpeg libpng ];
-  cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-2.3" ];
+  cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-2.3" ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
-  postInstall = ''
+  postInstall = if stdenv.isDarwin then ''
+    mkdir -p "$out/Applications" "$out/XyGrib/XyGrib.app/Contents/Resources"
+    cp "../data/img/xyGrib.icns" "$out/XyGrib/XyGrib.app/Contents/Resources/xyGrib.icns"
+    mv $out/XyGrib/XyGrib.app $out/Applications
+    wrapQtApp "$out/Applications/XyGrib.app/Contents/MacOS/XyGrib"
+  '' else ''
     wrapQtApp $out/XyGrib/XyGrib
     mkdir -p $out/bin
     ln -s $out/XyGrib/XyGrib $out/bin/xygrib
@@ -29,6 +35,6 @@ stdenv.mkDerivation rec {
                         of global and large area atmospheric and wave models.'';
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = [ maintainers.j03 ];
+    maintainers = with maintainers; [ j03 SuperSandro2000 ];
   };
 }

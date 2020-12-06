@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "1.5.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d751b97c1e84980a1646702d3fc1b45bab3284bc3388181f1dc9ba3d204b5a39";
+    sha256 = "a9dd004057fc441eee8c18bb2dc3bb20ba7b85f353d66894c61e42aeb8764e76";
   };
 
   checkInputs = [ pytest mock ];

@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.24.0";
+  version = "2.25.0";
 
   vendorSha256 = null;
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "1hgivmz6f5knpchkyi3njj1h81hixm77ad5g2v0m9bid09b97nh8";
+    sha256 = "00bvznswmz08s2jqpz5xxmkqggd06h6g8cwk242aaih6qajxfpsn";
   };
 
   # we have no bash at the moment for windows

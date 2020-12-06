@@ -28,6 +28,22 @@
    </para>
   </section>
 
+  <section xml:id="ssec-gnome-gdk-pixbuf-loaders">
+   <title>GdkPixbuf loaders</title>
+
+   <para>
+    GTK applications typically use <link xlink:href="https://developer.gnome.org/gdk-pixbuf/stable/">GdkPixbuf</link> to load images. But <package>gdk-pixbuf</package> package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring to use third-party loader modules for other formats. This is especially painful since GTK itself includes SVG icons, which cannot be rendered without a loader provided by <package>librsvg</package>.
+   </para>
+
+   <para>
+    Unlike other libraries mentioned in this section, GdkPixbuf only supports a single value in its controlling environment variable <envar>GDK_PIXBUF_MODULE_FILE</envar>. It is supposed to point to a cache file containing information about the available loaders. Each loader package will contain a <filename>lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</filename> file describing the default loaders in <package>gdk-pixbuf</package> package plus the loader contained in the package itself. If you want to use multiple third-party loaders, you will need to create your own cache file manually. Fortunately, this is pretty rare as <link xlink:href="https://gitlab.gnome.org/federico/gdk-pixbuf-survey/blob/master/src/modules.md">not many loaders exist</link>.
+   </para>
+
+   <para>
+    <package>gdk-pixbuf</package> contains <link linkend="ssec-gnome-hooks-gdk-pixbuf">a setup hook</link> that sets <envar>GDK_PIXBUF_MODULE_FILE</envar> from dependencies but as mentioned in further section, it is pretty limited. Loaders should propagate this setup hook.
+   </para>
+  </section>
+
   <section xml:id="ssec-gnome-icons">
    <title>Icons</title>
 
@@ -100,9 +116,16 @@ preFixup = ''
   done
 '';
 </programlisting>
-   Fortunately, there is <package>wrapGAppsHook</package>, that does the wrapping for us. In particular, it works in conjunction with other setup hooks that will populate the variable:
+  </para>
+  <para>
+   Fortunately, there is <package xml:id="ssec-gnome-hooks-wrapgappshook">wrapGAppsHook</package>. It works in conjunction with other setup hooks that populate environment variables, and it will then wrap all executables in <filename>bin</filename> and <filename>libexec</filename> directories using said variables.
+  </para>
+  <para>
+    For convenience, it also adds <package>dconf.lib</package> for a GIO module implementing a GSettings backend using <package>dconf</package>, <package>gtk3</package> for GSettings schemas, and <package>librsvg</package> for GdkPixbuf loader to the closure. In case you are packaging a program without a graphical interface, you might want to use <package xml:id="ssec-gnome-hooks-wrapgappsnoguihook">wrapGAppsNoGuiHook</package>, which runs the same script as <package>wrapGAppsHook</package> but does not bring <package>gtk3</package> and <package>librsvg</package> into the closure.
+  </para>
+  <para>
    <itemizedlist>
-    <listitem xml:id="ssec-gnome-hooks-wrapgappshook">
+    <listitem>
      <para>
       <package>wrapGAppsHook</package> itself will add the package’s <filename>share</filename> directory to <envar>XDG_DATA_DIRS</envar>.
      </para>
@@ -110,6 +133,11 @@ preFixup = ''
     <listitem xml:id="ssec-gnome-hooks-glib">
      <para>
       <package>glib</package> setup hook will populate <envar>GSETTINGS_SCHEMAS_PATH</envar> and then <package>wrapGAppsHook</package> will prepend it to <envar>XDG_DATA_DIRS</envar>.
+     </para>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-gdk-pixbuf">
+     <para>
+      <package>gdk-pixbuf</package> setup hook will populate <envar>GDK_PIXBUF_MODULE_FILE</envar> with the path to biggest <filename>loaders.cache</filename> file from the dependencies containing <link xlink:href="ssec-gnome-gdk-pixbuf-loaders">GdkPixbuf loaders</link>. This works fine when there are only two packages containing loaders (<package>gdk-pixbuf</package> and e.g. <package>librsvg</package>) – it will choose the second one, reasonably expecting that it will be bigger since it describes extra loader in addition to the default ones. But when there are more than two loader packages, this logic will break. One possible solution would be constructing a custom cache file for each package containing a program like <filename>services/x11/gdk-pixbuf.nix</filename> NixOS module does. <package>wrapGAppsHook</package> copies the <envar>GDK_PIXBUF_MODULE_FILE</envar> environment variable into the produced wrapper.
      </para>
     </listitem>
     <listitem xml:id="ssec-gnome-hooks-gtk-drop-icon-theme-cache">
@@ -178,7 +206,7 @@ preFixup = ''
     </term>
     <listitem>
      <para>
-      There are no schemas avalable in <envar>XDG_DATA_DIRS</envar>. Temporarily add a random package containing schemas like <package>gsettings-desktop-schemas</package> to <literal>buildInputs</literal>. <link linkend="ssec-gnome-hooks-glib"><package>glib</package></link> and <link linkend="ssec-gnome-hooks-wrapgappshook"><package>wrapGAppsHook</package></link> setup hooks will take care of making the schemas available to application and you will see the actual missing schemas with the <link linkend="ssec-gnome-common-issues-missing-schema">next error</link>. Or you can try looking through the source code for the actual schemas used.
+      There are no schemas available in <envar>XDG_DATA_DIRS</envar>. Temporarily add a random package containing schemas like <package>gsettings-desktop-schemas</package> to <literal>buildInputs</literal>. <link linkend="ssec-gnome-hooks-glib"><package>glib</package></link> and <link linkend="ssec-gnome-hooks-wrapgappshook"><package>wrapGAppsHook</package></link> setup hooks will take care of making the schemas available to application and you will see the actual missing schemas with the <link linkend="ssec-gnome-common-issues-missing-schema">next error</link>. Or you can try looking through the source code for the actual schemas used.
      </para>
     </listitem>
    </varlistentry>

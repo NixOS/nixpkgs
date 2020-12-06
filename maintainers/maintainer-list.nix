@@ -652,6 +652,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  archseer = {
+    email = "blaz@mxxn.io";
+    github = "archseer";
+    githubId = 1372918;
+    name = "Blaž Hrastnik";
+  };
   arcnmx = {
     email = "arcnmx@users.noreply.github.com";
     github = "arcnmx";
@@ -1251,6 +1257,16 @@
     github = "brettlyons";
     githubId = 3043718;
     name = "Brett Lyons";
+  };
+  brodes = {
+    email = "me@brod.es";
+    github = "brhoades";
+    githubId = 4763746;
+    name = "Billy Rhoades";
+    keys = [{
+      longkeyid = "rsa4096/0x8AE74787A4B7C07E";
+      fingerprint = "BF4FCB85C69989B4ED95BF938AE74787A4B7C07E";
+    }];
   };
   bryanasdev000 = {
     email = "bryanasdev000@gmail.com";

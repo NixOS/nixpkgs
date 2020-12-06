@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "comedilib";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Linux-Comedi";
     repo = "comedilib";
     rev = "r${stdenv.lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "159sv4jdgmcaqz76vazkyxxb85ni7pg14p1qv7y94hib3kspc195";
+    sha256 = "0kfs2dw62vjz8j7fgsxq6ky8r8kca726gyklbm6kljvgfh47lyfw";
   };
 
   nativeBuildInputs = [

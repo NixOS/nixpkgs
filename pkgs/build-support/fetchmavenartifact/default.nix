@@ -17,6 +17,8 @@ args@
   artifactId
 , # Example: "4.3.6"
   version
+, # Example: "jdk11"
+  classifier ? null
 , # List of maven repositories from where to fetch the artifact.
   # Example: [ http://oss.sonatype.org/content/repositories/public ].
   repos ? defaultRepos
@@ -48,7 +50,7 @@ let
       (replaceChars ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}.jar"
+      "${artifactId}-${version}-${optionalString (!isNull classifier) "-${classifier}"}.jar"
     ];
   urls_ =
     if url != "" then [url]
@@ -56,7 +58,7 @@ let
     else map mkJarUrl repos;
   jar =
     fetchurl (
-      builtins.removeAttrs args ["groupId" "artifactId" "version" "repos" "url" ]
+      builtins.removeAttrs args ["groupId" "artifactId" "version" "classifier" "repos" "url" ]
         // { urls = urls_; name = "${name_}.jar"; }
     );
 in
