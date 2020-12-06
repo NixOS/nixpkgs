@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0akkxcj11543c0jn4zdw4a668lk0xg7pghs8mch3xjk8nn8wfblc";
+    sha256 = "0fv0mg8zh40ffq0q39s195y6hvjrzihpx0i3f7ba5881syw3x7p4";
   };
 
   propagatedBuildInputs = [
