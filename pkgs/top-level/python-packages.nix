@@ -5023,6 +5023,8 @@ in {
 
   pycurl = callPackage ../development/python-modules/pycurl { };
 
+  pycxx = callPackage ../development/python-modules/pycxx { };
+
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
@@ -5341,6 +5343,8 @@ in {
 
   pync = callPackage ../development/python-modules/pync { };
 
+  pynest2d = callPackage ../development/python-modules/pynest2d { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 { };
@@ -5640,7 +5644,9 @@ in {
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pysvn = callPackage ../development/python-modules/pysvn { };
+  pysvn = callPackage ../development/python-modules/pysvn {
+    inherit (pkgs) bash subversion apr aprutil expat neon openssl;
+  };
 
   pytabix = callPackage ../development/python-modules/pytabix { };
 
@@ -5823,11 +5829,10 @@ in {
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
 
-  pytest_xdist_1 = callPackage ../development/python-modules/pytest-xdist { };
-
-  pytest_xdist_2 = callPackage ../development/python-modules/pytest-xdist/2.nix { };
-
-  pytest_xdist = self.pytest_xdist_2;
+  pytest_xdist = if isPy27 then
+    callPackage ../development/python-modules/pytest-xdist/1.nix { }
+  else
+    callPackage ../development/python-modules/pytest-xdist { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
