@@ -370,6 +370,7 @@ in
   telegraf = handleTest ./telegraf.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   timezone = handleTest ./timezone.nix {};
+  tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
   # traefik test relies on docker-containers
