@@ -3547,7 +3547,9 @@ in
 
   pax = callPackage ../tools/archivers/pax { };
 
-  rage = callPackage ../tools/security/rage { };
+  rage = callPackage ../tools/security/rage {
+    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+  };
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
@@ -14415,6 +14417,8 @@ in
   libmx = callPackage ../development/libraries/libmx { };
 
   libndctl = callPackage ../development/libraries/libndctl { };
+
+  libnest2d = callPackage ../development/libraries/libnest2d { };
 
   libnet = callPackage ../development/libraries/libnet { };
 
