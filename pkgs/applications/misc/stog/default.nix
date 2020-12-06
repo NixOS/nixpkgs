@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  patches = [ ./install.patch ];
+  patches = [ ./install.patch ./uri.patch ];
 
   meta = with stdenv.lib; {
     description = "XML documents and web site compiler";
