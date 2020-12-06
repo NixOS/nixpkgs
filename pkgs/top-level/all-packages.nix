@@ -21025,6 +21025,10 @@ in
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
+  greenfoot = callPackage ../applications/editors/greenfoot/default.nix {
+    jdk = jetbrains.jdk;
+  };
+
   gspeech = callPackage ../applications/audio/gspeech { };
 
   icesl = callPackage ../applications/misc/icesl { };
