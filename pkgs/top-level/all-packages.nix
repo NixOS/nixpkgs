@@ -15471,6 +15471,8 @@ in
 
   mkLibsForQt5 = self: with self; {
 
+  wf-config = callPackage ../development/libraries/wfconfig {};
+
     ### KDE FRAMEWORKS
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
