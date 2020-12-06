@@ -14416,6 +14416,8 @@ in
 
   libndctl = callPackage ../development/libraries/libndctl { };
 
+  libnest2d = callPackage ../development/libraries/libnest2d { };
+
   libnet = callPackage ../development/libraries/libnet { };
 
   libnetfilter_acct = callPackage ../development/libraries/libnetfilter_acct { };
