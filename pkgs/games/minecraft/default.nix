@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${stdenv.lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${stdenv.lib.getBin jre} \
       --run "cd /tmp" \
       "''${gappsWrapperArgs[@]}"
   '';
