@@ -5245,7 +5245,10 @@ in {
 
   pylev = callPackage ../development/python-modules/pylev { };
 
-  pylibacl = callPackage ../development/python-modules/pylibacl { };
+  pylibacl = if isPy3k then
+    callPackage ../development/python-modules/pylibacl { }
+  else
+    callPackage ../development/python-modules/pylibacl/0.5.nix { };
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
