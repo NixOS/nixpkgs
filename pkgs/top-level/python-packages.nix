@@ -1215,6 +1215,8 @@ in {
 
   click-threading = callPackage ../development/python-modules/click-threading { };
 
+  clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash {};
+
   cliff = callPackage ../development/python-modules/cliff { };
 
   clifford = callPackage ../development/python-modules/clifford { };
