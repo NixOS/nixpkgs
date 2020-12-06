@@ -148,6 +148,7 @@ stdenv.mkDerivation {
     ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0019-Revert-pkg-config-prefix-is-not-really-configurable-.patch
   ];
 
   postPatch = ''
