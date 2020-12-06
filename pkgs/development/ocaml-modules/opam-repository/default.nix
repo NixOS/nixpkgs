@@ -5,6 +5,8 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.02";
 
+  useDune2 = true;
+
   inherit (opam-format) src version;
 
   patches = [ ./download-tool.patch ];
