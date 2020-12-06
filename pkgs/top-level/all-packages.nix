@@ -26930,6 +26930,12 @@ in
     fftw = fftwSinglePrec;
   };
 
+  timeshift-unwrapped = callPackage ../applications/backup/timeshift/unwrapped.nix { };
+
+  timeshift = callPackage ../applications/backup/timeshift/default.nix { };
+
+  timeshift-minimal = callPackage ../applications/backup/timeshift/minimal.nix { };
+
   timewarrior = callPackage ../applications/misc/timewarrior { };
 
   timew-sync-server = callPackage ../applications/misc/timew-sync-server { };
