@@ -1,4 +1,5 @@
-{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles, darwin }:
+{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles
+, Foundation, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
@@ -16,8 +17,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.Foundation
+    Foundation
+    Security
   ];
 
   postBuild = ''
