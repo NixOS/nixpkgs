@@ -1,25 +1,49 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub, autoconf, automake, boost
+, zlib, libpng, libjpeg, libtiff, xlibsWrapper, SDL
+}:
 
-stdenv.mkDerivation {
-  name = "povray-3.6";
+stdenv.mkDerivation rec {
+  pname = "povray";
+  version = "3.8.0-x.10064738";
 
-  src = fetchurl {
-    url = http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Unix/povray-3.6.tar.bz2;
-    sha256 = "0wvsfgkybx28mj2p76nnsq9rdq50192g5qb7d0xk81s8skn7z2jf";
+  src = fetchFromGitHub {
+    owner = "POV-Ray";
+    repo = "povray";
+    rev = "v${version}";
+    sha256 = "0hy5a3q5092szk2x3s9lpn1zkszgq9bp15rxzdncxlvnanyzsasf";
   };
+
+
+  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff xlibsWrapper SDL ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
-  patchPhase = ''
-    sed -i -e 's/^povconfuser.*/povconfuser=$(TMPDIR)\/povray/' Makefile.{am,in};
+  postPatch = '' cd unix
+                 ./prebuild.sh
+                 cd ..
+                 sed -i -e 's/^povconfuser.*/povconfuser=$(TMPDIR)\/povray/' Makefile.{am,in}
+                 sed -i -e 's/^povuser.*/povuser=$(TMPDIR)\/.povray/' Makefile.{am,in}
+                 sed -i -e 's/^povowner.*/povowner=nobody/' Makefile.{am,in}
+                 sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
+               '';
+
+  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" "--with-x" ];
+
+  enableParallelBuilding = true;
+
+  preInstall = ''
+    mkdir "$TMP/bin"
+    for i in chown chgrp; do
+      echo '#!${stdenv.shell}' >> "$TMP/bin/$i"
+      chmod +x "$TMP/bin/$i"
+      PATH="$TMP/bin:$PATH"
+    done
   '';
-  # I didn't use configureFlags because I couldn't pass the quotes properly
-  # for the COMPILED_BY.
-  configurePhase = "./configure --prefix=$out COMPILED_BY=\"nix\"";
-  
-  meta = {
-    homepage = http://www.povray.org/;
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.povray.org/";
     description = "Persistence of Vision Raytracer";
-    license = "free";
+    license = licenses.free;
+    platforms = platforms.linux;
   };
 }

@@ -1,32 +1,69 @@
-{stdenv, fetchurl, pygtk, python, intltool, scrollkeeper, makeWrapper }:
+{ stdenv
+, fetchurl
+, gettext
+, itstool
+, python3
+, meson
+, ninja
+, wrapGAppsHook
+, libxml2
+, pkg-config
+, desktop-file-utils
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, gnome3
+, gsettings-desktop-schemas
+}:
 
-let
-  minor = "1.5";
-  version = "${minor}.2";
-in
+python3.pkgs.buildPythonApplication rec {
+  pname = "meld";
+  version = "3.21.0";
 
-stdenv.mkDerivation {
-  name = "meld-${version}";
+  format = "other";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/gnome/sources/meld/${minor}/meld-${version}.tar.xz";
-    sha256 = "05rbkqflbqnh2c4682d2fmidhwz2bvlggrhp1p7xbi3z8ci87pdx";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "toARTVq3kzJFSf1Y9OsgLY4oDAYzoLdl7ebfs0FgqBs=";
   };
 
-  buildInputs = [ pygtk python intltool scrollkeeper makeWrapper ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    itstool
+    libxml2
+    pkg-config
+    desktop-file-utils
+    gobject-introspection
+    wrapGAppsHook
+    gtk3 # for gtk-update-icon-cache
+  ];
 
-  patchPhase = ''
-    sed -e s,/usr/local,$out, -i INSTALL
-    sed -e 's,#!.*,#!${python}/bin/python,' -i bin/meld
-  '';
+  buildInputs = [
+    gtk3
+    gtksourceview4
+    gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme
+    gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
+  ];
 
-  postInstall = ''
-    wrapProgram $out/bin/meld --prefix PYTHONPATH : $PYTHONPATH:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0
-  '';
+  propagatedBuildInputs = with python3.pkgs; [
+    pygobject3
+    pycairo
+  ];
 
-  meta = {
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
     description = "Visual diff and merge tool";
-    homepage = http://meld.sourceforge.net;
-    license = "GPLv2+";
+    homepage = "http://meldmerge.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ jtojnar mimame ];
   };
 }

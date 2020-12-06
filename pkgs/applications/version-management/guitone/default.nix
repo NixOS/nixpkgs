@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, fetchmtn, qt4 }:
+{ stdenv, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
 
 let version = "1.0-mtn-head"; in
-stdenv.mkDerivation rec {
-  name = "guitone-${version}";
+stdenv.mkDerivation {
+  pname = "guitone";
+  inherit version;
 
   #src = fetchurl {
   #  url = "${meta.homepage}/count.php/from=default/${version}/${name}.tgz";
@@ -11,19 +12,23 @@ stdenv.mkDerivation rec {
 
   src = fetchmtn {
     dbs = ["mtn://code.monotone.ca/guitone"];
-    selector = "2777cdef424c65df93fa1ff181f02ee30d4901ab";
-    sha256 = "918d36a83060b84efa0ee0fe0fd058f1c871c91156d91366e2e979c886ff4271";
+    selector = "3a728afdbd3943b1d86c2a249b1e2ede7bf64c27";
+    sha256 = "01vs8m00phs5pl75mjkpdarynfpkqrg0qf4rsn95czi3q6nxiaq5";
     branch = "net.venge.monotone.guitone";
   };
 
-  buildInputs = [ qt4 ];
+  patches = [ ./parallel-building.patch ];
 
-  prefixKey="PREFIX=";
-  configureScript = "qmake guitone.pro";
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 qmake4Hook graphviz ];
+
+  qmakeFlags = [ "guitone.pro" ];
 
   meta = {
     description = "Qt4 based GUI for monotone";
-    homepage = http://guitone.thomaskeller.biz;
+    homepage = "https://guitone.thomaskeller.biz";
+    downloadPage = "https://code.monotone.ca/p/guitone/";
+    license = stdenv.lib.licenses.gpl3;
     inherit (qt4.meta) platforms;
   };
 }

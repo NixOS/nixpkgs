@@ -1,36 +1,59 @@
-{stdenv, fetchurl, zlib, openssl, tcl, readline, sqlite}:
+{ stdenv
+, installShellFiles
+, tcl
+, libiconv
+, fetchurl
+, zlib
+, openssl
+, readline
+, sqlite
+, ed
+, which
+, tcllib
+, withJson ? true
+}:
 
-stdenv.mkDerivation {
-  name = "fossil-1.24";
+stdenv.mkDerivation rec {
+  pname = "fossil";
+  version = "2.12.1";
 
   src = fetchurl {
-    url = http://www.fossil-scm.org/download/fossil-src-20121022124804.tar.gz;
-    sha256 = "0gcvcrd368acxd79gh7p7caicgqd0f076n0i2if63mg3b8ivz9im";
+    urls =
+      [
+        "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
+      ];
+    name = "${pname}-${version}.tar.gz";
+    sha256 = "00v6gmn2wpfms5jzf103hkm5s8i3bfs5mzacmznlhdzdrzzjc8w2";
   };
 
-  buildInputs = [ zlib openssl readline sqlite ];
-  buildNativeInputs = [ tcl ];
+  nativeBuildInputs = [ installShellFiles tcl ];
 
-  doCheck = true;
+  buildInputs = [ zlib openssl readline sqlite which ed ]
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
-  checkTarget = "test";
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  preBuild=''
+  configureFlags = [ "--disable-internal-sqlite" ]
+    ++ stdenv.lib.optional withJson "--json";
+
+  preCheck = ''
+    export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
+  '';
+
+  preBuild = ''
     export USER=nonexistent-but-specified-user
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     INSTALLDIR=$out/bin make install
+
+    installManPage fossil.1
+    installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
   '';
 
-  crossAttrs = {
-    doCheck = false;
-    makeFlagsArray = [ "TCC=${stdenv.cross.config}-gcc" ];
-  };
-
-  meta = {
-    description = "Simple, high-reliability, distributed software configuration management.";
+  meta = with stdenv.lib; {
+    description = "Simple, high-reliability, distributed software configuration management";
     longDescription = ''
       Fossil is a software configuration management system.  Fossil is
       software that is designed to control and track the development of a
@@ -38,12 +61,8 @@ stdenv.mkDerivation {
       many such systems in use today. Fossil strives to distinguish itself
       from the others by being extremely simple to setup and operate.
     '';
-    homepage = http://www.fossil-scm.org/;
-    license = "BSD";
-    platforms = with stdenv.lib.platforms; all;
-    maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
-      stdenv.lib.maintainers.viric
-    ];
+    homepage = "http://www.fossil-scm.org/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ maggesi viric ];
   };
 }

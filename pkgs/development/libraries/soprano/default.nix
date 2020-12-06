@@ -2,11 +2,11 @@
 , pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "soprano-2.8.0";
+  name = "soprano-2.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/soprano/${name}.tar.bz2";
-    sha256 = "1israssklrb4mhx2dgkfnabh21ll1jyis1c5c42rc9gi23mkb7ah";
+    sha256 = "1rg0x7yg0a1cbnxz7kqk52580wla8jbnj4d4r3j7l7g7ajyny1k4";
   };
 
   patches = [ ./find-virtuoso.patch ];
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
   # We disable the Java backend, since we do not need them and they make the closure size much bigger
   buildInputs = [ qt4 clucene_core librdf_redland libiodbc ];
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
-    homepage = http://soprano.sourceforge.net/;
+    homepage = "http://soprano.sourceforge.net/";
     description = "An object-oriented C++/Qt4 framework for RDF data";
     license = "LGPL";
-    maintainers = with stdenv.lib.maintainers; [ sander urkud ];
+    maintainers = with stdenv.lib.maintainers; [ sander ];
     inherit (qt4.meta) platforms;
   };
 }

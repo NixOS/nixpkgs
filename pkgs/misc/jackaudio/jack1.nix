@@ -1,30 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib
-, firewireSupport ? false, ffado ? null }:
+{ stdenv, fetchurl, pkgconfig
 
-assert firewireSupport -> ffado != null;
+# Optional Dependencies
+, alsaLib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
+}:
 
+let
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+
+  optAlsaLib = shouldUsePkg alsaLib;
+  optDb = shouldUsePkg db;
+  optLibuuid = shouldUsePkg libuuid;
+  optLibffado = shouldUsePkg libffado;
+  optCelt = shouldUsePkg celt;
+in
 stdenv.mkDerivation rec {
-  name = "jack-${version}";
-  version = "0.121.3";
+  pname = "jack1";
+  version = "0.125.0";
 
   src = fetchurl {
-    url = "http://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
-    sha256 = "1ypa3gjwy4vmaskin0vczmmdwybckkl42wmkfabx3v5yx8yms2dp";
+    url = "https://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
+    sha256 = "0i6l25dmfk2ji2lrakqq9icnwjxklgcjzzk65dmsff91z2zva5rm";
   };
-  
-  preBuild = "echo ok";
 
-  configureFlags = ''
-    ${if firewireSupport then "--enable-firewire" else ""}
-  '';
+  configureFlags = [
+    (stdenv.lib.enableFeature (optLibffado != null) "firewire")
+  ];
 
-  buildInputs = 
-    [ pkgconfig alsaLib
-    ] ++ (stdenv.lib.optional firewireSupport ffado);
-  
-  meta = {
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
+  propagatedBuildInputs = [ optLibuuid ];
+
+  meta = with stdenv.lib; {
     description = "JACK audio connection kit";
-    homepage = "http://jackaudio.org";
-    license = "GPL";
+    homepage = "https://jackaudio.org";
+    license = with licenses; [ gpl2 lgpl21 ];
+    platforms = platforms.unix;
   };
 }

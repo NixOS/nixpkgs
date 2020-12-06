@@ -1,16 +1,23 @@
-{ stdenv, fetchurl }: 
+{ stdenv, fetchurl, static ? false }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "libjpeg-8d";
-  
+  name = "libjpeg-9d";
+
   src = fetchurl {
-    url = http://www.ijg.org/files/jpegsrc.v8d.tar.gz;
-    sha256 = "1cz0dy05mgxqdgjf52p54yxpyy95rgl30cnazdrfmw7hfca9n0h0";
+    url = "http://www.ijg.org/files/jpegsrc.v9d.tar.gz";
+    sha256 = "0clwys9lcqlxqgcw8s1gwfm5ix2zjlqpklmd3mbvqmj5ibj51jwr";
   };
-  
+
+  configureFlags = optional static "--enable-static --disable-shared";
+
+  outputs = [ "bin" "dev" "out" "man" ];
+
   meta = {
-    homepage = http://www.ijg.org/;
+    homepage = "http://www.ijg.org/";
     description = "A library that implements the JPEG image file format";
-    license = "free";
+    license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

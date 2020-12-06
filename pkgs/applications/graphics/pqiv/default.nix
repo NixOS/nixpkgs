@@ -1,26 +1,28 @@
-{ stdenv, fetchurl, getopt, which, pkgconfig, gtk } :
+{ stdenv, fetchFromGitHub, pkgconfig
+, ffmpeg_3, gtk3, imagemagick, libarchive, libspectre, libwebp, poppler
+}:
 
 stdenv.mkDerivation (rec {
-  name = "pqiv-0.12";
+  pname = "pqiv";
+  version = "2.12";
 
-  src = fetchurl {
-    url = "https://github.com/downloads/phillipberndt/pqiv/${name}.tbz";
-    sha256 = "646c69f2f4e7289913f6b8e8ae984befba9debf0d2b4cc8af9955504a1fccf1e";
+  src = fetchFromGitHub {
+    owner = "phillipberndt";
+    repo = "pqiv";
+    rev = version;
+    sha256 = "18nvrqmlifh4m8nfs0d19sb9d1l3a95xc89qxqdr881jcxdsgflw";
   };
 
-  buildInputs = [ getopt which pkgconfig gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ffmpeg_3 gtk3 imagemagick libarchive libspectre libwebp poppler ];
 
-  preConfigure=''
-    substituteInPlace configure --replace /bin/bash "$shell"
-    sed -i -e 's|$(tempfile -s.*)|temp.c|' -e 's|tempfile|mktemp|' configure
-  '';
+  prePatch = "patchShebangs .";
 
-  unpackCmd = ''
-    tar -xf ${src}
-  '';
-
-  meta = {
-    description = "Rewrite of qiv (quick image viewer)";
-    homepage = http://www.pberndt.com/Programme/Linux/pqiv;
+  meta = with stdenv.lib; {
+    description = "Powerful image viewer with minimal UI";
+    homepage = "http://www.pberndt.com/Programme/Linux/pqiv";
+    license = licenses.gpl3;
+    maintainers = [];
+    platforms = platforms.linux;
   };
 })

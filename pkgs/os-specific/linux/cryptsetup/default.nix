@@ -1,22 +1,46 @@
-{ stdenv, fetchurl, devicemapper, libgcrypt, libuuid, pkgconfig, popt }:
+{ stdenv, fetchurl, lvm2, json_c
+, openssl, libuuid, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-1.5.1";
+  pname = "cryptsetup";
+  version = "2.3.4";
+
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "http://cryptsetup.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "0dib3nw6ifd7d7hr9k4iyaha3hz0pkzairqa38l3fndkr9w3zlhn";
+    url = "mirror://kernel/linux/utils/cryptsetup/v2.3/${pname}-${version}.tar.xz";
+    sha256 = "0wrpz2fzbsszmsgxxbssxjgylpyiindh24z8g13m2fxmjsxyw5lx";
   };
 
-  configureFlags = "--enable-cryptsetup-reencrypt";
+  # Disable 4 test cases that fail in a sandbox
+  patches = [ ./disable-failing-tests.patch ];
 
-  buildInputs = [ devicemapper libgcrypt libuuid pkgconfig popt ];
+  postPatch = ''
+    patchShebangs tests
+
+    # O_DIRECT is filesystem dependent and fails in a sandbox (on tmpfs)
+    # and on several filesystem types (btrfs, zfs) without sandboxing.
+    # Remove it, see discussion in #46151
+    substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
+  '';
+
+  NIX_LDFLAGS = "-lgcc_s";
+
+  configureFlags = [
+    "--enable-cryptsetup-reencrypt"
+    "--with-crypto_backend=openssl"
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lvm2 json_c openssl libuuid popt ];
+
+  doCheck = true;
 
   meta = {
-    homepage = http://code.google.com/p/cryptsetup/;
+    homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
-    license = "GPLv2";
-    maintainers = with stdenv.lib.maintainers; [ viric chaoflow ];
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -1,24 +1,19 @@
 { fetchurl, stdenv, makeWrapper, perl, openssh, rsync }:
 
 stdenv.mkDerivation rec {
-  name = "autobuild-3.5";
+  name = "autobuild-5.3";
 
   src = fetchurl {
     url = "http://savannah.spinellicreations.com/autobuild/${name}.tar.gz";
-    sha256 = "0ik13913x1yj8lsaf65chpiw13brl3q6kx7s1fa41a7s2krl1xvi";
+    sha256 = "0gv7g61ja9q9zg1m30k4snqwwy1kq7b4df6sb7d2qra7kbdq8af1";
   };
 
   buildInputs = [ makeWrapper perl openssh rsync ];
 
   doCheck = true;
 
-  postInstall = ''
-    wrapProgram $out/bin/ab{put,build}-sourceforge \
-      --prefix PATH ":" "${openssh}/bin:${rsync}/bin"
-  '';
-
   meta = {
-    description = "Simon Josefsson's Autobuild, a continuous integration tool";
+    description = "Continuous integration tool";
 
     longDescription = ''
       Autobuild is a package that process output from building
@@ -33,7 +28,7 @@ stdenv.mkDerivation rec {
       summary of the build status, after reading the manual.
     '';
 
-    homepage = http://josefsson.org/autobuild/;
-    license = "GPLv2+";
+    homepage = "https://josefsson.org/autobuild/";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

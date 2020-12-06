@@ -1,74 +1,61 @@
-{ stdenv, fetchurl, libcdio, cddiscid, wget, bash, vorbisTools, id3v2, lame, flac, eject, mkcue
-, perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
+{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
+, lame, flac, glyr
+, perlPackages
 , makeWrapper }:
 
-let version = "2.5.4";
+let version = "2.9.3";
 in
   stdenv.mkDerivation {
-    name = "abcde-${version}";
+    pname = "abcde";
+    inherit version;
     src = fetchurl {
-      url = "mirror://debian/pool/main/a/abcde/abcde_${version}.orig.tar.gz";
-      sha256 = "14g5lsgh53hza9848351kwpygc0yqpvvzp3s923aja77f2wpkdl5";
+      url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
+      sha256 = "091ip2iwb6b67bhjsj05l0sxyq2whqjycbzqpkfbpm4dlyxx0v04";
     };
 
-    # FIXME: This package does not support MP3 encoding (only Ogg),
-    # nor `distmp3', `eject', etc.
-
-    patches = [ ./abcde.patch ];
+    # FIXME: This package does not support `distmp3', `eject', etc.
 
     configurePhase = ''
       sed -i "s|^[[:blank:]]*prefix *=.*$|prefix = $out|g ;
               s|^[[:blank:]]*etcdir *=.*$|etcdir = $out/etc|g ;
-	      s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
-	  "Makefile";
+              s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
+        "Makefile";
 
-      # We use `cd-paranoia' from GNU libcdio, which contains a hyphen
-      # in its name, unlike Xiph's cdparanoia.
-      sed -i "s|^[[:blank:]]*CDPARANOIA=.*$|CDPARANOIA=cd-paranoia|g ;
-              s|^[[:blank:]]*DEFAULT_CDROMREADERS=.*$|DEFAULT_CDROMREADERS=\"cd-paranoia cdda2wav\"|g" \
-           "abcde"
+      echo 'CDPARANOIA=${libcdio-paranoia}/bin/cd-paranoia' >>abcde.conf
+      echo CDROMREADERSYNTAX=cdparanoia >>abcde.conf
 
-      substituteInPlace "abcde"					\
-	--replace "/etc/abcde.conf" "$out/etc/abcde.conf"
-
+      substituteInPlace "abcde" \
+        --replace "/etc/abcde.conf" "$out/etc/abcde.conf"
     '';
 
-    # no ELFs in this package, only scripts
-    dontStrip = true;
-    dontPatchELF = true;
+    nativeBuildInputs = [ makeWrapper ];
 
-    buildInputs = [ makeWrapper ];
+    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID ];
 
-    postInstall = ''
-    #   substituteInPlace "$out/bin/cddb-tool" \
-    #      --replace '#!/bin/sh' '#!${bash}/bin/sh'
-    #   substituteInPlace "$out/bin/abcde" \
-    #      --replace '#!/bin/bash' '#!${bash}/bin/bash'
+    installFlags = [ "sysconfdir=$(out)/etc" ];
 
-      # generic fixup script should be doing this, but it ignores this file for some reason
-      substituteInPlace "$out/bin/abcde-musicbrainz-tool" \
-         --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
-
-      wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        "$out/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbisTools}/bin:${id3v2}/bin:${lame}/bin"
-
-      wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
-        "${wget}/bin"
-
-      wrapProgram "$out/bin/abcde-musicbrainz-tool" --prefix PATH ":" \
-        "${wget}/bin"
+    postFixup = ''
+      for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
+        wrapProgram "$out/bin/$cmd" \
+          --prefix PERL5LIB : "$PERL5LIB" \
+          --prefix PATH ":" ${stdenv.lib.makeBinPath [
+            "$out" which libcdio-paranoia cddiscid wget
+            vorbis-tools id3v2 eyeD3 lame flac glyr
+          ]}
+      done
     '';
 
-    meta = {
-      homepage = "http://lly.org/~rcw/abcde/page/";
-      licence = "GPLv2+";
-      description = "A Better CD Encoder (ABCDE)";
-
+    meta = with stdenv.lib; {
+      homepage = "http://abcde.einval.com/wiki/";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ gebner ];
+      description = "Command-line audio CD ripper";
       longDescription = ''
         abcde is a front-end command-line utility (actually, a shell
         script) that grabs tracks off a CD, encodes them to
         Ogg/Vorbis, MP3, FLAC, Ogg/Speex and/or MPP/MP+ (Musepack)
         format, and tags them, all in one go.
       '';
+      platforms = platforms.linux;
     };
   }

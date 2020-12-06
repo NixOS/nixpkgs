@@ -1,16 +1,27 @@
-{ stdenv, fetchurl }:
-        
+{ stdenv, fetchurl, readline, gmp, zlib }:
+
 stdenv.mkDerivation rec {
-  name = "yap-5.1.1";
+  version = "6.3.3";
+  pname = "yap";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/yap/Yap-5.1.1.tar.gz";
-    sha256 = "0bajxmlla9gay4m4l7y7x6qldxzi0jcq2ykgpjk9liky7g5kbnya";
+    url = "https://www.dcc.fc.up.pt/~vsc/Yap/${pname}-${version}.tar.gz";
+    sha256 = "0y7sjwimadqsvgx9daz28c9mxcx9n1znxklih9xg16k6n54v9qxf";
   };
 
-  meta = { 
-    description = "Yap Prolog System is a ISO-compatible high-performance Prolog compiler";
-    homepage = http://yap.sourceforge.net/;
-    license = "artistic";
+  buildInputs = [ readline gmp zlib ];
+
+  configureFlags = [ "--enable-tabling=yes" ];
+
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
+  meta = {
+    homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";
+    description = "A ISO-compatible high-performance Prolog compiler";
+    license = stdenv.lib.licenses.artistic2;
+
+    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = stdenv.lib.platforms.linux;
+    broken = !stdenv.is64bit;   # the linux 32 bit build fails.
   };
 }

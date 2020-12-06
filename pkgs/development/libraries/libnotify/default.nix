@@ -1,17 +1,60 @@
-{ stdenv, fetchurl, pkgconfig, dbus, dbus_glib, gtk, glib }:
- 
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, libxslt
+, docbook-xsl-ns
+, glib
+, gdk-pixbuf
+, gobject-introspection
+, gnome3
+}:
+
 stdenv.mkDerivation rec {
-  name = "libnotify-0.4.5";
+  pname = "libnotify";
+  version = "0.7.9";
+
+  outputs = [ "out" "man" "dev" ];
 
   src = fetchurl {
-    url = "http://www.galago-project.org/files/releases/source/libnotify/${name}.tar.gz";
-    sha256 = "1ndh7wpm9qh12vm5avjrq2xv1j681j9qq6j2fyj6a2shl67dp687";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0qa7cx6ra5hwqnxw95b9svgjg5q6ynm8y843iqjszxvds5z53h36";
   };
 
-  buildInputs = [ pkgconfig dbus.libs dbus_glib gtk glib ];
+  mesonFlags = [
+    # disable tests as we don't need to depend on GTK (2/3)
+    "-Dtests=false"
+    "-Ddocbook_docs=disabled"
+    "-Dgtk_doc=false"
+  ];
 
-  meta = {
-    homepage = http://galago-project.org/;
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    libxslt
+    docbook-xsl-ns
+  ];
+
+  propagatedBuildInputs = [
+    gdk-pixbuf
+    glib
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://developer.gnome.org/notification-spec/";
     description = "A library that sends desktop notifications to a notification daemon";
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
+    license = licenses.lgpl21;
   };
 }

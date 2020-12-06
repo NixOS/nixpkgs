@@ -1,34 +1,37 @@
-{ stdenv, fetchurl, which, qt4 }:
+{ stdenv, fetchurl, openssl, cmake, pkgconfig, qt, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "qca-2.0.3";
-  
+  pname = "qca";
+  version = "2.2.1";
+
   src = fetchurl {
-    url = "http://delta.affinix.com/download/qca/2.0/${name}.tar.bz2";
-    sha256 = "0pw9fkjga8vxj465wswxmssxs4wj6zpxxi6kzkf4z5chyf4hr8ld";
+    url = "http://download.kde.org/stable/qca/${version}/qca-${version}.tar.xz";
+    sha256 = "00kv1vsrc8fp556hm8s6yw3240vx3l4067q6vfxrb3gdwgcd45np";
   };
-  
-  buildInputs = [ qt4 ];
-  
-  buildNativeInputs = [ which ];
 
-  preBuild =
-    ''
-      sed -i include/QtCrypto/qca_publickey.h -e '/EMSA3_Raw/a,\
-              EMSA3_SHA224,     ///< SHA224, with EMSA3 (ie PKCS#1 Version 1.5) encoding\
-              EMSA3_SHA256,     ///< SHA256, with EMSA3 (ie PKCS#1 Version 1.5) encoding\
-              EMSA3_SHA384,     ///< SHA384, with EMSA3 (ie PKCS#1 Version 1.5) encoding\
-              EMSA3_SHA512      ///< SHA512, with EMSA3 (ie PKCS#1 Version 1.5) encoding'
-    '';
-
-  configureFlags = "--no-separate-debug-info";
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ openssl qt ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   enableParallelBuilding = true;
-  
+
+  # tells CMake to use this CA bundle file if it is accessible
+  preConfigure = ''
+    export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt
+  '';
+
+  # tricks CMake into using this CA bundle file if it is not accessible (in a sandbox)
+  cmakeFlags = [ "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt" ];
+
+  postPatch = ''
+    sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+  '';
+
   meta = with stdenv.lib; {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";
-    homepage = http://delta.affinix.com/qca;
-    maintainers = [ maintainers.sander maintainers.urkud ];
+    homepage = "http://delta.affinix.com/qca";
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.unix;
   };
 }

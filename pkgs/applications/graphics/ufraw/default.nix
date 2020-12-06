@@ -1,24 +1,74 @@
-{ fetchurl, stdenv, pkgconfig, gtk, gettext, bzip2, zlib
-, libjpeg, libtiff, cfitsio, exiv2, lcms, gtkimageview }:
+{ stdenv
+, fetchFromGitHub
 
-stdenv.mkDerivation rec {
-  name = "ufraw-0.18";
+, autoconf
+, automake
+, autoreconfHook
+, bzip2
+, cfitsio
+, exiv2
+, gettext
+, gimp ? null
+, gtk2
+, gtkimageview
+, lcms2
+, lensfun
+, libjpeg
+, libtiff
+, perl
+, pkgconfig
+, zlib
 
-  src = fetchurl {
-    # XXX: These guys appear to mutate uploaded tarballs!
-    url = "mirror://sourceforge/ufraw/${name}.tar.gz";
-    sha256 = "01cjdc748vamjpaw2sbm8a9kwmb2hry4f200j3hlvqg9c6f77zi4";
+, withGimpPlugin ? true
+}:
+
+assert withGimpPlugin -> gimp != null;
+
+stdenv.mkDerivation {
+  pname = "ufraw";
+  version = "unstable-2019-06-12";
+
+  # The original ufraw repo is unmaintained and broken;
+  # this is a fork that collects patches
+  src = fetchFromGitHub {
+    owner = "sergiomb2";
+    repo = "ufraw";
+    rev = "c65b4237dcb430fb274e4778afaf5df9a18e04e6";
+    sha256 = "02icn67bsinvgliy62qa6v7gmwgp2sh15jvm8iiz3c7g1h74f0b7";
   };
 
-  buildInputs =
-    [ pkgconfig gtk gtkimageview gettext bzip2 zlib
-      libjpeg libtiff cfitsio exiv2 lcms
-    ];
+  outputs = [ "out" ] ++ stdenv.lib.optional withGimpPlugin "gimpPlugin";
 
-  meta = {
-    homepage = http://ufraw.sourceforge.net/;
+  nativeBuildInputs = [ autoconf automake autoreconfHook gettext perl pkgconfig ];
 
-    description = "UFRaw, a utility to read and manipulate raw images from digital cameras";
+  buildInputs = [
+    bzip2
+    cfitsio
+    exiv2
+    gtk2
+    gtkimageview
+    lcms2
+    lensfun
+    libjpeg
+    libtiff
+    zlib
+  ] ++ stdenv.lib.optional withGimpPlugin gimp;
+
+  configureFlags = [
+    "--enable-contrast"
+    "--enable-dst-correction"
+  ] ++ stdenv.lib.optional withGimpPlugin "--with-gimp";
+
+  postInstall = stdenv.lib.optionalString withGimpPlugin ''
+    moveToOutput "lib/gimp" "$gimpPlugin"
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/sergiomb2/ufraw";
+
+    broken = true; # https://github.com/NixOS/nixpkgs/issues/97946
+
+    description = "Utility to read and manipulate raw images from digital cameras";
 
     longDescription =
       '' The Unidentified Flying Raw (UFRaw) is a utility to read and
@@ -30,9 +80,9 @@ stdenv.mkDerivation rec {
          the camera's tone curves.
       '';
 
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # needs GTK+
+    maintainers = with maintainers; [ gloaming ];
+    platforms   = with platforms; all;
   };
 }

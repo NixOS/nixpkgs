@@ -1,34 +1,32 @@
-{stdenv, fetchurl, ucl, zlib}:
+{ stdenv, fetchurl, ucl, zlib, perl }:
 
-stdenv.mkDerivation {
-  name = "upx-3.07";
+stdenv.mkDerivation rec {
+  pname = "upx";
+  version = "3.96";
   src = fetchurl {
-    url = http://upx.sourceforge.net/download/upx-3.07-src.tar.bz2;
-    sha256 = "07pcgjn7x0a734mvhgqwz24qkm1rzqrkcp67pmagzz6i765cp7bs";
+    url = "https://github.com/upx/upx/releases/download/v${version}/${pname}-${version}-src.tar.xz";
+    sha256 = "051pk5jk8fcfg5mpgzj43z5p4cn7jy5jbyshyn78dwjqr7slsxs7";
   };
 
-  buildInputs = [ ucl zlib ];
+  CXXFLAGS = "-Wno-unused-command-line-argument";
 
-  lzmaSrc = fetchurl {
-    url = mirror://sourceforge/sevenzip/lzma443.tar.bz2;
-    sha256 = "1ck4z81y6xv1x9ky8abqn3mj9xj2dwg41bmd5j431xgi8crgd1ds";
-  };
+  buildInputs = [ ucl zlib perl ];
 
-  preConfigure = "
+  preConfigure = ''
     export UPX_UCLDIR=${ucl}
-    mkdir lzma443
-    pushd lzma443
-    tar xf $lzmaSrc
-    popd
-    export UPX_LZMADIR=`pwd`/lzma443
-    cd src
-  ";
+  '';
 
-  installPhase = "mkdir -p $out/bin ; cp upx.out $out/bin/upx";
+  makeFlags = [ "-C" "src" "CHECK_WHITESPACE=true" ];
 
-  meta = {
-    homepage = http://upx.sourceforge.net/;
+  installPhase = ''
+    mkdir -p $out/bin
+    cp src/upx.out $out/bin/upx
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://upx.github.io/";
     description = "The Ultimate Packer for eXecutables";
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

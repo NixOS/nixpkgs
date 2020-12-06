@@ -1,28 +1,47 @@
-
-{ stdenv, fetchurl, cmake,
-  singlePrec ? true,
-  fftw
+{ stdenv
+, fetchurl
+, cmake
+, singlePrec ? true
+, mpiEnabled ? false
+, fftw
+, openmpi
+, perl
 }:
 
-
 stdenv.mkDerivation {
-  name = "gromacs-4.5.5";
+  name = "gromacs-2020.4";
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.5.5.tar.gz";
-    md5 = "6a87e7cdfb25d81afa9fea073eb28468";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-2020.4.tar.gz";
+    sha256 = "1rplvgna60nqyb8nspaz3bfkwb044kv3zxdaa5whql5m441nj6am";
   };
 
-  buildInputs = [cmake fftw];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ fftw perl ]
+  ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
-  cmakeFlags = ''
-    ${if singlePrec then "-DGMX_DOUBLE=OFF" else "-DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF"}
-  '';
+  cmakeFlags = (
+    if singlePrec then [
+      "-DGMX_DOUBLE=OFF"
+    ] else [
+      "-DGMX_DOUBLE=ON"
+      "-DGMX_DEFAULT_SUFFIX=OFF"
+    ]
+  ) ++ (
+    if mpiEnabled then [
+      "-DGMX_MPI:BOOL=TRUE"
+      "-DGMX_CPU_ACCELERATION:STRING=SSE4.1"
+      "-DGMX_OPENMP:BOOL=TRUE"
+      "-DGMX_THREAD_MPI:BOOL=FALSE"
+    ] else [
+      "-DGMX_MPI:BOOL=FALSE"
+    ]
+  );
 
-  meta = {
-    homepage    = "http://www.gromacs.org";
-    licence     = "GPLv2";
-    description = "The GROMACS molecular dynamics software package";
+  meta = with stdenv.lib; {
+    homepage = "http://www.gromacs.org";
+    license = licenses.gpl2;
+    description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
       i.e. simulate the Newtonian equations of motion for systems
@@ -42,5 +61,6 @@ stdenv.mkDerivation {
 
       See: http://www.gromacs.org/About_Gromacs for details.
     '';
+    platforms = platforms.unix;
   };
 }

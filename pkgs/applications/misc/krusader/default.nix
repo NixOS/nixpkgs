@@ -1,17 +1,26 @@
-{stdenv, fetchurl, gettext, kdelibs, kde_baseapps}:
+{
+  mkDerivation, fetchurl, lib,
+  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  karchive, kconfig, kcrash, kguiaddons, kinit, kparts, kwindowsystem
+}:
 
-stdenv.mkDerivation rec {
-  name = "krusader-2.4.0-beta1";
+mkDerivation rec {
+  pname = "krusader";
+  version = "2.7.2";
+
   src = fetchurl {
-    url = "mirror://sourceforge/krusader/${name}.tar.bz2";
-    sha256 = "1q1m4cjzz2m41pdpxnwrsiczc7990785b700lv64midjjgjnr7j6";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "02b1jz5a7cjr13v6c7fczrhs1xmg1krnva5fxk8x2bf4nd1rm8s1";
   };
-  buildInputs = [ gettext kdelibs kde_baseapps ];
-  meta = {
+
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+
+  propagatedBuildInputs = [ karchive kconfig kcrash kguiaddons kinit kparts kwindowsystem ];
+
+  meta = with lib; {
     description = "Norton/Total Commander clone for KDE";
-    license = "GPL";
-    homepage = http://www.krusader.org;
-    maintainers = with stdenv.lib.maintainers; [ sander urkud ];
-    inherit (kdelibs.meta) platforms;
+    homepage = "http://www.krusader.org";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ sander turion ];
   };
 }

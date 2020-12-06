@@ -1,24 +1,28 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ stdenv, fetchFromGitHub, alsaLib }:
 
-stdenv.mkDerivation rec {
-  name = "flite-1.4";
+stdenv.mkDerivation {
+  name = "flite-2.1.0";
 
-  src = fetchurl {
-    url = "http://www.speech.cs.cmu.edu/flite/packed/${name}/${name}-release.tar.bz2";
-    sha256 = "036dagsydi0qh71ayi6jshfi3ik2md1az3gpi42md9pc18b65ij5";
+  src = fetchFromGitHub {
+    owner  = "festvox";
+    repo   = "flite";
+    rev    = "d673f65b2c4a8cd3da7447079309a6dc4bcf1a5e";
+    sha256 = "1kx43jvdln370590gfjhxxz3chxfi6kq18504wmdpljib2l0grjq";
   };
 
-  buildInputs = [ pkgconfig ];
+  buildInputs = [ alsaLib ];
 
-  configureFlags = ''
-    --enable-shared
-  '';
+  configureFlags = [
+    "--enable-shared"
+    "--with-audio=alsa"
+  ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A small, fast run-time speech synthesis engine";
-    homepage = http://www.speech.cs.cmu.edu/flite/index.html; 
-    license = "free-non-copyleft";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    homepage = "http://www.festvox.org/flite/";
+    license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
-

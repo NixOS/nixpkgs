@@ -1,15 +1,15 @@
 {stdenv}:
 
 rec {
-  xcodewrapper = import ./xcodewrapper.nix {
+  composeXcodeWrapper = import ./compose-xcodewrapper.nix {
     inherit stdenv;
   };
 
   buildApp = import ./build-app.nix {
-    inherit stdenv xcodewrapper;
+    inherit stdenv composeXcodeWrapper;
   };
 
   simulateApp = import ./simulate-app.nix {
-    inherit stdenv xcodewrapper;
+    inherit stdenv composeXcodeWrapper;
   };
 }

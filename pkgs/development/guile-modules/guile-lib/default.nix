@@ -1,38 +1,40 @@
-{stdenv, fetchurl, guile, texinfo}:
+{ stdenv, fetchurl, guile, texinfo, pkgconfig }:
 
-assert stdenv ? gcc && stdenv.gcc ? gcc && stdenv.gcc.gcc != null;
+assert stdenv ? cc && stdenv.cc.isGNU;
 
-stdenv.mkDerivation rec {
-  name = "guile-lib-0.2.1";
+let
+  name = "guile-lib-${version}";
+  version = "0.2.6.1";
+in stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     url = "mirror://savannah/guile-lib/${name}.tar.gz";
-    sha256 = "0ag18l7f9cpv4l577ln3f106xiggl7ndxhrqqiz7cg0w38s3cjvl";
+    sha256 = "0aizxdif5dpch9cvs8zz5g8ds5s4xhfnwza2il5ji7fv2h7ks7bd";
   };
 
-  buildInputs = [guile texinfo];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ guile texinfo ];
 
   doCheck = true;
 
-  preCheck =
+  preCheck = ''
     # Make `libgcc_s.so' visible for `pthread_cancel'.
-    '' export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib*/libgcc_s.so)):$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH=\
+    "$(dirname $(echo ${stdenv.cc.cc.lib}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A collection of useful Guile Scheme modules";
+    longDescription = ''
+      guile-lib is intended as an accumulation place for pure-scheme Guile
+      modules, allowing for people to cooperate integrating their generic Guile
+      modules into a coherent library.  Think "a down-scaled, limited-scope CPAN
+      for Guile".
     '';
-
-  meta = {
-    description = "Guile-Library, a collection of useful Guile Scheme modules";
-
-    longDescription =
-      '' guile-lib is intended as an accumulation place for pure-scheme Guile
-         modules, allowing for people to cooperate integrating their generic
-         Guile modules into a coherent library.  Think "a down-scaled,
-         limited-scope CPAN for Guile".
-      '';
-
-    homepage = http://www.nongnu.org/guile-lib/;
-    license = "GPLv3+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    homepage = "https://www.nongnu.org/guile-lib/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vyp ];
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

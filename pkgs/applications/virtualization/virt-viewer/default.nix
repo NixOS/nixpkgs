@@ -1,50 +1,46 @@
-x@{builderDefsPackage
-  , gnome, gtk, glib, libxml2, pkgconfig, libvirt, gtkvnc, cyrus_sasl, libtasn1
-  , gnupg, libgcrypt, perl, nettle, yajl
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["gnome"];
+{ stdenv, fetchurl, pkgconfig, intltool, shared-mime-info, wrapGAppsHook
+, glib, gsettings-desktop-schemas, gtk-vnc, gtk3, libvirt, libvirt-glib, libxml2, vte
+, spiceSupport ? true
+, spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
+}:
 
-  buildInputs = (map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames)))
-    ++ [gnome.libglade];
-  sourceInfo = rec {
-    baseName="virt-viewer";
-    version="0.2.0";
-    name="${baseName}-${version}";
-    url="http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    hash="0lhkmp4kn0s2z8241lqf2fdi55jg9iclr5hjw3m4wzaznpiajwlp";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+assert spiceSupport ->
+  spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
+
+with stdenv.lib;
+
+stdenv.mkDerivation rec {
+  baseName = "virt-viewer";
+  version = "9.0";
+  name = "${baseName}-${version}";
+
+  src = fetchurl {
+    url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
+    sha256 = "09a83mzyn3b4nd7wpa659g1zf1fjbzb79rk968bz6k5xl21k7d4i";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ pkgconfig intltool shared-mime-info wrapGAppsHook glib ];
+  buildInputs = [
+    glib gsettings-desktop-schemas gtk-vnc gtk3 libvirt libvirt-glib libxml2 vte
+  ] ++ optionals spiceSupport [
+    spice-gtk spice-protocol libcap gdbm
+  ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+  # Required for USB redirection PolicyKit rules file
+  propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
+
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   meta = {
     description = "A viewer for remote virtual machines";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
   passthru = {
     updateInfo = {
       downloadPage = "http://virt-manager.org/download.html";
     };
   };
-}) x
-
+}

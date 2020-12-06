@@ -1,18 +1,23 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv
+, CoreServices
+}:
 
-let version = "0.9.8"; in
-stdenv.mkDerivation {
-  name = "check-${version}";
+stdenv.mkDerivation rec {
+  pname = "check";
+  version = "0.15.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/check/${version}/check-${version}.tar.gz";
-    sha256 = "0zvak7vx0zq344x174yg9vkw6fg9kycda15zlbz4yn07pdbgkb42";
+    url = "https://github.com/libcheck/check/releases/download/${version}/check-${version}.tar.gz";
+    sha256 = "02m25y9m46pb6n46s51av62kpd936lkfv3b13kfpckgvmh5lxpm8";
   };
 
-  doCheck = true;
+  # Test can randomly fail: https://hydra.nixos.org/build/7243912
+  doCheck = false;
 
-  meta = {
-    description = "Check, a unit testing framework for C";
+  buildInputs = stdenv.lib.optional stdenv.isDarwin CoreServices;
+
+  meta = with stdenv.lib; {
+    description = "Unit testing framework for C";
 
     longDescription =
       '' Check is a unit testing framework for C.  It features a simple
@@ -23,8 +28,9 @@ stdenv.mkDerivation {
          can be used within source code editors and IDEs.
       '';
 
-    homepage = http://check.sourceforge.net/;
+    homepage = "https://libcheck.github.io/check/";
 
-    license = "LGPLv2+";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.all;
   };
 }

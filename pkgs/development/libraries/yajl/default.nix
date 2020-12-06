@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, cmake, ruby }:
+{ stdenv, fetchurl, cmake }:
 
-stdenv.mkDerivation {
-  name = "yajl-2.0.1";
+stdenv.mkDerivation rec {
+  name = "yajl-2.1.0";
 
   src = fetchurl {
-    url = http://github.com/lloyd/yajl/tarball/2.0.1;
-    name = "yajl-2.0.1.tar.gz";
-    sha256 = "08a7bgmdpvi6w9f9bxx5f42njwmwzdf6jz3w6ila7jgbl5mhknf2";
+    url = "https://github.com/lloyd/yajl/tarball/2.1.0";
+    name = "${name}.tar.gz";
+    sha256 = "0f6yrjc05aa26wfi7lqn2gslm19m6rm81b30ksllpkappvh162ji";
   };
 
-  buildInputs = [ cmake ruby ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Yet Another JSON Library";
@@ -17,9 +17,9 @@ stdenv.mkDerivation {
       YAJL is a small event-driven (SAX-style) JSON parser written in ANSI
       C, and a small validating JSON generator.
     '';
-    homepage = http://lloyd.github.com/yajl/;
+    homepage = "http://lloyd.github.com/yajl/";
     license = stdenv.lib.licenses.isc;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ z77z ];
+    maintainers = with stdenv.lib.maintainers; [ maggesi ];
   };
 }

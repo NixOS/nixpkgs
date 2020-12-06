@@ -45,7 +45,7 @@ gcc_warnings="-Wall"
 unset LANG
 unset LC_ALL LC_CTYPE LC_COLLATE LC_MESSAGES LC_MONETARY LC_NUMERIC LC_TIME 
 
-# Turn off some MacOS X debugging stuff, same reason
+# Turn off some macOS debugging stuff, same reason
 unset RC_TRACE_ARCHIVES RC_TRACE_DYLIBS RC_TRACE_PREBINDING_DISABLED
 
 # Parse command-line arguments

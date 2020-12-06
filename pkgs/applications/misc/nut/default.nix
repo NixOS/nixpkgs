@@ -1,31 +1,58 @@
-{ stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev }:
+{ stdenv, fetchurl, pkgconfig, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
+, libtool, makeWrapper, autoreconfHook, fetchpatch
+}:
 
-stdenv.mkDerivation {
-  name = "nut-2.6.1";
+stdenv.mkDerivation rec {
+  pname = "nut";
+  version = "2.7.4";
 
   src = fetchurl {
-    url = http://www.networkupstools.org/source/2.6/nut-2.6.1.tar.gz;
-    sha256 = "f5c46b856c0cf5b7f0e4b22d82b670af64cc98717a90eaac8723dd402a181c00";
+    url = "https://networkupstools.org/source/2.7/${pname}-${version}.tar.gz";
+    sha256 = "19r5dm07sfz495ckcgbfy0pasx0zy3faa0q7bih69lsjij8q43lq";
   };
 
-  buildInputs = [ pkgconfig neon libusb openssl udev ];
-
-  configureFlags = [
-    "--with-all"
-    "--without-snmp" # Until we have it ...
-    "--without-powerman" # Until we have it ...
-    "--without-cgi"
+  patches = [
+    (fetchpatch {
+      # Fix build with openssl >= 1.1.0
+      url = "https://github.com/networkupstools/nut/commit/612c05efb3c3b243da603a3a050993281888b6e3.patch";
+      sha256 = "0jdbii1z5sqyv24286j5px65j7b3gp8zk3ahbph83pig6g46m3hs";
+    })
   ];
 
-  meta = {
+  buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi ];
+
+  nativeBuildInputs = [ autoreconfHook libtool pkgconfig makeWrapper ];
+
+  configureFlags =
+    [ "--with-all"
+      "--with-ssl"
+      "--without-snmp" # Until we have it ...
+      "--without-powerman" # Until we have it ...
+      "--without-cgi"
+      "--without-hal"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-udev-dir=$(out)/etc/udev"
+    ];
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/nut-scanner --prefix LD_LIBRARY_PATH : \
+      "$out/lib:${neon}/lib:${libusb-compat-0_1.out}/lib:${avahi}/lib:${freeipmi}/lib"
+  '';
+
+  meta = with stdenv.lib; {
     description = "Network UPS Tools";
     longDescription = ''
       Network UPS Tools is a collection of programs which provide a common
       interface for monitoring and administering UPS, PDU and SCD hardware.
       It uses a layered approach to connect all of the parts.
     '';
-    homepage = http://www.networkupstools.org/;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ pierron ];
+    homepage = "https://networkupstools.org/";
+    repositories.git = "https://github.com/networkupstools/nut.git";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.pierron ];
+    license = with licenses; [ gpl1Plus gpl2Plus gpl3Plus ];
+    priority = 10;
   };
 }

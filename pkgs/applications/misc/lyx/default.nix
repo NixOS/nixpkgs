@@ -1,33 +1,45 @@
-{ fetchurl, stdenv, texLive, python, makeWrapper, pkgconfig
-, libX11, qt4, enchant #, mythes, boost
+{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc
+, qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.0.5.1";
-  name = "lyx-${version}";
+mkDerivation rec {
+  version = "2.3.6";
+  pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.0.x/${name}.tar.xz";
-    sha256 = "18k9qbz40v6lqmkfcg98wvcv4wi4p36ach1jz3z2b15gbmv2gr9n";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
+    sha256 = "160whjwwrmxizdakjlkf9xc86bhqfnslw47fixgqq4qhbapcxxkg";
   };
 
+  # LaTeX is used from $PATH, as people often want to have it with extra pkgs
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    qtbase qtsvg python file/*for libmagic*/ bc
+    hunspell makeWrapper # enchant
+  ];
+
   configureFlags = [
+    "--enable-qt5"
     #"--without-included-boost"
     /*  Boost is a huge dependency from which 1.4 MB of libs would be used.
         Using internal boost stuff only increases executable by around 0.2 MB. */
     #"--without-included-mythes" # such a small library isn't worth a separate package
   ];
 
-  buildInputs = [
-    texLive qt4 python makeWrapper pkgconfig
-    enchant # mythes boost
+  enableParallelBuilding = true;
+  doCheck = true;
+
+  # python is run during runtime to do various tasks
+  qtWrapperArgs = [
+    " --prefix PATH : ${python}/bin"
   ];
 
-  meta = {
-    description = "WYSIWYM frontend for LaTeX, DocBook, etc.";
+  meta = with lib; {
+    description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "http://www.lyx.org";
-    license = "GPL2";
-    maintainers = [ stdenv.lib.maintainers.neznalek ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.vcunat ];
+    platforms = platforms.linux;
   };
 }
+

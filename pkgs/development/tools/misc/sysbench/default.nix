@@ -1,19 +1,27 @@
-{stdenv, fetchurl, mysql, libxslt, zlib, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, libmysqlclient, libaio
+}:
 
 stdenv.mkDerivation rec {
-  name = "sysbench-0.4.12";
-  buildInputs = [ autoreconfHook mysql libxslt zlib ];
-  src = fetchurl {
-    url = mirror://sourceforge/sysbench/0.4.12/sysbench-0.4.12.tar.gz;
-    sha256 = "17pa4cw7wxvlb4mba943lfs3b3jdi64mlnaf4n8jq09y35j79yl3";
+  pname = "sysbench";
+  version = "1.0.20";
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libmysqlclient libaio ];
+
+  src = fetchFromGitHub {
+    owner = "akopytov";
+    repo = pname;
+    rev = version;
+    sha256 = "1sanvl2a52ff4shj62nw395zzgdgywplqvwip74ky8q7s6qjf5qy";
   };
-  preAutoreconf = ''
-    touch NEWS AUTHORS
-  '';
+
+  enableParallelBuilding = true;
 
   meta = {
-    description = "SysBench is a modular, cross-platform and multi-threaded benchmark tool.";
-    license = "GPLv2";
+    description = "Modular, cross-platform and multi-threaded benchmark tool";
+    homepage = "https://github.com/akopytov/sysbench";
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

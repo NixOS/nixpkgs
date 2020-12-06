@@ -1,17 +1,25 @@
-{ stdenv, fetchurl, libogg, xz }:
+{ stdenv, fetchurl, libogg, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libvorbis-1.3.3";
-  
+  name = "libvorbis-1.3.7";
+
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/vorbis/${name}.tar.xz";
-    sha256 = "1gby6hapz9njx4l9g0pndyk4q83z5fgrgc30mfwfgx7bllspsk43";
+    sha256 = "0jwmf87x5sdis64rbv0l87mdpah1rbilkkxszipbzg128f9w8g5k";
   };
 
-  buildNativeInputs = [ xz ];
+  outputs = [ "out" "dev" "doc" ];
+
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libogg ];
 
-  meta = {
-    homepage = http://xiph.org/vorbis/;
+  doCheck = true;
+
+  meta = with stdenv.lib; {
+    description = "Vorbis audio compression reference implementation";
+    homepage = "https://xiph.org/vorbis/";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ehmry ];
+    platforms = platforms.all;
   };
 }

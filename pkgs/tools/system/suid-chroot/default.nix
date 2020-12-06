@@ -1,34 +1,22 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl }:
 
-  version = a.lib.attrByPath ["version"] "1.0.1" a; 
-  buildInputs = with a; [
-    
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  pname = "suid-chroot";
+  version = "1.0.2";
+
   src = fetchurl {
-    url = "http://myweb.tiscali.co.uk/scottrix/linux/download/suid-chroot-${version}.tar.bz2";
-    sha256 = "15gs09md4lyym47ipzffm1ws8jkg028x0cgwxxs9qkdqbl5zb777";
+    sha256 = "1a9xqhck0ikn8kfjk338h9v1yjn113gd83q0c50k78xa68xrnxjx";
+    url = "http://myweb.tiscali.co.uk/scottrix/linux/download/${pname}-${version}.tar.bz2";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  postPatch = ''
+    substituteInPlace Makefile --replace /usr $out
+    sed -i -e '/chmod u+s/d' Makefile
+  '';
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["replacePaths" "doMakeInstall"];
-
-  installFlags = "PREFIX=$out";
-
-  replacePaths = a.fullDepEntry (''
-    sed -e "s@/usr/@$out/@g" -i Makefile
-  '') ["minInit" "doUnpack"];
-      
-  name = "suid-chroot-" + version;
-  meta = {
+  meta = with stdenv.lib; {
     description = "Setuid-safe wrapper for chroot";
-    maintainers = [
-    ];
+    license = licenses.gpl2Plus;
+    platforms = with platforms; unix;
   };
 }

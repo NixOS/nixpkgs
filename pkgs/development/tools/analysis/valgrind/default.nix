@@ -1,22 +1,59 @@
-{ stdenv, fetchurl, perl, gdb }:
+{ stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
 
-stdenv.mkDerivation (rec {
-  name = "valgrind-3.8.1";
+stdenv.mkDerivation rec {
+  name = "valgrind-3.16.1";
 
   src = fetchurl {
-    url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "1nsqk70ry3221sd62s4f0njcrncppszs4xxjcak13lxyfq2y0fs7";
+    url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
+    sha256 = "1jik19rcd34ip8a5c9nv5wfj8k8maqb8cyclr4xhznq2gcpkl7y9";
   };
 
-  # Perl is needed for `cg_annotate'.
+  outputs = [ "out" "dev" "man" "doc" ];
+
+  hardeningDisable = [ "stackprotector" ];
+
   # GDB is needed to provide a sane default for `--db-command'.
-  buildNativeInputs = [ perl ];
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  # Perl is needed for `callgrind_{annotate,control}'.
+  buildInputs = [ gdb perl ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+
+  # Perl is also a native build input.
+  nativeBuildInputs = [ perl ];
+
+  enableParallelBuilding = true;
+  separateDebugInfo = stdenv.isLinux;
+
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
+    let OSRELEASE = ''
+      $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
+      <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
+    in ''
+      echo "Don't derive our xnu version using uname -r."
+      substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
+
+      # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
+      echo "getting rid of the \`-arch' GCC option..."
+      find -name Makefile\* -exec \
+        sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
+
+      sed -i coregrind/link_tool_exe_darwin.in \
+          -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
+
+      substituteInPlace coregrind/m_debuginfo/readmacho.c \
+         --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
+
+      echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
+      substituteInPlace coregrind/link_tool_exe_darwin.in \
+        --replace /usr/bin/ld ${cctools}/bin/ld
+    '');
+
+  # To prevent rebuild on linux when moving darwin's postPatch fixes to preConfigure
+  postPatch = "";
 
   configureFlags =
-    if (stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin")
-    then [ "--enable-only64bit" ]
-    else [];
+    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
+
+  doCheck = false; # fails
 
   postInstall = ''
     for i in $out/lib/valgrind/*.supp; do
@@ -28,8 +65,8 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = {
-    homepage = http://www.valgrind.org/;
-    description = "Valgrind, a debugging and profiling tool suite";
+    homepage = "http://www.valgrind.org/";
+    description = "Debugging and profiling tool suite";
 
     longDescription = ''
       Valgrind is an award-winning instrumentation framework for
@@ -39,25 +76,16 @@ stdenv.mkDerivation (rec {
       Valgrind to build new tools.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ eelco ludo ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.unix;
+    badPlatforms = [
+      "armv5tel-linux" "armv6l-linux" "armv6m-linux"
+      "sparc-linux" "sparc64-linux"
+      "riscv32-linux" "riscv64-linux"
+      "alpha-linux"
+    ];
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }
-
-//
-
-(if stdenv.isDarwin
- then {
-   patchPhase =
-     # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
-     '' echo "getting rid of the \`-arch' GCC option..."
-        find -name Makefile\* -exec \
-          sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
-
-        sed -i coregrind/link_tool_exe_darwin.in \
-            -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
-     '';
- }
- else {}))

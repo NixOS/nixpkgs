@@ -1,59 +1,68 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk, libmowgli, libmcs
-, gettext, dbus_glib, libxml2, libmad, xlibs, alsaLib, libogg
-, libvorbis, libcdio, libcddb, flac, ffmpeg
+{
+  mkDerivation, lib, fetchurl, fetchpatch,
+  gettext, pkgconfig,
+  qtbase,
+  alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
+  libcddb, libcdio, libcdio-paranoia, libcue, libjack2, libmad, libmms, libmodplug,
+  libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
+  libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
+  wavpack, openmpt123
 }:
 
-let
-  version = "3.2.2";
-in
-stdenv.mkDerivation {
-  name = "audacious-${version}";
+mkDerivation rec {
+  pname = "audacious";
+  version = "4.0.5";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "1vj2f3jq67r9wc3s8p51w8338cjhidj3lpxmzyh31lrfikj21766";
+    sha256 = "028zjgz0p7ys15lk2a30m5zcv9xrx3ga50wjsh4m4zxilgkakbji";
   };
-
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "1z5p4ny0kzszaki4f1fgrvcr0q1j6i19847jhplc07nl1rvycdy6";
+    sha256 = "0ny5w1agr9jaz5w3wyyxf1ygmzmd1sivaf97lcm4z4w6529520lz";
   };
 
-  # `--enable-amidiplug' is to prevent configure from looking in /proc/asound.
-  configureFlags = "--enable-amidiplug --disable-oss";
+  nativeBuildInputs = [ gettext pkgconfig ];
 
-  buildInputs =
-    [ gettext pkgconfig glib gtk libmowgli libmcs libxml2 dbus_glib
-      libmad xlibs.libXcomposite libogg libvorbis flac alsaLib libcdio
-      libcddb ffmpeg
-    ];
+  buildInputs = [
+    # Core dependencies
+    qtbase
 
-  # Here we build bouth audacious and audacious-plugins in one
+    # Plugin dependencies
+    alsaLib curl faad2 ffmpeg flac fluidsynth gdk-pixbuf lame libbs2b libcddb
+    libcdio libcdio-paranoia libcue libjack2 libmad libmms libmodplug libmowgli
+    libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
+    libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
+    openmpt123
+  ];
+
+  # Here we build both audacious and audacious-plugins in one
   # derivations, since they really expect to be in the same prefix.
   # This is slighly tricky.
-  builder = builtins.toFile "builder.sh"
-    ''
-      # First build audacious.
-      (
-        source $stdenv/setup
-        genericBuild
-      )
+  builder = builtins.toFile "builder.sh" ''
+    # First build audacious.
+    (
+      source $stdenv/setup
+      genericBuild
+    )
+    # Then build the plugins.
+    (
+      nativeBuildInputs="$out $nativeBuildInputs" # to find audacious
+      source $stdenv/setup
+      rm -rfv audacious-*
+      src=$pluginsSrc
+      genericBuild
+    )
+  '';
 
-      # Then build the plugins.
-      (
-        buildNativeInputs="$out $buildNativeInputs" # to find audacious
-        source $stdenv/setup
-        rm -rfv audacious-*
-        src=$pluginsSrc
-        genericBuild
-      )
-    '';
-
-  enableParallelBuilding = true;
-
-  meta = {
-    description = "Audacious, a media player forked from the Beep Media Player, which was itself an XMMS fork";
-    homepage = http://audacious-media-player.org/;
-    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
+  meta = with lib; {
+    description = "Audio player";
+    homepage = "https://audacious-media-player.org/";
+    maintainers = with maintainers; [ eelco ramkromberg ttuegel ];
+    platforms = with platforms; linux;
+    license = with licenses; [
+      bsd2 bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
+      gpl2 gpl3 lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
+    ];
   };
 }

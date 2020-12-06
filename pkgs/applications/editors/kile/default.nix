@@ -1,24 +1,67 @@
-{stdenv, fetchurl, kdelibs, cmake, gettext }:
+{ mkDerivation
+, lib
+, fetchurl
+, extra-cmake-modules
+, kdoctools
+, wrapGAppsHook
+, qtscript
+, kconfig
+, kcrash
+, kdbusaddons
+, kdelibs4support
+, kguiaddons
+, kiconthemes
+, kinit
+, khtml
+, konsole
+, kparts
+, ktexteditor
+, kwindowsystem
+, okular
+, poppler
+}:
 
-stdenv.mkDerivation rec {
-  name = "kile-2.1.2";
+mkDerivation rec {
+  name = "kile-2.9.93";
 
   src = fetchurl {
     url = "mirror://sourceforge/kile/${name}.tar.bz2";
-    sha256 = "0nx5fmjrxrndnzvknxnybd8qh15jzfxzbny2rljq3amjw02y9lc2";
+    sha256 = "BEmSEv/LJPs6aCkUmnyuTGrV15WYXwgIANbfcviMXfA=";
   };
 
-  buildNativeInputs = [ cmake gettext ];
-  buildInputs = [ kdelibs ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    wrapGAppsHook
+    kdoctools
+  ];
 
-  # for KDE 4.7 the nl translations fail since kile-2.1.2
-  preConfigure = "rm -r translations/nl";
+  buildInputs = [
+    kconfig
+    kcrash
+    kdbusaddons
+    kdelibs4support
+    kguiaddons
+    kiconthemes
+    kinit
+    khtml
+    kparts
+    ktexteditor
+    kwindowsystem
+    okular
+    poppler
+    qtscript
+  ];
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  propagatedUserEnvPkgs = [ konsole ];
 
   meta = {
-    description = "An integrated LaTeX editor for KDE";
-    homepage = http://kile.sourceforge.net;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    license = stdenv.lib.licenses.gpl2Plus;
-    inherit (kdelibs.meta) platforms;
+    description = "User-friendly TeX/LaTeX authoring tool for the KDE desktop environment";
+    homepage = "https://www.kde.org/applications/office/kile/";
+    maintainers = with lib.maintainers; [ fridh ];
+    license = lib.licenses.gpl2Plus;
   };
 }

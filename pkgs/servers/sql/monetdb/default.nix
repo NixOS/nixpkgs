@@ -1,41 +1,30 @@
-{ composableDerivation, fetchurl, pcre, openssl, readline, libxml2, geos, apacheAnt, jdk5 }:
+{ stdenv, fetchurl, cmake, python3
+, bison, openssl, readline, bzip2
+}:
 
-let inherit (composableDerivation) edf; in
-
-composableDerivation.composableDerivation {} {
-
-  name = "monetdb-may-2009";
+stdenv.mkDerivation rec {
+  pname = "monetdb";
+  version = "11.39.7";
 
   src = fetchurl {
-    url = http://monetdb.cwi.nl/downloads/sources/May2009-SP1/MonetDB-May2009-SuperBall-SP1.tar.bz2;
-    sha256 = "0r794snnwa4m0x57nv8cgfdxwb689946c1mi2s44wp4iljka2ryj";
+    url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
+    sha256 = "0qb2hlz42400diahmsbflfjmfnzd5slm6761xhgvh8s4rjfqm21w";
   };
 
-  flags = edf { name = "geom"; enable = { buildInputs = [geos]; }; }
-          // {
-            java = { buildInputs = [ (apacheAnt.override {jdk = jdk5;}) jdk5 /* must be 1.5 */ ]; };
-            /* perl TODO export these (SWIG only if its present) HAVE_PERL=1 HAVE_PERL_DEVEL=1 HAVE_PERL_SWIG=1 */
-          };
-
-  buildInputs = [ (pcre.override { unicodeSupport = true; })
-                   openssl readline libxml2 ]; # optional python perl php java ?
-
-  cfg = {
-    geomSupport = true;
-    javaSupport = true;
-  };
-
-  configurePhase = ":";
-  buildPhase = ":";
-  
-  installPhase = ''
-    mkdir $TMP/build
-    sh monetdb-install.sh --build=$TMP/build --prefix=$out --enable-sql --enable-xquery
+  postPatch = ''
+    substituteInPlace cmake/monetdb-packages.cmake --replace \
+      'get_os_release_info(LINUX_DISTRO LINUX_DISTRO_VERSION)' \
+      'set(LINUX_DISTRO "nixos")'
   '';
 
-  meta = { 
-    description = "MonetDB is a open-source database system for high-performance applications in data mining, OLAP, GIS, XML Query, text and multimedia retrieval";
-    homepage = http://monetdb.cwi.nl/;
-    license = "MonetDB Public License"; # very similar to Mozilla public license (MPL) Version see 1.1 http://monetdb.cwi.nl/Legal/MonetDBLicense-1.1.html 
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = [ bison openssl readline bzip2 ];
+
+  meta = with stdenv.lib; {
+    description = "An open source database system";
+    homepage = "https://www.monetdb.org/";
+    license = licenses.mpl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.StillerHarpo ];
   };
 }

@@ -1,27 +1,35 @@
-{stdenv, fetchurl, x11, mesa}:
+{ stdenv, fetchurl, libGL, libX11 }:
 
-let version = "8.0.1"; in
-
-stdenv.mkDerivation {
-  name = "glxinfo-${version}";
+stdenv.mkDerivation rec {
+  pname = "glxinfo";
+  version = "8.4.0";
 
   src = fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/mesa/demos/${version}/mesa-demos-${version}.tar.bz2";
-    sha256 = "1lbp1llpx0hl5k79xb653yvjvk9mlikj73r8xjzyxqqp1nrg5isb";
+    url = "ftp://ftp.freedesktop.org/pub/mesa/demos/mesa-demos-${version}.tar.bz2";
+    sha256 = "0zgzbz55a14hz83gbmm0n9gpjnf5zadzi2kjjvkn6khql2a9rs81";
   };
 
-  buildInputs = [x11 mesa];
+  buildInputs = [ libX11 libGL ];
 
-  configurePhase = "true";
+  dontConfigure = true;
 
   buildPhase = "
-    cd src/xdemos
-    gcc glxinfo.c -o glxinfo -lGL -lX11
-    gcc glxgears.c -o glxgears -lGL -lX11
+    $CC src/xdemos/{glxinfo.c,glinfo_common.c} -o glxinfo -lGL -lX11
+    $CC src/xdemos/glxgears.c -o glxgears -lGL -lX11 -lm
+    $CC src/egl/opengles2/es2_info.c -o es2_info -lEGL -lGLESv2 -lX11
+    $CC src/egl/opengles2/es2gears.c src/egl/eglut/{eglut.c,eglut_x11.c} -o es2gears -Isrc/egl/eglut -lEGL -lGLESv2 -lX11 -lm
+    $CC src/egl/opengl/eglinfo.c -o eglinfo -lEGL -lGLESv2 -lX11
   ";
 
   installPhase = "
-    mkdir -p $out/bin
-    cp glxinfo glxgears $out/bin/
+    install -Dm 555 -t $out/bin glx{info,gears} es2{_info,gears} eglinfo
   ";
+
+  meta = with stdenv.lib; {
+    description = "Test utilities for OpenGL";
+    homepage = "https://www.mesa3d.org/";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
+  };
 }

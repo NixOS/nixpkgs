@@ -1,17 +1,20 @@
-{stdenv, fetchurl, libogg, libao, pkgconfig, libopus}:
+{stdenv, fetchurl, libogg, libao, pkgconfig, flac, opusfile, libopusenc}:
 
 stdenv.mkDerivation rec {
-  name = "opus-tools-0.1.5";
+  name = "opus-tools-0.2";
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/opus/${name}.tar.gz";
-    sha256 = "0184zfamg3qcjknk4liz4smws3mbv77gjhq2pn9xgcx9nw78srvn";
+    sha256 = "11pzl27s4vcz4m18ch72nivbhww2zmzn56wspb7rll1y1nq6rrdl";
   };
 
-  buildInputs = [ libogg libao pkgconfig libopus ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libogg libao flac opusfile libopusenc ];
 
   meta = {
     description = "Tools to work with opus encoded audio streams";
-    homepage = http://www.opus-codec.org/;
-    license = "BSD";
+    homepage = "https://www.opus-codec.org/";
+    license = stdenv.lib.licenses.bsd2;
+    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

@@ -1,15 +1,42 @@
-{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, mesa, x11 }:
+{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
 
-stdenv.mkDerivation {
-  name = "freeglut-2.8.0";
+let version = "3.2.1";
+in stdenv.mkDerivation {
+  pname = "freeglut";
+  inherit version;
 
   src = fetchurl {
-    url = mirror://sourceforge/freeglut/freeglut-2.8.0.tar.gz;
-    sha256 = "197293ff886abe613bc9eb4a762d9161b0c9e64b3e8e613ed7c5e353974fba05";
+    url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
+    sha256 = "0s6sk49q8ijgbsrrryb7dzqx2fa744jhx1wck5cz5jia2010w06l";
   };
 
-  configureFlags = "--" + (if stdenv.isDarwin then "disable" else "enable") + "-warnings";
+  outputs = [ "out" "dev" ];
 
-  buildInputs = [ libXi libXrandr libXxf86vm mesa x11 ];
-  patches = [ ./0001-remove-typedefs-now-living-in-mesa.patch ];
+  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper cmake ];
+
+  cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
+                 "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+                 "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
+                 "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
+                 "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
+                 "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
+               ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "Create and manage windows containing OpenGL contexts";
+    longDescription = ''
+      FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
+      (GLUT) library. GLUT (and hence FreeGLUT) allows the user to create and
+      manage windows containing OpenGL contexts on a wide range of platforms
+      and also read the mouse, keyboard and joystick functions. FreeGLUT is
+      intended to be a full replacement for GLUT, and has only a few
+      differences.
+    '';
+    homepage = "http://freeglut.sourceforge.net/";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }

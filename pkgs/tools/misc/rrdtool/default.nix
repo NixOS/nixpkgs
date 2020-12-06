@@ -1,17 +1,30 @@
-{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo }:
+{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
+, tcl-8_5, darwin }:
 
-stdenv.mkDerivation {
-  name = "rrdtool-1.4.5";
+stdenv.mkDerivation rec {
+  name = "rrdtool-1.7.2";
+
   src = fetchurl {
-    url = http://oss.oetiker.ch/rrdtool/pub/rrdtool-1.4.5.tar.gz;
-    sha256 = "07fgn0y4yj7p2vh6a37q273hf98gkfw2sdam5r1ldn1k0m1ayrqj";
+    url = "https://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
+    sha256 = "1nsqra0g2nja19akmf9x5y9hhgc35ml3w9dcdz2ayz7zgvmzm6d1";
   };
-  buildInputs = [ gettext perl pkgconfig libxml2 pango cairo ];
 
-  meta = {
-    homepage = http://oss.oetiker.ch/rrdtool/;
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ gettext perl libxml2 pango cairo groff ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices ];
+
+  postInstall = ''
+    # for munin and rrdtool support
+    mkdir -p $out/${perl.libPrefix}
+    mv $out/lib/perl/5* $out/${perl.libPrefix}
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://oss.oetiker.ch/rrdtool/";
     description = "High performance logging in Round Robin Databases";
-    license = "GPL";
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ pSub ];
   };
 }

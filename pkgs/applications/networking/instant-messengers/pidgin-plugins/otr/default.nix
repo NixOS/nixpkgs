@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, libotr, pidgin} :
+{ stdenv, fetchurl, libotr, pidgin, intltool } :
 
-stdenv.mkDerivation {
-  name = "pidgin-otr-3.2.0";
+stdenv.mkDerivation rec {
+  name = "pidgin-otr-4.0.2";
   src = fetchurl {
-    url = http://www.cypherpunks.ca/otr/pidgin-otr-3.2.0.tar.gz;
-    sha256 = "1cp6s565sid657lvmm7jrwl9wnk4ywsl8d9sp4iba36r0s5qaw08";
-  };
-
-  meta = {
-    description = "OTR plugin for Pidgin IM.";
-    homepage = http://www.cypherpunks.ca/otr;
+    url = "http://www.cypherpunks.ca/otr/${name}.tar.gz";
+    sha256 = "1i5s9rrgbyss9rszq6c6y53hwqyw1k86s40cpsfx5ccl9bprxdgl";
   };
 
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
 
-  buildInputs = [libotr pidgin];
+  buildInputs = [ libotr pidgin intltool ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://otr.cypherpunks.ca/";
+    description = "Plugin for Pidgin 2.x which implements OTR Messaging";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
+  };
 }

@@ -2,11 +2,20 @@
 
 own_dir="$(cd "$(dirname "$0")"; pwd)"
 
+URL_WAS_SET=
+DL_URL_RE=
 CURRENT_URL=
+CURRENT_REV=
+PREFETCH_COMMAND=
 NEED_TO_CHOOSE_URL=1
 
 url () {
+  URL_WAS_SET=1
   CURRENT_URL="$1"
+}
+
+dl_url_re () {
+  DL_URL_RE="$1"
 }
 
 version_unpack () {
@@ -99,16 +108,27 @@ ensure_name () {
 
 ensure_attribute_name () {
   echo "Ensuring attribute name. CURRENT_ATTRIBUTE_NAME: $CURRENT_ATTRIBUTE_NAME" >&2
+  ensure_name
   [ -z "$CURRENT_ATTRIBUTE_NAME" ] && attribute_name "$CURRENT_NAME"
   echo "Resulting attribute name: $CURRENT_ATTRIBUTE_NAME"
+}
+
+ensure_url () {
+  echo "Ensuring starting URL. CURRENT_URL: $CURRENT_URL" >&2
+  ensure_attribute_name
+  [ -z "$CURRENT_URL" ] && CURRENT_URL="$(retrieve_meta downloadPage)"
+  [ -z "$CURRENT_URL" ] && CURRENT_URL="$(retrieve_meta downloadpage)"
+  [ -z "$CURRENT_URL" ] && CURRENT_URL="$(retrieve_meta homepage)"
+  echo "Resulting URL: $CURRENT_URL"
 }
 
 ensure_choice () {
   echo "Ensuring that choice is made." >&2
   echo "NEED_TO_CHOOSE_URL: [$NEED_TO_CHOOSE_URL]." >&2
   echo "CURRENT_URL: $CURRENT_URL" >&2
+  [ -z "$URL_WAS_SET" ] && [ -z "$CURRENT_URL" ] && ensure_url
   [ -n "$NEED_TO_CHOOSE_URL" ] && {
-    version_link '[.]tar[.]([^./])+$'
+    version_link "${DL_URL_RE:-[.]tar[.]([^./])+\$}"
     unset NEED_TO_CHOOSE_URL
   }
   [ -z "$CURRENT_URL" ] && {
@@ -118,13 +138,26 @@ ensure_choice () {
   }
 }
 
+revision () {
+  CURRENT_REV="$1"
+  echo "CURRENT_REV: $CURRENT_REV"
+}
+
+prefetch_command () {
+  PREFETCH_COMMAND="$1"
+}
+
+prefetch_command_rel () {
+  PREFETCH_COMMAND="$(dirname "$0")/$1"
+}
+
 ensure_hash () {
   echo "Ensuring hash. CURRENT_HASH: $CURRENT_HASH" >&2
   [ -z "$CURRENT_HASH" ] && hash
 }
 
 hash () {
-  CURRENT_HASH="$(nix-prefetch-url "$CURRENT_URL")"
+  CURRENT_HASH="$(${PREFETCH_COMMAND:-nix-prefetch-url} "$CURRENT_URL" $CURRENT_REV)"
   echo "CURRENT_HASH: $CURRENT_HASH" >&2
 }
 
@@ -138,8 +171,18 @@ attribute_name () {
   echo "CURRENT_ATTRIBUTE_NAME: $CURRENT_ATTRIBUTE_NAME" >&2
 }
 
+retrieve_meta () {
+  nix-instantiate --eval-only '<nixpkgs>' -A "$CURRENT_ATTRIBUTE_NAME".meta."$1" | xargs
+}
+
 retrieve_version () {
-  PACKAGED_VERSION="$(nix-instantiate --eval-only '<nixpkgs>' -A "$CURRENT_ATTRIBUTE_NAME".meta.version | xargs)"
+  PACKAGED_VERSION="$(retrieve_meta version)"
+}
+
+ensure_dl_url_re () {
+  echo "Ensuring DL_URL_RE. DL_URL_RE: $DL_URL_RE" >&2
+  [ -z "$DL_URL_RE" ] && dl_url_re "$(retrieve_meta downloadURLRegexp)"
+  echo "DL_URL_RE: $DL_URL_RE" >&2
 }
 
 directory_of () {
@@ -172,6 +215,7 @@ do_write_expression () {
   echo "${1}  name=\"\${baseName}-\${version}\";"
   echo "${1}  hash=\"$CURRENT_HASH\";"
   echo "${1}  url=\"$CURRENT_URL\";"
+  [ -n "$CURRENT_REV" ] && echo "${1}  rev=\"$CURRENT_REV\";"
   echo "${1}  sha256=\"$CURRENT_HASH\";"
   echo "$2"
 }
@@ -230,14 +274,41 @@ do_overwrite () {
   mv "$1.new.tmp" "$1"
 }
 
+do_overwrite_just_version () {
+  ensure_hash
+  set_var_value version $CURRENT_VERSION
+  set_var_value sha256 $CURRENT_HASH
+}
+
+minimize_overwrite() {
+  do_overwrite(){
+    do_overwrite_just_version
+  }
+}
+
 process_config () {
   CONFIG_DIR="$(directory_of "$1")"
   CONFIG_NAME="$(basename "$1")"
   BEGIN_EXPRESSION='# Generated upstream information';
-  source "$CONFIG_DIR/$CONFIG_NAME"
-  ensure_name
+  if [ -f  "$CONFIG_DIR/$CONFIG_NAME" ] &&
+      [ "${CONFIG_NAME}" = "${CONFIG_NAME%.nix}" ]; then
+    source "$CONFIG_DIR/$CONFIG_NAME"
+  else
+    CONFIG_NAME="${CONFIG_NAME%.nix}"
+    ensure_attribute_name
+    [ -n "$(retrieve_meta updateWalker)" ] ||
+        [ -n "$FORCE_UPDATE_WALKER" ] || {
+      echo "Error: package not marked as safe for update-walker" >&2
+      echo "Set FORCE_UPDATE_WALKER=1 to override" >&2
+      exit 1;
+    }
+    [ -z "$(retrieve_meta fullRegenerate)" ] && eval "
+      minimize_overwrite
+    "
+  fi
   ensure_attribute_name
   retrieve_version
+  ensure_dl_url_re
   ensure_choice
   ensure_version
   ensure_target

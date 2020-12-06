@@ -1,53 +1,24 @@
-x@{builderDefsPackage
-  , ncurses
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, ncurses }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="Regina-REXX";
-    pname="regina-rexx";
-    version="3.5";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/${pname}/${pname}/${version}/${name}.tar.gz";
-    hash="0gh0k6lbhfixs44adha7lxirl3a08jabdylzr6m7mh5q5fhzv5f8";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "Regina-REXX";
+  version = "3.9.1";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/regina-rexx/regina-rexx/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1vpksnjmg6y5zag9li6sxqxj2xapgalfz8krfxgg49vyk0kdy4sx";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  buildInputs = [ ncurses ];
 
   configureFlags = [
-    "--libdir=$out/lib"
+    "--libdir=$(out)/lib"
   ];
-      
-  meta = {
-    description = "REXX interpreter";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl2;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/regina-rexx/files/regina-rexx/";
-    };
-  };
-}) x
 
+  meta = with stdenv.lib; {
+    description = "REXX interpreter";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
+  };
+}

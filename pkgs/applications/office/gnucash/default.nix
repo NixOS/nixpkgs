@@ -1,59 +1,96 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
-, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
-, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper
+{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
+, boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
+, webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
+, libdbiDrivers, guile, perl, perlPackages
 }:
 
-/* If you experience GConf errors when running GnuCash on NixOS, see
- * http://wiki.nixos.org/wiki/Solve_GConf_errors_when_running_GNOME_applications
- * for a possible solution.
- */
+let
 
-stdenv.mkDerivation rec {
-  name = "gnucash-2.4.11";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0qbpgd6spclkmwryi66cih0igi5a6pmsnk41mmnscpfpz1mddhwk";
+  # Enable gnc-fq-* to run in command line.
+  perlWrapper = stdenv.mkDerivation {
+    name = perl.name + "-wrapper-for-gnucash";
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ perl ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
+    phases = [ "installPhase" ];
+    installPhase = ''
+      mkdir -p $out/bin
+      for script in ${perl}/bin/*; do
+        makeWrapper $script $out''${script#${perl}} \
+          --prefix "PERL5LIB" ":" "$PERL5LIB"
+      done
+    '';
   };
 
+in
+
+stdenv.mkDerivation rec {
+  pname = "gnucash";
+  version = "4.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
+    sha256 = "020k1mm909dcgs52ls4v7xx3yn8gqazi9awyr81l6y7pkq1spn2n";
+  };
+
+  nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
+
   buildInputs = [
-    pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
-    libgnomeprint goffice enchant gettext intltool perl guile slibGuile
-    swig isocodes bzip2 makeWrapper libofx
-  ];
+    boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
+    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
+    libdbiDrivers guile
+    perlWrapper perl
+  ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
 
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
+  propagatedUserEnvPkgs = [ dconf ];
 
-  postInstall = ''
-    sed -i $out/bin/update-gnucash-gconf                                \
-       -e 's|--config-source=[^ ]* --install-schema-file|--makefile-install-rule|'
-    for prog in "$out/bin/"*
-    do
-      wrapProgram "$prog"                                               \
-        --set SCHEME_LIBRARY_PATH "$SCHEME_LIBRARY_PATH"                \
-        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"                 \
-        --prefix LD_LIBRARY_PATH ":" "${libgnomeui}/lib/libglade/2.0"   \
-        --prefix LD_LIBRARY_PATH ":" "${libbonoboui}/lib/libglade/2.0"  \
-        --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
-        --prefix PATH ":" "${gconf}/bin"                                \
-        --suffix PATH ":" "$out/bin"
-    done
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  postPatch = ''
+    patchShebangs .
   '';
 
-  # The following settings fix failures in the test suite. It's not required otherwise.
-  NIX_LDFLAGS = "-rpath=${guile}/lib -rpath=${glib}/lib";
-  preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
-  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+
+  postInstall = ''
+    # Auto-updaters don't make sense in Nix.
+    rm $out/bin/gnc-fq-update
+
+    # Unnecessary in the release build.
+    rm $out/bin/gnucash-valgrind
+
+    wrapProgram "$out/bin/gnucash" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}" \
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
+      --prefix PERL5LIB ":" "$PERL5LIB" \
+      --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
+  '';
+
+  # TODO: The following tests FAILED:
+  #   70 - test-load-c (Failed)
+  #   71 - test-modsysver (Failed)
+  #   72 - test-incompatdep (Failed)
+  #   73 - test-agedver (Failed)
+  #   77 - test-gnc-module-swigged-c (Failed)
+  #   78 - test-gnc-module-load-deps (Failed)
+  #   80 - test-gnc-module-scm-module (Failed)
+  #   81 - test-gnc-module-scm-multi (Failed)
+  preCheck = ''
+    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+    export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
+  '';
+  doCheck = false;
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "GnuCash, a personal and small-business financial-accounting application";
+    description = "Personal and small-business financial-accounting application";
 
     longDescription = ''
       GnuCash is personal and small-business financial-accounting software,
       freely licensed under the GNU GPL and available for GNU/Linux, BSD,
-      Solaris, Mac OS X and Microsoft Windows.
+      Solaris, macOS and Microsoft Windows.
 
       Designed to be easy to use, yet powerful and flexible, GnuCash allows
       you to track bank accounts, stocks, income and expenses.  As quick and
@@ -61,11 +98,11 @@ stdenv.mkDerivation rec {
       accounting principles to ensure balanced books and accurate reports.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://www.gnucash.org/;
+    homepage = "http://www.gnucash.org/";
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

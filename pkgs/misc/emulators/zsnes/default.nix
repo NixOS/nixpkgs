@@ -1,38 +1,63 @@
-{stdenv, fetchurl, nasm, SDL, zlib, libpng, ncurses, mesa}:
+{stdenv, fetchFromGitHub, nasm, SDL, zlib, libpng, ncurses, libGLU, libGL
+, makeDesktopItem }:
 
-stdenv.mkDerivation {
-  name = "zsnes-1.51";
-  
-  src = fetchurl {
-    url = mirror://sourceforge/zsnes/zsnes151src.tar.bz2;
-    sha256 = "08s64qsxziv538vmfv38fg1rfrz5k95dss5zdkbfxsbjlbdxwmi8";
+let
+  desktopItem = makeDesktopItem {
+    name = "zsnes";
+    exec = "zsnes";
+    icon = "zsnes";
+    comment = "A SNES emulator";
+    desktopName = "zsnes";
+    genericName = "zsnes";
+    categories = "Game;";
   };
 
-  buildInputs = [ nasm SDL zlib libpng ncurses mesa ];
-  
+in stdenv.mkDerivation {
+  name = "zsnes-1.51";
+
+  src = fetchFromGitHub {
+    owner = "emillon";
+    repo = "zsnes";
+    rev = "fc160b2538738995f600f8405d23a66b070dac02";
+    sha256 = "1gy79d5wdaacph0cc1amw7mqm7i0716n6mvav16p1svi26iz193v";
+  };
+
+  buildInputs = [ nasm SDL zlib libpng ncurses libGLU libGL ];
+
+  prePatch = ''
+    for i in $(cat debian/patches/series); do
+      echo "applying $i"
+      patch -p1 < "debian/patches/$i"
+    done
+  '';
+
   preConfigure = ''
     cd src
-    
-    # Fix for undefined strncasecmp()
-    echo '#include <strings.h>' > tmp.cpp 
-    cat tmp.cpp tools/strutil.h > tools/strutil.h.new
-    mv tools/strutil.h.new tools/strutil.h
-    
-    # Fix for undefined system()
-    echo '#include <stdlib.h>' > tmp.cpp
-    cat tmp.cpp tools/depbuild.cpp > tools/depbuild.cpp.new
-    mv tools/depbuild.cpp.new tools/depbuild.cpp
-    
-    # Fix for lots of undefined strcmp, strncmp etc.
-    echo '#include <string.h>' > tmp.cpp 
-    cat tmp.cpp parsegen.cpp > parsegen.cpp.new
-    mv parsegen.cpp.new parsegen.cpp
+    sed -i "/^STRIP/d" configure
+    sed -i "/\$STRIP/d" configure
   '';
-  
+
+  configureFlags = [ "--enable-release" ];
+
+  postInstall = ''
+    function installIcon () {
+        mkdir -p $out/share/icons/hicolor/$1/apps/
+        cp icons/$1x32.png $out/share/icons/hicolor/$1/apps/zsnes.png
+    }
+    installIcon "16x16"
+    installIcon "32x32"
+    installIcon "48x48"
+    installIcon "64x64"
+
+    mkdir -p $out/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+  '';
+
   meta = {
     description = "A Super Nintendo Entertainment System Emulator";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
-    homepage = http://www.zsnes.com;
+    homepage = "http://www.zsnes.com";
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -1,34 +1,16 @@
-{stdenv, fetchurl, ocaml, findlib}:
-
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
+{ stdenv, ocaml, findlib, ounit2 }:
 
 stdenv.mkDerivation {
-  name = "ounit-1.1.2";
+  pname = "ocaml${ocaml.version}-ounit";
+  inherit (ounit2) version src meta;
 
-  src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/886/ounit-1.1.2.tar.gz;
-    sha256 = "e6bc1b0cdbb5b5552d85bee653e23aafe20bb97fd7cd229c867d01ff999888e3";
-  };
+  buildInputs = [ findlib ];
+  propagatedBuildInputs = [ ounit2 ];
 
-  buildInputs = [ocaml findlib];
-
-  dontAddPrefix = true;
-
-  doCheck = true;
-
-  checkTarget = "test";
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   createFindlibDestdir = true;
 
-  meta = {
-    homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
-    description = "Unit test framework for OCaml";
-    license = stdenv.lib.licenses.mit;
-    platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
-  };
+  installTargets = "install-ounit version='${ounit2.version}'";
+
 }

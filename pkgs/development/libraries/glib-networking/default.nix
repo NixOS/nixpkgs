@@ -1,21 +1,93 @@
-{stdenv, fetchurl, pkgconfig, glib, libtool, intltool, gnutls2, libproxy
-, gsettings_desktop_schemas, libgcrypt, libtasn1 }:
+{ stdenv
+, fetchurl
+, substituteAll
+, meson
+, ninja
+, nixosTests
+, pkgconfig
+, glib
+, gettext
+, makeWrapper
+, python3
+, gnutls
+, p11-kit
+, libproxy
+, gnome3
+, gsettings-desktop-schemas
+}:
 
-stdenv.mkDerivation {
-  name = "glib-networking-2.30.2";
+stdenv.mkDerivation rec {
+  pname = "glib-networking";
+  version = "2.66.0";
+
+  outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = mirror://gnome/sources/glib-networking/2.30/glib-networking-2.30.2.tar.xz;
-    sha256 = "1g2ran0rn37009fs3xl38m95i5w8sdf9ax0ady4jbjir15844xcz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "16807qwflbghp0c66jdx2gnaffvdp4bla35ppzp9dlgx6wjbxmy5";
   };
 
-  configureFlags = "--with-ca-certificates=/etc/ca-bundle.crt";
-  
-  preBuild = ''
-    sed -e "s@${glib}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
+    })
+
+    ./installed-tests-path.patch
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
   '';
 
-  buildNativeInputs = [ pkgconfig intltool ];
-  propagatedBuildInputs =
-    [ glib libtool gnutls2 libproxy libgcrypt libtasn1 gsettings_desktop_schemas ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    makeWrapper
+    python3 # for install_script
+  ];
+
+  buildInputs = [
+    glib
+    gnutls
+    p11-kit
+    libproxy
+    gsettings-desktop-schemas
+  ];
+
+  doCheck = false; # tests need to access the certificates (among other things)
+
+  mesonFlags = [
+    "-Dinstalled_tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ];
+
+  postFixup = ''
+    find "$installedTests/libexec" "$out/libexec" -type f -executable -print0 \
+      | while IFS= read -r -d "" file; do
+      echo "Wrapping program '$file'"
+      wrapProgram "$file" --prefix GIO_EXTRA_MODULES : "$out/lib/gio/modules"
+    done
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.glib-networking;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "Network-related giomodules for glib";
+    homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
+    license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
+  };
 }

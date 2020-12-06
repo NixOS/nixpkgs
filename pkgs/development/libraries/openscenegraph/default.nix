@@ -1,59 +1,76 @@
-x@{builderDefsPackage
-  , cmake, giflib, libjpeg, libtiff, lib3ds, freetype, libpng
-  , coin3d, jasper, gdal, xproto, libX11, libXmu, freeglut, mesa
-  , doxygen, ffmpeg, xineLib, unzip, zlib, openal, libxml2
-  , curl
-  , ...}:
-builderDefsPackage
-(a :
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
+  libX11, libXinerama, libXrandr, libGLU, libGL,
+  glib, ilmbase, libxml2, pcre, zlib,
+  AGL, Carbon, Cocoa, Foundation,
+  jpegSupport ? true, libjpeg,
+  exrSupport ? false, openexr,
+  gifSupport ? true, giflib,
+  pngSupport ? true, libpng,
+  tiffSupport ? true, libtiff,
+  gdalSupport ? false, gdal,
+  curlSupport ? true, curl,
+  colladaSupport ? false, opencollada,
+  opencascadeSupport ? false, opencascade,
+  ffmpegSupport ? false, ffmpeg_3,
+  nvttSupport ? false, nvidia-texture-tools,
+  freetypeSupport ? true, freetype,
+  svgSupport ? false, librsvg,
+  pdfSupport ? false, poppler,
+  vncSupport ? false, libvncserver,
+  lasSupport ? false, libLAS,
+  luaSupport ? false, lua,
+  sdlSupport ? false, SDL2,
+  restSupport ? false, asio, boost,
+  withApps ? false,
+  withExamples ? false, fltk, wxGTK,
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="OpenSceneGraph";
-    version="2.8.3";
-    name="${baseName}-${version}";
-    url="http://www.openscenegraph.org/downloads/stable_releases/${name}/source/${name}.zip";
-    hash="0phihxs7zgir9n1z54xsrsha8wa0xll7xl6lvqvrrczf0bm80yrs";
+stdenv.mkDerivation rec {
+  pname = "openscenegraph";
+  version = "3.6.4";
+
+  src = fetchFromGitHub {
+    owner = "openscenegraph";
+    repo = "OpenSceneGraph";
+    rev = "OpenSceneGraph-${version}";
+    sha256 = "0x8hdbzw0b71j91fzp9cwmy9a7ava8v8wwyj8nxijq942vdx1785";
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "addInputs" "doUnpack" "doCmake" "doMakeInstall"];
+  buildInputs = [
+    libX11 libXinerama libXrandr libGLU libGL
+    glib ilmbase libxml2 pcre zlib
+  ] ++ lib.optional jpegSupport libjpeg
+    ++ lib.optional exrSupport openexr
+    ++ lib.optional gifSupport giflib
+    ++ lib.optional pngSupport libpng
+    ++ lib.optional tiffSupport libtiff
+    ++ lib.optional gdalSupport gdal
+    ++ lib.optional curlSupport curl
+    ++ lib.optional colladaSupport opencollada
+    ++ lib.optional opencascadeSupport opencascade
+    ++ lib.optional ffmpegSupport ffmpeg_3
+    ++ lib.optional nvttSupport nvidia-texture-tools
+    ++ lib.optional freetypeSupport freetype
+    ++ lib.optional svgSupport librsvg
+    ++ lib.optional pdfSupport poppler
+    ++ lib.optional vncSupport libvncserver
+    ++ lib.optional lasSupport libLAS
+    ++ lib.optional luaSupport lua
+    ++ lib.optional sdlSupport SDL2
+    ++ lib.optionals restSupport [ asio boost ]
+    ++ lib.optionals withExamples [ fltk wxGTK ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
+  ;
 
-  cmakeFlags = [
-    "-D MATH_LIBRARY="
-  ];
+  cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  setVars = a.noDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D__STDC_CONSTANT_MACROS=1"
-  '';
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 3D graphics toolkit";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = "http://www.openscenegraph.org/";
+    maintainers = with maintainers; [ aanderse raskin ];
+    platforms = with platforms; linux ++ darwin;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.openscenegraph.org/projects/osg/wiki/Downloads";
-    };
-  };
-}) x
-
+}

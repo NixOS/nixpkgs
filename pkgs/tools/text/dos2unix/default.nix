@@ -1,24 +1,22 @@
 {stdenv, fetchurl, perl, gettext }:
 
-stdenv.mkDerivation {
-  name = "dos2unix-5.3.1";
-  
+stdenv.mkDerivation rec {
+  pname = "dos2unix";
+  version = "7.4.2";
+
   src = fetchurl {
-    url = http://waterlan.home.xs4all.nl/dos2unix/dos2unix-5.3.1.tar.gz;
-    sha256 = "0bwqw3wi0j4f1x8d39xw5v57ac0bc58j41vjx8v2qm1smg9jyci1";
+    url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
+    sha256 = "00dfsf4rfyjb5j12gan8xjiirm0asshdz6dmd3l34a7ays6wadb0";
   };
 
-  configurePhase = ''
-    sed -i -e s,/usr,$out, Makefile
-  '';
+  nativeBuildInputs = [ perl gettext ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  buildInputs = [ perl gettext ];
-
-  meta = {
-    homepage = http://waterlan.home.xs4all.nl/dos2unix.html;
-    description = "Tools to transform text files from dos to unix formats and vicervesa";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+  meta = with stdenv.lib; {
+    description = "Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa";
+    homepage = "https://waterlan.home.xs4all.nl/dos2unix.html";
+    changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${version}/tree/dos2unix/NEWS.txt?format=raw";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ c0bw3b ];
   };
 }

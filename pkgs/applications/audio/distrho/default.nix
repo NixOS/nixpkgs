@@ -1,67 +1,58 @@
-{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, jackaudio
-, libxslt, lv2, pkgconfig, premake, xlibs }:
+{ stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
+, pkgconfig, ladspa-sdk, premake3
+, libX11, libXcomposite, libXcursor, libXext, libXinerama, libXrender
+}:
 
 let
-  rev = "7815b3545978e";
-in
-stdenv.mkDerivation rec {
-  name = "distrho-${rev}";
+  premakeos = if stdenv.hostPlatform.isDarwin then "osx"
+              else if stdenv.hostPlatform.isWindows then "mingw"
+              else "linux";
+in stdenv.mkDerivation rec {
+  pname = "distrho-ports";
+  version = "unstable-2019-10-09";
 
-  src = fetchgit {
-    url = "git://distrho.git.sf.net/gitroot/distrho/distrho";
-    inherit rev;
-    sha256 = "2e260f16ee67b1166c39e2d55c8dd5593902c8b3d8d86485545ef83139e1e844";
+  src = fetchFromGitHub {
+    owner = "DISTRHO";
+    repo = "DISTRHO-Ports";
+    rev = "7e62235e809e59770d0d91d2c48c3f50ce7c027a";
+    sha256 = "10hpsjcmk0cgcsic9r1wxyja9x6q9wb8w8254dlrnzyswl54r1f8";
   };
 
-  patchPhase = ''
-    sed -e "s#xsltproc#${libxslt}/bin/xsltproc#" -i Makefile
-    sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
-    sed -e "s#/etc/HybridReverb2#$out/etc/Hybridreverb2#" \
-      -i ports/hybridreverb2/source/SystemConfig.cpp
-    sed -e "s#/usr#$out#" -i ports/hybridreverb2/data/HybridReverb2.conf
+  configurePhase = ''
+    runHook preConfigure
+
+    sh ./scripts/premake-update.sh ${premakeos}
+
+    runHook postConfigure
   '';
 
+  postPatch = ''
+    sed -e "s#@./scripts#sh scripts#" -i Makefile
+  '';
+
+  nativeBuildInputs = [ pkgconfig premake3 ];
   buildInputs = [
-    alsaLib fftwSinglePrec freetype jackaudio pkgconfig premake
-    xlibs.libX11 xlibs.libXcomposite xlibs.libXcursor xlibs.libXext
-    xlibs.libXinerama xlibs.libXrender
+    alsaLib fftwSinglePrec freetype libjack2
+    libX11 libXcomposite libXcursor libXext
+    libXinerama libXrender ladspa-sdk
   ];
 
-  buildPhase = ''
-    sh ./scripts/premake-update.sh linux
-    make standalone
-    make lv2
-
-    # generate lv2 ttl
-    sh scripts/generate-ttl.sh
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin/standalone/* $out/bin/
-    mkdir -p $out/lib/lv2
-    cp -a bin/lv2/* $out/lib/lv2/
-
-    # HybridReverb2 data
-    mkdir -p $out/etc/HybridReverb2
-    cp ports/hybridreverb2/data/HybridReverb2.conf $out/etc/HybridReverb2/
-    mkdir -p $out/share
-    cp -a ports/hybridreverb2/data/HybridReverb2 $out/share/
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://distrho.sourceforge.net;
+    homepage = "http://distrho.sourceforge.net";
     description = "A collection of cross-platform audio effects and plugins";
     longDescription = ''
       Includes:
-      3BandEQ bitmangler drowaudio-distortion drowaudio-flanger
-      drowaudio-tremolo eqinox HybridReverb2 juce_pitcher sDelay
-      TAL-Filter TAL-NoiseMaker TAL-Reverb-2 TAL-Vocoder-2 ThePilgrim
-      Wolpertinger argotlunar capsaicin drowaudio-distortionshaper
-      drowaudio-reverb drumsynth highlife JuceDemoPlugin PingPongPan
-      TAL-Dub-3 TAL-Filter-2 TAL-Reverb TAL-Reverb-3 TheFunction vex
+      Dexed drowaudio-distortion drowaudio-distortionshaper drowaudio-flanger
+      drowaudio-reverb drowaudio-tremolo drumsynth EasySSP eqinox HiReSam
+      JuceDemoPlugin KlangFalter LUFSMeter LUFSMeterMulti Luftikus Obxd
+      PitchedDelay ReFine StereoSourceSeparation TAL-Dub-3 TAL-Filter
+      TAL-Filter-2 TAL-NoiseMaker TAL-Reverb TAL-Reverb-2 TAL-Reverb-3
+      TAL-Vocoder-2 TheFunction ThePilgrim Vex Wolpertinger
     '';
+    license = with licenses; [ gpl2 gpl3 gpl2Plus lgpl3 mit ];
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

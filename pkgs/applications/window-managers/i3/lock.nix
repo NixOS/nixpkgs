@@ -1,25 +1,37 @@
 { fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutilimage,
-  pam, libX11, libev, cairo }:
+  xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  name = "i3lock-2.4.1";
+  pname = "i3lock";
+  version = "2.13";
 
   src = fetchurl {
-    url = "http://i3wm.org/i3lock/${name}.tar.bz2";
-    sha256 = "4d29e66841138de562e71903d31ecaaefd8ecffe5e68da0d6c8d560ed543047c";
+    url = "https://i3wm.org/i3lock/${pname}-${version}.tar.bz2";
+    sha256 = "02szjsaz7rqrdkd0r2nwgwa85c4hwfrcskxw7ryk695kmjcfhzv3";
   };
 
-  buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutilimage pam libX11
-    libev cairo ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
+    pam libX11 libev cairo libxkbcommon libxkbfile ];
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc";
+  makeFlags = [ "all" ];
+  installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" ];
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp *.1 $out/share/man/man1
+  '';
 
-  meta = {
-    description = "i3 is a tiling window manager";
-    homepage = http://i3wm.org;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-    license = stdenv.lib.licenses.bsd3;
+  meta = with stdenv.lib; {
+    description = "A simple screen locker like slock";
+    longDescription = ''
+      Simple screen locker. After locking, a colored background (default: white) or
+      a configurable image is shown, and a ring-shaped unlock-indicator gives feedback
+      for every keystroke. After entering your password, the screen is unlocked again.
+    '';
+    homepage = "https://i3wm.org/i3lock/";
+    maintainers = with maintainers; [ malyn domenkozar ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 
 }

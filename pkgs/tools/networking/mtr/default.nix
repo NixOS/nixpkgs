@@ -1,47 +1,46 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
+, libcap, ncurses
+, withGtk ? false, gtk3 ? null }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="mtr";
-    version="0.82";
-    name="${baseName}-${version}";
-    url="ftp://ftp.bitwizard.nl/${baseName}/${name}.tar.gz";
-    hash="185nx4y6xn7vv6l3pbyc0ljmwfl4si4zszwad1jkbq1scb4mgd7k";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+assert withGtk -> gtk3 != null;
+
+stdenv.mkDerivation rec {
+  pname = "mtr${lib.optionalString withGtk "-gui"}";
+  version = "0.94";
+
+  src = fetchFromGitHub {
+    owner  = "traviscross";
+    repo   = "mtr";
+    rev    = "v${version}";
+    sha256 = "0wnz87cr2lcl74bj8qxq9xgai40az3pk9k0z893scyc8svd61xz6";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  # we need this before autoreconfHook does its thing
+  postPatch = ''
+    echo ${version} > .tarball-version
+  '';
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
+  # and this after autoreconfHook has generated Makefile.in
+  preConfigure = ''
+    substituteInPlace Makefile.in \
+      --replace ' install-exec-hook' ""
+  '';
+
+  configureFlags = stdenv.lib.optional (!withGtk) "--without-gtk";
+
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = [ ncurses ]
+    ++ stdenv.lib.optional withGtk gtk3
+    ++ stdenv.lib.optional stdenv.isLinux libcap;
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "A network diagnostics tool";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2;
+    homepage    = "https://www.bitwizard.nl/mtr/";
+    license     = licenses.gpl2;
+    maintainers = with maintainers; [ koral orivej raskin globin ];
+    platforms   = platforms.unix;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "ftp://ftp.bitwizard.nl/mtr/";
-    };
-  };
-}) x
-
+}

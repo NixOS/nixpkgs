@@ -1,14 +1,16 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "npth-0.91";
+  name = "npth-1.6";
 
   src = fetchurl {
-    url = "ftp://ftp.gnupg.org/gcrypt/npth/${name}.tar.bz2";
-    sha256 = "1qgs1n70x83dyyysabg50dh8s3464jwsa63qi5if2cd3sk78dvya";
+    url = "mirror://gnupg/npth/${name}.tar.bz2";
+    sha256 = "1lg2lkdd3z1s3rpyf88786l243adrzyk9p4q8z9n41ygmpcsp4qk";
   };
 
-  meta = {
+  doCheck = true;
+
+  meta = with stdenv.lib; {
     description = "The New GNU Portable Threads Library";
     longDescription = ''
       This is a library to provide the GNU Pth API and thus a non-preemptive
@@ -19,8 +21,8 @@ stdenv.mkDerivation rec {
       compatible to GNU Pth.  Experience with a Windows Pth emulation showed
       that this is a solid way to provide a co-routine based framework.
     '';
-    homepage = http://www.gnupg.org;
-    license = "LGPLv3";
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://www.gnupg.org";
+    license = licenses.lgpl3;
+    platforms = platforms.all;
   };
 }

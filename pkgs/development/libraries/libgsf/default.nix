@@ -1,42 +1,43 @@
-{ fetchurl, stdenv, perl, perlXMLParser, pkgconfig, libxml2
-, gettext, intltool, bzip2, glib, python
-, gnomeSupport ? true,  gdk_pixbuf ? null
-, gnome_vfs ? null, libbonobo ? null }:
-
-assert gnomeSupport -> gdk_pixbuf != null && gnome_vfs != null && libbonobo != null
-  && glib != null;
+{ fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
+, perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.23";
+  pname = "libgsf";
+  version = "1.14.47";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgsf/1.14/${name}.tar.xz";
-    sha256 = "05zvaazf0d584nfirwsz7889lbsl4v781hslv3kda6akiwbwdhdz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0kbpp9ksl7977xiga37sk1gdw1r039v6zviqznl7alvvg39yp26i";
   };
 
-  buildNativeInputs = [ intltool pkgconfig ];
-  buildInputs =
-    [ perl perlXMLParser gettext bzip2 python ]
-    ++ stdenv.lib.optionals gnomeSupport [ gnome_vfs gdk_pixbuf ];
+  nativeBuildInputs = [ pkgconfig intltool libintl ];
 
-  propagatedBuildInputs = [ libxml2 glib ]
-    ++ stdenv.lib.optionals gnomeSupport [ libbonobo ];
+  buildInputs = [ gettext bzip2 zlib ];
+  checkInputs = [ perl ];
+
+  propagatedBuildInputs = [ libxml2 glib gdk-pixbuf libiconv ];
+
+  outputs = [ "out" "dev" ];
 
   doCheck = true;
+  preCheck = "patchShebangs ./tests/";
 
-  patches = [ ./syscall-name-clash.patch ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
-  meta = {
-    homepage = http://www.gnome.org/projects/libgsf;
-    license = "LGPLv2";
+  meta = with stdenv.lib; {
     description = "GNOME's Structured File Library";
+    homepage    = "https://www.gnome.org/projects/libgsf";
+    license     = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = stdenv.lib.platforms.unix;
 
     longDescription = ''
       Libgsf aims to provide an efficient extensible I/O abstraction for
       dealing with different structured file formats.
     '';
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

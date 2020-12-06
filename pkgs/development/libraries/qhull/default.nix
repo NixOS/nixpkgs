@@ -1,20 +1,22 @@
-{stdenv, fetchurl, cmake}:
+{ stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
-  name = "qhull-2012.1";
+stdenv.mkDerivation {
+  name = "qhull-2016.1";
 
-  src = fetchurl {
-    url = "${meta.homepage}/download/${name}-src.tgz";
-    sha256 = "127zpjp6sm8c101hz239k82lpxqcqf4ksdyfqc2py2sm22kclpm3";
+  src = fetchFromGitHub {
+    owner = "qhull";
+    repo = "qhull";
+    rev = "5bbc75608c817b50383a0c24c3977cc09d0bbfde";
+    sha256 = "0wrgqc2mih7h8fs9v5jcn9dr56afqi9bgh2w9dcvzvzvxizr9kjj";
   };
 
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = "-DMAN_INSTALL_DIR=share/man/man1 -DDOC_INSTALL_DIR=share/doc/qhull";
-
-  meta = {
-    homepage = http://www.qhull.org/;
-    description = "Computes the convex hull, Delaunay triangulation, ...";
-    license = "free";
+  meta = with stdenv.lib; {
+    homepage = "http://www.qhull.org/";
+    description = "Compute the convex hull, Delaunay triangulation, Voronoi diagram and more";
+    license = licenses.qhull;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
   };
 }

@@ -1,32 +1,62 @@
-{ stdenv, fetchurl, flex, bison, ncurses }:
+{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
+
+# Optional Dependencies
+, ncurses ? null
+}:
 
 stdenv.mkDerivation rec {
-  name = "gpm-1.20.6";
-  
+  name = "gpm-1.20.7";
+
   src = fetchurl {
-    url = "http://www.nico.schottelius.org/software/gpm/archives/${name}.tar.bz2";
-    sha256 = "1990i19ddzn8gg5xwm53yn7d0mya885f48sd2hyvr7dvzyaw7ch8";
+    url = "https://www.nico.schottelius.org/software/gpm/archives/${name}.tar.bz2";
+    sha256 = "13d426a8h403ckpc8zyf7s2p5rql0lqbg2bv0454x0pvgbfbf4gh";
   };
 
-  buildNativeInputs = [ flex bison ];
-  buildInputs = [ ncurses ];
-
-  preConfigure =
-    ''
-      sed -e 's/[$](MKDIR)/mkdir -p /' -i doc/Makefile.in
-    '';
-
-  # Its configure script does not allow --disable-static
-  # Disabling this, we make cross-builds easier, because having
-  # cross-built static libraries we either have to disable stripping
-  # or fixing the gpm users, because there -lgpm will fail.
-  postInstall = ''
-    rm -f $out/lib/*.a
-    ln -s $out/lib/libgpm.so.2 $out/lib/libgpm.so
+  postPatch = ''
+    substituteInPlace src/prog/gpm-root.y --replace __sigemptyset sigemptyset
   '';
 
-  meta = {
-    homepage = http://www.nico.schottelius.org/software/gpm/;
+  nativeBuildInputs = [ automake autoconf libtool flex bison texinfo ];
+  buildInputs = [ ncurses ];
+
+  hardeningDisable = [ "format" ];
+
+  patches = [
+    # musl compat patches, safe everywhere
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/musl/5aed405d87dfa92a5cab1596f898e9dea07169b8/sys-libs/gpm/files/gpm-1.20.7-musl-missing-headers.patch";
+      sha256 = "1g338m6j1sba84wlqp1r6rpabj5nm6ki577hjalg46czg0lfp20h";
+    })
+    # Touches same code as glibc fix in postPatch above, but on the non-glibc route
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/musl/5aed405d87dfa92a5cab1596f898e9dea07169b8/sys-libs/gpm/files/gpm-1.20.7-musl-portable-sigaction.patch";
+      sha256 = "0hfdqm9977hd5dpzn05y0a6jbj55w1kp4hd9gyzmg9wslmxni4rg";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/musl/5aed405d87dfa92a5cab1596f898e9dea07169b8/sys-libs/gpm/files/gpm-1.20.7-sysmacros.patch";
+      sha256 = "0lg4l9phvy2n8gy17qsn6zn0qq52vm8g01pgq5kqpr8sd3fb21c2";
+    })
+  ];
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    (if ncurses == null then "--without-curses" else "--with-curses")
+  ];
+
+  # Provide libgpm.so for compatability
+  postInstall = ''
+    ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "A daemon that provides mouse support on the Linux console";
+    license = licenses.gpl2;
+    platforms = platforms.linux ++ platforms.cygwin;
+    maintainers = with maintainers; [ eelco ];
   };
 }

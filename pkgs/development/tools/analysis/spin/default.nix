@@ -1,30 +1,46 @@
-{stdenv, fetchurl, flex, yacc, tk }:
+{ stdenv, lib, fetchurl, makeWrapper, yacc, gcc
+, withISpin ? true, tk, swarm, graphviz }:
 
-stdenv.mkDerivation {
-  name = "spin-5.1.7";
+let
+  binPath = stdenv.lib.makeBinPath [ gcc ];
+  ibinPath = stdenv.lib.makeBinPath [ gcc tk swarm graphviz tk ];
+
+in stdenv.mkDerivation rec {
+  pname = "spin";
+  version = "6.4.9";
+  url-version = stdenv.lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
-    url = http://spinroot.com/spin/Src/spin517.tar.gz;
-    sha256 = "03c6bmar4z13jx7dddb029f0qnmgl8x4hyfwn3qijjyd4dbliiw6";
+    # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.
+    # Dropbox mirror from developers:
+    # https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AADZPqS4aoR-pjNF6OQXRLQHa
+    # (note that this URL doesn't work aross versions and hash should come from official site)
+    url = "https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AABtxFePMJmPxsxSvU5cpxh8a/spin${url-version}.tar.gz?raw=1";
+    sha256 = "07b7wk3qyfnp4pgwicqd33l7i1krzyihx0cf9zkv81ywaklf5vll";
   };
 
-  buildInputs = [ flex yacc tk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ yacc ];
 
-  patchPhase = ''
-    cd Src*
-    sed -i -e 's/-DNXT/-DNXT -DCPP="\\"gcc -E -x c\\""/' makefile
-  '';
+  sourceRoot = "Spin/Src${version}";
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp ../Xspin*/xsp* $out/bin/xspin
-    sed -i -e '1s@^#!/bin/sh@#!${tk}/bin/wish@' \
-      -e '/exec wish/d' $out/bin/xspin
-    cp spin $out/bin
+    install -Dm644 ../Man/spin.1 $out/share/man/man1/spin.1
+
+    install -Dm755 spin $out/bin/spin
+    wrapProgram $out/bin/spin \
+      --prefix PATH : ${binPath}
+  '' + lib.optionalString withISpin ''
+    install -Dm755 ../iSpin/ispin.tcl $out/bin/ispin
+    wrapProgram $out/bin/ispin \
+      --prefix PATH ':' "$out/bin:${ibinPath}"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Formal verification tool for distributed software systems";
-    homepage = http://spinroot.com/;
-    license = "free";
+    homepage = "http://spinroot.com/";
+    license = licenses.free;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

@@ -1,17 +1,18 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "cppunit-1.12.0";
+stdenv.mkDerivation rec {
+  pname = "cppunit";
+  version = "1.15.1";
 
   src = fetchurl {
-    url = mirror://sf/cppunit/cppunit-1.12.0.tar.gz;
-    sha256 = "07zyyx5dyai94y8r8va28971f5mw84mb93xx9pm6m4ddpj6c79cq";
+    url = "https://dev-www.libreoffice.org/src/${pname}-${version}.tar.gz";
+    sha256 = "19qpqzy66bq76wcyadmi3zahk5v1ll2kig1nvg96zx9padkcdic9";
   };
 
-  meta = {
-    homepage = "http://sourceforge.net/apps/mediawiki/cppunit/";
+  meta = with stdenv.lib; {
+    homepage = "https://freedesktop.org/wiki/Software/cppunit/";
     description = "C++ unit testing framework";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

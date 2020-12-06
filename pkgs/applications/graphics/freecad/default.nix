@@ -1,39 +1,77 @@
-{ fetchgit, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
-boost, zlib,
-python, swig, gfortran, soqt, libf2c, pyqt4, makeWrapper }:
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
+opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
 
-stdenv.mkDerivation rec {
-  name = "freecad-${version}";
-  version = "git-20121213";
+assert mpi != null;
 
-  src = fetchgit {
-    url = git://free-cad.git.sourceforge.net/gitroot/free-cad/free-cad;
-    rev = "d3949cedc7e3c924d426660515e06eaf55d1a67f";
-    sha256 = "0a07ih0z5d8m69zasmvi7z4lgq0pa67k2g7r1l6nz2d0b30py61w";
+let
+  pythonPackages = python3Packages;
+in mkDerivation rec {
+  pname = "freecad-unstable";
+  version = "2020-10-17";
+
+  src = fetchFromGitHub {
+    owner = "FreeCAD";
+    repo = "FreeCAD";
+    rev = "f3bdaaa55a6c03b297924c40819d23e4603fa55b";
+    sha256 = "1q1iy4i9k65v8z7h8a6r4bf5ycn124jp26xwp0xwbar4gnkx2jiq";
   };
 
-  buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt libf2c pyqt4 makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkgconfig
+    pythonPackages.pyside2-tools
+    wrapQtAppsHook
+  ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    cmake coin3d xercesc ode eigen opencascade-occt gts
+    zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
+    libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
+  ] ++ (with pythonPackages; [
+    matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
+    GitPython # for addon manager
+  ]);
+
+  cmakeFlags = [
+    "-DBUILD_QT5=ON"
+    "-DSHIBOKEN_INCLUDE_DIR=${pythonPackages.shiboken2}/include"
+    "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
+    ("-DPYSIDE_INCLUDE_DIR=${pythonPackages.pyside2}/include"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtCore"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtWidgets"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtGui"
+      )
+    "-DPYSIDE_LIBRARY=PySide2::pyside2"
+  ];
 
   # This should work on both x86_64, and i686 linux
   preBuild = ''
-    export NIX_LDFLAGS="-L${gfortran.gcc}/lib64 -L${gfortran.gcc}/lib $NIX_LDFLAGS";
+    export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/FreeCAD --prefix PYTHONPATH : $PYTHONPATH \
-      --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
+  # Their main() removes PYTHONPATH=, and we rely on it.
+  preConfigure = ''
+    sed '/putenv("PYTHONPATH/d' -i src/Main/MainGui.cpp
+
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
-  patches = [ ./pythonpath.patch ];
+  qtWrapperArgs = [
+    "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+  ];
 
-  meta = {
-    homepage = http://free-cad.sourceforge.net/;
-    license = [ "GPLv2+" "LGPLv2+" ];
+  postFixup = ''
+    mv $out/share/doc $out
+  '';
+
+  meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://www.freecadweb.org/";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ viric gebner ];
+    platforms = platforms.linux;
   };
 }

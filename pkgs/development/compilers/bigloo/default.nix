@@ -1,22 +1,37 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, autoconf, automake, libtool, gmp
+, darwin
+}:
 
 stdenv.mkDerivation rec {
-  name = "bigloo3.7a";
+  pname = "bigloo";
+  version = "4.3h";
 
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/${name}.tar.gz";
-    sha256 = "0y8i87c2bpqzap8rhzgpyfgdzq21py5xq6mgp0w6xv4rjcj9d0v1";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
+    sha256 = "0fw08096sf8ma2cncipnidnysxii0h0pc7kcqkjhkhdchknp8vig";
   };
 
+  nativeBuildInputs = [ autoconf automake libtool ];
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin
+    darwin.apple_sdk.frameworks.ApplicationServices
+  ;
+
+  propagatedBuildInputs = [ gmp ];
+
   preConfigure =
+    # For libuv on darwin
+    stdenv.lib.optionalString stdenv.isDarwin ''
+      export LIBTOOLIZE=libtoolize
+    '' +
     # Help libgc's configure.
-    '' export CXXCPP="g++ -E"
+    '' export CXXCPP="$CXX -E"
     '';
 
   patchPhase = ''
     # Fix absolute paths.
     sed -e 's=/bin/mv=mv=g' -e 's=/bin/rm=rm=g'			\
-        -e 's=/tmp=$TMPDIR=g' -i configure autoconf/*		\
+        -e 's=/tmp=$TMPDIR=g' -i autoconf/*		\
 	[Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
 	*/*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
 	comptime/Cc/cc.scm gc/install-*
@@ -29,8 +44,15 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
-    description = "Bigloo, an efficient Scheme compiler";
+    description = "Efficient Scheme compiler";
+    homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
+    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling
@@ -43,11 +65,5 @@ stdenv.mkDerivation rec {
       Scheme and C programs, between Scheme and Java programs, and
       between Scheme and C# programs.
     '';
-
-    homepage = http://www-sop.inria.fr/indes/fp/Bigloo/;
-    license = "GPLv2+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

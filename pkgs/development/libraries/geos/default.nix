@@ -1,33 +1,23 @@
-{ composableDerivation, fetchurl, python }:
+{ stdenv, fetchurl, python }:
 
-let inherit (composableDerivation) edf; in
-
-composableDerivation.composableDerivation {} {
-
-  flags =
-  # python and ruby untested 
-    edf { name = "python"; enable = { buildInputs = [ python ]; }; };
-    # (if args.use_svn then ["libtool" "autoconf" "automake" "swig"] else [])
-    # // edf { name = "ruby"; enable = { buildInputs = [ ruby ]; };}
-
-  name = "geos-3.2.2";
+stdenv.mkDerivation rec {
+  name = "geos-3.8.1";
 
   src = fetchurl {
-    url = http://download.osgeo.org/geos/geos-3.2.2.tar.bz2;
-    sha256 = "0711wcq46h7zgvp0bk4m60vmx1wal9db1q36mayf0vwk34hprpr4";
+    url = "https://download.osgeo.org/geos/${name}.tar.bz2";
+    sha256 = "1xqpmr10xi0n9sj47fbwc89qb0yr9imh4ybk0jsxpffy111syn22";
   };
 
-  # for development version. can be removed ?
-  #configurePhase = "
-  #  [ -f configure ] || \\
-  #  LIBTOOLIZE=libtoolize ./autogen.sh
-  #  [>{ automake --add-missing; autoconf; }
-  #  unset configurePhase; configurePhase
-  #";
+  enableParallelBuilding = true;
 
-  meta = {
+  buildInputs = [ python ];
+
+  # https://trac.osgeo.org/geos/ticket/993
+  configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-inline";
+
+  meta = with stdenv.lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
-    homepage = http://geos.refractions.net/;
-    license = "GPL";
+    homepage = "https://trac.osgeo.org/geos";
+    license = licenses.lgpl21;
   };
 }

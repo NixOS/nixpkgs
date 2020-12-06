@@ -19,7 +19,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Remake of AV Arcade Volleyball";
-    homepage = http://gav.sourceforge.net/;
-    license = "GPLv2+";
+    homepage = "http://gav.sourceforge.net/";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

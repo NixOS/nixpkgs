@@ -1,18 +1,18 @@
 { stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
-  name = "pv-1.3.4";
+  name = "pv-1.6.6";
 
   src = fetchurl {
-    url = "http://www.ivarch.com/programs/sources/${name}.tar.bz2";
-    sha256 = "114b730pghgg4gv9d798817n3am88p2b0xgdavch1vhklzh33c16";
+    url = "https://www.ivarch.com/programs/sources/${name}.tar.bz2";
+    sha256 = "1wbk14xh9rfypiwyy68ssl8dliyji30ly70qki1y2xx3ywszk3k0";
   };
 
   meta = {
-    homepage = http://www.ivarch.com/programs/pv;
+    homepage = "http://www.ivarch.com/programs/pv";
     description = "Tool for monitoring the progress of data through a pipeline";
-    license = "free";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = stdenv.lib.licenses.artistic2;
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; all;
   };
 }

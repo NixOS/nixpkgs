@@ -1,25 +1,24 @@
-{ stdenv, fetchurl
+{ config, lib, stdenv, fetchurl
 , yacc, flex
-, sysfsutils, module_init_tools, udev
-, firmware # Special pcmcia cards.
-, config   # Special hardware (map memory & port & irq)
-, lib      # used to generate postInstall script.
-}:
+, sysfsutils, kmod, udev
+, firmware   ? config.pcmciaUtils.firmware or [] # Special pcmcia cards.
+, configOpts ? config.pcmciaUtils.config or null # Special hardware (map memory & port & irq)
+}:                   # used to generate postInstall script.
 
 # FIXME: should add an option to choose between hotplug and udev.
 stdenv.mkDerivation rec {
-  name = "pcmciautils-015";
+  name = "pcmciautils-018";
 
   src = fetchurl {
-    url = "http://kernel.org/pub/linux/utils/kernel/pcmcia/${name}.tar.bz2";
-    sha256 = "4847485c412b47e3d88fa83ef811229e0e7941217303bc8449c30a3dc2128b6e";
+    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/${name}.tar.gz";
+    sha256 = "0sfm3w2n73kl5w7gb1m6q8gy5k4rgwvzz79n6yhs9w3sag3ix8sk";
   };
 
-  buildInputs = [udev yacc sysfsutils module_init_tools flex];
+  buildInputs = [udev yacc sysfsutils kmod flex];
 
   patchPhase = ''
     sed -i "
-      s,/sbin/modprobe,${module_init_tools}&,;
+      s,/sbin/modprobe,${kmod}&,;
       s,/lib/udev/,$out/sbin/,;
     " udev/* # fix-color */
     sed -i "
@@ -28,12 +27,12 @@ stdenv.mkDerivation rec {
     " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
   ''
   + (if firmware == [] then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
-  + (if config == null then "" else ''
-    ln -sf ${config} ./config/config.opts'')
+  + (if configOpts == null then "" else ''
+    ln -sf ${configOpts} ./config/config.opts'')
   ;
 
-  makeFlags = "LEX=flex";
-  installFlags = ''INSTALL=install DESTDIR=''${out}'';
+  makeFlags = [ "LEX=flex" ];
+  installFlags = [ "INSTALL=install" "DESTDIR=${placeholder "out"}" ];
   postInstall =
     lib.concatMapStrings (path: ''
       for f in : $(find ${path} -type f); do
@@ -44,12 +43,13 @@ stdenv.mkDerivation rec {
     '') firmware;
 
   meta = {
-    homepage = http://kernel.org/pub/linux/utils/kernel/pcmcia/pcmcia.html;
+    homepage = "https://www.kernel.org/pub/linux/utils/kernel/pcmcia/";
     longDescription = "
       PCMCIAutils contains the initialization tools necessary to allow
       the PCMCIA subsystem to behave (almost) as every other
       hotpluggable bus system.
     ";
-    license = "GPL2";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

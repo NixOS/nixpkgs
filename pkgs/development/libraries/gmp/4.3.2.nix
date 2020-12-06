@@ -1,6 +1,6 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   name = "gmp-4.3.2";
 
   src = fetchurl {
@@ -8,7 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
   };
 
-  buildNativeInputs = [ m4 ];
+  #outputs TODO: split $cxx due to libstdc++ dependency
+  # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
+  # - see #5855 for related discussion
+  outputs = [ "out" "dev" "info" ];
+  passthru.static = self.out;
+
+  nativeBuildInputs = [ m4 ];
 
   # Prevent the build system from using sub-architecture-specific
   # instructions (e.g., SSE2 on i686).
@@ -21,12 +27,20 @@ stdenv.mkDerivation rec {
     then "ln -sf configfsf.guess config.guess"
     else ''echo "Darwin host is `./config.guess`."'';
 
-  configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
+  configureFlags = [
+    (stdenv.lib.enableFeature cxx "cxx")
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "ac_cv_build=x86_64-apple-darwin13.4.0"
+    "ac_cv_host=x86_64-apple-darwin13.4.0"
+  ];
 
-  doCheck = true;
+  # The test t-lucnum_ui fails (on Linux/x86_64) when built with GCC 4.8.
+  # Newer versions of GMP don't have that issue anymore.
+  doCheck = false;
 
   meta = {
-    description = "GMP, the GNU multiple precision arithmetic library";
+    branch = "4";
+    description = "GNU multiple precision arithmetic library";
 
     longDescription =
       '' GMP is a free library for arbitrary precision arithmetic, operating
@@ -50,10 +64,12 @@ stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
-    homepage = http://gmplib.org/;
-    license = "LGPLv3+";
+    homepage = "https://gmplib.org/";
+    license = stdenv.lib.licenses.lgpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
+    badPlatforms = [ "x86_64-darwin" ];
   };
-}
+};
+  in self

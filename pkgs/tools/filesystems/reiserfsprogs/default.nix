@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, libuuid }:
+{ stdenv, fetchurl, libuuid, autoreconfHook }:
 
+let version = "3.6.24"; in
 stdenv.mkDerivation rec {
-  name = "reiserfsprogs-3.6.21";
+  pname = "reiserfsprogs";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/fs/reiserfs/${name}.tar.bz2";
-    sha256 = "19mqzhh6jsf2gh8zr5scqi9pyk1fwivrxncd11rqnp2148c58jam";
+    url = "https://www.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "0q07df9wxxih8714a3mdp61h5n347l7j2a0l351acs3xapzgwi3y";
   };
 
+  patches = [ ./reiserfsprogs-ar-fix.patch ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
 
-  postInstall =
-    ''
-      ln -s reiserfsck $out/sbin/fsck.reiserfs
-      ln -s mkreiserfs $out/sbin/mkfs.reiserfs
-    '';
+  NIX_CFLAGS_COMPILE = [ "-std=gnu90" "-D_GNU_SOURCE" ];
 
   meta = {
-    homepage = http://www.namesys.com/;
+    inherit version;
+    homepage = "http://www.namesys.com/";
     description = "ReiserFS utilities";
-    license = "GPL-2";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

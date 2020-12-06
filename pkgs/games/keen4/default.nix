@@ -1,12 +1,12 @@
-{stdenv, fetchurl, dosbox, unzip}:
+{ lib, stdenv, fetchurl, dosbox, unzip }:
 
 stdenv.mkDerivation {
   name = "keen4";
   builder = ./builder.sh;
 
   dist = fetchurl {
-    url = http://nixos.org/tarballs/keen4.zip;
-    md5 = "ffcdd9e3bce224d92797166bc3f56f1c";
+    url = "http://tarballs.nixos.org/keen4.zip";
+    sha256 = "12rnc9ksl7v6l8wsxvr26ylkafzq80dbsa7yafzw9pqc8pafkhx1";
   };
 
   buildInputs = [unzip];
@@ -15,5 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Commander Keen Episode 4: Secret of the Oracle";
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.eelco ];
   };
 }

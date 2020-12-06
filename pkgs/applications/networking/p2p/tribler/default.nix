@@ -1,49 +1,88 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
-, enablePlayer ? false, vlc ? null }:
+{ stdenv, fetchurl, pkgs, python3Packages, makeWrapper
+, enablePlayer ? true, libvlc ? null, qt5, lib }:
 
-let rev = "25411"; in
+stdenv.mkDerivation rec {
+  pname = "tribler";
+  version = "7.4.4";
 
-stdenv.mkDerivation {
-  name = "tribler-5.5.21-pre${rev}";
-
-  src = fetchsvn {
-    url = http://svn.tribler.org/abc/branches/release-5.5.x;
-    inherit rev;
-    sha256 = "17c9svy4zjchzihk6mf0kh4lnvaxjfmgfmimyby5w0d3cwbw49zx";
+  src = fetchurl {
+    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
+    sha256 = "0hxiyf1k07ngym2p8r1b5mcx1y2crkyz43gi9sgvsvsyijyaff3p";
   };
 
-  buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
+  nativeBuildInputs = [
+    python3Packages.wrapPython
+    makeWrapper
+  ];
 
-  pythonPath =
-    [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
-      pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
-    ];
+  buildInputs = [
+    python3Packages.python
+  ];
 
-  installPhase =
-    ''
-      substituteInPlace Tribler/Core/NATFirewall/guessip.py \
-          --replace /bin/netstat ${nettools}/bin/netstat \
-          --replace /sbin/ifconfig ${nettools}/sbin/ifconfig
-    
-      # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
-      wrapPythonPrograms
-      
-      mkdir -p $out/share/tribler
-      cp -prvd Tribler $out/share/tribler/
+  pythonPath = [
+    python3Packages.libtorrentRasterbar
+    python3Packages.twisted
+    python3Packages.netifaces
+    python3Packages.pycrypto
+    python3Packages.pyasn1
+    python3Packages.requests
+    python3Packages.m2crypto
+    python3Packages.pyqt5
+    python3Packages.chardet
+    python3Packages.cherrypy
+    python3Packages.cryptography
+    python3Packages.libnacl
+    python3Packages.configobj
+    python3Packages.decorator
+    python3Packages.feedparser
+    python3Packages.service-identity
+    python3Packages.psutil
+    python3Packages.pillow
+    python3Packages.networkx
+    python3Packages.pony
+    python3Packages.lz4
+    python3Packages.pyqtgraph
 
-      makeWrapper ${pythonPackages.python}/bin/python $out/bin/tribler \
-          --set _TRIBLERPATH $out/share/tribler \
-          --set PYTHONPATH $out/share/tribler:$program_PYTHONPATH \
-          --run 'cd $_TRIBLERPATH' \
-          --add-flags "-O $out/share/tribler/Tribler/Main/tribler.py" \
-          ${stdenv.lib.optionalString enablePlayer ''
-            --prefix LD_LIBRARY_PATH : ${vlc}/lib
-          ''}
-    '';
+    # there is a BTC feature, but it requires some unclear version of
+    # bitcoinlib, so this doesn't work right now.
+    # python3Packages.bitcoinlib
+  ];
 
-  meta = {
-    homepage = http://www.tribler.org/;
+  postPatch = ''
+    ${stdenv.lib.optionalString enablePlayer ''
+      substituteInPlace "./TriblerGUI/vlc.py" --replace "ctypes.CDLL(p)" "ctypes.CDLL('${libvlc}/lib/libvlc.so')"
+      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "if vlc and vlc.plugin_path" "if vlc"
+      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "os.environ['VLC_PLUGIN_PATH'] = vlc.plugin_path" "os.environ['VLC_PLUGIN_PATH'] = '${libvlc}/lib/vlc/plugins'"
+    ''}
+  '';
+
+  installPhase = ''
+    mkdir -pv $out
+    # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
+    wrapPythonPrograms
+    cp -prvd ./* $out/
+    makeWrapper ${python3Packages.python}/bin/python $out/bin/tribler \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
+        --set _TRIBLERPATH $out \
+        --set PYTHONPATH $out:$program_PYTHONPATH \
+        --set NO_AT_BRIDGE 1 \
+        --run 'cd $_TRIBLERPATH' \
+        --add-flags "-O $out/run_tribler.py" \
+        ${stdenv.lib.optionalString enablePlayer ''
+          --prefix LD_LIBRARY_PATH : ${libvlc}/lib
+        ''}
+
+    mkdir -p $out/share/applications $out/share/icons $out/share/man/man1
+    cp $out/Tribler/Main/Build/Ubuntu/tribler.desktop $out/share/applications/tribler.desktop
+    cp $out/Tribler/Main/Build/Ubuntu/tribler_big.xpm $out/share/icons/tribler.xpm
+    cp $out/Tribler/Main/Build/Ubuntu/tribler.1 $out/share/man/man1/tribler.1
+  '';
+
+  meta = with stdenv.lib; {
+    maintainers = with maintainers; [ xvapx ];
+    homepage = "https://www.tribler.org/";
     description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
-    license = "LGPLv2.1";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
   };
 }

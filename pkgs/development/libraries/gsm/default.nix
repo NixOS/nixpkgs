@@ -1,60 +1,53 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl
+, staticSupport ? false # Compile statically (support for packages that look for the static object)
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="gsm";
-    version="1.0.13";
-    name="${baseName}-${version}";
-    url="http://www.quut.com/gsm/${name}.tar.gz";
-    hash="1bcjl2h60gvr1dc5a963h3vnz9zl6n8qrfa3qmb2x3229lj1iiaj";
-  };
+let
+  inherit (stdenv) isDarwin;
+  inherit (stdenv.lib) optional optionalString;
 in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+
+stdenv.mkDerivation rec {
+  pname = "gsm";
+  version = "1.0.19";
+
+  src = fetchurl {
+    url = "http://www.quut.com/gsm/${pname}-${version}.tar.gz";
+    sha256 = "1xkha9ss5g5qnfaybi8il0mcvp8knwg9plgh8404vh58d0pna0s9";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["createDirs" "setVars" "doMakeInstall"];
-
-  createDirs = a.fullDepEntry ''
-    mkdir -p "$out/"{bin,lib,share/man,share/info,include/gsm}
-  '' ["minInit" "defEnsureDir"];
-
-  setVars = a.noDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
-  '';
+  patchPhase = ''
+    # Fix include directory
+    sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/include/gsm,' -i Makefile
+  '' + optionalString (!staticSupport) (
+    (if isDarwin then  ''
+      # Build dylib on Darwin
+      sed -e 's,libgsm.a,libgsm.dylib,' -i Makefile
+      sed -e 's,$(AR) $(ARFLAGS) $(LIBGSM) $(GSM_OBJECTS),$(LD) -o $(LIBGSM) -dynamiclib -install_name $(GSM_INSTALL_ROOT)/$(LIBGSM) $(GSM_OBJECTS) -lc,' -i Makefile
+    '' else ''
+      # Build ELF shared object by default
+      sed -e 's,libgsm.a,libgsm.so,' -i Makefile
+      sed -e 's/$(AR) $(ARFLAGS) $(LIBGSM) $(GSM_OBJECTS)/$(LD) -shared -Wl,-soname,libgsm.so -o $(LIBGSM) $(GSM_OBJECTS) -lc/' -i Makefile
+    '') + ''
+      # Remove line that is unused when building shared libraries
+      sed -e 's,$(RANLIB) $(LIBGSM),,' -i Makefile
+    ''
+  );
 
   makeFlags = [
-    ''INSTALL_ROOT="$out"''
-    ''GSM_INSTALL_INC="$out/include/gsm"''
-  ];
-      
-  meta = {
-    description = "A GSM codec library";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = "free-noncopyleft";
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.quut.com/gsm/";
-    };
-  };
-}) x
+    "SHELL=${stdenv.shell}"
+    "INSTALL_ROOT=$(out)"
+  ] ++ optional stdenv.cc.isClang "CC=clang";
 
+  preInstall = "mkdir -p $out/{bin,lib,man/man1,man/man3,include/gsm}";
+
+  parallelBuild = false;
+
+  meta = with stdenv.lib; {
+    description = "Lossy speech compression codec";
+    homepage    = "http://www.quut.com/gsm/";
+    license     = licenses.bsd2;
+    maintainers = with maintainers; [ codyopel raskin ];
+    platforms   = platforms.unix;
+  };
+}

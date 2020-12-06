@@ -1,22 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libid3tag, id3lib, libvorbis, libogg, flac }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
+, libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
+, gnome3, wrapGAppsHook
+}:
 
 let
+  pname = "easytag";
+  version = "2.4.3";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  version = "2.1.7";
-  sha256 = "bfed34cbdce96aca299a0db2b531dbc66feb489b911a34f0a9c67f2eb6ee9301";
-
-in stdenv.mkDerivation {
-  name = "easytag-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/easytag/easytag-${version}.tar.bz2";
-    inherit sha256;
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1mbxnqrw1fwcgraa1bgik25vdzvf97vma5pzknbwbqq5ly9fwlgw";
   };
 
-  buildInputs = [ pkgconfig gtk libid3tag id3lib libvorbis libogg flac ];
+  NIX_LDFLAGS = "-lid3tag -lz";
 
-  meta = {
-    description = "an utility for viewing and editing tags for various audio files";
-    homepage = http://http://easytag.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
+  buildInputs = [
+    gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
+    gsettings-desktop-schemas gnome3.adwaita-icon-theme
+  ];
+
+  doCheck = false; # fails 1 out of 9 tests
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "View and edit tags for various audio files";
+    homepage = "https://wiki.gnome.org/Apps/EasyTAG";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

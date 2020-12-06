@@ -1,33 +1,29 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "connect-1.95";
-  
+  pname = "connect";
+  version ="1.105";
+
   src = fetchurl {
-    url = http://savannah.gnu.org/maintenance/connect.c;
-    sha256 = "11dx07pcanwaq71g4xh8d4blr5j7iy0ilmb0fkgpj8p22blb74mf";
+    url = "https://bitbucket.org/gotoh/connect/get/${version}.tar.bz2";
+    sha256 = "00yld6yinc8s4xv3b8kbvzn2f4rja5dmp6ysv3n4847qn4k60dh7";
   };
 
-  phases = "unpackPhase buildPhase fixupPhase";
+  makeFlags = [ "CC=cc" ];      # gcc and/or clang compat
 
-  unpackPhase = ''
-    cp $src connect.c
-  '';
-
-  buildPhase = ''
-    ensureDir $out/bin
-    gcc -o $out/bin/connect connect.c
+  installPhase = ''
+    install -D -m ugo=rx connect $out/bin/connect
   '';
 
   meta = {
-    description = "make network connection via SOCKS and https proxy.";
+    description = "Make network connection via SOCKS and https proxy";
     longDescription = ''
       This proxy traversal tool is intended to assist OpenSSH (via ProxyCommand
       in ~/.ssh/config) and GIT (via $GIT_PROXY_COMMAND) utilize SOCKS and https proxies. 
       '';
-    homepage = http://bent.latency.net/bent/git/goto-san-connect-1.85/src/connect.html; # source URL is busted there
+    homepage = "https://bitbucket.org/gotoh/connect/wiki/Home";
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }

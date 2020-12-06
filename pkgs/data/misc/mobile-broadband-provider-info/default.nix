@@ -1,23 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, gnome3 }:
 
-let
-  version = "20120614";
-  pname = "mobile-broadband-provider-info";
-  name = "${pname}-${version}";
-in
 stdenv.mkDerivation rec {
-  inherit name;
+  pname = "mobile-broadband-provider-info";
+  version = "20190116";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${version}/${name}.tar.xz";
-    sha256 = "72507a732e0cd16cf27424bb094b1c7a03e2206c119ad124722a283e587755f1";
+    url = "mirror://gnome/sources/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "16y5lc7pfdvai9c8xwb825zc3v46039gghbip13fqslf5gw11fic";
   };
 
-  meta = {
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
     description = "Mobile broadband service provider database";
-    homepage = http://live.gnome.org/NetworkManager/MobileBroadband/ServiceProviders;
-    platforms = stdenv.lib.platforms.all;
-    license = "CC-PD";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    homepage = "https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders";
+    license = licenses.publicDomain;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }

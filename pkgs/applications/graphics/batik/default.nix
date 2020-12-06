@@ -1,12 +1,23 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "batik-1.6";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  pname = "batik";
+  version = "1.13";
+
   src = fetchurl {
-    url = http://nixos.org/tarballs/batik-1.6.zip;
-    md5 = "edff288fc64f968ff96ca49763d50f3c";
+    url = "mirror://apache/xmlgraphics/batik/binaries/batik-bin-${version}.tar.gz";
+    sha256 = "16sq90nbs6psgm3xz30sbs6r5dnpd3qzsvr1xvnp4yipwjcmhmkw";
   };
 
-  buildInputs = [unzip];
+  meta = with stdenv.lib; {
+    description = "Java based toolkit for handling SVG";
+    homepage = "https://xmlgraphics.apache.org/batik";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+  };
+
+  installPhase = ''
+    mkdir $out
+    cp -r * $out/
+  '';
 }

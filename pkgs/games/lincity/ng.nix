@@ -1,35 +1,55 @@
-{stdenv, fetchurl
-, zlib, jam, pkgconfig, gettext, libxml2, libxslt, xproto, libX11, mesa, SDL
+{ stdenv, fetchFromGitHub, autoreconfHook, jam, pkgconfig
+, zlib, libxml2, libxslt, xorgproto, libX11, libGLU, libGL, SDL
 , SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
 }:
-let s = # Generated upstream information
-  rec {
-    baseName="lincity";
-    version="2.0";
-    name="lincity-2.0";
-    hash="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
-    url="http://download.berlios.de/lincity-ng/lincity-ng-2.0.tar.bz2";
-    sha256="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
-  };
-  buildInputs = [zlib jam pkgconfig gettext libxml2 libxslt xproto libX11 mesa 
-    SDL SDL_mixer SDL_image SDL_ttf SDL_gfx physfs];
-in 
-stdenv.mkDerivation rec {
-  inherit (s) name version;
-  src = fetchurl {
-    inherit (s) url sha256;
+
+stdenv.mkDerivation {
+  pname = "lincity-ng";
+  version = "2.9beta.20170715";
+
+  src = fetchFromGitHub {
+    owner  = "lincity-ng";
+    repo   = "lincity-ng";
+    rev    = "0c19714b811225238f310633e59f428934185e6b";
+    sha256 = "1gaj9fq97zmb0jsdw4rzrw34pimkmkwbfqps0glpqij4w3srz5f3";
   };
 
-  inherit buildInputs;
+  hardeningDisable = [ "format" ];
 
-  buildPhase = "jam";
-  installPhase="jam install";
+  nativeBuildInputs = [
+    autoreconfHook jam pkgconfig
+  ];
 
-  meta = {
-    documentation = ''City building game'';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    inherit (s) version;
+  buildInputs = [
+    zlib libxml2 libxslt xorgproto libX11 libGLU libGL SDL SDL_mixer SDL_image
+    SDL_ttf SDL_gfx physfs
+  ];
+
+  autoreconfPhase = ''
+    ./autogen.sh
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    AR='ar r' jam -j $NIX_BUILD_CORES
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    touch CREDITS
+    AR='ar r' jam install
+
+    runHook postInstall
+  '';
+
+  meta = with stdenv.lib; {
+    description = "City building game";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

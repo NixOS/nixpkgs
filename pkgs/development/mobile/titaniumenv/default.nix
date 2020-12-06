@@ -1,18 +1,21 @@
-{pkgs, pkgs_i686}:
+{pkgs, androidenv, xcodeenv, tiVersion ? "8.3.2.GA"}:
 
 rec {
-  androidenv = pkgs.androidenv;
+  titaniumsdk = let
+    titaniumSdkFile = if tiVersion == "8.2.1.GA" then ./titaniumsdk-8.2.nix
+      else if tiVersion == "7.5.1.GA" then ./titaniumsdk-7.5.nix
+      else if tiVersion == "8.3.2.GA" then ./titaniumsdk-8.3.nix
+      else throw "Titanium version not supported: "+tiVersion;
+    in
+    import titaniumSdkFile {
+      inherit (pkgs) stdenv fetchurl unzip makeWrapper;
+    };
 
-  xcodeenv = if pkgs.stdenv.system == "x86_64-darwin" then pkgs.xcodeenv else null;
-
-  titaniumsdk = import ./titaniumsdk.nix {
-    inherit (pkgs) stdenv fetchurl unzip makeWrapper python jdk;
-  };
-  
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv;
-    inherit (androidenv) androidsdk;
-    inherit (xcodeenv) xcodewrapper;
+    inherit (pkgs) stdenv python which file jdk nodejs;
+    inherit (pkgs.nodePackages) alloy titanium;
+    inherit (androidenv) composeAndroidPackages;
+    inherit (xcodeenv) composeXcodeWrapper;
     inherit titaniumsdk;
   };
 }

@@ -1,26 +1,28 @@
-{stdenv, fetchurl, x11, libXp, libXau}:
+{stdenv, fetchurl, xlibsWrapper, libXp, libXau}:
 
-stdenv.mkDerivation {
-  name = "lesstif-0.95-p2";
+stdenv.mkDerivation rec {
+  name = "lesstif-0.95.2";
   src = fetchurl {
-    url = mirror://sourceforge/lesstif/lesstif-0.95.0.tar.bz2;
-    md5 = "ab895165c149d7f95843c7584b1c7ad4";
+    url = "mirror://sourceforge/lesstif/${name}.tar.bz2";
+    sha256 = "1qzpxjjf7ri1jzv71mvq5m9g8hfaj5yzwp30rwxlm6n2b24a6jpb";
   };
-  buildInputs = [x11];
+  buildInputs = [xlibsWrapper];
   propagatedBuildInputs = [libXp libXau];
 
-  # The last stable release of lesstif was in June 2006. These
-  # patches fix a number of later issues - in particular the 
+  # These patches fix a number of later issues - in particular the
   # render_table_crash shows up in 'arb'. The same patches appear
   # in Debian, so we assume they have been sent upstream.
   #
   patches = [
-    ./c-bad_integer_cast.patch    
-    ./c-linkage.patch             
-    ./c-unsigned_int.patch
-    ./c-missing_xm_h.patch        
-    ./c-xim_chained_list_crash.patch
-    ./c-render_table_crash.patch 
+    ./c-missing_xm_h.patch
+    ./c-render_table_crash.patch
     ./c-xpmpipethrough.patch
     ];
+
+  meta = with stdenv.lib; {
+    description = "An open source clone of the Motif widget set";
+    homepage = "http://lesstif.sourceforge.net";
+    platforms = platforms.unix;
+    license = with licenses; [ gpl2 lgpl2 ];
+  };
 }

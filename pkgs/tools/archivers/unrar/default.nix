@@ -1,28 +1,48 @@
 {stdenv, fetchurl}:
-stdenv.mkDerivation {
-  name = "unrar-3.9.10";
+
+stdenv.mkDerivation rec {
+  pname = "unrar";
+  version = "5.9.2";
 
   src = fetchurl {
-    url = http://www.rarlab.com/rar/unrarsrc-3.9.10.tar.gz;
-    sha256 = "0yi0i2j4srca8cag96ajc80m5xb5328ydzjab6y8h1bhypc2fiiv";
+    url = "https://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
+    sha256 = "19nsxdvf9ll99hvgzq6f89ymxhwki224lygjdabrg8ghikqvmlvk";
   };
 
-  # Add a missing objects to the library
-  #patchPhase = ''
-  #  sed -i 's/^\(LIB_OBJ=.*\)/\1 recvol.o rs.o/' makefile.unix
-  #'';
+  postPatch = ''
+    substituteInPlace makefile \
+      --replace "CXX=" "#CXX=" \
+      --replace "STRIP=" "#STRIP=" \
+      --replace "AR=" "#AR="
+  '';
 
   buildPhase = ''
-    make -f makefile.unix unrar
-    rm *.o
-    make -f makefile.unix lib CXXFLAGS="-fPIC -O2 -DSILENT";
+    make unrar
+    make clean
+    make lib
   '';
+
+  outputs = [ "out" "dev" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib
-    cp unrar $out/bin
-    cp libunrar.so $out/lib
+    install -Dt "$out/bin" unrar
+
+    mkdir -p $out/share/doc/unrar
+    cp acknow.txt license.txt \
+        $out/share/doc/unrar
+
+    install -Dm755 libunrar.so $out/lib/libunrar.so
+
+    install -Dt $dev/include/unrar/ *.hpp
   '';
 
-  buildInputs = [];
+  setupHook = ./setup-hook.sh;
+
+  meta = with stdenv.lib; {
+    description = "Utility for RAR archives";
+    homepage = "https://www.rarlab.com/";
+    license = licenses.unfreeRedistributable;
+    maintainers = [ maintainers.ehmry ];
+    platforms = platforms.all;
+  };
 }

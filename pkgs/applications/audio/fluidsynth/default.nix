@@ -1,21 +1,48 @@
-{ stdenv, fetchurl, alsaLib, glib, jackaudio, libsndfile, pkgconfig
-, pulseaudio }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+, alsaLib, glib, libjack2, libsndfile, libpulseaudio
+, AudioUnit, CoreAudio, CoreMIDI, CoreServices
+, version ? "2"
+}:
 
-stdenv.mkDerivation  rec {
-  name = "fluidsynth-${version}";
-  version = "1.1.5";
+let
+  versionMap = {
+    "1" = {
+      fluidsynthVersion = "1.1.11";
+      sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
+    };
+    "2" = {
+      fluidsynthVersion = "2.0.6";
+      sha256 = "0nas9pp9r8rnziznxm65x2yzf1ryg98zr3946g0br3s38sjf8l3a";
+    };
+  };
+in
 
-  src = fetchurl {
-    url = "mirror://sourceforge/fluidsynth/${name}.tar.bz2";
-    sha256 = "1x73a5rsyvfmh1j0484kzgnk251q61g1g2jdja673l8fizi0xd24";
+with versionMap.${version};
+
+stdenv.mkDerivation  {
+  name = "fluidsynth-${fluidsynthVersion}";
+  version = fluidsynthVersion;
+
+  src = fetchFromGitHub {
+    owner = "FluidSynth";
+    repo = "fluidsynth";
+    rev = "v${fluidsynthVersion}";
+    inherit sha256;
   };
 
-  buildInputs = [ alsaLib glib jackaudio libsndfile pkgconfig pulseaudio ];
+  nativeBuildInputs = [ pkgconfig cmake ];
 
-  meta = with stdenv.lib; {
-    description = "real-time software synthesizer based on the SoundFont 2 specifications";
-    homepage = http://www.fluidsynth.org;
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.goibhniu ];
+  buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
+    ++ lib.optionals stdenv.isLinux [ alsaLib ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
+
+  cmakeFlags = [ "-Denable-framework=off" ];
+
+  meta = with lib; {
+    description = "Real-time software synthesizer based on the SoundFont 2 specifications";
+    homepage    = "http://www.fluidsynth.org";
+    license     = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ goibhniu lovek323 ];
+    platforms   = platforms.unix;
   };
 }

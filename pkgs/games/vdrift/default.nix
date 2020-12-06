@@ -1,28 +1,61 @@
-{ fetchurl, stdenv, mesa, SDL, scons, freeglut, SDL_image, glew, libvorbis,
-  asio, boost, SDL_gfx, pkgconfig, bullet, curl, libarchive }:
+{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, sconsPackages, libGLU, libGL, SDL2, SDL2_image
+, libvorbis, bullet, curl, gettext, writeTextFile
 
-stdenv.mkDerivation rec {
-  name = "vdrift-2011-10-22";
+, data ? fetchsvn {
+    url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
+    rev = "1386";
+    sha256 = "0ka6zir9hg0md5p03dl461jkvbk05ywyw233hnc3ka6shz3vazi1";
+  }
+}:
+let
+  version = "git";
+  bin = stdenv.mkDerivation {
+    pname = "vdrift";
+    inherit version;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/vdrift/${name}.tar.bz2";
-    sha256 = "0vg1v1590jbln6k236kxn2sfgclvc6g34kykhh4nq9q3l1xgy38s";
+    src = fetchFromGitHub {
+      owner = "vdrift";
+      repo = "vdrift";
+      rev = "12d444ed18395be8827a21b96cc7974252fce6d1";
+      sha256 = "001wq3c4n9wzxqfpq40b1jcl16sxbqv2zbkpy9rq2wf9h417q6hg";
+    };
+
+    nativeBuildInputs = [ pkgconfig sconsPackages.scons_3_1_2 ];
+    buildInputs = [ libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
+
+    patches = [ ./0001-Ignore-missing-data-for-installation.patch ];
+
+    buildPhase = ''
+      sed -i -e s,/usr/local,$out, SConstruct
+      export CXXFLAGS="$(pkg-config --cflags SDL2_image)"
+      scons -j$NIX_BUILD_CORES
+    '';
+    installPhase = "scons install";
+
+    meta = {
+      description = "Car racing game";
+      homepage = "http://vdrift.net/";
+      license = stdenv.lib.licenses.gpl2Plus;
+      maintainers = with stdenv.lib.maintainers; [viric];
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
-
-  buildInputs = [ scons mesa SDL freeglut SDL_image glew libvorbis asio boost
-    SDL_gfx pkgconfig bullet curl libarchive ];
-
-  buildPhase = ''
-    sed -i -e s,/usr/local,$out, SConstruct
-    scons
+  wrappedName = "vdrift-${version}-with-data-${toString data.rev}";
+in writeTextFile {
+  name = wrappedName;
+  text = ''
+    export VDRIFT_DATA_DIRECTORY="${data}"
+    exec ${bin}/bin/vdrift "$@"
   '';
-  installPhase = "scons install";
-
-  meta = {
-    description = "Car racing game";
-    homepage = http://vdrift.net/;
-    license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+  destination = "/bin/vdrift";
+  executable = true;
+  checkPhase = ''
+    ${stdenv.shell} -n $out/bin/vdrift
+  '';
+} // {
+  meta = bin.meta // {
+    hydraPlatforms = [];
   };
+  unwrapped = bin;
+  inherit bin data;
 }

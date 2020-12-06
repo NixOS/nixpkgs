@@ -1,11 +1,37 @@
-{stdenv, fetchurl} :
+{stdenv, fetchurl, jre} :
 
-stdenv.mkDerivation {
-  name = "jflex-1.4.1";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  name = "jflex-1.8.2";
 
   src = fetchurl {
-    url = http://jflex.de/jflex-1.4.1.tar.gz;
-    md5 = "9e4be6e826e6b344e84c0434d6fd4b46";
+    url = "http://jflex.de/release/${name}.tar.gz";
+    sha256 = "1ar7g6zb2xjgnws3j4cqcp86jplhc9av8cpcjdmxw08x6igd5q51";
+  };
+
+  sourceRoot = name;
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -a * $out
+    rm -f $out/bin/jflex.bat
+
+    patchShebangs $out
+    sed -i -e '/^JAVA=java/ s#java#${jre}/bin/java#' $out/bin/jflex
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/jflex --version
+    runHook postInstallCheck
+  '';
+
+  meta = {
+    homepage = "https://www.jflex.de/";
+    description = "Lexical analyzer generator for Java, written in Java";
+    license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

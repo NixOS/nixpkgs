@@ -1,22 +1,31 @@
-{ stdenv, fetchurl, alsaLib, cmake, qt4 }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config, qttools
+, alsaLib, ftgl, libGLU, libjack2, qtbase, rtmidi, wrapQtAppsHook
+}:
 
-stdenv.mkDerivation  rec {
-  name = "pianobooster-${version}";
-  version = "0.6.4b";
+stdenv.mkDerivation rec {
+  pname = "pianobooster";
+  version = "0.7.2b";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pianobooster/pianobooster-src-0.6.4b.tar.gz";
-    sha256 = "1xwyap0288xcl0ihjv52vv4ijsjl0yq67scc509aia4plmlm6l35";
+  src = fetchFromGitHub {
+    owner = "captnfab";
+    repo = "PianoBooster";
+    rev = "v${version}";
+    sha256 = "03xcdnlpsij22ca3i6xj19yqzn3q2ch0d32r73v0c96nm04gvhjj";
   };
 
-  preConfigure = "cd src";
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
-  buildInputs = [ alsaLib cmake qt4 ];
+  buildInputs = [ alsaLib ftgl libGLU libjack2 qtbase rtmidi ];
+
+  cmakeFlags = [
+    "-DOpenGL_GL_PREFERENCE=GLVND"
+  ];
 
   meta = with stdenv.lib; {
     description = "A MIDI file player that teaches you how to play the piano";
-    homepage = http://pianobooster.sourceforge.net;
-    license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    homepage = "https://github.com/captnfab/PianoBooster";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ goibhniu orivej ];
   };
 }

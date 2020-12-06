@@ -1,0 +1,8 @@
+url https://launchpad.net/cuneiform-linux/+download
+
+do_overwrite () {
+  ensure_hash
+  set_var_value version "$CURRENT_VERSION"
+  set_var_value sha256 "$CURRENT_HASH"
+  set_var_value ' url' "$CURRENT_URL"
+}

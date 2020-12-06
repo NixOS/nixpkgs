@@ -1,18 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, fuse, curl, expat }:
-  
+{ stdenv, fetchFromGitHub
+, autoreconfHook, pkgconfig
+, fuse, curl, expat }:
+
 stdenv.mkDerivation rec {
-  name = "s3backer-1.3.1";
-  
-  src = fetchurl {
-    url = "http://s3backer.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1dmdvhb7mcn0fdcljpdyvfynhqrsnrg50dgl1706i8f1831lgk1r";
+  pname = "s3backer";
+  version = "1.5.4";
+
+  src = fetchFromGitHub {
+    sha256 = "1228qlfgz48k9vv72hrz488zg73zls99cppb9vmikc0pzv1xndsx";
+    rev = version;
+    repo = "s3backer";
+    owner = "archiecobbs";
   };
 
-  buildInputs = [ pkgconfig fuse curl expat ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ fuse curl expat ];
 
-  meta = {
-    homepage = http://code.google.com/p/s3backer/;
+  autoreconfPhase = ''
+    patchShebangs ./autogen.sh
+    ./autogen.sh
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/archiecobbs/s3backer";
     description = "FUSE-based single file backing store via Amazon S3";
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
   };
 }

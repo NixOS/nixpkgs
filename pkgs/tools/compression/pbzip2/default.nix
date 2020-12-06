@@ -1,26 +1,30 @@
-{stdenv, fetchurl, bzip2}:
+{ stdenv, fetchurl, bzip2 }:
 
-let name = "pbzip2";
-    version = "1.0.5";
+let major = "1.1";
+    version = "${major}.13";
 in
-stdenv.mkDerivation {
-  name = name + "-" + version;
+stdenv.mkDerivation rec {
+  pname = "pbzip2";
+  inherit version;
 
   src = fetchurl {
-    url = "http://compression.ca/${name}/${name}-${version}.tar.gz";
-    sha256 = "0vc9r6b2djhpwslavi2ykv6lk8pwf4lqb107lmapw2q8d658qpa1";
+    url = "https://launchpad.net/pbzip2/${major}/${version}/+download/${pname}-${version}.tar.gz";
+    sha256 = "1rnvgcdixjzbrmcr1nv9b6ccrjfrhryaj7jwz28yxxv6lam3xlcg";
   };
 
   buildInputs = [ bzip2 ];
-  installPhase = ''
-      make install PREFIX=$out
-  '';
 
-  meta = {
-    homepage = http://compression.ca/pbzip2/;
+  preBuild = "substituteInPlace Makefile --replace g++ c++";
+
+  installFlags = [ "PREFIX=$(out)" ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=reserved-user-defined-literal";
+
+  meta = with stdenv.lib; {
+    homepage = "http://compression.ca/pbzip2/";
     description = "A parallel implementation of bzip2 for multi-core machines";
-    license = "free";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [viric];
+    platforms = platforms.unix;
   };
 }

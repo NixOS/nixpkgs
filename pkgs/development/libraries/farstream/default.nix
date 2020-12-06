@@ -1,26 +1,65 @@
-{ stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst_plugins_base
-, pygobject, gst_python, gupnp_igd
-, gst_plugins_good, gst_plugins_bad, gst_ffmpeg
+{ stdenv
+, fetchurl
+, fetchpatch
+, libnice
+, pkgconfig
+, autoreconfHook
+, gstreamer
+, gst-plugins-base
+, gupnp-igd
+, gobject-introspection
+, gst-plugins-good
+, gst-plugins-bad
+, gst-libav
 }:
 
 stdenv.mkDerivation rec {
-  name = "farstream-0.1.2";
+  name = "farstream-0.2.8";
+
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";
-    sha256 = "1nbkbvq959f70zhr03fwdibhs0sbf1k7zmbz9w99vda7gdcl0nps";
+    url = "https://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";
+    sha256 = "0249ncd20x5mf884fd8bw75c3118b9fdml837v4fib349xmrqfrb";
   };
 
-  buildInputs = [ libnice python pygobject gupnp_igd ];
+  patches = [
+    # Python has not been used for ages
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/farstream/farstream/commit/73891c28fa27d5e65a71762e826f13747d743588.patch";
+      sha256 = "19pw1m8xhxyf5yhl6k898w240ra2k0m28gfv858x70c4wl786lrn";
+    })
+    # Fix build with newer gnumake.
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/farstream/farstream/-/commit/54987d44.diff";
+      sha256 = "02pka68p2j1wg7768rq7afa5wl9xv82wp86q7izrmwwnxdmz4zyg";
+    })
+  ];
 
-  buildNativeInputs = [ pkgconfig ];
+  buildInputs = [
+    libnice
+    gupnp-igd
+    libnice
+  ];
 
-  propagatedBuildInputs = [ gstreamer gst_plugins_base gst_python 
-    gst_plugins_good gst_plugins_bad gst_ffmpeg
-    ];
+  nativeBuildInputs = [
+    pkgconfig
+    autoreconfHook
+    gobject-introspection
+  ];
 
-  meta = {
-    homepage = http://www.freedesktop.org/wiki/Software/Farstream;
+  propagatedBuildInputs = [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-libav
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
     description = "Audio/Video Communications Framework formely known as farsight";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 }

@@ -1,22 +1,29 @@
 { stdenv, fetchurl, openssl, libidn, glib, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "loudmouth-1.4.3";
+  version = "1.5.3";
+  pname = "loudmouth";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/loudmouth/1.4/${name}.tar.bz2";
-    md5 = "55339ca42494690c3942ee1465a96937";
+    url = "https://mcabber.com/files/loudmouth/${pname}-${version}.tar.bz2";
+    sha256 = "0b6kd5gpndl9nzis3n6hcl0ldz74bnbiypqgqa1vgb0vrcar8cjl";
   };
 
-  patches = [ ./glib-2.32.patch ];
+  patches = [
+  ];
 
-  configureFlags = "--with-ssl=openssl";
+  configureFlags = [ "--with-ssl=openssl" ];
 
   propagatedBuildInputs = [ openssl libidn glib zlib ];
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A lightweight C library for the Jabber protocol";
+    platforms = platforms.linux;
+    downloadPage = "http://mcabber.com/files/loudmouth/";
+    downloadURLRegexp = "loudmouth-[0-9.]+[.]tar[.]bz2$";
+    updateWalker = true;
+    license = licenses.lgpl21;
   };
 }

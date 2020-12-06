@@ -1,42 +1,53 @@
-{ fetchurl, stdenv, SDL, freealut, SDL_image, openal, physfs, zlib, mesa, jam }:
+{ fetchurl, stdenv, runtimeShell, SDL2, freealut, SDL2_image, openal, physfs
+, zlib, libGLU, libGL, glew, tinyxml-2 }:
 
 stdenv.mkDerivation rec {
-  name = "trigger-rally-0.6.0";
+  pname = "trigger-rally";
+  version = "0.6.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/trigger-rally/${name}-src.tar.bz2";
-    sha256 = "0qm6anlcqx19iaiz0zh0bf74g9nc6gr8cy0lbsxahwgzkwsqz0fw";
+    url = "mirror://sourceforge/trigger-rally/${pname}-${version}.tar.gz";
+    sha256 = "016bc2hczqscfmngacim870hjcsmwl8r3aq8x03vpf22s49nw23z";
   };
 
-  srcData = fetchurl {
-    url = "mirror://sourceforge/trigger-rally/trigger-rally-0.6.0-data.tar.bz2";
-    sha256 = "161mfgv68my2231d8ps4zs1axisrj0lkcc4yqsr0x28w0mr19j4y";
-  };
-
-  buildInputs = [ SDL freealut SDL_image openal physfs zlib mesa jam ];
+  buildInputs = [
+    SDL2
+    freealut
+    SDL2_image
+    openal
+    physfs
+    zlib
+    libGLU
+    libGL
+    glew
+    tinyxml-2
+  ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --datadir=$out/share/trigger-rally-0.6.0-data"
+    sed s,/usr/local,$out, -i bin/*defs
+
+    cd src
+
+    sed s,lSDL2main,lSDL2, -i GNUmakefile
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL2.dev}/include/SDL2"
+    export makeFlags="$makeFlags prefix=$out"
   '';
 
-  # It has some problems installing the README file, so... out.
-  patchPhase = ''
-    sed -i /README/d Jamfile
-  '';
+  enableParallelBuilding = true;
 
-  buildPhase = "jam";
-
-  installPhase = ''
-    jam install
-    mkdir -p $out/share
-    pushd $out/share
-    tar xf $srcData
+  postInstall = ''
+    mkdir -p $out/bin
+    cat <<EOF > $out/bin/trigger-rally
+    #!${runtimeShell}
+    exec $out/games/trigger-rally "$@"
+    EOF
+    chmod +x $out/bin/trigger-rally
   '';
 
   meta = {
-    description = "Rally";
-    homepage = http://trigger-rally.sourceforge.net/;
-    license = "GPLv2";
+    description = "A fast-paced single-player racing game";
+    homepage = "http://trigger-rally.sourceforge.net/";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

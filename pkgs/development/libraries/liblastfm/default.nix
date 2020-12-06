@@ -1,30 +1,34 @@
-{ stdenv, fetchurl, ruby, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which }:
-
-let version = "0.3.3"; in
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, which, cmake
+, fftwSinglePrec, libsamplerate, qtbase
+, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "liblastfm-${version}";
+  pname = "liblastfm-unstable";
+  version = "2019-08-23";
 
-  # Upstream does not package git tags as tarballs. Get tarball from github.
-  src = fetchurl {
-    url = "https://github.com/mxcl/liblastfm/tarball/${version}";
-    name = "${name}.tar.gz";
-    sha256 = "0v33vzj89mgx2pc5fmiywlz51i553ckydw9xz70fiflm2inbl1r6";
+  src = fetchFromGitHub {
+    owner = "lastfm";
+    repo = "liblastfm";
+    rev = "2ce2bfe1879227af8ffafddb82b218faff813db9";
+    sha256 = "1crih9xxf3rb109aqw12bjqv47z28lvlk2dpvyym5shf82nz6yd0";
   };
 
-  prefixKey = "--prefix ";
-  propagatedBuildInputs = [ qt4 libsamplerate fftwSinglePrec ];
-  buildNativeInputs = [ ruby pkgconfig which ];
+  patches = [(fetchpatch {
+    url = "https://github.com/lastfm/liblastfm/commit/9c5d072b55f2863310e40291677e6397e9cbc3c2.patch";
+    name = "0001-Remove-deprecated-staging-server-and-fix-test-for-QT5-at-Ubuntu-19.10.patch";
+    sha256 = "04r14prydxshjgfws3pjajjmp2msszhjjs1mjh8s66yg29vq620l";
+  })];
 
-  configureFlags = "--release";
+  nativeBuildInputs = [ pkgconfig which cmake ];
+  buildInputs = [ fftwSinglePrec libsamplerate qtbase ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
 
-  patches = [ ./ruby-1.9.patch ];
-  postPatch = "patchShebangs .";
-
-  meta = {
-    homepage = http://github.com/mxcl/liblastfm;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/lastfm/liblastfm";
+    repositories.git = "git://github.com/lastfm/liblastfm.git";
     description = "Official LastFM library";
-    inherit (qt4.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.phreedom ];
+    license = licenses.gpl3;
   };
 }

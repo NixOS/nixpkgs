@@ -1,62 +1,78 @@
-x@{builderDefsPackage
-  , python, gtk, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
-  , libffi, cyrus_sasl, intltool, perl, perlPackages, firefox36Pkgs
-  , kbproto, libX11, libXext, xextproto, pygobject, libgcrypt
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["perlPackages" "firefox36Pkgs"];
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, gobject-introspection
+, gnutls
+, cairo
+, glib
+, pkgconfig
+, cyrus_sasl
+, libpulseaudio
+, libgcrypt
+, gtk3
+, vala
+, gettext
+, perl
+, gnome3
+, gdk-pixbuf
+, zlib
+}:
 
-  buildInputs = (map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames)))
-    ++ [perlPackages.TextCSV firefox36Pkgs.xulrunner ];
-  sourceInfo = rec {
-    baseName="gtk-vnc";
-    majorVersion="0.4";
-    minorVersion="2";
-    version="${majorVersion}.${minorVersion}";
-    name="${baseName}-${version}";
-    url="mirror://gnome/sources/${baseName}/${majorVersion}/${name}.tar.gz";
-    hash="1fkhzwpw50rnwp51lsbny16p2ckzx5rkcaiaqvkd90vwnm2cccls";
+stdenv.mkDerivation rec {
+  pname = "gtk-vnc";
+  version = "1.0.0";
+
+  outputs = [ "out" "bin" "man" "dev" ];
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1060ws037v556rx1qhfrcg02859rscksrzr8fq11himdg4d1y6m8";
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  configureFlags = [
-    "--with-python"
-    "--with-examples"
+  patches = [
+    # Fix undeclared gio-unix-2.0 in example program.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk-vnc/commit/8588bc1c8321152ddc5086ca9b2c03a7f511e0d0.patch";
+      sha256 = "0i1iapsbngl1mhnz22dd73mnzk68qc4n51pqdhnm18zqc8pawvh4";
+    })
   ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["fixMakefiles" "doConfigure" "doMakeInstall"];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gobject-introspection
+    vala
+    gettext
+    perl # for pod2man
+  ];
 
-  fixMakefiles = a.fullDepEntry ''
-    find . -name 'Makefile*' -exec sed -i '{}' -e 's@=codegendir pygtk-2.0@=codegendir pygobject-2.0@' ';'
-  '' ["minInit" "doUnpack"];
-      
-  meta = {
-    description = "A GTK VNC widget";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl21;
-  };
+  buildInputs = [
+    gnutls
+    cairo
+    gdk-pixbuf
+    zlib
+    glib
+    libgcrypt
+    cyrus_sasl
+    libpulseaudio
+    gtk3
+  ];
+
   passthru = {
-    updateInfo = {
-      downloadPage = "http://ftp.gnome.org/pub/GNOME/sources/gtk-vnc";
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
     };
   };
-}) x
 
+  meta = with stdenv.lib; {
+    description = "GTK VNC widget";
+    homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ raskin offline ];
+    platforms = platforms.linux;
+  };
+}

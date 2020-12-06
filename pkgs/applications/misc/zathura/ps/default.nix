@@ -1,28 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, gtk, zathura_core, girara, libspectre, gettext }:
+{ stdenv, lib, fetchurl, meson, ninja, pkgconfig, zathura_core, girara, libspectre, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "zathura-ps-0.2.0";
+  pname = "zathura-ps";
+  version = "0.2.6";
 
   src = fetchurl {
-    url = "http://pwmt.org/projects/zathura/plugins/download/${name}.tar.gz";
-    sha256 = "717eda01213b162421b6b52f29d6b981edc302fddf351ccb2c093b6842751414";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "0wygq89nyjrjnsq7vbpidqdsirjm6iq4w2rijzwpk2f83ys8bc3y";
   };
 
-  buildInputs = [ pkgconfig libspectre gettext zathura_core gtk girara ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  buildInputs = [ libspectre zathura_core girara ];
 
-  patches = [ ./gtkflags.patch ];
+  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
-  makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
-
-  meta = {
-    homepage = http://pwmt.org/projects/zathura/;
+  meta = with lib; {
+    homepage = "https://pwmt.org/projects/zathura-ps/";
     description = "A zathura PS plugin";
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the
       libspectre library.
       '';
-    license = "free";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ cstrahan ];
   };
 }
 

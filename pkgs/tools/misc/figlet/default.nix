@@ -1,24 +1,30 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation {
-  name = "figlet-2.2.4";
+  name = "figlet-2.2.5";
 
   # some tools can be found here ftp://ftp.figlet.org/pub/figlet/util/
   src = fetchurl {
-    url = ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-2.2.4.tar.gz;
-    sha256 = "19qcmm9cmf78w1z7gbpyj9wmrfjzjl25sax9f2j37sijznrh263f";
+    url = "ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-2.2.5.tar.gz";
+    sha256 = "0za1ax15x7myjl8jz271ybly8ln9kb9zhm1gf6rdlxzhs07w925z";
   };
 
-  installPhase = "make prefix=$out install";
+  patches = [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/figlet/musl-fix-cplusplus-decls.patch?h=3.4-stable&id=71776c73a6f04b6f671430f702bcd40b29d48399";
+      name = "musl-fix-cplusplus-decls.patch";
+      sha256 = "1720zgrfk9makznqkbjrnlxm7nnhk6zx7g458fv53337n3g3zn7j";
+    })
+  ];
 
-  preConfigure = ''
-    mkdir -p $out/{man/man6,bin}
-    makeFlags="DESTDIR=$out/bin MANDIR=$out/man/man6 DEFAULTFONTDIR=$out/share/figlet"
-  '';
+  makeFlags = [ "prefix=$(out)" "CC:=$(CC)" "LD:=$(CC)" ];
 
-  meta = { 
+  doCheck = true;
+
+  meta = {
     description = "Program for making large letters out of ordinary text";
-    homepage = http://www.figlet.org/;
-    license = "AFL-2.1";
+    homepage = "http://www.figlet.org/";
+    license = stdenv.lib.licenses.afl21;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,17 +1,26 @@
-{fetchurl, stdenv}:
+{ fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "diffstat-1.45";
+  name = "diffstat-1.63";
 
   src = fetchurl {
-    url = "ftp://invisible-island.net/diffstat/"+ name +".tgz";
-    md5 = "cfe06ffcdbeaaa2fd296db867157ef78";
+    urls = [
+      "ftp://ftp.invisible-island.net/diffstat/${name}.tgz"
+      "https://invisible-mirror.net/archives/diffstat/${name}.tgz"
+    ];
+    sha256 = "0vyw200s5dv1257pmrh6c6fdkmw3slyz5szpqfx916xr04sdbpby";
   };
 
-  meta = {
-    homepage = http://invisible-island.net/diffstat/;
-    longDescription = "diffstat reads the output of diff and displays a
-istogram of the insertions, deletions, and modifications per-file. It
-s useful for reviewing large, complex patch files.";
+  meta = with stdenv.lib; {
+    description = "Read output of diff and display a histogram of the changes";
+    longDescription = ''
+      diffstat reads the output of diff and displays a histogram of the
+      insertions, deletions, and modifications per-file. It is useful for
+      reviewing large, complex patch files.
+    '';
+    homepage = "https://invisible-island.net/diffstat/";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.bjornfor ];
   };
 }

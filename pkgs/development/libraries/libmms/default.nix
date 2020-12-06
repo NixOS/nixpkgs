@@ -1,20 +1,21 @@
 { stdenv, fetchurl, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libmms-0.6.2";
+  name = "libmms-0.6.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/libmms/${name}.tar.gz";
-    sha256 = "0cm4gq5jm8wj04biai6cyvlvdwv286vb3ycyzi870z9d2xi1p4q1";
+    sha256 = "0kvhxr5hkabj9v7ah2rzkbirndfqdijd9hp8v52c1z6bxddf019w";
   };
 
   buildInputs = [ glib ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
-    homepage = http://libmms.sourceforge.net;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.all;
+  meta = with stdenv.lib; {
+    description = "Library for downloading (streaming) media files using the mmst and mmsh protocols";
+    homepage = "http://libmms.sourceforge.net";
+    platforms = platforms.all;
+    license = licenses.lgpl21;
   };
 }

@@ -26,8 +26,7 @@ repoName=$(echo $url | sed '
   s,.*/\([^/]\+\)/tags/\([^/]\+\)/*$,\1-\2,;t
   s,.*/\([^/]\+\)/*$,\1,;t
 ')
-dstFile=$repoName-r$rev
-test -n "$rev" || dstFile=$repoName
+dstFile="bzr-export"
 
 # If the hash was given, a file with that hash may already be in the
 # store.
@@ -43,19 +42,15 @@ fi
 # If we don't know the hash or a path with that hash doesn't exist,
 # download the file and add it to the store.
 if test -z "$finalPath"; then
-    tmpPath=/tmp/bzr-checkout-tmp-$$
-    tmpFile=$tmpPath/$dstFile
-    mkdir $tmpPath
+    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/bzr-checkout-tmp-XXXXXXXX")"
+    trap "rm -rf \"$tmpPath\"" EXIT
 
-    trap "rm -rf $tmpPath" EXIT
+    tmpFile="$tmpPath/$dstFile"
 
     # Perform the checkout.
-    if test "$NIX_PREFETCH_BZR_LEAVE_DOT_BZR" != 1
-    then
-        bzr export $revarg "$tmpFile" "$url" >&2
-    else
-        bzr checkout --lightweight $revarg "$url" "$tmpFile" >&2
-    fi
+    bzr -Ossl.cert_reqs=none export $revarg --format=dir "$tmpFile" "$url"
+
+    echo "bzr revision is $(bzr revno $revarg "$url")"
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)

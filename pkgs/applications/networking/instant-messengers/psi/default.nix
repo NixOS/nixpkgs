@@ -1,45 +1,33 @@
-{ stdenv, fetchurl, aspell, qt4, zlib, sox, libX11, xproto, libSM
-, libICE, qca2, pkgconfig, qca2_ossl, liboil, speex, callPackage, which, glib
-, libXScrnSaver, scrnsaverproto
+{ lib, mkDerivation, fetchFromGitHub, cmake
+, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
+, libidn, qca-qt5, libXScrnSaver, hunspell
 }:
 
-stdenv.mkDerivation rec {
-  name = "psi-0.15";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/psi/${name}.tar.bz2";
-    sha256 = "593b5ddd7934af69c245afb0e7290047fd7dedcfd8765baca5a3a024c569c7e6";
+mkDerivation rec {
+  pname = "psi";
+  version = "1.5";
+  src = fetchFromGitHub {
+    owner = "psi-im";
+    repo = pname;
+    rev = version;
+    sha256 = "hXDZODHl14kimRlMQ1XjISQ2kk9NS78axVN3U21wkuM=";
+    fetchSubmodules = true;
   };
-
-  buildInputs =
-    [ aspell qt4 zlib sox libX11 xproto libSM libICE
-      qca2 qca2_ossl pkgconfig which glib scrnsaverproto libXScrnSaver
-    ];
-
-  NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
-
-  NIX_LDFLAGS="-lqca";
-
-  psiMedia = callPackage ./psimedia.nix { };
-
+  patches = [
+    ./fix-cmake-hunspell-1.7.patch
+  ];
+  nativeBuildInputs = [ cmake qttools ];
+  buildInputs = [
+    qtbase qtmultimedia qtx11extras qtwebengine
+    libidn qca-qt5 libXScrnSaver hunspell
+  ];
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-aspell-inc=${aspell}/include"
-    ];
-
-  postInstall = ''
-    PSI_PLUGINS="$out/lib/psi/plugins"
-    mkdir -p "$PSI_PLUGINS"
-    ln -s "${psiMedia}"/share/psi/plugins/*.so "$PSI_PLUGINS"
-    PSI_QT_PLUGINS="$out/share/psi"
-    mkdir -p "$PSI_QT_PLUGINS"/crypto
-    ln -s "${qca2_ossl}"/lib/qt4/plugins/crypto/*.so "$PSI_QT_PLUGINS"/crypto
-  '';
-
-  meta = {
-    description = "Psi, an XMPP (Jabber) client";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    homepage = "https://psi-im.org";
+    description = "An XMPP (Jabber) client";
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

@@ -1,24 +1,41 @@
-{ stdenv, fetchurl, cmake, libxml2, swig2, python, glib }:
+{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig, enablePython ? false, python, glib }:
 
 stdenv.mkDerivation rec {
-  name = "libplist-1.3";
+  pname = "libplist";
+  version = "2019-04-04";
 
-  buildNativeInputs = [ cmake swig2 ];
-
-  patches = [ ./swig.patch ];
-
-  propagatedBuildInputs = [ libxml2 glib python ];
-
-  passthru.swig = swig2;
-
-  src = fetchurl {
-    url = "http://github.com/downloads/JonathanBeck/libplist/${name}.tar.bz2";
-    sha256 = "1c5nwp9jbsp5kx8avmmsr5g7qdngnqlplh2sjbygmhydb6n8lb4q";
+  src = fetchFromGitHub {
+    owner = "libimobiledevice";
+    repo = pname;
+    rev = "42bb64ba966082b440cb68cbdadf317f44710017";
+    sha256 = "19yw80yblq29i2jx9yb7bx0lfychy9dncri3fk4as35kq5bf26i8";
   };
 
-  meta = {
-    homepage = http://github.com/JonathanBeck/libplist;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+  outputs = ["bin" "dev" "out" ] ++ stdenv.lib.optional enablePython "py";
+
+  nativeBuildInputs = [
+    pkgconfig
+    autoreconfHook
+  ] ++ stdenv.lib.optionals enablePython [
+    python
+    python.pkgs.cython
+  ];
+
+  configureFlags = stdenv.lib.optionals (!enablePython) [
+    "--without-cython"
+  ];
+
+  propagatedBuildInputs = [ glib ];
+
+  postFixup = stdenv.lib.optionalString enablePython ''
+    moveToOutput "lib/${python.libPrefix}" "$py"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A library to handle Apple Property List format in binary or XML";
+    homepage = "https://github.com/libimobiledevice/libplist";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ infinisil ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

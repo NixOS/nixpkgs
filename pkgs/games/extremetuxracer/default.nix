@@ -1,31 +1,39 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
+, sfml, libXi
+, libXmu, libXext, libXt, libSM, libICE
+, libpng, pkgconfig, gettext, intltool
+}:
 
-  version = a.lib.attrByPath ["version"] "0.5beta" a; 
-  buildInputs = with a; [
-    mesa libX11 xproto tcl freeglut
-    SDL SDL_mixer libXi inputproto
-    libXmu libXext xextproto libXt libSM libICE
-    libpng pkgconfig gettext intltool
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  version = "0.8.0";
+  pname = "extremetuxracer";
+
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/extremetuxracer/extremetuxracer-${version}.tar.gz";
-    sha256 = "04d99fsfna5mc9apjxsiyw0zgnswy33kwmm1s9d03ihw6rba2zxs";
+    url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
+    sha256 = "05ysaxvsgps9fxc421kdifsxmc1sn6n79cjaa0k0i3fs9qqrja2b";
   };
 
-  inherit buildInputs;
-  configureFlags = [
-  		"--with-tcl=${a.tcl}/lib"
-  	];
+  buildInputs = [
+    libGLU libGL libX11 xorgproto tcl freeglut freetype
+    sfml libXi
+    libXmu libXext libXt libSM libICE
+    libpng pkgconfig gettext intltool
+  ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  configureFlags = [ "--with-tcl=${tcl}/lib" ];
 
-  name = "extremetuxracer-" + version;
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE"
+  '';
+
   meta = {
-    description = "ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes..";
+    description = "High speed arctic racing game based on Tux Racer";
+    longDescription = ''
+      ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes.
+    '';
+    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "https://sourceforge.net/projects/extremetuxracer/";
+    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

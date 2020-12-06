@@ -1,18 +1,25 @@
-{ fetchurl, stdenv, curl, SDL, mesa, glew, ncurses }:
+{ stdenv, lib, fetchurl, pkgconfig
+, curl, SDL2, libGLU, libGL, glew, ncurses, c-ares
+, Carbon, CoreServices }:
 
 stdenv.mkDerivation rec {
-  name = "bzflag-2.0.16";
+  pname = "bzflag";
+  version = "2.4.20";
 
   src = fetchurl {
-    url = mirror://sourceforge/bzflag/bzflag-2.0.16.tar.bz2;
-    sha256 = "13v0ibiyq59j3xf23yf7s8blkmacagl8w48v2580k5bzkswa0vzy";
+    url = "https://download.bzflag.org/${pname}/source/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "16brxqmfiyz4j4lb8ihzjcbwqmpsms6vm3ijbp34lnw0blbwdjb2";
   };
 
-  buildInputs = [ curl SDL mesa glew ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ curl SDL2 libGLU libGL glew ncurses c-ares ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices ];
 
-  meta = {
+  meta = with lib; {
     description = "Multiplayer 3D Tank game";
-    homepage = http://bzflag.org/;
-    license = "LGPLv2.1+";
+    homepage = "https://bzflag.org/";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

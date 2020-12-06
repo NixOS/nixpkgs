@@ -1,23 +1,32 @@
-{ stdenv, fetchgit, cmake, libxml2, libxslt, python27Packages, qt4 }:
+{ stdenv, fetchurl, cmake, libxml2, libxslt, python3, qt4 }:
 
-stdenv.mkDerivation {
-  name = "pyside-apiextractor-0.10.7-6-gdcb1195";
+# This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
+let
+  pythonEnv = python3.withPackages(ps: with ps; [  sphinx ]);
+in stdenv.mkDerivation {
+  name = "pyside-apiextractor-0.10.10";
 
-  src = fetchgit {
-    url = "git://github.com/PySide/Apiextractor.git";
-    rev = "dcb11958cabe518630f9f2d2bebd9f8711c2b15b";
-    sha256 = "d7b6cb16d11b6134de17a15635d0b5ad7460d31d7870cafe23a690141b9a2274";
+  src = fetchurl {
+    url = "https://github.com/PySide/Apiextractor/archive/0.10.10.tar.gz";
+    sha256 = "1zj8yrxy08iv1pk38djxw3faimm226w6wmi0gm32w4yczblylwz3";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake libxml2 libxslt python27Packages.sphinx qt4 ];
+  outputs = [ "out" "dev" ];
+
+  preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
+  '';
+
+  nativeBuildInputs = [ cmake pythonEnv ];
+  buildInputs = [ qt4 libxml2 libxslt ];
 
   meta = {
     description = "Eases the development of bindings of Qt-based libraries for high level languages by automating most of the process";
     license = stdenv.lib.licenses.gpl2;
     homepage = "http://www.pyside.org/docs/apiextractor/";
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

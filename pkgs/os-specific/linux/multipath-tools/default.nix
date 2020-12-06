@@ -1,34 +1,47 @@
-{ stdenv, fetchurl, lvm2, libaio, gzip, readline, udev }:
+{ stdenv, fetchurl, pkgconfig, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
 
 stdenv.mkDerivation rec {
-  name = "multipath-tools-0.4.9";
+  pname = "multipath-tools";
+  version = "0.8.3";
 
   src = fetchurl {
-    url = "http://christophe.varoqui.free.fr/multipath-tools/${name}.tar.bz2";
-    sha256 = "04n7kazp1zrlqfza32phmqla0xkcq4zwn176qff5ida4a60whi4d";
+    name = "${pname}-${version}.tar.gz";
+    url = "https://git.opensvc.com/gitweb.cgi?p=multipath-tools/.git;a=snapshot;h=refs/tags/${version};sf=tgz";
+    sha256 = "1mgjylklh1cx8px8ffgl12kyc0ln3445vbabd2sy8chq31rpiiq8";
   };
 
-  sourceRoot = ".";
+  patches = [
+    # fix build with json-c 0.14 https://www.redhat.com/archives/dm-devel/2020-May/msg00261.html
+    ./json-c-0.14.patch
+  ];
 
-  buildInputs = [ lvm2 libaio readline ];
+  postPatch = ''
+    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${stdenv.lib.getDev lvm2}/include/libdevmapper.h
+    sed -i -re '
+      s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
+    ' libmultipath/defaults.h
+    sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
+      kpartx/Makefile libmpathpersist/Makefile
+    sed -i -e "s,GZIP,GZ," \
+      $(find * -name Makefile\*)
+  '';
 
-  preBuild =
-    ''
-      makeFlagsArray=(GZIP="${gzip}/bin/gzip -9 -c" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
-      
-      substituteInPlace multipath/Makefile --replace /etc $out/etc
-      substituteInPlace kpartx/Makefile --replace /etc $out/etc
-      
-      substituteInPlace kpartx/kpartx.rules --replace /sbin/kpartx $out/sbin/kpartx
-      substituteInPlace kpartx/kpartx_id --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup
+  nativeBuildInputs = [ gzip pkgconfig perl ];
+  buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
 
-      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
-      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
-    '';
+  makeFlags = [
+    "LIB=lib"
+    "prefix=$(out)"
+    "man8dir=$(out)/share/man/man8"
+    "man5dir=$(out)/share/man/man5"
+    "man3dir=$(out)/share/man/man3"
+    "SYSTEMDPATH=lib"
+  ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for the Linux multipathing driver";
-    homepage = http://christophe.varoqui.free.fr/;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://christophe.varoqui.free.fr/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

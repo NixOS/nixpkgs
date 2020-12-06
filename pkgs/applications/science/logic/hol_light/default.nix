@@ -1,30 +1,42 @@
-{stdenv, fetchsvn, writeScript, ocaml, findlib, camlp5}:
+{ stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
 
 let
-  start_script = ''
-    #!/bin/sh
-    cd "$out/lib/hol_light"
-    exec ${ocaml}/bin/ocaml -I "$(ocamlfind query camlp5)" -init make.ml
-  '';
+  load_num =
+    if num == null then "" else
+      ''
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+      '';
+
+  start_script =
+    ''
+      #!${runtimeShell}
+      cd $out/lib/hol_light
+      exec ${ocaml}/bin/ocaml \
+        -I \`${camlp5}/bin/camlp5 -where\` \
+        ${load_num} \
+        -init make.ml
+    '';
 in
 
 stdenv.mkDerivation {
-  name = "hol_light-20121213";
-  src = fetchsvn {
-    url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "153";
-    sha256 = "1n4da5k3jya8mf7dgif8cl5sr2dqf6vl21fw1fcdna215v2x1rc0";
+  name     = "hol_light-2019-10-06";
+
+  src = fetchFromGitHub {
+    owner  = "jrh13";
+    repo   = "hol-light";
+    rev    = "5c91b2ded8a66db571824ecfc18b4536c103b23e";
+    sha256 = "0sxsk8z08ba0q5aixdyczcx5l29lb51ba4ip3d2fry7y604kjsx6";
   };
 
-  buildInputs = [ ocaml findlib camlp5 ];
+  patches = [(fetchpatch {
+    url = "https://salsa.debian.org/ocaml-team/hol-light/-/raw/master/debian/patches/0004-Fix-compilation-with-camlp5-7.11.patch";
+    sha256 = "180qmxbrk3vb1ix7j77hcs8vsar91rs11s5mm8ir5352rz7ylicr";
+  })];
 
-  buildPhase = ''
-    make pa_j.ml
-    ocamlc -c \
-      -pp "camlp5r pa_lexer.cmo pa_extend.cmo q_MLast.cmo" \
-      -I "$(ocamlfind query camlp5)" \
-      pa_j.ml
-  '';
+  buildInputs = [ ocaml camlp5 ];
+  propagatedBuildInputs = [ num ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"
@@ -33,18 +45,11 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/hol_light"
   '';
 
-  meta = {
-    description = "An interactive theorem prover based on Higher-Order Logic.";
-    longDescription = ''
-HOL Light is a computer program to help users prove interesting mathematical
-theorems completely formally in Higher-Order Logic.  It sets a very exacting
-standard of correctness, but provides a number of automated tools and
-pre-proved mathematical theorems (e.g., about arithmetic, basic set theory and
-real analysis) to save the user work.  It is also fully programmable, so users
-can extend it with new theorems and inference rules without compromising its
-soundness.
-    '';
-    homepage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
-    license = "BSD";
+  meta = with stdenv.lib; {
+    description = "Interactive theorem prover based on Higher-Order Logic";
+    homepage    = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
+    license     = licenses.bsd2;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice maggesi vbgl ];
   };
 }

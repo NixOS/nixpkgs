@@ -1,18 +1,27 @@
-{stdenv, fetchurl, tcl, tk, x11, makeWrapper}:
+{ stdenv, fetchurl, tcl, tk, Cocoa, xlibsWrapper, makeWrapper }:
 
-let version = "3.0"; in
-stdenv.mkDerivation {
-  name = "wordnet-${version}";
+stdenv.mkDerivation rec {
+  version = "3.0";
+  pname = "wordnet";
   src = fetchurl {
     url = "http://wordnetcode.princeton.edu/${version}/WordNet-${version}.tar.bz2";
     sha256 = "08pgjvd2vvmqk3h641x63nxp7wqimb9r30889mkyfh2agc62sjbc";
   };
 
-  buildInputs = [tcl tk x11 makeWrapper];
+  buildInputs = [ tcl tk xlibsWrapper makeWrapper ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  hardeningDisable = [ "format" ];
+
+  patchPhase = ''
+    sed "13i#define USE_INTERP_RESULT 1" -i src/stubs.c
+  '';
 
   # Needs the path to `tclConfig.sh' and `tkConfig.sh'.
-  configureFlags = "--with-tcl=" + tcl + "/lib " +
-                   "--with-tk="  + tk  + "/lib";
+  configureFlags = [
+    "--with-tcl=${tcl}/lib"
+    "--with-tk=${tk}/lib"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/wishwn --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
@@ -20,7 +29,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "WordNet, a lexical database for the English language";
+    description = "Lexical database for the English language";
 
     longDescription =
       '' WordNet® is a large lexical database of English.  Nouns, verbs,
@@ -33,9 +42,12 @@ stdenv.mkDerivation {
          for computational linguistics and natural language processing.
       '';
 
-    homepage = http://wordnet.princeton.edu/;
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    homepage = "https://wordnet.princeton.edu/";
+    license = {
+      fullName = "WordNet 3.0 license";
+      url = "https://wordnet.princeton.edu/license-and-commercial-use";
+    };
+    maintainers = [ ];
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

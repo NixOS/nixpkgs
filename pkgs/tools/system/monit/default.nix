@@ -1,30 +1,41 @@
-a :  
-let 
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    bison flex openssl
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv
+, fetchurl, bison, flex
+, zlib
+, usePAM ? stdenv.hostPlatform.isLinux, pam
+, useSSL ? true, openssl
+}:
 
-  inherit (s) name;
-  inherit buildInputs;
+stdenv.mkDerivation rec {
+  name = "monit-5.27.1";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
+  src = fetchurl {
+    url = "${meta.homepage}dist/${name}.tar.gz";
+    sha256 = "0lgdhif6x11fcpli0qn138rpdvrfnwmkzsy4lc9pas45c78hhx7m";
+  };
+
+  nativeBuildInputs = [ bison flex ];
+  buildInputs = [ zlib.dev ] ++
+    stdenv.lib.optionals useSSL [ openssl ] ++
+    stdenv.lib.optionals usePAM [ pam ];
+
   configureFlags = [
-    "--with-ssl-incl-dir=${a.openssl}/include"
-    "--with-ssl-lib-dir=${a.openssl}/lib"
-    ];
-  preConfigure = a.fullDepEntry (''
-    sed -e 's@/bin/@@' -i Makefile.in
-  '') ["doUnpack" "minInit"];
-      
+    (stdenv.lib.withFeature usePAM "pam")
+  ] ++ (if useSSL then [
+      "--with-ssl-incl-dir=${openssl.dev}/include"
+      "--with-ssl-lib-dir=${openssl.out}/lib"
+    ] else [
+      "--without-ssl"
+  ]) ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # will need to check both these are true for musl
+    "libmonit_cv_setjmp_available=yes"
+    "libmonit_cv_vsnprintf_c99_conformant=yes"
+  ];
+
   meta = {
+    homepage = "http://mmonit.com/monit/";
     description = "Monitoring system";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
+    license = stdenv.lib.licenses.agpl3;
+    maintainers = with stdenv.lib.maintainers; [ raskin wmertens ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

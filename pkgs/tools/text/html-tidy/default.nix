@@ -1,41 +1,32 @@
-{ fetchcvs, stdenv, autoconf, automake, libtool }:
+{ stdenv, fetchFromGitHub, cmake, libxslt }:
 
-let date = "2009-07-04"; in
-  stdenv.mkDerivation rec {
-    name = "html-tidy-${date}";
+stdenv.mkDerivation rec {
+  pname = "html-tidy";
+  version = "5.6.0";
 
-    # According to http://tidy.sourceforge.net/, there are no new
-    # release tarballs, so one has to either get the code from CVS or
-    # use a decade-old tarball.
+  src = fetchFromGitHub {
+    owner = "htacg";
+    repo = "tidy-html5";
+    rev = version;
+    sha256 = "0w175c5d1babq0w1zzdzw9gl6iqbgyq58v8587s7srp05y3hwy9k";
+  };
 
-    src = fetchcvs {
-      inherit date;
-      cvsRoot = ":pserver:anonymous@tidy.cvs.sourceforge.net:/cvsroot/tidy";
-      module = "tidy";
-      sha256 = "d2e68b4335ebfde65ef66d5684f7693675c98bdd50b7a63c0b04f61db673aa6d";
-    };
+  nativeBuildInputs = [ cmake libxslt/*manpage*/ ];
 
-    buildInputs = [ autoconf automake libtool ];
+  cmakeFlags = [];
 
-    preConfigure = ''
-      cp -rv build/gnuauto/* .
-      AUTOMAKE="automake --foreign" autoreconf -vfi
+  # ATM bin/tidy is statically linked, as upstream provides no other option yet.
+  # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
+
+  meta = with stdenv.lib; {
+    description = "A HTML validator and `tidier'";
+    longDescription = ''
+      HTML Tidy is a command-line tool and C library that can be
+      used to validate and fix HTML data.
     '';
-
-    doCheck = true;
-
-    meta = {
-      description = "HTML Tidy, an HTML validator and `tidier'";
-
-      longDescription = ''
-        HTML Tidy is a command-line tool and C library that can be
-        used to validate and fix HTML data.
-      '';
-
-      license = "MIT";
-
-      homepage = http://tidy.sourceforge.net/;
-
-      maintainers = [ stdenv.lib.maintainers.ludo ];
-    };
-  }
+    license = licenses.libpng; # very close to it - the 3 clauses are identical
+    homepage = "http://html-tidy.org";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ edwtjo ];
+  };
+}

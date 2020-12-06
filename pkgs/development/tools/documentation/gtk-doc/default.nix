@@ -1,32 +1,86 @@
-{ stdenv, fetchurl, pkgconfig, perl, python, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome_doc_utils, dblatex, gettext }:
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, python3
+, docbook_xml_dtd_43
+, docbook_xsl
+, libxslt
+, gettext
+, gnome3
+, withDblatex ? false, dblatex
+}:
 
-stdenv.mkDerivation {
-  name = "gtk-doc-1.18";
+python3.pkgs.buildPythonApplication rec {
+  pname = "gtk-doc";
+  version = "1.33.0";
 
-  src = fetchurl {
-    url = mirror://gnome/sources/gtk-doc/1.18/gtk-doc-1.18.tar.xz;
-    sha256 = "084scak99ppgqk5lkziskhcsd3jmcgf7a98ddwhciq8vaqf5jnvq";
+  format = "other";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = version;
+    sha256 = "ahOTEWwVVwHt8TDWBnPKHIAUq0GXllEvMRmaKul1Tq0=";
   };
 
-  # maybe there is a better way to pass the needed dtd and xsl files
-  # "-//OASIS//DTD DocBook XML V4.1.2//EN" and "http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
-  preConfigure = ''
-    mkdir -p $out/nix-support
-    cat > $out/nix-support/catalog.xml << EOF
-    <?xml version="1.0"?>
-    <!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
-    <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-      <nextCatalog  catalog="${docbook_xsl}/xml/xsl/docbook/catalog.xml" />
-      <nextCatalog  catalog="${docbook_xml_dtd_43}/xml/dtd/docbook/catalog.xml" />
-    </catalog>
-    EOF
+  patches = [
+    passthru.respect_xml_catalog_files_var_patch
+  ];
 
-    configureFlags="--with-xml-catalog=$out/nix-support/catalog.xml --disable-scrollkeeper";
+  outputDevdoc = "out";
+
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    meson
+    ninja
+    libxslt # for xsltproc
+  ];
+
+  buildInputs = [
+    docbook_xml_dtd_43
+    docbook_xsl
+    libxslt
+  ] ++ stdenv.lib.optionals withDblatex [
+    dblatex
+  ];
+
+  pythonPath = with python3.pkgs; [
+    pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
+    (anytree.override { withGraphviz = false; })
+    lxml
+  ];
+
+  mesonFlags = [
+    "-Dtests=false"
+    "-Dyelp_manual=false"
+  ];
+
+  doCheck = false; # requires a lot of stuff
+  doInstallCheck = false; # fails
+
+  postFixup = ''
+    # Do not propagate Python
+    substituteInPlace $out/nix-support/propagated-build-inputs \
+      --replace "${python3}" ""
   '';
 
-  buildInputs =
-   [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-     gnome_doc_utils dblatex gettext which
-   ];
+  passthru = {
+    # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
+    respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "Tools to extract documentation embedded in GTK and GNOME source code";
+    homepage = "https://www.gtk.org/gtk-doc";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub worldofpeace ];
+  };
 }

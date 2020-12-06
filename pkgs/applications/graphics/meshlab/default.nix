@@ -1,48 +1,96 @@
-{stdenv, fetchurl, qt, bzip2, lib3ds, levmar, muparser, unzip}:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fetchpatch
+, libGLU
+, qtbase
+, qtscript
+, qtxmlpatterns
+, lib3ds
+, bzip2
+, muparser
+, eigen
+, glew
+, gmp
+, levmar
+, qhull
+, cmake
+}:
 
-stdenv.mkDerivation rec {
-  name = "meshlab-1.3.2";
+mkDerivation rec {
+  pname = "meshlab";
+  version = "2020.07";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/meshlab/meshlab/MeshLab%20v1.3.2/MeshLabSrc_AllInc_v132.tgz";
-    sha256 = "d57f0a99a55421aac54a66e2475d48f00f7b1752f9587cd69cf9b5b9c1a519b1";
+  src = fetchFromGitHub {
+    owner = "cnr-isti-vclab";
+    repo = "meshlab";
+    rev = "Meshlab-${version}";
+    sha256 = "0vj849b57zk3k6lx35zzcjhr9gdy4hxqnnkb8chwy7hw262cm3ri";
+    fetchSubmodules = true; # for vcglib
   };
 
-  # I don't know why I need this; without this, the rpath set at the beginning of the
-  # buildPhase gets removed from the 'meshlab' binary
-  dontPatchELF = true;
+  buildInputs = [
+    libGLU
+    qtbase
+    qtscript
+    qtxmlpatterns
+    lib3ds
+    bzip2
+    muparser
+    eigen
+    glew
+    gmp
+    levmar
+    qhull
+  ];
 
-  buildPhase = ''
-    mkdir -p "$out/include"
-    cp -r vcglib "$out/include"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$out/include/vcglib"
-    export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
-    cd meshlab/src
-    pushd external
-    qmake -recursive external.pro
-    make
-    popd
-    qmake -recursive meshlab_full.pro
-    make
+  nativeBuildInputs = [ cmake ];
+
+  patches = [
+    # Make cmake use the system qhull. The next meshlab will not need this patch because it is already in master.
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/cnr-isti-vclab/meshlab/pull/747.patch";
+      sha256 = "0wx9f6zn458xz3lsqcgvsbwh1pgi3g0lah93nlbsb0sagng7n565";
+    })
+  ];
+
+  preConfigure = ''
+    substituteAll ${./meshlab.desktop} install/linux/resources/meshlab.desktop
+    cd src
   '';
 
-  installPhase = ''
-    mkdir -p $out/opt/meshlab $out/bin $out/lib
-    pushd distrib
-    cp -R * $out/opt/meshlab
-    popd
-    ln -s $out/opt/meshlab/meshlab $out/bin/meshlab
+  cmakeFlags = [
+    "-DALLOW_BUNDLED_EIGEN=OFF"
+    "-DALLOW_BUNDLED_GLEW=OFF"
+    "-DALLOW_BUNDLED_LIB3DS=OFF"
+    "-DALLOW_BUNDLED_MUPARSER=OFF"
+    "-DALLOW_BUNDLED_QHULL=OFF"
+    # disable when available in nixpkgs
+    "-DALLOW_BUNDLED_OPENCTM=ON"
+    "-DALLOW_BUNDLED_SSYNTH=ON"
+    # some plugins are disabled unless these are on
+    "-DALLOW_BUNDLED_NEWUOA=ON"
+    "-DALLOW_BUNDLED_LEVMAR=ON"
+  ];
+
+  postFixup = ''
+    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlabserver-wrapped
   '';
 
-  sourceRoot = ".";
+  # Meshlab is not format-security clean; without disabling hardening, we get:
+  # src/common/GLLogStream.h:61:37: error: format not a string literal and no format arguments [-Werror=format-security]
+  #  61 |         int chars_written = snprintf(buf, buf_size, f, std::forward<Ts>(ts)...);
+  #     |
+  hardeningDisable = [ "format" ];
 
-  buildInputs = [ qt unzip ];
+  enableParallelBuilding = true;
 
   meta = {
-    description = "System for the processing and editing of unstructured 3D triangular meshes";
-    homepage = http://meshlab.sourceforge.net/;
-    license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    description = "A system for processing and editing 3D triangular meshes";
+    homepage = "https://www.meshlab.net/";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ viric ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -1,62 +1,26 @@
-{pkgs, pkgs_i686}:
+{ config, pkgs ? import <nixpkgs> {}, pkgsHostHost ? pkgs.pkgsHostHost
+, pkgs_i686 ? import <nixpkgs> { system = "i686-linux"; }
+, licenseAccepted ? config.android_sdk.accept_license or false
+}:
 
 rec {
-  platformTools = import ./platform-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
-    inherit (pkgs_i686) zlib ncurses;
-    stdenv_32bit = pkgs_i686.stdenv;
-  };
-  
-  support = import ./support.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
-  };
-  
-  platforms = if (pkgs.stdenv.system == "i686-linux" || pkgs.stdenv.system == "x86_64-linux")
-    then import ./platforms-linux.nix {
-      inherit (pkgs) stdenv fetchurl unzip;
-    }
-    else if pkgs.stdenv.system == "x86_64-darwin"
-    then import ./platforms-macosx.nix {
-      inherit (pkgs) stdenv fetchurl unzip;
-    }
-    else throw "Platform: ${pkgs.stdenv.system} not supported!";
-
-  sysimages = import ./sysimages.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
+  composeAndroidPackages = import ./compose-android-packages.nix {
+    inherit (pkgs) requireFile autoPatchelfHook;
+    inherit pkgs pkgsHostHost pkgs_i686 licenseAccepted;
   };
 
-  addons = import ./addons.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
-  };
-
-  androidsdk = import ./androidsdk.nix {
-    inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) freetype fontconfig gtk atk;
-    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp;
-    
-    inherit platformTools support platforms sysimages addons;
-    
-    stdenv_32bit = pkgs_i686.stdenv;
-    zlib_32bit = pkgs_i686.zlib;
-    libX11_32bit = pkgs_i686.xorg.libX11;
-    libxcb_32bit = pkgs_i686.xorg.libxcb;
-    libXau_32bit = pkgs_i686.xorg.libXau;
-    libXdmcp_32bit = pkgs_i686.xorg.libXdmcp;
-    libXext_32bit = pkgs_i686.xorg.libXext;
-  };
-  
-  androidsdk_4_1 = androidsdk {
-    platformVersions = [ "16" ];
-    useGoogleAPIs = true;
-  };
-  
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv jdk ant;
-    inherit androidsdk;
+    inherit (pkgs) stdenv lib jdk ant gnumake gawk;
+    inherit composeAndroidPackages;
   };
-  
+
   emulateApp = import ./emulate-app.nix {
-    inherit (pkgs) stdenv;
-    inherit androidsdk;
+    inherit (pkgs) stdenv lib runtimeShell;
+    inherit composeAndroidPackages;
+  };
+
+  androidPkgs_9_0 = composeAndroidPackages {
+    platformVersions = [ "28" ];
+    abiVersions = [ "x86" "x86_64"];
   };
 }

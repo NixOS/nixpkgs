@@ -1,26 +1,24 @@
-{stdenv, fetchurl}:
-
-let
-  pname = "scsh";
-  version = "0.6.7";
-  name = "${pname}-${version}";
-in
+{ stdenv, fetchgit, autoreconfHook, scheme48 }:
 
 stdenv.mkDerivation {
-  inherit name;
+  name = "scsh-0.7pre";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "c4a9f7df2a0bb7a7aa3dafc918aa9e9a566d4ad33a55f0192889de172d1ddb7f";
+  src = fetchgit {
+    url = "git://github.com/scheme/scsh.git";
+    rev = "f99b8c5293628cfeaeb792019072e3a96841104f";
+    fetchSubmodules = true;
+    sha256 = "0ci2h9hhv8pl12sdyl2qwal3dhmd7zgm1pjnmd4kg8r1hnm6vidx";
   };
 
-  meta = {
-    description = "a Scheme shell";
-    longDescription = ''
-      SCSH is an implementation of the Scheme shell.  It is implemented as
-      a heap image which is interpreted by the Scheme 48 virtual machine.
-    '';
-    homepage = http://www.scsh.net/;
-    license = "BSD";
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ scheme48 ];
+  configureFlags = [ "--with-scheme48=${scheme48}" ];
+
+  meta = with stdenv.lib; {
+    description = "A Scheme shell";
+    homepage = "http://www.scsh.net/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ joachifm ];
+    platforms = with platforms; unix;
   };
 }

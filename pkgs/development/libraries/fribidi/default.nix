@@ -1,16 +1,41 @@
-{stdenv, fetchurl}:
+{ stdenv
+, buildPackages
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, fixDarwinDylibNames
+, python3
+}:
 
 stdenv.mkDerivation rec {
-  name = "fribidi-${version}";
-  version = "0.19.2";
-  
+  pname = "fribidi";
+  version = "1.0.10";
+
+  outputs = [ "out" "devdoc" ];
+
+  # NOTE: Only URL tarball has "Have pre-generated man pages: true", which works-around upstream usage of some rare ancient `c2man` fossil application.
   src = fetchurl {
-    url = "http://fribidi.org/download/${name}.tar.gz";
-    sha256 = "0xs1yr22zw9a1qq9ygsrqam0vzqdvb0ndzvjb3i2zda8drc93ks9";
+    url = "https://github.com/fribidi/fribidi/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "009wcpgk4jj5x52skjkfs6xar6x38mcngs75rb59nj9ig1y6h73z";
   };
 
-  meta = {
-    homepage = http://fribidi.org/;
+  postPatch = ''
+    patchShebangs test
+  '';
+
+  nativeBuildInputs = [ meson ninja pkgconfig ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  doCheck = true;
+  checkInputs = [ python3 ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/fribidi/fribidi";
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
   };
 }

@@ -1,15 +1,35 @@
-{stdenv, fetchurl, x11, imake, libXScrnSaver, scrnsaverproto}:
+{ stdenv, fetchFromGitHub, xlibsWrapper
+, imake, gccmakedep, libXScrnSaver, xorgproto
+}:
 
-stdenv.mkDerivation rec
-{
-  name = "xautolock-2.2";
-  src = fetchurl
-  {
-    url = "http://www.ibiblio.org/pub/Linux/X11/screensavers/${name}.tgz";
-    sha256 = "11f0275175634e6db756e96f5713ec91b8b1c41f8663df54e8a5d27dc71c4da2";
+stdenv.mkDerivation rec {
+  pname = "xautolock";
+  version = "2.2-7-ga23dd5c";
+
+  # This repository contains xautolock-2.2 plus various useful patches that
+  # were collected from Debian, etc.
+  src = fetchFromGitHub {
+    owner = "peti";
+    repo = "xautolock";
+    rev = "v${version}";
+    sha256 = "10j61rl0sx9sh84rjyfyddl73xb5i2cpb17fyrli8kwj39nw0v2g";
   };
-  makeFlags="BINDIR=\${out}/bin MANPATH=\${out}/man";
-  preBuild = "xmkmf";
-  installTargets = "install install.man";
-  buildInputs = [x11 imake libXScrnSaver scrnsaverproto];
+
+  nativeBuildInputs = [ imake gccmakedep ];
+  buildInputs = [ xlibsWrapper libXScrnSaver xorgproto ];
+
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "MANPATH=$(out)/share/man"
+  ];
+
+  installTargets = [ "install" "install.man" ];
+
+  meta = with stdenv.lib; {
+    description = "Launch a given program when your X session has been idle for a given time";
+    homepage = "http://www.ibiblio.org/pub/linux/X11/screensavers";
+    maintainers = with maintainers; [ peti ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+  };
 }

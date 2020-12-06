@@ -1,67 +1,179 @@
-{ stdenv, fetchurl, makeWrapper, boost, file, gettext
-, glib, glibc, libgnome_keyring, gnome_keyring, gtk, gtkmm, intltool
-, libctemplate, libglade
-, libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
-, pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite
+{ stdenv
+, fetchurl
+, substituteAll
+, cmake
+, ninja
+, pkgconfig
+, glibc
+, gtk3
+, gtkmm3
+, pcre
+, swig
+, antlr4_8
+, sudo
+, mysql
+, libxml2
+, libmysqlconnectorcpp
+, vsqlite
+, gdal
+, libiodbc
+, libpthreadstubs
+, libXdmcp
+, libuuid
+, libzip
+, libsecret
+, libssh
+, python2
+, jre
+, boost
+, libsigcxx
+, libX11
+, openssl
+, rapidjson
+, proj
+, cairo
+, libxkbcommon
+, epoxy
+, wrapGAppsHook
+, at-spi2-core
+, dbus
+, bash
+, coreutils
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2.pkgs) paramiko pycairo pyodbc;
+in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "5.2.39";
-  name = "${pname}-${version}";
+  version = "8.0.21";
 
   src = fetchurl {
-    url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
-    sha256 = "0e4e14f1b39dca2b65f924381d82b406dc25a530fbd25631b4cd05bddc4ab5bd";
+    url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
+    sha256 = "0rqgr1dcbf6yp60hninbw5dnwykx5ngbyhhx0sbhgv0m0cq5a44h";
   };
 
-  buildInputs = [ boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
-    libctemplate libglade libgnome libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
-    mysql paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
+  patches = [
+    ./fix-gdal-includes.patch
 
+    (substituteAll {
+      src = ./hardcode-paths.patch;
+      catchsegv = "${glibc.bin}/bin/catchsegv";
+      bash = "${bash}/bin/bash";
+      cp = "${coreutils}/bin/cp";
+      dd = "${coreutils}/bin/dd";
+      ls = "${coreutils}/bin/ls";
+      mkdir = "${coreutils}/bin/mkdir";
+      nohup = "${coreutils}/bin/nohup";
+      rm = "${coreutils}/bin/rm";
+      rmdir = "${coreutils}/bin/rmdir";
+      sudo = "${sudo}/bin/sudo";
+    })
+
+    # Fix swig not being able to find headers
+    # https://github.com/NixOS/nixpkgs/pull/82362#issuecomment-597948461
+    (substituteAll {
+      src = ./fix-swig-build.patch;
+      cairoDev = "${cairo.dev}";
+    })
+  ];
+
+  # have it look for 4.7.2 instead of 4.7.1
   preConfigure = ''
-    substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"
+    substituteInPlace CMakeLists.txt \
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.8-complete.jar"
   '';
 
-  postInstall = ''
-    wrapProgram "$out/bin/mysql-workbench-bin" \
-      --prefix LD_LIBRARY_PATH : "${python}/lib" \
-      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64" \
-      --prefix PATH : "${gnome_keyring}/bin" \
-      --prefix PATH : "${python}/bin" \
-      --set PYTHONPATH $PYTHONPATH \
-      --run '
-# The gnome-keyring-daemon must be running.  To allow for environments like
-# kde, xfce where this is not so, we start it first.
-# It is cleaned up using a supervisor subshell which detects that
-# the parent has finished via the closed pipe as terminate signal idiom,
-# used because we cannot clean up after ourselves due to the exec call.
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkgconfig
+    jre
+    swig
+    wrapGAppsHook
+  ];
 
-# Start gnome-keyring-daemon, export the environment variables it asks us to set.
-for expr in $( gnome-keyring-daemon --components=ssh,pkcs11 --start ) ; do eval "export "$expr ; done
+  buildInputs = [
+    gtk3
+    gtkmm3
+    libX11
+    antlr4_8.runtime.cpp
+    python2
+    mysql
+    libxml2
+    libmysqlconnectorcpp
+    vsqlite
+    gdal
+    boost
+    libssh
+    openssl
+    rapidjson
+    libiodbc
+    pcre
+    cairo
+    libuuid
+    libzip
+    libsecret
+    libsigcxx
+    proj
 
-# Prepare fifo pipe.
-FIFOCTL="/tmp/gnome-keyring-daemon-ctl.$$.fifo"
-[ -p $FIFOCTL ] && rm $FIFOCTL
-mkfifo $FIFOCTL
+    # python dependencies:
+    paramiko
+    pycairo
+    pyodbc
+    # TODO: package sqlanydb and add it here
 
-# Supervisor subshell waits reading from pipe, will receive EOF when parent
-# closes pipe on termination.  Negate read with ! operator to avoid subshell
-# quitting when read EOF returns 1 due to -e option being set.
-(
-    exec 19< $FIFOCTL
-    ! read -u 19
+    # transitive dependencies:
+    libpthreadstubs
+    libXdmcp
+    libxkbcommon
+    epoxy
+    at-spi2-core
+    dbus
+  ];
 
-    kill $GNOME_KEYRING_PID
-    rm $FIFOCTL
-) &
+  postPatch = ''
+    patchShebangs tools/get_wb_version.sh
+  '';
 
-exec 19> $FIFOCTL
-            '
+  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  cmakeFlags = [
+    "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
+    "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
+    "-DWITH_ANTLR_JAR=${antlr4_8.jarLocation}"
+    # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
+    # Newer versions of connector still provide the legacy library when enabled
+    # but the headers are in a different location.
+    "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
+  ];
+
+  # There is already an executable and a wrapper in bindir
+  # No need to wrap both
+  dontWrapGApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${python2}/bin"
+      --prefix PROJSO : "${proj}/lib/libproj.so"
+      --set PYTHONPATH $PYTHONPATH
+    )
+  '';
+
+  # Let’s wrap the programs not ending with bin
+  # until https://bugs.mysql.com/bug.php?id=91948 is fixed
+  postFixup = ''
+    find -L "$out/bin" -type f -executable -print0 \
+      | while IFS= read -r -d ''' file; do
+      if [[ "''${file}" != *-bin ]]; then
+        echo "Wrapping program $file"
+        wrapGApp "$file"
+      fi
+    done
   '';
 
   meta = with stdenv.lib; {
-    description = "A MySQL visual database modeling, administration and querying tool.";
+    description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
       and generate MySQL databases graphically. It also has administration
@@ -69,9 +181,9 @@ exec 19> $FIFOCTL
       and execute SQL queries.
     '';
 
-    homepage = http://wb.mysql.com/;
+    homepage = "http://wb.mysql.com/";
     license = licenses.gpl2;
     maintainers = [ maintainers.kkallio ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

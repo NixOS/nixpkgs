@@ -1,66 +1,65 @@
-x@{builderDefsPackage
-  , jdk /* only used in bootstrap */
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, jdk, w3m, openssl, makeWrapper }:
+with stdenv.lib;
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="picolisp";
-    tarballBaseName="picoLisp";
-    version="3.0.5";
-    name="${baseName}-${version}";
-    tarballName="${tarballBaseName}-${version}";
-    extension="tgz";
-    url="http://www.software-lab.de/${tarballName}.${extension}";
-    hash="07w2aygllkmnfcnby3dy88n9giqsas35s77rp2lr2ll5yy2hkc0x";
+stdenv.mkDerivation rec {
+  pname = "picoLisp";
+  version = "20.6";
+  src = fetchurl {
+    url = "https://www.software-lab.de/${pname}-${version}.tgz";
+    sha256 = "0l51x98bn1hh6kv40sdgp0x09pzg5i8yxbcjvm9n5bxsd6bbk5w2";
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
+  buildInputs = [makeWrapper openssl] ++ optional stdenv.is64bit jdk;
+  patchPhase = ''
+    sed -i "s/which java/command -v java/g" mkAsm
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doMake" "doDeploy"];
-
-  goSrcDir = if a.stdenv.system == "x86_64-linux" then 
-    "cd src64" else "cd src";
-  makeFlags = [''PREFIX=$out''];
-
-  doDeploy = a.fullDepEntry (''
+    ${optionalString stdenv.isAarch32 ''
+      sed -i s/-m32//g Makefile
+      cat >>Makefile <<EOF
+      ext.o: ext.c
+        \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+      ht.o: ht.c
+        \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+      EOF
+    ''}
+  '';
+  sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
+  postBuild = ''
+    cd ../src; make gate
+  '';
+  installPhase = ''
     cd ..
-
-    sed -e "s@/usr/@$out/@g" -i bin/pil
 
     mkdir -p "$out/share/picolisp" "$out/lib" "$out/bin"
     cp -r . "$out/share/picolisp/build-dir"
     ln -s "$out/share/picolisp/build-dir" "$out/lib/picolisp"
     ln -s "$out/lib/picolisp/bin/picolisp" "$out/bin/picolisp"
-  '') ["minInit" "defEnsureDir" "doMake"];
-      
+    ln -s "$out/lib/picolisp/bin/httpGate" "$out/bin/httpGate"
+
+
+    makeWrapper $out/bin/picolisp $out/bin/pil \
+      --prefix PATH : ${w3m}/bin \
+      --add-flags "$out/lib/picolisp/lib.l" \
+      --add-flags "@lib/misc.l" \
+      --add-flags "@lib/btree.l" \
+      --add-flags "@lib/db.l" \
+      --add-flags "@lib/pilog.l"
+
+    mkdir -p "$out/share/emacs"
+    ln -s "$out/lib/picolisp/lib/el" "$out/share/emacs/site-lisp"
+  '';
+
   meta = {
-    description = "An interpreter for a small Lisp dialect with builtin DB";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.mit;
+    description = "A simple Lisp with an integrated database";
+    homepage = "https://picolisp.com/";
+    license = licenses.mit;
+    platforms = platforms.all;
+    broken = stdenv.isDarwin; # times out
+    maintainers = with maintainers; [ raskin tohl ];
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://www.software-lab.de/down.html";
     };
   };
-}) x
-
+}

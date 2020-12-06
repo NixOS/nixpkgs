@@ -1,42 +1,51 @@
-{stdenv, fetchurl
-, cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm, glibmm, gtkglext
-}:
+{ stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
+, cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
+, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0.2";
-  name = "k3d-${version}";
-  src = fetchurl {
-    url = "mirror://sourceforge/k3d/k3d-source-0.8.0.2.tar.bz2";
-    sha256 = "01fd2qb0zddif3wz1a2wdmwyzn81cf73678qp2gjs8iikmdz6w7x";
+  version = "0.8.0.6";
+  pname = "k3d";
+  src = fetchFromGitHub {
+    owner = "K-3D";
+    repo = "k3d";
+    rev = "${pname}-${version}";
+    sha256 = "0vdjjg6h8mxm2n8mvkkg2mvd27jn2xx90hnmx23cbd35mpz9p4aa";
   };
 
-  patches = map fetchurl ((import ./debian-patches.nix) ++
-    [ {
-      url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-gfx/k3d/files/k3d-0.7.11.0-libpng14.patch;
-      sha256 = "1vl7dbvxg9b54ay0n8dd2v2k3j001h8h1bpr1cbm3vrzv31lnwzx";
-    } ]);
+  patches = [
+    (fetchpatch { /* glibmm 2.50 fix */
+      url = "https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch";
+      sha256 = "162icv1hicr2dirkb9ijacvg9bhz5j30yfwg7b45ijavk8rns62j";
+    })
+  ];
+
+  cmakeFlags = [
+    "-DK3D_BUILD_DOCS=false"
+    "-DK3D_BUILD_GUIDE=false"
+  ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
   '';
 
+  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkgconfig perl asciidoc ];
+
   buildInputs = [
-     cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff gettext
-     intltool perl
-     gtkmm glibmm gtkglext
+     libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
+     boost cairomm libjpeg libtiff
+     ftgl glew gtkmm2 glibmm gtkglext libXmu
     ];
 
-  doCheck = false;
+  #doCheck = false;
 
-  meta = {
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
+  meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
-    homepage = "http://k-3d.org/";
-    platforms = with stdenv.lib.platforms;
-      linux;
-    maintainers = with stdenv.lib.maintainers;
-      [raskin];
+    homepage = "http://www.k-3d.org/";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
   };
 }

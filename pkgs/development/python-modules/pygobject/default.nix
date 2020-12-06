@@ -1,31 +1,41 @@
-{ stdenv, fetchurl, python, pkgconfig, glib }:
+{ stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib, isPy3k }:
 
-stdenv.mkDerivation rec {
-  name = "pygobject-2.27.0";
-  
+buildPythonPackage rec {
+  pname = "pygobject";
+  version = "2.28.7";
+  format = "other";
+
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.27/${name}.tar.bz2";
-    sha256 = "18mq4mj9s9sw12m6gbbc4iffrq993c7q09v9yahlnamrqn3bv53m";
+    url = "mirror://gnome/sources/pygobject/2.28/${pname}-${version}.tar.xz";
+    sha256 = "0nkam61rsn7y3wik3vw46wk5q2cjfh2iph57hl9m39rc8jijb7dv";
   };
 
-  configureFlags = "--disable-introspection";
+  outputs = [ "out" "devdoc" ];
 
-  buildInputs = [ python pkgconfig glib ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    ./pygobject-2.0-fix-darwin.patch
+  ];
 
-  postInstall = ''
-    # All python code is installed into a "gtk-2.0" sub-directory. That
-    # sub-directory may be useful on systems which share several library
-    # versions in the same prefix, i.e. /usr/local, but on Nix that directory
-    # is useless. Furthermore, its existence makes it very hard to guess a
-    # proper $PYTHONPATH that allows "import gtk" to succeed.
-    cd $(toPythonPath $out)/gtk-2.0
-    for n in *; do
-      ln -s "gtk-2.0/$n" "../$n"
-    done
+  configureFlags = [ "--disable-introspection" ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib ];
+
+  # in a "normal" setup, pygobject and pygtk are installed into the
+  # same site-packages: we need a pth file for both. pygtk.py would be
+  # used to select a specific version, in our setup it should have no
+  # effect, but we leave it in case somebody expects and calls it.
+  postInstall = stdenv.lib.optionalString (!isPy3k) ''
+    mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${pname}-${version}.pth}
+
+    # Prevent wrapping of codegen files as these are meant to be
+    # executed by the python program
+    chmod a-x $out/share/pygobject/*/codegen/*.py
   '';
 
   meta = {
-    homepage = http://live.gnome.org/PyGObject;
-    description = "Python bindings for Glib";
+    homepage = "https://pygobject.readthedocs.io/";
+    description = "Python bindings for GLib";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

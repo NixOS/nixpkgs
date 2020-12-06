@@ -1,68 +1,77 @@
-{stdenv, fetchurl, SDL, SDL_mixer, libvorbis, mesa, gtk, pkgconfig, nasm, makeDesktopItem}:
+{ stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
+, alsaLib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
+, SDL2, SDL2_mixer }:
 
-stdenv.mkDerivation rec {
-  name = "eduke32-1944";
-  
-  src = fetchurl {
-    url = http://dukeworld.duke4.net/eduke32/synthesis/20110724-1944/eduke32_src_20110724-1944.tar.bz2;
-    sha256 = "0y2y9agydfkdq4krp4lz22br3p23as6hrqhq7l9djw0pm2y76fqh";
-  };
-  
-  buildInputs = [ SDL SDL_mixer libvorbis mesa gtk pkgconfig ]
-    ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
-  
-  NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
-  NIX_LDFLAGS = "-L${SDL}/lib -lgcc_s";
-  
+let
+  version = "20200907";
+  rev = "9257";
+  revExtra = "93f62bbad";
+
   desktopItem = makeDesktopItem {
     name = "eduke32";
-    exec = "eduke32-wrapper";
+    exec = "@out@/bin/${wrapper}";
     comment = "Duke Nukem 3D port";
-    desktopName = "EDuke32";
+    desktopName = "Enhanced Duke Nukem 3D";
     genericName = "Duke Nukem 3D port";
-    categories = "Application;Game;";
+    categories = "Game;";
   };
 
-  preConfigure = ''
-    sed -i -e "s|/usr/bin/sdl-config|${SDL}/bin/sdl-config|" build/Makefile.shared
-  '';
-  
-  buildPhase = ''
-    make OPTLEVEL=0
+  wrapper = "eduke32-wrapper";
+
+in stdenv.mkDerivation {
+  pname = "eduke32";
+  inherit version;
+
+  src = fetchurl {
+    url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
+    sha256 = "972630059be61ef9564a241b84ef2ee4f69fc85c19ee36ce46052ff2f1ce3bf9";
+  };
+
+  buildInputs = [ alsaLib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
+
+  nativeBuildInputs = [ makeWrapper pkgconfig ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
+
+  postPatch = ''
+    substituteInPlace source/build/src/glbuild.cpp \
+      --replace libGLU.so ${libGLU}/lib/libGLU.so
+
+    for f in glad.c glad_wgl.c ; do
+      substituteInPlace source/glad/src/$f \
+        --replace libGL.so ${libGL}/lib/libGL.so
+    done
   '';
 
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
+
+  makeFlags = [
+    "SDLCONFIG=${SDL2}/bin/sdl2-config"
+  ];
+
+  enableParallelBuilding = true;
+
   installPhase = ''
-    # Install binaries
-    mkdir -p $out/bin
-    cp eduke32 mapster32 $out/bin 
-    
-    # Make wrapper script
-    cat > $out/bin/eduke32-wrapper <<EOF
-    #!/bin/sh
-    
-    if [ "$EDUKE32_DATA_DIR" = "" ]
-    then 
-        EDUKE32_DATA_DIR=/var/lib/games/eduke32
-    fi
-    if [ "$EDUKE32_GRP_FILE" = "" ]
-    then
-        EDUKE32_GRP_FILE=\$EDUKE32_DATA_DIR/DUKE3D.GRP
-    fi
-    
-    cd \$EDUKE32_DATA_DIR
-    eduke32 -g \$EDUKE32_GRP_FILE    
-    EOF
-    chmod 755 $out/bin/eduke32-wrapper
-    
-    # Install desktop item
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    runHook preInstall
+
+    install -Dm755 -t $out/bin eduke32 mapster32
+
+    makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
+      --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
+      --add-flags '-g "$EDUKE32_DATA_DIR/DUKE3D.GRP"'
+
+    cp -rv ${desktopItem}/share $out
+    substituteInPlace $out/share/applications/eduke32.desktop \
+      --subst-var out
+
+    runHook postInstall
   '';
-  
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
-    license = "GPLv2+ and BUILD license";
-    homepage = http://eduke32.com;
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    homepage = "http://eduke32.com";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sander ];
+    # Darwin is untested (supported by upstream)
+    platforms = platforms.all;
   };
 }

@@ -1,21 +1,27 @@
-{stdenv, fetchurl, pam, openldap}:
-   
+{ stdenv, fetchurl, pam, openldap, perl }:
+
 stdenv.mkDerivation rec {
-  name = "pam_ldap-183";
-   
+  name = "pam_ldap-186";
+
   src = fetchurl {
-    url = "http://www.padl.com/download/${name}.tar.gz";
-    md5 = "c0ad81e9d9712ddc6599a6e7a1688778";
+    url = "https://www.padl.com/download/${name}.tar.gz";
+    sha256 = "0lv4f7hc02jrd2l3gqxd247qq62z11sp3fafn8lgb8ymb7aj5zn8";
   };
+
+  postPatch = ''
+    patchShebangs ./vers_string
+    substituteInPlace vers_string --replace "cvslib.pl" "./cvslib.pl"
+  '';
 
   preInstall = "
     substituteInPlace Makefile --replace '-o root -g root' ''
   ";
 
-  buildInputs = [pam openldap];
+  nativeBuildInputs = [ perl ];
+  buildInputs = [ pam openldap ];
 
   meta = {
-    homepage = http://www.padl.com/OSS/pam_ldap.html;
+    homepage = "https://www.padl.com/OSS/pam_ldap.html";
     description = "LDAP backend for PAM";
     longDescription = ''
       The pam_ldap module provides the means for Solaris and Linux servers and

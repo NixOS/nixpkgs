@@ -1,45 +1,36 @@
-{stdenv, fetchurl, ocaml, findlib, camomile, ounit}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, qtest, num }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
+let version = "3.2.0"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-batteries-1.4.1";
+  name = "ocaml${ocaml.version}-batteries-${version}";
 
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/684/batteries-1.4.1.tar.gz;
-    sha256 = "bdca7deba290d83c66c0a5001da52b2d7f2af58b7b7e7d9303d4363aaafe9c30";
+    url = "https://github.com/ocaml-batteries-team/batteries-included/releases/download/v${version}/batteries-${version}.tar.gz";
+    sha256 = "0a77njgc6c6kz4rpwqgmnii7f1na6hzsa55nqqm3dndhq9xh628w";
   };
 
-  buildInputs = [ocaml findlib camomile ounit];
+  buildInputs = [ ocaml findlib ocamlbuild ];
+  checkInputs = [ qtest ];
+  propagatedBuildInputs = [ num ];
 
-  patchPhase = ''
-    substituteInPlace Makefile --replace '/bin/echo -n' echo
-  '';
-
-  configurePhase = "true"; 	# Skip configure
-
-  preInstall = ''
-    mkdir -p "$out/lib/ocaml/${ocaml_version}/site-lib"
-  '';
-
-  doCheck = true;
-
+  doCheck = stdenv.lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
   checkTarget = "test";
 
+  createFindlibDestdir = true;
+
   meta = {
-    homepage = http://batteries.forge.ocamlcore.org/;
+    homepage = "http://batteries.forge.ocamlcore.org/";
     description = "OCaml Batteries Included";
     longDescription = ''
       A community-driven effort to standardize on an consistent, documented,
       and comprehensive development platform for the OCaml programming
       language.
     '';
-    license = "LGPL";
-    platforms = ocaml.meta.platforms;
+    license = stdenv.lib.licenses.lgpl21Plus;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

@@ -1,12 +1,13 @@
 { stdenv, fetchurl, gawk }:
 
-let version = "1.98.1";
+let version = "2.0";
 in
-  stdenv.mkDerivation rec {
-    name = "hibernate-${version}";
+  stdenv.mkDerivation {
+    pname = "hibernate";
+    inherit version;
     src = fetchurl {
-      url = "http://www.tuxonice.net/downloads/all/hibernate-script-${version}.tar.gz";
-      sha256 = "1xpc2i16jczc3nhvxlkn6fb044srqrh528gnp92cwy4hxf2nzi1z";
+      url = "http://tuxonice.nigelcunningham.com.au/files/hibernate-script-${version}.tar.gz";
+      sha256 = "0ib5bac3spbcwmhf8f9apjbll8x7fgqj4k1s5q3srijh793rfifh";
     };
 
     patches = [ ./install.patch ./gen-manpages.patch ./hibernate.patch ];
@@ -38,7 +39,8 @@ in
 	it into "hibernation".  It works both with Linux swsusp and Tux-on-Ice.
       '';
 
-      license = "GPLv2+";
-      homepage = http://www.tuxonice.net/;
+      license = stdenv.lib.licenses.gpl2Plus;
+      homepage = "http://www.tuxonice.net/";
+      platforms = stdenv.lib.platforms.linux;
     };
   }

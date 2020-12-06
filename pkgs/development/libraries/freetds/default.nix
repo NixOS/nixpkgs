@@ -1,20 +1,33 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig
+, openssl
+, odbcSupport ? true, unixODBC ? null }:
 
-stdenv.mkDerivation {
-  name = "freetds-0.91";
+assert odbcSupport -> unixODBC != null;
+
+# Work is in progress to move to cmake so revisit that later
+
+stdenv.mkDerivation rec {
+  pname = "freetds";
+  version = "1.1.42";
 
   src = fetchurl {
-    url = ftp://ftp.ibiblio.org/pub/Linux/ALPHA/freetds/stable/freetds-stable.tgz;
-    sha256 = "0r946axzxs0czsmr7283w7vmk5jx3jnxxc32d2ncxsrsh2yli0ba";
+    url    = "https://www.freetds.org/files/stable/${pname}-${version}.tar.bz2";
+    sha256 = "02phnk88zv4f8byx954784w8mh33knsslwvj266jfyrmxz6hxxxg";
   };
 
-  meta = {
-    description =
-      "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
-    homepage = "http://www.freetds.org";
-    license = "lgpl";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-    platforms = stdenv.lib.platforms.all;
+  buildInputs = [
+    openssl
+  ] ++ stdenv.lib.optional odbcSupport unixODBC;
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
+    homepage    = "https://www.freetds.org";
+    license     = licenses.lgpl2;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms   = platforms.all;
   };
 }
-

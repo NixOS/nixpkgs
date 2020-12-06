@@ -1,23 +1,34 @@
-{ stdenv, fetchgit, cmake, pysideApiextractor, python27Packages, qt4 }:
+{ stdenv, fetchurl, cmake, pysideApiextractor, python3, qt4 }:
 
-stdenv.mkDerivation {
-  name = "pyside-generatorrunner-0.6.13-9-g567ca6e";
+# This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
+let
+  pythonEnv = python3.withPackages(ps: with ps; [ sphinx ]);
+  pname = "pyside-generatorrunner";
+  version = "0.6.16";
+in stdenv.mkDerivation {
+  name = "${pname}-${version}";
 
-  src = fetchgit {
-    url = "git://github.com/PySide/Generatorrunner.git";
-    rev = "567ca6effaecdf97b33d1d13eada23bafe0f7535";
-    sha256 = "182aba79af9fc865337f4befc96faf3eaca1ab9bcb902a57e0a68af49f071c74";
+  src = fetchurl {
+    url = "https://github.com/PySide/Generatorrunner/archive/0.6.16.tar.gz";
+    sha256 = "0vzk3cp0pfbhd921r8f1xkcz96znla39dhj074k623x9k26lj2sj";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pysideApiextractor python27Packages.sphinx qt4 ];
+  outputs = [ "out" "dev" ];
+
+  preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
+  '';
+
+  nativeBuildInputs = [ cmake pythonEnv ];
+  buildInputs = [ pysideApiextractor qt4 ];
 
   meta = {
     description = "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";
     license = stdenv.lib.licenses.gpl2;
     homepage = "http://www.pyside.org/docs/generatorrunner/";
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

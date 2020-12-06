@@ -1,23 +1,77 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nss, python3
+, blacklist ? []
+, includeEmail ? false
+}:
 
-stdenv.mkDerivation rec {
-  name = "cacert-20120628";
+with stdenv.lib;
 
-  src = fetchurl {
-    url = "http://nixos.org/tarballs/${name}.pem.bz2";
-    sha256 = "0xg9f1w2pmsv221lgc60c07bs0xf2rr189a2yp2y9an95h3gx7ir";
+let
+
+  certdata2pem = fetchurl {
+    name = "certdata2pem.py";
+    url = "https://salsa.debian.org/debian/ca-certificates/raw/debian/20170717/mozilla/certdata2pem.py";
+    sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
 
-  unpackPhase = "true";
+  version = "3.57";
+  underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
+in
 
-  installPhase =
-    ''
-      mkdir -p $out/etc
-      bunzip2 < $src > $out/etc/ca-bundle.crt
-    '';
+stdenv.mkDerivation {
+  name = "nss-cacert-${version}";
+
+  src = fetchurl {
+    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/nss-${version}.tar.gz";
+    sha256 = "55a86c01be860381d64bb4e5b94eb198df9b0f098a8af0e58c014df398bdc382";
+  };
+
+  outputs = [ "out" "unbundled" ];
+
+  nativeBuildInputs = [ python3 ];
+
+  configurePhase = ''
+    ln -s nss/lib/ckfw/builtins/certdata.txt
+
+    cat << EOF > blacklist.txt
+    ${concatStringsSep "\n" (map (c: ''"${c}"'') blacklist)}
+    EOF
+
+    cat ${certdata2pem} > certdata2pem.py
+    patch -p1 < ${./fix-unicode-ca-names.patch}
+    ${optionalString includeEmail ''
+      # Disable CAs used for mail signing
+      substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
+    ''}
+  '';
+
+  buildPhase = ''
+    python certdata2pem.py | grep -vE '^(!|UNTRUSTED)'
+
+    for cert in *.crt; do
+      echo $cert | cut -d. -f1 | sed -e 's,_, ,g' >> ca-bundle.crt
+      cat $cert >> ca-bundle.crt
+      echo >> ca-bundle.crt
+    done
+  '';
+
+  installPhase = ''
+    mkdir -pv $out/etc/ssl/certs
+    cp -v ca-bundle.crt $out/etc/ssl/certs
+    # install individual certs in unbundled output
+    mkdir -pv $unbundled/etc/ssl/certs
+    cp -v *.crt $unbundled/etc/ssl/certs
+    rm -f $unbundled/etc/ssl/certs/ca-bundle.crt  # not wanted in unbundled
+  '';
+
+  setupHook = ./setup-hook.sh;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage = http://curl.haxx.se/docs/caextract.html;
+    homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.mpl20;
   };
 }

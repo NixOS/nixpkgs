@@ -1,28 +1,29 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, pcre2 }:
 
-stdenv.mkDerivation {
-  name = "fdupes-1.50-PR2";
-  src = fetchurl {
-    url = http://fdupes.googlecode.com/files/fdupes-1.50-PR2.tar.gz;
-    sha256 = "068nxcn3xilaphq53sywli9ndydy4gijfi2mz7h45kpy0q9cgwjs";
+stdenv.mkDerivation rec {
+  pname = "fdupes";
+  version = "2.1.1";
+
+  src = fetchFromGitHub {
+    owner = "adrianlopezroche";
+    repo  = "fdupes";
+    rev   = "v${version}";
+    sha256 = "1c5hv7vkfxsii1qafhsynzp9zkwim47xkpk27sy64qdsjnhysdak";
   };
 
-  # workaround: otherwise make install fails (should be fixed in trunk)
-  preInstall = "mkdir -p $out/bin $out/man/man1";
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ncurses pcre2 ];
 
-  makeFlags = "PREFIX=\${out}";
-
-  meta = {
-    description = "identifies duplicate files residing within specified directories.";
+  meta = with stdenv.lib; {
+    description = "Identifies duplicate files residing within specified directories";
     longDescription = ''
-      FDUPES uses md5sums and then a byte by byte comparison to finde duplicate
-      files within a set of directories.
+      fdupes searches the given path for duplicate files.
+      Such files are found by comparing file sizes and MD5 signatures,
+      followed by a byte-by-byte comparison.
     '';
-    homepage = http://code.google.com/p/fdupes/;
-    license = "MIT";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
+    homepage = "https://github.com/adrianlopezroche/fdupes";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.maggesi ];
   };
 }

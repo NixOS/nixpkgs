@@ -1,69 +1,122 @@
-{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
+{ stdenv
+, fetchurl
+, fetchpatch
+, zlib
+, openssl
+, libedit
+, pkgconfig
+, pam
+, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
+, withKerberos ? true
+, withGssapiPatches ? false
+, kerberos
+, libfido2
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+, linkOpenssl ? true
 }:
 
 let
 
-  hpnSrc = fetchurl {
-    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.9p1-hpn13v12.diff.gz;
-    sha256 = "0h1h45vic4zks5bc5mvkc50rlgy2c219vn3rmpmalgm5hws9qjbl";
+  version = "8.4p1";
+
+  # **please** update this patch when you update to a new openssh release.
+  gssapiPatch = fetchpatch {
+    name = "openssh-gssapi.patch";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
+    sha256 = "1z1ckzimlkm1dmr9f5fqjnjg28gsqcwx6xka0klak857548d2lp2";
   };
 
 in
-
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-6.1p1";
+  pname = "openssh";
+  inherit version;
 
-  src = fetchurl {
-    url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha1 = "751c92c912310c3aa9cadc113e14458f843fc7b3";
-  };
+  src = if hpnSupport then
+      fetchurl {
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-${replaceStrings [ "." "p" ] [ "_" "_P" ] version}.tar.gz";
+        sha256 = "1x2afjy1isslbg7qlvhhs4zhj2c8q2h1ljz0fc5b4h9pqcm9j540";
+      }
+    else
+      fetchurl {
+        url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
+        sha256 = "091b3pxdlj47scxx6kkf4agkx8c8sdacdxx8m1dw1cby80pd40as";
+      };
 
-  prePatch = stdenv.lib.optionalString hpnSupport
+  patches =
+    [
+      ./locale_archive.patch
+
+      # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
+      ./dont_create_privsep_path.patch
+
+      ./ssh-keysign.patch
+
+      # See https://github.com/openssh/openssh-portable/pull/206
+      ./ssh-copy-id-fix-eof.patch
+    ]
+    ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
+
+  postPatch =
+    # On Hydra this makes installation fail (sometimes?),
+    # and nix store doesn't allow such fancy permission bits anyway.
     ''
-      gunzip -c ${hpnSrc} | patch -p1
-      export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
+      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
-    
-  patches = [ ./locale_archive.patch ];
 
-  buildNativeInptus = [ perl ];
-  buildInputs = [ zlib openssl libedit pkgconfig pam ];
+  nativeBuildInputs = [ pkgconfig ] ++ optional (hpnSupport || withGssapiPatches) autoreconfHook;
+  buildInputs = [ zlib openssl libedit pam ]
+    ++ optional withFIDO libfido2
+    ++ optional withKerberos kerberos;
+
+  preConfigure = ''
+    # Setting LD causes `configure' and `make' to disagree about which linker
+    # to use: `configure' wants `gcc', but `make' wants `ld'.
+    unset LD
+  '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
-  configureFlags =
-    ''
-      --with-mantype=man
-      --with-libedit=yes
-      --disable-strip
-      ${if pam != null then "--with-pam" else "--without-pam"}
-      ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
-    '';
+  configureFlags = [
+    "--sbindir=\${out}/bin"
+    "--localstatedir=/var"
+    "--with-pid-dir=/run"
+    "--with-mantype=man"
+    "--with-libedit=yes"
+    "--disable-strip"
+    (if pam != null then "--with-pam" else "--without-pam")
+  ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ optional withFIDO "--with-security-key-builtin=yes"
+    ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
+    ++ optional stdenv.isDarwin "--disable-libutil"
+    ++ optional (!linkOpenssl) "--without-openssl";
 
-  preConfigure =
-    ''
-      configureFlags="$configureFlags --with-privsep-path=$out/empty"
-      mkdir -p $out/empty
-    '';
+  buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
-  postInstall =
-    ''
-      # Install ssh-copy-id, it's very useful.
-      cp contrib/ssh-copy-id $out/bin/
-      chmod +x $out/bin/ssh-copy-id
-      cp contrib/ssh-copy-id.1 $out/share/man/man1/
+  enableParallelBuilding = true;
 
-      mkdir -p $out/etc/ssh
-      cp moduli $out/etc/ssh/
-    '';
+  hardeningEnable = [ "pie" ];
 
-  installTargets = "install-nosysconf";
+  postInstall = ''
+    # Install ssh-copy-id, it's very useful.
+    cp contrib/ssh-copy-id $out/bin/
+    chmod +x $out/bin/ssh-copy-id
+    cp contrib/ssh-copy-id.1 $out/share/man/man1/
+  '';
+
+  installTargets = [ "install-nokeys" ];
+  installFlags = [
+    "sysconfdir=\${out}/etc/ssh"
+  ];
 
   meta = {
-    homepage = http://www.openssh.org/;
     description = "An implementation of the SSH protocol";
-    license = "bsd";
+    homepage = "https://www.openssh.com/";
+    changelog = "https://www.openssh.com/releasenotes.html";
+    license = stdenv.lib.licenses.bsd2;
+    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with maintainers; [ eelco aneeshusa ];
   };
 }

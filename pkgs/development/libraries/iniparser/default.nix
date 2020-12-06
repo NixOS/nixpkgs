@@ -1,35 +1,48 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec{
-  name = "iniparser-3.0b";
+stdenv.mkDerivation rec {
+  pname = "iniparser";
+  version = "4.1";
 
-  src = fetchurl {
-    url = "${meta.homepage}/iniparser3.0b.tar.gz";
-    sha256 = "09klyddnqlpbgkv4cmh6ww9q5pv6nf1vfmzw4z256p51rnnlqqwa";
+  src = fetchFromGitHub {
+    owner = "ndevilla";
+    repo = "iniparser";
+    rev = "v${version}";
+    sha256 = "0dhab6pad6wh816lr7r3jb6z273njlgw2vpw8kcfnmi7ijaqhnr5";
   };
 
   patches = ./no-usr.patch;
 
-  buildFlags = "libiniparser.so";
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+        --replace -Wl,-soname= -Wl,-install_name,
+  '';
+
+  doCheck = true;
+  preCheck = "patchShebangs test/make-tests.sh";
 
   installPhase = ''
     mkdir -p $out/lib
-    cp libiniparser.so.0 $out/lib
-    ln -s libiniparser.so.0 $out/lib/libiniparser.so
 
     mkdir -p $out/include
     cp src/*.h $out/include
 
-    mkdir -p $out/share/doc/${name}
-    for i in AUTHORS INSTALL LICENSE README; do
-      bzip2 -c -9 $i > $out/share/doc/${name}/$i.bz2;
+    mkdir -p $out/share/doc/${pname}-${version}
+    for i in AUTHORS INSTALL LICENSE README.md; do
+      bzip2 -c -9 $i > $out/share/doc/${pname}-${version}/$i.bz2;
     done;
-    cp -r html $out/share/doc/${name}
+    cp -r html $out/share/doc/${pname}-${version}
+
+    cp libiniparser.a $out/lib
+    cp libiniparser.so.1 $out/lib
+    ln -s libiniparser.so.1 $out/lib/libiniparser.so
   '';
 
-  meta = {
-    homepage = http://ndevilla.free.fr/iniparser;
+  meta = with stdenv.lib; {
+    inherit (src.meta) homepage;
     description = "Free standalone ini file parsing library";
-    license = "MIT";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.primeos ];
   };
 }

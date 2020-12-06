@@ -1,25 +1,29 @@
-args : with args; 
-let version = lib.attrByPath ["version"] "1.1.0" args; in
-rec {
+{ stdenv, fetchurl, libglade, gtk2, guile, libxml2, perl
+, intltool, libtool, pkgconfig }:
+
+stdenv.mkDerivation rec {
+  pname = "drgeo";
+  version = "1.1.0";
+
+  hardeningDisable = [ "format" ];
+
   src = fetchurl {
-    url = http://downloads.sourceforge.net/ofset/drgeo-1.1.0.tar.gz;
+    url = "mirror://sourceforge/ofset/${pname}-${version}.tar.gz";
     sha256 = "05i2czgzhpzi80xxghinvkyqx4ym0gm9f38fz53idjhigiivp4wc";
   };
-
-  buildInputs = [libglade gtk guile libxml2
-    perl intltool libtool pkgconfig];
-  configureFlags = [];
-
-  /* doConfigure should be specified separately */
-  phaseNames = ["doPatch" "doConfigure" "doPreBuild" "doMakeInstall"];
   patches = [ ./struct.patch ];
 
-  doPreBuild = fullDepEntry (''
+  buildInputs = [libglade gtk2 guile libxml2
+    perl intltool libtool pkgconfig];
+
+  prebuild = ''
     cp drgeo.desktop.in drgeo.desktop
-  '') ["minInit" "doUnpack"];
-      
-  name = "drgeo-" + version;
-  meta = {
+  '';
+
+  meta = with stdenv.lib; {
     description = "Interactive geometry program";
+    homepage = "https://sourceforge.net/projects/ofset";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

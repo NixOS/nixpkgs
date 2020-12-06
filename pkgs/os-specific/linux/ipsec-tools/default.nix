@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, linuxHeaders, readline, openssl, flex, krb5, pam }:
+{ stdenv, fetchurl, fetchpatch, linuxHeaders, readline, openssl, flex, kerberos, pam }:
 
 # TODO: These tools are supposed to work under NetBSD and FreeBSD as
 # well, so I guess it's not appropriate to place this expression in
@@ -7,36 +7,42 @@
 # the time being.
 
 stdenv.mkDerivation rec {
-  name = "ipsec-tools-0.8.0";
+  name = "ipsec-tools-0.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/ipsec-tools/${name}.tar.bz2";
-    sha256 = "2359a24aa8eda9ca7043fc47950c8e6b7f58a07c5d5ad316aa7de2bc5e3a8717";
+    sha256 = "0b9gfbz78k2nj0k7jdlm5kajig628ja9qm0z5yksiwz22s3v7dlf";
   };
 
-  buildInputs = [ readline openssl flex krb5 pam ];
+  buildInputs = [ readline openssl flex kerberos pam ];
 
-  patches = [ ./dont-create-localstatedir-during-install.patch ];
+  patches = [
+    ./dont-create-localstatedir-during-install.patch
+    ./CVE-2015-4047.patch
+    ./CVE-2016-10396.patch
+  ];
 
-  configureFlags = ''
-    --sysconfdir=/etc --localstatedir=/var
-    --with-kernel-headers=${linuxHeaders}/include
-    --disable-security-context
-    --enable-adminport
-    --enable-dpd
-    --enable-frag
-    --enable-gssapi
-    --enable-hybrid
-    --enable-natt
-    --enable-shared
-    --enable-stats
-  '';
+  # fix build with newer gcc versions
+  preConfigure = ''substituteInPlace configure --replace "-Werror" "" '';
 
-  meta = {
+  configureFlags = [
+    "--sysconfdir=/etc --localstatedir=/var"
+    "--with-kernel-headers=${linuxHeaders}/include"
+    "--disable-security-context"
+    "--enable-adminport"
+    "--enable-dpd"
+    "--enable-frag"
+    "--enable-gssapi"
+    "--enable-hybrid"
+    "--enable-natt"
+    "--enable-shared"
+    "--enable-stats"
+  ];
+
+  meta = with stdenv.lib; {
     homepage = "http://ipsec-tools.sourceforge.net/";
     description = "Port of KAME's IPsec utilities to the Linux-2.6 IPsec implementation";
-
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.simons];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

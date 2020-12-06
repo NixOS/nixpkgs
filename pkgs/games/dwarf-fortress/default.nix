@@ -1,82 +1,122 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_ttf, gtk, glib, mesa, openal, glibc, libsndfile}:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs }:
 
-assert stdenv.system == "i686-linux";
+# To whomever it may concern:
+#
+# This directory menaces with spikes of Nix code. It is terrifying.
+#
+# If this is your first time here, you should probably install the dwarf-fortress-full package,
+# for instance with:
+#
+# environment.systemPackages = [ pkgs.dwarf-fortress-packages.dwarf-fortress-full ];
+#
+# You can adjust its settings by using override, or compile your own package by
+# using the other packages here.
+#
+# For example, you can enable the FPS indicator, disable the intro, pick a
+# theme other than phoebus (the default for dwarf-fortress-full), _and_ use
+# an older version with something like:
+#
+# environment.systemPackages = [
+#   (pkgs.dwarf-fortress-packages.dwarf-fortress-full.override {
+#      dfVersion = "0.44.11";
+#      theme = "cla";
+#      enableIntro = false;
+#      enableFPS = true;
+#   })
+# ]
+#
+# Take a look at lazy-pack.nix to see all the other options.
+#
+# You will find the configuration files in ~/.local/share/df_linux/data/init. If
+# you un-symlink them and edit, then the scripts will avoid overwriting your
+# changes on later launches, but consider extending the wrapper with your
+# desired options instead.
 
-stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.31.25";
+with lib;
 
-  src = fetchurl {
-    url = "http://www.bay12games.com/dwarves/df_31_25_linux.tar.bz2";
-    sha256 = "0d3klvf5n99j38pdhx9mak78px65aw47smck82jb92la97drmcg3";
+let
+  callPackage = pkgs.newScope self;
+
+  # The latest Dwarf Fortress version. Maintainers: when a new version comes
+  # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
+  # this.
+  latestVersion = "0.47.04";
+
+  # Converts a version to a package name.
+  versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
+
+  dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
+    texlive = pkgs.texlive.combine {
+      inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+    };
   };
 
-  phases = "unpackPhase patchPhase installPhase";
+  # A map of names to each Dwarf Fortress package we know about.
+  df-games = lib.listToAttrs (map (dfVersion: {
+    name = versionToName dfVersion;
+    value =
+      let
+        # I can't believe this syntax works. Spikes of Nix code indeed...
+        dwarf-fortress = callPackage ./game.nix {
+          inherit dfVersion;
+          inherit dwarf-fortress-unfuck;
+        };
 
-  /* :TODO: Game options should be configurable by patching the default configuration files */
+        # unfuck is linux-only right now, we will only use it there.
+        dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
+                                else null;
 
-  permission = ./df_permission;
+        twbt = callPackage ./twbt { inherit dfVersion; };
 
-  installPhase = ''
-    set -x
-    mkdir -p $out/bin
-    mkdir -p $out/share/df_linux
-    cp -r * $out/share/df_linux
-    cp $permission $out/share/df_linux/nix_permission
- 
-    patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
-    ln -s ${libsndfile}/lib/libsndfile.so $out/share/df_linux/libs/
-          
-    cat > $out/bin/dwarf-fortress << EOF
-    #!${stdenv.shell}
-    export DF_DIR="\$HOME/.config/df_linux"
-    if [ -n "\$XDG_DATA_HOME" ]
-     then export DF_DIR="\$XDG_DATA_HOME/df_linux"
-    fi
+        dfhack = callPackage ./dfhack {
+          inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
+          inherit dfVersion twbt;
+          stdenv = gccStdenv;
+        };
 
-    # Recreate a directory sturctor reflecting the original distribution in the user directory
+        dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
+          inherit dwarf-fortress;
+          dwarf-therapist = dwarf-therapist-original;
+        };
+      in
+      callPackage ./wrapper {
+        inherit (self) themes;
 
-    # Link in the static stuff
-    mkdir -p \$DF_DIR
-    ln -sf $out/share/df_linux/libs \$DF_DIR/
-    ln -sf $out/share/df_linux/raw \$DF_DIR/
-    ln -sf $out/share/df_linux/df \$DF_DIR/
+        dwarf-fortress = dwarf-fortress;
+        twbt = twbt;
+        dfhack = dfhack;
+        dwarf-therapist = dwarf-therapist;
 
-    # Delete old data directory
-    rm -rf \$DF_DIR/data
-    
-    # Link in the static data directory
-    mkdir \$DF_DIR/data
-    for i in $out/share/df_linux/data/*
-    do
-     ln -s \$i \$DF_DIR/data/
-    done
+        jdk = pkgs.jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+      };
+  }) (lib.attrNames self.df-hashes));
 
-    # index initial_movies, announcement, dipscript and help files are as of 0.31.16 opened in read/write mode instead of read-only mode
-    # this is a hack to work around this
-    # Should I just apply this to the whole data directory?
-    for i in index initial_movies announcement dipscript help
-    do
-     rm \$DF_DIR/data/\$i
-     cp -rf $out/share/df_linux/data/\$i \$DF_DIR/data/
-     chmod -R u+w \$DF_DIR/data/\$i
-    done
+  self = rec {
+    df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
 
-    # link in persistant data
-    mkdir -p \$DF_DIR/save
-    ln -s \$DF_DIR/save \$DF_DIR/data/
+    # Aliases for the latest Dwarf Fortress and the selected Therapist install
+    dwarf-fortress = getAttr (versionToName latestVersion) df-games;
+    inherit dwarf-therapist-original;
+    dwarf-therapist = dwarf-fortress.dwarf-therapist;
+    dwarf-fortress-original = dwarf-fortress.dwarf-fortress;
 
-    # now run Dwarf Fortress! 
-    export LD_LIBRARY_PATH=\$DF_DIR/df_linux/libs/:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/
-    \$DF_DIR/df "\$@"
-    EOF
+    dwarf-fortress-full = callPackage ./lazy-pack.nix {
+      inherit df-games versionToName latestVersion;
+    };
 
-    chmod +x $out/bin/dwarf-fortress
-  '';
+    soundSense = callPackage ./soundsense.nix { };
 
-  meta = {
-      description = "control a dwarven outpost or an adventurer in a randomly generated, persistent world";
-      homepage = http://www.bay12games.com/dwarves;
-      license = "unfree-redistributable";
-      maintainers = [stdenv.lib.maintainers.roconnor];
+    legends-browser = callPackage ./legends-browser {
+      jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    };
+
+    themes = recurseIntoAttrs (callPackage ./themes {
+      stdenv = stdenvNoCC;
+    });
+
+    # Theme aliases
+    phoebus-theme = themes.phoebus;
+    cla-theme = themes.cla;
   };
-}
+
+in self // df-games

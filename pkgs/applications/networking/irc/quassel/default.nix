@@ -1,54 +1,103 @@
 { monolithic ? true # build monolithic Quassel
-, daemon ? false # build Quassel daemon
+, enableDaemon ? false # build Quassel daemon
 , client ? false # build Quassel client
+, tag ? "-kf5" # tag added to the package name
+, static ? false # link statically
+
+, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
+, mkDerivation, qtbase, qtscript
+, phonon, libdbusmenu, qca-qt5
+
 , withKDE ? true # enable KDE integration
-, ssl ? true # enable SSL support
-, previews ? false # enable webpage previews on hovering over URLs
-, stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon }:
+, extra-cmake-modules
+, kconfigwidgets
+, kcoreaddons
+, knotifications
+, knotifyconfig
+, ktextwidgets
+, kwidgetsaddons
+, kxmlgui
+}:
+
+let
+    inherit (stdenv) lib;
+    buildClient = monolithic || client;
+    buildCore = monolithic || enableDaemon;
+in
+
+assert monolithic -> !client && !enableDaemon;
+assert client || enableDaemon -> !monolithic;
+assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
 
-in with stdenv; mkDerivation rec {
+in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
+  name = "quassel${tag}-${version}";
+  version = "0.13.1";
 
-  name = "quassel-0.7.1";
-
-  src = fetchurl {
-    url = "http://quassel-irc.org/pub/${name}.tar.bz2";
-    sha256 = "1kby1yikiv5bpzkdri5dq39pxnsj9gjrcv1gigvy2jzy3g99qjli";
+  src = fetchFromGitHub {
+    owner = "quassel";
+    repo = "quassel";
+    rev = version;
+    sha256 = "0z8p7iv90yrrjbh31cyxhpr6hsynfmi23rlayn7p2f6ki5az7yc3";
   };
 
-  buildInputs = [ cmake qt4 ]
-    ++ lib.optional withKDE kdelibs
-    ++ lib.optional withKDE automoc4
-    ++ lib.optional withKDE phonon;
+  patches = [
+    # fixes build with Qt 5.14
+    # source: https://github.com/quassel/quassel/pull/518/commits/8a46d983fc99204711cdff1e4c542e272fef45b9
+    ./0001-common-Disable-enum-type-stream-operators-for-Qt-5.1.patch
+  ];
+
+  enableParallelBuilding = true;
+
+  # Prevent ``undefined reference to `qt_version_tag''' in SSL check
+  NIX_CFLAGS_COMPILE = "-DQT_NO_VERSION_TAGGING=1";
+
+  buildInputs =
+       [ cmake makeWrapper qtbase ]
+    ++ lib.optionals buildCore [qtscript qca-qt5]
+    ++ lib.optionals buildClient [libdbusmenu phonon]
+    ++ lib.optionals (buildClient && withKDE) [
+      extra-cmake-modules kconfigwidgets kcoreaddons
+      knotifications knotifyconfig ktextwidgets kwidgetsaddons
+      kxmlgui
+    ];
 
   cmakeFlags = [
-    "-DWITH_DBUS=OFF"
-    "-DWITH_LIBINDICATE=OFF"
     "-DEMBED_DATA=OFF"
-    "-DSTATIC=OFF"
-    "-DWITH_PHONON=ON" ]
+    "-DUSE_QT5=ON"
+  ]
+    ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
-    ++ edf daemon "WANT_CORE"
+    ++ edf enableDaemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
-    ++ edf withKDE "WITH_KDE"
-    ++ edf ssl "WITH_OPENSSL"
-    ++ edf previews "WITH_WEBKIT"  ;
+    ++ edf withKDE "WITH_KDE";
+
+  dontWrapQtApps = true;
+
+  postFixup =
+    lib.optionalString enableDaemon ''
+      wrapProgram "$out/bin/quasselcore" --suffix PATH : "${qtbase.bin}/bin"
+    '' +
+    lib.optionalString buildClient ''
+      wrapQtApp "$out/bin/quassel${lib.optionalString client "client"}" \
+        --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+    '';
 
   meta = with stdenv.lib; {
-    homepage = http://quassel-irc.org/;
-    description = "Qt4/KDE4 distributed IRC client suppporting a remote daemon";
+    homepage = "https://quassel-irc.org/";
+    description = "Qt/KDE distributed IRC client suppporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to
       and detach from a central core -- much like the popular
       combination of screen and a text-based IRC client such
-      as WeeChat, but graphical (based on Qt4/KDE4).
+      as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
     '';
-    license = "GPLv3";
-    maintainers = [ maintainers.phreedom ];
-    inherit (qt4.meta) platforms;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ phreedom ttuegel ];
+    repositories.git = "https://github.com/quassel/quassel.git";
+    inherit (qtbase.meta) platforms;
   };
 }
-

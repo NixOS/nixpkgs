@@ -1,34 +1,30 @@
-{ stdenv, fetchurl, python, git }:
+{ stdenv, python3Packages, fetchFromGitHub, git, installShellFiles }:
 
-let
-  name = "stgit-0.15";
-in
-stdenv.mkDerivation {
-  inherit name;
+python3Packages.buildPythonApplication rec {
+  pname = "stgit";
+  version = "0.23";
 
-  src = fetchurl {
-    url = "http://download.gna.org/stgit/${name}.tar.gz";
-    sha256 = "0kgq9x0i7riwcl1lmmm40z0jiz5agr1kqxm2byv1qsf0q1ny47v9";
+  src = fetchFromGitHub {
+    owner = "ctmarinas";
+    repo = "stgit";
+    rev = "v${version}";
+    sha256 = "1r9y8qnl6kdvq61788pnfhhgyv2xrnyrizbhy4qz4l1bpqkwfr2r";
   };
 
-  buildInputs = [ python git ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  makeFlags = "prefix=$$out";
+  checkInputs = [ git ];
 
   postInstall = ''
-    mkdir -p "$out/etc/bash_completion.d/"
-    ln -s ../../share/stgit/completion/stgit-completion.bash "$out/etc/bash_completion.d/"
+    installShellCompletion $out/share/stgit/completion/stg.fish
+    installShellCompletion --name stg $out/share/stgit/completion/stgit.bash
+    installShellCompletion --name _stg $out/share/stgit/completion/stgit.zsh
   '';
 
-  doCheck = false;
-  checkTarget = "test";
-
-  meta = {
+  meta = with stdenv.lib; {
+    description = "A patch manager implemented on top of Git";
     homepage = "http://procode.org/stgit/";
-    description = "StGit is a patch manager implemented on top of Git";
-    license = "GPL";
-
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

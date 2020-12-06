@@ -6,22 +6,14 @@
 , buildInputs ? []
 , name ? "source-tarball"
 , version ? "0"
-, versionSuffix ? 
+, versionSuffix ?
     if officialRelease
     then ""
-    else if src ? rev then "pre${toString src.rev}" else ""
+    else "pre${toString (src.rev or src.revCount or "")}"
 , src, stdenv, autoconf, automake, libtool
+, # By default, provide all the GNU Build System as input.
+  bootstrapBuildInputs ? [ autoconf automake libtool ]
 , ... } @ args:
-
-let
-
-  # By default, provide all the GNU Build System as input.
-  bootstrapBuildInputs =
-    if (args ? bootstrapBuildInputs)
-    then args.bootstrapBuildInputs
-    else [ autoconf automake libtool ];
-
-in
 
 stdenv.mkDerivation (
 
@@ -74,7 +66,7 @@ stdenv.mkDerivation (
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
               header "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
-              cp -R $TMPDIR/* $KEEPBUILDDIR
+              cp -R "$TMPDIR/"* $KEEPBUILDDIR
               stopNest
           fi
       fi
@@ -82,17 +74,17 @@ stdenv.mkDerivation (
   }
 
   # Then, the caller-supplied attributes.
-  // args // 
+  // args //
 
   # And finally, our own stuff.
   {
     name = name + "-" + version + versionSuffix;
 
     buildInputs = buildInputs ++ bootstrapBuildInputs;
-    
+
     preUnpack = ''
       mkdir -p $out/nix-support
-    '';  
+    '';
 
     postUnpack = ''
       # Set all source files to the current date.  This is because Nix
@@ -102,6 +94,7 @@ stdenv.mkDerivation (
       touch now
       touch -d "1970-01-01 00:00:00 UTC" then
       find $sourceRoot ! -newer then -print0 | xargs -0r touch --reference now
+      rm now then
       eval "$nextPostUnpack"
     '';
 
@@ -126,11 +119,11 @@ stdenv.mkDerivation (
     };
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of a source distribution from a checkout";
+      description = "Source distribution";
 
       # Tarball builds are generally important, so give them a high
       # default priority.
-      schedulingPriority = "200";
+      schedulingPriority = 200;
     };
   }
 

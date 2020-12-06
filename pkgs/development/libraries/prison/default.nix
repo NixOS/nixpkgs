@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 qrencode libdmtx ];
 
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Qt4 library for QR-codes";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    license = stdenv.lib.licenses.mit;
     inherit (qt4.meta) platforms;
   };
 }

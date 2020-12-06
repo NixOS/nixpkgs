@@ -1,17 +1,17 @@
-{stdenv, fetchurl, unzip}:
+{ fetchzip }:
 
-stdenv.mkDerivation {
-  name = "MPH-2B-Damase";
-  src = fetchurl {
-    url = http://www.wazu.jp/downloads/damase_v.2.zip;
-    sha256 = "0y7rakbysjjrzcc5y100hkn64j7js434x20pyi6rllnw2w2n1y1h";
+fetchzip {
+  name = "MPH-2B-Damase-2";
+
+  url = "http://www.wazu.jp/downloads/damase_v.2.zip";
+
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+  '';
+
+  sha256 = "0yzf12z6fpbgycqwiz88f39iawdhjabadfa14wxar3nhl9n434ql";
+
+  meta = {
   };
-  buildInputs = [unzip];
-  unpackPhase = ''
-    unzip $src;
-  '';
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-  '';
 }

@@ -1,22 +1,29 @@
-{ stdenv, fetchurl, elfutils }:
+{ stdenv, fetchurl, elfutils, libunwind }:
 
-stdenv.mkDerivation rec {
-  name = "ltrace-0.5.3";
+stdenv.mkDerivation {
+  name = "ltrace-0.7.3";
 
   src = fetchurl {
-    url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.5.3.orig.tar.gz;
-    sha256 = "0cmyw8zyw8b1gszrwizcm53cr0mig1iw3kv18v5952m9spb2frjw";
+    url = "mirror://debian/pool/main/l/ltrace/ltrace_0.7.3.orig.tar.bz2";
+    sha256 = "00wmbdghqbz6x95m1mcdd3wd46l6hgcr4wggdp049dbifh3qqvqf";
   };
 
-  buildInputs = [ elfutils ];
+  buildInputs = [ elfutils libunwind ];
 
-  preBuild =
-    ''
-      makeFlagsArray=(INSTALL="install -c")
+  prePatch = let
+      debian = fetchurl {
+        url = "mirror://debian/pool/main/l/ltrace/ltrace_0.7.3-6.debian.tar.xz";
+        sha256 = "0xc4pfd8qw53crvdxr29iwl8na53zmknca082kziwpvlzsick4kp";
+      };
+    in ''
+      tar xf '${debian}'
+      patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Library call tracer";
-    homepage = http://www.ltrace.org/;
+    homepage = "https://www.ltrace.org/";
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.gpl2;
   };
 }

@@ -1,26 +1,39 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3 }:
 
-# TODO: add support for "make man"
-
-let
-  name = "cppcheck";
-  version = "1.53";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  pname = "cppcheck";
+  version = "2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-${version}.tar.bz2";
-    sha256 = "878db83d3954d0c45135362308da951ec0670a160c76a7410466a9b539e8677f";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1dcf053cqci2ha3yy817y02yz9mhrkgddcbnn6gj82j6k87a4rq4";
   };
 
-  configurePhase = "makeFlags=PREFIX=$out";
+  buildInputs = [ pcre ] ++ stdenv.lib.optionals withZ3 [ z3 ];
+  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
-  meta = {
-    description = "check C/C++ code for memory leaks, mismatching allocation-deallocation, buffer overrun, etc.";
-    homepage = "http://sourceforge.net/apps/mediawiki/cppcheck/";
-    license = "GPL";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+  makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ]
+   ++ stdenv.lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
+
+  outputs = [ "out" "man" ];
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
+    mkdir -p $man/share/man/man1
+    cp cppcheck.1 $man/share/man/man1/cppcheck.1
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A static analysis tool for C/C++ code";
+    longDescription = ''
+      Check C/C++ code for memory leaks, mismatching allocation-deallocation,
+      buffer overruns and more.
+    '';
+    homepage = "http://cppcheck.sourceforge.net/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ joachifm ];
   };
 }

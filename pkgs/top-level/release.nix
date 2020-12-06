@@ -1,468 +1,210 @@
-/*
-  This file will be evaluated by hydra with a call like this:
-  hydra_eval_jobs --gc-roots-dir \
-    /nix/var/nix/gcroots/per-user/hydra/hydra-roots --argstr \
-    system i686-linux --argstr system x86_64-linux --arg \
-    nixpkgs "{outPath = ./}" .... release.nix
+/* This file defines the builds that constitute the Nixpkgs.
+   Everything defined here ends up in the Nixpkgs channel.  Individual
+   jobs can be tested by running:
 
-  Hydra can be installed with "nix-env -i hydra".
+   $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
+
+   e.g.
+
+   $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-with (import ./release-lib.nix);
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
+, officialRelease ? false
+  # The platforms for which we build Nixpkgs.
+, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" ]
+  # Strip most of attributes when evaluating to spare memory usage
+, scrubJobs ? true
+  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+, nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+}:
 
-{
+with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
 
-  tarball = import ./make-tarball.nix;
+let
 
-} // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
+  systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
 
-  abcde = linux;
-  alsaUtils = linux;
-  apacheHttpd = linux;
-  aspell = all;
-  at = linux;
-  aterm25 = all;
-  aterm28 = all;
-  audacious = linux;
-  autoconf = all;
-  automake110x = all;
-  automake111x = all;
-  avahi = allBut "i686-cygwin";  # Cygwin builds fail
-  bash = all;
-  bashInteractive = all;
-  bazaar = linux; # first let sqlite3 work on darwin
-  bc = all;
-  binutils = linux;
-  bind = linux;
-  bison23 = all;
-  bison24 = all;
-  bison25 = all;
-  bitlbee = linux;
-  bittorrent = linux;
-  blender = linux;
-  bsdiff = all;
-  btrfsProgs = linux;
-  bvi = all;
-  bzip2 = all;
-  cabextract = all;
-  castle_combat = linux;
-  cdrkit = linux;
-  chatzilla = linux;
-  cksfv = all;
-  classpath = linux;
-  consolekit = linux;
-  coreutils = all;
-  cpio = all;
-  cron = linux;
-  cvs = linux;
-  db4 = all;
-  ddrescue = linux;
-  dhcp = linux;
-  dico = linux;
-  dietlibc = linux;
-  diffutils = all;
-  disnix = all;
-  disnixos = linux;
-  DisnixWebService = linux;
-  docbook5 = all;
-  docbook5_xsl = all;
-  docbook_xml_dtd_42 = all;
-  docbook_xml_dtd_43 = all;
-  docbook_xsl = all;
-  dosbox = linux;
-  dovecot = linux;
-  doxygen = linux;
-  dpkg = linux;
-  drgeo = linux;
-  e2fsprogs = linux;
-  ejabberd = linux;
-  elinks = linux;
-  emacs22 = gtkSupported;
-  emacs23 = gtkSupported;
-  enscript = all;
-  eprover = linux;
-  evince = linux;
-  expect = linux;
-  exult = linux;
-  fbterm = linux;
-  feh = linux;
-  file = all;
-  findutils = all;
-  flex = all;
-  flex2535 = all;
-  fontforge = linux;
-  fuse = linux;
-  gajim = linux;
-  gawk = all;
-  gcc = linux;
-  gcc33 = linux;
-  gcc34 = linux;
-  gcc41 = linux;
-  gcc42 = linux;
-  gcc43_multi = ["x86_64-linux"];
-  gcc44 = linux;
-  gcj44 = linux;
-  ghdl = linux;
-  ghostscript = linux;
-  ghostscriptX = linux;
-  gimp_2_8 = linux;
-  git = linux;
-  gitFull = linux;
-  glibc = linux;
-  glibcLocales = linux;
-  glxinfo = linux;
-  gnash = linux;
-  gnat44 = linux;
-  gnugrep = all;
-  gnum4 = all;
-  gnumake = all;
-  gnupatch = all;
-  gnupg = linux;
-  gnuplot = allBut "i686-cygwin";
-  gnused = all;
-  gnutar = all;
-  gnutls = linux;
-  gogoclient = linux;
-  gphoto2 = linux;
-  gpm = linux;
-  gprolog = linux;
-  gpsbabel = all;
-  gpscorrelate = linux;
-  gpsd = linux;
-  gqview = gtkSupported;
-  graphviz = all;
-  grub = linux;
-  grub2 = linux;
-  gsl = linux;
-  guile = linux;  # tests fail on Cygwin
-  gv = linux;
-  gzip = all;
-  hddtemp = linux;
-  hello = all;
-  host = linux;
-  htmlTidy = all;
-  hugin = linux;
-  iana_etc = linux;
-  icecat3Xul = linux;
-  icewm = linux;
-  idutils = all;
-  ifplugd = linux;
-  impressive = linux;
-  inetutils = linux;
-  inkscape = linux;
-  iputils = linux;
-  irssi = linux;
-  jfsutils = linux;
-  jfsrec = linux;
-  jnettop = linux;
-  jwhois = linux;
-  kbd = linux;
-  keen4 = ["i686-linux"];
-#  klibc = linux;
-  kvm = linux;
-  qemu = linux;
-  qemu_kvm = linux;
-  less = all;
-  lftp = all;
-  libarchive = linux;
-  libsmbios = linux;
-  libtool = all;
-  libtool_2 = all;
-  lout = linux;
-  lsh = linux;
-  lsof = linux;
-  ltrace = linux;
-  lvm2 = linux;
-  lynx = linux;
-  lzma = linux;
-  man = linux;
-  manpages = linux;
-  maxima = linux;
-  mc = linux;
-  mcabber = linux;
-  mcron = linux;
-  mdadm = linux;
-  mercurial = allBut "i686-cygwin";
-  mercurialFull = allBut "i686-cygwin";
-  mesa = mesaPlatforms;
-  midori = linux;
-  mingetty = linux;
-  mk = linux;
-  mktemp = all;
-  mod_python = linux;
-  module_init_tools = linux;
-  mono = linux;
-  mpg321 = linux;
-  mupen64plus = linux;
-  mutt = linux;
-  mysql = linux;
-  mysql51 = linux;
-  mysql55 = linux;
-  namazu = all;
-  nano = allBut "i686-cygwin";
-  ncat = linux;
-  netcat = all;
-  nfsUtils = linux;
-  nix = all;
-  nixUnstable = all;
-  nmap = linux;
-  nss_ldap = linux;
-  nssmdns = linux;
-  ntfs3g = linux;
-  ntp = linux;
-  ocaml = linux;
-  octave = linux;
-  openoffice = linux;
-  openssh = linux;
-  openssl = all;
-  pam_console = linux;
-  pam_login = linux;
-  pam_unix2 = linux;
-  pan = gtkSupported;
-  par2cmdline = all;
-  pavucontrol = linux;
-  pciutils = linux;
-  pdf2xml = all;
-  perl = all;
-  php = linux;
-  pidgin = linux;
-  pinentry = linux;
-  pltScheme = linux;
-  pmccabe = linux;
-  portmap = linux;
-  postgresql = all;
-  postfix = linux;
-  ppl = all;
-  procps = linux;
-  pwdutils = linux;
-  pthreadmanpages = linux;
-  pygtk = linux;
-  pyqt4 = linux;
-  python = allBut "i686-cygwin";
-  pythonFull = linux;
-  sbcl = linux;
-  qt3 = linux;
-  quake3demo = linux;
-  readline = all;
-  reiserfsprogs = linux;
-  rlwrap = all;
-  rogue = all;
-  rpm = linux;
-  rsync = linux;
-  rubber = allBut "i686-cygwin";
-  ruby = all;
-  rxvt_unicode = linux;
-  screen = linux ++ darwin;
-  scrot = linux;
-  sdparm = linux;
-  seccure = linux;
-  sgtpuzzles = linux;
-  sharutils = all;
-  slim = linux;
-  sloccount = allBut "i686-cygwin";
-  smartmontools = linux;
-  socat = linux;
-  spidermonkey = linux;
-  splashutils = linux;
-  sqlite = allBut "i686-cygwin";
-  squid = linux;
-  ssmtp = linux;
-  stdenv = prio 175 all;
-  stlport = linux;
-  strace = linux;
-  su = linux;
-  sudo = linux;
-  superTuxKart = linux;
-  swig = linux;
-  sylpheed = linux;
-  sysklogd = linux;
-  syslinux = ["i686-linux"];
-  sysvinit = linux;
-  sysvtools = linux;
-  tahoelafs = linux;
-  tangogps = linux;
-  tcl = linux;
-  tcpdump = linux;
-  teeworlds = linux;
-  tetex = linux;
-  texLive = linux;
-  texLiveBeamer = linux;
-  texLiveExtra = linux;
-  texinfo = all;
-  tightvnc = linux;
-  time = linux;
-  tinycc = ["i686-linux"];
-  uae = linux;
-  udev = linux;
-  unrar = linux;
-  upstart = linux;
-  usbutils = linux;
-  utillinux = linux;
-  utillinuxCurses = linux;
-  uzbl = linux;
-  viking = linux;
-  vice = linux;
-  vim = linux;
-  vimHugeX = linux;
-  VisualBoyAdvance = linux;
-  vlc = linux;
-  vncrec = linux;
-  vorbisTools = linux;
-  vpnc = linux;
-  vsftpd = linux;
-  w3m = all;
-  webkit = linux;
-  weechat = linux;
-  wget = all;
-  which = all;
-  wicd = linux;
-  wine = ["i686-linux"];
-  wireshark = linux;
-  wirelesstools = linux;
-  wxGTK = linux;
-  x11_ssh_askpass = linux;
-  xchm = linux;
-  xfig = x11Supported;
-  xfsprogs = linux;
-  xineUI = linux;
-  xkeyboard_config = linux;
-  xlockmore = linux;
-  xmltv = linux;
-  xpdf = linux;
-  xscreensaver = linux;
-  xsel = linux;
-  xterm = linux;
-  xxdiff = linux;
-  zdelta = linux;
-  zile = linux;
-  zip = all;
-  zsh = linux;
-  zsnes = ["i686-linux"];
+  supportDarwin = builtins.elem "x86_64-darwin" systemsWithAnySupport;
 
-  emacs22Packages = {
-    bbdb = linux;
-    cedet = linux;
-    ecb = linux;
-    emacsw3m = linux;
-    emms = linux;
-  };
+  jobs =
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
-  emacs23Packages = emacs22Packages // {
-    jdee = linux;
-  };
+      metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
-  firefox36Pkgs.firefox = linux;
-  firefox17Pkgs.firefox = linux;
-  firefox18Pkgs.firefox = linux;
+      manual = import ../../doc { inherit pkgs nixpkgs; };
+      lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+      pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
-  gnome = {
-    gnome_panel = linux;
-    metacity = linux;
-    gnome_vfs = linux;
-  };
+      darwin-tested = if supportDarwin then pkgs.releaseTools.aggregate
+        { name = "nixpkgs-darwin-${jobs.tarball.version}";
+          meta.description = "Release-critical builds for the Nixpkgs darwin channel";
+          constituents =
+            [ jobs.tarball
+              jobs.cabal2nix.x86_64-darwin
+              jobs.ghc.x86_64-darwin
+              jobs.git.x86_64-darwin
+              jobs.go.x86_64-darwin
+              jobs.mariadb.x86_64-darwin
+              jobs.nix.x86_64-darwin
+              jobs.nixpkgs-review.x86_64-darwin
+              jobs.nix-info.x86_64-darwin
+              jobs.nix-info-tested.x86_64-darwin
+              jobs.openssh.x86_64-darwin
+              jobs.openssl.x86_64-darwin
+              jobs.pandoc.x86_64-darwin
+              jobs.postgresql.x86_64-darwin
+              jobs.python.x86_64-darwin
+              jobs.python3.x86_64-darwin
+              jobs.ruby.x86_64-darwin
+              jobs.rustc.x86_64-darwin
+              # blocking ofBorg CI 2020-02-28
+              # jobs.stack.x86_64-darwin
+              jobs.stdenv.x86_64-darwin
+              jobs.vim.x86_64-darwin
+              jobs.cachix.x86_64-darwin
 
-  /*
-  haskellPackages_ghc6104 = {
-    ghc = ghcSupported;
-    haskellPlatform_2009_2_0_2 = ghcSupported;
-  };
+              # UI apps
+              # jobs.firefox-unwrapped.x86_64-darwin
+              jobs.qt5.qtmultimedia.x86_64-darwin
+              jobs.inkscape.x86_64-darwin
+              jobs.gimp.x86_64-darwin
+              jobs.emacs.x86_64-darwin
+              jobs.wireshark.x86_64-darwin
+              jobs.transmission-gtk.x86_64-darwin
 
-  haskellPackages_ghc6121 = {
-    ghc = ghcSupported;
-    haskellPlatform_2010_1_0_0 = ghcSupported;
-  };
+              # Tests
+              /*
+              jobs.tests.cc-wrapper.x86_64-darwin
+              jobs.tests.cc-wrapper-clang.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
+              jobs.tests.stdenv-inputs.x86_64-darwin
+              jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
+              */
+            ];
+        } else null;
 
-  haskellPackages_ghc6123 = {
-    ghc = ghcSupported;
-    gitit = linux;
-    gtk = linux;
-    haskellPlatform = ghcSupported;
-  };
+      unstable = pkgs.releaseTools.aggregate
+        { name = "nixpkgs-${jobs.tarball.version}";
+          meta.description = "Release-critical builds for the Nixpkgs unstable channel";
+          constituents =
+            [ jobs.tarball
+              jobs.manual
+              jobs.lib-tests
+              jobs.pkgs-lib-tests
+              jobs.stdenv.x86_64-linux
+              jobs.linux.x86_64-linux
+              jobs.pandoc.x86_64-linux
+              jobs.python.x86_64-linux
+              jobs.python3.x86_64-linux
+              # Needed by contributors to test PRs (by inclusion of the PR template)
+              jobs.nixpkgs-review.x86_64-linux
+              # Needed for support
+              jobs.nix-info.x86_64-linux
+              jobs.nix-info-tested.x86_64-linux
+              # Ensure that X11/GTK are in order.
+              jobs.thunderbird.x86_64-linux
+              jobs.cachix.x86_64-linux
 
-  haskellPackages_ghc701 = {
-    ghc = ghcSupported;
-  };
+              /*
+              jobs.tests.cc-wrapper.x86_64-linux
+              jobs.tests.cc-wrapper-gcc7.x86_64-linux
+              jobs.tests.cc-wrapper-gcc8.x86_64-linux
 
-  haskellPackages_ghc702 = {
-    ghc = ghcSupported;
-    haskellPlatform = ghcSupported;
-  };
+              # broken see issue #40038
 
-  haskellPackages_ghc704 = {
-    darcs = ghcSupported;
-    ghc = ghcSupported;
-    gitit = linux;
-    gtk = linux;
-    haskellPlatform = ghcSupported;
-    lhs2tex = ghcSupported;
-    xmonad = linux;
-  };
-  */
+              jobs.tests.cc-wrapper-clang.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx.x86_64-linux
+              jobs.tests.cc-wrapper-clang-5.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
+              jobs.tests.cc-wrapper-clang-6.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-linux
+              jobs.tests.cc-multilib-gcc.x86_64-linux
+              jobs.tests.cc-multilib-clang.x86_64-linux
+              jobs.tests.stdenv-inputs.x86_64-linux
+              jobs.tests.patch-shebangs.x86_64-linux
+              */
+            ]
+            ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
+            ++ lib.optionals supportDarwin [
+              jobs.stdenv.x86_64-darwin
+              jobs.python.x86_64-darwin
+              jobs.python3.x86_64-darwin
+              jobs.nixpkgs-review.x86_64-darwin
+              jobs.nix-info.x86_64-darwin
+              jobs.nix-info-tested.x86_64-darwin
+              jobs.git.x86_64-darwin
+              jobs.mariadb.x86_64-darwin
+              jobs.vim.x86_64-darwin
+              jobs.inkscape.x86_64-darwin
+              jobs.qt5.qtmultimedia.x86_64-darwin
+              /*
+              jobs.tests.cc-wrapper.x86_64-darwin
+              jobs.tests.cc-wrapper-gcc7.x86_64-darwin
+              # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
+              jobs.tests.cc-wrapper-clang.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-5.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-6.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.stdenv-inputs.x86_64-darwin
+              jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
+              */
+            ];
+        };
 
-  strategoPackages = {
-    sdf = linux;
-    strategoxt = linux;
-    javafront = linux;
-    strategoShell = linux ++ darwin;
-    dryad = linux;
-  };
+      stdenvBootstrapTools = with lib;
+        genAttrs systemsWithAnySupport
+          (system: {
+            inherit
+              (import ../stdenv/linux/make-bootstrap-tools.nix {
+                localSystem = { inherit system; };
+              })
+              dist test;
+          })
+        # darwin is special in this
+        // optionalAttrs supportDarwin {
+          x86_64-darwin =
+            let
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
+            in {
+              # Lightweight distribution and test
+              inherit (bootstrap) dist test;
 
-  pythonPackages = {
-    zfec = linux;
-  };
+              # Test a full stdenv bootstrap from the bootstrap tools definition
+              # Temporarily disabled. The darwin bootstrap is transitioning the
+              # structure of bootstrap tools. The tools that are generated as
+              # part of the current package set cannot be unpacked in the same
+              # way as the tools used by the current package set.
+              # inherit (bootstrap.test-pkgs) stdenv;
+            };
+          };
 
-  xorg = {
-    fontadobe100dpi = linux;
-    fontadobe75dpi = linux;
-    fontbh100dpi = linux;
-    fontbhlucidatypewriter100dpi = linux;
-    fontbhlucidatypewriter75dpi = linux;
-    fontbhttf = linux;
-    fontcursormisc = linux;
-    fontmiscmisc = linux;
-    iceauth = linux;
-    libX11 = linux;
-    lndir = all;
-    setxkbmap = linux;
-    xauth = linux;
-    xbitmaps = linux;
-    xev = linux;
-    xf86inputevdev = linux;
-    xf86inputkeyboard = linux;
-    xf86inputmouse = linux;
-    xf86inputsynaptics = linux;
-    xf86videoati = linux;
-    xf86videocirrus = linux;
-    xf86videointel = linux;
-    xf86videonv = linux;
-    xf86videovesa = linux;
-    xfs = linux;
-    xkbcomp = linux;
-    xlsclients = linux;
-    xmessage = linux;
-    xorgserver = linux;
-    xprop = linux;
-    xrandr = linux;
-    xrdb = linux;
-    xset = linux;
-    xsetroot = linux;
-    xwininfo = linux;
-  };
+    } // (mapTestOn ((packagePlatforms pkgs) // {
+      haskell.compiler = packagePlatforms pkgs.haskell.compiler;
+      haskellPackages = packagePlatforms pkgs.haskellPackages;
+      idrisPackages = packagePlatforms pkgs.idrisPackages;
+      agdaPackages = packagePlatforms pkgs.agdaPackages;
 
-  xfce = {
-    gtk_xfce_engine = linux;
-    mousepad = linux;
-    ristretto = linux;
-    terminal = linux;
-    thunar = linux;
-    xfce4_power_manager = linux;
-    xfce4icontheme = linux;
-    xfce4mixer = linux;
-    xfce4panel = linux;
-    xfce4session = linux;
-    xfce4settings = linux;
-    xfceutils = linux;
-    xfdesktop = linux;
-    xfwm4 = linux;
-  };
+      pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 
-} ))
+      tests = packagePlatforms pkgs.tests;
+
+      # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
+
+      #emacsPackages = packagePlatforms pkgs.emacsPackages;
+      #rPackages = packagePlatforms pkgs.rPackages;
+      ocamlPackages = { };
+      perlPackages = { };
+
+      darwin = packagePlatforms pkgs.darwin // {
+        cf-private = {};
+        xcode = {};
+      };
+    } ));
+
+in jobs

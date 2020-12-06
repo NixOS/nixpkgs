@@ -1,51 +1,33 @@
-x@{builderDefsPackage
-  , guile, pkgconfig, glib, loudmouth, gmp, libidn, readline, libtool
-  , libunwind, ncurses
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
-
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="freetalk";
-    version="3.2";
-    name="${baseName}-${version}";
-    url="mirror://savannah/${baseName}/${name}.tar.gz";
-    hash="12dn7yj9k5xsrrjlnma77wzpvsdxjccwla1q0wy3lacl5l2p0jms";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+{ stdenv, fetchFromGitHub
+, guile, pkgconfig, glib, loudmouth, gmp, libidn, readline, libtool
+, libunwind, ncurses, curl, jansson, texinfo
+, automake, autoconf }:
+stdenv.mkDerivation rec {
+  pname = "freetalk";
+  version = "4.1";
+  
+  src = fetchFromGitHub {
+    owner = "GNUFreetalk";
+    repo = "freetalk";
+    rev = "v${version}";
+    sha256 = "09jwk2i8qd8c7wrn9xbqcwm32720dwxis22kf3jpbg8mn6w6i757";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
-  patches = [./01_callbacks_const_fix.diff];
+  nativeBuildInputs = [ pkgconfig texinfo autoconf automake ];
+  buildInputs = [
+    guile glib loudmouth gmp libidn readline libtool
+    libunwind ncurses curl jansson
+  ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "Console XMPP client";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl3Plus;
+  meta = with stdenv.lib; {
+    description =  "Console XMPP client";
+    license = licenses.gpl3Plus ;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    downloadPage = "https://www.gnu.org/software/freetalk/";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.gnu.org/software/freetalk/";
-    };
-  };
-}) x
-
+}

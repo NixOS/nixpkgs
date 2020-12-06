@@ -1,20 +1,68 @@
-{stdenv, fetchurl, gperf, flex, bison}:
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, bison
+, bzip2
+, flex
+, gperf
+, ncurses
+, perl
+, readline
+, zlib
+}:
 
+let
+  iverilog-test = fetchFromGitHub {
+    owner  = "steveicarus";
+    repo   = "ivtest";
+    rev    = "253609b89576355b3bef2f91e90db62223ecf2be";
+    sha256 = "18i7jlr2csp7mplcrwjhllwvb6w3v7x7mnx7vdw48nd3g5scrydx";
+  };
+in
 stdenv.mkDerivation rec {
-  name = "verilog-0.9.3";
+  pname   = "iverilog";
+  version = "11.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/iverilog/${name}.tar.gz";
-    sha256 = "dd68c8ab874a93805d1e93fa76ee1e91fc0c7b20822ded3e57b6536cd8c0d1ba";
+  src = fetchFromGitHub {
+    owner  = "steveicarus";
+    repo   = pname;
+    rev    = "v${stdenv.lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0nzcyi6l2zv9wxzsv9i963p3igyjds0n55x0ph561mc3pfbc7aqp";
   };
 
-  buildInputs = [ gperf flex bison ];
+  nativeBuildInputs = [ autoconf bison flex gperf ];
 
-  meta = {
+  buildInputs = [ bzip2 ncurses readline zlib ];
+
+  preConfigure = "sh autoconf.sh";
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
+
+  installCheckInputs = [ perl ];
+
+  installCheckPhase = ''
+    # copy tests to allow writing results
+    export TESTDIR=$(mktemp -d)
+    cp -r ${iverilog-test}/* $TESTDIR
+
+    pushd $TESTDIR
+
+    # Run & check tests
+    PATH=$out/bin:$PATH perl vvp_reg.pl
+    # Check the tests, will error if unexpected tests fail. Some failures MIGHT be normal.
+    diff regression_report-devel.txt regression_report.txt
+    PATH=$out/bin:$PATH perl vpi_reg.pl
+
+    popd
+  '';
+
+  meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
-    homepage = http://www.icarus.com;
-    license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [winden];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage    = "http://iverilog.icarus.com/";  # https does not work
+    license     = with licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with maintainers; [ winden thoughtpolice ];
+    platforms   = platforms.all;
   };
 }

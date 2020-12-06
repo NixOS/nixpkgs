@@ -1,33 +1,30 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchFromGitHub, git, perl }:
 
-let
-  version = "0.8-45-gd279e29";
-  lib = stdenv.lib;
-in
-stdenv.mkDerivation {
-  name = "topgit-${version}";
+stdenv.mkDerivation rec {
+  pname = "topgit";
+  version = "0.19.12";
 
-  src = fetchurl {
-    url = "http://repo.or.cz/w/topgit.git/snapshot/topgit-${version}.zip";
-    sha256 = "0vzrng1w2k7m4z0x9h6zbrcf33dx08ly8fnbxzz3ms2k2dbsmpl6";
+  src = fetchFromGitHub {
+    owner = "mackyle";
+    repo = "topgit";
+    rev = "${pname}-${version}";
+    sha256 = "1wvf8hmwwl7a2fr17cfs3pbxjccdsjw9ngzivxlgja0gvfz4hjd5";
   };
 
-  buildInputs = [unzip];
-  configurePhase = "export prefix=$out";
+  makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  nativeBuildInputs = [ perl git ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/topgit-${version}"
-    cp README "$out/share/doc/topgit-${version}/"
-    mkdir -p "$out/etc/bash_completion.d"
-    make prefix="$out" install
-    mv "contrib/tg-completion.bash" "$out/etc/bash_completion.d/"
+    install -Dm644 README -t "$out/share/doc/${pname}-${version}/"
+    install -Dm755 contrib/tg-completion.bash -t "$out/share/bash-completion/completions/"
   '';
 
-  meta = {
-    description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
-    maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo lib.maintainers.simons ];
-    homepage = http://repo.or.cz/w/topgit.git;
-    license = "GPLv2";
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "TopGit manages large amount of interdependent topic branches";
+    homepage = "https://github.com/mackyle/topgit";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ marcweber ];
   };
 }

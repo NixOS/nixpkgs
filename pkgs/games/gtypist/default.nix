@@ -1,23 +1,27 @@
-{stdenv, fetchurl, ncurses}:
+{stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune}:
 
-stdenv.mkDerivation {
-  name = "gtypist-2.9.1";
+stdenv.mkDerivation rec {
+  pname = "gtypist";
+  version = "2.9.5";
 
   src = fetchurl {
-    url = "ftp://ftp.gnu.org/gnu/gtypist/gtypist-2.9.1.tar.xz";
-    sha256 = "1yv209aih1ixbs477vzzk1xj013g6w32vi33g0hldfzvfxbl9y5s";
+    url = "mirror://gnu/gtypist/gtypist-${version}.tar.xz";
+    sha256 = "0xzrkkmj0b1dw3yr0m9hml2y634cc4h61im6zwcq57s7285z8fn1";
   };
 
-  buildInputs = [ncurses];
+  buildInputs = [ makeWrapper ncurses perl fortune ]
+   ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
-  patches = [ (fetchurl {
-    url = "http://projects.archlinux.org/svntogit/community.git/plain/trunk/ncurses.patch?h=packages/gtypist";
-    sha256 = "1chdr4xkm140cjwv1n3ydk04qdwgycd12d9adz2sjc58lybqp7sy";
-  })];
+  preFixup = ''
+     wrapProgram "$out/bin/typefortune" \
+       --prefix PATH : "${fortune}/bin" \
+  '';
 
-  meta = {
-    homepage = http://www.gnu.org/software/gtypist;
-    description = "GNU Typist (also called gtypist) is a universal typing tutor.";
-    license = stdenv.lib.licenses.gpl3Plus;
+  meta = with stdenv.lib; {
+    homepage = "https://www.gnu.org/software/gtypist";
+    description = "Universal typing tutor";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ pSub ];
   };
 }

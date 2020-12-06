@@ -1,0 +1,51 @@
+{ stdenv, mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+, libtoxcore
+, libpthreadstubs, libXdmcp, libXScrnSaver
+, qtbase, qtsvg, qttools, qttranslations
+, ffmpeg_3, filter-audio, libexif, libsodium, libopus
+, libvpx, openal, pcre, qrencode, sqlcipher
+, AVFoundation ? null }:
+
+let
+  version = "1.17.3";
+  rev = "v${version}";
+
+in mkDerivation {
+  pname = "qtox";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner  = "qTox";
+    repo   = "qTox";
+    sha256 = "19xgw9bqirxbgvj5cdh20qxh61pkwk838lq1l78n6py1qrs7z5wp";
+    inherit rev;
+  };
+
+  buildInputs = [
+    libtoxcore
+    libpthreadstubs libXdmcp libXScrnSaver
+    qtbase qtsvg qttranslations
+    ffmpeg_3 filter-audio libexif libopus libsodium
+    libvpx openal pcre qrencode sqlcipher
+  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation] ;
+
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
+
+  enableParallelBuilding = true;
+
+  cmakeFlags = [
+    "-DGIT_DESCRIBE=${rev}"
+    "-DENABLE_STATUSNOTIFIER=False"
+    "-DENABLE_GTK_SYSTRAY=False"
+    "-DENABLE_APPINDICATOR=False"
+    "-DTIMESTAMP=1"
+  ];
+
+  meta = with lib; {
+    description = "Qt Tox client";
+    homepage    = "https://tox.chat";
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ akaWolf peterhoeg ];
+    platforms   = platforms.all;
+  };
+}

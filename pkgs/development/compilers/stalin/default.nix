@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.ece.purdue.edu/~qobi/software.html;
-    license = "GPLv2+";
-    description = "Stalin, an optimizing Scheme compiler";
+    homepage = "http://www.ece.purdue.edu/~qobi/software.html";
+    license = stdenv.lib.licenses.gpl2Plus;
+    description = "An optimizing Scheme compiler";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = [ ];
+    platforms = ["i686-linux"];  # doesn't want to work on 64-bit platforms
   };
 }

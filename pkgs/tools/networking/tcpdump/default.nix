@@ -1,24 +1,31 @@
-{ stdenv, fetchurl, libpcap, enableStatic ? false }:
+{ stdenv, fetchurl, libpcap, perl }:
 
 stdenv.mkDerivation rec {
-  name = "tcpdump-4.2.1";
+  pname = "tcpdump";
+  version = "4.9.3";
 
   src = fetchurl {
-    url = "http://www.tcpdump.org/release/${name}.tar.gz";
-    sha256 = "1zwv9zp169dwqwwwi6lfd3fhiayiq81ijqmwi0pfdvw63skfjmsl";
+    url = "http://www.tcpdump.org/release/${pname}-${version}.tar.gz";
+    sha256 = "0434vdcnbqaia672rggjzdn4bb8p8dchz559yiszzdk0sjrprm1c";
   };
+
+  postPatch = ''
+    patchShebangs tests
+  '';
+
+  checkInputs = [ perl ];
 
   buildInputs = [ libpcap ];
 
-  crossAttrs = {
-    LDFLAGS = if enableStatic then "-static" else "";
-    configureFlags = [ "ac_cv_linux_vers=2" ] ++ (stdenv.lib.optional
-      (stdenv.cross.platform.kernelMajor == "2.4") "--disable-ipv6");
-  };
+  configureFlags = stdenv.lib.optional
+    (stdenv.hostPlatform != stdenv.buildPlatform)
+    "ac_cv_linux_vers=2";
 
   meta = {
-    description = "tcpdump, a famous network sniffer";
-    homepage = http://www.tcpdump.org/;
+    description = "Network sniffer";
+    homepage = "http://www.tcpdump.org/";
     license = "BSD-style";
+    maintainers = with stdenv.lib.maintainers; [ globin ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

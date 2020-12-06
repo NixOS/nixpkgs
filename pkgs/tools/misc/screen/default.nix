@@ -1,25 +1,43 @@
-{ stdenv, fetchurl, ncurses, pam }:
+{ stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
-  name = "screen-4.0.3";
+  pname = "screen";
+  version = "4.8.0";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/${name}.tar.gz";
-    sha256 = "0xvckv1ia5pjxk7fs4za6gz2njwmfd54sc464n8ab13096qxbw3q";
+    url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
+    sha256 = "18ascpjzsy70h6hk7wpg8zmzjwgdyrdr7c6z4pg5z4l9hhyv24bf";
   };
 
-  preConfigure = ''
-    configureFlags="--enable-telnet --enable-pam --infodir=$out/share/info --mandir=$out/share/man"
-    sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
-  '';
+  configureFlags= [
+    "--enable-telnet"
+    "--enable-pam"
+    "--with-sys-screenrc=/etc/screenrc"
+    "--enable-colors256"
+  ];
 
-  buildInputs = [ ncurses pam ];
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      url = "https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff";
+      sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";
+      stripLen = 1;
+    });
+
+  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    # XXX: Awful hack to allow cross-compilation.
+    '' sed -i ./configure \
+           -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
+    ''; # "
+
+  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
+                            ++ stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
-  meta = {
-    homepage = http://www.gnu.org/software/screen/;
-    description = "GNU Screen, a window manager that multiplexes a physical terminal";
+  meta = with stdenv.lib; {
+    homepage = "https://www.gnu.org/software/screen/";
+    description = "A window manager that multiplexes a physical terminal";
+    license = licenses.gpl2Plus;
 
     longDescription =
       '' GNU Screen is a full-screen window manager that multiplexes a physical
@@ -43,9 +61,7 @@ stdenv.mkDerivation rec {
          terminal.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ peti vrthra ];
   };
 }

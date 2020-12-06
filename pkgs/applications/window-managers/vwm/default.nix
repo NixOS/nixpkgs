@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/include
   '';
  
-  buildInputs = [ ncurses pkgconfig glib libviper libpseudo gpm libvterm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses glib libviper libpseudo gpm libvterm ];
  
-  meta = {
-    homepage = http://vwm.sourceforge.net/;
+  meta = with stdenv.lib; {
+    homepage = "http://vwm.sourceforge.net/";
     description = "Dynamic window manager for the console";
-    license="GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

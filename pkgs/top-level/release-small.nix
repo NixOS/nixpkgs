@@ -1,37 +1,33 @@
 /* A small release file, with few packages to be built.  The aim is to reduce
-   the load on Hydra when testing the `stdenv-updates' branch.
+   the load on Hydra when testing the `stdenv-updates' branch. */
 
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+}:
 
-   This file will be evaluated by hydra with a call like this:
-   hydra_eval_jobs --gc-roots-dir \
-     /nix/var/nix/gcroots/per-user/hydra/hydra-roots --argstr \
-     system i686-linux --argstr system x86_64-linux --arg \
-     nixpkgs "{outPath = ./}" .... release.nix
-
-   Hydra can be installed with "nix-env -i hydra".  */
-with (import ./release-lib.nix);
+with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
 
 {
 
-  tarball = import ./make-tarball.nix;
+  tarball = import ./make-tarball.nix {
+    inherit nixpkgs;
+    officialRelease = false;
+  };
 
-} // (mapTestOn (rec {
+} // (mapTestOn ({
 
   aspell = all;
   at = linux;
-  aterm25 = all;
-  aterm28 = all;
   autoconf = all;
-  automake110x = all;
-  automake111x = all;
-  avahi = allBut "i686-cygwin";  # Cygwin builds fail
+  automake = all;
+  avahi = unix; # Cygwin builds fail
   bash = all;
   bashInteractive = all;
   bc = all;
   binutils = linux;
   bind = linux;
-  bison24 = all;
-  boostFull = all;
   bsdiff = all;
   bzip2 = all;
   classpath = linux;
@@ -40,33 +36,25 @@ with (import ./release-lib.nix);
   cpio = all;
   cron = linux;
   cups = linux;
+  dbus = linux;
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs23 = gtkSupported;
+  emacs = linux;
   enscript = all;
   file = all;
   findutils = all;
   flex = all;
-  flex2535 = all;
   gcc = all;
-  gcc33 = linux;
-  gcc34 = linux;
-  gcc41 = linux;
-  gcc42 = linux;
-  gcc43_multi = ["x86_64-linux"];
-  gcc44 = linux;
-  gcj44 = linux;
-  ghdl = linux;
+  gcj = linux;
   glibc = linux;
   glibcLocales = linux;
-  gnat44 = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
   gnupatch = all;
   gnupg = linux;
-  gnuplot = allBut "i686-cygwin";
+  gnuplot = unix; # Cygwin builds fail
   gnused = all;
   gnutar = all;
   gnutls = linux;
@@ -76,17 +64,13 @@ with (import ./release-lib.nix);
   gsl = linux;
   guile = linux;  # tests fail on Cygwin
   gzip = all;
-  hal = linux;
-  hal_info = linux;
   hddtemp = linux;
   hdparm = linux;
   hello = all;
   host = linux;
-  iana_etc = linux;
-  icecat3Xul = linux;
+  iana-etc = linux;
   icewm = linux;
   idutils = all;
-  ifplugd = linux;
   inetutils = linux;
   iputils = linux;
   jnettop = linux;
@@ -96,6 +80,7 @@ with (import ./release-lib.nix);
   kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
+  lapack-reference = linux;
   less = all;
   lftp = all;
   libtool = all;
@@ -110,7 +95,7 @@ with (import ./release-lib.nix);
   lynx = linux;
   lzma = linux;
   man = linux;
-  manpages = linux;
+  man-pages = linux;
   mc = all;
   mcabber = linux;
   mcron = linux;
@@ -120,16 +105,14 @@ with (import ./release-lib.nix);
   mingetty = linux;
   mk = linux;
   mktemp = all;
-  module_init_tools = linux;
   mono = linux;
   monotone = linux;
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
-  mysql51 = linux;
-  ncat = linux;
-  netcat = all;
-  nfsUtils = linux;
+  # netcat broken on darwin
+  netcat = linux;
+  nfs-utils = linux;
   nix = all;
   nixUnstable = all;
   nss_ldap = linux;
@@ -138,37 +121,30 @@ with (import ./release-lib.nix);
   ntp = linux;
   openssh = linux;
   openssl = all;
-  pam_console = linux;
-  pam_login = linux;
-  pam_unix2 = linux;
-  pan = gtkSupported;
+  pan = linux;
   par2cmdline = all;
   pciutils = linux;
   pdf2xml = all;
   perl = all;
   pkgconfig = all;
   pmccabe = linux;
-  policykit = linux;
-  portmap = linux;
   procps = linux;
-  pwdutils = linux;
-  python = allBut "i686-cygwin";
-  pythonFull = linux;
+  python = unix; # Cygwin builds fail
   readline = all;
   rlwrap = all;
   rpm = linux;
+  rpcbind = linux;
   rsync = linux;
   screen = linux ++ darwin;
   scrot = linux;
   sdparm = linux;
   sharutils = all;
-  sloccount = allBut "i686-cygwin";
+  sloccount = unix; # Cygwin builds fail
   smartmontools = all;
-  splashutils = linux;
-  sqlite = allBut "i686-cygwin";
+  sqlite = unix; # Cygwin builds fail
   squid = linux;
   ssmtp = linux;
-  stdenv = prio 175 all;
+  stdenv = all;
   strace = linux;
   su = linux;
   sudo = linux;
@@ -178,23 +154,16 @@ with (import ./release-lib.nix);
   sysvtools = linux;
   tcl = linux;
   tcpdump = linux;
-  tetex = linux;
-  texLive = linux;
-  texLiveBeamer = linux;
-  texLiveExtra = linux;
   texinfo = all;
   time = linux;
-  tinycc = ["i686-linux"];
+  tinycc = linux;
   udev = linux;
-  uml = ["i686-linux"];
-  unrar = linux;
   unzip = all;
-  upstart = linux;
   usbutils = linux;
-  utillinux = linux;
-  utillinuxCurses = linux;
+  util-linux = linux;
+  util-linuxMinimal = linux;
   w3m = all;
-  webkit = linux;
+  webkitgtk = linux;
   wget = all;
   which = all;
   wicd = linux;
@@ -206,16 +175,4 @@ with (import ./release-lib.nix);
   zile = linux;
   zip = all;
 
-  dbus_all = {
-    libs = linux;
-    tools = linux;
-  };
-
-  emacs23Packages = {
-    bbdb = linux;
-    cedet = linux;
-    ecb = linux;
-    emacsw3m = linux;
-    emms = linux;
-  };
 } ))

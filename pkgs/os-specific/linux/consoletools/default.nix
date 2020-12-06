@@ -1,22 +1,26 @@
-{ stdenv, fetchgit, SDL }:
+{ stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "linuxconsoletools-${version}";
-  version = "1.4.3";
+  pname = "linuxconsoletools";
+  version = "1.6.1";
 
-  src = fetchgit {
-    url = "git://linuxconsole.git.sourceforge.net/gitroot/linuxconsole/linuxconsole";
-    rev = "dac2cae0e5795ddc27b76a92767dd9e07a10621e";
-    sha256 = "350b008e614923dbd548fcaaf2842b39433acdcf595e2ce8aaf1599f076d331d";
+  src = fetchurl {
+    url = "mirror://sourceforge/linuxconsole/${pname}-${version}.tar.bz2";
+    sha256 = "0d2r3j916fl2y7pk1y82b9fvbr10dgs1gw7rqwzfpispdidb1mp9";
   };
 
   buildInputs = [ SDL ];
-  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  makeFlags = [ "DESTDIR=$(out)"];
+
+  installFlags = [ "PREFIX=\"\"" ];
+
+  meta = with stdenv.lib; {
     homepage = "https://sourceforge.net/projects/linuxconsole/";
     description = "A set of tools for joysticks and serial peripherals";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ebzzry ];
 
     longDescription = ''
       The included tools are:

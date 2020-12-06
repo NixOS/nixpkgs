@@ -1,46 +1,17 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ callPackage, fetchurl, ... } @ args:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="celt";
-    version="0.5.1.3";
-    name="${baseName}-${version}";
-    url="http://downloads.xiph.org/releases/${baseName}/${name}.tar.gz";
-    hash="0bkam9z5vnrxpbxkkh9kw6yzjka9di56h11iijikdd1f71l5nbpw";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+callPackage ./generic.nix (args // rec {
+  version = "0.5.1.3";
+
+  src = fetchurl {
+    url = "http://downloads.xiph.org/releases/celt/celt-${version}.tar.gz";
+    sha256 = "0bkam9z5vnrxpbxkkh9kw6yzjka9di56h11iijikdd1f71l5nbpw";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-
-  meta = {
-    description = "CELT - low-delay audio codec";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = "free";
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.celt-codec.org/downloads/";
-    };
-  };
-}) x
+  # Don't build tests due to badness with ec_ilog
+  prePatch = ''
+    substituteInPlace Makefile.in \
+      --replace 'SUBDIRS = libcelt tests' \
+                'SUBDIRS = libcelt'
+  '';
+})

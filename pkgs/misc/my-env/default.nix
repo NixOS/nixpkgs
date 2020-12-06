@@ -1,18 +1,19 @@
 # idea: provide a build environments for your developement of preference
 /*
   #### examples of use: ####
-  # Add this to your ~/.nixpkgs/config.nix:
+  # Add this to your ~/.config/nixpkgs/config.nix:
   {
     packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
           name = "sdl";
-          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net];
       };
     };
   }
 
   # Then you can install it by:  
-  #  $ nix-env -i sdl-env
+  #  $ nix-env -i env-sdl
   # And you can load it simply calling:  
   #  $ load-env-sdl
   # and this will update your env vars to have 'make' and 'gcc' finding the SDL
@@ -22,7 +23,7 @@
   ##### Another example, more complicated but achieving more: #######
   # Make an environment to build nix from source and create ctags (tagfiles can
   # be extracted from TAG_FILES) from every source package. Here would be a
-  # full ~/.nixpkgs/config.nix
+  # full ~/.config/nixpkgs/config.nix
   {
     packageOverrides = pkgs : with pkgs; with sourceAndTags;
     let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
@@ -41,7 +42,7 @@
       # this is the example we will be using
       nixEnv = complicatedMyEnv {
         name = "nix";
-        buildInputs = [ libtool stdenv perl curl bzip2 openssl db45 autoconf automake zlib ];
+        buildInputs = [ libtool stdenv perl curl bzip2 openssl db5 autoconf automake zlib ];
       };
     };
   }
@@ -58,37 +59,35 @@
 
 { mkDerivation, substituteAll, pkgs }:
     { stdenv ? pkgs.stdenv, name, buildInputs ? []
-    , propagatedBuildInputs ? [], gcc ? stdenv.gcc, cTags ? [], extraCmds ? ""
-    , shell ? "${pkgs.bashInteractive}/bin/bash"}:
+    , propagatedBuildInputs ? [], gcc ? stdenv.cc, extraCmds ? ""
+    , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
 
 mkDerivation {
-  # The setup.sh script from stdenv will expect the native build inputs in
-  # the buildNativeInputs environment variable.
-  buildNativeInputs = [ ] ++ buildInputs;
-  # Trick to bypass the stdenv usual change of propagatedBuildInputs => propagatedNativeBuildInputs
-  propagatedBuildInputs2 = propagatedBuildInputs;
+  inherit buildInputs propagatedBuildInputs;
 
   name = "env-${name}";
   phases = [ "buildPhase" "fixupPhase" ];
   setupNew = substituteAll {
     src = ../../stdenv/generic/setup.sh;
-    initialPath= (import ../../stdenv/common-path.nix) { inherit pkgs; };
     inherit gcc;
   };
 
-  buildPhase = ''
+  buildPhase = let
+    initialPath = import ../../stdenv/common-path.nix { inherit pkgs; };
+  in ''
     set -x
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
     s="$out/nix-support/setup-new-modified"
-    cp "$setupNew" "$s"
     # shut some warning up.., do not use set -e
-    sed -e 's@set -e@@' \
+    sed -e 's@set -eu@@' \
         -e 's@assertEnvExists\s\+NIX_STORE@:@' \
         -e 's@trap.*@@' \
-        -i "$s"
+        -e '1i initialPath="${toString initialPath}"' \
+        "$setupNew" > "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
-      buildNativeInputs="$buildNativeInputs"
-      propagatedBuildInputs="$propagatedBuildInputs2"
+      defaultNativeBuildInputs="$defaultNativeBuildInputs"
+      buildInputs="$buildInputs"
+      propagatedBuildInputs="$propagatedBuildInputs"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
       tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
       NIX_BUILD_TOP="\$tmp"
@@ -131,15 +130,23 @@ mkDerivation {
         echo "\$tmp/script";
         source "\$tmp/script";
       fi
-      rm -fr "\$tmp"
+      ${pkgs.coreutils}/bin/rm -fr "\$tmp"
       ${extraCmds}
+
+      nix_cleanup() {
+        :
+        ${cleanupCmds}
+      }
+
       export PATH
-      echo $name loaded
+      echo $name loaded >&2
+
+      trap nix_cleanup EXIT
     EOF
 
     mkdir -p $out/bin
-    sed -e s,@shell@,${shell}, -e s,@myenvpath@,$out/dev-envs/${name}, \
-      -e s,@name@,${name}, ${./loadenv.sh} > $out/bin/load-env-${name}
+    sed -e 's,@shell@,${shell},' -e s,@myenvpath@,$out/dev-envs/${name}, \
+      -e 's,@name@,${name},' ${./loadenv.sh} > $out/bin/load-env-${name}
     chmod +x $out/bin/load-env-${name}
   '';
 }

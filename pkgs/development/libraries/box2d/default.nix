@@ -1,59 +1,38 @@
-x@{builderDefsPackage
-  , unzip, cmake, mesa, freeglut, libX11, xproto
-  , inputproto, libXi
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
+, libXi, pkgconfig }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="box2d";
-    version="2.1.2";
-    name="${baseName}-${version}";
-    url="http://box2d.googlecode.com/files/Box2D_v${version}.zip";
-    hash="0m5szd74ig8yqazwk2g3zl4z7wwp08k52awawk1pigy6a4z1qd9v";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "box2d";
+  version = "2.3.1";
+
+  src = fetchurl {
+    url = "https://github.com/erincatto/Box2D/archive/v${version}.tar.gz";
+    sha256 = "0llpcifl8zbjbpxdwz87drd01m3lwnv82xb4av6kca1xn4w2gmkm";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  sourceRoot = "Box2D-${version}/Box2D";
 
-  phaseNames = ["changeSettings" "doCmake" "doMakeInstall"];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    unzip cmake libGLU libGL freeglut libX11 xorgproto libXi
+  ];
 
-  changeSettings = a.fullDepEntry ''
-    sed -i Box2D/Common/b2Settings.h -e 's@b2_maxPolygonVertices .*@b2_maxPolygonVertices 15@'
-  '' ["minInit" "addInputs" "doUnpack"];
-      
-  goSrcDir = ''cd Box2D'';
+  cmakeFlags = [
+    "-DBOX2D_INSTALL=ON"
+    "-DBOX2D_BUILD_SHARED=ON"
+    "-DBOX2D_BUILD_EXAMPLES=OFF"
+  ];
 
-  doCmake = a.fullDepEntry ''
-    cd Build; 
-    cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=$out ..
-  '' ["minInit" "addInputs" "doUnpack"];
-      
-  meta = {
+  prePatch = ''
+    substituteInPlace Box2D/Common/b2Settings.h \
+      --replace 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
+  '';
+
+  meta = with stdenv.lib; {
     description = "2D physics engine";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = "bsd";
+    homepage = "https://box2d.org/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.zlib;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://code.google.com/p/box2d/downloads/list";
-    };
-  };
-}) x
-
+}

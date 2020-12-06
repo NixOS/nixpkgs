@@ -1,0 +1,163 @@
+diff --git a/config/environments/production.rb b/config/environments/production.rb
+index c5cbfcf64c..4d01f6fab8 100644
+--- a/config/environments/production.rb
++++ b/config/environments/production.rb
+@@ -70,10 +70,10 @@ Rails.application.configure do
+ 
+   config.action_mailer.delivery_method = :sendmail
+   # Defaults to:
+-  # # config.action_mailer.sendmail_settings = {
+-  # #   location: '/usr/sbin/sendmail',
+-  # #   arguments: '-i -t'
+-  # # }
++  config.action_mailer.sendmail_settings = {
++    location: '/usr/sbin/sendmail',
++    arguments: '-i -t'
++  }
+   config.action_mailer.perform_deliveries = true
+   config.action_mailer.raise_delivery_errors = true
+ 
+diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
+index bd696a7f2c..44e3863736 100644
+--- a/config/gitlab.yml.example
++++ b/config/gitlab.yml.example
+@@ -590,7 +590,7 @@ production: &base
+   # CAUTION!
+   # Use the default values unless you really know what you are doing
+   git:
+-    bin_path: /usr/bin/git
++    bin_path: git
+ 
+   ## Webpack settings
+   # If enabled, this will tell rails to serve frontend assets from the webpack-dev-server running
+diff --git a/config/initializers/1_settings.rb b/config/initializers/1_settings.rb
+index 0bea8a4f4b..290248547b 100644
+--- a/config/initializers/1_settings.rb
++++ b/config/initializers/1_settings.rb
+@@ -177,7 +177,7 @@ Settings.gitlab['ssh_user'] ||= Settings.gitlab['user']
+ Settings.gitlab['user_home'] ||= begin
+   Etc.getpwnam(Settings.gitlab['user']).dir
+                                  rescue ArgumentError # no user configured
+-                                   '/home/' + Settings.gitlab['user']
++                                   '/homeless-shelter'
+ end
+ Settings.gitlab['time_zone'] ||= nil
+ Settings.gitlab['signup_enabled'] ||= true if Settings.gitlab['signup_enabled'].nil?
+@@ -507,7 +507,7 @@ Settings.backup['upload']['storage_class'] ||= nil
+ # Git
+ #
+ Settings['git'] ||= Settingslogic.new({})
+-Settings.git['bin_path'] ||= '/usr/bin/git'
++Settings.git['bin_path'] ||= 'git'
+ 
+ # Important: keep the satellites.path setting until GitLab 9.0 at
+ # least. This setting is fed to 'rm -rf' in
+diff --git a/lib/api/api.rb b/lib/api/api.rb
+index e953f3d2ec..3a8d9f076b 100644
+--- a/lib/api/api.rb
++++ b/lib/api/api.rb
+@@ -2,7 +2,7 @@ module API
+   class API < Grape::API
+     include APIGuard
+ 
+-    LOG_FILENAME = Rails.root.join("log", "api_json.log")
++    LOG_FILENAME = File.join(ENV["GITLAB_LOG_PATH"], "api_json.log")
+ 
+     NO_SLASH_URL_PART_REGEX = %r{[^/]+}
+     PROJECT_ENDPOINT_REQUIREMENTS = { id: NO_SLASH_URL_PART_REGEX }.freeze
+diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
+index a42e312b5d..ccaab9229e 100644
+--- a/lib/gitlab/logger.rb
++++ b/lib/gitlab/logger.rb
+@@ -26,7 +26,7 @@ module Gitlab
+     end
+ 
+     def self.full_log_path
+-      Rails.root.join("log", file_name)
++        File.join(ENV["GITLAB_LOG_PATH"], file_name)
+     end
+ 
+     def self.cache_key
+diff --git a/lib/gitlab/uploads_transfer.rb b/lib/gitlab/uploads_transfer.rb
+index 7d7400bdab..cb25211d44 100644
+--- a/lib/gitlab/uploads_transfer.rb
++++ b/lib/gitlab/uploads_transfer.rb
+@@ -1,7 +1,7 @@
+ module Gitlab
+   class UploadsTransfer < ProjectTransfer
+     def root_dir
+-      FileUploader.root
++      ENV['GITLAB_UPLOADS_PATH'] || FileUploader.root
+     end
+   end
+ end
+diff --git a/lib/system_check/app/log_writable_check.rb b/lib/system_check/app/log_writable_check.rb
+index 3e0c436d6e..28cefc5514 100644
+--- a/lib/system_check/app/log_writable_check.rb
++++ b/lib/system_check/app/log_writable_check.rb
+@@ -21,7 +21,7 @@ module SystemCheck
+       private
+ 
+       def log_path
+-        Rails.root.join('log')
++        ENV["GITLAB_LOG_PATH"]
+       end
+     end
+   end
+diff --git a/lib/system_check/app/uploads_directory_exists_check.rb b/lib/system_check/app/uploads_directory_exists_check.rb
+index 7026d0ba07..c56e1f7ed9 100644
+--- a/lib/system_check/app/uploads_directory_exists_check.rb
++++ b/lib/system_check/app/uploads_directory_exists_check.rb
+@@ -4,12 +4,13 @@ module SystemCheck
+       set_name 'Uploads directory exists?'
+ 
+       def check?
+-        File.directory?(Rails.root.join('public/uploads'))
++        File.directory?(ENV['GITLAB_UPLOADS_PATH'] || Rails.root.join('public/uploads'))
+       end
+ 
+       def show_error
++        uploads_dir = ENV['GITLAB_UPLOADS_PATH'] || Rails.root.join('public/uploads')
+         try_fixing_it(
+-          "sudo -u #{gitlab_user} mkdir #{Rails.root}/public/uploads"
++            "sudo -u #{gitlab_user} mkdir #{uploads_dir}"
+         )
+         for_more_information(
+           see_installation_guide_section 'GitLab'
+diff --git a/lib/system_check/app/uploads_path_permission_check.rb b/lib/system_check/app/uploads_path_permission_check.rb
+index 7df6c06025..bb447c16b2 100644
+--- a/lib/system_check/app/uploads_path_permission_check.rb
++++ b/lib/system_check/app/uploads_path_permission_check.rb
+@@ -25,7 +25,7 @@ module SystemCheck
+       private
+ 
+       def rails_uploads_path
+-        Rails.root.join('public/uploads')
++        ENV['GITLAB_UPLOADS_PATH'] || Rails.root.join('public/uploads')
+       end
+ 
+       def uploads_fullpath
+diff --git a/lib/system_check/app/uploads_path_tmp_permission_check.rb b/lib/system_check/app/uploads_path_tmp_permission_check.rb
+index b276a81eac..070e3ebd81 100644
+--- a/lib/system_check/app/uploads_path_tmp_permission_check.rb
++++ b/lib/system_check/app/uploads_path_tmp_permission_check.rb
+@@ -33,7 +33,7 @@ module SystemCheck
+       end
+ 
+       def uploads_fullpath
+-        File.realpath(Rails.root.join('public/uploads'))
++        File.realpath(ENV['GITLAB_UPLOADS_PATH'] || Rails.root.join('public/uploads'))
+       end
+     end
+   end
+--- a/lib/gitlab/authorized_keys.rb
++++ b/lib/gitlab/authorized_keys.rb
+@@ -157,7 +157,7 @@
+         raise KeyError, "Invalid ID: #{id.inspect}"
+       end
+ 
+-      "#{File.join(Gitlab.config.gitlab_shell.path, 'bin', 'gitlab-shell')} #{id}"
++      "#{File.join('/run/current-system/sw/bin', 'gitlab-shell')} #{id}"
+     end
+ 
+     def strip(key)

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cabextract}:
+{ stdenv, fetchurl, cabextract }:
 
 let
 
@@ -18,7 +18,7 @@ let
   ];
 
   eula = fetchurl {
-    url = http://corefonts.sourceforge.net/eula.htm;
+    url = "http://corefonts.sourceforge.net/eula.htm";
     sha256 = "1aqbcnl032g2hd7iy56cs022g47scb0jxxp3mm206x1yqc90vs1c";
   };
 
@@ -32,20 +32,42 @@ stdenv.mkDerivation {
     inherit sha256;
   }) fonts;
 
-  buildInputs = [cabextract];
+  nativeBuildInputs = [cabextract];
 
-  buildCommand = "
+  buildCommand = ''
     for i in $exes; do
         cabextract --lowercase $i
     done
 
     cabextract --lowercase viewer1.cab
-  
-    fontDir=$out/share/fonts/truetype
-    mkdir -p $fontDir
-    cp *.ttf $fontDir
+
+    install -m444 -Dt $out/share/fonts/truetype *.ttf
 
     # Also put the EULA there to be on the safe side.
-    cp ${eula} $fontDir/eula.html
-  ";
+    cp ${eula} $out/share/fonts/truetype/eula.html
+
+    # Set up no-op font configs to override any aliases set up by
+    # other packages.
+    mkdir -p $out/etc/fonts/conf.d
+    for name in Andale-Mono Arial-Black Arial Comic-Sans-MS \
+                Courier-New Georgia Impact Times-New-Roman \
+                Trebuchet Verdana Webdings ; do
+      substitute ${./no-op.conf} $out/etc/fonts/conf.d/30-''${name,,}.conf \
+        --subst-var-by fontname "''${name//-/ }"
+    done
+  '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "089d2m9bvaacj36qdq77pcazji0sbbr796shic3k52cpxkjnzbwh";
+
+  meta = with stdenv.lib; {
+    homepage = "http://corefonts.sourceforge.net/";
+    description = "Microsoft's TrueType core fonts for the Web";
+    platforms = platforms.all;
+    license = licenses.unfreeRedistributable;
+    # Set a non-zero priority to allow easy overriding of the
+    # fontconfig configuration files.
+    priority = 5;
+  };
 }

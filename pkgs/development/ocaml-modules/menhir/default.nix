@@ -1,51 +1,15 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild
+, version ? if stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.02" then "20190626" else "20140422"
+}@args:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "20120123";
+  src = fetchurl (
+  if version == "20140422" then { url = "http://cristal.inria.fr/~fpottier/menhir/menhir-20140422.tar.gz"; sha256 = "1ki1f2id6a14h9xpv2k8yb6px7dyw8cvwh39csyzj4qpzx7wia0d"; }
+  else if version == "20170712" then { url = "http://gallium.inria.fr/~fpottier/menhir/menhir-20170712.tar.gz"; sha256 = "006hq3bwj81j67f2k9cgzj5wr4hai8j36925p5n3sd2j01ljsj6a"; }
+  else if version == "20181113" then { url = "https://gitlab.inria.fr/fpottier/menhir/repository/20181113/archive.tar.gz"; sha256 = "0hl611l0gyl7b2bm7m0sk7vjz14m0i7znrnjq3gw58pylj934dx4"; }
+  else if version == "20190626" then { url = "https://gitlab.inria.fr/fpottier/menhir/repository/20190626/archive.tar.gz"; sha256 = "0nigjnskg89knyi2zj1w211mb1pvkrwfqpz9a0qbw80k3hm8gg0h"; }
+  else throw ("menhir: unknown version " ++ version)
+  );
 in
 
-stdenv.mkDerivation {
-  name = "menhir-${version}";
-
-  src = fetchurl {
-    url = "http://pauillac.inria.fr/~fpottier/menhir/menhir-${version}.tar.gz";
-    sha256 = "65cd9e4f813c62697c60c344963ca11bd461169f574ba3a866c2691541cb4682";
-  };
-
-  buildInputs = [ocaml findlib];
-
-  createFindlibDestdir = true;
-
-  preBuild = ''
-    #Fix makefiles.
-    RM=$(type -p rm)
-    CHMOD=$(type -p chmod)
-    ENV=$(type -p env)
-    for f in src/Makefile demos/OMakefile* demos/Makefile* demos/ocamldep.wrapper
-    do
-      substituteInPlace $f \
-        --replace /bin/rm $RM \
-	--replace /bin/chmod $CHMOD \
-	--replace /usr/bin/env $ENV
-    done
-
-    export PREFIX=$out
-  '';
-
-  meta = {
-    homepage = http://pauillac.inria.fr/~fpottier/menhir/;
-    description = "A LR(1) parser generator for OCaml";
-    longDescription = ''
-      Menhir is a LR(1) parser generator for the Objective Caml programming
-      language.  That is, Menhir compiles LR(1) grammar specifications down
-      to OCaml code.  Menhir was designed and implemented by François Pottier
-      and Yann Régis-Gianas.
-    '';
-    license = "QPL,LGPL+linking exceptions";
-    platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
-  };
-}
+import ./generic.nix (args // { inherit version src; })

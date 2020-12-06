@@ -1,22 +1,32 @@
-{ stdenv, fetchurl, zlib, nettools }:
+{ stdenv, fetchFromGitHub, zlib, nettools, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "iodine-0.6.0-rc1";
+  pname = "iodine";
+  version = "unstable-2019-09-27";
 
-  src = fetchurl {
-    url = "http://code.kryo.se/iodine/${name}.tar.gz";
-    sha256 = "dacf950198b68fd1dae09fe980080155b0c75718f581c08e069eee0c1b6c5e60";
+  src = fetchFromGitHub {
+    owner = "yarrick";
+    repo = "iodine";
+    rev = "8e14f18";
+    sha256 = "0k8m99qfjd5n6n56jnq85y7q8h2i2b8yw6ba0kxsz4jyx97lavg3";
   };
 
   buildInputs = [ zlib ];
 
-  patchPhase = ''sed -i "s,/sbin/ifconfig,${nettools}/sbin/ifconfig,; s,/sbin/route,${nettools}/sbin/route," src/tun.c'';
+  patchPhase = ''sed -i "s,/sbin/route,${nettools}/bin/route," src/tun.c'';
 
-  installFlags = "prefix=\${out}";
+  NIX_CFLAGS_COMPILE = "-DIFCONFIGPATH=\"${nettools}/bin/\"";
+
+  installFlags = [ "prefix=\${out}" ];
+
+  passthru.tests = {
+    inherit (nixosTests) iodine;
+  };
 
   meta = {
-    homepage = http://code.kryo.se/iodine/;
+    homepage = "http://code.kryo.se/iodine/";
     description = "Tool to tunnel IPv4 data through a DNS server";
-    license = "ISC";
+    license = stdenv.lib.licenses.isc;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

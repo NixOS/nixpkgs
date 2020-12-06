@@ -17,7 +17,7 @@ rm $p/Reader/intellinux/plug_ins/PPKLite.api
 # More pointless files.
 rm $p/bin/UNINSTALL
 
-patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
     --set-rpath $libPath \
     $p/Reader/intellinux/bin/acroread
 

@@ -1,29 +1,50 @@
-{ stdenv, fetchurl, pkgconfig, libgphoto2, libexif, popt, gettext
-, libjpeg, readline, libtool
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, gettext
+, libexif
+, libgphoto2
+, libjpeg
+, libtool
+, popt
+, readline
 }:
 
 stdenv.mkDerivation rec {
-  name = "gphoto2-2.4.14";
-  
-  src = fetchurl {
-    url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "08x1p8xhl65r79a6gn1fi63z1lspd5j55l05diiyzcwfxvqwsm47";
+  pname = "gphoto2";
+  version = "2.5.26";
+
+  src = fetchFromGitHub {
+    owner = "gphoto";
+    repo = "gphoto2";
+    rev = "v${version}";
+    sha256 = "1w01j3qvjl2nlfs38rnsmjvn3r0r2xf7prxz1i6yarbpj3fzwqqc";
   };
-  
-  buildNativeInputs = [ pkgconfig gettext ];
-  buildInputs = [ libgphoto2 libexif popt libjpeg readline libtool ];
-  
-  meta = {
-    description = "a ready to use set of digital camera software applications";
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+    gettext
+    libtool
+  ];
+
+  buildInputs = [
+    libexif
+    libgphoto2
+    libjpeg
+    popt
+    readline
+  ];
+
+  meta = with stdenv.lib; {
+    description = "A ready to use set of digital camera software applications";
     longDescription = ''
 
       A set of command line utilities for manipulating over 1400 different
       digital cameras. Through libgphoto2, it supports PTP, MTP, and much more..
 
     '';
-    homepage = http://www.gphoto.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    homepage = "http://www.gphoto.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.jcumming ];
   };
 }

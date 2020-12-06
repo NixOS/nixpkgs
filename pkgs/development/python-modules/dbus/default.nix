@@ -1,16 +1,36 @@
-{ stdenv, fetchurl, python, pkgconfig, dbus, dbus_glib }:
+{ lib, fetchPypi, buildPythonPackage, python, pkgconfig, dbus, dbus-glib, isPyPy
+, ncurses, pygobject3, isPy3k }:
 
-stdenv.mkDerivation rec {
-  name = "dbus-python-0.84.0";
+buildPythonPackage rec {
+  pname = "dbus-python";
+  version = "1.2.16";
+  format = "other";
 
-  src = fetchurl {
-    url = "http://dbus.freedesktop.org/releases/dbus-python/${name}.tar.gz";
-    sha256 = "01jrmj7ps79dkd6f8bzm17vxzpad1ixwmcb1liy64xm9y6mcfnxq";
+  outputs = [ "out" "dev" ];
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "196m5rk3qzw5nkmgzjl7wmq0v7vpwfhh8bz2sapdi5f9hqfqy8qi";
   };
 
-  buildInputs = [ python pkgconfig dbus dbus_glib ];
+  patches = [
+    ./fix-includedir.patch
+  ];
+
+  disabled = isPyPy;
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus dbus-glib ]
+    # My guess why it's sometimes trying to -lncurses.
+    # It seems not to retain the dependency anyway.
+    ++ lib.optional (! python ? modules) ncurses;
+
+  doCheck = isPy3k;
+  checkInputs = [ dbus.out pygobject3 ];
 
   meta = {
     description = "Python DBus bindings";
+    license = lib.licenses.mit;
+    platforms = dbus.meta.platforms;
   };
 }

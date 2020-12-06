@@ -7,13 +7,28 @@ stdenv.mkDerivation rec {
     url = "http://www.antigrain.com/${name}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  buildInputs = [ autoconf automake libtool pkgconfig freetype SDL libX11 ];
-  preConfigure = "sh autogen.sh";
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
 
-  configureFlags = "--x-includes=${libX11}/include --x-libraries=${libX11}/lib";
+  postPatch = ''
+    substituteInPlace include/agg_renderer_outline_aa.h \
+      --replace 'line_profile_aa& profile() {' 'const line_profile_aa& profile() {'
+  '';
+
+  # fix build with new automake, from Gentoo ebuild
+  preConfigure = ''
+    sed -i '/^AM_C_PROTOTYPES/d' configure.in
+    sh autogen.sh
+  '';
+
+  configureFlags = [ "--x-includes=${libX11.dev}/include" "--x-libraries=${libX11.out}/lib" "--enable-examples=no" ];
+
+  # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
+  # libtool: error: cannot find the library 'libexamples.la'
+  enableParallelBuilding = false;
 
   meta = {
-    description = "The Anti-Grain Geometry (AGG) library, a high quality rendering engine for C++";
+    description = "High quality rendering engine for C++";
 
     longDescription = ''
       Anti-Grain Geometry (AGG) is an Open Source, free of charge
@@ -25,7 +40,8 @@ stdenv.mkDerivation rec {
       of course, AGG can do much more than that.
     '';
 
-    license = "GPLv2+";
-    homepage = http://www.antigrain.com/;
+    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://www.antigrain.com/";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

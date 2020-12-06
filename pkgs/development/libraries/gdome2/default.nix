@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, libxml2, gtkdoc}:
+{stdenv, fetchurl, pkgconfig, glib, libxml2, gtk-doc}:
 
 let
   pname = "gdome2";
@@ -13,13 +13,18 @@ stdenv.mkDerivation {
     sha256 = "0hyms5s3hziajp3qbwdwqjc2xcyhb783damqg8wxjpwfxyi81fzl";
   };
 
-  buildInputs = [pkgconfig glib libxml2 gtkdoc];
-  propagatedBuildInputs = [glib libxml2];
+  hardeningDisable = [ "format" ];
 
-  meta = {
-    homepage = http://gdome2.cs.unibo.it/;
-    description = "DOM C library developped for the Gnome project";
-    license = "LGPLv2.1+";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxml2 gtk-doc ];
+  propagatedBuildInputs = [glib libxml2];
+  patches = [ ./xml-document.patch ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://gdome2.cs.unibo.it/";
+    description = "DOM C library developed for the Gnome project";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ prikhi roconnor ];
+    platforms = platforms.linux;
   };
 }

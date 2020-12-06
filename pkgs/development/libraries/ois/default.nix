@@ -1,53 +1,24 @@
-x@{builderDefsPackage
-  , autoconf, automake, libtool, m4
-  , libX11, xproto, libXi, inputproto
-  , libXaw, libXmu, libXt
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, lib, fetchFromGitHub, cmake, libX11, Cocoa, IOKit, Kernel }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="ois";
-    majorVersion="1";
-    minorVersion="3";
-    version="${majorVersion}.${minorVersion}";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/project/wgois/Source%20Release/${version}/ois_v${majorVersion}-${minorVersion}.tar.gz";
-    hash="18gs6xxhbqb91x2gm95hh1pmakimqim1k9c65h7ah6g14zc7dyjh";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "ois";
+  version = "1.5";
+
+  src = fetchFromGitHub {
+    owner = "wgois";
+    repo = "OIS";
+    rev = "v${version}";
+    sha256 = "0g8krgq5bdx2rw7ig0xva4kqv4x815672i7z6lljp3n8847wmypa";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ cmake ];
 
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  buildInputs = [ libX11 ] ++ lib.optionals stdenv.isDarwin [ Cocoa IOKit Kernel ];
 
-  configureCommand = ''sh bootstrap; sh configure'';
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "Object-oriented C++ input system";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.zlib;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.zlib;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/wgois/files/Source Release/";
-    };
-  };
-}) x
-
+}

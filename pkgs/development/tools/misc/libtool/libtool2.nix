@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, m4, perl, lzma }:
+{ stdenv, fetchurl, m4, perl, help2man
+}:
 
-stdenv.mkDerivation (rec {
-  name = "libtool-2.4.2";
+stdenv.mkDerivation rec {
+  pname = "libtool";
+  version = "2.4.6";
 
   src = fetchurl {
-    url = "mirror://gnu/libtool/${name}.tar.gz";
-    sha256 = "0649qfpzkswgcj9vqkkr9rn4nlcx80faxpyqscy2k1x9c94f93dk";
+    url = "mirror://gnu/libtool/${pname}-${version}.tar.gz";
+    sha256 = "1qq61k6lp1fp75xs398yzi6wvbx232l7xbyn3p13cnh27mflvgg3";
   };
 
-  buildNativeInputs = [ lzma m4 perl ];
+  outputs = [ "out" "lib" ];
+
+  nativeBuildInputs = [ perl help2man m4 ];
+  propagatedBuildInputs = [ m4 ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
@@ -17,10 +22,12 @@ stdenv.mkDerivation (rec {
   # XXX: The GNU ld wrapper does all sorts of nasty things wrt. RPATH, which
   # leads to the failure of a number of tests.
   doCheck = false;
+  doInstallCheck = false;
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "GNU Libtool, a generic library support script";
-
     longDescription = ''
       GNU libtool is a generic library support script.  Libtool hides
       the complexity of using shared libraries behind a consistent,
@@ -30,19 +37,9 @@ stdenv.mkDerivation (rec {
       your Makefile, Makefile.in, or Makefile.am.  See the
       documentation for details.
     '';
-
-    homepage = http://www.gnu.org/software/libtool/;
-
-    license = "GPLv2+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    homepage = "https://www.gnu.org/software/libtool/";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
   };
 }
-
-//
-
-# Don't run the native `strip' when cross-compiling.  This breaks at least
-# with `.a' files for MinGW.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))

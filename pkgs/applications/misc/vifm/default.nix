@@ -1,48 +1,44 @@
-x@{builderDefsPackage
-  , ncurses
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, makeWrapper
+, pkgconfig
+, ncurses, libX11
+, util-linux, file, which, groff
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="vifm";
-    version="0.6.3";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/project/${baseName}/${baseName}/${name}.tar.bz2";
-    hash="1v5kiifjk7iyqrzjd94wn6a5dz4j3krl06pbp1ps9g3zdq2w2skv";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+  # adds support for handling removable media (vifm-media). Linux only!
+, mediaSupport ? false, python3 ? null, udisks2 ? null, lib ? null
+}:
+
+let isFullPackage = mediaSupport;
+in stdenv.mkDerivation rec {
+  pname = if isFullPackage then "vifm-full" else "vifm";
+  version = "0.11";
+
+  src = fetchurl {
+    url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
+    sha256 = "0rqyd424y0g5b5basw2ybb60r9gar4f40d1xgzr3c2dsy4jpwvyh";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  buildInputs = [ ncurses libX11 util-linux file which groff ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "A vi-like file manager";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://vifm.sf.net";
-    };
-  };
-}) x
+  postFixup = let
+    path = lib.makeBinPath
+      [ udisks2
+        (python3.withPackages (p: [p.dbus-python]))
+      ];
 
+    wrapVifmMedia = "wrapProgram $out/share/vifm/vifm-media --prefix PATH : ${path}";
+  in ''
+    ${if mediaSupport then wrapVifmMedia else ""}
+  '';
+
+  meta = with stdenv.lib; {
+    description = ''A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}'';
+    maintainers = with maintainers; [ raskin ];
+    platforms = if mediaSupport then platforms.linux else platforms.unix;
+    license = licenses.gpl2;
+    downloadPage = "https://vifm.info/downloads.shtml";
+    homepage = "https://vifm.info/";
+    inherit version;
+    updateWalker = true;
+  };
+}

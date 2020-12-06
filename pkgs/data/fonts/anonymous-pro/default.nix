@@ -1,50 +1,30 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ lib, fetchzip }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version="1.002";
-    name="anonymousPro";
-    url="http://www.ms-studio.com/FontSales/AnonymousPro-${version}.zip";
-    hash="86665847a51cdfb58a1e1dfd8b1ba33f183485affe50b53e3304f63d3d3552ab";
+let
+  version = "1.002";
+in fetchzip rec {
+  name = "anonymousPro-${version}";
+
+  url = "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.ttf                           -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*.txt                           -d "$out/share/doc/${name}"
+  '';
+  sha256 = "05rgzag38qc77b31sm5i2vwwrxbrvwzfsqh3slv11skx36pz337f";
+
+  meta = with lib; {
+    homepage = "https://www.marksimonson.com/fonts/view/anonymous-pro";
+    description = "TrueType font set intended for source code";
+    longDescription = ''
+      Anonymous Pro (2009) is a family of four fixed-width fonts
+      designed with coding in mind. Anonymous Pro features an
+      international, Unicode-based character set, with support for
+      most Western and Central European Latin-based languages, plus
+      Greek and Cyrillic. It is designed by Mark Simonson.
+    '';
+    maintainers = with maintainers; [ raskin rycee ];
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
-
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  phaseNames = ["doUnpack" "installFonts"];
-
-  doUnpack = a.fullDepEntry (''
-    unzip ${src}
-    cd AnonymousPro*/
-  '') ["addInputs"];
-      
-  meta = {
-    description = "A TrueType font set intended for source code";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      all;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.ms-studio.com/FontSales/anonymouspro.html";
-    };
-  };
-}) x
-
+}

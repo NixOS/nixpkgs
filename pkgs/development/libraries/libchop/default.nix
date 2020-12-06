@@ -1,5 +1,7 @@
-{ fetchurl, stdenv, zlib, bzip2, libgcrypt, gdbm, gperf, tdb, gnutls, db4
-, libuuid, lzo, pkgconfig, guile }:
+{ fetchurl, stdenv, zlib, bzip2, libgcrypt
+, gdbm, gperf, tdb, gnutls, db, libuuid
+, lzo, pkgconfig, guile, rpcsvc-proto, libtirpc
+}:
 
 stdenv.mkDerivation rec {
   name = "libchop-0.5.2";
@@ -9,19 +11,29 @@ stdenv.mkDerivation rec {
     sha256 = "0fpdyxww41ba52d98blvnf543xvirq1v9xz1i3x1gm9lzlzpmc2g";
   };
 
-  buildNativeInputs = [ pkgconfig gperf ];
+  patches = [ ./gets-undeclared.patch ./size_t.patch ./0001-Fix-RPC-compilation-when-using-libtirpc-rather-than-.patch ];
+
+  nativeBuildInputs = [ pkgconfig gperf rpcsvc-proto ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
+
   buildInputs =
     [ zlib bzip2 lzo
       libgcrypt
-      gdbm db4 tdb
+      gdbm db tdb
       gnutls libuuid
-      guile
+      guile libtirpc
     ];
 
-  doCheck = true;
+  doCheck = false;
 
-  meta = {
-    description = "libchop, tools & library for data backup and distributed storage";
+  preConfigure = ''
+    sed -re 's%@GUILE@%&/guile%' -i */Makefile.* Makefile.*
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Tools & library for data backup and distributed storage";
 
     longDescription =
       '' Libchop is a set of utilities and library for data backup and
@@ -38,10 +50,9 @@ stdenv.mkDerivation rec {
          line.  It is written in C and has Guile (Scheme) bindings.
       '';
 
-    homepage = http://nongnu.org/libchop/;
-    license = "GPLv3+";
-
-    maintainers = with stdenv.lib.maintainers; [ ludo viric ];
-    platforms = stdenv.lib.platforms.gnu;
+    homepage = "https://www.nongnu.org/libchop/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

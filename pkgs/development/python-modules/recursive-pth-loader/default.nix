@@ -1,17 +1,22 @@
 { stdenv, python }:
 
-stdenv.mkDerivation rec {
-  name = "python-recursive-pth-loader-1.0";
+stdenv.mkDerivation {
+  pname = "python-recursive-pth-loader";
+  version = "1.0";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [ python ];
+
+  patchPhase = "cat ${./sitecustomize.py} > sitecustomize.py";
+
+  buildPhase = "${python}/bin/${python.executable} -m compileall .";
 
   installPhase =
     ''
       dst=$out/lib/${python.libPrefix}/site-packages
       mkdir -p $dst
-      cat ${./sitecustomize.py} >> $dst/sitecustomize.py
+      cp sitecustomize.* $dst/
     '';
 
   meta = {

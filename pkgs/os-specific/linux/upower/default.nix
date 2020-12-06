@@ -1,46 +1,71 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, dbus_tools, polkit
-, intltool, libxslt, docbook_xsl, udev, libusb1, pmutils
-, useSystemd ? false, systemd ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, libxslt
+, docbook_xsl
+, udev
+, libgudev
+, libusb1
+, glib
+, gobject-introspection
+, gettext
+, systemd
+, useIMobileDevice ? true
+, libimobiledevice
 }:
 
-assert stdenv.isLinux;
+stdenv.mkDerivation {
+  pname = "upower";
+  version = "0.99.11";
 
-stdenv.mkDerivation rec {
-  name = "upower-0.9.18";
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "13q6cw2d45qp077g3bjng4yhrvm6g1y9347dkf53kscm5xfm18d1";
+    url = "https://gitlab.freedesktop.org/upower/upower/uploads/93cfe7c8d66ed486001c4f3f55399b7a/upower-0.99.11.tar.xz";
+    sha256 = "1vxxvmz2cxb1qy6ibszaz5bskqdy9nd9fxspj9fv3gfmrjzzzdb4";
   };
 
-  buildInputs =
-    [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 ]
-    ++ stdenv.lib.optional useSystemd systemd;
+  nativeBuildInputs = [
+    docbook_xsl
+    gettext
+    gobject-introspection
+    libxslt
+    pkgconfig
+  ];
 
-  buildNativeInputs = [ pkgconfig ];
+  buildInputs = [
+    libgudev
+    libusb1
+    udev
+    systemd
+  ]
+  ++ stdenv.lib.optional useIMobileDevice libimobiledevice
+  ;
 
-  configureFlags =
-    [ "--with-backend=linux" "--localstatedir=/var" ]
-    ++ stdenv.lib.optional useSystemd
-    [ "--enable-systemd"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
-    ];
+  propagatedBuildInputs = [
+    glib
+  ];
 
-  preConfigure =
-    ''
-      substituteInPlace src/linux/up-backend.c \
-        --replace /usr/bin/pm- ${pmutils}/bin/pm- \
-        --replace /usr/sbin/pm- ${pmutils}/sbin/pm-
-      substituteInPlace src/notify-upower.sh \
-        --replace /usr/bin/dbus-send ${dbus_tools}/bin/dbus-send
-    '';
+  configureFlags = [
+    "--localstatedir=/var"
+    "--with-backend=linux"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemdutildir=${placeholder "out"}/lib/systemd"
+    "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "--sysconfdir=/etc"
+  ];
 
-  installFlags = "historydir=$(TMPDIR)/foo";
+  doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
 
-  meta = {
-    homepage = http://upower.freedesktop.org/;
+  installFlags = [
+    "historydir=$(TMPDIR)/foo"
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://upower.freedesktop.org/";
     description = "A D-Bus service for power management";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cryptsetup, dbus, dbus_glib, intltool, ntfs3g, utillinux
+{ stdenv, fetchurl, intltool, ntfs3g, util-linux
 , mediaDir ? "/media/"
 , lockDir ? "/var/lock/pmount"
 , whiteList ? "/etc/pmount.allow"
@@ -8,22 +8,24 @@
 assert stdenv.lib.hasSuffix "/" mediaDir;
 
 stdenv.mkDerivation rec {
-  name = "pmount-0.9.23";
+  pname = "pmount";
+  version = "0.9.23";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/3310/${name}.tar.gz";
+    url = "mirror://debian/pool/main/p/pmount/pmount_${version}.orig.tar.bz2";
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
-  buildInputs = [ intltool utillinux ];
+  buildInputs = [ intltool util-linux ];
 
-  configureFlags = ""
-  + " --with-media-dir=${mediaDir}"
-  + " --with-lock-dir=${lockDir}"
-  + " --with-whitelist=${whiteList}"
-  + " --with-mount-prog=${utillinux}/bin/mount"
-  + " --with-umount-prog=${utillinux}/bin/umount"
-  + " --with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g";
+  configureFlags = [
+    "--with-media-dir=${mediaDir}"
+    "--with-lock-dir=${lockDir}"
+    "--with-whitelist=${whiteList}"
+    "--with-mount-prog=${util-linux}/bin/mount"
+    "--with-umount-prog=${util-linux}/bin/umount"
+    "--with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
+  ];
 
   postConfigure = ''
     # etc/Mafile.am is hardcoded and it does not respect the --prefix option.
@@ -32,9 +34,12 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/Makefile --replace '-o root -g root -m 4755 ' '-m 755 '
   '';
 
+  doCheck = false; # fails 1 out of 1 tests with "Error: could not open fstab-type file: No such file or directory"
+
   meta = {
-    homepage = http://pmount.alioth.debian.org/;
+    homepage = "https://bazaar.launchpad.net/~fourmond/pmount/main/files";
     description = "Mount removable devices as normal user";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

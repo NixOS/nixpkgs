@@ -1,21 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "dosfstools-3.0.11";
+  pname = "dosfstools";
+  version = "4.1";
 
-  src = fetchurl {
-    urls = [
-      "http://www.daniel-baumann.ch/software/dosfstools/${name}.tar.bz2"
-      "http://pkgs.fedoraproject.org/repo/pkgs/dosfstools/${name}.tar.bz2/8d2211d5bd813164e20740e7c852aa06/${name}.tar.bz2"
-    ];
-    sha256 = "1a6rzjy82f6579ywaln33g1wc7k8gbgjdss9q2q8daplac7pmcll";
+  src = fetchFromGitHub {
+    owner = "dosfstools";
+    repo = "dosfstools";
+    rev = "v${version}";
+    sha256 = "1a2zn1655d5f1m6jp9vpn3bp8yfxhcmxx3mx23ai9hmxiydiykr1";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  nativeBuildInputs = [ autoreconfHook pkgconfig ]
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+
+  configureFlags = [ "--enable-compat-symlinks" ];
 
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
-    homepage = http://www.daniel-baumann.ch/software/dosfstools/;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/dosfstools/dosfstools";
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

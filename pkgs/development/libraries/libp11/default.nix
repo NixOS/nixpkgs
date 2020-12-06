@@ -1,18 +1,31 @@
-{stdenv, fetchurl, libtool, openssl, pkgconfig}:
+{ stdenv, fetchFromGitHub, autoreconfHook, libtool, pkgconfig
+, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "libp11-0.2.7";
-  
-  src = fetchurl {
-    url = "http://www.opensc-project.org/files/libp11/${name}.tar.gz";
-    sha256 = "0kaz5qafaxm0ycywmajl166c29fh9cz89b8i043jqsbxlpzf4hdp";
-  };
-  
-  buildInputs = [ libtool openssl pkgconfig ];
+  pname = "libp11";
+  version = "0.4.11";
 
-  meta = {
-    homepage = http://www.opensc-project.org/libp11/;
-    license = "LGPL";
+  src = fetchFromGitHub {
+    owner = "OpenSC";
+    repo = "libp11";
+    rev = "${pname}-${version}";
+    sha256 = "0hcl706i04nw5c1sj7l6sj6m0yjq6qijz345v498jll58fp5wif8";
+  };
+
+  configureFlags = [
+    "--with-enginesdir=${placeholder "out"}/lib/engines"
+  ];
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
+
+  buildInputs = [ openssl ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "Small layer on top of PKCS#11 API to make PKCS#11 implementations easier";
+    homepage = "https://github.com/OpenSC/libp11";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.all;
   };
 }

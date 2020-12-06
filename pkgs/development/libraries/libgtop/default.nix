@@ -1,12 +1,45 @@
-{ stdenv, fetchurl, glib, pkgconfig, perl, intltool }:
-stdenv.mkDerivation {
-  name = "libgtop-2.28.4";
+{ stdenv
+, fetchurl
+, glib
+, pkgconfig
+, perl
+, gettext
+, gobject-introspection
+, gnome3
+, gtk-doc
+}:
+
+stdenv.mkDerivation rec {
+  pname = "libgtop";
+  version = "2.40.0";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libgtop/2.28/libgtop-2.28.4.tar.xz;
-    sha256 = "1n71mg82k8m7p6kh06vgb1hk4y9cqwk1lva53pl7w9j02pyrqqdn";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1m6jbqk8maa52gxrf223442fr5bvvxgb7ham6v039i3r1i62gwvq";
   };
 
-  propagatedBuildInputs = [ glib ];
-  buildNativeInputs = [ pkgconfig perl intltool ];
+  nativeBuildInputs = [
+    pkgconfig
+    gtk-doc
+    perl
+    gettext
+    gobject-introspection
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "A library that reads information about processes and the running system";
+    license = licenses.gpl2Plus;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
+  };
 }

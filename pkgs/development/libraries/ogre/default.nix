@@ -1,42 +1,46 @@
-{ fetchurl, stdenv
-, cmake, mesa
-, freetype, freeimage, zziplib, randrproto, libXrandr
+{ fetchurl, stdenv, lib
+, cmake, libGLU, libGL
+, freetype, freeimage, zziplib, xorgproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
-, xproto, libX11, libXmu, libSM, pkgconfig
-, libXxf86vm, xf86vidmodeproto, libICE
-, renderproto, libXrender
-, nvidia_cg_toolkit }:
+, libX11, libXmu, libSM, pkgconfig
+, libXxf86vm, libICE
+, unzip
+, libXrender
+, withNvidiaCg ? false, nvidia_cg_toolkit
+, withSamples ? false }:
 
-stdenv.mkDerivation {
-  name = "ogre-1.8.1";
+stdenv.mkDerivation rec {
+  pname = "ogre";
+  version = "1.12.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ogre/1.8.1/ogre_src_v1-8-1.tar.bz2";
-    sha256 = "1avadx87sdfdk8165wlffnd5dzks694dcdnkg3ijap966k4qm46s";
+     url = "https://github.com/OGRECave/ogre/archive/v${version}.zip";
+     sha256 = "1iv6k0dwdzg5nnzw2mcgcl663q4f7p2kj7nhs8afnsikrzxxgsi4";
   };
 
-  cmakeFlags = [ "-DOGRE_INSTALL_SAMPLES=yes" ]
-    ++ (map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
-            [ "BSP" "CG" "OCTREE" "PCZ" "PFX" ])
-    ++ (map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ]);
+  cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
+    ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
+           ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
+    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
 
   enableParallelBuilding = true;
 
   buildInputs =
-   [ cmake mesa
-     freetype freeimage zziplib randrproto libXrandr
+   [ cmake libGLU libGL
+     freetype freeimage zziplib xorgproto libXrandr
      libXaw freeglut libXt libpng boost ois
-     xproto libX11 libXmu libSM pkgconfig
-     libXxf86vm xf86vidmodeproto libICE
-     renderproto libXrender
-     nvidia_cg_toolkit
-   ];
+     libX11 libXmu libSM pkgconfig
+     libXxf86vm libICE
+     libXrender
+   ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+
+  nativeBuildInputs = [ unzip ];
 
   meta = {
     description = "A 3D engine";
-    homepage = http://www.ogre3d.org/;
+    homepage = "https://www.ogre3d.org/";
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
   };
 }

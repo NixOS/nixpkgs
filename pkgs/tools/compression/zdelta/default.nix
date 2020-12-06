@@ -5,10 +5,12 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.gz";
-    md5 = "c69583a64f42f69a39e297d0d27d77e5";
+    sha256 = "0k6y0r9kv5qiglnr2j4a0yvfynjkvm0pyv8ly28j0pr3w6rbxrh3";
   };
 
-  meta = {
-	  homepage = http://cis.poly.edu/zdelta;
+  meta = with stdenv.lib; {
+	  homepage = "http://cis.poly.edu/zdelta";
+    platforms = platforms.linux;
+    license = licenses.zlib;
   };
 }

@@ -1,19 +1,41 @@
-{stdenv, fetchurl, flvstreamer, ffmpeg, makeWrapper, perl}:
+{stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg_3, makeWrapper, perl, perlPackages, rtmpdump}:
 
-stdenv.mkDerivation {
-  name = "get_iplayer-2.80";
+with stdenv.lib;
 
-  buildInputs = [makeWrapper perl];
+perlPackages.buildPerlPackage rec {
+  pname = "get_iplayer";
+  version = "3.24";
 
-  installPhase = '' 
-    mkdir -p $out/bin
-    cp get_iplayer $out/bin
-    wrapProgram $out/bin/get_iplayer --suffix PATH ${ffmpeg}/bin:${flvstreamer}/bin
-  '';  
-  
-  src = fetchurl {
-    url = ftp://ftp.infradead.org/pub/get_iplayer/get_iplayer-2.80.tar.gz;
-    sha256 = "1hnadryyzca3bv1hfk2q3np9ihwvyxa3prwcrply6ywy4vnayjf8";
+  src = fetchFromGitHub {
+    owner = "get-iplayer";
+    repo = "get_iplayer";
+    rev = "v${version}";
+    sha256 = "0yd84ncb6cjrk4v4kz3zrddkl7iwkm3zlfbjyswd9hanp8fvd4q3";
   };
-  
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
+  propagatedBuildInputs = with perlPackages; [
+    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple
+  ];
+
+  preConfigure = "touch Makefile.PL";
+  doCheck = false;
+  outputs = [ "out" "man" ];
+
+  installPhase = ''
+    mkdir -p $out/bin $out/share/man/man1
+    cp get_iplayer $out/bin
+    wrapProgram $out/bin/get_iplayer --suffix PATH : ${makeBinPath [ atomicparsley ffmpeg_3 flvstreamer rtmpdump ]} --prefix PERL5LIB : $PERL5LIB
+    cp get_iplayer.1 $out/share/man/man1
+  '';
+
+  meta = {
+    description = "Downloads TV and radio from BBC iPlayer";
+    license = licenses.gpl3Plus;
+    homepage = "https://squarepenguin.co.uk/";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rika ];
+  };
+
 }

@@ -1,56 +1,40 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, libX11, xorgproto, gd, SDL, SDL_image, SDL_mixer, zlib
+, libxml2, pkgconfig, curl, cmake, libzip }:
 
-  version = a.lib.attrByPath ["version"] "0.57beta8" a; 
-  buildInputs = with a; [
-    libX11 xproto gd SDL SDL_image SDL_mixer zlib libxml2
-    pkgconfig
-  ];
+stdenv.mkDerivation {
+  name = "openlierox-0.58rc3";
 
-in
-rec {
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/openlierox/openlierox/OpenLieroX%200.57%20Beta8/OpenLieroX_0.57_beta8.src.tar.bz2";
-    sha256 = "1a3p03bi5v2mca7323mrckab9wsj83fjfcr6akrh9a6nlljcdn8d";
+    url = "mirror://sourceforge/openlierox/OpenLieroX_0.58_rc3.src.tar.bz2";
+    sha256 = "1k35xppfqi3qfysv81xq3hj4qdy9j2ciinbkfdcmwclcsf3nh94z";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -std=c++98 -Wno-error";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doInstall"];
+  # The breakpad fails to build on x86_64, and it's only to report bugs upstream
+  cmakeFlags = [ "-DBREAKPAD=0" ];
 
-  setParams = a.noDepEntry (''
-    export SYSTEM_DATA_DIR="$out/share"
-    export BIN_DIR="$out/bin"
-    export DOC_DIR="$out/share/doc"
-    export PIXMAP_DIR="$out/share/pixmap"
+  preConfigure = ''
+    cmakeFlags="$cmakeFlags -DSYSTEM_DATA_DIR=$out/share"
+  '';
 
-    export HAWKNL_BUILTIN=1
-    export LIBZIP_BUILTIN=1
-    export X11=1
-    export DEBUG=1
-  '');
-  
-  doBuild=a.fullDepEntry (''
-    sed -re 's/ -1/ 255 /g' -i *.sh
+  patchPhase = ''
+    sed -i s,curl/types.h,curl/curl.h, include/HTTP.h src/common/HTTP.cpp
+  '';
 
-    source functions.sh
-    export INCLUDE_PATH=$(echo $NIX_CFLAGS_COMPILE | grep_param -I)
-    
-    bash compile.sh
-  '') ["doUnpack" "addInputs" "setParams"];
+  installPhase = ''
+    mkdir -p $out/bin $out/share/OpenLieroX
+    cp bin/* $out/bin
+    cp -R ../share/gamedir/* $out/share/OpenLieroX
+  '';
 
-  doInstall = a.fullDepEntry (''
-    mkdir -p $BIN_DIR $SYSTEM_DATA_DIR $DOC_DIR $PIXMAP_DIR
-    bash install.sh
-  '') ["doBuild" "addInputs" "setParams" "defEnsureDir"];
-      
-  name = "openlierox-" + version;
+  buildInputs = [ libX11 xorgproto gd SDL SDL_image SDL_mixer zlib libxml2
+    pkgconfig curl cmake libzip ];
+
   meta = {
+    homepage = "http://openlierox.net";
     description = "Real-time game with Worms-like shooting";
-    maintainers = [
-    ];
+    license = stdenv.lib.licenses.lgpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

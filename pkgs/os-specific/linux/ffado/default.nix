@@ -1,48 +1,108 @@
-{ stdenv, fetchurl, dbus, dbus_cplusplus, expat, glibmm, libconfig
-, libavc1394, libiec61883, libraw1394, libxmlxx, makeWrapper, pkgconfig
-, pyqt4, python, pythonDBus, qt4, scons }:
+{ stdenv
+, mkDerivation
+, dbus
+, dbus_cplusplus
+, desktop-file-utils
+, fetchurl
+, glibmm
+, kernel
+, libavc1394
+, libconfig
+, libiec61883
+, libraw1394
+, libxmlxx3
+, pkgconfig
+, python3
+, sconsPackages
+, which
+, wrapQtAppsHook
+}:
 
-stdenv.mkDerivation rec {
-  name = "libffado-${version}";
-  version = "2.1.0";
+let
+  inherit (python3.pkgs) pyqt5 dbus-python;
+  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
+in
+mkDerivation rec {
+  pname = "ffado";
+  version = "2.4.3";
 
   src = fetchurl {
-    url = "http://www.ffado.org/files/${name}.tgz";
-    sha256 = "11cxmy31c19720j2171l735rpg7l8i41icsgqscfd2vkbscfmh6y";
+    url = "http://www.ffado.org/files/libffado-${version}.tgz";
+    sha256 = "08bygzv1k6ai0572gv66h7gfir5zxd9klfy74z2pxqp6s5hms58r";
   };
 
-  buildInputs =
-    [ dbus dbus_cplusplus expat glibmm libavc1394 libconfig
-      libiec61883 libraw1394 libxmlxx makeWrapper pkgconfig pyqt4
-      python pythonDBus qt4 scons
-    ];
+  prePatch = ''
+    substituteInPlace ./support/tools/ffado-diag.in \
+      --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
+  '';
 
-  patches = [ ./enable-mixer-and-dbus.patch ];
+  patches = [
+    # fix installing metainfo file
+    ./fix-build.patch
+  ];
 
-  # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
-  buildPhase = ''
-    export PYLIBSUFFIX=lib/${python.libPrefix}/site-packages
-    scons PYPKGDIR=$out/$PYLIBSUFFIX DEBUG=False
-    sed -e "s#/usr/local#$out#" -i support/mixer-qt4/ffado/config.py
-    '';
+  outputs = [ "out" "bin" "dev" ];
 
-  installPhase = ''
-    scons PREFIX=$out LIBDIR=$out/lib SHAREDIR=$out/share/libffado \
-      PYPKGDIR=$out/$PYLIBSUFFIX UDEVDIR=$out/lib/udev/rules.d install
+  nativeBuildInputs = [
+    desktop-file-utils
+    sconsPackages.scons_3_1_2
+    pkgconfig
+    which
+    python
+    pyqt5
+    wrapQtAppsHook
+  ];
 
-    sed -e "s#/usr/local#$out#g" -i $out/bin/ffado-diag
+  prefixKey = "PREFIX=";
+  sconsFlags = [
+    "DEBUG=False"
+    "ENABLE_ALL=True"
+    "BUILD_TESTS=True"
+    "WILL_DEAL_WITH_XDG_MYSELF=True"
+    "BUILD_MIXER=True"
+    "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
+    "PYPKGDIR=${placeholder "out"}/${python3.sitePackages}"
+    "BINDIR=${placeholder "bin"}/bin"
+    "INCLUDEDIR=${placeholder "dev"}/include"
+    "PYTHON_INTERPRETER=${python.interpreter}"
+  ];
 
-    PYDIR=$out/$PYLIBSUFFIX
-    wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:${pyqt4}/$LIBSUFFIX:${pythonDBus}/$LIBSUFFIX:
-    wrapProgram $out/bin/ffado-diag --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:$out/share/libffado/python:${pyqt4}/$LIBSUFFIX:${pythonDBus}/$LIBSUFFIX:
-    '';
+  buildInputs = [
+    dbus
+    dbus_cplusplus
+    glibmm
+    libavc1394
+    libconfig
+    libiec61883
+    libraw1394
+    libxmlxx3
+    python
+  ];
+
+  enableParallelBuilding = true;
+  dontWrapQtApps = true;
+
+  postInstall = ''
+    desktop="$bin/share/applications/ffado-mixer.desktop"
+    install -DT -m 444 support/xdg/ffado.org-ffadomixer.desktop $desktop
+    substituteInPlace "$desktop" \
+      --replace Exec=ffado-mixer "Exec=$bin/bin/ffado-mixer" \
+      --replace hi64-apps-ffado ffado-mixer
+    install -DT -m 444 support/xdg/hi64-apps-ffado.png "$bin/share/icons/hicolor/64x64/apps/ffado-mixer.png"
+
+    # prevent build tools from leaking into closure
+    echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
+  '';
+
+  preFixup = ''
+    wrapQtApp $bin/bin/ffado-mixer
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.ffado.org;
+    homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu michojel ];
+    platforms = platforms.linux;
   };
 }

@@ -1,23 +1,73 @@
-{ stdenv, fetchurl, unzip, jdk, pkgconfig, gtk
-, libXtst
-, libXi
-, mesa
-, webkit
-, libsoup
+{ stdenv, lib, fetchurl, unzip, jdk, pkgconfig, gtk2
+, libXt, libXtst, libXi, libGLU, libGL, webkitgtk, libsoup, xorg
+, pango, gdk-pixbuf, glib
 }:
 
-stdenv.mkDerivation {
-  name = "swt-3.7.2-201202080800";
-  builder = ./builder.sh;
+let
+  platformMap = {
+    x86_64-linux =
+      { platform = "gtk-linux-x86_64";
+        sha256 = "1qq0pjll6030v4ml0hifcaaik7sx3fl7ghybfdw95vsvxafwp2ff"; };
+    i686-linux =
+      { platform = "gtk-linux-x86";
+        sha256 = "03mhzraikcs4fsz7d3h5af9pw1bbcfd6dglsvbk2ciwimy9zj30q"; };
+    x86_64-darwin =
+      { platform = "cocoa-macosx-x86_64";
+        sha256 = "00k1mfbncvyh8klgmk0891w8jwnd5niqb16j1j8yacrm2smmlb05"; };
+  };
+
+  metadata = assert platformMap ? ${stdenv.hostPlatform.system}; platformMap.${stdenv.hostPlatform.system};
+
+in stdenv.mkDerivation rec {
+  version = "4.5";
+  fullVersion = "${version}-201506032000";
+  pname = "swt";
+
+  hardeningDisable = [ "format" ];
 
   # Alas, the Eclipse Project apparently doesn't produce source-only
   # releases of SWT.  So we just grab a binary release and extract
   # "src.zip" from that.
   src = fetchurl {
-    url = "http://eclipse.ialto.com/eclipse/downloads/drops/R-3.7.2-201202080800/swt-3.7.2-gtk-linux-x86.zip";
-    sha256 = "10si8kmc7c9qmbpzs76609wkfb784pln3qpmra73gb3fbk7z8caf";
+    url = "http://archive.eclipse.org/eclipse/downloads/drops4/R-${fullVersion}/${pname}-${version}-${metadata.platform}.zip";
+    sha256 = metadata.sha256;
   };
 
-  buildInputs = [unzip jdk pkgconfig gtk libXtst libXi mesa webkit libsoup];
-  inherit jdk;
+  sourceRoot = ".";
+
+  nativeBuildInputs = [ unzip pkgconfig ];
+  buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU libGL webkitgtk libsoup ];
+
+  NIX_LFLAGS = toString (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) +
+    " -lX11 -lpango-1.0 -lgdk_pixbuf-2.0 -lglib-2.0";
+
+  buildPhase = ''
+    unzip src.zip -d src
+
+    cd src
+    sed -i "s#^LFLAGS =#LFLAGS = $NIX_LFLAGS #g"  *.mak
+    export JAVA_HOME=${jdk}
+
+    sh ./build.sh
+
+    mkdir out
+    javac -d out/ $(find org/ -name "*.java")
+  '';
+
+  installPhase = ''
+    mkdir -p $out/lib
+    cp *.so $out/lib
+
+    mkdir -p $out/jars
+    cp version.txt out/
+    cd out && jar -c * > $out/jars/swt.jar
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.eclipse.org/swt/";
+    description = "An widget toolkit for Java to access the user-interface facilities of the operating systems on which it is implemented";
+    license = licenses.epl10;
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
+  };
 }

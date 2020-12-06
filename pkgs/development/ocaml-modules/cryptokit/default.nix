@@ -1,31 +1,29 @@
-{stdenv, fetchurl, zlib, ocaml, findlib, ncurses}:
+{ lib, buildDunePackage, fetchurl, zlib, dune-configurator, zarith, ncurses }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.5";
-in
+buildDunePackage {
+  pname = "cryptokit";
+  version = "1.16.1";
 
-stdenv.mkDerivation {
-  name = "cryptokit-${version}";
+  useDune2 = true;
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/639/" +
-          "cryptokit-${version}.tar.gz";
-    sha256 = "1r5kbsbsicrbpdrdim7h8xg2b1a8qg8sxig9q6cywzm57r33lj72";
+    url = "https://github.com/xavierleroy/cryptokit/archive/release1161.tar.gz";
+    sha256 = "0kzqkk451m69nqi5qiwak0rd0rp5vzi613gcngsiig7dyxwka61c";
   };
 
-  buildInputs = [zlib ocaml findlib ncurses];
+  dontConfigure = true;
 
-  buildFlags = "setup.data build";
+  buildInputs = [ dune-configurator ncurses ];
+  propagatedBuildInputs = [ zarith zlib ];
 
-  preBuild = "mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib/cryptokit";
+  doCheck = true;
 
   meta = {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";
     description = "A library of cryptographic primitives for OCaml";
-    platforms = ocaml.meta.platforms;
+    license = lib.licenses.lgpl2Only;
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      lib.maintainers.maggesi
     ];
   };
 }

@@ -1,31 +1,52 @@
-# This package is only used to create the documentation of zsh-cvs
-# eg have a look at http://www.zsh.org/mla/users/2008/msg00715.html
-# latest release is newer though
+{ stdenv, fetchFromGitLab, perl, icmake, util-linux }:
 
-{ stdenv, fetchurl, perl }:
+stdenv.mkDerivation rec {
+  pname = "yodl";
+  version = "4.02.02";
 
-stdenv.mkDerivation {
-  name = "yodl-2.14.3";
+  nativeBuildInputs = [ icmake ];
 
   buildInputs = [ perl ];
 
-  src = fetchurl {
-    url = "mirror://sourceforge/yodl/yodl_2.14.3.orig.tar.gz";
-    sha256 = "0paypm76p34hap3d18vvks5rrilchcw6q56rvq6pjf9raqw8ynd4";
+  src = fetchFromGitLab {
+    sha256 = "1kf4h99p9i35fgas8z5wdy2qpd7gqfd645b5z7mfssjzsfdrv745";
+    rev = version;
+    repo = "yodl";
+    owner = "fbb-git";
   };
-  
-  patches =
-    [ (fetchurl {
-        url = "mirror://sourceforge/yodl/yodl_2.14.3-1.diff.gz";
-        sha256 = "176hlbiidv7p9051f04anzj4sr9dwlp9439f9mjvvgks47ac0qx4";
-      })
-    ];
 
-  # This doesn't isntall docs yet, do you need them?
-  installPhase = ''
-    # -> $out
-    sed -i "s@'/usr/@'$out/@" contrib/build.pl
-    perl contrib/build.pl make-software
-    perl contrib/build.pl install-software
+  setSourceRoot = ''
+    sourceRoot=$(echo */yodl)
   '';
+
+  preConfigure = ''
+    patchShebangs ./build
+    patchShebangs scripts/
+    substituteInPlace INSTALL.im --replace /usr $out
+    substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace scripts/yodl2whatever.in --replace getopt ${util-linux}/bin/getopt
+  '';
+
+  # Set TERM because icmbuild calls tput.
+  TERM = "xterm";
+
+  buildPhase = ''
+    ./build programs
+    ./build macros
+    ./build man
+  '';
+
+  installPhase = ''
+    ./build install programs
+    ./build install macros
+    ./build install man
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A package that implements a pre-document language and tools to process it";
+    homepage = "https://fbb-git.gitlab.io/yodl/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+  };
 }

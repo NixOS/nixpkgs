@@ -1,30 +1,26 @@
-{ fetchurl, stdenv, kernel, onlyHeaders ? false }:
+{ fetchFromGitHub, stdenv, kernel ? false }:
 
 stdenv.mkDerivation rec {
-  pname = "cryptodev-linux-1.5";
+  pname = "cryptodev-linux-1.11";
   name = "${pname}-${kernel.version}";
 
-  src = fetchurl {
-    url = "http://download.gna.org/cryptodev-linux/${pname}.tar.gz";
-    sha256 = "13hybl5p0ck0vgi2gxmiwa2810gcfk78kdy17ai8nczj8il15mn0";
+  src = fetchFromGitHub {
+    owner = "cryptodev-linux";
+    repo = "cryptodev-linux";
+    rev = pname;
+    sha256 = "1ky850qiyacq8p3lng7n3w6h3x2clqrz4lkv2cv3psy92mg9pvc9";
   };
 
-  buildPhase = if (!onlyHeaders) then ''
-    make -C ${kernel}/lib/modules/${kernel.modDirVersion}/build \
-      SUBDIRS=`pwd` INSTALL_PATH=$out
-  '' else ":";
+  hardeningDisable = [ "pic" ];
 
-  installPhase = stdenv.lib.optionalString (!onlyHeaders) ''
-    make -C ${kernel}/lib/modules/${kernel.modDirVersion}/build \
-      INSTALL_MOD_PATH=$out SUBDIRS=`pwd` modules_install
-  '' + ''
-    mkdir -p $out/include/crypto
-    cp crypto/cryptodev.h $out/include/crypto
-  '';
+  KERNEL_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  INSTALL_MOD_PATH = "\${out}";
+  prefix = "\${out}";
 
   meta = {
     description = "Device that allows access to Linux kernel cryptographic drivers";
-    homepage = http://home.gna.org/cryptodev-linux/;
-    license = "GPLv2+";
+    homepage = "http://cryptodev-linux.org/";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

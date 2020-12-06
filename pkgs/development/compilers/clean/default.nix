@@ -1,18 +1,20 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "clean-2.4";
+stdenv.mkDerivation {
+  name = "clean-3.0";
 
   src =
-    if stdenv.system == "i686-linux" then (fetchurl {
-      url = "http://clean.cs.ru.nl/download/Clean24/linux/clean2.4_boot.tar.gz";
-      sha256 = "1w8vvmkwzq8g51639r62apcy75sj69nm08082a34xvqm9ymfgkq5";
+    if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {
+      url = "https://ftp.cs.ru.nl/Clean/Clean30/linux/clean3.0_32_boot.tar.gz";
+      sha256 = "0cjxv3vqrg6pz3aicwfdz1zyhk0q650464j3qyl0wzaikh750010";
     })
-    else if stdenv.system == "x86_64-linux" then (fetchurl {
-        url = "http://clean.cs.ru.nl/download/Clean24/linux/clean2.4_64_boot.tar.gz";
-        sha256 = "08gsa1pjl5wyzh4ah8ccfx8a7mdcn6ycsn1lzkrr9adygv1gmm7r";
+    else if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
+        url = "https://ftp.cs.ru.nl/Clean/Clean30/linux/clean3.0_64_boot.tar.gz";
+        sha256 = "06k283y9adbi28f78k3m5ssg6py73qqkz3sm8dgxc89drv4krl2i";
     })
     else throw "Architecture not supported";
+
+  hardeningDisable = [ "format" "pic" ];
 
   # clm uses timestamps of dcl, icl, abc and o files to decide what must be rebuild
   # and for chroot builds all of the library files will have equal timestamps.  This
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Clean is a general purpose, state-of-the-art, pure and lazy functional programming language.";
+    description = "General purpose, state-of-the-art, pure and lazy functional programming language";
     longDescription = ''
       Clean is a general purpose, state-of-the-art, pure and lazy functional
       programming language designed for making real-world applications. Some
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
       and generic functions.
     '';
 
-    homepage = http://wiki.clean.cs.ru.nl/Clean;
+    homepage = "http://wiki.clean.cs.ru.nl/Clean";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = [ "i686-linux" "x86_64-linux" ];

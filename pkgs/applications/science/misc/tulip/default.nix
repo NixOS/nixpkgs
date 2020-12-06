@@ -1,24 +1,25 @@
-{ fetchurl, stdenv, libxml2, freetype, mesa, glew, qt4
-, cmake, makeWrapper, libjpeg }:
+{ fetchurl, stdenv, libxml2, freetype, libGLU, libGL, glew, qt4
+, cmake, makeWrapper, libjpeg, python }:
 
-let version = "3.7.0"; in
+let version = "5.2.1"; in
 stdenv.mkDerivation rec {
-  name = "tulip-${version}";
+  pname = "tulip";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/tulip/tulip-3.7.0/${name}-src.tar.gz";
-    sha256 = "150fj9pdxblvl5sby61cb2kq98r6h8yljk3vq5xizn198d3fz4jq";
+    url = "mirror://sourceforge/auber/${pname}-${version}_src.tar.gz";
+    sha256 = "0bqmqy6sri87a8xv5xf7ffaq5zin4hiaa13g0l64b84i7yckfwky";
   };
 
-  buildInputs = [ libxml2 freetype glew mesa qt4 libjpeg ];
+  buildInputs = [ libxml2 freetype glew libGLU libGL qt4 libjpeg python ];
 
-  buildNativeInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;
 
   meta = {
-    description = "Tulip, a visualization framework for the analysis and visualization of relational data";
+    description = "A visualization framework for the analysis and visualization of relational data";
 
     longDescription =
       '' Tulip is an information visualization framework dedicated to the
@@ -28,11 +29,11 @@ stdenv.mkDerivation rec {
          data that can be tailored to the problems he or she is addressing.
       '';
 
-    homepage = http://tulip.labri.fr/;
+    homepage = "http://tulip.labri.fr/";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = [ ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

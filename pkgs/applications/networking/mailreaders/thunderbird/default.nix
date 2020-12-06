@@ -1,95 +1,340 @@
-{ stdenv, fetchurl, pkgconfig, gtk, perl, python, zip, unzip
-, libIDL, dbus_glib, bzip2, alsaLib, nspr, yasm, mesa, nss
-, libnotify, cairo, pixman, fontconfig
+{ autoconf213
+, bzip2
+, cargo
+, common-updater-scripts
+, copyDesktopItems
+, coreutils
+, curl
+, dbus
+, dbus-glib
+, fetchpatch
+, fetchurl
+, file
+, fontconfig
+, freetype
+, glib
+, gnugrep
+, gnused
+, icu
+, jemalloc
+, lib
+, libGL
+, libGLU
+, libevent
 , libjpeg
-, pythonPackages
+, libnotify
+, libpng
+, libstartup_notification
+, libvpx
+, libwebp
+, llvmPackages
+, m4
+, makeDesktopItem
+, nasm
+, nodejs
+, nspr
+, nss_3_53
+, pango
+, perl
+, pkgconfig
+, python2
+, python3
+, runtimeShell
+, rust-cbindgen
+, rustc
+, sqlite
+, stdenv
+, systemd
+, unzip
+, which
+, writeScript
+, xidel
+, xorg
+, yasm
+, zip
+, zlib
 
-, # If you want the resulting program to call itself "Thunderbird"
-  # instead of "Shredder", enable this option.  However, those
-  # binaries may not be distributed without permission from the
-  # Mozilla Foundation, see
-  # http://www.mozilla.org/foundation/trademarks/.
-  enableOfficialBranding ? false
+, debugBuild ? false
+
+, alsaSupport ? stdenv.isLinux, alsaLib
+, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, waylandSupport ? true
+, libxkbcommon, calendarSupport ? true
+
+# Use official trademarked branding.  Permission obtained at:
+# https://github.com/NixOS/nixpkgs/pull/94880#issuecomment-675907971
+, enableOfficialBranding ? true
 }:
 
-let version = "17.0"; in
+assert waylandSupport -> gtk3Support == true;
 
-stdenv.mkDerivation {
-  name = "thunderbird-${version}";
+stdenv.mkDerivation rec {
+  pname = "thunderbird";
+  version = "78.5.1";
 
   src = fetchurl {
-    url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "ccc5f2e155364948945abf6fd27bebeb4d797aa8";
+    url =
+      "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
+    sha512 =
+      "202s2h9fsvg4chy93rgxdf4vlavf3wbp9vqgh0nrgk5wcdhz17144vhw1bmxia8hf99snq2a3ix6haidwl8d2n6l2nfsjzcnphhxd9z";
   };
 
-  enableParallelBuilding = false;
+  nativeBuildInputs = [
+    autoconf213
+    cargo
+    copyDesktopItems
+    gnused
+    llvmPackages.llvm
+    m4
+    nasm
+    nodejs
+    perl
+    pkgconfig
+    python2
+    python3
+    rust-cbindgen
+    rustc
+    which
+    yasm
+  ] ++ lib.optional gtk3Support wrapGAppsHook;
 
-  buildInputs =
-    [ pkgconfig perl python zip unzip bzip2 gtk dbus_glib alsaLib libIDL nspr
-      libnotify cairo pixman fontconfig yasm mesa nss
-      libjpeg pythonPackages.sqlite3
-    ];
+  buildInputs = [
+    bzip2
+    dbus
+    dbus-glib
+    file
+    fontconfig
+    freetype
+    glib
+    gtk2
+    icu
+    jemalloc
+    libGL
+    libGLU
+    libevent
+    libjpeg
+    libnotify
+    libpng
+    libstartup_notification
+    libvpx
+    libwebp
+    nspr
+    nss_3_53
+    pango
+    perl
+    sqlite
+    unzip
+    xorg.libX11
+    xorg.libXScrnSaver
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXft
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXt
+    xorg.pixman
+    xorg.xorgproto
+    zip
+    zlib
+  ] ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional gtk3Support gtk3
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional waylandSupport libxkbcommon;
 
-  configureFlags =
-    [ "--enable-application=mail"
-      "--enable-optimize"
-      "--with-pthreads"
-      "--disable-debug"
-      "--enable-strip"
-      "--with-pthreads"
-      "--with-system-jpeg"
-      #"--with-system-png"
-      "--with-system-zlib"
-      "--with-system-bz2"
-      "--with-system-nspr"
-      "--with-system-nss"
-      # Broken: https://bugzilla.mozilla.org/show_bug.cgi?id=722975
-      #"--enable-system-cairo"
-      "--disable-crashreporter"
-      "--disable-necko-wifi"
-      "--disable-webm"
-      "--disable-tests"
-      "--enable-calendar"
-      "--disable-ogg"
-    ]
-    ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
+  NIX_CFLAGS_COMPILE =[
+    "-I${glib.dev}/include/gio-unix-2.0"
+    "-I${nss_3_53.dev}/include/nss"
+  ];
 
-  # The Thunderbird Makefiles refer to the variables LIBXUL_DIST,
-  # prefix, and PREFIX in some places where they are not set.  In
-  # particular, there are some linker flags like
-  # `-rpath-link=$(LIBXUL_DIST)/bin'.  Since this expands to
-  # `-rpath-link=/bin', the build fails due to the purity checks in
-  # the ld wrapper.  So disable the purity check for now.
-  preBuild = "NIX_ENFORCE_PURITY=0";
+  patches = [
+    ./no-buildconfig.patch
+  ];
 
-  # This doesn't work:
-  #makeFlags = "LIBXUL_DIST=$(out) prefix=$(out) PREFIX=$(out)";
+  postPatch = ''
+    rm -rf obj-x86_64-pc-linux-gnu
+  '';
 
-  postInstall =
-    ''
-      rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+  hardeningDisable = [ "format" ];
 
-      # Create a desktop item.
-      mkdir -p $out/share/applications
-      cat > $out/share/applications/thunderbird.desktop <<EOF
-      [Desktop Entry]
-      Type=Application
-      Exec=$out/bin/thunderbird
-      Icon=$out/lib/thunderbird-${version}/chrome/icons/default/default256.png
-      Name=Thunderbird
-      GenericName=Mail Reader
-      Categories=Application;Network;
-      EOF
-    '';
+  preConfigure = ''
+    # remove distributed configuration files
+    rm -f configure
+    rm -f js/src/configure
+    rm -f .mozconfig*
+
+    configureScript="$(realpath ./mach) configure"
+    # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+    unset AS
+
+    export MOZCONFIG=$(pwd)/mozconfig
+
+    # Set C flags for Rust's bindgen program. Unlike ordinary C
+    # compilation, bindgen does not invoke $CC directly. Instead it
+    # uses LLVM's libclang. To make sure all necessary flags are
+    # included we need to look in a few places.
+    # TODO: generalize this process for other use-cases.
+
+    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
+      $(< ${stdenv.cc}/nix-support/libc-cflags) \
+      $(< ${stdenv.cc}/nix-support/cc-cflags) \
+      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
+      ${
+        lib.optionalString stdenv.cc.isClang
+        "-idirafter ${stdenv.cc.cc}/lib/clang/${
+          lib.getVersion stdenv.cc.cc
+        }/include"
+      } \
+      ${
+        lib.optionalString stdenv.cc.isGNU
+        "-isystem ${stdenv.cc.cc}/include/c++/${
+          lib.getVersion stdenv.cc.cc
+        } -isystem ${stdenv.cc.cc}/include/c++/${
+          lib.getVersion stdenv.cc.cc
+        }/${stdenv.hostPlatform.config}"
+      } \
+      $NIX_CFLAGS_COMPILE"
+
+    echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
+  '';
+
+  configureFlags = let
+    toolkitSlug = if gtk3Support then
+      "3${lib.optionalString waylandSupport "-wayland"}"
+    else
+      "2";
+    toolkitValue = "cairo-gtk${toolkitSlug}";
+  in [
+    "--enable-application=comm/mail"
+
+    "--with-system-icu"
+    "--with-system-jpeg"
+    "--with-system-libevent"
+    "--with-system-nspr"
+    "--with-system-nss"
+    "--with-system-png" # needs APNG support
+    "--with-system-zlib"
+    "--with-system-webp"
+    "--with-system-libvpx"
+
+    "--enable-rust-simd"
+    "--enable-crashreporter"
+    "--enable-default-toolkit=${toolkitValue}"
+    "--enable-js-shell"
+    "--enable-necko-wifi"
+    "--enable-system-ffi"
+    "--enable-system-pixman"
+
+    "--disable-tests"
+    "--disable-updater"
+    "--enable-jemalloc"
+  ] ++ (if debugBuild then [
+    "--enable-debug"
+    "--enable-profiling"
+  ] else [
+    "--disable-debug"
+    "--enable-release"
+    "--disable-debug-symbols"
+    "--enable-optimize"
+    "--enable-strip"
+  ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # on i686-linux: --with-libclang-path is not available in this configuration
+    "--with-libclang-path=${llvmPackages.libclang}/lib"
+    "--with-clang-path=${llvmPackages.clang}/bin/clang"
+  ] ++ lib.optional alsaSupport "--enable-alsa"
+  ++ lib.optional calendarSupport "--enable-calendar"
+  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ lib.optional pulseaudioSupport "--enable-pulseaudio";
+
+  enableParallelBuilding = true;
+
+  postConfigure = ''
+    cd obj-*
+  '';
+
+  makeFlags = lib.optionals enableOfficialBranding [
+    "MOZILLA_OFFICIAL=1"
+    "BUILD_OFFICIAL=1"
+  ];
+
+  doCheck = false;
+
+  desktopItems = [
+    (makeDesktopItem {
+      categories = lib.concatStringsSep ";" [ "Application" "Network" ];
+      desktopName = "Thunderbird";
+      genericName = "Mail Reader";
+      name = "thunderbird";
+      exec = "thunderbird %U";
+      icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
+      mimeType = lib.concatStringsSep ";" [
+        # Email
+        "x-scheme-handler/mailto"
+        "message/rfc822"
+        # Feeds
+        "x-scheme-handler/feed"
+        "application/rss+xml"
+        "application/x-extension-rss"
+        # Newsgroups
+        "x-scheme-handler/news"
+        "x-scheme-handler/snews"
+        "x-scheme-handler/nntp"
+      ];
+    })
+  ];
+
+  postInstall = ''
+    # TODO: Move to a dev output?
+    rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+  '';
+
+  preFixup = ''
+    # Needed to find Mozilla runtime
+    gappsWrapperArgs+=(
+      --argv0 "$out/bin/thunderbird"
+      --set MOZ_APP_LAUNCHER thunderbird
+      # https://github.com/NixOS/nixpkgs/pull/61980
+      --set SNAP_NAME "thunderbird"
+      --set MOZ_LEGACY_PROFILES 1
+      --set MOZ_ALLOW_DOWNGRADE 1
+    )
+  '';
+
+  # FIXME: The XUL portion of this can probably be removed as soon as we
+  # package a Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
+  postFixup = ''
+    local xul="$out/lib/thunderbird/libxul.so"
+    patchelf --set-rpath "${libnotify}/lib:${lib.getLib systemd}/lib:$(patchelf --print-rpath $xul)" $xul
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    "$out/bin/thunderbird" --version
+  '';
+
+  disallowedRequisites = [
+    stdenv.cc
+  ];
+
+  passthru.updateScript = import ./../../browsers/firefox/update.nix {
+    attrPath = "thunderbird-78";
+    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused
+      gnugrep curl runtimeShell;
+  };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with stdenv.lib; {
-    description = "Mozilla Thunderbird, a full-featured email client";
-    homepage = http://www.mozilla.org/thunderbird/;
-    license =
-      # Official branding implies thunderbird name and logo cannot be reuse,
-      # see http://www.mozilla.org/foundation/licensing.html
-      if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
-    maintainers = maintainers.pierron;
+    description = "A full-featured e-mail client";
+    homepage = "https://www.thunderbird.net";
+    maintainers = with maintainers; [
+      eelco
+      lovesegfault
+      pierron
+      vcunat
+    ];
     platforms = platforms.linux;
+    license = licenses.mpl20;
   };
 }

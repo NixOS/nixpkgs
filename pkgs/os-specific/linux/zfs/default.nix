@@ -1,50 +1,202 @@
-{ stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
+{ stdenv, fetchFromGitHub, fetchpatch
+, autoreconfHook, util-linux, nukeReferences, coreutils
+, perl, buildPackages
+, configFile ? "all"
 
-stdenv.mkDerivation {
-  name = "zfs-0.6.0-rc13-${kernel.version}";
+# Userspace dependencies
+, zlib, libuuid, python3, attr, openssl
+, libtirpc
+, nfs-utils
+, gawk, gnugrep, gnused, systemd
+, smartmontools, sysstat, sudo
+, pkgconfig
 
-  src = fetchurl {
-    url = http://zfsonlinux.org/downloads/0.6.0-rc13/zfs-0.6.0-rc13.tar.gz;
-    sha256 = "1kpx7sa49ir93kmlrjwjzd6v4kzmda4j9cf6bv2p4s3yrmiz3cjv";
+# Kernel dependencies
+, kernel ? null
+, enablePython ? true
+}:
+
+with stdenv.lib;
+let
+  buildKernel = any (n: n == configFile) [ "kernel" "all" ];
+  buildUser = any (n: n == configFile) [ "user" "all" ];
+
+  common = { version
+    , sha256
+    , extraPatches ? []
+    , rev ? "zfs-${version}"
+    , isUnstable ? false
+    , incompatibleKernelVersion ? null }:
+    if buildKernel &&
+      (incompatibleKernelVersion != null) &&
+        versionAtLeast kernel.version incompatibleKernelVersion then
+       throw ''
+         Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
+         ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
+       ''
+    else stdenv.mkDerivation {
+      name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
+
+      src = fetchFromGitHub {
+        owner = "zfsonlinux";
+        repo = "zfs";
+        inherit rev sha256;
+      };
+
+      patches = extraPatches;
+
+      postPatch = optionalString buildKernel ''
+        patchShebangs scripts
+        # The arrays must remain the same length, so we repeat a flag that is
+        # already part of the command and therefore has no effect.
+        substituteInPlace ./module/os/linux/zfs/zfs_ctldir.c \
+          --replace '"/usr/bin/env", "umount"' '"${util-linux}/bin/umount", "-n"' \
+          --replace '"/usr/bin/env", "mount"'  '"${util-linux}/bin/mount", "-n"'
+      '' + optionalString buildUser ''
+        substituteInPlace ./lib/libshare/os/linux/nfs.c --replace "/usr/sbin/exportfs" "${
+          # We don't *need* python support, but we set it like this to minimize closure size:
+          # If it's disabled by default, no need to enable it, even if we have python enabled
+          # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
+          nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
+        }/bin/exportfs"
+        substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
+        substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
+                                                      --replace "/etc/default"            "$out/etc/default"
+        substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
+
+        substituteInPlace ./contrib/initramfs/hooks/Makefile.am \
+          --replace "/usr/share/initramfs-tools/hooks" "$out/usr/share/initramfs-tools/hooks"
+        substituteInPlace ./contrib/initramfs/Makefile.am \
+          --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
+        substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
+        substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
+        substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
+        substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
+        substituteInPlace ./etc/systemd/system/Makefile.am \
+          --replace '$(DESTDIR)$(systemdunitdir)' "$out"'$(DESTDIR)$(systemdunitdir)'
+
+        substituteInPlace ./contrib/initramfs/conf.d/Makefile.am \
+          --replace "/usr/share/initramfs-tools/conf.d" "$out/usr/share/initramfs-tools/conf.d"
+        substituteInPlace ./contrib/initramfs/conf-hooks.d/Makefile.am \
+          --replace "/usr/share/initramfs-tools/conf-hooks.d" "$out/usr/share/initramfs-tools/conf-hooks.d"
+
+        substituteInPlace ./cmd/vdev_id/vdev_id \
+          --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+          "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+      '';
+
+      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+        ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
+        ++ optional buildUser pkgconfig;
+      buildInputs = optionals buildUser [ zlib libuuid attr libtirpc ]
+        ++ optional buildUser openssl
+        ++ optional (buildUser && enablePython) python3;
+
+      # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
+      NIX_CFLAGS_LINK = "-lgcc_s";
+
+      hardeningDisable = [ "fortify" "stackprotector" "pic" ];
+
+      configureFlags = [
+        "--with-config=${configFile}"
+        "--with-tirpc=1"
+        (withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+      ] ++ optionals buildUser [
+        "--with-dracutdir=$(out)/lib/dracut"
+        "--with-udevdir=$(out)/lib/udev"
+        "--with-systemdunitdir=$(out)/etc/systemd/system"
+        "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
+        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
+        "--with-mounthelperdir=$(out)/bin"
+        "--libexecdir=$(out)/libexec"
+        "--sysconfdir=/etc"
+        "--localstatedir=/var"
+        "--enable-systemd"
+      ] ++ optionals buildKernel ([
+        "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+        "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      ] ++ kernel.makeFlags);
+
+      makeFlags = optionals buildKernel kernel.makeFlags;
+
+      enableParallelBuilding = true;
+
+      installFlags = [
+        "sysconfdir=\${out}/etc"
+        "DEFAULT_INITCONF_DIR=\${out}/default"
+        "INSTALL_MOD_PATH=\${out}"
+      ];
+
+      postInstall = optionalString buildKernel ''
+        # Add reference that cannot be detected due to compressed kernel module
+        mkdir -p "$out/nix-support"
+        echo "${util-linux}" >> "$out/nix-support/extra-refs"
+      '' + optionalString buildUser ''
+        # Remove provided services as they are buggy
+        rm $out/etc/systemd/system/zfs-import-*.service
+
+        sed -i '/zfs-import-scan.service/d' $out/etc/systemd/system/*
+
+        for i in $out/etc/systemd/system/*; do
+        substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
+        done
+
+        # Remove tests because they add a runtime dependency on gcc
+        rm -rf $out/share/zfs/zfs-tests
+
+        # Add Bash completions.
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+        (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      '';
+
+      postFixup = let
+        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmontools sysstat ]}:$PATH";
+      in ''
+        for i in $out/libexec/zfs/zpool.d/*; do
+          sed -i '2i${path}' $i
+        done
+      '';
+
+      outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
+
+      meta = {
+        description = "ZFS Filesystem Linux Kernel module";
+        longDescription = ''
+          ZFS is a filesystem that combines a logical volume manager with a
+          Copy-On-Write filesystem with data integrity detection and repair,
+          snapshotting, cloning, block devices, deduplication, and more.
+        '';
+        homepage = "https://github.com/openzfs/zfs";
+        license = licenses.cddl;
+        platforms = platforms.linux;
+        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
+      };
+    };
+in {
+  # also check if kernel version constraints in
+  # ./nixos/modules/tasks/filesystems/zfs.nix needs
+  # to be adapted
+  zfsStable = common {
+    # comment/uncomment if breaking kernel versions are known
+    # incompatibleKernelVersion = "4.20";
+
+    # this package should point to the latest release.
+    version = "2.0.0";
+
+    sha256 = "1kriz6pg8wj98izvjc60wp23lgcp4k3mzhpkgj74np73rzgy6v8r";
   };
 
-  patches = [ ./module_perm_prefix.patch ./mount_zfs_prefix.patch ./kerneldir_path.patch ./no_absolute_paths_to_coreutils.patch ];
+  zfsUnstable = common {
+    # comment/uncomment if breaking kernel versions are known
+    # incompatibleKernelVersion = "4.19";
 
-  buildInputs = [ kernel spl perl autoconf automake libtool zlib libuuid coreutils ];
+    # this package should point to a version / git revision compatible with the latest kernel release
+    version = "2.0.0";
 
-  # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
-  NIX_CFLAGS_LINK = "-lgcc_s";
-  NIX_CFLAGS_COMPILE = "-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
-
-  preConfigure = ''
-    ./autogen.sh
-
-    substituteInPlace ./module/zfs/zfs_ctldir.c    --replace "umount -t zfs"     "${utillinux}/bin/umount -t zfs"
-    substituteInPlace ./module/zfs/zfs_ctldir.c    --replace "mount -t zfs"      "${utillinux}/bin/mount -t zfs"
-    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/umount"       "${utillinux}/bin/umount"
-    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/mount"        "${utillinux}/bin/mount"
-    substituteInPlace ./udev/rules.d/*             --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
-    substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/ztest"   "$out/sbin/ztest"
-    substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/zdb"     "$out/sbin/zdb"
-  '';
-
-  configureFlags = ''
-    --with-linux=${kernel}/lib/modules/${kernel.version}/build 
-    --with-linux-obj=${kernel}/lib/modules/${kernel.version}/build 
-    --with-spl=${spl}/libexec/spl/${kernel.version}
-    ${if stdenv.system == "i686-linux"  then "--enable-atomic-spinlocks" else ""}
-  '';
-
-  meta = {
-    description = "ZFS Filesystem Linux Kernel module";
-    longDescription = ''
-      ZFS is a filesystem that combines a logical volume manager with a
-      Copy-On-Write filesystem with data integrity detection and repair,
-      snapshotting, cloning, block devices, deduplication, and more. 
-      '';
-    homepage = http://zfsonlinux.org/;
-    license = stdenv.lib.licenses.cddl;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    sha256 = "1kriz6pg8wj98izvjc60wp23lgcp4k3mzhpkgj74np73rzgy6v8r";
   };
 }

@@ -1,26 +1,36 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, fftw, gettext, glib,
-libX11, libtool, tcl, tk }:
+{ stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
+, alsaLib, libjack2, tk, fftw
+}:
 
 stdenv.mkDerivation  rec {
-  name = "puredata-${version}";
-  version = "0.43-0";
+  pname = "puredata";
+  version = "0.50-2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pure-data/pd-${version}.src.tar.gz";
-    sha256 = "1qfq7x8vj12kr0cdrnbvmxfhc03flicc6vcc8bz6hwrrakwciyz2";
+    url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
+    sha256 = "0dz6r6jy0zfs1xy1xspnrxxks8kddi9c7pxz4vpg2ygwv83ghpg5";
   };
 
-  buildInputs = [ alsaLib autoconf automake fftw gettext glib libX11
-    libtool tcl tk ];
+  nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
 
-  preConfigure = ''
-    ./autogen.sh
+  buildInputs = [ alsaLib libjack2 fftw ];
+
+  configureFlags = [
+    "--enable-alsa"
+    "--enable-jack"
+    "--enable-fftw"
+    "--disable-portaudio"
+    "--disable-oss"
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/pd --prefix PATH : ${tk}/bin
   '';
 
   meta = with stdenv.lib; {
-    description = ''Real-time graphical programming environment for
+    description = ''A real-time graphical programming environment for
                     audio, video, and graphical processing'';
-    homepage = http://puredata.info;
+    homepage = "http://puredata.info";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

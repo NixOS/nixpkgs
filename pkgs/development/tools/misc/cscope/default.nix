@@ -1,28 +1,27 @@
-{ fetchurl, stdenv, ncurses, pkgconfig, emacs}:
+{ fetchurl, stdenv, ncurses
+, emacsSupport ? true, emacs
+}:
 
 stdenv.mkDerivation rec {
-  name = "cscope-15.8a";
+  name = "cscope-15.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/cscope/${name}.tar.gz";
-    sha256 = "07jdhxvp3dv7acvp0pwsdab1g2ncxjlcf838lj7vxgjs1p26lwzb";
+    sha256 = "0ngiv4aj3rr35k3q3wjx0y19gh7i1ydqa0cqip6sjwd8fph5ll65";
   };
 
-  preConfigure = ''
-    sed -i "contrib/xcscope/cscope-indexer" \
-        -"es|^PATH=.*$|PATH=\"$out/bin:\$PATH\"|g"
-    sed -i "contrib/xcscope/xcscope.el" \
-        -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
-  '';
-
-  configureFlags = "--with-ncurses=${ncurses}";
+  configureFlags = [ "--with-ncurses=${ncurses.dev}" ];
 
   buildInputs = [ ncurses ];
-  buildNativeInputs = [ pkgconfig emacs ];
+  nativeBuildInputs = stdenv.lib.optional emacsSupport emacs;
 
-  postInstall = ''
-    # Install Emacs mode.
+  postInstall = stdenv.lib.optionalString emacsSupport ''
     cd "contrib/xcscope"
+
+    sed -i "cscope-indexer" \
+        -"es|^PATH=.*$|PATH=\"$out/bin:\$PATH\"|g"
+    sed -i "xcscope.el" \
+        -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
 
     mkdir -p "$out/libexec/cscope"
     cp "cscope-indexer" "$out/libexec/cscope"
@@ -32,13 +31,8 @@ stdenv.mkDerivation rec {
     cp xcscope.el{,c} "$out/share/emacs/site-lisp"
   '';
 
-  crossAttrs = {
-    postInstall = "";
-    propagatedBuildInputs = [ ncurses.hostDrv ];
-  };
-
   meta = {
-    description = "Cscope, a developer's tool for browsing source code";
+    description = "A developer's tool for browsing source code";
 
     longDescription = ''
       Cscope is a developer's tool for browsing source code.  It has
@@ -50,10 +44,10 @@ stdenv.mkDerivation rec {
 
     license = "BSD-style";
 
-    homepage = http://cscope.sourceforge.net/;
+    homepage = "http://cscope.sourceforge.net/";
 
     maintainers = with stdenv.lib.maintainers; [viric];
 
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

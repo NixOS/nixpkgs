@@ -1,25 +1,43 @@
-{ stdenv, fetchurl, cmake, SDL, openal, zlib, libpng, python, libvorbis }:
-
-assert stdenv.gcc.libc != null;
+{ stdenv, fetchFromGitHub, cmake
+, freetype, SDL2, SDL2_mixer, openal, zlib, libpng, python, libvorbis
+, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "gemrb-0.6.1";
-  
-  src = fetchurl {
-    url = "mirror://sourceforge/gemrb/${name}.tar.gz";
-    sha256 = "1jnid5nrasy0lglnx71zkvv2p59cxsnhvagy7r8lsmjild1k5l93";
+  pname = "gemrb";
+  version = "0.8.7";
+
+  src = fetchFromGitHub {
+    owner = "gemrb";
+    repo = "gemrb";
+    rev = "v${version}";
+    sha256 = "14j9mhrbi4gnrbv25nlsvcxzkylijzrnwbqqnrg7pr452lb3srpb";
   };
 
-  buildInputs = [ cmake python openal SDL zlib libpng libvorbis ];
+  # TODO: make libpng, libvorbis, sdl_mixer, freetype, vlc, glew (and other gl
+  # reqs) optional
+  buildInputs = [ freetype python openal SDL2 SDL2_mixer zlib libpng libvorbis libiconv ];
 
-  # Necessary to find libdl.
-  CMAKE_LIBRARY_PATH = "${stdenv.gcc.libc}/lib";
+  nativeBuildInputs = [ cmake ];
 
-  # Can't have -werror because of the Vorbis header files.
-  cmakeFlags = "-DDISABLE_WERROR=ON -DCMAKE_VERBOSE_MAKEFILE=ON";
+  # TODO: add proper OpenGL support. We are currently (0.8.7) getting a shader
+  # error on execution when enabled.
+  cmakeFlags = [
+    "-DLAYOUT=opt"
+    # "-DOPENGL_BACKEND=GLES"
+    # "-DOpenGL_GL_PREFERENCE=GLVND"
+  ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
-    homepage = http://gemrb.sourceforge.net/;
+    longDescription = ''
+      GemRB (Game engine made with pre-Rendered Background) is a portable
+      open-source implementation of Bioware's Infinity Engine. It was written to
+      support pseudo-3D role playing games based on the Dungeons & Dragons
+      ruleset (Baldur's Gate and Icewind Dale series, Planescape: Torment).
+    '';
+    homepage = "https://gemrb.org/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.all;
   };
 }

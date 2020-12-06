@@ -1,33 +1,72 @@
-{ stdenv, fetchurl, gzip, bzip2 }:
+{ stdenv, fetchurl, autoreconfHook,
+  gzip, bzip2, pkgconfig, flex, check,
+  pam, coreutils
+}:
 
 stdenv.mkDerivation rec {
-  name = "kbd-1.15.3";
+  pname = "kbd";
+  version = "2.0.4";
 
   src = fetchurl {
-    url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.gz";
-    sha256 = "1vcl2791xshjdpi4w88iy87gkb7zv0dbvi83f98v30dvqc9mfl46";
+    url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
+    sha256 = "124swm93dm4ca0pifgkrand3r9gvj3019d4zkfxsj9djpvv0mnaz";
   };
 
-  configureFlags = "--disable-nls";  
+  configureFlags = [
+    "--enable-optional-progs"
+    "--enable-libkeymap"
+    "--disable-nls"
+  ];
 
-  patchPhase =
+  patches = [ ./search-paths.patch ];
+
+  postPatch =
     ''
+      # Add Neo keymap subdirectory
+      sed -i -e 's,^KEYMAPSUBDIRS *= *,&i386/neo ,' data/Makefile.am
+
+      # Renaming keymaps with name clashes, because loadkeys just picks
+      # the first keymap it sees. The clashing names lead to e.g.
+      # "loadkeys no" defaulting to a norwegian dvorak map instead of
+      # the much more common qwerty one.
+      pushd data/keymaps/i386
+      mv qwertz/cz{,-qwertz}.map
+      mv olpc/es{,-olpc}.map
+      mv olpc/pt{,-olpc}.map
+      mv dvorak/{no.map,dvorak-no.map}
+      mv fgGIod/trf{,-fgGIod}.map
+      mv colemak/{en-latin9,colemak}.map
+      popd
+
       # Fix the path to gzip/bzip2.
-      substituteInPlace src/findfile.c \
+      substituteInPlace src/libkeymap/findfile.c \
         --replace gzip ${gzip}/bin/gzip \
-        --replace bzip2 ${bzip2}/bin/bzip2 \
-    
+        --replace bzip2 ${bzip2.bin}/bin/bzip2 \
+
       # We get a warning in armv5tel-linux and the fuloong2f, so we
       # disable -Werror in it.
-      ${stdenv.lib.optionalString (stdenv.isArm || stdenv.system == "mips64el-linux") ''
+      ${stdenv.lib.optionalString (stdenv.isAarch32 || stdenv.hostPlatform.isMips) ''
         sed -i s/-Werror// src/Makefile.am
       ''}
     '';
 
-  makeFlags = "setowner= ";
+  postInstall = ''
+    for i in $out/bin/unicode_{start,stop}; do
+      substituteInPlace "$i" \
+        --replace /usr/bin/tty ${coreutils}/bin/tty
+    done
+  '';
 
-  meta = {
-    homepage = ftp://ftp.altlinux.org/pub/people/legion/kbd/;
+
+  buildInputs = [ check pam ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig flex ];
+
+  makeFlags = [ "setowner=" ];
+
+  meta = with stdenv.lib; {
+    homepage = "ftp://ftp.altlinux.org/pub/people/legion/kbd/";
     description = "Linux keyboard utilities and keyboard maps";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

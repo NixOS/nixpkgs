@@ -1,22 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixUnstable, gettext, libiconv }:
+{ stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, libnixxml, autoreconfHook }:
 
 stdenv.mkDerivation {
-  name = "disnix-0.3pre32254";
-  
+  name = "disnix-0.10";
+
   src = fetchurl {
-    url = http://hydra.nixos.org/build/2368541/download/4/disnix-0.3pre32254.tar.gz;
-    sha256 = "1jznx4mb6vwpzzpbk4c16j73hjgng7v1nraq8yya7f7m1s2gyhcw";
+    url = "https://github.com/svanderburg/disnix/releases/download/disnix-0.10/disnix-0.10.tar.gz";
+    sha256 = "0mciqbc2h60nc0i6pd36w0m2yr96v97ybrzrqzh5f67ac1f0gqwg";
   };
-  
-  buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable ]
-                ++ stdenv.lib.optional (!stdenv.isLinux) libiconv
-                ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
-                
-  dontStrip = true;
-  
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxml2 libxslt getopt nixUnstable libintl libiconv dysnomia ];
+
   meta = {
-    description = "A distributed deployment extension for Nix";
-    license = "LGPLv2.1+";
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    description = "A Nix-based distributed service deployment tool";
+    license = stdenv.lib.licenses.lgpl21Plus;
+    maintainers = with stdenv.lib.maintainers; [ sander tomberek ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

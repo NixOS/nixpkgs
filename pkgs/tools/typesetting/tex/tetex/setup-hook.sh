@@ -4,4 +4,4 @@ addTeXMFPath () {
     fi
 }
 
-envHooks=(${envHooks[@]} addTeXMFPath)
+addEnvHooks "$targetOffset" addTeXMFPath

@@ -1,37 +1,42 @@
-{ stdenv, fetchgit, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper
-, par2cmdline, par2Support ? false }:
+{ stdenv, fetchFromGitHub, makeWrapper
+, perl, pandoc, python3Packages, git
+, par2cmdline ? null, par2Support ? true
+}:
 
 assert par2Support -> par2cmdline != null;
+
+let version = "0.31"; in
 
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "bup-0.25git20121224";
+  pname = "bup";
+  inherit version;
 
-  src = fetchgit {
-    url = "https://github.com/bup/bup.git";
-    sha256 = "f0e0c835ab83f00b28920d493e4150d2247113aad3a74385865c2a8c6f1ba7b8";
-    rev = "458e92da32ddd3c18fc1c3e52a76e9f0b48b832f";
+  src = fetchFromGitHub {
+    repo = "bup";
+    owner = "bup";
+    rev = version;
+    sha256 = "03kmmdlgg0p5z39bhckkf91mmq55wghb93ghqvv9f9gaby1diw4z";
   };
 
-  buildNativeInputs = [ pandoc perl makeWrapper ];
+  buildInputs = [
+    git
+    (python3Packages.python.withPackages
+      (p: with p; [ setuptools tornado ]
+        ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
+  ];
+  nativeBuildInputs = [ pandoc perl makeWrapper ];
 
-  buildInputs = [ python git ];
-
-  postInstall = optionalString (elem stdenv.system platforms.linux) ''
-    wrapProgram $out/bin/bup --prefix PYTHONPATH : \
-      ${stdenv.lib.concatStringsSep ":"
-          (map (path: "$(toPythonPath ${path})") [ pyxattr pylibacl setuptools fuse ])}
-  '';
-
-  patchPhase = ''
-    for f in cmd/* lib/tornado/* lib/tornado/test/* t/* wvtest.py main.py; do
-      substituteInPlace $f --replace "/usr/bin/env python" "${python}/bin/python"
-    done
-    substituteInPlace Makefile --replace "./format-subst.pl" "perl ./format-subst.pl"
+  postPatch = ''
+    patchShebangs .
+    substituteInPlace Makefile --replace "-Werror" ""
+    substituteInPlace Makefile --replace "./format-subst.pl" "${perl}/bin/perl ./format-subst.pl"
   '' + optionalString par2Support ''
     substituteInPlace cmd/fsck-cmd.py --replace "['par2'" "['${par2cmdline}/bin/par2'"
   '';
+
+  dontAddPrefix = true;
 
   makeFlags = [
     "MANDIR=$(out)/share/man"
@@ -40,11 +45,22 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/bup \
+      --prefix PATH : ${git}/bin
+  '';
+
   meta = {
-    description = ''
+    homepage = "https://github.com/bup/bup";
+    description = "Efficient file backup system based on the git packfile format";
+    license = licenses.gpl2Plus;
+
+    longDescription = ''
       Highly efficient file backup system based on the git packfile format.
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
-    homepage = "https://github.com/bup/bup";
+
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ muflax ];
   };
 }

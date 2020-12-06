@@ -46,17 +46,27 @@ sub getDeps {
 }
 
 
-# Process the "Provides" fields to be able to resolve virtual dependencies.
+# Process the "Provides" and "Replaces" fields to be able to resolve
+# virtual dependencies.
 my %provides;
 
 foreach my $cdata (values %packages) {
-    next unless defined $cdata->{Provides};
-    my @provides = getDeps(Dpkg::Deps::deps_parse($cdata->{Provides}));
-    foreach my $name (@provides) {
-        #die "conflicting provide: $name\n" if defined $provides{$name};
-        #warn "provide by $cdata->{Package} conflicts with package with the same name: $name\n";
-        next if defined $packages{$name};
-        $provides{$name} = $cdata->{Package};
+    if (defined $cdata->{Provides}) {
+        my @provides = getDeps(Dpkg::Deps::deps_parse($cdata->{Provides}));
+        foreach my $name (@provides) {
+            #die "conflicting provide: $name\n" if defined $provides{$name};
+            #warn "provide by $cdata->{Package} conflicts with package with the same name: $name\n";
+            next if defined $packages{$name};
+            $provides{$name} = $cdata->{Package};
+        }
+    }
+    # Treat "Replaces" like "Provides".
+    if (defined $cdata->{Replaces}) {
+        my @replaces = getDeps(Dpkg::Deps::deps_parse($cdata->{Replaces}));
+        foreach my $name (@replaces) {
+            next if defined $packages{$name};
+            $provides{$name} = $cdata->{Package};
+        }
     }
 }
 

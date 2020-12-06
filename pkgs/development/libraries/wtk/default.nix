@@ -1,6 +1,6 @@
-{ stdenv, requireFile, unzip, xlibs }:
+{ stdenv, requireFile, unzip, xorg }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.hostPlatform.system == "i686-linux";
 
 stdenv.mkDerivation rec {
   name = "sun-java-wtk-2.5.2_01";
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
-  libraries = [ xlibs.libXpm xlibs.libXt xlibs.libX11 xlibs.libICE xlibs.libSM stdenv.gcc.gcc ];
+  libraries = [ xorg.libXpm xorg.libXt xorg.libX11 xorg.libICE xorg.libSM stdenv.cc.cc ];
 
   meta = {
-    homepage = http://java.sun.com/products/sjwtoolkit/download.html;
+    homepage = "http://java.sun.com/products/sjwtoolkit/download.html";
     description = "Sun Java Wireless Toolkit 2.5.2_01 for CLDC";
-    license = "unfree";
+    license = stdenv.lib.licenses.unfree;
   };
 }

@@ -1,47 +1,72 @@
-{ stdenv, fetchurl, flex, cracklib, libxcrypt }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4 }:
 
 stdenv.mkDerivation rec {
-  name = "linux-pam-1.1.1";
+  pname = "linux-pam";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = mirror://kernel/linux/libs/pam/library/Linux-PAM-1.1.1.tar.bz2;
-    sha256 = "015r3xdkjpqwcv4lvxavq0nybdpxhfjycqpzbx8agqd5sywkx3b0";
+    url    = "https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-${version}.tar.xz";
+    sha256 = "1nyh9kdi3knhxcbv5v4snya0g3gff0m671lnvqcbygw3rm77mx7g";
   };
 
-  buildNativeInputs = [ flex ];
-  buildInputs = [ cracklib ]
-    ++ stdenv.lib.optional
-      (!stdenv.isArm && stdenv.system != "mips64el-linux")
-      libxcrypt;
+  patches = stdenv.lib.optionals (stdenv.hostPlatform.libc == "musl") [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+      sha256 = "1h5yp5h2mqp1fcwiwwklyfpa69a3i03ya32pivs60fd7g5bqa7sf";
+    })
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+      sha256 = "1ib6shhvgzinjsc603k2x1lxh9dic6qq449fnk110gc359m23j81";
+    })
+    # From adelie's package repo, using local copy since it seems to be currently offline.
+    # (we previously used similar patch from void, but stopped working with update to 1.3.1)
+    ./musl-fix-pam_exec.patch
+  ];
 
-  crossAttrs = {
-    # Skip libxcrypt cross-building, as it fails for mips and arm
-    propagatedBuildInputs = [ flex.hostDrv cracklib.hostDrv ];
-    preConfigure = preConfigure + ''
-      ar x ${flex.hostDrv}/lib/libfl.a
-      mv libyywrap.o libyywrap-target.o
-      ar x ${flex}/lib/libfl.a
-      mv libyywrap.o libyywrap-host.o
-      export LDFLAGS="$LDFLAGS $PWD/libyywrap-target.o"
-      sed -e 's/@CC@/gcc/' -i doc/specs/Makefile.in
-    '';
-    postConfigure = ''
-      sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
-    ''; 
-  };
+  outputs = [ "out" "doc" "man" /* "modules" */ ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ flex ];
+
+  buildInputs = [ cracklib db4 ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}
-    ln -sv /var/setuid-wrappers/unix_chkpwd $out/sbin/unix_chkpwd
-    '';
+    ln -sv /run/wrappers/bin/unix_chkpwd $out/sbin/unix_chkpwd
+  ''; /*
+    rm -rf $out/etc
+    mkdir -p $modules/lib
+    mv $out/lib/security $modules/lib/
+  '';*/
+  # don't move modules, because libpam needs to (be able to) find them,
+  # which is done by dlopening $out/lib/security/pam_foo.so
+  # $out/etc was also missed: pam_env(login:session): Unable to open config file
 
-  preConfigure = ''
-    configureFlags="$configureFlags --includedir=$out/include/security"
+  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
+      # export ac_cv_search_crypt=no
+      # (taken from Alpine linux, apparently insecure but also doesn't build O:))
+      # disable insecure modules
+      # sed -e 's/pam_rhosts//g' -i modules/Makefile.am
+      sed -e 's/pam_rhosts//g' -i modules/Makefile.in
   '';
 
-  meta = {
-    homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
+  configureFlags = [
+    "--includedir=${placeholder "out"}/include/security"
+    "--enable-sconfigdir=/etc/security"
+  ];
+
+  installFlags = [
+    "SCONFIGDIR=${placeholder "out"}/etc/security"
+  ];
+
+  doCheck = false; # fails
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.linux-pam.org/";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }

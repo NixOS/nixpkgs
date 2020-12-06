@@ -1,30 +1,42 @@
-{ stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib }:
+{ stdenv, fetchurl, nasm
+, alsaLib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
+}:
 
-stdenv.mkDerivation {
-  name = "scummvm-1.2.1";
-  
+stdenv.mkDerivation rec {
+  pname = "scummvm";
+  version = "2.2.0";
+
   src = fetchurl {
-    url = mirror://sourceforge/scummvm/scummvm-1.2.1.tar.bz2;
-    sha256 = "029abzvpz85accwk7x79w255wr83gnkqg3yc5n6ryl28zg00z3j8";
-  };
-  
-  buildInputs = [ SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ];
-
-  crossAttrs = {
-    preConfigure = ''
-      # Remove the --build flag set by the gcc cross wrapper setup
-      # hook
-      export configureFlags="--host=${stdenv.cross.config}"
-    '';
-    postConfigure = ''
-      # They use 'install -s', that calls the native strip instead of the cross
-      sed -i 's/-c -s/-c/' ports.mk;
-    '';
+    url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
+    sha256 = "FGllflk72Ky8+sC4ObCG9kDr8SBjPpPxFsq2UrWyc4c=";
   };
 
-  meta = {
+  nativeBuildInputs = [ nasm ];
+
+  buildInputs = [
+    alsaLib curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libvorbis libGLU libGL SDL2 zlib
+  ];
+
+  dontDisableStatic = true;
+
+  enableParallelBuilding = true;
+
+  configurePlatforms = [ "host" ];
+  configureFlags = [
+    "--enable-c++11"
+    "--enable-release"
+  ];
+
+  # They use 'install -s', that calls the native strip instead of the cross
+  postConfigure = ''
+    sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
+  '';
+
+  meta = with stdenv.lib; {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
-    homepage = http://www.scummvm.org/;
+    homepage = "https://www.scummvm.org/";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.peterhoeg ];
+    platforms = platforms.linux;
   };
 }
-

@@ -1,104 +1,265 @@
-/* moving all git tools into one attribute set because git is unlikely to be
- * referenced by other packages and you can get a fast overview.
-*/
-args: with args; with pkgs;
+/* All git-relates tools live here, in a separate attribute set so that users
+ * can get a fast overview over what's available.
+ */
+args @ {config, lib, pkgs}: with args; with pkgs;
 let
-  inherit (pkgs) stdenv fetchgit fetchurl subversion;
-in
-rec {
-
-  git = lib.makeOverridable (import ./git) {
-    inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
-      asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversionClient;
-    svnSupport = false;		# for git-svn support
-    guiSupport = false;		# requires tcl/tk
-    sendEmailSupport = false;	# requires plenty of perl libraries
+  gitBase = callPackage ./git {
+    svnSupport = false;         # for git-svn support
+    guiSupport = false;         # requires tcl/tk
+    sendEmailSupport = false;   # requires plenty of perl libraries
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
-      perlPackages.NetSMTP perlPackages.NetSMTPSSL
+      perlPackages.libnet perlPackages.NetSMTPSSL
       perlPackages.IOSocketSSL perlPackages.NetSSLeay
-      perlPackages.MIMEBase64 perlPackages.AuthenSASL
-      perlPackages.DigestHMAC
+      perlPackages.AuthenSASL perlPackages.DigestHMAC
     ];
   };
 
+  self = rec {
+  # Try to keep this generally alphabetized
+
+  bfg-repo-cleaner = callPackage ./bfg-repo-cleaner { };
+
+  bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
+
+  bump2version = pkgs.python37Packages.callPackage ./bump2version { };
+
+  darcs-to-git = callPackage ./darcs-to-git { };
+
+  delta = callPackage ./delta {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  diff-so-fancy = callPackage ./diff-so-fancy { };
+
+  gh = callPackage ./gh { };
+
+  ghorg = callPackage ./ghorg { };
+
+  ghq = callPackage ./ghq { };
+
+  git = appendToName "minimal" gitBase;
+
+  git-absorb = callPackage ./git-absorb {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git-annex = pkgs.haskellPackages.git-annex;
+
+  git-annex-metadata-gui = libsForQt5.callPackage ./git-annex-metadata-gui {
+    inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
+  };
+
+  git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
+
+  git-annex-remote-dbx = callPackage ./git-annex-remote-dbx {
+    inherit (python3Packages)
+    buildPythonApplication
+    fetchPypi
+    dropbox
+    annexremote
+    humanfriendly;
+  };
+
+  git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
+
+  git-annex-utils = callPackage ./git-annex-utils { };
+
+  git-brunch = pkgs.haskellPackages.git-brunch;
+
+  git-appraise = callPackage ./git-appraise {};
+
+  git-bug = callPackage ./git-bug { };
+
   # support for bugzilla
-  gitBz = import ./git-bz {
-    inherit fetchgit stdenv makeWrapper python asciidoc xmlto # docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      ;
-    inherit (pythonPackages) pysqlite;
+  git-bz = callPackage ./git-bz { };
+
+  git-chglog = callPackage ./git-chglog { };
+
+  git-cinnabar = callPackage ./git-cinnabar { };
+
+  git-codeowners = callPackage ./git-codeowners { };
+
+  git-codereview = callPackage ./git-codereview { };
+
+  git-cola = callPackage ./git-cola { };
+
+  git-crypt = callPackage ./git-crypt { };
+
+  git-delete-merged-branches = callPackage ./git-delete-merged-branches { };
+
+  git-dit = callPackage ./git-dit {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
+  git-doc = lib.addMetaAttrs {
+    description = "Additional documentation for Git";
+    longDescription = ''
+      This package contains additional documentation (HTML and text files) that
+      is referenced in the man pages of Git.
+    '';
+  } gitFull.doc;
+
+  git-extras = callPackage ./git-extras { };
+
+  git-fame = callPackage ./git-fame {};
+
+  git-fast-export = callPackage ./fast-export { mercurial = mercurial_4; };
+
+  git-filter-repo = callPackage ./git-filter-repo {
+    pythonPackages = python3Packages;
+  };
+
+  git-gone = callPackage ./git-gone {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git-hub = callPackage ./git-hub { };
+
+  git-ignore = callPackage ./git-ignore { };
+
+  git-imerge = python3Packages.callPackage ./git-imerge { };
+
+  git-interactive-rebase-tool = callPackage ./git-interactive-rebase-tool {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git-machete = python3Packages.callPackage ./git-machete { };
+
+  git-my = callPackage ./git-my { };
+
+  git-octopus = callPackage ./git-octopus { };
+
+  git-open = callPackage ./git-open { };
+
+  git-radar = callPackage ./git-radar { };
+
+  git-recent = callPackage ./git-recent {
+    util-linux = if stdenv.isLinux then util-linuxMinimal else util-linux;
+  };
+
+  git-remote-codecommit = python3Packages.callPackage ./git-remote-codecommit { };
+
+  git-remote-gcrypt = callPackage ./git-remote-gcrypt { };
+
+  git-remote-hg = callPackage ./git-remote-hg { };
+
+  git-reparent = callPackage ./git-reparent { };
+
+  git-secret = callPackage ./git-secret { };
+
+  git-secrets = callPackage ./git-secrets { };
+
+  git-standup = callPackage ./git-standup { };
+
+  git-stree = callPackage ./git-stree { };
+
+  git-subrepo = callPackage ./git-subrepo { };
+
+  git-subset = callPackage ./git-subset {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git-subtrac = callPackage ./git-subtrac { };
+
+  git-sync = callPackage ./git-sync { };
+
+  git-test = callPackage ./git-test { };
+
+  git-trim = callPackage ./git-trim {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git-workspace = callPackage ./git-workspace {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git2cl = callPackage ./git2cl { };
+
+  # The full-featured Git.
+  gitFull = gitBase.override {
+    svnSupport = true;
+    guiSupport = true;
+    sendEmailSupport = true;
+    withLibsecret = !stdenv.isDarwin;
   };
 
   # Git with SVN support, but without GUI.
-  gitSVN = lowPrio (appendToName "with-svn" (git.override {
+  gitSVN = lowPrio (appendToName "with-svn" (gitBase.override {
     svnSupport = true;
   }));
 
-  # The full-featured Git.
-  gitFull = appendToName "full" (git.override {
-    svnSupport = true;
-    guiSupport = true;
-    sendEmailSupport = !stdenv.isDarwin;
-  });
+  gita = python3Packages.callPackage ./gita {};
 
-  gitAnnex = lib.makeOverridable (import ./git-annex) {
-    inherit stdenv fetchurl perl coreutils git libuuid rsync findutils curl ikiwiki which openssh;
-    inherit (haskellPackages) ghc bloomfilter dataenc editDistance hinotify hS3 hslogger HTTP
-      blazeBuilder blazeHtml caseInsensitive IfElse json liftedBase MissingH monadControl mtl
-      network pcreLight SHA stm utf8String networkInfo dbus clientsession cryptoApi dataDefault
-      extensibleExceptions filepath hamlet httpTypes networkMulticast text time transformers
-      transformersBase wai waiLogger warp yesod yesodDefault yesodStatic testpack QuickCheck
-      SafeSemaphore networkPprotocolXmpp async dns DAV;
+  gitbatch = callPackage ./gitbatch { };
+
+  gitflow = callPackage ./gitflow { };
+
+  gitin = callPackage ./gitin { };
+
+  gitstatus = callPackage ./gitstatus { };
+
+  gitui = callPackage ./gitui {
+    inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
 
-  qgit = import ./qgit {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libXext libX11;
-    qt = qt4;
+  glab = callPackage ./glab { };
+
+  grv = callPackage ./grv { };
+
+  hub = callPackage ./hub { };
+
+  lab = callPackage ./lab { };
+
+  lefthook = callPackage ./lefthook {
+    # Please use empty attrset once upstream bugs have been fixed
+    # https://github.com/Arkweid/lefthook/issues/151
+    buildGoModule = buildGo114Module;
   };
 
-  qgitGit = import ./qgit/qgit-git.nix {
-    inherit fetchurl sourceFromHead stdenv;
-    inherit (xlibs) libXext libX11;
-    qt = qt4;
-  };
+  legit = callPackage ./legit { };
 
-  stgit = import ./stgit {
-    inherit fetchurl stdenv python git;
-  };
+  pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 
-  topGit = lib.makeOverridable (import ./topgit) {
-    inherit stdenv fetchurl unzip;
-  };
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
-  tig = import ./tig {
-    inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl;
-  };
+  qgit = qt5.callPackage ./qgit { };
 
-  hub = import ./hub {
-    inherit (rubyLibs) rake;
-    inherit stdenv fetchgit groff makeWrapper;
-  };
+  rs-git-fsmonitor = callPackage ./rs-git-fsmonitor { };
 
-  gitFastExport = import ./fast-export {
-    inherit fetchgit stdenv mercurial coreutils git makeWrapper subversion;
-  };
+  scmpuff = callPackage ./scmpuff { };
 
-  git2cl = import ./git2cl {
-    inherit fetchgit stdenv perl;
-  };
+  stgit = callPackage ./stgit { };
 
-  svn2git = import ./svn2git {
-    inherit stdenv fetchgit ruby makeWrapper;
+  subgit = callPackage ./subgit { };
+
+  svn-all-fast-export = libsForQt5.callPackage ./svn-all-fast-export { };
+
+  svn2git = callPackage ./svn2git {
     git = gitSVN;
   };
 
-  svn2git_kde = callPackage ./svn2git-kde { };
+  thicket = callPackage ./thicket { };
 
-  gitSubtree = import ./git-subtree {
-    inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
-  };
+  tig = callPackage ./tig { };
 
-  darcsToGit = callPackage ./darcs-to-git { };
-}
+  top-git = callPackage ./topgit { };
+
+  transcrypt = callPackage ./transcrypt { };
+
+  git-vanity-hash = callPackage ./git-vanity-hash { };
+
+  ydiff = pkgs.python3.pkgs.toPythonApplication pkgs.python3.pkgs.ydiff;
+
+} // lib.optionalAttrs (config.allowAliases or true) (with self; {
+  # aliases
+  darcsToGit = darcs-to-git;
+  gitAnnex = git-annex;
+  gitBrunch = git-brunch;
+  gitFastExport = git-fast-export;
+  gitRemoteGcrypt = git-remote-gcrypt;
+  svn_all_fast_export = svn-all-fast-export;
+  topGit = top-git;
+});
+in
+  self

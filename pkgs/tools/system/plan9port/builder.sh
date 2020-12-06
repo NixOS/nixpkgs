@@ -1,49 +1,71 @@
 source $stdenv/setup
 
-tar xvfz $src
+export PLAN9=$out/plan9
+export PLAN9_TARGET=$PLAN9
 
-cd plan9
+plan9portLinkFlags()
+{
+    eval set -- "$NIX_LDFLAGS"
+    local flag
+    for flag in "$@"; do
+        printf ' -Wl,%s' "$flag"
+    done
+}
 
-export PLAN9=`pwd`
-export X11=/tmp
+configurePhase()
+{
+    (
+        echo CC9=\"$(command -v $CC)\"
+        echo CFLAGS=\"$NIX_CFLAGS_COMPILE\"
+        echo LDFLAGS=\"$(plan9portLinkFlags)\"
+        echo X11=\"${libXt_dev}/include\"
+        case "$system" in
+          x86_64-*) echo OBJTYPE=x86_64;;
+          i?86-*)   echo OBJTYPE=386;;
+          *power*)  echo OBJTYPE=power;;
+          *sparc*)  echo OBJTYPE=sparc;;
+        esac
+        if [[ $system =~ .*linux.* ]]; then
+          echo SYSVERSION=2.6.x
+        fi
+    ) >config
 
-# Patch for the installation
-sed -i -e 's@`which echo`@echo@' lib/moveplan9.sh
+    for f in `grep -l -r /usr/local/plan9`; do
+        sed "s,/usr/local/plan9,${PLAN9},g" -i $f
+    done
+}
 
-OLDPATH=$PATH
-PATH=`pwd`/bin:$PATH
+buildPhase()
+{
+    mkdir -p $PLAN9
 
-gcc lib/linux-isnptl.c -lpthread
-set +e 
-if ./a.out > /dev/null
-then
-  echo "SYSVERSION=2.6.x" >config
-else
-  echo "SYSVERSION=2.4.x" >config
-fi
-rm -f ./a.out
-set -e
+    # Copy sources, some necessary bin scripts
+    cp -R * $PLAN9
 
-pushd src
+    local originalPath="$PATH"
+    export PATH="$PLAN9/bin:$PATH"
+    export NPROC=$NIX_BUILD_CORES
+    pushd src
+    ../dist/buildmk
+    mk clean
+    mk libs-nuke
+    mk all
+    mk -k install
+    if [[ -f $PLAN9/bin/quote1 ]]; then
+        cp $PLAN9/bin/quote1 $PLAN9/bin/'"'
+        cp $PLAN9/bin/quote2 $PLAN9/bin/'""'
+    fi
+    popd
+    export PATH="$originalPath"
+}
 
-# Build mk
-../dist/buildmk 2>&1 | sed 's/^[+] //'
+installPhase()
+{
+    # Copy the `9' utility. This way you can use
+    # $ 9 awk
+    # to use the plan 9 awk
+    mkdir $out/bin
+    ln -s $PLAN9/bin/9 $out/bin
+}
 
-# Build everything
-
-mk clean
-mk libs-nuke
-mk all || exit 1
-mk install || exit 1
-
-popd
-
-# Installation
-export PLAN9=$out
-mkdir -p $PLAN9
-GLOBIGNORE='src:.*'
-cp -R * $PLAN9
-GLOBIGNORE=
-
-cd $PLAN9
-sh lib/moveplan9.sh `pwd`
+genericBuild

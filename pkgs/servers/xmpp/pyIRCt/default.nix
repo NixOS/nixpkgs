@@ -1,38 +1,41 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
 
-  version = a.lib.attrByPath ["version"] "0.4" a; 
-  buildInputs = with a; [
-    xmpppy pythonIRClib python makeWrapper
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  pname = "pyIRCt";
+  version = "0.4";
+
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/sourceforge/xmpppy/irc-transport-${version}.tar.gz";
+    url = "mirror://sourceforge/xmpppy/irc-transport-${version}.tar.gz";
     sha256 = "0gbc0dvj1p3088b6x315yjrlwnc5vvzp0var36wlf9z60ghvk8yb";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ pythonPackages.wrapPython ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/irc.py" a.pythonWrapperArguments)];
-  deploy = a.fullDepEntry (''
-    mkdir -p $out/bin $out/share/${name}
-    sed -e 's@/usr/bin/@${a.python}/bin/@' -i irc.py
+  pythonPath = [
+    xmpppy pythonIRClib
+  ];
+
+  # phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/irc.py" a.pythonWrapperArguments)];
+
+  installPhase = ''
+    mkdir -p $out/bin $out/share/${pname}-${version}
+    sed -e 's@/usr/bin/@${python}/bin/@' -i irc.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.pyIRCt.xml"]' -i config.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-irc-transport.xml"]' -i config.py
     sed -e '/configFiles/iimport os' -i config.py
-    cp * $out/share/$name
-    echo "#! /bin/sh" > $out/bin/pyIRCt
-    echo "cd $out/share/${name}" >> $out/bin/pyIRCt
-    echo "./irc.py \"$@\"" >> $out/bin/pyIRCt
-    chmod a+rx  $out/bin/pyIRCt $out/share/${name}/irc.py
-  '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
-      
-  name = "pyIRCt-" + version;
-  meta = {
+    cp * $out/share/${pname}-${version}
+    cat > $out/bin/pyIRCt <<EOF
+      #!${runtimeShell}
+      cd $out/share/${pname}-${version}
+      ./irc.py \"$@\"
+    EOF
+    chmod a+rx  $out/bin/pyIRCt $out/share/${pname}-${version}/irc.py
+    wrapPythonPrograms
+  '';
+
+  meta = with stdenv.lib; {
     description = "IRC transport module for XMPP";
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

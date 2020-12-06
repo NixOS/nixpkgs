@@ -1,27 +1,54 @@
-{ stdenv, fetchurl, SDL, ffmpeg, libdv, libsamplerate, libvorbis
-, libxml2 , pkgconfig, qt4, sox }:
+{ stdenv, fetchFromGitHub, makeWrapper
+, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate, libexif
+, libvorbis, libxml2, movit, pkgconfig, sox, fftw, opencv4, SDL2
+, gtk2, genericUpdater, common-updater-scripts, libebur128
+}:
 
 stdenv.mkDerivation rec {
-  name = "mlt-${version}";
-  version = "0.8.0";
+  pname = "mlt";
+  version = "6.22.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/mlt/${name}.tar.gz";
-    sha256 = "1pf61imb5xzgzf65g54kybjr67235rxi20691023mcv34qwppl3v";
+  src = fetchFromGitHub {
+    owner = "mltframework";
+    repo = "mlt";
+    rev = "v${version}";
+    sha256 = "0jxv848ykw0csbnayrd710ylw46m0picfv7rpzsxz1vh4jzs395k";
   };
 
-  buildInputs = 
-    [ SDL ffmpeg libdv libsamplerate libvorbis libxml2 pkgconfig qt4
-      sox
-    ];
+  buildInputs = [
+    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
+    makeWrapper movit pkgconfig sox libexif gtk2 fftw libebur128
+    opencv4 SDL2
+  ];
 
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
-  configureFlags = [ "--enable-gpl" "--avformat-swscale" ];
+  configureFlags = [
+    "--avformat-swscale" "--enable-gpl" "--enable-gpl3" "--enable-opengl"
+  ];
 
-  meta = {
-    homepage = http://www.mltframework.org/;
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/melt --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
+
+    # Remove an unnecessary reference to movit.dev.
+    s=${movit.dev}/include
+    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
+    sed -i $out/lib/mlt/libmltopengl.so -e "s|$s|$t|g"
+  '';
+
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    rev-prefix = "v";
+  };
+
+  meta = with stdenv.lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    license = "GPLv2+";
+    homepage = "https://www.mltframework.org";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ tohl peti ];
+    platforms = platforms.linux;
   };
 }

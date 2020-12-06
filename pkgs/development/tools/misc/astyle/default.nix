@@ -1,27 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl, cmake }:
 
-let
-  name = "astyle";
-  version = "2.02.1";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  pname = "astyle";
+  version = "3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}_${version}_linux.tar.gz";
-    sha256 = "0bece9a32887e51f42c57617cf7c4f9b63d0a386749fe3a094f5525b639ef953";
+    url = "mirror://sourceforge/${pname}/${pname}_${version}_linux.tar.gz";
+    sha256 = "1ms54wcs7hg1bsywqwf2lhdfizgbk7qxc9ghasxk8i99jvwlrk6b";
   };
 
-  sourceRoot = "astyle/build/gcc";
+  # lots of hardcoded references to /usr
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace ' /usr/' " $out/"
+  '';
 
-  installFlags = "INSTALL=install prefix=$$out";
+  nativeBuildInputs = [ cmake ];
 
-  meta = {
-    homepage = "http://astyle.sourceforge.net/";
-    description = "source code reformatter";
-    license = "LGPL";
-
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+  meta = with lib; {
+    description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
+    homepage = "https://astyle.sourceforge.net/";
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
   };
 }

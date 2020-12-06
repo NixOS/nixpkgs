@@ -1,12 +1,16 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, autoreconfHook}:
 stdenv.mkDerivation {
-  name = "pwgen-2.05";
+  name = "pwgen-2.08";
 
   src = fetchurl {
-    url = ftp://ftp.chg.ru/pub/sourceforge/p/pw/pwgen/pwgen-2.05.tar.gz;
-    sha256 = "1afxbkdl9b81760pyb972k18dmidrciy3vzcnspp3jg0aa316yn8";
+    url = "https://github.com/tytso/pwgen/archive/v2.08.tar.gz";
+    sha256 = "8d6e94f28655e61d6126290e3eafad4d17d7fba0d0d354239522a740a270bb2f";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   meta = {
-	description = "Small, GPL'ed password generator which creates passwords which can be easily memorized by a human.";
+    description = "Password generator which creates passwords which can be easily memorized by a human";
+    platforms = stdenv.lib.platforms.all;
   };
 }

@@ -1,47 +1,29 @@
-x@{builderDefsPackage
-  , libX11, xproto
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, libX11, xorgproto }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="stalonetray";
-    version="0.8.0";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/${baseName}/${name}.tar.bz2";
-    hash="0ccllmpsmilns6xxl174vgcjf8kfakcrhg3psc4cg0yynqbi2mka";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "stalonetray";
+  version = "0.8.3";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/stalonetray/${pname}-${version}.tar.bz2";
+    sha256 = "0k7xnpdb6dvx25d67v0crlr32cdnzykdsi9j889njiididc8lm1n";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ libX11 xorgproto ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
+  hardeningDisable = [ "format" ];
+
+  meta = with stdenv.lib; {
     description = "Stand alone tray";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = "http://stalonetray.sourceforge.net";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
   };
+
   passthru = {
     updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/stalonetray/files/";
+      downloadPage = "https://sourceforge.net/projects/stalonetray/files/";
     };
   };
-}) x
-
+}

@@ -1,22 +1,36 @@
-{stdenv, fetchurl, readline, bison, libX11, libICE, libXaw, libXext}:
+{ stdenv
+, fetchurl
+, bison
+, flex
+, readline
+, libX11
+, libICE
+, libXaw
+, libXmu
+, libXext
+, libXt
+, fftw
+}:
 
-stdenv.mkDerivation {
-  name = "ng-spice-rework-24";
+stdenv.mkDerivation rec {
+  pname = "ngspice";
+  version = "33";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-24.tar.gz";
-    sha256 = "0rgh75hbqrsljz767whbj65wi6369yc286v0qk8jxnv2da7p9ll6";
+    url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
+    sha256 = "1wa1hmpn13spmxqgbb1m7vgy32mwvjqwrxhymzll8z65q5nbd7dr";
   };
 
-  buildInputs = [ readline libX11 bison libICE libXaw libXext ];
+  nativeBuildInputs = [ flex bison ];
+  buildInputs = [ readline libX11 libICE libXaw libXmu libXext libXt fftw ];
 
-  configureFlags = [ "--enable-x" "--with-x" "--with-readline" ];
+  configureFlags = [ "--enable-x" "--with-x" "--with-readline" "--enable-xspice" "--enable-cider" ];
 
-  meta = {
-    description = "The Next Generation Spice (Electronic Circuit Simulator).";
+  meta = with stdenv.lib; {
+    description = "The Next Generation Spice (Electronic Circuit Simulator)";
     homepage = "http://ngspice.sourceforge.net";
-    license = ["BSD" "GPLv2"];
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = with licenses; [ "BSD" gpl2 ];
+    maintainers = with maintainers; [ bgamari rongcuid ];
+    platforms = platforms.linux;
   };
 }

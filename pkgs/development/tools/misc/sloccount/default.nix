@@ -1,13 +1,14 @@
-{ fetchurl, stdenv, perl }:
+{ fetchurl, stdenv, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "sloccount-2.26";
 
   src = fetchurl {
-    url = "http://www.dwheeler.com/sloccount/${name}.tar.gz";
+    url = "https://www.dwheeler.com/sloccount/${name}.tar.gz";
     sha256 = "0ayiwfjdh1946asah861ah9269s5xkc8p5fv1wnxs9znyaxs4zzs";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
 
   # Make sure the Flex-generated files are newer than the `.l' files, so that
@@ -29,9 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configurePhase = ''
-    sed -i "makefile" -"es|PREFIX[[:blank:]]*=.*$|PREFIX = $out|g"
-  '';
+  makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
 
   doCheck = true;
   checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';
@@ -42,8 +41,15 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/doc"
   '';
 
+  postInstall = ''
+    for w in "$out/bin"/*; do
+      isScript "$w" || continue
+      wrapProgram "$w" --prefix PATH : "$out/bin"
+    done
+    '';
+
   meta = {
-    description = "SLOCCount, a set of tools for counting physical Source Lines of Code (SLOC)";
+    description = "Set of tools for counting physical Source Lines of Code (SLOC)";
 
     longDescription = ''
       This is the home page of "SLOCCount", a set of tools for
@@ -56,11 +62,11 @@ stdenv.mkDerivation rec {
       the Perl CPAN library using this tool suite.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://www.dwheeler.com/sloccount/;
+    homepage = "https://www.dwheeler.com/sloccount/";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

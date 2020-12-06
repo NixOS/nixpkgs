@@ -1,26 +1,34 @@
-{stdenv, fetchgit, qt4, cgal, boost, gmp, mpfr, flex, bison, dxflib}: 
+{ stdenv, fetchFromGitHub, fetchurl, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline
+, qtbase, qmake, libGLU
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0";
-  name = "rapcad-${version}";
+  version = "0.9.8";
+  pname = "rapcad";
 
-  src = fetchgit {
-    url = "git://git.rapcad.org/rapcad";
-    rev = "refs/tags/v${version}";
-    sha256 = "37c7107dc4fcf8942a4ad35377c4e42e6aedfa35296e5fcf8d84882ae35087c7";
+  src = fetchFromGitHub {
+    owner = "gilesbathgate";
+    repo = "rapcad";
+    rev = "v${version}";
+    sha256 = "0a0sqf6h227zalh0jrz6jpm8iwji7q3i31plqk76i4qm9vsgrhir";
   };
-  
-  buildInputs = [qt4 cgal boost gmp mpfr flex bison dxflib];
 
-  configurePhase = ''
-    qmake;
-    sed -e "s@/usr/@$out/@g" -i $(find . -name Makefile)
-  '';
+  patches = [
+    (fetchurl {
+      url = "https://github.com/GilesBathgate/RapCAD/commit/278a8d6c7b8fe08f867002528bbab4a6319a7bb6.patch";
+      sha256 = "1vvkyf0wg79zdzs5zlggfrr1lrp1x75dglzl0mspnycwldsdwznj";
+      name = "disable-QVector-qHash.patch";
+    })
+  ];
 
-  meta = {
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = stdenv.lib.platforms.linux;
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase cgal boost gmp mpfr flex bison dxflib readline libGLU ];
+
+  meta = with stdenv.lib; {
+    license = licenses.gpl3;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     description = ''Constructive solid geometry package'';
+    broken = true; # 2018-04-11
   };
 }

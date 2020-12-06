@@ -7,17 +7,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/${name}.tar.gz";
-    md5 = "f4824d0a75bdeeef1e45cc88de7bb58a";
+    sha256 = "1i9qly13bwwmgj68vma766hgvsd1m75236haqsp9zgh5znlmkm3z";
   };
 
-  meta = {
-    homepage = http://musicbrainz.org/doc/libmusicbrainz;
+  meta = with stdenv.lib; {
+    homepage = "http://musicbrainz.org/doc/libmusicbrainz";
     description = "MusicBrainz Client Library (3.x version)";
     longDescription = ''
       The libmusicbrainz (also known as mb_client or MusicBrainz Client
       Library) is a development library geared towards developers who wish to
       add MusicBrainz lookup capabilities to their applications.'';
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.lgpl21;
   };
 }

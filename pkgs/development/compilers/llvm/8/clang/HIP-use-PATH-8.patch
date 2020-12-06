@@ -1,0 +1,80 @@
+From d9f1b7d7571b252e0ba2359ae6cfa93a9903c0e7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Holger=20W=C3=BCnsche?= <holger.o.wuensche@t-online.de>
+Date: Tue, 21 Jan 2020 19:49:44 +0100
+Subject: [PATCH] [HIP] use GetProgramPath for executable discovery
+
+This change replaces the manual building of executable paths
+using llvm::sys::path::append with GetProgramPath.
+This enables adding other paths in case executables reside
+in different directories and makes the code easier to read.
+
+Differential Revision: https://reviews.llvm.org/D72903
+---
+ clang/lib/Driver/ToolChains/HIP.cpp | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/lib/Driver/ToolChains/HIP.cpp b/lang/lib/Driver/ToolChains/HIP.cpp
+index 868765cf88e..31f2d68ec6c 100644
+--- a/lib/Driver/ToolChains/HIP.cpp
++++ b/lib/Driver/ToolChains/HIP.cpp
+@@ -104,9 +104,8 @@ const char *AMDGCN::Linker::constructLLVMLinkCommand(
+   const char *OutputFileName =
+       C.addTempFile(C.getArgs().MakeArgString(TmpName));
+   CmdArgs.push_back(OutputFileName);
+-  SmallString<128> ExecPath(C.getDriver().Dir);
+-  llvm::sys::path::append(ExecPath, "llvm-link");
+-  const char *Exec = Args.MakeArgString(ExecPath);
++  const char *Exec =
++      Args.MakeArgString(getToolChain().GetProgramPath("llvm-link"));
+   C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs, Inputs));
+   return OutputFileName;
+ }
+@@ -147,9 +146,8 @@ const char *AMDGCN::Linker::constructOptCommand(
+   const char *OutputFileName =
+       C.addTempFile(C.getArgs().MakeArgString(TmpFileName));
+   OptArgs.push_back(OutputFileName);
+-  SmallString<128> OptPath(C.getDriver().Dir);
+-  llvm::sys::path::append(OptPath, "opt");
+-  const char *OptExec = Args.MakeArgString(OptPath);
++  const char *OptExec =
++      Args.MakeArgString(getToolChain().GetProgramPath("opt"));
+   C.addCommand(llvm::make_unique<Command>(JA, *this, OptExec, OptArgs, Inputs));
+   return OutputFileName;
+ }
+@@ -167,9 +165,7 @@ const char *AMDGCN::Linker::constructLlcCommand(
+   const char *LlcOutputFile =
+       C.addTempFile(C.getArgs().MakeArgString(LlcOutputFileName));
+   LlcArgs.push_back(LlcOutputFile);
+-  SmallString<128> LlcPath(C.getDriver().Dir);
+-  llvm::sys::path::append(LlcPath, "llc");
+-  const char *Llc = Args.MakeArgString(LlcPath);
++  const char *Llc = Args.MakeArgString(getToolChain().GetProgramPath("llc"));
+   C.addCommand(llvm::make_unique<Command>(JA, *this, Llc, LlcArgs, Inputs));
+   return LlcOutputFile;
+ }
+@@ -184,9 +180,7 @@ void AMDGCN::Linker::constructLldCommand(Compilation &C, const JobAction &JA,
+   ArgStringList LldArgs{"-flavor",    "gnu", "--no-undefined",
+                         "-shared",    "-o",  Output.getFilename(),
+                         InputFileName};
+-  SmallString<128> LldPath(C.getDriver().Dir);
+-  llvm::sys::path::append(LldPath, "lld");
+-  const char *Lld = Args.MakeArgString(LldPath);
++  const char *Lld = Args.MakeArgString(getToolChain().GetProgramPath("lld"));
+   C.addCommand(llvm::make_unique<Command>(JA, *this, Lld, LldArgs, Inputs));
+ }
+ 
+@@ -218,9 +212,8 @@ void AMDGCN::constructHIPFatbinCommand(Compilation &C, const JobAction &JA,
+       Args.MakeArgString(std::string("-outputs=").append(OutputFileName));
+   BundlerArgs.push_back(BundlerOutputArg);
+ 
+-  SmallString<128> BundlerPath(C.getDriver().Dir);
+-  llvm::sys::path::append(BundlerPath, "clang-offload-bundler");
+-  const char *Bundler = Args.MakeArgString(BundlerPath);
++  const char *Bundler = Args.MakeArgString(
++          T.getToolChain().GetProgramPath("clang-offload-bundler"));
+   C.addCommand(llvm::make_unique<Command>(JA, T, Bundler, BundlerArgs, Inputs));
+ }
+ 
+-- 
+2.23.1
+

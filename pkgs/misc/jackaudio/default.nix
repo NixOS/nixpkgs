@@ -1,45 +1,72 @@
-{ stdenv, fetchurl, alsaLib, dbus, expat, libsamplerate
-, libsndfile, makeWrapper, pkgconfig, python, pythonDBus
-, firewireSupport ? false, ffado ? null }:
+{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, makeWrapper
+, bash, libsamplerate, libsndfile, readline, eigen, celt
+, wafHook
+# Darwin Dependencies
+, aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
-assert firewireSupport -> ffado != null;
+# Optional Dependencies
+, dbus ? null, libffado ? null, alsaLib ? null
+, libopus ? null
 
+# Extra options
+, prefix ? ""
+}:
+
+with stdenv.lib;
+let
+  inherit (python3Packages) python dbus-python;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+
+  libOnly = prefix == "lib";
+
+  optDbus = if stdenv.isDarwin then null else shouldUsePkg dbus;
+  optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
+  optLibffado = if libOnly then null else shouldUsePkg libffado;
+  optAlsaLib = if libOnly then null else shouldUsePkg alsaLib;
+  optLibopus = shouldUsePkg libopus;
+in
 stdenv.mkDerivation rec {
-  name = "jackdbus-${version}";
-  version = "1.9.8";
+  name = "${prefix}jack2-${version}";
+  version = "1.9.16";
 
-  src = fetchurl {
-    urls = [
-      "http://pkgs.fedoraproject.org/lookaside/pkgs/jack-audio-connection-kit/jack-1.9.8.tgz/1dd2ff054cab79dfc11d134756f27165/jack-1.9.8.tgz"
-      "http://www.grame.fr/~letz/jack-1.9.8.tgz"
-    ];
-    sha256 = "0788092zxrivcfnfg15brpjkf14x8ma8cwjz4k0b9xdxajn2wwac";
+  src = fetchFromGitHub {
+    owner = "jackaudio";
+    repo = "jack2";
+    rev = "v${version}";
+    sha256 = "0pzgrjy5fi2nif2j442fs3j2bbshxpnmq9kzwcqz54wx1w8fzdfr";
   };
 
-  buildInputs =
-    [ alsaLib dbus expat libsamplerate libsndfile makeWrapper
-      pkgconfig python pythonDBus
-    ] ++ (stdenv.lib.optional firewireSupport ffado);
+  nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
+  buildInputs = [ libsamplerate libsndfile readline eigen celt
+    optDbus optPythonDBus optLibffado optAlsaLib optLibopus
+  ] ++ optionals stdenv.isDarwin [
+    aften AudioUnit CoreAudio Accelerate libobjc
+  ];
 
-  patches = ./ffado_setbuffsize-jack2.patch;
-
-  configurePhase = ''
-    cd jack-1.9.8
-    python waf configure --prefix=$out --dbus --alsa ${if firewireSupport then "--firewire" else ""}
+  prePatch = ''
+    substituteInPlace svnversion_regenerate.sh \
+        --replace /bin/bash ${bash}/bin/bash
   '';
 
-  buildPhase = "python waf build";
+  wafConfigureFlags = [
+    "--classic"
+    "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
+  ] ++ optional (optDbus != null) "--dbus"
+    ++ optional (optLibffado != null) "--firewire"
+    ++ optional (optAlsaLib != null) "--alsa";
 
-  installPhase = ''
-    python waf install
+  postInstall = (if libOnly then ''
+    rm -rf $out/{bin,share}
+    rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
+  '' else ''
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
-  '';
+  '');
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";
-    homepage = "http://jackaudio.org";
+    homepage = "https://jackaudio.org";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

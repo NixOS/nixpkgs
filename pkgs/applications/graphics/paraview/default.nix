@@ -1,47 +1,88 @@
-{ fetchurl, stdenv, cmake, qt4
-, hdf5
-, mpich2
-, python
-, libxml2
-, mesa, libXt
-}:
+{ boost, cmake, fetchFromGitHub, ffmpeg, qtbase, qtx11extras,
+  qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper,
+  mkDerivation, ninja, openmpi, python3, stdenv, tbb, libGLU, libGL }:
 
-stdenv.mkDerivation rec {
-  name = "paraview-3.14.0";
-  src = fetchurl {
-    url = "http://www.paraview.org/files/v3.14/ParaView-3.14.0-Source.tar.gz";
-    sha256 = "168v8zk64pxcd392kb4zqnkbw540d52bx6fs35aqz88i5jc0x9xv";
+mkDerivation rec {
+  pname = "paraview";
+  version = "5.8.0";
+
+  src = fetchFromGitHub {
+    owner = "Kitware";
+    repo = "ParaView";
+    rev = "v${version}";
+    sha256 = "1mka6wwg9mbkqi3phs29mvxq6qbc44sspbm4awwamqhilh4grhrj";
+    fetchSubmodules = true;
   };
 
-  # [  5%] Generating vtkGLSLShaderLibrary.h
-  # ../../../bin/ProcessShader: error while loading shared libraries: libvtksys.so.pv3.10: cannot open shared object file: No such file or directory
+  # Avoid error: format not a string literal and
+  # no format arguments [-Werror=format-security]
   preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/paraview-3.10 -rpath ../../../bin -rpath ../../bin"
+    substituteInPlace VTK/Common/Core/vtkLogger.h \
+      --replace 'vtkLogScopeF(verbosity_name, __func__)' 'vtkLogScopeF(verbosity_name, "%s", __func__)'
+
+    substituteInPlace VTK/Common/Core/vtkLogger.h \
+      --replace 'vtkVLogScopeF(level, __func__)' 'vtkVLogScopeF(level, "%s", __func__)'
   '';
+
+  # Find the Qt platform plugin "minimal"
+  patchPhase = ''
+    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+  '';
+
+  # During build, binaries are called that rely on freshly built
+  # libraries.  These reside in build/lib, and are not found by
+  # default.
+  preBuild = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
+  '';
+
   cmakeFlags = [
-#    "-DPARAVIEW_USE_MPI:BOOL=ON"
-    "-DPARAVIEW_USE_SYSTEM_HDF5:BOOL=ON"
-    "-DVTK_USE_SYSTEM_LIBXML2:BOOL=ON"
-    "-DPARAVIEW_ENABLE_PYTHON:BOOL=ON"
-#  use -DPARAVIEW_INSTALL_THIRD_PARTY_LIBRARIES:BOOL=OFF \ to fix make install error: http://www.cmake.org/pipermail/paraview/2011-February/020268.html
-    "-DPARAVIEW_INSTALL_THIRD_PARTY_LIBRARIES:BOOL=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    "-DVTK_USE_RPATH:BOOL=ON"
-    "-DPARAVIEW_INSTALL_DEVELOPMENT=ON"
-#    "-DPYTHON_INCLUDE_DIR=${python}/include"
-#    "-DPYTHON_LIBRARY="
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DPARAVIEW_ENABLE_FFMPEG=ON"
+    "-DPARAVIEW_ENABLE_GDAL=ON"
+    "-DPARAVIEW_ENABLE_MOTIONFX=ON"
+    "-DPARAVIEW_ENABLE_VISITBRIDGE=ON"
+    "-DPARAVIEW_ENABLE_XDMF3=ON"
+    "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
+    "-DPARAVIEW_USE_MPI=ON"
+    "-DPARAVIEW_USE_PYTHON=ON"
+    "-DVTK_SMP_IMPLEMENTATION_TYPE=TBB"
+    "-DVTKm_ENABLE_MPI=ON"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DOpenGL_GL_PREFERENCE=GLVND"
+    "-GNinja"
   ];
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    ninja
+    gfortran
+  ];
 
-  buildInputs = [ cmake qt4 hdf5 mpich2 python libxml2 mesa libXt ];
+  buildInputs = [
+    libGLU libGL
+    libXt
+    openmpi
+    (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
+    tbb
+    boost
+    ffmpeg
+    gdal
+    qtbase
+    qtx11extras
+    qttools
+    qtxmlpatterns
+    qtsvg
+  ];
 
-  meta = {
-    homepage = "http://www.paraview.org/";
+  meta = with stdenv.lib; {
+    homepage = "https://www.paraview.org/";
     description = "3D Data analysis and visualization application";
-    license = "free";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.free;
+    maintainers = with maintainers; [ guibert ];
+    platforms = platforms.linux;
   };
 }
-

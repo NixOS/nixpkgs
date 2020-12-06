@@ -4,13 +4,15 @@ stdenv.mkDerivation {
   name = "dlx-2012.07.08";
 
   src = fetchurl {
-    url = "http://www.davidviner.com/zip/dlx/dlx.zip";
+    url = "https://www.davidviner.com/zip/dlx/dlx.zip";
     sha256 = "0q5hildq2xcig7yrqi26n7fqlanyssjirm7swy2a9icfxpppfpkn";
   };
 
   buildInputs = [ unzip ];
 
-  makeFlags = "LINK=gcc CFLAGS=-O2";
+  makeFlags = [ "LINK=gcc" "CFLAGS=-O2" ];
+
+  hardeningDisable = [ "format" ];
 
   installPhase = ''
     mkdir -p $out/include/dlx $out/share/dlx/{examples,doc} $out/bin
@@ -23,6 +25,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
-    license = "GPL-2";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

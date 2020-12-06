@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, which, ed }:
+{ fetchurl, stdenv, guile, which, ed, libtool }:
 
 stdenv.mkDerivation rec {
   name = "mcron-1.0.6";
@@ -10,12 +10,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install-vixie-programs.patch ];
 
-  buildInputs = [ guile which ed ];
+  # don't attempt to chmod +s files in the nix store
+  postPatch = ''
+    substituteInPlace makefile.in --replace "rwxs" "rwx"
+  '';
+
+  buildInputs = [ guile which ed libtool ];
 
   doCheck = true;
 
   meta = {
-    description = "GNU mcron, a flexible implementation of `cron' in Guile";
+    description = "Flexible implementation of `cron' in Guile";
 
     longDescription = ''
       The GNU package mcron (Mellor's cron) is a 100% compatible
@@ -25,8 +30,9 @@ stdenv.mkDerivation rec {
       when jobs should be run.  Mcron was written by Dale Mellor.
     '';
 
-    homepage = http://www.gnu.org/software/mcron/;
+    homepage = "https://www.gnu.org/software/mcron/";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

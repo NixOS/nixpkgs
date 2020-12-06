@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, gtk, libdv, libjpeg, libpng, libX11, pkgconfig, SDL, SDL_gfx }:
+{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkgconfig, SDL, SDL_gfx
+, withMinimal ? true
+}:
 
 # TODO:
 # - make dependencies optional
@@ -6,10 +8,34 @@
 # - libXxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
 
 stdenv.mkDerivation rec {
-  name = "mjpegtools-2.0.0";
+  name = "mjpegtools-2.1.0";
+
   src = fetchurl {
     url = "mirror://sourceforge/mjpeg/${name}.tar.gz";
-    sha256 = "bf3541593e71602f7b440c2e7d81b433f53d0511e74642f35bea9b3feded7a97";
+    sha256 = "01y4xpfdvd4zgv6fmcjny9mr1gbfd4y2i4adp657ydw6fqyi8kw6";
   };
-  buildInputs = [ gtk libdv libjpeg libpng libX11 pkgconfig SDL SDL_gfx ];
+
+  hardeningDisable = [ "format" ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libdv libjpeg libpng ]
+              ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
+
+  NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${SDL.dev}/include/SDL";
+
+  postPatch = ''
+    sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure
+  '';
+
+  enableParallelBuilding = true;
+
+  outputs = [ "out" "lib" ];
+
+  meta = with stdenv.lib; {
+    description = "A suite of programs for processing MPEG or MJPEG video";
+    homepage = "http://mjpeg.sourceforge.net/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ abbradar ];
+  };
 }

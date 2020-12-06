@@ -1,25 +1,25 @@
-{ fetchurl, stdenv, ghostscript }:
+{ fetchurl, stdenv, pkgconfig, ghostscript, cairo }:
 
 stdenv.mkDerivation rec {
-  name = "libspectre-0.2.6";
+  name = "libspectre-0.2.7";
 
   src = fetchurl {
-    url = "http://libspectre.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1lqdmi7vx497pbigpp77064a4463lmihzh44898l101c69i7qqrg";
+    url = "https://libspectre.freedesktop.org/releases/${name}.tar.gz";
+    sha256 = "1v63lqc6bhhxwkpa43qmz8phqs8ci4dhzizyy16d3vkb20m846z8";
   };
+
+  patches = [ ./libspectre-0.2.7-gs918.patch ];
 
   buildInputs = [
     # Need `libgs.so'.
-    ghostscript
+    pkgconfig ghostscript cairo /*for tests*/
   ];
-
-  patches = [ ./0001-Fix-a-crash-with-documents-containing-an-invalid-Pag.patch ./0002-Allocate-at-least-1-page-in-doc-pages.patch ];
 
   doCheck = true;
 
   meta = {
-    homepage = http://libspectre.freedesktop.org/;
-    description = "libspectre, a PostScript rendering library";
+    homepage = "http://libspectre.freedesktop.org/";
+    description = "PostScript rendering library";
 
     longDescription = ''
       libspectre is a small library for rendering Postscript
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       handling and rendering Postscript documents.
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,57 +1,51 @@
-{ stdenv, fetchgit, pkgconfig, libusb1, udev
-, enableGUI ? true, qt4 ? null
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
+, enableGUI ? false, qtbase ? null
 }:
 
-stdenv.mkDerivation {
-  name = "heimdall-1.3.0";
+let version = "1.4.2"; in
 
-  src = fetchgit {
-    url = git://github.com/Benjamin-Dobell/Heimdall.git;
-    rev = "ed9b08e5d9e3db60d52bccf6cb6919fb4bd47602";
-    sha256 = "e65f18299a05699595548cb27393a01b4e1dbbced82d4add8d0d55ef6514a691";
+mkDerivation {
+  name = "heimdall-${if enableGUI then "gui-" else ""}${version}";
+
+  src = fetchFromGitHub {
+    owner  = "Benjamin-Dobell";
+    repo   = "Heimdall";
+    rev    = "v${version}";
+    sha256 = "1ygn4snvcmi98rgldgxf5hwm7zzi1zcsihfvm6awf9s6mpcjzbqz";
   };
 
-  buildInputs =
-    [ pkgconfig libusb1 udev ]
-    ++ stdenv.lib.optional enableGUI qt4 ;
+  buildInputs = [
+    zlib libusb1
+  ] ++ stdenv.lib.optional enableGUI qtbase;
+  nativeBuildInputs = [ cmake ];
 
-  makeFlags = "udevrulesdir=$(out)/lib/udev/rules.d";
-  
-  preConfigure =
-    ''
-      pushd libpit
-      ./configure
-      make
-      popd
-    
-      cd heimdall
-      substituteInPlace Makefile.in --replace sudo true
+  cmakeFlags = [
+    "-DDISABLE_FRONTEND=${if enableGUI then "OFF" else "ON"}"
+    "-DLIBUSB_LIBRARY=${libusb1}"
+  ];
 
-      # Give ownership of the Galaxy S USB device to the logged in
-      # user.
-      substituteInPlace 60-heimdall-galaxy-s.rules --replace 'MODE="0666"' 'TAG+="udev-acl"'
-    '';
+  preConfigure = ''
+    # Give ownership of the Galaxy S USB device to the logged in user.
+    substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
+  '';
 
-  postBuild = stdenv.lib.optionalString enableGUI
-    ''
-      pushd ../heimdall-frontend
-      substituteInPlace Source/mainwindow.cpp --replace /usr/bin $out/bin
-      qmake heimdall-frontend.pro OUTPUTDIR=$out/bin
-      make
-      popd
-    '';
+  installPhase = ''
+    mkdir -p $out/{bin,share/doc/heimdall,lib/udev/rules.d}
+    install -m755 -t $out/bin                bin/*
+    install -m644 -t $out/lib/udev/rules.d   ../heimdall/60-heimdall.rules
+    install -m644 ../Linux/README   $out/share/doc/heimdall/README.linux
+    install -m644 ../OSX/README.txt $out/share/doc/heimdall/README.osx
+  '';
 
-  postInstall =
-    ''
-      mkdir -p $out/share/doc/heimdall
-      cp ../Linux/README $out/share/doc/heimdall/
-    '' + stdenv.lib.optionalString enableGUI ''
-      make -C ../heimdall-frontend install
-    '';
+  enableParallelBuilding = true;
 
-  meta = {
-    homepage = http://www.glassechidna.com.au/products/heimdall/;
-    description = "A cross-platform open-source tool suite used to flash firmware onto Samsung Galaxy S devices";
-    license = "bsd";
+  meta = with stdenv.lib; {
+    homepage    = "http://www.glassechidna.com.au/products/heimdall/";
+    description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms   = platforms.unix;
   };
 }

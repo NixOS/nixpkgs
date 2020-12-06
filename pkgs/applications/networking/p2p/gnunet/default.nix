@@ -1,61 +1,53 @@
-{ stdenv, fetchurl, libextractor, libmicrohttpd, libgcrypt
-, zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
-, libxml2, ncurses, gettext, libunistring, libidn
-, makeWrapper }:
+{ stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
+, libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
+, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib
+, libpulseaudio, libopus, libogg, jansson, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.5";
+  pname = "gnunet";
+  version = "0.13.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "162bahbskhzc0b2pda7v36dckm3p5p9rnbv2w0fbl0xl2gln63aa";
+    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
+    sha256 = "0b4a6bxwhpmj274d281vhny7i5rwydrdmab76xk6ji8vf0p705dn";
   };
 
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ pkgconfig libtool makeWrapper ];
   buildInputs = [
-    libextractor libmicrohttpd libgcrypt gmp curl libtool
-    zlib adns sqlite libxml2 ncurses libidn
-    pkgconfig gettext libunistring makeWrapper
+    adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
+    libmicrohttpd libunistring libxml2 ncurses gettext libsodium
+    sqlite zlib libpulseaudio libopus libogg jansson
   ];
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
     # /etc/{resolv.conf,hosts}, replace all references to `localhost'
     # by their IPv4 equivalent.
-    for i in $(find . \( -name \*.c -or -name \*.conf \) \
-                    -exec grep -l '\<localhost\>' {} \;)
-    do
-      echo "$i: substituting \`127.0.0.1' to \`localhost'..."
-      sed -i "$i" -e's/\<localhost\>/127.0.0.1/g'
-    done
+    find . \( -name \*.c -or -name \*.conf \) | \
+      xargs sed -ie 's|\<localhost\>|127.0.0.1|g'
 
     # Make sure the tests don't rely on `/tmp', for the sake of chroot
     # builds.
-    for i in $(find . \( -iname \*test\*.c -or -name \*.conf \) \
-                    -exec grep -l /tmp {} \;)
-    do
-      echo "$i: replacing references to \`/tmp' by \`$TMPDIR'..."
-      substituteInPlace "$i" --replace "/tmp" "$TMPDIR"
-    done
+    find . \( -iname \*test\*.c -or -name \*.conf \) | \
+      xargs sed -ie "s|/tmp|$TMPDIR|g"
 
-    # Ensure NSS installation works fine
-    configureFlags="$configureFlags --with-nssdir=$out/lib"
-    patchShebangs src/gns/nss/install-nss-plugin.sh
+    sed -ie 's|@LDFLAGS@|@LDFLAGS@ $(Z_LIBS)|g' \
+      src/regex/Makefile.in \
+      src/fs/Makefile.in
   '';
 
+  # unfortunately, there's still a few failures with impure tests
   doCheck = false;
+  checkPhase = ''
+    export GNUNET_PREFIX="$out"
+    export PATH="$out/bin:$PATH"
+    make -k check
+  '';
 
-  /* FIXME: Tests must be run this way, but there are still a couple of
-     failures.
-
-  postInstall =
-    '' export GNUNET_PREFIX="$out"
-       export PATH="$out/bin:$PATH"
-       make -k check
-    '';
-  */
-
-  meta = {
-    description = "GNUnet, GNU's decentralized anonymous and censorship-resistant P2P framework";
+  meta = with stdenv.lib; {
+    description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
       GNUnet is a framework for secure peer-to-peer networking that
@@ -72,11 +64,9 @@ stdenv.mkDerivation rec {
       network are rewarded with better service.
     '';
 
-    homepage = http://gnunet.org/;
-
-    license = "GPLv2+";
-
-    maintainers = with stdenv.lib.maintainers; [ ludo viric ];
-    platforms = stdenv.lib.platforms.gnu;
+    homepage = "https://gnunet.org/";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ pstn vrthra ];
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

@@ -1,28 +1,10 @@
-x@{stdenv, fetchurl, builderDefsPackage, ...}:
-builderDefsPackage
-(a :  
-let 
-  s = import ./src-for-default.nix;
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ [];
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ callPackage, fetchurl }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = ["--enable-shared"];
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "Gambit Scheme to C compiler";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux ++ freebsd;
+callPackage ./build.nix rec {
+  version = "4.9.3";
+  git-version = version;
+  src = fetchurl {
+    url = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.9/source/gambit-v4_9_3.tgz";
+    sha256 = "1p6172vhcrlpjgia6hsks1w4fl8rdyjf9xjh14wxfkv7dnx8a5hk";
   };
-}) x
+}

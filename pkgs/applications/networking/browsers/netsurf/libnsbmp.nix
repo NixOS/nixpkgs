@@ -1,20 +1,30 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "libnsbmp-0.0.1";
+{ stdenv, fetchurl, pkgconfig
+, buildsystem
+}:
+
+stdenv.mkDerivation rec {
+  pname = "netsurf-${libname}";
+  libname = "libnsbmp";
+  version = "0.1.6";
 
   src = fetchurl {
-    url = http://www.netsurf-browser.org/projects/releases/libnsbmp-0.0.1-src.tar.gz;
-    sha256 = "1ldng20w5f725rhfns3v58x1mh3d93zwrx4c8f88rsm6wym14ka2";
+    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
+    sha256 = "sha256-ecSTZfhg7UUb/EEJ7d7I3j6bfOWjvgaVlr0qoZJ5Mk8=";
   };
 
-  installPhase = "make PREFIX=$out install";
-  buildInputs = [];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ buildsystem ];
 
-  meta = { 
-    description = "Libnsbmp is a decoding library for BMP and ICO image file formats"; # used by netsurf
-    homepage = http://www.netsurf-browser.org/projects/libnsbmp/;
-    license = "MIT";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+  makeFlags = [
+    "PREFIX=$(out)"
+    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.netsurf-browser.org/";
+    description = "BMP Decoder for netsurf browser";
+    license = licenses.mit;
+    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

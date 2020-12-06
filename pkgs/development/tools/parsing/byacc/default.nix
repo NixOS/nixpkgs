@@ -1,21 +1,31 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "byacc-1.9";
+stdenv.mkDerivation rec {
+  pname = "byacc";
+  version = "20200910";
 
   src = fetchurl {
-    url = http://www.isc.org/sources/devel/tools/byacc-1.9.tar.gz;
-    sha256 = "d61a15ac4ac007c188d0c0e99365f016f8d327755f43032b58e400754846f736";
+    urls = [
+      "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
+      "https://invisible-mirror.net/archives/byacc/${pname}-${version}.tgz"
+    ];
+    sha256 = "0c6gbvlgzi6yflri22w7fa2w3k5m3jk0xb5a43f3vwpa783hcn8a";
   };
 
-  preConfigure =
-    ''mkdir -p $out/bin
-      sed -i "s@^DEST.*\$@DEST = $out/bin/yacc@" Makefile
-    '';
+  configureFlags = [
+    "--program-transform-name='s,^,b,'"
+  ];
 
-  meta = { 
+  doCheck = true;
+
+  postInstall = ''
+    ln -s $out/bin/byacc $out/bin/yacc
+  '';
+
+  meta = with stdenv.lib; {
     description = "Berkeley YACC";
-    homepage = http://dickey.his.com/byacc/byacc.html;
-    license = "public domain";
+    homepage = "https://invisible-island.net/byacc/byacc.html";
+    license = licenses.publicDomain;
+    platforms = platforms.unix;
   };
 }

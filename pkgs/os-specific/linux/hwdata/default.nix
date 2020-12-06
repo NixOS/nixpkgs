@@ -1,10 +1,30 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "hwdata-0.172";
-  builder = ./builder.sh;
-  src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/os/Linux/distr/debian/pool/main/h/hwdata/hwdata_0.172.orig.tar.gz;
-    md5 = "1c6b7f4dfe489f881702176c5f8e5a2e";
+stdenv.mkDerivation rec {
+  pname = "hwdata";
+  version = "0.335";
+
+  src = fetchFromGitHub {
+    owner = "vcrhonek";
+    repo = "hwdata";
+    rev = "v${version}";
+    sha256 = "0f8ikwfrs6xd5sywypd9rq9cln8a0rf3vj6nm0adwzn1p8mgmrb2";
+  };
+
+  preConfigure = "patchShebangs ./configure";
+
+  configureFlags = [ "--datadir=${placeholder "out"}/share" ];
+
+  doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
+
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "101lppd1805drwd038b4njr5czzjnqqxf3xlf6v3l22wfwr2cn3l";
+
+  meta = {
+    homepage = "https://github.com/vcrhonek/hwdata";
+    description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

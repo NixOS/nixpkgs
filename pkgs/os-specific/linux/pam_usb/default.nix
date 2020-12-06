@@ -1,8 +1,35 @@
-{stdenv, fetchurl, makeWrapper, useSetUID, dbus, libxml2, pam, pkgconfig, pmount, python, pythonDBus}:
+{ stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages, writeScript, runtimeShell }:
 
 let
+
+  # Search in the environment if the same program exists with a set uid or
+  # set gid bit.  If it exists, run the first program found, otherwise run
+  # the default binary.
+  useSetUID = drv: path:
+    let
+      name = baseNameOf path;
+      bin = "${drv}${path}";
+    in assert name != "";
+      writeScript "setUID-${name}" ''
+        #!${runtimeShell}
+        inode=$(stat -Lc %i ${bin})
+        for file in $(type -ap ${name}); do
+          case $(stat -Lc %a $file) in
+            ([2-7][0-7][0-7][0-7])
+              if test -r "$file".real; then
+                orig=$(cat "$file".real)
+                if test $inode = $(stat -Lc %i "$orig"); then
+                  exec "$file" "$@"
+                fi
+              fi;;
+          esac
+        done
+        exec ${bin} "$@"
+      '';
+
   pmountBin = useSetUID pmount "/bin/pmount";
   pumountBin = useSetUID pmount "/bin/pumount";
+  inherit (pythonPackages) python dbus-python;
 in
 
 stdenv.mkDerivation rec {
@@ -36,13 +63,14 @@ stdenv.mkDerivation rec {
     for prog in $out/bin/pamusb-conf $out/bin/pamusb-agent; do
       substituteInPlace $prog --replace '/usr/bin/env python' '/bin/python'
       wrapProgram $prog \
-        --prefix PYTHONPATH : "$(toPythonPath ${pythonDBus})"
+        --prefix PYTHONPATH : "$(toPythonPath ${dbus-python})"
     done
   '';
 
   meta = {
-    homepage = http://pamusb.org/;
+    homepage = "http://pamusb.org/";
     description = "Authentication using USB Flash Drives";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

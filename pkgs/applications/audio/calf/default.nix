@@ -1,22 +1,24 @@
 { stdenv, fetchurl, cairo, expat, fftwSinglePrec, fluidsynth, glib
-, gtk, jackaudio, ladspaH , libglade, lv2, pkgconfig }:
+, gtk2, libjack2, ladspaH , libglade, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "calf-${version}";
-  version = "0.0.19-rc7";
+  pname = "calf";
+  version = "0.90.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/calf/${name}.tar.gz";
-    sha256 = "0515pzc7ishrq0j5hza83s0yp3x34r977h776lpky389whcyf45j";
+    url = "https://calf-studio-gear.org/files/${pname}-${version}.tar.gz";
+    sha256 = "17x4hylgq4dn9qycsdacfxy64f5cv57n2qgkvsdp524gnqzw4az3";
   };
 
-  buildInputs = [ 
-    cairo expat fftwSinglePrec fluidsynth glib gtk jackaudio ladspaH
+  enableParallelBuilding = true;
+
+  buildInputs = [
+    cairo expat fftwSinglePrec fluidsynth glib gtk2 libjack2 ladspaH
     libglade lv2 pkgconfig
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://calf.sourceforge.net;
+    homepage = "http://calf-studio-gear.org";
     description = "A set of high quality open source audio plugins for musicians";
     license = licenses.lgpl2;
     maintainers = [ maintainers.goibhniu ];

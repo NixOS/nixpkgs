@@ -1,23 +1,35 @@
-{ stdenv, fetchurl, bison, flex, which, perl }:
+{ stdenv, fetchzip, bison, flex, which, perl
+, sensord ? false, rrdtool ? null
+}:
 
-let version = "3.3.1"; in
+assert sensord -> rrdtool != null;
 
 stdenv.mkDerivation rec {
-  name = "lm-sensors-3.3.1";
-  
-  src = fetchurl {
-    url = "http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-${version}.tar.bz2";
-    sha256 = "13v2gszagmx8hwjyzh2k47rdpc2kyg9zky3kdqhdbgzp8lwpik6g";
+  pname = "lm-sensors";
+  version = "3.6.0";
+  dashedVersion = stdenv.lib.replaceStrings ["."] ["-"] version;
+
+  src = fetchzip {
+    url = "https://github.com/lm-sensors/lm-sensors/archive/V${dashedVersion}.tar.gz";
+    sha256 = "1ipf6wjx037sqyhy0r5jh4983h216anq9l68ckn2x5c3qc4wfmzn";
   };
 
-  buildInputs = [ bison flex which perl ];
+  nativeBuildInputs = [ bison flex which ];
+  buildInputs = [ perl ]
+   ++ stdenv.lib.optional sensord rrdtool;
 
-  preBuild = ''
-    makeFlagsArray=(PREFIX=$out ETCDIR=$out/etc)
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "ETCDIR=${placeholder "out"}/etc"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ] ++ stdenv.lib.optional sensord "PROG_EXTRA=sensord";
 
-  meta = {
-    homepage = http://www.lm-sensors.org/;
+  meta = with stdenv.lib; {
+    homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
+    changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/V${dashedVersion}/CHANGES";
     description = "Tools for reading hardware sensors";
+    license = with licenses; [ lgpl21Plus gpl2Plus ];
+    platforms = platforms.linux;
   };
 }

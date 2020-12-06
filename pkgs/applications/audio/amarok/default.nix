@@ -1,34 +1,41 @@
-{ stdenv, fetchurl, lib, qtscriptgenerator, perl, gettext, curl
-, libxml2, mysql, taglib, taglib_extras, loudmouth , kdelibs
-, qca2, libmtp, liblastfm, libgpod, pkgconfig, automoc4, phonon
-, strigi, soprano, qjson, ffmpeg, libofa }:
+{ mkDerivation, fetchgit, lib
+, extra-cmake-modules, kdoctools
+, qca-qt5, qjson, qtquickcontrols2, qtscript, qtwebengine
+, karchive, kcmutils, kconfig, kdnssd, kguiaddons, kinit, kirigami2, knewstuff, knotifyconfig, ktexteditor, kwindowsystem
+, fftw, phonon, plasma-framework, threadweaver
+, curl, ffmpeg_3, gdk-pixbuf, libaio, liblastfm, libmtp, loudmouth, lzo, lz4, mysql57, pcre, snappy, taglib, taglib_extras
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
+  pname = "amarok-unstable";
+  version = "2020-06-12";
 
-  pname = "amarok";
-  version = "2.6.0";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
-    sha256 = "1h6jzl0jnn8g05pz4mw01kz20wjjxwwz6iki7lvgj70qi3jq04m9";
+  src = fetchgit {
+    # master has the Qt5 version as of April 2018 but a formal release has not
+    # yet been made so change this back to the proper upstream when such a
+    # release is out
+    url    = "https://invent.kde.org/multimedia/amarok.git";
+    # url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    rev    = "fece39b0e81db310b6a6e08f93d83b0d498cd02b";
+    sha256 = "12casnq6w5yp2jlvnr466pjpkn0vriry8jzfq2qkjl564y0vhy9x";
   };
 
-  QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
-  patches = ./find-mysql.patch;
-  buildInputs = [ qtscriptgenerator stdenv.gcc.libc gettext curl
-    libxml2 mysql taglib taglib_extras loudmouth kdelibs automoc4 phonon strigi
-    soprano qca2 libmtp liblastfm libgpod pkgconfig qjson ffmpeg libofa ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
-  postInstall = ''
-    mkdir -p $out/nix-support
-    echo ${qtscriptgenerator} > $out/nix-support/propagated-user-env-packages
-  '';
+  propagatedBuildInputs = [
+    qca-qt5 qjson qtquickcontrols2 qtscript qtwebengine
+    karchive kcmutils kconfig kdnssd kguiaddons kinit kirigami2 knewstuff knotifyconfig ktexteditor kwindowsystem
+    phonon plasma-framework threadweaver
+    curl fftw ffmpeg_3 gdk-pixbuf libaio liblastfm libmtp loudmouth lz4 lzo mysql57.server mysql57.server.static
+    pcre snappy taglib taglib_extras
+  ];
 
-  meta = {
-    description = "Popular music player for KDE";
-    license = "GPL";
-    homepage = http://amarok.kde.org;
-    inherit (kdelibs.meta) platforms maintainers;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://amarok.kde.org";
+    description = "A powerful music player with an intuitive interface";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

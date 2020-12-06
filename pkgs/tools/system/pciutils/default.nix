@@ -1,37 +1,43 @@
-{ stdenv, fetchurl, zlib }:
+{ stdenv, fetchurl, pkgconfig, zlib, kmod, which
+, static ? stdenv.targetPlatform.isStatic
+, darwin ? null
+}:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.1.10";
+  name = "pciutils-3.7.0"; # with release-date database
 
   src = fetchurl {
-    url = "mirror://kernel/software/utils/pciutils/${name}.tar.bz2";
-    sha256 = "0xdahcxd00c921wnxi0f0w3lzjqdfphwa5vglfcpf0lv3l2w40pl";
+    url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
+    sha256 = "1ss0rnfsx8gvqjxaji4mvbhf9xyih4cadmgadbwwv8mnx1xvjh4x";
   };
 
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib kmod which ] ++
+    stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
-  pciids = fetchurl {
-    # Obtained from http://pciids.sourceforge.net/v2.2/pci.ids.bz2.
-    url = http://nixos.org/tarballs/pci.ids.20120929.bz2;
-    sha256 = "1q3i479ay88wam1zz1vbgkbqb2axg8av9qjxaigrqbnw2pv0srmb";
-  };
-
-  # Override broken auto-detect logic.
-  # Note: we can't compress pci.ids (ZLIB=yes) because udev requires
-  # an uncompressed pci.ids.
-  makeFlags = "ZLIB=no DNS=yes SHARED=yes PREFIX=\${out}";
-
-  preBuild = ''
-    bunzip2 < $pciids > pci.ids
+  preConfigure = if stdenv.cc.isGNU then null else ''
+    substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
   '';
 
-  installTargets = "install install-lib";
+  makeFlags = [
+    "SHARED=${if static then "no" else "yes"}"
+    "PREFIX=\${out}"
+    "STRIP="
+    "HOST=${stdenv.hostPlatform.system}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "DNS=yes"
+  ];
+
+  installTargets = [ "install" "install-lib" ];
 
   # Get rid of update-pciids as it won't work.
   postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";
 
-  meta = {
-    homepage = http://mj.ucw.cz/pciutils.shtml;
+  meta = with stdenv.lib; {
+    homepage = "http://mj.ucw.cz/pciutils.html";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
   };
 }

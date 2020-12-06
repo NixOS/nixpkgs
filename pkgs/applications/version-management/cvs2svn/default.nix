@@ -1,27 +1,37 @@
-{stdenv, fetchurl, python, makeWrapper}:
+{ lib, fetchurl, makeWrapper
+, python2Packages
+, cvs, subversion, git, breezy
+}:
 
-stdenv.mkDerivation {
-  name = "cvs2svn-2.0.1";
+python2Packages.buildPythonApplication  rec {
+  pname = "cvs2svn";
+  version = "2.5.0";
 
   src = fetchurl {
-    url = http://cvs2svn.tigris.org/files/documents/1462/39919/cvs2svn-2.0.1.tar.gz;
-    sha256 = "1pgbyxzgn22lnw3h5c2nd8z46pkk863jg3fgh9pqa1jihsx1cg1j";
+    url = "http://cvs2svn.tigris.org/files/documents/1462/49543/${pname}-${version}.tar.gz";
+    sha256 = "1ska0z15sjhyfi860rjazz9ya1gxbf5c0h8dfqwz88h7fccd22b4";
   };
 
-  buildInputs = [python makeWrapper];
+  buildInputs = [ makeWrapper ];
 
-  buildPhase = "true";
-  installPhase = ''
-    python ./setup.py install --prefix=$out
-    wrapProgram $out/bin/cvs2svn \
-        --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH"
+  checkInputs = [ subversion git breezy ];
+
+  checkPhase = "python run-tests.py";
+
+  doCheck = false; # Couldn't find node 'transaction...' in expected output tree
+
+  postInstall = ''
+    for i in bzr svn git; do
+      wrapProgram $out/bin/cvs2$i \
+          --prefix PATH : "${lib.makeBinPath [ cvs ]}"
+    done
   '';
 
-  /* !!! maybe we should absolutise the program names in
-     $out/lib/python2.4/site-packages/cvs2svn_lib/config.py. */
-
-  meta = {
+  meta = with lib; {
     description = "A tool to convert CVS repositories to Subversion repositories";
-    homepage = http://cvs2svn.tigris.org/;
+    homepage = "http://cvs2svn.tigris.org/";
+    maintainers = [ maintainers.makefu ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

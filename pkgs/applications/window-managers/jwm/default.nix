@@ -1,29 +1,50 @@
-{ stdenv, fetchurl, libX11, libXext, libXinerama, libXpm, libXft, freetype,
-  fontconfig }:
+{ stdenv, fetchFromGitHub, pkgconfig, automake, autoconf, libtool, gettext
+, which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
+, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
 
-stdenv.mkDerivation {
-  name = "jwm-2.0.1";
-  
-  src = fetchurl {
-     url = http://www.joewing.net/programs/jwm/releases/jwm-2.0.1.tar.bz2;
-     sha256 = "1ix5y00cmg3cyazl0adzgv49140zxaf2dpngyg1dyy4ma6ysdmnw";
+stdenv.mkDerivation rec {
+  pname = "jwm";
+  version = "1685";
+
+  src = fetchFromGitHub {
+    owner = "joewing";
+    repo = "jwm";
+    rev = "s${version}";
+    sha256 = "1kyvy022sij898g2hm5spy5vq0kw6aqd7fsnawl2xyh06gwh29wg";
   };
 
-  buildInputs = [ libX11 libXext libXinerama libXpm libXft freetype 
-    fontconfig ];
+  patches = [ ./0001-Fix-Gettext-Requirement.patch ];
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2 "
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXft -lfreetype -lfontconfig "
-  '';
+  nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
 
-  postInstall =
-    ''
-      sed -i -e s/rxvt/xterm/g $out/etc/system.jwmrc
-      sed -i -e "s/.*Swallow.*\|.*xload.*//" $out/etc/system.jwmrc
-    '';
+  buildInputs = [
+    libX11
+    libXext
+    libXinerama
+    libXpm
+    libXft
+    xorg.libXrender
+    libXau
+    libXdmcp
+    libXmu
+    libpng
+    libjpeg
+    expat
+    xorgproto
+    librsvg
+    freetype
+    fontconfig
+  ];
+
+  enableParallelBuilding = true;
+
+  preConfigure = "./autogen.sh";
 
   meta = {
-    description = "A window manager for X11 that requires only Xlib";
+    homepage = "http://joewing.net/projects/jwm/";
+    description = "Joe's Window Manager is a light-weight X11 window manager";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

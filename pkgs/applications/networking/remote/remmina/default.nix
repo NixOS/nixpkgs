@@ -1,31 +1,60 @@
-{ stdenv, fetchurl, cmake, pkgconfig, makeWrapper
-, glib, gtk, gettext, libxkbfile, libgnome_keyring, libX11
-, freerdp, libssh, libgcrypt, gnutls }:
+{ stdenv, fetchFromGitLab, cmake, ninja, pkgconfig, wrapGAppsHook
+, glib, gtk3, gettext, libxkbfile, libX11
+, freerdp, libssh, libgcrypt, gnutls
+, pcre, libdbusmenu-gtk3, libappindicator-gtk3
+, libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
+, libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core
+, openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
+# The themes here are soft dependencies; only icons are missing without them.
+, gnome3
+}:
 
-let version = "1.0.0"; in
+with stdenv.lib;
 
-stdenv.mkDerivation {
-  name = "remmina-${version}";
+stdenv.mkDerivation rec {
+  pname = "remmina";
+  version = "1.4.7";
 
-  src = fetchurl {
-    url = "https://github.com/downloads/FreeRDP/Remmina/Remmina-${version}.tar.gz";
-    sha256 = "7cd0d2d6adbd96c7139da8c4bfc4cf4821e1fa97242bb9cc9db32a53df289731";
+  src = fetchFromGitLab {
+    owner  = "Remmina";
+    repo   = "Remmina";
+    rev    = "v${version}";
+    sha256 = "0h09f2amj7ab78fzil2w7cr22d21ad5mp1r2fa70w26g7ra3jzk9";
   };
 
-  buildInputs = [ cmake pkgconfig makeWrapper
-                  glib gtk gettext libxkbfile libgnome_keyring libX11
-                  freerdp libssh libgcrypt gnutls ];
+  nativeBuildInputs = [ cmake ninja pkgconfig wrapGAppsHook ];
+  buildInputs = [
+    gsettings-desktop-schemas
+    glib gtk3 gettext libxkbfile libX11
+    freerdp libssh libgcrypt gnutls
+    pcre libdbusmenu-gtk3 libappindicator-gtk3
+    libvncserver libpthreadstubs libXdmcp libxkbcommon
+    libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
+    openssl gnome3.adwaita-icon-theme json-glib libsodium webkitgtk
+    harfbuzz
+  ];
 
-  cmakeFlags = "-DWITH_VTE=OFF -DWITH_TELEPATHY=OFF -DWITH_AVAHI=OFF";
+  cmakeFlags = [
+    "-DWITH_VTE=OFF"
+    "-DWITH_TELEPATHY=OFF"
+    "-DWITH_AVAHI=OFF"
+    "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
+    "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
+    "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"
+    "-DWINPR_INCLUDE_DIR=${freerdp}/include/winpr2"
+  ];
 
-  postInstall = ''
-    wrapProgram $out/bin/remmina --prefix LD_LIBRARY_PATH : "${libX11}/lib"
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
+    )
   '';
 
   meta = {
-    license = "GPLv2";
-    homepage = "http://remmina.sourceforge.net/";
-    description = "Remmina is a remote desktop client written in GTK+";
-    maintainers = [];
+    license = licenses.gpl2;
+    homepage = "https://gitlab.com/Remmina/Remmina";
+    description = "Remote desktop client written in GTK";
+    maintainers = with maintainers; [ melsigl ryantm ];
+    platforms = platforms.linux;
   };
 }

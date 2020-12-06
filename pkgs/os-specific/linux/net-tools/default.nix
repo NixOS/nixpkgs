@@ -1,26 +1,35 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "net-tools-1.60";
-  
+stdenv.mkDerivation rec {
+  pname = "net-tools";
+  version = "1.60_p20180626073013";
+
   src = fetchurl {
-    url = http://www.tazenda.demon.co.uk/phil/net-tools/net-tools-1.60.tar.bz2;
-    md5 = "888774accab40217dde927e21979c165";
+    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
+    sha256 = "0mzsjjmz5kn676w2glmxwwd8bj0xy9dhhn21aplb435b767045q4";
   };
 
-  patches = [ ./net-tools-labels.patch ];
-  
   preBuild =
     ''
       cp ${./config.h} config.h
     '';
 
-  makeFlags = "BASEDIR=$(out) mandir=/share/man";
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "BASEDIR=$(out)"
+    "mandir=/share/man"
+    "HAVE_ARP_TOOLS=1"
+    "HAVE_PLIP_TOOLS=1"
+    "HAVE_SERIAL_TOOLS=1"
+    "HAVE_HOSTNAME_TOOLS=1"
+    "HAVE_HOSTNAME_SYMLINKS=1"
+  ];
 
   meta = {
-    homepage = http://www.tazenda.demon.co.uk/phil/net-tools/;
+    homepage = "http://net-tools.sourceforge.net/";
     description = "A set of tools for controlling the network subsystem in Linux";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };
 }

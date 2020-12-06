@@ -1,56 +1,69 @@
-{ stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
-, ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
-, libxml2, libxslt, openssl, gnutls, cups
+## Configuration:
+# Control you default wine config in nixpkgs-config:
+# wine = {
+#   release = "stable"; # "stable", "unstable", "staging"
+#   build = "wineWow"; # "wine32", "wine64", "wineWow"
+# };
+# Make additional configurations on demand:
+# wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
+{ lib, stdenv, callPackage,
+  wineRelease ? "stable",
+  wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
+  pngSupport ? false,
+  jpegSupport ? false,
+  tiffSupport ? false,
+  gettextSupport ? false,
+  fontconfigSupport ? false,
+  alsaSupport ? false,
+  gtkSupport ? false,
+  openglSupport ? false,
+  tlsSupport ? false,
+  gstreamerSupport ? false,
+  cupsSupport ? false,
+  colorManagementSupport ? false,
+  dbusSupport ? false,
+  mpg123Support ? false,
+  openalSupport ? false,
+  openclSupport ? false,
+  cairoSupport ? false,
+  odbcSupport ? false,
+  netapiSupport ? false,
+  cursesSupport ? false,
+  vaSupport ? false,
+  pcapSupport ? false,
+  v4lSupport ? false,
+  saneSupport ? false,
+  gsmSupport ? false,
+  gphoto2Support ? false,
+  ldapSupport ? false,
+  pulseaudioSupport ? false,
+  udevSupport ? false,
+  xineramaSupport ? false,
+  xmlSupport ? false,
+  vulkanSupport ? false,
+  sdlSupport ? false,
+  faudioSupport ? false,
+  vkd3dSupport ? false,
+  mingwSupport ? false,
 }:
 
-assert stdenv.isLinux;
-assert stdenv.gcc.gcc != null;
+let wine-build = build: release:
+      lib.getAttr build (callPackage ./packages.nix {
+        wineRelease = release;
+        supportFlags = {
+          inherit pngSupport jpegSupport cupsSupport colorManagementSupport gettextSupport
+                  dbusSupport mpg123Support openalSupport cairoSupport tiffSupport odbcSupport
+                  netapiSupport cursesSupport vaSupport pcapSupport v4lSupport saneSupport
+                  gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
+                  pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
+                  openglSupport gstreamerSupport udevSupport vulkanSupport sdlSupport faudioSupport
+                  vkd3dSupport mingwSupport;
+        };
+      });
 
-stdenv.mkDerivation rec {
-  name = "wine-${meta.version}";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "0l5kr3iq1lkv3gcw8ljzfjcfnsh9b5crdd4i0dzwdk1i3bfw2xxc";
-  };
-
-  gecko = fetchurl {
-    url = "mirror://sourceforge/wine/wine_gecko-1.5-x86.msi";
-    sha256 = "2e372a1b87ff2a22ad5127400ece4b09e55591d9f84e00bb562d294898a49b5c";
-  };
-
-  buildInputs = [
-    xlibs.xlibs flex bison xlibs.libXi mesa
-    xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
-    xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
-    alsaLib ncurses libpng libjpeg lcms fontforge
-    libxml2 libxslt openssl gnutls cups
-  ];
-
-  # Wine locates a lot of libraries dynamically through dlopen().  Add
-  # them to the RPATH so that the user doesn't have to set them in
-  # LD_LIBRARY_PATH.
-  NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
-    xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
-    xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
-    openssl gnutls cups
-  ];
-
-  # Don't shrink the ELF RPATHs in order to keep the extra RPATH
-  # elements specified above.
-  dontPatchELF = true;
-
-  postInstall = "install -D ${gecko} $out/share/wine/gecko/${gecko.name}";
-
-  enableParallelBuilding = true;
-
-  meta = {
-    version = "1.5.21";
-    homepage = "http://www.winehq.org/";
-    license = "LGPL";
-    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.simons];
-    platforms = stdenv.lib.platforms.linux;
-  };
-}
+in if wineRelease == "staging" then
+  callPackage ./staging.nix {
+    wineUnstable = wine-build wineBuild "unstable";
+  }
+else
+  wine-build wineBuild wineRelease

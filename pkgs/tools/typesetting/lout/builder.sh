@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Prepare a makefile specifying the appropriate output directories.
 #
 # Written by Ludovic Courtès <ludo@gnu.org>.
@@ -39,6 +37,6 @@ cat makefile |									\
   > "$nixMakefile" &&								\
 mkdir -p "$out/bin" && mkdir -p "$out/lib"					\
 mkdir -p "$out/man" && mkdir -p "$out/doc/lout" &&				\
-make -f "$nixMakefile" install installman &&					\
+make -f "$nixMakefile" CC=cc install installman &&					\
 installDoc &&									\
 fixupPhase

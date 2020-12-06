@@ -1,20 +1,31 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "libwapcaplet-devel";
+{ stdenv, fetchurl
+, buildsystem
+}:
 
-  # REGION AUTO UPDATE:     { name="libwapcaplet"; type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libwapcaplet"; groups = "netsurf_group"; }
-  src= sourceFromHead "libwapcaplet-9721.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/libwapcaplet-9721.tar.gz"; sha256 = "7f9f32ca772c939d67f3bc8bf0705544c2b2950760da3fe6a4e069ad0f77d91a"; });
-  # END
+stdenv.mkDerivation rec {
+  pname = "netsurf-${libname}";
+  libname = "libwapcaplet";
+  version = "0.4.3";
 
-  installPhase = "make PREFIX=$out install";
-  buildInputs = [];
+  src = fetchurl {
+    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
+    sha256 = "sha256-myqh3W1mRfjpkrNpf9vYfwwOHaVyH6VO0ptITRMWDFw=";
+  };
 
-  meta = { 
-    description = "LibWapcaplet is a string internment library, written in C";
-    homepage = http://www.netsurf-browser.org/projects/libwapcaplet/;
-    license = "MIT";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+  buildInputs = [ buildsystem ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+  ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
+    description = "String internment library for netsurf browser";
+    license = licenses.mit;
+    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

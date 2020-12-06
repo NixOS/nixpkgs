@@ -1,48 +1,46 @@
-{ composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
-, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng }:
+{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xorgproto, libXi
+, freeglut, libGL, libGLU, libjpeg, zlib, libXft, libpng
+, libtiff, freetype, Cocoa, AGL, GLUT
+}:
 
-let inherit (composableDerivation) edf; in
+let
+  version = "1.3.5";
+in
 
-composableDerivation.composableDerivation {} rec {
-  name = "fltk-2.0.x-alpha-r9296";
+stdenv.mkDerivation {
+  pname = "fltk";
+  inherit version;
 
   src = fetchurl {
-    url = "ftp://ftp.easysw.com/pub/fltk/snapshots/${name}.tar.bz2";
-    sha256 = "0353ngb7gpyklc9mdz8629big2na3c73akfwhis8fhqp7jkbs9ih";
+    url = "https://www.fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
+    sha256 = "00jp24z1818k9n6nn6lx7qflqf2k13g4kxr0p8v1d37kanhb4ac7";
   };
 
-  propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libGLU libGL libjpeg zlib libpng libXft ]
+    ++ stdenv.lib.optional stdenv.isDarwin [ AGL Cocoa GLUT ];
 
-  flags =
-    # this could be tidied up (?).. eg why does it require freeglut without glSupport?
-    edf { name = "cygwin"; }  #         use the CygWin libraries default=no
-    // edf { name = "debug"; }  #          turn on debugging default=no
-    // edf { name = "gl"; enable = { buildInputs = [ mesa ]; }; }  #             turn on OpenGL support default=yes
-    // edf { name = "shared"; }  #         turn on shared libraries default=no
-    // edf { name = "threads"; }  #        enable multi-threading support
-    // edf { name = "quartz"; enable = { buildInputs = "quartz"; }; }  # don't konw yet what quartz is #         use Quartz instead of Quickdraw (default=no)
-    // edf { name = "largefile"; } #     omit support for large files
-    // edf { name = "localjpeg"; disable = { buildInputs = [libjpeg]; }; } #       use local JPEG library, default=auto
-    // edf { name = "localzlib"; disable = { buildInputs = [zlib]; }; } #       use local ZLIB library, default=auto
-    // edf { name = "localpng"; disable = { buildInputs = [libpng]; }; } #       use local PNG library, default=auto
-    // edf { name = "xinerama"; enable = { buildInputs = [libXinerama]; }; } #       turn on Xinerama support default=no
-    // edf { name = "xft"; enable = { buildInputs=[libXft]; }; } #            turn on Xft support default=no
-    // edf { name = "xdbe"; };  #           turn on Xdbe support default=no
+  propagatedBuildInputs = [ xorgproto ]
+    ++ (if stdenv.isDarwin
+        then [ freetype libtiff ]
+        else [ xlibsWrapper libXi freeglut ]);
 
-  cfg = {
-    largefileSupport = true; # is default
-    glSupport = true; # doesn't build without it. Why?
-    localjpegSupport = false;
-    localzlibSupport = false;
-    localpngSupport = false;
-    sharedSupport = true;
-    threadsSupport = true;
-  };
+  configureFlags = [
+    "--enable-gl"
+    "--enable-largefile"
+    "--enable-shared"
+    "--enable-threads"
+    "--enable-xft"
+  ];
 
-  meta = {
-    description = "a C++ cross platform lightweight gui library binding";
-    homepage = http://www.fltk.org;
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "A C++ cross-platform lightweight GUI library";
+    homepage = "https://www.fltk.org";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl2;
   };
 }

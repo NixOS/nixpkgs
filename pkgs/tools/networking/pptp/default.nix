@@ -1,30 +1,34 @@
 { stdenv, fetchurl, perl, ppp, iproute }:
 
 stdenv.mkDerivation rec {
-  name = "pptp-1.7.2";
+  pname = "pptp";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pptpclient/${name}.tar.gz";
-    sha256 = "1g4lfv9vhid4v7kx1mlfcrprj3h7ny6g4kv564qzlf9abl3f12p9";
+    url = "mirror://sourceforge/pptpclient/${pname}-${version}.tar.gz";
+    sha256 = "1x2szfp96w7cag2rcvkdqbsl836ja5148zzfhaqp7kl7wjw2sjc2";
   };
 
-  patchPhase =
-    ''
-      sed -e 's/install -o root/install/' -i Makefile
-      sed -e 's,/bin/ip,${iproute}/sbin/ip,' -i routing.c
-    '';
-  preConfigure =
-    ''
-      makeFlagsArray=( PPPD=${ppp}/sbin/pppd BINDIR=$out/sbin \
-          MANDIR=$out/share/man/man8 PPPDIR=$out/etc/ppp )
-    '';
+  prePatch = ''
+    substituteInPlace Makefile --replace 'install -o root' 'install'
+  '';
 
-  buildNativeInputs = [ perl ];
+  preConfigure = ''
+    makeFlagsArray=( IP=${iproute}/bin/ip PPPD=${ppp}/sbin/pppd \
+                     BINDIR=$out/sbin MANDIR=$out/share/man/man8 \
+                     PPPDIR=$out/etc/ppp )
+  '';
 
-  meta = {
+  buildInputs = [ perl ];
+
+  postFixup = ''
+    patchShebangs $out
+  '';
+
+  meta = with stdenv.lib; {
     description = "PPTP client for Linux";
-    homepage = http://pptpclient.sourceforge.net/;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    homepage = "http://pptpclient.sourceforge.net/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

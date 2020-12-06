@@ -1,37 +1,47 @@
-{ stdenv, fetchurl, gettext, libjpeg, libtiff, libungif, libpng, freetype
-, fontconfig, xlibs, automake, pkgconfig, gdk_pixbuf }:
+{ stdenv, fetchFromGitHub, cmake, gettext, perl, asciidoc
+, libjpeg, libtiff, libungif, libpng, imlib, expat
+, freetype, fontconfig, pkgconfig, gdk-pixbuf, gdk-pixbuf-xlib, glib
+, mkfontdir, libX11, libXft, libXext, libXinerama
+, libXrandr, libICE, libSM, libXpm, libXdmcp, libxcb
+, libpthreadstubs, pcre, libXdamage, libXcomposite, libXfixes
+, libsndfile, fribidi }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "icewm-1.3.7";
+  pname = "icewm";
+  version = "1.9.2";
 
-  buildInputs =
-    [ gettext libjpeg libtiff libungif libpng
-      xlibs.libX11 xlibs.libXft xlibs.libXext xlibs.libXinerama xlibs.libXrandr
-      xlibs.libICE xlibs.libSM freetype fontconfig
-      pkgconfig gdk_pixbuf
-    ];
-
-  src = fetchurl {
-    url = "mirror://sourceforge/icewm/${name}.tar.gz";
-    sha256 = "0yw813d8amrl0n1fvdiyznxah92wcylj9kj1qhjc6h73d827h6na";
+  src = fetchFromGitHub {
+    owner  = "bbidulock";
+    repo = pname;
+    rev = version;
+    sha256 = "16a9ikknjmhrrlc5r6z2ilkjj5vzyfk4ypwab39mg7vcmd7jzc41";
   };
 
-  patches = [ ./deprecated.patch ];
+  nativeBuildInputs = [ cmake pkgconfig perl asciidoc ];
 
-  NIX_LDFLAGS = "-lfontconfig";
+  buildInputs = [
+    gettext libjpeg libtiff libungif libpng imlib expat freetype fontconfig
+    gdk-pixbuf gdk-pixbuf-xlib glib mkfontdir libX11 libXft libXext libXinerama
+    libXrandr libICE libSM libXpm libXdmcp libxcb libpthreadstubs pcre
+    libsndfile fribidi libXdamage libXcomposite libXfixes ];
 
-  # The fuloong2f is not supported by 1.3.6 still
-  #
-  # Don't know whether 1.3.7 supports fuloong2f and don't know how to test it
-  # on x86_64 hardware. So I left this 'cp' -- urkud
+  cmakeFlags = [ "-DPREFIX=$out" "-DCFGDIR=/etc/icewm" ];
 
-  preConfigure = ''
-    cp -v ${automake}/share/automake*/config.{sub,guess} .
+  # install legacy themes
+  postInstall = ''
+    cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} $out/share/icewm/themes/
   '';
 
   meta = {
-    description = "A window manager for the X Window System";
-    homepage = http://www.icewm.org/;
-    platforms = stdenv.lib.platforms.unix;
+    description = "A simple, lightweight X window manager";
+    longDescription = ''
+      IceWM is a window manager for the X Window System. The goal of
+      IceWM is speed, simplicity, and not getting in the user's way.
+    '';
+    homepage = "https://www.ice-wm.org/";
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

@@ -1,43 +1,43 @@
-{ stdenv, fetchgit, python, asciidoc, xmlto, pysqlite, makeWrapper }:
+{ stdenv, fetchgit
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
+, pythonPackages }:
 
-let
-  version = "3.20110902";
-in
 stdenv.mkDerivation {
-  name = "git-bz";
+  pname = "git-bz";
+  version = "3.2015-09-08";
 
   src = fetchgit {
+    sha256 = "146z57m8nblgsxm4z6qnsvcy81p11d0w88v93ybacc6w21plh8hc";
+    rev = "e17bbae7a2ce454d9f69c32fc40066995d44913d";
     url = "git://git.fishsoup.net/git-bz";
-    rev = "refs/heads/master";
   };
 
-  buildInputs = [
-    makeWrapper python pysqlite # asciidoc xmlto
+  nativeBuildInputs = [
+    asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto
   ];
+  buildInputs = []
+    ++ (with pythonPackages; [ python pysqlite ]);
 
-  buildPhase = ''
-    true
-    # make git-bz.1
+  postPatch = ''
+    patchShebangs configure
+
+    # Don't create a .html copy of the man page that isn't installed anyway:
+    substituteInPlace Makefile --replace "git-bz.html" ""
   '';
 
-  installPhase = ''
-    ensureDir $out
-    ensureDir $out/bin
-    cp git-bz $out/bin
+  postInstall = ''
     wrapProgram $out/bin/git-bz \
-      --prefix PYTHONPATH : "$(toPythonPath $python):$(toPythonPath $pysqlite)"
+      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pycrypto}")" \
+      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
   '';
 
-  meta = {
-    homepage = "http://git.fishsoup.net/cgit/git-bz/";
-    description = "integration of git with Bugzilla";
-    license = stdenv.lib.licenses.gpl2;
-
+  meta = with stdenv.lib; {
+    description = "Bugzilla integration for git";
     longDescription = ''
       git-bz is a tool for integrating the Git command line with the
       Bugzilla bug-tracking system. Operations such as attaching patches to
       bugs, applying patches in bugs to your current tree, and closing bugs
-      once you've pushed the fixes publically can be done completely from
+      once you've pushed the fixes publicly can be done completely from
       the command line without having to go to your web browser.
 
       Authentication for git-bz is done by reading the cookies for the
@@ -46,8 +46,9 @@ stdenv.mkDerivation {
       currently is able to do this for Firefox, Epiphany, Galeon and
       Chromium on Linux.
     '';
+    license = licenses.gpl2Plus;
+    homepage = "http://git.fishsoup.net/cgit/git-bz/";
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.pierron ];
+    platforms = platforms.linux;
   };
 }

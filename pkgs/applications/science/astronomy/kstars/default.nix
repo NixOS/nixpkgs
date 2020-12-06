@@ -1,0 +1,55 @@
+{
+  stdenv, extra-cmake-modules, fetchurl,
+
+  kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
+  knewstuff, kplotting, kwidgetsaddons, kxmlgui, wrapQtAppsHook,
+
+  qtx11extras, qtwebsockets,
+
+  eigen, zlib,
+
+  cfitsio, indilib, xplanet, libnova, gsl
+}:
+
+stdenv.mkDerivation rec {
+  pname = "kstars";
+  version = "3.4.3";
+
+  src = fetchurl {
+    url = "https://mirrors.mit.edu/kde/stable/kstars/kstars-${version}.tar.xz";
+    sha256 = "0j5yxg6ay6sic194skz6vjzg6yvrpb3gvypvs0frjrcjbsl1j4f8";
+  };
+
+  patches = [
+    ./indi-fix.patch
+  ];
+
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  buildInputs = [
+    kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
+    knewstuff kplotting kwidgetsaddons kxmlgui
+
+    qtx11extras qtwebsockets
+
+    eigen zlib
+
+    cfitsio indilib xplanet libnova gsl
+  ];
+
+  cmakeFlags = [
+    "-DINDI_NIX_ROOT=${indilib}"
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Virtual planetarium astronomy software";
+    homepage = "https://kde.org/applications/education/org.kde.kstars";
+    longDescription = ''
+      It provides an accurate graphical simulation of the night sky, from any location on Earth, at any date and time.
+      The display includes up to 100 million stars, 13.000 deep-sky objects, all 8 planets, the Sun and Moon, and thousands of comets, asteroids, supernovae, and satellites.
+      For students and teachers, it supports adjustable simulation speeds in order to view phenomena that happen over long timescales, the KStars Astrocalculator to predict conjunctions, and many common astronomical calculations.
+    '';
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ timput ];
+  };
+}

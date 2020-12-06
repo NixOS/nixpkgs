@@ -1,23 +1,32 @@
-{stdenv, fetchurl, openssl, curl, ncurses, libjpeg
+{stdenv, fetchurl, gnused, openssl, curl, ncurses, libjpeg
 , withGpg ? true, gpgme ? null}:
 
 stdenv.mkDerivation rec {
-  name = "centerim-4.22.10";
+  version = "5.0.1";
+  pname = "centerim5";
 
   src = fetchurl {
-    url = "http://centerim.org/download/releases/${name}.tar.gz";
+    url = "http://centerim.org/download/cim5/${pname}-${version}.tar.gz";
     sha256 = "0viz86jflp684vfginhl6aaw4gh2qvalc25anlwljjl3kkmibklk";
   };
+
+  CXXFLAGS = "-std=gnu++98";
 
   buildInputs = [ openssl curl ncurses libjpeg ]
     ++ stdenv.lib.optional withGpg gpgme;
 
-  configureFlags = [ "--with-openssl=${openssl}" ];
+  preConfigure = ''
+    ${gnused}/bin/sed -i '1,1i#include <stdio.h>' libicq2000/libicq2000/sigslot.h
+  '';
+
+  configureFlags = [
+    "--with-openssl=${openssl.dev}"
+  ];
 
   meta = {
-    homepage = http://www.centerim.org/;
+    homepage = "http://www.centerim.org/";
     description = "Fork of CenterICQ, a curses instant messaging program";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; linux;
   };
 }

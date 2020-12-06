@@ -1,50 +1,96 @@
-x@{builderDefsPackage
-  , imagemagickBig, pkgconfig, python, pygtk, perl, libX11, libv4l
-  , qt4, lzma
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv
+, lib
+, fetchFromGitHub
+, imagemagickBig
+, pkgconfig
+, libX11
+, libv4l
+, qtbase
+, qtx11extras
+, wrapQtAppsHook
+, wrapGAppsHook
+, gtk3
+, xmlto
+, docbook_xsl
+, autoreconfHook
+, dbus
+, enableVideo ? stdenv.isLinux
+, enableDbus ? stdenv.isLinux
+, libintl
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="zbar";
-    version="0.10";
-    name="${baseName}-${version}";
-    pName="${baseName}";
-    url="mirror://sourceforge/project/${pName}/${baseName}/${version}/${name}.tar.bz2";
-    hash="1imdvf5k34g1x2zr6975basczkz3zdxg6xnci50yyp5yvcwznki3";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "zbar";
+  version = "0.23.1";
+
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
+
+  src = fetchFromGitHub {
+    owner = "mchehab";
+    repo = "zbar";
+    rev = version;
+    sha256 = "0l4nxha8k18iqzrbqpgca49lrf1gigy3kpbzl3ldw2lw8alwy8x2";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [
+    pkgconfig
+    xmlto
+    autoreconfHook
+    docbook_xsl
+    wrapQtAppsHook
+    wrapGAppsHook
+  ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "Bar code toolset";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl21;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://zbar.sourceforge.net/";
-    };
-  };
-}) x
+  buildInputs = [
+    imagemagickBig
+    libX11
+    libintl
+  ] ++ lib.optionals enableDbus [
+    dbus
+  ] ++ lib.optionals enableVideo [
+    libv4l
+    gtk3
+    qtbase
+    qtx11extras
+  ];
 
+  # Disable assertions which include -dev QtBase file paths.
+  NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
+
+  configureFlags = [
+    "--without-python"
+  ] ++ (if enableDbus then [
+    "--with-dbusconfdir=${placeholder "out"}/share"
+  ] else [
+    "--without-dbus"
+  ]) ++ (if enableVideo then [
+    "--with-gtk=gtk3"
+  ] else [
+    "--disable-video"
+    "--without-gtk"
+    "--without-qt"
+  ]);
+
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+
+  postFixup = lib.optionalString enableVideo ''
+    wrapGApp "$out/bin/zbarcam-gtk"
+    wrapQtApp "$out/bin/zbarcam-qt"
+  '';
+
+  meta = with lib; {
+    description = "Bar code reader";
+    longDescription = ''
+      ZBar is an open source software suite for reading bar codes from various
+      sources, such as video streams, image files and raw intensity sensors. It
+      supports many popular symbologies (types of bar codes) including
+      EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5 and QR
+      Code.
+    '';
+    maintainers = with maintainers; [ delroth raskin ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
+    homepage = "https://github.com/mchehab/zbar";
+  };
+}

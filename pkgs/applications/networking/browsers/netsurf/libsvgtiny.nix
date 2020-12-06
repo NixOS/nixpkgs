@@ -1,20 +1,39 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "libsvgtiny-devel";
+{ stdenv, fetchurl, pkgconfig, gperf
+, buildsystem
+, libdom
+, libhubbub
+, libparserutils
+, libwapcaplet
+}:
 
-  # REGION AUTO UPDATE:      { name="libsvgtiny"; type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libsvgtiny"; groups = "netsurf_group"; }
-  src= sourceFromHead "libsvgtiny-9721.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/libsvgtiny-9721.tar.gz"; sha256 = "0c4c8e357c220218a32ef789eb2ba8226a403d4c2b550d7c65f351a0af5d1a71"; });
-  # END
+stdenv.mkDerivation rec {
+  pname = "netsurf-${libname}";
+  libname = "libsvgtiny";
+  version = "0.1.7";
 
-  installPhase = "make PREFIX=$out install";
-  buildInputs = [pkgconfig gperf libxml2];
+  src = fetchurl {
+    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
+    sha256 = "sha256-LA3PlS8c2ILD6VQB75RZ8W27U8XT5FEjObL563add4E=";
+  };
 
-  meta = { 
-    description = "implementation of SVG Tiny, written in C";
-    homepage = http://www.netsurf-browser.org/projects/libsvgtiny/;
-    license = "MIT";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+  nativeBuildInputs = [ pkgconfig gperf ];
+  buildInputs = [
+    libdom
+    libhubbub
+    libparserutils
+    libwapcaplet
+    buildsystem ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
+    description = "NetSurf SVG decoder";
+    license = licenses.mit;
+    maintainers = [ maintainers.samueldr maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

@@ -2,9 +2,9 @@ source $stdenv/setup
 
 tagtext=""
 tagflags=""
-if test -n "$tag"; then
-    tagtext="(tag $tag) "
-    tagflags="--tag=$tag"
+if test -n "$rev"; then
+    tagtext="(tag $rev) "
+    tagflags="--tag=$rev"
 elif test -n "$context"; then
     tagtext="(context) "
     tagflags="--context=$context"

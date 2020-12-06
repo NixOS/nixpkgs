@@ -1,17 +1,33 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, texinfo, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "gengetopt-2.22.5";
+  pname = "gengetopt";
+  version = "2.23";
 
   src = fetchurl {
-    url = "mirror://gnu/gengetopt/${name}.tar.gz";
-    sha256 = "0dr1xmlgk9q8za17wnpgghb5ifnbca5vb0w5bc6fpc2j0cjb6vrv";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1b44fn0apsgawyqa4alx2qj5hls334mhbszxsy6rfr0q074swhdr";
   };
 
   doCheck = true;
+  # attempts to open non-existent file
+  preCheck = ''
+    rm tests/test_conf_parser_save.sh
+  '';
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ texinfo help2man ];
+
+  #Fix, see #28255
+  postPatch = ''
+    substituteInPlace configure --replace \
+      'set -o posix' \
+      'set +o posix'
+  '';
 
   meta = {
-    description = "GNU Gengetopt, a command-line option parser generator";
+    description = "Command-line option parser generator";
 
     longDescription =
       '' GNU Gengetopt program generates a C function that uses getopt_long
@@ -19,11 +35,11 @@ stdenv.mkDerivation rec {
          fills a struct
       '';
 
-    homepage = http://www.gnu.org/software/gengetopt/;
+    homepage = "https://www.gnu.org/software/gengetopt/";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

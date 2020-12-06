@@ -1,41 +1,43 @@
-{ stdenv, fetchurl, perl, libX11, libjpeg, libpng, libtiff, pkgconfig,
-librsvg, glib, gtk, libXext, libXxf86vm, poppler }:
+{ stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff, pkgconfig,
+librsvg, glib, gtk2, libXext, libXxf86vm, poppler, xineLib, ghostscript, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "eaglemode-0.84.0";
+stdenv.mkDerivation rec {
+  pname = "eaglemode";
+  version = "0.94.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/eaglemode/eaglemode-0.84.0.tar.bz2;
-    sha256 = "0n20b419j0l7h7jr4s3f3n09ka0ysg9nqs8mcwsrx24rcq7nv0cs";
+    url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
+    sha256 = "10zxih7gmyhq0az1mnsw2x563l4bbwcns794s4png8rf4d6hjszm";
   };
 
-  buildInputs = [ perl libX11 libjpeg libpng libtiff pkgconfig
-    librsvg glib gtk libXxf86vm libXext poppler ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl libX11 libXinerama libjpeg libpng libtiff
+    librsvg glib gtk2 libXxf86vm libXext poppler xineLib ghostscript makeWrapper ];
 
-  # The program tries to dlopen both Xxf86vm and Xext, so we use the
+  # The program tries to dlopen Xxf86vm, Xext and Xinerama, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.
   # I use 'yes y' to skip a build error linking with xineLib,
   # because xine stopped exporting "_x_vo_new_port"
-  #  http://sourceforge.net/projects/eaglemode/forums/forum/808824/topic/5115261
+  #  https://sourceforge.net/projects/eaglemode/forums/forum/808824/topic/5115261
   buildPhase = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext"
-    yes y | perl make.pl build
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext -lXinerama"
+    perl make.pl build
   '';
 
   dontPatchELF = true;
+  # eaglemode expects doc to be in the root directory
+  forceShare = [ "man" "info" ];
 
   installPhase = ''
     perl make.pl install dir=$out
-    # I don't like this... but it seems the way they plan to run it by now.
-    # Run 'eaglemode.sh', not 'eaglemode'.
-    ln -s $out/eaglemode.sh $out/bin/eaglemode.sh
+    wrapProgram $out/bin/eaglemode --set EM_DIR "$out" --prefix LD_LIBRARY_PATH : "$out/lib" --prefix PATH : "${ghostscript}/bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://eaglemode.sourceforge.net";
     description = "Zoomable User Interface";
-    license="GPLv3";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig }:
 
-let baseurl = "http://perso.b2b2c.ca/sarrazip/dev"; in
+let baseurl = "https://perso.b2b2c.ca/~sarrazip/dev"; in
 
 stdenv.mkDerivation rec {
-  name = "boolstuff-0.1.13";
+  name = "boolstuff-0.1.16";
 
   src = fetchurl {
     url = "${baseurl}/${name}.tar.gz";
-    sha256 = "0akwb57lnzq1ak32k6mdxbma2gj0pqhj8y9m6hq79djb9s3mxvmn";
+    sha256 = "10qynbyw723gz2vrvn4xk2var172kvhlz3l3l80qbdsfb3d12wn0";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  meta = { 
+  meta = {
     description = "Library for operations on boolean expression binary trees";
     homepage = "${baseurl}/boolstuff.html";
     license = "GPL";

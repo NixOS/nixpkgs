@@ -1,10 +1,23 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "getopt-1.1.4";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  pname = "getopt";
+  version = "1.1.6";
   src = fetchurl {
-    url = http://nixos.org/tarballs/getopt-1.1.4.tar.gz;
-    md5 = "02188ca68da27c4175d6e9f3da732101";
+    url = "http://frodo.looijaard.name/system/files/software/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1zn5kp8ar853rin0ay2j3p17blxy16agpp8wi8wfg4x98b31vgyh";
+  };
+
+  makeFlags = [
+    "WITHOUT_GETTEXT=1"
+    "LIBCGETOPT=0"
+    "prefix=${placeholder "out"}"
+    "CC:=$(CC)"
+  ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://frodo.looijaard.name/project/getopt";
+    description = "Parses command-line arguments from shell scripts";
   };
 }

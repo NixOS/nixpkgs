@@ -1,27 +1,28 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ebtables-2.0.9-2";
+  pname = "ebtables";
+  version = "2.0.11";
 
   src = fetchurl {
-    url = mirror://sourceforge/ebtables/ebtables-v2.0.9-2.tar.gz;
-    sha256 = "18yni9zzhfi1ygkgifzj8qpn95cwwiw7j6b3wsl1bij39mj5z1cq";
+    url = "http://ftp.netfilter.org/pub/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0apxgmkhsk3vxn9q3libxn3dgrdljrxyy4mli2gk49m7hi3na7xp";
   };
 
   makeFlags =
-    "LIBDIR=$(out)/lib BINDIR=$(out)/sbin MANDIR=$(out)/share/man " +
-    "ETCDIR=$(out)/etc INITDIR=$(TMPDIR) SYSCONFIGDIR=$(out)/etc/sysconfig";
+    [ "LIBDIR=$(out)/lib" "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man"
+      "ETCDIR=$(out)/etc" "INITDIR=$(TMPDIR)" "SYSCONFIGDIR=$(out)/etc/sysconfig"
+      "LOCALSTATEDIR=/var"
+    ];
 
-  preBuild =
-    ''
-      substituteInPlace Makefile --replace '-o root -g root' ""
-    '';
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preInstall = "mkdir -p $out/etc/sysconfig";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A filtering tool for Linux-based bridging firewalls";
-    homepage = http://ebtables.sourceforge.net/;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://ebtables.sourceforge.net/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

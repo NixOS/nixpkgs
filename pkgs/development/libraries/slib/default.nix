@@ -1,28 +1,18 @@
 { fetchurl, stdenv, unzip, scheme, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "slib-3b2";
+  name = "slib-3b5";
 
   src = fetchurl {
-    url = "http://groups.csail.mit.edu/mac/ftpdir/scm/${name}.zip";
-    sha256 = "1s6a7f3ha2bhwj4nkg34n0j511ww1nlgrn5xis8k53l8ghdrrjxi";
+    url = "https://groups.csail.mit.edu/mac/ftpdir/scm/${name}.zip";
+    sha256 = "0q0p2d53p8qw2592yknzgy2y1p5a9k7ppjx0cfrbvk6242c4mdpq";
   };
 
   patches = [ ./catalog-in-library-vicinity.patch ];
 
   buildInputs = [ unzip scheme texinfo ];
 
-  configurePhase = ''
-    mkdir -p "$out"
-    sed -i "Makefile" \
-        -e "s|^[[:blank:]]*prefix[[:blank:]]*=.*$|prefix = $out/|g"
-  '';
-
-  buildPhase = "make infoz";
-
-  installPhase = ''
-    make install
-
+  postInstall = ''
     ln -s mklibcat{.scm,}
     SCHEME_LIBRARY_PATH="$out/lib/slib" make catalogs
 
@@ -43,7 +33,7 @@ stdenv.mkDerivation rec {
       provides a platform independent framework for using packages of Scheme
       procedures and syntax.  As distributed, SLIB contains useful packages
       for all Scheme implementations.  Its catalog can be transparently
-      extended to accomodate packages specific to a site, implementation,
+      extended to accommodate packages specific to a site, implementation,
       user, or directory.
 
       SLIB supports Bigloo, Chez, ELK 3.0, Gambit 4.0, Guile, JScheme, Kawa,
@@ -52,10 +42,11 @@ stdenv.mkDerivation rec {
     '';
 
     # Public domain + permissive (non-copyleft) licensing of some files.
-    license = "public domain";
+    license = stdenv.lib.licenses.publicDomain;
 
-    homepage = http://people.csail.mit.edu/jaffer/SLIB;
+    homepage = "http://people.csail.mit.edu/jaffer/SLIB";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,16 +1,29 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "proj-4.5.0";
+stdenv.mkDerivation rec {
+  pname = "proj";
+  version = "6.3.1";
 
-  src = fetchurl {
-    url = ftp://ftp.remotesensing.org/proj/proj-4.5.0.tar.gz;
-    sha256 = "1d2qz0vgp13hkfgaz7hkblhb9w2fh2blbjqz73xdinwc08cmflqv";
+  src = fetchFromGitHub {
+    owner = "OSGeo";
+    repo = "PROJ";
+    rev = version;
+    sha256 = "1ildcp57qsa01kvv2qxd05nqw5mg0wfkksiv9l138dbhp0s7rkxp";
   };
 
-  meta = { 
+  outputs = [ "out" "dev"];
+
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+
+  buildInputs = [ sqlite ];
+
+  doCheck = stdenv.is64bit;
+
+  meta = with stdenv.lib; {
     description = "Cartographic Projections Library";
-    homepage = http://proj.maptools.org;
-    license = "MIT";
+    homepage = "https://proj4.org";
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

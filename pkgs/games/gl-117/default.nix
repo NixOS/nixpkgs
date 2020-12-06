@@ -1,41 +1,23 @@
-x@{builderDefsPackage
-  , mesa, SDL, freeglut, SDL_mixer, autoconf, automake, libtool
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl
+, libGLU, libGL, SDL, freeglut, SDL_mixer, autoconf, automake, libtool
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version = "1.3.2";
-    name = "gl-117-1.3.2";
-    url = "mirror://sourceforge/project/gl-117/gl-117/GL-117%20Source/gl-117-1.3.2-src.tar.bz2";
-    hash = "1yvg1rp1yijv0b45cz085b29x5x0g5fkm654xdv5qwh2l6803gb4";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "gl-117";
+  version = "1.3.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/project/gl-117/gl-117/GL-117%20Source/${pname}-${version}.tar.bz2";
+    sha256 = "1yvg1rp1yijv0b45cz085b29x5x0g5fkm654xdv5qwh2l6803gb4";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ libGLU libGL SDL freeglut SDL_mixer autoconf automake libtool ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "An air combat simulator";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = "https://sourceforge.net/projects/gl-117";
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
-}) x
-
+}

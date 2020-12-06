@@ -1,28 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, gdk_pixbuf, gtk, libXmu }:
+{ stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "trayer-1.1.5";
+  name = "trayer-1.1.8";
 
-  buildInputs = [ pkgconfig gdk_pixbuf gtk libXmu ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gdk-pixbuf gtk2 ];
 
-  src = fetchurl {
-          url = "https://github.com/sargon/trayer-srg/tarball/${name}";
-          name = "${name}.tar.gz";
-          sha256 = "98804500188c0bb99c7389ebea4b2e4dfffa2f3d06dc97e633b4934cf7c29757";
-        };
+  src = fetchFromGitHub {
+    owner = "sargon";
+    repo = "trayer-srg";
+    rev = name;
+    sha256 = "1mvhwaqa9bng9wh3jg3b7y8gl7nprbydmhg963xg0r076jyzv0cg";
+  };
+
+  preConfigure = ''
+    patchShebangs configure
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
-    homepage = http://github.com/sargon/trayer-srg;
-
-    license = "bsd";
-
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/sargon/trayer-srg";
+    license = licenses.mit;
     description = "A lightweight GTK2-based systray for UNIX desktop";
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }
 

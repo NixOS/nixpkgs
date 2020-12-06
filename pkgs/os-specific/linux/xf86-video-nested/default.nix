@@ -1,31 +1,30 @@
-{ stdenv, fetchgit, autoconf, automake, fontsproto, libX11, libXext
-, libtool, pixman, pkgconfig, renderproto, utilmacros, xorgserver
+{ stdenv, fetchgit, autoreconfHook, xorgproto, libX11, libXext
+, pixman, pkgconfig, utilmacros, xorgserver
 }:
 
 stdenv.mkDerivation {
-  name = "xf86-video-nested-2012-06-15";
+  name = "xf86-video-nested-2017-06-12";
 
   src = fetchgit {
-    url = git://anongit.freedesktop.org/xorg/driver/xf86-video-nested;
-    rev = "ad48dc6eb98776a8a886f26f31c0110352fa1da4";
-    sha256 = "43a102405acdcdb346ab197b33c8fa724d2140f33754f8ee3941a0eea152735c";
+    url = "git://anongit.freedesktop.org/xorg/driver/xf86-video-nested";
+    rev = "6a48b385c41ea89354d0b2ee7f4649a1d1d9ec70";
+    sha256 = "133rd2kvr2q2wmwpx82bb93qbi8wm8qp1vlmbhgc7aslz0j4cqqv";
   };
 
   buildInputs =
-    [ autoconf automake fontsproto libX11 libXext libtool pixman
-      pkgconfig renderproto utilmacros xorgserver
+    [ autoreconfHook xorgproto libX11 libXext pixman
+      pkgconfig utilmacros xorgserver
     ];
 
+  hardeningDisable = [ "fortify" ];
 
-  configurePhase = ''
-    autoreconf -fvi
-    ./configure --prefix=$out CFLAGS="-I${pixman}/include/pixman-1"
-  '';
+  CFLAGS = "-I${pixman}/include/pixman-1";
 
-  meta = {
-    homepage = git://anongit.freedesktop.org/xorg/driver/xf86-video-nested;
-    description = "Driver to run Xorg on top of Xorg or something else";
-    maintainers = [ stdenv.lib.maintainers.goibhniu ];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    homepage = "https://cgit.freedesktop.org/xorg/driver/xf86-video-nested";
+    description = "A driver to run Xorg on top of Xorg or something else";
+    maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

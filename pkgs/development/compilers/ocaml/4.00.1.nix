@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, ncurses, x11 }:
+{ stdenv, fetchurl, ncurses, xlibsWrapper }:
 
 let
-   useX11 = !stdenv.isArm && !stdenv.isMips;
+   useX11 = !stdenv.isAarch32 && !stdenv.isMips;
    useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+   inherit (stdenv.lib) optional optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
-  
-  name = "ocaml-4.00.1";
-  
+  pname = "ocaml";
+  version = "4.00.1";
+
   src = fetchurl {
-    url = "http://caml.inria.fr/pub/distrib/ocaml-4.00/${name}.tar.bz2";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-4.00/${pname}-${version}.tar.bz2";
     sha256 = "33c3f4acff51685f5bfd7c260f066645e767d4e865877bf1613c176a77799951";
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11 ];
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ x11 ];
+  configureFlags = [ "-no-tk" ] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
+  buildInputs = [ ncurses ] ++ optional useX11 xlibsWrapper;
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = ''
     CAT=$(type -tp cat)
@@ -33,10 +33,14 @@ stdenv.mkDerivation rec {
     nativeCompilers = useNativeCompilers;
   };
 
-  meta = {
-    homepage = http://caml.inria.fr/ocaml;
-    licenses = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
-    description = "OCaml, the most popular variant of the Caml language";
+  meta = with stdenv.lib; {
+    homepage = "http://caml.inria.fr/ocaml";
+    branch = "4.00";
+    license = with licenses; [
+      qpl /* compiler */
+      lgpl2 /* library */
+    ];
+    description = "Most popular variant of the Caml language";
 
     longDescription =
       ''
@@ -57,7 +61,7 @@ stdenv.mkDerivation rec {
         and a documentation generator (ocamldoc).
       '';
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = with platforms; linux;
   };
 
 }

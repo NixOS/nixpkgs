@@ -1,47 +1,17 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="ised";
-    version="2.2.2";
-    name="${baseName}-${version}";
-    url="mirror://sf/project/ised/${name}.tar.bz2";
-    hash="1nb1cnsbs2k3j9cy2kc2kg01rd7wf3jwxm62rwn1rjlc46nwdlmn";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "ised";
+  version = "2.7.1";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/ised/${pname}-${version}.tar.bz2";
+    sha256 = "0fhha61whkkqranqdxg792g0f5kgp5m3m6z1iqcvjh2c34rczbmb";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
   meta = {
     description = "A numeric sequence editor";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl3Plus;
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
+    platforms = with stdenv.lib.platforms; linux;
+    license = stdenv.lib.licenses.gpl3Plus;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "ised.sf.net";
-    };
-  };
-}) x
-
+}

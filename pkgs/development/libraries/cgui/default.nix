@@ -1,57 +1,28 @@
-x@{builderDefsPackage
-  , texinfo, allegro, perl
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, texinfo, allegro, perl, libX11 }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="cgui";
-    version="2.0.3";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="mirror://sourceforge/project/${project}/${version}/${name}.tar.gz";
-    hash="00kk4xaw68m44awy8zq4g5plx372swwccvzshn68a0a8f3f2wi4x";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "cgui";
+  version="2.1.0";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/project/cgui/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1pp1hvidpilq37skkmbgba4lvzi01rasy04y0cnas9ck0canv00s";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ texinfo allegro perl libX11 ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["genMakefile" "doMakeInstall"];
-
-  genMakefile = a.fullDepEntry (''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
+  configurePhase = ''
     sh fix.sh unix
-  '') ["minInit" "doUnpack" "addInputs"];
-      
-  makeFlags = [
-    "SYSTEM_DIR=$out"
-  ];
+  '';
 
-  meta = {
+  hardeningDisable = [ "format" ];
+
+  makeFlags = [ "SYSTEM_DIR=$(out)" ];
+
+  meta = with stdenv.lib; {
     description = "A multiplatform basic GUI library";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.free;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/cgui/files/";
-    };
-  };
-}) x
-
+}

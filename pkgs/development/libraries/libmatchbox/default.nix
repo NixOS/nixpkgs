@@ -1,19 +1,22 @@
 { stdenv, fetchurl, libX11, libXext, libpng, libXft, libICE, pango, libjpeg}:
 
 stdenv.mkDerivation rec {
-  name = "libmatchbox-1.9";
+  pname = "libmatchbox";
+  version = "1.11";
 
   buildInputs = [ libXft libICE pango libjpeg ];
   propagatedBuildInputs = [ libX11 libXext libpng ];
+  NIX_LDFLAGS = "-lX11";
 
   src = fetchurl {
-    url = http://matchbox-project.org/sources/libmatchbox/1.9/libmatchbox-1.9.tar.bz2;
-    sha256 = "006zdrgs7rgh7dvakjmqsp1q9karq6c5cz4gki2l15fhx0cf40fv";
+    url = "https://downloads.yoctoproject.org/releases/matchbox/libmatchbox/${version}/libmatchbox-${version}.tar.bz2";
+    sha256 = "0lvv44s3bf96zvkysa4ansxj2ffgj3b5kgpliln538q4wd9ank15";
   };
 
   meta = {
     description = "Library of the matchbox X window manager";
-    homepage = http://matchbox-project.org/;
-    license = "GPLv2+";
+    homepage = "http://matchbox-project.org/";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

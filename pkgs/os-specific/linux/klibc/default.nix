@@ -1,74 +1,51 @@
-{ stdenv, fetchurl, perl, bison, mktemp, linuxHeaders, linuxHeadersCross, kernel ? null }:
-
-assert stdenv.isLinux;
+{ lib, stdenv, fetchurl, linuxHeaders, perl }:
 
 let
-  version = "1.5.24";
-  baseMakeFlags = ["V=1" "prefix=$out" "SHLIBDIR=$out/lib"];
+  commonMakeFlags = [
+    "prefix=$(out)"
+    "SHLIBDIR=$(out)/lib"
+  ];
 in
 
-stdenv.mkDerivation {
-  name = "klibc-${version}${stdenv.lib.optionalString (kernel != null) "-${kernel.version}"}";
+stdenv.mkDerivation rec {
+  pname = "klibc";
+  version = "2.0.8";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
-    sha256 = "18lm32dlj9k2ky9wwk274zmc3jndgrb41b6qm82g3lza6wlw3yki";
+    url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
+    sha256 = "0dmlkhnn5q8fc6rkzsisir4chkzmmiq6xkjmvyvf0g7yihwz2j2f";
   };
 
-  # Trick to make this build on nix. It expects to have the kernel sources
-  # instead of only the linux kernel headers.
-  # So it cannot run the 'make headers_install' it wants to run.
-  # We don't install the headers, so klibc will not be useful as libc, but
-  # usually in nixpkgs we only use the userspace tools comming with klibc.
-  prePatch = stdenv.lib.optionalString (kernel == null) ''
-    sed -i -e /headers_install/d scripts/Kbuild.install
-  '';
-  
-  makeFlags = baseMakeFlags;
+  patches = [ ./no-reinstall-kernel-headers.patch ];
 
-  inherit linuxHeaders;
+  nativeBuildInputs = [ perl ];
 
-  crossAttrs = {
-    makeFlags = baseMakeFlags ++ [ "CROSS_COMPILE=${stdenv.cross.config}-"
-        "KLIBCARCH=${stdenv.cross.arch}" ];
+  hardeningDisable = [ "format" "stackprotector" ];
 
-    patchPhase = ''
-      sed -i 's/-fno-pic -mno-abicalls/& -mabi=32/' usr/klibc/arch/mips/MCONFIG
-      sed -i /KLIBCKERNELSRC/d scripts/Kbuild.install
-      # Wrong check for __mips64 in klibc
-      sed -i s/__mips64__/__mips64/ usr/include/fcntl.h
-    '';
+  makeFlags = commonMakeFlags ++ [
+    "KLIBCARCH=${stdenv.hostPlatform.platform.kernelArch}"
+    "KLIBCKERNELSRC=${linuxHeaders}"
+  ] # TODO(@Ericson2314): We now can get the ABI from
+    # `stdenv.hostPlatform.parsed.abi`, is this still a good idea?
+    ++ stdenv.lib.optional (stdenv.hostPlatform.platform.kernelArch == "arm") "CONFIG_AEABI=y"
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
-    linuxHeaders = linuxHeadersCross;
-  };
-  
-  # The AEABI option concerns only arm systems, and does not affect the build for
-  # other systems.
-  preBuild = ''
-    sed -i /CONFIG_AEABI/d defconfig
-    echo "CONFIG_AEABI=y" >> defconfig
-    makeFlags=$(eval "echo $makeFlags")
-
-  '' + (if kernel == null then ''
-    mkdir linux
-    cp -prsd $linuxHeaders/include linux/
-    chmod -R u+w linux/include/
-  '' else ''
-    tar xvf ${kernel.src}
-    mv linux* linux
-    cd linux
-    ln -sv ${kernel}/config .config
-    make prepare
-    cd ..
-  '');
-  
   # Install static binaries as well.
   postInstall = ''
     dir=$out/lib/klibc/bin.static
     mkdir $dir
     cp $(find $(find . -name static) -type f ! -name "*.g" -a ! -name ".*") $dir/
-    cp usr/dash/sh $dir/
+
+    for file in ${linuxHeaders}/include/*; do
+      ln -sv $file $out/lib/klibc/include
+    done
   '';
-  
-  buildNativeInputs = [ perl bison mktemp ];
+
+  meta = {
+    description = "Minimalistic libc subset for initramfs usage";
+    homepage = "https://kernel.org/pub/linux/libs/klibc/";
+    maintainers = with lib.maintainers; [ fpletz ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+  };
 }

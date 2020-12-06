@@ -1,49 +1,67 @@
 { stdenv, fetchurl, kernel }:
 
-let version = "5_100_82_112";
-    bits = if stdenv.system == "i686-linux" then "32" else
-      assert stdenv.system == "x86_64-linux"; "64";
-in
+let
+  version = "6.30.223.271";
+  hashes = {
+    i686-linux   = "1kaqa2dw3nb8k23ffvx46g8jj3wdhz8xa6jp1v3wb35cjfr712sg";
+    x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
+  };
 
+  arch = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
+  tarballVersion = stdenv.lib.replaceStrings ["."] ["_"] version;
+  tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
+in
 stdenv.mkDerivation {
   name = "broadcom-sta-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_${bits}-v${version}.tar.gz";
-    sha256 = if bits == "32"
-      then "1rvhw9ngw0djxyyjx5m01c0js89zs3xiwmra03al6f9q7cbf7d45"
-      else "1qsarnry10f5m8a73wbr9cg2ifs00sqg6x0ay59l72vl9hb2zlww";
+    url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
+    sha256 = hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  buildInputs = [ kernel ];
-  patches =
-    [ ./makefile.patch ./linux-2.6.39.patch ./linux-3.2.patch
-      ./linux-3.4.patch ./license.patch
-    ];
+  hardeningDisable = [ "pic" ];
 
-  makeFlags = "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build";
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  unpackPhase =
-    ''
-      sourceRoot=broadcom-sta
-      mkdir "$sourceRoot"
-      tar xvf "$src" -C "$sourceRoot"
-    '';
+  patches = [
+    ./i686-build-failure.patch
+    ./license.patch
+    ./linux-4.7.patch
+    # source: https://git.archlinux.org/svntogit/community.git/tree/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms
+    ./linux-4.8.patch
+    # source: https://aur.archlinux.org/cgit/aur.git/tree/linux411.patch?h=broadcom-wl
+    ./linux-4.11.patch
+    # source: https://aur.archlinux.org/cgit/aur.git/tree/linux412.patch?h=broadcom-wl
+    ./linux-4.12.patch
+    ./linux-4.15.patch
+    ./linux-5.1.patch
+    # source: https://salsa.debian.org/Herrie82-guest/broadcom-sta/-/commit/247307926e5540ad574a17c062c8da76990d056f
+    ./linux-5.6.patch
+    ./null-pointer-fix.patch
+    ./gcc.patch
+  ];
 
-  installPhase =
-    ''
-      binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-      docDir="$out/share/doc/broadcom-sta/"
-      mkdir -p "$binDir" "$docDir"
-      cp wl.ko "$binDir"
-      cp lib/LICENSE.txt "$docDir"
-    '';
+  makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
+
+  unpackPhase = ''
+    sourceRoot=broadcom-sta
+    mkdir "$sourceRoot"
+    tar xvf "$src" -C "$sourceRoot"
+  '';
+
+  installPhase = ''
+    binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+    docDir="$out/share/doc/broadcom-sta/"
+    mkdir -p "$binDir" "$docDir"
+    cp wl.ko "$binDir"
+    cp lib/LICENSE.txt "$docDir"
+  '';
 
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
-    homepage = http://www.broadcom.com/support/802.11/linux_sta.php;
-    license = "unfree-redistributable";
-    maintainers = [ stdenv.lib.maintainers.neznalek ];
+    homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
+    license = stdenv.lib.licenses.unfreeRedistributable;
+    maintainers = with stdenv.lib.maintainers; [ phreedom ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

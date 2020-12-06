@@ -1,27 +1,61 @@
-{ stdenv, fetchurl, cmake, kdelibs, attica, perl, zlib, libpng, boost, mesa
-, kdepimlibs, createresources ? null, eigen, qca2, exiv2, soprano, marble, lcms2
-, fontconfig, freetype, sqlite, icu, libwpd, libwpg, pkgconfig, popplerQt4
-, libkdcraw, libxslt, fftw, glew, gsl, shared_desktop_ontologies, okular }:
+{
+  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, makeWrapper,
+  boost, qtwebkit, qtx11extras, shared-mime-info,
+  breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets,
+  kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n,
+  kiconthemes, kitemviews, kjobwidgets, kcmutils, kdelibs4support, kio, kross,
+  knotifications, knotifyconfig, kparts, ktextwidgets, kwallet, kwidgetsaddons,
+  kwindowsystem, kxmlgui, sonnet, threadweaver,
+  kcontacts, akonadi, akonadi-calendar, akonadi-contacts,
+  eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen,
+  librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon,
+  poppler, pstoedit, qca-qt5, vc
+# TODO: package Spnav, m2mml LibEtonyek, Libqgit2
+}:
 
-stdenv.mkDerivation rec {
-  name = "calligra-2.5.0";
+mkDerivation rec {
+  pname = "calligra";
+  version = "3.2.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${name}/${name}.tar.bz2";
-    sha256 = "0q6ydi7hzrzwqzb38gikdh1l2zf8qp4i3nkgyb01148bjwrhvf21";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0iqi6z6gkck2afgy200dacgcspq7i7887alcj0pklm08hbmsdy5i";
   };
 
-  buildNativeInputs = [ cmake perl pkgconfig ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
-  buildInputs = [ kdelibs attica zlib libpng boost mesa kdepimlibs
-    createresources eigen qca2 exiv2 soprano marble lcms2 fontconfig freetype
-    sqlite icu libwpd libwpg popplerQt4 libkdcraw libxslt fftw glew gsl
-    shared_desktop_ontologies okular ];
+  buildInputs = [
+    boost qtwebkit qtx11extras shared-mime-info
+    kactivities karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
+    kdbusaddons kdiagram kguiaddons khtml ki18n kiconthemes kitemviews
+    kjobwidgets kcmutils kdelibs4support kio kross knotifications knotifyconfig kparts
+    ktextwidgets kwallet kwidgetsaddons kwindowsystem kxmlgui sonnet threadweaver
+    kcontacts akonadi akonadi-calendar akonadi-contacts
+    eigen git gsl ilmbase kproperty kreport lcms2 marble pcre libgit2 libodfgen librevenge
+    libvisio libwpd libwpg libwps okular openexr openjpeg phonon poppler qca-qt5 vc
+  ];
 
-  meta = {
-    description = "A Qt/KDE office suite, formely known as koffice";
-    homepage = http://calligra.org;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    inherit (kdelibs.meta) platforms;
+  propagatedUserEnvPkgs = [ kproperty ];
+
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.getBin pstoedit}/bin"
+    "--prefix XDG_DATA_DIRS : ${breeze-icons}/share"
+  ];
+
+  meta = with lib; {
+    description = "A suite of productivity applications";
+    longDescription = ''
+      Calligra Suite is a set of applications written to help
+      you to accomplish your work. Calligra includes efficient
+      and capable office components: Words for text processing,
+      Sheets for computations, Plan for planning, and Karbon for
+      vector graphics.
+    '';
+    homepage = "https://www.calligra.org/";
+    maintainers = with maintainers; [ phreedom ebzzry zraexy ];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

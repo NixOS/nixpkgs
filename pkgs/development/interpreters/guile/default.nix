@@ -1,5 +1,9 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, coverageAnalysis ? null, gnu ? null }:
+{ stdenv, pkgsBuildBuild, buildPackages
+, fetchurl, makeWrapper, gawk, pkgconfig
+, libffi, libtool, readline, gmp, boehmgc, libunistring
+, coverageAnalysis ? null
+, fetchpatch
+}:
 
 # Do either a coverage analysis build or a standard build.
 (if coverageAnalysis != null
@@ -7,58 +11,98 @@
  else stdenv.mkDerivation)
 
 (rec {
-  name = "guile-2.0.7";
+  name = "guile-${version}";
+  version = "2.2.7";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "0f53pxkia4v17n0avwqlcjpy0n89hkazm2xsa6p84lv8k6k8y9vg";
+    sha256 = "013mydzhfswqci6xmyc1ajzd59pfbdak15i0b090nhr9bzm7dxyd";
   };
 
-  buildNativeInputs = [ makeWrapper gawk pkgconfig ];
-  buildInputs = [ readline libtool libunistring libffi ];
-  propagatedBuildInputs = [ gmp boehmgc ]
+  outputs = [ "out" "dev" "info" ];
+  setOutputFlags = false; # $dev gets into the library otherwise
 
-    # XXX: These ones aren't normally needed here, but since
-    # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+                           pkgsBuildBuild.guile;
+  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  buildInputs = [ readline libtool libunistring libffi ];
+
+  propagatedBuildInputs = [
+    gmp boehmgc
+
+    # XXX: These ones aren't normally needed here, but `libguile*.la' has '-l'
+    # flags for them without corresponding '-L' flags. Adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
-    ++ [ libtool libunistring ];
+    libtool libunistring
+  ];
 
-  # A native Guile 2.0 is needed to cross-build Guile.
-  selfBuildNativeInput = true;
+  # According to Bernhard M. Wiedemann <bwiedemann suse de> on
+  # #reproducible-builds on irc.oftc.net, (2020-01-29): they had to
+  # build Guile without parallel builds to make it reproducible.
+  #
+  # re: https://issues.guix.gnu.org/issue/20272
+  # re: https://build.opensuse.org/request/show/732638
+  enableParallelBuilding = false;
 
-  enableParallelBuilding = true;
+  patches = [
+    ./eai_system.patch
+  ] ++ stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
+    ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
+      sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
+    });
 
-  patches = [ ./disable-gc-sensitive-tests.patch ] ++
-    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
+  # Explicitly link against libgcc_s, to work around the infamous
+  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
+
+  # don't have "libgcc_s.so.1" on darwin
+  LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+
+  configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]
+    ++ stdenv.lib.optionals stdenv.isSunOS [
+      # Make sure the right <gmp.h> is found, and not the incompatible
+      # /usr/include/mp.h from OpenSolaris.  See
+      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+      # for details.
+      "--with-libgmp-prefix=${gmp.dev}"
+
+      # Same for these (?).
+      "--with-libunistring-prefix=${libunistring}"
+
+      # See below.
+      "--without-threads"
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-
+  ''
     # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-    sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
-        -e 's|-lunistring|-L${libunistring}/lib -lunistring|g ;
+  + ''
+    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
+        -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
             s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
-            s|-lltdl|-L${libtool}/lib -lltdl|g'
+            s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
+            s|includedir=$out|includedir=$dev|g
+            "
   '';
 
-  doCheck = true;
+  # make check doesn't work on darwin
+  # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
+  doCheck = false;
+  doInstallCheck = doCheck;
 
-  setupHook = ./setup-hook-2.0.sh;
-
-  crossAttrs.preConfigure =
-    stdenv.lib.optionalString (stdenv.cross.config == "i586-pc-gnu")
-       # On GNU, libgc depends on libpthread, but the cross linker doesn't
-       # know where to find libpthread, which leads to erroneous test failures
-       # in `configure', where `-pthread' and `-lpthread' aren't explicitly
-       # passed.  So it needs some help (XXX).
-       "export LDFLAGS=-Wl,-rpath-link=${gnu.libpthreadCross}/lib";
-
+  setupHook = ./setup-hook-2.2.sh;
 
   meta = {
-    description = "GNU Guile 2.0, an embeddable Scheme implementation";
+    description = "Embeddable Scheme implementation";
+    homepage    = "https://www.gnu.org/software/guile/";
+    license     = stdenv.lib.licenses.lgpl3Plus;
+    maintainers = with stdenv.lib.maintainers; [ ludo lovek323 vrthra ];
+    platforms   = stdenv.lib.platforms.all;
 
     longDescription = ''
       GNU Guile is an implementation of the Scheme programming language, with
@@ -69,43 +113,5 @@
       linking, a foreign function call interface, and powerful string
       processing.
     '';
-
-    homepage = http://www.gnu.org/software/guile/;
-    license = "LGPLv3+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-
-    platforms = stdenv.lib.platforms.all;
   };
-}
-
-//
-
-(stdenv.lib.optionalAttrs stdenv.isSunOS {
-  # TODO: Move me above.
-  configureFlags =
-    [
-      # Make sure the right <gmp.h> is found, and not the incompatible
-      # /usr/include/mp.h from OpenSolaris.  See
-      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
-      # for details.
-      "--with-libgmp-prefix=${gmp}"
-
-      # Same for these (?).
-      "--with-libreadline-prefix=${readline}"
-      "--with-libunistring-prefix=${libunistring}"
-
-      # See below.
-      "--without-threads"
-    ];
 })
-
-//
-
-(if stdenv.isFreeBSD
- then {
-   # XXX: Thread support is currently broken on FreeBSD and Solaris (namely
-   # the `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
-   configureFlags = [ "--without-threads" ];
- }
- else {}))

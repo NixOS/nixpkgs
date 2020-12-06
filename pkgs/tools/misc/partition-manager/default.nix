@@ -1,34 +1,32 @@
-{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt4, kdelibs, kde_baseapps,
-  automoc4, phonon, perl }:
+{ mkDerivation, fetchurl, lib
+, extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
+, kconfig, kcrash, kinit, kpmcore
+, eject, libatasmart , util-linux, qtbase
+}:
 
-stdenv.mkDerivation {
-  name = "partitionmanager-1.0.0";
+let
+  pname = "partitionmanager";
+in mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "3.3.1";
 
   src = fetchurl {
-    url = http://www.kde-apps.org/CONTENT/content-files/89595-partitionmanager-1.0.0.tar.bz2;
-    sha256 = "03ibn4vns7pa0ygkp2jh6zcdy106as5cc7p6rv1f5c15wxx0zsk1";
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "0jhggb4xksb0k0mj752n6pz0xmccnbzlp984xydqbz3hkigra1si";
   };
 
-  buildInputs =
-    [ cmake gettext parted libuuid qt4 kdelibs kde_baseapps automoc4 perl phonon ];
+  enableParallelBuilding = true;
 
-  preConfigure = ''
-    export VERBOSE=1
-    cmakeFlagsArray=($cmakeFlagsArray -DGETTEXT_INCLUDE_DIR=${gettext}/include -DCMAKE_INCLUDE_PATH=${qt4}/include/QtGui )
-  '';
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook ];
 
-  postInstall = ''
-    set -x
-    rpath=`patchelf --print-rpath $out/bin/partitionmanager-bin`:${qt4}/lib 
-    for p in $out/bin/partitionmanager-bin; do
-      patchelf --set-rpath $rpath $p
-    done
-  '';
+  # refer to kpmcore for the use of eject
+  buildInputs = [ eject libatasmart util-linux ];
+  propagatedBuildInputs = [ kconfig kcrash kinit kpmcore ];
 
-  meta = { 
-    description = "Utility program to help you manage the disk devices";
-    homepage = http://www.kde-apps.org/content/show.php/KDE+Partition+Manager?content=89595; # ?
-    license = "GPL";
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    description = "KDE Partition Manager";
+    license = licenses.gpl2;
+    homepage = "https://www.kde.org/applications/system/kdepartitionmanager/";
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

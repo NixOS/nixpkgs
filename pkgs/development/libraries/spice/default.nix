@@ -1,35 +1,91 @@
-{ stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib, openssl
-, libXrandr, libXfixes, libXext, libXrender, libXinerama, libjpeg, zlib
-, spice_protocol, python, pyparsing }:
-
-with stdenv.lib;
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, pixman
+, alsaLib
+, openssl
+, libXrandr
+, libXfixes
+, libXext
+, libXrender
+, libXinerama
+, libjpeg
+, zlib
+, spice-protocol
+, python3
+, glib
+, cyrus_sasl
+, libcacard
+, lz4
+, libopus
+, gst_all_1
+, orc
+}:
 
 stdenv.mkDerivation rec {
-  name = "spice-0.12.0";
+  pname = "spice";
+  version = "0.14.2";
 
   src = fetchurl {
-    url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "15mp6nz467h4l5jg3vk51si6r5w7g329jvsy61f2gl3yabwcxmva";
+    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
+    sha256 = "19r999py9v9c7md2bb8ysj809ag1hh6djl1ik8jcgx065s4b60xj";
   };
 
-  buildInputs = [ pixman celt alsaLib openssl libjpeg zlib
-                  libXrandr libXfixes libXrender libXext libXinerama
-                  python pyparsing ];
+  patches = [
+    # submitted https://gitlab.freedesktop.org/spice/spice/merge_requests/4
+    ./correct-meson.patch
+  ];
 
-  buildNativeInputs = [ pkgconfig spice_protocol ];
+  postPatch = ''
+    patchShebangs build-aux
+  '';
+
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    spice-protocol
+    python3
+    python3.pkgs.six
+    python3.pkgs.pyparsing
+  ];
+
+  buildInputs = [
+    alsaLib
+    cyrus_sasl
+    glib
+    gst_all_1.gst-plugins-base
+    libXext
+    libXfixes
+    libXinerama
+    libXrandr
+    libXrender
+    libcacard
+    libjpeg
+    libopus
+    lz4
+    openssl
+    orc
+    pixman
+    python3.pkgs.pyparsing
+    zlib
+  ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  configureFlags = [
-    "--with-sasl=no"
-    "--disable-smartcard"
+  mesonFlags = [
+    "-Dgstreamer=1.0"
+    "-Dcelt051=disabled"
   ];
 
   postInstall = ''
     ln -s spice-server $out/include/spice
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction
@@ -38,7 +94,7 @@ stdenv.mkDerivation rec {
       VD-Interfaces. The VD-Interfaces (VDI) enable both ends of the solution to be easily
       utilized by a third-party component.
     '';
-    homepage = http://www.spice-space.org/;
+    homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
 
     maintainers = [ maintainers.bluescreen303 ];

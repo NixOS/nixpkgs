@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpcap, ncurses }:
 
-stdenv.mkDerivation {
-  name = "dnstop-20110502";
+stdenv.mkDerivation rec {
+  name = "dnstop-20140915";
 
   src = fetchurl {
-    url = http://dns.measurement-factory.com/tools/dnstop/src/dnstop-20110502.tar.gz;
-    sha256 = "0ra3xjf7dwvq5xm6qbqd2al35vigibihy46rsz1860qrn3wycy12";
+    url = "http://dns.measurement-factory.com/tools/dnstop/src/${name}.tar.gz";
+    sha256 = "0yn5s2825l826506gclbcfk3lzllx9brk9rzja6yj5jv0013vc5l";
   };
 
   buildInputs = [ libpcap ncurses ];
@@ -17,6 +17,7 @@ stdenv.mkDerivation {
   meta = { 
     description = "libpcap application that displays DNS traffic on your network";
     homepage = "http://dns.measurement-factory.com/tools/dnstop";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

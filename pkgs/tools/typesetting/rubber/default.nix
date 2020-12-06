@@ -1,20 +1,31 @@
-{ fetchurl, stdenv, python, texinfo }:
+{ fetchurl, stdenv, python3Packages, texinfo }:
 
-stdenv.mkDerivation rec {
-  name = "rubber-1.1";
+python3Packages.buildPythonApplication rec {
+  pname = "rubber";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "http://ebeffara.free.fr/pub/${name}.tar.gz";
-    sha256 = "1xbkv8ll889933gyi2a5hj7hhh216k04gn8fwz5lfv5iz8s34gbq";
+    url = "https://launchpad.net/rubber/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    sha256 = "178dmrp0mza5gqjiqgk6dqs0c10s0c517pk6k9pjbam86vf47a1p";
   };
 
-  buildInputs = [ python texinfo ];
+  # I'm sure there is a better way to pass these parameters to the build script...
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'pdf  = True' 'pdf = False' \
+      --replace '$base/man'   'share/man' \
+      --replace '$base/info'  'share/info' \
+      --replace '$base/share' 'share'
+  '';
 
-  patchPhase = "substituteInPlace configure --replace which \"type -P\"";
+  nativeBuildInputs = [ texinfo ];
 
-  meta = {
-    description = "Rubber, a wrapper for LaTeX and friends";
+  checkPhase = ''
+    cd tests && ${stdenv.shell} run.sh
+  '';
 
+  meta = with stdenv.lib; {
+    description = "Wrapper for LaTeX and friends";
     longDescription = ''
       Rubber is a program whose purpose is to handle all tasks related
       to the compilation of LaTeX documents.  This includes compiling
@@ -24,9 +35,9 @@ stdenv.mkDerivation rec {
       produce PostScript documents is also included, as well as usage
       of pdfLaTeX to produce PDF documents.
     '';
-
-    license = "GPLv2+";
-
-    homepage = http://www.pps.jussieu.fr/~beffara/soft/rubber/;
+    license = licenses.gpl2Plus;
+    homepage = "https://launchpad.net/rubber";
+    maintainers = with maintainers; [ ttuegel peterhoeg ];
+    platforms = platforms.unix;
   };
 }

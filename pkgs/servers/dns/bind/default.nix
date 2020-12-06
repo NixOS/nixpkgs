@@ -1,30 +1,92 @@
-{ stdenv, fetchurl, openssl, libtool, perl, libxml2 }:
+{ config, stdenv, lib, fetchurl, fetchpatch
+, perl, pkg-config
+, libcap, libtool, libxml2, openssl, libuv
+, enablePython ? config.bind.enablePython or false, python3 ? null
+, enableSeccomp ? false, libseccomp ? null, buildPackages, nixosTests
+}:
 
-let version = "9.9.2"; in
+assert enableSeccomp -> libseccomp != null;
+assert enablePython -> python3 != null;
 
 stdenv.mkDerivation rec {
-
-  name = "bind-${version}";
+  pname = "bind";
+  version = "9.16.8";
 
   src = fetchurl {
-    url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0j4v01ch4xkgnsnngmh6bpapzi53n4k79gbbhmxf44nmk2qk0rby";
+    url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0ccdbqmpvnxlbrxjsx2w8ir4xh961svzcw7n87n8dglj6rb9r6wy";
   };
 
-  patchPhase = ''
-    sed -i 's/^\t.*run/\t/' Makefile.in
+  outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
+
+  patches = [
+    ./dont-keep-configure-flags.patch
+    ./remove-mkdir-var.patch
+    # Fix cross-compilation (will be included in next release after 9.16.8)
+    (fetchpatch {
+      url = "https://gitlab.isc.org/isc-projects/bind9/-/commit/35ca6df07277adff4df7472a0b01ea5438cdf1ff.patch";
+      sha256 = "1sj0hcd0wgkam7hrbp2vw2yymmni4azr9ixd9shz1l6ja90bdj9h";
+    })
+  ];
+
+  nativeBuildInputs = [ perl pkg-config ];
+  buildInputs = [ libtool libxml2 openssl libuv ]
+    ++ lib.optional stdenv.isLinux libcap
+    ++ lib.optional enableSeccomp libseccomp
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  configureFlags = [
+    "--localstatedir=/var"
+    "--with-libtool"
+    (if enablePython then "--with-python" else "--without-python")
+    "--without-atf"
+    "--without-dlopen"
+    "--without-docbook-xsl"
+    "--without-gssapi"
+    "--without-idn"
+    "--without-idnlib"
+    "--without-lmdb"
+    "--without-libjson"
+    "--without-pkcs11"
+    "--without-purify"
+    "--with-randomdev=/dev/random"
+    "--with-ecdsa"
+    "--with-gost"
+    "--without-eddsa"
+    "--with-aes"
+  ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
+    ++ lib.optional enableSeccomp "--enable-seccomp"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+
+  postInstall = ''
+    moveToOutput bin/bind9-config $dev
+
+    moveToOutput bin/host $host
+
+    moveToOutput bin/dig $dnsutils
+    moveToOutput bin/delv $dnsutils
+    moveToOutput bin/nslookup $dnsutils
+    moveToOutput bin/nsupdate $dnsutils
+
+    for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
+      sed -i "$f" -e 's|-L${openssl.dev}|-L${openssl.out}|g'
+    done
   '';
 
-  buildInputs = [ openssl libtool perl libxml2 ];
+  doCheck = false; # requires root and the net
 
-  /* Why --with-libtool? */
-  configureFlags = [ "--with-libtool" "--with-openssl=${openssl}"
-    "--localstatedir=/var" ];
+  passthru.tests = { inherit (nixosTests) bind; };
 
-  meta = {
-    homepage = http://www.isc.org/software/bind;
-    description = "ISC BIND: a domain name server";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+  meta = with stdenv.lib; {
+    homepage = "https://www.isc.org/downloads/bind/";
+    description = "Domain name server";
+    license = licenses.mpl20;
+
+    maintainers = with maintainers; [ peti globin ];
+    platforms = platforms.unix;
+
+    outputsToInstall = [ "out" "dnsutils" "host" ];
   };
 }

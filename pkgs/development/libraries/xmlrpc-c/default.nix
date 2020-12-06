@@ -1,16 +1,33 @@
-{ stdenv, fetchsvn, curl }:
+{ stdenv, fetchurl, curl, libxml2 }:
 
-let rev = "2262"; in
-stdenv.mkDerivation {
-  name = "xmlrpc-c-r${rev}";
+stdenv.mkDerivation rec {
+  name = "xmlrpc-c-1.51.06";
 
-  buildInputs = [ curl ];
+  src = fetchurl {
+    url = "mirror://sourceforge/xmlrpc-c/${name}.tgz";
+    sha256 = "1l4zz22q10081vr06b8sii0l3krr64xyiywz6rcladw8kiyxip06";
+  };
 
-  preInstall = "export datarootdir=$out/share";
+  buildInputs = [ curl libxml2 ];
 
-  src = fetchsvn {
-    url = http://xmlrpc-c.svn.sourceforge.net/svnroot/xmlrpc-c/advanced;
-    rev = "2262";
-    sha256 = "1grwnczp5dq3w20rbz8bgpwl6jmw0w7cm7nbinlasf3ap5sc5ahb";
+  configureFlags = [
+    "--enable-libxml2-backend"
+  ];
+
+  # Build and install the "xmlrpc" tool (like the Debian package)
+  postInstall = ''
+    (cd tools/xmlrpc && make && make install)
+  '';
+
+  hardeningDisable = [ "format" ];
+
+  meta = with stdenv.lib; {
+    description = "A lightweight RPC library based on XML and HTTP";
+    homepage = "http://xmlrpc-c.sourceforge.net/";
+    # <xmlrpc-c>/doc/COPYING also lists "Expat license",
+    # "ABYSS Web Server License" and "Python 1.5.2 License"
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.bjornfor ];
   };
 }

@@ -1,22 +1,47 @@
-{stdenv, fetchurl, pkgconfig, expat, zlib, libpng, libjpeg, xlibs}:
+{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
+, libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU, libGL
+, glee }:
 
 stdenv.mkDerivation rec {
-  name = "electricsheep-2.6.8";
-  
-  src = fetchurl {
-    url = "http://electricsheep.org/${name}.tar.gz";
-    sha256 = "1flqcqfs75wg74hr5w85n6w8b26l4qrpwzi7fzylnry67yzf94y5";
+  pname = "electricsheep";
+  version = "3.0.2-2019-10-05";
+
+  src = fetchFromGitHub {
+    owner = "scottdraves";
+    repo = pname;
+    rev = "37ba0fd692d6581f8fe009ed11c9650cd8174123";
+    sha256 = "1z49l53j1lhk7ahdy96lm9r0pklwpf2i5s6y2l2rn6l4z8dxkjmk";
   };
 
-  buildInputs = [pkgconfig expat zlib libpng libjpeg xlibs.xlibs xlibs.libXv];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  preInstall = ''
-    installFlags=GNOME_DATADIR=$out
-    mkdir -p $out/control-center/screensavers
+  buildInputs = [
+    wxGTK30 libav lua5_1 curl libpng xorg.libXrender
+    flam3 libgtop boost tinyxml freeglut libGLU libGL glee
+  ];
+
+  preAutoreconf = ''
+    cd client_generic
+    sed -i '/ACX_PTHREAD/d' configure.ac
   '';
 
-  meta = {
+  configureFlags = [
+    "CPPFLAGS=-I${glee}/include/GL"
+  ];
+
+  makeFlags = [
+    ''CXXFLAGS+="-DGL_GLEXT_PROTOTYPES"''
+  ];
+
+  preBuild = ''
+    sed -i "s|/usr|$out|" Makefile
+  '';
+
+  meta = with stdenv.lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
-    homepage = http://electricsheep.org/;
+    homepage = "https://electricsheep.org/";
+    maintainers = with maintainers; [ nand0p fpletz ];
+    platforms = platforms.linux;
+    license = licenses.gpl1;
   };
 }

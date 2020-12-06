@@ -1,0 +1,81 @@
+From: Robert Luberda <robert@debian.org>
+Date: Tue, 8 Mar 2011 21:02:47 +0100
+Subject: 0025 Languages
+
+Fix a few words.
+---
+ languages/english/british.0 |    1 +
+ languages/english/english.0 |    8 ++++++--
+ languages/english/english.1 |    3 ++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/languages/english/british.0 b/languages/english/british.0
+index dc4caa7..04d9177 100644
+--- a/languages/english/british.0
++++ b/languages/english/british.0
+@@ -46,6 +46,7 @@ armour/DGMRSZ
+ armoured/U
+ armourer/MS
+ armoury/DMS
++artefact/MS
+ atomisation/MS
+ atomise/DGRSZ
+ authorisation/AMS
+diff --git a/languages/english/english.0 b/languages/english/english.0
+index fc13212..f85e15a 100644
+--- a/languages/english/english.0
++++ b/languages/english/english.0
+@@ -3502,6 +3502,7 @@ closure/DGMS
+ cloth/DGS
+ clothe/DGS
+ clothed/U
++cloths
+ cloud/DGS
+ clouded/U
+ cloudless/PY
+@@ -10019,9 +10020,10 @@ mystery/MS
+ mystic/MS
+ mystical/Y
+ mysticism/S
+-myth/MS
++myth/M
+ mythical/Y
+ mythology/MS
++myths
+ nag/MS
+ nail/DGRS
+ naive/PRY
+@@ -14818,6 +14820,7 @@ tent/DGRS
+ tentacle/DS
+ tentative/PY
+ tented/U
++tenth
+ tenths
+ tenure/DS
+ tenured/U
+@@ -16511,8 +16514,9 @@ youngster/MS
+ your/MS
+ yourself
+ yourselves
+-youth/MS
++youth/M
+ youthful/PY
++youths
+ yuck
+ Yugoslavian/MS
+ yummy/R
+diff --git a/languages/english/english.1 b/languages/english/english.1
+index 2bfac86..78a7edf 100644
+--- a/languages/english/english.1
++++ b/languages/english/english.1
+@@ -7449,7 +7449,8 @@ metalloid
+ metallurgic
+ metallurgical/Y
+ metallurgists
+-metalsmith/S
++metalsmith
++metalsmiths
+ metalwork/GJR
+ metamorphic
+ metamorphism
+-- 

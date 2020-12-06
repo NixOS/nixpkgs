@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   name = "tokyotyrant-1.1.41";
 
   src = fetchurl {
-    url = "http://fallabs.com/tokyotyrant/${name}.tar.gz";
+    url = "https://fallabs.com/tokyotyrant/${name}.tar.gz";
     sha256 = "13xqcinhydqmh7231qlir6pymacjwcf98drybkhd9597kzxp1bs2";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ tokyocabinet ];
 
   doCheck = false;                                # FIXME
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
          licensed under the GNU Lesser General Public License.
        '';
 
-    homepage = http://fallabs.com/tokyotyrant/;
+    homepage = "https://fallabs.com/tokyotyrant/";
 
-    license = "LGPLv2.1+";
+    license = stdenv.lib.licenses.lgpl21Plus;
 
-    platforms = stdenv.lib.platforms.gnu;         # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;         # arbitrary choice
+    maintainers = [ ];
   };
 }

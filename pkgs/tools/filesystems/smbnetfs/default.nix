@@ -1,50 +1,28 @@
-x@{builderDefsPackage
-  , fuse, samba, pkgconfig
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, fuse, samba, pkgconfig, glib, autoconf, attr, libsecret }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="smbnetfs";
-    dirBaseName="SMBNetFS";
-    version="0.5.3a";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="mirror://sourceforge/project/${project}/${baseName}/${dirBaseName}-${version}/${name}.tar.bz2";
-    hash="0fzlw11y2vkxmjzz3qcypqlvz074v6a3pl4pyffbniqal64qgrsw";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "smbnetfs";
+  version = "0.6.2";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/smbnetfs/smbnetfs/SMBNetFS-${version}/${pname}-${version}.tar.bz2";
+    sha256 = "19x9978k90w9a65lrpsphk7swsq8zkws9jc27q4zbndrm0r2snr0";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ pkgconfig autoconf ];
+  buildInputs = [ fuse samba glib attr libsecret ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
+  postPatch = ''
+    substituteInPlace src/function.c --replace "attr/xattr.h" "sys/xattr.h"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A FUSE FS for mounting Samba shares";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+    downloadPage = "https://sourceforge.net/projects/smbnetfs/files/smbnetfs";
+    updateWalker = true;
+    inherit version;
+    homepage = "https://sourceforge.net/projects/smbnetfs/";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
-    };
-  };
-}) x
-
+}

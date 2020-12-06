@@ -1,15 +1,27 @@
-{ stdenv, fetchgit } :
-stdenv.mkDerivation {
-  name = "proxychains-4.0.1-head";
-  src = fetchgit {
-    url = https://github.com/haad/proxychains.git;
-    rev = "c9b8ce35b24f9d4e80563242b759dff54867163f";
-    sha256 = "4ab73e14c5db6d32d88e0710a9f1b7c9c77b59574a7cf0e9f69f34d8ec9fb643";
+{ stdenv, fetchFromGitHub } :
+stdenv.mkDerivation rec {
+  pname = "proxychains";
+  version = "4.2.0";
+
+  src = fetchFromGitHub {
+    owner = "haad";
+    repo = "proxychains";
+    rev = "${pname}-${version}";
+    sha256 = "015skh3z1jmm8kxbm3nkqv1w56kcvabdmcbmpwzywxr4xnh3x3pc";
   };
 
+  postPatch = ''
+    # Temporary work-around; most likely fixed by next upstream release
+    sed -i Makefile -e '/-lpthread/a LDFLAGS+=-ldl'
+  '';
+  postInstall = ''
+    cp src/proxychains.conf $out/etc
+  '';
+
   meta = {
-    description = "Proxifier for SOCKS proxies.";
-    homepage = http://proxychains.sourceforge.net;
-    license = "GPLv2+";
+    description = "Proxifier for SOCKS proxies";
+    homepage = "http://proxychains.sourceforge.net";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

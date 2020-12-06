@@ -1,20 +1,19 @@
-{stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib}:
+{stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib, camlp4}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  pname = "ocaml-http";
-  version = "0.1.3";
-in
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "ocaml-http is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  name = "ocaml-http-0.1.5";
 
   src = fetchurl {
-    url = "http://upsilon.cc/~zack/hacking/software/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "070xw033r4pk6f4l0wcknm75y9qm4mp622a4cgzmcfhm58v6kssn";
+    url = "https://forge.ocamlcore.org/frs/download.php/545/ocaml-http-0.1.5.tar.gz";
+    sha256 = "09q12b0j01iymflssxigsqggbsp8dqh9pfvkm76dv860544mygws";
   };
 
-  buildInputs = [ocaml_pcre ocamlnet ocaml findlib];
+  buildInputs = [ocaml findlib camlp4];
+  propagatedBuildInputs = [ocaml_pcre ocamlnet];
 
   createFindlibDestdir = true;
 
@@ -24,16 +23,17 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace "SHELL=/bin/bash" "SHELL=$BASH"
   '';
 
-  configurePhase = "true";	# Skip configure phase
+  dontConfigure = true;	# Skip configure phase
 
   buildPhase = ''
     make all opt
   '';
 
-  meta = {
-    homepage = "http://upsilon.cc/~zack/hacking/software/ocaml-http/";
-    description = "do it yourself (OCaml) HTTP daemon";
-    license = "LGPLv2";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+  meta = with stdenv.lib; {
+    homepage = "http://ocaml-http.forge.ocamlcore.org/";
+    platforms = ocaml.meta.platforms or [];
+    description = "Do it yourself (OCaml) HTTP daemon";
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ roconnor vbgl ];
   };
 }

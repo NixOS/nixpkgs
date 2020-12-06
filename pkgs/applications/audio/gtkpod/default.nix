@@ -1,25 +1,34 @@
-{ stdenv, fetchurl, pkgconfig, libgpod, gtk, glib, gettext, perl, perlXMLParser
-, libglade, flex, libid3tag, libvorbis, intltool }:
+{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, intltool, libgpod, curl, flac,
+  gnome3, gtk3, gettext, perlPackages, flex, libid3tag, gdl,
+  libvorbis, gdk-pixbuf }:
 
-stdenv.mkDerivation {
-  name = "gtkpod-1.0.0";
+stdenv.mkDerivation rec {
+  version = "2.1.5";
+  pname = "gtkpod";
 
   src = fetchurl {
-    url = mirror://sourceforge/gtkpod/gtkpod-1.0.0.tar.gz;
-    sha256 = "04jzybs55c27kyp7r9c58prcq0q4ssvj5iggva857f49s1ar826q";
+    url = "mirror://sourceforge/gtkpod/${pname}-${version}.tar.gz";
+    sha256 = "0xisrpx069f7bjkyc8vqxb4k0480jmx1wscqxr6cpq1qj6pchzd5";
   };
 
-  buildInputs = [ pkgconfig libgpod gettext perl perlXMLParser gtk libglade flex
-    libid3tag libvorbis intltool ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
+  buildInputs = [
+    curl gettext
+    flex libgpod libid3tag flac libvorbis gtk3 gdk-pixbuf
+    gdl gnome3.adwaita-icon-theme gnome3.anjuta
+  ] ++ (with perlPackages; [ perl XMLParser ]);
 
   patchPhase = ''
     sed -i 's/which/type -P/' scripts/*.sh
   '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "GTK Manager for an Apple ipod";
-    homepage = http://gtkpod.sourceforge.net;
-    license = "GPLv2+";
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://gtkpod.sourceforge.net";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.skeidel ];
   };
 }

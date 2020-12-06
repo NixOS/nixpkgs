@@ -1,39 +1,53 @@
-{ fetchurl, stdenv, flex, bison, db4, iptables, pkgconfig }:
+{ stdenv, fetchurl
+, buildPackages, bison, flex, pkg-config
+, db, iptables, libelf, libmnl
+}:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-3.6.0";
+  pname = "iproute2";
+  version = "5.9.0";
 
   src = fetchurl {
-    url = http://kernel.org/pub/linux/utils/net/iproute2/iproute2-3.6.0.tar.xz;
-    sha256 = "0d05av2s7p552yszgj6glz6d74jlmg392s7n74hicgqfl16m85rd";
+    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1kys6dmhrl43iaq95n5sh02p39d7bq8i5y672qrzgwnwpjaaqpd2";
   };
 
-  patches = [ ./vpnc.patch ];
+  preConfigure = ''
+    # Don't try to create /var/lib/arpd:
+    sed -e '/ARPDDIR/d' -i Makefile
+    # TODO: Drop temporary version fix for 5.9 once 5.10 is out:
+    substituteInPlace include/version.h \
+      --replace "5.8.0" "${version}"
+  '';
 
-  preConfigure =
-    ''
-      patchShebangs ./configure
-      sed -e '/ARPDDIR/d' -i Makefile
-    '';
+  outputs = [ "out" "dev" ];
 
-  postConfigure = "cat Config";
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/sbin"
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
+    "HDRDIR=$(dev)/include/iproute2"
+  ];
 
-  makeFlags = "DESTDIR= LIBDIR=$(out)/lib SBINDIR=$(out)/sbin"
-    + " CONFDIR=$(out)/etc DOCDIR=$(out)/share/doc/${name}"
-    + " MANDIR=$(out)/share/man";
+  buildFlags = [
+    "CONFDIR=/etc/iproute2"
+  ];
 
-  buildInputs = [ db4 iptables ];
-  buildNativeInputs = [ bison flex pkgconfig ];
+  installFlags = [
+    "CONFDIR=$(out)/etc/iproute2"
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ db iptables libelf libmnl ];
 
   enableParallelBuilding = true;
 
-  # Get rid of useless TeX/SGML docs.
-  postInstall = "rm -rf $out/share/doc";
-
-  meta = {
-    homepage = http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;
+  meta = with stdenv.lib; {
+    homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

@@ -1,21 +1,41 @@
-{stdenv, fetchurl, ncurses, curl, taglib, fftw, mpd_clientlib, pkgconfig}:
+{ stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
+, libiconv, icu, curl
+, outputsSupport ? true # outputs screen
+, visualizerSupport ? false, fftw ? null # visualizer screen
+, clockSupport ? true # clock screen
+, taglibSupport ? true, taglib ? null # tag editor
+}:
 
+assert visualizerSupport -> (fftw != null);
+assert taglibSupport -> (taglib != null);
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "0.5.10";
-  name = "ncmpcpp-${version}";
+  pname = "ncmpcpp";
+  version = "0.8.2";
 
   src = fetchurl {
-    url = "http://ncmpcpp.rybczak.net/stable/ncmpcpp-${version}.tar.bz2";
-    sha256 = "ff6d5376a2d9caba6f5bb78e68af77cefbdb2f04cd256f738e39f8ac9a79a4a8";
+    url = "https://ncmpcpp.rybczak.net/stable/${pname}-${version}.tar.bz2";
+    sha256 = "0m0mjb049sl62vx13h9waavysa30mk0rphacksnvf94n13la62v5";
   };
 
-  buildInputs = [ ncurses curl taglib fftw mpd_clientlib pkgconfig ];
+  configureFlags = [ "BOOST_LIB_SUFFIX=" ]
+    ++ optional outputsSupport "--enable-outputs"
+    ++ optional visualizerSupport "--enable-visualizer --with-fftw"
+    ++ optional clockSupport "--enable-clock"
+    ++ optional taglibSupport "--with-taglib";
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ boost mpd_clientlib ncurses readline libiconv icu curl ]
+    ++ optional visualizerSupport fftw
+    ++ optional taglibSupport taglib;
 
   meta = {
-    description = "Curses-based interface for MPD (music player daemon)";
-    homepage = http://unkart.ovh.org/ncmpcpp/;
-    license = "GPLv2+";
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    description = "A featureful ncurses based MPD client inspired by ncmpc";
+    homepage    = "https://ncmpcpp.rybczak.net/";
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jfrankenau koral lovek323 ];
+    platforms   = platforms.all;
   };
 }
-

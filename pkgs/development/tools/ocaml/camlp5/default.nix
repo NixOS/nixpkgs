@@ -1,41 +1,36 @@
-{stdenv, fetchurl, ocaml, transitional ? false}:
-
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  metafile = ./META;
-in
+{ stdenv, fetchzip, ocaml }:
 
 stdenv.mkDerivation {
 
-  name = "camlp5${if transitional then "_transitional" else ""}-6.06";
+  name = "camlp5-7.13";
 
-  src = fetchurl {
-    url = http://pauillac.inria.fr/~ddr/camlp5/distrib/src/camlp5-6.06.tgz;
-    sha256 = "763f89ee6cde4ca063a50708c3fe252d55ea9f8037e3ae9801690411ea6180c5";
+  src = fetchzip {
+    url = "https://github.com/camlp5/camlp5/archive/rel713.tar.gz";
+    sha256 = "1d9spy3f5ahixm8nxxk086kpslzva669a5scn49am0s7vx4i71kp";
   };
 
   buildInputs = [ ocaml ];
 
   prefixKey = "-prefix ";
 
-  preConfigure = "configureFlagsArray=(" +  (if transitional then "--transitional" else "--strict") +
-                  " --libdir $out/lib/ocaml/${ocaml_version}/site-lib)";
+  preConfigure = "configureFlagsArray=(--strict" +
+                  " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
 
-  buildFlags = "world.opt";
+  buildFlags = [ "world.opt" ];
 
-  postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml_version}/site-lib/camlp5/META";
+  dontStrip = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Preprocessor-pretty-printer for OCaml";
     longDescription = ''
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.
       It also provides parsing and printing tools.
     '';
-    homepage = http://pauillac.inria.fr/~ddr/camlp5/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
+    homepage = "https://camlp5.github.io/";
+    license = licenses.bsd3;
+    platforms = ocaml.meta.platforms or [];
+    maintainers = with maintainers; [
+      maggesi vbgl
     ];
   };
 }

@@ -1,42 +1,41 @@
-{ stdenv, fetchurl, qt4, inkscape, wpa_supplicant }:
+{ stdenv, mkDerivation, fetchpatch, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
 
-stdenv.mkDerivation {
+mkDerivation {
   name = "wpa_gui-${wpa_supplicant.version}";
 
   inherit (wpa_supplicant) src;
 
-  buildInputs = [ qt4 ];
+  patches = [
+    # Fix build with Inkscape 1.0
+    # https://github.com/NixOS/nixpkgs/issues/86930
+    (fetchpatch {
+      url = "https://w1.fi/cgit/hostap/patch/?id=0388992905a5c2be5cba9497504eaea346474754";
+      sha256 = "05hs74qawa433adripzhycm45g7yvxr6074nd4zcl4gabzp9hd30";
+    })
+  ];
 
-  buildNativeInputs = [ inkscape ];
+  buildInputs = [ qtbase ];
+  nativeBuildInputs = [ qmake inkscape imagemagick ];
 
-  prePatch = "cd wpa_supplicant/wpa_gui-qt4";
+  postPatch = ''
+    cd wpa_supplicant/wpa_gui-qt4
+  '';
 
-  configurePhase =
-    ''
-      lrelease wpa_gui.pro
-      qmake
-    '';
+  postBuild = ''
+    make -C icons
+  '';
 
-  # We do not install .xpm icons. First of all, I don't know where they should
-  # be install. Second, this allows us to drop imagemagick build-time dependency.
-  postBuild =
-    ''
-      sed -e '/ICONS.*xpm/d' -i icons/Makefile
-      make -C icons
-    '';
+  postInstall = ''
+    mkdir -pv $out/{bin,share/applications,share/icons}
+    cp -v wpa_gui $out/bin
+    cp -v wpa_gui.desktop $out/share/applications
+    cp -av icons/hicolor $out/share/icons
+  '';
 
-  installPhase =
-    ''
-      mkdir -pv $out/bin
-      cp -v wpa_gui $out/bin
-      mkdir -pv $out/share/applications
-      cp -v wpa_gui.desktop $out/share/applications
-      mkdir -pv $out/share/icons
-      cp -av icons/hicolor $out/share/icons
-    '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Qt-based GUI for wpa_supplicant";
-    inherit (qt4.meta) platforms;
+    homepage = "https://hostap.epitest.fi/wpa_supplicant/";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

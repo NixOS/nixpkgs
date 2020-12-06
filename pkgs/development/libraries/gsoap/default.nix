@@ -1,19 +1,45 @@
-{ stdenv, fetchurl, m4, bison, flex, openssl, zlib }:
+{ stdenv, fetchurl, autoreconfHook, unzip, m4, bison, flex, openssl, zlib }:
 
-let version = "2.7.15"; in
+let
+  majorVersion = "2.8";
 
-stdenv.mkDerivation {
-  name = "gsoap-${version}";
+in stdenv.mkDerivation rec {
+  pname = "gsoap";
+  version = "${majorVersion}.108";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gsoap2/files/gSOAP/2.7.15%20stable/gsoap_${version}.tar.gz";
-    sha256 = "3ed883ab1a3d32b5bb2bf599306f247f6de3ffedd8890eb0e6303ae15995dc12";
+    url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${version}.zip";
+    sha256 = "0x58bwlclk7frv03kg8bp0pm7zl784samvbzskrnr7dl5v866nvl";
   };
 
-  buildInputs = [ m4 bison flex openssl zlib ];
-  meta = {
+  buildInputs = [ openssl zlib ];
+  nativeBuildInputs = [ autoreconfHook bison flex m4 unzip ];
+  # Parallel building doesn't work as of 2.8.49
+  enableParallelBuilding = false;
+
+  # Future versions of automake require subdir-objects if the source is structured this way
+  # As of 2.8.49 (maybe earlier) this is needed to silence warnings
+  prePatch = ''
+    substituteInPlace configure.ac \
+      --replace 'AM_INIT_AUTOMAKE([foreign])' 'AM_INIT_AUTOMAKE([foreign subdir-objects])'
+  '';
+
+  meta = with stdenv.lib; {
+    description = "C/C++ toolkit for SOAP web services and XML-based applications";
     homepage = "http://www.cs.fsu.edu/~engelen/soap.html";
-    description = "The gSOAP toolkit is an open source C and C++ software development toolkit for SOAP/WSDL and XML Web services.";
-    license = "free-non-copyleft";
+    # gsoap is dual/triple licensed (see homepage for details):
+    # 1. gSOAP Public License 1.3 (based on Mozilla Public License 1.1).
+    #    Components NOT covered by the gSOAP Public License are:
+    #     - wsdl2h tool and its source code output,
+    #     - soapcpp2 tool and its source code output,
+    #     - UDDI code,
+    #     - the webserver example code in gsoap/samples/webserver,
+    #     - and several example applications in the gsoap/samples directory.
+    # 2. GPLv2 covers all of the software
+    # 3. Proprietary commercial software development license (removes GPL
+    #    restrictions)
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

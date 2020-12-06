@@ -1,340 +1,178 @@
-with (import ./release-lib.nix);
+/* This file defines some basic smoke tests for cross compilation.
+*/
+
+{ # The platforms *from* which we cross compile.
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
+, # Strip most of attributes when evaluating to spare memory usage
+  scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+}:
+
+with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
+
 let
-  nativePlatforms = linux;
+  nativePlatforms = all;
 
-  /* Basic list of packages to cross-build */
-  basicHostDrv = {
-    gccCrossStageFinal = nativePlatforms;
-    bison.hostDrv = nativePlatforms;
-    busybox.hostDrv = nativePlatforms;
-    coreutils.hostDrv = nativePlatforms;
-    dropbear.hostDrv = nativePlatforms;
-    tigervnc.hostDrv = nativePlatforms;
-    #openoffice.hostDrv = nativePlatforms;
-    wxGTK.hostDrv = nativePlatforms;
-    #firefox = nativePlatforms;
-    xorg = {
-      #xorgserver.hostDrv = nativePlatforms;
-    };
-    nixUnstable.hostDrv = nativePlatforms;
-    linuxPackages_3_3.kernel.hostDrv = linux;
-    linuxPackages_3_4.kernel.hostDrv = linux;
-    linuxPackages_3_6.kernel.hostDrv = linux;
+  embedded = {
+    buildPackages.binutils = nativePlatforms;
+    buildPackages.gcc = nativePlatforms;
+    libcCross = nativePlatforms;
   };
 
-  /* Basic list of packages to be natively built,
-     but need a crossSystem defined to get meaning */
-  basicBuildDrv = {
-    gdbCross = nativePlatforms;
+  common = {
+    buildPackages.binutils = nativePlatforms;
+    gmp = nativePlatforms;
+    libcCross = nativePlatforms;
+    nix = nativePlatforms;
+    nixUnstable = nativePlatforms;
+    mesa = nativePlatforms;
   };
 
-  basic = basicHostDrv // basicBuildDrv;
+  gnuCommon = lib.recursiveUpdate common {
+    buildPackages.gcc = nativePlatforms;
+    coreutils = nativePlatforms;
+    haskell.packages.ghcHEAD.hello = nativePlatforms;
+    haskellPackages.hello = nativePlatforms;
+  };
 
+  linuxCommon = lib.recursiveUpdate gnuCommon {
+    buildPackages.gdb = nativePlatforms;
+
+    bison = nativePlatforms;
+    busybox = nativePlatforms;
+    dropbear = nativePlatforms;
+    ed = nativePlatforms;
+    ncurses = nativePlatforms;
+    patch = nativePlatforms;
+  };
+
+  windowsCommon = lib.recursiveUpdate gnuCommon {
+    boehmgc = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
+    windows.mingw_w64_pthreads = nativePlatforms;
+  };
+
+  wasiCommon = {
+    gmp = nativePlatforms;
+    boehmgc = nativePlatforms;
+    hello = nativePlatforms;
+    zlib = nativePlatforms;
+  };
+
+  darwinCommon = {
+    buildPackages.binutils = darwin;
+  };
+
+  rpiCommon = linuxCommon // {
+    vim = nativePlatforms;
+    unzip = nativePlatforms;
+    ddrescue = nativePlatforms;
+    lynx = nativePlatforms;
+    patchelf = nativePlatforms;
+    buildPackages.binutils = nativePlatforms;
+    mpg123 = nativePlatforms;
+  };
 in
-(
 
-/* Test some cross builds to the Sheevaplug */
-let
-  crossSystem = {
-    config = "armv5tel-unknown-linux-gnueabi";  
-    bigEndian = false;
-    arch = "arm";
-    float = "soft";
-    withTLS = true;
-    platform = pkgs.platforms.sheevaplug;
-    libc = "glibc";
-    openssl.system = "linux-generic32";
-  };
-
-in {
-  crossSheevaplugLinux = mapTestOnCross crossSystem (
-    basic //
-    {
-      ubootSheevaplug.hostDrv = nativePlatforms;
-    });
-}) // (
-
-/* Test some cross builds to the Sheevaplug - uclibc*/
-let
-  crossSystem = {
-    config = "armv5tel-unknown-linux-gnueabi";  
-    bigEndian = false;
-    arch = "arm";
-    float = "soft";
-    withTLS = true;
-    platform = pkgs.platforms.sheevaplug;
-    libc = "uclibc";
-    openssl.system = "linux-generic32";
-    uclibc.extraConfig = ''
-      CONFIG_ARM_OABI n
-      CONFIG_ARM_EABI y
-      ARCH_BIG_ENDIAN n
-      ARCH_WANTS_BIG_ENDIAN n
-      ARCH_WANTS_LITTLE_ENDIAN y
-      LINUXTHREADS_OLD y
-    '';
-  };
-
-in {
-  crossSheevaplugLinuxUclibc = mapTestOnCross crossSystem (
-    basic //
-    {
-      ubootSheevaplug.hostDrv = nativePlatforms;
-    });
-}) // (
-
-/* Test some cross builds to the mipsel */
-let
-  crossSystem = {
-    config = "mipsel-unknown-linux";  
-    bigEndian = false;
-    arch = "mips";
-    float = "soft";
-    withTLS = true;
-    libc = "uclibc";
-    platform = {
-      name = "malta";
-      kernelMajor = "2.4";
-      kernelBaseConfig = "defconfig-malta";
-      kernelHeadersBaseConfig = "defconfig-malta";
-      uboot = null;
-      kernelArch = "mips";
-      kernelAutoModules = false;
-      kernelTarget = "vmlinux";
+{
+  # These derivations from a cross package set's `buildPackages` should be
+  # identical to their vanilla equivalents --- none of these package should
+  # observe the target platform which is the only difference between those
+  # package sets.
+  ensureUnaffected = let
+    # Absurd values are fine here, as we are not building anything. In fact,
+    # there probably a good idea to try to be "more parametric" --- i.e. avoid
+    # any special casing.
+    crossSystem = {
+      config = "mips64el-apple-windows-gnu";
+      libc = "glibc";
     };
-    openssl.system = "linux-generic32";
-    uclibc.extraConfig = ''
-      ARCH_BIG_ENDIAN n
-      ARCH_WANTS_BIG_ENDIAN n
-      ARCH_WANTS_LITTLE_ENDIAN y
-      LINUXTHREADS_OLD y
 
-      # Without this, it does not build for linux 2.4
-      UCLIBC_SUSV4_LEGACY y
-    '';
-  };
-in {
-  crossMipselLinux24 = mapTestOnCross crossSystem basic;
-}) // (
+    # Converting to a string (drv path) before checking equality is probably a
+    # good idea lest there be some irrelevant pass-through debug attrs that
+    # cause false negatives.
+    testEqualOne = path: system: let
+      f = path: crossSystem: system: builtins.toString (lib.getAttrFromPath path (pkgsForCross crossSystem system));
+    in assertTrue (
+        f path null system
+        ==
+        f (["buildPackages"] ++ path) crossSystem system
+      );
 
-/* Test some cross builds to the ultrasparc */
-let
-  crossSystem = {
-    config = "sparc64-unknown-linux";  
-    bigEndian = true;
-    arch = "sparc64";
-    float = "hard";
-    withTLS = true;
-    libc = "glibc";
-    platform = {
-        name = "ultrasparc";
-        kernelMajor = "2.6";
-        kernelHeadersBaseConfig = "sparc64_defconfig";
-        kernelBaseConfig = "sparc64_defconfig";
-        kernelArch = "sparc";
-        kernelAutoModules = false;
-        kernelTarget = "zImage";
-        uboot = null;
-    };
-    openssl.system = "linux64-sparcv9";
-    gcc.cpu = "ultrasparc";
-  };
-in {
-  crossUltraSparcLinux = mapTestOnCross crossSystem basic;
-}) // (
+    testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
 
-/* Test some cross builds on mingw32 */
-let
-  crossSystem = {
-      config = "i686-pc-mingw32";
-      arch = "x86";
-      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
-      platform = {};
-  };
-in {
-  crossMingw32 = mapTestOnCross crossSystem {
-    coreutils.hostDrv = nativePlatforms;
-    boehmgc.hostDrv = nativePlatforms;
-    gmp.hostDrv = nativePlatforms;
-    guile_1_8.hostDrv = nativePlatforms;
-    libffi.hostDrv = nativePlatforms;
-    libtool.hostDrv = nativePlatforms;
-    libunistring.hostDrv = nativePlatforms;
-    windows.wxMSW.hostDrv = nativePlatforms;
-  };
-}) // (
+    mapTestEqual = lib.mapAttrsRecursive testEqual;
 
-/* Test some cross builds on mingw-w64 */
-let
-  crossSystem = {
-      # That's the triplet they use in the mingw-w64 docs,
-      # and it's relevant for nixpkgs conditions.
-      config = "x86_64-w64-mingw32";
-      arch = "x86_64"; # Irrelevant
-      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
-      platform = {};
+  in mapTestEqual {
+    boehmgc = nativePlatforms;
+    libffi = nativePlatforms;
+    libiconv = nativePlatforms;
+    libtool = nativePlatforms;
+    zlib = nativePlatforms;
+    readline = nativePlatforms;
+    libxml2 = nativePlatforms;
+    guile = nativePlatforms;
   };
-in {
-  crossMingwW64 = mapTestOnCross crossSystem {
-    coreutils.hostDrv = nativePlatforms;
-    boehmgc.hostDrv = nativePlatforms;
-    gmp.hostDrv = nativePlatforms;
-    guile_1_8.hostDrv = nativePlatforms;
-    libffi.hostDrv = nativePlatforms;
-    libtool.hostDrv = nativePlatforms;
-    libunistring.hostDrv = nativePlatforms;
-    windows.wxMSW.hostDrv = nativePlatforms;
-  };
-}) // (
 
-/* GNU aka. GNU/Hurd.  */
-let
-  crossSystem = {
-    config = "i586-pc-gnu";
-    bigEndian = false;
-    arch = "i586";
-    float = "hard";
-    withTLS = true;
-    platform = pkgs.platforms.pc;
-    libc = "glibc";
-    openssl.system = "hurd-x86";  # Nix depends on OpenSSL.
-  };
-in {
-  crossGNU = mapTestOnCross crossSystem {
-    gnu.hurdCross = nativePlatforms;
-    gnu.mach.hostDrv = nativePlatforms;
-    gnu.mig = nativePlatforms;
-    gnu.smbfs.hostDrv = nativePlatforms;
+  crossIphone64 = mapTestOnCross lib.systems.examples.iphone64 darwinCommon;
 
-    coreutils.hostDrv = nativePlatforms;
-    ed.hostDrv = nativePlatforms;
-    grub2.hostDrv = nativePlatforms;
-    inetutils.hostDrv = nativePlatforms;
-    boehmgc.hostDrv = nativePlatforms;
-    findutils.hostDrv = nativePlatforms;
-    gcc.hostDrv = nativePlatforms;
-    gcc46.hostDrv = nativePlatforms;
-    gdb.hostDrv = nativePlatforms;
-    gmp.hostDrv = nativePlatforms;
-    gnugrep.hostDrv = nativePlatforms;
-    gnumake.hostDrv = nativePlatforms;
-    gnused.hostDrv = nativePlatforms;
-    guile_1_8.hostDrv = nativePlatforms;
-    guile.hostDrv = nativePlatforms;
-    libffi.hostDrv = nativePlatforms;
-    libtool.hostDrv = nativePlatforms;
-    libunistring.hostDrv = nativePlatforms;
-    lsh.hostDrv = nativePlatforms;
-    nixUnstable.hostDrv = nativePlatforms;
-    openssl.hostDrv = nativePlatforms;            # dependency of Nix
-    patch.hostDrv = nativePlatforms;
-    samba_light.hostDrv = nativePlatforms;      # needed for `runInGenericVM'
-    zile.hostDrv = nativePlatforms;
-  };
-}) // (
+  crossIphone32 = mapTestOnCross lib.systems.examples.iphone32 darwinCommon;
 
-/* Linux on the fuloong */
-let
-  crossSystem = {
-    config = "mips64el-unknown-linux";  
-    bigEndian = false;
-    arch = "mips";
-    float = "hard";
-    withTLS = true;
-    libc = "glibc";
-    platform = {
-      name = "fuloong-minipc";
-      kernelMajor = "2.6";
-      kernelBaseConfig = "lemote2f_defconfig";
-      kernelHeadersBaseConfig = "fuloong2e_defconfig";
-      uboot = null;
-      kernelArch = "mips";
-      kernelAutoModules = false;
-      kernelTarget = "vmlinux";
-    };
-    openssl.system = "linux-generic32";
-    gcc = {
-      arch = "loongson2f";
-      abi = "n32";
-    };
-  };
-in {
-  fuloongminipc = mapTestOnCross crossSystem {
+  /* Test some cross builds to the Sheevaplug */
+  crossSheevaplugLinux = mapTestOnCross lib.systems.examples.sheevaplug (linuxCommon // {
+    ubootSheevaplug = nativePlatforms;
+  });
 
-    coreutils.hostDrv = nativePlatforms;
-    ed.hostDrv = nativePlatforms;
-    grub2.hostDrv = nativePlatforms;
-    inetutils.hostDrv = nativePlatforms;
-    nixUnstable.hostDrv = nativePlatforms;
-    patch.hostDrv = nativePlatforms;
-    zile.hostDrv = nativePlatforms;
-  };
-}) // (
+  /* Test some cross builds on 32 bit mingw-w64 */
+  crossMingw32 = mapTestOnCross lib.systems.examples.mingw32 windowsCommon;
 
-/* Linux on the Ben Nanonote */
-let
-  crossSystem = {
-    config = "mipsel-unknown-linux";  
-    bigEndian = false;
-    arch = "mips";
-    float = "soft";
-    withTLS = true;
-    libc = "glibc";
-    platform = {
-      name = "ben_nanonote";
-      kernelMajor = "2.6";
-      kernelBaseConfig = "qi_lb60_defconfig";
-      kernelHeadersBaseConfig = "malta_defconfig";
-      uboot = "nanonote";
-      kernelArch = "mips";
-      kernelAutoModules = false;
-      kernelTarget = "vmlinux.bin";
-      kernelExtraConfig = ''
-        SOUND y
-        SND y
-        SND_MIPS y
-        SND_SOC y
-        SND_JZ4740_SOC y
-        SND_JZ4740_SOC_QI_LB60 y
-        FUSE_FS m
-        MIPS_FPU_EMU y
-      '';
-    };
-    openssl.system = "linux-generic32";
-    perl.arch = "mipsel-unknown";
-    uclibc.extraConfig = ''
-      CONFIG_MIPS_ISA_1 n
-      CONFIG_MIPS_ISA_MIPS32 y
-      CONFIG_MIPS_N32_ABI n
-      CONFIG_MIPS_O32_ABI y
-      ARCH_BIG_ENDIAN n
-      ARCH_WANTS_BIG_ENDIAN n
-      ARCH_WANTS_LITTLE_ENDIAN y
-      LINUXTHREADS_OLD y
-    '';
-    gcc = {
-      abi = "32";
-      arch = "mips32";
-    };
-    mpg123.cpu = "generic_nofpu";
-  };
-in {
-  nanonote = mapTestOnCross crossSystem {
+  /* Test some cross builds on 64 bit mingw-w64 */
+  crossMingwW64 = mapTestOnCross lib.systems.examples.mingwW64 windowsCommon;
 
-    coreutils.hostDrv = nativePlatforms;
-    ed.hostDrv = nativePlatforms;
-    inetutils.hostDrv = nativePlatforms;
-    nixUnstable.hostDrv = nativePlatforms;
-    patch.hostDrv = nativePlatforms;
-    zile.hostDrv = nativePlatforms;
-    prboom.hostDrv = nativePlatforms;
-    vim.hostDrv = nativePlatforms;
-    lynx.hostDrv = nativePlatforms;
-    patchelf.hostDrv = nativePlatforms;
-    nix.hostDrv = nativePlatforms;
-    fossil.hostDrv = nativePlatforms;
-    binutils.hostDrv = nativePlatforms;
-    mpg123.hostDrv = nativePlatforms;
-    yacas.hostDrv = nativePlatforms;
+  /* Linux on the fuloong */
+  fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
+
+  /* Javacript */
+  ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
+    haskell.packages.ghcjs.hello = nativePlatforms;
   };
-})
+
+  /* Linux on Raspberrypi */
+  rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
+  rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
+
+  aarch64-musl = mapTestOnCross lib.systems.examples.aarch64-multiplatform-musl linuxCommon;
+
+  x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
+
+  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt linuxCommon;
+  android32 = mapTestOnCross lib.systems.examples.armv7a-android-prebuilt linuxCommon;
+
+  wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
+
+  msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
+  avr = mapTestOnCross lib.systems.examples.avr embedded;
+  arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
+  powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;
+  aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
+  i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
+  x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
+
+  # we test `embedded` instead of `linuxCommon` because very few packages
+  # successfully cross-compile to Redox so far
+  x86_64-redox = mapTestOnCross lib.systems.examples.x86_64-unknown-redox embedded;
+
+  /* Cross-built bootstrap tools for every supported platform */
+  bootstrapTools = let
+    tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+    maintainers = [ lib.maintainers.dezgeg ];
+    mkBootstrapToolsJob = drv:
+      assert lib.elem drv.system supportedSystems;
+      hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
+  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
+}

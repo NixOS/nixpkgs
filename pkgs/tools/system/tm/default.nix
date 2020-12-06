@@ -6,23 +6,21 @@ stdenv.mkDerivation {
 
   installPhase=''make install "PREFIX=$out"'';
 
-  patchPhase = ''sed -i 's@/usr/bin/install@install@g' Makefile'';
-
-  crossAttrs = {
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
-  };
+  patchPhase = ''
+    sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile
+  '';
 
   src = fetchurl {
-    url = http://vicerveza.homeunix.net/~viric/soft/tm/tm-0.4.1.tar.gz;
+    url = "http://vicerveza.homeunix.net/~viric/soft/tm/tm-0.4.1.tar.gz";
     sha256 = "3b389bc03b6964ad5ffa57a344b891fdbcf7c9b2604adda723a863f83657c4a0";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/tm";
-    description = "terminal mixer - multiplexer for the i/o of terminal applications";
-    license="GPLv2";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    description = "Terminal mixer - multiplexer for the i/o of terminal applications";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.all;
   };
 
 }

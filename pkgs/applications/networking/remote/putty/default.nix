@@ -1,30 +1,55 @@
-{ stdenv, fetchsvn, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut
-, libtool }:
- 
-let
-  rev = 9690;
-in
-stdenv.mkDerivation {
-  name = "putty-${toString rev}";
-  # builder = ./builder.sh;
+{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
+, gtk2, halibut, ncurses, perl, darwin
+}:
 
-  preConfigure = ''
-    perl mkfiles.pl
-    ( cd doc ; make );
-    sed '/AM_PATH_GTK(/d' -i unix/configure.ac
-    sed '/AC_OUTPUT/iAM_PROG_CC_C_O' -i unix/configure.ac
-    sed '/AC_OUTPUT/iAM_PROG_AR' -i unix/configure.ac
-    ./mkauto.sh
-    cd unix
-  '';
-  
-  # The hash is going to change on new snapshot.
-  # I don't know of any better URL
-  src = fetchsvn {
-    url = svn://svn.tartarus.org/sgt/putty;
-    rev = rev;
-    sha256 = "e1fb49766e0724a12776ec3d6cd0bd420e03ebdc3383a01a12dbfd30983f81ef";
+stdenv.mkDerivation rec {
+  version = "0.74";
+  pname = "putty";
+
+  src = fetchurl {
+    urls = [
+      "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
+      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
+    ];
+    sha256 = "0zc43g8ycyf712cdrja4k8ih5s3agw1k0nq0jkifdn8xwn4d7mfx";
   };
 
-  buildInputs = [ gtk ncurses pkgconfig autoconf automake perl halibut libtool ];
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
+    perl mkfiles.pl
+    ( cd doc ; make );
+    ./mkauto.sh
+    cd unix
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    cd windows
+  '';
+
+  TOOLPATH = stdenv.cc.targetPrefix;
+  makefile = if stdenv.hostPlatform.isWindows then "Makefile.mgw" else null;
+
+  installPhase = if stdenv.hostPlatform.isWindows then ''
+    for exe in *.exe; do
+       install -D $exe $out/bin/$exe
+    done
+  '' else null;
+
+  nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
+    gtk2 ncurses
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "A Free Telnet/SSH Client";
+    longDescription = ''
+      PuTTY is a free implementation of Telnet and SSH for Windows and Unix
+      platforms, along with an xterm terminal emulator.
+      It is written and maintained primarily by Simon Tatham.
+    '';
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
+    license = licenses.mit;
+    platforms = platforms.unix ++ platforms.windows;
+  };
 }

@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pygtk }:
+{ stdenv, fetchurl, python2Packages }:
 
-buildPythonPackage {
-  name = "keepnote-0.6.5";
+python2Packages.buildPythonApplication {
+  name = "keepnote-0.7.8";
   namePrefix = "";
 
   src = fetchurl {
-    url = http://rasm.ods.org/keepnote/download/keepnote-0.6.5.tar.gz;
-    sha256 = "0kipcy90r50z4m9p8pyy9wi4dknsiwdrgy974xgakris2rh4lafw";
+    url = "http://keepnote.org/download/keepnote-0.7.8.tar.gz";
+    sha256 = "0nhkkv1n0lqf3zn17pxg5cgryv1wwlj4hfmhixwd76rcy8gs45dh";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk ];
+  propagatedBuildInputs = with python2Packages; [ pyGtkGlade ];
 
   # Testing fails.
   doCheck = false;
 
   meta = {
     description = "Note taking application";
-    homepage = http://rasm.ods.org/keepnote;
-    license = "GPLv2+";
+    homepage = "http://keepnote.org";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

@@ -1,18 +1,73 @@
-{ stdenv, fetchurl, pcre, libxml2, zlib, attr, bzip2 }:
+{ stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
+, openssl, enableMagnet ? false, lua5_1 ? null
+, enableMysql ? false, libmysqlclient ? null
+, enableLdap ? false, openldap ? null
+, enableWebDAV ? false, sqlite ? null, libuuid ? null
+, enableExtendedAttrs ? false, attr ? null
+, perl
+}:
 
-stdenv.mkDerivation {
-  name = "lighttpd-1.4.30";
+assert enableMagnet -> lua5_1 != null;
+assert enableMysql -> libmysqlclient != null;
+assert enableLdap -> openldap != null;
+assert enableWebDAV -> sqlite != null;
+assert enableWebDAV -> libuuid != null;
+assert enableExtendedAttrs -> attr != null;
+
+stdenv.mkDerivation rec {
+  name = "lighttpd-1.4.56";
 
   src = fetchurl {
-    url = http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.30.tar.xz;
-    sha256 = "c237692366935b19ef8a6a600b2f3c9b259a9c3107271594c081a45902bd9c9b";
+    url = "https://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
+    sha256 = "0xyzahrkmldwskwgjgj4dc3rmfmgqiwwr9y7jfhqpbp8g76q9kp4";
   };
 
-  buildInputs = [ pcre libxml2 zlib attr bzip2 ];
+  postPatch = ''
+    patchShebangs tests
+    # Linux sandbox has an empty hostname and not /etc/hosts, which fails some tests
+    sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
+  '';
 
-  meta = {
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
+             ++ stdenv.lib.optional enableMagnet lua5_1
+             ++ stdenv.lib.optional enableMysql libmysqlclient
+             ++ stdenv.lib.optional enableLdap openldap
+             ++ stdenv.lib.optional enableWebDAV sqlite
+             ++ stdenv.lib.optional enableWebDAV libuuid;
+
+  configureFlags = [ "--with-openssl" ]
+                ++ stdenv.lib.optional enableMagnet "--with-lua"
+                ++ stdenv.lib.optional enableMysql "--with-mysql"
+                ++ stdenv.lib.optional enableLdap "--with-ldap"
+                ++ stdenv.lib.optional enableWebDAV "--with-webdav-props"
+                ++ stdenv.lib.optional enableWebDAV "--with-webdav-locks"
+                ++ stdenv.lib.optional enableExtendedAttrs "--with-attr";
+
+  preConfigure = ''
+    export PATH=$PATH:${pcre.dev}/bin
+    sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
+  '';
+
+  checkInputs = [ perl ];
+  doCheck = true;
+
+  postInstall = ''
+    mkdir -p "$out/share/lighttpd/doc/config"
+    cp -vr doc/config "$out/share/lighttpd/doc/"
+    # Remove files that references needless store paths (dependency bloat)
+    rm "$out/share/lighttpd/doc/config/Makefile"*
+    rm "$out/share/lighttpd/doc/config/conf.d/Makefile"*
+    rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
+  '';
+
+  meta = with stdenv.lib; {
     description = "Lightweight high-performance web server";
-    homepage = http://www.lighttpd.net/;
-    license = "BSD";
+    homepage = "http://www.lighttpd.net/";
+    license = stdenv.lib.licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ maintainers.bjornfor ];
   };
 }

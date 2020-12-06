@@ -1,27 +1,38 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gmp, libffi }:
 
-let
-  version = "5.4.1";
-in
+stdenv.mkDerivation rec {
+  pname = "polyml";
+  version = "5.8.1";
 
-stdenv.mkDerivation {
-  name = "polyml-${version}";
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure.ac --replace stdc++ c++
+  '';
 
-  src = fetchurl {
-    url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";
-    sha256 = "514d1d07be487b783d4dfa29dbd550b3396640579ce135a9eb5a61f08e7f9cac";
+  buildInputs = [ libffi gmp ];
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+
+  configureFlags = [
+    "--enable-shared"
+    "--with-system-libffi"
+    "--with-gmp"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "polyml";
+    repo = "polyml";
+    rev = "v${version}";
+    sha256 = "0gcx2fjiwsiazlyfhm7zlrd563blc4fy9w2mspib9divbavaxin6";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
-    homepage = http://www.polyml.org/;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
-    ];
+    homepage = "https://www.polyml.org/";
+    license = licenses.lgpl21;
+    platforms = with platforms; (linux ++ darwin);
+    maintainers = with maintainers; [ maggesi kovirobi ];
   };
 }

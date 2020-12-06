@@ -1,28 +1,20 @@
-{ fetchurl, stdenv, cmake }:
+{ fetchurl, stdenv, cmake, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-data-0.4.5";
+  name = "poppler-data-0.4.10";
 
   src = fetchurl {
-    url = "http://poppler.freedesktop.org/${name}.tar.gz";
-    sha256 = "1zbh1zd083wfwrcw7vxc2bn32h42y6iyh24syxcb3r5ggd2vr41i";
+    url = "https://poppler.freedesktop.org/${name}.tar.gz";
+    sha256 = "0c3vjs3p7rjc4yfacnhd865r27czmzwcr4j2z4jldi68dvvcwbvf";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
 
-# TODO: actually use $prefix/etc/profile.d in NixOS
-  postInstall =
-    ''
-      mkdir -pv ''${out}/etc/profile.d
-      echo "export POPPLER_DATADIR=''${out}/share/poppler" |
-        tee ''${out}/etc/profile.d/60-poppler.sh
-      chmod -c +x ''${out}/etc/profile.d/60-poppler.sh
-    '';
-
-  meta = {
-    homepage = http://poppler.freedesktop.org/;
+  meta = with stdenv.lib; {
+    homepage = "https://poppler.freedesktop.org/";
     description = "Encoding files for Poppler, a PDF rendering library";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = platforms.all;
+    license = licenses.free; # more free licenses combined
+    maintainers = with maintainers; [ ];
   };
 }

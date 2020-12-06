@@ -1,21 +1,41 @@
-{stdenv, fetchurl, libtool, pcsclite, libusb, pkgconfig}:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pcsclite, libusb-compat-0_1
+, doxygen, libxslt
+}:
 
 stdenv.mkDerivation rec {
-  name = "openct-0.6.19";
-  
-  src = fetchurl {
-    url = "http://www.opensc-project.org/files/openct/${name}.tar.gz";
-    sha256 = "1y4jlr877g3lziq7i3p6pdkscqpkn1lld874q6r2hsvc39n7c88z";
-  };
-  
-  configureFlags = [ "--enable-usb" "--enable-pcsc" "--localstatedir=/var" ];
-  buildInputs = [ libtool pcsclite libusb pkgconfig ];
+  pname = "openct";
+  version = "0.6.20";
 
-  meta = {
-    homepage = http://www.opensc-project.org/openct/;
-    license = "LGPL";
+  src = fetchFromGitHub {
+    owner = "OpenSC";
+    repo = "openct";
+    rev = "${pname}-${version}";
+    sha256 = "09wxq0jxdxhci3zr7jd3zcxjkl3j0r1v00k3q8gqrg9gighh8nk2";
+  };
+
+  postPatch = ''
+    sed -i 's,$(DESTDIR),$(out),g' etc/Makefile.am
+  '';
+
+  configureFlags = [
+    "--enable-api-doc"
+    "--enable-usb"
+    "--enable-pcsc"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ pcsclite libusb-compat-0_1 doxygen libxslt ];
+
+  preInstall = ''
+    mkdir -p $out/etc
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/OpenSC/openct/";
+    license = licenses.lgpl21;
     description = "Drivers for several smart card readers";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = platforms.all;
   };
 }

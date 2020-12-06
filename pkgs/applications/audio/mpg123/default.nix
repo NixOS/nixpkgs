@@ -1,23 +1,48 @@
-{stdenv, fetchurl, alsaLib }:
+{ stdenv
+, fetchurl
+, makeWrapper
 
-stdenv.mkDerivation {
-  name = "mpg123-1.12.3";
+, alsaLib
+, perl
+}:
+
+stdenv.mkDerivation rec {
+  name = "mpg123-1.26.3";
 
   src = fetchurl {
-    url = mirror://sourceforge/mpg123/mpg123-1.12.3.tar.bz2;
-    sha256 = "1ij689s7jch3d4g0ja3jylaphallc8vgrsrm9b12254phnyy23xf";
+    url = "mirror://sourceforge/mpg123/${name}.tar.bz2";
+    sha256 = "0vkcfdx0mqq6lmpczsmpa2jsb0s6dryx3i7gvr32i3w9b9w9ij9h";
   };
 
-  buildInputs = [ alsaLib ];
+  outputs = [ "out" "conplay" ];
 
-  crossAttrs = {
-    configureFlags = if stdenv.cross ? mpg123 then
-      "--with-cpu=${stdenv.cross.mpg123.cpu}" else "";
-  };
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+
+  configureFlags = stdenv.lib.optional
+    (stdenv.hostPlatform ? mpg123)
+    "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
+
+  postInstall = ''
+    mkdir -p $conplay/bin
+    mv scripts/conplay $conplay/bin/
+  '';
+
+  preFixup = ''
+    patchShebangs $conplay/bin/conplay
+  '';
+
+  postFixup = ''
+    wrapProgram $conplay/bin/conplay \
+      --prefix PATH : $out/bin
+  '';
 
   meta = {
-    description = "Command-line MP3 player";
-    homepage = http://mpg123.sourceforge.net/;
-    license = "LGPL";
+    description = "Fast console MPEG Audio Player and decoder library";
+    homepage = "http://mpg123.org";
+    license = stdenv.lib.licenses.lgpl21;
+    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,20 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, ghostscript, gd, zlib, plotutils }:
+{ stdenv, fetchurl, pkgconfig, darwin, lib
+, zlib, ghostscript, imagemagick, plotutils, gd
+, libjpeg, libwebp, libiconv
+}:
 
-stdenv.mkDerivation {
-  name = "pstoedit-3.50";
+stdenv.mkDerivation rec {
+  name = "pstoedit-3.75";
 
   src = fetchurl {
-    url = http://prdownloads.sourceforge.net/pstoedit/pstoedit-3.50.tar.gz;
-    sha256 = "04ap21fxj2zn6vj9mv7zknj4svcbkb1gxwfzxkw5i0sksx969c92";
+    url = "mirror://sourceforge/pstoedit/${name}.tar.gz";
+    sha256 = "1kv46g2wsvsvcngkavxl5gnw3l6g5xqnh4kmyx4b39a01d8xiddp";
   };
 
-  buildInputs = [ pkgconfig ghostscript gd zlib plotutils ];
+  #
+  # Turn on "-rdb" option (REALLYDELAYBIND) by default to ensure compatibility with gs-9.22
+  #
+  patches = [ ./pstoedit-gs-9.22-compat.patch  ];
 
-  meta = { 
-    description = "translates PostScript and PDF graphics into other vector formats";
-    homepage = http://www.helga-glunz.homepage.t-online.de/pstoedit;
-    license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+  outputs = [ "out" "dev" ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ]
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    libiconv ApplicationServices
+  ]);
+
+  # '@LIBPNG_LDFLAGS@' is no longer substituted by autoconf (the code is commented out)
+  # so we need to remove it from the pkg-config file as well
+  preConfigure = ''
+    substituteInPlace config/pstoedit.pc.in --replace '@LIBPNG_LDFLAGS@' ""
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Translates PostScript and PDF graphics into other vector formats";
+    homepage = "https://sourceforge.net/projects/pstoedit/";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.unix;
   };
 }

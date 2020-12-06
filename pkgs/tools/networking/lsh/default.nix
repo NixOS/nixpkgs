@@ -29,10 +29,12 @@ stdenv.mkDerivation rec {
     export lsh_cv_sys_unix98_ptys=yes
   '';
 
+  NIX_CFLAGS_COMPILE = "-std=gnu90";
+
   buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
 
   meta = {
-    description = "GNU lsh, a GPL'd implementation of the SSH protocol";
+    description = "GPL'd implementation of the SSH protocol";
 
     longDescription = ''
       lsh is a free implementation (in the GNU sense) of the ssh
@@ -40,9 +42,10 @@ stdenv.mkDerivation rec {
       SECSH working group.
     '';
 
-    homepage = http://www.lysator.liu.se/~nisse/lsh/;
-    license = "GPLv2+";
+    homepage = "http://www.lysator.liu.se/~nisse/lsh/";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
+    platforms = [ "x86_64-linux" ];
   };
 }

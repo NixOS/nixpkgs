@@ -1,25 +1,39 @@
-{ stdenv, fetchurl, libsepol, libselinux }:
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
 
-  name = "policycoreutils-${version}";
-  version = "2.0.85";
+stdenv.mkDerivation rec {
+  pname = "policycoreutils";
+  version = "2.9";
+  inherit (libsepol) se_release se_url;
 
   src = fetchurl {
-    url = http://userspace.selinuxproject.org/releases/20101221/devel/policycoreutils-2.0.85.tar.gz;
-    sha256 = "01q5ifacg24k9jdz85j9m17ps2l1p7abvh8pzy6qz55y68rycifb";
+    url = "${se_url}/${se_release}/policycoreutils-${version}.tar.gz";
+    sha256 = "0yqg5ws5gbl1cbn8msxdk1c3ilmmx58qg5dx883kqyq0517k8g65";
   };
 
-  buildInputs = [ libsepol libselinux ];
+  postPatch = ''
+    # Fix install references
+    substituteInPlace po/Makefile \
+       --replace /usr/bin/install install --replace /usr/share /share
+    substituteInPlace newrole/Makefile --replace /usr/share /share
 
-  NIX_LDFLAGS = "-lsepol";
+    sed -i -e '39i#include <crypt.h>' run_init/run_init.c
+  '';
 
-  makeFlags = "LOCALEDIR=$(out)/share/locale";
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ libsepol libselinux libsemanage ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/sbin"
+    "ETCDIR=$(out)/etc"
+    "BASHCOMPLETIONDIR=$out/share/bash-completion/completions"
+    "LOCALEDIR=$(out)/share/locale"
+    "MAN5DIR=$(out)/share/man/man5"
+  ];
 
   meta = with stdenv.lib; {
-    homepage = http://userspace.selinuxproject.org/;
     description = "SELinux policy core utilities";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
-    platforms = platforms.linux;
+    inherit (libsepol.meta) homepage platforms maintainers;
   };
 }

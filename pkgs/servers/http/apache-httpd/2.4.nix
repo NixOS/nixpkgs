@@ -1,68 +1,97 @@
-{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre
+{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
 , proxySupport ? true
 , sslSupport ? true, openssl
+, http2Support ? true, nghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
+, brotliSupport ? true, brotli
 , luaSupport ? false, lua5
 }:
 
-let optional       = stdenv.lib.optional;
-    optionalString = stdenv.lib.optionalString;
+let inherit (stdenv.lib) optional;
 in
 
 assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
+assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.3";
-  name = "apache-httpd-${version}";
+  version = "2.4.46";
+  pname = "apache-httpd";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "17i4zdcjfvxks0p1fbqvab37kr8d6zscqaqan8pqkw8iq6wh48fq";
+    sha256 = "1sj1rwgbcjgkzac3ybjy7j68c9b3dv3ap71m48mrjhf6w7vds3kl";
   };
 
+  # FIXME: -dev depends on -doc
+  outputs = [ "out" "dev" "man" "doc" ];
+  setOutputFlags = false; # it would move $out/modules, etc.
+
   buildInputs = [perl] ++
+    optional brotliSupport brotli ++
+    optional sslSupport openssl ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2;
+    optional libxml2Support libxml2 ++
+    optional http2Support nghttp2 ++
+    optional stdenv.isDarwin libiconv;
+
+  prePatch = ''
+    sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
+    sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
+  '';
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
-  configureFlags = ''
-    --with-apr=${apr}
-    --with-apr-util=${aprutil}
-    --with-z=${zlib}
-    --with-pcre=${pcre}
-    --disable-maintainer-mode
-    --disable-debugger-mode
-    --enable-mods-shared=all
-    --enable-mpms-shared=all
-    --enable-cern-meta
-    --enable-imagemap
-    --enable-cgi
-    ${optionalString proxySupport "--enable-proxy"}
-    ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
-    ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
-    ${optionalString libxml2Support "--with-libxml2=${libxml2}/include/libxml2"}
-  '';
+  configureFlags = [
+    "--with-apr=${apr.dev}"
+    "--with-apr-util=${aprutil.dev}"
+    "--with-z=${zlib.dev}"
+    "--with-pcre=${pcre.dev}"
+    "--disable-maintainer-mode"
+    "--disable-debugger-mode"
+    "--enable-mods-shared=all"
+    "--enable-mpms-shared=all"
+    "--enable-cern-meta"
+    "--enable-imagemap"
+    "--enable-cgi"
+    "--includedir=${placeholder "dev"}/include"
+    (stdenv.lib.enableFeature proxySupport "proxy")
+    (stdenv.lib.enableFeature sslSupport "ssl")
+    (stdenv.lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
+    "--docdir=$(doc)/share/doc"
 
-  postInstall = ''
-    echo "removing manual"
-    rm -rf $out/manual
-  '';
+    (stdenv.lib.enableFeature brotliSupport "brotli")
+    (stdenv.lib.withFeatureAs brotliSupport "brotli" brotli)
+
+    (stdenv.lib.enableFeature http2Support "http2")
+    (stdenv.lib.withFeature http2Support "nghttp2")
+
+    (stdenv.lib.enableFeature luaSupport "lua")
+    (stdenv.lib.withFeatureAs luaSupport "lua" lua5)
+  ];
 
   enableParallelBuilding = true;
+
+  stripDebugList = [ "lib" "modules" "bin" ];
+
+  postInstall = ''
+    mkdir -p $doc/share/doc/httpd
+    mv $out/manual $doc/share/doc/httpd
+    mkdir -p $dev/bin
+    mv $out/bin/apxs $dev/bin/apxs
+  '';
 
   passthru = {
     inherit apr aprutil sslSupport proxySupport ldapSupport;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage = "http://httpd.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    homepage    = "http://httpd.apache.org/";
+    license     = licenses.asl20;
+    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with maintainers; [ lovek323 peti ];
   };
 }

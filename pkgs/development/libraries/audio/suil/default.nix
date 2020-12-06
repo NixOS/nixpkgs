@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, gtk, lv2, pkgconfig, python, serd, sord, sratom, qt4 }:
+{ stdenv, lib, fetchurl, gtk2, lv2, pkgconfig, python, serd, sord, sratom
+, wafHook
+, withQt4 ? true, qt4 ? null
+, withQt5 ? false, qt5 ? null }:
+
+# I haven't found an XOR operator in nix...
+assert withQt4 || withQt5;
+assert !(withQt4 && withQt5);
 
 stdenv.mkDerivation rec {
-  name = "suil-${version}";
-  version = "0.6.4";
+  pname = "suil";
+  version = "0.10.6";
+  name = "${pname}-qt${if withQt4 then "4" else "5"}-${version}";
 
   src = fetchurl {
-    url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "12pz2w74rhhi6gsskfs6l71vw8qfz8906kbjf5w6jyy1x4kkdca2";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
+    sha256 = "0z4v01pjw4wh65x38w6icn28wdwxz13ayl8hvn4p1g9kmamp1z06";
   };
 
-  buildInputs = [ gtk lv2 pkgconfig python qt4 serd sord sratom ];
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf";
-
-  installPhase = "python waf install";
+  nativeBuildInputs = [ pkgconfig wafHook ];
+  buildInputs = [ gtk2 lv2 python serd sord sratom ]
+    ++ (lib.optionals withQt4 [ qt4 ])
+    ++ (lib.optionals withQt5 (with qt5; [ qtbase qttools ]));
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/suil;
+    homepage = "http://drobilla.net/software/suil";
     description = "A lightweight C library for loading and wrapping LV2 plugin UIs";
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu ];
-
+    maintainers = with maintainers; [ goibhniu ];
+    platforms = platforms.linux;
   };
 }

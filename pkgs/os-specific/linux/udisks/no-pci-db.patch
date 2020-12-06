@@ -1,0 +1,13 @@
+Systemd no longer has the pci-db program.
+
+diff -ru -x '*~' udisks-1.0.4-orig/data/80-udisks.rules udisks-1.0.4/data/80-udisks.rules
+--- udisks-1.0.4-orig/data/80-udisks.rules	2011-08-25 23:31:20.000000000 +0200
++++ udisks-1.0.4/data/80-udisks.rules	2012-12-13 13:06:52.189650854 +0100
+@@ -3,7 +3,6 @@
+ 
+ # import names for PCI storage controllers
+ #
+-SUBSYSTEM=="pci", ACTION=="add|change", ENV{ID_MODEL_FROM_DATABASE}=="", ATTR{class}=="0x01*", IMPORT{program}="pci-db %p"
+ 
+ # Set eSATA port type for known eSATA CardBus adapters - first we want to ensure
+ # the device is on a cardbus controller (upper PCI device) - then we check

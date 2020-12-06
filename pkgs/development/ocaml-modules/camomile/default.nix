@@ -1,30 +1,24 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{ stdenv, fetchFromGitHub, buildDunePackage, cppo }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.8.3";
-in
+buildDunePackage rec {
+  pname = "camomile";
+	version = "1.0.2";
 
-stdenv.mkDerivation {
-  name = "camomile-${version}";
+	src = fetchFromGitHub {
+		owner = "yoriyuki";
+		repo = pname;
+		rev = version;
+		sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
+	};
 
-  src = fetchurl {
-    url = "mirror://sourceforge/camomile/camomile-${version}.tar.bz2";
-    #sha256 = "0x43pjxx70kgip86mmdn08s97k4qzdqc8i79xfyyx28smy1bsa00";
-    sha256 = "0yzj6j88aqrkbcynqh1d7r54670m1sqf889vdcgk143w85fxdj4l";
-  };
+	buildInputs = [ cppo ];
 
-  buildInputs = [ocaml findlib];
+	configurePhase = "ocaml configure.ml --share $out/share/camomile";
 
-  createFindlibDestdir = true;
-
-  meta = {
-    homepage = http://camomile.sourceforge.net/;
-    description = "A comprehensive Unicode library for OCaml";
-    license = "LGPL";
-    platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
-  };
+	meta = {
+		inherit (src.meta) homepage;
+		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = stdenv.lib.licenses.lgpl21;
+		description = "A Unicode library for OCaml";
+	};
 }

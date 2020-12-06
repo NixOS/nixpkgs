@@ -2,10 +2,11 @@
 
 let version = "0.2.4"; in
 stdenv.mkDerivation rec {
-  name = "mpc123-${version}";
+  pname = "mpc123";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/mpc123/version%20${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/mpc123/version%20${version}/${pname}-${version}.tar.gz";
     sha256 = "0sf4pns0245009z6mbxpx7kqy4kwl69bc95wz9v23wgappsvxgy1";
   };
 
@@ -20,13 +21,13 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://mpc123.sourceforge.net/;
+    homepage = "http://mpc123.sourceforge.net/";
 
-    description = "mpc123, a Musepack (.mpc) audio player";
+    description = "A Musepack (.mpc) audio player";
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu; # arbitrary choice
+    maintainers = [ ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
   };
 }

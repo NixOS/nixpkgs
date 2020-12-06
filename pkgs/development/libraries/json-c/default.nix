@@ -1,14 +1,30 @@
-{ stdenv, fetchurl}:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "json-c-0.9";
+  pname = "json-c";
+  version = "0.15";
+
   src = fetchurl {
-    url = "http://oss.metaparadigm.com/json-c/json-c-0.9.tar.gz";
-    sha256 = "0xcl8cwzm860f8m0cdzyw6slwcddni4mraw4shvr3qgqkdn4hakh";
+    url    = "https://s3.amazonaws.com/json-c_releases/releases/${pname}-${version}.tar.gz";
+    sha256 = "1im484iz08j3gmzpw07v16brwq46pxxj65i996kkp2vivcfhmn5q";
   };
-  meta = {
-    homepage = "http://oss.metaparadigm.com/json-c/";
+
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake ];
+
+  meta = with stdenv.lib; {
     description = "A JSON implementation in C";
-    longDescription = "JSON-C implements a reference counting object model that allows you to easily construct JSON objects in C, output them as JSON formatted strings and parse JSON formatted strings back into the C representation of JSON objects.";
+    homepage    = "https://github.com/json-c/json-c/wiki";
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
+    license = licenses.mit;
+
+    longDescription = ''
+      JSON-C implements a reference counting object model that allows you to
+      easily construct JSON objects in C, output them as JSON formatted strings
+      and parse JSON formatted strings back into the C representation of JSON
+      objects.
+    '';
   };
 }

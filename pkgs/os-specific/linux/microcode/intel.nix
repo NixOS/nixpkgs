@@ -1,28 +1,33 @@
-{ stdenv, fetchurl, microcode2ucode }:
+{ stdenv, fetchFromGitHub, libarchive, iucode-tool }:
 
-let version = "20120606";
-    num = "21385";
-in stdenv.mkDerivation {
-  name = "microcode-intel-${version}";
-  src = fetchurl {
-    url = "http://downloadmirror.intel.com/${num}/eng/microcode-${version}.tgz";
-    sha256 = "0hs95lj24zx3jscc64zg3hf8xc95vrnsyqlid66h453ib0wf8fg1";
+stdenv.mkDerivation rec {
+  pname = "microcode-intel";
+  version = "20201118";
+
+  src = fetchFromGitHub {
+    owner = "intel";
+    repo = "Intel-Linux-Processor-Microcode-Data-Files";
+    rev = "microcode-${version}";
+    sha256 = "1xs3f2rbfqnpz9qs7a1kl363qdyb8fybmmyd37v573clqf7l4lgg";
   };
 
-  buildInputs = [ microcode2ucode ];
-  sourceRoot = ".";
-
-  buildPhase = ''
-    intel-microcode2ucode microcode.dat
-  '';
+  nativeBuildInputs = [ iucode-tool libarchive ];
 
   installPhase = ''
-    ensureDir $out
-    cp -r intel-ucode "$out/"
+    runHook preInstall
+
+    mkdir -p $out kernel/x86/microcode
+    iucode_tool -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
+    echo kernel/x86/microcode/GenuineIntel.bin | bsdcpio -o -H newc -R 0:0 > $out/intel-ucode.img
+
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = http://www.intel.com/;
+  meta = with stdenv.lib; {
+    homepage = "http://www.intel.com/";
     description = "Microcode for Intel processors";
+    license = licenses.unfreeRedistributableFirmware;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ andir ];
   };
 }

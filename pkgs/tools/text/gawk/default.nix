@@ -1,21 +1,63 @@
-{ stdenv, fetchurl, libsigsegv }:
+{ stdenv, fetchurl
+# TODO: links -lsigsegv but loses the reference for some reason
+, withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
+, interactive ? false, readline
 
-stdenv.mkDerivation (rec {
-  name = "gawk-4.0.0";
+/* Test suite broke on:
+       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+    || stdenv.isDarwin # XXX: `locale' segfaults
+    || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+    || stdenv.isFreeBSD
+*/
+, doCheck ? (interactive && stdenv.isLinux), glibcLocales ? null
+, locale ? null
+}:
+
+assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
+
+let
+  inherit (stdenv.lib) optional;
+in
+stdenv.mkDerivation rec {
+  name = "gawk-5.1.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gawk/${name}.tar.bz2";
-    sha256 = "0sss7rhpvizi2a88h6giv0i7w5h07s2fxkw3s6n1hqvcnhrfgbb0";
+    url = "mirror://gnu/gawk/${name}.tar.xz";
+    sha256 = "1gc2cccqy1x1bf6rhwlmd8q7dz7gnam6nwgl38bxapv6qm5flpyg";
   };
 
-  doCheck = !stdenv.isCygwin;      # XXX: `test-dup2' segfaults on Cygwin 6.1
+  # When we do build separate interactive version, it makes sense to always include man.
+  outputs = [ "out" "info" ] ++ optional (!interactive) "man";
 
-  buildInputs = [ libsigsegv ];
+  nativeBuildInputs = optional (doCheck && stdenv.isLinux) glibcLocales;
 
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ];
+  buildInputs =
+       optional withSigsegv libsigsegv
+    ++ optional interactive readline
+    ++ optional stdenv.isDarwin locale;
 
-  meta = {
-    homepage = http://www.gnu.org/software/gawk/;
+  configureFlags = [
+    (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
+    (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
+  ];
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
+
+  inherit doCheck;
+
+  postInstall = ''
+    rm "$out"/bin/gawk-*
+    ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
+  '';
+
+  passthru = {
+    libsigsegv = if withSigsegv then libsigsegv else null; # for stdenv bootstrap
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.gnu.org/software/gawk/";
     description = "GNU implementation of the Awk programming language";
 
     longDescription = ''
@@ -32,14 +74,11 @@ stdenv.mkDerivation (rec {
       lines of code.
     '';
 
-    license = "GPLv3+";
+    license = licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = platforms.unix ++ platforms.windows;
+
+    maintainers = [ ];
   };
 }
 
-//
-
-stdenv.lib.optionalAttrs stdenv.isCygwin {
-  patches = [ ./cygwin-identifiers.patch ];
-})

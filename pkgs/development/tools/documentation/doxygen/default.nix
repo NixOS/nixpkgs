@@ -1,42 +1,41 @@
-{ stdenv, fetchurl, perl, flex, bison, qt4 }:
+{ stdenv, cmake, fetchFromGitHub, python3, flex, bison, qt5, CoreServices, libiconv }:
 
-let
-  name = "doxygen-1.8.1";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "doxygen";
+  version = "1.8.20";
 
-  src = fetchurl {
-    url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "0qmprax8d5fwx6sc7x9l06ilh2ffgvm6xs0rh54k3v5q5879r7mg";
+  src = fetchFromGitHub {
+    owner = "doxygen";
+    repo = "doxygen";
+    rev = "Release_${stdenv.lib.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "17chvi3i80rj4750smpizf562xjzd2xcv5rfyh997pyvc1zbq5rh";
   };
 
-  patches = [ ./tmake.patch ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    flex
+    bison
+  ];
 
   buildInputs =
-    [ perl flex bison ]
-    ++ stdenv.lib.optional (qt4 != null) qt4;
+       stdenv.lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+    ++ stdenv.lib.optional stdenv.isSunOS libiconv
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
-  prefixKey = "--prefix ";
+  cmakeFlags =
+    [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
+    stdenv.lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
-  configureFlags =
-    [ "--dot dot" ]
-    ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
-  preConfigure = stdenv.lib.optionalString (qt4 != null)
-    ''
-      echo "using QTDIR=${qt4}..."
-      export QTDIR=${qt4}
-    '';
-
-  makeFlags = "MAN1DIR=share/man/man1";
-
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = {
-    license = "GPLv2+";
-    homepage = "http://doxygen.org/";
-    description = "Doxygen, a source code documentation generator tool";
+    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://doxygen.nl/";
+    description = "Source code documentation generator tool";
 
     longDescription = ''
       Doxygen is a documentation system for C++, C, Java, Objective-C,
@@ -46,7 +45,6 @@ stdenv.mkDerivation {
       manual (in LaTeX) from a set of documented source files.
     '';
 
-    maintainers = [stdenv.lib.maintainers.simons];
-    platforms = if (qt4 != null) then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
+    platforms = if qt5 != null then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
   };
 }

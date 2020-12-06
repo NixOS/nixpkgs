@@ -1,22 +1,49 @@
-{ stdenv, fetchurl, cmake, alsaLib }:
+{ stdenv, fetchFromGitHub, cmake
+, alsaSupport ? !stdenv.isDarwin, alsaLib ? null
+, pulseSupport ? !stdenv.isDarwin, libpulseaudio ? null
+, CoreServices, AudioUnit, AudioToolbox
+}:
 
-stdenv.mkDerivation {
-#The current release is still in a testing phase, though it should be stable
-# (neither the ABI or API will break). Please try it out and let me know how it
-#  works. :-)
+with stdenv.lib;
 
-  name = "openal-soft-1.1.93";
+assert alsaSupport -> alsaLib != null;
+assert pulseSupport -> libpulseaudio != null;
 
-  src = fetchurl {
-    url = http://kcat.strangesoft.net/openal-releases/openal-soft-1.1.93.tar.bz2;
-    sha256 = "162nyv4jy6qzi7s5q3wpdawfph6npyn1n4wjf21haxdxq0mmp6l7";
+stdenv.mkDerivation rec {
+  version = "1.19.1";
+  pname = "openal-soft";
+
+  src = fetchFromGitHub {
+    owner = "kcat";
+    repo = "openal-soft";
+    rev = "${pname}-${version}";
+    sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
   };
 
-  buildInputs = [ cmake alsaLib ];
-  
+  # this will make it find its own data files (e.g. HRTF profiles)
+  # without any other configuration
+  patches = [ ./search-out.patch ];
+  postPatch = ''
+    substituteInPlace Alc/helpers.c \
+      --replace "@OUT@" $out
+  '';
+
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = []
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseSupport libpulseaudio
+    ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+
+  NIX_LDFLAGS = toString ([]
+    ++ optional alsaSupport "-lasound"
+    ++ optional pulseSupport "-lpulse");
+
   meta = {
     description = "OpenAL alternative";
-    homepage = http://kcat.strangesoft.net/openal.html;
-    license = "GPL2";
+    homepage = "https://kcat.strangesoft.net/openal.html";
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ftrvxmtrx];
+    platforms = platforms.unix;
   };
 }

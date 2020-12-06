@@ -1,50 +1,120 @@
-{ fetchurl, stdenv, tcp_wrappers, utillinux, libcap, libtirpc, libevent, libnfsidmap
-, lvm2, e2fsprogs }:
+{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, util-linux, libcap, libtirpc, libevent
+, sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
+, python3, buildPackages, nixosTests, rpcsvc-proto
+, enablePython ? true
+}:
+
+let
+  statdPath = lib.makeBinPath [ systemd util-linux coreutils ];
+in
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-1.2.5";
+  pname = "nfs-utils";
+  version = "2.5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "16ssfkj36ljifyaskgwpd3ys8ylhi5gasq88aha3bhg5dr7yv59m";
+    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1i1h3n2m35q9ixs1i2qf1rpjp10cipa3c25zdf1xj1vaw5q8270g";
   };
 
-  buildInputs =
-    [ tcp_wrappers utillinux libcap libtirpc libevent libnfsidmap
-      lvm2 e2fsprogs
-    ];
+  # libnfsidmap is built together with nfs-utils from the same source,
+  # put it in the "lib" output, and the headers in "dev"
+  outputs = [ "out" "dev" "lib" "man" ];
 
-  # FIXME: Add the dependencies needed for NFSv4 and TI-RPC.
-  configureFlags =
-    [ "--disable-gss"
-      "--with-statedir=/var/lib/nfs"
-      "--with-tirpcinclude=${libtirpc}/include/tirpc"
-    ]
-    ++ stdenv.lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc}/bin/rpcgen";
+  nativeBuildInputs = [ pkgconfig buildPackages.stdenv.cc rpcsvc-proto ];
 
-  patchPhase =
+  buildInputs = [
+    libtirpc libcap libevent sqlite lvm2
+    libuuid keyutils kerberos tcp_wrappers
+  ] ++ lib.optional enablePython python3;
+
+  enableParallelBuilding = true;
+
+  preConfigure =
     ''
-      for i in "tests/"*.sh
-      do
-        sed -i "$i" -e's|/bin/bash|/bin/sh|g'
-        chmod +x "$i"
-      done
-      sed -i s,/usr/sbin,$out/sbin, utils/statd/statd.c
-
-      # https://bugzilla.redhat.com/show_bug.cgi?id=749195
-      sed -i s,PAGE_SIZE,getpagesize\(\), utils/blkmapd/device-process.c
+      substituteInPlace configure \
+        --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
+        --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
     '';
 
-  preBuild =
+  configureFlags =
+    [ "--enable-gss"
+      "--enable-svcgss"
+      "--with-statedir=/var/lib/nfs"
+      "--with-krb5=${lib.getLib kerberos}"
+      "--with-systemd=${placeholder "out"}/etc/systemd/system"
+      "--enable-libmount-mount"
+      "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
+      "--with-rpcgen=${rpcsvc-proto}/bin/rpcgen"
+    ];
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/alpinelinux/aports/cb880042d48d77af412d4688f24b8310ae44f55f/main/nfs-utils/0011-exportfs-only-do-glibc-specific-hackery-on-glibc.patch";
+      sha256 = "0rrddrykz8prk0dcgfvmnz0vxn09dbgq8cb098yjjg19zz6d7vid";
+    })
+    # http://openwall.com/lists/musl/2015/08/18/10
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/alpinelinux/aports/cb880042d48d77af412d4688f24b8310ae44f55f/main/nfs-utils/musl-getservbyport.patch";
+      sha256 = "1fqws9dz8n1d9a418c54r11y3w330qgy2652dpwcy96cm44sqyhf";
+    })
+  ];
+
+  postPatch =
     ''
-      makeFlags="sbindir=$out/sbin"
-      installFlags="statedir=$TMPDIR" # hack to make `make install' work
+      patchShebangs tests
+      sed -i "s,/usr/sbin,$out/bin,g" utils/statd/statd.c
+      sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
+
+      configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
+
+      substituteInPlace systemd/nfs-utils.service \
+        --replace "/bin/true" "${coreutils}/bin/true"
+
+      substituteInPlace utils/mount/Makefile.in \
+        --replace "chmod 4511" "chmod 0511"
+
+      sed '1i#include <stdint.h>' -i support/nsm/rpc.c
+    '';
+
+  makeFlags = [
+    "sbindir=$(out)/bin"
+    "generator_dir=$(out)/etc/systemd/system-generators"
+  ];
+
+  installFlags = [
+    "statedir=$(TMPDIR)"
+    "statdpath=$(TMPDIR)"
+  ];
+
+  stripDebugList = [ "lib" "libexec" "bin" "etc/systemd/system-generators" ];
+
+  postInstall =
+    ''
+      # Not used on NixOS
+      sed -i \
+        -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
+        -e "s,/usr/sbin,$out/bin,g" \
+        $out/etc/systemd/system/*
+    '' + lib.optionalString (!enablePython) ''
+      # Remove all scripts that require python (currently mountstats and nfsiostat)
+      grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
     '';
 
   # One test fails on mips.
-  doCheck = !stdenv.isMips;
+  # doCheck = !stdenv.isMips;
+  # https://bugzilla.kernel.org/show_bug.cgi?id=203793
+  doCheck = false;
 
-  meta = {
+  disallowedReferences = [ (lib.getDev kerberos) ];
+
+  passthru.tests = {
+    nfs3-simple = nixosTests.nfs3.simple;
+    nfs4-simple = nixosTests.nfs4.simple;
+    nfs4-kerberos = nixosTests.nfs4.kerberos;
+  };
+
+  meta = with stdenv.lib; {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''
@@ -53,10 +123,9 @@ stdenv.mkDerivation rec {
       daemons.
     '';
 
-    homepage = http://nfs.sourceforge.net/;
-    license = "GPLv2";
-
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    homepage = "https://linux-nfs.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

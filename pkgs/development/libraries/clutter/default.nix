@@ -1,22 +1,41 @@
-{ stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
-, libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib }:
+{ stdenv, fetchurl, pkgconfig, libGLU, libGL, libX11, libXext, libXfixes
+, libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
+, gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
+}:
 
-stdenv.mkDerivation {
-  name = "clutter-1.8.2";
+let
+  pname = "clutter";
+  version = "1.26.4";
+in
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = mirror://gnome/sources/clutter/1.8/clutter-1.8.2.tar.xz;
-    sha256 = "0bzsvnharawfg525lpavrp55mq4aih5nb01dwwqwnccg8hk9z2fw";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1rn4cd1an6a9dfda884aqpcwcgq8dgydpqvb19nmagw4b70zlj4b";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  outputs = [ "out" "dev" ];
+
+  buildInputs = [ gtk3 ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
-      atk json_glib
+    [ libX11 libGL libGLU libXext libXfixes libXdamage libXcomposite libXi cogl pango
+      atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon
     ];
 
+  configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK
+
+  #doCheck = true; # no tests possible without a display
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
   meta = {
-    description = "Clutter, a library for creating fast, dynamic graphical user interfaces";
+    description = "Library for creating fast, dynamic graphical user interfaces";
 
     longDescription =
       '' Clutter is free software library for creating fast, compelling,
@@ -33,10 +52,10 @@ stdenv.mkDerivation {
          specific needs.
       '';
 
-    license = "LGPLv2+";
-    homepage = http://www.clutter-project.org/;
+    license = stdenv.lib.licenses.lgpl2Plus;
+    homepage = "http://www.clutter-project.org/";
 
-    maintainers = with stdenv.lib.maintainers; [ urkud ludo ];
+    maintainers = with stdenv.lib.maintainers; [ lethalman ];
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

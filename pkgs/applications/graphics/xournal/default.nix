@@ -1,37 +1,65 @@
-{ stdenv, fetchurl
-, ghostscript, atk, gtk, glib, fontconfig, freetype
+{ stdenv, fetchurl, makeDesktopItem
+, ghostscript, atk, gtk2, glib, fontconfig, freetype
 , libgnomecanvas, libgnomeprint, libgnomeprintui
-, pango, libX11, xproto, zlib, poppler, poppler_data
+, pango, libX11, xorgproto, zlib, poppler
 , autoconf, automake, libtool, pkgconfig}:
+
+let
+  isGdkQuartzBackend = (gtk2.gdktarget == "quartz");
+in
+
 stdenv.mkDerivation rec {
-  version = "0.4.5";
+  version = "0.4.8.2016";
   name = "xournal-" + version;
   src = fetchurl {
     url = "mirror://sourceforge/xournal/${name}.tar.gz";
-    sha256 = "1lamfzhby06w2pg56lpv1symdixcwmg6wvi7g6br6la4ak5w5mx7";
+    sha256 = "09i88v3wacmx7f96dmq0l3afpyv95lh6jrx16xzm0jd1szdrhn5j";
   };
 
   buildInputs = [
-    ghostscript atk gtk glib fontconfig freetype
-    libgnomecanvas libgnomeprint libgnomeprintui
-    pango libX11 xproto zlib poppler poppler_data
+    ghostscript atk gtk2 glib fontconfig freetype
+    libgnomecanvas
+    pango libX11 xorgproto zlib poppler
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    libgnomeprint libgnomeprintui
   ];
 
-  buildNativeInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  # Build with poppler-0.18.x
-  patchFlags = "-p0";
+  NIX_LDFLAGS = "-lz"
+    + stdenv.lib.optionalString (!isGdkQuartzBackend) " -lX11";
 
-  patches = [ (fetchurl {
-      url = "https://api.opensuse.org/public/source/X11:Utilities/xournal/xournal-poppler-0.18.patch?rev=eca1c0b24f5bc78111147ab8f4688455";
-      sha256 = "1q565kqb4bklncriq4dlhp1prhidv88wmxr9k3laykiia0qjmfyj";
-    })];
+  desktopItem = makeDesktopItem {
+    name = name;
+    exec = "xournal";
+    icon = "xournal";
+    desktopName = "Xournal";
+    comment = meta.description;
+    categories = "Office;Graphics;";
+    mimeType = "application/pdf;application/x-xoj";
+    genericName = "PDF Editor";
+  };
 
-  NIX_LDFLAGS="-lX11 -lz";
+  postInstall=''
+      mkdir --parents $out/share/mime/packages
+      cat << EOF > $out/share/mime/packages/xournal.xml
+      <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+         <mime-type type="application/x-xoj">
+          <comment>Xournal Document</comment>
+          <glob pattern="*.xoj"/>
+         </mime-type>
+      </mime-info>
+      EOF
+      cp --recursive ${desktopItem}/share/applications $out/share
+      mkdir --parents $out/share/icons
+      cp $out/share/xournal/pixmaps/xournal.png $out/share/icons
+  '';
 
-  meta = {
-    homepage = http://xournal.sourceforge.net/;
-    description = "note-taking application (supposes stylus)";
-    maintainers = [ stdenv.lib.maintainers.guibert ];
+  meta = with stdenv.lib; {
+    homepage = "http://xournal.sourceforge.net/";
+    description = "Note-taking application (supposes stylus)";
+    maintainers = [ maintainers.guibert ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ darwin;
   };
 }

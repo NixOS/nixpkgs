@@ -1,24 +1,25 @@
-{ fetchurl, stdenv, libX11, xproto, libXext, xextproto, libXtst
-, gtk, libXi, inputproto, pkgconfig, recordproto, texinfo }:
+{ fetchurl, stdenv, libX11, xorgproto, libXext, libXtst
+, gtk2, libXi, pkgconfig, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "xnee-3.12";
+  version = "3.19";
+  pname = "xnee";
 
   src = fetchurl {
-    url = "mirror://gnu/xnee/${name}.tar.gz";
-    sha256 = "10vxn0in0l2jir6x90grx5jc64x63l3b0f8liladdbplc8za8zmw";
+    url = "mirror://gnu/xnee/${pname}-${version}.tar.gz";
+    sha256 = "04n2lac0vgpv8zsn7nmb50hf3qb56pmj90dmwnivg09gyrf1x92j";
   };
 
   patchPhase =
     '' for i in `find cnee/test -name \*.sh`
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g ; s|/usr/bin/env bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
        done
     '';
 
   buildInputs =
-    [ libX11 xproto libXext xextproto libXtst gtk
-      libXi inputproto pkgconfig recordproto
+    [ libX11 xorgproto libXext libXtst gtk2
+      libXi pkgconfig
       texinfo
     ];
 
@@ -28,13 +29,13 @@ stdenv.mkDerivation rec {
 
   # `cnee' is linked without `-lXi' and as a consequence has a RUNPATH that
   # lacks libXi.
-  makeFlags = "LDFLAGS=-lXi";
+  makeFlags = [ "LDFLAGS=-lXi" ];
 
   # XXX: Actually tests require an X server.
   doCheck = true;
 
   meta = {
-    description = "GNU Xnee, an X11 event recording and replay tool";
+    description = "X11 event recording and replay tool";
 
     longDescription =
       '' Xnee is a suite of programs that can record, replay and distribute
@@ -44,11 +45,11 @@ stdenv.mkDerivation rec {
          "macros", retype a file.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/xnee/;
+    homepage = "https://www.gnu.org/software/xnee/";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

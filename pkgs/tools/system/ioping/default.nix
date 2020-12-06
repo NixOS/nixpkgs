@@ -1,50 +1,31 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchFromGitHub, fetchpatch }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="ioping";
-    version="0.4";
-    name="${baseName}-${version}";
-    url="http://ioping.googlecode.com/files/${name}.tar.gz";
-    hash="064pfjhg2a4hj6ly0wc9z85awiqry55n6wpx8kxzl9qasls0q447";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "ioping";
+  version = "1.2";
+
+  src = fetchFromGitHub {
+    owner = "koct9i";
+    repo = "ioping";
+    rev = "v${version}";
+    sha256 = "10bv36bqga8sdifxzywzzpjil7vmy62psirz7jbvlsq1bw71aiid";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doMakeInstall"];
-  makeFlags = [
-    ''PREFIX="$out"''
+  patches = [
+    # add netdata support: https://github.com/koct9i/ioping/pull/41
+    (fetchpatch {
+      url = "https://github.com/koct9i/ioping/commit/e7b818457ddb952cbcc13ae732ba0328f6eb73b3.patch";
+      sha256 = "122ivp4rqsnjszjfn33z8li6glcjhy7689bgipi8cgs5q55j99gf";
+    })
   ];
-      
-  meta = {
-    description = "Filesystem IO delay time measurer";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl3Plus;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://code.google.com/p/ioping/downloads/list";
-    };
-  };
-}) x
 
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  meta = with stdenv.lib; {
+    description = "Disk I/O latency measuring tool";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
+    homepage = "https://github.com/koct9i/ioping";
+  };
+}

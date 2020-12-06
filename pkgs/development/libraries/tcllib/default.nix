@@ -1,12 +1,12 @@
 { stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
-  name = "tcllib-${version}";
-  version = "1.14";
+  pname = "tcllib";
+  version = "1.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/tcllib/tcllib-${version}.tar.gz";
-    sha256 = "11052fgfmv9vyswzjjgfvh3pi0k3fnfnl9ri6nl4vc6f6z5ry56x";
+    sha256 = "0wax281h6ksz974a5qpfgf9y34lmlpd8i87lkm1w94ybbd3rgc73";
   };
 
   passthru = {
@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl ];
 
   meta = {
-    homepage = "http://tcl.activestate.com/software/tcllib/";
+    homepage = "https://sourceforge.net/projects/tcllib/";
     description = "Tcl-only library of standard routines for Tcl";
     license = stdenv.lib.licenses.tcltk;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

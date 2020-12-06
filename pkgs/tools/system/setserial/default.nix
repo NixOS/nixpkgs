@@ -1,34 +1,27 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, groff }:
 
-  version = a.lib.attrByPath ["version"] "2.17" a; 
-  buildInputs = with a; [
-    groff
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  pname = "setserial";
+  version = "2.17";
+
   src = fetchurl {
-    url = "mirror://sourceforge/setserial/setserial-${version}.tar.gz";
+    url = "mirror://sourceforge/setserial/${pname}-${version}.tar.gz";
     sha256 = "0jkrnn3i8gbsl48k3civjmvxyv9rbm1qjha2cf2macdc439qfi3y";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ groff ];
 
-  installFlags = "DESTDIR=$out";
+  installFlags = [ "DESTDIR=$(out)" ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "patchPath" "doMakeInstall"];
-
-  patchPath = a.fullDepEntry (''
+  postConfigure = ''
     sed -e s@/usr/man/@/share/man/@ -i Makefile
-  '') ["minInit" "doUnpack" "doConfigure"];
+  '';
 
-  neededDirs = ["$out/bin" "$out/share/man/man8"];
-      
-  name = "setserial-" + version;
+  preInstall = ''mkdir -p "$out/bin" "$out/share/man/man8"'';
+
   meta = {
     description = "Serial port configuration utility";
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

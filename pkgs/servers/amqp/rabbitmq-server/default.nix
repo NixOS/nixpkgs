@@ -1,33 +1,73 @@
-{ stdenv, fetchurl, erlang, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl }:
+{ stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
+, docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
+, procps, coreutils, gnused, systemd, glibcLocales
+, AppKit, Carbon, Cocoa
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
-  name = "rabbitmq-server-2.4.0";
+  pname = "rabbitmq-server";
 
+  version = "3.8.9";
+
+  # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
-    url = "http://www.rabbitmq.com/releases/rabbitmq-server/v2.4.0/${name}.tar.gz";
-    sha256 = "0zvyyqw9kpzi791hvv8qj1aw0fpx5m5cgqfvffxfrdz8daxx3nma";
+    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "0b252l9r45h8r5gibdqcn6hhbm8g6rfzhm1k9d39pwhs5x77cjqv";
   };
 
   buildInputs =
-    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl ];
+    [ erlang elixir python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip rsync glibcLocales ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
-  preBuild =
-    ''
-      # Fix the "/usr/bin/env" in "calculate-relative".
-      patchShebangs .
-    '';
+  outputs = [ "out" "man" "doc" ];
 
-  installFlags = "TARGET_DIR=$(out)/libexec/rabbitmq SBIN_DIR=$(out)/sbin MAN_DIR=$(out)/share/man";
+  installFlags = [ "PREFIX=$(out)" "RMQ_ERLAPP_DIR=$(out)" ];
+  installTargets = [ "install" "install-man" ];
 
-  postInstall =
-    ''
-      echo 'PATH=${erlang}/bin:${PATH:+:}$PATH' >> $out/sbin/rabbitmq-env
-    ''; # */
+  preBuild = ''
+    export LANG=C.UTF-8 # fix elixir locale warning
+  '';
+
+  runtimePath = stdenv.lib.makeBinPath ([
+    erlang
+    getconf # for getting memory limits
+    socat procps
+    gnused coreutils # used by helper scripts
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+  postInstall = ''
+    # rabbitmq-env calls to sed/coreutils, so provide everything early
+    sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'
+
+    # rabbitmq-server script uses `dirname` to get hold of a
+    # rabbitmq-env, so let's provide this file directly. After that
+    # point everything is OK - the PATH above will kick in
+    substituteInPlace $out/sbin/rabbitmq-server \
+      --replace '`dirname $0`/rabbitmq-env' \
+                "$out/sbin/rabbitmq-env"
+
+    # We know exactly where rabbitmq is gonna be, so we patch that into the env-script.
+    # By doing it early we make sure that auto-detection for this will
+    # never be executed (somewhere below in the script).
+    sed -i $out/sbin/rabbitmq-env -e "2s|^|RABBITMQ_SCRIPTS_DIR=$out/sbin\n|"
+
+    # there’s a few stray files that belong into share
+    mkdir -p $doc/share/doc/rabbitmq-server
+    mv $out/LICENSE* $doc/share/doc/rabbitmq-server
+
+    # and an unecessarily copied INSTALL file
+    rm $out/INSTALL
+  '';
 
   meta = {
-    homepage = http://www.rabbitmq.com/;
+    homepage = "https://www.rabbitmq.com/";
     description = "An implementation of the AMQP messaging protocol";
-    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.mpl20;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
+  };
+
+  passthru.tests = {
+    vm-test = nixosTests.rabbitmq;
   };
 }

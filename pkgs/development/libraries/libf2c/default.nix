@@ -1,11 +1,11 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "libf2c";
-  
+  name = "libf2c-20160102";
+
   src = fetchurl {
-    url = http://www.netlib.org/f2c/libf2c.zip;
-    sha256 = "14py0zdwzj5gqjzi0z2hlcy3czpzx1fav55akdj143qgav8h6dav";
+    url = "http://www.netlib.org/f2c/libf2c.zip";
+    sha256 = "1q78y8j8xpl8zdzdxmn5ablss56hi5a7vz3idam9l2nfx5q40h6a";
   };
 
   unpackPhase = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     unzip ${src}
   '';
 
-  makeFlags = "-f makefile.u";
+  makeFlags = [ "-f" "makefile.u" ];
 
   installPhase = ''
     mkdir -p $out/include $out/lib
@@ -24,9 +24,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "F2c converts Fortran 77 source code to C";
-    homepage = http://www.netlib.org/f2c/;
-    license = "BSD";
+    homepage = "http://www.netlib.org/f2c/";
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

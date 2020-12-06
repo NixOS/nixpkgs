@@ -1,17 +1,21 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "pies-1.2";
+  name = "pies-1.3";
 
   src = fetchurl {
     url = "mirror://gnu/pies/${name}.tar.bz2";
-    sha256 = "18w0dbg77i56cx1bwa789w0qi3l4xkkbascxcv2b6gbm0zmjg1g6";
+    sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
   };
+
+  configureFlags = ["--sysconfdir=/etc"];
+
+  hardeningDisable = [ "format" ];
 
   doCheck = true;
 
   meta = {
-    description = "GNU Pies, a program invocation and execution supervisor";
+    description = "A program invocation and execution supervisor";
 
     longDescription =
       '' The name Pies (pronounced "p-yes") stands for Program Invocation and
@@ -34,11 +38,11 @@ stdenv.mkDerivation rec {
          native utilities).  Finally, it can replace the inetd utility!
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/pies/;
+    homepage = "https://www.gnu.org/software/pies/";
 
-    platforms = stdenv.lib.platforms.gnu;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = [ ];
   };
 }

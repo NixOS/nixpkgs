@@ -1,55 +1,23 @@
-x@{builderDefsPackage
-  , allegro
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, allegro }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="atanks";
-    version="4.7";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="mirror://sourceforge/project/${project}/${baseName}/${name}/${name}.tar.gz";
-    hash="0kd98anwb785irv4qm1gqpk2xnh1q0fxnfazkjqpwjvgrliyj2rh";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "atanks";
+  version = "6.5";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/project/atanks/atanks/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "0bijsbd51j4wsnmdxj54r92m7h8zqnvh9z3qqdig6zx7a8kjn61j";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ allegro ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["fixInstall" "doMakeInstall"];
-  makeFlags=[
-    "PREFIX=$out/"
-  ];
-  fixInstall = a.fullDepEntry (''
-    sed -e "s@INSTALL=.*bin/install @INSTALL=install @" -i Makefile
-    sed -e "s@-g 0 -m ... -o 0@@" -i Makefile
-  '') ["doUnpack" "minInit"];
-      
-  meta = {
+  makeFlags = [ "PREFIX=$(out)/" "INSTALL=install" "CXX=g++" ];
+
+  meta = with stdenv.lib; {
     description = "Atomic Tanks ballistics game";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = "http://atanks.sourceforge.net/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/atanks/files/atanks/";
-    };
-  };
-}) x
-
+}

@@ -1,42 +1,39 @@
-{stdenv, fetchurl, perl}: 
+{ stdenv, fetchFromGitHub, cmake, perl
+, enableGui ? false, qt5
+, enableJupyter ? false, boost, jsoncpp, openssl, zmqpp
+}:
 
 stdenv.mkDerivation rec {
-  name = "yacas-1.2.2";
+  pname = "yacas";
+  version = "1.9.1";
 
-  src = fetchurl {
-    url = "http://yacas.sourceforge.net/backups/${name}.tar.gz";
-    sha256 = "1dmafm3w0lm5w211nwkfzaid1rvvmgskz7k4500pjhgdczi5sd78";
+  src = fetchFromGitHub {
+    owner = "grzegorzmazur";
+    repo = "yacas";
+    rev = "v${version}";
+    sha256 = "0dqgqvsb6ggr8jb3ngf0jwfkn6xwj2knhmvqyzx3amc74yd3ckqx";
   };
+
+  hardeningDisable = [ "format" ];
+
+  cmakeFlags = [
+    "-DENABLE_CYACAS_GUI=${if enableGui then "ON" else "OFF"}"
+    "-DENABLE_CYACAS_KERNEL=${if enableJupyter then "ON" else "OFF"}"
+  ];
 
   # Perl is only for the documentation
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ cmake perl ];
+  buildInputs = [
+  ] ++ stdenv.lib.optionals enableGui (with qt5; [ qtbase qtwebkit ])
+    ++ stdenv.lib.optionals enableJupyter [ boost jsoncpp openssl zmqpp ]
+    ;
 
-  patches = [ ./gcc43.patch ];
-
-  crossAttrs = {
-    # Trick to get host-built programs needed for the cross-build.
-    # If yacas had proper makefiles, this would not be needed.
-    preConfigure = ''
-      ./configure
-      pushd src
-      make mkfastprimes 
-      cp mkfastprimes ../..
-      popd
-      pushd manmake
-      make manripper removeduplicates
-      cp manripper removeduplicates ../..
-      popd
-    '';
-    preBuild = ''
-      cp ../mkfastprimes ../manripper ../removeduplicates src
-    '';
-  };
-
-  meta = { 
-      description = "Easy to use, general purpose Computer Algebra System";
-      homepage = http://yacas.sourceforge.net/;
-      license = "GPLv2+";
-      maintainers = with stdenv.lib.maintainers; [viric];
-      platforms = with stdenv.lib.platforms; all;
+  meta = {
+    description = "Easy to use, general purpose Computer Algebra System";
+    homepage = "http://www.yacas.org/";
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
+    broken = enableGui || enableJupyter;
   };
 }

@@ -1,33 +1,51 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub, util-linux }:
 
-# Shows the machine check exceptions logged by the kernel.
-# E.g. a log is generated when intel processors cpu-throttle.
+stdenv.mkDerivation rec {
+  pname = "mcelog";
+  version = "173";
 
-# The releases of this package are no longer on kernel.org
-# hence we fetch them from github. Apparently, these
-# are also more recent.
-
-let
-
-  rev = "7fa99818367a6d17014b36d6f918ad848cbe7ce2";
-  version = "1.0pre-${rev}"; 
-  sha256 = "15eea3acd76190c7922c71028b31963221a2eefd8afa713879e191a26bc22ae7";
-
-in stdenv.mkDerivation {
-
-  name = "mcelog-${version}";
-
-  src = fetchgit {
-    url = "https://github.com/andikleen/mcelog";
-    inherit sha256;
-    inherit rev;
+  src = fetchFromGitHub {
+    owner  = "andikleen";
+    repo   = "mcelog";
+    rev    = "v${version}";
+    sha256 = "1ili11kqacn6jkjpk11vhycgygdl92mymgb1sx22lcwq2x0d248m";
   };
 
-  makeFlags = "prefix=$(out) etcprefix=$(out) DOCDIR=$(out)/share/doc";
+  postPatch = ''
+    for i in mcelog.conf paths.h; do
+      substituteInPlace $i --replace /etc $out/etc
+    done
+    touch mcelog.conf.5 # avoid regeneration requiring Python
 
-  meta = {
-    description = "Tool to display logged machine check exceptions";
-    homepage = http://mcelog.org/;
-    license = stdenv.lib.licenses.gpl2;
+    substituteInPlace Makefile --replace '"unknown"' '"${version}"'
+
+    for i in triggers/*; do
+      substituteInPlace $i --replace 'logger' '${util-linux}/bin/logger'
+    done
+  '';
+
+  enableParallelBuilding = true;
+
+  installFlags = [ "DESTDIR=$(out)" "prefix=" "DOCDIR=/share/doc" ];
+
+  postInstall = ''
+    mkdir -p $out/lib/systemd/system
+    substitute mcelog.service $out/lib/systemd/system/mcelog.service \
+      --replace /usr/sbin $out/bin
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
+    longDescription = ''
+      The mcelog daemon accounts memory and some other errors in various ways
+      on modern x86 Linux systems. The daemon can be queried and/or execute
+      triggers when configurable error thresholds are exceeded. This is used to
+      implement a range of automatic predictive failure analysis algorithms,
+      including bad page offlining and automatic cache error handling. All
+      errors are logged to /var/log/mcelog or syslog or the journal.
+    '';
+    homepage = "http://mcelog.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

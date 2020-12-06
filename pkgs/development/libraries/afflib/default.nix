@@ -1,48 +1,29 @@
-x@{builderDefsPackage
-  , libewf, zlib, curl, expat, fuse, openssl
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchFromGitHub, zlib, curl, expat, fuse, openssl
+, autoreconfHook, python3
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="afflib";
-    version="3.6.12";
-    name="${baseName}-${version}";
-    url="http://afflib.org/downloads/${name}.tar.gz";
-    hash="1l13nrqjlvad112543qbyvrzai5by43zl96d3miklrhn26q9rs07";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  version = "3.7.19";
+  pname = "afflib";
+
+  src = fetchFromGitHub {
+    owner = "sshock";
+    repo = "AFFLIBv3";
+    rev = "v${version}";
+    sha256 = "1qs843yi33yqbp0scqirn753lxzg762rz6xy2h3f8f77fijqj2qb";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib curl expat openssl python3 ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ fuse ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
   meta = {
+    homepage = "http://afflib.sourceforge.net/";
     description = "Advanced forensic format library";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.bsdOriginal;
+    platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.bsdOriginal;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    inherit version;
+    downloadPage = "https://github.com/sshock/AFFLIBv3/tags";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://afflib.org/";
-    };
-  };
-}) x
-
+}

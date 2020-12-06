@@ -1,16 +1,25 @@
-{stdenv, fetchurl}:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+}:
 
-stdenv.mkDerivation {
-  name = "libyaml";
+stdenv.mkDerivation rec {
+  pname = "libyaml";
+  version = "0.2.5";
 
-  src = fetchurl {
-    url = http://pyyaml.org/download/libyaml/yaml-0.1.3.tar.gz;
-    sha256 = "a8bbad7e5250b3735126b7e3bd9f6fce9db19d6be7cc13abad17a24b59ec144a";
+  src = fetchFromGitHub {
+    owner = "yaml";
+    repo = "libyaml";
+    rev = version;
+    sha256 = "18zsnsxc53pans4a01cs4401a2cjk3qi098hi440pj4zijifgcsb";
   };
 
-  meta = {
-    homepage = http://pyyaml.org/;
+  nativeBuildInputs = [ autoreconfHook ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://pyyaml.org/";
     description = "A YAML 1.1 parser and emitter written in C";
-    license = "free";
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

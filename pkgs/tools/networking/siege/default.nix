@@ -1,51 +1,30 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, openssl, zlib }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="siege";
-    version="2.70";
-    name="${baseName}-${version}";
-    url="ftp://ftp.joedog.org/pub/siege/${name}.tar.gz";
-    hash="14fxfmfsqwyahc91w4vn3n8hvclf78n4k1xllqsrpvjb5asvrd1w";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "siege-4.0.7";
+
+  src = fetchurl {
+    url = "http://download.joedog.org/siege/${name}.tar.gz";
+    sha256 = "1y3dnl1ziw0c0d4nw30aj0sdmjvarn4xfxgfkswffwnkm8z5p9xz";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "createDirs" "doMakeInstall"];
+  buildInputs = [ openssl zlib ];
 
-  createDirs = a.fullDepEntry ''
-    mkdir -p "$out/"{bin,lib,share/man,etc}
-  '' ["defEnsureDir"];
+  prePatch = ''
+    sed -i -e 's/u_int32_t/uint32_t/g' -e '1i#include <stdint.h>' src/hash.c
+  '';
 
-  meta = {
+  configureFlags = [
+    "--with-ssl=${openssl.dev}"
+    "--with-zlib=${zlib.dev}"
+  ];
+
+  meta = with stdenv.lib; {
     description = "HTTP load tester";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ ocharles raskin ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.joedog.org/index/siege-home";
-    };
-  };
-}) x
-
+}

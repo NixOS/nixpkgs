@@ -1,32 +1,33 @@
-{stdenv, fetchurl, libX11, libXinerama, enableXft, libXft, zlib}:
-
-with stdenv.lib;
+{ stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dmenu-4.5";
+  name = "dmenu-5.0";
 
   src = fetchurl {
-    url = "http://dl.suckless.org/tools/${name}.tar.gz";
-    sha256 = "0l58jpxrr80fmyw5pgw5alm5qry49aw6y049745wl991v2cdcb08";
+    url = "https://dl.suckless.org/tools/${name}.tar.gz";
+    sha256 = "1lvfxzg3chsgcqbc2vr0zic7vimijgmbvnspayx73kyvqi1f267y";
   };
 
-  xftPatch = fetchurl {
-    url = "http://tools.suckless.org/dmenu/patches/${name}-xft.diff";
-    sha256 = "efb4095d65e5e86f9dde97294732174409c24f319bdd4824cc22fa1404972b4f";
-  };
+  buildInputs = [ libX11 libXinerama zlib libXft ];
 
-  buildInputs = [ libX11 libXinerama ] ++ optionals enableXft [zlib libXft];
+  inherit patches;
 
-  patches = optional enableXft xftPatch;
+  postPatch = ''
+    sed -ri -e 's!\<(dmenu|dmenu_path|stest)\>!'"$out/bin"'/&!g' dmenu_run
+    sed -ri -e 's!\<stest\>!'"$out/bin"'/&!g' dmenu_path
+  '';
 
-  preConfigure = [ ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'' ];
+  preConfigure = ''
+    sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk
+  '';
 
-  meta = { 
-      description = "a generic, highly customizable, and efficient menu for the X Window System";
-      homepage = http://tools.suckless.org/dmenu;
-      license = "MIT";
-      maintainers = with stdenv.lib.maintainers; [viric];
-      platforms = with stdenv.lib.platforms; all;
+  makeFlags = [ "CC:=$(CC)" ];
+
+  meta = with stdenv.lib; {
+      description = "A generic, highly customizable, and efficient menu for the X Window System";
+      homepage = "https://tools.suckless.org/dmenu";
+      license = licenses.mit;
+      maintainers = with maintainers; [ pSub globin ];
+      platforms = platforms.all;
   };
 }
-

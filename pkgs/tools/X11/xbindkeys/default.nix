@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, libX11, guile }:
+{ stdenv, fetchurl, pkgconfig, libX11, guile }:
 
-let version = "1.8.5"; in
+let version = "1.8.7"; in
 stdenv.mkDerivation {
-  name = "xbindkeys-${version}";
+  pname = "xbindkeys";
+  inherit version;
   src = fetchurl {
-    url = "http://www.nongnu.org/xbindkeys/xbindkeys-${version}.tar.gz";
-    sha256 = "10gwyvj69yyqgk1xxbrl37gx3c3jfpgr92mz62b1x5q6jiq7hbyn";
+    url = "https://www.nongnu.org/xbindkeys/xbindkeys-${version}.tar.gz";
+    sha256 = "1wl2vc5alisiwyk8m07y1ryq8w3ll9ym83j27g4apm4ixjl8d6x2";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 guile ];
 
   meta = {
-    homepage = http://www.nongnu.org/xbindkeys/xbindkeys.html;
+    homepage = "https://www.nongnu.org/xbindkeys/xbindkeys.html";
     description = "Launch shell commands with your keyboard or your mouse under X Window";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

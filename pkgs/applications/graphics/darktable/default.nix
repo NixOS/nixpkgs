@@ -1,52 +1,62 @@
-{ stdenv, fetchurl
-, GConf, atk, cairo, cmake, curl, dbus_glib, exiv2, glib
-, libgnome_keyring, gphoto2, gtk, ilmbase, intltool, lcms, lcms2
-, lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
-, libpng, libpthreadstubs, libraw1394, librsvg, libtiff, libxcb
-, openexr, pixman, pkgconfig, sqlite, bash, libxslt }:
-
-assert stdenv ? glibc;
+{ stdenv, fetchurl, libsoup, graphicsmagick, json-glib, wrapGAppsHook
+, cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
+, ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
+, libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
+, openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
+, ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
-  name = "darktable-${version}";
+  version = "3.2.1";
+  pname = "darktable";
 
   src = fetchurl {
-    url = "mirror://sourceforge/darktable/darktable-${version}.tar.gz";
-    sha256 = "0k1m7nd42yn4c2jr1ps1g96fqk9pq20cxjp7dmlza61pj2j9nads";
+    url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
+    sha256 = "035rvqmw386hm0jpi14lf4dnpr5rjkalzjkyprqh42nwi3m86dkf";
   };
 
-  buildInputs =
-    [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring gtk
-      ilmbase intltool lcms lcms2 lensfun libXau libXdmcp libexif
-      libglade libgphoto2 libjpeg libpng libpthreadstubs libraw1394
-      librsvg libtiff libxcb openexr pixman pkgconfig sqlite libxslt
-    ];
+  nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/include/gtk-2.0"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/lib/gtk-2.0/include"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${cairo}/include/cairo"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${atk}/include/atk-1.0"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${ilmbase}/include/OpenEXR"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${openexr}/include/OpenEXR"
-
-    substituteInPlace tools/create_preferences.sh.in --replace '#!/usr/bin/env bash' '#!${bash}/bin/bash'
-  '';
+  buildInputs = [
+    cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libexif
+    libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
+    libsoup graphicsmagick json-glib openjpeg lua pugixml
+    libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    colord colord-gtk libX11 ocl-icd
+  ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration
+    ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
-    "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include"
-    "-DPTHREAD_LIBRARY=${stdenv.glibc}/lib/libpthread.so"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk}/lib/gtk-2.0/include"
+    "-DBUILD_USERMANUAL=False"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DUSE_COLORD=OFF"
+    "-DUSE_KWALLET=OFF"
   ];
+
+
+  # darktable changed its rpath handling in commit
+  # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
+  # binaries can't find libdarktable.so, so change LD_LIBRARY_PATH in
+  # the wrappers:
+  preFixup = let
+    libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    libPathPrefix = "$out/lib/darktable" + stdenv.lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
+  in ''
+    for f in $out/share/darktable/kernels/*.cl; do
+      sed -r "s|#include \"(.*)\"|#include \"$out/share/darktable/kernels/\1\"|g" -i "$f"
+    done
+
+    gappsWrapperArgs+=(
+      --prefix ${libPathEnvVar} ":" "${libPathPrefix}"
+    )
+  '';
 
   meta = with stdenv.lib; {
     description = "Virtual lighttable and darkroom for photographers";
-    homepage = http://darktable.sourceforge.net;
+    homepage = "https://www.darktable.org";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];
   };
 }

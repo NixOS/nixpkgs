@@ -1,14 +1,27 @@
-{stdenv, fetchurl, x11, mesa, pkgconfig, imagemagick, libtiff, bzip2}:
+{stdenv, fetchurl, pkgconfig, xlibsWrapper, libXext, libGLU, libGL, imagemagick, libtiff, bzip2}:
 
-stdenv.mkDerivation {
-  name = "rss-glx-0.8.1";
-  
+stdenv.mkDerivation rec {
+  version = "0.9.1";
+  pname = "rss-glx";
+
   src = fetchurl {
-    url = mirror://sourceforge/rss-glx/rss-glx_0.8.1.tar.bz2;
-    md5 = "a2bdf0e10ee4e89c8975f313c5c0ba6f";
+    url = "mirror://sourceforge/rss-glx/rss-glx_${version}.tar.bz2";
+    sha256 = "1aikafjqrfmv23jnrrm5d56dg6injh4l67zjdxzdapv9chw7g3cg";
   };
 
-  buildInputs = [x11 mesa pkgconfig imagemagick libtiff bzip2];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libGLU libGL xlibsWrapper imagemagick libtiff bzip2 ];
 
-  NIX_CFLAGS_COMPILE = "-I${imagemagick}/include/ImageMagick";
+  NIX_CFLAGS_COMPILE = "-I${imagemagick.dev}/include/ImageMagick";
+  NIX_LDFLAGS= "-rpath ${libXext}/lib";
+
+  meta = {
+    description = "Really Slick Screensavers Port to GLX";
+    longDescription = ''
+      This package currently contains all of the screensavers from the
+      original collection, plus a few others.
+    '';
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

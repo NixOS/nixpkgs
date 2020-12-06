@@ -1,18 +1,25 @@
 { stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
-, libvorbis, freetype, openal, mesa }:
-stdenv.mkDerivation rec {
-  name = "alienarena-7.52";
+, libvorbis, freetype, openal, libGL }:
+
+stdenv.mkDerivation {
+  name = "alienarena-7.65";
+
   src = fetchurl {
-    url = "http://icculus.org/alienarena/Files/alienarena-7_52-linux20110929.tar.gz";
-    sha256 = "1s1l3apxsxnd8lyi568y38a1fcdr0gwmc3lkgq2nkc676k4gki3m";
+    url = "https://icculus.org/alienarena/Files/alienarena-7.65-linux20130207.tar.gz";
+    sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
-  buildInputs = [ pkgconfig libjpeg libX11 curl libogg libvorbis
-                  freetype openal mesa libXxf86vm ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjpeg libX11 curl libogg libvorbis
+                  freetype openal libGL libXxf86vm ];
+
   patchPhase = ''
     substituteInPlace ./configure \
-      --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
+      --replace libopenal.so.1 ${openal}/lib/libopenal.so.1 \
+      --replace libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "A free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How
@@ -23,10 +30,11 @@ stdenv.mkDerivation rec {
       with a retro alien theme, while adding tons of original ideas to
       make the game quite unique.
     '';
-    homepage = http://red.planetarena.org;
+    homepage = "http://red.planetarena.org";
     # Engine is under GPLv2, everything else is under
-    license = [ "unfree-redistributable" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.linux;
+    hydraPlatforms = [];
   };
 }

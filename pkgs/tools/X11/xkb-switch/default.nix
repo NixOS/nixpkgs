@@ -1,22 +1,24 @@
-{ stdenv, fetchgit, cmake, libX11 }:
+{ stdenv, fetchFromGitHub, cmake, libX11, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  name = "xkb-switch-1.2";
+  pname = "xkb-switch";
+  version = "1.6.0";
 
-  src = fetchgit {
-    url = https://github.com/ierton/xkb-switch.git;
-    rev = "4c90511ecf2cacc040c97f034a13254c3fa9dfef";
-    sha256 = "1jxya67v1qnvbzd0cd5gj7xrwvxyfy1rpa70l8p30p9cmw3ahk41";
+  src = fetchFromGitHub {
+    owner = "ierton";
+    repo = "xkb-switch";
+    rev = version;
+    sha256 = "11yn0y1kx04rqxh0d81b5q7kbyz58pi48bl7hyhlv7p8yndkfg4b";
   };
 
-  buildInputs = [ cmake libX11 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libX11 libxkbfile ];
 
-  meta = {
-    description = "Switch X layouts from the command line";
-    homepage = https://github.com/ierton/xkb-switch.git;
-    maintainers = with stdenv.lib.maintainers; [smironov];
-    platforms = stdenv.lib.platforms.gnu;
-    license = "BSD";
+  meta = with stdenv.lib; {
+    description = "Switch your X keyboard layouts from the command line";
+    homepage = "https://github.com/ierton/xkb-switch";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ smironov ];
+    platforms = platforms.linux;
   };
 }
-

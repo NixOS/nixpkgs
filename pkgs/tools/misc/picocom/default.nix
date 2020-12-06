@@ -1,23 +1,36 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, makeWrapper, lrzsz, IOKit }:
+
+assert stdenv.isDarwin -> IOKit != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "picocom-1.7";
+  pname = "picocom";
+  version = "3.1";
 
-  src = fetchurl {
-    url = "http://picocom.googlecode.com/files/${name}.tar.gz";
-    sha256 = "17hjq713naq02xar711aw24qqd52p591mj1h5n97cni1ga7irwyh";
+  src = fetchFromGitHub {
+    owner = "npat-efault";
+    repo = "picocom";
+    rev = version;
+    sha256 = "1vvjydqf0ax47nvdyyl67jafw5b3sfsav00xid6qpgia1gs2r72n";
   };
 
+  buildInputs = [ makeWrapper ]
+    ++ optionals stdenv.isDarwin [ IOKit ];
+
   installPhase = ''
-    ensureDir $out/bin $out/share/man/man8
+    mkdir -p $out/bin $out/share/man/man1
     cp picocom $out/bin
-    cp picocom.8 $out/share/man/man8
+    cp picocom.1 $out/share/man/man1
+
+    wrapProgram $out/bin/picocom \
+      --prefix PATH ":" "${lrzsz}/bin"
   '';
 
   meta = {
     description = "Minimal dumb-terminal emulation program";
-    homepage = http://code.google.com/p/picocom/;
-    license = "GPLv2+";
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    homepage = "https://github.com/npat-efault/picocom/";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

@@ -1,30 +1,27 @@
-{ stdenv, fetchsvn, alsaLib, asio, autoconf, automake, bison
-, jackaudio, libgig, libsndfile, libtool, lv2, pkgconfig }:
+{ stdenv, fetchurl, autoconf, automake, bison, libtool, pkgconfig, which
+, alsaLib, asio, libjack2, libgig, libsndfile, lv2 }:
 
 stdenv.mkDerivation rec {
-  name = "linuxsampler-svn-${version}";
-  version = "2340";
+  pname = "linuxsampler";
+  version = "2.1.1";
 
-  src = fetchsvn {
-    url = "https://svn.linuxsampler.org/svn/linuxsampler/trunk";
-    rev = "${version}";
-    sha256 = "0zsrvs9dwwhjx733m45vfi11yjkqv33z8qxn2i9qriq5zs1f0kd7";
+  src = fetchurl {
+    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
+    sha256 = "1gijf50x5xbpya5dj3v2mzj7azx4qk9p012csgddp73f0qi0n190";
   };
 
-  patches = ./linuxsampler_lv2_sfz_fix.diff;
-
   preConfigure = ''
-    sed -e 's/which/type -P/g' -i scripts/generate_parser.sh
-    make -f Makefile.cvs
+    make -f Makefile.svn
   '';
 
-  buildInputs = [ 
-   alsaLib asio autoconf automake bison jackaudio libgig libsndfile
-   libtool lv2 pkgconfig
-  ];
+  nativeBuildInputs = [ autoconf automake bison libtool pkgconfig which ];
+
+  buildInputs = [ alsaLib asio libjack2 libgig libsndfile lv2 ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+    homepage = "http://www.linuxsampler.org";
     description = "Sampler backend";
     longDescription = ''
       Includes sampler engine, audio and MIDI drivers, network layer
@@ -36,8 +33,8 @@ stdenv.mkDerivation rec {
       prior written permission by the LinuxSampler authors. If you
       have questions on the subject, that are not yet covered by the
       FAQ, please contact us.
-    ''; 
-    license = licenses.proprietary;
+    '';
+    license = licenses.unfree;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
   };

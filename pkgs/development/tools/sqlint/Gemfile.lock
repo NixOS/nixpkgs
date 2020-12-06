@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    pg_query (1.2.0)
+    sqlint (0.1.10)
+      pg_query (~> 1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  sqlint
+
+BUNDLED WITH
+   2.1.4

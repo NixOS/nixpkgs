@@ -1,9 +1,8 @@
 Based on http://ftp.free.org/mirrors/rsync.frugalware.org/frugalware-testing/source/apps-extra/sysklogd/sysklogd-1.5-systemd.diff
 
-diff --git a/Makefile b/Makefile
-index 9a114b8..aef1fd6 100644
---- a/Makefile
-+++ b/Makefile
+diff -ruN -x '*~' sysklogd-1.5-old/Makefile sysklogd-1.5/Makefile
+--- sysklogd-1.5-old/Makefile	2007-05-30 17:28:48.000000000 +0200
++++ sysklogd-1.5/Makefile	2013-05-09 16:01:14.428638113 +0200
 @@ -20,7 +20,7 @@
  CC= gcc
  #SKFLAGS= -g -DSYSV -Wall
@@ -13,7 +12,7 @@ index 9a114b8..aef1fd6 100644
  # -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
  # -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
  # $(shell getconf LFS_SKFLAGS)
-@@ -79,8 +79,8 @@ test: syslog_tst ksym oops.ko tsyslogd
+@@ -79,8 +79,8 @@
  
  install: install_man install_exec
  
@@ -24,7 +23,7 @@ index 9a114b8..aef1fd6 100644
  
  klogd:	klogd.o syslog.o pidfile.o ksym.o ksym_mod.o
  	${CC} ${LDFLAGS} -o klogd klogd.o syslog.o pidfile.o ksym.o \
-@@ -101,6 +101,9 @@ syslogd.o: syslogd.c version.h
+@@ -101,6 +101,9 @@
  syslog.o: syslog.c
  	${CC} ${SKFLAGS} ${SYSLOG_FLAGS} -c syslog.c
  
@@ -34,11 +33,9 @@ index 9a114b8..aef1fd6 100644
  klogd.o: klogd.c klogd.h version.h
  	${CC} ${SKFLAGS} ${KLOGD_FLAGS} $(DEB) -c klogd.c
  
-diff --git a/sd-daemon.c b/sd-daemon.c
-new file mode 100644
-index 0000000..6d1eebf
---- /dev/null
-+++ b/sd-daemon.c
+diff -ruN -x '*~' sysklogd-1.5-old/sd-daemon.c sysklogd-1.5/sd-daemon.c
+--- sysklogd-1.5-old/sd-daemon.c	1970-01-01 01:00:00.000000000 +0100
++++ sysklogd-1.5/sd-daemon.c	2013-05-09 16:01:14.429638107 +0200
 @@ -0,0 +1,436 @@
 +/*-*- Mode: C; c-basic-offset: 8; indent-tabs-mode: nil -*-*/
 +
@@ -476,11 +473,9 @@ index 0000000..6d1eebf
 +        return a.st_dev != b.st_dev;
 +#endif
 +}
-diff --git a/sd-daemon.h b/sd-daemon.h
-new file mode 100644
-index 0000000..d0a0a94
---- /dev/null
-+++ b/sd-daemon.h
+diff -ruN -x '*~' sysklogd-1.5-old/sd-daemon.h sysklogd-1.5/sd-daemon.h
+--- sysklogd-1.5-old/sd-daemon.h	1970-01-01 01:00:00.000000000 +0100
++++ sysklogd-1.5/sd-daemon.h	2013-05-09 16:01:14.429638107 +0200
 @@ -0,0 +1,265 @@
 +/*-*- Mode: C; c-basic-offset: 8; indent-tabs-mode: nil -*-*/
 +
@@ -747,11 +742,10 @@ index 0000000..d0a0a94
 +#endif
 +
 +#endif
-diff --git a/syslogd.c b/syslogd.c
-index acfd8f1..9bfa8c7 100644
---- a/syslogd.c
-+++ b/syslogd.c
-@@ -551,6 +551,7 @@ static char sccsid[] = "@(#)syslogd.c	5.27 (Berkeley) 10/10/88";
+diff -ruN -x '*~' sysklogd-1.5-old/syslogd.c sysklogd-1.5/syslogd.c
+--- sysklogd-1.5-old/syslogd.c	2007-07-04 21:04:01.000000000 +0200
++++ sysklogd-1.5/syslogd.c	2013-05-09 16:04:32.106602589 +0200
+@@ -551,6 +551,7 @@
  
  #if defined(__linux__)
  #include <paths.h>
@@ -759,7 +753,7 @@ index acfd8f1..9bfa8c7 100644
  #endif
  
  #ifndef UTMP_FILE
-@@ -965,8 +966,11 @@ int main(argc, argv)
+@@ -965,8 +966,11 @@
  			}
  			signal (SIGTERM, SIG_DFL);
  			num_fds = getdtablesize();
@@ -773,7 +767,7 @@ index acfd8f1..9bfa8c7 100644
  			untty();
  		}
  		else
-@@ -1253,6 +1257,60 @@ static int create_unix_socket(const char *path)
+@@ -1253,6 +1257,60 @@
  	if (path[0] == '\0')
  		return -1;
  
@@ -834,17 +828,18 @@ index acfd8f1..9bfa8c7 100644
  	(void) unlink(path);
  
  	memset(&sunx, 0, sizeof(sunx));
-@@ -2254,7 +2311,12 @@ void die(sig)
+@@ -2254,9 +2312,11 @@
  	if (InetInuse) close(inetm);
  
  	/* Clean-up files. */
 -        for (i = 0; i < nfunix; i++)
+-		if (funixn[i] && funix[i] != -1)
+-			(void)unlink(funixn[i]);
 +	i = 0;
 +#if defined(__linux__)
 +	if (sd_listen_fds(0) > 0)
 +		i = 1;
 +#endif
-+	for (; i < nfunix; i++)
- 		if (funixn[i] && funix[i] != -1)
- 			(void)unlink(funixn[i]);
  #ifndef TESTING
+ 	(void) remove_pid(PidFile);
+ #endif

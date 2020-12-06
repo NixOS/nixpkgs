@@ -8,14 +8,14 @@ With optimizations on, python will overwrite the nix store.
 -exec %PYTHON% -O %SHARE%daemon/wicd-daemon.py $@
 +exec %PYTHON% -B %SHARE%daemon/wicd-daemon.py $@
 
---- wicd-1.7.1b2/wicd/wicd-daemon.py.old     2011-04-07 08:28:38.668311226 -0400
-+++ wicd-1.7.1b2/wicd/wicd-daemon.py 2011-04-07 08:28:59.111311223 -0400
-@@ -1806,7 +1806,7 @@
-     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
+--- wicd-1.7.2.4/wicd/wicd-daemon.py  2012-04-30 21:19:45.000000000 +0200
++++ wicd-1.7.2.4/wicd/wicd-daemon.pynew       2013-03-14 21:35:23.250306592 +0100
+@@ -1812,7 +1812,7 @@
      daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
+     child_pid = None
      if not no_poll:
--        child_pid = Popen([misc.find_path("python2"), "-O", 
-+        child_pid = Popen([misc.find_path("python2"), "-B",
+-        child_pid = Popen([wpath.python, "-O", 
++        child_pid = Popen([wpath.python, "-B", 
                            os.path.join(wpath.daemon, "monitor.py")],
                            shell=False, close_fds=True).pid
      atexit.register(on_exit, child_pid)

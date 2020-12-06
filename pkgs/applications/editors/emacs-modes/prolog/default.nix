@@ -1,19 +1,22 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation
-{
-  name = "prolog-mode-1.22";
-  src = fetchurl
-  {
-    url = "http://bruda.ca/emacs-prolog/prolog.el";
-    sha256 = "f46915b2436642bb3302cb38cc457d3c121d0c3e95aecdf128fedc2ae5ea0c87";
+stdenv.mkDerivation {
+  pname = "prolog-mode";
+  version = "1.28";
+
+  src = fetchurl {
+    url = "http://bruda.ca/_media/emacs/prolog.el";
+    sha256 = "oCMzks4xuor8Il8Ll8PXh1zIvMl5qN0RCFJ9yKiHOHU=";
   };
 
-  buildCommand = "install -v -D -m644 $src $out/share/emacs/site-lisp/prolog.el";
+  buildCommand = ''
+    mkdir -p $out/share/emacs/site-lisp/
+    cp $src $out/share/emacs/site-lisp/prolog.el
+  '';
 
   meta = {
-    homepage = "http://turing.ubishops.ca/home/bruda/emacs-prolog/";
+    homepage = "http://bruda.ca/emacs/prolog_mode_for_emacs/";
     description = "Prolog mode for Emacs";
-    license = "GPL";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

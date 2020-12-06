@@ -1,25 +1,20 @@
-{stdenv, fetchurl, SDL} :
+{ stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "SDL_gfx-2.0.22";
+  pname = "SDL_gfx";
+  version = "2.0.26";
 
   src = fetchurl {
-    url = "http://www.ferzkopp.net/Software/SDL_gfx-2.0/${name}.tar.gz";
-    sha256 = "1w1bdpyypvqg1nmbjwkqnjhmngvpjmhc0zanwgq7z4pxffzffx8m";
+    url = "https://www.ferzkopp.net/Software/SDL_gfx-2.0/${pname}-${version}.tar.gz";
+    sha256 = "0ijljhs0v99dj6y27hc10z6qchyp8gdp4199y6jzngy6dzxlzsvw";
   };
 
   buildInputs = [ SDL ] ;
 
-  configureFlags = "--disable-mmx";
+  configureFlags = [ "--disable-mmx" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  postInstall = ''
-    sed -i -e 's,"SDL.h",<SDL/SDL.h>,' \
-      $out/include/SDL/*.h
-    
-    ln -s $out/include/SDL/*.h $out/include/;
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "SDL graphics drawing primitives and support functions";
 
     longDescription =
@@ -40,10 +35,10 @@ stdenv.mkDerivation rec {
          code. Its is written in plain C and can be used in C++ code.
        '';
 
-    homepage = https://sourceforge.net/projects/sdlgfx/;
-    license = "LGPLv2+";
+    homepage = "https://sourceforge.net/projects/sdlgfx/";
+    license = licenses.zlib;
 
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ bjg ];
+    platforms = platforms.unix;
   };
 }

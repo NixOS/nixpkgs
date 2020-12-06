@@ -1,22 +1,31 @@
-{ fetchurl, stdenv, openssl, pkgconfig, db4 }:
+{ stdenv, fetchurl, pkg-config, perl
+, openssl, db, zlib, cyrus_sasl
+}:
 
 stdenv.mkDerivation rec {
-  name = "isync-1.0.4";
+  pname = "isync";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/isync/isync-1.0.4.tar.gz";
-    sha256 = "1xmgzypl5a3i0fz1ca55vfbs5mv2l9icwf2gk8rvlbwrkn2wid68";
+    url = "mirror://sourceforge/isync/${pname}-${version}.tar.gz";
+    sha256 = "10n8ykag0q3ws6fc15xqyg3v980v5nq3kzpablly2rh2z7vkn8gj";
   };
 
-  patches = [ ./isync-recursice-imap.patch ]; # usefull patch to enable subfolders listing
-  buildInputs = [ openssl pkgconfig db4 ];
+  nativeBuildInputs = [ pkg-config perl ];
+  buildInputs = [ openssl db cyrus_sasl zlib ];
 
-  meta = {
-    homepage = http://isync.sourceforge.net/;
+  meta = with stdenv.lib; {
+    homepage = "http://isync.sourceforge.net/";
+    # https://sourceforge.net/projects/isync/
+    changelog = "https://sourceforge.net/p/isync/isync/ci/v${version}/tree/NEWS";
     description = "Free IMAP and MailDir mailbox synchronizer";
-    licenses = [ "GPLv2+" ];
-
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    longDescription = ''
+      mbsync (formerly isync) is a command line application which synchronizes
+      mailboxes. Currently Maildir and IMAP4 mailboxes are supported. New
+      messages, message deletions and flag changes can be propagated both ways.
+    '';
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ primeos lheckemann ];
   };
 }

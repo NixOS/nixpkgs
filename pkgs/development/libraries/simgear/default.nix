@@ -1,51 +1,33 @@
-x@{builderDefsPackage
-  , plib, freeglut, xproto, libX11, libXext, xextproto, libXi , inputproto
-  , libICE, libSM, libXt, libXmu, mesa, boost, zlib, libjpeg , freealut
-  , openscenegraph, openal
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
-
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="SimGear";
-    version="2.0.0";
-    name="${baseName}-${version}";
-    extension="tar.gz";
-    url="ftp://ftp.goflyflightgear.com/simgear/Source/${name}.${extension}";
-    hash="08fia5rjrlvw45i3v09fn90vhdhb54wjl6kn3d8vpspxmsw4fn55";
-  };
+{ stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
+, libICE, libSM, libXt, libXmu, libGLU, libGL, boost, zlib, libjpeg, freealut
+, openscenegraph, openal, expat, cmake, apr
+, curl
+}:
+let
+  version = "2020.1.3";
+  shortVersion = builtins.substring 0 6 version;
 in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "simgear";
+  inherit version;
+
+  src = fetchurl {
+    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
+    sha256 = "1l8kiicm0klbx0b05994vqd8a8wj7k0djbbg41a6i3q5d17jrnk6";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ plib freeglut xorgproto libX11 libXext libXi
+                  libICE libSM libXt libXmu libGLU libGL boost zlib libjpeg freealut
+                  openscenegraph openal expat apr curl ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "Simulation construction toolkit";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl2;
+    homepage = "https://gitorious.org/fg/simgear";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "ftp://ftp.goflyflightgear.com/simgear/Source/";
-    };
-  };
-}) x
-
+}

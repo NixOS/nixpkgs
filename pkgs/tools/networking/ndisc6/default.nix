@@ -1,23 +1,31 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "ndisc6-1.0.1";
+  name = "ndisc6-1.0.4";
 
   src = fetchurl {
-    url = "http://www.remlab.net/files/ndisc6/archive/${name}.tar.bz2";
-    sha256 = "1pggc9x3zki1sv08rs8x4fm7pmd3sn1nwkan3szax19xg049xbqx";
+    url = "https://www.remlab.net/files/ndisc6/archive/${name}.tar.bz2";
+    sha256 = "07swyar1hl83zxmd7fqwb2q0c0slvrswkcfp3nz5lknrk15dmcdb";
   };
 
   buildInputs = [ perl ];
 
-  configureFlags = "--localstatedir=/var";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--disable-suid-install"
+  ];
 
-  installFlags = "localstatedir=$(TMPDIR)";
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=$(TMPDIR)"
+  ];
 
-  meta = {
-    homepage = http://www.remlab.net/ndisc6/;
+  meta = with stdenv.lib; {
+    homepage = "https://www.remlab.net/ndisc6/";
     description = "A small collection of useful tools for IPv6 networking";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ eelco ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk, glib
-, gdk_pixbuf }:
+{ stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk2, glib
+, gdk-pixbuf, gdk-pixbuf-xlib }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.hostPlatform.system == "i686-linux";
 
-let version = "9.5.1"; in
+let version = "9.5.5"; in
 
 stdenv.mkDerivation {
   name = "adobe-reader-${version}-1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/${version}/enu/AdbeRdr${version}-1_i486linux_enu.tar.bz2";
-    sha256 = "19mwhbfsivb21zmrz2hllf0kh4i225ac697y026bakyysn0vig56";
+    sha256 = "0h35misxrqkl5zlmmvray1bqf4ywczkm89n9qw7d9arqbg3aj3pf";
   };
 
   # !!! Adobe Reader contains copies of OpenSSL, libcurl, and libicu.
@@ -20,11 +20,17 @@ stdenv.mkDerivation {
   # versions.
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.gcc.gcc libX11 zlib libxml2 cups pango atk gtk glib gdk_pixbuf ];
+    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf gdk-pixbuf-xlib ];
+
+  passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
 
   meta = {
     description = "Adobe Reader, a viewer for PDF documents";
-    homepage = http://www.adobe.com/products/reader;
-    license = "unfree";
+    homepage = "http://www.adobe.com/products/reader";
+    license = stdenv.lib.licenses.unfree;
+    knownVulnerabilities = [
+      "Numerous unresolved vulnerabilities"
+      "See: https://www.cvedetails.com/product/497/Adobe-Acrobat-Reader.html?vendor_id=53"
+    ];
   };
 }

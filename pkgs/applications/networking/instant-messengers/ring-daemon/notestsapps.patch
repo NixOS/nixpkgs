@@ -1,0 +1,106 @@
+/* diff --git a/Makefile b/Makefile */
+/* index 33a4e6b..a486eb7 100644 */
+/* --- a/Makefile */
+/* +++ b/Makefile */
+/* @@ -4,7 +4,7 @@ include build/host-$(HOST_NAME).mak */
+/*  include version.mak */
+ 
+/*  LIB_DIRS = pjlib/build pjlib-util/build pjnath/build third_party/build pjmedia/build pjsip/build */
+/* -DIRS = $(LIB_DIRS) pjsip-apps/build $(EXTRA_DIRS) */
+/* +DIRS = $(LIB_DIRS) $(EXTRA_DIRS) */
+ 
+/*  ifdef MINSIZE */
+/*  MAKE_FLAGS := MINSIZE=1 */
+diff --git a/pjlib-util/build/Makefile b/pjlib-util/build/Makefile
+index cb601cb..862a78a 100644
+--- a/pjlib-util/build/Makefile
++++ b/pjlib-util/build/Makefile
+@@ -54,7 +54,6 @@ export UTIL_TEST_OBJS += xml.o encryption.o stun.o resolver_test.o test.o \
+ export UTIL_TEST_CFLAGS += $(_CFLAGS)
+ export UTIL_TEST_CXXFLAGS += $(_CXXFLAGS)
+ export UTIL_TEST_LDFLAGS += $(PJLIB_UTIL_LDLIB) $(PJLIB_LDLIB) $(_LDFLAGS)
+-export UTIL_TEST_EXE:=pjlib-util-test-$(TARGET_NAME)$(HOST_EXE)
+ 
+ 	
+ export CC_OUT CC AR RANLIB HOST_MV HOST_RM HOST_RMDIR HOST_MKDIR OBJEXT LD LDOUT 
+diff --git a/pjlib/build/Makefile b/pjlib/build/Makefile
+index 1e64950..a75fa65 100644
+--- a/pjlib/build/Makefile
++++ b/pjlib/build/Makefile
+@@ -56,7 +56,6 @@ export TEST_OBJS += activesock.o atomic.o echo_clt.o errno.o exception.o \
+ export TEST_CFLAGS += $(_CFLAGS)
+ export TEST_CXXFLAGS += $(_CXXFLAGS)
+ export TEST_LDFLAGS += $(PJLIB_LDLIB) $(_LDFLAGS)
+-export TEST_EXE := pjlib-test-$(TARGET_NAME)$(HOST_EXE)
+ 
+ 
+ export CC_OUT CC AR RANLIB HOST_MV HOST_RM HOST_RMDIR HOST_MKDIR OBJEXT LD LDOUT 
+diff --git a/pjmedia/build/Makefile b/pjmedia/build/Makefile
+index 8012cb7..2ca283a 100644
+--- a/pjmedia/build/Makefile
++++ b/pjmedia/build/Makefile
+@@ -165,7 +165,6 @@ export PJMEDIA_TEST_LDFLAGS += $(PJMEDIA_CODEC_LDLIB) \
+ 			       $(PJLIB_UTIL_LDLIB) \
+ 			       $(PJNATH_LDLIB) \
+ 			       $(_LDFLAGS)
+-export PJMEDIA_TEST_EXE:=pjmedia-test-$(TARGET_NAME)$(HOST_EXE)
+ 
+ 	
+ export CC_OUT CC AR RANLIB HOST_MV HOST_RM HOST_RMDIR HOST_MKDIR OBJEXT LD LDOUT 
+diff --git a/pjnath/build/Makefile b/pjnath/build/Makefile
+index 1bc08b5..109f79b 100644
+--- a/pjnath/build/Makefile
++++ b/pjnath/build/Makefile
+@@ -54,7 +54,6 @@ export PJNATH_TEST_OBJS += ice_test.o stun.o sess_auth.o server.o concur_test.o
+ export PJNATH_TEST_CFLAGS += $(_CFLAGS)
+ export PJNATH_TEST_CXXFLAGS += $(_CXXFLAGS)
+ export PJNATH_TEST_LDFLAGS += $(PJNATH_LDLIB) $(PJLIB_UTIL_LDLIB) $(PJLIB_LDLIB) $(_LDFLAGS)
+-export PJNATH_TEST_EXE:=pjnath-test-$(TARGET_NAME)$(HOST_EXE)
+ 
+ 	
+ ###############################################################################
+@@ -65,7 +64,6 @@ export PJTURN_CLIENT_OBJS += client_main.o
+ export PJTURN_CLIENT_CFLAGS += $(_CFLAGS)
+ export PJTURN_CLIENT_CXXFLAGS += $(_CXXFLAGS)
+ export PJTURN_CLIENT_LDFLAGS += $(PJNATH_LDLIB) $(PJLIB_UTIL_LDLIB) $(PJLIB_LDLIB) $(_LDFLAGS)
+-export PJTURN_CLIENT_EXE:=pjturn-client-$(TARGET_NAME)$(HOST_EXE)
+ 
+ ###############################################################################
+ # Defines for building TURN server application
+@@ -76,7 +74,6 @@ export PJTURN_SRV_OBJS += allocation.o auth.o listener_udp.o \
+ export PJTURN_SRV_CFLAGS += $(_CFLAGS)
+ export PJTURN_SRV_CXXFLAGS += $(_CXXFLAGS)
+ export PJTURN_SRV_LDFLAGS += $(PJNATH_LDLIB) $(PJLIB_UTIL_LDLIB) $(PJLIB_LDLIB) $(_LDFLAGS)
+-export PJTURN_SRV_EXE:=pjturn-srv-$(TARGET_NAME)$(HOST_EXE)
+ 
+ 	
+ 	
+diff --git a/pjsip/build/Makefile b/pjsip/build/Makefile
+index d2a5c2a..7e2ec60 100644
+--- a/pjsip/build/Makefile
++++ b/pjsip/build/Makefile
+@@ -140,7 +140,7 @@ export PJSUA2_LIB_OBJS += $(OS_OBJS) $(M_OBJS) $(CC_OBJS) $(HOST_OBJS) \
+ 			   account.o endpoint.o json.o persistent.o types.o \
+ 			   siptypes.o call.o presence.o media.o
+ export PJSUA2_LIB_CFLAGS += $(_CFLAGS) $(PJ_VIDEO_CFLAGS)
+-export PJSUA2_LIB_CXXFLAGS = $(PJSUA2_LIB_CFLAGS) 
++export PJSUA2_LIB_CXXFLAGS = $(_CXXFLAGS) $(PJ_VIDEO_CFLAGS) 
+ export PJSUA2_LIB_LDFLAGS += $(PJSUA_LIB_LDLIB) \
+ 			     $(PJSIP_UA_LDLIB) \
+ 			     $(PJSIP_SIMPLE_LDLIB) \
+@@ -165,7 +165,6 @@ export PJSUA2_TEST_OBJS += $(OS_OBJS) $(M_OBJS) $(CC_OBJS) $(HOST_OBJS) \
+ export PJSUA2_TEST_CFLAGS += $(_CFLAGS) $(PJ_VIDEO_CFLAGS)
+ export PJSUA2_TEST_CXXFLAGS = $(PJSUA2_LIB_CFLAGS) 
+ export PJSUA2_TEST_LDFLAGS += $(PJ_LDXXFLAGS) $(PJ_LDXXLIBS) $(LDFLAGS)
+-export PJSUA2_TEST_EXE := pjsua2-test-$(TARGET_NAME)$(HOST_EXE)
+ 
+ export CC_OUT CC AR RANLIB HOST_MV HOST_RM HOST_RMDIR HOST_MKDIR OBJEXT LD LDOUT 
+ 
+@@ -195,7 +194,6 @@ export TEST_LDFLAGS += $(PJSIP_LDLIB) \
+ 		       $(PJLIB_UTIL_LDLIB) \
+ 		       $(PJNATH_LDLIB) \
+ 		       $(_LDFLAGS)
+-export TEST_EXE := pjsip-test-$(TARGET_NAME)$(HOST_EXE)
+ 
+ 	
+ export CC_OUT CC AR RANLIB HOST_MV HOST_RM HOST_RMDIR HOST_MKDIR OBJEXT LD LDOUT 

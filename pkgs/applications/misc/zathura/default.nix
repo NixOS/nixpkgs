@@ -1,41 +1,33 @@
-{ callPackage, pkgs }:
+{ config, pkgs
+# zathura_pdf_mupdf fails to load _opj_create_decompress at runtime on Darwin (https://github.com/NixOS/nixpkgs/pull/61295#issue-277982980)
+, useMupdf ? config.zathura.useMupdf or (!pkgs.stdenv.isDarwin) }:
 
-rec {
-  inherit (pkgs) stdenv;
+let
+  callPackage = pkgs.newScope self;
 
-  zathura_core = callPackage ./core { };
+  self = rec {
+    gtk = pkgs.gtk3;
 
-  zathura_pdf_poppler = callPackage ./pdf-poppler { };
+    zathura_core = callPackage ./core { };
 
-  zathura_djvu = callPackage ./djvu { };
+    zathura_pdf_poppler = callPackage ./pdf-poppler { };
 
-  zathura_ps = callPackage ./ps { };
+    zathura_pdf_mupdf = callPackage ./pdf-mupdf { };
 
-  zathuraWrapper = stdenv.mkDerivation rec {
+    zathura_djvu = callPackage ./djvu { };
 
-    name = "zathura-${zathura_core.version}";
+    zathura_ps = callPackage ./ps { };
 
-    plugins_path = stdenv.lib.makeSearchPath "lib" [
-      zathura_pdf_poppler
-      zathura_djvu
-      zathura_ps
-    ];
+    zathura_cb = callPackage ./cb { };
 
-    zathura = "${zathura_core}/bin/zathura";
-
-    builder = ./builder.sh;
-
-    meta = {
-      homepage = http://pwmt.org/projects/zathura/;
-      description = "A highly customizable and functional PDF viewer";
-      longDescription = ''
-        Zathura is a highly customizable and functional PDF viewer based on the
-        poppler rendering library and the gtk+ toolkit. The idea behind zathura
-        is an application that provides a minimalistic and space saving interface
-        as well as an easy usage that mainly focuses on keyboard interaction.
-      '';
-      license = "free";
+    zathuraWrapper = callPackage ./wrapper.nix {
+      plugins = [
+        zathura_djvu
+        zathura_ps
+        zathura_cb
+        (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
+      ];
     };
   };
-}
 
+in self.zathuraWrapper

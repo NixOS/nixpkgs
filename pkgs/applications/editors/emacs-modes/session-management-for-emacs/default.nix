@@ -1,13 +1,13 @@
 {stdenv, fetchurl, emacs}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "session-management-for-emacs-2.2a";
   
   src = fetchurl {
-    url = "mirror://sourceforge.net/sourceforge/emacs-session/session-2.2a.tar.gz";
-    sha256 = "0i01dnkizs349ahyybzy0mjzgj52z65rxynsj2mlw5mm41sbmprp";
+    url = "mirror://sourceforge/emacs-session/session-2.2a.tar.gz";
+    sha256 = "37dfba7420b5164eab90dafa9e8bf9a2c8f76505fe2fefa14a64e81fa76d0144";
   };
-  
+
   buildInputs = [emacs];
   
   installPhase = ''
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
        (require 'session)
        (add-hook 'after-init-hook 'session-initialize)
     */
-    description = "small session management for emacs";
-    homepage = http://emacs-session.sourceforge.net/;
+    description = "Small session management for emacs";
+    homepage = "http://emacs-session.sourceforge.net/";
     license = "GPL";
   };
 }

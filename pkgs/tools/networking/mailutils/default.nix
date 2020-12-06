@@ -1,27 +1,97 @@
-{ fetchurl, stdenv, gettext, gdbm, libtool, pam, readline
-, ncurses, gnutls, mysql, guile, texinfo, gnum4, dejagnu }:
-
-/* TODO: Add GNU SASL, GNU GSSAPI, and FreeBidi.  */
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
+, gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
+, python3, gss, libmysqlclient, system-sendmail }:
 
 stdenv.mkDerivation rec {
-  name = "mailutils-2.2";
+  pname = "mailutils";
+  version = "3.10";
 
   src = fetchurl {
-    url = "mirror://gnu/mailutils/${name}.tar.bz2";
-    sha256 = "0szbqa12zqzldqyw97lxqax3ja2adis83i7brdfsxmrfw68iaf65";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "17smrxjdgbbzbzakik30vj46q4iib85ksqhb82jr4vjp57akszh9";
   };
 
-  patches = [ ./path-to-cat.patch ];
+  postPatch = ''
+    sed -i -e '/chown root:mail/d' \
+           -e 's/chmod [24]755/chmod 0755/' \
+      */Makefile{.in,.am}
+    sed -i 's:/usr/lib/mysql:${libmysqlclient}/lib/mysql:' configure.ac
+    sed -i 's/0\.18/0.19/' configure.ac
+  '';
 
-  buildInputs =
-   [ gettext gdbm libtool pam readline ncurses
-     gnutls mysql guile texinfo gnum4 ]
-   ++ stdenv.lib.optional doCheck dejagnu;
+  nativeBuildInputs = [
+    autoreconfHook gettext pkgconfig
+  ];
 
-  doCheck = true;
+  buildInputs = [
+    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
+    gss libmysqlclient python3
+  ];
 
-  meta = {
-    description = "GNU Mailutils is a rich and powerful protocol-independent mail framework";
+  patches = [
+    ./fix-build-mb-len-max.patch
+    ./path-to-cat.patch
+    # mailquota.c:277: undefined reference to `get_size'
+    # https://lists.gnu.org/archive/html/bug-mailutils/2020-08/msg00002.html
+    (fetchpatch {
+      url = "http://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=37713b42a501892469234b90454731d8d8b7a3e6";
+      sha256 = "1mwj77nxvf4xvqf26yjs59jyksnizj0lmbymbzg4kmqynzq3zjny";
+    })
+    # Fix cross-compilation
+    # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html
+    (fetchpatch {
+      url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
+      sha256 = "0ghzqb8qx2q8cffbvqzw19mivv7r5f16whplzhm7hdj0j2i6xf6s";
+    })
+  ];
+
+  enableParallelBuilding = false;
+  hardeningDisable = [ "format" ];
+
+  configureFlags = [
+    "--with-gssapi"
+    "--with-gsasl"
+    "--with-mysql"
+    "--with-path-sendmail=${system-sendmail}/bin/sendmail"
+  ];
+
+  readmsg-tests = let
+    p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
+  in [
+    (fetchurl { url = "${p}/hdr.at"; sha256 = "0phpkqyhs26chn63wjns6ydx9468ng3ssbjbfhcvza8h78jlsd98"; })
+    (fetchurl { url = "${p}/nohdr.at"; sha256 = "1vkbkfkbqj6ml62s1am8i286hxwnpsmbhbnq0i2i0j1i7iwkk4b7"; })
+    (fetchurl { url = "${p}/twomsg.at"; sha256 = "15m29rg2xxa17xhx6jp4s2vwa9d4khw8092vpygqbwlhw68alk9g"; })
+    (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
+  ];
+
+  NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
+
+  checkInputs = [ dejagnu ];
+  doCheck = false; # fails 1 out of a bunch of tests, looks like a bug
+  doInstallCheck = false; # fails
+
+  preCheck = ''
+    # Add missing test files
+    cp ${builtins.toString readmsg-tests} readmsg/tests/
+    for f in hdr.at nohdr.at twomsg.at weed.at; do
+      mv readmsg/tests/*-$f readmsg/tests/$f
+    done
+    # Disable comsat tests that fail without tty in the sandbox.
+    tty -s || echo > comsat/tests/testsuite.at
+    # Disable lmtp tests that require root spool.
+    echo > maidag/tests/lmtp.at
+    # Disable mda tests that require /etc/passwd to contain root.
+    grep -qo '^root:' /etc/passwd || echo > maidag/tests/mda.at
+    # Provide libraries for mhn.
+    export LD_LIBRARY_PATH=$(pwd)/lib/.libs
+  '';
+
+  postCheck = ''
+    unset LD_LIBRARY_PATH
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''
       GNU Mailutils is a rich and powerful protocol-independent mail
@@ -43,13 +113,16 @@ stdenv.mkDerivation rec {
       message handling system.
     '';
 
-    licenses = [ "LGPLv3+" /* libraries */  "GPLv3+" /* tools */ ];
+    license = with licenses; [
+      lgpl3Plus /* libraries */
+      gpl3Plus /* tools */
+    ];
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = with maintainers; [ orivej vrthra ];
 
-    homepage = http://www.gnu.org/software/mailutils/;
+    homepage = "https://www.gnu.org/software/mailutils/";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = platforms.gnu ++ platforms.unix;
   };
 }

@@ -1,0 +1,21 @@
+commit 7aec1e9478ef679227e759ab9537df7584c6a852
+Author: Shea Levy <shea@shealevy.com>
+Date:   Fri Jan 15 09:09:18 2016 -0500
+
+    Make it possible to override hard-coded paths
+
+diff --git a/lib/RT/Generated.pm.in b/lib/RT/Generated.pm.in
+index 9dcb80b..99b034b 100644
+--- a/lib/RT/Generated.pm.in
++++ b/lib/RT/Generated.pm.in
+@@ -82,4 +82,10 @@ $MasonDataDir = '@MASON_DATA_PATH@';
+ $MasonSessionDir = '@MASON_SESSION_PATH@';
+ 
+ 
++if ( my $override_file = $ENV{RT_PATHS_OVERRIDE} )
++{
++    require "$override_file" || die "Couldn't load paths override file: $@";
++}
++
++
+ 1;

@@ -6,15 +6,16 @@ let
   sha256 = "99ff58080ed154cc4bd70f915fe4760dffb026a1c0447caa0b3bdb982b24b0a8";
 
 in stdenv.mkDerivation {
-  name = "ocaml-make-${version}";
+  pname = "ocaml-make";
+  inherit version;
 
   src = fetchurl {
-    url = "http://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
+    url = "https://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
     inherit sha256;
   };
 
   installPhase = ''
-    ensureDir "$out/include/"
+    mkdir -p "$out/include/"
     cp OCamlMakefile "$out/include/"
   '';
 
@@ -24,5 +25,6 @@ in stdenv.mkDerivation {
     homepage = "http://www.ocaml.info/home/ocaml_sources.html";
     description = "Generic OCaml Makefile for GNU Make";
     license = "LGPL";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

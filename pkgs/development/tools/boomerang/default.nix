@@ -1,30 +1,25 @@
-{ stdenv, fetchgit, cmake, boehmgc, expat, cppunit }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase, capstone, bison, flex }:
 
-stdenv.mkDerivation {
-  name = "boomerang-1.0pre";
+mkDerivation rec {
+  pname = "boomerang";
+  version = "0.5.2";
 
-  buildInputs = [ cmake boehmgc expat cppunit ];
-
-  installPhase = ''
-    for loaderfile in loader/*.so
-    do
-      install -vD "$loaderfile" "$out/lib/$(basename "$loaderfile")"
-    done
-
-    install -vD boomerang "$out/bin/boomerang"
-  '';
-
-  patches = [ ./dlopen_path.patch ];
-
-  src = fetchgit {
-    url = "git://github.com/aszlig/boomerang.git";
-    rev = "d0b147a5dfc915a5fa8fe6c517e66a049a37bf22";
-    sha256 = "6cfd95a3539ff45c18b17de76407568b0d0c17fde4e45dda54486c7eac113969";
+  src = fetchFromGitHub {
+    owner = "BoomerangDecompiler";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0xncdp0z8ry4lkzmvbj5d7hlzikivghpwicgywlv47spgh8ny0ix";
   };
 
-  meta = {
-    homepage = http://boomerang.sourceforge.net/;
-    license = stdenv.lib.licenses.bsd3;
+  nativeBuildInputs = [ cmake bison flex ];
+  buildInputs = [ qtbase capstone ];
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://github.com/BoomerangDecompiler/boomerang";
+    license = licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
+    maintainers = with maintainers; [ dtzWill ];
   };
 }

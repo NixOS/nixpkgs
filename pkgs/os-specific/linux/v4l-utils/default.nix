@@ -1,34 +1,54 @@
-{stdenv, fetchurl, which, libjpeg
-, withQt4 ? false, qt4 ? null}:
+{ stdenv, lib, fetchurl, pkgconfig, perl
+, libjpeg, udev
+, withUtils ? true
+, withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
+}:
 
-assert withQt4 -> qt4 != null;
+# See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
 
-stdenv.mkDerivation rec {
-  name = "v4l-utils-0.8.8";
+let
+  withQt = withUtils && withGUI;
+
+# we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
+in stdenv.mkDerivation rec {
+  pname = "v4l-utils";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "0zx8f1npsl6g5vjah1gwydg1j5azl74kr83ifbjhshgmnvscd92z";
+    url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1xr66y6w422hil6s7n8d61a2vhwh4im8l267amf41jvw7xqihqcm";
   };
 
-  buildInputs = [ libjpeg which ] ++ stdenv.lib.optional withQt4 qt4;
+  outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
 
-  # The keytable wants to touch /etc files and udev scripts in /lib.
-  # I skip it.
-  patchPhase = ''
-    sed -i s/keytable// utils/Makefile
+  configureFlags = (if withUtils then [
+    "--with-localedir=${placeholder "lib"}/share/locale"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
+  ] else [
+    "--disable-v4l-utils"
+  ]);
+
+  postFixup = ''
+    # Create symlink for V4l1 compatibility
+    ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  installPhase = ''
-    make PREFIX=$out install
+  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional withQt wrapQtAppsHook;
+
+  buildInputs = [ udev ] ++ lib.optionals withQt [ alsaLib libX11 qtbase libGLU ];
+
+  propagatedBuildInputs = [ libjpeg ];
+
+  postPatch = ''
+    patchShebangs utils/cec-ctl/msg2ctl.pl
+    patchShebangs utils/libcecutil/cec-gen.pl
   '';
 
-  meta = {
-    homepage = http://linuxtv.org/projects.php;
-    description = "V4L utils and libv4l, that provides common image formats regardless of the v4l device";
-    # (The libs are of LGPLv2.1+, some other pieces are GPL)
-    license = "free";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+  meta = with stdenv.lib; {
+    description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
+    homepage = "https://linuxtv.org/projects.php";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ codyopel ];
+    platforms = platforms.linux;
   };
 }

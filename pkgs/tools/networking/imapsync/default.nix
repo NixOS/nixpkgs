@@ -1,24 +1,34 @@
-{stdenv, fetchurl, perl, openssl, MailIMAPClient}:
+{stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "imapsync-1.267";
+  name = "imapsync-1.727";
   src = fetchurl {
-    url = http://www.linux-france.org/prj/imapsync/dist/imapsync-1.267.tgz;
-    sha256 = "0h9np2b4bdfnhn10cqkw66fki26480w0c8m3bxw0p76xkaggywdy";
+    url = "https://releases.pagure.org/imapsync/${name}.tgz";
+    sha256 = "1axacjw2wyaphczfw3kfmi5cl83fyr8nb207nks40fxkbs8q5dlr";
   };
+
   patchPhase = ''
     sed -i -e s@/usr@$out@ Makefile
   '';
 
   postInstall = ''
-    # Add Mail::IMAPClient to the runtime search path.
-    substituteInPlace $out/bin/imapsync --replace '/bin/perl' '/bin/perl -I${MailIMAPClient}/lib/perl5/site_perl';
+    wrapProgram $out/bin/imapsync --set PERL5LIB $PERL5LIB
   '';
-  buildInputs = [perl openssl MailIMAPClient];
 
-  meta = {
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = with perlPackages; [ perl openssl MailIMAPClient TermReadKey
+    IOSocketSSL DigestHMAC URI FileCopyRecursive IOTee UnicodeString
+    DataUniqid JSONWebToken TestMockGuard LWP CryptOpenSSLRSA
+    LWPProtocolHttps Readonly TestPod TestMockObject ParseRecDescent
+    IOSocketInet6 NTLM
+  ];
+
+  meta = with stdenv.lib; {
     homepage = "http://www.linux-france.org/prj/imapsync/";
     description = "Mail folder synchronizer between IMAP servers";
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

@@ -1,29 +1,38 @@
-{ stdenv, fetchurl, glib, qt4, pkgconfig, libnl, pygobject, python }:
+{ stdenv, fetchurl, qt4, pkgconfig, libnl, python }:
 
 let
   version = "016";
 in
 
 stdenv.mkDerivation rec {
-  name = "ntrack-${version}";
+  pname = "ntrack";
+  inherit version;
 
   src = fetchurl {
-    url = "http://launchpad.net/ntrack/main/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/ntrack/main/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "037ig5y0mp327m0hh4pnfr3vmsk3wrxgfjy3645q4ws9vdhx807w";
   };
 
   buildInputs = [ libnl qt4 ];
 
-  buildNativeInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig python ];
 
-  configureFlags = "--without-gobject CFLAGS=--std=gnu99";
+  # error: ISO C does not support '__FUNCTION__' predefined identifier [-Werror=pedantic]
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  patchPhase = ''sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c'';
+  configureFlags = [ "--without-gobject" "CFLAGS=--std=gnu99" ];
 
-  meta = {
+  # Remove this patch after version 016
+  patches = [ ./libnl-fix.patch ];
+
+  postPatch = ''
+    sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c
+  '';
+
+  meta = with stdenv.lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
-    homepage = https://launchpad.net/ntrack;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    homepage = "https://launchpad.net/ntrack";
+    platforms = platforms.linux;
+    license = licenses.lgpl3Plus;
   };
 }

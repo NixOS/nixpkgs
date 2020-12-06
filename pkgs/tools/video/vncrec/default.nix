@@ -1,39 +1,33 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
+, libXaw, libXext, libSM, libICE, libXpm, libXp
+}:
 
-  buildInputs = with a; [
-    libX11 xproto imake gccmakedep libXt libXmu libXaw
-    libXext xextproto libSM libICE libXpm libXp 
-  ];
-in
-rec {
+stdenv.mkDerivation {
+  name = "vncrec-0.2"; # version taken from Arch AUR
+
   src = fetchurl {
     url = "http://ronja.twibright.com/utils/vncrec-twibright.tgz";
     sha256 = "1yp6r55fqpdhc8cgrgh9i0mzxmkls16pgf8vfcpng1axr7cigyhc";
   };
 
-  inherit buildInputs;
+  hardeningDisable = [ "format" ];
+
+  nativeBuildInputs = [ imake gccmakedep ];
+  buildInputs = [
+    libX11 xorgproto libXt libXmu libXaw
+    libXext libSM libICE libXpm libXp
+  ];
+
   makeFlags = [
-    "World"
-    ];
-  installFlags=[
-    "BINDIR=/bin/"
-    "MANDIR=/share/man/man1"
-    "DESTDIR=$out"
-    "install.man"
-    ];
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/share/man"
+  ];
+  installTargets = [ "install" "install.man" ];
 
-  phaseNames = ["doXMKMF" "doMakeInstall"];
-
-  doXMKMF = a.fullDepEntry (''
-    xmkmf
-  '') ["doUnpack" "minInit" "addInputs"];
-      
-  name = "vncrec";
   meta = {
     description = "VNC recorder";
-    maintainers = [
-    ];
+    homepage = "http://ronja.twibright.com/utils/vncrec/";
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

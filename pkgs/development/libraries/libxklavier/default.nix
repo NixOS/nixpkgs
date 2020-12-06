@@ -1,25 +1,46 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXi, xkeyboard_config, libxml2
-, libICE, glib, libxkbfile, isocodes }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
+, glib, isocodes, gobject-introspection }:
 
+let
+  version = "5.4";
+in
 stdenv.mkDerivation rec {
-  name = "libxklavier-5.0";
+  pname = "libxklavier";
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://sf/gswitchit/${name}.tar.bz2";
-    sha256 = "1c2dxinjfpq1lzxi0z46r0j80crbmwb0lkvnh6987cjjlwblpnfz";
+  src = fetchgit {
+    url = "git://anongit.freedesktop.org/git/libxklavier";
+    rev = "${pname}-${version}";
+    sha256 = "1w1x5mrgly2ldiw3q2r6y620zgd89gk7n90ja46775lhaswxzv7a";
   };
 
+  patches = [ ./honor-XKB_CONFIG_ROOT.patch ];
+
+  outputs = [ "out" "dev" "devdoc" ];
+
   # TODO: enable xmodmap support, needs xmodmap DB
-  propagatedBuildInputs = [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
+  propagatedBuildInputs = with xorg; [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig gtk-doc docbook_xsl ];
 
-  configureFlags = ''
-    --with-xkb-base=${xkeyboard_config}/etc/X11/xkb
-    --disable-xmodmap-support
+  buildInputs = [ gobject-introspection ];
+
+  preAutoreconf = ''
+    export NOCONFIGURE=1
+    gtkdocize
   '';
 
-  meta = {
-    homepage = http://freedesktop.org/wiki/Software/LibXklavier;
+  configureFlags = [
+    "--with-xkb-base=${xkeyboard_config}/etc/X11/xkb"
+    "--with-xkb-bin-base=${xorg.xkbcomp}/bin"
+    "--disable-xmodmap-support"
+    "--enable-gtk-doc"
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Library providing high-level API for X Keyboard Extension known as XKB";
+    homepage = "http://freedesktop.org/wiki/Software/LibXklavier";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
   };
 }

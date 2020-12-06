@@ -1,31 +1,42 @@
-{stdenv, fetchurl, libjpeg, lcms, gettext }:
+{stdenv, fetchurl, libjpeg, lcms2, gettext, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "dcraw-9.04";
+  name = "dcraw-9.28.0";
 
   src = fetchurl {
-    url = "http://www.cybercom.net/~dcoffin/dcraw/archive/${name}.tar.gz";
-    sha256 = "1i9w35pldyzp5xjjcy20rps7p9wkxs6vj4wz43vhfyda93nij4y0";
+    url = "https://www.dechifro.org/dcraw/archive/${name}.tar.gz";
+    sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 
-  buildInputs = [ libjpeg lcms gettext ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libjpeg lcms2 gettext ];
 
+  # Jasper is disabled because the library is abandoned and has many
+  # CVEs.
   patchPhase = ''
-    sed -i -e s@/usr/local@$out@ install
+    substituteInPlace install \
+      --replace 'prefix=/usr/local' 'prefix=$out' \
+      --replace gcc '$CC' \
+      --replace '-ljasper' '-DNO_JASPER=1'
   '';
 
   buildPhase = ''
     mkdir -p $out/bin
-    set +e
-    sh install
-    set -e
+    sh -e install
   '';
 
   meta = {
-    homepage = http://www.cybercom.net/~dcoffin/dcraw/;
+    homepage = "https://www.dechifro.org/dcraw/";
     description = "Decoder for many camera raw picture formats";
-    license = "free";
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
+    maintainers = [ ];
+    knownVulnerabilities = [
+      "CVE-2018-19655"
+      "CVE-2018-19565"
+      "CVE-2018-19566"
+      "CVE-2018-19567"
+      "CVE-2018-19568"
+    ];
   };
 }

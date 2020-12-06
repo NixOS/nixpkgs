@@ -1,24 +1,59 @@
-{stdenv, fetchurl, unzip}:
+{ lib, stdenv, fetchurl, unzip, darwin }:
+
+# TODO: consider unvendoring various dependencies (libpng, libjpeg,
+# libwebp, zlib, ...)
+
 stdenv.mkDerivation {
-  name = "freeimage-3.15.3";
+  name = "freeimage-3.18.0";
+
   src = fetchurl {
-    url = mirror://sourceforge/freeimage/FreeImage3153.zip;
-    sha256 = "0i60fn1n9rw55dci0yw92zrw7k1jz3f9kv2z1wxmh84s5ngxa626";
+    url = "mirror://sourceforge/freeimage/FreeImage3180.zip";
+    sha256 = "1z9qwi9mlq69d5jipr3v2jika2g0kszqdzilggm99nls5xl7j4zl";
   };
-  buildInputs = [ unzip ];
-  prePatch = ''
-      sed -e s@/usr/@$out/@ \
+
+  patches = lib.optional stdenv.isDarwin ./dylib.patch;
+
+  buildInputs = [ unzip ] ++ lib.optional stdenv.isDarwin darwin.cctools;
+
+  prePatch = if stdenv.isDarwin then ''
+    sed -e 's/$(shell xcrun -find clang)/clang/g' \
+        -e 's/$(shell xcrun -find clang++)/clang++/g' \
+        -e "s|PREFIX = /usr/local|PREFIX = $out|" \
+        -e 's|-Wl,-syslibroot $(MACOSX_SYSROOT)||g' \
+        -e 's|-isysroot $(MACOSX_SYSROOT)||g' \
+        -e 's|	install -d -m 755 -o root -g wheel $(INCDIR) $(INSTALLDIR)||' \
+        -e 's| -m 644 -o root -g wheel||g' \
+        -i ./Makefile.osx
+    # Fix LibJXR performance timers
+    sed 's|^SRCS = \(.*\)$|SRCS = \1 Source/LibJXR/image/sys/perfTimerANSI.c|' -i ./Makefile.srcs
+  '' else ''
+    sed -e s@/usr/@$out/@ \
         -e 's@-o root -g root@@' \
         -e 's@ldconfig@echo not running ldconfig@' \
-        -i Makefile.gnu
+        -i Makefile.gnu Makefile.fip
   '';
-  preInstall = "mkdir -p $out/include $out/lib";
+
+  postBuild = lib.optionalString (!stdenv.isDarwin) ''
+    make -f Makefile.fip
+  '';
+
+  preInstall = ''
+    mkdir -p $out/include $out/lib
+  '';
+
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+    make -f Makefile.fip install
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Open Source library for accessing popular graphics image file formats";
-    homepage = http://freeimage.sourceforge.net/;
+    homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; unix;
+    # see https://github.com/NixOS/nixpkgs/issues/77653
+    broken = stdenv.isAarch64;
   };
 }

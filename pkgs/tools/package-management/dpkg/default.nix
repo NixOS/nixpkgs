@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
+{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
 
-let version = "1.16.9"; in
-
-stdenv.mkDerivation {
-  name = "dpkg-${version}";
+stdenv.mkDerivation rec {
+  pname = "dpkg";
+  version = "1.20.5";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "0ykby9x4x2zb7rfj30lfjcsrq2q32z2lnsrl8pbdvb2l9sx7zkbk";
+    sha256 = "1pg0yd1q9l5cx7pr0853yds1n3mh5b28zkw79gjqjzcmjwqkzwpj";
   };
 
-  patches = [ ./cache-arch.patch ];
-
-  configureFlags = "--disable-dselect --with-admindir=/var/lib/dpkg PERL_LIBDIR=$(out)/${perl.libPrefix}";
+  configureFlags = [
+    "--disable-dselect"
+    "--with-admindir=/var/lib/dpkg"
+    "PERL_LIBDIR=$(out)/${perl.libPrefix}"
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
+  ];
 
   preConfigure = ''
-    # Nice: dpkg has a circular dependency on itself.  Its configure
+    # Nice: dpkg has a circular dependency on itself. Its configure
     # script calls scripts/dpkg-architecture, which calls "dpkg" in
-    # $PATH.  It doesn't actually use its result, but fails if it
-    # isn't present.  So make a dummy available.
+    # $PATH. It doesn't actually use its result, but fails if it
+    # isn't present, so make a dummy available.
     touch $TMPDIR/dpkg
     chmod +x $TMPDIR/dpkg
     PATH=$TMPDIR:$PATH
@@ -28,7 +31,26 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [ perl zlib bzip2 xz makeWrapper ];
+  patchPhase = ''
+    patchShebangs .
+
+    # Dpkg commands sometimes calls out to shell commands
+    substituteInPlace lib/dpkg/dpkg.h \
+       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
+       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
+       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+       --replace '"dpkg"' \"$out/bin/dpkg\" \
+       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
+       --replace '"rm"' \"${coreutils}/bin/rm\" \
+       --replace '"cat"' \"${coreutils}/bin/cat\" \
+       --replace '"diff"' \"${coreutils}/bin/diff\"
+  '';
+
+  buildInputs = [ perl zlib bzip2 xz ];
+  nativeBuildInputs = [ makeWrapper perl ];
 
   postInstall =
     ''
@@ -36,12 +58,17 @@ stdenv.mkDerivation {
         if head -n 1 $i | grep -q perl; then
           wrapProgram $i --prefix PERL5LIB : $out/${perl.libPrefix}
         fi
-      done # */
+      done
+
+      mkdir -p $out/etc/dpkg
+      cp -r scripts/t/origins $out/etc/dpkg
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The Debian package manager";
-    homepage = http://wiki.debian.org/Teams/Dpkg;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://wiki.debian.org/Teams/Dpkg";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }

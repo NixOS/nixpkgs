@@ -1,34 +1,43 @@
-{ stdenv, fetchurl, ncurses, coreutils }:
+{ stdenv, fetchurl, ncurses, pcre, buildPackages }:
 
 let
-
-  version = "4.3.15";
+  version = "5.8";
 
   documentation = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.bz2";
-    sha256 = "73b7ee1a737fbaf9be77cf6b55b27cca96bac39bc5ef25efa9ceb427cd1b5ad4";
+    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
+    sha256 = "1i6wdzq6rfjx5yjrpzan1jf50hk2pfzy5qib9mb7cnnbjfar6klv";
   };
-  
 in
 
 stdenv.mkDerivation {
-  name = "zsh-${version}";
+  pname = "zsh";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}.tar.bz2";
-    sha256 = "8708f485823fb7e51aa696776d0dfac7d3558485182672cf9311c12a50a95486";
+    url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
+    sha256 = "09yyaadq738zlrnlh1hd3ycj1mv3q5hh4xl1ank70mjnqm6bbi6w";
   };
-  
-  buildInputs = [ ncurses coreutils ];
 
-  preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp"
-  '';
+  buildInputs = [ ncurses pcre ];
+
+  configureFlags = [
+    "--enable-maildir-support"
+    "--enable-multibyte"
+    "--with-tcsetpgrp"
+    "--enable-pcre"
+    "--enable-zprofile=${placeholder "out"}/etc/zprofile"
+  ];
+
+  # the zsh/zpty module is not available on hydra
+  # so skip groups Y Z
+  checkFlags = map (T: "TESTNUM=${T}") (stdenv.lib.stringToCharacters "ABCDEVW");
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
-    mkdir -p $out/share/
+    mkdir -p $out/share/info
     tar xf ${documentation} -C $out/share
+    ln -s $out/share/zsh-*/Doc/zsh.info* $out/share/info/
+
     mkdir -p $out/etc/
     cat > $out/etc/zprofile <<EOF
 if test -e /etc/NIXOS; then
@@ -52,17 +61,32 @@ else
   fi
 fi
 EOF
-    $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    ${if stdenv.hostPlatform == stdenv.buildPlatform then ''
+      $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    '' else ''
+      ${stdenv.lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
+    ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
   meta = {
-    description = "the Z shell";
-    longDescription = "Zsh is a UNIX command interpreter (shell) usable as an interactive login shell and as a shell script command processor.  Of the standard shells, zsh most closely resembles ksh but includes many enhancements.  Zsh has command line editing, builtin spelling correction, programmable command completion, shell functions (with autoloading), a history mechanism, and a host of other features.";
+    description = "The Z shell";
+    longDescription = ''
+      Zsh is a UNIX command interpreter (shell) usable as an interactive login
+      shell and as a shell script command processor.  Of the standard shells,
+      zsh most closely resembles ksh but includes many enhancements.  Zsh has
+      command line editing, builtin spelling correction, programmable command
+      completion, shell functions (with autoloading), a history mechanism, and
+      a host of other features.
+    '';
     license = "MIT-like";
-    homePage = "http://www.zsh.org/";
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    homepage = "https://www.zsh.org/";
+    maintainers = with stdenv.lib.maintainers; [ pSub ];
+    platforms = stdenv.lib.platforms.unix;
+  };
+
+  passthru = {
+    shellPath = "/bin/zsh";
   };
 }

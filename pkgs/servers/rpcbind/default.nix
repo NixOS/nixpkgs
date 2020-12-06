@@ -1,24 +1,37 @@
-{ fetchurl, stdenv, libtirpc }:
+{ fetchgit, stdenv, pkgconfig, libnsl, libtirpc, autoreconfHook
+, useSystemd ? true, systemd }:
 
-stdenv.mkDerivation rec {
-  name = "rpcbind-0.2.0";
-  
-  src = fetchurl {
-    url = "http://freefr.dl.sourceforge.net/project/rpcbind/rpcbind/0.2.0/rpcbind-0.2.0.tar.bz2";
-    sha256 = "c92f263e0353887f16379d7708ef1fb4c7eedcf20448bc1e4838f59497a00de3";
+stdenv.mkDerivation {
+  pname = "rpcbind";
+  version = "1.2.5";
+
+  src = fetchgit {
+    url = "git://git.linux-nfs.org/projects/steved/rpcbind.git";
+    rev = "c0c89b3bf2bdf304a5fe3cab626334e0cdaf1ef2";
+    sha256 = "1k5rr0pia70ifyp877rbjdd82377fp7ii0sqvv18qhashr6489va";
   };
 
-  patches = [ ./sunrpc.patch ];
+  patches = [
+    ./sunrpc.patch
+  ];
 
-  preConfigure = ''
-    export CPPFLAGS=-I${libtirpc}/include/tirpc
-  '';
+  buildInputs = [ libnsl libtirpc ]
+             ++ stdenv.lib.optional useSystemd systemd;
 
-  buildInputs = [ libtirpc ];
+  configureFlags = [
+    "--with-systemdsystemunitdir=${if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"}"
+    "--enable-warmstarts"
+    "--with-rpcuser=rpc"
+  ];
 
-  meta = {
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  meta = with stdenv.lib; {
     description = "ONC RPC portmapper";
-    license = "BSD";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    homepage = "https://linux-nfs.org/";
+    maintainers = with maintainers; [ abbradar ];
     longDescription = ''
       Universal addresses to RPC program number mapper.
     '';

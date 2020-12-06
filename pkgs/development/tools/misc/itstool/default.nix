@@ -1,27 +1,26 @@
-{ stdenv, fetchurl, python, libxml2Python }:
+{ stdenv, lib, fetchurl, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "itstool-1.1.1";
+  name = "itstool-2.0.6";
 
   src = fetchurl {
     url = "http://files.itstool.org/itstool/${name}.tar.bz2";
-    sha256 = "1jchgcgxvqwkhr61q0j08adl1k8hw86dzbl207gzmns9fa7vmzqg";
+    sha256 = "1acjgf8zlyk7qckdk19iqaca4jcmywd7vxjbcs1mm6kaf8icqcv2";
   };
 
-  buildInputs = [ python ];
-  
-  patchPhase =
-    ''
-      sed -e '/import libxml2/i import sys\
-      sys.path.append("${libxml2Python}/lib/${python.libPrefix}/site-packages")' \
-      -i itstool.in
-    '';
+  pythonPath = [ python3.pkgs.libxml2 ];
+  buildInputs = [ python3 python3.pkgs.libxml2 ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython ];
+
+  postFixup = ''
+    wrapPythonPrograms
+  '';
 
   meta = {
-    homepage = http://itstool.org/;
+    homepage = "http://itstool.org/";
     description = "XML to PO and back again";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

@@ -1,9 +1,16 @@
 { stdenv, fetchurl }:
     
-stdenv.mkDerivation {
-    name = "szip-2.1";
-    src = fetchurl {
-        url = ftp://ftp.hdfgroup.org/lib-external/szip/2.1/src/szip-2.1.tar.gz;
-        sha256 = "05707lrdhwp8mv0dgzh2b6m2mwamv1z6k29m2v1v7pz0c1w2gb6z";
-    };
+stdenv.mkDerivation rec {
+  pname = "szip";
+  version = "2.1.1";
+  src = fetchurl {
+    url = "https://support.hdfgroup.org/ftp/lib-external/szip/${version}/src/szip-${version}.tar.gz";
+    sha256 = "04nlhkzzf1gihvrfbzc6rq4kc13p92ly39dzrb4y4jrd9y5rbvi1";
+  };
+
+  meta = {
+    description = "Compression library that can be used with the hdf5 library";
+    homepage = "https://www.hdfgroup.org/doc_resource/SZIP/";
+    license = stdenv.lib.licenses.unfree;
+  };
 }

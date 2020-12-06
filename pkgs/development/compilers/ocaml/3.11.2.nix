@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, x11 }:
+{ stdenv, fetchurl, ncurses, xlibsWrapper }:
 
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
@@ -7,11 +7,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  
-  name = "ocaml-3.11.2";
-  
+
+  pname = "ocaml";
+  version = "3.11.2";
+
   src = fetchurl {
-    url = "http://caml.inria.fr/pub/distrib/ocaml-3.11/${name}.tar.bz2";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-3.11/${pname}-${version}.tar.bz2";
     sha256 = "86f3387a0d7e7c8be2a3c53af083a5a726e333686208d5ea0dd6bb5ac3f58143";
   };
 
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
     ];
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11 ];
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ x11 ];
+  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
+  buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   prePatch = ''
     CAT=$(type -tp cat)
@@ -37,14 +38,17 @@ stdenv.mkDerivation rec {
     patch -p0 < ${./mips64.patch}
   '';
   postBuild = ''
-    ensureDir $out/include
+    mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
 
-  meta = {
-    homepage = http://caml.inria.fr/ocaml;
-    licenses = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
-    description = "Objective Caml, the most popular variant of the Caml language";
+  meta = with stdenv.lib; {
+    homepage = "http://caml.inria.fr/ocaml";
+    license = with licenses; [
+      qpl /* compiler */
+      lgpl2 /* library */
+    ];
+    description = "Most popular variant of the Caml language";
 
     longDescription =
       '' Objective Caml is the most popular variant of the Caml language.
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
          documentation generator (ocamldoc).
        '';
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 
 }

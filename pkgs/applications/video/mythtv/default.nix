@@ -1,22 +1,42 @@
-{ stdenv, fetchurl, which, qt4, x11, pulseaudio, fftwSinglePrec
-, lame, zlib, mesa, alsaLib, freetype, perl, pkgconfig
-, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm, libXmu
+{ stdenv, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
+, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsaLib, freetype
+, perl, pkgconfig , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
+, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
 }:
 
-stdenv.mkDerivation rec {
-  name = "mythtv-0.24.2";
+mkDerivation rec {
+  pname = "mythtv";
+  version = "31.0";
 
-  src = fetchurl {
-    url = "http://ftp.osuosl.org/pub/mythtv/${name}.tar.bz2";
-    sha256 = "14mkyf2b26pc9spx6lg15mml0nqyg1r3qnq8m9dz3110h771y2db";
+  src = fetchFromGitHub {
+    owner = "MythTV";
+    repo = "mythtv";
+    rev = "v${version}";
+    sha256 = "092w5kvc1gjz6jd2lk2jhcazasz2h3xh0i5iq80k8x3znyp4i6v5";
   };
 
-  buildInputs = [
-    freetype qt4 lame zlib x11 mesa perl alsaLib pulseaudio fftwSinglePrec
-    libX11 libXv libXrandr libXvMC libXmu libXinerama libXxf86vm libXmu
+  patches = [
+    # Disables OS detection used while checking if enforce_wshadow should be disabled.
+    ./disable-os-detection.patch
   ];
 
-  buildNativeInputs = [ pkgconfig which ];
+  setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
 
-  patches = [ ./settings.patch ];
+  buildInputs = [
+    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL
+    perl libsamplerate libbluray lzo alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
+    libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
+  ];
+  nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
+
+  configureFlags = 
+    [ "--dvb-path=${linuxHeaders}/include" ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.mythtv.org/";
+    description = "Open Source DVR";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.titanous ];
+  };
 }

@@ -1,53 +1,37 @@
-x@{builderDefsPackage
-  , zlib
-  , curl, gnutls, fribidi, libpng, SDL, SDL_gfx, SDL_image, SDL_mixer
-  , SDL_net, SDL_ttf, libunwind, libX11, xproto, libxml2, pkgconfig
-  , gettext, intltool, libtool, perl
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchFromGitHub, autoconf, automake
+, zlib, curl, gnutls, fribidi, libpng, SDL, SDL_gfx, SDL_image, SDL_mixer
+, SDL_net, SDL_ttf, libunwind, libX11, xorgproto, libxml2, pkgconfig
+, gettext, intltool, libtool, perl
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="warmux";
-    version="11.04.1";
-    name="${baseName}-${version}";
-    url="http://download.gna.org/${baseName}/${name}.tar.bz2";
-    hash="1vp44wdpnb1g6cddmn3nphc543pxsdhjis52mfif0p2c7qslz73q";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation {
+  pname = "warmux";
+  version = "unstable-2017-10-20";
+
+  src = fetchFromGitHub {
+    owner = "fluxer";
+    repo = "warmux";
+    rev = "8f81d4fc309a548ae89a068c2dde27b7e7ef8851";
+    sha256 = "1hvzglsmp75xiqqb0k75qjz4jwi8kl3fhn8zfsz53hhhqmbw6wkr";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  preConfigure = "patchShebangs autogen.sh && ./autogen.sh";
+  configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  nativeBuildInputs = [
+    autoconf automake gettext intltool libtool pkgconfig
+  ];
+  buildInputs = [
+    zlib curl gnutls fribidi libpng SDL SDL_gfx SDL_image SDL_mixer
+    SDL_net SDL_ttf libunwind libX11 xorgproto libxml2 perl
+  ];
+  enableParallelBuilding = true;
 
-  configureFlags = "CFLAGS=\"-include ${zlib}/include/zlib.h\"";
-
-  meta = {
-    description = "Ballistics turn-based battle game between teams";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2;
+  meta = with stdenv.lib; {
+    description = "Ballistics turn-based battle game between teams - unofficial copy";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 ufl ];
+    homepage = "https://github.com/fluxer/warmux";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://download.gna.org/warmux/";
-    };
-  };
-}) x
-
+}

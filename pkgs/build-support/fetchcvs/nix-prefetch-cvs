@@ -20,7 +20,7 @@ fi
 
 
 mkTempDir() {
-    tmpPath=$(mktemp -d -t nix-prefetch-cvs-XXXXXXXX)
+    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-cvs-XXXXXXXX")"
     trap removeTempDir EXIT SIGINT SIGQUIT
 }
 

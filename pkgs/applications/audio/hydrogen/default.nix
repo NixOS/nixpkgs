@@ -1,39 +1,34 @@
-{ stdenv, fetchurl, alsaLib, boost, glib, jackaudio, ladspaPlugins
-, libarchive, liblrdf , libsndfile, pkgconfig, qt4, scons, subversion }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook
+, alsaLib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
+, qtbase, qttools, qtxmlpatterns
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
-  name = "hydrogen-${version}";
+  pname = "hydrogen";
+  version = "1.0.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/hydrogen/hydrogen-${version}.tar.gz";
-    sha256 = "1hyri49va2ss26skd6p9swkx0kbr7ggifbahkrcfgj8yj7pp6g4n";
+  src = fetchFromGitHub {
+    owner = "hydrogen-music";
+    repo = pname;
+    rev = version;
+    sha256 = "0snljpvbcgikhz610c325dgvayi0k512p3bglck9vvi90wsqx7l1";
   };
 
-  buildInputs = [ 
-    alsaLib boost glib jackaudio ladspaPlugins libarchive liblrdf
-    libsndfile pkgconfig qt4 scons subversion
+  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  buildInputs = [
+    alsaLib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
+    qtbase qttools qtxmlpatterns
   ];
 
-  patches = [ ./scons-env.patch ];
-
-  postPatch = ''
-    sed -e 's#/usr/lib/ladspa#${ladspaPlugins}/lib/ladspa#' -i libs/hydrogen/src/preferences.cpp
-    sed '/\/usr/d' -i libs/hydrogen/src/preferences.cpp
-    '';
-
-  # why doesn't scons find librdf?
-  buildPhase = ''
-    scons prefix=$out libarchive=1 lrdf=0 install
-  '';
-
-  installPhase = ":";
+  cmakeFlags = [
+    "-DWANT_DEBUG=OFF"
+  ];
 
   meta = with stdenv.lib; {
     description = "Advanced drum machine";
-    homepage = http://www.hydrogen-music.org;
+    homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu orivej ];
   };
 }

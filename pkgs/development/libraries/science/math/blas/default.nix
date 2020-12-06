@@ -1,13 +1,15 @@
 { stdenv, fetchurl, gfortran }:
 
-stdenv.mkDerivation {
-  name = "blas-20070405";
+stdenv.mkDerivation rec {
+  pname = "blas";
+  version = "3.8.0";
+
   src = fetchurl {
-    url = "http://www.netlib.org/blas/blas.tgz";
-    sha256 = "07alzd2yxkah96vjczqwi3ld5w00bvqv7qxb2fayvhs1h64jabxw";
+    url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
+    sha256 = "1s24iry5197pskml4iygasw196bdhplj0jmbsb9jhabcjqj2mpsm";
   };
 
-  buildInputs = [gfortran];
+  buildInputs = [ gfortran ];
 
   configurePhase = ''
     echo >make.inc  "SHELL = ${stdenv.shell}"
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
     echo >>make.inc "ARCH = gfortran"
     echo >>make.inc "ARCHFLAGS = -shared -o"
     echo >>make.inc "RANLIB = echo"
-    echo >>make.inc "BLASLIB = libblas.so.3.0.3"
+    echo >>make.inc "BLASLIB = libblas.so.${version}"
   '';
 
   buildPhase = ''
@@ -39,14 +41,31 @@ stdenv.mkDerivation {
     (stdenv.lib.optionalString stdenv.isFreeBSD "mkdir -p $out/lib ;")
     + ''
     install ${dashD} -m755 libblas.a "$out/lib/libblas.a"
-    install ${dashD} -m755 libblas.so.3.0.3 "$out/lib/libblas.so.3.0.3"
-    ln -s libblas.so.3.0.3 "$out/lib/libblas.so.3"
-    ln -s libblas.so.3.0.3 "$out/lib/libblas.so"
+    install ${dashD} -m755 libblas.so.${version} "$out/lib/libblas.so.${version}"
+    ln -s libblas.so.${version} "$out/lib/libblas.so.3"
+    ln -s libblas.so.${version} "$out/lib/libblas.so"
+    # Write pkgconfig alias.
+    # See also openblas/default.nix
+    mkdir $out/lib/pkgconfig
+    cat <<EOF > $out/lib/pkgconfig/blas.pc
+Name: blas
+Version: ${version}
+Description: blas provided by the BLAS package.
+Libs: -L$out/lib -lblas
+EOF
+  '';
+
+  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    for fn in $(find $out/lib -name "*.so*"); do
+      if [ -L "$fn" ]; then continue; fi
+      install_name_tool -id "$fn" "$fn"
+    done
   '';
 
   meta = {
     description = "Basic Linear Algebra Subprograms";
-    license = "public domain";
+    license = stdenv.lib.licenses.publicDomain;
     homepage = "http://www.netlib.org/blas/";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

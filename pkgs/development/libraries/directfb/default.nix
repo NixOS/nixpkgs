@@ -1,27 +1,40 @@
-{stdenv, fetchurl, perl, zlib, libjpeg, freetype, libpng, giflib
-, enableX11 ? true, libX11, xproto, xextproto, libXext, renderproto, libXrender
+{ stdenv, lib, fetchFromGitHub, fetchpatch
+, autoreconfHook, perl, pkgconfig, flux, zlib
+, libjpeg, freetype, libpng, giflib
+, enableX11 ? true, xorg
 , enableSDL ? true, SDL }:
 
-let s = import ./src-for-default.nix; in
-stdenv.mkDerivation {
-  inherit (s) name;
-  src = fetchurl {
-    url = s.url;
-    sha256 = s.hash;
+stdenv.mkDerivation rec {
+  pname = "directfb";
+  version = "1.7.7";
+
+  src = fetchFromGitHub {
+    owner = "deniskropp";
+    repo = "DirectFB";
+    rev = "DIRECTFB_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0bs3yzb7hy3mgydrj8ycg7pllrd2b6j0gxj596inyr7ihssr3i0y";
   };
 
-  patches = [ ./ftbfs.patch ];
+  patches = [
+    # Fixes build in "davinci" with glibc >= 2.28
+    # The "davinci" module is only enabled on 32-bit arm.
+    # https://github.com/deniskropp/DirectFB/pull/17
+    (fetchpatch {
+      url = "https://github.com/deniskropp/DirectFB/commit/3a236241bbec3f15b012b6f0dbe94353d8094557.patch";
+      sha256 = "0rj3gv0zlb225sqjz04p4yagy4xacf3210aa8vra8i1f0fv0w4kw";
+    })
+  ];
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ autoreconfHook perl pkgconfig flux ];
 
   buildInputs = [ zlib libjpeg freetype giflib libpng ]
-    ++ stdenv.lib.optional enableSDL SDL
-    ++ stdenv.lib.optionals enableX11 [
-      xproto libX11 libXext xextproto
-      renderproto libXrender
-    ];
+    ++ lib.optional enableSDL SDL
+    ++ lib.optionals enableX11 (with xorg; [
+      xorgproto libX11 libXext
+      libXrender
+    ]);
 
-  NIX_LDFLAGS="-lgcc_s";
+  NIX_LDFLAGS = "-lgcc_s";
 
   configureFlags = [
     "--enable-sdl"
@@ -31,10 +44,25 @@ stdenv.mkDerivation {
     "--enable-fbdev"
     "--enable-mmx"
     "--enable-sse"
-    "--enable-sysfs"
     "--with-software"
     "--with-smooth-scaling"
-    ] ++ stdenv.lib.optionals enableX11 [
-      "--enable-x11"
-    ];
+  ] ++ lib.optional enableX11 "--enable-x11";
+
+  meta = with lib; {
+    description = "Graphics and input library designed with embedded systems in mind";
+    longDescription = ''
+      DirectFB is a thin library that provides hardware graphics acceleration,
+      input device handling and abstraction, integrated windowing system with
+      support for translucent windows and multiple display layers, not only on
+      top of the Linux Framebuffer Device. It is a complete hardware
+      abstraction layer with software fallbacks for every graphics operation
+      that is not supported by the underlying hardware. DirectFB adds graphical
+      power to embedded systems and sets a new standard for graphics under
+      Linux.
+    '';
+    homepage = "https://github.com/deniskropp/DirectFB";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }

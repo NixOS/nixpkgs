@@ -1,36 +1,42 @@
-{stdenv, fetchurl, tcl, tk, xproto, libX11}:
+{ stdenv, fetchurl, tcl, makeWrapper, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "expect-5.44.1";
+stdenv.mkDerivation rec {
+  version = "5.45.4";
+  pname = "expect";
 
   src = fetchurl {
-    url = http://expect.nist.gov/old/expect-5.44.1.tar.gz;
-    sha256 = "13zxqiclzk1paxc0mr2vwp9nhfyr2mkwk9gs73fg0l3iss16n6p4";
+    url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";
+    sha256 = "0d1cp5hggjl93xwc8h1y6adbnrvpkk0ywkd00inz9ndxn21xm9s9";
   };
 
-  buildInputs = [tcl tk xproto libX11];
+  buildInputs = [ tcl ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
-  #NIX_CFLAGS_COMPILE = "-DHAVE_UNISTD_H";
+  hardeningDisable = [ "format" ];
 
-  # http://wiki.linuxfromscratch.org/lfs/ticket/2126
-  #preBuild = ''
-  #  substituteInPlace exp_inter.c --replace tcl.h tclInt.h
-  #'';
-
-  patchPhase = ''
-    substituteInPlace configure --replace /bin/stty "$(type -tP stty)"
-    sed -e '1i\#include <tclInt.h>' -i exp_inter.c
-    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
+  postPatch = ''
+    sed -i "s,/bin/stty,$(type -p stty),g" configure.in
   '';
 
-  configureFlags = ["--with-tcl=${tcl}/lib"
+  configureFlags = [
+    "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
-    "--with-tk=${tk}/lib"
-    "--exec-prefix=$out"];
+    "--exec-prefix=\${out}"
+  ];
 
-  meta = {
+  postInstall = ''
+    for i in $out/bin/*; do
+      wrapProgram $i \
+        --prefix PATH : "${tcl}/bin" \
+        --prefix TCLLIBPATH ' ' $out/lib/* \
+        ${stdenv.lib.optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}"}
+    done
+  '';
+
+  meta = with stdenv.lib; {
     description = "A tool for automating interactive applications";
-    homepage = http://expect.nist.gov/;
+    homepage = "http://expect.sourceforge.net/";
+    license = "Expect";
+    platforms = platforms.unix;
   };
-  postInstall="cp expect{,k} $out/bin; mkdir -p $out/lib; cp *.so $out/lib";
 }

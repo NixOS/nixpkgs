@@ -1,0 +1,4 @@
+name apache-jena-fuseki
+attribute apache-jena-fuseki
+target fuseki-binary.nix
+minimize_overwrite

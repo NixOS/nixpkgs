@@ -1,14 +1,17 @@
 { stdenv, fetchurl, libtool, gettext }:
 
-assert stdenv.isLinux && stdenv.system != "powerpc-linux";
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "cpufrequtils-008";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/cpufreq/cpufrequtils-008.tar.gz";
-    md5 = "52d3e09e47ffef634833f7fab168eccf";
+    url = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/${name}.tar.gz";
+    sha256 = "127i38d4w1hv2dzdy756gmbhq25q3k34nqb2s0xlhsfhhdqs0lq0";
   };
+
+  patches = [
+    # I am not 100% sure that this is ok, but it breaks repeatable builds.
+    ./remove-pot-creation-date.patch
+  ];
 
   patchPhase = ''
     sed -e "s@= /usr/bin/@= @g" \
@@ -16,10 +19,12 @@ stdenv.mkDerivation {
       -i Makefile
   '';
 
-  buildInputs = [ stdenv.gcc.libc.kernelHeaders libtool gettext ];
+  buildInputs = [ stdenv.cc.libc.linuxHeaders libtool gettext ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools to display or change the CPU governor settings";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils.html";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

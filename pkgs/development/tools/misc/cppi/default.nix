@@ -1,19 +1,19 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "cppi-1.16";
+  name = "cppi-1.18";
 
   src = fetchurl {
     url = "mirror://gnu/cppi/${name}.tar.xz";
-    sha256 = "16i4j80wam7p189xc9i2ijrcgjn684296rym6ja3nlqv8rv90lm8";
+    sha256 = "1jk42cjaggk71rimjnx3qpmb6hivps0917vl3z7wbxk3i2whb98j";
   };
 
   doCheck = true;
 
   meta = {
-    homepage = http://savannah.gnu.org/projects/cppi/;
+    homepage = "https://savannah.gnu.org/projects/cppi/";
 
-    description = "GNU cppi, a cpp directive indenter";
+    description = "A C preprocessor directive indenter";
 
     longDescription =
       '' GNU cppi indents C preprocessor directives to reflect their nesting
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
          to the level of nesting of that directive.
       '';
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

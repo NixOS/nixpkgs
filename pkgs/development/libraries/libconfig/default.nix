@@ -1,18 +1,21 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libconfig-${version}";
-  version = "1.4.8";
+  pname = "libconfig";
+  version = "1.7.2";
 
   src = fetchurl {
-    url = "http://www.hyperrealm.com/libconfig/${name}.tar.gz";
-    sha256 = "1v817hy9y416i64ly17xdmgrn62qwj225wqakdzqr2j3pygm1c8q";
+    url = "https://hyperrealm.github.io/${pname}/dist/${pname}-${version}.tar.gz";
+    sha256 = "1ngs2qx3cx5cbwinc5mvadly0b5n7s86zsc68c404czzfff7lg3w";
   };
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
-    homepage = http://www.hyperrealm.com/libconfig;
-    description = "a simple library for processing structured configuration files";
+    homepage = "http://www.hyperrealm.com/libconfig";
+    description = "A simple library for processing structured configuration files";
     license = licenses.lgpl3;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

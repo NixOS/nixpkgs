@@ -1,24 +1,53 @@
-{ stdenv, fetchurl, libusb }:
+{ stdenv, fetchFromGitHub, autoconf, automake, gettext, libtool, pkgconfig
+, libusb1
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.0.1";
+  pname = "libmtp";
+  version = "1.1.18";
 
-  propagatedBuildInputs = [ libusb ];
-
-  src = fetchurl {
-    url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "19iha1yi07cdqzlba4ng1mn7h701binalwwkb71q0ld9b88mad6s";
+  src = fetchFromGitHub {
+    owner = "libmtp";
+    repo = "libmtp";
+    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    sha256 = "0rya6dsb67a7ny2i1jzdicnday42qb8njqw6r902k712k5p7d1r9";
   };
 
-  meta = {
-    homepage = http://libmtp.sourceforge.net;
+  outputs = [ "bin" "dev" "out" ];
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gettext
+    libtool
+    pkgconfig
+  ];
+
+  buildInputs = [
+    libiconv
+  ];
+
+  propagatedBuildInputs = [
+    libusb1
+  ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  # tried to install files to /lib/udev, hopefully OK
+  configureFlags = [ "--with-udev=$$bin/lib/udev" ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://libmtp.sourceforge.net";
     description = "An implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''
       libmtp is an implementation of Microsoft's Media Transfer Protocol (MTP)
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
       '';
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

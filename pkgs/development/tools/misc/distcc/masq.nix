@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   phases = [ "installPhase" ];
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
 
     bin=${gccRaw}/bin
 
@@ -36,6 +36,9 @@ stdenv.mkDerivation {
         ln -sf $bbin/*-as $out/bin/as
       done
     fi
-    
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

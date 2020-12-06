@@ -1,34 +1,41 @@
-{ stdenv, fetchurl, libX11, inputproto, libXt, libXpm, libXft, fontconfig, freetype
-, libXtst, xextproto, readline, libXi, pkgconfig, perl, autoconf, automake }:
+{ stdenv, fetchurl, pkgconfig, perl, autoconf, automake
+, libX11, xorgproto, libXt, libXpm, libXft, libXtst, libXi
+, libXrandr, fontconfig, freetype, readline
+}:
 
 stdenv.mkDerivation rec {
-  name = "ratpoison-1.4.5";
+  pname = "ratpoison";
+  version = "1.4.9";
 
   src = fetchurl {
-    url = "mirror://savannah/ratpoison/${name}.tar.gz";
-    sha256 = "7391079db20b8613eecfd81d64d243edc9d3c586750c8f2da2bb9db14d260f03";
+    url = "mirror://savannah/ratpoison/${pname}-${version}.tar.xz";
+    sha256 = "1wfir1gvh5h7izgvx2kd1pr2k7wlncd33zq7qi9s9k2y0aza93yr";
   };
 
+  outputs = [ "out" "contrib" "man" "doc" "info" ];
+
+  configureFlags = [
+    # >=1.4.9 requires this even with readline in inputs
+    "--enable-history"
+  ];
+
+  nativeBuildInputs = [ pkgconfig autoconf automake ];
+
   buildInputs =
-    [ libX11 inputproto libXt libXpm libXft fontconfig freetype libXtst
-      xextproto readline libXi pkgconfig perl autoconf automake
-    ];
-
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2"; # urgh
-
-  preConfigure = "autoreconf -vf";      # needed because of the patch above
-
-  patches = [ ./glibc-fix.patch ];
+    [ perl
+      libX11 xorgproto libXt libXpm libXft libXtst libXi libXrandr
+      fontconfig freetype readline ];
 
   postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp
-    mv "$out/share/ratpoison/"*.el $out/share/emacs/site-lisp/
+    mkdir -p $contrib/{bin,share}
+    mv $out/bin/rpws $contrib/bin
+    mv $out/share/ratpoison $contrib/share
   '';
 
-  meta = {
-    homepage = "http://www.nongnu.org/ratpoison/";
-    description = "Ratpoison, a simple mouse-free tiling window manager";
-    license = "GPLv2+";
+  meta = with stdenv.lib; {
+    homepage = "https://www.nongnu.org/ratpoison/";
+    description = "Simple mouse-free tiling window manager";
+    license = licenses.gpl2Plus;
 
     longDescription = ''
        Ratpoison is a simple window manager with no fat library
@@ -45,7 +52,7 @@ stdenv.mkDerivation rec {
        cripples Emacs and other quality pieces of software.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.AndersonTorres ];
   };
 }

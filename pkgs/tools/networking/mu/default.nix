@@ -1,25 +1,57 @@
-{ fetchurl, stdenv, sqlite, pkgconfig, xapian, glib, gmime, texinfo, emacs, guile }:
+{ stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
+, xapian, glib, gmime3, texinfo , emacs, guile
+, gtk3, webkitgtk, libsoup, icu
+, withMug ? false
+, batchSize ? null }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.9";
-  name = "mu-${version}";
+  pname = "mu";
+  version = "1.4.13";
 
-  src = fetchurl {
-    url = "https://mu0.googlecode.com/files/mu-${version}.tar.gz";
-    sha256 = "04r0y05awsyb5hqwaxn1hq9jxijw20hwsgdbacqrma519f0y5y43";
+  src = fetchFromGitHub {
+    owner  = "djcb";
+    repo   = "mu";
+    rev    = version;
+    sha256 = "03cp2ppj07xpb0c43d3cr8m9jps07mfm8clmlk03sjbxg1widsh0";
   };
 
-  buildInputs = [ sqlite pkgconfig xapian glib gmime texinfo emacs guile ];
+  postPatch = stdenv.lib.optionalString (batchSize != null) ''
+    sed -i lib/mu-store.cc --regexp-extended \
+      -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
+  '';
 
-  meta = {
-    description = "mu is a collection of utilties for indexing and searching Maildirs";
+  buildInputs = [
+    sqlite xapian glib gmime3 texinfo emacs libsoup icu
+  ]
+    # Workaround for https://github.com/djcb/mu/issues/1641
+    ++ stdenv.lib.optional (!stdenv.isDarwin) guile
+    ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
 
-    licenses = [ "GPLv3+" ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
 
-    homepage = "http://www.djcbsoftware.nl/code/mu/";
+  enableParallelBuilding = true;
 
-    platforms = stdenv.lib.platforms.all;
+  preBuild = ''
+    # Fix mu4e-builddir (set it to $out)
+    substituteInPlace mu4e/mu4e-meta.el.in \
+      --replace "@abs_top_builddir@" "$out"
+  '';
 
-    maintainers = [ stdenv.lib.maintainers.antono ];
+  # Install mug
+  postInstall = stdenv.lib.optionalString withMug ''
+    for f in mug ; do
+      install -m755 toys/$f/$f $out/bin/$f
+    done
+  '';
+
+  doCheck = true;
+
+  meta = with stdenv.lib; {
+    description = "A collection of utilties for indexing and searching Maildirs";
+    license = licenses.gpl3Plus;
+    homepage = "https://www.djcbsoftware.nl/code/mu/";
+    changelog = "https://github.com/djcb/mu/releases/tag/${version}";
+    maintainers = with maintainers; [ antono peterhoeg ];
+    platforms = platforms.mesaPlatforms;
   };
 }

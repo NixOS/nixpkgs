@@ -1,54 +1,75 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ lib, fetchurl, gettext, wrapGAppsHook
 
-  version = a.lib.attrByPath ["version"] "0.15.1" a; 
-  buildInputs = with a; [
-    python pyGtkGlade gtk perl intltool dbus gettext
-    pkgconfig makeWrapper libglade pyopenssl libXScrnSaver
-    libXt xproto libXext xextproto libX11 gtkspell aspell
-    scrnsaverproto pycrypto pythonDBus pythonSexy 
-    docutils pyasn1 farstream gst_plugins_bad gstreamer
-    gst_ffmpeg gst_python
-  ];
-in
-rec {
+# Native dependencies
+, python3, gtk3, gobject-introspection, gnome3
+, glib-networking
+
+# Test dependencies
+, xvfb_run, dbus
+
+# Optional dependencies
+, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-good, libnice
+, enableE2E ? true
+, enableSecrets ? true, libsecret
+, enableRST ? true, docutils
+, enableSpelling ? true, gspell
+, enableUPnP ? true, gupnp-igd
+, enableOmemoPluginDependencies ? true
+, extraPythonPackages ? ps: []
+}:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "gajim";
+  version = "1.2.2";
+
   src = fetchurl {
-    url = "http://www.gajim.org/downloads/0.15/gajim-${version}.tar.gz";
-    sha256 = "b315d4a600da0c5f8248e8f887a41ce2630c49995b36cbad8fb2cd81cc8d2e8b";
+    url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
+    sha256 = "1gfcp3b5nq43xxz5my8vfhfxnnli726j3hzcgwh9fzrzzd9ic3gx";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [
+    gobject-introspection gtk3 gnome3.adwaita-icon-theme
+    glib-networking
+  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
+    ++ lib.optional enableSecrets libsecret
+    ++ lib.optional enableSpelling gspell
+    ++ lib.optional enableUPnP gupnp-igd;
 
-  preConfigure = a.fullDepEntry (''
-    export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pyGtkGlade})/gtk-2.0"
-    export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pygobject})/gtk-2.0"
-    sed -e '/-L[$]x_libraries/d' -i configure
-    sed -e 's@tmpfd.close()@os.close(tmpfd)@' -i src/common/latex.py
-  '') ["addInputs" "doUnpack"];
+  nativeBuildInputs = [
+    gettext wrapGAppsHook
+  ];
 
-  fixScriptNames = a.fullDepEntry (''
-    mkdir "$out"/bin-wrapped
-    for i in "$out"/bin/.*-wrapped; do
-      name="$i"
-      name="''${name%-wrapped}"
-      name="''${name##*/.}"
-      mv "$i" "$out/bin-wrapped/$name"
-      sed -e 's^'"$i"'^'"$out/bin-wrapped/$name"'^' -i "$out/bin/$name"
-      sed -e "2aexport LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}${a.gtkspell}/lib:${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
-      sed -e "2aexport NIX_LDFLAGS=\"\$NIX_LDFLAGS -L${a.gtkspell}/lib -L${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
-      sed -e "2aexport GST_PLUGIN_PATH=\"\$GST_PLUGIN_PATH''${GST_PLUGIN_PATH:+:}$(echo ${a.gst_plugins_bad}/lib/gstreamer-*):$(echo ${a.gst_ffmpeg}/lib/gstreamer-*):$(echo ${a.farstream}/lib/gstreamer-*)\"" -i "$out/bin/gajim"
-    done
-  '') ["wrapBinContentsPython"];
+  dontWrapGApps = true;
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preConfigure" (a.doDump "1") "doConfigure" "doMakeInstall" 
-    "wrapBinContentsPython" "fixScriptNames"];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
-  name = "gajim-" + version;
+  propagatedBuildInputs = with python3.pkgs; [
+    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools
+  ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
+    ++ lib.optional enableRST docutils
+    ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
+    ++ extraPythonPackages python3.pkgs;
+
+  checkInputs = [ xvfb_run dbus.daemon ];
+
+  checkPhase = ''
+    xvfb-run dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      ${python3.interpreter} setup.py test
+  '';
+
+  # necessary for wrapGAppsHook
+  strictDeps = false;
+
   meta = {
-    description = "Jabber client with meta-contacts";
-    maintainers = [a.lib.maintainers.raskin];
+    homepage = "http://gajim.org/";
+    description = "Jabber client written in PyGTK";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin abbradar ];
+    downloadPage = "http://gajim.org/downloads.php";
+    updateWalker = true;
+    platforms = lib.platforms.linux;
   };
 }

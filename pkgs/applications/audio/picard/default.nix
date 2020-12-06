@@ -1,46 +1,64 @@
-{ stdenv, fetchurl, pythonPackages, gettext, pyqt4
-, pkgconfig, libdiscid, libofa, ffmpeg }:
+{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+, enablePlayback ? true
+, gst_all_1
+}:
 
-pythonPackages.buildPythonPackage rec {
-  name = "picard-${version}";
-  namePrefix = "";
-  version = "1.1";
+let
+  pythonPackages = python3Packages;
+  pyqt5 = if enablePlayback then
+    pythonPackages.pyqt5_with_qtmultimedia
+  else
+    pythonPackages.pyqt5
+  ;
+in pythonPackages.buildPythonApplication rec {
+  pname = "picard";
+  version = "2.5.2";
 
-  src = fetchurl {
-    url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/${name}.tar.gz";
-    md5 = "57abb76632a423760f336ac11da5c149";
+  src = fetchFromGitHub {
+    owner = "metabrainz";
+    repo = pname;
+    rev = "release-${version}";
+    sha256 = "193pk6fhrqar2ra8krj6xdd7sm5qfw0p708iazzwk4b8c8g0q72j";
   };
 
-  buildInputs = [
-    pkgconfig
-    ffmpeg
-    libofa
-    gettext
+  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
+    ++ stdenv.lib.optionals (pyqt5.multimediaEnabled) [
+      qt5.qtmultimedia.bin
+      gst_all_1.gstreamer
+      gst_all_1.gst-vaapi
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+    ]
+  ;
+
+  propagatedBuildInputs = with pythonPackages; [
+    pyqt5
+    mutagen
+    chromaprint
+    discid
+    dateutil
   ];
 
-  propagatedBuildInputs = [
-    pythonPackages.mutagen
-    pyqt4
-    libdiscid
-  ];
-
-  configurePhase = ''
-    python setup.py config
+  prePatch = ''
+    # Pesky unicode punctuation.
+    substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
-  buildPhase = ''
-    python setup.py build
-  '';
+  # In order to spare double wrapping, we use:
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  ''
+    + stdenv.lib.optionalString (pyqt5.multimediaEnabled) ''
+      makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    ''
+  ;
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
-  '';
-
-  doCheck = false;
-
-  meta = {
-    homepage = "http://musicbrainz.org/doc/MusicBrainz_Picard";
+  meta = with stdenv.lib; {
+    homepage = "https://picard.musicbrainz.org/";
     description = "The official MusicBrainz tagger";
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }

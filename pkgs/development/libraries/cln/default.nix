@@ -1,19 +1,20 @@
 { stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "cln-1.3.1";
+  pname = "cln";
+  version = "1.3.6";
 
   src = fetchurl {
-    url = "${meta.homepage}${name}.tar.bz2";
-    sha256 = "1sd8jy5vnmww537zq6g6i586ffslm7fjliz04krv6scapgklq6ca";
+    url = "${meta.homepage}${pname}-${version}.tar.bz2";
+    sha256 = "0jlq9l4hphk7qqlgqj9ihjp4m3rwjbhk6q4v00lsbgbri07574pl";
   };
 
   buildInputs = [ gmp ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "C/C++ library for numbers, a part of GiNaC";
-    homepage = http://www.ginac.de/CLN/;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    homepage = "https://www.ginac.de/CLN/";
+    license = licenses.gpl2;
+    platforms = platforms.unix; # Once had cygwin problems
   };
 }

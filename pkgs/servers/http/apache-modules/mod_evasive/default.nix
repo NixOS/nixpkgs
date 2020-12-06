@@ -1,10 +1,16 @@
-{ stdenv, fetchurl, apacheHttpd }:
+{ lib, stdenv, fetchurl, apacheHttpd }:
+
+if lib.versionAtLeast (lib.getVersion apacheHttpd) "2.4" then
+
+  throw "mod_evasive is not supported on Apache httpd 2.4"
+
+else
 
 stdenv.mkDerivation {
-  name = "mod_evasive_1.10.1";
+  name = "mod_evasive-1.10.1";
 
   src = fetchurl {
-    url = http://www.zdziarski.com/blog/wp-content/uploads/2010/02/mod_evasive_1.10.1.tar.gz;
+    url = "http://www.zdziarski.com/blog/wp-content/uploads/2010/02/mod_evasive_1.10.1.tar.gz";
     sha256 = "0rsnx50rjv6xygbp9r0gyss7xqdkcb0hy3wh9949jf1im8wm3i07";
   };
 
@@ -23,8 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.zdziarski.com/blog/?page_id=442";
-    description = "mod_evasive is an evasive maneuvers module for Apache to provide evasive action in the event of an HTTP DoS or DDoS attack or brute force attack.";
-
+    description = "Evasive maneuvers module for Apache to provide evasive action in the event of an HTTP DoS or DDoS attack or brute force attack";
     platforms = stdenv.lib.platforms.linux;
   };
 }

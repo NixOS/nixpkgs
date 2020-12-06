@@ -1,34 +1,39 @@
-{stdenv, fetchurl, pciutils, perl, zlib}:
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
 
-let version = "0.5.4"; in
+stdenv.mkDerivation rec {
+  pname = "efibootmgr";
+  version = "17";
 
-stdenv.mkDerivation {
-  name = "efibootmgr-${version}";
+  nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ pciutils zlib perl ];
+  buildInputs = [ efivar popt ];
 
-  patches = [ ./arbitrary-filenames.patch ];
-  
-  src = fetchurl {
-    url = "http://linux.dell.com/efibootmgr/permalink/efibootmgr-${version}.tar.gz";
-    sha256 = "0wcfgf8x4p4xfh38m9x3njwsxibm9bhnmvpjj94lj9sk9xxa8qmm";
+  src = fetchFromGitHub {
+    owner = "rhboot";
+    repo = "efibootmgr";
+    rev = version;
+    sha256 = "1niicijxg59rsmiw3rsjwy4bvi1n42dynvm01lnp9haixdzdpq03";
   };
 
-  postPatch = ''
-    substituteInPlace "./tools/install.pl" \
-      --replace "/usr/bin/perl" "${perl}/bin/perl"
-  '';
+  patches = [
+    (fetchpatch {
+      name = "remove-extra-decl.patch";
+      url = "https://github.com/rhboot/efibootmgr/commit/99b578501643377e0b1994b2a068b790d189d5ad.patch";
+      sha256 = "1sbijvlpv4khkix3vix9mbhzffj8lp8zpnbxm9gnzjz8yssz9p5h";
+    })
+  ];
+  # We have no LTO here since commit 22284b07.
+  postPatch = if stdenv.isi686 then "sed '/^CFLAGS/s/-flto//' -i Make.defaults" else null;
 
-  preBuild = ''
-    export makeFlags="BINDIR=$out/sbin"
-  '';
+  makeFlags = [ "EFIDIR=nixos" "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config" ];
 
-  meta = {
+  installFlags = [ "prefix=$(out)" ];
+
+  meta = with stdenv.lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
-    homepage = http://linux.dell.com/efibootmgr/;
-    license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/rhboot/efibootmgr";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }
-

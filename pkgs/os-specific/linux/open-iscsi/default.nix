@@ -1,25 +1,52 @@
-{ stdenv, fetchurl, kernel}:
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
+, util-linux, openisns, openssl, kmod, perl, systemd, pkgconf
+}:
 
 stdenv.mkDerivation rec {
-  name = "open-iscsi-2.0-871-${kernel.version}";
-  
-  src = fetchurl {
-    url = "http://www.open-iscsi.org/bits/${name}.tar.gz";
-    sha256 = "1jvx1agybaj4czhz41bz37as076spicsmlh5pjksvwl2mr38gsmw";
+  pname = "open-iscsi";
+  version = "2.1.2";
+
+  nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];
+  buildInputs = [ kmod openisns.lib openssl systemd util-linux ];
+
+  src = fetchFromGitHub {
+    owner = "open-iscsi";
+    repo = "open-iscsi";
+    rev = version;
+    sha256 = "0fazf2ighj0akrvcj3jm3kd6wl9lgznvr38g6icwfkqk7bykjkam";
   };
-  
-  KSRC = "${kernel}/lib/modules/*/build";
+
   DESTDIR = "$(out)";
-  
+
+  NIX_LDFLAGS = "-lkmod -lsystemd";
+  NIX_CFLAGS_COMPILE = "-DUSE_KMOD";
+
   preConfigure = ''
-    sed -i 's|/usr/|/|' Makefile
+    sed -i 's|/usr|/|' Makefile
   '';
-  
-  patches = [./kernel.patch];
-  
-  meta = {
+
+  installFlags = [
+    "install"
+    "install_systemd"
+  ];
+
+  postInstall = ''
+    cp usr/iscsistart $out/sbin/
+    for f in $out/lib/systemd/system/*; do
+      substituteInPlace $f --replace /sbin $out/bin
+    done
+    $out/sbin/iscsistart -v
+  '';
+
+  postFixup = ''
+    sed -i "s|/sbin/iscsiadm|$out/bin/iscsiadm|" $out/bin/iscsi_fw_login
+  '';
+
+  meta = with stdenv.lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
-    license = "GPLv2+";
-    homepage = http://www.open-iscsi.org;
+    license = licenses.gpl2;
+    homepage = "https://www.open-iscsi.com";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cleverca22 zaninime ];
   };
 }

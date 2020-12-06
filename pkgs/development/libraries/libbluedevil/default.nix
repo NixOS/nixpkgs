@@ -1,13 +1,20 @@
-{ stdenv, fetchgit, cmake, qt4 }:
+{ stdenv, fetchurl, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "libbluedevil-20110304";
+  pname = "libbluedevil";
+  # bluedevil must have the same major version (x.y) as libbluedevil!
+  # do not update this package without checking bluedevil
+  version = "2.1";
 
-  src = fetchgit {
-    url = git://anongit.kde.org/libbluedevil.git;
-    rev = "b44537b1784528cacc62ab1d570c1565bd326b4f";
-    sha256 = "15rx44dncg7hm2x04yz53ni4l1fpb40c3bma3pbvr7l2yd89x3sa";
+  src = fetchurl {
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "0p4f0brhcz9gfxfd6114fa5x6swfdmgzv350xwncdr0s1qnamk8c";
   };
 
   buildInputs = [ cmake qt4 ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2Plus;
+  };
 }

@@ -1,30 +1,67 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, callPackage, fetchurl, makeWrapper, jre }:
 
-stdenv.mkDerivation {
-  name = "jruby-1.6.5.1";
+let
+# The version number here is whatever is reported by the RUBY_VERSION string
+rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "5" "7" "";
+jruby = stdenv.mkDerivation rec {
+  pname = "jruby";
+
+  version = "9.2.13.0";
 
   src = fetchurl {
-    url = http://jruby.org.s3.amazonaws.com/downloads/1.6.5.1/jruby-bin-1.6.5.1.tar.gz;
-    sha256 = "1j0iv1q950lyir9vqfgg2533f1q28jaz7vnxqswsaix1mjhm29qd";
+    url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
+    sha256 = "0n5glz6xm3skrfihzn3g5awdxpjsqn2k8k46gv449rk2l50w5a3k";
   };
 
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
-     mkdir -pv $out
+     mkdir -pv $out/docs
      mv * $out
      rm $out/bin/*.{bat,dll,exe,sh}
-     mv $out/README $out/docs
+     mv $out/COPYING $out/LICENSE* $out/docs
 
-     for i in $out/bin/*; do
+     for i in $out/bin/jruby{,.bash}; do
        wrapProgram $i \
          --set JAVA_HOME ${jre}
      done
+
+     ln -s $out/bin/jruby $out/bin/ruby
+
+     # Bundler tries to create this directory
+     mkdir -pv $out/${passthru.gemPath}
+     mkdir -p $out/nix-support
+     cat > $out/nix-support/setup-hook <<EOF
+       addGemPath() {
+         addToSearchPath GEM_PATH \$1/${passthru.gemPath}
+       }
+
+       addEnvHooks "$hostOffset" addGemPath
+     EOF
   '';
 
-  meta = { 
-    description = "Ruby interpreter written in Java";
-    homepage = http://jruby.org/;
-    license = "CPL-1.0 GPL-2 LGPL-2.1"; # one of those
+  postFixup = ''
+    PATH=$out/bin:$PATH patchShebangs $out/bin
+  '';
+
+  passthru = rec {
+    rubyEngine = "jruby";
+    gemPath = "lib/${rubyEngine}/gems/${rubyVersion.libDir}";
+    libPath = "lib/${rubyEngine}/${rubyVersion.libDir}";
   };
-}
+
+  meta = with stdenv.lib; {
+    description = "Ruby interpreter written in Java";
+    homepage = "http://jruby.org/";
+    license = with licenses; [ cpl10 gpl2 lgpl21 ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.fzakaria ];
+  };
+};
+in jruby.overrideAttrs (oldAttrs: {
+  passthru = oldAttrs.passthru // {
+    devEnv = callPackage ../ruby/dev.nix {
+      ruby = jruby;
+    };
+  };
+})

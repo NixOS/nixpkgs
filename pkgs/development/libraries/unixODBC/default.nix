@@ -1,10 +1,20 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "unixODBC-2.2.11";
+stdenv.mkDerivation rec {
+  pname = "unixODBC";
+  version = "2.3.7";
+
   src = fetchurl {
-    url = mirror://sourceforge/unixodbc/unixODBC-2.2.11.tar.gz;
-    md5 = "9ae806396844e38244cf65ad26ba0f23";
+    url = "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz";
+    sha256 = "0xry3sg497wly8f7715a7gwkn2k36bcap0mvzjw74jj53yx6kwa5";
   };
-  configureFlags = "--disable-gui --sysconfdir=/etc";
+
+  configureFlags = [ "--disable-gui" "--sysconfdir=/etc" ];
+
+  meta = with stdenv.lib; {
+    description = "ODBC driver manager for Unix";
+    homepage = "http://www.unixodbc.org/";
+    license = licenses.lgpl2;
+    platforms = platforms.unix;
+  };
 }

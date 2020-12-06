@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "2.0.2";
-  name = "atop-${version}";
+  version = "2.4.0";
+  pname = "atop";
 
   src = fetchurl {
-    url = "http://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "029lfa2capz1lg3m3rnyrgb8v6jm4znin84vjh2f0zkwvvhdn856";
+    url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
+    sha256 = "0s9xlxlzz688a80zxld840zkrmzw998rdkkg6yc7ssq8fw50275y";
   };
 
   buildInputs = [zlib ncurses];
@@ -25,15 +25,24 @@ stdenv.mkDerivation rec {
     sed -e "/touch.*LOGPATH/s@touch@echo should have created @" -i Makefile
     sed -e 's/chown/true/g' -i Makefile
     sed -e '/chkconfig/d' -i Makefile
+    sed -e 's/chmod 04711/chmod 0711/g' -i Makefile
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+  preInstall = ''
+    mkdir -p "$out"/{bin,sbin}
+    make systemdinstall $makeFlags
+  '';
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
     description = ''Console system performance monitor'';
 
     longDescription = ''
       Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of all processes (even if processes have finished during the interval), daily logging of system and process activity for long-term analysis, highlighting overloaded system resources by using colors, etc. At regular intervals, it shows system-level activity related to the CPU, memory, swap, disks and network layers, and for every active process it shows the CPU utilization, memory growth, disk utilization, priority, username, state, and exit code.
     '';
+    inherit version;
+    license = licenses.gpl2;
+    downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }

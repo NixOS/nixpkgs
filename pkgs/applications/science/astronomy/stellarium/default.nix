@@ -1,26 +1,42 @@
-{stdenv, fetchurl, cmake, freetype, libpng, mesa, gettext, openssl, qt4, perl, libiconv}:
+{ stdenv, lib, mkDerivation, fetchFromGitHub
+, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
+, qtscript, qtserialport, qttools
+, qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
+}:
 
-let
-  name = "stellarium-0.11.4";
-in
-stdenv.mkDerivation {
-  inherit name;
+mkDerivation rec {
+  pname = "stellarium";
+  version = "0.20.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/stellarium/${name}.tar.gz";
-    sha256 = "8ad5e9878eb36c2c27f4754dcfc69279123e0eae02cc388074e3cf9b23746535";
+  src = fetchFromGitHub {
+    owner = "Stellarium";
+    repo = "stellarium";
+    rev = "v${version}";
+    sha256 = "08abrshrzhdfcg3b2vzfmnq8fhzrasadg1ajs81kcw96yjc59vak";
   };
 
-  buildInputs = [ cmake freetype libpng mesa gettext openssl qt4 perl libiconv ];
+  nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
+    qtmultimedia qtlocation qtbase
+  ];
 
-  meta = {
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
+                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out"/Stellarium.app/Contents/MacOS/stellarium
+  '';
+
+  meta = with lib; {
     description = "Free open-source planetarium";
     homepage = "http://stellarium.org/";
-    license = stdenv.lib.licenses.gpl2;
-
-    platforms = stdenv.lib.platforms.linux; # should be mesaPlatforms, but we don't have qt on darwin
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ peti ma27 ];
   };
 }

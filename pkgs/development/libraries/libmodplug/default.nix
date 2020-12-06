@@ -1,47 +1,21 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="libmodplug";
-    version="0.8.8.4";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/project/modplug-xmms/${baseName}/${version}/${name}.tar.gz";
-    hash="1xv44bd84c4qi41i1wwjr6qzazx15l85yvi74sz49ldyvlyy2pjw";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+let
+  version = "0.8.9.0";
+in stdenv.mkDerivation rec {
+  pname = "libmodplug";
+  inherit version;
+
+  meta = with stdenv.lib; {
+    description = "MOD playing library";
+    homepage    = "http://modplug-xmms.sourceforge.net/";
+    license     = licenses.publicDomain;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ raskin ];
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "Music library";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.publicDomain;
+  src = fetchurl {
+    url = "mirror://sourceforge/project/modplug-xmms/libmodplug/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1pnri98a603xk47smnxr551svbmgbzcw018mq1k6srbrq6kaaz25";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/modplug-xmms/files/libmodplug/";
-    };
-  };
-}) x
-
+}

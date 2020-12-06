@@ -3,26 +3,31 @@
 let startFPC = import ./binary.nix { inherit stdenv fetchurl; }; in
 
 stdenv.mkDerivation rec {
-  version = "2.6.0";
-  name = "fpc-${version}";
+  version = "3.2.0";
+  pname = "fpc";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/sourceforge/freepascal/Source/${version}/fpcbuild-${version}.tar.gz";
-    sha256 = "1vxy2y8pm0ribhpdhqlwwz696ncnz4rk2dafbn1mjgipm97qb26p";
+    url = "mirror://sourceforge/freepascal/fpcbuild-${version}.tar.gz";
+    sha256 = "0f38glyn3ffmqww432snhx2b8wyrq0yj1njkp4zh56lqrvm19fgr";
   };
 
   buildInputs = [ startFPC gawk ];
+  glibc = stdenv.cc.libc.out;
 
-  preConfigure =
-    if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then ''
-      sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
-      sed -e "s@'/lib64/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
-    '' else "";
+  # Patch paths for linux systems. Other platforms will need their own patches.
+  patches = [
+    ./mark-paths.patch # mark paths for later substitution in postPatch
+  ];
+  postPatch = ''
+    # substitute the markers set by the mark-paths patch
+    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by dynlinker-prefix "${glibc}"
+    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
+  '';
 
-  makeFlags = "NOGDB=1";
+  makeFlags = [ "NOGDB=1" "FPC=${startFPC}/bin/fpc" ];
 
-  installFlags = "INSTALL_PREFIX=\${out}";
-  
+  installFlags = [ "INSTALL_PREFIX=\${out}" ];
+
   postInstall = ''
     for i in $out/lib/fpc/*/ppc*; do
       ln -fs $i $out/bin/$(basename $i)
@@ -31,9 +36,16 @@ stdenv.mkDerivation rec {
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/lib/fpc/etc/
   '';
 
-  meta = {
+  passthru = {
+    bootstrap = startFPC;
+  };
+
+  meta = with stdenv.lib; {
     description = "Free Pascal Compiler from a source distribution";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.freepascal.org";
+    maintainers = [ maintainers.raskin ];
+    license = with licenses; [ gpl2 lgpl2 ];
+    platforms = platforms.linux;
+    inherit version;
   };
 }

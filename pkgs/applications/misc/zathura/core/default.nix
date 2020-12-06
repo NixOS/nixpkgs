@@ -1,29 +1,54 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext }:
+{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig
+, appstream-glib, desktop-file-utils, python3
+, gtk, girara, gettext, libxml2, check
+, sqlite, glib, texlive, libintl, libseccomp
+, file, librsvg
+, gtk-mac-integration
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-
-  version = "0.2.1";
-
-  name = "zathura-core-${version}";
+  pname = "zathura";
+  version = "0.4.7";
 
   src = fetchurl {
-    url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "075b9def201c77ca738dc9e15b252bc23c085b7c4671a1810d1d962e8d0bd790";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "1rx1fk9s556fk59lmqgvhwrmv71ashh89bx9adjq46wq5gzdn4p0";
   };
 
-  buildInputs = [ pkgconfig gtk girara gettext ];
+  outputs = [ "bin" "man" "dev" "out" ];
 
-  makeFlags = "PREFIX=$(out)";
+  # Flag list:
+  # https://github.com/pwmt/zathura/blob/master/meson_options.txt
+  mesonFlags = [
+    "-Dsqlite=enabled"
+    "-Dmagic=enabled"
+    "-Dmanpages=enabled"
+    "-Dconvert-icon=enabled"
+    "-Dsynctex=enabled"
+    # Make sure tests are enabled for doCheck
+    "-Dtests=enabled"
+  ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
+
+  nativeBuildInputs = [
+    meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
+    gettext wrapGAppsHook libxml2 check appstream-glib
+  ];
+
+  buildInputs = [
+    gtk girara libintl sqlite glib file librsvg
+    texlive.bin.core
+  ] ++ optional stdenv.isLinux libseccomp
+    ++ optional stdenv.isDarwin gtk-mac-integration;
+
+  doCheck = true;
 
   meta = {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = "https://git.pwmt.org/pwmt/zathura";
     description = "A core component for zathura PDF viewer";
-    license = "free";
-    platforms = stdenv.lib.platforms.linux;
-
-    # Set lower priority in order to provide user with a wrapper script called
-    # 'zathura' instead of real zathura executable. The wrapper will build
-    # plugin path argument before executing the original.
-    priority = 1;
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ globin ];
   };
 }

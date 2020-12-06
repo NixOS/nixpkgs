@@ -1,20 +1,30 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "libnsgif-0.0.1";
+{ stdenv, fetchurl, pkgconfig
+, buildsystem
+}:
+
+stdenv.mkDerivation rec {
+  pname = "netsurf-${libname}";
+  libname = "libnsgif";
+  version = "0.2.1";
 
   src = fetchurl {
-    url = http://www.netsurf-browser.org/projects/releases/libnsgif-0.0.1-src.tar.gz;
-    sha256 = "0lnvyhfdb9dm979fly33mi2jlf2rfx9ldx93viawvana63sidwsl";
+    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
+    sha256 = "sha256-nq6lNM1wtTxar0UxeulXcBaFprSojb407Sb0+q6Hmks=";
   };
 
-  installPhase = "make PREFIX=$out install";
-  buildInputs = [];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ buildsystem ];
 
-  meta = {
-    description = "Libnsbmp is a decoding library for gif image file formats"; # used by netsurf
-    homepage = http://www.netsurf-browser.org/projects/libnsgif/;
-    license = "MIT";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+  makeFlags = [
+    "PREFIX=$(out)"
+    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
+    description = "GIF Decoder for netsurf browser";
+    license = licenses.mit;
+    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

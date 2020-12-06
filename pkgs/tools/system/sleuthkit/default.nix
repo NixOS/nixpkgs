@@ -1,48 +1,34 @@
-x@{builderDefsPackage
-  , libewf, afflib, openssl, zlib
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="sleuthkit";
-    version="3.2.2";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/project/${baseName}/${baseName}/${version}/${name}.tar.gz";
-    hash="02hik5xvbgh1dpisvc3wlhhq1aprnlsk0spbw6h5khpbq9wqnmgj";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  version = "4.6.5";
+  pname = "sleuthkit";
+
+  src = fetchFromGitHub {
+    owner = "sleuthkit";
+    repo = "sleuthkit";
+    rev = "${pname}-${version}";
+    sha256 = "1q1cdixnfv9v4qlzza8xwdsyvq1vdw6gjgkd41yc1d57ldp1qm0c";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  postPatch = ''
+    substituteInPlace tsk/img/ewf.c --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
+  '';
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libewf afflib openssl zlib ];
+
+  # Hack to fix the RPATH.
+  preFixup = "rm -rf */.libs";
+
   meta = {
     description = "A forensic/data recovery tool";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = "IBM Public License";
+    homepage = "https://www.sleuthkit.org/";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.ipl10;
+    inherit version;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/sleuthkit/files/sleuthkit";
-    };
-  };
-}) x
-
+}

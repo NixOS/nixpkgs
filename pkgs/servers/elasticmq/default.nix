@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
       cp bin/run.sh $out/bin/elasticmq
       substituteInPlace $out/bin/elasticmq --replace '-DBASEDIR=$BASEDIR' '-DBASEDIR=''${ELASTICMQ_DATA_PREFIX:-.}'
 
-      wrapProgram $out/bin/elasticmq --prefix PATH : "${which}/bin:${jre}/bin"
+      wrapProgram $out/bin/elasticmq --prefix PATH : "${stdenv.lib.makeBinPath [ which jre ]}"
     '';
 
   meta = {
-    homepage = https://github.com/adamw/elasticmq;
+    homepage = "https://github.com/adamw/elasticmq";
     description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
     longDescription =
       ''
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
         $ELASTICMQ_DATA_PREFIX/conf/Default.scala.  You can use the
         Default.scala included in the distribution as a template.
       '';
-    license = "APLv2";
+    license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

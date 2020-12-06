@@ -1,50 +1,64 @@
-{ fetchurl, stdenv, cairo, freetype, fontconfig, zlib
-, libjpeg, pixman, curl, libpthreadstubs, libXau, libXdmcp, openjpeg
-, libxml2, pkgconfig, cmake, lcms
-, gtkSupport ? false, glib ? null, gtk ? null
-, qt4Support ? false, qt4 ? null
+{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkgconfig, libiconv, libintl
+, zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
+, withData ? true, poppler_data
+, qt5Support ? false, qtbase ? null
+, introspectionSupport ? false, gobject-introspection ? null
+, utils ? false, nss ? null
+, minimal ? false, suffix ? "glib"
 }:
 
+let
+  mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
+in
 stdenv.mkDerivation rec {
-  name = "poppler-0.18.4";
+  name = "poppler-${suffix}-${version}";
+  version = "20.08.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
-    url = "${meta.homepage}${name}.tar.gz";
-    sha256 = "0bnl05al7mjndp2h0355946j59nfw76f5v0x57d47q68rm412hik";
+    url = "${meta.homepage}/poppler-${version}.tar.xz";
+    sha256 = "19gchq6fpa00ic5rn1zmjzxx85cif4hbdrsjcfd2aqxz9gqgwrdf";
   };
 
-  propagatedBuildInputs =
-    [ zlib cairo freetype fontconfig libjpeg lcms pixman curl
-      libpthreadstubs libXau libXdmcp openjpeg libxml2 stdenv.gcc.libc
-    ]
-    ++ stdenv.lib.optionals gtkSupport [ glib gtk ]
-    ++ stdenv.lib.optional qt4Support qt4;
+  outputs = [ "out" "dev" ];
 
-  buildNativeInputs = [ pkgconfig cmake ];
+  buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
 
-  cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
+  # TODO: reduce propagation to necessary libs
+  propagatedBuildInputs = with lib;
+    [ zlib freetype fontconfig libjpeg openjpeg ]
+    ++ optionals (!minimal) [ cairo lcms curl ]
+    ++ optional qt5Support qtbase
+    ++ optional utils nss
+    ++ optional introspectionSupport gobject-introspection;
 
-  patches = [ ./datadir_env.patch ];
+  nativeBuildInputs = [ cmake ninja pkgconfig ];
 
-  # XXX: The Poppler/Qt4 test suite refers to non-existent PDF files
-  # such as `../../../test/unittestcases/UseNone.pdf'.
-  #doCheck = !qt4Support;
-  checkTarget = "test";
+  # Workaround #54606
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+  '';
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
+    (mkFlag (!minimal) "GLIB")
+    (mkFlag (!minimal) "CPP")
+    (mkFlag (!minimal) "LIBCURL")
+    (mkFlag utils "UTILS")
+    (mkFlag qt5Support "QT5")
+  ];
 
-  meta = {
-    homepage = http://poppler.freedesktop.org/;
-    description = "Poppler, a PDF rendering library";
+  meta = with lib; {
+    homepage = "https://poppler.freedesktop.org/";
+    description = "A PDF rendering library";
 
     longDescription = ''
-      Poppler is a PDF rendering library based on the xpdf-3.0 code base.
+      Poppler is a PDF rendering library based on the xpdf-3.0 code
+      base. In addition it provides a number of tools that can be
+      installed separately.
     '';
 
-    platforms = if qt4Support
-      then qt4.meta.platforms
-      else stdenv.lib.platforms.all;
-
-    license = "GPLv2";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
 }

@@ -1,25 +1,17 @@
 The install tries to create files in /var.  This patch removes those steps.
 
---- wicd-1.7.0/setup.py 2010-01-14 23:49:11.000000000 -0500
-+++ wicd-1.7.0/setup.py 2010-11-16 22:15:33.855977242 -0500
-@@ -493,11 +493,8 @@
-     print "Using init file",(wpath.init, wpath.initfile)
-     data = [
-     (wpath.dbus, ['other/wicd.conf']),
--    (wpath.log, [empty_file]), 
--    (wpath.etc, ['other/dhclient.conf.template.default']),
-     (wpath.encryption, [('encryption/templates/' + b) for b in 
-                         os.listdir('encryption/templates') if not b.startswith('.')]),
--    (wpath.networks, [empty_file]),
-     (wpath.sbin,  ['scripts/wicd']),  
-     (wpath.daemon, ['wicd/monitor.py', 'wicd/wicd-daemon.py',
-                  'wicd/suspend.py', 'wicd/autoconnect.py']), 
-@@ -558,7 +555,7 @@
-     if not wpath.no_install_docs:
-         data.append((wpath.docdir, ['INSTALL', 'LICENSE', 'AUTHORS',
-                                      'README', 'CHANGES', ]))
--        data.append((wpath.varlib, ['other/WHEREAREMYFILES']))
-+        data.append((wpath.share, ['other/WHEREAREMYFILES']))
-     if not wpath.no_install_kde:
-         if not wpath.no_install_gtk:
-             data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
+--- wicd-1.7.2.4/setup.py     2013-03-14 21:28:21.360580941 +0100
++++ wicd-1.7.2.4/setup.py  2013-03-14 21:22:50.125721943 +0100
+@@ -505,11 +505,8 @@
+         (wpath.dbus_service, ['other/org.wicd.daemon.service']),
+         (wpath.systemd, ['other/wicd.service']),
+         (wpath.logrotate, ['other/wicd.logrotate']),
+-        (wpath.log, [empty_file]), 
+-        (wpath.etc, ['other/dhclient.conf.template.default']),
+         (wpath.encryption, [('encryption/templates/' + b) for b in 
+                             os.listdir('encryption/templates') if not b.startswith('.')]),
+-        (wpath.networks, [empty_file]),
+         (wpath.sbin,  ['scripts/wicd']),  
+         (wpath.daemon, ['wicd/monitor.py', 'wicd/wicd-daemon.py',
+                     'wicd/suspend.py', 'wicd/autoconnect.py']), 
+

@@ -1,59 +1,37 @@
-x@{builderDefsPackage
-  , texinfo, libXext, xextproto, libX11, xproto, libXpm, libXt, libXcursor
-  , alsaLib, cmake, zlib, libpng, libvorbis, libXxf86dga, libXxf86misc
-  , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal, mesa
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, texinfo6_5, libXext, xorgproto, libX11
+, libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
+, libXxf86dga, libXxf86misc
+, libXxf86vm, openal, libGLU, libGL }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="allegro";
-    version="4.4.2";
-    name="${baseName}-${version}";
-    project="alleg";
-    url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "allegro";
+  version="4.4.3.1";
+
+  src = fetchurl {
+    url = "https://github.com/liballeg/allegro5/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1m6lz35nk07dli26kkwz3wa50jsrxs1kb6w1nj14a911l34xn6gc";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doCmake" "doMakeInstall"];
-
-  doCmake = a.fullDepEntry (''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXext -lX11 -lXpm -lXcursor -lXxf86vm"
-    cmake -D CMAKE_INSTALL_PREFIX=$out -D CMAKE_SKIP_RPATH=ON .
-  '') ["minInit" "doUnpack" "addInputs"];
-      
-  makeFlags = [
+  patches = [
+    ./nix-unstable-sandbox-fix.patch
+    ./encoding.patch
   ];
 
-  meta = {
-    description = "A game programming library";
-    license = "free-noncopyleft"; # giftware
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/alleg/files/";
-    };
-  };
-}) x
+  buildInputs = [
+    texinfo6_5 libXext xorgproto libX11 libXpm libXt libXcursor
+    alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    libXxf86vm openal libGLU libGL
+  ];
 
+  hardeningDisable = [ "format" ];
+
+  cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
+
+  meta = with stdenv.lib; {
+    description = "A game programming library";
+    homepage = "https://liballeg.org/";
+    license = licenses.free; # giftware
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+  };
+}

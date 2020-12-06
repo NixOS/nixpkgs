@@ -1,22 +1,64 @@
-{stdenv, fetchurl, eventlog, pkgconfig, glib}:
+{ stdenv, fetchurl, openssl, libcap, curl, which
+, eventlog, pkgconfig, glib, python, systemd, perl
+, riemann_c_client, protobufc, pcre, libnet
+, json_c, libuuid, libivykis, mongoc, rabbitmq-c
+, libesmtp
+}:
 
-stdenv.mkDerivation {
-  name = "syslog-ng-3.1.2";
+stdenv.mkDerivation rec {
+  pname = "syslog-ng";
+  version = "3.28.1";
 
   src = fetchurl {
-    url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/3.1.2/source/syslog-ng_3.1.2.tar.gz";
-    sha256 = "0a508l4j11336jn5kg65l70rf7xbpdxi2n477rvp5p48cc1adcg2";
+    url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1s56q8k69sdrqsh3y9lr4di01fqw7xb49wr0dz75jmz084yg8kmg";
   };
 
-  buildInputs = [eventlog pkgconfig glib];
-  configureFlags = "--enable-dynamic-linking";
+  nativeBuildInputs = [ pkgconfig which ];
 
-  meta = {
-    homepage = "http://www.balabit.com/network-security/syslog-ng/";
-    description = "Next-generation syslogd with advanced networking and filtering capabilities.";
-    license = "GPLv2";
+  buildInputs = [
+    libcap
+    curl
+    openssl
+    eventlog
+    glib
+    perl
+    python
+    systemd
+    riemann_c_client
+    protobufc
+    pcre
+    libnet
+    json_c
+    libuuid
+    libivykis
+    mongoc
+    rabbitmq-c
+    libesmtp
+  ];
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+  configureFlags = [
+    "--enable-manpages"
+    "--enable-dynamic-linking"
+    "--enable-systemd"
+    "--enable-smtp"
+    "--with-ivykis=system"
+    "--with-librabbitmq-client=system"
+    "--with-mongoc=system"
+    "--with-jsonc=system"
+    "--with-systemd-journal=system"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+  ];
+
+  outputs = [ "out" "man" ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.syslog-ng.com";
+    description = "Next-generation syslogd with advanced networking and filtering capabilities";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.linux;
   };
 }

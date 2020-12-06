@@ -1,17 +1,49 @@
-{ stdenv, fetchurl, freetype, fontconfig, pkgconfig, enca ? null }:
+{ stdenv, fetchurl, pkgconfig, yasm
+, freetype, fribidi, harfbuzz
+, encaSupport ? true, enca ? null # enca support
+, fontconfigSupport ? true, fontconfig ? null # fontconfig support
+, rasterizerSupport ? false # Internal rasterizer
+, largeTilesSupport ? false # Use larger tiles in the rasterizer
+, libiconv
+}:
 
+assert encaSupport -> enca != null;
+assert fontconfigSupport -> fontconfig != null;
+
+let
+  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
+in
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libass-0.9.11";
+  pname = "libass";
+  version = "0.15.0";
 
   src = fetchurl {
-    url = "http://libass.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "0p3li523s8n85kfh5xdbbfffr17z8xdh2qcgvdg7ki1myv6agl7z";
+    url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0cz8v6kh3f2j5rdjrra2z0h715fa16vjm7kambvqx9hak86262cz";
   };
 
-  buildInputs = [ freetype fontconfig enca pkgconfig ];
+  configureFlags = [
+    (mkFlag encaSupport "enca")
+    (mkFlag fontconfigSupport "fontconfig")
+    (mkFlag rasterizerSupport "rasterizer")
+    (mkFlag largeTilesSupport "large-tiles")
+  ];
+
+  nativeBuildInputs = [ pkgconfig yasm ];
+
+  buildInputs = [ freetype fribidi harfbuzz ]
+    ++ optional encaSupport enca
+    ++ optional fontconfigSupport fontconfig
+    ++ optional stdenv.isDarwin libiconv;
 
   meta = {
-    homepage = http://code.google.com/p/libass/;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    description = "Portable ASS/SSA subtitle renderer";
+    homepage    = "https://github.com/libass/libass";
+    license     = licenses.isc;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ codyopel ];
+    repositories.git = "git://github.com/libass/libass.git";
   };
 }

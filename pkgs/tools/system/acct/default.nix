@@ -1,16 +1,16 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "acct-6.5.5";
+  name = "acct-6.6.4";
 
   src = fetchurl {
     url = "mirror://gnu/acct/${name}.tar.gz";
-    sha256 = "1mbg18acrva5m7kxc9pzhaknsqm4r90nrp7ax9jkm9wjkrxwhqs1";
+    sha256 = "0gv6m8giazshvgpvwbng98chpas09myyfw1zr2y7hqxib0mvy5ac";
   };
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU Accounting Utilities, login and process accounting utilities";
 
     longDescription = ''
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
       execution statistics.
     '';
 
-    license = "GPLv3+";
+    license = licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/acct/;
+    homepage = "https://www.gnu.org/software/acct/";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
   };
 }

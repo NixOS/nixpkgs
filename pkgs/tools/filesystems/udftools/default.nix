@@ -1,51 +1,42 @@
-x@{builderDefsPackage
-  , ncurses, readline
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="udftools";
-    version="1.0.0b3";
-    name="${baseName}-${version}";
-    project="linux-udf";
-    url="mirror://sourceforge/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="180414z7jblby64556i8p24rcaas937zwnyp1zg073jdin3rw1y5";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "udftools";
+  version = "2.0";
+  src = fetchFromGitHub {
+    owner = "pali";
+    repo = "udftools";
+    rev = version;
+    sha256 = "0mz04h3rki6ljwfs15z83gf4vv816w7xgz923waiqgmfj9xpvx87";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ ncurses readline ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["fixIncludes" "doConfigure" "doMakeInstall"];
-      
-  fixIncludes = a.fullDepEntry ''
+  hardeningDisable = [ "fortify" ];
+
+  NIX_CFLAGS_COMPILE = "-std=gnu90";
+
+  preConfigure = ''
     sed -e '1i#include <limits.h>' -i cdrwtool/cdrwtool.c -i pktsetup/pktsetup.c
     sed -e 's@[(]char[*][)]spm [+]=@spm = ((char*) spm) + @' -i wrudf/wrudf.c
-  '' ["doUnpack" "minInit"];
+    sed -e '27i#include <string.h>' -i include/udf_endian.h
+    sed -e '38i#include <string.h>' -i wrudf/wrudf-cdrw.c
+    sed -e '12i#include <string.h>' -i wrudf/wrudf-cdr.c
+    sed -e '37i#include <stdlib.h>' -i wrudf/ide-pc.c
+    sed -e '46i#include <sys/sysmacros.h>' -i mkudffs/main.c
 
-  meta = {
+    sed -e "s@\$(DESTDIR)/lib/udev/rules.d@$out/lib/udev/rules.d@" -i pktsetup/Makefile.am
+  '';
+
+  postFixup = ''
+    sed -i -e "s@/usr/sbin/pktsetup@$out/sbin/pktsetup@" $out/lib/udev/rules.d/80-pktsetup.rules
+  '';
+
+  meta = with stdenv.lib; {
     description = "UDF tools";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
-  passthru = {
-  };
-}) x
-
+}

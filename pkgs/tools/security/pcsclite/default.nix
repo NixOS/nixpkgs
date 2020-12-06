@@ -1,29 +1,47 @@
-{ stdenv, fetchurl, udev, pkgconfig, dbus_libs }:
+{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python3
+, IOKit ? null }:
 
 stdenv.mkDerivation rec {
-  name = "pcsclite-1.7.4";
+  pname = "pcsclite";
+  version = "1.9.0";
+
+  outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
-    url = "http://alioth.debian.org/frs/download.php/3598/${name}.tar.bz2";
-    sha256 = "1lc3amxisv2ya51v0gysygldj25kv7zj81famv69s205mvmagr6q";
+    url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
+    sha256 = "1y9f9zipnrmgiw0mxrvcgky8vfrcmg6zh40gbln5a93i2c1x8j01";
   };
 
-  # The OS should care on preparing the drivers into this location
-  configureFlags = [ "--enable-usbdropdir=/var/lib/pcsc/drivers" ];
+  patches = [ ./no-dropdir-literals.patch ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --enable-confdir=$out/etc"
+  configureFlags = [
+    # The OS should care on preparing the drivers into this location
+    "--enable-usbdropdir=/var/lib/pcsc/drivers"
+    "--enable-confdir=/etc"
+  ] ++ stdenv.lib.optional stdenv.isLinux
+         "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
+    ++ stdenv.lib.optional (!stdenv.isLinux)
+         "--disable-libsystemd";
+
+  postConfigure = ''
+    sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
+      s/(DROPDIR *)(.*)/\1(getenv("PCSCLITE_HP_DROPDIR") ? : \2)/
+    }' config.h
   '';
 
-  buildInputs = [ udev dbus_libs ];
+  postInstall = ''
+    # pcsc-spy is a debugging utility and it drags python into the closure
+    moveToOutput bin/pcsc-spy "$dev"
+  '';
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig perl ];
+  buildInputs = [ python3 ] ++ stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
+             ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
-    homepage = http://pcsclite.alioth.debian.org/;
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://pcsclite.apdu.fr/";
+    license = licenses.bsd3;
+    platforms = with platforms; unix;
   };
 }

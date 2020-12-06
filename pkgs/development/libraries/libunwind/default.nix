@@ -1,21 +1,41 @@
-{stdenv, fetchurl}:
+{ stdenv, lib, fetchurl, autoreconfHook, xz }:
 
 stdenv.mkDerivation rec {
-  name = "libunwind-1.0.1";
-  
+  pname = "libunwind";
+  version = "1.4.0";
+
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/libunwind/${name}.tar.gz";
-    sha256 = "aa95fd184c0b90d95891c2f3bac2c7df708ff016d2a6ee8b2eabb769f864101f";
+    url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
+    sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
   };
-  
-  NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
-  preInstall = ''
-    mkdir -p "$out/lib"
-    touch "$out/lib/libunwind-generic.so"
+
+  patches = [ ./backtrace-only-with-glibc.patch ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
   '';
-  
-  meta = {
-    homepage = http://www.nongnu.org/libunwind;
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  outputs = [ "out" "dev" ];
+
+  propagatedBuildInputs = [ xz ];
+
+  postInstall = ''
+    find $out -name \*.la | while read file; do
+      sed -i 's,-llzma,${xz.out}/lib/liblzma.la,' $file
+    done
+  '';
+
+  doCheck = false; # fails
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
+    license = licenses.mit;
   };
+
+  passthru.supportsHost = !stdenv.hostPlatform.isRiscV;
 }

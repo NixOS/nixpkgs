@@ -1,25 +1,36 @@
-{ stdenv, fetchurl, zlib, libjpeg }:
+{ stdenv
+, fetchurl
 
-let version = "3.9.7"; in
+, pkgconfig
+
+, zlib
+, libjpeg
+, xz
+}:
 
 stdenv.mkDerivation rec {
-  name = "libtiff-${version}";
+  version = "4.1.0";
+  pname = "libtiff";
 
   src = fetchurl {
-    urls =
-      [ "ftp://ftp.remotesensing.org/pub/libtiff/tiff-${version}.tar.gz"
-        "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz"
-      ];
-    sha256 = "0spg1hr5rsrmg88sfzb05qnf0haspq7r5hvdkxg5zib1rva4vmpm";
+    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
+    sha256 = "0d46bdvxdiv59lxnb0xz9ywm8arsr6xsapi5s6y6vnys2wjz6aax";
   };
 
-  propagatedBuildInputs = [ zlib libjpeg ];
+  outputs = [ "bin" "dev" "out" "man" "doc" ];
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
 
   enableParallelBuilding = true;
 
-  meta = {
+  doCheck = true; # not cross;
+
+  meta = with stdenv.lib; {
     description = "Library and utilities for working with the TIFF image file format";
-    homepage = http://www.libtiff.org/;
-    license = "bsd";
+    homepage = "http://download.osgeo.org/libtiff";
+    license = licenses.libtiff;
+    platforms = platforms.unix;
   };
 }

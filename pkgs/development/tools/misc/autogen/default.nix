@@ -1,55 +1,94 @@
-{ fetchurl, stdenv, guile, which }:
+{ stdenv, buildPackages, fetchurl, autoreconfHook, which, pkgconfig, perl, guile, libxml2 }:
 
-let version = "5.15"; in
+stdenv.mkDerivation rec {
+  pname = "autogen";
+  version = "5.18.16";
 
-  stdenv.mkDerivation {
-    name = "autogen-${version}";
+  src = fetchurl {
+    url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.xz";
+    sha256 = "16mlbdys8q4ckxlvxyhwkdnh1ay9f6g0cyp1kylkpalgnik398gq";
+  };
 
-    src = fetchurl {
-      url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.gz";
-      sha256 = "8a37effa66d285471851e445d3bdeb60c0940f9efd7852828ebb8116e1c5cc1f";
+  patches = let
+    dp = { ver ? "1%255.18.16-4", pname, name ? (pname + ".diff"), sha256 }: fetchurl {
+      url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
+          + "/debian/patches/${pname}.diff?inline=false";
+      inherit name sha256;
     };
+  in [
+    (dp {
+      pname = "20_no_Werror";
+      sha256 = "08z4s2ifiqyaacjpd9pzr59w8m4j3548kkaq1bwvp2gjn29m680x";
+    })
+    (dp {
+      pname = "30_ag_macros.m4_syntax_error";
+      sha256 = "1z8vmbwbkz3505wd33i2xx91mlf8rwsa7klndq37nw821skxwyh3";
+    })
+    (dp {
+      pname = "31_allow_overriding_AGexe_for_crossbuild";
+      sha256 = "0h9wkc9bqb509knh8mymi43hg6n6sxg2lixvjlchcx7z0j7p8xkf";
+    })
+  ];
 
-    buildInputs = [ guile which ];
+  outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
-    patchPhase =
-      '' for i in $(find -name \*.in)
-         do
-           sed -i "$i" -e's|/usr/bin/||g'
-         done
-      '';
+  nativeBuildInputs = [
+    which pkgconfig perl autoreconfHook/*patches applied*/
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # autogen needs a build autogen when cross-compiling
+    buildPackages.buildPackages.autogen buildPackages.texinfo
+  ];
+  buildInputs = [
+    guile libxml2
+  ];
 
-    # The tests rely on being able to find `libopts.a'.
-    configureFlags = "--enable-static";
+  preConfigure = ''
+    export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
+  '';
 
-    doCheck = true;
+  configureFlags =
+    [
+      # Make sure to use a static value for the timeout. If we do not set a value
+      # here autogen will select one based on the execution time of the configure
+      # phase which is not really reproducible.
+      #
+      # If you are curious about the number 78, it has been cargo-culted from
+      # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
+      "--enable-timeout=78"
+    ]
+    ++ (stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--with-libxml2=${libxml2.dev}"
+      "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
+      # the configure check for regcomp wants to run a host program
+      "libopts_cv_with_libregex=yes"
+      #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
+    ]);
 
-    meta = {
-      description = "GNU AutoGen, an automated text and program generation tool";
+  #doCheck = true; # not reliable
 
-      longDescription = ''
-        AutoGen is a tool designed to simplify the creation and maintenance
-        of programs that contain large amounts of repetitious text.  It is
-        especially valuable in programs that have several blocks of text that
-        must be kept synchronized.
+  postInstall = ''
+    mkdir -p $dev/bin
+    mv $bin/bin/autoopts-config $dev/bin
 
-        AutoGen can now accept XML files as definition input, in addition to
-        CGI data (for producing dynamic HTML) and traditional AutoGen
-        definitions.
+    for f in $lib/lib/autogen/tpl-config.tlib $out/share/autogen/tpl-config.tlib; do
+      sed -e "s|$dev/include|/no-such-autogen-include-path|" -i $f
+      sed -e "s|$bin/bin|/no-such-autogen-bin-path|" -i $f
+      sed -e "s|$lib/lib|/no-such-autogen-lib-path|" -i $f
+    done
 
-        A common example where this would be useful is in creating and
-        maintaining the code required for processing program options.
-        Processing options requires multiple constructs to be maintained in
-        parallel in different places in your program.  Options maintenance
-        needs to be done countless times.  So, AutoGen comes with an add-on
-        package named AutoOpts that simplifies the maintenance and
-        documentation of program options.
-      '';
+  '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # remove /build/** from RPATHs
+    for f in "$bin"/bin/*; do
+      local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)/build/[^:]*:@\1@g')"
+      patchelf --set-rpath "$nrp" "$f"
+    done
+  '';
 
-      license = "GPLv3+";
-
-      homepage = http://www.gnu.org/software/autogen/;
-
-      maintainers = [ stdenv.lib.maintainers.ludo ];
-    };
-  }
+  meta = with stdenv.lib; {
+    description = "Automated text and program generation tool";
+    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    homepage = "https://www.gnu.org/software/autogen/";
+    platforms = platforms.all;
+    maintainers = [ ];
+  };
+}

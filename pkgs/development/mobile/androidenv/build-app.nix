@@ -1,27 +1,26 @@
-{ stdenv, androidsdk, jdk, ant }:
-{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false
+{ composeAndroidPackages, stdenv, lib, ant, jdk, gnumake, gawk }:
+
+{ name
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
-}:
+, antFlags ? ""
+, ...
+}@args:
 
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
 
 let
-  platformName = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then "linux"
-    else if stdenv.system == "x86_64-darwin" then "macosx"
-    else throw "Platform: ${stdenv.system} is not supported!";
+  androidSdkFormalArgs = builtins.functionArgs composeAndroidPackages;
+  androidArgs = builtins.intersectAttrs androidSdkFormalArgs args;
+  androidsdk = (composeAndroidPackages androidArgs).androidsdk;
 
-  androidsdkComposition = androidsdk { inherit platformVersions useGoogleAPIs; };
+  extraArgs = removeAttrs args ([ "name" ] ++ builtins.attrNames androidSdkFormalArgs);
 in
-stdenv.mkDerivation {
-  inherit name src;
-  
-  ANDROID_HOME = "${androidsdkComposition}/libexec/android-sdk-${platformName}";
-
+stdenv.mkDerivation ({
+  name = lib.replaceChars [" "] [""] name; # Android APKs may contain white spaces in their names, but Nix store paths cannot
+  ANDROID_HOME = "${androidsdk}/libexec/android-sdk";
   buildInputs = [ jdk ant ];
-  
   buildPhase = ''
-    ${stdenv.lib.optionalString release ''
-    
+    ${lib.optionalString release ''
       # Provide key singing attributes
       ( echo "key.store=${keyStore}"
         echo "key.alias=${keyAlias}"
@@ -29,13 +28,21 @@ stdenv.mkDerivation {
         echo "key.alias.password=${keyAliasPassword}"
       ) >> ant.properties
     ''}
-  
+
     export ANDROID_SDK_HOME=`pwd` # Key files cannot be stored in the user's home directory. This overrides it.
-    ant ${if release then "release" else "debug"}
+
+    ${lib.optionalString (args ? includeNDK && args.includeNDK) ''
+      export GNUMAKE=${gnumake}/bin/make
+      export NDK_HOST_AWK=${gawk}/bin/gawk
+      ${androidsdk}/libexec/android-sdk/ndk-bundle/ndk-build
+    ''}
+    ant ${antFlags} ${if release then "release" else "debug"}
   '';
-  
   installPhase = ''
     mkdir -p $out
     mv bin/*-${if release then "release" else "debug"}.apk $out
+
+    mkdir -p $out/nix-support
+    echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
   '';
-}
+} // extraArgs)

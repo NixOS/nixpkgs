@@ -1,30 +1,30 @@
 { stdenv, fetchurl, gettext, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "cflow-1.4";
+  name = "cflow-1.6";
 
   src = fetchurl {
     url = "mirror://gnu/cflow/${name}.tar.bz2";
-    sha256 = "1jkbq97ajcf834z68hbn3xfhiz921zhn39gklml1racf0kb3jzh3";
+    sha256 = "1mzd3yf0dfv8h2av5vsxxlhpk21nw064h91b2kgfrdz92r0pnj1l";
   };
 
   patchPhase = ''
     substituteInPlace "src/cflow.h"					\
       --replace "/usr/bin/cpp"						\
-                "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/bin/cpp"
+                "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"
   '';
 
   buildInputs = [ gettext ] ++
     # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
     stdenv.lib.optional
-      (! (stdenv.lib.lists.any (x: stdenv.system == x)
+      (! (stdenv.lib.lists.any (x: stdenv.hostPlatform.system == x)
               [ "i686-cygwin" ]))
       emacs;
 
   doCheck = true;
 
-  meta = {
-    description = "GNU cflow, a tool to analyze the control flow of C programs";
+  meta = with stdenv.lib; {
+    description = "Tool to analyze the control flow of C programs";
 
     longDescription = ''
       GNU cflow analyzes a collection of C source files and prints a
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
       produced flowcharts in Emacs.
     '';
 
-    license = "GPLv3+";
+    license = licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/cflow/;
+    homepage = "https://www.gnu.org/software/cflow/";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ maintainers.vrthra ];
 
     /* On Darwin, build fails with:
 
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
              _argp_program_version$non_lazy_ptr in libcflow.a(argp-parse.o)
        ld: symbol(s) not found
      */
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

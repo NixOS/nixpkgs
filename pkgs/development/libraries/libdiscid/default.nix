@@ -1,26 +1,25 @@
-{ stdenv, fetchurl, cmake, pkgconfig }:
+{ stdenv, fetchurl, cmake, pkgconfig, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "libdiscid-0.2.2";
+  pname = "libdiscid";
+  version = "0.6.2";
 
-  buildNativeInputs = [ pkgconfig ];
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  
   src = fetchurl {
-    url = "http://users.musicbrainz.org/~matt/${name}.tar.gz";
-    sha256 = "00l4ln9rk0vqf67iccwqrgc9qx1al92i05zylh85kd1zn9d5sjwp";
+    url = "http://ftp.musicbrainz.org/pub/musicbrainz/libdiscid/${pname}-${version}.tar.gz";
+    sha256 = "1f9irlj3dpb5gyfdnb1m4skbjvx4d4hwiz2152f83m0d9jn47r7r";
   };
 
-  # developer forgot to update his version number
-  # this is propagated to pkg-config
-  preConfigure = ''
-    substituteInPlace "CMakeLists.txt" \
-      --replace "PROJECT_VERSION 0.1.1" "PROJECT_VERSION 0.2.2"
-  '';
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation -framework IOKit";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A C library for creating MusicBrainz DiscIDs from audio CDs";
-    homepage = http://musicbrainz.org/doc/libdiscid;
-    license = "LGPL-2.1";
+    homepage = "http://musicbrainz.org/doc/libdiscid";
+    maintainers = with maintainers; [ ehmry ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

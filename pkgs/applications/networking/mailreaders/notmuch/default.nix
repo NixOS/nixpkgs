@@ -1,71 +1,104 @@
-{ fetchurl, stdenv, bash, emacs, gdb, glib, gmime, gnupg1,
-  pkgconfig, talloc, xapian
+{ fetchurl, fetchgit, stdenv
+, pkgconfig, gnupg
+, xapian, gmime, talloc, zlib
+, doxygen, perl, texinfo
+, pythonPackages
+, emacs
+, ruby
+, which, dtach, openssl, bash, gdb, man
+, withEmacs ? true
 }:
 
-stdenv.mkDerivation rec {
-  name = "notmuch-0.14";
+with stdenv.lib;
 
-  src = fetchurl {
-    url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "095e191dc0f3125c4fd98440fdf55050cba01b8e9f68245ffe0190a7f39ca753";
+stdenv.mkDerivation rec {
+  version = "0.31";
+  pname = "notmuch";
+
+  passthru = {
+    pythonSourceRoot = "${src.name}/bindings/python";
+    inherit version;
   };
 
-  buildInputs = [ bash emacs gdb glib gmime gnupg1 pkgconfig talloc xapian ];
+  src = fetchgit {
+    url = "https://git.notmuchmail.org/git/notmuch";
+    sha256 = "0f9d9k9avb46yh2r8fvijvw7bryqwckvyzc68f9phax2g4c99x4x";
+    rev = version;
+  };
 
-  patchPhase = ''
-    (cd test && for prg in \
-        aggregate-results.sh \
-        argument-parsing \
-        atomicity \
-        author-order \
-        basic \
-        crypto \
-        count \
-        dump-restore \
-        emacs \
-        emacs-large-search-buffer \
-        encoding \
-        from-guessing \
-        help-test \
-        hooks \
-        json \
-        long-id \
-        maildir-sync \
-        multipart \
-        new \
-        notmuch-test \
-        python \
-        raw \
-        reply \
-        search \
-        search-by-folder \
-        search-insufficient-from-quoting \
-        search-folder-coherence \
-        search-limiting \
-        search-output \
-        search-position-overlap-bug \
-        symbol-hiding \
-        tagging \
-        test-lib.sh \
-        test-verbose \
-        thread-naming \
-        thread-order \
-        uuencode \
-    ;do
-      substituteInPlace "$prg" \
-        --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    done)
+  nativeBuildInputs = [
+    pkgconfig
+    doxygen                   # (optional) api docs
+    pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
+    texinfo                   # (optional) documentation -> doc/INSTALL
+  ] ++ optional withEmacs [ emacs ];
+
+  buildInputs = [
+    gnupg                     # undefined dependencies
+    xapian gmime talloc zlib  # dependencies described in INSTALL
+    perl
+    pythonPackages.python
+    ruby
+  ];
+
+  postPatch = ''
+    patchShebangs configure
+    patchShebangs test/
+
+    substituteInPlace lib/Makefile.local \
+      --replace '-install_name $(libdir)' "-install_name $out/lib"
+  '' + optionalString withEmacs ''
+    substituteInPlace emacs/notmuch-emacs-mua \
+      --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
+      --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
   '';
 
-  # XXX: emacs tests broken
-  doCheck = false;
+  configureFlags = [
+    "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
+    "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
+    "--infodir=${placeholder "info"}/share/info"
+  ] ++ optional (!withEmacs) "--without-emacs"
+    ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
+    ++ optional (isNull ruby) "--without-ruby";
+
+  # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
+  # friends
+  setOutputFlags = false;
+  enableParallelBuilding = true;
+  makeFlags = [ "V=1" ];
+
+
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional withEmacs "emacs";
+
+  preCheck = let
+    test-database = fetchurl {
+      url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
+      sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
+    };
+  in ''
+    mkdir -p test/test-databases
+    ln -s ${test-database} test/test-databases/database-v1.tar.xz
+  '';
+  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
   checkTarget = "test";
+  checkInputs = [
+    which dtach openssl bash
+    gdb man emacs
+  ];
+
+  installTargets = [ "install" "install-man" "install-info" ];
+
+  postInstall = stdenv.lib.optionalString withEmacs ''
+    moveToOutput bin/notmuch-emacs-mua $emacs
+  '';
+
+  dontGzipMan = true; # already compressed
 
   meta = {
-    description = "Notmuch -- The mail indexer";
-    longDescription = "";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
-    platforms = stdenv.lib.platforms.gnu;
+    description = "Mail indexer";
+    homepage    = "https://notmuchmail.org/";
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ flokli puckipedia ];
+    platforms   = platforms.unix;
   };
 }

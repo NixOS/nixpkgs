@@ -1,18 +1,67 @@
-{stdenv, fetchurl, fuse, python, perl, keyutils, pam, nss, nspr}:
-stdenv.mkDerivation {
-  name = "ecryptfs-82";
+{ stdenv, fetchurl, pkgconfig, perl, util-linux, keyutils, nss, nspr, python2, pam, enablePython ? false
+, intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
+
+stdenv.mkDerivation rec {
+  pname = "ecryptfs";
+  version = "111";
 
   src = fetchurl {
-    url = http://launchpad.net/ecryptfs/trunk/82/+download/ecryptfs-utils_82.orig.tar.gz;
-    sha256 = "1w3swispgp71prz8h56hqby2wwnvam5vllqvc69rn8cf605i69a6";
+    url = "https://launchpad.net/ecryptfs/trunk/${version}/+download/ecryptfs-utils_${version}.orig.tar.gz";
+    sha256 = "0zwq19siiwf09h7lwa7n7mgmrr8cxifp45lmwgcfr8c1gviv6b0i";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss";
+  # TODO: replace wrapperDir below with from <nixos> config.security.wrapperDir;
+  wrapperDir = "/run/wrappers/bin";
 
-  buildInputs = [ python perl keyutils pam nss nspr ];
+  postPatch = ''
+    FILES="$(grep -r '/bin/sh' src/utils -l; find src -name \*.c)"
+    for file in $FILES; do
+      substituteInPlace "$file" \
+        --replace /bin/mount ${util-linux}/bin/mount \
+        --replace /bin/umount ${util-linux}/bin/umount \
+        --replace /sbin/mount.ecryptfs_private ${wrapperDir}/mount.ecryptfs_private \
+        --replace /sbin/umount.ecryptfs_private ${wrapperDir}/umount.ecryptfs_private \
+        --replace /sbin/mount.ecryptfs $out/sbin/mount.ecryptfs \
+        --replace /sbin/umount.ecryptfs $out/sbin/umount.ecryptfs \
+        --replace /usr/bin/ecryptfs-rewrite-file $out/bin/ecryptfs-rewrite-file \
+        --replace /usr/bin/ecryptfs-mount-private $out/bin/ecryptfs-mount-private \
+        --replace /usr/bin/ecryptfs-setup-private $out/bin/ecryptfs-setup-private \
+        --replace /sbin/cryptsetup ${cryptsetup}/sbin/cryptsetup \
+        --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup \
+        --replace /sbin/unix_chkpwd ${wrapperDir}/unix_chkpwd \
+        --replace /bin/bash ${bash}/bin/bash
+    done
+  '';
 
-  meta = {
+  configureFlags = stdenv.lib.optionals (!enablePython) [ "--disable-pywrap" ];
+
+  nativeBuildInputs = [ pkgconfig ]
+  # if python2 support is requested, it is needed at builtime as well as runtime.
+  ++ stdenv.lib.optionals (enablePython) [ python2 ]
+  ;
+  buildInputs = [ perl nss nspr pam intltool makeWrapper ]
+  ++ stdenv.lib.optionals (enablePython) [ python2 ]
+  ;
+  propagatedBuildInputs = [ coreutils gettext cryptsetup lvm2 rsync keyutils which ];
+
+  postInstall = ''
+    FILES="$(grep -r '/bin/sh' $out/bin -l)"
+    for file in $FILES; do
+      wrapProgram $file \
+        --prefix PATH ":" "${coreutils}/bin" \
+        --prefix PATH ":" "${gettext}/bin" \
+        --prefix PATH ":" "${rsync}/bin" \
+        --prefix PATH ":" "${keyutils}/bin" \
+        --prefix PATH ":" "${which}/bin" \
+        --prefix PATH ":" "${lsof}/bin" \
+        --prefix PATH ":" "$out/bin"
+    done
+  '';
+
+  meta = with stdenv.lib; {
     description = "Enterprise-class stacked cryptographic filesystem";
-    license = "GPLv2+";
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ obadz ];
+    platforms   = platforms.linux;
   };
 }

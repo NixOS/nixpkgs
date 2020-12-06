@@ -1,90 +1,85 @@
-{ stdenv, fetchurl, makeDesktopItem
-, libSM, libX11, libXext, libXcomposite, libXcursor, libXdamage
-, libXfixes, libXi, libXinerama, libXrandr, libXrender
-, dbus, dbus_glib, fontconfig, gcc, patchelf
-, atk, glib, gdk_pixbuf, gtk, pango
-}:
+{ stdenv, lib, buildFHSUserEnv, writeScript, makeDesktopItem }:
 
-# this package contains the daemon version of dropbox
-# it's unfortunately closed source
-#
-# note: the resulting program has to be invoced as
-# 'dropbox' because the internal python engine takes
-# uses the name of the program as starting point.
-#
-# todo: dropbox is shipped with some copies of libraries.
-# replace these libraries with the appropriate ones in
-# nixpkgs.
+let platforms = [ "i686-linux" "x86_64-linux" ]; in
 
-# note: there is a i686 version available as well
-assert stdenv.system == "x86_64-linux";
+assert lib.elem stdenv.hostPlatform.system platforms;
+
+# Dropbox client to bootstrap installation.
+# The client is self-updating, so the actual version may be newer.
+let
+  version = "111.3.447";
+
+  arch = {
+    x86_64-linux = "x86_64";
+    i686-linux   = "x86";
+  }.${stdenv.hostPlatform.system};
+
+  installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
+in
 
 let
-
-  version = "1.4.0";
-  sha256 = "93933d95cce5956ed99342fa342d01ce2bde8d2e4339afb97f23e0c0ec98875e";
-
-  # relative location where the dropbox libraries are stored
-  appdir = "opt/dropbox";
-
-  # Libraries referenced by dropbox binary.
-  # Be aware that future versions of the dropbox binary may refer
-  # to different versions than are currently in these packages.
-  ldpath = stdenv.lib.makeSearchPath "lib" [
-      libSM libX11 libXext libXcomposite libXcursor libXdamage
-      libXfixes libXi libXinerama libXrandr libXrender
-      atk dbus dbus_glib glib fontconfig gcc gdk_pixbuf
-      gtk pango
-    ];
-
   desktopItem = makeDesktopItem {
     name = "dropbox";
     exec = "dropbox";
-    comment = "Online directories";
+    comment = "Sync your files across computers and to the web";
     desktopName = "Dropbox";
-    genericName = "Online storage";    
-    categories = "Application;Internet;";
+    genericName = "File Synchronizer";
+    categories = "Network;FileTransfer;";
+    startupNotify = "false";
   };
+in
 
-in stdenv.mkDerivation {
-  name = "dropbox-${version}-bin";
-  src = fetchurl {
-    name = "dropbox-${version}.tar.gz";
-    # using version-specific URL so if the version is no longer available,
-    # build will fail without having to finish downloading first
-    # url = "http://www.dropbox.com/download?plat=lnx.x86_64";
-    url = "http://dl-web.dropbox.com/u/17/dropbox-lnx.x86_64-${version}.tar.gz";
-    inherit sha256;
-  };
+buildFHSUserEnv {
+  name = "dropbox";
 
-  sourceRoot = ".";
+  targetPkgs = pkgs: with pkgs; with xorg; [
+    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
+    libXxf86vm libxcb xkeyboardconfig
+    curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
+    procps zlib mesa libxshmfence libpthreadstubs libappindicator
+  ];
 
-  patchPhase = ''
-    rm -f .dropbox-dist/dropboxd
+  extraInstallCommands = ''
+    mkdir -p "$out/share/applications"
+    cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
 
-  installPhase = ''
-    ensureDir "$out/${appdir}"
-    cp -r .dropbox-dist/* "$out/${appdir}/"
-    ensureDir "$out/bin"
-    ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
+  runScript = writeScript "install-and-start-dropbox" ''
+    export BROWSER=firefox
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
-      "$out/${appdir}/dropbox"
+    set -e
 
-    RPATH=${ldpath}:${gcc.gcc}/lib64:$out/${appdir}
-    echo "updating rpaths to: $RPATH"
-    find "$out/${appdir}" -type f -a -perm +0100 \
-      -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
+    do_install=
+    if ! [ -d "$HOME/.dropbox-dist" ]; then
+        do_install=1
+    else
+        installed_version=$(cat "$HOME/.dropbox-dist/VERSION")
+        latest_version=$(printf "${version}\n$installed_version\n" | sort -rV | head -n 1)
+        if [ "x$installed_version" != "x$latest_version" ]; then
+            do_install=1
+        fi
+    fi
 
-    ensureDir "$out/share/applications"
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    if [ -n "$do_install" ]; then
+        installer=$(mktemp)
+        # Dropbox is not installed.
+        # Download and unpack the client. If a newer version is available,
+        # the client will update itself when run.
+        curl '${installer}' >"$installer"
+        pkill dropbox || true
+        rm -fr "$HOME/.dropbox-dist"
+        tar -C "$HOME" -x -z -f "$installer"
+        rm "$installer"
+    fi
+
+    exec "$HOME/.dropbox-dist/dropboxd" "$@"
   '';
 
-  buildInputs = [ patchelf ];
-
-  meta = {
+  meta = with lib; {
     description = "Online stored folders (daemon version)";
-    homepage = http://www.dropbox.com;
+    homepage    = "http://www.dropbox.com/";
+    license     = licenses.unfree;
+    maintainers = with maintainers; [ ttuegel ];
+    platforms   = [ "i686-linux" "x86_64-linux" ];
   };
 }

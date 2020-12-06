@@ -1,27 +1,25 @@
-{ stdenv, fetchgit, alsaLib, cmake, gtk, jackaudio, libgnomecanvas
+{ stdenv, fetchurl, alsaLib, cmake, gtk2, libjack2, libgnomecanvas
 , libpthreadstubs, libsamplerate, libsndfile, libtool, libxml2
-, pkgconfig }:
+, pkgconfig, openssl }:
 
 stdenv.mkDerivation  rec {
-  name = "petri-foo";
+  pname = "petri-foo";
+  version = "0.1.87";
 
-  src = fetchgit {
-    url = https://github.com/licnep/Petri-Foo.git;
-    rev = "eef3b6efebe842d2fa18ed32b881fea4562b84e0";
-    sha256 = "a20c3f1a633500a65c099c528c7dc2405daa60738b64d881bb8f2036ae59913c";
+  src = fetchurl {
+    url =  "mirror://sourceforge/petri-foo/${pname}-${version}.tar.bz2";
+    sha256 = "0b25iicgn8c42487fdw32ycfrll1pm2zjgy5djvgw6mfcaa4gizh";
   };
 
   buildInputs =
-   [ alsaLib cmake  gtk jackaudio libgnomecanvas libpthreadstubs
-     libsamplerate libsndfile libtool libxml2 pkgconfig
+   [ alsaLib cmake gtk2 libjack2 libgnomecanvas libpthreadstubs
+     libsamplerate libsndfile libtool libxml2 pkgconfig openssl
    ];
-
-  dontUseCmakeBuildDir=true;
 
   meta = with stdenv.lib; {
     description = "MIDI controllable audio sampler";
     longDescription = "a fork of Specimen";
-    homepage = http://petri-foo.sourceforge.net;
+    homepage = "http://petri-foo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

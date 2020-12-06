@@ -1,19 +1,51 @@
-{stdenv, fetchurl, python, cheetahTemplate, makeWrapper, par2cmdline, unzip, unrar}:
+{ stdenv
+, fetchFromGitHub
+, python3
+, par2cmdline
+, unzip
+, unrar
+, p7zip
+, makeWrapper
+}:
 
-stdenv.mkDerivation {
-  name = "sabnzbd-0.4.12";
-  
-  src = fetchurl {
-    url = http://mesh.dl.sourceforge.net/project/sabnzbdplus/sabnzbdplus/sabnzbd-0.4.12/SABnzbd-0.4.12-src.tar.gz;
-    sha256 = "35ce4172688925ef608fba433ff676357dab7d2abdc1cf83112a1c99682fdd32";
+let
+  pythonEnv = python3.withPackages(ps: with ps; [
+    chardet
+    cheetah3
+    cherrypy
+    cryptography
+    configobj
+    feedparser
+    sabyenc3
+  ]);
+  path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
+in stdenv.mkDerivation rec {
+  version = "3.1.1";
+  pname = "sabnzbd";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "0m39r2il7d014kf2p6v28lw2hzshm6bhhdchqa8wzyvvmygqmwf2";
   };
 
-  buildInputs = [makeWrapper python cheetahTemplate];
-  inherit stdenv python cheetahTemplate par2cmdline unzip unrar; 
+  buildInputs = [ pythonEnv makeWrapper ];
 
-  builder = ./builder.sh;
-  
-  meta = {
-    description = "Usenet NZB downloader, par2 repairer and auto extracting server.";
+  installPhase = ''
+    mkdir -p $out
+    cp -R * $out/
+    mkdir $out/bin
+    echo "${pythonEnv}/bin/python $out/SABnzbd.py \$*" > $out/bin/sabnzbd
+    chmod +x $out/bin/sabnzbd
+    wrapProgram $out/bin/sabnzbd --set PATH ${path}
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Usenet NZB downloader, par2 repairer and auto extracting server";
+    homepage = "https://sabnzbd.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ fridh ];
   };
 }

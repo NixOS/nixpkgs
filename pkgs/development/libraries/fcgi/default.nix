@@ -1,20 +1,24 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "fcgi-2.4.0";
+  pname = "fcgi";
+  version = "2.4.2";
 
-  src = fetchurl {
-    url = "http://www.fastcgi.com/dist/${name}.tar.gz";
-    sha256 = "1f857wnl1d6jfrgfgfpz3zdaj8fch3vr13mnpcpvy8bang34bz36";
+  src = fetchFromGitHub {
+    owner = "FastCGI-Archives";
+    repo = "fcgi2";
+    rev = version;
+    sha256 = "1jhz6jfwv5kawa8kajvg18nfwc1b30f38zc0lggszd1vcmrwqkz1";
   };
 
-  patches = [ ./gcc-4.4.diff ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   postInstall = "ln -s . $out/include/fastcgi";
 
-  meta = {
-    description = "FastCGI  is a language independent, scalable, open extension to CG";
-    homepage = http://www.fastcgi.com/;
+  meta = with stdenv.lib; {
+    description = "A language independent, scalable, open extension to CG";
+    homepage = "http://www.fastcgi.com/";
     license = "FastCGI see LICENSE.TERMS";
+    platforms = platforms.all;
   };
 }

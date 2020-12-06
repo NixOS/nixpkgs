@@ -1,39 +1,52 @@
-{stdenv, fetchurl, makeWrapper, openjdk, rlwrap}:
+{ stdenv, fetchurl, makeWrapper
+, coreutils, jdk, rlwrap, gnupg }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "1.7.1";
-  name = "${pname}-${version}";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "7684b899edd6004abafd8e26d2b43d5691217f1aaca535fb94bde1594c8129a5";
+    sha256 = "1h0gpzpr7xk6hvmrrq41bcp2k9aai348baf8ad9bxvci01n4zb12";
   };
 
   jarsrc = fetchurl {
-    url = "https://github.com/downloads/technomancy/leiningen/leiningen-${version}-standalone.jar";
-    sha256 = "5d167b7572b9652d44c2b58a13829704842d976fd2236530ef552194e6c12150";
+    # NOTE: This is actually a .jar, Github has issues
+    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.zip";
+    sha256 = "1y2mva5s2w2szzn1b9rhz0dvkffls4ravii677ybcf2w9wd86z7a";
   };
 
-  clojuresrc = fetchurl {
-    url = "http://build.clojure.org/releases/org/clojure/clojure/1.2.1/clojure-1.2.1.jar";
-    sha256 = "b38853254a2df9138b2e2c12be0dca3600fa7e2a951fed05fc3ba2d9141a3fb0";
-  };
+  JARNAME = "${pname}-${version}-standalone.jar";
 
-  patches = [ ./lein-rlwrap.patch ./lein.patch ];
-
-  inherit rlwrap;
-
-  builder = ./builder.sh;
+  dontUnpack = true;
 
   buildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ jdk ];
 
-  propagatedBuildInputs = [ openjdk ];
+  # the jar is not in share/java, because it's a standalone jar and should
+  # never be picked up by set-java-classpath.sh
+
+  installPhase = ''
+    mkdir -p $out/bin $out/share
+    cp -v $src $out/bin/lein
+    cp -v $jarsrc $out/share/$JARNAME
+  '';
+
+  fixupPhase = ''
+    chmod +x $out/bin/lein
+    patchShebangs $out/bin/lein
+    substituteInPlace $out/bin/lein \
+      --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
+    wrapProgram $out/bin/lein \
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \
+      --set LEIN_GPG ${gnupg}/bin/gpg \
+      --set JAVA_CMD ${jdk}/bin/java
+  '';
 
   meta = {
-    homepage = https://github.com/technomancy/leiningen;
+    homepage = "https://leiningen.org/";
     description = "Project automation for Clojure";
-    license = "EPL";
-    platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.epl10;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

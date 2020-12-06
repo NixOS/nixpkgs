@@ -1,21 +1,25 @@
-{ stdenv, fetchurl }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "wqy-zenhei-0.4.23-1";
+let
+  version = "0.9.45";
+in fetchzip rec {
+  name = "wqy-zenhei-${version}";
 
-  src = fetchurl {
-    url = http://prdownloads.sourceforge.net/wqy/wqy-zenhei-0.4.23-1.tar.gz;
-    sha256 = "138nn81ai240av0xvcq4ab3rl73n0qlj3gwr3a36i63ry8vdj5qm";
-  };
+  url = "mirror://sourceforge/wqy/${name}.tar.gz";
 
-  installPhase =
-    ''
-      mkdir -p $out/share/fonts
-      cp *.ttf $out/share/fonts
-    '';
+  postFetch = ''
+    tar -xzf $downloadedFile --strip-components=1
+    mkdir -p $out/share/fonts
+    install -m644 *.ttc $out/share/fonts/
+  '';
+
+  sha256 = "0hbjq6afcd63nsyjzrjf8fmm7pn70jcly7fjzjw23v36ffi0g255";
 
   meta = {
     description = "A (mainly) Chinese Unicode font";
+    homepage = "http://wenq.org";
+    license = lib.licenses.gpl2; # with font embedding exceptions
+    maintainers = [ lib.maintainers.pkmx ];
+    platforms = lib.platforms.all;
   };
 }
-

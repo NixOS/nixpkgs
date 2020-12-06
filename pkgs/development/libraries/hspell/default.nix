@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     version = "1.1";
   };
 
+  PERL_USE_UNSAFE_INC = "1";
+
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
     sha256 = "08x7rigq5pa1pfpl30qp353hbdkpadr1zc49slpczhsn0sg36pd6";
@@ -16,13 +18,10 @@ stdenv.mkDerivation rec {
   patchPhase = ''patchShebangs .'';
   buildInputs = [ perl zlib ];
 
-  makeFlags = "CFLAGS=-fPIC";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Hebrew spell checker";
-    homepage = http://hspell.ivrix.org.il/;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-# Note that I don't speak hebrew, so I can only fix compile problems
+    homepage = "http://hspell.ivrix.org.il/";
+    platforms = platforms.all;
+    license = licenses.gpl2;
   };
 }

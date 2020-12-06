@@ -1,21 +1,31 @@
-{ stdenv, fetchurl, boost, libwpd, libwpg, pkgconfig }:
+{ stdenv, fetchurl, boost, libwpd, libwpg, pkgconfig, zlib, gperf
+, librevenge, libxml2, icu, perl, cppunit, doxygen
+}:
 
 stdenv.mkDerivation rec {
-  name = "libvisio-0.0.19";
+  pname = "libvisio";
+  version = "0.1.7";
+
+  outputs = [ "out" "bin" "dev" "doc" ];
 
   src = fetchurl {
-    url = "http://dev-www.libreoffice.org/src/${name}.tar.xz";
-    sha256 = "1iqkz280mi066bdccyxagkqm41i270nx01cacvgjq2pflgd3njd1";
+    url = "https://dev-www.libreoffice.org/src/libvisio/${pname}-${version}.tar.xz";
+    sha256 = "0k7adcbbf27l7n453cca1m6s9yj6qvb5j6bsg2db09ybf3w8vbwg";
   };
 
-  buildNativeInputs = [ pkgconfig ];
-  buildInputs = [ boost libwpd libwpg ];
+  nativeBuildInputs = [ pkgconfig cppunit doxygen ];
+  buildInputs = [ boost libwpd libwpg zlib gperf librevenge libxml2 icu perl ];
 
-  configureFlags = "--disable-werror";
+  configureFlags = [
+    "--disable-werror"
+  ];
 
-  meta = {
+  doCheck = true;
+
+  meta = with stdenv.lib; {
     description = "A library providing ability to interpret and import visio diagrams into various applications";
-    homepage = http://www.freedesktop.org/wiki/Software/libvisio;
-    platforms = stdenv.lib.platforms.gnu; # random choice
+    homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libvisio";
+    license = licenses.mpl20;
+    platforms = platforms.unix;
   };
 }

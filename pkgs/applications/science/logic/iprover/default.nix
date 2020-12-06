@@ -1,58 +1,33 @@
-x@{builderDefsPackage
-  , ocaml, eprover
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, ocaml, eprover, zlib }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="iprover";
-    version="0.8.1";
-    name="${baseName}_v${version}";
-    url="${baseName}.googlecode.com/files/${name}.tar.gz";
-    hash="15qn523w4l296np5rnkwi50a5x2xqz0kaza7bsh9bkazph7jma7w";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "iprover";
+  version = "3.1";
+
+  src = fetchurl {
+    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover-v${version}.tar.gz";
+    sha256 = "0lik8p7ayhjwpkln1iwf0ri84ramhch74j5nj6z7ph6wfi92pgg8";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ ocaml eprover zlib ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMake" "doDeploy"];
-  configureCommand = "sh configure";
-  doDeploy = a.fullDepEntry (''
+  preConfigure = ''patchShebangs .'';
+
+  installPhase = ''
     mkdir -p "$out/bin"
     cp iproveropt "$out/bin"
 
-    mkdir -p "$out/share/${name}"
-    cp *.p "$out/share/${name}"
-    echo -e "#! /bin/sh\\n$out/bin/iproveropt --clausifier \"${eprover}/bin/eprover\" --clausifier_options \" --tstp-format --silent --cnf \" \"\$@\"" > "$out"/bin/iprover
+    mkdir -p "$out/share/${pname}-${version}"
+    cp *.p "$out/share/${pname}-${version}"
+    echo -e "#! ${stdenv.shell}\\n$out/bin/iproveropt --clausifier \"${eprover}/bin/eprover\" --clausifier_options \" --tstp-format --silent --cnf \" \"\$@\"" > "$out"/bin/iprover
     chmod a+x  "$out"/bin/iprover
-  '') ["defEnsureDir" "minInit" "doMake"];
-      
-  meta = {
-    description = "An automated first-order logic theorem prover";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = "GPLv3";
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://code.google.com/p/iprover/downloads/list";
-    };
-  };
-}) x
+  '';
 
+  meta = with stdenv.lib; {
+    description = "An automated first-order logic theorem prover";
+    homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
+    maintainers = with maintainers; [ raskin gebner ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+  };
+}

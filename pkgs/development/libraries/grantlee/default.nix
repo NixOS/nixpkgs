@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qt4, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "grantlee-0.2.0";
+  name = "grantlee-0.5.1";
 
 # Upstream download server has country code firewall, so I made a mirror.
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       "http://downloads.grantlee.org/${name}.tar.gz"
       "http://www.loegria.net/grantlee/${name}.tar.gz"
     ];
-    sha256 = "0x6lvn5i9025vdbs6sybs2mm5ay5y40f7nvb58mc2k518rmjb9j3";
+    sha256 = "1b501xbimizmbmysl1j5zgnp48qw0r2r7lhgmxvzhzlv9jzhj60r";
   };
 
   buildInputs = [ cmake qt4 ];
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
       The syntax is intended to follow the syntax of the Django template system,
       and the design of Django is reused in Grantlee.'';
 
-    homepage = http://gitorious.org/grantlee;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    homepage = "http://gitorious.org/grantlee";
+    license = stdenv.lib.licenses.lgpl21;
     inherit (qt4.meta) platforms;
   };
 }

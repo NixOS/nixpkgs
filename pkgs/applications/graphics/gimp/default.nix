@@ -1,32 +1,182 @@
-{ stdenv, fetchurl, pkgconfig, gtk, freetype
-, fontconfig, libart_lgpl, libtiff, libjpeg, libpng12, libexif, zlib, perl
-, perlXMLParser, python, pygtk, gettext, xlibs, intltool, babl_0_0_22, gegl_0_0_22
+{ stdenv
+, lib
+, fetchurl
+, substituteAll
+, autoreconfHook
+, pkgconfig
+, intltool
+, babl
+, gegl
+, gtk2
+, glib
+, gdk-pixbuf
+, isocodes
+, pango
+, cairo
+, freetype
+, fontconfig
+, lcms
+, libpng
+, libjpeg
+, poppler
+, poppler_data
+, libtiff
+, libmng
+, librsvg
+, libwmf
+, zlib
+, libzip
+, ghostscript
+, aalib
+, shared-mime-info
+, python2
+, libexif
+, gettext
+, makeWrapper
+, xorg
+, glib-networking
+, libmypaint
+, gexiv2
+, harfbuzz
+, mypaint-brushes1
+, libwebp
+, libheif
+, libgudev
+, openexr
+, AppKit
+, Cocoa
+, gtk-mac-integration-gtk2
 }:
 
-stdenv.mkDerivation rec {
-  name = "gimp-2.6.12";
-  
+let
+  python = python2.withPackages (pp: [ pp.pygtk ]);
+in stdenv.mkDerivation rec {
+  pname = "gimp";
+  version = "2.10.22";
+
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
-    url = "ftp://ftp.gtk.org/pub/gimp/v2.6/${name}.tar.bz2";
-    sha256 = "0qpcgaa4pdqqhyyy8vjvzfflxgsrrs25zk79gixzlnbzq3qwjlym";
+    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "1fqqyshakvdarf1jipk2n33ibqr23ni22z3d8srq13bpydblpf1d";
   };
-  
-  buildInputs = [
-    pkgconfig gtk freetype fontconfig
-    libart_lgpl libtiff libjpeg libpng12 libexif zlib perl
-    perlXMLParser python pygtk gettext intltool babl_0_0_22 gegl_0_0_22
+
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+
+    # Use absolute paths instead of relying on PATH
+    # to make sure plug-ins are loaded by the correct interpreter.
+    ./hardcode-plugin-interpreters.patch
   ];
 
-  passthru = { inherit gtk; }; # probably its a good idea to use the same gtk in plugins ?
+  nativeBuildInputs = [
+    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
+    pkgconfig
+    intltool
+    gettext
+    makeWrapper
+  ];
 
-  configureFlags = [ "--disable-print" ];
+  buildInputs = [
+    babl
+    gegl
+    gtk2
+    glib
+    gdk-pixbuf
+    pango
+    cairo
+    gexiv2
+    harfbuzz
+    isocodes
+    freetype
+    fontconfig
+    lcms
+    libpng
+    libjpeg
+    poppler
+    poppler_data
+    libtiff
+    openexr
+    libmng
+    librsvg
+    libwmf
+    zlib
+    libzip
+    ghostscript
+    aalib
+    shared-mime-info
+    libwebp
+    libheif
+    python
+    libexif
+    xorg.libXpm
+    glib-networking
+    libmypaint
+    mypaint-brushes1
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Cocoa
+    gtk-mac-integration-gtk2
+  ] ++ lib.optionals stdenv.isLinux [
+    libgudev
+  ];
 
-  # "screenshot" needs this.
-  NIX_LDFLAGS = "-rpath ${xlibs.libX11}/lib";
+  # needed by gimp-2.0.pc
+  propagatedBuildInputs = [
+    gegl
+  ];
 
-  meta = {
+  configureFlags = [
+    "--without-webkit" # old version is required
+    "--disable-check-update"
+    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
+    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
+    "--libdir=\${exec_prefix}/lib"
+  ];
+
+  enableParallelBuilding = true;
+
+  # on Darwin,
+  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
+  doCheck = !stdenv.isDarwin;
+
+  # Check if librsvg was built with --disable-pixbuf-loader.
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+
+  preConfigure = ''
+    # The check runs before glib-networking is registered
+    export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/gimp-${lib.versions.majorMinor version} \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+  '';
+
+  passthru = rec {
+    # The declarations for `gimp-with-plugins` wrapper,
+    # used for determining plug-in installation paths
+    majorVersion = "${lib.versions.major version}.0";
+    targetLibDir = "lib/gimp/${majorVersion}";
+    targetDataDir = "share/gimp/${majorVersion}";
+    targetPluginDir = "${targetLibDir}/plug-ins";
+    targetScriptDir = "${targetDataDir}/scripts";
+
+    # probably its a good idea to use the same gtk in plugins ?
+    gtk = gtk2;
+  };
+
+  meta = with lib; {
     description = "The GNU Image Manipulation Program";
-    homepage = http://www.gimp.org/;
-    license = "GPL";
+    homepage = "https://www.gimp.org/";
+    maintainers = with maintainers; [ jtojnar ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
 }

@@ -1,28 +1,30 @@
-{ fetchurl, stdenv, ncurses, boehmgc, perl, help2man }:
+{ fetchurl, stdenv, pkgconfig, ncurses, boehmgc, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "zile-2.4.9";
+  name = "zile-2.4.14";
 
   src = fetchurl {
     url = "mirror://gnu/zile/${name}.tar.gz";
-    sha256 = "0j801c28ypm924rw3lqyb6khxyslg6ycrv16wmmwcam0mk3mj6f7";
+    sha256 = "0x3byaddms8l3g7igx6njycqsq98wgapysdb5c7lhcnajlkp8y3s";
   };
 
   buildInputs = [ ncurses boehmgc ];
-  buildNativeInputs = [ help2man perl ];
-
-  # `help2man' wants to run Zile, which fails when cross-compiling.
-  crossAttrs.buildNativeInputs = [];
+  nativeBuildInputs = [ perl pkgconfig ]
+    # `help2man' wants to run Zile, which won't work when the
+    # newly-produced binary can't be run at build-time.
+    ++ stdenv.lib.optional
+         (stdenv.hostPlatform == stdenv.buildPlatform)
+         help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
   doCheck = false;
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  preConfigure = "export gl_cv_func_fstatat_zero_flag=yes";
+  gl_cv_func_fstatat_zero_flag="yes";
 
-  meta = {
-    description = "GNU Zile, a lightweight Emacs clone";
+  meta = with stdenv.lib; {
+    description = "Lightweight Emacs clone";
 
     longDescription = ''
       GNU Zile, which is a lightweight Emacs clone.  Zile is short
@@ -43,10 +45,12 @@ stdenv.mkDerivation rec {
       compiles to about 130Kb.
     '';
 
-    homepage = http://www.gnu.org/software/zile/;
+    homepage = "https://www.gnu.org/software/zile/";
 
-    license = "GPLv3+";
+    license = licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = with maintainers; [ pSub ];
+
+    platforms = platforms.unix;
   };
 }

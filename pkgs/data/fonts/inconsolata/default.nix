@@ -1,51 +1,19 @@
-x@{builderDefsPackage
-  , fontforge
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, google-fonts }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    name="inconsolata";
-    url="http://www.levien.com/type/myfonts/Inconsolata.sfd";
-    hash="1cd29c8396adb18bfeddb1abf5bdb98b677649bb9b09f126d1335b123a4cfddb";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
+stdenv.mkDerivation {
+  pname = "inconsolata";
 
-  inherit (sourceInfo) name;
-  inherit buildInputs;
+  inherit (google-fonts) src version;
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["copySrc" "generateFontsFromSFD" "installFonts"];
-  
-  copySrc = a.fullDepEntry (''
-    cp ${src} inconsolata.sfd
-  '') ["minInit"];
+  installPhase = ''
+    install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/*.ttf
+  '';
 
-  generateFontsFromSFD = a.generateFontsFromSFD // {deps=["addInputs"];};
-
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = "https://www.levien.com/type/myfonts/inconsolata.html";
     description = "A monospace font for both screen and print";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      all;
+    maintainers = with maintainers; [ mikoim raskin rycee ];
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.levien.com/type/myfonts/inconsolata.html";
-    };
-  };
-}) x
-
+}

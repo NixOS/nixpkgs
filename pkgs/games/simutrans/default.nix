@@ -1,78 +1,171 @@
-{ stdenv, fetchurl, unzip, zlib, libpng, bzip2, SDL, SDL_mixer } :
+{ stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
+, buildEnv, config, runtimeShell
+}:
 
 let
-  # This is the default "pakset" of objects, images, text, music, etc.
-  pak64 = fetchurl {
-    url = http://sourceforge.net/projects/simutrans/files/pak64/110-0-1/simupak64-110-0-1.zip/download;
-    name = "pak64.zip";
-    sha256 = "0gs6k9dbbhh60g2smsx2jza65vyss616bpngwpvilrvb5rzzrxcq";
+  # Choose your "paksets" of objects, images, text, music, etc.
+  paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
+
+  result = with stdenv.lib; withPaks (
+    if paksets == "*" then attrValues pakSpec # taking all
+      else map (name: pakSpec.${name}) (splitString " " paksets)
+  );
+
+  ver1 = "120";
+  ver2 = "4";
+  ver3 = "1";
+  version =   "${ver1}.${ver2}.${ver3}";
+  ver_dash =  "${ver1}-${ver2}-${ver3}";
+
+  binary_src = fetchurl {
+    url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
+    sha256 = "0yw7vjvmczp022mgk35swwhpbiszpz91mwsgicxglwivgc30vvic";
   };
 
-  # The source distribution seems to be missing some text files.
-  # So we will get them from the binary Linux release (which apparently has them).
-  langtab = fetchurl {
-    url = http://sourceforge.net/projects/simutrans/files/simutrans/110-0-1/simulinux-110-0-1.zip/download;
-    name = "simulinux-110-0-1.zip";
-    sha256 = "15z13kazdzhfzwxry7a766xkkdzaidvscylzrjkx3nnbcq6461s4";
+
+  # As of 2015/03, many packsets still didn't have a release for version 120.
+  pakSpec = stdenv.lib.mapAttrs
+    (pakName: attrs: mkPak (attrs // {inherit pakName;}))
+  {
+    pak64 = {
+      srcPath = "121-0/simupak64-121-0";
+      sha256 = "1k335kh8dhm1hdn5iwn3sdgnrlpk0rqxmmgqgqcwsi09cmw45m5c";
+    };
+    "pak64.japan" = {
+      # No release for 120.2 yet!
+      srcPath = "120-0/simupak64.japan-120-0-1";
+      sha256 = "14swy3h4ij74bgaw7scyvmivfb5fmp21nixmhlpk3mav3wr3167i";
+    };
+
+    pak128 = {
+      srcPath = "pak128%20for%20ST%20120.4.1%20%282.8.1%2C%20priority%20signals%20%2B%20bugfix%29/pak128";
+      sha256 = "0z01y7r0rz7q79vr17bbnkgcbjjrimphy1dwb1pgbiv4klz7j5xw";
+    };
+    "pak128.britain" = {
+      srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.18-120-3";
+      sha256 = "1kyb0s54kysvdr0zdln9106yx75d71j4lbw3v87k3i440cj3r1d3";
+    };
+    "pak128.cs" = { # note: it needs pak128 to work
+      url = "mirror://sourceforge/simutrans/Pak128.CS/pak128.cz_v.0.2.1.zip";
+      sha256 = "008d8x1s0vxsq78rkczlnf57pv1n5hi1v5nbd1l5w3yls7lk11sc";
+    };
+    "pak128.german" = {
+      url = "mirror://sourceforge/simutrans/PAK128.german/"
+        + "pak128.german_1.2_for_ST_121.0/PAK128.german_1.2_for_ST_121-0.zip";
+      sha256 = "1jxjckz4b02yv1mv1zc3pmajpq740dfnlvhr0x762lbrybymvagi";
+    };
+
+    /* This release contains accented filenames that prevent unzipping.
+    "pak192.comic" = {
+      srcPath = "pak192comic%20for%20${ver2_dash}/pak192comic-0.4-${ver2_dash}up";
+      sha256 = throw "";
+    };
+    */
   };
-in
-stdenv.mkDerivation rec {
-  pname = "simutrans";
-  version = "110.0.1";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://github.com/aburch/simutrans/tarball/v110.0.1";
-    name = "${name}.tar.gz";
-    sha256 = "ab0e42e5013d6d2fd5d3176b39dc45e482583b3bad178aac1188bf2ec88feb51";
-  };
 
-  buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
+  mkPak = {
+    sha256, pakName, srcPath ? null
+    , url ? "mirror://sourceforge/simutrans/${pakName}/${srcPath}.zip"
+  }:
+    stdenv.mkDerivation {
+      name = "simutrans-${pakName}";
+      dontUnpack = true;
+      preferLocalBuild = true;
+      installPhase = let src = fetchurl { inherit url sha256; };
+      in ''
+        mkdir -p "$out/share/simutrans/${pakName}"
+        cd "$out/share/simutrans/${pakName}"
+        "${unzip}/bin/unzip" "${src}"
+        chmod -R +w . # some zipfiles need that
 
-  prePatch = ''
-    # Use ~/.simutrans instead of ~/simutrans
-    sed -i 's@%s/simutrans@%s/.simutrans@' simsys_s.cc
-  '';
+        set +o pipefail # no idea why it's needed
+        toStrip=`find . -iname '*.pak' | head -n 1 | sed 's|\./\(.*\)/[^/]*$|\1|'`
+        echo "Detected path '$toStrip' to strip"
+        mv ./"$toStrip"/* .
+        rm -f "$toStrip/.directory" #pak128.german had this
+        rmdir -p "$toStrip"
+      '';
+    };
 
-  preConfigure = ''
-    # Configuration as per the readme.txt
-    sed -i 's@#BACKEND = sdl@BACKEND = sdl@' config.template
-    sed -i 's@#COLOUR_DEPTH = 16@COLOUR_DEPTH = 16@' config.template
-    sed -i 's@#OSTYPE = linux@OSTYPE = linux@' config.template
-    sed -i 's@#OPTIMISE = 1@OPTIMISE = 1@' config.template
-
-    cp config.template config.default
-  '';
-
-  installPhase = ''
-    # Erase the source distribution object definitions, will be replaced with langtab.
-    rm -r simutrans
-
-    # Default pakset and binary release core objects.
-    unzip ${pak64}
-    unzip ${langtab}
-
-    mv sim simutrans/
-
-    mkdir -p $out/simutrans
-    cp -r simutrans $out
-
-    mkdir -p $out/bin
-    ln -s $out/simutrans/sim $out/bin/simutrans
-  '';
-
-  meta = {
-    description = "Simutrans is a simulation game in which the player strives to run a successful transport system.";
-    longDescription = ''
-      Simutrans is a cross-platform simulation game in which the
-      player strives to run a successful transport system by
-      transporting goods, passengers, and mail between
-      places. Simutrans is an open source remake of Transport Tycoon.
+  /* The binaries need all data in one directory; the default is directory
+      of the executable, and another option is the current directory :-/ */
+  withPaks = paks: buildEnv {
+    inherit (binaries) name;
+    paths = [binaries] ++ paks;
+    postBuild = ''
+      rm "$out/bin" && mkdir "$out/bin"
+      cat > "$out/bin/simutrans" <<EOF
+      #!${runtimeShell}
+      cd "$out"/share/simutrans
+      exec "${binaries}/bin/simutrans" -use_workdir "\$@"
+      EOF
+      chmod +x "$out/bin/simutrans"
     '';
 
-    homepage = http://www.simutrans.com/;
-    license = "Artistic";
-    maintainers = [ stdenv.lib.maintainers.kkallio ];
-    platforms = stdenv.lib.platforms.linux;
+    passthru.meta = binaries.meta // { hydraPlatforms = []; };
+    passthru.binaries = binaries;
   };
-}
+
+  binaries = stdenv.mkDerivation {
+    pname = "simutrans";
+    inherit version;
+
+    src = binary_src;
+
+    sourceRoot = ".";
+
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
+
+    configurePhase = let
+      # Configuration as per the readme.txt and config.template
+      platform =
+        if stdenv.isLinux then "linux" else
+        if stdenv.isDarwin then "mac" else throw "add your platform";
+      config = ''
+        BACKEND = mixer_sdl
+        COLOUR_DEPTH = 16
+        OSTYPE = ${platform}
+        VERBOSE = 1
+      '';
+      #TODO: MULTI_THREAD = 1 is "highly recommended",
+      # but it's roughly doubling CPU usage for me
+    in ''
+      echo "${config}" > config.default
+
+      # Use ~/.simutrans instead of ~/simutrans
+      substituteInPlace simsys.cc --replace '%s/simutrans' '%s/.simutrans'
+
+      # use -O2 optimization (defaults are -O or -O3)
+      sed -i -e '/CFLAGS += -O/d' Makefile
+      export CFLAGS+=-O2
+    '';
+
+    enableParallelBuilding = true;
+
+    installPhase = ''
+      mkdir -p $out/share/
+      mv simutrans $out/share/
+
+      mkdir -p $out/bin/
+      mv build/default/sim $out/bin/simutrans
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A simulation game in which the player strives to run a successful transport system";
+      longDescription = ''
+        Simutrans is a cross-platform simulation game in which the
+        player strives to run a successful transport system by
+        transporting goods, passengers, and mail between
+        places. Simutrans is an open source remake of Transport Tycoon.
+      '';
+
+      homepage = "http://www.simutrans.com/";
+      license = with licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ kkallio vcunat phile314 ];
+      platforms = with platforms; linux; # TODO: ++ darwin;
+    };
+  };
+
+in result

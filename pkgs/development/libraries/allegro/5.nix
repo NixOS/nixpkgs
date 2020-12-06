@@ -1,61 +1,44 @@
+{ stdenv, fetchFromGitHub, fetchpatch, texinfo, libXext, xorgproto, libX11
+, libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
+, libXxf86dga, libXxf86misc
+, libXxf86vm, openal, libGLU, libGL, libjpeg, flac
+, libXi, libXfixes, freetype, libopus, libtheora
+, physfs, enet, pkgconfig, gtk2, pcre, libpulseaudio, libpthreadstubs
+, libXdmcp
+}:
 
-x@{builderDefsPackage
-  , texinfo, libXext, xextproto, libX11, xproto, libXpm, libXt, libXcursor
-  , alsaLib, cmake, zlib, libpng, libvorbis, libXxf86dga, libXxf86misc
-  , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal, mesa
-  , kbproto
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+stdenv.mkDerivation rec {
+  pname = "allegro";
+  version = "5.2.6.0";
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="allegro";
-    version="5.0.4";
-    name="${baseName}-${version}";
-    project="alleg";
-    url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="0vm93kqvvw4rw2zx4l64c2i86xl5giwbqbyki4b2b83z0acpmc1n";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+  src = fetchFromGitHub {
+    owner = "liballeg";
+    repo = "allegro5";
+    rev = version;
+    sha256 = "1xbhvriyh10ka2j7jgjkpa6mlzp6av909hhr9sk317vjvf0z0mqz";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doCmake" "doMakeInstall"];
-
-  doCmake = a.fullDepEntry (''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXext -lX11 -lXpm -lXcursor -lXxf86vm"
-    cmake -D CMAKE_INSTALL_PREFIX=$out -D CMAKE_SKIP_RPATH=ON .
-  '') ["minInit" "doUnpack" "addInputs"];
-      
-  makeFlags = [
+  buildInputs = [
+    texinfo libXext xorgproto libX11 libXpm libXt libXcursor
+    alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    libXxf86vm openal libGLU libGL
+    libjpeg flac
+    libXi libXfixes
+    enet libtheora freetype physfs libopus pkgconfig gtk2 pcre libXdmcp
+    libpulseaudio libpthreadstubs
   ];
 
-  meta = {
-    description = "A game programming library";
-    license = "free-noncopyleft"; # giftware
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/alleg/files/";
-    };
-  };
-}) x
+  postPatch = ''
+    sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt "src/"*.c
+  '';
 
+  cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
+
+  meta = with stdenv.lib; {
+    description = "A game programming library";
+    homepage = "https://liballeg.org/";
+    license = licenses.zlib;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+  };
+}

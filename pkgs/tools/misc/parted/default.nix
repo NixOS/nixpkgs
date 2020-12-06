@@ -1,37 +1,52 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline
-, utillinux, check, enableStatic ? false, hurd ? null }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, lvm2
+, libuuid
+, gettext
+, readline
+, dosfstools
+, e2fsprogs
+, perl
+, python3
+, util-linux
+, check
+, enableStatic ? false
+}:
 
 stdenv.mkDerivation rec {
-  name = "parted-3.1";
+  name = "parted-3.3";
 
   src = fetchurl {
     url = "mirror://gnu/parted/${name}.tar.xz";
-    sha256 = "05fa4m1bky9d13hqv91jlnngzlyn7y4rnnyq6d86w0dg3vww372y";
+    sha256 = "0i1xp367wpqw75b20c3jnism3dg3yqj4a7a22p2jb1h1hyyv9qjp";
   };
+
+  outputs = [ "out" "dev" "man" "info" ];
+
+  postPatch = ''
+    patchShebangs tests
+  '';
 
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (devicemapper != null) devicemapper
-    ++ stdenv.lib.optional (hurd != null) hurd
-    ++ stdenv.lib.optional doCheck check;
+    ++ stdenv.lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
        (if (readline != null)
         then [ "--with-readline" ]
         else [ "--without-readline" ])
-    ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
+    ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
-  doCheck = true;
-
-  preCheck =
-    stdenv.lib.optionalString doCheck
-      # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
-      "export PATH=\"${utillinux}/sbin:$PATH\"";
+  # Tests were previously failing due to Hydra running builds as uid 0.
+  # That should hopefully be fixed now.
+  doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
+  checkInputs = [ check dosfstools e2fsprogs perl python3 util-linux ];
 
   meta = {
-    description = "GNU Parted, a tool to create, destroy, resize, check, and copy partitions";
+    description = "Create, destroy, resize, check, and copy partitions";
 
     longDescription = ''
       GNU Parted is an industrial-strength package for creating, destroying,
@@ -43,12 +58,11 @@ stdenv.mkDerivation rec {
       which also serves as a sample implementation and script backend.
     '';
 
-    homepage = http://www.gnu.org/software/parted/;
-    license = "GPLv3+";
+    homepage = "https://www.gnu.org/software/parted/";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [
       # Add your name here!
-      stdenv.lib.maintainers.ludo
     ];
 
     # GNU Parted requires libuuid, which is part of util-linux-ng.

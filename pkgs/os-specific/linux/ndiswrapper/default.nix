@@ -1,14 +1,22 @@
-{ stdenv, fetchurl, kernel, perl }:
-
+{ stdenv, fetchurl, kernel, perl, kmod, libelf }:
+let
+  version = "1.63";
+in
 stdenv.mkDerivation {
-  name = "ndiswrapper-1.56-${kernel.version}";
+  name = "ndiswrapper-${version}-${kernel.version}";
+  inherit version;
 
-  # need at least .config and include 
-  inherit kernel;
+  hardeningDisable = [ "pic" ];
+
+  patches = [ ./no-sbin.patch ];
+
+  # need at least .config and include
+  kernel = kernel.dev;
 
   buildPhase = "
     echo make KBUILD=$(echo \$kernel/lib/modules/*/build);
     echo -n $kernel/lib/modules/*/build > kbuild_path
+    export PATH=${kmod}/sbin:$PATH
     make KBUILD=$(echo \$kernel/lib/modules/*/build);
   ";
 
@@ -21,20 +29,18 @@ stdenv.mkDerivation {
     patchShebangs $out/sbin
   '';
 
-  # should we use unstable? 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/ndiswrapper/ndiswrapper-1.56.tar.gz;
-    sha256 = "10yqg1a08v6z1qm1qr1v4rbhl35c90gzrazapr09vp372hky8f57";
+    url = "mirror://sourceforge/ndiswrapper/files/stable/ndiswrapper-${version}.tar.gz";
+    sha256 = "1v6b66jhisl110jfl00hm43lmnrav32vs39d85gcbxrjqnmcx08g";
   };
 
-  buildInputs = [ kernel perl ];
+  buildInputs = [ perl libelf ];
 
-  # this is a patch against svn head, not stable version
-  patches = [./prefix.patch];
-
-  meta = { 
+  meta = {
     description = "Ndis driver wrapper for the Linux kernel";
-    homepage = http://sourceforge.net/projects/ndiswrapper;
+    homepage = "https://sourceforge.net/projects/ndiswrapper";
     license = "GPL";
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = stdenv.lib.versionAtLeast kernel.version "5.8";
   };
 }

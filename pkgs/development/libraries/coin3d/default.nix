@@ -1,22 +1,28 @@
-{ fetchurl, stdenv, mesa }:
+{ fetchFromGitHub, stdenv, boost, cmake, libGL, libGLU }:
 
 stdenv.mkDerivation rec {
-  name = "coin3d-${version}";
-  version = "3.1.3";
+  pname = "coin";
+  version = "4.0.0";
 
-  src = fetchurl {
-    url = "http://ftp.coin3d.org/coin/src/all/Coin-${version}.tar.gz";
-    sha256 = "05ylhrcglm81dajbk132l1w892634z2i97x10fm64y1ih72phd2q";
+  src = fetchFromGitHub {
+    owner = "coin3d";
+    repo = "coin";
+    rev = "Coin-${version}";
+    sha256 = "1ayg0hl8wanhadahm5xbghghxw1qjwqbrs3dl3ngnff027hsyf8p";
   };
 
-  buildInputs = [ mesa ];
+  postPatch = ''
+    sed -i /cpack.d/d CMakeLists.txt
+  '';
 
-  meta = {
-    homepage = http://www.coin3d.org/;
-    license = "GPLv2+";
-    description = "High-level, retained-mode toolkit for effective 3D graphics development.";
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost libGL libGLU ];
 
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/coin3d/coin";
+    license = licenses.bsd3;
+    description = "High-level, retained-mode toolkit for effective 3D graphics development";
+    maintainers = with maintainers; [ gebner viric ];
+    platforms = platforms.linux;
   };
 }

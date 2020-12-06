@@ -1,31 +1,33 @@
-{ stdenv, fetchgit, kernel }:
+{ stdenv, fetchFromGitHub, kernel }:
 
-stdenv.mkDerivation {
-  name = "acpi-call-${kernel.version}";
+stdenv.mkDerivation rec {
+  pname = "acpi-call";
+  version = "2020-04-07-${kernel.version}";
 
-  src = fetchgit {
-    url = "git://github.com/mkottman/acpi_call.git";
-    rev = "b570c3b6c7016174107558464e864391d8bbd176";
-    sha256 = "a89c62d391b721bb87a094f81cefc77d9c80de4bb314bb6ea449c3ef2decad5e";
+  src = fetchFromGitHub {
+    owner = "nix-community";
+    repo = "acpi_call";
+    rev = "3d7c9fe5ed3fc5ed5bafd39d54b1fdc7a09ce710";
+    sha256 = "09kp8zl392h99wjwzqrdw2xcfnsc944hzmfwi8n1y7m2slpdybv3";
   };
-  
-  preBuild = ''
-    sed -e 's/break/true/' -i test_off.sh
-    sed -e 's@/bin/bash@.bin/sh@' -i test_off.sh
-    sed -e "s@/lib/modules/\$(.*)@${kernel}/lib/modules/${kernel.modDirVersion}@" -i Makefile
-  '';
- 
+
+  hardeningDisable = [ "pic" ];
+
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  makeFlags = [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
+
   installPhase = ''
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
-    cp acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc
-    mkdir -p $out/bin
-    cp test_off.sh $out/bin/test_discrete_video_off.sh
-    chmod a+x $out/bin/test_discrete_video_off.sh
+    install -D acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc/acpi_call.ko
+    install -D -m755 examples/turn_off_gpu.sh $out/bin/test_discrete_video_off.sh
   '';
 
-  meta = {
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    maintainers = with maintainers; [ raskin mic92 ];
+    inherit (src.meta) homepage;
+    platforms = platforms.linux;
     description = "A module allowing arbitrary ACPI calls; use case: hybrid video";
   };
 }

@@ -1,34 +1,94 @@
-{ stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff }:
+{ stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
+, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl, libpng
+, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat, libiconv, libxml2
+, autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl, pkg-config }:
 
-composableDerivation.composableDerivation {} (fixed: {
-  name = "gdal-1.7.1";
+with stdenv.lib;
 
-  src = fetchurl {
-    url = ftp://ftp.remotesensing.org/gdal/gdal171.zip;
-    md5 = "f5592cff69b239166c9b64ff81943b1a";
+stdenv.mkDerivation rec {
+  pname = "gdal";
+  # broken with poppler 20.08, however, can't fetch patches cleanly
+  version = "3.1.2.post2020-08-26";
+
+  src = fetchFromGitHub {
+    owner = "OSGeo";
+    repo = "gdal";
+    rev = "9a8df672204a8b3b33c36e09a32f747e21166fe9";
+    sha256 = "1n25jma4x1l7slwxk702q77r84vxr90fyn4c3zpkr07q1b8wqql9";
   };
 
-  buildInputs = [ unzip libjpeg ];
+  sourceRoot = "source/gdal";
 
-  # don't use optimization for gcc >= 4.3. That's said to be causeing segfaults
-  preConfigure = "export CFLAGS=-O0; export CXXFLAGS=-O0";
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = [
+    unzip
+    libjpeg
+    libtiff
+    libpng
+    proj
+    openssl
+    sqlite
+    libspatialite
+    libgeotiff
+    poppler
+    hdf4
+    qhull
+    giflib
+    expat
+    libxml2
+    postgresql
+  ] ++ (with pythonPackages; [ python numpy wrapPython ])
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv
+    ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   configureFlags = [
-    "--with-jpeg=${libjpeg}"
-    "--with-libtiff=${libtiff}"  # optional (without largetiff support
-    "--with-libz=${zlib}"        # optional
-
-    "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql}/bin/mysql_config"
+    "--with-expat=${expat.dev}"
+    "--with-jpeg=${libjpeg.dev}"
+    "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
+    "--with-png=${libpng.dev}" # optional
+    "--with-poppler=${poppler.dev}" # optional
+    "--with-libz=${zlib.dev}" # optional
+    "--with-pg=yes" # since gdal 3.0 doesn't use ${postgresql}/bin/pg_config
+    "--with-mysql=${getDev libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
+    "--with-sqlite3=${sqlite.dev}"
+    "--with-spatialite=${libspatialite}"
+    "--with-python" # optional
+    "--with-proj=${proj.dev}" # optional
+    "--with-geos=${geos}/bin/geos-config" # optional
+    "--with-hdf4=${hdf4.dev}" # optional
+    "--with-xml2=yes" # optional
+    (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
+
+  hardeningDisable = [ "format" ];
+
+  CXXFLAGS = "-fpermissive";
+
+  # - Unset CC and CXX as they confuse libtool.
+  # - teach gdal that libdf is the legacy name for libhdf
+  preConfigure = ''
+    substituteInPlace configure \
+      --replace "-lmfhdf -ldf" "-lmfhdf -lhdf"
+  '';
+
+  preBuild = ''
+    substituteInPlace swig/python/GNUmakefile \
+      --replace "ifeq (\$(STD_UNIX_LAYOUT),\"TRUE\")" "ifeq (1,1)"
+  '';
+
+  postInstall = ''
+    wrapPythonPrograms
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Translator library for raster geospatial data formats";
-    homepage = http://www.gdal.org/;
-    license = "X/MIT";
+    homepage = "https://www.gdal.org/";
+    license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
-})
+}

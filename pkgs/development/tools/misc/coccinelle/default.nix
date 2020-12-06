@@ -1,62 +1,57 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig, makeWrapper }:
+{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
 
-let
-
-  name = "coccinelle-1.0.0-rc15";
-  sha256 = "07fab4e17512925b958890bb13c0809797074f2e44a1107b0074bdcc156b9596";
-
-in stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "coccinelle";
+  version = "1.0.6";
 
   src = fetchurl {
-    url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
-    inherit sha256;
+    url = "http://coccinelle.lip6.fr/distrib/${pname}-${version}.tgz";
+    sha256 = "02g9hmwkvfl838zz690yra5jzrqjg6y6ffxkrfcsx790bhkfsll4";
   };
 
   buildInputs = with ocamlPackages; [
     ocaml findlib menhir
     ocaml_pcre pycaml
     python ncurses pkgconfig
-    makeWrapper
   ];
 
-  # TODO: is the generation of this wrapper truly/still needed?
-  # I don't have a non-NixOS system, so I cannot verify this, but shouldn't
-  # libpython know where to find its modules? (the path is for example in
-  # its Sys-module).
-  postInstall =
-    # On non-NixOS systems, Coccinelle would end up looking up Python modules
-    # in the wrong directory.
-    '' for p in "$out/bin/"*
-       do
-         wrapProgram "$p" \
-           --prefix "PYTHONPATH" ":" "${python}/lib/python${python.majorVersion}"
-       done
-    '';
+  doCheck = !stdenv.isDarwin;
 
-  configureFlags = "--enable-release";
+  # The build system builds two versions of spgen:
+  # 'spgen' with ocamlc -custom (bytecode specially linked)
+  # and 'spgen.opt' using ocamlopt.
+  # I'm not sure of the intentions here, but the way
+  # the 'spgen' binary is produced results in an
+  # invalid/incorrect interpreter path (/lib/ld-linux*).
+  # We could patch it, but without knowing why it's
+  # finding the wrong path it seems safer to use
+  # the .opt version that is built correctly.
+  # All that said, our fix here is simple: remove 'spgen'.
+  # The bin/spgen entrypoint is really a bash script
+  # and will use spgen.opt if 'spgen' doesn't exist.
+  postInstall = ''
+    rm $out/lib/coccinelle/spgen/spgen
+  '';
 
   meta = {
-    description = "Coccinelle, a program to apply C code semantic patches";
+    description = "Program to apply semantic patches to C code";
+    longDescription = ''
+      Coccinelle is a program matching and transformation engine which
+      provides the language SmPL (Semantic Patch Language) for
+      specifying desired matches and transformations in C code.
+      Coccinelle was initially targeted towards performing collateral
+      evolutions in Linux.  Such evolutions comprise the changes that
+      are needed in client code in response to evolutions in library
+      APIs, and may include modifications such as renaming a function,
+      adding a function argument whose value is somehow
+      context-dependent, and reorganizing a data structure.  Beyond
+      collateral evolutions, Coccinelle is successfully used (by us
+      and others) for finding and fixing bugs in systems code.
+    '';
 
-    longDescription =
-      '' Coccinelle is a program matching and transformation engine which
-         provides the language SmPL (Semantic Patch Language) for specifying
-         desired matches and transformations in C code.  Coccinelle was
-         initially targeted towards performing collateral evolutions in
-         Linux.  Such evolutions comprise the changes that are needed in
-         client code in response to evolutions in library APIs, and may
-         include modifications such as renaming a function, adding a function
-         argument whose value is somehow context-dependent, and reorganizing
-         a data structure.  Beyond collateral evolutions, Coccinelle is
-         successfully used (by us and others) for finding and fixing bugs in
-         systems code.
-      '';
-
-    homepage = http://coccinelle.lip6.fr/;
-    license = "GPLv2";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    homepage = "http://coccinelle.lip6.fr/";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

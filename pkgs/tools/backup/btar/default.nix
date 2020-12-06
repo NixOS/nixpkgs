@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tar-compatible block-based archiver";
-    license = "GPLv3+";
-    homepage = http://viric.name/cgi-bin/btar;
+    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = "http://viric.name/cgi-bin/btar";
     platforms = with stdenv.lib.platforms; all;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

@@ -1,35 +1,56 @@
-{fetchurl, stdenv, builderDefs, stringsWithDeps, singlePrecision ? false, pthreads ? false}:
+{ fetchurl, stdenv, lib, llvmPackages ? null, precision ? "double", perl }:
+
+with lib;
+
+assert stdenv.cc.isClang -> llvmPackages != null;
+assert elem precision [ "single" "double" "long-double" "quad-precision" ];
+
 let
-  version = "3.3.2";
-  localDefs = builderDefs.passthru.function { 
-  src = 
-    fetchurl {
-      url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
-      sha256 = "b1236a780ca6e66fc5f8eda6ef0665d680e8253d9f01d7bf211b714a50032d01";
-    };
-  buildInputs = [];
-  configureFlags = ["--enable-shared"]
-                        # some distros seem to be shipping both versions within the same package?
-                        # why does --enable-float still result in ..3f.so instead of ..3.so?
-                   ++ (if singlePrecision then [ "--enable-single" ] else [ ])
-		   ++ (stdenv.lib.optional (!pthreads) "--enable-openmp")
-		   ++ (stdenv.lib.optional pthreads "--enable-threads")
-                        # I think all i686 has sse
-                   ++ (if (stdenv.isi686 || stdenv.isx86_64) && singlePrecision then [ "--enable-sse" ] else [ ])
-                        # I think all x86_64 has sse2
-                   ++ (if stdenv.isx86_64 && ! singlePrecision then [ "--enable-sse2" ] else [ ]);
-                
-  };
-in with localDefs;
+  version = "3.3.8";
+  withDoc = stdenv.cc.isGNU;
+in
+
 stdenv.mkDerivation {
-  name = "fftw-3.3.2" + ( if singlePrecision then "-single" else "-double" );
-  builder = writeScript "fftw-3.3.2-builder"
-    (textClosure localDefs [doConfigure doMakeInstall doForceShare]);
-  meta = {
-    description = "Fastest Fourier Transform in the West library";
+  name = "fftw-${precision}-${version}";
+
+  src = fetchurl {
+    urls = [
+      "http://fftw.org/fftw-${version}.tar.gz"
+      "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz"
+    ];
+    sha256 = "00z3k8fq561wq2khssqg0kallk0504dzlx989x3vvicjdqpjc4v1";
   };
-  passthru = {
-    # Allow instantiating "-A fftw.src"
-    inherit src;
+
+  outputs = [ "out" "dev" "man" ]
+    ++ optional withDoc "info"; # it's dev-doc only
+  outputBin = "dev"; # fftw-wisdom
+
+  buildInputs = lib.optionals stdenv.cc.isClang [
+    # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.
+    llvmPackages.openmp
+  ];
+
+  configureFlags =
+    [ "--enable-shared"
+      "--enable-threads"
+    ]
+    ++ optional (precision != "double") "--enable-${precision}"
+    # all x86_64 have sse2
+    # however, not all float sizes fit
+    ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
+    ++ [ "--enable-openmp" ]
+    # doc generation causes Fortran wrapper generation which hard-codes gcc
+    ++ optional (!withDoc) "--disable-doc";
+
+  enableParallelBuilding = true;
+
+  checkInputs = [ perl ];
+
+  meta = with stdenv.lib; {
+    description = "Fastest Fourier Transform in the West library";
+    homepage = "http://www.fftw.org/";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.spwhitt ];
+    platforms = platforms.unix;
   };
 }

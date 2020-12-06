@@ -1,14 +1,19 @@
-{stdenv, fetchurl, tcl}:
+{ stdenv, fetchFromGitHub, tcl }:
 
-stdenv.mkDerivation {
-  name = "eggdrop-1.6.19";
+stdenv.mkDerivation rec {
+  pname = "eggdrop";
+  version = "1.8.4";
 
-  src = fetchurl {
-    url = ftp://ftp.eggheads.org/pub/eggdrop/GNU/1.6/eggdrop1.6.19+ctcpfix.tar.gz;
-    sha256 = "1lpa6sqwizn8y30i14559j3427vi743pmsxjq9g70x4m71hmshvi";
+  src = fetchFromGitHub {
+    owner = "eggheads";
+    repo = "eggdrop";
+    rev = "v${version}";
+    sha256 = "0xqdrv4ydxw72a740lkmpg3fs7ldicaf08b0sfqdyaj7cq8l5x5l";
   };
 
-  buildInputs = [tcl]; 
+  buildInputs = [ tcl ];
+
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     prefix=$out/eggdrop
@@ -19,5 +24,15 @@ stdenv.mkDerivation {
     make config
   '';
 
-  configureFlags = "--with-tcllib=${tcl}/lib/libtcl8.5.so --with-tclinc=${tcl}/include/tcl.h";
+  configureFlags = [
+    "--with-tcllib=${tcl}/lib/lib${tcl.libPrefix}${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "--with-tclinc=${tcl}/include/tcl.h"
+  ];
+
+  meta = with stdenv.lib; {
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    homepage = "http://www.eggheads.org";
+    description = "An Internet Relay Chat (IRC) bot";
+  };
 }

@@ -1,28 +1,56 @@
-{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true }:
+{ stdenv, fetchurl
+, pcre, windows ? null
+, variant ? null
+}:
 
-stdenv.mkDerivation rec {
-  name = "pcre-8.21";
+with stdenv.lib;
+
+assert elem variant [ null "cpp" "pcre16" "pcre32" ];
+
+let
+  version = "8.44";
+  pname = if (variant == null) then "pcre"
+    else  if (variant == "cpp") then "pcre-cpp"
+    else  variant;
+
+in stdenv.mkDerivation {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "1qwrqldbwszbmr4cw4f0xmcl889cmmjbf58l9vxn89zw26fm1f54";
+    url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
+    sha256 = "0v9nk51wh55pcbnf2jr36yarz8ayajn6d7ywiq2wagivn9c8c40r";
   };
 
-  # The compiler on Darwin crashes with an internal error while building the
-  # C++ interface. Disabling optimizations on that platform remedies the
-  # problem. In case we ever update the Darwin GCC version, the exception for
-  # that platform ought to be removed.
-  configureFlags = ''
-    ${if unicodeSupport then "--enable-unicode-properties" else ""}
-    ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '' + stdenv.lib.optionalString stdenv.isDarwin "CXXFLAGS=-O0";
+  outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  doCheck = !stdenv.isCygwin;                   # XXX: test failure on Cygwin
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV) "--enable-jit" ++ [
+    "--enable-unicode-properties"
+    "--disable-cpp"
+  ]
+    ++ optional (variant != null) "--enable-${variant}";
+
+  # https://bugs.exim.org/show_bug.cgi?id=2173
+  patches = [ ./stacksize-detection.patch ];
+
+  preCheck = ''
+    patchShebangs RunGrepTest
+  '';
+
+  doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
+    # XXX: test failure on Cygwin
+    # we are running out of stack on both freeBSDs on Hydra
+
+  postFixup = ''
+    moveToOutput bin/pcre-config "$dev"
+  ''
+    + optionalString (variant != null) ''
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
+  '';
 
   meta = {
     homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
-    license = "BSD-3";
+    license = stdenv.lib.licenses.bsd3;
 
     longDescription = ''
       The PCRE library is a set of functions that implement regular
@@ -32,7 +60,6 @@ stdenv.mkDerivation rec {
       PCRE library is free, even for building proprietary software.
     '';
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.all;
   };
 }

@@ -1,19 +1,21 @@
-{ stdenv, fetchgit, which, pythonPackages }:
+{ stdenv, fetchgit, python2Packages }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "euca2ools-2.0.0-pre-20111230";
-  namePrefix = "";
+let
+  inherit (python2Packages) buildPythonApplication boto m2crypto;
+in buildPythonApplication {
+  pname = "euca2ools";
+  version = "2.1.4";
 
   src = fetchgit {
-    url = https://github.com/eucalyptus/euca2ools.git;
-    rev = "0032f7c85603f34b728a6f8bc6f25d7e4892432e";
-    sha256 = "ae3c3918d60411ebf15faefb6dc94e3a98ab73cf751d8180c52f51b19ed64c09";
+    url = "https://github.com/eucalyptus/euca2ools.git";
+    rev = "19cb7eac34dd7efe3a56e4841b9692c03458bf3b";
+    sha256 = "0grsgn5gbvk1hlfa8qx7ppz7iyfyi2pdhxy8njr8lm60w4amfiyq";
   };
 
-  pythonPath = [ pythonPackages.boto pythonPackages.m2crypto pythonPackages.ssl ];
+  propagatedBuildInputs = [ boto m2crypto ];
 
   meta = {
-    homepage = http://open.eucalyptus.com/downloads;
+    homepage = "https://github.com/eucalyptus/euca2ools";
     description = "Tools for interacting with Amazon EC2/S3-compatible cloud computing services";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

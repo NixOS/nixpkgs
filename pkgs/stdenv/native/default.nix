@@ -1,6 +1,11 @@
-{ system, allPackages ? import ../../.. }:
+{ lib
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
+}:
 
-rec {
+assert crossSystem == localSystem;
+
+let
+  inherit (localSystem) system;
 
   shell =
     if system == "i686-freebsd" || system == "x86_64-freebsd" then "/usr/local/bin/bash"
@@ -9,21 +14,14 @@ rec {
   path =
     (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
+    (if system == "x86_64-solaris" then [ "/opt/local/gnu" ] else []) ++
     ["/" "/usr" "/usr/local"];
 
   prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
     # libraries outside the Nix store (like the C library).
     export NIX_ENFORCE_PURITY=
-  '';
-
-  prehookDarwin = ''
-    ${prehookBase}
-    export NIX_DONT_SET_RPATH=1
-    export NIX_NO_SELF_RPATH=1
-    dontFixLibtool=1
-    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-    xargsFlags=" "
+    export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
   '';
 
   prehookFreeBSD = ''
@@ -34,9 +32,6 @@ rec {
     alias sed=gsed
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookOpenBSD = ''
@@ -51,9 +46,6 @@ rec {
 
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookNetBSD = ''
@@ -64,86 +56,115 @@ rec {
     alias tar=gtar
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
+  # prevent libtool from failing to find dynamic libraries
   prehookCygwin = ''
     ${prehookBase}
 
-    if test -z "$cygwinConfigureEnableShared"; then
-      export configureFlags="$configureFlags --disable-shared"
-    fi
-
-    PATH_DELIMITER=';'
+    shopt -s expand_aliases
+    export lt_cv_deplibs_check_method=pass_all
   '';
 
+  extraNativeBuildInputsCygwin = [
+    ../cygwin/all-buildinputs-as-runtimedep.sh
+    ../cygwin/wrap-exes-to-find-dlls.sh
+  ] ++ (if system == "i686-cygwin" then [
+    ../cygwin/rebase-i686.sh
+  ] else if system == "x86_64-cygwin" then [
+    ../cygwin/rebase-x86_64.sh
+  ] else []);
 
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { gcc, fetchurl, extraPath ? [], overrides ? (pkgs: { }) }:
+    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
 
     import ../generic {
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+
       preHook =
-        if system == "x86_64-darwin" then prehookDarwin else
         if system == "i686-freebsd" then prehookFreeBSD else
         if system == "x86_64-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
         if system == "i686-netbsd" then prehookNetBSD else
+        if system == "i686-cygwin" then prehookCygwin else
+        if system == "x86_64-cygwin" then prehookCygwin else
         prehookBase;
+
+      extraNativeBuildInputs = extraNativeBuildInputs ++
+        (if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
+        if system == "x86_64-cygwin" then extraNativeBuildInputsCygwin else
+        []);
 
       initialPath = extraPath ++ path;
 
       fetchurlBoot = fetchurl;
 
-      inherit system shell gcc overrides;
+      inherit shell cc overrides config;
     };
 
+in
 
-  stdenvBoot0 = makeStdenv {
-    gcc = "/no-such-path";
-    fetchurl = null;
-  };
+[
 
+  ({}: rec {
+    __raw = true;
 
-  gcc = import ../../build-support/gcc-wrapper {
-    name = "gcc-native";
-    nativeTools = true;
-    nativeLibc = true;
-    nativePrefix = if system == "i686-solaris" then "/usr/gnu" else "/usr";
-    stdenv = stdenvBoot0;
-  };
+    stdenv = makeStdenv {
+      cc = null;
+      fetchurl = null;
+    };
+    stdenvNoCC = stdenv;
 
+    cc = let
+      nativePrefix = { # switch
+        i686-solaris = "/usr/gnu";
+        x86_64-solaris = "/opt/local/gcc47";
+      }.${system} or "/usr";
+    in
+    import ../../build-support/cc-wrapper {
+      name = "cc-native";
+      nativeTools = true;
+      nativeLibc = true;
+      inherit nativePrefix;
+      bintools = import ../../build-support/bintools-wrapper {
+        name = "bintools";
+        inherit stdenvNoCC nativePrefix;
+        nativeTools = true;
+        nativeLibc = true;
+      };
+      inherit stdenvNoCC;
+    };
 
-  fetchurl = import ../../build-support/fetchurl {
-    stdenv = stdenvBoot0;
-    # Curl should be in /usr/bin or so.
-    curl = null;
-  };
+    fetchurl = import ../../build-support/fetchurl {
+      inherit lib stdenvNoCC;
+      # Curl should be in /usr/bin or so.
+      curl = null;
+    };
 
+  })
 
   # First build a stdenv based only on tools outside the store.
-  stdenvBoot1 = makeStdenv {
-    inherit gcc fetchurl;
-  } // {inherit fetchurl;};
+  (prevStage: {
+    inherit config overlays;
+    stdenv = makeStdenv {
+      inherit (prevStage) cc fetchurl;
+    } // { inherit (prevStage) fetchurl; };
+  })
 
-  stdenvBoot1Pkgs = allPackages {
-    inherit system;
-    bootStdenv = stdenvBoot1;
-  };
+  # Using that, build a stdenv that adds the ‘xz’ command (which most systems
+  # don't have, so we mustn't rely on the native environment providing it).
+  (prevStage: {
+    inherit config overlays;
+    stdenv = makeStdenv {
+      inherit (prevStage.stdenv) cc fetchurl;
+      extraPath = [ prevStage.xz ];
+      overrides = self: super: { inherit (prevStage) xz; };
+      extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
+    };
+  })
 
-
-  # Using that, build a stdenv that adds the ‘xz’ command (which most
-  # systems don't have, so we mustn't rely on the native environment
-  # providing it).
-  stdenvBoot2 = makeStdenv {
-    inherit gcc fetchurl;
-    extraPath = [ stdenvBoot1Pkgs.xz ];
-    overrides = pkgs: { inherit (stdenvBoot1Pkgs) xz; };
-  };
-
-
-  stdenv = stdenvBoot2;
-}
+]

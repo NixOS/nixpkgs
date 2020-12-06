@@ -1,11 +1,11 @@
-args: with args; {
+{ stdenv, lib, glibcLocales, unzip, hasktags, ctags } : {
   # optional srcDir
   annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags 
                                       || x ? meta && x.meta ? sourceWithTags );
   # hack because passthru doesn't work the way I'd expect. Don't have time to spend on this right now
   # that's why I'm abusing meta for the same purpose in ghcsAndLibs
-  sourceWithTagsFromDerivation = x : if (x ? passthru && x.passthru ? sourceWithTags ) then x.passthru.sourceWithTags
-                                     else if (x ? meta && x.meta ? sourceWithTags ) then x.meta.sourceWithTags
+  sourceWithTagsFromDerivation = x : if x ? passthru && x.passthru ? sourceWithTags  then x.passthru.sourceWithTags
+                                     else if x ? meta && x.meta ? sourceWithTags  then x.meta.sourceWithTags
                                        else null;
 
   # createTagFiles =  [ { name  = "my_tag_name_without_suffix", tagCmd = "ctags -R . -o \$TAG_FILE"; } ]
@@ -56,8 +56,13 @@ args: with args; {
                  tagCmd = "
                    srcs=\"`find . -type f -name \"*.*hs\"; find . -type f -name \"*.*hs*\";`\"
                    [ -z \"$srcs\" ] || {
-                    ${toString hasktags}/bin/hasktags-modified --ignore-close-implementation --ctags $srcs
-                    sort tags > \$TAG_FILE
+                    # without this creating tag files for lifted-base fails
+                    export LC_ALL=en_US.UTF-8
+                    export LANG=en_US.UTF-8
+                    ${if stdenv.isLinux then "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;" else ""}
+
+                    ${toString hasktags}/bin/hasktags --ignore-close-implementation --ctags .
+                    mv tags \$TAG_FILE
                    }";
               }
           ];

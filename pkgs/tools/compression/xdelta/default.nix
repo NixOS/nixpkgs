@@ -1,24 +1,61 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook
+, lzmaSupport ? true, xz ? null
+}:
 
-stdenv.mkDerivation {
-  name = "xdelta-3.0z";
-  
-  src = fetchurl {
-    url = http://xdelta.googlecode.com/files/xdelta3.0z.tar.gz;
-    sha256 = "1rpk4n3yz8x81vakzn3n75h79a2ycm06p5v72djklx0wn9gb412m";
+assert lzmaSupport -> xz != null;
+
+let
+  mkWith = flag: name: if flag
+    then "--with-${name}"
+    else "--without-${name}";
+in stdenv.mkDerivation rec {
+  pname = "xdelta";
+  version = "3.1.0";
+
+  src = fetchFromGitHub {
+    sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
+    rev = "v${version}";
+    repo = "xdelta-devel";
+    owner = "jmacd";
   };
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp xdelta3 $out/bin/
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = []
+    ++ stdenv.lib.optionals lzmaSupport [ xz ];
 
-      mkdir -p $out/share/man/man1
-      cp xdelta3.1 $out/share/man/man1/
+  postPatch = ''
+    cd xdelta3
+  '';
+
+  configureFlags = [
+    (mkWith lzmaSupport "liblzma")
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  checkPhase = ''
+    mkdir $PWD/tmp
+    for i in testing/file.h xdelta3-test.h; do
+      substituteInPlace $i --replace /tmp $PWD/tmp
+    done
+    ./xdelta3regtest
+  '';
+
+  installPhase = ''
+    install -D -m755 xdelta3 $out/bin/xdelta3
+    install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Binary differential compression in VCDIFF (RFC 3284) format";
+    longDescription = ''
+      xdelta is a command line program for delta encoding, which generates two
+      file differences. This is similar to diff and patch, but it is targeted
+      for binary files and does not generate human readable output.
     '';
-
-  meta = {
-    homepage = http://xdelta.org/;
-    description = "A binary diff tool that uses the VCDIFF (RFC 3284) format and compression";
+    homepage = "http://xdelta.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

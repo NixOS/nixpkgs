@@ -1,36 +1,73 @@
-{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
+, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.20.1";
+  pname = "util-linux";
+  version = "2.36";
 
   src = fetchurl {
-    # This used to be mirror://kernel/linux/utils/util-linux, but it
-    # disappeared in the kernel.org meltdown.
-    url = "mirror://gentoo/distfiles/${name}.tar.bz2";
-    sha256 = "1q5vjcvw4f067c63vj2n3xggvk5prm11571x6vnqiav47vdbqvni";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1cg0m4psswg71v6wrqc2bngcw20fsp01vbijxdzvdf8kxdkiqjwy";
   };
 
-  patches = [ ./linux-specific-header.patch ];
+  patches = [
+    ./rtcwake-search-PATH-for-shutdown.patch
+  ];
 
-  crossAttrs = {
-    # Work around use of `AC_RUN_IFELSE'.
-    preConfigure = "export scanf_cv_type_modifier=ms";
-  };
+  outputs = [ "bin" "dev" "out" "man" ];
+
+  postPatch = ''
+    patchShebangs tests/run.sh
+
+    substituteInPlace include/pathnames.h \
+      --replace "/bin/login" "${shadow}/bin/login"
+    substituteInPlace sys-utils/eject.c \
+      --replace "/bin/umount" "$bin/bin/umount"
+  '';
 
   # !!! It would be better to obtain the path to the mount helpers
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
   # root...
-  # --enable-libmount-mount  fixes the behaviour being /etc/mtab a symlink to /proc/monunts
-  #     http://pl.digipedia.org/usenet/thread/19513/1924/
-  configureFlags = ''
-    --disable-use-tty-group
-    --enable-write
-    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/sbin:/sbin
-    --enable-libmount-mount
-    ${if ncurses == null then "--without-ncurses" else ""}
+  configureFlags = [
+    "--enable-write"
+    "--enable-last"
+    "--enable-mesg"
+    "--disable-use-tty-group"
+    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
+    "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
+    "--disable-su" # provided by shadow
+    (lib.withFeature (ncurses != null) "ncursesw")
+    (lib.withFeature (systemd != null) "systemd")
+    (lib.withFeatureAs (systemd != null)
+       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "scanf_cv_type_modifier=ms"
+  ;
+
+  makeFlags = [
+    "usrbin_execdir=${placeholder "bin"}/bin"
+    "usrsbin_execdir=${placeholder "bin"}/sbin"
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs =
+    [ zlib pam ]
+    ++ lib.filter (p: p != null) [ ncurses systemd perl ];
+
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
+
+  postInstall = lib.optionalString minimal ''
+    rm -rf $out/share/{locale,doc,bash-completion}
   '';
 
-  buildInputs = [ zlib ] ++ stdenv.lib.optional (ncurses != null) ncurses
-             ++ stdenv.lib.optional (perl != null) perl;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
+    description = "A set of system utilities for Linux";
+    license = licenses.gpl2; # also contains parts under more permissive licenses
+    platforms = platforms.linux;
+    priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
+  };
 }

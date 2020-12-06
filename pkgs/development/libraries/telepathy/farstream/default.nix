@@ -1,17 +1,21 @@
-{ stdenv, fetchurl, telepathy_glib, farstream, gst_plugins_base, dbus_glib
-, pkgconfig, libxslt, python, gstreamer, gst_python, pygobject }:
+{ stdenv, fetchurl, pkgconfig, telepathy-glib, farstream, dbus-glib }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-0.2.3";
+  name = "${pname}-0.6.2";
   pname = "telepathy-farstream";
 
   src = fetchurl {
-    url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
-    sha256 = "1a163gk9y3ckabm4a43lxc5a7j2s42hykbwr6r7b5mlfyqq8myx1";
+    url = "https://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
+    sha256 = "02ky12bb92prr5f6xmvmfq4yz2lj33li6nj4829a98hk5pr9k83g";
   };
 
-  buildInputs = [ gst_plugins_base gst_python pygobject ];
+  propagatedBuildInputs = [ dbus-glib telepathy-glib farstream ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ dbus_glib farstream telepathy_glib gstreamer ];
-  buildNativeInputs = [ pkgconfig python libxslt];
+  meta = with stdenv.lib; {
+    description = "GObject-based C library that uses Telepathy GLib, Farstream and GStreamer to handle the media streaming part of channels of type Call";
+    homepage = "https://telepathy.freedesktop.org/wiki/Components/Telepathy-Farstream/";
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+  };
 }

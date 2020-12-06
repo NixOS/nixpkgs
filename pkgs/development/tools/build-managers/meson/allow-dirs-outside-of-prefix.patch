@@ -1,0 +1,19 @@
+--- a/mesonbuild/coredata.py
++++ b/mesonbuild/coredata.py
+@@ -491,7 +491,6 @@ class CoreData:
+             return value
+         if option.endswith('dir') and value.is_absolute() and \
+            option not in builtin_dir_noprefix_options:
+-            # Value must be a subdir of the prefix
+             # commonpath will always return a path in the native format, so we
+             # must use pathlib.PurePath to do the same conversion before
+             # comparing.
+@@ -503,7 +502,7 @@ class CoreData:
+             try:
+                 value = value.relative_to(prefix)
+             except ValueError:
+-                raise MesonException(msg.format(option, value, prefix))
++                pass
+             if '..' in str(value):
+                 raise MesonException(msg.format(option, value, prefix))
+         return value.as_posix()

@@ -1,19 +1,23 @@
 { stdenv, fetchurl, kernel }:
 
-stdenv.mkDerivation {
-  name = "e1000e-1.5.1-${kernel.version}";
+assert stdenv.lib.versionOlder kernel.version "4.10";
+
+stdenv.mkDerivation rec {
+  name = "e1000e-${version}-${kernel.version}";
+  version = "3.8.4";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/e1000/e1000e-1.5.1.tar.gz";
-    sha256 = "0nzjlarpqcpm5y112n3vzra4qv32hiygpfkk10y8g4nln4adhqsw";
+    url = "mirror://sourceforge/e1000/e1000e-${version}.tar.gz";
+    sha256 = "1q8dbqh14c7r15q6k6iv5k0d6xpi74i71d5r54py60gr099m2ha4";
   };
 
-  buildInputs = [ kernel ];
+  hardeningDisable = [ "pic" ];
 
   configurePhase = ''
     cd src
-    kernel_version=$( cd ${kernel}/lib/modules && echo * )
-    sed -i -e 's|/lib/modules|${kernel}/lib/modules|' Makefile
+    kernel_version=${kernel.modDirVersion}
+    substituteInPlace common.mk \
+      --replace "/lib/modules" "${kernel.dev}/lib/modules"
     export makeFlags="BUILD_KERNEL=$kernel_version"
   '';
 

@@ -1,46 +1,59 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
-  doPatchShebangs = args.doPatchShebangs;
-  makeManyWrappers = args.makeManyWrappers;
+{ stdenv
+, fetchurl
+, cmake
+, ninja
+, pkgconfig
+, intltool
+, vala
+, wrapGAppsHook
+, gcr
+, libpeas
+, gtk3
+, webkitgtk
+, sqlite
+, gsettings-desktop-schemas
+, libsoup
+, glib-networking
+, json-glib
+, libarchive
+}:
 
-  version = "0.4"; 
-  release = "4";
-  buildInputs = with args; [
-    intltool python imagemagick gtk3 glib webkit libxml2 
-    gtksourceview pkgconfig which gettext makeWrapper 
-    file libidn sqlite docutils libnotify libsoup vala
-    kbproto xproto scrnsaverproto libXScrnSaver dbus_glib
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  pname = "midori";
+  version = "9.0";
+
   src = fetchurl {
-    url = "http://archive.xfce.org/src/apps/midori/${version}/midori-${version}.${release}.tar.bz2";
-    sha256 = "fadd43f76c1c9f6a16483e60a804e58fb6817c6a595b1acdd59bcbdd7b35bca2";
+    url = "https://github.com/midori-browser/core/releases/download/v${version}/midori-v${version}.tar.gz";
+    sha256 = "05i04qa83dnarmgkx4xsk6fga5lw1lmslh4rb3vhyyy4ala562jy";
   };
 
-  inherit buildInputs;
-  configureFlags = ["--enable-gtk3"];
+  nativeBuildInputs = [
+    cmake
+    intltool
+    ninja
+    pkgconfig
+    vala
+    wrapGAppsHook
+  ];
 
-  /* doConfigure should be specified separately */
-  phaseNames = ["doUnpack" "setVars" "shebangsHere" "doConfigure" 
-    "doMakeInstall" "shebangsInstalled" "wrapWK"
-    ];
+  buildInputs = [
+    (libsoup.override { gnomeSupport = true; })
+    gcr
+    glib-networking
+    gsettings-desktop-schemas
+    gtk3
+    libpeas
+    sqlite
+    webkitgtk
+    json-glib
+    libarchive
+  ];
 
-  setVars = args.fullDepEntry ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lnotify"
-  '' [];
-      
-  shebangsHere = (doPatchShebangs ".");
-  shebangsInstalled = (doPatchShebangs "$out/bin");
-  wrapWK = (makeManyWrappers "$out/bin/*" "--set WEBKIT_IGNORE_SSL_ERRORS 1");
-
-  name = "midori-${version}.${release}";
-  meta = {
-    description = "Light WebKit-based web browser with GTK GUI.";
-    maintainers = [args.lib.maintainers.raskin];
-    platforms = with args.lib.platforms;
-      linux;
+  meta = with stdenv.lib; {
+    description = "Lightweight WebKitGTK web browser";
+    homepage = "https://www.midori-browser.org/";
+    license = with licenses; [ lgpl21Plus ];
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ raskin ramkromberg ];
   };
 }

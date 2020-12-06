@@ -1,12 +1,15 @@
 {buildPerlPackage, stdenv, fetchurl, DBDmysql}:
 
-buildPerlPackage rec {
-  name = "maatkit-4790";
+buildPerlPackage {
+  pname = "maatkit";
+  version = "7540";
 
   src = fetchurl {
-    url = "http://maatkit.googlecode.com/files/${name}.tar.gz" ;
-    sha256 = "0lf6dgh1w96m234hrkhagyyvv1m1ldchpzsg6iswvkj6sbvv7d7h";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/maatkit/maatkit-7540.tar.gz";
+    sha256 = "1a7rxrddkrsfxb2wj01ha91ld0vapfkqcy8j9p08l76zz2l8p2v1";
   };
+
+  outputs = [ "out" ];
 
   buildInputs = [ DBDmysql ] ;
 
@@ -25,8 +28,16 @@ buildPerlPackage rec {
   '' ;
 
   meta = {
-    description = "Maatkit makes MySQL easier and safer to manage. It provides simple, predictable ways to do things you cannot otherwise do.";
-    license = "GPLv2+";
-    homepage = http://www.maatkit.org/;
+    description = "Database toolkit";
+    longDescription = ''
+      You can use Maatkit to prove replication is working correctly, fix
+      corrupted data, automate repetitive tasks, speed up your servers, and
+      much more.
+
+      In addition to MySQL, there is support for PostgreSQL, Memcached, and a
+      growing variety of other databases and technologies.
+    '';
+    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://www.maatkit.org/";
   };
 }

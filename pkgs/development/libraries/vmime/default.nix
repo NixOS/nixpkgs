@@ -1,18 +1,30 @@
-{stdenv, fetchurl, gsasl, gnutls, pkgconfig, zlib, libtasn1 }:
+{stdenv, fetchFromGitHub
+, gsasl, gnutls, pkgconfig, cmake, zlib, libtasn1, libgcrypt, gtk3
+# this will not work on non-nixos systems
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+}:
 
-stdenv.mkDerivation {
-  name = "vmime-0.9.1";
-  src = fetchurl {
-    url = mirror://sourceforge/vmime/libvmime-0.9.1.tar.bz2;
-    sha256 = "1bninkznn07zhl7gc3jnigzvb0x1sclwqwgjy47ahzdwv5vcnriv";
+stdenv.mkDerivation rec {
+  pname = "vmime";
+  version = "0.9.2";
+  src = fetchFromGitHub {
+    owner = "kisli";
+    repo = "vmime";
+    rev = "v${version}";
+    sha256 = "1304n50ny2av8bagjpgz55ag0nd7m313akm9bb73abjn6h5nzacv";
   };
 
-  buildInputs = [ gsasl gnutls pkgconfig zlib libtasn1 ];
+  buildInputs = [ gsasl gnutls zlib libtasn1 libgcrypt gtk3 ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  cmakeFlags = [
+    "-DVMIME_SENDMAIL_PATH=${sendmailPath}"
+  ];
 
   meta = {
-    homepage = http://www.vmime.org/;
+    homepage = "https://www.vmime.org/";
     description = "Free mail library for C++";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

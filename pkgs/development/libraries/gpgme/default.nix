@@ -1,26 +1,87 @@
-{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, useGnupg1 ? false, gnupg1 ? null }:
-
-assert useGnupg1 -> gnupg1 != null;
-assert !useGnupg1 -> gnupg != null;
+{ stdenv, fetchurl, fetchpatch
+, autoreconfHook, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+, file, which, ncurses
+, texinfo
+, buildPackages
+, qtbase ? null
+, pythonSupport ? false, swig2 ? null, python ? null
+}:
 
 let
-  gpgPath = if useGnupg1 then
-    "${gnupg1}/bin/gpg"
-  else
-    "${gnupg}/bin/gpg2";
+  inherit (stdenv) lib;
+  inherit (stdenv.hostPlatform) system;
 in
+
 stdenv.mkDerivation rec {
-  name = "gpgme-1.3.1";
-  
+  pname = "gpgme";
+  version = "1.15.0";
+
   src = fetchurl {
-    url = "ftp://ftp.gnupg.org/gcrypt/gpgme/${name}.tar.bz2";
-    sha256 = "1m7l7nicn6gd952cgspv9xr8whqivbg33nbg8kbpj3dffnl2gvqm";
+    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
+    sha256 = "0nqfipv5s4npfidsm1rs3kpq0r0av9bfqfd5r035jibx5k0jniqb";
   };
-  
-  propagatedBuildInputs = [ libgpgerror glib libassuan pth ];
 
-  buildNativeInputs = [ pkgconfig ];
+  patches = [
+    (fetchpatch { # gpg: Send --with-keygrip when listing keys
+      name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
+      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
+      sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
+    })
+    # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
+    (fetchpatch {
+      name = "0001-Fix-python-tests-on-non-Linux.patch";
+      url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
+      sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
+    })
+    # Disable python tests on Darwin as they use gpg (see configureFlags below)
+  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch;
 
-  configureFlags = "--with-gpg=${gpgPath}";
+  outputs = [ "out" "dev" "info" ];
+  outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
+
+  propagatedBuildInputs =
+    [ libgpgerror glib libassuan pth ]
+    ++ lib.optional (qtbase != null) qtbase;
+
+  nativeBuildInputs = [ pkgconfig gnupg texinfo autoreconfHook ]
+  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  configureFlags = [
+    "--enable-fixed-path=${gnupg}/bin"
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
+  ] ++ lib.optional pythonSupport "--enable-languages=python"
+  # Tests will try to communicate with gpg-agent instance via a UNIX socket
+  # which has a path length limit. Nix on darwin is using a build directory
+  # that already has quite a long path and the resulting socket path doesn't
+  # fit in the limit. https://github.com/NixOS/nix/pull/1085
+    ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
+
+  NIX_CFLAGS_COMPILE = toString (
+    # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
+    # debugging is disabled
+    lib.optional (qtbase != null) "-DQT_NO_DEBUG"
+    # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
+    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64");
+
+  checkInputs = [ which ];
+
+  doCheck = true;
+
+  meta = with stdenv.lib; {
+    homepage = "https://gnupg.org/software/gpgme/index.html";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;hb=refs/tags/gpgme-${version}";
+    description = "Library for making GnuPG easier to use";
+    longDescription = ''
+      GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
+      easier for applications. It provides a High-Level Crypto API for
+      encryption, decryption, signing, signature verification and key
+      management.
+    '';
+    license = with licenses; [ lgpl21Plus gpl3Plus ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ primeos ];
+  };
 }

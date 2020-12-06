@@ -1,20 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, libX11 }:
+{ stdenv, fetchurl, pkgconfig, xorg, mesa, meson, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "libvdpau-0.5";
-  
+  pname = "libvdpau";
+  version = "1.4";
+
   src = fetchurl {
-    url = "http://people.freedesktop.org/~aplattner/vdpau/${name}.tar.gz";
-    sha256 = "0k2ydz4yp7zynlkpd1llfwax30xndwbca36z83ah1i4ldjw2gfhx";
+    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0c1zsfr6ypzwv8g9z50kdahpb7pirarq4z8avqqyyma5b9684n22";
   };
+  patches = [ ./installdir.patch ];
 
-  buildInputs = [ pkgconfig libX11 ];
+  outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ libX11 ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
+  buildInputs = with xorg; [ xorgproto libXext ];
 
-  meta = {
-    homepage = http://people.freedesktop.org/~aplattner/vdpau/;
+  propagatedBuildInputs = [ xorg.libX11 ];
+
+  mesonFlags = stdenv.lib.optional stdenv.isLinux
+    [ "-Dmoduledir=${mesa.drivers.driverLink}/lib/vdpau" ];
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lX11";
+
+  meta = with stdenv.lib; {
+    homepage = "https://people.freedesktop.org/~aplattner/vdpau/";
     description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
-    license = "bsd";
+    license = licenses.mit; # expat version
+    platforms = platforms.unix;
+    maintainers = [ maintainers.vcunat ];
   };
 }

@@ -1,15 +1,12 @@
-{stdenv, fetchurl, m4, ncurses, ocaml, writeText}:
+{ stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
-
-stdenv.mkDerivation {
-  name = "ocaml-findlib-1.3.3";
+stdenv.mkDerivation rec {
+  pname = "ocaml-findlib";
+  version = "1.8.1";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/findlib-1.3.3.tar.gz;
-    sha256 = "981f5c67118a2be015efa79f3af3cb0063376b93123b5d695e7cb5c586b1d45c";
+    url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
+    sha256 = "00s3sfb02pnjmkax25pcnljcnhcggiliccfz69a72ic7gsjwz1cf";
   };
 
   buildInputs = [m4 ncurses ocaml];
@@ -22,7 +19,7 @@ stdenv.mkDerivation {
     configureFlagsArray=(
       -bindir $out/bin
       -mandir $out/share/man
-      -sitelib $out/lib/ocaml/${ocaml_version}/site-lib
+      -sitelib $out/lib/ocaml/${ocaml.version}/site-lib
       -config $out/etc/findlib.conf
     )
   '';
@@ -34,25 +31,31 @@ stdenv.mkDerivation {
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
-        if test -d "''$1/lib/ocaml/${ocaml_version}/site-lib"; then
-            export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml_version}/site-lib/"
+        if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib"; then
+            export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/"
         fi
-        export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml_version}/site-lib/"
-        if test -n "$createFindlibDestdir"; then
+        if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"; then
+            export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"
+        fi
+        export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
+        if test -n "''${createFindlibDestdir-}"; then
           mkdir -p $OCAMLFIND_DESTDIR
         fi
     }
-    
-    envHooks=(''${envHooks[@]} addOCamlPath)
+
+    addEnvHooks "$targetOffset" addOCamlPath
   '';
 
   meta = {
-    homepage = http://projects.camlcity.org/projects/findlib.html;
+    homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
-    license = "MIT/X11";
-    platforms = ocaml.meta.platforms;
+    license = stdenv.lib.licenses.mit;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
+      stdenv.lib.maintainers.vbmithr
     ];
   };
 }
+
+

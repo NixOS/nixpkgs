@@ -1,35 +1,45 @@
-{ stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar
-, gettext, bash, gawk, boost}:
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl, fetchpatch, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
+, libpng, libX11, gettext, boost, libnotify, gtk2, doxygen, spring
+, makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
 
-  name = "springlobby-${version}";
-  version = "0.146";
+stdenv.mkDerivation rec {
+  pname = "springlobby";
+  version = "0.270";
 
   src = fetchurl {
-    url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "55899baf6732e48bfaa36d80974aa135c051d2cbb6fe92fbcffd80440639eedf";
+    url = "https://springlobby.springrts.com/dl/stable/springlobby-${version}.tar.bz2";
+    sha256 = "1r1g2hw9ipsmsmzbhsi7bxqra1za6x7j1kw12qzl5psqyq8rqbgs";
   };
 
-  buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost];
+  nativeBuildInputs = [ cmake pkgconfig gettext doxygen makeWrapper ];
+  buildInputs = [
+    wxGTK30 openal curl libtorrentRasterbar pcre jsoncpp
+    boost libpng libX11 libnotify gtk2 glib minizip alure
+  ];
 
-  prePatch = ''
-    substituteInPlace tools/regen_config_header.sh --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace tools/test-susynclib.awk --replace "#!/usr/bin/awk" "#!${gawk}/bin/awk"
-    substituteInPlace CMakeLists.txt --replace "boost_system-mt" "boost_system"
-  '';
-
-  # for now sound is disabled as it causes a linker error with alure i can't resolve (qknight)
-  cmakeFlags = "-DOPTION_SOUND:BOOL=OFF"; 
+  patches = [
+    ./revert_58b423e.patch # Allows springLobby to continue using system installed spring until #707 is fixed
+    ./fix-certs.patch
+    (fetchpatch {
+      url = "https://github.com/springlobby/springlobby/commit/252c4cb156c1442ed9b4faec3f26265bc7c295ff.patch";
+      sha256 = "sha256-Nq1F5fRPnCkZwl9KgrfuUmpIMK3hUOyZQYIKElWpmzU=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
-  #buildPhase = "make VERBOSE=1";
+  postInstall = ''
+    wrapProgram $out/bin/springlobby \
+      --prefix PATH : "${spring}/bin" \
+      --set SPRING_BUNDLE_DIR "${spring}/lib"
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://springlobby.info/;
-    description = "A free cross-platform lobby client for the Spring RTS project.";
+    homepage = "https://springlobby.info/";
+    repositories.git = "git://github.com/springlobby/springlobby.git";
+    description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight];
+    maintainers = with maintainers; [ phreedom qknight domenkozar ];
     platforms = platforms.linux;
   };
 }

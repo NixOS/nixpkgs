@@ -1,37 +1,41 @@
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xi="http://www.w3.org/2001/XInclude">
-
-  <info>
-
-    <title>Nixpkgs Manual</title>
-
-    <subtitle>Draft (Version <xi:include href="../VERSION"
-    parse="text" />)</subtitle>
-
-    <author>
-      <personname>
-        <firstname>Eelco</firstname>
-        <surname>Dolstra</surname>
-      </personname>
-      <affiliation>
-        <orgname>LogicBlox</orgname>
-      </affiliation>
-    </author>
-
-    <copyright>
-      <year>2008-2012</year>
-      <holder>Eelco Dolstra</holder>
-    </copyright>
-
-  </info>
-
-  <xi:include href="introduction.xml" />
-  <xi:include href="quick-start.xml" />
-  <xi:include href="stdenv.xml" />
-  <xi:include href="meta.xml" />
-  <xi:include href="language-support.xml" />
-  <xi:include href="package-notes.xml" />
-  <xi:include href="coding-conventions.xml" />
-  
-        
+ <info>
+  <title>Nixpkgs Manual</title>
+  <subtitle>Version <xi:include href=".version" parse="text" />
+  </subtitle>
+ </info>
+ <xi:include href="preface.chapter.xml" />
+ <part>
+  <title>Using Nixpkgs</title>
+  <xi:include href="using/configuration.xml" />
+  <xi:include href="using/overlays.xml" />
+  <xi:include href="using/overrides.xml" />
+  <xi:include href="functions.xml" />
+ </part>
+ <part>
+  <title>Standard environment</title>
+  <xi:include href="stdenv/stdenv.xml" />
+  <xi:include href="stdenv/meta.xml" />
+  <xi:include href="stdenv/multiple-output.xml" />
+  <xi:include href="stdenv/cross-compilation.xml" />
+  <xi:include href="stdenv/platform-notes.xml" />
+ </part>
+ <part>
+  <title>Builders</title>
+  <xi:include href="builders/fetchers.xml" />
+  <xi:include href="builders/trivial-builders.xml" />
+  <xi:include href="builders/special.xml" />
+  <xi:include href="builders/images.xml" />
+  <xi:include href="languages-frameworks/index.xml" />
+  <xi:include href="builders/packages/index.xml" />
+ </part>
+ <part>
+  <title>Contributing to Nixpkgs</title>
+  <xi:include href="contributing/quick-start.xml" />
+  <xi:include href="contributing/coding-conventions.xml" />
+  <xi:include href="contributing/submitting-changes.xml" />
+  <xi:include href="contributing/reviewing-contributions.xml" />
+  <xi:include href="contributing/contributing-to-documentation.xml" />
+ </part>
 </book>

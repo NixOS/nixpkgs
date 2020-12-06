@@ -1,24 +1,52 @@
-{stdenv, fetchurl, libcap}:
+{ stdenv, lib, fetchurl, openssl, perl, libcap ? null, libseccomp ? null, pps-tools }:
 
 assert stdenv.isLinux -> libcap != null;
- 
-stdenv.mkDerivation rec {
-  name = "ntp-4.2.6p4";
-  
-  src = fetchurl {
-    url = "http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
-    sha256 = "1ww1hpy0yfmj13vs46d80hs48hy8ig6kn6p6d8q2syym02khxhyy";
-  };
-  
-  configureFlags = ''
-    --without-crypto
-    ${if stdenv.isLinux then "--enable-linuxcaps" else ""}
-  '';
-  
-  buildInputs = stdenv.lib.optional stdenv.isLinux libcap;
+assert stdenv.isLinux -> libseccomp != null;
 
-  meta = {
-    homepage = http://www.ntp.org/;
+let
+  withSeccomp = stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64);
+in
+
+stdenv.mkDerivation rec {
+  name = "ntp-4.2.8p15";
+
+  src = fetchurl {
+    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
+    sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
+  };
+
+  # The hardcoded list of allowed system calls for seccomp is
+  # insufficient for NixOS, add more to make it work (issue #21136).
+  patches = [ ./seccomp.patch ];
+
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--with-openssl-libdir=${openssl.out}/lib"
+    "--with-openssl-incdir=${openssl.dev}/include"
+    "--enable-ignore-dns-errors"
+    "--with-yielding-select=yes"
+  ] ++ stdenv.lib.optional stdenv.isLinux "--enable-linuxcaps"
+    ++ stdenv.lib.optional withSeccomp "--enable-libseccomp";
+
+  buildInputs = [ libcap openssl perl ]
+    ++ lib.optional withSeccomp libseccomp
+    ++ lib.optional stdenv.isLinux pps-tools;
+
+  hardeningEnable = [ "pie" ];
+
+  postInstall = ''
+    rm -rf $out/share/doc
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.ntp.org/";
     description = "An implementation of the Network Time Protocol";
+    license = {
+      # very close to isc and bsd2
+      url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
+    };
+    maintainers = with maintainers; [ eelco thoughtpolice ];
+    platforms = platforms.linux;
   };
 }

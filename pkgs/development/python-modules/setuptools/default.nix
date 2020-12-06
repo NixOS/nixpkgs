@@ -1,35 +1,83 @@
-{ stdenv, fetchurl, python, wrapPython }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, wrapPython
+, unzip
+, callPackage
+, bootstrapped-pip
+, lib
+, pipInstallHook
+, setuptoolsBuildHook
+}:
 
-stdenv.mkDerivation rec {
-  name = "setuptools-" + version;
+let
+  pname = "setuptools";
+  version = "50.3.1";
 
-  version = "0.6c11";
+  # Create an sdist of setuptools
+  sdist = stdenv.mkDerivation rec {
+    name = "${pname}-${version}-sdist.tar.gz";
 
-  src = fetchurl {
-    url = "http://pypi.python.org/packages/source/s/setuptools/${name}.tar.gz";
-    sha256 = "1lx1hwxkhipyh206bgl90ddnfcnb68bzcvyawczbf833fadyl3v3";
-  };
+    src = fetchFromGitHub {
+      owner = "pypa";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "Z4KHB3Pv4wZPou/Vbp1DFDgDp47OTDfVChGP55GtIJE=";
+      name = "${pname}-${version}-source";
+    };
 
-  buildInputs = [ python wrapPython ];
+    patches = [
+      ./tag-date.patch
+    ];
 
-  buildPhase = "python setup.py build --build-base $out";
+    buildPhase = ''
+      ${python.pythonForBuild.interpreter} bootstrap.py
+      ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
 
-  installPhase =
-    ''
-      dst=$out/lib/${python.libPrefix}/site-packages
-      mkdir -p $dst
-      PYTHONPATH=$dst:$PYTHONPATH
-      python setup.py install --prefix=$out
-      wrapPythonPrograms
+      # Here we untar the sdist and retar it in order to control the timestamps
+      # of all the files included
+      tar -xzf dist/${pname}-${version}.post0.tar.gz -C dist/
+      tar -czf dist/${name} -C dist/ --mtime="@$SOURCE_DATE_EPOCH"  ${pname}-${version}.post0
     '';
 
-  doCheck = false; # doesn't work with Python 2.7
+    installPhase = ''
+      echo "Moving sdist..."
+      mv dist/${name} $out
+    '';
+  };
+in buildPythonPackage rec {
+  inherit pname version;
+  # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
+  # Instead, we override it to remove setuptools to avoid a circular dependency.
+  # The same is done for pip and the pipInstallHook.
+  format = "other";
 
-  checkPhase = "python setup.py test";
+  src = sdist;
 
-  meta = {
+  nativeBuildInputs = [
+    bootstrapped-pip
+    (pipInstallHook.override{pip=null;})
+    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+  ];
+
+  preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+    export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
+  '';
+
+  pipInstallFlags = [ "--ignore-installed" ];
+
+  # Adds setuptools to nativeBuildInputs causing infinite recursion.
+  catchConflicts = false;
+
+  # Requires pytest, causing infinite recursion.
+  doCheck = false;
+
+  meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = http://pypi.python.org/pypi/setuptools;
-    licenses = [ "PSF" "ZPL" ];
-  };    
+    homepage = "https://pypi.python.org/pypi/setuptools";
+    license = with licenses; [ psfl zpl20 ];
+    platforms = python.meta.platforms;
+    priority = 10;
+  };
 }

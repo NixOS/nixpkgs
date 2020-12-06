@@ -1,32 +1,47 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl, gnum4 }:
 
-let
-  version = "1.4";
-in
-stdenv.mkDerivation {
-  name = "adns-${version}";
+stdenv.mkDerivation rec {
+  pname = "adns";
+  version = "1.6.0";
 
   src = fetchurl {
     urls = [
-      "http://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
+      "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
       "ftp://ftp.chiark.greenend.org.uk/users/ian/adns/adns-${version}.tar.gz"
       "mirror://gnu/adns/adns-${version}.tar.gz"
     ];
-    sha256 = "1zm99i9fd5gfijd144ajngn6x73563355im79sqdi98pj6ir4yvi";
+    sha256 = "1pi0xl07pav4zm2jrbrfpv43s1r1q1y12awgak8k7q41m5jp4hpv";
   };
 
-  preConfigure =
-    stdenv.lib.optionalString stdenv.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
+  nativeBuildInputs = [ gnum4 ];
 
-  # http://thread.gmane.org/gmane.linux.distributions.nixos/1328 for details.
+  preConfigure =
+    lib.optionalString stdenv.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
+
+  # https://www.mail-archive.com/nix-dev@cs.uu.nl/msg01347.html for details.
   doCheck = false;
 
-  meta = {
+  postInstall = let suffix = lib.versions.majorMinor version;
+  in lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libadns.so.${suffix} $out/lib/libadns.so.${suffix}
+  '';
+
+  # darwin executables fail, but I don't want to fail the 100-500 packages depending on this lib
+  doInstallCheck = !stdenv.isDarwin;
+  installCheckPhase = ''
+    set -eo pipefail
+
+    for prog in $out/bin/*; do
+      $prog --help > /dev/null && echo $(basename $prog) shows usage
+    done
+  '';
+
+  meta = with lib; {
     homepage = "http://www.chiark.greenend.org.uk/~ian/adns/";
     description = "Asynchronous DNS Resolver Library";
-    license = "LGPL-v2";
+    license = licenses.lgpl2;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.peti ];
   };
 }

@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, libX11, libXtst, xextproto, libXi, inputproto }:
+{ stdenv, fetchurl, libX11, libXtst, xorgproto, libXi }:
 
-stdenv.mkDerivation {
-  name = "xmacro-0.3pre20000911";
+stdenv.mkDerivation rec {
+  pname = "xmacro";
+  version = "0.4.6";
 
   src = fetchurl {
-    url = mirror://sourceforge/xmacro/xmacro-pre0.3-20000911.tar.gz;
-    md5 = "d2956b82f3d5380e58a75ccc721fb746";
+    url = "http://download.sarine.nl/xmacro/${pname}-${version}.tar.gz";
+    sha256 = "1p9jljxyn4j6piljiyi2xv6f8jhjbzhabprp8p0qmqxaxgdipi61";
   };
 
-  preBuild = ''
-    sed -e 's/-pedantic//g' -i Makefile
-    sed -e 's/iostream[.]h/iostream/' -i *.cpp
-    sed -e 's/iomanip[.]h/iomanip/' -i *.cpp
-    sed -e '1iusing namespace std;' -i *.cpp
-  '';
+  preInstall = "echo -e 'install:\n	mkdir \${out}/bin;\n	cp xmacrorec2 xmacroplay \${out}/bin;' >>Makefile; ";
 
-  preInstall = "echo -e 'install:\n	mkdir \${out}/bin;\n	cp xmacrorec xmacrorec2 xmacroplay \${out}/bin;' >>Makefile; ";
+  buildInputs = [ libX11 libXtst xorgproto libXi ];
 
-  buildInputs = [ libX11 libXtst xextproto libXi inputproto ];
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
+  };
 }

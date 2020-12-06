@@ -1,29 +1,28 @@
-{stdenv, fetchurl, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl}:
+{ lib, fetchzip, pkgconfig, ncurses, libev, buildDunePackage, ocaml
+, cppo, ocaml-migrate-parsetree, ocplib-endian, result
+, mmap, seq
+}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "2.1.1";
-in
+let inherit (lib) optional versionAtLeast; in
 
-stdenv.mkDerivation {
-  name = "ocaml-lwt-${version}";
+buildDunePackage rec {
+  pname = "lwt";
+  version = "5.3.0";
 
-  src = fetchurl {
-    url = "http://ocsigen.org/download/lwt-${version}.tar.gz";
-    sha256 = "1zjn0sgihryshancn4kna1xslhc8gifliny1qd3a85f72xxxnw0w";
+  src = fetchzip {
+    url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
+    sha256 = "15hgy3220m2b8imipa514n7l65m1h5lc6l1hanqwwvs7ghh2aqp2";
   };
 
-  buildInputs = [which cryptopp ocaml findlib ocaml_react ocaml_ssl];
-
-  configurePhase = "true";
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cppo ocaml-migrate-parsetree ]
+   ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
+  propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
   meta = {
-    homepage = http://ocsigen.org/lwt;
-    description = "Lightweight thread library for Objective Caml";
-    license = "LGPL";
-    platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
+    homepage = "https://ocsigen.org/lwt/";
+    description = "A cooperative threads library for OCaml";
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
   };
 }

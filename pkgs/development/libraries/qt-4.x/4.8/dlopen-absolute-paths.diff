@@ -1,7 +1,8 @@
-diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/corelib/tools/qlocale_icu.cpp qt-everywhere-opensource-src-4.8.3/src/corelib/tools/qlocale_icu.cpp
---- qt-everywhere-opensource-src-4.8.3-orig/src/corelib/tools/qlocale_icu.cpp	2012-09-10 21:36:50.000000000 -0400
-+++ qt-everywhere-opensource-src-4.8.3/src/corelib/tools/qlocale_icu.cpp	2012-09-28 22:57:40.764153828 -0400
-@@ -81,7 +81,7 @@
+diff --git a/src/corelib/tools/qlocale_icu.cpp b/src/corelib/tools/qlocale_icu.cpp
+index c3e2907..2fac4e1 100644
+--- a/src/corelib/tools/qlocale_icu.cpp
++++ b/src/corelib/tools/qlocale_icu.cpp
+@@ -81,7 +81,7 @@ bool qt_initIcu(const QString &localeString)
      if (status == NotLoaded) {
  
          // resolve libicui18n
@@ -10,7 +11,7 @@ diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/corelib/tools/qlocale_icu.c
          lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
          if (!lib.load()) {
              qWarning() << "Unable to load library icui18n" << lib.errorString();
-@@ -111,7 +111,7 @@
+@@ -111,7 +111,7 @@ bool qt_initIcu(const QString &localeString)
          }
  
          // resolve libicuuc
@@ -19,10 +20,11 @@ diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/corelib/tools/qlocale_icu.c
          ucLib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
          if (!ucLib.load()) {
              qWarning() << "Unable to load library icuuc" << ucLib.errorString();
-diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/gui/painting/qcups.cpp qt-everywhere-opensource-src-4.8.3/src/gui/painting/qcups.cpp
---- qt-everywhere-opensource-src-4.8.3-orig/src/gui/painting/qcups.cpp	2012-09-10 21:36:51.000000000 -0400
-+++ qt-everywhere-opensource-src-4.8.3/src/gui/painting/qcups.cpp	2012-09-28 18:08:26.600720491 -0400
-@@ -87,7 +87,7 @@
+diff --git a/src/gui/painting/qcups.cpp b/src/gui/painting/qcups.cpp
+index 99ea43f..acdf9c9 100644
+--- a/src/gui/painting/qcups.cpp
++++ b/src/gui/painting/qcups.cpp
+@@ -87,7 +87,7 @@ static CupsPrintFile _cupsPrintFile = 0;
  
  static void resolveCups()
  {
@@ -31,10 +33,11 @@ diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/gui/painting/qcups.cpp qt-e
      if(cupsLib.load()) {
          _cupsGetDests = (CupsGetDests) cupsLib.resolve("cupsGetDests");
          _cupsFreeDests = (CupsFreeDests) cupsLib.resolve("cupsFreeDests");
-diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/gui/painting/qprinterinfo_unix.cpp qt-everywhere-opensource-src-4.8.3/src/gui/painting/qprinterinfo_unix.cpp
---- qt-everywhere-opensource-src-4.8.3-orig/src/gui/painting/qprinterinfo_unix.cpp	2012-09-10 21:36:51.000000000 -0400
-+++ qt-everywhere-opensource-src-4.8.3/src/gui/painting/qprinterinfo_unix.cpp	2012-09-28 18:08:26.601720488 -0400
-@@ -454,7 +454,7 @@
+diff --git a/src/gui/painting/qprinterinfo_unix.cpp b/src/gui/painting/qprinterinfo_unix.cpp
+index 3d15538..f0f5351 100644
+--- a/src/gui/painting/qprinterinfo_unix.cpp
++++ b/src/gui/painting/qprinterinfo_unix.cpp
+@@ -454,7 +454,7 @@ int qt_retrieveNisPrinters(QList<QPrinterDescription> *printers)
      char *domain;
      int err;
  
@@ -43,22 +46,24 @@ diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/gui/painting/qprinterinfo_u
      typedef int (*ypGetDefaultDomain)(char **);
      ypGetDefaultDomain _ypGetDefaultDomain = (ypGetDefaultDomain)lib.resolve("yp_get_default_domain");
      typedef int (*ypAll)(const char *, const char *, const struct ypall_callback *);
-diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/network/kernel/qhostinfo_unix.cpp qt-everywhere-opensource-src-4.8.3/src/network/kernel/qhostinfo_unix.cpp
---- qt-everywhere-opensource-src-4.8.3-orig/src/network/kernel/qhostinfo_unix.cpp	2012-09-10 21:36:51.000000000 -0400
-+++ qt-everywhere-opensource-src-4.8.3/src/network/kernel/qhostinfo_unix.cpp	2012-09-28 18:08:53.186643755 -0400
-@@ -95,7 +95,7 @@
+diff --git a/src/network/kernel/qhostinfo_unix.cpp b/src/network/kernel/qhostinfo_unix.cpp
+index 6b42d1e..f88b628 100644
+--- a/src/network/kernel/qhostinfo_unix.cpp
++++ b/src/network/kernel/qhostinfo_unix.cpp
+@@ -95,7 +95,7 @@ static res_state_ptr local_res = 0;
  static void resolveLibrary()
  {
- #ifndef QT_NO_LIBRARY
+ #if !defined(QT_NO_LIBRARY) && !defined(Q_OS_QNX)
 -    QLibrary lib(QLatin1String("resolv"));
 +    QLibrary lib(QLatin1String("@glibc@/lib/libresolv"));
      lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
      if (!lib.load())
          return;
-diff -ru qt-everywhere-opensource-src-4.8.3-orig/src/plugins/platforms/xlib/qxlibstatic.cpp qt-everywhere-opensource-src-4.8.3/src/plugins/platforms/xlib/qxlibstatic.cpp
---- qt-everywhere-opensource-src-4.8.3-orig/src/plugins/platforms/xlib/qxlibstatic.cpp	2012-09-10 21:36:51.000000000 -0400
-+++ qt-everywhere-opensource-src-4.8.3/src/plugins/platforms/xlib/qxlibstatic.cpp	2012-09-28 18:08:26.601720488 -0400
-@@ -242,7 +242,7 @@
+diff --git a/src/plugins/platforms/xlib/qxlibstatic.cpp b/src/plugins/platforms/xlib/qxlibstatic.cpp
+index f8f3d69..d63c5bc 100644
+--- a/src/plugins/platforms/xlib/qxlibstatic.cpp
++++ b/src/plugins/platforms/xlib/qxlibstatic.cpp
+@@ -242,7 +242,7 @@ static void* qt_load_library_runtime(const char *library, int vernum,
  }
  
  #  define XFIXES_LOAD_RUNTIME(vernum, symbol, symbol_type) \

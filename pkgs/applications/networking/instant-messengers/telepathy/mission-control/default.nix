@@ -1,15 +1,53 @@
-{ stdenv, fetchurl, pkgconfig, telepathy_glib, libxslt }:
+{ stdenv
+, fetchurl
+, pkg-config
+, dconf
+, telepathy-glib
+, python3
+, libxslt
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-5.12.0";
   pname = "telepathy-mission-control";
+  version = "5.16.6";
+
+  outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
-    sha256 = "0xsycjk2l19h026adqms8ik7c2xj9j9rba76znfh46ryaijyn2k6";
+    url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0ibs575pfr0wmhfcw6ln6iz7gw2y45l3bah11rksf6g9jlwsxy1d";
   };
 
-  buildInputs = [ telepathy_glib ];
+  buildInputs = [
+    python3
+  ]; # ToDo: optional stuff missing
 
-  buildNativeInputs = [ pkgconfig libxslt ];
+  nativeBuildInputs = [
+    pkg-config
+    libxslt
+    makeWrapper
+  ];
+
+  propagatedBuildInputs = [
+    telepathy-glib
+  ];
+
+  doCheck = true;
+
+  enableParallelBuilding = true;
+
+  preFixup = ''
+    wrapProgram "$lib/libexec/mission-control-5" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "An account manager and channel dispatcher for the Telepathy framework";
+    homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
+  };
 }

@@ -1,18 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook, docutils, pkgconfig
+, kerberos, keyutils, pam, talloc }:
 
 stdenv.mkDerivation rec {
-  name = "cifs-utils-5.6";
+  pname = "cifs-utils";
+  version = "6.9";
 
   src = fetchurl {
-    url = "ftp://ftp.samba.org/pub/linux-cifs/cifs-utils/${name}.tar.bz2";
-    sha256 = "0f619nw1163bcmfc83mmqj31qdkl68wfm81vynx3d8q0m0k1ll7i";
+    url = "mirror://samba/pub/linux-cifs/cifs-utils/${pname}-${version}.tar.bz2";
+    sha256 = "175cp509wn1zv8p8mv37hkf6sxiskrsxdnq22mhlsg61jazz3n0q";
   };
 
-  makeFlags = "root_sbindir=$(out)/sbin";
+  nativeBuildInputs = [ autoreconfHook docutils pkgconfig ];
 
-  meta = {
-    homepage = http://www.samba.org/linux-cifs/cifs-utils/;
+  buildInputs = [ kerberos keyutils pam talloc ];
+
+  makeFlags = [ "root_sbindir=$(out)/sbin" ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.samba.org/linux-cifs/cifs-utils/";
     description = "Tools for managing Linux CIFS client filesystems";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.lgpl3;
   };
 }

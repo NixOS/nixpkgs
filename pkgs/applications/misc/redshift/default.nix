@@ -1,28 +1,147 @@
-{ fetchurl, stdenv,
-  libX11, libXrandr, libXxf86vm, libxcb, pkgconfig, python,
-  randrproto, xcbutil, xf86vidmodeproto }:
+{ stdenv, fetchFromGitHub, fetchFromGitLab
+, autoconf, automake, gettext, intltool
+, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
+, gtk3, python, pygobject3, pyxdg
 
-stdenv.mkDerivation rec {
-  name = "redshift";
-  version = "1.6";
-  src = fetchurl {
-    url = "http://launchpad.net/${name}/trunk/${version}/+download/${name}-${version}.tar.bz2";
-    sha256 = "0g46zhqnx3y2fssmyjgaardzhjw1j29l1dbc2kmccw9wxqfla1wi";
+, withQuartz ? stdenv.isDarwin, ApplicationServices
+, withRandr ? stdenv.isLinux, libxcb
+, withDrm ? stdenv.isLinux, libdrm
+
+, withGeolocation ? true
+, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
+, withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+, withAppIndicator ? true, libappindicator
+}:
+
+let
+  mkRedshift =
+    { pname, version, src, meta }:
+    stdenv.mkDerivation rec {
+      inherit pname version src meta;
+
+      patches = stdenv.lib.optionals (pname != "gammastep") [
+        # https://github.com/jonls/redshift/pull/575
+        ./575.patch
+      ];
+
+      nativeBuildInputs = [
+        autoconf
+        automake
+        gettext
+        intltool
+        libtool
+        pkgconfig
+        wrapGAppsHook
+        wrapPython
+      ];
+
+      configureFlags = [
+        "--enable-randr=${if withRandr then "yes" else "no"}"
+        "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
+        "--enable-drm=${if withDrm then "yes" else "no"}"
+        "--enable-quartz=${if withQuartz then "yes" else "no"}"
+        "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
+      ];
+
+      buildInputs = [
+        gobject-introspection
+        gtk3
+        python
+      ] ++ stdenv.lib.optional  withRandr        libxcb
+        ++ stdenv.lib.optional  withGeoclue      geoclue
+        ++ stdenv.lib.optional  withDrm          libdrm
+        ++ stdenv.lib.optional  withQuartz       ApplicationServices
+        ++ stdenv.lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
+        ++ stdenv.lib.optional  withAppIndicator libappindicator
+        ;
+
+      pythonPath = [ pygobject3 pyxdg ];
+
+      preConfigure = "./bootstrap";
+
+      postFixup = "wrapPythonPrograms";
+
+      # the geoclue agent may inspect these paths and expect them to be
+      # valid without having the correct $PATH set
+      postInstall = if (pname == "gammastep") then ''
+        substituteInPlace $out/share/applications/gammastep.desktop \
+          --replace 'Exec=gammastep' "Exec=$out/bin/gammastep"
+        substituteInPlace $out/share/applications/gammastep-indicator.desktop \
+          --replace 'Exec=gammastep-indicator' "Exec=$out/bin/gammastep-indicator"
+      '' else ''
+        substituteInPlace $out/share/applications/redshift.desktop \
+          --replace 'Exec=redshift' "Exec=$out/bin/redshift"
+        substituteInPlace $out/share/applications/redshift-gtk.desktop \
+          --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+      '';
+
+      enableParallelBuilding = true;
+    };
+in
+rec {
+  redshift = mkRedshift rec {
+    pname = "redshift";
+    version = "1.12";
+
+    src = fetchFromGitHub {
+      owner = "jonls";
+      repo = "redshift";
+      rev = "v${version}";
+      sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Screen color temperature manager";
+      longDescription = ''
+        Redshift adjusts the color temperature according to the position
+        of the sun. A different color temperature is set during night and
+        daytime. During twilight and early morning, the color temperature
+        transitions smoothly from night to daytime temperature to allow
+        your eyes to slowly adapt. At night the color temperature should
+        be set to match the lamps in your room.
+      '';
+      license = licenses.gpl3Plus;
+      homepage = "http://jonls.dk/redshift";
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ yegortimoshenko globin ];
+    };
   };
 
-  buildInputs = [ libX11 libXrandr libXxf86vm libxcb pkgconfig python
-                  randrproto xcbutil xf86vidmodeproto ];
+  redshift-wlr = mkRedshift {
+    pname = "redshift-wlr";
+    # upstream rebases so this is the push date
+    version = "2019-08-24";
 
-  meta = {
-    description = "changes the color temperature of your screen gradually";
-    longDescription = ''
-      The color temperature is set according to the position of the
-      sun. A different color temperature is set during night and
-      daytime. During twilight and early morning, the color
-      temperature transitions smoothly from night to daytime
-      temperature to allow your eyes to slowly adapt.
-      '';
-    license = "GPLv3+";
-    homepage = "http://jonls.dk/redshift";
-  }; 
+    src = fetchFromGitHub {
+      owner = "minus7";
+      repo = "redshift";
+      rev = "7da875d34854a6a34612d5ce4bd8718c32bec804";
+      sha256 = "0rs9bxxrw4wscf4a8yl776a8g880m5gcm75q06yx2cn3lw2b7v22";
+    };
+
+    meta = redshift.meta // {
+      description = redshift.meta.description + "(with wlroots patches)";
+      homepage = "https://github.com/minus7/redshift";
+    };
+  };
+
+  gammastep = mkRedshift rec {
+    pname = "gammastep";
+    version = "2.0.5";
+
+    src = fetchFromGitLab {
+      owner = "chinstrap";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "1l3x4gnichwzbb0529bhm723xpryn5svhhsfdiwlw122q1vmz2q7";
+    };
+
+    meta = redshift.meta // {
+      name = "${pname}-${version}";
+      longDescription = "Gammastep"
+        + stdenv.lib.removePrefix "Redshift" redshift.meta.longDescription;
+      homepage = "https://gitlab.com/chinstrap/gammastep";
+      maintainers = [ stdenv.lib.maintainers.primeos ] ++ redshift.meta.maintainers;
+    };
+  };
 }

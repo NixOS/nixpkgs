@@ -1,46 +1,49 @@
-{ fetchurl, stdenv, python, pkgconfig, SDL, SDL_image, SDL_mixer, SDL_ttf
-, numeric }:
+{ lib, fetchPypi, buildPythonPackage, python, pkg-config, libX11
+, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, freetype
+}:
 
-stdenv.mkDerivation {
-  name = "pygame-1.7";
+buildPythonPackage rec {
+  pname = "pygame";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = http://www.pygame.org/ftp/pygame-1.7.1release.tar.gz ;
-    sha256 = "0hl0rmgjcqj217fibwyilz7w9jpg0kh7hsa7vyzd4cgqyliskpqi";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "63b038da116a643046181b02173fd894d87d2f85ecfd6aa7d5ece73c6ef501e9";
   };
 
-  buildInputs = [python pkgconfig SDL SDL_image SDL_ttf numeric];
- 
-  configurePhase = ''
-    export LOCALBASE=///
-    sed -e "/origincdirs =/a'${SDL_image}/include/SDL','${SDL_image}/include'," -i config_unix.py
-    sed -e "/origlibdirs =/aoriglibdirs += '${SDL_image}/lib'," -i config_unix.py
-    sed -e "/origincdirs =/a'${SDL_mixer}/include/SDL','${SDL_mixer}/include'," -i config_unix.py
-    sed -e "/origlibdirs =/aoriglibdirs += '${SDL_mixer}/lib'," -i config_unix.py
-    sed -e "/origincdirs =/a'${SDL_ttf}/include/SDL','${SDL_ttf}/include'," -i config_unix.py
-    sed -e "/origlibdirs =/aoriglibdirs += '${SDL_ttf}/lib'," -i config_unix.py
-    sed -e "/origincdirs =/a'${numeric}/include/python2.5'," -i config_unix.py
+  nativeBuildInputs = [
+    pkg-config SDL
+  ];
 
-    sed -e "s|get_python_inc(0)|\"${numeric}/include/python2.5\"|g" -i config_unix.py
+  buildInputs = [
+    SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
+    portmidi libX11 freetype
+  ];
 
-    # XXX: `Numeric.pth' should be found by Python but it's not, hence the
-    # $PYTHONPATH setting below.  Gobolinux has the same problem:
-    # http://bugs.python.org/issue1431 .
-    yes Y | \
-      PYTHONPATH="${numeric}/lib/python2.5/site-packages/Numeric:$PYTHONPATH" \
-      python config.py
+  # Tests fail because of no audio device and display.
+  doCheck = false;
 
-    # That `config.py' is really deeply broken.
-    sed -i Setup \
-        -e "s|^NUMERIC *=.*$|NUMERIC = -I${numeric}/include/python2.5|g ;
-            s|^MIXER *=.*$|MIXER = -I${SDL_mixer}/include -L${SDL_mixer}/lib -lSDL_mixer|g"
+  preConfigure = ''
+    sed \
+      -e "s/origincdirs = .*/origincdirs = []/" \
+      -e "s/origlibdirs = .*/origlibdirs = []/" \
+      -e "/'\/lib\/i386-linux-gnu', '\/lib\/x86_64-linux-gnu']/d" \
+      -e "/\/include\/smpeg/d" \
+      -i buildconfig/config_unix.py
+    ${lib.concatMapStrings (dep: ''
+      sed \
+        -e "/origincdirs =/a\        origincdirs += ['${lib.getDev dep}/include']" \
+        -e "/origlibdirs =/a\        origlibdirs += ['${lib.getLib dep}/lib']" \
+        -i buildconfig/config_unix.py
+      '') buildInputs
+    }
+    LOCALBASE=/ ${python.interpreter} buildconfig/config.py
   '';
 
-  buildPhase = "yes Y | python setup.py build";	
-
-  installPhase = "yes Y | python setup.py install --prefix=\${out} ";
-
-  meta = {
+  meta = with lib; {
     description = "Python library for games";
+    homepage = "http://www.pygame.org/";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

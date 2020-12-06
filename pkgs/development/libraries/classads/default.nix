@@ -1,22 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pcre }:
 
-let version = "1.0.4"; in
+let version = "1.0.10"; in
 
 stdenv.mkDerivation {
-  name = "classads-${version}";
+  pname = "classads";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${version}.tar.gz";
-    sha256 = "80b11c6d383891c90e04e403b2f282e91177940c3fe536082899fbfb9e854d24";
+    sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
 
-  configureFlags = ''                                                  
-    --enable-namespace --enable-flexible-member
-  '';
+  buildInputs = [ pcre ];
+
+  configureFlags = [
+    "--enable-namespace" "--enable-flexible-member"
+  ];
   
   meta = {
-    homepage = http://www.cs.wisc.edu/condor/classad/;
-    description = "The Classified Advertisements library provides a generic means for matching resources.";
-    license = "Apache-2.0";
+    homepage = "http://www.cs.wisc.edu/condor/classad/";
+    description = "The Classified Advertisements library provides a generic means for matching resources";
+    license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

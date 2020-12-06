@@ -1,37 +1,57 @@
-{stdenv, fetchurl, cmake, SDL, nasm, p7zip, zlib, flac, fmod, libjpeg}:
+{ stdenv, fetchurl, p7zip, cmake
+, SDL2, openal, fluidsynth, soundfont-fluid, bzip2, zlib, libjpeg, game-music-emu
+, libsndfile, mpg123 }:
 
-stdenv.mkDerivation {
-  name = "zdoom-2.6.1";
+stdenv.mkDerivation rec {
+  pname = "zdoom";
+  majorVersion = "2.8";
+  version = "${majorVersion}.1";
+
   src = fetchurl {
-    url = http://zdoom.org/files/zdoom/2.6/zdoom-2.6.1-src.7z;
-    sha256 = "1ha7hygwf243vkgw0dfh4dxphf5vffb3kkci1p1p75a7r1g1bir8";
+    url = "https://zdoom.org/files/zdoom/${majorVersion}/zdoom-${version}-src.7z";
+    sha256 = "0453fqrh9l00xwphfxni5qkf9y134n3s1mr1dvi5cbkxcva7j8bq";
   };
 
-  # XXX: shouldn't inclusion of p7zip handle this?
-  unpackPhase = ''
-  mkdir zdoom
-  cd zdoom
-  7z x $src
+  nativeBuildInputs = [ p7zip cmake ];
+  buildInputs = [
+    SDL2 openal fluidsynth bzip2 zlib libjpeg game-music-emu libsndfile mpg123
+  ];
+
+  cmakeFlags = [
+    "-DFORCE_INTERNAL_GME=OFF"
+    "-DGME_INCLUDE_DIR=${game-music-emu}/include"
+    "-DGME_LIBRARIES=${game-music-emu}/lib/libgme.so"
+  ];
+
+  sourceRoot = ".";
+
+  enableParallelBuilding = true;
+
+  NIX_CFLAGS_LINK = [ "-lopenal" "-lfluidsynth" ];
+
+  preConfigure = ''
+    sed -i \
+      -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
+      -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
+      src/sound/music_fluidsynth_mididevice.cpp
   '';
-
-  buildInputs = [cmake nasm SDL p7zip zlib flac fmod libjpeg];
-
-  cmakeFlags = [ "-DSDL_INCLUDE_DIR=${SDL}/include/SDL" ];
-   
-  preConfigure=''
-    sed s@zdoom.pk3@$out/share/zdoom.pk3@ -i src/version.h
- '';
 
   installPhase = ''
+    install -Dm755 zdoom "$out/lib/zdoom/zdoom"
+    for i in *.pk3; do
+      install -Dm644 "$i" "$out/lib/zdoom/$i"
+    done
     mkdir -p $out/bin
-    cp zdoom $out/bin
-    mkdir -p $out/share
-    cp zdoom.pk3 $out/share
+    ln -s $out/lib/zdoom/zdoom $out/bin/zdoom
   '';
 
-  meta = {
-    homepage = http://zdoom.org/;
+  meta = with stdenv.lib; {
+    homepage = "http://zdoom.org/";
     description = "Enhanced port of the official DOOM source code";
+    # Doom source license, MAME license
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lassulus ];
   };
 }
 

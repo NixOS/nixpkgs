@@ -1,56 +1,29 @@
-x@{builderDefsPackage
-  , libX11, xproto, libXt, libICE
-  , libSM, libXext
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, libX11, xorgproto, libXt, libICE, libSM, libXext }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="xdaliclock";
-    version="2.35";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="http://www.jwz.org/${project}/${name}.tar.gz";
-    hash="0iybha2d0wqb4wkpw7l1zi3zhw57kqh3y7p4ja1k0fmvrzqc08g7";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "xdaliclock";
+  version = "2.44";
+
+  src = fetchurl {
+    url="https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
+    sha256 = "1gsgnsm6ql0mcg9zpdkhws3g23r3a92bc3rpg4qbgbmd02nvj3c0";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  # Note: don't change this to set sourceRoot, or updateAutotoolsGnuConfigScriptsHook
+  # on aarch64 doesn't find the files to patch and the aarch64 build fails!
+  preConfigure = "cd X11";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "prepareDirs" "doMakeInstall"];
+  buildInputs = [ libX11 xorgproto libXt libICE libSM libXext ];
 
-  prepareDirs = a.fullDepEntry ''
-    mkdir -p "$out/bin" "$out/share" "$out/share/man/man1"
-  '' ["minInit" "defEnsureDir"];
+  preInstall = ''
+    mkdir -vp $out/bin $out/share/man/man1
+  '';
 
-  goSrcDir = "cd X11";
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "A clock application that morphs digits when they are changed";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux ++ freebsd;
-    license = "free";
+    maintainers = with maintainers; [ raskin rycee ];
+    platforms = with platforms; linux ++ freebsd;
+    license = licenses.free; #TODO BSD on Gentoo, looks like MIT
+    downloadPage = "http://www.jwz.org/xdaliclock/";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.jwz.org/xdaliclock/";
-    };
-  };
-}) x
-
+}

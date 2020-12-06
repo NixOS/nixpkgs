@@ -1,51 +1,92 @@
-{stdenv, fetchurl, cmake, gperf, imagemagick, pkgconfig, lua
-, glib, cairo, pango, imlib2, libxcb, libxdg_basedir, xcbutil
-, xcbutilimage, xcbutilkeysyms, xcbutilwm, libpthreadstubs, libXau
-, libXdmcp, pixman, doxygen
-, libstartup_notification, libev, asciidoc, xmlto, dbus, docbook_xsl
-, docbook_xml_dtd_45, libxslt, coreutils}:
+{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk-pixbuf
+, xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
+, xcb-util-cursor, makeWrapper, pango, gobject-introspection
+, which, dbus, nettools, git, doxygen
+, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
+, libxkbcommon, xcbutilxrm, hicolor-icon-theme
+, asciidoctor
+, fontsConf
+, gtk3Support ? false, gtk3 ? null
+}:
 
-let
-  version = "3.4.13";
-in
+# needed for beautiful.gtk to work
+assert gtk3Support -> gtk3 != null;
 
 stdenv.mkDerivation rec {
-  name = "awesome-${version}";
- 
-  src = fetchurl {
-    url = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "0jhsgb8wdzpfmdyl9fxp2w6app7l6zl8b513z3ff513nvdlxj5hr";
-  };
- 
-  buildInputs = [ cmake gperf imagemagick pkgconfig lua glib cairo pango
-    imlib2 libxcb libxdg_basedir xcbutil xcbutilimage xcbutilkeysyms xcbutilwm
-    libstartup_notification libev libpthreadstubs libXau libXdmcp pixman doxygen
-    asciidoc xmlto dbus docbook_xsl docbook_xml_dtd_45 libxslt ];
+  lgi = luaPackages.lgi;
+  lua = luaPackages.lua;
+  ldoc = luaPackages.ldoc;
+  pname = "awesome";
+  version = "4.3";
 
-  # We use coreutils for 'env', that will allow then finding 'bash' or 'zsh' in
-  # the awesome lua code. I prefered that instead of adding 'bash' or 'zsh' as
-  # dependencies.
-  prePatch = ''
-    # Fix the tab completion (supporting bash or zsh)
-    sed s,/usr/bin/env,${coreutils}/bin/env, -i lib/awful/completion.lua.in
-    # Remove the 'root' PATH override (I don't know why they have that)
-    sed /WHOAMI/d -i utils/awsetbg
-    # Russian manpages fail to be generated:
-    #  [ 56%] Generating manpages/ru/man1/awesome.1.xml
-    #  asciidoc: ERROR: <stdin>: line 3: name section expected
-    #  asciidoc: FAILED: <stdin>: line 3: section title expected
-    #  make[2]: *** [manpages/ru/man1/awesome.1.xml] Error 1
-    substituteInPlace CMakeLists.txt \
-      --replace "set(AWE_MAN_LANGS it es fr de ru)" \
-                "set(AWE_MAN_LANGS it es fr de)"
+  src = fetchFromGitHub {
+    owner = "awesomewm";
+    repo = "awesome";
+    rev = "v${version}";
+    sha256 = "1i7ajmgbsax4lzpgnmkyv35x8vxqi0j84a14k6zys4blx94m9yjf";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    imagemagick
+    makeWrapper
+    pkgconfig
+    xmlto docbook_xml_dtd_45
+    docbook_xsl findXMLCatalogs
+    asciidoctor
+    ldoc
+  ];
+
+  outputs = [ "out" "doc" ];
+
+  FONTCONFIG_FILE = toString fontsConf;
+
+  propagatedUserEnvPkgs = [ hicolor-icon-theme ];
+  buildInputs = [ cairo librsvg dbus gdk-pixbuf gobject-introspection
+                  git lgi libpthreadstubs libstartup_notification
+                  libxdg_basedir lua nettools pango xcb-util-cursor
+                  xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
+                  xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
+                  xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
+                  xcbutilxrm ]
+                  ++ stdenv.lib.optional gtk3Support gtk3;
+
+  cmakeFlags = [
+    #"-DGENERATE_MANPAGES=ON"
+    "-DOVERRIDE_VERSION=${version}"
+  ] ++ stdenv.lib.optional luaPackages.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
+  ;
+
+  GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
+  # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
+  # below for how awesome finds the libraries it needs at runtime.
+  LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
+  LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;;";
+
+  postInstall = ''
+    # Don't use wrapProgram or the wrapper will duplicate the --search
+    # arguments every restart
+    mv "$out/bin/awesome" "$out/bin/.awesome-wrapped"
+    makeWrapper "$out/bin/.awesome-wrapped" "$out/bin/awesome" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
+      --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
+
+    wrapProgram $out/bin/awesome-client \
+      --prefix PATH : "${which}/bin"
   '';
- 
-  meta = {
-    homepage = http://awesome.naquadah.org/;
+
+  passthru = {
+    inherit lua;
+  };
+
+  meta = with stdenv.lib; {
     description = "Highly configurable, dynamic window manager for X";
-    license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage    = "https://awesomewm.org/";
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lovek323 rasendubi ];
+    platforms   = platforms.linux;
   };
 }
-

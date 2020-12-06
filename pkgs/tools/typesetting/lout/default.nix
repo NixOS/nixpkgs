@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ghostscript}:
 
 stdenv.mkDerivation rec {
-  name = "lout-3.39";
+  name = "lout-3.40";
 
   src = fetchurl {
     urls = [
@@ -9,16 +9,16 @@ stdenv.mkDerivation rec {
       "mirror://savannah/lout/${name}.tar.gz"      # new!
       "mirror://sourceforge/lout/${name}.tar.gz"   # to be phased out
       # XXX: We could add the CTAN mirrors
-      # (see http://www.ctan.org/tex-archive/support/lout/).
+      # (see https://www.ctan.org/tex-archive/support/lout/).
     ];
-    sha256 = "12gkyqrn0kaa8xq7sc7v3wm407pz2fxg9ngc75aybhi5z825b9vq";
+    sha256 = "1gb8vb1wl7ikn269dd1c7ihqhkyrwk19jwx5kd0rdvbk6g7g25ix";
   };
 
   buildInputs = [ ghostscript ];
   builder = ./builder.sh;
 
   meta = {
-    description = "Lout, a document layout system similar in style to LaTeX";
+    description = "Document layout system similar in style to LaTeX";
 
     longDescription = ''
       The Lout document formatting system is now reads a high-level
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
       went back to the beginning.
     '';
 
-    # Author's page: http://www.cs.usyd.edu.au/~jeff/
-    # Wiki: http://lout.wiki.sourceforge.net/
-    homepage = http://savannah.nongnu.org/projects/lout/;
+    # Author's page: http://jeffreykingston.id.au/lout/
+    # Wiki: https://sourceforge.net/p/lout/wiki/
+    homepage = "https://savannah.nongnu.org/projects/lout/";
 
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

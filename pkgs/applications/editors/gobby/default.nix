@@ -1,30 +1,27 @@
 { avahiSupport ? false # build support for Avahi in libinfinity
-, gnomeSupport ? false # build support for Gnome(gnome-vfs)
-, stdenv, fetchurl, pkgconfig
-, gtkmm, gsasl, gtksourceview, libxmlxx, libinfinity, intltool
-, gnome_vfs ? null}:
+, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, wrapGAppsHook, yelp-tools
+, gtkmm3, gsasl, gtksourceview3, libxmlxx, libinfinity, intltool, itstool, gnome3 }:
 
 let
   libinf = libinfinity.override { gtkWidgets = true; inherit avahiSupport; };
-  
-in stdenv.mkDerivation rec {
-
-  name = "gobby-0.4.94";
-  src = fetchurl {
-    url = "http://releases.0x539.de/gobby/${name}.tar.gz";
-    sha256 = "b9798808447cd94178430f0fb273d0e45d0ca30ab04560e3790bac469e03bb00";
+in stdenv.mkDerivation {
+  name = "gobby-unstable-2018-04-03";
+  src = fetchFromGitHub {
+    owner = "gobby";
+    repo = "gobby";
+    rev = "ea4df27c9b6b885434797b0071ce198b23f9f63b";
+    sha256 = "0q7lq64yn16lxvj4jphs8y9194h0xppj8k7y9x8b276krraak2az";
   };
 
-  buildInputs = [ pkgconfig gtkmm gsasl gtksourceview libxmlxx libinf intltool ]
-    ++ stdenv.lib.optional gnomeSupport gnome_vfs;
-  
-  configureFlags = ''
-  '';
+  nativeBuildInputs = [ autoconf automake pkgconfig intltool itstool yelp-tools wrapGAppsHook ];
+  buildInputs = [ gtkmm3 gsasl gtksourceview3 libxmlxx libinf ];
+
+  preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = http://gobby.0x539.de/;
+    homepage = "http://gobby.0x539.de/";
     description = "A GTK-based collaborative editor supporting multiple documents in one session and a multi-user chat";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.all;
   };

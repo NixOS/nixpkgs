@@ -1,10 +1,10 @@
-{stdenv, fetchurl, ncurses, glib, gettext, readline, pkgconfig }:
+{stdenv, fetchurl, glib, gettext, readline, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "pal-0.4.2";
+  name = "pal-0.4.3";
   src = fetchurl {
     url = "mirror://sourceforge/palcal/${name}.tgz";
-    sha256 = "1601nsspxscm7bp9g9bkia0ij0mx2lpskl2fqhs5r0smp92121nx";
+    sha256 = "072mahxvd7lcvrayl32y589w4v3vh7bmlcnhiksjylknpsvhqiyf";
   };
 
   patchPhase = ''
@@ -12,16 +12,17 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/etc/pal\.conf,'$out/etc/pal.conf, src/input.c
   '';
 
-  preBuild = ''
-    export makeFlags="prefix=$out"
-  '';
+  makeFlags = [ "prefix=$(out)" ];
 
-  buildInputs = [ glib gettext readline pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gettext readline ];
+
+  hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = http://palcal.sourceforge.net/;
+    homepage = "http://palcal.sourceforge.net/";
     description = "Command-line calendar program that can keep track of events";
-    license = "BSD";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

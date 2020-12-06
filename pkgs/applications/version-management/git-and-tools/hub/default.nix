@@ -1,28 +1,43 @@
-{ stdenv, fetchgit, groff, rake, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, groff, installShellFiles, util-linux }:
 
-stdenv.mkDerivation rec {
-  name = "hub-${version}";
-  version = "1.10.3";
+buildGoPackage rec {
+  pname = "hub";
+  version = "2.14.2";
 
-  src = fetchgit {
-    url = "git://github.com/defunkt/hub.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0j0krmf0sf09hhw3nsn0w1y97d67762g4qrc8080bwcx38lbyvbg";
+  goPackagePath = "github.com/github/hub";
+
+  # Only needed to build the man-pages
+  excludedPackages = [ "github.com/github/hub/md2roff-bin" ];
+
+  src = fetchFromGitHub {
+    owner = "github";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1qjab3dpia1jdlszz3xxix76lqrm4zbmqzd9ymld7h06awzsg2vh";
   };
 
-  buildInputs = [ rake makeWrapper ];
+  nativeBuildInputs = [ groff installShellFiles util-linux ];
 
-  installPhase = ''
-    rake install "prefix=$out"
+  postPatch = ''
+    patchShebangs .
   '';
 
-  fixupPhase = ''
-    wrapProgram $out/bin/hub --prefix PATH : ${groff}/bin
+  postInstall = ''
+    cd go/src/${goPackagePath}
+    installShellCompletion --zsh --name _hub etc/hub.zsh_completion
+    installShellCompletion --bash --name hub etc/hub.bash_completion.sh
+    installShellCompletion --fish --name hub.fish etc/hub.fish_completion
+
+    LC_ALL=C.UTF8 \
+    make man-pages
+    installManPage share/man/man[1-9]/*.[1-9]
   '';
 
-  meta = {
-    description = "A GitHub specific wrapper for git";
-    homepage = "http://defunkt.io/hub/";
-    license = stdenv.lib.licenses.mit;
+  meta = with stdenv.lib; {
+    description = "Command-line wrapper for git that makes you better at GitHub";
+    license = licenses.mit;
+    homepage = "https://hub.github.com/";
+    maintainers = with maintainers; [ globin ];
+    platforms = with platforms; unix;
   };
 }

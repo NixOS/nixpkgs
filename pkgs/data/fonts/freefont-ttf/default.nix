@@ -1,31 +1,27 @@
-{stdenv, fetchurl}:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "freefont-ttf-20100919";
+fetchzip rec {
+  name = "freefont-ttf-20120503";
 
-  src = fetchurl {
-    url = "mirror://gnu/freefont/${name}.tar.gz";
-    sha256 = "1q3h5jp1mbdkinkwxy0lfd0a1q7azlbagraydlzaa2ng82836wg4";
-  };
+  url = "mirror://gnu/freefont/${name}.zip";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
+
+  sha256 = "0h0x2hhr7kvjiycf7fv800xxwa6hcpiz54bqx06wsqc7z61iklvd";
 
   meta = {
     description = "GNU Free UCS Outline Fonts";
-
     longDescription = ''
       The GNU Freefont project aims to provide a set of free outline
       (PostScript Type0, TrueType, OpenType...) fonts covering the ISO
       10646/Unicode UCS (Universal Character Set).
     '';
-
-    homepage = http://www.gnu.org/software/freefont/;
-    license = "GPLv3+";
-
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    homepage = "https://www.gnu.org/software/freefont/";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [];
   };
 }

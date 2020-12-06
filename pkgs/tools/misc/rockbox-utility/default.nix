@@ -1,31 +1,57 @@
-{ stdenv, fetchurl, libusb, qt4 }:
+{ stdenv, fetchurl, pkgconfig, cryptopp
+, libusb1, qtbase, qttools, makeWrapper
+, qmake, withEspeak ? false, espeak ? null
+, qt5 }:
+
+let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation  rec {
-  name = "rockbox-utility-${version}";
-  version = "1.2.8";
+  pname = "rockbox-utility";
+  version = "1.4.1";
 
   src = fetchurl {
-    url = "http://download.rockbox.org/rbutil/source/rbutil_${version}-src.tar.bz2";
-    sha256 = "1gjwlyrwvzfdhqdwvq1chdnjkcn9lk21ixp92h5y74826j3ahdgs";
+    url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
+    sha256 = "0zm9f01a810y7aq0nravbsl0vs9vargwvxnfl4iz9qsqygwlj69y";
   };
 
-  buildInputs = [ libusb qt4 ];
+  buildInputs = [ cryptopp libusb1 qtbase qttools ]
+    ++ stdenv.lib.optional withEspeak espeak;
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake qt5.wrapQtAppsHook ];
 
-  preBuild = ''
+  postPatch = ''
+    sed -i rbutil/rbutilqt/rbutilqt.pro \
+        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${getDev qttools}/bin/lrelease|'
+  '';
+
+  preConfigure = ''
     cd rbutil/rbutilqt
-    qmake
+    lrelease rbutilqt.pro
   '';
 
   installPhase = ''
-    mkdir -p $out/bin 
-    cp RockboxUtility $out/bin
+    runHook preInstall
+
+    install -Dm755 RockboxUtility $out/bin/rockboxutility
+    ln -s $out/bin/rockboxutility $out/bin/RockboxUtility
+    wrapProgram $out/bin/rockboxutility \
+    ${stdenv.lib.optionalString withEspeak ''
+      --prefix PATH : ${espeak}/bin
+    ''}
+
+    runHook postInstall
   '';
 
+  # `make build/rcc/qrc_rbutilqt-lang.cpp` fails with
+  #      RCC: Error in 'rbutilqt-lang.qrc': Cannot find file 'lang/rbutil_cs.qm'
+  # Do not add `lrelease rbutilqt.pro` into preConfigure, otherwise `make lrelease`
+  # may clobber the files read by the parallel `make build/rcc/qrc_rbutilqt-lang.cpp`.
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
-    description = "open source firmware for mp3 players";
-    homepage = http://www.rockbox.org;
+    description = "Open source firmware for mp3 players";
+    homepage = "https://www.rockbox.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

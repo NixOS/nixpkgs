@@ -1,35 +1,39 @@
-{stdenv, fetchurl_gnome, gtk, pkgconfig, perl, perlXMLParser, libxml2, gettext
-, python, libxml2Python, docbook5, docbook_xsl, libxslt, intltool, libart_lgpl
-, withGNOME ? false, libgnomeui }:
+{ stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkgconfig, perlPackages,
+libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl,
+libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui,
+gtk-mac-integration-gtk2 }:
 
-stdenv.mkDerivation rec {
-  name = src.pkgname;
+stdenv.mkDerivation {
+  pname = "dia";
+  version = "0.97.3.20170622";
 
-  src = fetchurl_gnome {
-    project = "dia";
-    major = "0"; minor = "97"; patchlevel = "2"; extension = "xz";
-    sha256 = "1qgawm7rrf4wd1yc0fp39ywv8gbz4ry1s16k00dzg5w6p67lfqd7";
+  src = fetchgit {
+    url = "https://gitlab.gnome.org/GNOME/dia.git";
+    rev = "b86085dfe2b048a2d37d587adf8ceba6fb8bc43c";
+    sha256 = "1fyxfrzdcs6blxhkw3bcgkksaf3byrsj4cbyrqgb4869k3ynap96";
   };
 
   buildInputs =
-    [ gtk perlXMLParser libxml2 gettext python libxml2Python docbook5
-      libxslt docbook_xsl libart_lgpl
-    ] ++ stdenv.lib.optional withGNOME libgnomeui;
+    [ gtk2 libxml2 gettext python libxml2Python docbook5
+      libxslt docbook_xsl libart_lgpl ]
+      ++ stdenv.lib.optional withGNOME libgnomeui
+      ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
 
-  buildNativeInputs = [ pkgconfig intltool perl ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
-  configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
+  '';
+  configureFlags = stdenv.lib.optional withGNOME "--enable-gnome";
 
-  patches = [ ./glib-top-level-header.patch ];
+  hardeningDisable = [ "format" ];
 
-  # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
-  # It have no reasons to exist in a redistribuable package
-  postInstall = "rm $out/share/icons/hicolor/icon-theme.cache";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Gnome Diagram drawing software";
-    homepage = http://live.gnome.org/Dia;
-    maintainers = with stdenv.lib.maintainers; [raskin urkud];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://live.gnome.org/Dia";
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

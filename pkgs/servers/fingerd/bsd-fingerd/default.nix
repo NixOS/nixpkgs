@@ -2,7 +2,7 @@
 
 # !!! Duplication: this package is almost exactly the same as `bsd-fingerd'.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bsd-fingerd-0.17";
 
   src = fetchurl {
@@ -17,4 +17,9 @@ stdenv.mkDerivation rec {
   preBuild = "cd fingerd";
 
   preInstall = '' mkdir -p $out/man/man8 $out/sbin '';
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    license = licenses.bsdOriginal;
+  };
 }

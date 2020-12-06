@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "hexedit-${version}";
-  version = "1.2.12";
+  pname = "hexedit";
+  version = "1.2.13";
 
   src = fetchurl {
-    url = "http://rigaux.org/${name}.src.tgz";
-    sha256 = "bcffbf3d128516cc4e1da64485866fbb5f62754f2af8327e7a527855186ba10f";
+    url = "http://rigaux.org/${pname}-${version}.src.tgz";
+    sha256 = "1mwdp1ikk64cqmagnrrps5jkn3li3n47maiqh2qc1xbp1ains4ka";
   };
 
   buildInputs = [ ncurses ];
@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "View and edit files in hexadecimal or in ASCII";
     homepage = "http://prigaux.chez.com/hexedit.html";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

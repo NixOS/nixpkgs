@@ -1,32 +1,40 @@
-{stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
-, libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz
-, libX11}:
+{ stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
+, libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
+, libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
-let version = "1.3.13"; in
-
-stdenv.mkDerivation {
-  name = "graphicsmagick-${version}";
+stdenv.mkDerivation rec {
+  pname = "graphicsmagick";
+  version = "1.3.35";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "08lgjvhvhw3by5h4kfpl7072dbvkcpsajy5f6izq69cv61vadqs5";
+    sha256 = "0l024l4hawm9s3jqrgi2j0lxgm61dqh8sgkj1017ma7y11hqv2hq";
   };
 
-  configureFlags = "--enable-shared";
+  patches = [
+    ./disable-popen.patch
+  ];
+
+  configureFlags = [
+    "--enable-shared"
+    "--with-quantum-depth=${toString quantumdepth}"
+    "--with-gslib=yes"
+  ];
 
   buildInputs =
     [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
-      zlib libtool
+      zlib libtool libwebp
     ];
 
-  buildNativeInputs = [ xz ];
+  nativeBuildInputs = [ xz ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*
   '';
 
   meta = {
-    homepage = http://www.graphicsmagick.org;
+    homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

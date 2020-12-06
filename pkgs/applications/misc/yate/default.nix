@@ -1,23 +1,24 @@
-{ composableDerivation, fetchurl, lib, qt4, openssl, autoconf, automake, pkgconfig }:
+{ stdenv, fetchurl, lib, qt4, openssl, pkgconfig }:
 
-let inherit (composableDerivation) edf wwf; in
-
-composableDerivation.composableDerivation {} ( fixed : {
-  name = "yate2";
+stdenv.mkDerivation rec {
+  pname = "yate";
+  version = "6.1.0-1";
 
   src = fetchurl {
-    url = http://yate.null.ro/tarballs/yate2/yate2.tar.gz;
-    sha256 = "1z1rvzcw6449cvczig1dkh6rlp6f8zv649sk0ldz38mwkyd07257";
+    url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/${pname}-${version}.tar.gz";
+    sha256 = "0xx3i997nsf2wzbv6m5n6adsym0qhgc6xg4rsv0fwqrgisf5327d";
   };
 
   # TODO zaptel ? postgres ?
-  buildInputs = [ qt4 openssl autoconf automake pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 openssl ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
   preConfigure =
     ''
       sed -i 's@,/dev/null@@' configure
-    ''; 
+      patchShebangs configure
+    '';
 
   # --unresolved-symbols=ignore-in-shared-libs makes ld no longer find --library=yate? Why?
   preBuild =
@@ -28,12 +29,14 @@ composableDerivation.composableDerivation {} ( fixed : {
         -e 's@-Wl,--retain-symbols-file@@'
     '';
 
-  meta = { 
-    description = "YATE - Yet Another Telephony Engine";
-    homepage = http://yate.null.ro/;
-    license = ["GPL" "MPL"]; # Yate's license is GPL with an exception for linking with OpenH323 and PWlib (licensed under MPL).
+  meta = {
+    description = "Yet another telephony engine";
+    homepage = "http://yate.null.ro/";
+    # Yate's license is GPL with an exception for linking with
+    # OpenH323 and PWlib (licensed under MPL).
+    license = ["GPL" "MPL"];
     maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
-} )
+}

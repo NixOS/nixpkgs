@@ -1,27 +1,47 @@
-{ fetchurl, stdenv, perl, bdftopcf, mkfontdir, mkfontscale }:
+{ stdenv, fetchurl, python3
+, libfaketime, fonttosfnt
+, bdftopcf, mkfontscale
+}:
+
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.30";
+  pname = "terminus-font";
+  version = "4.48"; # set here for use in URL below
+
   src = fetchurl {
-#    urls = "http://www.is-vn.bg/hamster/${name}.tar.gz"
-#    sha256 = "ca15718f715f1ca7af827a8ab5543b0c0339b2515f39f8c15f241b2bc1a15a9a";
-     url = "http://ftp.de.debian.org/debian/pool/main/x/xfonts-terminus/xfonts-terminus_4.30.orig.tar.gz";
-     sha256 = "d7f1253d75f0aa278b0bbf457d15927ed3bbf2565b9f6b829c2b2560fedc1712";
+    url = "mirror://sourceforge/project/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1bwlkj39rqbyq57v5yssayav6hzv1n11b9ml2s0dpiyfsn6rqy9l";
   };
-  buildInputs = [ perl bdftopcf mkfontdir mkfontscale ];
-  patchPhase = ''
+
+  nativeBuildInputs =
+    [ python3 bdftopcf libfaketime
+      fonttosfnt mkfontscale
+    ];
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
     substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
+    substituteInPlace Makefile --replace 'gzip'     'gzip -n'
   '';
-  configurePhase = ''
-    ./configure --prefix=$out
+
+  postBuild = ''
+    # convert unicode bdf fonts to otb
+    for i in *.bdf; do
+      name=$(basename $i .bdf)
+      faketime -f "1970-01-01 00:00:01" \
+      fonttosfnt -v -o "$name.otb" "$i"
+    done
   '';
-  buildPhase = ''
-    make pcf
+
+  postInstall = ''
+    # install otb fonts (for GTK applications)
+    install -m 644 -D *.otb -t "$out/share/fonts/misc";
+    mkfontdir "$out/share/fonts/misc"
   '';
-  installPhase = '' 
-    make install-pcf
-    make fontdir
-  '';
-  meta = {
+
+  installTargets = [ "install" "fontdir" ];
+
+  meta = with stdenv.lib; {
     description = "A clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work
@@ -35,9 +55,8 @@ stdenv.mkDerivation rec {
       16x32. The styles are normal and bold (except for 6x12), plus
       EGA/VGA-bold for 8x14 and 8x16.
     '';
-    homepage = http://www.is-vn.bg/hamster/;
-    license = [ "GPLv2+" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://terminus-font.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ astsmtl ];
   };
 }

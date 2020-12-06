@@ -1,65 +1,109 @@
-{ stdenv, fetchurl, db4, glibc, openssl, cyrus_sasl
-, coreutils, findutils, gnused, gnugrep, bison, perl
+{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
+, coreutils, findutils, gnugrep, gawk, icu, pcre, m4
+, buildPackages, nixosTests
+, withLDAP ? true, openldap
+, withPgSQL ? false, postgresql
+, withMySQL ? false, libmysqlclient
+, withSQLite ? false, sqlite
 }:
 
-assert stdenv.isLinux;
+let
+  ccargs = lib.concatStringsSep " " ([
+    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
+    "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
+   ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient.dev}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
+     ++ lib.optional withSQLite "-DHAS_SQLITE"
+     ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
+   auxlibs = lib.concatStringsSep " " ([
+     "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
+   ] ++ lib.optional withPgSQL "-lpq"
+     ++ lib.optional withMySQL "-lmysqlclient"
+     ++ lib.optional withSQLite "-lsqlite3"
+     ++ lib.optional withLDAP "-lldap");
 
-stdenv.mkDerivation rec {
-  name = "postfix-2.8.12";
+in stdenv.mkDerivation rec {
+
+  pname = "postfix";
+
+  version = "3.5.8";
 
   src = fetchurl {
-    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "11z07mjy53l1fnl7k4101yk4ilibgqr1164628mqcbmmr8bh2szl";
+    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
+    sha256 = "0vs50z5p5xcrdbbkb0dnbx1sk5fx8d2z97sw2p2iip1yrwl2cn12";
   };
 
-  buildInputs = [db4 openssl cyrus_sasl bison perl];
+  nativeBuildInputs = [ makeWrapper m4 ];
+  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
+                ++ lib.optional withPgSQL postgresql
+                ++ lib.optional withMySQL libmysqlclient
+                ++ lib.optional withSQLite sqlite
+                ++ lib.optional withLDAP openldap;
 
-  patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
+  hardeningDisable = [ "format" ];
+  hardeningEnable = [ "pie" ];
 
-  postPatch = ''
-    sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \
-      -e s,/usr/sbin,/var/run/current-system/sw/sbin, \
-      -e s,:/sbin,, src/util/sys_defs.h
-  '';
+  patches = [
+    ./postfix-script-shell.patch
+    ./postfix-3.0-no-warnings.patch
+    ./post-install-script.patch
+    ./relative-symlinks.patch
+  ];
 
-  preBuild = ''
-    export daemon_directory=$out/libexec/postfix
-    export command_directory=$out/sbin
-    export queue_directory=/var/spool/postfix
-    export sendmail_path=$out/bin/sendmail
-    export mailq_path=$out/bin/mailq
-    export newaliases_path=$out/bin/newaliases
-    export html_directory=$out/share/postfix/doc/html
-    export manpage_directory=$out/share/man
-    export sample_directory=$out/share/postfix/doc/samples
-    export readme_directory=$out/share/postfix/doc
-
-    make makefiles CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl' AUXLIBS='-lssl -lcrypto -lsasl2 -ldb -lnsl'
-  '';
-
-  installPhase = ''
+  postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    sed -e 's!bin/postconf!${buildPackages.postfix}/bin/postconf!' -i postfix-install
+  '' + ''
     sed -e '/^PATH=/d' -i postfix-install
-    $SHELL postfix-install install_root=out -non-interactive -package
+    sed -e "s|@PACKAGE@|$out|" -i conf/post-install
 
-    mkdir -p $out
-    mv -v "out$out/"* $out/
-
-    mkdir -p $out/share/postfix
-    mv conf $out/share/postfix/
-    mv LICENSE TLS_LICENSE $out/share/postfix/
-
-    sed -e 's@^PATH=.*@PATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin@' -i $out/share/postfix/conf/post-install $out/libexec/postfix/post-install
-    sed -e '2aPATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin' -i $out/share/postfix/conf/postfix-script $out/libexec/postfix/postfix-script
-    chmod a+x $out/share/postfix/conf/{postfix-script,post-install}
+    # post-install need skip permissions check/set on all symlinks following to /nix/store
+    sed -e "s|@NIX_STORE@|$NIX_STORE|" -i conf/post-install
   '';
 
-  inherit glibc;
+  postConfigure = ''
+    export command_directory=$out/sbin
+    export config_directory=/etc/postfix
+    export meta_directory=$out/etc/postfix
+    export daemon_directory=$out/libexec/postfix
+    export data_directory=/var/lib/postfix/data
+    export html_directory=$out/share/postfix/doc/html
+    export mailq_path=$out/bin/mailq
+    export manpage_directory=$out/share/man
+    export newaliases_path=$out/bin/newaliases
+    export queue_directory=/var/lib/postfix/queue
+    export readme_directory=$out/share/postfix/doc
+    export sendmail_path=$out/bin/sendmail
 
-  meta = {
+    makeFlagsArray+=(AR=$AR _AR=$AR RANLIB=$RANLIB _RANLIB=$RANLIB)
+
+    make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
+  '';
+
+  NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
+
+  installTargets = [ "non-interactive-package" ];
+
+  installFlags = [ "install_root=installdir" ];
+
+  postInstall = ''
+    mkdir -p $out
+    mv -v installdir/$out/* $out/
+    cp -rv installdir/etc $out
+    sed -e '/^PATH=/d' -i $out/libexec/postfix/post-install
+    wrapProgram $out/libexec/postfix/post-install \
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep ]}
+    wrapProgram $out/libexec/postfix/postfix-script \
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
+  '';
+
+  passthru.tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+
+  meta = with lib; {
     homepage = "http://www.postfix.org/";
-    description = "a fast, easy to administer, and secure mail server";
-    license = stdenv.lib.licenses.bsdOriginal;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    description = "A fast, easy to administer, and secure mail server";
+    license = with licenses; [ ipl10 epl20 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ globin ];
   };
+
 }

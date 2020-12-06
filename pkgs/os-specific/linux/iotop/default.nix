@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages }:
+{ stdenv, fetchurl, python3Packages, fetchpatch }:
 
-buildPythonPackage rec {
-  name = "iotop-0.4.1";
-  namePrefix = "";
+python3Packages.buildPythonApplication rec {
+  name = "iotop-0.6";
 
   src = fetchurl {
     url = "http://guichaz.free.fr/iotop/files/${name}.tar.bz2";
-    sha256 = "1dfvw3khr2rvqllvs9wad9ca3ld4i7szqf0ibq87rn36ickrf3ll";
+    sha256 = "0nzprs6zqax0cwq8h7hnszdl3d2m4c2d4vjfxfxbnjfs9sia5pis";
   };
 
-  pythonPath = [ pythonPackages.curses ];
+  patches = [
+    (fetchpatch {
+      url = "https://repo.or.cz/iotop.git/patch/99c8d7cedce81f17b851954d94bfa73787300599";
+      sha256 = "0rdgz6xpmbx77lkr1ixklliy1aavdsjmfdqvzwrjylbv0xh5wc8z";
+    })
+  ];
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool to find out the processes doing the most IO";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://guichaz.free.fr/iotop";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

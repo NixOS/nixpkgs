@@ -1,30 +1,61 @@
-{stdenv, fetchurl, zlib, libjpeg, libpng, imake}:
+{ stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "transfig-3.2.4";
-  builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz;
-    md5 = "742de0f7a3cae74d247bbd0c70dd9dd7";
+    url = "ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz";
+    sha256 = "0429snhp5acbz61pvblwlrwv8nxr6gf12p37f9xxwrkqv4ir7dd4";
   };
 
-  buildInputs = [zlib libjpeg libpng imake];
-  inherit libpng;
+  nativeBuildInputs = [ imake gccmakedep ];
+  buildInputs = [ zlib libjpeg libpng ];
 
-  patches = [prefixPatch1 prefixPatch2 prefixPatch3 varargsPatch gensvgPatch];
+  patches = [
+    ./patch-fig2dev-dev-Imakefile.patch
+    ./patch-fig2dev-Imakefile.patch
+    ./patch-transfig-Imakefile.patch
+    ./patch-fig2dev-fig2dev.h.patch
+    ./patch-fig2dev-dev-gensvg.c.patch
+  ];
 
-  prefixPatch1 =
-    ./patch-fig2dev-dev-Imakefile;
+  patchPhase = ''
+    runHook prePatch
 
-  prefixPatch2 =
-    ./patch-fig2dev-Imakefile;
+    configureImakefiles() {
+        local sedcmd=$1
 
-  prefixPatch3 =
-    ./patch-transfig-Imakefile;
+        sed "$sedcmd" fig2dev/Imakefile > tmpsed
+        cp tmpsed fig2dev/Imakefile
 
-  varargsPatch =
-    ./patch-fig2dev-fig2dev.h;
+        sed "$sedcmd" fig2dev/dev/Imakefile > tmpsed
+        cp tmpsed fig2dev/dev/Imakefile
 
-  gensvgPatch =
-    ./patch-fig2dev-dev-gensvg.c;
+        sed "$sedcmd" transfig/Imakefile > tmpsed
+        cp tmpsed transfig/Imakefile
+    }
+
+    for i in $patches; do
+        header "applying patch $i" 3
+        patch -p0 < $i
+        stopNest
+    done
+
+    configureImakefiles "s:__PREFIX_PNG:${libpng}:"
+    configureImakefiles "s:__PREFIX:$out:"
+
+    runHook postPatch
+  '';
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  preInstall = ''
+    mkdir -p $out
+    mkdir -p $out/lib
+  '';
+
+  hardeningDisable = [ "format" ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

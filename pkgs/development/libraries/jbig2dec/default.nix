@@ -1,16 +1,27 @@
-{ stdenv, fetchurl }: 
+{ stdenv, fetchurl, python3, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "jbig2dec-0.11";
-  
+stdenv.mkDerivation rec {
+  pname = "jbig2dec";
+  version = "0.19";
+
   src = fetchurl {
-    url = http://ghostscript.com/~giles/jbig2/jbig2dec/jbig2dec-0.11.tar.gz;
-    sha256 = "1ffhgmf2fqzk0h4k736pp06z7q5y4x41fg844bd6a9vgncq86bby";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9533/${pname}-${version}.tar.gz";
+    sha256 = "0dwa24kjqyg9hmm40fh048sdxfpnasz43l2rm8wlkw1qbdlpd517";
   };
-  
+
+  postPatch = ''
+    patchShebangs test_jbig2dec.py
+  '';
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  checkInputs = [ python3 ];
+  doCheck = true;
+
   meta = {
-    homepage = http://jbig2dec.sourceforge.net/;
+    homepage = "https://www.jbig2dec.com/";
     description = "Decoder implementation of the JBIG2 image compression format";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,31 +1,42 @@
-{stdenv, fetchurl, ncurses, coreutils}:
+{ stdenv, fetchurl, ncurses, coreutils }:
 
-let version = "3.2.4"; in
-stdenv.mkDerivation {
-  name = "ncftp-${version}";
+stdenv.mkDerivation rec {
+  pname = "ncftp";
+  version = "3.2.6";
 
   src = fetchurl {
-    # `ncftp.com' got stolen, apparently, so resort to Debian.
-    url = "mirror://debian/pool/main/n/ncftp/ncftp_${version}.orig.tar.gz";
-    sha256 = "6f26e7891f3eab27eebd2bbbe2bc87d5ae872e610eaf0bc5652aec520adcf68a";
+    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.xz";
+    sha256 = "1389657cwgw5a3kljnqmhvfh4vr2gcr71dwz1mlhf22xq23hc82z";
   };
 
-  preConfigure = ''
-    find . -name "*.sh" -type f | xargs sed 's@/bin/ls@${coreutils}/bin/ls@g' -i
-    find . -name "*.in" -type f | xargs sed 's@/bin/ls@${coreutils}/bin/ls@g' -i
-    find . -name "*.c" -type f | xargs sed 's@/bin/ls@${coreutils}/bin/ls@g' -i
-    sed 's@/bin/ls@${coreutils}/bin/ls@g' -i configure
+  buildInputs = [ ncurses ];
 
-    find . -name "*.sh" -type f | xargs sed 's@/bin/rm@${coreutils}/bin/rm@g' -i
-    find . -name "*.in" -type f | xargs sed 's@/bin/rm@${coreutils}/bin/rm@g' -i
-    find . -name "*.c" -type f | xargs sed 's@/bin/rm@${coreutils}/bin/rm@g' -i
-    sed 's@/bin/rm@${coreutils}/bin/rm@g' -i configure
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    find -name Makefile.in | xargs sed -i '/^TMPDIR=/d'
+
+    find . -name '*.sh' -or -name '*.in' -or -name '*.c' -or -name configure | xargs sed -i \
+      -e 's@/bin/ls@${coreutils}/bin/ls@g' \
+      -e 's@/bin/rm@${coreutils}/bin/rm@g'
   '';
 
-  meta = {
-    description = "NcFTP Client (also known as just NcFTP) is a set of FREE application programs implementing the File Transfer Protocol (FTP).";
+  postInstall = ''
+    rmdir $out/etc
+    mkdir -p $out/share/doc
+    cp -r doc $out/share/doc/ncftp
+  '';
 
-    # Homeless!
-    # homepage = http://www.ncftp.com/ncftp/;
+  configureFlags = [
+    "--enable-ssp"
+    "--mandir=$(out)/share/man/"
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Command line FTP (File Transfer Protocol) client";
+    homepage = "https://www.ncftp.com/ncftp/";
+    maintainers = with maintainers; [ bjornfor ];
+    platforms = platforms.unix;
+    license = licenses.clArtistic;
   };
 }

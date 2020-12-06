@@ -1,28 +1,58 @@
-{stdenv, fetchurl, perl}:
+{ stdenv, fetchurl, fetchpatch, fetchzip, perl
+, searchNixProfiles ? true
+}:
 
-stdenv.mkDerivation rec {
-  name = "aspell-0.60.6.1";
+let
 
-  src = fetchurl {
-    url = "ftp://ftp.gnu.org/gnu/aspell/${name}.tar.gz";
-    sha256 = "1qgn5psfyhbrnap275xjfrzppf5a83fb67gpql0kfqv37al869gm";
+  # Source for u-deva.cmap and u-deva.cset: use the Marathi
+  # dictionary like Debian does.
+  devaMapsSource = fetchzip {
+    name = "aspell-u-deva";
+    url = "https://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
+    sha256 = "1v8cdl8x2j1d4vbvsq1xrqys69bbccd6mi03fywrhkrrljviyri1";
   };
 
+in
+
+stdenv.mkDerivation rec {
+  pname = "aspell";
+  version = "0.60.8";
+
+  src = fetchurl {
+    url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
+    sha256 = "1wi60ankalmh8ds7nplz434jd7j94gdvbahdwsr539rlad8pxdzr";
+  };
+
+  patches = stdenv.lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
+
+  postPatch = ''
+    patch interfaces/cc/aspell.h < ${./clang.patch}
+  '';
+
+  nativeBuildInputs = [ perl ];
   buildInputs = [ perl ];
 
   doCheck = true;
 
-  # Note: Users should define the `ASPELL_CONF' environment variable to
-  # `dict-dir $HOME/.nix-profile/lib/aspell/' so that they can access
-  # dictionaries installed in their profile.
-  #
-  # We can't use `$out/etc/aspell.conf' for that purpose since Aspell
-  # doesn't expand environment variables such as `$HOME'.
+  preConfigure = ''
+    configureFlagsArray=(
+      --enable-pkglibdir=$out/lib/aspell
+      --enable-pkgdatadir=$out/lib/aspell
+    );
+  '';
+
+  # Include u-deva.cmap and u-deva.cset in the aspell package
+  # to avoid conflict between 'mr' and 'hi' dictionaries as they
+  # both include those files.
+  postInstall = ''
+    cp ${devaMapsSource}/u-deva.{cmap,cset} $out/lib/aspell/
+  '';
 
   meta = {
-    description = "GNU Aspell, A spell checker for many languages";
-    homepage = http://aspell.net/;
-    license = "LGPLv2+";
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    description = "Spell checker for many languages";
+    homepage = "http://aspell.net/";
+    license = stdenv.lib.licenses.lgpl2Plus;
+    maintainers = [ ];
+    platforms = with stdenv.lib.platforms; all;
   };
 }

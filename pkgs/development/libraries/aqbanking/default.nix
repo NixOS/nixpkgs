@@ -1,23 +1,38 @@
-{ stdenv, fetchurl, gwenhywfar, pkgconfig, gmp, zlib }:
+{ stdenv, fetchurl, gmp, gwenhywfar, libtool, libxml2, libxslt
+, pkgconfig, gettext, xmlsec, zlib
+}:
 
-stdenv.mkDerivation rec {
-  name = "aqbanking-5.0.21";
+let
+  inherit ((import ./sources.nix).aqbanking) sha256 releaseId version;
+in stdenv.mkDerivation rec {
+  pname = "aqbanking";
+  inherit version;
 
   src = fetchurl {
-    url = "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=91&file=01&dummy=aqbanking-5.0.21.tar.gz";
-    name = "${name}.tar.gz";
-    sha256 = "1xvzg640fswkrjrkrqzj0j9lnij7kcpnyvzd7nsg1by40wxwgp52";
+    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
+    inherit sha256;
   };
 
-  buildInputs = [ gwenhywfar gmp zlib ];
+  # Set the include dir explicitly, this fixes a build error when building
+  # kmymoney because otherwise the includedir is overwritten by gwenhywfar's
+  # cmake file
+  postPatch = ''
+    sed -i '/^set_and_check(AQBANKING_INCLUDE_DIRS "@aqbanking_headerdir@")/i set_and_check(includedir "@includedir@")' aqbanking-config.cmake.in
+    sed -i -e '/^aqbanking_plugindir=/ {
+      c aqbanking_plugindir="\''${libdir}/gwenhywfar/plugins"
+    }' configure
+  '';
 
-  buildNativeInputs = [ pkgconfig ];
+  buildInputs = [ gmp gwenhywfar libtool libxml2 libxslt xmlsec zlib ];
 
-  configureFlags = "--with-gwen-dir=${gwenhywfar}";
+  nativeBuildInputs = [ pkgconfig gettext ];
 
-  meta = {
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    # Tries to install gwenhywfar plugin, thus `make install` fails
-    platforms = [];
+  meta = with stdenv.lib; {
+    description = "An interface to banking tasks, file formats and country information";
+    homepage = "https://www.aquamaniac.de/";
+    hydraPlatforms = [];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ goibhniu ];
+    platforms = platforms.linux;
   };
 }

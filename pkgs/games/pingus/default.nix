@@ -1,26 +1,19 @@
-{stdenv, fetchurl, scons, SDL, SDL_image, boost, libpng, SDL_mixer, pkgconfig
-, mesa}:
-let
-  buildInputs = [scons SDL SDL_image boost libpng SDL_mixer pkgconfig mesa];
-  s = # Generated upstream information
-  rec {
-    baseName="pingus";
-    version="0.7.6";
-    name="pingus-0.7.6";
-    hash="0q34d2k6anzqvb0mf67x85q92lfx9jr71ry13dlp47jx0x9i573m";
-    url="http://pingus.googlecode.com/files/pingus-0.7.6.tar.bz2";
-    sha256="0q34d2k6anzqvb0mf67x85q92lfx9jr71ry13dlp47jx0x9i573m";
-  };
-in
+{stdenv, fetchgit, cmake, SDL2, SDL2_image, boost, libpng, SDL2_mixer
+, pkgconfig, libGLU, libGL, git, jsoncpp }:
 stdenv.mkDerivation rec {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
+  pname = "pingus";
+  version = "unstable-0.7.6.0.20191104";
+
+  nativeBuildInputs = [ cmake pkgconfig git ];
+  buildInputs = [ SDL2 SDL2_image boost libpng SDL2_mixer libGLU libGL jsoncpp ];
+  src = fetchgit {
+    url = "https://gitlab.com/pingus/pingus/";
+    rev = "709546d9b9c4d6d5f45fc9112b45ac10c7f9417d";
+    sha256 = "11mmzk0766riaw5qyd1r5i7s7vczbbzfccm92bvgrm99iy1sj022";
+    fetchSubmodules = true;
   };
-  makeFlags = '' PREFIX="$(out)" '';
+
   meta = {
-    inherit (s) version;
     description = ''A puzzle game with mechanics similar to Lemmings'';
     platforms = stdenv.lib.platforms.linux;
     maintainers = [stdenv.lib.maintainers.raskin];

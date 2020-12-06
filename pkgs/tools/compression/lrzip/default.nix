@@ -1,26 +1,21 @@
 {stdenv, fetchurl, zlib, lzo, bzip2, nasm, perl}:
 
-let
-  md5fix = fetchurl {
-    url = "https://github.com/ckolivas/lrzip/commit/9430b6ff4a58adb69ef4cf74f1245fd5b3b313dd.patch";
-    sha256 = "084x4wi3mamcxphzwf43iw287v1ylrk0xjghg6b5k6vgm9gkqlx8";
-  };
-in
 stdenv.mkDerivation rec {
-  name = "lrzip-0.612";
+  version = "0.631";
+  pname = "lrzip";
 
   src = fetchurl {
-    url = "http://ck.kolivas.org/apps/lrzip/${name}.tar.bz2";
-    sha256 = "15rfqpc4xj7wbv117mr2g9npxnrlmqqj97mhxqfpy8360ys9yc1c";
+    url = "http://ck.kolivas.org/apps/lrzip/${pname}-${version}.tar.bz2";
+    sha256 = "0mb449vmmwpkalq732jdyginvql57nxyd31sszb108yps1lf448d";
   };
 
   buildInputs = [ zlib lzo bzip2 nasm perl ];
 
-  patches = [ md5fix ];
-
   meta = {
-    homepage = http://ck.kolivas.org/apps/lrzip/;
+    homepage = "http://ck.kolivas.org/apps/lrzip/";
     description = "The CK LRZIP compression program (LZMA + RZIP)";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
+    inherit version;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

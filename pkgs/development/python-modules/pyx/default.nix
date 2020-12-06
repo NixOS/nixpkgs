@@ -1,40 +1,26 @@
-{stdenv, fetchurl, python, makeWrapper}:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+}:
 
-stdenv.mkDerivation rec {
-  name = "PyX-0.10";
-  src = fetchurl {
-    url = "mirror://sourceforge/pyx/${name}.tar.gz";
-    sha256 = "dfaa4a7790661d67d95f80b22044fdd8a9922483631950296ff1d7a9f85c8bba";
+buildPythonPackage rec {
+  pname = "pyx";
+  version = "0.15";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    pname = "PyX";
+    inherit version;
+    sha256 = "0xs9brmk9fvfmnsvi0haf13xwz994kv9afznzfpg9dkzbq6b1hqg";
   };
 
-  patchPhase = ''
-    substituteInPlace ./setup.py --replace '"/etc"' '"etc"'
-  '';
+  # No tests in archive
+  doCheck = false;
 
-  buildInputs = [python makeWrapper];
-  buildPhase = "python ./setup.py build";
-  installPhase = ''
-    python ./setup.py install --prefix="$out" || exit 1
-
-    for i in "$out/bin/"*
-    do
-      # FIXME: We're assuming Python 2.4.
-      wrapProgram "$i" --prefix PYTHONPATH :  \
-       "$out/lib/python2.4/site-packages" ||  \
-        exit 2
-    done
-  '';
-
-  meta = {
-    description = ''Python graphics package'';
-    longDescription = ''
-      PyX is a Python package for the creation of PostScript and PDF
-      files. It combines an abstraction of the PostScript drawing
-      model with a TeX/LaTeX interface. Complex tasks like 2d and 3d
-      plots in publication-ready quality are built out of these
-      primitives.
-    '';
-    license = "GPLv2";
-    homepage = http://pyx.sourceforge.net/;
+  meta = with stdenv.lib; {
+    description = "Python package for the generation of PostScript, PDF, and SVG files";
+    homepage = "http://pyx.sourceforge.net/";
+    license = with licenses; [ gpl2 ];
   };
 }

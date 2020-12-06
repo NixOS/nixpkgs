@@ -1,62 +1,83 @@
-{ stdenv, fetchurl, perl, cross ? null }:
-
-assert cross == null -> stdenv.isLinux;
+{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header }:
 
 let
-  version = "2.6.35.14";
-  kernelHeadersBaseConfig = if cross == null then
-      stdenv.platform.kernelHeadersBaseConfig
-    else
-      cross.platform.kernelHeadersBaseConfig;
-in
+  makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
+    inherit src;
 
-stdenv.mkDerivation {
-  name = "linux-headers-${version}";
+    pname = "linux-headers";
+    inherit version;
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v2.6/longterm/v2.6.35/linux-${version}.tar.bz2";
-    sha256 = "1wzml7s9karfbk2yi36g1r8fyaq4d4f16yizc68zgchv0xzj39zl";
-  };
+    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
 
-  targetConfig = if (cross != null) then cross.config else null;
+    # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
+    # We do this so we have a build->build, not build->host, C compiler.
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    # `elf-header` is null when libc provides `elf.h`.
+    nativeBuildInputs = [ perl elf-header ];
 
-  platform =
-    if cross != null then cross.platform.kernelArch else
-    if stdenv.system == "i686-linux" then "i386" else
-    if stdenv.system == "x86_64-linux" then "x86_64" else
-    if stdenv.system == "powerpc-linux" then "powerpc" else
-    if stdenv.isArm then "arm" else
-    if stdenv.platform ? kernelArch then stdenv.platform.kernelArch else
-    abort "don't know what the kernel include directory is called for this platform";
+    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
-  buildInputs = [perl];
+    inherit patches;
 
-  extraIncludeDirs =
-    if cross != null then
-	(if cross.arch == "powerpc" then ["ppc"] else [])
-    else if stdenv.system == "powerpc-linux" then ["ppc"] else [];
+    hardeningDisable = lib.optional stdenvNoCC.buildPlatform.isDarwin "format";
 
-  buildPhase = ''
-    if test -n "$targetConfig"; then
-       export ARCH=$platform
-    fi
-    make ${kernelHeadersBaseConfig}
-    make mrproper headers_check
-  '';
+    makeFlags = [
+      "SHELL=bash"
+      # Avoid use of runtime build->host compilers for checks. These
+      # checks only cared to work around bugs in very old compilers, so
+      # these changes should be safe.
+      "cc-version:=9999"
+      "cc-fullversion:=999999"
+      # `$(..)` expanded by make alone
+      "HOSTCC:=$(CC_FOR_BUILD)"
+      "HOSTCXX:=$(CXX_FOR_BUILD)"
+    ];
 
-  installPhase = ''
-    make INSTALL_HDR_PATH=$out headers_install
+    # Skip clean on darwin, case-sensitivity issues.
+    buildPhase = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
+      make mrproper $makeFlags
+    '' + ''
+      make headers $makeFlags
+    '';
 
+    checkPhase = ''
+      make headers_check $makeFlags
+    '';
+
+    # The following command requires rsync:
+    #   make headers_install INSTALL_HDR_PATH=$out $makeFlags
+    # but rsync depends on popt which does not compile on aarch64 without
+    # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
+    # so we replicate it with cp. This also reduces bootstrap closure size.
+    installPhase = ''
+      mkdir -p $out
+      cp -r usr/include $out
+      find $out -type f ! -name '*.h' -delete
+    ''
     # Some builds (e.g. KVM) want a kernel.release.
-    mkdir -p $out/include/config
-    echo "${version}-default" > $out/include/config/kernel.release
-  '';
+    + ''
+      mkdir -p $out/include/config
+      echo "${version}-default" > $out/include/config/kernel.release
+    '';
 
-  # !!! hacky
-  fixupPhase = ''
-    ln -s asm $out/include/asm-$platform
-    if test "$platform" = "i386" -o "$platform" = "x86_64"; then
-      ln -s asm $out/include/asm-x86
-    fi
-  '';
+    meta = with lib; {
+      description = "Header files and scripts for Linux kernel";
+      license = licenses.gpl2;
+      platforms = platforms.linux;
+    };
+  };
+in {
+  inherit makeLinuxHeaders;
+
+  linuxHeaders = let version = "5.9.8"; in
+    makeLinuxHeaders {
+      inherit version;
+      src = fetchurl {
+        url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+        sha256 = "19l67gzk97higd2cbggipcb0wi21pv0ag0mc4qh6cqk564xp6mkn";
+      };
+      patches = [
+         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+      ];
+    };
 }

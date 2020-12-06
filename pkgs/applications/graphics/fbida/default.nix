@@ -1,35 +1,34 @@
-{ stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp
-, pkgconfig, freetype, fontconfig, which, imagemagick, curl, saneBackends
-}:
+{ stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp, libdrm
+, pkgconfig, freetype, fontconfig, which, imagemagick, curl, sane-backends, libXpm
+, epoxy, poppler, mesa, lirc }:
 
 stdenv.mkDerivation rec {
-  name = "fbida-2.09";
-  
+  name = "fbida-2.14";
+
   src = fetchurl {
     url = "http://dl.bytesex.org/releases/fbida/${name}.tar.gz";
-    sha256 = "1riia87v5nsx858xnlvc7sspr1p36adjqrdch1255ikr5xbv6h6x";
+    sha256 = "0f242mix20rgsqz1llibhsz4r2pbvx6k32rmky0zjvnbaqaw1dwm";
   };
 
-  buildNativeInputs = [ pkgconfig which ];
-  buildInputs =
-    [ libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
-      imagemagick curl saneBackends
-    ];
-  
-  makeFlags = [ "prefix=$(out)" "verbose=yes" ];
+  nativeBuildInputs = [ pkgconfig which ];
+  buildInputs = [
+    libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
+    imagemagick curl sane-backends libdrm libXpm epoxy poppler lirc
+    mesa
+  ];
 
-  patchPhase =
-    ''
+  makeFlags = [ "prefix=$(out)" "verbose=yes" "STRIP=" "JPEG_VER=62" ];
+
+  patchPhase = ''
     sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile
-    '';
+    sed -e 's@$(HAVE_LINUX_FB_H)@yes@' -i GNUmakefile
+  '';
 
-  configurePhase = "make config $makeFlags";
-
-  crossAttrs = {
-    makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP="];
-  };
-
-  meta = {
-    description = "Image viewing and manipulation programs";
+  meta = with stdenv.lib; {
+    description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
+    homepage = "https://www.kraxel.org/blog/linux/fbida/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
   };
 }

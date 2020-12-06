@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, unrar, unzip, SDL, SDL_image, SDL_ttf, SDL_mixer,
-  mysql, makeWrapper }:
+{ fetchurl, stdenv, unrar, unzip, SDL, SDL_image, SDL_ttf, SDL_mixer
+, libmysqlclient, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "zod-engine-2011-03-18";
 
   src = fetchurl {
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gmg4ppr4y6ck04mandlp2fmdcyssmck999m012jx5v1rm57g2hn";
   };
 
+  hardeningDisable = [ "format" ];
+
   unpackPhase = ''
     mkdir src
     pushd src
@@ -22,10 +24,9 @@ stdenv.mkDerivation rec {
     sourceRoot=`pwd`/src
   '';
 
-  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer mysql
-    makeWrapper ];
+  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer libmysqlclient makeWrapper ];
 
-  NIX_LDFLAGS="-L${mysql}/lib/mysql";
+  NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/zod
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Multiplayer remake of ZED";
-    homepage = http://zod.sourceforge.net/;
-    license = "GPLv3+"; /* Says the web */
+    homepage = "http://zod.sourceforge.net/";
+    license = stdenv.lib.licenses.gpl3Plus; /* Says the web */
   };
 }

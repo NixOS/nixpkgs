@@ -1,57 +1,151 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
+, less
+, buildPackages
+, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkgconfig, qt5
+}:
 
-  version = a.lib.attrByPath ["version"] "3.4.3" a; 
-  buildInputs = with a; [
-    ncurses flex bison
-  ];
-in
-rec {
+let
+  platform =
+    if stdenv.hostPlatform.isUnix then "unix"
+    else throw "Unknown platform for NetHack: ${stdenv.hostPlatform.system}";
+  unixHint =
+    if x11Mode then "linux-x11"
+    else if qtMode then "linux-qt4"
+    else if stdenv.hostPlatform.isLinux  then "linux"
+    else if stdenv.hostPlatform.isDarwin then "macosx10.10"
+    # We probably want something different for Darwin
+    else "unix";
+  userDir = "~/.config/nethack";
+  binPath = lib.makeBinPath [ coreutils less ];
+
+in stdenv.mkDerivation rec {
+  version = "3.6.6";
+  name = if x11Mode then "nethack-x11-${version}"
+         else if qtMode then "nethack-qt-${version}"
+         else "nethack-${version}";
+
   src = fetchurl {
-    url = "mirror://sourceforge/nethack/nethack-343-src.tgz";
-    sha256 = "1r3ghqj82j0bar62z3b0lx9hhx33pj7p1ppxr2hg8bgfm79c6fdv";
+    url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
+    sha256 = "1liyckjp34j354qnxc1zn9730lh1p2dabrg1hap24z6xnqx0rpng";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ ncurses ]
+                ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
+                ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preBuild" "doMakeInstall" "postInstall"];
-     
-  preBuild = a.fullDepEntry (''
-    ( cd sys/unix ; sh setup.sh )
-    sed -e 's@.*define HACKDIR.*@\#define HACKDIR "/tmp/nethack"@' -i include/config.h
-    sed -e '/define COMPRESS/d' -i include/config.h
-    sed -e '1i\#define COMPRESS "/usr/local/bin/gzip"' -i include/config.h
-    sed -e '1i\#define COMPRESS_EXTENSION ".gz"' -i include/config.h
+  nativeBuildInputs = [ flex bison ]
+                      ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
+                      ++ lib.optionals qtMode [
+                           pkgconfig mkfontdir qt5.qtbase.dev
+                           qt5.qtmultimedia.dev qt5.wrapQtAppsHook
+                           bdftopcf
+                         ];
 
-    sed -e '/extern char [*]tparm/d' -i win/tty/*.c
-    sed -e 's/-ltermlib/-lncurses/' -i src/Makefile
-    sed -e 's/^YACC *=.*/YACC = bison -y/' -i util/Makefile
-    sed -e 's/^LEX *=.*/LEX = flex/' -i util/Makefile
+  makeFlags = [ "PREFIX=$(out)" ];
 
-    sed -e 's@GAMEDIR = @GAMEDIR = /tmp/nethack@' -i Makefile
-    sed -re 's@^(CH...).*@\1 = true@' -i Makefile
-  '') ["minInit" "doUnpack"];
+  postPatch = ''
+    sed -e '/^ *cd /d' -i sys/unix/nethack.sh
+    sed \
+      -e 's/^YACC *=.*/YACC = bison -y/' \
+      -e 's/^LEX *=.*/LEX = flex/' \
+      -i sys/unix/Makefile.utl
+    sed \
+      -e 's,^WINQT4LIB =.*,WINQT4LIB = `pkg-config Qt5Gui --libs` \\\
+            `pkg-config Qt5Widgets --libs` \\\
+            `pkg-config Qt5Multimedia --libs`,' \
+      -i sys/unix/Makefile.src
+    sed \
+      -e 's,^CFLAGS=-g,CFLAGS=,' \
+      -e 's,/bin/gzip,${gzip}/bin/gzip,g' \
+      -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
+      -i sys/unix/hints/linux
+    sed \
+      -e 's,^CC=.*$,CC=cc,' \
+      -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
+      -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
+      -e 's,^CFLAGS=-g,CFLAGS=,' \
+      -i sys/unix/hints/macosx10.10
+    sed -e '/define CHDIR/d' -i include/config.h
+    ${lib.optionalString qtMode ''
+    sed \
+      -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
+      -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
+      -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
+        -DCOMPRESS_EXTENSION=\\".gz\\",' \
+      -e 's,moc-qt4,moc,' \
+      -i sys/unix/hints/linux-qt4
+    ''}
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    # If we're cross-compiling, replace the paths to the data generation tools
+    # with the ones from the build platform's nethack package, since we can't
+    # run the ones we've built here.
+    ''
+    ${buildPackages.perl}/bin/perl -p \
+      -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
+      -i sys/unix/Makefile.*
+    ''}
+    sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
+  '';
 
-  postInstall = a.fullDepEntry (''
+  configurePhase = ''
+    pushd sys/${platform}
+    ${lib.optionalString (platform == "unix") ''
+      sh setup.sh hints/${unixHint}
+    ''}
+    popd
+  '';
+
+  enableParallelBuilding = true;
+
+  preFixup = stdenv.lib.optionalString qtMode ''
+    wrapQtApp "$out/games/nethack"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/games/lib/nethackuserdir
+    for i in xlogfile logfile perm record save; do
+      mv $out/games/lib/nethackdir/$i $out/games/lib/nethackuserdir
+    done
+
     mkdir -p $out/bin
-    ln -s $out/games/nethack $out/bin/nethack
-    sed -i $out/bin/nethack -e '5aNEWHACKDIR="$HOME/.nethack"'
-    sed -i $out/bin/nethack -e '6amkdir -p "$NEWHACKDIR/save"'
-    sed -i $out/bin/nethack -e '7afor i in $(find "$NEWHACKDIR" -type l); do if ! test -e $(readlink "$i"); then rm "$i"; fi; done;'
-    sed -i $out/bin/nethack -e '8aln -s "$HACKDIR"/* "$NEWHACKDIR" &>/dev/null'
-    sed -i $out/bin/nethack -e '9atest -L "$NEWHACKDIR/record" && rm "$NEWHACKDIR"/record'
-    sed -i $out/bin/nethack -e '10aexport HACKDIR="$NEWHACKDIR"'
-  '') ["minInit" "defEnsureDir"];
+    cat <<EOF >$out/bin/nethack
+    #! ${stdenv.shell} -e
+    PATH=${binPath}:\$PATH
 
-  makeFlags = [
-      "PREFIX=$out"
-    ];
+    if [ ! -d ${userDir} ]; then
+      mkdir -p ${userDir}
+      cp -r $out/games/lib/nethackuserdir/* ${userDir}
+      chmod -R +w ${userDir}
+    fi
 
-  name = "nethack-" + version;
-  meta = {
-    description = "rogue-like game";
+    RUNDIR=\$(mktemp -d)
+
+    cleanup() {
+      rm -rf \$RUNDIR
+    }
+    trap cleanup EXIT
+
+    cd \$RUNDIR
+    for i in ${userDir}/*; do
+      ln -s \$i \$(basename \$i)
+    done
+    for i in $out/games/lib/nethackdir/*; do
+      ln -s \$i \$(basename \$i)
+    done
+    $out/games/nethack
+    EOF
+    chmod +x $out/bin/nethack
+    ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
+    ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
+    install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/nethack/
+    ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Rogue-like game";
+    homepage = "http://nethack.org/";
+    license = "nethack";
+    platforms = if x11Mode then platforms.linux else platforms.unix;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

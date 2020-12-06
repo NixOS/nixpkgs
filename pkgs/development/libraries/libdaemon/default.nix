@@ -8,16 +8,18 @@ stdenv.mkDerivation rec {
     sha256 = "0d5qlq5ab95wh1xc87rqrh1vx6i8lddka1w3f1zcqvcqdxgyn8zx";
   };
 
-  configureFlags = [ "--disable-lynx" ];
+  patches = [ ./fix-includes.patch ];
+
+  configureFlags = [ "--disable-lynx" ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ # Can't run this test while cross-compiling
+      "ac_cv_func_setpgrp_void=yes"
+    ];
 
   meta = {
-    description = "libdaemon, a lightweight C library that eases the writing of UNIX daemons";
-
-    homepage = http://0pointer.de/lennart/projects/libdaemon/;
-
-    license = "LGPLv2+";
-
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    description = "Lightweight C library that eases the writing of UNIX daemons";
+    homepage = "http://0pointer.de/lennart/projects/libdaemon/";
+    license = stdenv.lib.licenses.lgpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

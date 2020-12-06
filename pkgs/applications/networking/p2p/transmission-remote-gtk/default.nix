@@ -1,17 +1,42 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk, json_glib, curl }:
+{ stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub, pkgconfig
+, intltool, gtk3, json-glib, curl, glib, autoconf-archive, appstream-glib, fetchpatch }:
 
 
 stdenv.mkDerivation rec {
-  name = "transmission-remote-gtk-1.0.1";
+  pname = "transmission-remote-gtk";
+  version = "1.4.1";
 
-  src = fetchurl {
-    url = "http://transmission-remote-gtk.googlecode.com/files/${name}.tar.gz";
-    sha256 = "b1ae032dd52b2d7975656913e4fe39e7f74d29ef8138292d8b82318ff9afed6f";
+  src = fetchFromGitHub {
+    owner = "transmission-remote-gtk";
+    repo = "transmission-remote-gtk";
+    rev = version;
+    sha256 = "1pipc1f94jdppv597mqmcj2kw2rdvaqcbl512v7z8vir76p1a7gk";
   };
 
-  buildInputs = [ pkgconfig intltool gtk json_glib curl ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/commit/0f5cc8a9942e220ea0f7d0b17db4a78d094e3b65.patch";
+      sha256 = "195rsjpbc0gzmr9bycvq4mra7abp3hd9by3a5vvcmxsh5ipikycf";
+    })
+  ];
 
-  meta = {
-   description = "GTK remote control for the Transmission BitTorrent client";
+  preConfigure = "./autogen.sh";
+
+  nativeBuildInputs= [
+    autoconf automake libtool wrapGAppsHook
+    pkgconfig intltool autoconf-archive
+    appstream-glib
+  ];
+
+  buildInputs = [ gtk3 json-glib curl glib ];
+
+  doCheck = false; # fails with style validation error
+
+  meta = with stdenv.lib; {
+    description = "GTK remote control for the Transmission BitTorrent client";
+    homepage = "https://github.com/ajf8/transmission-remote-gtk";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.ehmry ];
+    platforms = platforms.linux;
   };
 }

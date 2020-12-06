@@ -1,71 +1,86 @@
-a @ {
-  freeglut,ghostscriptX,imagemagick,fftw,
-  boehmgc,mesa,ncurses,readline,gsl,libsigsegv,
-  python,zlib, perl, texLive, texinfo, lzma,
+{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
+, autoreconfHook, bison, glm, yacc, flex
+, freeglut, ghostscriptX, imagemagick, fftw
+, boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
+, python3Packages
+, zlib, perl, curl
+, texLive, texinfo
+, darwin
+}:
 
-  noDepEntry, fullDepEntry, fetchUrlFromSrcInfo,
-  lib,
+stdenv.mkDerivation rec {
+  version = "2.67";
+  pname = "asymptote";
 
-  ...}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="asymptote";
-    version="2.21";
-    name="asymptote-2.21";
-    hash="07lkj0xnxpanfscmbm30lw6j9484rlmmqpnl0mhs7nx9h2lczrjz";
-    url="mirror://sourceforge/project/asymptote/2.21/asymptote-2.21.src.tgz";
-    sha256="07lkj0xnxpanfscmbm30lw6j9484rlmmqpnl0mhs7nx9h2lczrjz";
+  src = fetchFromGitHub {
+    owner = "vectorgraphics";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256:1lawj2gf0985clzbyym26s5mxxp2syl1dqqxfzk0sq9s30l2rj3l";
   };
-  buildInputs = with a; [
-    freeglut ghostscriptX imagemagick fftw boehmgc
-    mesa ncurses readline gsl libsigsegv python zlib
-    perl texLive texinfo lzma
+
+  patches =
+    (stdenv.lib.optional (stdenv.lib.versionOlder version "2.68")
+      (fetchpatch {
+        url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
+        sha256 = "sha256:1z2b41x8v7683myd45lq6niixpdjy0b185x0xl61130vrijhq5nm";
+      }))
+  ;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    yacc
+    texinfo
   ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = "--enable-gc=${a.boehmgc} --enable-offscreen";
+  buildInputs = [
+    ghostscriptX imagemagick fftw
+    boehmgc ncurses readline gsl libsigsegv
+    zlib perl curl
+    texLive
+  ] ++ (with python3Packages; [
+    python
+    pyqt5
+  ]);
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doUnpack" "fixPaths" "extractTexinfoTex"
-    "doConfigure" "dumpRealVars" "doMakeInstall" "fixPathsResult"
-    "fixInfoDir"];
+  propagatedBuildInputs = [
+    glm
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    freeglut libGLU libGL mesa.osmesa
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    OpenGL GLUT Cocoa
+  ]);
 
-  setVars = a.noDepEntry ''
-    export HOME="$PWD"
+  preConfigure = ''
+    HOME=$TMP
   '';
 
-  dumpRealVars = a.noDepEntry ''
-    set > ../real-env-vars
-  '';
+  configureFlags = [
+    "--with-latex=$out/share/texmf/tex/latex"
+    "--with-context=$out/share/texmf/tex/context/third"
+  ];
 
-  fixPaths = a.doPatchShebangs ''.'';
-  fixPathsResult = a.doPatchShebangs ''$out/bin'';
+  NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
-  fixInfoDir = a.noDepEntry ''
-    mv -v "$out/share/info/asymptote/"*.info $out/share/info/
+  postInstall = ''
+    mv $out/share/info/asymptote/*.info $out/share/info/
     sed -i -e 's|(asymptote/asymptote)|(asymptote)|' $out/share/info/asymptote.info
     rmdir $out/share/info/asymptote
-    rm $out/share/info/dir
+    rm -f $out/share/info/dir
+
+    rm -rf $out/share/texmf
+    install -Dt $out/share/emacs/site-lisp/${pname} $out/share/asymptote/*.el
   '';
 
-  extractTexinfoTex = a.fullDepEntry ''
-    lzma -d < ${a.texinfo.src} | tar --wildcards -x texinfo-'*'/doc/texinfo.tex
-    cp texinfo-*/doc/texinfo.tex doc/
-  '' ["minInit" "addInputs" "doUnpack"];
+  enableParallelBuilding = true;
 
-  meta = {
-    inherit (s) version;
-    description = "A tool for programming graphics intended to replace Metapost";
-    maintainers = [
-      a.lib.maintainers.raskin
-      a.lib.maintainers.simons
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+  meta = with stdenv.lib; {
+    description =  "A tool for programming graphics intended to replace Metapost";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.raskin maintainers.peti ];
+    broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

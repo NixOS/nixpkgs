@@ -1,38 +1,28 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl }:
 
-  version = a.lib.attrByPath ["version"] "2009-05-27" a; 
-  buildInputs = with a; [
-    
-  ];
-in
-rec {
-  src = a.fetchcvs {
-    cvsRoot = ":pserver:anonymous@cvs.savannah.gnu.org:/sources/libffcall";
-    module = "ffcall";
-    date = version;
-    sha256 = "91bcb5a20c85a9ccab45886aae8fdbbcf1f20f995ef898e8bdd2964448daf724";
+stdenv.mkDerivation rec {
+  pname = "libffcall";
+  version = "2.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/libffcall/libffcall-${version}.tar.gz";
+    sha256 = "0iwcad6w78jp84vd6xaz5fwqm84n3cb42bdf5m5cj5xzpa5zp4d0";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  enableParallelBuilding = false;
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  doConfigure = a.fullDepEntry (''
-    for i in ./configure */configure; do
-      cwd="$PWD"
-      cd "$(dirname "$i")"; 
-      ( test -f Makefile && make distclean ) || true
-      ./configure --prefix=$out
-      cd "$cwd"
-    done
-  '') a.doConfigure.deps;
+  outputs = [ "dev" "out" "doc" "man" ];
 
-  name = "libffcall-" + version;
-  meta = {
+  postInstall = ''
+    mkdir -p $doc/share/doc/libffcall
+    mv $out/share/html $doc/share/doc/libffcall
+    rm -rf $out/share
+  '';
+
+  meta = with stdenv.lib; {
     description = "Foreign function call library";
+    homepage = "https://www.gnu.org/software/libffcall/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

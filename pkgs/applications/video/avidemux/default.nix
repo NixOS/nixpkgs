@@ -1,43 +1,99 @@
-{stdenv, fetchurl, cmake, pkgconfig, libxml2, qt4, gtk, gettext, SDL,
-libXv, pixman, libpthreadstubs, libXau, libXdmcp, libxslt, x264,
-alsaLib, lame, faac, faad2, libvorbis, yasm, libvpx, xvidcore, libva }:
+{ stdenv, lib, fetchurl, cmake, pkgconfig
+, zlib, gettext, libvdpau, libva, libXv, sqlite
+, yasm, freetype, fontconfig, fribidi
+, makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
+, alsaLib
+, withX265 ? true, x265
+, withX264 ? true, x264
+, withXvid ? true, xvidcore
+, withLAME ? true, lame
+, withFAAC ? false, faac
+, withVorbis ? true, libvorbis
+, withPulse ? true, libpulseaudio
+, withFAAD ? true, faad2
+, withOpus ? true, libopus
+, withVPX ? true, libvpx
+, withQT ? true
+, withCLI ? true
+, default ? "qt5"
+, withPlugins ? true
+}:
 
-assert stdenv ? glibc;
+assert withQT -> qttools != null && qtbase != null;
+assert default != "qt5" -> default == "cli";
+assert !withQT -> default != "qt5";
 
-stdenv.mkDerivation {
-  name = "avidemux-2.5.6";
-  
+stdenv.mkDerivation rec {
+  pname = "avidemux";
+  version = "2.7.6";
+
   src = fetchurl {
-    url = mirror://sourceforge/avidemux/avidemux_2.5.6.tar.gz;
-    sha256 = "12wvxz0n2g85f079d8mdkkp2zm279d34m9v7qgcqndh48cn7znnn";
+    url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
+    sha256 = "1kwkn976ppahrcr74bnv6sqx75pzl9y21m1mvr5ksi1m6lgp924s";
   };
-  
-  buildInputs = [ cmake pkgconfig libxml2 qt4 gtk gettext SDL libXv
-    pixman libpthreadstubs libXau libXdmcp libxslt x264 alsaLib 
-    lame faac faad2 libvorbis yasm libvpx xvidcore libva ];
 
-  cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include" +
-    " -DGETTEXT_INCLUDE_DIR=${gettext}/include" +
-    " -DSDL_INCLUDE_DIR=${SDL}/include/SDL";
+  patches = [
+    ./dynamic_install_dir.patch
+    ./bootstrap_logging.patch
+  ];
 
-  NIX_LDFLAGS="-lpthread";
+  nativeBuildInputs =
+    [ yasm cmake pkgconfig ]
+    ++ lib.optional withQT wrapQtAppsHook;
+  buildInputs = [
+    zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
+    freetype alsaLib libXext libGLU makeWrapper
+  ] ++ lib.optional withX264 x264
+    ++ lib.optional withX265 x265
+    ++ lib.optional withXvid xvidcore
+    ++ lib.optional withLAME lame
+    ++ lib.optional withFAAC faac
+    ++ lib.optional withVorbis libvorbis
+    ++ lib.optional withPulse libpulseaudio
+    ++ lib.optional withFAAD faad2
+    ++ lib.optional withOpus libopus
+    ++ lib.optionals withQT [ qttools qtbase ]
+    ++ lib.optional withVPX libvpx;
 
-  postInstall = ''
-    cd $NIX_BUILD_TOP/$sourceRoot
-    mkdir build_plugins
-    cd build_plugins
-    cmake $cmakeFlags -DAVIDEMUX_INSTALL_PREFIX=$out \
-      -DAVIDEMUX_SOURCE_DIR=$NIX_BUILD_TOP/$sourceRoot \
-      -DAVIDEMUX_CORECONFIG_DIR=$NIX_BUILD_TOP/$sourceRoot/build/config ../plugins
+  buildCommand = let
+    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
+    wrapWith = makeWrapper: filename:
+      "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+    wrapQtApp = wrapWith "wrapQtApp";
+    wrapProgram = wrapWith "wrapProgram";
+  in ''
+    unpackPhase
+    cd "$sourceRoot"
+    patchPhase
 
-    make
-    make install
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libXext}/lib"
+    ${stdenv.shell} bootStrap.bash \
+      --with-core \
+      ${if withQT then "--with-qt" else "--without-qt"} \
+      ${if withCLI then "--with-cli" else "--without-cli"} \
+      ${if withPlugins then "--with-plugins" else "--without-plugins"}
+
+    mkdir $out
+    cp -R install/usr/* $out
+
+    ${wrapProgram "$out/bin/avidemux3_cli"}
+
+    ${stdenv.lib.optionalString withQT ''
+      ${wrapQtApp "$out/bin/avidemux3_qt5"}
+      ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
+    ''}
+
+    ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
+
+    fixupPhase
   '';
 
-  meta = { 
-    homepage = http://fixounet.free.fr/avidemux/;
+  meta = with stdenv.lib; {
+    homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with maintainers; [ abbradar ma27 ];
+    # "CPU not supported" errors on AArch64
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.gpl2;
   };
 }

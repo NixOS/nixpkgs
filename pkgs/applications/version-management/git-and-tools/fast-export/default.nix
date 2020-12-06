@@ -1,39 +1,66 @@
-{stdenv, fetchgit, mercurial, coreutils, git, makeWrapper, subversion}:
+{stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
 
-stdenv.mkDerivation {
-  name = "fast-export";
+stdenv.mkDerivation rec {
+  pname = "fast-export";
+  version = "200213";
 
-  src = fetchgit {
-    url = "git://repo.or.cz/fast-export.git";
-    rev = "refs/heads/master";
+  src = fetchFromGitHub {
+    owner = "frej";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0hzyh66rlawxip4n2pvz7pbs0cq82clqv1d6c7hf60v1drjxw287";
   };
 
-  buildInputs = [mercurial.python mercurial makeWrapper subversion];
+  buildInputs = [mercurial.python mercurial makeWrapper];
 
-  buildPhase="true"; # skip svn for now
-
-  # TODO also support svn stuff
-  # moving .py files into lib directory so that you can't pick the wrong file from PATH.
-  # This requires redefining ROOT
   installPhase = ''
-    sed -i "s@/usr/bin/env.*@$(type -p python)@" *.py
-    l=$out/libexec/git-fast-export
-    mkdir -p $out/{bin,doc/git-fast-export} $l
-    mv *.txt $out/doc/git-fast-export
-    sed -i "s@ROOT=.*@ROOT=$l@" *.sh
-    mv *.sh $out/bin
-    mv *.py $l
-    for p in $out/bin/*.sh; do
-      wrapProgram $p \
-        --prefix PYTHONPATH : "$(echo ${mercurial}/lib/python*/site-packages):$(echo ${mercurial.python}/lib/python*/site-packages)${stdenv.lib.concatMapStrings (x: ":$(echo ${x}/lib/python*/site-packages)") mercurial.pythonPackages}" \
-        --prefix PATH : "$(dirname $(type -p python))":$l
+    binPath=$out/bin
+    libexecPath=$out/libexec/${pname}
+    sitepackagesPath=$out/${mercurial.python.sitePackages}
+    mkdir -p $binPath $libexecPath $sitepackagesPath
+
+    # Patch shell scripts so they can execute the Python scripts
+    sed -i "s|ROOT=.*|ROOT=$libexecPath|" *.sh
+
+    mv hg-fast-export.sh hg-reset.sh $binPath
+    mv hg-fast-export.py hg-reset.py $libexecPath
+    mv hg2git.py pluginloader plugins $sitepackagesPath
+
+    for script in $out/bin/*.sh; do
+      wrapProgram $script \
+        --prefix PATH : "${git}/bin":"${mercurial.python}/bin":$libexec \
+        --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
   '';
 
-  # usage: 
-  meta = {
-      description = "import svn, mercurial into git";
-      homepage = "http://repo.or.cz/w/fast-export.git";
-      license = "?"; # the .py file is GPLv2
+  doInstallCheck = true;
+  # deliberately not adding git or hg into installCheckInputs - package should
+  # be able to work without them in runtime env
+  installCheckPhase = ''
+    mkdir repo-hg
+    pushd repo-hg
+    ${mercurial}/bin/hg init
+    echo foo > bar
+    ${mercurial}/bin/hg add bar
+    ${mercurial}/bin/hg commit --message "baz"
+    popd
+
+    mkdir repo-git
+    pushd repo-git
+    ${git}/bin/git init
+    ${git}/bin/git config core.ignoreCase false  # for darwin
+    $out/bin/hg-fast-export.sh -r ../repo-hg/ --hg-hash
+    for s in "foo" "bar" "baz" ; do
+      (${git}/bin/git show | grep $s > /dev/null) && echo $s found
+    done
+    popd
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Import mercurial into git";
+    homepage = "https://repo.or.cz/w/fast-export.git";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.koral ];
+    platforms = platforms.unix;
   };
 }

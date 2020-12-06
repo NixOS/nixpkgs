@@ -1,40 +1,49 @@
-{stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
+{stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
 , enableX11 ? true}:
+
+let inherit (ocamlPackages) ocaml lablgtk; in
 
 stdenv.mkDerivation (rec {
 
-  name = "unison-2.40.63";
-  src = fetchurl {
-    url = "http://www.seas.upenn.edu/~bcpierce/unison/download/releases/${name}/${name}.tar.gz";
-    sha256 = "17fd2bg5jxwbib87j6j2bjpwdm66whqm1fq46v70hfby79j00vkf";
+  pname = "unison";
+  version = "2.51.3";
+  src = fetchFromGitHub {
+    owner = "bcpierce00";
+    repo = "unison";
+    rev = "v${version}";
+    sha256 = "sha256-42hmdMwOYSWGiDCmhuqtpCWtvtyD2l+kA/bhHD/Qh5Y=";
   };
 
   buildInputs = [ ocaml makeWrapper ncurses ];
 
-  preBuild = if enableX11 then ''
-    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" Makefile.OCaml
-  '' else "";
+  preBuild = (if enableX11 then ''
+    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
+  '' else "") + ''
+  echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
+  '';
 
-  makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")
-    + (if ! ocaml.nativeCompilers then " NATIVE=false" else "");
+  makeFlags = [
+    "INSTALLDIR=$(out)/bin/"
+    "UISTYLE=${if enableX11 then "gtk2" else "text"}"
+  ] ++ stdenv.lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
 
   preInstall = "mkdir -p $out/bin";
 
   postInstall = if enableX11 then ''
     for i in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$i \
-        --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
+        --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | ${gnugrep}/bin/grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
     done
   '' else "";
 
-  dontStrip = if ! ocaml.nativeCompilers then true else false;
+  dontStrip = !ocaml.nativeCompilers;
 
   meta = {
-    homepage = http://www.cis.upenn.edu/~bcpierce/unison/;
+    homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 
 })

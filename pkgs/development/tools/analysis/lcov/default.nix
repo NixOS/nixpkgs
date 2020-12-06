@@ -1,33 +1,37 @@
-{stdenv, fetchurl, perl}:
+ {stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "lcov-1.9";
+  name = "lcov-1.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/ltp/${name}.tar.gz";
-    sha256 = "1jhs1x2qy5la5gpdfl805zm11rsz6anla3b0wffk6wq79xfi4zn3";
+    sha256 = "06h7ixyznf6vz1qvksjgy5f3q2nw9akf6zx59npf0h3l32cmd68l";
   };
 
   patches =
-    [ ./find-source.patch ]
-    ++ (stdenv.lib.optional stdenv.isFreeBSD ./freebsd-install.patch);
+    [ (fetchpatch {
+        url = "https://github.com/linux-test-project/lcov/commit/ebfeb3e179e450c69c3532f98cd5ea1fbf6ccba7.patch";
+        sha256 = "0dalkqbjb6a4vp1lcsxd39dpn5fzdf7ihsjbiviq285s15nxdj1j";
+      })
+      (fetchpatch {
+        url = "https://github.com/linux-test-project/lcov/commit/75fbae1cfc5027f818a0bb865bf6f96fab3202da.patch";
+        sha256 = "0v1hn0511dxqbf50ppwasc6vmg0m6rns7ydbdy2rdbn0j7gxw30x";
+      })
+    ];
+
+  buildInputs = [ perl makeWrapper ];
 
   preBuild = ''
-    makeFlagsArray=(PREFIX=$out BIN_DIR=$out/bin MAN_DIR=$out/share/man)
-  '';
-
-  preInstall = ''
-    substituteInPlace bin/install.sh --replace /bin/bash $shell
+    patchShebangs bin/
+    makeFlagsArray=(PREFIX=$out LCOV_PERL_PATH=$(command -v perl))
   '';
 
   postInstall = ''
-    for i in "$out/bin/"*; do
-      substituteInPlace $i --replace /usr/bin/perl ${perl}/bin/perl
-    done
+    wrapProgram $out/bin/lcov --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.PerlIOgzip perlPackages.JSON ]}
   '';
 
-  meta = {
-    description = "LCOV, a code coverage tool that enhances GNU gcov";
+  meta = with stdenv.lib; {
+    description = "Code coverage tool that enhances GNU gcov";
 
     longDescription =
       '' LCOV is an extension of GCOV, a GNU tool which provides information
@@ -38,10 +42,10 @@ stdenv.mkDerivation rec {
          HTML output.
       '';
 
-    homepage = http://ltp.sourceforge.net/coverage/lcov.php;
-    license = "GPLv2+";
+    homepage = "http://ltp.sourceforge.net/coverage/lcov.php";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ dezgeg ];
+    platforms = platforms.all;
   };
 }

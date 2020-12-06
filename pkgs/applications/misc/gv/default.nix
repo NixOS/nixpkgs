@@ -1,17 +1,28 @@
-{ stdenv, fetchurl, Xaw3d, ghostscriptX, perl }:
+{ stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkgconfig, libiconv }:
 
 let
-  name = "gv-3.7.3";
+  name = "gv-3.7.4";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://gnu/gv/${name}.tar.gz";
-    sha256 = "ee01ba96e3a5c319eb4658357372a118dbb0e231891b360edecbdebd449d1c2b";
+    sha256 = "0q8s43z14vxm41pfa8s5h9kyyzk1fkwjhkiwbf2x70alm6rv6qi1";
   };
 
-  buildInputs = [ Xaw3d ghostscriptX perl ];
+  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
+    "--enable-SIGCHLD-fallback"
+  ];
+
+  buildInputs = [
+    Xaw3d
+    ghostscriptX
+    perl
+    pkgconfig
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   patchPhase = ''
     sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i "src/"*.in
@@ -21,8 +32,8 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/gv/;
-    description = "GNU gv, a PostScript/PDF document viewer";
+    homepage = "https://www.gnu.org/software/gv/";
+    description = "PostScript/PDF document viewer";
 
     longDescription = ''
       GNU gv allows users to view and navigate through PostScript and
@@ -30,8 +41,8 @@ stdenv.mkDerivation {
       interface for the Ghostscript interpreter.
     '';
 
-    license = "GPLv3+";
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,51 +1,86 @@
-x@{builderDefsPackage
-  , glib, libsoup, libxml2, pkgconfig, intltool, perl
-  , libtasn1, nettle, gmp
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv
+, fetchurl
+, pkgconfig
+, meson
+, ninja
+, nixosTests
+, vala
+, gettext
+, libxml2
+, glib
+, json-glib
+, gcr
+, gnome-online-accounts
+, gobject-introspection
+, gnome3
+, p11-kit
+, openssl
+, uhttpmock
+, libsoup
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="libgdata";
-    majorVersion="0.8";
-    minorVersion="1";
-    version="${majorVersion}.${minorVersion}";
-    name="${baseName}-${version}";
-    url="mirror://gnome/sources/${baseName}/${majorVersion}/${name}.tar.bz2";
-    hash="1ffhd1dvjflwjsiba1qdianlzfdlfkjgifmw3c7qs2g6fzkf62q8";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  pname = "libgdata";
+  version = "0.17.13";
+
+  outputs = [ "out" "dev" "installedTests" ];
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0bj7ij6k3lxjn62jgh8vabr8vfjs48aylnnl3779warw5iwyzfga";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  patches = [
+    ./installed-tests-path.patch
+  ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "GData API library";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl21Plus;
-  };
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    vala
+  ];
+
+  buildInputs = [
+    gcr
+    glib
+    libsoup
+    libxml2
+    openssl
+    p11-kit
+    uhttpmock
+  ];
+
+  propagatedBuildInputs = [
+    gnome-online-accounts
+    json-glib
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=false"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
+    "-Dinstalled_tests=true"
+  ];
+
   passthru = {
-    updateInfo = {
-      downloadPage = "http://ftp.gnome.org/pub/GNOME/sources/${sourceInfo.baseName}";
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none"; # Stable version has not been updated for a long time.
+    };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.libgdata;
     };
   };
-}) x
 
+  meta = with stdenv.lib; {
+    description = "GData API library";
+    homepage = "https://wiki.gnome.org/Projects/libgdata";
+    maintainers = with maintainers; [ raskin lethalman ] ++ teams.gnome.members;
+    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+  };
+}

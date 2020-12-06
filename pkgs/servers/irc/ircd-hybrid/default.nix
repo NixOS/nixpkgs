@@ -1,21 +1,26 @@
 { stdenv, fetchurl, openssl, zlib }:
 
-stdenv.mkDerivation {
-  name = "ircd-hybrid-7.2.2";
+stdenv.mkDerivation rec {
+  name = "ircd-hybrid-8.2.35";
 
   src = fetchurl {
-    url = mirror://sourceforge/ircd-hybrid/ircd-hybrid-7.2.2.tgz;
-    sha256 = "1xn4dfbgx019mhismfnr2idhslvarlajyahj7c6bqzmarcwwrvck";
+    url = "mirror://sourceforge/ircd-hybrid/${name}.tgz";
+    sha256 = "045wd3wa4i1hl7i4faksaj8l5r70ld55bggryaf1ml28ijwjwpca";
   };
 
   buildInputs = [ openssl zlib ];
 
-  configureFlags =
-    "--with-nicklen=100 --with-topiclen=360 --enable-openssl=${openssl}";
+  configureFlags = [
+    "--with-nicklen=100"
+    "--with-topiclen=360"
+    "--enable-openssl=${openssl.dev}"
+  ];
 
   postInstall = "echo postinstall; mkdir -p \${out}/ ; rm -rf \${out}/logs ; ln -s /home/ircd \${out}/logs;";
 
   meta = {
     description = "An IPv6-capable IRC server";
+    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.ircd-hybrid.org/";
   };
 }

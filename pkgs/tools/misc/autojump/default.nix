@@ -1,64 +1,53 @@
-{ fetchurl, stdenv, python }:
+{ stdenv, fetchFromGitHub, python3, bash }:
 
-let version = "4"; in
-  stdenv.mkDerivation rec {
-    name = "autojump-${version}";
+stdenv.mkDerivation rec {
+  pname = "autojump";
+  version = "22.5.3";
 
-    src = fetchurl {
-      url = "http://github.com/joelthelion/autojump/tarball/release-v4";
-      name = "autojump-${version}.tar.gz";
-      sha256 = "06hjkdmfhawi6xksangymf9z85ql8d7q0vlcmgsw45vxq7iq1fnp";
-    };
+  src = fetchFromGitHub {
+    owner = "wting";
+    repo = "autojump";
+    rev = "release-v${version}";
+    sha256 = "1rgpsh70manr2dydna9da4x7p8ahii7dgdgwir5fka340n1wrcws";
+  };
 
-    # FIXME: Appears to be broken with Bash 4.0:
-    # http://wiki.github.com/joelthelion/autojump/doesnt-seem-to-be-working-with-bash-40 .
+  buildInputs = [ python3 bash ];
+  dontBuild = true;
 
-    patchPhase = ''
-      sed -i "install.sh" \
-          -e "s,/usr/,$out/,g ; s,/etc/,/nowhere/,g ; s,sudo,,g"
+  installPhase = ''
+    python ./install.py -d "$out" -p "" -z "$out/share/zsh/site-functions/"
+
+    chmod +x "$out/etc/profile.d/autojump.sh"
+    install -Dt "$out/share/bash-completion/completions/" -m444 "$out/share/autojump/autojump.bash"
+    install -Dt "$out/share/fish/vendor_conf.d/" -m444 "$out/share/autojump/autojump.fish"
+    install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A `cd' command that learns";
+    longDescription = ''
+      One of the most used shell commands is “cd”.  A quick survey
+      among my friends revealed that between 10 and 20% of all
+      commands they type are actually cd commands! Unfortunately,
+      jumping from one part of your system to another with cd
+      requires to enter almost the full path, which isn’t very
+      practical and requires a lot of keystrokes.
+
+      Autojump is a faster way to navigate your filesystem.  It
+      works by maintaining a database of the directories you use the
+      most from the command line.  The jstat command shows you the
+      current contents of the database.  You need to work a little
+      bit before the database becomes usable.  Once your database
+      is reasonably complete, you can “jump” to a directory by
+      typing "j dirspec", where dirspec is a few characters of the
+      directory you want to jump to.  It will jump to the most used
+      directory whose name matches the pattern given in dirspec.
+
+      Autojump supports tab-completion.
     '';
-
-    buildInputs = [ python ];
-
-    installPhase = ''
-      mkdir -p "$out/bin" "$out/share/man/man1"
-      yes no | sh ./install.sh
-
-      mkdir -p "$out/etc/bash_completion.d"
-      cp -v autojump.bash "$out/etc/bash_completion.d"
-
-      echo "Bash users: Make sure to source \`$out/etc/bash_completion.d/autojump.bash'"
-      echo "to get the \`j' and \`jumpstat' commands."
-
-      # FIXME: What's the right place for `autojump.zsh'?
-    '';
-
-    meta = {
-      description = "Autojump, a `cd' command that learns";
-
-      longDescription = ''
-        One of the most used shell commands is “cd”.  A quick survey
-        among my friends revealed that between 10 and 20% of all
-        commands they type are actually cd commands! Unfortunately,
-        jumping from one part of your system to another with cd
-        requires to enter almost the full path, which isn’t very
-        practical and requires a lot of keystrokes.
-
-        Autojump is a faster way to navigate your filesystem.  It
-        works by maintaining a database of the directories you use the
-        most from the command line.  The jstat command shows you the
-        current contents of the database.  You need to work a little
-        bit before the database becomes useable.  Once your database
-        is reasonably complete, you can “jump” to a directory by
-        typing "j dirspec", where dirspec is a few characters of the
-        directory you want to jump to.  It will jump to the most used
-        directory whose name matches the pattern given in dirspec.
-
-        Autojump supports tab-completion.
-      '';
-
-      homepage = http://wiki.github.com/joelthelion/autojump;
-
-      license = "GPLv3+";
-    };
-  }
+    homepage = "https://github.com/wting/autojump";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ domenkozar yurrriq ];
+  };
+}

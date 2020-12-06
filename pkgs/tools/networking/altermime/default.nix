@@ -1,52 +1,33 @@
-x@{builderDefsPackage
-  
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="altermime";
-    version="0.3.10";
-    name="${baseName}-${version}";
-    url="http://www.pldaniels.com/${baseName}/${name}.tar.gz";
-    hash="0vn3vmbcimv0n14khxr1782m76983zz9sf4j2kz5v86lammxld43";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  baseName = "altermime";
+  name = "${baseName}-${version}";
+  version = "0.3.11";
+
+  src = fetchurl {
+    url = "https://pldaniels.com/${baseName}/${name}.tar.gz";
+    sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=format"
+    "-Wno-error=format-truncation"
+    "-Wno-error=pointer-compare"
+    "-Wno-error=memset-elt-size"
+    "-Wno-error=restrict"
+  ];
 
-  patches = map a.fetchurl (import ./debian-patches.nix);
-
-  phaseNames = ["doPatch" "fixTarget" "doMakeInstall"];
-  fixTarget = a.fullDepEntry (''
+  postPatch = ''
     sed -i Makefile -e "s@/usr/local@$out@"
     mkdir -p "$out/bin"
-  '') ["doUnpack" "minInit" "defEnsureDir"];
-      
-  meta = {
-    description = "MIME alteration tool";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.pldaniels.com/altermime/";
-    };
-  };
-}) x
+  '';
 
+  meta = with stdenv.lib; {
+    description = "MIME alteration tool";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license.fullName = "alterMIME LICENSE";
+    downloadPage = "https://pldaniels.com/altermime/";
+  };
+}

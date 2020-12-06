@@ -1,11 +1,49 @@
-{stdenv, fetchurl, python, pkgconfig, cairo, x11}:
+{ lib
+, fetchFromGitHub
+, meson
+, ninja
+, buildPythonPackage
+, pytestCheckHook
+, pkg-config
+, cairo
+, isPy3k
+}:
 
-stdenv.mkDerivation {
-  name = "pycairo-1.8.8";
-  src = fetchurl {
-    url = http://cairographics.org/releases/pycairo-1.8.8.tar.gz;
-    sha256 = "0q18hd4ai4raljlvd76ylgi30kxpr2qq83ka6gzwh0ya8fcmjlig";
+buildPythonPackage rec {
+  pname = "pycairo";
+  version = "1.18.2";
+
+  format = "other";
+
+  src = fetchFromGitHub {
+    owner = "pygobject";
+    repo = "pycairo";
+    rev = "v${version}";
+    sha256 = "142145a2whvlk92jijrbf3i2bqrzmspwpysj0bfypw0krzi0aa6j";
   };
 
-  buildInputs = [python pkgconfig cairo x11];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    cairo
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  mesonFlags = [
+    "-Dpython=${if isPy3k then "python3" else "python"}"
+  ];
+
+  meta = with lib; {
+    description = "Python 2/3 bindings for cairo";
+    homepage = "https://pycairo.readthedocs.io/";
+    license = with licenses; [ lgpl21Only mpl11 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
 }

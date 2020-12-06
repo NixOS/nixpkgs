@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk, jackaudio,
+{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk2, libjack2,
 ladspaH, ladspaPlugins, liblo, pkgconfig }:
 
 stdenv.mkDerivation  rec {
-  name = "xsynth-dssi-${version}";
+  pname = "xsynth-dssi";
   version = "0.9.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dssi/${name}.tar.gz";
+    url = "mirror://sourceforge/dssi/${pname}-${version}.tar.gz";
     sha256 = "00nwv2pqjbmxqdc6xdm0cljq6z05lv4y6bibmhz1kih9lm0lklnk";
   };
 
-  buildInputs = [ alsaLib autoconf automake dssi gtk jackaudio ladspaH
+  buildInputs = [ alsaLib autoconf automake dssi gtk2 libjack2 ladspaH
     ladspaPlugins liblo pkgconfig ];
 
   installPhase = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "classic-analog (VCOs-VCF-VCA) style software synthesizer";
+    description = "Classic-analog (VCOs-VCF-VCA) style software synthesizer";
     longDescription = ''
       Xsynth-DSSI is a classic-analog (VCOs-VCF-VCA) style software
       synthesizer which operates as a plugin for the DSSI Soft Synth

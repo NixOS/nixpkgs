@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, emacs }:
+{ fetchurl, stdenv, emacs, python }:
 
 stdenv.mkDerivation rec {
-  name = "cedet-1.0pre6";
+  name = "cedet-1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/cedet/${name}.tar.gz";
-    sha256 = "0pvd54rjlba12cxgqibm8v4i8x43r5c239z891lgcbafjvkzpdxb";
+    sha256 = "0p2bwlpwwa019axvgj09xkxbr53j0pq23d46s4la9jfhl47nbh22";
   };
 
-  buildInputs = [ emacs ];
+  buildInputs = [ emacs python ];
 
   doCheck = true;
   checkPhase = "make utest";
@@ -41,8 +41,11 @@ stdenv.mkDerivation rec {
       Development Environment), and COGRE (COnnected GRaph Editor).
     '';
 
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://cedet.sourceforge.net/;
+    homepage = "http://cedet.sourceforge.net/";
+
+    # Fails with `semantic-idle.el:42:1:Error: Invalid function: class-p`
+    broken = true;
   };
 }

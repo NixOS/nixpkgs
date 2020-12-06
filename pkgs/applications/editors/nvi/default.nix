@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nvi-1.79";
 
   src = fetchurl {
@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
   # nvi tries to write to a usual tmp directory (/var/tmp),
   # so we will force it to use /tmp.
   patchPhase = ''
-    sed -i -e s/-lcurses/-lncurses/ \
+    sed -i build/configure \
       -e s@vi_cv_path_preserve=no@vi_cv_path_preserve=/tmp/vi.recover@ \
-      -e s@/var/tmp@@ build/configure
+      -e s@/var/tmp@@ \
+      -e s@-lcurses@-lncurses@
   '';
 
   configurePhase = ''
@@ -47,8 +48,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.bostic.com/vi/;
+    homepage = "http://www.bostic.com/vi/";
     description = "The Berkeley Vi Editor";
-    license = "free";
+    license = stdenv.lib.licenses.free;
+    broken = true; # since 2020-02-08
   };
 }

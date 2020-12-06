@@ -1,35 +1,36 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk, libglade, bzip2
-, pango, libgsf, libxml2, libart, intltool, gettext
-, cairo, gconf, libgnomeui, pcre }:
+{ fetchurl, stdenv, pkgconfig, intltool, glib, gtk3, lasem
+, libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "goffice-0.8.17";
+  pname = "goffice";
+  version = "0.10.48";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goffice/0.8/${name}.tar.xz";
-    sha256 = "165070beb67b84580afe80a8a100b674a81d553ab791acd72ac0c655f4fadb15";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1z6f3q8fxkd1ysqrwdxdi0844zqa00vjpf07gq8mh3kal8picfd4";
   };
 
-  buildInputs = [
-    pkgconfig libglade bzip2 libart intltool gettext
-    gconf libgnomeui pcre
-  ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   propagatedBuildInputs = [
-    # All these are in the "Requires:" field of `libgoffice-0.6.pc'.
-    glib libgsf libxml2 gtk libglade libart cairo pango
+    glib gtk3 libxml2 cairo pango libgsf lasem
   ];
 
-  postInstall =
-    ''
-      # Get GnuCash to build.  Might be unnecessary if we upgrade pkgconfig.
-      substituteInPlace $out/lib/pkgconfig/libgoffice-*.pc --replace Requires.private Requires
-    '';
+  buildInputs = [ libxslt librsvg ];
 
+  enableParallelBuilding = true;
   doCheck = true;
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
   meta = {
-    description = "GOffice, a Glib/GTK+ set of document centric objects and utilities";
+    description = "A Glib/GTK set of document centric objects and utilities";
 
     longDescription = ''
       There are common operations for document centric applications that are
@@ -37,9 +38,8 @@ stdenv.mkDerivation rec {
       documents, undo/redo.
     '';
 
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

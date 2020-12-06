@@ -1,16 +1,16 @@
-{stdenv, fetchurl, apacheAnt, unzip, sharutils, lib}:
+{stdenv, fetchurl, apacheAnt, unzip, sharutils, lib, jdk}:
 
 stdenv.mkDerivation {
   name = "freetts-1.2.2";
   src = fetchurl {
-    url = mirror://sourceforge/freetts/freetts-1.2.2-src.zip;
+    url = "mirror://sourceforge/freetts/freetts-1.2.2-src.zip";
     sha256 = "0mnikqhpf4f4jdr0irmibr8yy0dnffx1i257y22iamxi7a6by2r7";
   };
-  buildInputs = [ apacheAnt unzip sharutils ];
+  buildInputs = [ apacheAnt unzip sharutils jdk ];
   unpackPhase = ''
     unzip $src -x META-INF/*
   '';
-  
+
   buildPhase = ''
     cd */lib
     sed -i -e "s/more/cat/" jsapi.sh
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     install -v -m755 -d $out/{lib,docs/{audio,images}}
     install -v -m644 lib/*.jar $out/lib
   '';
-  
+
   meta = {
     description = "Text to speech system based on Festival written in Java";
     longDescription = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       Can be used in combination with KDE accessibility.
     '';
     license = "GPL";
-    homepage = http://freetts.sourceforge.net;
+    homepage = "http://freetts.sourceforge.net";
     maintainers = [ lib.maintainers.sander ];
   };
 }

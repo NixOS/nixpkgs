@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gmp, isl }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-0.16.3";
+  name = "cloog-0.18.4";
 
   src = fetchurl {
     url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
-    sha256 = "0lzbsszfzsr0jfwkccfbsvx913d2yc45dqwa472plmxkhbwykmc9";
+    sha256 = "03km1aqaiy3sbqc2f046ms9x0mlmacxlvs5rxsvjj8nf20vxynij";
   };
 
   buildInputs = [ gmp ];
@@ -14,10 +14,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-isl=system" ];
 
+  # Breaks the test cases
+  #enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = {
-    description = "CLooG, the Chunky Loop Generator";
+    description = "Library that generates loops for scanning polyhedra";
 
     longDescription = ''
       CLooG is a free software library to generate code for scanning
@@ -33,11 +36,9 @@ stdenv.mkDerivation rec {
       effective code.
     '';
 
-    homepage = http://www.cloog.org/;
+    homepage = "http://www.cloog.org/";
 
-    license = "GPLv2+";
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    license = stdenv.lib.licenses.gpl2Plus;
 
     /* Leads to an ICE on Cygwin:
 
@@ -58,6 +59,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
   };
 }

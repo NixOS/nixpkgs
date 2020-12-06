@@ -1,28 +1,46 @@
-{ stdenv, fetchurl, buildPythonPackage, minicom, avrdude, arduino_core, avrgcclibc }:
+{ stdenv, fetchurl, python2Packages, picocom
+, avrdude, arduino-core }:
 
-buildPythonPackage {
-  name = "ino-0.3.4";
+python2Packages.buildPythonApplication rec {
+  name = "ino-0.3.6";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://pypi.python.org/packages/source/i/ino/ino-0.3.4.tar.gz";
-    sha256 = "1v7z3da31cv212k28aci269qkg92p377fm7i76rymjjpjra7payv";
+    url = "mirror://pypi/i/ino/${name}.tar.gz";
+    sha256 = "0k6lzfcn55favbj0w4afrvnmwyskf7bgzg9javv2ycvskp35srwv";
   };
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support
-  propagatedBuildInputs = [ minicom avrdude arduino_core ];
+  propagatedBuildInputs = with python2Packages; [
+    arduino-core
+    avrdude
+    picocom
+    configobj
+    jinja2
+    pyserial
+    six
+  ];
 
   patchPhase = ''
     echo "Patching Arduino distribution path"
-    sed -i 's@/usr/local/share/arduino@${arduino_core}/share/arduino@g' ino/environment.py
+    sed -i 's@/usr/local/share/arduino@${arduino-core}/share/arduino@g' \
+        ino/environment.py
+    sed -i -e 's@argparse@@' -e 's@ordereddict@@' \
+        requirements.txt
+    sed -i -e 's@from ordereddict@from collections@' \
+        ino/environment.py ino/utils.py
+
+    # Patch the upload command so it uses the correct avrdude
+    substituteInPlace ino/commands/upload.py \
+      --replace "self.e['avrdude']" "'${avrdude}/bin/avrdude'" \
+      --replace "'-C', self.e['avrdude.conf']," ""
   '';
- 
-  doCheck = false;
 
   meta = {
     description = "Command line toolkit for working with Arduino hardware";
-    homepage = http://inotool.org/;
-    license = "MIT";
-    maintainers = [ stdenv.lib.maintainers.antono ];
+    homepage = "http://inotool.org/";
+    license = stdenv.lib.licenses.mit;
+    maintainers = with stdenv.lib.maintainers; [ antono ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

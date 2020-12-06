@@ -1,29 +1,34 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
+{ stdenv, fetchzip, fetchpatch, cmake
+, libjpeg, openssl, zlib, libgcrypt, libpng
+, systemd
+}:
 
-  version = lib.attrByPath ["version"] "0.9.1" args; 
-  buildInputs = with args; [
-    libtool libjpeg openssl libX11 libXdamage xproto damageproto
-    xextproto libXext fixesproto libXfixes xineramaproto libXinerama
-    libXrandr randrproto libXtst zlib
-  ];
+let
+  s = # Generated upstream information
+  rec {
+    pname = "libvncserver";
+    version = "0.9.13";
+    url = "https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
+    sha256 = "0zz0hslw8b1p3crnfy3xnmrljik359h83dpk64s697dqdcrzy141"; # unpacked archive checksum
+  };
 in
-rec {
-  src = fetchurl {
-    url = "http://downloads.sourceforge.net/libvncserver/LibVNCServer-${version}.tar.gz";
-    sha256 = "10pjhfv0vnfphy4bghygm1bfz983ca6y91mmpsyn1wy16zyagg8g";
+stdenv.mkDerivation {
+  inherit (s) pname version;
+  src = fetchzip {
+    inherit (s) url sha256;
   };
 
-  inherit buildInputs;
-  configureFlags = [];
-
-  /* doConfigure should be specified separately */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  name = "libvncserver-" + version;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    libjpeg openssl libgcrypt libpng
+  ] ++ stdenv.lib.optional stdenv.isLinux systemd;
+  propagatedBuildInputs = [ zlib ];
   meta = {
+    inherit (s) version;
     description = "VNC server library";
+    homepage = "https://libvnc.github.io/";
+    license = stdenv.lib.licenses.gpl2Plus ;
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
