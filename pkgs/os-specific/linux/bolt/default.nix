@@ -3,6 +3,7 @@
 , ninja
 , pkgconfig
 , fetchFromGitLab
+, fetchpatch
 , python3
 , umockdev
 , gobject-introspection
@@ -60,8 +61,18 @@ stdenv.mkDerivation rec {
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
 
-  # meson install tries to create /var/lib/boltd
-  patches = [ ./0001-skip-mkdir.patch ];
+  patches = [
+    # meson install tries to create /var/lib/boltd
+    ./0001-skip-mkdir.patch
+
+    # https://github.com/NixOS/nixpkgs/issues/104429
+    # Upstream issue: https://gitlab.freedesktop.org/bolt/bolt/-/issues/167
+    (fetchpatch {
+      name = "disable-atime-tests.diff";
+      url = "https://gitlab.freedesktop.org/roberth/bolt/-/commit/1f672a7de2ebc4dd51590bb90f3b873a8ac0f4e6.diff";
+      sha256 = "134f5s6kjqs6612pwq5pm1miy58crn1kxbyyqhzjnzmf9m57fnc8";
+    })
+    ];
 
   postPatch = ''
     patchShebangs scripts tests
