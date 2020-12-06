@@ -34,13 +34,17 @@ self: super: let
     });
   };
 
-  staticAdapters = [ makeStaticLibraries propagateBuildInputs ]
+  staticAdapters =
+    # makeStaticDarwin must go first so that the extraBuildInputs
+    # override does not recreate mkDerivation, removing subsequent
+    # adapters.
+    optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
+
+    ++ [ makeStaticLibraries propagateBuildInputs ]
 
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
     ++ optional (!super.stdenv.hostPlatform.isDarwin) makeStaticBinaries
-
-    ++ optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
 
     # Glibc doesn’t come with static runtimes by default.
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
