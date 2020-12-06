@@ -32,7 +32,7 @@
      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/82263">finnally</link>
      packaged, along with a rewrite to the Nix expressions, allowing users to
      override the features upstream supports selecting to compile or not to.
-     Additionally, the attribute <code>gnuradio<code> and <code>gnuradio3_7<code>
+     Additionally, the attribute <code>gnuradio</code> and <code>gnuradio3_7</code>
      now point to an externally wrapped by default derivations, that allow you to
      also add `extraPythonPackages` to the Python interpreter used by GNURadio.
      Missing environmental variables needed for operational GUI were also added

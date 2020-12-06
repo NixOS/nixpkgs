@@ -3790,6 +3790,8 @@ in {
 
   mido = callPackage ../development/python-modules/mido { };
 
+  milc = callPackage ../development/python-modules/milc { };
+
   milksnake = callPackage ../development/python-modules/milksnake { };
 
   minidb = callPackage ../development/python-modules/minidb { };
@@ -4861,6 +4863,8 @@ in {
   pxml = callPackage ../development/python-modules/pxml { };
 
   py-air-control = callPackage ../development/python-modules/py-air-control { };
+
+  py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
 

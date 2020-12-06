@@ -12786,18 +12786,12 @@ in
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     # The following need to be fixed on Darwin
-    frei0r = if stdenv.isDarwin then null else frei0r;
-    game-music-emu = if stdenv.isDarwin then null else game-music-emu;
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
-    openal = if stdenv.isDarwin then null else openal;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
-    rav1e = if stdenv.isDarwin then null else rav1e;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
-    x265 = if stdenv.isDarwin then null else x265;
-    xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
@@ -18415,6 +18409,8 @@ in
 
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
+    gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
+
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
     e1000e = if stdenv.lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
@@ -22896,9 +22892,7 @@ in
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
-  pijul = callPackage ../applications/version-management/pijul {
-    inherit (llvmPackages) clang libclang;
-  };
+  pijul = callPackage ../applications/version-management/pijul { };
 
   ping = callPackage ../applications/networking/ping { };
 
