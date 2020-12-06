@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
-    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
+    addToSearchPath XDG_DATA_DIRS @out@/share
+    export XDG_DATA_DIRS
   '';
 
   # Include absolute paths to layer libraries in their associated
