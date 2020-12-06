@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # which is done by dlopening $out/lib/security/pam_foo.so
   # $out/etc was also missed: pam_env(login:session): Unable to open config file
 
-  preConfigure = 
+  preConfigure = ''
       # the unix_chkpwd binary needs to be suid to check /etc/shadow. NixOS
       # builds a suid wrapper in /run/wrappers/bin/ for unix_chkpwd, use that
       # instead of trying to use the one installed into the store.
