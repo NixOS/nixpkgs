@@ -4851,6 +4851,8 @@ in {
 
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
+  py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
+
   py2bit = callPackage ../development/python-modules/py2bit { };
 
   py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
