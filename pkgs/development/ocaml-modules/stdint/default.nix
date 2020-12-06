@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "stdint";
-  version = "0.6.0";
+  version = "0.7.0";
 
   minimumOCamlVersion = "4.07";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "andrenth";
     repo = "ocaml-stdint";
     rev = version;
-    sha256 = "19ccxs0vij81vyc9nqc9kbr154ralb9dgc2y2nr71a5xkx6xfn0y";
+    sha256 = "05zpayczrq9668ci20b2ynsjcjp0wnzb1avfpsqzp4n0mb1mhgdl";
   };
 
   meta = {
