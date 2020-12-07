@@ -14246,6 +14246,8 @@ in
 
   librime = callPackage ../development/libraries/librime {};
 
+  librtprocess = callPackage ../development/libraries/librtprocess { };
+
   libsamplerate = callPackage ../development/libraries/libsamplerate {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
   };
