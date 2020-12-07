@@ -7409,6 +7409,12 @@
     githubId = 165283;
     name = "Alexey Kutepov";
   };
+  rgrunbla = {
+    email = "remy@grunblatt.org";
+    github = "rgrunbla";
+    githubId = 42433779;
+    name = "Rémy Grünblatt";
+  };
   rht = {
     email = "rhtbot@protonmail.com";
     github = "rht";
