@@ -3,9 +3,9 @@
 }:
 
 buildDunePackage {
-	pname = "js_of_ocaml-ocamlbuild"; 
+  pname = "js_of_ocaml-ocamlbuild";
 
-	inherit (js_of_ocaml-compiler) version src meta useDune2;
+  inherit (js_of_ocaml-compiler) version src meta useDune2;
 
-	propagatedBuildInputs = [ ocamlbuild ];
+  propagatedBuildInputs = [ ocamlbuild ];
 }
