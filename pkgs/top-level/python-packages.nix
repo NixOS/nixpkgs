@@ -4486,6 +4486,8 @@ in {
 
   pathtools = callPackage ../development/python-modules/pathtools { };
 
+  patiencediff = callPackage ../development/python-modules/patiencediff { };
+
   patool = callPackage ../development/python-modules/patool { };
 
   patsy = callPackage ../development/python-modules/patsy { };
