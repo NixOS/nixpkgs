@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "20201009T224414";
+  version = "20201205T230541";
 
   src = fetchurl {
     url = "https://github.com/snoe/clojure-lsp/releases/download/release-${version}/${pname}";
-    sha256 = "1az87b4cq6yyibs4knd0ywd0qfgmfzai4bqry4b7h2ycnfhfxdpa";
+    sha256 = "06sismbv7wrcwfgr0brw9gsdvl2plrryhxs1v08a2sd5rdf2qi3b";
   };
 
   dontUnpack = true;

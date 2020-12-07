@@ -1182,6 +1182,8 @@ in
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
+  genann = callPackage ../development/libraries/genann { };
+
   genpass = callPackage ../tools/security/genpass {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -18106,7 +18108,8 @@ in
 
   iotop = callPackage ../os-specific/linux/iotop { };
 
-  iproute = callPackage ../os-specific/linux/iproute { };
+  iproute2 = callPackage ../os-specific/linux/iproute { };
+  iproute = iproute2; # Alias added 2020-11-15 (TODO: deprecate and move to pkgs/top-level/aliases.nix)
 
   iproute_mptcp = callPackage ../os-specific/linux/iproute/mptcp.nix { };
 
@@ -22568,6 +22571,8 @@ in
   meld = callPackage ../applications/version-management/meld { };
 
   meli = callPackage ../applications/networking/mailreaders/meli { };
+
+  melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
   melonDS = callPackage ../misc/emulators/melonDS { };
 
