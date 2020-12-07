@@ -504,7 +504,7 @@ in {
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
 
-  awkward = callPackage ../development/python-modules/awkward { };
+  awkward0 = callPackage ../development/python-modules/awkward0 { };
   awkward1 = callPackage ../development/python-modules/awkward1 { };
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
