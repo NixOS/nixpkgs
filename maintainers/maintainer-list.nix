@@ -6529,12 +6529,6 @@
     githubId = 3359345;
     name = "obadz";
   };
-  ocharles = {
-    email = "ollie@ocharles.org.uk";
-    github = "ocharles";
-    githubId = 20878;
-    name = "Oliver Charles";
-  };
   odi = {
     email = "oliver.dunkl@gmail.com";
     github = "odi";
