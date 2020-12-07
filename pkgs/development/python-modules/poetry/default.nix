@@ -88,6 +88,16 @@ buildPythonPackage rec {
     "test_builder_should_execute_build_scripts"
   ];
 
+  patches = [
+    # The following patch addresses a minor incompatibility with
+    # pytest-mock.  This is addressed upstream in
+    # https://github.com/python-poetry/poetry/pull/3457
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry/commit/8ddceb7c52b3b1f35412479707fa790e5d60e691.diff";
+      sha256 = "yHjFb9xJBLFOqkOZaJolKviTdtST9PMFwH9n8ud2Y+U=";
+    })
+  ];
+
   meta = with lib; {
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
