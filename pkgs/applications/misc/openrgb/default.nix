@@ -17,6 +17,9 @@ mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp openrgb $out/bin
+
+    mkdir -p $out/etc/udev/rules.d
+    cp 60-openrgb.rules $out/etc/udev/rules.d
   '';
 
   doInstallCheck = true;
