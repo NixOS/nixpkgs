@@ -115,6 +115,8 @@ stdenv.mkDerivation ({
       ./fix-x64-abi.patch
       ./2.30-cve-2020-1752.patch
       ./2.31-cve-2020-10029.patch
+      ./2.31-cve-2020-6096.0.patch
+      ./2.31-cve-2020-6096.1.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
