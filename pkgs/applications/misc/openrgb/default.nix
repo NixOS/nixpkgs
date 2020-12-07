@@ -24,11 +24,6 @@ mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/openrgb --help > /dev/null
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
     HOME=$TMPDIR $out/bin/openrgb --help > /dev/null
   '';
 
