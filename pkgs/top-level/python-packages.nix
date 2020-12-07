@@ -6696,6 +6696,8 @@ in {
 
   sfepy = callPackage ../development/python-modules/sfepy { };
 
+  sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
+
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
   shap = callPackage ../development/python-modules/shap { };
@@ -7565,6 +7567,8 @@ in {
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
+
+  unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
 

@@ -203,7 +203,7 @@ let
       homepage = "http://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ocharles cole-h ];
+      maintainers = with maintainers; [ cole-h ];
     };
 
     passthru = {

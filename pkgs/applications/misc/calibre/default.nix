@@ -99,7 +99,7 @@ mkDerivation rec {
       sip
       # the following are distributed with calibre, but we use upstream instead
       odfpy
-    ]
+    ] ++ lib.optional (unrarSupport) unrardll
   );
 
   installPhase = ''
