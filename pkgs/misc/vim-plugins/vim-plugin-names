@@ -198,7 +198,7 @@ jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 joshdick/onedark.vim
-jpalardy/vim-slime
+jpalardy/vim-slime@main
 jparise/vim-graphql
 jparise/vim-phabricator
 jreybert/vimagit

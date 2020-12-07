@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0358g5q4igq1pgy8dznbbkc6y7zf36y4m81hhh8hvzzhaa37vc22";
+    sha256 = "bc50a60803f5c409a295ec0e31cdd4acc271611ce3f4963a072036bbfa5ccde5";
   };
 
   disabled = pythonOlder "3.6";

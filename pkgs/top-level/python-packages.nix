@@ -3199,6 +3199,8 @@ in {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  jsonstreams = callPackage ../development/python-modules/jsonstreams { };
+
   jsonwatch = callPackage ../development/python-modules/jsonwatch { };
 
   jug = callPackage ../development/python-modules/jug { };
@@ -3831,6 +3833,8 @@ in {
   mmpython = callPackage ../development/python-modules/mmpython { };
 
   mnemonic = callPackage ../development/python-modules/mnemonic { };
+
+  mne-python = callPackage ../development/python-modules/mne-python { };
 
   mnist = callPackage ../development/python-modules/mnist { };
 
@@ -5708,6 +5712,8 @@ in {
 
   pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
 
+  pytest-celery = callPackage ../development/python-modules/pytest-celery { };
+
   pytest-check = callPackage ../development/python-modules/pytest-check { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
@@ -5814,6 +5820,8 @@ in {
   pytest-socket = callPackage ../development/python-modules/pytest-socket { };
 
   pytest-subtesthack = callPackage ../development/python-modules/pytest-subtesthack { };
+
+  pytest-subtests = callPackage ../development/python-modules/pytest-subtests { };
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 

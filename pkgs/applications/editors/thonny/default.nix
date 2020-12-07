@@ -4,13 +4,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1k1iy01az65w463j6id7iyrbinjbjd220i100mrnxyn569dxmf34";
+    sha256 = "0nk4kx6apmnd6fyd9zw77yprjzgjf7micvcws2i2sci0d9fff34c";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
