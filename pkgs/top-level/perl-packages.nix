@@ -150,6 +150,20 @@ let
     buildInputs = [ pkgs.unzip ];
   };
 
+  AlgorithmLCSS = buildPerlPackage {
+    pname = "Algorithm-LCSS";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JF/JFREEMAN/Algorithm-LCSS-0.01.tar.gz";
+      sha256 = "0y0zc3sq283zpv67vy7a3h3dyvjn5svjxwknanmp38a2g36fyz3i";
+    };
+    propagatedBuildInputs = [ AlgorithmDiff ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AlgorithmMerge = buildPerlPackage {
     pname = "Algorithm-Merge";
     version = "0.08";
