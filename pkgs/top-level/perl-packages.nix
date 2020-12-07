@@ -8266,6 +8266,22 @@ let
     };
   };
 
+  FileUtilTempdir = buildPerlPackage {
+    pname = "File-Util-Tempdir";
+    version = "0.034";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/File-Util-Tempdir-0.034.tar.gz";
+      sha256 = "076wdwbvqsg64wr5np8j6pnmmhs9li64g9mw2h33zbbgbv7f47fi";
+    };
+    buildInputs = [ Perlosnames TestException ];
+    meta = {
+      homepage = "https://metacpan.org/release/File-Util-Tempdir";
+      description = "Cross-platform way to get system-wide & user private temporary directory";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   FileWhich = buildPerlPackage {
     pname = "File-Which";
     version = "1.23";
