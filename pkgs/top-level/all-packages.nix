@@ -1182,6 +1182,8 @@ in
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
+  genann = callPackage ../development/libraries/genann { };
+
   genpass = callPackage ../tools/security/genpass {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
