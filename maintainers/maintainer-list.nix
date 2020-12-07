@@ -3777,6 +3777,12 @@
       fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293";
     }];
   };
+  ishan = {
+    name = "Ishan Agarwal";
+    email = "ishan365.ia@gmail.com";
+    github = "ishan9299";
+    githubId = 47824004;
+  };
   ivan = {
     email = "ivan@ludios.org";
     github = "ivan";
