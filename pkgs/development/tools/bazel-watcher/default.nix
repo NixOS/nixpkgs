@@ -79,5 +79,7 @@ buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;
+    # broken on darwin, see https://github.com/NixOS/nixpkgs/issues/105573
+    broken = stdenv.isDarwin;
   };
 }
