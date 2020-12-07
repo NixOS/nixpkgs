@@ -15,6 +15,14 @@ buildPythonPackage rec {
     sha256 = "1g2cdhdqrb6m7655qp61pn61pwj1ql61cdzhr2jvl3w4i8877ddr";
   };
 
+  patches = [
+    # fix tests with pytest 6
+    (fetchpatch {
+      url = "https://github.com/python-llfuse/python-llfuse/commit/1ed8b280d2544eedf8bf209761bef0d2519edd17.diff";
+      sha256 = "0wailfrr1i0n2m9ylwpr00jh79s7z3l36w7x19jx1x4djcz2hdps";
+    })
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs =
     optionals stdenv.isLinux [ fuse ]
