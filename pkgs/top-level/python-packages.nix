@@ -3355,7 +3355,9 @@ in {
 
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
 
-  ledgerwallet = callPackage ../development/python-modules/ledgerwallet { };
+  ledgerwallet = callPackage ../development/python-modules/ledgerwallet {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
+  };
 
   lektor = callPackage ../development/python-modules/lektor { };
 

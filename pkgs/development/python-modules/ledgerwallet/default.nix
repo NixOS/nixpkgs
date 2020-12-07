@@ -11,7 +11,7 @@
 , protobuf
 , requests
 , tabulate
-, darwin
+, AppKit
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "0fb93h2wxm9as9rsywlgz2ng4wrlbjphn6mgbhj6nls2i86rrdxk";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit ]);
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit ];
   propagatedBuildInputs = [
     cryptography click construct ecdsa hidapi intelhex pillow protobuf requests tabulate
   ];
