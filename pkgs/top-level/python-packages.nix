@@ -5815,6 +5815,8 @@ in {
 
   pytest-subtesthack = callPackage ../development/python-modules/pytest-subtesthack { };
 
+  pytest-subtests = callPackage ../development/python-modules/pytest-subtests { };
+
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
