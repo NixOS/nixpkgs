@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2020.11.11";
+  version = "2020.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c51c2c8862ea0d59346114f43be9e65ea134ed5b2bbd8dae766c4f6b02f5e3c";
+    sha256 = "a7ae7aba87e88965c3e1490f5b9742c95e06150f2fc73da69647a9366dd88018";
   };
 
   nativeBuildInputs = [ glibcLocales ];
