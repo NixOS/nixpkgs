@@ -2,13 +2,13 @@
 
 buildGoModule rec {
     pname = "dolt";
-    version = "0.22.5";
+    version = "0.22.6";
 
     src = fetchFromGitHub {
         owner = "liquidata-inc";
         repo = "dolt";
         rev = "v${version}";
-        sha256 = "04lsmh80br1cr26dp11ai0f96lmjdkc9mjdwnmwkkc0d7igv7rc0";
+        sha256 = "1kd7kqiic6mm974cix7m3620yzdaxpdnnq4q53pyicfq2i4pk2ml";
     };
 
     modRoot = "./go";
