@@ -7157,6 +7157,12 @@
     githubId = 13752145;
     name = "Richard Lupton";
   };
+  rmcgibbo = {
+    email = "rmcgibbo@gmail.com";
+    github = "rmcgibbo";
+    githubId = 641278;
+    name = "Robert T. McGibbon";
+  };
   rnhmjoj = {
     email = "rnhmjoj@inventati.org";
     github = "rnhmjoj";
