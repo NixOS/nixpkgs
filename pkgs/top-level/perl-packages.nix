@@ -9900,6 +9900,22 @@ let
      };
   };
 
+  HTTPTinyCache = buildPerlPackage {
+    pname = "HTTP-Tiny-Cache";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/HTTP-Tiny-Cache-0.002.tar.gz";
+      sha256 = "08c6274x7fxl9r7cw1yiq21wv2mjgxw7db0wv5r80dyw377vfzbk";
+    };
+    propagatedBuildInputs = [ FileUtilTempdir Logger ];
+    meta = {
+      homepage = "https://metacpan.org/release/HTTP-Tiny-Cache";
+      description = "Cache HTTP::Tiny responses";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   HTTPTinyish = buildPerlPackage {
     pname = "HTTP-Tinyish";
     version = "0.17";
