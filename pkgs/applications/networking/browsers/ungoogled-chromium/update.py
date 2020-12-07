@@ -38,6 +38,20 @@ def get_file_revision(revision, file_path):
     with urlopen(url) as http_response:
         return http_response.read()
 
+def get_matching_chromedriver(version):
+    # See https://chromedriver.chromium.org/downloads/version-selection
+    build = re.sub('.[0-9]+$', '', version)
+    chromedriver_version_url = f'https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{build}'
+    with urlopen(chromedriver_version_url) as http_response:
+        chromedriver_version = http_response.read().decode()
+        def get_chromedriver_url(system):
+            return f'https://chromedriver.storage.googleapis.com/{chromedriver_version}/chromedriver_{system}.zip'
+        return {
+            'version': chromedriver_version,
+            'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
+            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64'))
+        }
+
 def get_channel_dependencies(channel):
     deps = get_file_revision(channel['version'], 'DEPS')
     gn_pattern = b"'gn_version': 'git_revision:([0-9a-f]{40})'"
@@ -85,6 +99,8 @@ with urlopen(HISTORY_URL) as resp:
             continue
 
         channel['deps'] = get_channel_dependencies(channel)
+        if channel_name == 'stable':
+            channel['chromedriver'] = get_matching_chromedriver(channel['version'])
 
         channels[channel_name] = channel
 
