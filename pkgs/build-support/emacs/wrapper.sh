@@ -22,5 +22,6 @@ else
 fi
 
 export EMACSLOADPATH="${newLoadPath[*]}"
+export emacsWithPackages_siteLisp=@wrapperSiteLisp@
 
 exec @prog@ "$@"
