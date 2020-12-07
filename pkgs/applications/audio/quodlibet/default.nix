@@ -16,6 +16,8 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1q17ckblfa4fcs7wsjwsq1dj7360ymrdyjkyqmj864wzlqkw1rd2";
   };
 
+  patches = [ ./quodlibet-feedparser6.patch ];
+
   nativeBuildInputs = [ wrapGAppsHook gettext ];
 
   checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [ pytest pytest_xdist polib xvfb_run dbus.daemon glibcLocales ]);
