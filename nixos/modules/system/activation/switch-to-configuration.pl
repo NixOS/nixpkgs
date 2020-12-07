@@ -663,7 +663,7 @@ sub filter_units {
 }
 
 my @units_to_stop_filtered = filter_units(\%units_to_stop);
-
+my $start_nscd = delete $unitsToStart{"nscd.service"};
 
 # Show dry-run actions.
 if ($action eq "dry-activate") {
@@ -722,6 +722,7 @@ if ($action eq "dry-activate") {
         print STDERR "would restart the following units: ", join(", ", sort(keys(%units_to_restart))), "\n";
     }
     my @units_to_start_filtered = filter_units(\%units_to_start);
+    print STDERR "would start nscd\n" if $start_nscd;
     if (scalar(@units_to_start_filtered)) {
         print STDERR "would start the following units: ", join(", ", @units_to_start_filtered), "\n";
     }
@@ -821,6 +822,13 @@ close($list_active_users) || die("Unable to close the file handle to loginctl");
 # Set the new tmpfiles
 print STDERR "setting up tmpfiles\n";
 system("$new_systemd/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+
+# We need to start nscd before any other service, since they might need
+# to resolve users/groups only exposed by nss modules (i.e. DynamicUser via nss_systemd)
+if ($start_nscd) {
+    print STDERR "starting nscd\n";
+    system("@systemd@/bin/systemctl", "start", "nscd.service") == 0 or $res = 4;
+}
 
 # Before reloading we need to ensure that the units are still active. They may have been
 # deactivated because one of their requirements got stopped. If they are inactive
