@@ -1957,6 +1957,10 @@ in {
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
 
+  etebase = callPackage ../development/python-modules/etebase {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
+
   etesync = callPackage ../development/python-modules/etesync { };
 
   eth-hash = callPackage ../development/python-modules/eth-hash { };
