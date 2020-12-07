@@ -22,7 +22,7 @@
  <xi:include href="maven.section.xml" />
  <xi:include href="node.section.xml" />
  <xi:include href="ocaml.section.xml" />
- <xi:include href="perl.xml" />
+ <xi:include href="perl.section.xml" />
  <xi:include href="php.section.xml" />
  <xi:include href="python.section.xml" />
  <xi:include href="qt.section.xml" />
