@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner="OpenSmalltalk";
     repo="opensmalltalk-vm";
     rev="${version}";
-    sha256 = "0qxnmw5q836m09y7pkii1dwkjsjwa86pyhwxj11hxsf815r15c0v";
+    sha256 = "1cs0vmza1nq03i5f6w3j6l78j76qwlmc2aakvc10ivmy4vknglmc";
   };
 
   buildInputs = [
