@@ -15480,6 +15480,8 @@ in
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
+  wf-config = callPackage ../development/libraries/wfconfig {};
+
   mkLibsForQt5 = self: with self; {
 
     ### KDE FRAMEWORKS
@@ -24632,6 +24634,10 @@ in
 
   way-cooler = throw ("way-cooler is abandoned by its author: " +
     "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html");
+
+  wayfire = callPackage ../applications/window-managers/wayfire {};
+  wcm = callPackage ../applications/window-managers/wayfire/wcm {};
+  wf-shell = callPackage ../applications/window-managers/wayfire/wfshell {};
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
