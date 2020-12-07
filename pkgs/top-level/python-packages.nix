@@ -5115,6 +5115,8 @@ in {
 
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
+  pyfuse3 = callPackage ../development/python-modules/pyfuse3 { };
+
   pyfxa = callPackage ../development/python-modules/pyfxa { };
 
   pygal = callPackage ../development/python-modules/pygal { };
