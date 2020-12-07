@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "MIDIVisualizer";
-  version = "5.2";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "kosua20";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19z8m6clirz8kwfjp0z1j69fjfna8ar7hkgqnlm3lrc84gyx2rpf";
+    sha256 = "052zpabkbkqzqzf8r6mdq9p6arn9mr1ywx6x3y9rqxj6sfprxd65";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper];
