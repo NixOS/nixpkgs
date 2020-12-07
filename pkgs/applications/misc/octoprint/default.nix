@@ -25,6 +25,7 @@ let
       [
         # the following dependencies are non trivial to update since later versions introduce backwards incompatible
         # changes that might affect plugins, or due to other observed problems
+        (mkOverride "flask-babel" "1.0.0" "0gmb165vkwv5v7dxsxa2i3zhafns0fh938m2zdcrv4d8z5l099yn")
         (mkOverride "rsa" "4.0" "1a836406405730121ae9823e19c6e806c62bbad73f890574fff50efa4122c487")
         (mkOverride "markdown" "3.1.1" "2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a")
         (mkOverride "tornado" "5.1.1" "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409")
