@@ -7580,7 +7580,7 @@ in {
 
   uproot = callPackage ../development/python-modules/uproot { };
 
-  uproot-methods = callPackage ../development/python-modules/uproot-methods { };
+  uproot3-methods = callPackage ../development/python-modules/uproot3-methods { };
 
   uptime = callPackage ../development/python-modules/uptime { };
 
