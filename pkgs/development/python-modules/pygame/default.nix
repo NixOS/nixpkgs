@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage, python, pkg-config, libX11
-, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, freetype
+, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype
 }:
 
 buildPythonPackage rec {
@@ -12,11 +12,11 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pkg-config SDL
+    pkg-config SDL2
   ];
 
   buildInputs = [
-    SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
+    SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng libjpeg
     portmidi libX11 freetype
   ];
 
@@ -27,8 +27,7 @@ buildPythonPackage rec {
     sed \
       -e "s/origincdirs = .*/origincdirs = []/" \
       -e "s/origlibdirs = .*/origlibdirs = []/" \
-      -e "/'\/lib\/i386-linux-gnu', '\/lib\/x86_64-linux-gnu']/d" \
-      -e "/\/include\/smpeg/d" \
+      -e "/linux-gnu/d" \
       -i buildconfig/config_unix.py
     ${lib.concatMapStrings (dep: ''
       sed \
