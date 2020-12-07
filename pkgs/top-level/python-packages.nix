@@ -5708,6 +5708,8 @@ in {
 
   pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
 
+  pytest-celery = callPackage ../development/python-modules/pytest-celery { };
+
   pytest-check = callPackage ../development/python-modules/pytest-check { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
