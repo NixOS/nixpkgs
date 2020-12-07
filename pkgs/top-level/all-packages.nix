@@ -14927,6 +14927,8 @@ in
 
   minizip = callPackage ../development/libraries/minizip { };
 
+  minizip2 = callPackage ../development/libraries/minizip2 { };
+
   mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
 
   mkvtoolnix-cli = callPackage ../applications/video/mkvtoolnix {
