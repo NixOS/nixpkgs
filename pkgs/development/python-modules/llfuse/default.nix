@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, buildPythonPackage, pkgconfig, pytest_5, fuse, attr, which
+{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkgconfig, pytest_5, fuse, attr, which
 , contextlib2, osxfuse
 }:
 
@@ -8,24 +8,12 @@ in
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.3.6";
+  version = "1.3.8";
 
-  src = fetchurl {
-    url = "mirror://pypi/l/llfuse/${pname}-${version}.tar.bz2";
-    sha256 = "1j9fzxpgmb4rxxyl9jcf84zvznhgi3hnh4hg5vb0qaslxkvng8ii";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1g2cdhdqrb6m7655qp61pn61pwj1ql61cdzhr2jvl3w4i8877ddr";
   };
-
-  patches = [
-    # https://github.com/python-llfuse/python-llfuse/pull/23 (2 commits)
-    (fetchpatch {
-      url = "https://github.com/python-llfuse/python-llfuse/commit/7579b0e626da1a7882b13caedcdbd4a834702e94.diff";
-      sha256 = "0vpybj4k222h20lyn0q7hz86ziqlapqs5701cknw8d11jakbhhb0";
-    })
-    (fetchpatch {
-      url = "https://github.com/python-llfuse/python-llfuse/commit/438c00ab9e10d6c485bb054211c01b7f8524a736.diff";
-      sha256 = "1zhb05b7k3c9mjqshy9in8yzpbihy7f33x1myq5kdjip1k50cwrn";
-    })
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs =
