@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkgconfig, pytest_5, fuse, attr, which
+{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
 , contextlib2, osxfuse
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   buildInputs =
     optionals stdenv.isLinux [ fuse ]
     ++ optionals stdenv.isDarwin [ osxfuse ];
-  checkInputs = [ pytest_5 which ] ++
+  checkInputs = [ pytest which ] ++
     optionals stdenv.isLinux [ attr ];
 
   propagatedBuildInputs = [ contextlib2 ];
