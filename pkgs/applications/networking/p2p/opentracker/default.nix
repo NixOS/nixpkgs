@@ -11,11 +11,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ libowfat zlib ];
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace 'LIBOWFAT_HEADERS=$(PREFIX)/libowfat' 'LIBOWFAT_HEADERS=${libowfat}/include/libowfat' \
-      --replace 'LIBOWFAT_LIBRARY=$(PREFIX)/libowfat' 'LIBOWFAT_LIBRARY=${libowfat}/lib'
-  '';
+  makeFlags = [
+    "LIBOWFAT_HEADERS=${libowfat}/include/libowfat"
+    "LIBOWFAT_LIBRARY=${libowfat}/lib"
+  ];
 
   installPhase = ''
     runHook preInstall
