@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.1.0";
+  version = "1.2.0-post";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "v${version}";
-    sha256 = "10hvzgn98qbzs7mmql9wlbll814mkki29lvg71lbvr81wlbdn6mr";
+    sha256 = "0h4cd36lrhr64p3m2l7yvkq22h8fzzm3g61m39d303s1viibm6dg";
   };
 
-  cargoSha256 = "0kkfrdzyy5068k8nz08pfc4cl1dvn0vd6i01gax5dblk122ybbag";
+  cargoSha256 = "0aadalgs5p7wqbbkidm49ccfl716xairb4pirrgm3749zdg55bi9";
 
   meta = with lib; {
     description = "Ping, but with a graph";
