@@ -72,7 +72,7 @@ in mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = platforms.linux;
-    maintainers = [ maintainers.ocharles ];
+    maintainers = [ ];
     license = licenses.gpl3;
   };
 }
