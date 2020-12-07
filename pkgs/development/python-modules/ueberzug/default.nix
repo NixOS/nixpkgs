@@ -14,7 +14,12 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ libX11 libXext ];
+
   propagatedBuildInputs = [ attrs docopt pillow psutil xlib ];
+
+  doCheck = false;
+
+  pythonImportsCheck = [ "ueberzug" ];
 
   meta = with lib; {
     homepage = "https://github.com/seebye/ueberzug";
