@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "sigil";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
     rev = version;
-    sha256 = "1vn444ax5af1gbhkm9lz46jc7zi4grf16cb4wqyb6hvgj2gbl0iw";
+    sha256 = "1hk8kmhvkwfimbxzhwbnb8qdpf4n36cdzl9wfvi574i9pps36hnz";
   };
 
   pythonPath = with python3Packages; [ lxml ];

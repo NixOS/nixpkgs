@@ -1,4 +1,4 @@
-# Firefox
+# Firefox {#sec-firefox}
 
 ## Build wrapped Firefox with extensions and policies
 
@@ -44,6 +44,6 @@ To view available enterprise policies visit [enterprise policies](https://github
 or type into the Firefox url bar: `about:policies#documentation`.
 Nix installed addons do not have a valid signature, which is why signature verification is disabled. This does not compromise security because downloaded addons are checksumed and manual addons can't be installed.
 
-# Troubleshooting
+## Troubleshooting {#sec-firefox-troubleshooting}
 If addons do not appear installed although they have been defined in your nix configuration file reset the local addon state of your Firefox profile by clicking `help -> restart with addons disabled -> restart -> refresh firefox`. This can happen if you switch from manual addon mode to nix addon mode and then back to manual mode and then again to nix addon mode.
 

@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
     python3
     ruby
     glib # for gdbus-codegen
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
 

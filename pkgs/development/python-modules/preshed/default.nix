@@ -9,11 +9,11 @@
 }:
 buildPythonPackage rec {
   pname = "preshed";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ad47d5d2688fabc66850f32c7b6d3b4a97e6b653726309fe09603edd6fceb23";
+    sha256 = "13a779205d55ce323976ac06df597f9ec2d6f0563ebcf5652176cf4520c7d540";
   };
 
   propagatedBuildInputs = [

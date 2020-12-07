@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.24.3";
+  version = "0.24.4";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "04ycjgy40if0licc883lp7i6jpndvcndw24xp7lilskmaacpm5if";
+    sha256 = "17k32wr70sp7ag69xww2q9mrgnzakgkjw6la04n3jlhfa5z37dzj";
   };
 
   vendorSha256 = "0dd0qm1fxp3jnlrhfaas8fw87cj7rygaac35a9nk3xh2xsk7q35p";

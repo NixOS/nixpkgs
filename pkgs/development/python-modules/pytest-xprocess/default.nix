@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.14.0";
+  version = "0.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06g1j5079ddl2sd3pxh2jg6g83b2z3l5hzbadiry2xg673dcncmb";
+    sha256 = "2506d637c4f54c65dd195c1d094abdeedacc9bf0689131d847a324ad0fc951c0";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

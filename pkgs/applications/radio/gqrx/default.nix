@@ -9,13 +9,13 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 mkDerivation rec {
   pname = "gqrx";
-  version = "2.14";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "1iz4lgk99v5bwzk35wi4jg8nn3gbp0vm1p6svs42mxxxf9f99j7i";
+    sha256 = "15xlzfgmffq43wn74xjqc5p2m21i3lh28qqskd2jf2hhvanpcwcp";
   };
 
   nativeBuildInputs = [ cmake ];

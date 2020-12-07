@@ -674,7 +674,7 @@ rec {
     else
       false;
 
-  /* Parse a string string as an int.
+  /* Parse a string as an int.
 
      Type: string -> int
 

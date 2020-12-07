@@ -546,6 +546,8 @@ in
 
   wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook { };
 
+  wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
+
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
 
   setupDebugInfoDirs = makeSetupHook { } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
@@ -2374,6 +2376,8 @@ in
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
 
+  marl = callPackage ../development/libraries/marl {};
+
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
   masscan = callPackage ../tools/security/masscan {
@@ -2477,8 +2481,6 @@ in
   onboard = callPackage ../applications/misc/onboard { };
 
   oneshot = callPackage ../tools/networking/oneshot { };
-
-  onnxruntime = callPackage ../development/libraries/onnxruntime { };
 
   xkbd = callPackage ../applications/misc/xkbd { };
 
@@ -3545,7 +3547,9 @@ in
 
   pax = callPackage ../tools/archivers/pax { };
 
-  rage = callPackage ../tools/security/rage { };
+  rage = callPackage ../tools/security/rage {
+    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+  };
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
@@ -12786,18 +12790,12 @@ in
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     # The following need to be fixed on Darwin
-    frei0r = if stdenv.isDarwin then null else frei0r;
-    game-music-emu = if stdenv.isDarwin then null else game-music-emu;
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
-    openal = if stdenv.isDarwin then null else openal;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
-    rav1e = if stdenv.isDarwin then null else rav1e;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
-    x265 = if stdenv.isDarwin then null else x265;
-    xavs = if stdenv.isDarwin then null else xavs;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
@@ -14320,7 +14318,18 @@ in
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
   # also known as libturbojpeg
-  libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
+  libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo (lib.optionalAttrs stdenv.isDarwin {
+    # cmake 3.19.1 has a bug. So far only noticed with this package.
+    # https://github.com/NixOS/nixpkgs/issues/105854
+    cmake = cmake.overrideAttrs(oldAttrs: {
+      patches = oldAttrs.patches ++ [
+        (fetchpatch {
+          url = "https://gitlab.kitware.com/cmake/cmake/-/commit/fcabf4a47e0c441ff80fad8f34e388b16738bd33.patch";
+          sha256 = "bVrjY8omtAEKe8G76hGtmO54LKJvhx3RTW6OF6Y7rsU=";
+        })
+      ];
+    });
+  });
   libjpeg = libjpeg_turbo;
 
   libjreen = callPackage ../development/libraries/libjreen { };
@@ -14408,6 +14417,8 @@ in
   libmx = callPackage ../development/libraries/libmx { };
 
   libndctl = callPackage ../development/libraries/libndctl { };
+
+  libnest2d = callPackage ../development/libraries/libnest2d { };
 
   libnet = callPackage ../development/libraries/libnet { };
 
@@ -15743,7 +15754,13 @@ in
 
   qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
 
-  qradiolink = callPackage ../applications/radio/qradiolink { };
+  qradiolink = callPackage ../applications/radio/qradiolink {
+    # 3.8 support is not ready yet:
+    # https://github.com/qradiolink/qradiolink/issues/67#issuecomment-703222573
+    # The non minimal build is used because the 'qtgui' component is needed.
+    # gr-osmosdr is using the same gnuradio as of now.
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
@@ -16876,8 +16893,8 @@ in
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse {
-    # clickhouse doesn't build on llvm8.
-    inherit (llvmPackages_9) clang-unwrapped lld lldClang llvm;
+    # upstream requires llvm10 as of v20.11.4.13
+    inherit (llvmPackages_10) clang-unwrapped lld lldClang llvm;
   };
 
   couchdb = callPackage ../servers/http/couchdb {
@@ -18397,6 +18414,8 @@ in
     evdi = callPackage ../os-specific/linux/evdi { };
 
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
+
+    gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
 
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
@@ -21023,6 +21042,10 @@ in
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
+  greenfoot = callPackage ../applications/editors/greenfoot/default.nix {
+    jdk = jetbrains.jdk;
+  };
+
   gspeech = callPackage ../applications/audio/gspeech { };
 
   icesl = callPackage ../applications/misc/icesl { };
@@ -21154,34 +21177,80 @@ in
 
   gksu = callPackage ../applications/misc/gksu { };
 
-  gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
-
-  gnuradio = callPackage ../applications/radio/gnuradio {
-    inherit (python2Packages) cheetah lxml Mako matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
-    inherit (darwin.apple_sdk.frameworks) CoreAudio;
-    fftw = fftwFloat;
-    qwt = qwt6_qt4;
+  gnss-sdr = callPackage ../applications/radio/gnss-sdr {
+    boost = boost166;
+    gnuradio = gnuradio3_7-unwrapped;
   };
 
-  gnuradio-with-packages = callPackage ../applications/radio/gnuradio/wrapper.nix {
-    inherit (python2Packages) python;
-    extraPackages = [ gr-nacl gr-osmosdr gr-ais gr-rds ]
-      ++ lib.optionals stdenv.isLinux [ gr-gsm gr-limesdr ];
+  gnuradio-unwrapped = callPackage ../applications/radio/gnuradio {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    python = python3;
+  };
+  # A build without gui components and other utilites not needed for end user
+  # libraries
+  gnuradioMinimal = gnuradio-unwrapped.override {
+    features = {
+      gnuradio-companion = false;
+      python-support = false;
+      gr-ctrlport = false;
+      examples = false;
+      gr-qtgui = false;
+      gr-utils = false;
+      gr-modtool = false;
+      sphinx = false;
+      doxygen = false;
+    };
+  };
+  gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
+    unwrapped = gnuradio-unwrapped;
+  };
+  gnuradio3_7-unwrapped = callPackage ../applications/radio/gnuradio/3.7.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    python = python2;
+  };
+  # A build without gui components and other utilites not needed if gnuradio is
+  # used as a c++ library.
+  gnuradio3_7Minimal = gnuradio3_7-unwrapped.override {
+    features = {
+      gnuradio-companion = false;
+      python-support = false;
+      gr-ctrlport = false;
+      gr-qtgui = false;
+      gr-utils = false;
+      sphinx = false;
+      doxygen = false;
+      gr-wxgui = false;
+    };
+  };
+  gnuradio3_7 = callPackage ../applications/radio/gnuradio/wrapper.nix {
+    unwrapped = gnuradio3_7-unwrapped;
   };
 
   grandorgue = callPackage ../applications/audio/grandorgue { };
 
-  gr-nacl = callPackage ../applications/radio/gnuradio/nacl.nix { };
+  gr-nacl = callPackage ../applications/radio/gnuradio/nacl.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-gsm = callPackage ../applications/radio/gnuradio/gsm.nix { };
+  gr-gsm = callPackage ../applications/radio/gnuradio/gsm.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-ais = callPackage ../applications/radio/gnuradio/ais.nix { };
+  gr-ais = callPackage ../applications/radio/gnuradio/ais.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix { };
+  gr-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-rds = callPackage ../applications/radio/gnuradio/rds.nix { };
+  gr-rds = callPackage ../applications/radio/gnuradio/rds.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix { };
+  gr-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
   goldendict = libsForQt514.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
@@ -21220,7 +21289,14 @@ in
 
   gpx = callPackage ../applications/misc/gpx { };
 
-  gqrx = libsForQt514.callPackage ../applications/radio/gqrx { };
+  gqrx = libsForQt514.callPackage ../applications/radio/gqrx {
+    gnuradio = gnuradio3_7Minimal;
+    # Use the same gnuradio for gr-osmosdr as well
+    gr-osmosdr = gr-osmosdr.override {
+      gnuradio = gnuradio3_7Minimal;
+      pythonSupport = false;
+    };
+  };
 
   gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
 
@@ -21986,7 +22062,9 @@ in
 
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
 
-  inspectrum = libsForQt514.callPackage ../applications/radio/inspectrum { };
+  inspectrum = libsForQt514.callPackage ../applications/radio/inspectrum {
+    gnuradio = gnuradioMinimal;
+  };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5_1;
@@ -22759,6 +22837,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  n8n = callPackage ../applications/networking/n8n {};
+
   neap = callPackage ../applications/misc/neap { };
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
@@ -22822,9 +22902,7 @@ in
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
-  pijul = callPackage ../applications/version-management/pijul {
-    inherit (llvmPackages) clang libclang;
-  };
+  pijul = callPackage ../applications/version-management/pijul { };
 
   ping = callPackage ../applications/networking/ping { };
 
@@ -26235,6 +26313,7 @@ in
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
     draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
+    easyScreenCast = callPackage ../desktops/gnome-3/extensions/EasyScreenCast { };
     emoji-selector = callPackage ../desktops/gnome-3/extensions/emoji-selector { };
     freon = callPackage ../desktops/gnome-3/extensions/freon { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
@@ -28278,7 +28357,7 @@ in
 
   vttest = callPackage ../tools/misc/vttest { };
 
-  wacomtablet = libsForQt514.callPackage ../tools/misc/wacomtablet { };
+  wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
   wasmer = callPackage ../development/interpreters/wasmer { };
 

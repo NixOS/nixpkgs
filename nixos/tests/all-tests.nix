@@ -231,6 +231,7 @@ in
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix {};
   mysql-backup = handleTest ./mysql/mysql-backup.nix {};
   mysql-replication = handleTest ./mysql/mysql-replication.nix {};
+  n8n = handleTest ./n8n.nix {};
   nagios = handleTest ./nagios.nix {};
   nano = handleTest ./nano.nix {};
   nar-serve = handleTest ./nar-serve.nix {};

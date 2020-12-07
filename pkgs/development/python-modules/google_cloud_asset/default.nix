@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14r77bcxy7bmqhmz2hzcf3km2y4vivf5sfzgqjwlyynaydhn4f6j";
+    sha256 = "1cf1b8a102eea8cec65eb07bef51dc15c1136cfc8564ea7fc5a39465b8f20017";
   };
 
   disabled = pythonOlder "3.6";

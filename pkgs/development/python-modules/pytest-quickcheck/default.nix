@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, pytest-flakes, pytestpep8, tox }:
 buildPythonPackage rec {
   pname = "pytest-quickcheck";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2427808b54ccdec26a40cdba934a6c042fab9ebadb60d563a01f367bef87fe58";
+    sha256 = "3ef9bde7ba1fe6470c5b61631440186d1254e276c67a527242d91451ab7994e5";
   };
 
   buildInputs = [ pytest ];

@@ -1,17 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, libgphoto2, libexif, popt, gettext
-, libjpeg, readline, libtool
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, gettext
+, libexif
+, libgphoto2
+, libjpeg
+, libtool
+, popt
+, readline
 }:
 
 stdenv.mkDerivation rec {
-  name = "gphoto2-2.5.26";
+  pname = "gphoto2";
+  version = "2.5.26";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "0bxbcn31xalsvjp8fra324hf2105y3ps7zlyfz11v71j0lxj2lvn";
+  src = fetchFromGitHub {
+    owner = "gphoto";
+    repo = "gphoto2";
+    rev = "v${version}";
+    sha256 = "1w01j3qvjl2nlfs38rnsmjvn3r0r2xf7prxz1i6yarbpj3fzwqqc";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext libtool ];
-  buildInputs = [ libgphoto2 libexif popt libjpeg readline ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+    gettext
+    libtool
+  ];
+
+  buildInputs = [
+    libexif
+    libgphoto2
+    libjpeg
+    popt
+    readline
+  ];
 
   meta = with stdenv.lib; {
     description = "A ready to use set of digital camera software applications";

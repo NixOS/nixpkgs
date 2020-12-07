@@ -1215,6 +1215,10 @@ in {
 
   click-threading = callPackage ../development/python-modules/click-threading { };
 
+  clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash {};
+
+  clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver {};
+
   cliff = callPackage ../development/python-modules/cliff { };
 
   clifford = callPackage ../development/python-modules/clifford { };
@@ -2270,7 +2274,10 @@ in {
 
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
-  freezegun = callPackage ../development/python-modules/freezegun { };
+  freezegun = if isPy27 then
+      callPackage ../development/python-modules/freezegun/0.3.nix { }
+    else
+      callPackage ../development/python-modules/freezegun { };
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
@@ -3058,7 +3065,11 @@ in {
 
   isodate = callPackage ../development/python-modules/isodate { };
 
-  isort = callPackage ../development/python-modules/isort { };
+  isort = if isPy3k then
+    callPackage ../development/python-modules/isort { }
+  else
+    callPackage ../development/python-modules/isort/4.nix {
+  };
 
   isoweek = callPackage ../development/python-modules/isoweek { };
 
@@ -3188,6 +3199,8 @@ in {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  jsonstreams = callPackage ../development/python-modules/jsonstreams { };
+
   jsonwatch = callPackage ../development/python-modules/jsonwatch { };
 
   jug = callPackage ../development/python-modules/jug { };
@@ -3228,6 +3241,8 @@ in {
   jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git { };
 
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
+
+  jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
 
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
@@ -3781,6 +3796,8 @@ in {
 
   mido = callPackage ../development/python-modules/mido { };
 
+  milc = callPackage ../development/python-modules/milc { };
+
   milksnake = callPackage ../development/python-modules/milksnake { };
 
   minidb = callPackage ../development/python-modules/minidb { };
@@ -3816,6 +3833,8 @@ in {
   mmpython = callPackage ../development/python-modules/mmpython { };
 
   mnemonic = callPackage ../development/python-modules/mnemonic { };
+
+  mne-python = callPackage ../development/python-modules/mne-python { };
 
   mnist = callPackage ../development/python-modules/mnist { };
 
@@ -4346,7 +4365,9 @@ in {
 
   oyaml = callPackage ../development/python-modules/oyaml { };
 
-  packaging = callPackage ../development/python-modules/packaging { };
+  packaging = if isPy3k
+    then callPackage ../development/python-modules/packaging { }
+    else callPackage ../development/python-modules/packaging/2.nix { };
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
@@ -4851,6 +4872,8 @@ in {
 
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
+  py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
+
   py2bit = callPackage ../development/python-modules/py2bit { };
 
   py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
@@ -5004,6 +5027,8 @@ in {
 
   pycurl = callPackage ../development/python-modules/pycurl { };
 
+  pycxx = callPackage ../development/python-modules/pycxx { };
+
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
@@ -5133,7 +5158,10 @@ in {
 
   pygobject2 = callPackage ../development/python-modules/pygobject { inherit (pkgs) pkgconfig; };
 
-  pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { inherit (pkgs) meson pkgconfig; };
+  pygobject3 = if isPy3k then
+    callPackage ../development/python-modules/pygobject/3.nix { inherit (pkgs) meson pkgconfig; }
+  else
+    callPackage ../development/python-modules/pygobject/3.36.nix { inherit (pkgs) meson pkgconfig; };
 
   pygogo = callPackage ../development/python-modules/pygogo { };
 
@@ -5221,7 +5249,10 @@ in {
 
   pylev = callPackage ../development/python-modules/pylev { };
 
-  pylibacl = callPackage ../development/python-modules/pylibacl { };
+  pylibacl = if isPy3k then
+    callPackage ../development/python-modules/pylibacl { }
+  else
+    callPackage ../development/python-modules/pylibacl/0.5.nix { };
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
@@ -5321,6 +5352,8 @@ in {
   pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
 
   pync = callPackage ../development/python-modules/pync { };
+
+  pynest2d = callPackage ../development/python-modules/pynest2d { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
 
@@ -5621,7 +5654,9 @@ in {
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pysvn = callPackage ../development/python-modules/pysvn { };
+  pysvn = callPackage ../development/python-modules/pysvn {
+    inherit (pkgs) bash subversion apr aprutil expat neon openssl;
+  };
 
   pytabix = callPackage ../development/python-modules/pytabix { };
 
@@ -5636,7 +5671,7 @@ in {
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   # pytest>=6 is too new for most packages
-  pytest = if isPy3k then self.pytest_5 else self.pytest_4;
+  pytest = if isPy3k then self.pytest_6 else self.pytest_4;
 
   pytest_4 = callPackage
     ../development/python-modules/pytest/4.nix { # hypothesis tests require pytest that causes dependency cycle
@@ -5676,6 +5711,8 @@ in {
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
   pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
+
+  pytest-celery = callPackage ../development/python-modules/pytest-celery { };
 
   pytest-check = callPackage ../development/python-modules/pytest-check { };
 
@@ -5784,6 +5821,8 @@ in {
 
   pytest-subtesthack = callPackage ../development/python-modules/pytest-subtesthack { };
 
+  pytest-subtests = callPackage ../development/python-modules/pytest-subtests { };
+
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
@@ -5804,11 +5843,10 @@ in {
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
 
-  pytest_xdist_1 = callPackage ../development/python-modules/pytest-xdist { };
-
-  pytest_xdist_2 = callPackage ../development/python-modules/pytest-xdist/2.nix { };
-
-  pytest_xdist = self.pytest_xdist_1;
+  pytest_xdist = if isPy27 then
+    callPackage ../development/python-modules/pytest-xdist/1.nix { }
+  else
+    callPackage ../development/python-modules/pytest-xdist { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
@@ -6226,6 +6264,8 @@ in {
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
+
+  re-assert = callPackage ../development/python-modules/re-assert { };
 
   readchar = callPackage ../development/python-modules/readchar { };
 
@@ -6655,6 +6695,8 @@ in {
   sexpdata = callPackage ../development/python-modules/sexpdata { };
 
   sfepy = callPackage ../development/python-modules/sfepy { };
+
+  sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
 
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 

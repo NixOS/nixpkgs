@@ -35,7 +35,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    isort
     pep517
     pytest-mock
     pytestCheckHook

@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "2.4.6";
+  version = "2.4.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2be6c03dafce0a786cfab5d120196efccaf300cab5aee4d2fdad644b7bee1aef";
+    sha256 = "488fb0b2233738c3bba3d3bf67b941f105553b7286cca3099ac0120dd247bd84";
   };
 
   propagatedBuildInputs = [

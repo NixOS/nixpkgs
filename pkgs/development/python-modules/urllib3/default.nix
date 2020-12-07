@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.25.11";
+  version = "1.26.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2";
+    sha256 = "19188f96923873c92ccb987120ec4acaa12f0461fa9ce5d3d0772bc965a39e08";
   };
 
   NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [

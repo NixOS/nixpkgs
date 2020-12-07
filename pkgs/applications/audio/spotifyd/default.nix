@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl
+{ stdenv, fetchFromGitHub, rustPackages_1_45, pkgconfig, openssl
 , withALSA ? true, alsaLib ? null
 , withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null
@@ -7,7 +7,10 @@
 , dbus ? null
 }:
 
-rustPlatform.buildRustPackage rec {
+# rust >= 1.48 causes a panic within spotifyd on music playback. as long as
+# there is no upstream fix for the issue we use an older version of rust.
+# Upstream issue: https://github.com/Spotifyd/spotifyd/issues/719
+rustPackages_1_45.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
   version = "0.2.24";
 

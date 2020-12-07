@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l576dws9drjakfsn0pfpbr48b21vpxv3vd3dz8lkbn8q71zs22r";
+    sha256 = "bdce9370153fd80c5c4ec499a639f55eef0620e45d4b15fbf7d7ff2a225a3d40";
   };
 
   propagatedBuildInputs = [ numpy pytorch scikitlearn scipy tabulate tqdm ];

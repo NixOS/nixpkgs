@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.24";
+  version = "1.25";
   pname = "numericalunits";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wn7kqp0rxqr6gnqhdn8pc0wy359krzan0kbika6hfvb0c1rw1hs";
+    sha256 = "c32a482adae818a1a8d6c799bf9fb153326461d490c0de9deab9c694a6537eec";
   };
 
   disabled = !isPy3k;

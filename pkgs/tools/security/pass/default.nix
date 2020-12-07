@@ -34,11 +34,15 @@ let
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)
-        rm $out/bin
-        mkdir $out/bin
+        if [ -L $out/bin ]; then
+          rm $out/bin
+          mkdir $out/bin
+        fi
 
         for i in $files; do
-          ln -sf $i $out/bin/$(basename $i)
+          if ! [ "$(readlink -f "$out/bin/$(basename $i)")" = "$i" ]; then
+            ln -sf $i $out/bin/$(basename $i)
+          fi
         done
 
         wrapProgram $out/bin/pass \

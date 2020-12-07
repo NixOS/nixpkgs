@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, libpcap, openssl, libnetfilter_queue, libnfnetlink }:
 stdenv.mkDerivation rec {
   pname = "thc-ipv6";
-  version = "3.6";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1xjg30z0wzm3xvccv9cgh000i1m79p3m8f0b3s741k0mzyrk8lln";
+    sha256 = "07kwika1zdq62s5p5z94xznm77dxjxdg8k0hrg7wygz50151nzmx";
   };
 
   buildInputs = [

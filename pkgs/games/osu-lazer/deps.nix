@@ -1,8 +1,8 @@
 { fetchNuGet }: [
   (fetchNuGet {
     name = "Dapper";
-    version = "2.0.35";
-    sha256 = "0465i2p5kjj0hmadyw0xrpn43zpc4bnbid9mg561739fyjyjwmfm";
+    version = "2.0.78";
+    sha256 = "13xgi8prsa3y67hx644yflamwakjv8vsk5m15v407clsl2r4g0bp";
   })
   (fetchNuGet {
     name = "DeltaCompressionDotNet";
@@ -16,8 +16,8 @@
   })
   (fetchNuGet {
     name = "DiscordRichPresence";
-    version = "1.0.150";
-    sha256 = "0qmbi4sccia3w80q8xfvj3bw62nvz047wq198n2b2aflkf47bq79";
+    version = "1.0.166";
+    sha256 = "019rz0br8hamydmdrgzcc6280jfhm4i4ix27jh66a7h37alvdi3a";
   })
   (fetchNuGet {
     name = "FFmpeg.AutoGen";
@@ -261,8 +261,8 @@
   })
   (fetchNuGet {
     name = "JetBrains.Annotations";
-    version = "2020.1.0";
-    sha256 = "13fqcr6bs4x9rn0mpx110xl5apwh8ds1h0lx208znrm178ywqm8y";
+    version = "2020.3.0";
+    sha256 = "04xlfqnfg3069f014q8f0vx7y70m8nldbf9fia4b50bp3rry2lv2";
   })
   (fetchNuGet {
     name = "ManagedBass";
@@ -575,11 +575,6 @@
     sha256 = "0538fvjz9c27nvc6kv83b0912qvc71wz2w60svl0mscj86ds49wc";
   })
   (fetchNuGet {
-    name = "Microsoft.Net.Compilers.Toolset";
-    version = "3.1.0";
-    sha256 = "1csf8hgwvyxjlxdygacrk3pp0xkzydc1kvsv68cxy8h7gd62k0w0";
-  })
-  (fetchNuGet {
     name = "Microsoft.NetCore.Analyzers";
     version = "3.3.1";
     sha256 = "16cx0x5hcjs2ml5zjalfsp7n3rfyz75ihnvh1p10z96yaz43gdwn";
@@ -601,13 +596,13 @@
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.Platforms";
-    version = "3.1.0";
-    sha256 = "1gc1x8f95wk8yhgznkwsg80adk1lc65v9n5rx4yaa4bc5dva0z3j";
+    version = "3.1.1";
+    sha256 = "05hmaygd5131rnqi6ipv7agsbpi7ka18779vw45iw6b385l7n987";
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.Platforms";
-    version = "3.1.1";
-    sha256 = "05hmaygd5131rnqi6ipv7agsbpi7ka18779vw45iw6b385l7n987";
+    version = "5.0.0";
+    sha256 = "0mwpwdflidzgzfx2dlpkvvnkgkr2ayaf0s80737h4wa35gaj11rc";
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.Targets";
@@ -636,8 +631,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.Win32.Registry";
-    version = "4.7.0";
-    sha256 = "0bx21jjbs7l5ydyw4p6cn07chryxpmchq2nl5pirzz4l3b0q4dgs";
+    version = "5.0.0";
+    sha256 = "102hvhq2gmlcbq8y2cb7hdr2dnmjzfp2k3asr1ycwrfacwyaak7n";
   })
   (fetchNuGet {
     name = "Mono.Cecil";
@@ -681,8 +676,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2020.1127.0";
-    sha256 = "05vxdkw5z7bylj8dyw52lxf3g12mmvdifwvwlgz00v6ybkxr455j";
+    version = "2020.1203.0";
+    sha256 = "0xk1l09gm39z1739a7bgykj2bkg6lgxx72ds9s7qmbc6nrkr7jwj";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
@@ -691,8 +686,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Game.Resources";
-    version = "2020.1030.0";
-    sha256 = "1sxip1m5y7c5jblf9br8f0i5yhv0qjpidv9w6bbdxiy29mfwnz6d";
+    version = "2020.1202.0";
+    sha256 = "1m5156gkyyhf52ii6y7yqmsgpwcxn6zgji3nnyny6lk9glmc9vvs";
   })
   (fetchNuGet {
     name = "ppy.osuTK.NS20";
@@ -701,8 +696,8 @@
   })
   (fetchNuGet {
     name = "ppy.SDL2-CS";
-    version = "1.0.40";
-    sha256 = "1pvc154nqdbhn0rm6id0710yh72wvd2s5xmqxx3935h1jxrjgk8s";
+    version = "1.0.53";
+    sha256 = "0x52pq6xdg4qcgi8cnqlijifqjpszbi8z4nkmsym0xgd9m5bmd7k";
   })
   (fetchNuGet {
     name = "ppy.squirrel.windows";
@@ -816,8 +811,8 @@
   })
   (fetchNuGet {
     name = "Sentry";
-    version = "2.1.6";
-    sha256 = "0vc45p1arxwifv5fb6lzkqqxlsvm4i0xmpq2vc73vbjqzydd2phm";
+    version = "2.1.8";
+    sha256 = "1ii62ynihr4j2v2agjizk38kfz3m9bdijkks9k7ydhcq1bcz7jbn";
   })
   (fetchNuGet {
     name = "Sentry.PlatformAbstractions";
@@ -826,8 +821,8 @@
   })
   (fetchNuGet {
     name = "Sentry.Protocol";
-    version = "2.1.6";
-    sha256 = "0qc18kc9d7f0s6hmnpji3sbz0z09kdgg4fwh55rrmpfgr3w851s7";
+    version = "2.1.8";
+    sha256 = "04baw4yxc5lbcl83sfcdyjg5225719bf3sxpa3kjmhf58bjr143l";
   })
   (fetchNuGet {
     name = "SharpCompress";
@@ -845,14 +840,9 @@
     sha256 = "1bgacgh9hbck0qvji6frbb50sdiqfdng2fvvfgfw8b9qaql91mx0";
   })
   (fetchNuGet {
-    name = "SixLabors.Core";
-    version = "1.0.0-beta0008";
-    sha256 = "1yqcv5d2igsrmi9hf8xzikn0fms47skqpr552yzbj4z4wnraahaw";
-  })
-  (fetchNuGet {
     name = "SixLabors.ImageSharp";
-    version = "1.0.0-beta0007";
-    sha256 = "1k3hrp26imyqjarkrcsrhvamlmynzv6cakzq68yx69c0h8lmscaf";
+    version = "1.0.2";
+    sha256 = "0fhk9sn8k18slfb26wz8mal0j699f7djwhxgv97snz6b10wynfaj";
   })
   (fetchNuGet {
     name = "Splat";
@@ -921,11 +911,6 @@
   })
   (fetchNuGet {
     name = "System.Buffers";
-    version = "4.5.0";
-    sha256 = "1ywfqn4md6g3iilpxjn5dsr0f5lx6z0yvhqp4pgjcamygg73cz2c";
-  })
-  (fetchNuGet {
-    name = "System.Buffers";
     version = "4.5.1";
     sha256 = "04kb1mdrlcixj9zh1xdi5as0k0qi8byr5mi3p3jcxx72qz93s2y3";
   })
@@ -971,8 +956,8 @@
   })
   (fetchNuGet {
     name = "System.ComponentModel.Annotations";
-    version = "4.7.0";
-    sha256 = "06x1m46ddxj0ng28d7gry9gjkqdg2kp89jyf480g5gznyybbs49z";
+    version = "5.0.0";
+    sha256 = "021h7x98lblq9avm1bgpa4i31c2kgsa7zn4sqhxf39g087ar756j";
   })
   (fetchNuGet {
     name = "System.Composition";
@@ -1151,8 +1136,8 @@
   })
   (fetchNuGet {
     name = "System.IO.Packaging";
-    version = "4.7.0";
-    sha256 = "1vivvf158ilcpp6bq70zyafimi0lng546b34csmjb09k19wgxpiv";
+    version = "5.0.0";
+    sha256 = "08l85pi8jy65las973szqdnir2awxp0r16h21c0bgrz19gxhs11n";
   })
   (fetchNuGet {
     name = "System.IO.Pipelines";
@@ -1436,8 +1421,8 @@
   })
   (fetchNuGet {
     name = "System.Security.AccessControl";
-    version = "4.7.0";
-    sha256 = "0n0k0w44flkd8j0xw7g3g3vhw7dijfm51f75xkm1qxnbh4y45mpz";
+    version = "5.0.0";
+    sha256 = "17n3lrrl6vahkqmhlpn3w20afgz09n7i6rv0r3qypngwi7wqdr5r";
   })
   (fetchNuGet {
     name = "System.Security.Cryptography.Algorithms";
@@ -1511,8 +1496,8 @@
   })
   (fetchNuGet {
     name = "System.Security.Principal.Windows";
-    version = "4.7.0";
-    sha256 = "1a56ls5a9sr3ya0nr086sdpa9qv0abv31dd6fp27maqa9zclqq5d";
+    version = "5.0.0";
+    sha256 = "1mpk7xj76lxgz97a5yg93wi8lj0l8p157a5d50mmjy3gbz1904q8";
   })
   (fetchNuGet {
     name = "System.Text.Encoding";

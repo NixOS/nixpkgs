@@ -2,18 +2,22 @@
 
 buildPythonPackage rec {
   pname = "colorlog";
-  version = "4.4.0";
+  version = "4.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0272c537469ab1e63b9915535874d15b671963c9325db0c4891a2aeff97ce3d1";
+    sha256 = "54e5f153419c22afc283c130c4201db19a3dbd83221a0f4657d5ee66234a2ea4";
   };
 
   checkInputs = [ pytest ];
 
+  # tests are no longer packaged in pypi
+  doCheck = false;
   checkPhase = ''
     py.test -p no:logging
   '';
+
+  pythonImportsCheck =  [ "colorlog" ];
 
   meta = with stdenv.lib; {
     description = "Log formatting with colors";

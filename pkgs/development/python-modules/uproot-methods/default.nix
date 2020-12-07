@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
+  version = "0.9.1";
   pname = "uproot-methods";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57da3d67e1a42b548020debdd23285b5710e3bb2aac20eb7b2d2a686822aa1ab";
+    sha256 = "accb4392c59a1485ce3ee6d78a6fd163731ade8b9b5208e7bde8fa1767aef097";
   };
 
   propagatedBuildInputs = [ numpy awkward ];

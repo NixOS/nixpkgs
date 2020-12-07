@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zfec";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "222a2d84898db792b28f993cb663e940668bfbd844992a82351fd40dc1680883";
+    sha256 = "6033b2f3cc3edacf3f7eeed5f258c1ebf8a1d7e5e35b623db352512ce564e5ca";
   };
 
   buildInputs = [ setuptoolsDarcs ];

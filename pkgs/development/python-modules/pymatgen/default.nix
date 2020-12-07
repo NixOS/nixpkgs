@@ -1,16 +1,34 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, numpy, pydispatcher, sympy, requests, monty, ruamel_yaml, six, scipy, tabulate, enum34, matplotlib, palettable, spglib, pandas, plotly, networkx }:
+{ stdenv, buildPythonPackage, fetchPypi
+, enum34
+, glibcLocales
+, matplotlib
+, monty
+, networkx
+, numpy
+, palettable
+, pandas
+, plotly
+, pydispatcher
+, requests
+, ruamel_yaml
+, scipy
+, six
+, spglib
+, sympy
+, tabulate
+, uncertainties
+}:
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2020.8.13";
+  version = "2020.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23e5885e15195b37ce4c16ef93f474f741cb98451fa8dd4c319ec121f4887256";
+    sha256 = "a7ae7aba87e88965c3e1490f5b9742c95e06150f2fc73da69647a9366dd88018";
   };
 
   nativeBuildInputs = [ glibcLocales ];
-
 
   propagatedBuildInputs = [
     enum34
@@ -29,6 +47,7 @@ buildPythonPackage rec {
     spglib
     sympy
     tabulate
+    uncertainties
   ];
 
   # No tests in pypi tarball.
