@@ -19,11 +19,11 @@ python3Packages.buildPythonApplication rec {
 
   # Disable tests that touch network or shell out to commands
   checkPhase = ''
-    pytest . -k 'not get_channels \
+    pytest . -k "not get_channels \
                  and not play_video \
                  and not download_videos \
                  and not update_all \
-                 and not add_channel_duplicate'
+                 and not add_channel_duplicate"
   '';
 
   meta = {

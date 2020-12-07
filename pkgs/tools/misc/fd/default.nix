@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.1.1";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "0qzqnsjkq8i4gzn9273algx33kr1hzgxid8lnqp4awy2zxm4ksiq";
+    sha256 = "1g9jnf9h2s33l5q9z892vmvj78phwd4hfvspvnraxj4lvjp707ia";
   };
 
-  cargoSha256 = "1d7hfgl9l4b9bnq2qcpvdq5rh7lpz33r19hw3wwgnqh142q67m7r";
+  cargoSha256 = "0yavp67fb4vqygww9kjzdi7gr7dj4aw47s03dkwlz526rhkhappw";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/fd.1
 
     installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
-    installShellCompletion --zsh $releaseDir/build/fd-find-*/out/_fd
+    installShellCompletion --zsh contrib/completion/_fd
   '';
 
   meta = with lib; {
