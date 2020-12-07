@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    sha256 = "0ba0694krj2q77zwdn22v2qzjdy52a7ryhgc3m51s7p17ahigz97";
+    sha256 = "1k2cjpq73j2d4vnjj7q9b38pbccjmls1qp1zy2vb1iv2yh2d76z6";
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
