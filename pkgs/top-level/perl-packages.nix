@@ -11547,6 +11547,21 @@ let
     buildInputs = [ PathTiny TestWarn ];
   };
 
+  Logger = buildPerlPackage {
+    pname = "Log-ger";
+    version = "0.037";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Log-ger-0.037.tar.gz";
+      sha256 = "0f5078g8lkyw09ijpz7dna5xw6yvpd0m283fdrw3s152xmr43qn2";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Log-ger";
+      description = "A lightweight, flexible logging framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   LogHandler = buildPerlModule {
     pname = "Log-Handler";
     version = "0.90";
