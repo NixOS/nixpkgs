@@ -141,6 +141,11 @@ in stdenv.mkDerivation rec {
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz
     cp -r rustc-dev*/rustc-dev*/lib/* $out/lib/
+    rm $out/lib/rustlib/install.log
+    for m in $out/lib/rustlib/manifest-rust*
+    do
+      sort --output=$m < $m
+    done
 
   '' + ''
     # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
