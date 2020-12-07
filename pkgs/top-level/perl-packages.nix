@@ -13548,6 +13548,24 @@ let
     };
   };
 
+  MojoUserAgentCached = buildPerlPackage {
+    pname = "Mojo-UserAgent-Cached";
+    version = "1.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NICOMEN/Mojo-UserAgent-Cached-1.12.tar.gz";
+      sha256 = "08pa3sz63sq2y3g3lbhy2msbnx0myb2igmmc28cm3kaznryvsgwm";
+    };
+    buildInputs = [ ModuleInstall ];
+    propagatedBuildInputs = [ AlgorithmLCSS CHI DataSerializer DevelStackTrace Mojolicious Readonly StringTruncate ];
+    doCheck = !stdenv.isDarwin;
+    meta = {
+      homepage = "https://github.com/nicomen/mojo-useragent-cached";
+      description = "Caching, Non-blocking I/O HTTP, Local file and WebSocket user agent";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MonitoringPlugin = buildPerlPackage {
     pname = "Monitoring-Plugin";
     version = "0.40";
