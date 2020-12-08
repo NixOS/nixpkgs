@@ -66,7 +66,9 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  nativeBuildInputs = [ pkgconfig ] ++ optional (hpnSupport || withGssapiPatches) autoreconfHook;
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optional (hpnSupport || withGssapiPatches) autoreconfHook
+    ++ optional withKerberos kerberos.dev;
   buildInputs = [ zlib openssl libedit pam ]
     ++ optional withFIDO libfido2
     ++ optional withKerberos kerberos;
@@ -75,6 +77,22 @@ stdenv.mkDerivation rec {
     # Setting LD causes `configure' and `make' to disagree about which linker
     # to use: `configure' wants `gcc', but `make' wants `ld'.
     unset LD
+  ''
+  # Upstream build system does not support static build, so we fall back
+  # on fragile patching of configure script.
+  #
+  # libedit is found by pkgconfig, but without --static flag, required
+  # to get also transitive dependencies for static linkage, hence sed
+  # expression.
+  #
+  # Kerberos can be found either by krb5-config or by fall-back shell
+  # code in openssh's configure.ac. Neither of them support static
+  # build, but patching code for krb5-config is simpler, so to get it
+  # into PATH, kerberos.dev is added into buildInputs.
+  + optionalString stdenv.hostPlatform.isStatic ''
+    sed -i "s,PKGCONFIG --libs,PKGCONFIG --libs --static,g" configure
+    sed -i 's#KRB5CONF --libs`#KRB5CONF --libs` -lkrb5support -lkeyutils#g' configure
+    sed -i 's#KRB5CONF --libs gssapi`#KRB5CONF --libs gssapi` -lkrb5support -lkeyutils#g' configure
   '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
