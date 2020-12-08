@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , configobj
+, patiencediff
 , six
 , fastimport
 , dulwich
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1eff207403f48898fa3b3ffa7a4275197c6c58fec105ef267caf1f5fd5a6c7be";
   };
 
-  propagatedBuildInputs = [ configobj six fastimport dulwich launchpadlib ];
+  propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
 
   checkInputs = [ testtools ];
 
