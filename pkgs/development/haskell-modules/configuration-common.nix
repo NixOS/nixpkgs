@@ -176,9 +176,6 @@ self: super: {
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
-  # Test suite build depends on ancient tasty 0.11.x.
-  cryptohash-sha512 = dontCheck super.cryptohash-sha512;
-
   # Test suite depends on source code being available
   simple-affine-space = dontCheck super.simple-affine-space;
 
@@ -814,6 +811,12 @@ self: super: {
 
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
+
+  # Depends on base <4.12
+  # See https://github.com/haskell-hvr/cryptohash-sha512/pull/3
+  # , https://github.com/haskell-hvr/cryptohash-sha512/issues/4
+  # and https://github.com/haskell-hvr/cryptohash-sha512/pull/5
+  cryptohash-sha512 = doJailbreak super.cryptohash-sha512;
 
   # Depends on tasty < 1.x, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
