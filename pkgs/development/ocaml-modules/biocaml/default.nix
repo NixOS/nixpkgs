@@ -4,24 +4,18 @@
 
 buildDunePackage rec {
   pname = "biocaml";
-  version = "0.10.1";
+  version = "0.11.1";
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.07";
+  minimumOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "biocaml";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1f19nc8ld0iv45jjnsvaah3ddj88s2n9wj8mrz726kzg85cfr8xj";
+    sha256 = "1il84vvypgkhdyc2j5fmgh14a58069s6ijbd5dvyl2i7jdxaazji";
   };
-
-  # fix compilation without and disable -unsafe-string, needed for Ocaml 4.10:
-  patches = [ (fetchpatch {
-      url = "https://github.com/biocaml/biocaml/commit/597fa7b0d203684e45ffe03f56c74335b6173ffc.patch";
-      sha256 = "0b8jdg215cv2k4y3ww7vak2ag5v6v9w8b76qjivr5d1qxz47mqxv";
-  }) ];
 
   buildInputs = [ ppx_jane ppx_sexp_conv ];
   checkInputs = [ ounit ];

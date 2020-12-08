@@ -1049,16 +1049,19 @@ let
 
     janePackage =
       if lib.versionOlder "4.08" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_13.nix {}
+      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_14.nix {}
       else if lib.versionOlder "4.07" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_12.nix {}
       else callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
-    then import ../development/ocaml-modules/janestreet/0.13.nix {
-      inherit ctypes dune-configurator janePackage num octavius ppxlib re zarith;
-      inherit (pkgs) openssl;
+    then import ../development/ocaml-modules/janestreet/0.14.nix {
+      inherit alcotest angstrom angstrom-async base64 cryptokit ctypes
+        dune-configurator faraday inotify janePackage js_of_ocaml
+        js_of_ocaml-ppx lambdasoup magic-mime num octavius ounit
+        ppxlib re tyxml uri-sexp zarith;
+      inherit (pkgs) openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
