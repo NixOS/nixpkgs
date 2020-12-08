@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub
+{ lib, mkDerivation, fetchFromGitHub, stdenv
 , qmake, pkgconfig, olm, wrapQtAppsHook
 , qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qttools, qtgraphicaleffects
 , python3Packages, pyotherside
@@ -53,6 +53,7 @@ mkDerivation rec {
     homepage = "https://github.com/mirukana/mirage";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ colemickens ];
+    broken = stdenv.isDarwin;
     inherit (qtbase.meta) platforms;
     inherit version;
   };
