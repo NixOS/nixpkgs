@@ -1,12 +1,14 @@
 { lib, stdenv, python3, openssl
 , enableSystemd ? stdenv.isLinux, nixosTests
 , enableRedis ? false
+, callPackage
 }:
 
 with python3.pkgs;
 
 let
   plugins = python3.pkgs.callPackage ./plugins { };
+  tools = callPackage ./tools { };
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
@@ -68,6 +70,7 @@ buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
   passthru.plugins = plugins;
+  passthru.tools = tools;
   passthru.python = python3;
 
   meta = with stdenv.lib; {
