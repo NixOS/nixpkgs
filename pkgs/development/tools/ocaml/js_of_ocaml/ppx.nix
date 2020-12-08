@@ -1,5 +1,5 @@
 { buildDunePackage, js_of_ocaml-compiler
-, ocaml-migrate-parsetree, ppx_tools_versioned
+, ppxlib
 , js_of_ocaml
 }:
 
@@ -8,5 +8,5 @@ buildDunePackage {
 
   inherit (js_of_ocaml-compiler) version src meta useDune2;
 
-  buildInputs = [ ocaml-migrate-parsetree ppx_tools_versioned js_of_ocaml ];
+  buildInputs = [ ppxlib js_of_ocaml ];
 }
