@@ -806,7 +806,13 @@ let
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
-    ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
+    ppxlib = ppxlib-0-12;
+
+    ppxlib-0-12 = callPackage ../development/ocaml-modules/ppxlib { };
+
+    ppxlib-0-20 = callPackage ../development/ocaml-modules/ppxlib/0.20.x.nix {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
