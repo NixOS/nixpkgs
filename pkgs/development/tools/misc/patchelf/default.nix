@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "14npmdxppmh0ci140w8i8cy7zg1pnqg81a1mdsnza711ab7k36k9";
   };
 
+  patches = [
+    ./PR230-fix-false-alarm-for-non-overlapping-sections.patch
+  ];
+
   setupHook = [ ./setup-hook.sh ];
 
   # fails 8 out of 24 tests, problems when loading libc.so.6
