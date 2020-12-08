@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchPypi
 , glibcLocales
 , pytest
@@ -14,6 +15,7 @@
 buildPythonPackage rec {
   pname = "traitlets";
   version = "5.0.5";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,8 +28,6 @@ buildPythonPackage rec {
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test
   '';
-
-#   doCheck = false;
 
   meta = {
     description = "Traitlets Python config system";
