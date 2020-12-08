@@ -31,7 +31,13 @@ in buildGoModule rec {
     sha256 = "02w7pf7l9sr2nk8ky9b0d5b4syx3d9my65h2kzvh2afk7kv35h5y";
   };
 
-  vendorSha256 = "15mx5g2wa93sajbdwh58wcspg0n51d1ciwb7f15d0nm5hspz3w9r";
+  patches = [
+    # https://gitlab.com/gitlab-org/gitaly/-/issues/3330
+    # remove when upstream has enabled libgit2 1.1.0 support
+    ./0001-use-git2go-v31.patch
+  ];
+
+  vendorSha256 = "182s4m6z8dgfnpwir8njjb2s8fnxw4yivim2b252nvl34hsa7550";
 
   passthru = {
     inherit rubyEnv;

@@ -1,0 +1,329 @@
+From 1048d2f60a42ca0816b4e84f7b94c55147af2ee0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <milan@petabyte.dev>
+Date: Tue, 8 Dec 2020 09:51:08 +0100
+Subject: [PATCH] use git2go v31
+
+---
+ Makefile                                     | 2 +-
+ cmd/gitaly-git2go/commit/change_file_mode.go | 2 +-
+ cmd/gitaly-git2go/commit/commit.go           | 2 +-
+ cmd/gitaly-git2go/commit/create_directory.go | 2 +-
+ cmd/gitaly-git2go/commit/create_file.go      | 2 +-
+ cmd/gitaly-git2go/commit/delete_file.go      | 2 +-
+ cmd/gitaly-git2go/commit/move_file.go        | 2 +-
+ cmd/gitaly-git2go/commit/update_file.go      | 2 +-
+ cmd/gitaly-git2go/commit/validate.go         | 2 +-
+ cmd/gitaly-git2go/conflicts/conflicts.go     | 2 +-
+ cmd/gitaly-git2go/merge.go                   | 2 +-
+ cmd/gitaly-git2go/merge_test.go              | 2 +-
+ cmd/gitaly-git2go/resolve_conflicts.go       | 2 +-
+ cmd/gitaly-git2go/revert.go                  | 2 +-
+ cmd/gitaly-git2go/revert_test.go             | 2 +-
+ cmd/gitaly-git2go/submodule.go               | 2 +-
+ cmd/gitaly-git2go/testhelper/testhelper.go   | 2 +-
+ cmd/gitaly-git2go/util.go                    | 2 +-
+ go.mod                                       | 5 ++---
+ go.sum                                       | 7 +++++++
+ 20 files changed, 27 insertions(+), 21 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 4e128a5a..5da434e7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -58,7 +58,7 @@ GOLANGCI_LINT_VERSION     ?= 1.31.0
+ PROTOC_VERSION            ?= 3.12.4
+ PROTOC_GEN_GO_VERSION     ?= 1.3.2
+ GIT_VERSION               ?= v2.29.0
+-GIT2GO_VERSION            ?= v30
++GIT2GO_VERSION            ?= v31
+ LIBGIT2_VERSION       	  ?= v1.0.1
+ GOCOVER_COBERTURA_VERSION ?= aaee18c8195c3f2d90e5ef80ca918d265463842a
+ 
+diff --git a/cmd/gitaly-git2go/commit/change_file_mode.go b/cmd/gitaly-git2go/commit/change_file_mode.go
+index 17200ee3..3628e32f 100644
+--- a/cmd/gitaly-git2go/commit/change_file_mode.go
++++ b/cmd/gitaly-git2go/commit/change_file_mode.go
+@@ -3,7 +3,7 @@
+ package commit
+ 
+ import (
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/commit/commit.go b/cmd/gitaly-git2go/commit/commit.go
+index 90862e1a..e6d725d1 100644
+--- a/cmd/gitaly-git2go/commit/commit.go
++++ b/cmd/gitaly-git2go/commit/commit.go
+@@ -9,7 +9,7 @@ import (
+ 	"fmt"
+ 	"io"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/commit/create_directory.go b/cmd/gitaly-git2go/commit/create_directory.go
+index c7059c0a..91ee783b 100644
+--- a/cmd/gitaly-git2go/commit/create_directory.go
++++ b/cmd/gitaly-git2go/commit/create_directory.go
+@@ -6,7 +6,7 @@ import (
+ 	"fmt"
+ 	"path/filepath"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/commit/create_file.go b/cmd/gitaly-git2go/commit/create_file.go
+index 62bc6f61..abf92fa8 100644
+--- a/cmd/gitaly-git2go/commit/create_file.go
++++ b/cmd/gitaly-git2go/commit/create_file.go
+@@ -3,7 +3,7 @@
+ package commit
+ 
+ import (
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/commit/delete_file.go b/cmd/gitaly-git2go/commit/delete_file.go
+index 0c9df3be..7a5b2a97 100644
+--- a/cmd/gitaly-git2go/commit/delete_file.go
++++ b/cmd/gitaly-git2go/commit/delete_file.go
+@@ -3,7 +3,7 @@
+ package commit
+ 
+ import (
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/commit/move_file.go b/cmd/gitaly-git2go/commit/move_file.go
+index e9c11508..67ca0543 100644
+--- a/cmd/gitaly-git2go/commit/move_file.go
++++ b/cmd/gitaly-git2go/commit/move_file.go
+@@ -3,7 +3,7 @@
+ package commit
+ 
+ import (
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/commit/update_file.go b/cmd/gitaly-git2go/commit/update_file.go
+index 0bf6e751..31bacf4d 100644
+--- a/cmd/gitaly-git2go/commit/update_file.go
++++ b/cmd/gitaly-git2go/commit/update_file.go
+@@ -3,7 +3,7 @@
+ package commit
+ 
+ import (
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/commit/validate.go b/cmd/gitaly-git2go/commit/validate.go
+index 8854cdbb..7506ee2a 100644
+--- a/cmd/gitaly-git2go/commit/validate.go
++++ b/cmd/gitaly-git2go/commit/validate.go
+@@ -5,7 +5,7 @@ package commit
+ import (
+ 	"os"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/conflicts/conflicts.go b/cmd/gitaly-git2go/conflicts/conflicts.go
+index ac29e68c..9952412b 100644
+--- a/cmd/gitaly-git2go/conflicts/conflicts.go
++++ b/cmd/gitaly-git2go/conflicts/conflicts.go
+@@ -10,7 +10,7 @@ import (
+ 	"io"
+ 	"os"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ 	"gitlab.com/gitlab-org/gitaly/internal/helper"
+ 	"google.golang.org/grpc/codes"
+diff --git a/cmd/gitaly-git2go/merge.go b/cmd/gitaly-git2go/merge.go
+index 5a9f10a7..8865b995 100644
+--- a/cmd/gitaly-git2go/merge.go
++++ b/cmd/gitaly-git2go/merge.go
+@@ -11,7 +11,7 @@ import (
+ 	"os"
+ 	"time"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/merge_test.go b/cmd/gitaly-git2go/merge_test.go
+index 0a2b6bba..e05d47b3 100644
+--- a/cmd/gitaly-git2go/merge_test.go
++++ b/cmd/gitaly-git2go/merge_test.go
+@@ -6,7 +6,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"github.com/stretchr/testify/assert"
+ 	"github.com/stretchr/testify/require"
+ 	cmdtesthelper "gitlab.com/gitlab-org/gitaly/cmd/gitaly-git2go/testhelper"
+diff --git a/cmd/gitaly-git2go/resolve_conflicts.go b/cmd/gitaly-git2go/resolve_conflicts.go
+index 7500fae8..380813fc 100644
+--- a/cmd/gitaly-git2go/resolve_conflicts.go
++++ b/cmd/gitaly-git2go/resolve_conflicts.go
+@@ -13,7 +13,7 @@ import (
+ 	"strings"
+ 	"time"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git/conflict"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+diff --git a/cmd/gitaly-git2go/revert.go b/cmd/gitaly-git2go/revert.go
+index 8ef9dcff..61f1f057 100644
+--- a/cmd/gitaly-git2go/revert.go
++++ b/cmd/gitaly-git2go/revert.go
+@@ -10,7 +10,7 @@ import (
+ 	"fmt"
+ 	"io"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/revert_test.go b/cmd/gitaly-git2go/revert_test.go
+index 790ad585..8a083270 100644
+--- a/cmd/gitaly-git2go/revert_test.go
++++ b/cmd/gitaly-git2go/revert_test.go
+@@ -7,7 +7,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"github.com/stretchr/testify/assert"
+ 	"github.com/stretchr/testify/require"
+ 	cmdtesthelper "gitlab.com/gitlab-org/gitaly/cmd/gitaly-git2go/testhelper"
+diff --git a/cmd/gitaly-git2go/submodule.go b/cmd/gitaly-git2go/submodule.go
+index d256188b..b46bc92b 100644
+--- a/cmd/gitaly-git2go/submodule.go
++++ b/cmd/gitaly-git2go/submodule.go
+@@ -9,7 +9,7 @@ import (
+ 	"io"
+ 	"time"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"gitlab.com/gitlab-org/gitaly/internal/git2go"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/testhelper/testhelper.go b/cmd/gitaly-git2go/testhelper/testhelper.go
+index 3a7a24b0..429ff1f0 100644
+--- a/cmd/gitaly-git2go/testhelper/testhelper.go
++++ b/cmd/gitaly-git2go/testhelper/testhelper.go
+@@ -6,7 +6,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ 	"github.com/stretchr/testify/require"
+ )
+ 
+diff --git a/cmd/gitaly-git2go/util.go b/cmd/gitaly-git2go/util.go
+index a315c5f3..31dfa281 100644
+--- a/cmd/gitaly-git2go/util.go
++++ b/cmd/gitaly-git2go/util.go
+@@ -5,7 +5,7 @@ package main
+ import (
+ 	"fmt"
+ 
+-	git "github.com/libgit2/git2go/v30"
++	git "github.com/libgit2/git2go/v31"
+ )
+ 
+ func lookupCommit(repo *git.Repository, ref string) (*git.Commit, error) {
+diff --git a/go.mod b/go.mod
+index 28d02380..21f434b9 100644
+--- a/go.mod
++++ b/go.mod
+@@ -13,7 +13,7 @@ require (
+ 	github.com/hashicorp/go-uuid v1.0.2 // indirect
+ 	github.com/kelseyhightower/envconfig v1.3.0
+ 	github.com/lib/pq v1.2.0
+-	github.com/libgit2/git2go/v30 v30.0.5
++	github.com/libgit2/git2go/v31 v31.4.3
+ 	github.com/mattn/go-isatty v0.0.12 // indirect
+ 	github.com/olekukonko/tablewriter v0.0.2
+ 	github.com/opentracing/opentracing-go v1.2.0
+@@ -28,10 +28,9 @@ require (
+ 	gitlab.com/gitlab-org/gitlab-shell v1.9.8-0.20201117050822-3f9890ef73dc
+ 	gitlab.com/gitlab-org/labkit v0.0.0-20201113080642-40dcf811328c
+ 	go.uber.org/atomic v1.4.0 // indirect
+-	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
+ 	golang.org/x/net v0.0.0-20200904194848-62affa334b73 // indirect
+ 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
+-	golang.org/x/sys v0.0.0-20201015000850-e3ed0017c211
++	golang.org/x/sys v0.0.0-20201204225414-ed752295db88
+ 	golang.org/x/text v0.3.3 // indirect
+ 	google.golang.org/grpc v1.24.0
+ 	gopkg.in/yaml.v2 v2.3.0
+diff --git a/go.sum b/go.sum
+index 4bfb0052..4d23dd77 100644
+--- a/go.sum
++++ b/go.sum
+@@ -158,6 +158,7 @@ github.com/google/pprof v0.0.0-20190515194954-54271f7e092f/go.mod h1:zfwlbNMJ+OI
+ github.com/google/pprof v0.0.0-20191218002539-d4f498aebedc h1:DLpL8pWq0v4JYoRpEhDfsJhhJyGKCcQM2WPW2TJs31c=
+ github.com/google/pprof v0.0.0-20191218002539-d4f498aebedc/go.mod h1:ZgVRPoUq/hfqzAqh7sHMqb3I9Rq5C59dIz2SbBwJ4eM=
+ github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
++github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510/go.mod h1:pupxD2MaaD3pAXIBCelhxNneeOaAeabZDe5s4K6zSpQ=
+ github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
+ github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+ github.com/googleapis/gax-go/v2 v2.0.4/go.mod h1:0Wqv26UfaUD9n4G6kQubkQ+KchISgw+vpHVxEJEs9eg=
+@@ -236,6 +237,7 @@ github.com/libgit2/git2go v0.0.0-20190104134018-ecaeb7a21d47 h1:HDt7WT3kpXSHq4ml
+ github.com/libgit2/git2go v0.0.0-20190104134018-ecaeb7a21d47/go.mod h1:4bKN42efkbNYMZlvDfxGDxzl066GhpvIircZDsm8Y+Y=
+ github.com/libgit2/git2go/v30 v30.0.5 h1:gxKqXOslpvYDZNC62f8GV34TAk0qw4wZ++IdYw8V9I4=
+ github.com/libgit2/git2go/v30 v30.0.5/go.mod h1:YReiQ7xhMoyAL4ISYFLZt+OGqn6xtLqvTC1xJ9oAH7Y=
++github.com/libgit2/git2go/v31 v31.4.3/go.mod h1:c/rkJcBcUFx6wHaT++UwNpKvIsmPNqCeQ/vzO4DrEec=
+ github.com/lightstep/lightstep-tracer-go v0.15.6 h1:D0GGa7afJ7GcQvu5as6ssLEEKYXvRgKI5d5cevtz8r4=
+ github.com/lightstep/lightstep-tracer-go v0.15.6/go.mod h1:6AMpwZpsyCFwSovxzM78e+AsYxE8sGwiM6C3TytaWeI=
+ github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
+@@ -454,6 +456,8 @@ golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8U
+ golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
+ golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a h1:vclmkQCjlDX5OydZ9wv8rBCcS0QyQY66Mpf/7BZbInM=
+ golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
++golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c h1:9HhBz5L/UjnK9XLtiZhYAdue5BVKep3PMmS2LuPDt8k=
++golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c/go.mod h1:jdWPYTVW3xRLrWPugEBEK3UY2ZEsg3UU495nc5E+M+I=
+ golang.org/x/exp v0.0.0-20190121172915-509febef88a4/go.mod h1:CJ0aWSM057203Lf6IL+f9T1iT9GByDxfZKAQTCR3kQA=
+ golang.org/x/exp v0.0.0-20190306152737-a1d7652674e8/go.mod h1:CJ0aWSM057203Lf6IL+f9T1iT9GByDxfZKAQTCR3kQA=
+ golang.org/x/exp v0.0.0-20190510132918-efd6b22b2522/go.mod h1:ZjyILWgesfNpC6sMxTJOJm9Kp84zZh5NQWvqDGG3Qr8=
+@@ -544,6 +548,9 @@ golang.org/x/sys v0.0.0-20200916030750-2334cc1a136f h1:6Sc1XOXTulBN6imkqo6XoAXDE
+ golang.org/x/sys v0.0.0-20200916030750-2334cc1a136f/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+ golang.org/x/sys v0.0.0-20201015000850-e3ed0017c211 h1:9UQO31fZ+0aKQOFldThf7BKPMJTiBfWycGh/u3UoO88=
+ golang.org/x/sys v0.0.0-20201015000850-e3ed0017c211/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++golang.org/x/sys v0.0.0-20201204225414-ed752295db88 h1:KmZPnMocC93w341XZp26yTJg8Za7lhb2KhkYmixoeso=
++golang.org/x/sys v0.0.0-20201204225414-ed752295db88/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++golang.org/x/term v0.0.0-20201117132131-f5c789dd3221/go.mod h1:Nr5EML6q2oocZ2LXRh80K7BxOlk5/8JxuGnuhpl+muw=
+ golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+ golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+ golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
+-- 
+2.29.2
+
