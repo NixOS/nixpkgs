@@ -1228,6 +1228,8 @@ in
 
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
+  gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
+
   gomatrix = callPackage ../applications/misc/gomatrix { };
 
   gopacked = callPackage ../applications/misc/gopacked { };
@@ -2575,6 +2577,8 @@ in
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
   socklog = callPackage ../tools/system/socklog { };
+
+  spacevim = callPackage ../applications/editors/spacevim { };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
@@ -7862,6 +7866,8 @@ in
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
+  tvm = callPackage ../development/compilers/tvm { };
+
   oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
 
   twilight = callPackage ../tools/graphics/twilight {
@@ -10777,6 +10783,8 @@ in
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
 
+  tclreadline = callPackage ../development/interpreters/tclreadline { };
+
   wasm = ocamlPackages.wasm;
 
   proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
@@ -11826,6 +11834,8 @@ in
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
   pax-rs = callPackage ../development/tools/pax-rs { };
+
+  perfect-hash = callPackage ../development/tools/misc/perfect-hash { };
 
   peg = callPackage ../development/tools/parsing/peg { };
 
@@ -18334,6 +18344,14 @@ in
     ];
   };
 
+  linux-rt_5_9 = callPackage ../os-specific/linux/kernel/linux-rt-5.9.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -18583,10 +18601,11 @@ in
 
   # Realtime kernel packages.
   linuxPackages-rt_5_4 = linuxPackagesFor pkgs.linux-rt_5_4;
-  linuxPackages-rt = linuxPackages-rt_5_4;
-  linux-rt = linuxPackages-rt.kernel;
   linuxPackages-rt_5_6 = linuxPackagesFor pkgs.linux-rt_5_6;
-  linuxPackages-rt_latest = linuxPackages-rt_5_6;
+  linuxPackages-rt_5_9 = linuxPackagesFor pkgs.linux-rt_5_9;
+  linuxPackages-rt = linuxPackages-rt_5_4;
+  linuxPackages-rt_latest = linuxPackages-rt_5_9;
+  linux-rt = linuxPackages-rt.kernel;
   linux-rt_latest = linuxPackages-rt_latest.kernel;
 
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
@@ -22059,6 +22078,8 @@ in
 
   imgcat = callPackage ../applications/graphics/imgcat { };
 
+  img-cat = callPackage ../applications/graphics/img-cat { };
+
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
   # Impressive, formerly known as "KeyJNote".
@@ -23094,7 +23115,7 @@ in
 
   nedit = callPackage ../applications/editors/nedit { };
 
-  ngt = callPackage ../development/libraries/ngt { };
+  ngt = callPackage ../development/libraries/ngt { enableAVX = false; };
 
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
@@ -23310,6 +23331,8 @@ in
   peek = callPackage ../applications/video/peek { };
 
   pflask = callPackage ../os-specific/linux/pflask {};
+
+  pfsshell = callPackage ../tools/misc/pfsshell { };
 
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
 
