@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
     substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
   '';
 
-  patches = [
-    ./no-install-statedir.patch
-  ];
+  patches = [ ./no-install-statedir.patch ]
+    # fix gnulib tests on 32-bit ARM. Included on findutils master.
+    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
+    ++ stdenv.lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
