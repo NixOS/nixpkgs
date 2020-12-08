@@ -2,6 +2,10 @@
 , js_of_ocaml, ppxlib
 }:
 
+if !stdenv.lib.versionAtLeast ppxlib.version "0.14"
+then throw "js_of_ocaml-ppx_deriving_json is not compatible with ppxlib ${ppxlib.version}"
+else
+
 stdenv.mkDerivation {
 	pname = "js_of_ocaml-ppx_deriving_json";
 
