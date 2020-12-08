@@ -461,6 +461,18 @@ self: super: {
     ];
   });
 
+  lens-vim = super.lens-vim.overrideAttrs(old: {
+    # remove duplicate g:lens#animate in doc/lens.txt
+    # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
+    # https://github.com/camspiers/lens.vim/pull/40/files
+    patches = [
+      (substituteAll {
+        src = ./patches/lens-vim/remove_duplicate_g_lens_animate.patch;
+        inherit languagetool;
+      })
+    ];
+  });
+
   vim-hier = super.vim-hier.overrideAttrs(old: {
     buildInputs = [ vim ];
   });
