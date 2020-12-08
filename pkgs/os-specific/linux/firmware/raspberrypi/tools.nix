@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "raspberrypi-tools";
-  version = "2020-05-28";
+  version = "2020-11-30";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "userland";
-    rev = "f97b1af1b3e653f9da2c1a3643479bfd469e3b74";
-    sha256 = "1r7n05rv96hqjq0rn0qzchmfqs0j7vh3p8jalgh66s6l0vms5mwy";
+    rev = "093b30bbc2fd083d68cc3ee07e6e555c6e592d11";
+    sha256 = "0n2psqyxlsic9cc5s8h65g0blblw3xws4czhpbbgjm58px3822d7";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
