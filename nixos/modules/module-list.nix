@@ -679,6 +679,7 @@
   ./services/networking/monero.nix
   ./services/networking/morty.nix
   ./services/networking/miredo.nix
+  ./services/networking/mptcp/default.nix
   ./services/networking/mstpd.nix
   ./services/networking/mtprotoproxy.nix
   ./services/networking/mullvad-vpn.nix

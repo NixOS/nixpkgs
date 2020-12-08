@@ -154,6 +154,10 @@
     <para>
      <literal>./programs/dwm-status.nix</literal>
     </para>
+    <para>
+      <literal>./nixos/modules/services/networking/mptcp/default.nix</literal> brings multipath TCP support to nixos.
+      It can be enabled via <option>networking.mptcp.enable</option>.
+    </para>
    </listitem>
    <listitem>
     <para>
