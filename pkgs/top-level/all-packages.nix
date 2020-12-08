@@ -22887,6 +22887,8 @@ in
     geoip = geoipWithDatabase;
   };
 
+  nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
+
   nixos-shell = callPackage ../tools/virtualization/nixos-shell {};
 
   noaa-apt = callPackage ../applications/radio/noaa-apt { };
