@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , libX11
+, libXext
 , libXft
 , libXinerama
 , fontconfig
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =[
     libX11
+    libXext
     libXft
     libXinerama
     fontconfig
