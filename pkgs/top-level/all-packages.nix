@@ -10143,11 +10143,10 @@ in
   sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.0.9.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
 
-  inherit (callPackage ../development/compilers/scala/2.x.nix { jre = jre8; })
-    scala_2_10
-    scala_2_11
-    scala_2_12
-    scala_2_13;
+  scala_2_10 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.10"; jre = jdk8; };
+  scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
+  scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; jre = jdk8; };
+  scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; jre = jdk8; };
 
   scala = scala_2_13;
 
@@ -12406,10 +12405,7 @@ in
     inherit (llvmPackages_6) llvm clang-unwrapped;
   };
 
-  belle-sip = callPackage ../development/libraries/belle-sip {
-    stdenv = gcc8Stdenv;
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  belle-sip = callPackage ../development/libraries/belle-sip { };
 
   libbfd = callPackage ../development/libraries/libbfd { };
 
@@ -14949,6 +14945,8 @@ in
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
   minizip = callPackage ../development/libraries/minizip { };
+
+  minizip2 = callPackage ../development/libraries/minizip2 { };
 
   mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
 
@@ -22887,6 +22885,8 @@ in
   nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus {
     geoip = geoipWithDatabase;
   };
+
+  nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell {};
 

@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "12.1";
+  version = "12.2";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,13 +19,15 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    sha512 = "ad4bb5b191c784ed144b0b4831a8b95e0707c362917833c279d3f6fad11d7b3fb1f004f30121a941b694fc2ce323974b15072aa31cb5449111bc5d33d0d77103";
+    sha512 = "b25cda9830e8fe1d05687b08cc5fa9bcac7e8e6d12776998a4da7e483b3be0d04493345e56be7e6198fa8f86428d57d4459bfa7372c2e3f918f4a1101d0a31a7";
   };
 
   buildCommand = ''
     # Unpack and perform some path patching.
     unzip $src
     patchShebangs .
+
+    rm netbeans/bin/*.exe
 
     # Copy to installation directory and create a wrapper capable of starting
     # it.
