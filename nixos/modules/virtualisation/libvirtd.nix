@@ -23,6 +23,20 @@ let
   '';
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
+  qemuPackage = pkgs.buildEnv {
+     name = cfg.qemuPackage.name + "-with-spice-usb-helper";
+     buildInputs = [ pkgs.makeWrapper ];
+     paths = [
+       cfg.qemuPackage
+       # for polkit rules
+       pkgs.spice-gtk
+     ];
+     postBuild = ''
+       for i in $out/bin/qemu*; do
+        wrapProgram $i --set SPICE_USB_ACL_BINARY /run/wrappers/bin/spice-client-glib-usb-acl-helper
+       done
+      '';
+    };
 
 in {
 
@@ -149,7 +163,7 @@ in {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:
         "allow ${e}") cfg.allowedBridges;
-      systemPackages = with pkgs; [ libvirt libressl.nc iptables cfg.qemuPackage ];
+      systemPackages = with pkgs; [ libvirt libressl.nc iptables qemuPackage ];
       etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
@@ -165,8 +179,14 @@ in {
       group = "qemu-libvirtd";
     };
 
-    security.wrappers.qemu-bridge-helper = {
-      source = "/run/${dirName}/nix-helpers/qemu-bridge-helper";
+    security.wrappers = {
+      qemu-bridge-helper = {
+        source = "/run/${dirName}/nix-helpers/qemu-bridge-helper";
+      };
+      spice-client-glib-usb-acl-helper = {
+        source = "${pkgs.spice-gtk.out}/bin/spice-client-glib-usb-acl-helper";
+        capabilities = "cap_fowner+ep";
+      };
     };
 
     systemd.packages = [ pkgs.libvirt ];
@@ -188,12 +208,12 @@ in {
         cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
 
         # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
-        for emulator in ${pkgs.libvirt}/libexec/libvirt_lxc ${cfg.qemuPackage}/bin/qemu-kvm ${cfg.qemuPackage}/bin/qemu-system-*; do
+        for emulator in ${pkgs.libvirt}/libexec/libvirt_lxc ${qemuPackage}/bin/qemu-kvm ${qemuPackage}/bin/qemu-system-*; do
           ln -s --force "$emulator" /run/${dirName}/nix-emulators/
         done
 
         for helper in libexec/qemu-bridge-helper bin/qemu-pr-helper; do
-          ln -s --force ${cfg.qemuPackage}/$helper /run/${dirName}/nix-helpers/
+          ln -s --force ${qemuPackage}/$helper /run/${dirName}/nix-helpers/
         done
 
         ${optionalString cfg.qemuOvmf ''
@@ -221,7 +241,7 @@ in {
           "--timeout" "120"     # from ${libvirt}/var/lib/sysconfig/libvirtd
         ] ++ cfg.extraOptions);
 
-      path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
+      path = [ qemuPackage ] # libvirtd requires qemu-img to manage disk images
              ++ optional vswitch.enable vswitch.package;
 
       serviceConfig = {
