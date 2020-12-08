@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
 , cmake, pkg-config
 # required
-, libupnp, libuuid, pugixml, libiconv, sqlite, zlib, spdlog, fmt
+, libupnp, libuuid, pugixml, libiconv, sqlite, zlib, spdlog, fmt_7_0
 , pkgs
 # options
 , enableDuktape ? true
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    libupnp libuuid pugixml libiconv sqlite zlib fmt.dev
+    libupnp libuuid pugixml libiconv sqlite zlib fmt_7_0.dev
     spdlog
   ]
   ++ optionals enableDuktape [ pkgs.duktape ]

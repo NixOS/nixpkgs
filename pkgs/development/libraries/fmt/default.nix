@@ -45,4 +45,8 @@ in
     version = "7.1.3";
     sha256 = "08hyv73qp2ndbs0isk8pspsphdzz5qh8czl3wgyxy3mmif9xdg29";
   };
+  fmt_7_0_1 = generic {
+    version = "7.0.1";
+    sha256 = "1xxl3yjv38n8i6lify467qlhlas0yzpyl9y22fzayxq6famdry95";
+  };
 }
