@@ -18334,6 +18334,14 @@ in
     ];
   };
 
+  linux-rt_5_9 = callPackage ../os-specific/linux/kernel/linux-rt-5.9.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -18583,10 +18591,11 @@ in
 
   # Realtime kernel packages.
   linuxPackages-rt_5_4 = linuxPackagesFor pkgs.linux-rt_5_4;
-  linuxPackages-rt = linuxPackages-rt_5_4;
-  linux-rt = linuxPackages-rt.kernel;
   linuxPackages-rt_5_6 = linuxPackagesFor pkgs.linux-rt_5_6;
-  linuxPackages-rt_latest = linuxPackages-rt_5_6;
+  linuxPackages-rt_5_9 = linuxPackagesFor pkgs.linux-rt_5_9;
+  linuxPackages-rt = linuxPackages-rt_5_4;
+  linuxPackages-rt_latest = linuxPackages-rt_5_9;
+  linux-rt = linuxPackages-rt.kernel;
   linux-rt_latest = linuxPackages-rt_latest.kernel;
 
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
