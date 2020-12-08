@@ -13,7 +13,7 @@
     },
     "chromedriver": {
       "version": "87.0.4280.88",
-      "sha256_linux": "141mr2jiy3nslwd3s43m4i6plkv9wv5fgi78cn7mz0ac9x6fpcgx",
+      "sha256_linux": "11plh2hs2zpa14ymlbnj92pa58krl28yw4c0s55wk8qsxvzvl02m",
       "sha256_darwin": "048hsqp6575r980m769lzznvxypmfcwn89f1d3ik751ymzmb5r78"
     }
   },
