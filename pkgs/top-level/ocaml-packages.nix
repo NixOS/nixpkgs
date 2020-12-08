@@ -129,6 +129,8 @@ let
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
+    cinaps = callPackage ../development/ocaml-modules/cinaps { };
+
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cohttp = callPackage ../development/ocaml-modules/cohttp { };
