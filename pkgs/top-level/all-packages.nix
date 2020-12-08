@@ -1228,6 +1228,8 @@ in
 
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
+  gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
+
   gomatrix = callPackage ../applications/misc/gomatrix { };
 
   gopacked = callPackage ../applications/misc/gopacked { };
