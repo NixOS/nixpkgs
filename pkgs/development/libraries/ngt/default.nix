@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, llvmPackages, enableAVX ? true }:
+{ stdenv, fetchFromGitHub, cmake, llvmPackages, enableAVX ? false }:
 stdenv.mkDerivation rec {
   pname = "NGT";
   version = "v1.12.3-alpha";
