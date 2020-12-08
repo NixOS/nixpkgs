@@ -12,6 +12,17 @@ let
   #
   baseExtensions = self: stdenv.lib.mapAttrs (_n: stdenv.lib.recurseIntoAttrs)
     {
+      a5huynh.vscode-ron = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-ron";
+          publisher = "a5huynh";
+          version = "0.9.0";
+          sha256 = "0d3p50mhqp550fmj662d3xklj14gvzvhszm2hlqvx4h28v222z97";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
 
       alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
         mktplcRef = {
