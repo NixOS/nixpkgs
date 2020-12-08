@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openbazaar-client";
-  version = "2.4.8";
+  version = "2.4.9";
 
   src = fetchurl {
     url = "https://github.com/OpenBazaar/openbazaar-desktop/releases/download/v${version}/openbazaar2client_${version}_amd64.deb";
-    sha256 = "0c8ar0rd4yydy4rd4hqafljrhi40v3cwhc9v7fjbrfhcx1ikmf64";
+    sha256 = "1l6l72kb5h5f32dl5wqv31sigl3fh2byixv0h0d3icmjf558c39p";
   };
 
   dontBuild = true;
