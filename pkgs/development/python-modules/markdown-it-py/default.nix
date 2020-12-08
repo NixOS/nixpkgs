@@ -2,7 +2,6 @@
 , attrs
 , coverage
 , psutil
-, pytest
 , pytest-benchmark
 }:
 
@@ -25,7 +24,6 @@ buildPythonPackage rec {
     coverage
     pytest-benchmark
     psutil
-    pytest
     pytestCheckHook
   ];
 
@@ -42,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Markdown parser done right";
     homepage = "https://markdown-it-py.readthedocs.io/en/latest";
-    changelog = "https://github.com/executablebooks/markdown-it-py/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];
   };
