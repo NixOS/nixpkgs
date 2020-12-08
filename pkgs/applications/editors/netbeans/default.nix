@@ -27,6 +27,8 @@ stdenv.mkDerivation {
     unzip $src
     patchShebangs .
 
+    rm netbeans/bin/*.exe
+
     # Copy to installation directory and create a wrapper capable of starting
     # it.
     mkdir -pv $out/bin
