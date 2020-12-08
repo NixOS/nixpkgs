@@ -1064,14 +1064,14 @@ let
     then import ../development/ocaml-modules/janestreet/0.12.nix {
       inherit ctypes janePackage num octavius re;
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { legacy = true; };
+      ppxlib = ppxlib.override { version = "0.8.1"; };
     }
     else import ../development/ocaml-modules/janestreet {
       inherit janePackage ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
       inherit ppx_deriving re;
       inherit (pkgs) openssl;
-      ppxlib = ppxlib.override { legacy = true; };
+      ppxlib = ppxlib.override { version = "0.8.1"; };
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
