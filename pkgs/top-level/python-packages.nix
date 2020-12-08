@@ -7690,6 +7690,8 @@ in {
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
+  vncdo = callPackage ../development/python-modules/vncdo { };
+
   vobject = callPackage ../development/python-modules/vobject { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
