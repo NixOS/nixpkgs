@@ -190,6 +190,18 @@ let
 
       matklad.rust-analyzer = callPackage ./rust-analyzer {};
 
+      pkief.material-icon-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "material-icon-theme";
+          publisher = "pkief";
+          version = "4.4.0";
+          sha256 = "1m9mis59j9xnf1zvh67p5rhayaa9qxjiw9iw847nyl9vsy73w8ya";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       scala-lang.scala = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scala";
