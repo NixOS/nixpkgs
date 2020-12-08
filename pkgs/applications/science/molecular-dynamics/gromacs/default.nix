@@ -1,26 +1,44 @@
 { stdenv
 , fetchurl
 , cmake
-, singlePrec ? true
-, mpiEnabled ? false
+, hwloc
 , fftw
 , openmpi
 , perl
+, singlePrec ? true
+, mpiEnabled ? false
+, cpuAcceleration ? null
 }:
 
-stdenv.mkDerivation {
-  name = "gromacs-2020.4";
+let
+  # Select reasonable defaults for all major platforms
+  # The possible values are defined in CMakeLists.txt:
+  # AUTO None SSE2 SSE4.1 AVX_128_FMA AVX_256 AVX2_256
+  # AVX2_128 AVX_512 AVX_512_KNL MIC ARM_NEON ARM_NEON_ASIMD
+  SIMD = x: if (cpuAcceleration != null) then x else
+    if stdenv.hostPlatform.system == "i686-linux" then "SSE2" else
+    if stdenv.hostPlatform.system == "x86_64-linux" then "SSE4.1" else
+    if stdenv.hostPlatform.system == "x86_64-darwin" then "SSE4.1" else
+    if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON" else
+    "None";
+
+in stdenv.mkDerivation rec {
+  pname = "gromacs";
+  version = "2020.4";
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-2020.4.tar.gz";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
     sha256 = "1rplvgna60nqyb8nspaz3bfkwb044kv3zxdaa5whql5m441nj6am";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fftw perl ]
+  buildInputs = [ fftw perl hwloc ]
   ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
-  cmakeFlags = (
+  cmakeFlags = [
+    "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
+    "-DGMX_OPENMP:BOOL=TRUE"
+  ] ++ (
     if singlePrec then [
       "-DGMX_DOUBLE=OFF"
     ] else [
@@ -30,8 +48,6 @@ stdenv.mkDerivation {
   ) ++ (
     if mpiEnabled then [
       "-DGMX_MPI:BOOL=TRUE"
-      "-DGMX_CPU_ACCELERATION:STRING=SSE4.1"
-      "-DGMX_OPENMP:BOOL=TRUE"
       "-DGMX_THREAD_MPI:BOOL=FALSE"
     ] else [
       "-DGMX_MPI:BOOL=FALSE"
