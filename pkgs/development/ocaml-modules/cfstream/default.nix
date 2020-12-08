@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "cfstream";
   version = "1.3.1";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.04.1";
 
   src = fetchFromGitHub {
