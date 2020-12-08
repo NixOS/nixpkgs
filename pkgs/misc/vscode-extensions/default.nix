@@ -144,6 +144,18 @@ let
         };
       };
 
+      mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "one-dark-theme";
+          publisher = "mskelton";
+          version = "1.7.2";
+          sha256 = "1ks6z8wsxmlfhiwa51f7d6digvw11dlxc7mja3hankgxcf5dyj31";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       ms-azuretools.vscode-docker = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-docker";
