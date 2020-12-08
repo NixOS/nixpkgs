@@ -3570,6 +3570,8 @@ in {
   else
     callPackage ../development/python-modules/markdown/3_1.nix { };
 
+  markdown-it-py = callPackage ../development/python-modules/markdown-it-py { };
+
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
