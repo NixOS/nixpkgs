@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
   # not allowed for the stdenv.
   buildInputs = [ ncurses ];
 
+  postPatch = ''
+    patch -p3 < ${./build-tapi-command.patch}
+  '';
+
   cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ];
 
   # fixes: fatal error: 'clang/Basic/Diagnostic.h' file not found
@@ -31,9 +35,9 @@ stdenv.mkDerivation rec {
     cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="$INCLUDE_FIX")
   '';
 
-  buildFlags = [ "clangBasic" "libtapi" ];
+  buildFlags = [ "clangBasic" "libtapi" "tapi" ];
 
-  installTargets = [ "install-libtapi" "install-tapi-headers" ];
+  installTargets = [ "install-libtapi" "install-tapi-headers" "install-tapi" ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -id $out/lib/libtapi.dylib $out/lib/libtapi.dylib

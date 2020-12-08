@@ -1,0 +1,114 @@
+diff --git a/src/llvm/projects/libtapi/CMakeLists.txt b/src/llvm/projects/libtapi/CMakeLists.txt
+index ecf9f24ca..a8edae638 100644
+--- a/src/llvm/projects/libtapi/CMakeLists.txt
++++ b/src/llvm/projects/libtapi/CMakeLists.txt
+@@ -176,6 +176,13 @@ option(TAPI_INCLUDE_TESTS "Generate build targets for the TAPI unit tests."
+ option(TAPI_INCLUDE_DOCS "Generate build targets for the TAPI docs."
+       ${LLVM_INCLUDE_DOCS})
+ 
++if (NOT DEFINED CLANG_VERSION)
++  set(CLANG_VERSION "${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}")
++endif ()
++if (NOT DEFINED CLANG_TABLEGEN_EXE)
++  set(CLANG_TABLEGEN_EXE "${LLVM_TOOLS_BINARY_DIR}/clang-tblgen")
++endif ()
++
+ # Include must go first.
+ add_subdirectory(include)
+ # All targets below may depend on all tablegen'd files.
+diff --git a/src/llvm/projects/libtapi/include/tapi/Diagnostics/CMakeLists.txt b/src/llvm/projects/libtapi/include/tapi/Diagnostics/CMakeLists.txt
+index 6240f15d3..375243432 100644
+--- a/src/llvm/projects/libtapi/include/tapi/Diagnostics/CMakeLists.txt
++++ b/src/llvm/projects/libtapi/include/tapi/Diagnostics/CMakeLists.txt
+@@ -1,5 +1,3 @@
+-#[[
+ tapi_clang_tablegen(DiagnosticTAPIKinds.inc -gen-clang-diags-defs
+   SOURCE DiagnosticTAPIKinds.td
+   TARGET TAPIDiagnosticTAPI)
+-]]
+diff --git a/src/llvm/projects/libtapi/include/tapi/Driver/DriverOptions.h b/src/llvm/projects/libtapi/include/tapi/Driver/DriverOptions.h
+index 49957d0db..b25c28776 100644
+--- a/src/llvm/projects/libtapi/include/tapi/Driver/DriverOptions.h
++++ b/src/llvm/projects/libtapi/include/tapi/Driver/DriverOptions.h
+@@ -36,7 +36,7 @@ enum ID {
+ #define OPTION(PREFIX, NAME, ID, KIND, GROUP, ALIAS, ALIASARGS, FLAGS, PARAM,  \
+                HELPTEXT, METAVAR, VALUES)                                      \
+   OPT_##ID,
+-//#include "tapi/Driver/TAPIOptions.inc"
++#include "tapi/Driver/TAPIOptions.inc"
+   LastOption
+ #undef OPTION
+ };
+diff --git a/src/llvm/projects/libtapi/include/tapi/Driver/Snapshot.h b/src/llvm/projects/libtapi/include/tapi/Driver/Snapshot.h
+index 8d5fa9757..03401ea0a 100644
+--- a/src/llvm/projects/libtapi/include/tapi/Driver/Snapshot.h
++++ b/src/llvm/projects/libtapi/include/tapi/Driver/Snapshot.h
+@@ -6,7 +6,6 @@
+ // License. See LICENSE.TXT for details.
+ //
+ //===----------------------------------------------------------------------===//
+-#define TAPI_DRIVER_SNAPSHOT_H
+ #ifndef TAPI_DRIVER_SNAPSHOT_H
+ #define TAPI_DRIVER_SNAPSHOT_H
+ 
+diff --git a/src/llvm/projects/libtapi/include/tapi/Driver/SnapshotFileSystem.h b/src/llvm/projects/libtapi/include/tapi/Driver/SnapshotFileSystem.h
+index 59788e77f..ff0073579 100644
+--- a/src/llvm/projects/libtapi/include/tapi/Driver/SnapshotFileSystem.h
++++ b/src/llvm/projects/libtapi/include/tapi/Driver/SnapshotFileSystem.h
+@@ -11,7 +11,6 @@
+ /// \brief Defines the Snapshot Virtual File System.
+ ///
+ //===----------------------------------------------------------------------===//
+-#define TAPI_DRIVER_SNAPSHOT_FILE_SYSTEM_H
+ #ifndef TAPI_DRIVER_SNAPSHOT_FILE_SYSTEM_H
+ #define TAPI_DRIVER_SNAPSHOT_FILE_SYSTEM_H
+ 
+diff --git a/src/llvm/projects/libtapi/lib/Diagnostics/CMakeLists.txt b/src/llvm/projects/libtapi/lib/Diagnostics/CMakeLists.txt
+index f67657821..829b732db 100644
+--- a/src/llvm/projects/libtapi/lib/Diagnostics/CMakeLists.txt
++++ b/src/llvm/projects/libtapi/lib/Diagnostics/CMakeLists.txt
+@@ -1,4 +1,3 @@
+-#[[
+ add_tapi_library(tapiDiagnostics
+   Diagnostics.cpp
+ 
+@@ -8,4 +7,3 @@ add_tapi_library(tapiDiagnostics
+   LINK_LIBS
+   tapiCore
+   )
+-]]
+diff --git a/src/llvm/projects/libtapi/lib/Driver/CMakeLists.txt b/src/llvm/projects/libtapi/lib/Driver/CMakeLists.txt
+index a12f14442..11cc3c413 100644
+--- a/src/llvm/projects/libtapi/lib/Driver/CMakeLists.txt
++++ b/src/llvm/projects/libtapi/lib/Driver/CMakeLists.txt
+@@ -1,4 +1,3 @@
+-#[[
+ add_tapi_library(tapiDriver
+   API2XPIConverter.cpp
+   ArchiveDriver.cpp
+@@ -25,4 +24,3 @@ add_tapi_library(tapiDriver
+   tapiDiagnostics
+   tapiFrontend
+   )
+-]]
+diff --git a/src/llvm/projects/libtapi/tools/CMakeLists.txt b/src/llvm/projects/libtapi/tools/CMakeLists.txt
+index fcbf7c6cf..9a6fa2665 100644
+--- a/src/llvm/projects/libtapi/tools/CMakeLists.txt
++++ b/src/llvm/projects/libtapi/tools/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ add_subdirectory(libtapi)
+-#add_subdirectory(tapi)
++add_subdirectory(tapi)
+ #add_subdirectory(tapi-run)
+ #add_subdirectory(tapi-frontend)
+diff --git a/src/llvm/projects/libtapi/tools/tapi/CMakeLists.txt b/src/llvm/projects/libtapi/tools/tapi/CMakeLists.txt
+index e6d3693fc..680b08890 100644
+--- a/src/llvm/projects/libtapi/tools/tapi/CMakeLists.txt
++++ b/src/llvm/projects/libtapi/tools/tapi/CMakeLists.txt
+@@ -30,4 +30,4 @@ install(TARGETS tapi
+ 
+ add_llvm_install_targets(install-tapi
+                          DEPENDS tapi install-tapi-clang-headers
+-                         COMPONENT tapi)
+\ No newline at end of file
++                         COMPONENT tapi)
