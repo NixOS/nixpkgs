@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub }:
+{ stdenv, cmake, fetchFromGitHub, rsync }:
 
 stdenv.mkDerivation rec {
   pname = "rapidcheck";
@@ -11,10 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0n8l0mlq9xqmpkgcj5xicicd1my2cfwxg25zdy8347dqkl1ppgbs";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake rsync ];
 
+  # Install the extras headers
   postInstall = ''
-    cp ../extras/boost_test/include/rapidcheck/boost_test.h $out/include/rapidcheck
+    cd $src
+    rsync --filter="- **CMakeLists.txt" -acRv extras $out
   '';
 
   meta = with stdenv.lib; {
