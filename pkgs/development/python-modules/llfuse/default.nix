@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, buildPythonPackage, pkgconfig, pytest_5, fuse, attr, which
-, contextlib2, osxfuse
+{ stdenv, fetchFromGitHub, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
+, contextlib2, osxfuse, cython
 }:
 
 let
@@ -8,33 +8,29 @@ in
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.3.6";
+  version = "1.3.8-2020-12-04";  # recent fixes to support pytest >6.0
 
-  src = fetchurl {
-    url = "mirror://pypi/l/llfuse/${pname}-${version}.tar.bz2";
-    sha256 = "1j9fzxpgmb4rxxyl9jcf84zvznhgi3hnh4hg5vb0qaslxkvng8ii";
+  src = fetchFromGitHub {
+    owner = "python-llfuse";
+    repo = "python-llfuse";
+    rev = "af24c5ba8d82b1f8a8144bbca2fad955ba1e12c8";
+    sha256 = "1v3fx7vyi5nqqsidj4b2as7wjhgpc79jy1ybdgc092z6qxviv3lb";
   };
 
-  patches = [
-    # https://github.com/python-llfuse/python-llfuse/pull/23 (2 commits)
-    (fetchpatch {
-      url = "https://github.com/python-llfuse/python-llfuse/commit/7579b0e626da1a7882b13caedcdbd4a834702e94.diff";
-      sha256 = "0vpybj4k222h20lyn0q7hz86ziqlapqs5701cknw8d11jakbhhb0";
-    })
-    (fetchpatch {
-      url = "https://github.com/python-llfuse/python-llfuse/commit/438c00ab9e10d6c485bb054211c01b7f8524a736.diff";
-      sha256 = "1zhb05b7k3c9mjqshy9in8yzpbihy7f33x1myq5kdjip1k50cwrn";
-    })
-  ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig cython ];
   buildInputs =
     optionals stdenv.isLinux [ fuse ]
     ++ optionals stdenv.isDarwin [ osxfuse ];
-  checkInputs = [ pytest_5 which ] ++
+  checkInputs = [ pytest which ] ++
     optionals stdenv.isLinux [ attr ];
 
   propagatedBuildInputs = [ contextlib2 ];
+
+  buildPhase = ''
+    python setup.py build_cython
+    python setup.py build_ext --inplace
+    python setup.py bdist_wheel
+  '';
 
   checkPhase = ''
     py.test -k "not test_listdir" ${optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
