@@ -182,6 +182,8 @@ in
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
+
   cm256cc = callPackage ../development/libraries/cm256cc {  };
 
   conftest = callPackage ../development/tools/conftest { };
@@ -2310,6 +2312,8 @@ in
 
   ifm = callPackage ../tools/graphics/ifm {};
 
+  ink = callPackage ../tools/misc/ink { };
+
   interlock = callPackage ../servers/interlock {};
 
   jellyfin = callPackage ../servers/jellyfin { };
@@ -3016,6 +3020,8 @@ in
   libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix {
     inherit (xorg) libXaw;
   };
+
+  netevent = callPackage ../tools/inputmethods/netevent { };
 
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
@@ -14015,6 +14021,8 @@ in
   libiio = callPackage ../development/libraries/libiio { };
 
   libinjection = callPackage ../development/libraries/libinjection { };
+
+  libinklevel = callPackage ../development/libraries/libinklevel { };
 
   libnats-c = callPackage ../development/libraries/libnats-c {
     openssl = openssl_1_0_2;

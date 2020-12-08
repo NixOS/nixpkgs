@@ -1,35 +1,30 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, libusb1, hidapi, pkg-config, fetchpatch }:
+{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config }:
 
 mkDerivation rec {
   pname = "openrgb";
-  version = "0.4";
+  version = "0.5";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "sha256-tHrRG2Zx7NYqn+WPiRpAlWA/QmxuAYidENanTkC1XVw";
+    sha256 = "001x2ycfmlb9s21sp91aw5gxizcn6kzm8x7bvkps4b1iq0ap5fzv";
   };
 
   nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [ libusb1 hidapi ];
 
-  patches = [
-    # Make build SOURCE_DATE_EPOCH aware, merged in master
-    (fetchpatch {
-      url = "https://gitlab.com/CalcProgrammer1/OpenRGB/-/commit/f1b7b8ba900db58a1119d8d3e21c1c79de5666aa.patch";
-      sha256 = "17m1hn1kjxfcmd4p3zjhmr5ar9ng0zfbllq78qxrfcq1a0xrkybx";
-    })
-  ];
-
   installPhase = ''
     mkdir -p $out/bin
-    cp OpenRGB $out/bin
+    cp openrgb $out/bin
+
+    mkdir -p $out/etc/udev/rules.d
+    cp 60-openrgb.rules $out/etc/udev/rules.d
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/OpenRGB --help > /dev/null
+    HOME=$TMPDIR $out/bin/openrgb --help > /dev/null
   '';
 
   enableParallelBuilding = true;
