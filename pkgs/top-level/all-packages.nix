@@ -10143,11 +10143,10 @@ in
   sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.0.9.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
 
-  inherit (callPackage ../development/compilers/scala/2.x.nix { jre = jre8; })
-    scala_2_10
-    scala_2_11
-    scala_2_12
-    scala_2_13;
+  scala_2_10 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.10"; jre = jdk8; };
+  scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
+  scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; jre = jdk8; };
+  scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; jre = jdk8; };
 
   scala = scala_2_13;
 
