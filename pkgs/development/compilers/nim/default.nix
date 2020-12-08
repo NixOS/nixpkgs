@@ -4,10 +4,10 @@
 , pcre, readline, boehmgc, sqlite, nim-unwrapped, nimble-unwrapped }:
 
 let
-  version = "1.4.0";
+  version = "1.4.2";
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-    sha256 = "0gf2lqkqzai6mg7mf4y04gdy1ddiavans09i8aisa88ssfza5ywx";
+    sha256 = "0q8i56343b69f1bh48a8vxkqman9i2kscyj0lf017n3xfy1pb903";
   };
 
   meta = with lib; {
