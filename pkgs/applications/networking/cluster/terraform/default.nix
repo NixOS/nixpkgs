@@ -42,6 +42,7 @@ let
         description =
           "Tool for building, changing, and versioning infrastructure";
         homepage = "https://www.terraform.io/";
+        changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
         license = licenses.mpl20;
         maintainers = with maintainers; [
           Chili-Man
@@ -165,9 +166,9 @@ in rec {
   });
 
   terraform_0_14 = pluggable (generic {
-    version = "0.14.0";
-    sha256 = "0pbglnvb6cx8zrz791lfa67dmjqfsyysbxm2083b1lhlmbybi9ax";
-    vendorSha256 = "1gxhdj98np482jm76aj6zbbmkn7vfk8b878hzz59iywgbdr1r4m1";
+    version = "0.14.2";
+    sha256 = "0j09bjdl1z836y3zdlgjcdah11wlnvsd5hmsagjsz9am04qlyfya";
+    vendorSha256 = "1iifjrnc79f4liyy4pgjbnarv2fx6vwlaqcv75crmyji40xv0w9s";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
