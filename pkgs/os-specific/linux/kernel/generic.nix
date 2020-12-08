@@ -161,7 +161,7 @@ let
       moduleStructuredConfig = (lib.evalModules {
         modules = [
           module
-          { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
+          { settings = lib.mkDefault commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
           { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
         ]
         ++  structuredConfigFromPatches
