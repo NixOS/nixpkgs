@@ -196,6 +196,8 @@ in stdenv.mkDerivation rec {
 
     cp TOOLS/mpv_identify.sh $out/bin
     cp TOOLS/umpv $out/bin
+    cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
+    sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
   '' + optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r build/mpv.app $out/Applications
