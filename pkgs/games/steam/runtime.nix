@@ -1,8 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+
+# for update script
+, writeShellScript, curl, nix-update
+}:
 
 stdenv.mkDerivation rec {
 
-  name = "steam-runtime";
+  pname = "steam-runtime";
   # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
   version = "0.20200720.0";
 
@@ -16,6 +20,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     tar -C $out --strip=1 -x -f $src
   '';
+
+  passthru = {
+    updateScript = writeShellScript "update.sh" ''
+      version=$(${curl}/bin/curl https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt)
+      ${nix-update}/bin/nix-update --version "$version" steamPackages.steam-runtime
+    '';
+  };
 
   meta = with stdenv.lib; {
     description = "The official runtime used by Steam";
