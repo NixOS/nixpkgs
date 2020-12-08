@@ -6051,6 +6051,18 @@ let
     meta.homepage = "https://github.com/LnL7/vim-nix/";
   };
 
+  vim-nong-theme = buildVimPluginFrom2Nix {
+    pname = "vim-nong-theme";
+    version = "2020-12-03";
+    src = fetchFromGitHub {
+      owner = "fruit-in";
+      repo = "vim-nong-theme";
+      rev = "ea4c8558970b2c6e724483e3031940906420aa7e";
+      sha256 = "09ws0wj2zldyfn7752rzh0wx24271yi4c390gd9f60d33pkc0s80";
+    };
+    meta.homepage = "https://github.com/fruit-in/vim-nong-theme/";
+  };
+
   vim-numbertoggle = buildVimPluginFrom2Nix {
     pname = "vim-numbertoggle";
     version = "2017-10-26";
