@@ -7801,6 +7801,8 @@ in {
 
   wptserve = callPackage ../development/python-modules/wptserve { };
 
+  wrapio = callPackage ../development/python-modules/wrapio { };
+
   wrapt = callPackage ../development/python-modules/wrapt { };
 
   wrf-python = callPackage ../development/python-modules/wrf-python { };
