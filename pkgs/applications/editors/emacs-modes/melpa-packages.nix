@@ -429,6 +429,9 @@ let
         # upstream issue: doesn't build
         magit-stgit = markBroken super.magit-stgit;
 
+        # upstream issue: missing file header
+        melancholy-theme = markBroken super.melancholy-theme;
+
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
 
