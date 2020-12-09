@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   doCheck = false;
 
+  CFLAGS = stdenv.lib.optionals (stdenv.cc.isClang) [ "--rtlib=compiler-rt" ];
+
   configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ];
 
   # Upstream is aware of it; it may be in the next release.
