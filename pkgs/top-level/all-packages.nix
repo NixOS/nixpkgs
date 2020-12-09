@@ -10352,7 +10352,10 @@ in
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
-  clojure = callPackage ../development/interpreters/clojure { };
+  clojure = callPackage ../development/interpreters/clojure {
+    # set this to an LTS version of java
+    jdk = jdk11;
+  };
 
   clojure-lsp = callPackage ../development/tools/misc/clojure-lsp { };
 
