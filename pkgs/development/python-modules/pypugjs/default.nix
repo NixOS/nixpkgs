@@ -1,17 +1,13 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, chardet, nose
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, six, chardet, nose
 , django, jinja2, tornado, pyramid, pyramid_mako, Mako }:
 
 buildPythonPackage rec {
   pname = "pypugjs";
-  version = "5.9.7";
+  version = "5.9.8";
 
-  # PyPI source tarball is missing files
-  # https://github.com/kakulukia/pypugjs/issues/68
-  src = fetchFromGitHub {
-    owner = "kakulukia";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1wvl0n5c3xpani5yn1740f9yd72pjcqg7zy7sj4553m0mlwj9pvc";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1iy8k56rbslxcylhamdik2bd6gqqirrix55mrdn29zz9gl6vg1xi";
   };
 
   propagatedBuildInputs = [ six chardet ];
