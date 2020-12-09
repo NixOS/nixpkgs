@@ -5230,8 +5230,6 @@ in {
 
   pyipp = callPackage ../development/python-modules/pyipp { };
 
-  pyjade = callPackage ../development/python-modules/pyjade { };
-
   pyjet = callPackage ../development/python-modules/pyjet { };
 
   pyjks = callPackage ../development/python-modules/pyjks { };
@@ -5467,6 +5465,8 @@ in {
   pyptlib = callPackage ../development/python-modules/pyptlib { };
 
   pypubsub = callPackage ../development/python-modules/pypubsub { };
+
+  pypugjs = callPackage ../development/python-modules/pypugjs { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
