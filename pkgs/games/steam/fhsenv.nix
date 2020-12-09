@@ -35,6 +35,10 @@ let
       # Steam VR
       procps
       usbutils
+
+      # electron based launchers need newer versions of these libraries than what runtime provides
+      mesa
+      sqlite
     ] ++ lib.optional withJava jdk8 # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
@@ -175,7 +179,6 @@ in buildFHSUserEnv rec {
     libidn
     tbb
     wayland
-    mesa
     libxkbcommon
 
     # Other things from runtime
