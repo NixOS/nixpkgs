@@ -1,8 +1,7 @@
-{ lib, mkDerivation, fetchFromGitHub, stdenv
+{ stdenv, mkDerivation, fetchFromGitHub
 , qmake, pkgconfig, olm, wrapQtAppsHook
 , qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qttools, qtgraphicaleffects
-, python3Packages, pyotherside
-, libXScrnSaver
+, python3Packages, pyotherside, libXScrnSaver
 }:
 
 let
@@ -48,7 +47,7 @@ mkDerivation rec {
       "''${qtWrapperArgs[@]}"
     '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A fancy, customizable, keyboard-operable Qt/QML+Python Matrix chat client for encrypted and decentralized communication";
     homepage = "https://github.com/mirukana/mirage";
     license = licenses.lgpl3;
