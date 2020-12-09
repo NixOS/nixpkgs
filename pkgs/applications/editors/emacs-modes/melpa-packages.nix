@@ -438,6 +438,9 @@ let
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
 
+        # upstream issue: doesn't build
+        per-buffer-theme = markBroken super.per-buffer-theme;
+
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
 
