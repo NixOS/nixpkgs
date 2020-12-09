@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, rsync }:
+{ stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "rapidcheck";
@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0n8l0mlq9xqmpkgcj5xicicd1my2cfwxg25zdy8347dqkl1ppgbs";
   };
 
-  nativeBuildInputs = [ cmake rsync ];
+  nativeBuildInputs = [ cmake ];
 
   # Install the extras headers
   postInstall = ''
-    cd $src
-    rsync --filter="- **CMakeLists.txt" -acRv extras $out
+    cp -r $src/extras $out
+    chmod -R +w $out/extras
+    rm $out/extras/CMakeLists.txt
+    rm $out/extras/**/CMakeLists.txt
   '';
 
   meta = with stdenv.lib; {
