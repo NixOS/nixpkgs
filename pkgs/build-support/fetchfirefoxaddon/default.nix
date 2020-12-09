@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   inherit name;
   extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
   passthru = {
-    exitd=extid;
+    inherit extid;
   };
 
   builder = writeScript "xpibuilder" ''
