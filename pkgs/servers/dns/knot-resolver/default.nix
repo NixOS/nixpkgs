@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "8824267ca3331fa06d418c1351b68c648da0af121bcbc84c6e08f5b1e28d9433";
+    sha256 = "aa37b744c400f437acba7a54aebcbdbe722ece743d342cbc39f2dd8087f05826";
   };
 
   outputs = [ "out" "dev" ];
@@ -30,8 +30,8 @@ unwrapped = stdenv.mkDerivation rec {
   postPatch = ''
     patch meson.build <<EOF
     @@ -50,2 +50,2 @@
-    -systemd_work_dir = join_paths(prefix, get_option('localstatedir'), 'lib', 'knot-resolver')
-    -systemd_cache_dir = join_paths(prefix, get_option('localstatedir'), 'cache', 'knot-resolver')
+    -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
+    -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
     +systemd_work_dir  = '/var/lib/knot-resolver'
     +systemd_cache_dir = '/var/cache/knot-resolver'
     EOF

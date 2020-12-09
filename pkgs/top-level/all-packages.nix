@@ -20257,8 +20257,6 @@ in
 
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
-  amsn = callPackage ../applications/networking/instant-messengers/amsn { };
-
   androidStudioPackages = recurseIntoAttrs
     (callPackage ../applications/editors/android-studio {
       buildFHSUserEnv = buildFHSUserEnvBubblewrap;
