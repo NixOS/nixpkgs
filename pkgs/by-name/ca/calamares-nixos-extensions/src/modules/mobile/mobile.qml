@@ -166,6 +166,20 @@ Page
     }
     function navNextFeature() {
         var id = featureIdByScreen[screen] + 1;
+
+        /* Skip disabled features by checking "config.featureSshd" etc.*/
+        do {
+            var name = features[id]["name"];
+            var configOption = "feature";
+            configOption += name.charAt(0).toUpperCase();
+            configOption += name.slice(1);
+            if (config[configOption] === false) {
+                console.log("Skipping feature (disabled in config): " + name);
+                id += 1;
+                continue;
+            }
+        } while(false);
+
         console.log("Navigating to feature: " + features[id]["name"]);
         return navTo(features[id]["screens"][0]);
     }
