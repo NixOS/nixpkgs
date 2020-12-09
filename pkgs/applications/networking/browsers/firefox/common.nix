@@ -186,11 +186,6 @@ buildStdenv.mkDerivation ({
     -rpath ${llvmPackages.libunwind.out}/lib
   '';
 
-  NIX_CFLAGS_COMPILE = toString [
-    "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss_pkg.dev}/include/nss"
-  ];
-
   MACH_USE_SYSTEM_PYTHON = "1";
 
   postPatch = ''
