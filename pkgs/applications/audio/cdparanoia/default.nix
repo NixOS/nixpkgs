@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gnu-config, IOKit, Carbon }:
+{ lib, stdenv, fetchurl, gnu-config, IOKit, Carbon }:
 
 stdenv.mkDerivation rec {
   name = "cdparanoia-III-10.2";
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     ] ++ lib.optional stdenv.hostPlatform.isMusl ./utils.patch
     ++ [./fix_private_keyword.patch];
 
-  nativeBuildInputs = lib.optional stdenv.isAarch64 autoreconfHook;
-
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [
     Carbon
     IOKit
@@ -29,7 +27,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  preConfigure = "unset CC" + lib.optionalString stdenv.isAarch64 '';
+  preConfigure = ''
+    unset CC
+  '' + lib.optionalString (!stdenv.hostPlatform.isx86) ''
     cp ${gnu-config}/config.sub configure.sub
     cp ${gnu-config}/config.guess configure.guess
   '';
