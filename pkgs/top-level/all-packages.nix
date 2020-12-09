@@ -9389,6 +9389,8 @@ in
   stack = haskell.lib.justStaticExecutables haskellPackages.stack;
   hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
 
+  krank = haskell.lib.justStaticExecutables haskellPackages.krank;
+
   # We use a version built with an older compiler because of https://github.com/pikajude/stylish-cabal/issues/12.
   stylish-cabal = haskell.lib.justStaticExecutables haskell.packages.ghc865.stylish-cabal;
 
