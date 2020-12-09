@@ -29,6 +29,10 @@ let params = {
         rev = "V8.12.0";
         sha256 = "14ijb3qy2hin3g4djx437jmnswxxq7lkfh3dwh9qvrds9a015yg8";
       };
+      "8.13" = {
+        rev = "V8.13.0";
+        sha256 = "1n66i7hd9222b2ks606mak7m4f0dgy02xgygjskmmav6h7g2sx7y";
+      };
     };
     param = params.${coq.coq-version};
 in
