@@ -6054,6 +6054,9 @@ in
   nomad_0_12 = callPackage ../applications/networking/cluster/nomad/0.12.nix {
     buildGoPackage = buildGo114Package;
   };
+  nomad_1_0 = callPackage ../applications/networking/cluster/nomad/1.0.nix {
+    buildGoPackage = buildGo115Package;
+  };
 
   notable = callPackage ../applications/misc/notable { };
 
