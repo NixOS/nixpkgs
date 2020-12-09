@@ -85,7 +85,9 @@ mkChromiumDerivation (base: rec {
       else [ primeos thefloweringash bendlas ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
-    hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
+    hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
+      then ["aarch64-linux" "x86_64-linux"]
+      else [];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
   };
 })

@@ -113,9 +113,12 @@ with open(JSON_PATH, 'w') as out:
             return 1
         elif channel_name == 'dev':
             return 2
+        elif channel_name == 'ungoogled-chromium':
+            return 3
         else:
             print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
             sys.exit(1)
+    channels['ungoogled-chromium'] = last_channels['ungoogled-chromium'] # Keep ungoogled-chromium unchanged
     sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
     json.dump(sorted_channels, out, indent=2)
     out.write('\n')

@@ -110,11 +110,10 @@ let
             result
        else result;
 
-  ungoogler =
-    let versionEntry = (import ./ungoogled-src.nix)."${upstream-info.version}";
-    in ungoogled-chromium {
-      inherit (versionEntry) rev sha256;
-    };
+  ungoogler = ungoogled-chromium {
+    inherit (upstream-info.deps.ungoogled-patches) rev sha256;
+  };
+
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;

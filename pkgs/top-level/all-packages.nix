@@ -23600,6 +23600,7 @@ in
 
   ungoogled-chromium = callPackage ../applications/networking/browsers/chromium ((config.chromium or {}) // {
     ungoogled = true;
+    channel = "ungoogled-chromium";
   });
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
