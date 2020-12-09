@@ -37,6 +37,7 @@ buildPythonApplication rec {
       excludes = [ "changelog.md" "mycli/AUTHORS" ];
     })
   ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse"
