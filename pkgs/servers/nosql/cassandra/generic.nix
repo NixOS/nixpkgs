@@ -92,9 +92,7 @@ stdenv.mkDerivation rec {
       let
         test = nixosTests."cassandra_${generation}";
       in {
-        nixos =
-          assert test.testPackage.version == version;
-          test;
+        nixos = test;
       };
   };
 
