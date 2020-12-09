@@ -9906,6 +9906,12 @@
     githubId = 8100652;
     name = "David Mell";
   };
+  ztzg = {
+    email = "dd@crosstwine.com";
+    github = "ztzg";
+    githubId = 393108;
+    name = "Damien Diederen";
+  };
   zx2c4 = {
     email = "Jason@zx2c4.com";
     github = "zx2c4";
