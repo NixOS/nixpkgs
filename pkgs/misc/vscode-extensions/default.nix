@@ -226,6 +226,18 @@ let
         };
       };
 
+      serayuzgur.crates = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "crates";
+          publisher = "serayuzgur";
+          version = "0.5.3";
+          sha256 = "1xk7ayv590hsm3scqpyh6962kvgdlinnpkx0vapr7vs4y08dx72f";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       skyapps.fish-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "fish-vscode";
