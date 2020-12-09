@@ -5,6 +5,7 @@
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
+, hash ? ""
 }:
 stdenv.mkDerivation rec {
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
   src = fetchurl {
     url = url;
-    inherit md5 sha1 sha256 sha512;
+    inherit md5 sha1 sha256 sha512 hash;
   };
   nativeBuildInputs = [ coreutils unzip zip jq  ];
 }
