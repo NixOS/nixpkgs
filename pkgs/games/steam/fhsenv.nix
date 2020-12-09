@@ -268,6 +268,10 @@ in buildFHSUserEnv rec {
     broken = nativeOnly;
   };
 
+  # allows for some gui applications to share IPC
+  # this fixes certain issues where they don't render correctly
+  unshareIpc = false;
+
   passthru.run = buildFHSUserEnv {
     name = "steam-run";
 
