@@ -238,6 +238,18 @@ let
         };
       };
 
+      tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "even-better-toml";
+          publisher = "tamasfe";
+          version = "0.9.3";
+          sha256 = "16x2y58hkankazpwm93j8lqdn3mala7iayck548kki9zx4qrhhck";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       vadimcn.vscode-lldb = callPackage ./vscode-lldb {
         lldb = llvmPackages_latest.lldb;
       };
