@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
   # Somehow this does not get set automatically
   cmakeFlags = [ "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2.so" ];
 
+  postInstall = ''
+    install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
+    install -Dm644 $src/resources/pictures/carton.png $out/share/pixmaps/milkytracker.png
+    install -Dm644 $src/resources/milkytracker.appdata $out/share/appdata/milkytracker.appdata.xml
+  '';
+
   meta = with stdenv.lib; {
     description = "Music tracker application, similar to Fasttracker II";
     homepage = "http://milkytracker.org";
