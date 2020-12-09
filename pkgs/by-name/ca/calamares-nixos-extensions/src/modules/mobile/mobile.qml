@@ -122,6 +122,7 @@ Page
 
     /* Navigation related */
     function navTo(name, historyPush=true) {
+        console.log("Navigating to screen: " + name);
         if (historyPush)
             screenPrevious.push(screen);
         screen = name;
