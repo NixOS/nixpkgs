@@ -1,25 +1,29 @@
 { stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkgconfig
-, bind, zlib, openssl, libcap
+, openssl, ldns
 }:
 
 stdenv.mkDerivation rec {
   pname = "dnsperf";
-  version = "2.3.4";
+  version = "2.4.0";
 
   # The same as the initial commit of the new GitHub repo (only readme changed).
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${version}";
-    sha256 = "1lyci2vdl6g0s5pqs7dkq7pxdahcpkzh614wmy5fwi2f3334y0d1";
+    sha256 = "0q7zmzhhx71v41wf6rhyvpil43ch4a9sx21x47wgcg362lca3cbz";
   };
 
   outputs = [ "out" "man" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ bind zlib openssl ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap.lib ];
+  buildInputs = [
+    openssl
+    ldns # optional for DDNS (but cheap anyway)
+  ];
+
+  doCheck = true;
 
   # For now, keep including the old PDFs as well.
   # https://github.com/DNS-OARC/dnsperf/issues/27
