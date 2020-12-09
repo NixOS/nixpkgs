@@ -199,6 +199,18 @@ let
         extractNuGet = callPackage ./python/extract-nuget.nix { };
       };
 
+      naumovs.color-highlight = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "color-highlight";
+          publisher = "naumovs";
+          version = "2.3.0";
+          sha256 = "1syzf43ws343z911fnhrlbzbx70gdn930q67yqkf6g0mj8lf2za2";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       redhat.vscode-yaml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-yaml";
