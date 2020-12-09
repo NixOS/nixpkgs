@@ -5238,6 +5238,8 @@ in
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
 
+  matrix-synapse-tools = recurseIntoAttrs matrix-synapse.tools;
+
   matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
 
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
