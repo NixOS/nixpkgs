@@ -4885,6 +4885,18 @@ let
     meta.homepage = "https://github.com/tpope/vim-endwise/";
   };
 
+  vim-erlang-runtime = buildVimPluginFrom2Nix {
+    pname = "vim-erlang-runtime";
+    version = "2020-11-22";
+    src = fetchFromGitHub {
+      owner = "vim-erlang";
+      repo = "vim-erlang-runtime";
+      rev = "8a8ec7cb54d52be5fc5dce2a028888c2a2f50e35";
+      sha256 = "13qfyl9v0a82hn574x6h7rq9kl3rhg6ivlpj69n2jn0lf33ij8qq";
+    };
+    meta.homepage = "https://github.com/vim-erlang/vim-erlang-runtime/";
+  };
+
   vim-eunuch = buildVimPluginFrom2Nix {
     pname = "vim-eunuch";
     version = "2020-08-07";
