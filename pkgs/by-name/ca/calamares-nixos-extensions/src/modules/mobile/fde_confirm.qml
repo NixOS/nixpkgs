@@ -46,7 +46,7 @@ Item {
         text: qsTr("Enable")
         onClicked: {
             config.isFdeEnabled = true;
-            navTo("fde_pass");
+            navNext();
         }
     }
 
@@ -59,7 +59,7 @@ Item {
         text: qsTr("Disable")
         onClicked: {
             config.isFdeEnabled = false;
-            navTo("install_confirm");
+            navNextFeature();
         }
     }
 }

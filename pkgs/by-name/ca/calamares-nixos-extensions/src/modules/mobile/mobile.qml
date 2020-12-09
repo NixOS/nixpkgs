@@ -25,6 +25,29 @@ Page
         "install_confirm": "Ready to install",
         "wait": null
     }
+    property var features: [
+        {"name": "welcome",
+         "screens": ["welcome"]},
+        {"name": "userPin",
+         "screens": ["default_pin"]},
+        {"name": "sshd",
+         "screens": ["ssh_confirm", "ssh_credentials"]},
+        {"name": "fde",
+         "screens": ["fde_confirm", "fde_pass"]},
+        {"name": "installConfirm",
+         "screens": ["install_confirm", "wait"]}
+    ]
+    property var featureIdByScreen: (function() {
+        /* Put "features" above into an index of screen name -> feature id:
+         * featureIdByScreen = {"welcome": 0, "default_pin": 1, ...} */
+        var ret = {};
+        for (var i=0; i<features.length; i++) {
+            for (var j=0; j<features[i]["screens"].length; j++) {
+                ret[ features[i]["screens"][j] ] = i;
+            }
+        }
+        return ret;
+    }())
     /* Only allow characters, that can be typed in with the initramfs on-screen keyboard
      * (osk-sdl: see src/keyboard.cpp). FIXME: make configurable, but keep this as default? */
      property var allowed_chars:
@@ -140,6 +163,30 @@ Page
         timer.repeat = false;
         timer.triggered.connect(ViewManager.next);
         timer.start();
+    }
+    function navNextFeature() {
+        var id = featureIdByScreen[screen] + 1;
+        console.log("Navigating to feature: " + features[id]["name"]);
+        return navTo(features[id]["screens"][0]);
+    }
+    function navNext() {
+        var featureId = featureIdByScreen[screen];
+        var featureScreens = features[featureId]["screens"];
+        for (var i = 0; i<featureScreens.length; i++) {
+            /* Seek ahead until i is current screen */
+            if (featureScreens[i] != screen)
+                continue;
+
+            /* Navigate to next screen in same feature */
+            if (i + 1 < featureScreens.length) {
+                var screenNext = featureScreens[i + 1];
+                return navTo(screenNext);
+            }
+
+            /* Screen is last in feature */
+            return navNextFeature();
+        }
+        console.log("ERROR: navNext() failed for screen: " + screen);
     }
     function navBack() {
         if (screenPrevious.length)

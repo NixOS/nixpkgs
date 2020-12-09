@@ -58,7 +58,7 @@ Page
                 width: 500
 
                 text: qsTr("Continue")
-                onClicked: navTo("default_pin")
+                onClicked: navNext()
             }
         }
     }
