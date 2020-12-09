@@ -252,12 +252,6 @@ let
             (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
-        magit-stgit = super.magit-stgit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
         magit-tbdiff = super.magit-tbdiff.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
@@ -431,6 +425,9 @@ let
 
         # upstream issue: missing file header
         maxframe = markBroken super.maxframe;
+
+        # upstream issue: doesn't build
+        magit-stgit = markBroken super.magit-stgit;
 
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
