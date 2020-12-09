@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, python3Packages
 , boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
-, llvmPackages ? null
+, fmt, llvmPackages ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog wrapQtAppsHook ]
+  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt wrapQtAppsHook ]
     ++ (with python3Packages; [ python pybind11 ])
     ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
   # the qt mkDerivation - the latter forcibly overrides this.
   cmakeBuildType = "MinSizeRel";
 
-  meta = {
+  meta = with stdenv.lib {
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
     homepage = "https://github.com/emsec/hal";
-    license = stdenv.lib.licenses.mit;
-    platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [ ris ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ris shamilton ];
   };
 }
