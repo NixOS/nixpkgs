@@ -13,6 +13,12 @@ stdenv.mkDerivation {
     # the original configure looks for things in the FHS path
     # I have modified it to take environment vars
     ./0001-mangle-configure.patch
+
+    # lc3sim looks for the LC3 OS in $out/share/lc3tools instead of $out
+    ./0002-lc3os-path.patch
+
+    # lc3sim-tk looks for lc3sim in $out/bin instead of $out
+    ./0003-lc3sim-tk-path.patch
   ];
 
   nativeBuildInputs = [ unzip ];
@@ -27,10 +33,9 @@ stdenv.mkDerivation {
   prefixKey = "--installdir ";
 
   postInstall = ''
-    rm $out/{COPYING,NO_WARRANTY,README}
     mkdir -p $out/{bin,share/lc3tools}
 
-    mv -t $out/share/lc3tools $out/lc3os*
+    mv -t $out/share/lc3tools $out/{COPYING,NO_WARRANTY,README} $out/lc3os*
     mv -t $out/bin $out/lc3*
   '';
 

@@ -2312,6 +2312,8 @@ in
 
   icdiff = callPackage ../tools/text/icdiff {};
 
+  inchi = callPackage ../development/libraries/inchi {};
+
   ifm = callPackage ../tools/graphics/ifm {};
 
   ink = callPackage ../tools/misc/ink { };
