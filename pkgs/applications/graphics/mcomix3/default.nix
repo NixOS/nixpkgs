@@ -57,8 +57,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     rmdir $libdir/mcomix/mcomix
+    mv man/mcomix.1 man/${pname}.1
     installManPage man/*
-    mv $out/share/man/man1/mcomix.1 $out/share/man/man1/${pname}.1
     cp -r mime/icons/* $out/share/icons/hicolor/
     cp mime/*.desktop $out/share/applications/
     cp mime/*.appdata.xml $out/share/metainfo/
