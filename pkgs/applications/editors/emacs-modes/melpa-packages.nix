@@ -421,6 +421,9 @@ let
         initsplit = markBroken super.initsplit;
 
         # upstream issue: missing file header
+        instapaper = markBroken super.instapaper;
+
+        # upstream issue: missing file header
         jsfmt = markBroken super.jsfmt;
 
         # upstream issue: missing file header
