@@ -2070,7 +2070,10 @@ in {
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator { inherit (pkgs) glibcLocales; };
 
-  feedparser = callPackage ../development/python-modules/feedparser { };
+  feedparser = if isPy3k then
+    callPackage ../development/python-modules/feedparser { }
+  else
+    callPackage ../development/python-modules/feedparser/5.nix { };
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     inherit (pkgs) pkg-config;
