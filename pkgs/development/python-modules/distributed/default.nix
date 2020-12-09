@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2.30.0";
+  version = "2.30.1";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3eb8e4173625cea6ebda2f0a079b813eeabbffd1b24584855cf063ed1cca60b3";
+    sha256 = "1421d3b84a0885aeb2c4bdc9e8896729c0f053a9375596c9de8864e055e2ac8e";
   };
 
   disabled = pythonOlder "3.6";

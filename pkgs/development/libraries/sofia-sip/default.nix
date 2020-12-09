@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, glib, openssl, pkgconfig }:
+{ stdenv, fetchFromGitHub, glib, openssl, pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "sofia-sip-1.12.11";
+  pname = "sofia-sip";
+  version = "1.13.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sofia-sip/${name}.tar.gz";
-    sha256 = "10bwsdfijpbk9ahlfpk94kzdapxiahl9mljpgwghvq1630pbq09b";
+  src = fetchFromGitHub {
+    owner = "freeswitch";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "01xj30hhm1ji76igkqkn63rw42vvzq3azkr9qz6fy83iwqaybgyn";
   };
 
   buildInputs = [ glib openssl ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "Open-source SIP User-Agent library, compliant with the IETF RFC3261 specification";
-    homepage = "http://sofia-sip.sourceforge.net/";
+    homepage = "https://github.com/freeswitch/sofia-sip";
     platforms = platforms.linux;
     license = licenses.lgpl2;
   };

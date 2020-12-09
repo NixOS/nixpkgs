@@ -12,7 +12,7 @@
 , libopus
 , srtp
 , jemalloc
-, ... }:
+}:
 
 let
   ffmpeg = ffmpeg_3_4.overrideAttrs (super: {
@@ -20,20 +20,20 @@ let
     src = fetchFromGitHub {
       owner = "Airensoft";
       repo = "FFmpeg";
-      rev = "142b4bb64b64e337f80066e6af935a68627fedae";  # ome/3.4
+      rev = "142b4bb64b64e337f80066e6af935a68627fedae";  # on branch ome/3.4
       sha256 = "0fla3940q3z0c0ik2xzkbvdfvrdg06ban7wi6y94y8mcipszpp11";
     };
   });
 in
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.10.4";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "15lrlynsldlpa21ryzccf5skgiih6y5fc9qg0bfqh557wnnmml6w";
+    sha256 = "ec4yvS+4/rTBHGEx2OP0yoNGDtzPucFOcZJ0o0cCAHg=";
   };
 
   sourceRoot = "source/src";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
+{ stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
 , procps, libcap_ng, openssl, python2, iproute , perl
 , automake, autoconf, libtool, kernel ? null }:
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   kernel = optional (_kernel != null) _kernel.dev;
 
   nativeBuildInputs = [ autoconf libtool automake pkgconfig  ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python2
+  buildInputs = [ makeWrapper util-linux openssl libcap_ng python2
                   perl procps which ];
 
   preConfigure = "./boot.sh";

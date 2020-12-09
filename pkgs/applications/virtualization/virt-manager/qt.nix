@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, pkgconfig
 , qtbase, qtmultimedia, qtsvg, qttools, krdc
 , libvncserver, libvirt, pcre, pixman, qtermwidget, spice-gtk, spice-protocol
-, libselinux, libsepol, utillinux
+, libselinux, libsepol, util-linux
 }:
 
 mkDerivation rec {
@@ -32,7 +32,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase qtmultimedia qtsvg krdc
     libvirt libvncserver pcre pixman qtermwidget spice-gtk spice-protocol
-    libselinux libsepol utillinux
+    libselinux libsepol util-linux
   ];
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];

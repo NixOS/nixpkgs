@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.18.0";
+  version = "1.18.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "15vqvcy842vhbic3w7l4yvannzazdgwggzv2x8f9m02hm78vsakn";
+    sha256 = "0hf66sh8d4x2ksfnvaq2rqrrfq0vi0pv6wbh9i5jixrhvvbm99hv";
   };
 
   patches = [

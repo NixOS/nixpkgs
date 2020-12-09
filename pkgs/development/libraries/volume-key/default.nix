@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, gettext, python3
-, ncurses, swig, glib, utillinux, cryptsetup, nss, gpgme
+, ncurses, swig, glib, util-linux, cryptsetup, nss, gpgme
 , autoconf, automake, libtool
 , buildPackages
 }:
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig gettext swig ];
 
-  buildInputs = [ autoreconfHook glib cryptsetup nss utillinux gpgme ncurses ];
+  buildInputs = [ autoreconfHook glib cryptsetup nss util-linux gpgme ncurses ];
 
   configureFlags = [
     "--with-gpgme-prefix=${gpgme.dev}"

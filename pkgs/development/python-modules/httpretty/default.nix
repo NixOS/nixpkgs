@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "1.0.2";
+  version = "1.0.3";
 
   # drop this for version > 0.9.7
   # Flaky tests: https://github.com/gabrielfalcao/HTTPretty/pull/394
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24a6fd2fe1c76e94801b74db8f52c0fb42718dc4a199a861b305b1a492b9d868";
+    sha256 = "9335cbd8f38745e0e2dc4755d8932a77d378d93e15804969504b1e6b568d613c";
   };
 
   propagatedBuildInputs = [ six ];

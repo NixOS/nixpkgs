@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libmad, libogg, libpng
-, libsndfile, libvorbis, lua, pkgconfig, SDL, SDL_image, SDL_net, SDL_ttf, smpeg
-, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip, alephone }:
+{ stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
+, libpng, libsndfile, libvorbis, lua, pkgconfig, SDL2, SDL2_image, SDL2_net
+, SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
+, alephone }:
 
 let
   self = stdenv.mkDerivation rec {
     outputs = [ "out" "icons" ];
     pname = "alephone";
-    version = "20150620";
+    version = "1.3.1";
 
     src = fetchurl {
-      url =
-        "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/AlephOne-${version}.tar.bz2";
-      sha256 = "0cz18fa3gx8mz5j09ywz8gq0r4q082kh6l9pbpwn8qjanzgn1wy0";
+      url = let date = "20200904";
+      in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
+      sha256 = "13ck3mp9qd5pkiq6zwvr744bwvmnqkgj5vpf325sz1mcvnv7l8lh";
     };
 
     nativeBuildInputs = [ pkgconfig icoutils ];
@@ -20,16 +21,17 @@ let
       boost
       curl
       ffmpeg
+      libGLU
       libmad
       libsndfile
       libogg
       libpng
       libvorbis
       lua
-      SDL
-      SDL_image
-      SDL_net
-      SDL_ttf
+      SDL2
+      SDL2_image
+      SDL2_net
+      SDL2_ttf
       smpeg
       speex
       zziplib

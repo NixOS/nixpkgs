@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, which, nixosTests}:
+{stdenv, fetchurl, fetchpatch, which, xdg-dbus-proxy, nixosTests}:
 let
   s = # Generated upstream information
   rec {
@@ -20,11 +20,24 @@ stdenv.mkDerivation {
     name = "${s.name}.tar.bz2";
   };
 
+  patches = [
+    # Adds the /nix directory when using an overlay.
+    # Required to run any programs under this mode.
+    ./mount-nix-dir-on-overlay.patch
+    # By default fbuilder hardcodes the firejail binary to the install path.
+    # On NixOS the firejail binary is a setuid wrapper available in $PATH.
+    ./fbuilder-call-firejail-on-path.patch
+  ];
+
   prePatch = ''
     # Allow whitelisting ~/.nix-profile
     substituteInPlace etc/firejail.config --replace \
       '# follow-symlink-as-user yes' \
       'follow-symlink-as-user no'
+
+    # Fix the path to 'xdg-dbus-proxy' hardcoded in the 'common.h' file
+    substituteInPlace src/include/common.h \
+      --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
   '';
 
   preConfigure = ''

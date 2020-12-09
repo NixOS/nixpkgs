@@ -24,12 +24,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.2.2";
+  version = "4.3.1";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iv802v67x2fy35q7m27j6xnz94l3w509z8c1286schgav1dw7f4";
+    sha256 = "12ja913kz8wl4afrmpzxh9fx6j7rcwc2vqzkvfr1fxn42gkqhqf4";
   };
 
   # Upstream has set an upper bound on unicorn because of https://github.com/Gallopsled/pwntools/issues/1538,

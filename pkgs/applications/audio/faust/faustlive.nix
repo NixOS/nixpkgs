@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, llvm, qt48Full, qrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
+, llvm, qt48Full, qrencode, libmicrohttpd_0_9_70, libjack2, alsaLib, faust, curl
 , bc, coreutils, which, libsndfile, pkg-config
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    llvm qt48Full qrencode libmicrohttpd libjack2 alsaLib faust curl
+    llvm qt48Full qrencode libmicrohttpd_0_9_70 libjack2 alsaLib faust curl
     bc coreutils which libsndfile pkg-config
   ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       together the convenience of a standalone interpreted language with the
       efficiency of a compiled language. It's ideal for fast prototyping.
     '';
-    homepage = "http://faust.grame.fr/";
+    homepage = "https://faust.grame.fr/";
     license = licenses.gpl3;
   };
 }

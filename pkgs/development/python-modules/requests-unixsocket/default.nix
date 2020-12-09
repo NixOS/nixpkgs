@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestpep8 waitress ];
   checkPhase = ''
+    rm pytest.ini
     py.test
   '';
 

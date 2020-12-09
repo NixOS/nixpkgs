@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spigot";
-  version = "20200101";
+  version = "20200901";
   src = fetchgit {
     url = "https://git.tartarus.org/simon/spigot.git";
-    rev = "b1b0b202b3523b72f0638fb31fd49c47f4abb39c";
-    sha256 = "0lh5v42aia1hvhsqzs515q0anrjc6c2s9bjklfaap5gz0cg59wbv";
+    rev = "9910e5bdc203bae6b7bbe1ed4a93f13755c1cae";
+    sha256 = "1az6v9gk0g2k197lr288nmr9jv20bvgc508vn9ic3v7mav7hf5bf";
   };
 
   nativeBuildInputs = [ autoreconfHook halibut perl ];

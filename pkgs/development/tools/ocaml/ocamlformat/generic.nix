@@ -30,7 +30,7 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.06";
 
-  useDune2 = lib.versionAtLeast version "0.14";
+  useDune2 = true;
 
   buildInputs =
     if lib.versionAtLeast version "0.14"

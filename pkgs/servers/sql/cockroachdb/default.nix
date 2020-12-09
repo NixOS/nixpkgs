@@ -2,6 +2,7 @@
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
 , installShellFiles
+, removeReferencesTo, go
 }:
 
 let
@@ -53,10 +54,16 @@ buildGoPackage rec {
 
   outputs = [ "out" "man" ];
 
+  # fails with `GOFLAGS=-trimpath`
+  allowGoReference = true;
+  preFixup = ''
+    find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
+  '';
+
   meta = with stdenv.lib; {
     homepage    = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
-    license     = licenses.asl20;
+    license     = licenses.bsl11;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ rushmorem thoughtpolice rvolosatovs ];
   };

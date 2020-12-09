@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nbconvert, pytest, requests, responses }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, nbconvert, pytest, requests, responses }:
 
 buildPythonPackage rec {
   pname = "nbconflux";
   version = "0.7.0";
+  disabled = isPy27; # no longer compatible with python 2 urllib
 
   src = fetchFromGitHub {
     owner = "Valassis-Digital-Media";

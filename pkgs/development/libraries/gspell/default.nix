@@ -1,27 +1,50 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glib, gtk3, enchant2, isocodes, vala, gobject-introspection, gnome3 }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libxml2
+, glib
+, gtk3
+, enchant2
+, icu
+, vala
+, gobject-introspection
+, gnome3
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.8.4";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.9.1";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1d23pl9956dkpy52pbndp0vrba0y030msh1issdl84z82skickfg";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1pdb4gbjrs8mk6r0ipw5vxyvzav1wvkjq46kiq53r3nyznfpdfyw";
   };
 
-  propagatedBuildInputs = [ enchant2 ]; # required for pkgconfig
+  nativeBuildInputs = [
+    pkgconfig
+    vala
+    gobject-introspection
+    libxml2
+  ];
 
-  nativeBuildInputs = [ pkgconfig vala gobject-introspection libxml2 ];
-  buildInputs = [ glib gtk3 isocodes ];
+  buildInputs = [
+    glib
+    gtk3
+    icu
+  ];
+
+  propagatedBuildInputs = [
+    # required for pkgconfig
+    enchant2
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
+      versionPolicy = "none";
     };
   };
 

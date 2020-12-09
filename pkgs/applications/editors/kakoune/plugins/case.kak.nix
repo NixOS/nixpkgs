@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "Ease navigation between opened buffers in Kakoune";
+    description = "Case convention conversion for Kakoune";
     homepage = "https://gitlab.com/FlyingWombat/case.kak";
     license = licenses.unlicense;
     maintainers = with maintainers; [ eraserhd ];

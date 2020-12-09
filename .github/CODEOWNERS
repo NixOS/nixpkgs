@@ -12,6 +12,7 @@
 
 # GitHub actions
 /.github/workflows @Mic92 @zowoq
+/.github/workflows/merge-staging @FRidh
 
 # EditorConfig
 /.editorconfig @Mic92 @zowoq
@@ -213,7 +214,7 @@
 /doc/builders/images/dockertools.xml         @roberth
 
 # Blockchains
-/pkgs/applications/blockchains  @mmahut
+/pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq

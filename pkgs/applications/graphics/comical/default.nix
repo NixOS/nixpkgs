@@ -1,4 +1,4 @@
-{stdenv, fetchurl, wxGTK, utillinux, zlib }:
+{stdenv, fetchurl, wxGTK, util-linux, zlib }:
 
 stdenv.mkDerivation rec {
   name = "comical-0.8";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/comical/${name}.tar.gz";
     sha256 = "0b6527cc06b25a937041f1eb248d0fd881cf055362097036b939817f785ab85e";
   };
-  buildInputs = [ wxGTK utillinux zlib ];
+  buildInputs = [ wxGTK util-linux zlib ];
   preBuild="makeFlags=\"prefix=$out\"";
 
   patches = [ ./wxgtk-2.8.patch ];

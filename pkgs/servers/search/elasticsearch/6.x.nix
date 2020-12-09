@@ -4,7 +4,7 @@
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux, gnugrep, coreutils
+, util-linux, gnugrep, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  buildInputs = [ makeWrapper jre_headless utillinux ]
+  buildInputs = [ makeWrapper jre_headless util-linux ]
              ++ optional enableUnfree zlib;
 
   installPhase = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation (rec {
     chmod -x $out/bin/*.*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${makeBinPath [ utillinux gnugrep coreutils ]}" \
+      --prefix PATH : "${makeBinPath [ util-linux gnugrep coreutils ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"

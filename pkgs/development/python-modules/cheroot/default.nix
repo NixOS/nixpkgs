@@ -6,7 +6,6 @@
 , pytestCheckHook
 , pytestcov
 , pytest-mock
-, pytest-testmon
 , requests
 , requests-toolbelt
 , requests-unixsocket
@@ -18,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.4.5";
+  version = "8.4.8";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b6c18caf5f79cdae668c35fc8309fc88ea4a964cce9e2ca8504fab13bcf57301";
+    sha256 = "1089c28a9c320d19fdf9a4b0ed6ace23a0948db1c171a36ac985f3741bc62865";
   };
 
   nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytestcov
     pytest-mock
-    pytest-testmon
     requests
     requests-toolbelt
     requests-unixsocket
@@ -54,6 +52,7 @@ buildPythonPackage rec {
   # Deselect test_bind_addr_unix on darwin because times out
   # Deselect test_http_over_https_error on darwin because builtin cert fails
   # Disable warnings-as-errors because of deprecation warnings from socks on python 3.7
+  # Disable pytest-testmon because it doesn't work
   # adds many other pytest utilities which aren't necessary like linting
   preCheck = ''
     rm pytest.ini

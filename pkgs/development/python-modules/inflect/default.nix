@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "4.1.0";
+  version = "5.0.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "def6f3791be9181f0c01e0bf5949304007ec6e04c6674fbef7cc49c657b8a9a5";
+    sha256 = "d284c905414fe37c050734c8600fe170adfb98ba40f72fc66fed393f5b8d5ea0";
   };
 
   nativeBuildInputs = [ setuptools_scm toml ];

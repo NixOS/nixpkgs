@@ -1,7 +1,8 @@
 { buildPythonPackage
 , stdenv
 , fetchFromGitHub
-, boto3
+, isPy39
+, cookiecutter
 , filelock
 , regex
 , requests
@@ -9,7 +10,6 @@
 , parameterized
 , protobuf
 , sacremoses
-, sentencepiece
 , timeout-decorator
 , tokenizers
 , tqdm
@@ -18,23 +18,24 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.4.0";
+  version = "4.0.1";
+  disabled = isPy39;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v09gryxsg57d2cjwagna1535m8mbxlazdbhsww210lxa818m5qj";
+    sha256 = "1h53a3n6fdrx3ns1h1ip273hzd9pkm9m1qh41si75csb8mi1dq3d";
   };
 
   propagatedBuildInputs = [
+    cookiecutter
     filelock
     numpy
     protobuf
     regex
     requests
     sacremoses
-    sentencepiece
     tokenizers
     tqdm
   ];
@@ -47,7 +48,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "tokenizers == 0.9.2" "tokenizers"
+      --replace "tokenizers == 0.9.4" "tokenizers"
   '';
 
   preCheck = ''
@@ -70,11 +71,13 @@ buildPythonPackage rec {
   disabledTests = [
     "BlenderbotSmallTokenizerTest"
     "Blenderbot3BTokenizerTests"
+    "GetFromCacheTests"
     "TokenizationTest"
     "TestTokenizationBart"
     "test_all_tokenizers"
     "test_batch_encoding_is_fast"
     "test_batch_encoding_pickle"
+    "test_batch_encoding_word_to_tokens"
     "test_config_from_model_shortcut"
     "test_config_model_type_from_model_identifier"
     "test_from_pretrained_use_fast_toggle"
@@ -89,6 +92,7 @@ buildPythonPackage rec {
     "test_tokenizer_from_pretrained"
     "test_tokenizer_from_tokenizer_class"
     "test_tokenizer_identifier_with_correct_config"
+    "test_tokenizer_identifier_non_existent"
   ];
 
   meta = with stdenv.lib; {

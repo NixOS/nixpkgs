@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "Unit-aware calculator";
     homepage = "https://rinkcalc.app";
     license = with licenses; [ mpl20 gpl3 ];
-    maintainers = with maintainers; [ sb0 filalex77 ];
+    maintainers = with maintainers; [ sb0 Br1ght0ne ];
   };
 }

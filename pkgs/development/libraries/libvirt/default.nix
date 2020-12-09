@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchgit
 , pkgconfig, makeWrapper, autoreconfHook, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
-, iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
+, iproute, iptables, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto, darwin
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 utillinux systemd libnl numad zfs
+    libpciaccess lvm2 util-linux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted libtirpc
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen

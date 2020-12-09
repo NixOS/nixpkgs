@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper unzip wrapGAppsHook ];
   # For wrapGAppsHook setup hook
-  buildInputs = [ jre.gtk3 ];
+  buildInputs = [ (jre.gtk3 or null) ];
 
   dontConfigure = true;
   dontBuild = true;

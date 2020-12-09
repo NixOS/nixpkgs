@@ -1,6 +1,10 @@
 { stdenv
 , fetchurl
-, rpmextract
+, dpkg
+, writeScript
+, curl
+, jq
+, common-updater-scripts
 }:
 
 # The raw package that fetches and extracts the Plex RPM. Override the source
@@ -8,23 +12,26 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.20.3.3483-211702a9f";
+  version = "1.21.0.3711-b509cc236";
   pname = "plexmediaserver";
 
   # Fetch the source
-  src = fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/redhat/plexmediaserver-${version}.x86_64.rpm";
-    sha256 = "0b05mxmvjn2sr0aqy8s2c41gz0vlpmwjwx42jpqddk3qzidvwkbd";
+  src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
+    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
+    sha256 = "0nhxxfcds3byhbz8gsd9107diy182m33xbcc8jgi78hwfadyjj7h";
+  } else fetchurl {
+    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
+    sha256 = "0izsmcc337paakz1nqfsr78s097sxyxy3kbs43qpzpx7w5wshynb";
   };
 
   outputs = [ "out" "basedb" ];
 
-  nativeBuildInputs = [ rpmextract ];
+  nativeBuildInputs = [ dpkg ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" "distPhase" ];
 
   unpackPhase = ''
-    rpmextract $src
+    dpkg-deb -R $src .
   '';
 
   installPhase = ''
@@ -49,11 +56,33 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontAutoPatchelf = true;
 
+  passthru.updateScript = writeScript "${pname}-updater" ''
+    #!${stdenv.shell}
+    set -eu -o pipefail
+    PATH=${stdenv.lib.makeBinPath [curl jq common-updater-scripts]}:$PATH
+
+    plexApiJson=$(curl -sS https://plex.tv/api/downloads/5.json)
+    latestVersion="$(echo $plexApiJson | jq .computer.Linux.version | tr -d '"\n')"
+
+    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+      arch=$(echo $platform | cut -d '-' -f1)
+      dlUrl="$(echo $plexApiJson | jq --arg arch "$arch" -c '.computer.Linux.releases[] | select(.distro == "debian") | select(.build | contains($arch)) .url' | tr -d '"\n')"
+
+      latestSha="$(nix-prefetch-url $dlUrl)"
+
+      # The script will not perform an update when the version attribute is up to date from previous platform run
+      # We need to clear it before each run
+      update-source-version plexRaw 0 $(yes 0 | head -64 | tr -d "\n") --system=$platform
+      update-source-version plexRaw "$latestVersion" "$latestSha" --system=$platform
+    done
+  '';
+
   meta = with stdenv.lib; {
     homepage = "https://plex.tv/";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [
+      badmutex
       colemickens
       forkk
       lnl7

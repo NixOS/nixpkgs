@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
-, wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
+, wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
 , ffmpeg, x264, libvpx, libwebp, x265
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobject-introspection
@@ -97,7 +97,7 @@ in buildPythonApplication rec {
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
     )
   '';
 

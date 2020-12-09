@@ -127,13 +127,13 @@ rec {
 
   gammastep = mkRedshift rec {
     pname = "gammastep";
-    version = "2.0.2";
+    version = "2.0.5";
 
     src = fetchFromGitLab {
       owner = "chinstrap";
       repo = pname;
       rev = "v${version}";
-      sha256 = "09wqlz3yya955galhs20014qfwm2yk0lxhyqdsw8gwddvcpyprzg";
+      sha256 = "1l3x4gnichwzbb0529bhm723xpryn5svhhsfdiwlw122q1vmz2q7";
     };
 
     meta = redshift.meta // {

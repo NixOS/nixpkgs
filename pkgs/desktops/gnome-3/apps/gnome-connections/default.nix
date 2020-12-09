@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/connections/${stdenv.lib.versions.majorMinor version}/connections-${version}.tar.xz";
-    hash = "sha256-Eob36/zoWIGdYMpWks280FoIHGL7AHUhinFA4cEqels=";
+    hash = "sha256-5c7uBFkh9Vsw6bWWUDjNTMDrrFqI5JEgYlsWpfyuTpA=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = pname;
+      packageName = "connections";
+      attrPath = "gnome-connections";
     };
   };
 

@@ -1,4 +1,6 @@
-{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09 }:
+{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
+, compcert
+}:
 
 let
   mkCoqPackages' = self: coq:
@@ -59,7 +61,9 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
-      VST = callPackage ../development/coq-modules/VST {};
+      VST = callPackage ../development/coq-modules/VST {
+        compcert = compcert.override { version = "3.7"; };
+      };
 
       filterPackages = filterCoqPackages;
     };
@@ -119,7 +123,7 @@ in rec {
     version = "8.11.2";
   };
   coq_8_12 = callPackage ../applications/science/logic/coq {
-    version = "8.12.0";
+    version = "8.12.1";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;

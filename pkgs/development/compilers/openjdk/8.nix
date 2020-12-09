@@ -267,6 +267,7 @@ let
     passthru = {
       inherit architecture;
       home = "${openjdk8}/lib/openjdk";
+      inherit gtk2;
     };
   };
 in openjdk8

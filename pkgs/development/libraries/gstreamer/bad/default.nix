@@ -89,27 +89,17 @@ let
   inherit (stdenv.lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.18.0";
+  version = "1.18.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0pqqq5bs9fjwcmbwgsgxs2dx6gznhxs7ii5pmjkslr6xmlfap0pk";
+    sha256 = "1cn18cbqyysrxnrk5bpxdzd5xcws9g2kmm5rbv00cx6rhn69g5f1";
   };
 
   patches = [
     ./fix_pkgconfig_includedir.patch
-    # Fixes srt usage failing with
-    #     Failed to open SRT: failed to set SRTO_LINGER (reason: Operation not supported: Bad parameters)
-    # see https://github.com/Haivision/srt/issues/1374
-    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891
-    # is shown as being in a release tag that nixpkgs uses.
-    (fetchpatch {
-      name = "gstreamer-srtobject-typecast-SRTO_LINGER-to-linger.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891.patch";
-      sha256 = "0596lvgi93sj3yn98grgmsrhnqhhq7fnjk91qi4xc6618fpqmp9x";
-    })
   ];
 
   nativeBuildInputs = [
@@ -161,7 +151,6 @@ in stdenv.mkDerivation rec {
     soundtouch
     srtp
     fluidsynth
-    libva
     libvdpau
     libwebp
     xvidcore
@@ -180,6 +169,7 @@ in stdenv.mkDerivation rec {
     faac
   ] ++ optionals stdenv.isLinux [
     bluez
+    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
   ] ++ optionals (!stdenv.isDarwin) [
@@ -259,6 +249,9 @@ in stdenv.mkDerivation rec {
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
   ]
+  ++ optionals (!stdenv.isLinux) [
+    "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ]
   ++ optionals stdenv.isDarwin [
     "-Dbluez=disabled"
     "-Dchromaprint=disabled"
@@ -272,6 +265,7 @@ in stdenv.mkDerivation rec {
     "-Ddvb=disabled"
     "-Dfbdev=disabled"
     "-Duvch264=disabled" # requires gudev
+    "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above

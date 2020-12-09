@@ -190,7 +190,7 @@ let
               '' else ''
               ''}
             '';
-          buildInputs = [ pkgs.utillinux ];
+          buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
                       + lib.optionalString cfg.useEFIBoot (
                         " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"

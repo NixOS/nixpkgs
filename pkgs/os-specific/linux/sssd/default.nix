@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/SSSD/sssd/commit/bc56b10aea999284458dcc293b54cf65288e325d.patch";
       sha256 = "0q74sx5n41srq3kdn55l5j1sq4xrjsnl5y4v8yh5mwsijj74yh4g";
     })
+    # Fix collision with external nss symbol
+    (fetchpatch {
+      url = "https://github.com/SSSD/sssd/commit/fe9eeb51be06059721e873f77092b1e9ba08e6c1.patch";
+      sha256 = "0b83b2w0rnvm26pg03a4lpmkmi7n3gqxg7lk751q61q79gnzrpz4";
+    })
   ];
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>

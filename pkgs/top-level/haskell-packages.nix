@@ -96,7 +96,7 @@ in {
     };
     ghc8102 = callPackage ../development/compilers/ghc/8.10.2.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 then
+      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;

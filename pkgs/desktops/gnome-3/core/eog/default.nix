@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qyrs9cp4hsh64jfdpdi2v1hag8izw77qqnsvqwdb33871ya98z1";
+    sha256 = "1xqcfil3b68clafnxg1migp54psqh5x6arnlvdqgmvvpq9hwj7dp";
   };
 
   nativeBuildInputs = [

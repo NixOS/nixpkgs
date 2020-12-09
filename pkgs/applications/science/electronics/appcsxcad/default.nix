@@ -27,7 +27,6 @@ mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
   ];
 
   buildInputs = [

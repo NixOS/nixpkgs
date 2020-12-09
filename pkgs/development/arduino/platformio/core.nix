@@ -1,9 +1,10 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, fetchpatch
+{ stdenv, lib, buildPythonApplication, fetchpatch
 , bottle, click, colorama, semantic-version
 , lockfile, pyserial, requests
 , tabulate, pyelftools, marshmallow
 , pytest, tox, jsondiff
 , git, spdx-license-list-data
+, version, src
 }:
 
 let
@@ -75,15 +76,7 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "5.0.2";
-
-  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
-  src = fetchFromGitHub {
-    owner = "platformio";
-    repo = "platformio-core";
-    rev = "v${version}";
-    sha256 = "1hbw8nbllyj0xyx1rz2chx9vyqf9949dcdx4v9hnfbsjwwpcfi0a";
-  };
+  inherit version src;
 
   propagatedBuildInputs =  [
     bottle click colorama git lockfile

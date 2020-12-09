@@ -27,6 +27,7 @@ pythonPackages.callPackage
     , ...
     }@args:
     let
+      inherit (pkgs) stdenv;
       inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromPypi moduleName;
 
       inherit (import ./pep425.nix {
@@ -45,6 +46,7 @@ pythonPackages.callPackage
       toPath = s: pwd + "/${s}";
       isSource = source != null;
       isGit = isSource && source.type == "git";
+      isUrl = isSource && source.type == "url";
       isLocal = isSource && source.type == "directory";
       localDepPath = toPath source.url;
 
@@ -91,7 +93,7 @@ pythonPackages.callPackage
         "toml" # Toml is an extra for setuptools-scm
       ];
       baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
-      format = if isLocal then "pyproject" else if isGit then "pyproject" else fileInfo.format;
+      format = if isLocal || isGit || isUrl then "pyproject" else fileInfo.format;
     in
     buildPythonPackage {
       pname = moduleName name;
@@ -113,9 +115,10 @@ pythonPackages.callPackage
 
       buildInputs = (
         baseBuildInputs
+        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isLocal buildSystemPkgs
-        ++ lib.optional (!__isBootstrap) [ pythonPackages.poetry ]
+        ++ lib.optional (!__isBootstrap) pythonPackages.poetry
       );
 
       propagatedBuildInputs =
@@ -157,14 +160,22 @@ pythonPackages.callPackage
           (
             builtins.fetchGit {
               inherit (source) url;
-              rev = source.reference;
+              rev = source.resolved_reference or source.reference;
               ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
             }
-          ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else
-        fetchFromPypi {
-          pname = name;
-          inherit (fileInfo) file hash kind;
-        };
+          )
+        else if isUrl then
+          builtins.fetchTarball
+            {
+              inherit (source) url;
+            }
+        else if isLocal then
+          (poetryLib.cleanPythonSources { src = localDepPath; })
+        else
+          fetchFromPypi {
+            pname = name;
+            inherit (fileInfo) file hash kind;
+          };
     }
   )
 { }

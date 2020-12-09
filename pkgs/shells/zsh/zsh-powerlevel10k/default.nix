@@ -7,25 +7,25 @@ let
   # match gitstatus version with given `gitstatus_version`:
   # https://github.com/romkatv/powerlevel10k/blob/master/gitstatus/build.info
   gitstatus = pkgs.gitAndTools.gitstatus.overrideAttrs (oldAtttrs: rec {
-    version = "1.2.0";
+    version = "1.3.1";
 
     src = fetchFromGitHub {
       owner = "romkatv";
       repo = "gitstatus";
       rev = "v${version}";
-      sha256 = "0xi5ab0rsj6xs4vqgn2j5rih1nncghr83yn395mk1is1f4bsmp0s";
+      sha256 = "03zaywncds7pjrl07rvdf3fh39gnp2zfvgsf0afqwv317sgmgpzf";
     };
   });
 in
 stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.13.0";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
     rev = "v${version}";
-    sha256 = "0w5rv7z47nys3x113mdddpb2pf1d9pmz9myh4xjzrcy4hp4qv421";
+    sha256 = "073d9hlf6x1nq63mzpywc1b8cljbm1dd8qr07fdf0hsk2fcjiqg7";
   };
 
   patches = [

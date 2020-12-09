@@ -41,6 +41,8 @@ let
 
     enableParallelBuilding = !stdenv.isDarwin;
 
+    separateDebugInfo = true;
+
     buildFlags = [ "world" ];
 
     NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
@@ -54,6 +56,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
@@ -65,7 +68,6 @@ let
         ./patches/specify_pkglibdir_at_runtime.patch
         ./patches/findstring.patch
       ]
-      ++ lib.optional (atLeast "10") ./patches/stabilize-timetz-dst.patch
       ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
 
     installTargets = [ "install-world" ];
@@ -146,7 +148,7 @@ let
       homepage    = "https://www.postgresql.org";
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin marsam ];
+      maintainers = with maintainers; [ thoughtpolice danbst globin marsam ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
@@ -161,6 +163,7 @@ let
         postgresql.man   # in case user installs this into environment
     ];
     buildInputs = [ makeWrapper ];
+
 
     # We include /bin to ensure the $out/bin directory is created, which is
     # needed because we'll be removing the files from that directory in postBuild
@@ -184,51 +187,50 @@ let
 in self: {
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.23";
+    version = "9.5.24";
     psqlSchema = "9.5";
-    sha256 = "0rl31jc3kg2wq6hazyd297gnmx3cibjvivllbsivii2m6dzgl573";
+    sha256 = "0an2k4m1da96897hyxlff8p4p63wg4dffwsfg57aib7mp4yzsp06";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.19";
+    version = "9.6.20";
     psqlSchema = "9.6";
-    sha256 = "1c2wnl5bbpjs1s1rpzvlnzsqlpb0p823zw7s38nhpgnxrja3myb1";
+    sha256 = "1dkv916y7vrfbygrfbfvs6y3fxaysnh32i5j88nvcnnl16jcn21x";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.14";
+    version = "10.15";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0fxj30jvwq5pqpbj97vhlxgmn2ah59a78s9jyjr7vxyqj7sdh71q";
+    sha256 = "0zhzj9skag1pgqas2rnd217vj41ilaalqna17j47gyngpvhbqmjr";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.9";
+    version = "11.10";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "0db6pfphc5rp12abnkvv2l9pbl7bdyf3hhiwj8ghjwh35skqlq9m";
+    sha256 = "16bqp6ds37kbwqx7mk5gg3y6gv59wq6xz33iqwxldzk20vwd5rhk";
     this = self.postgresql_11;
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.4";
+    version = "12.5";
     psqlSchema = "12";
-    sha256 = "1k06wryy8p4s1fim9qafcjlak3f58l0wqaqnrccr9x9j5jz3zsdy";
+    sha256 = "15gzg778da23sbfmy7sqg443f9ny480301lm7i3vay4m3ls2a3dx";
     this = self.postgresql_12;
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.0";
+    version = "13.1";
     psqlSchema = "13";
-    sha256 = "15i2b7m9a9430idqdgvrcyx66cpxz0v2d81nfqcm8ss3inz51rw0";
+    sha256 = "07z6zwr58dckaa97yl9ml240z83d1lhgaxw9aq49i8lsp21mqd0j";
     this = self.postgresql_13;
     inherit self;
   };
-
 }

@@ -550,6 +550,14 @@ in
       '';
     };
 
+    systemd.enableUnifiedCgroupHierarchy = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to enable the unified cgroup hierarchy (cgroupsv2).
+      '';
+    };
+
     systemd.coredump.enable = mkOption {
       default = true;
       type = types.bool;
@@ -1178,6 +1186,7 @@ in
     boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
       "kernel.core_pattern" = "core";
     };
+    boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
   };
 
   # FIXME: Remove these eventually.

@@ -4,8 +4,8 @@
 with stdenv.lib;
 
 let
-  minorVersion = "3.6";
-  patchVersion = "0";
+  minorVersion = "3.141";
+  patchVersion = "59";
 
 in stdenv.mkDerivation rec {
   pname = "selenium-server-standalone";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
-    sha256 = "11v340nm8vzqc2bkmbjfm9a7j4dj0bi9bfk8wdpfan0fb8prf772";
+    sha256 = "1jzkx0ahsb27zzzfvjqv660x9fz2pbcddgmhdzdmasxns5vipxxc";
   };
 
   dontUnpack = true;

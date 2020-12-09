@@ -1,8 +1,11 @@
 { aiohttp
+, blinker
+, botocore
 , bottle
 , buildPythonPackage
 , celery
 , certifi
+, chalice
 , django
 , falcon
 , fetchPypi
@@ -26,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "0.16.5";
+  version = "0.19.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e12eb1c2c01cd9e9cfe70608dbda4ef451f37ef0b7cbb92e5d43f87c341d6334";
+    sha256 = "1052f0ed084e532f66cb3e4ba617960d820152aee8b93fc6c05bd53861768c1c";
   };
 
-  checkInputs = [ django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
+  checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
     executing pure-eval asttokens ]
   ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 

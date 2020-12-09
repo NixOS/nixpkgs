@@ -31,13 +31,20 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = stdenv.lib.optionals (!isPyPy) [
+    cffi
+  ];
+
   buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     packaging
     six
-  ] ++ stdenv.lib.optional (!isPyPy) cffi
-  ++ stdenv.lib.optionals isPy27 [ ipaddress enum34 ];
+  ] ++ stdenv.lib.optionals (!isPyPy) [
+    cffi
+  ] ++ stdenv.lib.optionals isPy27 [
+    ipaddress enum34
+  ];
 
   checkInputs = [
     cryptography_vectors

@@ -83,6 +83,12 @@ stdenv.mkDerivation rec {
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
     ./CVE-2020-27617.patch
+    (fetchpatch {
+      # e1000e: infinite loop scenario in case of null packet descriptor, remove for QEMU >= 5.2.0-rc3
+      name = "CVE-2020-28916.patch";
+      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=c2cb511634012344e3d0fe49a037a33b12d8a98a";
+      sha256 = "1kvm6wl4vry0npiisxsn76h8nf1iv5fmqsyjvb46203f1yyg5pis";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -99,6 +105,15 @@ stdenv.mkDerivation rec {
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
     })
   ];
+
+  # Remove CVE-2020-{29129,29130} for QEMU >5.1.0
+  postPatch = ''
+    (cd slirp && patch -p1 < ${fetchpatch {
+      name = "CVE-2020-29129_CVE-2020-29130.patch";
+      url = "https://gitlab.freedesktop.org/slirp/libslirp/-/commit/2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f.patch";
+      sha256 = "01vbjqgnc0kp881l5p6b31cyyirhwhavm6x36hlgkymswvl3wh9w";
+    }})
+  '';
 
   hardeningDisable = [ "stackprotector" ];
 

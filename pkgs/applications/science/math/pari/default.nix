@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     homepage = "http://pari.math.u-bordeaux.fr";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
+    maintainers = with maintainers; [ ertes AndersonTorres ] ++ teams.sage.members;
     platforms = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };

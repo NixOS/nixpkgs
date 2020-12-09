@@ -27,7 +27,7 @@ in buildPythonPackage rec {
   postPatch = ''
     patchShebangs tests/run-tests
   '' + stdenv.lib.optionalString stdenv.isLinux ''
-    substituteInPlace nuitka/plugins/standard/ImplicitImports.py --replace 'locateDLL("uuid")' '"${pkgs.utillinux.out}/lib/libuuid.so"'
+    substituteInPlace nuitka/plugins/standard/ImplicitImports.py --replace 'locateDLL("uuid")' '"${pkgs.util-linux.out}/lib/libuuid.so"'
   '';
 
   # We do not want any wrappers here.

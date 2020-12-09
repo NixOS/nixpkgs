@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libtins";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gv661gdf018zk1sr6fnvcmd5akqjihs4h6zzxv6881v6yhhglrz";
+    sha256 = "09ah1a7ska7xiki7625mn1d8i96il3hxbkc39ba8fn1a5383kmqa";
   };
 
   postPatch = ''

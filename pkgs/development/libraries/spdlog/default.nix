@@ -15,7 +15,12 @@ let
 
       nativeBuildInputs = [ cmake ];
 
-      cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLE=OFF" "-DSPDLOG_BUILD_BENCH=OFF" ];
+      cmakeFlags = [
+        "-DSPDLOG_BUILD_SHARED=ON"
+        "-DSPDLOG_BUILD_EXAMPLE=OFF"
+        "-DSPDLOG_BUILD_BENCH=OFF"
+        "-DSPDLOG_BUILD_TESTS=ON"
+      ];
 
       outputs = [ "out" "doc" ];
 
@@ -23,6 +28,9 @@ let
         mkdir -p $out/share/doc/spdlog
         cp -rv ../example $out/share/doc/spdlog
       '';
+
+      doCheck = true;
+      preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
 
       meta = with stdenv.lib; {
         description    = "Very fast, header only, C++ logging library";
@@ -35,8 +43,8 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.7.0";
-    sha256 = "1ryaa22ppj60461hcdb8nk7jwj84arp4iw4lyw594py92g4vnx3j";
+    version = "1.8.1";
+    sha256 = "sha256-EyZhYgcdtZC+vsOUKShheY57L0tpXltduHWwaoy6G9k=";
   };
 
   spdlog_0 = generic {

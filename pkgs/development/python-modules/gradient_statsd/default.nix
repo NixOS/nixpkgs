@@ -16,6 +16,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gradient_statsd" ];
 
+  # Pypi does not contain tests
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Wrapper around the DogStatsd client";
     homepage    = "https://paperspace.com";

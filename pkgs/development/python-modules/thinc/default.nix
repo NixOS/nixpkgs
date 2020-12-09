@@ -23,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.4.2";
+  version = "7.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "772f1a27b9b31e51003d1d2a7476cc49cc81044dd87088112237f93bd2091f0b";
+    sha256 = "08cf5cf7d70135db931c9f9d6f3b1844c53046c88f6072675fc164884f44c9e2";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [

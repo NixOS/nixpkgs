@@ -3,17 +3,16 @@
 , stdenv
 , writeTextDir
 , substituteAll
-, pkgsHostHost
 , fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.55.3";
+  version = "0.56.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "19cjy24mfaswxyvqmns6rd7hx05ybqb663zlgklspfr8l4jjmvbb";
+    sha256 = "04vj250bwrzq7c0z1r96b0z0vgirvn0m367wm3ygqmfdy67x6799";
   };
 
   patches = [
@@ -60,10 +59,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   setupHook = ./setup-hook.sh;
-
-  # Ensure there will always be a native C compiler when meson is used, as a
-  # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
-  depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;

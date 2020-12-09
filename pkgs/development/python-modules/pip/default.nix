@@ -10,31 +10,22 @@
 , pytest
 , setuptools
 , wheel
-, isPy27
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "20.2.4";
+  version = "20.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "eMVV4ftgV71HLQsSeaOchYlfaJVgzNrwUynn3SA1/Do=";
+    sha256 = "e/2/0MrGY3myELmvuTAbNfXCBuT8kmvz9qTwITdDtQU=";
     name = "${pname}-${version}-source";
   };
 
   nativeBuildInputs = [ bootstrapped-pip ];
-
-  patches = lib.optionals isPy27 [
-    (fetchpatch {
-      url = "https://github.com/pypa/pip/commit/94fbb6cf78c267bf7cdf83eeeb2536ad56cfe639.patch";
-      sha256 = "Z6x5yxBp8QkU/GOfb1ltI0dVt//MaI09XK3cdY42kFs=";
-    })
-  ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.

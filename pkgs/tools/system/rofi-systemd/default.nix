@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, rofi, systemd, coreutils, utillinux, gawk, makeWrapper
+{ stdenv, fetchFromGitHub, rofi, systemd, coreutils, util-linux, gawk, makeWrapper, jq
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-systemd";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "IvanMalison";
     repo = "rofi-systemd";
     rev = "v${version}";
-    sha256 = "1dbygq3qaj1f73hh3njdnmibq7vi6zbyzdc6c0j989c0r1ksv0zi";
+    sha256 = "0lgffb6rk1kf91j4j303lzpx8w2g9zy2gk99p8g8pk62a30c5asm";
   };
 
   buildInputs = [ makeWrapper ];
@@ -22,11 +22,12 @@ stdenv.mkDerivation rec {
   '';
 
   wrapperPath = with stdenv.lib; makeBinPath [
-    rofi
     coreutils
-    utillinux
     gawk
+    jq
+    rofi
     systemd
+    util-linux
   ];
 
   fixupPhase = ''

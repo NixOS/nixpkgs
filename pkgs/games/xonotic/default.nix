@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommandNoCC, makeDesktopItem
-, xonotic-data
+, xonotic-data, copyDesktopItems
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
 , # glx
@@ -131,7 +131,8 @@ in rec {
 
   xonotic = runCommandNoCC "xonotic${variant}-${version}" {
     inherit xonotic-unwrapped;
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+    desktopItems = [ desktopItem ];
     passthru = {
       inherit version;
       meta = meta // {
@@ -151,7 +152,7 @@ in rec {
   '' + lib.optionalString (withSDL || withGLX) ''
     mkdir -p $out/share
     ln -s ${xonotic-unwrapped}/share/icons $out/share/icons
-    ${desktopItem.buildCommand}
+    copyDesktopItems
   '' + ''
     for binary in $out/bin/xonotic-*; do
       wrapProgram $binary --add-flags "-basedir ${xonotic-data}"

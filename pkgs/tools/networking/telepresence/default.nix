@@ -3,7 +3,7 @@
 , iptables, bash }:
 
 let
-  sshuttle-telepresence = 
+  sshuttle-telepresence =
     let
       sshuttleTelepresenceRev = "32226ff14d98d58ccad2a699e10cdfa5d86d6269";
     in
@@ -22,13 +22,13 @@ let
       });
 in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.105";
+  version = "0.108";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = version;
-    sha256 = "0fccbd54ryd9rcbhfh5lx8qcc3kx3k9jads918rwnzwllqzjf7sg";
+    sha256 = "6V0sM0Z+2xNDgL0wIzJOdaUp2Ol4ejNTk9K/pllVa7g=";
   };
 
   buildInputs = [ makeWrapper ];

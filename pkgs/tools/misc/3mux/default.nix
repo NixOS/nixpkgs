@@ -22,7 +22,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/aaronjanse/3mux";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronjanse filalex77 ];
+    maintainers = with maintainers; [ aaronjanse Br1ght0ne ];
     platforms = platforms.unix;
   };
 }

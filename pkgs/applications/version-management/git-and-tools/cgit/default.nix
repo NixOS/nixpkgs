@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  stripDebugList = [ "cgit" ];
+
   meta = {
     homepage = "https://git.zx2c4.com/cgit/about/";
     repositories.git = "git://git.zx2c4.com/cgit";

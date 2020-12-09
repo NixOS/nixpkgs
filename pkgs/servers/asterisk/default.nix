@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchsvn,
   jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
-  utillinux, dmidecode, libuuid, newt,
+  util-linux, dmidecode, libuuid, newt,
   lua, speex,
   srtp, wget, curl, iksemel, pkgconfig
 }:
@@ -14,7 +14,7 @@ let
                     dmidecode libuuid newt
                     lua speex
                     srtp wget curl iksemel ];
-    nativeBuildInputs = [ utillinux pkgconfig ];
+    nativeBuildInputs = [ util-linux pkgconfig ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
@@ -98,15 +98,15 @@ in rec {
   # Series  Type       Rel. Date   Sec. Fixes  EOL
   # 13.x    LTS        2014-10-24  2020-10-24  2021-10-24
   # 16.x    LTS        2018-10-09  2022-10-09  2023-10-09
+  # 17.x    Standard   2019-10-28  2020-10-28  2021-10-28
   # 18.x    LTS        2020-10-20  2024-10-20  2025-10-20
   asterisk-lts = asterisk_18;
-  # 17.x    Standard   2019-10-28  2020-10-28  2021-10-28
   asterisk-stable = asterisk_18;
   asterisk = asterisk_18;
 
   asterisk_13 = common {
-    version = "13.37.1";
-    sha256 = "1zc3104zw4y7i8bhhgrgy3snq0zr1904p64ykfc3ldh4xyfy3ld6";
+    version = "13.38.0";
+    sha256 = "1kxff6pbry8nydkspi0mqllidz2lw3d3g3r127x8jwgx021x0rik";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -114,8 +114,8 @@ in rec {
   };
 
   asterisk_16 = common {
-    version = "16.14.1";
-    sha256 = "1lhh3npyy8hvy29jwjgapnxfjv1ahp2qdi4iq1d6a61ffhd20vfs";
+    version = "16.15.0";
+    sha256 = "12nc7ywm6w1xyn720kdc1sqz5wkjjrkxr25wisl02f4v5wz8py7m";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -123,8 +123,8 @@ in rec {
   };
 
   asterisk_17 = common {
-    version = "17.8.1";
-    sha256 = "0m7gw01kpvsc0f9lb1hiq5b4g1fdh4gdfyxlqxp6m37vgxh2a48p";
+    version = "17.9.0";
+    sha256 = "1fnm1z7g45m883ivkm36r4kqb7163bzazi70mwf0fc2rc28jd1z4";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -132,8 +132,8 @@ in rec {
   };
 
   asterisk_18 = common {
-    version = "18.0.1";
-    sha256 = "1kyly10pk7bpfqg3mjbvb8p795fnj9lvd29yp2xsxwgsqi1dn9p8";
+    version = "18.1.0";
+    sha256 = "1pq2nrf60xnvh2h1rv82bdfbxxxd277g68xas0vbfgr4531gc4nc";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;

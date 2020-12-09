@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "1.15.1";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb0d4af9d684eb8a416f14c39d9fa6314be3adf41db2dd8ee8e30db9e8853d90";
+    sha256 = "c8e4869ec22aa7958ff937c1acbd34d7a2a8a446af9a09ce442f24128eee063c";
   };
 
   disabled = pythonOlder "3.5";

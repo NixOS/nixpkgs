@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Third person ninja rabbit fighting game";
     homepage = "https://osslugaru.gitlab.io";
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

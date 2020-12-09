@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
     guile libxml2
   ];
 
+  preConfigure = ''
+    export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
+  '';
+
   configureFlags =
     [
       # Make sure to use a static value for the timeout. If we do not set a value

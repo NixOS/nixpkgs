@@ -12,6 +12,8 @@ lib.makePackageOverridable
       directory ? ""
     , # The file to import, relative to the above directory
       file ? "package.dhall"
+      # Set to `true` to generate documentation for the package
+    , document ? false
 
       # Arguments passed through to `fetchFromGitHub`
     , owner
@@ -22,29 +24,32 @@ lib.makePackageOverridable
     , ...
     }@args:
 
-    buildDhallPackage {
-      inherit name dependencies source;
+    let
+      src = fetchFromGitHub ({
+        name = "${name}-source";
 
-      code =
-        let
-          src = fetchFromGitHub ({
-            name = "${name}-source";
+        inherit owner repo rev;
+      } // removeAttrs args [
+        "name"
+        "dependencies"
+        "document"
+        "source"
+        "directory"
+        "file"
+        "owner"
+        "repo"
+        "rev"
+      ]);
 
-            inherit owner repo rev;
-          } // removeAttrs args [
-            "name"
-            "dependencies"
-            "source"
-            "directory"
-            "file"
-            "owner"
-            "repo"
-            "rev"
-          ]);
+      prefix = lib.optionalString (directory != "") "${directory}/";
 
-          prefix = lib.optionalString (directory != "") "${directory}/";
+    in
+      buildDhallPackage
+        ( { inherit name dependencies source;
 
-        in
-          "${src}/${prefix}${file}";
-    }
+            code = "${src}/${prefix}${file}";
+          }
+        // lib.optionalAttrs document
+          { documentationRoot = "${src}/${prefix}"; }
+        )
   )

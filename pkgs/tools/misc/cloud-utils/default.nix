@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, gawk, gnused, utillinux, file
+, gawk, gnused, util-linux, file
 , wget, python3, qemu-utils, euca2ools
 , e2fsprogs, cdrkit
 , gptfdisk }:
@@ -7,7 +7,7 @@
 let
   # according to https://packages.debian.org/sid/cloud-image-utils + https://packages.debian.org/sid/admin/cloud-guest-utils
   guestDeps = [
-    e2fsprogs gptfdisk gawk gnused utillinux
+    e2fsprogs gptfdisk gawk gnused util-linux
   ];
   binDeps = guestDeps ++ [
     wget file qemu-utils cdrkit

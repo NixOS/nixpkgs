@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-flask";
-  version = "1.0.0";
+  version = "1.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d5678a045c07317618d80223ea124e21e8acc89dae109542dd1fdf6783d96c2";
+    sha256 = "9c136afd6d0fb045b0b8fd2363421b6670bfebd21d9141f79669d9051c9d2d05";
   };
 
   doCheck = false;

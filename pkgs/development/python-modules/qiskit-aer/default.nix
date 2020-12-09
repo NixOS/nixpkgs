@@ -3,34 +3,39 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+  # C Inputs
+, blas
+, catch2
 , cmake
-, cvxpy
 , cython
 , muparserx
 , ninja
 , nlohmann_json
+, spdlog
+  # Python Inputs
+, cvxpy
 , numpy
-, openblas
 , pybind11
 , scikit-build
-, spdlog
   # Check Inputs
-, qiskit-terra
 , pytestCheckHook
-, python
+, ddt
+, fixtures
+, pytest-timeout
+, qiskit-terra
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.6.1";
+  version = "0.7.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    sha256 = "1fnv11diis0as8zcc57mamz0gbjd6vj7nw3arxzvwa77ja803sr4";
+    sha256 = "07l0wavdknx0y4vy0hwgw24365sg4nb6ygl3lpa098np85qgyn4y";
   };
 
   nativeBuildInputs = [
@@ -40,10 +45,11 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    openblas
-    spdlog
-    nlohmann_json
+    blas
+    catch2
     muparserx
+    nlohmann_json
+    spdlog
   ];
 
   propagatedBuildInputs = [
@@ -60,11 +66,6 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  cmakeFlags = [
-    "-DBUILD_TESTS=True"
-    "-DAER_THRUST_BACKEND=OMP"
-  ];
-
   # *** Testing ***
 
   pythonImportsCheck = [
@@ -72,11 +73,22 @@ buildPythonPackage rec {
     "qiskit.providers.aer.backends.qasm_simulator"
     "qiskit.providers.aer.backends.controller_wrappers" # Checks C++ files built correctly. Only exists if built & moved to output
   ];
-  checkInputs = [
-    qiskit-terra
-    pytestCheckHook
+  # Slow tests
+  disabledTests = [
+    "test_paulis_1_and_2_qubits"
+    "test_3d_oscillator"
   ];
-  dontUseSetuptoolsCheck = true;  # Otherwise runs tests twice
+  checkInputs = [
+    pytestCheckHook
+    ddt
+    fixtures
+    pytest-timeout
+    qiskit-terra
+  ];
+  pytestFlagsArray = [
+    "--timeout=30"
+    "--durations=10"
+  ];
 
   preCheck = ''
     # Tests include a compiled "circuit" which is auto-built in $HOME
@@ -87,9 +99,7 @@ buildPythonPackage rec {
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME
   '';
-  postCheck = ''
-    popd
-  '';
+  postCheck = "popd";
 
   meta = with lib; {
     description = "High performance simulators for Qiskit";

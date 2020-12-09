@@ -29,6 +29,8 @@ buildPythonPackage rec {
     sha256 = "0af25w5mkd6vwns3r6ai1w5ip9xp0ms9s261zzssbpadzdr05hx0";
   };
 
+  patches = [ ./CVE-2020-25659.patch ];
+
   outputs = [ "out" "dev" ];
 
   buildInputs = [ openssl ]

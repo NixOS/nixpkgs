@@ -35,6 +35,7 @@ let
     "msp430-none"
     "riscv64-none" "riscv32-none"
     "vc4-none"
+    "or1k-none"
 
     "mmix-mmixware"
 
@@ -61,6 +62,7 @@ in {
   mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
   vc4           = filterDoubles predicates.isVc4;
+  or1k          = filterDoubles predicates.isOr1k;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;

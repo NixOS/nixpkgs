@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, makeWrapper, libXScrnSaver }:
+{ stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, makeWrapper, libXScrnSaver, writeScript }:
 
 let
   version = "2.16.4.2";
@@ -34,6 +34,15 @@ in mkDerivation {
       --set-rpath "${lib.makeLibraryPath [ qt5.qtbase libXtst libXext libX11 libXScrnSaver ]}" \
       $out/bin/rescuetime
   '';
+
+  passthru.updateScript = writeScript "rescuetime-updater" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pup common-updater-scripts
+    set -eu -o pipefail
+    latestVersion="$(curl -sS https://www.rescuetime.com/release-notes/linux | pup '.release:first-of-type h2 strong text{}' | tr -d '\n')"
+    update-source-version rescuetime "$latestVersion"
+  '';
+
   meta = with lib; {
     description = "Helps you understand your daily habits so you can focus and be more productive";
     homepage    = "https://www.rescuetime.com";

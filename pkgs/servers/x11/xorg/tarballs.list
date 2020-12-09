@@ -60,7 +60,7 @@ mirror://xorg/individual/app/xmessage-1.0.5.tar.bz2
 mirror://xorg/individual/app/xmodmap-1.0.10.tar.bz2
 mirror://xorg/individual/app/xmore-1.0.3.tar.bz2
 mirror://xorg/individual/app/xpr-1.0.5.tar.bz2
-mirror://xorg/individual/app/xprop-1.2.4.tar.bz2
+mirror://xorg/individual/app/xprop-1.2.5.tar.bz2
 mirror://xorg/individual/app/xrandr-1.5.0.tar.bz2
 mirror://xorg/individual/app/xrdb-1.2.0.tar.bz2
 mirror://xorg/individual/app/xrefresh-1.0.6.tar.bz2
@@ -75,7 +75,7 @@ mirror://xorg/individual/app/xwininfo-1.1.4.tar.bz2
 mirror://xorg/individual/app/xwud-1.0.5.tar.bz2
 mirror://xorg/individual/data/xbitmaps-1.1.2.tar.bz2
 mirror://xorg/individual/data/xcursor-themes-1.0.6.tar.bz2
-mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.27.tar.bz2
+mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.31.tar.bz2
 mirror://xorg/individual/doc/xorg-docs-1.7.1.tar.bz2
 mirror://xorg/individual/doc/xorg-sgml-doctools-1.11.tar.bz2
 mirror://xorg/individual/driver/xf86-input-evdev-2.10.6.tar.bz2
@@ -175,7 +175,7 @@ mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.6.12.tar.bz2
+mirror://xorg/individual/lib/libX11-1.7.0.tar.bz2
 mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2
 mirror://xorg/individual/lib/libXaw-1.0.13.tar.bz2
 mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2
@@ -218,4 +218,4 @@ mirror://xorg/individual/util/lndir-1.0.3.tar.bz2
 mirror://xorg/individual/util/makedepend-1.0.6.tar.bz2
 mirror://xorg/individual/util/util-macros-1.19.2.tar.bz2
 mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2
-mirror://xorg/individual/xserver/xorg-server-1.20.9.tar.bz2
+mirror://xorg/individual/xserver/xorg-server-1.20.10.tar.bz2

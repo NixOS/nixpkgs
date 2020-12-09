@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ideviceinstaller";
-  version = "2018-10-01";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "f14def7cd9303a0fe622732fae9830ae702fdd7c";
-    sha256 = "1biwhbldvgdhn8ygp7w79ca0rivzdjpykr76pyhy7r2fa56mrwq8";
+    rev = version;
+    sha256 = "1xp0sjgfx2z19x9mxihn18ybsmrnrcfc55zbh5a44g3vrmagmlzz";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig usbmuxd libimobiledevice libzip ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       and enumerate installed or archived apps.
     '';
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ aristid infinisil ];
   };
 }

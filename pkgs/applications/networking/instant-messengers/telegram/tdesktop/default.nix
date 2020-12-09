@@ -4,7 +4,7 @@
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
 # TODO: Shouldn't be required:
-, pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
+, pcre, xorg, util-linux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
 , xdg_utils
 }:
 
@@ -49,7 +49,7 @@ in mkDerivation rec {
     tl-expected hunspell
     tg_owt
     # TODO: Shouldn't be required:
-    pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
+    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy at-spi2-core libXtst
   ];
 
   enableParallelBuilding = true;

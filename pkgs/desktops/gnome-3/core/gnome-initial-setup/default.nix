@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-5V1PQHOZjg+3s9/MRw4qTH2VCpa+2rFQEbkITryBNnY=";
+    hash = "sha256-qliJJ0+LC23moFErR3Qrgqw0ANrsgt1O/+LuonRko7g=";
   };
 
   nativeBuildInputs = [

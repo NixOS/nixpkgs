@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.2.2";
+  version = "0.3.1";
   pname = "sshtunnel";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1801b144b42b9bdb2f931923e85837f9193b877f3d490cd5776e1d4062c62fb4";
+    sha256 = "e0cac8a6a154c7a9651b42038e3f6cf35bb88c8ee4b94822b28a5b2fe7140f95";
   };
 
   propagatedBuildInputs = [ paramiko ];

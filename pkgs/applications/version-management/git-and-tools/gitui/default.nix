@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Blazing fast terminal-ui for git written in rust";
     homepage = "https://github.com/extrawurst/gitui";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 yanganto ];
+    maintainers = with maintainers; [ Br1ght0ne yanganto ];
   };
 }

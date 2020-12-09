@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , zlib, bzip2, lzma, lzo, lz4, zstd, xz
-, libgcrypt, e2fsprogs, utillinux, libgpgerror }:
+, libgcrypt, e2fsprogs, util-linux, libgpgerror }:
 
 let
   version = "0.8.5";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     zlib bzip2 lzma lzo lz4 zstd xz
-    libgcrypt e2fsprogs utillinux libgpgerror
+    libgcrypt e2fsprogs util-linux libgpgerror
   ];
 
   meta = with stdenv.lib; {

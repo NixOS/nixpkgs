@@ -232,6 +232,16 @@ in
         Restart = "on-failure";
         ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${mosquittoConf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ReadWritePaths = "${cfg.dataDir}";
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        NoNewPrivileges = true;
       };
       preStart = ''
         rm -f ${cfg.dataDir}/passwd

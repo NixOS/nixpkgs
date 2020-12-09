@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   COMPLETION_OUT = "out";
   postInstall = ''
-    install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/etc/bash_completion.d/${pname}"
+    install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/share/bash-completion/completions/${pname}"
     install -Dm 755 "${COMPLETION_OUT}/${pname}.fish" "$out/share/fish/vendor_completions.d/${pname}"
   '';
 

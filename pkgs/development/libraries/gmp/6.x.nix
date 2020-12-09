@@ -11,11 +11,11 @@
 let inherit (stdenv.lib) optional; in
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-6.2.0";
+  name = "gmp-6.2.1";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "1sji8i9yjzfv5l2fsadpgjfyn452q6ab9zvm02k23ssd275rj77m";
+    sha256 = "0z2ddfiwgi0xbf65z4fg4hqqzlhv0cc6hdcswf3c6n21xdmk5sga";
   };
 
   #outputs TODO: split $cxx due to libstdc++ dependency

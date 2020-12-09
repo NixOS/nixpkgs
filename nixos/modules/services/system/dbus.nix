@@ -11,6 +11,7 @@ let
   homeDir = "/run/dbus";
 
   configDir = pkgs.makeDBusConf {
+    inherit (cfg) apparmor;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
     serviceDirectories = cfg.packages;
   };
@@ -49,6 +50,20 @@ in
           <filename><replaceable>pkg</replaceable>/share/dbus-1/session.d</filename>
           <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
         '';
+      };
+
+      apparmor = mkOption {
+        type = types.enum [ "enabled" "disabled" "required" ];
+        description = ''
+          AppArmor mode for dbus.
+
+          <literal>enabled</literal> enables mediation when it's
+          supported in the kernel, <literal>disabled</literal>
+          always disables AppArmor even with kernel support, and
+          <literal>required</literal> fails when AppArmor was not found
+          in the kernel.
+        '';
+        default = "disabled";
       };
 
       socketActivated = mkOption {

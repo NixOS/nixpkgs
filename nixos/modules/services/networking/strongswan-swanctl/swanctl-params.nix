@@ -1173,20 +1173,20 @@ in {
 
     ppk = mkPrefixedAttrsOfParams {
       secret = mkOptionalStrParam ''
-	      Value of the PPK. It may either be an ASCII string, a hex encoded string
-	      if it has a <literal>0x</literal> prefix or a Base64 encoded string if
-	      it has a <literal>0s</literal> prefix in its value. Should have at least
-	      256 bits of entropy for 128-bit security.
+        Value of the PPK. It may either be an ASCII string, a hex encoded string
+        if it has a <literal>0x</literal> prefix or a Base64 encoded string if
+        it has a <literal>0s</literal> prefix in its value. Should have at least
+        256 bits of entropy for 128-bit security.
       '';
 
       id = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
-	      PPK identity the PPK belongs to. Multiple unique identities may be
-	      specified, each having an <literal>id</literal> prefix, if a secret is
-	      shared between multiple peers.
+        PPK identity the PPK belongs to. Multiple unique identities may be
+        specified, each having an <literal>id</literal> prefix, if a secret is
+        shared between multiple peers.
       '';
     } ''
-	    Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
-	    defined in a unique section having the <literal>ppk</literal> prefix.
+      Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
+      defined in a unique section having the <literal>ppk</literal> prefix.
     '';
 
     private = mkPrefixedAttrsOfParams {

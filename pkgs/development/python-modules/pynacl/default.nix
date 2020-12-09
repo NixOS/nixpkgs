@@ -5,7 +5,7 @@
 , libsodium
 , cffi
 , six
-, hypothesis_4
+, hypothesis
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "01b56hxrbif3hx8l6rwz5kljrgvlbj7shmmd2rjh0hn7974a5sal";
   };
 
-  checkInputs = [ pytest hypothesis_4 ];
+  checkInputs = [ pytest hypothesis ];
   buildInputs = [ libsodium ];
   propagatedBuildInputs = [ cffi six ];
 

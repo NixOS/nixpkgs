@@ -1,6 +1,6 @@
 { stdenv, lib, fetchgit, makeDesktopItem, pkgconfig, makeWrapper
 # Build
-, python2, autoconf213, yasm, perl, ccache
+, python2, autoconf213, yasm, perl
 , unzip, gnome2, gnum4
 
 # Runtime
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnum4 makeWrapper perl pkgconfig python2 ccache
+    gnum4 makeWrapper perl pkgconfig python2
   ];
 
   buildInputs = [
@@ -54,7 +54,6 @@ in stdenv.mkDerivation rec {
   configurePhase = ''
     export MOZCONFIG=$PWD/.mozconfig
     export MOZ_NOSPAM=1
-    export HOME=$PWD # Needed by ccache
 
     cp $src/doc/mozconfig.example $MOZCONFIG
     # Need to modify it
@@ -65,7 +64,8 @@ in stdenv.mkDerivation rec {
       --replace "mk_add_options AUTOCONF=/usr/bin/autoconf-2.13" "mk_add_options AUTOCONF=${autoconf213}/bin/autoconf" \
       --replace 'mk_add_options MOZ_OBJDIR=$HOME/build/wbobjects/' "" \
       --replace "ac_add_options --x-libraries=/usr/lib64" "ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}" \
-      --replace "_BUILD_64=1" "_BUILD_64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}"
+      --replace "_BUILD_64=1" "_BUILD_64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}" \
+      --replace "--enable-ccache" "--disable-ccache"
 
     echo >> $MOZCONFIG '
     #

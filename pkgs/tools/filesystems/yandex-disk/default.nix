@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
     cd unpacked
     ${rpmextract}/bin/rpmextract $src
 
+    mkdir -p $out/share/bash-completion/completions
     cp -r -t $out/bin usr/bin/*
     cp -r -t $out/share usr/share/*
-    cp -r -t $out/etc etc/*
+    cp -r -t $out/share/bash-completion/completions etc/bash_completion.d/*
 
     sed -i 's@have@${which}/bin/which >/dev/null 2>\&1@' \
-      $out/etc/bash_completion.d/yandex-disk-completion.bash
+      $out/share/bash-completion/completions/yandex-disk-completion.bash
 
     ${patchelf}/bin/patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

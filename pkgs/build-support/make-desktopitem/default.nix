@@ -12,16 +12,16 @@
 , mimeType ? null
 , categories ? null
 , startupNotify ? null
-, extraDesktopEntries ? {} # Extra key-value pairs to add to the [Desktop Entry] section. This may override other values
+, extraDesktopEntries ? { } # Extra key-value pairs to add to the [Desktop Entry] section. This may override other values
 , extraEntries ? "" # Extra configuration. Will be appended to the end of the file and may thus contain extra sections
 , fileValidation ? true # whether to validate resulting desktop file.
 }:
-
 let
   # like builtins.toString, but null -> null instead of null -> ""
-  nullableToString = value: if value == null then null
-        else if builtins.isBool value then lib.boolToString value
-        else builtins.toString value;
+  nullableToString = value:
+    if value == null then null
+    else if builtins.isBool value then lib.boolToString value
+    else builtins.toString value;
 
   # The [Desktop entry] section of the desktop file, as attribute set.
   mainSection = {
@@ -39,16 +39,19 @@ let
 
   # Map all entries to a list of lines
   desktopFileStrings =
-    ["[Desktop Entry]"]
+    [ "[Desktop Entry]" ]
     ++ builtins.filter
       (v: v != null)
       (lib.mapAttrsToList
         (name: value: if value != null then "${name}=${value}" else null)
         mainSection
       )
-    ++ (if extraEntries == "" then [] else ["${extraEntries}"]);
+    ++ (if extraEntries == "" then [ ] else [ "${extraEntries}" ]);
 in
-runCommandLocal "${name}.desktop" {}
+runCommandLocal "${name}.desktop"
+{
+  nativeBuildInputs = [ desktop-file-utils ];
+}
   (''
     mkdir -p "$out/share/applications"
     cat > "$out/share/applications/${name}.desktop" <<EOF
@@ -56,5 +59,5 @@ runCommandLocal "${name}.desktop" {}
     EOF
   '' + lib.optionalString fileValidation ''
     echo "Running desktop-file validation"
-    ${desktop-file-utils}/bin/desktop-file-validate "$out/share/applications/${name}.desktop"
+    desktop-file-validate "$out/share/applications/${name}.desktop"
   '')

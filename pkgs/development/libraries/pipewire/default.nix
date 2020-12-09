@@ -19,7 +19,6 @@
 , libsndfile
 , vulkan-headers
 , vulkan-loader
-, libpulseaudio
 , makeFontsConf
 , callPackage
 , nixosTests
@@ -28,7 +27,7 @@
 , bluezSupport ? true, bluez ? null, sbc ? null
 , nativeHspSupport ? true
 , ofonoSupport ? true
-, hsphfpdSupport ? false
+, hsphfpdSupport ? true
 }:
 
 let
@@ -40,7 +39,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.15";
+  version = "0.3.17";
 
   outputs = [
     "out"
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "1lmsn13pbr0cigb5ri9nd3102ffbaf8nsz5c8aawf6lsz7mhkx9x";
+    sha256 = "1gzdahji23fsgjycc08h7zzv8filmzdrkyvpkljc881l4cb5l58n";
   };
 
   patches = [
@@ -65,6 +64,10 @@ stdenv.mkDerivation rec {
     ./alsa-profiles-use-libdir.patch
     # Move installed tests into their own output.
     ./installed-tests-path.patch
+    # Change the path of the pipewire-pulse binary in the service definition.
+    ./pipewire-pulse-path.patch
+    # Add flag to specify configuration directory (different from the installation directory).
+    ./pipewire-config-dir.patch
   ];
 
   nativeBuildInputs = [
@@ -73,7 +76,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -81,7 +83,6 @@ stdenv.mkDerivation rec {
     dbus
     glib
     libjack2
-    libpulseaudio
     libsndfile
     udev
     vulkan-headers
@@ -99,7 +100,7 @@ stdenv.mkDerivation rec {
     "-Dudevrulesdir=lib/udev/rules.d"
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    "-Dlibpulse-path=${placeholder "pulse"}/lib"
+    "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
     "-Dlibjack-path=${placeholder "jack"}/lib"
     "-Dgstreamer=${mesonBool gstreamerSupport}"
     "-Dffmpeg=${mesonBool ffmpegSupport}"
@@ -107,16 +108,17 @@ stdenv.mkDerivation rec {
     "-Dbluez5-backend-native=${mesonBool nativeHspSupport}"
     "-Dbluez5-backend-ofono=${mesonBool ofonoSupport}"
     "-Dbluez5-backend-hsphfpd=${mesonBool hsphfpdSupport}"
+    "-Dpipewire_config_dir=/etc/pipewire"
   ];
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
   doCheck = true;
 
-  # Pulseaudio asserts lead to dev references.
-  # TODO This should be fixed in the pulseaudio sources instead.
-  preFixup = ''
-    remove-references-to -t ${libpulseaudio.dev} "$(readlink -f $pulse/lib/libpulse.so)"
+  postInstall = ''
+    moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
+    moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+    moveToOutput "bin/pipewire-pulse" "$pulse"
   '';
 
   passthru.tests = {

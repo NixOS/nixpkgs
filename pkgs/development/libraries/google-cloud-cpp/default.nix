@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ ];
     broken = true; # Broken on Hydra since 2020-05-19
   };
 }

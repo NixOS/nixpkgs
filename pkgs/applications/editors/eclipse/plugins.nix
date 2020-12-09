@@ -255,12 +255,12 @@ rec {
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "9.11.1";
+    version = "10.0.1";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.11/${name}/${name}.zip";
-      sha256 = "00cpaal6jm9xb4nbkljrf381r3lf1rb1p06vrbn4l0lxnbckb9df";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.0/${name}/${name}.zip";
+      sha256 = "1smi1yc4l627bb01zp0pcilm6d0hysxk440hy4n55gz3jxilygx5";
     };
 
     meta = with stdenv.lib; {
@@ -355,9 +355,6 @@ rec {
       url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
       sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
       extraPostFetch = ''
-        # work around https://github.com/NixOS/nixpkgs/issues/38649
-        chmod go-w $out;
-
         # update site is a couple levels deep, alongside some other irrelevant stuff
         cd $out;
         find . -type f -not -path ./binaries/org.drools.updatesite/\* -exec rm {} \;
@@ -475,12 +472,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.16";
+    version = "4.17";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202006040540/org.eclipse.jdt-${version}.zip";
-      sha256 = "0g349hg2nv1y628daxf84396wpf33z52wxv0gawlgrirbbizaznd";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202009021800/org.eclipse.jdt-${version}.zip";
+      sha256 = "16vb88ywqfh0rix5krp2g39yhisv4i797g9c03aayzy5lynqm3ky";
     };
 
     meta = with stdenv.lib; {

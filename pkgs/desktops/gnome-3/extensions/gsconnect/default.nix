@@ -9,15 +9,12 @@
 , gobject-introspection
 , wrapGAppsHook
 , glib
+, glib-networking
 , gtk3
 , openssh
 , gnome3
 , gjs
 , nixosTests
-, atk
-, harfbuzz
-, pango
-, gdk-pixbuf
 , gsettings-desktop-schemas
 }:
 
@@ -55,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib # libgobject
+    glib-networking
     gtk3
     gsound
     gjs # for running daemon
@@ -87,20 +85,18 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = let
-    testDeps = [
-      gtk3 harfbuzz atk pango.out gdk-pixbuf
-    ];
-  in ''
+  postFixup = ''
     # Let’s wrap the daemons
     for file in $out/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/service/{daemon,nativeMessagingHost}.js; do
       echo "Wrapping program $file"
       wrapGApp "$file"
     done
 
-    wrapProgram "$installedTests/libexec/installed-tests/gsconnect/minijasmine" \
-      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
-      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
+    # Wrap jasmine runner for tests
+    for file in $installedTests/libexec/installed-tests/gsconnect/minijasmine; do
+      echo "Wrapping program $file"
+      wrapGApp "$file"
+    done
   '';
 
   uuid = "gsconnect@andyholmes.github.io";

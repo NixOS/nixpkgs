@@ -1,12 +1,13 @@
-{ stdenv, buildPythonApplication, fetchPypi, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
+{ stdenv, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
 
 buildPythonApplication rec {
   pname = "screeninfo";
-  version = "0.6.5";
+  version = "0.6.6";
+  disabled = isPy27; # dataclasses isn't available for python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vcw54crdgmbzwlrfg80kd1a8p9i10yks8k0szzi0k5q80zhp8xz";
+    sha256 = "c93fcc3c9421cc2046e57468241c4c08c0c6cffd0e05a85cb0b18de8fe8b026f";
   };
 
   # dataclasses is a compatibility shim for python 3.6 ONLY

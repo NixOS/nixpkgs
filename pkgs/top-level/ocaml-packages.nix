@@ -70,6 +70,8 @@ let
 
     bos = callPackage ../development/ocaml-modules/bos { };
 
+    ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
@@ -491,7 +493,9 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
-    lwt = callPackage ../development/ocaml-modules/lwt { };
+    lwt = callPackage ../development/ocaml-modules/lwt {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     ocaml_lwt = lwt;
 
@@ -529,7 +533,11 @@ let
 
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
+    metrics-influx = callPackage ../development/ocaml-modules/metrics/influx.nix { };
+
     metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
+
+    metrics-mirage = callPackage ../development/ocaml-modules/metrics/mirage.nix { };
 
     metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
       inherit (pkgs) gnuplot;
@@ -590,6 +598,10 @@ let
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
     mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
+
+    mirage-types = callPackage ../development/ocaml-modules/mirage/types.nix { };
+
+    mirage-types-lwt = callPackage ../development/ocaml-modules/mirage/types-lwt.nix { };
 
     mirage-unix = callPackage ../development/ocaml-modules/mirage-unix { };
 
@@ -656,11 +668,17 @@ let
 
     ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
-    ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
+    ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
+
+    ocaml-migrate-parsetree-1-8 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/1.8.x.nix { };
+
+    ocaml-migrate-parsetree-2-1 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/2.1.x.nix { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
-    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
+    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
@@ -721,6 +739,8 @@ let
     ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
 
     octavius = callPackage ../development/ocaml-modules/octavius { };
+
+    odate = callPackage ../development/ocaml-modules/odate { };
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
@@ -806,7 +826,9 @@ let
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
-    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
+    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr {
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+    };
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
 
@@ -868,9 +890,7 @@ let
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
 
-    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc {
-      ppxlib = ppxlib.override { legacy = true; };
-    };
+    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
 
@@ -927,6 +947,8 @@ let
     rope = callPackage ../development/ocaml-modules/rope { };
 
     rpclib = callPackage ../development/ocaml-modules/rpclib { };
+
+    rpclib-lwt = callPackage ../development/ocaml-modules/rpclib/lwt.nix { };
 
     rresult = callPackage ../development/ocaml-modules/rresult { };
 
@@ -1250,6 +1272,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_10 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.10.nix { });
 
   ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
+
+  ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_11;
 

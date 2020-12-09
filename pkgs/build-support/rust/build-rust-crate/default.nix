@@ -54,6 +54,10 @@ let
    };
 
    installCrate = import ./install-crate.nix { inherit stdenv; };
+
+   # Allow access to the rust attribute set from inside buildRustCrate, which
+   # has a parameter that shadows the name.
+   rustAttrs = rust;
 in
 
 /* The overridable pkgs.buildRustCrate function.
@@ -250,7 +254,7 @@ stdenv.mkDerivation (rec {
       depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
       hashedMetadata = builtins.hashString "sha256"
         (crateName + "-" + crateVersion + "___" + toString (mkRustcFeatureArgs crateFeatures) +
-          "___" + depsMetadata);
+          "___" + depsMetadata + "___" + rustAttrs.toRustTarget stdenv.hostPlatform);
       in lib.substring 0 10 hashedMetadata;
 
     build = crate.build or "";

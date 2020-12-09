@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , coreutils
-, utillinux
+, util-linux
 , which
 , gnused
 , gnugrep
@@ -178,7 +178,7 @@ let
       EOF
 
     '' + optionalString stdenv.isLinux ''
-      sed -e "s| ul| ${utillinux}/bin/ul|" \
+      sed -e "s| ul| ${util-linux}/bin/ul|" \
           -i "$out/share/fish/functions/__fish_print_help.fish"
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
@@ -203,7 +203,7 @@ let
       homepage = "http://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ocharles cole-h ];
+      maintainers = with maintainers; [ cole-h ];
     };
 
     passthru = {

@@ -20,6 +20,12 @@ buildGoModule rec {
     sha256 = import ./source-sha.nix;
   };
 
+  # With `allowGoReference = true;`, `buildGoModule` adds the `-trimpath`
+  # argument for Go builds which apparently breaks the UI like this:
+  #
+  #   server[780]: stat /var/lib/private/ui/build/index.html: no such file or directory
+  allowGoReference = true;
+
   vendorSha256 = import ./vendor-sha.nix;
 
   doCheck = false;

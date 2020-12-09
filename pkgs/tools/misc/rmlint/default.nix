@@ -14,7 +14,7 @@
 , python3
 , scons
 , sphinx
-, utillinux
+, util-linux
 , wrapGAppsHook
 , withGui ? false }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
   };
 
-  CFLAGS="-I${stdenv.lib.getDev utillinux}/include";
+  CFLAGS="-I${stdenv.lib.getDev util-linux}/include";
 
   nativeBuildInputs = [
     pkgconfig
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     glib
     json-glib
     libelf
-    utillinux
+    util-linux
   ] ++ stdenv.lib.optionals withGui [
     cairo
     gobject-introspection

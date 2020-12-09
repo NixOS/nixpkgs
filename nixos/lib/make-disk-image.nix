@@ -134,7 +134,7 @@ let format' = format; in let
 
   binPath = with pkgs; makeBinPath (
     [ rsync
-      utillinux
+      util-linux
       parted
       e2fsprogs
       lkl
@@ -239,7 +239,7 @@ let format' = format; in let
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
     { preVM = prepareImage;
-      buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
+      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
       postVM = ''
         ${if format == "raw" then ''
           mv $diskImage $out/${filename}

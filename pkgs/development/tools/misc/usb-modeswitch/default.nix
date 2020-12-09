@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, makeWrapper
-, libusb1, tcl, utillinux, coreutils, bash }:
+, libusb1, tcl, util-linux, coreutils, bash }:
 
 stdenv.mkDerivation rec {
   pname = "usb-modeswitch";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/usb_modeswitch_dispatcher \
-      --set PATH ${lib.makeBinPath [ utillinux coreutils bash ]}
+      --set PATH ${lib.makeBinPath [ util-linux coreutils bash ]}
   '';
 
   buildInputs = [ libusb1 tcl ];

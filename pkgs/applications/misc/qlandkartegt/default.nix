@@ -33,6 +33,10 @@ mkDerivation rec {
       sha256 = "16hql8ignzw4n1hlp4icbvaddqcadh2rjns0bvis720535112sc8";
     })
     (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-timespec.patch?h=qlandkartegt";
+      sha256 = "1yzdwfsgjn7q04r9f7s5qk50y25hdl384dxrmpfmkm97fmpgyr7w";
+    })
+    (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-ver_str.patch?h=qlandkartegt";
       sha256 = "13fg05gqrjfa9j00lrqz1b06xf6r5j01kl6l06vkn0hz1jzxss5m";
     })

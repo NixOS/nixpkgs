@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "faad2";
-  version = "2.9.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
     rev = builtins.replaceStrings [ "." ] [ "_" ] version;
-    sha256 = "0rdi6bmyryhkwf4mpprrsp78m6lv1nppav2f0lf1ywifm92ng59c";
+    sha256 = "0q52kdd95ls6ihzyspx176wg9x22425v5qsknrmrjq30q25qmmlg";
   };
 
   configureFlags = []

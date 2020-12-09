@@ -1,12 +1,12 @@
 { stdenv
 , fetchFromGitHub
 }: rec {
-  version = "2.8.0";
+  version = "2.9.0";
   src = fetchFromGitHub {
     owner = "openrazer";
     repo = "openrazer";
     rev = "v${version}";
-    sha256 = "0mwg6b2y3wfpvgxb9lznwblb3bnrayn858nc4fbbg76zdp5bk5ky";
+    sha256 = "1js7hq7zx5kj99brffrfaaah283ydkffmmrzsxv4mkd3nnd6rykk";
   };
   meta = with stdenv.lib; {
     homepage = "https://openrazer.github.io/";

@@ -7,6 +7,7 @@
 , fontconfig
 , freetype
 , glib
+, libGLU
 , libglvnd
 , libX11
 , libxcb
@@ -18,15 +19,15 @@
 }:
 
 let
-  buildNum = "2020-09-11-26";
+  buildNum = "2020-11-19-376";
 in
 stdenv.mkDerivation rec {
   pname = "rgp";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchurl {
-    url = "https://github.com/GPUOpen-Tools/radeon_gpu_profiler/releases/download/v${lib.versions.majorMinor version}/RadeonDeveloperTools-${buildNum}.tgz";
-    sha256 = "1lpkh7sfpq697lm4xnkpjfchh8zpy49f4mb3c5qcn7brav5iqwfh";
+    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    sha256 = "f71ibuMerd0SmXKSDjaTj7xtyy1dWzkZ5s0PlGtQ1+k=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     glib
+    libGLU
     libglvnd
     libX11
     libxcb
@@ -54,12 +56,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/opt/rgp $out/bin
     cp -r . $out/opt/rgp/
-    # Breaks autoPatchelfHook and has no known usage
-    rm $out/opt/rgp/AMDToolsDownloader
 
-    for prog in RadeonGPUProfiler RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI; do
+    for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler rga rtda; do
       # makeWrapper is needed so that executables are started from the opt
-      # directory, where qt.conf is
+      # directory, where qt.conf and other tools are
       makeWrapper \
         $out/opt/rgp/$prog \
         $out/bin/$prog
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool from AMD that allows for deep inspection of GPU workloads";
-    homepage = "https://gpuopen.com/gaming-product/radeon-gpu-profiler-rgp/";
+    homepage = "https://gpuopen.com/rgp/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Flakebi ];

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
-, sox, accuraterip-checksum, libsndfile, utillinux, substituteAll }:
+, sox, accuraterip-checksum, libsndfile, util-linux, substituteAll }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao utillinux flac sox ])
+    "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao util-linux flac sox ])
   ];
 
   preBuild = ''

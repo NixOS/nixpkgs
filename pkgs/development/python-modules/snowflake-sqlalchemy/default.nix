@@ -19,6 +19,8 @@ buildPythonPackage rec {
     snowflake-connector-python
   ];
 
+  # Pypi does not include tests
+  doCheck = false;
   pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
   meta = with lib; {

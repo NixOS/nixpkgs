@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/werman/noise-suppression-for-voice";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ panaeon ];
+    maintainers = with maintainers; [ panaeon henrikolsson ];
   };
 }

@@ -58,7 +58,13 @@ let majorVersion = "9";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-         optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+      # Fix ICE: Max. number of generated reload insns per insn is achieved (90)
+      #
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96796
+      #
+      # This patch can most likely be removed by a post 9.3.0-release.
+      [ ./avoid-cycling-subreg-reloads.patch ]
+      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       /* ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/${version}/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";

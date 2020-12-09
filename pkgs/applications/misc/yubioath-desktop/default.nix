@@ -19,6 +19,10 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake makeWrapper python3.pkgs.wrapPython ];
 
+  patches = [
+    ./0001-replace-git-with-normal-python-package.patch
+  ];
+
   postPatch = ''
     substituteInPlace deployment.pri \
       --replace '/usr/bin' "$out/bin"

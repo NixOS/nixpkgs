@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line client for WebSockets (like netcat/socat)";
     homepage = "https://github.com/vi/websocat";
     license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice filalex77 ];
+    maintainers = with maintainers; [ thoughtpolice Br1ght0ne ];
   };
 }

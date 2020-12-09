@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix bundler common-updater-scripts nix nix-prefetch-git python3 python3Packages.requests python3Packages.click python3Packages.click-log vgo2nix yarn2nix
+#! nix-shell -i python3 -p bundix bundler common-updater-scripts nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log vgo2nix yarn2nix
 
 import click
 import click_log
@@ -40,9 +40,7 @@ class GitLabRepo:
         return versions
 
     def get_git_hash(self, rev: str):
-        out = subprocess.check_output(['nix-prefetch-git', self.url, rev])
-        j = json.loads(out)
-        return j['sha256']
+        return subprocess.check_output(['nix-universal-prefetch', 'fetchFromGitLab', '--owner', self.owner, '--repo', self.repo, '--rev', rev]).decode('utf-8').strip()
 
     @staticmethod
     def rev2version(tag: str) -> str:
@@ -117,6 +115,7 @@ def update_data(rev: str):
 
     with open(data_file_path.as_posix(), 'w') as f:
         json.dump(data, f, indent=2)
+        f.write("\n")
 
 
 @cli.command('update-rubyenv')

@@ -116,6 +116,8 @@ rec {
 
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
 
+    or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
+
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 

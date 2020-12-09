@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "NOAA APT image decoder";
-    homepage = "http://noaa-apt.mbernardi.com.ar/";
+    homepage = "https://noaa-apt.mbernardi.com.ar/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ trepetti ];
     platforms = platforms.all;

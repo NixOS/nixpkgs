@@ -1,4 +1,5 @@
 { fetchurl, stdenv, buildPackages
+, fetchpatch
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
@@ -51,6 +52,12 @@ stdenv.mkDerivation {
     ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
+    (fetchpatch {
+      # https://github.com/git/git/pull/925
+      name = "make-manual-reproducible.patch";
+      url = "https://github.com/git/git/commit/7a68e9e0b8eda91eb576bbbc5ed66298f3ab761c.patch";
+      sha256 = "02naws82pd3vvwrrgqn91kid8qkjihyjaz1ahgjz8qlmnn2avf5n";
+    })
   ];
 
   postPatch = ''
@@ -153,8 +160,8 @@ stdenv.mkDerivation {
       cp -a contrib $out/share/git/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
-      mkdir -p $out/etc/bash_completion.d
-      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
+      mkdir -p $out/share/bash-completion/completions
+      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -229,8 +236,8 @@ stdenv.mkDerivation {
         notSupported $out/libexec/git-core/git-send-email
       '')
 
-   + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES USE_ASCIIDOCTOR=1 PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html install-info \
+   + stdenv.lib.optionalString withManual ''# Install man pages
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES USE_ASCIIDOCTOR=1 PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
          -C Documentation ''
 
    + (if guiSupport then ''
@@ -249,6 +256,7 @@ stdenv.mkDerivation {
      '')
    + stdenv.lib.optionalString stdenv.isDarwin ''
     # enable git-credential-osxkeychain by default if darwin
+    mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF
     [credential]
       helper = osxkeychain

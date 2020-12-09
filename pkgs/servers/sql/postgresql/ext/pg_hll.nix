@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_hll";
-  version = "2.14";
+  version = "2.15";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "postgresql-hll";
     rev    = "refs/tags/v${version}";
-    sha256 = "13vphxkc9pn4bkpgab560bgdbl99li2b3p1n2rm5a78wswlsbsps";
+    sha256 = "19d50cvp3byjyr2dc5rjmyrlp97bb19mz0ykr3w4iyc6qi5d5qj2";
   };
 
   installPhase = ''

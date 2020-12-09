@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, expat, pam, perl, fetchpatch
-, intltool, spidermonkey_60 , gobject-introspection, libxslt, docbook_xsl, dbus
+, intltool, spidermonkey_78, gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl), systemd, elogind
 , withIntrospection ? true
@@ -19,11 +19,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "0.116";
+  version = "0.118";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.gz";
-    sha256 = "1c9lbpndh5zis22f154vjrhnqw65z8s85nrgl42v738yf6g0q5w8";
+    sha256 = "0swmg37jsxsxfsd2b3qm0l3zxr9ldvhpjw8lsgq3j8q7wy2fjm3d";
   };
 
   patches = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     [ glib gtk-doc pkgconfig intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ expat pam spidermonkey_60 ]
+    [ expat pam spidermonkey_78 ]
     # On Linux, fall back to elogind when systemd support is off.
     ++ stdenv.lib.optional stdenv.isLinux (if useSystemd then systemd else elogind)
     ++ stdenv.lib.optional withIntrospection gobject-introspection;
@@ -102,6 +102,10 @@ stdenv.mkDerivation rec {
   inherit doCheck;
   checkInputs = [ dbus ];
   checkPhase = ''
+    # unfortunately this test needs python-dbusmock, but python-dbusmock needs polkit,
+    # leading to a circular dependency
+    substituteInPlace test/Makefile --replace polkitbackend ""
+
     # tests need access to the system bus
     dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS make check'
   '';

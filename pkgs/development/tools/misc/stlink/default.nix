@@ -5,7 +5,7 @@ let
   libusb1' = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
 
 # IMPORTANT: You need permissions to access the stlink usb devices.
-# Add services.udev.pkgs = [ pkgs.stlink ] to your configuration.nix
+# Add services.udev.packages = [ pkgs.stlink ] to your configuration.nix
 
 in stdenv.mkDerivation rec {
   pname = "stlink";

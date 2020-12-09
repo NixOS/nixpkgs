@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
-, utillinux, openisns, openssl, kmod, perl, systemd, pkgconf
+, util-linux, openisns, openssl, kmod, perl, systemd, pkgconf
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.1.2";
 
   nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];
-  buildInputs = [ kmod openisns.lib openssl systemd utillinux ];
+  buildInputs = [ kmod openisns.lib openssl systemd util-linux ];
 
   src = fetchFromGitHub {
     owner = "open-iscsi";

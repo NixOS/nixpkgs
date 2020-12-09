@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
+{ stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
 , procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   kernel = optional (_kernel != null) _kernel.dev;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng pythonEnv
+  buildInputs = [ makeWrapper util-linux openssl libcap_ng pythonEnv
                   perl procps which ];
 
   configureFlags = [

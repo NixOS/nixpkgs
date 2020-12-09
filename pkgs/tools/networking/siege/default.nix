@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "HTTP load tester";
-    maintainers = with maintainers; [ ocharles raskin ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
   };

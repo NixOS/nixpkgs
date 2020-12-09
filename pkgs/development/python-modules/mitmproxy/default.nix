@@ -37,32 +37,25 @@
 , parver
 , pytest-asyncio
 , hypothesis
+, asgiref
+, msgpack
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "5.2";
+  version = "5.3.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0ja0aqnfmkvns5qmd51hmrvbw8dnccaks30gxgzgcjgy30rj4brq";
+    sha256 = "04y7fxxssrs14i7zl7fwlwrpnms39i7a6m18481sg8vlrkbagxjr";
   };
-
-  patches = [
-    # Apply patch from upstream to make mitmproxy v5.2 compatible with urwid >v2.1.0
-    (fetchpatch {
-      name = "urwid-lt-2.1.0.patch";
-      url = "https://github.com/mitmproxy/mitmproxy/commit/ea9177217208fdf642ffc54f6b1f6507a199350c.patch";
-      sha256 = "1z5r8izg5nvay01ywl3xc6in1vjfi9f144j057p3k5rzfliv49gg";
-    })
-  ];
 
   postPatch = ''
     # remove dependency constraints
-    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?//' -i setup.py
+    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
   '';
 
   doCheck = (!stdenv.isDarwin);
@@ -75,6 +68,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     setuptools
     # setup.py
+    asgiref
     blinker
     brotli
     certifi
@@ -85,6 +79,7 @@ buildPythonPackage rec {
     hyperframe
     kaitaistruct
     ldap3
+    msgpack
     passlib
     protobuf
     publicsuffix2

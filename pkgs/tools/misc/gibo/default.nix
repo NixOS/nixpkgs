@@ -14,15 +14,15 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc/bash_completion.d
+    mkdir -p $out/bin $out/share/bash-completion/completions
     cp gibo $out/bin
-    cp gibo-completion.bash $out/etc/bash_completion.d
+    cp gibo-completion.bash $out/share/bash-completion/completions
 
     sed -e 's|\<git |${git}/bin/git |g' \
         -e 's|\<basename |${coreutils}/bin/basename |g' \
         -i "$out/bin/gibo"
     sed -e 's|\<find |${findutils}/bin/find |g' \
-        -i "$out/etc/bash_completion.d/gibo-completion.bash"
+        -i "$out/share/bash-completion/completions/gibo-completion.bash"
   '';
 
   meta = {

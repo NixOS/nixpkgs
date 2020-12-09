@@ -1,40 +1,47 @@
-{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison, readline, ncurses
-, bzip2, zlib
-# Test inputs
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, bison
+, bzip2
+, flex
+, gperf
+, ncurses
 , perl
+, readline
+, zlib
 }:
 
 let
   iverilog-test = fetchFromGitHub {
     owner  = "steveicarus";
     repo   = "ivtest";
-    rev    = "d4c80beb845cad92136c05074b3910b822a9315f";
-    sha256 = "13cpnkki3xmhsh2v4bp2s35mhwknapcikdh85g4q6925ka940r45";
+    rev    = "253609b89576355b3bef2f91e90db62223ecf2be";
+    sha256 = "18i7jlr2csp7mplcrwjhllwvb6w3v7x7mnx7vdw48nd3g5scrydx";
   };
 in
 stdenv.mkDerivation rec {
   pname   = "iverilog";
-  version = "unstable-2020-10-24";
+  version = "11.0";
 
   src = fetchFromGitHub {
     owner  = "steveicarus";
     repo   = pname;
-    rev    = "d6e01d0c557253414109a4dde46b2966a5a3fb08";
-    sha256 = "1bl75mbycj9zpjbpay8z12384yk9ih5q9agsrjh9pva0vv3h4y4y";
+    rev    = "v${stdenv.lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0nzcyi6l2zv9wxzsv9i963p3igyjds0n55x0ph561mc3pfbc7aqp";
   };
 
-  nativeBuildInputs = [ autoconf gperf flex bison ];
-  buildInputs = [ readline ncurses bzip2 zlib ];
+  nativeBuildInputs = [ autoconf bison flex gperf ];
 
-  preConfigure = "bash $PWD/autoconf.sh";
+  buildInputs = [ bzip2 ncurses readline zlib ];
+
+  preConfigure = "sh autoconf.sh";
 
   enableParallelBuilding = true;
+
   doCheck = true;
 
-  # most tests pass, but some that rely on exact text of floating-point numbers
-  # fail on aarch64.
-  doInstallCheck = !stdenv.isAarch64;
   installCheckInputs = [ perl ];
+
   installCheckPhase = ''
     # copy tests to allow writing results
     export TESTDIR=$(mktemp -d)
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
-    homepage    = "http://iverilog.icarus.com/";
+    homepage    = "http://iverilog.icarus.com/";  # https does not work
     license     = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ winden thoughtpolice ];
     platforms   = platforms.all;

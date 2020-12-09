@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://cask.readthedocs.io/en/latest/index.html";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.flexw ];
   };
 }

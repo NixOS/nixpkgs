@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "05k5ws1qgbfkxf6y923r61m42gy45l9awqqbfjqgrb3ricfr4wha";
+    sha256 = "159qd4al19k1i5a54m2q2mxvig4z2lz9h3rd5rq44bklybdc0i7j";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

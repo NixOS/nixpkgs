@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    sha256 = "12f3jvb9b6ji5w2n2k3sjn156ikaf06mriwbqlc54ii1zznaw43r";
+    sha256 = "1ia00bk6dc1176arf84lx08x4c7c74q7ycn7dqjnmyxkg3kmr21g";
   };
 
   # (bundled) blosc headers have a warning on some archs that it will be using

@@ -440,7 +440,7 @@ in
           pkgs.gnugrep
           pkgs.gnused
           pkgs.nettools
-          pkgs.utillinux
+          pkgs.util-linux
         ];
       };
 

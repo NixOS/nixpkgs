@@ -22,12 +22,15 @@ stdenv.mkDerivation rec {
     python3
     sqlite
     libpsl
+    glib.out
     brotli
   ] ++ lib.optionals stdenv.isLinux [
     libsysprof-capture
   ];
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
+
+  NIX_CFLAGS_COMPILE = [ "-lpthread" ];
 
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency

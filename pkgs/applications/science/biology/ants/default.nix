@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, itk4, vtk_7 }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, itk4, vtk_7, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname    = "ANTs";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ itk4 vtk_7 ];
+  buildInputs = [ itk4 vtk_7 ] ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE" ];
 

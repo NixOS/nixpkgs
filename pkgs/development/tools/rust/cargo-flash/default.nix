@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";
-    homepage = "http://probe.rs/";
+    homepage = "https://probe.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ fooker ];
   };

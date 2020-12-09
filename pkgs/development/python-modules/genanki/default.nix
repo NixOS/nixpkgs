@@ -4,15 +4,15 @@
 
 buildPythonPackage rec {
   pname = "genanki";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08eddb4a203e36e4fc3b66f85e00252070379867dbbc04fd8902ddc14fb352c6";
+    sha256 = "b4049621469be115bb13b6ff90994c4c68ef9e7e72e6a98d4a3ada629f163a11";
   };
 
   propagatedBuildInputs = [
-		pytestrunner
+    pytestrunner
     cached-property
     frozendict
     pystache
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   # relies on upstream anki
-	doCheck = false;
+  doCheck = false;
   checkPhase = ''
     py.test
   '';

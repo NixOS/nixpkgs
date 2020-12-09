@@ -3,33 +3,33 @@
 }:
 
 let
-  version = "4.31.0";
+  version = "4.33.0";
 
   src = fetchFromGitHub {
-    owner = "v2ray";
+    owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "0s0blc05nrqm78qslv5xb42pjlx5v8qqwg0pwbzhxn9s71x2669m";
+    sha256 = "05w714i56nipp7m985g6zqq6ljz0w5ihxrgs93j10llfdd089iig";
   };
 
-  vendorSha256 = "0n2mf19fvgk5x0j2wwm4zk9xikzvl6cdvw26qar91wzcsraf5z2d";
+  vendorSha256 = "0ix5kxldgbcb10jh0l64lrh8qzla4qvsxi6vanb73y7lbsix120w";
 
   assets = {
     # MIT licensed
     "geoip.dat" = let
-      geoipRev = "202009300006";
-      geoipSha256 = "1ss2izqlmrp5b5kpw804jk6c1nyimwlccbkikix3bwfaz4vlv1nc";
+      geoipRev = "202012030015";
+      geoipSha256 = "1qy9h0721y5kjcp0s859lhj253jfi3d3i658gpc4kmij2l5dxm5w";
     in fetchurl {
-      url = "https://github.com/v2ray/geoip/releases/download/${geoipRev}/geoip.dat";
+      url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
       sha256 = geoipSha256;
     };
 
     # MIT licensed
     "geosite.dat" = let
-      geositeRev = "20201010021828";
-      geositeSha256 = "0gpfhcf4iyx7ip7rlkb0l1q64w84zvmcah52qyjwljs6l4p3hrj9";
+      geositeRev = "20201207123222";
+      geositeSha256 = "03xckk39rrda42cam2awbsh0gib6rhmz28asc8vx29lsp9g2bj6n";
     in fetchurl {
-      url = "https://github.com/v2ray/domain-list-community/releases/download/${geositeRev}/dlc.dat";
+      url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
       sha256 = geositeSha256;
     };
 
@@ -59,21 +59,23 @@ let
     installPhase = ''
       install -Dm755 v2ray v2ctl -t $out/bin
     '';
+
+    meta = {
+      homepage = "https://www.v2fly.org/en_US/";
+      description = "A platform for building proxies to bypass network restrictions";
+      license = with lib.licenses; [ mit ];
+      maintainers = with lib.maintainers; [ servalcatty ];
+    };
   };
 
 in runCommand "v2ray-${version}" {
   inherit version;
+  inherit (core) meta;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  meta = {
-    homepage = "https://www.v2ray.com/en/index.html";
-    description = "A platform for building proxies to bypass network restrictions";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ servalcatty ];
-  };
-
   passthru = {
+    inherit core;
     updateScript = ./update.sh;
     tests = {
       simple-vmess-proxy-test = nixosTests.v2ray;

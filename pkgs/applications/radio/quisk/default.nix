@@ -3,11 +3,11 @@
 
 python38Packages.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.1.72";
+  version = "4.1.73";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qw00b9d0l3ysdrmd3nr5a2zlwg9ygdil7krnk2gjp5g8bb778k7";
+    sha256 = "37dfb02a32341025c086b07d66ddf1608d4ee1ae1c62fb51f87c97662f13e0d8";
   };
 
   buildInputs = [ fftw alsaLib pulseaudio ];

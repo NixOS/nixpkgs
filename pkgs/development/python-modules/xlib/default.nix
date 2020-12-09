@@ -7,7 +7,7 @@
 , python
 , mock
 , nose
-, utillinux
+, util-linux
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  checkInputs = [ mock nose utillinux /* mcookie */ xorg.xauth xorg.xorgserver /* xvfb */ ];
+  checkInputs = [ mock nose util-linux /* mcookie */ xorg.xauth xorg.xorgserver /* xvfb */ ];
   nativeBuildInputs = [ setuptools_scm ];
   buildInputs = [ xorg.libX11 ];
   propagatedBuildInputs = [ six ];

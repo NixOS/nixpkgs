@@ -1,4 +1,5 @@
 { stdenv
+, nixosTests
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
@@ -26,10 +27,12 @@ rustPlatform.buildRustPackage rec {
     "--skip meta::filetype::test::test_socket_type"
   ];
 
+  passthru.tests = { inherit (nixosTests) lsd; };
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/Peltoche/lsd";
     description = "The next gen ls command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 marsam zowoq ];
+    maintainers = with maintainers; [ Br1ght0ne marsam zowoq ];
   };
 }

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.22.1";
+  version = "1.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fs448jcx2cbpk0nq3picndfryjsakmd9allggvh7mrqjiw723ww";
+    sha256 = "5176db85f1e7e837a646cd9cede72c3c404ccf2e3373d9ee14b2db88febad440";
   };
 
   disabled = pythonOlder "3.5";
