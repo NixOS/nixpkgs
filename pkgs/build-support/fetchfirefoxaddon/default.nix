@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   inherit name;
   extid = "${src.outputHash}@${name}";
   passthru = {
-    exitd=extid;
+    inherit extid;
   };
 
   builder = writeScript "xpibuilder" ''
