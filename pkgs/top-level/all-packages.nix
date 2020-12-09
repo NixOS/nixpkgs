@@ -6380,6 +6380,8 @@ in
 
   pandoc = callPackage ../development/tools/pandoc { };
 
+  pandoc-lua-filters = callPackage ../tools/misc/pandoc-lua-filters { };
+
   pamtester = callPackage ../tools/security/pamtester { };
 
   paperless = callPackage ../applications/office/paperless { };
@@ -11654,6 +11656,9 @@ in
   kind = callPackage ../development/tools/kind {  };
 
   khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
+
+
+  krew = callPackage ../development/tools/krew { };
 
   kube-aws = callPackage ../development/tools/kube-aws { };
 
@@ -28870,4 +28875,6 @@ in
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
+
+  zktree = callPackage ../applications/misc/zktree {};
 }

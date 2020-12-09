@@ -1,6 +1,7 @@
 { lib
 , python3
 , glibcLocales
+, fetchpatch
 }:
 
 with python3.pkgs;
@@ -28,7 +29,21 @@ buildPythonApplication rec {
       --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
-  meta = {
+  patches = [
+    # TODO: remove with next release (v1.22.3 or v1.23)
+    (fetchpatch {
+      url = "https://github.com/dbcli/mycli/commit/17f093d7b70ab2d9f3c6eababa041bf76f029aac.patch";
+      sha256 = "sha256-VwfbtzUtElV+ErH+NJb+3pRtSaF0yVK8gEWCvlzZNHI=";
+      excludes = [ "changelog.md" "mycli/AUTHORS" ];
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse"
+  '';
+
+  meta = with lib; {
     inherit version;
     description = "Command-line interface for MySQL";
     longDescription = ''
@@ -36,7 +51,7 @@ buildPythonApplication rec {
       syntax highlighting.
     '';
     homepage = "http://mycli.net";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.jojosch ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jojosch ];
   };
 }

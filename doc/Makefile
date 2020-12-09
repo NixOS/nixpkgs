@@ -39,6 +39,7 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	mkdir -p out/html/highlightjs/
 	cp -r highlightjs out/html/
 
+	cp -r media out/html/
 	cp ./overrides.css out/html/
 	cp ./style.css out/html/style.css
 
@@ -53,6 +54,7 @@ out/epub/manual.epub: manual-full.xml
 		doc-support/result/epub.xsl \
 		./manual-full.xml
 
+	cp -r media out/epub/scratch/OEBPS
 	cp ./overrides.css out/epub/scratch/OEBPS
 	cp ./style.css out/epub/scratch/OEBPS
 	mkdir -p out/epub/scratch/OEBPS/images/callouts/
@@ -88,11 +90,15 @@ functions/library/generated: doc-support/result
 
 %.section.xml: %.section.md
 	pandoc $^ -t docbook \
+		--extract-media=media \
+		--lua-filter=$(PANDOC_LUA_FILTERS_DIR)/diagram-generator.lua \
 		-f markdown+smart \
 	| cat  > $@
 
 %.chapter.xml: %.chapter.md
 	pandoc $^ -t docbook \
 		--top-level-division=chapter \
+		--extract-media=media \
+		--lua-filter=$(PANDOC_LUA_FILTERS_DIR)/diagram-generator.lua \
 		-f markdown+smart \
 	| cat  > $@
