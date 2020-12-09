@@ -27,7 +27,7 @@ mkDerivation rec {
 
   postInstall = ''
     install -vD $src/gqrx.desktop -t "$out/share/applications/"
-    install -vD $src/resources/icons/gqrx.svg -t "$out/share/icons/"
+    install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"
   '';
 
   meta = with stdenv.lib; {
