@@ -448,6 +448,9 @@ let
         speech-tagger = markBroken super.speech-tagger;
 
         # upstream issue: missing file header
+        sql-presto = markBroken super.sql-presto;
+
+        # upstream issue: missing file header
         textmate = markBroken super.textmate;
 
         # upstream issue: missing file header
