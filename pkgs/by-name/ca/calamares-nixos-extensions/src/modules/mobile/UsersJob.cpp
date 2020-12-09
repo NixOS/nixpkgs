@@ -12,7 +12,8 @@
 #include <QFileInfo>
 
 
-UsersJob::UsersJob( QString cmdPasswd,
+UsersJob::UsersJob( bool featureSshd,
+                    QString cmdPasswd,
                     QString cmdSshd,
                     QString cmdSshdUseradd,
                     bool isSshEnabled,
@@ -21,6 +22,7 @@ UsersJob::UsersJob( QString cmdPasswd,
                     QString sshdUsername,
                     QString sshdPassword )
     : Calamares::Job()
+    , m_featureSshd( featureSshd )
     , m_cmdPasswd( cmdPasswd )
     , m_cmdSshd( cmdSshd )
     , m_cmdSshdUseradd( cmdSshdUseradd )
@@ -48,14 +50,18 @@ UsersJob::exec()
 
     QList< QPair< QStringList, QString > > commands = {
         { { "sh", "-c", m_cmdPasswd + " " + m_username }, m_password + "\n" + m_password + "\n" },
-        { { "sh", "-c", m_cmdSshd }, QString() },
     };
 
-    if ( m_isSshEnabled )
+    if ( m_featureSshd )
     {
-        commands.append( { { "sh", "-c", m_cmdSshdUseradd + " " + m_sshdUsername }, QString() } );
-        commands.append(
-            { { "sh", "-c", m_cmdPasswd + " " + m_sshdUsername }, m_sshdPassword + "\n" + m_sshdPassword + "\n" } );
+        commands.append( { { "sh", "-c", m_cmdSshd }, QString() } );
+
+        if ( m_isSshEnabled )
+        {
+            commands.append( { { "sh", "-c", m_cmdSshdUseradd + " " + m_sshdUsername }, QString() } );
+            commands.append(
+                { { "sh", "-c", m_cmdPasswd + " " + m_sshdUsername }, m_sshdPassword + "\n" + m_sshdPassword + "\n" } );
+        }
     }
 
     foreach ( auto command, commands )

@@ -8,7 +8,8 @@ class UsersJob : public Calamares::Job
 {
     Q_OBJECT
 public:
-    UsersJob( QString cmdPasswd,
+    UsersJob( bool featureSshd,
+              QString cmdPasswd,
               QString cmdSshd,
               QString cmdSshdUseradd,
               bool isSshEnabled,
@@ -23,6 +24,7 @@ public:
     Calamares::JobList createJobs();
 
 private:
+    bool m_featureSshd;
     QString m_cmdPasswd;
     QString m_cmdSshd;
     QString m_cmdSshdUseradd;

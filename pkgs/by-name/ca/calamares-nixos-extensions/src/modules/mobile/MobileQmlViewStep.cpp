@@ -54,7 +54,8 @@ MobileQmlViewStep::onLeave()
     /* Put users job in queue (should run after unpackfs) */
     m_jobs.clear();
     QString cmdSshd = m_config->isSshEnabled() ? m_config->cmdSshdEnable() : m_config->cmdSshdDisable();
-    users = new UsersJob( m_config->cmdPasswd(),
+    users = new UsersJob( m_config->featureSshd(),
+                          m_config->cmdPasswd(),
                           cmdSshd,
                           m_config->cmdSshdUseradd(),
                           m_config->isSshEnabled(),

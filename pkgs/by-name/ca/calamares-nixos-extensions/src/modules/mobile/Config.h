@@ -19,6 +19,7 @@ class Config : public QObject
     Q_PROPERTY( QString userPassword READ userPassword WRITE setUserPassword NOTIFY userPasswordChanged )
 
     /* ssh server + credentials */
+    Q_PROPERTY( bool featureSshd READ featureSshd CONSTANT FINAL )
     Q_PROPERTY( QString sshdUsername READ sshdUsername WRITE setSshdUsername NOTIFY sshdUsernameChanged )
     Q_PROPERTY( QString sshdPassword READ sshdPassword WRITE setSshdPassword NOTIFY sshdPasswordChanged )
     Q_PROPERTY( bool isSshEnabled READ isSshEnabled WRITE setIsSshEnabled )
@@ -55,6 +56,7 @@ public:
     void setUserPassword( const QString& userPassword );
 
     /* ssh server + credetials */
+    bool featureSshd() { return m_featureSshd; }
     QString sshdUsername() const { return m_sshdUsername; }
     QString sshdPassword() const { return m_sshdPassword; }
     bool isSshEnabled() { return m_isSshEnabled; }
@@ -94,6 +96,7 @@ private:
     QString m_userPassword;
 
     /* ssh server + credetials */
+    bool m_featureSshd;
     QString m_sshdUsername;
     QString m_sshdPassword;
     bool m_isSshEnabled;
