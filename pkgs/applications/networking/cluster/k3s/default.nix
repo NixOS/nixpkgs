@@ -158,8 +158,8 @@ let
       platforms = platforms.linux;
     };
   };
-  k3sBuild = buildGoPackage rec {
-    name = "k3s-build";
+  k3sBin = buildGoPackage rec {
+    name = "k3s-bin";
     version = "${k3sVersion}";
 
     goPackagePath = "github.com/rancher/k3s";
@@ -169,7 +169,9 @@ let
     patches = [ ./patches/0001-Use-rm-from-path-in-go-generate.patch ./patches/0002-Add-nixpkgs-patches.patch ];
 
     nativeBuildInputs = [ git pkgconfig ];
-    buildInputs = [ k3sBuildStage1 k3sPlugins runc ];
+    # These dependencies are embedded as compressed files in k3s at runtime.
+    # Propagate them to avoid broken runtime references to libraries.
+    propagatedBuildInputs = [ k3sPlugins k3sBuildStage1 runc ];
 
     # k3s appends a suffix to the final distribution binary for some arches
     archSuffix =
@@ -240,7 +242,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    k3sBuild
+    k3sBin
     makeWrapper
   ] ++ k3sRuntimeDeps;
 
@@ -254,7 +256,7 @@ stdenv.mkDerivation rec {
   # execute, but that we didn't bundle with it.
   installPhase = ''
     mkdir -p "$out/bin"
-    makeWrapper ${k3sBuild}/bin/k3s "$out/bin/k3s" \
+    makeWrapper ${k3sBin}/bin/k3s "$out/bin/k3s" \
       --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
   '';
