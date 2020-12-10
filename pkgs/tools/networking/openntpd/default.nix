@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openntpd";
-  version = "6.2p3";
+  version = "6.8p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenNTPD/${pname}-${version}.tar.gz";
-    sha256 = "0fn12i4kzsi0zkr4qp3dp9bycmirnfapajqvdfx02zhr4hanj0kv";
+    sha256 = "0ijsylc7a4jlpxsqa0jq1w1c7333id8pcakzl7a5749ria1xp0l5";
   };
 
   prePatch = ''
