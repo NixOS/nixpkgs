@@ -8348,7 +8348,7 @@ in
 
   vmtouch = callPackage ../tools/misc/vmtouch { };
 
-  vncdo = callPackage ../tools/admin/vncdo { };
+  vncdo = with python3Packages; toPythonApplication vncdo;
 
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
