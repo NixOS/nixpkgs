@@ -136,15 +136,6 @@ let
     "recurseForDerivations"
   ];
 in rec {
-  terraform_0_11 = pluggable (generic {
-    version = "0.11.14";
-    sha256 = "1bzz5wy13gh8j47mxxp6ij6yh20xmxd9n5lidaln3mf1bil19dmc";
-    patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
-  });
-
-  terraform_0_11-full = terraform_0_11.full;
-
   terraform_0_12 = pluggable (generic {
     version = "0.12.29";
     sha256 = "18i7vkvnvfybwzhww8d84cyh93xfbwswcnwfrgvcny1qwm8rsaj8";
@@ -181,7 +172,7 @@ in rec {
     mainTf = writeText "main.tf" ''
       resource "random_id" "test" {}
     '';
-    terraform = terraform_0_11.withPlugins (p: [ p.random ]);
+    terraform = terraform_0_12.withPlugins (p: [ p.random ]);
     test =
       runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e

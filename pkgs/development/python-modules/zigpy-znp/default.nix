@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "zha-ng";
     repo = "zigpy-znp";
     rev = "v${version}";
-    sha256 = "a98RYPvcYE1NPERmPo1jPwMf86N+0297u4pOKuaB6u4=";
+    sha256 = "18dav2n5fqdigf8dl7gcqa9z8l6p2ig6l5q78gqg2wj7wjpncwyj";
   };
 
   propagatedBuildInputs = [
