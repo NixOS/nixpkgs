@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
@@ -12,6 +12,14 @@ python3Packages.buildPythonApplication rec {
     inherit pname version;
     sha256 = "FARWjtbS5zi/XQDyAVImUmArLj8xATz1jZ4jnXFdq1w=";
   };
+
+  patches = [
+    # Fix compatibility with sqlparse >= 0.4.0. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/dbcli/litecli/commit/37957e401d22f88800bbdec2c690e731f2cc13bd.patch";
+      sha256 = "1x82s2h1rzflyiahyd8pfya30rzs6yx6ij4a4s16f8iix5x35zv9";
+    })
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     cli-helpers
