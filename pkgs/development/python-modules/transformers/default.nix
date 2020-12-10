@@ -1,7 +1,7 @@
 { buildPythonPackage
 , stdenv
 , fetchFromGitHub
-, boto3
+, isPy39
 , cookiecutter
 , filelock
 , regex
@@ -18,13 +18,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.0.0";
+  version = "4.0.1";
+  disabled = isPy39;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17djq32pq8d6vqip7i9pda0ldigmzckbbcd278llmpxdriqd4llg";
+    sha256 = "1h53a3n6fdrx3ns1h1ip273hzd9pkm9m1qh41si75csb8mi1dq3d";
   };
 
   propagatedBuildInputs = [

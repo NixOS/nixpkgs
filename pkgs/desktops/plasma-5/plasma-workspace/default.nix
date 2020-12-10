@@ -15,7 +15,7 @@
   appstream-qt,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
-  qtwayland, qtx11extras,
+  qtwayland, qtx11extras, qqc2-desktop-style,
 }:
 
 let inherit (lib) getBin getLib; in
@@ -34,7 +34,8 @@ mkDerivation {
     libqalculate networkmanager-qt phonon plasma-framework prison solid
     kholidays kquickcharts appstream-qt
 
-    qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
+    qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland
+    qtx11extras qqc2-desktop-style
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
