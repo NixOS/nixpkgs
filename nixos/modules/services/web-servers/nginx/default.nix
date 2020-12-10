@@ -390,13 +390,24 @@ in
       };
 
       config = mkOption {
+        type = types.str;
         default = "";
-        description = "
-          Verbatim nginx.conf configuration.
-          This is mutually exclusive with the structured configuration
-          via virtualHosts and the recommendedXyzSettings configuration
-          options. See appendConfig for appending to the generated http block.
-        ";
+        description = ''
+          Verbatim <filename>nginx.conf</filename> configuration.
+          This is mutually exclusive to any other config option for
+          <filename>nginx.conf</filename> except for
+          <itemizedlist>
+          <listitem><para><xref linkend="opt-services.nginx.appendConfig" />
+          </para></listitem>
+          <listitem><para><xref linkend="opt-services.nginx.httpConfig" />
+          </para></listitem>
+          <listitem><para><xref linkend="opt-services.nginx.logError" />
+          </para></listitem>
+          </itemizedlist>
+
+          If additional verbatim config in addition to other options is needed,
+          <xref linkend="opt-services.nginx.appendConfig" /> should be used instead.
+        '';
       };
 
       appendConfig = mkOption {
