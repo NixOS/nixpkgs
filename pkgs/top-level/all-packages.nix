@@ -20503,10 +20503,6 @@ in
 
   bombono = callPackage ../applications/video/bombono {};
 
-  bomi = libsForQt5.callPackage ../applications/video/bomi {
-    ffmpeg = ffmpeg_2;
-  };
-
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
   brackets = callPackage ../applications/editors/brackets { gconf = gnome2.GConf; };
