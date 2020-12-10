@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ** from under $out/libexec. By default, it expects to find the files
   ** in $CWD which doesn't work. */
   patchPhase = ''
-    substituteInPlace ./src/settings.ml \
+    substituteInPlace ./src/syntax.ml \
       --replace \"default\" \"$out/libexec/default\"
   '';
 
