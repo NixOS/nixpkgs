@@ -1,5 +1,5 @@
 { lib, stdenv
-, python, cmake, meson, vim, ruby
+, python, gnumake, cmake, gcc, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform, buildGoModule
 , pkgconfig, curl, openssl, libgit2, libiconv
@@ -577,6 +577,20 @@ self: super: {
 
   lf-vim = super.lf-vim.overrideAttrs(old: {
     dependencies = with super; [ bclose-vim ];
+  });
+
+  telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs(old: {
+    # it already contains precompiled libraries
+    # rm them and build our own
+    preFixup = ''
+      cd deps/fzy-lua-native
+      rm -rf static/*
+      ${gnumake}/bin/make
+      '';
+
+    buildInputs = [ gcc ];
+
+    meta.platforms = stdenv.lib.platforms.all;
   });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
