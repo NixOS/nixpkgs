@@ -198,7 +198,7 @@ in mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/octave/";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    maintainers = with stdenv.lib.maintainers; [ raskin doronbehar ];
     description = "Scientific Pragramming Language";
     # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
     broken = enableJIT;
