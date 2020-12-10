@@ -23,8 +23,7 @@
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
-# LTO is disabled since it caused segfaults on wayland see https://github.com/NixOS/nixpkgs/issues/101429
-, ltoSupport ? false, overrideCC, buildPackages
+, ltoSupport ? stdenv.isLinux, overrideCC, buildPackages
 , gssSupport ? true, kerberos
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
@@ -91,21 +90,25 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
+  # 78 ESR won't build with rustc 1.47
+  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
+    rustc cargo;
+
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
+  # Target the LLVM version that rustc -Vv reports it is built with for LTO.
+  # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
   llvmPackages = if stdenv.isDarwin
                  then buildPackages.llvmPackages
-                 else buildPackages.llvmPackages_10;
+                 else if lib.versionAtLeast rustc.llvm.version "11"
+                      then buildPackages.llvmPackages_11
+                      else buildPackages.llvmPackages_10;
 
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
                 then overrideCC stdenv llvmPackages.lldClang
                 else stdenv;
-
-  # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
-    rustc cargo;
 
   nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
 in
@@ -121,13 +124,19 @@ buildStdenv.mkDerivation ({
   ] ++
   lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
   lib.optional (lib.versionAtLeast ffversion "84") ./no-buildconfig-ffx84.patch ++
+  lib.optional (ltoSupport && lib.versionOlder ffversion "84") ./lto-dependentlibs-generation-ffx83.patch ++
+  lib.optional (ltoSupport && lib.versionAtLeast ffversion "84" && lib.versionOlder ffversion "86")
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/fdff20c37be3";
+      sha256 = "135n9brliqy42lj3nqgb9d9if7x6x9nvvn0z4anbyf89bikixw48";
+    })
 
   # there are two flavors of pipewire support
   # The patches for the ESR release and the patches for the current stable
   # release.
   # Until firefox upstream stabilizes pipewire support we will have to continue
   # tracking multiple versions here.
-  lib.optional (pipewireSupport && lib.versionOlder ffversion "83")
+  ++ lib.optional (pipewireSupport && lib.versionOlder ffversion "83")
     (fetchpatch {
       # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
       url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
@@ -315,6 +324,13 @@ buildStdenv.mkDerivation ({
   makeFlags = lib.optionals enableOfficialBranding [
     "MOZILLA_OFFICIAL=1"
     "BUILD_OFFICIAL=1"
+  ]
+  ++ lib.optionals ltoSupport [
+    "AR=${llvmPackages.bintools}/bin/llvm-ar"
+    "LLVM_OBJDUMP=${llvmPackages.bintools}/bin/llvm-objdump"
+    "NM=${llvmPackages.bintools}/bin/llvm-nm"
+    "RANLIB=${llvmPackages.bintools}/bin/llvm-ranlib"
+    "STRIP=${llvmPackages.bintools}/bin/llvm-strip"
   ]
   ++ extraMakeFlags;
 
