@@ -89,23 +89,25 @@ mkDerivation rec {
     libwebp
     gl2ps
   ]
-  ++ (stdenv.lib.optionals enableQt [
+  ++ stdenv.lib.optionals enableQt [
     qtbase
     qtsvg
     qscintilla
-  ])
-  ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
-  ++ (stdenv.lib.optional (hdf5 != null) hdf5)
-  ++ (stdenv.lib.optional (glpk != null) glpk)
-  ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
-  ++ (stdenv.lib.optional (enableJava) jdk)
-  ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
-  ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
-  ++ (stdenv.lib.optional (python != null) python)
-  ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
-  ++ (stdenv.lib.optionals (stdenv.isDarwin) [ libiconv
-                                               darwin.apple_sdk.frameworks.Accelerate
-                                               darwin.apple_sdk.frameworks.Cocoa ])
+  ]
+  ++ stdenv.lib.optionals (ghostscript != null) [ ghostscript ]
+  ++ stdenv.lib.optionals (hdf5 != null) [ hdf5 ]
+  ++ stdenv.lib.optionals (glpk != null) [ glpk ]
+  ++ stdenv.lib.optionals (suitesparse != null) [ suitesparse ]
+  ++ stdenv.lib.optionals (enableJava) [ jdk ]
+  ++ stdenv.lib.optionals (sundials_2 != null) [ sundials_2 ]
+  ++ stdenv.lib.optionals (gnuplot != null) [ gnuplot ]
+  ++ stdenv.lib.optionals (python != null) [ python ]
+  ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Accelerate
+    darwin.apple_sdk.frameworks.Cocoa
+  ]
   ;
   nativeBuildInputs = [
     pkgconfig
@@ -115,12 +117,12 @@ mkDerivation rec {
     fftwSinglePrec
     texinfo
   ]
-  ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
-  ++ (stdenv.lib.optional enableJIT llvm)
-  ++ (stdenv.lib.optionals enableQt [
+  ++ stdenv.lib.optionals (sundials_2 != null) [ sundials_2 ]
+  ++ stdenv.lib.optionals enableJIT [ llvm ]
+  ++ stdenv.lib.optionals enableQt [
     qtscript
     qttools
-  ])
+  ]
   ;
 
   doCheck = !stdenv.isDarwin;
@@ -135,7 +137,7 @@ mkDerivation rec {
     "--with-lapack=lapack"
     (if blas.isILP64 then "--enable-64" else "--disable-64")
   ]
-    ++ (if stdenv.isDarwin then [ "--enable-link-all-dependencies" ] else [ ])
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "--enable-link-all-dependencies" ]
     ++ stdenv.lib.optionals enableReadline [ "--enable-readline" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "--with-x=no" ]
     ++ stdenv.lib.optionals enableQt [ "--with-qt=5" ]
