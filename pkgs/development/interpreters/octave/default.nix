@@ -23,15 +23,17 @@
 , fftwSinglePrec
 , zlib
 , curl
-, qrupdate
 , blas, lapack
-, arpack
+# These two should use the same lapack and blas as the above
+, qrupdate, arpack, suitesparse ? null
+# If set to true, the above 5 deps are overriden to use the blas and lapack
+# with 64 bit indexes support. If all are not compatible, the build will fail.
+, use64BitIdx ? false
 , libwebp
 , gl2ps
 , ghostscript ? null
 , hdf5 ? null
 , glpk ? null
-, suitesparse ? null
 , gnuplot ? null
 # - Include support for GNU readline:
 , enableReadline ? true
@@ -56,9 +58,42 @@
 , darwin
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
-
-mkDerivation rec {
+let
+  # Not always evaluated
+  blas' = if use64BitIdx then
+    blas.override {
+      isILP64 = true;
+    }
+  else
+    blas
+  ;
+  lapack' = if use64BitIdx then
+    lapack.override {
+      isILP64 = true;
+    }
+  else
+    lapack
+  ;
+  qrupdate' = qrupdate.override {
+    # If use64BitIdx is false, this override doesn't evaluate to a new
+    # derivation, as blas and lapack are not overriden.
+    blas = blas';
+    lapack = lapack';
+  };
+  arpack' = arpack.override {
+    blas = blas';
+    lapack = lapack';
+  };
+  # Not always suitesparse is required at all
+  suitesparse' = if suitesparse != null then
+    suitesparse.override {
+      blas = blas';
+      lapack = lapack';
+    }
+  else
+    null
+  ;
+in mkDerivation rec {
   version = "6.1.0";
   pname = "octave";
 
@@ -78,14 +113,14 @@ mkDerivation rec {
     fltk
     zlib
     curl
-    blas
-    lapack
+    blas'
+    lapack'
     libsndfile
     fftw
     fftwSinglePrec
     portaudio
-    qrupdate
-    arpack
+    qrupdate'
+    arpack'
     libwebp
     gl2ps
   ]
@@ -97,7 +132,7 @@ mkDerivation rec {
   ++ stdenv.lib.optionals (ghostscript != null) [ ghostscript ]
   ++ stdenv.lib.optionals (hdf5 != null) [ hdf5 ]
   ++ stdenv.lib.optionals (glpk != null) [ glpk ]
-  ++ stdenv.lib.optionals (suitesparse != null) [ suitesparse ]
+  ++ stdenv.lib.optionals (suitesparse != null) [ suitesparse' ]
   ++ stdenv.lib.optionals (enableJava) [ jdk ]
   ++ stdenv.lib.optionals (sundials_2 != null) [ sundials_2 ]
   ++ stdenv.lib.optionals (gnuplot != null) [ gnuplot ]
@@ -130,12 +165,12 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   # See https://savannah.gnu.org/bugs/?50339
-  F77_INTEGER_8_FLAG = if blas.isILP64 then "-fdefault-integer-8" else "";
+  F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
 
   configureFlags = [
     "--with-blas=blas"
     "--with-lapack=lapack"
-    (if blas.isILP64 then "--enable-64" else "--disable-64")
+    (if use64BitIdx then "--enable-64" else "--disable-64")
   ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "--enable-link-all-dependencies" ]
     ++ stdenv.lib.optionals enableReadline [ "--enable-readline" ]
@@ -153,6 +188,11 @@ mkDerivation rec {
   passthru = {
     inherit version;
     sitePath = "share/octave/${version}/site";
+    blas = blas';
+    lapack = lapack';
+    qrupdate = qrupdate';
+    arpack = arpack';
+    suitesparse = suitesparse';
   };
 
   meta = {
