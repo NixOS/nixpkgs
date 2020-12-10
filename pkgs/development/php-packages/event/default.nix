@@ -2,8 +2,8 @@
 buildPecl {
   pname = "event";
 
-  version = "3.0.1";
-  sha256 = "12629hi2ddyavzgl5ala53fi8m55l0xsmqsywy040f0grzp9r6rc";
+  version = "3.0.2";
+  sha256 = "1ws4l014z52vb23xbsfj6viwkf7fmh462af639xgbp0n6syf77dq";
 
   configureFlags = [
     "--with-event-libevent-dir=${pkgs.libevent.dev}"
