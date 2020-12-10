@@ -222,7 +222,6 @@ let
     buildInputs
     disallowedReferences
     stripDebugList
-    passthru
     doCheck
     dontWrapPythonPrograms
     dontWrapQtApps

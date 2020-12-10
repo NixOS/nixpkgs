@@ -1,57 +1,71 @@
 { lib
-, mkDerivation
 , fetchFromGitHub
 , libpulseaudio
 , libconfig
+# Needs a gnuradio built with qt gui support
 , gnuradio
-, gnuradioPackages
+# Not gnuradioPackages'
+, codec2
+, log4cpp
+, gmp
 , gsm
 , libopus
 , libjpeg
+, libsndfile
+, libftdi
 , protobuf
 , speex
-, qmake4Hook
-} :
+, speexdsp
+}:
 
-let
-  version = "0.5.0";
-
-in mkDerivation {
+gnuradio.pkgs.mkDerivation rec {
   pname = "qradiolink";
-  inherit version;
+  version = "0.8.5-2";
 
   src = fetchFromGitHub {
-    owner = "kantooon";
+    owner = "qradiolink";
     repo = "qradiolink";
     rev = version;
-    sha256 = "0xhg5zhjznmls5m3rhpk1qx0dipxmca12s85w15d0i7qwva2f1gi";
+    sha256 = "MgHfKR3AJW3pIN9oCBr4BWxk1fGSCpLmMzjxvuTmuFA=";
   };
 
   preBuild = ''
-    cd ext
+    cd src/ext
     protoc --cpp_out=. Mumble.proto
     protoc --cpp_out=. QRadioLink.proto
-    cd ..
+    cd ../..
     qmake
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp qradiolink $out/bin
+    install -D qradiolink $out/bin/qradiolink
+    install -Dm644 src/res/icon.png $out/share/pixmaps/qradiolink.png
+    install -Dm644 qradiolink.desktop $out/share/applications/qradiolink.desktop
   '';
 
   buildInputs = [
+    gnuradio.unwrapped.boost
+    codec2
+    log4cpp
+    gmp
     libpulseaudio
     libconfig
     gsm
-    gnuradioPackages.osmosdr
+    gnuradio.pkgs.osmosdr
     libopus
     libjpeg
     speex
+    speexdsp
+    gnuradio.qt.qtbase
+    gnuradio.qt.qtmultimedia
+    libftdi
+    libsndfile
+    gnuradio.qwt
   ];
   nativeBuildInputs = [
     protobuf
-    qmake4Hook
+    gnuradio.qt.qmake
+    gnuradio.qt.wrapQtAppsHook
   ];
 
   enableParallelBuilding = true;
