@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "foot";
-  version = "1.5.1";
+  version = "1.5.4";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/foot.git";
     rev = version;
-    sha256 = "sha256-GAk2qkrgCNILJOeRcn1NT4t3w+R6WFTZ1goOhBEwKwc=";
+    sha256 = "0y6xfsldz5lwy6kp5dy9s27pnii7n5zj754wglvz9d9fp5lkl6id";
   };
 
   nativeBuildInputs = [
@@ -23,13 +23,14 @@ stdenv.mkDerivation rec {
   # recommended build flags for foot as per INSTALL.md
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#user-content-release-build
   preConfigure = ''
-    export CFLAGS+="-O3 -fno-plt"
+    export CFLAGS+=" -O3 -fno-plt"
   '';
 
   mesonFlags = [ "--buildtype=release" "-Db_lto=true" ];
 
   meta = with stdenv.lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
+    changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
     description = "A fast, lightweight and minimalistic Wayland terminal emulator";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
