@@ -4833,7 +4833,9 @@ in {
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
-  psautohint = callPackage ../development/python-modules/psautohint { };
+  psautohint = callPackage ../development/python-modules/psautohint {
+    pytest = self.pytest_5;
+  };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
