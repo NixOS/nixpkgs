@@ -2070,7 +2070,10 @@ in {
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator { inherit (pkgs) glibcLocales; };
 
-  feedparser = callPackage ../development/python-modules/feedparser { };
+  feedparser = if isPy3k then
+    callPackage ../development/python-modules/feedparser { }
+  else
+    callPackage ../development/python-modules/feedparser/5.nix { };
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     inherit (pkgs) pkg-config;
@@ -5227,8 +5230,6 @@ in {
 
   pyipp = callPackage ../development/python-modules/pyipp { };
 
-  pyjade = callPackage ../development/python-modules/pyjade { };
-
   pyjet = callPackage ../development/python-modules/pyjet { };
 
   pyjks = callPackage ../development/python-modules/pyjks { };
@@ -5464,6 +5465,8 @@ in {
   pyptlib = callPackage ../development/python-modules/pyptlib { };
 
   pypubsub = callPackage ../development/python-modules/pypubsub { };
+
+  pypugjs = callPackage ../development/python-modules/pypugjs { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 

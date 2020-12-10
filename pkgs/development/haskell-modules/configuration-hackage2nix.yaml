@@ -8504,7 +8504,6 @@ broken-packages:
   - pam
   - pan-os-syslog
   - panda
-  - pandoc-crossref
   - pandoc-csv2table
   - pandoc-filter-graphviz
   - pandoc-filter-indent

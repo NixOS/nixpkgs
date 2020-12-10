@@ -382,6 +382,13 @@
      for more information.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <package>zookeeper</package> package does not provide
+     <literal>zooInspector.sh</literal> anymore, as that "contrib" has
+     been dropped from upstream releases.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

@@ -199,12 +199,24 @@ let
         extractNuGet = callPackage ./python/extract-nuget.nix { };
       };
 
+      naumovs.color-highlight = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "color-highlight";
+          publisher = "naumovs";
+          version = "2.3.0";
+          sha256 = "1syzf43ws343z911fnhrlbzbx70gdn930q67yqkf6g0mj8lf2za2";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       redhat.vscode-yaml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "0.5.3";
-          sha256 = "03swlsp906rqlrx6jf3ibh7pk36sm0zdr8jfy6sr3w5lqjg27gka";
+          version = "0.13.0";
+          sha256 = "046kdk73a5xbrwq16ff0l64271c6q6ygjvxaph58z29gyiszfkig";
         };
         meta = {
           license = stdenv.lib.licenses.mit;
