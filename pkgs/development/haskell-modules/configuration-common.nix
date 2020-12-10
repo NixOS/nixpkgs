@@ -951,6 +951,7 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  niv = generateOptparseApplicativeCompletion "niv" super.niv;
   stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
   # musl fixes
