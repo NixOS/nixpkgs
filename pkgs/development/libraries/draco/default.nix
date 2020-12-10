@@ -2,14 +2,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.4.1";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "0s65il754fpiygbg0yq2xynpbnmhiiaxghkzprjqxziyz6gi87lm";
+    sha256 = "14ln4la52x38pf8syr7i5v4vd65ya4zij8zj5kgihah03cih0qcd";
   };
 
   enableParallelBuilding = true;
