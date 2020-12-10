@@ -4,7 +4,7 @@
 
 { lib, stdenv, pkgconfig, pango, perl, python2, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, nss_3_53, libnotify
+, freetype, fontconfig, file, nspr, nss, nss_3_53
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification
 , libvpx_1_8
@@ -157,7 +157,7 @@ buildStdenv.mkDerivation ({
     gtk2 perl zip libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    libnotify xorg.pixman yasm libGLU libGL
+    xorg.pixman yasm libGLU libGL
     xorg.xorgproto
     xorg.libXext unzip makeWrapper
     libevent libstartup_notification /* cairo */
@@ -336,18 +336,6 @@ buildStdenv.mkDerivation ({
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
   '';
 
-  postFixup = lib.optionalString buildStdenv.isLinux ''
-    # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
-    patchelf --set-rpath "${lib.getLib libnotify
-      }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
-        "$out"/lib/${binaryName}*/libxul.so
-    patchelf --add-needed ${xorg.libXScrnSaver.out}/lib/libXss.so $out/lib/${binaryName}/${binaryName}
-    ${lib.optionalString (pipewireSupport && lib.versionAtLeast ffversion "83") ''
-      patchelf --add-needed "${lib.getLib pipewire}/lib/libpipewire-0.3.so" \
-        "$out"/lib/${binaryName}/${binaryName}
-    ''}
-  '';
-
   doInstallCheck = true;
   installCheckPhase = ''
     # Some basic testing
@@ -360,6 +348,7 @@ buildStdenv.mkDerivation ({
     isFirefox3Like = true;
     gtk = gtk2;
     inherit alsaSupport;
+    inherit pipewireSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;
