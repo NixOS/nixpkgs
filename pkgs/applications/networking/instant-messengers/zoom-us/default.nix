@@ -1,5 +1,5 @@
 { stdenv, fetchurl, mkDerivation, autoPatchelfHook, bash
-, fetchFromGitHub
+, fetchFromGitHub, wrapGAppsHook
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
 , qtgraphicaleffects, qtimageformats, qtlocation, qtquickcontrols
@@ -38,7 +38,9 @@ in mkDerivation {
 
   src = srcs.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
+  # Let mkDerivation do it
+  dontWrapGApps = true;
 
   buildInputs = [
     dbus glib libGL libX11 libXfixes libuuid libxcb faac qtbase
@@ -110,10 +112,11 @@ in mkDerivation {
     # some bad array propagation. We'll do that in bash below
   ];
 
-  postFixup = ''
+  preFixup = ''
     # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
     # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
     qtWrapperArgs+=( --run "cd ${placeholder "out"}/share/zoom-us" )
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
 
     for app in ZoomLauncher zopen zoom; do
       wrapQtApp $out/share/zoom-us/$app
