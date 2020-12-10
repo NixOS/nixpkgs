@@ -277,39 +277,42 @@ let
 
         [ "$opened" == false ] && die "Maximum authentication errors reached"
 
-        echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
-        for i in $(seq ${toString yubikey.saltLength}); do
-            byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
-            new_salt="$new_salt$byte";
-            echo -n .
-        done;
-        echo "ok"
+        ${optionalString yubikey.renewKey ''
+          echo -n "Gathering entropy for new salt (please press some random keys to generate entropy if this blocks for long)..."
+          for i in $(seq ${toString yubikey.saltLength}); do
+              byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
+              new_salt="$new_salt$byte";
+              echo -n .
+          done;
+          echo "ok"
 
-        new_iterations="$iterations"
-        ${optionalString (yubikey.iterationStep > 0) ''
-        new_iterations="$(($new_iterations + ${toString yubikey.iterationStep}))"
+          new_iterations="$iterations"
+          ${optionalString (yubikey.iterationStep > 0) ''
+          new_iterations="$(($new_iterations + ${toString yubikey.iterationStep}))"
+          ''}
+
+          new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
+
+          new_response="$(ykchalresp -${toString yubikey.slot} -x $new_challenge 2>/dev/null)"
+
+          if [ ! -z "$k_user" ]; then
+              new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+          else
+              new_k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+          fi
+
+          echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
+          echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
+
+          if [ $? == 0 ]; then
+              echo -ne "$new_salt\n$new_iterations" > /crypt-storage${yubikey.storage.path}
+          else
+              echo "Warning: Could not update LUKS key, current challenge persists!"
+          fi
+
+          rm -f /crypt-ramfs/new_key
         ''}
 
-        new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-
-        new_response="$(ykchalresp -${toString yubikey.slot} -x $new_challenge 2>/dev/null)"
-
-        if [ ! -z "$k_user" ]; then
-            new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
-        else
-            new_k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
-        fi
-
-        echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
-        echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
-
-        if [ $? == 0 ]; then
-            echo -ne "$new_salt\n$new_iterations" > /crypt-storage${yubikey.storage.path}
-        else
-            echo "Warning: Could not update LUKS key, current challenge persists!"
-        fi
-
-        rm -f /crypt-ramfs/new_key
         umount /crypt-storage
     }
 
@@ -693,6 +696,12 @@ in
                   default = 64;
                   type = types.int;
                   description = "Length of the LUKS slot key derived with PBKDF2 in byte.";
+                };
+
+                renewKey = mkOption {
+                  default = true;
+                  type = types.bool;
+                  description = "Whether to regenerate a new LUKS key in the header (true), or do not regenerate it (false).";
                 };
 
                 iterationStep = mkOption {
