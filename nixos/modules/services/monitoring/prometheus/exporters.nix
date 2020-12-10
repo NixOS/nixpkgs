@@ -41,6 +41,7 @@ let
     "openvpn"
     "postfix"
     "postgres"
+    "py-air-control"
     "redis"
     "rspamd"
     "rtl_433"
