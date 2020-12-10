@@ -173,7 +173,6 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optional  ltoSupport llvmPackages.libunwind
   ++ lib.optional  waylandSupport libxkbcommon
   ++ lib.optional  pipewireSupport pipewire
   ++ lib.optional  (lib.versionAtLeast ffversion "82") gnum4
@@ -182,7 +181,6 @@ buildStdenv.mkDerivation ({
                                           Foundation libobjc AddressBook cups ];
 
   NIX_LDFLAGS = lib.optionalString ltoSupport ''
-    -rpath ${placeholder "out"}/lib/${binaryName}
     -rpath ${llvmPackages.libunwind.out}/lib
   '';
 
