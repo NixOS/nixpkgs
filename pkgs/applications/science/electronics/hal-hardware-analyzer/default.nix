@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # the qt mkDerivation - the latter forcibly overrides this.
   cmakeBuildType = "MinSizeRel";
 
-  meta = with stdenv.lib {
+  meta = with stdenv.lib; {
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;
