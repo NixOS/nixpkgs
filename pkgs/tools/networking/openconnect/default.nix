@@ -9,7 +9,7 @@
 , stoken
 , zlib
 , fetchgit
-, darwin
+, PCSC
 , head ? false
   , fetchFromGitLab
   , autoreconfHook
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
+    ++ lib.optional stdenv.isDarwin PCSC;
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional head autoreconfHook;
 
