@@ -42,7 +42,7 @@ in {
       description = "Update unofficial ClamAV signatures";
 
       serviceConfig = {
-        ExecStart = "${pkgs.clamav-unofficial-sigs}/bin/clamav-unofficial-sigs.sh";
+        ExecStart = "${pkgs.clamav-unofficial-sigs}/bin/clamav-unofficial-sigs";
         User = "${cfg.user}";
         Group = "${cfg.group}";
         StateDirectory = "clamav-unofficial-sigs";

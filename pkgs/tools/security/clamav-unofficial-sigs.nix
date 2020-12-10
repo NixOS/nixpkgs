@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, clamav, rsync, coreutils, gnutar, curl, gzip, dnsutils, gnupg, glibc, gawk, diffutils, bind }:
+{ stdenv, fetchFromGitHub, makeWrapper, clamav, rsync, coreutils, gnutar, curl, gzip, dnsutils, gnupg, glibc, gawk, diffutils, bind }:
 
 stdenv.mkDerivation rec {
   pname = "clamav-unofficial-sigs";
@@ -7,18 +7,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "extremeshok";
     repo = "clamav-unofficial-sigs";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-KZh8f4BB31b4ZBOrp4z/+TCqsppa2cyfteM3OUVv57A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/etc/clamav-unofficial-sigs
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/etc/clamav-unofficial-sigs
 
-    cp clamav-unofficial-sigs.sh $out/bin
-    chmod +x $out/bin/clamav-unofficial-sigs.sh
+    cp clamav-unofficial-sigs.sh $out/bin/clamav-unofficial-sigs
+    chmod +x $out/bin/clamav-unofficial-sigs
 
     cp config/master.conf $out/etc/clamav-unofficial-sigs
 
@@ -34,7 +33,8 @@ stdenv.mkDerivation rec {
     user_configuration_complete="yes"
     ' > $out/etc/clamav-unofficial-sigs/os.conf
 
-    wrapProgram $out/bin/clamav-unofficial-sigs.sh --prefix PATH : "${lib.makeBinPath [ clamav coreutils gzip rsync gnutar curl dnsutils bind.host gnupg glibc gawk diffutils ]}"
+    wrapProgram $out/bin/clamav-unofficial-sigs \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ clamav coreutils gzip rsync gnutar curl dnsutils bind.host gnupg glibc gawk diffutils ]}"
   '';
 
   meta = with stdenv.lib; {
