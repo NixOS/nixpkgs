@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, python2
 , python3
 , pkg-config
 , readline
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_42
     wafHook
+    python2 # For wafHook
   ];
 
   buildInputs = [
