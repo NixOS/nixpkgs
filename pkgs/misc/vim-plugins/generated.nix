@@ -4921,6 +4921,18 @@ let
     meta.homepage = "https://github.com/vim-erlang/vim-erlang-runtime/";
   };
 
+  vim-erlang-tags = buildVimPluginFrom2Nix {
+    pname = "vim-erlang-tags";
+    version = "2020-10-16";
+    src = fetchFromGitHub {
+      owner = "vim-erlang";
+      repo = "vim-erlang-tags";
+      rev = "a5bc6a90a166073d74e5103f40735740ae40a3cb";
+      sha256 = "02d3y2296nh8qv0kgx119c1niim6ci2bahi7q3k0jsl2f86fl7dy";
+    };
+    meta.homepage = "https://github.com/vim-erlang/vim-erlang-tags/";
+  };
+
   vim-eunuch = buildVimPluginFrom2Nix {
     pname = "vim-eunuch";
     version = "2020-08-07";
