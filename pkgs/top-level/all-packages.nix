@@ -10480,10 +10480,6 @@ in
 
   mujs = callPackage ../development/interpreters/mujs { };
 
-  nix-exec = callPackage ../development/interpreters/nix-exec {
-    git = gitMinimal;
-  };
-
   octave = callPackage ../development/interpreters/octave {
     python = python3;
     mkDerivation = stdenv.mkDerivation;
