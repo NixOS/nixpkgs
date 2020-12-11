@@ -16183,7 +16183,9 @@ in
 
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
-  talloc = callPackage ../development/libraries/talloc { };
+  talloc = callPackage ../development/libraries/talloc {
+    wafHook = wafHook.override { python = python3; };
+  };
 
   tclap = callPackage ../development/libraries/tclap {};
 
