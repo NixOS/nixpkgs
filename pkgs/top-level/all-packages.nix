@@ -25823,8 +25823,6 @@ in
 
   prboom = callPackage ../games/prboom { };
 
-  privateer = callPackage ../games/privateer { };
-
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
 
   qweechat = callPackage ../applications/networking/irc/qweechat { };
