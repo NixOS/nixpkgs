@@ -6,7 +6,6 @@
 with lib;
 
 let
-  libDir = "/var/lib/bacula";
 
   fd_cfg = config.services.bacula-fd;
   fd_conf = pkgs.writeText "bacula-fd.conf"
@@ -14,7 +13,7 @@ let
       Client {
         Name = "${fd_cfg.name}";
         FDPort = ${toString fd_cfg.port};
-        WorkingDirectory = "${libDir}";
+        WorkingDirectory = "${dir_cfg.workingDirectory}";
         Pid Directory = "/run";
         ${fd_cfg.extraClientConfig}
       }
@@ -40,7 +39,7 @@ let
       Storage {
         Name = "${sd_cfg.name}";
         SDPort = ${toString sd_cfg.port};
-        WorkingDirectory = "${libDir}";
+        WorkingDirectory = "${dir_cfg.workingDirectory}";
         Pid Directory = "/run";
         ${sd_cfg.extraStorageConfig}
       }
@@ -86,7 +85,7 @@ let
       Name = "${dir_cfg.name}";
       Password = "${dir_cfg.password}";
       DirPort = ${toString dir_cfg.port};
-      Working Directory = "${libDir}";
+      Working Directory = "${dir_cfg.workingDirectory}";
       Pid Directory = "/run/";
       QueryFile = "${pkgs.bacula}/etc/query.sql";
       ${dir_cfg.extraDirectorConfig}
@@ -443,6 +442,23 @@ in {
         '';
       };
 
+      workingDirectory = mkOption {
+        description = ''
+          This  directive is mandatory and specifies a directory in which
+          the Director may put its status files.  This directory should
+          be used only by Bacula but may be shared by other Bacula daemons.
+
+          However, please  note, if this directory is shared with other
+          Bacula daemons (the File daemon and Storage daemon), you must
+          ensure that the Name given to each daemon is unique so that the
+          temporary filenames used do not collide.
+
+          The working directory specified must already exist and be readable
+          and writable by the Bacula daemon referencing it.
+        '';
+        default = "/var/lib/bacula";
+      };
+
       password = mkOption {
         # TODO: required?
         description = ''
@@ -502,7 +518,7 @@ in {
       after = [ "network.target" ];
       description = "Bacula Storage Daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.bacula ];
+      path = [ pkgs.bacula pkgs.gawk pkgs.mtx pkgs.mt-st ];
       serviceConfig = {
         ExecStart = "${pkgs.bacula}/sbin/bacula-sd -f -u bacula -g bacula -c ${sd_conf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -517,7 +533,7 @@ in {
       after = [ "network.target" "postgresql.service" ];
       description = "Bacula Director Daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.bacula ];
+      path = [ pkgs.bacula pkgs.gawk pkgs.mtx pkgs.mt-st pkgs.su ];
       serviceConfig = {
         ExecStart = "${pkgs.bacula}/sbin/bacula-dir -f -u bacula -g bacula -c ${dir_conf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -525,7 +541,7 @@ in {
         StateDirectory = "bacula";
       };
       preStart = ''
-        if ! test -e "${libDir}/db-created"; then
+        if ! test -e "${dir_cfg.workingDirectory}/db-created"; then
             ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole bacula
             #${pkgs.postgresql}/bin/createdb --owner bacula bacula
 
@@ -533,7 +549,7 @@ in {
             ${pkgs.bacula}/etc/create_bacula_database postgresql
             ${pkgs.bacula}/etc/make_bacula_tables postgresql
             ${pkgs.bacula}/etc/grant_bacula_privileges postgresql
-            touch "${libDir}/db-created"
+            touch "${dir_cfg.workingDirectory}/db-created"
         else
             ${pkgs.bacula}/etc/update_bacula_tables postgresql || true
         fi
@@ -545,7 +561,7 @@ in {
     users.users.bacula = {
       group = "bacula";
       uid = config.ids.uids.bacula;
-      home = "${libDir}";
+      home = "${dir_cfg.workingDirectory}";
       createHome = true;
       description = "Bacula Daemons user";
       shell = "${pkgs.bash}/bin/bash";
