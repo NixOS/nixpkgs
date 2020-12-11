@@ -7802,8 +7802,6 @@ in
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
-  chaps = callPackage ../tools/security/chaps { };
-
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   kernelshark = libsForQt5.callPackage ../os-specific/linux/trace-cmd/kernelshark.nix { };
