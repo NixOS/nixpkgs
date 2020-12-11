@@ -22807,8 +22807,6 @@ in
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
-  natron = callPackage ../applications/video/natron { };
-
   neocomp  = callPackage ../applications/window-managers/neocomp { };
 
   newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
