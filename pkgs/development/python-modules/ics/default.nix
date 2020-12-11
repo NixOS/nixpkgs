@@ -20,6 +20,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "arrow>=0.11,<0.15" "arrow"
+    substituteInPlace setup.cfg --replace "--pep8" ""
   '';
 
   checkInputs = [ pytestCheckHook pytest-flakes ];
