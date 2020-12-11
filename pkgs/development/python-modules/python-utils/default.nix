@@ -12,6 +12,7 @@ buildPythonPackage rec {
   postPatch = ''
     rm -r tests/__pycache__
     rm tests/*.pyc
+    substituteInPlace pytest.ini --replace "--pep8" ""
   '';
 
   checkInputs = [ pytest pytestrunner pytestcov pytest-flakes sphinx ];
