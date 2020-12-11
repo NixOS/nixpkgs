@@ -11500,6 +11500,7 @@ in
 
   fswatch = callPackage ../development/tools/misc/fswatch {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    autoreconfHook = autoreconfHook269;
   };
 
   fujprog = callPackage ../development/tools/misc/fujprog {
