@@ -26942,8 +26942,6 @@ in
   glucose = callPackage ../applications/science/logic/glucose { };
   glucose-syrup = callPackage ../applications/science/logic/glucose/syrup.nix { };
 
-  hol = callPackage ../applications/science/logic/hol { };
-
   inherit (ocamlPackages) hol_light;
 
   hologram = callPackage ../tools/security/hologram { };
