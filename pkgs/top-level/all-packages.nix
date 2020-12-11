@@ -4820,8 +4820,6 @@ in
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
-  inboxer = callPackage ../applications/networking/mailreaders/inboxer { };
-
   incron = callPackage ../tools/system/incron { };
 
   industrializer = callPackage ../applications/audio/industrializer { };
