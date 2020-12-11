@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "iannix";
-  version = "0.9.20-b";
+  version = "unstable-2020-12-09";
 
   src = fetchFromGitHub {
     owner = "iannix";
     repo = "IanniX";
-    rev = "v${version}";
-    sha256 = "6jjgMvD2VkR3ztU5LguqhtNd+4/ZqRy5pVW5xQ6K20Q=";
+    rev = "287b51d9b90b3e16ae206c0c4292599619f7b159";
+    sha256 = "AhoP+Ok78Vk8Aee/RP572hJeM8O7v2ZTvFalOZZqRy8=";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
