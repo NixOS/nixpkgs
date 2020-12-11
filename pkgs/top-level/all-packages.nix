@@ -4739,8 +4739,6 @@ in
 
   i2pd = callPackage ../tools/networking/i2pd { };
 
-  i-score = libsForQt514.callPackage ../applications/audio/i-score { };
-
   iasl = callPackage ../development/compilers/iasl { };
 
   iannix = libsForQt514.callPackage ../applications/audio/iannix { };
