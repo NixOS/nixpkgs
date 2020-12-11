@@ -10774,6 +10774,7 @@ in
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
+    autoreconfHook = autoreconfHook269;
     bison = buildPackages.bison_3_5;
   })
     ruby_2_5
