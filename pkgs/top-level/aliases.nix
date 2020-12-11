@@ -251,7 +251,7 @@ mapAliases ({
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
-  kdeconnect = kdeApplications.kdeconnect-kde; # added 2020-10-28
+  kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
   keepassx-community = keepassxc; # added 2017-11
@@ -808,8 +808,8 @@ mapAliases ({
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
 
-  inherit (kdeFrameworks) breeze-icons oxygen-icons5;
-  inherit (kdeApplications)
+  inherit (plasma5Packages) breeze-icons oxygen-icons5;
+  inherit (plasma5Packages)
     akonadi akregator ark
     bomber bovo
     dolphin dragon
@@ -841,7 +841,7 @@ mapAliases ({
     spectacle
     yakuake
   ;
-  inherit (plasma5)
+  inherit (plasma5Packages)
     bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover
     kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
@@ -850,7 +850,7 @@ mapAliases ({
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
     systemsettings xdg-desktop-portal-kde
   ;
-  inherit (plasma5.thirdParty)
+  inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
     kwin-dynamic-workspaces
     kwin-tiling
