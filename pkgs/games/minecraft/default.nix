@@ -88,11 +88,11 @@ in
 stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.2.741";
+  version = "2.2.909";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "0bm78ybn91ihibxgmlpk7dl2zxy4a57k86qmb08cif3ifbflzkvw";
+    sha256 = "15x2imr8c4m2bjfs9y1l34fpvixxdf09gqls4bqb4rdvj1vhdrh2";
   };
 
   icon = fetchurl {
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${stdenv.lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${stdenv.lib.getBin jre} \
       --run "cd /tmp" \
       "''${gappsWrapperArgs[@]}"
   '';

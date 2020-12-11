@@ -8348,7 +8348,7 @@ in
 
   vmtouch = callPackage ../tools/misc/vmtouch { };
 
-  vncdo = callPackage ../tools/admin/vncdo { };
+  vncdo = with python3Packages; toPythonApplication vncdo;
 
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
@@ -20503,10 +20503,6 @@ in
   bombadillo = callPackage ../applications/networking/browsers/bombadillo { };
 
   bombono = callPackage ../applications/video/bombono {};
-
-  bomi = libsForQt5.callPackage ../applications/video/bomi {
-    ffmpeg = ffmpeg_2;
-  };
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 

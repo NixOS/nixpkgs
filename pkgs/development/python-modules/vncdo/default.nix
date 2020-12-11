@@ -1,18 +1,23 @@
 { stdenv, fetchFromGitHub
-, python2Packages
+, buildPythonPackage, isPy27
+, pillow
+, twisted
+, pexpect
+, nose
+, ptyprocess
 }:
-python2Packages.buildPythonPackage {
+buildPythonPackage rec {
   pname = "vncdo";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "vncdotool";
-    rev = "5c03a82dcb5a3bd9e8f741f8a8d0c1ce082f2834";
-    sha256 = "0k03b09ipsz8vp362x7sx7z68mxgqw9qzvkii2f8j9vx2y79rjsh";
+    rev = "v${version}";
+    sha256 = "0h3ccr8zi7xpgn6hz43x1045x5l4bhha7py8x00g8bv6gaqlbwxn";
   };
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = [
     pillow
     twisted
     pexpect
@@ -20,7 +25,7 @@ python2Packages.buildPythonPackage {
     ptyprocess
   ];
 
-  doCheck = false;
+  doCheck = !isPy27;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/sibson/vncdotool";
