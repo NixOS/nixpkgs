@@ -2744,11 +2744,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xrandr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXrandr, libXrender }: stdenv.mkDerivation {
-    name = "xrandr-1.5.0";
+    name = "xrandr-1.5.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xrandr-1.5.0.tar.bz2";
-      sha256 = "1kaih7rmzxr1vp5a5zzjhm5x7dn9mckya088sqqw026pskhx9ky1";
+      url = "mirror://xorg/individual/app/xrandr-1.5.1.tar.xz";
+      sha256 = "0ql75s1n3dm2m3g1ilb9l6hqh15r0v709bgghpwazy3jknpnvivv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

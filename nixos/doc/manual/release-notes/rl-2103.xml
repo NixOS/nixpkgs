@@ -372,6 +372,18 @@
    </listitem>
    <listitem>
     <para>
+     PulseAudio was upgraded to 14.0, with changes to the handling of default sinks.
+     See its <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/14.0/">release notes</link>.
+    </para>
+
+    <para>
+     GNOME users may wish to delete their <literal>~/.config/pulse</literal> due to the changes to stream routing
+     logic. See <link xlink:href="https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/832">PulseAudio bug 832</link>
+     for more information.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The <package>zookeeper</package> package does not provide
      <literal>zooInspector.sh</literal> anymore, as that "contrib" has
      been dropped from upstream releases.

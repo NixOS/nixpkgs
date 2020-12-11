@@ -319,4 +319,6 @@ in {
       configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
     });
   });
+
+  libcap = super.libcap.override { pam = null; };
 }
