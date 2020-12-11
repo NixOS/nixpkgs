@@ -5858,8 +5858,6 @@ in
 
   nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
 
-  namazu = callPackage ../tools/text/namazu { };
-
   nasty = callPackage ../tools/security/nasty { };
 
   nat-traverse = callPackage ../tools/networking/nat-traverse { };
