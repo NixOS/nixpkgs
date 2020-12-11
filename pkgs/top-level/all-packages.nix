@@ -26950,12 +26950,6 @@ in
 
   iprover = callPackage ../applications/science/logic/iprover { };
 
-  jonprl = callPackage ../applications/science/logic/jonprl {
-    smlnj = if stdenv.isDarwin
-      then smlnjBootstrap
-      else smlnj;
-  };
-
   key = callPackage ../applications/science/logic/key { };
 
   lean = callPackage ../applications/science/logic/lean {};
