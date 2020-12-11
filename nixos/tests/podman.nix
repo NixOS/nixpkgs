@@ -61,12 +61,6 @@ import ./make-test-python.nix (
           podman.succeed("podman stop sleeping")
           podman.succeed("podman rm sleeping")
 
-
-      podman.succeed(
-          "mkdir -p /tmp/podman-run-1000/libpod && chown alice -R /tmp/podman-run-1000"
-      )
-
-
       with subtest("Run container rootless with crun"):
           podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           podman.succeed(

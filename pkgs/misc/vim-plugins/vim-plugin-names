@@ -38,6 +38,7 @@ brennanfee/vim-gui-position
 bronson/vim-trailing-whitespace
 brooth/far.vim
 buoto/gotests-vim
+camspiers/lens.vim
 carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml
@@ -120,6 +121,7 @@ flazz/vim-colorschemes
 floobits/floobits-neovim
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
+fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 fszymanski/deoplete-emoji
 garbas/vim-snipmate
@@ -176,6 +178,7 @@ itchyny/vim-gitbranch
 ivanov/vim-ipython
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
+jakwings/vim-pony
 jaredgorski/SpaceCamp
 jaxbot/semantic-highlight.vim
 JazzCore/ctrlp-cmatcher

@@ -114,6 +114,18 @@ in rec {
       };
   };
 
+  ### Eclipse IDE for RCP and RAP Developers
+
+  eclipse-rcp = buildEclipse {
+    name = "eclipse-rcp-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for RCP and RAP Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        sha512 = "216g805fgpb7vwbgk36xkf467vijvaa3x0gk4d94pi92d9wdh5dph6wjjr4ka9rvg0pzxxr8y3sgbfqqzqpc82bgiz5qqr93sprh9bj";
+      };
+  };
+
   ### Environments
 
   # Function that assembles a complete Eclipse environment from an

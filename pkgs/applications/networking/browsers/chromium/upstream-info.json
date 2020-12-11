@@ -13,14 +13,14 @@
     },
     "chromedriver": {
       "version": "87.0.4280.88",
-      "sha256_linux": "141mr2jiy3nslwd3s43m4i6plkv9wv5fgi78cn7mz0ac9x6fpcgx",
+      "sha256_linux": "11plh2hs2zpa14ymlbnj92pa58krl28yw4c0s55wk8qsxvzvl02m",
       "sha256_darwin": "048hsqp6575r980m769lzznvxypmfcwn89f1d3ik751ymzmb5r78"
     }
   },
   "beta": {
-    "version": "88.0.4324.27",
-    "sha256": "0mciiyh3sn2zrl8g6znylc2pm9sb0wzsclgavf7mmlknri5sjblc",
-    "sha256bin64": "0qf2j1j3p94s724rwh8fydpjn88cs9yxxhjf5axvqwi7q3h35cfx",
+    "version": "88.0.4324.41",
+    "sha256": "06hnawylr7fl1zav6cyg1yfw2z04qrpnj4n3v07qx7ya6p8qyp2g",
+    "sha256bin64": "1iq4qd5x7ivypcxh47d6av45hyqdgga2s80idyhf1f51f660h2vc",
     "deps": {
       "gn": {
         "version": "2020-11-05",

@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 let
-  version = "0.16.0";
+  version = "0.16.3";
 
   system = stdenv.hostPlatform.system;
   suffix = {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchsrc {
-    x86_64-linux = "1i6i42hwxaczkfv8ldxn3wp6bslgwfkycvh88khfmapw2f5f9mhr";
-    aarch64-linux = "1ka5vscyqxckxnhnymp06yi0r2ljw42q0g62yq7qv4safljd452p";
-    x86_64-darwin = "1c50c2r2hq2fi8jcijq6vn336w96ar7b6qccv5w2240i0szsxxql";
+    x86_64-linux = "1c6v7d8i494k32b0zrjn4fn1idza95r6h99c33c5za4hi7gqvy0x";
+    aarch64-linux = "153jd4wsq8qc598w7y4d30dy20ljyhrl68cc3pig1p712l5258zs";
+    x86_64-darwin = "0y2qjdlyvhrzwg0fmxsr3jl39kd13276a7wg0ndhdjfwxvdwpxkz";
   };
 
   doBuild = false;

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "dbus-next";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "altdesktop";
     repo = "python-dbus-next";
     rev = "v${version}";
-    sha256 = "0c14mmysx014n1m4pi4ymi6pzxf8dkjr6fm2cmp96x05z9v90vlr";
+    sha256 = "0x78ghkci4las13gwbrm8fzg671lx1q2cn8h0f64ki8yag1myia1";
   };
 
   checkInputs = [

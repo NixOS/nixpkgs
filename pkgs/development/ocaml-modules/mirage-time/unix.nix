@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "mirage-time-unix";
 
-  inherit (mirage-time) src version minimumOCamlVersion;
+  inherit (mirage-time) src useDune2 version minimumOCamlVersion;
 
   propagatedBuildInputs = [ mirage-time ocaml_lwt duration ];
 

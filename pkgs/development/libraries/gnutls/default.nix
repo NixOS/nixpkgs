@@ -34,7 +34,10 @@ stdenv.mkDerivation {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
+    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch
+    # fix gnulib tests on 32-bit ARM. Included on gnutls master.
+    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
+    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   # Skip some tests:
   #  - pkgconfig: building against the result won't work before installing (3.5.11)

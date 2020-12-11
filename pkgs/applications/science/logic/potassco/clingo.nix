@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clingo";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchzip {
     url = "https://github.com/potassco/clingo/archive/v${version}.tar.gz";
-    sha256 = "0gfqlgwg3qx042w6hdc9qpmr50n4vci3p0ddk28f3kqacf6q9q7m";
+    sha256 = "1f0q5f71s696ywxcjlfz7z134m1h7i39j9sfdv8hlw2w3g5nppc3";
   };
 
   nativeBuildInputs = [ cmake ];

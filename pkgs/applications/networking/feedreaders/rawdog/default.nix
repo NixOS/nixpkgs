@@ -11,6 +11,10 @@ python2Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python2Packages; [ feedparser ];
 
+  # Requested by @SuperSandro20001
+  pythonImportsCheck = [ "feedparser" ];
+  doCheck = false;
+
   namePrefix = "";
 
   meta = with stdenv.lib; {

@@ -20,7 +20,7 @@ buildGoPackage {
     description = "Prometheus exporter for RabbitMQ";
     homepage = "https://github.com/kbudde/rabbitmq_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ocharles ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

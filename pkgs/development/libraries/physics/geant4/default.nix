@@ -48,20 +48,20 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "10.6.3";
+  version = "10.7.0";
   pname = "geant4";
 
   src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p03.tar.gz";
-    sha256 = "1wzv5xky1pfm7wdfdkvqcaaqlcnsrz35dc7zcrxh8l3j5rki6pqb";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.07.tar.gz";
+    sha256 = "0jmdxb8z20d4l6sf2w0gk9ska48kylm38yngy3mzyvyj619a8vkp";
   };
 
   boost_python_lib = "python${builtins.replaceStrings ["."] [""] python3.pythonVersion}";
   postPatch = ''
     # Fix for boost 1.67+
     substituteInPlace environments/g4py/CMakeLists.txt \
-      --replace "find_package(Boost REQUIRED python)" \
-                "find_package(Boost REQUIRED COMPONENTS $boost_python_lib)"
+      --replace "REQUIRED python" \
+                "REQUIRED COMPONENTS $boost_python_lib"
     substituteInPlace environments/g4py/G4PythonHelpers.cmake \
       --replace "Boost::python" "Boost::$boost_python_lib"
   '';
