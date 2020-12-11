@@ -930,6 +930,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  audiowaveform = callPackage ../tools/audio/audiowaveform { };
+
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
   autospotting = callPackage ../applications/misc/autospotting { };
@@ -6761,6 +6763,8 @@ in
   };
 
   remarshal = callPackage ../development/tools/remarshal { };
+
+  rehex = callPackage ../applications/editors/rehex { };
 
   rig = callPackage ../tools/misc/rig {
     stdenv = gccStdenv;
@@ -17026,8 +17030,6 @@ in
   firebird = callPackage ../servers/firebird { icu = null; /*stdenv = gcc5Stdenv;*/ };
   firebirdSuper = firebird.override { icu = icu58; superServer = true; /*stdenv = gcc5Stdenv;*/ };
 
-  frab = callPackage ../servers/web-apps/frab { };
-
   freeradius = callPackage ../servers/freeradius { };
 
   freeswitch = callPackage ../servers/sip/freeswitch {
@@ -18208,6 +18210,10 @@ in
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
   openisns = callPackage ../os-specific/linux/open-isns { };
+
+  osx-cpu-temp = callPackage ../os-specific/darwin/osx-cpu-temp {
+    inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
+  };
 
   osxfuse = callPackage ../os-specific/darwin/osxfuse { };
 
