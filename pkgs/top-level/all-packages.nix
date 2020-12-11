@@ -930,6 +930,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  audiowaveform = callPackage ../tools/audio/audiowaveform { };
+
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
   autospotting = callPackage ../applications/misc/autospotting { };
