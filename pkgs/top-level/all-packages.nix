@@ -19910,8 +19910,6 @@ in
 
   qgo = libsForQt5.callPackage ../games/qgo { };
 
-  qmc2 = libsForQt514.callPackage ../misc/emulators/qmc2 { };
-
   quattrocento = callPackage ../data/fonts/quattrocento {};
 
   quattrocento-sans = callPackage ../data/fonts/quattrocento-sans {};
