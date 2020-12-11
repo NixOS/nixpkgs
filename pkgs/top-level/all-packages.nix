@@ -8817,8 +8817,6 @@ in
     jdk = jdk8;
   };
 
-  aliceml = callPackage ../development/compilers/aliceml { };
-
   arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
 
   asciigraph = callPackage ../tools/text/asciigraph { };
