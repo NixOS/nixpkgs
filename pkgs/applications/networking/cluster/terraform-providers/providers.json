@@ -70,10 +70,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/aws",
     "repo": "terraform-provider-aws",
-    "rev": "v3.15.0",
-    "sha256": "0rxpdxg5p478sipbhq2x347gs5wrlwz4ggy9z007cbp34yhb2wka",
-    "vendorSha256": "0vapfnd4c8jb15pdjnnb97vgsvfakjvl1czccbfy0znhdk2ynz02",
-    "version": "3.15.0"
+    "rev": "v3.20.0",
+    "sha256": "18zccjkdxzcprhpv3cn3b9fbp0h81pkj0dsygfz2islclljc3x17",
+    "vendorSha256": "0lalcp3wwjbwhp1rwidpndjmilfsc7cb79diicn02a207y277gji",
+    "version": "3.20.0"
   },
   "azuread": {
     "owner": "terraform-providers",
@@ -748,11 +748,13 @@
     "version": "1.2.1"
   },
   "postgresql": {
-    "owner": "terraform-providers",
+    "owner": "cyrilgdn",
+    "provider-source-address": "registry.terraform.io/cyrilgdn/postgresql",
     "repo": "terraform-provider-postgresql",
-    "rev": "v1.7.1",
-    "sha256": "0qlz00svvbwxslp8v7bi7mx5mvnjmh2cvg33a006gh4fy5n75shy",
-    "version": "1.7.1"
+    "rev": "v1.8.1",
+    "sha256": "07qaiy3vmz179am1qrxwvrk7xpraaa8g0hf49bj54pw7nkrmaixq",
+    "vendorSha256": null,
+    "version": "1.8.1"
   },
   "powerdns": {
     "owner": "terraform-providers",

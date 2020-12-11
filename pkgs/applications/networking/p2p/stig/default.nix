@@ -1,4 +1,4 @@
-{ lib
+{ stdenv
 , fetchFromGitHub
 , python3Packages
 }:
@@ -54,9 +54,12 @@ python3Packages.buildPythonApplication rec {
     "--deselect=tests/client_test/ttypes_test.py::TestTimestamp::test_string__month_day_hour_minute_second"
     # TestScrollBarWithScrollable.test_wrapping_bug fails
     "--deselect=tests/tui_test/scroll_test.py::TestScrollBarWithScrollable::test_wrapping_bug"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "--deselect=tests/client_test/aiotransmission_test/api_torrent_test.py"
+    "--deselect=tests/client_test/aiotransmission_test/rpc_test.py"
   ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
     license = licenses.gpl3;

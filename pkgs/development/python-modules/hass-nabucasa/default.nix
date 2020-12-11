@@ -15,6 +15,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i 's/"acme.*"/"acme"/' setup.py
+    sed -i 's/"attrs.*"/"attrs"/' setup.py
     sed -i 's/"cryptography.*"/"cryptography"/' setup.py
   '';
 
