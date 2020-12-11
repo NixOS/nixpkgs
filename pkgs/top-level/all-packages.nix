@@ -13465,7 +13465,9 @@ in
 
   hiredis-vip = callPackage ../development/libraries/hiredis-vip { };
 
-  hivex = callPackage ../development/libraries/hivex { };
+  hivex = callPackage ../development/libraries/hivex {
+    autoreconfHook = autoreconfHook269;
+  };
 
   hound = callPackage ../development/tools/misc/hound { };
 
