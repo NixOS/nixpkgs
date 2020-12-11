@@ -7289,6 +7289,8 @@ in
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
+  siril = callPackage ../applications/science/astronomy/siril { };
+
   sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
 
   sit = callPackage ../applications/version-management/sit {
@@ -14275,6 +14277,8 @@ in
   librevisa = callPackage ../development/libraries/librevisa { };
 
   librime = callPackage ../development/libraries/librime {};
+
+  librtprocess = callPackage ../development/libraries/librtprocess { };
 
   libsamplerate = callPackage ../development/libraries/libsamplerate {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
