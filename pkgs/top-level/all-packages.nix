@@ -353,8 +353,6 @@ in
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
 
-  mht2htm = callPackage ../tools/misc/mht2htm { };
-
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
