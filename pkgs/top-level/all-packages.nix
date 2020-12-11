@@ -26663,7 +26663,9 @@ in
     neuron-version = neuron.version;
   };
 
-  kallisto = callPackage ../applications/science/biology/kallisto { };
+  kallisto = callPackage ../applications/science/biology/kallisto {
+    autoconf = autoconf269;
+  };
 
   kssd = callPackage ../applications/science/biology/kssd { };
 
