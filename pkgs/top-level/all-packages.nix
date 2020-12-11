@@ -6762,6 +6762,8 @@ in
 
   remarshal = callPackage ../development/tools/remarshal { };
 
+  rehex = callPackage ../applications/editors/rehex { };
+
   rig = callPackage ../tools/misc/rig {
     stdenv = gccStdenv;
   };
