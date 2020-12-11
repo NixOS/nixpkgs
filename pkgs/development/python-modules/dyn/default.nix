@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestcov, mock, pytestpep8
+{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestcov, mock
 , pytest_xdist, covCore, glibcLocales }:
 
 buildPythonPackage rec {
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     pytest
     pytestcov
     mock
-    pytestpep8
     pytest_xdist
     covCore
   ];

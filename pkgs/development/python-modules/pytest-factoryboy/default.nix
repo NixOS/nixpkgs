@@ -7,7 +7,6 @@
 , factory_boy
 , pytestcache
 , pytestcov
-, pytestpep8
 , mock
 }:
 
@@ -30,7 +29,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytestcache
     pytestcov
-    pytestpep8
   ];
   pytestFlagsArray = [ "--ignore=docs" ];
 

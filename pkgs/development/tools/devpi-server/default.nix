@@ -32,7 +32,6 @@ python3Packages.buildPythonApplication rec {
     nginx
     pytest
     pytest-flake8
-    pytestpep8
     webtest
   ] ++ stdenv.lib.optionals isPy27 [ mock ];
 
