@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
   buildInputs = [ gettext libtool makeWrapper texinfo ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A cross-platform file change monitor with multiple backends";
     homepage = "https://github.com/emcrisostomo/fswatch";
