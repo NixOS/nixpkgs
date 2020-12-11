@@ -20,7 +20,7 @@ let
     # "caffe" "mxnet" "flint" "sage" "sageWithDoc"
 
     # broken
-    # "gnss-sdr" "octave-jit" "openmodelica" "torch"
+    # "gnss-sdr" "octave-jit" "torch"
 
     # subpackages
     ["pythonPackages" "numpy"] ["pythonPackages" "prox-tv"] ["pythonPackages" "scs"]
