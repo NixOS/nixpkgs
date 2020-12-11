@@ -144,7 +144,7 @@ in
       dictd = 105;
       couchdb = 106;
       searx = 107;
-      kippo = 108;
+      # kippo = 108; # unused
       jenkins = 109;
       systemd-journal-gateway = 110;
       #notbit = 111; # unused
