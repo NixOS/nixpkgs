@@ -10750,8 +10750,6 @@ in
 
   wasm = ocamlPackages.wasm;
 
-  proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
-
 
   ### DEVELOPMENT / MISC
 
