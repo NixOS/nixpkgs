@@ -2512,8 +2512,6 @@ in
 
   pbgopy = callPackage ../tools/text/pbgopy { };
 
-  pbpst = callPackage ../applications/misc/pbpst { };
-
   pbzx = callPackage ../tools/compression/pbzx { };
 
   persepolis = python3Packages.callPackage ../tools/networking/persepolis {
