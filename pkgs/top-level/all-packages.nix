@@ -20617,8 +20617,6 @@ in
     inherit (xorg) libSM;
   };
 
-  clfswm = callPackage ../applications/window-managers/clfswm { };
-
   clickshare-csc1 = callPackage ../applications/video/clickshare-csc1 { };
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
