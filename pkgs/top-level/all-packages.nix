@@ -4259,8 +4259,6 @@ in
     gegl = gegl_0_4;
   };
 
-  gnokii = callPackage ../tools/misc/gnokii { };
-
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
   gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
