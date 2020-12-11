@@ -11866,7 +11866,9 @@ in
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
-  openocd = callPackage ../development/tools/misc/openocd { };
+  openocd = callPackage ../development/tools/misc/openocd {
+    autoreconfHook = autoreconfHook269;
+  };
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
