@@ -818,16 +818,20 @@ class Machine:
         with self.nested("waiting for the X11 server"):
             retry(check_x)
 
-    def get_window_names(self) -> List[str]:
+    def get_window_names(self, user: str = "root") -> List[str]:
+        env = self.systemctl("show-environment", user)[1].splitlines()
+        filtered_env = (x for x in env if x.startswith("XAUTHORITY="))
         return self.succeed(
-            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+            r"sudo -u {} env {} xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'".format(
+                user, " ".join(filtered_env)
+            )
         ).splitlines()
 
-    def wait_for_window(self, regexp: str) -> None:
+    def wait_for_window(self, regexp: str, user: str = "root") -> None:
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
-            names = self.get_window_names()
+            names = self.get_window_names(user)
             if last_try:
                 self.log(
                     "Last chance to match {} on the window list,".format(regexp)
