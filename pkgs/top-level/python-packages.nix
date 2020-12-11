@@ -7304,6 +7304,8 @@ in {
 
   SQLAlchemy-ImageAttach = callPackage ../development/python-modules/sqlalchemy-imageattach { };
 
+  sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
+
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
