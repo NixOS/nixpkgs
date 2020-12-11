@@ -15643,8 +15643,6 @@ in
     inherit (darwin.apple_sdk.frameworks) AGL;
   };
 
-  qxt = callPackage ../development/libraries/qxt {};
-
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
   raft-canonical = callPackage ../development/libraries/raft-canonical { };
