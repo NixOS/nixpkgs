@@ -4603,7 +4603,7 @@ in
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
-  hal-hardware-analyzer = libsForQt514.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
+  hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
 
   half = callPackage ../development/libraries/half { };
 
