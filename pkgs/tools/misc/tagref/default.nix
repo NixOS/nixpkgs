@@ -1,16 +1,16 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform }:
 rustPlatform.buildRustPackage rec {
   pname = "tagref";
-  version = "1.3.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3R6vhevSld9IjJMsGl5Rwv0ADMjm94NeZxvl8eYHR2Y=";
+    sha256 = "0y1c0v2zjpav1n72pgf3kpqdz6ixp2mjhcvvza4gzfp865c236nc";
   };
 
-  cargoSha256 = "sha256-pLugAT8QlgxawkR2y+LIacRh4nB59qpKLJjxc81CNDY=";
+  cargoSha256 = "06ljy213x9lhvqjysz9cjhrrg0ns07qkz27pxd8rih0mk6cck45g";
 
   meta = with lib; {
     description = "Tagref helps you refer to other locations in your codebase.";
