@@ -26502,8 +26502,6 @@ in
 
   ### SCIENCE/BIOLOGY
 
-  alliance = callPackage ../applications/science/electronics/alliance { };
-
   ants = callPackage ../applications/science/biology/ants {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
