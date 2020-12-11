@@ -12455,7 +12455,9 @@ in
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
-  libbfd = callPackage ../development/libraries/libbfd { };
+  libbfd = callPackage ../development/libraries/libbfd {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libopcodes = callPackage ../development/libraries/libopcodes { };
 
