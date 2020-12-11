@@ -28588,8 +28588,6 @@ in
 
   tomboy = callPackage ../applications/misc/tomboy { };
 
-  imatix_gsl = callPackage ../development/tools/imatix_gsl {};
-
   sccache = callPackage ../development/tools/misc/sccache { };
 
   sequeler = callPackage ../applications/misc/sequeler { };
