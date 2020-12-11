@@ -1157,6 +1157,8 @@ in {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
+  cattrs = callPackage ../development/python-modules/cattrs { };
+
   cbeams = callPackage ../misc/cbeams { };
 
   cbor2 = callPackage ../development/python-modules/cbor2 { };
