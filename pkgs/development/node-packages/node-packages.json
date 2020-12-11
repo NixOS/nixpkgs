@@ -150,6 +150,7 @@
 , "node-red"
 , "node2nix"
 , "nodemon"
+, "np"
 , "npm"
 , "npm-check-updates"
 , {"npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0"}
