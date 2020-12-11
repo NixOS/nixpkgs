@@ -4051,6 +4051,8 @@ in
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
 
+  freenukum = callPackage ../games/freenukum { };
+
   freebind = callPackage ../tools/networking/freebind { };
 
   freeipmi = callPackage ../tools/system/freeipmi {};
