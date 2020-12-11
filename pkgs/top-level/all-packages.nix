@@ -13441,6 +13441,7 @@ in
   hidapi = callPackage ../development/libraries/hidapi {
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
+    autoreconfHook = autoreconfHook269;
   };
 
   highfive = callPackage ../development/libraries/highfive { };
