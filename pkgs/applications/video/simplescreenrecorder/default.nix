@@ -1,14 +1,17 @@
 { stdenv, mkDerivation, fetchurl, alsaLib, ffmpeg_3, libjack2, libX11, libXext, libXinerama, qtx11extras
-, libXfixes, libGLU, libGL, pkgconfig, libpulseaudio, qtbase, cmake, ninja
+, libXfixes, libGLU, libGL, pkgconfig, libpulseaudio, qtbase, cmake, ninja, fetchFromGitHub
 }:
 
 mkDerivation rec {
   pname = "simplescreenrecorder";
   version = "0.4.2";
 
-  src = fetchurl {
-    url = "https://github.com/MaartenBaert/ssr/archive/${version}.tar.gz";
-    sha256 = "04953d45kgg86a7146iscmlwrkc9w9aiqgz4jgm05x63qxwlknm6";
+  src = fetchFromGitHub {
+    name = "simplescreenrecorder";
+    owner = "MaartenBaert";
+    repo = "ssr";
+    rev = "ed69cf51dfa5d17179244badb0f2652574219554";
+    sha256 = "1dzp5yzqlha65crzklx2qlan6ssw1diwzfpc4svd7gnr858q2292";
   };
 
   cmakeFlags = [ "-DWITH_QT5=TRUE" ];
