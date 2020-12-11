@@ -26931,8 +26931,6 @@ in
 
   monosat = callPackage ../applications/science/logic/monosat {};
 
-  opensmt = callPackage ../applications/science/logic/opensmt { };
-
   ott = callPackage ../applications/science/logic/ott { };
 
   otter = callPackage ../applications/science/logic/otter {};
