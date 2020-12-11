@@ -11004,6 +11004,7 @@ in
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
   autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
+  autoconf270 = callPackage ../development/tools/misc/autoconf/2.70.nix { };
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
