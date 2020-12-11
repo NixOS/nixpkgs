@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
     sha256 = "1f46h0hv7fk35zg4iczlp7ib7h2jmh8m4r5klw3g2558ib9134qq";
   };
 
+  patches = [
+    # Couldn't find an upstream version of this patch
+    # https://build.opensuse.org/package/view_file/openSUSE:Factory/vlc/fix-missing-includes-with-qt-5.15.patch?expand=1
+    ./fix-missing-includes-with-qt-5.15.patch
+  ];
+
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
   # which are not included here for no other reason that nobody has mentioned
   # needing them
@@ -99,6 +105,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.videolan.org/vlc/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    broken = if qtbase != null then versionAtLeast qtbase.version "5.15" else false;
   };
 }

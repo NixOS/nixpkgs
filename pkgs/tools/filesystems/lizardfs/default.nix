@@ -16,6 +16,7 @@
 , judy
 , pam
 , spdlog
+, fmt
 , zlib # optional
 }:
 
@@ -29,13 +30,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0zk73wmx82ari3m2mv0zx04x1ggsdmwcwn7k6bkl5c0jnxffc4ax";
   };
-
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-
-  buildInputs =
-    [ db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
-      zlib boost judy pam spdlog python2
-    ];
 
   patches = [
     # Use system-provided spdlog instead of downloading an old one (next two patches)
@@ -53,13 +47,26 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lizardfs/lizardfs/commit/5d20c95179be09241b039050bceda3c46980c004.patch";
       sha256 = "185bfcz2rjr4cnxld2yc2nxwzz0rk4x1fl1sd25g8gr5advllmdv";
     })
+    # Add SPDLOG_FMT_EXTERNAL flag to disable spdlog from using bundled fmt
+    # Would use https://github.com/lizardfs/lizardfs/commit/31b0cd40f84ee75f99643ad19122061e3d6fb6cc.patch
+    # if it didn't failed to patch
+    ./cmake-def-spdlog-fmt-external.patch
   ];
+
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+
+  buildInputs =
+  [ db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
+    zlib boost judy pam spdlog fmt python2
+  ];
+  
+  cmakeFlags = [ "-DSPDLOG_FMT_EXTERNAL=ON" ];
 
   meta = with stdenv.lib; {
     homepage = "https://lizardfs.com";
     description = "A highly reliable, scalable and efficient distributed file system";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = [ maintainers.rushmorem ];
+    maintainers = with maintainers; [ rushmorem shamilton ];
   };
 }

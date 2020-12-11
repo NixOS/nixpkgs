@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, fmt }:
 
 let
   generic = { version, sha256 }:
@@ -14,12 +14,14 @@ let
       };
 
       nativeBuildInputs = [ cmake ];
+      buildInputs = [ fmt ];
 
       cmakeFlags = [
         "-DSPDLOG_BUILD_SHARED=ON"
         "-DSPDLOG_BUILD_EXAMPLE=OFF"
         "-DSPDLOG_BUILD_BENCH=OFF"
         "-DSPDLOG_BUILD_TESTS=ON"
+        "-DSPDLOG_FMT_EXTERNAL=ON"
       ];
 
       outputs = [ "out" "doc" ];
