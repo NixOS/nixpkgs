@@ -7,6 +7,7 @@
 , makeWrapper
 , rsync
 , installShellFiles
+, nixosTests
 
 , components ? [
     "cmd/kubelet"
@@ -80,6 +81,13 @@ stdenv.mkDerivation rec {
   preFixup = ''
     find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
+
+  passthru.tests = with nixosTests.kubernetes; {
+    dns-multinode = dns.multinode;
+    dns-singlenode = dns.singlenode;
+    rbac-multinode = rbac.multinode;
+    rbac-singlenode = rbac.singlenode;
+  };
 
   meta = with lib; {
     description = "Production-Grade Container Scheduling and Management";
