@@ -52,7 +52,7 @@ let
       };
 
       type = mkOption {
-        type = types.enum [ "inet" "unix" "fifo" "pass" ];
+        type = types.enum [ "inet" "unix" "unix-dgram" "fifo" "pass" ];
         default = "unix";
         example = "inet";
         description = "The type of the service";
