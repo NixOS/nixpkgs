@@ -178,6 +178,8 @@ in
 
   cereal = callPackage ../development/libraries/cereal { };
 
+  chrysalis = callPackage ../applications/misc/chrysalis { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cmark = callPackage ../development/libraries/cmark { };
