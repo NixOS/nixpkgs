@@ -19908,8 +19908,6 @@ in
 
   quattrocento-sans = callPackage ../data/fonts/quattrocento-sans {};
 
-  r3rs = callPackage ../data/documentation/rnrs/r3rs.nix { };
-
   r4rs = callPackage ../data/documentation/rnrs/r4rs.nix { };
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
