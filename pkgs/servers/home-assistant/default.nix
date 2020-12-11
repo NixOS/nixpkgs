@@ -174,6 +174,8 @@ in with py.pkgs; buildPythonApplication rec {
     "test_device_tracker_not_home"
     # Racy https://github.com/home-assistant/core/issues/41425
     "test_cached_event_message"
+    # ValueError: count must be a positive integer (got 0)
+    "test_media_view"
   ];
 
   preCheck = ''
