@@ -18209,6 +18209,10 @@ in
 
   openisns = callPackage ../os-specific/linux/open-isns { };
 
+  osx-cpu-temp = callPackage ../os-specific/darwin/osx-cpu-temp {
+    inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
+  };
+
   osxfuse = callPackage ../os-specific/darwin/osxfuse { };
 
   osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
