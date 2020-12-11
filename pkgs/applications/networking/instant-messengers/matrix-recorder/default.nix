@@ -1,5 +1,5 @@
 { stdenv, pkgs }:
-(import ./composition.nix {
+(import ./node-composition.nix {
   inherit pkgs;
   inherit (stdenv.hostPlatform) system;
 })."package".override {

@@ -1,3 +1,9 @@
-#!/bin/sh -e
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p nodePackages.node2nix
 
-node2nix --nodejs-10 -i pkgs.json -c nodepkgs.nix -e ../../node-packages/node-env.nix
+set -eu -o pipefail
+
+exec node2nix --nodejs-10 \
+    -i node-packages.json -o node-packages.nix \
+    -c remarkjs.nix \
+    -e ../../../development/node-packages/node-env.nix

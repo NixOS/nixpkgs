@@ -1,6 +1,6 @@
 # This file originates from node2nix
 
-{stdenv, nodejs, python2, util-linux, libtool, runCommand, writeTextFile}:
+{stdenv, nodejs, python2, utillinux, libtool, runCommand, writeTextFile}:
 
 let
   python = if nodejs ? python then nodejs.python else python2;
@@ -57,7 +57,7 @@ let
 
   # Recursively composes the dependencies of a package
   composePackage = { name, packageName, src, dependencies ? [], ... }@args:
-    ''
+    builtins.addErrorContext "while evaluating node package '${packageName}'" ''
       DIR=$(pwd)
       cd $TMPDIR
 
@@ -363,7 +363,7 @@ let
 
         npm ${forceOfflineFlag} --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
 
-        if [ "$dontNpmInstall" != "1" ]
+        if [ "''${dontNpmInstall-}" != "1" ]
         then
             # NPM tries to download packages even when they already exist if npm-shrinkwrap is used.
             rm -f npm-shrinkwrap.json
@@ -396,9 +396,11 @@ let
     stdenv.mkDerivation ({
       name = "node_${name}-${version}";
       buildInputs = [ tarWrapper python nodejs ]
-        ++ stdenv.lib.optional (stdenv.isLinux) util-linux
+        ++ stdenv.lib.optional (stdenv.isLinux) utillinux
         ++ stdenv.lib.optional (stdenv.isDarwin) libtool
         ++ buildInputs;
+
+      inherit nodejs;
 
       inherit dontStrip; # Stripping may fail a build for some package deployments
       inherit dontNpmInstall preRebuild unpackPhase buildPhase;
@@ -468,7 +470,7 @@ let
         name = "node-dependencies-${name}-${version}";
 
         buildInputs = [ tarWrapper python nodejs ]
-          ++ stdenv.lib.optional (stdenv.isLinux) util-linux
+          ++ stdenv.lib.optional (stdenv.isLinux) utillinux
           ++ stdenv.lib.optional (stdenv.isDarwin) libtool
           ++ buildInputs;
 
@@ -514,7 +516,7 @@ let
     stdenv.mkDerivation {
       name = "node-shell-${name}-${version}";
 
-      buildInputs = [ python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) util-linux ++ buildInputs;
+      buildInputs = [ python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ buildInputs;
       buildCommand = ''
         mkdir -p $out/bin
         cat > $out/bin/shell <<EOF
@@ -528,8 +530,8 @@ let
       # Provide the dependencies in a development shell through the NODE_PATH environment variable
       inherit nodeDependencies;
       shellHook = stdenv.lib.optionalString (dependencies != []) ''
-        export NODE_PATH=$nodeDependencies/lib/node_modules
-        export PATH="$nodeDependencies/bin:$PATH"
+        export NODE_PATH=${nodeDependencies}/lib/node_modules
+        export PATH="${nodeDependencies}/bin:$PATH"
       '';
     };
 in
