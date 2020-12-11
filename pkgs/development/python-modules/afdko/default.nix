@@ -3,7 +3,7 @@
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
 , setuptools_scm
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -52,10 +52,18 @@ buildPythonPackage rec {
   # https://github.com/adobe-type-tools/afdko/issues/1163
   # https://github.com/adobe-type-tools/afdko/issues/1216
   doCheck = stdenv.isx86_64;
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    PATH="$PATH:$out/bin" py.test
-  '';
+  checkInputs = [ pytestCheckHook ];
+  preCheck = "export PATH=$PATH:$out/bin";
+  disabledTests = [
+    # Disable slow tests, reduces test time ~25 %
+    "test_report"
+    "test_post_overflow"
+    "test_cjk"
+    "test_extrapolate"
+    "test_filename_without_dir"
+    "test_overwrite"
+    "test_options"
+  ];
 
   meta = with stdenv.lib; {
     description = "Adobe Font Development Kit for OpenType";
