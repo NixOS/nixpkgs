@@ -19770,7 +19770,7 @@ in
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
-    inherit (kdeFrameworks) breeze-icons;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   font-awesome_4 = (callPackage ../data/fonts/font-awesome-5 { }).v4;
@@ -19935,7 +19935,7 @@ in
   luculent = callPackage ../data/fonts/luculent { };
 
   luna-icons = callPackage ../data/icons/luna-icons {
-    inherit (kdeFrameworks) breeze-icons;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   maia-icon-theme = libsForQt5.callPackage ../data/icons/maia-icon-theme { };
@@ -20070,11 +20070,11 @@ in
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme {
-    inherit (kdeFrameworks) breeze-icons;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme {
-    inherit (kdeFrameworks) breeze-icons;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   papis = with python3Packages; toPythonApplication papis;
@@ -20106,7 +20106,7 @@ in
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
 
   pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
-    inherit (kdeFrameworks) breeze-icons;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
@@ -20390,7 +20390,7 @@ in
   yaru-theme = callPackage ../data/themes/yaru {};
 
   zafiro-icons = callPackage ../data/icons/zafiro-icons {
-    inherit (kdeFrameworks) breeze-icons;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   zeal = libsForQt514.callPackage ../data/documentation/zeal { };
