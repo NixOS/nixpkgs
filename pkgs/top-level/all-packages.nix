@@ -17140,8 +17140,6 @@ in
 
   mumsi = callPackage ../servers/mumsi { };
 
-  myserver = callPackage ../servers/http/myserver { };
-
   nas = callPackage ../servers/nas { };
 
   nats-streaming-server = callPackage ../servers/nats-streaming-server { };
