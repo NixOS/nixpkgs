@@ -5172,7 +5172,9 @@ in
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
-  libcoap = callPackage ../applications/networking/libcoap {};
+  libcoap = callPackage ../applications/networking/libcoap {
+    autoconf = autoconf269;
+  };
 
   libcryptui = callPackage ../development/libraries/libcryptui { };
 
