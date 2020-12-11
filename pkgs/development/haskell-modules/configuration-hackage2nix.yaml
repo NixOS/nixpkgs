@@ -3655,9 +3655,7 @@ broken-packages:
   - broker-haskell
   - bronyradiogermany-common
   - bronyradiogermany-streaming
-  - brotli
   - brotli-conduit
-  - brotli-streams
   - browscap
   - bsd-sysctl
   - bson
