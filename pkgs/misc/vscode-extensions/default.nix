@@ -253,8 +253,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.9.7";
-          sha256 = "0v599yssvk358gxfxnyzzkyk0y5krsbp8n4rkp9wb2ncxqsqladr";
+          version = "1.9.9";
+          sha256 = "0frfymwrd2hcj0fkzlsgdmsjb0nn869vinlhm5my8sgy09vjj4dn";
         };
         meta = {
           license = stdenv.lib.licenses.asl20;
