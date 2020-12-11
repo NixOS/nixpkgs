@@ -21544,8 +21544,6 @@ in
 
   mindforger = libsForQt514.callPackage ../applications/editors/mindforger { };
 
-  mi2ly = callPackage ../applications/audio/mi2ly {};
-
   moe =  callPackage ../applications/editors/moe { };
 
   multibootusb = libsForQt514.callPackage ../applications/misc/multibootusb { qt5 = qt514; };
