@@ -50,7 +50,7 @@ let
       (replaceChars ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}-${optionalString (!isNull classifier) "-${classifier}"}.jar"
+      "${artifactId}-${version}${optionalString (!isNull classifier) "-${classifier}"}.jar"
     ];
   urls_ =
     if url != "" then [url]
