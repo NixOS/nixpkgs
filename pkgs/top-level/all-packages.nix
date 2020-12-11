@@ -27234,8 +27234,6 @@ in
 
   spyder = with python3.pkgs; toPythonApplication spyder;
 
-  openspace = callPackage ../applications/science/astronomy/openspace { };
-
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   astrolabe-generator = callPackage ../applications/science/astronomy/astrolabe-generator { };
