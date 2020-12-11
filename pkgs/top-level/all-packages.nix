@@ -26800,8 +26800,6 @@ in
 
   groove = callPackage ../applications/science/programming/groove { };
 
-  plm = callPackage ../applications/science/programming/plm { };
-
   scyther = callPackage ../applications/science/programming/scyther { };
 
   ### SCIENCE/LOGIC
