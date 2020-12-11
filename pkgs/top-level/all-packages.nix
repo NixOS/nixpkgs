@@ -25424,8 +25424,6 @@ in
 
   bench = haskell.lib.justStaticExecutables haskellPackages.bench;
 
-  beret = callPackage ../games/beret { };
-
   bitsnbots = callPackage ../games/bitsnbots {
     lua = lua5;
   };
