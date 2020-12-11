@@ -467,10 +467,10 @@ in
 
     networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
 
-    security.pam.services.sshd =
+    security.pam.services.sshd.modules =
       { startSession = true;
-        showMotd = true;
-        unixAuth = cfg.passwordAuthentication;
+        motd.enable = true;
+        unix.enableAuth = cfg.passwordAuthentication;
       };
 
     # These values are merged with the ones defined externally, see:

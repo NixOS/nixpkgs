@@ -22,7 +22,7 @@ with lib;
 
   config = mkIf config.environment.noXlibs {
     programs.ssh.setXAuthLocation = false;
-    security.pam.services.su.forwardXAuth = lib.mkForce false;
+    security.pam.services.su.modules.forwardXAuth = lib.mkForce false;
 
     fonts.fontconfig.enable = false;
 

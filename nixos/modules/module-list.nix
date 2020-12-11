@@ -201,10 +201,7 @@
   ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
-  ./security/oath.nix
-  ./security/pam.nix
-  ./security/pam_usb.nix
-  ./security/pam_mount.nix
+  ./security/pam
   ./security/polkit.nix
   ./security/rngd.nix
   ./security/rtkit.nix

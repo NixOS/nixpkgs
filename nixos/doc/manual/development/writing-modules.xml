@@ -24,7 +24,7 @@ xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/modules"><filenam
   options provided by other modules in its own implementation. For example, the
   module
   <link
-xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/security/pam.nix"><filename>pam.nix</filename></link>
+   xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/security/pam/default.nix"><filename>pam</filename></link>
   declares the option <option>security.pam.services</option> that allows other
   modules (e.g.
   <link

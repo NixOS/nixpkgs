@@ -165,7 +165,7 @@ in
     };
     users.groups.xrdp = {};
 
-    security.pam.services.xrdp-sesman = { allowNullPassword = true; startSession = true; };
+    security.pam.services.xrdp-sesman.modules = { unix.allowNullPassword = true; startSession = true; };
   };
 
 }

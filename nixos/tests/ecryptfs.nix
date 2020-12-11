@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ ... }:
   machine = { pkgs, ... }: {
     imports = [ ./common/user-account.nix ];
     boot.kernelModules = [ "ecryptfs" ];
-    security.pam.enableEcryptfs = true;
+    security.pam.modules.ecryptfs.enable = true;
     environment.systemPackages = with pkgs; [ keyutils ];
   };
 

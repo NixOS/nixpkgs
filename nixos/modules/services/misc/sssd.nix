@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.sssd;
@@ -39,6 +39,70 @@ in {
         '';
       };
     };
+
+    security.pam =
+      let
+        name = "sssd";
+        pamCfg = config.security.pam;
+        pamModCfg = pamCfg.modules.${name};
+
+        path = "${pkgs.sssd}/lib/security/pam_sss.so";
+      in
+      utils.pam.mkPamModule {
+        inherit name;
+        mkSvcConfigCondition = svcCfg: cfg.enable && svcCfg.modules.${name}.enable;
+
+        mkModuleOptions = global: {
+          enable = mkOption {
+            type = types.bool;
+            default = if global then true else pamModCfg.enable;
+            description = ''
+              Whether to include authentication against SSSD in PAM
+            '';
+          };
+
+          strictAccess = mkOption {
+            default = if global then false else pamModCfg.strictAccess;
+            type = types.bool;
+            description = "enforce sssd access control";
+          };
+        };
+
+        mkAccountConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = if svcCfg.modules.${name}.strictAccess then { default = "bad"; success = "ok"; user_unknown = "ignore"; } else "sufficient";
+            order = 3000;
+          };
+        };
+
+        mkAuthConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = "sufficient";
+            args = [ "use_first_pass" ];
+            order = 33000;
+          };
+        };
+
+        mkPasswordConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = "sufficient";
+            args = [ "use_authtok" ];
+            order = 5000;
+          };
+        };
+
+        mkSessionConfig = svcCfg: {
+          ${name} = {
+            inherit path;
+            control = "optional";
+            order = 8000;
+          };
+        };
+      };
+
   };
   config = mkMerge [
     (mkIf cfg.enable {
@@ -63,6 +127,8 @@ in {
           PIDFile = "/run/sssd.pid";
         };
       };
+
+      environment.systemPackages = [ pkgs.sssd ];
 
       environment.etc."sssd/sssd.conf" = {
         text = cfg.config;

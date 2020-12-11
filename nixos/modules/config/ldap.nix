@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with pkgs;
 with lib;
@@ -49,6 +49,9 @@ let
       --set NIX_REDIRECTS "/etc/nslcd.conf=/run/nslcd/nslcd.conf"
   '';
 
+  pamModName = "ldap";
+  pamCfg = config.security.pam;
+
 in
 
 {
@@ -63,12 +66,6 @@ in
         type = types.bool;
         default = false;
         description = "Whether to enable authentication against an LDAP server.";
-      };
-
-      loginPam = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Whether to include authentication against LDAP in login PAM";
       };
 
       nsswitch = mkOption {
@@ -218,11 +215,67 @@ in
 
     };
 
+    security.pam =
+      let
+        pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
+        path = "${pam_ldap}/lib/security/pam_ldap.so";
+        pamModCfg = pamCfg.modules.${pamModName};
+      in
+      utils.pam.mkPamModule {
+        name = pamModName;
+        mkSvcConfigCondition = svcCfg: cfg.enable && svcCfg.modules.${pamModName}.enable;
+
+        mkModuleOptions = global: {
+          enable = mkOption {
+            type = types.bool;
+            default = if global then true else pamModCfg.enable;
+            description = ''
+              Whether to include authentication against LDAP in login PAM
+            '';
+          };
+        };
+
+        mkAccountConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = "sufficient";
+            order = 2000;
+          };
+        };
+
+        mkAuthConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = "sufficient";
+            args = [ "use_first_pass" ];
+            order = 32000;
+          };
+        };
+
+        mkPasswordConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = "sufficient";
+            order = 4000;
+          };
+        };
+
+        mkSessionConfig = svcCfg: {
+          ${pamModName} = {
+            inherit path;
+            control = "optional";
+            order = 7000;
+          };
+        };
+      };
+
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    environment.systemPackages = optional (utils.pam.anyEnable pamCfg pamModName) pam_ldap;
 
     environment.etc = optionalAttrs (!cfg.daemon.enable) {
       "ldap.conf" = ldapConfig;
@@ -294,7 +347,8 @@ in
 
   };
 
-  imports =
-    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
-    ];
+  imports = [
+    (mkRenamedOptionModule [ "users" "ldap" "bind" "password" ] [ "users" "ldap" "bind" "passwordFile" ])
+    (mkRenamedOptionModule [ "users" "ldap" "loginPam" ] [ "security" "pam" "modules" pamModName "enable" ])
+  ];
 }

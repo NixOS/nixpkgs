@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -35,6 +35,36 @@ in
       };
 
     };
+
+    security.pam =
+      let
+        name = "fprintd";
+        pamCfg = config.security.pam;
+        modCfg = pamCfg.modules.${name};
+      in
+      utils.pam.mkPamModule {
+        inherit name;
+        mkSvcConfigCondition = svcCfg: svcCfg.modules.${name}.enable;
+
+        mkModuleOptions = global: {
+          enable = mkOption {
+            default = if global then cfg.enable else modCfg.enable;
+            type = types.bool;
+            description = ''
+              If true, fingerprint reader will be used (if exists and
+              your fingerprints are enrolled).
+            '';
+          };
+        };
+
+        mkAuthConfig = svcCfg: {
+          ${name} = {
+            control = "sufficient";
+            path = "${cfg.package}/lib/security/pam_fprintd.so";
+            order = 15000;
+          };
+        };
+      };
 
   };
 

@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ ... }:
   machine =
     { ... }:
     {
-      security.pam.u2f = {
+      security.pam.modules.u2f = {
         control = "required";
         cue = true;
         debug = true;

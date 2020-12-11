@@ -143,4 +143,68 @@ rec {
       ${builtins.toJSON set}
       EOF
     '';
+
+  pam = rec {
+    entryTypes = [ "account" "auth" "password" "session" ];
+
+    returnCode = types.enum [
+      "success" "open_err" "symbol_err" "service_err" "system_err" "buf_err"
+      "perm_denied" "auth_err" "cred_insufficient" "authinfo_unavail"
+      "user_unknown" "maxtries" "new_authtok_reqd" "acct_expired" "session_err"
+      "cred_unavail" "cred_expired" "cred_err" "no_module_data" "conv_err"
+      "authtok_err" "authtok_recover_err" "authtok_lock_busy"
+      "authtok_disable_aging" "try_again" "ignore" "abort" "authtok_expired"
+      "module_unknown" "bad_item" "conv_again" "incomplete" "default"
+    ];
+
+    action = types.either types.int (types.enum ["ignore" "bad" "die" "ok" "done" "reset"]);
+
+    controlType = types.either
+      (types.enum [ "required" "requisite" "sufficient" "optional" "include" "substack" ])
+      (types.addCheck (types.attrsOf action) (x: all returnCode.check (attrNames x)));
+
+    anyEnable = pamCfg: name: any (attrByPath [ "modules" name "enable" ] false) (attrValues pamCfg.services);
+
+    isTypeEnabled = svcCfg: type: all (t: t != type) svcCfg.excludeDefaults;
+
+    # See nixos/modules/security/pam/modules/motd.nix for a simple example
+    # See nixos/modules/security/pam/modules/unix.nix for a more complex one
+    mkPamModule =
+      { name
+      , mkModuleOptions ? (global: {})
+      , mkSvcConfigCondition ? (svcCfg: true)
+      , mkAccountConfig ? (svcCfg: {})
+      , mkAuthConfig ? (svcCfg: {})
+      , mkPasswordConfig ? (svcCfg: {})
+      , mkSessionConfig ? (svcCfg: {})
+      , extraSubmodules ? []
+      }:
+      {
+        services = mkOption {
+          type = with types; attrsOf (submoduleWith {
+            shorthandOnlyDefinesConfig = true;
+            modules = extraSubmodules ++ [
+              ({ config, ... }: {
+                options = if name != null then {
+                  modules."${name}" = mkModuleOptions false;
+                } else {
+                  modules = mkModuleOptions false;
+                };
+
+                config = mkIf (mkSvcConfigCondition config) {
+                  account = mkIf (isTypeEnabled config "account") (mkAccountConfig config);
+                  auth = mkIf (isTypeEnabled config "auth") (mkAuthConfig config);
+                  password = mkIf (isTypeEnabled config "password") (mkPasswordConfig config);
+                  session = mkIf (isTypeEnabled config "session") (mkSessionConfig config);
+                };
+              })
+            ];
+          });
+        };
+
+        modules = if name != null then {
+          "${name}" = mkModuleOptions true;
+        } else mkModuleOptions true;
+      };
+  };
 }

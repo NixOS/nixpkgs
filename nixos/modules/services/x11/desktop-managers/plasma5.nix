@@ -357,14 +357,8 @@ in
         theme = mkDefault "breeze";
       };
 
-      security.pam.services.kde = { allowNullPassword = true; };
-
-      # Doing these one by one seems silly, but we currently lack a better
-      # construct for handling common pam configs.
-      security.pam.services.gdm.enableKwallet = true;
-      security.pam.services.kdm.enableKwallet = true;
-      security.pam.services.lightdm.enableKwallet = true;
-      security.pam.services.sddm.enableKwallet = true;
+      security.pam.services.kde = { modules.unix.allowNullPassword = true; };
+      security.pam.modules.kwallet.enable = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
