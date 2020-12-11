@@ -14006,7 +14006,9 @@ in
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
-  libeatmydata = callPackage ../development/libraries/libeatmydata { };
+  libeatmydata = callPackage ../development/libraries/libeatmydata {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libeb = callPackage ../development/libraries/libeb { };
 
