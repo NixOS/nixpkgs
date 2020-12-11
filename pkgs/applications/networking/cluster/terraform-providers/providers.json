@@ -748,11 +748,13 @@
     "version": "1.2.1"
   },
   "postgresql": {
-    "owner": "terraform-providers",
+    "owner": "cyrilgdn",
+    "provider-source-address": "registry.terraform.io/cyrilgdn/postgresql",
     "repo": "terraform-provider-postgresql",
-    "rev": "v1.7.1",
-    "sha256": "0qlz00svvbwxslp8v7bi7mx5mvnjmh2cvg33a006gh4fy5n75shy",
-    "version": "1.7.1"
+    "rev": "v1.8.1",
+    "sha256": "07qaiy3vmz179am1qrxwvrk7xpraaa8g0hf49bj54pw7nkrmaixq",
+    "vendorSha256": null,
+    "version": "1.8.1"
   },
   "powerdns": {
     "owner": "terraform-providers",
