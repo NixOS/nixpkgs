@@ -4503,7 +4503,9 @@ in
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
-  gsmlib = callPackage ../development/libraries/gsmlib { };
+  gsmlib = callPackage ../development/libraries/gsmlib {
+    autoreconfHook = autoreconfHook269;
+  };
 
   gssdp = callPackage ../development/libraries/gssdp { };
 
