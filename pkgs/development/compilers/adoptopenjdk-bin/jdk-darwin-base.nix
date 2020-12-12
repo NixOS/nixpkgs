@@ -3,6 +3,7 @@
 { swingSupport ? true # not used for now
 , lib, stdenv
 , fetchurl
+, setJavaClassPath
 }:
 
 let cpuName = stdenv.hostPlatform.parsed.cpu.name;
@@ -30,7 +31,11 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
     ln -s $out/Contents/Home/* $out/
 
+    # Propagate the setJavaClassPath setup hook from the JDK so that
+    # any package that depends on the JDK has $CLASSPATH set up
+    # properly.
     mkdir -p $out/nix-support
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
