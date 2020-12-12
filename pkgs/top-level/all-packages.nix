@@ -6756,6 +6756,8 @@ in
     pythonPackages = python27Packages;
   };
 
+  py-spy = callPackage ../development/tools/py-spy { };
+
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;
@@ -21831,6 +21833,8 @@ in
     gtk = gtk3;
   };
 
+  hover = callPackage ../development/tools/hover { };
+
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
 
   howl = callPackage ../applications/editors/howl { };
@@ -22342,6 +22346,8 @@ in
   popeye = callPackage ../applications/networking/cluster/popeye { };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
+
+  fluxcd = callPackage ../applications/networking/cluster/fluxcd { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
 
