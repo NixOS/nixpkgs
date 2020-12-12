@@ -24155,7 +24155,7 @@ in
 
   scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
 
-  seafile-client = libsForQt514.callPackage ../applications/networking/seafile-client { };
+  seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   sent = callPackage ../applications/misc/sent { };
 
