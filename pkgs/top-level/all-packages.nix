@@ -21019,7 +21019,9 @@ in
 
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
-  elinks = callPackage ../applications/networking/browsers/elinks { };
+  elinks = callPackage ../applications/networking/browsers/elinks {
+    autoreconfHook = autoreconfHook269;
+  };
 
   elvis = callPackage ../applications/editors/elvis { };
 
