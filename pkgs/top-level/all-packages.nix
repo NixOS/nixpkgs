@@ -5176,7 +5176,9 @@ in
     autoconf = autoconf269;
   };
 
-  libcryptui = callPackage ../development/libraries/libcryptui { };
+  libcryptui = callPackage ../development/libraries/libcryptui {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libsmi = callPackage ../development/libraries/libsmi { };
 
