@@ -1,13 +1,13 @@
 { mkDerivation, lib, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false # Debugging
-, guiSupport ? true, dbus ? null # GUI (disable to run headless)
+, debugSupport ? false
+, guiSupport ? true, dbus ? null # GUI OR headless
 , webuiSupport ? true # WebUI
 }:
 
 assert guiSupport -> (dbus != null);
-with lib;
 
+with lib;
 mkDerivation rec {
   pname = "qbittorrent";
   version = "4.3.1";
@@ -19,7 +19,6 @@ mkDerivation rec {
     sha256 = "17ih00q7idrpl3b2vgh4smva6lazs5jw06pblriscn1lrwdvrc38";
   };
 
-  # NOTE: 2018-05-31: CMake is working but it is not officially supported
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
