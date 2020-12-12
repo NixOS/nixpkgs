@@ -44,13 +44,13 @@ let
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "030ff9prnvpadgcb4x4hx6b6ggg10bwqcj8vd8nwrdz9sjq67yf7";
+    sha256 = "0anilhg9sw7qcc8fgifdrzlsxb7x7a4gjg6v35psiflk9x1shr22";
   };
 
   nativeBuildInputs = [
