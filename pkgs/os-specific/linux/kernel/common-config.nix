@@ -654,7 +654,10 @@ let
 
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
-      KERNEL_XZ          = yes;
+
+      # use zstd for kernel compression if newer than 5.9, else xz.
+      KERNEL_XZ          = { optional = true; tristate = whenOlder "5.9" "y";};
+      KERNEL_ZSTD        = { optional = true; tristate = whenAtLeast "5.9" "y";};
 
       SYSVIPC            = yes;  # System-V IPC
 
