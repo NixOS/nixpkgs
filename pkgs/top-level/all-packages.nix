@@ -20084,6 +20084,8 @@ in
     tcl = tcl-8_5;
   };
 
+  alttpr-opentracker = callPackage ../applications/misc/alttpr-opentracker { };
+
   msgviewer = callPackage ../applications/networking/mailreaders/msgviewer { };
 
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
