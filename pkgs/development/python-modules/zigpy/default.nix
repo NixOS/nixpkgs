@@ -1,5 +1,6 @@
 { lib
 , aiohttp
+, aiosqlite
 , asynctest
 , buildPythonPackage
 , crccheck
@@ -14,17 +15,18 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.26.0";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     rev = version;
-    sha256 = "ba8Ru6RCbFOHhctFtklnrxVD3uEpxF4XDvO5RMgXPBs=";
+    sha256 = "iZJJhTh6BPc4capTkyBB0TO8OysrBWC9li/VTsOLIMA=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    aiosqlite
     crccheck
     pycrypto
     pycryptodome
