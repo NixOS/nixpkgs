@@ -79,9 +79,9 @@ stdenv.mkDerivation rec {
     done
 
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    # remove /build/** from RPATHs
+    # remove build directory (/build/**, or /tmp/nix-build-**) from RPATHs
     for f in "$bin"/bin/*; do
-      local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)/build/[^:]*:@\1@g')"
+      local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)'$NIX_BUILD_TOP'[^:]*:@\1@g')"
       patchelf --set-rpath "$nrp" "$f"
     done
   '';
