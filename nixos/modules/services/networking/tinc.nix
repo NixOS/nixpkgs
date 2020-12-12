@@ -168,6 +168,7 @@ in
           Type = "simple";
           Restart = "always";
           RestartSec = "3";
+          ExecReload = mkIf (versionAtLeast (getVersion data.package) "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
           ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
         };
         preStart = ''
