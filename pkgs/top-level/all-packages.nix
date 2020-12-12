@@ -21310,7 +21310,7 @@ in
     gnuradio = gnuradio3_7-unwrapped;
   };
 
-  goldendict = libsForQt514.callPackage ../applications/misc/goldendict {
+  goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
   };
 
