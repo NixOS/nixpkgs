@@ -2856,6 +2856,8 @@ in {
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
 
+  hdfs = callPackage ../development/python-modules/hdfs { };
+
   hdlparse = callPackage ../development/python-modules/hdlparse { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
