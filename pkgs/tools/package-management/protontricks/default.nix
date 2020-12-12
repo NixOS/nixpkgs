@@ -11,13 +11,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "0ri4phi1rna9snrxa6gl23walyack09mgax7zpjqfpxivwls3ach";
+    sha256 = "0a5727igwafwvj8rr5lv0lx8rlfji3qkzmrbp0d15w5dc4fhknp0";
   };
 
   patches = [
@@ -44,6 +44,11 @@ buildPythonApplication rec {
   disabledTests = [
     # Steam runtime is hard-coded with steam-run.patch and can't be configured
     "test_run_steam_runtime_not_found"
+    "test_unknown_steam_runtime_detected"
+
+    # Steam runtime 2 currently isn't supported
+    # See https://github.com/NixOS/nixpkgs/issues/100655
+    "test_run_winetricks_steam_runtime_v2"
   ];
 
   meta = with lib; {
