@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Intel Graphics Memory Management Library";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ danieldk ];
   };
 }
