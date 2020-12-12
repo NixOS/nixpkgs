@@ -22,6 +22,8 @@ self: super: {
   hls-brittany = self.callPackage ../tools/haskell/haskell-language-server/hls-brittany.nix { };
   hls-hlint-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-hlint-plugin.nix { };
   hls-tactics-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-tactics-plugin.nix { };
+  hls-explicit-imports-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-explicit-imports-plugin.nix { };
+  hls-retrie-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-retrie-plugin.nix { };
 
   nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
 

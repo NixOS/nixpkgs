@@ -2,21 +2,21 @@
 , bytestring, containers, data-default, deepseq, directory, extra
 , fetchgit, filepath, floskell, fourmolu, ghc, ghc-boot-th
 , ghc-paths, ghcide, gitrev, hashable, haskell-lsp, hie-bios
-, hls-hlint-plugin, hls-plugin-api, hls-tactics-plugin, hslogger
-, hspec, hspec-core, lens, lsp-test, mtl, optparse-applicative
-, optparse-simple, ormolu, process, regex-tdfa, retrie
-, safe-exceptions, shake, stdenv, stm, stylish-haskell, tasty
-, tasty-ant-xml, tasty-expected-failure, tasty-golden, tasty-hunit
-, tasty-rerun, temporary, text, time, transformers
-, unordered-containers, yaml
+, hls-explicit-imports-plugin, hls-hlint-plugin, hls-plugin-api
+, hls-retrie-plugin, hls-tactics-plugin, hslogger, hspec
+, hspec-core, lens, lsp-test, mtl, optparse-applicative
+, optparse-simple, ormolu, process, regex-tdfa, safe-exceptions
+, shake, stdenv, stm, stylish-haskell, tasty, tasty-ant-xml
+, tasty-expected-failure, tasty-golden, tasty-hunit, tasty-rerun
+, temporary, text, time, transformers, unordered-containers, yaml
 }:
 mkDerivation {
   pname = "haskell-language-server";
   version = "0.6.0.0";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "027fq6752024wzzq9izsilm5lkq9gmpxf82rixbimbijw0yk4pwj";
-    rev = "372a12e797069dc3ac4fa33dcaabe3b992999d7c";
+    sha256 = "15hyscfllyapqinihmal6xkqwxgay7sgk5wqkjfgmlqsvl0vm7b7";
+    rev = "9a742e2c6a31ff92a053735541e4cca9c2c18d3e";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -30,11 +30,12 @@ mkDerivation {
   executableHaskellDepends = [
     aeson base binary brittany bytestring containers deepseq directory
     extra filepath floskell fourmolu ghc ghc-boot-th ghc-paths ghcide
-    gitrev hashable haskell-lsp hie-bios hls-hlint-plugin
-    hls-plugin-api hls-tactics-plugin hslogger lens mtl
-    optparse-applicative optparse-simple ormolu process regex-tdfa
-    retrie safe-exceptions shake stylish-haskell temporary text time
-    transformers unordered-containers
+    gitrev hashable haskell-lsp hie-bios hls-explicit-imports-plugin
+    hls-hlint-plugin hls-plugin-api hls-retrie-plugin
+    hls-tactics-plugin hslogger lens mtl optparse-applicative
+    optparse-simple ormolu process regex-tdfa safe-exceptions shake
+    stylish-haskell temporary text time transformers
+    unordered-containers
   ];
   testHaskellDepends = [
     aeson base blaze-markup bytestring containers data-default

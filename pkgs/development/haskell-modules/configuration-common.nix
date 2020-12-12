@@ -1402,6 +1402,7 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck (super.haskell-language-server.override {
     lsp-test = dontCheck self.lsp-test_0_11_0_7;
+    fourmolu = self.fourmolu_0_3_0_0;
   });
 
   fourmolu = dontCheck super.fourmolu;
