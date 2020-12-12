@@ -21912,7 +21912,7 @@ in
 
   manul = callPackage ../development/tools/manul { };
 
-  mindforger = libsForQt514.callPackage ../applications/editors/mindforger { };
+  mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
