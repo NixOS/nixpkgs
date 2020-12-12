@@ -1,0 +1,39 @@
+commit 07702712187347ef448a14647d051c223755b4cd
+Author: emanuele-f <faranda@ntop.org>
+Date:   Mon May 27 14:35:45 2019 +0200
+
+    Fix cookie name overmatch leading to login issues
+    
+    Cookies ending in "session" (e.g. "grafana_session") were matched as session cookies, invalidating the ntopng session
+
+diff --git a/third-party/mongoose/mongoose.c b/third-party/mongoose/mongoose.c
+index 6385b3bba..fbc19ff4a 100644
+--- a/third-party/mongoose/mongoose.c
++++ b/third-party/mongoose/mongoose.c
+@@ -1870,21 +1870,21 @@ int mg_get_var(const char *data, size_t data_len, const char *name,
+ 
+ int mg_get_cookie(const struct mg_connection *conn, const char *cookie_name,
+ 		  char *dst, size_t dst_size) {
+-  const char *s, *p, *end;
++  const char *s, *p, *end, *start;
+   int name_len, len = -1;
+ 
+   if (dst == NULL || dst_size == 0) {
+     len = -2;
+-  } else if (cookie_name == NULL || (s = mg_get_header(conn, "Cookie")) == NULL) {
++  } else if (cookie_name == NULL || (start = mg_get_header(conn, "Cookie")) == NULL) {
+     len = -1;
+     dst[0] = '\0';
+   } else {
+     name_len = (int) strlen(cookie_name);
+-    end = s + strlen(s);
++    end = start + strlen(start);
+     dst[0] = '\0';
+ 
+-    for (; (s = strstr(s, cookie_name)) != NULL; s += name_len) {
+-      if (s[name_len] == '=') {
++    for (s = start; (s = strstr(s, cookie_name)) != NULL; s += name_len) {
++      if ((s[name_len] == '=') && ((s == start) || (s[-1] == ' ') || (s[-1] == ';'))) {
+ 	s += name_len + 1;
+ 	if ((p = strchr(s, ' ')) == NULL)
+ 	  p = end;

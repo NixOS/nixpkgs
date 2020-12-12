@@ -1,36 +1,49 @@
-{ stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
-, geoip, geolite-legacy, sqlite, which, autoreconfHook, git
-, pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool
+{ stdenv, fetchFromGitHub, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
+, geoip, geolite-legacy, sqlite, which, autoreconfHook, mariadb, readline80
+, pkgconfig, groff, curl, json_c, lua5_3, zeromq, rrdtool, libmaxminddb
 }:
 
-# ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
-# directory, but we use luajit, zeromq, and rrdtool from nixpkgs
+# ntopng includes Lua, mongoose, rrdtool and zeromq in its third-party/
+# directory, but we use lua, zeromq, and rrdtool from nixpkgs
 
-stdenv.mkDerivation rec {
-  name = "ntopng-2.0";
-
-  src = fetchurl {
-    urls = [
-      "mirror://sourceforge/project/ntop/ntopng/old/${name}.tar.gz"
-      "mirror://sourceforge/project/ntop/ntopng/${name}.tar.gz"
-    ];
-    sha256 = "0l82ivh05cmmqcvs26r6y69z849d28njipphqzvnakf43ggddgrw";
+let
+  ndpi = fetchFromGitHub {
+    owner = "ntop";
+    repo = "nDPI";
+    rev = "2.6";
+    sha256 = "1rivxbia4cqn8n3lp9ijrhj4ppclnici0ixnara9bh97sf5gpk9z";
   };
+in stdenv.mkDerivation rec {
+  version = "3.8";
+  pname = "ntopng";
+
+  src = fetchFromGitHub {
+    owner = "ntop";
+    repo = "ntopng";
+    rev = version;
+    sha256 = "170cqggrja4am34cwwb4h92hyb38jpsb81rqwncqd0lydqx114f0";
+  };
+
+  postUnpack = ''
+    cp    --recursive ${ndpi} $sourceRoot/nDPI
+    chmod --recursive +w $sourceRoot/nDPI
+    # ensure that lua or rrdtool from third-party is not used accidentally
+    rm --recursive --force $sourceRoot/third-party/lua-5.*
+    rm --recursive --force $sourceRoot/third-party/rrdtool-*
+  '';
 
   patches = [
     ./0001-Undo-weird-modification-of-data_dir.patch
-    ./0002-Remove-requirement-to-have-writeable-callback-dir.patch
-    ./0003-New-libpcap-defines-SOCKET.patch
+    ./0002-fix-cookie-match-issue.patch
+    ./0003-skip-building-lua.patch
   ];
 
-  buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
-    sqlite which autoreconfHook git pkgconfig groff curl json_c luajit zeromq
-    rrdtool ];
+  buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 libmaxminddb glib geoip geolite-legacy
+    sqlite curl json_c lua5_3 zeromq mariadb readline80 rrdtool ];
 
+  nativeBuildInputs = [ autoreconfHook groff pkgconfig which ];
 
   autoreconfPhase = ''
-    substituteInPlace autogen.sh --replace "/bin/rm" "rm"
-    substituteInPlace nDPI/autogen.sh --replace "/bin/rm" "rm"
     $shell autogen.sh
   '';
 
@@ -39,8 +52,6 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    substituteInPlace src/Ntop.cpp --replace "/usr/local" "$out"
-
     sed -e "s|\(#define CONST_DEFAULT_DATA_DIR\).*|\1 \"/var/lib/ntopng\"|g" \
         -e "s|\(#define CONST_DEFAULT_DOCS_DIR\).*|\1 \"$out/share/ntopng/httpdocs\"|g" \
         -e "s|\(#define CONST_DEFAULT_SCRIPTS_DIR\).*|\1 \"$out/share/ntopng/scripts\"|g" \

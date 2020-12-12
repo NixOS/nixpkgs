@@ -1,0 +1,36 @@
+diff --git a/Makefile.in b/Makefile.in
+index bd1ca568a..ec51ed58b 100755
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -38,9 +38,8 @@ else ifeq ($(OS), $(filter $(OS), FreeBSD))
+ 	LUA_PLATFORM=freebsd
+ endif
+ 
+-LUA_HOME=${PWD}/third-party/lua-5.3.5
+-LUA_INC=-I$(LUA_HOME)/src -DDONT_USE_LUAJIT
+-LUA_LIB=$(LUA_HOME)/src/liblua.a
++LUA_INC=$(shell pkg-config --cflags lua) -DDONT_USE_LUAJIT
++LUA_LIB=$(shell pkg-config --variable=libdir lua)/liblua.a
+ 
+ ######
+ LIBRRDTOOL_HOME=${PWD}/third-party/rrdtool-1.4.8
+@@ -127,7 +126,7 @@ RPM_PKG = $(TARGET)-$(NTOPNG_VERSION)-@REVISION@.$(PLATFORM).rpm
+ RPM_DATA_PKG = $(TARGET)-data-$(NTOPNG_VERSION)-@REVISION@.noarch.rpm
+ ######
+ 
+-LIB_TARGETS = $(LUA_LIB)
++#LIB_TARGETS = $(LUA_LIB)
+ 
+ ifneq ($(HAS_ZEROMQ), 0)
+ LIB_TARGETS += $(ZEROMQ_LIB)
+@@ -161,8 +160,8 @@ HEADERS = $(wildcard include/*.h) @PRO_HEADERS@
+ $(TARGET): $(OBJECTS) $(LIB_TARGETS) Makefile
+ 	$(GPP) $(OBJECTS) -Wall $(NLIBS) -o $@
+ 
+-$(LUA_LIB):
+-	cd $(LUA_HOME); @GMAKE@ $(LUA_PLATFORM)
++#$(LUA_LIB):
++#	cd $(LUA_HOME); @GMAKE@ $(LUA_PLATFORM)
+ 
+ $(ZEROMQ_LIB):
+ 	cd $(ZEROMQ_HOME); ./configure --without-documentation --without-libsodium; @GMAKE@
