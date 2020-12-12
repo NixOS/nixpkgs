@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.4.4";
+  version = "7.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08cf5cf7d70135db931c9f9d6f3b1844c53046c88f6072675fc164884f44c9e2";
+    sha256 = "5743fde41706252ec6ce4737c68d3505f7e1cc3d4431174a17149838d594f8cb";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = [ cython ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Accelerate CoreFoundation CoreGraphics CoreVideo
   ]);
 
@@ -38,7 +38,6 @@ buildPythonPackage rec {
    blis
    catalogue
    cymem
-   cython
    murmurhash
    numpy
    plac
@@ -60,7 +59,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "blis>=0.4.0,<0.5.0" "blis>=0.4.0,<1.0" \
+      --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
       --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
       --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
       --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
