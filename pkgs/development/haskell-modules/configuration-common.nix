@@ -951,6 +951,8 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  niv = generateOptparseApplicativeCompletion "niv" super.niv;
+  ormolu = generateOptparseApplicativeCompletion "ormolu" super.ormolu;
   stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
   # musl fixes
@@ -1498,13 +1500,13 @@ self: super: {
     extraPrefix = "";
     includes = [ "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" ];
   });
-  cachix = appendPatch super.cachix (pkgs.fetchpatch {
+  cachix = generateOptparseApplicativeCompletion "cachix" (appendPatch super.cachix (pkgs.fetchpatch {
     url = https://github.com/cachix/cachix/commit/bfeec151a03afad72401815fe8bbb1b0d5d63b0d.patch;
     sha256 = "06jmpz8l5vh9cch5aqdbrln7bm3fghxsicwy1m93avli320kp8pp";
     stripLen = 2;
     extraPrefix = "";
     excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
-  });
+  }));
 
   # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
   pipes-text = doJailbreak super.pipes-text;
