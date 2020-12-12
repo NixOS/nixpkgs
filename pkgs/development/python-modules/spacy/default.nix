@@ -30,19 +30,19 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   blis
-   catalogue
-   cymem
-   jsonschema
-   murmurhash
-   numpy
-   plac
-   preshed
-   requests
-   setuptools
-   srsly
-   thinc
-   wasabi
+    blis
+    catalogue
+    cymem
+    jsonschema
+    murmurhash
+    numpy
+    plac
+    preshed
+    requests
+    setuptools
+    srsly
+    thinc
+    wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy" ];
 
-  passthru.tests = callPackage ./annotation-test {};
+  passthru.tests = callPackage ./annotation-test { };
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
