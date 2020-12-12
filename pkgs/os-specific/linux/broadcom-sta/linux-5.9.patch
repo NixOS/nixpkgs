@@ -1,0 +1,19 @@
+diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+index 0d05100..7a972b9 100644
+--- a/src/wl/sys/wl_linux.c
++++ b/src/wl/sys/wl_linux.c
+@@ -1643,8 +1643,13 @@ wl_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
+ 		goto done2;
+ 	}
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
++if (uaccess_kernel())
++  buf = ioc.buf;
++#else
+ 	if (segment_eq(get_fs(), KERNEL_DS))
+ 		buf = ioc.buf;
++#endif
+ 
+ 	else if (ioc.buf) {
+ 		if (!(buf = (void *) MALLOC(wl->osh, MAX(ioc.len, WLC_IOCTL_MAXLEN)))) {
+
