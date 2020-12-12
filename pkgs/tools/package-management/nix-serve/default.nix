@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub,
-  bzip2, nix, perl, perlPackages,
+{ stdenv
+, fetchFromGitHub
+, bzip2
+, nix
+, perl
+, perlPackages
+, nixosTests
 }:
 
 with stdenv.lib;
@@ -34,6 +39,8 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/nix-serve
   '';
+
+  passthru.tests.nix-serve = nixosTests.nix-serve;
 
   meta = {
     homepage = "https://github.com/edolstra/nix-serve";
