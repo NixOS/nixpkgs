@@ -175,9 +175,9 @@ runCommand
 
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
         --subst-var-by bash ${emacs.stdenv.shell} \
-        --subst-var-by wrapperSiteLisp "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs" \
-        --subst-var prog
-      chmod +x $out/bin/$progname
+        --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
+        --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
+      chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi
 
     mkdir -p $out/share
