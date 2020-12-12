@@ -9,6 +9,7 @@ let
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
     sha256 = "19sx9n5mij68v07vy65h1c16rgbpll3kagr437cjb7r95k3nk2zn";
   };
+  extraPkgs = pkgs: with pkgs; [ wrapGAppsHook ];
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
