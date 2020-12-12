@@ -6428,7 +6428,9 @@ in
 
   parastoo-fonts = callPackage ../data/fonts/parastoo-fonts { };
 
-  parcellite = callPackage ../tools/misc/parcellite { };
+  parcellite = callPackage ../tools/misc/parcellite {
+    autoreconfHook = autoreconfHook269;
+  };
 
   patchutils = callPackage ../tools/text/patchutils { };
 
