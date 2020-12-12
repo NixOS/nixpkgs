@@ -6401,7 +6401,6 @@ broken-packages:
   - hlrdb
   - hlrdb-core
   - hls
-  - hls-brittany
   - hlwm
   - hly
   - hmark

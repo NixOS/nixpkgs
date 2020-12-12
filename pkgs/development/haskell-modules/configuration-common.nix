@@ -1402,6 +1402,7 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck (super.haskell-language-server.override {
     lsp-test = dontCheck self.lsp-test_0_11_0_7;
+    fourmolu = self.fourmolu_0_3_0_0;
   });
 
   fourmolu = dontCheck super.fourmolu;
@@ -1412,12 +1413,6 @@ self: super: {
   ));
   refinery = doDistribute super.refinery_0_3_0_0;
   data-tree-print = doJailbreak super.data-tree-print;
-  # the hls brittany is objectively better, because there hasn‘t been a
-  # brittany release in a while and this version works with 8.10.
-  # And we need to build it anyways.
-  # 2020-11-15: jailbreaking because we have strict 0.4 which is to new
-  brittany = self.hls-brittany;
-  hls-brittany = dontCheck (doJailbreak super.hls-brittany);
 
   # 2020-11-15: aeson 1.5.4.1 needs to new quickcheck-instances for testing
   aeson = dontCheck super.aeson;
