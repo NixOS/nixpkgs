@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy" ];
 
-  passthru.tests = callPackage ./annotation-test { };
+  passthru.tests.annotation = callPackage ./annotation-test { };
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
