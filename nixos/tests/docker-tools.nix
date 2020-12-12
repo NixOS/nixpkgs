@@ -245,7 +245,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
                 + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
             ).strip()
-            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64v8"}"
+            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
         )
   '';
 })

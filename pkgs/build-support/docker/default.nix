@@ -58,15 +58,15 @@ let
     done;
   '';
 
-  # Map nixpkgs architecture to Docker notation
-  # Reference: https://github.com/docker-library/official-images#architectures-other-than-amd64
+  # Map nixpkgs architecture to OCI recomendation
+  # Reference: https://github.com/opencontainers/image-spec/blob/master/config.md#properties
   getArch = nixSystem: {
-    aarch64-linux = "arm64v8";
-    armv7l-linux = "arm32v7";
+    aarch64-linux = "arm64";
+    armv7l-linux = "arm";
     x86_64-linux = "amd64";
     powerpc64le-linux = "ppc64le";
-    i686-linux = "i386";
-  }.${nixSystem} or "Can't map Nix system ${nixSystem} to Docker architecture notation. Please check that your input and your requested build are correct or update the mapping in Nixpkgs.";
+    i686-linux = "386";
+  }.${nixSystem} or "Can't map Nix system ${nixSystem} to Docker architecture. Please check that your input and your requested build are correct or update the mapping in Nixpkgs.";
 
 in
 rec {
