@@ -13040,6 +13040,7 @@ in
 
   gdal = callPackage ../development/libraries/gdal {
     pythonPackages = python3Packages;
+    autoreconfHook = autoreconfHook269;
   };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
