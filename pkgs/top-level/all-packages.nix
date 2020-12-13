@@ -13780,7 +13780,9 @@ in
   libayatana-appindicator-gtk3 = libayatana-appindicator.override { gtkVersion = "3"; };
   libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
 
-  libarchive = callPackage ../development/libraries/libarchive { };
+  libarchive = callPackage ../development/libraries/libarchive {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libasr = callPackage ../development/libraries/libasr { };
 
