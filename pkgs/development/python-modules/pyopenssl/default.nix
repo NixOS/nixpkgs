@@ -54,6 +54,9 @@ let
     optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
   ) ++ (
     optionals (versionAtLeast (getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
+  ) ++ (
+    # https://github.com/pyca/pyopenssl/issues/974
+    optionals stdenv.isi686 [ "test_verify_with_time" ]
   );
 
   # Compose the final string expression, including the "-k" and the single quotes.
