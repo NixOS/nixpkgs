@@ -15148,7 +15148,7 @@ let
 
   NetLDAPSID = buildPerlPackage {
     pname = "Net-LDAP-SID";
-    version = "0.0001";
+    version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-SID-0.001.tar.gz";
       sha256 = "1mnnpkmj8kpb7qw50sm8h4sd8py37ssy2xi5hhxzr5whcx0cvhm8";
