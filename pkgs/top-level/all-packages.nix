@@ -20574,12 +20574,12 @@ in
 
   calibre = calibre-py3;
 
-  calligra = libsForQt514.callPackage ../applications/office/calligra {
+  calligra = libsForQt5.callPackage ../applications/office/calligra {
     openjpeg = openjpeg_1;
     poppler = poppler_0_61.override {
       qt5Support = true;
       # Must be using the same qt version as calligra itself.
-      qtbase = qt514.qtbase;
+      inherit (qt515) qtbase;
     };
   };
 
