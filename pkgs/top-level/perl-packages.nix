@@ -21956,10 +21956,10 @@ let
 
   TieHashIndexed = buildPerlPackage {
     pname = "Tie-Hash-Indexed";
-    version = "0.05";
+    version = "0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MH/MHX/Tie-Hash-Indexed-0.05.tar.gz";
-      sha256 = "a8862a4763d58a8c785e34b8b18e5db4ce5c3e36b9b5cf565a3088584eab361e";
+      url = "mirror://cpan/authors/id/M/MH/MHX/Tie-Hash-Indexed-0.08.tar.gz";
+      sha256 = "043v98xaid6sjch2x9c39s475wm9i13vzf8jg73qm12sby0n5g1p";
     };
     meta = {
       description = "Ordered hashes for Perl";
