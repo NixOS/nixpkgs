@@ -18283,12 +18283,12 @@ let
     };
   };
 
-  SQLAbstractLimit = buildPerlModule {
+  SQLAbstractLimit = buildPerlPackage {
     pname = "SQL-Abstract-Limit";
-    version = "0.141";
+    version = "0.142";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAVEBAIRD/SQL-Abstract-Limit-0.141.tar.gz";
-      sha256 = "1qqh89kz065mkgyg5pjcgbf8qcpzfk8vf1lgkbwynknadmv87zqg";
+      url = "mirror://cpan/authors/id/A/AS/ASB/SQL-Abstract-Limit-0.142.tar.gz";
+      sha256 = "0y2q7mxngm9m2kvr6isvxra4frb1cjbiplp381p6hhifn7xfz8fl";
     };
     propagatedBuildInputs = [ DBI SQLAbstract ];
     buildInputs = [ TestDeep TestException ];
