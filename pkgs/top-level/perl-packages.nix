@@ -15936,10 +15936,10 @@ let
 
   ParamsUtil = buildPerlPackage {
     pname = "Params-Util";
-    version = "1.07";
+    version = "1.102";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/Params-Util-1.07.tar.gz";
-      sha256 = "0v67sx93yhn7xa0nh9mnbf8mixf54czk6wzrjsp6dzzr5hzyrw9h";
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/Params-Util-1.102.tar.gz";
+      sha256 = "00kl154zisf2zsl8yl6xa6yw54nhd9cja5d5fyigs96vhasb36s9";
     };
     meta = {
       description = "Simple, compact and correct param-checking functions";
