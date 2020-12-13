@@ -129,8 +129,7 @@ autoPatchelfFile() {
     # clear the RPATH first.
     runPatchelf --remove-rpath "$toPatch"
 
-    local missing
-    missing="$(
+    local missing="$(
         ldd "$toPatch" 2> /dev/null | \
             sed -n -e 's/^[\t ]*\([^ ]\+\) => not found.*/\1/p'
     )"
