@@ -8861,11 +8861,12 @@ let
 
   Graph = buildPerlPackage {
     pname = "Graph";
-    version = "0.9704";
+    version = "0.9712";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHI/Graph-0.9704.tar.gz";
-      sha256 = "099a1gca0wj5zs0cffncjqp2mjrdlk9i6325ks89ml72gfq8wpij";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9712.tar.gz";
+      sha256 = "1as4ngbqxrjv9f31hm3wg8pyiyrz5fbbvlpfsrm68k1yskwkgkcg";
     };
+    propagatedBuildInputs = [ HeapFibonacci ];
   };
 
   GraphViz = buildPerlPackage {
