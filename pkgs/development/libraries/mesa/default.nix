@@ -64,12 +64,8 @@ stdenv.mkDerivation {
       # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
       (fetchpatch {
         name = "nine_debug-Make-tid-more-type-correct";
-        # Patch adjusted for version `20.1`, before the big mesa dirs change
-        # `gallium: rename 'state tracker' to 'frontend'`.
-        # Patch for versions after that change is at
-        #     https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e3b4745ef16d0e833300ad67044.patch
-        url = "https://gitlab.freedesktop.org/nh2/mesa/commit/3385c49684375f1153a52ed7ccda3f5135268a41.patch";
-        sha256 = "1ci694sqjll44c9g2md4krhk6qlvq51r7ad5rnnfdnf3l8ys0i50";
+        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
+        sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
       })
     ]
     # do not prefix user provided dri-drivers-path
