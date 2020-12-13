@@ -70,6 +70,12 @@ in stdenv.mkDerivation {
     mkdir -p $out
     cp -r ./* "$out/"
 
+    rm -rf $out/demo
+    rm -rf $out/sample
+
+    # Remove some broken manpages.
+    rm -rf $out/man/ja*
+
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
@@ -89,6 +95,10 @@ in stdenv.mkDerivation {
   preFixup = ''
     find "$out" -name libfontmanager.so -exec \
       patchelf --add-needed libfontconfig.so {} \;
+  '';
+
+  postFixup = stdenv.lib.optional stdenv.isDarwin ''
+    ln -sf $out/zulu-*.jdk/Contents/Home/man $out/share/man
   '';
 
   passthru = {
