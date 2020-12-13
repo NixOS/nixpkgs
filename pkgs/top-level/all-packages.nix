@@ -13438,6 +13438,7 @@ in
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    autoreconfHook = autoreconfHook269;
   };
   libheimdal = heimdal;
 
