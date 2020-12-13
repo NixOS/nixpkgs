@@ -5491,10 +5491,10 @@ let
 
   DevelPatchPerl = buildPerlPackage {
     pname = "Devel-PatchPerl";
-    version = "2.00";
+    version = "2.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.00.tar.gz";
-      sha256 = "07yy02v86ia7j8qbn46jqan8c8d6xdqigvv5a4wmkqwln7jxmhrr";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.04.tar.gz";
+      sha256 = "1q8xhz2sdlz2266pjl8j9vcixbhcaxsprmvsx56ra998miayc42p";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
