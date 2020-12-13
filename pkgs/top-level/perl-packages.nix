@@ -19212,10 +19212,10 @@ let
 
   TaskFreecellSolverTesting = buildPerlModule {
     pname = "Task-FreecellSolver-Testing";
-    version = "0.0.11";
+    version = "0.0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Task-FreecellSolver-Testing-v0.0.11.tar.gz";
-      sha256 = "a2f73c65d0e5676cf4aae213ba4c3f88bf85f084a2165f1e71e3ce5b19023206";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Task-FreecellSolver-Testing-0.0.12.tar.gz";
+      sha256 = "19wkz5ii8h90i9gmh692kvw9rz7k9bmpi53pw331fm0jmsvi069x";
     };
     buildInputs = [ CodeTidyAll TestDataSplit TestDifferences TestPerlTidy TestRunPluginTrimDisplayedFilenames TestRunValgrind TestTrailingSpace TestTrap ];
     propagatedBuildInputs = [ EnvPath FileWhich GamesSolitaireVerify InlineC ListMoreUtils MooX StringShellQuote TaskTestRunAllPlugins TemplateToolkit YAMLLibYAML ];
