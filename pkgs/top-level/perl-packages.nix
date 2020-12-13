@@ -6919,10 +6919,10 @@ let
 
   EmailOutlookMessage = buildPerlModule {
     pname = "Email-Outlook-Message";
-    version = "0.919";
+    version = "0.920";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MV/MVZ/Email-Outlook-Message-0.919.tar.gz";
-      sha256 = "0fb1gymqa8nlj540dmbb1rhs2b0ln3y9ippbgj0miswcw92iaayb";
+      url = "mirror://cpan/authors/id/M/MV/MVZ/Email-Outlook-Message-0.920.tar.gz";
+      sha256 = "1063wpdf90k1f6vcqvs92cwm93zvmh3l09pfnrrsp6vqkyah48lj";
     };
     propagatedBuildInputs = [ EmailMIME EmailSender IOAll IOString OLEStorage_Lite ];
     preCheck = "rm t/internals.t t/plain_jpeg_attached.t"; # these tests expect EmailMIME version 1.946 and fail with 1.949 (the output difference in benign)
