@@ -5253,10 +5253,10 @@ let
 
   DateTimeFormatNatural = buildPerlModule {
     pname = "DateTime-Format-Natural";
-    version = "1.10";
+    version = "1.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.10.tar.gz";
-      sha256 = "0ahia58vs5f8ymskain1a6vl6b4fhkar1cmakq5q92zzhvmgx6z1";
+      url = "mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.11.tar.gz";
+      sha256 = "0lj5yh1k4dl06p9ydyscd4ic330w8ygz88m38bhzlbz42kxv13vk";
     };
     buildInputs = [ ModuleUtil TestMockTime ];
     propagatedBuildInputs = [ Clone DateTime ListMoreUtils ParamsValidate boolean ];
