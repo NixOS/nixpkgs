@@ -20338,10 +20338,10 @@ let
 
   TestMockModule = buildPerlModule {
     pname = "Test-MockModule";
-    version = "0.173.0";
+    version = "0.175.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.173.0.tar.gz";
-      sha256 = "0hnv2ziyasrri58ys93j5qyyzgxw3jx5hvjhd72nsp4vqq6lhg6s";
+      url = "mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.175.0.tar.gz";
+      sha256 = "1zpf8p04and7jj33pc919g2pfg0scaqwqq1cnk8wx0nx2gbq9ch7";
     };
     propagatedBuildInputs = [ SUPER ];
     buildInputs = [ TestWarnings ];
