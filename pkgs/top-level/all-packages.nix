@@ -22738,7 +22738,9 @@ in
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
-  mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
+  mhwaveedit = callPackage ../applications/audio/mhwaveedit {
+    autoreconfHook = autoreconfHook269;
+  };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
