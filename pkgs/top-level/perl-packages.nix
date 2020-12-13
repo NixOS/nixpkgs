@@ -15834,12 +15834,12 @@ let
 
   PackageStash = buildPerlPackage {
     pname = "Package-Stash";
-    version = "0.38";
+    version = "0.39";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.38.tar.gz";
-      sha256 = "c58ee8844df2dda38e3bf66fdf443439aaefaef1a33940edf2055f0afd223a7f";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.39.tar.gz";
+      sha256 = "1d914qnnpiyimfi57crzb6r31nl613g2k48frs9h821f25azarci";
     };
-    buildInputs = [ TestFatal TestRequires ];
+    buildInputs = [ CPANMetaCheck TestFatal TestNeeds TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
     meta = {
       description = "Routines for manipulating stashes";
