@@ -192,10 +192,10 @@ let
 
   AlienLibxml2 = buildPerlPackage {
     pname = "Alien-Libxml2";
-    version = "0.16";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.16.tar.gz";
-      sha256 = "15rvllspikyr8412v8dpl2f2w5vxnjgnddnkz378sy2g0mc6mw2n";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.17.tar.gz";
+      sha256 = "1cwdqspbq0r0bmw0079z4qzc7chs5aw6jdf3699nxhxmy1255d3k";
     };
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ pkgs.libxml2 MojoDOM58 SortVersions Test2Suite URI ];
