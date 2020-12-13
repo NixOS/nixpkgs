@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'WTForms ==' 'WTForms >=' \
       --replace 'python_dotenv ==' 'python_dotenv >=' \
       --replace 'attrs == 20.2.0' 'attrs' \
+      --replace 'watchdog == 0.10.3' 'watchdog' \
       --replace 'python_frontmatter == 0.5.0' 'python_frontmatter' \
       --replace 'requests ==' 'requests >='
   '';
