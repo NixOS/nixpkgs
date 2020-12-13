@@ -1,0 +1,46 @@
+diff --git a/requirements.txt b/requirements.txt
+index 61f708b1..d2006af9 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,21 +1,25 @@
+-astral==1.10.1
+-pytz==2019.3
++astral
++pytz
+ requests>=2.22.0
+ websocket-client==0.57.0
+-aiohttp==3.6.2
++aiohttp
+ yarl==1.4.2
+-Jinja2==2.11.1
+-aiohttp_jinja2==1.2.0
+-pyyaml==5.3
+-voluptuous==0.11.7
+-feedparser==5.2.1
+-iso8601==0.1.12
++Jinja2
++aiohttp_jinja2
++pyyaml
++voluptuous
++feedparser
++iso8601
+ bcrypt==3.1.7
+-paho-mqtt==1.5.0
++paho-mqtt
+-python-socketio==4.4.0
+-deepdiff==4.3.1
++python-socketio
++deepdiff
+ python-dateutil==2.8.1
+-pid==2.2.5
+-azure==4.0.0
+-pygments==2.6.1
+-sockjs==0.10.0
++pid
++azure-mgmt-compute
++azure-mgmt-storage
++azure-mgmt-resource
++azure-keyvault-secrets
++azure-storage-blob
++pygments
++sockjs

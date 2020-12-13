@@ -42,29 +42,7 @@ in python.pkgs.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "pyyaml==5.3" "pyyaml" \
-      --replace "pid==2.2.5" "pid" \
-      --replace "Jinja2==2.11.1" "Jinja2" \
-      --replace "pytz==2019.3" "pytz" \
-      --replace "aiohttp==3.6.2" "aiohttp>=3.6" \
-      --replace "iso8601==0.1.12" "iso8601>=0.1" \
-      --replace "azure==4.0.0" "azure-mgmt-compute
-    azure-mgmt-storage
-    azure-mgmt-resource
-    azure-keyvault-secrets
-    azure-storage-blob" \
-      --replace "sockjs==0.10.0" "sockjs" \
-      --replace "deepdiff==4.3.1" "deepdiff" \
-      --replace "voluptuous==0.11.7" "voluptuous" \
-      --replace "astral==1.10.1" "astral" \
-      --replace "python-socketio==4.4.0" "python-socketio" \
-      --replace "feedparser==5.2.1" "feedparser>=5.2.1" \
-      --replace "aiohttp_jinja2==1.2.0" "aiohttp_jinja2>=1.2.0" \
-      --replace "pygments==2.6.1" "pygments>=2.6.1" \
-      --replace "paho-mqtt==1.5.0" "paho-mqtt>=1.5.0"
-  '';
+  patches = [ ./relax_versions.patch ];
 
   meta = with lib; {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
