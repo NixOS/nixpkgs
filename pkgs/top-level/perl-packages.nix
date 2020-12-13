@@ -20789,10 +20789,10 @@ let
 
   TestRunPluginColorSummary = buildPerlModule {
     pname = "Test-Run-Plugin-ColorSummary";
-    version = "0.0202";
+    version = "0.0203";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-ColorSummary-0.0202.tar.gz";
-      sha256 = "ea4fb6768c4f6645cedf87d9b7c6baf97364ebc6f4171e4dd5f68939fb2bdd3a";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-ColorSummary-0.0203.tar.gz";
+      sha256 = "1zca7w360m0vf3srf8af1s2k9k8hi85w1cavql7m2sr9kcvpknbv";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap ];
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
