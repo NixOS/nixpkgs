@@ -12738,7 +12738,9 @@ in
       inherit suidHelper serviceDirectories apparmor;
     };
 
-  dee = callPackage ../development/libraries/dee { };
+  dee = callPackage ../development/libraries/dee {
+    autoreconfHook = autoreconfHook269;
+  };
 
   dhex = callPackage ../applications/editors/dhex { };
 
