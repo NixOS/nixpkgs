@@ -11252,10 +11252,10 @@ let
 
   ListMoreUtils = buildPerlPackage {
     pname = "List-MoreUtils";
-    version = "0.428";
+    version = "0.430";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-0.428.tar.gz";
-      sha256 = "713e0945d5f16e62d81d5f3da2b6a7b14a4ce439f6d3a7de74df1fd166476cc2";
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-0.430.tar.gz";
+      sha256 = "09v5cipjf634a1176wy2wicibzz51lry0d0yim9rnbfl5j2ggcb3";
     };
     propagatedBuildInputs = [ ExporterTiny ListMoreUtilsXS ];
     meta = {
