@@ -1232,11 +1232,11 @@ let
 
   BerkeleyDB = buildPerlPackage {
     pname = "BerkeleyDB";
-    version = "0.63";
+    version = "0.64";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.63.tar.gz";
-      sha256 = "1lh2a75cy85hqxlridk862nwzhrp762h74vy27hcbfgb4a6r62by";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.64.tar.gz";
+      sha256 = "0jvllgyk7ai8zxziaxpxar0n2054y01dq3qn40xc86lwakl8ap2k";
     };
 
     preConfigure = ''
