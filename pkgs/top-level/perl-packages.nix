@@ -4169,10 +4169,10 @@ let
 
   CryptRIPEMD160 = buildPerlPackage {
     pname = "Crypt-RIPEMD160";
-    version = "0.06";
+    version = "0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-RIPEMD160-0.06.tar.gz";
-      sha256 = "ea64a1e9eb42f3d79855a392e7cca6b86e8e0bcc9aabcc5efa5fa32415b67dba";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-RIPEMD160-0.08.tar.gz";
+      sha256 = "0cmj620kfg08yvh81bq1sbabdyyc3g9pc6vlngxdxjgn0xvcil9l";
     };
     meta = {
       homepage = "https://wiki.github.com/toddr/Crypt-RIPEMD160";
