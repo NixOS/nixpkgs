@@ -129,10 +129,10 @@ let
 
   AlgorithmC3 = buildPerlPackage {
     pname = "Algorithm-C3";
-    version = "0.10";
+    version = "0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Algorithm-C3-0.10.tar.gz";
-      sha256 = "01hlcaxndls86bl92rkd3fvf9pfa3inxqaimv88bxs95803kmkss";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Algorithm-C3-0.11.tar.gz";
+      sha256 = "02ck52cf0yyk57354rd1rp5l0kbfwi1pvg2lh3jadvjxfrkq9x5a";
     };
     meta = {
       description = "A module for merging hierarchies using the C3 algorithm";
