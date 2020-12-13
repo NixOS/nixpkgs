@@ -4270,10 +4270,10 @@ let
 
   CryptTwofish = buildPerlPackage {
     pname = "Crypt-Twofish";
-    version = "2.17";
+    version = "2.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AM/AMS/Crypt-Twofish-2.17.tar.gz";
-      sha256 = "eed502012f0c63927a1a32e3154071cc81175d1992a893ec41f183b6e3e5d758";
+      url = "mirror://cpan/authors/id/A/AM/AMS/Crypt-Twofish-2.18.tar.gz";
+      sha256 = "00fms8v94wr3lmn1nqjcfw30p5scsyr4s3dah8ijm5w7c5fmb0aq";
     };
     meta = {
       description = "The Twofish Encryption Algorithm";
