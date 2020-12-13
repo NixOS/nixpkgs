@@ -6701,6 +6701,12 @@
     githubId = 1449319;
     name = "Pacien Tran-Girard";
   };
+  pacman99 = {
+    email = "pachum99@gmail.com";
+    github = "Pacman99";
+    githubId = 16345849;
+    name = "Parthiv Seetharaman";
+  };
   paddygord = {
     email = "pgpatrickgordon@gmail.com";
     github = "paddygord";
