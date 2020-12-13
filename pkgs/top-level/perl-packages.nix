@@ -1584,10 +1584,10 @@ let
 
   Cairo = buildPerlPackage {
     pname = "Cairo";
-    version = "1.107";
+    version = "1.108";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Cairo-1.107.tar.gz";
-      sha256 = "0sg1gf1f2pjq7pji0zsv4rbi3bzpsx82z98k7yqxafzrvlkf27ay";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Cairo-1.108.tar.gz";
+      sha256 = "1nh5iya63q6j2w0cdi24x2ygpi8k8wwccnbh8cisnx8nqmywnhk0";
     };
     buildInputs = [ pkgs.cairo ];
     meta = {
