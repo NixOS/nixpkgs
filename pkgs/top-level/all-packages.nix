@@ -3932,6 +3932,8 @@ in
 
   chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
 
+  fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 { };
+
   fcppt = callPackage ../development/libraries/fcppt { };
 
   fcrackzip = callPackage ../tools/security/fcrackzip { };
