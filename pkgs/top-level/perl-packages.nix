@@ -5815,13 +5815,13 @@ let
 
   DBIxClass = buildPerlPackage {
     pname = "DBIx-Class";
-    version = "0.082841";
+    version = "0.082842";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082841.tar.gz";
-      sha256 = "d705f85825aced299020534349778537524526d64f524217ca362787f683c3bd";
+      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082842.tar.gz";
+      sha256 = "1rh7idjjbibc1zmiaaarask434lh0lx7f2xyfwmy37k9fa0xcpmh";
     };
     buildInputs = [ DBDSQLite TestDeep TestException TestWarn ];
-    propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction ModuleFind PathClass SQLAbstract ScopeGuard SubName namespaceclean ];
+    propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction ModuleFind PathClass SQLAbstractClassic ScopeGuard SubName namespaceclean ];
     meta = {
       homepage = "https://metacpan.org/pod/DBIx::Class";
       description = "Extensible and flexible object <-> relational mapper";
@@ -18259,6 +18259,21 @@ let
     };
     buildInputs = [ TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ HashMerge MROCompat Moo ];
+    meta = {
+      description = "Generate SQL from Perl data structures";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SQLAbstractClassic = buildPerlPackage {
+    pname = "SQL-Abstract-Classic";
+    version = "1.91";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/SQL-Abstract-Classic-1.91.tar.gz";
+      sha256 = "0a7g13hs3kdxrjn43sfli09mgsi9d6w0dfw6hlk268av17yisgaf";
+    };
+    buildInputs = [ TestDeep TestException TestWarn ];
+    propagatedBuildInputs = [ SQLAbstract ];
     meta = {
       description = "Generate SQL from Perl data structures";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
