@@ -9762,10 +9762,10 @@ let
 
   HTTPMessage = buildPerlPackage {
     pname = "HTTP-Message";
-    version = "6.25";
+    version = "6.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/HTTP-Message-6.25.tar.gz";
-      sha256 = "21f46502e87d57f43b7a38f81916464b079f5d50fe529458391c0ad529e0075a";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.26.tar.gz";
+      sha256 = "1q952w7r1yj4s2v2cly5zzir7v45nj4h2fbad63bphvmvrcw7rkc";
     };
     buildInputs = [ TryTiny ];
     propagatedBuildInputs = [ EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
