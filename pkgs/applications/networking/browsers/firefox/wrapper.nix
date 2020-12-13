@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
-, replace, fetchurl, zip, unzip, jq, xdg_utils
+, replace, fetchurl, zip, unzip, jq, xdg_utils, writeText
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
@@ -97,7 +97,7 @@ let
       #   EXTRA PREF CHANGES  #
       #                       #
       #########################
-      policiesJson = builtins.toFile "policies.json"
+      policiesJson = writeText "policies.json"
         (builtins.toJSON enterprisePolicies);
 
       usesNixExtensions = nixExtensions != null;
@@ -132,7 +132,7 @@ let
         // extraPolicies;
       };
 
-      mozillaCfg = builtins.toFile "mozilla.cfg" ''
+      mozillaCfg = writeText "mozilla.cfg" ''
 // First line must be a comment
 
         // Disables addon signature checking
