@@ -22417,10 +22417,10 @@ let
 
   URI = buildPerlPackage {
     pname = "URI";
-    version = "1.76";
+    version = "5.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-1.76.tar.gz";
-      sha256 = "b2c98e1d50d6f572483ee538a6f4ccc8d9185f91f0073fd8af7390898254413e";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.05.tar.gz";
+      sha256 = "1v3r3ck67w272kzfgm1nd3wb41av1hlnza56vkxxj1i7s3917hd5";
     };
     buildInputs = [ TestNeeds ];
     meta = {
