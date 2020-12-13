@@ -17330,10 +17330,10 @@ let
 
   PodMarkdown = buildPerlPackage {
     pname = "Pod-Markdown";
-    version = "3.200";
+    version = "3.300";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/Pod-Markdown-3.200.tar.gz";
-      sha256 = "16dffpqwrdhi2s90ff2sgncrpnzqp81ydhl5pd78m725j60p2286";
+      url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/Pod-Markdown-3.300.tar.gz";
+      sha256 = "0y8vk7wprair2fjqbkjl7g9jv0dn7rv58l7b9yf7819nia8fjygc";
     };
     buildInputs = [ TestDifferences ];
     meta = {
