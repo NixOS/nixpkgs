@@ -22278,10 +22278,10 @@ let
 
   TypesSerialiser = buildPerlPackage {
      pname = "Types-Serialiser";
-     version = "1.0";
+     version = "1.01";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.0.tar.gz";
-       sha256 = "03bk0hm5ys8k7265dkap825ybn2zmzb1hl0kf1jdm8yq95w39lvs";
+       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.01.tar.gz";
+       sha256 = "104a7292pwwg57rswpkiaq1cgj7hcsrpf818azcy7l0l14xigizq";
      };
      propagatedBuildInputs = [ commonsense ];
      meta = {
