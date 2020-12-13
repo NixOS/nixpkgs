@@ -10687,10 +10687,10 @@ let
 
   JSONMaybeXS = buildPerlPackage {
     pname = "JSON-MaybeXS";
-    version = "1.004002";
+    version = "1.004003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004002.tar.gz";
-      sha256 = "1dbpdlrk4pjwbn3wzawwsj57jqzdvi01h4kqpknwbl1n7gf2z3iv";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz";
+      sha256 = "1grg8saa318bs4x2wqnww7y0nra7azrzg35bk5pgvkwxzwbkpvjv";
     };
     meta = {
       description = "Use L<Cpanel::JSON::XS> with a fallback to L<JSON::XS> and L<JSON::PP>";
