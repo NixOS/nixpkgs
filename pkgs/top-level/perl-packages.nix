@@ -20706,10 +20706,10 @@ let
 
   TestRun = buildPerlModule {
     pname = "Test-Run";
-    version = "0.0304";
+    version = "0.0305";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-0.0304.tar.gz";
-      sha256 = "f3feaf9c4494c0b3a5294228cab27efe93653b7e0bbd7fbb99b94b65b247f323";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-0.0305.tar.gz";
+      sha256 = "0j62hzh7k4lvk390pm8581nhjnayxp4pf0g6x1vagqpqc3fp36pq";
     };
     buildInputs = [ TestTrap ];
     propagatedBuildInputs = [ IPCSystemSimple ListMoreUtils MooseXStrictConstructor TextSprintfNamed UNIVERSALrequire ];
