@@ -8626,10 +8626,10 @@ let
 
   GitAutofixup = buildPerlPackage rec {
     pname = "App-Git-Autofixup";
-    version = "0.002007";
+    version = "0.003001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.002007.tar.gz";
-      sha256 = "1ydy15pibva0qr5vrv5mqyzw3zlc3wbszzv7932vh7m88vv6gfr6";
+      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.003001.tar.gz";
+      sha256 = "1q7im0zj238k5agwi7d1mz26a8r0wrxwfwp1l8n5k777gx3b5xhp";
     };
     meta = {
       maintainers = [ maintainers.DamienCassou ];
