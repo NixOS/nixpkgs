@@ -23306,10 +23306,10 @@ let
 
   XMLWriter = buildPerlPackage {
     pname = "XML-Writer";
-    version = "0.625";
+    version = "0.900";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JO/JOSEPHW/XML-Writer-0.625.tar.gz";
-      sha256 = "1gjzs570i67ywbv967g8ylb5sg59clwmyrl2yix3jl70dhn55070";
+      url = "mirror://cpan/authors/id/J/JO/JOSEPHW/XML-Writer-0.900.tar.gz";
+      sha256 = "07qd806kcs7si7qakx3x5p68xq2jdmkxdrns987kaayg7syzbj3k";
     };
   };
 
