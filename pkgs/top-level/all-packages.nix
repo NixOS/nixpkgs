@@ -1023,7 +1023,9 @@ in
 
   apg = callPackage ../tools/security/apg { };
 
-  apt-dater = callPackage ../tools/package-management/apt-dater { };
+  apt-dater = callPackage ../tools/package-management/apt-dater {
+    autoreconfHook = autoreconfHook269;
+  };
 
   autorevision = callPackage ../tools/misc/autorevision { };
 
