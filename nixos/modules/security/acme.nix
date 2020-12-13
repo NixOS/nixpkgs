@@ -7,6 +7,11 @@ let
   numCerts = length (builtins.attrNames cfg.certs);
   _24hSecs = 60 * 60 * 24;
 
+  # Used to make unique paths for each cert/account config set
+  mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
+  mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
+  accountDirRoot = "/var/lib/acme/.lego/accounts/";
+
   # There are many services required to make cert renewals work.
   # They all follow a common structure:
   #   - They inherit this commonServiceConfig
@@ -101,11 +106,10 @@ let
       ${toString acmeServer} ${toString data.dnsProvider}
       ${toString data.ocspMustStaple} ${data.keyType}
     '';
-    mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
     certDir = mkHash hashData;
     domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
-    othersHash = mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
-    accountDir = "/var/lib/acme/.lego/accounts/" + othersHash;
+    accountHash = (mkAccountHash acmeServer data);
+    accountDir = accountDirRoot + accountHash;
 
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
@@ -142,7 +146,7 @@ let
     );
 
   in {
-    inherit accountDir selfsignedDeps;
+    inherit accountHash accountDir cert selfsignedDeps;
 
     webroot = data.webroot;
     group = data.group;
@@ -253,8 +257,7 @@ let
         echo '${domainHash}' > domainhash.txt
 
         # Check if we can renew
-        # Certificates and account credentials must exist
-        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a "$(ls -1 accounts)" ]; then
+        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
 
           # When domains are updated, there's no need to do a full
           # Lego run, but it's likely renew won't work if days is too low.
@@ -670,15 +673,32 @@ in {
         "d /var/lib/acme/.lego/accounts - acme acme"
       ] ++ (unique (concatMap (conf: [
           "d ${conf.accountDir} - acme acme"
-        ] ++ (optional (conf.webroot != null) "d ${conf.webroot}/.well-known/acme-challenge - acme ${conf.group}")
+        ] ++ (optionals (conf.webroot != null) [
+          "d ${conf.webroot} - acme ${conf.group}"
+          "d ${conf.webroot}/.well-known - acme ${conf.group}"
+          "d ${conf.webroot}/.well-known/acme-challenge - acme ${conf.group}"
+        ])
       ) (attrValues certConfigs)));
 
-      # Create some targets which can be depended on to be "active" after cert renewals
-      systemd.targets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
-        wantedBy = [ "default.target" ];
-        requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
-        after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
-      }) certConfigs;
+      systemd.targets = let
+        # Create some targets which can be depended on to be "active" after cert renewals
+        finishedTargets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
+          wantedBy = [ "default.target" ];
+          requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+          after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+        }) certConfigs;
+
+        # Create targets to limit the number of simultaneous account creations
+        accountTargets = mapAttrs' (hash: confs: let
+          leader = "acme-${(builtins.head confs).cert}.service";
+          dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
+        in nameValuePair "acme-account-${hash}" {
+          requiredBy = dependantServices;
+          before = dependantServices;
+          requires = [ leader ];
+          after = [ leader ];
+        }) (groupBy (conf: conf.accountHash) (attrValues certConfigs));
+      in finishedTargets // accountTargets;
     })
   ];
 
