@@ -66,7 +66,6 @@ python3Packages.buildPythonApplication rec {
     mock
     pytest
     pytest-mock
-    pytestpep8
     xvfb_run
   ];
 
@@ -95,7 +94,7 @@ python3Packages.buildPythonApplication rec {
     # skip tests in invocation that handle paths that
     # aren't nix friendly (i think)
     xvfb-run -s '-screen 0 1024x768x16' \
-      pytest -k 'not TestPath and not test_handle_key_press_event' --pep8 tests
+      pytest -k 'not TestPath and not test_handle_key_press_event' tests
 
     runHook postCheck
   '';

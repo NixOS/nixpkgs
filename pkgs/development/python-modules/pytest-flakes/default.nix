@@ -1,5 +1,4 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, pytestpep8
 , pytest
 , pyflakes
 }:
@@ -16,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "bf070c5485dad82d5b5f5d0eb08d269737e378492d9a68f5223b0a90924c7754";
   };
 
-  checkInputs = [ pytestpep8 pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ pytest pyflakes ];
 
   # no longer passes

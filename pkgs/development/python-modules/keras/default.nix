@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, pytestpep8, pytest_xdist
+, pytest, pytestcov, pytest_xdist
 , six, numpy, scipy, pyyaml, h5py
 , keras-applications, keras-preprocessing
 }:
@@ -16,7 +16,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytestcov
-    pytestpep8
     pytest_xdist
   ];
 

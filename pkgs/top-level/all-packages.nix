@@ -21620,6 +21620,8 @@ in
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
+  deadd-notification-center = callPackage ../applications/misc/deadd-notification-center/default.nix { };
+
   lollypop = callPackage ../applications/audio/lollypop { };
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
