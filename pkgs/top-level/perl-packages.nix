@@ -8105,10 +8105,10 @@ let
 
   FileShareDir = buildPerlPackage {
     pname = "File-ShareDir";
-    version = "1.116";
+    version = "1.118";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RE/REHSACK/File-ShareDir-1.116.tar.gz";
-      sha256 = "0a43rfb0a1fpxh4d2dayarkdxw4cx9a2krkk87zmcilcz7yhpnar";
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/File-ShareDir-1.118.tar.gz";
+      sha256 = "0n69h793jxz1zkp8ng6yqjwdh0yr0py0c8sg1bf5iyaxlc5s5civ";
     };
     propagatedBuildInputs = [ ClassInspector ];
     meta = {
