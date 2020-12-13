@@ -24,7 +24,7 @@ let
       Type = "oneshot";
       User = "acme";
       Group = mkDefault "acme";
-      UMask = 0027;
+      UMask = 0023;
       StateDirectoryMode = 750;
       ProtectSystem = "full";
       PrivateTmp = true;
