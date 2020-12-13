@@ -16,8 +16,8 @@
   })
   (fetchNuGet {
     name = "DiscordRichPresence";
-    version = "1.0.166";
-    sha256 = "019rz0br8hamydmdrgzcc6280jfhm4i4ix27jh66a7h37alvdi3a";
+    version = "1.0.169";
+    sha256 = "0rs9fjr65432qckmzx4djlwsnc2yqwwwnjszqwnm3z2pv8dm7zrf";
   })
   (fetchNuGet {
     name = "FFmpeg.AutoGen";
@@ -676,8 +676,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2020.1203.0";
-    sha256 = "0xk1l09gm39z1739a7bgykj2bkg6lgxx72ds9s7qmbc6nrkr7jwj";
+    version = "2020.1212.0";
+    sha256 = "14ijrdlpj6ksfy0vw28m36mwbg7sfx7fgpb2p6g3w3bl4lnh8025";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
