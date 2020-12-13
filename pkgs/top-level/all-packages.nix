@@ -247,7 +247,9 @@ in
   archiver = callPackage ../applications/misc/archiver { };
 
   # It segfaults if it uses qt5.15
-  digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox { };
+  digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox {
+    autoreconfHook = autoreconfHook269;
+  };
 
   gretl = callPackage ../applications/science/math/gretl { };
 
