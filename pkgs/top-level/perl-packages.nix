@@ -20739,10 +20739,10 @@ let
 
   TestRunPluginAlternateInterpreters = buildPerlModule {
     pname = "Test-Run-Plugin-AlternateInterpreters";
-    version = "0.0124";
+    version = "0.0125";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-AlternateInterpreters-0.0124.tar.gz";
-      sha256 = "eecb3830d350b5d7853322df4f3090af42ff17e9c31075f8d4f69856c968bff3";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-AlternateInterpreters-0.0125.tar.gz";
+      sha256 = "1fwr687h05fg6xn6vsfx9ll2ha8c7brmqbiz18biz0jx2jdnihsj";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
