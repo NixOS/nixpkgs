@@ -25715,7 +25715,10 @@ in
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
-  freeciv = callPackage ../games/freeciv { qt5 = qt514; };
+  freeciv = callPackage ../games/freeciv {
+    autoreconfHook = autoreconfHook269;
+    qt5 = qt514;
+  };
 
   freeciv_gtk = freeciv.override {
     gtkClient = true;
