@@ -17105,10 +17105,10 @@ let
 
   PodChecker = buildPerlPackage {
     pname = "Pod-Checker";
-    version = "1.73";
+    version = "1.74";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.73.tar.gz";
-      sha256 = "7dee443b03d80d0735ec50b6d1caf0209c51ab0a97d64050cfc10e1555cb9305";
+      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.74.tar.gz";
+      sha256 = "12559997r7wbhhs0p6cdxdzv7rzviv0nx1hq0dby8q481apn489f";
     };
   };
 
