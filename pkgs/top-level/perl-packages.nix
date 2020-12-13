@@ -20771,10 +20771,10 @@ let
 
   TestRunPluginColorFileVerdicts = buildPerlModule {
     pname = "Test-Run-Plugin-ColorFileVerdicts";
-    version = "0.0124";
+    version = "0.0125";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-ColorFileVerdicts-0.0124.tar.gz";
-      sha256 = "0418f03abe241f5a3c2a2ab3dd2679d11eee42c9e1f5b5a6ea80d9e238374302";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-ColorFileVerdicts-0.0125.tar.gz";
+      sha256 = "0ihy5rzhc7472kh8931i7fbqf36nixl6yjrf8x5ndzd62hn1l90w";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap ];
     propagatedBuildInputs = [ Moose ];
