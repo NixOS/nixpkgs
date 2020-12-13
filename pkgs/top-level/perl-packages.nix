@@ -9510,11 +9510,15 @@ let
 
   HTMLTableExtract = buildPerlPackage {
     pname = "HTML-TableExtract";
-    version = "2.13";
+    version = "2.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSISK/HTML-TableExtract-2.13.tar.gz";
-      sha256 = "01jimmss3q68a89696wmclvqwb2ybz6xgabpnbp6mm6jcni82z8a";
+      url = "mirror://cpan/authors/id/M/MS/MSISK/HTML-TableExtract-2.15.tar.gz";
+      sha256 = "1kry9igbcjyiwpwivq5in41dmx02zfhgaqjyv9sa2g6sb2frric6";
     };
+    preCheck = ''
+      # https://rt.cpan.org/Public/Bug/Display.html?id=121920
+      rm t/30_tree.t
+    '';
     propagatedBuildInputs = [ HTMLElementExtended ];
   };
 
