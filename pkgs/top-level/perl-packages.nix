@@ -7937,11 +7937,12 @@ let
 
   FileLoadLines = buildPerlPackage {
     pname = "File-LoadLines";
-    version = "0.02";
+    version = "1.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-0.02.tar.gz";
-      sha256 = "ab0c1c31cf7b694dd3c9a0707098f7483763d46b60799a7f496ea0588be46b7b";
+      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.01.tar.gz";
+      sha256 = "1lar8s1mc4d36lhxgqyk3hpwdc1bk6j6dfdzzacbjz4zlim6x33f";
     };
+    buildInputs = [ TestException ];
     meta = {
       description = "Load lines from file";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
