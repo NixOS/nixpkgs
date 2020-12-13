@@ -21200,10 +21200,10 @@ let
 
   TextBalanced = buildPerlPackage {
     pname = "Text-Balanced";
-    version = "2.03";
+    version = "2.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/Text-Balanced-2.03.tar.gz";
-      sha256 = "057753f8f0568b53921f66a60a89c30092b73329bcc61a2c43339ab70c9792c8";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/Text-Balanced-2.04.tar.gz";
+      sha256 = "1qp7whrampvdzb4nbdvbzp02vlmyk5ssha2lg1iaf2y8hn5l177l";
     };
     meta = {
       description = "Extract delimited text sequences from strings";
