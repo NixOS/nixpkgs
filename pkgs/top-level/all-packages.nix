@@ -21310,7 +21310,7 @@ in
     gnuradio = gnuradio3_7-unwrapped;
   };
 
-  goldendict = libsForQt514.callPackage ../applications/misc/goldendict {
+  goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
   };
 
@@ -21740,11 +21740,11 @@ in
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
-  gpsbabel = libsForQt514.callPackage ../applications/misc/gpsbabel {
+  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel {
     inherit (darwin) IOKit;
   };
 
-  gpsbabel-gui = libsForQt514.callPackage ../applications/misc/gpsbabel/gui.nix { };
+  gpsbabel-gui = libsForQt5.callPackage ../applications/misc/gpsbabel/gui.nix { };
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
@@ -22315,7 +22315,7 @@ in
     openjpeg = openjpeg_1;
   };
 
-  krusader = libsForQt514.callPackage ../applications/misc/krusader { };
+  krusader = libsForQt5.callPackage ../applications/misc/krusader { };
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
@@ -22589,7 +22589,7 @@ in
 
   mandelbulber = libsForQt5.callPackage ../applications/graphics/mandelbulber { };
 
-  mapmap = libsForQt514.callPackage ../applications/video/mapmap { };
+  mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
   marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
 

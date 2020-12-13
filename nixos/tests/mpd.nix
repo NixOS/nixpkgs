@@ -27,10 +27,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       after = [ "mpd.service" ];
       wantedBy = [ "default.target" ];
       script = ''
-        mkdir -p ${musicDirectory} && chown -R ${user}:${group} ${musicDirectory}
         cp ${track} ${musicDirectory}
-        chown ${user}:${group} ${musicDirectory}/$(basename ${track})
       '';
+      serviceConfig = {
+        User = user;
+        Group = group;
+      };
     };
 
     mkServer = { mpd, musicService, }:

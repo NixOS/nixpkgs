@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.gpsbabel.org/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
 }

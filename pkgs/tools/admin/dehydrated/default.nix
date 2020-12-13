@@ -1,13 +1,13 @@
 { stdenv, coreutils, curl, diffutils, gawk, gnugrep, gnused, openssl, makeWrapper, fetchFromGitHub, installShellFiles }:
 stdenv.mkDerivation rec {
   pname = "dehydrated";
-  version = "0.6.5";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "lukas2511";
     repo = "dehydrated";
     rev = "v${version}";
-    sha256 = "14k7ykry16zp09i0bqb5pqaclvnjcb6p3x8knm9v5q0bdvlplkjv";
+    sha256 = "09jhmkjvnj98zbf92qwdr5rr7pc6v63xzyk2fbi177r7szb2yg09";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
