@@ -10951,10 +10951,10 @@ let
 
   LinguaENInflect = buildPerlPackage {
     pname = "Lingua-EN-Inflect";
-    version = "1.904";
+    version = "1.905";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Lingua-EN-Inflect-1.904.tar.gz";
-      sha256 = "54d344884ba9b585680975bbd4049ddbf27bf654446fb00c7e1fc538e08c3173";
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Lingua-EN-Inflect-1.905.tar.gz";
+      sha256 = "15ij4rk1nznnd9hyg2hzy1ydpi9h1cdii8hdlq9j6mrf931rxhh5";
     };
     meta = {
       description = "Convert singular to plural. Select 'a' or 'an'";
