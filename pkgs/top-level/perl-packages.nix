@@ -6936,10 +6936,10 @@ let
 
   EmailSender = buildPerlPackage {
     pname = "Email-Sender";
-    version = "1.300034";
+    version = "1.300035";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-1.300034.tar.gz";
-      sha256 = "05ac38a63b053c7c3846ffa45196e4483a5785941b0bfb615b22b7a4f04c5291";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-1.300035.tar.gz";
+      sha256 = "0yfssp3rqdx1dmgvnygarzgkpkhqm28r5sd0gh87ksk8yxndhjql";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailAddress MooXTypesMooseLike SubExporter Throwable TryTiny ];
