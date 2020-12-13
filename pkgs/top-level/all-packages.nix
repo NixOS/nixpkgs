@@ -27417,6 +27417,7 @@ in
   boinc = callPackage ../applications/science/misc/boinc { };
 
   celestia = callPackage ../applications/science/astronomy/celestia {
+    autoreconfHook = autoreconfHook269;
     lua = lua5_1;
     inherit (pkgs.gnome2) gtkglext;
   };
