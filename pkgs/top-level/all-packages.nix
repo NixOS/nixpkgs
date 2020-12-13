@@ -15556,7 +15556,7 @@ in
       kwin kwrited milou oxygen plasma-browser-integration plasma-desktop
       plasma-integration plasma-nm plasma-pa plasma-thunderbolt plasma-vault plasma-workspace
       plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
-      systemsettings user-manager xdg-desktop-portal-kde
+      systemsettings xdg-desktop-portal-kde
     ;
 
     inherit ((plasma5.override { libsForQt5 = self; }).thirdParty)
