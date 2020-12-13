@@ -16000,10 +16000,10 @@ let
 
   PARDist = buildPerlPackage {
     pname = "PAR-Dist";
-    version = "0.49";
+    version = "0.51";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-Dist-0.49.tar.gz";
-      sha256 = "078ycyn8pw3rba4k3qwcqrqfcym5c1pivymwa0bvs9sab45j4iwy";
+      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-Dist-0.51.tar.gz";
+      sha256 = "1y6z6fpp6wclmk4x3nzsxv869i56668y1i74828g72dnz4nhchnj";
     };
     meta = {
       description = "Create and manipulate PAR distributions";
