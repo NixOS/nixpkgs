@@ -20722,10 +20722,10 @@ let
 
   TestRunCmdLine = buildPerlModule {
     pname = "Test-Run-CmdLine";
-    version = "0.0131";
+    version = "0.0132";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-CmdLine-0.0131.tar.gz";
-      sha256 = "cceeeecd3f4b2f1d2929f3ada351c1ade23a8ac73ef0486dc6e9605ebcdaef18";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-CmdLine-0.0132.tar.gz";
+      sha256 = "01x7rzscj3f06kpv0bd9dwx4wg9bmn7b5gyqfvy7wmv3ak6r3hxj";
     };
     buildInputs = [ TestRun TestTrap ];
     propagatedBuildInputs = [ MooseXGetopt UNIVERSALrequire YAMLLibYAML ];
