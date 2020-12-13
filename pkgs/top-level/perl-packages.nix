@@ -20822,10 +20822,10 @@ let
 
   TestRunValgrind = buildPerlModule {
     pname = "Test-RunValgrind";
-    version = "0.2.1";
+    version = "0.2.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-RunValgrind-0.2.1.tar.gz";
-      sha256 = "25a4a8bfcefaed7c40d8b8492e8828e798e6c85ca5f34ce4b9993f9899a7b09c";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-RunValgrind-0.2.2.tar.gz";
+      sha256 = "1vm5iw5sy0mhjjypaaviil9qgqixmkaghdbjbcyb4lf2mm6d24v9";
     };
     buildInputs = [ TestTrap ];
     propagatedBuildInputs = [ PathTiny ];
