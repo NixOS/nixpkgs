@@ -17361,10 +17361,10 @@ let
 
   PodSimple = buildPerlPackage {
     pname = "Pod-Simple";
-    version = "3.40";
+    version = "3.42";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.40.tar.gz";
-      sha256 = "0384k8k18srsdj2a2j10gbvv19lnvynq359y9kb4zn5bv2wqqfh6";
+      url = "mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.42.tar.gz";
+      sha256 = "1icagrjqw1azmff82h17cbrhqgql7rg21gz64mjpiqqq0cpfpz59";
     };
   };
 
