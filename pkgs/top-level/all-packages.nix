@@ -25006,7 +25006,9 @@ in
     gtk = gtk2;
   };
 
-  x11basic = callPackage ../development/compilers/x11basic { };
+  x11basic = callPackage ../development/compilers/x11basic {
+    autoconf = autoconf269;
+  };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
