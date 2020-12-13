@@ -10213,10 +10213,10 @@ let
 
   IOHTML = buildPerlPackage {
     pname = "IO-HTML";
-    version = "1.001";
+    version = "1.004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CJ/CJM/IO-HTML-1.001.tar.gz";
-      sha256 = "ea78d2d743794adc028bc9589538eb867174b4e165d7d8b5f63486e6b828e7e0";
+      url = "mirror://cpan/authors/id/C/CJ/CJM/IO-HTML-1.004.tar.gz";
+      sha256 = "1xcbplf8rxb3z4wz66h5w7vy1g83bkxksxwnjp1z5fv3jksjsyy8";
     };
     meta = {
       description = "Open an HTML file with automatic charset detection";
