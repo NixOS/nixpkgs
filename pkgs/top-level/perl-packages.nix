@@ -13657,10 +13657,10 @@ let
 
   MooXHandlesVia = buildPerlPackage {
     pname = "MooX-HandlesVia";
-    version = "0.001008";
+    version = "0.001009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MATTP/MooX-HandlesVia-0.001008.tar.gz";
-      sha256 = "b0946f23b3537763b8a96b8a83afcdaa64fce4b45235e98064845729acccfe8c";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/MooX-HandlesVia-0.001009.tar.gz";
+      sha256 = "04kcyflg49rclxa1nm035c05jpyvhdacjyy1wklbgv4li3im6qvi";
     };
     buildInputs = [ MooXTypesMooseLike TestException TestFatal ];
     propagatedBuildInputs = [ DataPerl Moo ];
