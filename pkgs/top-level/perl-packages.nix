@@ -2942,10 +2942,10 @@ let
 
   ClassSingleton = buildPerlPackage {
     pname = "Class-Singleton";
-    version = "1.5";
+    version = "1.6";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/Class-Singleton-1.5.tar.gz";
-      sha256 = "0y7ngrjf551bjgmijp5rsidbkq6c8hb5lmy2jcqq0fify020s8iq";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/Class-Singleton-1.6.tar.gz";
+      sha256 = "1942j9g0b4c88nvs3jghh3y31mlhbpwrx35xdcb2jaaiv7q17fi7";
     };
   };
 
