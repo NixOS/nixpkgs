@@ -14591,6 +14591,8 @@ in
 
   libimagequant = callPackage ../development/libraries/libimagequant {};
 
+  libime = callPackage ../development/libraries/libime { };
+
   libinfinity = callPackage ../development/libraries/libinfinity { };
 
   libinput = callPackage ../development/libraries/libinput {
