@@ -16433,10 +16433,10 @@ let
 
   PerlIOutf8_strict = buildPerlPackage {
     pname = "PerlIO-utf8_strict";
-    version = "0.007";
+    version = "0.008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/PerlIO-utf8_strict-0.007.tar.gz";
-      sha256 = "83a33f2fe046cb3ad6afc80790635a423e2c7c6854afacc6998cd46951cc81cb";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/PerlIO-utf8_strict-0.008.tar.gz";
+      sha256 = "0ngl9p3kh7as1yx1az66yhbxhrh664vzhl3qnlhx9iywa3nqsyaz";
     };
     buildInputs = [ TestException ];
     meta = {
