@@ -2692,10 +2692,10 @@ let
 
   ClassC3 = buildPerlPackage {
     pname = "Class-C3";
-    version = "0.34";
+    version = "0.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Class-C3-0.34.tar.gz";
-      sha256 = "1dcibc31v5jwmi6hsdzi7c5ag1sb4wp3kxkibc889qrdj7jm12sd";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Class-C3-0.35.tar.gz";
+      sha256 = "0gp3czp6y0jxx4448kz37f7gdxq4vw514bvc0l98rk4glvqkq1c4";
     };
     propagatedBuildInputs = [ AlgorithmC3 ];
     meta = {
