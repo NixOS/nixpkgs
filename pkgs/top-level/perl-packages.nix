@@ -3146,10 +3146,10 @@ let
 
   ClonePP = buildPerlPackage {
      pname = "Clone-PP";
-     version = "1.07";
+     version = "1.08";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/N/NE/NEILB/Clone-PP-1.07.tar.gz";
-       sha256 = "15dkhqvih6rx9dnngfwwljcm9s8afb0nbyl2vdvhd8frnw4y31dz";
+       url = "mirror://cpan/authors/id/N/NE/NEILB/Clone-PP-1.08.tar.gz";
+       sha256 = "0y7m25fksiavzg4xj4cm9zkz8rmnk4iqy7lm01m4nmyqlna3082p";
      };
      meta = {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
