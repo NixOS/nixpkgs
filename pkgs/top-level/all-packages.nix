@@ -16326,7 +16326,9 @@ in
 
   totem-pl-parser = callPackage ../development/libraries/totem-pl-parser { };
 
-  tpm2-tss = callPackage ../development/libraries/tpm2-tss { };
+  tpm2-tss = callPackage ../development/libraries/tpm2-tss {
+    autoreconfHook = autoreconfHook269;
+  };
 
   tremor = callPackage ../development/libraries/tremor { };
 
