@@ -21278,7 +21278,9 @@ in
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
-  fsv = callPackage ../applications/misc/fsv { };
+  fsv = callPackage ../applications/misc/fsv {
+    autoreconfHook = autoreconfHook269;
+  };
 
   ft2-clone = callPackage ../applications/audio/ft2-clone { };
 
