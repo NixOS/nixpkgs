@@ -4497,10 +4497,10 @@ let
 
   Curses = buildPerlPackage {
     pname = "Curses";
-    version = "1.36";
+    version = "1.37";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-1.36.tar.gz";
-      sha256 = "0r6xd9wr0c25rr28zixhqipak575zqsfb7r7f2693i9il1dpj554";
+      url = "mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-1.37.tar.gz";
+      sha256 = "086vaj4wh5473hbp5f4amk6l0yzm66yxdcd2znz5pcqrmpiplw3l";
     };
     propagatedBuildInputs = [ pkgs.ncurses ];
     NIX_CFLAGS_LINK = "-lncurses";
