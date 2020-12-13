@@ -18307,10 +18307,10 @@ let
 
   SQLStatement = buildPerlPackage {
     pname = "SQL-Statement";
-    version = "1.412";
+    version = "1.414";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RE/REHSACK/SQL-Statement-1.412.tar.gz";
-      sha256 = "65c870883379c11b53f19ead10aaac241ccc86a90bbab77f6376fe750720e5c8";
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/SQL-Statement-1.414.tar.gz";
+      sha256 = "0j8sg36wc3nwfb2gj3fv75f0iv7s7q7vl6b5l3fywdm1lv7vvs6x";
     };
     buildInputs = [ MathBaseConvert TestDeep TextSoundex ];
     propagatedBuildInputs = [ Clone ModuleRuntime ParamsUtil ];
