@@ -8022,10 +8022,10 @@ let
 
   FilePath = buildPerlPackage {
     pname = "File-Path";
-    version = "2.17";
+    version = "2.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/File-Path-2.17.tar.gz";
-      sha256 = "8c506dfd69a70fdd5f1212fe58fbc53620a89a8293e2ac6860570f868269fb31";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz";
+      sha256 = "1pddss5hwzng0rxgsi8cz3hcsaarkxzkayydx53dylxkxlbhl3wq";
     };
     meta = {
       description = "Create or remove directory trees";
