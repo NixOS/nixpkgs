@@ -23409,10 +23409,10 @@ let
 
   YAMLPP = buildPerlPackage {
     pname = "YAML-PP";
-    version = "0.025";
+    version = "0.026";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-0.025.tar.gz";
-      sha256 = "1v579a874b98l8kj0sk2qk8ydcgqlzlrvcs2yc77s1xnxay15b0m";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-0.026.tar.gz";
+      sha256 = "1ss5b8ny00pvg6bfx562hy7z5hj02w1yh224qpn6dsgk3ikqx1ab";
     };
     buildInputs = [ TestDeep TestWarn ];
     meta = {
