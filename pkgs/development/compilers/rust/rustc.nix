@@ -11,7 +11,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optionals optional optionalString;
+  inherit (stdenv.lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   llvmSharedForBuild = pkgsBuildBuild.llvm_10.override { enableSharedLibraries = true; };
@@ -72,7 +72,14 @@ in stdenv.mkDerivation rec {
     "--enable-vendor"
     "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
     "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
-    "--target=${rust.toRustTargetSpec stdenv.targetPlatform}"
+    # std is built for all platforms in --target. When building a cross-compiler
+    # we need to add the host platform as well so rustc can compile build.rs
+    # scripts.
+    "--target=${concatStringsSep "," ([
+      (rust.toRustTargetSpec stdenv.targetPlatform)
+    ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
+      (rust.toRustTargetSpec stdenv.hostPlatform)
+    ])}"
 
     "${setBuild}.cc=${ccForBuild}"
     "${setHost}.cc=${ccForHost}"

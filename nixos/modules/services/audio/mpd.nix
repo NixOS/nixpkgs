@@ -66,7 +66,10 @@ in {
         default = "${cfg.dataDir}/music";
         defaultText = ''''${dataDir}/music'';
         description = ''
-          The directory or NFS/SMB network share where mpd reads music from.
+          The directory or NFS/SMB network share where MPD reads music from. If left
+          as the default value this directory will automatically be created before
+          the MPD server starts, otherwise the sysadmin is responsible for ensuring
+          the directory exists with appropriate ownership and permissions.
         '';
       };
 
@@ -75,7 +78,10 @@ in {
         default = "${cfg.dataDir}/playlists";
         defaultText = ''''${dataDir}/playlists'';
         description = ''
-          The directory where mpd stores playlists.
+          The directory where MPD stores playlists. If left as the default value
+          this directory will automatically be created before the MPD server starts,
+          otherwise the sysadmin is responsible for ensuring the directory exists
+          with appropriate ownership and permissions.
         '';
       };
 
@@ -94,8 +100,10 @@ in {
         type = types.path;
         default = "/var/lib/${name}";
         description = ''
-          The directory where MPD stores its state, tag cache,
-          playlists etc.
+          The directory where MPD stores its state, tag cache, playlists etc. If
+          left as the default value this directory will automatically be created
+          before the MPD server starts, otherwise the sysadmin is responsible for
+          ensuring the directory exists with appropriate ownership and permissions.
         '';
       };
 
@@ -185,36 +193,42 @@ in {
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.playlistDirectory}' - ${cfg.user} ${cfg.group} - -"
-    ];
-
     systemd.services.mpd = {
       after = [ "network.target" "sound.target" ];
       description = "Music Player Daemon";
       wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-      serviceConfig = {
-        User = "${cfg.user}";
-        ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon /etc/mpd.conf";
-        ExecStartPre = pkgs.writeScript "mpd-start-pre" ''
-          #!${pkgs.runtimeShell}
-          set -euo pipefail
-          cat ${mpdConf} ${cfg.credentialsFile} > /etc/mpd.conf
-        '';
-        Type = "notify";
-        LimitRTPRIO = 50;
-        LimitRTTIME = "infinity";
-        ProtectSystem = true;
-        NoNewPrivileges = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        ProtectKernelModules = true;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
-        RestrictNamespaces = true;
-        Restart = "always";
-      };
+      serviceConfig = mkMerge [
+        {
+          User = "${cfg.user}";
+          ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon /etc/mpd.conf";
+          ExecStartPre = pkgs.writeScript "mpd-start-pre" ''
+            #!${pkgs.runtimeShell}
+            set -euo pipefail
+            cat ${mpdConf} ${cfg.credentialsFile} > /etc/mpd.conf
+          '';
+          Type = "notify";
+          LimitRTPRIO = 50;
+          LimitRTTIME = "infinity";
+          ProtectSystem = true;
+          NoNewPrivileges = true;
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
+          RestrictNamespaces = true;
+          Restart = "always";
+        }
+        (mkIf (cfg.dataDir == "/var/lib/${name}") {
+          StateDirectory = [ name ];
+        })
+        (mkIf (cfg.playlistDirectory == "/var/lib/${name}/playlists") {
+          StateDirectory = [ name "${name}/playlists" ];
+        })
+        (mkIf (cfg.musicDirectory == "/var/lib/${name}/music") {
+          StateDirectory = [ name "${name}/music" ];
+        })
+      ];
     };
     environment.etc."mpd.conf" = {
       mode = "0640";

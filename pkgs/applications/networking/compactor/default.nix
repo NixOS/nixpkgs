@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "compactor";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "dns-stats";
     repo = pname;
     rev = version;
-    sha256 = "0x5rwbv0ndf9zcvnsbd78ic6shh9hd0bh3gh0lzz9wlb99lslbkk";
+    sha256 = "0qykdnwi2q9sajkkc2sl5f00lvxjfymqjzqm0limsziykanh87c0";
   };
 
   # cbor-diag, cddl and wireshark-cli are only used for tests.
