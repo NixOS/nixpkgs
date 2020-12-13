@@ -7927,10 +7927,10 @@ let
 
   FileListing = buildPerlPackage {
     pname = "File-Listing";
-    version = "6.04";
+    version = "6.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/File-Listing-6.04.tar.gz";
-      sha256 = "1xcwjlnxaiwwpn41a5yi6nz95ywh3szq5chdxiwj36kqsvy5000y";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-Listing-6.14.tar.gz";
+      sha256 = "1zs8gfngqsd6jbsqajf95kql3bshsis1nf16y8v4l5i33s3s9cqm";
     };
     propagatedBuildInputs = [ HTTPDate ];
   };
