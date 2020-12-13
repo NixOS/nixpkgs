@@ -7,7 +7,6 @@
 , factory_boy
 , pytestcache
 , pytestcov
-, pytestpep8
 , mock
 }:
 
@@ -22,6 +21,9 @@ buildPythonPackage rec {
     sha256 = "0m1snyybq2k51khlydhisq300vzys897vdbsicph628iran950hn";
   };
 
+  # TODO: remove in next release, it's removed in master.
+  postPatch = "substituteInPlace tox.ini --replace '--pep8' ''";
+
   propagatedBuildInputs = [ factory_boy inflection pytest ];
 
   # The project uses tox, which we can't. So we simply run pytest manually.
@@ -30,7 +32,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytestcache
     pytestcov
-    pytestpep8
   ];
   pytestFlagsArray = [ "--ignore=docs" ];
 
