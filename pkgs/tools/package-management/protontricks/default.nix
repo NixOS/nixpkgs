@@ -35,7 +35,11 @@ buildPythonApplication rec {
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [
       steam-run
-      winetricks
+      (winetricks.override {
+        # Remove default build of wine to reduce closure size.
+        # Falls back to wine in PATH when --no-runtime is passed.
+        wine = null;
+      })
       zenity
     ]}"
   ];
