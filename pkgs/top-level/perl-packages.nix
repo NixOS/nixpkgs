@@ -3523,10 +3523,10 @@ let
 
   Connector = buildPerlPackage {
     pname = "Connector";
-    version = "1.32";
+    version = "1.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.32.tar.gz";
-      sha256 = "c108ce559fa48faf95d01eb6bae9c14ecef49386f89c4aa2c2ce5edf9fd0ca14";
+      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.35.tar.gz";
+      sha256 = "0jnwcvjibywdfq4x5n3np9fxvpsgqq6vjpn72sfa2xfdwrp7dna1";
     };
     buildInputs = [ ConfigMerge ConfigStd ConfigVersioned DBDSQLite DBI IOSocketSSL JSON LWP LWPProtocolHttps ProcSafeExec TemplateToolkit YAML ];
     propagatedBuildInputs = [ LogLog4perl Moose ];
