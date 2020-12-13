@@ -20755,10 +20755,10 @@ let
 
   TestRunPluginBreakOnFailure = buildPerlModule {
     pname = "Test-Run-Plugin-BreakOnFailure";
-    version = "0.0.5";
+    version = "0.0.6";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-BreakOnFailure-v0.0.5.tar.gz";
-      sha256 = "e422eb64a2fa6ae59837312e37ab88d68b4945148eb436a3774faed5074f0430";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-BreakOnFailure-v0.0.6.tar.gz";
+      sha256 = "1a8k9p89s31wrax0yk8p0zsvj40mjgi0bnjmj0949hghwbihw650";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
