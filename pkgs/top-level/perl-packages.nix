@@ -19238,10 +19238,10 @@ let
 
   TaskTestRunAllPlugins = buildPerlModule {
     pname = "Task-Test-Run-AllPlugins";
-    version = "0.0105";
+    version = "0.0106";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Task-Test-Run-AllPlugins-0.0105.tar.gz";
-      sha256 = "fd43bd053aa884a5abca851f145a0e29898515dcbfc3512f18cd0d86d28eb0a9";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Task-Test-Run-AllPlugins-0.0106.tar.gz";
+      sha256 = "0y6fgldb59mc96lkghmd8n0gdbqaal6hz0cqqadna1jqi3q0p38v";
     };
     buildInputs = [ TestRun TestRunCmdLine TestRunPluginAlternateInterpreters TestRunPluginBreakOnFailure TestRunPluginColorFileVerdicts TestRunPluginColorSummary TestRunPluginTrimDisplayedFilenames ];
     meta = {
