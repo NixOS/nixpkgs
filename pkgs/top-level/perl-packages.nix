@@ -15949,10 +15949,10 @@ let
 
   ParamsValidate = buildPerlModule {
     pname = "Params-Validate";
-    version = "1.29";
+    version = "1.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Params-Validate-1.29.tar.gz";
-      sha256 = "49a68dfb430bea028042479111d19068e08095e5a467e320b7ab7bde3d729733";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Params-Validate-1.30.tar.gz";
+      sha256 = "04nqfgib2w529na6wjfxfrp54zdyyn91yb40iizd099i7mc3afls";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
