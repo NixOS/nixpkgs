@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "nginxlog_exporter";
@@ -16,6 +16,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   runVend = true;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) nginxlog; };
 
   meta = with stdenv.lib; {
     description = "Export metrics from Nginx access log files to Prometheus";
