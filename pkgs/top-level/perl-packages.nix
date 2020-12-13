@@ -8480,10 +8480,10 @@ let
 
   GD = buildPerlPackage {
     pname = "GD";
-    version = "2.72";
+    version = "2.73";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/GD-2.72.tar.gz";
-      sha256 = "014ik1rng6cnjfgdarkyy5m6wl4pdzc2b445m27krfn3zh9hgl31";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/GD-2.73.tar.gz";
+      sha256 = "0arjpa8id6k5yjxfq0j2hsinhhjzjch5lwk6gscf48l54drrw729";
     };
 
     buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm ExtUtilsPkgConfig TestFork ];
