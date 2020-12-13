@@ -16558,10 +16558,10 @@ let
 
   Plack = buildPerlPackage {
     pname = "Plack";
-    version = "1.0047";
+    version = "1.0048";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0047.tar.gz";
-      sha256 = "322c93f5acc0a0f0e11fd4a76188f978bdc14338a9f1df3ae535227017046561";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0048.tar.gz";
+      sha256 = "19j2wnzsl0wl31ww4c2p1pahidwsr9hnylm2as8qadxl35gg5x9h";
     };
     buildInputs = [ AuthenSimplePasswd CGIEmulatePSGI FileShareDirInstall HTTPRequestAsCGI HTTPServerSimplePSGI IOHandleUtil LWP LWPProtocolhttp10 LogDispatchArray MIMETypes TestMockTimeHiRes TestRequires TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPEntityParser HTTPHeadersFast HTTPMessage TryTiny ];
