@@ -23377,10 +23377,10 @@ let
 
   YAMLSyck = buildPerlPackage {
     pname = "YAML-Syck";
-    version = "1.32";
+    version = "1.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.32.tar.gz";
-      sha256 = "1fz9r9vvsmjkzvcbznxw65b319vkmwzd0ck09q9nwip00gn907fv";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.34.tar.gz";
+      sha256 = "0na1wg3d7ykzy5i44w6i1s37ymq6x0cvcc9gzvmri9xxmv65d4fc";
     };
     perlPreHook = stdenv.lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
