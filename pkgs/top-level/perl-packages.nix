@@ -11882,10 +11882,10 @@ let
 
   MacPasteboard = buildPerlPackage {
     pname = "Mac-Pasteboard";
-    version = "0.009";
+    version = "0.011";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.009.tar.gz";
-      sha256 = "85b1d5e9630973b997c3c1634e2df964d6a8d6cb57d9abe1f7093385cf26cf54";
+      url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.011.tar.gz";
+      sha256 = "1a82pacp6pph3y2agdihzr4vc0phx85mq5am9czc81g8n484b35x";
     };
     meta = with stdenv.lib; {
       description = "Manipulate Mac OS X pasteboards";
