@@ -754,10 +754,10 @@ let
 
   ArrayCompare = buildPerlModule {
     pname = "Array-Compare";
-    version = "3.0.3";
+    version = "3.0.7";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-v3.0.3.tar.gz";
-      sha256 = "13hn913cj7vswh5yy7gxpmhzrwmwknkc73qn7bhw0x7gx757rav2";
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-v3.0.7.tar.gz";
+      sha256 = "1p2kv4p2p5i6a665ax4b8iq1wal4x0g259yv32cc2ypbk7v11qs4";
     };
 
     buildInputs = [ TestNoWarnings ];
