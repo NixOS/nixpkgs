@@ -10773,10 +10773,10 @@ let
 
   JSONXS = buildPerlPackage {
     pname = "JSON-XS";
-    version = "4.02";
+    version = "4.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-4.02.tar.gz";
-      sha256 = "05ngmpc0smlfzgyhyagd5gza8g93r8hik858kmr186h770higbd5";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz";
+      sha256 = "0s4hdfjwi1sq3cx4bjxrg8k1s4nhb0vm6948iklag89gbzs3cmai";
     };
     propagatedBuildInputs = [ TypesSerialiser ];
     buildInputs = [ CanaryStability ];
