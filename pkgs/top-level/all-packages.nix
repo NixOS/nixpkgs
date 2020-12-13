@@ -19280,6 +19280,11 @@ in
     ubootWandboard
     ;
 
+  # Upstream Barebox:
+  inherit (callPackage ../misc/barebox {})
+    buildbarebox
+    bareboxTools;
+
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = callPackage ../os-specific/linux/uclibc {
