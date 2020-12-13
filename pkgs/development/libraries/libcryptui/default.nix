@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gtk3 gnupg22 gpgme dbus-glib libgnome-keyring ];
   propagatedBuildInputs = [ dbus-glib ];
 
+  enableParallelBuilding = true;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
