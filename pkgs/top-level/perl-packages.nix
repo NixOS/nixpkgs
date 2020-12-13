@@ -20806,10 +20806,10 @@ let
 
   TestRunPluginTrimDisplayedFilenames = buildPerlModule {
     pname = "Test-Run-Plugin-TrimDisplayedFilenames";
-    version = "0.0125";
+    version = "0.0126";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-TrimDisplayedFilenames-0.0125.tar.gz";
-      sha256 = "2255bc5cb6ab65ee4dfff3bcdf007fb74785ff3bb439a9cef5052c66d80424a5";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-TrimDisplayedFilenames-0.0126.tar.gz";
+      sha256 = "0a4hxbsbhsnkx99h3d01fchv7ip0c1np2jmf6xvqm657qv1lk1la";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
