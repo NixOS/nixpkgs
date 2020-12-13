@@ -24166,7 +24166,9 @@ in
 
   sslyze = with python3Packages; toPythonApplication sslyze;
 
-  ssr = callPackage ../applications/audio/soundscape-renderer {};
+  ssr = callPackage ../applications/audio/soundscape-renderer {
+    autoreconfHook = autoreconfHook269;
+  };
 
   ssrc = callPackage ../applications/audio/ssrc { };
 
