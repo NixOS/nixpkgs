@@ -17881,19 +17881,11 @@ let
 
   SearchXapian = buildPerlPackage rec {
     pname = "Search-Xapian";
-    version = "1.2.25.2";
+    version = "1.2.25.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.2.tar.gz";
-      sha256 = "0hpa8gi38j0ibq8af6dy69lm1bl5jnq76nsa69dbrzbr88l5m594";
+      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.4.tar.gz";
+      sha256 = "1pbl8pbgmbs3i8yik4p63g4pd9bhn0dp3d7l667dkvw0kccl66c7";
     };
-    patches = [
-      (fetchpatch {
-        url = "https://git.xapian.org/?p=xapian;a=patch;h=69ad652b7ad7912801e686db2da55d73f79fbf75";
-        name = "fix-automated-testing-false-negative";
-        sha256 = "1241mpyf8mgx7szyl5sxa6wl388rzph3q51mn9v4yjbm0k5l0sxr";
-        stripLen = 1;
-      })
-    ];
     buildInputs = [ pkgs.xapian DevelLeak ];
     meta = {
       description = "Perl XS frontend to the Xapian C++ search library";
