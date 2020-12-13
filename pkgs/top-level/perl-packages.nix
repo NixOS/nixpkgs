@@ -21970,10 +21970,10 @@ let
 
   TieRefHash = buildPerlPackage {
     pname = "Tie-RefHash";
-    version = "1.39";
+    version = "1.40";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/Tie-RefHash-1.39.tar.gz";
-      sha256 = "b0b80ef571e7dadb726b8214f7352a932a8fa82af29072895aa1aadc89f48bec";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Tie-RefHash-1.40.tar.gz";
+      sha256 = "1mvyjab8pv1yfimvlh4gxxpm3xzny4pinymdr8hgdd9gim8izkss";
     };
   };
 
