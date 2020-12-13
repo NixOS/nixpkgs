@@ -3934,6 +3934,8 @@ in
 
   fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 { };
 
+  fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
+
   fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
 
   fcppt = callPackage ../development/libraries/fcppt { };
