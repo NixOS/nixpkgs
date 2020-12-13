@@ -23265,6 +23265,10 @@ in
 
   owamp = callPackage ../applications/networking/owamp { };
 
+  vieb = callPackage ../applications/networking/browsers/vieb {
+    electron = electron_11;
+  };
+
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
