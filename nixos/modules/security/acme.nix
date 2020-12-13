@@ -59,9 +59,9 @@ let
     '';
   };
 
-  # Previously, all certs were owned by whatever user was configured in
-  # config.security.acme.certs.<cert>.user. Now everything is owned by and
-  # run by the acme user.
+  # Ensures that directories which are shared across all certs
+  # exist and have the correct user and group, since group
+  # is configurable on a per-cert basis.
   userMigrationService = {
     description = "Fix owner and group of all ACME certificates";
 
@@ -74,8 +74,13 @@ let
       done
     '') certConfigs);
 
-    # We don't want this to run every time a renewal happens
-    serviceConfig.RemainAfterExit = true;
+    serviceConfig = {
+      # We don't want this to run every time a renewal happens
+      RemainAfterExit = true;
+
+      # These StateDirectory entries negate the need for tmpfiles
+      StateDirectory = "acme acme/.lego acme/.lego/accounts";
+    };
   };
 
   certToConfig = cert: data: let
@@ -146,7 +151,7 @@ let
     );
 
   in {
-    inherit accountHash accountDir cert selfsignedDeps;
+    inherit accountHash cert selfsignedDeps;
 
     webroot = data.webroot;
     group = data.group;
@@ -226,10 +231,14 @@ let
       serviceConfig = commonServiceConfig // {
         Group = data.group;
 
-        # AccountDir dir will be created by tmpfiles to ensure correct permissions
-        # And to avoid deletion during systemctl clean
-        # acme/.lego/${cert} is listed so that it is deleted during systemctl clean
-        StateDirectory = "acme/${cert} acme/.lego/${cert} acme/.lego/${cert}/${certDir}";
+        # Keep in mind that these directories will be deleted if the user runs
+        # systemctl clean --what=state
+        # acme/.lego/${cert} is listed for this reason.
+        StateDirectory =
+          "acme/${cert} " +
+          "acme/.lego/${cert} " +
+          "acme/.lego/${cert}/${certDir} " +
+          "acme/.lego/accounts/${accountHash} ";
 
         # Needs to be space separated, but can't use a multiline string because that'll include newlines
         BindPaths =
@@ -667,18 +676,14 @@ in {
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
 
-      # .lego and .lego/accounts specified to fix any incorrect permissions
-      systemd.tmpfiles.rules = [
-        "d /var/lib/acme/.lego - acme acme"
-        "d /var/lib/acme/.lego/accounts - acme acme"
-      ] ++ (unique (concatMap (conf: [
-          "d ${conf.accountDir} - acme acme"
-        ] ++ (optionals (conf.webroot != null) [
-          "d ${conf.webroot} - acme ${conf.group}"
-          "d ${conf.webroot}/.well-known - acme ${conf.group}"
-          "d ${conf.webroot}/.well-known/acme-challenge - acme ${conf.group}"
-        ])
-      ) (attrValues certConfigs)));
+      systemd.tmpfiles.rules = unique (
+        flatten (
+          mapAttrsToList (
+            cert: conf:
+              optional (conf.webroot != null) "d ${conf.webroot}/.well-known/acme-challenge - acme ${conf.group}"
+          ) certConfigs
+        )
+      );
 
       systemd.targets = let
         # Create some targets which can be depended on to be "active" after cert renewals
