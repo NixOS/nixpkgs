@@ -21635,10 +21635,10 @@ let
 
   TextSprintfNamed = buildPerlModule {
     pname = "Text-Sprintf-Named";
-    version = "0.0403";
+    version = "0.0405";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Sprintf-Named-0.0403.tar.gz";
-      sha256 = "8a2f6e52998d1d8adb6ce0f5be85265be2e51ce06cf8ae23b3a0f059ba21b888";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Sprintf-Named-0.0405.tar.gz";
+      sha256 = "1z0glxrmbc6pgjs5bkmp1wiifd4xdcrin8wqz6rhmi6gzxw0siwv";
     };
     buildInputs = [ TestWarn ];
     meta = {
