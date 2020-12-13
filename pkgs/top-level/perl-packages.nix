@@ -14609,16 +14609,16 @@ let
     };
   };
 
-  MusicBrainzDiscID = buildPerlModule {
+  MusicBrainzDiscID = buildPerlPackage {
     pname = "MusicBrainz-DiscID";
-    version = "0.03";
+    version = "0.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NJ/NJH/MusicBrainz-DiscID-0.03.tar.gz";
-      sha256 = "0fjph2q3yp0aa87gckv3391s47m13wbyylj7jb7vqx7hv0pzj0jh";
+      url = "mirror://cpan/authors/id/N/NJ/NJH/MusicBrainz-DiscID-0.06.tar.gz";
+      sha256 = "1azc91jnwa3gdmy9pc8mflakgvsvf69ywwlqllxmdzwpk386w2xs";
     };
     perlPreHook = stdenv.lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
-    # Build.PL in this package uses which to find pkg-config -- make it use path instead
-    patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Build.PL'';
+    # Makefile.PL in this package uses which to find pkg-config -- make it use path instead
+    patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Makefile.PL'';
     doCheck = false; # The main test performs network access
     nativeBuildInputs = [ pkgs.pkgconfig ];
     propagatedBuildInputs = [ pkgs.libdiscid ];
