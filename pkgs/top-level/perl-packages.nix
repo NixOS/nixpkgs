@@ -10269,11 +10269,11 @@ let
   };
 
   IOPager = buildPerlPackage {
-    version = "1.03";
+    version = "2.10";
     pname = "IO-Pager";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-1.03.tgz";
-      sha256 = "13mmykrb391584wkw907zrmy4hg1fa9hj3zw58whdq5bjc66r1mc";
+      url = "mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-2.10.tgz";
+      sha256 = "15dimh3i61y6kybhbap91kwh9837xfww072rh95h7j40sb1did5w";
     };
     propagatedBuildInputs = [ pkgs.more FileWhich TermReadKey ]; # `more` used in tests
   };
