@@ -16270,10 +16270,10 @@ let
 
   PDL = buildPerlPackage rec {
     pname = "PDL";
-    version = "2.022";
+    version = "2.025";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/${pname}-${version}.tar.gz";
-      sha256 = "12isj05ni44bgf76lc0fs5v88ai8gn5dqrppsbj7vsxblcya7113";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.025.tar.gz";
+      sha256 = "1mlab95ij5a4q5pkrmgfas8x46cms2vqwzyjvaajsxr7mmz1cnhv";
     };
     patchPhase = ''
       substituteInPlace perldl.conf \
