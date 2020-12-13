@@ -101,6 +101,10 @@ stdenv.mkDerivation {
       'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}'"
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace meson.build --replace \
+      "find_program('nm')" \
+      "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
   outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
