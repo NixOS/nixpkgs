@@ -19958,10 +19958,10 @@ let
 
   TestEOL = buildPerlPackage {
     pname = "Test-EOL";
-    version = "2.00";
+    version = "2.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-EOL-2.00.tar.gz";
-      sha256 = "0l3bxpsw0x7j9nclizcp53mnf9wny25dmg2iglfhzgnk0xfpwzwf";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-EOL-2.02.tar.gz";
+      sha256 = "1i5g40bx72fh0nszxh75v042bp66f4jv3xva4bi7z017zgbrjc98";
     };
     meta = {
       description = "Check the correct line endings in your project";
