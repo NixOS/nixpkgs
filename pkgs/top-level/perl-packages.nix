@@ -19890,10 +19890,10 @@ let
 
   TestDataSplit = buildPerlModule {
     pname = "Test-Data-Split";
-    version = "0.2.1";
+    version = "0.2.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Data-Split-0.2.1.tar.gz";
-      sha256 = "9ba0c27a9e23c5dd8ede7611a049180485acc512a63783e1d1843b6569db5ae7";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Data-Split-0.2.2.tar.gz";
+      sha256 = "08l0h9xkikj6ggm24dark2hp9wffypanjdbha3gdfc5dmn83h275";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ IOAll ListMoreUtils MooX MooXlate ];
