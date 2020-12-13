@@ -22485,10 +22485,10 @@ let
 
   UserIdentity = buildPerlPackage {
      pname = "User-Identity";
-     version = "0.99";
+     version = "1.00";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/M/MA/MARKOV/User-Identity-0.99.tar.gz";
-       sha256 = "0c2qwxgpqncm4ya3rb5zz2hgiwwf559j1b1a6llyarf9jy43hfzm";
+       url = "mirror://cpan/authors/id/M/MA/MARKOV/User-Identity-1.00.tar.gz";
+       sha256 = "0jlzishg33848qvl5x7nsrnlpnx7lfg5hr4m1qrjddzy3hkv86cj";
      };
      meta = {
        description = "Collect information about a user";
