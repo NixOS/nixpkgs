@@ -9638,10 +9638,10 @@ let
 
   HTTPCookieJar = buildPerlPackage {
     pname = "HTTP-CookieJar";
-    version = "0.008";
+    version = "0.010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.008.tar.gz";
-      sha256 = "0rfw6avcralggs7bf7n86flvhaahxjnqzvpwszp0sk4z4wwy01wm";
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.010.tar.gz";
+      sha256 = "1l7mqsca4fmls7agzwmp6yq1x16y9jwq4114i6i75n654gl37qsn";
     };
     propagatedBuildInputs = [ HTTPDate ];
     buildInputs = [ TestDeep TestRequires URI ];
