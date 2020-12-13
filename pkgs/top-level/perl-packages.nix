@@ -619,10 +619,10 @@ let
 
   Applify = buildPerlPackage {
     pname = "Applify";
-    version = "0.21";
+    version = "0.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Applify-0.21.tar.gz";
-      sha256 = "e34bc64c12c42369af6db7d17e3e20059b9d97ed50f8e487bf610008525eb84d";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Applify-0.22.tar.gz";
+      sha256 = "0y644rr7gl49awn27xj556q9i86fddkkn26gnfn52wm19d7aa94a";
     };
     meta = {
       homepage = "https://github.com/jhthorsen/applify";
