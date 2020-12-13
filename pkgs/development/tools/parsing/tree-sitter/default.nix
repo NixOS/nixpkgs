@@ -41,8 +41,10 @@ let
 
   builtGrammars = let
     change = name: grammar:
-      callPackage ./library.nix {
-        language = name; inherit version; source = fetchGrammar grammar;
+      callPackage ./library.nix {} {
+        language = name;
+        inherit version;
+        source = fetchGrammar grammar;
       };
   in
     # typescript doesn't have parser.c in the same place as others
