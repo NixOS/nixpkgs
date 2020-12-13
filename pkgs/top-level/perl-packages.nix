@@ -23157,10 +23157,10 @@ let
 
   XMLRSS = buildPerlModule {
     pname = "XML-RSS";
-    version = "1.61";
+    version = "1.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.61.tar.gz";
-      sha256 = "fa6fe7ce5d31800a2bd414ef39da48c7f2b26b073a3c1f0d677bda26e840c90d";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.62.tar.gz";
+      sha256 = "0klb8ghd405pdkmn25lp3i4j2lfydz8w581sk51p3zy788s0c9yk";
     };
     propagatedBuildInputs = [ DateTimeFormatMail DateTimeFormatW3CDTF XMLParser ];
     meta = {
