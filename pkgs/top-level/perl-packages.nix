@@ -18327,10 +18327,10 @@ let
 
   SQLTranslator = buildPerlPackage {
     pname = "SQL-Translator";
-    version = "1.61";
+    version = "1.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Translator-1.61.tar.gz";
-      sha256 = "840e3c77cd48b47e1343c79ae8ef4fca46d036356d143d33528900740416dfe8";
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/SQL-Translator-1.62.tar.gz";
+      sha256 = "096fq62iphmxgcfcayg4i0wf09y1rl1ar6hrcxfqsbrsmkwlzk8a";
     };
     buildInputs = [ FileShareDirInstall JSONMaybeXS TestDifferences TestException XMLWriter YAML ];
     propagatedBuildInputs = [ CarpClan DBI FileShareDir Moo PackageVariant ParseRecDescent TryTiny ];
