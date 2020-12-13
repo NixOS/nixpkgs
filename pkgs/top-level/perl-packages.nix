@@ -9668,11 +9668,12 @@ let
 
   HTTPDaemon = buildPerlPackage {
     pname = "HTTP-Daemon";
-    version = "6.01";
+    version = "6.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/HTTP-Daemon-6.01.tar.gz";
-      sha256 = "1hmd2isrkilf0q0nkxms1q64kikjmcw9imbvrjgky6kh89vqdza3";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.12.tar.gz";
+      sha256 = "19hz9r6f1p406fk1pqyd99h96ipxsmknh4fh1xw0qrrq1k8vwiyz";
     };
+    buildInputs = [ CPANMetaCheck ModuleBuildTiny TestNeeds ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "A simple http server class";
