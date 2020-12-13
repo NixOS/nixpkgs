@@ -278,12 +278,25 @@ stdenv.mkDerivation {
     ##
     ## GCC libs for non-GCC support
     ##
-    + optionalString useGccForLibs ''
+    + optionalString useGccForLibs (''
 
+    ''
+    # In theory we shouldn't need this, because we always set `useLLVM` on
+    # Darwin, and maybe also break down `useLLVM` into fine-grained use flags
+    # (libgcc vs compiler-rt, ld.lld vs legacy, libc++ vs libstdc++, etc.)
+    # since Darwin isn't `useLLVM` on all counts. (See
+    # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
+    # break `useLLVM` into.)
+    #
+    # But, for now, we haven't doneo these things, so we use
+    # `targetPlatform.isLinux` as a proxy.
+    + optionalString targetPlatform.isLinux ''
+      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
+    '' + ''
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
-    ''
+    '')
 
     ##
     ## General libc support
