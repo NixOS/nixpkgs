@@ -15548,12 +15548,12 @@ let
 
   NumberFraction = buildPerlModule {
     pname = "Number-Fraction";
-    version = "2.01";
+    version = "3.0.3";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-2.01.tar.gz";
-      sha256 = "1ysv5md4dmz95zc0gy8ivb21nhqxyv8vrc5lr2sgshsjrdqsi185";
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-v3.0.3.tar.gz";
+      sha256 = "1vqhd6ngrxhfykf4qz358divjhcnp9v688fp3zi6n5757x1sl01v";
     };
-    propagatedBuildInputs = [ Moose ];
+    propagatedBuildInputs = [ Moo MooXTypesMooseLike ];
     meta = {
       description = "Perl extension to model fractions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
