@@ -477,10 +477,10 @@ let
 
   ApacheSession = buildPerlModule {
     pname = "Apache-Session";
-    version = "1.93";
+    version = "1.94";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHORNY/Apache-Session-1.93.tar.gz";
-      sha256 = "8e5a4882ac8ec657d1018d74d3ba37854e2688a41ddd0e1d73955ea59f276e8d";
+      url = "mirror://cpan/authors/id/C/CH/CHORNY/Apache-Session-1.94.tar.gz";
+      sha256 = "17z9cdsk3vxah1dlix1pi68dlnjplymf4bdqwn50psdgk5lbfsgy";
     };
     buildInputs = [ TestDeep TestException ];
     meta = {
