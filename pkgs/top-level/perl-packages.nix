@@ -10890,10 +10890,10 @@ let
 
   libintl_perl = buildPerlPackage {
     pname = "libintl-perl";
-    version = "1.31";
+    version = "1.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.31.tar.gz";
-      sha256 = "1afandrl44mq9c32r57xr489gkfswdgc97h8x86k98dz1byv3l6a";
+      url = "mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.32.tar.gz";
+      sha256 = "19gbbh9w3rl805mv6mg1q80fsrg610h098qhf7ycnkjnyac84440";
     };
   };
 
