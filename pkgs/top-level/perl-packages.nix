@@ -19526,10 +19526,10 @@ let
 
   TermShell = buildPerlModule {
     pname = "Term-Shell";
-    version = "0.11";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Term-Shell-0.11.tar.gz";
-      sha256 = "7a142361f22f2e5fae9d6e39353663e8bdfa6118d1aee82204bd9083ddb04154";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Term-Shell-0.12.tar.gz";
+      sha256 = "1mrx7g74qvkdis7x7zq1zs0b7q2fsz59g4hxvg140r8bq1wzav3x";
     };
     propagatedBuildInputs = [ TermReadKey TextAutoformat ];
     meta = with stdenv.lib; {
