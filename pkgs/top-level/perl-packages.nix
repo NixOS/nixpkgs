@@ -13558,10 +13558,10 @@ let
 
   MojoJWT = buildPerlModule {
     pname = "Mojo-JWT";
-    version = "0.08";
+    version = "0.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-JWT-0.08.tar.gz";
-      sha256 = "c910229e1182266b6666a2d65deea381a04e48d3aa788c42461b3184006934de";
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-JWT-0.09.tar.gz";
+      sha256 = "11jqm2sbgf5nikkb0d56xxwrd74757ks53nh8p72nvqc7sc06kn0";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ Mojolicious ];
