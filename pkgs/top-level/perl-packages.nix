@@ -11307,10 +11307,10 @@ let
 
   LocaleCodes = buildPerlPackage {
     pname = "Locale-Codes";
-    version = "3.65";
+    version = "3.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.65.tar.gz";
-      sha256 = "8e0a3f5f9a5f9ec027dcfc6e21ad414b10e3a5c0826b3f9ea498e1a79881cd5d";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.66.tar.gz";
+      sha256 = "1rspbig3zb7l7s1mlsk9n0rrisy8qrzwn0ix6a7sd372arnwvylr";
     };
     meta = {
       description = "A distribution of modules to handle locale codes";
