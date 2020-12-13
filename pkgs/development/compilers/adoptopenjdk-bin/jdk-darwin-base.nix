@@ -24,10 +24,10 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
     mv $sourceRoot $out
 
-    rm -rf $out/Home/demo
+    rm -rf $out/Contents/Home/sample
 
     # Remove some broken manpages.
-    rm -rf $out/Home/man/ja*
+    rm -rf $out/Contents/Home/man/ja*
 
     ln -s $out/Contents/Home/* $out/
 

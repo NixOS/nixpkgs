@@ -66,7 +66,7 @@ let result = stdenv.mkDerivation rec {
 
     mv $sourceRoot $out
 
-    rm -rf $out/demo
+    rm -rf $out/sample
 
     # Remove some broken manpages.
     rm -rf $out/man/ja*
