@@ -17013,10 +17013,10 @@ let
 
   PadWalker = buildPerlPackage {
     pname = "PadWalker";
-    version = "2.3";
+    version = "2.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROBIN/PadWalker-2.3.tar.gz";
-      sha256 = "2a6c44fb600861e54568e74081a8d1f121f0060076069ceab34b1ae89d6588cf";
+      url = "mirror://cpan/authors/id/R/RO/ROBIN/PadWalker-2.5.tar.gz";
+      sha256 = "1l0cga0ny43x5xpqw9nrdwbznvqpj35ni39a0wrayihihjxnmch7";
     };
   };
 
