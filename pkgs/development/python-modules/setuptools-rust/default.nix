@@ -26,6 +26,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Setuptools plugin for Rust support";
     homepage = "https://github.com/PyO3/setuptools-rust";
+    changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk ];
   };
