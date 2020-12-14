@@ -87,8 +87,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
         '';
       in {
         security.acme.email = lib.mkForce email;
-        systemd.services."b.example.test".serviceConfig.preStart = testScript;
-        systemd.services."c.example.test".serviceConfig.preStart = testScript;
+        systemd.services."b.example.test".preStart = testScript;
+        systemd.services."c.example.test".preStart = testScript;
 
         services.nginx.virtualHosts."b.example.test" = (vhostBase pkgs) // {
           enableACME = true;
