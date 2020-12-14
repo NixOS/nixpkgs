@@ -5703,6 +5703,18 @@ let
     meta.homepage = "https://github.com/ledger/vim-ledger/";
   };
 
+  vim-lightline-coc = buildVimPluginFrom2Nix {
+    pname = "vim-lightline-coc";
+    version = "2020-11-15";
+    src = fetchFromGitHub {
+      owner = "josa42";
+      repo = "vim-lightline-coc";
+      rev = "92a32b37ac1039ba39a451bd928bc62a316f0a7a";
+      sha256 = "1qwim9y20ffn6dx4s69389w4d2c0rwlp7ri2pxhfb6bgyvibrc3s";
+    };
+    meta.homepage = "https://github.com/josa42/vim-lightline-coc/";
+  };
+
   vim-lion = buildVimPluginFrom2Nix {
     pname = "vim-lion";
     version = "2020-07-18";
