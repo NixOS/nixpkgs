@@ -133,6 +133,8 @@ in
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
+    ssh2 = callPackage ../development/php-packages/ssh2 { };
+
     v8 = buildPecl {
       version = "0.2.2";
       pname = "v8";
