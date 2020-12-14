@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage    = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
     license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ prusnak rnhmjoj ];
   };
 }
