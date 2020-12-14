@@ -245,7 +245,7 @@ Page
         if (repeat != pin)
             return validationFailure(errorText,
                                      "The PINs don't match.");
-                             
+
         return validationFailureClear(errorText);
     }
     function validateSshdUsername(username, errorText) {
