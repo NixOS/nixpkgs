@@ -2,22 +2,17 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-, electron_9
+, electron_11
 , openssl
 }:
 
-let
-  electron = electron_9;
-
-in
-
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "0.8.4";
+  version = "0.9.7";
 
   src = fetchurl {
     url = "https://onepassword.s3.amazonaws.com/linux/appimage/${pname}-${version}.AppImage";
-    sha256 = "04rjlyi465pkg75pql3rfzmfj9zf8pfnxynz110x1wkqnvqmsxgw";
+    hash = "sha256-JaYFJL24Pgwh5CrsKjJPL8u0fx1x0beFTK+EGNT1iqA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -51,7 +46,7 @@ stdenv.mkDerivation rec {
     cp -a ${appimageContents}/usr/share/icons $out/share
 
     # Wrap the application with Electron.
-    makeWrapper "${electron}/bin/electron" "$out/bin/${pname}" \
+    makeWrapper "${electron_11}/bin/electron" "$out/bin/${pname}" \
       --add-flags "$out/share/${pname}/resources/app.asar" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath runtimeLibs}"
   '';
@@ -69,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://1password.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ danieldk timstott ];
     platforms = [ "x86_64-linux" ];
   };
 }
