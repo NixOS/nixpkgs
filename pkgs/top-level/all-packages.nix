@@ -5293,6 +5293,8 @@ in
 
   mmv-go = callPackage ../tools/misc/mmv-go { };
 
+  mob = callPackage ../applications/misc/mob { };
+
   most = callPackage ../tools/misc/most { };
 
   motion = callPackage ../applications/video/motion { };
@@ -12500,7 +12502,7 @@ in
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
-  niv = haskellPackages.niv.bin;
+  niv = haskell.lib.justStaticExecutables haskellPackages.niv;
 
   ormolu = haskellPackages.ormolu.bin;
 
@@ -18364,7 +18366,7 @@ in
     ];
   };
 
-  linux_5_8 = callPackage ../os-specific/linux/kernel/linux-5.8.nix {
+  linux_5_9 = callPackage ../os-specific/linux/kernel/linux-5.9.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
@@ -18372,7 +18374,7 @@ in
     ];
   };
 
-  linux_5_9 = callPackage ../os-specific/linux/kernel/linux-5.9.nix {
+  linux_5_10 = callPackage ../os-specific/linux/kernel/linux-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
@@ -18633,7 +18635,7 @@ in
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_9;
+  linuxPackages_latest = linuxPackages_5_10;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -18656,8 +18658,8 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
-  linuxPackages_5_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_8);
   linuxPackages_5_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_9);
+  linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
 
   # When adding to the list above:
   # - Update linuxPackages_latest to the latest version
@@ -23270,6 +23272,10 @@ in
   };
 
   owamp = callPackage ../applications/networking/owamp { };
+
+  vieb = callPackage ../applications/networking/browsers/vieb {
+    electron = electron_11;
+  };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
