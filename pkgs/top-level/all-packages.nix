@@ -20554,6 +20554,8 @@ in
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
+  boops = callPackage ../applications/audio/boops { };
+
   brackets = callPackage ../applications/editors/brackets { gconf = gnome2.GConf; };
 
   brave = callPackage ../applications/networking/browsers/brave { };
