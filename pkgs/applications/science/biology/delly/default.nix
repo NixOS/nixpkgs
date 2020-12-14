@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "delly";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
       owner = "dellytools";
       repo = pname;
       rev = "v${version}";
-      sha256 = "1af1y20hd8x2yvix0gjvx038w7chf4fiyr68ny5yvrx5b2gw0vbq";
+      sha256 = "sha256-j9klZ8qq1GQS7+zZ+vHwAwLHBYMBrWfbwqeD8QJeCuk=";
   };
 
   buildInputs = [ zlib htslib bzip2 lzma ncurses boost ];
