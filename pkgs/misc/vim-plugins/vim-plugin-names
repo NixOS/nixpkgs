@@ -128,6 +128,7 @@ garbas/vim-snipmate
 gentoo/gentoo-syntax
 GEverding/vim-hocon
 gibiansky/vim-textobj-haskell
+glepnir/galaxyline.nvim
 glts/vim-textobj-comment
 godlygeek/csapprox
 godlygeek/tabular

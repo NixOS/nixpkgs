@@ -1389,6 +1389,18 @@ let
     meta.homepage = "https://github.com/junegunn/fzf.vim/";
   };
 
+  galaxyline-nvim = buildVimPluginFrom2Nix {
+    pname = "galaxyline-nvim";
+    version = "2020-12-14";
+    src = fetchFromGitHub {
+      owner = "glepnir";
+      repo = "galaxyline.nvim";
+      rev = "528bb65b00f9ef5081cb524638b3337c4e5f26b5";
+      sha256 = "069ksz4nfhlr5zlkpawh1yak4yk3vc2cd9mgy5f0r6in3wh0iypc";
+    };
+    meta.homepage = "https://github.com/glepnir/galaxyline.nvim/";
+  };
+
   gen_tags-vim = buildVimPluginFrom2Nix {
     pname = "gen_tags-vim";
     version = "2020-10-12";
