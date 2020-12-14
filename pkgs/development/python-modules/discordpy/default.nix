@@ -23,8 +23,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ aiohttp websockets ];
   patchPhase = ''
     substituteInPlace "requirements.txt" \
-      --replace "aiohttp>=3.6.0,<3.7.0" "aiohttp~=3.6.0" \
-      --replace "websockets>=6.0,!=7.0,!=8.0,!=8.0.1,<9.0" "websockets>=6"
+      --replace "aiohttp>=3.6.0,<3.7.0" "aiohttp" \
+      --replace "websockets>=6.0,!=7.0,!=8.0,!=8.0.1,<9.0" "websockets"
   '' + lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \
       --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus.so.0'"
