@@ -110,7 +110,7 @@ let
       # Fixes for NixOS jsoncpp
       ../system-jsoncpp.patch
 
-      ./lift-gast-restriction.patch
+      ./relax-dependencies.patch
 
       # see https://github.com/tensorflow/tensorflow/issues/40688
       (fetchpatch {
