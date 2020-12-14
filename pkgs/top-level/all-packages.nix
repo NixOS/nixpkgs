@@ -26426,12 +26426,9 @@ in
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
-    # TODO: Update these to qt515 at some point. When doing it, please remove
-    # the choice of libsForQt5*.sddm in sddm's module.
-    qt5 = qt514;
-    libsForQt5 = libsForQt514;
     inherit pkgs;
     inherit (lib) makeScope;
+    inherit qt5 libsForQt5;
   });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
