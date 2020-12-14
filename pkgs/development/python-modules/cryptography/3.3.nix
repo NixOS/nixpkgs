@@ -22,24 +22,31 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.9.2"; # Also update the hash in vectors.nix
+  version = "3.3.1"; # Also update the hash in vectors-3.3.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0af25w5mkd6vwns3r6ai1w5ip9xp0ms9s261zzssbpadzdr05hx0";
+    sha256 = "1ribd1vxq9wwz564mg60dzcy699gng54admihjjkgs9dx95pw5vy";
   };
 
-  patches = [ ./CVE-2020-25659.patch ];
+  patches = [ ./cryptography-py27-warning.patch ];
 
   outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = stdenv.lib.optionals (!isPyPy) [
+    cffi
+  ];
 
   buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     packaging
     six
-  ] ++ stdenv.lib.optional (!isPyPy) cffi
-  ++ stdenv.lib.optionals isPy27 [ ipaddress enum34 ];
+  ] ++ stdenv.lib.optionals (!isPyPy) [
+    cffi
+  ] ++ stdenv.lib.optionals isPy27 [
+    ipaddress enum34
+  ];
 
   checkInputs = [
     cryptography_vectors

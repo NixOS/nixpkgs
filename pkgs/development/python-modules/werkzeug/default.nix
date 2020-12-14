@@ -21,9 +21,6 @@ buildPythonPackage rec {
     "test_get_machine_id"
   ];
 
-  # Python 2 pytest fails with INTERNALERROR due to a deprecation warning.
-  doCheck = isPy3k;
-
   meta = with stdenv.lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "A WSGI utility library for Python";
