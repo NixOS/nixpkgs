@@ -12,19 +12,25 @@
 #include <QFileInfo>
 
 
-PartitionJob::PartitionJob( const QString& cmdLuksFormat,
+PartitionJob::PartitionJob( const QString& cmdInternalStoragePrepare,
+                            const QString& cmdLuksFormat,
                             const QString& cmdLuksOpen,
                             const QString& cmdMkfsRoot,
                             const QString& cmdMount,
                             const QString& targetDeviceRoot,
+                            const QString& targetDeviceRootInternal,
+                            bool installFromExternalToInternal,
                             bool isFdeEnabled,
                             const QString& password )
     : Calamares::Job()
+    , m_cmdInternalStoragePrepare( cmdInternalStoragePrepare )
     , m_cmdLuksFormat( cmdLuksFormat )
     , m_cmdLuksOpen( cmdLuksOpen )
     , m_cmdMkfsRoot( cmdMkfsRoot )
     , m_cmdMount( cmdMount )
     , m_targetDeviceRoot( targetDeviceRoot )
+    , m_targetDeviceRootInternal( targetDeviceRootInternal )
+    , m_installFromExternalToInternal( installFromExternalToInternal )
     , m_isFdeEnabled( isFdeEnabled )
     , m_password( password )
 {
@@ -77,10 +83,18 @@ PartitionJob::exec()
     QString cryptDev = "/dev/mapper/" + cryptName;
     QString passwordStdin = m_password + "\n";
     QString dev = m_targetDeviceRoot;
+    QList< QPair< QStringList, QString > > commands = {};
 
-    QList< QPair< QStringList, QString > > commands = {
-        { { "mkdir", "-p", pathMount }, QString() },
-    };
+    if ( m_installFromExternalToInternal )
+    {
+        dev = m_targetDeviceRootInternal;
+
+        commands.append( {
+            { { "sh", "-c", m_cmdInternalStoragePrepare }, QString() },
+        } );
+    }
+
+    commands.append( { { { "mkdir", "-p", pathMount }, QString() } } );
 
     if ( m_isFdeEnabled )
     {

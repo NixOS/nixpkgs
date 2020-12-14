@@ -25,25 +25,9 @@ Item {
         anchors.topMargin: 30
         wrapMode: Text.WordWrap
 
-        text: (function() {
-            var ret = "Once you hit 'install', the installation will begin." +
-                " It will typically take a few minutes. Do not power off the" +
-                " device until it is done.<br><br>";
-
-            if (config.installFromExternalToInternal) {
-                ret += "<b>After the installation, your device will shutdown" +
-                       " automatically. You must remove the external storage" +
-                       " (SD card) before booting again.</b>" +
-                       "<br><br>" +
-                       "Otherwise, your device will boot into the installer" +
-                       " again, and not into the installed system."
-            } else {
-                ret += "Afterwards, it will reboot into the installed system.";
-            }
-
-            return ret;
-        }())
-
+	text: "Are you sure that you want to overwrite the internal storage?" +
+	      "<br><br>" +
+	      "<b>All existing data on the device will be lost!</b>"
         width: 500
     }
 
@@ -54,7 +38,21 @@ Item {
         anchors.topMargin: 40
         width: 500
 
-        text: qsTr("Install")
-        onClicked: navFinish()
+        text: qsTr("Yes")
+        onClicked: {
+            navNext();
+        }
+    }
+
+    Button {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: firstButton.bottom
+        anchors.topMargin: 40
+        width: 500
+
+        text: qsTr("No")
+        onClicked: {
+            navBack();
+        }
     }
 }

@@ -25,24 +25,12 @@ Item {
         anchors.topMargin: 30
         wrapMode: Text.WordWrap
 
-        text: (function() {
-            var ret = "Once you hit 'install', the installation will begin." +
-                " It will typically take a few minutes. Do not power off the" +
-                " device until it is done.<br><br>";
-
-            if (config.installFromExternalToInternal) {
-                ret += "<b>After the installation, your device will shutdown" +
-                       " automatically. You must remove the external storage" +
-                       " (SD card) before booting again.</b>" +
-                       "<br><br>" +
-                       "Otherwise, your device will boot into the installer" +
-                       " again, and not into the installed system."
-            } else {
-                ret += "Afterwards, it will reboot into the installed system.";
-            }
-
-            return ret;
-        }())
+        text: "The installation was started from an external storage medium." +
+              "<br>" +
+              "You can either install to the same medium and overwrite the" +
+              " installer, or install to the internal storage.<br>" +
+              "<br>" +
+              "Where would you like to install " + config.osName + "?"
 
         width: 500
     }
@@ -54,7 +42,23 @@ Item {
         anchors.topMargin: 40
         width: 500
 
-        text: qsTr("Install")
-        onClicked: navFinish()
+        text: qsTr("Internal (eMMC)")
+        onClicked: {
+            config.installFromExternalToInternal = true;
+            navNext();
+        }
+    }
+
+    Button {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: firstButton.bottom
+        anchors.topMargin: 40
+        width: 500
+
+        text: qsTr("External (SD card)")
+        onClicked: {
+            config.installFromExternalToInternal = false;
+            navNextFeature();
+        }
     }
 }

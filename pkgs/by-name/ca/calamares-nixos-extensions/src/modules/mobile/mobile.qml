@@ -17,6 +17,8 @@ Page
     property var screenPrevious: []
     property var titles: {
         "welcome": null, /* titlebar disabled */
+        "install_target": "Installation target",
+        "install_target_confirm": "Warning",
         "default_pin": "Lockscreen PIN",
         "ssh_confirm": "SSH server",
         "ssh_credentials": "SSH credentials",
@@ -28,6 +30,8 @@ Page
     property var features: [
         {"name": "welcome",
          "screens": ["welcome"]},
+        {"name": "installTarget",
+         "screens": ["install_target", "install_target_confirm"]},
         {"name": "userPin",
          "screens": ["default_pin"]},
         {"name": "sshd",
@@ -141,6 +145,10 @@ Page
 
     Timer {
         id: timer
+    }
+
+    function skipFeatureInstallTarget() {
+        return config.targetDeviceRootInternal == "";
     }
 
     /* Navigation related */

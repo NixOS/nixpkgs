@@ -33,7 +33,9 @@ Config::setConfigurationMap( const QVariantMap& cfgMap )
     m_cmdMkfsRoot = getString( cfgMap, "cmdMkfsRoot", "mkfs.ext4 -L 'unknownOS_root'" );
     m_cmdMount = getString( cfgMap, "cmdMount", "mount" );
     m_targetDeviceRoot = getString( cfgMap, "targetDeviceRoot", "/dev/unknown" );
+    m_targetDeviceRootInternal = getString( cfgMap, "targetDeviceRootInternal", "" );
 
+    m_cmdInternalStoragePrepare = getString( cfgMap, "cmdInternalStoragePrepare", "ondev-internal-storage-prepare" );
     m_cmdPasswd = getString( cfgMap, "cmdPasswd", "passwd" );
     m_cmdSshdEnable = getString( cfgMap, "cmdSshdEnable", "systemctl enable sshd.service" );
     m_cmdSshdDisable = getString( cfgMap, "cmdSshdDisable", "systemctl disable sshd.service" );
@@ -73,8 +75,16 @@ Config::runPartitionJobThenLeave( bool b )
      * own module and pass everything via globalstorage. But then we might as
      * well refactor everything so we can unify the mobile's partition job with
      * the proper partition job from Calamares. */
-    Calamares::Job* j = new PartitionJob(
-        m_cmdLuksFormat, m_cmdLuksOpen, m_cmdMkfsRoot, m_cmdMount, m_targetDeviceRoot, m_isFdeEnabled, m_fdePassword );
+    Calamares::Job* j = new PartitionJob( m_cmdInternalStoragePrepare,
+                                          m_cmdLuksFormat,
+                                          m_cmdLuksOpen,
+                                          m_cmdMkfsRoot,
+                                          m_cmdMount,
+                                          m_targetDeviceRoot,
+                                          m_targetDeviceRootInternal,
+                                          m_installFromExternalToInternal,
+                                          m_isFdeEnabled,
+                                          m_fdePassword );
     Calamares::JobResult res = j->exec();
 
     Calamares::ViewManager* v = Calamares::ViewManager::instance();
@@ -126,4 +136,10 @@ void
 Config::setIsFdeEnabled( const bool isFdeEnabled )
 {
     m_isFdeEnabled = isFdeEnabled;
+}
+
+void
+Config::setInstallFromExternalToInternal( const bool val )
+{
+    m_installFromExternalToInternal = val;
 }

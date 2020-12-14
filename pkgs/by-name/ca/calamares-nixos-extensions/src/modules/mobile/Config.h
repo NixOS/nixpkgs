@@ -33,11 +33,15 @@ class Config : public QObject
 
     /* partition job */
     Q_PROPERTY( bool runPartitionJobThenLeave READ runPartitionJobThenLeaveDummy WRITE runPartitionJobThenLeave )
+    Q_PROPERTY( QString cmdInternalStoragePrepare READ cmdInternalStoragePrepare CONSTANT FINAL )
     Q_PROPERTY( QString cmdLuksFormat READ cmdLuksFormat CONSTANT FINAL )
     Q_PROPERTY( QString cmdLuksOpen READ cmdLuksOpen CONSTANT FINAL )
     Q_PROPERTY( QString cmdMkfsRoot READ cmdMkfsRoot CONSTANT FINAL )
     Q_PROPERTY( QString cmdMount READ cmdMount CONSTANT FINAL )
     Q_PROPERTY( QString targetDeviceRoot READ targetDeviceRoot CONSTANT FINAL )
+    Q_PROPERTY( QString targetDeviceRootInternal READ targetDeviceRootInternal CONSTANT FINAL )
+    Q_PROPERTY(
+        bool installFromExternalToInternal READ installFromExternalToInternal WRITE setInstallFromExternalToInternal )
 
     /* users job */
     Q_PROPERTY( QString cmdSshdEnable READ cmdSshdEnable CONSTANT FINAL )
@@ -78,11 +82,15 @@ public:
     /* partition job */
     bool runPartitionJobThenLeaveDummy() { return 0; }
     void runPartitionJobThenLeave( bool b );
+    QString cmdInternalStoragePrepare() const { return m_cmdInternalStoragePrepare; }
     QString cmdLuksFormat() const { return m_cmdLuksFormat; }
     QString cmdLuksOpen() const { return m_cmdLuksOpen; }
     QString cmdMkfsRoot() const { return m_cmdMkfsRoot; }
     QString cmdMount() const { return m_cmdMount; }
     QString targetDeviceRoot() const { return m_targetDeviceRoot; }
+    QString targetDeviceRootInternal() const { return m_targetDeviceRootInternal; }
+    bool installFromExternalToInternal() { return m_installFromExternalToInternal; }
+    void setInstallFromExternalToInternal( const bool val );
 
     /* users job */
     QString cmdPasswd() const { return m_cmdPasswd; }
@@ -113,11 +121,14 @@ private:
     bool m_isFdeEnabled = false;
 
     /* partition job */
+    QString m_cmdInternalStoragePrepare;
     QString m_cmdLuksFormat;
     QString m_cmdLuksOpen;
     QString m_cmdMkfsRoot;
     QString m_cmdMount;
     QString m_targetDeviceRoot;
+    QString m_targetDeviceRootInternal;
+    bool m_installFromExternalToInternal;
 
     /* users job */
     QString m_cmdPasswd;
