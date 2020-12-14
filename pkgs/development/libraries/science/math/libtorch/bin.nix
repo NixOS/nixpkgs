@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "1.7.0";
+  version = "1.7.1";
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
