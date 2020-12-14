@@ -58,6 +58,5 @@ mkDerivation rec {
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    broken = true;
   };
 }
