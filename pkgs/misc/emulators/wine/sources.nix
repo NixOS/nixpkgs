@@ -44,9 +44,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "6.0-rc1";
+    version = "6.0-rc2";
     url = "https://dl.winehq.org/wine/source/6.0/wine-${version}.tar.xz";
-    sha256 = "sha256-eN3JSPlGxmJ3m9WUPZGBJ0BIACG8lRy8resQLDi1O8g=";
+    sha256 = "sha256-8giHy+YsxCU5sh9YI9ZP3DEAGLFTPr8ELagZJ/OSDXY=";
     inherit (stable) mono gecko32 gecko64;
 
     patches = [
@@ -58,11 +58,10 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "sha256-wAvH2BV/j3PbrLYoALVj5YG0VO15ySRodSs2w70YcIs=";
+    sha256 = "sha256-o5oXY2P/mT323paPifFz5kn/t56MAdlXaxcQlZDGUTI=";
     owner = "wine-staging";
     repo = "wine-staging";
-    # rev = "v${version}"; # revert back to this statement after stable release
-    rev = "v6.0rc1";
+    rev = "v${version}";
 
     # Just keep list empty, if current release haven't broken patchsets
     disabledPatchsets = [ ];
