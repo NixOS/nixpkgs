@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, python, ensureNewerSourcesForZipFilesHook
+{ stdenv, fetchFromGitLab, python, ensureNewerSourcesForZipFilesHook, buildPackages
 # optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
 , withTools ? null
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xbd1lmchq9pdrplkr2db28xqafyw753qbhnrfn8pxdg3inxxqvq";
   };
 
-  buildInputs = [ python ensureNewerSourcesForZipFilesHook ];
+  nativeBuildInputs = [ buildPackages.python ensureNewerSourcesForZipFilesHook ];
 
   configurePhase = ''
     python waf-light configure
