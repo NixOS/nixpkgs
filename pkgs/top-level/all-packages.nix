@@ -19282,7 +19282,7 @@ in
 
   # Upstream Barebox:
   inherit (callPackage ../misc/barebox {})
-    buildbarebox
+    buildBarebox
     bareboxTools;
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
