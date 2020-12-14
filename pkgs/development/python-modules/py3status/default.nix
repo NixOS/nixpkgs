@@ -33,9 +33,8 @@ buildPythonPackage rec {
 
   doCheck = false;
   propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python
+    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python file
   ];
-  buildInputs = [ file ];
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
