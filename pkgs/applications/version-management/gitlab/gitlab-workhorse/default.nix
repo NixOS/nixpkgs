@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitLab, git, buildGoPackage }:
+{ stdenv, fetchFromGitLab, git, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gitlab-workhorse";
 
   version = "8.54.0";
@@ -12,10 +12,10 @@ buildGoPackage rec {
     sha256 = "0fz00sl9q4d3vbslh7y9nsnhjshgfg0x7mv7b7a9sc3mxmabp7gz";
   };
 
-  goPackagePath = "gitlab.com/gitlab-org/gitlab-workhorse";
-  goDeps = ./deps.nix;
+  vendorSha256 = "0wi6vj9phwh0bsdk2lrgq807nb90iivlm0bkdjkim06jq068mizj";
   buildInputs = [ git ];
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "http://www.gitlab.com/";

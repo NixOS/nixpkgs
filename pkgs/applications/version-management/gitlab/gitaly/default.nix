@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoPackage, ruby,
-  bundlerEnv, pkgconfig, libgit2_0_27 }:
+{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
+, bundlerEnv, pkgconfig
+# libgit2 + dependencies
+, libgit2, openssl, zlib, pcre, http-parser }:
 
 let
   rubyEnv = bundlerEnv rec {
@@ -18,27 +20,27 @@ let
         };
       };
   };
-in buildGoPackage rec {
-  version = "13.6.0";
+in buildGoModule rec {
+  version = "13.6.1";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1b3vjg5sxrg8cfxn1nh8j26h847kxrfnn2chbb5v3ivhp1kp6zh2";
+    sha256 = "02w7pf7l9sr2nk8ky9b0d5b4syx3d9my65h2kzvh2afk7kv35h5y";
   };
 
-  goPackagePath = "gitlab.com/gitlab-org/gitaly";
+  vendorSha256 = "15mx5g2wa93sajbdwh58wcspg0n51d1ciwb7f15d0nm5hspz3w9r";
 
   passthru = {
     inherit rubyEnv;
   };
 
+  buildFlags = [ "-tags=static,system_libgit2" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_0_27 ];
-  goDeps = ./deps.nix;
-  preBuild = "rm -rf go/src/gitlab.com/gitlab-org/labkit/vendor";
+  buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
+  doCheck = false;
 
   postInstall = ''
     mkdir -p $ruby
