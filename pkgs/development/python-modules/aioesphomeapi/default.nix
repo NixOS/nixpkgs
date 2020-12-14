@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "2.6.3";
+  version = "2.6.4";
 
   disabled = !isPy3k;
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lbjxqdx63fc7qxx7xwq4b9dafmdafj7p1ggs48hyhbqfwkrv9p7";
+    sha256 = "02x7y3d50d496885qqqg8hhhb2qdl1lbbr1jg49666saz6c4z0yn";
   };
 
   propagatedBuildInputs = [ attrs protobuf zeroconf ];
