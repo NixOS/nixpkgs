@@ -83,6 +83,8 @@ in
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
+    msgpack = callPackage ../development/php-packages/msgpack { };
+
     oci8 = callPackage ../development/php-packages/oci8 { };
 
     pcov = callPackage ../development/php-packages/pcov { };
