@@ -12500,7 +12500,7 @@ in
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
-  niv = haskellPackages.niv.bin;
+  niv = haskell.lib.justStaticExecutables haskellPackages.niv;
 
   ormolu = haskellPackages.ormolu.bin;
 
