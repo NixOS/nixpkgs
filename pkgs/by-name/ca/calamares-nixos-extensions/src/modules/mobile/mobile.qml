@@ -174,14 +174,25 @@ Page
     function navNextFeature() {
         var id = featureIdByScreen[screen] + 1;
 
-        /* Skip disabled features by checking "config.featureSshd" etc.*/
+        /* Skip disabled features */
         do {
+            /* First letter uppercase */
             var name = features[id]["name"];
-            var configOption = "feature";
-            configOption += name.charAt(0).toUpperCase();
-            configOption += name.slice(1);
+            var nameUp = name.charAt(0).toUpperCase() + name.slice(1);
+
+            /* Check config.Feature<Name> */
+            var configOption = "feature" + nameUp;
             if (config[configOption] === false) {
                 console.log("Skipping feature (disabled in config): " + name);
+                id += 1;
+                continue;
+            }
+
+            /* Check skipFeature<Name>() */
+            var funcName = "skipFeature" + nameUp;
+            if (eval("typeof " + funcName) === "function"
+                && eval(funcName + "()")) {
+                console.log("Skipping feature (skip function): " + name);
                 id += 1;
                 continue;
             }
