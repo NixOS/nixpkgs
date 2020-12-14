@@ -2,8 +2,8 @@
 , fetchPypi
 , buildPythonPackage
 , urllib3
+, geojson
 , isPy3k
-, mock
 , sqlalchemy
 , pytestCheckHook
 }:
@@ -20,12 +20,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     urllib3
+    sqlalchemy
+    geojson
   ];
 
   checkInputs = [
     pytestCheckHook
-    sqlalchemy
-    mock
   ];
 
   meta = with stdenv.lib; {

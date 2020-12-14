@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "imagecorruptions";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "011e7c84a01f3e41465e5ad1ee48291cd6fd8032f45c836c5ddaad6e09fe0ae2";
+    sha256 = "044e173f24d5934899bdbf3596bfbec917e8083e507eed583ab217abebbe084d";
   };
 
   postPatch = ''
