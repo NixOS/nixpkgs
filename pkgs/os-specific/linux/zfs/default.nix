@@ -194,9 +194,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.5";
+    version = "0.8.6";
 
-    sha256 = "0vhd3zs2i83pd59nk0llml4vyk4fc178j6nhg00p6k3f6r0l655b";
+    sha256 = "1mp27midxfhzzbsd84dcc10wrs3fx6hfmkayyw58s3q2mxbrghn2";
   };
 
   zfsUnstable = common {
