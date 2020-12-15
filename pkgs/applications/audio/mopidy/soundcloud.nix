@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-soundcloud";
-  version = "2.1.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-soundcloud";
     rev = "v${version}";
-    sha256 = "131qdm9i0j3ayff0js11qcmbjv50ws5s6iiqr6x5b66ymjl4scfv";
+    sha256 = "18wiiv4rca9vibvnc27f3q4apf8n61kbp7mdbm2pmz86qwmd47pa";
   };
 
   propagatedBuildInputs = [ mopidy ];
