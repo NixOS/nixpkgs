@@ -6,18 +6,6 @@ in {
   options.services.clamav-unofficial-sigs = with types; {
     enable = mkEnableOption "Unofficial ClamAV signatures";
 
-    user = mkOption {
-      type = str;
-      description = "User to run systemd service under";
-      default = "clamav";
-    };
-
-    group = mkOption {
-      type = str;
-      description = "Group to run systemd service under. Should be the same as used by clamav in order to allow this service access to the clamav database.";
-      default = "clamav";
-    };
-
     extraConfig = mkOption {
       type = attrsOf str;
       description = "Extra key-value pairs to configure in user.conf";
@@ -33,18 +21,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d /var/lib/secrets/clamav-unofficial-sigs 0700 ${cfg.user} ${cfg.group} -"
-    ];
-
     systemd.services.clamav-unofficial-sigs = {
       startAt = "hourly";
       description = "Update unofficial ClamAV signatures";
 
       serviceConfig = {
         ExecStart = "${pkgs.clamav-unofficial-sigs}/bin/clamav-unofficial-sigs";
-        User = "${cfg.user}";
-        Group = "${cfg.group}";
+        User = "clamav";
+        Group = "clamav";
         StateDirectory = "clamav-unofficial-sigs";
         ReadWritePaths = [ "/var/lib/clamav/" ];
 
