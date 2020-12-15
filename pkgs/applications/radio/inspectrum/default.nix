@@ -1,17 +1,14 @@
 { lib
-, mkDerivation
+, gnuradioMinimal
 , fetchFromGitHub
 , pkg-config
 , cmake
-, boost
 , fftwFloat
-, gnuradio
+, qt5
 , liquid-dsp
-, qtbase
-, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+gnuradioMinimal.pkgs.mkDerivation rec {
   pname = "inspectrum";
   version = "0.2.3";
 
@@ -22,13 +19,15 @@ mkDerivation rec {
     sha256 = "1x6nyn429pk0f7lqzskrgsbq09mq5787xd4piic95add6n1cc355";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    qt5.wrapQtAppsHook
+    pkg-config
+  ];
   buildInputs = [
     fftwFloat
-    boost
-    gnuradio
     liquid-dsp
-    qtbase
+    qt5.qtbase
   ];
 
   meta = with lib; {
