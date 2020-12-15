@@ -119,6 +119,7 @@ fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
+francoiscabrol/ranger.vim
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fruit-in/vim-nong-theme
@@ -433,7 +434,6 @@ qnighy/lalrpop.vim
 qpkorr/vim-bufkill
 Quramy/tsuquyomi
 racer-rust/vim-racer
-rafaqz/ranger.vim
 rafi/awesome-vim-colorschemes
 raghur/fruzzy
 raghur/vim-ghost

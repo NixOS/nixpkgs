@@ -3205,14 +3205,14 @@ let
 
   ranger-vim = buildVimPluginFrom2Nix {
     pname = "ranger-vim";
-    version = "2019-02-08";
+    version = "2019-10-30";
     src = fetchFromGitHub {
-      owner = "rafaqz";
+      owner = "francoiscabrol";
       repo = "ranger.vim";
-      rev = "6def86f4293d170480ce62cc41f15448075d7835";
-      sha256 = "0890rbmdw3p25cww6vsji7xrndcxsisfyv5przahpclk9fc9sxs8";
+      rev = "91e82debdf566dfaf47df3aef0a5fd823cedf41c";
+      sha256 = "0i2d88yyfjv4gn3zn7jzv5pf94vzllvxmnmi3hdjddrhl2xppsza";
     };
-    meta.homepage = "https://github.com/rafaqz/ranger.vim/";
+    meta.homepage = "https://github.com/francoiscabrol/ranger.vim/";
   };
 
   readline-vim = buildVimPluginFrom2Nix {
