@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , glibcLocales
 , pytest
@@ -15,7 +14,7 @@
 buildPythonPackage rec {
   pname = "traitlets";
   version = "5.0.5";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ glibcLocales pytest mock ];
-  propagatedBuildInputs = [ ipython_genutils decorator six ] ++ lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = [ ipython_genutils decorator six ];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test

@@ -10,7 +10,7 @@
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
-, withAppIndicator ? true, libappindicator
+, withAppIndicator ? true, libappindicator, libayatana-appindicator
 }:
 
 let
@@ -41,6 +41,9 @@ let
         "--enable-drm=${if withDrm then "yes" else "no"}"
         "--enable-quartz=${if withQuartz then "yes" else "no"}"
         "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
+      ] ++ stdenv.lib.optionals (pname == "gammastep") [
+        "--with-systemduserunitdir=${placeholder "out"}/share/systemd/user/"
+        "--enable-apparmor"
       ];
 
       buildInputs = [
@@ -52,7 +55,9 @@ let
         ++ stdenv.lib.optional  withDrm          libdrm
         ++ stdenv.lib.optional  withQuartz       ApplicationServices
         ++ stdenv.lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
-        ++ stdenv.lib.optional  withAppIndicator libappindicator
+        ++ stdenv.lib.optional  withAppIndicator (if (pname != "gammastep")
+             then libappindicator
+             else libayatana-appindicator)
         ;
 
       pythonPath = [ pygobject3 pyxdg ];
@@ -127,13 +132,13 @@ rec {
 
   gammastep = mkRedshift rec {
     pname = "gammastep";
-    version = "2.0.5";
+    version = "2.0.6";
 
     src = fetchFromGitLab {
       owner = "chinstrap";
       repo = pname;
       rev = "v${version}";
-      sha256 = "1l3x4gnichwzbb0529bhm723xpryn5svhhsfdiwlw122q1vmz2q7";
+      sha256 = "00s457yajnm7vq6jfanyri52pq000jbyjiy6wz2i3f0rq7cc01ya";
     };
 
     meta = redshift.meta // {

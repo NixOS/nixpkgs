@@ -278,6 +278,19 @@
   <itemizedlist>
    <listitem>
     <para>
+     The Mailman NixOS module (<literal>services.mailman</literal>) has a new
+     option <xref linkend="opt-services.mailman.enablePostfix" />, defaulting
+     to true, that controls integration with Postfix.
+    </para>
+    <para>
+     If this option is disabled, default MTA config becomes not set and you
+     should set the options in <literal>services.mailman.settings.mta</literal>
+     according to the desired configuration as described in
+     <link xlink:href="https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html">Mailman documentation</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The default-version of <literal>nextcloud</literal> is <package>nextcloud20</package>.
      Please note that it's <emphasis>not</emphasis> possible to upgrade <literal>nextcloud</literal>
      across multiple major versions! This means that it's e.g. not possible to upgrade
@@ -368,6 +381,18 @@
      you can switch back to the old behaviour by setting
      <xref linkend="opt-systemd.enableUnifiedCgroupHierarchy"/> = <literal>false</literal>;
      and rebooting.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PulseAudio was upgraded to 14.0, with changes to the handling of default sinks.
+     See its <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/14.0/">release notes</link>.
+    </para>
+
+    <para>
+     GNOME users may wish to delete their <literal>~/.config/pulse</literal> due to the changes to stream routing
+     logic. See <link xlink:href="https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/832">PulseAudio bug 832</link>
+     for more information.
     </para>
    </listitem>
    <listitem>

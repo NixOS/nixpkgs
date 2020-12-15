@@ -60,7 +60,7 @@ in mkYarnPackage rec {
   # https://github.com/vector-im/riot-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
-    exec = executableName;
+    exec = "${executableName} %u";
     icon = "element";
     desktopName = "Element (Riot)";
     genericName = "Matrix Client";
@@ -68,6 +68,7 @@ in mkYarnPackage rec {
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
       StartupWMClass=element
+      MimeType=x-scheme-handler/element;
     '';
   };
 

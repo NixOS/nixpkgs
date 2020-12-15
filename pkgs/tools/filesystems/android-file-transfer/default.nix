@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "android-file-transfer";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "11d4n4ybmc25gz18nlps3v11m3y8dw5bcb817gkik5m4nvqnbcsf";
+    sha256 = "0xmnwxr649wdzsa1vf3spl387hxs4pq0rldyrsr9hz43da4v081k";
   };
 
   nativeBuildInputs = [ cmake readline pkgconfig ];

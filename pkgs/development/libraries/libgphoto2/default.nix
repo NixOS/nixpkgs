@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
-  version = "2.5.23";
+  version = "2.5.26";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "1sc2ycx11khf0qzp1cqxxx1qymv6bjfbkx3vvbwz6wnbyvsigxz2";
+    sha256 = "0lnlxflj04ng9a0hm2nb2067kqs4kp9kx1z4gg395cgbfd7lx6j6";
   };
 
   patches = [];

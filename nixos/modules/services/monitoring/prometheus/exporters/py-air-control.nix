@@ -5,10 +5,6 @@ with lib;
 let
   cfg = config.services.prometheus.exporters.py-air-control;
 
-  py-air-control-exporter-env = pkgs.python3.withPackages (pyPkgs: [
-      pyPkgs.py-air-control-exporter
-  ]);
-
   workingDir = "/var/lib/${cfg.stateDir}";
 
 in
@@ -45,18 +41,13 @@ in
       StateDirectory = cfg.stateDir;
       WorkingDirectory = workingDir;
       ExecStart = ''
-        ${py-air-control-exporter-env}/bin/python -c \
-          "from py_air_control_exporter import app; app.create_app().run( \
-              debug=False, \
-              port=${toString cfg.port}, \
-              host='${cfg.listenAddress}', \
-          )"
+        ${pkgs.python3Packages.py-air-control-exporter}/bin/py-air-control-exporter \
+          --host ${cfg.deviceHostname} \
+          --protocol ${cfg.protocol} \
+          --listen-port ${toString cfg.port} \
+          --listen-address ${cfg.listenAddress}
       '';
-      Environment = [
-        "PY_AIR_CONTROL_HOST=${cfg.deviceHostname}"
-        "PY_AIR_CONTROL_PROTOCOL=${cfg.protocol}"
-        "HOME=${workingDir}"
-      ];
+      Environment = [ "HOME=${workingDir}" ];
     };
   };
 }

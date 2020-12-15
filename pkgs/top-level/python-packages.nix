@@ -1389,12 +1389,12 @@ in {
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
   cryptography = if isPy27 then
-    callPackage ../development/python-modules/cryptography/2.9.nix { }
+    callPackage ../development/python-modules/cryptography/3.3.nix { }
   else
     callPackage ../development/python-modules/cryptography { };
 
   cryptography_vectors = if isPy27 then
-    callPackage ../development/python-modules/cryptography/vectors-2.9.nix { }
+    callPackage ../development/python-modules/cryptography/vectors-3.3.nix { }
   else
     callPackage ../development/python-modules/cryptography/vectors.nix { };
 
@@ -5820,7 +5820,7 @@ in {
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
-  pytestpep8 = callPackage ../development/python-modules/pytest-pep8 { };
+  pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
@@ -7437,7 +7437,10 @@ in {
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
-  traitlets = callPackage ../development/python-modules/traitlets { };
+  traitlets = if pythonOlder "3.7" then
+    callPackage ../development/python-modules/traitlets/4.nix { }
+  else
+    callPackage ../development/python-modules/traitlets { };
 
   traits = callPackage ../development/python-modules/traits { };
 

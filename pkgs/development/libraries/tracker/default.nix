@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -42,6 +43,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit asciidoc;
+    })
+
+    # Fix consistency error with sqlite 3.34
+    # https://gitlab.gnome.org/GNOME/tracker/merge_requests/353
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker/commit/040e22d005985a19a0dc435a7631f91700804ce4.patch";
+      sha256 = "5OZj17XY8ZnXfMMim25HvGfFKUlsVlVHOUjZKfBKHcs=";
     })
   ];
 

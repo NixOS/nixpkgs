@@ -1,28 +1,28 @@
 { stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, python3Packages
 , boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
-, fmt, llvmPackages ? null
+, fmt, graphviz, llvmPackages ? null
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.0";
+  version = "3.1.9";
   pname = "hal-hardware-analyzer";
 
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
     rev = "v${version}";
-    sha256 = "11xmqxnryksl645wmm1d69k1b5zwvxxf0admk4iblzaa3ggf7cv1";
+    sha256 = "0yvvlx0hq73x20va4csa8kyx3x4z648s6l6qqirzjpmxa1w91xc6";
   };
   # make sure bundled dependencies don't get in the way - install also otherwise
   # copies them in full to the output, bloating the package
   postPatch = ''
-    rm -rf deps/*/*
-    substituteInPlace cmake/detect_dependencies.cmake \
-      --replace 'spdlog 1.4.2 EXACT' 'spdlog 1.4.2 REQUIRED'
+    shopt -s extglob
+    rm -rf deps/!(sanitizers-cmake)/*
+    shopt -u extglob
   '';
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt wrapQtAppsHook ]
+  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt graphviz wrapQtAppsHook ]
     ++ (with python3Packages; [ python pybind11 ])
     ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
 

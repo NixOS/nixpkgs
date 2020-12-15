@@ -298,10 +298,10 @@ in rec {
 
   en = buildOfficialDict {
     language = "en";
-    version = "2019.10.06-0";
+    version = "2020.12.07-0";
     fullName = "English";
     filename = "aspell6";
-    sha256 = "1zai9wrqwgb9z9vfgb22qhrvxvg73jg0ix44j1khm2f6m96lncr4";
+    sha256 = "1cwzqkm8gr1w51rpckwlvb43sb0b5nbwy7s8ns5vi250515773sc";
   };
 
   eo = buildOfficialDict {
