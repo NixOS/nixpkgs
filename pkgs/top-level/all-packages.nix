@@ -22975,7 +22975,9 @@ in
       else null;
   };
 
-  mup = callPackage ../applications/audio/mup { };
+  mup = callPackage ../applications/audio/mup {
+    autoreconfHook = autoreconfHook269;
+  };
 
   # TODO: we should probably merge these 2
   musescore =
