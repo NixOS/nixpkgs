@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dcdab13e95bc534d268f87d5293e482cce5bc86dfce6ca0f2e2e89cbb73ef38c";
+    sha256 = "ee98b1921e5bda94867a08c864e55b4763d63887664f49ee1c231988f56b9d43";
   };
 
   checkInputs = [ pytest mock ];
