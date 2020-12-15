@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "1.2.8";
-  tagHash = "37adb62a35d818f4af638924d3fc1526bdeaf215"; # from `git rev-parse v1.2.7`
+  version = "1.2.10";
+  tagHash = "4b3581abed6c2db79b61eb1b53e29645df12a833"; # from `git rev-parse v1.2.10`
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    sha256 = "0305n5gwp2w36z3yh0w8x3ma8a074zr913cx3y73szln56jz88hg";
+    sha256 = "09m4xhnjpnkic9jy5dwnmpl40r92xa8fcx4xhpadv6hjpx9k4xx5";
   };
 
   nativeBuildInputs = [ makeWrapper ];
