@@ -5,16 +5,16 @@ let
 
   plat = {
     x86_64-linux = "linux-x64";
+    x86_64-darwin = "darwin-x64";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0hn4pqmabz3qf3bbqnn1fz7fcgzdkp2lwr2yzgmx8hhh3cff8bnb";
-    x86_64-darwin = "1x3wx0d99ihyya0n89qclc3jlhh0m72hs8hj7l0h3z6zmh6q2vzv";
-    aarch64-linux = "1cdg49gcz41mabh9hfmv2dz2ixjslsizcx3hxzcaw75in60h7swy";
+    x86_64-linux = "1134y8wg8201f02jfzp6110cqdyy92ihiy3b323w26s0fy8zmq3v";
+    x86_64-darwin = "1c1m390rsz8azlbjdp7bgd4gjzs2fhq391l6kpwrz51iil68nsy8";
+    aarch64-linux = "0zdpbrqbi0nl9crsz24kas18zifgz30vvpla1i06i1629g8avsjz";
   }.${system};
 
   sourceRoot = {
@@ -30,7 +30,7 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.51.1";
+    version = "1.52.0";
     pname = "vscodium";
 
     executableName = "codium";
