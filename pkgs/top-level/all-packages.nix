@@ -28374,6 +28374,8 @@ in
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
+  autocpu-freq = callPackage ../tools/system/autocpu-freq {  };
+
   thermald = callPackage ../tools/system/thermald { };
 
   throttled = callPackage ../tools/system/throttled { };
