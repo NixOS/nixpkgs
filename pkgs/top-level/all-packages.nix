@@ -14465,6 +14465,7 @@ in
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
   libmatheval = callPackage ../development/libraries/libmatheval {
+    autoconf = autoconf269;
     guile = guile_2_0;
   };
 
