@@ -7613,8 +7613,9 @@ in
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
+    autoreconfHook = autoreconfHook269;
     libxml2 = libxml2Python;
-   };
+  };
 
   systembus-notify = callPackage ../applications/misc/systembus-notify { };
 
