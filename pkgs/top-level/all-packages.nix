@@ -8484,6 +8484,7 @@ in
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
     gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
+    autoconf = autoconf269;
   };
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
