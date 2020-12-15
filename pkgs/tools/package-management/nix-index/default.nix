@@ -1,5 +1,10 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, makeWrapper, openssl, curl
-, nix, Security
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkgconfig
+, openssl
+, curl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0apdr9z18p6m4lfjv8k9zv2mqc7vssd2d536zfv1pns0pdqsfw50";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl curl ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
 
@@ -26,8 +31,6 @@ rustPlatform.buildRustPackage rec {
     cp ./command-not-found.sh $out/etc/profile.d/command-not-found.sh
     substituteInPlace $out/etc/profile.d/command-not-found.sh \
       --replace "@out@" "$out"
-    wrapProgram $out/bin/nix-index \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ nix ]}"
   '';
 
   meta = with stdenv.lib; {
