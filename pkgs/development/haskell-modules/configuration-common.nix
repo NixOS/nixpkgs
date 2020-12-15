@@ -1405,13 +1405,11 @@ self: super: {
   });
 
   fourmolu = dontCheck super.fourmolu;
-  ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
-    # 2020-11-13: Bumping bounds via an already upstream merged change
-    # https://github.com/haskell/ghcide/pull/905
-    url = https://github.com/haskell/ghcide/commit/9b8aaf9b06846571cc0b5d46680e686e4f9153a3.patch;
-    sha256 = "0j8980dmvwjcs72ahq2zc14hwkyd5ybgzyy1az3zq5flp383fai6";
-    includes = [ "ghcide.cabal" ];
-  }));
+  # 1. test requires internet
+  # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
+  ghcide = doDistribute (unmarkBroken (dontCheck
+    (super.ghcide.override { lsp-test = dontCheck self.lsp-test_0_11_0_7; })
+  ));
   refinery = doDistribute super.refinery_0_3_0_0;
   data-tree-print = doJailbreak super.data-tree-print;
   # the hls brittany is objectively better, because there hasn‘t been a
