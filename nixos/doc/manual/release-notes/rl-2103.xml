@@ -265,6 +265,19 @@
       located in <literal>/run/rspamd</literal> instead of <literal>/run</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Enabling the Tor client no longer silently also enables and
+      configures Privoxy, and the
+      <varname>services.tor.client.privoxy.enable</varname> option has
+      been removed.  To enable Privoxy, and to configure it to use
+      Tor's faster port, use the following configuration:
+    </para>
+    <programlisting>
+      <xref linkend="opt-services.privoxy.enable" /> = true;
+      <xref linkend="opt-services.privoxy.enableTor" /> = true;
+    </programlisting>
+   </listitem>
   </itemizedlist>
  </section>
 
