@@ -5,7 +5,7 @@ let
 
   base = callPackage generic (_args // {
     version = "8.0.0";
-    sha256 = "02cx3gvxqvkllp54jfvs83kl8bmpcqyzp9jf1d0l9x5bgv1jv0sy";
+    sha256 = "0fhn9dfgczf4g8p3ilw3c38nwdvkbnvz6sa92k8z7gszyjvd5rzv";
   });
 
 in base.withExtensions ({ all, ... }: with all; ([

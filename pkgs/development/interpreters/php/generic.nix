@@ -5,7 +5,7 @@
 
 let
   generic =
-    { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
+    { callPackage, lib, stdenv, nixosTests, config, fetchFromGitHub, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
     , systemd, system-sendmail, valgrind, xcbuild
@@ -238,6 +238,10 @@ let
             substituteInPlace configure --replace "-lstdc++" "-lc++"
           '';
 
+          preInstall = lib.optionalString pearSupport ''
+            cp ${php-pearweb-phars}/install-pear-nozlib.phar $TMPDIR/php-src-${version}/pear/install-pear-nozlib.phar
+          '';
+
           postInstall = ''
             test -d $out/etc || mkdir $out/etc
             cp php.ini-production $out/etc/php.ini
@@ -251,8 +255,11 @@ let
                $dev/share/man/man1/
           '';
 
-          src = fetchurl {
-            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+          src = fetchFromGitHub {
+            name = "php-src-${version}";
+            owner = "php";
+            repo = "php-src";
+            rev = "php-${version}";
             inherit sha256;
           };
 
