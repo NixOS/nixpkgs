@@ -469,13 +469,11 @@ in
                 A specification of the desired configuration of this
                 container, as a NixOS module.
               '';
-              type = let
-                confPkgs = if config.pkgs == null then pkgs else config.pkgs;
-              in lib.mkOptionType {
+              type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") {
+                merge = loc: defs: (import (config.pkgs.path + "/nixos/lib/eval-config.nix") {
                   inherit system;
-                  pkgs = confPkgs;
+                  pkgs = config.pkgs;
                   modules =
                     let
                       extraConfig = {
@@ -525,9 +523,9 @@ in
             };
 
             pkgs = mkOption {
-              type = types.nullOr types.attrs;
-              default = null;
-              example = literalExample "pkgs";
+              type = types.attrs;
+              default = pkgs;
+              defaultText = "pkgs";
               description = ''
                 Customise which nixpkgs to use for this container.
               '';
