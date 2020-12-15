@@ -17843,7 +17843,9 @@ in
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
-  torque = callPackage ../servers/computing/torque { };
+  torque = callPackage ../servers/computing/torque {
+    autoreconfHook = autoreconfHook269;
+  };
 
   tt-rss = callPackage ../servers/tt-rss { };
   tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
