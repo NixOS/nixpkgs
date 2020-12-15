@@ -123,7 +123,7 @@ in rec {
     version = "8.11.2";
   };
   coq_8_12 = callPackage ../applications/science/logic/coq {
-    version = "8.12.1";
+    version = "8.12.2";
   };
   coq_8_13 = callPackage ../applications/science/logic/coq {
     version = "8.13+beta1";
