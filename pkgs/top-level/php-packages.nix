@@ -207,7 +207,13 @@ in
         zendExtension doCheck;
 
       prePatch = "pushd ../..";
-      postPatch = "popd";
+      postPatch = ''
+        popd
+      ''
+      # https://bugs.php.net/bug.php?id=79159
+      + lib.optionalString (lib.versionOlder php.version "7.4") ''
+        substituteInPlace ./acinclude.m4 --replace "AC_PROG_YACC" "AC_CHECK_PROG(YACC, bison, bison)"
+      '';
 
       preConfigure =
       # A wrapper around Autoconf that generates files to build PHP on *nix systems
