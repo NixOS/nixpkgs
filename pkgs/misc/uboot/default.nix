@@ -13,8 +13,9 @@
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
-, buildPackages
+, firmwareOdroidC2
 , firmwareOdroidC4
+, buildPackages
 }:
 
 let
@@ -206,27 +207,24 @@ in {
     filesToInstall = ["u-boot-dtb.img" "SPL"];
   };
 
-  # Flashing instructions:
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=1 count=442
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=512 skip=1 seek=1
-  # dd if=u-boot.gxbb of=<device> conv=fsync bs=512 seek=97
-  ubootOdroidC2 = let
-    firmwareBlobs = fetchFromGitHub {
-      owner = "armbian";
-      repo = "odroidc2-blobs";
-      rev = "47c5aac4bcac6f067cebe76e41fb9924d45b429c";
-      sha256 = "1ns0a130yxnxysia8c3q2fgyjp9k0nkr689dxk88qh2vnibgchnp";
-      meta.license = lib.licenses.unfreeRedistributableFirmware;
-    };
-  in buildUBoot {
+  ubootOdroidC2 = buildUBoot {
     defconfig = "odroid-c2_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["u-boot.bin" "u-boot.gxbb" "${firmwareBlobs}/bl1.bin.hardkernel"];
+
+    # Fix eMMC boot issue on meson-gxbb boards
+    # Patches are queued for U-Boot 2021.01 release
+    patches = [
+      (fetchurl { #0001-pinctrl-meson-fix-bit-manipulation-of-pin-bias-confi.patch
+        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/5ccd5d2cc98224108ae9fb09593a862c9caa5e80.patch";
+        sha256 = "19jvfqm1gkcmgd07wyv2srpg88a42zz2x46i7kxxybvi1vx8qkyl";
+      })
+    ];
+
     postBuild = ''
       # BL301 image needs at least 64 bytes of padding after it to place
       # signing headers (with amlbootsig)
       truncate -s 64 bl301.padding.bin
-      cat '${firmwareBlobs}/gxb/bl301.bin' bl301.padding.bin > bl301.padded.bin
+      cat ${firmwareOdroidC2}/bl301.bin bl301.padding.bin > bl301.padded.bin
+
       # The downstream fip_create tool adds a custom TOC entry with UUID
       # AABBCCDD-ABCD-EFEF-ABCD-12345678ABCD for the BL301 image. It turns out
       # that the firmware blob does not actually care about UUIDs, only the
@@ -239,17 +237,24 @@ in {
       #
       # See https://github.com/afaerber/meson-tools/issues/3 for more
       # information.
-      '${buildPackages.armTrustedFirmwareTools}/bin/fiptool' create \
+      ${buildPackages.armTrustedFirmwareTools}/bin/fiptool create \
         --align 0x4000 \
-        --tb-fw '${firmwareBlobs}/gxb/bl30.bin' \
+        --tb-fw ${firmwareOdroidC2}/bl30.bin \
         --scp-fw bl301.padded.bin \
-        --soc-fw '${armTrustedFirmwareS905}/bl31.bin' \
+        --soc-fw ${armTrustedFirmwareS905}/bl31.bin \
         --nt-fw u-boot.bin \
         fip.bin
-      cat '${firmwareBlobs}/gxb/bl2.package' fip.bin > boot_new.bin
-      '${buildPackages.meson-tools}/bin/amlbootsig' boot_new.bin u-boot.img
-      dd if=u-boot.img of=u-boot.gxbb bs=512 skip=96
+      cat ${firmwareOdroidC2}/bl2.package fip.bin > boot_new.bin
+      ${buildPackages.meson-tools}/bin/amlbootsig boot_new.bin u-boot.img
+
+      dd if=u-boot.img of=u-boot.bin bs=512 skip=96
     '';
+
+    filesToInstall = [
+      "u-boot.bin"
+      "${firmwareOdroidC2}/sd_fusing.sh" "${firmwareOdroidC2}/bl1.bin.hardkernel"
+    ];
+    extraMeta.platforms = ["aarch64-linux"];
   };
 
   ubootOdroidC4 = let in
