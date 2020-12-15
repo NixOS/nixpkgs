@@ -138,6 +138,7 @@ let
         mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
           mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
 
+        php-pearweb-phars = (callPackage ./pearweb-phars.nix { });
         pcre' = if (lib.versionAtLeast version "7.3") then pcre2 else pcre;
       in
         stdenv.mkDerivation {
