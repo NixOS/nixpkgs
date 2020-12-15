@@ -15924,7 +15924,9 @@ in
 
   sbc = callPackage ../development/libraries/sbc { };
 
-  schroedinger = callPackage ../development/libraries/schroedinger { };
+  schroedinger = callPackage ../development/libraries/schroedinger {
+    autoreconfHook = autoreconfHook269;
+  };
 
   SDL = callPackage ../development/libraries/SDL ({
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
