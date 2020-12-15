@@ -8725,6 +8725,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  Technical27 = {
+    email = "38222826+Technical27@users.noreply.github.com";
+    github = "Technical27";
+    githubId = 38222826;
+    name = "Aamaruvi Yogamani";
+  };
   teh = {
     email = "tehunger@gmail.com";
     github = "teh";
