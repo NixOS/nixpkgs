@@ -21637,6 +21637,7 @@ in
   getxbook = callPackage ../applications/misc/getxbook { };
 
   gimp = callPackage ../applications/graphics/gimp {
+    autoreconfHook = autoreconfHook269;
     gegl = gegl_0_4;
     lcms = lcms2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
