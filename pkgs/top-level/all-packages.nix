@@ -8293,7 +8293,9 @@ in
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
-  uim = callPackage ../tools/inputmethods/uim { };
+  uim = callPackage ../tools/inputmethods/uim {
+    autoconf = autoconf269;
+  };
 
   uhub = callPackage ../servers/uhub { };
 
