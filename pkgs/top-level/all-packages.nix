@@ -8168,6 +8168,7 @@ in
 
   watchman = callPackage ../development/tools/watchman {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    autoconf = autoconf269;
   };
 
   wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
