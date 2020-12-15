@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, makeWrapper, clamav, rsync, coreutils, gnutar, curl, gzip, dnsutils, gnupg, glibc, gawk, diffutils, bind }:
+{ stdenv, fetchFromGitHub, makeWrapper, clamav, rsync, coreutils, gnutar, gnugrep, curl, gzip, dnsutils, gnupg, glibc, gawk, diffutils }:
 
 stdenv.mkDerivation rec {
   pname = "clamav-unofficial-sigs";
-  version = "7.2";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "extremeshok";
     repo = "clamav-unofficial-sigs";
     rev = version;
-    sha256 = "sha256-KZh8f4BB31b4ZBOrp4z/+TCqsppa2cyfteM3OUVv57A=";
+    sha256 = "sha256-utGr7phrLyZojTVg1V2MnlhYmCBP6K6L4OYfug+/5D0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ' > $out/etc/clamav-unofficial-sigs/os.conf
 
     wrapProgram $out/bin/clamav-unofficial-sigs \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ clamav coreutils gzip rsync gnutar curl dnsutils bind.host gnupg glibc gawk diffutils ]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ clamav coreutils gzip rsync gnutar gnugrep curl dnsutils gnupg glibc gawk diffutils ]}"
   '';
 
   meta = with stdenv.lib; {
