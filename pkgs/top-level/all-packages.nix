@@ -8059,7 +8059,9 @@ in
 
   verilator = callPackage ../applications/science/electronics/verilator {};
 
-  verilog = callPackage ../applications/science/electronics/verilog {};
+  verilog = callPackage ../applications/science/electronics/verilog {
+    autoconf = autoconf269;
+  };
 
   versus = callPackage ../applications/networking/versus { };
 
