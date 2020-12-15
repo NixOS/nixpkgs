@@ -206,12 +206,9 @@ in
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
-      prePatch = "pushd ../..";
-      postPatch = ''
-        popd
-      ''
+      postPatch =
       # https://bugs.php.net/bug.php?id=79159
-      + lib.optionalString (lib.versionOlder php.version "7.4") ''
+        lib.optionalString (lib.versionOlder php.version "7.4") ''
         substituteInPlace ./acinclude.m4 --replace "AC_PROG_YACC" "AC_CHECK_PROG(YACC, bison, bison)"
       '';
 
