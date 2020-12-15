@@ -49,7 +49,7 @@ let
               php = generic filteredArgs;
 
               php-packages = (callPackage ../../../top-level/php-packages.nix {
-                php = phpWithExtensions;
+                phpPackage = phpWithExtensions;
               });
 
               allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
@@ -112,7 +112,8 @@ let
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
                   tests = nixosTests.php;
-                  inherit (php-packages) packages extensions buildPecl;
+                  inherit (php-packages) extensions buildPecl;
+                  packages = php-packages.tools;
                   meta = php.meta // {
                     outputsToInstall = [ "out" ];
                   };
