@@ -12852,6 +12852,7 @@ in
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
       gst-libav;
+    autoreconfHook = autoreconfHook269;
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
