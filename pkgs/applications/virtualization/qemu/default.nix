@@ -1,13 +1,13 @@
 { stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
-, bison, lzo, snappy, libaio, gnutls, nettle, curl
-, makeWrapper
+, bison, lzo, snappy, libaio, gnutls, nettle, curl, ninja, meson
+, makeWrapper, autoPatchelfHook
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin, SDL2
+, sdlSupport ? !stdenv.isDarwin, SDL2, SDL2_image
 , gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte, wrapGAppsHook
 , vncSupport ? true, libjpeg, libpng
 , smartcardSupport ? true, libcacard
@@ -36,7 +36,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "5.1.0";
+  version = "5.2.0";
   pname = "qemu"
     + stdenv.lib.optionalString xenSupport "-xen"
     + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "1rd41wwlvp0vpialjp2czs6i3lsc338xc72l3zkbb7ixjfslw5y9";
+    sha256 = "1g0pvx4qbirpcn9mni704y03n3lvkmw2c0rbcwvydyr8ns4xh66b";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ]
+  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison meson ninja autoPatchelfHook ]
     ++ optionals gtkSupport [ wrapGAppsHook ];
   buildInputs =
     [ zlib glib ncurses perl pixman
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     ++ optionals seccompSupport [ libseccomp ]
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
-    ++ optionals sdlSupport [ SDL2 ]
+    ++ optionals sdlSupport [ SDL2 SDL2_image ]
     ++ optionals gtkSupport [ gtk3 gettext vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals smartcardSupport [ libcacard ]
@@ -72,20 +72,13 @@ stdenv.mkDerivation rec {
     ++ optionals smbdSupport [ samba ];
 
   enableParallelBuilding = true;
+  dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
 
   patches = [
-    ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
-    ./CVE-2020-27617.patch
-    (fetchpatch {
-      # e1000e: infinite loop scenario in case of null packet descriptor, remove for QEMU >= 5.2.0-rc3
-      name = "CVE-2020-28916.patch";
-      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=c2cb511634012344e3d0fe49a037a33b12d8a98a";
-      sha256 = "1kvm6wl4vry0npiisxsn76h8nf1iv5fmqsyjvb46203f1yyg5pis";
-    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -103,27 +96,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # Remove CVE-2020-{29129,29130} for QEMU >5.1.0
-  postPatch = ''
-    (cd slirp && patch -p1 < ${fetchpatch {
-      name = "CVE-2020-29129_CVE-2020-29130.patch";
-      url = "https://gitlab.freedesktop.org/slirp/libslirp/-/commit/2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f.patch";
-      sha256 = "01vbjqgnc0kp881l5p6b31cyyirhwhavm6x36hlgkymswvl3wh9w";
-    }})
-  '';
-
   hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
+    # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
+    chmod +x ./scripts/shaderinclude.pl
+    patchShebangs .
   '' + optionalString stdenv.hostPlatform.isMusl ''
     NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags =
     [ "--audio-drv-list=${audio}"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
       "--enable-docs"
       "--enable-tools"
       "--enable-guest-agent"
@@ -163,6 +148,7 @@ stdenv.mkDerivation rec {
       wrapGApp $f
     done
   '';
+  preBuild = "cd build";
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
