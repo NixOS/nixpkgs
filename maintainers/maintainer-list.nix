@@ -4862,6 +4862,10 @@
     github = "kyleondy";
     githubId = 1640900;
     name = "Kyle Ondy";
+    keys = [{
+      longkeyid = "rsa4096/0xDB0E3C33491F91C9";
+      fingerprint = "3C79 9D26 057B 64E6 D907  B0AC DB0E 3C33 491F 91C9";
+    }];
   };
   kylesferrazza = {
     name = "Kyle Sferrazza";
