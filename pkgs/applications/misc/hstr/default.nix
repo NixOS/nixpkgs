@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Shell history suggest box - easily view, navigate, search and use your command history";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = with stdenv.lib.platforms; linux; # Cannot test others
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 
 }
