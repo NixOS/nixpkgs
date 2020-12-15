@@ -152,7 +152,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
-    license = licenses.gpl2Plus;
+    # OptiX, enabled with cudaSupport, is non-free.
+    license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ goibhniu veprbl ];
   };
