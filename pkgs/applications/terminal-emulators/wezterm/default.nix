@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage {
     install -Dm644 assets/icon/terminal.png $out/usr/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/usr/share/applications/org.wezfurlong.wezterm.desktop
     install -Dm644 assets/wezterm.appdata.xml $out/usr/share/metainfo/org.wezfurlong.wezterm.appdata.xml
-    )
 
     runHook postInstall
   '';
