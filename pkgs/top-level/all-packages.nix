@@ -16803,6 +16803,12 @@ in
 
   perlcritic = perlPackages.PerlCritic;
 
+  sqitchMysql = callPackage ../development/tools/misc/sqitch {
+    name = "sqitch-mysql";
+    databaseModule = perlPackages.DBDmysql;
+    sqitchModule = perlPackages.AppSqitch;
+  };
+
   sqitchPg = callPackage ../development/tools/misc/sqitch {
     name = "sqitch-pg";
     databaseModule = perlPackages.DBDPg;
