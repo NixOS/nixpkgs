@@ -6,6 +6,12 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     afm (0.2.2)
     asciidoctor (2.0.12)
+    asciidoctor-bibtex (0.8.0)
+      asciidoctor (~> 2.0)
+      bibtex-ruby (~> 5.1)
+      citeproc-ruby (~> 1)
+      csl-styles (~> 1)
+      latex-decode (~> 0.2)
     asciidoctor-diagram (2.0.5)
       asciidoctor (>= 1.5.7, < 3.x)
     asciidoctor-epub3 (1.5.0.alpha.19)
@@ -33,8 +39,19 @@ GEM
       concurrent-ruby (~> 1.0)
       thread_safe (~> 0.3.5)
     asciimath (2.0.2)
+    bibtex-ruby (5.1.6)
+      latex-decode (~> 0.0)
+    citeproc (1.0.10)
+      namae (~> 1.0)
+    citeproc-ruby (1.1.13)
+      citeproc (~> 1.0, >= 1.0.9)
+      csl (~> 1.5)
     coderay (1.1.3)
     concurrent-ruby (1.1.7)
+    csl (1.5.2)
+      namae (~> 1.0)
+    csl-styles (1.0.1.10)
+      csl (~> 1.0)
     css_parser (1.7.1)
       addressable
     gepub (1.0.12)
@@ -43,6 +60,7 @@ GEM
     hashery (2.1.2)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    latex-decode (0.3.2)
     mathematical (1.6.13)
       ruby-enum (~> 0.4)
     mime-types (3.3.1)
@@ -50,6 +68,7 @@ GEM
     mime-types-data (3.2020.1104)
     mini_portile2 (2.4.0)
     multi_json (1.15.0)
+    namae (1.0.1)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     pdf-core (0.7.0)
@@ -92,6 +111,7 @@ PLATFORMS
 
 DEPENDENCIES
   asciidoctor
+  asciidoctor-bibtex
   asciidoctor-diagram
   asciidoctor-epub3
   asciidoctor-mathematical
