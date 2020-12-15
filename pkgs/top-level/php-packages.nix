@@ -498,7 +498,7 @@ in
       { name = "sysvsem"; }
       { name = "sysvshm"; }
       { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; doCheck = false; }
-      { name = "tokenizer"; }
+      { name = "tokenizer"; doCheck = !(lib.versionOlder php.version "7.4"); }
       { name = "wddx";
         buildInputs = [ libxml2 ];
         internalDeps = [ php.extensions.session ];
