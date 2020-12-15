@@ -209,12 +209,7 @@ let
 
           hardeningDisable = [ "bindnow" ];
 
-          postPatch = lib.optionalString (lib.versionOlder version "7.4") ''
-            # https://bugs.php.net/bug.php?id=79159
-            substituteInPlace ./acinclude.m4 --replace "AC_PROG_YACC" "AC_CHECK_PROG(YACC, bison, bison)"
-          '';
-
-          preConfigure =
+          postPatch =
           # Don't record the configure flags since this causes unnecessary
           # runtime dependencies
           ''
@@ -224,7 +219,17 @@ let
                 --replace '@CONFIGURE_OPTIONS@' "" \
                 --replace '@PHP_LDFLAGS@' ""
             done
+          '' + lib.optionalString (lib.versionOlder version "7.4")
+            # https://bugs.php.net/bug.php?id=79159
+          ''
+            substituteInPlace ./acinclude.m4 --replace "AC_PROG_YACC" "AC_CHECK_PROG(YACC, bison, bison)"
+          '' + lib.optionalString stdenv.isDarwin
+          ''
+            substituteInPlace configure --replace "-lstdc++" "-lc++"
+          '';
 
+          preConfigure =
+          ''
             export EXTENSION_DIR=$out/lib/php/extensions
           ''
           # PKG_CONFIG need not be a relative path
@@ -239,8 +244,6 @@ let
             if test -f $src/genfiles; then
               ./genfiles
             fi
-          '' + lib.optionalString stdenv.isDarwin ''
-            substituteInPlace configure --replace "-lstdc++" "-lc++"
           '';
 
           preInstall = lib.optionalString pearSupport ''
