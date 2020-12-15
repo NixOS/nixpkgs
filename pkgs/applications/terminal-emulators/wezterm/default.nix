@@ -42,6 +42,8 @@ let
     freetype
   ];
   pname = "wezterm";
+  version = "2020-12-15";
+  rev = "7e49377313cd2f9bc7e406ed6ad3216d883875f3";
 in
 
 rustPlatform.buildRustPackage {
@@ -51,11 +53,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
-    rev = "3bd8d8c84591f4d015ff9a47ddb478e55c231fda";
-    sha256 = "13xf3685kir4p159hsxrqkj9p2lwgfp0n13h9zadslrd44l8b8j8";
+    inherit rev;
     fetchSubmodules = true;
+    sha256 = "0p4krjc7k31k9qdc23g26rja9xqpm94dcv1vk7a73sr2dlfj06hn";
   };
-  cargoSha256 = "1ghjpyd3f5dqi6bblr6d2lihdschpyj5djfd1600hvb41x75lmhx";
+  cargoSha256 = "0cv7bi57pwv221pp7fw9k80wcias8wl024sxi0znkj6wrvrsyarx";
 
   nativeBuildInputs = [
     pkg-config
