@@ -55,6 +55,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     free = false;
   };
 
+  angle = {
+    fullName = "ANGLE";
+    url = "https://github.com/google/angle/blob/master/LICENSE";
+  };
+
   apsl20 = spdx {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
