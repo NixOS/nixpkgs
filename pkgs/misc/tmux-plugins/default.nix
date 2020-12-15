@@ -448,6 +448,7 @@ in rec {
   tmux-fzf = mkDerivation {
     pluginName = "tmux-fzf";
     version = "unstable-2020-11-23";
+    rtpFilePath = "main.tmux";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
