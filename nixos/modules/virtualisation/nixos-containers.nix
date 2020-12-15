@@ -463,7 +463,6 @@ in
         { config, options, name, ... }:
         {
           options = {
-
             config = mkOption {
               description = ''
                 A specification of the desired configuration of this
@@ -471,9 +470,8 @@ in
               '';
               type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import (config.pkgs.path + "/nixos/lib/eval-config.nix") {
+                merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   inherit system;
-                  pkgs = config.pkgs;
                   modules =
                     let
                       extraConfig = {
@@ -522,12 +520,18 @@ in
               '';
             };
 
-            pkgs = mkOption {
-              type = types.attrs;
-              default = pkgs;
-              defaultText = "pkgs";
+            nixpkgs = mkOption {
+              type = types.path;
+              default = pkgs.path;
+              defaultText = "pkgs.path";
               description = ''
-                Customise which nixpkgs to use for this container.
+                A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
+
+                To only change the <literal>pkgs</literal> argument used inside the container modules,
+                set the <literal>nixpkgs.*</literal> options in the container <option>config</option>.
+                Setting <literal>config.nixpkgs.pkgs = pkgs</literal> speeds up the container evaluation
+                by reusing the system pkgs, but the <literal>nixpkgs.config</literal> option in the
+                container config is ignored in this case.
               '';
             };
 
@@ -668,14 +672,31 @@ in
               '';
             };
 
+            # Removed option. See `checkAssertion` below for the accompanying error message.
+            pkgs = mkOption { visible = false; };
           } // networkOptions;
 
-          config = mkMerge
-            [
-              (mkIf options.config.isDefined {
-                path = config.config.system.build.toplevel;
-              })
-            ];
+          config = let
+            # Throw an error when removed option `pkgs` is used.
+            # Because this is a submodule we cannot use `mkRemovedOptionModule` or option `assertions`.
+            optionPath = "containers.${name}.pkgs";
+            files = showFiles options.pkgs.files;
+            checkAssertion = if options.pkgs.isDefined then throw ''
+              The option definition `${optionPath}' in ${files} no longer has any effect; please remove it.
+
+              Alternatively, you can use the following options:
+              - containers.${name}.nixpkgs
+                This sets the nixpkgs (and thereby the modules, pkgs and lib) that
+                are used for evaluating the container.
+
+              - containers.${name}.config.nixpkgs.pkgs
+                This only sets the `pkgs` argument used inside the container modules.
+            ''
+            else null;
+          in {
+            path = builtins.seq checkAssertion
+              mkIf options.config.isDefined config.config.system.build.toplevel;
+          };
         }));
 
       default = {};
