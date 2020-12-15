@@ -10241,7 +10241,9 @@ in
 
   solc = callPackage ../development/compilers/solc { };
 
-  souffle = callPackage ../development/compilers/souffle { };
+  souffle = callPackage ../development/compilers/souffle {
+    autoreconfHook = autoreconfHook269;
+  };
 
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
 
