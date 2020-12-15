@@ -19,10 +19,10 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/bin $src/yadm
-    install -Dt $out/share/man/man1 $src/yadm.1
-    install -D $src/completion/yadm.zsh_completion $out/share/zsh/site-functions/_yadm
-    install -D $src/completion/yadm.bash_completion $out/share/bash-completion/completions/yadm.bash
+    install -Dt $out/bin yadm
+    install -Dt $out/share/man/man1 yadm.1
+    install -D completion/yadm.zsh_completion $out/share/zsh/site-functions/_yadm
+    install -D completion/yadm.bash_completion $out/share/bash-completion/completions/yadm.bash
     runHook postInstall
   '';
 
@@ -36,6 +36,7 @@ stdenv.mkDerivation {
       * Supplies a method of encrypting confidential data so it can safely be stored in your repository.
     '';
     license = stdenv.lib.licenses.gpl3;
+    maintainers = with stdenv.lib.maintainers; [ abathur ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
