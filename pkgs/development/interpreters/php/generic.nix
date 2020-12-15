@@ -238,12 +238,15 @@ let
               substituteInPlace $i \
                 --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
             done
-          '' + ''
+          ''
+          # A wrapper around Autoconf that generates files to build PHP on *nix systems
+          + lib.optionalString (lib.versionOlder version "7.4") ''
             ./buildconf --copy --force
-
-            if test -f $src/genfiles; then
-              ./genfiles
-            fi
+            ./genfiles
+          ''
+          + lib.optionalString (lib.versionAtLeast version "7.4") ''
+            ./buildconf --force
+            ./scripts/dev/genfiles
           '';
 
           preInstall = lib.optionalString pearSupport ''
