@@ -209,6 +209,11 @@ let
 
           hardeningDisable = [ "bindnow" ];
 
+          postPatch = lib.optionalString (lib.versionOlder version "7.4") ''
+            # https://bugs.php.net/bug.php?id=79159
+            substituteInPlace ./acinclude.m4 --replace "AC_PROG_YACC" "AC_CHECK_PROG(YACC, bison, bison)"
+          '';
+
           preConfigure =
           # Don't record the configure flags since this causes unnecessary
           # runtime dependencies
