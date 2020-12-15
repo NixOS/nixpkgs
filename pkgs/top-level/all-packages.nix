@@ -3565,7 +3565,9 @@ in
 
   eflite = callPackage ../applications/audio/eflite {};
 
-  eid-mw = callPackage ../tools/security/eid-mw { };
+  eid-mw = callPackage ../tools/security/eid-mw {
+    autoreconfHook = autoreconfHook269;
+  };
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
