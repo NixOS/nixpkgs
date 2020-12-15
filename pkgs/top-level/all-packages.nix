@@ -8612,7 +8612,9 @@ in
 
   zbackup = callPackage ../tools/backup/zbackup {};
 
-  zbar = libsForQt5.callPackage ../tools/graphics/zbar { };
+  zbar = libsForQt5.callPackage ../tools/graphics/zbar {
+    autoreconfHook = autoreconfHook269;
+  };
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
