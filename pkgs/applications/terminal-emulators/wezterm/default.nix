@@ -69,8 +69,16 @@ rustPlatform.buildRustPackage {
   installPhase = ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do
       patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $releaseDir/$artifact
-      install -D $releaseDir/$artifact -t $out/bin
+      install -Dsm755 $releaseDir/$artifact $out/bin/$artifact
     done
+
+    install -Dm644 assets/shell-integration/* -t $out/etc/profile.d
+    install -Dm644 assets/icon/terminal.png $out/usr/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
+    install -Dm644 assets/wezterm.desktop $out/usr/share/applications/org.wezfurlong.wezterm.desktop
+    install -Dm644 assets/wezterm.appdata.xml $out/usr/share/metainfo/org.wezfurlong.wezterm.appdata.xml
+    )
+
+    runHook postInstall
   '';
 
   # prevent further changes to the RPATH
@@ -79,7 +87,7 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
-    license = licenses.mit;
+    license = with licenses; [ angle mit ofl ];
     maintainers = with maintainers; [ steveej ];
     platforms = platforms.unix;
   };
