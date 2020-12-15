@@ -253,12 +253,8 @@ let
             cp ${php-pearweb-phars}/install-pear-nozlib.phar $TMPDIR/php-src-${version}/pear/install-pear-nozlib.phar
           '';
 
-          postInstall = ''
-            test -d $out/etc || mkdir $out/etc
-            cp php.ini-production $out/etc/php.ini
-          '';
-
           postFixup = ''
+            cp php.ini-production $out/etc/php.ini
             mkdir -p $dev/bin $dev/share/man/man1
             mv $out/bin/phpize $out/bin/php-config $dev/bin/
             mv $out/share/man/man1/phpize.1.gz \
