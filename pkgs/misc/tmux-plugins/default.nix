@@ -447,12 +447,12 @@ in rec {
 
   tmux-fzf = mkDerivation {
     pluginName = "tmux-fzf";
-    version = "unstable-2020-11-23";
     rtpFilePath = "main.tmux";
+    version = "unstable-2020-12-07";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "312685b2a7747b61f1f4a96bd807819f1450479d";
+      rev = "5efeb91086040a3becf5372fb38258acd0579954";
       sha256 = "1z0zmsf8asxs9wbwvkiyd81h93wb2ikl8nxxc26sdpi6l333q5s9";
     };
     postInstall = ''
