@@ -9018,6 +9018,8 @@ in
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  fennel = callPackage ../development/compilers/fennel { };
+
   flyctl = callPackage ../development/web/flyctl { };
 
   flutterPackages =
