@@ -476,8 +476,6 @@ in
                 merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") {
                   inherit system;
                   pkgs = confPkgs;
-                  baseModules = import (confPkgs.path + "/nixos/modules/module-list.nix");
-                  inherit (confPkgs) lib;
                   modules =
                     let
                       extraConfig = {
