@@ -30,14 +30,17 @@ in stdenv.mkDerivation {
       ./core-foundation-check
     ''}
 
-    printf "checking whether compiler builds valid static C binaries... " >&2
-    $CC ${staticLibc} -static -o cc-static ${./cc-main.c}
-    ./cc-static
-    # our glibc does not have pie enabled yet.
-    ${optionalString (stdenv.hostPlatform.isMusl && stdenv.cc.isGNU) ''
-      printf "checking whether compiler builds valid static pie C binaries... " >&2
-      $CC ${staticLibc} -static-pie -o cc-static-pie ${./cc-main.c}
-      ./cc-static-pie
+
+    ${optionalString (!stdenv.isDarwin) ''
+      printf "checking whether compiler builds valid static C binaries... " >&2
+      $CC ${staticLibc} -static -o cc-static ${./cc-main.c}
+      ./cc-static
+      # our glibc does not have pie enabled yet.
+      ${optionalString (stdenv.hostPlatform.isMusl && stdenv.cc.isGNU) ''
+        printf "checking whether compiler builds valid static pie C binaries... " >&2
+        $CC ${staticLibc} -static-pie -o cc-static-pie ${./cc-main.c}
+        ./cc-static-pie
+      ''}
     ''}
 
     printf "checking whether compiler uses NIX_CFLAGS_COMPILE... " >&2
