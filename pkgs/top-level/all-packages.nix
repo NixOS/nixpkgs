@@ -24588,7 +24588,9 @@ in
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
-  vcprompt = callPackage ../applications/version-management/vcprompt { };
+  vcprompt = callPackage ../applications/version-management/vcprompt {
+    autoconf = autoconf269;
+  };
 
   vcs = callPackage ../applications/video/vcs { };
 
