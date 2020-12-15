@@ -1,7 +1,9 @@
 { lib, buildFHSUserEnv, version, src }:
 
-let
-  pio-pkgs = pkgs:
+buildFHSUserEnv {
+  name = "platformio";
+
+  targetPkgs = pkgs:
     let
       python = pkgs.python3.override {
         packageOverrides = self: super: {
@@ -18,12 +20,6 @@ let
       bottle
       platformio
     ]);
-
-in buildFHSUserEnv {
-  name = "platformio";
-
-  targetPkgs = pio-pkgs;
-  multiPkgs = pio-pkgs;
 
   meta = with lib; {
     description = "An open source ecosystem for IoT development";
