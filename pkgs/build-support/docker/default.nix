@@ -58,15 +58,12 @@ let
     done;
   '';
 
-  # Map nixpkgs architecture to Docker notation
-  # Reference: https://github.com/docker-library/official-images#architectures-other-than-amd64
-  getArch = nixSystem: {
-    aarch64-linux = "arm64v8";
-    armv7l-linux = "arm32v7";
-    x86_64-linux = "amd64";
-    powerpc64le-linux = "ppc64le";
-    i686-linux = "i386";
-  }.${nixSystem} or "Can't map Nix system ${nixSystem} to Docker architecture notation. Please check that your input and your requested build are correct or update the mapping in Nixpkgs.";
+  # The OCI Image specification recommends that configurations use values listed
+  # in the Go Language document for GOARCH.
+  # Reference: https://github.com/opencontainers/image-spec/blob/master/config.md#properties
+  # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
+  # mapping from the go package.
+  defaultArch = go.GOARCH;
 
 in
 rec {
@@ -84,7 +81,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? getArch system
+    , arch ? defaultArch
 
       # This is used to set name to the pulled image
     , finalImageName ? imageName
@@ -500,7 +497,7 @@ rec {
       baseJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = getArch system;
+            architecture = defaultArch;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
@@ -754,7 +751,7 @@ rec {
       streamScript = writePython3 "stream" {} ./stream_layered_image.py;
       baseJson = writeText "${name}-base.json" (builtins.toJSON {
          inherit config;
-         architecture = getArch system;
+         architecture = defaultArch;
          os = "linux";
       });
 
