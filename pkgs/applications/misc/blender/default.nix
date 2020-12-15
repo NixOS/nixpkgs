@@ -6,7 +6,6 @@
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
-, optixSupport ? config.optixSupport or false
 , colladaSupport ? true, opencollada
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
@@ -116,8 +115,8 @@ in stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"
-    ++ optional optixSupport [
+    ++ optional cudaSupport [
+      "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"
     ];
