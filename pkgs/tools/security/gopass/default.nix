@@ -46,10 +46,12 @@ buildGoModule rec {
     ln -s $out/bin/gopass $out/bin/pass
   '';
 
+  # --run to work around WONTFIX in https://github.com/gopasspw/gopass/issues/1662
   postFixup = ''
     for bin in $out/bin/*; do
       wrapProgram $bin \
-        --prefix PATH : "${wrapperPath}"
+        --prefix PATH : "${wrapperPath}" \
+        --run 'rm -f "''${XDG_CONFIG_HOME:-~/.config}/gopass/gpg-binary.loc"'
     done
   '';
 
