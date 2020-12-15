@@ -99,13 +99,12 @@ stdenv.mkDerivation rec {
     # Create 'ldd' symlink, builtin
     ln -rs $out/lib/libc.so $out/bin/ldd
 
-    # (impure) cc wrapper around musl for interactive usuage
+    # (impure) cc wrapper around musl for interactive usage is *removed*
+    # to avoid bash dependency
     for i in musl-gcc musl-clang ld.musl-clang; do
-      moveToOutput bin/$i $dev
+      rm $out/bin/$i
     done
     moveToOutput lib/musl-gcc.specs $dev
-    substituteInPlace $dev/bin/musl-gcc \
-      --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
     # provide 'iconv' utility, using just-built headers, libc/ldso
     $CC ${iconv_c} -o $out/bin/iconv \
