@@ -25337,7 +25337,9 @@ in
 
   zeronet = callPackage ../applications/networking/p2p/zeronet { };
 
-  zexy = callPackage ../applications/audio/pd-plugins/zexy  { };
+  zexy = callPackage ../applications/audio/pd-plugins/zexy {
+    autoconf = autoconf269;
+  };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
