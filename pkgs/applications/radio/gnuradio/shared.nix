@@ -103,9 +103,11 @@ rec {
       features
       featuresInfo
       python
-      qt
-      gtk
     ;
+  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+    inherit qt;
+  } // lib.optionalAttrs (hasFeature "gnuradio-companion" features) {
+    inherit gtk;
   };
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
