@@ -107,6 +107,9 @@ let
 in
 {
   imports = [
+    (mkRemovedOptionModule [ "services" "tor" "client" "privoxy" "enable" ] ''
+      Use services.privoxy.enable and services.privoxy.enableTor instead.
+    '')
     (mkRenamedOptionModule [ "services" "tor" "relay" "portSpec" ] [ "services" "tor" "relay" "port" ])
     (mkRemovedOptionModule [ "services" "tor" "relay" "isBridge" ] "Use services.tor.relay.role instead.")
     (mkRemovedOptionModule [ "services" "tor" "relay" "isExit" ] "Use services.tor.relay.role instead.")
@@ -269,23 +272,6 @@ in
             example = [".onion"];
             description = "List of suffixes to use with automapHostsOnResolve";
           };
-        };
-
-        privoxy.enable = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Whether to enable and configure the system Privoxy to use Tor's
-            faster port, suitable for HTTP.
-
-            To have anonymity, protocols need to be scrubbed of identifying
-            information, and this can be accomplished for HTTP by Privoxy.
-
-            Privoxy can also be useful for KDE torification. A good setup would be:
-            setting SOCKS proxy to the default Tor port, providing maximum
-            circuit isolation where possible; and setting HTTP proxy to Privoxy
-            to route HTTP traffic over faster, but less isolated port.
-          '';
         };
       };
 
@@ -784,16 +770,5 @@ in
       };
 
     environment.systemPackages = [ cfg.package ];
-
-    services.privoxy = mkIf (cfg.client.enable && cfg.client.privoxy.enable) {
-      enable = true;
-      extraConfig = ''
-        forward-socks4a / ${cfg.client.socksListenAddressFaster} .
-        toggle  1
-        enable-remote-toggle 0
-        enable-edit-actions 0
-        enable-remote-http-toggle 0
-      '';
-    };
   };
 }

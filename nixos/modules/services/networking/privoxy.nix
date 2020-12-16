@@ -8,15 +8,22 @@ let
 
   cfg = config.services.privoxy;
 
-  confFile = pkgs.writeText "privoxy.conf" ''
+  confFile = pkgs.writeText "privoxy.conf" (''
     user-manual ${privoxy}/share/doc/privoxy/user-manual
     confdir ${privoxy}/etc/
     listen-address  ${cfg.listenAddress}
     enable-edit-actions ${if (cfg.enableEditActions == true) then "1" else "0"}
     ${concatMapStrings (f: "actionsfile ${f}\n") cfg.actionsFiles}
     ${concatMapStrings (f: "filterfile ${f}\n") cfg.filterFiles}
+  '' + optionalString cfg.enableTor ''
+    forward-socks4a / ${config.services.tor.client.socksListenAddressFaster} .
+    toggle 1
+    enable-remote-toggle 0
+    enable-edit-actions 0
+    enable-remote-http-toggle 0
+  '' + ''
     ${cfg.extraConfig}
-  '';
+  '');
 
 in
 
@@ -69,6 +76,15 @@ in
         default = false;
         description = ''
           Whether or not the web-based actions file editor may be used.
+        '';
+      };
+
+      enableTor = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to configure Privoxy to use Tor's faster SOCKS port,
+          suitable for HTTP.
         '';
       };
 
