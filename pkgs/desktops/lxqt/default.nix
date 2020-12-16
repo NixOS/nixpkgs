@@ -107,7 +107,7 @@ let
       qlipper
 
       ### Default icon theme
-      pkgs.oxygen-icons5
+      pkgs.kdeFrameworks.oxygen-icons5
 
       ### Screen saver
       pkgs.xscreensaver
