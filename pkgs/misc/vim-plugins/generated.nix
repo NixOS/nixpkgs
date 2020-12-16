@@ -291,6 +291,18 @@ let
     meta.homepage = "https://github.com/euclidianAce/BetterLua.vim/";
   };
 
+  brainfuck-vim = buildVimPluginFrom2Nix {
+    pname = "brainfuck-vim";
+    version = "2020-12-16";
+    src = fetchFromGitHub {
+      owner = "fruit-in";
+      repo = "brainfuck-vim";
+      rev = "1e0f81c11214c6cc27dc55775fe6f43216fcf09a";
+      sha256 = "0wvz7gbjnk2lm6jbxmsxfs6hc38g8zwmrqw2clkzpj7kvs1ayw26";
+    };
+    meta.homepage = "https://github.com/fruit-in/brainfuck-vim/";
+  };
+
   bufexplorer = buildVimPluginFrom2Nix {
     pname = "bufexplorer";
     version = "2020-02-17";
