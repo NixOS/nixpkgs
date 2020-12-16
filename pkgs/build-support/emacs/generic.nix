@@ -60,10 +60,13 @@ stdenv.mkDerivation ({
 
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 
-  postInstall = ''
-    find $out/share/emacs -type f -name '*.el' -print0 | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c "emacs --batch -f batch-native-compile {} || true"
-  '';
+  addEmacsNativeLoadPath = true;
 
+  postInstall = ''
+    find $out/share/emacs -type f -name '*.el' -print0 \
+      | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c \
+          "emacs --batch --eval=\"(add-to-list 'comp-eln-load-path \\\"$out/share/emacs/native-lisp/\\\")\" -f batch-native-compile {} || true"
+  '';
 }
 
 // removeAttrs args [ "buildInputs" "packageRequires"
