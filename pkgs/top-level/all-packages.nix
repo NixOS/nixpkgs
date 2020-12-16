@@ -5553,6 +5553,8 @@ in
 
   libspf2 = callPackage ../development/libraries/libspf2 { };
 
+  libsurvive = callPackage ../development/libraries/libsurvive { };
+
   libsrs2 = callPackage ../development/libraries/libsrs2 { };
 
   libtermkey = callPackage ../development/libraries/libtermkey { };
