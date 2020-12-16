@@ -13559,6 +13559,8 @@ in
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
 
   indilib = callPackage ../development/libraries/indilib { };
+  indi-3rdparty = lowPrio (callPackage ../development/libraries/indilib/indi-3rdparty.nix { });
+  indi-full = lowPrio (callPackage ../development/libraries/indilib/indi-full.nix { });
 
   iniparser = callPackage ../development/libraries/iniparser { };
 
