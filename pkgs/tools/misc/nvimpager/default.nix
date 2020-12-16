@@ -17,8 +17,8 @@ pkgs.stdenv.mkDerivation rec {
     ncurses # for tput
     neovim
     procps # for nvim_get_proc() which uses ps(1)
-    pandoc
   ];
+  nativeBuildInputs = [ pkgs.pandoc ];
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "nvimpager.configured" ];
