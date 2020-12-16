@@ -8290,6 +8290,8 @@ in
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xdg-launch = callPackage ../applications/misc/xdg-launch { };
+
   xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
 
   xfstests = callPackage ../tools/misc/xfstests { };
