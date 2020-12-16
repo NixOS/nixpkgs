@@ -1,8 +1,5 @@
 { fetchFromGitHub
 , pkgs
-# Defaults to false until I find out how to provide /dev/tty inside the
-# sandbox.
-, doCheck ? false
 }:
 
 pkgs.stdenv.mkDerivation rec {
@@ -31,7 +28,9 @@ pkgs.stdenv.mkDerivation rec {
       --replace ':-nvim' ':-${pkgs.neovim}/bin/nvim'
     '';
 
-  inherit doCheck;
+  # Defaults to false until I find out how to provide /dev/tty inside the
+  # sandbox.
+  doCheck = false;
   checkInputs = with pkgs; [ lua51Packages.busted ];
   checkPhase = "busted --lpath './?.lua' test";
 
