@@ -23,7 +23,7 @@
  </part>
  <part>
   <title>Builders</title>
-  <xi:include href="builders/fetchers.xml" />
+  <xi:include href="builders/fetchers.chapter.xml" />
   <xi:include href="builders/trivial-builders.chapter.xml" />
   <xi:include href="builders/special.xml" />
   <xi:include href="builders/images.xml" />
