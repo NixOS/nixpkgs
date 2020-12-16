@@ -119,13 +119,14 @@ private:
     QString m_cmdSshdUseradd;
 
 signals:
+    /* booleans we don't read from QML (like isSshEnabled) don't need a signal */
+
     /* default user */
     void userPasswordChanged( QString userPassword );
 
-    /* ssh server + credetials */
+    /* ssh server + credentials */
     void sshdUsernameChanged( QString sshdUsername );
     void sshdPasswordChanged( QString sshdPassword );
-    /* isSshEnabled doesn't need a signal, we don't read it from QML */
 
     /* full disk encryption */
     void fdePasswordChanged( QString fdePassword );
