@@ -1,24 +1,21 @@
-{ stdenv
-, fetchurl
-, wrapQtAppsHook
+{ fetchurl
+, lib
+, mkDerivation
 , pcsclite
 , pyotherside
-, pythonPackages
-, python3
+, python3Packages
 , qmake
 , qtbase
+, qtdeclarative
 , qtgraphicaleffects
 , qtquickcontrols
 , qtquickcontrols2
-, qtdeclarative
 , qtsvg
 , yubikey-manager
 , yubikey-personalization
 }:
 
-let inherit (stdenv) lib; in
-
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yubikey-manager-qt";
   version = "1.1.5";
 
@@ -27,30 +24,29 @@ stdenv.mkDerivation rec {
     sha256 = "1yimlaqvhq34gw6wkqgil0qq8x9zbfzh4psqihjr2d9jaa2wygwy";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook python3.pkgs.wrapPython qmake ];
-
   postPatch = ''
-    substituteInPlace ykman-gui/deployment.pri --replace '/usr/bin' "$out/bin"
+    substituteInPlace ykman-gui/deployment.pri \
+      --replace /usr/bin $out/bin
   '';
 
-  buildInputs = [ pythonPackages.python qtbase qtgraphicaleffects qtquickcontrols qtquickcontrols2 pyotherside ];
+  buildInputs = [ python3Packages.python qtbase qtgraphicaleffects qtquickcontrols qtquickcontrols2 pyotherside ];
+
+  nativeBuildInputs = [ python3Packages.wrapPython qmake ];
 
   enableParallelBuilding = true;
 
   pythonPath = [ yubikey-manager ];
 
-  dontWrapQtApps = true;
   postInstall = ''
     buildPythonPath "$pythonPath"
 
-    wrapQtApp $out/bin/ykman-gui \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
+    qtWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pcsclite yubikey-personalization]}"
       --prefix PYTHONPATH : "$program_PYTHONPATH"
+    )
 
-    mkdir -p $out/share/applications
-    cp resources/ykman-gui.desktop $out/share/applications/ykman-gui.desktop
-    mkdir -p $out/share/ykman-gui/icons
-    cp resources/icons/*.{icns,ico,png,xpm} $out/share/ykman-gui/icons
+    install -Dm444 -t $out/share/applications    resources/ykman-gui.desktop
+    install -Dm444 -t $out/share/ykman-gui/icons resources/icons/*.{icns,ico,png,xpm}
     substituteInPlace $out/share/applications/ykman-gui.desktop \
       --replace 'Exec=ykman-gui' "Exec=$out/bin/ykman-gui" \
   '';
@@ -60,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
     license = licenses.bsd2;
-    maintainers = [ maintainers.cbley ];
+    maintainers = with maintainers; [ cbley ];
     platforms = platforms.linux;
   };
 }
