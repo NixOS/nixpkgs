@@ -16803,6 +16803,12 @@ in
 
   perlcritic = perlPackages.PerlCritic;
 
+  sqitchMysql = callPackage ../development/tools/misc/sqitch {
+    name = "sqitch-mysql";
+    databaseModule = perlPackages.DBDmysql;
+    sqitchModule = perlPackages.AppSqitch;
+  };
+
   sqitchPg = callPackage ../development/tools/misc/sqitch {
     name = "sqitch-pg";
     databaseModule = perlPackages.DBDPg;
@@ -26997,6 +27003,7 @@ in
     coqPackages_8_10 coq_8_10
     coqPackages_8_11 coq_8_11
     coqPackages_8_12 coq_8_12
+    coqPackages_8_13 coq_8_13
     coqPackages      coq
   ;
 

@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
-, replace, fetchurl, zip, unzip, jq, xdg_utils
+, replace, fetchurl, zip, unzip, jq, xdg_utils, writeText
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
@@ -97,12 +97,17 @@ let
       #   EXTRA PREF CHANGES  #
       #                       #
       #########################
-      policiesJson = builtins.toFile "policies.json"
-        (builtins.toJSON enterprisePolicies);
+      policiesJson = writeText "policies.json" (builtins.toJSON enterprisePolicies);
 
       usesNixExtensions = nixExtensions != null;
 
-      extensions = builtins.map (a:
+      nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
+
+      # Check that every extension has a unqiue .name attribute
+      # and an extid attribute
+      extensions = if nameArray != (lib.unique nameArray) then
+        throw "Firefox addon name needs to be unique"
+      else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
         else
@@ -128,12 +133,19 @@ let
                 };
               }
             ) {} extensions;
-        }
+          } //
+          {
+            Extensions = {
+              Install = lib.foldr (e: ret:
+                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+                ) [] extensions;
+            };
+          }
         // extraPolicies;
       };
 
-      mozillaCfg = builtins.toFile "mozilla.cfg" ''
-// First line must be a comment
+      mozillaCfg =  writeText "mozilla.cfg" ''
+        // First line must be a comment
 
         // Disables addon signature checking
         // to be able to install addons that do not have an extid
@@ -320,18 +332,13 @@ let
         # preparing for autoconfig
         mkdir -p "$out/lib/${firefoxLibName}/defaults/pref"
 
-        cat > "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js" <<EOF
-          pref("general.config.filename", "mozilla.cfg");
-          pref("general.config.obscure_value", 0);
-        EOF
+        echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
+        echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${firefoxLibName}/defaults/pref/autoconfig.js"
 
         cat > "$out/lib/${firefoxLibName}/mozilla.cfg" < ${mozillaCfg}
 
         mkdir -p $out/lib/${firefoxLibName}/distribution/extensions
 
-        for i in ${toString extensions}; do
-          ln -s -t $out/lib/${firefoxLibName}/distribution/extensions $i/*
-        done
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #

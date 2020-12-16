@@ -36,6 +36,7 @@ let
    "8.11.2" = "0f77ccyxdgbf1nrj5fa8qvrk1cyfy06fv8gj9kzfvlcgn0cf48sa";
    "8.12.0" = "18dc7k0piv6v064zgdadpw6mkkxk7j663hb3svgj5236fihjr0cz";
    "8.12.1" = "1rkcyjjrzcqw9xk93hsq0vvji4f8r5iq0f739mghk60bghkpnb7q";
+   "8.13+beta1" = "1v4a6dpj41flspa4ihcr7m5ahqz10kbn62fmrldmv7gzq6jsyfyq";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -118,7 +119,9 @@ self = stdenv.mkDerivation {
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
      else [ ocamlPackages.lablgtk ]);
 
-  propagatedBuildInputs = stdenv.lib.optional (versionAtLeast "8.12") ocamlPackages.num;
+  propagatedBuildInputs =
+     stdenv.lib.optional (versionAtLeast "8.13") ocamlPackages.zarith
+  ++ stdenv.lib.optional (coq-version == "8.12") ocamlPackages.num;
 
   postPatch = ''
     UNAME=$(type -tp uname)
