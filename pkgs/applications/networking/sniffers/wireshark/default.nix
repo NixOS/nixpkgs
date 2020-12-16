@@ -80,9 +80,6 @@ in stdenv.mkDerivation {
   '' else optionalString withQt ''
     install -Dm644 -t $out/share/applications ../wireshark.desktop
 
-    substituteInPlace $out/share/applications/*.desktop \
-        --replace "Exec=wireshark" "Exec=$out/bin/wireshark"
-
     install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
     mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
 
