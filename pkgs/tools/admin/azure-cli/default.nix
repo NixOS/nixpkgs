@@ -1,12 +1,12 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.15.1";
+  version = "2.16.0";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "05vwaafb6yzvrhig0gjkb4803yj6qr00gqh41rws9520899f2m9d";
+    sha256 = "1rn9aj8hcfd3pd3ilab9wa8zl986a6dc8l8c0gh2r9krkcvczqf2";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -26,7 +26,8 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
       --replace "javaproperties==0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
       --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
-      --replace "mock~=4.0" "mock"
+      --replace "mock~=4.0" "mock" \
+      --replace "cryptography>=2.3.1,<3.0.0" "cryptography"
 
     # remove namespace hacks
     # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
