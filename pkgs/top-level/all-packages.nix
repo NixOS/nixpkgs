@@ -25666,6 +25666,11 @@ in
 
   lnd = callPackage ../applications/blockchains/lnd.nix { };
 
+  monado = callPackage ../development/libraries/monado {
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+    inherit (xorg) libXrandr;
+  };
+
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
     boost = boost17x;
