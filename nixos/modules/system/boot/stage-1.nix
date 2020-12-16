@@ -512,7 +512,12 @@ in
 
     boot.initrd.compressor = mkOption {
       internal = true;
-      default = "gzip -9n";
+      default = (
+        if lib.versionAtLeast config.boot.kernelPackages.kernel.version "5.9" then
+          "${lib.getBin pkgs.zstd}/bin/zstd -10"
+        else
+          "gzip -9n"
+        );
       type = types.str;
       description = "The compressor to use on the initrd image.";
       example = "xz";
