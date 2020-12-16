@@ -278,6 +278,15 @@
       <xref linkend="opt-services.privoxy.enableTor" /> = true;
     </programlisting>
    </listitem>
+   <listitem>
+     <para>
+       The options <literal>services.slurm.dbdserver.storagePass</literal>
+       and <literal>services.slurm.dbdserver.configFile</literal> have been removed.
+       Use <literal>services.slurm.dbdserver.storagePassFile</literal> instead to provide the database password.
+       Extra config options can be given via the option <literal>services.slurm.dbdserver.extraConfig</literal>. The actual configuration file is created on the fly on startup of the service.
+       This avoids that the password gets exposed in the nix store.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
