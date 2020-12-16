@@ -266,7 +266,7 @@ stdenv.mkDerivation rec {
       genericName = "Mail Reader";
       name = "thunderbird";
       exec = "thunderbird %U";
-      icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
+      icon = "thunderbird";
       mimeType = lib.concatStringsSep ";" [
         # Email
         "x-scheme-handler/mailto"
@@ -286,6 +286,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # TODO: Move to a dev output?
     rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+    install -Dm 444 $out/lib/thunderbird/chrome/icons/default/default256.png $out/share/icons/hicolor/256x256/apps/thunderbird.png
   '';
 
   preFixup = ''
