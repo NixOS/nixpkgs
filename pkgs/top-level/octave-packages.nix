@@ -76,7 +76,7 @@ makeScope newScope (self:
     control = callPackage ../development/octave-modules/control { };
 
     io = callPackage ../development/octave-modules/io {
-      unzip = pkgs.unzip;
+      inherit (octave) enableJava;
     };
 
     level-set = callPackage ../development/octave-modules/level-set { };
