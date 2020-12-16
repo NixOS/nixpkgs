@@ -91,6 +91,7 @@ dpelle/vim-LanguageTool
 dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
+dstein64/nvim-scrollview@main
 dylanaraps/wal.vim
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc

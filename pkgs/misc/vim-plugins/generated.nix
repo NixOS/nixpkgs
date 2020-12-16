@@ -2758,6 +2758,18 @@ let
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
   };
 
+  nvim-scrollview = buildVimPluginFrom2Nix {
+    pname = "nvim-scrollview";
+    version = "2020-12-15";
+    src = fetchFromGitHub {
+      owner = "dstein64";
+      repo = "nvim-scrollview";
+      rev = "ded4ca817ebf724d2b1a91ffed97aeb3f8d354db";
+      sha256 = "1r1af6wnpqd4gspwi8pnkvv87alnafprbgjkmp9y7y9f88h43mmw";
+    };
+    meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal-lua";
     version = "2019-10-17";
