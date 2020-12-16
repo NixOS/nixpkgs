@@ -13588,6 +13588,8 @@ in
 
   indilib = callPackage ../development/libraries/indilib { };
 
+  inih = callPackage ../development/libraries/inih { };
+
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intel-gmmlib = callPackage ../development/libraries/intel-gmmlib { };
