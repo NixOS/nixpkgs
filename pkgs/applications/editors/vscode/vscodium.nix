@@ -6,6 +6,8 @@ let
   plat = {
     x86_64-linux = "linux-x64";
     x86_64-darwin = "darwin";
+    aarch64-linux = "linux-arm64";
+    armv7l-linux = "linux-armhf";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
@@ -13,11 +15,15 @@ let
   sha256 = {
     x86_64-linux = "1ckg279vvg8h1n8ippa9vlyw4vk3frinb6fvvi47zggs31168m7b";
     x86_64-darwin = "168g34v2b8r1pdbnqrs0c0k9aa60n5rspixziywnq7m61i23nlgd";
+    aarch64-linux = "1cd4sg6k7sqmj3yzmprq1rz928bvc3zrch8agfd8zfap1d6nfaal";
+    armv7l-linux = "0f8z4lws027dyqhcrkzm9rvifwid5m0icprg0xk01l7y18n3q923";
   }.${system};
 
   sourceRoot = {
     x86_64-linux = ".";
     x86_64-darwin = "";
+    aarch64-linux = ".";
+    armv7l-linux = ".";
   }.${system};
 in
   callPackage ./generic.nix rec {
@@ -55,6 +61,6 @@ in
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
       maintainers = with maintainers; [ synthetica turion ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }
