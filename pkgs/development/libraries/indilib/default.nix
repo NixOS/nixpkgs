@@ -23,24 +23,16 @@ stdenv.mkDerivation rec {
     sha256 = "0cy9l1vpsnfilxslvmn88hhq8iw8cnx3xpbnl78c0dgjyfv5xmhz";
   };
 
-  patches = [
-    ./udev-dir.patch
-  ];
-
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    curl
-    cfitsio
-    libusb1
-    zlib
-    boost
-    libnova
-    libjpeg
-    gsl
-    fftw
+    curl cfitsio zlib boost gsl
+    fftw libnova libjpeg libusb1
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
   ];
 
   meta = with stdenv.lib; {
