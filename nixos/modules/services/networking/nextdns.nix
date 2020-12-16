@@ -12,6 +12,13 @@ in {
         default = false;
         description = "Whether to enable the NextDNS DNS/53 to DoH Proxy service.";
       };
+      package = mkOption {
+        default = pkgs.nextdns;
+        defaultText = "pkgs.nextdns";
+        example = "pkgs.unstable.nextdns";
+        type = types.package;
+        description = "NextDNS package to use.";
+      };
       arguments = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -31,7 +38,7 @@ in {
       startLimitIntervalSec = 5;
       startLimitBurst = 10;
       serviceConfig = {
-        ExecStart = "${pkgs.nextdns}/bin/nextdns run ${escapeShellArgs config.services.nextdns.arguments}";
+        ExecStart = "${cfg.package}/bin/nextdns run ${escapeShellArgs config.services.nextdns.arguments}";
         RestartSec = 120;
         LimitMEMLOCK = "infinity";
       };
