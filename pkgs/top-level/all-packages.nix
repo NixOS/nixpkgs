@@ -12228,6 +12228,8 @@ in
 
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
+  unused = callPackage ../development/tools/misc/unused { };
+
   vagrant = callPackage ../development/tools/vagrant {};
 
   vala-language-server = callPackage ../development/tools/vala-language-server {};
