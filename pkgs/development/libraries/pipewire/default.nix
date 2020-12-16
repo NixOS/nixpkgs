@@ -24,7 +24,7 @@
 , nixosTests
 , gstreamerSupport ? true, gst_all_1 ? null
 , ffmpegSupport ? true, ffmpeg ? null
-, bluezSupport ? true, bluez ? null, sbc ? null
+, bluezSupport ? true, bluez ? null, sbc ? null, libopenaptx ? null, ldacbt ? null
 , nativeHspSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.17";
+  version = "0.3.18";
 
   outputs = [
     "out"
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "1gzdahji23fsgjycc08h7zzv8filmzdrkyvpkljc881l4cb5l58n";
+    sha256 = "1yghhgs18yqrnd0b2r75l5n8yng962r1wszbsi01v6i9zib3jc9g";
   };
 
   patches = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     systemd
   ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
   ++ lib.optional ffmpegSupport ffmpeg
-  ++ lib.optionals bluezSupport [ bluez sbc ];
+  ++ lib.optionals bluezSupport [ bluez libopenaptx ldacbt sbc ];
 
   mesonFlags = [
     "-Ddocs=true"

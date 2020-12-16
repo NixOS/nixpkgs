@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "bugwarrior";
-  version = "1.7.0";
+  version = "1.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pmznka5dxcdjfak0p1yh7lhfbfazmx8g9ysv57lsrkqy4n61qks";
+    sha256 = "f024c29d2089b826f05481cace33a62aa984f33e98d226f6e41897e6f11b3f51";
   };
 
   propagatedBuildInputs = [
