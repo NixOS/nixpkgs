@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
+{ stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsaLib, dbus, cups, libexif, ffmpeg_3, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
@@ -18,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "3.4.2066.90-1";
+  version = "3.5.2115.73-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "059vcr2j0vr8szqcxfqnzxwy5i8z53g71fwhm22nc0477jbrsxz1";
+    sha256 = "0gjar22b0qdirww4mlb0d0pm2cqkhlp1jn88gwxwvx6g72p3b6lz";
   };
 
   unpackPhase = ''
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelf makeWrapper ];
 
   buildInputs = [
-    stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
+    stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg_3 systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr

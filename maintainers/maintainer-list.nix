@@ -189,7 +189,7 @@
     name = "Adrien Devresse";
   };
   adisbladis = {
-    email = "adis@blad.is";
+    email = "adisbladis@gmail.com";
     github = "adisbladis";
     githubId = 63286;
     name = "Adam Hose";

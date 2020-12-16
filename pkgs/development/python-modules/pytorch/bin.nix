@@ -3,6 +3,7 @@
 , fetchurl
 , isPy37
 , isPy38
+, isPy39
 , python
 , nvidia_x11
 , addOpenGLRunpath
@@ -19,7 +20,7 @@ let
   platform = if stdenv.isDarwin then "darwin" else "linux";
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.7.0";
+  version = "1.7.1";
 in buildPythonPackage {
   inherit version;
 
@@ -28,7 +29,7 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = !(isPy37 || isPy38);
+  disabled = !(isPy37 || isPy38 || isPy39);
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -43,16 +44,6 @@ in buildPythonPackage {
     pyyaml
     requests
     typing-extensions
-  ];
-
-  # PyTorch are broken: the dataclasses wheel is required, but ships with
-  # Python >= 3.7. Our dataclasses derivation is incompatible with >= 3.7.
-  #
-  # https://github.com/pytorch/pytorch/issues/46930
-  #
-  # Should be removed with the next PyTorch version.
-  pipInstallFlags = [
-    "--no-deps"
   ];
 
   postInstall = ''
