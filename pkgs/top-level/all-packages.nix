@@ -12594,6 +12594,8 @@ in
 
   bamf = callPackage ../development/libraries/bamf { };
 
+  inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
+
   bcg729 = callPackage ../development/libraries/bcg729 { };
 
   bctoolbox = callPackage ../development/libraries/bctoolbox { };
