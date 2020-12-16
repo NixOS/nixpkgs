@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0irqwpvg7763pdbdkf0pvmch4ip6wjvbclv0ba5z8p3n2b3v5hd6";
+    sha256 = "07hz0hnx2shqjgk3x4gymvd6j24gzkxaknqvxg1nff42bx65jvfi";
     fetchSubmodules = true;
   };
-  cargoSha256 = "0187xg9k399d5zdj4yg7fl8qhpyw7gvi8vfjs0ifa9rlc7g6ndjz";
+  cargoSha256 = "1vspqqx5g65flwqnxvism1aq34cg7h3xf076siy91iw5iphmwqd8";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
@@ -58,10 +58,8 @@ rustPlatform.buildRustPackage rec {
 
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
-      --fish <($out/bin/deno completions fish)
-    # deno zsh completion broken since 1.5.4
-    # waiting for fix https://github.com/denoland/deno/issues/8472
-    # --zsh <($out/bin/deno completions zsh)
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
   '';
 
   passthru.updateScript = ./update/update.ts;
