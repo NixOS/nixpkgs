@@ -12,8 +12,6 @@ buildGoModule rec {
   };
   vendorSha256 = "8NdeCD558r0tV+ZR4MvLl5CzeNj8cUGtqwvJ2ZhS7mI=";
 
-  goPackagePath = "github.com/hashicorp/terraform-ls";
-
   # tests fail in sandbox mode because of trying to download stuff from releases.hashicorp.com
   doCheck = false;
 
