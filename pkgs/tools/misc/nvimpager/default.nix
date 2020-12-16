@@ -23,9 +23,8 @@ pkgs.stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "nvimpager.configured" ];
   preBuild = ''
-    substituteInPlace nvimpager \
-      --replace '/usr/bin/env bash' '${pkgs.bash}/bin/bash' \
-      --replace ':-nvim' ':-${pkgs.neovim}/bin/nvim'
+    patchShebangs nvimpager
+    substituteInPlace nvimpager --replace ':-nvim' ':-${pkgs.neovim}/bin/nvim'
     '';
 
   # Defaults to false until I find out how to provide /dev/tty inside the
