@@ -1,12 +1,13 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools, lxml, fs
+, fonttools
+, lxml, fs # for fonttools extras
 , setuptools_scm
 , pytestCheckHook, pytest_5, pytestcov, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "psautohint";
-  version = "2.1.2";
+  version = "2.2.0";
 
   disabled = pythonOlder "3.6";
 
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     owner = "adobe-type-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1s2l54gzn11y07zaggprwif7r3ia244qijjhkbvjdx4jsgc5df8n";
+    sha256 = "0gsgfr190xy2rnjf1gf7688xrh13ihgq10s19s4rv5hp6pmg9iaa";
     fetchSubmodules = true; # data dir for tests
   };
 
