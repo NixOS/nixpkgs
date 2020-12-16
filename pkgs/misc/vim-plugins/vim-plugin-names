@@ -245,6 +245,7 @@ keith/swift.vim
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
+konfekt/vim-DetectSpellLang
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
