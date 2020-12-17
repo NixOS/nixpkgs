@@ -70,7 +70,6 @@ rpath = lib.makeLibraryPath [
   libXext
   libXfixes
   libXi
-  libxkbcommon
   libXrandr
   libXrender
   libXtst
@@ -89,11 +88,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.17.73";
+  version = "1.18.70";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "18bd6kgzfza5r0y2ggfy82pdpnfr2hzgjcfy9vxqq658z7q3jpqy";
+    sha256 = "08v9r41knmvi3vi27hs8rsjiyrxiidx24zzwz2gbclf4l42sk88j";
   };
 
   dontConfigure = true;
