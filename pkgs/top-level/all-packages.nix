@@ -5268,7 +5268,7 @@ in
 
   mdcat = callPackage ../tools/text/mdcat {
     inherit (darwin.apple_sdk.frameworks) Security;
-    inherit (pythonPackages) ansi2html;
+    inherit (python3Packages) ansi2html;
   };
 
   medfile = callPackage ../development/libraries/medfile { };
