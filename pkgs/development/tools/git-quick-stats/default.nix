@@ -6,7 +6,7 @@
 , git
 , gnugrep
 , ncurses
-, utillinux
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
         git
         gnugrep
         ncurses
-        utillinux
+        util-linux
       ];
     in
     ''

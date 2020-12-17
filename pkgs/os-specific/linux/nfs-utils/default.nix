@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
+{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, util-linux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
 , python3, buildPackages, nixosTests, rpcsvc-proto
 , enablePython ? true
 }:
 
 let
-  statdPath = lib.makeBinPath [ systemd utillinux coreutils ];
+  statdPath = lib.makeBinPath [ systemd util-linux coreutils ];
 in
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       "--with-systemd=${placeholder "out"}/etc/systemd/system"
       "--enable-libmount-mount"
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
-      "--with-rpcgen=${rpcsvc-proto}/bin/rpcgen"
+      "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
     ];
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [

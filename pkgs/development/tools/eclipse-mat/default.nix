@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "eclipse-mat";
-  version = "${pVersion}";
+  version = pVersion;
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";

@@ -34,13 +34,17 @@ self: super: let
     });
   };
 
-  staticAdapters = [ makeStaticLibraries propagateBuildInputs ]
+  staticAdapters =
+    # makeStaticDarwin must go first so that the extraBuildInputs
+    # override does not recreate mkDerivation, removing subsequent
+    # adapters.
+    optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
+
+    ++ [ makeStaticLibraries propagateBuildInputs ]
 
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
     ++ optional (!super.stdenv.hostPlatform.isDarwin) makeStaticBinaries
-
-    ++ optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
 
     # Glibc doesn’t come with static runtimes by default.
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
@@ -163,6 +167,7 @@ in {
   };
   mkl = super.mkl.override { enableStatic = true; };
   nix = super.nix.override { enableStatic = true; };
+  nixUnstable = super.nixUnstable.override { enableStatic = true; };
   openssl = (super.openssl_1_1.override { static = true; }).overrideAttrs (o: {
     # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
     configureFlags = (removeUnknownConfigureFlags o.configureFlags);
@@ -281,10 +286,15 @@ in {
   python39 = super.python39.override { static = true; };
   python3Minimal = super.python3Minimal.override { static = true; };
 
-
-  libev = super.libev.override { static = true; };
+  # Note: -static doesn’t work on darwin
+  libev = super.libev.override { static = !super.stdenv.hostPlatform.isDarwin; };
 
   libexecinfo = super.libexecinfo.override { enableShared = false; };
+
+  tree-sitter = super.tree-sitter.override {
+    enableShared = false;
+    enableStatic = true;
+  };
 
   xorg = super.xorg.overrideScope' (xorgself: xorgsuper: {
     libX11 = xorgsuper.libX11.overrideAttrs (attrs: {
@@ -309,4 +319,6 @@ in {
       configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
     });
   });
+
+  libcap = super.libcap.override { pam = null; };
 }

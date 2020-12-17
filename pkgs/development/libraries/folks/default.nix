@@ -16,7 +16,6 @@
 , nss
 , dbus
 , libgee
-, telepathy-glib
 , evolution-data-server
 , libsecret
 , db
@@ -26,6 +25,8 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+, telepathy-glib
+, telepathySupport ? false
 }:
 
 # TODO: enable more folks backends
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtelepathy_backend=${stdenv.lib.boolToString telepathySupport}"
   ];
 
   nativeBuildInputs = [
@@ -69,8 +71,7 @@ stdenv.mkDerivation rec {
     nspr
     nss
     readline
-    telepathy-glib
-  ];
+  ] ++ stdenv.lib.optional telepathySupport telepathy-glib;
 
   propagatedBuildInputs = [
     glib
@@ -109,6 +110,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/Folks";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

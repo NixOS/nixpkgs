@@ -6,6 +6,7 @@ let
   cfg = config.services.chrony;
 
   stateDir = "/var/lib/chrony";
+  driftFile = "${stateDir}/chrony.drift";
   keyFile = "${stateDir}/chrony.keys";
 
   configFile = pkgs.writeText "chrony.conf" ''
@@ -16,7 +17,7 @@ let
       "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.servers}"
     }
 
-    driftfile ${stateDir}/chrony.drift
+    driftfile ${driftFile}
     keyfile ${keyFile}
 
     ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
@@ -95,6 +96,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0755 chrony chrony - -"
+      "f ${driftFile} 0640 chrony chrony -"
       "f ${keyFile} 0640 chrony chrony -"
     ];
 

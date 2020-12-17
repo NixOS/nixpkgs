@@ -17,7 +17,8 @@ in mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ fixDarwinDylibNames autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook ]
+    ++ lib.optional hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxml2 stdenv.cc.cc ];
 

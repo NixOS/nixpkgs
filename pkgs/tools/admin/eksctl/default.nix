@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.30.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
     rev = version;
-    sha256 = "0kg966czixkmaaznl7xm751jpx4252nkm99vaigg1iwhlx2yczh9";
+    sha256 = "1n2mvnis6r5vpb60jlb3c84sllsbvy93gzsds54igsp6l3zngq19";
   };
 
-  vendorSha256 = "1lhs1h0x3ryq0bd5w9ny7i2j9d0x2904br1vlxy677w2xsa9213p";
+  vendorSha256 = "0ggxilp44mm81b8hrxyb7642vy2q1109yz619z97mgvk0drhkhc0";
 
   doCheck = false;
 

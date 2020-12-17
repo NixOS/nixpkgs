@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   pname = "py4j";
 
-  version = "0.10.9";
+  version = "0.10.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "36ec57f43ff8ced260a18aa9a4e46c3500a730cac8860e259cbaa546c2b9db2f";
+    sha256 = "7605e512bf9b002245f5a9121a8c2df9bfd1a6004fe6dd3ff29d46f901719d53";
   };
 
   # No tests in archive

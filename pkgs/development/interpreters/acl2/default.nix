@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
-    rev = "${version}";
+    rev = version;
     sha256 = "0c0wimaf16nrr3d6cxq6p7nr7rxffvpmn66hkpwc1m6zpcipf0y5";
   };
 

@@ -1,17 +1,46 @@
-{ stdenv, gettext, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra-gtk3
-, pkgconfig, gtk3, glib, clutter-gtk, clutter-gst, udev, gst_all_1, itstool
-, libgudev, vala, docbook_xml_dtd_43, docbook_xsl, appstream-glib
-, libxslt, yelp-tools, gnome-common, gtk-doc
-, adwaita-icon-theme, librsvg, totem, gdk-pixbuf, gnome3, gnome-desktop, libxml2
-, meson, ninja, dbus, python3 }:
+{ stdenv
+, gettext
+, fetchurl
+, wrapGAppsHook
+, gnome-video-effects
+, libcanberra-gtk3
+, pkgconfig
+, gtk3
+, glib
+, clutter-gtk
+, clutter-gst
+, udev
+, gst_all_1
+, itstool
+, libgudev
+, vala
+, docbook_xml_dtd_43
+, docbook_xsl
+, appstream-glib
+, libxslt
+, yelp-tools
+, gnome-common
+, gtk-doc
+, adwaita-icon-theme
+, librsvg
+, totem
+, gdk-pixbuf
+, gnome3
+, gnome-desktop
+, libxml2
+, meson
+, ninja
+, dbus
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
-  version = "3.34.0";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0wvyc9wb0avrprvm529m42y5fkv3lirdphqydc9jw0c8mh05d1ni";
+    sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
   };
 
   postPatch = ''
@@ -24,15 +53,43 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool vala wrapGAppsHook libxml2 appstream-glib
-    libxslt docbook_xml_dtd_43 docbook_xsl
-    gtk-doc yelp-tools gnome-common python3
+    appstream-glib
+    docbook_xml_dtd_43
+    docbook_xsl
+    gettext
+    gnome-common
+    gtk-doc
+    itstool
+    libxml2
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
+    yelp-tools
   ];
-  buildInputs = [ gtk3 glib gnome-video-effects
-                  gdk-pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer
-                  gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome-desktop
-                  gst_all_1.gst-plugins-bad clutter-gtk clutter-gst
-                  libcanberra-gtk3 libgudev dbus ];
+
+  buildInputs = [
+    adwaita-icon-theme
+    clutter-gst
+    clutter-gtk
+    dbus
+    gdk-pixbuf
+    glib
+    gnome-desktop
+    gnome-video-effects
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+    gtk3
+    libcanberra-gtk3
+    libgudev
+    librsvg
+    udev
+  ];
 
   outputs = [ "out" "man" "devdoc" ];
 

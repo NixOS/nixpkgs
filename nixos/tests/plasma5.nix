@@ -35,6 +35,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.wait_until_succeeds("pgrep plasmashell")
         machine.wait_for_window("^Desktop ")
 
+    with subtest("Check that KDED is running"):
+        machine.succeed("pgrep kded5")
+
     with subtest("Check that logging in has given the user ownership of devices"):
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 

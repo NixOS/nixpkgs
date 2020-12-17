@@ -20,6 +20,6 @@ buildPythonPackage rec {
     meta = with stdenv.lib; {
       description = "python implementation of BRiAl";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ timokau ];
+      maintainers = teams.sage.members;
     };
 }

@@ -1,14 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
 
-# Maintainer notes for updating:
-# 1. increment version number in expression and in Gemfile
-# 2. run $ nix-shell --command "bundler install && bundix"
-#    in metasploit in nixpkgs
-# 3. run $ sed -i '/[ ]*dependencies =/d' gemset.nix
-# 4. run $ nix-build -A metasploit ../../../../
-# 5. update sha256sum in expression
-# 6. run step 3 again
-
 let
   env = bundlerEnv {
     inherit ruby;
@@ -17,13 +8,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "5.0.90";
+  version = "6.0.12";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "1z3m8pvf1r8rz0snfkr9svhgjl2xn2qjgf8qswszzplsccqx1rss";
+    sha256 = "1kh5alvw68lxnm1wcwbka983b5ww7bqvbkih831mrf6sfmv4wkxs";
   };
 
   buildInputs = [ makeWrapper ];
@@ -44,6 +35,9 @@ in stdenv.mkDerivation rec {
     )
 
   '';
+
+  # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
+  passthru.updateScript = ./update.sh;
 
   meta = with stdenv.lib; {
     description = "Metasploit Framework - a collection of exploits";

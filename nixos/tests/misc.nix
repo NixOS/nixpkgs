@@ -88,8 +88,8 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
       with subtest("whether kernel.poweroff_cmd is set"):
           machine.succeed('[ -x "$(cat /proc/sys/kernel/poweroff_cmd)" ]')
 
-      with subtest("whether the blkio controller is properly enabled"):
-          machine.succeed("[ -e /sys/fs/cgroup/blkio/blkio.reset_stats ]")
+      with subtest("whether the io cgroupv2 controller is properly enabled"):
+          machine.succeed("grep -q '\\bio\\b' /sys/fs/cgroup/cgroup.controllers")
 
       with subtest("whether we have a reboot record in wtmp"):
           machine.shutdown

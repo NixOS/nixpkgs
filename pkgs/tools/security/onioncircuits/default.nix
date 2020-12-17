@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, pythonPackages, intltool, gtk3, gobject-introspection, gnome3 }:
+{ stdenv, fetchgit, python3, intltool, gtk3, gobject-introspection, gnome3 }:
 
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";
   version = "0.5";
 
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ intltool ];
   buildInputs = [ intltool gtk3 gobject-introspection ];
-  propagatedBuildInputs =  with pythonPackages; [ stem distutils_extra pygobject3 ];
+  propagatedBuildInputs =  with python3.pkgs; [ stem distutils_extra pygobject3 ];
 
   postFixup = ''
     wrapProgram "$out/bin/onioncircuits" \

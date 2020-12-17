@@ -1,24 +1,15 @@
-{ stdenv, fetchpatch, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+{ stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.04.1";
+  version = "1.05.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "1ry861pk3z02hy7i0yi3xwmd1zma802qzcnlm09w6pslayd9rwbf";
+    sha256 = "03b2vxpakp6zizb0m65q9lq800z67b052k01q251b3f04kr1waih";
   };
-
-  # patches and patchFlags can be deleted with the next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Novum/vkQuake/commit/a869a22d9b51c68e57646fa20e4c40fc6db36760.patch";
-      sha256 = "sha256-ea5lcXTTlJZnuOdF1W+GCYvVgj/gW10tDNyTgfl3Kfs=";
-    })
-  ];
-  patchFlags = "-p2";
 
   sourceRoot = "source/Quake";
 

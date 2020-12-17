@@ -136,7 +136,7 @@ in
       }
     ];
 
-    users.users.resolved.group = "systemd-resolve";
+    users.users.systemd-resolve.group = "systemd-resolve";
 
     # add resolve to nss hosts database if enabled and nscd enabled
     # system.nssModules is configured in nixos/modules/system/boot/systemd.nix

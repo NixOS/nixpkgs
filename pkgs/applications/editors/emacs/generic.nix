@@ -22,6 +22,7 @@
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
+, withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
@@ -41,7 +42,12 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 let
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
+  NATIVE_FULL_AOT = "1";
+  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+} // lib.optionalAttrs stdenv.isDarwin {
+  CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
+} // {
   inherit pname version patches;
 
   src = fetchurl {
@@ -87,10 +93,6 @@ in stdenv.mkDerivation {
     ""
   ];
 
-  CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
-
-  LIBRARY_PATH = if nativeComp then "${lib.getLib stdenv.cc.libc}/lib" else "";
-
   nativeBuildInputs = [ pkgconfig makeWrapper ]
     ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
@@ -101,7 +103,8 @@ in stdenv.mkDerivation {
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff libXft
         gconf cairo ]
-    ++ lib.optionals (withX || withNS) [ imagemagick librsvg ]
+    ++ lib.optionals (withX || withNS) [ librsvg ]
+    ++ lib.optionals withImageMagick [ imagemagick ]
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
@@ -126,6 +129,7 @@ in stdenv.mkDerivation {
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-nativecomp"
+    ++ lib.optional withImageMagick "--with-imagemagick"
     ;
 
   installTargets = [ "tags" "install" ];
@@ -138,11 +142,10 @@ in stdenv.mkDerivation {
 
     siteVersionDir=`ls $out/share/emacs | grep -v site-lisp | head -n 1`
 
-    rm -rf $out/var
-    rm -rf $siteVersionDir
+    rm -r $out/share/emacs/$siteVersionDir/site-lisp
   '' + lib.optionalString withCsrc ''
     for srcdir in src lisp lwlib ; do
-      dstdir=$siteVersionDir/$srcdir
+      dstdir=$out/share/emacs/$siteVersionDir/$srcdir
       mkdir -p $dstdir
       find $srcdir -name "*.[chm]" -exec cp {} $dstdir \;
       cp $srcdir/TAGS $dstdir
@@ -151,6 +154,13 @@ in stdenv.mkDerivation {
   '' + lib.optionalString withNS ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
+  '' + lib.optionalString (nativeComp && withNS) ''
+    ln -snf $out/lib/emacs/*/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
+  '' + lib.optionalString nativeComp ''
+    mkdir -p $out/share/emacs/native-lisp
+    $out/bin/emacs --batch \
+      --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
+      -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
   postFixup = lib.concatStringsSep "\n" [
@@ -191,4 +201,4 @@ in stdenv.mkDerivation {
       separately.
     '';
   };
-}
+})

@@ -1,13 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.24";
+  version = "1.1.28";
   pname = "libpaper";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/libp/libpaper/libpaper_${version}.tar.gz";
-    sha256 = "0zhcx67afb6b5r936w5jmaydj3ks8zh83n9rm5sv3m3k8q8jib1q";
+    sha256 = "sha256-yLuUbsk9PCxyu7HXJX6QFyoipEoHoH+2uAKluyyV/dw=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   # The configure script of libpaper is buggy: it uses AC_SUBST on a headerfile
   # to compile sysconfdir into the library. Autoconf however defines sysconfdir

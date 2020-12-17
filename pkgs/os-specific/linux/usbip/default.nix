@@ -1,11 +1,11 @@
-{ lib, stdenv, kernel, udev, autoconf, automake, libtool }:
+{ lib, stdenv, kernel, udev, autoconf, automake, libtool, kernelOlder }:
 
 stdenv.mkDerivation {
   name = "usbip-${kernel.name}";
 
   src = kernel.src;
 
-  patches = lib.optionals (lib.versionAtLeast "5.4" kernel.version) [
+  patches = lib.optionals (kernelOlder "5.4") [
     # fixes build with gcc8
     ./fix-snprintf-truncation.patch
     # fixes build with gcc9
@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     description = "allows to pass USB device from server to client over the network";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    broken = kernelOlder "4.10";
   };
 }

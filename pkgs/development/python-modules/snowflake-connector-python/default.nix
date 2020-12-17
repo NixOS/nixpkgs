@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.3.4";
+  version = "2.3.6";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a072ee61ef156e5938e04447f0b99248b87ef262e498b5e5002f5b579cd7fb2";
+    sha256 = "1a4ebf25989fc13d6f70dc3e2064721c54834e493a7964a1d67be61d40e75f50";
   };
 
   propagatedBuildInputs = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'boto3>=1.4.4,<1.15'," "'boto3~=1.15'," \
+      --replace "'boto3>=1.4.4,<1.16'," "'boto3~=1.16'," \
       --replace "'cryptography>=2.5.0,<3.0.0'," "'cryptography'," \
       --replace "'idna<2.10'," "'idna'," \
       --replace "'requests<2.24.0'," "'requests',"

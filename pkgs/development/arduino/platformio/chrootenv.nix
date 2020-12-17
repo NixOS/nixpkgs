@@ -1,11 +1,11 @@
-{ lib, buildFHSUserEnv, fetchFromGitHub }:
+{ lib, buildFHSUserEnv, version, src }:
 
 let
   pio-pkgs = pkgs:
     let
       python = pkgs.python3.override {
         packageOverrides = self: super: {
-          platformio = self.callPackage ./core.nix { };
+          platformio = self.callPackage ./core.nix { inherit version src; };
         };
       };
     in (with pkgs; [
@@ -18,14 +18,6 @@ let
       bottle
       platformio
     ]);
-
-  src = fetchFromGitHub {
-    owner = "platformio";
-    repo = "platformio-core";
-    rev = "v5.0.1";
-    sha256 = "01xh61ldilg6fg95l1p870rld2xffhnl9f9ndvbi5jdn8q634pmw";
-  };
-
 
 in buildFHSUserEnv {
   name = "platformio";

@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
 , openal, libtheora, SDL2, lzo, libjpeg, libogg, tbb
-, pcre, makeWrapper }:
+, pcre, makeWrapper, fetchpatch }:
 
 let
-  version = "730-july-preview";
+  version = "784-october-preview";
 
   src = fetchFromGitHub {
     owner = "OpenXRay";
     repo = "xray-16";
     rev = version;
-    sha256 = "1nish3sbpk0hsag7r4nyx8j6pl9mlgx58v8dhzg2vwj2q32isyb2";
+    sha256 = "0q0h70gbpscdvn45wpxicljj4ji3cd2maijd5b7jhr1695h61q5y";
     fetchSubmodules = true;
   };
 
@@ -41,6 +41,13 @@ in stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
   cmakeFlags = [ "-DCMAKE_INCLUDE_PATH=${cryptopp}/include/cryptopp" ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/OpenXRay/xray-16/commit/4532cba11e98808c92e56e246188863261ef9201.patch";
+      sha256 = "1hrm4rkkg946ai95krzpf3isryzbb2vips63gxf481plv4vlcfc9";
+    })
+  ];
+
   buildInputs = [
     glew freeimage liblockfile openal cryptopp libtheora SDL2 lzo
     libjpeg libogg tbb pcre
@@ -50,10 +57,6 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/xrCore/xrCore.cpp \
       --replace /usr/share $out/share
-
-    # https://github.com/OpenXRay/xray-16/issues/667
-    echo "inline const char* xr_sys_errlist[100] = {};" >> src/Common/PlatformLinux.inl
-    echo "#define _sys_errlist xr_sys_errlist" >> src/Common/PlatformLinux.inl
   '';
 
   postInstall = ''

@@ -224,6 +224,8 @@ in
               chmod -R u+w ${dataDir}/${wikiIdent}/underlay
             '';
 
+            startLimitIntervalSec = 30;
+
             serviceConfig = {
               User = user;
               Group = group;
@@ -237,7 +239,6 @@ in
 
               Restart = "on-failure";
               RestartSec = "2s";
-              StartLimitIntervalSec = "30s";
 
               StateDirectory = "moin/${wikiIdent}";
               StateDirectoryMode = "0750";

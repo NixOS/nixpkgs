@@ -1,9 +1,9 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, gnused, getopt, git, tree, gnupg, openssl, which, procps
-, qrencode , makeWrapper, pass, symlinkJoin
+, coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
+, which, procps , qrencode , makeWrapper, pass, symlinkJoin
 
 , xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? !stdenv.isDarwin
+, x11Support ? !stdenv.isDarwin , dmenuSupport ? x11Support
 , waylandSupport ? false, wl-clipboard ? null
 
 # For backwards-compatibility
@@ -12,9 +12,11 @@
 
 with lib;
 
-assert x11Support -> xclip != null
-                  && xdotool != null
-                  && dmenu != null;
+assert x11Support -> xclip != null;
+
+assert dmenuSupport -> dmenu != null
+                       && xdotool != null
+                       && x11Support;
 
 assert waylandSupport -> wl-clipboard != null;
 
@@ -32,11 +34,15 @@ let
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)
-        rm $out/bin
-        mkdir $out/bin
+        if [ -L $out/bin ]; then
+          rm $out/bin
+          mkdir $out/bin
+        fi
 
         for i in $files; do
-          ln -sf $i $out/bin/$(basename $i)
+          if ! [ "$(readlink -f "$out/bin/$(basename $i)")" = "$i" ]; then
+            ln -sf $i $out/bin/$(basename $i)
+          fi
         done
 
         wrapProgram $out/bin/pass \
@@ -72,14 +78,16 @@ stdenv.mkDerivation rec {
     # himself.
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
-  '' + optionalString x11Support ''
+  '' + optionalString dmenuSupport ''
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
   wrapperPath = with stdenv.lib; makeBinPath ([
     coreutils
+    findutils
     getopt
     git
+    gnugrep
     gnupg
     gnused
     tree
@@ -87,7 +95,8 @@ stdenv.mkDerivation rec {
     qrencode
     procps
   ] ++ optional stdenv.isDarwin openssl
-    ++ ifEnable x11Support [ dmenu xclip xdotool ]
+    ++ optional x11Support xclip
+    ++ optionals dmenuSupport [ xdotool dmenu ]
     ++ optional waylandSupport wl-clipboard);
 
   postFixup = ''
@@ -98,7 +107,7 @@ stdenv.mkDerivation rec {
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
       --prefix PATH : "${wrapperPath}"
-  '' + stdenv.lib.optionalString x11Support ''
+  '' + stdenv.lib.optionalString dmenuSupport ''
     # We just wrap passmenu with the same PATH as pass. It doesn't
     # need all the tools in there but it doesn't hurt either.
     wrapProgram $out/bin/passmenu \

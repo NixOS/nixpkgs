@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, docutils, pkgconfig
+{ stdenv, lib, fetchurl, autoreconfHook, docutils, pkgconfig
 , kerberos, keyutils, pam, talloc }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook docutils pkgconfig ];
 
   buildInputs = [ kerberos keyutils pam talloc ];
+
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # AC_FUNC_MALLOC is broken on cross builds.
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   makeFlags = [ "root_sbindir=$(out)/sbin" ];
 

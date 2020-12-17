@@ -678,14 +678,14 @@ in
 
         script = "${cfg.displayManager.job.execCmd}";
 
+        # Stop restarting if the display manager stops (crashes) 2 times
+        # in one minute. Starting X typically takes 3-4s.
+        startLimitIntervalSec = 30;
+        startLimitBurst = 3;
         serviceConfig = {
           Restart = "always";
           RestartSec = "200ms";
           SyslogIdentifier = "display-manager";
-          # Stop restarting if the display manager stops (crashes) 2 times
-          # in one minute. Starting X typically takes 3-4s.
-          StartLimitInterval = "30s";
-          StartLimitBurst = "3";
         };
       };
 

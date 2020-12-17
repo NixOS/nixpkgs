@@ -57,7 +57,7 @@ let
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    if buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
+    if (buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 

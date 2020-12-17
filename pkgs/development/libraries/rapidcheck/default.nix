@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # Install the extras headers
   postInstall = ''
-    cp ../extras/boost_test/include/rapidcheck/boost_test.h $out/include/rapidcheck
+    cp -r $src/extras $out
+    chmod -R +w $out/extras
+    rm $out/extras/CMakeLists.txt
+    rm $out/extras/**/CMakeLists.txt
   '';
 
   meta = with stdenv.lib; {

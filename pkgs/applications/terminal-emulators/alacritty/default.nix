@@ -52,16 +52,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1948j57xhqvc5y876s929x9rhd6j0xnw5c91g1zqw2rfncn602g2";
+    sha256 = "vQdNwNiUvoJWRT1foPRadirI2zWjnzU3sGnIxeHKlj8=";
   };
 
-  cargoSha256 = "17lyzcj07f0vyki3091vgjd0w8ki11sw5m8gb3bxdph1dl04rria";
+  cargoSha256 = "1PQSg6EmwVMZj2ALw6qsbtPMCtALVHx5TR05FjGD/QE=";
 
   nativeBuildInputs = [
     cmake
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-  ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.isDarwin [
     AppKit
     CoreGraphics
     CoreServices
@@ -136,7 +136,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 mic92 cole-h ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne mic92 cole-h ma27 ];
     platforms = platforms.unix;
   };
 }

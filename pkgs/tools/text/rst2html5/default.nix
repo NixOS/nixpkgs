@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, python3Packages }:
 
-pythonPackages.buildPythonPackage rec {
+let
   pname = "rst2html5";
-  version = "1.9.4";
+  version = "1.10.6";
+in python3Packages.buildPythonPackage {
+  inherit pname version;
+  format = "wheel";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "d044589d30eeaf7336986078b7bd175510fd649a212b01a457d7806b279e6c73";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-jmToDFLQODqgTycBp2J8LyoJ1Zxho9w1VdhFMzvDFkg=";
   };
 
-  propagatedBuildInputs = with pythonPackages;
+  propagatedBuildInputs = with python3Packages;
   [ docutils genshi pygments beautifulsoup4 ];
 
-  meta = with stdenv.lib;{
-    homepage = "https://bitbucket.org/andre_felipe_dias/rst2html5";
+  meta = with lib;{
+    homepage = "https://pypi.org/project/rst2html5/";
     description = "Converts ReSTructuredText to (X)HTML5";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];

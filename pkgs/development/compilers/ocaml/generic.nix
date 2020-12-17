@@ -1,12 +1,8 @@
 { minor_version, major_version, patch_version
-, url ? null
-, sha256, ...}@args:
+, ...}@args:
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
   version = "${versionNoPatch}.${toString patch_version}";
-  real_url = if url == null then
-    "http://caml.inria.fr/pub/distrib/ocaml-${versionNoPatch}/ocaml-${version}.tar.xz"
-  else url;
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
 in
 
@@ -21,6 +17,13 @@ assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
 assert aflSupport -> stdenv.lib.versionAtLeast version "4.05";
 assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
 assert spaceTimeSupport -> stdenv.lib.versionAtLeast version "4.04";
+
+let
+  src = args.src or (fetchurl {
+    url = args.url or "http://caml.inria.fr/pub/distrib/ocaml-${versionNoPatch}/ocaml-${version}.tar.xz";
+    inherit (args) sha256;
+  });
+in
 
 let
    useNativeCompilers = !stdenv.isMips;
@@ -39,10 +42,7 @@ stdenv.mkDerivation (args // {
   inherit name;
   inherit version;
 
-  src = fetchurl {
-    url = real_url;
-    inherit sha256;
-  };
+  inherit src;
 
   prefixKey = "-prefix ";
   configureFlags =

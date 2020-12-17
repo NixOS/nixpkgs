@@ -4,7 +4,7 @@ let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system)
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.93.2";
+  version = "4.94.0";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ ncurses ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "1gd6r0nv8xz76pmvk52dgmfl0xjvkxl0s51b4jk4a0lphw3393yv";
+    sha256 = "0yxv2jg6rnzys49lyrz9yjb4knamah4xvlqj596y6ix3vm4k3chp";
   };
 
   patches = [ ./no-build-info.patch ];

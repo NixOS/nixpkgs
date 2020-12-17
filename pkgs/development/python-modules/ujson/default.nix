@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "3.1.0";
+  version = "4.0.1";
   disabled = isPyPy || (!isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00bda1de275ed6fe81817902189c75dfd156b4fa29b44dc1f4620775d2f50cf7";
+    sha256 = "26cf6241b36ff5ce4539ae687b6b02673109c5e3efc96148806a7873eaa229d3";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

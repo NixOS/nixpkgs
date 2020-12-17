@@ -3,7 +3,7 @@
 , gcc-unwrapped
 , dpkg
 , polkit
-, utillinux
+, util-linux
 , bash
 , nodePackages
 , makeWrapper
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     # use Nix(OS) paths
     sed -i "s|/usr/bin/pkexec|/usr/bin/pkexec', '/run/wrappers/bin/pkexec|" tmp/node_modules/sudo-prompt/index.js
     sed -i 's|/bin/bash|${bash}/bin/bash|' tmp/node_modules/sudo-prompt/index.js
-    sed -i "s|'lsblk'|'${utillinux}/bin/lsblk'|" tmp/node_modules/drivelist/js/lsblk/index.js
+    sed -i "s|'lsblk'|'${util-linux}/bin/lsblk'|" tmp/node_modules/drivelist/js/lsblk/index.js
     sed -i "s|process.resourcesPath|'$out/share/${pname}/resources/'|" tmp/generated/gui.js
     ${nodePackages.asar}/bin/asar pack tmp opt/balenaEtcher/resources/app.asar
     rm -rf tmp

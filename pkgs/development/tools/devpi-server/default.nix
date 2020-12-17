@@ -30,24 +30,30 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [
     beautifulsoup4
     nginx
-    pytest
+    pytestCheckHook
     pytest-flake8
-    pytestpep8
     webtest
   ] ++ stdenv.lib.optionals isPy27 [ mock ];
 
   # root_passwd_hash tries to write to store
   # TestMirrorIndexThings tries to write to /var through ngnix
   # nginx tests try to write to /var
-  checkPhase = ''
-    PATH=$PATH:$out/bin HOME=$TMPDIR pytest \
-      ./test_devpi_server --slow -rfsxX \
-      --ignore=test_devpi_server/test_nginx_replica.py \
-      --ignore=test_devpi_server/test_streaming_nginx.py \
-      --ignore=test_devpi_server/test_streaming_replica_nginx.py \
-      -k 'not root_passwd_hash_option \
-          and not TestMirrorIndexThings'
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$TMPDIR
   '';
+  pytestFlagsArray = [
+    "./test_devpi_server"
+    "--slow"
+    "-rfsxX"
+    "--ignore=test_devpi_server/test_nginx_replica.py"
+    "--ignore=test_devpi_server/test_streaming_nginx.py"
+    "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
+  ];
+  disabledTests = [
+    "root_passwd_hash_option"
+    "TestMirrorIndexThings"
+  ];
 
   meta = with stdenv.lib;{
     homepage = "http://doc.devpi.net";

@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     amm =
       { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs.ammonite ];
+          environment.systemPackages = [ (pkgs.ammonite.override { jre = pkgs.jre8; }) ];
         };
     };
 

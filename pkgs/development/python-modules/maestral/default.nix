@@ -3,20 +3,22 @@
 , fetchFromGitHub
 , pythonOlder
 , python
-, alembic, bugsnag, click, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, sqlalchemy, watchdog
+, alembic, bugsnag, click, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, sqlalchemy, survey, watchdog
+, importlib-metadata
+, importlib-resources
 , dbus-next
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.2.1";
+  version = "1.3.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "sha256-kh3FYBSVOU4ywrYl6ONEIbLbkSuZmexNJC9dB+JtUjM=";
+    sha256 = "sha256-SspyTdmAbbmWN3AqVp9bj/QfAKLVgU2bLiiHjZO0aCM=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +36,12 @@ buildPythonPackage rec {
     setuptools
     sdnotify
     sqlalchemy
+    survey
     watchdog
+  ] ++ stdenv.lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ] ++ stdenv.lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     dbus-next
   ];

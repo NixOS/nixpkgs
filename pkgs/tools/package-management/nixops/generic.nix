@@ -2,11 +2,12 @@
 # version args
 , src, version
 , meta ? {}
+, patches ? null
 }:
 
 python2Packages.buildPythonApplication {
   name = "nixops-${version}";
-  inherit version src;
+  inherit version src patches;
 
   buildInputs = [ libxslt ];
 

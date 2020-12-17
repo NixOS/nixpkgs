@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitLab
 , meson, ninja, pkg-config, scdoc
-, wayland, wayland-protocols, openssh
+, openssh
 , mesa, lz4, zstd, ffmpeg, libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "waypipe-unstable";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "0bkmibask7gfnwkn3fg3l6zaabp95n1zsdnz3dwng8j80a0kakyy";
+    sha256 = "00skyxmbssfxksb8wlqdr8gajpysadirjcn230fd5gaf5msvllx7";
   };
 
   postPatch = ''
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
 
   buildInputs = [
-    wayland wayland-protocols
     # Optional dependencies:
     mesa lz4 zstd ffmpeg libva
   ];

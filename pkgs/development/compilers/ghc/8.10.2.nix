@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
@@ -107,9 +107,15 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/18549 
-  patches = [ 
-    ./issue-18549.patch 
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/18549
+  patches = [
+    ./issue-18549.patch
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    # Make Block.h compile with c++ compilers. Remove with the next release
+    (fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
+      sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
+    })
   ];
 
   postPatch = "patchShebangs .";
@@ -190,7 +196,7 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-	dontAddExtraLibs = true;
+  dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx
@@ -242,6 +248,7 @@ stdenv.mkDerivation (rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
+    timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
   };
 

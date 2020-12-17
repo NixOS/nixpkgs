@@ -5,7 +5,7 @@
 , gettext
 , fetchFromGitLab
 , python3
-, libhandy
+, libhandy_0
 , libpwquality
 , wrapGAppsHook
 , gtk3
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     glib
     gdk-pixbuf
-    libhandy
+    libhandy_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

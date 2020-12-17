@@ -41,6 +41,7 @@ in {
     systemd.services.dnsdist = {
       wantedBy = [ "multi-user.target" ];
 
+      startLimitIntervalSec = 0;
       serviceConfig = {
         DynamicUser = true;
 

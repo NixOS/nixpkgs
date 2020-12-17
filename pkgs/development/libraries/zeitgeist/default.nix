@@ -11,13 +11,11 @@
 , libtool
 , gettext
 , dbus
-, telepathy-glib
 , gtk3
 , json-glib
 , librdf_raptor2
-, dbus-glib
 , pythonSupport ? true
-, python2Packages
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -50,23 +48,21 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     vala
-    python2Packages.python
+    python3
   ];
 
   buildInputs = [
     glib
     sqlite
     dbus
-    telepathy-glib
-    dbus-glib
     gtk3
     json-glib
     librdf_raptor2
-    python2Packages.rdflib
+    python3.pkgs.rdflib
   ];
 
   configureFlags = [
-    "--with-session-bus-services-dir=${placeholder "out"}/share/dbus-1/services"
+    "--disable-telepathy"
   ];
 
   enableParallelBuilding = true;
@@ -80,14 +76,14 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = stdenv.lib.optionalString pythonSupport ''
-    moveToOutput lib/${python2Packages.python.libPrefix} "$py"
+    moveToOutput lib/${python3.libPrefix} "$py"
   '';
 
   meta = with stdenv.lib; {
     description = "A service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
     maintainers = with maintainers; [ lethalman worldofpeace ];
-    license = licenses.gpl2;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

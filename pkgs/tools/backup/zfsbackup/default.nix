@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   pname = "zfsbackup";
-  version = "unstable-2019-03-05";
-  rev = "78fea6e99f0a5a4c8513d3a3d1d45fb6750cfddf";
+  version = "unstable-2020-09-30";
+  rev = "092f80846b23e02f99d2aa72d9d889eabfdcb053";
 
   goPackagePath = "github.com/someone1/zfsbackup-go";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "someone1";
     repo = "zfsbackup-go";
     inherit rev;
-    sha256 = "0yalsfvzmcnc8yfzm3r5dikqrp57spwa16l7gbzvgqqcz4vlnw3n";
+    sha256 = "1xiacaf4r9jkx0m8wjfis14cq622yhljldwkflh9ni3khax7dlgi";
   };
 
   goDeps = ./deps.nix;

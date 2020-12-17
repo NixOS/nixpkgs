@@ -7,7 +7,7 @@
 , gnupg
 , gnutar
 , par2cmdline
-, utillinux
+, util-linux
 , rsync
 , backblaze-b2
 , makeWrapper
@@ -72,7 +72,7 @@ pythonPackages.buildPythonApplication rec {
     librsync # Add 'rdiff' to PATH.
     par2cmdline # Add 'par2' to PATH.
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    utillinux # Add 'setsid' to PATH.
+    util-linux # Add 'setsid' to PATH.
   ] ++ (with pythonPackages; [
     lockfile
     mock

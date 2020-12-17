@@ -1,9 +1,9 @@
 {
-  version = "2020.3";
+  version = "2020.4";
 
   sha256 = {
-    batman-adv = "0wrzh0k44zzjx2s5zj65hjkh4jm9y38qpis1s5cbx9cyj756slb5";
-    alfred = "13bvccz90pkjl09jyw68gj23pbrw9b05w1vhds9sjggwf3jkj5w2";
-    batctl = "0r2w2v4sy6wgr7mp9lc7yj9k4ldsbsm3425rjil7p0b17zmzf4rm";
+    batman-adv = "1cxr0zmn9nzisawkrfk0gzd9fx0pg6261c889kz47hwp4f545v6d";
+    alfred = "1ay69nifzghpbvy11fdca5cllkn852h6rg045lci4vzgqf7b2bd2";
+    batctl = "05rrpfbpdhxn5zgdps849qls2ifis6a94cjryb60d4y1nc2n0d7w";
   };
 }

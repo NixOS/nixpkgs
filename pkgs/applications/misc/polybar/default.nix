@@ -27,13 +27,13 @@ assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     pname = "polybar";
-    version = "3.4.3";
+    version = "3.5.0";
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = version;
-      sha256 = "0fsfh3xv0c0hz10xqzvd01c0p0wvzcnanbyczi45zhaxfrisb39w";
+      sha256 = "1kga98cgllsjcq692l27y01sgl8ii4wxp70kmdcwxkrliylg3dji";
       fetchSubmodules = true;
     };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
         having a black belt in shell scripting.
       '';
       license = licenses.mit;
-      maintainers = with maintainers; [ afldcr filalex77 ];
+      maintainers = with maintainers; [ afldcr Br1ght0ne ];
       platforms = platforms.linux;
     };
 

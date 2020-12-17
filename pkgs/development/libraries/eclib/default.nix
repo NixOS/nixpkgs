@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = ''Elliptic curve tools'';
     homepage = "https://github.com/JohnCremona/eclib";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.all;
   };
 }

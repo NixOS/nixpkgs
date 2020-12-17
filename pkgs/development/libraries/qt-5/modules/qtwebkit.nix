@@ -72,7 +72,6 @@ qtModule {
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
 
   meta = {
-    broken = lib.versionAtLeast qtbase.version "5.15";
     maintainers = with stdenv.lib.maintainers; [ abbradar periklis ];
   };
 }

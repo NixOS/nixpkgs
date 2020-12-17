@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ maintainers.ocharles ];
+    maintainers = [ ];
   };
 }

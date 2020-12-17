@@ -1,7 +1,7 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
-, llvmPackages, rustPlatform
+, llvmPackages, rustPlatform, buildGoModule
 , pkgconfig, curl, openssl, libgit2, libiconv
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -273,6 +273,10 @@ self: super: {
     dependencies = with super; [ ultisnips ];
   });
 
+  nvim-lsputils = super.nvim-lsputils.overrideAttrs(old: {
+    dependencies = with super; [ popfix ];
+  });
+
   fzf-vim = super.fzf-vim.overrideAttrs(old: {
     dependencies = [ self.fzfWrapper ];
   });
@@ -457,6 +461,18 @@ self: super: {
     ];
   });
 
+  lens-vim = super.lens-vim.overrideAttrs(old: {
+    # remove duplicate g:lens#animate in doc/lens.txt
+    # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
+    # https://github.com/camspiers/lens.vim/pull/40/files
+    patches = [
+      (substituteAll {
+        src = ./patches/lens-vim/remove_duplicate_g_lens_animate.patch;
+        inherit languagetool;
+      })
+    ];
+  });
+
   vim-hier = super.vim-hier.overrideAttrs(old: {
     buildInputs = [ vim ];
   });
@@ -465,6 +481,21 @@ self: super: {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
         --replace 'import vim' 'import vim; import sys; sys.path.append("${python.pkgs.isort}/${python.sitePackages}")'
+    '';
+  });
+
+  vim-markdown-composer =
+  let
+    vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
+      pname = "vim-markdown-composer-bin";
+      inherit (super.vim-markdown-composer) src version;
+      cargoSha256 = "iuhq2Zhdkib8hw4uvXBjwE5ZiN1kzairlzufaGuVkWc=";
+    };
+  in super.vim-markdown-composer.overrideAttrs(oldAttrs: rec {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/vim-markdown-composer/after/ftplugin/markdown/composer.vim \
+        --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
+        "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
     '';
   });
 
@@ -580,6 +611,20 @@ self: super: {
       '';
   });
 
+  vim-hexokinase = super.vim-hexokinase.overrideAttrs(old: {
+    preFixup = let
+      hexokinase = buildGoModule {
+        name = "hexokinase";
+        src = old.src + "/hexokinase";
+        vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+      };
+    in ''
+      ln -s ${hexokinase}/bin/hexokinase $target/hexokinase/hexokinase
+    '';
+
+    meta.platforms = stdenv.lib.platforms.all;
+  });
+
   vim-clap = super.vim-clap.overrideAttrs(old: {
     preFixup = let
       maple-bin = rustPlatform.buildRustPackage {
@@ -619,12 +664,12 @@ self: super: {
 } // (
   let
     nodePackageNames = [
-      "coc-go"
       "coc-css"
       "coc-diagnostic"
       "coc-emmet"
       "coc-eslint"
       "coc-git"
+      "coc-go"
       "coc-highlight"
       "coc-html"
       "coc-imselect"
@@ -632,6 +677,7 @@ self: super: {
       "coc-jest"
       "coc-json"
       "coc-lists"
+      "coc-markdownlint"
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
@@ -648,6 +694,7 @@ self: super: {
       "coc-tslint-plugin"
       "coc-tsserver"
       "coc-vetur"
+      "coc-vimlsp"
       "coc-vimtex"
       "coc-wxml"
       "coc-yaml"

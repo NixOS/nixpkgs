@@ -2,7 +2,7 @@
 
 { stdenv
 , fetchurl
-, fetchpatch
+, fetchFromGitHub
 , substituteAll
 , gtk-doc
 , pkg-config
@@ -14,8 +14,7 @@
 , gusb
 , sqlite
 , libarchive
-, glib-networking
-, libsoup
+, curl
 , help2man
 , libjcat
 , libxslt
@@ -88,7 +87,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.4.6";
+    version = "1.5.3";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -97,7 +96,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "AKG5stioIveQc7ooYb/2UoOaBzbPUFzYk8tZK0rzvK0=";
+      sha256 = "005y5wicmm6f2v8i9m3axx7ivgj3z8mbqps4v9m71bsqmq298j86";
     };
 
     patches = [
@@ -145,14 +144,13 @@ let
       gusb
       sqlite
       libarchive
-      libsoup
+      curl
       elfutils
       gnu-efi
       libgudev
       colord
       libjcat
       libuuid
-      glib-networking
       json-glib
       umockdev
       bash-completion
@@ -169,6 +167,11 @@ let
     mesonFlags = [
       "-Dgtkdoc=true"
       "-Dplugin_dummy=true"
+      # We are building the official releases.
+      "-Dsupported_build=true"
+      # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
+      # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
+      "-Dsoup_session_compat=false"
       "-Dudevdir=lib/udev"
       "-Dsystemd_root_prefix=${placeholder "out"}"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -229,6 +232,19 @@ let
       addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
     '';
 
+    postInstall =
+      let
+        testFw = fetchFromGitHub {
+          owner = "fwupd";
+          repo = "fwupd-test-firmware";
+          rev = "42b62c62dc85ecfb8e38099fe5de0625af87a722";
+          sha256 = "XUpxE003DZSeLJMtyV5UN5CNHH89/nEVKpCbMStm91Q=";
+        };
+      in ''
+        # These files have weird licenses so they are shipped separately.
+        cp --recursive --dereference "${testFw}/installed-tests/tests" "$installedTests/libexec/installed-tests/fwupd"
+      '';
+
     preFixup = let
       binPath = [
         efibootmgr
@@ -254,6 +270,8 @@ let
       done
     '';
 
+    separateDebugInfo = true;
+
     passthru = {
       filesInstalledToEtc = [
         "fwupd/ata.conf"
@@ -277,8 +295,8 @@ let
         "fwupd/remotes.d/dell-esrt.conf"
       ];
 
-      # BlacklistPlugins key in fwupd/daemon.conf
-      defaultBlacklistedPlugins = [
+      # DisabledPlugins key in fwupd/daemon.conf
+      defaultDisabledPlugins = [
         "test"
         "invalid"
       ];
@@ -302,9 +320,9 @@ let
 
           config = configparser.RawConfigParser()
           config.read('${self}/etc/fwupd/daemon.conf')
-          package_blacklisted_plugins = config.get('fwupd', 'BlacklistPlugins').rstrip(';').split(';')
-          passthru_blacklisted_plugins = ${listToPy passthru.defaultBlacklistedPlugins}
-          assert package_blacklisted_plugins == passthru_blacklisted_plugins, f'Default blacklisted plug-ins in the package {package_blacklisted_plugins} do not match those listed in passthru.defaultBlacklistedPlugins {passthru_blacklisted_plugins}'
+          package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
+          passthru_disabled_plugins = ${listToPy passthru.defaultDisabledPlugins}
+          assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'
 
           pathlib.Path(os.getenv('out')).touch()
         '';

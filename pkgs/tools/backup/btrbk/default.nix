@@ -1,5 +1,5 @@
 { stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, utillinux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
+, util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     # Fix SSH filter script
     sed -i '/^export PATH/d' ssh_filter_btrbk.sh
-    substituteInPlace ssh_filter_btrbk.sh --replace logger ${utillinux}/bin/logger
+    substituteInPlace ssh_filter_btrbk.sh --replace logger ${util-linux}/bin/logger
   '';
 
   preFixup = ''

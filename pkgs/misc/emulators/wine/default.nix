@@ -44,6 +44,7 @@
   sdlSupport ? false,
   faudioSupport ? false,
   vkd3dSupport ? false,
+  mingwSupport ? false,
 }:
 
 let wine-build = build: release:
@@ -56,7 +57,7 @@ let wine-build = build: release:
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
                   openglSupport gstreamerSupport udevSupport vulkanSupport sdlSupport faudioSupport
-                  vkd3dSupport;
+                  vkd3dSupport mingwSupport;
         };
       });
 

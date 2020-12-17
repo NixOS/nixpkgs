@@ -126,12 +126,12 @@ in
         GPU_USE_SYNC_OBJECTS = "1";
       };
 
+      startLimitIntervalSec = 60;  # 1 min
       serviceConfig = {
         ExecStart = "${pkgs.cgminer}/bin/cgminer --syslog --text-only --config ${cgminerConfig}";
         User = cfg.user;
         RestartSec = "30s";
         Restart = "always";
-        StartLimitInterval = "1m";
       };
     };
 

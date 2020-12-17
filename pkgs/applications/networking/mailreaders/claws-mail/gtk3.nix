@@ -31,12 +31,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "claws-mail-gtk3";
-  version = "3.17.5";
+  version = "3.99.0";
 
   src = fetchgit {
     url = "git://git.claws-mail.org/claws.git";
-    rev = "c1e1902323c2b5dfe82144328b7933dc857ef343"; # this commit is "for release 3.17.5"
-    sha256 = "0cqzlzcms6alvsdsbcc06bsdi1h349b16qngn2z1p8fz16x6s6cy";
+    rev = version;
+    sha256 = "176h1swh1zx6dqyzfz470x4a1xicnv0zhy8ir47k7p23g6y17i2k";
   };
 
   outputs = [ "out" "dev" ];

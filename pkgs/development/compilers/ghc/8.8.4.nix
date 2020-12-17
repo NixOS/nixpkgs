@@ -119,7 +119,11 @@ stdenv.mkDerivation (rec {
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
-  preConfigure = ''
+  preConfigure = stdenv.lib.optionalString stdenv.isAarch64 ''
+    # Aarch64 allow backward bootstrapping since earlier versions are unstable.
+    find . -name \*\.cabal\* -exec sed -i -e 's/\(base.*\)4.14/\14.16/' {} \; \
+      -exec sed -i -e 's/\(prim.*\)0.6/\10.8/' {} \;
+  '' + ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
@@ -246,6 +250,7 @@ stdenv.mkDerivation (rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
+    timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
   };
 

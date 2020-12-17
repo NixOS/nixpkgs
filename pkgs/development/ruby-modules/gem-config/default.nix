@@ -19,7 +19,7 @@
 
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
-, pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
+, pkgconfig , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
@@ -196,10 +196,20 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
+
+  gitlab-pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.0") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i 's;"https://gitlab.com.*";"${fetchurl {
+        url = "https://gitlab.com/gitlab-org/libpg_query/-/archive/gitlab-10-1.0.3/libpg_query-gitlab-10-1.0.3.tar.gz";
+        sha256 = "1519x4v6wrk189mjg4hlfah0f7hjy3syg8kk8b6g644gdspzs26j";
+      }}";' ext/pg_query/extconf.rb
+    '';
+  };
 
   glib2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
@@ -210,7 +220,7 @@ in
     nativeBuildInputs = [
       binutils pkgconfig
     ] ++ lib.optionals stdenv.isLinux [
-      utillinux libselinux libsepol
+      util-linux libselinux libsepol
     ];
     propagatedBuildInputs = [
       atk

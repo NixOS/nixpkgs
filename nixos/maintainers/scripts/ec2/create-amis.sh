@@ -1,13 +1,15 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p awscli -p jq -p qemu -i bash
+# shellcheck shell=bash
 
 # Uploads and registers NixOS images built from the
 # <nixos/release.nix> amazonImage attribute. Images are uploaded and
 # registered via a home region, and then copied to other regions.
 
-# The home region requires an s3 bucket, and a "vmimport" IAM role
-# with access to the S3 bucket.  Configuration of the vmimport role is
-# documented in
+# The home region requires an s3 bucket, and an IAM role named "vmimport"
+# (by default) with access to the S3 bucket. The name can be
+# configured with the "service_role_name" variable. Configuration of the
+# vmimport role is documented in
 # https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html
 
 # set -x
@@ -17,6 +19,7 @@ set -euo pipefail
 state_dir=$HOME/amis/ec2-images
 home_region=eu-west-1
 bucket=nixos-amis
+service_role_name=vmimport
 
 regions=(eu-west-1 eu-west-2 eu-west-3 eu-central-1 eu-north-1
          us-east-1 us-east-2 us-west-1 us-west-2
@@ -64,7 +67,7 @@ image_logical_bytes=$(read_image_info .logical_bytes)
 
 # Derived attributes
 
-image_logical_gigabytes=$((($image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
+image_logical_gigabytes=$(((image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
 
 case "$image_system" in
     aarch64-linux)
@@ -100,7 +103,7 @@ write_state() {
     local type=$2
     local val=$3
 
-    mkdir -p $state_dir
+    mkdir -p "$state_dir"
     echo "$val" > "$state_dir/$state_key.$type"
 }
 
@@ -110,8 +113,8 @@ wait_for_import() {
     local state snapshot_id
     log "Waiting for import task $task_id to be completed"
     while true; do
-        read state progress snapshot_id < <(
-            aws ec2 describe-import-snapshot-tasks --region $region --import-task-ids "$task_id" | \
+        read -r state progress snapshot_id < <(
+            aws ec2 describe-import-snapshot-tasks --region "$region" --import-task-ids "$task_id" | \
                 jq -r '.ImportSnapshotTasks[].SnapshotTaskDetail | "\(.Status) \(.Progress) \(.SnapshotId)"'
         )
         log " ... state=$state progress=$progress snapshot_id=$snapshot_id"
@@ -125,6 +128,8 @@ wait_for_import() {
                 ;;
             *)
                 log "Unexpected snapshot import state: '${state}'"
+                log "Full response: "
+                aws ec2 describe-import-snapshot-tasks --region "$region" --import-task-ids "$task_id" >&2
                 exit 1
                 ;;
         esac
@@ -138,8 +143,8 @@ wait_for_image() {
     log "Waiting for image $ami_id to be available"
 
     while true; do
-        read state < <(
-            aws ec2 describe-images --image-ids "$ami_id" --region $region | \
+        read -r state < <(
+            aws ec2 describe-images --image-ids "$ami_id" --region "$region" | \
                 jq -r ".Images[].State"
         )
         log " ... state=$state"
@@ -163,7 +168,7 @@ make_image_public() {
     local region=$1
     local ami_id=$2
 
-    wait_for_image $region "$ami_id"
+    wait_for_image "$region" "$ami_id"
 
     log "Making image $ami_id public"
 
@@ -177,27 +182,30 @@ upload_image() {
     local aws_path=${image_file#/}
 
     local state_key="$region.$image_label.$image_system"
-    local task_id=$(read_state "$state_key" task_id)
-    local snapshot_id=$(read_state "$state_key" snapshot_id)
-    local ami_id=$(read_state "$state_key" ami_id)
+    local task_id
+    task_id=$(read_state "$state_key" task_id)
+    local snapshot_id
+    snapshot_id=$(read_state "$state_key" snapshot_id)
+    local ami_id
+    ami_id=$(read_state "$state_key" ami_id)
 
     if [ -z "$task_id" ]; then
         log "Checking for image on S3"
         if ! aws s3 ls --region "$region" "s3://${bucket}/${aws_path}" >&2; then
             log "Image missing from aws, uploading"
-            aws s3 cp --region $region "$image_file" "s3://${bucket}/${aws_path}" >&2
+            aws s3 cp --region "$region" "$image_file" "s3://${bucket}/${aws_path}" >&2
         fi
 
         log "Importing image from S3 path s3://$bucket/$aws_path"
 
-        task_id=$(aws ec2 import-snapshot --disk-container "{
+        task_id=$(aws ec2 import-snapshot --role-name "$service_role_name" --disk-container "{
           \"Description\": \"nixos-image-${image_label}-${image_system}\",
           \"Format\": \"vhd\",
           \"UserBucket\": {
               \"S3Bucket\": \"$bucket\",
               \"S3Key\": \"$aws_path\"
           }
-        }" --region $region | jq -r '.ImportTaskId')
+        }" --region "$region" | jq -r '.ImportTaskId')
 
         write_state "$state_key" task_id "$task_id"
     fi
@@ -221,16 +229,16 @@ upload_image() {
             --virtualization-type hvm
         )
 
-        block_device_mappings+=(DeviceName=/dev/sdb,VirtualName=ephemeral0)
-        block_device_mappings+=(DeviceName=/dev/sdc,VirtualName=ephemeral1)
-        block_device_mappings+=(DeviceName=/dev/sdd,VirtualName=ephemeral2)
-        block_device_mappings+=(DeviceName=/dev/sde,VirtualName=ephemeral3)
+        block_device_mappings+=("DeviceName=/dev/sdb,VirtualName=ephemeral0")
+        block_device_mappings+=("DeviceName=/dev/sdc,VirtualName=ephemeral1")
+        block_device_mappings+=("DeviceName=/dev/sdd,VirtualName=ephemeral2")
+        block_device_mappings+=("DeviceName=/dev/sde,VirtualName=ephemeral3")
 
         ami_id=$(
             aws ec2 register-image \
                 --name "$image_name" \
                 --description "$image_description" \
-                --region $region \
+                --region "$region" \
                 --architecture $amazon_arch \
                 --block-device-mappings "${block_device_mappings[@]}" \
                 "${extra_flags[@]}" \
@@ -240,7 +248,7 @@ upload_image() {
         write_state "$state_key" ami_id "$ami_id"
     fi
 
-    make_image_public $region "$ami_id"
+    make_image_public "$region" "$ami_id"
 
     echo "$ami_id"
 }
@@ -268,7 +276,7 @@ copy_to_region() {
         write_state "$state_key" ami_id "$ami_id"
     fi
 
-    make_image_public $region "$ami_id"
+    make_image_public "$region" "$ami_id"
 
     echo "$ami_id"
 }

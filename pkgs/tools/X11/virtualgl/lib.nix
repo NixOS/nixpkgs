@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, cmake, libGL, libGLU, libX11, libXv, libXtst, libjpeg_turbo, fltk }:
+{ stdenv, fetchurl, cmake
+, libGL, libGLU, libX11, libXv, libXtst, libjpeg_turbo, fltk
+, xorg
+, opencl-headers, opencl-clhpp, ocl-icd
+}:
 
 stdenv.mkDerivation rec {
   pname = "virtualgl-lib";
-  version = "2.6.2";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/virtualgl/VirtualGL-${version}.tar.gz";
-    sha256 = "0ngqwsm9bml6lis0igq3bn92amh04rccd6jhjibj3418hrbzipvr";
+    sha256 = "1giin3jmcs6y616bb44bpz30frsmj9f8pz2vg7jvb9vcfc9456rr";
   };
 
   cmakeFlags = [ "-DVGL_SYSTEMFLTK=1" "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so" ];
@@ -15,7 +19,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libjpeg_turbo libGL libGLU fltk libX11 libXv libXtst ];
+  buildInputs = [ libjpeg_turbo libGL libGLU fltk
+    libX11 libXv libXtst xorg.xcbutilkeysyms
+    opencl-headers opencl-clhpp ocl-icd
+  ];
+
+  fixupPhase = ''
+    substituteInPlace $out/bin/vglrun \
+      --replace "LD_PRELOAD=libvglfaker" "LD_PRELOAD=$out/lib/libvglfaker" \
+      --replace "LD_PRELOAD=libdlfaker" "LD_PRELOAD=$out/lib/libdlfaker" \
+      --replace "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
+  '';
 
   enableParallelBuilding = true;
 

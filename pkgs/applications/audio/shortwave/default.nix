@@ -8,7 +8,7 @@
 , glib
 , gst_all_1
 , gtk3
-, libhandy
+, libhandy_0
 , meson
 , ninja
 , openssl
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     glib
     gtk3
-    libhandy
+    libhandy_0
     openssl
     sqlite
   ] ++ (with gst_all_1; [

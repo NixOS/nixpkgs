@@ -1,7 +1,35 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
-, accountsservice, libX11, gnome3, systemd, autoreconfHook, dconf
-, gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
-, librsvg, coreutils, xwayland, nixos-icons, fetchpatch }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, substituteAll
+, meson
+, ninja
+, python3
+, rsync
+, pkg-config
+, glib
+, itstool
+, libxml2
+, xorg
+, accountsservice
+, libX11
+, gnome3
+, systemd
+, dconf
+, gtk3
+, libcanberra-gtk3
+, pam
+, libselinux
+, keyutils
+, audit
+, gobject-introspection
+, plymouth
+, librsvg
+, coreutils
+, xwayland
+, dbus
+, nixos-icons
+}:
 
 let
 
@@ -19,44 +47,64 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "3.34.1";
+  version = "3.38.2";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lyqvcwxhwxklbxn4xjswjzr6fhjix6h28mi9ypn34wdm9bzcpg8";
+    sha256 = "1k2k3rv10y9dppp6ffz6gqi2p6s3g03bxjyy8njvcjyxqdk6d8i5";
   };
 
-  # Only needed to make it build
-  preConfigure = ''
-    substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
-  '';
-
-  initialVT = "7";
-
-  configureFlags = [
+  mesonFlags = [
+    "-Dgdm-xsession=true"
+    # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
+    "-Dinitial-vt=${passthru.initialVT}"
+    "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-plymouth=yes"
-    "--enable-gdm-xsession"
-    "--with-initial-vt=${initialVT}"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-udevdir=$(out)/lib/udev"
   ];
 
-  nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool dconf ];
+  nativeBuildInputs = [
+    dconf
+    glib # for glib-compile-schemas
+    itstool
+    meson
+    ninja
+    pkg-config
+    python3
+    rsync
+  ];
+
   buildInputs = [
-    glib accountsservice systemd
-    gobject-introspection libX11 gtk3
-    libcanberra-gtk3 pam plymouth librsvg
+    accountsservice
+    audit
+    glib
+    gobject-introspection
+    gtk3
+    keyutils
+    libX11
+    libcanberra-gtk3
+    libselinux
+    pam
+    plymouth
+    systemd
+    xorg.libXdmcp
   ];
-
-  enableParallelBuilding = true;
 
   patches = [
+    # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/112
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/1d28d4b3568381b8590d2235737b924aefd1746c.patch";
+      sha256 = "ZUXKZS4T0o0hzrApxaqcR0txCRv5zBgqeQ9K9fLNX1o=";
+    })
+
     # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit coreutils plymouth xwayland;
+      inherit coreutils plymouth xwayland dbus;
     })
 
     # The following patches implement certain environment variables in GDM which are set by
@@ -76,21 +124,52 @@ stdenv.mkDerivation rec {
     ./reset-environment.patch
   ];
 
-  installFlags = [
-    "sysconfdir=$(out)/etc"
-    "dbusconfdir=$(out)/etc/dbus-1/system.d"
-  ];
+  postPatch = ''
+    patchShebangs build-aux/meson_post_install.py
+
+    # Upstream checks some common paths to find an `X` binary. We already know it.
+    echo #!/bin/sh > build-aux/find-x-server.sh
+    echo "echo ${stdenv.lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
+    patchShebangs build-aux/find-x-server.sh
+  '';
 
   preInstall = ''
-    schema_dir=${glib.makeSchemaPath "$out" "${pname}-${version}"}
-    install -D ${override} $schema_dir/org.gnome.login-screen.gschema.override
+    install -D ${override} ${DESTDIR}/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
   '';
+
+  postInstall = ''
+    # Move stuff from DESTDIR to proper location.
+    # We use rsync to merge the directories.
+    rsync --archive "${DESTDIR}/etc" "$out"
+    rm --recursive "${DESTDIR}/etc"
+    for o in $outputs; do
+        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
+        rm --recursive "${DESTDIR}/''${!o}"
+    done
+    # Ensure the DESTDIR is removed.
+    rmdir "${DESTDIR}/nix/store" "${DESTDIR}/nix" "${DESTDIR}"
+
+    # We are setting DESTDIR so the post-install script does not compile the schemas.
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
+
+  # HACK: We want to install configuration files to $out/etc
+  # but GDM should read them from /etc on a NixOS system.
+  # With autotools, it was possible to override Make variables
+  # at install time but Meson does not support this
+  # so we need to convince it to install all files to a temporary
+  # location using DESTDIR and then move it to proper one in postInstall.
+  DESTDIR = "${placeholder "out"}/dest";
 
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gdm";
       attrPath = "gnome3.gdm";
     };
+
+    # Used in GDM NixOS module
+    # Don't remove.
+    initialVT = "7";
   };
 
   meta = with stdenv.lib; {

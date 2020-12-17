@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , cryptography
 , bcrypt, gssapi, libnacl, libsodium, nettle, pyopenssl
-, openssl, openssh }:
+, openssl, openssh, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
@@ -23,6 +23,11 @@ buildPythonPackage rec {
     ./fix-sftp-chmod-test-nixos.patch
   ];
 
+  # Disables windows specific test (specifically the GSSAPI wrapper for Windows)
+  postPatch = ''
+    rm tests/sspi_stub.py
+  '';
+
   propagatedBuildInputs = [
     bcrypt
     cryptography
@@ -36,12 +41,10 @@ buildPythonPackage rec {
   checkInputs = [
     openssh
     openssl
+    pytestCheckHook
   ];
 
-  # Disables windows specific test (specifically the GSSAPI wrapper for Windows)
-  postPatch = ''
-    rm tests/sspi_stub.py
-  '';
+  disabledTests = [ "test_expired_root" "test_confirm" ];
 
   meta = with stdenv.lib; {
     description = "Provides an asynchronous client and server implementation of the SSHv2 protocol on top of the Python asyncio framework";

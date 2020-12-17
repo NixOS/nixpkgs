@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "658ad6705f43dcf3d6df379da9486529cf30e02d9ea14c5682aa80eb33b649e1";
+    sha256 = "786b5c38c530d4846aa68a42604f61b4e69a493390e3ca11b88df0fbfdc3ed04";
   };
 
   checkInputs = [ nose ];

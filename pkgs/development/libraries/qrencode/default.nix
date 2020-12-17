@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qrencode";
-  version = "4.0.2";
+  version = "4.1.1";
 
   outputs = [ "bin" "out" "man" "dev" ];
 
   src = fetchurl {
     url = "https://fukuchi.org/works/qrencode/qrencode-${version}.tar.gz";
-    sha256 = "079v3a15ydpr67zdi3xbgvic8n2kxvi0m32dyz8jaik10yffgayv";
+    sha256 = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
   };
 
   nativeBuildInputs = [ pkgconfig ];

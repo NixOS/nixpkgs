@@ -1,12 +1,13 @@
 { stdenv, fetchgit, dmd, dub }:
 
 stdenv.mkDerivation {
-  name = "Literate-2019-01-08";
+  pname = "Literate";
+  version = "unstable-2020-09-02";
 
   src = fetchgit {
     url = "https://github.com/zyedidia/Literate.git";
-    rev = "e20c5c86713701d4d17fd2881779d758a27a3e5a";
-    sha256 = "1pr7iipcnp6jxi13341p5b3szdrvs7aixpfbwifj6lgbb45vg9sm";
+    rev = "533991cca6ec7a608a778396d32d51b35182d944";
+    sha256 = "09h1as01z0fw0bj0kf1g9nlhvinya7sqq2x8qb6zmhvqqm6v4n49";
   };
 
   buildInputs = [ dmd dub ];

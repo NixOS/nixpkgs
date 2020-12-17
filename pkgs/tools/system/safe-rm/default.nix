@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.12";
 
   src = fetchgit {
-    url = "https://gitorious.org/safe-rm/mainline.git";
+    url = "https://git.launchpad.net/safe-rm";
     rev = "refs/tags/${pname}-${version}";
     sha256 = "0zkmwxyl1870ar6jr9h537vmqgkckqs9jd1yv6m4qqzdsmg5gdbq";
   };

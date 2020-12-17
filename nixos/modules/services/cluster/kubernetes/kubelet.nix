@@ -241,7 +241,7 @@ in
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
         after = [ "network.target" "docker.service" "kube-apiserver.service" ];
-        path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
+        path = with pkgs; [ gitMinimal openssh docker util-linux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
         preStart = ''
           ${concatMapStrings (img: ''
             echo "Seeding docker image: ${img}"

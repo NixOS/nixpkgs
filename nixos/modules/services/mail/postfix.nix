@@ -52,7 +52,7 @@ let
       };
 
       type = mkOption {
-        type = types.enum [ "inet" "unix" "fifo" "pass" ];
+        type = types.enum [ "inet" "unix" "unix-dgram" "fifo" "pass" ];
         default = "unix";
         example = "inet";
         description = "The type of the service";
@@ -834,12 +834,6 @@ in
       };
 
       services.postfix.masterConfig = {
-        smtp_inet = {
-          name = "smtp";
-          type = "inet";
-          private = false;
-          command = "smtpd";
-        };
         pickup = {
           private = false;
           wakeup = 60;
@@ -921,6 +915,12 @@ in
           in concatLists (mapAttrsToList mkKeyVal cfg.submissionOptions);
         };
       } // optionalAttrs cfg.enableSmtp {
+        smtp_inet = {
+          name = "smtp";
+          type = "inet";
+          private = false;
+          command = "smtpd";
+        };
         smtp = {};
         relay = {
           command = "smtp";

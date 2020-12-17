@@ -23,6 +23,7 @@
 , libsamplerate
 , libsndfile
 , libebur128
+, rnnoise
 , boost
 , dbus
 , fftwFloat
@@ -44,13 +45,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.8.1";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "17yfs3ja7vflywhxbn3n3r8n6hl829x257kzplg2vpppppg6ylj6";
+    sha256 = "0k5p5y3im7xnf0ikaghh56nfhirkdwf95c8fr17wasgdpw2m86i2";
   };
 
   nativeBuildInputs = [
@@ -79,6 +80,7 @@ in stdenv.mkDerivation rec {
     libebur128
     libsamplerate
     libsndfile
+    rnnoise
     boost
     dbus
     fftwFloat

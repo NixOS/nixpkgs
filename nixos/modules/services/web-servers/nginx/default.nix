@@ -261,10 +261,7 @@ let
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
 
-          ${optionalString (vhost.basicAuthFile != null || vhost.basicAuth != {}) ''
-            auth_basic secured;
-            auth_basic_user_file ${if vhost.basicAuthFile != null then vhost.basicAuthFile else mkHtpasswd vhostName vhost.basicAuth};
-          ''}
+          ${mkBasicAuth vhostName vhost}
 
           ${mkLocations vhost.locations}
 
@@ -293,9 +290,19 @@ let
       ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
+      ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
+
+  mkBasicAuth = name: zone: optionalString (zone.basicAuthFile != null || zone.basicAuth != {}) (let
+    auth_file = if zone.basicAuthFile != null
+      then zone.basicAuthFile
+      else mkHtpasswd name zone.basicAuth;
+  in ''
+    auth_basic secured;
+    auth_basic_user_file ${auth_file};
+  '');
+  mkHtpasswd = name: authDef: pkgs.writeText "${name}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}
     '') authDef)
@@ -383,13 +390,24 @@ in
       };
 
       config = mkOption {
+        type = types.str;
         default = "";
-        description = "
-          Verbatim nginx.conf configuration.
-          This is mutually exclusive with the structured configuration
-          via virtualHosts and the recommendedXyzSettings configuration
-          options. See appendConfig for appending to the generated http block.
-        ";
+        description = ''
+          Verbatim <filename>nginx.conf</filename> configuration.
+          This is mutually exclusive to any other config option for
+          <filename>nginx.conf</filename> except for
+          <itemizedlist>
+          <listitem><para><xref linkend="opt-services.nginx.appendConfig" />
+          </para></listitem>
+          <listitem><para><xref linkend="opt-services.nginx.httpConfig" />
+          </para></listitem>
+          <listitem><para><xref linkend="opt-services.nginx.logError" />
+          </para></listitem>
+          </itemizedlist>
+
+          If additional verbatim config in addition to other options is needed,
+          <xref linkend="opt-services.nginx.appendConfig" /> should be used instead.
+        '';
       };
 
       appendConfig = mkOption {
@@ -693,6 +711,8 @@ in
         ${cfg.preStart}
         ${execCommand} -t
       '';
+
+      startLimitIntervalSec = 60;
       serviceConfig = {
         ExecStart = execCommand;
         ExecReload = [
@@ -701,7 +721,6 @@ in
         ];
         Restart = "always";
         RestartSec = "10s";
-        StartLimitInterval = "1min";
         # User and group
         User = cfg.user;
         Group = cfg.group;

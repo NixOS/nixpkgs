@@ -3,17 +3,16 @@
 , stdenv
 , writeTextDir
 , substituteAll
-, pkgsHostHost
 , fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.55.3";
+  version = "0.56.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "19cjy24mfaswxyvqmns6rd7hx05ybqb663zlgklspfr8l4jjmvbb";
+    sha256 = "04vj250bwrzq7c0z1r96b0z0vgirvn0m367wm3ygqmfdy67x6799";
   };
 
   patches = [
@@ -52,13 +51,14 @@ python3.pkgs.buildPythonApplication rec {
     # cut-in-half-by-\0 store path references.
     # Let’s just clear the whole rpath and hope for the best.
     ./clear-old-rpath.patch
+
+    # Patch out default boost search paths to avoid impure builds on
+    # unsandboxed non-NixOS builds, see:
+    # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
+    ./boost-Do-not-add-system-paths-on-nix.patch
   ];
 
   setupHook = ./setup-hook.sh;
-
-  # Ensure there will always be a native C compiler when meson is used, as a
-  # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
-  depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;

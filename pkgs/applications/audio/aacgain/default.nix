@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ stdenv, fetchFromGitLab, fetchpatch }:
 
 stdenv.mkDerivation {
   name = "aacgain-1.9.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "mulx";
     repo = "aacgain";
     rev = "7c29dccd878ade1301710959aeebe87a8f0828f5";

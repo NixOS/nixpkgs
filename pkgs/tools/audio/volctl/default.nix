@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, libpulseaudio, glib, gtk3, gobject-introspection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, python3, libpulseaudio, glib, gtk3, gobject-introspection, wrapGAppsHook }:
 
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "volctl";
   version = "0.6.3";
 
@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
     libpulseaudio
   ];
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python3.pkgs; [
     pygobject3
   ];
 

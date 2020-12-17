@@ -3,6 +3,9 @@
 , writeShellScript, runCommand, which
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
 , callPackage
+, enableShared ? true
+, enableStatic ? false
+, Security
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -11,9 +14,9 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.17.1";
-  sha256 = "sha256-k61actAEyao/Ea8aw9PCm252U+1I0d43MAYC68/lui4=";
-  cargoSha256 = "sha256-Jp/Fl20ZZfaIdWinOOujNVH5JjJNtyUYHfyTrmeeoRg=";
+  version = "0.17.3";
+  sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
+  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -49,6 +52,8 @@ in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version cargoSha256;
 
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
   nativeBuildInputs = [ emscripten which ];
 
   postPatch = ''
@@ -66,6 +71,12 @@ in rustPlatform.buildRustPackage {
   # JS dependencies for installation.
   preBuild = ''
     bash ./script/build-wasm --debug
+  '';
+
+  postInstall = ''
+    PREFIX=$out make install
+    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
@@ -95,9 +106,8 @@ in rustPlatform.buildRustPackage {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Profpatsch ];
-    # Darwin needs some more work with default libraries
     # Aarch has test failures with how tree-sitter compiles the generated C files
-    broken = stdenv.isDarwin || stdenv.isAarch64;
+    broken = stdenv.isAarch64;
   };
 
 }

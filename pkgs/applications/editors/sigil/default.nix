@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "sigil";
-  version = "1.3.0";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
     rev = version;
-    sha256 = "02bkyi9xpaxdcivm075y3praxgvfay9z0189gvr6g8yc3ml1miyr";
+    sha256 = "1hk8kmhvkwfimbxzhwbnb8qdpf4n36cdzl9wfvi574i9pps36hnz";
   };
 
   pythonPath = with python3Packages; [ lxml ];
@@ -23,6 +23,10 @@ mkDerivation rec {
     boost xercesc qtbase qttools qtwebengine qtxmlpatterns
     python3Packages.lxml
   ];
+
+  prePatch = ''
+    sed -i '/^QTLIB_DIR=/ d' src/Resource_Files/bash/sigil-sh_install
+  '';
 
   dontWrapQtApps = true;
 

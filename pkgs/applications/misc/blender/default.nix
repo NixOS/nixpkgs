@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg_3, gettext, glew
+{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
@@ -8,8 +8,8 @@
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
 , makeWrapper
-, pugixml, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
-, embree
+, pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, embree, gmp
 }:
 
 with lib;
@@ -18,18 +18,18 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.90.1";
+  version = "2.91.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "169xcmm1zkvab14qdxggqc758xdkqs7r7imwi6yx2fl2djacr3g7";
+    sha256 = "0x396lgmk0dq9115yrc36s8zwxzmjr490sr5n2y6w27y17yllyjm";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
-    [ boost ffmpeg_3 gettext glew ilmbase
+    [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
       opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
       alembic
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
       tbb
       makeWrapper
       embree
+      gmp
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
       openvdb
     ]
     else [
-      pugixml SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
+      pugixml llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
@@ -60,7 +61,9 @@ stdenv.mkDerivation rec {
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
-                  '${python}'
+                  '${python}' \
+        --replace '${"$"}{LIBDIR}/openmp' \
+                  '${llvmPackages.openmp}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace 'set(PYTHON_VERSION 3.7)' \
                   'set(PYTHON_VERSION ${python.pythonVersion})' \
@@ -71,15 +74,7 @@ stdenv.mkDerivation rec {
         --replace '${"$"}{LIBDIR}/opencollada' \
                   '${opencollada}' \
         --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                  '${python3Packages.numpy}/${python.sitePackages}/numpy' \
-        --replace 'set(OPENJPEG_INCLUDE_DIRS ' \
-                  'set(OPENJPEG_INCLUDE_DIRS "'$(echo ${openjpeg.dev}/include/openjpeg-*)'") #' \
-        --replace 'set(OPENJPEG_LIBRARIES ' \
-                  'set(OPENJPEG_LIBRARIES "${openjpeg}/lib/libopenjp2.dylib") #' \
-        --replace 'set(OPENIMAGEIO ' \
-                  'set(OPENIMAGEIO "${openimageio2.out}") #' \
-        --replace 'set(OPENEXR_INCLUDE_DIRS ' \
-                  'set(OPENEXR_INCLUDE_DIRS "${openexr.dev}/include/OpenEXR") #'
+                  '${python3Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '');

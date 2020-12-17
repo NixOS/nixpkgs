@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "Ultra relevant and instant full-text search API";
     homepage = "https://meilisearch.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

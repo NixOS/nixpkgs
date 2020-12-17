@@ -5,11 +5,11 @@ let
 in
 buildPythonApplication rec {
   pname = "fava";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "436b6f9441a638f8028729c2a39c28433f7878c2af6ddb9bfccaeea9ea3086e1";
+    sha256 = "efad3a4b5697b9d7ee29eff5dc0c8367fc1df37b1abacc8d0b2071602e94a6cd";
   };
 
   checkInputs = [ python3.pkgs.pytest ];

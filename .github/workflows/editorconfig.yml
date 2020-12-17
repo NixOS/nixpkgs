@@ -2,6 +2,8 @@ name: "Checking EditorConfig"
 
 on:
   pull_request:
+    branches-ignore:
+      - 'release-**'
 
 jobs:
   tests:
@@ -23,5 +25,5 @@ jobs:
     - name: Checking EditorConfig
       if: env.GIT_DIFF
       run: |
-        ./bin/editorconfig-checker -disable-indentation \
+        ./bin/editorconfig-checker -disable-indent-size \
         ${{ env.GIT_DIFF }}

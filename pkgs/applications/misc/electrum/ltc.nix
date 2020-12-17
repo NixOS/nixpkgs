@@ -27,6 +27,8 @@ python3Packages.buildPythonApplication rec {
     dnspython
     jsonrpclib-pelix
     pysocks
+    trezor
+    btchip
   ];
 
   preBuild = ''

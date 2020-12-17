@@ -62,6 +62,13 @@ in stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fix build
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/620
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/54e25f23f53af889703dfc50d51a8afeeea8a439.patch";
+      sha256 = "oy/AZhOC15anWeIMYJfDBcITqJ7CiU715he68XvPRxk=";
+    })
   ];
 
   buildInputs = [

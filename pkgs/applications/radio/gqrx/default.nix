@@ -9,13 +9,13 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 mkDerivation rec {
   pname = "gqrx";
-  version = "2.13.2";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "1lcy9gqb1x9fwq550bywj7h66rdacq5893wsax1p7qvqa27d945b";
+    sha256 = "10pmd2jqmw77gybjfzrch6qi8jil1g6nsjzabbd6gnbsq7320axj";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,7 +27,7 @@ mkDerivation rec {
 
   postInstall = ''
     install -vD $src/gqrx.desktop -t "$out/share/applications/"
-    install -vD $src/resources/icons/gqrx.svg -t "$out/share/icons/"
+    install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"
   '';
 
   meta = with stdenv.lib; {

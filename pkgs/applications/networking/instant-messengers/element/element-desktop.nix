@@ -8,12 +8,12 @@
 
 let
   executableName = "element-desktop";
-  version = "1.7.12";
+  version = "1.7.15";
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = "riot-desktop";
+    repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "08d9llrglap5bbicdkbdl9l71wba2kkyhdyd0a4iqdz3l2jvv698";
+    sha256 = "sha256-7kWf8MXSB4/sX1bjMsfkzgzElS/AYu5VHAKGcqgvH54=";
   };
   electron = electron_9;
 
@@ -60,7 +60,7 @@ in mkYarnPackage rec {
   # https://github.com/vector-im/riot-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
-    exec = executableName;
+    exec = "${executableName} %u";
     icon = "element";
     desktopName = "Element (Riot)";
     genericName = "Matrix Client";
@@ -68,6 +68,7 @@ in mkYarnPackage rec {
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
       StartupWMClass=element
+      MimeType=x-scheme-handler/element;
     '';
   };
 

@@ -4,7 +4,7 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   pname = "keeweb";
-  version = "1.15.7";
+  version = "1.16.0";
   name = "${pname}-${version}";
 
   suffix = {
@@ -15,8 +15,8 @@ let
   src = fetchurl {
     url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "0cy0avl0m07xs523xm0rzsmifl28sv4rjb2jj3x492qmr2v64ckk";
-      x86_64-darwin = "0r8c3zi0ibj0bb0gfc1axfn0y4qpjqfr0xpcxf810d65kaz6wic4";
+      x86_64-linux = "1pivic7n5nv00s8bb51i2jz2mxgjn92hkc8n0p8662ai1cdng47g";
+      x86_64-darwin = "0q6k0qgkgzid9yjbfsfpp8l9dr0n8xp25a4jf2bxwickm4irs9mz";
     }.${system} or throwSystem;
   };
 

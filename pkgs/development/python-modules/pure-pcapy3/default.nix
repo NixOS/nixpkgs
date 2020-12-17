@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pure Python reimplementation of pcapy. This package is API compatible and a drop-in replacement.";
-    homepage = "http://bitbucket.org/viraptor/pure-pcapy";
+    homepage = "https://bitbucket.org/viraptor/pure-pcapy";
     license = licenses.bsd2;
     maintainers = with maintainers; [ etu ];
   };

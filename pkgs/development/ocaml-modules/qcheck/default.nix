@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "qcheck";
 
-  inherit (qcheck-ounit) version src;
+  inherit (qcheck-ounit) version useDune2 src;
 
   propagatedBuildInputs = [ qcheck-ounit ];
 

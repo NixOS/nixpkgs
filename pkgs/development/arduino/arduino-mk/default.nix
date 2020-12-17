@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, python3Packages, installShellFiles }:
 
 stdenv.mkDerivation rec {
   version = "1.6.0";
@@ -11,8 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0flpl97d2231gp51n3y4qvf3y1l8xzafi1sgpwc305vwc2h4dl2x";
   };
 
-  phases = ["installPhase"];
-  installPhase = "ln -s $src $out";
+  nativeBuildInputs = [ python3Packages.wrapPython installShellFiles ];
+  propagatedBuildInputs = with python3Packages; [ pyserial ];
+  installPhase = ''
+    mkdir $out
+    cp -rT $src $out
+    installManPage *.1
+  '';
+  postFixupPhase = ''
+    wrapPythonPrograms
+  '';
 
   meta = {
     description = "Makefile for Arduino sketches";

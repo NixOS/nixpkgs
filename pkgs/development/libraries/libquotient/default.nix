@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "libquotient";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    sha256 = "1wpjrihi2gci3kwq9b3i3avd6bk3x7g22r0n6hvlphapkaf1ig6y";
+    sha256 = "1721cy6zaq086nrwh9x4d7k1jiaygg1wkvyx486i9bj9z53lc3wd";
   };
 
   buildInputs = [ qtbase qtmultimedia ];

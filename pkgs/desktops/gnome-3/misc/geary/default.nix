@@ -1,44 +1,111 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
-, desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
-, libpeas, libsecret, gmime3, isocodes, libxml2, gettext, fetchpatch
-, sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, folks, glib-networking
-, gobject-introspection, gspell, appstream-glib, libytnef, libhandy }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gtk3
+, vala
+, enchant2
+, wrapGAppsHook
+, meson
+, ninja
+, desktop-file-utils
+, gnome-online-accounts
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, libpeas
+, libsecret
+, gmime3
+, isocodes
+, libxml2
+, gettext
+, sqlite
+, gcr
+, json-glib
+, itstool
+, libgee
+, gnome3
+, webkitgtk
+, python3
+, gnutls
+, cacert
+, xvfb_run
+, glibcLocales
+, dbus
+, shared-mime-info
+, libunwind
+, folks
+, glib-networking
+, gobject-introspection
+, gspell
+, appstream-glib
+, libytnef
+, libhandy
+, gsound
+}:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.36.2";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09l2lbcn3ar3scw6iylmdqi1lhpb408iqs6056d0wzx2l9nkmqis";
+    sha256 = "04p8fjkz4xp5afp0ld1m09pnv0zkcx51l7hf23amfrjkk0kj2bp7";
   };
-
-  nativeBuildInputs = [
-    desktop-file-utils gettext itstool libxml2 meson ninja
-    pkgconfig vala wrapGAppsHook python3 appstream-glib
-    gobject-introspection
-  ];
-
-  buildInputs = [
-    adwaita-icon-theme enchant2 gcr gmime3 gnome-online-accounts
-    gsettings-desktop-schemas gtk3 isocodes json-glib libpeas
-    libgee libsecret sqlite webkitgtk glib-networking
-    libunwind folks gspell libytnef libhandy
-  ];
-
-  checkInputs = [ xvfb_run dbus ];
-
-  mesonFlags = [
-    "-Dcontractor=true" # install the contractor file (Pantheon specific)
-  ];
 
   patches = [
     # Longer timeout for client test.
-    (fetchpatch {
-      url = "https://salsa.debian.org/gnome-team/geary/raw/04be1e058a2e65075dd8cf8843d469ee45a9e09a/debian/patches/Bump-client-test-timeout-to-300s.patch";
-      sha256 = "1zvnq8bgla160531bjdra8hcg15mp8r1j1n53m1xfgm0ssnj5knx";
-    })
+    ./Bump-client-test-timeout-to-300s.patch
+  ];
+
+  nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
+    gettext
+    gobject-introspection
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    adwaita-icon-theme
+    enchant2
+    folks
+    gcr
+    glib-networking
+    gmime3
+    gnome-online-accounts
+    gsettings-desktop-schemas
+    gsound
+    gspell
+    gtk3
+    isocodes
+    json-glib
+    libgee
+    libhandy
+    libpeas
+    libsecret
+    libunwind
+    libytnef
+    sqlite
+    webkitgtk
+  ];
+
+  checkInputs = [
+    dbus
+    gnutls # for certtool
+    cacert # trust store for glib-networking
+    xvfb_run
+    glibcLocales # required by Geary.ImapDb.DatabaseTest/utf8_case_insensitive_collation
+  ];
+
+  mesonFlags = [
+    "-Dcontractor=true" # install the contractor file (Pantheon specific)
   ];
 
   # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
@@ -54,12 +121,12 @@ stdenv.mkDerivation rec {
     chmod +x desktop/geary-attach
   '';
 
-  # FIXME: fix tests
-  doCheck = false;
+  doCheck = true;
 
   checkPhase = ''
     NO_AT_BRIDGE=1 \
-    XDG_DATA_DIRS=:$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share \
+    GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules \
+    XDG_DATA_DIRS=$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share:${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test -v --no-stdsplit

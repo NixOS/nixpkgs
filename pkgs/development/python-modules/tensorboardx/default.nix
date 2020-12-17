@@ -19,6 +19,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy protobuf six ];
 
+  # apparently torch API changed a bit at 1.6
+  postPatch = ''
+    substituteInPlace tensorboardX/pytorch_graph.py --replace "torch.onnx.set_training(model, False)" "torch.onnx.select_model_mode_for_export(model, torch.onnx.TrainingMode.EVAL)"
+  '';
+
+
   disabledTests = [ "test_TorchVis"  "test_onnx_graph" ];
 
   meta = with lib; {

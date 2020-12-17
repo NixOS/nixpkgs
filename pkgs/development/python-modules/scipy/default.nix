@@ -9,11 +9,11 @@ let
   });
 in buildPythonPackage rec {
   pname = "scipy";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "066c513d90eb3fd7567a9e150828d39111ebd88d3e924cdfc9f8ce19ab6f90c9";
+    sha256 = "4a453d5e5689de62e5d38edf40af3f17560bfd63c9c5bd228c18c1f99afa155b";
   };
 
   checkInputs = [ nose pytest ];

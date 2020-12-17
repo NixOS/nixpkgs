@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1268dz39sx3gygnm7vpg59k1wdhy6rhf72i8i0kz4jckll0s9102";
+    sha256 = "180db4nlir2409wzdnsc1bkyrllnki8d551qbm1rg82zkz3vdmqg";
   };
 
   cmakeFlags = [
     "-DPRECICE_PETScMapping=OFF"
     "-DBUILD_SHARED_LIBS=ON"
     "-DPYTHON_LIBRARIES=${python3.libPrefix}"
-    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}m"
+    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
   ];
 
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [ "-D_GNU_SOURCE" ];

@@ -189,8 +189,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      A list of names and e-mail addresses of the maintainers of this Nix expression. If you would like to be a maintainer of a package, you may want to add yourself to <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix"><filename>nixpkgs/maintainers/maintainer-list.nix</filename></link> and write something like <literal>[ stdenv.lib.maintainers.alice stdenv.lib.maintainers.bob ]</literal>.
+      A list of the maintainers of this Nix expression. Maintainers are defined in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix"><filename>nixpkgs/maintainers/maintainer-list.nix</filename></link>. There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled 'maintainers: add alice', and reference maintainers with <literal>maintainers = with lib.maintainers; [ alice bob ]</literal>.
      </para>
     </listitem>
    </varlistentry>

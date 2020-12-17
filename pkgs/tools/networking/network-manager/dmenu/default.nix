@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
-    rev = "${version}";
+    rev = version;
     sha256 = "1liidqh8c33pxyb07qyj0jkd0fdak73g9r2iwiq62vfzrpik09k0";
   };
 

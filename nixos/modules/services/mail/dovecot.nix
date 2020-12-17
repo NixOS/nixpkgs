@@ -427,12 +427,12 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ cfg.configFile modulesDir ];
 
+      startLimitIntervalSec = 60;  # 1 min
       serviceConfig = {
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
         Restart = "on-failure";
         RestartSec = "1s";
-        StartLimitInterval = "1min";
         RuntimeDirectory = [ "dovecot2" ];
       };
 

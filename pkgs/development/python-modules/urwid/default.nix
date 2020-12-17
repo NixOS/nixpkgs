@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.1.1";
+  version = "2.1.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09nmi2nmvpcmbh3w3fb0dn0c7yp7r20i5pfcr6q722xh6mp8cw3q";
+    sha256 = "588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae";
   };
 
   # tests need to be able to set locale

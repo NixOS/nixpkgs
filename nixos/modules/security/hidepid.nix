@@ -23,5 +23,9 @@ with lib;
 
     boot.specialFileSystems."/proc".options = [ "hidepid=2" "gid=${toString config.ids.gids.proc}" ];
     systemd.services.systemd-logind.serviceConfig.SupplementaryGroups = [ "proc" ];
+
+    # Disable cgroupsv2, which doesn't work with hidepid.
+    # https://github.com/NixOS/nixpkgs/pull/104094#issuecomment-729996203
+    systemd.enableUnifiedCgroupHierarchy = false;
   };
 }

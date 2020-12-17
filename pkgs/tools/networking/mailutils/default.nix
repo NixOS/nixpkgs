@@ -3,13 +3,12 @@
 , python3, gss, libmysqlclient, system-sendmail }:
 
 stdenv.mkDerivation rec {
-  name = "${project}-${version}";
-  project = "mailutils";
-  version = "3.9";
+  pname = "mailutils";
+  version = "3.10";
 
   src = fetchurl {
-    url = "mirror://gnu/${project}/${name}.tar.xz";
-    sha256 = "1g1xf2lal04nsnf1iym9n9n0wxjpqbcr9nysxpm98v4pniinqwsz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "17smrxjdgbbzbzakik30vj46q4iib85ksqhb82jr4vjp57akszh9";
   };
 
   postPatch = ''
@@ -32,6 +31,18 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-build-mb-len-max.patch
     ./path-to-cat.patch
+    # mailquota.c:277: undefined reference to `get_size'
+    # https://lists.gnu.org/archive/html/bug-mailutils/2020-08/msg00002.html
+    (fetchpatch {
+      url = "http://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=37713b42a501892469234b90454731d8d8b7a3e6";
+      sha256 = "1mwj77nxvf4xvqf26yjs59jyksnizj0lmbymbzg4kmqynzq3zjny";
+    })
+    # Fix cross-compilation
+    # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html
+    (fetchpatch {
+      url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
+      sha256 = "0ghzqb8qx2q8cffbvqzw19mivv7r5f16whplzhm7hdj0j2i6xf6s";
+    })
   ];
 
   enableParallelBuilding = false;

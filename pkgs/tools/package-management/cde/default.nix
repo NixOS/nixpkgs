@@ -5,10 +5,10 @@ stdenv.mkDerivation rec {
   version = "0.1";
 
   src = fetchFromGitHub {
-    owner = "pgbovine";
-    repo = "CDE";
-    sha256 = "0raiz7pczkbnzxpg7g59v7gdp1ipkwgms2vh3431snw1va1gjzmk";
+    owner = "usnistgov";
+    repo = "corr-CDE";
     rev = "v${version}";
+    sha256 = "sha256-s375gtqBWx0GGXALXR+fN4bb3tmpvPNu/3bNz+75UWU=";
   };
 
   # The build is small, so there should be no problem
@@ -18,19 +18,22 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   patchBuild = ''
-    sed '/install/d' $src/Makefile > $src/Makefile
+    sed -i -e '/install/d' $src/Makefile
   '';
-  
+
+  preBuild = ''
+    patchShebangs .
+  '';
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp cde $out/bin
-    cp cde-exec $out/bin
+    install -d $out/bin
+    install -t $out/bin cde cde-exec
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/pgbovine/CDE";
+    homepage = "https://pg.ucsd.edu/cde/manual/";
     description = "A packaging tool for building portable packages";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.rlupton20 ];
     platforms = platforms.linux;
     # error: architecture aarch64 is not supported by strace

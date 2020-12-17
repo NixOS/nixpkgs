@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2019-04-04";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "42bb64ba966082b440cb68cbdadf317f44710017";
-    sha256 = "19yw80yblq29i2jx9yb7bx0lfychy9dncri3fk4as35kq5bf26i8";
+    rev = version;
+    sha256 = "1vxhpjxniybqsg5wcygmdmr5dv7p2zb34dqnd3bi813rnnzsdjm6";
   };
 
   outputs = ["bin" "dev" "out" ] ++ stdenv.lib.optional enablePython "py";
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ infinisil ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

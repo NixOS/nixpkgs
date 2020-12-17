@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.5.5";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "787ade4796c5b2e79af2aac678841ba3748a65a3adce150697dcdd31c4f80365";
+    sha256 = "215703456479d24f524cdcd0365006250d4502d242f57e2f5db18e8638bc8694";
   };
 
   propagatedBuildInputs = [

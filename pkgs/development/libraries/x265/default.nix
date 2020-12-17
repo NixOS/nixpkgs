@@ -30,7 +30,7 @@ let
   src = fetchFromBitbucket {
     owner = "multicoreware";
     repo = "x265_git";
-    rev = "${version}";
+    rev = version;
     sha256 = "1jzgv2hxhcwmsdf6sbgyzm88a46dp09ll1fqj92g9vckvh9a7dsn";
   };
 

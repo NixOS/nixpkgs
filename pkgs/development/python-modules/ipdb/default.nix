@@ -3,19 +3,22 @@
 , fetchPypi
 , ipython
 , isPyPy
+, isPy27
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "ipdb";
-  version = "0.13.3";
-  disabled = isPyPy;  # setupterm: could not find terminfo database
+  version = "0.13.4";
+  disabled = isPyPy || isPy27;  # setupterm: could not find terminfo database
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y3yk5k2yszcwxsjinvf40b1wl8wi8l6kv7pl9jmx9j53hk6vx6n";
+    sha256 = "c85398b5fb82f82399fc38c44fe3532c0dde1754abee727d8f5cfcc74547b334";
   };
 
   propagatedBuildInputs = [ ipython ];
+  checkInputs = [ mock ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

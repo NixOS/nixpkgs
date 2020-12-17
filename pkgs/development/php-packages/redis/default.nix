@@ -7,8 +7,9 @@ buildPecl {
   sha256 = "1cfsbxf3q3im0cmalgk76jpz581zr92z03c1viy93jxb53k2vsgl";
 
   internalDeps = with php.extensions; [
-    json
     session
+  ] ++ lib.optionals (lib.versionOlder php.version "8.0") [
+    json
   ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
     hash
   ];

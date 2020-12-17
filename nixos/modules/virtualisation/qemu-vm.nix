@@ -190,7 +190,7 @@ let
               '' else ''
               ''}
             '';
-          buildInputs = [ pkgs.utillinux ];
+          buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
                       + lib.optionalString cfg.useEFIBoot (
                         " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
@@ -744,16 +744,19 @@ in
         (isEnabled "VIRTIO_PCI")
         (isEnabled "VIRTIO_NET")
         (isEnabled "EXT4_FS")
+        (isEnabled "NET_9P_VIRTIO")
+        (isEnabled "9P_FS")
         (isYes "BLK_DEV")
         (isYes "PCI")
-        (isYes "EXPERIMENTAL")
         (isYes "NETDEVICES")
         (isYes "NET_CORE")
         (isYes "INET")
         (isYes "NETWORK_FILESYSTEMS")
-      ] ++ optional (!cfg.graphics) [
+      ] ++ optionals (!cfg.graphics) [
         (isYes "SERIAL_8250_CONSOLE")
         (isYes "SERIAL_8250")
+      ] ++ optionals (cfg.writableStore) [
+        (isEnabled "OVERLAY_FS")
       ];
 
   };

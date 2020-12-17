@@ -109,6 +109,25 @@ in {
     };
   };
 
+  marlingcodedocumentation = buildPlugin rec {
+    pname = "MarlinGcodeDocumentation";
+    version = "0.11.0";
+
+    src = fetchFromGitHub {
+      owner = "costas-basdekis";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "0vx06w9hqwy0k4r8g67y8gdckfdx7wl8ghfx6hmxc1s8fgkghfkc";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Displays GCode documentation for Marlin in the Octoprint terminal command line";
+      homepage = "https://github.com/costas-basdekis/MarlinGcodeDocumentation";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
   mqtt = buildPlugin rec {
     pname = "MQTT";
     version = "0.8.7";

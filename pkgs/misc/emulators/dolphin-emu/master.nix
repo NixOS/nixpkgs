@@ -71,6 +71,8 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
     ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';
 
   meta = with lib; {

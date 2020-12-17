@@ -4,20 +4,20 @@
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/vslavik/poedit/archive/v${version}-oss.tar.gz";
-    sha256 = "0pvd903j2x3h9wh38fhlcn23d0jkjlqnfbdpbvnbhy6al1ngx72w";
+    sha256 = "1kry3xphrdccx8znfm9pw5872c5w0ri7cknlad4qcps54b25nnzk";
   };
 
-  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook 
+  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
     libxslt xmlto boost libtool pkgconfig ];
 
   buildInputs = [ lucenepp nlohmann_json wxGTK30 icu pugixml gtk2 gtkspell2 hicolor-icon-theme ];
 
   propagatedBuildInputs = [ gettext ];
-  
+
   preConfigure = "
     patchShebangs bootstrap
     ./bootstrap
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     "--with-boost-libdir=${boost.out}/lib"
     "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/"
   ];
- 
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ gettext ]}")
   '';
- 
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ domenkozar genesis ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

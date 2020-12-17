@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , requests
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,10 @@ buildPythonPackage rec {
     sha256 = "1bxvmghm834gsfz3pm69772wzhh15p8ci526b25dpk3z4315nd7v";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ (requests.override { urllib3 = urllib3.override {
+    pyopenssl = null;
+    cryptography = null;
+  };}) ];
 
   meta = {
     description = "A library for interacting with Browsermob Proxy";

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyserial";
-  version="3.4";
+  version="3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09y68bczw324a4jb9a1cfwrbjhq179vnfkkkrybbksp0vqgl0bbf";
+    sha256 = "1nyd4m4mnrz8scbfqn4zpq8gnbl4x42w5zz62vcgpzqd2waf0xrw";
   };
 
   checkPhase = "python -m unittest discover -s test";

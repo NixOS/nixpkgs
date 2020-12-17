@@ -9,7 +9,7 @@ let
       ${parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
       mkdir /mnt
       ${e2fsprogs}/bin/mkfs.ext4 /dev/vda1
-      ${utillinux}/bin/mount -t ext4 /dev/vda1 /mnt
+      ${util-linux}/bin/mount -t ext4 /dev/vda1 /mnt
 
       if test -e /mnt/.debug; then
         exec ${bash}/bin/sh

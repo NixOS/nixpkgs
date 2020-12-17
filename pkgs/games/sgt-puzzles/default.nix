@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Simon Tatham's portable puzzle collection";
     license = licenses.mit;
-    maintainers = [ maintainers.raskin maintainers.genesis ];
+    maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
   };

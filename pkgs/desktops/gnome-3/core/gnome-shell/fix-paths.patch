@@ -19,8 +19,8 @@
 +        Util.spawn(['@libgnomekbd@/bin/gkbd-keyboard-display', '-l', description]);
      }
  });
---- a/data/gnome-shell-disable-extensions.service
-+++ b/data/gnome-shell-disable-extensions.service
+--- a/data/org.gnome.Shell-disable-extensions.service
++++ b/data/org.gnome.Shell-disable-extensions.service
 @@ -10,5 +10,5 @@ Requisite=gnome-session-stable.timer
  [Service]
  Type=simple

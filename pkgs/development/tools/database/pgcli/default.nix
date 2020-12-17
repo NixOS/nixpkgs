@@ -1,4 +1,4 @@
-{ buildPythonApplication, lib, fetchPypi, isPy3k
+{ buildPythonApplication, lib, fetchPypi, isPy3k, fetchpatch
 , cli-helpers, click, configobj, humanize, prompt_toolkit, psycopg2
 , pygments, sqlparse, pgspecial, setproctitle, keyring, pytest, mock
 }:
@@ -17,6 +17,15 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     cli-helpers click configobj humanize prompt_toolkit psycopg2
     pygments sqlparse pgspecial setproctitle keyring
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "enable-sqlparse-4.patch";
+      url = "https://github.com/dbcli/pgcli/pull/1224/commits/55d534d41051887c637b6300e08a9f70e6656020.patch";
+      sha256 = "01r8qc7qzb6mz0xq2xnrgyackbapf43ng6l88qpzd9lw2pwksc8w";
+      includes = [ "pgcli/packages/parseutils/ctes.py" "tests/test_sqlcompletion.py" "setup.py" ];
+    })
   ];
 
   postPatch = ''

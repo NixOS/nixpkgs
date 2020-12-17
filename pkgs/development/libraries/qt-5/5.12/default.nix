@@ -55,6 +55,10 @@ let
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
         ./qtbase.patch.d/0002-qtbase-mac.patch
         ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0015-qtbase-tbd-frameworks.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
@@ -96,6 +100,15 @@ let
         name = "fix-build-with-pulseaudio-13.0.patch";
         url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
+      })
+
+      # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
+      (fetchpatch {
+        name = "qtwebengine-bison-3.7-build.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
+        sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
       })
     ] ++ optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch

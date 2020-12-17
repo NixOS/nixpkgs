@@ -3,16 +3,16 @@
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "0nrh52cjymzcf093sqqa3kfw2nimnx6qwn8aw0wsci2v2r84yzzx";
+    sha256 = "13zmx9wzv29z0np3agx4rsz1j9pgrvlnngjsb971i1dnzwv5l3hf";
   };
 
-  vendorSha256 = "1pfixq3mbfn12gyablc4g0j8r00md3887q0l8xgxy76z0d8w924s";
+  vendorSha256 = "09sa5jpdj73w595c063mib14132zacswh54nmjqp2n440cflmwjh";
 
   subPackages = [ "cmd/restic" ];
 

@@ -10,7 +10,7 @@ assert withQt  -> qt5  != null;
 with stdenv.lib;
 
 let
-  version = "3.2.7";
+  version = "3.4.0";
   variant = if withQt then "qt" else "cli";
   pcap = libpcap.override { withBluez = stdenv.isLinux; };
 
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "1nkhglzxj05hwhgzrgan4glv0z67rmasf9djx1dmqicwdnw2z0xy";
+    sha256 = "1bm8jj2rviis9j9l6nixvhxcfx362y9iphkxssgmiz2kj6yypr37";
   };
 
   cmakeFlags = [
@@ -79,9 +79,6 @@ in stdenv.mkDerivation {
     wrapQtApp $out/Applications/Wireshark.app/Contents/MacOS/Wireshark
   '' else optionalString withQt ''
     install -Dm644 -t $out/share/applications ../wireshark.desktop
-
-    substituteInPlace $out/share/applications/*.desktop \
-        --replace "Exec=wireshark" "Exec=$out/bin/wireshark"
 
     install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
     mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv

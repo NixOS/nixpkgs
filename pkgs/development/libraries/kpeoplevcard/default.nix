@@ -32,7 +32,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Pulseaudio bindings for Qt";
-    homepage    = "KPeople VCard Support";
+    homepage    = "https://github.com/KDE/kpeoplevcard";
     license     = with licenses; [ lgpl2 ];
     maintainers = with maintainers; [ doronbehar ];
   };

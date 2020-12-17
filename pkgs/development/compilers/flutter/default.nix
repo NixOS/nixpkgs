@@ -1,6 +1,9 @@
-{ callPackage }:
+{ callPackage, dart }:
 
 let
+  dart_stable = dart.override { version = "2.10.0"; };
+  dart_beta = dart.override { version = "2.10.0"; };
+  dart_dev = dart.override { version = "2.11.0-161.0.dev"; };
   mkFlutter = opts: callPackage (import ./flutter.nix opts) { };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
@@ -10,25 +13,28 @@ in {
   stable = mkFlutter rec {
     pname = "flutter";
     channel = "stable";
-    version = "1.17.5";
+    version = "1.22.0";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "0kapja3nh7dfhjbn2np02wghijrjnpzsv4hz10fj54hs8hdx19di";
+    sha256Hash = "0ryrx458ss8ryhmspcfrhjvad2pl46bxh1qk5vzwzhxiqdc79vm8";
     patches = getPatches ./patches/stable;
+    dart = dart_stable;
   };
   beta = mkFlutter rec {
-    pname = "flutter-beta";
+    pname = "flutter";
     channel = "beta";
-    version = "1.20.0-7.2.pre";
+    version = "1.22.0-12.3.pre";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "0w89ig5vi4spa95mf08r4vvwni7bzzdlyhvr9sy1a35qmf7j9s6f";
-    patches = getPatches ./patches/beta;
+    sha256Hash = "1axzz137z4lgpa09h7bjf52i6dij6a9wmjbha1182db23r09plzh";
+    patches = getPatches ./patches/stable;
+    dart = dart_beta;
   };
   dev = mkFlutter rec {
-    pname = "flutter-dev";
+    pname = "flutter";
     channel = "dev";
-    version = "1.21.0-1.0.pre";
+    version = "1.23.0-7.0.pre";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "14rx89jp6ivk3ai7iwbznkr5q445ndh8fppzbxg520kq10s2208r";
-    patches = getPatches ./patches/beta;
+    sha256Hash = "166qb4qbv051bc71yj7c0vrkamhvzz3fp3mz318qzm947mydwjj5";
+    patches = getPatches ./patches/dev;
+    dart = dart_dev;
   };
 }

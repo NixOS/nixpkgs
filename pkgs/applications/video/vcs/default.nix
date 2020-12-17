@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper
-, coreutils, ffmpeg, gawk, gnugrep, gnused, imagemagick, mplayer, utillinux
+, coreutils, ffmpeg, gawk, gnugrep, gnused, imagemagick, mplayer, util-linux
 , dejavu_fonts
 }:
 with stdenv.lib;
 let
   version = "1.13.4";
-  runtimeDeps = [ coreutils ffmpeg gawk gnugrep gnused imagemagick mplayer utillinux ];
+  runtimeDeps = [ coreutils ffmpeg gawk gnugrep gnused imagemagick mplayer util-linux ];
 in
 stdenv.mkDerivation {
   pname = "vcs";

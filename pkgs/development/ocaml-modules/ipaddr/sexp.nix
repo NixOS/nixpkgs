@@ -5,7 +5,7 @@
 buildDunePackage rec {
   pname = "ipaddr-sexp";
 
-  inherit (ipaddr) version src minimumOCamlVersion;
+  inherit (ipaddr) version src useDune2 minimumOCamlVersion;
 
   propagatedBuildInputs = [ ipaddr ];
 

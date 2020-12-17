@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , SDL
 , jack2
 , Foundation
@@ -7,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "littlegptracker";
-  version = "unstable-2019-04-14";
+  version = "unstable-2020-11-26";
 
   src = fetchFromGitHub {
     owner = "Mdashdotdashn";
     repo = "littlegptracker";
-    rev = "0ed729b46739e3df5e111c6fa4d548fde2d3b891";
-    sha256 = "1pc6lg2qp6xh7ahs5d5pb63ms4h2dz7ryp3c7mci4g37gbwbsj5b";
+    rev = "4aca8cd765e1ad586da62decd019e66cb64b45b8";
+    sha256 = "0f2ip8z5wxk8fvlw47mczsbcrzh4nh1hgw1fwf5gjrqnzm8v111x";
   };
 
   buildInputs = [
@@ -26,9 +27,6 @@ stdenv.mkDerivation rec {
     # Remove outdated (pre-64bit) checks that would fail on modern platforms
     # (see description in patch file)
     ./0001-Remove-coherency-checks.patch
-    # Set starting directory to cwd, default is in /nix/store and causes a crash
-    # (see description in patch file)
-    ./0002-Set-the-initial-directory-to-the-current-directory.patch
   ];
 
   preBuild = "cd projects";
@@ -44,6 +42,8 @@ stdenv.mkDerivation rec {
 
   installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with stdenv.lib; {
     description = "A music tracker similar to lsdj optimised to run on portable game consoles";

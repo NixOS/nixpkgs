@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mcabber";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://mcabber.com/files/mcabber-${version}.tar.bz2";
-    sha256 = "1ggh865p1rf10ffsnf4g6qv9i8bls36dxdb1nzs5r9vdqci2rz04";
+    sha256 = "0q1i5acyghsmzas88qswvki8kkk2nfpr8zapgnxbcd3lwcxl38f4";
   };
 
   nativeBuildInputs = [ pkgconfig ];

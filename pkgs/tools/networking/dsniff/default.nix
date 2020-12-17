@@ -38,7 +38,7 @@ let
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.
@@ -49,7 +49,7 @@ in stdenv.mkDerivation {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    rev = "debian%2F2.4b1%2Bdebian-29"; # %2B = urlquote("+"), %2F = urlquote("/")
+    rev = "debian/${version}+debian-29";
     sha256 = "10zz9krf65jsqvlcr72ycp5cd27xwr18jkc38zqp2i4j6x0caj2g";
     name = "dsniff.tar.gz";
   };

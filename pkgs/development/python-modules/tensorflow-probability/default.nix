@@ -31,7 +31,7 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "${version}";
+      rev = version;
       sha256 = "07cm8zba8n0ihzdm3k4a4rsg5v62xxsfvcw4h0niz91c0parqjqy";
     };
 

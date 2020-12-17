@@ -55,17 +55,6 @@ stdenv.mkDerivation rec {
 
   src = kicadSrc;
 
-  # quick fix for #72248
-  # should be removed if a a more permanent fix is published
-  patches = [
-    (
-      fetchpatch {
-        url = "https://github.com/johnbeard/kicad/commit/dfb1318a3989e3d6f9f2ac33c924ca5030ea273b.patch";
-        sha256 = "00ifd3fas8lid8svzh1w67xc8kyx89qidp7gm633r014j3kjkgcd";
-      }
-    )
-  ];
-
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here

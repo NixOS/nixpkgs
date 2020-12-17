@@ -8,7 +8,7 @@
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
-, eglPlatforms ? [ "x11" "surfaceless" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
+, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
 , withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
@@ -31,7 +31,7 @@ with stdenv.lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.1.9";
+  version = "20.2.4";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "10kk8a8k7f4ip8yaiqdyrx162nbw8pw4h3b4hs4ha8mpd43wlldj";
+    sha256 = "14m09bk7akj0k02lg8fhvvzbdsashlbdsgl2cw7wbqfj2mhdqwh5";
   };
 
   prePatch = "patchShebangs .";
@@ -58,19 +58,14 @@ stdenv.mkDerivation {
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-    ./link-radv-with-ld_args_build_id.patch
   ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [
       # Fix `-Werror=int-conversion` pthread warnings on musl.
       # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
       (fetchpatch {
         name = "nine_debug-Make-tid-more-type-correct";
-        # Patch adjusted for version `20.1`, before the big mesa dirs change
-        # `gallium: rename 'state tracker' to 'frontend'`.
-        # Patch for versions after that change is at
-        #     https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e3b4745ef16d0e833300ad67044.patch
-        url = "https://gitlab.freedesktop.org/nh2/mesa/commit/3385c49684375f1153a52ed7ccda3f5135268a41.patch";
-        sha256 = "1ci694sqjll44c9g2md4krhk6qlvq51r7ad5rnnfdnf3l8ys0i50";
+        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
+        sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
       })
     ]
     # do not prefix user provided dri-drivers-path
@@ -102,6 +97,10 @@ stdenv.mkDerivation {
       'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}'"
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace meson.build --replace \
+      "find_program('nm')" \
+      "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
   outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";

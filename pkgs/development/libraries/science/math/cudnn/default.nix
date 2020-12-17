@@ -79,7 +79,7 @@ in rec {
     sha256 = "084c13vzjdkb5s1996yilybg6dgav1lscjr1xdcgvlmfrbr6f0k0";
   };
 
-  cudnn_cudatoolkit_10 = cudnn_cudatoolkit_10_1;
+  cudnn_cudatoolkit_10 = cudnn_cudatoolkit_10_2;
 
   cudnn_cudatoolkit_11_0 = generic rec {
     version = "8.0.2";

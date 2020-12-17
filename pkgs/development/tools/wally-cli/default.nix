@@ -27,8 +27,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";
     homepage = "https://ergodox-ez.com/pages/wally-planck";
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     license = licenses.mit;
-    maintainers = [ maintainers.spacekookie ];
+    maintainers = with maintainers; [ spacekookie r-burns ];
   };
 }

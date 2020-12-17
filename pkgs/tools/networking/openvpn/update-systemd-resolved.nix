@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , makeWrapper
-, iproute, systemd, coreutils, utillinux }:
+, iproute, systemd, coreutils, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "update-systemd-resolved";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     wrapProgram $out/libexec/openvpn/update-systemd-resolved \
-      --prefix PATH : ${lib.makeBinPath [ iproute systemd coreutils utillinux ]}
+      --prefix PATH : ${lib.makeBinPath [ iproute systemd coreutils util-linux ]}
   '';
 
   meta = with stdenv.lib; {

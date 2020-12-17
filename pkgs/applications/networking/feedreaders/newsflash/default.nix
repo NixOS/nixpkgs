@@ -8,7 +8,7 @@
 , gdk-pixbuf
 , glib
 , gtk3
-, libhandy
+, libhandy_0
 , openssl
 , sqlite
 , webkitgtk
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     gtk3
-    libhandy
+    libhandy_0
     openssl
     sqlite
     webkitgtk

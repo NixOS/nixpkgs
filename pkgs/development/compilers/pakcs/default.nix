@@ -4,13 +4,14 @@
 , curl, git, unzip, gnutar, coreutils, sqlite }:
 
 let
-  name = "pakcs-2.2.0";
+  pname = "pakcs";
+  version = "2.2.1";
 
-  # Don't switch to development release without a reason, because its
-  # source updates without version bump. Prefer current release instead.
+  # Don't switch to "Current release" without a reason, because its
+  # source updates without version bump. Prefer last from "Older releases" instead.
   src = fetchurl {
-    url = "https://www.informatik.uni-kiel.de/~pakcs/download/${name}-src.tar.gz";
-    sha256 = "0c0a6cp9lwha5i90kv9ya2zi1ggnvkf4gwjfzbffgwwa77s2wz2l";
+    url = "https://www.informatik.uni-kiel.de/~pakcs/download/pakcs-${version}-src.tar.gz";
+    sha256 = "1jyg29j8r8pgcin7ixdya6c3zzfjdi66rghpwrfnkk133fz4iz7s";
   };
 
   curry-frontend = (haskellPackages.override {
@@ -26,7 +27,7 @@ let
     };
   }).curry-frontend;
 in stdenv.mkDerivation {
-  inherit name src;
+  inherit pname version src;
 
   buildInputs = [ swiProlog ];
   nativeBuildInputs = [ which makeWrapper ];

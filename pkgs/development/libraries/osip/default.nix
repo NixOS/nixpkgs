@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation rec {
-  version = "5.1.1";
+  version = "5.2.0";
   src = fetchurl {
     url = "mirror://gnu/osip/libosip2-${version}.tar.gz";
-    sha256 = "0kgnxgzf968kbl6rx3hjsfb3jsg4ydgrsf35gzj319i1f8qjifv1";
+    sha256 = "0xdk3cszkzb8nb757gl47slrr13mf6xz43ab4k343fv8llp8pd2g";
   };
   pname = "libosip2";
 

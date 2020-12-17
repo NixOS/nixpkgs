@@ -198,7 +198,7 @@ with lib;
         Basic Auth protection for a vhost.
 
         WARNING: This is implemented to store the password in plain text in the
-        nix store.
+        Nix store.
       '';
     };
 
@@ -207,7 +207,10 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>
+        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>.
+
+        WARNING: The generate file contains the users' passwords in a
+        non-cryptographically-securely hashed way.
       '';
     };
 

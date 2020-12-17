@@ -1,7 +1,5 @@
-diff --git a/ndiswrapper/driver/Makefile b/ndiswrapper/driver/Makefile
-index bf42f7bc..ad23aa2d 100644
---- a/ndiswrapper/driver/Makefile
-+++ b/ndiswrapper/driver/Makefile
+--- a/driver/Makefile
++++ b/driver/Makefile
 @@ -191,7 +191,7 @@ clean:
  	rm -rf .tmp_versions
  

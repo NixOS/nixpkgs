@@ -19,7 +19,6 @@ let
       secret_key = s3.secretKey;
       insecure = true;
       signature_version2 = false;
-      encrypt_sse =  false;
       put_user_metadata = {};
       http_config = {
         idle_conn_timeout = "0s";

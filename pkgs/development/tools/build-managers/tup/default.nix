@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, fuse, pkgconfig, pcre }:
+{ stdenv, fetchFromGitHub, fuse3, pkgconfig, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "tup";
-  version = "0.7.9";
+  version = "0.7.10";
+  outputs = [ "bin" "man" "out" ];
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "1b9rllwfdmjvfmwvzqfbqfi1flf4y9zzjmyp0dizq23gpkvhi42f";
+    sha256 = "1qd07h4wi0743l7z2vybfvhwp61g2p2pc5qhl40672ryl24nvd1d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse pcre ];
+  buildInputs = [ fuse3 pcre ];
 
   configurePhase = ''
     sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
@@ -30,11 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp tup $out/bin/
-
-    mkdir -p $out/share/man/man1
-    cp tup.1 $out/share/man/man1/
+    install -D tup -t $bin/bin/
+    install -D tup.1 -t $man/share/man/man1/
   '';
 
   setupHook = ./setup-hook.sh;

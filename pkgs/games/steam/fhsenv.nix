@@ -35,6 +35,10 @@ let
       # Steam VR
       procps
       usbutils
+
+      # electron based launchers need newer versions of these libraries than what runtime provides
+      mesa
+      sqlite
     ] ++ lib.optional withJava jdk8 # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
@@ -56,7 +60,7 @@ let
     #!${runtimeShell}
     runtime_paths="/lib32:/lib64:${lib.concatStringsSep ":" ldPath}"
     if [ "$1" == "--print-steam-runtime-library-paths" ]; then
-      echo "$runtime_paths"
+      echo "$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       exit 0
     fi
     export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -175,7 +179,6 @@ in buildFHSUserEnv rec {
     libidn
     tbb
     wayland
-    mesa
     libxkbcommon
 
     # Other things from runtime
@@ -264,6 +267,10 @@ in buildFHSUserEnv rec {
   meta = steam.meta // {
     broken = nativeOnly;
   };
+
+  # allows for some gui applications to share IPC
+  # this fixes certain issues where they don't render correctly
+  unshareIpc = false;
 
   passthru.run = buildFHSUserEnv {
     name = "steam-run";

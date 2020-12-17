@@ -1,17 +1,46 @@
 {
   "stable": {
-    "version": "86.0.4240.111",
-    "sha256": "05y7lwr89awkhvgmwkx3br9j4ap2aypg2wsc0nz8mi7kxc1dnyzj",
-    "sha256bin64": "10aqiiydw4i3jxnw8xxdgkgcqbfqc67n1fbrg40y54kg0v5dz8l6"
+    "version": "87.0.4280.88",
+    "sha256": "1h09g9b2zxad85vd146ymvg3w2kpngpi78yig3dn1vrmhwr4aiiy",
+    "sha256bin64": "0n3fm6wf8zfkv135d50xl8xxrnng3q55vyxkck1da8jyvh18bijb",
+    "deps": {
+      "gn": {
+        "version": "2020-09-09",
+        "url": "https://gn.googlesource.com/gn",
+        "rev": "e002e68a48d1c82648eadde2f6aafa20d08c36f2",
+        "sha256": "0x4c7amxwzxs39grqs3dnnz0531mpf1p75niq7zhinyfqm86i4dk"
+      }
+    },
+    "chromedriver": {
+      "version": "87.0.4280.88",
+      "sha256_linux": "11plh2hs2zpa14ymlbnj92pa58krl28yw4c0s55wk8qsxvzvl02m",
+      "sha256_darwin": "048hsqp6575r980m769lzznvxypmfcwn89f1d3ik751ymzmb5r78"
+    }
   },
   "beta": {
-    "version": "87.0.4280.27",
-    "sha256": "0w0asxj7jlsw69cssfia8km4q9cx1c2mliks2rmhf4jk0hsghasm",
-    "sha256bin64": "1lsx4mhy8nachfb8c9f3mrx5nqw2bi046dqirb4lnv7y80jjjs1k"
+    "version": "88.0.4324.41",
+    "sha256": "06hnawylr7fl1zav6cyg1yfw2z04qrpnj4n3v07qx7ya6p8qyp2g",
+    "sha256bin64": "1iq4qd5x7ivypcxh47d6av45hyqdgga2s80idyhf1f51f660h2vc",
+    "deps": {
+      "gn": {
+        "version": "2020-11-05",
+        "url": "https://gn.googlesource.com/gn",
+        "rev": "53d92014bf94c3893886470a1c7c1289f8818db0",
+        "sha256": "1xcm07qjk6m2czi150fiqqxql067i832adck6zxrishm70c9jbr9"
+      }
+    }
   },
   "dev": {
-    "version": "88.0.4298.4",
-    "sha256": "0ka11gmpkyrmifajaxm66c16hrj3xakdvhjqg04slyp2sv0nlhrl",
-    "sha256bin64": "0768y31jqbl1znp7yp6mvl5j12xl1nwjkh2l8zdga81q0wz52hh6"
+    "version": "89.0.4350.4",
+    "sha256": "1jh3r227j70imjzj0gm7cf1mv25zcdd2waa9qvim0p3g6wbdacmq",
+    "sha256bin64": "06963r7a1xc9vjlwgn0wgzqfj6mavfks20lzf49axw6izrxf8sbr",
+    "deps": {
+      "gn": {
+        "version": "2020-11-05",
+        "url": "https://gn.googlesource.com/gn",
+        "rev": "53d92014bf94c3893886470a1c7c1289f8818db0",
+        "sha256": "1xcm07qjk6m2czi150fiqqxql067i832adck6zxrishm70c9jbr9"
+      }
+    }
   }
 }

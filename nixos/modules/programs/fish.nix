@@ -103,7 +103,7 @@ in
     programs.fish.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
     # Required for man completions
-    documentation.man.generateCaches = true;
+    documentation.man.generateCaches = lib.mkDefault true;
 
     environment.etc."fish/foreign-env/shellInit".text = cfge.shellInit;
     environment.etc."fish/foreign-env/loginShellInit".text = cfge.loginShellInit;

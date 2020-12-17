@@ -1,0 +1,50 @@
+--- CMakeLists.txt	2020-11-02 13:58:06.119743710 -0600
++++ kstars-3.4.3/CMakeLists.txt	2020-11-02 14:05:01.707799274 -0600
+@@ -4,5 +4,7 @@
+ set (KStars_VERSION_REVISION 3)
+ set (CMAKE_CXX_STANDARD 11)
+ 
++add_definitions(-DINDI_NIX_ROOT=${INDI_NIX_ROOT})
++
+ # Build KStars Lite with -DBUILD_KSTARS_LITE=ON
+ option(BUILD_KSTARS_LITE "Build KStars Lite" OFF)
+
+--- ksutils.cpp	2020-11-02 13:47:44.883596916 -0600
++++ kstars-3.4.3/kstars/auxiliary/ksutils.cpp	2020-11-02 17:41:44.961937090 -0600
+@@ -1076,6 +1076,9 @@
+ {
+     QString snap = QProcessEnvironment::systemEnvironment().value("SNAP");
+     QString flat = QProcessEnvironment::systemEnvironment().value("FLATPAK_DEST");
++#define STR_EXPAND(x) #x
++#define STR(x) STR_EXPAND(x)
++    QString nix = QString(STR(INDI_NIX_ROOT));
+ 
+     if (option == "fitsDir")
+     {
+@@ -1089,7 +1091,7 @@
+         if (flat.isEmpty() == false)
+             return flat + "/bin/indiserver";
+         else
+-            return snap + "/usr/bin/indiserver";
++            return nix + "/bin/indiserver";
+     }
+     else if (option == "INDIHubAgent")
+     {
+@@ -1099,7 +1101,7 @@
+         if (flat.isEmpty() == false)
+             return flat + "/bin/indihub-agent";
+         else
+-            return snap + "/usr/bin/indihub-agent";
++            return nix + "/bin/indihub-agent";
+     }
+     else if (option == "indiDriversDir")
+     {
+@@ -1109,7 +1111,7 @@
+         if (flat.isEmpty() == false)
+             return flat + "/share/indi";
+         else
+-            return snap + "/usr/share/indi";
++            return nix + "/share/indi";
+ #else
+         return QStandardPaths::locate(QStandardPaths::GenericDataLocation, "indi", QStandardPaths::LocateDirectory);
+ #endif

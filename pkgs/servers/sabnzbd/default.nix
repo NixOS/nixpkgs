@@ -20,14 +20,14 @@ let
   ]);
   path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "3.0.1";
+  version = "3.1.1";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1zp8cxz56qmai1z6xcscnq85gxhv64dv1s5zqsqdn0zpbxyqqdlr";
+    sha256 = "0m39r2il7d014kf2p6v28lw2hzshm6bhhdchqa8wzyvvmygqmwf2";
   };
 
   buildInputs = [ pythonEnv makeWrapper ];

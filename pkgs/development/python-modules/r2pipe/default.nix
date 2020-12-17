@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "r2pipe";
-  version = "1.4.2";
+  version = "1.5.3";
 
   postPatch = let
     r2lib = "${lib.getOutput "lib" radare2}/lib";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4020754e3263ef28d3e74288537847bd8ae5fc1ddd74f34fb262ef1282c4d23c";
+    sha256 = "8f3708195c8a6e91c5753940fd348cd821df1389d23b889b01b3e88acf407485";
   };
 
   # Tiny sanity check to make sure r2pipe finds radare2 (since r2pipe doesn't

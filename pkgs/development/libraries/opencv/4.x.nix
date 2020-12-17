@@ -34,8 +34,6 @@
 , AVFoundation, Cocoa, VideoDecodeAcceleration, CoreMedia, MediaToolbox, bzip2
 }:
 
-assert blas.implementation == "openblas" && lapack.implementation == "openblas";
-
 let
   version = "4.3.0";
 
@@ -164,15 +162,11 @@ stdenv.mkDerivation {
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
-  # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
-  # what appears to be some stray headers in dnn/misc/tensorflow
-  # in contrib when generating the Python bindings:
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
   postPatch = ''
     sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
-    sed -i -e 's|if len(decls) == 0:|if len(decls) == 0 or "opencv2/" not in hdr:|' ./modules/python/src2/gen2.py
   '';
 
   preConfigure =

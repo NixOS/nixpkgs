@@ -1,5 +1,7 @@
 { stdenv, fetchPypi, buildPythonPackage
-, boto3, requests
+, boto3, requests, gradient_statsd, terminaltables
+, click-completion , click-didyoumean, click-help-colors
+, colorama, requests_toolbelt, gradient_sdk, progressbar2
 }:
 
 buildPythonPackage rec {
@@ -11,7 +13,10 @@ buildPythonPackage rec {
     sha256 = "7959305128fea6da8ca0cdc528783a89859dacb9b54bf8eb89fd04a518872191";
   };
 
-  propagatedBuildInputs = [ boto3 requests ];
+  propagatedBuildInputs = [ boto3 requests gradient_statsd terminaltables
+    click-completion click-didyoumean click-help-colors requests_toolbelt
+    colorama gradient_sdk progressbar2
+  ];
 
   # tries to use /homeless-shelter to mimic container usage, etc
   doCheck = false;
@@ -22,6 +27,5 @@ buildPythonPackage rec {
     license     = licenses.isc;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
-    broken = true;
   };
 }

@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "agda";
     repo = "agda-categories";
     rev = "v${version}";
-    sha256 = "0n6y9xarqhj95i4h56klx10gy0fyckxbfwgiissfknpfq6l0m7r6";
+    sha256 = "1bcvmxcnl1ig38fxqkx8ydidhxq6a0kn2k9waf0lygh4ap928sgk";
   };
 
   buildInputs = [ standard-library ];

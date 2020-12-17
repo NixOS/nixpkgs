@@ -1,10 +1,6 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, ncurses
-, texinfo
-, gettext ? null
-, enableNls ? true
-, enableTiny ? false
-}:
+{ stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
+, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
+, gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
 
@@ -20,11 +16,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "0lj3fcfzprmv9raydx8yq25lw81bs6g40rhd0fv9d6idcb7wphf5";
+    sha256 = "1sc6xl9935k9s9clkv83hapijka4qknfnj6f15c3b1i2n84396gy";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -44,13 +40,42 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    tests = { inherit (nixosTests) nano; };
+
+    updateScript = writeScript "update.sh" ''
+      #!${stdenv.shell}
+      set -o errexit
+      PATH=${
+        stdenv.lib.makeBinPath [
+          common-updater-scripts
+          git
+          nixfmt
+          nix
+          coreutils
+          gnused
+        ]
+      }
+
+      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+      latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags git://git.savannah.gnu.org/nano.git '*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
+
+      if [ ! "$oldVersion" = "$latestTag" ]; then
+        update-source-version ${pname} "$latestTag" --version-key=version --print-changes
+        nixpkgs="$(git rev-parse --show-toplevel)"
+        default_nix="$nixpkgs/pkgs/applications/editors/nano/default.nix"
+        nixfmt "$default_nix"
+      else
+        echo "${pname} is already up-to-date"
+      fi
+    '';
+  };
+
   meta = {
     homepage = "https://www.nano-editor.org/";
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      joachifm
-    ];
+    maintainers = with maintainers; [ joachifm nequissimus ];
     platforms = platforms.all;
   };
 }

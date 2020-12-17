@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liblouis";
-  version = "3.15.0";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "1ljy5xsy7vf2r0ix0d7bqcr6qvr6897f8madsx9zlm1mrj31n5px";
+    sha256 = "0q9ixy8cjgd2d2lzxgkfd4chzr5j1bz783mg10pnwviyg6k630m5";
   };
 
   outputs = [ "out" "dev" "man" "info" "doc" ];

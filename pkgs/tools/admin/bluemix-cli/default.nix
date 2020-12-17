@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -m755 -D -t $out/bin/cfcli bin/cfcli/cf
     ln -sv $out/bin/ibmcloud $out/bin/bx
     ln -sv $out/bin/ibmcloud $out/bin/bluemix
-    install -D -t "$out/etc/bash_completion.d" bx/bash_autocomplete
+    install -D -t "$out/share/bash-completion/completions" bx/bash_autocomplete
     install -D -t "$out/share/zsh/site-functions" bx/zsh_autocomplete
   '';
 

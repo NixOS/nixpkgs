@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitLab, cmake, extra-cmake-modules, gtk3, kdeFrameworks, hicolor-icon-theme }:
+{ stdenv
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, gtk3
+, plasma-framework
+, kwindowsystem
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation {
   pname = "maia-icon-theme";
@@ -17,8 +25,8 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     gtk3
-    kdeFrameworks.plasma-framework
-    kdeFrameworks.kwindowsystem
+    plasma-framework
+    kwindowsystem
   ];
 
   propagatedBuildInputs = [

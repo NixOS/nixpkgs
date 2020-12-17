@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy, pythonAtLeast
 , lazy-object-proxy, six, wrapt, typing, typed-ast
 , pytestrunner, pytest
 }:
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   pname = "astroid";
   version = "2.4.2";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.4" || pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;

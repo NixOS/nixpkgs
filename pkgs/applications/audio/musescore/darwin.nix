@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
   pname = "musescore-darwin";
   version = concatStringsSep "." versionComponents;
 
+  # The disk image contains the .app and a symlink to /Applications.
+  sourceRoot = "${appName}.app";
+
   src = fetchurl {
     url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
     sha256 = "19xkaxlkbrhvfip6n3iw6q7463ngr6y5gfisrpjqg2xl2igyl795";

@@ -24,24 +24,24 @@ echo "$old_rev -> $rev"
 
 sha256=$(nix-prefetch -f "$nixpkgs" rust-analyzer-unwrapped.src --rev "$rev")
 # Clear cargoSha256 to avoid inconsistency.
-sed -e "s/rev = \".*\"/rev = \"$rev\"/" \
-    -e "s/sha256 = \".*\"/sha256 = \"$sha256\"/" \
-    -e "s/cargoSha256 = \".*\"/cargoSha256 = \"\"/" \
+sed -e "s#rev = \".*\"#rev = \"$rev\"#" \
+    -e "s#sha256 = \".*\"#sha256 = \"$sha256\"#" \
+    -e "s#cargoSha256 = \".*\"#cargoSha256 = \"\"#" \
     --in-place ./default.nix
 node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"
 
 # Check vscode compatibility
 req_vscode_ver="$(jq '.engines.vscode' "$node_src/package.json" --raw-output)"
 req_vscode_ver="${req_vscode_ver#^}"
-cur_vscode_ver="$(nix eval --raw -f "$nixpkgs" vscode.version)"
-if [[ "$(nix eval "(builtins.compareVersions \"$req_vscode_ver\" \"$cur_vscode_ver\")")" -gt 0 ]]; then
+cur_vscode_ver="$(nix-instantiate --eval --strict "$nixpkgs" -A vscode.version | tr -d '"')"
+if [[ "$(nix-instantiate --eval --strict -E "(builtins.compareVersions \"$req_vscode_ver\" \"$cur_vscode_ver\")")" -gt 0 ]]; then
     echo "vscode $cur_vscode_ver is incompatible with the extension requiring ^$req_vscode_ver"
     exit 1
 fi
 
 echo "Prebuilding for cargoSha256"
 cargo_sha256=$(nix-prefetch "{ sha256 }: (import $nixpkgs {}).rust-analyzer-unwrapped.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
-sed "s/cargoSha256 = \".*\"/cargoSha256 = \"$cargo_sha256\"/" \
+sed "s#cargoSha256 = \".*\"#cargoSha256 = \"$cargo_sha256\"#" \
     --in-place ./default.nix
 
 # Update vscode extension

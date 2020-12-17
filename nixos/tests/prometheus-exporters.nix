@@ -530,6 +530,21 @@ let
       '';
     };
 
+    py-air-control = {
+      nodeName = "py_air_control";
+      exporterConfig = {
+        enable = true;
+        deviceHostname = "127.0.0.1";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-py-air-control-exporter.service")
+        wait_for_open_port(9896)
+        succeed(
+            "curl -sSf http://localhost:9896/metrics | grep -q 'py_air_control_sampling_error_total'"
+        )
+      '';
+    };
+
     redis = {
       exporterConfig = {
         enable = true;
@@ -606,6 +621,50 @@ let
         wait_for_unit("prometheus-snmp-exporter.service")
         wait_for_open_port(9116)
         succeed("curl -sSf localhost:9116/metrics | grep -q 'snmp_request_errors_total 0'")
+      '';
+    };
+
+    sql = {
+      exporterConfig = {
+        configuration.jobs.points = {
+          interval = "1m";
+          connections = [
+            "postgres://prometheus-sql-exporter@/data?host=/run/postgresql&sslmode=disable"
+          ];
+          queries = {
+            points = {
+              labels = [ "name" ];
+              help = "Amount of points accumulated per person";
+              values = [ "amount" ];
+              query = "SELECT SUM(amount) as amount, name FROM points GROUP BY name";
+            };
+          };
+        };
+        enable = true;
+        user = "prometheus-sql-exporter";
+      };
+      metricProvider = {
+        services.postgresql = {
+          enable = true;
+          initialScript = builtins.toFile "init.sql" ''
+            CREATE DATABASE data;
+            \c data;
+            CREATE TABLE points (amount INT, name TEXT);
+            INSERT INTO points(amount, name) VALUES (1, 'jack');
+            INSERT INTO points(amount, name) VALUES (2, 'jill');
+            INSERT INTO points(amount, name) VALUES (3, 'jack');
+
+            CREATE USER "prometheus-sql-exporter";
+            GRANT ALL PRIVILEGES ON DATABASE data TO "prometheus-sql-exporter";
+            GRANT SELECT ON points TO "prometheus-sql-exporter";
+          '';
+        };
+        systemd.services.prometheus-sql-exporter.after = [ "postgresql.service" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-sql-exporter.service")
+        wait_for_open_port(9237)
+        succeed("curl http://localhost:9237/metrics | grep -c 'sql_points{' | grep -q 2")
       '';
     };
 

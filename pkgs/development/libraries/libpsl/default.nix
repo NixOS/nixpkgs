@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
     lzip
     pkgconfig
     python3
-    (stdenv.lib.optionalString (!stdenv.isDarwin) valgrind)
     libxslt
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    valgrind
   ];
 
   buildInputs = [
@@ -56,15 +57,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     # "--enable-gtk-doc"
     "--enable-man"
-    "--enable-valgrind-tests"
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    "--enable-valgrind-tests"
   ];
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "C library for the Publix Suffix List";

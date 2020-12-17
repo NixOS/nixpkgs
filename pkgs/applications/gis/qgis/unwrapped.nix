@@ -10,7 +10,7 @@ let
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
 in mkDerivation rec {
-  version = "3.10.10";
+  version = "3.10.11";
   pname = "qgis";
   name = "${pname}-unwrapped-${version}";
 
@@ -18,7 +18,7 @@ in mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "yZBG+bpJA7iKkUEjVo45d+bmRp9WS7mk8z96FLf0ZQ0=";
+    sha256 = "157hwi9sgnsf0csbfg4x3c7vh0zgf1hnqgn04lhg9xa1n8jjbv2q";
   };
 
   passthru = {
@@ -53,5 +53,8 @@ in mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ lsix ];
+    # Our 3.10 LTS cannot use a newer Qt (5.15) version because it requires qtwebkit
+    # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
+    broken = true;
   };
 }

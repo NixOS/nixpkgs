@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://www.supermicro.com/wftp/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
     sha256 = "0srkzivxa4qlf3x9zdkri7xfq7kjj4fsmn978vzmzsvbxkqswd5a";
-    extraPostFetch = "chmod u+rwX,go-rwx+X $out/";
   };
 
   installPhase = ''

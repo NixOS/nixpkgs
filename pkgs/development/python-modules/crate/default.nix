@@ -2,30 +2,30 @@
 , fetchPypi
 , buildPythonPackage
 , urllib3
+, geojson
 , isPy3k
-, mock
 , sqlalchemy
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.24.0";
+  version = "0.26.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "028q9r1qyqkq185awkazhplfy7y1081963fnjzi3kf3lxvz6yhay";
+    sha256 = "6f650c2efe250b89bf35f8fe3211eb37ebc8d76f7a9c09bd73db3076708fa2fc";
   };
 
   propagatedBuildInputs = [
     urllib3
+    sqlalchemy
+    geojson
   ];
 
   checkInputs = [
     pytestCheckHook
-    sqlalchemy
-    mock
   ];
 
   meta = with stdenv.lib; {

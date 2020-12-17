@@ -1,42 +1,32 @@
 { stdenv
 , fetchurl
 , fetchpatch
-, autoreconfHook
 , neon
 , procps
 , substituteAll
 , zlib
+, wrapperDir ? "/run/wrappers/bin"
 }:
 
 stdenv.mkDerivation rec {
-  name = "davfs2-1.5.6";
+  name = "davfs2-1.6.0";
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/${name}.tar.gz";
-    sha256 = "00fqadhmhi2bmdar5a48nicmjcagnmaj9wgsvjr6cffmrz6pcx21";
+    sha256 = "sha256-LmtnVoW9kXdyvmDwmZrgmMgPef8g3BMej+xFR8u2O1A=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook # neon-0.31.patch requires reconfiguration
-  ];
 
   buildInputs = [ neon zlib ];
 
   patches = [
-    ./isdir.patch
     ./fix-sysconfdir.patch
     (substituteAll {
       src = ./0001-umount_davfs-substitute-ps-command.patch;
       ps = "${procps}/bin/ps";
     })
-
-    # Fix build with neon 0.31
-    # http://savannah.nongnu.org/bugs/?58101
-    (fetchpatch {
-      name = "neon-0.31.patch";
-      url = "http://savannah.nongnu.org/bugs/download.php?file_id=48737";
-      sha256 = "117x9rql6wk230pl1nram3pp8svll9wzfs5nf407z4jnrdr1zm0j";
-      extraPrefix = ""; # empty means add 'a/' and 'b/'
+    (substituteAll {
+      src = ./0002-Make-sure-that-the-setuid-wrapped-umount-is-invoked.patch;
+      inherit wrapperDir;
     })
   ];
 

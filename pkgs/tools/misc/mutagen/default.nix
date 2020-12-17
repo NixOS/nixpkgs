@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mutagen";
-  version = "0.11.7";
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "mutagen-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11wp94khj9bzmadij0nq6i6q0x9z6h0zy4a6fhf322y5nxsmvcgy";
+    sha256 = "17ycd2y7hgwa2yxbin86i6aj67x7xaajwz3mqgdyfvkja5hgbjyr";
   };
 
   vendorSha256 = "0szs9yc49fyh55ra1wf8zj76kdah0x49d45cgivk3gqh2hl17j6l";

@@ -18,6 +18,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Abstyles License";
   };
 
+  afl20 = spdx {
+    spdxId = "AFL-2.0";
+    fullName = "Academic Free License v2.0";
+  };
+
   afl21 = spdx {
     spdxId = "AFL-2.1";
     fullName = "Academic Free License v2.1";
@@ -390,6 +395,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   hpnd = spdx {
     spdxId = "HPND";
     fullName = "Historic Permission Notice and Disclaimer";
+  };
+
+  hpndSellVariant = spdx {
+    fullName = "Historical Permission Notice and Disclaimer - sell variant";
+    spdxId = "HPND-sell-variant";
   };
 
   # Intel's license, seems free

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, autoreconfHook, pkgconfig, perl, python
 , db, libgcrypt, avahi, libiconv, pam, openssl, acl
-, ed, glibc, libevent
+, ed, libtirpc, libevent
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     /^afpd_LDADD
     /am__append_2
     a
-      ${glibc.static}/lib/librpcsvc.a \\
+      ${libtirpc}/lib/libtirpc.so \\
     .
     w
     EOF

@@ -110,7 +110,7 @@ for version in "${all_versions[@]}"; do
     echo "Checking src" >&2
     src_rev="$(${get_rev} "${gitlab}"/code/kicad.git "${version}" | cut -f1)"
     has_rev="$(grep -sm 1 "\"${pname}\"" -A 4 "${file}" | grep -sm 1 "${src_rev}" || true)"
-    has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256")"
+    has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256" || true)"
     if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
       echo "Reusing old ${pname}.src.sha256, already latest .rev" >&2
       grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "rev" -A 1
@@ -130,7 +130,7 @@ for version in "${all_versions[@]}"; do
         echo "Checking i18n" >&2
         i18n_rev="$(${get_rev} "${i18n}" "${version}" | cut -f1)"
         has_rev="$(grep -sm 1 "\"${pname}\"" -A 11 "${file}" | grep -sm 1 "${i18n_rev}" || true)"
-        has_hash="$(grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n.sha256")"
+        has_hash="$(grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n.sha256" || true)"
         if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
           echo "Reusing old kicad-i18n-${today}.src.sha256, already latest .rev" >&2
           grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n" -A 1
@@ -146,7 +146,7 @@ for version in "${all_versions[@]}"; do
             url="${gitlab}/libraries/kicad-${lib}.git"
             lib_rev="$(${get_rev} "${url}" "${version}" | cut -f1 | head -n1)"
             has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
-            has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256")"
+            has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256" || true)"
             if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
               echo "Reusing old kicad-${lib}-${today}.src.sha256, already latest .rev" >&2
               grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}" -A 1

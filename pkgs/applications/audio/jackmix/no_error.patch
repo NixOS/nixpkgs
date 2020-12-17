@@ -1,13 +1,13 @@
 diff --git a/SConstruct b/SConstruct
-index 4290fa5..0a7a679 100644
+index 8bf6517..a432aa9 100644
 --- a/SConstruct
 +++ b/SConstruct
 @@ -16,7 +16,7 @@ env = Environment(
- env.Replace( LIBS="" )
- env.Replace( LIBPATH="" )
-
--env.MergeFlags( ['-Wall', '-Werror', '-g', '-fpic'] )
-+env.MergeFlags( ['-g', '-fpic'] )
-
- tests = { }
- tests.update( env['PKGCONFIG_TESTS'] )
+ env.Replace(LIBS="")
+ env.Replace(LIBPATH="")
+ 
+-env.MergeFlags(['-Wall', '-Werror', '-g', '-fpic', '-std=c++11'])
++env.MergeFlags(['-g', '-fpic', '-std=c++11'])
+ 
+ tests = {}
+ tests.update(env['PKGCONFIG_TESTS'])

@@ -1,8 +1,9 @@
 { fetchurl, stdenv, buildPackages
+, fetchpatch
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
-, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
+, asciidoctor, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xsl_ns, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? true
@@ -22,7 +23,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.28.0";
+  version = "2.29.2";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "17a311vzimqn1glc9d7x82rhb1mb81m5rr4g8xji8idaafid39fz";
+    sha256 = "1h87yv117ypnc0yi86941089c14n91gixk8b6shj2y35prp47z7j";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional withManual "doc";
@@ -51,6 +52,12 @@ stdenv.mkDerivation {
     ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
+    (fetchpatch {
+      # https://github.com/git/git/pull/925
+      name = "make-manual-reproducible.patch";
+      url = "https://github.com/git/git/commit/7a68e9e0b8eda91eb576bbbc5ed66298f3ab761c.patch";
+      sha256 = "02naws82pd3vvwrrgqn91kid8qkjihyjaz1ahgjz8qlmnn2avf5n";
+    })
   ];
 
   postPatch = ''
@@ -65,8 +72,8 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl ]
-    ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_45 libxslt ];
+    ++ stdenv.lib.optionals withManual [ asciidoctor texinfo xmlto docbook2x
+         docbook_xsl docbook_xsl_ns docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
     ++ stdenv.lib.optionals perlSupport [ perlPackages.perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
@@ -145,7 +152,7 @@ stdenv.mkDerivation {
       }
 
       # Install git-subtree.
-      make -C contrib/subtree install ${stdenv.lib.optionalString withManual "install-doc"}
+      make -C contrib/subtree install ${stdenv.lib.optionalString withManual "USE_ASCIIDOCTOR=1 install-doc"}
       rm -rf contrib/subtree
 
       # Install contrib stuff.
@@ -153,8 +160,8 @@ stdenv.mkDerivation {
       cp -a contrib $out/share/git/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
-      mkdir -p $out/etc/bash_completion.d
-      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
+      mkdir -p $out/share/bash-completion/completions
+      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -229,8 +236,8 @@ stdenv.mkDerivation {
         notSupported $out/libexec/git-core/git-send-email
       '')
 
-   + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html install-info \
+   + stdenv.lib.optionalString withManual ''# Install man pages
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES USE_ASCIIDOCTOR=1 PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
          -C Documentation ''
 
    + (if guiSupport then ''
@@ -249,6 +256,7 @@ stdenv.mkDerivation {
      '')
    + stdenv.lib.optionalString stdenv.isDarwin ''
     # enable git-credential-osxkeychain by default if darwin
+    mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF
     [credential]
       helper = osxkeychain

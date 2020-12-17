@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
-    rev = "${version}";
+    rev = version;
     sha256 = "0k5z9dap6rawiafkg1x7zjx51ala7wra6j6lvc2nn0y8r79yp7a9";
   };
 

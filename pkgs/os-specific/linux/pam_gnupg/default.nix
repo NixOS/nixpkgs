@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pam_gnupg";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "cruegge";
     repo = "pam-gnupg";
     rev = "v${version}";
-    sha256 = "0b70mazyvcbg6xyqllm62rwhbz0y94pcy202db1qyy4w8466bhsw";
+    sha256 = "1d8046clv7r3bl77dbpza4f1zlkjffvdczbb5bci3prz7dyfrwsz";
   };
 
   configureFlags = [

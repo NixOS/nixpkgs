@@ -1,4 +1,4 @@
-{ lib, mkDerivation, callPackage, fetchurl, fetchpatch,
+{ lib, mkDerivation, callPackage, fetchFromGitHub,
   guile_1_8, qtbase, xmodmap, which, freetype,
   libjpeg,
   sqlite,
@@ -16,7 +16,7 @@
 
 let
   pname = "TeXmacs";
-  version = "1.99.13";
+  version = "1.99.15";
   common = callPackage ./common.nix {
     inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
   };
@@ -24,23 +24,12 @@ in
 mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
-    sha256 = "Aq0cS47QqmFQHelxRjANeJlgXCXagnYRykpAq7wHqbQ=";
+  src = fetchFromGitHub {
+    owner = "texmacs";
+    repo = "texmacs";
+    rev = "v${version}";
+    sha256 = "04585hdh98fvyhj4wsxf69xal2wvfa6lg76gad8pr6ww9abi5105";
   };
-
-  patches = [
-    # Minor patch for Qt 5.15 support, should be included in next release.
-    (fetchpatch {
-      url = "https://github.com/texmacs/texmacs/commit/3cf56af92326b74538f5e943928199ba6e963d0b.patch";
-      sha256 = "+OBQmnKgvQZZkLx6ea773Dwq0o7L92Sex/kcVUhmg6Q=";
-    })
-    # Fix returned version, lets hope they remember to bump the version next release.
-    (fetchpatch {
-      url = "https://github.com/texmacs/texmacs/commit/da5b67005d2fc31bb32ea1ead882c26af12d8cbb.patch";
-      sha256 = "czMgdraQErrdvN83jY76P673L52BpQkDwntmKvF0Ykg=";
-    })
-  ];
 
   enableParallelBuilding = true;
 

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       cp ${desktop}/share/applications/* $out/share/applications
       install -Dpm644 packages/misc/icon.png $out/share/icons/assaultcube.png
       install -Dpm644 packages/misc/icon.png $out/share/pixmaps/assaultcube.png
-      
+
       makeWrapper $out/bin/ac_client $out/bin/${pname} \
         --run "cd $out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
     fi
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast and fun first-person-shooter based on the Cube fps";
     homepage = "https://assault.cubers.net";
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux; # should work on darwin with a little effort.
     license = stdenv.lib.licenses.zlib;
   };

@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     ./fsharp-IsPathRooted-type-inference.patch
     ./fsharp-string-switchName.patch
     ./fsharp-path-overloads.patch
+    ./fsharp-GetFileNameWithoutExtension-type-inference.patch
   ];
 
   configurePhase = ''

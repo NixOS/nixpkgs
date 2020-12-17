@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, pkgconfig, autoconf, automake, openssl, libgsf, gmp }:
+{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, openssl, libgsf, gmp }:
 
 stdenv.mkDerivation rec {
 
   pname = "crackxls";
   version = "0.4";
 
-  src = fetchgit {
-    url = "https://github.com/GavinSmith0123/crackxls2003.git";
-    rev = "refs/tags/v${version}";
+  src = fetchFromGitHub {
+    owner = "GavinSmith0123";
+    repo = "crackxls2003";
+    rev = "v${version}";
     sha256 = "0q5jl7hcds3f0rhly3iy4fhhbyh9cdrfaw7zdrazzf1wswwhyssz";
   };
 

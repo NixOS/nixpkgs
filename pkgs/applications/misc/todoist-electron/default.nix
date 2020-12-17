@@ -1,19 +1,21 @@
 { stdenv, lib, fetchurl, makeDesktopItem, dpkg, atk, at-spi2-atk, glib, pango, gdk-pixbuf
 , gtk3, cairo, freetype, fontconfig, dbus, xorg, nss, nspr, alsaLib, cups, expat
-, udev, libpulseaudio, utillinux, makeWrapper }:
+, udev, libpulseaudio, util-linux, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
-  version = "1.23.0";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://github.com/KryDos/todoist-linux/releases/download/${version}/Todoist_${version}_amd64.deb";
-    sha256 = "1yxa0fdc3fnffny6jf1hm7545792pw7828mc27il17l4kn346g98";
+    sha256 = "0g35518z6nf6pnfyx4ax75rq8b8br72mi6wv6jzgac9ric1q4h2s";
   };
 
   desktopItem = makeDesktopItem {
     name = "Todoist";
-    exec = "todoist";
+    exec = "todoist %U";
+    icon = "todoist";
+    comment = "Todoist for Linux";
     desktopName = "Todoist";
     categories = "Utility";
   };
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
   installPhase = let
     libPath = lib.makeLibraryPath ([
       stdenv.cc.cc gtk3 atk at-spi2-atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
-      nss nspr alsaLib libpulseaudio cups expat udev utillinux
+      nss nspr alsaLib libpulseaudio cups expat udev util-linux
     ] ++ (with xorg; [
       libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
       libXrender libX11 libXtst libXScrnSaver
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p "$out/bin"
     mv opt "$out/"
+    mv usr/share "$out/share"
 
     # Patch binary
     patchelf \
@@ -48,14 +51,15 @@ stdenv.mkDerivation rec {
 
     # Desktop item
     mkdir -p "$out/share"
-    ln -s "${desktopItem}/share/applications" "$out/share/applications"
+    rm -r "$out/share/applications"
+    cp -r "${desktopItem}/share/applications" "$out/share/applications"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/KryDos/todoist-linux";
     description = "The Linux wrapper for Todoist web version";
     platforms = [ "x86_64-linux" ];
-    license = licenses.isc;
+    license = licenses.mit;
     maintainers = with maintainers; [ i077 ];
   };
 }

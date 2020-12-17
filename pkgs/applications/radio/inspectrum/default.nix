@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "inspectrum";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "miek";
     repo = "inspectrum";
     rev = "v${version}";
-    sha256 = "1a517y7s1xi66y5kjrpjay450pad9nc228pa8801mxq1c7m1lamm";
+    sha256 = "1x6nyn429pk0f7lqzskrgsbq09mq5787xd4piic95add6n1cc355";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];

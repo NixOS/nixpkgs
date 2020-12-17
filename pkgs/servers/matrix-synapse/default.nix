@@ -1,20 +1,22 @@
 { lib, stdenv, python3, openssl
 , enableSystemd ? stdenv.isLinux, nixosTests
 , enableRedis ? false
+, callPackage
 }:
 
 with python3.pkgs;
 
 let
   plugins = python3.pkgs.callPackage ./plugins { };
+  tools = callPackage ./tools { };
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.22.0";
+  version = "1.24.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dl4a5zirrjabbfibl9vj4zb16md11kqkz2v9l299gxbwwvzqc39";
+    sha256 = "sha256-yxcdFd7iVXbDIUx1lW73FKLy+BZfSspz60LKw7BCtl4=";
   };
 
   patches = [
@@ -68,6 +70,7 @@ buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
   passthru.plugins = plugins;
+  passthru.tools = tools;
   passthru.python = python3;
 
   meta = with stdenv.lib; {

@@ -60,7 +60,7 @@ in
           <!-- if activated, requires ofl from hxtools to be present -->
           <logout wait="0" hup="no" term="no" kill="no" />
           <!-- set PATH variable for pam_mount module -->
-          <path>${pkgs.utillinux}/bin</path>
+          <path>${pkgs.util-linux}/bin</path>
           <!-- create mount point if not present -->
           <mkmountpoint enable="1" remove="true" />
 

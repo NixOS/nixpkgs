@@ -4,6 +4,9 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
   version = "20191011";
   pname = "imagelib";
+
+  useDune2 = true;
+
   src = fetchFromGitHub {
     owner = "rlepigre";
     repo = "ocaml-imagelib";
