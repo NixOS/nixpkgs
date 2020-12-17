@@ -34,6 +34,25 @@ least specific (the system profile)"
       (setenv "EMACSLOADPATH" (when new-env-list
                                 (mapconcat 'identity new-env-list ":"))))))
 
+(let ((wrapper-site-lisp (getenv "emacsWithPackages_siteLispNative"))
+      (env-load-path (getenv "EMACSNATIVELOADPATH")))
+  (when wrapper-site-lisp
+    (setenv "emacsWithPackages_siteLispNative" nil))
+  (when (and wrapper-site-lisp env-load-path)
+    (let* ((env-list (split-string env-load-path ":"))
+           (new-env-list (delete wrapper-site-lisp env-list)))
+      (setenv "EMACSNATIVELOADPATH" (when new-env-list
+                                (mapconcat 'identity new-env-list ":"))))))
+
+;;; Set up native-comp load path.
+(when (featurep 'comp)
+  ;; Append native-comp subdirectories from `NIX_PROFILES'.
+  (setq comp-eln-load-path
+        (append (mapcar (lambda (profile-dir)
+                          (concat profile-dir "/share/emacs/native-lisp/"))
+                        (nix--profile-paths))
+                comp-eln-load-path)))
+
 ;;; Make `woman' find the man pages
 (defvar woman-manpath)
 (eval-after-load 'woman

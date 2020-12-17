@@ -6588,6 +6588,8 @@ in
     graphviz = graphviz_2_32;
   };
 
+  plantuml-server = callPackage ../tools/misc/plantuml-server { };
+
   plan9port = callPackage ../tools/system/plan9port { };
 
   platformioPackages = dontRecurseIntoAttrs (callPackage ../development/arduino/platformio { });
@@ -8296,6 +8298,8 @@ in
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xdg-launch = callPackage ../applications/misc/xdg-launch { };
+
   xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
 
   xfstests = callPackage ../tools/misc/xfstests { };
@@ -8928,7 +8932,10 @@ in
     llvmPackages = llvmPackages_latest;
   };
 
-  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
+  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
+    llvmPackages = llvmPackages_latest;
+    inherit (llvmPackages_latest) clang;
+  };
 
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
