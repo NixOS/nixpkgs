@@ -888,7 +888,7 @@ rec {
       });
       config._module.checks =
         let opt = getAttrFromPath optionName options; in {
-        ${showOption optionName} = lib.mkIf opt.isDefined {
+        ${"removed-" + showOption optionName} = lib.mkIf opt.isDefined {
           message = ''
             The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
             ${replacementInstructions}
@@ -960,7 +960,7 @@ rec {
             let val = getAttrFromPath f config;
                 opt = getAttrFromPath f options;
             in {
-              ${showOption f} = lib.mkIf (val != "_mkMergedOptionModule") {
+              ${"merged" + showOption f} = lib.mkIf (val != "_mkMergedOptionModule") {
                 type = "warning";
                 message = "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly.";
               };
@@ -1025,7 +1025,7 @@ rec {
       });
       config = mkMerge [
         {
-          _module.checks.${showOption from} = mkIf (warn && fromOpt.isDefined) {
+          _module.checks.${"renamed-" + showOption from} = mkIf (warn && fromOpt.isDefined) {
             type = "warning";
             message = "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
           };
