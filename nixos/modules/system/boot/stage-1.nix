@@ -518,9 +518,11 @@ in
       description = ''
         The compressor to use on the initrd image. May be any of:
 
-         - A string representing a command available in stdenv, e.g. "xz";
-         - A function which, given the nixpkgs package set, returns the path to a compressor tool, e.g. pkgs: "''${pkgs.pigz}/bin/pigz"
-         - (not recommended, because it does not work when cross-compiling) the full path to a compressor tool, e.g. "''${pkgs.pigz}/bin/pigz"
+        <itemizedlist>
+         <listitem><para>The name of one of the predefined compressors, see <filename>pkgs/build-support/kernel/initrd-compressor-meta.nix</filename> for the definitions.</para></listitem>
+         <listitem><para>A function which, given the nixpkgs package set, returns the path to a compressor tool, e.g. <literal>pkgs: "''${pkgs.pigz}/bin/pigz"</literal></para></listitem>
+         <listitem><para>(not recommended, because it does not work when cross-compiling) the full path to a compressor tool, e.g. <literal>"''${pkgs.pigz}/bin/pigz"</literal></para></listitem>
+        </itemizedlist>
 
         The given program should read data from stdin and write it to stdout compressed.
       '';
