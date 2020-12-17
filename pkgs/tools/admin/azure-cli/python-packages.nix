@@ -6,7 +6,8 @@ let
     prePatch = (attrs.prePatch or "") + ''
       rm -f azure_bdist_wheel.py tox.ini
       substituteInPlace setup.py \
-        --replace "wheel==0.30.0" "wheel"
+        --replace "wheel==0.30.0" "wheel" \
+        --replace "cryptography>=2.3.1,<3.0.0" "cryptography"
       sed -i "/azure-namespace-package/c\ " setup.cfg
     '';
 
@@ -148,8 +149,8 @@ let
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "0.6.0" "zip"
         "13s2k4jl8570bj6jkqzm0w29z29rl7h5i7czd3kr6vqar5wj9xjd";
 
-      azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "10.2.0" "zip"
-        "ddfe4c0c55f0e3fd1f66dd82c1d4a3d872ce124639b9a77fcd172daf464438a5";
+      azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "10.3.0" "zip"
+        "1bb95rlwfikfl3pgyga0v5lfgr1xyaybm1nq2498rncfcvdpkjhz";
 
       azure-mgmt-appconfiguration = overrideAzureMgmtPackage super.azure-mgmt-appconfiguration "0.6.0" "zip"
         "0pvc8f3g12q7als0pgy26kqi2i9grykwrjyiv2vijci9wxn22vpy";
@@ -196,8 +197,8 @@ let
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
         "1397ksrd61jv7400mgn8sqngp6ahir55fyq9n5k69wk88169qm2r";
 
-      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "0.13.0" "zip"
-        "1fq3hgwwhba6vv07rciiibwmp2zlygz20zp1mzdxajqlfg838q78";
+      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "0.14.0" "zip"
+        "0f8m7j8sdm1rfrwizz3qfk4lyb2x02af3v66as5yqjriipk1bnbg";
 
       azure-mgmt-dns = overrideAzureMgmtPackage super.azure-mgmt-dns "2.1.0" "zip"
         "1l55py4fzzwhxlmnwa41gpmqk9v2ncc79w7zq11sm9a5ynrv2c1p";
@@ -205,8 +206,8 @@ let
       azure-mgmt-loganalytics = overrideAzureMgmtPackage super.azure-mgmt-loganalytics "0.7.0" "zip"
         "18n2lqvrhq40gdqhlzzg8mc03571i02c7qq7jv771lc58rqpzysh";
 
-      azure-mgmt-network = overrideAzureMgmtPackage super.azure-mgmt-network "12.0.0" "zip"
-        "150074lnld426lv37v4gy41cqqvj57zw4mrz5svv7iynljb2jl3l";
+      azure-mgmt-network = overrideAzureMgmtPackage super.azure-mgmt-network "13.0.0" "zip"
+        "02ac54fs4wqdwy986j9qyx6fbl5zmpkh1sykr9r6mqk1xx9l4jq8";
 
       azure-mgmt-media = overrideAzureMgmtPackage super.azure-mgmt-media "2.1.0" "zip"
         "1py0hch0wghzfxazdrrs7p0kln2zn9jh3fmkzwd2z8qggj38q6gm";
@@ -241,8 +242,8 @@ let
       azure-mgmt-sqlvirtualmachine = overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "0.5.0" "zip"
         "1b9am8raa17hxnz7d5pk2ix0309wsnhnchq1mi22icd728sl5adm";
 
-      azure-mgmt-synapse = overrideAzureMgmtPackage super.azure-mgmt-synapse "0.3.0" "zip"
-        "0sa12s5af9xl1wnblilswxc6ydr2anm9an000iz3ks54pydby2vy";
+      azure-mgmt-synapse = overrideAzureMgmtPackage super.azure-mgmt-synapse "0.5.0" "zip"
+        "0dr8xml9zlsnag761zx7ifvdkhsv4syzxpmdn4gbf9c5qcq65dsf";
 
       azure-mgmt-datamigration = overrideAzureMgmtPackage super.azure-mgmt-datamigration "0.1.0" "zip"
         "1pq5rn32yvrf5kqjafnj0kc92gpfg435w2l0k7cm8gvlja4r4m77";
@@ -256,8 +257,8 @@ let
       azure-mgmt-keyvault = overrideAzureMgmtPackage super.azure-mgmt-keyvault "8.0.0" "zip"
         "2c974c6114d8d27152642c82a975812790a5e86ccf609bf370a476d9ea0d2e7d";
 
-      azure-mgmt-cdn = overrideAzureMgmtPackage super.azure-mgmt-cdn "5.0.0" "zip"
-        "0y1bq6lirwx4n8zydi49jx72xfc7dppzhy82x22sx98id8lxgcwm";
+      azure-mgmt-cdn = overrideAzureMgmtPackage super.azure-mgmt-cdn "5.2.0" "zip"
+        "10b8y1b5qlyr666x7yimnwis9386ciphrxdnmmyzk90qg6h0niry";
 
       azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "3.0.0rc15" "zip"
         "1fnmdl3m7kdn6c2ws5vrm7nwadcbq9mgc6g5bg4s1a4xjb23q6vb";
@@ -390,19 +391,6 @@ let
           substituteInPlace setup.cfg \
             --replace "azure-namespace-package = azure-mgmt-datalake-nspkg" ""
         '';
-      });
-
-      cryptography = super.cryptography.overridePythonAttrs(oldAttrs: rec {
-        version = "2.9.2";
-
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "0af25w5mkd6vwns3r6ai1w5ip9xp0ms9s261zzssbpadzdr05hx0";
-        };
-
-        # prevent cycle with cryptography-vectors
-        doCheck = false;
       });
 
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {
