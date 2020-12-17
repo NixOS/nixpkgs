@@ -34,7 +34,7 @@ Page
                 source: "file:///usr/share/calamares/branding/default-mobile/logo.png"
             }
             Text {
-                id: welcomeText
+                id: mainText
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: logo.bottom
                 anchors.topMargin: 50
@@ -53,7 +53,7 @@ Page
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: welcomeText.bottom
+                anchors.top: mainText.bottom
                 anchors.topMargin: 50
                 width: 500
 

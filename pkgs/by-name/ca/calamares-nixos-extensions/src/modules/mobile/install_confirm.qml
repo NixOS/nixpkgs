@@ -19,7 +19,7 @@ Item {
     height: parent.height
 
     Text {
-        id: welcomeText
+        id: mainText
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 30
@@ -34,9 +34,9 @@ Item {
     }
 
     Button {
-        id: enableButton
+        id: firstButton
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: welcomeText.bottom
+        anchors.top: mainText.bottom
         anchors.topMargin: 40
         width: 500
 
