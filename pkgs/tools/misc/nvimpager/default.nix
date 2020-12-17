@@ -27,11 +27,9 @@ pkgs.stdenv.mkDerivation rec {
     substituteInPlace nvimpager --replace ':-nvim' ':-${pkgs.neovim}/bin/nvim'
     '';
 
-  # Defaults to false until I find out how to provide /dev/tty inside the
-  # sandbox.
-  doCheck = false;
-  checkInputs = with pkgs; [ lua51Packages.busted ];
-  checkPhase = "busted --lpath './?.lua' test";
+  doCheck = true;
+  checkInputs = with pkgs; [ lua51Packages.busted util-linux ];
+  checkPhase = ''script -c "busted --lpath './?.lua' test"'';
 
   meta = with pkgs.stdenv.lib; {
     description = "Use neovim as pager";
