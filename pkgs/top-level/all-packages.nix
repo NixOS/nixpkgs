@@ -2009,6 +2009,8 @@ in
 
   dlx = callPackage ../misc/emulators/dlx { };
 
+  dgen-sdl = callPackage ../misc/emulators/dgen-sdl { };
+
   doitlive = callPackage ../tools/misc/doitlive { };
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
