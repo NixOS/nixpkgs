@@ -9,7 +9,7 @@ fi
 path_backup="$PATH"
 
 # That @-vars are substituted separately from bash evaluation makes
-# shellcheck think this, and others like it, are useless conditionals.
+# "shellcheck" think this, and others like it, are useless conditionals.
 # shellcheck disable=SC2157
 if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
@@ -117,7 +117,7 @@ if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
 fi
 
 # Clear march/mtune=native -- they bring impurity.
-if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
+if [ "${NIX_ENFORCE_NO_NATIVE_@suffixSalt@:-0}" = 1 ]; then
     rest=()
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
@@ -140,14 +140,18 @@ fi
 
 source @out@/nix-support/add-hardening.sh
 
-# Add the flags for the C compiler proper.
+# Add the flags for the C compiler proper.  Explicitly converting
+# space-separated words into array elements.
+# shellcheck disable=SC2206
 extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
+# shellcheck disable=SC2206
 extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
+    # shellcheck disable=SC2206
     extraAfter+=($NIX_CFLAGS_LINK_@suffixSalt@)
 
     # Add the flags that should be passed to the linker (and prevent
