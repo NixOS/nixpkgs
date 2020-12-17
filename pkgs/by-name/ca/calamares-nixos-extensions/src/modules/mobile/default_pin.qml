@@ -88,7 +88,7 @@ Item {
         onClicked: {
             if (validatePin(userPin, userPinRepeat, errorText)) {
                 config.userPassword = userPin.text;
-                navTo("ssh_confirm");
+                navNext();
             }
         }
     }

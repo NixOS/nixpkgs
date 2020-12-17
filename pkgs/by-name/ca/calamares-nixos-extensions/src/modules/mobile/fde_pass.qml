@@ -73,7 +73,7 @@ Item {
         onClicked: {
             if (validatePassword(password, passwordRepeat, errorText)) {
                 config.fdePassword = password.text;
-                navTo("install_confirm");
+                navNext();
             }
         }
     }

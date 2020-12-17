@@ -100,7 +100,7 @@ Item {
                 config.sshdUsername = username.text;
                 config.sshdPassword = password.text;
 
-                navTo("fde_confirm");
+                navNext();
             }
         }
     }

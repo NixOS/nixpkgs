@@ -49,7 +49,7 @@ Item {
         text: qsTr("Enable")
         onClicked: {
             config.isSshEnabled = true;
-            navTo("ssh_credentials");
+            navNext();
         }
     }
 
@@ -62,7 +62,7 @@ Item {
         text: qsTr("Disable")
         onClicked: {
             config.isSshEnabled = false;
-            navTo("fde_confirm");
+            navNextFeature();
         }
     }
 }

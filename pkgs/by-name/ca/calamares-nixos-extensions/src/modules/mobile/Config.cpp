@@ -19,6 +19,16 @@ cfgStr( const QVariantMap& cfgMap, QString key, QString defaultStr )
     return ret;
 }
 
+bool
+cfgBool( const QVariantMap& cfgMap, QString key, bool defaultBool )
+{
+    if ( cfgMap.contains( key ) )
+    {
+        return cfgMap.value( key ).toBool();
+    }
+    return defaultBool;
+}
+
 void
 Config::setConfigurationMap( const QVariantMap& cfgMap )
 {
@@ -28,6 +38,8 @@ Config::setConfigurationMap( const QVariantMap& cfgMap )
     m_userInterface = cfgStr( cfgMap, "userInterface", "(unknown)" );
     m_version = cfgStr( cfgMap, "version", "(unknown)" );
     m_username = cfgStr( cfgMap, "username", "user" );
+
+    m_featureSshd = cfgBool( cfgMap, "featureSshd", true );
 
     m_cmdLuksFormat = cfgStr( cfgMap, "cmdLuksFormat", "cryptsetup luksFormat --use-random" );
     m_cmdLuksOpen = cfgStr( cfgMap, "cmdLuksOpen", "cryptsetup luksOpen" );
