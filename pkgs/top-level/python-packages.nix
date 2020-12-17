@@ -1175,6 +1175,8 @@ in {
 
   cirq = callPackage ../development/python-modules/cirq { };
 
+  ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
+
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
