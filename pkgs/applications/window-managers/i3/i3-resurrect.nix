@@ -6,7 +6,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-sha256 = "0h181frdwpqfj9agw43qgicdvzv1i7xwky0vs0ksd8h18qxqp4hr";
+    sha256 = "0h181frdwpqfj9agw43qgicdvzv1i7xwky0vs0ksd8h18qxqp4hr";
   };
 
   propagatedBuildInputs = [ click psutil xprop natsort i3ipc xdotool importlib-metadata ];
@@ -20,4 +20,3 @@ sha256 = "0h181frdwpqfj9agw43qgicdvzv1i7xwky0vs0ksd8h18qxqp4hr";
     maintainers = with maintainers; [ vldn-dev ];
   };
 }
-
