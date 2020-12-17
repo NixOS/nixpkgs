@@ -26,7 +26,18 @@ hls_derivation_file="${script_dir}/default.nix"
 hls_old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$hls_derivation_file")"
 
 # This is the latest release version of hls on GitHub.
-hls_new_version=$(curl --silent "https://api.github.com/repos/haskell/haskell-language-server/commits/master" | jq '.sha' --raw-output)
+# Get all tag names, filter to the hls ones (no prefix like 'hls-plugin-api-'),
+# sort for the latest one and select just that
+hls_latest_release=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/haskell/haskell-language-server/tags |
+  jq --raw-output 'map(.name) | .[]' |
+  grep '^[0-9]' |
+  sort --version-sort |
+  tail -n1)
+
+# Use this value instead for the very latest revision
+# hls_head=(curl --silent "https://api.github.com/repos/haskell/haskell-language-server/commits/master" | jq '.sha' --raw-output)
+
+hls_new_version=$hls_latest_release
 
 echo "Updating haskell-language-server from old version $hls_old_version to new version $hls_new_version."
 echo "Running cabal2nix and outputting to ${hls_derivation_file}..."
