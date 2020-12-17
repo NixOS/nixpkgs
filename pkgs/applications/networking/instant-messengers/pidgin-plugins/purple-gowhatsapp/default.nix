@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pidgin }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "purple-gowhatsapp";
   version = "2020-12-08";
 
