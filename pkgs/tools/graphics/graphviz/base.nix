@@ -79,6 +79,8 @@ stdenv.mkDerivation {
       --replace /usr/bin/vimdot $out/bin/vimdot \
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";

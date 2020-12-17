@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./libuv-application-services.patch
 
+    # Fix namelink failures, can be removed in 3.19.2+
+    (fetchpatch {
+      url = "https://gitlab.kitware.com/cmake/cmake/-/commit/38bcb5c0a3accd2dd29fb7632c6b3bf31b990d82.patch";
+      sha256 = "17yr66wrayhmavsz46b37zfwp2jcwab1zig2xqps39ysndf74qjc";
+    })
+
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];

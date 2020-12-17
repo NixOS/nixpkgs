@@ -57,6 +57,12 @@ let
 
         # Downgrade minimal required SDK to 10.12
         ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0001-Revert-QCocoaDrag-set-image-only-on-the-first-drag-i.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0002-Revert-QCocoaDrag-drag-make-sure-clipboard-is-ours-a.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0003-Revert-QCocoaDrag-maybeDragMultipleItems-fix-erroneo.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0004-Revert-QCocoaDrag-avoid-using-the-deprecated-API-if-.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0005-Revert-macOS-Fix-use-of-deprecated-NSOffState.patch
+        ./qtbase.patch.d/macos-sdk-10.12/0006-git-checkout-v5.15.0-src-plugins-platforms-cocoa-qco.patch
         ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
 
         # Patch framework detection to support X.framework/X.tbd,
@@ -77,16 +83,7 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [
-      # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
-      (fetchpatch {
-        name = "qtwebengine-bison-3.7-build.patch";
-        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
-        sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/";
-      })
-    ]
+    qtwebengine = [ ]
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [
       (fetchpatch {
