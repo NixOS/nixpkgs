@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deny";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = pname;
     rev = version;
-    sha256 = "18l3nl7db8s8c5yjr5n63qw49bl4qvbzcx1y3vdawfr5fvxj3535";
+    sha256 = "01czsnhlvs78fpx1kpi75386657jmlrqpsj4474nxmgcs75igncx";
   };
 
-  cargoSha256 = "00hqxr97lpz1999dkhain0np5yn42mqfrp84nasp4vxyvnmqngmx";
+  cargoSha256 = "1d5vh6cifkvqxmbgc2z9259q8879fjw016z959hfivv38rragqbr";
 
   nativeBuildInputs = [ perl pkgconfig ];
 
