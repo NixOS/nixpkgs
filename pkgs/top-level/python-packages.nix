@@ -504,7 +504,7 @@ in {
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
 
-  awkward = callPackage ../development/python-modules/awkward { };
+  awkward0 = callPackage ../development/python-modules/awkward0 { };
   awkward1 = callPackage ../development/python-modules/awkward1 { };
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
@@ -7628,9 +7628,9 @@ in {
 
   update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
-  uproot = callPackage ../development/python-modules/uproot { };
+  uproot3 = callPackage ../development/python-modules/uproot3 { };
 
-  uproot-methods = callPackage ../development/python-modules/uproot-methods { };
+  uproot3-methods = callPackage ../development/python-modules/uproot3-methods { };
 
   uptime = callPackage ../development/python-modules/uptime { };
 

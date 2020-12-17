@@ -23,6 +23,6 @@ VSCODIUM_LINUX_URL="https://github.com/VSCodium/vscodium/releases/download/${VSC
 VSCODIUM_LINUX_SHA256=$(nix-prefetch-url ${VSCODIUM_LINUX_URL})
 sed -i "s/x86_64-linux = \".\{52\}\"/x86_64-linux = \"${VSCODIUM_LINUX_SHA256}\"/" "$ROOT/vscodium.nix"
 
-VSCODIUM_DARWIN_URL="https://github.com/VSCodium/vscodium/releases/download/${VSCODIUM_VER}/VSCodium-darwin-${VSCODIUM_VER}.zip"
+VSCODIUM_DARWIN_URL="https://github.com/VSCodium/vscodium/releases/download/${VSCODIUM_VER}/VSCodium-darwin-x64-${VSCODIUM_VER}.zip"
 VSCODIUM_DARWIN_SHA256=$(nix-prefetch-url ${VSCODIUM_DARWIN_URL})
 sed -i "s/x86_64-darwin = \".\{52\}\"/x86_64-darwin = \"${VSCODIUM_DARWIN_SHA256}\"/" "$ROOT/vscodium.nix"
