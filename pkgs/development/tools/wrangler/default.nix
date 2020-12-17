@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w0j6if1fnih1036hlb9a3c6wgjw4p057llhjf0f3d568ah1244a";
+    sha256 = "1h9020yf5jsbilzn94h7qyxw9qnz3vw43g8a2415wvjqq6ihzfvm";
   };
 
-  cargoSha256 = "0d9wvdjjakznz8dnqx4gqxh0xkxrh4229460hg6dr9qn492p7nfx";
+  cargoSha256 = "12azc41y2yx936ax9b1yylc0gy91k0m7ih6p0bkw7m928f762hpx";
 
   nativeBuildInputs = [ perl ] ++ stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
 

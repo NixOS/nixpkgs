@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , six
 , pytest_4
 , hypothesis_4
@@ -10,6 +11,8 @@
 buildPythonPackage rec {
   pname = "pyrsistent";
   version = "0.17.3";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

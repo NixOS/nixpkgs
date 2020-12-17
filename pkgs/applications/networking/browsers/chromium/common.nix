@@ -31,6 +31,7 @@
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
+, ungoogled ? false, ungoogled-chromium
 
 , channel
 , upstream-info
@@ -108,6 +109,10 @@ let
        then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
        else result;
+
+  ungoogler = ungoogled-chromium {
+    inherit (upstream-info.deps.ungoogled-patches) rev sha256;
+  };
 
   base = rec {
     name = "${packageName}-unwrapped-${version}";
@@ -208,6 +213,10 @@ let
     '' + optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+    '' + optionalString ungoogled ''
+      ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
+      ${ungoogler}/utils/patches.py . ${ungoogler}/patches
+      ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
     '';
 
     gnFlags = mkGnFlags ({
@@ -260,6 +269,24 @@ let
       use_system_minigbm = true;
       use_system_libdrm = true;
       system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
+    } // optionalAttrs ungoogled {
+      chrome_pgo_phase = 0;
+      enable_hangout_services_extension = false;
+      enable_js_type_check = false;
+      enable_mdns = false;
+      enable_nacl_nonsfi = false;
+      enable_one_click_signin = false;
+      enable_reading_list = false;
+      enable_remoting = false;
+      enable_reporting = false;
+      enable_service_discovery = false;
+      exclude_unwind_tables = true;
+      google_api_key = "";
+      google_default_client_id = "";
+      google_default_client_secret = "";
+      safe_browsing_mode = 0;
+      use_official_google_api_keys = false;
+      use_unofficial_version_number = false;
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''

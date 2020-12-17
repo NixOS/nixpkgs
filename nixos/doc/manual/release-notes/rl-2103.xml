@@ -431,6 +431,13 @@
      been dropped from upstream releases.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <xref linkend="opt-users.users._name_.createHome" /> now always ensures home directory permissions to be <literal>0700</literal>.
+     Permissions had previously been ignored for already existing home directories, possibly leaving them readable by others.
+     The option's description was incorrect regarding ownership management and has been simplified greatly.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
