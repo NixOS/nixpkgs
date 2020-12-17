@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, iasl, python }:
+{ stdenv, fetchurl, acpica-tools, python }:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zc1brgafbbf5hmdr1qc1p859cabpz73l8sklq83xa4sn9icqw7b";
   };
 
-  buildInputs = [ iasl python ];
+  buildInputs = [ acpica-tools python ];
 
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 
