@@ -6155,7 +6155,7 @@ in
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
-  nvimpgaer = callPackage ../tools/misc/nvimpager { };
+  nvimpager = callPackage ../tools/misc/nvimpager { };
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
