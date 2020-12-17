@@ -6908,6 +6908,8 @@ in
 
   rep = callPackage ../development/tools/rep { };
 
+  reicast = callPackage ../misc/emulators/reicast { };
+
   reredirect = callPackage ../tools/misc/reredirect { };
 
   retext = libsForQt5.callPackage ../applications/editors/retext { };
