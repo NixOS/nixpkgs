@@ -9,11 +9,6 @@ let
   dbHost = "localhost";
   dbName = "miniflux";
 
-  defaultCredentials = pkgs.writeText "miniflux-admin-credentials" ''
-    ADMIN_USERNAME=admin
-    ADMIN_PASSWORD=password
-  '';
-
   pgsu = "${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser}";
   pgbin = "${config.services.postgresql.package}/bin";
   preStart = pkgs.writeScript "miniflux-pre-start" ''
@@ -48,27 +43,16 @@ in
           for documentation on the supported values.
         '';
       };
-
-      adminCredentialsFile = mkOption  {
-        type = types.nullOr types.path;
-        default = null;
-        description = ''
-          File containing the ADMIN_USERNAME, default is "admin", and
-          ADMIN_PASSWORD (length >= 6), default is "password"; in the format of
-          an EnvironmentFile=, as described by systemd.exec(5).
-        '';
-        example = "/etc/nixos/miniflux-admin-credentials";
-      };
     };
   };
 
   config = mkIf cfg.enable {
 
-    services.miniflux.config =  {
+    services.miniflux.config = {
       LISTEN_ADDR = mkDefault "localhost:8080";
       DATABASE_URL = "postgresql://${dbUser}:${dbPassword}@${dbHost}/${dbName}?sslmode=disable";
       RUN_MIGRATIONS = "1";
-      CREATE_ADMIN = "1";
+      CREATE_ADMIN = mkDefault "1";
     };
 
     services.postgresql.enable = true;
@@ -85,12 +69,12 @@ in
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
         RuntimeDirectoryMode = "0700";
-        EnvironmentFile = if cfg.adminCredentialsFile == null
-        then defaultCredentials
-        else cfg.adminCredentialsFile;
       };
 
-      environment = cfg.config;
+      environment = {
+        ADMIN_USERNAME = mkIf (!(cfg.config ? ADMIN_USERNAME_FILE)) "admin";
+        ADMIN_PASSWORD = mkIf (!(cfg.config ? ADMIN_PASSWORD_FILE)) "password";
+      } // cfg.config;
     };
     environment.systemPackages = [ pkgs.miniflux ];
   };
