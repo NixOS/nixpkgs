@@ -2335,6 +2335,8 @@ in
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
+  joycond = callPackage ../os-specific/linux/joycond { };
+
   jwt-cli = callPackage ../tools/security/jwt-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
