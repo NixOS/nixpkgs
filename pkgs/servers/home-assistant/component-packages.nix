@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.118.5";
+  version = "2020.12.0";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -56,7 +56,7 @@
     "aten_pe" = ps: with ps; [ ]; # missing inputs: atenpdu
     "atome" = ps: with ps; [ ]; # missing inputs: pyatome
     "august" = ps: with ps; [ ]; # missing inputs: py-august
-    "aurora" = ps: with ps; [ ];
+    "aurora" = ps: with ps; [ ]; # missing inputs: auroranoaa
     "aurora_abb_powerone" = ps: with ps; [ ]; # missing inputs: aurorapy
     "auth" = ps: with ps; [ aiohttp-cors ];
     "automation" = ps: with ps; [ aiohttp-cors ];
@@ -253,6 +253,7 @@
     "filesize" = ps: with ps; [ ];
     "filter" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "fints" = ps: with ps; [ fints ];
+    "fireservicerota" = ps: with ps; [ ]; # missing inputs: pyfireservicerota
     "firmata" = ps: with ps; [ ]; # missing inputs: pymata-express
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ ]; # missing inputs: fixerio
@@ -421,6 +422,7 @@
     "knx" = ps: with ps; [ ]; # missing inputs: xknx
     "kodi" = ps: with ps; [ ]; # missing inputs: pykodi
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
+    "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
     "lacrosse" = ps: with ps; [ ]; # missing inputs: pylacrosse
     "lametric" = ps: with ps; [ ]; # missing inputs: lmnotify
@@ -506,6 +508,7 @@
     "mold_indicator" = ps: with ps; [ ];
     "monoprice" = ps: with ps; [ ]; # missing inputs: pymonoprice
     "moon" = ps: with ps; [ ];
+    "motion_blinds" = ps: with ps; [ ]; # missing inputs: motionblinds
     "mpchc" = ps: with ps; [ ];
     "mpd" = ps: with ps; [ mpd2 ];
     "mqtt" = ps: with ps; [ aiohttp-cors paho-mqtt ];
@@ -558,6 +561,7 @@
     "nuimo_controller" = ps: with ps; [ ]; # missing inputs: --only-binary=all nuimo
     "nuki" = ps: with ps; [ ]; # missing inputs: pynuki
     "numato" = ps: with ps; [ ]; # missing inputs: numato-gpio
+    "number" = ps: with ps; [ ];
     "nut" = ps: with ps; [ ]; # missing inputs: pynut2
     "nws" = ps: with ps; [ ]; # missing inputs: pynws
     "nx584" = ps: with ps; [ ]; # missing inputs: pynx584
@@ -596,7 +600,7 @@
     "otp" = ps: with ps; [ pyotp ];
     "ovo_energy" = ps: with ps; [ ]; # missing inputs: ovoenergy
     "owntracks" = ps: with ps; [ pynacl aiohttp-cors hass-nabucasa paho-mqtt ];
-    "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: python-openzwave-mqtt
+    "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: python-openzwave-mqtt[mqtt-client]
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
     "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect ];
@@ -618,7 +622,7 @@
     "plaato" = ps: with ps; [ aiohttp-cors ];
     "plant" = ps: with ps; [ sqlalchemy ];
     "plex" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];
-    "plugwise" = ps: with ps; [ ]; # missing inputs: Plugwise_Smile
+    "plugwise" = ps: with ps; [ ]; # missing inputs: plugwise
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pocketcasts
     "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
@@ -697,7 +701,6 @@
     "sabnzbd" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: pysabnzbd
     "safe_mode" = ps: with ps; [ aiohttp-cors hass-nabucasa pillow ]; # missing inputs: home-assistant-frontend
     "saj" = ps: with ps; [ ]; # missing inputs: pysaj
-    "salt" = ps: with ps; [ ]; # missing inputs: saltbox
     "samsungtv" = ps: with ps; [ samsungctl samsungtvws ];
     "satel_integra" = ps: with ps; [ ]; # missing inputs: satel_integra
     "scene" = ps: with ps; [ ];
@@ -774,6 +777,7 @@
     "spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "sql" = ps: with ps; [ sqlalchemy ];
     "squeezebox" = ps: with ps; [ pysqueezebox ];
+    "srp_energy" = ps: with ps; [ ]; # missing inputs: srpenergy
     "ssdp" = ps: with ps; [ aiohttp-cors defusedxml netdisco zeroconf ];
     "starline" = ps: with ps; [ ]; # missing inputs: starline
     "starlingbank" = ps: with ps; [ ]; # missing inputs: starlingbank
@@ -801,7 +805,7 @@
     "syncthru" = ps: with ps; [ ]; # missing inputs: pysyncthru url-normalize
     "synology" = ps: with ps; [ ]; # missing inputs: py-synology
     "synology_chat" = ps: with ps; [ ];
-    "synology_dsm" = ps: with ps; [ ]; # missing inputs: python-synology
+    "synology_dsm" = ps: with ps; [ ]; # missing inputs: synologydsm-api
     "synology_srm" = ps: with ps; [ ]; # missing inputs: synology-srm
     "syslog" = ps: with ps; [ ];
     "system_health" = ps: with ps; [ aiohttp-cors ];
@@ -864,9 +868,9 @@
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
+    "twinkly" = ps: with ps; [ ]; # missing inputs: twinkly-client
     "twitch" = ps: with ps; [ ]; # missing inputs: python-twitch-client
     "twitter" = ps: with ps; [ ]; # missing inputs: TwitterAPI
-    "ubee" = ps: with ps; [ ]; # missing inputs: pyubee
     "ubus" = ps: with ps; [ ];
     "ue_smart_radio" = ps: with ps; [ ];
     "uk_transport" = ps: with ps; [ ];
@@ -954,7 +958,6 @@
     "yandextts" = ps: with ps; [ ];
     "yeelight" = ps: with ps; [ yeelight ];
     "yeelightsunflower" = ps: with ps; [ ]; # missing inputs: yeelightsunflower
-    "yessssms" = ps: with ps; [ ]; # missing inputs: YesssSMS
     "yi" = ps: with ps; [ aioftp ha-ffmpeg ];
     "zabbix" = ps: with ps; [ ]; # missing inputs: py-zabbix
     "zamg" = ps: with ps; [ ];
@@ -962,7 +965,7 @@
     "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf ];
     "zerproc" = ps: with ps; [ ]; # missing inputs: pyzerproc
     "zestimate" = ps: with ps; [ xmltodict ];
-    "zha" = ps: with ps; [ bellows pyserial zha-quirks zigpy-cc zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zigpy ];
+    "zha" = ps: with ps; [ bellows pyserial-asyncio pyserial zha-quirks zigpy-cc zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zigpy ];
     "zhong_hong" = ps: with ps; [ ]; # missing inputs: zhong_hong_hvac
     "ziggo_mediabox_xl" = ps: with ps; [ ]; # missing inputs: ziggo-mediabox-xl
     "zodiac" = ps: with ps; [ ];

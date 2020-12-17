@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.12.0";
+  version = "1.13.0";
 
   disabled = pythonOlder "3.6"; # requires python version >=3.6
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "influxdata";
     repo = "influxdb-client-python";
     rev = "v${version}";
-    sha256 = "0b4xr8nwrnikj2rnyrrcl6pym2il8iirr9f9cyg6vzfgx8l8brk9";
+    sha256 = "0g7jhjnag8jx8zbjh6xlqds42alpj87a4dpqc37xqa4ir55m3c2q";
   };
 
   # makes test not reproducible

@@ -3,6 +3,7 @@
 IFS=:
 
 newLoadPath=()
+newNativeLoadPath=()
 added=
 
 if [[ -n $EMACSLOADPATH ]]
@@ -21,7 +22,26 @@ else
     newLoadPath+=("")
 fi
 
+if [[ -n $EMACSNATIVELOADPATH ]]
+then
+    while read -rd: entry
+    do
+        if [[ -z $entry && -z $added ]]
+        then
+            newNativeLoadPath+=(@wrapperSiteLispNative@)
+            added=1
+        fi
+        newNativeLoadPath+=("$entry")
+    done <<< "$EMACSNATIVELOADPATH:"
+else
+    newNativeLoadPath+=(@wrapperSiteLispNative@)
+    newNativeLoadPath+=("")
+fi
+
 export EMACSLOADPATH="${newLoadPath[*]}"
 export emacsWithPackages_siteLisp=@wrapperSiteLisp@
+
+export EMACSNATIVELOADPATH="${newNativeLoadPath[*]}"
+export emacsWithPackages_siteLispNative=@wrapperSiteLispNative@
 
 exec @prog@ "$@"
