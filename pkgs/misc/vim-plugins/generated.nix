@@ -3036,12 +3036,12 @@ let
 
   plenary-nvim = buildVimPluginFrom2Nix {
     pname = "plenary-nvim";
-    version = "2020-12-12";
+    version = "2020-12-16";
     src = fetchFromGitHub {
       owner = "nvim-lua";
       repo = "plenary.nvim";
-      rev = "16eb57376ce62fbb86ebbd721fb7d2c1b1a0164f";
-      sha256 = "0nn1bili0xfldn12svm2px81y8957mj7snl07xx6v1qpfjinp1pm";
+      rev = "2c7d9031eea13e50818f94118a5cdd30692feafa";
+      sha256 = "1vx0l3p44ycqhy1mkdz47j64bdakq77hlda2zldbcfshxlmsb6rb";
     };
     meta.homepage = "https://github.com/nvim-lua/plenary.nvim/";
   };
@@ -3722,12 +3722,12 @@ let
 
   telescope-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-nvim";
-    version = "2020-12-15";
+    version = "2020-12-16";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope.nvim";
-      rev = "af8d990c2cc19577f9503fae29c59d256e304bee";
-      sha256 = "021978fdd73rdwwsz2zjghkg7x4d0d33589xvyvhxbca1fnznf3v";
+      rev = "b5ff9de13d4b15e78e9d3433d6bf085601f62a5d";
+      sha256 = "1ckb1ka1wp8m859xdbvzhh52gq4i3j5qia4w6mcz78x358mknp6x";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
   };

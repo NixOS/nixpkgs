@@ -185,11 +185,6 @@ runCommand
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
         --subst-var prog
       chmod +x $out/bin/$progname
-
-      makeWrapper "$prog" "$out/bin/$progname" \
-        --suffix EMACSLOADPATH ":" "$deps/share/emacs/site-lisp:" \
-        --suffix EMACSNATIVELOADPATH ":" "$deps/share/emacs/native-lisp:"
-
     done
 
     # Wrap MacOS app
