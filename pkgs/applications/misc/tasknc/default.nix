@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, makeWrapper, perl, ncurses5, taskwarrior }:
 
 stdenv.mkDerivation rec {
-  version = "2017-05-15";
+  version = "2020-12-17";
   pname = "tasknc";
 
   src = fetchFromGitHub {
     owner = "lharding";
     repo = "tasknc";
-    rev = "c41d0240e9b848e432f01de735f28de93b934ae7";
-    sha256 = "0f7l7fy06p33vw6f6sjnjxfhw951664pmwhjl573jvmh6gi2h1yr";
+    rev = "a182661fbcc097a933d5e8cce3922eb1734a563e";
+    sha256 = "0jrv2k1yizfdjndbl06lmy2bb62ky2rjdk308967j31c5kqqnw56";
   };
 
   nativeBuildInputs = [
