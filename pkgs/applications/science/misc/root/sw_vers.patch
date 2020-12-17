@@ -1,7 +1,7 @@
 diff a/build/unix/compiledata.sh b/build/unix/compiledata.sh
 --- a/build/unix/compiledata.sh
 +++ b/build/unix/compiledata.sh
-@@ -47,7 +47,7 @@ fi
+@@ -41,7 +41,7 @@ EXPLLINKLIBS="\$LinkedLibs"
  
  if [ "$ARCH" = "macosx" ] || [ "$ARCH" = "macosx64" ] || \
     [ "$ARCH" = "macosxicc" ]; then
@@ -13,7 +13,7 @@ diff a/build/unix/compiledata.sh b/build/unix/compiledata.sh
 diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 --- a/cmake/modules/SetUpMacOS.cmake
 +++ b/cmake/modules/SetUpMacOS.cmake
-@@ -2,17 +2,8 @@ set(ROOT_ARCHITECTURE macosx)
+@@ -8,17 +8,8 @@ set(ROOT_ARCHITECTURE macosx)
  set(ROOT_PLATFORM macosx)
  
  if (CMAKE_SYSTEM_NAME MATCHES Darwin)
@@ -31,7 +31,7 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
      #TODO: check haveconfig and rpath -> set rpath true
      #TODO: check Thread, define link command
      #TODO: more stuff check configure script
-@@ -25,23 +16,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+@@ -31,23 +22,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
         SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
         SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m64")
@@ -56,7 +56,7 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
  
    if (CMAKE_COMPILER_IS_GNUCXX)
       message(STATUS "Found GNU compiler collection")
-@@ -104,7 +79,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+@@ -98,7 +73,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
    endif()
  
    #---Set Linker flags----------------------------------------------------------------------
@@ -67,7 +67,7 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 diff a/config/root-config.in b/config/root-config.in
 --- a/config/root-config.in
 +++ b/config/root-config.in
-@@ -306,12 +306,6 @@ macosxicc)
+@@ -305,12 +305,6 @@ macosxicc)
     auxlibs="-lm -ldl"
     ;;
  macosx64)
@@ -80,18 +80,18 @@ diff a/config/root-config.in b/config/root-config.in
     auxcflags="${cxxversionflag} -m64"
     auxldflags="-m64"
     auxlibs="-lm -ldl"
-@@ -375,18 +369,11 @@ freebsd* | openbsd* | linux*)
+@@ -371,18 +365,11 @@ freebsd* | openbsd* | linux*)
+    done
+    ;;
  macosx*)
+-   if [ $macosx_minor -ge 5 ]; then
+       auxcflags="-pthread $auxcflags"
+       auxlibs="-lpthread $auxlibs"
+-   else
+-      auxcflags="-D_REENTRANT $auxcflags"
+-      auxlibs="-lpthread $auxlibs"
+-   fi
     for f in $features ; do
-       if test "x$f" = "xthread" ; then
--         if [ $macosx_minor -ge 5 ]; then
-             auxcflags="-pthread $auxcflags"
-             auxlibs="-lpthread $auxlibs"
--         else
--            auxcflags="-D_REENTRANT $auxcflags"
--            auxlibs="-lpthread $auxlibs"
--         fi
-       fi
        if test "x$f" = "xrpath" ; then
 -         if [ $macosx_minor -ge 5 ]; then
              auxlibs="-Wl,-rpath,$libdir $auxlibs"
