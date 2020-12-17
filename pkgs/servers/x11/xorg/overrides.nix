@@ -22,11 +22,6 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
   });
 
-  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/app/fonttosfnt/merge_requests/6
-    patches = [ ./fix-uninitialised-memory.patch ];
-  });
-
   bitmap = super.bitmap.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
     postInstall = ''

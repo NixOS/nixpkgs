@@ -532,11 +532,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   fonttosfnt = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
-    name = "fonttosfnt-1.0.5";
+    name = "fonttosfnt-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/fonttosfnt-1.0.5.tar.bz2";
-      sha256 = "00w5in1gznai141wishz8ng7spvi5274n16zj0pdl1ma2vsmy2n8";
+      url = "mirror://xorg/individual/app/fonttosfnt-1.2.1.tar.bz2";
+      sha256 = "16r51h5wfy85wnbq3q8v8a184hb25c3ksjgix0mlcywdz7qkbj07";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
