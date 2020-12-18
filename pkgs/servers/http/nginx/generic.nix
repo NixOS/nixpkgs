@@ -149,6 +149,6 @@ stdenv.mkDerivation {
     homepage    = "http://nginx.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ];
+    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
   };
 }
