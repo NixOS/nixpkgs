@@ -16809,6 +16809,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  tageditor = libsForQt5.callPackage ../applications/audio/tageditor { };
+
   taglib = callPackage ../development/libraries/taglib { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
