@@ -3405,6 +3405,7 @@ broken-packages:
   - bbi
   - BCMtools
   - bcp47
+  - bcp47-orphans
   - bdcs
   - bdcs-api
   - bdd
@@ -4234,6 +4235,7 @@ broken-packages:
   - cookies
   - coordinate
   - copilot
+  - copilot-c99
   - copilot-cbmc
   - copilot-language
   - copilot-libraries
@@ -8868,6 +8870,7 @@ broken-packages:
   - postgresql-syntax
   - postgresql-tx-query
   - postgresql-tx-squeal
+  - postgresql-tx-squeal-compat-simple
   - postgresql-typed-lifted
   - postgrest
   - postgrest-ws
@@ -10456,6 +10459,7 @@ broken-packages:
   - tds
   - TeaHS
   - teams
+  - techlab
   - teeth
   - telegram
   - telegram-api
