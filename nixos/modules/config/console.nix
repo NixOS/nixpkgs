@@ -90,20 +90,6 @@ in
       '';
     };
 
-    extraTTYs = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      example = ["tty8" "tty9"];
-      description = ''
-        TTY (virtual console) devices, in addition to the consoles on
-        which mingetty and syslogd run, that must be initialised.
-        Only useful if you have some program that you want to run on
-        some fixed console.  For example, the NixOS installation CD
-        opens the manual in a web browser on console 7, so it sets
-        <option>console.extraTTYs</option> to <literal>["tty7"]</literal>.
-      '';
-    };
-
     useXkbConfig = mkOption {
       type = types.bool;
       default = false;
@@ -199,5 +185,9 @@ in
     (mkRenamedOptionModule [ "i18n" "consoleUseXkbConfig" ] [ "console" "useXkbConfig" ])
     (mkRenamedOptionModule [ "boot" "earlyVconsoleSetup" ] [ "console" "earlySetup" ])
     (mkRenamedOptionModule [ "boot" "extraTTYs" ] [ "console" "extraTTYs" ])
+    (mkRemovedOptionModule [ "console" "extraTTYs" ] ''
+      Since NixOS switched to systemd (circa 2012), TTYs have been spawned on
+      demand, so there is no need to configure them manually.
+    '')
   ];
 }

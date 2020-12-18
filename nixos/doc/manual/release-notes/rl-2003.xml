@@ -650,7 +650,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
       <listitem>
        <para>
          <literal>boot.extraTTYs</literal> renamed to
-         <link linkend="opt-console.extraTTYs">console.extraTTYs</link>
+         <literal>console.extraTTYs</literal>.
        </para>
       </listitem>
     </itemizedlist>
