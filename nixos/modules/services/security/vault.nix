@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.vault;
 
-  configFile = pkgs.writeText "vault.hcl" ''
+  configText = ''
     listener "tcp" {
       address = "${cfg.address}"
       ${if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null) then ''
@@ -98,6 +98,42 @@ in
         default = "";
         description = "Extra text appended to <filename>vault.hcl</filename>.";
       };
+
+      configPath = mkOption {
+        type = types.path;
+        default = pkgs.writeText "vault.hcl" cfg.configText;
+        defaultText = literalExample ''pkgs.writeText "vault.hcl" configText'';
+        description = ''
+          This path will be read as the <filename>vault.hcl</filename> configuration file.
+
+          The path SHOULD point to a file containing <xref linkend="opt-services.vault.configText"/>. Otherwise, most options will not work as expected.
+
+          Remember to reload <literal>vault.service</literal> if you use a path to a mutable file.
+        '';
+      };
+
+      configText = mkOption {
+        type = types.str;
+        default = configText;
+        readOnly = true;
+        description = ''
+          A read-only option containing the generated configuration file text.
+
+          This is useful when you want to deploy a config with sensitive data
+          without exposing it in the Nix store.
+
+          With NixOps you can achieve this as follows:
+
+          <programlisting><![CDATA[
+            services.vault.configPath = "/run/keys/vault.hcl";
+            users.users.vault.extraGroups = ["keys"];
+            deployment.keys."vault.hcl" = {
+              text = config.services.vault.configText;
+              user = "vault";
+            };
+          ]]></programlisting>
+        '';
+      };
     };
   };
 
@@ -136,7 +172,7 @@ in
       serviceConfig = {
         User = "vault";
         Group = "vault";
-        ExecStart = "${cfg.package}/bin/vault server -config ${configFile}";
+        ExecStart = "${cfg.package}/bin/vault server -config ${cfg.configPath}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         PrivateDevices = true;
         PrivateTmp = true;

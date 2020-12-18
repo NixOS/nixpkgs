@@ -486,6 +486,11 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
      The option's description was incorrect regarding ownership management and has been simplified greatly.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>vault</package> can now use a configuration file outside the Nix store in order to protect sensitive configuration like database passwords. See <xref linkend="opt-services.vault.configPath"/>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
