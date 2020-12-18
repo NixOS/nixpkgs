@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "Gw+cR5sA5MGuclcvur8olmRtK04LDP5vKJ5k7yZO3B0=";
 
-  goPackagePath = "github.com/cloudposse/${pname}";
-
   meta = with lib; {
     description = "Command line utility for creating GitHub comments on Commits, Pull Request Reviews or Issues";
     license = licenses.asl20;

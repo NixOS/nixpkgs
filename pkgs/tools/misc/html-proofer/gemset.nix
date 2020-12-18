@@ -37,10 +37,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mp8vbnb58z97gscrbp0q0yn4wmq8gcr914kb8g6pjv5laq9hfxn";
+      sha256 = "06vbbm8qdmw4955522zh9wqn2214ajsf70y0vymxgl7dlwjd2pz0";
       type = "gem";
     };
-    version = "3.18.1";
+    version = "3.18.2";
   };
   mercenary = {
     groups = ["default"];

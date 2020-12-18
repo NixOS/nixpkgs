@@ -36,6 +36,9 @@
 
 , meta ? {}
 
+# Not needed with buildGoModule
+, goPackagePath ? null
+
 , ... }@args':
 
 with builtins;
@@ -242,5 +245,7 @@ let
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"
+else if (goPackagePath != null) then
+  throw "`goPackagePath` not needed with `buildGoModule`"
 else
   package

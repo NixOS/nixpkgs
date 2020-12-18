@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04pmjzwcy1lswkri30rnvac99dff8zajs41as0j1cqrd1058i03j";
+    sha256 = "0SG7NLCLbqYB9du6Q6SxYTpuVJP8Cx4uzJDGZnEakS0=";
   };
 
   patches = [

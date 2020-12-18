@@ -7,10 +7,8 @@ buildGoModule rec {
   pname = "sonobuoy";
   version = "0.19.0";
 
-  goPackagePath = "github.com/vmware-tanzu/sonobuoy";
-
   buildFlagsArray =
-    let t = goPackagePath;
+    let t = "github.com/vmware-tanzu/sonobuoy";
     in ''
       -ldflags=
         -s -X ${t}/pkg/buildinfo.Version=v${version}

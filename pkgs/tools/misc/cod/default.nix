@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "cod";
   version = "unstable-2020-09-10";
 
-  goPackagePath = "cod";
-
   src = fetchFromGitHub {
     owner = "dim-an";
     repo = pname;
