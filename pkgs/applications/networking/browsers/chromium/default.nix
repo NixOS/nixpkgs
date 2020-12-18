@@ -54,15 +54,17 @@ let
 
   pkgSuffix = if channel == "dev" then "unstable" else channel;
   pkgName = "google-chrome-${pkgSuffix}";
-  chromeSrc = fetchurl {
-    urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
-      "https://dl.google.com/linux/chrome/deb/pool/main/g"
-      "http://95.31.35.30/chrome/pool/main/g"
-      "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
-      "http://repo.fdzh.org/chrome/deb/pool/main/g"
-    ];
-    sha256 = chromium.upstream-info.sha256bin64;
-  };
+  chromeSrc = if channel == "ungoogled-chromium"
+    then throw "Google Chrome is not supported for the ungoogled-chromium channel."
+    else fetchurl {
+      urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
+        "https://dl.google.com/linux/chrome/deb/pool/main/g"
+        "http://95.31.35.30/chrome/pool/main/g"
+        "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
+        "http://repo.fdzh.org/chrome/deb/pool/main/g"
+      ];
+      sha256 = chromium.upstream-info.sha256bin64;
+    };
 
   mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";
   widevineCdm = stdenv.mkDerivation {
