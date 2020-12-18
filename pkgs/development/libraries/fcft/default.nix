@@ -1,5 +1,8 @@
 { stdenv, lib, fetchgit, pkg-config, meson, ninja, scdoc
-,freetype, fontconfig, harfbuzz, pixman, tllist, check }:
+, freetype, fontconfig, pixman, tllist, check
+, withHarfBuzz ? true
+, harfbuzz
+}:
 
 stdenv.mkDerivation rec {
   pname = "fcft";
@@ -12,10 +15,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
-  buildInputs = [ freetype fontconfig pixman tllist harfbuzz ];
+  buildInputs = [ freetype fontconfig pixman tllist ]
+    ++ lib.optional withHarfBuzz harfbuzz;
   checkInputs = [ check ];
 
-  mesonFlags = [ "--buildtype=release" ];
+  mesonFlags = [
+    "--buildtype=release"
+    "-Dtext-shaping=${if withHarfBuzz then "enabled" else "disabled"}"
+  ];
 
   doCheck = true;
 
