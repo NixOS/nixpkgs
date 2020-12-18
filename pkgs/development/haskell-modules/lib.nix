@@ -414,13 +414,13 @@ rec {
   */
   generateOptparseApplicativeCompletion = exeName: pkg: overrideCabal pkg (drv: {
     postInstall = (drv.postInstall or "") + ''
-      bashCompDir="$out/share/bash-completion/completions"
-      zshCompDir="$out/share/zsh/vendor-completions"
-      fishCompDir="$out/share/fish/vendor_completions.d"
+      bashCompDir="''${!outputBin}/share/bash-completion/completions"
+      zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
+      fishCompDir="''${!outputBin}/share/fish/vendor_completions.d"
       mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
-      "$out/bin/${exeName}" --bash-completion-script "$out/bin/${exeName}" >"$bashCompDir/${exeName}"
-      "$out/bin/${exeName}" --zsh-completion-script "$out/bin/${exeName}" >"$zshCompDir/_${exeName}"
-      "$out/bin/${exeName}" --fish-completion-script "$out/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
+      "''${!outputBin}/bin/${exeName}" --bash-completion-script "''${!outputBin}/bin/${exeName}" >"$bashCompDir/${exeName}"
+      "''${!outputBin}/bin/${exeName}" --zsh-completion-script "''${!outputBin}/bin/${exeName}" >"$zshCompDir/_${exeName}"
+      "''${!outputBin}/bin/${exeName}" --fish-completion-script "''${!outputBin}/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
 
       # Sanity check
       grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {

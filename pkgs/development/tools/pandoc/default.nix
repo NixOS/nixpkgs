@@ -8,30 +8,6 @@ in
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
     buildTools = (drv.buildTools or []) ++ [ removeReferencesTo ];
-    patches = (drv.patches or []) ++ [
-      # Add xmlns to top-level tags in Docbook, required for nixpkgs manual.
-      # https://github.com/jgm/pandoc/pull/6923
-      (fetchpatch {
-        url = "https://github.com/jgm/pandoc/commit/6f35600204132c5a0907bb7cccb2e10ffb27506a.patch";
-        sha256 = "gRUqc4YG4lZdCZn21fPmlcrFyZ3/VlDx71lU8GMuGSs=";
-      })
-      # Generate admonitions in DocBook, required for nixpkgs manual.
-      # https://github.com/jgm/pandoc/pull/6922
-      (fetchpatch {
-        url = "https://github.com/jgm/pandoc/commit/dc6856530c2cb6ca58ed82721ab895b86cfe0c1c.patch";
-        sha256 = "EdsUDlHzsfRscXBR4EP2Z5ZEz+NfrmFHnV7c1hJczio=";
-      })
-      # Use correct id attributes in DocBook, required for nixpkgs manual.
-      (fetchpatch {
-        url = "https://github.com/jgm/pandoc/commit/16ef87745702f69d5aa948fbe6d2101577dee8f4.patch";
-        sha256 = "WyWTqrO6hGsMgJ7o7QL1BNvhkm0yIO1XJOcfPBDy6ag=";
-      })
-      # Allow using admonition titles from Markdown in DocBook.
-      (fetchpatch {
-        url = "https://github.com/jgm/pandoc/commit/70c7c5703afcbd1cbf2a80c2be515e038abcd419.patch";
-        sha256 = "2kHQ1qy/UdDi/chwCBvMjAPA/XFH42vWFCjR46Jgt6M=";
-      })
-    ];
   })).overrideAttrs (drv: {
 
     # These libraries are still referenced, because they generate
