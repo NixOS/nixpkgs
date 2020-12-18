@@ -1529,4 +1529,9 @@ self: super: {
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
 
+  # Update pandoc dependencies to fix the build.
+  doctemplates = self.doctemplates_0_9;
+  skylighting = self.skylighting_0_10_2;
+  skylighting-core = self.skylighting-core_0_10_2;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
