@@ -15085,6 +15085,8 @@ in
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
+  notcurses = callPackage ../development/libraries/notcurses { };
+
   ncurses5 = ncurses.override {
     abiVersion = "5";
   };
