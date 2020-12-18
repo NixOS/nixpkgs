@@ -12,11 +12,11 @@
 }:
 mkDerivation {
   pname = "haskell-language-server";
-  version = "0.7.0.0";
+  version = "0.7.1.0";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "0w37792wkq4ys7afgali4jg1kwgkbpk8q0y95fd2j1vgpk0pndlr";
-    rev = "6a692de3308c06d8eb7bdf0f7b8a35b6e9a92610";
+    sha256 = "0gkzvjx4dgf53yicinqjshlj80gznx5khb62i7g3kqjr85iy0raa";
+    rev = "e4f677e1780fe85a02b99a09404a0a3c3ab5ce7c";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -24,7 +24,7 @@ mkDerivation {
   libraryHaskellDepends = [
     base containers data-default directory extra filepath ghc ghcide
     gitrev haskell-lsp hls-plugin-api hslogger optparse-applicative
-    optparse-simple process text unordered-containers
+    optparse-simple process shake text unordered-containers
   ];
   executableHaskellDepends = [
     aeson base binary brittany bytestring containers deepseq directory
