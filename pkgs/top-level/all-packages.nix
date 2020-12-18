@@ -16220,6 +16220,8 @@ in
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
 
+  pyoxidizer = callPackage ../development/tools/pyoxidizer { };
+
   re2 = callPackage ../development/libraries/re2 { };
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
