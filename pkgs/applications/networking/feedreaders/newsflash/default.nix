@@ -8,7 +8,7 @@
 , gdk-pixbuf
 , glib
 , gtk3
-, libhandy_0
+, libhandy
 , openssl
 , sqlite
 , webkitgtk
@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsflash";
-  version = "1.0.5";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    sha256 = "0kh1xqvxfz58gnrl8av0zkig9vcgmx9iaxw5p6gdm8a7gv18nvp3";
+    sha256 = "1z47h23g87dqmr9sfjl36fs5xjm2wj7z2bri9g0a4jcpwzl5awsd";
   };
 
-  cargoSha256 = "059sppidbxzjk8lmjq41d5qbymp9j9v2qr0jxd7xg9avr0klwc2s";
+  cargoSha256 = "0rnrdh9ganj63hf9j890yj9pahcgza95z7x020w72mbb4648hq26";
 
   patches = [
     ./no-post-install.patch
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     gtk3
-    libhandy_0
+    libhandy
     openssl
     sqlite
     webkitgtk

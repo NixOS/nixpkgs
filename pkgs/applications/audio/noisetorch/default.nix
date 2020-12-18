@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "NoiseTorch";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lawl";
     repo = "NoiseTorch";
     rev = version;
-    sha256 = "14i04rmraxbddcvk0k9c6ak9invln7002g5jms54kcjzv9p39hbf";
+    sha256 = "1a4g112h83m55pga8kq2a1wzxpycj59v4bygyjfyi1s09q1y97qg";
   };
 
-  patches = [ ./version.patch ./embedlibrnnoise.patch ];
+  patches = [ ./version.patch ];
 
   vendorSha256 = null;
 
@@ -20,6 +20,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   buildInputs = [ rnnoise-plugin ];
+
+  postPatch = "substituteInPlace main.go --replace 'librnnoise_ladspa/bin/ladspa/librnnoise_ladspa.so' '$RNNOISE_LADSPA_PLUGIN'";
 
   preBuild = ''
     export RNNOISE_LADSPA_PLUGIN="${rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
