@@ -1,6 +1,9 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python -p python3 nix nix-prefetch-git
 
+"""This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
+via upstream-info.json."""
+
 import csv
 import json
 import re
@@ -19,40 +22,53 @@ BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official
 
 JSON_PATH = dirname(abspath(__file__)) + '/upstream-info.json'
 
+
 def load_json(path):
+    """Loads the given JSON file."""
     with open(path, 'r') as f:
         return json.load(f)
 
+
 def nix_prefetch_url(url, algo='sha256'):
+    """Prefetches the content of the given URL."""
     print(f'nix-prefetch-url {url}')
     out = subprocess.check_output(['nix-prefetch-url', '--type', algo, url])
     return out.decode('utf-8').rstrip()
 
+
 def nix_prefetch_git(url, rev):
+    """Prefetches the requested Git revision of the given repository URL."""
     print(f'nix-prefetch-git {url} {rev}')
     out = subprocess.check_output(['nix-prefetch-git', '--quiet', '--url', url, '--rev', rev])
     return json.loads(out)
 
+
 def get_file_revision(revision, file_path):
+    """Fetches the requested Git revision of the given Chromium file."""
     url = f'https://raw.githubusercontent.com/chromium/chromium/{revision}/{file_path}'
     with urlopen(url) as http_response:
         return http_response.read()
 
+
 def get_matching_chromedriver(version):
+    """Gets the matching chromedriver version for the given Chromium version."""
     # See https://chromedriver.chromium.org/downloads/version-selection
     build = re.sub('.[0-9]+$', '', version)
     chromedriver_version_url = f'https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{build}'
     with urlopen(chromedriver_version_url) as http_response:
         chromedriver_version = http_response.read().decode()
         def get_chromedriver_url(system):
-            return f'https://chromedriver.storage.googleapis.com/{chromedriver_version}/chromedriver_{system}.zip'
+            return ('https://chromedriver.storage.googleapis.com/' +
+                    f'{chromedriver_version}/chromedriver_{system}.zip')
         return {
             'version': chromedriver_version,
             'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
             'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64'))
         }
 
+
 def get_channel_dependencies(channel):
+    """Gets all dependencies for the given Chromium version."""
     deps = get_file_revision(channel['version'], 'DEPS')
     gn_pattern = b"'gn_version': 'git_revision:([0-9a-f]{40})'"
     gn_commit = re.search(gn_pattern, deps).group(1).decode()
@@ -68,6 +84,7 @@ def get_channel_dependencies(channel):
 
 channels = {}
 last_channels = load_json(JSON_PATH)
+
 
 print(f'GET {HISTORY_URL}', file=sys.stderr)
 with urlopen(HISTORY_URL) as resp:
@@ -92,7 +109,9 @@ with urlopen(HISTORY_URL) as resp:
 
         try:
             channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{build["version"]}.tar.xz')
-            channel['sha256bin64'] = nix_prefetch_url(f'{DEB_URL}/google-chrome-{suffix}/google-chrome-{suffix}_{build["version"]}-1_amd64.deb')
+            channel['sha256bin64'] = nix_prefetch_url(
+                f'{DEB_URL}/google-chrome-{suffix}/' +
+                f'google-chrome-{suffix}_{build["version"]}-1_amd64.deb')
         except subprocess.CalledProcessError:
             # This build isn't actually available yet.  Continue to
             # the next one.
@@ -104,21 +123,23 @@ with urlopen(HISTORY_URL) as resp:
 
         channels[channel_name] = channel
 
+
 with open(JSON_PATH, 'w') as out:
     def get_channel_key(item):
+        """Orders Chromium channels by their name."""
         channel_name = item[0]
         if channel_name == 'stable':
             return 0
-        elif channel_name == 'beta':
+        if channel_name == 'beta':
             return 1
-        elif channel_name == 'dev':
+        if channel_name == 'dev':
             return 2
-        elif channel_name == 'ungoogled-chromium':
+        if channel_name == 'ungoogled-chromium':
             return 3
-        else:
-            print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
-            sys.exit(1)
-    channels['ungoogled-chromium'] = last_channels['ungoogled-chromium'] # Keep ungoogled-chromium unchanged
+        print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
+        sys.exit(1)
+    # Keep ungoogled-chromium unchanged:
+    channels['ungoogled-chromium'] = last_channels['ungoogled-chromium']
     sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
     json.dump(sorted_channels, out, indent=2)
     out.write('\n')
