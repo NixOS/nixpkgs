@@ -1,7 +1,6 @@
 /* SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #include "MobileQmlViewStep.h"
-#include "PartitionJob.h"
 
 #include "GlobalStorage.h"
 
@@ -33,21 +32,7 @@ MobileQmlViewStep::MobileQmlViewStep( QObject* parent )
 void
 MobileQmlViewStep::onLeave()
 {
-    Calamares::Job* partition;
-
-    /* HACK: run partition job now */
-    partition = new PartitionJob( m_config->cmdLuksFormat(),
-                                  m_config->cmdLuksOpen(),
-                                  m_config->cmdMkfsRoot(),
-                                  m_config->cmdMount(),
-                                  m_config->targetDeviceRoot(),
-                                  m_config->isFdeEnabled(),
-                                  m_config->fdePassword() );
-    Calamares::JobResult res = partition->exec();
-    if ( !res )
-    {
-        cError() << "PARTITION JOB FAILED: " << res.message();
-    }
+    return;
 }
 
 bool

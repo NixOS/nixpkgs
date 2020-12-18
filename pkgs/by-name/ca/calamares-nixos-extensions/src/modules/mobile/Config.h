@@ -32,6 +32,7 @@ class Config : public QObject
     Q_PROPERTY( bool isFdeEnabled READ isFdeEnabled WRITE setIsFdeEnabled )
 
     /* partition job */
+    Q_PROPERTY( bool runPartitionJobThenLeave READ runPartitionJobThenLeaveDummy WRITE runPartitionJobThenLeave )
     Q_PROPERTY( QString cmdLuksFormat READ cmdLuksFormat CONSTANT FINAL )
     Q_PROPERTY( QString cmdLuksOpen READ cmdLuksOpen CONSTANT FINAL )
     Q_PROPERTY( QString cmdMkfsRoot READ cmdMkfsRoot CONSTANT FINAL )
@@ -75,6 +76,8 @@ public:
     void setIsFdeEnabled( bool isFdeEnabled );
 
     /* partition job */
+    bool runPartitionJobThenLeaveDummy() { return 0; }
+    void runPartitionJobThenLeave( bool b );
     QString cmdLuksFormat() const { return m_cmdLuksFormat; }
     QString cmdLuksOpen() const { return m_cmdLuksOpen; }
     QString cmdMkfsRoot() const { return m_cmdMkfsRoot; }

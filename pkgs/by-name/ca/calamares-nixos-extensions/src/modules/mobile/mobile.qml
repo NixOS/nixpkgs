@@ -155,13 +155,20 @@ Page
         Qt.inputMethod.hide();
     }
     function navFinish() {
-        /* Show a waiting screen and wait a second (so it can render), then let
-         * MobileQmlViewStep.cpp::onLeave() create the (encrypted) partition
-         * and mount it. We can't have this as proper job due to ondev#18. */
+        /* Show a waiting screen and wait a second (so it can render). The big
+         * comment in Config.cpp::runPartitionJobThenLeave() explains why this
+         * is necessary. */
         navTo("wait");
         timer.interval = 1000;
         timer.repeat = false;
-        timer.triggered.connect(ViewManager.next);
+        timer.triggered.connect(function() {
+            /* Trigger Config.cpp::runPartitionJobThenLeave(). (We could expose
+             * the function directly with qmlRegisterSingletonType somehow, but
+             * I haven't seen existing Calamares code do that with the Config
+             * object, so just use the side effect of setting the variable, as
+             * done in existing code of Calamares modules.) */
+            config.runPartitionJobThenLeave = 1
+        });
         timer.start();
     }
     function navNextFeature() {

@@ -1,7 +1,10 @@
 /* SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #include "Config.h"
+#include "PartitionJob.h"
 #include "UsersJob.h"
+
+#include "ViewManager.h"
 
 #include <QVariant>
 
@@ -74,6 +77,33 @@ Config::createJobs()
     list.append( Calamares::job_ptr( j ) );
 
     return list;
+}
+
+void
+Config::runPartitionJobThenLeave( bool b )
+{
+    /* HACK: run partition job
+     * The "mobile" module has two jobs, the partition job and the users job.
+     * If we added both of them in Config::createJobs(), Calamares would run
+     * them right after each other. But we need the "unpackfs" module to run
+     * inbetween, that's why as workaround, the partition job is started here.
+     * To solve this properly, we would need to place the partition job in an
+     * own module and pass everything via globalstorage. But then we might as
+     * well refactor everything so we can unify the mobile's partition job with
+     * the proper partition job from Calamares. */
+    Calamares::Job* j = new PartitionJob(
+        m_cmdLuksFormat, m_cmdLuksOpen, m_cmdMkfsRoot, m_cmdMount, m_targetDeviceRoot, m_isFdeEnabled, m_fdePassword );
+    Calamares::JobResult res = j->exec();
+
+    Calamares::ViewManager* v = Calamares::ViewManager::instance();
+    if ( res )
+    {
+        v->next();
+    }
+    else
+    {
+        v->onInstallationFailed( res.message(), res.details() );
+    }
 }
 
 void
