@@ -16817,6 +16817,8 @@ in
 
   talloc = callPackage ../development/libraries/talloc { };
 
+  tagparser = callPackage ../development/libraries/tagparser { };
+
   tclap = callPackage ../development/libraries/tclap {};
 
   tcllib = callPackage ../development/libraries/tcllib { };
