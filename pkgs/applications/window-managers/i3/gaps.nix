@@ -20,7 +20,7 @@ i3.overrideAttrs (oldAttrs : rec {
     homepage    = "https://github.com/Airblader/i3";
     maintainers = with maintainers; [ fmthoma ];
     license     = licenses.bsd3;
-    platforms   = platforms.all;
+    platforms   = platforms.linux ++ platforms.netbsd ++ platforms.openbsd;
 
     longDescription = ''
       Fork of i3wm, a tiling window manager primarily targeted at advanced users

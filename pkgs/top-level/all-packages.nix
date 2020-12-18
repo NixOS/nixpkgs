@@ -3885,6 +3885,8 @@ in
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
+  feeds = callPackage ../applications/networking/feedreaders/feeds {};
+
   fend = callPackage ../tools/misc/fend { };
 
   ferm = callPackage ../tools/networking/ferm { };
@@ -16622,6 +16624,8 @@ in
   czmq = callPackage ../development/libraries/czmq/default.nix {};
 
   zmqpp = callPackage ../development/libraries/zmqpp { };
+
+  libzra = callPackage ../development/libraries/libzra { };
 
   zig = callPackage ../development/compilers/zig {
     llvmPackages = llvmPackages_10;
