@@ -27,37 +27,50 @@ reportFailure() {
     fail=$((fail + 1))
 }
 
-checkConfigOutput() {
+checkConfigCodeOutErr() {
+    local expectedExit=$1
+    shift;
     local outputContains=$1
     shift;
-    if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
-        pass=$((pass + 1))
-        return 0;
-    else
-        echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
+    local errorContains=$1
+    shift;
+    out=$(mktemp)
+    err=$(mktemp)
+    evalConfig "$@" 1>"$out" 2>"$err"
+    if [[ "$?" -ne "$expectedExit" ]]; then
+        echo 2>&1 "error: Expected exit code $expectedExit while evaluating"
         reportFailure "$@"
         return 1
     fi
+
+    if [[ -n "$outputContains" ]] && ! grep -zP --silent "$outputContains" "$out"; then
+        echo 2>&1 "error: Expected output matching '$outputContains', while evaluating"
+        reportFailure "$@"
+        return 1
+    fi
+
+    if [[ -n "$errorContains" ]] && ! grep -zP --silent "$errorContains" "$err"; then
+        echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
+        reportFailure "$@"
+        return 1
+    fi
+
+    pass=$((pass + 1))
+
+    # Clean up temp files
+    rm "$out" "$err"
+}
+
+checkConfigOutput() {
+    local outputContains=$1
+    shift;
+    checkConfigCodeOutErr 0 "$outputContains" "" "$@"
 }
 
 checkConfigError() {
     local errorContains=$1
-    local err=""
     shift;
-    if err==$(evalConfig "$@" 2>&1 >/dev/null); then
-        echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
-        reportFailure "$@"
-        return 1
-    else
-        if echo "$err" | grep -zP --silent "$errorContains" ; then
-            pass=$((pass + 1))
-            return 0;
-        else
-            echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
-            reportFailure "$@"
-            return 1
-        fi
-    fi
+    checkConfigCodeOutErr 1 "" "$errorContains" "$@"
 }
 
 # Check boolean option.
@@ -261,6 +274,29 @@ checkConfigOutput '{ }' config.value.mkmerge ./types-anything/mk-mods.nix
 checkConfigOutput true config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput 1 config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
+
+## Module assertions
+# Check that assertions are triggered by default for just evaluating config
+checkConfigError 'Failed checks:\n- \[test\] Assertion failed' config ./assertions/simple.nix
+
+# Assertion is not triggered when enable is false or condition is true
+checkConfigOutput '{ }' config ./assertions/condition-true.nix
+checkConfigOutput '{ }' config ./assertions/enable-false.nix
+
+# Warnings should be displayed on standard error
+checkConfigCodeOutErr 0 '{ }' 'warning: \[test\] Warning message' config ./assertions/warning.nix
+
+# Check that multiple assertions and warnings can be triggered at once
+checkConfigError 'Failed checks:\n- \[test1\] Assertion 1 failed\n- \[test2\] Assertion 2 failed' config ./assertions/multi.nix
+checkConfigError 'trace: warning: \[test3\] Warning 3 failed\ntrace: warning: \[test4\] Warning 4 failed' config ./assertions/multi.nix
+
+# Submodules should be able to trigger assertions and display the submodule prefix in their error
+checkConfigError 'Failed checks:\n- \[foo/test\] Assertion failed' config.foo ./assertions/submodule.nix
+checkConfigError 'Failed checks:\n- \[foo.bar/test\] Assertion failed' config.foo.bar ./assertions/submodule-attrsOf.nix
+checkConfigError 'Failed checks:\n- \[foo.bar.baz/test\] Assertion failed' config.foo.bar.baz ./assertions/submodule-attrsOf-attrsOf.nix
+
+# Assertions with an attribute starting with _ shouldn't have their name displayed
+checkConfigError 'Failed checks:\n- Assertion failed' config ./assertions/underscore-attributes.nix
 
 cat <<EOF
 ====== module tests ======

@@ -192,7 +192,7 @@ rec {
           let ss = opt.type.getSubOptions opt.loc;
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
       in
-        [ docOption ] ++ optionals docOption.visible subOptions) (collect isOption options);
+        [ docOption ] ++ optionals (docOption.visible && ! docOption.internal) subOptions) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from

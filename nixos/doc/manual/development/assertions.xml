@@ -3,72 +3,155 @@
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="5.0"
         xml:id="sec-assertions">
- <title>Warnings and Assertions</title>
+ <title>Evaluation Checks</title>
 
  <para>
   When configuration problems are detectable in a module, it is a good idea to
-  write an assertion or warning. Doing so provides clear feedback to the user
-  and prevents errors after the build.
+  write a check for catching it early. Doing so can provide clear feedback to
+  the user and can prevent errors before the build.
  </para>
 
  <para>
   Although Nix has the <literal>abort</literal> and
   <literal>builtins.trace</literal>
   <link xlink:href="https://nixos.org/nix/manual/#ssec-builtins">functions</link>
-  to perform such tasks, they are not ideally suited for NixOS modules. Instead
-  of these functions, you can declare your warnings and assertions using the
-  NixOS module system.
+  to perform such tasks generally, they are not ideally suited for NixOS
+  modules. Instead of these functions, you can declare your evaluation checks
+  using the NixOS module system.
  </para>
 
- <section xml:id="sec-assertions-warnings">
-  <title>Warnings</title>
+ <section xml:id="sec-assertions-define">
+  <title>Defining Checks</title>
 
   <para>
-   This is an example of using <literal>warnings</literal>.
+   Checks can be defined using the <xref linkend="opt-_module.checks"/> option.
+   Each check needs an attribute name, under which you can define a trigger
+   assertion using <xref linkend="opt-_module.checks._name_.check"/> and a
+   message using <xref linkend="opt-_module.checks._name_.message"/>.
+   For the message, you can add
+   <literal>options</literal> to the module arguments and use
+   <literal>${options.path.to.option}</literal> to print a context-aware string
+   representation of an option path. Here is an example showing how this can be
+   done.
   </para>
 
 <programlisting>
-<![CDATA[
-{ config, lib, ... }:
-{
-  config = lib.mkIf config.services.foo.enable {
-    warnings =
-      if config.services.foo.bar
-      then [ ''You have enabled the bar feature of the foo service.
-               This is known to cause some specific problems in certain situations.
-               '' ]
-      else [];
-  }
+{ config, options, ... }: {
+  _module.checks.gpgSshAgent = {
+    check = config.programs.gnupg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
+    message = "If you have ${options.programs.gnupg.agent.enableSSHSupport} enabled,"
+      + " you can't enable ${options.programs.ssh.startAgent} as well!";
+  };
+
+  _module.checks.grafanaPassword = {
+    check = config.services.grafana.database.password == "";
+    message = "The grafana password defined with ${options.services.grafana.database.password}"
+      + " will be stored as plaintext in the Nix store!";
+    # This is a non-fatal warning
+    type = "warning";
+  };
 }
-]]>
 </programlisting>
+
  </section>
 
- <section xml:id="sec-assertions-assertions">
-  <title>Assertions</title>
+ <section xml:id="sec-assertions-ignoring">
+  <title>Ignoring Checks</title>
 
   <para>
-   This example, extracted from the
-   <link xlink:href="https://github.com/NixOS/nixpkgs/blob/release-17.09/nixos/modules/services/logging/syslogd.nix">
-   <literal>syslogd</literal> module </link> shows how to use
-   <literal>assertions</literal>. Since there can only be one active syslog
-   daemon at a time, an assertion is useful to prevent such a broken system
-   from being built.
+   Sometimes you can get failing checks that don't apply to your specific case
+   and you wish to ignore them, or at least make errors non-fatal. You can do so
+   for all checks defined using <xref linkend="opt-_module.checks"/> by
+   using the attribute name of the definition, which is conveniently printed
+   using <literal>[...]</literal> when the check is triggered. For above
+   example, the evaluation output when the checks are triggered looks as
+   follows:
   </para>
 
 <programlisting>
-<![CDATA[
-{ config, lib, ... }:
-{
-  config = lib.mkIf config.services.syslogd.enable {
-    assertions =
-      [ { assertion = !config.services.rsyslogd.enable;
-          message = "rsyslogd conflicts with syslogd";
-        }
-      ];
-  }
-}
-]]>
+trace: warning: [grafanaPassword] The grafana password defined with
+  services.grafana.database.password will be stored as plaintext in the Nix store!
+error: Failed checks:
+- [gpgSshAgent] If you have programs.gnupg.agent.enableSSHSupport
+  enabled, you can't enable programs.ssh.startAgent as well!
 </programlisting>
+
+  <para>
+   The <literal>[grafanaPassword]</literal> and <literal>[gpgSshAgent]</literal>
+   strings tell you that these were defined under the <literal>grafanaPassword
+   </literal> and <literal>gpgSshAgent</literal> attributes of
+   <xref linkend="opt-_module.checks"/> respectively. With this knowledge
+   you can adjust them to your liking:
+  </para>
+
+<programlisting>
+{
+  # Change the error into a non-fatal warning
+  _module.checks.gpgSshAgent.type = "warning";
+
+  # We don't care about this warning, disable it
+  _module.checks.grafanaPassword.enable = false;
+}
+</programlisting>
+
+
+ </section>
+ <section xml:id="sec-assertions-submodules">
+  <title>Checks in Submodules</title>
+
+  <para>
+   Evaluation checks can be defined within submodules in the same way. Here is an example:
+  </para>
+
+<programlisting>
+{ lib, ... }: {
+
+  options.myServices = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule ({ config, options, ... }: {
+      options.port = lib.mkOption {};
+
+      config._module.checks.portConflict = {
+        check = config.port != 80;
+        message = "Port ${toString config.port} defined using"
+          + " ${options.port} is usually used for HTTP";
+        type = "warning";
+      };
+    }));
+  };
+
+}
+</programlisting>
+
+  <para>
+   When this check is triggered, it shows both the submodule path along with
+   the check attribute within that submodule, joined by a
+   <literal>/</literal>. Note also how <literal>${options.port}</literal>
+   correctly shows the context of the option.
+  </para>
+
+<programlisting>
+trace: warning: [myServices.foo/portConflict] Port 80 defined using
+  myServices.foo.port is usually used for HTTP
+</programlisting>
+
+  <para>
+   Therefore to disable such a check, you can do so by changing the
+   <xref linkend="opt-_module.checks"/> option within the
+   <literal>myServices.foo</literal> submodule:
+  </para>
+
+<programlisting>
+{
+  myServices.foo._module.checks.portConflict.enable = false;
+}
+</programlisting>
+
+<note>
+ <para>
+  Checks defined in submodules under <literal>types.listOf</literal> can't be
+  ignored, since there's no way to change previously defined list items.
+ </para>
+</note>
+
  </section>
 </section>

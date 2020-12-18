@@ -46,6 +46,7 @@ let
     showFiles
     showOption
     unknownModule
+    literalExample
     ;
 in
 
@@ -72,14 +73,20 @@ rec {
                   check ? true
                 }:
     let
-      # This internal module declare internal options under the `_module'
-      # attribute.  These options are fragile, as they are used by the
-      # module system to change the interpretation of modules.
+      # An internal module that's always added, defining special options which
+      # change the behavior of the module evaluation itself. This is under a
+      # `_`-prefixed namespace in order to prevent name clashes with
+      # user-defined options
       internalModule = rec {
-        _file = ./modules.nix;
+        # FIXME: Using ./modules.nix directly breaks the doc for some reason
+        _file = "lib/modules.nix";
 
         key = _file;
 
+        # Most of these options are set to be internal only for prefix != [],
+        # aka it's a submodule evaluation. This way their docs are displayed
+        # only once as a top-level NixOS option, but will be hidden for all
+        # submodules, even though they are available there too
         options = {
           _module.args = mkOption {
             # Because things like `mkIf` are entirely useless for
@@ -89,7 +96,7 @@ rec {
             # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
             # start a download when `pkgs` wasn't evaluated.
             type = types.lazyAttrsOf types.unspecified;
-            internal = true;
+            internal = prefix != [];
             description = "Arguments passed to each module.";
           };
 
@@ -97,13 +104,19 @@ rec {
             type = types.bool;
             internal = true;
             default = check;
-            description = "Whether to check whether all option definitions have matching declarations.";
+            description = ''
+              Whether to check whether all option definitions have matching
+              declarations.
+
+              Note that this has nothing to do with the similarly named
+              <option>_module.checks</option> option
+            '';
           };
 
           _module.freeformType = mkOption {
             # Disallow merging for now, but could be implemented nicely with a `types.optionType`
             type = types.nullOr (types.uniq types.attrs);
-            internal = true;
+            internal = prefix != [];
             default = null;
             description = ''
               If set, merge all definitions that don't have an associated option
@@ -115,6 +128,75 @@ rec {
               will throw an error unless <option>_module.check</option> is
               turned off.
             '';
+          };
+
+          _module.checks = mkOption {
+            description = ''
+              Evaluation checks to trigger during module evaluation. The
+              attribute name will be displayed when it is triggered, allowing
+              users to disable/change these checks if necessary. See
+              the section on Warnings and Assertions in the manual for more
+              information.
+            '';
+            example = literalExample ''
+              {
+                gpgSshAgent = {
+                  enable = config.programs.gnupg.agent.enableSSHSupport && config.programs.ssh.startAgent;
+                  message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
+                };
+
+                grafanaPassword = {
+                  enable = config.services.grafana.database.password != "";
+                  message = "Grafana passwords will be stored as plaintext in the Nix store!";
+                  type = "warning";
+                };
+              }
+            '';
+            default = {};
+            internal = prefix != [];
+            type = types.attrsOf (types.submodule {
+              options.enable = mkOption {
+                description = ''
+                  Whether to enable this check. Set this to false to not trigger
+                  any errors or warning messages. This is useful for ignoring a
+                  check in case it doesn't make sense in certain scenarios.
+                '';
+                default = true;
+                type = types.bool;
+              };
+
+              options.check = mkOption {
+                description = ''
+                  The condition that must succeed in order for this check to be
+                  successful and not trigger a warning or error.
+                '';
+                readOnly = true;
+                type = types.bool;
+              };
+
+              options.type = mkOption {
+                description = ''
+                  The type of the check. The default
+                  <literal>"error"</literal> type will cause evaluation to fail,
+                  while the <literal>"warning"</literal> type will only show a
+                  warning.
+                '';
+                type = types.enum [ "error" "warning" ];
+                default = "error";
+                example = "warning";
+              };
+
+              options.message = mkOption {
+                description = ''
+                  The message to display if this check triggers.
+                  To display option names in the message, add
+                  <literal>options</literal> to the module function arguments
+                  and use <literal>''${options.path.to.option}</literal>.
+                '';
+                type = types.str;
+                example = "Enabling both \${options.services.foo.enable} and \${options.services.bar.enable} is not possible.";
+              };
+            });
           };
         };
 
@@ -154,6 +236,35 @@ rec {
           # paths, meaning recursiveUpdate will never override any value
           else recursiveUpdate freeformConfig declaredConfig;
 
+      # Triggers all checks defined by _module.checks before returning its argument
+      triggerChecks = let
+
+        handleCheck = errors: name:
+          let
+            value = config._module.checks.${name};
+            show =
+              # Assertions with a _ prefix aren't meant to be configurable
+              if lib.hasPrefix "_" name then value.message
+              else "[${showOption prefix}${optionalString (prefix != []) "/"}${name}] ${value.message}";
+          in
+            if value.enable -> value.check then errors
+            else if value.type == "warning" then lib.warn show errors
+            else if value.type == "error" then errors ++ [ show ]
+            else abort "Unknown check type ${value.type}";
+
+        errors = lib.foldl' handleCheck [] (lib.attrNames config._module.checks);
+
+        errorMessage = ''
+          Failed checks:
+          ${lib.concatMapStringsSep "\n" (a: "- ${a}") errors}
+        '';
+
+        trigger = if errors == [] then null else throw errorMessage;
+
+      in builtins.seq trigger;
+
+      finalConfig = triggerChecks (removeAttrs config [ "_module" ]);
+
       checkUnmatched =
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
           let
@@ -173,7 +284,7 @@ rec {
 
       result = builtins.seq checkUnmatched {
         inherit options;
-        config = removeAttrs config [ "_module" ];
+        config = finalConfig;
         inherit (config) _module;
       };
     in result;
@@ -514,6 +625,8 @@ rec {
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
         inherit (res) isDefined;
+        # This allows options to be correctly displayed using `${options.path.to.it}`
+        __toString = _: showOption loc;
       };
 
   # Merge definitions of a value of a given type.
@@ -773,14 +886,15 @@ rec {
         visible = false;
         apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config.assertions =
-        let opt = getAttrFromPath optionName options; in [{
-          assertion = !opt.isDefined;
+      config._module.checks =
+        let opt = getAttrFromPath optionName options; in {
+        ${"removed-" + showOption optionName} = lib.mkIf opt.isDefined {
           message = ''
             The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
             ${replacementInstructions}
           '';
-        }];
+        };
+      };
     };
 
   /* Return a module that causes a warning to be shown if the
@@ -841,14 +955,18 @@ rec {
       })) from);
 
       config = {
-        warnings = filter (x: x != "") (map (f:
-          let val = getAttrFromPath f config;
-              opt = getAttrFromPath f options;
-          in
-          optionalString
-            (val != "_mkMergedOptionModule")
-            "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
-        ) from);
+        _module.checks =
+          let warningMessages = map (f:
+            let val = getAttrFromPath f config;
+                opt = getAttrFromPath f options;
+            in {
+              ${"merged" + showOption f} = lib.mkIf (val != "_mkMergedOptionModule") {
+                type = "warning";
+                message = "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly.";
+              };
+            }
+            ) from;
+          in mkMerge warningMessages;
       } // setAttrByPath to (mkMerge
              (optional
                (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from)
@@ -907,8 +1025,10 @@ rec {
       });
       config = mkMerge [
         {
-          warnings = optional (warn && fromOpt.isDefined)
-            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          _module.checks.${"renamed-" + showOption from} = mkIf (warn && fromOpt.isDefined) {
+            type = "warning";
+            message = "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          };
         }
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
