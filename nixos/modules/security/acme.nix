@@ -104,12 +104,7 @@ let
     mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
     certDir = mkHash hashData;
     domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
-    othersHash = mkHash (
-      "${toString acmeServer} ${data.keyType}"
-      + (
-        optionalString (versionOlder "20.09" config.system.stateVersion) data.email
-      )
-    );
+    othersHash = mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
     accountDir = "/var/lib/acme/.lego/accounts/" + othersHash;
 
     protocolOpts = if useDns then (
