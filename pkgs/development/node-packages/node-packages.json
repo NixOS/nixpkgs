@@ -79,6 +79,7 @@
 , "expo-cli"
 , {"fast-cli": "1.x"}
 , "fauna-shell"
+, "firebase-tools"
 , "fixjson"
 , "fkill-cli"
 , "flood"
