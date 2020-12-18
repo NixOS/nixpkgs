@@ -21497,11 +21497,6 @@ in
     };
   };
 
-  emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26);
-  emacs27Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs27);
-  emacs26WithPackages = emacs26Packages.emacsWithPackages;
-  emacs27WithPackages = emacs27Packages.emacsWithPackages;
-
   inherit (gnome3) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
