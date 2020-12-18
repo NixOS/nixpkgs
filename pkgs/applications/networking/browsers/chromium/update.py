@@ -67,9 +67,9 @@ def get_matching_chromedriver(version):
         }
 
 
-def get_channel_dependencies(channel):
+def get_channel_dependencies(version):
     """Gets all dependencies for the given Chromium version."""
-    deps = get_file_revision(channel['version'], 'DEPS')
+    deps = get_file_revision(version, 'DEPS')
     gn_pattern = b"'gn_version': 'git_revision:([0-9a-f]{40})'"
     gn_commit = re.search(gn_pattern, deps).group(1).decode()
     gn = nix_prefetch_git('https://gn.googlesource.com/gn', gn_commit)
@@ -81,6 +81,35 @@ def get_channel_dependencies(channel):
             'sha256': gn['sha256']
         }
     }
+
+
+def get_latest_ungoogled_chromium_tag():
+    """Returns the latest ungoogled-chromium tag using the GitHub API."""
+    api_tag_url = 'https://api.github.com/repos/Eloston/ungoogled-chromium/tags?per_page=1'
+    with urlopen(api_tag_url) as http_response:
+        tag_data = json.load(http_response)
+        return tag_data[0]['name']
+
+
+def get_ungoogled_chromium_channel():
+    """Returns a dictionary for the ungoogled-chromium channel."""
+    latest_tag = get_latest_ungoogled_chromium_tag()
+    version = latest_tag.split('-')[0]
+    if version == last_channels['ungoogled-chromium']['version']:
+        # No update available -> keep the cached information (no refetching required):
+        return last_channels['ungoogled-chromium']
+    channel = {
+        'version': version,
+        'sha256': nix_prefetch_url(f'{BUCKET_URL}/chromium-{version}.tar.xz'),
+        'deps': get_channel_dependencies(version)
+    }
+    repo_url = 'https://github.com/Eloston/ungoogled-chromium.git'
+    channel['deps']['ungoogled-patches'] = {
+        'rev': latest_tag,
+        'sha256': nix_prefetch_git(repo_url, latest_tag)['sha256']
+    }
+    return channel
+
 
 channels = {}
 last_channels = load_json(JSON_PATH)
@@ -117,7 +146,7 @@ with urlopen(HISTORY_URL) as resp:
             # the next one.
             continue
 
-        channel['deps'] = get_channel_dependencies(channel)
+        channel['deps'] = get_channel_dependencies(channel['version'])
         if channel_name == 'stable':
             channel['chromedriver'] = get_matching_chromedriver(channel['version'])
 
@@ -138,8 +167,8 @@ with open(JSON_PATH, 'w') as out:
             return 3
         print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
         sys.exit(1)
-    # Keep ungoogled-chromium unchanged:
-    channels['ungoogled-chromium'] = last_channels['ungoogled-chromium']
+    # Get the special ungoogled-chromium channel:
+    channels['ungoogled-chromium'] = get_ungoogled_chromium_channel()
     sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
     json.dump(sorted_channels, out, indent=2)
     out.write('\n')

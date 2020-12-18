@@ -47,15 +47,15 @@
     "version": "87.0.4280.88",
     "sha256": "1h09g9b2zxad85vd146ymvg3w2kpngpi78yig3dn1vrmhwr4aiiy",
     "deps": {
-      "ungoogled-patches": {
-        "rev": "87.0.4280.88-1",
-        "sha256": "0w2137w8hfcgl6f938hqnb4ffp33v5r8vdzxrvs814w7dszkiqgg"
-      },
       "gn": {
         "version": "2020-09-09",
         "url": "https://gn.googlesource.com/gn",
         "rev": "e002e68a48d1c82648eadde2f6aafa20d08c36f2",
         "sha256": "0x4c7amxwzxs39grqs3dnnz0531mpf1p75niq7zhinyfqm86i4dk"
+      },
+      "ungoogled-patches": {
+        "rev": "87.0.4280.88-1",
+        "sha256": "0w2137w8hfcgl6f938hqnb4ffp33v5r8vdzxrvs814w7dszkiqgg"
       }
     }
   }
