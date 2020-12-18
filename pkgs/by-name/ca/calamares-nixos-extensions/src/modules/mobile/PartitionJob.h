@@ -8,11 +8,11 @@ class PartitionJob : public Calamares::Job
 {
     Q_OBJECT
 public:
-    PartitionJob( QString cmdLuksFormat,
-                  QString cmdLuksOpen,
-                  QString cmdMkfsRoot,
-                  QString cmdMount,
-                  QString targetDeviceRoot,
+    PartitionJob( const QString& cmdLuksFormat,
+                  const QString& cmdLuksOpen,
+                  const QString& cmdMkfsRoot,
+                  const QString& cmdMount,
+                  const QString& targetDeviceRoot,
                   bool isFdeEnabled,
                   const QString& password );
 

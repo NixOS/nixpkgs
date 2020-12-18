@@ -13,14 +13,14 @@
 
 
 UsersJob::UsersJob( bool featureSshd,
-                    QString cmdPasswd,
-                    QString cmdSshd,
-                    QString cmdSshdUseradd,
+                    const QString& cmdPasswd,
+                    const QString& cmdSshd,
+                    const QString& cmdSshdUseradd,
                     bool isSshEnabled,
-                    QString username,
-                    QString password,
-                    QString sshdUsername,
-                    QString sshdPassword )
+                    const QString& username,
+                    const QString& password,
+                    const QString& sshdUsername,
+                    const QString& sshdPassword )
     : Calamares::Job()
     , m_featureSshd( featureSshd )
     , m_cmdPasswd( cmdPasswd )

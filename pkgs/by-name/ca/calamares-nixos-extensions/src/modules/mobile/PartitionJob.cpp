@@ -12,11 +12,11 @@
 #include <QFileInfo>
 
 
-PartitionJob::PartitionJob( QString cmdLuksFormat,
-                            QString cmdLuksOpen,
-                            QString cmdMkfsRoot,
-                            QString cmdMount,
-                            QString targetDeviceRoot,
+PartitionJob::PartitionJob( const QString& cmdLuksFormat,
+                            const QString& cmdLuksOpen,
+                            const QString& cmdMkfsRoot,
+                            const QString& cmdMount,
+                            const QString& targetDeviceRoot,
                             bool isFdeEnabled,
                             const QString& password )
     : Calamares::Job()
