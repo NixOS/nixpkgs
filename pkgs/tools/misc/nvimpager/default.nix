@@ -1,8 +1,10 @@
 { fetchFromGitHub
-, pkgs
+, stdenv
+, ncurses, neovim, procps
+, pandoc, lua51Packages, util-linux
 }:
 
-pkgs.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nvimpager";
   version = "0.9";
 
@@ -13,25 +15,24 @@ pkgs.stdenv.mkDerivation rec {
     sha256 = "1xy5387szfw0bp8dr7d4z33wd4xva7q219rvz8gc0vvv1vsy73va";
   };
 
-  buildInputs = with pkgs; [
+  buildInputs = [
     ncurses # for tput
-    neovim
     procps # for nvim_get_proc() which uses ps(1)
   ];
-  nativeBuildInputs = [ pkgs.pandoc ];
+  nativeBuildInputs = [ pandoc ];
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "nvimpager.configured" ];
   preBuild = ''
     patchShebangs nvimpager
-    substituteInPlace nvimpager --replace ':-nvim' ':-${pkgs.neovim}/bin/nvim'
+    substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
     '';
 
   doCheck = true;
-  checkInputs = with pkgs; [ lua51Packages.busted util-linux ];
+  checkInputs = [ lua51Packages.busted util-linux neovim ];
   checkPhase = ''script -c "busted --lpath './?.lua' test"'';
 
-  meta = with pkgs.stdenv.lib; {
+  meta = with stdenv.lib; {
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax
@@ -41,6 +42,6 @@ pkgs.stdenv.mkDerivation rec {
     homepage = "https://github.com/lucc/nvimpager";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lucc ];
+    maintainers = [ maintainers.lucc ];
   };
 }
