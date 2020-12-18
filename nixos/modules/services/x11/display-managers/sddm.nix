@@ -33,6 +33,14 @@ let
     ${cfg.stopScript}
   '';
 
+  facesEnv = pkgs.linkFarm "sddm-faces" (mapAttrsToList (user: face: {
+    name = "${user}.face.icon";
+    path = face;
+  }) ({
+    root = "${sddm}/share/sddm/faces/root.face.icon";
+    "" = "${sddm}/share/sddm/faces/.face.icon";
+  } // cfg.faces));
+
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
     HaltCommand=/run/current-system/systemd/bin/systemctl poweroff
@@ -44,7 +52,7 @@ let
     [Theme]
     Current=${cfg.theme}
     ThemeDir=/run/current-system/sw/share/sddm/themes
-    FacesDir=/run/current-system/sw/share/sddm/faces
+    FacesDir=${facesEnv}
 
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
@@ -140,6 +148,15 @@ in
         description = ''
           Greeter theme to use.
         '';
+      };
+
+      faces = mkOption {
+        default = {};
+        example = { alice = "/path/to/picture"; };
+        description = ''
+          the picture to set as a user's profile photo in SDDM
+        '';
+        type = types.attrsOf types.path;
       };
 
       autoNumlock = mkOption {
