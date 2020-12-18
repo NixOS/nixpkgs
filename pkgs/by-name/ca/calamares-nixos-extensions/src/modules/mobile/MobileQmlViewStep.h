@@ -32,7 +32,6 @@ public:
 
 private:
     Config* m_config;
-    QList< Calamares::job_ptr > m_jobs;
 };
 
 CALAMARES_PLUGIN_FACTORY_DECLARATION( MobileQmlViewStepFactory )

@@ -2,7 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #include "MobileQmlViewStep.h"
 #include "PartitionJob.h"
-#include "UsersJob.h"
 
 #include "GlobalStorage.h"
 #include "JobQueue.h"
@@ -35,7 +34,7 @@ MobileQmlViewStep::MobileQmlViewStep( QObject* parent )
 void
 MobileQmlViewStep::onLeave()
 {
-    Calamares::Job *partition, *users;
+    Calamares::Job* partition;
 
     /* HACK: run partition job now */
     partition = new PartitionJob( m_config->cmdLuksFormat(),
@@ -50,20 +49,6 @@ MobileQmlViewStep::onLeave()
     {
         cError() << "PARTITION JOB FAILED: " << res.message();
     }
-
-    /* Put users job in queue (should run after unpackfs) */
-    m_jobs.clear();
-    QString cmdSshd = m_config->isSshEnabled() ? m_config->cmdSshdEnable() : m_config->cmdSshdDisable();
-    users = new UsersJob( m_config->featureSshd(),
-                          m_config->cmdPasswd(),
-                          cmdSshd,
-                          m_config->cmdSshdUseradd(),
-                          m_config->isSshEnabled(),
-                          m_config->username(),
-                          m_config->userPassword(),
-                          m_config->sshdUsername(),
-                          m_config->sshdPassword() );
-    m_jobs.append( Calamares::job_ptr( users ) );
 }
 
 bool
@@ -96,7 +81,7 @@ MobileQmlViewStep::isAtEnd() const
 Calamares::JobList
 MobileQmlViewStep::jobs() const
 {
-    return m_jobs;
+    return m_config->createJobs();
 }
 
 QObject*

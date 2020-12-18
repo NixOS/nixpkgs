@@ -1,6 +1,9 @@
 /* SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #pragma once
+
+#include "Job.h"
+
 #include <QObject>
 #include <memory>
 
@@ -42,6 +45,7 @@ class Config : public QObject
 public:
     Config( QObject* parent = nullptr );
     void setConfigurationMap( const QVariantMap& );
+    Calamares::JobList createJobs();
 
     /* welcome */
     QString osName() const { return m_osName; }

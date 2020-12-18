@@ -1,6 +1,8 @@
 /* SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #include "Config.h"
+#include "UsersJob.h"
+
 #include <QVariant>
 
 Config::Config( QObject* parent )
@@ -51,6 +53,27 @@ Config::setConfigurationMap( const QVariantMap& cfgMap )
     m_cmdSshdEnable = cfgStr( cfgMap, "cmdSshdEnable", "systemctl enable sshd.service" );
     m_cmdSshdDisable = cfgStr( cfgMap, "cmdSshdDisable", "systemctl disable sshd.service" );
     m_cmdSshdUseradd = cfgStr( cfgMap, "cmdSshdUseradd", "useradd -G wheel -m" );
+}
+
+Calamares::JobList
+Config::createJobs()
+{
+    QList< Calamares::job_ptr > list;
+    QString cmdSshd = m_isSshEnabled ? m_cmdSshdEnable : m_cmdSshdDisable;
+
+    /* Put users job in queue (should run after unpackfs) */
+    Calamares::Job* j = new UsersJob( m_featureSshd,
+                                      m_cmdPasswd,
+                                      cmdSshd,
+                                      m_cmdSshdUseradd,
+                                      m_isSshEnabled,
+                                      m_username,
+                                      m_userPassword,
+                                      m_sshdUsername,
+                                      m_sshdPassword );
+    list.append( Calamares::job_ptr( j ) );
+
+    return list;
 }
 
 void
