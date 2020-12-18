@@ -623,6 +623,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Open Software License 3.0";
   };
 
+  parity70 = spdx {
+    spdxId = "Parity-7.0.0";
+    fullName = "Parity Public License 7.0.0";
+    url = "https://paritylicense.com/versions/7.0.0.html";
+  };
+
   php301 = spdx {
     spdxId = "PHP-3.01";
     fullName = "PHP License v3.01";
