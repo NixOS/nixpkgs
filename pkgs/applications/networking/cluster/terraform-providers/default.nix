@@ -55,6 +55,7 @@ let
 
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
+    checkly = callPackage ./checkly {};
     cloudfoundry = callPackage ./cloudfoundry {};
     elasticsearch = callPackage ./elasticsearch {};
     gandi = callPackage ./gandi {};
