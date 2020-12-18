@@ -7654,6 +7654,8 @@ in
 
   sewer = callPackage ../tools/admin/sewer { };
 
+  sfeed = callPackage ../tools/misc/sfeed { };
+
   sftpman = callPackage ../tools/filesystems/sftpman { };
 
   screenfetch = callPackage ../tools/misc/screenfetch { };
