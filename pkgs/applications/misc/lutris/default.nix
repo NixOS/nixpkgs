@@ -114,7 +114,7 @@ in buildPythonApplication rec {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ chiiruno jefflabonte ];
     platforms = platforms.linux;
   };
 }
