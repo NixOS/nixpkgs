@@ -1514,7 +1514,6 @@ self: super: {
   # 2020-11-23: https://github.com/cdornan/fmt/issues/30
   fmt = dontCheck super.fmt;
 
-
   # 2020-11-27: Tests broken
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
@@ -1529,4 +1528,5 @@ self: super: {
 
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
