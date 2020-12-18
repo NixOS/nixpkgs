@@ -29,6 +29,10 @@ let
     (mkOverride "yarl" "1.4.2"
       "0jzpgrdl6415zzl8js7095q8ks14555lhgxah76mimffkr39rkaq")
 
+    # Pinned, because hass-nabucasa 0.37.2 needs attrs < 20.3
+    (mkOverride "attrs" "20.2.0"
+      "152m77pcxkfwi0l8r0iwn859jx6gsqvxss1nbm6x7qcypgdlvd96")
+
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
