@@ -1,21 +1,22 @@
-{ stdenv, lib
+{ stdenv, lib, fetchpatch
 , pkgconfig, autoreconfHook
-, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
+, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
+, sqlite
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.15.1";
+  version = "4.16.1.2";
 
   src = fetchurl {
     url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    sha256 = "0c6jwail90fhha3bpx70w4a2i8ycxwvnx6zwxm121l8wc3wlbvyx";
+    sha256 = "1k6ank2aad7r503w12m6m494mxr6iccj52wqhwbc94pwxsf34mw3";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ]
+  buildInputs = [ cpio zlib bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
                 ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
@@ -28,14 +29,23 @@ stdenv.mkDerivation rec {
     "--with-external-db"
     "--with-lua"
     "--enable-python"
+    "--enable-ndb"
+    "--enable-sqlite"
     "--localstatedir=/var"
     "--sharedstatedir=/com"
   ];
 
-  postPatch = ''
-    # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here
-    substituteInPlace configure.ac --replace 'python''${PYTHON_VERSION}' ${python.executable}
+  # Small fixes for ndb on darwin
+  # https://github.com/rpm-software-management/rpm/pull/1465
+  patches = [
+    (fetchpatch {
+      name = "darwin-support.patch";
+      url = "https://github.com/rpm-software-management/rpm/commit/2d20e371d5e38f4171235e5c64068cad30bda557.patch";
+      sha256 = "0p3j5q5a4hl357maf7018k3826jhcpqg6wfrnccrkv30g0ayk171";
+    })
+  ];
 
+  postPatch = ''
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
   '';
 
