@@ -21722,6 +21722,8 @@ in
 
   lv2-cpp-tools = callPackage ../applications/audio/lv2-cpp-tools { };
 
+  lxi-tools = callPackage ../tools/networking/lxi-tools { };
+
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
