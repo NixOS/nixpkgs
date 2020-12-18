@@ -1534,4 +1534,7 @@ self: super: {
   skylighting = self.skylighting_0_10_2;
   skylighting-core = self.skylighting-core_0_10_2;
 
+  # https://github.com/yesodweb/yesod/issues/1714
+  yesod-core = dontCheck super.yesod-core;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
