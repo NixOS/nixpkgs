@@ -117,10 +117,18 @@ let
     perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
   };
 
+  # Handle assertions and warnings
+
+  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+
+  baseSystemAssertWarn = if failedAssertions != []
+    then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else showWarnings config.warnings baseSystem;
+
   # Replace runtime dependencies
   system = fold ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystem config.system.replaceRuntimeDependencies;
+    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
 in
 
