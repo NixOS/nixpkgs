@@ -13625,6 +13625,8 @@ in
 
   libltc = callPackage ../development/libraries/libltc { };
 
+  liblxi = callPackage ../development/libraries/liblxi { };
+
   libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
