@@ -9660,6 +9660,10 @@
     email = "oliver.huntuk@gmail.com";
     name = "Oliver Hunt";
   };
+  vq = {
+    email = "vq@erq.se";
+    name = "Daniel Nilsson";
+  };
   vrthra = {
     email = "rahul@gopinath.org";
     github = "vrthra";
