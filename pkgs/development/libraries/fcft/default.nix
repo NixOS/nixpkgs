@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/fcft.git";
     rev = version;
-    sha256 = "sha256-FD3KfaQbSEA1XdmS6YxH+c5fSsra9Ro/KKslb7Brv7U=";
+    sha256 = "0k2i57rakm4g86f7hbhkby8af0vv7v63a70lk3m58mkycpy5q2rm";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
