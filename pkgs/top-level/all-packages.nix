@@ -5443,8 +5443,9 @@ in
 
   libgaminggear = callPackage ../development/libraries/libgaminggear { };
 
-  libhandy = callPackage ../development/libraries/libhandy { };
-
+  libhandy = libhandy_1;
+  # stable version
+  libhandy_1 = callPackage ../development/libraries/libhandy { };
   # Needed for apps that still depend on the unstable verison of the library (not libhandy-1)
   libhandy_0 = callPackage ../development/libraries/libhandy/0.x.nix { };
 
@@ -18025,6 +18026,10 @@ in
   corerad = callPackage ../tools/networking/corerad { };
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
+
+  cpupower-gui = python3Packages.callPackage ../os-specific/linux/cpupower-gui {
+    inherit (pkgs) meson;
+  };
 
   cpuset = callPackage ../os-specific/linux/cpuset { };
 
