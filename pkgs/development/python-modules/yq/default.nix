@@ -1,4 +1,5 @@
 { lib
+, nixosTests
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -45,6 +46,8 @@ buildPythonPackage rec {
   checkPhase = "pytest ./test/test.py";
 
   pythonImportsCheck = [ "yq" ];
+
+  passthru.tests = { inherit (nixosTests) yq; };
 
   meta = with lib; {
     description = "Command-line YAML processor - jq wrapper for YAML documents";
