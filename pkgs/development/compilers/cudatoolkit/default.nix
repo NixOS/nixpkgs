@@ -1,14 +1,37 @@
 { lib
 , callPackage
 , fetchurl
+, fetchpatch
 , gcc48
 , gcc6
 , gcc7
 , gcc9
+, wrapCC
 }:
 
 let
   common = callPackage ./common.nix;
+
+  # CUDA Toolkit pre-9.2/10.0 used the old type signatures for AVX intrinsics,
+  # prior to the fix for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=76731
+  # The host compiler needs to agree with these type signatures, or will error.
+  gcc6-patched = let
+    revertGccPatch = attrs: fetchpatch {
+      url = "https://github.com/gcc-mirror/gcc/commit/${attrs.rev}.patch";
+      excludes = [ "gcc/ChangeLog" ]; # causes too many conflicts
+      revert = true;
+      inherit (attrs) sha256;
+    };
+  in wrapCC (gcc6.cc.overrideAttrs (oa: {
+    patches = (oa.patches or []) ++ map revertGccPatch [
+      # Mass renaming - needs to be reverted to avoid conflicts
+      { rev = "ec434f449ddead7da2248b6fe1018e76b71145aa";
+        sha256 = "16c067vk909fjk07b29qimra5ifxz9q0q21qy3f14lgdzj9bp6cl"; }
+      # The actual change we need to revert
+      { rev = "1992881bde049433d2585b3fe6f25b80420cd296";
+        sha256 = "1sdf220ry3j2q0mikyn4cnv88lga1fjgv1gz5zymvbcswy4np2zj"; }
+    ];
+  }));
 in rec {
   cudatoolkit_6 = common {
     version = "6.0.37";
@@ -73,7 +96,7 @@ in rec {
         sha256 = "0pymg3mymsa2n48y0njz3spzlkm15lvjzw8fms1q83zslz4x0lwk";
       })
     ];
-    gcc = gcc6;
+    gcc = gcc6-patched;
   };
 
   cudatoolkit_9_1 = common {
@@ -94,7 +117,7 @@ in rec {
         sha256 = "12mcv6f8z33z8y41ja8bv5p5iqhv2vx91mv3b5z6fcj7iqv98422";
       })
     ];
-    gcc = gcc6;
+    gcc = gcc6-patched;
   };
 
   cudatoolkit_9_2 = common {

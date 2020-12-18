@@ -226,6 +226,12 @@ stdenv.mkDerivation rec {
       esac
     done
     popd
+
+    # Ensure vector intrinsic type signatures do not cause compiler errors
+    pushd $TMPDIR
+    echo '#include <immintrin.h>' > test.cu
+    $out/bin/nvcc -c test.cu
+    popd
   '';
   passthru = {
     cc = gcc;
