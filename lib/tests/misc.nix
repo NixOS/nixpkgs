@@ -655,7 +655,7 @@ runTests {
           modules = [ module ];
         }).options;
 
-        locs = filter (o: ! o.internal) (optionAttrSetToDocList (removeAttrs options [ "_module" ]));
+        locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
     expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
