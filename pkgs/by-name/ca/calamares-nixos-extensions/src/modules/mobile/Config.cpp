@@ -5,6 +5,7 @@
 #include "UsersJob.h"
 
 #include "ViewManager.h"
+#include "utils/Variant.h"
 
 #include <QVariant>
 
@@ -13,49 +14,30 @@ Config::Config( QObject* parent )
 {
 }
 
-QString
-cfgStr( const QVariantMap& cfgMap, QString key, QString defaultStr )
-{
-    QString ret = cfgMap.value( key ).toString();
-    if ( ret.isEmpty() )
-    {
-        return defaultStr;
-    }
-    return ret;
-}
-
-bool
-cfgBool( const QVariantMap& cfgMap, QString key, bool defaultBool )
-{
-    if ( cfgMap.contains( key ) )
-    {
-        return cfgMap.value( key ).toBool();
-    }
-    return defaultBool;
-}
-
 void
 Config::setConfigurationMap( const QVariantMap& cfgMap )
 {
-    m_osName = cfgStr( cfgMap, "osName", "(unknown)" );
-    m_arch = cfgStr( cfgMap, "arch", "(unknown)" );
-    m_device = cfgStr( cfgMap, "device", "(unknown)" );
-    m_userInterface = cfgStr( cfgMap, "userInterface", "(unknown)" );
-    m_version = cfgStr( cfgMap, "version", "(unknown)" );
-    m_username = cfgStr( cfgMap, "username", "user" );
+    using namespace CalamaresUtils;
 
-    m_featureSshd = cfgBool( cfgMap, "featureSshd", true );
+    m_osName = getString( cfgMap, "osName", "(unknown)" );
+    m_arch = getString( cfgMap, "arch", "(unknown)" );
+    m_device = getString( cfgMap, "device", "(unknown)" );
+    m_userInterface = getString( cfgMap, "userInterface", "(unknown)" );
+    m_version = getString( cfgMap, "version", "(unknown)" );
+    m_username = getString( cfgMap, "username", "user" );
 
-    m_cmdLuksFormat = cfgStr( cfgMap, "cmdLuksFormat", "cryptsetup luksFormat --use-random" );
-    m_cmdLuksOpen = cfgStr( cfgMap, "cmdLuksOpen", "cryptsetup luksOpen" );
-    m_cmdMkfsRoot = cfgStr( cfgMap, "cmdMkfsRoot", "mkfs.ext4 -L 'unknownOS_root'" );
-    m_cmdMount = cfgStr( cfgMap, "cmdMount", "mount" );
-    m_targetDeviceRoot = cfgStr( cfgMap, "targetDeviceRoot", "/dev/unknown" );
+    m_featureSshd = getBool( cfgMap, "featureSshd", true );
 
-    m_cmdPasswd = cfgStr( cfgMap, "cmdPasswd", "passwd" );
-    m_cmdSshdEnable = cfgStr( cfgMap, "cmdSshdEnable", "systemctl enable sshd.service" );
-    m_cmdSshdDisable = cfgStr( cfgMap, "cmdSshdDisable", "systemctl disable sshd.service" );
-    m_cmdSshdUseradd = cfgStr( cfgMap, "cmdSshdUseradd", "useradd -G wheel -m" );
+    m_cmdLuksFormat = getString( cfgMap, "cmdLuksFormat", "cryptsetup luksFormat --use-random" );
+    m_cmdLuksOpen = getString( cfgMap, "cmdLuksOpen", "cryptsetup luksOpen" );
+    m_cmdMkfsRoot = getString( cfgMap, "cmdMkfsRoot", "mkfs.ext4 -L 'unknownOS_root'" );
+    m_cmdMount = getString( cfgMap, "cmdMount", "mount" );
+    m_targetDeviceRoot = getString( cfgMap, "targetDeviceRoot", "/dev/unknown" );
+
+    m_cmdPasswd = getString( cfgMap, "cmdPasswd", "passwd" );
+    m_cmdSshdEnable = getString( cfgMap, "cmdSshdEnable", "systemctl enable sshd.service" );
+    m_cmdSshdDisable = getString( cfgMap, "cmdSshdDisable", "systemctl disable sshd.service" );
+    m_cmdSshdUseradd = getString( cfgMap, "cmdSshdUseradd", "useradd -G wheel -m" );
 }
 
 Calamares::JobList
