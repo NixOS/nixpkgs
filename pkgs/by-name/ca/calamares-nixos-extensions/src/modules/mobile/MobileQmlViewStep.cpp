@@ -4,7 +4,6 @@
 #include "PartitionJob.h"
 
 #include "GlobalStorage.h"
-#include "JobQueue.h"
 
 #include "locale/LabelModel.h"
 #include "utils/Dirs.h"
