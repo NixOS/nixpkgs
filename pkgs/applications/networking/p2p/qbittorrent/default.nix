@@ -1,29 +1,31 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, makeWrapper, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false # Debugging
-, guiSupport ? true, dbus ? null # GUI (disable to run headless)
+, debugSupport ? false
+, guiSupport ? true, dbus ? null # GUI OR headless
 , webuiSupport ? true # WebUI
+, trackerSearch ? true, python3 ? null
 }:
 
 assert guiSupport -> (dbus != null);
-with lib;
+assert trackerSearch -> (python3 != null);
 
+with lib;
 mkDerivation rec {
   pname = "qbittorrent";
-  version = "4.3.0.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "068sf24mjvc2idimgpzvf7gjk8n9xrr3qqlqfx5j3j598ckm3yfp";
+    sha256 = "17ih00q7idrpl3b2vgh4smva6lazs5jw06pblriscn1lrwdvrc38";
   };
 
-  # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
+    ++ optional guiSupport dbus # D(esktop)-Bus depends on GUI support
+    ++ optional trackerSearch python3;
 
   # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
   QMAKE_LRELEASE = "lrelease";
@@ -34,6 +36,12 @@ mkDerivation rec {
     ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
     ++ optional (!webuiSupport) "--disable-webui"
     ++ optional debugSupport "--enable-debug";
+
+  postInstall = "wrapProgram $out/bin/${
+    if guiSupport
+    then "qbittorrent"
+    else "qbittorrent-nox"
+  } --prefix PATH : ${makeBinPath [ python3 ]}";
 
   enableParallelBuilding = true;
 

@@ -9,31 +9,13 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  # https://trac.sagemath.org/ticket/15980 for tracking of python3 support
-  python = pkgs.python2.override {
+  python3 = pkgs.python3.override {
     packageOverrides = self: super: {
-      # python packages that appear unmaintained and were not accepted into the nixpkgs
-      # tree because of that. These packages are only dependencies of the more-or-less
-      # deprecated sagenb. However sagenb is still a default dependency and the doctests
-      # depend on it.
-      # See https://github.com/NixOS/nixpkgs/pull/38787 for a discussion.
-      # The dependency on the sage notebook (and therefore these packages) will be
-      # removed in the future:
-      # https://trac.sagemath.org/ticket/25837
-      flask-oldsessions = self.callPackage ./flask-oldsessions.nix {};
-      flask-openid = self.callPackage ./flask-openid.nix {};
-      python-openid = self.callPackage ./python-openid.nix {};
-      sagenb = self.callPackage ./sagenb.nix {
-        mathjax = nodePackages.mathjax;
-      };
-
-      # Package with a cyclic dependency with sage
-      pybrial = self.callPackage ./pybrial.nix {};
-
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
-        inherit flint ecl arb;
+        inherit flint arb;
         inherit sage-src env-locations pynac singular;
+        ecl = maxima-ecl.ecl;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };
@@ -59,9 +41,10 @@ let
   # A bash script setting various environment variables to tell sage where
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
-    inherit pari_data ecl;
+    inherit pari_data;
     inherit singular maxima-ecl;
-    cysignals = python.pkgs.cysignals;
+    ecl = maxima-ecl.ecl;
+    cysignals = python3.pkgs.cysignals;
     three = nodePackages.three;
     mathjax = nodePackages.mathjax;
   };
@@ -69,21 +52,22 @@ let
   # The shell file that gets sourced on every sage start. Will also source
   # the env-locations file.
   sage-env = callPackage ./sage-env.nix {
-    sagelib = python.pkgs.sagelib;
+    sagelib = python3.pkgs.sagelib;
     inherit env-locations;
-    inherit python ecl singular palp flint pynac pythonEnv maxima-ecl;
+    inherit python3 singular palp flint pynac pythonEnv maxima-ecl;
+    ecl = maxima-ecl.ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
   };
 
   # The documentation for sage, building it takes a lot of ram.
   sagedoc = callPackage ./sagedoc.nix {
     inherit sage-with-env;
-    inherit python maxima-ecl;
+    inherit python3 maxima-ecl;
   };
 
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
   sage-with-env = callPackage ./sage-with-env.nix {
-    inherit pythonEnv;
+    inherit python3 pythonEnv;
     inherit sage-env;
     inherit pynac singular maxima-ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
@@ -100,10 +84,8 @@ let
 
   sage-src = callPackage ./sage-src.nix {};
 
-  pythonRuntimeDeps = with python.pkgs; [
+  pythonRuntimeDeps = with python3.pkgs; [
     sagelib
-    pybrial
-    sagenb
     cvxopt
     networkx
     service-identity
@@ -116,11 +98,10 @@ let
     ipywidgets
     rpy2
     sphinx
-    typing
     pillow
   ];
 
-  pythonEnv = python.buildEnv.override {
+  pythonEnv = python3.buildEnv.override {
     extraLibs = pythonRuntimeDeps;
     ignoreCollisions = true;
   } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
@@ -129,8 +110,21 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  # https://trac.sagemath.org/ticket/26625
-  maxima-ecl = pkgs.maxima-ecl;
+  maxima-ecl = pkgs.maxima-ecl.override {
+    ecl = pkgs.ecl.override {
+      # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
+      # ECL. We apply a patch to fix it (write_error.patch), but it
+      # only works if threads are disabled.  sage 9.2 tests this
+      # (src/sage/interfaces/tests.py) and ships ecl like so.
+      # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1#note_1657275
+      threadSupport = false;
+
+      # if we don't use the system boehmgc, sending a SIGINT to ecl
+      # can segfault if we it happens during memory allocation.
+      # src/sage/libs/ecl.pyx would intermittently fail in this case.
+      useBoehmgc = true;
+    };
+  };
 
   # *not* to confuse with the python package "pynac"
   pynac = pkgs.pynac.override { inherit singular flint; };
@@ -161,9 +155,6 @@ let
       pari-seadata-small
     ];
   };
-
-  # https://trac.sagemath.org/ticket/22191
-  ecl = pkgs.ecl_16_1_2;
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
