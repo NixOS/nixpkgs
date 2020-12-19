@@ -26363,6 +26363,8 @@ in
 
   zscroll = callPackage ../applications/misc/zscroll {};
 
+  zsteg = callPackage ../tools/security/zsteg { };
+
   zynaddsubfx = zyn-fusion;
 
   zynaddsubfx-fltk = callPackage ../applications/audio/zynaddsubfx {
