@@ -287,6 +287,12 @@
        This avoids that the password gets exposed in the nix store.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The <literal>wafHook</literal> hook does not wrap Python anymore.
+       Packages depending on <literal>wafHook</literal> need to include any Python into their <literal>nativeBuildInputs</literal>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
