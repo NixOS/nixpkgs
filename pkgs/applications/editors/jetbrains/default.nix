@@ -2,12 +2,13 @@
 , python
 , jdk, cmake, libxml2, zlib, python3, ncurses5
 , dotnet-sdk_3
+, vmopts ? null
 }:
 
 with stdenv.lib;
 
 let
-  mkJetBrainsProduct = callPackage ./common.nix { };
+  mkJetBrainsProduct = callPackage ./common.nix { inherit vmopts; };
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
