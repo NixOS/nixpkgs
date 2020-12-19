@@ -16,6 +16,7 @@ appleDerivation {
     cp ${Libc_10-9}/include/NSSystemDirectories.h $out/include
 
     # Ugh Apple stopped releasing this stuff so we need an older one...
+    # NOTE: a newer libproc.h is shipped with xnu, we drop this old one.
     cp    ${Libc_old}/include/spawn.h    $out/include
     cp    ${Libc_old}/include/setjmp.h   $out/include
     cp    ${Libc_old}/include/ucontext.h $out/include
@@ -25,7 +26,6 @@ appleDerivation {
 
     mkdir -p $out/include/libkern
     cp ${Libc_old}/include/asl.h                    $out/include
-    cp ${Libc_old}/include/libproc.h                $out/include
     cp ${Libc_old}/include/libkern/OSAtomic.h       $out/include/libkern
     cp ${Libc_old}/include/libkern/OSCacheControl.h $out/include/libkern
   '';

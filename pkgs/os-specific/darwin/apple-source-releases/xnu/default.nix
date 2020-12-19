@@ -98,6 +98,9 @@ appleDerivation ({
     cp EXTERNAL_HEADERS/Availability*.h $out/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/
     cp -r EXTERNAL_HEADERS/corecrypto $out/include
 
+    # FIXME: libproc.h is no longer shipped with Libc, we kidnap the newer one here.
+    cp libsyscall/wrappers/libproc/libproc.h $out/include
+
     # Build the mach headers we crave
     export SRCROOT=$PWD/libsyscall
     export DERIVED_SOURCES_DIR=$out/include
