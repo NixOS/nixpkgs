@@ -4777,6 +4777,8 @@ in
 
   icecast = callPackage ../servers/icecast { };
 
+  icemon = libsForQt5.callPackage ../applications/networking/icemon { };
+
   icepeak = haskell.lib.justStaticExecutables haskellPackages.icepeak;
 
   iceshelf = callPackage ../tools/backup/iceshelf { };
@@ -17128,6 +17130,8 @@ in
   https-dns-proxy = callPackage ../servers/dns/https-dns-proxy { };
 
   hydron = callPackage ../servers/hydron { };
+
+  icecream = callPackage ../servers/icecream { };
 
   icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = {
