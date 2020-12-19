@@ -120,6 +120,10 @@ in
     { deps = [ autoconf264 automake111x gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
 
+  autoreconfHook269 = makeSetupHook
+    { deps = [ autoconf269 automake gettext libtool ]; }
+    ../build-support/setup-hooks/autoreconf.sh;
+
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
@@ -243,7 +247,9 @@ in
   archiver = callPackage ../applications/misc/archiver { };
 
   # It segfaults if it uses qt5.15
-  digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox { };
+  digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox {
+    autoreconfHook = autoreconfHook269;
+  };
 
   gretl = callPackage ../applications/science/math/gretl { };
 
@@ -1017,7 +1023,9 @@ in
 
   apg = callPackage ../tools/security/apg { };
 
-  apt-dater = callPackage ../tools/package-management/apt-dater { };
+  apt-dater = callPackage ../tools/package-management/apt-dater {
+    autoreconfHook = autoreconfHook269;
+  };
 
   autorevision = callPackage ../tools/misc/autorevision { };
 
@@ -3493,7 +3501,9 @@ in
 
   duc = callPackage ../tools/misc/duc { };
 
-  duff = callPackage ../tools/filesystems/duff { };
+  duff = callPackage ../tools/filesystems/duff {
+    autoreconfHook = autoreconfHook269;
+  };
 
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
@@ -3557,7 +3567,9 @@ in
 
   eflite = callPackage ../applications/audio/eflite {};
 
-  eid-mw = callPackage ../tools/security/eid-mw { };
+  eid-mw = callPackage ../tools/security/eid-mw {
+    autoreconfHook = autoreconfHook269;
+  };
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
@@ -4265,7 +4277,9 @@ in
 
   gmvault = callPackage ../tools/networking/gmvault { };
 
-  gnash = callPackage ../misc/gnash { };
+  gnash = callPackage ../misc/gnash {
+    autoreconfHook = autoreconfHook269;
+  };
 
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
@@ -4501,7 +4515,9 @@ in
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
-  gsmlib = callPackage ../development/libraries/gsmlib { };
+  gsmlib = callPackage ../development/libraries/gsmlib {
+    autoreconfHook = autoreconfHook269;
+  };
 
   gssdp = callPackage ../development/libraries/gssdp { };
 
@@ -5170,9 +5186,13 @@ in
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
-  libcoap = callPackage ../applications/networking/libcoap {};
+  libcoap = callPackage ../applications/networking/libcoap {
+    autoconf = autoconf269;
+  };
 
-  libcryptui = callPackage ../development/libraries/libcryptui { };
+  libcryptui = callPackage ../development/libraries/libcryptui {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libsmi = callPackage ../development/libraries/libsmi { };
 
@@ -5590,7 +5610,9 @@ in
 
   lv = callPackage ../tools/text/lv { };
 
-  lxc = callPackage ../os-specific/linux/lxc { };
+  lxc = callPackage ../os-specific/linux/lxc {
+    autoreconfHook = autoreconfHook269;
+  };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
   lxd = callPackage ../tools/admin/lxd { };
 
@@ -6350,7 +6372,9 @@ in
 
   opn2bankeditor = callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
 
-  orangefs = callPackage ../tools/filesystems/orangefs { };
+  orangefs = callPackage ../tools/filesystems/orangefs {
+    autoreconfHook = autoreconfHook269;
+  };
 
   os-prober = callPackage ../tools/misc/os-prober {};
 
@@ -6422,7 +6446,9 @@ in
 
   parastoo-fonts = callPackage ../data/fonts/parastoo-fonts { };
 
-  parcellite = callPackage ../tools/misc/parcellite { };
+  parcellite = callPackage ../tools/misc/parcellite {
+    autoreconfHook = autoreconfHook269;
+  };
 
   patchutils = callPackage ../tools/text/patchutils { };
 
@@ -7595,8 +7621,9 @@ in
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
+    autoreconfHook = autoreconfHook269;
     libxml2 = libxml2Python;
-   };
+  };
 
   systembus-notify = callPackage ../applications/misc/systembus-notify { };
 
@@ -7879,7 +7906,9 @@ in
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
-  ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint { };
+  ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint {
+    autoreconfHook = autoreconfHook269;
+  };
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   tty-clock = callPackage ../tools/misc/tty-clock { };
@@ -8038,7 +8067,9 @@ in
 
   verilator = callPackage ../applications/science/electronics/verilator {};
 
-  verilog = callPackage ../applications/science/electronics/verilog {};
+  verilog = callPackage ../applications/science/electronics/verilog {
+    autoconf = autoconf269;
+  };
 
   versus = callPackage ../applications/networking/versus { };
 
@@ -8147,6 +8178,7 @@ in
 
   watchman = callPackage ../development/tools/watchman {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    autoconf = autoconf269;
   };
 
   wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
@@ -8269,7 +8301,9 @@ in
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
-  uim = callPackage ../tools/inputmethods/uim { };
+  uim = callPackage ../tools/inputmethods/uim {
+    autoconf = autoconf269;
+  };
 
   uhub = callPackage ../servers/uhub { };
 
@@ -8463,6 +8497,7 @@ in
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
     gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
+    autoconf = autoconf269;
   };
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
@@ -8590,7 +8625,9 @@ in
 
   zbackup = callPackage ../tools/backup/zbackup {};
 
-  zbar = libsForQt5.callPackage ../tools/graphics/zbar { };
+  zbar = libsForQt5.callPackage ../tools/graphics/zbar {
+    autoreconfHook = autoreconfHook269;
+  };
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
@@ -10214,7 +10251,9 @@ in
 
   solc = callPackage ../development/compilers/solc { };
 
-  souffle = callPackage ../development/compilers/souffle { };
+  souffle = callPackage ../development/compilers/souffle {
+    autoreconfHook = autoreconfHook269;
+  };
 
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
 
@@ -10776,6 +10815,7 @@ in
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
+    autoreconfHook = autoreconfHook269;
     bison = buildPackages.bison_3_5;
   })
     ruby_2_5
@@ -11004,12 +11044,14 @@ in
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
-  autoconf = callPackage ../development/tools/misc/autoconf { };
+  autoconf = autoconf270;
 
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
   autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
+  autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
+  autoconf270 = callPackage ../development/tools/misc/autoconf { };
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
@@ -11499,6 +11541,7 @@ in
 
   fswatch = callPackage ../development/tools/misc/fswatch {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    autoreconfHook = autoreconfHook269;
   };
 
   fujprog = callPackage ../development/tools/misc/fujprog {
@@ -11858,7 +11901,9 @@ in
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
-  openocd = callPackage ../development/tools/misc/openocd { };
+  openocd = callPackage ../development/tools/misc/openocd {
+    autoreconfHook = autoreconfHook269;
+  };
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
@@ -12454,9 +12499,13 @@ in
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
-  libbfd = callPackage ../development/libraries/libbfd { };
+  libbfd = callPackage ../development/libraries/libbfd {
+    autoreconfHook = autoreconfHook269;
+  };
 
-  libopcodes = callPackage ../development/libraries/libopcodes { };
+  libopcodes = callPackage ../development/libraries/libopcodes {
+    autoreconfHook = autoreconfHook269;
+  };
 
   bicpl = callPackage ../development/libraries/science/biology/bicpl { };
 
@@ -12716,7 +12765,9 @@ in
       inherit suidHelper serviceDirectories apparmor;
     };
 
-  dee = callPackage ../development/libraries/dee { };
+  dee = callPackage ../development/libraries/dee {
+    autoreconfHook = autoreconfHook269;
+  };
 
   dhex = callPackage ../applications/editors/dhex { };
 
@@ -12820,6 +12871,7 @@ in
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
       gst-libav;
+    autoreconfHook = autoreconfHook269;
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
@@ -13014,6 +13066,7 @@ in
 
   gdal = callPackage ../development/libraries/gdal {
     pythonPackages = python3Packages;
+    autoreconfHook = autoreconfHook269;
   };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
@@ -13414,6 +13467,7 @@ in
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    autoreconfHook = autoreconfHook269;
   };
   libheimdal = heimdal;
 
@@ -13438,6 +13492,7 @@ in
   hidapi = callPackage ../development/libraries/hidapi {
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
+    autoreconfHook = autoreconfHook269;
   };
 
   highfive = callPackage ../development/libraries/highfive { };
@@ -13450,7 +13505,9 @@ in
 
   hiredis-vip = callPackage ../development/libraries/hiredis-vip { };
 
-  hivex = callPackage ../development/libraries/hivex { };
+  hivex = callPackage ../development/libraries/hivex {
+    autoreconfHook = autoreconfHook269;
+  };
 
   hound = callPackage ../development/tools/misc/hound { };
 
@@ -13763,7 +13820,9 @@ in
   libayatana-appindicator-gtk3 = libayatana-appindicator.override { gtkVersion = "3"; };
   libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
 
-  libarchive = callPackage ../development/libraries/libarchive { };
+  libarchive = callPackage ../development/libraries/libarchive {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libasr = callPackage ../development/libraries/libasr { };
 
@@ -13995,7 +14054,9 @@ in
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
-  libeatmydata = callPackage ../development/libraries/libeatmydata { };
+  libeatmydata = callPackage ../development/libraries/libeatmydata {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libeb = callPackage ../development/libraries/libeb { };
 
@@ -14176,7 +14237,9 @@ in
 
   libgpiod = callPackage ../development/libraries/libgpiod { };
 
-  libgpod = callPackage ../development/libraries/libgpod { };
+  libgpod = callPackage ../development/libraries/libgpod {
+    autoreconfHook = autoreconfHook269;
+  };
 
   libgssglue = callPackage ../development/libraries/libgssglue { };
 
@@ -14422,6 +14485,7 @@ in
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
   libmatheval = callPackage ../development/libraries/libmatheval {
+    autoconf = autoconf269;
     guile = guile_2_0;
   };
 
@@ -15878,7 +15942,9 @@ in
 
   sbc = callPackage ../development/libraries/sbc { };
 
-  schroedinger = callPackage ../development/libraries/schroedinger { };
+  schroedinger = callPackage ../development/libraries/schroedinger {
+    autoreconfHook = autoreconfHook269;
+  };
 
   SDL = callPackage ../development/libraries/SDL ({
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
@@ -16292,7 +16358,9 @@ in
 
   totem-pl-parser = callPackage ../development/libraries/totem-pl-parser { };
 
-  tpm2-tss = callPackage ../development/libraries/tpm2-tss { };
+  tpm2-tss = callPackage ../development/libraries/tpm2-tss {
+    autoreconfHook = autoreconfHook269;
+  };
 
   tremor = callPackage ../development/libraries/tremor { };
 
@@ -16965,7 +17033,9 @@ in
 
   cayley = callPackage ../servers/cayley { };
 
-  charybdis = callPackage ../servers/irc/charybdis { };
+  charybdis = callPackage ../servers/irc/charybdis {
+    autoreconfHook = autoreconfHook269;
+  };
 
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
@@ -17785,7 +17855,9 @@ in
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
-  torque = callPackage ../servers/computing/torque { };
+  torque = callPackage ../servers/computing/torque {
+    autoreconfHook = autoreconfHook269;
+  };
 
   tt-rss = callPackage ../servers/tt-rss { };
   tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
@@ -21002,7 +21074,9 @@ in
 
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
-  elinks = callPackage ../applications/networking/browsers/elinks { };
+  elinks = callPackage ../applications/networking/browsers/elinks {
+    autoreconfHook = autoreconfHook269;
+  };
 
   elvis = callPackage ../applications/editors/elvis { };
 
@@ -21246,7 +21320,9 @@ in
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
-  fsv = callPackage ../applications/misc/fsv { };
+  fsv = callPackage ../applications/misc/fsv {
+    autoreconfHook = autoreconfHook269;
+  };
 
   ft2-clone = callPackage ../applications/audio/ft2-clone { };
 
@@ -21592,6 +21668,7 @@ in
   getxbook = callPackage ../applications/misc/getxbook { };
 
   gimp = callPackage ../applications/graphics/gimp {
+    autoreconfHook = autoreconfHook269;
     gegl = gegl_0_4;
     lcms = lcms2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
@@ -22704,7 +22781,9 @@ in
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
-  mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
+  mhwaveedit = callPackage ../applications/audio/mhwaveedit {
+    autoreconfHook = autoreconfHook269;
+  };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
@@ -22927,7 +23006,9 @@ in
       else null;
   };
 
-  mup = callPackage ../applications/audio/mup { };
+  mup = callPackage ../applications/audio/mup {
+    autoreconfHook = autoreconfHook269;
+  };
 
   # TODO: we should probably merge these 2
   musescore =
@@ -23121,6 +23202,7 @@ in
 
   msmtp = callPackage ../applications/networking/msmtp {
     inherit (darwin.apple_sdk.frameworks) Security;
+    autoreconfHook = autoreconfHook269;
   };
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
@@ -23821,7 +23903,9 @@ in
 
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
-  rofi-unwrapped = callPackage ../applications/misc/rofi { };
+  rofi-unwrapped = callPackage ../applications/misc/rofi {
+    autoreconfHook = autoreconfHook269;
+  };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
@@ -24095,7 +24179,9 @@ in
 
   soxr = callPackage ../applications/misc/audio/soxr { };
 
-  spek = callPackage ../applications/audio/spek { };
+  spek = callPackage ../applications/audio/spek {
+    autoreconfHook = autoreconfHook269;
+  };
 
   spotify-unwrapped = callPackage ../applications/audio/spotify {
     libgcrypt = libgcrypt_1_5;
@@ -24127,7 +24213,9 @@ in
 
   sslyze = with python3Packages; toPythonApplication sslyze;
 
-  ssr = callPackage ../applications/audio/soundscape-renderer {};
+  ssr = callPackage ../applications/audio/soundscape-renderer {
+    autoreconfHook = autoreconfHook269;
+  };
 
   ssrc = callPackage ../applications/audio/ssrc { };
 
@@ -24513,7 +24601,9 @@ in
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
-  vcprompt = callPackage ../applications/version-management/vcprompt { };
+  vcprompt = callPackage ../applications/version-management/vcprompt {
+    autoconf = autoconf269;
+  };
 
   vcs = callPackage ../applications/video/vcs { };
 
@@ -24976,7 +25066,9 @@ in
     gtk = gtk2;
   };
 
-  x11basic = callPackage ../development/compilers/x11basic { };
+  x11basic = callPackage ../development/compilers/x11basic {
+    autoconf = autoconf269;
+  };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
@@ -25281,7 +25373,9 @@ in
 
   zeronet = callPackage ../applications/networking/p2p/zeronet { };
 
-  zexy = callPackage ../applications/audio/pd-plugins/zexy  { };
+  zexy = callPackage ../applications/audio/pd-plugins/zexy {
+    autoconf = autoconf269;
+  };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
@@ -25405,7 +25499,10 @@ in
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
   pivx = libsForQt5.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
-  pivxd = callPackage ../applications/blockchains/pivx.nix { withGui = false; };
+  pivxd = callPackage ../applications/blockchains/pivx.nix {
+    withGui = false;
+    autoreconfHook = autoreconfHook269;
+  };
 
   ethabi = callPackage ../applications/blockchains/ethabi.nix { };
 
@@ -25683,7 +25780,10 @@ in
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
-  freeciv = callPackage ../games/freeciv { qt5 = qt514; };
+  freeciv = callPackage ../games/freeciv {
+    autoreconfHook = autoreconfHook269;
+    qt5 = qt514;
+  };
 
   freeciv_gtk = freeciv.override {
     gtkClient = true;
@@ -26663,7 +26763,9 @@ in
     neuron-version = neuron.version;
   };
 
-  kallisto = callPackage ../applications/science/biology/kallisto { };
+  kallisto = callPackage ../applications/science/biology/kallisto {
+    autoconf = autoconf269;
+  };
 
   kssd = callPackage ../applications/science/biology/kssd { };
 
@@ -27380,6 +27482,7 @@ in
   boinc = callPackage ../applications/science/misc/boinc { };
 
   celestia = callPackage ../applications/science/astronomy/celestia {
+    autoreconfHook = autoreconfHook269;
     lua = lua5_1;
     inherit (pkgs.gnome2) gtkglext;
   };
