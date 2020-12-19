@@ -48,7 +48,7 @@ let
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*-x86_64-linux-gnu.so
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
