@@ -1,7 +1,15 @@
 { stdenv
-, language
 , tree-sitter
+}:
+
+# Build a parser grammar and put the resulting shared object in `$out/parser`
+
+{
+  # language name
+  language
+  # version of tree-sitter
 , version
+  # source for the language grammar
 , source
 }:
 

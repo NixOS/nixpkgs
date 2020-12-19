@@ -9,11 +9,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
-  version = "1.5.0-21"; # TODO try to remove preCheck phase on upgrade
+  version = "1.5.0-87"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "1b9khiv0mk2xzw1rblm2jy6qsf8y6f9k7qy15sxpb21d72hzzbl2";
+    sha256 = "1d0h1yb7qvh9x7wwv9yrzmcp712f49w1iljkxp4y6g9pzsmg1mmv";
   };
 
   patches = stdenv.lib.optionals (!enableGUI) [

@@ -1,0 +1,39 @@
+diff --git a/src/sage/repl/image.py b/src/sage/repl/image.py
+index d7d00b0..cd1607a 100644
+--- a/src/sage/repl/image.py
++++ b/src/sage/repl/image.py
+@@ -77,7 +77,7 @@ class Image(SageObject):
+ 
+         - ``size`` -- 2-tuple, containing (width, height) in pixels.
+ 
+-        - ``color`` -- string or tuple of numeric. What colour to use
++        - ``color`` -- string, numeric or tuple of numeric. What colour to use
+           for the image. Default is black.  If given, this should be a
+           a tuple with one value per band. When creating RGB images,
+           you can also use colour strings as supported by the
+@@ -91,9 +91,15 @@ class Image(SageObject):
+         EXAMPLES::
+ 
+             sage: from sage.repl.image import Image
+-            sage: Image('P', (16, 16), (13,))
++            sage: Image('P', (16, 16), 13)
+             16x16px 8-bit Color image
+         """
++        # pillow does not support Sage integers as color
++        from sage.rings.integer import Integer
++        if isinstance(color, Integer):
++            color = int(color)
++        elif isinstance(color, tuple):
++            color = tuple(int(i) if isinstance(i, Integer) else i for i in color)
+         self._pil = PIL.Image.new(mode, size, color)
+ 
+     @property
+@@ -233,7 +239,7 @@ class Image(SageObject):
+         EXAMPLES::
+ 
+             sage: from sage.repl.image import Image
+-            sage: img = Image('P', (12, 34), (13,))
++            sage: img = Image('P', (12, 34), 13)
+             sage: filename = tmp_filename(ext='.png')
+             sage: img.save(filename)
+             sage: with open(filename, 'rb') as f:
