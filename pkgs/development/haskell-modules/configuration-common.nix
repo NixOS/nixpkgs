@@ -176,9 +176,6 @@ self: super: {
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
-  # Test suite build depends on ancient tasty 0.11.x.
-  cryptohash-sha512 = dontCheck super.cryptohash-sha512;
-
   # Test suite depends on source code being available
   simple-affine-space = dontCheck super.simple-affine-space;
 
@@ -815,6 +812,12 @@ self: super: {
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
 
+  # Depends on base <4.12
+  # See https://github.com/haskell-hvr/cryptohash-sha512/pull/3
+  # , https://github.com/haskell-hvr/cryptohash-sha512/issues/4
+  # and https://github.com/haskell-hvr/cryptohash-sha512/pull/5
+  cryptohash-sha512 = doJailbreak super.cryptohash-sha512;
+
   # Depends on tasty < 1.x, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
 
@@ -859,6 +862,10 @@ self: super: {
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
   swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
+  # hledger-lib requires the latest version of pretty-simple
+  hledger-lib = super.hledger-lib.override { pretty-simple = self.pretty-simple_4_0_0_0; };
+  pretty-simple_4_0_0_0 = super.pretty-simple_4_0_0_0.overrideScope (self: super: { prettyprinter = self.prettyprinter_1_7_0; });
+
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
@@ -889,6 +896,7 @@ self: super: {
     '';
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
+    preCheck = "export HOME=$TMPDIR";
     postInstall = ''
       for i in $(seq 1 9); do
         for j in *.$i; do
@@ -948,6 +956,8 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  niv = generateOptparseApplicativeCompletion "niv" super.niv;
+  ormolu = generateOptparseApplicativeCompletion "ormolu" super.ormolu;
   stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
   # musl fixes
@@ -1397,24 +1407,17 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck (super.haskell-language-server.override {
     lsp-test = dontCheck self.lsp-test_0_11_0_7;
+    fourmolu = self.fourmolu_0_3_0_0;
   });
 
   fourmolu = dontCheck super.fourmolu;
-  ghcide = dontCheck (appendPatch super.ghcide (pkgs.fetchpatch {
-    # 2020-11-13: Bumping bounds via an already upstream merged change
-    # https://github.com/haskell/ghcide/pull/905
-    url = https://github.com/haskell/ghcide/commit/9b8aaf9b06846571cc0b5d46680e686e4f9153a3.patch;
-    sha256 = "0j8980dmvwjcs72ahq2zc14hwkyd5ybgzyy1az3zq5flp383fai6";
-    includes = [ "ghcide.cabal" ];
-  }));
+  # 1. test requires internet
+  # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
+  ghcide = doDistribute (unmarkBroken (dontCheck
+    (super.ghcide.override { lsp-test = dontCheck self.lsp-test_0_11_0_7; })
+  ));
   refinery = doDistribute super.refinery_0_3_0_0;
   data-tree-print = doJailbreak super.data-tree-print;
-  # the hls brittany is objectively better, because there hasn‘t been a
-  # brittany release in a while and this version works with 8.10.
-  # And we need to build it anyways.
-  # 2020-11-15: jailbreaking because we have strict 0.4 which is to new
-  brittany = self.hls-brittany;
-  hls-brittany = dontCheck (doJailbreak super.hls-brittany);
 
   # 2020-11-15: aeson 1.5.4.1 needs to new quickcheck-instances for testing
   aeson = dontCheck super.aeson;
@@ -1495,13 +1498,13 @@ self: super: {
     extraPrefix = "";
     includes = [ "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" ];
   });
-  cachix = appendPatch super.cachix (pkgs.fetchpatch {
+  cachix = generateOptparseApplicativeCompletion "cachix" (appendPatch super.cachix (pkgs.fetchpatch {
     url = https://github.com/cachix/cachix/commit/bfeec151a03afad72401815fe8bbb1b0d5d63b0d.patch;
     sha256 = "06jmpz8l5vh9cch5aqdbrln7bm3fghxsicwy1m93avli320kp8pp";
     stripLen = 2;
     extraPrefix = "";
     excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
-  });
+  }));
 
   # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
   pipes-text = doJailbreak super.pipes-text;
@@ -1512,12 +1515,30 @@ self: super: {
   # 2020-11-23: https://github.com/cdornan/fmt/issues/30
   fmt = dontCheck super.fmt;
 
-
   # 2020-11-27: Tests broken
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
 
   # 2020-11-27: cxx-options is broken in Cabal 3.2.0.0
   hercules-ci-agent = addSetupDepend super.hercules-ci-agent self.Cabal_3_2_1_0;
+
+  # 2020-12-05: http-client is fixed on too old version
+  essence-of-live-coding-warp = super.essence-of-live-coding-warp.override {
+    http-client = self.http-client_0_7_3;
+  };
+
+  # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
+  pandoc-include-code = doJailbreak super.pandoc-include-code;
+
+  # https://github.com/jgm/pandoc/issues/6961
+  pandoc = dontCheck super.pandoc;
+
+  # Update pandoc dependencies to fix the build.
+  doctemplates = self.doctemplates_0_9;
+  skylighting = self.skylighting_0_10_2;
+  skylighting-core = self.skylighting-core_0_10_2;
+
+  # https://github.com/yesodweb/yesod/issues/1714
+  yesod-core = dontCheck super.yesod-core;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
