@@ -192,6 +192,7 @@ in mkDerivation rec {
     qrupdate = qrupdate';
     arpack = arpack';
     suitesparse = suitesparse';
+    inherit python;
   };
 
   meta = {
