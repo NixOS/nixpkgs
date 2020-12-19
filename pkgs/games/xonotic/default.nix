@@ -45,7 +45,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = "xonotic";
-    exec = "$out/bin/xonotic";
+    exec = "xonotic";
     comment = meta.description;
     desktopName = "Xonotic";
     categories = "Game;Shooter;";
