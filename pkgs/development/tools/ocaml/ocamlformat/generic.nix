@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchzip, ocamlPackages
+{ lib, fetchurl, fetchzip, ocaml-ng
 , version
 , tarballName ? "ocamlformat-${version}.tbz",
 }:
@@ -20,6 +20,12 @@ let src =
       "0.15.0" = "0190vz59n6ma9ca1m3syl3mc8i1smj1m3d8x1jp21f710y4llfr6";
     }."${version}";
   }
+; in
+
+let ocamlPackages =
+  if lib.versionAtLeast version "0.14.3"
+  then ocaml-ng.ocamlPackages
+  else ocaml-ng.ocamlPackages_4_07
 ; in
 
 with ocamlPackages;

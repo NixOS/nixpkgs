@@ -16,23 +16,6 @@ set -eo pipefail
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # ===========================
-# HLS maintainer's Brittany fork
-# ===========================
-
-# brittany derivation created with cabal2nix.
-brittany_derivation_file="${script_dir}/hls-brittany.nix"
-
-# This is the current revision of the brittany fork in Nixpkgs.
-brittany_old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$brittany_derivation_file")"
-
-brittany_new_version=$(curl --silent "https://api.github.com/repos/bubba/brittany/commits/ghc-8.10.1" | jq '.sha' --raw-output)
-
-echo "Updating haskell-language-server's brittany from old version $brittany_old_version to new version $brittany_new_version."
-echo "Running cabal2nix and outputting to ${brittany_derivation_file}..."
-
-cabal2nix --revision "$brittany_new_version" "https://github.com/bubba/brittany" > "$brittany_derivation_file"
-
-# ===========================
 # HLS
 # ===========================
 
@@ -43,7 +26,18 @@ hls_derivation_file="${script_dir}/default.nix"
 hls_old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$hls_derivation_file")"
 
 # This is the latest release version of hls on GitHub.
-hls_new_version=$(curl --silent "https://api.github.com/repos/haskell/haskell-language-server/commits/master" | jq '.sha' --raw-output)
+# Get all tag names, filter to the hls ones (no prefix like 'hls-plugin-api-'),
+# sort for the latest one and select just that
+hls_latest_release=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/haskell/haskell-language-server/tags |
+  jq --raw-output 'map(.name) | .[]' |
+  grep '^[0-9]' |
+  sort --version-sort |
+  tail -n1)
+
+# Use this value instead for the very latest revision
+# hls_head=(curl --silent "https://api.github.com/repos/haskell/haskell-language-server/commits/master" | jq '.sha' --raw-output)
+
+hls_new_version=$hls_latest_release
 
 echo "Updating haskell-language-server from old version $hls_old_version to new version $hls_new_version."
 echo "Running cabal2nix and outputting to ${hls_derivation_file}..."
@@ -51,5 +45,7 @@ echo "Running cabal2nix and outputting to ${hls_derivation_file}..."
 cabal2nix --revision "$hls_new_version" "https://github.com/haskell/haskell-language-server.git" > "$hls_derivation_file"
 cabal2nix --revision "$hls_new_version" --subpath plugins/tactics "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-tactics-plugin.nix"
 cabal2nix --revision "$hls_new_version" --subpath plugins/hls-hlint-plugin "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-hlint-plugin.nix"
+cabal2nix --revision "$hls_new_version" --subpath plugins/hls-explicit-imports-plugin "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-explicit-imports-plugin.nix"
+cabal2nix --revision "$hls_new_version" --subpath plugins/hls-retrie-plugin "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-retrie-plugin.nix"
 
 echo "Finished."
