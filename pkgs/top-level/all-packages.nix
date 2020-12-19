@@ -3333,7 +3333,7 @@ in
 
   deluge-2_x = callPackage ../applications/networking/p2p/deluge/2 {
     pythonPackages = python3Packages;
-    libtorrentRasterbar = libtorrentRasterbar.override { python = python3; };
+    libtorrentRasterbar = libtorrentRasterbar-1_2_x.override { python = python3; };
   };
   deluge-1_x = callPackage ../applications/networking/p2p/deluge/1 {
     pythonPackages = python2Packages;
@@ -14673,13 +14673,18 @@ in
 
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
+  libtorrentRasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar/2.0 {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+    python = python3;
+  };
+
   libtorrentRasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2 {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
   libtorrentRasterbar-1_1_x = callPackage ../development/libraries/libtorrent-rasterbar/1.1 { };
 
-  libtorrentRasterbar = libtorrentRasterbar-1_2_x;
+  libtorrentRasterbar = libtorrentRasterbar-2_0_x;
 
   # this is still the new version of the old API
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
