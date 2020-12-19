@@ -3,8 +3,7 @@
 }:
 
 let
-  version = "1.2.6";
-  formattedVersion = stdenv.lib.replaceChars ["."] ["_"] version;
+  version = "1.2.11";
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
@@ -17,8 +16,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "libtorrent-${formattedVersion}";
-    sha256 = "140gc9j6lymy5kr0gviqznpg4hl57rz2q6vpb9sjkkimr19lrvdr";
+    rev = "v${version}";
+    sha256 = "05qm8mcyxsnb6zb8nckln1gkk8ncwzfhsz7d7p3fhx6gdsc8j71b";
   };
 
   enableParallelBuilding = true;
