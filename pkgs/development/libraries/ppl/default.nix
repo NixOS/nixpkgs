@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   };
 
   patches = [(fetchpatch {
-    name = "ppl.patch";
-    url = "http://www.cs.unipr.it/git/gitweb.cgi?p=ppl/ppl.git;a=patch;h=c39f6a07b51f89e365b05ba4147aa2aa448febd7";
+    name = "clang5-support.patch";
+    url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ppl/patches/clang5-support.patch?h=9.2";
     sha256 = "1zj90hm25pkgvk4jlkfzh18ak9b98217gbidl3731fdccbw6hr87";
   })];
 

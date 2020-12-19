@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchurl
 , autoreconfHook
 , pkgconfig
 , flint
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkgconfig
+  ];
+
+  patches = [
+    (fetchurl {
+      name = "py_ssize_t_clean.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/py_ssize_t_clean.patch?h=9.2";
+      sha256 = "0l3gbg9hc4v671zf4w376krnk3wh8hj3649610nlvzzxckcryzab";
+    })
   ];
 
   meta = with stdenv.lib; {
