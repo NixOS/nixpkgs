@@ -17011,6 +17011,8 @@ in
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
+  directx-shader-compiler = callPackage ../tools/graphics/directx-shader-compiler {};
+
   dkimproxy = callPackage ../servers/mail/dkimproxy { };
 
   do-agent = callPackage ../servers/monitoring/do-agent { };
