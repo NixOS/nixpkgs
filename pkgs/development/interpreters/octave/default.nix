@@ -43,7 +43,7 @@
 , jdk ? null
 , python ? null
 , overridePlatforms ? null
-, sundials_2 ? null
+, sundials ? null
 # - Build Octave Qt GUI:
 , enableQt ? false
 , qtbase ? null
@@ -134,7 +134,7 @@ in mkDerivation rec {
   ++ stdenv.lib.optionals (glpk != null) [ glpk ]
   ++ stdenv.lib.optionals (suitesparse != null) [ suitesparse' ]
   ++ stdenv.lib.optionals (enableJava) [ jdk ]
-  ++ stdenv.lib.optionals (sundials_2 != null) [ sundials_2 ]
+  ++ stdenv.lib.optionals (sundials != null) [ sundials ]
   ++ stdenv.lib.optionals (gnuplot != null) [ gnuplot ]
   ++ stdenv.lib.optionals (python != null) [ python ]
   ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ]
@@ -152,7 +152,7 @@ in mkDerivation rec {
     fftwSinglePrec
     texinfo
   ]
-  ++ stdenv.lib.optionals (sundials_2 != null) [ sundials_2 ]
+  ++ stdenv.lib.optionals (sundials != null) [ sundials ]
   ++ stdenv.lib.optionals enableJIT [ llvm ]
   ++ stdenv.lib.optionals enableQt [
     qtscript
