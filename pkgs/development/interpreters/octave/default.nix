@@ -193,6 +193,7 @@ in mkDerivation rec {
     arpack = arpack';
     suitesparse = suitesparse';
     inherit python;
+    inherit enableQt enableJIT enableReadline enableJava;
   };
 
   meta = {
