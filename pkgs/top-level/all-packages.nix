@@ -10071,7 +10071,6 @@ in
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
-  buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   cratesIO = callPackage ../build-support/rust/crates-io.nix { };
 
   cargo-web = callPackage ../development/tools/cargo-web {
