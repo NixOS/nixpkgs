@@ -186,7 +186,6 @@ in mkDerivation rec {
   '';
 
   passthru = {
-    inherit version;
     sitePath = "share/octave/${version}/site";
     blas = blas';
     lapack = lapack';
