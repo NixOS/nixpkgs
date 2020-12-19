@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.5";
+  version = "6.6";
   pname = "quantum-espresso";
 
   src = fetchurl {
     url = "https://gitlab.com/QEF/q-e/-/archive/qe-${version}/q-e-qe-${version}.tar.gz";
-    sha256 = "00nnsq1vq579xsmkvwrgs6bdqdcbdlsmcp4yfynnvs40ca52m2r5";
+    sha256 = "0b3718bwdqfyssyz25jknijar79qh5cf1bbizv9faliz135mcilj";
   };
 
   passthru = {
