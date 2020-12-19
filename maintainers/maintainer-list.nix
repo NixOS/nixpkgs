@@ -5228,6 +5228,10 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  lrworth = {
+    email = "luke@worth.id.au";
+    name = "Luke Worth";
+  };
   lschuermann = {
     email = "leon.git@is.currently.online";
     github = "lschuermann";
