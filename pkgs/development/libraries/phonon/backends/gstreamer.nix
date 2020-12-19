@@ -1,5 +1,19 @@
-{ stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkgconfig
-, extra-cmake-modules, qttools, qtbase, qtx11extras
+{ stdenv, lib, fetchurl
+, cmake
+, elfutils # for libdw
+, gst_all_1
+, libselinux
+, libsepol
+, libunwind
+, orc
+, pcre
+, phonon
+, pkgconfig
+, util-linuxMinimal ? null # for libmount
+, extra-cmake-modules
+, qttools
+, qtbase
+, qtx11extras
 , debug ? false
 }:
 
@@ -45,11 +59,19 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs = with gst_all_1; [
+    elfutils # for libdw
     gstreamer
     gst-plugins-base
+    libunwind
+    orc
+    pcre
     phonon
     qtbase
     qtx11extras
+  ] ++ optionals stdenv.isLinux [
+    libselinux
+    libsepol
+    util-linuxMinimal # for libmount
   ];
 
   nativeBuildInputs = [
