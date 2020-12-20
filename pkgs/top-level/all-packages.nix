@@ -26053,6 +26053,8 @@ in
 
   quantumminigolf = callPackage ../games/quantumminigolf {};
 
+  r2mod_cli = callPackage ../games/r2mod_cli { };
+
   racer = callPackage ../games/racer { };
 
   redeclipse = callPackage ../games/redeclipse { };
