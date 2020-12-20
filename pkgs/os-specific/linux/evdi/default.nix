@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1yrny6jj9403z0rxbd3nxf49xc4w0rfpl7xsq03pq32pb3vlbqw7";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/DisplayLink/evdi/pull/228.patch";
+      sha256 = "0kj8wqvw784npa9y8n28xy5fsa9xc037m460rja09x7czyd8sgwa";
+    })
+  ];
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildInputs = [ kernel libdrm ];
@@ -33,6 +40,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ lgpl21 gpl2 ];
     homepage = "https://www.displaylink.com/";
-    broken = with kernel; kernelOlder "5" || kernelAtLeast "5.9" || stdenv.isAarch64;
+    broken = with kernel; kernelOlder "5" || stdenv.isAarch64;
   };
 }
