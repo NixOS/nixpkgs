@@ -699,6 +699,8 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  notsodeep = callPackage ../tools/networking/notsodeep { };
+
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
@@ -28966,4 +28968,5 @@ in
   lc3tools = callPackage ../development/tools/lc3tools {};
 
   zktree = callPackage ../applications/misc/zktree {};
+
 }
