@@ -9,7 +9,6 @@ with pkgs.lib;
 let
   common = {
     virtualisation.useBootLoader = true;
-    virtualisation.useEFIBoot = true;
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
