@@ -14608,6 +14608,8 @@ in
 
   libs3 = callPackage ../development/libraries/libs3 { };
 
+  libschrift = callPackage ../development/libraries/libschrift { };
+
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
