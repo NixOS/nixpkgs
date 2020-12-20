@@ -2,8 +2,10 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, Foundation
 , setJavaClassPath
+, makeWrapper
+# minimum dependencies
+, Foundation
 , alsaLib
 , fontconfig
 , freetype
@@ -13,10 +15,23 @@
 , unzip
 , xorg
 , zlib
+# runtime dependencies
+, cups
+# runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? true
+, cairo
+, glib
+, gtk3
 }:
 
 let
   platform = if stdenv.isDarwin then "darwin-amd64" else "linux-amd64";
+  runtimeDependencies = [
+    cups
+  ] ++ lib.optionals gtkSupport [
+    cairo glib gtk3
+  ];
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
   common = javaVersion:
     let
       javaVersionPlatform = "${javaVersion}-${platform}";
@@ -67,24 +82,24 @@ let
         ];
 
         buildInputs = lib.optionals stdenv.isLinux [
-          zlib
+          alsaLib # libasound.so wanted by lib/libjsound.so
           fontconfig
           freetype
+          openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
+          stdenv.cc.cc.lib # libstdc++.so.6
           xorg.libX11
+          xorg.libXext
           xorg.libXi
           xorg.libXrender
-          xorg.libXext
           xorg.libXtst
-          stdenv.cc.cc.lib # libstdc++.so.6
-          alsaLib # libasound.so wanted by lib/libjsound.so
-          openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
+          zlib
         ];
 
         # Workaround for libssl.so.10 wanted by TruffleRuby
         # Resulting TruffleRuby cannot use `openssl` library.
         autoPatchelfIgnoreMissingDeps = true;
 
-        nativeBuildInputs = [ unzip perl autoPatchelfHook ];
+        nativeBuildInputs = [ unzip perl autoPatchelfHook makeWrapper ];
 
         unpackPhase = ''
            unpack_jar() {
@@ -171,8 +186,17 @@ let
 
         dontStrip = true;
 
-        # copy-paste openjdk's preFixup
         preFixup = ''
+          # We cannot use -exec since wrapProgram is a function but not a
+          # command.
+          for bin in $( find "$out" -executable -type f -not -path '*/languages/ruby/lib/gems/*' ); do
+            if patchelf --print-interpreter "$bin" &> /dev/null || head -n 1 "$bin" | grep '^#!' -q; then
+              wrapProgram "$bin" \
+                --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
+            fi
+          done
+
+          # copy-paste openjdk's preFixup
           # Set JAVA_HOME automatically.
           mkdir -p $out/nix-support
           cat <<EOF > $out/nix-support/setup-hook
