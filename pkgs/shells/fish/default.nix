@@ -56,8 +56,12 @@ let
     #     source both, but source the more global configuration files earlier
     #     than the more local ones, so that more local configurations inherit
     #     from but override the more global locations.
+    #
+    #     Special care needs to be taken, when fish is called from an FHS user env
+    #     or similar setup, because this configuration file will then be relocated
+    #     to /etc/fish/config.fish, so we test for this case to avoid nontermination.
 
-    if test -f /etc/fish/config.fish
+    if test -f /etc/fish/config.fish && test /etc/fish/config.fish != (status filename)
       source /etc/fish/config.fish
     end
 
