@@ -74,6 +74,21 @@ in
   imports = [
     (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd.")
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
+    (mkRemovedOptionModule [ "services" "mysql" "initialDatabases" ] ''
+      This option often resulted in systems which weren't reproducible. If you wish to provision databases please review
+      the services.mysql.activationScripts option and carefully consider the pros and cons of this option with respect to
+      reproduciblity.
+    '')
+    (mkRemovedOptionModule [ "services" "mysql" "ensureDatabases" ] ''
+      This option often resulted in systems which weren't reproducible. If you wish to provision databases please review
+      the services.mysql.activationScripts option and carefully consider the pros and cons of this option with respect to
+      reproduciblity.
+    '')
+    (mkRemovedOptionModule [ "services" "mysql" "ensureUsers" ] ''
+      This option often resulted in systems which weren't reproducible. If you wish to provision databases please review
+      the services.mysql.activationScripts option and carefully consider the pros and cons of this option with respect to
+      reproduciblity.
+    '')
   ];
 
   ###### interface
@@ -194,36 +209,6 @@ in
         '';
       };
 
-      initialDatabases = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = ''
-                The name of the database to create.
-              '';
-            };
-            schema = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                The initial schema of the database; if null (the default),
-                an empty database is created.
-              '';
-            };
-          };
-        });
-        default = [];
-        description = ''
-          List of database names and their initial schemas that should be used to create databases on the first startup
-          of MySQL. The schema attribute is optional: If not specified, an empty database is created.
-        '';
-        example = [
-          { name = "foodatabase"; schema = literalExample "./foodatabase.sql"; }
-          { name = "bardatabase"; }
-        ];
-      };
-
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -283,81 +268,6 @@ in
             exit $_status
           '';
         };
-      };
-
-      ensureDatabases = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          Ensures that the specified databases exist.
-          This option will never delete existing databases, especially not when the value of this
-          option is changed. This means that databases created once through this option or
-          otherwise have to be removed manually.
-        '';
-        example = [
-          "nextcloud"
-          "matomo"
-        ];
-      };
-
-      ensureUsers = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = ''
-                Name of the user to ensure.
-              '';
-            };
-            ensurePermissions = mkOption {
-              type = types.attrsOf types.str;
-              default = {};
-              description = ''
-                Permissions to ensure for the user, specified as attribute set.
-                The attribute names specify the database and tables to grant the permissions for,
-                separated by a dot. You may use wildcards here.
-                The attribute values specfiy the permissions to grant.
-                You may specify one or multiple comma-separated SQL privileges here.
-
-                For more information on how to specify the target
-                and on which privileges exist, see the
-                <link xlink:href="https://mariadb.com/kb/en/library/grant/">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
-              '';
-              example = literalExample ''
-                {
-                  "database.*" = "ALL PRIVILEGES";
-                  "*.*" = "SELECT, LOCK TABLES";
-                }
-              '';
-            };
-          };
-        });
-        default = [];
-        description = ''
-          Ensures that the specified users exist and have at least the ensured permissions.
-          The MySQL users will be identified using Unix socket authentication. This authenticates the Unix user with the
-          same name only, and that without the need for a password.
-          This option will never delete existing users or remove permissions, especially not when the value of this
-          option is changed. This means that users created and permissions assigned once through this option or
-          otherwise have to be removed manually.
-        '';
-        example = literalExample ''
-          [
-            {
-              name = "nextcloud";
-              ensurePermissions = {
-                "nextcloud.*" = "ALL PRIVILEGES";
-              };
-            }
-            {
-              name = "backup";
-              ensurePermissions = {
-                "*.*" = "SELECT, LOCK TABLES";
-              };
-            }
-          ]
-        '';
       };
 
       replication = {
@@ -511,29 +421,6 @@ in
                 echo "GRANT ALL PRIVILEGES ON *.* TO '${cfg.user}'@'localhost' WITH GRANT OPTION;"
               ) | ${cfg.package}/bin/mysql -u ${superUser} -N
 
-              ${concatMapStrings (database: ''
-                # Create initial databases
-                if ! test -e "${cfg.dataDir}/${database.name}"; then
-                    echo "Creating initial database: ${database.name}"
-                    ( echo 'create database `${database.name}`;'
-
-                      ${optionalString (database.schema != null) ''
-                      echo 'use `${database.name}`;'
-
-                      # TODO: this silently falls through if database.schema does not exist,
-                      # we should catch this somehow and exit, but can't do it here because we're in a subshell.
-                      if [ -f "${database.schema}" ]
-                      then
-                          cat ${database.schema}
-                      elif [ -d "${database.schema}" ]
-                      then
-                          cat ${database.schema}/mysql-databases/*.sql
-                      fi
-                      ''}
-                    ) | ${cfg.package}/bin/mysql -u ${superUser} -N
-                fi
-              '') cfg.initialDatabases}
-
               ${optionalString (cfg.replication.role == "master")
                 ''
                   # Set up the replication master
@@ -565,23 +452,6 @@ in
 
               rm ${cfg.dataDir}/mysql_init
           fi
-
-          ${optionalString (cfg.ensureDatabases != []) ''
-            (
-            ${concatMapStrings (database: ''
-              echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
-            '') cfg.ensureDatabases}
-            ) | ${cfg.package}/bin/mysql -N
-          ''}
-
-          ${concatMapStrings (user:
-            ''
-              ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
-                ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                  echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
-                '') user.ensurePermissions)}
-              ) | ${cfg.package}/bin/mysql -N
-            '') cfg.ensureUsers}
         '';
 
         serviceConfig = mkMerge [
