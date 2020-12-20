@@ -7034,6 +7034,7 @@ in {
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
+  sqlite-fts4 = callPackage ../development/python-modules/sqlite-fts4 { };
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };

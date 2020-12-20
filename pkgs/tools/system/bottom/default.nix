@@ -11,6 +11,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-88uEEsb+coX8PTKrem+0t5AkamCmqJsFYsENFTZSsys=";
   };
 
+  prePatch = ''
+    rm .cargo/config.toml
+  '';
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
