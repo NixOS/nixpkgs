@@ -254,8 +254,27 @@ let
         for try in $(seq 3); do
             ${optionalString yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
-            read -r k_user
-            echo
+            k_user=
+            while true; do
+                if [ -e /crypt-ramfs/passphrase ]; then
+                    echo "reused"
+                    k_user=$(cat /crypt-ramfs/passphrase)
+                    break
+                else
+                    # Try reading it from /dev/console with a timeout
+                    IFS= read -t 1 -r k_user
+                    if [ -n "$k_user" ]; then
+                       ${if luks.reusePassphrases then ''
+                         # Remember it for the next device
+                         echo -n "$k_user" > /crypt-ramfs/passphrase
+                       '' else ''
+                         # Don't save it to ramfs. We are very paranoid
+                       ''}
+                       echo
+                       break
+                    fi
+                fi
+            done
             ''}
 
             if [ ! -z "$k_user" ]; then
@@ -268,6 +287,11 @@ let
 
             if [ $? == 0 ]; then
                 opened=true
+                ${if luks.reusePassphrases then ''
+                  # We don't rm here because we might reuse it for the next device
+                '' else ''
+                  rm -f /crypt-ramfs/passphrase
+                ''}
                 break
             else
                 opened=false
