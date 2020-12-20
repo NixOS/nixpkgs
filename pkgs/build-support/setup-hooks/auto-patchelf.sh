@@ -135,6 +135,8 @@ autoPatchelfFile() {
     # clear the RPATH first.
     runPatchelf --remove-rpath "$toPatch"
 
+    # If the file is not a dynamic executable, ldd/sed will fail,
+    # in which case we return, since there is nothing left to do.
     local missing
     missing="$(
         ldd "$toPatch" 2> /dev/null | \
