@@ -7884,6 +7884,8 @@ in
 
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
+  tty-share = callPackage ../applications/misc/tty-share { };
+
   ttyplot = callPackage ../tools/misc/ttyplot { };
 
   ttyrec = callPackage ../tools/misc/ttyrec { };

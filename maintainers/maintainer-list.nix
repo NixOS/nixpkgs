@@ -580,6 +580,12 @@
     githubId = 3808928;
     name = "Anders Sildnes";
   };
+  andys8 = {
+    email = "andys8@users.noreply.github.com";
+    github = "andys8";
+    githubId = 13085980;
+    name = "Andy";
+  };
   aneeshusa = {
     email = "aneeshusa@gmail.com";
     github = "aneeshusa";
