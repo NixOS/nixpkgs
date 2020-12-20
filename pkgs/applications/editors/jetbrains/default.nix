@@ -2,12 +2,13 @@
 , python
 , jdk, cmake, libxml2, zlib, python3, ncurses5
 , dotnet-sdk_3
+, vmopts ? null
 }:
 
 with stdenv.lib;
 
 let
-  mkJetBrainsProduct = callPackage ./common.nix { };
+  mkJetBrainsProduct = callPackage ./common.nix { inherit vmopts; };
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
@@ -48,7 +49,7 @@ let
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*-x86_64-linux-gnu.so
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
@@ -268,12 +269,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2020.2.5"; /* updated by script */
+    version = "2020.3"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0j7gxh8wqshn2i1f22bl9099sx8a4092qwkp4fwny4649rbkfyrz"; /* updated by script */
+      sha256 = "0kqja2c5pz0f9idc52mv7iy2pqq2kfcx4q4x1ywfn3gq3d8n5j7z"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -294,12 +295,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2020.2.3"; /* updated by script */
+    version = "2020.3"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "18mzlqibgc6lzwhbmyrni56464qhzla9mss27d45hv0mbv087jn0"; /* updated by script */
+      sha256 = "0hj1xm3c71y2z1jyv7j3xf2lcj2y0kyvsxd3jjyyhs31w1f3394j"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -346,12 +347,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2020.2.4"; /* updated by script */
+    version = "2020.3"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "111dr1a6695msh13cd484yk671jnh2ps6q1k2dl0kmryk9dqnvhd"; /* updated by script */
+      sha256 = "1d5rx7p7lvjzgp57n980f2bfrj14p1f4hxmyvx5pzzd86q7hrcbq"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -359,12 +360,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2020.2.5"; /* updated by script */
+    version = "2020.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0jkc26y3v94jj8q7dxq1py59is2whh45b890iac5adg6x670z3s6"; /* updated by script */
+      sha256 = "1c2izsqx27g4jy46iskx5zg00pd8jaf9x1p0vya4l2v5r49dk4jb"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -372,12 +373,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2020.2.5"; /* updated by script */
+    version = "2020.3"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "04imfgr45gvicjjgqzdcdmbnbiszjma3s40k2pgqs5nn6wbrw3dd"; /* updated by script */
+      sha256 = "1kzgy90zcligwa9r6r11kx99z0zm93mrzy700y2jwslyzapd16d0"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
