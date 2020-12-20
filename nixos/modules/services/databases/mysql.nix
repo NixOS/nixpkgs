@@ -16,6 +16,58 @@ let
     optionalString (cfg.extraOptions != null) "[mysqld]\n${cfg.extraOptions}"
   );
 
+  addAttributeName = mapAttrs (a: v: v // {
+    text = ''
+      #### MySQL activation script snippet ${a}:
+      _localstatus=0
+      ${v.text}
+      if (( _localstatus > 0 )); then
+        printf "MySQL activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
+      fi
+    '';
+  });
+
+  scriptType = with types;
+    let scriptOptions =
+      { deps = mkOption
+          { type = types.listOf types.str;
+            default = [ ];
+            description = "List of dependencies. The script will run after these.";
+          };
+        text = mkOption
+          { type = types.lines;
+            description = "The content of the script.";
+          };
+      };
+    in either str (submodule { options = scriptOptions; });
+
+  commonServiceConfig = {
+    # User and group
+    User = cfg.user;
+    Group = cfg.group;
+    # Capabilities
+    CapabilityBoundingSet = "";
+    # Security
+    NoNewPrivileges = true;
+    # Sandboxing
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    PrivateTmp = true;
+    PrivateDevices = true;
+    ProtectHostname = true;
+    ProtectKernelTunables = true;
+    ProtectKernelModules = true;
+    ProtectControlGroups = true;
+    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    PrivateMounts = true;
+    # System Call Filtering
+    SystemCallArchitectures = "native";
+  };
+
 in
 
 {
@@ -176,6 +228,61 @@ in
         type = types.nullOr types.path;
         default = null;
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database.";
+      };
+
+      activationScripts = mkOption {
+        type = types.attrsOf scriptType;
+        default = {};
+        description = ''
+          A set of shell script fragments that are executed when a NixOS
+          system configuration is activated, after MySQL has started. Since
+          these are executed every time you boot the system or run
+          <command>nixos-rebuild</command>, it's important that they are
+          idempotent and fast. Useful for:
+          <itemizedlist>
+            <listitem><para>creating databases</para></listitem>
+            <listitem><para>creating local accounts with socket authentication</para></listitem>
+            <listitem><para>granting certain permissions on a database</para></listitem>
+          </itemizedlist>
+          <warning>
+            <para>
+              This should <emphasis>NOT</emphasis> contain any sensitive data such as credentials
+              because the contents of this option will end up in the world readable nix store.
+            </para>
+            <para>
+              Using this option can result in systems which are not reproducible, working against
+              the general Nix philosophy. You are advised to exercise caution when using this
+              option, carefully weighing the pros and cons with respect to reproduciblity.
+            </para>
+          </warning>
+        '';
+        example = lib.literalExample ''
+          { nextcloud =
+            '''
+              ( echo "create database if not exists `nextcloud`;"
+                echo "create user if not exists 'nextcloud'@'localhost' identified with unix_socket;"
+                echo "grant all privileges on nextcloud.* to 'nextcloud'@'localhost';"
+              ) | ${pkgs.mariadb}/bin/mysql -N
+            ''';
+          }
+        '';
+        apply = set: {
+          script = ''
+            #! ${pkgs.runtimeShell}
+
+            _status=0
+            trap "_status=1 _localstatus=\$?" ERR
+
+            ${
+              let
+                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
+                withHeadlines = addAttributeName set';
+              in textClosureMap id (withHeadlines) (attrNames withHeadlines)
+            }
+
+            exit $_status
+          '';
+        };
       };
 
       ensureDatabases = mkOption {
@@ -477,43 +584,38 @@ in
             '') cfg.ensureUsers}
         '';
 
-        serviceConfig = {
-          Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
-          RestartSec = "5s";
-          # The last two environment variables are used for starting Galera clusters
-          ExecStart = "${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
-          # User and group
-          User = cfg.user;
-          Group = cfg.group;
-          # Runtime directory and mode
-          RuntimeDirectory = "mysqld";
-          RuntimeDirectoryMode = "0755";
-          # Access write directories
-          ReadWritePaths = [ cfg.dataDir ];
-          # Capabilities
-          CapabilityBoundingSet = "";
-          # Security
-          NoNewPrivileges = true;
-          # Sandboxing
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectHostname = true;
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          PrivateMounts = true;
-          # System Call Filtering
-          SystemCallArchitectures = "native";
-        };
+        serviceConfig = mkMerge [
+          commonServiceConfig
+          {
+            Type = if hasNotify then "notify" else "simple";
+            Restart = "on-abort";
+            RestartSec = "5s";
+            # The last two environment variables are used for starting Galera clusters
+            ExecStart = "${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
+            # Runtime directory and mode
+            RuntimeDirectory = "mysqld";
+            RuntimeDirectoryMode = "0755";
+            # Access write directories
+            ReadWritePaths = [ cfg.dataDir ];
+          }
+        ];
       };
+
+    systemd.services.mysql-activation-scripts = {
+      description = "Run MySQL-specific NixOS activation";
+      after = [ "mysql.service" ];
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = mkMerge [
+        commonServiceConfig
+        {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          SyslogIdentifier = "mysql-activation-scripts";
+          ExecStart = pkgs.writeScript "mysql-activation-scripts.sh" cfg.activationScripts.script;
+        }
+      ];
+    };
 
   };
 
