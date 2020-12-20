@@ -1957,6 +1957,12 @@
     githubId = 4331004;
     name = "Naoya Hatta";
   };
+  damhiya = {
+    name = "SoonWon Moon";
+    email = "damhiya@gmail.com";
+    github = "damhiya";
+    githubId = 13533446;
+  };
   DamienCassou = {
     email = "damien@cassou.me";
     github = "DamienCassou";
