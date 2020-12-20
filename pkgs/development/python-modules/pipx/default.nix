@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.15.5.1";
+  version = "0.15.6.0";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = version;
-    sha256 = "0lq8dfkq4ji11r4k5csqzyv0757fbxiax6ixn94f9747zrikssf6";
+    sha256 = "1yffswayjfkmq86ygisja0mkg55pqj9pdml5nc0z05222sfnvn1a";
   };
 
   propagatedBuildInputs = [ userpath argcomplete packaging ];
@@ -40,6 +40,8 @@ buildPythonPackage rec {
     "internet"
     "runpip"
     "upgrade"
+    "suffix"
+    "legacy_venv"
   ];
 
   meta = with lib; {
