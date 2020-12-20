@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
+{ stdenv, fetchurl, fetchpatch, cmake, wxGTK30, openal, pkgconfig, curl, libtorrent-rasterbar
 , libpng, libX11, gettext, boost, libnotify, gtk2, doxygen, spring
 , makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig gettext doxygen makeWrapper ];
   buildInputs = [
-    wxGTK30 openal curl libtorrentRasterbar pcre jsoncpp
+    wxGTK30 openal curl libtorrent-rasterbar pcre jsoncpp
     boost libpng libX11 libnotify gtk2 glib minizip alure
   ];
 

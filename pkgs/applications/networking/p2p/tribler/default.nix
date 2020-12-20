@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = [
-    python3Packages.libtorrentRasterbar
+    python3Packages.libtorrent-rasterbar
     python3Packages.twisted
     python3Packages.netifaces
     python3Packages.pycrypto

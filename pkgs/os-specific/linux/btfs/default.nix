@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, python3, boost, fuse, libtorrentRasterbar, curl }:
+, python3, boost, fuse, libtorrent-rasterbar, curl }:
 
 stdenv.mkDerivation rec {
   pname = "btfs";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    boost fuse libtorrentRasterbar curl python3
+    boost fuse libtorrent-rasterbar curl python3
   ];
 
   meta = with stdenv.lib; {

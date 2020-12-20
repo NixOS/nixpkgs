@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, intltool, libtorrentRasterbar, pythonPackages }:
+{ stdenv, fetchurl, fetchpatch, intltool, libtorrent-rasterbar, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
   pname = "deluge";
@@ -19,7 +19,7 @@ pythonPackages.buildPythonPackage rec {
 
   propagatedBuildInputs = with pythonPackages; [
     pyGtkGlade twisted Mako chardet pyxdg pyopenssl service-identity
-    libtorrentRasterbar.dev libtorrentRasterbar.python setuptools
+    libtorrent-rasterbar.dev libtorrent-rasterbar.python setuptools
   ];
 
   nativeBuildInputs = [ intltool ];

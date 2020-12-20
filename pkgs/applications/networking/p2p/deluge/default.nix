@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, libtorrentRasterbar, pythonPackages
+{ stdenv, fetchurl, intltool, libtorrent-rasterbar, pythonPackages
 , gtk3, glib, gobject-introspection, librsvg, wrapGAppsHook }:
 
 pythonPackages.buildPythonPackage rec {
@@ -12,7 +12,7 @@ pythonPackages.buildPythonPackage rec {
 
   propagatedBuildInputs = with pythonPackages; [
     twisted Mako chardet pyxdg pyopenssl service-identity
-    libtorrentRasterbar.dev libtorrentRasterbar.python setuptools
+    libtorrent-rasterbar.dev libtorrent-rasterbar.python setuptools
     setproctitle pillow rencode six zope_interface
     dbus-python pygobject3 pycairo
     gtk3 gobject-introspection librsvg
