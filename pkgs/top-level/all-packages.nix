@@ -16550,6 +16550,8 @@ in
 
   xdo = callPackage ../tools/misc/xdo { };
 
+  xed = callPackage ../development/libraries/xed { };
+
   xineLib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
