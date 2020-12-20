@@ -1,5 +1,5 @@
 {
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   opencl-headers,
   cmake,
@@ -16,7 +16,11 @@
   cli11
 }:
 
-stdenv.mkDerivation rec {
+# Note that this requires clang < 9.0 to build, and currently
+# clangStdenv provides clang 7.1 which satisfies the requirement.
+let stdenv = clangStdenv;
+
+in stdenv.mkDerivation rec {
   pname = "ethminer";
   version = "0.18.0";
 
@@ -71,8 +75,5 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p ];
     license = licenses.gpl2;
-    # Doesn't build with gcc9, and if overlayed to use gcc8 stdenv fails on CUDA issues.
-    broken = true;
   };
-
 }
