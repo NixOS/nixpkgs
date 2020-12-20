@@ -15,9 +15,10 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  subPackages = [ "./" ];
+
   postInstall = ''
     install -D -m 755 ./go/src/$goPackagePath/docopts.sh $out/bin/docopts.sh
-    rm $out/bin/json_t
   '';
 
   meta = with stdenv.lib; {
