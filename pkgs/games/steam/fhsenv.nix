@@ -6,6 +6,7 @@
 , nativeOnly ? false
 , runtimeOnly ? false
 , runtimeShell
+, stdenv
 
 # DEPRECATED
 , withJava ? config.steam.java or false
@@ -43,12 +44,14 @@ let
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
-  ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
-           ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
+  ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
+  ++ [ "/lib32" ]
+  ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
+  ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
 
   # Zachtronics and a few other studios expect STEAM_LD_LIBRARY_PATH to be present
   exportLDPath = ''
-    export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
@@ -58,7 +61,7 @@ let
 
   runSh = writeScript "run.sh" ''
     #!${runtimeShell}
-    runtime_paths="/lib32:/lib64:${lib.concatStringsSep ":" ldPath}"
+    runtime_paths="${lib.concatStringsSep ":" ldPath}"
     if [ "$1" == "--print-steam-runtime-library-paths" ]; then
       echo "$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       exit 0
