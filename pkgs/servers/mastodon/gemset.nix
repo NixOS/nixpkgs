@@ -966,17 +966,6 @@
     };
     version = "0.4.2";
   };
-  goldfinger = {
-    dependencies = ["addressable" "http" "nokogiri" "oj"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "101ijr0gh6jnjliddvgvmnjz8zr5iyf18bxj8g4h4583fcwcyls4";
-      type = "gem";
-    };
-    version = "2.1.1";
-  };
   hamlit = {
     dependencies = ["temple" "thor" "tilt"];
     groups = ["default"];
@@ -1135,18 +1124,6 @@
       type = "gem";
     };
     version = "2.1.1";
-  };
-  "http_parser.rb" = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      fetchSubmodules = true;
-      rev = "54b17ba8c7d8d20a16dfc65d1775241833219cf2";
-      sha256 = "16ihplh821kjbck9kjvqr780qsx9wi9vyc6kpmydj44r2pq76v59";
-      type = "git";
-      url = "https://github.com/tmm1/http_parser.rb";
-    };
-    version = "0.6.1";
   };
   httplog = {
     dependencies = ["rack" "rainbow"];
