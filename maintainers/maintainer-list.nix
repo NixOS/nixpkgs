@@ -7343,6 +7343,12 @@
     githubId = 1758708;
     name = "Răzvan Flavius Panda";
   };
+  rb2k = {
+    email = "nix@marc-seeger.com";
+    github = "rb2k";
+    githubId = 9519;
+    name = "Marc Seeger";
+  };
   rbasso = {
     email = "rbasso@sharpgeeks.net";
     github = "rbasso";
