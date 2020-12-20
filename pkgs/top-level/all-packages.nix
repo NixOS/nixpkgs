@@ -19135,6 +19135,8 @@ in
 
   rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
 
+  rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
+
   rtlwifi_new-firmware = callPackage ../os-specific/linux/firmware/rtlwifi_new-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
