@@ -118,8 +118,9 @@ buildStdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
-    ./no-buildconfig-ffx76.patch
   ] ++
+  lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
+  lib.optional (lib.versionAtLeast ffversion "84") ./no-buildconfig-ffx84.patch ++
 
   # there are two flavors of pipewire support
   # The patches for the ESR release and the patches for the current stable
@@ -141,13 +142,7 @@ buildStdenv.mkDerivation ({
         url = "https://src.fedoraproject.org/rpms/firefox/raw/${fedora_revision}/f/${spec.name}";
       };
     in map mkPWPatch [
-        { name = "pw1.patch"; sha256 = "1a7zvngn3k7dg886zmi38kmrsdzh2rrr46aw59bhr1gfmq8wlwn0"; }
-        { name = "pw2.patch"; sha256 = "17irg3yb2mchcy0z0nr4k65mwvkps467cvvczr10fnm06lhkhw1l"; }
-        { name = "pw3.patch"; sha256 = "12p6ql5ff2lfzlni6xkpz63h2xr6n2a9zf8hhjl99fj56rif6706"; }
-        { name = "pw4.patch"; sha256 = "0rvysc92rdm98s47w5lvbnrklrf7d299k3918qnldniyb4b9p4mg"; }
-        { name = "pw5.patch"; sha256 = "0kk2yxq4qkfwc4px6m08jrn18a7a7dhrngfiaw84r9ga6sgn0z00"; }
         { name = "pw6.patch"; sha256 = "12lhx9wjpw0ahbfmw07wsx76bb223mr453q9cg8cq951vyskch3s"; }
-        { name = "pw7.patch"; sha256 = "0afw7cfd48vn62zb9y5kd2l26fg44s3aq1kyg3gm4q3rj34xidf6"; }
     ])
 
   ++ patches;
