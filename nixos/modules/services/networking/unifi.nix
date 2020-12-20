@@ -13,6 +13,21 @@ in
 {
 
   options = {
+    services.unifi.sites = mkOption {
+      description = "Site configuration";
+      default = {};
+      example = { default = { system.conntrack.timeout.tcp.close = "20"; }; };
+      type = with types; attrsOf (submodule {
+        options = {
+          configGateway = mkOption {
+            type = types.either types.str types.attrs;
+            description = ''
+              The gateway configuration as per https://help.ui.com/hc/en-us/articles/215458888-UniFi-USG-Advanced-Configuration-Using-config-gateway-json.
+            '';
+          };
+        };
+      });
+    };
 
     services.unifi.enable = mkOption {
       type = types.bool;
