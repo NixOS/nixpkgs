@@ -126,6 +126,18 @@ in rec {
       };
   };
 
+  ### Eclipse IDE for Rust Developers
+
+  eclipse-rust = buildEclipse {
+    name = "eclipse-rust-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Rust Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rust-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        sha512 = "QbaG1knCMFnVQkPeApcIamJMXPyL8zUQa0ZsTJOuTgU/fD1RiHN7/WS6ax5azzIJhpjEtj2LMU4XV+MwkzResw==";
+      };
+  };
+
   ### Environments
 
   # Function that assembles a complete Eclipse environment from an
