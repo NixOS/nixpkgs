@@ -7,7 +7,7 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? true
+, enableShared ? !stdenv.targetPlatform.isStatic
 , enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java

@@ -1,5 +1,9 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, perl, pam
-, static ? stdenv.targetPlatform.isStatic }:
+{ stdenv, lib, buildPackages, fetchurl, attr, perl
+, usePam ? !isStatic, pam ? null
+, isStatic ? stdenv.hostPlatform.isStatic
+}:
+
+assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
@@ -10,21 +14,21 @@ stdenv.mkDerivation rec {
     sha256 = "1qf80lifygbnxwvqjf8jz5j24n6fqqx4ixnkbf76xs2vrmcq664j";
   };
 
-  patches = lib.optional static ./no-shared-lib.patch;
+  patches = lib.optional isStatic ./no-shared-lib.patch;
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
-    ++ lib.optional (pam != null) "pam";
+    ++ lib.optional usePam "pam";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ pam ];
+  buildInputs = lib.optional usePam pam;
 
   propagatedBuildInputs = [ attr ];
 
   makeFlags = [
     "lib=lib"
-    "PAM_CAP=${if pam == null then "no" else "yes"}"
+    "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
   ];
@@ -48,10 +52,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "RAISE_SETFCAP=no" ];
 
   postInstall = ''
-    ${lib.optionalString (!static) ''rm "$lib"/lib/*.a''}
+    ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
     mkdir -p "$doc/share/doc/${pname}-${version}"
     cp License "$doc/share/doc/${pname}-${version}/"
-  '' + stdenv.lib.optionalString (pam != null) ''
+  '' + stdenv.lib.optionalString usePam ''
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';

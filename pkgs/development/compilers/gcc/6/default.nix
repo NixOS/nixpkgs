@@ -8,7 +8,7 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? true
+, enableShared ? !stdenv.targetPlatform.isStatic
 , enableLTO ? true
 , texinfo ? null
 , flex

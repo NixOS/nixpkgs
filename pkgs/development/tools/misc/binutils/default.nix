@@ -2,7 +2,7 @@
 , fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
-, enableShared ? true
+, enableShared ? !stdenv.hostPlatform.isStatic
 , noSysDirs
 , gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
 , bison ? null
