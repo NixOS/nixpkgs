@@ -50,8 +50,7 @@ stdenv.mkDerivation (rec {
     fmt
   ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ]
-               ++ stdenv.lib.optionals stdenv.cc.isClang [ "-DCOMPILER_HAS_F_ALIGNED_NEW=OFF" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   enableParallelBuilding = true;
 
@@ -64,6 +63,5 @@ stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ abbradar pierreis ];
   };
 } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-  CXXFLAGS = "-faligned-allocation";
   LDFLAGS = "-ljemalloc";
 })
