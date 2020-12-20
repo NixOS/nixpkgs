@@ -1,4 +1,19 @@
-{ lib, stdenv, fetchurl, perl, unzip, glibc, zlib, setJavaClassPath, Foundation, openssl }:
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, Foundation
+, setJavaClassPath
+, alsaLib
+, fontconfig
+, freetype
+, glibc
+, openssl
+, perl
+, unzip
+, xorg
+, zlib
+}:
 
 let
   platform = if stdenv.isDarwin then "darwin-amd64" else "linux-amd64";
@@ -50,7 +65,27 @@ let
              url    = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersionPlatform}-${version}.jar";
           })
         ];
-        nativeBuildInputs = [ unzip perl ];
+
+        buildInputs = lib.optionals stdenv.isLinux [
+          zlib
+          fontconfig
+          freetype
+          xorg.libX11
+          xorg.libXi
+          xorg.libXrender
+          xorg.libXext
+          xorg.libXtst
+          stdenv.cc.cc.lib # libstdc++.so.6
+          alsaLib # libasound.so wanted by lib/libjsound.so
+          openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
+        ];
+
+        # Workaround for libssl.so.10 wanted by TruffleRuby
+        # Resulting TruffleRuby cannot use `openssl` library.
+        autoPatchelfIgnoreMissingDeps = true;
+
+        nativeBuildInputs = [ unzip perl autoPatchelfHook ];
+
         unpackPhase = ''
            unpack_jar() {
              jar=$1
@@ -143,25 +178,9 @@ let
           cat <<EOF > $out/nix-support/setup-hook
             if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
           EOF
-        '';
 
-        postFixup = ''
-          rpath="${ {  "8" = "$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64:$out/jre/languages/ruby/lib/cext";
-                      "11" = "$out/lib/jli:$out/lib/server:$out/lib:$out/languages/ruby/lib/cext";
-                    }.${javaVersion}
-                 }:${
-            lib.makeLibraryPath [
-              stdenv.cc.cc.lib # libstdc++.so.6
-              zlib             # libz.so.1
-            ]}"
-
-          ${lib.optionalString stdenv.isLinux ''
-          for f in $(find $out -type f -perm -0100); do
-            patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f" || true
-            patchelf --set-rpath   "$rpath"                                    "$f" || true
-            if ldd "$f" | fgrep 'not found'; then echo "in file $f"; fi
-          done
-          ''}
+          find "$out" -name libfontmanager.so -exec \
+            patchelf --add-needed libfontconfig.so {} \;
         '';
 
         # $out/bin/native-image needs zlib to build native executables.
