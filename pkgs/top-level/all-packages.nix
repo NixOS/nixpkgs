@@ -3331,11 +3331,11 @@ in
 
   ddrutility = callPackage ../tools/system/ddrutility { };
 
-  deluge-2_x = callPackage ../applications/networking/p2p/deluge/2 {
+  deluge-2_x = callPackage ../applications/networking/p2p/deluge {
     pythonPackages = python3Packages;
     libtorrentRasterbar = libtorrentRasterbar-1_2_x.override { python = python3; };
   };
-  deluge-1_x = callPackage ../applications/networking/p2p/deluge/1 {
+  deluge-1_x = callPackage ../applications/networking/p2p/deluge/1.nix {
     pythonPackages = python2Packages;
     libtorrentRasterbar = libtorrentRasterbar-1_1_x;
   };
