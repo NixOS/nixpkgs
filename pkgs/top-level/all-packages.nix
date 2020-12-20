@@ -14676,16 +14676,16 @@ in
 
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
-  libtorrentRasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar/2.0 {
+  libtorrentRasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
     python = python3;
   };
 
-  libtorrentRasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2 {
+  libtorrentRasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
-  libtorrentRasterbar-1_1_x = callPackage ../development/libraries/libtorrent-rasterbar/1.1 { };
+  libtorrentRasterbar-1_1_x = callPackage ../development/libraries/libtorrent-rasterbar/1.1.nix { };
 
   libtorrentRasterbar = libtorrentRasterbar-2_0_x;
 
