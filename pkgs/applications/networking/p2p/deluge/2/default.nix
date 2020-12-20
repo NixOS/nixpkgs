@@ -21,11 +21,13 @@ pythonPackages.buildPythonPackage rec {
   nativeBuildInputs = [ intltool wrapGAppsHook glib ];
 
   checkInputs = with pythonPackages; [
-    pytest /* pytest-twisted */ pytestcov mock
+    pytest pytest-twisted pytestcov mock
     mccabe pylint
   ];
 
-  doCheck = false; # until pytest-twisted is packaged
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   postInstall = ''
      mkdir -p $out/share/applications
