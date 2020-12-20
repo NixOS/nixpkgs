@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals (kluSupport) [
     suitesparse
   ];
+  outputs = [ "out" "examples" ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DEXAMPLES_INSTALL_PATH=${placeholder "out"}/share/examples"
+    "-DEXAMPLES_INSTALL_PATH=${placeholder "examples"}/share/examples"
   ] ++ stdenv.lib.optionals (lapackSupport) [
     "-DENABLE_LAPACK=ON"
     "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
