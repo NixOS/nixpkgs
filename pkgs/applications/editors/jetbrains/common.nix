@@ -1,5 +1,6 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf
+{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf, writeText
 , coreutils, gnugrep, which, git, unzip, libsecret, libnotify
+, vmopts ? null
 }:
 
 { name, product, version, src, wmClass, jdk, meta }:
@@ -9,6 +10,11 @@ with stdenv.lib;
 let loName = toLower product;
     hiName = toUpper product;
     execName = concatStringsSep "-" (init (splitString "-" name));
+    vmoptsName = loName
+               + ( if (with stdenv.hostPlatform; (is32bit || isDarwin))
+                   then ""
+                   else "64" )
+               + ".vmoptions";
 in
 
 with stdenv; lib.makeOverridable mkDerivation rec {
@@ -25,6 +31,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       StartupWMClass=${wmClass}
     '';
   };
+
+  vmoptsFile = optionalString (vmopts != null) (writeText vmoptsName vmopts);
 
   nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
@@ -72,7 +80,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ANDROID_JAVA_HOME "$jdk" \
-      --set JAVA_HOME "$jdk"
+      --set JAVA_HOME "$jdk" \
+      --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$item/share/applications" $out/share
   '';

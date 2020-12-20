@@ -35,11 +35,12 @@ stdenv.mkDerivation rec {
     libxml2
     glib
     openssl
-    zchunk
     curl
     check
     gpgme
-  ];
+  ]
+  # zchunk currently has issues compiling in darwin, fine in linux
+  ++ stdenv.lib.optional stdenv.isLinux zchunk;
 
   # librepo/fastestmirror.h includes curl/curl.h, and pkg-config specfile refers to others in here
   propagatedBuildInputs = [
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DPYTHON_DESIRED=${stdenv.lib.substring 0 1 python.pythonVersion}"
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin "-DWITH_ZCHUNK=OFF";
 
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
     homepage = "https://rpm-software-management.github.io/librepo/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ copumpkin ];
   };
 }

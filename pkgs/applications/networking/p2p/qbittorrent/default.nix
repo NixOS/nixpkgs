@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false
-, guiSupport ? true, dbus ? null # GUI OR headless
+, guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
 , trackerSearch ? true, python3 ? null
 }:
@@ -21,6 +21,7 @@ mkDerivation rec {
     sha256 = "17ih00q7idrpl3b2vgh4smva6lazs5jw06pblriscn1lrwdvrc38";
   };
 
+  # NOTE: 2018-05-31: CMake is working but it is not officially supported
   nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
