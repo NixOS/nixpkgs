@@ -638,22 +638,22 @@ let
         };
 
         wantedBy = [ "multi-user.target" ];
-        requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+        requires = optional mysqlLocal "mysql-activation-scripts.service" ++ optional pgsqlLocal "postgresql.service";
         after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
     };
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mysql;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        {
-          name = cfg.user;
-          ensurePermissions = {
-            "${cfg.database.name}.*" = "ALL PRIVILEGES";
-          };
-        }
-      ];
+      activationScripts.tt-rss =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in ''
+          ( echo "create database if not exists \`${cfg.database.name}\`;"
+            echo "create user if not exists '${cfg.user}'@'localhost' identified with ${unix_socket};"
+            echo "grant all privileges on \`${cfg.database.name}\`.* to '${cfg.user}'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
     };
 
     services.postgresql = mkIf pgsqlLocal {

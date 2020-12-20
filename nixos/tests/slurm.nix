@@ -100,15 +100,12 @@ in {
         services.mysql = {
           enable = true;
           package = pkgs.mariadb;
-          initialScript = pkgs.writeText "mysql-init.sql" ''
-            CREATE USER 'slurm'@'localhost' IDENTIFIED BY 'password123';
-            GRANT ALL PRIVILEGES ON slurm_acct_db.* TO 'slurm'@'localhost';
+          activationScripts.slurm = ''
+            ( echo "create database if not exists slurm_acct_db;"
+              echo "create user if not exists 'slurm'@'localhost' identified by 'password123';"
+              echo "grant all privileges on slurm_acct_db.* to 'slurm'@'localhost';"
+            ) | ${pkgs.mariadb}/bin/mysql -N
           '';
-          ensureDatabases = [ "slurm_acct_db" ];
-          ensureUsers = [{
-            ensurePermissions = { "slurm_acct_db.*" = "ALL PRIVILEGES"; };
-            name = "slurm";
-          }];
           extraOptions = ''
             # recommendations from: https://slurm.schedmd.com/accounting.html#mysql-configuration
             innodb_buffer_pool_size=1024M
@@ -116,6 +113,7 @@ in {
             innodb_lock_wait_timeout=900
           '';
         };
+        systemd.services.slurmdbd.after = [ "mysql-activation-scripts.service" ];
       };
 
     node1 = computeNode;

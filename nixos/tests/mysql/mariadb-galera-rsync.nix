@@ -38,13 +38,12 @@ in {
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
-        ensureDatabases = [ "testdb" ];
-        ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        }];
+        activationScripts.mariadb-galera-rsync = ''
+          ( echo "create database if not exists testdb;"
+            echo "create user if not exists 'testuser'@'localhost' identified with unix_socket;"
+            echo "grant all privileges on testdb.* to 'testuser'@'localhost';"
+          ) | ${pkgs.mariadb}/bin/mysql -N
+        '';
         settings = {
           mysqld = {
             bind_address = "0.0.0.0";
@@ -162,7 +161,7 @@ in {
 
   testScript = ''
     galera_04.start()
-    galera_04.wait_for_unit("mysql")
+    galera_04.wait_for_unit("mysql-activation-scripts.service")
     galera_04.wait_for_open_port(3306)
     galera_04.succeed(
         "sudo -u testuser mysql -u testuser -e 'use testdb; create table db1 (test_id INT, PRIMARY KEY (test_id)) ENGINE = InnoDB;'"
@@ -171,10 +170,10 @@ in {
         "sudo -u testuser mysql -u testuser -e 'use testdb; insert into db1 values (41);'"
     )
     galera_05.start()
-    galera_05.wait_for_unit("mysql")
+    galera_05.wait_for_unit("mysql-activation-scripts.service")
     galera_05.wait_for_open_port(3306)
     galera_06.start()
-    galera_06.wait_for_unit("mysql")
+    galera_06.wait_for_unit("mysql-activation-scripts.service")
     galera_06.wait_for_open_port(3306)
     galera_05.succeed(
         "sudo -u testuser mysql -u testuser -e 'use testdb; select test_id from db1;' -N | grep 41"

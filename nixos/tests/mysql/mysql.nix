@@ -12,27 +12,26 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
         users.users.testuser = { };
         users.users.testuser2 = { };
         services.mysql.enable = true;
-        services.mysql.initialDatabases = [
-          { name = "testdb3"; schema = ./testdb.sql; }
-        ];
         # note that using pkgs.writeText here is generally not a good idea,
         # as it will store the password in world-readable /nix/store ;)
         services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
           CREATE USER 'testuser3'@'localhost' IDENTIFIED BY 'secure';
           GRANT ALL PRIVILEGES ON testdb3.* TO 'testuser3'@'localhost';
         '';
-        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
-        services.mysql.ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        services.mysql.activationScripts.mysql57 = ''
+          ( echo "create database if not exists testdb;"
+            echo "create user if not exists 'testuser'@'localhost' identified with auth_socket;"
+            echo "grant all privileges on testdb.* to 'testuser'@'localhost';"
+
+            echo "create database if not exists testdb2;"
+            echo "create user if not exists 'testuser2'@'localhost' identified with auth_socket;"
+            echo "grant all privileges on testdb2.* to 'testuser2'@'localhost';"
+
+            echo "create database if not exists testdb3;"
+          ) | ${pkgs.mysql57}/bin/mysql -N
+
+          ${pkgs.mysql57}/bin/mysql -N testdb3 < ${./testdb.sql}
+        '';
         services.mysql.package = pkgs.mysql57;
       };
 
@@ -47,27 +46,26 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
         users.users.testuser = { };
         users.users.testuser2 = { };
         services.mysql.enable = true;
-        services.mysql.initialDatabases = [
-          { name = "testdb3"; schema = ./testdb.sql; }
-        ];
         # note that using pkgs.writeText here is generally not a good idea,
         # as it will store the password in world-readable /nix/store ;)
         services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
           CREATE USER 'testuser3'@'localhost' IDENTIFIED BY 'secure';
           GRANT ALL PRIVILEGES ON testdb3.* TO 'testuser3'@'localhost';
         '';
-        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
-        services.mysql.ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        services.mysql.activationScripts.mysql80 = ''
+          ( echo "create database if not exists testdb;"
+            echo "create user if not exists 'testuser'@'localhost' identified with auth_socket;"
+            echo "grant all privileges on testdb.* to 'testuser'@'localhost';"
+
+            echo "create database if not exists testdb2;"
+            echo "create user if not exists 'testuser2'@'localhost' identified with auth_socket;"
+            echo "grant all privileges on testdb2.* to 'testuser2'@'localhost';"
+
+            echo "create database if not exists testdb3;"
+          ) | ${pkgs.mysql80}/bin/mysql -N
+
+          ${pkgs.mysql80}/bin/mysql -N testdb3 < ${./testdb.sql}
+        '';
         services.mysql.package = pkgs.mysql80;
       };
 
@@ -84,18 +82,16 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
           DELETE FROM mysql.user WHERE user = ''';
           FLUSH PRIVILEGES;
         '';
-        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
-        services.mysql.ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        services.mysql.activationScripts.mariadb = ''
+          ( echo "create database if not exists testdb;"
+            echo "create user if not exists 'testuser'@'localhost' identified with unix_socket;"
+            echo "grant all privileges on testdb.* to 'testuser'@'localhost';"
+
+            echo "create database if not exists testdb2;"
+            echo "create user if not exists 'testuser2'@'localhost' identified with unix_socket;"
+            echo "grant all privileges on testdb2.* to 'testuser2'@'localhost';"
+          ) | ${pkgs.mariadb}/bin/mysql -N
+        '';
         services.mysql.settings = {
           mysqld = {
             plugin-load-add = [ "ha_tokudb.so" "ha_rocksdb.so" ];

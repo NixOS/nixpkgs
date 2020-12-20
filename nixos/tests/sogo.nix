@@ -10,15 +10,17 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       services.mysql = {
         enable = true;
-        package = pkgs.mysql;
-        ensureDatabases = [ "sogo" ];
-        ensureUsers = [{
-          name = "sogo";
-          ensurePermissions = {
-            "sogo.*" = "ALL PRIVILEGES";
-          };
-        }];
+        package = pkgs.mariadb;
+        activationScripts.sogo = ''
+          ( echo "create database if not exists sogo;"
+            echo "create user if not exists 'sogo'@'localhost' identified with unix_socket;"
+            echo "grant all privileges on sogo.* to 'sogo'@'localhost';"
+          ) | ${pkgs.mariadb}/bin/mysql -N
+        '';
       };
+
+      systemd.services.sogo.after = [ "mysql-activation-scripts.service" ];
+      systemd.services.sogo-ealarms.after = [ "mysql-activation-scripts.service" ];
 
       services.sogo = {
         enable = true;

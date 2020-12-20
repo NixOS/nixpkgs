@@ -37,14 +37,15 @@ let
       services.grafana.database.user = "grafana";
       services.mysql = {
         enable = true;
-        ensureDatabases = [ "grafana" ];
-        ensureUsers = [{
-          name = "grafana";
-          ensurePermissions."grafana.*" = "ALL PRIVILEGES";
-        }];
         package = pkgs.mariadb;
+        activationScripts.grafana = ''
+          ( echo "create database if not exists grafana;"
+            echo "create user if not exists 'grafana'@'localhost' identified with unix_socket;"
+            echo "grant all privileges on grafana.* to 'grafana'@'localhost';"
+          ) | ${pkgs.mariadb}/bin/mysql -N
+        '';
       };
-      systemd.services.grafana.after = [ "mysql.service" ];
+      systemd.services.grafana.after = [ "mysql-activation-scripts.service" ];
     };
   };
 
@@ -86,7 +87,7 @@ in {
 
     with subtest("Successful API query as admin user with mysql db"):
         mysql.wait_for_unit("grafana.service")
-        mysql.wait_for_unit("mysql.service")
+        mysql.wait_for_unit("mysql-activation-scripts.service")
         mysql.wait_for_open_port(3000)
         mysql.wait_for_open_port(3306)
         mysql.succeed(

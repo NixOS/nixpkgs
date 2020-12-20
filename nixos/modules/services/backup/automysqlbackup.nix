@@ -3,7 +3,7 @@
 let
 
   inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExample;
-  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional types;
+  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption types;
 
   cfg = config.services.automysqlbackup;
   pkg = pkgs.automysqlbackup;
@@ -90,6 +90,7 @@ in
 
     systemd.services.automysqlbackup = {
       description = "automysqlbackup service";
+      after = [ "mysql-activation-scripts.service" ];
       serviceConfig = {
         User = user;
         Group = group;
@@ -109,10 +110,14 @@ in
       "d '${cfg.config.backup_dir}' 0750 ${user} ${group} - -"
     ];
 
-    services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") {
-      name = user;
-      ensurePermissions = { "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES"; };
-    };
+    services.mysql.activationScripts.automysqlbackup =
+      let
+        unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+      in mkIf (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") ''
+        ( echo "create user if not exists '${user}'@'localhost' identified with ${unix_socket};"
+          echo "grant select, show view, trigger, lock tables on *.* to '${user}'@'localhost';"
+        ) | ${config.services.mysql.package}/bin/mysql -N
+      '';
 
   };
 }
