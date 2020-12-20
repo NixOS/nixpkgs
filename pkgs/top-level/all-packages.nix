@@ -25770,6 +25770,8 @@ in
 
   mari0 = callPackage ../games/mari0 { };
 
+  manaplus = callPackage ../games/manaplus { };
+
   mars = callPackage ../games/mars { };
 
   megaglest = callPackage ../games/megaglest {};
