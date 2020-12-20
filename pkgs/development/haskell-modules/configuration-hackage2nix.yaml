@@ -5541,7 +5541,6 @@ broken-packages:
   - github-webhook-handler-snap
   - githud
   - gitignore
-  - gitit
   - gitlab-api
   - gitlib
   - gitlib-cmdline
