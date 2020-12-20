@@ -39,6 +39,8 @@ common =
 
       outputs = [ "out" "dev" "man" "doc" ];
 
+      strictDeps = true;
+
       nativeBuildInputs =
         [ pkgconfig ]
         ++ lib.optionals is24
