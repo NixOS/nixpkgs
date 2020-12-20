@@ -229,7 +229,7 @@ in buildFHSUserEnv rec {
     mkdir -p $out/share/applications
     ln -s ${steam}/share/icons $out/share
     ln -s ${steam}/share/pixmaps $out/share
-    sed "s,/usr/bin/steam,steam,g" ${steam}/share/applications/steam.desktop > $out/share/applications/steam.desktop
+    ln -s ${steam}/share/applications/steam.desktop $out/share/applications/steam.desktop
   '';
 
   profile = ''
