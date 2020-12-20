@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nitrokey-app";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
