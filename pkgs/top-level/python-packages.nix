@@ -505,7 +505,7 @@ in {
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
 
   awkward0 = callPackage ../development/python-modules/awkward0 { };
-  awkward1 = callPackage ../development/python-modules/awkward1 { };
+  awkward = callPackage ../development/python-modules/awkward { };
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
@@ -3514,7 +3514,10 @@ in {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
-  libtorrentRasterbar = (toPythonModule (pkgs.libtorrentRasterbar.override { inherit python; })).python;
+  libtorrentRasterbar = if isPy27 then
+    (toPythonModule (pkgs.libtorrentRasterbar-1_2_x.override { inherit python; })).python
+  else
+    (toPythonModule (pkgs.libtorrentRasterbar.override { inherit python; })).python;
 
   libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
 
@@ -7857,6 +7860,8 @@ in {
   wsgitools = callPackage ../development/python-modules/wsgitools { };
 
   WSME = callPackage ../development/python-modules/WSME { };
+
+  wsnsimpy = callPackage ../development/python-modules/wsnsimpy { };
 
   wsproto = if (pythonAtLeast "3.6") then
     callPackage ../development/python-modules/wsproto { }

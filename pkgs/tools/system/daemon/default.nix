@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0b17zzl7bqnkn7a4pr3l6fxqfmxfld7izphrab5nvhc4wzng4spn";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
   buildInputs = [ perl ];
 
   meta = with stdenv.lib; {

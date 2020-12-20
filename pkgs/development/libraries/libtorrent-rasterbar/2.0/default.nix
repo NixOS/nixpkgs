@@ -1,12 +1,11 @@
-{ stdenv, fetchFromGitHub, pkg-config, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, ncurses, SystemConfiguration
+{ stdenv, fetchFromGitHub, cmake
+, zlib, boost, openssl, python, ncurses, SystemConfiguration
 }:
 
 let
-  version = "1.2.11";
+  version = "2.0.1";
 
   # Make sure we override python, so the correct version is chosen
-  # for the bindings, if overridden
   boostPython = boost.override { enablePython = true; inherit python; };
 
 in stdenv.mkDerivation {
@@ -17,17 +16,14 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "05qm8mcyxsnb6zb8nckln1gkk8ncwzfhsz7d7p3fhx6gdsc8j71b";
+    sha256 = "04ppw901babkfkis89pyb8kiyn39kb21k1s838xjq5ghbral1b1c";
+    fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
-  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
-
-  buildInputs = [ boostPython openssl zlib python libiconv ncurses ]
+  buildInputs = [ boostPython openssl zlib python ncurses ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ SystemConfiguration ];
-
-  preConfigure = "./autotool.sh";
 
   postInstall = ''
     moveToOutput "include" "$dev"
@@ -36,11 +32,8 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "python" ];
 
-  configureFlags = [
-    "--enable-python-binding"
-    "--with-libiconv=yes"
-    "--with-boost=${boostPython.dev}"
-    "--with-boost-libdir=${boostPython.out}/lib"
+  cmakeFlags = [
+    "-Dpython-bindings=on"
   ];
 
   meta = with stdenv.lib; {

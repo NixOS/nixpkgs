@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "X-Ray Engine 1.6 expansion. Original version was used in S.T.A.L.K.E.R.: Call of Pripyat";
+    description = "Improved version of the X-Ray Engine, the game engine used in the world-famous S.T.A.L.K.E.R. game series by GSC Game World";
     homepage = src.meta.homepage;
     license = licenses.unfree // {
       url = "https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt";
