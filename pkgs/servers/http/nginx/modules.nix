@@ -462,6 +462,17 @@ in
     inputs = [ pkgs.ffmpeg_3 ];
   };
 
+  vod = {
+    src = fetchFromGitHub {
+      name = "vod";
+      owner = "kaltura";
+      repo = "nginx-vod-module";
+      rev = "e46079f51282d5a378e6911714b5f3a533bb7700";
+      sha256 = "0pzzq4xcq7jg8mxwnz7srj1nczg9ajd1b8q58qlm03lny8nd2hr5";
+    };
+    inputs = [ pkgs.ffmpeg_3 pkgs.fdk_aac pkgs.openssl pkgs.libxml2 pkgs.libiconv ];
+  };
+
   vts = {
     src = fetchFromGitHub {
       name = "vts";
