@@ -3514,10 +3514,10 @@ in {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
-  libtorrentRasterbar = if isPy27 then
-    (toPythonModule (pkgs.libtorrentRasterbar-1_2_x.override { inherit python; })).python
+  libtorrent-rasterbar = if isPy27 then
+    (toPythonModule (pkgs.libtorrent-rasterbar-1_2_x.override { inherit python; })).python
   else
-    (toPythonModule (pkgs.libtorrentRasterbar.override { inherit python; })).python;
+    (toPythonModule (pkgs.libtorrent-rasterbar.override { inherit python; })).python;
 
   libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
 
