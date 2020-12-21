@@ -36,6 +36,7 @@ in rec {
     export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
+    export NIX_DYNAMIC_LINKER="darwin"
     unset SDKROOT
 
     export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}

@@ -30,10 +30,6 @@ cppInclude=1
 cInclude=1
 setDynamicLinker=1
 
-if [[ "@isdarwin@" = "1" ]]; then
-    setDynamicLinker=0
-fi
-
 expandResponseParams "$@"
 declare -i n=0
 nParams=${#params[@]}
@@ -149,6 +145,12 @@ extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
 extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
+
+    # Disable the -dynamic-linker flag if NIX_DYNAMIC_LINKER is the special darwin
+    # value. -dynamic-linker is not supported on darwin systems.
+    if [[ "$NIX_DYNAMIC_LINKER_@suffixSalt@" = "darwin" ]]; then
+        setDynamicLinker=0
+    fi
 
     # Add the flags that should only be passed to the compiler when
     # linking.
