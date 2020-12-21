@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, jansson, pcre
+{ stdenv, nixosTests, lib, fetchurl, pkgconfig, jansson, pcre
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
@@ -120,4 +120,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar schneefux globin ];
     platforms = platforms.unix;
   };
+
+  passthru.tests.uwsgi = nixosTests.uwsgi;
+
 }
