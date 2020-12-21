@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, makeWrapper, cmake, ftgl, gl2ps, glew, gsl, libX11
-, libXpm , libXft, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre, pkgconfig
-, python , xxHash, zlib, zstd
+{ stdenv, lib, fetchurl, makeWrapper, cmake, ftgl, gl2ps, glew, gsl, llvm_5
+, libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre
+, pkgconfig, python, xxHash, zlib, zstd
 , libAfterImage, giflib, libjpeg, libtiff, libpng
 , Cocoa, OpenGL, noSplash ? false }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkgconfig ];
-  buildInputs = [ ftgl gl2ps glew pcre zlib zstd libxml2 lz4 lzma gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
+  buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 lzma gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
+    "-Dbuiltin_llvm=OFF"
     "-Dcastor=OFF"
     "-Dchirp=OFF"
     "-Dclad=OFF"
