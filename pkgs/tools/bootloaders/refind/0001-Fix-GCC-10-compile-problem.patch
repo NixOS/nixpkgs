@@ -1,0 +1,25 @@
+From e34a16301f425f273a67ed3abbc45840bc82d892 Mon Sep 17 00:00:00 2001
+From: srs5694 <srs5694@users.sourceforge.net>
+Date: Fri, 15 May 2020 12:34:14 -0400
+Subject: [PATCH] Fix GCC 10 compile problem
+
+---
+ Make.common | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Make.common b/Make.common
+index 3f0b919..95a3a97 100644
+--- a/Make.common
++++ b/Make.common
+@@ -60,7 +60,7 @@ endif
+ #
+ 
+ # ...for both GNU-EFI and TianoCore....
+-OPTIMFLAGS      = -Os -fno-strict-aliasing
++OPTIMFLAGS      = -Os -fno-strict-aliasing -fno-tree-loop-distribute-patterns
+ CFLAGS          = $(OPTIMFLAGS) -fno-stack-protector -fshort-wchar -Wall
+ 
+ # ...for GNU-EFI....
+-- 
+2.29.2
+
