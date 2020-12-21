@@ -56,7 +56,7 @@ let
       homepage = "https://www.enpass.io/";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux"];
-      maintainers = with maintainers; [ guillaumekoenig ];
+      maintainers = with maintainers; [ ewok ];
     };
 
     buildInputs = [makeWrapper dpkg];
