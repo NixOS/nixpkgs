@@ -158,6 +158,7 @@ stdenv.mkDerivation rec {
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ aneeshusa ];
   };
 }
