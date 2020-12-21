@@ -12725,6 +12725,8 @@ in
 
   docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
 
+  docopts = callPackage ../development/tools/misc/docopts { };
+
   dotconf = callPackage ../development/libraries/dotconf { };
 
   draco = callPackage ../development/libraries/draco { };
