@@ -9,15 +9,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "15pfijbiyv0adrchj3v379w898gxsji33q4ly0k7s22vd93wj20m";
+    sha256 = "1sakmhvh40gh4x55vzgy6cyvizqkhqalcfpvs6r0c14w62p38jm5";
   };
 
   preConfigure = ''
     # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
-    # TODO: Drop temporary version fix once 5.11 is out (hopefully :D):
-    substituteInPlace include/version.h \
-      --replace "5.9.0" "${version}"
   '';
 
   outputs = [ "out" "dev" ];
