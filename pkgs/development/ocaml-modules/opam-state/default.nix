@@ -5,6 +5,8 @@ buildDunePackage rec {
 
   inherit (opam) src version;
 
+  useDune2 = true;
+
   # get rid of check for curl at configure time
   # opam-state does not call curl at run time
   configureFlags = [ "--disable-checks" ];
