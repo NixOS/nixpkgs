@@ -1,9 +1,15 @@
-{ stdenv, buildPackages
-, fetchurl, binutils ? null, bison, util-linux
+{ stdenv
+, buildPackages
+, fetchurl
+, binutils ? null
+, bison
+, util-linux
 
-# patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin, readline80 ? null
-, withDocs ? false, texinfo ? null
+  # patch for cygwin requires readline support
+, interactive ? stdenv.isCygwin
+, readline80 ? null
+, withDocs ? false
+, texinfo ? null
 }:
 
 with stdenv.lib;
@@ -11,21 +17,19 @@ with stdenv.lib;
 assert interactive -> readline80 != null;
 assert withDocs -> texinfo != null;
 assert stdenv.hostPlatform.isDarwin -> binutils != null;
-
 let
-  upstreamPatches = import ./bash-5.0-patches.nix (nr: sha256: fetchurl {
-    url = "mirror://gnu/bash/bash-5.0-patches/bash50-${nr}";
+  upstreamPatches = import ./bash-5.1-patches.nix (nr: sha256: fetchurl {
+    url = "mirror://gnu/bash/bash-5.1-patches/bash51-${nr}";
     inherit sha256;
   });
 in
-
 stdenv.mkDerivation rec {
   name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    sha256 = "0kgvfwqdcd90waczf4gx39xnrxzijhjrzyzv7s8v4w31qqm0za5l";
+    sha256 = "1alv68wplnfdm6mh39hm57060xgssb9vqca4yr1cyva0c342n0fc";
   };
 
   hardeningDisable = [ "format" ];
@@ -44,7 +48,7 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" "-T" ];
 
   patches = upstreamPatches
-    ++ [ ./pgrp-pipe-5.0.patch ];
+    ++ [ ./pgrp-pipe-5.1.patch ];
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
@@ -87,7 +91,8 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/bash/Makefile.inc
   '';
 
-  postFixup = if interactive
+  postFixup =
+    if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
         --replace '${stdenv.shell}' "$out/bin/bash"
@@ -101,7 +106,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/bash/";
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
-        (if interactive then " (for interactive use)" else "");
+      (if interactive then " (for interactive use)" else "");
 
     longDescription = ''
       Bash is the shell, or command language interpreter, that will
