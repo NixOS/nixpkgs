@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.20.08";
+  version = "6.22.06";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "1s9sqapw2f31m3gcm8nyg7dl8g9mgj92ny28jsli9j08955j4byh";
+    sha256 = "0mqvj42nax0bmz8h83jjlwjm3xxjy1n0n10inc8csip9ly28fs64";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkgconfig ];
@@ -70,7 +70,14 @@ stdenv.mkDerivation rec {
     "-Dxrootd=OFF"
   ]
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include"
-  ++ stdenv.lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
+    "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
+
+    # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
+    # fatal error: could not build module '_Builtin_intrinsics'
+    "-Druntime_cxxmodules=OFF"
+  ];
 
   enableParallelBuilding = true;
 
