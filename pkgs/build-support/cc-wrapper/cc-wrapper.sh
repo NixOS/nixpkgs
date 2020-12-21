@@ -30,6 +30,10 @@ cppInclude=1
 cInclude=1
 setDynamicLinker=1
 
+if [[ "@isdarwin@" = "1" ]]; then
+    setDynamicLinker=0
+fi
+
 expandResponseParams "$@"
 declare -i n=0
 nParams=${#params[@]}
