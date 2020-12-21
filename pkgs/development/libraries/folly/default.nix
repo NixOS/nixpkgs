@@ -1,18 +1,37 @@
-{ stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
-, gflags, libiberty, openssl }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, libevent
+, double-conversion
+, glog
+, gflags
+, libiberty
+, lz4
+, lzma
+, zlib
+, jemalloc
+, openssl
+, pkg-config
+, libunwind
+, fmt
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "folly";
-  version = "2019.11.11.00";
+  version = "2020.09.28.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "1sgv7sdalbs7zhz3zcc95gn2h8j2xjf7hkw2c618zc3pdn6aa58w";
+    sha256 = "1ry2nqfavcbz0jvsqw71105gbxm5hpmdi2k1w155m957jrv3n5vg";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
   buildInputs = [
@@ -23,9 +42,15 @@ stdenv.mkDerivation rec {
     libevent
     libiberty
     openssl
+    lz4
+    lzma
+    zlib
+    jemalloc
+    libunwind
+    fmt
   ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with stdenv.lib; {
     description = "An open-source C++ library developed and used at Facebook";
@@ -35,4 +60,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
-}
+} // stdenv.lib.optionalAttrs stdenv.isDarwin {
+  LDFLAGS = "-ljemalloc";
+})
