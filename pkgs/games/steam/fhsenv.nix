@@ -55,6 +55,14 @@ let
     export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
+  # bootstrap.tar.xz has 444 permissions, which means that simple deletes fail
+  # and steam will not be able to start
+  fixBootstrap = ''
+    if [ -r $HOME/.local/share/Steam/bootstrap.tar.xz ]; then
+      chmod +w $HOME/.local/share/Steam/bootstrap.tar.xz
+    fi
+  '';
+
   setupSh = writeScript "setup.sh" ''
     #!${runtimeShell}
   '';
@@ -264,6 +272,7 @@ in buildFHSUserEnv rec {
       fi
     fi
     ${lib.optionalString (!nativeOnly) exportLDPath}
+    ${fixBootstrap}
     exec steam "$@"
   '';
 
@@ -290,6 +299,7 @@ in buildFHSUserEnv rec {
       fi
       shift
       ${lib.optionalString (!nativeOnly) exportLDPath}
+      ${fixBootstrap}
       exec -- "$run" "$@"
     '';
   };
