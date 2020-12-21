@@ -28,19 +28,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wayland";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0k995rn96xkplrapz5k648j651wc43kq817xk1x8280h16gsfxa6";
+    sha256 = "05bd2vphyx8qwa1mhsj1zdaiv4m4v94wrlssrn0lad8d601dkk5s";
   };
 
   patches = [
-    # Fix documentation to be reproducible.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/wayland/wayland/-/commit/e53e0edf0f892670f3e8c5dd527b3bb22335d32d.patch";
-      sha256 = "15sbhi86m9k72lsj56p7zr20ph2b0y4svl639snsbafn2ir1zdb2";
-    })
     (substituteAll {
       src = ./0001-add-placeholder-for-nm.patch;
       nm = "${stdenv.cc.targetPrefix}nm";
