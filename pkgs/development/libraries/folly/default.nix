@@ -52,8 +52,6 @@ stdenv.mkDerivation (rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "An open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";
