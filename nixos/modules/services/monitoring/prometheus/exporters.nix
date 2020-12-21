@@ -37,6 +37,7 @@ let
     "modemmanager"
     "nextcloud"
     "nginx"
+    "nginxlog"
     "node"
     "openvpn"
     "postfix"

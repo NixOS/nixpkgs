@@ -1,21 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "nginxlog_exporter";
-  version = "1.3.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "martin-helmich";
     repo = "prometheus-nginxlog-exporter";
     rev = "v${version}";
-    sha256 = "0cma6hgagqdms6x40v0q4jn8gjq1awyg1aqk5l8mz7l6k132qq7k";
+    sha256 = "1kqyjw5yqgjb8xa5irdhpqvwp1qhba6igpc23n2qljhbh0aybkbq";
   };
 
-  goPackagePath = "github.com/martin-helmich/prometheus-nginxlog-exporter";
+  vendorSha256 = "130hq19y890amxhjywg5blassl8br2p9d62aai8fj839p3p2a7zp";
 
-  goDeps = ./nginxlog-exporter_deps.nix;
+  subPackages = [ "." ];
 
-  doCheck = true;
+  runVend = true;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) nginxlog; };
 
   meta = with stdenv.lib; {
     description = "Export metrics from Nginx access log files to Prometheus";

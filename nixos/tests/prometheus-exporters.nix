@@ -444,6 +444,67 @@ let
       '';
     };
 
+    nginxlog = {
+      exporterConfig = {
+        enable = true;
+        group = "nginx";
+        settings = {
+          namespaces = [
+            {
+              name = "filelogger";
+              source = {
+                files = [ "/var/log/nginx/filelogger.access.log" ];
+              };
+            }
+            {
+              name = "syslogger";
+              source = {
+                syslog = {
+                  listen_address = "udp://127.0.0.1:10000";
+                  format = "rfc3164";
+                  tags = ["nginx"];
+                };
+              };
+            }
+          ];
+        };
+      };
+      metricProvider = {
+        services.nginx = {
+          enable = true;
+          httpConfig = ''
+            server {
+              listen 80;
+              server_name filelogger.local;
+              access_log /var/log/nginx/filelogger.access.log;
+            }
+            server {
+              listen 81;
+              server_name syslogger.local;
+              access_log syslog:server=127.0.0.1:10000,tag=nginx,severity=info;
+            }
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("nginx.service")
+        wait_for_unit("prometheus-nginxlog-exporter.service")
+        wait_for_open_port(9117)
+        wait_for_open_port(80)
+        wait_for_open_port(81)
+        succeed("curl http://localhost")
+        execute("sleep 1")
+        succeed(
+            "curl -sSf http://localhost:9117/metrics | grep 'filelogger_http_response_count_total' | grep -q 1"
+        )
+        succeed("curl http://localhost:81")
+        execute("sleep 1")
+        succeed(
+            "curl -sSf http://localhost:9117/metrics | grep 'syslogger_http_response_count_total' | grep -q 1"
+        )
+      '';
+    };
+
     node = {
       exporterConfig = {
         enable = true;
