@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       edwtjo
     ];
+    platforms = jre.meta.platforms;
     description = "A proofreading program for English, French German, Polish, and more";
   };
 }

@@ -12,13 +12,13 @@ assert stdenv ? glibc;
 # find the downloads needed for new versions
 #
 # to test:
-# $ for e in cpp modeling platform sdk java committers; do nix build -f default.nix pkgs.eclipses.eclipse-${e} -o eclipse-${e}; done
+# $ for e in cpp modeling platform sdk java committers rcp rust; do nix build -f default.nix pkgs.eclipses.eclipse-${e} -o eclipse-${e}; done
 
 let
   platform_major = "4";
-  platform_minor = "17";
+  platform_minor = "18";
   year = "2020";
-  month = "09";
+  month = "12";
   timestamp = "${year}${month}021800";
   gtk = gtk3;
 in rec {
@@ -37,7 +37,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "270pk7vvfvanig49xkrail01nf967zlp7xf8rvyh2ya7s0y0akj2bi0y4yms4gwijmingm8y2ir9qynd360mzwl8mnc1c31ykf9l3lh";
+        sha512 = "MR6ddNmBKyXCyVGlGPfq6K2zJRywy4I5QDXji3rh81eJQ6zkEguo+VvD75i/szg/+FbCVA09vDVV06JgL4SHwQ==";
       };
   };
 
@@ -49,7 +49,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "26bb6cbnw94ml585aqrs8wpfksd2883njlqi48klpbn5n1bwpnpwvymx9q46i49piiyp0r1pa8ghdcgiwcakvri5nzldlh522fs7h5y";
+        sha512 = "hSi3IL+fWhlUfEJYv4LFO7WNbZpiofAgNGZbEOIBS0VpeHfJ5Y6UKMKMLfQlG3hlkAL5jg/cEJKb/ad4DxHbjQ==";
       };
   };
 
@@ -61,7 +61,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "2i3gjxmq1i4p70q2l5749b96z1r4nv15dii17fywbyby3kbggwhfvaydizy7z5p6kn0y91dw13p7gmg3qpr9d46mb8f8h3sxks7fyl9";
+        sha512 = "cPRa7ICogpcuwzOlzSSCEcWpwpUhQuIv6lGBKuAu9mOwj7Nz0TPaWVWNqN1541uVRXVTzcWX+mwc2UBPzWUPxg==";
       };
   };
 
@@ -86,7 +86,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "1c29r7qwjrjv86q2c4bhlrmmh50690lrq164jzrlisys9vnxb6wii0gwb34p9m1xqr3lgba1zhffb4jx18prrk0x8xbd78mp0lvya3k";
+        sha512 = "iN6z5iSJ2bhE1IH3uJj7aiaF/nSIgIAqadvaTBpE4gkgLAXgtfraFAzgcw0zJr5m2u5mULfW45hLkmIXselniQ==";
       };
   };
 
@@ -98,7 +98,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3rkpngrk6423i2pcf241wbr9jfzwxm2qwm57ipjpjw6705w1rapcws4bibqjznlf34lqvnynkw2wihy51j1ryw25z9fc2jsvyj67c1q";
+        sha512 = "HVqsWUVNNRdcaziGdNI96R9F2VMUE4nYK1VX1G3pK+srFDlkJ7+rj2sZjtWL7WcJR1XSbT03nJJzPyp01RsCvQ==";
       };
   };
 
@@ -110,7 +110,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3gnqamrn3x2gr4dfcgl7ppxpyi1q422l0sm7sh0vmipbs9l1c58plm3p14j9rjsyjlly2xjci6dg7sb9mj6259vc640wafnzcs89ii1";
+        sha512 = "UtI4piLNRM3TsM9PzbGgsPqTkiurJ+7Q7jVra45an4YJHtfWcGTxxwUNnRzay6cHT49AjrWtVf1bovWSDXMiQA==";
       };
   };
 
@@ -122,7 +122,19 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "216g805fgpb7vwbgk36xkf467vijvaa3x0gk4d94pi92d9wdh5dph6wjjr4ka9rvg0pzxxr8y3sgbfqqzqpc82bgiz5qqr93sprh9bj";
+        sha512 = "9DqNjSx1Ypdzpt1jIOJ9KFx8y+cG55K6bqkWTqnGjjDr4h4mWSzvGjHGUtFrKl92WRzQZKjNPxzVreDMcUkc/g==";
+      };
+  };
+
+  ### Eclipse IDE for Rust Developers
+
+  eclipse-rust = buildEclipse {
+    name = "eclipse-rust-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Rust Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rust-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        sha512 = "QbaG1knCMFnVQkPeApcIamJMXPyL8zUQa0ZsTJOuTgU/fD1RiHN7/WS6ax5azzIJhpjEtj2LMU4XV+MwkzResw==";
       };
   };
 

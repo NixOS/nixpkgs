@@ -467,7 +467,7 @@ let self = rec {
     propagatedBuildInputs = [
       simpleplugin
       python2Packages.requests
-      python2Packages.libtorrentRasterbar
+      python2Packages.libtorrent-rasterbar
     ];
 
     meta = {
