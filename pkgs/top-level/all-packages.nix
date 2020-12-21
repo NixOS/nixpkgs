@@ -22674,6 +22674,8 @@ in
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
 
+  mediaelch = libsForQt5.callPackage ../applications/misc/mediaelch { };
+
   mediainfo = callPackage ../applications/misc/mediainfo { };
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
