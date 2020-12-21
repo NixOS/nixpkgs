@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, doxygen
+{ stdenv, fetchurl, cmake, doxygen, darwin
 , zlib }:
 
 let
@@ -14,7 +14,8 @@ let
 
     nativeBuildInputs = [ cmake doxygen ];
 
-    buildInputs = [ zlib ];
+    buildInputs = [ zlib ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
     enableParallelBuilding = true;
 
@@ -32,7 +33,7 @@ let
       homepage = "http://icculus.org/physfs/";
       description = "Library to provide abstract access to various archives";
       license = licenses.free;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   };
 
