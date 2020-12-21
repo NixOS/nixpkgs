@@ -22,6 +22,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/msgpack/msgpack-python";
     description = "MessagePack serializer implementation for Python";
+    changelog = "https://github.com/msgpack/msgpack-python/blob/master/ChangeLog.rst";
     license = lib.licenses.asl20;
     # maintainers =  ?? ;
   };
