@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, cmake }:
+{ stdenv, fetchurl, zlib, bzip2, cmake, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "SPAdes";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ zlib bzip2 ];
+  buildInputs = [ zlib bzip2 python3 ];
 
   doCheck = true;
 

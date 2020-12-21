@@ -469,11 +469,11 @@
     md5name = "b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523-libjpeg-turbo-1.5.3.tar.gz";
   }
   {
-    name = "language-subtag-registry-2020-04-01.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-04-01.tar.bz2";
-    sha256 = "fb1ee0dabfd956a445fbe9f351e86a52767808558f20f4256e67fbbb3768e9da";
+    name = "language-subtag-registry-2020-09-29.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-09-29.tar.bz2";
+    sha256 = "cbe9fca811a37056560aab73e9fc9d3522b46b6785cb02db165f521bf42c230f";
     md5 = "";
-    md5name = "fb1ee0dabfd956a445fbe9f351e86a52767808558f20f4256e67fbbb3768e9da-language-subtag-registry-2020-04-01.tar.bz2";
+    md5name = "cbe9fca811a37056560aab73e9fc9d3522b46b6785cb02db165f521bf42c230f-language-subtag-registry-2020-09-29.tar.bz2";
   }
   {
     name = "JLanguageTool-1.7.0.tar.bz2";
@@ -700,11 +700,11 @@
     md5name = "66adacd705a7d19895e08eac46d1e851332adf2e736c566bef1164e7a442519d-libpagemaker-0.0.4.tar.xz";
   }
   {
-    name = "pdfium-4137.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/pdfium-4137.tar.bz2";
-    sha256 = "9a2f9bddca935a263f06c81003483473a525ccd0f4e517bc75fceb914d4c54b6";
+    name = "pdfium-4306.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/pdfium-4306.tar.bz2";
+    sha256 = "eca406d47ac7e2a84dcc86f93c08f96e591d409589e881477fa75e488e4851d8";
     md5 = "";
-    md5name = "9a2f9bddca935a263f06c81003483473a525ccd0f4e517bc75fceb914d4c54b6-pdfium-4137.tar.bz2";
+    md5name = "eca406d47ac7e2a84dcc86f93c08f96e591d409589e881477fa75e488e4851d8-pdfium-4306.tar.bz2";
   }
   {
     name = "pixman-0.34.0.tar.gz";
