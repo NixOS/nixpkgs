@@ -14,9 +14,8 @@
   This includes a hardened kernel, and limiting the system information
   available to processes through the <filename>/sys</filename> and
   <filename>/proc</filename> filesystems. It also disables the User Namespaces
-  feature of the kernel, which stops Nix from being able to build anything
-  (this particular setting can be overriden via
-  <xref linkend="opt-security.allowUserNamespaces"/>). See the
+  feature of the kernel for non-root users, which means you need to be root to
+  build anything. See the
   <literal
    xlink:href="https://github.com/nixos/nixpkgs/tree/master/nixos/modules/profiles/hardened.nix">
   profile source</literal> for further detail on which settings are altered.
