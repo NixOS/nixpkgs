@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
-  version = "5.9.14";
+  version = "5.10.1";
 in
 
 buildLinux (args // {
@@ -13,11 +13,11 @@ buildLinux (args // {
     owner = "zen-kernel";
     repo = "zen-kernel";
     rev = "v${version}-zen1";
-    sha256 = "1b8pm80z49d7qk9mvdf9w3hih34pilqr1zjk110q5im1kdz81zrg";
+    sha256 = "1c77x53ixyn64b4qq6br6ckicmjs316c8k08yfxibmhv72av1wcp";
   };
 
   extraMeta = {
-    branch = "5.9/master";
+    branch = "5.10/master";
     maintainers = with stdenv.lib.maintainers; [ atemu andresilva ];
   };
 

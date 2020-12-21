@@ -5107,6 +5107,8 @@ in
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
+  keystore-explorer = callPackage ../applications/misc/keystore-explorer { };
+
   kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
   kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
     enableUnfree = false;
@@ -9070,6 +9072,8 @@ in
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  flasm = callPackage ../development/compilers/flasm { };
+
   flyctl = callPackage ../development/web/flyctl { };
 
   flutterPackages =
@@ -10592,19 +10596,16 @@ in
   octave = callPackage ../development/interpreters/octave {
     python = python3;
     mkDerivation = stdenv.mkDerivation;
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   octave-jit = callPackage ../development/interpreters/octave {
     python = python3;
     enableJIT = true;
     mkDerivation = stdenv.mkDerivation;
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   octaveFull = libsForQt5.callPackage ../development/interpreters/octave {
     python = python3;
     enableQt = true;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   ocropus = callPackage ../applications/misc/ocropus { };
@@ -16083,6 +16084,8 @@ in
 
   soapyairspy = callPackage ../applications/radio/soapyairspy { };
 
+  soapyaudio = callPackage ../applications/radio/soapyaudio { };
+
   soapybladerf = callPackage ../applications/radio/soapybladerf { };
 
   soapyhackrf = callPackage ../applications/radio/soapyhackrf { };
@@ -16095,6 +16098,7 @@ in
     extraPackages = [
       limesuite
       soapyairspy
+      soapyaudio
       soapybladerf
       soapyhackrf
       soapyremote
@@ -16247,10 +16251,6 @@ in
   };
 
   sundials = callPackage ../development/libraries/sundials {
-    python = python3;
-  };
-
-  sundials_2 = callPackage ../development/libraries/sundials/2.x.nix {
     python = python3;
   };
 

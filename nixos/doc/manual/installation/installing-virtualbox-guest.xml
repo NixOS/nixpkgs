@@ -83,7 +83,7 @@
   VirtualBox settings (Machine / Settings / Shared Folders, then click on the
   "Add" icon). Add the following to the
   <literal>/etc/nixos/configuration.nix</literal> to auto-mount them. If you do
-  not add <literal>"nofail"</literal>, the system will no boot properly. The
+  not add <literal>"nofail"</literal>, the system will not boot properly. The
   same goes for disabling <literal>rngd</literal> which is normally used to get
   randomness but this does not work in virtual machines.
  </para>
