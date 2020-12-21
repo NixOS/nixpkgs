@@ -3,25 +3,29 @@
 with lib;
 
 let
-
   cfg = config.services.fprintd;
-
 in
-
-
 {
-
   ###### interface
 
   options = {
-
     services.fprintd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable fprintd daemon and PAM module for fingerprint readers handling.
+          Whether to enable fprintd daemon and PAM module for fingerprint
+          readers handling.
+        '';
+      };
+
+      global = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to create <literal>fprintAuth</literal> PAM rules for all
+          services when <literal>services.fprintd.enable</literal> is
+          <literal>true</literal>.
         '';
       };
 
@@ -33,22 +37,14 @@ in
           fprintd package to use.
         '';
       };
-
     };
-
   };
 
 
   ###### implementation
-
   config = mkIf cfg.enable {
-
-    services.dbus.packages = [ pkgs.fprintd ];
-
-    environment.systemPackages = [ pkgs.fprintd ];
-
+    services.dbus.packages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
-
   };
-
 }
