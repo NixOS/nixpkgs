@@ -3339,13 +3339,13 @@ in
 
   ddrutility = callPackage ../tools/system/ddrutility { };
 
-  deluge-2_x = callPackage ../applications/networking/p2p/deluge/2 {
+  deluge-2_x = callPackage ../applications/networking/p2p/deluge {
     pythonPackages = python3Packages;
-    libtorrentRasterbar = libtorrentRasterbar-1_2_x.override { python = python3; };
+    libtorrent-rasterbar = libtorrent-rasterbar-1_2_x.override { python = python3; };
   };
-  deluge-1_x = callPackage ../applications/networking/p2p/deluge/1 {
+  deluge-1_x = callPackage ../applications/networking/p2p/deluge/1.nix {
     pythonPackages = python2Packages;
-    libtorrentRasterbar = libtorrentRasterbar-1_1_x;
+    libtorrent-rasterbar = libtorrent-rasterbar-1_1_x;
   };
   deluge = deluge-2_x;
 
@@ -7913,6 +7913,8 @@ in
 
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
+  tty-share = callPackage ../applications/misc/tty-share { };
+
   ttyplot = callPackage ../tools/misc/ttyplot { };
 
   ttyrec = callPackage ../tools/misc/ttyrec { };
@@ -9772,7 +9774,6 @@ in
 
   knightos-kimg = callPackage ../development/tools/knightos/kimg {
     asciidoc = asciidoc-full;
-    imagemagick = imagemagick7Big;
   };
 
   knightos-kpack = callPackage ../development/tools/knightos/kpack { };
@@ -14734,18 +14735,18 @@ in
 
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
-  libtorrentRasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar/2.0 {
+  libtorrent-rasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
     python = python3;
   };
 
-  libtorrentRasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2 {
+  libtorrent-rasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
-  libtorrentRasterbar-1_1_x = callPackage ../development/libraries/libtorrent-rasterbar/1.1 { };
+  libtorrent-rasterbar-1_1_x = callPackage ../development/libraries/libtorrent-rasterbar/1.1.nix { };
 
-  libtorrentRasterbar = libtorrentRasterbar-2_0_x;
+  libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
   # this is still the new version of the old API
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
@@ -26145,6 +26146,8 @@ in
   quake3e = callPackage ../games/quake3/quake3e { };
 
   quantumminigolf = callPackage ../games/quantumminigolf {};
+
+  r2mod_cli = callPackage ../games/r2mod_cli { };
 
   racer = callPackage ../games/racer { };
 

@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Free and open source C++ spell checking library";
     homepage = "https://nuspell.github.io/";
+    platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
     license = licenses.lgpl3Plus;
   };
