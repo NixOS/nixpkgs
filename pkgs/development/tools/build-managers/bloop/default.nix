@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash     = if stdenv.isLinux && stdenv.isx86_64 then "1hg02a3ildgqv8864zg08hvk4y0kmsxsg7ncbsl933rclhk2lybd"
-                     else if stdenv.isDarwin && stdenv.isx86_64 then "1i9kh4h5w3gr4w6rf5m7xpfqwps91mfddl1zk25v7f6vsraayam0"
+                     else if stdenv.isDarwin && stdenv.isx86_64 then "1wcgrnbjrhn9v6lx6bm2g9ddx7zjbdbrb04i22mbqmp384j8d7fj"
                      else throw "unsupported platform";
   };
 
