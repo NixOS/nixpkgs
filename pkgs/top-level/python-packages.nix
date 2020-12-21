@@ -1820,6 +1820,8 @@ in {
 
   docutils = callPackage ../development/python-modules/docutils { };
 
+  docx2python = callPackage ../development/python-modules/docx2python { };
+
   dodgy = callPackage ../development/python-modules/dodgy { };
 
   dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
