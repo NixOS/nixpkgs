@@ -145,7 +145,7 @@ then
     done
 fi
 
-if [[ "$link32" = "1" && "$setDynamicLinker" = 1 && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
+if [[ "$link32" = "0" && "$setDynamicLinker" = 1 && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
     # We have an alternate 32-bit linker and we're producing a 32-bit ELF, let's
     # use it.
     extraAfter+=(
