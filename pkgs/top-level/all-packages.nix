@@ -1347,6 +1347,8 @@ in
 
   wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
 
+  waypoint = callPackage ../applications/networking/cluster/waypoint { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
