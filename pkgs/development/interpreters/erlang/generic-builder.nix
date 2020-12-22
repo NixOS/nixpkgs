@@ -3,11 +3,11 @@
 # TODO: use jdk https://github.com/NixOS/nixpkgs/pull/89731
 , openjdk8 ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null, wxSupport ? true
 , parallelBuild ? false
 , systemd
 }:
-
+let defaultWxSupport = wxSupport; in
 { baseName ? "erlang"
 , version
 , sha256 ? null
@@ -21,7 +21,7 @@
 , javacSupport ? false, javacPackages ? [ openjdk8 ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
 , withSystemd ? stdenv.isLinux # systemd support in epmd
-, wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
+, wxSupport ? defaultWxSupport, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
