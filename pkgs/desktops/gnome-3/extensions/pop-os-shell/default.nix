@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     echo "heeeelo"
   '';
 
-  meta = with stdenv.lib; {
+   meta = with stdenv.lib; {
     description = "Keyboard-driven layer for GNOME Shell";
     license = licenses.gpl3Only;
     homepage = "https://github.com/pop-os/shell";

@@ -16,7 +16,7 @@ index 5625321..5aa808e 100644
 \ No newline at end of file
 +Gtk.main();
 diff --git a/src/extension.ts b/src/extension.ts
-index 4fb3c27..6b1fd4f 100644
+index 4fb3c27..db095bd 100644
 --- a/src/extension.ts
 +++ b/src/extension.ts
 @@ -503,7 +503,7 @@ export class Ext extends Ecs.System<ExtEvent> {
@@ -24,7 +24,7 @@ index 4fb3c27..6b1fd4f 100644
          let path = Me.dir.get_path() + "/floating_exceptions/main.js";
  
 -        utils.async_process(["gjs", path], null, null)
-+        utils.async_process(["exec .", path], null, null)
++        utils.async_process([path], null, null)
              .then(output => {
                  log.debug(`Floating Window Dialog Event: ${output}`)
                  switch (output.trim()) {
