@@ -2961,9 +2961,7 @@ in
 
   cmt = callPackage ../applications/audio/cmt {};
 
-  codimd = callPackage ../servers/web-apps/codimd {
-    nodejs = nodejs-12_x;
-  };
+  hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
 
   colord = callPackage ../tools/misc/colord { };
 
