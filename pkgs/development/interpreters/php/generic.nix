@@ -5,7 +5,7 @@
 
 let
   generic =
-    { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
+    { callPackage, lib, stdenv, nixosTests, config, fetchFromGitHub, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
     , systemd, system-sendmail, valgrind, xcbuild
@@ -138,6 +138,7 @@ let
         mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
           mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
 
+        php-pearweb-phars = (callPackage ./pearweb-phars.nix { });
         pcre' = if (lib.versionAtLeast version "7.3") then pcre2 else pcre;
       in
         stdenv.mkDerivation {
@@ -208,7 +209,7 @@ let
 
           hardeningDisable = [ "bindnow" ];
 
-          preConfigure =
+          postPatch =
           # Don't record the configure flags since this causes unnecessary
           # runtime dependencies
           ''
@@ -218,7 +219,17 @@ let
                 --replace '@CONFIGURE_OPTIONS@' "" \
                 --replace '@PHP_LDFLAGS@' ""
             done
+          '' + lib.optionalString (lib.versionOlder version "7.4")
+            # https://bugs.php.net/bug.php?id=79159
+          ''
+            substituteInPlace ./acinclude.m4 --replace "AC_PROG_YACC" "AC_CHECK_PROG(YACC, bison, bison)"
+          '' + lib.optionalString stdenv.isDarwin
+          ''
+            substituteInPlace configure --replace "-lstdc++" "-lc++"
+          '';
 
+          preConfigure =
+          ''
             export EXTENSION_DIR=$out/lib/php/extensions
           ''
           # PKG_CONFIG need not be a relative path
@@ -227,22 +238,23 @@ let
               substituteInPlace $i \
                 --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
             done
-          '' + ''
+          ''
+          # A wrapper around Autoconf that generates files to build PHP on *nix systems
+          + lib.optionalString (lib.versionOlder version "7.4") ''
             ./buildconf --copy --force
-
-            if test -f $src/genfiles; then
-              ./genfiles
-            fi
-          '' + lib.optionalString stdenv.isDarwin ''
-            substituteInPlace configure --replace "-lstdc++" "-lc++"
+            ./genfiles
+          ''
+          + lib.optionalString (lib.versionAtLeast version "7.4") ''
+            ./buildconf --force
+            ./scripts/dev/genfiles
           '';
 
-          postInstall = ''
-            test -d $out/etc || mkdir $out/etc
-            cp php.ini-production $out/etc/php.ini
+          preInstall = lib.optionalString pearSupport ''
+            cp ${php-pearweb-phars}/install-pear-nozlib.phar $TMPDIR/php-src-${version}/pear/install-pear-nozlib.phar
           '';
 
           postFixup = ''
+            cp php.ini-production $out/etc/php.ini
             mkdir -p $dev/bin $dev/share/man/man1
             mv $out/bin/phpize $out/bin/php-config $dev/bin/
             mv $out/share/man/man1/phpize.1.gz \
@@ -250,8 +262,11 @@ let
                $dev/share/man/man1/
           '';
 
-          src = fetchurl {
-            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+          src = fetchFromGitHub {
+            name = "php-src-${version}";
+            owner = "php";
+            repo = "php-src";
+            rev = "php-${version}";
             inherit sha256;
           };
 

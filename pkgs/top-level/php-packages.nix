@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, php, autoconf, automake, bison, flex, pkgconfig, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu64, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
@@ -200,17 +200,29 @@ in
       extensionName = name;
 
       inherit (php.unwrapped) version src;
-      sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php.unwrapped autoconf pkgconfig re2c ];
+      nativeBuildInputs = [ php.unwrapped autoconf automake bison flex pkgconfig re2c ];
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
-      prePatch = "pushd ../..";
-      postPatch = "popd";
+      postPatch =
+      # https://bugs.php.net/bug.php?id=79159
+        lib.optionalString (lib.versionOlder php.version "7.4") ''
+        substituteInPlace ./acinclude.m4 --replace "AC_PROG_YACC" "AC_CHECK_PROG(YACC, bison, bison)"
+      '';
 
-      preConfigure = ''
+      preConfigure =
+      # A wrapper around Autoconf that generates files to build PHP on *nix systems
+        lib.optionalString (lib.versionOlder php.version "7.4") ''
+        ./buildconf --copy --force
+        ./genfiles
+      ''
+      + lib.optionalString (lib.versionAtLeast php.version "7.4") ''
+        ./buildconf --force
+        ./scripts/dev/genfiles
+      '' + ''
+        cd ext/${name}
         nullglobRestore=$(shopt -p nullglob)
         shopt -u nullglob   # To make ?-globbing work
 
@@ -486,7 +498,7 @@ in
       { name = "sysvsem"; }
       { name = "sysvshm"; }
       { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; doCheck = false; }
-      { name = "tokenizer"; }
+      { name = "tokenizer"; doCheck = !(lib.versionOlder php.version "7.4"); }
       { name = "wddx";
         buildInputs = [ libxml2 ];
         internalDeps = [ php.extensions.session ];
