@@ -233,10 +233,9 @@ in {
       path = [ pkgs.wpa_supplicant ];
 
       script = ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
-          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
+        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
         fi
-
         iface_args="-s -u -D${cfg.driver} -c ${configFile}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
@@ -249,10 +248,6 @@ in {
               fi
             fi
           done
-          if [ -z "$args" ]; then
-            echo >&2 "<3>No wireless interfaces detected (yet)."
-            exit 1
-          fi
         '' else ''
           args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
         ''}
@@ -266,7 +261,7 @@ in {
 
     # Restart wpa_supplicant when a wlan device appears or disappears.
     services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl restart wpa_supplicant.service"
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 
