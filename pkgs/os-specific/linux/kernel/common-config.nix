@@ -247,6 +247,16 @@ let
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
       # Allow device firmware updates
       DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
+      # amdgpu display core (DC) support; defaults to yes
+      DRM_AMD_DC = mkIf (!features.amdgpu_dc) (whenAtLeast "4.15" no);
+    } // optionalAttrs (features.amdgpu_dc or false) {
+      # DC support for all chipsets
+      DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
+      DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
+      DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
+      DRM_AMD_DC_DCN2_1 = whenBetween "5.4" "5.6" yes;
+      DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
+      DRM_AMD_DC_DCN = whenAtLeast "5.6" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
