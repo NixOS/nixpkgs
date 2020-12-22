@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytestrunner, pytestcov, pytest-flakes, sphinx, six }:
+{ lib, pythonAtLeast, buildPythonPackage, fetchPypi, pytestCheckHook, pytestrunner, pytestcov, pytest-flakes, sphinx, six }:
 
 buildPythonPackage rec {
   pname = "python-utils";
@@ -15,6 +15,7 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini --replace "--pep8" ""
   '';
 
+  doCheck = pythonAtLeast "3.5";
   checkInputs = [ pytestCheckHook pytestrunner pytestcov pytest-flakes sphinx ];
 
   propagatedBuildInputs = [ six ];
