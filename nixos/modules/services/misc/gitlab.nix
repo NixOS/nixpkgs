@@ -148,6 +148,7 @@ let
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
+    ENABLE_RBTRACE = if cfg.rbtrace then "1" else "0";
   };
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
@@ -537,6 +538,14 @@ in {
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
+        '';
+      };
+
+      rbtrace = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable rbtrace for the unicorn processes.
         '';
       };
 
