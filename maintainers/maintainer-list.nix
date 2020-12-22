@@ -4942,6 +4942,12 @@
     githubId = 45168934;
     name = "Louis Blin";
   };
+  lucc = {
+    email = "lucc+nix@posteo.de";
+    github = "lucc";
+    githubId = 1104419;
+    name = "Lucas Hoffmann";
+  };
   ldelelis = {
     email = "ldelelis@est.frba.utn.edu.ar";
     github = "ldelelis";
