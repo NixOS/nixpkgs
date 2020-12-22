@@ -1,7 +1,8 @@
 { stdenv
 , fetchFromGitLab
 , lib
-, cmake
+, meson
+, ninja
 , libGL
 , libglvnd
 , makeWrapper
@@ -9,6 +10,7 @@
 , wayland
 , libxcb
 , libX11
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -32,12 +34,16 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake
+    meson
+    ninja
     makeWrapper
     pkg-config
+    python3
   ];
 
-  cmakeFlags = [ "-Dplatforms=x11,wayland" ];
+  mesonFlags = [
+    "-Dgbm=disabled"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \
