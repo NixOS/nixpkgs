@@ -91,24 +91,15 @@ def get_latest_ungoogled_chromium_tag():
         return tag_data[0]['name']
 
 
-def get_ungoogled_chromium_channel():
-    """Returns a dictionary for the ungoogled-chromium channel."""
-    latest_tag = get_latest_ungoogled_chromium_tag()
-    version = latest_tag.split('-')[0]
-    if version == last_channels['ungoogled-chromium']['version']:
-        # No update available -> keep the cached information (no refetching required):
-        return last_channels['ungoogled-chromium']
-    channel = {
+def get_latest_ungoogled_chromium_build():
+    """Returns a dictionary for the latest ungoogled-chromium build."""
+    tag = get_latest_ungoogled_chromium_tag()
+    version = tag.split('-')[0]
+    return {
+        'channel': 'ungoogled-chromium',
         'version': version,
-        'sha256': nix_prefetch_url(f'{BUCKET_URL}/chromium-{version}.tar.xz'),
-        'deps': get_channel_dependencies(version)
+        'ungoogled_tag': tag
     }
-    repo_url = 'https://github.com/Eloston/ungoogled-chromium.git'
-    channel['deps']['ungoogled-patches'] = {
-        'rev': latest_tag,
-        'sha256': nix_prefetch_git(repo_url, latest_tag)['sha256']
-    }
-    return channel
 
 
 channels = {}
@@ -118,6 +109,8 @@ last_channels = load_json(JSON_PATH)
 print(f'GET {HISTORY_URL}', file=sys.stderr)
 with urlopen(HISTORY_URL) as resp:
     builds = csv.DictReader(iterdecode(resp, 'utf-8'))
+    builds = list(builds)
+    builds.append(get_latest_ungoogled_chromium_build())
     for build in builds:
         channel_name = build['channel']
 
@@ -134,13 +127,18 @@ with urlopen(HISTORY_URL) as resp:
             continue
 
         channel = {'version': build['version']}
-        suffix = 'unstable' if channel_name == 'dev' else channel_name
+        if channel_name == 'dev':
+            google_chrome_suffix = 'unstable'
+        elif channel_name == 'ungoogled-chromium':
+            google_chrome_suffix = 'stable'
+        else:
+            google_chrome_suffix = channel_name
 
         try:
             channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{build["version"]}.tar.xz')
             channel['sha256bin64'] = nix_prefetch_url(
-                f'{DEB_URL}/google-chrome-{suffix}/' +
-                f'google-chrome-{suffix}_{build["version"]}-1_amd64.deb')
+                f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
+                f'google-chrome-{google_chrome_suffix}_{build["version"]}-1_amd64.deb')
         except subprocess.CalledProcessError:
             # This build isn't actually available yet.  Continue to
             # the next one.
@@ -149,6 +147,12 @@ with urlopen(HISTORY_URL) as resp:
         channel['deps'] = get_channel_dependencies(channel['version'])
         if channel_name == 'stable':
             channel['chromedriver'] = get_matching_chromedriver(channel['version'])
+        elif channel_name == 'ungoogled-chromium':
+            ungoogled_repo_url = 'https://github.com/Eloston/ungoogled-chromium.git'
+            channel['deps']['ungoogled-patches'] = {
+                'rev': build['ungoogled_tag'],
+                'sha256': nix_prefetch_git(ungoogled_repo_url, build['ungoogled_tag'])['sha256']
+            }
 
         channels[channel_name] = channel
 
@@ -167,8 +171,6 @@ with open(JSON_PATH, 'w') as out:
             return 3
         print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
         sys.exit(1)
-    # Get the special ungoogled-chromium channel:
-    channels['ungoogled-chromium'] = get_ungoogled_chromium_channel()
     sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
     json.dump(sorted_channels, out, indent=2)
     out.write('\n')
