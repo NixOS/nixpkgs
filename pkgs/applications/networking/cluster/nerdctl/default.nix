@@ -14,16 +14,16 @@ let
 in
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bxxdsx8aqbrbjm0bn6makw77z96mng5by7k3licbk0vdgakaix6";
+    sha256 = "0vjcbvd5yrasw97hd5mrn6cdjvfv2r03z7g1wczlszlcs8gr6nxw";
   };
 
-  vendorSha256 = "1d2bqv7bc7q82z6sd8kkqj4xdccs660mj34ggwb09a59law139li";
+  vendorSha256 = "181lp9l4i0qpiqm8wbxa4ldi1j5bm3ygmanz1xh3mkjanl0pwqjr";
 
   nativeBuildInputs = [ makeWrapper ];
 
