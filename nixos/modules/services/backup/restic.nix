@@ -85,11 +85,21 @@ in
         };
 
         repository = mkOption {
-          type = types.str;
+          type = types.nullOr types.str;
+          default = null;
           description = ''
             repository to backup to.
           '';
           example = "sftp:backup@192.168.1.100:/backups/${name}";
+        };
+
+        repositoryFile = mkOption {
+          type = types.nullOr (types.either types.str types.path);
+          default = null;
+          description = ''
+            file including repository to backup to.
+          '';
+          example = "/etc/nixos/restic-repository";
         };
 
         paths = mkOption {
@@ -210,6 +220,21 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        assertion = builtins.all
+          (backup: (backup.repository == null || backup.repositoryFile == null))
+          (builtins.attrValues config.services.restic.backups);
+        message = "`services.restic.backups.<name>.repository` and `services.restic.backups.<name>.repositoryFile` are mutually exclusive";
+      }
+      {
+        assertion = builtins.all
+          (backup: (backup.repository != null || backup.repositoryFile != null))
+          (builtins.attrValues config.services.restic.backups);
+        message = "Either `services.restic.backups.<name>.repository` or `services.restic.backups.<name>.repositoryFile` has to be defined";
+      }
+    ];
+
     systemd.services =
       mapAttrs' (name: backup:
         let
@@ -231,7 +256,10 @@ in
         in nameValuePair "restic-backups-${name}" ({
           environment = {
             RESTIC_PASSWORD_FILE = backup.passwordFile;
+          } // optionalAttrs (backup.repository != null) {
             RESTIC_REPOSITORY = backup.repository;
+          } // optionalAttrs (backup.repositoryFile != null) {
+            RESTIC_REPOSITORY_FILE = backup.repositoryFile;
           } // optionalAttrs (backup.rcloneOptions != null) (mapAttrs' (name: value:
             nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
           ) backup.rcloneOptions) // optionalAttrs (backup.rcloneConfigFile != null) {
