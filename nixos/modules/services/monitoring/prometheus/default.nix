@@ -32,6 +32,7 @@ let
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ]);
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
+    remote_write = filterValidPrometheus cfg.remoteWrite;
     alerting = {
       inherit (cfg) alertmanagers;
     };
@@ -464,6 +465,79 @@ let
     };
   };
 
+  promTypes.remote_write = types.submodule {
+    options = {
+      url = mkOption {
+        # mandatory
+        type = types.str;
+        description = ''
+          The URL of the endpoint to send samples to.
+        '';
+      };
+
+      remote_timeout = mkDefOpt types.str "30s" ''
+        Timeout for requests to the remote write endpoint.
+      '';
+
+      write_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
+        List of remote write relabel configurations.
+        List of relabel configurations.
+      '';
+
+      name = mkOpt types.string ''
+        Name of the remote write config, which if specified must be unique among remote write configs.
+        The name will be used in metrics and logging in place of a generated value to help users distinguish between
+        remote write configs.
+      '';
+
+      basic_auth = mkOpt (types.submodule {
+        options = {
+          username = mkOption {
+            type = types.str;
+            description = ''
+              HTTP username
+            '';
+          };
+          password = mkOpt types.str "HTTP password";
+          password_file = mkOpt types.str "HTTP password file";
+        };
+      }) ''
+        Sets the `Authorization` header on every remote write request with the
+        configured username and password.
+        password and password_file are mutually exclusive.
+      '';
+
+      bearer_token = mkOpt types.str ''
+        Sets the `Authorization` header on every remote write request with
+        the configured bearer token. It is mutually exclusive with `bearer_token_file`.
+      '';
+
+      bearer_token_file = mkOpt types.str ''
+        Sets the `Authorization` header on every remote write request with the bearer token
+        read from the configured file. It is mutually exclusive with `bearer_token`.
+      '';
+
+      tls_config = mkOpt promTypes.tls_config ''
+        Configures the remote write request's TLS settings.
+      '';
+
+      proxy_url = mkOpt types.str "Optional Proxy URL.";
+
+      metadata_config = {
+
+        send = mkDefOpt types.bool "true" ''
+          Whether metric metadata is sent to remote storage or not.
+        '';
+
+        send_interval = mkDefOpt types.str "1m" ''
+          How frequently metric metadata is sent to remote storage.
+        '';
+
+      };
+
+    };
+  };
+
 in {
 
   imports = [
@@ -601,6 +675,14 @@ in {
       default = [];
       description = ''
         A list of scrape configurations.
+      '';
+    };
+
+    remoteWrite = mkOption {
+      type = types.listOf promTypes.remote_write;
+      default = [];
+      description = ''
+        Settings related to the remote write feature.
       '';
     };
 
