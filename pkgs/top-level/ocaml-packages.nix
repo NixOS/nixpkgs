@@ -161,6 +161,8 @@ let
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
+    cppo_ocamlbuild = callPackage ../development/tools/ocaml/cppo/ocamlbuild.nix { };
+
     cpu = callPackage ../development/ocaml-modules/cpu { };
 
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
