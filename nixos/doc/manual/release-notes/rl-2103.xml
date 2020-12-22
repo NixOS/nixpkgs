@@ -287,6 +287,14 @@
        This avoids that the password gets exposed in the nix store.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Starting with version 1.7.0, the project formerly named <literal>CodiMD</literal>
+       is now named <literal>HedgeDoc</literal>.
+       New installations will no longer use the old name for users, state directories and such, this needs to be considered when moving state to a more recent NixOS installation.
+       Based on <xref linkend="opt-system.stateVersion" />, existing installations will continue to work.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
