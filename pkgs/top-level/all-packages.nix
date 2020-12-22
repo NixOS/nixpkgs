@@ -18163,7 +18163,7 @@ in
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
-    elixir = elixir_1_8;
+    elixir = beam_nox.interpreters.elixir_1_8;
     erlang = erlang_nox;
   };
 
