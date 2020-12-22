@@ -33,7 +33,7 @@
         kernel=u-boot-rpi3.bin
 
         # Boot in 64-bit mode.
-        arm_control=0x200
+        arm_64bit=1
 
         # U-Boot used to need this to work, regardless of whether UART is actually used or not.
         # TODO: check when/if this can be removed.
