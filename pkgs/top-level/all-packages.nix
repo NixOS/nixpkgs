@@ -2678,6 +2678,8 @@ in
     libmaxminddb = null;
   };
 
+  task-spooler = callPackage ../tools/system/task-spooler {};
+
   xmlsort = perlPackages.XMLFilterSort;
 
   xmousepasteblock = callPackage ../tools/X11/xmousepasteblock { };
