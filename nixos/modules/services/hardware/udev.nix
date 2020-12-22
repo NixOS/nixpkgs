@@ -205,7 +205,7 @@ in
       extraRules = mkOption {
         default = "";
         example = ''
-          KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
+          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
         '';
         type = types.lines;
         description = ''
