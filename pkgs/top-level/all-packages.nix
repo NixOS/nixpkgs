@@ -6054,6 +6054,9 @@ in
   nomad_0_12 = callPackage ../applications/networking/cluster/nomad/0.12.nix {
     buildGoPackage = buildGo114Package;
   };
+  nomad_1_0 = callPackage ../applications/networking/cluster/nomad/1.0.nix {
+    buildGoPackage = buildGo115Package;
+  };
 
   notable = callPackage ../applications/misc/notable { };
 
@@ -12739,6 +12742,8 @@ in
   doctest = callPackage ../development/libraries/doctest { };
 
   docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
+
+  docopts = callPackage ../development/tools/misc/docopts { };
 
   dotconf = callPackage ../development/libraries/dotconf { };
 
@@ -25865,6 +25870,8 @@ in
   };
 
   mari0 = callPackage ../games/mari0 { };
+
+  manaplus = callPackage ../games/manaplus { };
 
   mars = callPackage ../games/mars { };
 

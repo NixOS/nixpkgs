@@ -52,19 +52,18 @@ let
     ungoogled-chromium = callPackage ./ungoogled.nix {};
   };
 
-  pkgSuffix = if channel == "dev" then "unstable" else channel;
+  pkgSuffix = if channel == "dev" then "unstable" else
+    (if channel == "ungoogled-chromium" then "stable" else channel);
   pkgName = "google-chrome-${pkgSuffix}";
-  chromeSrc = if channel == "ungoogled-chromium"
-    then throw "Google Chrome is not supported for the ungoogled-chromium channel."
-    else fetchurl {
-      urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
-        "https://dl.google.com/linux/chrome/deb/pool/main/g"
-        "http://95.31.35.30/chrome/pool/main/g"
-        "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
-        "http://repo.fdzh.org/chrome/deb/pool/main/g"
-      ];
-      sha256 = chromium.upstream-info.sha256bin64;
-    };
+  chromeSrc = fetchurl {
+    urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
+      "https://dl.google.com/linux/chrome/deb/pool/main/g"
+      "http://95.31.35.30/chrome/pool/main/g"
+      "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
+      "http://repo.fdzh.org/chrome/deb/pool/main/g"
+    ];
+    sha256 = chromium.upstream-info.sha256bin64;
+  };
 
   mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";
   widevineCdm = stdenv.mkDerivation {
@@ -76,7 +75,7 @@ let
 
     unpackCmd = let
       widevineCdmPath =
-        if channel == "stable" then
+        if (channel == "stable" || channel == "ungoogled-chromium") then
           "./opt/google/chrome/WidevineCdm"
         else if channel == "beta" then
           "./opt/google/chrome-beta/WidevineCdm"
