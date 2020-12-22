@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "ufonormalizer";
-  version = "0.5.0";
+  version = "0.5.2";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qc3389i2y16n1hjg4dzk821klzjipbh9c9yci70z51pp21mwwh5";
+    sha256 = "03k9dndnv3p3ysfq5wq8bnaijvqip61fh79d5gz2zk284vc47mgj";
     extension = "zip";
   };
 
