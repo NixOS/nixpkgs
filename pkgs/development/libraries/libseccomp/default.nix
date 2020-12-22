@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # src input for buildPythonPackage calls
   postInstall = ''
     cp -R ./src/python/ tmp-pythonsrc/
-    tar -zcf $pythonsrc --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
+    tar --mtime="@$SOURCE_DATE_EPOCH" --sort=name -zcf $pythonsrc --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
   '';
 
   meta = with stdenv.lib; {
