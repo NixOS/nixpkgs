@@ -53,6 +53,7 @@ mkDerivation rec {
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
     "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
 
   LD_LIBRARY_PATH = "${ocl-icd}/lib";
