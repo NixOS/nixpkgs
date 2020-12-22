@@ -5178,6 +5178,8 @@ in
 
   libcryptui = callPackage ../development/libraries/libcryptui { };
 
+  libsmartcols = callPackage ../development/libraries/libsmartcols { };
+
   libsmi = callPackage ../development/libraries/libsmi { };
 
   libgen-cli = callPackage ../tools/misc/libgen-cli { };

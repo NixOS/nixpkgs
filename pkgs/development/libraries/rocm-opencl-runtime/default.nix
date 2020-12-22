@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
-  version = "3.10.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
