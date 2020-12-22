@@ -4,7 +4,7 @@
 #
 # Recommended: simply use `emacsWithPackages` with the packages you want.
 #
-# Alterative: use `emacs`, install everything to a system or user profile
+# Alternative: use `emacs`, install everything to a system or user profile
 # and then add this at the start your `init.el`:
 /*
   (require 'package)
