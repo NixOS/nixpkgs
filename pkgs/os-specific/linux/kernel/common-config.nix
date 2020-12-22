@@ -247,10 +247,10 @@ let
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
       # Allow device firmware updates
       DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
-      # amdgpu display core (DC) support; defaults to yes
-      DRM_AMD_DC = mkIf (!features.amdgpu_dc) (whenAtLeast "4.15" no);
-    } // optionalAttrs (features.amdgpu_dc or false) {
-      # DC support for all chipsets
+      # amdgpu display core (DC) support; enabled by default
+      DRM_AMD_DC = mkIf (features.amdgpu_dc_disabled or false) (whenAtLeast "4.15" no);
+    } // optionalAttrs (features.amdgpu_dc_all or false) {
+      # amdgpu display core (DC) support for all chipsets
       DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
       DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
       DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
