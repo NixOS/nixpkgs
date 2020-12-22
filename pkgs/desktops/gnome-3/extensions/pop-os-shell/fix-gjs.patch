@@ -46,7 +46,7 @@ index 719c29b..8c8748b 100644
 \ No newline at end of file
 +main()
 diff --git a/src/panel_settings.ts b/src/panel_settings.ts
-index 9ee9c68..8edea9f 100644
+index 9ee9c68..e287503 100644
 --- a/src/panel_settings.ts
 +++ b/src/panel_settings.ts
 @@ -323,7 +323,7 @@ function color_selector(ext: Ext, menu: any) {
@@ -54,7 +54,7 @@ index 9ee9c68..8edea9f 100644
      color_button.connect('button-press-event', () => {
          let path = Me.dir.get_path() + "/color_dialog/main.js";
 -        let resp = GLib.spawn_command_line_async(`gjs ${path}`);
-+        let resp = GLib.spawn_command_line_async(`exec .${path}`);
++        let resp = GLib.spawn_command_line_async(path);
          if (!resp) {
  
              return null;
