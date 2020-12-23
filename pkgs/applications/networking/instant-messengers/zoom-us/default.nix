@@ -1,42 +1,15 @@
 { stdenv, fetchurl, mkDerivation, autoPatchelfHook, bash
-, fetchFromGitHub, wrapGAppsHook, substituteAll
+, fetchFromGitHub, wrapGAppsHook, substituteAll, addOpenGLRunpath
 # Dynamic libraries
-, dbus
-, glib
-, libGL
-, libX11
-, libXfixes
-, libuuid
-, libxcb
-, atk
-, cairo
 , dbus_tools
-, libdrm
+, glib
 , libglvnd
-, fontconfig
-, freetype
-, gtk3
-, gdk_pixbuf
-, xorg_sys_opengl
-, pango
-, wayland
-, xorg # For libXcomposite, libXext, libXrender
-, libxkbcommon
-, zlib
 , qtbase
 , qtdeclarative
-, qtgraphicaleffects
-, qtimageformats
-, qtlocation
-, qtquickcontrols2
-, qtsvg
-, qtwayland
-, qtxmlpatterns
-, quazip_qt4
-, mpg123
-, icu56
+, qtscript
+, xorg
 # Runtime
-, coreutils, iw, wirelesstools
+, coreutils, pciutils, procps, util-linux, iw, wirelesstools
 , pulseaudioSupport ? true, libpulseaudio ? null
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
 }:
@@ -68,96 +41,84 @@ in mkDerivation {
 
   src = srcs.${stdenv.hostPlatform.system};
 
-  patches = [
-    (substituteAll {
-      src = ./getbssid.patch;
-      inherit iw wirelesstools coreutils;
-    })
-  ];
-
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook addOpenGLRunpath wrapGAppsHook ];
   # Let mkDerivation do it
   dontWrapGApps = true;
 
   buildInputs = [
-    dbus
-    glib
-    libGL
-    libX11
-    libXfixes
-    libuuid
-    libxcb
-    atk
-    cairo
     dbus_tools
-    libdrm
+    glib
     libglvnd
-    fontconfig
-    freetype
-    gtk3
-    gdk_pixbuf
-    xorg_sys_opengl
-    pango
-    wayland
-    xorg.libXcomposite
-    xorg.libXext
-    xorg.libXrender
-    libxkbcommon
-    zlib
     qtbase
     qtdeclarative
-    qtgraphicaleffects
-    qtimageformats
-    qtlocation
-    qtquickcontrols2
-    qtsvg
-    qtwayland
-    qtxmlpatterns
-    quazip_qt4
-    mpg123
-    icu56
+    qtscript
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXtst
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
   ]
     ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ stdenv.lib.optionals alsaSupport [ alsaLib ]
   ;
+  dontBuild = true;
+  dontConfigure = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      files = concatStringsSep " " [
+        "*.pcm"
+        "ZoomLauncher"
+        "ringtone"
+        "sip"
+        "timezones"
+        "translations"
+        "version.txt"
+        "zoom"
+        "zopen"
+        "json"
+        "getmem.sh"
+        "getbssid.sh"
+        "Embedded.properties"
+      ];
+    in ''
+      runHook preInstall
 
-    mkdir -p $out/{bin,share/zoom-us}
+      mkdir -p $out/{bin,share/zoom-us}
 
-    # Fixing an upstream issue maybe?
-    chmod +x libquazip.so
-    # TODO: Remove all libraries not needed and patch each only if needed
-    cp -ar ${files} $out/share/zoom-us
+      cp -ar ${files} $out/share/zoom-us
 
-    mkdir -p $out/share/{applications,appdata,icons}
+      # It was evident that some webcams work only with upstream's libturbojpeg.so
+      cp libturbojpeg.so $out/share/zoom-us/libturbojpeg.so
+      mkdir -p $out/share/{applications,appdata,icons}
 
-    # Desktop File
-    cp ${desktopIntegration}/us.zoom.Zoom.desktop $out/share/applications
-    substituteInPlace $out/share/applications/us.zoom.Zoom.desktop \
-        --replace "Exec=zoom" "Exec=$out/bin/zoom-us"
+      # Desktop File
+      cp ${desktopIntegration}/us.zoom.Zoom.desktop $out/share/applications
+      substituteInPlace $out/share/applications/us.zoom.Zoom.desktop \
+          --replace "Exec=zoom" "Exec=$out/bin/zoom-us"
 
-    # Appdata
-    cp ${desktopIntegration}/us.zoom.Zoom.appdata.xml $out/share/appdata
+      # Appdata
+      cp ${desktopIntegration}/us.zoom.Zoom.appdata.xml $out/share/appdata
 
-    # Icons
-    for icon_size in 64 96 128 256; do
-        path=$icon_size'x'$icon_size
-        icon=${desktopIntegration}/us.zoom.Zoom.$icon_size.png
+      # Icons
+      for icon_size in 64 96 128 256; do
+          path=$icon_size'x'$icon_size
+          icon=${desktopIntegration}/us.zoom.Zoom.$icon_size.png
 
-        mkdir -p $out/share/icons/hicolor/$path/apps
-        cp $icon $out/share/icons/hicolor/$path/apps/us.zoom.Zoom.png
-    done
+          mkdir -p $out/share/icons/hicolor/$path/apps
+          cp $icon $out/share/icons/hicolor/$path/apps/us.zoom.Zoom.png
+      done
 
-    runHook postInstall
+      runHook postInstall
   '';
 
   # $out/share/zoom-us isn't in auto-wrap directories list, need manual wrapping
   dontWrapQtApps = true;
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev util-linux ]}''
+    ''--prefix PATH : ${makeBinPath [ iw wirelesstools coreutils glib.dev pciutils procps util-linux ]}''
     # --run "cd ${placeholder "out"}/share/zoom-us"
     # ^^ unfortunately, breaks run arg into multiple array elements, due to
     # some bad array propagation. We'll do that in bash below
@@ -174,6 +135,12 @@ in mkDerivation {
     done
 
     ln -s $out/share/zoom-us/ZoomLauncher $out/bin/zoom-us
+  '';
+
+  postFixup = ''
+    for app in ZoomLauncher zopen zoom; do
+      addOpenGLRunpath $out/share/zoom-us/.$app-wrapped
+    done
   '';
 
   passthru.updateScript = ./update.sh;

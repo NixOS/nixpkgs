@@ -13435,6 +13435,12 @@ in
 
   hyperscan = callPackage ../development/libraries/hyperscan { };
 
+  icu56 = callPackage (import ../development/libraries/icu/56.nix fetchurl) ({
+    nativeBuildRoot = buildPackages.icu56.override { buildRootOnly = true; };
+  } //
+    (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
   icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) ({
     nativeBuildRoot = buildPackages.icu58.override { buildRootOnly = true; };
   } //
