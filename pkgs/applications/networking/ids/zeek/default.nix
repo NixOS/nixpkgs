@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "00cxz7ad7p62s2glcagzcvwbnsivrv4bmz6rl1vij907jb24hmvc";
+    sha256 = "1in25clpbb2vdhms3iypj6r5sp8d1dxjcfn85c272sh7shnmqagr";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Powerful network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
+    changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub marsam tobim ];
     platforms = platforms.unix;

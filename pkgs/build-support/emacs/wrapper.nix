@@ -103,7 +103,7 @@ runCommand
         }
         mkdir -p $out/bin
         mkdir -p $out/share/emacs/site-lisp
-        ${optionalString emacs.nativeComp ''
+        ${optionalString nativeComp ''
           mkdir -p $out/share/emacs/native-lisp
         ''}
 
