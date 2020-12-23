@@ -1,28 +1,16 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
-
-  dataDir = "/var/lib/consul";
   cfg = config.services.consul;
-
-  configOptions = {
-    data_dir = dataDir;
-    ui = cfg.webUi;
-  } // cfg.extraConfig;
-
-  configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
-    ++ cfg.extraConfigFiles;
-
-  devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
-  systemdDevices = forEach devices
-    (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
+  settings = {
+    data_dir = "/var/lib/consul";
+  } // cfg.settings;
+  settingsFiles = [ "/etc/consul.json" ] ++ cfg.settingsFiles;
 in
 {
   options = {
-
     services.consul = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -40,15 +28,6 @@ in
         '';
       };
 
-
-      webUi = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enables the web interface on the consul http port.
-        '';
-      };
-
       leaveOnStop = mkOption {
         type = types.bool;
         default = false;
@@ -61,31 +40,27 @@ in
         '';
       };
 
-      interface = {
+      settings = mkOption {
+        type = format.type;
+        default = { };
+        description = ''
+          Extra configuration options which are serialized to json and added
+          to the config.json file.
 
-        advertise = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The name of the interface to pull the advertise_addr from.
-          '';
-        };
+          For example, to bind the client to specific interface's IP address you
+          can use Consul's support for go-sockaddr templates:
 
-        bind = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The name of the interface to pull the bind_addr from.
-          '';
-        };
-
+          settings = {
+            client_addr = "{{ GetInterfaceIP \"eth0\" }}";
+          };
+        '';
       };
 
-      forceIpv4 = mkOption {
-        type = types.bool;
-        default = false;
+      settingsFiles = mkOption {
+        default = [ ];
+        type = types.listOf (types.oneOf [ types.path types.str ]);
         description = ''
-          Whether we should force the interfaces to only pull ipv4 addresses.
+          Additional configuration files to pass to consul
         '';
       };
 
@@ -94,23 +69,6 @@ in
         default = true;
         description = ''
           Whether the consul agent should be run as a non-root consul user.
-        '';
-      };
-
-      extraConfig = mkOption {
-        default = { };
-        description = ''
-          Extra configuration options which are serialized to json and added
-          to the config.json file.
-        '';
-      };
-
-      extraConfigFiles = mkOption {
-        default = [ ];
-        type = types.listOf types.str;
-        description = ''
-          Additional configuration files to pass to consul
-          NOTE: These will not trigger the service to be restarted when altered.
         '';
       };
 
@@ -125,13 +83,13 @@ in
         };
 
         listenAddr = mkOption {
-          description = "Api listening address.";
+          description = "API listening address.";
           default = "localhost:9000";
           type = types.str;
         };
 
         consulAddr = mkOption {
-          description = "Consul api listening adddress";
+          description = "Consul API listening adddress";
           default = "localhost:8500";
           type = types.str;
         };
@@ -148,107 +106,61 @@ in
           type = types.bool;
         };
       };
-
     };
-
   };
 
   config = mkIf cfg.enable (
-    mkMerge [{
-
-      users.users.consul = {
-        description = "Consul agent daemon user";
-        uid = config.ids.uids.consul;
-        # The shell is needed for health checks
-        shell = "/run/current-system/sw/bin/bash";
-      };
-
-      environment = {
-        etc."consul.json".text = builtins.toJSON configOptions;
-        # We need consul.d to exist for consul to start
-        etc."consul.d/dummy.json".text = "{ }";
-        systemPackages = [ cfg.package ];
-      };
-
-      systemd.services.consul = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ] ++ systemdDevices;
-        bindsTo = systemdDevices;
-        restartTriggers = [ config.environment.etc."consul.json".source ]
-          ++ mapAttrsToList (_: d: d.source)
-            (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
-
-        serviceConfig = {
-          ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
-            + concatMapStrings (n: " -config-file ${n}") configFiles;
-          ExecReload = "${cfg.package}/bin/consul reload";
-          PermissionsStartOnly = true;
-          User = if cfg.dropPrivileges then "consul" else null;
-          Restart = "on-failure";
-          TimeoutStartSec = "infinity";
-        } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${cfg.package}/bin/consul leave";
-        });
-
-        path = with pkgs; [ iproute gnugrep gawk consul ];
-        preStart = ''
-          mkdir -m 0700 -p ${dataDir}
-          chown -R consul ${dataDir}
-
-          # Determine interface addresses
-          getAddrOnce () {
-            ip addr show dev "$1" \
-              | grep 'inet${optionalString (cfg.forceIpv4) " "}.*scope global' \
-              | awk -F '[ /\t]*' '{print $3}' | head -n 1
-          }
-          getAddr () {
-            ADDR="$(getAddrOnce $1)"
-            LEFT=60 # Die after 1 minute
-            while [ -z "$ADDR" ]; do
-              sleep 1
-              LEFT=$(expr $LEFT - 1)
-              if [ "$LEFT" -eq "0" ]; then
-                echo "Address lookup timed out"
-                exit 1
-              fi
-              ADDR="$(getAddrOnce $1)"
-            done
-            echo "$ADDR"
-          }
-          echo "{" > /etc/consul-addrs.json
-          delim=" "
-        ''
-        + concatStrings (flip mapAttrsToList cfg.interface (name: i:
-          optionalString (i != null) ''
-            echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
-            delim=","
-          ''))
-        + ''
-          echo "}" >> /etc/consul-addrs.json
-        '';
-      };
-    }
-
-    (mkIf (cfg.alerts.enable) {
-      systemd.services.consul-alerts = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "consul.service" ];
-
-        path = [ cfg.package ];
-
-        serviceConfig = {
-          ExecStart = ''
-            ${cfg.alerts.package}/bin/consul-alerts start \
-              --alert-addr=${cfg.alerts.listenAddr} \
-              --consul-addr=${cfg.alerts.consulAddr} \
-              ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
-              ${optionalString cfg.alerts.watchEvents "--watch-events"}
-          '';
-          User = if cfg.dropPrivileges then "consul" else null;
-          Restart = "on-failure";
+    mkMerge [
+      {
+        environment = {
+          etc."consul.json".source = json.generate settings;
+          systemPackages = [ cfg.package ];
         };
-      };
-    })
 
-  ]);
+        systemd.services.consul = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network-online.target" ];
+          requires = [ "network-online.target" ];
+          restartTriggers = settingsFiles;
+
+          serviceConfig = {
+            ExecStart = "${cfg.package}/bin/consul agent"
+              + concatMapStrings (file: " -config-file=${file}") settingsFiles;
+            ExecReload = "${pkgs.coreutils}/bin/kill --signal HUP $MAINPID";
+            ExecStop = optionalString cfg.leaveOnStop "${cfg.package}/bin/consul leave";
+            DynamicUser = cfg.dropPrivileges;
+            User = optionalString cfg.dropPrivileges "consul";
+            Type = "notify";
+            KillMode = "process";
+            KillSignal = "SIGTERM";
+            Restart = "on-failure";
+            StateDirectory = "consul";
+            TimeoutStartSec = "infinity";
+          };
+        };
+      }
+
+      (mkIf cfg.alerts.enable {
+        systemd.services.consul-alerts = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "consul.service" ];
+
+          path = [ cfg.package ];
+
+          serviceConfig = {
+            ExecStart = ''
+              ${cfg.alerts.package}/bin/consul-alerts start \
+                --alert-addr=${cfg.alerts.listenAddr} \
+                --consul-addr=${cfg.alerts.consulAddr} \
+                ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
+                ${optionalString cfg.alerts.watchEvents "--watch-events"}
+            '';
+            DynamicUser = cfg.dropPrivileges;
+            User = optionalString cfg.dropPrivileges "consul";
+            Restart = "on-failure";
+          };
+        };
+      })
+    ]
+  );
 }
