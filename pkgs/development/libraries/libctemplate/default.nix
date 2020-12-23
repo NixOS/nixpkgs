@@ -5,7 +5,6 @@ stdenv.mkDerivation rec {
 
   version = "2.4";
 
-
   src = fetchFromGitHub {
     owner = "OlafvdSpek";
     repo = "ctemplate";
@@ -19,7 +18,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  preConfigure = "./autogen.sh";
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   meta = {
     description = "A simple but powerful template language for C++";
