@@ -5741,6 +5741,8 @@ in
 
   mgba = libsForQt5.callPackage ../misc/emulators/mgba { };
 
+  microdnf = callPackage ../tools/package-management/microdnf { };
+
   microserver = callPackage ../servers/microserver { };
 
   midisheetmusic = callPackage ../applications/audio/midisheetmusic { };
@@ -13976,6 +13978,8 @@ in
   libdmtx = callPackage ../development/libraries/libdmtx { };
 
   libdnet = callPackage ../development/libraries/libdnet { };
+
+  libdnf = callPackage ../tools/package-management/libdnf { };
 
   libdrm = callPackage ../development/libraries/libdrm { };
 
