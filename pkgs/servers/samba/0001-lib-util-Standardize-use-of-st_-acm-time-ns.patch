@@ -1,0 +1,569 @@
+From 55a5b9c8254126d0acef8702526c92a31200a07c Mon Sep 17 00:00:00 2001
+From: Matthew DeVore <matvore@google.com>
+Date: Tue, 4 Aug 2020 17:49:42 -0700
+Subject: [PATCH] lib/util: Standardize use of st_[acm]time ns
+
+Commit 810397f89a10, and possibly others, broke the build for macOS and
+other environments which don't have st_[acm]tim fields on 'struct stat'.
+
+Multiple places in the codebase used the config.h values to determine
+how to access the nanosecond or microsecond values of the stat
+timestamps, so rather than add more, centralize them all into
+lib/util/time.c.
+
+Also allow pvfs_fileinfo.c to read nanosecond-granularity timestamps on
+platforms where it didn't before, since its #if branches were not
+complete.
+
+Signed-off-by: Matthew DeVore <matvore@google.com>
+Reviewed-by: Jeremy Allison <jra@samba.org>
+Reviewed-by: Volker Lendecke <vl@samba.org>
+
+Autobuild-User(master): Volker Lendecke <vl@samba.org>
+Autobuild-Date(master): Sat Aug 15 08:51:09 UTC 2020 on sn-devel-184
+---
+ lib/replace/wscript                         |   2 -
+ lib/util/time.c                             | 230 ++++++++++++++++++++
+ lib/util/time.h                             |  18 ++
+ source3/lib/system.c                        | 121 +---------
+ source3/libsmb/libsmb_stat.c                |  24 +-
+ source4/ntvfs/posix/pvfs_fileinfo.c         |  11 +-
+ source4/torture/libsmbclient/libsmbclient.c |   7 +-
+ 7 files changed, 277 insertions(+), 136 deletions(-)
+
+diff --git a/lib/replace/wscript b/lib/replace/wscript
+index 64f305d6df0..85bc11d2f01 100644
+--- a/lib/replace/wscript
++++ b/lib/replace/wscript
+@@ -746,8 +746,6 @@ def configure(conf):
+ 
+     conf.CHECK_CODE('mkdir("foo",0777)', define='HAVE_MKDIR_MODE', headers='sys/stat.h')
+ 
+-    conf.CHECK_STRUCTURE_MEMBER('struct stat', 'st_mtim.tv_nsec', define='HAVE_STAT_TV_NSEC',
+-                                headers='sys/stat.h')
+     # we need the st_rdev test under two names
+     conf.CHECK_STRUCTURE_MEMBER('struct stat', 'st_rdev',
+                                 define='HAVE_STRUCT_STAT_ST_RDEV',
+diff --git a/lib/util/time.c b/lib/util/time.c
+index 0fac5e2e397..b5c1d700b23 100644
+--- a/lib/util/time.c
++++ b/lib/util/time.c
+@@ -26,6 +26,10 @@
+ #include "byteorder.h"
+ #include "time_basic.h"
+ #include "lib/util/time.h" /* Avoid /usr/include/time.h */
++#include <sys/stat.h>
++#ifndef NO_CONFIG_H
++#include "config.h"
++#endif
+ 
+ /**
+  * @file
+@@ -1232,3 +1236,229 @@ struct timespec time_t_to_full_timespec(time_t t)
+ 	}
+ 	return (struct timespec){.tv_sec = t};
+ }
++
++#if !defined(HAVE_STAT_HIRES_TIMESTAMPS)
++
++/* Old system - no ns timestamp. */
++time_t get_atimensec(const struct stat *st)
++{
++	return 0;
++}
++
++time_t get_mtimensec(const struct stat *st)
++{
++	return 0;
++}
++
++time_t get_ctimensec(const struct stat *st)
++{
++	return 0;
++}
++
++/* Set does nothing with no ns timestamp. */
++void set_atimensec(struct stat *st, time_t ns)
++{
++	return;
++}
++
++void set_mtimensec(struct stat *st, time_t ns)
++{
++	return;
++}
++
++void set_ctimensec(struct stat *st, time_t ns)
++{
++	return;
++}
++
++#elif HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC
++
++time_t get_atimensec(const struct stat *st)
++{
++	return st->st_atimespec.tv_nsec;
++}
++
++time_t get_mtimensec(const struct stat *st)
++{
++	return st->st_mtimespec.tv_nsec;
++}
++
++time_t get_ctimensec(const struct stat *st)
++{
++	return st->st_ctimespec.tv_nsec;
++}
++
++void set_atimensec(struct stat *st, time_t ns)
++{
++	st->st_atimespec.tv_nsec = ns;
++}
++
++void set_mtimensec(struct stat *st, time_t ns)
++{
++	st->st_mtimespec.tv_nsec = ns;
++}
++
++void set_ctimensec(struct stat *st, time_t ns)
++{
++	st->st_ctimespec.tv_nsec = ns;
++}
++
++#elif HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC
++
++time_t get_atimensec(const struct stat *st)
++{
++	return st->st_atim.tv_nsec;
++}
++
++time_t get_mtimensec(const struct stat *st)
++{
++	return st->st_mtim.tv_nsec;
++}
++
++time_t get_ctimensec(const struct stat *st)
++{
++	return st->st_ctim.tv_nsec;
++}
++
++void set_atimensec(struct stat *st, time_t ns)
++{
++	st->st_atim.tv_nsec = ns;
++}
++
++void set_mtimensec(struct stat *st, time_t ns)
++{
++	st->st_mtim.tv_nsec = ns;
++}
++void set_ctimensec(struct stat *st, time_t ns)
++{
++	st->st_ctim.tv_nsec = ns;
++}
++
++#elif HAVE_STRUCT_STAT_ST_MTIMENSEC
++
++time_t get_atimensec(const struct stat *st)
++{
++	return st->st_atimensec;
++}
++
++time_t get_mtimensec(const struct stat *st)
++{
++	return st->st_mtimensec;
++}
++
++time_t get_ctimensec(const struct stat *st)
++{
++	return st->st_ctimensec;
++}
++
++void set_atimensec(struct stat *st, time_t ns)
++{
++	st->st_atimensec = ns;
++}
++
++void set_mtimensec(struct stat *st, time_t ns)
++{
++	st->st_mtimensec = ns;
++}
++
++void set_ctimensec(struct stat *st, time_t ns)
++{
++	st->st_ctimensec = ns;
++}
++
++#elif HAVE_STRUCT_STAT_ST_MTIME_N
++
++time_t get_atimensec(const struct stat *st)
++{
++	return st->st_atime_n;
++}
++
++time_t get_mtimensec(const struct stat *st)
++{
++	return st->st_mtime_n;
++}
++
++time_t get_ctimensec(const struct stat *st)
++{
++	return st->st_ctime_n;
++}
++
++void set_atimensec(struct stat *st, time_t ns)
++{
++	st->st_atime_n = ns;
++}
++
++void set_mtimensec(struct stat *st, time_t ns)
++{
++	st->st_mtime_n = ns;
++}
++
++void set_ctimensec(struct stat *st, time_t ns)
++{
++	st->st_ctime_n = ns;
++}
++
++#elif HAVE_STRUCT_STAT_ST_UMTIME
++
++/* Only usec timestamps available. Convert to/from nsec. */
++
++time_t get_atimensec(const struct stat *st)
++{
++	return st->st_uatime * 1000;
++}
++
++time_t get_mtimensec(const struct stat *st)
++{
++	return st->st_umtime * 1000;
++}
++
++time_t get_ctimensec(const struct stat *st)
++{
++	return st->st_uctime * 1000;
++}
++
++void set_atimensec(struct stat *st, time_t ns)
++{
++	st->st_uatime = ns / 1000;
++}
++
++void set_mtimensec(struct stat *st, time_t ns)
++{
++	st->st_umtime = ns / 1000;
++}
++
++void set_ctimensec(struct stat *st, time_t ns)
++{
++	st->st_uctime = ns / 1000;
++}
++
++#else
++#error CONFIGURE_ERROR_IN_DETECTING_TIMESPEC_IN_STAT
++#endif
++
++struct timespec get_atimespec(const struct stat *pst)
++{
++	struct timespec ret;
++
++	ret.tv_sec = pst->st_atime;
++	ret.tv_nsec = get_atimensec(pst);
++	return ret;
++}
++
++struct timespec get_mtimespec(const struct stat *pst)
++{
++	struct timespec ret;
++
++	ret.tv_sec = pst->st_mtime;
++	ret.tv_nsec = get_mtimensec(pst);
++	return ret;
++}
++
++struct timespec get_ctimespec(const struct stat *pst)
++{
++	struct timespec ret;
++
++	ret.tv_sec = pst->st_mtime;
++	ret.tv_nsec = get_ctimensec(pst);
++	return ret;
++}
+diff --git a/lib/util/time.h b/lib/util/time.h
+index 4a90b40d5ce..04945b5f25f 100644
+--- a/lib/util/time.h
++++ b/lib/util/time.h
+@@ -375,4 +375,22 @@ time_t full_timespec_to_time_t(const struct timespec *ts);
+ time_t nt_time_to_full_time_t(NTTIME nt);
+ struct timespec time_t_to_full_timespec(time_t t);
+ 
++/*
++ * Functions to get and set the number of nanoseconds for times in a stat field.
++ * If the stat has timestamp granularity less than nanosecond, then the set_*
++ * operations will be lossy.
++ */
++struct stat;
++time_t get_atimensec(const struct stat *);
++time_t get_mtimensec(const struct stat *);
++time_t get_ctimensec(const struct stat *);
++void set_atimensec(struct stat *, time_t);
++void set_mtimensec(struct stat *, time_t);
++void set_ctimensec(struct stat *, time_t);
++
++/* These are convenience wrappers for the above getters. */
++struct timespec get_atimespec(const struct stat *);
++struct timespec get_mtimespec(const struct stat *);
++struct timespec get_ctimespec(const struct stat *);
++
+ #endif /* _SAMBA_TIME_H_ */
+diff --git a/source3/lib/system.c b/source3/lib/system.c
+index f1265e0c43f..7c8cd19d11f 100644
+--- a/source3/lib/system.c
++++ b/source3/lib/system.c
+@@ -25,7 +25,8 @@
+ #include "system/capability.h"
+ #include "system/passwd.h"
+ #include "system/filesys.h"
+-#include "../lib/util/setid.h"
++#include "lib/util/setid.h"
++#include "lib/util/time.h"
+ 
+ #ifdef HAVE_SYS_SYSCTL_H
+ #include <sys/sysctl.h>
+@@ -122,124 +123,6 @@ int sys_fcntl_int(int fd, int cmd, int arg)
+ 	return ret;
+ }
+ 
+-/****************************************************************************
+- Get/Set all the possible time fields from a stat struct as a timespec.
+-****************************************************************************/
+-
+-static struct timespec get_atimespec(const struct stat *pst)
+-{
+-#if !defined(HAVE_STAT_HIRES_TIMESTAMPS)
+-	struct timespec ret;
+-
+-	/* Old system - no ns timestamp. */
+-	ret.tv_sec = pst->st_atime;
+-	ret.tv_nsec = 0;
+-	return ret;
+-#else
+-#if defined(HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_atim.tv_sec;
+-	ret.tv_nsec = pst->st_atim.tv_nsec;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIMENSEC)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_atime;
+-	ret.tv_nsec = pst->st_atimensec;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIME_N)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_atime;
+-	ret.tv_nsec = pst->st_atime_n;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_UMTIME)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_atime;
+-	ret.tv_nsec = pst->st_uatime * 1000;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC)
+-	return pst->st_atimespec;
+-#else
+-#error	CONFIGURE_ERROR_IN_DETECTING_TIMESPEC_IN_STAT
+-#endif
+-#endif
+-}
+-
+-static struct timespec get_mtimespec(const struct stat *pst)
+-{
+-#if !defined(HAVE_STAT_HIRES_TIMESTAMPS)
+-	struct timespec ret;
+-
+-	/* Old system - no ns timestamp. */
+-	ret.tv_sec = pst->st_mtime;
+-	ret.tv_nsec = 0;
+-	return ret;
+-#else
+-#if defined(HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_mtim.tv_sec;
+-	ret.tv_nsec = pst->st_mtim.tv_nsec;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIMENSEC)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_mtime;
+-	ret.tv_nsec = pst->st_mtimensec;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIME_N)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_mtime;
+-	ret.tv_nsec = pst->st_mtime_n;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_UMTIME)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_mtime;
+-	ret.tv_nsec = pst->st_umtime * 1000;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC)
+-	return pst->st_mtimespec;
+-#else
+-#error	CONFIGURE_ERROR_IN_DETECTING_TIMESPEC_IN_STAT
+-#endif
+-#endif
+-}
+-
+-static struct timespec get_ctimespec(const struct stat *pst)
+-{
+-#if !defined(HAVE_STAT_HIRES_TIMESTAMPS)
+-	struct timespec ret;
+-
+-	/* Old system - no ns timestamp. */
+-	ret.tv_sec = pst->st_ctime;
+-	ret.tv_nsec = 0;
+-	return ret;
+-#else
+-#if defined(HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_ctim.tv_sec;
+-	ret.tv_nsec = pst->st_ctim.tv_nsec;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIMENSEC)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_ctime;
+-	ret.tv_nsec = pst->st_ctimensec;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIME_N)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_ctime;
+-	ret.tv_nsec = pst->st_ctime_n;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_UMTIME)
+-	struct timespec ret;
+-	ret.tv_sec = pst->st_ctime;
+-	ret.tv_nsec = pst->st_uctime * 1000;
+-	return ret;
+-#elif defined(HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC)
+-	return pst->st_ctimespec;
+-#else
+-#error	CONFIGURE_ERROR_IN_DETECTING_TIMESPEC_IN_STAT
+-#endif
+-#endif
+-}
+-
+ /****************************************************************************
+  Return the best approximation to a 'create time' under UNIX from a stat
+  structure.
+diff --git a/source3/libsmb/libsmb_stat.c b/source3/libsmb/libsmb_stat.c
+index 790934bd565..b01aeb51ac1 100644
+--- a/source3/libsmb/libsmb_stat.c
++++ b/source3/libsmb/libsmb_stat.c
+@@ -27,6 +27,7 @@
+ #include "libsmbclient.h"
+ #include "libsmb_internal.h"
+ #include "../libcli/smb/smbXcli_base.h"
++#include "lib/util/time.h"
+ 
+ /*
+  * Generate an inode number from file name for those things that need it
+@@ -102,18 +103,29 @@ void setup_stat(struct stat *st,
+ 	}
+ 
+ 	st->st_dev = dev;
+-	st->st_atim = access_time_ts;
+-	st->st_ctim = change_time_ts;
+-	st->st_mtim = write_time_ts;
++
++	st->st_atime = access_time_ts.tv_sec;
++	set_atimensec(st, access_time_ts.tv_nsec);
++
++	st->st_ctime = change_time_ts.tv_sec;
++	set_ctimensec(st, change_time_ts.tv_nsec);
++
++	st->st_mtime = write_time_ts.tv_sec;
++	set_mtimensec(st, write_time_ts.tv_nsec);
+ }
+ 
+ void setup_stat_from_stat_ex(const struct stat_ex *stex,
+ 			     const char *fname,
+ 			     struct stat *st)
+ {
+-	st->st_atim = stex->st_ex_atime;
+-	st->st_ctim = stex->st_ex_ctime;
+-	st->st_mtim = stex->st_ex_mtime;
++	st->st_atime = stex->st_ex_atime.tv_sec;
++	set_atimensec(st, stex->st_ex_atime.tv_nsec);
++
++	st->st_ctime = stex->st_ex_ctime.tv_sec;
++	set_ctimensec(st, stex->st_ex_ctime.tv_nsec);
++
++	st->st_mtime = stex->st_ex_mtime.tv_sec;
++	set_mtimensec(st, stex->st_ex_mtime.tv_nsec);
+ 
+ 	st->st_mode = stex->st_ex_mode;
+ 	st->st_size = stex->st_ex_size;
+diff --git a/source4/ntvfs/posix/pvfs_fileinfo.c b/source4/ntvfs/posix/pvfs_fileinfo.c
+index d2e2aeea265..977ea4fa3d5 100644
+--- a/source4/ntvfs/posix/pvfs_fileinfo.c
++++ b/source4/ntvfs/posix/pvfs_fileinfo.c
+@@ -21,6 +21,7 @@
+ 
+ #include "includes.h"
+ #include "vfs_posix.h"
++#include "lib/util/time.h"
+ 
+ /****************************************************************************
+  Change a unix mode to a dos mode.
+@@ -72,12 +73,10 @@ NTSTATUS pvfs_fill_dos_info(struct pvfs_state *pvfs, struct pvfs_filename *name,
+ 	unix_to_nt_time(&name->dos.access_time, name->st.st_atime);
+ 	unix_to_nt_time(&name->dos.write_time,  name->st.st_mtime);
+ 	unix_to_nt_time(&name->dos.change_time, name->st.st_ctime);
+-#ifdef HAVE_STAT_TV_NSEC
+-	name->dos.create_time += name->st.st_ctim.tv_nsec / 100;
+-	name->dos.access_time += name->st.st_atim.tv_nsec / 100;
+-	name->dos.write_time  += name->st.st_mtim.tv_nsec / 100;
+-	name->dos.change_time += name->st.st_ctim.tv_nsec / 100;
+-#endif
++	name->dos.create_time += get_ctimensec(&name->st) / 100;
++	name->dos.access_time += get_atimensec(&name->st) / 100;
++	name->dos.write_time  += get_mtimensec(&name->st) / 100;
++	name->dos.change_time += get_ctimensec(&name->st) / 100;
+ 	name->dos.attrib = dos_mode_from_stat(pvfs, &name->st);
+ 	name->dos.alloc_size = pvfs_round_alloc_size(pvfs, name->st.st_size);
+ 	name->dos.nlink = name->st.st_nlink;
+diff --git a/source4/torture/libsmbclient/libsmbclient.c b/source4/torture/libsmbclient/libsmbclient.c
+index 3f3992593f9..4fbd759487b 100644
+--- a/source4/torture/libsmbclient/libsmbclient.c
++++ b/source4/torture/libsmbclient/libsmbclient.c
+@@ -27,6 +27,7 @@
+ #include "lib/param/loadparm.h"
+ #include "lib/param/param_global.h"
+ #include "dynconfig.h"
++#include "lib/util/time.h"
+ 
+ /* test string to compare with when debug_callback is called */
+ #define TEST_STRING "smbc_setLogCallback test"
+@@ -1231,8 +1232,8 @@ static bool torture_libsmbclient_utimes(struct torture_context *tctx)
+ 	ret = smbc_fstat(fhandle, &st);
+ 	torture_assert_int_not_equal(tctx, ret, -1, "smbc_fstat failed");
+ 
+-	tbuf[0] = convert_timespec_to_timeval(st.st_atim);
+-	tbuf[1] = convert_timespec_to_timeval(st.st_mtim);
++	tbuf[0] = convert_timespec_to_timeval(get_atimespec(&st));
++	tbuf[1] = convert_timespec_to_timeval(get_mtimespec(&st));
+ 
+ 	tbuf[1] = timeval_add(&tbuf[1], 0, 100000); /* 100 msec */
+ 
+@@ -1244,7 +1245,7 @@ static bool torture_libsmbclient_utimes(struct torture_context *tctx)
+ 
+ 	torture_assert_int_equal(
+ 		tctx,
+-		st.st_mtim.tv_nsec / 1000,
++		get_mtimensec(&st) / 1000,
+ 		tbuf[1].tv_usec,
+ 		"smbc_utimes did not update msec");
+ 
+-- 
+2.29.2
+
