@@ -157,11 +157,12 @@ let
         local passphrase
 
         while true; do
-            echo -n "Passphrase for ${device}: "
+            # echo -n "Passphrase for ${device}: "
             passphrase=
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
-                    echo "reused"
+                    # echo "reused"
+                    _prompt --text "Passphrase for ${device}: reused"
                     passphrase=$(cat /crypt-ramfs/passphrase)
                     break
                 else
@@ -169,7 +170,9 @@ let
                     echo -n "${device}" > /crypt-ramfs/device
 
                     # and try reading it from /dev/console with a timeout
-                    IFS= read -t 1 -r passphrase
+                    # IFS= read -t 1 -r passphrase
+                    _prompt --text "Passphrase for ${device}"
+                    passphrase="$(_read)"
                     if [ -n "$passphrase" ]; then
                        ${if luks.reusePassphrases then ''
                          # remember it for the next device
@@ -182,10 +185,12 @@ let
                     fi
                 fi
             done
-            echo -n "Verifying passphrase for ${device}..."
+            # echo -n "Verifying passphrase for ${device}..."
+            _prompt --text "Verifying passphrase for ${device} ... "
             echo -n "$passphrase" | ${csopen} --key-file=-
             if [ $? == 0 ]; then
-                echo " - success"
+                # echo " - success"
+                _prompt --text "Verifying passphrase for ${device} ... success"
                 ${if luks.reusePassphrases then ''
                   # we don't rm here because we might reuse it for the next device
                 '' else ''
@@ -193,7 +198,8 @@ let
                 ''}
                 break
             else
-                echo " - failure"
+                # echo " - failure"
+                _prompt --text "Verifying passphrase for ${device} ... failure"
                 # ask for a different one
                 rm -f /crypt-ramfs/passphrase
             fi
@@ -249,13 +255,17 @@ let
         salt="$(cat /crypt-storage${yubikey.storage.path} | sed -n 1p | tr -d '\n')"
         iterations="$(cat /crypt-storage${yubikey.storage.path} | sed -n 2p | tr -d '\n')"
         challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
+        _prompt --text "Awaiting Yubikey response ... "
         response="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
+        _prompt --text "Awaiting Yubikey response ... ok"
 
         for try in $(seq 3); do
             ${optionalString yubikey.twoFactor ''
-            echo -n "Enter two-factor passphrase: "
-            read -r k_user
-            echo
+            # echo -n "Enter two-factor passphrase: "
+            _prompt --text "Enter two-factor passphrase"
+            # read -r k_user
+            k_user="$(_read)"
+            # echo
             ''}
 
             if [ ! -z "$k_user" ]; then
@@ -264,26 +274,35 @@ let
                 k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $iterations $response | rbtohex)"
             fi
 
+            _prompt --text "Verifying passphrase for ${device} ... "
             echo -n "$k_luks" | hextorb | ${csopen} --key-file=-
 
             if [ $? == 0 ]; then
+                _prompt --text "Verifying passphrase for ${device} ... success"
                 opened=true
                 break
             else
+                # echo " - failure"
+                _prompt --text "Verifying passphrase for ${device} ... failure"
                 opened=false
-                echo "Authentication failed!"
+                # echo "Authentication failed!"
             fi
         done
 
-        [ "$opened" == false ] && die "Maximum authentication errors reached"
+        if [ "$opened" == false ]; then
+            _prompt --text "Maximum authentication errors reached, falling back to non-yubikey open procedure"
+            die "Maximum authentication errors reached"
+        fi
 
-        echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
+        # echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
+        _prompt --text "Gathering entropy for new salt ... "
         for i in $(seq ${toString yubikey.saltLength}); do
             byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
             new_salt="$new_salt$byte";
-            echo -n .
+            # echo -n .
         done;
-        echo "ok"
+        # echo "ok"
+        _prompt --text "Gathering entropy for new salt ... ok"
 
         new_iterations="$iterations"
         ${optionalString (yubikey.iterationStep > 0) ''
@@ -292,7 +311,9 @@ let
 
         new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
 
+        _prompt --text "Awaiting Yubikey response ..."
         new_response="$(ykchalresp -${toString yubikey.slot} -x $new_challenge 2>/dev/null)"
+        _prompt --text "Awaiting Yubikey response ... ok"
 
         if [ ! -z "$k_user" ]; then
             new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
@@ -301,12 +322,15 @@ let
         fi
 
         echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
+        _prompt --text "Attempting passphrase change for ${device} ..."
         echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
 
         if [ $? == 0 ]; then
+            _prompt --text "Attempting passphrase change for ${device} ... ok"
             echo -ne "$new_salt\n$new_iterations" > /crypt-storage${yubikey.storage.path}
         else
-            echo "Warning: Could not update LUKS key, current challenge persists!"
+            # echo "Warning: Could not update LUKS key, current challenge persists!"
+            _prompt --text "Warning: Failed to get Yubikey response, current challenge persists!"
         fi
 
         rm -f /crypt-ramfs/new_key

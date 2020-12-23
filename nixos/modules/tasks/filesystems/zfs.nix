@@ -418,7 +418,11 @@ in
             fi
             ${if isBool cfgZfs.requestEncryptionCredentials
               then optionalString cfgZfs.requestEncryptionCredentials ''
-                zfs load-key -a
+                while true; do
+                  _prompt --text "enter passphrase for '${pool}'"
+                  _read | zfs load-key "${pool}" && break
+                done
+                _prompt --text "unlocked '${pool}' successfully"
               ''
               else concatMapStrings (fs: ''
                 zfs load-key ${fs}

@@ -29,6 +29,22 @@ let
     ${cfg.extraConfig}
   '';
 
+  commonFunctions = ''
+    if [ ! "$(type -t _read)" = "function" ]; then
+      _read() {
+        local pwd
+        pwd="$(plymouth ask-for-password "$@")"
+        printf "$pwd"
+      }
+    fi
+
+    if [ ! "$(type -t _prompt)" = "function" ]; then
+      _prompt() {
+        plymouth display-message "$@"
+      }
+    fi
+  '';
+
 in
 
 {
@@ -113,6 +129,9 @@ in
     systemd.services.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
     systemd.paths.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
 
+    # boot.initrd.kernelModules = [ "i915" ];
+    boot.initrd.availableKernelModules = [ "i915" ];
+
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${plymouth}/bin/plymouth
       copy_bin_and_libs ${plymouth}/bin/plymouthd
@@ -157,8 +176,10 @@ in
       sed -i '/loginctl/d' $out/71-seat.rules
     '';
 
-    # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
-    boot.initrd.preLVMCommands = mkAfter ''
+    # mkBefore is 500 and we want it after console.earlySetup to prevent setfont error
+    boot.initrd.preLVMCommands = mkOrder 550 ''
+      ${commonFunctions}
+
       mkdir -p /etc/plymouth
       mkdir -p /run/plymouth
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
@@ -171,6 +192,8 @@ in
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
       plymouth show-splash
     '';
+
+    boot.initrd.postDeviceCommands = mkBefore commonFunctions;
 
     boot.initrd.postMountCommands = ''
       plymouth update-root-fs --new-root-dir="$targetRoot"

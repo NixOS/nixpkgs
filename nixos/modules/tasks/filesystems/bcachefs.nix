@@ -9,18 +9,20 @@ let
   commonFunctions = ''
     prompt() {
         local name="$1"
-        printf "enter passphrase for $name: "
+        # printf "enter passphrase for $name: "
+        _prompt --text "enter passphrase for $name"
     }
     tryUnlock() {
         local name="$1"
         local path="$2"
         if bcachefs unlock -c $path > /dev/null 2> /dev/null; then    # test for encryption
             prompt $name
-            until bcachefs unlock $path 2> /dev/null; do              # repeat until sucessfully unlocked
-                printf "unlocking failed!\n"
+            until _read | bcachefs unlock $path 2> /dev/null; do              # repeat until sucessfully unlocked
+                # printf "unlocking failed!\n"
                 prompt $name
             done
-            printf "unlocking successful.\n"
+            # printf "unlocking successful.\n"
+            _prompt --text "unlocked $name successfully"
         fi
     }
   '';
