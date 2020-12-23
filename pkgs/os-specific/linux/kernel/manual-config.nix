@@ -249,8 +249,7 @@ let
         find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
         # Keep root and arch-specific Makefiles
-        chmod u-w Makefile
-        chmod u-w arch/$arch/Makefile*
+        chmod u-w Makefile arch/"$arch"/Makefile*
 
         # Keep whole scripts dir
         chmod u-w -R scripts
