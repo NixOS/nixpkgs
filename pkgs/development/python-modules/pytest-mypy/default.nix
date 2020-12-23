@@ -17,7 +17,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
+
   propagatedBuildInputs = [ pytest mypy filelock ];
+
+  # does not contain tests
+  doCheck = false;
+  pythonImportsCheck = [ "pytest_mypy" ];
 
   meta = with lib; {
     description = "Mypy static type checker plugin for Pytest";
