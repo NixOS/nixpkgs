@@ -17,6 +17,8 @@ in stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
   buildInputs = [
