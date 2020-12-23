@@ -5698,7 +5698,6 @@ broken-packages:
   - gray-code
   - greencard
   - greencard-lib
-  - greenclip
   - greg-client
   - gremlin-haskell
   - Grempa
