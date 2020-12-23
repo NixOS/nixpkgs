@@ -6033,6 +6033,8 @@ in
 
   madlang = haskell.lib.justStaticExecutables haskellPackages.madlang;
 
+  maeparser = callPackage ../development/libraries/maeparser { };
+
   mailcheck = callPackage ../applications/networking/mailreaders/mailcheck { };
 
   maildrop = callPackage ../tools/networking/maildrop { };
