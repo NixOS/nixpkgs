@@ -8180,6 +8180,8 @@ in
 
   wf-recorder = callPackage ../applications/video/wf-recorder { };
 
+  wf-recorder-x = callPackage ../applications/video/wf-recorder-x { };
+
   whipper = callPackage ../applications/audio/whipper { };
 
   whois = callPackage ../tools/networking/whois { };
