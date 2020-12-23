@@ -84,6 +84,10 @@ in {
       pulse = {
         enable = mkEnableOption "PulseAudio server emulation";
       };
+
+      gstreamer = {
+        enable = mkEnableOption "GStreamer plugins";
+      };
     };
   };
 
@@ -103,7 +107,10 @@ in {
 
     services.pipewire.sessionManager = mkDefault "${cfg.package}/bin/pipewire-media-session";
 
+    services.pipewire.gstreamer.enable = mkDefault true;
+
     environment.systemPackages = [ cfg.package ]
+                                 ++ lib.optional cfg.gstreamer.enable cfg.package.gstreamer
                                  ++ lib.optional cfg.jack.enable jack-libs;
 
     systemd.packages = [ cfg.package ]
