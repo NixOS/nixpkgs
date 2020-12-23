@@ -29,7 +29,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
-    license = licenses.gpl2Plus;
+    license = with licenses; [ asl20 gpl2Plus];
     maintainers = with maintainers; [ koral ];
   };
 }
