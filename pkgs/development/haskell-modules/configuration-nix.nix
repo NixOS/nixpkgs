@@ -662,33 +662,9 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
-      # Spago needs a small patch to work with the latest versions of rio.
-      # https://github.com/purescript/spago/pull/647
-      spagoWithPatches = overrideCabal (appendPatch super.spago (
-        # Spago-0.17 needs a small patch to work with the latest version of dhall.
-        # This can probably be removed with Spago-0.18.
-        # https://github.com/purescript/spago/pull/695
-        pkgs.fetchpatch {
-          url = "https://github.com/purescript/spago/commit/6258ac601480e776c215c989cc5faae46d5ca9f7.patch";
-          sha256 = "02zy4jf24qlqz9fkcs2rqg64ijd8smncmra8s5yp2mln4dmmii1k";
-        }
-      )) (old: {
-        # The above patch contains a completely new spago.cabal file, but our
-        # source tree from Hackage already contains a cabal file.  Delete the
-        # local cabal file and just take the one from the patch.
-        #
-        # WARNING: The empty line above the `rm` needs to be kept.
-        prePatch = old.prePatch or "" + ''
-
-          rm spago.cabal
-        '';
-        # The above patch also adds a dependency on the stringsearch package.
-        libraryHaskellDepends = old.libraryHaskellDepends or [] ++ [ self.stringsearch ];
-      });
-
       # spago requires an older version of megaparsec, but it appears to work
       # fine with newer versions.
-      spagoWithOverrides = doJailbreak spagoWithPatches;
+      spagoWithOverrides = doJailbreak super.spago;
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
