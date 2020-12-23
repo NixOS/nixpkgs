@@ -201,6 +201,7 @@ let
 
   gitui = callPackage ./gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
+    inherit (pkgs) openssl perl;
   };
 
   glab = callPackage ./glab { };
