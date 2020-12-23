@@ -37,6 +37,7 @@ mkDerivation {
   patches = [
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
+    ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
   ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
