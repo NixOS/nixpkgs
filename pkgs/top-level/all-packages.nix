@@ -8892,6 +8892,8 @@ in
     gmp-static = gmp.override { withStatic = true; };
   };
 
+  cakelisp = callPackage ../development/compilers/cakelisp { };
+
   ciao = callPackage ../development/compilers/ciao { };
 
   colm = callPackage ../development/compilers/colm { };
