@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     "lib"
     "pulse"
     "jack"
+    "gstreamer"
     "dev"
     "doc"
     "installedTests"
@@ -119,6 +120,7 @@ stdenv.mkDerivation rec {
     moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
     moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
     moveToOutput "bin/pipewire-pulse" "$pulse"
+    moveToOutput "lib/gstreamer-1.0/*" "$gstreamer"
   '';
 
   passthru.tests = {
