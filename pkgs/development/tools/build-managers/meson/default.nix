@@ -4,6 +4,7 @@
 , writeTextDir
 , substituteAll
 , fetchpatch
+, installShellFiles
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -75,6 +76,13 @@ python3.pkgs.buildPythonApplication rec {
 
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh data/shell-completions/zsh/_meson
+    installShellCompletion --bash data/shell-completions/bash/meson
   '';
 
   meta = with lib; {
