@@ -1,4 +1,4 @@
-{stdenv, fetchurl, runtimeShell, traceDeps ? false}:
+{ stdenv, fetchurl, runtimeShell, traceDeps ? false, bash }:
 
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
@@ -26,8 +26,16 @@ in stdenv.mkDerivation {
       EOF
       chmod +x $out/bin/steamdeps
     ''}
-    install -d $out/lib/udev/rules.d
-    install -m644 lib/udev/rules.d/*.rules $out/lib/udev/rules.d
+
+    # install udev rules
+    mkdir -p $out/etc/udev/rules.d/
+    cp ./subprojects/steam-devices/*.rules $out/etc/udev/rules.d/
+    substituteInPlace $out/etc/udev/rules.d/60-steam-input.rules \
+      --replace "/bin/sh" "${bash}/bin/bash"
+
+    # this just installs a link, "steam.desktop -> /lib/steam/steam.desktop"
+    rm $out/share/applications/steam.desktop
+    sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
   '';
 
   meta = with stdenv.lib; {
