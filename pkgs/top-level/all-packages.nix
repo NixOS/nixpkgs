@@ -7348,6 +7348,7 @@ in
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
+  # Not updated upstream since 2018, doesn't support qt newer than 5.12
   sleepyhead = libsForQt512.callPackage ../applications/misc/sleepyhead {};
 
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
