@@ -30,7 +30,13 @@ with lib;
 
   config = {
 
-    systemd.additionalUpstreamSystemUnits = optional config.boot.tmpOnTmpfs "tmp.mount";
+    systemd.mounts = mkIf config.boot.tmpOnTmpfs [
+      {
+        what = "tmpfs";
+        where = "/tmp";
+        mountConfig.Options = [ "mode=1777" "strictatime" "rw" "nosuid" "nodev" "size=50%" ];
+      }
+    ];
 
     systemd.tmpfiles.rules = optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
 
