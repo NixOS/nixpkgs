@@ -37,6 +37,7 @@ in import ./make-test-python.nix {
   nodes = {
     prometheus = { pkgs, ... }: {
       virtualisation.diskSize = 2 * 1024;
+      virtualisation.memorySize = 2048;
       environment.systemPackages = [ pkgs.jq ];
       networking.firewall.allowedTCPPorts = [ grpcPort ];
       services.prometheus = {
@@ -133,6 +134,7 @@ in import ./make-test-python.nix {
 
     store = { pkgs, ... }: {
       virtualisation.diskSize = 2 * 1024;
+      virtualisation.memorySize = 2048;
       environment.systemPackages = with pkgs; [ jq thanos ];
       services.thanos.store = {
         enable = true;
