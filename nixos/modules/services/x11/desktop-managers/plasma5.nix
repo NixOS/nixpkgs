@@ -238,6 +238,7 @@ in
           kidletime
           kimageformats
           kinit
+          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
           kio
           kjobwidgets
           knewstuff

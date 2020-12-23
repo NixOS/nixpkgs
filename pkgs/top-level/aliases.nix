@@ -838,7 +838,7 @@ mapAliases ({
     kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-browser-integration
     plasma-desktop plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
-    systemsettings user-manager xdg-desktop-portal-kde
+    systemsettings xdg-desktop-portal-kde
   ;
   inherit (plasma5.thirdParty)
     plasma-applet-caffeine-plus
