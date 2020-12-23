@@ -807,6 +807,7 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
+  bc-python-hcl2 = callPackage ../development/python-modules/bc-python-hcl2 { };
   bcdoc = callPackage ../development/python-modules/bcdoc { };
 
   bcrypt = if pythonOlder "3.6" then
