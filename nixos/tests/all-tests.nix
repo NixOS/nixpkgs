@@ -324,6 +324,7 @@ in
   redis = handleTest ./redis.nix {};
   redmine = handleTest ./redmine.nix {};
   restic = handleTest ./restic.nix {};
+  ripgrep = handleTest ./ripgrep.nix {};
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rspamd = handleTest ./rspamd.nix {};
@@ -339,6 +340,7 @@ in
   scala = handleTest ./scala.nix {};
   sddm = handleTest ./sddm.nix {};
   service-runner = handleTest ./service-runner.nix {};
+  shadow = handleTest ./shadow.nix {};
   shadowsocks = handleTest ./shadowsocks {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
   shiori = handleTest ./shiori.nix {};

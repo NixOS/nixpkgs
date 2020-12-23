@@ -1,4 +1,5 @@
 { stdenv
+, nixosTests
 , fetchFromGitHub
 , rustPlatform
 , asciidoctor
@@ -33,6 +34,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
     installShellCompletion --zsh complete/_rg
   '';
+
+  passthru.tests = { inherit (nixosTests) ripgrep; };
 
   meta = with stdenv.lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
