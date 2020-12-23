@@ -10,13 +10,13 @@
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.163.a/linux-hardened-4.19.163.a.patch"
     },
     "5.4": {
-        "name": "linux-hardened-5.4.84.a.patch",
-        "sha256": "1pwij0bxgf61ahi6fa8qwrr85yhx92z4sif71kdgxkbwcw9qwyzs",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.84.a/linux-hardened-5.4.84.a.patch"
+        "name": "linux-hardened-5.4.85.a.patch",
+        "sha256": "1ml9vpakhpxry29c4q0fz346ly7s3hwd7rasr4dzkgs71lm5a1sy",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.85.a/linux-hardened-5.4.85.a.patch"
     },
     "5.9": {
-        "name": "linux-hardened-5.9.15.a.patch",
-        "sha256": "1iqkw4mnr1p9wzfmjy5lawc6cn9wvg05xsak24fzbp1i22h4dfz4",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.9.15.a/linux-hardened-5.9.15.a.patch"
+        "name": "linux-hardened-5.9.16.a.patch",
+        "sha256": "024wdzc9bwgr4nd4z0l6bazcl35jczhsmdl2lb26bvffjwg207rw",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.9.16.a/linux-hardened-5.9.16.a.patch"
     }
 }
