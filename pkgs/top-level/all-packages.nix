@@ -6977,6 +6977,8 @@ in
 
   reftools = callPackage ../development/tools/reftools { };
 
+  remarkable-linux-client = qt5.callPackage ../applications/office/remarkable-linux-client { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
