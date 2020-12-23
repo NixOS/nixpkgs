@@ -5,8 +5,6 @@
 , IOKit
 }:
 
-assert stdenv.isDarwin -> IOKit != null;
-
 stdenv.mkDerivation rec {
   pname = "picocom";
   # last tagged release is 3.1 but 3.2 is still considered a release
