@@ -417,6 +417,9 @@ let
       DEFAULT_SECURITY_APPARMOR        = yes;
 
       SECURITY_LOCKDOWN_LSM            = whenAtLeast "5.4" yes;
+
+      MODULE_SIG_KEY = freeform "${./r13yKey.pem}"; # would be auto-generated during build
+      MODULE_SIG_SHA256 = yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
