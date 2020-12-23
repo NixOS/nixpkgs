@@ -8934,6 +8934,8 @@ in
 
   hitch = callPackage ../servers/hitch { };
 
+  hitide = callPackage ../servers/hitide { };
+
   venus = callPackage ../tools/misc/venus {
     python = python27;
   };
