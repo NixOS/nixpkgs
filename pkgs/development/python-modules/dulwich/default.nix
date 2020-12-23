@@ -23,7 +23,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple Python implementation of the Git file formats and protocols";
-    homepage = "https://samba.org/~jelmer/dulwich/";
+    longDescription = ''
+      Dulwich is a Python implementation of the Git file formats and protocols, which
+      does not depend on Git itself. All functionality is available in pure Python.
+    '';
+    homepage = "https://www.dulwich.io/";
+    changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ koral ];
   };
