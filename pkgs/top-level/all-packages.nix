@@ -5621,6 +5621,8 @@ in
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
+  lotide = callPackage ../servers/lotide { };
+
   lottieconverter = callPackage ../tools/misc/lottieconverter { };
 
   lsd = callPackage ../tools/misc/lsd { };
