@@ -5140,7 +5140,7 @@ in
 
   ksmoothdock = libsForQt514.callPackage ../applications/misc/ksmoothdock { };
 
-  kstars = libsForQt514.callPackage ../applications/science/astronomy/kstars { };
+  kstars = libsForQt5.callPackage ../applications/science/astronomy/kstars { };
 
   kytea = callPackage ../tools/text/kytea { };
 
@@ -22674,6 +22674,8 @@ in
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
+
+  mediaelch = libsForQt5.callPackage ../applications/misc/mediaelch { };
 
   mediainfo = callPackage ../applications/misc/mediainfo { };
 
