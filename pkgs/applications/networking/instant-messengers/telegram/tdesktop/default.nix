@@ -22,12 +22,12 @@ let
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.4.7";
+  version = "2.5.0";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1j2v29952l0am357pqvvgzm2zghmwhlr833kgp85hssxpr9xy4vv";
+    sha256 = "08y6krzhg8hipl7zgyda7ifi2ydxylb2snkslr7w5yj43rvc7hxj";
   };
 
   postPatch = ''
@@ -80,9 +80,6 @@ in mkDerivation rec {
   # TODO: Package mapbox-variant
 
   postFixup = ''
-    # Nuke refs to `tg_owt` which is introduced by `__FILE__` in headers.
-    remove-references-to -t ${tg_owt} $out/bin/telegram-desktop
-
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
     wrapProgram $out/bin/telegram-desktop \
