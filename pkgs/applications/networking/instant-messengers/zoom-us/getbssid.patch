@@ -1,0 +1,13 @@
+diff --git 1/../zoom-patched-getbssid.sh 2/getbssid.sh
+index ebef9fd..2525d09 100755
+--- 1/../zoom-patched-getbssid.sh
++++ 2/getbssid.sh
+@@ -1,6 +1,6 @@
+-DEVICE_LIST=`@iw@/bin/iw dev | @gawk@/bin/awk '$1=="Interface"{print $2}'`
++DEVICE_LIST=`iw dev | awk '$1=="Interface"{print $2}'`
+ for d in $DEVICE_LIST ; do
+-	bssid=`@wirelesstools@/bin/iwconfig ${d} | @coreutils@/bin/sed -n 's/.*Access Point: \([0-9\:A-F]\{17\}\).*/\1/p'`
++	bssid=`iwconfig ${d} | sed -n 's/.*Access Point: \([0-9\:A-F]\{17\}\).*/\1/p'`
+ 	if [ ! -z "$bssid" ]; then
+ 		echo $bssid
+ 	fi

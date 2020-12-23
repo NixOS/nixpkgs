@@ -1,12 +1,42 @@
 { stdenv, fetchurl, mkDerivation, autoPatchelfHook, bash
-, fetchFromGitHub, wrapGAppsHook
+, fetchFromGitHub, wrapGAppsHook, substituteAll
 # Dynamic libraries
-, dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
-, qtgraphicaleffects, qtimageformats, qtlocation, qtquickcontrols
-, qtquickcontrols2, qtscript, qtsvg , qttools, qtwayland, qtwebchannel
-, qtwebengine
+, dbus
+, glib
+, libGL
+, libX11
+, libXfixes
+, libuuid
+, libxcb
+, atk
+, cairo
+, dbus_tools
+, libdrm
+, libglvnd
+, fontconfig
+, freetype
+, gtk3
+, gdk_pixbuf
+, xorg_sys_opengl
+, pango
+, wayland
+, xorg # For libXcomposite, libXext, libXrender
+, libxkbcommon
+, zlib
+, qtbase
+, qtdeclarative
+, qtgraphicaleffects
+, qtimageformats
+, qtlocation
+, qtquickcontrols2
+, qtsvg
+, qtwayland
+, qtxmlpatterns
+, quazip_qt4
+, mpg123
+, icu56
 # Runtime
-, coreutils, faac, pciutils, procps, util-linux
+, coreutils, iw, wirelesstools
 , pulseaudioSupport ? true, libpulseaudio ? null
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
 }:
@@ -14,7 +44,7 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  inherit (stdenv.lib) concatStringsSep makeBinPath optional;
+  inherit (stdenv.lib) concatStringsSep makeBinPath;
 
   version = "5.4.57450.1220";
   srcs = {
@@ -38,50 +68,69 @@ in mkDerivation {
 
   src = srcs.${stdenv.hostPlatform.system};
 
+  patches = [
+    (substituteAll {
+      src = ./getbssid.patch;
+      inherit iw wirelesstools coreutils;
+    })
+  ];
+
   nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
   # Let mkDerivation do it
   dontWrapGApps = true;
 
   buildInputs = [
-    dbus glib libGL libX11 libXfixes libuuid libxcb faac qtbase
-    qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols qtquickcontrols2
-    qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
-  ];
+    dbus
+    glib
+    libGL
+    libX11
+    libXfixes
+    libuuid
+    libxcb
+    atk
+    cairo
+    dbus_tools
+    libdrm
+    libglvnd
+    fontconfig
+    freetype
+    gtk3
+    gdk_pixbuf
+    xorg_sys_opengl
+    pango
+    wayland
+    xorg.libXcomposite
+    xorg.libXext
+    xorg.libXrender
+    libxkbcommon
+    zlib
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtimageformats
+    qtlocation
+    qtquickcontrols2
+    qtsvg
+    qtwayland
+    qtxmlpatterns
+    quazip_qt4
+    mpg123
+    icu56
+  ]
+    ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ stdenv.lib.optionals alsaSupport [ alsaLib ]
+  ;
 
-  runtimeDependencies = optional pulseaudioSupport libpulseaudio
-    ++ optional alsaSupport alsaLib;
+  installPhase = ''
+    runHook preInstall
 
-  installPhase =
-    let
-      files = concatStringsSep " " [
-        "*.pcm"
-        "*.png"
-        "ZoomLauncher"
-        "config-dump.sh"
-        "timezones"
-        "translations"
-        "version.txt"
-        "zoom"
-        "zoom.sh"
-        "zopen"
-      ];
-    in ''
-      runHook preInstall
+    mkdir -p $out/{bin,share/zoom-us}
 
-      mkdir -p $out/{bin,share/zoom-us}
+    # Fixing an upstream issue maybe?
+    chmod +x libquazip.so
+    # TODO: Remove all libraries not needed and patch each only if needed
+    cp -ar ${files} $out/share/zoom-us
 
-      cp -ar ${files} $out/share/zoom-us
-
-      # TODO Patch this somehow; tries to dlopen './libturbojpeg.so' from cwd
-      cp libturbojpeg.so $out/share/zoom-us/libturbojpeg.so
-
-      # Again, requires faac with a nonstandard filename.
-      ln -s $(readlink -e "${faac}/lib/libfaac.so") $out/share/zoom-us/libfaac1.so
-
-      runHook postInstall
-    '';
-
-  postInstall = ''
     mkdir -p $out/share/{applications,appdata,icons}
 
     # Desktop File
@@ -100,6 +149,8 @@ in mkDerivation {
         mkdir -p $out/share/icons/hicolor/$path/apps
         cp $icon $out/share/icons/hicolor/$path/apps/us.zoom.Zoom.png
     done
+
+    runHook postInstall
   '';
 
   # $out/share/zoom-us isn't in auto-wrap directories list, need manual wrapping

@@ -25100,7 +25100,8 @@ in
 
   zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
 
-  zoom-us = libsForQt5.callPackage ../applications/networking/instant-messengers/zoom-us { };
+  # Upstream's `.so` files in the tarball end with `5.12.9` so we conclude they compile it upstream with qt512
+  zoom-us = libsForQt512.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
 
