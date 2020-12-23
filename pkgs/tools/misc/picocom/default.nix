@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , installShellFiles
 , lrzsz
-, IOKit ? null
+, IOKit
 }:
 
 assert stdenv.isDarwin -> IOKit != null;
