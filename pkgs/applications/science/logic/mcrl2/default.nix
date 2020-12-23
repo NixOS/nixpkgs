@@ -1,19 +1,16 @@
-{stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost }:
+{ stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost }:
 
 stdenv.mkDerivation rec {
-  version = "202006";
   pname = "mcrl2";
+  version = "202006.0";
 
   src = fetchurl {
-    url = "https://www.mcrl2.org/download/release/mcrl2-${version}.0.tar.gz";
+    url = "https://www.mcrl2.org/download/release/mcrl2-${version}.tar.gz";
     sha256 = "167ryrzk1a2j53c2j198jlxa98amcaym070gkcj730619gymv5zl";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   buildInputs = [ cmake libGLU libGL qt5.qtbase boost ];
-
-  enableParallelBuilding = true;
-
 
   meta = with stdenv.lib; {
     description = "A toolset for model-checking concurrent systems and protocols";
