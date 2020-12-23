@@ -8531,6 +8531,12 @@
     githubId = 638763;
     name = "Stuart Moss";
   };
+  stunkymonkey = {
+    email = "account@buehler.rocks";
+    github = "Stunkymonkey";
+    githubId = 1315818;
+    name = "Felix Bühler";
+  };
   suhr = {
     email = "suhr@i2pmail.org";
     github = "suhr";
