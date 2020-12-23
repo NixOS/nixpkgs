@@ -1,36 +1,48 @@
-{ stdenv, fetchFromGitHub, makeWrapper, lrzsz, IOKit }:
-
-assert stdenv.isDarwin -> IOKit != null;
-
-with stdenv.lib;
+{ stdenv
+, fetchFromGitHub
+, installShellFiles
+, lrzsz
+, IOKit
+}:
 
 stdenv.mkDerivation rec {
   pname = "picocom";
-  version = "3.1";
+  # last tagged release is 3.1 but 3.2 is still considered a release
+  version = "3.2a";
 
+  # upstream is quiet as the original author is no longer active since March 2018
   src = fetchFromGitHub {
     owner = "npat-efault";
     repo = "picocom";
-    rev = version;
-    sha256 = "1vvjydqf0ax47nvdyyl67jafw5b3sfsav00xid6qpgia1gs2r72n";
+    rev = "1acf1ddabaf3576b4023c4f6f09c5a3e4b086fb8";
+    sha256 = "sha256-cs2bxqZfTbnY5d+VJ257C5hssaFvYup3tBKz68ROnAo=";
   };
 
-  buildInputs = [ makeWrapper ]
-    ++ optionals stdenv.isDarwin [ IOKit ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace '.picocom_history' '.cache/picocom_history'
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
-    cp picocom $out/bin
-    cp picocom.1 $out/share/man/man1
-
-    wrapProgram $out/bin/picocom \
-      --prefix PATH ":" "${lrzsz}/bin"
+    substituteInPlace picocom.c \
+      --replace '"rz -vv"' '"${lrzsz}/bin/rz -vv"' \
+      --replace '"sz -vv"' '"${lrzsz}/bin/sz -vv"'
   '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin IOKit;
+
+  installPhase = ''
+    install -Dm555 -t $out/bin picocom
+    installManPage picocom.1
+    installShellCompletion --bash bash_completion/picocom
+  '';
+
+  meta = with stdenv.lib; {
     description = "Minimal dumb-terminal emulation program";
     homepage = "https://github.com/npat-efault/picocom/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }
