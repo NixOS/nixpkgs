@@ -28,14 +28,6 @@
 mkDerivation {
   name = "kdeconnect-kde";
 
-  patches = [
-    # https://invent.kde.org/network/kdeconnect-kde/-/merge_requests/328
-    (fetchpatch {
-      url = "https://invent.kde.org/network/kdeconnect-kde/-/commit/6101ef3ad07d865958d58a3d2736f5536f1c5719.diff";
-      sha256 = "17mr7k13226vzcgxlmfs6q2mdc5j7vwp4iri9apmh6xlf6r591ac";
-    })
-  ];
-
   buildInputs = [
     kcmutils
     kconfigwidgets
