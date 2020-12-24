@@ -9,7 +9,7 @@
 }:
 
 mkDerivation {
-  name = "kdepim-runtime";
+  pname = "kdepim-runtime";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
