@@ -36,7 +36,7 @@ let
   mkUniqueOutPaths = pkgs: uniqueStrings
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
-in buildEnv {
+in (buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}";
 
   extraPrefix = "/share/texmf";
@@ -271,6 +271,6 @@ in buildEnv {
   ''
     + bin.cleanBrokenLinks
   ;
-}
+}).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
 #       similarly, deal with xe(la)tex font visibility?
