@@ -15349,6 +15349,8 @@ in
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
+  pe-parse = callPackage ../development/libraries/pe-parse { };
+
   inherit (callPackage ../development/libraries/physfs { })
     physfs_2
     physfs;
