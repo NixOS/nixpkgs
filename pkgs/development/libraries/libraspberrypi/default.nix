@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   cmakeFlags = [
-    (if (stdenv.targetPlatform.system == "aarch64-linux") then "-DARM64=ON" else "-DARM64=OFF")
+    (if (stdenv.hostPlatform.isAarch64) then "-DARM64=ON" else "-DARM64=OFF")
     "-DVMCS_INSTALL_PREFIX=$out"
   ];
 
