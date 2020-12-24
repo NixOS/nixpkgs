@@ -18,7 +18,7 @@ addEmacsVars () {
   addToEmacsLoadPath "$1/share/emacs/site-lisp"
 
   if [ -n "${addEmacsNativeLoadPath:-}" ]; then
-    addToEmacsNativeLoadPath "$1/share/emacs/native-lisp"
+    addToEmacsNativeLoadPath "$1/share/emacs/native-lisp/"
   fi
 
   # Add sub paths to the Emacs load path if it is a directory

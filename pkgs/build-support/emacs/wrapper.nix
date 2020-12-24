@@ -182,7 +182,7 @@ runCommand
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
-        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp/:" \
         --subst-var prog
       chmod +x $out/bin/$progname
     done
@@ -206,7 +206,7 @@ runCommand
 
       makeWrapper $emacs/Applications/Emacs.app/Contents/MacOS/Emacs $out/Applications/Emacs.app/Contents/MacOS/Emacs \
         --suffix EMACSLOADPATH ":" "$deps/share/emacs/site-lisp:" \
-        --suffix EMACSNATIVELOADPATH ":" "$deps/share/emacs/native-lisp:"
+        --suffix EMACSNATIVELOADPATH ":" "$deps/share/emacs/native-lisp/:"
     fi
 
     mkdir -p $out/share
