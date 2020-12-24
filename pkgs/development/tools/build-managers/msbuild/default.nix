@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
       --set MSBuildExtensionsPath $out/lib/mono/xbuild \
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
+
+    ln -s $(find ${dotnet-sdk} -name libhostfxr.so) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
   '';
 
   doInstallCheck = true;
@@ -130,4 +132,3 @@ EOF
     platforms = platforms.unix;
   };
 }
-
