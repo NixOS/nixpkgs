@@ -15653,6 +15653,8 @@ in
 
     kreport = callPackage ../development/libraries/kreport { };
 
+    KQuickImageEdit = callPackage ../development/libraries/KQuickImageEdit { };
+
     ldutils = callPackage ../development/libraries/ldutils { };
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
