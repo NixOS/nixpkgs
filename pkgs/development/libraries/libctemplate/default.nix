@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "ctemplate";
-
   version = "2.4";
 
   src = fetchFromGitHub {
