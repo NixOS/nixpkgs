@@ -78,14 +78,14 @@ let
              + stdenv.lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.12";
+  version = "1.8.13";
   name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = version;
-    sha256 = "0lxkyvsh55biz2q20ba4qabraind5cpxznl41zfq027vl22j6kd2";
+    sha256 = "0qg3qyj1b7wbaw2rsfly7nf3115h26nskl4ggrn6plhx272ni84p";
   };
 
   teensyduino_version = "151";
@@ -100,13 +100,13 @@ stdenv.mkDerivation rec {
   };
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
-    url = "http://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
+    url = "https://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
     sha256 =
       {
-        linux64 = "128f34kkxz7ab6ir5mqyr8d1mgxig8f9jygwxy44pdnq2rk6gmh9";
-        linux32 = "11n85lwsn1w4ysfacyw08v85s3f3zvl8j8ac7rld19yxgjslvisi";
-        linuxarm = "1k8yjivaydm6y16mplrjyblgx7l0wjzm3mjxh5saxrjq7drswmxx";
-        linuxaarch64 = "04v2nhyjhahml6nmz23bfb63c0an4a7zxgcgxqqq442i8vd304wa";
+        linux64 = "1bdlk51dqiyg5pw23hs8rfv8nrjqy0jqfl89h1466ahahpnd080v";
+        linux32 = "0mgsw9wpwv1pgs2jslzflh7zf4ggqjgcd55hmdzrj0dvgkyw4cr2";
+        linuxarm = "08n4lpak3i7yfyi0085j4nq14gb2n7zx85wl9drp8gaavxnfbp5f";
+        linuxaarch64 = "0m4nhykzknm2hdpz1fhr2hbpncry53kvzs9y5lgj7rx3sy6ygbh7";
       }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
 
