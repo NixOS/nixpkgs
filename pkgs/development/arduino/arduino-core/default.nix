@@ -11,7 +11,8 @@
 , ncurses
 , readline
 , withGui ? false
-, gtk2 ? null
+, gtk3 ? null
+, wrapGAppsHook
 , withTeensyduino ? false
   /* Packages needed for Teensyduino */
 , upx
@@ -29,7 +30,7 @@
 , udev
 }:
 
-assert withGui -> gtk2 != null;
+assert withGui -> gtk3 != null && wrapGAppsHook != null;
 assert withTeensyduino -> withGui;
 let
   externalDownloads = import ./downloads.nix {
@@ -55,7 +56,7 @@ let
     gcc.cc.lib
     gdk-pixbuf
     glib
-    gtk2
+    gtk3
     libpng12
     libusb-compat-0_1
     pango
@@ -111,6 +112,7 @@ stdenv.mkDerivation rec {
   };
 
 
+  nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = [
     jdk
     ant
@@ -149,7 +151,7 @@ stdenv.mkDerivation rec {
 
   # This will be patched into `arduino` wrapper script
   # Java loads gtk dynamically, so we need to provide it using LD_LIBRARY_PATH
-  dynamicLibraryPath = lib.makeLibraryPath [ gtk2 ];
+  dynamicLibraryPath = lib.makeLibraryPath [ gtk3 ];
   javaPath = lib.makeBinPath [ jdk ];
 
   # Everything else will be patched into rpath
