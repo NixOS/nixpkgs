@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
 
-  pname = "tree-sitter-${language}-library";
+  pname = "${language}-grammar";
   inherit version;
 
   src = source;

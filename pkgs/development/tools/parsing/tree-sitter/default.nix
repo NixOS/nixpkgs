@@ -43,7 +43,7 @@ let
 
   builtGrammars = let
     change = name: grammar:
-      callPackage ./library.nix {} {
+      callPackage ./grammar.nix {} {
         language = name;
         inherit version;
         source = fetchGrammar grammar;
