@@ -34,11 +34,11 @@ let
     , "tree-sitter-verilog"
     , "tree-sitter-jsdoc"
     , "tree-sitter-ql"
+    , "tree-sitter-embedded-template"
     ]'
     ignore='
     [ "tree-sitter"
     , "tree-sitter-cli"
-    , "tree-sitter-embedded-template"
     ${/*this is the haskell language bindings, tree-sitter-haskell is the grammar*/""}
     , "haskell-tree-sitter"
     ${/*this is the ruby language bindings, tree-sitter-ruby is the grammar*/""}

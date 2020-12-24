@@ -49,8 +49,16 @@ let
         source = fetchGrammar grammar;
       };
   in
-    # typescript doesn't have parser.c in the same place as others
-    lib.mapAttrs change (removeAttrs (import ./grammars) ["typescript"]);
+    lib.mapAttrs change (removeAttrs (import ./grammars) [
+      # TODO these don't have parser.c in the same place as others.
+      # They might require more elaborate builds?
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-typescript"
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-ocaml"
+      # /nix/…/src/parser.c:1:10: fatal error: tree_sitter/parser.h: No such file or directory
+      "tree-sitter-razor"
+    ]);
 
 in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
