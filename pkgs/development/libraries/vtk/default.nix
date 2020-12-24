@@ -22,6 +22,14 @@ stdenv.mkDerivation rec {
     sha256 = "1fspgp8k0myr6p2a6wkc21ldcswb4bvmb484m12mxgk1a9vxrhrl";
   };
 
+  patches = [
+    # Fix compilation with Qt 5.15
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/vtk/files/vtk-8.2.0-qt-5.15.patch?id=3ca9613d7ad604c93d714e29b116952561e4e41c";
+      sha256 = "sha256-BFjoKws1hVD3Ly9RS4lGN62J6RTyI1E8ATHrZdzg7ds=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libtiff ]
