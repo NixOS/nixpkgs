@@ -17,6 +17,8 @@ Page
     property var screenPrevious: []
     property var titles: {
         "welcome": null, /* titlebar disabled */
+        "install_target": "Installation target",
+        "install_target_confirm": "Warning",
         "default_pin": "Lockscreen PIN",
         "ssh_confirm": "SSH server",
         "ssh_credentials": "SSH credentials",
@@ -28,6 +30,8 @@ Page
     property var features: [
         {"name": "welcome",
          "screens": ["welcome"]},
+        {"name": "installTarget",
+         "screens": ["install_target", "install_target_confirm"]},
         {"name": "userPin",
          "screens": ["default_pin"]},
         {"name": "sshd",
@@ -143,6 +147,10 @@ Page
         id: timer
     }
 
+    function skipFeatureInstallTarget() {
+        return config.targetDeviceRootInternal == "";
+    }
+
     /* Navigation related */
     function navTo(name, historyPush=true) {
         console.log("Navigating to screen: " + name);
@@ -155,26 +163,44 @@ Page
         Qt.inputMethod.hide();
     }
     function navFinish() {
-        /* Show a waiting screen and wait a second (so it can render), then let
-         * MobileQmlViewStep.cpp::onLeave() create the (encrypted) partition
-         * and mount it. We can't have this as proper job due to ondev#18. */
+        /* Show a waiting screen and wait a second (so it can render). The big
+         * comment in Config.cpp::runPartitionJobThenLeave() explains why this
+         * is necessary. */
         navTo("wait");
         timer.interval = 1000;
         timer.repeat = false;
-        timer.triggered.connect(ViewManager.next);
+        timer.triggered.connect(function() {
+            /* Trigger Config.cpp::runPartitionJobThenLeave(). (We could expose
+             * the function directly with qmlRegisterSingletonType somehow, but
+             * I haven't seen existing Calamares code do that with the Config
+             * object, so just use the side effect of setting the variable, as
+             * done in existing code of Calamares modules.) */
+            config.runPartitionJobThenLeave = 1
+        });
         timer.start();
     }
     function navNextFeature() {
         var id = featureIdByScreen[screen] + 1;
 
-        /* Skip disabled features by checking "config.featureSshd" etc.*/
+        /* Skip disabled features */
         do {
+            /* First letter uppercase */
             var name = features[id]["name"];
-            var configOption = "feature";
-            configOption += name.charAt(0).toUpperCase();
-            configOption += name.slice(1);
+            var nameUp = name.charAt(0).toUpperCase() + name.slice(1);
+
+            /* Check config.Feature<Name> */
+            var configOption = "feature" + nameUp;
             if (config[configOption] === false) {
                 console.log("Skipping feature (disabled in config): " + name);
+                id += 1;
+                continue;
+            }
+
+            /* Check skipFeature<Name>() */
+            var funcName = "skipFeature" + nameUp;
+            if (eval("typeof " + funcName) === "function"
+                && eval(funcName + "()")) {
+                console.log("Skipping feature (skip function): " + name);
                 id += 1;
                 continue;
             }
@@ -245,7 +271,7 @@ Page
         if (repeat != pin)
             return validationFailure(errorText,
                                      "The PINs don't match.");
-                             
+
         return validationFailureClear(errorText);
     }
     function validateSshdUsername(username, errorText) {

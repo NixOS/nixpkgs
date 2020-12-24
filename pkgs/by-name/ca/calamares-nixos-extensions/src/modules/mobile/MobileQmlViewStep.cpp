@@ -1,11 +1,8 @@
 /* SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #include "MobileQmlViewStep.h"
-#include "PartitionJob.h"
-#include "UsersJob.h"
 
 #include "GlobalStorage.h"
-#include "JobQueue.h"
 
 #include "locale/LabelModel.h"
 #include "utils/Dirs.h"
@@ -35,35 +32,7 @@ MobileQmlViewStep::MobileQmlViewStep( QObject* parent )
 void
 MobileQmlViewStep::onLeave()
 {
-    Calamares::Job *partition, *users;
-
-    /* HACK: run partition job now */
-    partition = new PartitionJob( m_config->cmdLuksFormat(),
-                                  m_config->cmdLuksOpen(),
-                                  m_config->cmdMkfsRoot(),
-                                  m_config->cmdMount(),
-                                  m_config->targetDeviceRoot(),
-                                  m_config->isFdeEnabled(),
-                                  m_config->fdePassword() );
-    Calamares::JobResult res = partition->exec();
-    if ( !res )
-    {
-        cError() << "PARTITION JOB FAILED: " << res.message();
-    }
-
-    /* Put users job in queue (should run after unpackfs) */
-    m_jobs.clear();
-    QString cmdSshd = m_config->isSshEnabled() ? m_config->cmdSshdEnable() : m_config->cmdSshdDisable();
-    users = new UsersJob( m_config->featureSshd(),
-                          m_config->cmdPasswd(),
-                          cmdSshd,
-                          m_config->cmdSshdUseradd(),
-                          m_config->isSshEnabled(),
-                          m_config->username(),
-                          m_config->userPassword(),
-                          m_config->sshdUsername(),
-                          m_config->sshdPassword() );
-    m_jobs.append( Calamares::job_ptr( users ) );
+    return;
 }
 
 bool
@@ -96,7 +65,7 @@ MobileQmlViewStep::isAtEnd() const
 Calamares::JobList
 MobileQmlViewStep::jobs() const
 {
-    return m_jobs;
+    return m_config->createJobs();
 }
 
 QObject*

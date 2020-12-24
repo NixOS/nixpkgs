@@ -1,6 +1,9 @@
 /* SPDX-FileCopyrightText: 2020 Oliver Smith <ollieparanoid@postmarketos.org>
  * SPDX-License-Identifier: GPL-3.0-or-later */
 #pragma once
+
+#include "Job.h"
+
 #include <QObject>
 #include <memory>
 
@@ -29,11 +32,16 @@ class Config : public QObject
     Q_PROPERTY( bool isFdeEnabled READ isFdeEnabled WRITE setIsFdeEnabled )
 
     /* partition job */
+    Q_PROPERTY( bool runPartitionJobThenLeave READ runPartitionJobThenLeaveDummy WRITE runPartitionJobThenLeave )
+    Q_PROPERTY( QString cmdInternalStoragePrepare READ cmdInternalStoragePrepare CONSTANT FINAL )
     Q_PROPERTY( QString cmdLuksFormat READ cmdLuksFormat CONSTANT FINAL )
     Q_PROPERTY( QString cmdLuksOpen READ cmdLuksOpen CONSTANT FINAL )
     Q_PROPERTY( QString cmdMkfsRoot READ cmdMkfsRoot CONSTANT FINAL )
     Q_PROPERTY( QString cmdMount READ cmdMount CONSTANT FINAL )
     Q_PROPERTY( QString targetDeviceRoot READ targetDeviceRoot CONSTANT FINAL )
+    Q_PROPERTY( QString targetDeviceRootInternal READ targetDeviceRootInternal CONSTANT FINAL )
+    Q_PROPERTY(
+        bool installFromExternalToInternal READ installFromExternalToInternal WRITE setInstallFromExternalToInternal )
 
     /* users job */
     Q_PROPERTY( QString cmdSshdEnable READ cmdSshdEnable CONSTANT FINAL )
@@ -42,6 +50,7 @@ class Config : public QObject
 public:
     Config( QObject* parent = nullptr );
     void setConfigurationMap( const QVariantMap& );
+    Calamares::JobList createJobs();
 
     /* welcome */
     QString osName() const { return m_osName; }
@@ -71,11 +80,17 @@ public:
     void setIsFdeEnabled( bool isFdeEnabled );
 
     /* partition job */
+    bool runPartitionJobThenLeaveDummy() { return 0; }
+    void runPartitionJobThenLeave( bool b );
+    QString cmdInternalStoragePrepare() const { return m_cmdInternalStoragePrepare; }
     QString cmdLuksFormat() const { return m_cmdLuksFormat; }
     QString cmdLuksOpen() const { return m_cmdLuksOpen; }
     QString cmdMkfsRoot() const { return m_cmdMkfsRoot; }
     QString cmdMount() const { return m_cmdMount; }
     QString targetDeviceRoot() const { return m_targetDeviceRoot; }
+    QString targetDeviceRootInternal() const { return m_targetDeviceRootInternal; }
+    bool installFromExternalToInternal() { return m_installFromExternalToInternal; }
+    void setInstallFromExternalToInternal( const bool val );
 
     /* users job */
     QString cmdPasswd() const { return m_cmdPasswd; }
@@ -106,11 +121,14 @@ private:
     bool m_isFdeEnabled = false;
 
     /* partition job */
+    QString m_cmdInternalStoragePrepare;
     QString m_cmdLuksFormat;
     QString m_cmdLuksOpen;
     QString m_cmdMkfsRoot;
     QString m_cmdMount;
     QString m_targetDeviceRoot;
+    QString m_targetDeviceRootInternal;
+    bool m_installFromExternalToInternal;
 
     /* users job */
     QString m_cmdPasswd;
@@ -119,13 +137,14 @@ private:
     QString m_cmdSshdUseradd;
 
 signals:
+    /* booleans we don't read from QML (like isSshEnabled) don't need a signal */
+
     /* default user */
     void userPasswordChanged( QString userPassword );
 
-    /* ssh server + credetials */
+    /* ssh server + credentials */
     void sshdUsernameChanged( QString sshdUsername );
     void sshdPasswordChanged( QString sshdPassword );
-    /* isSshEnabled doesn't need a signal, we don't read it from QML */
 
     /* full disk encryption */
     void fdePasswordChanged( QString fdePassword );

@@ -19,24 +19,38 @@ Item {
     height: parent.height
 
     Text {
-        id: welcomeText
+        id: mainText
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 30
         wrapMode: Text.WordWrap
 
-        text: "Once you hit 'install', the installation will begin. It will" +
-              " typically take a few minutes. Do not power off the device" +
-              " until it is done. Afterwards, it will reboot into the" +
-              " installed system."
+        text: (function() {
+            var ret = "Once you hit 'install', the installation will begin." +
+                " It will typically take a few minutes. Do not power off the" +
+                " device until it is done.<br><br>";
+
+            if (config.installFromExternalToInternal) {
+                ret += "<b>After the installation, your device will shutdown" +
+                       " automatically. You must remove the external storage" +
+                       " (SD card) before booting again.</b>" +
+                       "<br><br>" +
+                       "Otherwise, your device will boot into the installer" +
+                       " again, and not into the installed system."
+            } else {
+                ret += "Afterwards, it will reboot into the installed system.";
+            }
+
+            return ret;
+        }())
 
         width: 500
     }
 
     Button {
-        id: enableButton
+        id: firstButton
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: welcomeText.bottom
+        anchors.top: mainText.bottom
         anchors.topMargin: 40
         width: 500
 

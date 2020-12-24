@@ -8,11 +8,14 @@ class PartitionJob : public Calamares::Job
 {
     Q_OBJECT
 public:
-    PartitionJob( QString cmdLuksFormat,
-                  QString cmdLuksOpen,
-                  QString cmdMkfsRoot,
-                  QString cmdMount,
-                  QString targetDeviceRoot,
+    PartitionJob( const QString& cmdInternalStoragePrepare,
+                  const QString& cmdLuksFormat,
+                  const QString& cmdLuksOpen,
+                  const QString& cmdMkfsRoot,
+                  const QString& cmdMount,
+                  const QString& targetDeviceRoot,
+                  const QString& targetDeviceRootInternal,
+                  bool installFromExternalToInternal,
                   bool isFdeEnabled,
                   const QString& password );
 
@@ -22,11 +25,14 @@ public:
     Calamares::JobList createJobs();
 
 private:
+    QString m_cmdInternalStoragePrepare;
     QString m_cmdLuksFormat;
     QString m_cmdLuksOpen;
     QString m_cmdMkfsRoot;
     QString m_cmdMount;
     QString m_targetDeviceRoot;
+    QString m_targetDeviceRootInternal;
+    bool m_installFromExternalToInternal;
     bool m_isFdeEnabled;
     QString m_password;
 };

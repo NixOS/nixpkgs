@@ -25,16 +25,12 @@ Item {
         anchors.topMargin: 30
         wrapMode: Text.WordWrap
 
-        text: "If you don't know what SSH is, choose 'disable'.<br>" +
+        text: "The installation was started from an external storage medium." +
               "<br>" +
-              "With 'enable', you will be asked for a second username and" +
-              " password. You will be able to login to the SSH server with" +
-              " these credentials via USB (172.16.42.1), Wi-Fi and possibly" +
-              " cellular network. It is recommended to replace the password" +
-              " with an SSH key after the installation.<br>" +
+              "You can either install to the same medium and overwrite the" +
+              " installer, or install to the internal storage.<br>" +
               "<br>" +
-              "More information:<br>" +
-              "https://postmarketos.org/ssh"
+              "Where would you like to install " + config.osName + "?"
 
         width: 500
     }
@@ -46,9 +42,9 @@ Item {
         anchors.topMargin: 40
         width: 500
 
-        text: qsTr("Enable")
+        text: qsTr("Internal (eMMC)")
         onClicked: {
-            config.isSshEnabled = true;
+            config.installFromExternalToInternal = true;
             navNext();
         }
     }
@@ -59,9 +55,9 @@ Item {
         anchors.topMargin: 40
         width: 500
 
-        text: qsTr("Disable")
+        text: qsTr("External (SD card)")
         onClicked: {
-            config.isSshEnabled = false;
+            config.installFromExternalToInternal = false;
             navNextFeature();
         }
     }
