@@ -35,15 +35,13 @@ let
 
   mkDerivation = args:
     let
-      inherit (args) name;
-      sname = args.sname or name;
-      inherit (srcs.${sname}) src version;
+      inherit (args) pname;
+      inherit (srcs.${pname}) src version;
       mkDerivation =
         libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
     in
       mkDerivation (args // {
-        pname = name;
-        inherit src version;
+        inherit pname version src;
 
         outputs = args.outputs or [ "out" ];
 

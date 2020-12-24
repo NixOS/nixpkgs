@@ -26,7 +26,7 @@
 }:
 
 mkDerivation {
-  name = "kdeconnect-kde";
+  pname = "kdeconnect-kde";
 
   buildInputs = [
     kcmutils

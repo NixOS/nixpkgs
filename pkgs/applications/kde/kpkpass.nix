@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "kpkpass";
+  pname = "kpkpass";
   meta = {
     license = with lib.licenses; [ lgpl21 ];
     maintainers = [ lib.maintainers.bkchr ];
