@@ -18041,7 +18041,9 @@ in
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
-  cpuset = callPackage ../os-specific/linux/cpuset { };
+  cpuset = callPackage ../os-specific/linux/cpuset {
+    pythonPackages = python3Packages;
+  };
 
   criu = callPackage ../os-specific/linux/criu { };
 
