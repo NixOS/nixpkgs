@@ -20,21 +20,19 @@
 }:
 
 let
-  apparmor-series = "3.0";
-  apparmor-patchver = "0";
-  apparmor-version = apparmor-series + "." + apparmor-patchver;
+  apparmor-version = "3.0.1";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom thoughtpolice joachifm ];
+    maintainers = with maintainers; [ joachifm julm phreedom thoughtpolice ];
     platforms = platforms.linux;
   };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-series}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "0pkm8f619c0ra8kpjmarzl9d409dn4sy0kl6mb92gd0ywlgpbzb6";
+    url = "https://launchpad.net/apparmor/${lib.versions.majorMinor apparmor-version}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
+    sha256 = "096zbg3v7b51x7f1ly61mzd3iy9alad6sd4lam98j2d6v5ragbcg";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
