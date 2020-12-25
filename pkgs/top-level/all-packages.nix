@@ -5939,6 +5939,8 @@ in
 
   neo-cowsay = callPackage ../tools/misc/neo-cowsay { };
 
+  neochat = libsForQt5.callPackage ../applications/networking/instant-messengers/neochat { };
+
   neofetch = callPackage ../tools/misc/neofetch { };
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
@@ -15658,6 +15660,8 @@ in
     kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
 
     kreport = callPackage ../development/libraries/kreport { };
+
+    KQuickImageEdit = callPackage ../development/libraries/KQuickImageEdit { };
 
     ldutils = callPackage ../development/libraries/ldutils { };
 
