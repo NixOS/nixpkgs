@@ -33,14 +33,14 @@ running the Eclipse. For example, say you wish to install the latest
 Eclipse Platform with the popular Eclipse Color Theme plugin and also
 allow Eclipse to use more RAM. You could then add
 
-```ShellSession
-  packageOverrides = pkgs: {
-    myEclipse = with pkgs.eclipses; eclipseWithPlugins {
-      eclipse = eclipse-platform;
-      jvmArgs = [ "-Xmx2048m" ];
-      plugins = [ plugins.color-theme ];
-    };
-  }
+```nix
+packageOverrides = pkgs: {
+  myEclipse = with pkgs.eclipses; eclipseWithPlugins {
+    eclipse = eclipse-platform;
+    jvmArgs = [ "-Xmx2048m" ];
+    plugins = [ plugins.color-theme ];
+  };
+}
 ```
 
 to your Nixpkgs configuration (`~/.config/nixpkgs/config.nix`) and
@@ -49,7 +49,7 @@ afterward run Eclipse as usual. It is possible to find out which plugins
 are available for installation using `eclipseWithPlugins` by running
 
 ```ShellSession
-    $ nix-env -f '<nixpkgs>' -qaP -A eclipses.plugins --description
+$ nix-env -f '<nixpkgs>' -qaP -A eclipses.plugins --description
 ```
 
 If there is a need to install plugins that are not available in Nixpkgs
@@ -69,33 +69,33 @@ argument `{ name, srcFeature, srcPlugin }` where `srcFeature` and
 Expanding the previous example with two plugins using the above
 functions we have
 
-```ShellSession
-    packageOverrides = pkgs: {
-      myEclipse = with pkgs.eclipses; eclipseWithPlugins {
-        eclipse = eclipse-platform;
-        jvmArgs = [ "-Xmx2048m" ];
-        plugins = [
-          plugins.color-theme
-          (plugins.buildEclipsePlugin {
-            name = "myplugin1-1.0";
-            srcFeature = fetchurl {
-              url = "http://…/features/myplugin1.jar";
-              sha256 = "123…";
-            };
-            srcPlugin = fetchurl {
-              url = "http://…/plugins/myplugin1.jar";
-              sha256 = "123…";
-            };
-          });
-          (plugins.buildEclipseUpdateSite {
-            name = "myplugin2-1.0";
-            src = fetchurl {
-              stripRoot = false;
-              url = "http://…/myplugin2.zip";
-              sha256 = "123…";
-            };
-          });
-        ];
-      };
-    }
+```nix
+packageOverrides = pkgs: {
+  myEclipse = with pkgs.eclipses; eclipseWithPlugins {
+    eclipse = eclipse-platform;
+    jvmArgs = [ "-Xmx2048m" ];
+    plugins = [
+      plugins.color-theme
+      (plugins.buildEclipsePlugin {
+        name = "myplugin1-1.0";
+        srcFeature = fetchurl {
+          url = "http://…/features/myplugin1.jar";
+          sha256 = "123…";
+        };
+        srcPlugin = fetchurl {
+          url = "http://…/plugins/myplugin1.jar";
+          sha256 = "123…";
+        };
+      });
+      (plugins.buildEclipseUpdateSite {
+        name = "myplugin2-1.0";
+        src = fetchurl {
+          stripRoot = false;
+          url = "http://…/myplugin2.zip";
+          sha256 = "123…";
+        };
+      });
+    ];
+  };
+}
 ```
