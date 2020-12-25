@@ -5091,7 +5091,9 @@ broken-packages:
   - fei-base
   - fei-cocoapi
   - fei-dataiter
+  - fei-datasets
   - fei-examples
+  - fei-modelzoo
   - fei-nn
   - feldspar-compiler
   - feldspar-language
@@ -7709,6 +7711,7 @@ broken-packages:
   - mahoro
   - maid
   - mail-pool
+  - mail-reports
   - mailchimp
   - mailchimp-subscribe
   - MailchimpSimple
@@ -11512,6 +11515,7 @@ broken-packages:
   - yxdb-utils
   - Z-Data
   - Z-IO
+  - Z-YAML
   - z3-encoding
   - z85
   - zabt
