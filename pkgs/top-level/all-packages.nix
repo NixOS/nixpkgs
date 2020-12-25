@@ -3987,6 +3987,8 @@ in
 
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
+  fbcat = callPackage ../tools/misc/fbcat { };
+
   fbv = callPackage ../tools/graphics/fbv { };
 
   fbvnc = callPackage ../tools/admin/fbvnc {};
