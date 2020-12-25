@@ -39,8 +39,14 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = {
-    description = "A simple, correct PEP517 package builder";
-    license = lib.licenses.mit;
+  meta = with lib; {
+    description = "Simple, correct PEP517 package builder";
+    longDescription = ''
+      build will invoke the PEP 517 hooks to build a distribution package. It
+      is a simple build tool and does not perform any dependency management.
+    '';
+    homepage = "https://github.com/pypa/build";
+    maintainers = with maintainers; [ fab ];
+    license = licenses.mit;
   };
 }
