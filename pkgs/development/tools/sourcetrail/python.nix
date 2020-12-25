@@ -64,5 +64,7 @@ stdenv.mkDerivation rec {
     description = "Python indexer for Sourcetrail";
     homepage = "https://github.com/CoatiSoftware/SourcetrailPythonIndexer";
     license = licenses.gpl3;
+    broken = stdenv.isDarwin;
+    # https://github.com/NixOS/nixpkgs/pull/107533#issuecomment-751063675
   };
 }
