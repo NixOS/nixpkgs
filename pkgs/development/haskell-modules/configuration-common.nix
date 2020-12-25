@@ -1543,4 +1543,8 @@ self: super: {
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
 
+  # Add ApplicationServices on darwin
+  apecs-physics = addPkgconfigDepends super.apecs-physics
+    (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
