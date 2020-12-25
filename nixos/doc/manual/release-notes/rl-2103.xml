@@ -3,7 +3,7 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-21.03">
- <title>Release 21.03 (“Okapi”, 2021.03/??)</title>
+ <title>Release 21.05 (“Okapi”, 2021.05/??)</title>
 
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -20,7 +20,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     Support is planned until the end of October 2021, handing over to 21.09.
+     Support is planned until the end of December 2021, handing over to 21.11.
     </para>
    </listitem>
    <listitem>

@@ -6,7 +6,9 @@
  <title>Release 20.09 (“Nightingale”, 2020.10/27)</title>
 
   <para>
-   Support is planned until the end of April 2021, handing over to 21.03.
+   Support is planned until the end of June 2021, handing over to 21.05.
+   (Plans <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md#core-changes">
+   have shifted</link> by two months since release of 20.09.)
   </para>
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
