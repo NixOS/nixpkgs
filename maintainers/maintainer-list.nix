@@ -5231,16 +5231,10 @@
     github = "lovesegfault";
     githubId = 7243783;
     name = "Bernardo Meurer";
-    keys = [
-      {
-        longkeyid = "rsa2048/0xE421C74191EA186C";
-        fingerprint = "5894 12CE 19DF 582A E10A  3320 E421 C741 91EA 186C";
-      }
-      {
-        longkeyid = "rsa2048/0x4A6D87A0E7475769";
-        fingerprint = "56A8 E164 E834 290C 4AC0  EE3E 4A6D 87A0 E747 5769";
-      }
-    ];
+    keys = [{
+        longkeyid = "rsa4096/0xF4C0D53B8D14C246";
+        fingerprint = "F193 7596 57D5 6DA4 CCD4  786B F4C0 D53B 8D14 C246";
+    }];
   };
   lowfatcomputing = {
     email = "andreas.wagner@lowfatcomputing.org";
