@@ -20,6 +20,7 @@ with frameworks; with libs; {
   Automator               = {};
   CFNetwork               = {};
   CalendarStore           = {};
+  CloudKit                = {};
   Cocoa                   = { inherit AppKit CoreData; };
   Collaboration           = {};
   Contacts                = {};
