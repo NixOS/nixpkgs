@@ -817,6 +817,10 @@
     github = "aszlig";
     githubId = 192147;
     name = "aszlig";
+    keys = [{
+      longkeyid = "ed25519/0x684089CE67EBB691";
+      fingerprint = "DD52 6BC7 767D BA28 16C0 95E5 6840 89CE 67EB B691";
+    }];
   };
   atemu = {
     name = "Atemu";
