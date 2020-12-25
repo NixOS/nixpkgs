@@ -11,7 +11,8 @@
 , ncurses
 , readline
 , withGui ? false
-, gtk2 ? null
+, gtk3 ? null
+, wrapGAppsHook
 , withTeensyduino ? false
   /* Packages needed for Teensyduino */
 , upx
@@ -29,7 +30,7 @@
 , udev
 }:
 
-assert withGui -> gtk2 != null;
+assert withGui -> gtk3 != null && wrapGAppsHook != null;
 assert withTeensyduino -> withGui;
 let
   externalDownloads = import ./downloads.nix {
@@ -55,7 +56,7 @@ let
     gcc.cc.lib
     gdk-pixbuf
     glib
-    gtk2
+    gtk3
     libpng12
     libusb-compat-0_1
     pango
@@ -78,39 +79,40 @@ let
              + stdenv.lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.12";
+  version = "1.8.13";
   name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = version;
-    sha256 = "0lxkyvsh55biz2q20ba4qabraind5cpxznl41zfq027vl22j6kd2";
+    sha256 = "0qg3qyj1b7wbaw2rsfly7nf3115h26nskl4ggrn6plhx272ni84p";
   };
 
-  teensyduino_version = "151";
+  teensyduino_version = "153";
   teensyduino_src = fetchurl {
     url = "https://www.pjrc.com/teensy/td_${teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
     sha256 = {
-      linux64 = "0q8mw9bm2vb5vwa98gwcs6ad164i98hc1qqh2qw029yhwm599pn0";
-      linux32 = "1rq6sx0048ab200jy0cz5vznwxi99avidngj42rjnh7kcfas5c4m";
-      linuxarm = "19j55bq36040rpdpfxcqimda76rkbx137q15bs8nvxj13wrbl4ip";
-      linuxaarch64 = "09k78dycn1vcpcx37c1dak8bgjv8gs34l89n9r9s0c3rqmv3pg4x";
+      linux64 = "02qgsj4h4zrjxkcclx7clsqbqd699kg0dq1xxa9hbj3vfnddjv1f";
+      linux32 = "14xaff8xj176ih8ifdvxsly5xgjjm82dqbn7lqq81a43i0svjjyn";
+      linuxarm = "0xpg9axa6dqyhccm9cpvsv2al7rgwy4gv2l8b2kffvn974dl5759";
+      linuxaarch64 = "1lyn4zy4l5mml3c19fw6i2pk1ypnq6mgjmxmzk9d54wpf6n3j5dk";
     }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
-    url = "http://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
+    url = "https://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
     sha256 =
       {
-        linux64 = "128f34kkxz7ab6ir5mqyr8d1mgxig8f9jygwxy44pdnq2rk6gmh9";
-        linux32 = "11n85lwsn1w4ysfacyw08v85s3f3zvl8j8ac7rld19yxgjslvisi";
-        linuxarm = "1k8yjivaydm6y16mplrjyblgx7l0wjzm3mjxh5saxrjq7drswmxx";
-        linuxaarch64 = "04v2nhyjhahml6nmz23bfb63c0an4a7zxgcgxqqq442i8vd304wa";
+        linux64 = "1bdlk51dqiyg5pw23hs8rfv8nrjqy0jqfl89h1466ahahpnd080v";
+        linux32 = "0mgsw9wpwv1pgs2jslzflh7zf4ggqjgcd55hmdzrj0dvgkyw4cr2";
+        linuxarm = "08n4lpak3i7yfyi0085j4nq14gb2n7zx85wl9drp8gaavxnfbp5f";
+        linuxaarch64 = "0m4nhykzknm2hdpz1fhr2hbpncry53kvzs9y5lgj7rx3sy6ygbh7";
       }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
 
 
+  nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = [
     jdk
     ant
@@ -149,7 +151,7 @@ stdenv.mkDerivation rec {
 
   # This will be patched into `arduino` wrapper script
   # Java loads gtk dynamically, so we need to provide it using LD_LIBRARY_PATH
-  dynamicLibraryPath = lib.makeLibraryPath [ gtk2 ];
+  dynamicLibraryPath = lib.makeLibraryPath [ gtk3 ];
   javaPath = lib.makeBinPath [ jdk ];
 
   # Everything else will be patched into rpath
