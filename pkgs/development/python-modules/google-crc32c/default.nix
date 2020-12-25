@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "google-crc32c";
-  version = "1.0.0";
+  version = "1.1.0";
 
   disabled = !isPy3k;
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "python-crc32c";
     rev = "v${version}";
-    sha256 = "0n3ggsxmk1fhq0kz6p5rcj4gypfb05i26fcn7lsawakgl7fzxqyl";
+    sha256 = "0vbidg9yrv9k8xvk8rl43lsf4cg3dci4a9k4srwwrchbxivz1gr6";
   };
 
   buildInputs = [ crc32c  ];
