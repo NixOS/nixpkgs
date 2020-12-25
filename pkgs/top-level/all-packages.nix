@@ -1859,6 +1859,8 @@ in
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
+  code-minimap = callPackage ../tools/misc/code-minimap { };
+
   codesearch = callPackage ../tools/text/codesearch { };
 
   codec2 = callPackage ../development/libraries/codec2 { };
