@@ -9095,6 +9095,12 @@
     githubId = 10110;
     name = "Travis B. Hartwell";
   };
+  TredwellGit = {
+    email = "tredwell@tutanota.com";
+    github = "TredwellGit";
+    githubId = 61860346;
+    name = "Tredwell";
+  };
   treemo = {
     email = "matthieu.chevrier@treemo.fr";
     github = "treemo";
