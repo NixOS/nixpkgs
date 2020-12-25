@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1fpdj73cgp96xwasdcifxl7q2pr1my2f4vfdjpv771llri3hgfvx";
+    sha256 = "1g62sdzcw3zx4ccky125ciwnzx6z9kwyvskvp7ijmqxqk3nrxjs9";
   };
 
   nativeBuildInputs = with python3.pkgs; [
