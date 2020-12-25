@@ -7,10 +7,11 @@ let
   buildPythonPackage = pythonPackages.buildPythonPackage;
 
   xe = buildPythonPackage rec {
-    url = "http://www.blarg.net/%7Esteveha/xe-0.7.4.tar.gz";
-    name = stdenv.lib.nameFromURL url ".tar";
+    pname = "xe";
+    version = "0.7.4";
+
     src = fetchurl {
-      inherit url;
+      url = "http://www.blarg.net/%7Esteveha/${pname}-${version}.tar.gz";
       sha256 = "0v9878cl0y9cczdsr6xjy8v9l139lc23h4m5f86p4kpf2wlnpi42";
     };
 
@@ -26,12 +27,11 @@ let
 in {
 
   pyfeed = (buildPythonPackage rec {
-    url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
-
-    name = stdenv.lib.nameFromURL url ".tar";
+    pname = "pyfeed";
+    version = "0.7.4";
 
     src = fetchurl {
-      inherit url;
+      url = "http://www.blarg.net/%7Esteveha/${pname}-${version}.tar.gz";
       sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
     };
 
@@ -48,10 +48,11 @@ in {
   });
 
   wokkel = buildPythonPackage (rec {
-    url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
-    name = stdenv.lib.nameFromURL url ".tar";
+    pname = "wokkel";
+    version = "0.7.0";
+
     src = fetchurl {
-      inherit url;
+      url = "http://wokkel.ik.nu/releases/${version}/${pname}-${version}.tar.gz";
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
     };
 
