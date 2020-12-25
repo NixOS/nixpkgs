@@ -1,18 +1,11 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform, openssl, pkg-config, protobuf
 , Security, libiconv, rdkafka, tzdata
 
-, features ? ((if stdenv.isAarch64 then [
-  "jemallocator"
-  "rdkafka"
-  "rdkafka/dynamic_linking"
-] else [
-  "leveldb"
-  "leveldb/leveldb-sys-2"
-  "jemallocator"
-  "rdkafka"
-  "rdkafka/dynamic_linking"
-]) ++ (lib.optional stdenv.targetPlatform.isUnix "unix")
-  ++ [ "sinks" "sources" "transforms" ]), coreutils, CoreServices }:
+, features ?
+  ((lib.optional (!stdenv.isAarch64) [ "leveldb" "leveldb/leveldb-sys-2" ]
+    ++ [ "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ])
+    ++ (lib.optional stdenv.targetPlatform.isUnix "unix")
+    ++ [ "sinks" "sources" "transforms" ]), coreutils, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vector";
