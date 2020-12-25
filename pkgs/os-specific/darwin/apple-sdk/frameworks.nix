@@ -49,6 +49,7 @@ with frameworks; with libs; {
   DiskArbitration         = { inherit IOKit; };
   EventKit                = {};
   ExceptionHandling       = {};
+  FinderSync              = {};
   FWAUserLib              = {};
   ForceFeedback           = { inherit IOKit; };
   Foundation              = { inherit libobjc CoreFoundation Security ApplicationServices SystemConfiguration; };
