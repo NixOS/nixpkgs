@@ -12,7 +12,13 @@ get_package_vars() {
   local package_json version url
 
   package_json=$(curl -s https://pypi.org/pypi/"$package"/json)
-  version=$(echo "$package_json" | jq --raw-output '.info.version')
+
+  if [[ -z ${version_overwrite:-} ]]; then
+    version=$(echo "$package_json" | jq --raw-output '.info.version')
+  else
+    version="$version_overwrite"
+  fi
+
   url=$(echo "$package_json" | jq --raw-output ".releases.\"${version}\"[] | select(.packagetype == \"sdist\") | .url")
 
   echo "$version" "$url"
@@ -114,7 +120,7 @@ generate_framework_nix() {
       ;;
     ColorSync)
       python_frameworks="Cocoa"
-      test=true
+      tests=true
       ;;
     Contacts)
       build_frameworks="Contacts Foundation"
@@ -148,17 +154,17 @@ generate_framework_nix() {
       ;;
     CoreHaptics)
       python_frameworks="Cocoa"
-      test=true
+      tests=true
       ;;
     CoreLocation)
       build_frameworks="CoreLocation Foundation"
       python_frameworks="Cocoa"
-      test=false
+      tests=false
       ;;
     CoreMedia)
       build_frameworks="CoreMedia Foundation"
       python_frameworks="Cocoa"
-      tests=true
+      tests=false
       ;;
     CoreMediaIO)
       build_frameworks="CoreMediaIO Foundation"
@@ -228,15 +234,15 @@ generate_framework_nix() {
       ;;
     ExceptionHandling)
       python_frameworks="Cocoa"
-      test=false
+      tests=false
       ;;
     ExecutionPolicy)
       python_frameworks="Cocoa"
-      test=true
+      tests=true
       ;;
     ExternalAccessory)
       build_frameworks="ExternalAccessory Foundation"
-      test=true
+      tests=true
       ;;
     FileProvider)
       python_frameworks="Cocoa"
@@ -248,7 +254,7 @@ generate_framework_nix() {
       ;;
     FinderSync)
       python_frameworks="Cocoa"
-      test=false
+      tests=false
       ;;
     FSEvents)
       build_frameworks="Foundation"
@@ -295,7 +301,7 @@ generate_framework_nix() {
       ;;
     InstantMessage)
       python_frameworks="Cocoa Quartz"
-      tests=true
+      tests=false
       ;;
     Intents)
       build_frameworks="Foundation Intents"
@@ -539,7 +545,7 @@ generate_framework_nix() {
       ;;
   esac
 
-  mkdir -p $(dirname "$path")
+  mkdir -p "$(dirname "$path")"
   echo esh -o "$path" default.nix.esh framework="$framework" version="$version" hash="$hash" build_frameworks="$build_frameworks" python_frameworks="$python_frameworks" patch=$patch tests=$tests
   IFS=' ' esh -o "$path" default.nix.esh framework="$framework" version="$version" hash="$hash" build_frameworks="$build_frameworks" python_frameworks="$python_frameworks" patch=$patch tests=$tests
 }
@@ -568,7 +574,7 @@ update_commit_package() {
   update_package $package $new_version
   cd $root
   git add pkgs/development/python-modules/$package/default.nix
-  if [[ $old_version != $new_version ]]; then
+  if [[ $old_version != "$new_version" ]]; then
     git commit -m "$package: $old_version -> $new_version"
   else
     git commit -m "$package: $commit_message"
@@ -589,52 +595,63 @@ declare -a frameworks=(Accounts AdSupport AddressBook AppleScriptObjC AppleScrip
   SecurityFoundation SecurityInterface ServiceManagement Social SoundAnalysis Speech SpriteKit StoreKit SyncServices SystemConfiguration
   SystemExtensions UserNotifications VideoSubscriberAccount VideoToolbox Vision WebKit)
 
-case $1 in
-  "-h" | "--help")
-    echo "Usage:"
-    echo "$0 [-h|--help] [generate|update [NAME]]"
-    echo "--help    Show this help."
-    echo "auto      Automatically updating, regenrating and commiting all pyobjc* modules."
-    echo "generate  Re-generate all pyobjc-framework-* Python packages. Accepts an optional NAME to only update this package."
-    echo "update    Update all pyobjc-framework-* Python packages using update-source-version. Accepts an optional NAME to only generate this package."
-    ;;
-  "auto")
-    commit_message="$2"
+while [[ $# -gt 0 ]]; do
+  case ${1:-h} in
+    "-h" | "--help")
+      echo "Usage:"
+      echo "$0 [-h|--help] [--version X.X.X] [auto|generate [NAME]|update [NAME]]"
+      echo "--help    Show this help."
+      echo "auto      Automatically updating, regenrating and commiting all pyobjc* modules."
+      echo "generate  Re-generate all pyobjc-framework-* Python packages. Accepts an optional NAME to only update this package."
+      echo "update    Update all pyobjc-framework-* Python packages using update-source-version. Accepts an optional NAME to only generate this package."
+      exit 0
+      ;;
+    "--version")
+      version_overwrite="$2"
+      shift 2
+      ;;
+    "auto")
+      commit_message="$2"
+      shift 2
 
-    update_commit_package pyobjc "$commit_message"
-    update_commit_package pyobjc-core "$commit_message"
+      update_commit_package pyobjc "$commit_message"
+      update_commit_package pyobjc-core "$commit_message"
 
-    for framework in ${frameworks[@]}; do
-      update_commit_package pyobjc-framework-$framework "$commit_message"
-    done
-    ;;
-  "generate" | "")
-    framework="${2:-}"
+      for framework in "${frameworks[@]}"; do
+        update_commit_package pyobjc-framework-$framework "$commit_message"
+      done
+      ;;
+    "generate" | "")
+      framework="${2:-}"
+      shift
 
-    if [[ -n $framework ]]; then
-      generate_framework_nix $framework
-    else
-      for framework in ${frameworks[@]}; do
+      if [[ -n $framework ]]; then
+        shift
         generate_framework_nix $framework
-      done
-    fi
-    ;;
-  "update")
-    framework="$2"
+      else
+        for framework in "${frameworks[@]}"; do
+          generate_framework_nix $framework
+        done
+      fi
+      ;;
+    "update")
+      framework="$2"
+      shift 2
 
-    if [[ -n $framework ]]; then
-      update_package pyobjc-framework-$framework
-    else
-      update_package pyobjc
-      update_package pyobjc-core
-
-      for framework in ${frameworks[@]}; do
+      if [[ -n $framework ]]; then
         update_package pyobjc-framework-$framework
-      done
-    fi
-    ;;
-  *)
-    echo "Unknown argument $1"
-    exit
-    ;;
-esac
+      else
+        update_package pyobjc
+        update_package pyobjc-core
+
+        for framework in ${frameworks[@]}; do
+          update_package pyobjc-framework-$framework
+        done
+      fi
+      ;;
+    *)
+      echo "Unknown argument $1"
+      exit
+      ;;
+  esac
+done
