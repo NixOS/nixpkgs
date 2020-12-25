@@ -18,6 +18,13 @@ in mkDerivation rec {
     sha256 = "1vffvzv3gkndfj2k8ik0afyk9rgngnr4aai5py66qd63qd7kmxch";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/FreeCAD/FreeCAD/commit/b2882c699b1444efadd9faee36855a965ac6a215.patch";
+      sha256 = "sha256:1fs43a5aaqziaa1iicppfjd68kklmk9qrcncxs8hx2dl429z2lzv";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
