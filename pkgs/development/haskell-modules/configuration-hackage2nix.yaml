@@ -5443,7 +5443,6 @@ broken-packages:
   - geolite-csv
   - geom2d
   - GeomPredicates-SSE
-  - geos
   - Get
   - getemx
   - getflag
