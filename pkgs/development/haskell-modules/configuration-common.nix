@@ -1544,7 +1544,8 @@ self: super: {
   yesod-core = dontCheck super.yesod-core;
 
   # Add ApplicationServices on darwin
-  apecs-physics = addPkgconfigDepends super.apecs-physics
+  # use 0.4.5 instead of 0.4.4 to fix build with glibc >= 2.32
+  apecs-physics = addPkgconfigDepends super.apecs-physics_0_4_5
     (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

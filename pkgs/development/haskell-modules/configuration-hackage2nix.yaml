@@ -3150,9 +3150,6 @@ broken-packages:
   - aos-signature
   - aosd
   - apart
-  - apecs-gloss
-  - apecs-physics
-  - apecs-physics-gloss
   - apecs-stm
   - apelsin
   - api-builder
