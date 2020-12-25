@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     "--with-gs=${ghostscript}/bin/gs"
   ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+    "gl_cv_func_signbit=yes"
   ];
 
   makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
