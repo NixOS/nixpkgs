@@ -102,7 +102,7 @@ with frameworks; with libs; {
   PhotosUI                = { inherit AppKit Photos; };
   PreferencePanes         = {};
   PubSub                  = {};
-  QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox; };
+  QTKit                   = { inherit CoreMediaIO CoreMedia MediaToolbox VideoToolbox; };
   QuickLook               = { inherit ApplicationServices; };
   SafariServices          = { inherit AppKit; };
   SceneKit                = { inherit AppKit GLKit; };
