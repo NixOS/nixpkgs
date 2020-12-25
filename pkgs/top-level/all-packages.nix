@@ -1859,6 +1859,8 @@ in
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
+  code-minimap = callPackage ../tools/misc/code-minimap { };
+
   codesearch = callPackage ../tools/text/codesearch { };
 
   codec2 = callPackage ../development/libraries/codec2 { };
@@ -15705,6 +15707,12 @@ in
       suffix = "qt5";
     };
 
+    poppler_0_61 = callPackage ../development/libraries/poppler/0.61.nix {
+      lcms = lcms2;
+      qt5Support = true;
+      suffix = "qt5";
+    };
+
     pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
@@ -18948,6 +18956,8 @@ in
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
+  go-minimock = callPackage ../development/tools/go-minimock { };
+
   go-protobuf = callPackage ../development/tools/go-protobuf { };
 
   go-symbols = callPackage ../development/tools/go-symbols { };
@@ -20630,13 +20640,10 @@ in
 
   calibre = calibre-py3;
 
-  calligra = libsForQt514.callPackage ../applications/office/calligra {
+  calligra = libsForQt5.callPackage ../applications/office/calligra {
     openjpeg = openjpeg_1;
-    poppler = poppler_0_61.override {
-      qt5Support = true;
-      # Must be using the same qt version as calligra itself.
-      qtbase = qt514.qtbase;
-    };
+    # Must use the same Qt version as Calligra itself:
+    poppler = libsForQt5.poppler_0_61;
   };
 
   perkeep = callPackage ../applications/misc/perkeep { };
@@ -22308,14 +22315,14 @@ in
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  kdevelop-pg-qt = libsForQt514.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix { };
+  kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix { };
 
-  kdevelop-unwrapped = libsForQt514.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
+  kdevelop-unwrapped = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
     llvmPackages = llvmPackages_10;
   };
 
-  kdev-php = libsForQt514.callPackage ../applications/editors/kdevelop5/kdev-php.nix { };
-  kdev-python = libsForQt514.callPackage ../applications/editors/kdevelop5/kdev-python.nix {
+  kdev-php = libsForQt5.callPackage ../applications/editors/kdevelop5/kdev-php.nix { };
+  kdev-python = libsForQt5.callPackage ../applications/editors/kdevelop5/kdev-python.nix {
     python = python3;
   };
 
@@ -24469,7 +24476,7 @@ in
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
-  trojita = libsForQt514.callPackage ../applications/networking/mailreaders/trojita { };
+  trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
   tudu = callPackage ../applications/office/tudu { };
 
@@ -25284,7 +25291,7 @@ in
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
-  zanshin = libsForQt514.callPackage ../applications/office/zanshin {
+  zanshin = libsForQt5.callPackage ../applications/office/zanshin {
     boost = boost160;
   };
 
@@ -25623,7 +25630,7 @@ in
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam = libsForQt514.callPackage ../applications/graphics/digikam {};
+  digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
 
   displaycal = callPackage ../applications/graphics/displaycal {};
 
@@ -26509,10 +26516,9 @@ in
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
-    inherit qt5;
-    inherit libsForQt5;
     inherit pkgs;
     inherit (lib) makeScope;
+    inherit qt5 libsForQt5;
   });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
