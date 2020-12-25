@@ -1164,8 +1164,10 @@ self: super: {
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
-  # gitit is unbroken in the latest release
-  gitit = markUnbroken super.gitit;
+  # version constraints break the build, so we jailbreak
+  # can be removed at a new release which also fixes
+  # https://github.com/jgm/gitit/issues/665
+  gitit = doJailbreak super.gitit;
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
@@ -1540,5 +1542,10 @@ self: super: {
 
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
+
+  # Add ApplicationServices on darwin
+  # use 0.4.5 instead of 0.4.4 to fix build with glibc >= 2.32
+  apecs-physics = addPkgconfigDepends super.apecs-physics_0_4_5
+    (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
