@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, darwin, cffi, setuptools, python }:
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, darwin, python, cffi, setuptools}:
 
 buildPythonPackage rec {
   pname = "pyobjc-core";
@@ -14,9 +14,11 @@ buildPythonPackage rec {
   postPatch = ''
     # Hard code correct SDK version
     # Fix hardcoded paths
+    # Remove xcrun call, all paths are provided by nix anyway
     substituteInPlace setup.py \
       --replace 'get_sdk_level(self.sdk_root)' '"${darwin.apple_sdk.sdk.version}"' \
-      --replace 'os.path.join(self.sdk_root, "usr/include/objc/runtime.h")' '"${darwin.objc4}/include/objc/runtime.h"'
+      --replace 'os.path.join(self.sdk_root, "usr/include/objc/runtime.h")' '"${darwin.objc4}/include/objc/runtime.h"' \
+      --replace '["/usr/bin/xcrun", "-sdk", "macosx", "--show-sdk-path"]' '["true"]'
 
     # Hard code OS version
     # This needs to be done here or pyobjc-frameworks-* don't get the change
@@ -32,14 +34,16 @@ buildPythonPackage rec {
     Foundation
   ]);
 
-  propagatedBuildInputs = with darwin; [
-    objc4
-  ] ++ [
+  propagatedBuildInputs = [
     # required for namespaced import of PyObjCTools.TestSupport from pyobjc-framework-*
     setuptools
   ];
 
   hardeningDisable = [ "strictoverflow" ];
+
+  preBuild = ''
+    export SDKROOT=/
+  '';
 
   preCheck = ''
     # Test removed because ~ does not expand to /homeless-shelter
@@ -57,6 +61,12 @@ buildPythonPackage rec {
 
     substituteInPlace PyObjCTest/test_testsupport.py \
       --replace '".".join(platform.mac_ver()[0].split("."))' '"${darwin.apple_sdk.sdk.version}"'
+
+    # Tries to acces paths outside the sandbox
+    rm PyObjCTest/test_filepointer.py PyObjCTest/test_fsref.py
+
+    # Segmentation fault: 11
+    rm PyObjCTest/test_corefoundation.py
   '';
 
   # show test names instead of just dots
@@ -68,12 +78,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib;
-    {
-      description = "Python<->ObjC Interoperability Module";
-      homepage = "https://pythonhosted.org/pyobjc-core/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ SuperSandro2000 ];
-      platforms = platforms.darwin;
-    };
+  meta = with stdenv.lib; {
+    description = "Python<->ObjC Interoperability Module";
+    homepage = "https://pythonhosted.org/pyobjc-core/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+    platforms = platforms.darwin;
+  };
 }
