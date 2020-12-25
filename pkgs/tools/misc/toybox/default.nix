@@ -1,5 +1,6 @@
 {
   stdenv, lib, fetchFromGitHub, which,
+  buildPackages,
   enableStatic ? false,
   enableMinimal ? false,
   extraConfig ? ""
@@ -16,6 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cgbmv6qk1haj709hjx5q4sl7wgh91i459gzs1203adwc7rvk6jv";
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
   buildInputs = lib.optionals enableStatic [ stdenv.cc.libc stdenv.cc.libc.static ];
 
   postPatch = "patchShebangs .";
