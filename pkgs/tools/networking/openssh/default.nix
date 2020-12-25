@@ -9,7 +9,7 @@
 , autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
-, withKerberos ? true
+, withKerberos ? (stdenv.hostPlatform.system != "armv6l-linux")
 , withGssapiPatches ? false
 , kerberos
 , libfido2
