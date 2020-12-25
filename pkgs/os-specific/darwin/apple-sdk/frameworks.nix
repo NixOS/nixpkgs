@@ -83,6 +83,7 @@ with frameworks; with libs; {
   LocalAuthentication     = {};
   MapKit                  = { inherit AppKit CoreLocation; };
   MediaAccessibility      = { inherit CoreGraphics CoreText QuartzCore; };
+  MediaLibrary            = {};
   MediaPlayer             = {};
   MediaToolbox            = { inherit AudioToolbox AudioUnit CoreMedia; };
   Metal                   = {};
