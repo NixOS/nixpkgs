@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_git";
-  version = "0.23.2";
+  version = "0.23.3";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c4c55c5bc651a670b13e89064f7aba7422b72ad6b3f2b3890ac72cc9a2d4089";
+    sha256 = "20a4954d8d1b1eb6f9111cd15d6a598bd7ff72b08797cf5e86c5a55827c85a1d";
   };
 
   propagatedBuildInputs = [ notebook nbdime git ];

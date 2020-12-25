@@ -8573,6 +8573,12 @@
     githubId = 1040871;
     name = "Mathis Antony";
   };
+  svrana = {
+    email = "shaw@vranix.com";
+    github = "svrana";
+    githubId = 850665;
+    name = "Shaw Vrana";
+  };
   svsdep = {
     email = "svsdep@gmail.com";
     github = "svsdep";
