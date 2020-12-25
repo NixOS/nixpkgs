@@ -84,7 +84,7 @@ let plugins = {
       ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v370-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
 
 
-      mkdir $out{,/share,/lib}
+      mkdir -p $out/share $out/lib
       cp -r usr/share/{iscan-data,iscan}/ $out/share
       cp -r usr/lib64/iscan $out/lib
       mv $out/share/iscan $out/share/esci
