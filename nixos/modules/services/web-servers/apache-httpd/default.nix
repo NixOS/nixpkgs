@@ -126,6 +126,13 @@ let
     </IfModule>
   '';
 
+  luaSetPaths = ''
+    <IfModule mod_lua.c>
+      LuaPackageCPath ${cfg.package.lua5}/lib/lua/${cfg.package.lua5.lua.luaversion}/?.so
+      LuaPackagePath  ${cfg.package.lua5}/share/lua/${cfg.package.lua5.lua.luaversion}/?.lua
+    </IfModule>
+  '';
+
   mkVHostConf = hostOpts:
     let
       adminAddr = if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr;
@@ -325,6 +332,8 @@ let
     TraceEnable off
 
     ${sslConf}
+
+    ${if cfg.package.luaSupport then luaSetPaths else ""}
 
     # Fascist default - deny access to everything.
     <Directory />
