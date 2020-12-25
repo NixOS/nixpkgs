@@ -1111,6 +1111,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  callaudiod = callPackage ../applications/audio/callaudiod { };
+
   calls = callPackage ../applications/networking/calls { };
 
   inherit (nodePackages) castnow;
