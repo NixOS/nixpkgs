@@ -84,13 +84,13 @@ in {
           This setup is then analogous to other (non-NixOS) linux distributions.
 
           If you do set this option, you likely want to use "launch" as your
-          entry point for xmonad (as in the example), to avoid xmonads
+          entry point for xmonad (as in the example), to avoid xmonad's
           recompilation logic on startup. Doing so will render the default
           "mod+q" restart key binding dysfunctional though, because that attempts
           to call your binary with the "--restart" command line option, unless
           you implement that yourself. You way mant to bind "mod+q" to
           <literal>(restart "xmonad" True)</literal> instead, which will just restart
-          xmonad from PATH. This allows e.g. switching to the new xmonad binary,
+          xmonad from PATH. This allows e.g. switching to the new xmonad binary
           after rebuilding your system with nixos-rebuild.
 
           If you actually want to run xmonad with a config specified here, but
