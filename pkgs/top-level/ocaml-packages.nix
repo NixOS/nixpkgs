@@ -577,6 +577,8 @@ let
 
     mirage-block-combinators = callPackage ../development/ocaml-modules/mirage-block/combinators.nix { };
 
+    mirage-block-ramdisk = callPackage ../development/ocaml-modules/mirage-block-ramdisk { };
+
     mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
 
     mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
