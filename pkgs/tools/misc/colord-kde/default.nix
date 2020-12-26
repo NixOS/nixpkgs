@@ -2,7 +2,7 @@
 , extra-cmake-modules, ki18n
 , kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kiconthemes, kcmutils
 , kio, knotifications, plasma-framework, kwidgetsaddons, kwindowsystem
-, kitemviews, lcms2, libXrandr, qtx11extras
+, kitemviews, lcms2, libXrandr, qtx11extras, libXdmcp
 }:
 
 mkDerivation rec {
@@ -19,7 +19,7 @@ mkDerivation rec {
   buildInputs = [
     kconfig kconfigwidgets kcoreaddons kdbusaddons kiconthemes
     kcmutils ki18n kio knotifications plasma-framework kwidgetsaddons
-    kwindowsystem kitemviews lcms2 libXrandr qtx11extras
+    kwindowsystem kitemviews lcms2 libXrandr qtx11extras libXdmcp
   ];
 
   meta = with lib; {
