@@ -1,8 +1,8 @@
 {
   mkDerivation,
   extra-cmake-modules, wrapGAppsHook,
-  glib, gtk2, gtk3, karchive, kcmutils, kconfigwidgets, ki18n, kiconthemes, kio,
-  knewstuff, gsettings-desktop-schemas, xsettingsd, kdecoration, sass
+  glib, gtk2, gtk3, pcre, mount, karchive, kcmutils, kconfigwidgets, ki18n, kiconthemes,
+  kio, knewstuff, gsettings-desktop-schemas, xsettingsd, kdecoration, sass
 }:
 
 mkDerivation {
@@ -10,7 +10,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules wrapGAppsHook ];
   dontWrapGApps = true;  # There is nothing to wrap
   buildInputs = [
-    ki18n kio glib gtk2 gtk3 karchive kcmutils kconfigwidgets kiconthemes
+    ki18n kio glib gtk2 gtk3 pcre mount karchive kcmutils kconfigwidgets kiconthemes
     knewstuff gsettings-desktop-schemas xsettingsd kdecoration sass
   ];
   cmakeFlags = [
