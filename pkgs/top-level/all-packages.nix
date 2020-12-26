@@ -2346,6 +2346,8 @@ in
 
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
+  shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   simplenes = callPackage ../misc/emulators/simplenes { };
