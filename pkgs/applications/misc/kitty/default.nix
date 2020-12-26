@@ -2,7 +2,7 @@
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  installShellFiles,
+  installShellFiles, fetchpatch,
   dbus,
   Cocoa,
   CoreGraphics,
@@ -63,6 +63,12 @@ buildPythonApplication rec {
 
   patches = [
     ./fix-paths.patch
+    (fetchpatch {
+      name = "CVE-2020-35605.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/82c137878c2b99100a3cdc1c0f0efea069313901.patch";
+      sha256 = "1rm9cjv7nj9rf9xpzkk5f3v3b4b4zg4y6sp1vbq2fdwgbn50bvwy";
+      excludes = [ "docs/changelog.rst" ];
+    })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./no-lto.patch
   ];
