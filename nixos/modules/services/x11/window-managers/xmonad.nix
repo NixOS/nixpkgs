@@ -120,7 +120,7 @@ in {
               { modMask = mod4Mask -- Use Super instead of Alt
               , terminal = "urxvt" }
               `additionalKeys`
-              [ ( (mod4Mask,xK_r), compileRestart )
+              [ ( (mod4Mask,xK_r), writeStateToFile >> compileRestart )
               , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
         '';
       };
