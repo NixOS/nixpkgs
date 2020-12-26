@@ -20244,6 +20244,8 @@ in
 
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
+  vimix-cursors = callPackage ../data/icons/vimix-cursors { };
+
   vimix-gtk-themes = callPackage ../data/themes/vimix {};
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
