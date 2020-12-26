@@ -2863,6 +2863,12 @@
     githubId = 30512529;
     name = "Evils";
   };
+  ewok = {
+    email = "ewok@ewok.ru";
+    github = "ewok";
+    githubId = 454695;
+    name = "Artur Taranchiev";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";
