@@ -12584,6 +12584,8 @@ in
 
   aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
 
+  aws-c-io = callPackage ../development/libraries/aws-c-io { };
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
