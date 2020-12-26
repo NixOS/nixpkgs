@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
   version = "1.20201201";
@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
     cp -R boot/* $out/share/raspberrypi/boot
   '';
 
+  dontConfigure = true;
+  dontBuild = true;
   dontFixup = true;
 
-  meta = with stdenv.lib; {
+  meta = with stdenvNoCC.lib; {
     description = "Firmware for the Raspberry Pi board";
     homepage = "https://github.com/raspberrypi/firmware";
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
