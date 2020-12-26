@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  ki18n, xcb-util-cursor,
+  ki18n, xcb-util-cursor, libXdmcp,
   kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
   qtx11extras, knewstuff, kwayland, qttools
@@ -14,7 +14,7 @@ mkDerivation {
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras xcb-util-cursor
-    knewstuff kwayland
+    knewstuff kwayland libXdmcp
   ];
   postPatch = ''
     substituteInPlace desktop/org.kde.spectacle.desktop.cmake \
