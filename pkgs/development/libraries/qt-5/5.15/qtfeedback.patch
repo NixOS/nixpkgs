@@ -1,0 +1,26 @@
+From e8ee1f98fa1d013642ea36183f15cb76debcbc06 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Thu, 24 Dec 2020 03:16:14 +0100
+Subject: [PATCH] Add git_build to fix lack of .git dir
+
+---
+ src/feedback/feedback.pro | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/feedback/feedback.pro b/src/feedback/feedback.pro
+index 06350fd..949c5f9 100644
+--- a/src/feedback/feedback.pro
++++ b/src/feedback/feedback.pro
+@@ -6,7 +6,9 @@ QMAKE_DOCS = $$PWD/../../doc/qtfeedback.qdocconf
+ MODULE_PLUGIN_TYPES = \
+     feedback
+ 
++CONFIG += git_build
+ load(qt_module)
++load(qt_module_headers)
+ 
+ PUBLIC_HEADERS += qfeedbackglobal.h \
+                   qfeedbackactuator.h \
+-- 
+2.29.2
+

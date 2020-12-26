@@ -1,7 +1,7 @@
-From 82771c437957b3684ce296997d795432756aa8b1 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <me@pbb.lc>
-Date: Sat, 4 Apr 2020 00:25:52 +0200
-Subject: [PATCH 03/11] qtbase-mkspecs
+From a70860837a5944193eec49f0f6a6692c76ffb6ce Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Fri, 18 Dec 2020 17:29:38 +0100
+Subject: [PATCH] qtbase mkspecs debugging
 
 ---
  mkspecs/features/create_cmake.prf             | 51 +++---------
@@ -12,13 +12,13 @@ Subject: [PATCH 03/11] qtbase-mkspecs
  mkspecs/features/qt_build_paths.prf           |  4 +-
  mkspecs/features/qt_docs.prf                  | 10 +--
  mkspecs/features/qt_example_installs.prf      |  2 +-
- mkspecs/features/qt_functions.prf             |  2 +-
+ mkspecs/features/qt_functions.prf             | 18 ++++-
  mkspecs/features/qt_installs.prf              | 22 ++---
  mkspecs/features/qt_plugin.prf                |  2 +-
- 11 files changed, 38 insertions(+), 141 deletions(-)
+ 11 files changed, 51 insertions(+), 144 deletions(-)
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 24ed125f12..f0666a1986 100644
+index 24ed125f..f0666a19 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
 @@ -21,7 +21,7 @@ load(cmake_functions)
@@ -105,7 +105,7 @@ index 24ed125f12..f0666a1986 100644
  # We are generating cmake files. Most developers of Qt are not aware of cmake,
  # so we require automatic tests to be available. The only module which should
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 309798a767..b6c3ab8609 100644
+index 309798a7..b6c3ab86 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -2,30 +2,6 @@ if (CMAKE_VERSION VERSION_LESS 3.1.0)
@@ -265,7 +265,7 @@ index 309798a767..b6c3ab8609 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/qml_module.prf b/mkspecs/features/qml_module.prf
-index c0b50416c9..cabe39b22e 100644
+index c0b50416..cabe39b2 100644
 --- a/mkspecs/features/qml_module.prf
 +++ b/mkspecs/features/qml_module.prf
 @@ -51,7 +51,7 @@ builtin_resources {
@@ -278,7 +278,7 @@ index c0b50416c9..cabe39b22e 100644
  qmlfiles.base = $$_PRO_FILE_PWD_
  qmlfiles.files = $$fq_aux_qml_files
 diff --git a/mkspecs/features/qml_plugin.prf b/mkspecs/features/qml_plugin.prf
-index 1b67435787..24a1f78c17 100644
+index 1b674357..24a1f78c 100644
 --- a/mkspecs/features/qml_plugin.prf
 +++ b/mkspecs/features/qml_plugin.prf
 @@ -50,7 +50,7 @@ load(qt_build_paths)
@@ -291,7 +291,7 @@ index 1b67435787..24a1f78c17 100644
  
  # Some final setup
 diff --git a/mkspecs/features/qt_app.prf b/mkspecs/features/qt_app.prf
-index 8354f30eea..62028fef8e 100644
+index 8354f30e..62028fef 100644
 --- a/mkspecs/features/qt_app.prf
 +++ b/mkspecs/features/qt_app.prf
 @@ -30,7 +30,7 @@ host_build:force_bootstrap {
@@ -304,7 +304,7 @@ index 8354f30eea..62028fef8e 100644
  }
  INSTALLS += target
 diff --git a/mkspecs/features/qt_build_paths.prf b/mkspecs/features/qt_build_paths.prf
-index 3bb3823a8e..655b7b7db8 100644
+index 3bb3823a..655b7b7d 100644
 --- a/mkspecs/features/qt_build_paths.prf
 +++ b/mkspecs/features/qt_build_paths.prf
 @@ -24,6 +24,6 @@ exists($$MODULE_BASE_INDIR/.git): \
@@ -317,7 +317,7 @@ index 3bb3823a8e..655b7b7db8 100644
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
 diff --git a/mkspecs/features/qt_docs.prf b/mkspecs/features/qt_docs.prf
-index 095bf15dac..4cc977bea5 100644
+index 095bf15d..4cc977be 100644
 --- a/mkspecs/features/qt_docs.prf
 +++ b/mkspecs/features/qt_docs.prf
 @@ -65,7 +65,7 @@ QMAKE_DOCS_OUTPUTDIR = $$QMAKE_DOCS_BASE_OUTDIR/$$QMAKE_DOCS_TARGETDIR
@@ -356,7 +356,7 @@ index 095bf15dac..4cc977bea5 100644
      INSTALLS += inst_qch_docs
  
 diff --git a/mkspecs/features/qt_example_installs.prf b/mkspecs/features/qt_example_installs.prf
-index 15b373ba40..5c373fe1d5 100644
+index 15b373ba..5c373fe1 100644
 --- a/mkspecs/features/qt_example_installs.prf
 +++ b/mkspecs/features/qt_example_installs.prf
 @@ -91,7 +91,7 @@ sourcefiles += \
@@ -369,20 +369,48 @@ index 15b373ba40..5c373fe1d5 100644
  
  check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 7777e615bd..abeb03a663 100644
+index 7777e615..ad5818dc 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
-@@ -87,7 +87,7 @@ defineTest(qtHaveModule) {
+@@ -85,12 +85,20 @@ defineTest(qtHaveModule) {
+ 
+ # variable, default, [suffix for variable for system() use], [prepare primary variable for system() use]
  defineTest(qtPrepareTool) {
++    message("Looking for $${2}")
      cmd = $$eval(QT_TOOL.$${2}.binary)
++    message("-> $$cmd")
      isEmpty(cmd) {
 -        cmd = $$[QT_HOST_BINS]/$$2
-+        cmd = $$system("command -v $$2")
-         exists($${cmd}.pl) {
-             $${1}_EXE = $${cmd}.pl
-             cmd = perl -w $$system_path($${cmd}.pl)
+-        exists($${cmd}.pl) {
+-            $${1}_EXE = $${cmd}.pl
+-            cmd = perl -w $$system_path($${cmd}.pl)
++        message("cmd is empty")
++        cmd = $$system("command -v $${2}")
++        message("-> $$cmd")
++        isEmpty(cmd) {
++          message("cmd still empty")
++          cmd = $$system("command -v $${2}.pl")
++          message("-> $$cmd")
++          message("Must be: $${cmd}")
++          $${1}_EXE = $${cmd}
++          cmd = perl -w $$system_path($${cmd})
+         } else: contains(QMAKE_HOST.os, Windows) {
+             $${1}_EXE = $${cmd}.exe
+             cmd = $$system_path($${cmd}.exe)
+@@ -101,9 +109,11 @@ defineTest(qtPrepareTool) {
+             }
+             $${1}_EXE = $$cmd
+         } else {
++            message("$${cmd} exists")
+             $${1}_EXE = $$cmd
+         }
+     } else {
++        message("$${cmd} exists")
+         $${1}_EXE = $$last(cmd)
+     }
+     export($${1}_EXE)
 diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
-index 1ebca17366..a8f958eae8 100644
+index 1ebca173..a8f958ea 100644
 --- a/mkspecs/features/qt_installs.prf
 +++ b/mkspecs/features/qt_installs.prf
 @@ -12,16 +12,10 @@
@@ -447,7 +475,7 @@ index 1ebca17366..a8f958eae8 100644
          INSTALLS += privpritarget
      }
 diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
-index 573d717eea..024c624cb6 100644
+index 573d717e..024c624c 100644
 --- a/mkspecs/features/qt_plugin.prf
 +++ b/mkspecs/features/qt_plugin.prf
 @@ -88,7 +88,7 @@ CONFIG(static, static|shared)|prefix_build {
@@ -460,5 +488,5 @@ index 573d717eea..024c624cb6 100644
  
  qt_libinfix_plugins: TARGET = $$TARGET$$QT_LIBINFIX
 -- 
-2.25.4
+2.28.0
 

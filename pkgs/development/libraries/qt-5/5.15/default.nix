@@ -37,6 +37,36 @@ let
 
   mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
+    # qtfeedback does not have any releases
+    qtfeedback = rec {
+      src = fetchFromGitHub {
+        owner = "qt";
+        repo = "qtfeedback";
+        rev = "a14bd0bb1373cde86e09e3619fb9dc70f34c71f2";
+        sha256 = "0kiiffvriagql1cark6g1qxy7l9c3q3s13cx3s2plbz19nlnikj7";
+      };
+      version = "2018-09-03";
+    };
+    # qtpim does not have any releases, latest HEAD includes Qt6 changes
+    qtpim = rec {
+      src = fetchFromGitHub {
+        owner = "qt";
+        repo = "qtpim";
+        rev = "8fec622c186d254bc9750606d54c32670a9046a5";
+        sha256 = "0h2fa3cki4hhmid1iab0a2pzqzaiv7lpg2ghp0m75x00viv9nr15";
+      };
+      version = "2019-06-18";
+    };
+    # qtsystems does not have any releases
+    qtsystems = rec {
+      src = fetchFromGitHub {
+        owner = "qt";
+        repo = "qtsystems";
+        rev = "e3332ee38d27a134cef6621fdaf36687af1b6f4a";
+        sha256 = "1z9h5skq3q6f9c9n8vmy8p5q7cyhvbdnr778lfc10343d20hkhrz";
+      };
+      version = "2019-01-03";
+    };
     # qtwebkit does not have an official release tarball on the qt mirror and is
     # mostly maintained by the community.
     qtwebkit = rec {
@@ -81,8 +111,11 @@ let
         ./qtbase.patch.d/0011-fix-header_module.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
+    qtfeedback = [ ./qtfeedback.patch ];
+    qtpim = [ ./qtpim.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
+    qtsystems = [ ./qtsystems.patch ];
     qtwebengine = [ ]
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [
@@ -136,6 +169,7 @@ let
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
+      qtfeedback = callPackage ../modules/qtfeedback.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
@@ -144,6 +178,7 @@ let
         inherit gstreamer gst-plugins-base;
       };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
+      qtpim = callPackage ../modules/qtpim.nix {};
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
@@ -153,6 +188,7 @@ let
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qtscxml = callPackage ../modules/qtscxml.nix {};
+      qtsystems = callPackage ../modules/qtsystems.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
@@ -168,9 +204,9 @@ let
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
-        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
-        qtscript qtsensors qtserialport qtsvg qttools qttranslations
+        qtcharts qtconnectivity qtdeclarative qtdoc qtfeedback qtgraphicaleffects
+        qtimageformats qtlocation qtmultimedia qtpim qtquickcontrols qtquickcontrols2
+        qtscript qtsensors qtserialport qtsvg qtsystems qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
         qtwebview qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland

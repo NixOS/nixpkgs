@@ -1,0 +1,51 @@
+From fdae65c5f02c6aff8521ca284d85e5707f296219 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Sat, 19 Dec 2020 14:36:12 +0100
+Subject: [PATCH] Add git_build to fix lack of .git dir
+
+---
+ src/publishsubscribe/publishsubscribe.pro | 3 ++-
+ src/serviceframework/serviceframework.pro | 2 ++
+ src/systeminfo/systeminfo.pro             | 2 ++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/publishsubscribe/publishsubscribe.pro b/src/publishsubscribe/publishsubscribe.pro
+index 9ef482b..b58fb05 100644
+--- a/src/publishsubscribe/publishsubscribe.pro
++++ b/src/publishsubscribe/publishsubscribe.pro
+@@ -47,5 +47,6 @@ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
+ 
+ QMAKE_DOCS = $$PWD/../../doc/config/publishsubscribe/qtpublishsubscribe.qdocconf
+ 
++CONFIG += git_build
+ load(qt_module)
+-
++load(qt_module_headers)
+diff --git a/src/serviceframework/serviceframework.pro b/src/serviceframework/serviceframework.pro
+index 19aa1c0..f3eac85 100644
+--- a/src/serviceframework/serviceframework.pro
++++ b/src/serviceframework/serviceframework.pro
+@@ -48,4 +48,6 @@ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS \
+ 
+ QMAKE_DOCS = $$PWD/../../doc/config/serviceframework/qtserviceframework.qdocconf
+ 
++CONFIG += git_build
+ load(qt_module)
++load(qt_module_headers)
+diff --git a/src/systeminfo/systeminfo.pro b/src/systeminfo/systeminfo.pro
+index b174085..67fbd87 100644
+--- a/src/systeminfo/systeminfo.pro
++++ b/src/systeminfo/systeminfo.pro
+@@ -282,7 +282,9 @@ simulator {
+ QMAKE_DOCS = $$PWD/../../doc/config/systeminfo/qtsysteminfo.qdocconf
+ 
+ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
++CONFIG += git_build
+ load(qt_module)
++load(qt_module_headers)
+ 
+ # This must be done after loading qt_module.prf
+ config_bluez | win32 {
+-- 
+2.28.0
+
