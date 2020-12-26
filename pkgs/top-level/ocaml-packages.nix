@@ -203,6 +203,8 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    diet =  callPackage ../development/ocaml-modules/diet { };
+
     digestif =  callPackage ../development/ocaml-modules/digestif { };
 
     dispatch =  callPackage ../development/ocaml-modules/dispatch { };
