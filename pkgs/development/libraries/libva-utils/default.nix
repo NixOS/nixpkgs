@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   inherit (libva) version;
 
   src = fetchFromGitHub {
-    owner  = "01org";
+    owner  = "intel";
     repo   = "libva-utils";
     rev    = version;
     sha256 = "1yk9bg1wg4nqva3l01s6bghcvc3hb02gp62p1sy5qk0r9mn5kpik";
