@@ -24,8 +24,8 @@ in {
       };
 
       accelProfile = mkOption {
-        type = types.enum [ "flat" "adaptive" ];
-        default = "adaptive";
+        type = types.nullOr (types.enum [ "flat" "adaptive" ]);
+        default = null;
         example = "flat";
         description =
           ''
@@ -83,13 +83,13 @@ in {
       };
 
       leftHanded = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description = "Enables left-handed button orientation, i.e. swapping left and right buttons.";
       };
 
       middleEmulation = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         default = true;
         description =
           ''
@@ -99,8 +99,8 @@ in {
       };
 
       naturalScrolling = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description = "Enables or disables natural scrolling behavior.";
       };
 
@@ -116,8 +116,8 @@ in {
       };
 
       scrollMethod = mkOption {
-        type = types.enum [ "twofinger" "edge" "button" "none" ];
-        default = "twofinger";
+        type = types.nullOr (types.enum [ "twofinger" "edge" "button" "none" ]);
+        default = null;
         example = "edge";
         description =
           ''
@@ -127,7 +127,7 @@ in {
       };
 
       horizontalScrolling = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         default = true;
         description =
           ''
@@ -138,8 +138,8 @@ in {
       };
 
       sendEventsMode = mkOption {
-        type = types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ];
-        default = "enabled";
+        type = types.nullOr (types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ]);
+        default = null;
         example = "disabled";
         description =
           ''
@@ -149,7 +149,7 @@ in {
       };
 
       tapping = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         default = true;
         description =
           ''
@@ -158,7 +158,7 @@ in {
       };
 
       tappingDragLock = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         default = true;
         description =
           ''
@@ -169,8 +169,8 @@ in {
       };
 
       disableWhileTyping = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description =
           ''
             Disable input method while typing.
@@ -220,21 +220,21 @@ in {
           Identifier "libinputConfiguration"
           MatchDriver "libinput"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
-          Option "AccelProfile" "${cfg.accelProfile}"
+          ${optionalString (cfg.accelProfile != null) ''Option "AccelProfile" "${cfg.accelProfile}"''}
           ${optionalString (cfg.accelSpeed != null) ''Option "AccelSpeed" "${cfg.accelSpeed}"''}
           ${optionalString (cfg.buttonMapping != null) ''Option "ButtonMapping" "${cfg.buttonMapping}"''}
           ${optionalString (cfg.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.calibrationMatrix}"''}
           ${optionalString (cfg.clickMethod != null) ''Option "ClickMethod" "${cfg.clickMethod}"''}
-          Option "LeftHanded" "${xorgBool cfg.leftHanded}"
-          Option "MiddleEmulation" "${xorgBool cfg.middleEmulation}"
-          Option "NaturalScrolling" "${xorgBool cfg.naturalScrolling}"
+          ${optionalString (cfg.leftHanded != null) ''Option "LeftHanded" "${xorgBool cfg.leftHanded}"''}
+          ${optionalString (cfg.middleEmulation != null) ''Option "MiddleEmulation" "${xorgBool cfg.middleEmulation}"''}
+          ${optionalString (cfg.naturalScrolling != null) ''Option "NaturalScrolling" "${xorgBool cfg.naturalScrolling}"''}
           ${optionalString (cfg.scrollButton != null) ''Option "ScrollButton" "${toString cfg.scrollButton}"''}
-          Option "ScrollMethod" "${cfg.scrollMethod}"
-          Option "HorizontalScrolling" "${xorgBool cfg.horizontalScrolling}"
-          Option "SendEventsMode" "${cfg.sendEventsMode}"
-          Option "Tapping" "${xorgBool cfg.tapping}"
-          Option "TappingDragLock" "${xorgBool cfg.tappingDragLock}"
-          Option "DisableWhileTyping" "${xorgBool cfg.disableWhileTyping}"
+          ${optionalString (cfg.scrollMethod != null) ''Option "ScrollMethod" "${cfg.scrollMethod}"''}
+          ${optionalString (cfg.horizontalScrolling != null) ''Option "HorizontalScrolling" "${xorgBool cfg.horizontalScrolling}"''}
+          ${optionalString (cfg.sendEventsMode != null) ''Option "SendEventsMode" "${cfg.sendEventsMode}"''}
+          ${optionalString (cfg.tapping != null) ''Option "Tapping" "${xorgBool cfg.tapping}"''}
+          ${optionalString (cfg.tappingDragLock != null) ''Option "TappingDragLock" "${xorgBool cfg.tappingDragLock}"''}
+          ${optionalString (cfg.disableWhileTyping != null) ''Option "DisableWhileTyping" "${xorgBool cfg.disableWhileTyping}"''}
           ${cfg.additionalOptions}
         EndSection
       '';
