@@ -2,7 +2,7 @@
 , src, unpackPhase ? null, patches ? []
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [] }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip
+{ lib, stdenv, pkgconfig, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, nss_3_53
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
@@ -223,7 +223,6 @@ buildStdenv.mkDerivation ({
       nodejs
       perl
       pkgconfig
-      python2
       python3
       rust-cbindgen
       rustc
