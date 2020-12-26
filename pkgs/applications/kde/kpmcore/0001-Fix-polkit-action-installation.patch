@@ -1,0 +1,25 @@
+From db6760c580ff04b70e344b3c4779c66ed1681f40 Mon Sep 17 00:00:00 2001
+From: Andreas <hamburger1984@gmail.com>
+Date: Fri, 25 Dec 2020 23:16:09 +0100
+Subject: [PATCH] Fix polkit action installation
+
+---
+ src/util/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/util/CMakeLists.txt b/src/util/CMakeLists.txt
+index fcd4721..0303ae8 100644
+--- a/src/util/CMakeLists.txt
++++ b/src/util/CMakeLists.txt
+@@ -59,7 +59,7 @@ target_link_libraries(kpmcore_externalcommand
+ install(TARGETS kpmcore_externalcommand DESTINATION ${KDE_INSTALL_LIBEXECDIR})
+ install( FILES util/org.kde.kpmcore.helperinterface.conf DESTINATION ${KDE_INSTALL_DBUSDIR}/system.d )
+ 
+-kauth_install_actions(org.kde.kpmcore.externalcommand util/org.kde.kpmcore.externalcommand.actions)
++kauth_install_actions(org.kde.kpmcore.externalcommand ${CMAKE_CURRENT_SOURCE_DIR}/util/org.kde.kpmcore.externalcommand.actions)
+ ecm_install_configured_files(
+     INPUT util/org.kde.kpmcore.helperinterface.service.in
+     DESTINATION ${KDE_INSTALL_DBUSDIR}/system-services
+-- 
+2.29.2
+

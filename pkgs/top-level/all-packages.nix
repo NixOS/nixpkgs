@@ -15690,8 +15690,8 @@ in
       kdenlive kdf kdialog kdiamond keditbookmarks kfind kfloppy kget kgpg khelpcenter
       kig kigo killbots kitinerary kleopatra klettres klines kmag kmail kmines kmix kmplot
       knavalbattle knetwalk knights kollision kolourpaint kompare konsole kontact korganizer
-      kpkpass krdc kreversi krfb kshisen ksquares ksystemlog kteatime ktimer ktouch kturtle
-      kwalletmanager kwave marble minuet okular picmi spectacle yakuake
+      kpkpass kpmcore krdc kreversi krfb kshisen ksquares ksystemlog kteatime ktimer ktouch
+      kturtle kwalletmanager kwave marble minuet okular picmi spectacle yakuake
     ;
 
     ### LIBRARIES
@@ -15759,8 +15759,6 @@ in
     };
 
     libqtav = callPackage ../development/libraries/libqtav { };
-
-    kpmcore = callPackage ../development/libraries/kpmcore { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
