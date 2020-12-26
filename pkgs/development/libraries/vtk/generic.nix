@@ -11,7 +11,7 @@
 let
   inherit (lib) optionalString optionals optional;
 
-  pythonMajor = if pythonInterpreter.isPy3 then "3" else if pythonInterpreter.isPy2 then "2" else throw "vtk: vtk only supports python 2.x and 3.x";
+  pythonMajor = lib.substring 0 1 pythonInterpreter.pythonVersion;
 
 in stdenv.mkDerivation rec {
   pname = "vtk${optionalString enableQt "-qvtk"}";
