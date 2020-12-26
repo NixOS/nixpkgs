@@ -19,7 +19,7 @@
 }:
 
 mkDerivation rec {
-  name = "elisa";
+  pname = "elisa";
 
   buildInputs = [ libvlc ];
 
