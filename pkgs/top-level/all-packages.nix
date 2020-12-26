@@ -21795,6 +21795,8 @@ in
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
+  feedbackd = callPackage ../applications/misc/feedbackd { };
+
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
