@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kpmcore";
+  pname = "kpmcore";
   buildInputs = [
     qtbase
     libatasmart
