@@ -9,7 +9,7 @@
   libarchive, libzip,
 
   # Archive tools
-  p7zip, lrzip,
+  p7zip, lrzip, lzma,
 
   # Unfree tools
   unfreeEnableUnrar ? false, unrar,
@@ -30,7 +30,7 @@ mkDerivation {
 
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ libarchive libzip ] ++ extraTools;
+  buildInputs = [ libarchive libzip lzma ] ++ extraTools;
   propagatedBuildInputs = [
     breeze-icons karchive kconfig kcrash kdbusaddons khtml ki18n kiconthemes kio
     kitemmodels kparts kpty kservice kwidgetsaddons
