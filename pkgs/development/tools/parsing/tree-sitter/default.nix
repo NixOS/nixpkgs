@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchgit, fetchFromGitHub, fetchurl
-, writeShellScript, runCommand, which
+, writeShellScript, runCommand, which, formats
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
 , Security
 , callPackage
@@ -29,7 +29,7 @@ let
   };
 
   update-all-grammars = import ./update.nix {
-    inherit writeShellScript nix-prefetch-git curl jq xe src;
+    inherit writeShellScript nix-prefetch-git curl jq xe src formats;
   };
 
   fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });

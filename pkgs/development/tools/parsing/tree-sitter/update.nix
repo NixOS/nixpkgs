@@ -1,72 +1,80 @@
-{ writeShellScript, nix-prefetch-git
+{ writeShellScript, nix-prefetch-git, formats
 , curl, jq, xe
 , src }:
 
 let
+  # Grammars we want to fetch from the tree-sitter github orga
+  knownTreeSitterOrgGrammarRepos = [
+    "tree-sitter-javascript"
+    "tree-sitter-c"
+    "tree-sitter-swift"
+    "tree-sitter-json"
+    "tree-sitter-cpp"
+    "tree-sitter-ruby"
+    "tree-sitter-razor"
+    "tree-sitter-go"
+    "tree-sitter-c-sharp"
+    "tree-sitter-python"
+    "tree-sitter-typescript"
+    "tree-sitter-rust"
+    "tree-sitter-bash"
+    "tree-sitter-php"
+    "tree-sitter-java"
+    "tree-sitter-scala"
+    "tree-sitter-ocaml"
+    "tree-sitter-julia"
+    "tree-sitter-agda"
+    "tree-sitter-fluent"
+    "tree-sitter-html"
+    "tree-sitter-haskell"
+    "tree-sitter-regex"
+    "tree-sitter-css"
+    "tree-sitter-verilog"
+    "tree-sitter-jsdoc"
+    "tree-sitter-ql"
+    "tree-sitter-embedded-template"
+  ];
+
+  # repos of the tree-sitter github orga we want to ignore (not grammars)
+  ignoredTreeSitterOrgRepos = [
+    "tree-sitter"
+    "tree-sitter-cli"
+    # this is the haskell language bindings, tree-sitter-haskell is the grammar
+    "haskell-tree-sitter"
+    # this is the ruby language bindings, tree-sitter-ruby is the grammar
+    "ruby-tree-sitter"
+    # this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar
+    "rust-tree-sitter"
+    # this is the nodejs language bindings, tree-sitter-javascript is the grammar
+    "node-tree-sitter"
+    # this is the python language bindings, tree-sitter-python is the grammar
+    "py-tree-sitter"
+    # afl fuzzing for tree sitter
+    "afl-tree-sitter"
+    # archived
+    "highlight-schema"
+    # website
+    "tree-sitter.github.io"
+  ];
+
+  jsonFile = name: val: (formats.json {}).generate name val;
+
   # check in the list of grammars, whether we know all of them.
   checkKnownGrammars = writeShellScript "get-grammars.sh" ''
     set -euo pipefail
-    known='
-    [ "tree-sitter-javascript"
-    , "tree-sitter-c"
-    , "tree-sitter-swift"
-    , "tree-sitter-json"
-    , "tree-sitter-cpp"
-    , "tree-sitter-ruby"
-    , "tree-sitter-razor"
-    , "tree-sitter-go"
-    , "tree-sitter-c-sharp"
-    , "tree-sitter-python"
-    , "tree-sitter-typescript"
-    , "tree-sitter-rust"
-    , "tree-sitter-bash"
-    , "tree-sitter-php"
-    , "tree-sitter-java"
-    , "tree-sitter-scala"
-    , "tree-sitter-ocaml"
-    , "tree-sitter-julia"
-    , "tree-sitter-agda"
-    , "tree-sitter-fluent"
-    , "tree-sitter-html"
-    , "tree-sitter-haskell"
-    , "tree-sitter-regex"
-    , "tree-sitter-css"
-    , "tree-sitter-verilog"
-    , "tree-sitter-jsdoc"
-    , "tree-sitter-ql"
-    , "tree-sitter-embedded-template"
-    ]'
-    ignore='
-    [ "tree-sitter"
-    , "tree-sitter-cli"
-    ${/*this is the haskell language bindings, tree-sitter-haskell is the grammar*/""}
-    , "haskell-tree-sitter"
-    ${/*this is the ruby language bindings, tree-sitter-ruby is the grammar*/""}
-    , "ruby-tree-sitter"
-    ${/*this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar*/""}
-    , "rust-tree-sitter"
-    ${/*this is the nodejs language bindings, tree-sitter-javascript is the grammar*/""}
-    , "node-tree-sitter"
-    ${/*this is the python language bindings, tree-sitter-python is the grammar*/""}
-    , "py-tree-sitter"
-    ${/*afl fuzzing for tree sitter*/""}
-    , "afl-tree-sitter"
-    ${/*archived*/""}
-    , "highlight-schema"
-    ${/*website*/""}
-    , "tree-sitter.github.io"
-    ]'
+    known="${jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos}"
+    ignore="${jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos}"
     res=$(${jq}/bin/jq \
-      --argjson known "$known" \
-      --argjson ignore "$ignore" \
-      '. - ($known + $ignore)' \
+      --slurpfile known "$known" \
+      --slurpfile ignore "$ignore" \
+      '. - ($known[0] + $ignore[0])' \
       )
     if [ ! "$res" == "[]" ]; then
       echo "These repositories are neither known nor ignored:" 1>&2
       echo "$res" 1>&2
       exit 1
     fi
-    printf '%s' "$known"
+    cat "$known"
   '';
 
   # TODO
