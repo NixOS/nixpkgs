@@ -16150,6 +16150,8 @@ in
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
+  s2n = callPackage ../development/libraries/s2n { };
+
   simavr = callPackage ../development/tools/simavr {
     avrgcc = pkgsCross.avr.buildPackages.gcc;
     avrlibc = pkgsCross.avr.libcCross;
