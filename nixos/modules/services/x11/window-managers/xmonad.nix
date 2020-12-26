@@ -27,6 +27,7 @@ let
       pkgs.runCommandLocal "xmonad" {
         nativeBuildInputs = [ pkgs.makeWrapper ];
       } ''
+        install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
           --set NIX_GHC "${xmonadEnv}/bin/ghc" \
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
