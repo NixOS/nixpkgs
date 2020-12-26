@@ -817,6 +817,10 @@
     github = "aszlig";
     githubId = 192147;
     name = "aszlig";
+    keys = [{
+      longkeyid = "ed25519/0x684089CE67EBB691";
+      fingerprint = "DD52 6BC7 767D BA28 16C0 95E5 6840 89CE 67EB B691";
+    }];
   };
   atemu = {
     name = "Atemu";
@@ -1366,12 +1370,12 @@
     keys = [
       # compare with https://keybase.io/cab404
       {
-        longkeyid = "1BB96810926F4E715DEF567E6BA7C26C3FDF7BB3";
-        fingerprint = "rsa3072/0xCBDECF658C38079E";
+        fingerprint = "1BB96810926F4E715DEF567E6BA7C26C3FDF7BB3";
+        longkeyid = "rsa3072/0xCBDECF658C38079E";
       }
       {
-        longkeyid = "1EBC648C64D6045463013B3EB7EFFC271D55DB8A";
-        fingerprint = "ed25519/0xB7EFFC271D55DB8A";
+        fingerprint = "1EBC648C64D6045463013B3EB7EFFC271D55DB8A";
+        longkeyid = "ed25519/0xB7EFFC271D55DB8A";
       }
     ];
   };
@@ -5227,16 +5231,10 @@
     github = "lovesegfault";
     githubId = 7243783;
     name = "Bernardo Meurer";
-    keys = [
-      {
-        longkeyid = "rsa2048/0xE421C74191EA186C";
-        fingerprint = "5894 12CE 19DF 582A E10A  3320 E421 C741 91EA 186C";
-      }
-      {
-        longkeyid = "rsa2048/0x4A6D87A0E7475769";
-        fingerprint = "56A8 E164 E834 290C 4AC0  EE3E 4A6D 87A0 E747 5769";
-      }
-    ];
+    keys = [{
+        longkeyid = "rsa4096/0xF4C0D53B8D14C246";
+        fingerprint = "F193 7596 57D5 6DA4 CCD4  786B F4C0 D53B 8D14 C246";
+    }];
   };
   lowfatcomputing = {
     email = "andreas.wagner@lowfatcomputing.org";
@@ -9094,6 +9092,12 @@
     github = "travisbhartwell";
     githubId = 10110;
     name = "Travis B. Hartwell";
+  };
+  TredwellGit = {
+    email = "tredwell@tutanota.com";
+    github = "TredwellGit";
+    githubId = 61860346;
+    name = "Tredwell";
   };
   treemo = {
     email = "matthieu.chevrier@treemo.fr";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "augustus";
-  version = "1.4.1a";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Keriew";
     repo = "augustus";
     rev = "v${version}";
-    sha256 = "1xqv8j8jh3f13fjhyf7hk1anrn799cwwsvsd75kpl9n5yh5s1j5y";
+    sha256 = "0czazw8mc3fbvdazs2nzvgxd1dpzjc8z5fwiv89vv4nd7laz3jkj";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
     homepage = "https://github.com/Keriew/augustus";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ Thra11 ];
   };
 }

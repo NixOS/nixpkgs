@@ -1,29 +1,29 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.10.2
+compiler: ghc-8.10.3
 
 core-packages:
   - array-0.5.4.0
   - base-4.14.1.0
   - binary-0.8.8.0
-  - bytestring-0.10.10.0
-  - Cabal-3.2.0.0
+  - bytestring-0.10.12.0
+  - Cabal-3.2.1.0
   - containers-0.6.2.1
   - deepseq-1.4.4.0
   - directory-1.3.6.0
   - exceptions-0.10.4
   - filepath-1.4.2.1
-  - ghc-8.10.2
-  - ghc-boot-8.10.2
-  - ghc-boot-th-8.10.2
+  - ghc-8.10.3
+  - ghc-boot-8.10.3
+  - ghc-boot-th-8.10.3
   - ghc-compact-0.1.0.0
-  - ghc-heap-8.10.2
+  - ghc-heap-8.10.3
   - ghc-prim-0.6.1
-  - ghci-8.10.2
+  - ghci-8.10.3
   - haskeline-0.8.0.1
   - hpc-0.6.1.0
   - integer-gmp-1.0.3.0
-  - libiserv-8.10.2
+  - libiserv-8.10.3
   - mtl-2.2.2
   - parsec-3.1.14.0
   - pretty-1.1.3.6
@@ -32,7 +32,7 @@ core-packages:
   - stm-2.5.0.0
   - template-haskell-2.16.0.0
   - terminfo-0.4.1.4
-  - text-1.2.3.2
+  - text-1.2.4.1
   - time-1.9.3
   - transformers-0.5.6.2
   - unix-2.7.2.2
@@ -3150,9 +3150,6 @@ broken-packages:
   - aos-signature
   - aosd
   - apart
-  - apecs-gloss
-  - apecs-physics
-  - apecs-physics-gloss
   - apecs-stm
   - apelsin
   - api-builder
@@ -5091,7 +5088,9 @@ broken-packages:
   - fei-base
   - fei-cocoapi
   - fei-dataiter
+  - fei-datasets
   - fei-examples
+  - fei-modelzoo
   - fei-nn
   - feldspar-compiler
   - feldspar-language
@@ -5178,7 +5177,6 @@ broken-packages:
   - flamethrower
   - flamingra
   - flashblast
-  - flat
   - flat-maybe
   - flatbuffers
   - flay
@@ -5541,7 +5539,6 @@ broken-packages:
   - github-webhook-handler-snap
   - githud
   - gitignore
-  - gitit
   - gitlab-api
   - gitlib
   - gitlib-cmdline
@@ -5700,7 +5697,6 @@ broken-packages:
   - gray-code
   - greencard
   - greencard-lib
-  - greenclip
   - greg-client
   - gremlin-haskell
   - Grempa
@@ -7712,6 +7708,7 @@ broken-packages:
   - mahoro
   - maid
   - mail-pool
+  - mail-reports
   - mailchimp
   - mailchimp-subscribe
   - MailchimpSimple
@@ -10394,7 +10391,6 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
-  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core
@@ -11516,6 +11512,7 @@ broken-packages:
   - yxdb-utils
   - Z-Data
   - Z-IO
+  - Z-YAML
   - z3-encoding
   - z85
   - zabt
