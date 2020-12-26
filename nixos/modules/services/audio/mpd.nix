@@ -193,18 +193,6 @@ in {
         ];
       };
 
-      credentialsFile = mkOption {
-        type = types.path;
-        description = ''
-          Path to a file to be merged with the settings during the service startup.
-          Useful to merge a file which is better kept out of the Nix store
-          because it contains sensible data like MPD's password. Example may look like this:
-          <literal>password "myMpdPassword@read,add,control,admin"</literal>
-        '';
-        default = "/dev/null";
-        example = "/var/lib/secrets/mpd.conf";
-      };
-
       fluidsynth = mkOption {
         type = types.bool;
         default = false;
@@ -244,9 +232,8 @@ in {
           User = "${cfg.user}";
           ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon /run/mpd/mpd.conf";
           ExecStartPre = pkgs.writeShellScript "mpd-start-pre" ''
-            set -xeuo pipefail
-            umask 077
-            cat ${mpdConf} ${cfg.credentialsFile} > /run/mpd/mpd.conf
+            set -euo pipefail
+            install -m 600 ${mpdConf} /run/mpd/mpd.conf
             ${pkgs.replace}/bin/replace-literal -fe ${
               concatStringsSep " -a " (imap0 (i: c: "\"{{password-${toString i}}}\" \"$(cat ${c.passwordFile})\"") cfg.credentials)
             } /run/mpd/mpd.conf
