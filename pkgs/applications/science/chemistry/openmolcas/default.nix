@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
 
