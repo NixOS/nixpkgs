@@ -5,26 +5,22 @@ let
   inherit (lib) mkOption mkIf optionals literalExample;
   cfg = config.services.xserver.windowManager.xmonad;
 
+  ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
+  packages = self: cfg.extraPackages self ++
+                   optionals cfg.enableContribAndExtras
+                   [ self.xmonad-contrib self.xmonad-extras ];
+
   xmonad-vanilla = pkgs.xmonad-with-packages.override {
-    ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
-    packages = self: cfg.extraPackages self ++
-                     optionals cfg.enableContribAndExtras
-                     [ self.xmonad-contrib self.xmonad-extras ];
+    inherit ghcWithPackages packages;
   };
 
   xmonad-config =
     let
-      xmonadAndPackages = self: [ self.xmonad ] ++
-                                cfg.extraPackages self ++
-                                optionals cfg.enableContribAndExtras
-                                [ self.xmonad-contrib self.xmonad-extras ];
-      xmonadEnv = cfg.haskellPackages.ghcWithPackages xmonadAndPackages;
+      xmonadAndPackages = self: [ self.xmonad ] ++ packages self;
+      xmonadEnv = ghcWithPackages xmonadAndPackages;
       configured = pkgs.writers.writeHaskellBin "xmonad" {
         ghc = cfg.haskellPackages.ghc;
-        libraries = [ cfg.haskellPackages.xmonad ] ++
-                    cfg.extraPackages cfg.haskellPackages ++
-                    optionals cfg.enableContribAndExtras
-                    (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
+        libraries = xmonadAndPackages cfg.haskellPackages;
         inherit (cfg) ghcArgs;
       } cfg.config;
     in
