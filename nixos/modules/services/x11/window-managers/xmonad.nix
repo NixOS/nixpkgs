@@ -12,7 +12,7 @@ let
                      [ self.xmonad-contrib self.xmonad-extras ];
   };
 
-  xmonad-config = pkgs.writers.writeHaskellBin "xmonad" {
+  xmonad-config' = pkgs.writers.writeHaskellBin "xmonad" {
     ghc = cfg.haskellPackages.ghc;
     libraries = [ cfg.haskellPackages.xmonad ] ++
                 cfg.extraPackages cfg.haskellPackages ++
@@ -20,6 +20,22 @@ let
                 (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
     inherit (cfg) ghcArgs;
   } cfg.config;
+
+  xmonad-config =
+    let
+      xmonadAndPackages = self: [ self.xmonad ] ++
+                                cfg.extraPackages self ++
+                                optionals cfg.enableContribAndExtras
+                                [ self.xmonad-contrib self.xmonad-extras ];
+      xmonadEnv = cfg.haskellPackages.ghcWithPackages xmonadAndPackages;
+    in
+      pkgs.runCommandLocal "xmonad" {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      } ''
+        makeWrapper ${xmonad-config'}/bin/xmonad $out/bin/xmonad \
+          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+          --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
+      '';
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in {
