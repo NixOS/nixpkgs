@@ -7746,7 +7746,7 @@ in {
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
-  vtk = vtk_7;
+  vtk = self.vtk_7;
   vtk_7 = toPythonModule (pkgs.vtk_7.override {
     pythonInterpreter = python;
     enablePython = true;
