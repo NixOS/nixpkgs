@@ -5,13 +5,13 @@ let
   inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
 in buildPythonApplication rec {
   pname = "sonata";
-  version = "1.7b1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
     rev = "v${version}";
-    sha256 = "1npbxlrg6k154qybfd250nq2p96kxdsdkj9wwnp93gljnii3g8wh";
+    sha256 = "0rl8w7s2asff626clzfvyz987l2k4ml5dg417mqp9v8a962q0v2x";
   };
 
   disabled = !isPy3k;
