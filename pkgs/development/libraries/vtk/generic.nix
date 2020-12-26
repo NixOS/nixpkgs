@@ -13,9 +13,7 @@ let
 
   pythonMajor = if pythonInterpreter.isPy3 then "3" else if pythonInterpreter.isPy2 then "2" else throw "vtk: vtk only supports python 2.x and 3.x";
 
-  maybeToPythonModule = if enablePython then pythonInterpreter.pkgs.toPythonModule else lib.id;
-
-in maybeToPythonModule (stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "vtk${optionalString enableQt "-qvtk"}";
   version = "${majorVersion}.${minorVersion}";
 
@@ -95,4 +93,4 @@ in maybeToPythonModule (stdenv.mkDerivation rec {
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
   };
-})
+}

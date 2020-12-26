@@ -7747,18 +7747,18 @@ in {
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
   vtk = vtk_7;
-  vtk_7 = pkgs.vtk_7.override {
+  vtk_7 = toPythonModule (pkgs.vtk_7.override {
     pythonInterpreter = python;
     enablePython = true;
-  };
-  vtk_8 = pkgs.vtk_8.override {
+  });
+  vtk_8 = toPythonModule (pkgs.vtk_8.override {
     pythonInterpreter = python;
     enablePython = true;
-  };
-  vtk_9 = pkgs.vtk_9.override {
+  });
+  vtk_9 = toPythonModule (pkgs.vtk_9.override {
     pythonInterpreter = python;
     enablePython = true;
-  };
+  });
 
   vultr = callPackage ../development/python-modules/vultr { };
 
