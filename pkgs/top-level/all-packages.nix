@@ -16436,6 +16436,7 @@ in
   };
 
   vtk = vtk_8;
+  vtkWithQt5 = vtk.override { enableQt = true; };
 
   vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
