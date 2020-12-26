@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "0.30.2";
+  version = "0.30.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de7eba5235df61deee2291a2fe70b904154df613a334109488afdea7a4c0011f";
+    sha256 = "3577bbf38f2c7c2f42306b8dfdeffbb0eedf45aaec947fd513d51937f72046d1";
   };
 
   disabled = pythonOlder "3.5";

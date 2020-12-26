@@ -83,6 +83,12 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
 
+  # Version 4.7.2 is broken by the bytestring library shipped by ghc-8.10.3.
+  ListLike = appendPatch super.ListLike (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/ListLike-4.7.2.patch";
+    sha256 = "1v392a74w0sxyn6x0bqixpmjbgla0i2b5hxzkcn1vaa3gaya7ag4";
+  });
+
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = generateOptparseApplicativeCompletion "hnix"
     (overrideCabal super.hnix (drv: {
