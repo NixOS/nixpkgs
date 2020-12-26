@@ -27609,6 +27609,8 @@ in
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
 
+  carps-cups = callPackage ../misc/cups/drivers/carps-cups { };
+
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
