@@ -2617,7 +2617,9 @@ in
 
   statserial = callPackage ../tools/misc/statserial { };
 
-  step-ca = callPackage ../tools/security/step-ca { };
+  step-ca = callPackage ../tools/security/step-ca {
+    inherit (darwin.apple_sdk.frameworks) PCSC;
+  };
 
   step-cli = callPackage ../tools/security/step-cli { };
 
@@ -6456,6 +6458,8 @@ in
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   papertrail = callPackage ../tools/text/papertrail { };
+
+  pappl = callPackage ../applications/printing/pappl { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
@@ -12550,7 +12554,8 @@ in
   boost172 = callPackage ../development/libraries/boost/1.72.nix { };
   boost173 = callPackage ../development/libraries/boost/1.73.nix { };
   boost174 = callPackage ../development/libraries/boost/1.74.nix { };
-  boost17x = boost174;
+  boost175 = callPackage ../development/libraries/boost/1.75.nix { };
+  boost17x = boost175;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };

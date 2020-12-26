@@ -43,5 +43,10 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;
+    # https://github.com/NixOS/nixpkgs/issues/90828
+    knownVulnerabilities = [
+      "CVE-2020-6624"
+      "CVE-2020-6625"
+    ];
   };
 }
