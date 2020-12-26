@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, fetchFromGitHub, callPackage
+{ lib, fetchurl, fetchFromGitHub, fetchpatch, callPackage
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -23,8 +23,8 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
-  , name, suffix ? "", src, patches ? []
-
+  , name, suffix ? "", src
+  , patches ? [ ]
   }:
   let
      sh = busybox-sandbox-shell;
@@ -197,6 +197,13 @@ in rec {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "a8a85e55de43d017abbf13036edfb58674ca136691582f17080c1cd12787b7ab";
     };
+
+    patches = [(
+      fetchpatch {
+        url = "https://github.com/NixOS/nix/pull/4316.patch";
+        sha256 = "0bqlm4n9sac9prgr9xlfng92arisp1hiqvc9pfh4fibsppkgdfc5";
+      }
+    )];
 
     inherit storeDir stateDir confDir boehmgc;
   });
