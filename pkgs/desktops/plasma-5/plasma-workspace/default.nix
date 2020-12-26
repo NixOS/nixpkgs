@@ -4,7 +4,7 @@
   extra-cmake-modules, kdoctools,
 
   coreutils, dbus, gnugrep, gnused, isocodes, libdbusmenu, libSM, libXcursor,
-  libXtst, libXft, pam, wayland, xmessage, xprop, xrdb, xsetroot,
+  libXdmcp, libXtst, libXft, pam, wayland, xmessage, xprop, xrdb, xsetroot,
 
   baloo, breeze-qt5, kactivities, kactivities-stats, kcmutils, kconfig, kcrash,
   kdbusaddons, kdeclarative, kdelibs4support, kdesu, kglobalaccel, kidletime,
@@ -25,7 +25,7 @@ mkDerivation {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    isocodes libdbusmenu libSM libXcursor libXtst libXft pam wayland
+    isocodes libdbusmenu libSM libXcursor libXdmcp libXtst libXft pam wayland
 
     baloo kactivities kactivities-stats kcmutils kconfig kcrash kdbusaddons
     kdeclarative kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
