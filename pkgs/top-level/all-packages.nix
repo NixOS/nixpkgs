@@ -15669,7 +15669,7 @@ in
       breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover kactivitymanagerd
       kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5 kinfocenter kmenuedit
       kscreen kscreenlocker ksshaskpass ksysguard kwallet-pam kwayland-integration
-      kwin kwrited milou oxygen plasma-browser-integration plasma-desktop
+      kwin kwrited milou oxygen plasma-browser-integration plasma-desktop plasma-disks
       plasma-integration plasma-nm plasma-pa plasma-thunderbolt plasma-vault plasma-workspace
       plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
       systemsettings xdg-desktop-portal-kde
