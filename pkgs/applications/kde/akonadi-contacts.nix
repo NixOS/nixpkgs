@@ -2,7 +2,8 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules,
   qtwebengine,
-  grantlee,
+  grantlee, grantleetheme,
+  libkleo,
   kdbusaddons, ki18n, kiconthemes, kio, kitemmodels, ktextwidgets, prison,
   akonadi, akonadi-mime, kcontacts, kmime,
 }:
@@ -16,7 +17,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     qtwebengine
-    grantlee
+    grantlee grantleetheme
+    libkleo
     kdbusaddons ki18n kiconthemes kio kitemmodels ktextwidgets prison
     akonadi-mime kcontacts kmime
   ];
