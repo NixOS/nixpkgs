@@ -4,7 +4,7 @@
 
 let
   # Grammars we want to fetch from the tree-sitter github orga
-  knownTreeSitterOrgGrammarRepos = [
+  knownTreeSitterOrgGrammarRepos = jsonFile "known-tree-sitter-org-grammar-repos" [
     "tree-sitter-javascript"
     "tree-sitter-c"
     "tree-sitter-swift"
@@ -36,7 +36,7 @@ let
   ];
 
   # repos of the tree-sitter github orga we want to ignore (not grammars)
-  ignoredTreeSitterOrgRepos = [
+  ignoredTreeSitterOrgRepos = jsonFile "ignored-tree-sitter-org-repos" [
     "tree-sitter"
     "tree-sitter-cli"
     # this is the haskell language bindings, tree-sitter-haskell is the grammar
@@ -59,14 +59,12 @@ let
 
   jsonFile = name: val: (formats.json {}).generate name val;
 
-  # check in the list of grammars, whether we know all of them.
-  checkKnownGrammars = writeShellScript "get-grammars.sh" ''
+  # check the tree-sitter orga repos
+  checkTreeSitterRepos = writeShellScript "get-grammars.sh" ''
     set -euo pipefail
-    known="${jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos}"
-    ignore="${jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos}"
     res=$(${jq}/bin/jq \
-      --slurpfile known "$known" \
-      --slurpfile ignore "$ignore" \
+      --slurpfile known "${knownTreeSitterOrgGrammarRepos}" \
+      --slurpfile ignore "${ignoredTreeSitterOrgRepos}" \
       '. - ($known[0] + $ignore[0])' \
       )
     if [ ! "$res" == "[]" ]; then
@@ -74,7 +72,6 @@ let
       echo "$res" 1>&2
       exit 1
     fi
-    cat "$known"
   '';
 
   # TODO
@@ -132,9 +129,10 @@ let
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
     echo "fetching list of grammars" 1>&2
-    grammars=$(${latestGithubRepos { orga = "tree-sitter"; }})
-    echo "checking against the list of grammars we know" 1>&2
-    knownGrammars=$(printf '%s' "$grammars" | ${checkKnownGrammars})
+    treeSitterRepos=$(${latestGithubRepos { orga = "tree-sitter"; }})
+    echo "checking the tree-sitter repo list against the grammars we know" 1>&2
+    printf '%s' "$treeSitterRepos" | ${checkTreeSitterRepos}
+    knownGrammars=$(cat "${knownTreeSitterOrgGrammarRepos}")
     # change the json list into a item-per-line bash format
     grammarNames=$(printf '%s' "$knownGrammars" | ${jq}/bin/jq --raw-output '.[]')
     outputDir="${toString ./.}/grammars"
