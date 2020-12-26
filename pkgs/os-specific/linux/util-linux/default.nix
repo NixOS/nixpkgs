@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+    # Remove patch below in 2.36.2, see https://github.com/karelzak/util-linux/issues/1193
+    (fetchpatch {
+      url = "https://github.com/karelzak/util-linux/commit/52f730e47869ce630fafb24fd46f755dc7ffc691.patch";
+      sha256 = "1fz3p9127lfvmrdj1j1s8jds0jjz2dzkvmia66555ihv7hcfajbg";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" ];
