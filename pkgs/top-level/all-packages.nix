@@ -2214,6 +2214,8 @@ in
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
+  gmqcc = callPackage ../development/compilers/gmqcc { };
+
   go-chromecast = callPackage ../applications/video/go-chromecast { };
 
   go-rice = callPackage ../tools/misc/go.rice {};
