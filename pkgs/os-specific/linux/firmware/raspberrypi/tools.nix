@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig }:
 
 stdenv.mkDerivation {
   pname = "raspberrypi-tools";
@@ -13,6 +13,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/raspberrypi/userland/pull/670
+      url = "https://github.com/raspberrypi/userland/pull/670/commits/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
+      sha256 = "1fbrbkpc4cc010ji8z4ll63g17n6jl67kdy62m74bhlxn72gg9rw";
+    })
+  ];
+
   preConfigure = ''
     cmakeFlagsArray+=("-DVMCS_INSTALL_PREFIX=$out")
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
@@ -23,7 +31,7 @@ stdenv.mkDerivation {
     description = "Userland tools for the Raspberry Pi board";
     homepage = "https://github.com/raspberrypi/userland";
     license = licenses.bsd3;
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ dezgeg tavyc ];
   };
 }
