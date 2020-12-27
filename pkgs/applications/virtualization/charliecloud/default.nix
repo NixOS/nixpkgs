@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  version = "0.20";
+  version = "0.21";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "15ihffwhpjnzgz0ir5vc9la4fwkqj91vmrcsb2r58ikq7h9sk45j";
+    sha256 = "Y/tH6Znq//HBA/FHfIm2Wpppx6TiL7CqKtZFDc/XSNc=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
