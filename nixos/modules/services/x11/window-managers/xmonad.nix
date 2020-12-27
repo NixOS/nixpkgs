@@ -103,6 +103,7 @@ in {
         example = ''
           import XMonad
           import XMonad.Util.EZConfig (additionalKeys)
+          import Control.Monad (when)
           import Text.Printf (printf)
           import System.Posix.Process (executeFile)
           import System.Info (arch,os)
