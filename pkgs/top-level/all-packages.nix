@@ -29699,6 +29699,10 @@ with pkgs;
 
   gltron = callPackage ../games/gltron { };
 
+  gl-gsync-demo = callPackage ../games/gl-gsync-demo {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
+
   gmad = callPackage ../games/gmad { };
 
   gnonograms = callPackage ../games/gnonograms { };
