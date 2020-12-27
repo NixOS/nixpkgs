@@ -111,16 +111,21 @@ in {
 
           compiledConfig = printf "xmonad-%s-%s" arch os
 
-          compileRestart = whenX (recompile True) . catchIO $ do
-              dir  <- getXMonadDataDir
-              args <- getArgs
-              executeFile (dir </> compiledConfig) False args Nothing
+          compileRestart resume =
+            whenX (recompile True) $
+              when resume writeStateToFile
+                *> catchIO
+                  ( do
+                      dir <- getXMonadDataDir
+                      args <- getArgs
+                      executeFile (dir </> compiledConfig) False args Nothing
+                  )
 
           main = launch defaultConfig
               { modMask = mod4Mask -- Use Super instead of Alt
               , terminal = "urxvt" }
               `additionalKeys`
-              [ ( (mod4Mask,xK_r), writeStateToFile >> compileRestart )
+              [ ( (mod4Mask,xK_r), compileRestart True)
               , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
         '';
       };
