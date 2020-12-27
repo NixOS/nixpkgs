@@ -11,9 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1z9qdk3pk507hdg39v2z1hanlw2wv7mhn8br4cb8qry9z9qwi87i";
   };
 
-  postPatch = ''
-    sed -i "s,^PREFIX=.*,PREFIX=$out," Makefile
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" "CC=cc" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,6 +19,8 @@ stdenv.mkDerivation {
 
   postInstall = ''
     installManPage sonic.1
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libsonic.so.0.3.0 $out/lib/libsonic.so.0.3.0
   '';
 
   meta = with stdenv.lib; {
@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/waywardgeek/sonic";
     license = licenses.asl20;
     maintainers = with maintainers; [ aske ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
