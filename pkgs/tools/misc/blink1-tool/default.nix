@@ -1,30 +1,35 @@
-{ stdenv, fetchurl, libusb1, pkgconfig, ... }:
+{ stdenv, fetchFromGitHub, libusb1, udev, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "blink1";
-  version = "1.98a";
+  pname = "blink1-tool";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/todbot/blink1/archive/v${version}.tar.gz";
-    sha256 = "1waci6hccv5i50v5d3z7lx4h224fbkj66ywfynnsgn46w0jm6imv";
+  src = fetchFromGitHub {
+    owner = "todbot";
+    repo = "blink1-tool";
+    rev = "v${version}";
+    sha256 = "Wsbc6KAs804sx2Nhlqu1zXgZ1iX/44zNQQj32g2j7zQ=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb1 ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libusb1 udev ];
 
-  configurePhase = ''
-    cd commandline
+  makeFlags = [ "GIT_TAG=v${version}" ];
+
+  buildFlags = [ "blink1-tool" "lib" ];
+
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
+  installTargets = [ "install-lib" ];
+  postInstall = ''
+    install -D blink1-tool $out/bin/blink1-tool
   '';
 
-  installPhase = ''
-    PREFIX=$out make install
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Command line client for the blink(1) notification light";
     homepage = "https://blink1.thingm.com/";
-    license = stdenv.lib.licenses.cc-by-sa-30;
-    maintainers = [ stdenv.lib.maintainers.cransom ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.cc-by-sa-30;
+    maintainers = with maintainers; [ cransom ];
+    platforms = platforms.linux;
   };
 }
