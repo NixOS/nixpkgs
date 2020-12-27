@@ -11,18 +11,18 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2020.09.20",
-    "sha256": "09svn8yyqp6znvfpcxrsybkclh828h5rvah7nhbhk7nrfzj8i63x"
+    "rev": "2020.11.02",
+    "sha256": "0shihlm1hg74m04qyrj2iic2ik0x7qggihmnylvvdry3y79d07fy"
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2020.10.12",
-    "sha256": "07vznwwfa3c1jr1cd32yppw0mmmm1ja9bmsxhxlcbnc2nb30n9zr"
+    "rev": "6560bc35a2cf31399be8713ac189216afabf9f01",
+    "sha256": "1bjnd6pcd9ddkvl7ma05z7f8svq609kljwc7gvbszc76hdb8d54x"
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2020.10.11",
-    "sha256": "11vx685i85izp7wzb34dalcwlkmkbz1vzva5j9cf2yz1jff1v4qw"
+    "rev": "2459ea2a2e50050f7e6ee59a17a52aae05ca4433",
+    "sha256": "155cwcmr9f23j4x13pidvb3vcgglawkxxpizjw90ajwhmg831acr"
   },
   "EControl": {
     "owner": "Alexey-T",
@@ -36,8 +36,8 @@
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2020.07.31",
-    "sha256": "0qbs51h6gw8qd3h06kwy1j7db35shbg7r2rayrhvvw0vzr9n330j"
+    "rev": "2020.10.23",
+    "sha256": "1lljldqnixlh0j05fh594gccwzkgcxa50byq8wr9ld5ik5sf8khn"
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.2.4",
-    "sha256": "1zk88crfn07md16wg6af4i8nlx4ikkhxq9gfk49jirwimgwbf1md"
+    "rev": "v11.3.1",
+    "sha256": "1f95rdpfwqy9fipzybi17nbhq46zj45yjps21p2hplhinrr49n2p"
   }
 }

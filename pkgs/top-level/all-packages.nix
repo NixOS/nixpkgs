@@ -1894,6 +1894,10 @@ in
 
   cppclean = callPackage ../development/tools/cppclean {};
 
+  credhub-cli = callPackage ../tools/admin/credhub-cli {
+    buildGoModule = buildGo114Module;
+  };
+
   crex = callPackage ../tools/misc/crex { };
 
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
@@ -7723,6 +7727,8 @@ in
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
   };
+
+  teler = callPackage ../tools/security/teler { };
 
   termius = callPackage ../applications/networking/termius { };
 
@@ -16540,6 +16546,7 @@ in
   waffle = callPackage ../development/libraries/waffle { };
 
   wally-cli = callPackage ../development/tools/wally-cli { };
+  zsa-udev-rules = callPackage ../os-specific/linux/zsa-udev-rules { };
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
@@ -19984,6 +19991,8 @@ in
   nanum-gothic-coding = callPackage ../data/fonts/nanum-gothic-coding {  };
 
   national-park-typeface = callPackage ../data/fonts/national-park { };
+
+  netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
 
   nordic = callPackage ../data/themes/nordic { };
 
