@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake which libtool pkgconfig ];
 
-  buildInputs = [ portaudio alsaLib ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs = [ portaudio ]
+    ++ lib.optionals stdenv.isLinux [ alsaLib ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   preConfigure = "./autogen.sh";
 
@@ -25,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rhdunn/pcaudiolib";
     license = licenses.gpl3;
     maintainers = with maintainers; [ aske ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
