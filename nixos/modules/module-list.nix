@@ -47,6 +47,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
   ./hardware/sensor/iio.nix
+  ./hardware/keyboard/zsa.nix
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/logitech.nix
