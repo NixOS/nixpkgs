@@ -7701,6 +7701,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  teler = callPackage ../tools/security/teler { };
+
   termius = callPackage ../applications/networking/termius { };
 
   termplay = callPackage ../tools/misc/termplay { };
