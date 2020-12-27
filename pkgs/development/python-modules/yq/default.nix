@@ -2,6 +2,7 @@
 , nixosTests
 , buildPythonPackage
 , fetchPypi
+, substituteAll
 , pkgs
 , argcomplete
 , pyyaml
@@ -23,6 +24,13 @@ buildPythonPackage rec {
     sha256 = "1q4rky0a6n4izmq7slb91a54g8swry1xrbfqxwc8lkd3hhvlxxkl";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./jq-path.patch;
+      jq = "${lib.getBin pkgs.jq}/bin/jq";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace test/test.py --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
   '';
@@ -39,7 +47,6 @@ buildPythonPackage rec {
    pytest
    coverage
    flake8
-   pkgs.jq
    toml
   ];
 

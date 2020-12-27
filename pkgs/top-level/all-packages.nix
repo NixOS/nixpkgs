@@ -1313,6 +1313,8 @@ in
 
   gopass = callPackage ../tools/security/gopass { };
 
+  gospider = callPackage ../tools/security/gospider { };
+
   browserpass = callPackage ../tools/security/browserpass { };
 
   passff-host = callPackage ../tools/security/passff-host { };
@@ -4159,6 +4161,8 @@ in
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
+  gau = callPackage ../tools/security/gau { };
+
   gauge = callPackage ../development/tools/gauge { };
 
   gawk = callPackage ../tools/text/gawk {
@@ -6764,6 +6768,8 @@ in
     proxmark3 proxmark3-unstable;
 
   proxychains = callPackage ../tools/networking/proxychains { };
+
+  proxify = callPackage ../tools/networking/proxify { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel {
     openssl = openssl_1_0_2;
@@ -10581,7 +10587,7 @@ in
 
   ### LUA interpreters
   luaInterpreters = callPackage ./../development/interpreters/lua-5 {};
-  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat luajit_2_1 luajit_2_0;
+  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_2_1 luajit_2_0;
 
   lua5 = lua5_2_compat;
   lua = lua5;
@@ -12870,6 +12876,8 @@ in
   enchant = enchant2;
 
   enet = callPackage ../development/libraries/enet { };
+
+  entt = callPackage ../development/libraries/entt { };
 
   epoxy = callPackage ../development/libraries/epoxy {};
 
@@ -19227,8 +19235,6 @@ in
   raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
 
   raspberrypi-eeprom = callPackage ../os-specific/linux/raspberrypi-eeprom {};
-
-  raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
 
