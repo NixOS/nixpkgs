@@ -66,6 +66,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
+  ./hardware/opentabletdriver.nix
   ./hardware/wooting.nix
   ./hardware/uinput.nix
   ./hardware/video/amdgpu.nix
