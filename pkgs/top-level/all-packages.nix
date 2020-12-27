@@ -4147,6 +4147,8 @@ in
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
+  gau = callPackage ../tools/security/gau { };
+
   gauge = callPackage ../development/tools/gauge { };
 
   gawk = callPackage ../tools/text/gawk {
