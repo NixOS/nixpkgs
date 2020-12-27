@@ -28,7 +28,7 @@ mkXfceDerivation {
     # Fix build with libical 3.0
     (fetchpatch {
       name = "fix-libical3.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/libical3.patch?h=packages/orage&id=7b1b06c42dda034d538977b9f3550b28e370057f";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/libical3.patch?h=orage-4.10";
       sha256 = "1l8s106mcidmbx2p8c2pi8v9ngbv2x3fsgv36j8qk8wyd4qd1jbf";
     })
   ];
