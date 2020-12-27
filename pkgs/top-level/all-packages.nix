@@ -19919,6 +19919,8 @@ in
 
   national-park-typeface = callPackage ../data/fonts/national-park { };
 
+  netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
+
   nordic = callPackage ../data/themes/nordic { };
 
   nordic-polar = callPackage ../data/themes/nordic-polar { };
