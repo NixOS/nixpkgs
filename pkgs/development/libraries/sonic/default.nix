@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, fftw, installShellFiles }:
 
 stdenv.mkDerivation {
-  pname = "sonic";
-  version = "2018-07-06";
+  pname = "sonic-unstable";
+  version = "2020-12-27";
 
   src = fetchFromGitHub {
     owner = "waywardgeek";
     repo = "sonic";
-    rev = "71c51195de71627d7443d05378c680ba756545e8";
-    sha256 = "1z9qdk3pk507hdg39v2z1hanlw2wv7mhn8br4cb8qry9z9qwi87i";
+    rev = "4a052d9774387a9d9b4af627f6a74e1694419960";
+    sha256 = "0ah54nizb6iwcx277w104wsfnx05vrp4sh56d2pfxhf8xghg54m6";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "CC=cc" ];
