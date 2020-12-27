@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     tar xvzf $src
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's@-I/usr/include/ncurses@@' \
       -e 's@/usr/local@'"$out"@ makefile
   '';
