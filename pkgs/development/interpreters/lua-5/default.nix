@@ -14,6 +14,19 @@ let
   };
 
 in rec {
+  lua5_4 = callPackage ./interpreter.nix {
+    sourceVersion = { major = "5"; minor = "4"; patch = "2"; };
+    hash = "0ksj5zpj74n0jkamy3di1p6l10v4gjnd2zjnb453qc6px6bhsmqi";
+    patches = [
+      # build lua as a shared library as well, MIT-licensed from
+      # https://github.com/archlinux/svntogit-packages/tree/packages/lua/trunk
+      ./liblua.so.patch
+    ];
+  };
+
+  lua5_4_compat = lua5_4.override({
+    compat = true;
+  });
 
   lua5_3 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "3"; patch = "5"; };
