@@ -1,28 +1,34 @@
-{ lib, stdenv, fetchurl, jdk11, runtimeShell }:
+{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "burpsuite";
   version = "2020.12.1";
-  jar = fetchurl {
+
+  src = fetchurl {
     name = "burpsuite.jar";
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "1vdxwasvcyxyyidq3cfjphzkir358sxikgvxgl36czylap4hzjh1";
+    sha256 = "AcoPyVXUf2YGfX2/GbtGZeQ4P7zSsYFb9L57trXive0=";
   };
-  launcher = ''
-    #!${runtimeShell}
-    exec ${jdk11}/bin/java -jar ${jar} "$@"
-  '';
-in stdenv.mkDerivation {
-  pname = "burpsuite";
-  inherit version;
-  buildCommand = ''
+
+  dontUnpack = true;
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
-    echo "${launcher}" > $out/bin/burpsuite
+    echo '#!${runtimeShell}
+    eval "$(${unzip}/bin/unzip -p ${src} chromium.properties)"
+    mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
+    ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
+    exec ${jdk11}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
     chmod +x $out/bin/burpsuite
+
+    runHook postInstall
   '';
 
   preferLocalBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "An integrated platform for performing security testing of web applications";
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
@@ -32,9 +38,9 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://portswigger.net/burp/";
     downloadPage = "https://portswigger.net/burp/freedownload";
-    license = [ lib.licenses.unfree ];
+    license = licenses.unfree;
     platforms = jdk11.meta.platforms;
     hydraPlatforms = [];
-    maintainers = with lib.maintainers; [ bennofs ];
+    maintainers = with maintainers; [ bennofs ];
   };
 }
