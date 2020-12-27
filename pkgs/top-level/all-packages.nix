@@ -1886,6 +1886,10 @@ in
 
   cppclean = callPackage ../development/tools/cppclean {};
 
+  credhub-cli = callPackage ../tools/admin/credhub-cli {
+    buildGoModule = buildGo114Module;
+  };
+
   crex = callPackage ../tools/misc/crex { };
 
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
